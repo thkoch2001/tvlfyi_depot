@@ -38,7 +38,7 @@
 
 (deflazy define-grammar
   (let ((*package* #.*package*)
-	(*compile-print* (and parser::*debug* t)))
+        (*compile-print* (and parser::*debug* t)))
     (reset-grammar)
     (format t "creating Cobol grammar...~%")
     (populate-grammar)
@@ -263,8 +263,8 @@
 (defrule file-control-entry
     := select-clause assign-clause fce-phrase* "."
     :reduce (append select-clause
-		    assign-clause
-		    (flatten-list fce-phrase)))
+                    assign-clause
+                    (flatten-list fce-phrase)))
 
 (defrule organization-is
     := "ORGANIZATION" "IS"?)
@@ -658,7 +658,7 @@
 (defrule data-description-entry
     := level-number alt-data-name-filler? data-description-entry-clause* "."
     :reduce (append (list level-number alt-data-name-filler)
-		    (flatten-list data-description-entry-clause)))
+                    (flatten-list data-description-entry-clause)))
 
 (defrule alt-data-name-filler
     := data-name
@@ -754,8 +754,8 @@
 (defrule synchronized-clause
     := synchronized alt-left-right?
     :reduce `(:synchronized ,(if alt-left-right
-				 alt-left-right
-				 t)))
+                                 alt-left-right
+                                 t)))
 
 (defrule alt-left-right
     := "LEFT"
@@ -1004,7 +1004,7 @@
 (defrule compute-statement
     := "COMPUTE" cobword-rounded+ equal arithmetic-expression on-size-error-statement-list? not-on-size-error-statement-list? "END-COMPUTE"?
     :reduce (list 'compute cobword-rounded arithmetic-expression :on-size-error on-size-error-statement-list
-		  :not-on-size-error not-on-size-error-statement-list))
+                  :not-on-size-error not-on-size-error-statement-list))
 
 (defrule equal
     := "="
@@ -1100,12 +1100,12 @@
 (defrule if-phrase
     := "IF" condition "THEN"? alt-statement-list-next-sentence "ELSE" alt-statement-list-next-sentence
     :reduce (list 'if condition
-		  (if (cdr alt-statement-list-next-sentence)
-		      (cons 'progn alt-statement-list-next-sentence)
-		      (car alt-statement-list-next-sentence))
-		  (if (cdr alt-statement-list-next-sentence2)
-		      (cons 'progn alt-statement-list-next-sentence2)
-		      (car alt-statement-list-next-sentence2)))
+                  (if (cdr alt-statement-list-next-sentence)
+                      (cons 'progn alt-statement-list-next-sentence)
+                      (car alt-statement-list-next-sentence))
+                  (if (cdr alt-statement-list-next-sentence2)
+                      (cons 'progn alt-statement-list-next-sentence2)
+                      (car alt-statement-list-next-sentence2)))
     := "IF" condition "THEN"? alt-statement-list-next-sentence
     :reduce (append (list 'when condition) alt-statement-list-next-sentence))
 
@@ -1209,11 +1209,11 @@
 (defrule multiply-statement
     := "MULTIPLY" id-or-lit "BY" cobword-rounded+ on-size-error-statement-list? not-on-size-error-statement-list? "END-MULTIPLY"?
     :reduce (list 'multiply id-or-lit cobword-rounded :on-size-error on-size-error-statement-list
-		  :not-on-size-error not-on-size-error-statement-list)
+                  :not-on-size-error not-on-size-error-statement-list)
     := "MULTIPLY" id-or-lit "BY" id-or-lit "GIVING" cobword-rounded+ on-size-error-statement-list? not-on-size-error-statement-list? "END-MULTIPLY"?
     :reduce (list 'multiply id-or-lit id-or-lit2 :giving cobword-rounded
-		  :on-size-error on-size-error-statement-list
-		  :not-on-size-error not-on-size-error-statement-list))
+                  :on-size-error on-size-error-statement-list
+                  :not-on-size-error not-on-size-error-statement-list))
 
 (defrule open-statement
     := "OPEN" open-statement-phrase+
@@ -1418,17 +1418,17 @@
 (defrule subtract-statement
     := "SUBTRACT" id-or-lit+ "FROM" id-or-lit "GIVING" cobword-rounded+ on-size-error-statement-list? not-on-size-error-statement-list? "END-SUBTRACT"?
     :reduce (list 'subtract-giving id-or-lit id-or-lit2 cobword-rounded
-		  :on-size-error on-size-error-statement-list
-		  :not-on-size-error not-on-size-error-statement-list)
+                  :on-size-error on-size-error-statement-list
+                  :not-on-size-error not-on-size-error-statement-list)
     := "SUBTRACT" id-or-lit+ "FROM" cobword-rounded+ on-size-error-statement-list? not-on-size-error-statement-list? "END-SUBTRACT"?
     :reduce (list 'subtract id-or-lit cobword-rounded
-		  :on-size-error on-size-error-statement-list
-		  :not-on-size-error not-on-size-error-statement-list)
+                  :on-size-error on-size-error-statement-list
+                  :not-on-size-error not-on-size-error-statement-list)
     := "SUBTRACT" corresponding variable-identifier "FROM" variable-identifier "ROUNDED"? on-size-error-statement-list? not-on-size-error-statement-list? "END-SUBTRACT"?
     :reduce (list 'subtract-corr variable-identifier variable-identifier
-		  :rounded (and $5 t)
-		  :on-size-error on-size-error-statement-list
-		  :not-on-size-error not-on-size-error-statement-list))
+                  :rounded (and $5 t)
+                  :on-size-error on-size-error-statement-list
+                  :not-on-size-error not-on-size-error-statement-list))
 
 (defrule cobword-rounded
     := variable-identifier "ROUNDED"?
@@ -1449,11 +1449,11 @@
 (defrule unstring-statement
     := "UNSTRING" variable-identifier delimited-by-all-phrase? "INTO" unstring-statement-dst+ with-pointer-identifier? tallying-in-identifier? on-overflow-statement-list? not-on-overflow-statement-list? "END-UNSTRING"?
     :reduce (list 'unstring variable-identifier unstring-statement-dst
-		  :delimited-by-all delimited-by-all-phrase
-		  :with-pointer with-pointer-identifier
-		  :tallying tallying-in-identifier
-		  :on-overflow on-overflow-statement-list
-		  :not-on-overflow not-on-overflow-statement-list))
+                  :delimited-by-all delimited-by-all-phrase
+                  :with-pointer with-pointer-identifier
+                  :tallying tallying-in-identifier
+                  :on-overflow on-overflow-statement-list
+                  :not-on-overflow not-on-overflow-statement-list))
 
 (defrule id-or-lit
     := literal
@@ -1622,8 +1622,8 @@
 (defrule combinable-condition
     := "NOT"? simple-condition
     :reduce (if $1
-		(list 'not simple-condition)
-		simple-condition))
+                (list 'not simple-condition)
+                simple-condition))
 
 (defrule simple-condition
     := class-condition
@@ -1637,8 +1637,8 @@
 (defrule class-condition
     := variable-identifier "IS"? "NOT"? class-type
     :reduce (if $3
-		(list 'not (list 'type-of variable-identifier (make-keyword class-type)))
-		(list 'type-of variable-identifier (make-keyword class-type))))
+                (list 'not (list 'type-of variable-identifier (make-keyword class-type)))
+                (list 'type-of variable-identifier (make-keyword class-type))))
 
 (defrule class-type
     := "NUMERIC"
@@ -1651,12 +1651,12 @@
   (destructuring-bind (main-operator main-variable other-variable) main-relation
     (declare (ignore other-variable))
     (labels ((unfold (subs)
-	       (if (null subs)
-		   main-relation
-		   (destructuring-bind (connection operator variable) (car subs)
-		     (list connection
-			   (list (or operator main-operator) main-variable variable)
-			   (unfold (cdr subs)))))))
+               (if (null subs)
+                   main-relation
+                   (destructuring-bind (connection operator variable) (car subs)
+                     (list connection
+                           (list (or operator main-operator) main-variable variable)
+                           (unfold (cdr subs)))))))
       (unfold subs))))
 
 (defrule relation-condition
@@ -1720,8 +1720,8 @@
 (defrule sign-condition
     := arithmetic-expression "IS"? "NOT"? sign-type
     :reduce (if $3
-		`(not (,sign-type ,arithmetic-expression))
-		`(,sign-type ,arithmetic-expression)))
+                `(not (,sign-type ,arithmetic-expression))
+                `(,sign-type ,arithmetic-expression)))
 
 (defrule sign-type
     := "POSITIVE" :reduce '>
@@ -1743,14 +1743,14 @@
 (defrule variable-identifier
     := qualified-data-name subscript-parentheses* ;; reference-modification?
     :reduce (if subscript-parentheses
-		(list :aref qualified-data-name subscript-parentheses)
-		qualified-data-name))
+                (list :aref qualified-data-name subscript-parentheses)
+                qualified-data-name))
 
 (defrule reference-modification
     := "(" leftmost-character-position ":" length? ")"
     :reduce (if length
-		(list :range leftmost-character-position length)
-		leftmost-character-position))
+                (list :range leftmost-character-position length)
+                leftmost-character-position))
 
 (defrule condition-name-reference
     := condition-name in-data-or-file-or-mnemonic-name* subscript-parentheses*)
@@ -1777,8 +1777,8 @@
 (defrule qualified-data-name
     := data-name in-data-or-file-name*
     :reduce (if in-data-or-file-name
-		(list data-name in-data-or-file-name) ; incomplete -wcp15/7/03.
-		data-name)
+                (list data-name in-data-or-file-name) ; incomplete -wcp15/7/03.
+                data-name)
     := "ADDRESS" "OF" data-name
     :reduce (list 'address-of data-name)
     := "LENGTH" "OF" cobol-identifier
@@ -1811,8 +1811,8 @@
     := plus-or-minus? basis
     := plus-or-minus? basis "**" power
     :reduce (if plus-or-minus
-		`(plus-or-minus (expt basis basis2))
-		`(expt basis basis2)))
+                `(plus-or-minus (expt basis basis2))
+                `(expt basis basis2)))
 
 (defrule plus-or-minus
     := "+"

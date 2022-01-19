@@ -63,22 +63,22 @@
 (defmacro be (&rest bindings-and-body)
   "Less-parenthetic let."
   (let ((bindings
-	 (loop
-	    while (and (symbolp (car bindings-and-body))
-		       (cdr bindings-and-body))
-	    collect (list (pop bindings-and-body)
-			  (pop bindings-and-body)))))
+         (loop
+            while (and (symbolp (car bindings-and-body))
+                       (cdr bindings-and-body))
+            collect (list (pop bindings-and-body)
+                          (pop bindings-and-body)))))
     `(let ,bindings
        ,@bindings-and-body)))
 
 (defmacro be* (&rest bindings-and-body)
   "Less-parenthetic let*."
   (let ((bindings
-	 (loop
-	    while (and (symbolp (car bindings-and-body))
-		       (cdr bindings-and-body))
-	    collect (list (pop bindings-and-body)
-			  (pop bindings-and-body)))))
+         (loop
+            while (and (symbolp (car bindings-and-body))
+                       (cdr bindings-and-body))
+            collect (list (pop bindings-and-body)
+                          (pop bindings-and-body)))))
     `(let* ,bindings
        ,@bindings-and-body)))
 
@@ -93,7 +93,7 @@ useless.  This macro works around that problem."
   "Gensym all SYMBOLS and make them available in BODY.
 See also LET-GENSYMS."
   `(let ,(mapcar #'(lambda (s)
-		     (list s '(gensym))) symbols)
+                     (list s '(gensym))) symbols)
      ,@body))
 
 (defun s+ (&rest strings)
@@ -103,14 +103,14 @@ See also LET-GENSYMS."
 (defun string-starts-with (prefix string &optional (compare #'string=))
   (be prefix-length (length prefix)
     (and (>= (length string) prefix-length)
-	 (funcall compare prefix string :end2 prefix-length))))
+         (funcall compare prefix string :end2 prefix-length))))
 
 (defun string-ends-with (postfix string &optional (compare #'string=))
   "Return true if STRING's last characters are the same as POSTFIX."
   (be postfix-length (length postfix)
       string-length (length string)
     (and (>= string-length postfix-length)
-	 (funcall compare postfix string :start2 (- string-length postfix-length)))))
+         (funcall compare postfix string :start2 (- string-length postfix-length)))))
 
 (defun string-substitute (from to sequence &key (start 0) end (test #'eql))
   "Replace in SEQUENCE occurrences of FROM with TO.  FROM and TO don't
@@ -119,13 +119,13 @@ need to be the same length."
     (with-output-to-string (out)
       (write-string sequence out :start 0 :end start)
       (loop
-	 for position = (search from sequence :start2 start :end2 end :test test)
-	 while position
-	 do
-	   (write-string sequence out :start start :end position)
-	   (write-string to out)
-	   (setf start (+ position from-length))
-	 finally (write-string (subseq sequence start) out)))))
+         for position = (search from sequence :start2 start :end2 end :test test)
+         while position
+         do
+           (write-string sequence out :start start :end position)
+           (write-string to out)
+           (setf start (+ position from-length))
+         finally (write-string (subseq sequence start) out)))))
 
 (defun string-escape (string character &key (escape-character #\\) (escape-escape t))
   "Prepend all occurences of CHARACTER in STRING with a
@@ -134,8 +134,8 @@ ESCAPE-CHARACTER."
     (loop
        for c across string
        when (or (char= c character)
-		(and escape-escape
-		     (char= c escape-character)))
+                (and escape-escape
+                     (char= c escape-character)))
        do (write-char escape-character stream)
        do (write-char c stream))))
 
@@ -144,8 +144,8 @@ ESCAPE-CHARACTER."
 (defmacro aif (test then &optional else)
   `(be it ,test
      (if it
-	 ,then
-	 ,else)))
+         ,then
+         ,else)))
 
 (defmacro awhen (test &body then)
   `(be it ,test
@@ -155,13 +155,13 @@ ESCAPE-CHARACTER."
 (defmacro acond (&body forms)
   (when forms
     `(aif ,(caar forms)
-	  (progn ,@(cdar forms))
-	  (acond ,@(cdr forms)))))
+          (progn ,@(cdar forms))
+          (acond ,@(cdr forms)))))
 
 (defmacro aand (&rest args)
   (cond ((null args) t)
-	((null (cdr args)) (car args))
-	(t `(aif ,(car args) (aand ,@(cdr args))))))
+        ((null (cdr args)) (car args))
+        (t `(aif ,(car args) (aand ,@(cdr args))))))
 
 (defmacro acase (condition &body forms)
   `(be it ,condition
@@ -190,20 +190,20 @@ ESCAPE-CHARACTER."
   "Return SEQUENCE if it's not empty, otherwise NIL.
 NIL is indeed empty."
   (when (or (listp sequence)
-	    (not (zerop (length sequence))))
+            (not (zerop (length sequence))))
       sequence))
 
 (defun position-any (bag sequence &rest position-args)
   "Find any element of bag in sequence and return its position.
 Accept any argument accepted by the POSITION function."
   (apply #'position-if #'(lambda (element)
-			   (find element bag)) sequence position-args))
+                           (find element bag)) sequence position-args))
 
 (defun find-any (bag sequence &rest find-args)
   "Find any element of bag in sequence.  Accept any argument
 accepted by the FIND function."
   (apply #'find-if #'(lambda (element)
-			   (find element bag)) sequence find-args))
+                           (find element bag)) sequence find-args))
 
 (defun split-at (bag sequence &key (start 0) key)
   "Split SEQUENCE at occurence of any element from BAG.
@@ -211,15 +211,15 @@ Contiguous occurences of elements from BAG are considered atomic;
 so no empty sequence is returned."
   (be len (length sequence)
     (labels ((split-from (start)
-	       (unless (>= start len)
-		 (be sep (position-any bag sequence :start start :key key)
-		   (cond ((not sep)
-			  (list (subseq sequence start)))
-			 ((> sep start)
-			  (cons (subseq sequence start sep)
-				(split-from (1+ sep))))
-			 (t
-			  (split-from (1+ start))))))))
+               (unless (>= start len)
+                 (be sep (position-any bag sequence :start start :key key)
+                   (cond ((not sep)
+                          (list (subseq sequence start)))
+                         ((> sep start)
+                          (cons (subseq sequence start sep)
+                                (split-from (1+ sep))))
+                         (t
+                          (split-from (1+ start))))))))
       (split-from start))))
 
 (defun split-string-at-char (string separator &key escape skip-empty)
@@ -229,12 +229,12 @@ not nil then split at SEPARATOR only if it's not preceded by ESCAPE."
   (declare (type string string) (type character separator))
   (labels ((next-separator (beg)
              (be pos (position separator string :start beg)
-	       (if (and escape
-			pos
-			(plusp pos)
-			(char= escape (char string (1- pos))))
-		   (next-separator (1+ pos))
-		   pos)))
+               (if (and escape
+                        pos
+                        (plusp pos)
+                        (char= escape (char string (1- pos))))
+                   (next-separator (1+ pos))
+                   pos)))
            (parse (beg)
              (cond ((< beg (length string))
                     (let* ((end (next-separator beg))
@@ -244,11 +244,11 @@ not nil then split at SEPARATOR only if it's not preceded by ESCAPE."
                             ((not end)
                              (list substring))
                             (t
-			     (cons substring (parse (1+ end)))))))
+                             (cons substring (parse (1+ end)))))))
                    (skip-empty
-		    '())
+                    '())
                    (t
-		    (list "")))))
+                    (list "")))))
     (parse 0)))
 
 (defun copy-stream (in out)
@@ -262,15 +262,15 @@ not nil then split at SEPARATOR only if it's not preceded by ESCAPE."
   (unless (pathnamep pathname)
     (setf pathname (pathname pathname)))
   (cond ((pathname-name pathname)
-	 pathname)
-	((stringp (car (last (pathname-directory pathname))))
-	 (be name (parse-native-namestring (car (last (pathname-directory pathname))))
-	   (make-pathname :directory (butlast (pathname-directory pathname))
-			  :name (pathname-name name)
-			  :type (pathname-type name)
-			  :defaults pathname)))
-	;; it can't be done?
-	(t pathname)))
+         pathname)
+        ((stringp (car (last (pathname-directory pathname))))
+         (be name (parse-native-namestring (car (last (pathname-directory pathname))))
+           (make-pathname :directory (butlast (pathname-directory pathname))
+                          :name (pathname-name name)
+                          :type (pathname-type name)
+                          :defaults pathname)))
+        ;; it can't be done?
+        (t pathname)))
 
 (defun copy-file (file copy-file &key (if-exists :error))
   (with-open-file (in file)
@@ -279,7 +279,7 @@ not nil then split at SEPARATOR only if it's not preceded by ESCAPE."
 
 (defun symlink-file (src dst &key (if-exists :error))
   (when (and (eq :supersede if-exists)
-	     (probe-file dst))
+             (probe-file dst))
     (delete-file dst))
   #+sbcl (sb-posix:symlink src dst)
   #+cmu(unix:unix-symlink (native-namestring src) (native-namestring dst))
@@ -302,8 +302,8 @@ signalling an error."
      for line = (read-line stream nil)
      for i from 0
      while (and line
-		(or (not n)
-		    (< i n)))
+                (or (not n)
+                    (< i n)))
      collect line))
 
 (defun read-file (pathname &key (element-type 'character) (if-does-not-exist :error) default)
@@ -311,24 +311,24 @@ signalling an error."
 can be a string, a vector of bytes, or whatever you specify as
 ELEMENT-TYPE."
   (with-open-file (in pathname
-		      :element-type element-type
-		      :if-does-not-exist (unless (eq :value if-does-not-exist)
-					   :error))
+                      :element-type element-type
+                      :if-does-not-exist (unless (eq :value if-does-not-exist)
+                                           :error))
     (if in
-	(be seq (make-array (file-length in) :element-type element-type)
-	  (read-sequence seq in)
-	  seq)
-	default)))
+        (be seq (make-array (file-length in) :element-type element-type)
+          (read-sequence seq in)
+          seq)
+        default)))
 
 (defun write-file (pathname contents &key (if-exists :error))
   "Read the whole content of file and return it as a sequence which
 can be a string, a vector of bytes, or whatever you specify as
 ELEMENT-TYPE."
   (with-open-file (out pathname
-		       :element-type (if (stringp contents)
-					 'character
-					 (array-element-type contents))
-		       :if-exists if-exists)
+                       :element-type (if (stringp contents)
+                                         'character
+                                         (array-element-type contents))
+                       :if-exists if-exists)
     (write-sequence contents out)))
 
 (defun read-from-file (pathname &key (on-error :error) default)
@@ -343,9 +343,9 @@ DEFAULT is returned."
        (read in)))
     (:value
      (handler-case (with-open-file (in pathname)
-		     (read in))
+                     (read in))
        (t ()
-	 default)))))
+         default)))))
 
 (defun write-to-file (object pathname &key (if-exists :error) pretty)
   "Similar to WRITE-TO-STRING but for files.  Write OBJECT to a file
@@ -357,10 +357,10 @@ with pathname PATHNAME."
   "Concatenate the strings in LIST interposing SEPARATOR (default
 nothing) between them."
   (reduce #'(lambda (&rest args)
-	      (if args
-		  (s+ (car args) separator (cadr args))
-		  ""))
-	  list))
+              (if args
+                  (s+ (car args) separator (cadr args))
+                  ""))
+          list))
 
 ;; to indent it properly: (put 'gcase 'lisp-indent-function 1)
 (defmacro gcase ((value &optional (test 'equalp)) &rest cases)
@@ -369,18 +369,18 @@ but use TEST as the comparison function, which defaults to EQUALP."
   (with-gensyms (val)
     `(be ,val ,value
        ,(cons 'cond
-	      (mapcar #'(lambda (case-desc)
-			  (destructuring-bind (vals &rest forms) case-desc
-			    `(,(cond ((consp vals)
-				      (cons 'or (mapcar #'(lambda (v)
-							    (list test val v))
-							vals)))
-				     ((or (eq vals 'otherwise)
-					  (eq vals t))
-				      t)
-				     (t (list test val vals)))
-			       ,@forms)))
-		      cases)))))
+              (mapcar #'(lambda (case-desc)
+                          (destructuring-bind (vals &rest forms) case-desc
+                            `(,(cond ((consp vals)
+                                      (cons 'or (mapcar #'(lambda (v)
+                                                            (list test val v))
+                                                        vals)))
+                                     ((or (eq vals 'otherwise)
+                                          (eq vals t))
+                                      t)
+                                     (t (list test val vals)))
+                               ,@forms)))
+                      cases)))))
 
 (defun string-truncate (string max-length)
   "If STRING is longer than MAX-LENGTH, return a shorter version.
@@ -393,10 +393,10 @@ Otherwise return the same string unchanged."
 (defmacro until (test &body body)
   (with-gensyms (result)
     `(loop
-	for ,result = ,test
-	until ,result
-	do (progn ,@body)
-	finally (return ,result))))
+        for ,result = ,test
+        until ,result
+        do (progn ,@body)
+        finally (return ,result))))
 
 (defun keywordify (string)
   (intern (string-upcase string) :keyword))
@@ -419,7 +419,7 @@ to make sure that the returned pathname doesn't identify an
 already existing file.  If missing DEFAULT defaults to
 *TMP-FILE-DEFAULTS*."
   (make-pathname :defaults default
-		 :name (format nil "~36R" (random #.(expt 36 10)))))
+                 :name (format nil "~36R" (random #.(expt 36 10)))))
 
 (defun open-temp-file (&optional default-pathname &rest open-args)
   "Open a new temporary file and return a stream to it.  This function
@@ -435,14 +435,14 @@ file, otherwise *TMP-FILE-DEFAULTS* is used."
   ;; purpose of this function, otherwise make it default to :OUTPUT
   (aif (getf open-args :direction)
        (unless (member it '(:output :io))
-	 (error "Can't create temporary file with open direction ~A." it))
+         (error "Can't create temporary file with open direction ~A." it))
        (setf open-args (append '(:direction :output)
-			       open-args)))
+                               open-args)))
   (do* ((name #1=(temp-file-name default-pathname) #1#)
-	(stream #2=(apply #'open  name
-			  :if-exists nil
-			  :if-does-not-exist :create
-			  open-args) #2#))
+        (stream #2=(apply #'open  name
+                          :if-exists nil
+                          :if-does-not-exist :create
+                          open-args) #2#))
        (stream stream)))
 
 (defmacro with-temp-file ((stream &rest open-temp-args) &body body)
@@ -451,11 +451,11 @@ a STREAM open on a unique temporary file name.  OPEN-TEMP-ARGS are
 passed verbatim to OPEN-TEMP-FILE."
   `(be ,stream (open-temp-file ,@open-temp-args)
      (unwind-protect
-	  (progn ,@body)
+          (progn ,@body)
        (close ,stream)
        ;; body may decide to rename the file so we must ignore the errors
        (ignore-errors
-	 (delete-file (pathname ,stream))))))
+         (delete-file (pathname ,stream))))))
 
 (defmacro with-hidden-temp-file ((stream &rest open-args) &body body)
   "Just like WITH-TEMP-FILE but unlink (delete) the temporary file
@@ -468,17 +468,17 @@ may likely decide to crash, take all your data with it and, in the
 meanwhile, report you to the NSA as terrorist."
   `(be ,stream (open-temp-file ,@open-args)
      (unwind-protect
-	  (progn (delete-file (pathname ,stream))
-		 ,@body)
+          (progn (delete-file (pathname ,stream))
+                 ,@body)
        (close ,stream))))
 
 (defun insert-in-order (item seq &key (test #'<) key)
   "Destructively insert ITEM in LIST in order by TEST.  Return
 the new list.  This is a simple wrapper around MERGE."
   (merge (if seq
-	     (type-of seq)
-	     'list)
-	 (list item) seq test :key key))
+             (type-of seq)
+             'list)
+         (list item) seq test :key key))
 
 (defmacro f++ (x &optional (delta 1))
   "Same as INCF but hopefully optimised for fixnums."
@@ -500,46 +500,46 @@ Examples:
    (soundex \"Ladd\") => \"L300\""
   (declare (type string word))
   (flet ((translate-char (char)
-	   (awhen (position char "BFPVCGJKQSXZDTLMNR")
-	     (elt "111122222222334556" it))))
+           (awhen (position char "BFPVCGJKQSXZDTLMNR")
+             (elt "111122222222334556" it))))
     (let ((key (make-string key-length :initial-element #\0))
-	  (word-length (length word)))
+          (word-length (length word)))
       (setf (elt key 0) (elt word 0))
       (loop
-	 with previous-sound = (translate-char (char-upcase (elt word 0)))
-	 with j = 1
-	 for i from 1 by 1 below word-length
-	 for c = (char-upcase (elt word i))
-	 while (< j key-length)
-	 do (be sound (translate-char c)
-	      (cond ((not (eq sound previous-sound))
-		     (unless (member c '(#\H #\W))
-		       (setf previous-sound sound))
-		     (when sound
-		       (setf (elt key j) sound)
-		       (incf j))))))
+         with previous-sound = (translate-char (char-upcase (elt word 0)))
+         with j = 1
+         for i from 1 by 1 below word-length
+         for c = (char-upcase (elt word i))
+         while (< j key-length)
+         do (be sound (translate-char c)
+              (cond ((not (eq sound previous-sound))
+                     (unless (member c '(#\H #\W))
+                       (setf previous-sound sound))
+                     (when sound
+                       (setf (elt key j) sound)
+                       (incf j))))))
       key)))
 
 (defun string-soundex= (string1 string2)
   (let ((l1 (split-at +whitespace+ string1))
-	(l2 (split-at +whitespace+ string2)))
+        (l2 (split-at +whitespace+ string2)))
     (and (= (length l1) (length l2))
-	 (every #'string= (mapcar #'soundex l1) (mapcar #'soundex l2)))))
+         (every #'string= (mapcar #'soundex l1) (mapcar #'soundex l2)))))
 
 #+(OR)
 (defun soundex-test ()
   (let* ((words1 '("Euler" "Gauss" "Hilbert" "Knuth" "Lloyd" "Lukasiewicz" "Wachs"))
-	 (words2 '("Ellery" "Ghosh" "Heilbronn" "Kant" "Ladd" "Lissajous" "Waugh"))
-	 (results '("E460" "G200" "H416" "K530" "L300" "L222" "W200")))
+         (words2 '("Ellery" "Ghosh" "Heilbronn" "Kant" "Ladd" "Lissajous" "Waugh"))
+         (results '("E460" "G200" "H416" "K530" "L300" "L222" "W200")))
     (mapc #'(lambda (w1 w2 r)
-	      (let ((r1 (soundex w1))
-		    (r2 (soundex w2)))
-		(format t "~A = ~A, ~A = ~A => ~A~%" w1 r1 w2 r2
-			(if (and (string= r1 r2)
-				 (string= r r1))
-			    "OK"
-			    (format nil "ERROR (expected ~A)" r)))))
-	  words1 words2 results)
+              (let ((r1 (soundex w1))
+                    (r2 (soundex w2)))
+                (format t "~A = ~A, ~A = ~A => ~A~%" w1 r1 w2 r2
+                        (if (and (string= r1 r2)
+                                 (string= r r1))
+                            "OK"
+                            (format nil "ERROR (expected ~A)" r)))))
+          words1 words2 results)
     (values)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -596,17 +596,17 @@ one (if any)."
 (defun dle-map (function dle-object)
   (when dle-object
     (make-double-linked-element :value (funcall function (dle-value dle-object))
-				:previous (dle-previous dle-object)
-				:next (dle-map function (dle-next dle-object)))))
+                                :previous (dle-previous dle-object)
+                                :next (dle-map function (dle-next dle-object)))))
 
 (defmacro do-dle ((var dle &optional (result nil)) &body body)
   "Iterate over a list of DOUBLE-LINKED-ELEMENTs and map body to
 each element's value.  Bind VAR to the value on each iteration."
   (be cursor (gensym)
     `(do ((,cursor ,dle (dle-next ,cursor)))
-	 ((not ,cursor) ,result)
+         ((not ,cursor) ,result)
        (be ,var (dle-value ,cursor)
-	 ,@body))))
+         ,@body))))
 
 (defmacro do-dle* ((var dle &optional (result nil)) &body body)
   "Same as DO-DLE but VAR is a symbol macro, so that BODY can
@@ -614,14 +614,14 @@ modify the element's value."
   (be cursor (gensym)
     `(symbol-macrolet ((,var (dle-value ,cursor)))
        (do ((,cursor ,dle (dle-next ,cursor)))
-	   ((not ,cursor) ,result)
-	 ,@body))))
+           ((not ,cursor) ,result)
+         ,@body))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (defclass double-linked-list ()
   ((elements :type double-linked-element
-	     :documentation "The actual list of elements held by this object.")
+             :documentation "The actual list of elements held by this object.")
    (last-element :type double-linked-element))
   (:documentation
    "A double linked list where elements can be added or removed
@@ -632,13 +632,13 @@ from either end."))
   (call-next-method)
   (with-slots (last-element elements) object
     (setf last-element (make-double-linked-element)
-	  elements last-element)))
+          elements last-element)))
 
 (defmethod print-object ((object double-linked-list) stream)
   (print-unreadable-object (object stream :type t)
     (be elements '()
       (do-dle (e (slot-value object 'elements))
-	(push e elements))
+        (push e elements))
       (format stream "elements=~S" (nreverse elements)))))
 
 (defgeneric pop-first (double-linked-list)
@@ -672,8 +672,8 @@ from either end."))
   (with-slots (elements) list
     (when (dle-next elements)
       (prog1 (dle-value elements)
-	(setf (dle-previous (dle-next elements)) nil
-	      elements (dle-next elements))))))
+        (setf (dle-previous (dle-next elements)) nil
+              elements (dle-next elements))))))
 
 (defmethod push-first (value (list double-linked-list))
   (with-slots (elements) list
@@ -687,11 +687,11 @@ from either end."))
 
 (defmethod list-map (function (list double-linked-list))
   (labels ((map-dll (dle)
-	     (when (dle-next dle)
-	       (make-double-linked-element
-		:value (funcall function (dle-value dle))
-		:previous (dle-previous dle)
-		:next (map-dll (dle-next dle))))))
+             (when (dle-next dle)
+               (make-double-linked-element
+                :value (funcall function (dle-value dle))
+                :previous (dle-previous dle)
+                :next (map-dll (dle-next dle))))))
     (map-dll (slot-value list 'elements))))
 
 (defmethod dll-find-cursor (object (list double-linked-list) &key (test #'eql) (key #'identity))
@@ -699,7 +699,7 @@ from either end."))
       ((not (dle-next cursor)))
     (be value (dle-value cursor)
       (when (funcall test (funcall key value) object)
-	(return cursor)))))
+        (return cursor)))))
 
 (defmethod dll-find (object (list double-linked-list) &key (test #'eql) (key #'identity))
   (awhen (dll-find-cursor object list :test test :key key)
@@ -708,9 +708,9 @@ from either end."))
 (defmethod dll-remove ((cursor double-linked-element) (list double-linked-list))
   (with-slots (elements) list
     (if (dle-previous cursor)
-	(dle-remove cursor)
-	(setf (dle-previous (dle-next elements)) nil
-	      elements (dle-next elements))))
+        (dle-remove cursor)
+        (setf (dle-previous (dle-next elements)) nil
+              elements (dle-next elements))))
   list)
 
 (defmacro do-dll ((var list &optional (result nil)) &body body)
@@ -718,9 +718,9 @@ from either end."))
 value.  Bind VAR to the value on each iteration."
   (be cursor (gensym)
     `(do ((,cursor (slot-value ,list 'elements) (dle-next ,cursor)))
-	 ((not (dle-next ,cursor)) ,result)
+         ((not (dle-next ,cursor)) ,result)
        (be ,var (dle-value ,cursor)
-	 ,@body))))
+         ,@body))))
 
 (defmacro do-dll* ((var list &optional (result nil)) &body body)
   "Same as DO-DLL but VAR is a symbol macro, so that BODY can
@@ -728,21 +728,21 @@ modify the element's value."
   (be cursor (gensym)
     `(symbol-macrolet ((,var (dle-value ,cursor)))
        (do ((,cursor (slot-value ,list 'elements) (dle-next ,cursor)))
-	   ((not (dle-next ,cursor)) ,result)
-	 ,@body))))
+           ((not (dle-next ,cursor)) ,result)
+         ,@body))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (defclass limited-list (double-linked-list)
   ((max-size :initform nil
-	     :initarg :size
-	     :reader max-size
-	     :type (or integer null)
-	     :documentation "Size limit to which the list is allowed to grow to.  NIL = no limit.")
+             :initarg :size
+             :reader max-size
+             :type (or integer null)
+             :documentation "Size limit to which the list is allowed to grow to.  NIL = no limit.")
    (size :initform 0
-	 :reader size
-	 :type integer
-	 :documentation "Current number of elements in the list."))
+         :reader size
+         :type integer
+         :documentation "Current number of elements in the list."))
   (:documentation
    "A double linked list where the maximum number of elements can
 be limited."))
@@ -750,9 +750,9 @@ be limited."))
 (defun dll-member-p (dle list)
   (with-slots (elements size) list
     (do ((e elements (dle-next e)))
-	((not e))
+        ((not e))
       (when (eq e dle)
-	(return t)))))
+        (return t)))))
 
 (defmethod dll-remove ((cursor double-linked-element) (list limited-list))
   (with-slots (size) list
@@ -780,9 +780,9 @@ full."
   (prog1 (call-next-method)
     (with-slots (max-size size last-element) list
       (if (or (not max-size)
-	      (< size max-size))
-	  (incf size)
-	  (dle-remove (dle-previous last-element))))))
+              (< size max-size))
+          (incf size)
+          (dle-remove (dle-previous last-element))))))
 
 (defmethod push-last (value (list limited-list))
   "Add at the end of the list and drop the first element if list
@@ -791,16 +791,16 @@ is full."
   (prog1 (call-next-method)
     (with-slots (max-size size elements) list
       (if (or (not max-size)
-	      (< size max-size))
-	(incf size)
-	(setf (dle-previous (dle-next elements)) nil
-	      elements (dle-next elements))))))
+              (< size max-size))
+        (incf size)
+        (setf (dle-previous (dle-next elements)) nil
+              elements (dle-next elements))))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (defclass sorted-list (limited-list)
   ((test :type function
-	 :initarg :test))
+         :initarg :test))
   (:documentation
    "A double linked list where elements are inserted in a
 sorted order."))
@@ -816,25 +816,25 @@ Returns two values, the modified list and the cursor to the new
 element."
   (with-slots (max-size size elements test last-element) sl
     (do ((cursor elements (dle-next cursor)))
-	((or (not (dle-next cursor))
-	     (funcall test item (dle-value cursor)))
-	 (if (dle-previous cursor)
-	     (cons-dle item (dle-previous cursor) cursor)
-	     (setf elements (cons-dle item nil cursor)))
-	 (if (or (not max-size)
-		  (< size max-size))
-	     (incf size)
-	     (dle-remove (dle-previous last-element)))
-	 (values sl (dle-previous cursor))))))
+        ((or (not (dle-next cursor))
+             (funcall test item (dle-value cursor)))
+         (if (dle-previous cursor)
+             (cons-dle item (dle-previous cursor) cursor)
+             (setf elements (cons-dle item nil cursor)))
+         (if (or (not max-size)
+                  (< size max-size))
+             (incf size)
+             (dle-remove (dle-previous last-element)))
+         (values sl (dle-previous cursor))))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (defclass heap ()
   ((less-than :type function
-	      :initarg :test
-	      :documentation "The heap invariant.")
+              :initarg :test
+              :documentation "The heap invariant.")
    (data :type array
-	 :documentation "The heap tree representation.")))
+         :documentation "The heap tree representation.")))
 
 (defmethod initialize-instance ((heap heap) &rest args)
   (declare (ignore args))
@@ -850,7 +850,7 @@ element."
        for current = pos then parent
        for parent = (truncate (1- current) 2)
        until (or (zerop current)
-		 (funcall less-than (aref data parent) (aref data current)))
+                 (funcall less-than (aref data parent) (aref data current)))
        do (rotatef (aref data current) (aref data parent)))))
 
 (defmethod heap-add ((heap heap) item)
@@ -879,13 +879,13 @@ element."
        for left-child = (+ 1 (* 2 current))
        for right-child = (+ 2 (* 2 current))
        for child = (cond ((>= left-child end)
-			  (return))
-			 ((>= right-child end)
-			  left-child)
-			 ((funcall less-than (aref data left-child) (aref data right-child))
-			  left-child)
-			 (t
-			  right-child))
+                          (return))
+                         ((>= right-child end)
+                          left-child)
+                         ((funcall less-than (aref data left-child) (aref data right-child))
+                          left-child)
+                         (t
+                          right-child))
        while (funcall less-than (aref data child) (aref data current))
        do (rotatef (aref data current) (aref data child)))))
 
@@ -901,7 +901,7 @@ element."
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (defstruct (lru-cache-slot (:include double-linked-element)
-			   (:conc-name lruc-slot-))
+                           (:conc-name lruc-slot-))
   key)
 
 (defmethod print-object ((object lru-cache-slot) stream)
@@ -914,24 +914,24 @@ time.")
 
 (defclass lru-cache ()
   ((max-size :initform *default-cache-size*
-	     :initarg :size
-	     :reader max-size
-	     :type (or integer null)
-	     :documentation
-	     "Maximum number of elements that the cache can fit.")
+             :initarg :size
+             :reader max-size
+             :type (or integer null)
+             :documentation
+             "Maximum number of elements that the cache can fit.")
    (elements-list :type lru-cache-slot
-		  :documentation "The list of elements held by the cache.")
+                  :documentation "The list of elements held by the cache.")
    (elements-hash :type hash-table
-		  :documentation "The hash table of the elements held bye the cache.")
+                  :documentation "The hash table of the elements held bye the cache.")
    (last-element :type lru-cache-slot)
    (size :initform 0
-	 :reader size
-	 :type integer
-	 :documentation "Current number of elements in the cache.")
+         :reader size
+         :type integer
+         :documentation "Current number of elements in the cache.")
    (finalizer :initform nil
-	      :initarg :finalizer
-	      :documentation
-	      "Procedure to call when elements are dropped from cache."))
+              :initarg :finalizer
+              :documentation
+              "Procedure to call when elements are dropped from cache."))
   (:documentation
    "An objects cache that keeps the elements used more often and
 drops those that are used less often.  The usage is similar to an
@@ -945,10 +945,10 @@ is required."))
   (call-next-method)
   (with-slots (last-element elements-list elements-hash) object
     (setf last-element (make-lru-cache-slot)
-	  elements-list last-element
-	  elements-hash (if test
-			    (make-hash-table :test test)
-			    (make-hash-table)))))
+          elements-list last-element
+          elements-hash (if test
+                            (make-hash-table :test test)
+                            (make-hash-table)))))
 
 (defgeneric getcache (key cache)
   (:documentation
@@ -966,7 +966,7 @@ is required."))
   "Relocate slot to the front of the elements list in cache.
 This will stretch its lifespan in the cache."
   (declare (type lru-cache-slot slot)
-	   (type lru-cache cache))
+           (type lru-cache cache))
   (with-slots (elements-list) cache
     ;; unless it's already the first
     (unless (eq slot elements-list)
@@ -974,9 +974,9 @@ This will stretch its lifespan in the cache."
       (dle-remove slot)
       ;; ... and add it in front of the list
       (setf (lruc-slot-next slot) elements-list
-	    (lruc-slot-previous slot) nil
-	    (lruc-slot-previous elements-list) slot
-	    elements-list slot))))
+            (lruc-slot-previous slot) nil
+            (lruc-slot-previous elements-list) slot
+            elements-list slot))))
 
 (defun drop-last-cache-element (cache)
   "Drop the last element in the list of the cache object."
@@ -985,20 +985,20 @@ This will stretch its lifespan in the cache."
     (let ((second-last (lruc-slot-previous last-element)))
       (assert second-last)
       (when finalizer
-	(funcall finalizer (lruc-slot-value second-last)))
+        (funcall finalizer (lruc-slot-value second-last)))
       (dle-remove second-last)
       (remhash (lruc-slot-key second-last) elements-hash))))
 
 (defun add-to-cache (slot cache)
   (declare (type lru-cache-slot slot)
-	   (type lru-cache cache))
+           (type lru-cache cache))
   (move-in-front-of-cache-list slot cache)
   (with-slots (max-size size elements-hash) cache
     (setf (gethash (lruc-slot-key slot) elements-hash) slot)
     (if (and max-size
-	     (< size max-size))
-	(incf size)
-	(drop-last-cache-element cache))))
+             (< size max-size))
+        (incf size)
+        (drop-last-cache-element cache))))
 
 (defmethod getcache (key (cache lru-cache))
   (multiple-value-bind (slot found?) (gethash key (slot-value cache 'elements-hash))
@@ -1010,37 +1010,37 @@ This will stretch its lifespan in the cache."
   (with-slots (elements-hash elements-list) cache
     (multiple-value-bind (slot found?) (gethash key elements-hash)
       (if found?
-	  (progn
-	    (move-in-front-of-cache-list slot cache)
-	    (setf (lruc-slot-value slot) value))
-	  (add-to-cache (make-lru-cache-slot :key key :value value) cache))
+          (progn
+            (move-in-front-of-cache-list slot cache)
+            (setf (lruc-slot-value slot) value))
+          (add-to-cache (make-lru-cache-slot :key key :value value) cache))
       value)))
 
 (defmethod remcache (key (cache lru-cache))
   (with-slots (elements-hash size elements-list finalizer) cache
     (multiple-value-bind (slot found?) (gethash key elements-hash)
       (when found?
-	(remhash key elements-hash)
-	(when finalizer
-	  (funcall finalizer (lruc-slot-value slot)))
-	(when (eq slot elements-list)
-	  (setf elements-list (dle-next slot)))
-	(dle-remove slot)
-	(decf size)
-	t))))
+        (remhash key elements-hash)
+        (when finalizer
+          (funcall finalizer (lruc-slot-value slot)))
+        (when (eq slot elements-list)
+          (setf elements-list (dle-next slot)))
+        (dle-remove slot)
+        (decf size)
+        t))))
 
 (defmacro cached (cache key value)
   "If KEY is found in CACHE return the associated object.  Otherwise
 store VALUE for later re-use."
   (with-gensyms (object my-cache my-key my-value found?)
     `(let* ((,my-cache ,cache)
-	    (,my-key ,key))
+            (,my-key ,key))
        (multiple-value-bind (,object ,found?) (getcache ,my-key ,my-cache)
-	 (if ,found?
-	     ,object
-	     (let ((,my-value ,value))
-	       (setf (getcache ,my-key ,my-cache) ,my-value)
-	       ,my-value))))))
+         (if ,found?
+             ,object
+             (let ((,my-value ,value))
+               (setf (getcache ,my-key ,my-cache) ,my-value)
+               ,my-value))))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
@@ -1073,17 +1073,17 @@ store VALUE for later re-use."
 (defun find-uid (name)
   "Find the user id of NAME.  Return an integer."
   #+sbcl (awhen (sb-posix:getpwnam name)
-	   (sb-posix:passwd-uid it))
+           (sb-posix:passwd-uid it))
   #+cmu (awhen (unix:unix-getpwnam name)
-	  (unix:user-info-uid it))
+          (unix:user-info-uid it))
   #-(or cmu sbcl)
   (error "Unable to find a UID on this Lisp system."))
 
 #+clisp (ffi:def-call-out %getuid
-	    (:name "getuid")
-	  (:arguments)
-	  (:return-type ffi:int)
-	  (:library "libc.so"))
+            (:name "getuid")
+          (:arguments)
+          (:return-type ffi:int)
+          (:library "libc.so"))
 
 (defun getuid ()
   "Return the Unix user id.  This is an integer."
@@ -1104,7 +1104,7 @@ user id."
     `(be ,ruid (getuid)
        (seteuid ,uid)
        (unwind-protect (progn ,@forms)
-	 (seteuid ,ruid)))))
+         (seteuid ,ruid)))))
 
 (defun get-logname (&optional uid)
   "Return the login id of the user.  This is a string and it is not
@@ -1129,9 +1129,9 @@ file."
     (setf uid (find-uid uid)))
   (when uid
     (car (split-string-at-char #+cmu (unix:user-info-gecos (unix:unix-getpwuid uid))
-			       #+sbcl (sb-posix:passwd-gecos (sb-posix:getpwuid uid))
-			       #-(or cmu sbcl) (error "can't getpwuid() on this Lisp system.")
-			       #\,))))
+                               #+sbcl (sb-posix:passwd-gecos (sb-posix:getpwuid uid))
+                               #-(or cmu sbcl) (error "can't getpwuid() on this Lisp system.")
+                               #\,))))
 
 (defun get-user-home (&optional uid)
   (unless uid
@@ -1158,37 +1158,37 @@ value.  If PAIRS-P is true the alist elements will be pairs."
   (loop
      for (key val) on plist by #'cddr
      collect (if pairs-p
-		 (cons key val)
-		 (list key val))))
+                 (cons key val)
+                 (list key val))))
 
 (defun string->byte-vector (string &key start end)
   "Convert a string of characters into a vector of (unsigned-byte
 8) elements."
   (map '(vector (unsigned-byte 8)) #'char-code
        (if (or start end)
-	   (subseq string (or start 0) end)
-	   string)))
+           (subseq string (or start 0) end)
+           string)))
 
 (defun byte-vector->string (vector &key start end)
   "Convert a vector of (unsigned-byte 8) elements into a string
 of characters."
   (map 'string #'code-char
        (if (or start end)
-	   (subseq vector (or start 0) end)
-	   vector)))
+           (subseq vector (or start 0) end)
+           vector)))
 
 (defun outdated-p (file dependencies)
   "Check if FILE has been modified before any of its
 DEPENDENCIES."
   (be epoch (and (probe-file file)
-		 (file-write-date file))
+                 (file-write-date file))
     ;; if file is missing altogether, we consider it outdated
     (or (not epoch)
-	(loop
-	   for dep in dependencies
-	   thereis (aand (probe-file dep)
-			 (file-write-date dep)
-			 (> it epoch))))))
+        (loop
+           for dep in dependencies
+           thereis (aand (probe-file dep)
+                         (file-write-date dep)
+                         (> it epoch))))))
 
 (defmacro let-places (places-and-values &body body)
   "Execute BODY binding temporarily some places to new values and
@@ -1198,21 +1198,21 @@ instead of new variable names this macro binds values to existing
 places (variables)."
   (be tmp-variables (loop for x in places-and-values collect (gensym))
     `(let ,(mapcar #'(lambda (tmp-var place-and-value)
-		       (list tmp-var (car place-and-value)))
-		   tmp-variables places-and-values)
+                       (list tmp-var (car place-and-value)))
+                   tmp-variables places-and-values)
        (unwind-protect
-	    (progn
-	      ;; as some assignments could signal an error, we assign
-	      ;; within the unwind-protect block so that we can always
-	      ;; guarantee a consistent state on exit
-	      ,@(mapcar #'(lambda (place-and-value)
-			    `(setf ,(car place-and-value) ,(cadr place-and-value)))
-			places-and-values)
-	      ,@body)
-	 ,@(mapcar #'(lambda (tmp-var place-and-value)
-		       `(setf ,(car place-and-value) ,tmp-var))
-		   tmp-variables
-		   places-and-values)))))
+            (progn
+              ;; as some assignments could signal an error, we assign
+              ;; within the unwind-protect block so that we can always
+              ;; guarantee a consistent state on exit
+              ,@(mapcar #'(lambda (place-and-value)
+                            `(setf ,(car place-and-value) ,(cadr place-and-value)))
+                        places-and-values)
+              ,@body)
+         ,@(mapcar #'(lambda (tmp-var place-and-value)
+                       `(setf ,(car place-and-value) ,tmp-var))
+                   tmp-variables
+                   places-and-values)))))
 
 (defmacro let-slots (accessor/new-value-pairs object &body body)
   "Execute BODY with some OBJECT's slots temporary sets to new
@@ -1223,61 +1223,61 @@ their original value.  See LET-PLACES."
   (with-gensyms (obj)
     `(be ,obj ,object
        (let-places ,(mapcar #'(lambda (av)
-				`((,(car av) ,obj) ,(cadr av)))
-			    accessor/new-value-pairs)
-	 ,@body))))
+                                `((,(car av) ,obj) ,(cadr av)))
+                            accessor/new-value-pairs)
+         ,@body))))
 
 (defvar *decimal-point* #\.)
 (defvar *thousands-comma* #\,)
 
 (defun format-amount (number &key (decimals 2) (rounder #'round)
-		      (comma *thousands-comma*) (comma-stance 3)
-		      (decimal-point *decimal-point*))
+                      (comma *thousands-comma*) (comma-stance 3)
+                      (decimal-point *decimal-point*))
   "Return a string formatted as fixed decimal point number of DECIMALS
 adding commas every COMMA-STANCE places before the decimal point."
   (declare (type number number)
-	   (type fixnum decimals comma-stance)
-	   (type function rounder)
-	   (type character comma decimal-point)
-	   (optimize (speed 3) (safety 0) (debug 0)))
+           (type fixnum decimals comma-stance)
+           (type function rounder)
+           (type character comma decimal-point)
+           (optimize (speed 3) (safety 0) (debug 0)))
   (let* ((int (funcall rounder (* number (expt 10 decimals))))
-	 (negative (< int 0)))
+         (negative (< int 0)))
     (declare (integer int))
     (when negative
       (setf int (- int)))
     (let* ((digits (max (1+ decimals)
-			(1+ (if (zerop int)
-				0
-				(truncate (log int 10))))))
-	   (string-length (+ digits
-			     ;; the minus sign
-			     (if negative 1 0)
-			     ;; the decimal point
-			     (if (zerop decimals) 0 1)
-			     ;; the thousands commas
-			     (1- (ceiling (- digits decimals) comma-stance))))
-	   (string (make-string string-length))
-	   (pos (1- string-length)))
+                        (1+ (if (zerop int)
+                                0
+                                (truncate (log int 10))))))
+           (string-length (+ digits
+                             ;; the minus sign
+                             (if negative 1 0)
+                             ;; the decimal point
+                             (if (zerop decimals) 0 1)
+                             ;; the thousands commas
+                             (1- (ceiling (- digits decimals) comma-stance))))
+           (string (make-string string-length))
+           (pos (1- string-length)))
       (declare (type fixnum pos digits))
       (labels ((add-char (char)
-		 (setf (schar string pos) char)
-		 (decf pos))
-	       (add-digit ()
-		 (add-char (digit-char (mod int 10)))
-		 (setf int (truncate int 10))))
-	(unless (zerop decimals)
-	  (loop
-	     for i fixnum from 0 below decimals
-	     do (add-digit))
-	  (add-char decimal-point))
-	(loop
-	   for i fixnum from 1
-	   do (add-digit)
-	   while (>= pos (if negative 1 0))
-	   when (zerop (mod i comma-stance))
-	   do (add-char comma))
-	(when negative
-	  (add-char #\-)))
+                 (setf (schar string pos) char)
+                 (decf pos))
+               (add-digit ()
+                 (add-char (digit-char (mod int 10)))
+                 (setf int (truncate int 10))))
+        (unless (zerop decimals)
+          (loop
+             for i fixnum from 0 below decimals
+             do (add-digit))
+          (add-char decimal-point))
+        (loop
+           for i fixnum from 1
+           do (add-digit)
+           while (>= pos (if negative 1 0))
+           when (zerop (mod i comma-stance))
+           do (add-char comma))
+        (when negative
+          (add-char #\-)))
       string)))
 
 (defun parse-amount (string &key (start 0) end)
@@ -1288,28 +1288,28 @@ trailing spaces must be removed from the string in advance."
      with amount = 0
      with decimals = nil
      with negative = (when (and (not (zerop (length string)))
-				(char= #\- (char string 0)))
-		       (incf start)
-		       t)
+                                (char= #\- (char string 0)))
+                       (incf start)
+                       t)
      for i from start below (or end (length string))
      for c = (char string i)
      do (cond ((char= c *decimal-point*)
-	       (if decimals
-		   (return nil)
-		   (setf decimals 0)))
-	      ((char= c *thousands-comma*))
-	      (t
-	       (be d (digit-char-p c)
-		 (cond ((not d)
-			(return nil))
-		       (decimals
-			(incf decimals)
-			(incf amount (/ d (expt 10 decimals))))
-		       (t
-			(setf amount (+ d (* amount 10))))))))
+               (if decimals
+                   (return nil)
+                   (setf decimals 0)))
+              ((char= c *thousands-comma*))
+              (t
+               (be d (digit-char-p c)
+                 (cond ((not d)
+                        (return nil))
+                       (decimals
+                        (incf decimals)
+                        (incf amount (/ d (expt 10 decimals))))
+                       (t
+                        (setf amount (+ d (* amount 10))))))))
      finally (return (if negative
-			 (- amount)
-			 amount))))
+                         (- amount)
+                         amount))))
 
 (defmacro with-package (name &body body)
   `(let ((*package* (find-package ,name)))
@@ -1320,22 +1320,22 @@ trailing spaces must be removed from the string in advance."
 of a byte that is most apporpriate for the magnitude of N.  A
 kilobyte is 1024 not 1000 bytes, everything follows."
   (let* ((kilo 1024)
-	 (mega (* kilo kilo))
-	 (giga (* kilo mega))
-	 (tera (* mega mega))
-	 (peta (* kilo tera)))
+         (mega (* kilo kilo))
+         (giga (* kilo mega))
+         (tera (* mega mega))
+         (peta (* kilo tera)))
     (apply #'format nil "~,1F~A"
-	   (cond ((> n (* 2 peta))
-		  (list (/ n peta) (if imply-bytes "P" "PB")))
-		 ((> n (* 2 tera))
-		  (list (/ n tera) (if imply-bytes "T" "TB")))
-		 ((> n (* 2 giga))
-		  (list (/ n giga) (if imply-bytes "G" "GB")))
-		 ((> n (* 2 mega))
-		  (list (/ n mega) (if imply-bytes "M" "MB")))
-		 ((> n (* 2 kilo))
-		  (list (/ n kilo) (if imply-bytes "K" "KB")))
-		 (t (list n (if imply-bytes "" " bytes")))))))
+           (cond ((> n (* 2 peta))
+                  (list (/ n peta) (if imply-bytes "P" "PB")))
+                 ((> n (* 2 tera))
+                  (list (/ n tera) (if imply-bytes "T" "TB")))
+                 ((> n (* 2 giga))
+                  (list (/ n giga) (if imply-bytes "G" "GB")))
+                 ((> n (* 2 mega))
+                  (list (/ n mega) (if imply-bytes "M" "MB")))
+                 ((> n (* 2 kilo))
+                  (list (/ n kilo) (if imply-bytes "K" "KB")))
+                 (t (list n (if imply-bytes "" " bytes")))))))
 
 ;; WARNING: This function may or may not work on your Lisp system.  It
 ;; all depends on how the OPEN function has been implemented regarding
@@ -1368,31 +1368,31 @@ prevent the inadvertent immediate removal of any newly created
 lock file by another program."
   (be locked '()
     (flet ((lock (file)
-	     (when (and expiration
-			(> (get-universal-time)
-			   (+ (file-write-date file) expiration)))
-	       (delete-file file)
-	       (when suspend
-		 (sleep suspend)))
-	     (do ((i 0 (1+ i))
-		  (done nil))
-		 (done)
-	       (unless (or (not retries)
-			   (< i retries))
-		 (error "Can't create lock file ~S: tried ~A time~:P." file retries))
-	       (with-open-file (out file :direction :output :if-exists nil)
-		 (cond (out
-			(format out "Lock file created on ~A~%" (time-string (get-universal-time)))
-			(setf done t))
-		       (sleep-time
-			(sleep sleep-time)))))))
+             (when (and expiration
+                        (> (get-universal-time)
+                           (+ (file-write-date file) expiration)))
+               (delete-file file)
+               (when suspend
+                 (sleep suspend)))
+             (do ((i 0 (1+ i))
+                  (done nil))
+                 (done)
+               (unless (or (not retries)
+                           (< i retries))
+                 (error "Can't create lock file ~S: tried ~A time~:P." file retries))
+               (with-open-file (out file :direction :output :if-exists nil)
+                 (cond (out
+                        (format out "Lock file created on ~A~%" (time-string (get-universal-time)))
+                        (setf done t))
+                       (sleep-time
+                        (sleep sleep-time)))))))
       (unwind-protect
-	   (progn
-	     (dolist (file pathnames)
-	       (lock file)
-	       (push file locked))
-	     (setf locked '()))
-	(mapc #'delete-file locked)))))
+           (progn
+             (dolist (file pathnames)
+               (lock file)
+               (push file locked))
+             (setf locked '()))
+        (mapc #'delete-file locked)))))
 
 (defmacro with-lock-files ((lock-files &rest lock-args) &body body)
   "Execute BODY after creating LOCK-FILES.  Remove the lock files
@@ -1401,7 +1401,7 @@ on exit.  LOCK-ARGS are passed to MAKE-LOCK-FILES."
     `(be ,files (list ,@lock-files)
        (make-lock-files ,files ,@lock-args)
        (unwind-protect (progn ,@body)
-	 (mapc #'delete-file ,files)))))
+         (mapc #'delete-file ,files)))))
 
 (defun getpid ()
   #+cmu (unix:unix-getpid)
@@ -1416,11 +1416,11 @@ This does _not_ stop the error from propagating."
   (be done-p (gensym)
     `(be ,done-p nil
        (unwind-protect
-	    (prog1
-		,form
-	      (setf ,done-p t))
-	 (unless ,done-p
-	   ,@error-forms)))))
+            (prog1
+                ,form
+              (setf ,done-p t))
+         (unless ,done-p
+           ,@error-forms)))))
 
 (defun floor-to (x aim)
   "Round X down to the nearest multiple of AIM."
@@ -1446,11 +1446,11 @@ This does _not_ stop the error from propagating."
 
 (defmethod queue-append ((queue queue) (objects list))
   (cond ((null (queue-first queue))
-	 (setf (queue-first queue) objects
-	       (queue-last queue) (last objects)))
-	(t
-	 (setf (cdr (queue-last queue)) objects
-	       (queue-last queue) (last objects))))
+         (setf (queue-first queue) objects
+               (queue-last queue) (last objects)))
+        (t
+         (setf (cdr (queue-last queue)) objects
+               (queue-last queue) (last objects))))
   queue)
 
 (defmethod queue-append ((queue queue) object)
@@ -1479,30 +1479,30 @@ don't get garbage collected.  It may work for your own code, though.
 Locked packages are left alone.  If you need to do those too, unlock
 them first."
   (flet ((forget (symbol)
-	   (dolist (type '(compiler-macro function method-combination setf structure type variable))
-	     (when (ignore-errors (documentation symbol type))
-	       (setf (documentation symbol type) nil)))))
+           (dolist (type '(compiler-macro function method-combination setf structure type variable))
+             (when (ignore-errors (documentation symbol type))
+               (setf (documentation symbol type) nil)))))
     (setf packages (mapcar #'(lambda (pkg)
-			       (if (packagep pkg)
-				   (package-name pkg)
-				   (package-name (find-package pkg))))
-			   packages))
+                               (if (packagep pkg)
+                                   (package-name pkg)
+                                   (package-name (find-package pkg))))
+                           packages))
     (setf packages
-	  ;; don't try to modify locked packages
-	  (remove-if #'package-locked-p
-		     (mapcar #'find-package
-			     (or packages
-				 (list-all-packages)))))
+          ;; don't try to modify locked packages
+          (remove-if #'package-locked-p
+                     (mapcar #'find-package
+                             (or packages
+                                 (list-all-packages)))))
     (dolist (package packages)
       (with-package-iterator (next package :internal :external)
-	(loop
-	   (multiple-value-bind (more? symbol) (next)
-	     (unless more?
-	       (return))
-	     (forget symbol)))))
+        (loop
+           (multiple-value-bind (more? symbol) (next)
+             (unless more?
+               (return))
+             (forget symbol)))))
     #+(OR) (do-all-symbols (symbol)
-	     (when (member (symbol-package symbol) packages)
-	       (forget symbol))))
+             (when (member (symbol-package symbol) packages)
+               (forget symbol))))
   (values))
 
 (defun load-compiled (pathname &optional compiled-pathname)
@@ -1513,13 +1513,13 @@ the compiled version is more recent than its source."
     (setf pathname (merge-pathnames pathname (make-pathname :type "lisp"))))
   (if (probe-file pathname)
       (progn
-	(setf compiled-pathname (or compiled-pathname
-				    (compile-file-pathname pathname)))
-	(when (or (not (probe-file compiled-pathname))
-		  (< (file-write-date compiled-pathname)
-		     (file-write-date pathname)))
-	  (compile-file pathname))
-	(load compiled-pathname))
+        (setf compiled-pathname (or compiled-pathname
+                                    (compile-file-pathname pathname)))
+        (when (or (not (probe-file compiled-pathname))
+                  (< (file-write-date compiled-pathname)
+                     (file-write-date pathname)))
+          (compile-file pathname))
+        (load compiled-pathname))
       (error "Can't load ~A as it doesn't exist." pathname)))
 
 ;; Just a silly mnemonic for those used to lesser languages
@@ -1535,14 +1535,14 @@ also specify forms, not just variables."
   (let ((*print-pretty* nil))
     `(let ((*print-circle* t))
        (format t ,(format nil "~~&~{~A=~~:W~~%~}" things)
-	       ,@things)
+               ,@things)
        (finish-output)
        (values))))
 
 (defmacro memoize-function (name &key test)
   "Make function NAME memoized.  TEST is passed to MAKE-HASH-TABLE."
   `(setf (get ',name 'results-hash-table)
-	 (make-hash-table ,@(when test (list :test test)))))
+         (make-hash-table ,@(when test (list :test test)))))
 
 (defmacro defun-memoized (name args &body forms)
   "Define function NAME and make it memoizable.  Then the MEMOIZED
@@ -1560,13 +1560,13 @@ memoized.  The next time this form is executed with the same argument
 value, the memoized result is returned instead of executing FUNCTION."
   (with-gensyms (table key result not-found)
     `(be* ,key ,arg
-	  ,table (get ',function 'results-hash-table)
-	  ,not-found (list nil)
-	  ,result (gethash ,key ,table ,not-found)
+          ,table (get ',function 'results-hash-table)
+          ,not-found (list nil)
+          ,result (gethash ,key ,table ,not-found)
        (if (eq ,not-found ,result)
-	   (setf (gethash ,key ,table)
-		 (,function ,key))
-	   ,result))))
+           (setf (gethash ,key ,table)
+                 (,function ,key))
+           ,result))))
 
 
 (defmacro save-file-excursion ((stream &optional position) &body forms)
@@ -1587,9 +1587,9 @@ before FORMS.  Optionally POSITION can be set to the starting offset."
 (defun getenv (var)
   "Return the string associate to VAR in the system environment."
   #+cmu (cdr (assoc (if (symbolp var)
-			var
-			(intern var :keyword))
-		    ext:*environment-list*))
+                        var
+                        (intern var :keyword))
+                    ext:*environment-list*))
   #+sbcl (sb-ext:posix-getenv (string var))
   #+lispworks (hcl:getenv var)
   #+clisp (ext:getenv (string var))
@@ -1597,16 +1597,16 @@ before FORMS.  Optionally POSITION can be set to the starting offset."
   (error "GETENV not implemented for your Lisp system."))
 
 #+clisp (ffi:def-call-out %setenv
-	    (:name "setenv")
-	  (:arguments (name ffi:c-string) (value ffi:c-string) (overwrite ffi:int))
-	  (:return-type ffi:int)
-	  (:library "libc.so"))
+            (:name "setenv")
+          (:arguments (name ffi:c-string) (value ffi:c-string) (overwrite ffi:int))
+          (:return-type ffi:int)
+          (:library "libc.so"))
 
 #+clisp (ffi:def-call-out %unsetenv
-	    (:name "unsetenv")
-	  (:arguments (name ffi:c-string))
-	  (:return-type ffi:int)
-	  (:library "libc.so"))
+            (:name "unsetenv")
+          (:arguments (name ffi:c-string))
+          (:return-type ffi:int)
+          (:library "libc.so"))
 
 (defun setenv (name value &optional (overwrite t))
   (typecase value
@@ -1616,30 +1616,30 @@ before FORMS.  Optionally POSITION can be set to the starting offset."
     (t
      (setf value (format nil "~A" value))))
   #+sbcl (unless (zerop (sb-posix:setenv name value (if overwrite 1 0)))
-	   (error "unable to setenv ~A: errno=~A." name
-		  (sb-alien:get-errno)))
+           (error "unable to setenv ~A: errno=~A." name
+                  (sb-alien:get-errno)))
   #+cmu (be key (keywordify name)
-	  (aif (assoc key
-		      ext:*environment-list*)
-	       (when overwrite
-		 (setf (cdr it) value))
-	       (setf ext:*environment-list*
-		     (cons (cons key value)
-			   ext:*environment-list*))))
+          (aif (assoc key
+                      ext:*environment-list*)
+               (when overwrite
+                 (setf (cdr it) value))
+               (setf ext:*environment-list*
+                     (cons (cons key value)
+                           ext:*environment-list*))))
   #-(or cmu sbcl) (unless (zerop (%setenv name value (if overwrite 1 0)))
-		    (error "unable to setenv ~A." name)))
+                    (error "unable to setenv ~A." name)))
 
 (defun unsetenv (name)
   #+sbcl (unless (zerop (sb-posix:unsetenv name))
-	   (error "unable to unsetenv ~A: errno=~A." name
-		  (sb-alien:get-errno)))
+           (error "unable to unsetenv ~A: errno=~A." name
+                  (sb-alien:get-errno)))
   #+cmu (be key (keywordify name)
-	  (setf ext:*environment-list*
-		(delete-if #'(lambda (e)
-			       (eq (car e) key))
-			   ext:*environment-list*)))
+          (setf ext:*environment-list*
+                (delete-if #'(lambda (e)
+                               (eq (car e) key))
+                           ext:*environment-list*)))
   #-(or cmu sbcl) (unless (zerop (%unsetenv name))
-		    (error "unable to unsetenv ~A." name)))
+                    (error "unable to unsetenv ~A." name)))
 
 (defun (setf getenv) (value name)
   (if value
@@ -1650,38 +1650,38 @@ before FORMS.  Optionally POSITION can be set to the starting offset."
 #-cmu
 (defmacro with-system-environment ((&rest var-and-values) &body body)
   (be gensym-alist (mapcar #'(lambda (vv)
-			       (list (gensym) (string (car vv)) (cadr vv)))
-			   var-and-values)
+                               (list (gensym) (string (car vv)) (cadr vv)))
+                           var-and-values)
       `(let ,(mapcar #'(lambda (vv)
-			 (destructuring-bind (varsym var value) vv
-			   (declare (ignore value))
-			   `(,varsym (getenv ,var))))
-		     gensym-alist)
-	 (unwind-protect
-	      (progn
-		,@(mapcar #'(lambda (vv)
-			      (destructuring-bind (varsym var value) vv
-				(declare (ignore varsym))
-				`(setenv ,var ,value)))
-			  gensym-alist)
-		,@body)
-	   ,@(mapcar #'(lambda (vv)
-			 (destructuring-bind (varsym var value) vv
-			   (declare (ignore value))
-			   `(if ,varsym
-				(setenv ,var ,varsym)
-				(unsetenv ,var))))
-		     gensym-alist)))))
+                         (destructuring-bind (varsym var value) vv
+                           (declare (ignore value))
+                           `(,varsym (getenv ,var))))
+                     gensym-alist)
+         (unwind-protect
+              (progn
+                ,@(mapcar #'(lambda (vv)
+                              (destructuring-bind (varsym var value) vv
+                                (declare (ignore varsym))
+                                `(setenv ,var ,value)))
+                          gensym-alist)
+                ,@body)
+           ,@(mapcar #'(lambda (vv)
+                         (destructuring-bind (varsym var value) vv
+                           (declare (ignore value))
+                           `(if ,varsym
+                                (setenv ,var ,varsym)
+                                (unsetenv ,var))))
+                     gensym-alist)))))
 
 #+cmu
 (defmacro with-system-environment ((&rest var-and-values) &body body)
   `(let ((ext:*environment-list*
-	  (append (list ,@(mapcar #'(lambda (vv)
-				      (destructuring-bind (variable value) vv
-					`(cons ,(keywordify variable)
-					       ,value)))
-				  var-and-values))
-		  ext:*environment-list*)))
+          (append (list ,@(mapcar #'(lambda (vv)
+                                      (destructuring-bind (variable value) vv
+                                        `(cons ,(keywordify variable)
+                                               ,value)))
+                                  var-and-values))
+                  ext:*environment-list*)))
      ,@body))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -1693,7 +1693,7 @@ before FORMS.  Optionally POSITION can be set to the starting offset."
      for l2 = (member item l :key key :test test)
      while l2
      do (setf result l2
-	      l (cdr l2))
+              l (cdr l2))
      finally (return result)))
 
 
@@ -1705,13 +1705,13 @@ before FORMS.  Optionally POSITION can be set to the starting offset."
     (loop
        for i from 0 below (length string)
        do (be c (char string i)
-	    (cond ((char= c #\\)
-		   (setf c (char string (incf i))))
-		  ((find c  ".+()|^$")
-		   (write-char #\\ out))
-		  ((char= c #\*)
-		   (write-char #\. out))
-		  ((char= c #\?)
-		   (setf c #\.)))
-	    (write-char c out)))
+            (cond ((char= c #\\)
+                   (setf c (char string (incf i))))
+                  ((find c  ".+()|^$")
+                   (write-char #\\ out))
+                  ((char= c #\*)
+                   (write-char #\. out))
+                  ((char= c #\?)
+                   (setf c #\.)))
+            (write-char c out)))
     (write-char #\$ out)))

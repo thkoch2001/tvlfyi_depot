@@ -66,8 +66,8 @@ error is not discarded.")
      #+cmu unix:sigcont
      #+sbcl sb-posix:sigcont)
     #+freebsd((:emt :emulate-instruction)
-	      #+cmu unix:sigemt
-	      #+sbcl sb-posix:sigemt)
+              #+cmu unix:sigemt
+              #+sbcl sb-posix:sigemt)
     ((:fpe :floating-point-exception)
      #+cmu unix:sigfpe
      #+sbcl sb-posix:sigfpe)
@@ -189,29 +189,29 @@ error is not discarded.")
   "Run PROGRAM with ARGUMENTS (a list) and return a process object."
   ;; convert arguments to strings
   (setf arguments
-	(mapcar #'(lambda (item)
-		    (typecase item
-		      (string item)
-		      (pathname (native-namestring item))
-		      (t (format nil "~A" item))))
-		arguments))
+        (mapcar #'(lambda (item)
+                    (typecase item
+                      (string item)
+                      (pathname (native-namestring item))
+                      (t (format nil "~A" item))))
+                arguments))
   (when *run-verbose*
     (unless error
       (setf error t))
     (format t "~&; run-pipe ~A~{ ~S~}~%" program arguments))
   #+cmu (ext:run-program program arguments
-			 :wait wait
-			 :pty pty
-			 :input input
-			 :output output
-			 :error (or error *run-verbose*))
+                         :wait wait
+                         :pty pty
+                         :input input
+                         :output output
+                         :error (or error *run-verbose*))
   #+sbcl (sb-ext:run-program program arguments
-			     :search t
-			     :wait wait
-			     :pty pty
-			     :input input
-			     :output output
-			     :error (or error *run-verbose*))
+                             :search t
+                             :wait wait
+                             :pty pty
+                             :input input
+                             :output output
+                             :error (or error *run-verbose*))
   #-(or sbcl cmu)
   (error "Unsupported Lisp system."))
 
@@ -220,16 +220,16 @@ error is not discarded.")
 return the input and output streams and process object of that
 process."
   (be process (run-program program arguments
-			   :wait nil
-			   :pty nil
-			   :input (when (member direction '(:output :input-output :io))
-				    :stream)
-			   :output (when (member direction '(:input :input-output :io))
-				     :stream)
-			   :error error)
+                           :wait nil
+                           :pty nil
+                           :input (when (member direction '(:output :input-output :io))
+                                    :stream)
+                           :output (when (member direction '(:input :input-output :io))
+                                     :stream)
+                           :error error)
     (values (sysproc-output process)
-	    (sysproc-input process)
-	    process))
+            (sysproc-input process)
+            process))
   #-(or sbcl cmu)
   (error "Unsupported Lisp system."))
 
@@ -245,7 +245,7 @@ process."
   "Run a Bourne Shell command asynchronously. Return a process
 object if provided by your Lisp implementation."
   (run-program *bourne-shell* (list "-c" (apply #'format nil fmt args))
-	       :wait nil))
+               :wait nil))
 
 (defmacro with-open-pipe ((in out program arguments &key (process (gensym)) error pty) &body forms)
   "Run BODY with IN and OUT bound respectively to an input and an
@@ -253,36 +253,36 @@ output stream connected to a system process created by running PROGRAM
 with ARGUMENTS.  If IN or OUT are NIL, then don't create that stream."
   (with-gensyms (prg args)
     `(be* ,prg ,program
-	  ,args ,arguments
-	  ,process (run-program ,prg ,args
-				:output ,(case in
-					       ((t nil) in)
-					       (t :stream))
-				:input ,(case out
-					      ((t nil) out)
-					      (t :stream))
-				:wait nil
-				:pty ,pty
-				,@(when error `(:error ,error)))
+          ,args ,arguments
+          ,process (run-program ,prg ,args
+                                :output ,(case in
+                                               ((t nil) in)
+                                               (t :stream))
+                                :input ,(case out
+                                              ((t nil) out)
+                                              (t :stream))
+                                :wait nil
+                                :pty ,pty
+                                ,@(when error `(:error ,error)))
        (if ,process
-	   (let (,@(case in
-			 ((t nil))
-			 (t `((,in (sysproc-output ,process)))))
-		 ,@(case out
-			 ((t nil))
-			 (t `((,out (sysproc-input ,process))))))
-	     (unwind-protect
-		  (progn
-		    ,@forms)
-	       ,@(case in
-		       ((t nil))
-		       (t `((close ,in))))
-	       ,@(case out
-		       ((t nil))
-		       (t `((close ,out))))
-	       (when (sysproc-alive-p ,process)
-		 (sysproc-kill ,process :term))))
-	   (error "unable to run ~A~{ ~A~}." ,prg ,args)))))
+           (let (,@(case in
+                         ((t nil))
+                         (t `((,in (sysproc-output ,process)))))
+                 ,@(case out
+                         ((t nil))
+                         (t `((,out (sysproc-input ,process))))))
+             (unwind-protect
+                  (progn
+                    ,@forms)
+               ,@(case in
+                       ((t nil))
+                       (t `((close ,in))))
+               ,@(case out
+                       ((t nil))
+                       (t `((close ,out))))
+               (when (sysproc-alive-p ,process)
+                 (sysproc-kill ,process :term))))
+           (error "unable to run ~A~{ ~A~}." ,prg ,args)))))
 
 
 (defun sysproc-set-signal-callback (signal handler)

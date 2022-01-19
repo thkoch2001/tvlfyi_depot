@@ -49,10 +49,10 @@ uses, too small to fit anywhere else."
      (:file "directory" :depends-on ("package" "sclf" "time"))
      (:file "serial" :depends-on ("package" "sclf"))
      (:module "mp"
-	      :depends-on ("package" "sclf")
-	      :components
-	      ((:doc-file "README")
-	       (:file #.(first
-			 (list #+cmu "cmu"
-			       #+sbcl "sbcl"
-			       "unknown")))))))
+              :depends-on ("package" "sclf")
+              :components
+              ((:doc-file "README")
+               (:file #.(first
+                         (list #+cmu "cmu"
+                               #+sbcl "sbcl"
+                               "unknown")))))))

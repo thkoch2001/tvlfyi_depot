@@ -24,66 +24,66 @@
 
 (deftest quoted-printable.1
     (encode-quoted-printable-sequence (map '(vector (unsigned-byte 8)) #'char-code
-					   "Français, Español, böse, skøl"))
+                                           "Français, Español, böse, skøl"))
   "Fran=E7ais, Espa=F1ol, b=F6se, sk=F8l")
 
 (deftest quoted-printable.2
     (encode-quoted-printable-sequence (map '(vector (unsigned-byte 8)) #'char-code
-					   "Français, Español, böse, skøl")
-				      :start 10 :end 17)
+                                           "Français, Español, böse, skøl")
+                                      :start 10 :end 17)
   "Espa=F1ol")
 
 (deftest quoted-printable.3
     (map 'string #'code-char
-	 (decode-quoted-printable-string "Fran=E7ais, Espa=F1ol, b=F6se, sk=F8l"))
+         (decode-quoted-printable-string "Fran=E7ais, Espa=F1ol, b=F6se, sk=F8l"))
   "Français, Español, böse, skøl")
 
 (deftest quoted-printable.4
     (map 'string #'code-char
-	 (decode-quoted-printable-string "Fran=E7ais, Espa=F1ol, b=F6se, sk=F8l"
-					 :start 12 :end 21))
+         (decode-quoted-printable-string "Fran=E7ais, Espa=F1ol, b=F6se, sk=F8l"
+                                         :start 12 :end 21))
   "Español")
 
 (deftest quoted-printable.5
     (map 'string #'code-char
-	 (decode-quoted-printable-string "this = wrong"))
+         (decode-quoted-printable-string "this = wrong"))
   "this = wrong")
 
 (deftest quoted-printable.6
     (map 'string #'code-char
-	 (decode-quoted-printable-string "this is wrong="))
+         (decode-quoted-printable-string "this is wrong="))
   "this is wrong=")
 
 (deftest quoted-printable.7
     (map 'string #'code-char
-	 (decode-quoted-printable-string "this is wrong=1"))
+         (decode-quoted-printable-string "this is wrong=1"))
   "this is wrong=1")
 
 (deftest quoted-printable.8
     (encode-quoted-printable-sequence (map '(vector (unsigned-byte 8)) #'char-code
-					   "x = x + 1"))
+                                           "x = x + 1"))
   "x =3D x + 1")
 
 (deftest quoted-printable.9
     (encode-quoted-printable-sequence (map '(vector (unsigned-byte 8)) #'char-code
-					   "x = x + 1   "))
+                                           "x = x + 1   "))
   "x =3D x + 1  =20")
 
 (deftest quoted-printable.10
     (encode-quoted-printable-sequence (map '(vector (unsigned-byte 8)) #'char-code
-					   "this string is very very very very very very very very very very very very very very very very very very very very long"))
+                                           "this string is very very very very very very very very very very very very very very very very very very very very long"))
   "this string is very very very very very very very very very very very ve=
 ry very very very very very very very very long")
 
 (deftest quoted-printable.11
     (encode-quoted-printable-sequence (map '(vector (unsigned-byte 8)) #'char-code
-					   "this string is very very                                                                                  very very long"))
+                                           "this string is very very                                                                                  very very long"))
   "this string is very very                                                =
                                   very very long")
 
 (deftest quoted-printable.12
     (encode-quoted-printable-sequence (map '(vector (unsigned-byte 8)) #'char-code
-					   "please read the next   
+                                           "please read the next   
 line"))
   "please read the next  =20
 line")
@@ -93,24 +93,24 @@ line")
 (deftest base64.1
     (let ((*base64-line-length* nil))
       (encode-base64-sequence (map '(vector (unsigned-byte 8)) #'char-code
-				   "Some random string.")))
+                                   "Some random string.")))
   "U29tZSByYW5kb20gc3RyaW5nLg==")
 
 (deftest base64.2
     (let ((*base64-line-length* nil))
       (encode-base64-sequence (map '(vector (unsigned-byte 8)) #'char-code
-				   "Some random string.") :start 5 :end 11))
+                                   "Some random string.") :start 5 :end 11))
   "cmFuZG9t")
 
 (deftest base64.3
     (map 'string #'code-char
-	 (decode-base64-string "U29tZSByYW5kb20gc3RyaW5nLg=="))
+         (decode-base64-string "U29tZSByYW5kb20gc3RyaW5nLg=="))
   "Some random string.")
 
 (deftest base64.4
     (map 'string #'code-char
-	 (decode-base64-string "some rubbish U29tZSByYW5kb20gc3RyaW5nLg== more rubbish"
-			       :start 13 :end 41))
+         (decode-base64-string "some rubbish U29tZSByYW5kb20gc3RyaW5nLg== more rubbish"
+                               :start 13 :end 41))
   "Some random string.")
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -121,47 +121,47 @@ line")
 
 (defun perftest-encoder (encoder-class &optional (megs 100))
   (declare (optimize (speed 3) (debug 0) (safety 0))
-	   (type fixnum megs))
+           (type fixnum megs))
   (with-open-file (in #P"/dev/random" :element-type '(unsigned-byte 8))
     (let* ((meg (* 1024 1024))
-	   (buffer (make-sequence '(vector (unsigned-byte 8)) meg))
-	   (encoder (make-instance encoder-class
-				   :output-function #'(lambda (c) (declare (ignore c))))))
+           (buffer (make-sequence '(vector (unsigned-byte 8)) meg))
+           (encoder (make-instance encoder-class
+                                   :output-function #'(lambda (c) (declare (ignore c))))))
       (declare (type fixnum meg))
       (time
        (progn
-	 (dotimes (x megs)
-	   (read-sequence buffer in)
-	   (dotimes (i meg)
-	     (mime4cl:encoder-write-byte encoder (aref buffer i))))
-	 (mime4cl:encoder-finish-output encoder))))))
+         (dotimes (x megs)
+           (read-sequence buffer in)
+           (dotimes (i meg)
+             (mime4cl:encoder-write-byte encoder (aref buffer i))))
+         (mime4cl:encoder-finish-output encoder))))))
 
 (defun perftest-decoder (decoder-class &optional (megs 100))
   (declare (optimize (speed 3) (debug 0) (safety 0))
-	   (type fixnum megs))
+           (type fixnum megs))
   (with-open-file (in #P"/dev/random" :element-type '(unsigned-byte 8))
     (let ((sclf:*tmp-file-defaults* (make-pathname :defaults #.(or *load-pathname* *compile-file-pathname*)
-						   :type "encoded-data")))
+                                                   :type "encoded-data")))
       (sclf:with-temp-file (tmp nil :direction :io)
-	(let* ((meg (* 1024 1024))
-	       (buffer (make-sequence '(vector (unsigned-byte 8)) meg))
-	       (encoder-class (ecase decoder-class
-				(mime4cl:base64-decoder 'mime4cl:base64-encoder)
-				(mime4cl:quoted-printable-decoder 'mime4cl:quoted-printable-encoder)))
-	       (encoder (make-instance encoder-class
-				       :output-function #'(lambda (c)
-							    (write-char c tmp))))
-	       (decoder (make-instance decoder-class
-				       :input-function #'(lambda ()
-							   (read-char tmp nil)))))
-	  (declare (type fixnum meg))
-	  (dotimes (x megs)
-	    (read-sequence buffer in)
-	    (dotimes (i meg)
-	      (mime4cl:encoder-write-byte encoder (aref buffer i))))
-	  (mime4cl:encoder-finish-output encoder)
-	  (file-position tmp 0)
-	  (time
-	   (loop
-	      for b = (mime4cl:decoder-read-byte decoder)
-	      while b)))))))
+        (let* ((meg (* 1024 1024))
+               (buffer (make-sequence '(vector (unsigned-byte 8)) meg))
+               (encoder-class (ecase decoder-class
+                                (mime4cl:base64-decoder 'mime4cl:base64-encoder)
+                                (mime4cl:quoted-printable-decoder 'mime4cl:quoted-printable-encoder)))
+               (encoder (make-instance encoder-class
+                                       :output-function #'(lambda (c)
+                                                            (write-char c tmp))))
+               (decoder (make-instance decoder-class
+                                       :input-function #'(lambda ()
+                                                           (read-char tmp nil)))))
+          (declare (type fixnum meg))
+          (dotimes (x megs)
+            (read-sequence buffer in)
+            (dotimes (i meg)
+              (mime4cl:encoder-write-byte encoder (aref buffer i))))
+          (mime4cl:encoder-finish-output encoder)
+          (file-position tmp 0)
+          (time
+           (loop
+              for b = (mime4cl:decoder-read-byte decoder)
+              while b)))))))

@@ -41,13 +41,13 @@
   (if (forced-p promise)
       (promise-value promise)
       (prog1 (setf (promise-value promise)
-		   (funcall (promise-procedure promise)))
-	(setf (promise-procedure promise) nil))))
+                   (funcall (promise-procedure promise)))
+        (setf (promise-procedure promise) nil))))
 
 (defmacro deflazy (name value &optional documentation)
   `(defparameter ,name (lazy ,value)
      ,@(when documentation
-	     (list documentation))))
+             (list documentation))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
@@ -71,8 +71,8 @@ any other."))
 
 (defclass lazy-slot-mixin ()
   ((lazy-function :initarg :lazy
-		   :reader lazy-slot-function
-		   :initform nil))
+                   :reader lazy-slot-function
+                   :initform nil))
   (:documentation
    "Slot for LAZY-METACLASS classes.  Lazy slots must be declared with
 the argument :LAZY which must be a function accepting the object
@@ -100,20 +100,20 @@ instance as argument."))
   (let ((ds (car direct-slots)))
     (if (typep ds 'lazy-direct-slot-definition)
       (let ((form (lazy-slot-function ds))
-	    (args (call-next-method)))
-	(when (or (getf args :initarg)
-		  (getf args :initform))
-	  (error "Lazy slot ~S cannot have :INITARG nor :INITFORM arguments." ds))
-	(list* :lazy
-	       (cond ((and (listp form)
-			   (eq 'lambda (car form)))
-		      (compile nil form))
-		     ((symbolp form)
-		      form)
-		     (t (compile nil `(lambda (self)
-					(declare (ignorable self))
-					,form))))
-	       args))
+            (args (call-next-method)))
+        (when (or (getf args :initarg)
+                  (getf args :initform))
+          (error "Lazy slot ~S cannot have :INITARG nor :INITFORM arguments." ds))
+        (list* :lazy
+               (cond ((and (listp form)
+                           (eq 'lambda (car form)))
+                      (compile nil form))
+                     ((symbolp form)
+                      form)
+                     (t (compile nil `(lambda (self)
+                                        (declare (ignorable self))
+                                        ,form))))
+               args))
       (call-next-method))))
 
 (defmethod slot-value-using-class ((class lazy-metaclass) instance (slot lazy-slot-mixin))
@@ -122,7 +122,7 @@ instance as argument."))
   ;; instance and memoize the value in the slot.
   (unless (slot-boundp-using-class class instance slot)
     (setf (slot-value-using-class class instance slot)
-	  (funcall (lazy-slot-function slot) instance)))
+          (funcall (lazy-slot-function slot) instance)))
   (call-next-method))
 
 (defun reset-lazy-slots (object)
@@ -131,4 +131,4 @@ re-evaluated next time their value is requested again."
   (be* class (class-of object)
     (dolist (slot (class-slots class))
       (when (typep slot 'lazy-effective-slot-definition)
-	(slot-makunbound object (slot-definition-name slot))))))
+        (slot-makunbound object (slot-definition-name slot))))))

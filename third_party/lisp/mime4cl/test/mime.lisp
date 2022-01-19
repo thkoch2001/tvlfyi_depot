@@ -25,9 +25,9 @@
 
 (defvar *samples-directory*
   (merge-pathnames (make-pathname :directory '(:relative "samples"))
-		   #.(or *compile-file-pathname*
-			 *load-pathname*
-			 #P"")))
+                   #.(or *compile-file-pathname*
+                         *load-pathname*
+                         #P"")))
 
 (defvar *sample1-file* (make-pathname :defaults #.(or *compile-file-pathname*
                                                       *load-pathname*)
@@ -36,21 +36,21 @@
 
 (deftest mime.1
     (let* ((orig (mime-message *sample1-file*))
-	   (dup (mime-message (with-output-to-string (out) (encode-mime-part orig out)))))
+           (dup (mime-message (with-output-to-string (out) (encode-mime-part orig out)))))
       (mime= orig dup))
   t)
 
 (deftest mime.2
     (loop
        for f in (directory (make-pathname :defaults *samples-directory*
-					  :name :wild
-					  :type "txt"))
+                                          :name :wild
+                                          :type "txt"))
        do
-	 (format t "~A:~%" f)
-	 (finish-output)
-	 (let* ((orig (mime-message f))
-		(dup (mime-message (with-output-to-string (out) (encode-mime-part orig out)))))
-	   (unless (mime= orig dup)
-	     (return nil)))
+         (format t "~A:~%" f)
+         (finish-output)
+         (let* ((orig (mime-message f))
+                (dup (mime-message (with-output-to-string (out) (encode-mime-part orig out)))))
+           (unless (mime= orig dup)
+             (return nil)))
        finally (return t))
   t)

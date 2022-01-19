@@ -29,25 +29,25 @@
   (setf pathname (pathname pathname))
   (if (pathname-name pathname)
       (make-pathname :directory (append (or (pathname-directory pathname)
-					    '(:relative))
-					(list (file-namestring pathname)))
-		     :name nil
-		     :type nil
-		     :defaults pathname)
+                                            '(:relative))
+                                        (list (file-namestring pathname)))
+                     :name nil
+                     :type nil
+                     :defaults pathname)
       pathname))
 
 (defun d+ (path &rest rest)
   "Concatenate directory pathname parts and return a pathname."
   (make-pathname :defaults path
-		 :directory (append (pathname-directory path) rest)))
+                 :directory (append (pathname-directory path) rest)))
 
 (defun delete-directory (pathname)
   "Remove directory PATHNAME.  Return PATHNAME."
   #+cmu (multiple-value-bind (done errno)
-	     (unix:unix-rmdir (namestring pathname))
-	   (unless done
-	     (error "Unable to delete directory ~A (errno=~A)"
-		    pathname errno)))
+             (unix:unix-rmdir (namestring pathname))
+           (unless done
+             (error "Unable to delete directory ~A (errno=~A)"
+                    pathname errno)))
   #+sbcl (sb-posix:rmdir pathname)
   #+lispworks (lw:delete-directory pathname)
   #-(or cmu sbcl)
@@ -60,11 +60,11 @@ to follow symbolic links."
   #-(or sbcl cmu) (declare (ignore truenamep))
   (let (#+cmu (lisp::*ignore-wildcards* t))
     (directory (make-pathname :defaults (pathname-as-directory pathname)
-			      :name :wild
-			      :type :wild
-			      :version :wild)
-	       #+cmu :truenamep #+cmu truenamep
-	       #+sbcl :resolve-symlinks #+sbcl truenamep)))
+                              :name :wild
+                              :type :wild
+                              :version :wild)
+               #+cmu :truenamep #+cmu truenamep
+               #+sbcl :resolve-symlinks #+sbcl truenamep)))
 
 (defun traverse-directory-tree (root-pathname proc &key truenamep test depth-first)
   "Call PROC on all pathnames under ROOT-PATHNAME, both files and
@@ -76,42 +76,42 @@ broken symbolic links in your filesystem."
   (check-type proc (or function symbol))
   (check-type test (or function symbol null))
   (labels ((ls (dir)
-	     (declare (type pathname dir))
-	     (list-directory dir :truenamep truenamep))
-	   (traverse? (file)
-	     (declare (type pathname file))
-	     (and (not (pathname-name file))
-		  (or truenamep
-		      (not (symbolic-link-p file)))
-		  (or (not test)
-		      (funcall test file))))
-	   (traverse-pre-order (dir)
-	     (declare (type pathname dir))
-	     (loop
-		for file in (ls dir)
-		do (funcall proc file)
-		when (traverse? file)
-		do (traverse-pre-order file)))
-	   (traverse-post-order (dir)
-	     (declare (type pathname dir))
-	     (loop
-		for file in (ls dir)
-		when (traverse? file)
-		do (traverse-post-order file)
-		do (funcall proc file))))
+             (declare (type pathname dir))
+             (list-directory dir :truenamep truenamep))
+           (traverse? (file)
+             (declare (type pathname file))
+             (and (not (pathname-name file))
+                  (or truenamep
+                      (not (symbolic-link-p file)))
+                  (or (not test)
+                      (funcall test file))))
+           (traverse-pre-order (dir)
+             (declare (type pathname dir))
+             (loop
+                for file in (ls dir)
+                do (funcall proc file)
+                when (traverse? file)
+                do (traverse-pre-order file)))
+           (traverse-post-order (dir)
+             (declare (type pathname dir))
+             (loop
+                for file in (ls dir)
+                when (traverse? file)
+                do (traverse-post-order file)
+                do (funcall proc file))))
     (if depth-first
-	(traverse-post-order root-pathname)
-	(traverse-pre-order root-pathname))
+        (traverse-post-order root-pathname)
+        (traverse-pre-order root-pathname))
     (values)))
 
 (defmacro do-directory-tree ((file root-pathname &key truenamep test depth-first) &body body)
   "Call TRAVERSE-DIRECTORY-TREE with BODY es procedure."
   `(traverse-directory-tree ,root-pathname
-			    #'(lambda (,file)
-				,@body)
-			    :truenamep ,truenamep
-			    :test ,test
-			    :depth-first ,depth-first))
+                            #'(lambda (,file)
+                                ,@body)
+                            :truenamep ,truenamep
+                            :test ,test
+                            :depth-first ,depth-first))
 
 (defun empty-directory-p (pathname)
   (and (directory-p pathname)
@@ -142,7 +142,7 @@ system.)"
   (be files '()
     (do-directory-tree (file root-pathname :truenamep truenamep)
       (when (funcall matcher-function file)
-	(push file files)))
+        (push file files)))
     (nreverse files)))
 
 (defun delete-directory-tree (pathname)
@@ -156,17 +156,17 @@ this function in your programs."
   (if (pathname-name pathname)
       (delete-file pathname)
       (progn
-	(dolist (file (list-directory pathname))
-	  (delete-directory-tree file))
-	(delete-directory pathname))))
+        (dolist (file (list-directory pathname))
+          (delete-directory-tree file))
+        (delete-directory pathname))))
 
 (defun make-directory (pathname &optional (mode #o777))
   "Create a new directory in the filesystem.  Permissions MODE
 will be assigned to it.  Return PATHNAME."
   #+cmu (multiple-value-bind (done errno)
-	    (unix:unix-mkdir (native-namestring pathname) mode)
-	  (unless done
-	    (error "Unable to create directory ~A (errno=~A)." pathname errno)))
+            (unix:unix-mkdir (native-namestring pathname) mode)
+          (unless done
+            (error "Unable to create directory ~A (errno=~A)." pathname errno)))
   #+sbcl (sb-posix:mkdir pathname mode)
   #-(or cmu sbcl)
   (error "MAKE-DIRECTORY is not implemented for this Lisp system.")
@@ -180,19 +180,19 @@ will be assigned to it.  Return PATHNAME."
   "Just like ENSURE-DIRECTORIES-EXIST but, in some situations,
 it's faster."
   (labels ((ensure (path)
-	     (unless (probe-file path)
-	       (be* tail (last (pathname-directory path) 2)
-		    last (cdr tail)
-		 (setf (cdr tail) nil)
-		 (unwind-protect
-		      (ensure path)
-		   (setf (cdr tail) last))
-		 (make-directory path mode)
-		 (when verbose
-		   (format t "Created ~S~%" path))))))
+             (unless (probe-file path)
+               (be* tail (last (pathname-directory path) 2)
+                    last (cdr tail)
+                 (setf (cdr tail) nil)
+                 (unwind-protect
+                      (ensure path)
+                   (setf (cdr tail) last))
+                 (make-directory path mode)
+                 (when verbose
+                   (format t "Created ~S~%" path))))))
     (ensure (make-pathname :defaults pathname
-			   :name nil :type nil
-			   :version nil))))
+                           :name nil :type nil
+                           :version nil))))
 
 (defun make-temp-directory (&optional (default-pathname *tmp-file-defaults*) (mode #o777))
   "Create a new directory and return its pathname.
@@ -212,7 +212,7 @@ BODY returns.  BODY is _not_ executed within the PATH directory; the
 working directory is never changed."
   `(be ,path (make-temp-directory ,@make-temp-directory-args)
      (unwind-protect
-	  (progn ,@body)
+          (progn ,@body)
        (delete-directory-tree ,path))))
 
 (defun current-directory ()
@@ -229,44 +229,44 @@ are defined."
     ;; we should discard and replace whatever has been defined in any
     ;; rc file during compilation
     (setf (logical-pathname-translations "home")
-	  (list
-	   (list "**;*.*.*"
-		 (make-pathname :defaults home
-				:directory (append (pathname-directory home)
-						   '(:wild-inferiors))
-				:name :wild
-				:type :wild))))))
+          (list
+           (list "**;*.*.*"
+                 (make-pathname :defaults home
+                                :directory (append (pathname-directory home)
+                                                   '(:wild-inferiors))
+                                :name :wild
+                                :type :wild))))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (defun parse-native-namestring (string &optional host (defaults *default-pathname-defaults*)
-				&key (start 0) end junk-allowed)
+                                &key (start 0) end junk-allowed)
   #+sbcl (sb-ext:parse-native-namestring string host defaults
-					 :start start
-					 :end end
-					 :junk-allowed junk-allowed)
+                                         :start start
+                                         :end end
+                                         :junk-allowed junk-allowed)
   #-sbcl (let (#+cmu(lisp::*ignore-wildcards* t))
-	   (parse-namestring string host defaults
-			     :start start
-			     :end end
-			     :junk-allowed junk-allowed)))
+           (parse-namestring string host defaults
+                             :start start
+                             :end end
+                             :junk-allowed junk-allowed)))
 
 (defun native-namestring (pathname)
   #+sbcl (sb-ext:native-namestring pathname)
   #-sbcl (let (#+cmu (lisp::*ignore-wildcards* t))
-	   (namestring pathname)))
+           (namestring pathname)))
 
 (defun native-file-namestring (pathname)
   #+sbcl (sb-ext:native-namestring
-	  (make-pathname :name (pathname-name pathname)
-			 :type (pathname-type pathname)))
+          (make-pathname :name (pathname-name pathname)
+                         :type (pathname-type pathname)))
   #+cmu (be lisp::*ignore-wildcards* t
-	  (file-namestring pathname)))
+          (file-namestring pathname)))
 
 (defun native-pathname (thing)
   #+sbcl (sb-ext:native-pathname thing)
   #+cmu (be lisp::*ignore-wildcards* t
-	  (pathname thing)))
+          (pathname thing)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
@@ -277,9 +277,9 @@ are defined."
 (defun directory-p (pathname)
   "Return true if PATHNAME names a directory on the filesystem."
   #-clisp (awhen (unix-stat (native-namestring pathname))
-	    (bits-set-p (stat-mode it)
-			#+sbcl sb-posix:s-ifdir
-			#+cmu unix:s-ifdir))
+            (bits-set-p (stat-mode it)
+                        #+sbcl sb-posix:s-ifdir
+                        #+cmu unix:s-ifdir))
   #+clisp (ext:probe-directory (pathname-as-directory pathname)))
 
 (defun regular-file-p (pathname)
@@ -287,8 +287,8 @@ are defined."
   #-(or sbcl cmu) (error "don't know how to check whether a file might be a regular file")
   (awhen (unix-stat (native-namestring pathname))
     (bits-set-p (stat-mode it)
-		#+sbcl sb-posix:s-ifreg
-		#+cmu unix:s-ifreg)))
+                #+sbcl sb-posix:s-ifreg
+                #+cmu unix:s-ifreg)))
 
 (defun file-readable-p (pathname)
   #+sbcl (sb-unix:unix-access (native-namestring pathname) sb-unix:r_ok)
@@ -324,27 +324,27 @@ are defined."
 (defun unix-stat (pathname)
   ;; this could be different depending on the unix systems
   (multiple-value-bind (ok? device inode mode links uid gid rdev
-			    size atime mtime ctime
-			    blksize blocks)
+                            size atime mtime ctime
+                            blksize blocks)
       (#+cmu unix:unix-lstat
        #+sbcl sb-unix:unix-lstat
        (if (stringp pathname)
-	   pathname
-	   (native-namestring pathname)))
+           pathname
+           (native-namestring pathname)))
     (declare (ignore rdev))
     (when ok?
       (make-unix-file-stat :device device
-			   :inode inode
-			   :links links
-			   :atime atime
-			   :mtime mtime
-			   :ctime ctime
-			   :size size
-			   :blksize blksize
-			   :blocks blocks
-			   :uid uid
-			   :gid gid
-			   :mode mode))))
+                           :inode inode
+                           :links links
+                           :atime atime
+                           :mtime mtime
+                           :ctime ctime
+                           :size size
+                           :blksize blksize
+                           :blocks blocks
+                           :uid uid
+                           :gid gid
+                           :mode mode))))
 
 (defun stat-modification-time (stat)
   "Return the modification time of the STAT structure as Lisp
@@ -383,9 +383,9 @@ contents."
 (defun symbolic-link-p (pathname)
   #-(or sbcl cmu) (error "don't know hot to test for symbolic links.")
   (aand (unix-stat pathname)
-	(bits-set-p (stat-mode it)
-		    #+sbcl sb-posix:s-iflnk
-		    #+cmu unix:s-iflnk)))
+        (bits-set-p (stat-mode it)
+                    #+sbcl sb-posix:s-iflnk
+                    #+cmu unix:s-iflnk)))
 
 (defun broken-link-p (pathname)
  (when (symbolic-link-p pathname)

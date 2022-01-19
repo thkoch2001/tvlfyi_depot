@@ -24,7 +24,7 @@
 (defpackage :mime4cl-tests-system
   (:use :common-lisp :asdf #+asdfa :asdfa)
   (:export #:*base-directory*
-	   #:*compilation-epoch*))
+           #:*compilation-epoch*))
 
 (in-package :mime4cl-tests-system)
 
@@ -39,12 +39,12 @@
     :depends-on (:mime4cl)
     :components
     ((:module test
-	      :components
-	      ((:file "rt")
-	       (:file "package" :depends-on ("rt"))
-	       (:file "endec" :depends-on ("rt" "package"))
-	       (:file "address" :depends-on ("rt" "package"))
-	       (:file "mime" :depends-on ("rt" "package"))))))
+              :components
+              ((:file "rt")
+               (:file "package" :depends-on ("rt"))
+               (:file "endec" :depends-on ("rt" "package"))
+               (:file "address" :depends-on ("rt" "package"))
+               (:file "mime" :depends-on ("rt" "package"))))))
 
 ;; when loading this form the regression-test, the package is yet to
 ;; be loaded so we cannot use rt:do-tests directly or we would get a

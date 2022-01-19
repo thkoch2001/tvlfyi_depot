@@ -38,7 +38,7 @@
 
 (deflazy define-grammar
   (let ((*package* #.*package*)
-	(*compile-print* (and parser::*debug* t)))
+        (*compile-print* (and parser::*debug* t)))
     (reset-grammar)
     (format t "~&creating Python grammar...~%")
     (populate-grammar)
@@ -80,8 +80,8 @@
 (defrule statement-list
     := (+ simple-statement ";")
     :reduce (if (cdr $1)
-		(cons :statement-list $1)
-		(car $1)))
+                (cons :statement-list $1)
+                (car $1)))
 
 (defrule statement
     := statement-list eol
