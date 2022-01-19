@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ee0b64de_a3164398",
+        "filename": "third_party/lisp/cl-date-time-parser.nix",
+        "patchSetId": 2
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-01-19T13:05:24Z",
+      "side": 1,
+      "message": "hax!",
+      "range": {
+        "startLine": 8,
+        "startChar": 0,
+        "endLine": 8,
+        "endChar": 137
+      },
+      "revId": "5b4435d205d3e50eb61b5362c420816a2fe9464c",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
