@@ -1,0 +1,96 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a5dd9535_ecb19404",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 5
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2022-01-19T10:13:27Z",
+      "side": 1,
+      "message": "kit?",
+      "range": {
+        "startLine": 7,
+        "startChar": 22,
+        "endLine": 7,
+        "endChar": 27
+      },
+      "revId": "9e50b0ce8f27d3167ba0c4cc9d1f4d8b4df7998b",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2b7c2c96_84564b00",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 5
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2022-01-19T10:13:27Z",
+      "side": 1,
+      "message": "views",
+      "range": {
+        "startLine": 9,
+        "startChar": 38,
+        "endLine": 9,
+        "endChar": 41
+      },
+      "revId": "9e50b0ce8f27d3167ba0c4cc9d1f4d8b4df7998b",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4fcf8ef9_212bcb68",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 5
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2022-01-19T10:13:27Z",
+      "side": 1,
+      "message": "kit?",
+      "range": {
+        "startLine": 10,
+        "startChar": 49,
+        "endLine": 10,
+        "endChar": 54
+      },
+      "revId": "9e50b0ce8f27d3167ba0c4cc9d1f4d8b4df7998b",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f69dec16_d0610bc8",
+        "filename": "views/kit/README.md",
+        "patchSetId": 5
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2022-01-19T10:13:27Z",
+      "side": 1,
+      "message": "views",
+      "range": {
+        "startLine": 16,
+        "startChar": 55,
+        "endLine": 16,
+        "endChar": 58
+      },
+      "revId": "9e50b0ce8f27d3167ba0c4cc9d1f4d8b4df7998b",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
