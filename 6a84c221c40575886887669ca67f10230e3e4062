@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "53f41133_2db47edf",
+        "filename": "nix/buildkite/default.nix",
+        "patchSetId": 3
+      },
+      "lineNbr": 168,
+      "author": {
+        "id": 1000038
+      },
+      "writtenOn": "2022-01-19T21:12:55Z",
+      "side": 1,
+      "message": "is this the old legacy way to define additional steps?\nif yes, do we plan this to be replaced by extra step functionality?",
+      "range": {
+        "startLine": 167,
+        "startChar": 0,
+        "endLine": 168,
+        "endChar": 24
+      },
+      "revId": "6a84c221c40575886887669ca67f10230e3e4062",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
