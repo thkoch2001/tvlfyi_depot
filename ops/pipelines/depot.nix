@@ -11,17 +11,10 @@ let
     label = ":water_buffalo:";
   };
 
-  # Formatting check which validates that all supported auto-formatted
-  # files are formatted correctly. See //tools/depotfmt for details.
-  depotfmtCheck = {
-    command = "${depot.tools.depotfmt.check}";
-    label = ":evergreen_tree: (tools/depotfmt)";
-  };
-
   pipeline = depot.nix.buildkite.mkPipeline {
     headBranch = "refs/heads/canon";
     drvTargets = depot.ci.targets;
-    additionalSteps = [ depotfmtCheck protoCheck ];
+    additionalSteps = [ protoCheck ];
 
     parentTargetMap = if (externalArgs ? parentTargetMap)
       then builtins.fromJSON (builtins.readFile externalArgs.parentTargetMap)
