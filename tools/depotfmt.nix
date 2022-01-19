@@ -35,5 +35,9 @@ let
       --tree-root .
   '';
 in depotfmt.overrideAttrs(_: {
-  passthru.check = check;
+  passthru.meta.ci.extraSteps.check = {
+    label = "depot formatting check";
+    script = check;
+    alwaysRun = true;
+  };
 })
