@@ -18,7 +18,7 @@ steps:
       # Attempt to fetch a target map from a parent commit on canon,
       # except on builds of canon itself.
       [ "${BUILDKITE_BRANCH}" != "refs/heads/canon" ] && \
-        ops/pipelines/fetch-parent-targets.sh
+        nix/buildkite/fetch-parent-targets.sh
 
       PIPELINE_ARGS=""
       if [[ -f tmp/parent-target-map.json ]]; then
