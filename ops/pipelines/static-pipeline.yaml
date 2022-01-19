@@ -21,8 +21,8 @@ steps:
         ops/pipelines/fetch-parent-targets.sh
 
       PIPELINE_ARGS=""
-      if [[ -f ./parent-target-map.json ]]; then
-        PIPELINE_ARGS="--arg parentTargetMap ./parent-target-map.json"
+      if [[ -f tmp/parent-target-map.json ]]; then
+        PIPELINE_ARGS="--arg parentTargetMap tmp/parent-target-map.json"
       fi
 
       nix-build -A ops.pipelines.depot -o pipeline --show-trace $$PIPELINE_ARGS
