@@ -5,6 +5,16 @@
 # is executed instead which will simply report an error to Gerrit.
 ---
 steps:
+  # Run pipeline for tvl-kit when new commits arrive on canon. Since
+  # it is not part of the depot build tree, this is a useful
+  # verification to ensure we don't break external things (too much).
+  - trigger: "tvl-kit"
+    async: true
+    label: ":fork:"
+    # branches: "refs/heads/canon"
+    build:
+      message: "Build message test"
+
   - label: ":llama:"
     key: "pipeline-gen"
     command: |
