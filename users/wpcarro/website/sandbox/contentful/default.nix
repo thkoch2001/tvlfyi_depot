@@ -20,5 +20,5 @@ pkgs.stdenv.mkDerivation {
   '';
 
   # TODO(wpcarro): This doesn't build at all.
-  meta.ci = false;
+  meta.ci.skip = true;
 }

@@ -65,10 +65,10 @@ let
   # To determine build targets, we walk through the depot tree and
   # fetch attributes that were imported by readTree and are buildable.
   #
-  # Any build target that contains `meta.ci = false` will be skipped.
+  # Any build target that contains `meta.ci.skip = true` will be skipped.
 
   # Is this tree node eligible for build inclusion?
-  eligible = node: (node ? outPath) && (node.meta.ci or true);
+  eligible = node: (node ? outPath) && (!node.meta.ci.skip or true);
 
 in readTree.fix(self: (readDepot {
   depot = self;
