@@ -47,6 +47,6 @@ self: super: {
 
   # Avoid builds of mkShell derivations in CI.
   mkShell = super.lib.makeOverridable(args: (super.mkShell args) // {
-    meta.ci = false;
+    meta.ci.skip = true;
   });
 }
