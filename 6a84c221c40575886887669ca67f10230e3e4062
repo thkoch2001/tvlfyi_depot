@@ -24,6 +24,30 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c2881bf6_69ff4bcc",
+        "filename": "nix/buildkite/default.nix",
+        "patchSetId": 3
+      },
+      "lineNbr": 168,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-01-19T21:39:59Z",
+      "side": 1,
+      "message": "Yes, and yes.",
+      "parentUuid": "53f41133_2db47edf",
+      "range": {
+        "startLine": 167,
+        "startChar": 0,
+        "endLine": 168,
+        "endChar": 24
+      },
+      "revId": "6a84c221c40575886887669ca67f10230e3e4062",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "c7e75317_c6da4f40",
@@ -37,6 +61,30 @@
       "writtenOn": "2022-01-19T21:17:59Z",
       "side": 1,
       "message": "what values does env.READTREE_TARGET contain?\nis it readable for a human?",
+      "range": {
+        "startLine": 249,
+        "startChar": 51,
+        "endLine": 249,
+        "endChar": 84
+      },
+      "revId": "6a84c221c40575886887669ca67f10230e3e4062",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "87755046_1d60a72f",
+        "filename": "nix/buildkite/default.nix",
+        "patchSetId": 3
+      },
+      "lineNbr": 249,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-01-19T21:39:59Z",
+      "side": 1,
+      "message": "It\u0027s the target label, i.e. the thing that magrathea takes, except without any prefix. For example, `web/logo:blue`.\n\nNote that the word \"label\" is used in different ways by Buildkite and by our tooling.",
+      "parentUuid": "c7e75317_c6da4f40",
       "range": {
         "startLine": 249,
         "startChar": 51,
