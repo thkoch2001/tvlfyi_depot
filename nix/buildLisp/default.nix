@@ -167,8 +167,8 @@ let
   # and then executes expression to check its result
   testSuite = { name, expression, srcs, deps ? [], native ? [], implementation }:
     let
-      lispNativeDeps = allNative native deps;
       lispDeps = allDeps implementation (implFilter implementation deps);
+      lispNativeDeps = allNative native lispDeps;
       filteredSrcs = implFilter implementation srcs;
     in runCommandNoCC name {
       LD_LIBRARY_PATH = lib.makeLibraryPath lispNativeDeps;
