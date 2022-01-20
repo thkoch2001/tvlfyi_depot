@@ -16,10 +16,12 @@ set -ueo pipefail
 : ${DRVMAP_PATH:=pipeline/drvmap.json}
 
 function most_relevant_builds {
+    set -x
     git fetch -v origin "${BUILDKITE_PIPELINE_DEFAULT_BRANCH}"
-    local FIRST=$(git merge-base --fork-point HEAD FETCH_HEAD)
+    local FIRST=$(git merge-base --fork-point "${BUILDKITE_COMMIT}" FETCH_HEAD)
     local SECOND=$(git rev-parse "$FIRST~1")
     local THIRD=$(git rev-parse "$FIRST~2")
+    set +x
 
     curl 'https://graphql.buildkite.com/v1' \
          --silent \
