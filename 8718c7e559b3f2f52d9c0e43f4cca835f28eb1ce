@@ -219,6 +219,29 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "fc3530a6_8cf1a5a4",
+        "filename": "nix/buildkite/default.nix",
+        "patchSetId": 5
+      },
+      "lineNbr": 264,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2022-01-20T10:46:20Z",
+      "side": 1,
+      "message": "Ideally we would establish if script depends on parent.outPath as well for scheduling purposes. OTOH we probably should solve this in a generic way (I promised this at some point, didn\u0027t I)…",
+      "range": {
+        "startLine": 264,
+        "startChar": 18,
+        "endLine": 264,
+        "endChar": 23
+      },
+      "revId": "8718c7e559b3f2f52d9c0e43f4cca835f28eb1ce",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "1ed2ab1b_3cc003ab",
