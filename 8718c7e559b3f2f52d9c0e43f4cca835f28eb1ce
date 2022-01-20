@@ -1,0 +1,268 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f0c90014_cb4c7bc1",
+        "filename": "default.nix",
+        "patchSetId": 5
+      },
+      "lineNbr": 71,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2022-01-20T10:44:15Z",
+      "side": 1,
+      "message": "This line will disappear after a rebase on canon.",
+      "revId": "8718c7e559b3f2f52d9c0e43f4cca835f28eb1ce",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8495b715_99f0a016",
+        "filename": "nix/buildkite/default.nix",
+        "patchSetId": 5
+      },
+      "lineNbr": 66,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2022-01-20T10:44:15Z",
+      "side": 1,
+      "message": "will this symlink be cleaned up by buildkite-agent?",
+      "range": {
+        "startLine": 66,
+        "startChar": 38,
+        "endLine": 66,
+        "endChar": 55
+      },
+      "revId": "8718c7e559b3f2f52d9c0e43f4cca835f28eb1ce",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fffc0d2b_b983d189",
+        "filename": "nix/buildkite/default.nix",
+        "patchSetId": 5
+      },
+      "lineNbr": 66,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2022-01-20T10:44:15Z",
+      "side": 1,
+      "message": "Nix ignores the symlink name a bit when multiple outputs are involved: E.g. if the default output is `bin`, it will always append `-bin` to the symlink name regardless of whether you specify it explicitly or not.",
+      "range": {
+        "startLine": 66,
+        "startChar": 49,
+        "endLine": 66,
+        "endChar": 55
+      },
+      "revId": "8718c7e559b3f2f52d9c0e43f4cca835f28eb1ce",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "87e8aff5_d6cf27eb",
+        "filename": "nix/buildkite/default.nix",
+        "patchSetId": 5
+      },
+      "lineNbr": 165,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2022-01-20T10:44:15Z",
+      "side": 1,
+      "message": "Is it important that extraSteps come after all the normal steps in the pipeline? In theory we could do these two things in one step, right?",
+      "range": {
+        "startLine": 162,
+        "startChar": 0,
+        "endLine": 165,
+        "endChar": 2
+      },
+      "revId": "8718c7e559b3f2f52d9c0e43f4cca835f28eb1ce",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7a270687_d38ba5a3",
+        "filename": "nix/buildkite/default.nix",
+        "patchSetId": 5
+      },
+      "lineNbr": 208,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2022-01-20T10:44:15Z",
+      "side": 1,
+      "message": "attribute name?",
+      "range": {
+        "startLine": 208,
+        "startChar": 30,
+        "endLine": 208,
+        "endChar": 34
+      },
+      "revId": "8718c7e559b3f2f52d9c0e43f4cca835f28eb1ce",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a887677c_a4aae3c5",
+        "filename": "nix/buildkite/default.nix",
+        "patchSetId": 5
+      },
+      "lineNbr": 212,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2022-01-20T10:44:15Z",
+      "side": 1,
+      "message": "Is a \"${foo}/bin/foo\" also okay? I suppose anything that is coercible to a string and points to a single executable file goes (impure scripts 😬)?",
+      "range": {
+        "startLine": 212,
+        "startChar": 57,
+        "endLine": 212,
+        "endChar": 67
+      },
+      "revId": "8718c7e559b3f2f52d9c0e43f4cca835f28eb1ce",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "61636da6_4c689c17",
+        "filename": "nix/buildkite/default.nix",
+        "patchSetId": 5
+      },
+      "lineNbr": 215,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2022-01-20T10:44:15Z",
+      "side": 1,
+      "message": "Is this referring to the attribute name or can it be specified again to override the former?",
+      "range": {
+        "startLine": 215,
+        "startChar": 12,
+        "endLine": 215,
+        "endChar": 20
+      },
+      "revId": "8718c7e559b3f2f52d9c0e43f4cca835f28eb1ce",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "82b587bb_dd1f2360",
+        "filename": "nix/buildkite/default.nix",
+        "patchSetId": 5
+      },
+      "lineNbr": 226,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2022-01-20T10:44:15Z",
+      "side": 1,
+      "message": "but the extraStep will be executed after the parent regardless?",
+      "range": {
+        "startLine": 226,
+        "startChar": 6,
+        "endLine": 226,
+        "endChar": 17
+      },
+      "revId": "8718c7e559b3f2f52d9c0e43f4cca835f28eb1ce",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0baede7e_7eff9d24",
+        "filename": "nix/buildkite/default.nix",
+        "patchSetId": 5
+      },
+      "lineNbr": 228,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2022-01-20T10:44:15Z",
+      "side": 1,
+      "message": "Maybe add a TODO about accessing multiple outputs?",
+      "revId": "8718c7e559b3f2f52d9c0e43f4cca835f28eb1ce",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "001ccee8_97ff9f4d",
+        "filename": "nix/buildkite/default.nix",
+        "patchSetId": 5
+      },
+      "lineNbr": 250,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2022-01-20T10:44:15Z",
+      "side": 1,
+      "message": "Why do we need the condition again here?",
+      "range": {
+        "startLine": 250,
+        "startChar": 15,
+        "endLine": 250,
+        "endChar": 24
+      },
+      "revId": "8718c7e559b3f2f52d9c0e43f4cca835f28eb1ce",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1ed2ab1b_3cc003ab",
+        "filename": "nix/buildkite/default.nix",
+        "patchSetId": 5
+      },
+      "lineNbr": 273,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2022-01-20T10:44:15Z",
+      "side": 1,
+      "message": "lib.strings.sanitizeDerivationName key",
+      "range": {
+        "startLine": 273,
+        "startChar": 41,
+        "endLine": 273,
+        "endChar": 44
+      },
+      "revId": "8718c7e559b3f2f52d9c0e43f4cca835f28eb1ce",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "75845d9e_8f439476",
+        "filename": "nix/buildkite/default.nix",
+        "patchSetId": 5
+      },
+      "lineNbr": 280,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2022-01-20T10:44:15Z",
+      "side": 1,
+      "message": "!alwaysRun \u0026\u0026 !needsOutput\n\nOtherwise we could start the same build twice in parallel.",
+      "range": {
+        "startLine": 280,
+        "startChar": 24,
+        "endLine": 280,
+        "endChar": 33
+      },
+      "revId": "8718c7e559b3f2f52d9c0e43f4cca835f28eb1ce",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
