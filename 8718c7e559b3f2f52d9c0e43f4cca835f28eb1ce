@@ -154,6 +154,30 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "78c711f1_2740d07c",
+        "filename": "nix/buildkite/default.nix",
+        "patchSetId": 5
+      },
+      "lineNbr": 66,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-01-20T17:43:26Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7c497aa1_3e4219a0",
+      "range": {
+        "startLine": 66,
+        "startChar": 49,
+        "endLine": 66,
+        "endChar": 55
+      },
+      "revId": "8718c7e559b3f2f52d9c0e43f4cca835f28eb1ce",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "87e8aff5_d6cf27eb",
@@ -215,6 +239,30 @@
       "side": 1,
       "message": "Maybe mkSteps\u0027 should already return a list of targets then it\u0027d be `lib.concatLists steps`?!",
       "parentUuid": "fd8e4a9d_c195b857",
+      "range": {
+        "startLine": 162,
+        "startChar": 0,
+        "endLine": 165,
+        "endChar": 2
+      },
+      "revId": "8718c7e559b3f2f52d9c0e43f4cca835f28eb1ce",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "250ffb18_c8cf5c11",
+        "filename": "nix/buildkite/default.nix",
+        "patchSetId": 5
+      },
+      "lineNbr": 165,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-01-20T17:43:26Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2444215a_3ace654a",
       "range": {
         "startLine": 162,
         "startChar": 0,
@@ -486,6 +534,24 @@
       "side": 1,
       "message": "We would only build the first output in case of multiple outputs.",
       "parentUuid": "f947b354_d186cacd",
+      "revId": "8718c7e559b3f2f52d9c0e43f4cca835f28eb1ce",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9abc0762_e90759b2",
+        "filename": "nix/buildkite/default.nix",
+        "patchSetId": 5
+      },
+      "lineNbr": 228,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-01-20T17:43:26Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f43f8f59_f3e853a1",
       "revId": "8718c7e559b3f2f52d9c0e43f4cca835f28eb1ce",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },

@@ -35,6 +35,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "2972a83c_53e97f7a",
+        "filename": "nix/buildkite/default.nix",
+        "patchSetId": 8
+      },
+      "lineNbr": 156,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-01-20T17:43:26Z",
+      "side": 1,
+      "message": "Done. mkStep\u0027 -\u003e targetToSteps",
+      "parentUuid": "9c21a7cc_222f4835",
+      "revId": "206ada8cf444fbceb686ccbd3f102d9fe2d7cde1",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "86674589_647a1557",
@@ -48,6 +66,24 @@
       "writtenOn": "2022-01-20T14:57:20Z",
       "side": 1,
       "message": "another thought - that maaybe lends itself better to the whole \"this should be a single executable file\" thing - what about \"command\" instead of \"script?",
+      "revId": "206ada8cf444fbceb686ccbd3f102d9fe2d7cde1",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d9d69dea_856010f7",
+        "filename": "nix/buildkite/default.nix",
+        "patchSetId": 8
+      },
+      "lineNbr": 211,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-01-20T17:43:26Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "86674589_647a1557",
       "revId": "206ada8cf444fbceb686ccbd3f102d9fe2d7cde1",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
@@ -105,6 +141,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c50cd92b_6724e306",
+        "filename": "nix/buildkite/default.nix",
+        "patchSetId": 8
+      },
+      "lineNbr": 218,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-01-20T17:43:26Z",
+      "side": 1,
+      "message": "Went for prompt.",
+      "parentUuid": "462a91d1_45fa4639",
+      "revId": "206ada8cf444fbceb686ccbd3f102d9fe2d7cde1",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "4ff92bb0_29b4fa1e",
@@ -142,6 +196,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "c1f06c6b_71749241",
+        "filename": "nix/buildkite/default.nix",
+        "patchSetId": 8
+      },
+      "lineNbr": 228,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-01-20T17:43:26Z",
+      "side": 1,
+      "message": "\u003e like you\u0027d reference the parent drv directly probably in your script.\n\nIf you do this right now (e.g. by wrapping the parent in fix) you\u0027ll move the parent to IFD.\n\n\u003e does it cost anything to put the symlink in the build directory?\n\nTime, potentially. Especially if we start having more than one agent (and things get fetched from a cache, eval is repeated etc.)",
+      "parentUuid": "a26f1381_85d5b7e4",
+      "revId": "206ada8cf444fbceb686ccbd3f102d9fe2d7cde1",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "04123782_38838be1",
         "filename": "nix/buildkite/default.nix",
         "patchSetId": 8
@@ -153,6 +225,24 @@
       "writtenOn": "2022-01-20T14:57:20Z",
       "side": 1,
       "message": "maybe link to the buildkite documentation for this here?",
+      "revId": "206ada8cf444fbceb686ccbd3f102d9fe2d7cde1",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1a138772_10890755",
+        "filename": "nix/buildkite/default.nix",
+        "patchSetId": 8
+      },
+      "lineNbr": 231,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-01-20T17:43:26Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "04123782_38838be1",
       "revId": "206ada8cf444fbceb686ccbd3f102d9fe2d7cde1",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
