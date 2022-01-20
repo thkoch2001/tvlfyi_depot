@@ -46,6 +46,30 @@
       },
       "revId": "d14c81007eefb01005156d4a0b7e34d41af5d5b4",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4abd033b_25d41181",
+        "filename": "nix/buildkite/fetch-parent-targets.sh",
+        "patchSetId": 13
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-01-20T12:39:45Z",
+      "side": 1,
+      "message": "The fetch we do above will always give us a result (it\u0027ll fetch refs/heads/canon), so unless it fails (in which case the script aborts), we\u0027ll have a FETCH_HEAD.",
+      "parentUuid": "cf69c2ea_fe77b6d9",
+      "range": {
+        "startLine": 20,
+        "startChar": 36,
+        "endLine": 20,
+        "endChar": 46
+      },
+      "revId": "d14c81007eefb01005156d4a0b7e34d41af5d5b4",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
