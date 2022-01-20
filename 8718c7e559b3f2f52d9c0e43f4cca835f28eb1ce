@@ -474,6 +474,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "f43f8f59_f3e853a1",
+        "filename": "nix/buildkite/default.nix",
+        "patchSetId": 5
+      },
+      "lineNbr": 228,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2022-01-20T15:27:36Z",
+      "side": 1,
+      "message": "We would only build the first output in case of multiple outputs.",
+      "parentUuid": "f947b354_d186cacd",
+      "revId": "8718c7e559b3f2f52d9c0e43f4cca835f28eb1ce",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "001ccee8_97ff9f4d",
         "filename": "nix/buildkite/default.nix",
         "patchSetId": 5
