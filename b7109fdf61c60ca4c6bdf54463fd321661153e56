@@ -22,6 +22,30 @@
       },
       "revId": "b7109fdf61c60ca4c6bdf54463fd321661153e56",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7a45b8b3_c9a95ff3",
+        "filename": "nix/buildkite/fetch-parent-targets.sh",
+        "patchSetId": 2
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-01-20T18:46:42Z",
+      "side": 1,
+      "message": "That doesn\u0027t work:\n\n tazjin@tverskoy /depot ((b7109fdf…))\u003e git rev-parse origin/refs/heads/canon\n origin/refs/heads/canon\n fatal: ambiguous argument \u0027origin/refs/heads/canon\u0027: unknown revision or path not in the working tree.",
+      "parentUuid": "1e9cf0b0_9ec6f78d",
+      "range": {
+        "startLine": 20,
+        "startChar": 36,
+        "endLine": 20,
+        "endChar": 48
+      },
+      "revId": "b7109fdf61c60ca4c6bdf54463fd321661153e56",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
