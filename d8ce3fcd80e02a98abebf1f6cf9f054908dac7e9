@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0585fdd5_5df84e80",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 22
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-01-20T18:23:53Z",
+      "side": 1,
+      "message": "Note: Gated steps have been removed from here and moved into cl/5033. This is because uploading them at the point where other extraSteps are added in this CL will block :duck:. We need to restructure that logic slightly.",
+      "revId": "d8ce3fcd80e02a98abebf1f6cf9f054908dac7e9",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
