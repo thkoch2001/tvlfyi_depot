@@ -213,6 +213,10 @@ in rec {
   #   label (optional): Human-readable label for this step to display
   #     in the Buildkite UI instead of the attribute name.
   #
+  #   prompt (optional): Setting this blocks the step until confirmed
+  #     by a human. Should be a string which is displayed for
+  #     confirmation.
+  #
   #   needsOutput (optional): If set to true, the parent derivation
   #     will be built in the working directory before running the
   #     command. Output will be available as 'result'.
@@ -224,11 +228,37 @@ in rec {
   #
   #   alwaysRun (optional): If set to true, this step will always run,
   #     even if its parent has not been rebuilt.
+  #
+  # Note that gated steps are independent of each other.
 
-  # Create the Buildkite configuration for an extra step.
+  # Create a gated step in a step group, independent from any other
+  # steps.
+  mkGatedStep = { step, label, parent, prompt, condition }: {
+    group = label;
+    depends_on = step.depends_on;
+    skip = parent.skip or false;
+    "if" = condition;
+
+    steps = [
+      {
+        inherit prompt;
+        block = ":radio_button: Run ${label}? (from ${parent.env.READTREE_TARGET})";
+        "if" = condition;
+      }
+
+      # The explicit depends_on of the wrapped step must be removed,
+      # otherwise its dependency relationship with the gate step will
+      # break.
+      (builtins.removeAttrs step [ "depends_on" ])
+    ];
+  };
+
+  # Create the Buildkite configuration for an extra step, optionally
+  # wrapping it in a gate group.
   mkExtraStep = parent: key: {
     command,
     label ? key,
+    prompt ? false,
     needsOutput ? false,
     condition ? null,
     alwaysRun ? false
@@ -249,5 +279,9 @@ in rec {
         exec ${command}
       '';
     };
-  in step;
+  in if (isString prompt)
+    then mkGatedStep {
+      inherit step label parent prompt condition;
+    }
+    else step;
 }
