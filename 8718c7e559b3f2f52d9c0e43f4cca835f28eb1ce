@@ -132,6 +132,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "7c497aa1_3e4219a0",
+        "filename": "nix/buildkite/default.nix",
+        "patchSetId": 5
+      },
+      "lineNbr": 66,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2022-01-20T14:57:20Z",
+      "side": 1,
+      "message": "can we maybe add that to thhe documentation?",
+      "parentUuid": "9954c6f2_7ee96a48",
+      "range": {
+        "startLine": 66,
+        "startChar": 49,
+        "endLine": 66,
+        "endChar": 55
+      },
+      "revId": "8718c7e559b3f2f52d9c0e43f4cca835f28eb1ce",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "87e8aff5_d6cf27eb",
         "filename": "nix/buildkite/default.nix",
         "patchSetId": 5
@@ -507,6 +531,30 @@
       "side": 1,
       "message": "It\u0027s not a derivation name though?",
       "parentUuid": "1ed2ab1b_3cc003ab",
+      "range": {
+        "startLine": 273,
+        "startChar": 41,
+        "endLine": 273,
+        "endChar": 44
+      },
+      "revId": "8718c7e559b3f2f52d9c0e43f4cca835f28eb1ce",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4441bcf6_ebd39008",
+        "filename": "nix/buildkite/default.nix",
+        "patchSetId": 5
+      },
+      "lineNbr": 273,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2022-01-20T14:57:20Z",
+      "side": 1,
+      "message": "isn\u0027t it?",
+      "parentUuid": "0936bc79_6b2e797d",
       "range": {
         "startLine": 273,
         "startChar": 41,

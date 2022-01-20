@@ -1,0 +1,106 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "04b5a04a_350e9f2c",
+        "filename": "nix/buildkite/default.nix",
+        "patchSetId": 8
+      },
+      "lineNbr": 82,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2022-01-20T14:57:20Z",
+      "side": 1,
+      "message": "heh, that certainly works too",
+      "revId": "206ada8cf444fbceb686ccbd3f102d9fe2d7cde1",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9c21a7cc_222f4835",
+        "filename": "nix/buildkite/default.nix",
+        "patchSetId": 8
+      },
+      "lineNbr": 156,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2022-01-20T14:57:20Z",
+      "side": 1,
+      "message": "having a function called `mkStep\u0027` return an attribute set containing a step and extraSteps, rather than just returning an individual step, seeems a little fuzzy - maybe call it `mkSteps` or something?",
+      "revId": "206ada8cf444fbceb686ccbd3f102d9fe2d7cde1",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "86674589_647a1557",
+        "filename": "nix/buildkite/default.nix",
+        "patchSetId": 8
+      },
+      "lineNbr": 211,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2022-01-20T14:57:20Z",
+      "side": 1,
+      "message": "another thought - that maaybe lends itself better to the whole \"this should be a single executable file\" thing - what about \"command\" instead of \"script?",
+      "revId": "206ada8cf444fbceb686ccbd3f102d9fe2d7cde1",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e621e256_a75dd9a9",
+        "filename": "nix/buildkite/default.nix",
+        "patchSetId": 8
+      },
+      "lineNbr": 218,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2022-01-20T14:57:20Z",
+      "side": 1,
+      "message": "not sure how crazy I am about this naming - what about something slightly more obvious such as \"requireConfirmation\"?",
+      "revId": "206ada8cf444fbceb686ccbd3f102d9fe2d7cde1",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4ff92bb0_29b4fa1e",
+        "filename": "nix/buildkite/default.nix",
+        "patchSetId": 8
+      },
+      "lineNbr": 228,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2022-01-20T14:57:20Z",
+      "side": 1,
+      "message": "honestly can\u0027t imagine when this would ever *not* be true - does it cost anything to put the symlink in the build directory? If not, why not reduce the API surface area by just doing this unconditionally?",
+      "revId": "206ada8cf444fbceb686ccbd3f102d9fe2d7cde1",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "04123782_38838be1",
+        "filename": "nix/buildkite/default.nix",
+        "patchSetId": 8
+      },
+      "lineNbr": 231,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2022-01-20T14:57:20Z",
+      "side": 1,
+      "message": "maybe link to the buildkite documentation for this here?",
+      "revId": "206ada8cf444fbceb686ccbd3f102d9fe2d7cde1",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
