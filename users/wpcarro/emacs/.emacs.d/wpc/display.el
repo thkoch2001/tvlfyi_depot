@@ -99,39 +99,5 @@ See the man-page for xrandr for more details."
                                      (eval (intern (format "display-%s-args" x)))))
                              (s-join " "))))))
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Configuration
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-(display-register laptop
-                  :output "eDP1"
-                  :primary nil
-                  :coords (2560 1440)
-                  :size (1920 1080)
-                  :rate 30.0
-                  :dpi 144
-                  :rotate normal)
-
-(display-register 4k-horizontal
-                  :output "DP-0"
-                  :primary t
-                  :coords (0 0)
-                  :size (2560 1440)
-                  :rate 30.0
-                  :dpi 144
-                  :rotate normal)
-
-(display-register 4k-vertical
-                  :output "DP-2"
-                  :primary nil
-                  :coords (-1440 -560)
-                  :size (2560 1440)
-                  :rate 30.0
-                  :dpi 144
-                  :rotate left)
-
-(display-arrangement primary
-                     :displays (laptop 4k-horizontal 4k-vertical))
-
 (provide 'display)
 ;;; display.el ends here
