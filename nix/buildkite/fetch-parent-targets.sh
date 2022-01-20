@@ -33,9 +33,9 @@ for build in $(most_relevant_builds); do
     echo "Checking artifacts for build $build"
     buildkite-agent artifact download --build "${build}" "${DRVMAP_PATH}" 'tmp/' || true
 
-    if [[ -f "tmp/${DRVMAP_PATH}" ]]; then
+    if [[ -f "tmp/$${DRVMAP_PATH}" ]]; then
         echo "Fetched target map from build ${build}"
-        mv "tmp/${DRVMAP_PATH}" tmp/parent-target-map.json
+        mv "tmp/$${DRVMAP_PATH}" tmp/parent-target-map.json
         break
     fi
 done
