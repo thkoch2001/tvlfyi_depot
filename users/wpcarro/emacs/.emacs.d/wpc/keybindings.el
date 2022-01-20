@@ -178,7 +178,10 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Workspaces
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(keybindings-exwm (kbd-raw 'workspace "l") #'window-manager-logout)
+(keybindings-exwm (kbd-raw 'workspace "l")
+                  (lambda ()
+                    (interactive)
+                    (shell-command window-manager-screenlocker)))
 
 (general-define-key
  :keymaps 'override

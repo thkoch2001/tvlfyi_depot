@@ -56,6 +56,7 @@
 ;; between workspaces.
 
 (cl-defstruct window-manager--named-workspace label kbd display)
+(defgroup window-manager)
 
 (defconst window-manager--install-kbds? t
   "When t, install the keybindings to switch between named-workspaces.")
@@ -124,6 +125,9 @@
           ;; TODO: Ensure C-c copies.
           ([?\C-c] . [C-c])))
   (exwm-enable))
+(defcustom window-manager-screenlocker "xsecurelock"
+  "Reference to a screen-locking executable."
+  :group 'window-manager)
 
 ;; Here is the code required to allow EXWM to cycle workspaces.
 (defconst window-manager--workspaces
@@ -184,65 +188,6 @@
 ;; TODO: Consider replacing the `ivy-read' call with something like `hydra' that
 ;; can provide a small mode for accepting user-input.
 ;; TODO: Put this somewhere more diliberate.
-
-;; TODO: Configure the environment variables for xsecurelock so that the font is
-;; smaller, different, and the glinux wallpaper doesn't show.
-;; - XSECURELOCK_FONT="InputMono-Black 10"
-;; - XSECURE_SAVER=""
-;; - XSECURE_LOGO_IMAGE=""
-;; Maybe just create a ~/.xsecurelockrc
-;; TODO: Is there a shell-command API that accepts an alist and serializes it
-;; into variables to pass to the shell command?
-(defconst window-manager--xsecurelock
-  (if (device-corporate?)
-      "/usr/share/goobuntu-desktop-files/xsecurelock.sh"
-    "xsecurelock")
-  "Path to the proper xsecurelock executable.
-The other path to xsecurelock is /usr/bin/xsecurelock, which works fine, but it
-is not optimized for Goobuntu devices.  Goobuntu attempts to check a user's
-password using the network.  When there is no network connection available, the
-login attempts fail with an \"unknown error\", which isn't very helpful.  To
-avoid this, prefer the goobuntu wrapper around xsecurelock when on a goobuntu
-device.  This all relates to PAM (i.e. pluggable authentication modules).")
-
-(defun window-manager-logout ()
-  "Prompt the user for options for logging out, shutting down, etc.
-
-The following options are supported:
-- Lock
-- Logout
-- Suspend
-- Hibernate
-- Reboot
-- Shutdown
-
-Ivy is used to capture the user's input."
-  (interactive)
-  (let* ((name->cmd `(("Lock" .
-                       (lambda ()
-                         (shell-command window-manager--xsecurelock)))
-                      ("Logout" .
-                       (lambda ()
-                         (let ((default-directory "/sudo::"))
-                           (shell-command "systemctl restart gdm.service"))))
-                      ("Suspend" .
-                       (lambda ()
-                         (shell-command "systemctl suspend")))
-                      ("Hibernate" .
-                       (lambda ()
-                         (shell-command "systemctl hibernate")))
-                      ("Reboot" .
-                       (lambda ()
-                         (let ((default-directory "/sudo::"))
-                           (shell-command "reboot"))))
-                      ("Shutdown" .
-                       (lambda ()
-                         (let ((default-directory "/sudo::"))
-                           (shell-command "shutdown now")))))))
-    (funcall
-     (lambda ()
-       (funcall (al-get (ivy-read "System: " (al-keys name->cmd))
-                        name->cmd))))))
 
 (defun window-manager--label->index (label workspaces)
   "Return the index of the workspace in WORKSPACES named LABEL."
