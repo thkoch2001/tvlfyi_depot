@@ -18,6 +18,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "7752f61c_9edf892a",
+        "filename": "default.nix",
+        "patchSetId": 5
+      },
+      "lineNbr": 71,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-01-20T11:03:44Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "f0c90014_cb4c7bc1",
+      "revId": "8718c7e559b3f2f52d9c0e43f4cca835f28eb1ce",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "8495b715_99f0a016",
@@ -64,6 +82,54 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "9954c6f2_7ee96a48",
+        "filename": "nix/buildkite/default.nix",
+        "patchSetId": 5
+      },
+      "lineNbr": 66,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-01-20T11:03:44Z",
+      "side": 1,
+      "message": "Yeah, I\u0027m aware - if anyone is using this with multiple-output derivations they will need to account for this in their extra steps script if required.",
+      "parentUuid": "fffc0d2b_b983d189",
+      "range": {
+        "startLine": 66,
+        "startChar": 49,
+        "endLine": 66,
+        "endChar": 55
+      },
+      "revId": "8718c7e559b3f2f52d9c0e43f4cca835f28eb1ce",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a7eee9d5_a87d05fd",
+        "filename": "nix/buildkite/default.nix",
+        "patchSetId": 5
+      },
+      "lineNbr": 66,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-01-20T11:03:44Z",
+      "side": 1,
+      "message": "Yes, Buildkite resets the working directory to a clean state at the beginning of each step.",
+      "parentUuid": "8495b715_99f0a016",
+      "range": {
+        "startLine": 66,
+        "startChar": 38,
+        "endLine": 66,
+        "endChar": 55
+      },
+      "revId": "8718c7e559b3f2f52d9c0e43f4cca835f28eb1ce",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "87e8aff5_d6cf27eb",
@@ -87,6 +153,30 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "fd8e4a9d_c195b857",
+        "filename": "nix/buildkite/default.nix",
+        "patchSetId": 5
+      },
+      "lineNbr": 165,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-01-20T11:03:44Z",
+      "side": 1,
+      "message": "It\u0027s not, but I wanted to avoid another evaluation-heavy fold creating lots of unnecessary lists. There\u0027s probably a better way to do that, but I couldn\u0027t think of one now. Prime target for refactoring :)",
+      "parentUuid": "87e8aff5_d6cf27eb",
+      "range": {
+        "startLine": 162,
+        "startChar": 0,
+        "endLine": 165,
+        "endChar": 2
+      },
+      "revId": "8718c7e559b3f2f52d9c0e43f4cca835f28eb1ce",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "7a270687_d38ba5a3",
@@ -100,6 +190,30 @@
       "writtenOn": "2022-01-20T10:44:15Z",
       "side": 1,
       "message": "attribute name?",
+      "range": {
+        "startLine": 208,
+        "startChar": 30,
+        "endLine": 208,
+        "endChar": 34
+      },
+      "revId": "8718c7e559b3f2f52d9c0e43f4cca835f28eb1ce",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c81e6151_a6bcd801",
+        "filename": "nix/buildkite/default.nix",
+        "patchSetId": 5
+      },
+      "lineNbr": 208,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-01-20T11:03:44Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7a270687_d38ba5a3",
       "range": {
         "startLine": 208,
         "startChar": 30,
@@ -135,6 +249,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "61477615_4bf640df",
+        "filename": "nix/buildkite/default.nix",
+        "patchSetId": 5
+      },
+      "lineNbr": 212,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-01-20T11:03:44Z",
+      "side": 1,
+      "message": "I think it would be better if it was a derivation, because right now these things are built at eval-time (store paths go in the YAML file), but we\u0027ll want to refactor that to only instantiate the derivation and then realise \u0026 inject it later (like with other builds). I just didn\u0027t want to put all of that complexity here at once.",
+      "parentUuid": "a887677c_a4aae3c5",
+      "range": {
+        "startLine": 212,
+        "startChar": 57,
+        "endLine": 212,
+        "endChar": 67
+      },
+      "revId": "8718c7e559b3f2f52d9c0e43f4cca835f28eb1ce",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "61636da6_4c689c17",
         "filename": "nix/buildkite/default.nix",
         "patchSetId": 5
@@ -146,6 +284,30 @@
       "writtenOn": "2022-01-20T10:44:15Z",
       "side": 1,
       "message": "Is this referring to the attribute name or can it be specified again to override the former?",
+      "range": {
+        "startLine": 215,
+        "startChar": 12,
+        "endLine": 215,
+        "endChar": 20
+      },
+      "revId": "8718c7e559b3f2f52d9c0e43f4cca835f28eb1ce",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e3b3c52a_c3c39e21",
+        "filename": "nix/buildkite/default.nix",
+        "patchSetId": 5
+      },
+      "lineNbr": 215,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-01-20T11:03:44Z",
+      "side": 1,
+      "message": "It can be specified again here. Renamed to label instead to make it clearer (it\u0027s the word Buildkite uses).",
+      "parentUuid": "61636da6_4c689c17",
       "range": {
         "startLine": 215,
         "startChar": 12,
@@ -179,6 +341,30 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "5eaf4e54_ad0143ae",
+        "filename": "nix/buildkite/default.nix",
+        "patchSetId": 5
+      },
+      "lineNbr": 226,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-01-20T11:03:44Z",
+      "side": 1,
+      "message": "Yes",
+      "parentUuid": "82b587bb_dd1f2360",
+      "range": {
+        "startLine": 226,
+        "startChar": 6,
+        "endLine": 226,
+        "endChar": 17
+      },
+      "revId": "8718c7e559b3f2f52d9c0e43f4cca835f28eb1ce",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "0baede7e_7eff9d24",
@@ -196,6 +382,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "f947b354_d186cacd",
+        "filename": "nix/buildkite/default.nix",
+        "patchSetId": 5
+      },
+      "lineNbr": 228,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-01-20T11:03:44Z",
+      "side": 1,
+      "message": "There\u0027s nothing to do - they just exist if Nix produces them.",
+      "parentUuid": "0baede7e_7eff9d24",
+      "revId": "8718c7e559b3f2f52d9c0e43f4cca835f28eb1ce",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "001ccee8_97ff9f4d",
@@ -209,6 +413,30 @@
       "writtenOn": "2022-01-20T10:44:15Z",
       "side": 1,
       "message": "Why do we need the condition again here?",
+      "range": {
+        "startLine": 250,
+        "startChar": 15,
+        "endLine": 250,
+        "endChar": 24
+      },
+      "revId": "8718c7e559b3f2f52d9c0e43f4cca835f28eb1ce",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "db834ab2_502df950",
+        "filename": "nix/buildkite/default.nix",
+        "patchSetId": 5
+      },
+      "lineNbr": 250,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-01-20T11:03:44Z",
+      "side": 1,
+      "message": "We ran into this with a different pipeline - for some confusing reason, these conditions seem to be independent of each other, leading to strange situations where we had steps running without a group. The fix we had in the other pipeline was to carry the conditions through. I also find this unintuitive ...",
+      "parentUuid": "001ccee8_97ff9f4d",
       "range": {
         "startLine": 250,
         "startChar": 15,
@@ -267,6 +495,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "0936bc79_6b2e797d",
+        "filename": "nix/buildkite/default.nix",
+        "patchSetId": 5
+      },
+      "lineNbr": 273,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-01-20T11:03:44Z",
+      "side": 1,
+      "message": "It\u0027s not a derivation name though?",
+      "parentUuid": "1ed2ab1b_3cc003ab",
+      "range": {
+        "startLine": 273,
+        "startChar": 41,
+        "endLine": 273,
+        "endChar": 44
+      },
+      "revId": "8718c7e559b3f2f52d9c0e43f4cca835f28eb1ce",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "75845d9e_8f439476",
         "filename": "nix/buildkite/default.nix",
         "patchSetId": 5
@@ -278,6 +530,30 @@
       "writtenOn": "2022-01-20T10:44:15Z",
       "side": 1,
       "message": "!alwaysRun \u0026\u0026 !needsOutput\n\nOtherwise we could start the same build twice in parallel.",
+      "range": {
+        "startLine": 280,
+        "startChar": 24,
+        "endLine": 280,
+        "endChar": 33
+      },
+      "revId": "8718c7e559b3f2f52d9c0e43f4cca835f28eb1ce",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4b1338a2_85316742",
+        "filename": "nix/buildkite/default.nix",
+        "patchSetId": 5
+      },
+      "lineNbr": 280,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-01-20T11:03:44Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "75845d9e_8f439476",
       "range": {
         "startLine": 280,
         "startChar": 24,
