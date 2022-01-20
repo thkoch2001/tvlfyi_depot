@@ -18,6 +18,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "041c9da2_818b7a07",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 12
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-01-20T11:04:32Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "e76e19d6_07beb32a",
+      "revId": "1a82ccb170fd92c9513b88aabed91d4c08eda982",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "7e0e103a_9215fe89",
@@ -35,6 +53,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "db7f5901_45bc15f7",
+        "filename": "nix/buildkite/fetch-parent-targets.sh",
+        "patchSetId": 12
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-01-20T11:04:32Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "7e0e103a_9215fe89",
+      "revId": "1a82ccb170fd92c9513b88aabed91d4c08eda982",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "f844d6fe_93bdc96e",
@@ -48,6 +84,24 @@
       "writtenOn": "2022-01-20T10:59:45Z",
       "side": 1,
       "message": "The proper way would be to separate declaration and assignment, i.e.\n\n        local FIRST SECOND THIRD\n        FIRST\u003d$(...)\n        ...\n\nThat way, the shell\u0027s `nounset` and `error` are in effect during sub-shell execution without `local` clobbering its exit status.",
+      "revId": "1a82ccb170fd92c9513b88aabed91d4c08eda982",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4676f99a_0fefe6ed",
+        "filename": "nix/buildkite/fetch-parent-targets.sh",
+        "patchSetId": 12
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-01-20T11:04:32Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "f844d6fe_93bdc96e",
       "revId": "1a82ccb170fd92c9513b88aabed91d4c08eda982",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
