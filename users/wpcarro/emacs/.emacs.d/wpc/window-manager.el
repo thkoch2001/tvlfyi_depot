@@ -222,8 +222,6 @@ Currently using super- as the prefix for switching workspaces."
                window-manager--workspaces)
   (window-manager--change-workspace (cycle-current window-manager--workspaces)))
 
-(exwm-input-set-key (kbd "C-S-f") #'window-manager-toggle-previous)
-
 (defun window-manager-toggle-previous ()
   "Focus the previously active EXWM workspace."
   (interactive)
