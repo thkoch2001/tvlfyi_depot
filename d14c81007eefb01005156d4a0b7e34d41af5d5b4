@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2ad02db5_13f92626",
+        "filename": "nix/buildkite/fetch-parent-targets.sh",
+        "patchSetId": 13
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2022-01-20T12:16:48Z",
+      "side": 1,
+      "message": "I do not think FETCH_HEAD is set if there is nothing to fetch...\n\n$ git fetch \n$ git merge-base --fork-point HEAD FETCH_HEAD\nfatal: Not a valid object name: \u0027FETCH_HEAD\u0027",
+      "range": {
+        "startLine": 20,
+        "startChar": 36,
+        "endLine": 20,
+        "endChar": 46
+      },
+      "revId": "d14c81007eefb01005156d4a0b7e34d41af5d5b4",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
