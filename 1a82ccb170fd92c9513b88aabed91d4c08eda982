@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e76e19d6_07beb32a",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 12
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1000040
+      },
+      "writtenOn": "2022-01-20T10:59:45Z",
+      "side": 1,
+      "message": "To clarify, this is simply how `local` (and other builtins) work:\n\n\u003e The return status is 0 unless local is used outside a function,\n\u003e an invalid name is supplied, or name is a readonly variable.",
+      "revId": "1a82ccb170fd92c9513b88aabed91d4c08eda982",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7e0e103a_9215fe89",
+        "filename": "nix/buildkite/fetch-parent-targets.sh",
+        "patchSetId": 12
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1000040
+      },
+      "writtenOn": "2022-01-20T10:59:45Z",
+      "side": 1,
+      "message": "Note to the interested reader: `BUILDKITE_COMMIT` might be \"HEAD\" or the 40 digit commit id, so it must be used as second argument since git-merge-base(1)\u0027s `--fork-commit` requires a reference (not a commit) as first argument.",
+      "revId": "1a82ccb170fd92c9513b88aabed91d4c08eda982",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f844d6fe_93bdc96e",
+        "filename": "nix/buildkite/fetch-parent-targets.sh",
+        "patchSetId": 12
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1000040
+      },
+      "writtenOn": "2022-01-20T10:59:45Z",
+      "side": 1,
+      "message": "The proper way would be to separate declaration and assignment, i.e.\n\n        local FIRST SECOND THIRD\n        FIRST\u003d$(...)\n        ...\n\nThat way, the shell\u0027s `nounset` and `error` are in effect during sub-shell execution without `local` clobbering its exit status.",
+      "revId": "1a82ccb170fd92c9513b88aabed91d4c08eda982",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
