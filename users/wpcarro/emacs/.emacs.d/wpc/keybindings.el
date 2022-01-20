@@ -27,6 +27,7 @@
 (require 'pulse-audio)
 (require 'scrot)
 (require 'ivy-clipmenu)
+(require 'ivy-helpers)
 (require 'general)
 (require 'exwm)
 (require 'vterm-mgt)
@@ -172,6 +173,7 @@
 (keybindings-exwm "M-x" #'counsel-M-x)
 (keybindings-exwm "<M-tab>" #'window-manager-next-workspace)
 (keybindings-exwm "<M-S-iso-lefttab>" #'window-manager-prev-workspace)
+(keybindings-exwm "C-S-f" #'window-manager-toggle-previous)
 (keybindings-exwm "C-M-\\" #'ivy-pass)
 (keybindings-exwm "s-e" #'wpc-misc-copy-emoji)
 
