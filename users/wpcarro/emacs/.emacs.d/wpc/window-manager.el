@@ -8,10 +8,8 @@
 ;; I switched to EXWM from i3, and I haven't looked back.  One day I may write a
 ;; poem declaring my love for Emacs and EXWM.  For now, I haven't the time.
 
-;; Wish list:
-;; - TODO: Support different startup commands and layouts depending on laptop or
-;;   desktop.
-;; - TODO: Support a Music named-workspace.
+;; Wist List:
+;; - TODO: Consider supporting MRU cache of worksapces.
 
 ;;; Code:
 
@@ -35,34 +33,11 @@
 ;; Library
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-;; TODO: Associate `window-purpose' window-layouts with each of these named
-;; workspaces.
-
-;; TODO: Associate KBDs for each of these named-layouts.
-
-;; TODO: Decide between window-manager, exwm, or some other namespace.
-
-;; TODO: Support (cycle-from-list '(current previous)) to toggle back and forth
-;; between most recent workspace.
-
-;; TODO: Support ad hoc cycle for loading a few workspaces that can be cycled
-;; between. (cycle-from-list '("Project" "Workspace"))
-
-;; TODO: Consider supporting a workspace for Racket, Clojure, Common Lisp,
-;; Haskell, Elixir, and a few other languages. These could behave very similarly
-;; to repl.it, which I've wanted to have locally for awhile now.
-
-;; TODO: Support MRU cache of workspaces for easily switching back-and-forth
-;; between workspaces.
-
 (cl-defstruct window-manager--named-workspace label kbd display)
 (defgroup window-manager)
 
 (defconst window-manager--install-kbds? t
   "When t, install the keybindings to switch between named-workspaces.")
-
-;; TODO: Consume `cache/touch' after changing workspaces.  Use this to enable
-;; cycling through workspaces.
 
 (defconst window-manager--named-workspaces
   (list (make-window-manager--named-workspace
@@ -111,7 +86,6 @@
              -flatten))
   (setq exwm-workspace-number (list-length window-manager--named-workspaces))
   (setq exwm-input-simulation-keys
-        ;; TODO: Consider supporting M-d and other readline style KBDs.
         '(([?\C-b] . [left])
           ([?\M-b] . [C-left])
           ([?\C-f] . [right])
@@ -121,8 +95,6 @@
           ([?\C-a] . [home])
           ([?\C-e] . [end])
           ([?\C-d] . [delete])
-          ;; TODO: Assess whether or not this is a good idea.
-          ;; TODO: Ensure C-c copies.
           ([?\C-c] . [C-c])))
   (exwm-enable))
 (defcustom window-manager-screenlocker "xsecurelock"
@@ -148,8 +120,6 @@
   "Cycle backwards to the previous workspace."
   (interactive)
   (window-manager--change-workspace (cycle-prev window-manager--workspaces)))
-
-;; TODO: Create friendlier API for working with EXWM.
 
 ;; Here is the code required to toggle EXWM's modes.
 (defun window-manager--line-mode ()
@@ -177,14 +147,6 @@
 ;; Ensure exwm apps open in char-mode.
 (add-hook 'exwm-manage-finish-hook #'window-manager--char-mode)
 
-
-;; TODO: How do I handle this dependency?
-(defconst window-manager--preferred-browser "google-chrome"
-  "My preferred web browser.")
-
-;; TODO: Consider replacing the `ivy-read' call with something like `hydra' that
-;; can provide a small mode for accepting user-input.
-;; TODO: Put this somewhere more diliberate.
 
 (defun window-manager--label->index (label workspaces)
   "Return the index of the workspace in WORKSPACES named LABEL."
