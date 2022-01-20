@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1e9cf0b0_9ec6f78d",
+        "filename": "nix/buildkite/fetch-parent-targets.sh",
+        "patchSetId": 2
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2022-01-20T18:36:54Z",
+      "side": 1,
+      "message": "\"origin/${BUILDKITE_PIPELINE_DEFAULT_BRANCH}\" to match above.",
+      "range": {
+        "startLine": 20,
+        "startChar": 36,
+        "endLine": 20,
+        "endChar": 48
+      },
+      "revId": "b7109fdf61c60ca4c6bdf54463fd321661153e56",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
