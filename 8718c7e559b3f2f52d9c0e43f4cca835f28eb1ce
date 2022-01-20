@@ -203,6 +203,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "2444215a_3ace654a",
+        "filename": "nix/buildkite/default.nix",
+        "patchSetId": 5
+      },
+      "lineNbr": 165,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2022-01-20T15:24:23Z",
+      "side": 1,
+      "message": "Maybe mkSteps\u0027 should already return a list of targets then it\u0027d be `lib.concatLists steps`?!",
+      "parentUuid": "fd8e4a9d_c195b857",
+      "range": {
+        "startLine": 162,
+        "startChar": 0,
+        "endLine": 165,
+        "endChar": 2
+      },
+      "revId": "8718c7e559b3f2f52d9c0e43f4cca835f28eb1ce",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "7a270687_d38ba5a3",
         "filename": "nix/buildkite/default.nix",
         "patchSetId": 5
@@ -285,6 +309,30 @@
       "side": 1,
       "message": "I think it would be better if it was a derivation, because right now these things are built at eval-time (store paths go in the YAML file), but we\u0027ll want to refactor that to only instantiate the derivation and then realise \u0026 inject it later (like with other builds). I just didn\u0027t want to put all of that complexity here at once.",
       "parentUuid": "a887677c_a4aae3c5",
+      "range": {
+        "startLine": 212,
+        "startChar": 57,
+        "endLine": 212,
+        "endChar": 67
+      },
+      "revId": "8718c7e559b3f2f52d9c0e43f4cca835f28eb1ce",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "df19e08c_00f2e7d1",
+        "filename": "nix/buildkite/default.nix",
+        "patchSetId": 5
+      },
+      "lineNbr": 212,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2022-01-20T15:24:23Z",
+      "side": 1,
+      "message": "Right — makes sense. I think it wouldn\u0027t even need to be a derivation then /in theory/ but remembering the string context for later is probably a huge hassle.\n\nAlso: Hello our old friend gcrooting drvs or not problem :p",
+      "parentUuid": "61477615_4bf640df",
       "range": {
         "startLine": 212,
         "startChar": 57,
@@ -554,6 +602,30 @@
       "writtenOn": "2022-01-20T14:57:20Z",
       "side": 1,
       "message": "isn\u0027t it?",
+      "parentUuid": "0936bc79_6b2e797d",
+      "range": {
+        "startLine": 273,
+        "startChar": 41,
+        "endLine": 273,
+        "endChar": 44
+      },
+      "revId": "8718c7e559b3f2f52d9c0e43f4cca835f28eb1ce",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "21fbcfcd_faa61294",
+        "filename": "nix/buildkite/default.nix",
+        "patchSetId": 5
+      },
+      "lineNbr": 273,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2022-01-20T15:24:23Z",
+      "side": 1,
+      "message": "`writeShellScript` does it internally anyways, forgot.",
       "parentUuid": "0936bc79_6b2e797d",
       "range": {
         "startLine": 273,
