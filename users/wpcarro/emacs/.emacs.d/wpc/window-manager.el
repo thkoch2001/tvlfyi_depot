@@ -177,9 +177,6 @@
 ;; Ensure exwm apps open in char-mode.
 (add-hook 'exwm-manage-finish-hook #'window-manager--char-mode)
 
-;; Interface to the Linux password manager
-;; TODO: Consider writing a better client for this.
-(use-package ivy-pass)
 
 ;; TODO: How do I handle this dependency?
 (defconst window-manager--preferred-browser "google-chrome"
