@@ -31,7 +31,6 @@
 (require 'exwm)
 (require 'vterm-mgt)
 (require 'buffer)
-(require 'display)
 (require 'device)
 (require 'fonts)
 (require 'bookmark)
@@ -257,19 +256,6 @@
  ;; Without this, typing "+" is effectively no-op. Try for yourself:
  ;; (vterm-send-key "<kp-add>")
  "<kp-add>" "+")
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Displays
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-(when (device-work-laptop?)
-  (general-define-key
-   :prefix "<SPC>"
-   :states '(normal)
-   "d0" #'display-enable-laptop
-   "D0" #'display-disable-laptop
-   "d1" #'display-enable-4k-horizontal
-   "D1" #'display-disable-4k-horizontal))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; notmuch
