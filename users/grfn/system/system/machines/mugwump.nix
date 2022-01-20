@@ -72,6 +72,18 @@ with lib;
     bbbg.file = secret "bbbg";
     cloudflare.file = secret "cloudflare";
     ddclient-password.file = secret "ddclient-password";
+
+    buildkite-ssh-key = {
+      file = secret "buildkite-ssh-key";
+      group = "keys";
+      mode = "0440";
+    };
+
+    buildkite-token = {
+      file = secret "buildkite-token";
+      group = "keys";
+      mode = "0440";
+    };
   };
 
   services.depot.auto-deploy = {
@@ -141,6 +153,8 @@ with lib;
     passwordFile = "/run/agenix/ddclient-password";
     quiet = true;
   };
+
+  systemd.services.ddclient.serviceConfig.DynamicUser = lib.mkForce false;
 
   security.acme.certs."metrics.gws.fyi" = {
     dnsProvider = "cloudflare";
@@ -247,8 +261,8 @@ with lib;
     value = {
       inherit name;
       enable = true;
-      tokenPath = "/etc/secrets/buildkite-agent-token";
-      privateSshKeyPath = "/etc/secrets/buildkite-ssh-key";
+      tokenPath = "/run/agenix/buildkite-agent-token";
+      privateSshKeyPath = "/run/agenix/buildkite-ssh-key";
       runtimePackages = with pkgs; [
         docker
         nix
