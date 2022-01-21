@@ -212,6 +212,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "cd2ceaba_0f6aef92",
+        "filename": "nix/buildkite/default.nix",
+        "patchSetId": 8
+      },
+      "lineNbr": 228,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-01-21T11:48:48Z",
+      "side": 1,
+      "message": "Marking as resolved, I see reasons for why we\u0027d want to have this. It also encodes the expectations of the command itself more directly.",
+      "parentUuid": "c1f06c6b_71749241",
+      "revId": "206ada8cf444fbceb686ccbd3f102d9fe2d7cde1",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "04123782_38838be1",
