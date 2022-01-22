@@ -80,6 +80,7 @@ steps:
   #  * besadii configuration must be readable to the build agents
   - label: ":duck:"
     key: ":duck:"
+    depends_on: "pipeline-gen"
     command: |
       set -ueo pipefail
 
