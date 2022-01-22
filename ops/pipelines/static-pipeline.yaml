@@ -54,7 +54,7 @@ steps:
 
       # Steps need to be uploaded in reverse order because pipeline
       # upload prepends instead of appending.
-      ls pipeline/chunk-*.json | tac | while read chunk; do
+      ls pipeline/build-chunk-*.json | tac | while read chunk; do
         buildkite-agent pipeline upload $$chunk
       done
 
