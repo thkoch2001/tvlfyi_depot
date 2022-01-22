@@ -43,7 +43,7 @@ steps:
         buildkite-agent pipeline upload $$chunk
       done
 
-      buildkite-agent artifact upload pipeline/drvmap.json
+      buildkite-agent artifact upload "pipeline/*"
 
   # Wait for all previous steps to complete.
   - wait: null
