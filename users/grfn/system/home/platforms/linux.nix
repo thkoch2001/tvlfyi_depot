@@ -25,8 +25,6 @@ in
   xsession.enable = true;
 
   home.packages = with pkgs; [
-    (import (fetchTarball "https://github.com/ashkitten/nixpkgs/archive/init-glimpse.tar.gz") {}).glimpse
-
     # Desktop stuff
     arandr
     firefox
@@ -44,6 +42,7 @@ in
     pandoc
     barrier
     depot.tools.nsfv-setup
+    glimpse # fork of gimp
 
     # System utilities
     powertop
