@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fd38ecad_4436a83c",
+        "filename": "README.md",
+        "patchSetId": 2
+      },
+      "lineNbr": 4,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2022-01-22T21:08:40Z",
+      "side": 1,
+      "message": "There it is again our pesky refs/heads…",
+      "range": {
+        "startLine": 4,
+        "startChar": 107,
+        "endLine": 4,
+        "endChar": 123
+      },
+      "revId": "e768895d6aca6c22bd9f033c541050f9c3b8be6d",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
