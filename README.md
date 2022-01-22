@@ -1,7 +1,7 @@
 depot
 =====
 
-[![Build status](https://badge.buildkite.com/016bff4b8ae2704a3bbbb0a250784e6692007c582983b6dea7.svg?branch=canon)](https://buildkite.com/tvl/depot)
+[![Build status](https://badge.buildkite.com/016bff4b8ae2704a3bbbb0a250784e6692007c582983b6dea7.svg?branch=refs/heads/canon)](https://buildkite.com/tvl/depot)
 
 This repository is the [monorepo][] for the community around [The
 Virus Lounge][tvl], containing our personal tools and infrastructure.
