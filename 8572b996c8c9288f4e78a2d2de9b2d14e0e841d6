@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "05a34756_57e448fb",
+        "filename": "nix/buildkite/default.nix",
+        "patchSetId": 1
+      },
+      "lineNbr": 162,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2022-01-22T20:56:54Z",
+      "side": 1,
+      "message": "value.postBuild or false",
+      "range": {
+        "startLine": 162,
+        "startChar": 41,
+        "endLine": 162,
+        "endChar": 77
+      },
+      "revId": "8572b996c8c9288f4e78a2d2de9b2d14e0e841d6",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "dab90e18_c7a51b0e",
+        "filename": "nix/buildkite/default.nix",
+        "patchSetId": 1
+      },
+      "lineNbr": 289,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2022-01-22T20:56:54Z",
+      "side": 1,
+      "message": "I think adding postBuild here is worth it as well, for documentation / clarity reasons",
+      "range": {
+        "startLine": 289,
+        "startChar": 4,
+        "endLine": 289,
+        "endChar": 7
+      },
+      "revId": "8572b996c8c9288f4e78a2d2de9b2d14e0e841d6",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
