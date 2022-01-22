@@ -159,7 +159,7 @@ in rec {
       splitExtraSteps = partition ({ postStep, ... }: postStep)
        (attrValues (mapAttrs (name: value: {
          inherit name value;
-         postStep = value ? prompt;
+         postStep = (value ? prompt) || (value ? postBuild && value.postBuild);
         }) (target.meta.ci.extraSteps or {})));
 
       mkExtraStep' = { name, value, ... }: mkExtraStep step name value;
@@ -238,6 +238,10 @@ in rec {
   #     confirmation. These steps always run after the main build is
   #     done and have no influence on CI status.
   #
+  #   postBuild (optional): If set to true, this step will run after
+  #     all primary build steps (that is, after status has been reported
+  #     back to CI).
+  #
   #   needsOutput (optional): If set to true, the parent derivation
   #     will be built in the working directory before running the
   #     command. Output will be available as 'result'.
@@ -281,7 +285,8 @@ in rec {
     prompt ? false,
     needsOutput ? false,
     branches ? null,
-    alwaysRun ? false
+    alwaysRun ? false,
+    ...
   }@cfg: let
     parentLabel = parent.env.READTREE_TARGET;
     step = {
