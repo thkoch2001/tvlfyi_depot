@@ -24,7 +24,7 @@ steps:
   # Revision numbers are defined as the number of commits in the
   # lineage of HEAD, following only the first parent of merges.
   - label: ":git:"
-    if: "build.branch == 'refs/heads/canon'"
+    branches: "refs/heads/canon"
     command: |
       git -c 'credential.helper=gerrit-creds' \
         push origin "HEAD:refs/r/$(git rev-list --count --first-parent HEAD)"
@@ -106,7 +106,7 @@ steps:
   # since it happens after :duck: it should not affect the timing of
   # status reporting back to Gerrit.
   - label: ":anchor:"
-    if: "build.branch == 'refs/heads/canon'"
+    branches: "refs/heads/canon"
     command: |
       nix-build -A ci.gcroot --out-link /nix/var/nix/gcroots/depot/canon
     depends_on:
