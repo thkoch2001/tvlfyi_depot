@@ -15,6 +15,21 @@ steps:
     build:
       message: "Verification triggered by ${BUILDKITE_COMMIT}"
 
+  # Create a revision number for the current commit for builds on
+  # canon.
+  #
+  # This writes data back to Gerrit using the Buildkite agent
+  # credentials injected through a git credentials helper.
+  #
+  # Revision numbers are defined as the number of commits in the
+  # lineage of HEAD, following only the first parent of merges.
+  - label: ":git:"
+    if: "build.branch == 'refs/heads/canon'"
+    command: |
+      git -c 'credential.helper=gerrit-creds' \
+        push origin "HEAD:refs/r/$(git rev-list --count --first-parent HEAD)"
+
+  # Generate & upload dynamic build steps
   - label: ":llama:"
     key: "pipeline-gen"
     command: |
@@ -97,17 +112,3 @@ steps:
     depends_on:
       - step: ":duck:"
         allow_failure: false
-
-  # Create a revision number for the current commit for builds on
-  # canon.
-  #
-  # This writes data back to Gerrit using the Buildkite agent
-  # credentials injected through a git credentials helper.
-  #
-  # Revision numbers are defined as the number of commits in the
-  # lineage of HEAD, following only the first parent of merges.
-  - label: ":git:"
-    if: "build.branch == 'refs/heads/canon'"
-    command: |
-      git -c 'credential.helper=gerrit-creds' \
-        push origin "HEAD:refs/r/$(git rev-list --count --first-parent HEAD)"
