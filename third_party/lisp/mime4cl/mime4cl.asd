@@ -1,6 +1,7 @@
 ;;;  mime4cl.asd --- system definition
 
 ;;;  Copyright (C) 2005-2007, 2010 by Walter C. Pelissero
+;;;  Copyright (C) 2022 by The TVL Authors
 
 ;;;  Author: Walter C. Pelissero <walter@pelissero.de>
 ;;;  Project: mime4cl
@@ -20,11 +21,6 @@
 
 (in-package :cl-user)
 
-#+(and cmu (not gray-streams))
-(eval-when (:compile-toplevel :load-toplevel :execute)
-  (ext:without-package-locks
-    (load "library:subsystems/gray-streams-library")))
-
 (defpackage :mime4cl-system
   (:use :common-lisp :asdf))
 
@@ -40,7 +36,7 @@
     "A collection of Common Lisp primitives to forge and handle
 MIME mail contents."
     :licence "LGPL"
-    :depends-on (:npg :sclf)
+    :depends-on (:npg :sclf :trivial-gray-streams)
     :components
     ((:file "package")
      (:file "mime" :depends-on ("package" "endec" "streams"))

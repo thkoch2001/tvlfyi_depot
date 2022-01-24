@@ -1,12 +1,12 @@
- ;;; eds.lisp --- En/De-coding Streams
+;;; streams.lisp --- En/De-coding Streams
 
- ;;; Copyright (C) 2012 by Walter C. Pelissero
- ;;; Copyright (C) 2021 by the TVL Authors
+;;; Copyright (C) 2012 by Walter C. Pelissero
+;;; Copyright (C) 2021-2022 by the TVL Authors
 
- ;;; Author: Walter C. Pelissero <walter@pelissero.de>
- ;;; Project: mime4cl
+;;; Author: Walter C. Pelissero <walter@pelissero.de>
+;;; Project: mime4cl
 
-#+cmu (ext:file-comment "$Module: eds.lisp")
+#+cmu (ext:file-comment "$Module: streams.lisp")
 
 ;;; This library is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU Lesser General Public License
@@ -23,39 +23,6 @@
 
 (in-package :mime4cl)
 
-#+cmu
-(eval-when (:load-toplevel :compile-toplevel :execute)
-  ;; CMUCL doesn't provide the STREAM-FILE-POSITION method in its
-  ;; implementation of Gray streams.  We patch it in ourselves.
-  (defgeneric stream-file-position (stream &optional position))
-  (defun my-file-position (stream &optional position)
-    (stream-file-position stream position))
-  (defvar *original-file-position-function*
-    (prog1
-        (symbol-function 'file-position)
-      (setf (symbol-function 'file-position) (symbol-function 'my-file-position))))
-  (defmethod stream-file-position (stream &optional position)
-    (if position
-        (funcall *original-file-position-function* stream position)
-        (funcall *original-file-position-function* stream)))
-
-  ;; oddly CMUCL doesn't seem to provide a default for STREAM-READ-SEQUENCE
-  (defmacro make-read-sequence (stream-type element-reader)
-    `(defmethod stream-read-sequence ((stream ,stream-type) seq &optional start end)
-       (unless start
-         (setf start 0))
-       (unless end
-         (setf end (length seq)))
-       (loop
-          for i from start below end
-          for b = (,element-reader stream)
-          until (eq b :eof)
-          do (setf (elt seq i) b)
-          finally (return i))))
-
-  (make-read-sequence fundamental-binary-input-stream stream-read-byte)
-  (make-read-sequence fundamental-character-input-stream stream-read-char))
-
 (defclass coder-stream-mixin ()
   ((real-stream :type stream
                 :initarg :stream
@@ -63,9 +30,11 @@
    (dont-close :initform nil
                :initarg :dont-close)))
 
-(defmethod stream-file-position ((stream coder-stream-mixin) &optional position)
-  (apply #'file-position (remove nil (list (slot-value stream 'real-stream)
-                                           position))))
+(defmethod stream-file-position ((stream coder-stream-mixin))
+  (file-position (slot-value stream 'real-stream)))
+
+(defmethod (setf stream-file-position) (newval (stream coder-stream-mixin))
+  (file-position (slot-value stream 'real-stream) newval))
 
 (defclass coder-input-stream-mixin (fundamental-binary-input-stream coder-stream-mixin)
   ())
