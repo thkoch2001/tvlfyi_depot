@@ -1,6 +1,7 @@
 ;;;  mime4cl-tests.asd --- system description for the regression tests
 
 ;;;  Copyright (C) 2006, 2007, 2010 by Walter C. Pelissero
+;;;  Copyright (C) 2022 by The TVL Authors
 
 ;;;  Author: Walter C. Pelissero <walter@pelissero.de>
 ;;;  Project: mime4cl
@@ -18,7 +19,7 @@
 ;;; Software Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
 ;;; 02111-1307 USA
 
-#-(or sbcl cmu)
+#-(or sbcl)
 (warn "This code hasn't been tested on your Lisp system.")
 
 (defpackage :mime4cl-tests-system

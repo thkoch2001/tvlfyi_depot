@@ -1,12 +1,10 @@
- ;;; mime.lisp --- MIME regression tests
+;;; mime.lisp --- MIME regression tests
 
- ;;; Copyright (C) 2012 by Walter C. Pelissero
- ;;; Copyright (C) 2021 by the TVL Authors
+;;; Copyright (C) 2012 by Walter C. Pelissero
+;;; Copyright (C) 2021-2022 by the TVL Authors
 
- ;;; Author: Walter C. Pelissero <walter@pelissero.de>
- ;;; Project: mime4cl
-
-#+cmu (ext:file-comment "$Module: mime.lisp")
+;;; Author: Walter C. Pelissero <walter@pelissero.de>
+;;; Project: mime4cl
 
 ;;; This library is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU Lesser General Public License
