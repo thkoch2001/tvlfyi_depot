@@ -1,11 +1,10 @@
 ;;;  package.lisp --- package description for the regression tests
 
 ;;;  Copyright (C) 2006, 2009 by Walter C. Pelissero
+;;;  Copyright (C) 2022 by The TVL Authors
 
 ;;;  Author: Walter C. Pelissero <walter@pelissero.de>
 ;;;  Project: mime4cl
-
-#+cmu (ext:file-comment "$Module: package.lisp $")
 
 ;;; This library is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU Lesser General Public License
