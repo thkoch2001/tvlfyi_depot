@@ -1,6 +1,7 @@
 ;;;  package.lisp --- package declaration
 
 ;;;  Copyright (C) 2005-2007, 2010 by Walter C. Pelissero
+;;;  Copyright (C) 2022 The TVL Authors
 
 ;;;  Author: Walter C. Pelissero <walter@pelissero.de>
 ;;;  Project: mime4cl
@@ -22,9 +23,7 @@
 
 (defpackage :mime4cl
   (:nicknames :mime)
-  (:use :common-lisp :npg :sclf
-        ;; for Gray streams
-        #+cmu :extensions #+sbcl :sb-gray)
+  (:use :common-lisp :npg :sclf :trivial-gray-streams)
   ;; this is stuff that comes from SCLF and clashes with CMUCL's EXT
   ;; package
   (:shadowing-import-from :sclf

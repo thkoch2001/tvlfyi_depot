@@ -8,6 +8,7 @@ depot.nix.buildLisp.library {
   deps = [
     depot.third_party.lisp.sclf
     depot.third_party.lisp.npg
+    depot.third_party.lisp.trivial-gray-streams
   ];
 
   srcs = [
