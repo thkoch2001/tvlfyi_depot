@@ -5,4 +5,4 @@ besadii = :/ops/besadii
     ::buildkite/
     ::readTree/
 ]
-nixpkgs = :/third_party/nixpkgs
+.nixpkgs = :/third_party/nixpkgs
