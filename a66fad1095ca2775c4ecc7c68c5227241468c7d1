@@ -22,6 +22,30 @@
       },
       "revId": "a66fad1095ca2775c4ecc7c68c5227241468c7d1",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6b48af67_ef0b1d0a",
+        "filename": "nix/buildkite/default.nix",
+        "patchSetId": 2
+      },
+      "lineNbr": 248,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-01-24T10:04:39Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "cbc72d2b_970a2bd9",
+      "range": {
+        "startLine": 248,
+        "startChar": 18,
+        "endLine": 248,
+        "endChar": 37
+      },
+      "revId": "a66fad1095ca2775c4ecc7c68c5227241468c7d1",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
