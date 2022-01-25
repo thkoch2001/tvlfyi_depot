@@ -56,7 +56,8 @@ in {
     tree
     vim
     whois
-    wpcarro.tools.simple_vim
+    # TODO(wpcarro): Debug this failing build.
+    # wpcarro.tools.simple_vim
     xclip
   ];
 }
