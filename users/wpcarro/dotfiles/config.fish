@@ -14,6 +14,7 @@ alias gd 'git diff'
 alias edit 'emacsclient -n'
 # fs navigation
 alias d 'cd /depot'
+alias w 'cd /depot/users/wpcarro'
 
 # environment variables
 set -gx EDITOR "emacsclient"
