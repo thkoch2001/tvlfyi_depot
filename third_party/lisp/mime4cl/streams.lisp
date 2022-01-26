@@ -243,7 +243,8 @@ in a stream of character."))
    (end-offset :initarg :end
                :initform nil
                :reader stream-end
-               :type (or null integer))))
+               :type (or null integer))
+   (current-offset :type integer)))
 
 (defmethod print-object ((object delimited-input-stream) stream)
   (if *print-readably*
@@ -262,24 +263,43 @@ in a stream of character."))
   (unless (slot-boundp stream 'real-stream)
     (error "REAL-STREAM is unbound.  Must provide a :STREAM argument."))
   (with-slots (start-offset) stream
-    (when start-offset
-      (file-position stream start-offset))))
+    (file-position stream start-offset)))
 
-(defmethod stream-read-char ((stream delimited-input-stream))
-  (with-slots (real-stream end-offset) stream
-    (if (or (not end-offset)
-            (< (file-position real-stream) end-offset))
-        (or (read-char real-stream nil)
-            :eof)
-        :eof)))
+(defmethod (setf stream-file-position) (newval (stream delimited-input-stream))
+  (with-slots (current-offset real-stream) stream
+    (setf current-offset newval)
+    (call-next-method)))
 
-#+(OR)(defmethod stream-read-byte ((stream delimited-input-stream))
-  (with-slots (real-stream end-offset) stream
-    (if (or (not end-offset)
-            (< (file-position real-stream) end-offset))
-        (or (read-byte real-stream nil)
-            :eof)
-        :eof)))
+(defmethod stream-file-position ((stream delimited-input-stream))
+  (slot-value stream 'current-offset))
+
+;; Calling file-position with SBCL on every read is quite expensive, since
+;; it will invoke lseek each time. This is so expensive that it's faster to
+;; /compute/ the amount the stream got advanced by.
+;; file-position's behavior however, is quite flexible and it behaves differently
+;; not only for different implementation, but also different streams in SBCL.
+;; Thus, we should ideally go back to file-position and try to reduce the amount
+;; of calls by using read-sequence.
+;; TODO(sterni): make decoders use read-sequence and drop offset tracking code
+(macrolet ((def-stream-read (name read-fun update-offset-form)
+             `(defmethod ,name ((stream delimited-input-stream))
+               (with-slots (real-stream end-offset current-offset) stream
+                 (let ((el (if (or (not end-offset)
+                                   (< current-offset end-offset))
+                               (or (,read-fun real-stream nil)
+                                   :eof)
+                               :eof)))
+                   (setf current-offset ,update-offset-form)
+                   el)))))
+
+  ;; Assume we are using an encoding where < 128 is one byte, in all other cases
+  ;; it's hard to guess how much file-position will increase
+  (def-stream-read stream-read-char read-char
+    (if (or (eq el :eof) (< (char-code el) 128))
+        (1+ current-offset)
+        (file-position real-stream)))
+
+  (def-stream-read stream-read-byte read-byte (1+ current-offset)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
