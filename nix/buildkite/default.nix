@@ -54,7 +54,16 @@ rec {
     else label;
 
   # Create an unique (in the context of the pipeline) string for a target
-  mkKey = target: hashString "sha1" (mkLabel target);
+  # which buildkite will accept as a key value.
+  mkKey = target:
+    let
+      keyEsc = str:
+        if builtins.match "[[:alnum:]:_-]+" str == null
+        then builtins.hashString "sha1" str
+        else str;
+    in
+    concatStringsSep "-" (builtins.map keyEsc target.__readTree)
+    + lib.optionalString (target ? __subtarget) ":${keyEsc target.__subtarget}";
 
   # Determine whether to skip a target if it has not diverged from the
   # HEAD branch.
