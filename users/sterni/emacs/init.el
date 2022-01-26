@@ -7,6 +7,7 @@
   (set-fontset-font t nil emoji-font))
 
 (setq inhibit-startup-message t
+      initial-buffer-choice (concat (getenv "HOME") "/files/sync/org/inbox.org")
       display-time-24hr-format t
       select-enable-clipboard t)
 
