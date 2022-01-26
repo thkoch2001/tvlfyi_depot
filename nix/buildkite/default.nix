@@ -156,17 +156,20 @@ rec {
     in
     lib.fix (self:
       let
-        # Compute the given derivation's dependency closure by repeatedly applying
-        # directDrvDeps.
-        drvDeps = drv: builtins.map ({ key }: key) (
+        # Compute part of the given derivation's dependency closure by applying
+        # applying directDrvDeps maxDepth times. This allows us to detect dependencies
+        # which lie behind an intermediate derivation without impacting performance
+        # too much.
+        drvPartialClosure = maxDepth: drv: builtins.map ({ key, ... }: key) (
           builtins.genericClosure {
-            startSet = builtins.map (x: { key = x; }) (
+            startSet = builtins.map (x: { key = x; depth = 1; }) (
               directDrvDeps (pathContextDrvPath drv.drvPath)
             );
-            operator = { key }: lib.optionals (!(self ? ${unsafeDiscardStringContext key}))
+            operator = { key, depth }: lib.optionals (!(self ? ${unsafeDiscardStringContext key}) && depth < maxDepth)
               (builtins.map
                 (drvPath: {
                   key = pathContextDrvPath drvPath;
+                  depth = depth + 1;
                 })
                 (directDrvDeps key)
               );
@@ -177,7 +180,9 @@ rec {
       lib.mapAttrs
         (_: { key, target }@args: args // {
           depends_on = builtins.filter (x: x != null && x != key) (
-            builtins.map (dep: self.${dep}.key or null) (builtins.map unsafeDiscardStringContext (drvDeps target))
+            builtins.map (dep: self.${dep}.key or null) (
+              builtins.map unsafeDiscardStringContext (drvPartialClosure 6 target)
+            )
           );
         })
         (builtins.listToAttrs (
