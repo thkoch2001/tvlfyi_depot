@@ -147,16 +147,21 @@ in rec {
       )
     );
 
-    # Compute the given derivation's dependency closure by repeatedly applying
-    # directDrvDeps.
-    drvDeps = drv: builtins.map ({ key }: key) (
+    # Compute the given derivation's dependency and their dependencies by
+    # repeatedly applying directDrvDeps. This allows us to detect dependencies
+    # which lie behind an intermediate derivation without impacting performance
+    # too much.
+    drvDepsOfDeps = drv: builtins.map ({ key, ... }: key) (
       builtins.genericClosure {
         startSet = [
-          { key = pathContextDrvPath drv.drvPath; }
+          { key = pathContextDrvPath drv.drvPath; depth = 0; }
         ];
-        operator = { key }: builtins.map (drvPath: {
-          key = pathContextDrvPath drvPath;
-        }) (directDrvDeps key);
+        operator = { key, depth }: lib.optionals (depth < 3) (
+          builtins.map (drvPath: {
+            key = pathContextDrvPath drvPath;
+            depth = depth + 1;
+          }) (directDrvDeps key)
+        );
       }
     );
   in lib.fix (self:
