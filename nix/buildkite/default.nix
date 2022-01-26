@@ -51,6 +51,9 @@ in rec {
       then "${label}:${target.__subtarget}"
       else label;
 
+  # Create an unique (in the context of the pipeline) string for a target
+  mkKey = target: hashString "sha1" (mkLabel target);
+
   # Determine whether to skip a target if it has not diverged from the
   # HEAD branch.
   shouldSkip = parentTargetMap: label: drvPath:
@@ -73,14 +76,14 @@ in rec {
   ];
 
   # Create a pipeline step from a single target.
-  mkStep = headBranch: parentTargetMap: target:
+  mkStep = headBranch: parentTargetMap: deps: target:
   let
     label = mkLabel target;
     drvPath = unsafeDiscardStringContext target.drvPath;
     shouldSkip' = shouldSkip parentTargetMap;
   in {
     label = ":nix: " + label;
-    key = hashString "sha1" label;
+    key = mkKey target;
     skip = shouldSkip' label drvPath;
     command = mkBuildCommand target drvPath;
     env.READTREE_TARGET = label;
@@ -88,7 +91,7 @@ in rec {
     # Add a dependency on the initial static pipeline step which
     # always runs. This allows build steps uploaded in batches to
     # start running before all batches have been uploaded.
-    depends_on = ":init:";
+    depends_on = [ ":init:" ] ++ deps;
   };
 
   # Helper function to inelegantly divide a list into chunks of at
@@ -118,6 +121,32 @@ in rec {
   # number of chunks at once.
   pipelineChunks = name: steps:
     attrValues (mapAttrs (makePipelineChunk name) (chunksOf 256 steps));
+
+  # Takes a list of readTree targets and returns an attribute set mapping
+  # drvPaths to lists of target keys (obtained via mkKey) the derivations
+  # depend on _directly_. Current drawback is that, if a target depends on
+  # another target via a derivation that is not a target, this dependency
+  # won't be detected.
+  drvTargetsDepMap = drvTargets: let
+    # TODO(sterni): parse drv and the drvs it depends on to get the full dep closure
+    drvDeps = drv: builtins.attrNames (
+      builtins.getContext (builtins.toJSON drv.drvAttrs)
+    );
+  in lib.fix (self:
+    lib.mapAttrs (_: { key, target }@args: args // {
+      depends_on = builtins.filter (x: x != null) (
+        builtins.map (dep: self.${dep}.key or null) (drvDeps target)
+      );
+    }) (builtins.listToAttrs (
+      builtins.map (target: {
+        name = unsafeDiscardStringContext target.drvPath;
+        value = {
+          key = mkKey target;
+          inherit target;
+        };
+      }) drvTargets
+    ))
+  );
 
   # Create a pipeline structure for the given targets.
   mkPipeline = {
@@ -150,10 +179,13 @@ in rec {
     # Can be used for status reporting steps and the like.
     postBuildSteps ? []
   }: let
+    targetDepMap = drvTargetsDepMap drvTargets;
+
     # Convert a target into all of its build and post-build steps,
     # treated separately as they need to be in different chunks.
     targetToSteps = target: let
-      step = mkStep headBranch parentTargetMap target;
+      deps = targetDepMap.${unsafeDiscardStringContext target.drvPath}.depends_on;
+      step = mkStep headBranch parentTargetMap deps target;
 
       # Split build/post-build steps
       splitExtraSteps = partition ({ postStep, ... }: postStep)
