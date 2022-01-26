@@ -52,7 +52,7 @@ in rec {
       else label;
 
   # Create an unique (in the context of the pipeline) string for a target
-  mkKey = target: hashString "sha1" (mkLabel target);
+  mkKey = mkLabel;
 
   # Determine whether to skip a target if it has not diverged from the
   # HEAD branch.
