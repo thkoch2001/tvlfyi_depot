@@ -154,24 +154,53 @@ rec {
         )
       );
 
-      # Compute the given derivation's dependency closure by repeatedly applying
-      # directDrvDeps.
-      drvDeps = drv: builtins.map ({ key }: key) (
+      # Compute part of the given derivation's dependency closure by applying
+      # applying directDrvDeps maxDepth times. This allows us to detect dependencies
+      # which lie behind an intermediate derivation without impacting performance
+      # too much.
+      drvPartialClosure = maxDepth: drv: builtins.map ({ key, ... }: key) (
         builtins.genericClosure {
           startSet = [
-            { key = pathContextDrvPath drv.drvPath; }
+            { key = pathContextDrvPath drv.drvPath; depth = 0; }
           ];
-          operator = { key }: builtins.map
-            (drvPath: {
-              key = pathContextDrvPath drvPath;
-            })
-            (directDrvDeps key);
+          operator = { key, depth }: lib.optionals (depth < maxDepth) (
+            builtins.map
+              (drvPath: {
+                key = pathContextDrvPath drvPath;
+                depth = depth + 1;
+              })
+              (directDrvDeps key)
+          );
         }
       );
     in
     lib.fix (self:
       lib.mapAttrs
         (_: { key, target }@args: args // {
+          depends_on = builtins.filter (x: x != null && x != key) (
+            builtins.map (dep: self.${dep}.key or null) (
+              builtins.map unsafeDiscardStringContext (drvPartialClosure 6 target)
+            )
+          );
+
+          # Compute the given derivation's dependency closure by repeatedly applying
+          # directDrvDeps.
+          drvDeps = drv: builtins.map ({ key }: key) (
+            builtins.genericClosure {
+              startSet = [
+                { key = pathContextDrvPath drv.drvPath; }
+              ];
+              operator = { key }: builtins.map
+                (drvPath: {
+                  key = pathContextDrvPath drvPath;
+                })
+                (directDrvDeps key);
+            }
+          );
+          in
+          lib.fix (self:
+          lib.mapAttrs
+          (_: { key, target }@args: args // {
           depends_on = builtins.filter (x: x != null && x != key) (
             builtins.map (dep: self.${dep}.key or null) (builtins.map unsafeDiscardStringContext (drvDeps target))
           );
