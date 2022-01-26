@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c16ba0da_5fbb338a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-01-26T07:57:52Z",
+      "side": 1,
+      "message": "This needs b/170 to be able to work with external users correctly.",
+      "revId": "52298e5ba30b460f7e0d7915073809ed756e4e92",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
