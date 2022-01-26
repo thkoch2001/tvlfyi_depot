@@ -134,16 +134,48 @@ rec {
   # won't be detected.
   drvTargetsDepMap = drvTargets:
     let
-      # TODO(sterni): parse drv and the drvs it depends on to get the full dep closure
-      drvDeps = drv: builtins.attrNames (
-        builtins.getContext (builtins.toJSON drv.drvAttrs)
+      # Make sure drvPath carries a path reference to itself, since we want to
+      # read from it later.
+      pathContextDrvPath = drvPath:
+        let
+          drvPath' = unsafeDiscardStringContext drvPath;
+        in
+        builtins.appendContext drvPath' { ${drvPath'} = { path = true; }; };
+
+      # Find all quoted references to a derivation path in the specified drv file.
+      # Should correspond to the list of input derivations, but is obviously a
+      # big HACK as we just grep for store paths that look right.
+      # TODO(sterni): IFD?
+      directDrvDeps = drvPath: builtins.concatLists (
+        builtins.filter builtins.isList (
+          builtins.split
+            "\"(${lib.escapeRegex builtins.storeDir}/[[:alnum:]+._?=-]+.drv)\""
+            (builtins.readFile drvPath)
+        )
+      );
+
+      # Compute the given derivation's dependency closure by repeatedly applying
+      # directDrvDeps.
+      drvDeps = drv: builtins.map ({ key }: key) (
+        builtins.genericClosure {
+          startSet = [
+            { key = pathContextDrvPath drv.drvPath; }
+          ];
+          operator = { key }: lib.optionals (!(self ? ${key}))
+            (builtins.map
+              (drvPath: {
+                key = pathContextDrvPath drvPath;
+              })
+              (directDrvDeps key)
+            );
+        }
       );
     in
     lib.fix (self:
       lib.mapAttrs
         (_: { key, target }@args: args // {
-          depends_on = builtins.filter (x: x != null) (
-            builtins.map (dep: self.${dep}.key or null) (drvDeps target)
+          depends_on = builtins.filter (x: x != null && x != key) (
+            builtins.map (dep: self.${dep}.key or null) (builtins.map unsafeDiscardStringContext (drvDeps target))
           );
         })
         (builtins.listToAttrs (
