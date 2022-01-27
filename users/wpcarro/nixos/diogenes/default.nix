@@ -110,7 +110,7 @@ in wpcarro.terraform.googleCloudVM {
     services = wpcarro.common.services // {
       # TODO(wpcarro): Re-enable this when rebuild-system better supports
       # terraform deployments.
-      # depot.auto-deploy = {
+      # depot.auto-upgrade = {
       #   enable = true;
       #   interval = "1h";
       # };
