@@ -52,6 +52,9 @@ case "${TARGET_TOOL}" in
   rebuild-system)
     attr="ops.nixos.rebuild-system"
     ;;
+  upgrade-system)
+    attr="ops.nixos.upgrade-system"
+    ;;
   rink)
     attr="third_party.nixpkgs.rink"
     ;;
