@@ -19,20 +19,16 @@ self: super:
   # See https://www.gnu.org/licenses/gpl-faq.en.html#LGPLStaticVsDynamic
   ecl-static = (super.pkgsMusl.ecl.override {
     inherit (self.pkgsStatic) gmp libffi boehmgc;
-  }).overrideAttrs (drv: {
-    # Patches that make .fasc files concatenable again
-    patches = drv.patches ++ [
-      (self.fetchpatch {
-        name = "make-bytecode-fasl-concatenatable-1.patch";
-        url = "https://gitlab.com/embeddable-common-lisp/ecl/-/commit/fbb75a0fc524e3280d89d8abf3be2ee9924955c8.patch";
-        sha256 = "0k6cx1bh835rl0j0wbbi5nj0aa2rwbyfyz5q2jw643iqc62l16kv";
-      })
-      (self.fetchpatch {
-        name = "make-bytecode-fasl-concatenatable-2.patch";
-        url = "https://gitlab.com/embeddable-common-lisp/ecl/-/commit/a8b1c0da43f89800d09c23a27832d0b4c9dcc1e8.patch";
-        sha256 = "18hl79lss0dxglpa34hszqb6ajvs8rs4b4g1qlrqrvgh1gs667n0";
-      })
-    ];
+  }).overrideAttrs (drv: rec {
+    # version must not be changed as it indicates where to find the bundled libs,
+    # using ecl HEAD is necessary for us since it includes multiple fixes to do
+    # with bytecode compilation and allows to concatenate fasc files again.
+    src = self.fetchFromGitLab {
+      owner = "embeddable-common-lisp";
+      repo = "ecl";
+      rev = "1c989247c1b0bf1d38a76aec30b9ca5e41afe1e3";
+      sha256 = "0bzjqw6m1kk5z5b81yizic347k931msp5lf78x65dcw3fqfwv3xn";
+    };
     configureFlags = drv.configureFlags ++ [
       "--disable-shared"
       "--with-dffi=no" # will fail at runtime anyways if statically linked
