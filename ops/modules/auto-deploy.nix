@@ -10,40 +10,17 @@ let
   cfg = config.services.depot.auto-deploy;
   description = "to automatically rebuild the current system's NixOS config from the latest checkout of depot";
 
-  rebuild-system = depot.ops.nixos.rebuildSystemWith "$STATE_DIRECTORY/deploy";
   deployScript = pkgs.writeShellScript "auto-deploy" ''
     set -ueo pipefail
 
-    if [[ $EUID -ne 0 ]]; then
-      echo "Oh no! Only root is allowed to run auto-deploy!" >&2
-      exit 1
-    fi
-
     if [[ -f $STATE_DIRECTORY/stop ]]; then
-      echo "stop file exists in $STATE_DIRECTORY, not deploying!" >&2
+      echo "stop file exists in $STATE_DIRECTORY, not upgrading!" >&2
       exit 1
     fi
 
-    readonly depot=$STATE_DIRECTORY/depot.git
-    readonly deploy=$STATE_DIRECTORY/deploy
-    readonly git="git -C $depot"
-
-    # find-or-create depot
-    if [ ! -d $depot ]; then
-      # cannot use $git here because $depot doesn't exist
-      git clone --bare ${cfg.git-remote} $depot
-    fi
-
-    function cleanup() {
-      $git worktree remove $deploy
-    }
-    trap cleanup EXIT
-
-    $git fetch origin
-    $git worktree add --force $deploy FETCH_HEAD
-    # unsure why, but without this switch-to-configuration attempts to install
-    # NixOS in $STATE_DIRECTORY
-    (cd / && ${rebuild-system}/bin/rebuild-system)
+    ${depot.ops.nixos.upgrade-system}/bin/upgrade-system \
+      $STATE_DIRECTORY \
+      ${cfg.git-remote}
   '';
 in {
   options.services.depot.auto-deploy = {
