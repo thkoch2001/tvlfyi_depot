@@ -8,7 +8,7 @@ interesting things.
 System configuration lives in folders, and some of the modules stem
 from `//ops/modules`.
 
-Machines are deployed with the script at `ops.nixos.rebuild-system`.
+Machines are deployed with `tools.rebuild-system`.
 
 ## Configured hosts:
 

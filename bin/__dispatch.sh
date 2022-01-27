@@ -50,7 +50,7 @@ case "${TARGET_TOOL}" in
     attr="tools.perf-flamegraph"
     ;;
   rebuild-system)
-    attr="ops.nixos.rebuild-system"
+    attr="tools.rebuild-system"
     ;;
   rink)
     attr="third_party.nixpkgs.rink"
