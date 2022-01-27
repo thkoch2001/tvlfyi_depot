@@ -66,6 +66,21 @@
                                :test #'string-equal))
     (string-equal (cdr uniform-id) "com.apple.mail-note")))
 
+(defun decode-RFC2047-to-string (input)
+  (apply
+   #'concatenate
+   (cons 'string
+         (mapcar
+          (lambda (el)
+            (etypecase el
+              (cons (babel:octets-to-string
+                     (car el)
+                     ;; TODO(sterni): don't create new keywords?
+                     :encoding (babel-encodings:get-character-encoding
+                                (intern (string-upcase (cdr el)) 'keyword))))
+              (string el)))
+          (mime:parse-RFC2047-text input)))))
+
 (defun make-apple-note (msg)
   (check-type msg mime-message)
 
@@ -73,7 +88,9 @@
     (error "Passed message is not an Apple Note according to headers"))
 
   (let ((text-part (mime:find-mime-text-part msg))
-        (subject (find-mime-message-header "Subject" msg))
+        (subject (when-let ((val (find-mime-message-header "Subject" msg)))
+                   ;; TODO(sterni): mime4cl should do this
+                   (decode-RFC2047-to-string val)))
         (uuid (when-let ((val (find-mime-message-header
                                "X-Universally-Unique-Identifier"
                                msg)))
