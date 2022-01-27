@@ -74,8 +74,10 @@
 
   (let ((text-part (mime:find-mime-text-part msg))
         (subject (find-mime-message-header "Subject" msg))
-        ;; TODO(sterni): downcase uuid always
-        (uuid (find-mime-message-header "X-Universally-Unique-Identifier" msg))
+        (uuid (when-let ((val (find-mime-message-header
+                               "X-Universally-Unique-Identifier"
+                               msg)))
+                (string-downcase val)))
         (time (find-mime-message-date msg)))
     ;; The idea here is that we don't need to check a lot manually, instead
     ;; the type annotation are going to do this for us (with sufficient safety?)
