@@ -32,20 +32,54 @@ in rec {
       (throw "${hostname} is not a known NixOS host")
       (map nixosFor depot.ops.machines.all-systems));
 
-  rebuild-system = rebuildSystemWith depot.path;
-
-  rebuildSystemWith = depotPath: pkgs.writeShellScriptBin "rebuild-system" ''
+  rebuild-system = pkgs.writeShellScriptBin "rebuild-system" ''
     set -ue
     if [[ $EUID -ne 0 ]]; then
       echo "Oh no! Only root is allowed to rebuild the system!" >&2
       exit 1
     fi
 
+    readonly depot_path=''${1:-${depot.path}}
+
     echo "Rebuilding NixOS for $HOSTNAME"
-    system=$(${pkgs.nix}/bin/nix-build -E "((import ${depotPath} {}).ops.nixos.findSystem \"$HOSTNAME\").system" --no-out-link --show-trace)
+    system=$(${pkgs.nix}/bin/nix-build -E "((import \"$depot_path\" {}).ops.nixos.findSystem \"$HOSTNAME\").system" --no-out-link --show-trace)
 
     ${pkgs.nix}/bin/nix-env -p /nix/var/nix/profiles/system --set $system
     $system/bin/switch-to-configuration switch
+  '';
+
+  upgrade-system = pkgs.writeShellScriptBin "upgrade-system" ''
+    set -ueo pipefail
+
+    if [[ $EUID -ne 0 ]]; then
+      echo "Oh no! Only root is allowed to run upgrade-system!" >&2
+      exit 1
+    fi
+
+    readonly state_directory=''${1:-/var/lib/upgrade-system}
+    readonly git_remote=''${2:-https://cl.tvl.fyi/depot.git}
+    readonly depot=$state_directory/depot.git
+    readonly build=$state_directory/build
+    readonly git="${pkgs.git}/bin/git -C $depot"
+
+    mkdir -p $state_directory
+
+    # find-or-create depot
+    if [ ! -d $depot ]; then
+      # cannot use $git here because $depot doesn't exist
+      ${pkgs.git}/bin/git clone --bare $git_remote $depot
+    fi
+
+    function cleanup() {
+      $git worktree remove $build
+    }
+    trap cleanup EXIT
+
+    $git fetch origin
+    $git worktree add --force $build FETCH_HEAD
+    # unsure why, but without this switch-to-configuration attempts to install
+    # NixOS in $state_directory
+    (cd / && ${rebuild-system}/bin/rebuild-system $build)
   '';
 
   # Systems that should be built in CI
