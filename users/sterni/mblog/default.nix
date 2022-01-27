@@ -17,6 +17,7 @@ depot.nix.buildLisp.program {
       default = depot.nix.buildLisp.bundled "asdf";
     }
     depot.third_party.lisp.alexandria
+    depot.third_party.lisp.babel
     depot.third_party.lisp.closure-html
     depot.third_party.lisp.cl-date-time-parser
     depot.third_party.lisp.cl-who
