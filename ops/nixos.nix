@@ -48,6 +48,40 @@ in rec {
     $system/bin/switch-to-configuration switch
   '';
 
+  upgrade-system = pkgs.writeShellScriptBin "upgrade-system" ''
+    set -ueo pipefail
+
+    if [[ $EUID -ne 0 ]]; then
+      echo "Oh no! Only root is allowed to run upgrade-system!" >&2
+      exit 1
+    fi
+
+    readonly state_directory=''${1:-/var/lib/upgrade-system}
+    readonly git_remote=''${2:-https://cl.tvl.fyi/depot.git}
+    readonly depot=$state_directory/depot.git
+    readonly deploy=$state_directory/deploy
+    readonly git="git -C $depot"
+
+    mkdir -p $state_directory
+
+    # find-or-create depot
+    if [ ! -d $depot ]; then
+      # cannot use $git here because $depot doesn't exist
+      git clone --bare $git_remote $depot
+    fi
+
+    function cleanup() {
+      $git worktree remove $deploy
+    }
+    trap cleanup EXIT
+
+    $git fetch origin
+    $git worktree add --force $deploy FETCH_HEAD
+    # unsure why, but without this switch-to-configuration attempts to install
+    # NixOS in $state_directory
+    (cd / && ${rebuild-system}/bin/rebuild-system)
+  '';
+
   # Systems that should be built in CI
   whitbySystem = (nixosFor depot.ops.machines.whitby).system;
   meta.targets = [ "whitbySystem" ];
