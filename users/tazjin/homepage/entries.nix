@@ -1,6 +1,35 @@
 [
   {
     class = "misc";
+    title = "@tazlog on Telegram";
+    url = "https://t.me/tazlog";
+    date = 1643321164;
+    description = ''
+      My new channel on Telegram, for occasional updates smaller (and
+      more frequent) than what ends up being posted here.
+    '';
+  }
+  {
+    class = "project";
+    title = "Ship It! #37";
+    url = "https://changelog.com/shipit/37";
+    date = 1641819600;
+    description = ''
+      Episode #37 of Ship It!, a podcast about systems, featuring me.
+      We talk about TVL, Nix, monorepos and related things.
+    '';
+  }
+  {
+    class = "project";
+    title = "Tvix";
+    url = "https://tvl.fyi/blog/rewriting-nix";
+    date = 1638381387;
+    description = ''
+      TVL is rewriting Nix with funding from NLNet.
+    '';
+  }
+  {
+    class = "misc";
     title = "Interview with Joscha Bach";
     url = "https://www.youtube.com/watch?v=P-2P3MSZrBM";
     date = 1594594800;
@@ -14,7 +43,7 @@
     title = "The Virus Lounge";
     url = "https://tvl.fyi";
     date = 1587435629;
-    description = "A daily social video call in these trying pandemic times. Join us!";
+    description = "A community around Nix, monorepos, build tooling and the like!";
   }
   {
     class = "project";
