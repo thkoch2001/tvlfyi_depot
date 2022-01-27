@@ -413,10 +413,9 @@ let
         (ext:install-c-compiler)
 
         (c:build-program
-         (make-pathname :name "${name}"
-                        :directory (concatenate 'string
-                                                (getenv-or-fail "out")
-                                                "/bin"))
+         (merge-pathnames (make-pathname :directory '(:relative "bin")
+                                         :name "${name}")
+                          (truename (getenv-or-fail "out")))
          :epilogue-code `(progn
                           ;; UIOP doesn't understand ECL, so we need to make it
                           ;; aware that we are a proper executable, causing it
