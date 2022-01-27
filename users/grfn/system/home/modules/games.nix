@@ -53,7 +53,7 @@ in mkMerge [
   (mkIf stdenv.isLinux {
     home.packages = [
       df
-      multimc
+      polymc
     ];
   })
 ]
