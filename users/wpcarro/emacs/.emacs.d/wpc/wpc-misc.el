@@ -225,8 +225,9 @@
 
 (use-package yasnippet
   :config
-  (setq yas-snippet-dirs (list (f-join user-emacs-directory "snippets")))
-  (yas-global-mode 1))
+  (unless constants-ci?
+    (setq yas-snippet-dirs (list (f-join user-emacs-directory "snippets")))
+    (yas-global-mode 1)))
 
 (use-package projectile
   :config

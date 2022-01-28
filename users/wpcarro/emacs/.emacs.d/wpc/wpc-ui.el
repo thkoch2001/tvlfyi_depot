@@ -110,16 +110,17 @@
 (use-package ivy-prescient
   :config
   (ivy-prescient-mode 1)
-  (prescient-persist-mode 1))
+  (unless constants-ci?
+    (prescient-persist-mode 1)))
 
 (use-package ivy-pass)
 
 ;; all-the-icons
 (use-package all-the-icons
   :config
-  (when (not constants-ci?)
-    (unless (f-exists? "~/.local/share/fonts/all-the-icons.ttf")
-      (all-the-icons-install-fonts t))))
+  (unless (or constants-ci?
+              (f-exists? "~/.local/share/fonts/all-the-icons.ttf"))
+    (all-the-icons-install-fonts t)))
 
 ;; icons for Ivy
 (use-package all-the-icons-ivy
