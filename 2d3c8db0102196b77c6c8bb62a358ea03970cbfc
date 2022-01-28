@@ -70,6 +70,30 @@
       },
       "revId": "2d3c8db0102196b77c6c8bb62a358ea03970cbfc",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f6744542_4e5a5852",
+        "filename": "fun/clbot/clbot.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-01-28T12:38:42Z",
+      "side": 1,
+      "message": "we can, but basically every flag in here has a TVL-specific value hardcoded and I think there are 0 non-TVL usages of this, so it seems like unnecessary complexity split",
+      "parentUuid": "3ac7d39e_56ed9d45",
+      "range": {
+        "startLine": 45,
+        "startChar": 1,
+        "endLine": 45,
+        "endChar": 10
+      },
+      "revId": "2d3c8db0102196b77c6c8bb62a358ea03970cbfc",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
