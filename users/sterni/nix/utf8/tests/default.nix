@@ -1,90 +1,92 @@
-{ depot, pkgs, lib, ... }:
-
+{ depot
+, pkgs
+, lib
+, ...
+}:
 let
-
-  inherit (pkgs)
-    runCommandLocal
-    ;
-
-  inherit (depot.nix.runTestsuite)
-    runTestsuite
-    it
-    assertEq
-    assertThrows
-    assertDoesNotThrow
-    ;
-
-  inherit (depot.nix.writers)
+  inherit ( pkgs ) runCommandLocal;
+  inherit ( depot.nix.runTestsuite ) runTestsuite it assertEq assertThrows assertDoesNotThrow;
+  inherit ( depot.nix.writers ) rustSimple;
+  inherit ( depot.users.sterni.nix ) int utf8 string char;
+  rustDecoder =
     rustSimple
-    ;
+      { name = "utf8-decode"; }
+      ''
+      use std::io::{self, Read};
+      fn main() -> std::io::Result<()> {
+        let mut buffer = String::new();
+        io::stdin().read_to_string(&mut buffer)?;
 
-  inherit (depot.users.sterni.nix)
-    int
-    utf8
-    string
-    char
-    ;
+        print!("[ ");
 
-  rustDecoder = rustSimple {
-    name = "utf8-decode";
-  } ''
-    use std::io::{self, Read};
-    fn main() -> std::io::Result<()> {
-      let mut buffer = String::new();
-      io::stdin().read_to_string(&mut buffer)?;
+        for c in buffer.chars() {
+          print!("{} ", u32::from(c));
+        }
 
-      print!("[ ");
+        print!("]");
 
-      for c in buffer.chars() {
-        print!("{} ", u32::from(c));
+        Ok(())
       }
-
-      print!("]");
-
-      Ok(())
-    }
-  '';
-
-  rustDecode = s:
-    let
-      expr = runCommandLocal "${s}-decoded" {} ''
-        printf '%s' ${lib.escapeShellArg s} | ${rustDecoder} > $out
       '';
-    in import expr;
-
-  hexDecode = l:
-    utf8.decode (string.fromBytes (builtins.map int.fromHex l));
-
-  hexEncode = l: utf8.encode (builtins.map int.fromHex l);
-
-  testFailures = it "checks UTF-8 decoding failures" ([
-    (assertThrows "truncated UTF-8 string throws" (hexDecode [ "F0" "9F" ]))
-    # examples from The Unicode Standard
-    (assertThrows "ill-formed: C0 AF" (hexDecode [ "C0" "AF" ]))
-    (assertThrows "ill-formed: E0 9F 80" (hexDecode [ "E0" "9F" "80" ]))
-    (assertEq "well-formed: F4 80 83 92" (hexDecode [ "F4" "80" "83" "92" ]) [ 1048786 ])
-    (assertThrows "Codepoint out of range: 0xFFFFFF" (hexEncode [ "FFFFFF" ]))
-    (assertThrows "Codepoint out of range: -0x02" (hexEncode [ "-02" ]))
-  ] ++ builtins.genList (i:
+  rustDecode =
+    s:
     let
-      cp = i + int.fromHex "D800";
+      expr =
+        runCommandLocal
+          "${ s }-decoded"
+          { }
+          ''
+          printf '%s' ${ lib.escapeShellArg s } | ${ rustDecoder } > $out
+          '';
     in
-      assertThrows "Can't encode UTF-16 reserved characters: ${utf8.formatCodepoint cp}"
-        (utf8.encode [ cp ])
-  ) (int.fromHex "07FF"));
-
-  testAscii = it "checks decoding of ascii strings"
-    (builtins.map (s: assertEq "ASCII decoding is equal to UTF-8 decoding for \"${s}\""
-      (string.toBytes s) (utf8.decode s)) [
-        "foo bar"
-        "hello\nworld"
-        "carriage\r\nreturn"
-        "1238398494829304 []<><>({})[]!!)"
-        (string.take 127 char.allChars)
-      ]);
-
+    import expr;
+  hexDecode = l: utf8.decode ( string.fromBytes ( builtins.map int.fromHex l ) );
+  hexEncode = l: utf8.encode ( builtins.map int.fromHex l );
+  testFailures =
+    it
+      "checks UTF-8 decoding failures"
+      (
+        [
+          ( assertThrows "truncated UTF-8 string throws" ( hexDecode [ "F0" "9F" ] ) )
+          # examples from The Unicode Standard
+          ( assertThrows "ill-formed: C0 AF" ( hexDecode [ "C0" "AF" ] ) )
+          ( assertThrows "ill-formed: E0 9F 80" ( hexDecode [ "E0" "9F" "80" ] ) )
+          ( assertEq "well-formed: F4 80 83 92" ( hexDecode [ "F4" "80" "83" "92" ] ) [ 1048786 ] )
+          ( assertThrows "Codepoint out of range: 0xFFFFFF" ( hexEncode [ "FFFFFF" ] ) )
+          ( assertThrows "Codepoint out of range: -0x02" ( hexEncode [ "-02" ] ) )
+        ]
+          ++ builtins.genList
+            (
+              i:
+              let
+                cp = i + int.fromHex "D800";
+              in
+              assertThrows
+                "Can't encode UTF-16 reserved characters: ${ utf8.formatCodepoint cp }"
+                ( utf8.encode [ cp ] )
+            )
+            ( int.fromHex "07FF" )
+      );
+  testAscii =
+    it
+      "checks decoding of ascii strings"
+      (
+        builtins.map
+          (
+            s:
+            assertEq "ASCII decoding is equal to UTF-8 decoding for \"${ s }\"" ( string.toBytes s ) ( utf8.decode s )
+          )
+          [
+            "foo bar"
+            "hello\nworld"
+            "carriage\r\nreturn"
+            "1238398494829304 []<><>({})[]!!)"
+            ( string.take 127 char.allChars )
+          ]
+      );
   randomUnicode = [
-    "" # empty string should yield empty list
+    ""
+    # empty string should yield empty list
     "🥰👨‍👨‍👧‍👦🐈‍⬛👩🏽‍🦰"
     # https://kermitproject.org/utf8.html
     "ᚠᛇᚻ᛫ᛒᛦᚦ᛫ᚠᚱᚩᚠᚢᚱ᛫ᚠᛁᚱᚪ᛫ᚷᛖᚻᚹᛦᛚᚳᚢᛗ"
@@ -96,7 +98,6 @@ let
     "யாமறிந்த மொழிகளிலே தமிழ்மொழி போல் இனிதாவது எங்கும் காணோம், "
     "ಬಾ ಇಲ್ಲಿ ಸಂಭವಿಸು "
   ];
-
   # https://kermitproject.org/utf8.html
   glassSentences = [
     "Euro Symbol: €."
@@ -114,28 +115,21 @@ let
     "Japanese: 私はガラスを食べられます。それは私を傷つけません。"
     "Thai: ฉันกินกระจกได้ แต่มันไม่ทำให้ฉันเจ็บ "
   ];
-
-  testDecoding = it "checks decoding of UTF-8 strings against Rust's String"
-    (builtins.map
-      (s: assertEq "Decoding of “${s}” is correct" (utf8.decode s) (rustDecode s))
-      (lib.flatten [
-        glassSentences
-        randomUnicode
-      ]));
-
-  testDecodingEncoding = it "checks that decoding and then encoding forms an identity"
-    (builtins.map
-      (s: assertEq "Decoding and then encoding “${s}” yields itself"
-        (utf8.encode (utf8.decode s)) s)
-      (lib.flatten [
-        glassSentences
-        randomUnicode
-      ]));
-
+  testDecoding =
+    it
+      "checks decoding of UTF-8 strings against Rust's String"
+      (
+        builtins.map
+          ( s: assertEq "Decoding of “${ s }” is correct" ( utf8.decode s ) ( rustDecode s ) )
+          ( lib.flatten [ glassSentences randomUnicode ] )
+      );
+  testDecodingEncoding =
+    it
+      "checks that decoding and then encoding forms an identity"
+      (
+        builtins.map
+          ( s: assertEq "Decoding and then encoding “${ s }” yields itself" ( utf8.encode ( utf8.decode s ) ) s )
+          ( lib.flatten [ glassSentences randomUnicode ] )
+      );
 in
-  runTestsuite "nix.utf8" [
-    testFailures
-    testAscii
-    testDecoding
-    testDecodingEncoding
-  ]
+runTestsuite "nix.utf8" [ testFailures testAscii testDecoding testDecodingEncoding ]

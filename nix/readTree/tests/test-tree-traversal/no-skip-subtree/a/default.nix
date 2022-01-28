@@ -1,3 +1,1 @@
-{ ... }:
-
-"am I subtree yet?"
+{ ... }: "am I subtree yet?"

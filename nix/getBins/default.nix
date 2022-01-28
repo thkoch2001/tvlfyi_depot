@@ -1,5 +1,8 @@
-{ lib, pkgs, depot, ... }:
-
+{ lib
+, pkgs
+, depot
+, ...
+}:
 # Takes a derivation and a list of binary names
 # and returns an attribute set of `name -> path`.
 # The list can also contain renames in the form of
@@ -23,26 +26,27 @@
 #   provides
 #     bins.{hello,printf,ln,echo,execlineIf,test,cat}
 #
-
 let
-  getBins = drv: xs:
-    let f = x:
-      # TODO(Profpatsch): typecheck
-      let x' = if builtins.isString x then { use = x; as = x; } else x;
-      in {
-        name = x'.as;
-        value = "${lib.getBin drv}/bin/${x'.use}";
+  getBins =
+    drv:
+    xs:
+    let
+      f =
+        x:
+        # TODO(Profpatsch): typecheck
+        let
+          x' = if builtins.isString x then { use = x; as = x; } else x;
+        in
+        { name = x'.as; value = "${ lib.getBin drv }/bin/${ x'.use }"; };
+    in
+    builtins.listToAttrs ( builtins.map f xs );
+  tests =
+    import
+      ./tests.nix
+      {
+        inherit getBins;
+        inherit ( depot.nix ) writeScriptBin;
+        inherit ( depot.nix.runTestsuite ) assertEq it runTestsuite;
       };
-    in builtins.listToAttrs (builtins.map f xs);
-
-
-  tests = import ./tests.nix {
-    inherit getBins;
-    inherit (depot.nix) writeScriptBin;
-    inherit (depot.nix.runTestsuite) assertEq it runTestsuite;
-  };
-
-in {
-  __functor = _: getBins;
-  inherit tests;
-}
+in
+{ __functor = _: getBins; inherit tests; }

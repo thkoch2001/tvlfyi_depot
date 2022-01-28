@@ -1,16 +1,12 @@
-{ depot, pkgs, ... }:
-
+{ depot
+, pkgs
+, ...
+}:
 let
-  getSrcs = builtins.map (p: "${pkgs.srcOnly pkgs.lispPackages.metabang-bind}/${p}");
+  getSrcs = builtins.map ( p: "${ pkgs.srcOnly pkgs.lispPackages.metabang-bind }/${ p }" );
 in
-
-depot.nix.buildLisp.library {
-  name = "metabang-bind";
-
-  srcs = getSrcs [
-    "dev/packages.lisp"
-    "dev/macros.lisp"
-    "dev/bind.lisp"
-    "dev/binding-forms.lisp"
-  ];
-}
+depot.nix.buildLisp.library
+  {
+    name = "metabang-bind";
+    srcs = getSrcs [ "dev/packages.lisp" "dev/macros.lisp" "dev/bind.lisp" "dev/binding-forms.lisp" ];
+  }

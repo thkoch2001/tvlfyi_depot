@@ -1,33 +1,30 @@
-{ depot, lib, pkgs, ... }:
-
+{ depot
+, lib
+, pkgs
+, ...
+}:
 let
-
-  inherit (depot.nix)
-    runExecline
-    getBins
-    utils
+  inherit ( depot.nix ) runExecline getBins utils sparseTree nint;
+  minimalDepot =
     sparseTree
-    nint
-    ;
-
-  minimalDepot = sparseTree depot.path.origSrc [
-    # general depot things
-    "default.nix"
-    "nix/readTree"
-    # nixpkgs for lib and packages
-    "third_party/nixpkgs"
-    "third_party/overlays"
-    # bubblegum and its dependencies
-    "web/bubblegum"
-    "nix/runExecline"
-    "nix/utils"
-    "nix/sparseTree"
-    # tvix docs for svg demo
-    "tvix/docs"
-    # for blog.nix
-    "users/sterni/nix"
-  ];
-
+      depot.path.origSrc
+      [
+        # general depot things
+        "default.nix"
+        "nix/readTree"
+        # nixpkgs for lib and packages
+        "third_party/nixpkgs"
+        "third_party/overlays"
+        # bubblegum and its dependencies
+        "web/bubblegum"
+        "nix/runExecline"
+        "nix/utils"
+        "nix/sparseTree"
+        # tvix docs for svg demo
+        "tvix/docs"
+        # for blog.nix
+        "users/sterni/nix"
+      ];
   statusCodes = {
     # 1xx
     "Continue" = 100;
@@ -98,20 +95,20 @@ let
     "Not Extended" = 510;
     "Network Authentication Required" = 511;
   };
-
-  /* Generate a CGI response. Takes three arguments:
-
-     1. Status of the response as a string which is
-        the descriptive name in the protocol, e. g.
-        `"OK"`, `"Not Found"` etc.
-     2. Attribute set describing extra headers to
-        send, keys and values should both be strings.
-     3. Response content as a string.
-
-     See the [README](./README.md) for an example.
-
-    Type: either int string -> attrs string -> string -> string
-  */
+  /*
+     Generate a CGI response. Takes three arguments:
+   
+    1. Status of the response as a string which is
+       the descriptive name in the protocol, e. g.
+       `"OK"`, `"Not Found"` etc.
+    2. Attribute set describing extra headers to
+       send, keys and values should both be strings.
+    3. Response content as a string.
+   
+    See the [README](./README.md) for an example.
+   
+   Type: either int string -> attrs string -> string -> string
+   */
   respond =
     # response status as an integer (status code) or its
     # textual representation in the HTTP protocol.
@@ -123,74 +120,65 @@ let
     bodyArg:
     let
       status =
-        if builtins.isInt statusArg
-        then {
-          code = statusArg;
-          line = lib.findFirst
-            (line: statusCodes."${line}" == statusArg)
-            null
-            (builtins.attrNames statusCodes);
-        } else if builtins.isString statusArg then {
-          code = statusCodes."${statusArg}" or null;
-          line = statusArg;
-        } else {
-          code = null; line = null;
-        };
-      renderedHeaders = lib.concatStrings
-        (lib.mapAttrsToList (n: v: "${n}: ${toString v}\r\n") headers);
-      internalError = msg: respond 500 {
-        Content-type = "text/plain";
-      } "bubblegum error: ${msg}";
+        if
+          builtins.isInt statusArg
+        then
+          {
+            code = statusArg;
+            line =
+              lib.findFirst ( line: statusCodes."${ line }" == statusArg ) null ( builtins.attrNames statusCodes );
+          }
+        else
+          if
+            builtins.isString statusArg
+          then
+            { code = statusCodes."${ statusArg }" or null; line = statusArg; }
+          else
+            { code = null; line = null; };
+      renderedHeaders = lib.concatStrings ( lib.mapAttrsToList ( n: v: "${ n }: ${ toString v }\r\n" ) headers );
+      internalError = msg: respond 500 { Content-type = "text/plain"; } "bubblegum error: ${ msg }";
       body = builtins.tryEval bodyArg;
     in
-      if status.code == null || status.line == null
-      then internalError "Invalid status ${lib.generators.toPretty {} statusArg}."
-      else if !body.success
-      then internalError "Unknown evaluation error in user code"
-      else lib.concatStrings [
-        "Status: ${toString status.code} ${status.line}\r\n"
-        renderedHeaders
-        "\r\n"
-        body.value
-      ];
-
-  /* Returns the value of the `SCRIPT_NAME` environment
-     variable used by CGI.
-  */
+    if
+      status.code == null || status.line == null
+    then
+      internalError "Invalid status ${ lib.generators.toPretty { } statusArg }."
+    else
+      if
+        !body.success
+      then
+        internalError "Unknown evaluation error in user code"
+      else
+        lib.concatStrings
+          [ "Status: ${ toString status.code } ${ status.line }\r\n" renderedHeaders "\r\n" body.value ];
+  /*
+    Returns the value of the `SCRIPT_NAME` environment
+   variable used by CGI.
+   */
   scriptName = builtins.getEnv "SCRIPT_NAME";
-
-  /* Returns the value of the `PATH_INFO` environment
-     variable used by CGI. All cases that could be
-     considered as the CGI script's root (i. e.
-     `PATH_INFO` is empty or `/`) is mapped to `"/"`
-     for convenience.
-  */
-  pathInfo =
-    let
-      p = builtins.getEnv "PATH_INFO";
-    in
-      if builtins.stringLength p == 0
-      then "/"
-      else p;
-
-  /* Helper function which converts a path from the
-     root of the CGI script (i. e. something which
-     could be the content of `PATH_INFO`) to an
-     absolute path from the web root by also
-     utilizing `scriptName`.
-
-     Type: string -> string
-  */
-  absolutePath = path:
-    if builtins.substring 0 1 path == "/"
-    then "${scriptName}${path}"
-    else "${scriptName}/${path}";
-
-  bins = getBins pkgs.coreutils [ "env" "tee" "cat" "printf" "chmod" ]
-      // getBins nint [ "nint" ];
-
-  /* Type: args -> either path derivation string -> derivation
-  */
+  /*
+    Returns the value of the `PATH_INFO` environment
+   variable used by CGI. All cases that could be
+   considered as the CGI script's root (i. e.
+   `PATH_INFO` is empty or `/`) is mapped to `"/"`
+   for convenience.
+   */
+  pathInfo = let p = builtins.getEnv "PATH_INFO"; in if builtins.stringLength p == 0 then "/" else p;
+  /*
+    Helper function which converts a path from the
+   root of the CGI script (i. e. something which
+   could be the content of `PATH_INFO`) to an
+   absolute path from the web root by also
+   utilizing `scriptName`.
+   
+   Type: string -> string
+   */
+  absolutePath =
+    path: if builtins.substring 0 1 path == "/" then "${ scriptName }${ path }" else "${ scriptName }/${ path }";
+  bins = getBins pkgs.coreutils [ "env" "tee" "cat" "printf" "chmod" ] // getBins nint [ "nint" ];
+  /*
+   Type: args -> either path derivation string -> derivation
+   */
   writeCGI =
     { # if given sets the `PATH` to search for `nix-instantiate`
       # Useful when using for example thttpd which unsets `PATH`
@@ -201,51 +189,58 @@ let
       # Must be given if the input is a string.
     , name ? null
     , ...
-    }@args:
-    input: let
-      drvName =
-        if builtins.isString input || args ? name
-        then args.name
-        else utils.storePathName input;
+    }
+    @ args:
+    input:
+    let
+      drvName = if builtins.isString input || args ? name then args.name else utils.storePathName input;
       script =
-        if builtins.isPath input || lib.isDerivation input
-        then input
-        else if builtins.isString input
-        then pkgs.writeText "${drvName}-source" input
-        else builtins.throw "Unsupported input: ${lib.generators.toPretty {} input}";
-      shebang = lib.concatStringsSep " " ([
-        "#!${bins.env}"
-        # use the slightly cursed /usr/bin/env -S which allows us
-        # to pass any number of arguments to our interpreter
-        # instead of maximum one using plain shebang which considers
-        # everything after the first space as the second argument.
-        "-S"
-      ] ++ lib.optionals (builtins.stringLength binPath > 0) [
-        "PATH=${binPath}"
-      ] ++ [
-        "${bins.nint}"
-        # always pass depot so scripts can use this library
-        "--arg depot '(import ${minimalDepot} {})'"
-      ]);
-    in runExecline.local drvName {} [
-      "importas" "out" "out"
-      "pipeline" [
-        "foreground" [
-          "if" [ bins.printf "%s\n" shebang ]
-        ]
-        "if" [ bins.cat script ]
-      ]
-      "if" [ bins.tee "$out" ]
-      "if" [ bins.chmod "+x" "$out" ]
-      "exit" "0"
-    ];
-
-in {
-  inherit
-    respond
-    pathInfo
-    scriptName
-    absolutePath
-    writeCGI
-    ;
-}
+        if
+          builtins.isPath input || lib.isDerivation input
+        then
+          input
+        else
+          if
+            builtins.isString input
+          then
+            pkgs.writeText "${ drvName }-source" input
+          else
+            builtins.throw "Unsupported input: ${ lib.generators.toPretty { } input }";
+      shebang =
+        lib.concatStringsSep
+          " "
+          (
+            [
+              "#!${ bins.env }"
+              # use the slightly cursed /usr/bin/env -S which allows us
+              # to pass any number of arguments to our interpreter
+              # instead of maximum one using plain shebang which considers
+              # everything after the first space as the second argument.
+              "-S"
+            ]
+              ++ lib.optionals ( builtins.stringLength binPath > 0 ) [ "PATH=${ binPath }" ]
+              ++ [
+                "${ bins.nint }"
+                # always pass depot so scripts can use this library
+                "--arg depot '(import ${ minimalDepot } {})'"
+              ]
+          );
+    in
+    runExecline.local
+      drvName
+      { }
+      [
+        "importas"
+        "out"
+        "out"
+        "pipeline"
+        [ "foreground" [ "if" [ bins.printf "%s\n" shebang ] ] "if" [ bins.cat script ] ]
+        "if"
+        [ bins.tee "$out" ]
+        "if"
+        [ bins.chmod "+x" "$out" ]
+        "exit"
+        "0"
+      ];
+in
+{ inherit respond pathInfo scriptName absolutePath writeCGI; }

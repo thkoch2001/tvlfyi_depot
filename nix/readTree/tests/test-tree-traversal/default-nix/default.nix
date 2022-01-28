@@ -1,5 +1,1 @@
-{ ... }:
-
-{
-  no = "siblings should be read";
-}
+{ ... }: { no = "siblings should be read"; }

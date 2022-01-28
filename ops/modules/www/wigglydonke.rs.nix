@@ -1,15 +1,11 @@
-{ depot, lib, pkgs, ... }:
-
+{ depot
+, lib
+, pkgs
+, ...
+}:
 {
-  imports = [
-    ./base.nix
-  ];
-
+  imports = [ ./base.nix ];
   config = {
-    services.nginx.virtualHosts."wigglydonke.rs" = {
-      enableACME = true;
-      forceSSL = true;
-      root = "${depot.path + "/users/grfn/wigglydonke.rs"}";
-    };
+    services.nginx.virtualHosts."wigglydonke.rs" = { enableACME = true; forceSSL = true; root = "${ depot.path + "/users/grfn/wigglydonke.rs" }"; };
   };
 }

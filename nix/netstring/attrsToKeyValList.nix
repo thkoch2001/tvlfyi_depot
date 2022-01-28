@@ -1,5 +1,7 @@
-{ depot, lib, ... }:
-
+{ depot
+, lib
+, ...
+}:
 # Convert an attrset of strings to a list of key/value netstring pairs.
 # A good minimally viable json replacement if all you need is to iterate.
 # You can use e.g. `forstdin -Ed '' item` in execline to split the items
@@ -20,14 +22,13 @@
 #     "multidefine" "-d" "" "$item" [ "key" "value" ]
 #     "${pkgs.coreutils}/bin/echo" "\${key} -> \${value}"
 #   ]
-
 #   will print:
 #     foo -> bar
 #     x -> abc
 attrs:
 lib.concatStrings
-  (lib.mapAttrsToList
-    (k: v: depot.nix.netstring.fromString
-       ( depot.nix.netstring.fromString k
-       + depot.nix.netstring.fromString v))
-    attrs)
+  (
+    lib.mapAttrsToList
+      ( k: v: depot.nix.netstring.fromString ( depot.nix.netstring.fromString k + depot.nix.netstring.fromString v ) )
+      attrs
+  )

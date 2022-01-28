@@ -1,71 +1,66 @@
-{ depot, ... }:
-
+{ depot
+, ...
+}:
 let
-  inherit (depot.third_party.nixpkgs)
-    lib
-    ;
-
-  inherit (depot.web.bubblegum)
-    pathInfo
-    respond
-    absolutePath
-    ;
-
+  inherit ( depot.third_party.nixpkgs ) lib;
+  inherit ( depot.web.bubblegum ) pathInfo respond absolutePath;
   routes = {
     "/" = {
       status = "OK";
       title = "index";
-      content = ''
+      content =
+        ''
         Hello World!
-      '';
+        '';
     };
     "/clock" = {
       status = "OK";
       title = "clock";
-      content = ''
-        It is ${toString builtins.currentTime}s since 1970-01-01 00:00 UTC.
-      '';
+      content =
+        ''
+        It is ${ toString builtins.currentTime }s since 1970-01-01 00:00 UTC.
+        '';
     };
     "/coffee" = {
       status = "I'm a teapot";
       title = "coffee";
-      content = ''
+      content =
+        ''
         No coffee, I'm afraid
-      '';
+        '';
     };
     "/type-error" = {
       status = 666;
       title = "bad usage";
-      content = ''
+      content =
+        ''
         Never gonna see this.
-      '';
+        '';
     };
-    "/eval-error" = {
-      status = "OK";
-      title = "evaluation error";
-      content = builtins.throw "lol";
-    };
+    "/eval-error" = { status = "OK"; title = "evaluation error"; content = builtins.throw "lol"; };
   };
-
   notFound = {
     status = "Not Found";
     title = "404";
-    content = ''
+    content =
+      ''
       This page doesn't exist.
-    '';
+      '';
   };
-
   navigation =
-    lib.concatStrings (lib.mapAttrsToList
-      (p: v: "<li><a href=\"${absolutePath p}\">${v.title}</a></li>")
-      routes);
-
-  template = { title, content, ... }: ''
+    lib.concatStrings
+      ( lib.mapAttrsToList ( p: v: "<li><a href=\"${ absolutePath p }\">${ v.title }</a></li>" ) routes );
+  template =
+    { title
+    , content
+    , ...
+    }:
+    ''
     <!doctype html>
     <html lang="en">
     <head>
       <meta charset="utf-8">
-      <title>${title}</title>
+      <title>${ title }</title>
       <style>a:link, a:visited { color: blue; }</style>
     </head>
     <body>
@@ -75,18 +70,14 @@ let
       </hgroup>
       <header>
         <nav>
-          <ul>${navigation}</ul>
+          <ul>${ navigation }</ul>
         </nav>
       </header>
       <main>
-        <p>${content}</p>
+        <p>${ content }</p>
       </main>
     </body>
-  '';
-
-  response = routes."${pathInfo}" or notFound;
-
+    '';
+  response = routes."${ pathInfo }" or notFound;
 in
-  respond response.status {
-    "Content-type" = "text/html";
-  } (template response)
+respond response.status { "Content-type" = "text/html"; } ( template response )

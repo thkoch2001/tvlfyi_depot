@@ -1,15 +1,13 @@
-{ depot, pkgs, ... }:
-
-let src = with pkgs; srcOnly lispPackages.parse-float;
-in depot.nix.buildLisp.library {
-  name = "parse-float";
-
-  deps = with depot.third_party.lisp; [
-    alexandria
-  ];
-
-  srcs = map (f: src + ("/" + f)) [
-    "package.lisp"
-    "parse-float.lisp"
-  ];
-}
+{ depot
+, pkgs
+, ...
+}:
+let
+  src = with pkgs; srcOnly lispPackages.parse-float;
+in
+depot.nix.buildLisp.library
+  {
+    name = "parse-float";
+    deps = with depot.third_party.lisp; [ alexandria ];
+    srcs = map ( f: src + ( "/" + f ) ) [ "package.lisp" "parse-float.lisp" ];
+  }

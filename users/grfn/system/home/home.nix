@@ -1,13 +1,11 @@
-{ config, pkgs, ... }:
-
+{ config
+, pkgs
+, ...
+}:
 {
-  imports = [
-    (throw "Pick a machine from ./machines")
-  ];
-
+  imports = [ ( throw "Pick a machine from ./machines" ) ];
   # Let Home Manager install and manage itself.
   programs.home-manager.enable = true;
-
   # This value determines the Home Manager release that your
   # configuration is compatible with. This helps avoid breakage
   # when a new Home Manager release introduces backwards
