@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "68e7aa57_e0f5e1f9",
+        "filename": "fun/clbot/clbot.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2022-01-28T11:11:31Z",
+      "side": 1,
+      "message": "Should we make this a flag (that can be specified multiple times)? This would be in the spirit of keeping things generic, although maybe it\u0027s not as important as with besadii.",
+      "range": {
+        "startLine": 45,
+        "startChar": 1,
+        "endLine": 45,
+        "endChar": 10
+      },
+      "revId": "2d3c8db0102196b77c6c8bb62a358ea03970cbfc",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
