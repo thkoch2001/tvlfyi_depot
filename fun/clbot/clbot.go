@@ -40,6 +40,8 @@ var (
 
 	notifyRepo     = flag.String("notify_repo", "depot", "Repo name to notify about")
 	notifyBranches = stringSetFlag{}
+
+	neverPing = flag.String("never_ping", "marcus", "Comma-separated terms that should never ping users")
 )
 
 func init() {
@@ -181,7 +183,13 @@ func noping(user string) string {
 // message. With this users will not be pinged for their own CLs, but
 // they will be notified if someone else writes a CL that includes
 // their username.
+//
+// Also applies noping to all instances of the words in `neverPing`.
 func nopingAll(username, message string) string {
+	for _, word := range strings.Split(*neverPing, ",") {
+		message = strings.ReplaceAll(message, word, noping(word))
+	}
+
 	return strings.ReplaceAll(message, username, noping(username))
 }
 
