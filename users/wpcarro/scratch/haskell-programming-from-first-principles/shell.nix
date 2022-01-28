@@ -1,8 +1,1 @@
-{ depot, ... }:
-
-depot.users.wpcarro.buildHaskell.shell {
-  deps = hpkgs: with hpkgs; [
-    quickcheck-simple
-    checkers
-  ];
-}
+{ depot, ... }: depot.users.wpcarro.buildHaskell.shell { deps = hpkgs: with hpkgs; [ quickcheck-simple checkers ]; }

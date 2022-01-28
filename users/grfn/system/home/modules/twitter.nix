@@ -1,19 +1,12 @@
-{ pkgs, lib, ... }:
-
+{ pkgs
+, lib
+, ...
+}:
 {
-  home.packages = with pkgs; [
-    t
-  ];
-
-  home.sessionVariables = {
-    TWITTER_WHOAMI = "glittershark1";
-  };
-
+  home.packages = with pkgs; [ t ];
+  home.sessionVariables = { TWITTER_WHOAMI = "glittershark1"; };
   programs.zsh = {
-    shellAliases = {
-      "mytl" = "t tl $TWITTER_WHOAMI";
-    };
-
+    shellAliases = { "mytl" = "t tl $TWITTER_WHOAMI"; };
     functions = {
       favelast = "t fave $(t tl -l $1 | head -n1 | cut -d' ' -f1)";
       rtlast = "t rt $(t tl -l $1 | head -n1 | cut -d' ' -f1)";

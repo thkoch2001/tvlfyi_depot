@@ -1,28 +1,34 @@
-{ depot, lib, ... }:
-
+{ depot
+, lib
+, ...
+}:
 let
   # TODO(sterni): find a better place for this: is dot time //fun?
-
   # get the email address of a depot user from //ops/users
-  findEmail = user:
+  findEmail =
+    user:
     let
-      res = builtins.filter ({ username, ... }: username == user) depot.ops.users;
+      res = builtins.filter ( { username, ... }: username == user ) depot.ops.users;
       len = builtins.length res;
     in
-      if len == 1
-      then (builtins.head res).email
-      else builtins.throw "findEmail: got ${toString len} results instead of 1";
-
+    if
+      len == 1
+    then
+      ( builtins.head res ).email
+    else
+      builtins.throw "findEmail: got ${ toString len } results instead of 1";
   # dot-time(7) man page, ported from dotti.me
-  dot-time = rec {
+  dot-time = rec
+    {
     name = "dot-time";
     section = 7;
-    content = ''
+    content =
+      ''
       .Dd $Mdocdate$
-      .Dt ${lib.toUpper name} ${toString section}
+      .Dt ${ lib.toUpper name } ${ toString section }
       .Os
       .Sh NAME
-      .Nm ${name}
+      .Nm ${ name }
       .Nd a universal convention for conveying time
       .Sh DESCRIPTION
       For those of us who travel often or coordinate across many timezones,
@@ -56,15 +62,12 @@ let
       .An -nosplit
       .Sy dot time
       has been proposed and documented by
-      .An edef Aq Mt ${findEmail "edef"}
+      .An edef Aq Mt ${ findEmail "edef" }
       and ported to
       .Xr mdoc 7
       by
-      .An sterni Aq Mt ${findEmail "sterni"} .
-    '';
+      .An sterni Aq Mt ${ findEmail "sterni" } .
+      '';
   };
-
 in
-  depot.nix.buildManPages "dot-time" {} [
-    dot-time
-  ]
+depot.nix.buildManPages "dot-time" { } [ dot-time ]

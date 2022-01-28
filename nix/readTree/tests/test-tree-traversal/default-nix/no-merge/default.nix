@@ -1,3 +1,1 @@
-{ ... }:
-
-"I’m not merged with any children"
+{ ... }: "I’m not merged with any children"

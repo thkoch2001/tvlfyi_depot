@@ -1,18 +1,16 @@
-{ depot, ... }:
-
+{ depot
+, ...
+}:
 {
-  imports = [
-    ./base.nix
-  ];
-
+  imports = [ ./base.nix ];
   config = {
     services.nginx.virtualHosts."tvl.fyi" = {
       serverName = "tvl.fyi";
       root = depot.web.tvl;
       enableACME = true;
       forceSSL = true;
-
-      extraConfig = ''
+      extraConfig =
+        ''
         add_header Strict-Transport-Security "max-age=31536000; includeSubDomains; preload" always;
 
         rewrite ^/builds/?$ https://buildkite.com/tvl/depot/ last;
@@ -37,7 +35,7 @@
         location = /blog {
           return 302 /;
         }
-      '';
+        '';
     };
   };
 }

@@ -1,21 +1,19 @@
-{ config, ... }:
-
+{ config
+, ...
+}:
 {
-  imports = [
-    ./base.nix
-  ];
-
+  imports = [ ./base.nix ];
   config = {
     services.nginx.virtualHosts."nixery.dev" = {
       serverName = "nixery.dev";
       enableACME = true;
       forceSSL = true;
-
-      extraConfig = ''
+      extraConfig =
+        ''
         location / {
-          proxy_pass http://localhost:${toString config.services.depot.nixery.port};
+          proxy_pass http://localhost:${ toString config.services.depot.nixery.port };
         }
-      '';
+        '';
     };
   };
 }

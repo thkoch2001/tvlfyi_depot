@@ -4,14 +4,19 @@
 # However, bat lacks some of the syntaxes we are interested in. This
 # package creates a new binary syntax set which bundles our additional
 # syntaxes on top of bat's existing ones.
-{ pkgs, ... }:
-
+{ pkgs
+, ...
+}:
 let
-  inherit (pkgs) bat runCommandNoCC;
-in runCommandNoCC "bat-syntaxes.bin" {} ''
+  inherit ( pkgs ) bat runCommandNoCC;
+in
+runCommandNoCC
+  "bat-syntaxes.bin"
+  { }
+  ''
   export HOME=$PWD
   mkdir -p .config/bat/syntaxes
-  cp ${./Prolog.sublime-syntax} .config/bat/syntaxes
-  ${bat}/bin/bat cache --build
+  cp ${ ./Prolog.sublime-syntax } .config/bat/syntaxes
+  ${ bat }/bin/bat cache --build
   mv .cache/bat/syntaxes.bin $out
-''
+  ''

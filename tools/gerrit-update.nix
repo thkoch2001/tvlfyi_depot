@@ -1,7 +1,10 @@
 # Utility script to perform a Gerrit update.
-{ pkgs, ... }:
-
-pkgs.writeShellScriptBin "gerrit-update" ''
+{ pkgs
+, ...
+}:
+pkgs.writeShellScriptBin
+  "gerrit-update"
+  ''
   set -euo pipefail
 
   if [[ $EUID -ne 0 ]]; then
@@ -9,8 +12,8 @@ pkgs.writeShellScriptBin "gerrit-update" ''
     exit 1
   fi
 
-  gerrit_war="$(find "${pkgs.gerrit}/webapps" -name 'gerrit*.war')"
-  java="${pkgs.jdk}/bin/java"
+  gerrit_war="$(find "${ pkgs.gerrit }/webapps" -name 'gerrit*.war')"
+  java="${ pkgs.jdk }/bin/java"
   backup_path="/root/gerrit_preupgrade-$(date +"%Y-%m-%d").tar.bz2"
 
   # Take a safety backup of Gerrit into /root's homedir. Just in case.
@@ -31,4 +34,4 @@ pkgs.writeShellScriptBin "gerrit-update" ''
   systemctl start gerrit.socket gerrit.service
 
   echo "...done"
-''
+  ''

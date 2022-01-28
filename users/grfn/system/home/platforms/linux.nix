@@ -1,11 +1,10 @@
-{ config, pkgs, ... }:
-
+{ config
+, pkgs
+, ...
+}:
 let
-
   depot = config.lib.depot;
-
 in
-
 {
   imports = [
     ../modules/alacritty.nix
@@ -21,72 +20,56 @@ in
     ../modules/tarsnap.nix
     ../modules/vim.nix
   ];
-
   xsession.enable = true;
-
-  home.packages = with pkgs; [
-    # Desktop stuff
-    arandr
-    firefox
-    feh
-    chromium
-    xclip
-    xorg.xev
-    picom
-    peek
-    signal-desktop
-    apvlv # pdf viewer
-    vlc
-    irssi
-    gnutls
-    pandoc
-    barrier
-    depot.tools.nsfv-setup
-    glimpse # fork of gimp
-
-    # System utilities
-    powertop
-    usbutils
-    pciutils
-    gdmap
-    lsof
-    tree
-    ncat
-    iftop
-
-    # Security
-    gnupg
-    keybase
-    openssl
-    yubikey-manager
-    yubikey-manager-qt
-
-    # Spotify...etc
-    spotify
-    playerctl
-  ];
-
-  services.redshift = {
-    enable = true;
-    provider = "geoclue2";
-  };
-
-  services.pasystray.enable = true;
-
-  services.gpg-agent = {
-    enable = true;
-  };
-
-  gtk = {
-    enable = true;
-    gtk3.bookmarks = [
-      "file:///home/grfn/code"
+  home.packages =
+    with pkgs;
+    [
+      # Desktop stuff
+      arandr
+      firefox
+      feh
+      chromium
+      xclip
+      xorg.xev
+      picom
+      peek
+      signal-desktop
+      apvlv
+      # pdf viewer
+      vlc
+      irssi
+      gnutls
+      pandoc
+      barrier
+      depot.tools.nsfv-setup
+      glimpse
+      # fork of gimp
+      # System utilities
+      powertop
+      usbutils
+      pciutils
+      gdmap
+      lsof
+      tree
+      ncat
+      iftop
+      # Security
+      gnupg
+      keybase
+      openssl
+      yubikey-manager
+      yubikey-manager-qt
+      # Spotify...etc
+      spotify
+      playerctl
     ];
-  };
-
-  programs.zsh.initExtra = ''
+  services.redshift = { enable = true; provider = "geoclue2"; };
+  services.pasystray.enable = true;
+  services.gpg-agent = { enable = true; };
+  gtk = { enable = true; gtk3.bookmarks = [ "file:///home/grfn/code" ]; };
+  programs.zsh.initExtra =
+    ''
     [[ ! $IN_NIX_SHELL ]] && alsi -l
-  '';
-
+    '';
   services.lorri.enable = true;
 }

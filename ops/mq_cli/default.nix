@@ -1,3 +1,1 @@
-{ depot, ... }:
-
-depot.third_party.naersk.buildPackage ./.
+{ depot, ... }: depot.third_party.naersk.buildPackage ./.

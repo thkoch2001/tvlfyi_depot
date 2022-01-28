@@ -1,6 +1,11 @@
-{ depot, pkgs, ... }:
-
-pkgs.runCommandNoCC "monsterpoker.app" {} ''
+{ depot
+, pkgs
+, ...
+}:
+pkgs.runCommandNoCC
+  "monsterpoker.app"
+  { }
+  ''
   mkdir -p $out
-  cp ${./index.html} $out/index.html
-''
+  cp ${ ./index.html } $out/index.html
+  ''

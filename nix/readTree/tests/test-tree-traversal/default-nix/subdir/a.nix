@@ -1,3 +1,1 @@
-{ ... }:
-
-"but I’m picked up"
+{ ... }: "but I’m picked up"

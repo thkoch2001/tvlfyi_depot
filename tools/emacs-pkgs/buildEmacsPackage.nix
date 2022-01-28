@@ -12,23 +12,23 @@
 #   emacsPackages
 #
 # * internalRequires takes other depot packages
-{ pkgs, ... }:
-
+{ pkgs
+, ...
+}:
 buildArgs:
-
-pkgs.callPackage({ emacsPackages }:
-
-let
-  # Select external dependencies from the emacsPackages set
-  externalDeps = (buildArgs.externalRequires or (_: [])) emacsPackages;
-
-  # Override emacsPackages for depot-internal packages
-  internalDeps = map (p: p.override { inherit emacsPackages; })
-                     (buildArgs.internalRequires or []);
-
-  trivialBuildArgs = builtins.removeAttrs buildArgs [
-    "externalRequires" "internalRequires"
-  ] // {
-    packageRequires = externalDeps ++ internalDeps;
-  };
-in emacsPackages.trivialBuild trivialBuildArgs) {}
+pkgs.callPackage
+  (
+    { emacsPackages
+    }:
+    let
+      # Select external dependencies from the emacsPackages set
+      externalDeps = ( buildArgs.externalRequires or ( _: [ ] ) ) emacsPackages;
+      # Override emacsPackages for depot-internal packages
+      internalDeps = map ( p: p.override { inherit emacsPackages; } ) ( buildArgs.internalRequires or [ ] );
+      trivialBuildArgs =
+        builtins.removeAttrs buildArgs [ "externalRequires" "internalRequires" ]
+          // { packageRequires = externalDeps ++ internalDeps; };
+    in
+    emacsPackages.trivialBuild trivialBuildArgs
+  )
+  { }

@@ -7,12 +7,7 @@
     content = ./posts/emacs-is-underrated.md;
     draft = true;
   }
-  {
-    key = "best-tools";
-    title = "tazjin's best tools";
-    date = 1576800001;
-    content = ./posts/best-tools.md;
-  }
+  { key = "best-tools"; title = "tazjin's best tools"; date = 1576800001; content = ./posts/best-tools.md; }
   {
     key = "nixery-layers";
     title = "Nixery: Improved Layering Design";
@@ -37,7 +32,7 @@
     key = "the-smu-problem";
     title = "The SMU-problem of messaging apps";
     date = 1450354078;
-    content =./posts/the-smu-problem.md;
+    content = ./posts/the-smu-problem.md;
     oldKey = "1450354078";
   }
   {

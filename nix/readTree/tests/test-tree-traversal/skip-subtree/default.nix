@@ -1,5 +1,1 @@
-{ ... }:
-
-{
-  but = "the default.nix is still read";
-}
+{ ... }: { but = "the default.nix is still read"; }

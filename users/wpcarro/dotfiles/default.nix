@@ -1,5 +1,1 @@
-{ ... }:
-
-{
-  dunstrc = ./dunstrc;
-}
+{ ... }: { dunstrc = ./dunstrc; }

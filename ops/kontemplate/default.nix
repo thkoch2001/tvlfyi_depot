@@ -9,28 +9,32 @@
 #
 # This file is the Nix derivation used to install Kontemplate on
 # Nix-based systems.
-
-{ lib, pkgs, ... }:
-
-pkgs.buildGoPackage rec {
-  name = "kontemplate-${version}";
-  version = "canon";
-  src = ./.;
-  goPackagePath = "github.com/tazjin/kontemplate";
-  goDeps = ./deps.nix;
-  buildInputs = [ pkgs.parallel ];
-
-  # Enable checks and configure check-phase to include vet:
-  doCheck = true;
-  preCheck = ''
-    for pkg in $(getGoDirs ""); do
-      buildGoDir vet "$pkg"
-    done
-  '';
-
-  meta = with lib; {
-    description = "A resource templating helper for Kubernetes";
-    homepage = "http://kontemplate.works/";
-    license = licenses.gpl3;
-  };
-}
+{ lib
+, pkgs
+, ...
+}:
+pkgs.buildGoPackage
+  rec
+    {
+    name = "kontemplate-${ version }";
+    version = "canon";
+    src = ./.;
+    goPackagePath = "github.com/tazjin/kontemplate";
+    goDeps = ./deps.nix;
+    buildInputs = [ pkgs.parallel ];
+    # Enable checks and configure check-phase to include vet:
+    doCheck = true;
+    preCheck =
+      ''
+      for pkg in $(getGoDirs ""); do
+        buildGoDir vet "$pkg"
+      done
+      '';
+    meta =
+      with lib;
+      {
+        description = "A resource templating helper for Kubernetes";
+        homepage = "http://kontemplate.works/";
+        license = licenses.gpl3;
+      };
+  }

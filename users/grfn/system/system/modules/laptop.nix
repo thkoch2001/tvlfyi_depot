@@ -1,15 +1,14 @@
-{ config, lib, pkgs, ... }:
-
+{ config
+, lib
+, pkgs
+, ...
+}:
 {
-  imports = [
-    ./reusable/battery.nix
-  ];
-
+  imports = [ ./reusable/battery.nix ];
   laptop.onLowBattery.enable = true;
-
-  services.logind.extraConfig = ''
+  services.logind.extraConfig =
+    ''
     HandlePowerKey=hibernate
-  '';
-
+    '';
   services.tlp.enable = true;
 }

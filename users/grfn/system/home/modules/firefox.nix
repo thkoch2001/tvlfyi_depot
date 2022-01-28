@@ -1,8 +1,11 @@
-{ config, lib, pkgs, ... }:
-
+{ config
+, lib
+, pkgs
+, ...
+}:
 {
-
-  xdg.mimeApps = rec {
+  xdg.mimeApps = rec
+    {
     enable = true;
     defaultApplications = {
       "text/html" = [ "firefox.desktop" ];

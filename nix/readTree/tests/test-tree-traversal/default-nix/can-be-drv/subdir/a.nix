@@ -1,3 +1,1 @@
-{ ... }:
-
-"Picked up through the drv"
+{ ... }: "Picked up through the drv"

@@ -5,15 +5,16 @@
 # For now, readTree is not used inside of this configuration to keep
 # it simple. Adding it may be useful if we set up test scaffolding
 # around the exported workspace.
-
-{ pkgs ? import ./nixpkgs { depotOverlays = false; }, ... }:
-
-pkgs.lib.fix(self: {
-  buildGo = import ./buildGo { inherit pkgs; };
-  buildkite = import ./buildkite { inherit pkgs; };
-  readTree = import ./readTree { };
-
-  besadii = import ./besadii {
-    depot.nix.buildGo = self.buildGo;
-  };
-})
+{ pkgs ? import ./nixpkgs { depotOverlays = false; }
+, ...
+}:
+pkgs.lib.fix
+  (
+    self:
+    {
+      buildGo = import ./buildGo { inherit pkgs; };
+      buildkite = import ./buildkite { inherit pkgs; };
+      readTree = import ./readTree { };
+      besadii = import ./besadii { depot.nix.buildGo = self.buildGo; };
+    }
+  )

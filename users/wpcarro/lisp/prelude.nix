@@ -1,8 +1,1 @@
-{ depot, ... }:
-
-depot.nix.buildLisp.library {
-  name = "prelude";
-  srcs = [
-    ./prelude.lisp
-  ];
-}
+{ depot, ... }: depot.nix.buildLisp.library { name = "prelude"; srcs = [ ./prelude.lisp ]; }

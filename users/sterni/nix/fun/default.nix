@@ -1,31 +1,21 @@
-{ depot, lib, ... }:
-
+{ depot
+, lib
+, ...
+}:
 let
-
-  inherit (lib)
-    id
-    ;
-
+  inherit ( lib ) id;
   # Simple function composition,
   # application is right to left.
-  rl = f1: f2:
-    (x: f1 (f2 x));
-
+  rl = f1: f2: ( x: f1 ( f2 x ) );
   # Compose a list of functions,
   # application is right to left.
-  rls = fs:
-    builtins.foldl' (fOut: f: lr f fOut) id fs;
-
+  rls = fs: builtins.foldl' ( fOut: f: lr f fOut ) id fs;
   # Simple function composition,
   # application is left to right.
-  lr = f1: f2:
-    (x: f2 (f1 x));
-
+  lr = f1: f2: ( x: f2 ( f1 x ) );
   # Compose a list of functions,
   # application is left to right
-  lrs = x: fs:
-    builtins.foldl' (v: f: f v) x fs;
-
+  lrs = x: fs: builtins.foldl' ( v: f: f v ) x fs;
   # Warning: cursed function
   #
   # Check if a function has an attribute
@@ -34,26 +24,7 @@ let
   # s/o to puck for discovering that you could use
   # builtins.toXML to introspect functions more than
   # you should be able to in Nix.
-  hasEllipsis = f:
-    builtins.isFunction f &&
-    builtins.match ".*<attrspat ellipsis=\"1\">.*"
-      (builtins.toXML f) != null;
-
+  hasEllipsis =
+    f: builtins.isFunction f && builtins.match ".*<attrspat ellipsis=\"1\">.*" ( builtins.toXML f ) != null;
 in
-
-{
-  inherit (lib)
-    fix
-    flip
-    const
-    ;
-
-  inherit
-    id
-    rl
-    rls
-    lr
-    lrs
-    hasEllipsis
-    ;
-}
+{ inherit ( lib ) fix flip const; inherit id rl rls lr lrs hasEllipsis; }

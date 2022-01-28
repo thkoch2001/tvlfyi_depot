@@ -3,15 +3,10 @@
 # Usage:
 #   $ lsblk  # get your USB dev path (e.g. /dev/sdb)
 #   $ create-installer --dev=/dev/sdb //users/wpcarro/nixos/marcus
-
-{ pkgs, ... }:
-
+{ pkgs
+, ...
+}:
 {
-  imports = [
-    "${pkgs.nixos}/modules/installer/cd-graphical-gnome.nix"
-  ];
-
-  config = {
-    networking.wireless.enable = true;
-  };
+  imports = [ "${ pkgs.nixos }/modules/installer/cd-graphical-gnome.nix" ];
+  config = { networking.wireless.enable = true; };
 }

@@ -1,5 +1,1 @@
-{ ... }:
-
-{
-  favouriteColour = "orange";
-}
+{ ... }: { favouriteColour = "orange"; }
