@@ -188,7 +188,7 @@ in {
 
   meta = {
     targets = [ "nixos" ];
-    extraSteps = [
+    ci.extraSteps = [
       {
         label = ":gnu: initialize Emacs";
         command = "${runScript ./ci.el} ${./.emacs.d/init.el}";
