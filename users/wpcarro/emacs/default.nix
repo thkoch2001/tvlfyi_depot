@@ -119,30 +119,8 @@ let
       emojify
     ]));
 
-  vendorDir = path {
-    path = ./.emacs.d/vendor;
-    name = "emacs-vendor";
-  };
-
-  # TODO(wpcarro): byte-compile these by packaging each as an Elisp library.
-  wpcDir = path {
-    path = ./.emacs.d/wpc;
-    name = "emacs-libs";
-  };
-
-  wpcPackageEl = path {
-    path = ./.emacs.d/wpc/wpc-package.el;
-    name = "wpc-package.el";
-  };
-
-  initEl = path {
-    path = ./.emacs.d/init.el;
-    name = "init.el";
-  };
-
   loadPath = concatStringsSep ":" [
-    wpcDir
-    vendorDir
+    ./.emacs.d/wpc
     # TODO(wpcarro): Explain why the trailing ":" is needed.
     "${wpcarrosEmacs.deps}/share/emacs/site-lisp:"
   ];
@@ -162,7 +140,7 @@ let
         --no-init-file \
         --no-site-file \
         --no-site-lisp \
-        --load ${initEl} \
+        --load ${./.emacs.d/init.el} \
         "$@"
     '';
 in {
