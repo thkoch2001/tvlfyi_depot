@@ -80,14 +80,6 @@
    (format "J%s" (bookmark-kbd b)) `,(intern (format "bookmark-visit-%s" (bookmark-label b)))
    (format "j%s" (bookmark-kbd b)) `,(intern (format "bookmark-browse-%s" (bookmark-label b)))))
 
-(defun bookmark-install-kbd (x)
-  "Install the keybindings for a bookmark, X."
-  (general-define-key
-    :prefix "<SPC>"
-    :states '(normal)
-    (format "J%s" (bookmark-kbd x)) (lambda () (interactive) (find-file (bookmark-path x)))
-    (format "j%s" (bookmark-kbd x)) (lambda () (interactive) (bookmark-open (bookmark-path x)))))
-
 (defun bookmark-install-kbds ()
   "Install the keybindings defined herein."
   (->> bookmark-whitelist
