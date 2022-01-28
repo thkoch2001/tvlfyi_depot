@@ -94,6 +94,30 @@
       },
       "revId": "2d3c8db0102196b77c6c8bb62a358ea03970cbfc",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "618cef1a_88216491",
+        "filename": "fun/clbot/clbot.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2022-01-28T12:39:32Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "f6744542_4e5a5852",
+      "range": {
+        "startLine": 45,
+        "startChar": 1,
+        "endLine": 45,
+        "endChar": 10
+      },
+      "revId": "2d3c8db0102196b77c6c8bb62a358ea03970cbfc",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
