@@ -166,19 +166,17 @@ let
         "$@"
     '';
 
-  # I need this to start my Emacs from CI without the call to
-  # `--load ${initEl}`.
-  runScript = script: writeShellScript "run-emacs-script" ''
+  # Script that asserts my Emacs can initialize without warnings or errors.
+  check = writeShellScript "check-emacs" ''
     export PATH="${emacsBinPath}:$PATH"
     export EMACSLOADPATH="${loadPath}"
     exec ${wpcarrosEmacs}/bin/emacs \
       --no-site-file \
       --no-site-lisp \
       --no-init-file \
-      --script ${script} \
+      --script ${./ci.el} \
       "$@"
     '';
-
 in {
   inherit withEmacsPath;
 
@@ -186,13 +184,16 @@ in {
     emacsBin = "${wpcarrosEmacs}/bin/emacs";
   };
 
-  meta = {
-    targets = [ "nixos" ];
-    extraSteps = [
-      {
-        label = ":gnu: initialize Emacs";
-        command = "${runScript ./ci.el} ${./.emacs.d/init.el}";
-      }
-    ];
-  };
+  check = writeShellScript "check-emacs" ''
+    export PATH="${emacsBinPath}:$PATH"
+    export EMACSLOADPATH="${loadPath}"
+    exec ${wpcarrosEmacs}/bin/emacs \
+      --no-site-file \
+      --no-site-lisp \
+      --no-init-file \
+      --script ${./ci.el} \
+      "$@"
+    '';
+
+  meta.targets [ "nixos" "check" ];
 }
