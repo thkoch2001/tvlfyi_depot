@@ -135,6 +135,7 @@ in {
     wpcarro.common.shell-utils ++
     (with pkgs; [
       alacritty
+      depot.ops.nixos.upgrade-system
       firefox
       pavucontrol
       quasselClient
