@@ -6,7 +6,7 @@ let
   inherit (builtins) path;
   inherit (depot.third_party.nixpkgs) emacsPackagesGen emacs27;
   inherit (depot.users) wpcarro;
-  inherit (pkgs) writeShellScript writeShellScriptBin;
+  inherit (pkgs) runCommand writeShellScriptBin;
   inherit (lib) mapAttrsToList;
   inherit (lib.strings) concatStringsSep makeBinPath;
 
@@ -165,20 +165,6 @@ let
         --load ${initEl} \
         "$@"
     '';
-
-  # I need this to start my Emacs from CI without the call to
-  # `--load ${initEl}`.
-  runScript = script: writeShellScript "run-emacs-script" ''
-    export PATH="${emacsBinPath}:$PATH"
-    export EMACSLOADPATH="${loadPath}"
-    exec ${wpcarrosEmacs}/bin/emacs \
-      --no-site-file \
-      --no-site-lisp \
-      --no-init-file \
-      --script ${script} \
-      "$@"
-    '';
-
 in {
   inherit withEmacsPath;
 
@@ -186,13 +172,21 @@ in {
     emacsBin = "${wpcarrosEmacs}/bin/emacs";
   };
 
-  meta = {
-    targets = [ "nixos" ];
-    extraSteps = [
-      {
-        label = ":gnu: initialize Emacs";
-        command = "${runScript ./ci.el} ${./.emacs.d/init.el}";
-      }
-    ];
-  };
+  # Script that asserts my Emacs can initialize without warnings or errors.
+  check = runCommand "check-emacs" {} ''
+    # Even though Buildkite defines this, I'd still like still be able to test
+    # this locally without depending on my ability to remember to set CI=true.
+    export CI=true
+    export PATH="${emacsBinPath}:$PATH"
+    export EMACSLOADPATH="${loadPath}"
+    ${wpcarrosEmacs}/bin/emacs \
+      --no-site-file \
+      --no-site-lisp \
+      --no-init-file \
+      --script ${./ci.el} \
+      ${./.emacs.d/init.el} && \
+    touch $out
+  '';
+
+  meta.targets = [ "nixos" "check" ];
 }
