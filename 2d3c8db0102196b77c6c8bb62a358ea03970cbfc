@@ -22,6 +22,30 @@
       },
       "revId": "2d3c8db0102196b77c6c8bb62a358ea03970cbfc",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ae43fcdc_f0163d9a",
+        "filename": "fun/clbot/clbot.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-01-28T12:32:23Z",
+      "side": 1,
+      "message": "Done, but slightly differently. It is now a comma-separated list, defaulting to `marcus`.",
+      "parentUuid": "68e7aa57_e0f5e1f9",
+      "range": {
+        "startLine": 45,
+        "startChar": 1,
+        "endLine": 45,
+        "endChar": 10
+      },
+      "revId": "2d3c8db0102196b77c6c8bb62a358ea03970cbfc",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
