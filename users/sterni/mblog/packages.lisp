@@ -11,17 +11,15 @@
    :babel
    :babel-encodings
    :closure-html
-   :who
    :cl-date-time-parser
-   :mime4cl
-   :who)
+   :mime4cl)
   (:import-from
    :alexandria
    :when-let*
    :when-let
    :starts-with-subseq
    :ends-with-subseq)
-  (:shadow :with-html-output) ; conflict between closure-html and who
+  (:import-from :who :escape-string)
   (:export
    :apple-note
    :apple-note-uuid
