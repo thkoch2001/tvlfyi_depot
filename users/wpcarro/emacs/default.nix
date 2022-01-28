@@ -3,11 +3,11 @@
 # TODO(wpcarro): See if it's possible to expose emacsclient on PATH, so that I
 # don't need to depend on wpcarros-emacs and emacs in my NixOS configurations.
 let
-  inherit (builtins) path;
+  inherit (builtins) getAttr path readFile;
   inherit (depot.third_party.nixpkgs) emacsPackagesGen emacs27;
   inherit (depot.users) wpcarro;
   inherit (pkgs) writeShellScript writeShellScriptBin;
-  inherit (lib) mapAttrsToList;
+  inherit (lib) mapAttrsToList removeSuffix;
   inherit (lib.strings) concatStringsSep makeBinPath;
 
   emacsBinPath = makeBinPath (
@@ -129,7 +129,7 @@ let
   makeEnvVars = env: concatStringsSep "\n"
     (mapAttrsToList (k: v: "export ${k}=\"${v}\"") env);
 
-  withEmacsPath = { emacsBin, env ? {} }:
+  withEmacsPath = { emacsBin, env ? {}, load ? [] }:
     writeShellScriptBin "wpcarros-emacs" ''
       export XMODIFIERS=emacs
       export PATH="${emacsBinPath}:$PATH"
@@ -141,8 +141,13 @@ let
         --no-site-file \
         --no-site-lisp \
         --load ${./.emacs.d/init.el} \
+        ${concatStringsSep "\n" (map (el: "--load ${el} \\") load)}
         "$@"
     '';
+
+  machineEl = getAttr (removeSuffix "\n" (readFile /etc/hostname)) {
+    "marcus" = ./marcus.el;
+  };
 in {
   inherit withEmacsPath;
 
@@ -162,6 +167,7 @@ in {
 
   nixos = withEmacsPath {
     emacsBin = "${wpcarrosEmacs}/bin/emacs";
+    load = [ machineEl ];
   };
 
   meta.targets = [ "nixos" ];
