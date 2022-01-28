@@ -3,7 +3,10 @@
 
 let
   inherit (depot.users) wpcarro;
-  wpcarrosEmacs = wpcarro.emacs.nixos;
+
+  wpcarrosEmacs = wpcarro.emacs.nixos {
+    load = [ ./marcus.el ];
+  };
 
   quasselClient = pkgs.quassel.override {
     client = true;
