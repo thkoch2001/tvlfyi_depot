@@ -165,25 +165,34 @@ let
         --load ${initEl} \
         "$@"
     '';
-in {
-  inherit initEl withEmacsPath;
 
-  # I need to start my Emacs from CI without the call to `--load ${initEl}`.
-  runScript = { script }:
-    writeShellScript "run-emacs-script" ''
-      export PATH="${emacsBinPath}:$PATH"
-      export EMACSLOADPATH="${wpcDir}:${vendorDir}:${wpcarrosEmacs.deps}/share/emacs/site-lisp"
-      exec ${wpcarrosEmacs}/bin/emacs \
-        --no-site-file \
-        --no-site-lisp \
-        --no-init-file \
-        --script ${script} \
-        "$@"
+  # I need this to start my Emacs from CI without the call to
+  # `--load ${initEl}`.
+  runScript = script: writeShellScript "run-emacs-script" ''
+    export PATH="${emacsBinPath}:$PATH"
+    export EMACSLOADPATH="${loadPath}"
+    exec ${wpcarrosEmacs}/bin/emacs \
+      --no-site-file \
+      --no-site-lisp \
+      --no-init-file \
+      --script ${script} \
+      "$@"
     '';
+
+in {
+  inherit withEmacsPath;
 
   nixos = withEmacsPath {
     emacsBin = "${wpcarrosEmacs}/bin/emacs";
   };
 
-  meta.targets = [ "nixos" ];
+  meta = {
+    targets = [ "nixos" ];
+    extraSteps = [
+      {
+        label = ":gnu: initialize Emacs";
+        command = "${runScript ./ci.el} ${./.emacs.d/init.el}";
+      }
+    ];
+  };
 }
