@@ -46,6 +46,30 @@
       },
       "revId": "2d3c8db0102196b77c6c8bb62a358ea03970cbfc",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3ac7d39e_56ed9d45",
+        "filename": "fun/clbot/clbot.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2022-01-28T12:36:33Z",
+      "side": 1,
+      "message": "Can\u0027t we just default to \"\" and pass the flag in //ops/machines/whitby?",
+      "parentUuid": "ae43fcdc_f0163d9a",
+      "range": {
+        "startLine": 45,
+        "startChar": 1,
+        "endLine": 45,
+        "endChar": 10
+      },
+      "revId": "2d3c8db0102196b77c6c8bb62a358ea03970cbfc",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
