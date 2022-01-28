@@ -56,7 +56,7 @@
     :initarg :mime-subtype
     :reader apple-note-mime-subtype))
   (:documentation
-   "Representation of a Note created using Apple's Notes using the IMAP backend"))
+   "Representation of a Note created using Apple's Notes via the IMAP backend"))
 
 (defun apple-note-p (msg)
   "Checks X-Uniform-Type-Identifier of a MIME:MIME-MESSAGE
