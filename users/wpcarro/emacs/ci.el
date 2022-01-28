@@ -40,5 +40,5 @@
       (message "Encountered warnings in *Warnings* buffer: %s" (buffer-string)))
     (kill-emacs 1)))
 
-(message "Successfully init'd Emacs without encountering errors or warnings!")
+(message "Successfully initialized Emacs without errors or warnings!")
 (kill-emacs 0)
