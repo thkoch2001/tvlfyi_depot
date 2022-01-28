@@ -119,30 +119,8 @@ let
       emojify
     ]));
 
-  vendorDir = path {
-    path = ./.emacs.d/vendor;
-    name = "emacs-vendor";
-  };
-
-  # TODO(wpcarro): byte-compile these by packaging each as an Elisp library.
-  wpcDir = path {
-    path = ./.emacs.d/wpc;
-    name = "emacs-libs";
-  };
-
-  wpcPackageEl = path {
-    path = ./.emacs.d/wpc/wpc-package.el;
-    name = "wpc-package.el";
-  };
-
-  initEl = path {
-    path = ./.emacs.d/init.el;
-    name = "init.el";
-  };
-
   loadPath = concatStringsSep ":" [
-    wpcDir
-    vendorDir
+    ./.emacs.d/wpc
     # TODO(wpcarro): Explain why the trailing ":" is needed.
     "${wpcarrosEmacs.deps}/share/emacs/site-lisp:"
   ];
@@ -162,17 +140,18 @@ let
         --no-init-file \
         --no-site-file \
         --no-site-lisp \
-        --load ${initEl} \
+        --load ${./.emacs.d/init.el} \
         "$@"
     '';
 in {
-  inherit initEl withEmacsPath;
+  inherit withEmacsPath;
 
-  # I need to start my Emacs from CI without the call to `--load ${initEl}`.
+  # I need this to start my Emacs from CI without the call to
+  # `--load ${initEl}`.
   runScript = { script }:
     writeShellScript "run-emacs-script" ''
       export PATH="${emacsBinPath}:$PATH"
-      export EMACSLOADPATH="${wpcDir}:${vendorDir}:${wpcarrosEmacs.deps}/share/emacs/site-lisp"
+      export EMACSLOADPATH="${loadPath}"
       exec ${wpcarrosEmacs}/bin/emacs \
         --no-site-file \
         --no-site-lisp \
@@ -180,6 +159,8 @@ in {
         --script ${script} \
         "$@"
     '';
+
+  initEl = ./.emacs.d/init.el;
 
   nixos = withEmacsPath {
     emacsBin = "${wpcarrosEmacs}/bin/emacs";
