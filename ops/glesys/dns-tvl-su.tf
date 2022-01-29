@@ -118,3 +118,12 @@ resource "glesys_dnsdomain_record" "tvl_su_TXT_google_dkim" {
   type   = "TXT"
   data   = "v=DKIM1; k=rsa; p=MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAlqCbnGa8oPwrudJK60l6MJj3NBnwj8wAPXNGtYy2SXrOBi7FT+ySwW7ATpfv6Xq9zGDUWJsENPUlFmvDiUs7Qi4scnNvSO1L+sDseB9/q1m3gMFVnTuieDO/T+KKkg0+uYgMM7YX5PahsAAJJ+EMb/r4afl3tcBMPR64VveKQ0hiSHA4zIYPsB9FB+b8S5C46uyY0r6WR7IzGjq2Gzb1do0kxvaKItTITWLSImcUu5ZZuXOUKJb441frVBWur5lXaYuedkxb1IRTTK0V/mBODE1D7k73MxGrqlzaMPdCqz+c3hRE18WVUkBTYjANVXDrs3yzBBVxaIAeu++vkO6BvQIDAQAB"
 }
+
+# Yandex 360 setup
+
+resource "glesys_dnsdomain_record" "tvl_su_TXT_yandex" {
+  domain = glesys_dnsdomain.tvl_su.id
+  host   = "@"
+  type   = "TXT"
+  data   = "yandex-verification: b99c43b7838949dc"
+}
