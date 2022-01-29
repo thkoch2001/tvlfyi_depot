@@ -483,14 +483,23 @@ in {
   # Prometheus is inside the respective service modules.
   services.prometheus = {
     enable = true;
-    exporters.node = {
-      enable = true;
 
-      enabledCollectors = [
-        "logind"
-        "processes"
-        "systemd"
-      ];
+    exporters = {
+      node = {
+        enable = true;
+
+        enabledCollectors = [
+          "logind"
+          "processes"
+          "systemd"
+        ];
+      };
+
+      nginx = {
+        enable = true;
+        sslVerify = false;
+        constLabels = [ "host=whitby" ];
+      };
     };
 
     scrapeConfigs = [{
@@ -498,6 +507,12 @@ in {
       scrape_interval = "5s";
       static_configs = [{
         targets = ["localhost:${toString config.services.prometheus.exporters.node.port}"];
+      }];
+    } {
+      job_name = "nginx";
+      scrape_interval = "5s";
+      static_configs = [{
+        targets = ["localhost:${toString config.services.prometheus.exporters.nginx.port}"];
       }];
     }];
   };
