@@ -479,6 +479,9 @@ in {
     applicationCredentials = "/var/lib/journaldriver/key.json";
   };
 
+  # Required for prometheus to be able to scrape stats
+  services.nginx.statusPage = true;
+
   # Configure Prometheus & Grafana. Exporter configuration for
   # Prometheus is inside the respective service modules.
   services.prometheus = {
