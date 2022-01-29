@@ -54,5 +54,16 @@
    (constantly (component/start (make-system (env->config))))))
 
 (comment
-  (run-dev)
+  ;; To run the application:
+  ;; 1. `M-x cider-jack-in`
+  ;; 2. `M-x cider-load-buffer` in this buffer
+  ;; 3. (optionally) configure the secrets backend in `bbbg.util.dev-secrets`
+  ;; 4. Put your cursor after the following form and run `M-x cider-eval-last-sexp`
+  ;;
+  ;; A web server will be listening on http://localhost:8888
+
+  (do
+    (run-dev)
+    (bbbg.db/migrate! (:db system)))
+
   )
