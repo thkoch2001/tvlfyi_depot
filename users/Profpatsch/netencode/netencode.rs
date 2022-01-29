@@ -405,11 +405,9 @@ pub mod parse {
                     inner_no_empty_string(tag_g(&inner)),
                     HashMap::new(),
                     |mut acc: HashMap<_, _>, Tag { tag, mut val }| {
-                        // ignore duplicated tag names that appear later
+                        // ignore earlier tags with the same name
                         // according to netencode spec
-                        if !acc.contains_key(tag) {
-                            acc.insert(tag, *val);
-                        }
+                        let _ = acc.insert(tag, *val);
                         acc
                     },
                 ),
@@ -633,7 +631,7 @@ pub mod parse {
                 record_t("{25:<1:a|u,<1:b|u,<1:a|i1:-1,}".as_bytes()),
                 Ok((
                     "".as_bytes(),
-                    vec![("a".to_owned(), T::Unit), ("b".to_owned(), T::Unit),]
+                    vec![("a".to_owned(), T::I3(-1)), ("b".to_owned(), T::Unit),]
                         .into_iter()
                         .collect::<HashMap<_, _>>()
                 )),
