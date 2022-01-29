@@ -1,12 +1,14 @@
+# Brooklyn-Based Board Gaming signup sheet
+
 This directory contains a small web application that acts as a signup
 sheet and attendee tracking system for [my local board gaming
 meetup](https://www.meetup.com/brooklyn-based-board-gaming/).
 
-# Development
+## Development
 
-## Installing dependencies
+### Installing dependencies
 
-### With Nix + Docker ("blessed way")
+#### With Nix + Docker ("blessed way")
 
 Prerequisites:
 
@@ -32,7 +34,7 @@ $ pwd
 $ arion up -d
 ```
 
-### Choose-your-own-adventure
+#### Choose-your-own-adventure
 
 Note that the **authoritative** source for dev dependencies is the `shell.nix`
 file in this directory - those may diverge from what's written here; if so
@@ -51,7 +53,7 @@ follow those versions rather than these.
     -   `PGDATABASE=bbbg`
     -   `PGPASSWORD=bbbg`
 
-## Running the application
+### Running the application
 
 Before running the app, you'll need an oauth2 client-id and client secret for a
 Discord app. The application can either load those from a
@@ -59,7 +61,7 @@ Discord app. The application can either load those from a
 plaintext files in a directory. In either case, they should be accessible at the
 paths `bbbg/discord-client-id` and `bbbg/discord-client-secret` respectively.
 
-### From the command line
+#### From the command line
 
 ``` shell-session
 $ clj -A:dev
@@ -69,7 +71,7 @@ nil
 user=> ;; Optionally, if you're using a directory with plaintext files for the discord client ID and client secret:
 user=> (bbbg.util.dev-secrets/set-backend! [:dir "/path/to/that/directory"])
 user=> (bbbg.core/run-dev)
-#<SystemMap>
+##<SystemMap>
 user=> (bbbg.db/migrate! (:db bbbg.core/system))
 11:57:26.536 [main] INFO  migratus.core - Starting migrations {  }
 11:57:26.538 [main] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Starting... {  }
@@ -82,14 +84,14 @@ nil
 This will run a web server for the application listening at
 <http://localhost:8888>
 
-### In Emacs, with [CIDER](https://docs.cider.mx/cider/index.html) + [direnv](https://github.com/wbolster/emacs-direnv)
+#### In Emacs, with [CIDER](https://docs.cider.mx/cider/index.html) + [direnv](https://github.com/wbolster/emacs-direnv)
 
 Open `//users/grfn/bbbg/src/bbbg/core.clj` in a buffer, then follow the
 instructions at the end of the file
 
-# Deployment
+## Deployment
 
-## With nix+terraform
+### With nix+terraform
 
 Deployment configuration is located in the `tf.nix` file, which is
 currently tightly coupled to my own infrastructure and AWS account but
@@ -111,7 +113,7 @@ The current deploy configuration includes:
 -   The DNS A record for `bbbg.gws.fyi` pointing at that ec2 instance,
     in the cloudflare zone for `gws.fyi`
 
-## Otherwise
+### Otherwise
 
 ¯\\\_(ツ)_/¯
 
