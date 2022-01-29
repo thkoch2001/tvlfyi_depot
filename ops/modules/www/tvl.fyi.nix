@@ -35,11 +35,11 @@
         }
 
         location = /blog {
-          return 302 /;
+          return 302 /#blog;
         }
 
         location = /blog/ {
-          return 302 /;
+          return 302 /#blog;
         }
       '';
     };
