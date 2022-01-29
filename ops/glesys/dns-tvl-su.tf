@@ -62,61 +62,11 @@ resource "glesys_dnsdomain_record" "tvl_su_wildcard" {
   data   = "whitby.tvl.su."
 }
 
-# # Google Domains mail forwarding configuration (no sending)
-resource "glesys_dnsdomain_record" "tvl_su_MX_aspmx" {
-  domain = glesys_dnsdomain.tvl_su.id
-  host   = "@"
-  type   = "MX"
-  data   = "1 aspmx.l.google.com."
-}
-
-resource "glesys_dnsdomain_record" "tvl_su_MX_alt1" {
-  domain = glesys_dnsdomain.tvl_su.id
-  host   = "@"
-  type   = "MX"
-  data   = "5 alt1.aspmx.l.google.com."
-}
-
-resource "glesys_dnsdomain_record" "tvl_su_MX_alt2" {
-  domain = glesys_dnsdomain.tvl_su.id
-  host   = "@"
-  type   = "MX"
-  data   = "5 alt2.aspmx.l.google.com."
-}
-
-resource "glesys_dnsdomain_record" "tvl_su_MX_alt3" {
-  domain = glesys_dnsdomain.tvl_su.id
-  host   = "@"
-  type   = "MX"
-  data   = "10 alt3.aspmx.l.google.com."
-}
-
-resource "glesys_dnsdomain_record" "tvl_su_MX_alt4" {
-  domain = glesys_dnsdomain.tvl_su.id
-  host   = "@"
-  type   = "MX"
-  data   = "10 alt4.aspmx.l.google.com."
-}
-
 resource "glesys_dnsdomain_record" "tvl_su_TXT_google_site" {
   domain = glesys_dnsdomain.tvl_su.id
   host   = "@"
   type   = "TXT"
   data   = "google-site-verification=3ksTBzFK3lZlzD3ddBfpaHs9qasfAiYBmvbW2T_ejH4"
-}
-
-resource "glesys_dnsdomain_record" "tvl_su_TXT_google_spf" {
-  domain = glesys_dnsdomain.tvl_su.id
-  host   = "@"
-  type   = "TXT"
-  data   = "v=spf1 include:_spf.google.com ~all"
-}
-
-resource "glesys_dnsdomain_record" "tvl_su_TXT_google_dkim" {
-  domain = glesys_dnsdomain.tvl_su.id
-  host   = "google._domainkey"
-  type   = "TXT"
-  data   = "v=DKIM1; k=rsa; p=MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAlqCbnGa8oPwrudJK60l6MJj3NBnwj8wAPXNGtYy2SXrOBi7FT+ySwW7ATpfv6Xq9zGDUWJsENPUlFmvDiUs7Qi4scnNvSO1L+sDseB9/q1m3gMFVnTuieDO/T+KKkg0+uYgMM7YX5PahsAAJJ+EMb/r4afl3tcBMPR64VveKQ0hiSHA4zIYPsB9FB+b8S5C46uyY0r6WR7IzGjq2Gzb1do0kxvaKItTITWLSImcUu5ZZuXOUKJb441frVBWur5lXaYuedkxb1IRTTK0V/mBODE1D7k73MxGrqlzaMPdCqz+c3hRE18WVUkBTYjANVXDrs3yzBBVxaIAeu++vkO6BvQIDAQAB"
 }
 
 # Yandex 360 setup
@@ -126,4 +76,33 @@ resource "glesys_dnsdomain_record" "tvl_su_TXT_yandex" {
   host   = "@"
   type   = "TXT"
   data   = "yandex-verification: b99c43b7838949dc"
+}
+
+resource "glesys_dnsdomain_record" "tvl_su_MX_yandex" {
+  domain = glesys_dnsdomain.tvl_su.id
+  host   = "@"
+  type   = "MX"
+  data   = "10 mx.yandex.net."
+}
+
+resource "glesys_dnsdomain_record" "tvl_su_TXT_yandex_spf" {
+  domain = glesys_dnsdomain.tvl_su.id
+  host   = "@"
+  type   = "TXT"
+  data   = "v=spf1 redirect=_spf.yandex.net"
+
+}
+
+resource "glesys_dnsdomain_record" "tvl_su_TXT_yandex_dkim" {
+  domain = glesys_dnsdomain.tvl_su.id
+  host   = "mail._domainkey"
+  type   = "TXT"
+  data   = "v=DKIM1; k=rsa; t=s; p=MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQDaRdWF8BtCHlTTQN8O+E5Qn27FVIpUEAdk1uq2vdIKh1Un/3NfdWtxStcS1Mf0iEprt1Fb4zgWOkDlPi+hH/UZqiC9QNeNqEBGMB9kgJyfsUt6cDCIVGvn8PT9JcZW1jxSziOj8nUWB4noqbaVcQNqNbwtaHPm3aifwKwScxVO7wIDAQAB"
+}
+
+resource "glesys_dnsdomain_record" "tvl_su_CNAME_yandex_mail" {
+  domain = glesys_dnsdomain.tvl_su.id
+  host   = "mail"
+  type   = "CNAME"
+  data   = "domain.mail.yandex.net."
 }
