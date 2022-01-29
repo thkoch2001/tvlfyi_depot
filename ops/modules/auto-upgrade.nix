@@ -1,16 +1,16 @@
 # Defines a service for automatically and periodically calling depot's
 # rebuild-system on a NixOS machine.
 #
-# Deploys can be stopped in emergency situations by creating an empty
-# file called `stop` in the state directory of the auto-deploy service
-# (typically /var/lib/auto-deploy).
+# Upgrades can be stopped in emergency situations by creating an empty file
+# called `stop` in the state directory of the auto-upgrade service
+# (typically /var/lib/auto-upgrade).
 { depot, config, lib, pkgs, ... }:
 
 let
-  cfg = config.services.depot.auto-deploy;
+  cfg = config.services.depot.auto-upgrade;
   description = "to automatically rebuild the current system's NixOS config from the latest checkout of depot";
 
-  deployScript = pkgs.writeShellScript "auto-deploy" ''
+  upgradeScript = pkgs.writeShellScript "auto-upgrade" ''
     set -ueo pipefail
 
     if [[ -f $STATE_DIRECTORY/stop ]]; then
@@ -23,7 +23,7 @@ let
       ${cfg.git-remote}
   '';
 in {
-  options.services.depot.auto-deploy = {
+  options.services.depot.auto-upgrade = {
     enable = lib.mkEnableOption description;
 
     git-remote = lib.mkOption {
@@ -45,9 +45,9 @@ in {
   };
 
   config = lib.mkIf cfg.enable {
-    systemd.services.auto-deploy = {
+    systemd.services.auto-upgrade = {
       inherit description;
-      script = "${deployScript}";
+      script = "${upgradeScript}";
       path = with pkgs; [
         bash
         git
@@ -63,11 +63,11 @@ in {
 
       serviceConfig = {
         Type = "oneshot";
-        StateDirectory = "auto-deploy";
+        StateDirectory = "auto-upgrade";
       };
     };
 
-    systemd.timers.auto-deploy = {
+    systemd.timers.auto-upgrade = {
       inherit description;
       wantedBy = [ "multi-user.target" ];
 

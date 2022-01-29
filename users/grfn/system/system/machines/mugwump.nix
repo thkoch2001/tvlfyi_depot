@@ -86,7 +86,7 @@ with lib;
     };
   };
 
-  services.depot.auto-deploy = {
+  services.depot.auto-upgrade = {
     enable = true;
     interval = "1d";
   };
