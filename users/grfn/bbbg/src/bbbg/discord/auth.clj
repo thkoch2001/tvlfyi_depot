@@ -2,6 +2,7 @@
   (:require
    [bbbg.discord :as discord]
    [bbbg.util.core :as u]
+   [bbbg.util.dev-secrets :refer [secret]]
    clj-time.coerce
    [clojure.spec.alpha :as s]
    [config.core :refer [env]]
@@ -33,8 +34,8 @@
 (defn dev-config []
   (s/assert
    ::config
-   {::client-id (u/pass "bbbg/discord-client-id")
-    ::client-secret (u/pass "bbbg/discord-client-secret")
+   {::client-id (secret "bbbg/discord-client-id")
+    ::client-secret (secret "bbbg/discord-client-secret")
     ::bbbg-guild-id "841295283564052510"
     ;; TODO this might not be the right id
     ::bbbg-organizer-role "874846495873040395"}))

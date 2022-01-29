@@ -1,8 +1,9 @@
 (ns bbbg.discord
   (:refer-clojure :exclude [get])
-  (:require [clj-http.client :as http]
-            [clojure.string :as str]
-            [bbbg.util.core :as u]))
+  (:require
+   [bbbg.util.dev-secrets :refer [secret]]
+   [clj-http.client :as http]
+   [clojure.string :as str]))
 
 (def base-uri "https://discord.com/api")
 
@@ -33,7 +34,7 @@
   (get token (str "/users/@me/guilds/" guild-id "/member")))
 
 (comment
-  (def token {:token (u/pass "bbbg/test-token")})
+  (def token {:token (secret "bbbg/test-token")})
   (me token)
   (guilds token)
   (guild-member token "841295283564052510")
