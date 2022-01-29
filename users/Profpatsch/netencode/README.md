@@ -73,7 +73,11 @@ A tag (`<`) gives a value a name. The tag is UTF-8 encoded, starting with its le
 ### records (products/records), also maps
 
 A record (`{`) is a concatenation of tags (`<`). It needs to be closed with `}`.
-If tag names repeat the later ones should be ignored. Ordering does not matter.
+
+If tag names repeat the *earlier* ones should be ignored.
+Using the last tag corresponds with the way most languages handle converting a list of tuples to Maps, by using a for-loop and Map.insert without checking the contents first. Otherwise you’d have to revert the list first or remember which keys you already inserted.
+
+Ordering of tags in a record does not matter.
 
 Similar to text, records start with the length of their *whole encoded content*, in bytes. This makes it possible to treat their contents as opaque bytestrings.
 
