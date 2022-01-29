@@ -32,6 +32,20 @@
 (defpackage :mblog
   (:use
    :common-lisp
-   :uiop
+   :klatre
+   :who
+   :maildir
    :note)
+  (:export :build-mblog)
+  (:import-from :local-time :universal-to-timestamp)
+  (:import-from :sclf :pathname-as-directory)
+  (:shadowing-import-from :common-lisp :list))
+
+(defpackage :cli
+  (:use
+   :common-lisp
+   :uiop
+   :note
+   :mblog)
+  (:import-from :alexandria :starts-with)
   (:export :main))
