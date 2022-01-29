@@ -16,6 +16,24 @@
       "message": "Needs no config in nginx?",
       "revId": "f357283f79904af4c28a56798d32bf1a06ff5b42",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "31e4dc41_9f57d4b8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2022-01-29T22:58:08Z",
+      "side": 1,
+      "message": "nope, works on mugwump with exactly this config perfectly fine.",
+      "parentUuid": "69663a2b_eb8d036e",
+      "revId": "f357283f79904af4c28a56798d32bf1a06ff5b42",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
