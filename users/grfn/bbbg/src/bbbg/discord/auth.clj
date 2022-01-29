@@ -37,8 +37,7 @@
    {::client-id (secret "bbbg/discord-client-id")
     ::client-secret (secret "bbbg/discord-client-secret")
     ::bbbg-guild-id "841295283564052510"
-    ;; TODO this might not be the right id
-    ::bbbg-organizer-role "874846495873040395"}))
+    ::bbbg-organizer-role "908428000817725470"}))
 
 ;;;
 
