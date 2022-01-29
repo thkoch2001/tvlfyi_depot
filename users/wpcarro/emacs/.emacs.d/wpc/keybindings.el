@@ -399,5 +399,15 @@
 ;; Install KBDs like <SPC>jb to search through my monorepo.
 (bookmark-install-kbds)
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; refine
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(general-define-key
+ :keymaps '(refine-mode-map)
+ :states '(normal)
+ "K" #'refine-delete
+ "q" #'kill-this-buffer)
+
 (provide 'keybindings)
 ;;; keybindings.el ends here
