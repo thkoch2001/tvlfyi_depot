@@ -88,6 +88,7 @@ let
     ];
   };
 
-in postmodern // {
+in
+postmodern // {
   inherit s-sql cl-postgres;
 }

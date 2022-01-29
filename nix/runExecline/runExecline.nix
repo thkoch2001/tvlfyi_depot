@@ -35,32 +35,32 @@
 
 let
   bins = getBins pkgs.execline [
-           "execlineb"
-           { use = "if"; as = "execlineIf"; }
-           "redirfd"
-           "importas"
-           "exec"
-         ]
-      // getBins pkgs.s6-portable-utils [
-           "s6-cat"
-           "s6-grep"
-           "s6-touch"
-           "s6-test"
-           "s6-chmod"
-         ];
+    "execlineb"
+    { use = "if"; as = "execlineIf"; }
+    "redirfd"
+    "importas"
+    "exec"
+  ]
+  // getBins pkgs.s6-portable-utils [
+    "s6-cat"
+    "s6-grep"
+    "s6-touch"
+    "s6-test"
+    "s6-chmod"
+  ];
 
 in
 
 # TODO: move name into the attrset
 name:
 {
-# a string to pass as stdin to the execline script
-stdin ? ""
-# a program wrapping the acutal execline invocation;
-# should be in Bernstein-chaining style
+  # a string to pass as stdin to the execline script
+  stdin ? ""
+  # a program wrapping the acutal execline invocation;
+  # should be in Bernstein-chaining style
 , builderWrapper ? bins.exec
-# additional arguments to pass to the derivation
-, derivationArgs ? {}
+  # additional arguments to pass to the derivation
+, derivationArgs ? { }
 }:
 # the execline script as a nested list of string,
 # representing the blocks;
@@ -85,38 +85,39 @@ derivation (derivationArgs // {
   # so we give it a long & unique name
   _runExeclineScript =
     let
-    in escapeExecline execline;
+    in
+    escapeExecline execline;
   _runExeclineStdin = stdin;
   passAsFile = [
     "_runExeclineScript"
     "_runExeclineStdin"
-  ] ++ derivationArgs.passAsFile or [];
+  ] ++ derivationArgs.passAsFile or [ ];
 
   # the default, exec acts as identity executable
   builder = builderWrapper;
 
   args = [
-    bins.importas            # import script file as $script
-    "-ui"                    # drop the envvar afterwards
-    "script"                 # substitution name
+    bins.importas # import script file as $script
+    "-ui" # drop the envvar afterwards
+    "script" # substitution name
     "_runExeclineScriptPath" # passed script file
 
-    bins.importas            # do the same for $stdin
+    bins.importas # do the same for $stdin
     "-ui"
     "stdin"
     "_runExeclineStdinPath"
 
-    bins.redirfd             # now we
-    "-r"                     # read the file
-    "0"                      # into the stdin of execlineb
-    "$stdin"                 # that was given via stdin
+    bins.redirfd # now we
+    "-r" # read the file
+    "0" # into the stdin of execlineb
+    "$stdin" # that was given via stdin
 
-    bins.execlineb           # the actual invocation
+    bins.execlineb # the actual invocation
     # TODO(Profpatsch): depending on the use-case, -S0 might not be enough
     # in all use-cases, then a wrapper for execlineb arguments
     # should be added (-P, -S, -s).
-    "-S0"                    # set $@ inside the execline script
-    "-W"                     # die on syntax error
-    "$script"                # substituted by importas
+    "-S0" # set $@ inside the execline script
+    "-W" # die on syntax error
+    "$script" # substituted by importas
   ];
 })

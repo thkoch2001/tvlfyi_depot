@@ -21,4 +21,5 @@ let
   };
 
   pkgs = pkgs_ // (packageOverrides pkgs_);
-in pkgs.a.b.name
+in
+pkgs.a.b.name

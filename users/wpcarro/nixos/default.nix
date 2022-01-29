@@ -1,7 +1,8 @@
 { depot, pkgs, ... }:
 
 let systemFor = sys: (depot.ops.nixos.nixosFor sys).system;
-in {
+in
+{
   marcusSystem = systemFor depot.users.wpcarro.nixos.marcus;
   deploy-diogenes = pkgs.writeShellScriptBin "deploy-diogenes" ''
     set -euo pipefail

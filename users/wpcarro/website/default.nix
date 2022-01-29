@@ -8,11 +8,11 @@ let
 
   globalVars = {
     inherit domain;
-    homepage  = "https://${domain}/";
-    blog      = "https://${domain}/blog";
-    habits    = "https://${domain}/habits";
-    github    = "https://github.com/wpcarro";
-    linkedin  = "https://linkedin.com/in/williampatrickcarroll";
+    homepage = "https://${domain}/";
+    blog = "https://${domain}/blog";
+    habits = "https://${domain}/habits";
+    github = "https://github.com/wpcarro";
+    linkedin = "https://linkedin.com/in/williampatrickcarroll";
     depotWork = "https://cs.tvl.fyi/depot/-/blob/users/wpcarro";
   };
 
@@ -23,10 +23,11 @@ let
   withBrand = contentHtml: renderTemplate ./fragments/template.html {
     inherit contentHtml;
   };
-in {
+in
+{
   inherit domain renderTemplate withBrand;
 
-  root = pkgs.runCommandNoCC "wpcarro.dev" {} ''
+  root = pkgs.runCommandNoCC "wpcarro.dev" { } ''
     mkdir -p $out
 
     # /

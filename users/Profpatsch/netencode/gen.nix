@@ -27,7 +27,7 @@ let
   concatStrings = builtins.concatStringsSep "";
 
   record = lokv: netstring "{" "}"
-    (concatStrings (map ({key, val}: tag key val) lokv));
+    (concatStrings (map ({ key, val }: tag key val) lokv));
 
   list = l: netstring "[" "]" (concatStrings l);
 
@@ -41,15 +41,17 @@ let
         if attrs.type or "" == "derivation" then text "${attrs}"
         else
           record (lib.mapAttrsToList
-          (k: v: {
-            key = k;
-            val = dwim v;
-          }) attrs);
+            (k: v: {
+              key = k;
+              val = dwim v;
+            })
+            attrs);
       "list" = l: list (map dwim l);
     };
     in match.${builtins.typeOf val} val;
 
-in {
+in
+{
   inherit
     unit
     n1

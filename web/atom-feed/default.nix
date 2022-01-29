@@ -90,7 +90,7 @@ let
 
   # Feed generation functions:
 
-  renderEpoch = epoch: removeSuffix "\n" (readFile (runCommandNoCC "date-${toString epoch}" {} ''
+  renderEpoch = epoch: removeSuffix "\n" (readFile (runCommandNoCC "date-${toString epoch}" { } ''
     date --date='@${toString epoch}' --utc --iso-8601='seconds' > $out
   ''));
 
@@ -147,6 +147,7 @@ let
       ${concatStrings (map renderEntry (sortEntries f.entries))}
     </feed>
   '');
-in {
+in
+{
   inherit entry feed renderFeed renderEpoch;
 }

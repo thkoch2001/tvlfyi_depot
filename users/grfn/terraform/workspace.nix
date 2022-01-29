@@ -21,13 +21,15 @@ let
   ]));
 
   plugins_tf = {
-    terraform.required_providers = (builtins.listToAttrs (map (p: {
-      name = lib.last (lib.splitString "/" p.provider-source-address);
-      value = {
-        source = p.provider-source-address;
-        version = p.version;
-      };
-    }) (allPlugins pkgs.terraform.plugins)));
+    terraform.required_providers = (builtins.listToAttrs (map
+      (p: {
+        name = lib.last (lib.splitString "/" p.provider-source-address);
+        value = {
+          source = p.provider-source-address;
+          version = p.version;
+        };
+      })
+      (allPlugins pkgs.terraform.plugins)));
   };
 
 
@@ -36,7 +38,7 @@ let
     plugins = plugins_tf;
   };
 
-  module = runCommandNoCC "module" {} ''
+  module = runCommandNoCC "module" { } ''
     mkdir $out
     ${lib.concatStrings (lib.mapAttrsToList (k: config_tf:
       (let
@@ -70,7 +72,7 @@ let
   '';
 
   # TODO: import (-config)
-  tfcmds = runCommandNoCC "${name}-tfcmds" {} ''
+  tfcmds = runCommandNoCC "${name}-tfcmds" { } ''
     mkdir -p $out/bin
     ln -s ${init} $out/bin/init
     ln -s ${tfcmd} $out/bin/validate
@@ -79,7 +81,8 @@ let
     ln -s ${tfcmd} $out/bin/destroy
   '';
 
-in {
+in
+{
   inherit name module;
   terraform = tf;
   cmds = tfcmds;
@@ -92,7 +95,7 @@ in {
   #   destroy = depot.nix.nixRunWrapper "destroy" tfcmds;
   # };
 
-  test = runCommandNoCC "${name}-test" {} ''
+  test = runCommandNoCC "${name}-test" { } ''
     set -e
     export TF_STATE_ROOT=$(pwd)
     ${tfcmds}/bin/init

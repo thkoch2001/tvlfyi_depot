@@ -28,14 +28,14 @@ self: super: {
       notmuch = super.notmuch.emacs;
 
       # Build EXWM with the depot sources instead.
-      exwm = esuper.exwm.overrideAttrs(_: {
+      exwm = esuper.exwm.overrideAttrs (_: {
         src = depot.path.origSrc + "/third_party/exwm";
       });
     })
   );
 
   # dottime support for notmuch
-  notmuch = super.notmuch.overrideAttrs(old: {
+  notmuch = super.notmuch.overrideAttrs (old: {
     passthru = old.passthru // {
       patches = old.patches ++ [ ./patches/notmuch-dottime.patch ];
     };
@@ -46,7 +46,7 @@ self: super: {
   nix-serve = super.nix-serve.override { nix = super.nix_2_3; };
 
   # Avoid builds of mkShell derivations in CI.
-  mkShell = super.lib.makeOverridable(args: (super.mkShell args) // {
+  mkShell = super.lib.makeOverridable (args: (super.mkShell args) // {
     meta.ci.skip = true;
   });
 }

@@ -7,7 +7,8 @@
 let
   inherit (pkgs) fetchFromGitHub;
   inherit (pkgs.python3Packages) buildPythonPackage cryptography;
-in buildPythonPackage (lib.fix (self: {
+in
+buildPythonPackage (lib.fix (self: {
   pname = "python-broadlink";
   version = "0.13.2";
   src = ./.;

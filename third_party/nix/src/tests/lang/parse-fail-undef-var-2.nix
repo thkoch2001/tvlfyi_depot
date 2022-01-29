@@ -1,7 +1,8 @@
-let {
+let
+{
 
-  f = {x, y : ["baz" "bar" z "bat"]}: x + y;
+f = { x, y : ["baz" "bar" z "bat"] }: x + y;
 
-  body = f {x = "foo"; y = "bar";};
+body = f { x = "foo"; y = "bar"; };
 
 }

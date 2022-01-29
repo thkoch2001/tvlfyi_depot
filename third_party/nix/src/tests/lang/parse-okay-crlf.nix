@@ -1,12 +1,12 @@
 rec {
 
   /* Dit is
-  een test. */
+    een test. */
 
-  x = 
-  # Dit is een test.y;
-  
-  y = 123;
+  x =
+    # Dit is een test.y;
+
+    y = 123;
 
   # CR or CR/LF (but not explicit \r's) in strings should be
   # translated to LF.
@@ -14,4 +14,5 @@ rec {
   string
   test\r";
 
-  z = 456;}
+  z = 456;
+}

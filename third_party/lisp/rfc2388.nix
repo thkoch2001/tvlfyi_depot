@@ -2,7 +2,8 @@
 { depot, pkgs, ... }:
 
 let src = with pkgs; srcOnly lispPackages.rfc2388;
-in depot.nix.buildLisp.library {
+in
+depot.nix.buildLisp.library {
   name = "rfc2388";
 
   srcs = map (f: src + ("/" + f)) [

@@ -9,7 +9,8 @@
 { depot, pkgs, ... }:
 
 let staticHash = depot.web.static.drvHash;
-in {
+in
+{
   imports = [
     ./base.nix
   ];

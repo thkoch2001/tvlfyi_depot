@@ -1,7 +1,8 @@
 # This file configures camden.tazj.in, my homeserver.
 { depot, pkgs, lib, ... }:
 
-config: let
+config:
+let
   nginxRedirect = { from, to, acmeHost }: {
     serverName = from;
     useACMEHost = acmeHost;
@@ -9,7 +10,8 @@ config: let
 
     extraConfig = "return 301 https://${to}$request_uri;";
   };
-in lib.fix(self: {
+in
+lib.fix (self: {
   # Disable the current ACME module and use the old one from 19.09
   # instead, until the various regressions have been sorted out.
   # TODO(tazjin): Remove this once the new ACME module works.
@@ -20,7 +22,8 @@ in lib.fix(self: {
       url = "https://github.com/NixOS/nixpkgs-channels/archive/75f4ba05c63be3f147bcc2f7bd4ba1f029cedcb1.tar.gz";
       sha256 = "157c64220lf825ll4c0cxsdwg7cxqdx4z559fdp7kpz0g6p8fhhr";
     };
-    in [
+    in
+    [
       "${depot.path}/ops/modules/quassel.nix"
       "${depot.path}/ops/modules/smtprelay.nix"
       "${oldChannel}/nixos/modules/security/acme.nix"
@@ -37,8 +40,14 @@ in lib.fix(self: {
   boot = {
     initrd = {
       availableKernelModules = [
-        "ahci" "xhci_pci" "usbhid" "usb_storage" "sd_mod" "sdhci_pci"
-        "rtsx_usb_sdmmc" "r8169"
+        "ahci"
+        "xhci_pci"
+        "usbhid"
+        "usb_storage"
+        "sd_mod"
+        "sdhci_pci"
+        "rtsx_usb_sdmmc"
+        "r8169"
       ];
 
       kernelModules = [ "dm-snapshot" ];
@@ -152,7 +161,7 @@ in lib.fix(self: {
     };
 
     # Set up a user & group for general git shenanigans
-    groups.git = {};
+    groups.git = { };
     users.git = {
       group = "git";
       isSystemUser = true;
@@ -220,9 +229,9 @@ in lib.fix(self: {
 
   # Forward logs to Google Cloud Platform
   services.journaldriver = {
-    enable                 = true;
-    logStream              = "home";
-    googleCloudProject     = "tazjins-infrastructure";
+    enable = true;
+    logStream = "home";
+    googleCloudProject = "tazjins-infrastructure";
     applicationCredentials = "/etc/gcp/key.json";
   };
 

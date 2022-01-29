@@ -1,7 +1,8 @@
 { depot, pkgs, ... }:
 
 let src = with pkgs; srcOnly lispPackages.marshal;
-in depot.nix.buildLisp.library {
+in
+depot.nix.buildLisp.library {
   name = "marshal";
   srcs = map (f: src + ("/" + f)) [
     "package.lisp"

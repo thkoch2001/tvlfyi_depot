@@ -23,7 +23,7 @@ let
   });
 
   allEntries = (with depot.users.tazjin.blog; map (blog.toFeedEntry config) posts)
-             ++ (map pageEntryToEntry pageEntries);
+    ++ (map pageEntryToEntry pageEntries);
 
   feed = {
     id = "https://tazj.in/";
@@ -39,4 +39,5 @@ let
 
     entries = allEntries;
   };
-in writeText "feed.atom" (atom-feed.renderFeed feed)
+in
+writeText "feed.atom" (atom-feed.renderFeed feed)

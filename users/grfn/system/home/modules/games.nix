@@ -13,14 +13,14 @@ let
     enableFPS = true;
   });
 
-  init = runCommand "init.txt" {} ''
+  init = runCommand "init.txt" { } ''
     substitute "${df-orig}/data/init/init.txt" $out \
       --replace "[INTRO:YES]" "[INTRO:NO]" \
       --replace "[VOLUME:255]" "[VOLUME:0]" \
       --replace "[FPS:NO]" "[FPS:YES]"
   '';
 
-  d_init = runCommand "d_init.txt" {} ''
+  d_init = runCommand "d_init.txt" { } ''
     substitute "${df-orig}/data/init/d_init.txt" $out \
       --replace "[AUTOSAVE:NONE]" "[AUTOSAVE:SEASONAL]" \
       --replace "[AUTOSAVE_PAUSE:NO]" "[AUTOSAVE_PAUSE:YES]" \
@@ -30,7 +30,7 @@ let
       --replace "[SHOW_FLOW_AMOUNTS:NO]" "[SHOW_FLOW_AMOUNTS:YES]"
   '';
 
-  df = runCommand "dwarf-fortress" {} ''
+  df = runCommand "dwarf-fortress" { } ''
     mkdir -p $out/bin
     sed \
       -e '4icp -f ${init} "$DF_DIR/data/init/init.txt"' \
@@ -43,7 +43,8 @@ let
     chmod +x $out/bin/dwarf-fortress
   '';
 
-in mkMerge [
+in
+mkMerge [
   {
     home.packages = [
       crawl

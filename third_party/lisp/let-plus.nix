@@ -1,7 +1,8 @@
 { depot, pkgs, ... }:
 
 let src = with pkgs; srcOnly lispPackages.let-plus;
-in depot.nix.buildLisp.library {
+in
+depot.nix.buildLisp.library {
   name = "let-plus";
   deps = [
     depot.third_party.lisp.alexandria

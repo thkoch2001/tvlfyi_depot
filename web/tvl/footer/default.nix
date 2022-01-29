@@ -15,7 +15,7 @@ args: ''
     <a class="uncoloured-link" href="https://todo.tvl.fyi/">todos</a>
     |
     <a class="uncoloured-link" href="https://atward.tvl.fyi/">search</a>
-    '' + lib.optionalString (args ? extraFooter) args.extraFooter + ''
+'' + lib.optionalString (args ? extraFooter) args.extraFooter + ''
   </p>
   <p class="lod">ಠ_ಠ</p>
 ''

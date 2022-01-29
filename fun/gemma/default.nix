@@ -33,7 +33,8 @@ let
       cp ${frontend} $out/index.html
     ''}/")
   '';
-in depot.nix.buildLisp.program {
+in
+depot.nix.buildLisp.program {
   name = "gemma";
 
   deps = with depot.third_party.lisp; [

@@ -10,4 +10,5 @@ let
       label = ":broom: lint secrets";
     }
   ];
-in pkgs.writeText "pipeline.yaml" (toJSON pipeline)
+in
+pkgs.writeText "pipeline.yaml" (toJSON pipeline)

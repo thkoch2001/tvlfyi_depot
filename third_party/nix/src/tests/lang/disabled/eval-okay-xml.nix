@@ -10,12 +10,12 @@ rec {
 
   c = "foo" + "bar";
 
-  f = {z, x, y}: if y then x else z;
+  f = { z, x, y }: if y then x else z;
 
   id = x: x;
 
-  at = args@{x, y, z}: x;
+  at = args@{ x, y, z }: x;
 
-  ellipsis = {x, y, z, ...}: x;
+  ellipsis = { x, y, z, ... }: x;
 
 }

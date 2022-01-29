@@ -19,7 +19,8 @@ let
     reverse_proxy = true
     set_xauthrequest = true
   '';
-in {
+in
+{
   options.services.depot.oauth2_proxy = {
     enable = lib.mkEnableOption description;
 

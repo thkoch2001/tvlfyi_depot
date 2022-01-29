@@ -1,6 +1,7 @@
 { depot, pkgs, lib, ... }:
 
-{ # content of the <title> tag
+{
+  # content of the <title> tag
   title
   # main part of the page, usually wrapped with <main>
 , content
@@ -17,7 +18,8 @@ let
   inherit (depot.tools) cheddar;
 in
 
-runCommandNoCC "${lib.strings.sanitizeDerivationName title}-index.html" {
+runCommandNoCC "${lib.strings.sanitizeDerivationName title}-index.html"
+{
   headerPart = ''
     <!DOCTYPE html>
     <head>
@@ -36,11 +38,11 @@ runCommandNoCC "${lib.strings.sanitizeDerivationName title}-index.html" {
   inherit content;
 
   footerPart = ''
-    <hr>
-    <footer>
-      ${depot.web.tvl.footer args}
-    </footer>
-  </body>
+      <hr>
+      <footer>
+        ${depot.web.tvl.footer args}
+      </footer>
+    </body>
   '';
 
   passAsFile = [ "headerPart" "content" "footerPart" ];

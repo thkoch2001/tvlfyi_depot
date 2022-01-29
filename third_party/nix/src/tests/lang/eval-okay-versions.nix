@@ -10,9 +10,11 @@ let
   gt = 1;
 
   versionTest = v1: v2: expected:
-    let d1 = builtins.compareVersions v1 v2;
-        d2 = builtins.compareVersions v2 v1;
-    in d1 == builtins.sub 0 d2 && d1 == expected;
+    let
+      d1 = builtins.compareVersions v1 v2;
+      d2 = builtins.compareVersions v2 v1;
+    in
+    d1 == builtins.sub 0 d2 && d1 == expected;
 
   tests = [
     ((builtins.parseDrvName name1).name == "hello")
@@ -37,4 +39,5 @@ let
     (versionTest "2.3pre1" "2.3q" lt)
   ];
 
-in (import ./lib.nix).and tests
+in
+(import ./lib.nix).and tests

@@ -3,7 +3,8 @@
 let
   bbbg = depot.users.grfn.bbbg;
   cfg = config.services.bbbg;
-in {
+in
+{
   options = with lib; {
     services.bbbg = {
       enable = mkEnableOption "BBBG Server";
@@ -81,9 +82,9 @@ in {
         description = "Run database migrations for BBBG";
         wantedBy = [ "bbbg-server.service" ];
         after = ([ "network.target" ]
-                 ++ (if cfg.database.enable
-                     then ["postgresql.service"]
-                     else []));
+          ++ (if cfg.database.enable
+        then [ "postgresql.service" ]
+        else [ ]));
 
         serviceConfig = {
           Type = "oneshot";

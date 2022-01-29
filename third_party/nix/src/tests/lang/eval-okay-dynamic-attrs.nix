@@ -2,7 +2,8 @@ let
   aString = "a";
 
   bString = "b";
-in {
+in
+{
   hasAttrs = { a.b = null; } ? "${aString}".b;
 
   selectAttrs = { a.b = true; }.a."${bString}";

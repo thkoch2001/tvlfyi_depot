@@ -21,7 +21,7 @@ let
       (attrValues (mapAttrs (key: value: "-${key} \"${toString value}\"") flags));
 
   # Escapes a unit name for use in systemd
-  systemdEscape = name: removeSuffix "\n" (readFile (runCommandNoCC "unit-name" {} ''
+  systemdEscape = name: removeSuffix "\n" (readFile (runCommandNoCC "unit-name" { } ''
     ${pkgs.systemd}/bin/systemd-escape '${name}' >> $out
   ''));
 
@@ -42,7 +42,8 @@ let
       };
     };
   };
-in {
+in
+{
   options.services.depot.clbot = {
     enable = mkEnableOption description;
 
@@ -68,7 +69,7 @@ in {
     # (notably the SSH private key) readable by this user outside of
     # the module.
     users = {
-      groups.clbot = {};
+      groups.clbot = { };
 
       users.clbot = {
         group = "clbot";

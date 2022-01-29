@@ -27,8 +27,9 @@ let
   prepareArgs = args:
     concatStringsSep " "
       (attrValues (mapAttrs (key: value: "-${key} \"${toString value}\"")
-                            (args // overrideArgs)));
-in {
+        (args // overrideArgs)));
+in
+{
   options.services.depot.smtprelay = {
     enable = mkEnableOption description;
 

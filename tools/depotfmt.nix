@@ -18,6 +18,11 @@ let
     [formatter.tf]
     command = "${terraformat}"
     includes = [ "*.tf" ]
+
+    [formatter.nix]
+    command = "${pkgs.nixpkgs-fmt}/bin/nixpkgs-fmt"
+    includes = [ "*.nix" ]
+    excludes = [ "third_party/nix/tests/*" ]
   '';
 
   # helper tool for formatting the depot interactively
@@ -34,7 +39,8 @@ let
       --config-file ${config} \
       --tree-root .
   '';
-in depotfmt.overrideAttrs(_: {
+in
+depotfmt.overrideAttrs (_: {
   passthru.meta.ci.extraSteps.check = {
     label = "depot formatting check";
     command = check;

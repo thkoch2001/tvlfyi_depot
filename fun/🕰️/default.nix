@@ -38,6 +38,7 @@ let
       "ecl" # refuses to create non-ASCII paths even on POSIX…
     ];
   };
-in bin // {
+in
+bin // {
   inherit lib;
 }

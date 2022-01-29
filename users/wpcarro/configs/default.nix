@@ -3,7 +3,8 @@
 let
   inherit (pkgs) writeShellScript;
   inherit (pkgs.lib.strings) makeBinPath;
-in {
+in
+{
   install = writeShellScript "install-configs" ''
     cd "$WPCARRO/configs" && ${pkgs.stow}/bin/stow --target="$HOME" .
   '';

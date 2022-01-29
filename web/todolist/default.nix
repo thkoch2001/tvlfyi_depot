@@ -39,7 +39,7 @@ let
     user = string;
   };
 
-  allTodos = fromJSON (readFile (runCommandNoCC "depot-todos.json" {} ''
+  allTodos = fromJSON (readFile (runCommandNoCC "depot-todos.json" { } ''
     ${ripgrep}/bin/rg --json 'TODO\(\w+\):.*$' ${depot.path} | \
       ${jq}/bin/jq -s -f ${./extract-todos.jq} > $out
   ''));
@@ -58,22 +58,24 @@ let
   '');
 
   userParagraph = todos:
-  let user = (head todos).user;
-  in ''
-    <p>
-      <h3>
-        <a style="color:inherit; text-decoration: none;"
-           name="${user}"
-           href="#${user}">${user}</a>
-      </h3>
-      ${concatStringsSep "\n" (map todoElement todos)}
-    </p>
-    <hr>
-  '';
+    let user = (head todos).user;
+    in
+    ''
+      <p>
+        <h3>
+          <a style="color:inherit; text-decoration: none;"
+             name="${user}"
+             href="#${user}">${user}</a>
+        </h3>
+        ${concatStringsSep "\n" (map todoElement todos)}
+      </p>
+      <hr>
+    '';
 
   staticUrl = "https://static.tvl.fyi/${depot.web.static.drvHash}";
 
-in writeTextFile {
+in
+writeTextFile {
   name = "tvl-todos";
   destination = "/index.html";
   text = ''

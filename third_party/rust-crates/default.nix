@@ -4,17 +4,17 @@
 # Intended for manual updates, which keeps us honest with what we pull into our closure.
 
 let
-  buildRustCrate = attrs@{
-    edition ? "2018",
-    pname,
-    crateName ? pname,
-    ...
-  }: pkgs.buildRustCrate (attrs // {
-    inherit
-      crateName
-      edition
-      ;
-   });
+  buildRustCrate =
+    attrs@{ edition ? "2018"
+    , pname
+    , crateName ? pname
+    , ...
+    }: pkgs.buildRustCrate (attrs // {
+      inherit
+        crateName
+        edition
+        ;
+    });
 in
 
 rec {

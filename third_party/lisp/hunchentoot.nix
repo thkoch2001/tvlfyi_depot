@@ -1,5 +1,5 @@
 # Hunchentoot is a web framework for Common Lisp.
-{ depot, pkgs, ...}:
+{ depot, pkgs, ... }:
 
 let
   src = with pkgs; srcOnly lispPackages.hunchentoot;
@@ -15,7 +15,8 @@ let
       "url-rewrite.lisp"
     ];
   };
-in depot.nix.buildLisp.library {
+in
+depot.nix.buildLisp.library {
   name = "hunchentoot";
 
   deps = with depot.third_party.lisp; [

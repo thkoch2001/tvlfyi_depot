@@ -1,13 +1,14 @@
-let {
+let
+{
 
-  as = {
-    x = 123;
-    y = 456;
-  };
+as = {
+  x = 123;
+  y = 456;
+};
 
-  bs = {
-    x = 789;
-    inherit (as) x;
-  };
-  
+bs = {
+  x = 789;
+  inherit (as) x;
+};
+
 }

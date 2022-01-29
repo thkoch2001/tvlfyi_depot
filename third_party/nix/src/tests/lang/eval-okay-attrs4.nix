@@ -4,4 +4,5 @@ let
 
   bs = null;
 
-in [ (as ? x) (as ? y) (as ? x.y.z) (as ? x.y.z.a) (as ? x.y.a) (as ? a.b.c) (bs ? x) (bs ? x.y.z) ]
+in
+[ (as ? x) (as ? y) (as ? x.y.z) (as ? x.y.z.a) (as ? x.y.a) (as ? a.b.c) (bs ? x) (bs ? x.y.z) ]

@@ -9,7 +9,8 @@ let src = pkgs.applyPatches {
     ./0001-fix-definition-order-in-xml.lisp.patch
   ];
 };
-in depot.nix.buildLisp.library {
+in
+depot.nix.buildLisp.library {
   name = "s-xml";
 
   srcs = map (f: src + ("/src/" + f)) [

@@ -10,13 +10,16 @@
 # This file is the Nix derivation used to build release binaries for
 # several different architectures and operating systems.
 
-let pkgs = import ((import <nixpkgs> {}).fetchFromGitHub {
-  owner = "NixOS";
-  repo = "nixpkgs-channels";
-  rev = "541d9cce8af7a490fb9085305939569567cb58e6";
-  sha256 = "0jgz72hhzkd5vyq5v69vpljjlnf0lqaz7fh327bvb3cvmwbfxrja";
-}) {};
-in with pkgs; buildGoPackage rec {
+let pkgs = import
+  ((import <nixpkgs> { }).fetchFromGitHub {
+    owner = "NixOS";
+    repo = "nixpkgs-channels";
+    rev = "541d9cce8af7a490fb9085305939569567cb58e6";
+    sha256 = "0jgz72hhzkd5vyq5v69vpljjlnf0lqaz7fh327bvb3cvmwbfxrja";
+  })
+  { };
+in
+with pkgs; buildGoPackage rec {
   name = "kontemplate-${version}";
   version = "canon";
   src = ./.;
@@ -29,8 +32,8 @@ in with pkgs; buildGoPackage rec {
   # reason for setting the 'allowGoReference' flag.
   dontStrip = true; # Linker configuration handles stripping
   allowGoReference = true;
-  CGO_ENABLED="0";
-  GOCACHE="off";
+  CGO_ENABLED = "0";
+  GOCACHE = "off";
 
   # Configure release builds via the "build-matrix" script:
   buildInputs = [ git ];

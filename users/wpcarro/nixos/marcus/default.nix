@@ -13,7 +13,8 @@ let
     enableDaemon = false;
     monolithic = false;
   };
-in {
+in
+{
   imports = [
     (depot.path + "/users/wpcarro/nixos/marcus/hardware.nix")
     "${pkgs.home-manager.src}/nixos"

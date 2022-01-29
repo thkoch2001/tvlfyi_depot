@@ -21,7 +21,8 @@ let tex = texlive.combine {
     scheme-basic
     translator;
 };
-in stdenv.mkDerivation {
+in
+stdenv.mkDerivation {
   name = "nuug-bootstrapping-slides";
   src = ./.;
 

@@ -4,7 +4,8 @@
 
 let
   cfg = config.services.depot.sourcegraph;
-in {
+in
+{
   options.services.depot.sourcegraph = with lib; {
     enable = mkEnableOption "SourceGraph code search engine";
 
@@ -51,7 +52,8 @@ in {
       # Sourcegraph needs a higher nofile limit, it logs warnings
       # otherwise (unclear whether it actually affects the service).
       extraOptions = [
-        "--ulimit" "nofile=10000:10000"
+        "--ulimit"
+        "nofile=10000:10000"
       ];
     };
   };

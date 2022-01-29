@@ -7,7 +7,8 @@ let src = pkgs.fetchFromGitHub {
   rev = "052df578900dea59bf951e0a6749281fa73432e4";
   sha256 = "1i1s5g01aimfq6lndcl1pnw7ly5hdh0wmjp2dj9cjjwbkz9lnwcf";
 };
-in depot.nix.buildLisp.library {
+in
+depot.nix.buildLisp.library {
   name = "lisp-binary";
 
   deps = with depot.third_party.lisp; [

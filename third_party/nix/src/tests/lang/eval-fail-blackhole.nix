@@ -1,5 +1,6 @@
-let {
-  body = x;
-  x = y;
-  y = x;
+let
+{
+body = x;
+x = y;
+y = x;
 }

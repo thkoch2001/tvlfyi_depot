@@ -45,7 +45,8 @@ let
     # NixOS in $STATE_DIRECTORY
     (cd / && ${rebuild-system}/bin/rebuild-system)
   '';
-in {
+in
+{
   options.services.depot.auto-deploy = {
     enable = lib.mkEnableOption description;
 

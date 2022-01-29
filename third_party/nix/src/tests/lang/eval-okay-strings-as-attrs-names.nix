@@ -14,7 +14,8 @@ let
   # variable.
   "foo bar" = 1;
 
-in t1 == "test"
-   && t2 == "caseok"
-   && t3 == true
-   && t4 == ["key 1"]
+in
+t1 == "test"
+&& t2 == "caseok"
+&& t3 == true
+  && t4 == [ "key 1" ]

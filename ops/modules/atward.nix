@@ -3,7 +3,8 @@
 let
   cfg = config.services.depot.atward;
   description = "atward - (attempt to) cleverly route queries";
-in {
+in
+{
   options.services.depot.atward = {
     enable = lib.mkEnableOption description;
 

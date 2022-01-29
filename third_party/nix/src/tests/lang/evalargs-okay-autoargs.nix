@@ -11,5 +11,5 @@ in
 }:
 
 {
-  result = lib.concat [xyzzy xyzzy2 fb];
+  result = lib.concat [ xyzzy xyzzy2 fb ];
 }

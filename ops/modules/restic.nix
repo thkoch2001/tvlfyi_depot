@@ -14,7 +14,8 @@ let
     inherit default;
     type = lib.types.str;
   };
-in {
+in
+{
   options.services.depot.restic = {
     enable = lib.mkEnableOption description;
     bucketEndpoint = mkStringOption "objects.dc-sto1.glesys.net";

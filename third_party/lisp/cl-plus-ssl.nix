@@ -8,7 +8,8 @@ let src = pkgs.fetchgit {
   rev = "29081992f6d7b4e3aa2c5eeece4cd92b745071f4";
   hash = "sha256:16lyrixl98b7vy29dbbzkbq0xaz789350dajrr1gdny5i55rkjq0";
 };
-in buildLisp.library {
+in
+buildLisp.library {
   name = "cl-plus-ssl";
   deps = with depot.third_party.lisp; [
     alexandria
