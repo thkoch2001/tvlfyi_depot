@@ -34,4 +34,5 @@ in {
   "smtprelay.age" = default;
   "tf-glesys.age" = default;
   "tf-keycloak.age" = default;
+  "tvl-alerts-bot-telegram-token.age" = default;
 }
