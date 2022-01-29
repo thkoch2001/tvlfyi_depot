@@ -6,7 +6,7 @@ meetup](https://www.meetup.com/brooklyn-based-board-gaming/).
 
 ## Installing dependencies
 
-### With Nix + Docker (\"blessed way\")
+### With Nix + Docker ("blessed way")
 
 Prerequisites:
 
@@ -34,9 +34,9 @@ $ arion up -d
 
 ### Choose-your-own-adventure
 
-Note that the **authoritative** source for dev dependencies is the
-`shell.nix` file in this directory - those may diverge from what\'s
-written here, and if so follow those versions rather than these.
+Note that the **authoritative** source for dev dependencies is the `shell.nix`
+file in this directory - those may diverge from what's written here; if so
+follow those versions rather than these.
 
 -   Install the [clojure command-line
     tools](https://clojure.org/guides/getting_started), with openjdk 11
@@ -53,12 +53,11 @@ written here, and if so follow those versions rather than these.
 
 ## Running the application
 
-Before running the app, you\'ll need an oauth2 client-id and client
-secret for a Discord app. The application can either load those from a
+Before running the app, you'll need an oauth2 client-id and client secret for a
+Discord app. The application can either load those from a
 [pass](https://www.passwordstore.org/) password store, or read them from
-plaintext files in a directory. In either case, they should be
-accessible at the paths `bbbg/discord-client-id` and
-`bbbg/discord-client-secret` respectively.
+plaintext files in a directory. In either case, they should be accessible at the
+paths `bbbg/discord-client-id` and `bbbg/discord-client-secret` respectively.
 
 ### From the command line
 
@@ -96,8 +95,8 @@ Deployment configuration is located in the `tf.nix` file, which is
 currently tightly coupled to my own infrastructure and AWS account but
 could hypothetically be adjusted to be general-purpose.
 
-To deploy a new version of the application, after following \"installing
-dependencies\" above, run the following command in a context with ec2
+To deploy a new version of the application, after following "installing
+dependencies" above, run the following command in a context with ec2
 credentials available:
 
 ``` shell-session
@@ -114,14 +113,13 @@ The current deploy configuration includes:
 
 ## Otherwise
 
-¯\\~(ツ)~\_/¯
+¯\\\_(ツ)_/¯
 
-You\'ll need:
+You'll need:
 
--   An uberjar for bbbg; the canonical way of building that is
-    `nix-build
-     /path/to/depot -A users.grfn.bbbg.server-jar` but I\'m not sure how
-    that works outside of nix
+-   An uberjar for bbbg; the canonical way of building that is `nix-build
+    /path/to/depot -A users.grfn.bbbg.server-jar` but I\'m not sure how that
+    works outside of nix
 -   A postgresql database
 -   Environment variables telling the app how to connect to that
     database. See `config.systemd.services.bbbg-server.environment` in
