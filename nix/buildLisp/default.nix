@@ -303,6 +303,11 @@ let
         (let* ((bindir (concatenate 'string (sb-posix:getenv "out") "/bin"))
                (outpath (make-pathname :name "${name}"
                                        :directory bindir)))
+
+          ;; Tell UIOP that argv[0] will refer to running image, not the lisp impl
+          (when (find-package :uiop)
+            (eval `(setq ,(find-symbol "*IMAGE-DUMPED-P*" :uiop) :executable)))
+
           (save-lisp-and-die outpath
                              :executable t
                              :toplevel
@@ -422,7 +427,7 @@ let
                           ;; to handle argument parsing and such properly. Since
                           ;; this needs to work even when we're not using UIOP,
                           ;; we need to do some compile-time acrobatics.
-                          ,(when (find-package 'uiop)
+                          ,(when (find-package :uiop)
                             `(setf ,(find-symbol "*IMAGE-DUMPED-P*" :uiop) :executable))
                           ;; Run the actual application…
                           (${main})
@@ -542,6 +547,10 @@ let
         (let* ((out (or (getenv "out") (error "Not running in a Nix build")))
                (bindir (concatenate 'string out "/bin/"))
                (executable (make-pathname :directory bindir :name "${name}")))
+
+          ;; Tell UIOP that argv[0] will refer to running image, not the lisp impl
+          (when (find-package :uiop)
+            (eval `(setf ,(find-symbol "*IMAGE-DUMPED-P*" :uiop) :executable)))
 
           (save-application executable
                             :purify t
