@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ef2653e8_225cb5bc",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2022-01-29T12:05:57Z",
+      "side": 1,
+      "message": "One problem is that e. g. `Data.List.lookup` works like you specified originally, so if you parse it into a list you need to do a look up each step instead of using the trivial collect into list.",
+      "revId": "be8e4e523b9448fe642d9738ab4efe84a9e5f328",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
