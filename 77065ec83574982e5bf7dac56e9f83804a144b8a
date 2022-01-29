@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "48c70ba4_a4735a6b",
+        "filename": "ops/modules/www/base.nix",
+        "patchSetId": 1
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2022-01-29T22:21:41Z",
+      "side": 1,
+      "message": "Missing trailing \u0027?",
+      "range": {
+        "startLine": 21,
+        "startChar": 43,
+        "endLine": 21,
+        "endChar": 44
+      },
+      "revId": "77065ec83574982e5bf7dac56e9f83804a144b8a",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
