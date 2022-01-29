@@ -37,6 +37,10 @@
         location = /blog {
           return 302 /;
         }
+
+        location = /blog/ {
+          return 302 /;
+        }
       '';
     };
   };
