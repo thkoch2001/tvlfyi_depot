@@ -13,6 +13,8 @@
     ../modules/lib/cloneRepo.nix
   ];
 
+  home.homeDirectory = "/home/grfn";
+
   programs.password-store.enable = true;
 
   grfn.impure.clonedRepos.passwordStore = {
