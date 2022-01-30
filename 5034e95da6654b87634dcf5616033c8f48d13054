@@ -16,6 +16,24 @@
       "message": "lol",
       "revId": "5034e95da6654b87634dcf5616033c8f48d13054",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b962cd3b_b0f8c7da",
+        "filename": "tools/rust-crates-advisory/default.nix",
+        "patchSetId": 1
+      },
+      "lineNbr": 75,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2022-01-30T16:32:47Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "6ea06ef5_b25b2924",
+      "revId": "5034e95da6654b87634dcf5616033c8f48d13054",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
