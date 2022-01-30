@@ -1,5 +1,4 @@
-args@{
-  depot ? (import ../.. {})
+args@{ depot ? (import ../.. { })
 , pkgs ? depot.third_party.nixpkgs
 , lib
 , buildType ? "release"
@@ -8,39 +7,43 @@ args@{
 
 let
   aws-s3-cpp = pkgs.aws-sdk-cpp.override {
-    apis = ["s3" "transfer"];
+    apis = [ "s3" "transfer" ];
     customMemoryManagement = false;
   };
 
-  src = let
-    srcDir = ./.;
-    # create relative paths for all the sources we are filtering
-    asRelative = path:
-      let
-        srcS = toString srcDir;
-        pathS = toString path;
-      in
+  src =
+    let
+      srcDir = ./.;
+      # create relative paths for all the sources we are filtering
+      asRelative = path:
+        let
+          srcS = toString srcDir;
+          pathS = toString path;
+        in
         if ! lib.hasPrefix srcS pathS then
           throw "Path is outside of the working directory."
         else
-        lib.removePrefix srcS pathS;
+          lib.removePrefix srcS pathS;
 
-  in builtins.filterSource (path: type:
-    # Strip out .nix files that are in the root of the repository.  Changing
-    # the expression of tvix shouldn't cause a rebuild of tvix unless really
-    # required.
-    !(dirOf (asRelative path) == "/" && lib.hasSuffix ".nix" path) &&
+    in
+    builtins.filterSource
+      (path: type:
+        # Strip out .nix files that are in the root of the repository.  Changing
+        # the expression of tvix shouldn't cause a rebuild of tvix unless really
+        # required.
+        !(dirOf (asRelative path) == "/" && lib.hasSuffix ".nix" path) &&
 
-    # remove the proto files from the repo as those are compiled separately
-    !(lib.hasPrefix "src/proto" (asRelative path)) &&
+        # remove the proto files from the repo as those are compiled separately
+        !(lib.hasPrefix "src/proto" (asRelative path)) &&
 
-    # ignore result symlinks
-    !(type == "symlink" && lib.hasPrefix "result" (baseNameOf path))
-  ) srcDir;
+        # ignore result symlinks
+        !(type == "symlink" && lib.hasPrefix "result" (baseNameOf path))
+      )
+      srcDir;
 
   # Proto generation in CMake is theoretically possible, but that is
   # very theoretical - this does it in Nix instead.
-  protoSrcs = pkgs.runCommand "nix-proto-srcs" {} ''
+  protoSrcs = pkgs.runCommand "nix-proto-srcs" { } ''
     export PROTO_SRCS=${./src/proto}
     mkdir -p $out/libproto
     ${depot.third_party.protobuf}/bin/protoc -I=$PROTO_SRCS \
@@ -52,12 +55,13 @@ let
 
   # Derivation for busybox that just has the `busybox` binary in bin/, not all
   # the symlinks, so cmake can find it
-  busybox = pkgs.runCommand "busybox" {} ''
+  busybox = pkgs.runCommand "busybox" { } ''
     mkdir -p $out/bin
     cp ${pkgs.busybox}/bin/busybox $out/bin
   '';
 
-in lib.fix (self: pkgs.fullLlvm11Stdenv.mkDerivation {
+in
+lib.fix (self: pkgs.fullLlvm11Stdenv.mkDerivation {
   pname = "tvix";
   version = "2.3.4";
   inherit src;
@@ -141,7 +145,7 @@ in lib.fix (self: pkgs.fullLlvm11Stdenv.mkDerivation {
   # Work around broken system header include flags in the cxx toolchain.
   LIBCXX_INCLUDE = "${pkgs.llvmPackages_11.libcxx}/include/c++/v1";
 
-  SANDBOX_SHELL="${pkgs.busybox}/bin/busybox";
+  SANDBOX_SHELL = "${pkgs.busybox}/bin/busybox";
 
   # Install the various symlinks to the Nix binary which users expect
   # to exist.
@@ -190,7 +194,7 @@ in lib.fix (self: pkgs.fullLlvm11Stdenv.mkDerivation {
         ${pkgs.jq}/bin/jq < compile_commands.json -r 'map(.file)|.[]' | grep -v '/generated/' | ${pkgs.parallel}/bin/parallel ${pkgs.clang-tools}/bin/clang-tidy -p compile_commands.json $@
       '';
 
-      installCheckInputs = up.installCheckInputs ++ [run_clang_tidy];
+      installCheckInputs = up.installCheckInputs ++ [ run_clang_tidy ];
 
       shellHook = ''
         export NIX_DATA_DIR="${toString depot.path}/third_party"

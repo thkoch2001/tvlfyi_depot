@@ -68,13 +68,14 @@ let
           then s x
           else x == s;
       in
-        if b
-        then builtins.elemAt c 1
-        else switch x (builtins.tail conds);
+      if b
+      then builtins.elemAt c 1
+      else switch x (builtins.tail conds);
 
 
 
-in {
+in
+{
   inherit
     cond
     switch

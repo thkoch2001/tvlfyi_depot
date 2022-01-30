@@ -9,7 +9,7 @@
 , region ? "us-east-2"
 , rootVolumeSizeGb ? 50
 , securityGroupId ? null
-, extraIngressPorts ? []
+, extraIngressPorts ? [ ]
 }:
 
 let
@@ -40,13 +40,14 @@ let
 
   machineResource = "aws_instance.${prefix}machine";
 
-  recursiveMerge = builtins.foldl' lib.recursiveUpdate {};
+  recursiveMerge = builtins.foldl' lib.recursiveUpdate { };
 
   securityGroupId' =
     if isNull securityGroupId
     then "\${aws_security_group.${prefix}group.id}"
     else securityGroupId;
-in recursiveMerge [
+in
+recursiveMerge [
   (lib.optionalAttrs (isNull securityGroupId) {
     resource.aws_security_group."${prefix}group" = {
       provider = "aws.${region}";
@@ -60,12 +61,12 @@ in recursiveMerge [
     resource.aws_security_group_rule.all_egress = {
       provider = "aws.${region}";
       security_group_id = securityGroupId';
-      type            = "egress";
-      protocol        = "-1";
-      from_port       = 0;
-      to_port         = 0;
-      cidr_blocks     = ["0.0.0.0/0"];
-      ipv6_cidr_blocks = ["::/0"];
+      type = "egress";
+      protocol = "-1";
+      from_port = 0;
+      to_port = 0;
+      cidr_blocks = [ "0.0.0.0/0" ];
+      ipv6_cidr_blocks = [ "::/0" ];
 
       description = null;
       prefix_list_ids = null;
@@ -74,12 +75,14 @@ in recursiveMerge [
   })
   rec {
     data.external.my_ip = {
-      program = [(pkgs.writeShellScript "my_ip" ''
-        ${pkgs.jq}/bin/jq \
-          -n \
-          --arg ip "$(curl ifconfig.me)" \
-          '{"ip":$ip}'
-      '')];
+      program = [
+        (pkgs.writeShellScript "my_ip" ''
+          ${pkgs.jq}/bin/jq \
+            -n \
+            --arg ip "$(curl ifconfig.me)" \
+            '{"ip":$ip}'
+        '')
+      ];
     };
 
     resource.aws_security_group_rule.provision_ssh_access = {
@@ -89,8 +92,8 @@ in recursiveMerge [
       protocol = "TCP";
       from_port = 22;
       to_port = 22;
-      cidr_blocks = ["\${data.external.my_ip.result.ip}/32"];
-      ipv6_cidr_blocks = [];
+      cidr_blocks = [ "\${data.external.my_ip.result.ip}/32" ];
+      ipv6_cidr_blocks = [ ];
       description = null;
       prefix_list_ids = null;
       self = null;
@@ -183,21 +186,23 @@ in recursiveMerge [
   }
 
   {
-    resource.aws_security_group_rule = builtins.listToAttrs (map (port: {
-      name = "ingress_${toString port}";
-      value = {
-        provider = "aws.${region}";
-        security_group_id = securityGroupId';
-        type = "ingress";
-        protocol = "TCP";
-        from_port = port;
-        to_port = port;
-        cidr_blocks = ["0.0.0.0/0"];
-        ipv6_cidr_blocks = [];
-        description = null;
-        prefix_list_ids = null;
-        self = null;
-      };
-    }) extraIngressPorts);
+    resource.aws_security_group_rule = builtins.listToAttrs (map
+      (port: {
+        name = "ingress_${toString port}";
+        value = {
+          provider = "aws.${region}";
+          security_group_id = securityGroupId';
+          type = "ingress";
+          protocol = "TCP";
+          from_port = port;
+          to_port = port;
+          cidr_blocks = [ "0.0.0.0/0" ];
+          ipv6_cidr_blocks = [ ];
+          description = null;
+          prefix_list_ids = null;
+          self = null;
+        };
+      })
+      extraIngressPorts);
   }
 ]

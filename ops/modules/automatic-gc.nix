@@ -29,7 +29,8 @@ let
       echo "Skipping GC, enough space available"
     fi
   '';
-in {
+in
+{
   options.services.depot.automatic-gc = {
     enable = lib.mkEnableOption description;
 

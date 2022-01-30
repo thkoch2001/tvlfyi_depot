@@ -10,9 +10,24 @@ let
     ;
 
   reserved = c: builtins.elem c [
-    "!" "#" "$" "&" "'" "(" ")"
-    "*" "+" "," "/" ":" ";" "="
-    "?" "@" "[" "]"
+    "!"
+    "#"
+    "$"
+    "&"
+    "'"
+    "("
+    ")"
+    "*"
+    "+"
+    ","
+    "/"
+    ":"
+    ";"
+    "="
+    "?"
+    "@"
+    "["
+    "]"
   ];
 
   unreserved = c: char.asciiAlphaNum c
@@ -21,11 +36,13 @@ let
   percentEncode = c:
     if unreserved c
     then c
-    else "%" + (string.fit {
-      width = 2;
-      char = "0";
-      side = "left";
-    } (int.toHex (char.ord c)));
+    else "%" + (string.fit
+      {
+        width = 2;
+        char = "0";
+        side = "left";
+      }
+      (int.toHex (char.ord c)));
 
   encode = { leaveReserved ? false }: s:
     let
@@ -34,7 +51,8 @@ let
         if leaveReserved && reserved c
         then c
         else percentEncode c;
-    in lib.concatStrings (builtins.map tr chars);
+    in
+    lib.concatStrings (builtins.map tr chars);
 
   decode = s:
     let
@@ -71,9 +89,10 @@ let
         ];
 
     in
-      (builtins.foldl' decodeStep {} tokens).result;
+    (builtins.foldl' decodeStep { } tokens).result;
 
-in {
+in
+{
   inherit
     encode
     decode

@@ -22,11 +22,11 @@ with lib;
   config =
     let cfg = config.laptop.onLowBattery;
     in mkIf cfg.enable {
-    services.udev.extraRules = concatStrings [
-      ''SUBSYSTEM=="power_supply", ''
-      ''ATTR{status}=="Discharging", ''
-      ''ATTR{capacity}=="[0-${toString cfg.thresholdPercentage}]", ''
-      ''RUN+="${pkgs.systemd}/bin/systemctl ${cfg.action}"''
-    ];
-  };
+      services.udev.extraRules = concatStrings [
+        ''SUBSYSTEM=="power_supply", ''
+        ''ATTR{status}=="Discharging", ''
+        ''ATTR{capacity}=="[0-${toString cfg.thresholdPercentage}]", ''
+        ''RUN+="${pkgs.systemd}/bin/systemctl ${cfg.action}"''
+      ];
+    };
 }

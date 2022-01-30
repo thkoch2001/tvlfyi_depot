@@ -5,7 +5,8 @@
 let
   src = with pkgs; srcOnly lispPackages.bordeaux-threads;
   getSrc = f: "${src}/src/${f}";
-in depot.nix.buildLisp.library {
+in
+depot.nix.buildLisp.library {
   name = "bordeaux-threads";
   deps = [ depot.third_party.lisp.alexandria ];
 

@@ -87,6 +87,8 @@ let
   response = routes."${pathInfo}" or notFound;
 
 in
-  respond response.status {
-    "Content-type" = "text/html";
-  } (template response)
+respond response.status
+{
+  "Content-type" = "text/html";
+}
+  (template response)

@@ -11,7 +11,8 @@ let
     generic-arbitrary = appendPatch hsSuper.generic-arbitrary
       [ ./patches/generic-arbitrary-export-garbitrary.patch ];
   };
-in {
+in
+{
   haskellPackages = super.haskellPackages.override {
     inherit overrides;
   };

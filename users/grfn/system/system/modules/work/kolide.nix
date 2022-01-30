@@ -3,9 +3,10 @@
 let
   deb = ./kolide.deb;
 
-  kolide = pkgs.runCommand "kolide-data" {
-    buildInputs = [ pkgs.binutils-unwrapped ];
-  } ''
+  kolide = pkgs.runCommand "kolide-data"
+    {
+      buildInputs = [ pkgs.binutils-unwrapped ];
+    } ''
     cp ${deb} ./kolide.deb
     ar x kolide.deb
     mkdir result
@@ -19,7 +20,8 @@ let
     mv result $out
   '';
 
-in {
+in
+{
   systemd.services."launcher.kolide-k2" = {
     wantedBy = [ "multi-user.target" ];
     after = [ "network.target" "syslog.service" ];

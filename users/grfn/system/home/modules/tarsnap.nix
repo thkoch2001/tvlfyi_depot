@@ -6,59 +6,59 @@
   ];
 
   home.file.".tarsnaprc".text = ''
-  ### Recommended options
+    ### Recommended options
 
-  # Tarsnap cache directory
-  cachedir /home/grfn/.cache/tarsnap
+    # Tarsnap cache directory
+    cachedir /home/grfn/.cache/tarsnap
 
-  # Tarsnap key file
-  keyfile /home/grfn/.private/tarsnap.key
+    # Tarsnap key file
+    keyfile /home/grfn/.private/tarsnap.key
 
-  # Don't archive files which have the nodump flag set.
-  nodump
+    # Don't archive files which have the nodump flag set.
+    nodump
 
-  # Print statistics when creating or deleting archives.
-  print-stats
+    # Print statistics when creating or deleting archives.
+    print-stats
 
-  # Create a checkpoint once per GB of uploaded data.
-  checkpoint-bytes 1G
+    # Create a checkpoint once per GB of uploaded data.
+    checkpoint-bytes 1G
 
-  ### Commonly useful options
+    ### Commonly useful options
 
-  # Use SI prefixes to make numbers printed by --print-stats more readable.
-  humanize-numbers
+    # Use SI prefixes to make numbers printed by --print-stats more readable.
+    humanize-numbers
 
-  ### Other options, not applicable to most systems
+    ### Other options, not applicable to most systems
 
-  # Aggressive network behaviour: Use multiple TCP connections when
-  # writing archives.  Use of this option is recommended only in
-  # cases where TCP congestion control is known to be the limiting
-  # factor in upload performance.
-  #aggressive-networking
+    # Aggressive network behaviour: Use multiple TCP connections when
+    # writing archives.  Use of this option is recommended only in
+    # cases where TCP congestion control is known to be the limiting
+    # factor in upload performance.
+    #aggressive-networking
 
-  # Exclude files and directories matching specified patterns.
-  # Only one file or directory per command; multiple "exclude"
-  # commands may be given.
-  #exclude
+    # Exclude files and directories matching specified patterns.
+    # Only one file or directory per command; multiple "exclude"
+    # commands may be given.
+    #exclude
 
-  # Include only files and directories matching specified patterns.
-  # Only one file or directory per command; multiple "include"
-  # commands may be given.
-  #include
+    # Include only files and directories matching specified patterns.
+    # Only one file or directory per command; multiple "include"
+    # commands may be given.
+    #include
 
-  # Attempt to reduce tarsnap memory consumption.  This option
-  # will slow down the process of creating archives, but may help
-  # on systems where the average size of files being backed up is
-  # less than 1 MB.
-  #lowmem
+    # Attempt to reduce tarsnap memory consumption.  This option
+    # will slow down the process of creating archives, but may help
+    # on systems where the average size of files being backed up is
+    # less than 1 MB.
+    #lowmem
 
-  # Try even harder to reduce tarsnap memory consumption.  This can
-  # significantly slow down tarsnap, but reduces its memory usage
-  # by an additional factor of 2 beyond what the lowmem option does.
-  #verylowmem
+    # Try even harder to reduce tarsnap memory consumption.  This can
+    # significantly slow down tarsnap, but reduces its memory usage
+    # by an additional factor of 2 beyond what the lowmem option does.
+    #verylowmem
 
-  # Snapshot time.  Use this option if you are backing up files
-  # from a filesystem snapshot rather than from a "live" filesystem.
-  #snaptime <file>
+    # Snapshot time.  Use this option if you are backing up files
+    # from a filesystem snapshot rather than from a "live" filesystem.
+    #snaptime <file>
   '';
 }

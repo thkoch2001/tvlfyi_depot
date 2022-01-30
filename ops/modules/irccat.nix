@@ -27,7 +27,8 @@ let
 
     exec ${depot.third_party.irccat}/bin/irccat
   '';
-in {
+in
+{
   options.services.depot.irccat = {
     enable = lib.mkEnableOption description;
 

@@ -43,7 +43,8 @@ let
     '';
   };
 
-in {
+in
+{
   inherit pathScripts;
   inherit commonsh;
   inherit tvlcNew;

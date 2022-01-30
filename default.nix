@@ -4,14 +4,16 @@
 
 { nixpkgsBisectPath ? null
 , parentTargetMap ? null
-, nixpkgsConfig ? {}, ... }@args:
+, nixpkgsConfig ? { }
+, ...
+}@args:
 
 let
   inherit (builtins)
     filter
     ;
 
-  readTree = import ./nix/readTree {};
+  readTree = import ./nix/readTree { };
 
   # Disallow access to //users from other depot parts.
   usersFilter = readTree.restrictFolder {
@@ -70,7 +72,8 @@ let
   # Is this tree node eligible for build inclusion?
   eligible = node: (node ? outPath) && !(node.meta.ci.skip or false);
 
-in readTree.fix(self: (readDepot {
+in
+readTree.fix (self: (readDepot {
   depot = self;
 
   # Pass third_party as 'pkgs' (for compatibility with external
@@ -110,8 +113,10 @@ in readTree.fix(self: (readDepot {
   });
 
   # Derivation that gcroots all depot targets.
-  ci.gcroot = with self.third_party.nixpkgs; makeSetupHook {
-    name = "depot-gcroot";
-    deps = self.ci.targets;
-  } emptyFile;
+  ci.gcroot = with self.third_party.nixpkgs; makeSetupHook
+    {
+      name = "depot-gcroot";
+      deps = self.ci.targets;
+    }
+    emptyFile;
 })

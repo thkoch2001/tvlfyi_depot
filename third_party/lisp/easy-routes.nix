@@ -9,7 +9,8 @@ let
     sha256 = "06lnipwc6mmg0v5gybcnr7wn5xmn5xfd1gs19vbima777245bfka";
   };
 
-in depot.nix.buildLisp.library {
+in
+depot.nix.buildLisp.library {
   name = "easy-routes";
   deps = with depot.third_party.lisp; [
     hunchentoot

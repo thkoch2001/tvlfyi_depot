@@ -1,2 +1,2 @@
 # Make readTree happy at this level.
-_: {}
+_: { }

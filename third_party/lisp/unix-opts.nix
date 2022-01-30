@@ -1,5 +1,5 @@
 # unix-opts is a portable command line argument parser
-{ depot, pkgs, ...}:
+{ depot, pkgs, ... }:
 
 
 let src = with pkgs; srcOnly lispPackages.unix-opts;

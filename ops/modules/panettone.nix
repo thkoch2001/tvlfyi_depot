@@ -2,7 +2,8 @@
 
 let
   cfg = config.services.depot.panettone;
-in {
+in
+{
   options.services.depot.panettone = with lib; {
     enable = mkEnableOption "Panettone issue tracker";
 
@@ -62,23 +63,26 @@ in {
       assertion =
         cfg.dbHost != "localhost" || config.services.postgresql.enable;
       message = "Panettone requires a postgresql database";
-    } {
-      assertion =
-        cfg.dbHost != "localhost" || config.services.postgresql.enableTCPIP;
-      message = "Panettone can only connect to the postgresql database over TCP";
-    } {
-      assertion =
-        cfg.dbHost != "localhost" || (lib.any
-          (user: user.name == cfg.dbUser)
-          config.services.postgresql.ensureUsers);
-      message = "Panettone requires a database user";
-    } {
-      assertion =
-        cfg.dbHost != "localhost" || (lib.any
-          (db: db == cfg.dbName)
-          config.services.postgresql.ensureDatabases);
-      message = "Panettone requires a database";
-    }];
+    }
+      {
+        assertion =
+          cfg.dbHost != "localhost" || config.services.postgresql.enableTCPIP;
+        message = "Panettone can only connect to the postgresql database over TCP";
+      }
+      {
+        assertion =
+          cfg.dbHost != "localhost" || (lib.any
+            (user: user.name == cfg.dbUser)
+            config.services.postgresql.ensureUsers);
+        message = "Panettone requires a database user";
+      }
+      {
+        assertion =
+          cfg.dbHost != "localhost" || (lib.any
+            (db: db == cfg.dbName)
+            config.services.postgresql.ensureDatabases);
+        message = "Panettone requires a database";
+      }];
 
     systemd.services.panettone = {
       wantedBy = [ "multi-user.target" ];

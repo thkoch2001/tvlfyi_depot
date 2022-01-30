@@ -3,14 +3,17 @@
 let
   inherit (depot.users.grfn)
     terraform
-  ;
+    ;
 
-in terraform.workspace "bbbg" {
+in
+terraform.workspace "bbbg"
+{
   plugins = (p: with p; [
     aws
     cloudflare
   ]);
-} {
+}
+{
   machine = terraform.nixosMachine {
     name = "bbbg";
     instanceType = "t3a.small";
@@ -52,8 +55,8 @@ in terraform.workspace "bbbg" {
       };
 
       security.sudo.extraRules = [{
-        groups = ["wheel"];
-        commands = [{ command = "ALL"; options = ["NOPASSWD"]; }];
+        groups = [ "wheel" ];
+        commands = [{ command = "ALL"; options = [ "NOPASSWD" ]; }];
       }];
 
       nix.gc = {

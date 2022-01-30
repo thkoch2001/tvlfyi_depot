@@ -8,7 +8,8 @@ let
     inherit default;
     type = lib.types.str;
   };
-in {
+in
+{
   options.services.depot.gerrit-queue = {
     enable = lib.mkEnableOption description;
     gerritUrl = mkStringOption "https://cl.tvl.fyi";

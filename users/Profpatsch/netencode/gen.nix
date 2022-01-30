@@ -27,29 +27,33 @@ let
   concatStrings = builtins.concatStringsSep "";
 
   record = lokv: netstring "{" "}"
-    (concatStrings (map ({key, val}: tag key val) lokv));
+    (concatStrings (map ({ key, val }: tag key val) lokv));
 
   list = l: netstring "[" "]" (concatStrings l);
 
   dwim = val:
-    let match = {
-      "bool" = n1;
-      "int" = i6;
-      "string" = text;
-      "set" = attrs:
-        # it could be a derivation, then just return the path
-        if attrs.type or "" == "derivation" then text "${attrs}"
-        else
-          record (lib.mapAttrsToList
-          (k: v: {
-            key = k;
-            val = dwim v;
-          }) attrs);
-      "list" = l: list (map dwim l);
-    };
-    in match.${builtins.typeOf val} val;
+    let
+      match = {
+        "bool" = n1;
+        "int" = i6;
+        "string" = text;
+        "set" = attrs:
+          # it could be a derivation, then just return the path
+          if attrs.type or "" == "derivation" then text "${attrs}"
+          else
+            record (lib.mapAttrsToList
+              (k: v: {
+                key = k;
+                val = dwim v;
+              })
+              attrs);
+        "list" = l: list (map dwim l);
+      };
+    in
+    match.${builtins.typeOf val} val;
 
-in {
+in
+{
   inherit
     unit
     n1

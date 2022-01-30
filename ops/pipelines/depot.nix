@@ -16,9 +16,10 @@ let
     drvTargets = depot.ci.targets;
     additionalSteps = [ protoCheck ];
 
-    parentTargetMap = if (externalArgs ? parentTargetMap)
+    parentTargetMap =
+      if (externalArgs ? parentTargetMap)
       then builtins.fromJSON (builtins.readFile externalArgs.parentTargetMap)
-      else {};
+      else { };
 
     postBuildSteps = [
       # After successful builds, create a gcroot for builds on canon.
@@ -40,7 +41,8 @@ let
   };
 
   drvmap = depot.nix.buildkite.mkDrvmap depot.ci.targets;
-in pkgs.runCommandNoCC "depot-pipeline" {} ''
+in
+pkgs.runCommandNoCC "depot-pipeline" { } ''
   mkdir $out
   cp -r ${pipeline}/* $out
   cp ${drvmap} $out/drvmap.json

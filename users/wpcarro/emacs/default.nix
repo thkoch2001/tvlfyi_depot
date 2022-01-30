@@ -18,7 +18,8 @@ let
       pass
       scrot
       xorg.xset
-    ]));
+    ])
+  );
 
   emacsWithPackages = (emacsPackagesGen emacs27).emacsWithPackages;
 
@@ -128,7 +129,7 @@ let
   makeEnvVars = env: concatStringsSep "\n"
     (mapAttrsToList (k: v: "export ${k}=\"${v}\"") env);
 
-  withEmacsPath = { emacsBin, env ? {}, load ? [] }:
+  withEmacsPath = { emacsBin, env ? { }, load ? [ ] }:
     writeShellScriptBin "wpcarros-emacs" ''
       export XMODIFIERS=emacs
       export PATH="${emacsBinPath}:$PATH"
@@ -143,16 +144,17 @@ let
         ${concatStringsSep "\n" (map (el: "--load ${el} \\") load)}
         "$@"
     '';
-in {
+in
+{
   inherit withEmacsPath;
 
-  nixos = { load ? [] }: withEmacsPath {
+  nixos = { load ? [ ] }: withEmacsPath {
     inherit load;
     emacsBin = "${wpcarrosEmacs}/bin/emacs";
   };
 
   # Script that asserts my Emacs can initialize without warnings or errors.
-  check = runCommand "check-emacs" {} ''
+  check = runCommand "check-emacs" { } ''
     # Even though Buildkite defines this, I'd still like still be able to test
     # this locally without depending on my ability to remember to set CI=true.
     export CI=true

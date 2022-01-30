@@ -17,9 +17,10 @@ let
   drvSeqL = defun [ (list drv) drv drv ]
     (drvDeps: drvOut:
       let
-        drvOutOutputs = drvOut.outputs or ["out"];
+        drvOutOutputs = drvOut.outputs or [ "out" ];
       in
-        pkgs.runCommandLocal drvOut.name {
+      pkgs.runCommandLocal drvOut.name
+        {
           # we inherit all attributes in order to replicate
           # the original derivation as much as possible
           outputs = drvOutOutputs;
@@ -29,15 +30,18 @@ let
         }
         # the outputs of the original derivation are replicated
         # by creating a symlink to the old output path
-        (lib.concatMapStrings (output: ''
-          target=${lib.escapeShellArg drvOut.${output}}
-          # if the target is already a symlink, follow it until it’s not;
-          # this is done to prevent too many dereferences
-          target=$(readlink -e "$target")
-          # link to the output
-          ln -s "$target" "${"$"}${output}"
-        '') drvOutOutputs));
+        (lib.concatMapStrings
+          (output: ''
+            target=${lib.escapeShellArg drvOut.${output}}
+            # if the target is already a symlink, follow it until it’s not;
+            # this is done to prevent too many dereferences
+            target=$(readlink -e "$target")
+            # link to the output
+            ln -s "$target" "${"$"}${output}"
+          '')
+          drvOutOutputs));
 
-in {
+in
+{
   __functor = _: drvSeqL;
 }

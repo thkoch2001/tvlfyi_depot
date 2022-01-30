@@ -1,5 +1,5 @@
 let
- depot = import ../../.. {};
+  depot = import ../../.. { };
 in
 with depot.third_party.nixpkgs;
 

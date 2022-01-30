@@ -26,14 +26,16 @@
 
 let
   getBins = drv: xs:
-    let f = x:
-      # TODO(Profpatsch): typecheck
-      let x' = if builtins.isString x then { use = x; as = x; } else x;
-      in {
-        name = x'.as;
-        value = "${lib.getBin drv}/bin/${x'.use}";
-      };
-    in builtins.listToAttrs (builtins.map f xs);
+    let
+      f = x:
+        # TODO(Profpatsch): typecheck
+        let x' = if builtins.isString x then { use = x; as = x; } else x;
+        in {
+          name = x'.as;
+          value = "${lib.getBin drv}/bin/${x'.use}";
+        };
+    in
+    builtins.listToAttrs (builtins.map f xs);
 
 
   tests = import ./tests.nix {
@@ -42,7 +44,8 @@ let
     inherit (depot.nix.runTestsuite) assertEq it runTestsuite;
   };
 
-in {
+in
+{
   __functor = _: getBins;
   inherit tests;
 }

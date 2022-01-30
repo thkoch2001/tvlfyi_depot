@@ -2,7 +2,7 @@
 
 let
 
-  depot = import ../../../../.. {};
+  depot = import ../../../../.. { };
 
 in
 

@@ -34,14 +34,14 @@ let
         basename = builtins.unsafeDiscardStringContext
           (builtins.baseNameOf strPath);
       in
-        # If p is a direct child of storeDir, we need to remove
+      # If p is a direct child of storeDir, we need to remove
         # the leading hash as well to make sure that:
         # `storePathName drv == storePathName (toString drv)`.
-        if noStoreDir == basename
-        then builtins.substring 33 (-1) basename
-        else basename
+      if noStoreDir == basename
+      then builtins.substring 33 (-1) basename
+      else basename
     else builtins.throw "Don't know how to get (base)name of "
-      + lib.generators.toPretty {} p;
+      + lib.generators.toPretty { } p;
 
   /* Query the type of a path exposing the same information as would be by
      `builtins.readDir`, but for a single, specific target path.
@@ -106,7 +106,7 @@ let
       # We need to call toString to prevent unsafeDiscardStringContext
       # from importing a path into store which messes with base- and
       # dirname of course.
-      path'= builtins.unsafeDiscardStringContext (toString path);
+      path' = builtins.unsafeDiscardStringContext (toString path);
       # To read the containing directory we absolutely need
       # to keep the string context, otherwise a derivation
       # would not be realized before our check (at eval time)
@@ -120,20 +120,22 @@ let
       # directory. If not, either the target doesn't exist or is a regular file.
       # TODO(sterni): is there a way to check reliably if the symlink target exists?
       isSymlinkDir = builtins.pathExists (path' + "/.");
-    in {
+    in
+    {
       ${thisPathType} =
-        /**/ if thisPathType != "symlink" then true
-        else if isSymlinkDir              then "directory"
-        else                                   "regular-or-missing";
+        /**/
+        if thisPathType != "symlink" then true
+        else if isSymlinkDir then "directory"
+        else "regular-or-missing";
     };
 
   pathType' = path:
     let
       p = pathType path;
     in
-      if p ? missing
-      then builtins.throw "${lib.generators.toPretty {} path} does not exist"
-      else p;
+    if p ? missing
+    then builtins.throw "${lib.generators.toPretty {} path} does not exist"
+    else p;
 
   /* Check whether the given path is a directory.
      Throws if the path in question doesn't exist.
@@ -151,9 +153,11 @@ let
 
      Type: path(-like) -> bool
   */
-  realPathIsDirectory = path: let
-    pt = pathType' path;
-  in pt ? directory || pt.symlink or null == "directory";
+  realPathIsDirectory = path:
+    let
+      pt = pathType' path;
+    in
+    pt ? directory || pt.symlink or null == "directory";
 
   /* Check whether the given path is a regular file.
      Throws if the path in question doesn't exist.
@@ -169,7 +173,8 @@ let
   */
   isSymlink = path: pathType' path ? symlink;
 
-in {
+in
+{
   inherit
     storePathName
     pathType

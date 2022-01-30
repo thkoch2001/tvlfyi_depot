@@ -5,7 +5,9 @@
 let
   storeDirLength = with builtins; (stringLength storeDir) + 1;
   logo = depot.web.tvl.logo;
-in lib.fix(self: pkgs.runCommand "tvl-static" {
+in
+lib.fix (self: pkgs.runCommand "tvl-static"
+{
   passthru = {
     # Preserving the string context here makes little sense: While we are
     # referencing this derivation, we are not doing so via the nix store,
