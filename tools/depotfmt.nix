@@ -18,6 +18,14 @@ let
     [formatter.tf]
     command = "${terraformat}"
     includes = [ "*.tf" ]
+
+    [formatter.nix]
+    command = "${pkgs.nixpkgs-fmt}/bin/nixpkgs-fmt"
+    includes = [ "*.nix" ]
+    excludes = [
+      "third_party/nix/tests/*",
+      "third_party/nix/src/tests/*"
+    ]
   '';
 
   # helper tool for formatting the depot interactively
