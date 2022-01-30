@@ -19,7 +19,8 @@ in
     htop
     killall
     bind
-    zip unzip
+    zip
+    unzip
     tree
     ncat
     bc

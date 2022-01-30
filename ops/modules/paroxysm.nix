@@ -3,7 +3,8 @@
 let
   cfg = config.services.depot.paroxysm;
   description = "TVL's majestic IRC bot";
-in {
+in
+{
   options.services.depot.paroxysm.enable = lib.mkEnableOption description;
 
   config = lib.mkIf cfg.enable {

@@ -7,5 +7,5 @@ depot.nix.buildGo.program {
   srcs = [
     ./main.go
   ];
-  deps = [];
+  deps = [ ];
 }

@@ -8,15 +8,17 @@ let
     ;
 
   exampleDocument = withDoctype (<html> { lang = "en"; } [
-    (<head> {} [
+    (<head> { } [
       (<meta> { charset = "utf-8"; } null)
-      (<title> {} "html.nix example document")
-      (<link> {
-        rel = "license";
-        href = "https://code.tvl.fyi/about/LICENSE";
-        type = "text/html";
-      } null)
-      (<style> {}  (esc ''
+      (<title> { } "html.nix example document")
+      (<link>
+        {
+          rel = "license";
+          href = "https://code.tvl.fyi/about/LICENSE";
+          type = "text/html";
+        }
+        null)
+      (<style> { } (esc ''
         hgroup h2 {
           font-weight: normal;
         }
@@ -26,39 +28,45 @@ let
         }
       ''))
     ])
-    (<body> {} [
-      (<main> {} [
-        (<hgroup> {} [
-          (<h1> {} (esc "html.nix"))
-          (<h2> {} [
-            (<em> {} "the")
+    (<body> { } [
+      (<main> { } [
+        (<hgroup> { } [
+          (<h1> { } (esc "html.nix"))
+          (<h2> { } [
+            (<em> { } "the")
             (esc " most cursed HTML DSL ever!")
           ])
         ])
-        (<dl> {} [
-          (<dt> {} [
+        (<dl> { } [
+          (<dt> { } [
             (esc "Q: Wait, it's all ")
-            (<a> {
-              href = "https://cl.tvl.fyi/q/hashtag:cursed";
-            } (esc "cursed"))
+            (<a>
+              {
+                href = "https://cl.tvl.fyi/q/hashtag:cursed";
+              }
+              (esc "cursed"))
             (esc " nix hacks?")
           ])
-          (<dd> {} (esc "A: Always has been. 🔫"))
-          (<dt> {} (esc "Q: Why does this work?"))
-          (<dd> {} [
+          (<dd> { } (esc "A: Always has been. 🔫"))
+          (<dt> { } (esc "Q: Why does this work?"))
+          (<dd> { } [
             (esc "Because nix ")
-            (<a> {
-              href = "https://github.com/NixOS/nix/blob/293220bed5a75efc963e33c183787e87e55e28d9/src/libexpr/parser.y#L410-L416";
-            } (esc "translates "))
-            (<a> {
-              href = "https://github.com/NixOS/nix/blob/293220bed5a75efc963e33c183787e87e55e28d9/src/libexpr/lexer.l#L100";
-            } (esc "SPATH tokens"))
+            (<a>
+              {
+                href = "https://github.com/NixOS/nix/blob/293220bed5a75efc963e33c183787e87e55e28d9/src/libexpr/parser.y#L410-L416";
+              }
+              (esc "translates "))
+            (<a>
+              {
+                href = "https://github.com/NixOS/nix/blob/293220bed5a75efc963e33c183787e87e55e28d9/src/libexpr/lexer.l#L100";
+              }
+              (esc "SPATH tokens"))
             (esc " like ")
-            (<code> {} (esc "<nixpkgs>"))
+            (<code> { } (esc "<nixpkgs>"))
             (esc " into calls to ")
-            (<code> {} (esc "__findFile"))
+            (<code> { } (esc "__findFile"))
             (esc " in the ")
-            (<em> {} (esc "current"))
+            (<em> { } (esc "current"))
             (esc " scope.")
           ])
         ])
@@ -67,7 +75,8 @@ let
   ]);
 in
 
-pkgs.runCommandNoCC "html.nix.html" {
+pkgs.runCommandNoCC "html.nix.html"
+{
   passAsFile = [ "exampleDocument" ];
   inherit exampleDocument;
   nativeBuildInputs = [ pkgs.html5validator ];

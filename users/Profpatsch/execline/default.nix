@@ -1,16 +1,19 @@
 { depot, pkgs, lib, ... }:
 
 let
-  exec-helpers = depot.nix.writers.rustSimpleLib {
-    name = "exec-helpers";
-  } (builtins.readFile ./exec_helpers.rs);
+  exec-helpers = depot.nix.writers.rustSimpleLib
+    {
+      name = "exec-helpers";
+    }
+    (builtins.readFile ./exec_helpers.rs);
 
-  print-one-env = depot.nix.writers.rustSimple {
-    name = "print-one-env";
-    dependencies = [
-      depot.users.Profpatsch.execline.exec-helpers
-    ];
-  } ''
+  print-one-env = depot.nix.writers.rustSimple
+    {
+      name = "print-one-env";
+      dependencies = [
+        depot.users.Profpatsch.execline.exec-helpers
+      ];
+    } ''
     extern crate exec_helpers;
     use std::os::unix::ffi::OsStrExt;
     use std::io::Write;
@@ -25,7 +28,8 @@ let
     }
   '';
 
-in depot.nix.readTree.drvTargets {
+in
+depot.nix.readTree.drvTargets {
   inherit
     exec-helpers
     print-one-env

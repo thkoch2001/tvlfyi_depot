@@ -16,4 +16,5 @@ let
   };
 
   system = depot.third_party.nixos { inherit configuration; };
-in system.vm
+in
+system.vm

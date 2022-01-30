@@ -9,7 +9,7 @@ let
   runExeclineLocal = name: args: execline:
     runExecline name
       (args // {
-        derivationArgs = args.derivationArgs or {} // {
+        derivationArgs = args.derivationArgs or { } // {
           preferLocalBuild = true;
           allowSubstitutes = false;
         };
@@ -23,7 +23,8 @@ let
     inherit pkgs;
   };
 
-in {
+in
+{
   __functor = _: runExecline;
   local = runExeclineLocal;
   inherit tests;

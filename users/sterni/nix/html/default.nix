@@ -20,7 +20,7 @@ let
      => "&lt;hello&gt;"
   */
   escapeMinimal = builtins.replaceStrings
-    [ "<"    ">"    "&"     "\""     "'"      ]
+    [ "<" ">" "&" "\"" "'" ]
     [ "&lt;" "&gt;" "&amp;" "&quot;" "&#039;" ];
 
   /* Return a string with a correctly rendered tag of the given name,
@@ -87,18 +87,20 @@ let
   renderTag = tag: attrs: content:
     let
       attrs' = builtins.concatStringsSep "" (
-        builtins.map (n:
-          " ${escapeMinimal n}=\"${escapeMinimal (toString attrs.${n})}\""
-        ) (builtins.attrNames attrs)
+        builtins.map
+          (n:
+            " ${escapeMinimal n}=\"${escapeMinimal (toString attrs.${n})}\""
+          )
+          (builtins.attrNames attrs)
       );
       content' =
         if builtins.isList content
         then builtins.concatStringsSep "" content
         else content;
     in
-      if content == null
-      then "<${tag}${attrs'}/>"
-      else "<${tag}${attrs'}>${content'}</${tag}>";
+    if content == null
+    then "<${tag}${attrs'}/>"
+    else "<${tag}${attrs'}>${content'}</${tag}>";
 
   /* Prepend "<!DOCTYPE html>" to a string.
 
@@ -111,7 +113,8 @@ let
   */
   withDoctype = doc: "<!DOCTYPE html>" + doc;
 
-in {
+in
+{
   inherit escapeMinimal renderTag withDoctype;
 
   __findFile = _: renderTag;

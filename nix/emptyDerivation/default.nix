@@ -14,7 +14,8 @@ let
     inherit (depot.nix.runTestsuite) runTestsuite it assertEq;
   };
 
-in {
+in
+{
   __functor = _: emptyDerivation;
   inherit tests;
 }

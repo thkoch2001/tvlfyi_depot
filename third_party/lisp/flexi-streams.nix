@@ -28,6 +28,6 @@ in depot.nix.buildLisp.library {
     "input.lisp"
     "io.lisp"
     "strings.lisp"
- ];
+  ];
 }
 

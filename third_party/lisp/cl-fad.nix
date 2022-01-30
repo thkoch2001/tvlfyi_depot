@@ -1,5 +1,5 @@
 # Portable pathname library
-{ depot, pkgs, ...}:
+{ depot, pkgs, ... }:
 
 with depot.nix;
 
@@ -18,7 +18,7 @@ in buildLisp.library {
   srcs = map (f: src + ("/" + f)) [
     "packages.lisp"
   ] ++ [
-    { ccl =  "${src}/openmcl.lisp"; }
+    { ccl = "${src}/openmcl.lisp"; }
   ] ++ map (f: src + ("/" + f)) [
     "fad.lisp"
     "path.lisp"

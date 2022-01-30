@@ -53,17 +53,20 @@ let
   asciiAlpha = c:
     let
       v = ord c;
-    in (v >= 65 && v <= 90)
+    in
+    (v >= 65 && v <= 90)
     || (v >= 97 && v <= 122);
 
   asciiNum = c:
     let
       v = ord c;
-    in v >= 48 && v <= 57;
+    in
+    v >= 48 && v <= 57;
 
   asciiAlphaNum = c: asciiAlpha c || asciiNum c;
 
-in {
+in
+{
   inherit
     allChars
     char
@@ -78,18 +81,19 @@ in {
   # originally I generated a nix file containing a list of
   # characters, but infinisil uses a better way which I adapt
   # which is using builtins.readFile instead of import.
-  __generateAllChars = pkgs.runCommandCC "generate-all-chars" {
-    source = ''
-      #include <stdio.h>
+  __generateAllChars = pkgs.runCommandCC "generate-all-chars"
+    {
+      source = ''
+        #include <stdio.h>
 
-      int main(void) {
-        for(int i = 1; i <= 0xff; i++) {
-          putchar(i);
+        int main(void) {
+          for(int i = 1; i <= 0xff; i++) {
+            putchar(i);
+          }
         }
-      }
-    '';
-    passAsFile = [ "source" ];
-  } ''
+      '';
+      passAsFile = [ "source" ];
+    } ''
     $CC -o "$out" -x c "$sourcePath"
   '';
 }

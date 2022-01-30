@@ -26,17 +26,17 @@ let
     let
       matched = builtins.match "/?([0-9]+)-([0-9]+)-([0-9]+)-.+" post;
     in
-      if matched == null
-      then [ 0 0 0 ]
-      else builtins.map builtins.fromJSON matched;
+    if matched == null
+    then [ 0 0 0 ]
+    else builtins.map builtins.fromJSON matched;
 
   parseTitle = post:
     let
       matched = builtins.match "/?[0-9]+-[0-9]+-[0-9]+-(.+).html" post;
     in
-      if matched == null
-      then "no title"
-      else builtins.head matched;
+    if matched == null
+    then "no title"
+    else builtins.head matched;
 
   dateAtLeast = a: b:
     builtins.all fun.id
@@ -68,11 +68,13 @@ let
     <main>
       <h1>blog posts</h1>
       <ul>
-  '' + lib.concatMapStrings (post: ''
+  '' + lib.concatMapStrings
+    (post: ''
       <li>
         <a href="${absolutePath (url.encode {} post)}">${parseTitle post}</a>
       </li>
-  '') posts + ''
+    '')
+    posts + ''
       </ul>
     </main>
   '';
@@ -80,10 +82,14 @@ let
   formatDate =
     let
       # Assume we never deal with years < 1000
-      formatDigit = d: string.fit {
-        char = "0"; width = 2;
-      } (toString d);
-    in lib.concatMapStringsSep "-" formatDigit;
+      formatDigit = d: string.fit
+        {
+          char = "0";
+          width = 2;
+        }
+        (toString d);
+    in
+    lib.concatMapStringsSep "-" formatDigit;
 
   post = title: post: ''
     <main>
@@ -101,8 +107,9 @@ let
   validatePathInfo = pathInfo:
     let
       chars = string.toChars pathInfo;
-    in builtins.length chars > 1
-      && !(builtins.elem "/" (builtins.tail chars));
+    in
+    builtins.length chars > 1
+    && !(builtins.elem "/" (builtins.tail chars));
 
   response =
     if pathInfo == "/"
@@ -129,6 +136,8 @@ let
       inner = "<h1>404 — not found</h1>";
     };
 in
-  respond response.status {
-    "Content-type" = "text/html";
-  } (generic response)
+respond response.status
+{
+  "Content-type" = "text/html";
+}
+  (generic response)

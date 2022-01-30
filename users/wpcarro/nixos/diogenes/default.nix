@@ -4,7 +4,8 @@ let
   inherit (depot.users) wpcarro;
   name = "diogenes";
   domainName = "billandhiscomputer.com";
-in wpcarro.terraform.googleCloudVM {
+in
+wpcarro.terraform.googleCloudVM {
   project = "wpcarros-infrastructure";
   name = "diogenes";
   region = "us-central1";
@@ -23,7 +24,7 @@ in wpcarro.terraform.googleCloudVM {
       type = "A";
       ttl = 300; # 5m
       managed_zone = "\${google_dns_managed_zone.${name}.name}";
-      rrdatas = ["\${google_compute_instance.${name}.network_interface[0].access_config[0].nat_ip}"];
+      rrdatas = [ "\${google_compute_instance.${name}.network_interface[0].access_config[0].nat_ip}" ];
     };
 
     resource.google_compute_instance."${name}" = {
@@ -43,7 +44,7 @@ in wpcarro.terraform.googleCloudVM {
       type = "A";
       ttl = 300; # 5m
       managed_zone = "\${google_dns_managed_zone.monsterpoker.name}";
-      rrdatas = ["\${google_compute_instance.${name}.network_interface[0].access_config[0].nat_ip}"];
+      rrdatas = [ "\${google_compute_instance.${name}.network_interface[0].access_config[0].nat_ip}" ];
     };
   };
 
@@ -54,9 +55,9 @@ in wpcarro.terraform.googleCloudVM {
 
     networking = {
       firewall.allowedTCPPorts = [
-        22   # ssh
-        80   # http
-        443  # https
+        22 # ssh
+        80 # http
+        443 # https
         6698 # quassel
       ];
       firewall.allowedUDPPortRanges = [

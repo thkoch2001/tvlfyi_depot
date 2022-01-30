@@ -3,16 +3,17 @@
 with lib;
 
 let
- # doom-emacs = pkgs.callPackage (builtins.fetchTarball {
- #   url = https://github.com/vlaci/nix-doom-emacs/archive/master.tar.gz;
- # }) {
- #   doomPrivateDir = ./doom.d;  # Directory containing your config.el init.el
- #                               # and packages.el files
- # };
+  # doom-emacs = pkgs.callPackage (builtins.fetchTarball {
+  #   url = https://github.com/vlaci/nix-doom-emacs/archive/master.tar.gz;
+  # }) {
+  #   doomPrivateDir = ./doom.d;  # Directory containing your config.el init.el
+  #                               # and packages.el files
+  # };
 
   depot = config.lib.depot;
 
-in {
+in
+{
   imports = [
     ./lib/cloneRepo.nix
   ];
@@ -47,7 +48,7 @@ in {
             upquote
             varwidth
             wrapfig
-          ;
+            ;
         })
 
         ispell
@@ -82,14 +83,14 @@ in {
         doomEmacs = {
           github = "hlissner/doom-emacs";
           path = ".emacs.d";
-          after = ["emacs.d"];
+          after = [ "emacs.d" ];
           onClone = "bin/doom install";
         };
 
         "emacs.d" = {
           github = "glittershark/emacs.d";
           path = ".doom.d";
-          after = ["orgClubhouse"];
+          after = [ "orgClubhouse" ];
         };
       };
 

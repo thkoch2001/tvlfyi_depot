@@ -2,7 +2,8 @@
 
 let
   inherit (depot.users) wpcarro;
-in {
+in
+{
   programs = {
     fish.enable = true;
 

@@ -8,7 +8,8 @@ let
     sha256 = "11mxzyx34ynsfsrs8pgrarqi9s442vkpmh7kdpzvarhj7i97g8yx";
   };
 
-in depot.nix.buildLisp.library {
+in
+depot.nix.buildLisp.library {
   name = "lass";
 
   deps = with depot.third_party.lisp; [

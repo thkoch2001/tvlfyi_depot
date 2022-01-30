@@ -1,6 +1,7 @@
-{ depot ? (import ../../../. {})
+{ depot ? (import ../../../. { })
 , pkgs ? depot.third_party.nixpkgs
-, ... }:
+, ...
+}:
 
 let
   basePkg = pkgs.haskellPackages.callPackage ./pkg.nix { };

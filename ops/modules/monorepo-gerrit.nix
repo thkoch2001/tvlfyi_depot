@@ -9,12 +9,13 @@ let
     exec -a ${name} ${depot.ops.besadii}/bin/besadii "$@"
   '';
 
-  gerritHooks = pkgs.runCommandNoCC "gerrit-hooks" {} ''
+  gerritHooks = pkgs.runCommandNoCC "gerrit-hooks" { } ''
     mkdir -p $out
     ln -s ${besadiiWithConfig "change-merged"} $out/change-merged
     ln -s ${besadiiWithConfig "patchset-created"} $out/patchset-created
   '';
-in {
+in
+{
   services.gerrit = {
     enable = true;
     listenAddress = "[::]:4778"; # 4778 - grrt

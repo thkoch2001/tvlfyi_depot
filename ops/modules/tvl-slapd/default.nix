@@ -26,7 +26,8 @@ let
 
   inherit (depot.ops) users;
 
-in {
+in
+{
   services.openldap = {
     enable = true;
 
@@ -48,7 +49,7 @@ in {
 
       "cn=schema".includes =
         map (schema: "${pkgs.openldap}/etc/schema/${schema}.ldif")
-            [ "core" "cosine" "inetorgperson" "nis" ];
+          [ "core" "cosine" "inetorgperson" "nis" ];
     };
 
     # Contents are immutable at runtime, and adding user accounts etc.

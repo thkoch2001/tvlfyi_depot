@@ -2,11 +2,12 @@
 { depot, pkgs, ... }:
 
 let
-  checkZone = zone: file: pkgs.runCommandNoCC "${zone}-check" {} ''
+  checkZone = zone: file: pkgs.runCommandNoCC "${zone}-check" { } ''
     ${pkgs.bind}/bin/named-checkzone -i local ${zone} ${file} | tee $out
   '';
 
-in depot.nix.readTree.drvTargets {
-  kontemplate-works = checkZone "kontemplate.works"./kontemplate.works.zone;
+in
+depot.nix.readTree.drvTargets {
+  kontemplate-works = checkZone "kontemplate.works" ./kontemplate.works.zone;
   tazj-in = checkZone "tazj.in" ./tazj.in.zone;
 }

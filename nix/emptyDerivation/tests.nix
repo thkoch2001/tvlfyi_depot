@@ -10,10 +10,17 @@ let
   ];
 
   fooOut = emptyDerivation {
-    builder = writeExecline "foo-builder" {} [
-      "importas" "out" "out"
-      "redirfd" "-w" "1" "$out"
-      bins.s6-echo "-n" "foo"
+    builder = writeExecline "foo-builder" { } [
+      "importas"
+      "out"
+      "out"
+      "redirfd"
+      "-w"
+      "1"
+      "$out"
+      bins.s6-echo
+      "-n"
+      "foo"
     ];
   };
 
@@ -26,7 +33,8 @@ let
       "bar")
   ];
 
-in runTestsuite "emptyDerivation" [
+in
+runTestsuite "emptyDerivation" [
   empty
   overrideBuilder
 ]

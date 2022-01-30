@@ -7,6 +7,6 @@
       twitter-color-emoji
     ];
 
-    fontconfig.defaultFonts.emoji = ["Twitter Color Emoji"];
+    fontconfig.defaultFonts.emoji = [ "Twitter Color Emoji" ];
   };
 }

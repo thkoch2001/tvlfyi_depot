@@ -4,24 +4,26 @@
 
 with pkgs;
 
-let tex = texlive.combine {
-  inherit (texlive)
-    beamer
-    beamertheme-metropolis
-    etoolbox
-    euenc
-    extsizes
-    fontspec
-    lualibs
-    luaotfload
-    luatex
-    minted
-    ms
-    pgfopts
-    scheme-basic
-    translator;
-};
-in stdenv.mkDerivation {
+let
+  tex = texlive.combine {
+    inherit (texlive)
+      beamer
+      beamertheme-metropolis
+      etoolbox
+      euenc
+      extsizes
+      fontspec
+      lualibs
+      luaotfload
+      luatex
+      minted
+      ms
+      pgfopts
+      scheme-basic
+      translator;
+  };
+in
+stdenv.mkDerivation {
   name = "nuug-bootstrapping-slides";
   src = ./.;
 

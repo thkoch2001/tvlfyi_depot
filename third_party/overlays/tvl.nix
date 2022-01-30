@@ -28,14 +28,14 @@ self: super: {
       notmuch = super.notmuch.emacs;
 
       # Build EXWM with the depot sources instead.
-      exwm = esuper.exwm.overrideAttrs(_: {
+      exwm = esuper.exwm.overrideAttrs (_: {
         src = depot.path.origSrc + "/third_party/exwm";
       });
     })
   );
 
   # dottime support for notmuch
-  notmuch = super.notmuch.overrideAttrs(old: {
+  notmuch = super.notmuch.overrideAttrs (old: {
     passthru = old.passthru // {
       patches = old.patches ++ [ ./patches/notmuch-dottime.patch ];
     };
@@ -46,13 +46,13 @@ self: super: {
   nix-serve = super.nix-serve.override { nix = super.nix_2_3; };
 
   # Avoid builds of mkShell derivations in CI.
-  mkShell = super.lib.makeOverridable(args: (super.mkShell args) // {
+  mkShell = super.lib.makeOverridable (args: (super.mkShell args) // {
     meta.ci.skip = true;
   });
 
   # bump nixpkgs-fmt to a version that doesn't touch whitespace in
   # strings
-  nixpkgs-fmt = super.nixpkgs-fmt.overrideAttrs(old: rec {
+  nixpkgs-fmt = super.nixpkgs-fmt.overrideAttrs (old: rec {
     src = self.fetchFromGitHub {
       owner = "nix-community";
       repo = "nixpkgs-fmt";
@@ -60,7 +60,7 @@ self: super: {
       sha256 = "0hjkbcgz62793hzfzlaxyah8a2c1k79n1k891lg7kfw8mkbq0w4p";
     };
 
-    cargoDeps = old.cargoDeps.overrideAttrs(_: {
+    cargoDeps = old.cargoDeps.overrideAttrs (_: {
       inherit src;
       outputHash = "10if2lmv8d95j3walq3ggx3y423yfy4yl9vplw3apd0s671bly8b";
     });

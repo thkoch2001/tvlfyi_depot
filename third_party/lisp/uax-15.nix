@@ -4,7 +4,8 @@ let
   inherit (pkgs) runCommand;
   inherit (depot.nix.buildLisp) bundled;
   src = with pkgs; srcOnly lispPackages.uax-15;
-in depot.nix.buildLisp.library {
+in
+depot.nix.buildLisp.library {
   name = "uax-15";
 
   deps = with depot.third_party.lisp; [
@@ -23,7 +24,7 @@ in depot.nix.buildLisp.library {
     #
     # additionally there are some wonky variable usages of variables
     # that are never defined, for which we patch in defvar statements.
-    (runCommand "precomputed-tables.lisp" {} ''
+    (runCommand "precomputed-tables.lisp" { } ''
       substitute ${src}/src/precomputed-tables.lisp precomputed-tables.lisp \
         --replace "(asdf:system-source-directory (asdf:find-system 'uax-15 nil))" \
                   '"${src}/"'

@@ -5,7 +5,8 @@
 let
   inherit (builtins) attrNames hasAttr map readDir;
   inherit (pkgs.lib) filterAttrs;
-in {
+in
+{
   # Returns a list of all of the regular files in `dir`.
   files = dir:
     map (name: dir + "/${name}")
@@ -31,11 +32,11 @@ in {
     if hasAttr name (readDir dir) then
       dir + "/${name}"
     else
-      # This prevents the function from infinitely recursing and eventually
-      # stack overflowing.
+    # This prevents the function from infinitely recursing and eventually
+    # stack overflowing.
       if (dirOf dir) == dir then
         null
       else
         resolve name (dirOf dir);
-  };
+};
 }

@@ -2,7 +2,8 @@
 
 let
   inherit (import ../builder.nix args) buildGerritBazelPlugin;
-in buildGerritBazelPlugin rec {
+in
+buildGerritBazelPlugin rec {
   name = "oauth";
   depsOutputHash = "sha256:0j86amkw54y177s522hc988hqg034fsrkywbsb9a7h14zwcqbran";
   src = pkgs.fetchgit {

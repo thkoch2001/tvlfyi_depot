@@ -1,4 +1,4 @@
-{ pkgs ? (import ../../../. {}).third_party, ... }:
+{ pkgs ? (import ../../../. { }).third_party, ... }:
 
 let
   inherit (pkgs)

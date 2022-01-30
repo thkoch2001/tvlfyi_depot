@@ -1,4 +1,4 @@
-{ depot ? import ../.. {} }:
+{ depot ? import ../.. { } }:
 
 with depot.third_party;
 

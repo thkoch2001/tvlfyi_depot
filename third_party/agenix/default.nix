@@ -9,7 +9,8 @@ let
   agenix = import src {
     inherit pkgs;
   };
-in {
+in
+{
   inherit src;
   cli = agenix.agenix;
 }

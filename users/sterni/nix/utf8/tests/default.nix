@@ -25,9 +25,10 @@ let
     char
     ;
 
-  rustDecoder = rustSimple {
-    name = "utf8-decode";
-  } ''
+  rustDecoder = rustSimple
+    {
+      name = "utf8-decode";
+    } ''
     use std::io::{self, Read};
     fn main() -> std::io::Result<()> {
       let mut buffer = String::new();
@@ -47,10 +48,11 @@ let
 
   rustDecode = s:
     let
-      expr = runCommandLocal "${s}-decoded" {} ''
+      expr = runCommandLocal "${s}-decoded" { } ''
         printf '%s' ${lib.escapeShellArg s} | ${rustDecoder} > $out
       '';
-    in import expr;
+    in
+    import expr;
 
   hexDecode = l:
     utf8.decode (string.fromBytes (builtins.map int.fromHex l));
@@ -65,23 +67,27 @@ let
     (assertEq "well-formed: F4 80 83 92" (hexDecode [ "F4" "80" "83" "92" ]) [ 1048786 ])
     (assertThrows "Codepoint out of range: 0xFFFFFF" (hexEncode [ "FFFFFF" ]))
     (assertThrows "Codepoint out of range: -0x02" (hexEncode [ "-02" ]))
-  ] ++ builtins.genList (i:
-    let
-      cp = i + int.fromHex "D800";
-    in
+  ] ++ builtins.genList
+    (i:
+      let
+        cp = i + int.fromHex "D800";
+      in
       assertThrows "Can't encode UTF-16 reserved characters: ${utf8.formatCodepoint cp}"
         (utf8.encode [ cp ])
-  ) (int.fromHex "07FF"));
+    )
+    (int.fromHex "07FF"));
 
   testAscii = it "checks decoding of ascii strings"
-    (builtins.map (s: assertEq "ASCII decoding is equal to UTF-8 decoding for \"${s}\""
-      (string.toBytes s) (utf8.decode s)) [
-        "foo bar"
-        "hello\nworld"
-        "carriage\r\nreturn"
-        "1238398494829304 []<><>({})[]!!)"
-        (string.take 127 char.allChars)
-      ]);
+    (builtins.map
+      (s: assertEq "ASCII decoding is equal to UTF-8 decoding for \"${s}\""
+        (string.toBytes s)
+        (utf8.decode s)) [
+      "foo bar"
+      "hello\nworld"
+      "carriage\r\nreturn"
+      "1238398494829304 []<><>({})[]!!)"
+      (string.take 127 char.allChars)
+    ]);
 
   randomUnicode = [
     "" # empty string should yield empty list
@@ -126,16 +132,17 @@ let
   testDecodingEncoding = it "checks that decoding and then encoding forms an identity"
     (builtins.map
       (s: assertEq "Decoding and then encoding “${s}” yields itself"
-        (utf8.encode (utf8.decode s)) s)
+        (utf8.encode (utf8.decode s))
+        s)
       (lib.flatten [
         glassSentences
         randomUnicode
       ]));
 
 in
-  runTestsuite "nix.utf8" [
-    testFailures
-    testAscii
-    testDecoding
-    testDecodingEncoding
-  ]
+runTestsuite "nix.utf8" [
+  testFailures
+  testAscii
+  testDecoding
+  testDecodingEncoding
+]

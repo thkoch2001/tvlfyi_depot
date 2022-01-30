@@ -35,7 +35,7 @@ let
     date = post.date;
   });
 
-  formatDate = defun [ int string ] (date: readFile (runCommandNoCC "date" {} ''
+  formatDate = defun [ int string ] (date: readFile (runCommandNoCC "date" { } ''
     date --date='@${toString date}' '+%Y-%m-%d' > $out
   ''));
 
@@ -67,7 +67,8 @@ let
   pageEntries = import ./entries.nix;
   homepage = index ((map postToEntry users.tazjin.blog.posts) ++ pageEntries);
   atomFeed = import ./feed.nix (args // { inherit entry pageEntries; });
-in runCommandNoCC "website" {} ''
+in
+runCommandNoCC "website" { } ''
   mkdir $out
   cp ${homepage} $out/index.html
   cp ${atomFeed} $out/feed.atom

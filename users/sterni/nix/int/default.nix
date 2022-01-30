@@ -47,12 +47,12 @@ let
         if i == 0
         then ""
         else go (bitShiftR i 4)
-           + string.charAt (bitAnd i 15) hexdigits;
+          + string.charAt (bitAnd i 15) hexdigits;
       sign = lib.optionalString (int < 0) "-";
     in
-      if int == 0
-      then "0"
-      else "${sign}${go (abs int)}";
+    if int == 0
+    then "0"
+    else "${sign}${go (abs int)}";
 
   fromHexMap = builtins.listToAttrs
     (lib.imap0 (i: c: { name = c; value = i; })
@@ -72,11 +72,12 @@ let
           val = v.val + (fromHexMap."${d}" * v.mul);
           mul = v.mul * 16;
         })
-        { val = 0; mul = 1; } digits;
+        { val = 0; mul = 1; }
+        digits;
     in
-      if negative
-      then -parsed.val
-      else parsed.val;
+    if negative
+    then -parsed.val
+    else parsed.val;
 
   # A nix integer is a 64bit signed integer
   maxBound = 9223372036854775807;
@@ -99,7 +100,8 @@ let
 
   inRange = a: b: x: x >= a && x <= b;
 
-in {
+in
+{
   inherit
     maxBound
     minBound

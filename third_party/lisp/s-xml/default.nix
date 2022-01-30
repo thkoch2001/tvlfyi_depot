@@ -1,15 +1,17 @@
 # XML serialiser for Common Lisp.
 { depot, pkgs, ... }:
 
-let src = pkgs.applyPatches {
-  name = "s-xml-source";
-  src = pkgs.lispPackages.s-xml.src;
+let
+  src = pkgs.applyPatches {
+    name = "s-xml-source";
+    src = pkgs.lispPackages.s-xml.src;
 
-  patches = [
-    ./0001-fix-definition-order-in-xml.lisp.patch
-  ];
-};
-in depot.nix.buildLisp.library {
+    patches = [
+      ./0001-fix-definition-order-in-xml.lisp.patch
+    ];
+  };
+in
+depot.nix.buildLisp.library {
   name = "s-xml";
 
   srcs = map (f: src + ("/src/" + f)) [

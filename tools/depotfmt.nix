@@ -34,7 +34,8 @@ let
       --config-file ${config} \
       --tree-root .
   '';
-in depotfmt.overrideAttrs(_: {
+in
+depotfmt.overrideAttrs (_: {
   passthru.meta.ci.extraSteps.check = {
     label = "depot formatting check";
     command = check;

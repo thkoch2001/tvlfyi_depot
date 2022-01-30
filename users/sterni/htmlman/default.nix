@@ -19,9 +19,9 @@ let
     ;
 
   bins = getBins cheddar [ "cheddar" ]
-      // getBins mandoc [ "mandoc" ]
-      // getBins coreutils [ "cat" "mv" "mkdir" ]
-      ;
+    // getBins mandoc [ "mandoc" ]
+    // getBins coreutils [ "cat" "mv" "mkdir" ]
+  ;
 
   normalizeDrv = fetchurl {
     url = "https://necolas.github.io/normalize.css/8.0.1/normalize.css";
@@ -29,7 +29,10 @@ let
   };
 
   execlineStdoutInto = target: line: [
-    "redirfd" "-w" "1" target
+    "redirfd"
+    "-w"
+    "1"
+    target
   ] ++ line;
 
   # I will not write a pure nix markdown renderer
@@ -39,16 +42,24 @@ let
   # I will not write a pure nix markdown renderer
   markdown = md:
     let
-      html = runExecline.local "rendered-markdown" {
-        stdin = md;
-      } ([
-        "importas" "-iu" "out" "out"
-      ] ++ execlineStdoutInto "$out" [
-        bins.cheddar "--about-filter" "description.md"
-      ]);
-    in builtins.readFile html;
+      html = runExecline.local "rendered-markdown"
+        {
+          stdin = md;
+        }
+        ([
+          "importas"
+          "-iu"
+          "out"
+          "out"
+        ] ++ execlineStdoutInto "$out" [
+          bins.cheddar
+          "--about-filter"
+          "description.md"
+        ]);
+    in
+    builtins.readFile html;
 
-  indexTemplate = { title, description, pages ? [] }: ''
+  indexTemplate = { title, description, pages ? [ ] }: ''
     <!doctype html>
     <html>
       <head>
@@ -137,40 +148,40 @@ let
 
   htmlman =
     { title
-    # title of the index page
+      # title of the index page
     , description ? ""
-    # description which is displayed after
-    # the main heading on the index page
-    , pages ? []
-    # man pages of the following structure:
-    # {
-    #   name : string;
-    #   section : int;
-    #   path : either path string;
-    # }
-    # path is optional, if it is not given,
-    # the man page source must be located at
-    # "${manDir}/${name}.${toString section}"
+      # description which is displayed after
+      # the main heading on the index page
+    , pages ? [ ]
+      # man pages of the following structure:
+      # {
+      #   name : string;
+      #   section : int;
+      #   path : either path string;
+      # }
+      # path is optional, if it is not given,
+      # the man page source must be located at
+      # "${manDir}/${name}.${toString section}"
     , manDir ? null
-    # directory in which man page sources are located
+      # directory in which man page sources are located
     , style ? defaultStyle
-    # CSS to use as a string
+      # CSS to use as a string
     , normalizeCss ? true
-    # whether to include normalize.css before the custom CSS
+      # whether to include normalize.css before the custom CSS
     , linkXr ? "all"
-    # How to handle cross references in the html output:
-    #
-    # * none:     don't convert cross references into hyperlinks
-    # * all:      link all cross references as if they were
-    #             rendered into $out by htmlman
-    # * inManDir: link to all man pages which have their source
-    #             in `manDir` and use the format string defined
-    #             in linkXrFallback for all other cross references.
+      # How to handle cross references in the html output:
+      #
+      # * none:     don't convert cross references into hyperlinks
+      # * all:      link all cross references as if they were
+      #             rendered into $out by htmlman
+      # * inManDir: link to all man pages which have their source
+      #             in `manDir` and use the format string defined
+      #             in linkXrFallback for all other cross references.
     , linkXrFallback ? "https://manpages.debian.org/unstable/%N.%S.en.html"
-    # fallback link to use if linkXr == "inManDir" and the man
-    # page is not in ${manDir}. Placeholders %N (name of page)
-    # and %S (section of page) can be used. See mandoc(1) for
-    # more information.
+      # fallback link to use if linkXr == "inManDir" and the man
+      # page is not in ${manDir}. Placeholders %N (name of page)
+      # and %S (section of page) can be used. See mandoc(1) for
+      # more information.
     }:
 
     let
@@ -188,47 +199,70 @@ let
       mandocOpts = lib.concatStringsSep "," ([
         "style=style.css"
       ] ++ linkXrEnum.match linkXr {
-        all      = [ "man=./%N.%S.html" ];
+        all = [ "man=./%N.%S.html" ];
         inManDir = [ "man=./%N.%S.html;${linkXrFallback}" ];
-        none     = [ ];
+        none = [ ];
       });
 
       html =
-        runExecline.local "htmlman-${title}" {
-          derivationArgs = {
-            inherit index style;
-            passAsFile = [ "index" "style" ];
-          };
-        } ([
-          "multisubstitute" [
-            "importas" "-iu" "out" "out"
-            "importas" "-iu" "index" "indexPath"
-            "importas" "-iu" "style" "stylePath"
-          ]
-          "if" [ bins.mkdir "-p" "$out" ]
-          "if" [ bins.mv "$index" "\${out}/index.html" ]
-          "if" (execlineStdoutInto "\${out}/style.css" [
-            "if" ([
-              bins.cat
-            ] ++ lib.optional normalizeCss normalizeDrv
+        runExecline.local "htmlman-${title}"
+          {
+            derivationArgs = {
+              inherit index style;
+              passAsFile = [ "index" "style" ];
+            };
+          }
+          ([
+            "multisubstitute"
+            [
+              "importas"
+              "-iu"
+              "out"
+              "out"
+              "importas"
+              "-iu"
+              "index"
+              "indexPath"
+              "importas"
+              "-iu"
+              "style"
+              "stylePath"
+            ]
+            "if"
+            [ bins.mkdir "-p" "$out" ]
+            "if"
+            [ bins.mv "$index" "\${out}/index.html" ]
+            "if"
+            (execlineStdoutInto "\${out}/style.css" [
+              "if"
+              ([
+                bins.cat
+              ] ++ lib.optional normalizeCss normalizeDrv
               ++ [
-              "$style"
+                "$style"
+              ])
             ])
-          ])
-          # let mandoc check for available man pages
-          "execline-cd" "${manDir}"
-        ] ++ lib.concatMap ({ name, section, ... }@p:
-          execlineStdoutInto "\${out}/${name}.${toString section}.html" [
-          "if" [
-            bins.mandoc
-            "-mdoc"
-            "-T" "html"
-            "-O" mandocOpts
-            (resolvePath p)
-          ]
-        ]) pages);
-    in html // {
+            # let mandoc check for available man pages
+            "execline-cd"
+            "${manDir}"
+          ] ++ lib.concatMap
+            ({ name, section, ... }@p:
+              execlineStdoutInto "\${out}/${name}.${toString section}.html" [
+                "if"
+                [
+                  bins.mandoc
+                  "-mdoc"
+                  "-T"
+                  "html"
+                  "-O"
+                  mandocOpts
+                  (resolvePath p)
+                ]
+              ])
+            pages);
+    in
+    html // {
       deploy = deployScript title html;
     };
 in
-  htmlman
+htmlman

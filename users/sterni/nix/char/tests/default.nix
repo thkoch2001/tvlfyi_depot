@@ -26,6 +26,6 @@ let
   ];
 
 in
-  runTestsuite "char" [
-    testAllCharConversion
-  ]
+runTestsuite "char" [
+  testAllCharConversion
+]

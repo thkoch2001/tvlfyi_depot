@@ -1,5 +1,5 @@
 let
-  depot = import ../../.. {};
+  depot = import ../../.. { };
 in
 depot.third_party.nixpkgs.mkShell {
   buildInputs = [
