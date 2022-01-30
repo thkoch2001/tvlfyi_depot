@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0e694f23_5c5a7465",
+        "filename": "third_party/nix/src/tests/lang/eval-okay-curpos.nix",
+        "patchSetId": 2
+      },
+      "lineNbr": 4,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2022-01-30T09:14:35Z",
+      "side": 1,
+      "message": "This must not be reformatted as it breaks the test.",
+      "range": {
+        "startLine": 4,
+        "startChar": 6,
+        "endLine": 4,
+        "endChar": 14
+      },
+      "revId": "e08f6853d522b176a40aaed2e51f688c3a2c34d6",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ae079556_1b192081",
+        "filename": "third_party/nix/src/tests/lang/eval-okay-ind-string.nix",
+        "patchSetId": 2
+      },
+      "lineNbr": 94,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2022-01-30T09:14:35Z",
+      "side": 1,
+      "message": "Tab replacement breaks this test I suspect, skipping on format could be a workaround for me, but the fact that nixpkgs-fmt touches tabs in the string worries me, wondering if it\u0027s intentional.",
+      "revId": "e08f6853d522b176a40aaed2e51f688c3a2c34d6",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
