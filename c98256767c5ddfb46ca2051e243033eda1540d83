@@ -22,6 +22,30 @@
       },
       "revId": "c98256767c5ddfb46ca2051e243033eda1540d83",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "76bf9342_8a1926c8",
+        "filename": "tools/depotfmt.nix",
+        "patchSetId": 1
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-01-30T19:57:00Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b1d1a4da_d2184a51",
+      "range": {
+        "startLine": 25,
+        "startChar": 18,
+        "endLine": 25,
+        "endChar": 39
+      },
+      "revId": "c98256767c5ddfb46ca2051e243033eda1540d83",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
