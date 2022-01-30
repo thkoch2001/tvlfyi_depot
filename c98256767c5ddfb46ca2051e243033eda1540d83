@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b1d1a4da_d2184a51",
+        "filename": "tools/depotfmt.nix",
+        "patchSetId": 1
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2022-01-30T16:34:20Z",
+      "side": 1,
+      "message": "third_party/nix/src/tests",
+      "range": {
+        "startLine": 25,
+        "startChar": 18,
+        "endLine": 25,
+        "endChar": 39
+      },
+      "revId": "c98256767c5ddfb46ca2051e243033eda1540d83",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
