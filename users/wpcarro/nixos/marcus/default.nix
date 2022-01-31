@@ -49,6 +49,11 @@ in
   services = wpcarro.common.services // {
     tzupdate.enable = true;
 
+    depot.auto-deploy = {
+      enable = true;
+      interval = "1d";
+    };
+
     xserver = {
       enable = true;
       libinput = {
