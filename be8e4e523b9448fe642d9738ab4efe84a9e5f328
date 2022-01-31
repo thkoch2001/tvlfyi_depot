@@ -16,6 +16,24 @@
       "message": "One problem is that e. g. `Data.List.lookup` works like you specified originally, so if you parse it into a list you need to do a look up each step instead of using the trivial collect into list.",
       "revId": "be8e4e523b9448fe642d9738ab4efe84a9e5f328",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "aceea99d_56676664",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2022-01-31T09:43:08Z",
+      "side": 1,
+      "message": "That is true in case you’d want to represent the netencode records as a list internally, but then I guess you should also define your own DSL for working with it or something.\n\nI mean, what you should actually do to correctly parse it is deduplicate said list right at parse time.",
+      "parentUuid": "ef2653e8_225cb5bc",
+      "revId": "be8e4e523b9448fe642d9738ab4efe84a9e5f328",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
