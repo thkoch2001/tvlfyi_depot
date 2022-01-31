@@ -8,8 +8,6 @@
 (defpackage :note
   (:use
    :common-lisp
-   :babel
-   :babel-encodings
    :closure-html
    :cl-date-time-parser
    :mime4cl)
