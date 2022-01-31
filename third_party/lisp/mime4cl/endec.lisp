@@ -644,7 +644,7 @@ method of RFC2047 and return a sequence of bytes."
            (vector-push-extend (char-code c) output-sequence)))
        finally (return output-sequence)))
 
-(defun decode-RFC2047-string (encoding string &key (start 0) (end (length string)))
+(defun decode-RFC2047-part (encoding string &key (start 0) (end (length string)))
   "Decode STRING according to RFC2047 and return a sequence of
 bytes."
   (gcase (encoding string-equal)
@@ -674,10 +674,24 @@ sequence, a charset string indicating the original coding."
             (push (subseq text previous-end start)
                   result))
           (setf previous-end (+ end 2))
-          (push (cons (decode-RFC2047-string encoding text :start (1+ second-?) :end end)
+          (push (cons (decode-RFC2047-part encoding text :start (1+ second-?) :end end)
                       charset)
                 result))
      finally (unless (= previous-end (length text))
                (push (subseq text previous-end (length text))
                      result))
        (return (nreverse result))))
+
+(defun decode-RFC2047 (text)
+  "Decode TEXT into a fully decoded string. Whenever a non ASCII part is
+  encountered, try to decode it using babel, otherwise signal an error."
+  (flet ((decode-part (part)
+           (etypecase part
+             (cons (babel:octets-to-string
+                    (car part)
+                    :encoding (babel-encodings:get-character-encoding
+                               (intern (string-upcase (cdr part)) 'keyword))))
+             (string part))))
+    (apply #'concatenate
+           (cons 'string
+                 (mapcar #'decode-part (mime:parse-RFC2047-text text))))))

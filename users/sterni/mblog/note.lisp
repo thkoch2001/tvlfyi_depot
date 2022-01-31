@@ -19,15 +19,8 @@
   surrounds them with angle brackets for a MIME header"
   (concatenate 'string "<" cid ">"))
 
-;; TODO(sterni): move into mime4cl
-(defun find-mime-message-header (header-name message)
-  (when-let ((header (assoc header-name
-                            (mime:mime-message-headers message)
-                            :test #'string-equal)))
-    (cdr header)))
-
 (defun find-mime-message-date (message)
-  (when-let ((date-string (find-mime-message-header "Date" message)))
+  (when-let ((date-string (car (mime:mime-message-header-values "Date" message))))
     (date-time-parser:parse-date-time date-string)))
 
 ;;; main implementation
@@ -65,24 +58,10 @@
 (defun apple-note-p (msg)
   "Checks X-Uniform-Type-Identifier of a MIME:MIME-MESSAGE
   to determine if a given mime message claims to be an Apple Note."
-  (when-let (uniform-id (assoc "X-Uniform-Type-Identifier"
-                               (mime:mime-message-headers msg)
-                               :test #'string-equal))
-    (string-equal (cdr uniform-id) "com.apple.mail-note")))
-
-(defun decode-RFC2047-to-string (input)
-  (apply
-   #'concatenate
-   (cons 'string
-         (mapcar
-          (lambda (el)
-            (etypecase el
-              (cons (babel:octets-to-string
-                     (car el)
-                     :encoding (babel-encodings:get-character-encoding
-                                (intern (string-upcase (cdr el)) 'keyword))))
-              (string el)))
-          (mime:parse-RFC2047-text input)))))
+  (when-let (uniform-id (car (mime:mime-message-header-values
+                              "X-Uniform-Type-Identifier"
+                              msg)))
+    (string-equal uniform-id "com.apple.mail-note")))
 
 (defun make-apple-note (msg)
   (check-type msg mime-message)
@@ -91,12 +70,10 @@
     (error "Passed message is not an Apple Note according to headers"))
 
   (let ((text-part (mime:find-mime-text-part msg))
-        (subject (when-let ((val (find-mime-message-header "Subject" msg)))
-                   ;; TODO(sterni): mime4cl should do this
-                   (decode-RFC2047-to-string val)))
-        (uuid (when-let ((val (find-mime-message-header
-                               "X-Universally-Unique-Identifier"
-                               msg)))
+        (subject (car (mime:mime-message-header-values "Subject" msg :decode t)))
+        (uuid (when-let ((val (car (mime:mime-message-header-values
+                                    "X-Universally-Unique-Identifier"
+                                    msg))))
                 (string-downcase val)))
         (time (find-mime-message-date msg)))
     ;; The idea here is that we don't need to check a lot manually, instead
