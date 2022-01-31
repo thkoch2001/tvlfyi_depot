@@ -22,4 +22,11 @@
     content = ./posts/send-mail-as-2fa.md;
     draft = false;
   }
+  {
+    key = "auto-reboot-nixos";
+    title = "Automatically Reboot NixOS";
+    date = 1643666914;
+    content = ./posts/auto-reboot-nixos.md;
+    draft = false;
+  }
 ]
