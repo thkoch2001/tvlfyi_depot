@@ -81,6 +81,29 @@
       "parentUuid": "ae079556_1b192081",
       "revId": "e08f6853d522b176a40aaed2e51f688c3a2c34d6",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "40471152_cdbfeb91",
+        "filename": "users/grfn/system/system/machines/mugwump.nix",
+        "patchSetId": 2
+      },
+      "lineNbr": 220,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2022-01-31T16:03:08Z",
+      "side": 1,
+      "message": "this is upsetting.",
+      "range": {
+        "startLine": 219,
+        "startChar": 0,
+        "endLine": 220,
+        "endChar": 7
+      },
+      "revId": "e08f6853d522b176a40aaed2e51f688c3a2c34d6",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
