@@ -22,6 +22,30 @@
       },
       "revId": "120f0aa253b65eacda1220dd5ba9b1bcb01a4dcc",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "386cc14c_3072f2df",
+        "filename": "users/grfn/system/system/machines/mugwump.nix",
+        "patchSetId": 1
+      },
+      "lineNbr": 213,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2022-01-31T16:18:57Z",
+      "side": 0,
+      "message": "oh nice, thanks!",
+      "parentUuid": "c1f5cc91_54797739",
+      "range": {
+        "startLine": 213,
+        "startChar": 20,
+        "endLine": 213,
+        "endChar": 22
+      },
+      "revId": "120f0aa253b65eacda1220dd5ba9b1bcb01a4dcc",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
