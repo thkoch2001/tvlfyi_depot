@@ -141,7 +141,7 @@ let
         --no-site-file \
         --no-site-lisp \
         --load ${./.emacs.d/init.el} \
-        ${concatStringsSep "\n" (map (el: "--load ${el} \\") load)}
+        ${concatStringsSep "\n  " (map (el: "--load ${el} \\") load)}
         "$@"
     '';
 in
