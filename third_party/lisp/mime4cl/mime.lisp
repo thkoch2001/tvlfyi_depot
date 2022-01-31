@@ -622,6 +622,20 @@ found in STREAM."
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+(defun mime-message-header-values (name message &key decode)
+  "Return all values of the header with NAME in MESSAGE, optionally decoding
+  it according to RFC2047 if :DECODE is T."
+  (loop ;; A header may occur multiple times
+        for header in (mime-message-headers message)
+        ;; MIME Headers should be case insensitive
+        ;; https://stackoverflow.com/a/6143644
+        when (string-equal (car header) name)
+        collect (if decode
+                    (decode-RFC2047 (cdr header))
+                    (cdr header))))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
 (defvar *lazy-mime-decode* t
   "If true don't  decode mime bodies in memory.")
 
