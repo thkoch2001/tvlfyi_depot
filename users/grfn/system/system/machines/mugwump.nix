@@ -210,13 +210,14 @@ with lib;
       };
     };
 
-    scrapeConfigs = [{
-      job_name = "node";
-      scrape_interval = "5s";
-      static_configs = [{
-        targets = [ "localhost:${toString config.services.prometheus.exporters.node.port}" ];
-      }];
-    }
+    scrapeConfigs = [
+      {
+        job_name = "node";
+        scrape_interval = "5s";
+        static_configs = [{
+          targets = [ "localhost:${toString config.services.prometheus.exporters.node.port}" ];
+        }];
+      }
       {
         job_name = "nginx";
         scrape_interval = "5s";
@@ -256,7 +257,8 @@ with lib;
             target_label = "__address__";
             replacement = "localhost:${toString config.services.prometheus.exporters.blackbox.port}";
           }];
-      }];
+      }
+    ];
   };
 
   services.xanthous-server.enable = true;
