@@ -30,6 +30,8 @@
                           #:process-wait
                           #:process-alive-p
                           #:run-program)
+  (:import-from :babel :octets-to-string)
+  (:import-from :babel-encodings :get-character-encoding)
   (:export #:*lazy-mime-decode*
            #:print-mime-part
            #:read-mime-message
@@ -61,6 +63,8 @@
            #:mime-type-string
            #:mime-type-parameters
            #:mime-message-headers
+           #:mime-message-header-values
+           #:mime-message-get-header
            #:mime=
            #:find-mime-part-by-path
            #:find-mime-part-by-id
