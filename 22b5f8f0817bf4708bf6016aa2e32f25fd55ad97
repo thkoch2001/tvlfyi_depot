@@ -16,6 +16,24 @@
       "message": "Seems like the channel hasn\u0027t advanced to include https://github.com/NixOS/nixpkgs/pull/157310",
       "revId": "22b5f8f0817bf4708bf6016aa2e32f25fd55ad97",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8e6879c7_f07c7ddf",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2022-01-31T20:57:32Z",
+      "side": 1,
+      "message": "It has now, updated this CL to use the new revision.",
+      "parentUuid": "c4397117_dbf16aeb",
+      "revId": "22b5f8f0817bf4708bf6016aa2e32f25fd55ad97",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
