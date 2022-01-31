@@ -201,9 +201,6 @@ in lib.fix(self: {
       maxFreed = 10; # GiB
       preserveGenerations = "14d";
     };
-
-    # Run keyring daemon, solely required by Fractal.
-    gnome.gnome-keyring.enable = true;
   };
 
   # Set variables to enable EXWM-XIM
@@ -232,12 +229,12 @@ in lib.fix(self: {
   };
 
   programs = {
-    adb.enable = true;
     fish.enable = true;
     light.enable = true;
-    mosh.enable = true;
     ssh.startAgent = true;
+    mosh.enable = true;
     steam.enable = true;
+    adb.enable = true;
 
     # Required by impermanence
     fuse.userAllowOther = true;
