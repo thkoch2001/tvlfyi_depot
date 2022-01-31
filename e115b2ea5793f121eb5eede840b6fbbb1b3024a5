@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f5cf8ce9_9649c41c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2022-01-31T20:54:45Z",
+      "side": 1,
+      "message": "niv feels like a lot of complexity to me, but I guess you\u0027re right that it\u0027s an unnecessary wheel to reinvent.",
+      "revId": "e115b2ea5793f121eb5eede840b6fbbb1b3024a5",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
