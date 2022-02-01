@@ -65,6 +65,11 @@
     device = "/dev/disk/by-uuid/b627cb0e-0451-4f25-94d0-6497e01f0da4";
   }];
 
+  services.earlyoom = {
+    enable = true;
+    freeMemThreshold = 5;
+  };
+
   services.xserver = {
     exportConfiguration = true;
     extraConfig = ''
