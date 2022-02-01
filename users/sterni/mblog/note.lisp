@@ -3,12 +3,16 @@
 
 ;;; util
 
+;; TODO(sterni): merge this with mblog::*copy-buffer-size*
+(defvar *copy-buffer-size* 4096)
+
 (defun html-escape-stream (in out)
   "Escape characters read from stream IN and write them to
-  stream OUT escaped using WHO:ESCAPE-CHAR-MINIMAL."
-  (loop for char = (read-char in nil nil)
-        while char
-        do (write-string (who:escape-char-minimal char) out)))
+  stream OUT escaped using WHO:ESCAPE-STRING-MINIMAL."
+  (let ((buf (make-string *copy-buffer-size*)))
+    (loop for len = (read-sequence buf in)
+          while (> len 0)
+          do (write-string (who:escape-string-minimal (subseq buf 0 len)) out))))
 
 (defun cid-header-value (cid)
   "Takes a Content-ID as present in Apple Notes' <object> tags and properly
