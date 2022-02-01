@@ -24,6 +24,30 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "22544028_573dea45",
+        "filename": "tools/rebuild-system/README.md",
+        "patchSetId": 11
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-02-01T00:22:37Z",
+      "side": 1,
+      "message": "Totally agree with the nits re: \"remote\".\n\nI like `rebuild-system --canon`. `--canonize` would be kind of funny, but I\u0027d like to suppress that urge.",
+      "parentUuid": "a031ac83_b4cc6383",
+      "range": {
+        "startLine": 12,
+        "startChar": 15,
+        "endLine": 12,
+        "endChar": 23
+      },
+      "revId": "dcaa84e3e60cecd331080838e4bc2ca4299f9aa3",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "5840030a_5d289487",
@@ -47,6 +71,30 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "fa630e88_d795f0b8",
+        "filename": "tools/rebuild-system/README.md",
+        "patchSetId": 11
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-02-01T00:22:37Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5840030a_5d289487",
+      "range": {
+        "startLine": 15,
+        "startChar": 23,
+        "endLine": 15,
+        "endChar": 24
+      },
+      "revId": "dcaa84e3e60cecd331080838e4bc2ca4299f9aa3",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "9ac72025_639de40d",
@@ -60,6 +108,24 @@
       "writtenOn": "2022-01-29T16:42:23Z",
       "side": 1,
       "message": "strong -1 on rewriting this in go - basically makes it completely unmaintainable to me, not to mention that go\u0027s flag handling is fundamentally broken (uses single-dash long flags, which I am categorically opposed to)",
+      "revId": "dcaa84e3e60cecd331080838e4bc2ca4299f9aa3",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8b353532_bb717f6a",
+        "filename": "tools/rebuild-system/main.go",
+        "patchSetId": 11
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-02-01T00:22:37Z",
+      "side": 1,
+      "message": "How\u0027s Haskell?",
+      "parentUuid": "9ac72025_639de40d",
       "revId": "dcaa84e3e60cecd331080838e4bc2ca4299f9aa3",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
