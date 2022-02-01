@@ -59,11 +59,11 @@ in
       '';
     };
 
-    interval = lib.mkOption {
+    schedule = lib.mkOption {
       type = lib.types.str;
-      example = "1h";
+      example = "*-*-* 00:00:00";
       description = ''
-        Interval between Nix builds, specified in systemd.time(7) format.
+        Calendar specification to schedule builds, specified in systemd.time(7) format.
       '';
     };
   };
@@ -96,8 +96,7 @@ in
       wantedBy = [ "multi-user.target" ];
 
       timerConfig = {
-        OnActiveSec = "1";
-        OnUnitActiveSec = cfg.interval;
+        OnCalendar = cfg.schedule;
       };
     };
   };

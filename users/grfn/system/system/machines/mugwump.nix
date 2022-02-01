@@ -95,7 +95,7 @@ with lib;
 
   services.depot.auto-deploy = {
     enable = true;
-    interval = "1d";
+    schedule = "*-*-* 00:00:00";
   };
 
   services.fail2ban = {

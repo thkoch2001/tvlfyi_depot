@@ -51,7 +51,7 @@ in
 
     depot.auto-deploy = {
       enable = true;
-      interval = "1d";
+      schedule = "*-*-* 00:00:00";
     };
 
     xserver = {
