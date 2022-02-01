@@ -12,6 +12,9 @@ case "${TARGET_TOOL}" in
   deploy-diogenes)
     attr="users.wpcarro.nixos.deploy-diogenes"
     ;;
+  rebuild-diogenes)
+    attr="users.wpcarro.nixos.rebuild-diogenes"
+    ;;
   import-gpg)
     attr="users.wpcarro.configs.import-gpg"
     ;;
