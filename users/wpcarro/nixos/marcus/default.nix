@@ -146,6 +146,11 @@ in
       '';
     };
 
+    services.redshift = {
+      enable = true;
+      provider = "geoclue2";
+    };
+
     systemd.user.startServices = true;
   };
 
