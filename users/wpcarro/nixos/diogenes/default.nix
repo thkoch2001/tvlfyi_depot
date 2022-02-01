@@ -99,6 +99,8 @@ wpcarro.terraform.googleCloudVM {
       mosh.enable = true;
     };
 
+    virtualisation.docker.enable = true;
+
     # I won't have an Emacs server running on diogenes, and I'll likely be in an
     # SSH session from within vterm. As such, Vim is one of the few editors that
     # I tolerably navigate this way.
@@ -107,6 +109,15 @@ wpcarro.terraform.googleCloudVM {
     };
 
     environment.systemPackages = wpcarro.common.shell-utils;
+
+    systemd.services.wpcarros-shell = {
+      description = "Run the gotty server for my shell.";
+      script = "${wpcarro.nixos.shell}/bin/expose-shell";
+      wantedBy = [ "multi-user.target" ];
+      serviceConfig = {
+        User = "root";
+      };
+    };
 
     services = wpcarro.common.services // {
       # TODO(wpcarro): Re-enable this when rebuild-system better supports
@@ -159,17 +170,28 @@ wpcarro.terraform.googleCloudVM {
           access_log syslog:server=unix:/dev/log,nohostname json_combined;
         '';
 
-        virtualHosts = {
-          "${domainName}" = {
-            addSSL = true;
+        virtualHosts = let
+          base = locations: {
+            inherit locations;
+            forceSSL = true;
             enableACME = true;
-            root = wpcarro.website.root;
           };
-          "monsterpoker.app" = {
-            addSSL = true;
-            enableACME = true;
-            root = wpcarro.clients.monsterpoker;
+          proxy = port: base {
+            "/".proxyPass = "http://127.0.0.1:${port}/";
           };
+          in
+            {
+            # "${domainName}" = {
+            #   forceSSL = true;
+            #   enableACME = true;
+            #   root = wpcarro.website.root;
+            # };
+
+            # TODO(wpcarro): Secure with HTTP basic auth
+            "${domainName}" = proxy "3000" // {
+              authBasic = "wpcarro's shell";
+              authBasicUserFile = "/etc/blah/blah"
+            };
         };
       };
     };

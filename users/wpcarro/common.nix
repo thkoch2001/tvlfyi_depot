@@ -39,6 +39,7 @@ in
   # machines.
   shell-utils = with pkgs; [
     bat
+    busybox
     dig
     direnv
     diskus
@@ -47,6 +48,7 @@ in
     fd
     fzf
     git
+    htop
     jq
     mkpasswd
     nmap

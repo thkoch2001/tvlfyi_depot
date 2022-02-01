@@ -148,8 +148,8 @@ in
 {
   inherit withEmacsPath;
 
-  nixos = { load ? [ ] }: withEmacsPath {
-    inherit load;
+  nixos = { load ? [ ], env ? {} }: withEmacsPath {
+    inherit load env;
     emacsBin = "${wpcarrosEmacs}/bin/emacs";
   };
 
