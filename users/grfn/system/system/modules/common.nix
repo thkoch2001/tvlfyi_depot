@@ -61,7 +61,7 @@ with lib;
   };
 
   nix = {
-    trustedUsers = [ "grfn" ];
+    settings.trusted-users = [ "grfn" ];
     distributedBuilds = true;
 
     gc = {
