@@ -19,7 +19,7 @@
    :when-let
    :starts-with-subseq
    :ends-with-subseq)
-  (:import-from :who :escape-char-minimal)
+  (:import-from :who :escape-string-minimal)
   (:export
    :apple-note
    :apple-note-uuid
