@@ -16,6 +16,24 @@
       "message": "I\u0027m not sure I would want this to be a thing that actually fails the build. It might be useful if it was a warning instead, but we don\u0027t really have this as a concept yet. Unsure ...",
       "revId": "5602610f187517c02b4b0d7ef1e56a9198fe1ced",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "341ce171_632908ac",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2022-02-01T16:48:40Z",
+      "side": 1,
+      "message": "I guess we could do an alwaysRun extraStep for this now? Which ignores the exit code of course…",
+      "parentUuid": "08c6d083_9f9adffa",
+      "revId": "5602610f187517c02b4b0d7ef1e56a9198fe1ced",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
