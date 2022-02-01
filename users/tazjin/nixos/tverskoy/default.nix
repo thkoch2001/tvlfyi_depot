@@ -145,6 +145,11 @@ lib.fix (self: {
     ];
   };
 
+  # from https://github.com/NixOS/nixpkgs/issues/64965
+  environment.etc."ipsec.secrets".text = ''
+    include ipsec.d/ipsec.nm-l2tp.secrets
+  '';
+
   security.rtkit.enable = true;
 
   services = {
