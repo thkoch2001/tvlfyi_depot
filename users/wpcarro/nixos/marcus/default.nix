@@ -138,6 +138,12 @@ in
       backend = "glx";
     };
 
+    services.redshift = {
+      enable = true;
+      latitude = 37.4223931;
+      longitude = -122.0864016;
+    };
+
     services.dunst.enable = true;
     xdg.configFile."dunst/dunstrc" = {
       source = wpcarro.dotfiles.dunstrc;
