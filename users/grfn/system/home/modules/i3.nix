@@ -39,15 +39,23 @@ in
   };
 
   config =
-    let decorationFont = "MesloLGSDZ ${toString config.system.machine.i3FontSize}"; in
-    {
-      home.packages = with pkgs; [
-        rofi
-        rofi-pass
-        python38Packages.py3status
-        i3lock
-        i3status
-        dconf # for gtk
+    let
+      fontName = "MesloLGSDZ";
+      fontSize = config.system.machine.i3FontSize;
+      fonts = {
+        names = [ fontName ];
+        size = fontSize * 1.0;
+      };
+      decorationFont = "${fontName} ${toString fontSize}";
+    in
+      {
+        home.packages = with pkgs; [
+          rofi
+          rofi-pass
+          python38Packages.py3status
+          i3lock
+          i3status
+          dconf # for gtk
 
         # Screenshots
         maim
@@ -176,7 +184,7 @@ in
               ]
             );
 
-          fonts = [ decorationFont ];
+          inherit fonts;
 
           colors = with solarized; rec {
             focused = {
@@ -296,7 +304,7 @@ in
                 '';
               in
               "py3status -c ${i3status-conf}";
-            fonts = [ decorationFont ];
+            inherit fonts;
             position = "top";
             colors = with solarized; rec {
               background = base03;
