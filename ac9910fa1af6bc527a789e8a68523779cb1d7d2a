@@ -16,6 +16,24 @@
       "message": "Just picked midnight for the deploy time. Wdyt?",
       "revId": "ac9910fa1af6bc527a789e8a68523779cb1d7d2a",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "71482782_32fab0d4",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-02-01T06:06:21Z",
+      "side": 1,
+      "message": "You can use `systemd-analyze calendar \u0027*-*-* 00:00:00\u0027` to test formats",
+      "parentUuid": "9f72e304_acc50317",
+      "revId": "ac9910fa1af6bc527a789e8a68523779cb1d7d2a",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
