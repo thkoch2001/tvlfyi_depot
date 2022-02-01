@@ -1,7 +1,7 @@
 # diogenes
 
 diogenes is a NixOS machine deployed on a Google VM. It hosts
-https://wpcarro.dev.
+https://billandhiscomputer.com.
 
 ## Deployment
 
