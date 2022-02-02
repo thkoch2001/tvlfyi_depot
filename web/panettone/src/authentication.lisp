@@ -103,13 +103,13 @@ instance of `user'"
 request against the ldap server at *ldap*. Returns the user if authentication is
 successful, `nil' otherwise"
   (when-let ((user (if (typep user-or-username 'user) user-or-username
-                       (find-user user-or-username))))
-    (let ((dn (dn user)))
-      (let ((code-sym
-              (nth-value 1 (ldap:bind
-                            (ldap:new-ldap :host (ldap:host *ldap*)
-                                           :port (ldap:port *ldap*)
-                                           :user dn
-                                           :pass password)))))
-        (when (equalp code-sym 'trivial-ldap:success)
-          user)))))
+                     (find-user user-or-username))))
+    (let* ((dn (dn user))
+           (conn (ldap:new-ldap :host (ldap:host *ldap*)
+                                :port (ldap:port *ldap*)
+                                :user dn
+                                :pass password))
+           (code-sym (nth-value 1 (unwind-protect (ldap:bind conn)
+                                    (ldap:unbind conn)))))
+      (when (equalp code-sym 'trivial-ldap:success)
+        user))))
