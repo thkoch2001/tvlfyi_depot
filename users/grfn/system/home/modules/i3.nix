@@ -48,14 +48,14 @@ in
       };
       decorationFont = "${fontName} ${toString fontSize}";
     in
-      {
-        home.packages = with pkgs; [
-          rofi
-          rofi-pass
-          python38Packages.py3status
-          i3lock
-          i3status
-          dconf # for gtk
+    {
+      home.packages = with pkgs; [
+        rofi
+        rofi-pass
+        python38Packages.py3status
+        i3lock
+        i3status
+        dconf # for gtk
 
         # Screenshots
         maim
