@@ -23,6 +23,7 @@
         *ldap* (ldap:new-ldap :host host :port port)))
 
 (defun reconnect-ldap ()
+  (ldap:close-stream *ldap*)
   (setq *ldap* (ldap:new-ldap
                 :host *ldap-host*
                 :port *ldap-port*)))
