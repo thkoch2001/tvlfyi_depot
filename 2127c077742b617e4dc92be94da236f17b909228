@@ -16,6 +16,24 @@
       "message": "to avoid things going out of sync, maybe we could put all this info in the comment and point people at the comment from the README?",
       "revId": "2127c077742b617e4dc92be94da236f17b909228",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "326df474_8905dd83",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2022-02-02T19:23:42Z",
+      "side": 1,
+      "message": "bit awkward to refer to \"the comment at the end of the file\"…",
+      "parentUuid": "870d31a3_732b4414",
+      "revId": "2127c077742b617e4dc92be94da236f17b909228",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
