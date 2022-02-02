@@ -93,9 +93,12 @@ with lib;
       };
     };
 
-  services.depot.auto-deploy = {
+  services.self-deploy = {
     enable = true;
-    interval = "1d";
+    repository = "https://cl.tvl.fyi/depot.git";
+    branch = "canon";
+    nixAttribute = "users.grfn.system.system.mugwumpSystem";
+    startAt = "daily";
   };
 
   services.fail2ban = {

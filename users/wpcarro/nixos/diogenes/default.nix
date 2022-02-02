@@ -110,10 +110,12 @@ wpcarro.terraform.googleCloudVM {
 
     services = wpcarro.common.services // {
       # TODO(wpcarro): Re-enable this when rebuild-system better supports
-      # terraform deployments.
-      # depot.auto-deploy = {
+      # self-deploy = {
       #   enable = true;
-      #   interval = "1h";
+      #   repository = "https://cl.tvl.fyi/depot.git";
+      #   branch = "canon";
+      #   nixAttribute = "users.wpcarro.nixos.diogenesSystem";
+      #   startAt = "daily";
       # };
 
       # TODO(wpcarro): Re-enable this after debugging ACME and NXDOMAIN.

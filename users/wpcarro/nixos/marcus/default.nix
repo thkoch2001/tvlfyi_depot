@@ -49,9 +49,12 @@ in
   services = wpcarro.common.services // {
     tzupdate.enable = true;
 
-    depot.auto-deploy = {
+    self-deploy = {
       enable = true;
-      interval = "1d";
+      repository = "https://cl.tvl.fyi/depot.git";
+      branch = "canon";
+      nixAttribute = "users.wpcarro.nixos.marcusSystem";
+      startAt = "daily";
     };
 
     xserver = {
