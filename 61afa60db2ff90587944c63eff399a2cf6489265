@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8094b383_7eb1966e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-02-02T12:35:05Z",
+      "side": 1,
+      "message": "Upstream PR changed, but the new one has been merged: https://github.com/NixOS/nixpkgs/pull/157804\n\nNow we\u0027ll wait for the channel to advance here.",
+      "revId": "61afa60db2ff90587944c63eff399a2cf6489265",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
