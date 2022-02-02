@@ -104,5 +104,11 @@ in
         ISSUECHANNEL = cfg.irccatChannel;
       };
     };
+
+    # Workaround for panettone's resource leakage bugs.
+    systemd.services.restart-panettone = {
+      script = "${pkgs.systemd}/bin/systemctl restart panettone";
+      startAt = "hourly";
+    };
   };
 }
