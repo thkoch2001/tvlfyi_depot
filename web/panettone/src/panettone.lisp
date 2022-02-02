@@ -215,7 +215,7 @@
                       (who:esc (format nil "#~A" issue-id)))
                " - "
                (created-by-at issue)
-               (let ((num-comments (length (issue-comments issue))))
+               (let ((num-comments (length (model:issue-comments issue))))
                  (unless (zerop num-comments)
                    (who:htm
                     (:span :class "comment-count"
@@ -383,8 +383,8 @@
                      (:open "Close")
                      (:closed "Reopen"))))))
        (:p (who:str (render-markdown (body issue))))
-       (let* ((comments (issue-comments issue))
-              (events (issue-events issue))
+       (let* ((comments (model:issue-comments issue))
+              (events (model:issue-events issue))
               (history (merge 'list
                               comments
                               events
@@ -412,14 +412,15 @@
   "Send an email notification to all subscribers to the given issue with the
 given subject an body (in a thread, to avoid blocking)"
   (let ((current-user *user*))
-    (model:make-thread
+    (bordeaux-threads:make-thread
      (lambda ()
-       (dolist (user-dn (model:issue-subscribers issue-id))
-         (when (not (equal (dn current-user) user-dn))
-           (email:notify-user
-            user-dn
-            :subject subject
-            :message message)))))))
+       (pomo:with-connection *pg-spec*
+         (dolist (user-dn (model:issue-subscribers issue-id))
+           (when (not (equal (dn current-user) user-dn))
+             (email:notify-user
+              user-dn
+              :subject subject
+              :message message))))))))
 
 (defun link-to-issue (issue-id)
   (format nil "https://b.tvl.fyi/issues/~A" issue-id))
@@ -437,15 +438,17 @@ given subject an body (in a thread, to avoid blocking)"
               (hunchentoot:request-uri*)
               :utf-8)))))
 
-(defun @txn (next)
-  (pomo:with-transaction ()
-    (catch
-        ;; 'hunchentoot:handler-done is unexported, but is used by functions
-        ;; like hunchentoot:redirect to nonlocally abort the request handler -
-        ;; this doesn't mean an error occurred, so we need to catch it here to
-        ;; make the transaction still get committed
-        (intern "HANDLER-DONE" "HUNCHENTOOT")
-      (funcall next))))
+(defun @db (next)
+  "Decorator for handlers that use the database, wrapped in a transaction."
+  (pomo:with-connection *pg-spec*
+    (pomo:with-transaction ()
+      (catch
+          ;; 'hunchentoot:handler-done is unexported, but is used by functions
+          ;; like hunchentoot:redirect to nonlocally abort the request handler -
+          ;; this doesn't mean an error occurred, so we need to catch it here to
+          ;; make the transaction still get committed
+          (intern "HANDLER-DONE" "HUNCHENTOOT")
+        (funcall next)))))
 
 (defun @handle-issue-not-found (next)
   (handler-case (funcall next)
@@ -472,14 +475,14 @@ given subject an body (in a thread, to avoid blocking)"
   (hunchentoot:delete-session-value 'user)
   (hunchentoot:redirect "/"))
 
-(defroute index ("/" :decorators (@auth-optional)) ()
+(defroute index ("/" :decorators (@auth-optional @db)) ()
   (let ((issues (model:list-issues :status :open)))
     (render/index :issues issues)))
 
-(defroute settings ("/settings" :method :get :decorators (@auth)) ()
+(defroute settings ("/settings" :method :get :decorators (@auth @db)) ()
   (render/settings))
 
-(defroute save-settings ("/settings" :method :post :decorators (@auth))
+(defroute save-settings ("/settings" :method :post :decorators (@auth @db))
     (&post enable-email-notifications)
   (let ((settings (model:settings-for-user (dn *user*))))
     (model:update-user-settings
@@ -488,7 +491,7 @@ given subject an body (in a thread, to avoid blocking)"
     (render/settings)))
 
 (defroute handle-closed-issues
-    ("/issues/closed" :decorators (@auth-optional)) ()
+    ("/issues/closed" :decorators (@auth-optional @db)) ()
   (let ((issues (model:list-issues :status :closed)))
     (render/closed-issues :issues issues)))
 
@@ -496,7 +499,7 @@ given subject an body (in a thread, to avoid blocking)"
   (render/issue-form))
 
 (defroute handle-create-issue
-    ("/issues" :method :post :decorators (@auth @txn))
+    ("/issues" :method :post :decorators (@auth @db))
     (&post subject body)
   (if (string= subject "")
       (render/issue-form
@@ -518,7 +521,7 @@ given subject an body (in a thread, to avoid blocking)"
         (hunchentoot:redirect "/"))))
 
 (defroute show-issue
-    ("/issues/:id" :decorators (@auth-optional @handle-issue-not-found))
+    ("/issues/:id" :decorators (@auth-optional @handle-issue-not-found @db))
     (&path (id 'integer))
   (let* ((issue (model:get-issue id))
          (*title* (format nil "~A | Panettone"
@@ -526,14 +529,14 @@ given subject an body (in a thread, to avoid blocking)"
     (render/issue issue)))
 
 (defroute edit-issue
-    ("/issues/:id/edit" :decorators (@auth @handle-issue-not-found))
+    ("/issues/:id/edit" :decorators (@auth @handle-issue-not-found @db))
     (&path (id 'integer))
   (let* ((issue (model:get-issue id))
          (*title* "Edit Issue | Panettone"))
     (render/issue-form issue)))
 
 (defroute update-issue
-    ("/issues/:id" :decorators (@auth @handle-issue-not-found @txn)
+    ("/issues/:id" :decorators (@auth @handle-issue-not-found @db)
                    ;; NOTE: this should be a put, but we're all HTML forms
                    ;; right now and those don't support PUT
                    :method :post)
@@ -551,7 +554,7 @@ given subject an body (in a thread, to avoid blocking)"
 
 (defroute handle-create-comment
     ("/issues/:id/comments"
-     :decorators (@auth @handle-issue-not-found @txn)
+     :decorators (@auth @handle-issue-not-found @db)
      :method :post)
     (&path (id 'integer) &post body)
   (flet ((redirect-to-issue ()
@@ -578,7 +581,7 @@ given subject an body (in a thread, to avoid blocking)"
        (redirect-to-issue)))))
 
 (defroute close-issue
-    ("/issues/:id/close" :decorators (@auth @handle-issue-not-found @txn)
+    ("/issues/:id/close" :decorators (@auth @handle-issue-not-found @db)
                          :method :post)
     (&path (id 'integer))
   (model:set-issue-status id :closed)
@@ -602,7 +605,7 @@ given subject an body (in a thread, to avoid blocking)"
   (hunchentoot:redirect (format nil "/issues/~A" id)))
 
 (defroute open-issue
-    ("/issues/:id/open" :decorators (@auth)
+    ("/issues/:id/open" :decorators (@auth @db)
                         :method :post)
     (&path (id 'integer))
   (model:set-issue-status id :open)
@@ -634,17 +637,17 @@ given subject an body (in a thread, to avoid blocking)"
 
 (defun migrate-db ()
   "Migrate the database to the latest version of the schema"
-  (model:ddl/init))
+  (pomo:with-connection *pg-spec*
+    (model:ddl/init)))
 
 (defun start-panettone (&key port
                           (ldap-host "localhost")
                           (ldap-port 389)
-                          postgres-params
                           session-secret)
   (connect-ldap :host ldap-host
                 :port ldap-port)
 
-  (apply #'model:connect-postgres postgres-params)
+  (model:prepare-db-connections)
   (migrate-db)
 
   (when session-secret
@@ -668,6 +671,8 @@ given subject an body (in a thread, to avoid blocking)"
     (start-panettone :port port
                      :ldap-port ldap-port
                      :session-secret session-secret)
+
+    (format t "launched panettone on port ~A~%" port)
 
     (sb-thread:join-thread
      (find-if (lambda (th)
