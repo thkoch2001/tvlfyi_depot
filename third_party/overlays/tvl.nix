@@ -46,9 +46,11 @@ self: super: {
   nix-serve = super.nix-serve.override { nix = super.nix_2_3; };
 
   # Avoid builds of mkShell derivations in CI.
-  mkShell = super.lib.makeOverridable (args: (super.mkShell args) // {
-    meta.ci.skip = true;
-  });
+  mkShell = super.lib.makeOverridable (args: (super.mkShell args).overrideAttrs (_: {
+    passthru = {
+      meta.ci.skip = true;
+    };
+  }));
 
   # bump nixpkgs-fmt to a version that doesn't touch whitespace in
   # strings
