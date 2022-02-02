@@ -32,7 +32,9 @@
   (:use :cl :panettone.util :klatre :postmodern :iterate)
   (:import-from :alexandria :if-let :when-let :define-constant)
   (:export
-   :connect-postgres :ddl/init :make-thread
+   :prepare-db-connections
+   :ddl/init
+   :*pg-spec*
 
    :user-settings
    :user-dn :enable-email-notifications-p :settings-for-user
@@ -76,7 +78,7 @@
    :panettone.model
    :id :subject :body :author-dn :issue-id :status :created-at
    :field :previous-value :new-value :acting-user-dn
-   :issue-comments :num-comments :issue-events)
+   :*pg-spec*)
   (:import-from :panettone.irc :send-irc-notification)
   (:shadow :next)
   (:export :start-pannetone :config :main))
