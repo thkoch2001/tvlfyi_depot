@@ -1,28 +1,24 @@
 (in-package :panettone.model)
 (declaim (optimize (safety 3)))
 
-(defun connect-postgres (&key
-                           (host (or (uiop:getenvp "PGHOST") "localhost"))
-                           (user (or (uiop:getenvp "PGUSER") "panettone"))
-                           (password (or (uiop:getenvp "PGPASSWORD") "password"))
-                           (database (or (uiop:getenvp "PGDATABASE") "panettone"))
-                           (port (or (integer-env "PGPORT") 5432)))
-  "Initialize the global postgresql connection for Panettone"
-  (postmodern:connect-toplevel database user password host :port port))
+(defvar *pg-spec* nil
+  "Connection spec for use with the with-connection macro. Needs to be
+initialised at launch time.")
 
-(defun make-thread
-    (function &rest args)
-  "Make a new thread as per `BORDEAUX-THREADS:MAKE-THREAD' but with its own, new
-database connection."
-  (let ((spec `(,(or (uiop:getenvp "PGDATABASE") "panettone")
-                ,(or (uiop:getenvp "PGUSER") "panettone")
-                ,(or (uiop:getenvp "PGPASSWORD") "password")
-                ,(or (uiop:getenvp "PGHOST") "localhost")
-                :port ,(or (integer-env "PGPORT") 5432))))
-    (apply #'bt:make-thread
-           (lambda ()
-             (postmodern:call-with-connection spec function))
-           args)))
+(defun make-pg-spec ()
+  "Construct the Postgres connection spec from the environment."
+  (list (or (uiop:getenvp "PGDATABASE") "panettone")
+        (or (uiop:getenvp "PGUSER") "panettone")
+        (or (uiop:getenvp "PGPASSWORD") "password")
+        (or (uiop:getenvp "PGHOST") "localhost")
+
+        :port (or (integer-env "PGPORT") 5432)
+        :application-name "panettone"
+        :pooled-p t))
+
+(defun prepare-db-connections ()
+  "Initialises the connection spec used for all Postgres connections."
+  (setq *pg-spec* (make-pg-spec)))
 
 ;;;
 ;;; Schema
@@ -268,7 +264,7 @@ type `ISSUE-NOT-FOUND'."
     (with-column-writers ('num_comments 'num-comments)
       (query-dao 'issue query status))))
 
-(defmethod num-comments ((issue-id integer))
+(defmethod count-comments ((issue-id integer))
   "Return the number of comments for the given ISSUE-ID."
   (query
    (:select (:count '*)
@@ -305,7 +301,6 @@ NOTE: This makes a database query, so be wary of N+1 queries"
      :from 'issue-events
      :where (:= 'issue-id issue-id))
     (:asc 'created-at))))
-
 
 ;;;
 ;;; Writing
@@ -414,7 +409,6 @@ explicitly subscribing to / unsubscribing from individual issues."
 
 
 (comment
- (connect-postgres)
  (ddl/init)
  (make-instance 'issue :subject "test")
  (create-issue :subject "test"
