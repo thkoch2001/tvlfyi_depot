@@ -93,6 +93,11 @@
 (setq perl-continued-statement-offset 0)
 (setq perl-continued-brace-offset 0)
 
+;; org mode
+
+(setq org-clock-persist 'history)
+(org-clock-persistence-insinuate)
+
 ;;; Configure packages
 (require 'use-package)
 
