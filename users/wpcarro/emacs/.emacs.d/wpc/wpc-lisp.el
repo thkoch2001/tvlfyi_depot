@@ -100,10 +100,18 @@
   :config
   (general-add-hook 'emacs-lisp-mode #'ielm-mode))
 
+(defun wpc-lisp-copy-elisp-eval-output ()
+  "Copy the output of the elisp evaluation"
+  (interactive)
+  (call-interactively 'eval-last-sexp)
+  (clipboard-copy (current-message)
+                  :message (format "%s - copied!" (current-message))))
+
 (general-define-key
  :keymaps 'emacs-lisp-mode-map
  :prefix "<SPC>"
  :states 'normal
+ "c" #'wpc-lisp-copy-elisp-eval-output
  "x" #'eval-defun
  "X" #'eval-buffer
  "d" (lambda ()
