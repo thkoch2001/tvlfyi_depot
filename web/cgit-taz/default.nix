@@ -10,15 +10,12 @@ let
     writeText
     ;
 
-  sourceFilter = writeShellScriptBin "cheddar-about" ''
-    exec ${depot.tools.cheddar}/bin/cheddar --about-filter $@
-  '';
   cgitConfig = writeText "cgitrc" ''
     # Global configuration
     virtual-root=/
     enable-http-clone=0
     readme=:README.md
-    about-filter=${sourceFilter}/bin/cheddar-about
+    about-filter=${depot.tools.cheddar.about-filter}/bin/cheddar-about
     source-filter=${depot.tools.cheddar}/bin/cheddar
     enable-log-filecount=1
     enable-log-linecount=1
