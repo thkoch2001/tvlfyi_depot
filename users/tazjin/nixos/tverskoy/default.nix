@@ -273,7 +273,7 @@ lib.fix (self: {
       direnv
       dmd
       dnsutils
-      emacs27-nox # emacsclient
+      emacsGcc # emacsclient
       exa
       fd
       file
