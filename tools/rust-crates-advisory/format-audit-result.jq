@@ -9,6 +9,8 @@
 #   for the current lock file.
 # - attr: An attribute name (or otherwise unique identifier) to associate the
 #   report for the current lock file with.
+# - checklist: If true, the markdown report will use GHFM checklists for the
+#   report, allowing to tick of attributes as taken care of.
 
 # Link to human-readable advisory info for a given vulnerability
 def link:
@@ -62,7 +64,7 @@ def format_vulnerability:
 if .vulnerabilities.found | not then
   ""
 else
-  ([ "- [ ] "
+  ([ "-", if $checklist then " [ ] " else " " end
    , "`", $attr, "`: "
    , (.vulnerabilities.count | tostring)
    , " vulnerabilities in Cargo.lock"
