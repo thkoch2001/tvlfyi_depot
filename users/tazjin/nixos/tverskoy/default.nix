@@ -247,7 +247,6 @@ lib.fix (self: {
     light.enable = true;
     mosh.enable = true;
     ssh.startAgent = true;
-    steam.enable = true;
 
     # Required by impermanence
     fuse.userAllowOther = true;
@@ -315,7 +314,6 @@ lib.fix (self: {
       rustup
       screen
       scrot
-      spotify
       syncthing
       tig
       tokei
