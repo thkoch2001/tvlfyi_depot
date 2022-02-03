@@ -52,6 +52,24 @@
       "parentUuid": "326df474_8905dd83",
       "revId": "2127c077742b617e4dc92be94da236f17b909228",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bdd1aa39_3a7fc336",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2022-02-03T15:29:06Z",
+      "side": 1,
+      "message": "I guess we could refer to the README from the comment?",
+      "parentUuid": "7842c135_1d7b190b",
+      "revId": "2127c077742b617e4dc92be94da236f17b909228",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
