@@ -1,3 +1,15 @@
+# This is a jq script to format the JSON output of cargo-audit into a short
+# markdown report for humans. It is used by //users/sterni/nixpkgs-crate-holes
+# and //tools/rust-crates-advisory:check-all-our-lock-files which will provide
+# you with example invocations.
+#
+# It needs the following arguments passed to it:
+#
+# - maintainers: Either the empty string or a list of maintainers to @mention
+#   for the current lock file.
+# - attr: An attribute name (or otherwise unique identifier) to associate the
+#   report for the current lock file with.
+
 # Link to human-readable advisory info for a given vulnerability
 def link:
   [ "https://rustsec.org/advisories/", .advisory.id, ".html" ] | add;
