@@ -3,7 +3,7 @@
 { lib, pkgs, ... }:
 
 pkgs.makeOverridable
-  ({ emacs ? pkgs.emacsGcc }:
+  ({ emacs ? pkgs.emacs }:
   let
     emacsWithPackages = (pkgs.emacsPackagesGen emacs).emacsWithPackages;
 
@@ -141,6 +141,9 @@ pkgs.makeOverridable
       # Call overrideEmacs with a function (pkgs -> pkgs) to modify the
       # packages that should be included in this Emacs distribution.
       overrideEmacs = f': self l f';
+
+      # Make the original Emacs intended for use with this available.
+      inherit emacs;
 
       # Call withLocalConfig with the path to a *folder* containing a
       # `local.el` which provides local system configuration.
