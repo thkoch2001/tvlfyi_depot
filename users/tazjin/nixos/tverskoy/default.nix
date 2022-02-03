@@ -258,6 +258,7 @@ lib.fix (self: {
       screenLock
       tools.nsfv-setup
       users.tazjin.emacs
+      # users.tazjin.emacs.emacs # emacsclient
       third_party.agenix.cli
       third_party.dfmt
     ]) ++
@@ -273,17 +274,15 @@ lib.fix (self: {
       direnv
       dmd
       dnsutils
-      emacsGcc # emacsclient
       exa
       fd
       file
       firefox
       fractal
-      gdb
       gh
       git
       gnupg
-      google-chrome
+      # google-chrome
       gtk3 # for gtk-launch
       htop
       hyperfine
@@ -319,7 +318,7 @@ lib.fix (self: {
       tokei
       tree
       unzip
-      vlc
+      # vlc
       whois
       xsecurelock
       zoxide
