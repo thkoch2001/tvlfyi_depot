@@ -16,6 +16,46 @@
       "message": "Upstream PR changed, but the new one has been merged: https://github.com/NixOS/nixpkgs/pull/157804\n\nNow we\u0027ll wait for the channel to advance here.",
       "revId": "61afa60db2ff90587944c63eff399a2cf6489265",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c9318402_e33ef3f5",
+        "filename": "tools/crfo-approve.nix",
+        "patchSetId": 1
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2022-02-03T14:48:34Z",
+      "side": 1,
+      "message": "maybe check `$#` and exit early if it\u0027s not 4?",
+      "revId": "61afa60db2ff90587944c63eff399a2cf6489265",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ec0dc179_a1470fb7",
+        "filename": "tools/crfo-approve.nix",
+        "patchSetId": 1
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2022-02-03T14:48:34Z",
+      "side": 1,
+      "message": "generally I believe local (non-exported) bash variables are lowercase",
+      "range": {
+        "startLine": 13,
+        "startChar": 11,
+        "endLine": 13,
+        "endChar": 16
+      },
+      "revId": "61afa60db2ff90587944c63eff399a2cf6489265",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
