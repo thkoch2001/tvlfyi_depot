@@ -265,7 +265,6 @@ lib.fix (self: {
       tools.nsfv-setup
       users.tazjin.emacs
       third_party.agenix.cli
-      third_party.dfmt
     ]) ++
 
     # programs from nixpkgs
@@ -273,7 +272,6 @@ lib.fix (self: {
       amber
       audacity
       bat
-      chromium
       curl
       ddcutil
       direnv
@@ -320,7 +318,6 @@ lib.fix (self: {
       rustup
       screen
       scrot
-      syncthing
       tig
       tokei
       tree
