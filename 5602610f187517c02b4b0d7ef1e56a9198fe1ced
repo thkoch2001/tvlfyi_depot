@@ -34,6 +34,24 @@
       "parentUuid": "08c6d083_9f9adffa",
       "revId": "5602610f187517c02b4b0d7ef1e56a9198fe1ced",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "26b202f1_8c8a3630",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-02-03T09:00:02Z",
+      "side": 1,
+      "message": "Yeah, that sounds good.\n\nCould you make it so that it does `check-thing || buildkite-agent annotate --style warning \"Oh no, insecurities!\"` or something? That would highlight it prominently on the build page.",
+      "parentUuid": "341ce171_632908ac",
+      "revId": "5602610f187517c02b4b0d7ef1e56a9198fe1ced",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
