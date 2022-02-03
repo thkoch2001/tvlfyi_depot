@@ -176,7 +176,7 @@ let
       "maintainers"
       ""
       "-f"
-      ../../users/sterni/nixpkgs-crate-holes/format-audit-result.jq
+      ./format-audit-result.jq
     ]
     "if"
     [ depot.tools.eprintf "%s\n" "$report" ]
