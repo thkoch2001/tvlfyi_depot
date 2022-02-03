@@ -67,7 +67,7 @@ else
   ([ "-", if $checklist then " [ ] " else " " end
    , "`", $attr, "`: "
    , (.vulnerabilities.count | tostring)
-   , " vulnerabilities in Cargo.lock"
+   , " advisories for Cargo.lock"
    , if $maintainers != "" then " (cc " + $maintainers + ")" else "" end
    , "\n"
    ] + (.vulnerabilities.list | map(format_vulnerability))
