@@ -147,7 +147,7 @@ let
         bins.jq
         "-rj"
         "-f"
-        ./format-audit-result.jq
+        ../../../tools/rust-crates-advisory/format-audit-result.jq
         "--arg"
         "attr"
         strAttr
