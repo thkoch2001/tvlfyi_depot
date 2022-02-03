@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "05c2aad5_33fff88e",
+        "filename": "web/panettone/src/authentication.lisp",
+        "patchSetId": 2
+      },
+      "lineNbr": 113,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2022-02-03T14:50:56Z",
+      "side": 1,
+      "message": "shouldn\u0027t this be handling errors somehow?",
+      "revId": "3a226aa2613960b5b083e59864fc7a6254871d00",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
