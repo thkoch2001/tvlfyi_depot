@@ -9,4 +9,15 @@ depot.third_party.naersk.buildPackage {
     # plus additional languages we care about.
     BAT_SYNTAXES = "${depot.third_party.bat_syntaxes}";
   };
+
+  passthru = {
+    # Wrapper for cgit which can't be told to pass arguments to a filter
+    about-filter = pkgs.writeShellScriptBin "cheddar-about" ''
+      exec ${depot.tools.cheddar}/bin/cheddar --about-filter $@
+    '';
+  };
+
+  meta.targets = [
+    "about-filter"
+  ];
 }
