@@ -154,6 +154,9 @@ let
         "--arg"
         "maintainers"
         strMaintainers
+        "--argjson"
+        "checklist"
+        "true"
       ];
 
   # GHMF in issues splits paragraphs on newlines

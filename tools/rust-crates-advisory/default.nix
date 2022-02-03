@@ -175,6 +175,9 @@ let
       "--arg"
       "maintainers"
       ""
+      "--argjson"
+      "checklist"
+      "false"
       "-f"
       ./format-audit-result.jq
     ]
