@@ -21,4 +21,7 @@ pkgs.fetchFromGitHub {
     rev
     sha256
     ;
+  passthru = {
+    inherit (pin) rev;
+  };
 }
