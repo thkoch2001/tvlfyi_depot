@@ -34,6 +34,24 @@
       "parentUuid": "870d31a3_732b4414",
       "revId": "2127c077742b617e4dc92be94da236f17b909228",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7842c135_1d7b190b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2022-02-03T14:51:45Z",
+      "side": 1,
+      "message": "¯\\_(ツ)_/¯\n\nagain, I\u0027m mostly worried about either copy of this information getting out of sync.\n\nBut it\u0027s not a huge deal I guess.",
+      "parentUuid": "326df474_8905dd83",
+      "revId": "2127c077742b617e4dc92be94da236f17b909228",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
