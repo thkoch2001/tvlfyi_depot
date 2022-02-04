@@ -17,6 +17,17 @@ let
   our-crates = lib.filter (v: v ? outPath)
     (builtins.attrValues depot.third_party.rust-crates);
 
+  our-crates-lock-file = pkgs.writeText "our-crates-Cargo.lock"
+    (lib.concatMapStrings
+      (crate: ''
+        [[package]]
+        name = "${crate.crateName}"
+        version = "${crate.version}"
+        source = "registry+https://github.com/rust-lang/crates.io-index"
+
+      '')
+      our-crates);
+
   check-security-advisory = depot.nix.writers.rustSimple
     {
       name = "parse-security-advisory";
@@ -69,73 +80,6 @@ let
     "$out"
   ];
 
-
-  check-all-our-crates = depot.nix.runExecline "check-all-our-crates"
-    {
-      stdin = lib.concatStrings
-        (map
-          (crate:
-            depot.nix.netstring.fromString
-              (depot.nix.netstring.fromString crate.crateName
-                + depot.nix.netstring.fromString crate.version))
-          our-crates);
-    } [
-    "if"
-    [
-      "forstdin"
-      "-o"
-      "0"
-      "-Ed"
-      ""
-      "crateNetstring"
-      "multidefine"
-      "-d"
-      ""
-      "$crateNetstring"
-      [ "crate" "crate_version" ]
-      "if"
-      [ depot.tools.eprintf "checking %s, version %s\n" "$crate" "$crate_version" ]
-
-      "ifthenelse"
-      [ bins.s6-test "-d" "${crate-advisories}/\${crate}" ]
-      [
-        # also print the full advisory text if it matches
-        "export"
-        "PRINT_ADVISORY"
-        "1"
-        check-crate-advisory
-        "${crate-advisories}/\${crate}"
-        "$crate"
-        "$crate_version"
-      ]
-      [ depot.tools.eprintf "No advisories found for crate %s\n" "$crate" ]
-      "importas"
-      "-ui"
-      "ret"
-      "?"
-      # put a marker in ./failed to read at the end
-      "ifelse"
-      [ bins.s6-test "$ret" "-eq" "1" ]
-      [ bins.s6-touch "./failed" ]
-      "if"
-      [ depot.tools.eprintf "\n" ]
-      "exit"
-      "$ret"
-    ]
-    "ifelse"
-    [ bins.s6-test "-f" "./failed" ]
-    [
-      "if"
-      [ depot.tools.eprintf "Error: Found active advisories!" ]
-      "exit"
-      "1"
-    ]
-    "importas"
-    "out"
-    "out"
-    bins.s6-touch
-    "$out"
-  ];
 
   lock-file-report = pkgs.writers.writeBash "lock-file-report" ''
     set -u
@@ -203,6 +147,13 @@ let
     "-EI"
     "report"
     [
+      "foreground"
+      [
+        lock-file-report
+        "//third_party/rust-crates"
+        our-crates-lock-file
+        "false"
+      ]
       tree-lock-file-report
       "."
     ]
@@ -232,13 +183,8 @@ let
 
 in
 depot.nix.readTree.drvTargets {
-
-  check-all-our-crates =
-    depot.nix.drvSeqL
-      [ test-parsing-all-security-advisories ]
-      check-all-our-crates;
-
   inherit
+    test-parsing-all-security-advisories
     check-crate-advisory
     lock-file-report
     ;
@@ -246,7 +192,7 @@ depot.nix.readTree.drvTargets {
 
   tree-lock-file-report = tree-lock-file-report // {
     meta.ci.extraSteps.run = {
-      label = "Check Cargo.lock files in depot for advisories";
+      label = "Check all crates used in depot for advisories";
       alwaysRun = true;
       command = check-all-our-lock-files;
     };
