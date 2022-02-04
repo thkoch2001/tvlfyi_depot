@@ -136,6 +136,31 @@ let
     "$out"
   ];
 
+  lock-file-report = pkgs.writers.writeBash "lock-file-report" ''
+    set -u
+
+    if test "$#" -lt 2; then
+      echo "Usage: $0 IDENTIFIER LOCKFILE [CHECKLIST [MAINTAINERS]]" >&2
+      echo 2>&1
+      echo "  IDENTIFIER  Unique string describing the lock file" >&2
+      echo "  LOCKFILE    Path to Cargo.lock file" >&2
+      echo "  CHECKLIST   Whether to use GHFM checklists in the output (true or false)" >&2
+      echo "  MAINTAINERS List of @names to cc in case of advisories" >&2
+      exit 100
+    fi
+
+    "${bins.cargo-audit}" audit --json --no-fetch \
+      --db "${depot.third_party.rustsec-advisory-db}" \
+      --file "$2" \
+    | "${bins.jq}" --raw-output --join-output \
+      --from-file "${./format-audit-result.jq}" \
+      --arg maintainers "''${4:-}" \
+      --argjson checklist "''${3:-false}" \
+      --arg attr "$1"
+
+    exit "''${PIPESTATUS[0]}" # inherit exit code from cargo-audit
+  '';
+
   check-all-our-lock-files = depot.nix.writeExecline "check-all-our-lock-files" { } [
     "backtick"
     "-E"
@@ -156,30 +181,10 @@ let
         bins.sed
         "s|^\\.|/|"
       ]
-      "pipeline"
-      [
-        bins.cargo-audit
-        "audit"
-        "--json"
-        "-n"
-        "--db"
-        depot.third_party.rustsec-advisory-db
-        "-f"
-        "$lockFile"
-      ]
-      bins.jq
-      "-rj"
-      "--arg"
-      "attr"
+      lock-file-report
       "$depotPath"
-      "--arg"
-      "maintainers"
-      ""
-      "--argjson"
-      "checklist"
+      "$lockFile"
       "false"
-      "-f"
-      ./format-audit-result.jq
     ]
     "if"
     [ depot.tools.eprintf "%s\n" "$report" ]
@@ -227,6 +232,7 @@ depot.nix.readTree.drvTargets {
 
   inherit
     check-crate-advisory
+    lock-file-report
     ;
 
 
