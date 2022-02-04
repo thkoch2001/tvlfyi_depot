@@ -4,6 +4,7 @@ let
 
   bins =
     depot.nix.getBins pkgs.s6-portable-utils [ "s6-ln" "s6-cat" "s6-echo" "s6-mkdir" "s6-test" "s6-touch" "s6-dirname" ]
+    // depot.nix.getBins pkgs.coreutils [ "printf" ]
     // depot.nix.getBins pkgs.lr [ "lr" ]
     // depot.nix.getBins pkgs.cargo-audit [ "cargo-audit" ]
     // depot.nix.getBins pkgs.jq [ "jq" ]
@@ -15,6 +16,17 @@ let
 
   our-crates = lib.filter (v: v ? outPath)
     (builtins.attrValues depot.third_party.rust-crates);
+
+  our-crates-lock-file = pkgs.writeText "our-crates-Cargo.lock"
+    (lib.concatMapStrings
+      (crate: ''
+        [[package]]
+        name = "${crate.crateName}"
+        version = "${crate.version}"
+        source = "registry+https://github.com/rust-lang/crates.io-index"
+
+      '')
+      our-crates);
 
   check-security-advisory = depot.nix.writers.rustSimple
     {
@@ -69,73 +81,6 @@ let
   ];
 
 
-  check-all-our-crates = depot.nix.runExecline "check-all-our-crates"
-    {
-      stdin = lib.concatStrings
-        (map
-          (crate:
-            depot.nix.netstring.fromString
-              (depot.nix.netstring.fromString crate.crateName
-                + depot.nix.netstring.fromString crate.version))
-          our-crates);
-    } [
-    "if"
-    [
-      "forstdin"
-      "-o"
-      "0"
-      "-Ed"
-      ""
-      "crateNetstring"
-      "multidefine"
-      "-d"
-      ""
-      "$crateNetstring"
-      [ "crate" "crate_version" ]
-      "if"
-      [ depot.tools.eprintf "checking %s, version %s\n" "$crate" "$crate_version" ]
-
-      "ifthenelse"
-      [ bins.s6-test "-d" "${crate-advisories}/\${crate}" ]
-      [
-        # also print the full advisory text if it matches
-        "export"
-        "PRINT_ADVISORY"
-        "1"
-        check-crate-advisory
-        "${crate-advisories}/\${crate}"
-        "$crate"
-        "$crate_version"
-      ]
-      [ depot.tools.eprintf "No advisories found for crate %s\n" "$crate" ]
-      "importas"
-      "-ui"
-      "ret"
-      "?"
-      # put a marker in ./failed to read at the end
-      "ifelse"
-      [ bins.s6-test "$ret" "-eq" "1" ]
-      [ bins.s6-touch "./failed" ]
-      "if"
-      [ depot.tools.eprintf "\n" ]
-      "exit"
-      "$ret"
-    ]
-    "ifelse"
-    [ bins.s6-test "-f" "./failed" ]
-    [
-      "if"
-      [ depot.tools.eprintf "Error: Found active advisories!" ]
-      "exit"
-      "1"
-    ]
-    "importas"
-    "out"
-    "out"
-    bins.s6-touch
-    "$out"
-  ];
-
   lock-file-report = pkgs.writers.writeBash "lock-file-report" ''
     set -u
 
@@ -159,13 +104,16 @@ let
     exit "''${PIPESTATUS[0]}" # inherit exit code from cargo-audit
   '';
 
-  check-all-our-lock-files = depot.nix.writeExecline "check-all-our-lock-files" { } [
+  tree-lock-file-report = depot.nix.writeExecline "tree-lock-file-report"
+    {
+      readNArgs = 1;
+    } [
     "backtick"
     "-E"
     "report"
     [
       "pipeline"
-      [ bins.find "." "-name" "Cargo.lock" "-and" "-type" "f" "-print0" ]
+      [ bins.find "$1" "-name" "Cargo.lock" "-and" "-type" "f" "-print0" ]
       "forstdin"
       "-E"
       "-0"
@@ -185,27 +133,38 @@ let
       "false"
     ]
     "if"
-    [ depot.tools.eprintf "%s\n" "$report" ]
-    "ifelse"
-    [ bins.s6-test "-z" "$report" ]
+    [ bins.printf "%s\n" "$report" ]
     # empty report implies success (no advisories)
-    [ "exit" "0" ]
-    # If we reach this point, we know that the report is non-empty, so we should
-    # only continue without one if we are running in buildkite.
-    "if"
+    bins.s6-test
+    "-z"
+    "$report"
+  ];
+
+  check-all-our-lock-files = depot.nix.writeExecline "check-all-our-lock-files" { } [
+    "backtick"
+    "-EI"
+    "report"
     [
-      "importas"
-      "-D"
-      ""
-      "BUILDKITE_BUILD_ID"
-      "BUILDKITE_BUILD_ID"
-      bins.s6-test
-      "-n"
-      "$BUILDKITE_BUILD_ID"
+      "foreground"
+      [
+        lock-file-report
+        "//third_party/rust-crates"
+        our-crates-lock-file
+        "false"
+      ]
+      tree-lock-file-report
+      "."
     ]
-    # If we're running in buildkite, annotate the pipeline run with the report
-    # as a warning. Only fail if something goes wrong with buildkite-agent
-    # which is assumed to be in PATH.
+    "ifelse"
+    [
+      bins.s6-test
+      "-z"
+      "$report"
+    ]
+    [
+      "exit"
+      "0"
+    ]
     "pipeline"
     [
       "printf"
@@ -222,21 +181,16 @@ let
 
 in
 depot.nix.readTree.drvTargets {
-
-  check-all-our-crates =
-    depot.nix.drvSeqL
-      [ test-parsing-all-security-advisories ]
-      check-all-our-crates;
-
   inherit
+    test-parsing-all-security-advisories
     check-crate-advisory
     lock-file-report
     ;
 
 
-  check-all-our-lock-files = check-all-our-lock-files // {
+  tree-lock-file-report = tree-lock-file-report // {
     meta.ci.extraSteps.run = {
-      label = "Check Cargo.lock files in depot for advisories";
+      label = "Check all crates used in depot for advisories";
       alwaysRun = true;
       command = check-all-our-lock-files;
     };
