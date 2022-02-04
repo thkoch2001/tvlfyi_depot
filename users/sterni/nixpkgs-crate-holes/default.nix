@@ -126,37 +126,23 @@ let
     then pkgs.emptyFile
     else
       depot.nix.runExecline "${strAttr}-vulnerability-report" { } [
-        "pipeline"
+        "foreground"
         [
-          bins.cargo-audit
-          "audit"
-          "--json"
-          "-n"
-          "--db"
-          rustsec-advisory-db
-          "-f"
+          "importas"
+          "out"
+          "out"
+          "redirfd"
+          "-w"
+          "1"
+          "$out"
+          depot.tools.rust-crates-advisory.lock-file-report
+          strAttr
           lock
+          "true"
+          strMaintainers
         ]
-        "importas"
-        "out"
-        "out"
-        "redirfd"
-        "-w"
-        "1"
-        "$out"
-        bins.jq
-        "-rj"
-        "-f"
-        ../../../tools/rust-crates-advisory/format-audit-result.jq
-        "--arg"
-        "attr"
-        strAttr
-        "--arg"
-        "maintainers"
-        strMaintainers
-        "--argjson"
-        "checklist"
-        "true"
+        # ignore exit status of report
+        "exit" "0"
       ];
 
   # GHMF in issues splits paragraphs on newlines
