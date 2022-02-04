@@ -1,5 +1,5 @@
 ;; Set default font and fallback font via set-fontset-font
-;; TODO(sterni): Investigate non-emoji representation of some glyphs
+;; TODO(sterni): Investigate why ZWJ sequences aren't shaped properly
 (let ((mono-font "Bitstream Vera Sans Mono-12")
       (emoji-font "Noto Color Emoji-12"))
   (setq default-frame-alist `((font . ,mono-font)))
