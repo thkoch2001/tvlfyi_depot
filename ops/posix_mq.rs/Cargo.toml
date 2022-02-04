@@ -7,5 +7,5 @@ license = "MIT"
 repository = "https://git.tazj.in/tree/ops/posix_mq.rs"
 
 [dependencies]
-nix = "0.16"
+nix = "0.23"
 libc = "0.2"
