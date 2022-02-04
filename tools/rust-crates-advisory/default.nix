@@ -4,6 +4,7 @@ let
 
   bins =
     depot.nix.getBins pkgs.s6-portable-utils [ "s6-ln" "s6-cat" "s6-echo" "s6-mkdir" "s6-test" "s6-touch" "s6-dirname" ]
+    // depot.nix.getBins pkgs.coreutils [ "printf" ]
     // depot.nix.getBins pkgs.lr [ "lr" ]
     // depot.nix.getBins pkgs.cargo-audit [ "cargo-audit" ]
     // depot.nix.getBins pkgs.jq [ "jq" ]
@@ -161,13 +162,16 @@ let
     exit "''${PIPESTATUS[0]}" # inherit exit code from cargo-audit
   '';
 
-  check-all-our-lock-files = depot.nix.writeExecline "check-all-our-lock-files" { } [
+  tree-lock-file-report = depot.nix.writeExecline "tree-lock-file-report"
+    {
+      readNArgs = 1;
+    } [
     "backtick"
     "-E"
     "report"
     [
       "pipeline"
-      [ bins.find "." "-name" "Cargo.lock" "-and" "-type" "f" "-print0" ]
+      [ bins.find "$1" "-name" "Cargo.lock" "-and" "-type" "f" "-print0" ]
       "forstdin"
       "-E"
       "-0"
@@ -187,27 +191,31 @@ let
       "false"
     ]
     "if"
-    [ depot.tools.eprintf "%s\n" "$report" ]
-    "ifelse"
-    [ bins.s6-test "-z" "$report" ]
+    [ bins.printf "%s\n" "$report" ]
     # empty report implies success (no advisories)
-    [ "exit" "0" ]
-    # If we reach this point, we know that the report is non-empty, so we should
-    # only continue without one if we are running in buildkite.
-    "if"
+    bins.s6-test
+    "-z"
+    "$report"
+  ];
+
+  check-all-our-lock-files = depot.nix.writeExecline "check-all-our-lock-files" { } [
+    "backtick"
+    "-EI"
+    "report"
     [
-      "importas"
-      "-D"
-      ""
-      "BUILDKITE_BUILD_ID"
-      "BUILDKITE_BUILD_ID"
-      bins.s6-test
-      "-n"
-      "$BUILDKITE_BUILD_ID"
+      tree-lock-file-report
+      "."
     ]
-    # If we're running in buildkite, annotate the pipeline run with the report
-    # as a warning. Only fail if something goes wrong with buildkite-agent
-    # which is assumed to be in PATH.
+    "ifelse"
+    [
+      bins.s6-test
+      "-z"
+      "$report"
+    ]
+    [
+      "exit"
+      "0"
+    ]
     "pipeline"
     [
       "printf"
@@ -236,7 +244,7 @@ depot.nix.readTree.drvTargets {
     ;
 
 
-  check-all-our-lock-files = check-all-our-lock-files // {
+  tree-lock-file-report = tree-lock-file-report // {
     meta.ci.extraSteps.run = {
       label = "Check Cargo.lock files in depot for advisories";
       alwaysRun = true;
