@@ -22,6 +22,30 @@
       },
       "revId": "505a411fb1c1116a395e7b845e0bade9aceb08a4",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c88c5f02_688a135d",
+        "filename": "ops/posix_mq.rs/src/error.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 107,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-02-04T15:56:25Z",
+      "side": 1,
+      "message": "You\u0027re thinking of UnknownInternalError, the foreign one wraps nix (as in the crate, not our nix) errors.",
+      "parentUuid": "473264fe_3c17980d",
+      "range": {
+        "startLine": 107,
+        "startChar": 44,
+        "endLine": 107,
+        "endChar": 47
+      },
+      "revId": "505a411fb1c1116a395e7b845e0bade9aceb08a4",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
