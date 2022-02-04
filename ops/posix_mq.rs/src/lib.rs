@@ -1,5 +1,5 @@
-extern crate nix;
 extern crate libc;
+extern crate nix;
 
 use error::Error;
 use libc::mqd_t;
@@ -8,8 +8,8 @@ use nix::sys::stat;
 use std::ffi::CString;
 use std::fs::File;
 use std::io::Read;
-use std::string::ToString;
 use std::ops::Drop;
+use std::string::ToString;
 
 pub mod error;
 
@@ -33,16 +33,20 @@ impl Name {
         // have tried just using '/' as a queue name.
         if string.len() == 1 {
             return Err(Error::InvalidQueueName(
-                "Queue name must be a slash followed by one or more characters"
+                "Queue name must be a slash followed by one or more characters",
             ));
         }
 
         if string.len() > 255 {
-            return Err(Error::InvalidQueueName("Queue name must not exceed 255 characters"));
+            return Err(Error::InvalidQueueName(
+                "Queue name must not exceed 255 characters",
+            ));
         }
 
         if string.matches('/').count() > 1 {
-            return Err(Error::InvalidQueueName("Queue name can not contain more than one slash"));
+            return Err(Error::InvalidQueueName(
+                "Queue name can not contain more than one slash",
+            ));
         }
 
         // TODO: What error is being thrown away here? Is it possible?
@@ -97,16 +101,9 @@ impl Queue {
             flags
         };
 
-        let attr = mqueue::MqAttr::new(
-            0, max_pending, max_size, 0
-        );
+        let attr = mqueue::MqAttr::new(0, max_pending, max_size, 0);
 
-        let queue_descriptor = mqueue::mq_open(
-            &name.0,
-            oflags,
-            default_mode(),
-            Some(&attr),
-        )?;
+        let queue_descriptor = mqueue::mq_open(&name.0, oflags, default_mode(), Some(&attr))?;
 
         Ok(Queue {
             name,
@@ -121,12 +118,7 @@ impl Queue {
         // No extra flags need to be constructed as the default is to open and fail if the
         // queue does not exist yet - which is what we want here.
         let oflags = mqueue::MQ_OFlag::O_RDWR;
-        let queue_descriptor = mqueue::mq_open(
-            &name.0,
-            oflags,
-            default_mode(),
-            None,
-        )?;
+        let queue_descriptor = mqueue::mq_open(&name.0, oflags, default_mode(), None)?;
 
         let attr = mq_getattr(queue_descriptor)?;
 
@@ -151,16 +143,9 @@ impl Queue {
 
         let default_pending = read_i64_from_file(MSG_DEFAULT)?;
         let default_size = read_i64_from_file(MSGSIZE_DEFAULT)?;
-        let attr = mqueue::MqAttr::new(
-            0, default_pending, default_size, 0
-        );
+        let attr = mqueue::MqAttr::new(0, default_pending, default_size, 0);
 
-        let queue_descriptor = mqueue::mq_open(
-            &name.0,
-            oflags,
-            default_mode(),
-            Some(&attr),
-        )?;
+        let queue_descriptor = mqueue::mq_open(&name.0, oflags, default_mode(), Some(&attr))?;
 
         let actual_attr = mq_getattr(queue_descriptor)?;
 
@@ -187,11 +172,8 @@ impl Queue {
             return Err(Error::MessageSizeExceeded());
         }
 
-        mqueue::mq_send(
-            self.queue_descriptor,
-            msg.data.as_ref(),
-            msg.priority,
-        ).map_err(|e| e.into())
+        mqueue::mq_send(self.queue_descriptor, msg.data.as_ref(), msg.priority)
+            .map_err(|e| e.into())
     }
 
     /// Receive a message from the message queue.
@@ -200,11 +182,7 @@ impl Queue {
         let mut data: Vec<u8> = vec![0; self.max_size as usize];
         let mut priority: u32 = 0;
 
-        let msg_size = mqueue::mq_receive(
-            self.queue_descriptor,
-            data.as_mut(),
-            &mut priority,
-        )?;
+        let msg_size = mqueue::mq_receive(self.queue_descriptor, data.as_mut(), &mut priority)?;
 
         data.truncate(msg_size);
         Ok(Message { data, priority })
@@ -261,9 +239,9 @@ fn read_i64_from_file(name: &str) -> Result<i64, Error> {
 /// To work around it, this method calls the C-function directly.
 fn mq_getattr(mqd: mqd_t) -> Result<libc::mq_attr, Error> {
     use std::mem;
-    let mut attr = unsafe { mem::uninitialized::<libc::mq_attr>() };
-    let res = unsafe { libc::mq_getattr(mqd, &mut attr) };
+    let mut attr = mem::MaybeUninit::<libc::mq_attr>::uninit();
+    let res = unsafe { libc::mq_getattr(mqd, attr.as_mut_ptr()) };
     nix::errno::Errno::result(res)
-        .map(|_| attr)
+        .map(|_| unsafe { attr.assume_init() })
         .map_err(|e| e.into())
 }
