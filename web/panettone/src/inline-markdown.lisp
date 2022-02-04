@@ -124,7 +124,4 @@
          ; only eliminates the slight use case for nesting :em inside :del, but
          ; shouldn't be too bad. As a side effect this is the precise behavior
          ; we want for :code.
-         ;
-         ; TODO(sterni): maybe bring back the restart-based system which allowed
-         ;               to skip nested tokens if desired.
          (t (write-string (who:escape-string tok-str) target)))))

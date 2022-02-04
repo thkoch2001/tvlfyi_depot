@@ -1370,7 +1370,6 @@ static void prim_functionArgs(EvalState& state, const Pos& pos, Value** args,
                               Value& v) {
   state.forceValue(*args[0]);
   if (args[0]->type == tPrimOpApp || args[0]->type == tPrimOp) {
-    // TODO(sterni): return set of formal arguments for fetch* primops
     state.mkAttrs(v, 0);
     return;
   }
