@@ -17,7 +17,7 @@ use std::num;
 /// * ENAMETOOLONG: This crate performs name validation
 ///
 /// If an unexpected error is encountered it will be wrapped appropriately and should be reported
-/// as a bug on https://github.com/aprilabank/posix_mq.rs
+/// as a bug on https://b.tvl.fyi
 
 #[derive(Debug)]
 pub enum Error {
@@ -50,10 +50,10 @@ pub enum Error {
     UnknownInternalError(Option<nix::Error>),
 }
 
-impl error::Error for Error {
-    fn description(&self) -> &str {
+impl fmt::Display for Error {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         use Error::*;
-        match *self {
+        f.write_str(match *self {
             // This error contains more sensible description strings already
             InvalidQueueName(e) => e,
             ValueReadingError(_) => "error reading system configuration for message queues",
@@ -67,21 +67,25 @@ impl error::Error for Error {
             QueueNotFound() => "the specified queue could not be found",
             InsufficientMemory() => "insufficient memory to call queue method",
             InsufficientSpace() => "insufficient space to call queue method",
-            ProcessFileDescriptorLimitReached() =>
-                "maximum number of process file descriptors reached",
-            SystemFileDescriptorLimitReached() =>
-                "maximum number of system file descriptors reached",
+            ProcessFileDescriptorLimitReached() => {
+                "maximum number of process file descriptors reached"
+            }
+            SystemFileDescriptorLimitReached() => {
+                "maximum number of system file descriptors reached"
+            }
             UnknownForeignError(_) => "unknown foreign error occured: please report a bug!",
             UnknownInternalError(_) => "unknown internal error occured: please report a bug!",
-        }
+        })
     }
 }
 
-impl fmt::Display for Error {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        // Explicitly import this to gain access to Error::description()
-        use std::error::Error;
-        f.write_str(self.description())
+impl error::Error for Error {
+    fn source(&self) -> Option<&(dyn error::Error + 'static)> {
+        match self {
+            Error::ValueReadingError(e) => Some(e),
+            Error::UnknownForeignError(e) => Some(e),
+            _ => None,
+        }
     }
 }
 
@@ -111,20 +115,19 @@ impl From<num::ParseIntError> for Error {
     }
 }
 
-
 fn match_errno(err: nix::errno::Errno) -> Error {
     use nix::errno::Errno::*;
 
     match err {
         EACCES => Error::PermissionDenied(),
-        EBADF  => Error::InvalidQueueDescriptor(),
-        EINTR  => Error::QueueCallInterrupted(),
+        EBADF => Error::InvalidQueueDescriptor(),
+        EINTR => Error::QueueCallInterrupted(),
         EEXIST => Error::QueueAlreadyExists(),
         EMFILE => Error::ProcessFileDescriptorLimitReached(),
         ENFILE => Error::SystemFileDescriptorLimitReached(),
         ENOENT => Error::QueueNotFound(),
         ENOMEM => Error::InsufficientMemory(),
         ENOSPC => Error::InsufficientSpace(),
-        _      => Error::UnknownForeignError(err),
+        _ => Error::UnknownForeignError(err),
     }
 }
