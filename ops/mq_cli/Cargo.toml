@@ -1,10 +1,12 @@
 [package]
 name = "mq"
-version = "1.0.0"
-authors = ["Vincent Ambo <mail@tazj.in>"]
+version = "3772.0.0"
+authors = ["Vincent Ambo <tazjin@tvl.su>"]
+homepage = "https://cs.tvl.fyi/depot/-/tree/ops/mq_cli"
+repository = "https://code.tvl.fyi/depot.git:/ops/mq_cli.git"
 
 [dependencies]
-clap = "2.33"
+clap = "2.34"
 libc = "0.2"
-nix = "0.16"
-posix_mq = "0.9"
+nix = "0.23"
+posix_mq = "3771.0.0"

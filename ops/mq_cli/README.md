@@ -27,5 +27,16 @@ SUBCOMMANDS:
     send       Send a message to a queue
 ```
 
+## Development
+
+Development happens in the [TVL
+monorepo](https://cs.tvl.fyi/depot/-/tree/ops/mq_cli).
+
+Starting from version `3771.0.0`, the version numbers correspond to
+_revisions_ of the TVL repository, available as git refs (e.g.
+`refs/r/3771`).
+
+See the TVL documentation for more information about how to contribute
+to the codebase.
 
 [POSIX message queues]: https://linux.die.net/man/7/mq_overview
