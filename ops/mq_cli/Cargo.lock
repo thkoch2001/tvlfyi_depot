@@ -86,8 +86,8 @@ dependencies = [
 ]
 
 [[package]]
-name = "mq"
-version = "1.0.0"
+name = "mq_cli"
+version = "3773.0.0"
 dependencies = [
  "clap",
  "libc",

@@ -1,6 +1,8 @@
 [package]
-name = "mq"
-version = "3772.0.0"
+name = "mq_cli"
+description = "CLI tool for accessing POSIX message queues (mq_overview(7))"
+license = "MIT"
+version = "3773.0.0"
 authors = ["Vincent Ambo <tazjin@tvl.su>"]
 homepage = "https://cs.tvl.fyi/depot/-/tree/ops/mq_cli"
 repository = "https://code.tvl.fyi/depot.git:/ops/mq_cli.git"
