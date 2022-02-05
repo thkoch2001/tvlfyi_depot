@@ -84,6 +84,14 @@ code_owners(Checks) :-
     ; Checks = OwnerChecks
     ).
 
+% Require CI to pass, except for CLs to refs/meta/config.
+build_check(Check) :-
+    gerrit:change_branch('refs/meta/config'),
+    Check = label('Verified', may(_)),
+    !.
+build_check(Check) :-
+    gerrit:max_with_block(-1, 1, 'Verified', Check).
+
 submit_rule(S) :-
     % Code review with +2 is required, -2 blocks the submit process.
     gerrit:max_with_block(-2, 2, 'Code-Review', ReviewCheck),
@@ -91,7 +99,7 @@ submit_rule(S) :-
     % CI verification is required, broken builds block the submit
     % process. The `depot-interventions` group can be used by admins
     % to override the verification status if CI is on fire.
-    gerrit:max_with_block(-1, 1, 'Verified', BuildCheck),
+    build_check(BuildCheck),
 
     % Check for unresolved comments (this is necessary because it's
     % easy to miss them in previous patch sets)
