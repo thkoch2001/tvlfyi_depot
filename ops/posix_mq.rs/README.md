@@ -1,7 +1,6 @@
 posix_mq
 ========
 
-[![Build Status](https://travis-ci.org/aprilabank/posix_mq.rs.svg?branch=master)](https://travis-ci.org/aprilabank/posix_mq.rs)
 [![crates.io](https://img.shields.io/crates/v/posix_mq.svg)](https://crates.io/crates/posix_mq)
 
 This is a simple, relatively high-level library for the POSIX [message queue API][]. It wraps the lower-level API in a
@@ -28,6 +27,18 @@ queue.send(&message).expect("message sending failed");
 // ... and receiving it!
 let result = queue.receive().expect("message receiving failed");
 ```
+
+## Development
+
+Development happens in the [TVL
+monorepo](https://cs.tvl.fyi/depot/-/tree/ops/posix_mq.rs).
+
+Starting from version `3771.0.0`, the version numbers correspond to
+_revisions_ of the TVL repository, available as git refs (e.g.
+`refs/r/3771`).
+
+See the TVL documentation for more information about how to contribute
+to the codebase.
 
 [message queue API]: https://linux.die.net/man/7/mq_overview
 [sister library]: https://github.com/aprilabank/posix_mq.kt
