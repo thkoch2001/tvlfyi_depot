@@ -1,10 +1,11 @@
 [package]
 name = "posix_mq"
-version = "0.9.0"
-authors = ["Vincent Ambo <mail@tazj.in>"]
+version = "3771.0.0"
+authors = ["Vincent Ambo <tazjin@tvl.su>"]
 description = "(Higher-level) Rust bindings to POSIX message queues"
 license = "MIT"
-repository = "https://git.tazj.in/tree/ops/posix_mq.rs"
+homepage = "https://cs.tvl.fyi/depot/-/tree/ops/posix_mq.rs"
+repository = "https://code.tvl.fyi/depot.git:/ops/posix_mq.rs.git"
 
 [dependencies]
 nix = "0.23"
