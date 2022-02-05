@@ -32,9 +32,9 @@ SUBCOMMANDS:
 Development happens in the [TVL
 monorepo](https://cs.tvl.fyi/depot/-/tree/ops/mq_cli).
 
-Starting from version `3771.0.0`, the version numbers correspond to
+Starting from version `3773.0.0`, the version numbers correspond to
 _revisions_ of the TVL repository, available as git refs (e.g.
-`refs/r/3771`).
+`refs/r/3773`).
 
 See the TVL documentation for more information about how to contribute
 to the codebase.
