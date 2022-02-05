@@ -12,7 +12,7 @@
 % It also implements the submit type decision, with the following
 % rules:
 %
-% - subtree changes are submittable as 'merge_if_necessary'
+% - subtree changes are submittable as 'fast_forward_only'
 % - all other changes are submittable as 'rebase_if_necessary'
 
 % Helper predicate which relates a list and an element of that list
@@ -114,8 +114,11 @@ submit_rule(S) :-
            Autosubmit
            | OwnerChecks].
 
-submit_type(merge_if_necessary) :-
+submit_type(fast_forward_only) :-
     % Check if the commit type is a subtree commit.
     gerrit:commit_message_matches('^subtree[\(]'),
+    % Validate that it actually has multiple parents
+    gerrit:commit_parent_count(ParentCount),
+    ParentCount > 1,
     !.
 submit_type(rebase_always).
