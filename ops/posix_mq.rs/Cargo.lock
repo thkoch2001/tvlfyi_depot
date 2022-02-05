@@ -56,7 +56,7 @@ dependencies = [
 
 [[package]]
 name = "posix_mq"
-version = "0.9.0"
+version = "3771.0.0"
 dependencies = [
  "libc",
  "nix",
