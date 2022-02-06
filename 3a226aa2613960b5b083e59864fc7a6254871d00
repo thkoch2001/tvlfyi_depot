@@ -16,6 +16,24 @@
       "message": "shouldn\u0027t this be handling errors somehow?",
       "revId": "3a226aa2613960b5b083e59864fc7a6254871d00",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4e1c29c1_88120da5",
+        "filename": "web/panettone/src/authentication.lisp",
+        "patchSetId": 2
+      },
+      "lineNbr": 113,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-02-06T10:52:01Z",
+      "side": 1,
+      "message": "afaict there is no way to get to this line without `conn` being an LDAP connection object (as it would fail on ldap:new-ldap above)\n\nthe function will always succeed if passed a real connection, because it unbinds in a \"fire\u0026forget\" style and then attempts to close the socket, so any remote errors would be ignored\n\nif the socket closes during the lookup I think that\u0027s an error we\u0027d want to have bubbled up.\n\ntl;dr - i think this is fine",
+      "parentUuid": "05c2aad5_33fff88e",
+      "revId": "3a226aa2613960b5b083e59864fc7a6254871d00",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
