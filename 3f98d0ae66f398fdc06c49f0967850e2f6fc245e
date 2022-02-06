@@ -1,0 +1,140 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "dbe1b868_c2dc57b5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000040
+      },
+      "writtenOn": "2022-02-06T13:41:23Z",
+      "side": 1,
+      "message": "Looking good except for a few shell nits.",
+      "revId": "3f98d0ae66f398fdc06c49f0967850e2f6fc245e",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f3d4a1f2_481f18a4",
+        "filename": "tools/crfo-approve.nix",
+        "patchSetId": 3
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1000040
+      },
+      "writtenOn": "2022-02-06T13:41:23Z",
+      "side": 1,
+      "message": "`-ne` is for integers, so no need to quote `$#` which is only ever integer, anyway.\n\nAlso, in general, variables don\u0027t have to be quoted inside `[[` since word splitting does not happen.\n\nBest use `((` for arithmetics, i.e. `(($# !\u003d 4)) || [[ -z $GERRIT_TOKEN ]]`.",
+      "revId": "3f98d0ae66f398fdc06c49f0967850e2f6fc245e",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5ebfc850_587cf762",
+        "filename": "tools/crfo-approve.nix",
+        "patchSetId": 3
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1000040
+      },
+      "writtenOn": "2022-02-06T13:41:23Z",
+      "side": 1,
+      "message": "You can use `$(basename \"$0\")` or `${0##*/}` here instead of hard-coding the filename.",
+      "revId": "3f98d0ae66f398fdc06c49f0967850e2f6fc245e",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5b0dc354_2d400661",
+        "filename": "tools/crfo-approve.nix",
+        "patchSetId": 3
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1000040
+      },
+      "writtenOn": "2022-02-06T13:41:23Z",
+      "side": 1,
+      "message": "Isn\u0027t it \"credentials\" (plural)?",
+      "revId": "3f98d0ae66f398fdc06c49f0967850e2f6fc245e",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cea5a884_30998ddc",
+        "filename": "tools/crfo-approve.nix",
+        "patchSetId": 3
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1000040
+      },
+      "writtenOn": "2022-02-06T13:41:23Z",
+      "side": 1,
+      "message": "This ought to go to standard error.",
+      "revId": "3f98d0ae66f398fdc06c49f0967850e2f6fc245e",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d121b0f3_1c71faff",
+        "filename": "tools/crfo-approve.nix",
+        "patchSetId": 3
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 1000040
+      },
+      "writtenOn": "2022-02-06T13:41:23Z",
+      "side": 1,
+      "message": "This still leaves control to the environment.\nWouldn\u0027t you want to prepend so http(1) and jq(1) always come from what you pass here?",
+      "revId": "3f98d0ae66f398fdc06c49f0967850e2f6fc245e",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "96a93986_423202ad",
+        "filename": "tools/crfo-approve.nix",
+        "patchSetId": 3
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 1000040
+      },
+      "writtenOn": "2022-02-06T13:41:23Z",
+      "side": 1,
+      "message": "Again, integers should be treated as such.\n`[[ ${ACC_LENGTH} -ne 1 ]]` or `((ACC_LENGTH !\u003d 0))`.",
+      "revId": "3f98d0ae66f398fdc06c49f0967850e2f6fc245e",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "dcd942e5_868af240",
+        "filename": "tools/crfo-approve.nix",
+        "patchSetId": 3
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 1000040
+      },
+      "writtenOn": "2022-02-06T13:41:23Z",
+      "side": 1,
+      "message": "You can pass variables into jq(1) directly with\n```\njq --argjson response \"${ACC_RESPONSE}\" \u0027$response | ...\u0027\n```",
+      "revId": "3f98d0ae66f398fdc06c49f0967850e2f6fc245e",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
