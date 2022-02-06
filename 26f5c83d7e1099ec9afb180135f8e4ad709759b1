@@ -33,6 +33,24 @@
       "message": "Another useless use of echo.\nYou can zap ACC_LENGTH entirely by using jq itself as check:\n\n```\nif jq -n -e --argjson response \"${ACC_RESPONSE}\" \u0027$response | length !\u003d 1\u0027; then\n```",
       "revId": "26f5c83d7e1099ec9afb180135f8e4ad709759b1",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a83aa8e6_592ee017",
+        "filename": "tools/crfo-approve.nix",
+        "patchSetId": 4
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 1000040
+      },
+      "writtenOn": "2022-02-06T20:40:17Z",
+      "side": 1,
+      "message": "with `\u003e/dev/null` or so to silence jq\u0027s \"true\"/\"false\" output...",
+      "parentUuid": "c4466431_914ecda1",
+      "revId": "26f5c83d7e1099ec9afb180135f8e4ad709759b1",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
