@@ -16,6 +16,24 @@
       "message": "Let\u0027s wait for https://github.com/NixOS/nixpkgs/pull/157883 to be submitted, then bump the nixpkgs version to that commit or thereafter, before submitting this CL because it doesn\u0027t appear that startAt is used, which some of our machines need for reliable deploy schedules (i.e. marcus, mugwump).",
       "revId": "e48be313bf673cad5f25b386a001402372902f70",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "29dde4e5_513c8755",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-02-06T12:23:08Z",
+      "side": 1,
+      "message": "Latest nixos-unstable still doesn\u0027t have it. I\u0027m gonna mark this as unresolved until we\u0027ve confirmed the update.",
+      "parentUuid": "83101189_541a9e3b",
+      "revId": "e48be313bf673cad5f25b386a001402372902f70",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
