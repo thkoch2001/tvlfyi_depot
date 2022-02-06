@@ -35,6 +35,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "15e02458_9f25749b",
+        "filename": "tools/crfo-approve.nix",
+        "patchSetId": 3
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-02-06T20:04:10Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f3d4a1f2_481f18a4",
+      "revId": "3f98d0ae66f398fdc06c49f0967850e2f6fc245e",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "5ebfc850_587cf762",
@@ -48,6 +66,24 @@
       "writtenOn": "2022-02-06T13:41:23Z",
       "side": 1,
       "message": "You can use `$(basename \"$0\")` or `${0##*/}` here instead of hard-coding the filename.",
+      "revId": "3f98d0ae66f398fdc06c49f0967850e2f6fc245e",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6907268f_99c6c03b",
+        "filename": "tools/crfo-approve.nix",
+        "patchSetId": 3
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-02-06T20:04:10Z",
+      "side": 1,
+      "message": "This is always going to be the same filename as a Nix store path, so I don\u0027t think it\u0027s worth it (plus it makes the rest of the heredoc more complicated since interpolation is otherwise disabled).",
+      "parentUuid": "5ebfc850_587cf762",
       "revId": "3f98d0ae66f398fdc06c49f0967850e2f6fc245e",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
@@ -69,6 +105,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "798147cf_fe319b80",
+        "filename": "tools/crfo-approve.nix",
+        "patchSetId": 3
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-02-06T20:04:10Z",
+      "side": 1,
+      "message": "Both work. I read a Stackoverflow linguistics discussion on the topic and it was indecisive. In this case it\u0027s a single token.",
+      "parentUuid": "5b0dc354_2d400661",
+      "revId": "3f98d0ae66f398fdc06c49f0967850e2f6fc245e",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "cea5a884_30998ddc",
@@ -82,6 +136,24 @@
       "writtenOn": "2022-02-06T13:41:23Z",
       "side": 1,
       "message": "This ought to go to standard error.",
+      "revId": "3f98d0ae66f398fdc06c49f0967850e2f6fc245e",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0a659ab5_a24ba033",
+        "filename": "tools/crfo-approve.nix",
+        "patchSetId": 3
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-02-06T20:04:10Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "cea5a884_30998ddc",
       "revId": "3f98d0ae66f398fdc06c49f0967850e2f6fc245e",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
@@ -103,6 +175,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "3350ac26_fe6e04a2",
+        "filename": "tools/crfo-approve.nix",
+        "patchSetId": 3
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-02-06T20:04:10Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d121b0f3_1c71faff",
+      "revId": "3f98d0ae66f398fdc06c49f0967850e2f6fc245e",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "96a93986_423202ad",
@@ -120,6 +210,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "43ed74c3_27c2243d",
+        "filename": "tools/crfo-approve.nix",
+        "patchSetId": 3
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-02-06T20:04:10Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "96a93986_423202ad",
+      "revId": "3f98d0ae66f398fdc06c49f0967850e2f6fc245e",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "dcd942e5_868af240",
@@ -133,6 +241,24 @@
       "writtenOn": "2022-02-06T13:41:23Z",
       "side": 1,
       "message": "You can pass variables into jq(1) directly with\n```\njq --argjson response \"${ACC_RESPONSE}\" \u0027$response | ...\u0027\n```",
+      "revId": "3f98d0ae66f398fdc06c49f0967850e2f6fc245e",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "400a7421_23eec414",
+        "filename": "tools/crfo-approve.nix",
+        "patchSetId": 3
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-02-06T20:04:10Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "dcd942e5_868af240",
       "revId": "3f98d0ae66f398fdc06c49f0967850e2f6fc245e",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
