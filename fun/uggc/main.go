@@ -31,7 +31,6 @@ func main() {
 	corrected := strings.Map(rot13, urlText)
 
 	err := browser.OpenURL(corrected)
-
 	if err != nil {
 		fmt.Println("could not launch browser:", err)
 	}

@@ -49,7 +49,8 @@ func main() {
 			for j := 0; j < 100; j += 1 {
 				msg := readMsg{
 					key:    rand.Intn(5),
-					sender: make(chan int)}
+					sender: make(chan int),
+				}
 				reads <- msg
 				val := <-msg.sender
 				fmt.Printf("Received %d.\n", val)
@@ -67,7 +68,8 @@ func main() {
 				msg := writeMsg{
 					key:    rand.Intn(5),
 					value:  rand.Intn(10),
-					sender: make(chan bool)}
+					sender: make(chan bool),
+				}
 				writes <- msg
 				<-msg.sender
 				fmt.Printf("Set %d as %d in state\n", msg.key, msg.value)

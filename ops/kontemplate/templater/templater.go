@@ -48,7 +48,6 @@ func LoadAndApplyTemplates(include *[]string, exclude *[]string, c *context.Cont
 
 	for _, rs := range *limitedResourceSets {
 		set, err := processResourceSet(c, &rs)
-
 		if err != nil {
 			return nil, err
 		}
@@ -105,7 +104,6 @@ func processFiles(ctx *context.Context, rs *context.ResourceSet, files []os.File
 		if !file.IsDir() && isResourceFile(file) {
 			path := path.Join(rs.Path, file.Name())
 			res, err := templateFile(ctx, rs, path)
-
 			if err != nil {
 				return resources, err
 			}

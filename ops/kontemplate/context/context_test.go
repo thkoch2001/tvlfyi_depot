@@ -18,7 +18,6 @@ var noExplicitVars []string = make([]string, 0)
 
 func TestLoadFlatContextFromFile(t *testing.T) {
 	ctx, err := LoadContext("testdata/flat-test.yaml", &noExplicitVars)
-
 	if err != nil {
 		t.Error(err)
 		t.Fail()
@@ -56,7 +55,6 @@ func TestLoadFlatContextFromFile(t *testing.T) {
 
 func TestLoadContextWithArgs(t *testing.T) {
 	ctx, err := LoadContext("testdata/flat-with-args-test.yaml", &noExplicitVars)
-
 	if err != nil {
 		t.Error(err)
 		t.Fail()
@@ -92,7 +90,6 @@ func TestLoadContextWithArgs(t *testing.T) {
 
 func TestLoadContextWithResourceSetCollections(t *testing.T) {
 	ctx, err := LoadContext("testdata/collections-test.yaml", &noExplicitVars)
-
 	if err != nil {
 		t.Error(err)
 		t.Fail()
@@ -136,12 +133,10 @@ func TestLoadContextWithResourceSetCollections(t *testing.T) {
 		t.Error("Loaded context and expected context did not match")
 		t.Fail()
 	}
-
 }
 
 func TestSubresourceVariableInheritance(t *testing.T) {
 	ctx, err := LoadContext("testdata/parent-variables.yaml", &noExplicitVars)
-
 	if err != nil {
 		t.Error(err)
 		t.Fail()
@@ -174,7 +169,6 @@ func TestSubresourceVariableInheritance(t *testing.T) {
 
 func TestSubresourceVariableInheritanceOverride(t *testing.T) {
 	ctx, err := LoadContext("testdata/parent-variable-override.yaml", &noExplicitVars)
-
 	if err != nil {
 		t.Error(err)
 		t.Fail()

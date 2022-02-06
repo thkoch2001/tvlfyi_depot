@@ -1,10 +1,9 @@
 package main
 
 import (
+	"net/http"
 	"os"
 	"time"
-
-	"net/http"
 
 	"github.com/tweag/gerrit-queue/frontend"
 	"github.com/tweag/gerrit-queue/gerrit"

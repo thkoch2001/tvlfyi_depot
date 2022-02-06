@@ -187,7 +187,7 @@ func enumerateInner(tag tag, v interface{}) (e []enumerate) {
 		// so let’s sort them
 		keys := []string{}
 		m := *v.(*map[string]val)
-		for k, _ := range m {
+		for k := range m {
 			keys = append(keys, k)
 		}
 		sort.Strings(keys)
@@ -376,7 +376,6 @@ func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 			// 			m.selected[m.cursor] = struct{}{}
 			// 		}
 		}
-
 	}
 	if err != nil {
 		log.Fatal(err)

@@ -11,7 +11,7 @@ let
 
   config = pkgs.writeText "depot-treefmt-config" ''
     [formatter.go]
-    command = "${pkgs.go}/bin/gofmt"
+    command = "${pkgs.gofumpt}/bin/gofumpt"
     options = [ "-w" ]
     includes = ["*.go"]
 

@@ -6,8 +6,10 @@ import (
 	"strconv"
 )
 
-const urlFormat string = "https://%s%s"
-const uriFormat = "/?%s"
+const (
+	urlFormat string = "https://%s%s"
+	uriFormat        = "/?%s"
+)
 
 func templateChallengeTriggerUri(username *string, password *string) string {
 	v := url.Values{}

@@ -69,7 +69,6 @@ func main() {
 			}
 
 		}
-
 	}()
 
 	for msg := range fireaway {
@@ -126,7 +125,7 @@ func propwords(username string, start string, redisc *redis.Client) string {
 		}
 	}
 
-	for k, _ := range userIntHashMap {
+	for k := range userIntHashMap {
 		return k
 	}
 

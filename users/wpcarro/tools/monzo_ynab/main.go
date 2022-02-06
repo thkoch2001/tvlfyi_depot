@@ -14,9 +14,7 @@ import (
 	"os"
 )
 
-var (
-	ynabAccountID = os.Getenv("ynab_account_id")
-)
+var ynabAccountID = os.Getenv("ynab_account_id")
 
 ////////////////////////////////////////////////////////////////////////////////
 // Business Logic

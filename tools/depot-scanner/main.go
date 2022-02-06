@@ -12,13 +12,17 @@ import (
 	pb "code.tvl.fyi/tools/depot-scanner/proto"
 )
 
-var nixInstantiatePath = flag.String("nix-bin", "/run/current-system/sw/bin/nix-instantiate", "path to nix-instantiate")
-var depotRoot = flag.String("depot", envOr("DEPOT_ROOT", "/depot/"), "path to tvl.fyi depot at current canon")
-var nixStoreRoot = flag.String("store-path", "/nix/store/", "prefix for all valid nix store paths")
+var (
+	nixInstantiatePath = flag.String("nix-bin", "/run/current-system/sw/bin/nix-instantiate", "path to nix-instantiate")
+	depotRoot          = flag.String("depot", envOr("DEPOT_ROOT", "/depot/"), "path to tvl.fyi depot at current canon")
+	nixStoreRoot       = flag.String("store-path", "/nix/store/", "prefix for all valid nix store paths")
+)
 
-var modeFlag = flag.String("mode", modeArchive, "operation mode. valid values: tar, print")
-var onlyFlag = flag.String("only", "", "only enable the listed output types, comma separated. valid values: DEPOT, STORE, CORE, UNKNOWN")
-var relativeFlag = flag.Bool("relpath", false, "when printing paths, print them relative to the root of their path type")
+var (
+	modeFlag     = flag.String("mode", modeArchive, "operation mode. valid values: tar, print")
+	onlyFlag     = flag.String("only", "", "only enable the listed output types, comma separated. valid values: DEPOT, STORE, CORE, UNKNOWN")
+	relativeFlag = flag.Bool("relpath", false, "when printing paths, print them relative to the root of their path type")
+)
 
 const (
 	modeArchive = "tar"
@@ -169,7 +173,7 @@ func main() {
 
 	if *modeFlag == "print" {
 		if enabledPathTypes[pb.PathType_STORE] {
-			for k, _ := range results[nixStorePath] {
+			for k := range results[nixStorePath] {
 				if *relativeFlag {
 					k = strings.TrimPrefix(k, *nixStoreRoot)
 					k = strings.TrimPrefix(k, "/")
@@ -178,7 +182,7 @@ func main() {
 			}
 		}
 		if enabledPathTypes[pb.PathType_DEPOT] {
-			for k, _ := range results[depotPath] {
+			for k := range results[depotPath] {
 				if *relativeFlag {
 					k = strings.TrimPrefix(k, *depotRoot)
 					k = strings.TrimPrefix(k, "/")
@@ -187,13 +191,13 @@ func main() {
 			}
 		}
 		if enabledPathTypes[pb.PathType_CORE] {
-			for k, _ := range results[corePkgsPath] {
+			for k := range results[corePkgsPath] {
 				// TODO relativeFlag
 				fmt.Println(k)
 			}
 		}
 		if enabledPathTypes[pb.PathType_UNKNOWN] {
-			for k, _ := range results[unknownPath] {
+			for k := range results[unknownPath] {
 				fmt.Println(k)
 			}
 		}
@@ -223,5 +227,4 @@ func checkDepotRoot() {
 		fmt.Fprintf(os.Stderr, "error: could not stat %q: %v\n", *depotRoot, err)
 		os.Exit(1)
 	}
-
 }

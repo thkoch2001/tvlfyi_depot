@@ -69,7 +69,6 @@ func contextLoadingError(filename string, cause error) error {
 func LoadContext(filename string, explicitVars *[]string) (*Context, error) {
 	var ctx Context
 	err := util.LoadData(filename, &ctx)
-
 	if err != nil {
 		return nil, contextLoadingError(filename, err)
 	}
@@ -121,7 +120,6 @@ func (ctx *Context) loadImportedVariables() (map[string]interface{}, error) {
 
 		var importedVars map[string]interface{}
 		err := util.LoadData(filePath, &importedVars)
-
 		if err != nil {
 			return nil, err
 		}

@@ -15,7 +15,7 @@ func saySomething(x string, wg *sync.WaitGroup) {
 
 func main() {
 	var wg sync.WaitGroup
-	var things = [5]string{"chicken", "panini", "cheeseburger", "rice", "bread"}
+	things := [5]string{"chicken", "panini", "cheeseburger", "rice", "bread"}
 	for i := 0; i < 5; i += 1 {
 		wg.Add(1)
 		go saySomething(things[i], &wg)

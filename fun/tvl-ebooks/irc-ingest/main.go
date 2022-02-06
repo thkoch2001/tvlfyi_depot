@@ -95,5 +95,4 @@ func ircKeepalive() {
 			lastPing = time.Now()
 		}
 	}
-
 }

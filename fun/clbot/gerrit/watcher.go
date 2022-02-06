@@ -80,9 +80,7 @@ type restartingClient struct {
 	shutdown func()
 }
 
-var (
-	errStopConnect = errors.New("gerrit: told to stop reconnecting by remote server")
-)
+var errStopConnect = errors.New("gerrit: told to stop reconnecting by remote server")
 
 func (c *restartingClient) runOnce() error {
 	netConn, err := net.Dial(c.network, c.addr)

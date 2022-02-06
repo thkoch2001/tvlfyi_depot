@@ -14,10 +14,12 @@ import (
 	"gopkg.in/irc.v3"
 )
 
-var messageBeat chan bool
-var firstMessage chan bool
-var client *irc.Client
-var safeLock sync.Mutex
+var (
+	messageBeat  chan bool
+	firstMessage chan bool
+	client       *irc.Client
+	safeLock     sync.Mutex
+)
 
 func main() {
 	nick := flag.String("nick", "NONE", "the ircnick you want")
@@ -85,7 +87,6 @@ func main() {
 			}
 			time.Sleep(time.Second * 10)
 		}
-
 	}()
 
 	go func() {
@@ -106,7 +107,6 @@ func main() {
 			}
 			time.Sleep(time.Second * 10)
 		}
-
 	}()
 
 	seenMsgBefore := false

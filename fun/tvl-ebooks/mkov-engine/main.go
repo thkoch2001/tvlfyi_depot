@@ -20,8 +20,10 @@ type incomingIRC struct {
 	User    string   `json:"User"`
 }
 
-var suppressionUsernames map[string]bool
-var noMkov map[string]bool
+var (
+	suppressionUsernames map[string]bool
+	noMkov               map[string]bool
+)
 
 func main() {
 	redisc := redis.NewClient(&redis.Options{
@@ -37,7 +39,7 @@ func main() {
 	suppressionListA, _ := suppressionList.Result()
 
 	suppressionListMap, _ := stringMaptoIntMap(suppressionListA)
-	for v, _ := range suppressionListMap {
+	for v := range suppressionListMap {
 		suppressionUsernames[v] = true
 		suppressionUsernames[strings.ToLower(v)] = true
 	}
@@ -48,7 +50,7 @@ func main() {
 	noMkovRedisA, _ := noMkovRedis.Result()
 
 	noMkovMap, _ := stringMaptoIntMap(noMkovRedisA)
-	for v, _ := range noMkovMap {
+	for v := range noMkovMap {
 		noMkov[v] = true
 		noMkov[strings.ToLower(v)] = true
 	}
@@ -196,7 +198,7 @@ func propwords(username string, start string, redisc *redis.Client) string {
 		}
 	}
 
-	for k, _ := range userIntHashMap {
+	for k := range userIntHashMap {
 		return k
 	}
 

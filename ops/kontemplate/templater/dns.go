@@ -21,7 +21,6 @@ import (
 func GetIPsFromDNS(host string) ([]interface{}, error) {
 	fmt.Fprintf(os.Stderr, "Attempting to look up IP for %s in DNS\n", host)
 	ips, err := net.LookupIP(host)
-
 	if err != nil {
 		return nil, fmt.Errorf("IP address lookup failed: %v", err)
 	}

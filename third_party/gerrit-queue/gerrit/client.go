@@ -2,11 +2,10 @@ package gerrit
 
 import (
 	"fmt"
+	"net/url"
 
 	goGerrit "github.com/andygrunwald/go-gerrit"
 	"github.com/apex/log"
-
-	"net/url"
 )
 
 // passed to gerrit when retrieving changesets
@@ -89,7 +88,7 @@ func (c *Client) Refresh() error {
 	}
 	c.head = HEAD
 
-	var queryString = fmt.Sprintf("status:open project:%s branch:%s", c.projectName, c.branchName)
+	queryString := fmt.Sprintf("status:open project:%s branch:%s", c.projectName, c.branchName)
 	c.logger.Debugf("fetching changesets: %s", queryString)
 	changesets, err := c.fetchChangesets(queryString)
 	if err != nil {

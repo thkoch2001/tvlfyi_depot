@@ -44,7 +44,6 @@ func GetImageOfCurrentExecutable() Image {
 		Config:         configJson,
 		ConfigDigest:   Digest(configJson),
 	}
-
 }
 
 func getCurrentBinary() []byte {

@@ -53,6 +53,7 @@ type stringSetFlag map[string]bool
 func (f stringSetFlag) String() string {
 	return fmt.Sprintf("%q", map[string]bool(f))
 }
+
 func (f stringSetFlag) Set(s string) error {
 	if s == "" {
 		return nil

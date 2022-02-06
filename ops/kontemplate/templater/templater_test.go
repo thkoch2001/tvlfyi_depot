@@ -10,10 +10,11 @@
 package templater
 
 import (
-	"github.com/tazjin/kontemplate/context"
 	"reflect"
 	"strings"
 	"testing"
+
+	"github.com/tazjin/kontemplate/context"
 )
 
 func TestApplyNoLimits(t *testing.T) {
@@ -168,7 +169,6 @@ func TestDefaultTemplateFunction(t *testing.T) {
 	resourceSet := context.ResourceSet{}
 
 	res, err := templateFile(&ctx, &resourceSet, "testdata/test-default.txt")
-
 	if err != nil {
 		t.Errorf("Templating with default values should have succeeded.\n")
 		t.Fail()
@@ -190,7 +190,6 @@ func TestInsertTemplateFunction(t *testing.T) {
 	}
 
 	res, err := templateFile(&ctx, &resourceSet, "testdata/test-insertTemplate.txt")
-
 	if err != nil {
 		t.Error(err)
 		t.Errorf("Templating with an insertTemplate call should have succeeded.\n")

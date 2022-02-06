@@ -454,7 +454,6 @@ func gerritHookMain(cfg *config, log *syslog.Writer, trigger *buildTrigger) {
 	}
 
 	err := triggerBuild(cfg, log, trigger)
-
 	if err != nil {
 		log.Err(fmt.Sprintf("failed to trigger Buildkite build: %s", err))
 	}
@@ -529,7 +528,6 @@ func main() {
 
 	bin := path.Base(os.Args[0])
 	cfg, err := loadConfig()
-
 	if err != nil {
 		log.Crit(fmt.Sprintf("besadii configuration error: %v", err))
 		os.Exit(4)

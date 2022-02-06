@@ -12,9 +12,7 @@ import (
 	"strings"
 )
 
-var (
-	exclude = flag.String("exclude", "", "comma-separated list of filenames to exclude (in any directory)")
-)
+var exclude = flag.String("exclude", "", "comma-separated list of filenames to exclude (in any directory)")
 
 func init() {
 	flag.Usage = func() {

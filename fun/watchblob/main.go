@@ -4,11 +4,12 @@ import (
 	"bufio"
 	"encoding/xml"
 	"fmt"
-	"golang.org/x/crypto/ssh/terminal"
 	"net/http"
 	"os"
 	"strings"
 	"syscall"
+
+	"golang.org/x/crypto/ssh/terminal"
 )
 
 // The XML response returned by the WatchGuard server

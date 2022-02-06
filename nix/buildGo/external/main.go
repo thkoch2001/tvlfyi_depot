@@ -68,13 +68,12 @@ func findGoDirs(at string) ([]string, error) {
 
 		return nil
 	})
-
 	if err != nil {
 		return nil, err
 	}
 
 	goDirs := []string{}
-	for k, _ := range dirSet {
+	for k := range dirSet {
 		goDirs = append(goDirs, k)
 	}
 
