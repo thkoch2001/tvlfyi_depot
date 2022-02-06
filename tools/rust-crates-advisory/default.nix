@@ -117,44 +117,36 @@ let
     exec $status
   '';
 
-  check-all-our-lock-files = depot.nix.writeExecline "check-all-our-lock-files" { } [
-    "backtick"
-    "-EI"
-    "report"
-    [
-      "foreground"
-      [
-        lock-file-report
-        "//third_party/rust-crates"
-        our-crates-lock-file
-        "false"
-      ]
-      tree-lock-file-report
-      "."
-    ]
-    "ifelse"
-    [
-      bins.s6-test
-      "-z"
-      "$report"
-    ]
-    [
-      "exit"
-      "0"
-    ]
-    "pipeline"
-    [
-      "printf"
-      "%s"
-      "$report"
-    ]
-    "buildkite-agent"
-    "annotate"
-    "--style"
-    "warning"
-    "--context"
-    "check-all-our-lock-files"
-  ];
+  depot-rust-crates-advisory-report = pkgs.writers.writeBash "depot-advisory-report" ''
+    set -eu
+    status=true
+
+    ${lock-file-report} "//third_party/rust-crates" "${our-crates-lock-file}" || status=false
+    ${tree-lock-file-report} || status=false
+
+    exec $status
+  '';
+
+  buildkiteReportStep =
+    { command
+    , context ? null
+    , style ? "warning"
+    }:
+    let
+      commandName = depot.nix.utils.storePathName (builtins.head command);
+    in
+
+    pkgs.writers.writeBash "buildkite-report-${commandName}" ''
+      set -u
+
+      report="$(${lib.escapeShellArgs command})"
+
+      if test $? -ne 0; then
+         buildkite-agent annotate --style "${style}" \
+           ${lib.optionalString (context != null) "--context \"${context}\""} \
+           "$report"
+      fi
+    '';
 
 in
 depot.nix.readTree.drvTargets {
@@ -164,12 +156,14 @@ depot.nix.readTree.drvTargets {
     lock-file-report
     ;
 
-
   tree-lock-file-report = tree-lock-file-report // {
     meta.ci.extraSteps.run = {
       label = "Check all crates used in depot for advisories";
       alwaysRun = true;
-      command = check-all-our-lock-files;
+      command = buildkiteReportStep {
+        command = [ depot-rust-crates-advisory-report ];
+        style = "warning";
+      };
     };
   };
 }
