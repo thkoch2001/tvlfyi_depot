@@ -120,44 +120,43 @@ let
     exit $status
   '';
 
-  check-all-our-lock-files = depot.nix.writeExecline "check-all-our-lock-files" { } [
-    "backtick"
-    "-EI"
-    "report"
-    [
-      "foreground"
-      [
-        lock-file-report
-        "//third_party/rust-crates"
-        our-crates-lock-file
-        "false"
-      ]
-      tree-lock-file-report
-      "."
-    ]
-    "ifelse"
-    [
-      bins.s6-test
-      "-z"
-      "$report"
-    ]
-    [
-      "exit"
-      "0"
-    ]
-    "pipeline"
-    [
-      "printf"
-      "%s"
-      "$report"
-    ]
-    "buildkite-agent"
-    "annotate"
-    "--style"
-    "warning"
-    "--context"
-    "check-all-our-lock-files"
-  ];
+  depot-rust-crates-advisory-report = pkgs.writers.writeBash "depot-advisory-report" ''
+    set -eu
+    status=0
+
+    "${lock-file-report}" "//third_party/rust-crates" "${our-crates-lock-file}" || status=1
+    "${tree-lock-file-report}" || status=1
+
+    exit $status
+  '';
+
+  buildkiteReportStep =
+    { command
+    , context ? null
+    , style ? "warning"
+    }:
+    let
+      commandName = depot.nix.utils.storePathName (builtins.head command);
+    in
+
+    pkgs.writers.writeBash "buildkite-report-${commandName}" ''
+      set -uo pipefail
+
+      report="$(${lib.escapeShellArgs command})"
+
+      if test $? -ne 0; then
+         printf "%s" "$report" | \
+         buildkite-agent annotate ${
+           lib.escapeShellArgs ([
+             "--style"
+             style
+           ] ++ lib.optionals (context != null) [
+             "--context"
+             context
+           ])
+         }
+      fi
+    '';
 
 in
 depot.nix.readTree.drvTargets {
@@ -167,12 +166,14 @@ depot.nix.readTree.drvTargets {
     lock-file-report
     ;
 
-
   tree-lock-file-report = tree-lock-file-report // {
     meta.ci.extraSteps.run = {
       label = "Check all crates used in depot for advisories";
       alwaysRun = true;
-      command = check-all-our-lock-files;
+      command = buildkiteReportStep {
+        command = [ depot-rust-crates-advisory-report ];
+        style = "warning";
+      };
     };
   };
 }
