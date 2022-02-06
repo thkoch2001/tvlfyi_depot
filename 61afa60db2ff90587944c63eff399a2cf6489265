@@ -56,6 +56,48 @@
       },
       "revId": "61afa60db2ff90587944c63eff399a2cf6489265",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5f087185_172b8eae",
+        "filename": "tools/crfo-approve.nix",
+        "patchSetId": 1
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-02-06T11:07:13Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c9318402_e33ef3f5",
+      "revId": "61afa60db2ff90587944c63eff399a2cf6489265",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "112d0178_77906375",
+        "filename": "tools/crfo-approve.nix",
+        "patchSetId": 1
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-02-06T11:07:13Z",
+      "side": 1,
+      "message": "I\u0027m following the Google style guide here (constants are upper-case).\n\nhttps://google.github.io/styleguide/shellguide.html#constants-and-environment-variable-names",
+      "parentUuid": "ec0dc179_a1470fb7",
+      "range": {
+        "startLine": 13,
+        "startChar": 11,
+        "endLine": 13,
+        "endChar": 16
+      },
+      "revId": "61afa60db2ff90587944c63eff399a2cf6489265",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
