@@ -104,41 +104,18 @@ let
     exit "''${PIPESTATUS[0]}" # inherit exit code from cargo-audit
   '';
 
-  tree-lock-file-report = depot.nix.writeExecline "tree-lock-file-report"
-    {
-      readNArgs = 1;
-    } [
-    "backtick"
-    "-E"
-    "report"
-    [
-      "pipeline"
-      [ bins.find "$1" "-name" "Cargo.lock" "-and" "-type" "f" "-print0" ]
-      "forstdin"
-      "-E"
-      "-0"
-      "lockFile"
-      "backtick"
-      "-E"
-      "depotPath"
-      [
-        "pipeline"
-        [ bins.s6-dirname "$lockFile" ]
-        bins.sed
-        "s|^\\.|/|"
-      ]
-      lock-file-report
-      "$depotPath"
-      "$lockFile"
-      "false"
-    ]
-    "if"
-    [ bins.printf "%s\n" "$report" ]
-    # empty report implies success (no advisories)
-    bins.s6-test
-    "-z"
-    "$report"
-  ];
+  tree-lock-file-report = pkgs.writers.writeBash "tree-lock-file-report" ''
+    set -euo pipefail
+    status=true
+
+    while IFS= read -r -d $'\0' lockFile; do
+      depotPath="$(${bins.s6-dirname} "$lockFile" | ${bins.sed} 's|^\.|/|')"
+
+      ${lock-file-report} "$depotPath" "$lockFile" || status=false
+    done < <(${bins.find} "''${1:-.}" -name Cargo.lock -and -type f -print0)
+
+    exec $status
+  '';
 
   check-all-our-lock-files = depot.nix.writeExecline "check-all-our-lock-files" { } [
     "backtick"
