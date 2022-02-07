@@ -1,16 +1,16 @@
 extern crate exec_helpers;
 // extern crate arglib_netencode;
 // extern crate netencode;
-extern crate imap;
 extern crate epoll;
+extern crate imap;
 
 // use netencode::dec;
-use std::convert::TryFrom;
-use std::io::{Read, Write};
-use std::fs::File;
-use std::os::unix::io::{FromRawFd, AsRawFd, RawFd};
-use std::time::Duration;
 use imap::extensions::idle::SetReadTimeout;
+use std::convert::TryFrom;
+use std::fs::File;
+use std::io::{Read, Write};
+use std::os::unix::io::{AsRawFd, FromRawFd, RawFd};
+use std::time::Duration;
 
 /// Implements an UCSPI client that wraps fd 6 & 7
 /// and implements Write and Read with a timeout.
@@ -33,7 +33,7 @@ impl UcspiClient {
                 read: File::from_raw_fd(6),
                 read_epoll_fd,
                 read_timeout: None,
-                write: File::from_raw_fd(7)
+                write: File::from_raw_fd(7),
             })
         }
     }
@@ -54,21 +54,23 @@ impl SetReadTimeout for UcspiClient {
 impl Read for UcspiClient {
     // TODO: test the epoll code with a short timeout
     fn read(&mut self, buf: &mut [u8]) -> std::io::Result<usize> {
-        const NO_DATA : u64 = 0;
+        const NO_DATA: u64 = 0;
         // in order to implement the read_timeout,
         // we use epoll to wait for either data or time out
         epoll::ctl(
             self.read_epoll_fd,
             epoll::ControlOptions::EPOLL_CTL_ADD,
             self.read.as_raw_fd(),
-            epoll::Event::new(epoll::Events::EPOLLIN, NO_DATA)
+            epoll::Event::new(epoll::Events::EPOLLIN, NO_DATA),
         )?;
         let UNUSED = epoll::Event::new(epoll::Events::EPOLLIN, NO_DATA);
         let wait = epoll::wait(
             self.read_epoll_fd,
             match self.read_timeout {
-                Some(duration) => i32::try_from(duration.as_millis()).expect("duration too big for epoll"),
-                None => -1 // infinite
+                Some(duration) => {
+                    i32::try_from(duration.as_millis()).expect("duration too big for epoll")
+                }
+                None => -1, // infinite
             },
             // event that was generated; but we don’t care
             &mut vec![UNUSED; 1][..],
@@ -79,11 +81,14 @@ impl Read for UcspiClient {
             self.read_epoll_fd,
             epoll::ControlOptions::EPOLL_CTL_DEL,
             self.read.as_raw_fd(),
-            UNUSED
+            UNUSED,
         )?;
         match wait {
             // timeout happened (0 events)
-            Ok(0) => Err(std::io::Error::new(std::io::ErrorKind::TimedOut, "ucspi read timeout")),
+            Ok(0) => Err(std::io::Error::new(
+                std::io::ErrorKind::TimedOut,
+                "ucspi read timeout",
+            )),
             // its ready for reading, we can read
             Ok(_) => self.read.read(buf),
             // error
@@ -110,18 +115,21 @@ fn main() {
     let username = std::env::var("IMAP_USERNAME").expect("username");
     let password = std::env::var("IMAP_PASSWORD").expect("password");
 
-    let net = unsafe {
-        UcspiClient::new_from_6_and_7().expect("no ucspi client for you")
-    };
+    let net = unsafe { UcspiClient::new_from_6_and_7().expect("no ucspi client for you") };
     let client = imap::Client::new(net);
-    let mut session = client.login(username, password).map_err(|(err, _)| err).expect("unable to login");
+    let mut session = client
+        .login(username, password)
+        .map_err(|(err, _)| err)
+        .expect("unable to login");
     eprintln!("{:#?}", session);
     let list = session.list(None, Some("*"));
     eprintln!("{:#?}", list);
     let mailbox = session.examine("INBOX");
     eprintln!("{:#?}", mailbox);
     fn now() -> String {
-        String::from_utf8_lossy(&std::process::Command::new("date").output().unwrap().stdout).trim_right().to_string()
+        String::from_utf8_lossy(&std::process::Command::new("date").output().unwrap().stdout)
+            .trim_right()
+            .to_string()
     }
     loop {
         eprintln!("{}: idling on INBOX", now());

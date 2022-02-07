@@ -28,14 +28,19 @@ fn main() {
 
     // Otherwise ask Nix to build it and inject the result.
     let output = Command::new("nix-build")
-        .arg("-A").arg("third_party.bat_syntaxes")
+        .arg("-A")
+        .arg("third_party.bat_syntaxes")
         // ... assuming cheddar is at //tools/cheddar ...
         .arg("../..")
         .output()
         .expect(ERROR_MESSAGE);
 
     if !output.status.success() {
-        eprintln!("{}\nNix output: {}", ERROR_MESSAGE, String::from_utf8_lossy(&output.stderr));
+        eprintln!(
+            "{}\nNix output: {}",
+            ERROR_MESSAGE,
+            String::from_utf8_lossy(&output.stderr)
+        );
         return;
     }
 

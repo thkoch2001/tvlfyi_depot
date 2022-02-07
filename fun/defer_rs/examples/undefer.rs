@@ -1,10 +1,10 @@
 // Go's defer in Rust, with a little twist!
 
 struct Defer<F: Fn()> {
-    f: F
+    f: F,
 }
 
-impl <F: Fn()> Drop for Defer<F> {
+impl<F: Fn()> Drop for Defer<F> {
     fn drop(&mut self) {
         (self.f)()
     }
