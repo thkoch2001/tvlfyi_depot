@@ -51,6 +51,24 @@
       "parentUuid": "c4466431_914ecda1",
       "revId": "26f5c83d7e1099ec9afb180135f8e4ad709759b1",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b5edf664_43b5b904",
+        "filename": "tools/crfo-approve.nix",
+        "patchSetId": 4
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-02-07T19:12:28Z",
+      "side": 1,
+      "message": "Gonna ACK this for now, I think that is actually less readable than what we have right now.",
+      "parentUuid": "a83aa8e6_592ee017",
+      "revId": "26f5c83d7e1099ec9afb180135f8e4ad709759b1",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
