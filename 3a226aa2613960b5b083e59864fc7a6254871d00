@@ -70,6 +70,24 @@
       "parentUuid": "2542b4f9_5178bee2",
       "revId": "3a226aa2613960b5b083e59864fc7a6254871d00",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "52458192_b9214ef9",
+        "filename": "web/panettone/src/authentication.lisp",
+        "patchSetId": 2
+      },
+      "lineNbr": 113,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2022-02-07T17:12:38Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4e78e33f_1c448410",
+      "revId": "3a226aa2613960b5b083e59864fc7a6254871d00",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
