@@ -21,17 +21,12 @@
 //! are established in a similar way as was tradition in
 //! `error_chain`, albeit manually.
 
-use std::result;
-use actix_web::{ResponseError, HttpResponse};
 use actix_web::http::StatusCode;
+use actix_web::{HttpResponse, ResponseError};
+use std::result;
 
 // Modules with foreign errors:
-use actix;
-use actix_web;
-use askama;
-use diesel;
-use r2d2;
-use tokio_timer;
+use {actix, actix_web, askama, diesel, r2d2, tokio_timer};
 
 pub type Result<T> = result::Result<T, ConverseError>;
 pub type ConverseResult<T> = result::Result<T, ConverseError>;
@@ -96,7 +91,9 @@ impl From<askama::Error> for ConverseError {
 
 impl From<actix::MailboxError> for ConverseError {
     fn from(error: actix::MailboxError) -> ConverseError {
-        ConverseError::Actix { error: Box::new(error) }
+        ConverseError::Actix {
+            error: Box::new(error),
+        }
     }
 }
 
@@ -136,7 +133,7 @@ impl ResponseError for ConverseError {
                 .header("Location", format!("/thread/{}#post-reply", id))
                 .finish(),
             _ => HttpResponse::build(StatusCode::INTERNAL_SERVER_ERROR)
-                .body(format!("An error occured: {}", self))
+                .body(format!("An error occured: {}", self)),
         }
     }
 }

@@ -1,9 +1,9 @@
-extern crate nom;
 extern crate exec_helpers;
+extern crate nom;
 
 use std::collections::HashMap;
-use std::io::{Write, Read};
-use std::fmt::{Display, Debug};
+use std::fmt::{Debug, Display};
+use std::io::{Read, Write};
 
 #[derive(Debug, PartialEq, Eq, Clone)]
 pub enum T {
@@ -46,22 +46,19 @@ impl T {
             T::I7(i) => U::I7(*i),
             T::Text(t) => U::Text(t.as_str()),
             T::Binary(v) => U::Binary(v),
-            T::Sum(Tag { tag, val }) => U::Sum(
-                Tag { tag: tag.as_str(), val: Box::new(val.to_u()) }
-            ),
-            T::Record(map) => U::Record(
-                map.iter().map(|(k, v)| (k.as_str(), v.to_u())).collect()
-            ),
-            T::List(l) => U::List(
-                l.iter().map(|v| v.to_u()).collect::<Vec<U<'a>>>()
-            ),
+            T::Sum(Tag { tag, val }) => U::Sum(Tag {
+                tag: tag.as_str(),
+                val: Box::new(val.to_u()),
+            }),
+            T::Record(map) => U::Record(map.iter().map(|(k, v)| (k.as_str(), v.to_u())).collect()),
+            T::List(l) => U::List(l.iter().map(|v| v.to_u()).collect::<Vec<U<'a>>>()),
         }
     }
 
     pub fn encode<'a>(&'a self) -> Vec<u8> {
         match self {
             // TODO: don’t go via U, inefficient
-            o => o.to_u().encode()
+            o => o.to_u().encode(),
         }
     }
 }
@@ -110,15 +107,16 @@ impl<'a> U<'a> {
             U::I7(i) => T::I7(*i),
             U::Text(t) => T::Text((*t).to_owned()),
             U::Binary(v) => T::Binary((*v).to_owned()),
-            U::Sum(Tag { tag, val }) => T::Sum(
-                Tag { tag: (*tag).to_owned(), val: Box::new(val.to_t()) }
-            ),
+            U::Sum(Tag { tag, val }) => T::Sum(Tag {
+                tag: (*tag).to_owned(),
+                val: Box::new(val.to_t()),
+            }),
             U::Record(map) => T::Record(
-                map.iter().map(|(k, v)| ((*k).to_owned(), v.to_t())).collect::<HashMap<String, T>>()
+                map.iter()
+                    .map(|(k, v)| ((*k).to_owned(), v.to_t()))
+                    .collect::<HashMap<String, T>>(),
             ),
-            U::List(l) => T::List(
-                l.iter().map(|v| v.to_t()).collect::<Vec<T>>()
-            ),
+            U::List(l) => T::List(l.iter().map(|v| v.to_t()).collect::<Vec<T>>()),
         }
     }
 }
@@ -127,16 +125,18 @@ impl<'a> U<'a> {
 pub struct Tag<S, A> {
     // TODO: make into &str
     pub tag: S,
-    pub val: Box<A>
+    pub val: Box<A>,
 }
 
 impl<S, A> Tag<S, A> {
     fn map<F, B>(self, f: F) -> Tag<S, B>
-        where F: Fn(A) -> B {
-          Tag {
-              tag: self.tag,
-              val: Box::new(f(*self.val))
-          }
+    where
+        F: Fn(A) -> B,
+    {
+        Tag {
+            tag: self.tag,
+            val: Box::new(f(*self.val)),
+        }
     }
 }
 
@@ -147,45 +147,51 @@ fn encode_tag<W: Write>(w: &mut W, tag: &str, val: &U) -> std::io::Result<()> {
 }
 
 pub fn encode<W: Write>(w: &mut W, u: &U) -> std::io::Result<()> {
-  match u {
-      U::Unit => write!(w, "u,"),
-      U::N1(b) => if *b { write!(w, "n1:1,") } else { write!(w, "n1:0,") },
-      U::N3(n) => write!(w, "n3:{},", n),
-      U::N6(n) => write!(w, "n6:{},", n),
-      U::N7(n) => write!(w, "n7:{},", n),
-      U::I3(i) => write!(w, "i3:{},", i),
-      U::I6(i) => write!(w, "i6:{},", i),
-      U::I7(i) => write!(w, "i7:{},", i),
-      U::Text(s) => {
-          write!(w, "t{}:", s.len());
-          w.write_all(s.as_bytes());
-          write!(w, ",")
-      }
-      U::Binary(s) => {
-          write!(w, "b{}:", s.len());
-          w.write_all(&s);
-          write!(w, ",")
-      },
-      U::Sum(Tag{tag, val}) => encode_tag(w, tag, val),
-      U::Record(m) => {
-          let mut c = std::io::Cursor::new(vec![]);
-          for (k, v) in m {
-              encode_tag(&mut c, k, v)?;
-          }
-          write!(w, "{{{}:", c.get_ref().len())?;
-          w.write_all(c.get_ref())?;
-          write!(w, "}}")
-      },
-      U::List(l) => {
-          let mut c = std::io::Cursor::new(vec![]);
-          for u in l {
-              encode(&mut c, u)?;
-          }
-          write!(w, "[{}:", c.get_ref().len())?;
-          w.write_all(c.get_ref())?;
-          write!(w, "]")
-      }
-  }
+    match u {
+        U::Unit => write!(w, "u,"),
+        U::N1(b) => {
+            if *b {
+                write!(w, "n1:1,")
+            } else {
+                write!(w, "n1:0,")
+            }
+        }
+        U::N3(n) => write!(w, "n3:{},", n),
+        U::N6(n) => write!(w, "n6:{},", n),
+        U::N7(n) => write!(w, "n7:{},", n),
+        U::I3(i) => write!(w, "i3:{},", i),
+        U::I6(i) => write!(w, "i6:{},", i),
+        U::I7(i) => write!(w, "i7:{},", i),
+        U::Text(s) => {
+            write!(w, "t{}:", s.len());
+            w.write_all(s.as_bytes());
+            write!(w, ",")
+        }
+        U::Binary(s) => {
+            write!(w, "b{}:", s.len());
+            w.write_all(&s);
+            write!(w, ",")
+        }
+        U::Sum(Tag { tag, val }) => encode_tag(w, tag, val),
+        U::Record(m) => {
+            let mut c = std::io::Cursor::new(vec![]);
+            for (k, v) in m {
+                encode_tag(&mut c, k, v)?;
+            }
+            write!(w, "{{{}:", c.get_ref().len())?;
+            w.write_all(c.get_ref())?;
+            write!(w, "}}")
+        }
+        U::List(l) => {
+            let mut c = std::io::Cursor::new(vec![]);
+            for u in l {
+                encode(&mut c, u)?;
+            }
+            write!(w, "[{}:", c.get_ref().len())?;
+            w.write_all(c.get_ref())?;
+            write!(w, "]")
+        }
+    }
 }
 
 pub fn text(s: String) -> T {
@@ -197,27 +203,36 @@ pub fn u_from_stdin_or_die_user_error<'a>(prog_name: &'_ str, stdin_buf: &'a mut
     let u = match parse::u_u(stdin_buf) {
         Ok((rest, u)) => match rest {
             b"" => u,
-            _ => exec_helpers::die_user_error(prog_name, format!("stdin contained some soup after netencode value: {:?}", String::from_utf8_lossy(rest)))
+            _ => exec_helpers::die_user_error(
+                prog_name,
+                format!(
+                    "stdin contained some soup after netencode value: {:?}",
+                    String::from_utf8_lossy(rest)
+                ),
+            ),
         },
-        Err(err) => exec_helpers::die_user_error(prog_name, format!("unable to parse netencode from stdin: {:?}", err))
+        Err(err) => exec_helpers::die_user_error(
+            prog_name,
+            format!("unable to parse netencode from stdin: {:?}", err),
+        ),
     };
     u
 }
 
 pub mod parse {
-    use super::{T, Tag, U};
+    use super::{Tag, T, U};
 
-    use std::str::FromStr;
-    use std::ops::Neg;
     use std::collections::HashMap;
+    use std::ops::Neg;
+    use std::str::FromStr;
 
-    use nom::{IResult};
-    use nom::branch::{alt};
+    use nom::branch::alt;
     use nom::bytes::streaming::{tag, take};
-    use nom::character::streaming::{digit1, char};
-    use nom::sequence::{tuple};
-    use nom::combinator::{map, map_res, flat_map, map_parser, opt};
+    use nom::character::streaming::{char, digit1};
+    use nom::combinator::{flat_map, map, map_parser, map_res, opt};
     use nom::error::{context, ErrorKind, ParseError};
+    use nom::sequence::tuple;
+    use nom::IResult;
 
     fn unit_t(s: &[u8]) -> IResult<&[u8], ()> {
         let (s, _) = context("unit", tag("u,"))(s)?;
@@ -227,9 +242,9 @@ pub mod parse {
     fn usize_t(s: &[u8]) -> IResult<&[u8], usize> {
         context(
             "usize",
-            map_res(
-                map_res(digit1, |n| std::str::from_utf8(n)),
-                |s| s.parse::<usize>())
+            map_res(map_res(digit1, |n| std::str::from_utf8(n)), |s| {
+                s.parse::<usize>()
+            }),
         )(s)
     }
 
@@ -238,87 +253,77 @@ pub mod parse {
             // This is the point where we check the descriminator;
             // if the beginning char does not match, we can immediately return.
             let (s, _) = char(begin)(s)?;
-            let (s, (len, _)) = tuple((
-                usize_t,
-                char(':')
-            ))(s)?;
-            let (s, (res, _)) = tuple((
-                take(len),
-                char(end)
-            ))(s)?;
+            let (s, (len, _)) = tuple((usize_t, char(':')))(s)?;
+            let (s, (res, _)) = tuple((take(len), char(end)))(s)?;
             Ok((s, res))
         }
     }
-
 
     fn uint_t<'a, I: FromStr + 'a>(t: &'static str) -> impl Fn(&'a [u8]) -> IResult<&'a [u8], I> {
         move |s: &'a [u8]| {
             let (s, (_, _, int, _)) = tuple((
                 tag(t.as_bytes()),
                 char(':'),
-                map_res(
-                    map_res(digit1, |n: &[u8]| std::str::from_utf8(n)),
-                    |s| s.parse::<I>()
-                ),
-                char(',')
+                map_res(map_res(digit1, |n: &[u8]| std::str::from_utf8(n)), |s| {
+                    s.parse::<I>()
+                }),
+                char(','),
             ))(s)?;
             Ok((s, int))
         }
     }
 
     fn bool_t<'a>() -> impl Fn(&'a [u8]) -> IResult<&'a [u8], bool> {
-        context("bool", alt((
-            map(tag("n1:0,"), |_| false),
-            map(tag("n1:1,"), |_| true),
-        )))
+        context(
+            "bool",
+            alt((map(tag("n1:0,"), |_| false), map(tag("n1:1,"), |_| true))),
+        )
     }
 
-    fn int_t<'a, I: FromStr + Neg<Output=I>>(t: &'static str) -> impl Fn(&'a [u8]) -> IResult<&[u8], I> {
-        context(
-            t,
-            move |s: &'a [u8]| {
-                let (s, (_, _, neg, int, _)) = tuple((
-                    tag(t.as_bytes()),
-                    char(':'),
-                    opt(char('-')),
-                    map_res(
-                        map_res(digit1, |n: &[u8]| std::str::from_utf8(n)),
-                        |s| s.parse::<I>()
-                    ),
-                    char(',')
-                ))(s)?;
-                let res = match neg {
-                    Some(_) => -int,
-                    None => int,
-                };
-                Ok((s, res))
-            }
-        )
+    fn int_t<'a, I: FromStr + Neg<Output = I>>(
+        t: &'static str,
+    ) -> impl Fn(&'a [u8]) -> IResult<&[u8], I> {
+        context(t, move |s: &'a [u8]| {
+            let (s, (_, _, neg, int, _)) = tuple((
+                tag(t.as_bytes()),
+                char(':'),
+                opt(char('-')),
+                map_res(map_res(digit1, |n: &[u8]| std::str::from_utf8(n)), |s| {
+                    s.parse::<I>()
+                }),
+                char(','),
+            ))(s)?;
+            let res = match neg {
+                Some(_) => -int,
+                None => int,
+            };
+            Ok((s, res))
+        })
     }
 
     fn tag_t(s: &[u8]) -> IResult<&[u8], Tag<String, T>> {
         // recurses into the main parser
-        map(tag_g(t_t),
-            |Tag {tag, val}|
-            Tag {
-                tag: tag.to_string(),
-                val
-            })(s)
+        map(tag_g(t_t), |Tag { tag, val }| Tag {
+            tag: tag.to_string(),
+            val,
+        })(s)
     }
 
     fn tag_g<'a, P, O>(inner: P) -> impl Fn(&'a [u8]) -> IResult<&'a [u8], Tag<&'a str, O>>
     where
-        P: Fn(&'a [u8]) -> IResult<&'a [u8], O>
+        P: Fn(&'a [u8]) -> IResult<&'a [u8], O>,
     {
         move |s: &[u8]| {
             let (s, tag) = sized('<', '|')(s)?;
             let (s, val) = inner(s)?;
-            Ok((s, Tag {
-                tag: std::str::from_utf8(tag)
-                    .map_err(|_| nom::Err::Failure((s, ErrorKind::Char)))?,
-                val: Box::new(val)
-            }))
-
+            Ok((
+                s,
+                Tag {
+                    tag: std::str::from_utf8(tag)
+                        .map_err(|_| nom::Err::Failure((s, ErrorKind::Char)))?,
+                    val: Box::new(val),
+                },
+            ))
         }
     }
 
@@ -330,9 +335,9 @@ pub mod parse {
 
     fn text_g(s: &[u8]) -> IResult<&[u8], &str> {
         let (s, res) = sized('t', ',')(s)?;
-        Ok((s,
-            std::str::from_utf8(res)
-                .map_err(|_| nom::Err::Failure((s, ErrorKind::Char)))?,
+        Ok((
+            s,
+            std::str::from_utf8(res).map_err(|_| nom::Err::Failure((s, ErrorKind::Char)))?,
         ))
     }
 
@@ -374,22 +379,24 @@ pub mod parse {
     {
         map_parser(
             sized('[', ']'),
-            nom::multi::many0(inner_no_empty_string(inner))
+            nom::multi::many0(inner_no_empty_string(inner)),
         )
     }
 
     fn record_t<'a>(s: &'a [u8]) -> IResult<&'a [u8], HashMap<String, T>> {
         let (s, r) = record_g(t_t)(s)?;
-        Ok((s,
+        Ok((
+            s,
             r.into_iter()
-            .map(|(k, v)| (k.to_string(), v))
-            .collect::<HashMap<_,_>>()))
+                .map(|(k, v)| (k.to_string(), v))
+                .collect::<HashMap<_, _>>(),
+        ))
     }
 
     fn record_g<'a, P, O>(inner: P) -> impl Fn(&'a [u8]) -> IResult<&'a [u8], HashMap<&'a str, O>>
     where
         O: Clone,
-        P: Fn(&'a [u8]) -> IResult<&'a [u8], O>
+        P: Fn(&'a [u8]) -> IResult<&'a [u8], O>,
     {
         move |s: &'a [u8]| {
             let (s, map) = map_parser(
@@ -397,19 +404,19 @@ pub mod parse {
                 nom::multi::fold_many0(
                     inner_no_empty_string(tag_g(&inner)),
                     HashMap::new(),
-                    |mut acc: HashMap<_,_>, Tag { tag, mut val }| {
+                    |mut acc: HashMap<_, _>, Tag { tag, mut val }| {
                         // ignore duplicated tag names that appear later
                         // according to netencode spec
-                        if ! acc.contains_key(tag) {
+                        if !acc.contains_key(tag) {
                             acc.insert(tag, *val);
                         }
                         acc
-                    }
-                )
+                    },
+                ),
             )(s)?;
             if map.is_empty() {
                 // records must not be empty, according to the spec
-                Err(nom::Err::Failure((s,nom::error::ErrorKind::Many1)))
+                Err(nom::Err::Failure((s, nom::error::ErrorKind::Many1)))
             } else {
                 Ok((s, map))
             }
@@ -424,7 +431,6 @@ pub mod parse {
             map(tag_g(u_u), |t| U::Sum(t)),
             map(list_g(u_u), U::List),
             map(record_g(u_u), U::Record),
-
             map(bool_t(), |u| U::N1(u)),
             map(uint_t("n3"), |u| U::N3(u)),
             map(uint_t("n6"), |u| U::N6(u)),
@@ -432,7 +438,6 @@ pub mod parse {
             map(int_t("i3"), |u| U::I3(u)),
             map(int_t("i6"), |u| U::I6(u)),
             map(int_t("i7"), |u| U::I7(u)),
-
             // less common
             map(uint_t("n2"), |u| U::N3(u)),
             map(uint_t("n4"), |u| U::N6(u)),
@@ -445,7 +450,7 @@ pub mod parse {
         ))(s)
     }
 
-    pub fn t_t(s: &[u8]) -> IResult<&[u8], T>  {
+    pub fn t_t(s: &[u8]) -> IResult<&[u8], T> {
         alt((
             text,
             binary(),
@@ -453,7 +458,6 @@ pub mod parse {
             map(tag_t, |t| T::Sum(t)),
             map(list_t, |l| T::List(l)),
             map(record_t, |p| T::Record(p)),
-
             map(bool_t(), |u| T::N1(u)),
             // 8, 64 and 128 bit
             map(uint_t("n3"), |u| T::N3(u)),
@@ -462,7 +466,6 @@ pub mod parse {
             map(int_t("i3"), |u| T::I3(u)),
             map(int_t("i6"), |u| T::I6(u)),
             map(int_t("i7"), |u| T::I7(u)),
-
             // less common
             map(uint_t("n2"), |u| T::N3(u)),
             map(uint_t("n4"), |u| T::N6(u)),
@@ -481,30 +484,18 @@ pub mod parse {
 
         #[test]
         fn test_parse_unit_t() {
-            assert_eq!(
-                unit_t("u,".as_bytes()),
-                Ok(("".as_bytes(), ()))
-            );
+            assert_eq!(unit_t("u,".as_bytes()), Ok(("".as_bytes(), ())));
         }
 
         #[test]
         fn test_parse_bool_t() {
-            assert_eq!(
-                bool_t()("n1:0,".as_bytes()),
-                Ok(("".as_bytes(), false))
-            );
-            assert_eq!(
-                bool_t()("n1:1,".as_bytes()),
-                Ok(("".as_bytes(), true))
-            );
+            assert_eq!(bool_t()("n1:0,".as_bytes()), Ok(("".as_bytes(), false)));
+            assert_eq!(bool_t()("n1:1,".as_bytes()), Ok(("".as_bytes(), true)));
         }
 
         #[test]
         fn test_parse_usize_t() {
-            assert_eq!(
-                usize_t("32foo".as_bytes()),
-                Ok(("foo".as_bytes(), 32))
-            );
+            assert_eq!(usize_t("32foo".as_bytes()), Ok(("foo".as_bytes(), 32)));
         }
 
         #[test]
@@ -515,7 +506,10 @@ pub mod parse {
             );
             assert_eq!(
                 uint_t::<u8>("n3")("n3:1024,abc".as_bytes()),
-                Err(nom::Err::Error(("1024,abc".as_bytes(), nom::error::ErrorKind::MapRes)))
+                Err(nom::Err::Error((
+                    "1024,abc".as_bytes(),
+                    nom::error::ErrorKind::MapRes
+                )))
             );
             assert_eq!(
                 int_t::<i64>("i6")("i6:-23,abc".as_bytes()),
@@ -544,18 +538,21 @@ pub mod parse {
             assert_eq!(
                 text("t5:hello,".as_bytes()),
                 Ok(("".as_bytes(), T::Text("hello".to_owned()))),
-                "{}", r"t5:hello,"
+                "{}",
+                r"t5:hello,"
             );
             assert_eq!(
                 text("t4:fo".as_bytes()),
                 // The content of the text should be 4 long
                 Err(nom::Err::Incomplete(nom::Needed::Size(4))),
-                "{}", r"t4:fo,"
+                "{}",
+                r"t4:fo,"
             );
             assert_eq!(
                 text("t9:今日は,".as_bytes()),
                 Ok(("".as_bytes(), T::Text("今日は".to_owned()))),
-                "{}", r"t9:今日は,"
+                "{}",
+                r"t9:今日は,"
             );
         }
 
@@ -564,24 +561,28 @@ pub mod parse {
             assert_eq!(
                 binary()("b5:hello,".as_bytes()),
                 Ok(("".as_bytes(), T::Binary(Vec::from("hello".to_owned())))),
-                "{}", r"b5:hello,"
+                "{}",
+                r"b5:hello,"
             );
             assert_eq!(
                 binary()("b4:fo".as_bytes()),
                 // The content of the byte should be 4 long
                 Err(nom::Err::Incomplete(nom::Needed::Size(4))),
-                "{}", r"b4:fo,"
+                "{}",
+                r"b4:fo,"
             );
             assert_eq!(
                 binary()("b4:foob".as_bytes()),
                 // The content is 4 bytes now, but the finishing , is missing
                 Err(nom::Err::Incomplete(nom::Needed::Size(1))),
-                    "{}", r"b4:fo,"
-                );
+                "{}",
+                r"b4:fo,"
+            );
             assert_eq!(
                 binary()("b9:今日は,".as_bytes()),
                 Ok(("".as_bytes(), T::Binary(Vec::from("今日は".as_bytes())))),
-                "{}", r"b9:今日は,"
+                "{}",
+                r"b9:今日は,"
             );
         }
 
@@ -590,25 +591,23 @@ pub mod parse {
             assert_eq!(
                 list_t("[0:]".as_bytes()),
                 Ok(("".as_bytes(), vec![])),
-                "{}", r"[0:]"
+                "{}",
+                r"[0:]"
             );
             assert_eq!(
                 list_t("[6:u,u,u,]".as_bytes()),
-                Ok(("".as_bytes(), vec![
-                    T::Unit,
-                    T::Unit,
-                    T::Unit,
-                ])),
-                "{}", r"[6:u,u,u,]"
+                Ok(("".as_bytes(), vec![T::Unit, T::Unit, T::Unit,])),
+                "{}",
+                r"[6:u,u,u,]"
             );
             assert_eq!(
                 list_t("[15:u,[7:t3:foo,]u,]".as_bytes()),
-                Ok(("".as_bytes(), vec![
-                    T::Unit,
-                    T::List(vec![T::Text("foo".to_owned())]),
-                    T::Unit,
-                ])),
-                "{}", r"[15:u,[7:t3:foo,]u,]"
+                Ok((
+                    "".as_bytes(),
+                    vec![T::Unit, T::List(vec![T::Text("foo".to_owned())]), T::Unit,]
+                )),
+                "{}",
+                r"[15:u,[7:t3:foo,]u,]"
             );
         }
 
@@ -616,27 +615,40 @@ pub mod parse {
         fn test_record() {
             assert_eq!(
                 record_t("{21:<1:a|u,<1:b|u,<1:c|u,}".as_bytes()),
-                Ok(("".as_bytes(), vec![
-                    ("a".to_owned(), T::Unit),
-                    ("b".to_owned(), T::Unit),
-                    ("c".to_owned(), T::Unit),
-                ].into_iter().collect::<HashMap<String, T>>())),
-                "{}", r"{21:<1:a|u,<1:b|u,<1:c|u,}"
+                Ok((
+                    "".as_bytes(),
+                    vec![
+                        ("a".to_owned(), T::Unit),
+                        ("b".to_owned(), T::Unit),
+                        ("c".to_owned(), T::Unit),
+                    ]
+                    .into_iter()
+                    .collect::<HashMap<String, T>>()
+                )),
+                "{}",
+                r"{21:<1:a|u,<1:b|u,<1:c|u,}"
             );
             // duplicated keys are ignored (first is taken)
             assert_eq!(
                 record_t("{25:<1:a|u,<1:b|u,<1:a|i1:-1,}".as_bytes()),
-                Ok(("".as_bytes(), vec![
-                    ("a".to_owned(), T::Unit),
-                    ("b".to_owned(), T::Unit),
-                ].into_iter().collect::<HashMap<_,_>>())),
-                "{}", r"{25:<1:a|u,<1:b|u,<1:a|i1:-1,}"
+                Ok((
+                    "".as_bytes(),
+                    vec![("a".to_owned(), T::Unit), ("b".to_owned(), T::Unit),]
+                        .into_iter()
+                        .collect::<HashMap<_, _>>()
+                )),
+                "{}",
+                r"{25:<1:a|u,<1:b|u,<1:a|i1:-1,}"
             );
             // empty records are not allowed
             assert_eq!(
                 record_t("{0:}".as_bytes()),
-                Err(nom::Err::Failure(("".as_bytes(), nom::error::ErrorKind::Many1))),
-                "{}", r"{0:}"
+                Err(nom::Err::Failure((
+                    "".as_bytes(),
+                    nom::error::ErrorKind::Many1
+                ))),
+                "{}",
+                r"{0:}"
             );
         }
 
@@ -645,37 +657,62 @@ pub mod parse {
             assert_eq!(
                 t_t("n3:255,".as_bytes()),
                 Ok(("".as_bytes(), T::N3(255))),
-                "{}", r"n3:255,"
+                "{}",
+                r"n3:255,"
             );
             assert_eq!(
                 t_t("t6:halloo,".as_bytes()),
                 Ok(("".as_bytes(), T::Text("halloo".to_owned()))),
-                "{}", r"t6:halloo,"
+                "{}",
+                r"t6:halloo,"
             );
             assert_eq!(
                 t_t("<3:foo|t6:halloo,".as_bytes()),
-                Ok(("".as_bytes(), T::Sum (Tag {
-                    tag: "foo".to_owned(),
-                    val: Box::new(T::Text("halloo".to_owned()))
-                }))),
-                "{}", r"<3:foo|t6:halloo,"
+                Ok((
+                    "".as_bytes(),
+                    T::Sum(Tag {
+                        tag: "foo".to_owned(),
+                        val: Box::new(T::Text("halloo".to_owned()))
+                    })
+                )),
+                "{}",
+                r"<3:foo|t6:halloo,"
             );
             // { a: Unit
             // , foo: List <A: Unit | B: List i3> }
             assert_eq!(
                 t_t("{52:<1:a|u,<3:foo|[33:<1:A|u,<1:A|n1:1,<1:B|[7:i3:127,]]}".as_bytes()),
-                Ok(("".as_bytes(), T::Record(vec![
-                    ("a".to_owned(), T::Unit),
-                    ("foo".to_owned(), T::List(vec![
-                        T::Sum(Tag { tag: "A".to_owned(), val: Box::new(T::Unit) }),
-                        T::Sum(Tag { tag: "A".to_owned(), val: Box::new(T::N1(true)) }),
-                        T::Sum(Tag { tag: "B".to_owned(), val: Box::new(T::List(vec![T::I3(127)])) }),
-                    ]))
-                ].into_iter().collect::<HashMap<String, T>>()))),
-                "{}", r"{52:<1:a|u,<3:foo|[33:<1:A|u,<1:A|n1:1,<1:B|[7:i3:127,]]}"
+                Ok((
+                    "".as_bytes(),
+                    T::Record(
+                        vec![
+                            ("a".to_owned(), T::Unit),
+                            (
+                                "foo".to_owned(),
+                                T::List(vec![
+                                    T::Sum(Tag {
+                                        tag: "A".to_owned(),
+                                        val: Box::new(T::Unit)
+                                    }),
+                                    T::Sum(Tag {
+                                        tag: "A".to_owned(),
+                                        val: Box::new(T::N1(true))
+                                    }),
+                                    T::Sum(Tag {
+                                        tag: "B".to_owned(),
+                                        val: Box::new(T::List(vec![T::I3(127)]))
+                                    }),
+                                ])
+                            )
+                        ]
+                        .into_iter()
+                        .collect::<HashMap<String, T>>()
+                    )
+                )),
+                "{}",
+                r"{52:<1:a|u,<3:foo|[33:<1:A|u,<1:A|n1:1,<1:B|[7:i3:127,]]}"
             );
         }
-
     }
 }
 
@@ -735,7 +772,10 @@ pub mod dec {
         fn dec(&self, u: U<'a>) -> Result<Self::A, DecodeError> {
             match u {
                 U::Binary(b) => Ok(b),
-                other => Err(DecodeError(format!("Cannot decode {:?} into Binary", other))),
+                other => Err(DecodeError(format!(
+                    "Cannot decode {:?} into Binary",
+                    other
+                ))),
             }
         }
     }
@@ -766,16 +806,17 @@ pub mod dec {
     pub struct Record<T>(pub T);
 
     impl<'a, Inner> Decoder<'a> for Record<Inner>
-        where Inner: Decoder<'a>
+    where
+        Inner: Decoder<'a>,
     {
         type A = HashMap<&'a str, Inner::A>;
         fn dec(&self, u: U<'a>) -> Result<Self::A, DecodeError> {
             match u {
-                U::Record(map) =>
-                    map.into_iter()
+                U::Record(map) => map
+                    .into_iter()
                     .map(|(k, v)| self.0.dec(v).map(|v2| (k, v2)))
                     .collect::<Result<Self::A, _>>(),
-                o => Err(DecodeError(format!("Cannot decode {:?} into record", o)))
+                o => Err(DecodeError(format!("Cannot decode {:?} into record", o))),
             }
         }
     }
@@ -784,18 +825,22 @@ pub mod dec {
     #[derive(Clone, Copy)]
     pub struct RecordDot<'a, T> {
         pub field: &'a str,
-        pub inner: T
+        pub inner: T,
     }
 
-    impl <'a, Inner> Decoder<'a> for RecordDot<'_, Inner>
-        where Inner: Decoder<'a> + Clone
+    impl<'a, Inner> Decoder<'a> for RecordDot<'_, Inner>
+    where
+        Inner: Decoder<'a> + Clone,
     {
         type A = Inner::A;
         fn dec(&self, u: U<'a>) -> Result<Self::A, DecodeError> {
             match Record(self.inner.clone()).dec(u) {
                 Ok(mut map) => match map.remove(self.field) {
                     Some(inner) => Ok(inner),
-                    None => Err(DecodeError(format!("Cannot find `{}` in record map", self.field))),
+                    None => Err(DecodeError(format!(
+                        "Cannot find `{}` in record map",
+                        self.field
+                    ))),
                 },
                 Err(err) => Err(err),
             }
@@ -804,23 +849,27 @@ pub mod dec {
 
     /// Equals one of the listed `A`s exactly, after decoding.
     #[derive(Clone)]
-    pub struct OneOf<T, A>{
+    pub struct OneOf<T, A> {
         pub inner: T,
         pub list: Vec<A>,
     }
 
-    impl <'a, Inner> Decoder<'a> for OneOf<Inner, Inner::A>
-        where Inner: Decoder<'a>,
-              Inner::A: Display + Debug + PartialEq
+    impl<'a, Inner> Decoder<'a> for OneOf<Inner, Inner::A>
+    where
+        Inner: Decoder<'a>,
+        Inner::A: Display + Debug + PartialEq,
     {
         type A = Inner::A;
         fn dec(&self, u: U<'a>) -> Result<Self::A, DecodeError> {
             match self.inner.dec(u) {
                 Ok(inner) => match self.list.iter().any(|x| x.eq(&inner)) {
                     true => Ok(inner),
-                    false => Err(DecodeError(format!("{} is not one of {:?}", inner, self.list)))
+                    false => Err(DecodeError(format!(
+                        "{} is not one of {:?}",
+                        inner, self.list
+                    ))),
                 },
-                Err(err) => Err(err)
+                Err(err) => Err(err),
             }
         }
     }
@@ -829,16 +878,16 @@ pub mod dec {
     #[derive(Clone)]
     pub struct Try<T>(pub T);
 
-    impl <'a, Inner> Decoder<'a> for Try<Inner>
-        where Inner: Decoder<'a>
+    impl<'a, Inner> Decoder<'a> for Try<Inner>
+    where
+        Inner: Decoder<'a>,
     {
         type A = Option<Inner::A>;
         fn dec(&self, u: U<'a>) -> Result<Self::A, DecodeError> {
             match self.0.dec(u) {
                 Ok(inner) => Ok(Some(inner)),
-                Err(err) => Ok(None)
+                Err(err) => Ok(None),
             }
         }
     }
-
 }

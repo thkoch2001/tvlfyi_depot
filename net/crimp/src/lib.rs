@@ -33,9 +33,12 @@
 //! use crimp::Request;
 //!
 //! let response = Request::get("http://httpbin.org/get")
-//!     .user_agent("crimp test suite").unwrap()
-//!     .send().unwrap()
-//!     .as_string().unwrap();
+//!     .user_agent("crimp test suite")
+//!     .unwrap()
+//!     .send()
+//!     .unwrap()
+//!     .as_string()
+//!     .unwrap();
 //!
 //! println!("Status: {}\nBody: {}", response.status, response.body);
 //! # assert_eq!(response.status, 200);
@@ -54,10 +57,9 @@
 //!
 //! All optional features are enabled by default.
 //!
-//! * `json`: Adds `Request::json` and `Response::as_json` methods
-//!   which can be used for convenient serialisation of
-//!   request/response bodies using `serde_json`. This feature adds a
-//!   dependency on the `serde` and `serde_json` crates.
+//! * `json`: Adds `Request::json` and `Response::as_json` methods which can be used for convenient
+//!   serialisation of request/response bodies using `serde_json`. This feature adds a dependency on
+//!   the `serde` and `serde_json` crates.
 //!
 //! ## Initialisation
 //!
@@ -72,32 +74,42 @@
 
 extern crate curl;
 
-#[cfg(feature = "json")] extern crate serde;
-#[cfg(feature = "json")] extern crate serde_json;
+#[cfg(feature = "json")]
+extern crate serde;
+#[cfg(feature = "json")]
+extern crate serde_json;
 
 pub use curl::init;
 
-use curl::easy::{Auth, Easy, Form, List, Transfer, ReadError, WriteError};
+use curl::easy::{Auth, Easy, Form, List, ReadError, Transfer, WriteError};
 use std::collections::HashMap;
 use std::io::Write;
 use std::path::Path;
 use std::string::{FromUtf8Error, ToString};
 use std::time::Duration;
 
-#[cfg(feature = "json")] use serde::Serialize;
-#[cfg(feature = "json")] use serde::de::DeserializeOwned;
+#[cfg(feature = "json")]
+use serde::de::DeserializeOwned;
+#[cfg(feature = "json")]
+use serde::Serialize;
 
 #[cfg(test)]
 mod tests;
 
 /// HTTP method to use for the request.
 enum Method {
-    Get, Post, Put, Patch, Delete
+    Get,
+    Post,
+    Put,
+    Patch,
+    Delete,
 }
 
 /// Certificate types for client-certificate key pairs.
 pub enum CertType {
-    P12, PEM, DER
+    P12,
+    PEM,
+    DER,
 }
 
 /// Builder structure for an HTTP request.
@@ -145,7 +157,7 @@ pub struct Response<T> {
     pub body: T,
 }
 
-impl <'a> Request<'a> {
+impl<'a> Request<'a> {
     /// Initiate an HTTP request with the given method and URL.
     fn new(method: Method, url: &'a str) -> Self {
         Request {
@@ -158,19 +170,29 @@ impl <'a> Request<'a> {
     }
 
     /// Initiate a GET request with the given URL.
-    pub fn get(url: &'a str) -> Self { Request::new(Method::Get, url) }
+    pub fn get(url: &'a str) -> Self {
+        Request::new(Method::Get, url)
+    }
 
     /// Initiate a POST request with the given URL.
-    pub fn post(url: &'a str) -> Self { Request::new(Method::Post, url) }
+    pub fn post(url: &'a str) -> Self {
+        Request::new(Method::Post, url)
+    }
 
     /// Initiate a PUT request with the given URL.
-    pub fn put(url: &'a str) -> Self { Request::new(Method::Put, url) }
+    pub fn put(url: &'a str) -> Self {
+        Request::new(Method::Put, url)
+    }
 
     /// Initiate a PATCH request with the given URL.
-    pub fn patch(url: &'a str) -> Self { Request::new(Method::Patch, url) }
+    pub fn patch(url: &'a str) -> Self {
+        Request::new(Method::Patch, url)
+    }
 
     /// Initiate a DELETE request with the given URL.
-    pub fn delete(url: &'a str) -> Self { Request::new(Method::Delete, url) }
+    pub fn delete(url: &'a str) -> Self {
+        Request::new(Method::Delete, url)
+    }
 
     /// Add an HTTP header to a request.
     pub fn header(mut self, k: &str, v: &str) -> Result<Self, curl::Error> {
@@ -188,7 +210,8 @@ impl <'a> Request<'a> {
     /// Set the `Authorization` header to a `Bearer` value with the
     /// supplied token.
     pub fn bearer_auth(mut self, token: &str) -> Result<Self, curl::Error> {
-        self.headers.append(&format!("Authorization: Bearer {}", token))?;
+        self.headers
+            .append(&format!("Authorization: Bearer {}", token))?;
         Ok(self)
     }
 
@@ -212,8 +235,11 @@ impl <'a> Request<'a> {
     /// Consult the documentation for the `ssl_cert` and `ssl_key`
     /// functions in `curl::easy::Easy2` for details on supported
     /// formats and defaults.
-    pub fn tls_client_cert<P: AsRef<Path>>(mut self, cert_type: CertType, cert: P)
-                                           -> Result<Self, curl::Error> {
+    pub fn tls_client_cert<P: AsRef<Path>>(
+        mut self,
+        cert_type: CertType,
+        cert: P,
+    ) -> Result<Self, curl::Error> {
         self.handle.ssl_cert(cert)?;
         self.handle.ssl_cert_type(match cert_type {
             CertType::P12 => "P12",
@@ -262,13 +288,17 @@ impl <'a> Request<'a> {
     /// ```
     /// # use crimp::Request;
     /// let response = Request::get("https://httpbin.org/get")
-    ///     .with_handle(|mut handle| handle.referer("Example-Referer")).unwrap()
-    ///     .send().unwrap();
+    ///     .with_handle(|mut handle| handle.referer("Example-Referer"))
+    ///     .unwrap()
+    ///     .send()
+    ///     .unwrap();
     /// #
     /// # assert!(response.is_success());
     /// ```
     pub fn with_handle<F>(mut self, function: F) -> Result<Self, curl::Error>
-    where F: FnOnce(&mut Easy) -> Result<(), curl::Error> {
+    where
+        F: FnOnce(&mut Easy) -> Result<(), curl::Error>,
+    {
         function(&mut self.handle)?;
         Ok(self)
     }
@@ -293,12 +323,15 @@ impl <'a> Request<'a> {
     /// let mut form = Form::new();
     /// form.part("some-name")
     ///     .contents("some-data".as_bytes())
-    ///     .add().unwrap();
+    ///     .add()
+    ///     .unwrap();
     ///
     /// let response = Request::post("https://httpbin.org/post")
-    ///     .user_agent("crimp test suite").unwrap()
+    ///     .user_agent("crimp test suite")
+    ///     .unwrap()
     ///     .form(form)
-    ///     .send().unwrap();
+    ///     .send()
+    ///     .unwrap();
     /// #
     /// # assert_eq!(200, response.status, "form POST should succeed");
     /// # assert_eq!(
@@ -330,10 +363,10 @@ impl <'a> Request<'a> {
         self.handle.url(self.url)?;
 
         match self.method {
-            Method::Get    => self.handle.get(true)?,
-            Method::Post   => self.handle.post(true)?,
-            Method::Put    => self.handle.put(true)?,
-            Method::Patch  => self.handle.custom_request("PATCH")?,
+            Method::Get => self.handle.get(true)?,
+            Method::Post => self.handle.post(true)?,
+            Method::Put => self.handle.put(true)?,
+            Method::Patch => self.handle.custom_request("PATCH")?,
             Method::Delete => self.handle.custom_request("DELETE")?,
         }
 
@@ -351,21 +384,22 @@ impl <'a> Request<'a> {
 
         // Optionally set content type if a body payload is configured
         // and configure the expected body size (or form payload).
-         match self.body {
+        match self.body {
             Body::Bytes { content_type, data } => {
                 self.handle.post_field_size(data.len() as u64)?;
-                self.headers.append(&format!("Content-Type: {}", content_type))?;
-            },
+                self.headers
+                    .append(&format!("Content-Type: {}", content_type))?;
+            }
 
             #[cfg(feature = "json")]
             Body::Json(ref data) => {
                 self.handle.post_field_size(data.len() as u64)?;
                 self.headers.append("Content-Type: application/json")?;
-            },
+            }
 
-             // Do not set content-type header at all if there is no
-             // body, or if the form handler was invoked above.
-             _ => (),
+            // Do not set content-type header at all if there is no
+            // body, or if the form handler was invoked above.
+            _ => (),
         };
 
         // Configure headers on the request:
@@ -407,9 +441,7 @@ impl <'a> Request<'a> {
                     return true;
                 }
 
-                headers.insert(
-                    split[0].trim().to_string(), split[1].trim().to_string()
-                );
+                headers.insert(split[0].trim().to_string(), split[1].trim().to_string());
                 true
             })?;
 
@@ -427,7 +459,7 @@ impl <'a> Request<'a> {
         Ok(Response {
             status: self.handle.response_code()?,
             headers,
-            body
+            body,
         })
     }
 }
@@ -438,13 +470,14 @@ impl <'a> Request<'a> {
 ///
 /// As we manually set the expected upload size, cURL will call the
 /// read callback repeatedly until it has all the data it needs.
-fn chunked_read_function<'easy, 'data>(transfer: &mut Transfer<'easy, 'data>,
-                                       data: &'data [u8]) -> Result<(), curl::Error> {
+fn chunked_read_function<'easy, 'data>(
+    transfer: &mut Transfer<'easy, 'data>,
+    data: &'data [u8],
+) -> Result<(), curl::Error> {
     let mut data = data;
 
     transfer.read_function(move |mut into| {
-        let written = into.write(data)
-            .map_err(|_| ReadError::Abort)?;
+        let written = into.write(data).map_err(|_| ReadError::Abort)?;
 
         data = &data[written..];
 
@@ -452,7 +485,7 @@ fn chunked_read_function<'easy, 'data>(transfer: &mut Transfer<'easy, 'data>,
     })
 }
 
-impl <T> Response<T> {
+impl<T> Response<T> {
     /// Check whether the status code of this HTTP response is a
     /// success (i.e. in the 200-299 range).
     pub fn is_success(&self) -> bool {
@@ -466,9 +499,11 @@ impl <T> Response<T> {
     /// This function exists for convenience to avoid having to write
     /// repetitive `if !response.is_success() { ... }` blocks.
     pub fn error_for_status<F, E>(self, closure: F) -> Result<Self, E>
-    where F: FnOnce(Self) -> E {
+    where
+        F: FnOnce(Self) -> E,
+    {
         if !self.is_success() {
-            return Err(closure(self))
+            return Err(closure(self));
         }
 
         Ok(self)

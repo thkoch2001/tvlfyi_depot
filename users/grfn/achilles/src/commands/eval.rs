@@ -1,10 +1,6 @@
 use clap::Clap;
 
-use crate::codegen;
-use crate::interpreter;
-use crate::parser;
-use crate::tc;
-use crate::Result;
+use crate::{codegen, interpreter, parser, tc, Result};
 
 /// Evaluate an expression and print its result
 #[derive(Clap)]

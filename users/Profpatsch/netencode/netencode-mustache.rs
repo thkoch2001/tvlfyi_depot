@@ -1,12 +1,12 @@
-extern crate netencode;
-extern crate mustache;
 extern crate arglib_netencode;
+extern crate mustache;
+extern crate netencode;
 
-use mustache::{Data};
-use netencode::{T};
+use mustache::Data;
+use netencode::T;
 use std::collections::HashMap;
-use std::os::unix::ffi::{OsStrExt};
-use std::io::{Read};
+use std::io::Read;
+use std::os::unix::ffi::OsStrExt;
 
 fn netencode_to_mustache_data_dwim(t: T) -> Data {
     match t {
@@ -25,27 +25,26 @@ fn netencode_to_mustache_data_dwim(t: T) -> Data {
         T::Record(xs) => Data::Map(
             xs.into_iter()
                 .map(|(key, val)| (key, netencode_to_mustache_data_dwim(val)))
-                .collect::<HashMap<_,_>>()
+                .collect::<HashMap<_, _>>(),
         ),
         T::List(xs) => Data::Vec(
             xs.into_iter()
                 .map(|x| netencode_to_mustache_data_dwim(x))
-                .collect::<Vec<_>>()
+                .collect::<Vec<_>>(),
         ),
     }
 }
 
 pub fn from_stdin() -> () {
-    let data = netencode_to_mustache_data_dwim(
-        arglib_netencode::arglib_netencode("netencode-mustache", Some(std::ffi::OsStr::new("TEMPLATE_DATA")))
-    );
+    let data = netencode_to_mustache_data_dwim(arglib_netencode::arglib_netencode(
+        "netencode-mustache",
+        Some(std::ffi::OsStr::new("TEMPLATE_DATA")),
+    ));
     let mut stdin = String::new();
     std::io::stdin().read_to_string(&mut stdin).unwrap();
     mustache::compile_str(&stdin)
-        .and_then(|templ| templ.render_data(
-            &mut std::io::stdout(),
-            &data
-        )).unwrap()
+        .and_then(|templ| templ.render_data(&mut std::io::stdout(), &data))
+        .unwrap()
 }
 
 pub fn main() {

@@ -5,14 +5,13 @@
 //! 2. As a long-running HTTP server that handles rendering requests
 //!    (matching the SourceGraph protocol).
 use clap::{App, Arg};
-use rouille::Response;
-use rouille::{router, try_or_400};
+use rouille::{router, try_or_400, Response};
 use serde::Deserialize;
 use serde_json::json;
 use std::collections::HashMap;
 use std::io;
 
-use cheddar::{THEMES, format_code, format_markdown};
+use cheddar::{format_code, format_markdown, THEMES};
 
 // Server endpoint for rendering the syntax of source code. This
 // replaces the 'syntect_server' component of Sourcegraph.

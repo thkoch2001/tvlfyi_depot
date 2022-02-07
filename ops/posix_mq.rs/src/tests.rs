@@ -4,8 +4,7 @@ use super::*;
 fn test_open_delete() {
     // Simple test with default queue settings
     let name = Name::new("/test-queue").unwrap();
-    let queue = Queue::open_or_create(name)
-        .expect("Opening queue failed");
+    let queue = Queue::open_or_create(name).expect("Opening queue failed");
 
     let message = Message {
         data: "test-message".as_bytes().to_vec(),

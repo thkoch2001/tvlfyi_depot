@@ -1,8 +1,5 @@
 use nix;
-use std::error;
-use std::fmt;
-use std::io;
-use std::num;
+use std::{error, fmt, io, num};
 
 /// This module implements a simple error type to match the errors that can be thrown from the C
 /// functions as well as some extra errors resulting from internal validations.
