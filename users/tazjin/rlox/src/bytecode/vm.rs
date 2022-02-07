@@ -141,15 +141,18 @@ impl VM {
                             self.push(Value::String(new_s.into()));
                         }
 
-                        (Value::Number(n_a), Value::Number(n_b)) =>
-                            self.push(Value::Number(n_a + n_b)),
+                        (Value::Number(n_a), Value::Number(n_b)) => {
+                            self.push(Value::Number(n_a + n_b))
+                        }
 
-                        _ => return Err(Error {
-                            line: self.chunk.get_line(self.ip - 1),
-                            kind: ErrorKind::TypeError(
-                                "'+' operator only works on strings and numbers".into()
-                            ),
-                        })
+                        _ => {
+                            return Err(Error {
+                                line: self.chunk.get_line(self.ip - 1),
+                                kind: ErrorKind::TypeError(
+                                    "'+' operator only works on strings and numbers".into(),
+                                ),
+                            })
+                        }
                     }
                 }
 

@@ -19,13 +19,13 @@
 //! This module implements the database executor, which holds the
 //! database connection and performs queries on it.
 
-use actix::prelude::*;
-use diesel::{self, sql_query};
-use diesel::sql_types::Text;
-use diesel::prelude::*;
-use diesel::r2d2::{Pool, ConnectionManager};
-use crate::models::*;
 use crate::errors::{ConverseError, Result};
+use crate::models::*;
+use actix::prelude::*;
+use diesel::prelude::*;
+use diesel::r2d2::{ConnectionManager, Pool};
+use diesel::sql_types::Text;
+use diesel::{self, sql_query};
 
 /// Raw PostgreSQL query used to perform full-text search on posts
 /// with a supplied phrase. For now, the query language is hardcoded
@@ -50,14 +50,12 @@ pub struct DbExecutor(pub Pool<ConnectionManager<PgConnection>>);
 
 impl DbExecutor {
     /// Request a list of threads.
-    //
     // TODO(tazjin): This should support pagination.
     pub fn list_threads(&self) -> Result<Vec<ThreadIndex>> {
         use crate::schema::thread_index::dsl::*;
 
         let conn = self.0.get()?;
-        let results = thread_index
-            .load::<ThreadIndex>(&conn)?;
+        let results = thread_index.load::<ThreadIndex>(&conn)?;
         Ok(results)
     }
 
@@ -69,9 +67,7 @@ impl DbExecutor {
 
         let conn = self.0.get()?;
 
-        let opt_user = users
-            .filter(email.eq(email))
-            .first(&conn).optional()?;
+        let opt_user = users.filter(email.eq(email)).first(&conn).optional()?;
 
         if let Some(user) = opt_user {
             Ok(user)
@@ -93,12 +89,11 @@ impl DbExecutor {
 
     /// Fetch a specific thread and return it with its posts.
     pub fn get_thread(&self, thread_id: i32) -> Result<(Thread, Vec<SimplePost>)> {
-        use crate::schema::threads::dsl::*;
         use crate::schema::simple_posts::dsl::id;
+        use crate::schema::threads::dsl::*;
 
         let conn = self.0.get()?;
-        let thread_result: Thread = threads
-            .find(thread_id).first(&conn)?;
+        let thread_result: Thread = threads.find(thread_id).first(&conn)?;
 
         let post_list = SimplePost::belonging_to(&thread_result)
             .order_by(id.asc())
@@ -127,8 +122,7 @@ impl DbExecutor {
 
     /// Create a new thread.
     pub fn create_thread(&self, new_thread: NewThread, post_text: String) -> Result<Thread> {
-                use crate::schema::threads;
-        use crate::schema::posts;
+        use crate::schema::{posts, threads};
 
         let conn = self.0.get()?;
 
@@ -161,20 +155,21 @@ impl DbExecutor {
 
         let closed: bool = {
             use crate::schema::threads::dsl::*;
-            threads.select(closed)
+            threads
+                .select(closed)
                 .find(new_post.thread_id)
                 .first(&conn)?
         };
 
         if closed {
             return Err(ConverseError::ThreadClosed {
-                id: new_post.thread_id
-            })
+                id: new_post.thread_id,
+            });
         }
 
         Ok(diesel::insert_into(posts::table)
-           .values(&new_post)
-           .get_result(&conn)?)
+            .values(&new_post)
+            .get_result(&conn)?)
     }
 
     /// Search for posts.
@@ -197,7 +192,6 @@ impl DbExecutor {
     }
 }
 
-
 // Old actor implementation:
 
 impl Actor for DbExecutor {
@@ -216,9 +210,7 @@ message!(LookupOrCreateUser, Result<User>);
 impl Handler<LookupOrCreateUser> for DbExecutor {
     type Result = <LookupOrCreateUser as Message>::Result;
 
-    fn handle(&mut self,
-              _: LookupOrCreateUser,
-              _: &mut Self::Context) -> Self::Result {
+    fn handle(&mut self, _: LookupOrCreateUser, _: &mut Self::Context) -> Self::Result {
         unimplemented!()
     }
 }
@@ -238,7 +230,9 @@ impl Handler<GetThread> for DbExecutor {
 
 /// Message used to fetch a specific post.
 #[derive(Deserialize, Debug)]
-pub struct GetPost { pub id: i32 }
+pub struct GetPost {
+    pub id: i32,
+}
 
 message!(GetPost, Result<SimplePost>);
 
@@ -296,7 +290,9 @@ impl Handler<CreatePost> for DbExecutor {
 
 /// Message used to search for posts
 #[derive(Deserialize)]
-pub struct SearchPosts { pub query: String }
+pub struct SearchPosts {
+    pub query: String,
+}
 message!(SearchPosts, Result<Vec<SearchResult>>);
 
 impl Handler<SearchPosts> for DbExecutor {

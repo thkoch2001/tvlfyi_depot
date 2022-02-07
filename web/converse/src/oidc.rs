@@ -22,12 +22,12 @@
 //! Currently Converse only supports a single OIDC provider. Note that
 //! this has so far only been tested with Office365.
 
-use actix::prelude::*;
 use crate::errors::*;
+use actix::prelude::*;
 use crimp::Request;
+use curl::easy::Form;
 use url::Url;
 use url_serde;
-use curl::easy::Form;
 
 /// This structure represents the contents of an OIDC discovery
 /// document.
@@ -114,20 +114,30 @@ impl Handler<RetrieveToken> for OidcExecutor {
         debug!("Received OAuth2 code, requesting access_token");
 
         let mut form = Form::new();
-        form.part("client_id").contents(&self.client_id.as_bytes())
-            .add().expect("critical error: invalid form data");
+        form.part("client_id")
+            .contents(&self.client_id.as_bytes())
+            .add()
+            .expect("critical error: invalid form data");
 
-        form.part("client_secret").contents(&self.client_secret.as_bytes())
-            .add().expect("critical error: invalid form data");
+        form.part("client_secret")
+            .contents(&self.client_secret.as_bytes())
+            .add()
+            .expect("critical error: invalid form data");
 
-        form.part("grant_type").contents("authorization_code".as_bytes())
-            .add().expect("critical error: invalid form data");
+        form.part("grant_type")
+            .contents("authorization_code".as_bytes())
+            .add()
+            .expect("critical error: invalid form data");
 
-        form.part("code").contents(&msg.0.code.as_bytes())
-            .add().expect("critical error: invalid form data");
+        form.part("code")
+            .contents(&msg.0.code.as_bytes())
+            .add()
+            .expect("critical error: invalid form data");
 
-        form.part("redirect_uri").contents(&self.redirect_uri.as_bytes())
-            .add().expect("critical error: invalid form data");
+        form.part("redirect_uri")
+            .contents(&self.redirect_uri.as_bytes())
+            .add()
+            .expect("critical error: invalid form data");
 
         let response = Request::post(&self.oidc_config.token_endpoint)
             .user_agent(concat!("converse-", env!("CARGO_PKG_VERSION")))?
@@ -142,7 +152,8 @@ impl Handler<RetrieveToken> for OidcExecutor {
             .user_agent(concat!("converse-", env!("CARGO_PKG_VERSION")))?
             .header("Authorization", &bearer)?
             .send()?
-            .as_json()?.body;
+            .as_json()?
+            .body;
 
         Ok(Author {
             name: user.name,

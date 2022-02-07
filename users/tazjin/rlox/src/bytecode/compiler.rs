@@ -63,9 +63,11 @@ enum Precedence {
     Equality,   // == !=
     Comparison, // < > <= >=
     Term,       // + -
-    Factor,     // * /
-    Unary,      // ! -
-    Call,       // . ()
+    Factor,     //
+    //
+    // * /
+    Unary, // ! -
+    Call,  // . ()
     Primary,
 }
 
@@ -105,9 +107,11 @@ impl Precedence {
             Precedence::Factor => Precedence::Unary,
             Precedence::Unary => Precedence::Call,
             Precedence::Call => Precedence::Primary,
-            Precedence::Primary => panic!(
-                "invalid parser state: no higher precedence than Primary"
-            ),
+            Precedence::Primary => {
+                panic!(
+                    "invalid parser state: no higher precedence than Primary"
+                )
+            }
         }
     }
 }

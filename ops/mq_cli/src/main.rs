@@ -1,36 +1,38 @@
 extern crate clap;
-extern crate posix_mq;
 extern crate libc;
 extern crate nix;
+extern crate posix_mq;
 
-use clap::{App, SubCommand, Arg, ArgMatches, AppSettings};
-use posix_mq::{Name, Queue, Message};
+use clap::{App, AppSettings, Arg, ArgMatches, SubCommand};
+use posix_mq::{Message, Name, Queue};
 use std::fs::{read_dir, File};
 use std::io::{self, Read, Write};
 use std::process::exit;
 
 fn run_ls() {
-    let mqueues = read_dir("/dev/mqueue")
-        .expect("Could not read message queues");
+    let mqueues = read_dir("/dev/mqueue").expect("Could not read message queues");
 
     for queue in mqueues {
         let path = queue.unwrap().path();
         let status = {
-            let mut file = File::open(&path)
-                .expect("Could not open queue file");
+            let mut file = File::open(&path).expect("Could not open queue file");
 
             let mut content = String::new();
-            file.read_to_string(&mut content).expect("Could not read queue file");
+            file.read_to_string(&mut content)
+                .expect("Could not read queue file");
 
             content
         };
 
-        let queue_name = path.components().last().unwrap()
+        let queue_name = path
+            .components()
+            .last()
+            .unwrap()
             .as_os_str()
             .to_string_lossy();
 
         println!("/{}: {}", queue_name, status)
-    };
+    }
 }
 
 fn run_inspect(queue_name: &str) {
@@ -47,8 +49,7 @@ fn run_create(cmd: &ArgMatches) {
         set_rlimit(rlimit.parse().expect("Invalid rlimit value"));
     }
 
-    let name = Name::new(cmd.value_of("queue").unwrap())
-        .expect("Invalid queue name");
+    let name = Name::new(cmd.value_of("queue").unwrap()).expect("Invalid queue name");
 
     let max_pending: i64 = cmd.value_of("max-pending").unwrap().parse().unwrap();
     let max_size: i64 = cmd.value_of("max-size").unwrap().parse().unwrap();
@@ -56,11 +57,11 @@ fn run_create(cmd: &ArgMatches) {
     let queue = Queue::create(name, max_pending, max_size * 1024);
 
     match queue {
-        Ok(_)  => println!("Queue created successfully"),
+        Ok(_) => println!("Queue created successfully"),
         Err(e) => {
             writeln!(io::stderr(), "Could not create queue: {}", e).ok();
             exit(1);
-        },
+        }
     };
 }
 
@@ -120,7 +121,12 @@ fn run_rlimit() {
     };
 
     if errno != 0 {
-        writeln!(io::stderr(), "Could not get message queue rlimit: {}", errno).ok();
+        writeln!(
+            io::stderr(),
+            "Could not get message queue rlimit: {}",
+            errno
+        )
+        .ok();
     } else {
         println!("Message queue rlimit:");
         println!("Current limit: {}", rlimit.rlim_cur);
@@ -170,16 +176,20 @@ fn main() {
         .about("Create a new queue")
         .arg(&queue_arg)
         .arg(&rlimit_arg)
-        .arg(Arg::with_name("max-size")
-            .help("maximum message size (in kB)")
-            .long("max-size")
-            .required(true)
-            .takes_value(true))
-        .arg(Arg::with_name("max-pending")
-            .help("maximum # of pending messages")
-            .long("max-pending")
-            .required(true)
-            .takes_value(true));
+        .arg(
+            Arg::with_name("max-size")
+                .help("maximum message size (in kB)")
+                .long("max-size")
+                .required(true)
+                .takes_value(true),
+        )
+        .arg(
+            Arg::with_name("max-pending")
+                .help("maximum # of pending messages")
+                .long("max-pending")
+                .required(true)
+                .takes_value(true),
+        );
 
     let receive = SubCommand::with_name("receive")
         .about("Receive a message from a queue")
@@ -188,9 +198,11 @@ fn main() {
     let send = SubCommand::with_name("send")
         .about("Send a message to a queue")
         .arg(&queue_arg)
-        .arg(Arg::with_name("message")
-            .help("the message to send")
-            .required(true));
+        .arg(
+            Arg::with_name("message")
+                .help("the message to send")
+                .required(true),
+        );
 
     let rlimit = SubCommand::with_name("rlimit")
         .about("Get the message queue rlimit")
@@ -211,13 +223,13 @@ fn main() {
     match matches.subcommand() {
         ("ls", _) => run_ls(),
         ("inspect", Some(cmd)) => run_inspect(cmd.value_of("queue").unwrap()),
-        ("create",  Some(cmd)) => run_create(cmd),
+        ("create", Some(cmd)) => run_create(cmd),
         ("receive", Some(cmd)) => run_receive(cmd.value_of("queue").unwrap()),
-        ("send",    Some(cmd)) => run_send(
+        ("send", Some(cmd)) => run_send(
             cmd.value_of("queue").unwrap(),
-            cmd.value_of("message").unwrap()
+            cmd.value_of("message").unwrap(),
         ),
-        ("rlimit",  _) => run_rlimit(),
+        ("rlimit", _) => run_rlimit(),
         _ => unimplemented!(),
     }
 }

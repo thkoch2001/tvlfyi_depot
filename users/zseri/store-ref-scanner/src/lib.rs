@@ -15,7 +15,8 @@ const BASENAME_MAXLEN: usize = 255;
 /// (usually byte slices)
 pub trait ScannerInput: AsRef<[u8]> + Sized {
     /// Splits the input into two at the given index.
-    /// Afterwards self contains elements [at, len), and the returned input part contains elements [0, at).
+    /// Afterwards self contains elements [at, len), and the returned input part contains elements
+    /// [0, at).
     fn split_to(&mut self, at: usize) -> Self;
     fn finish(&mut self);
 }
@@ -120,14 +121,16 @@ where
 mod tests {
     use super::*;
     extern crate alloc;
-    use alloc::{vec, vec::Vec};
+    use alloc::vec;
+    use alloc::vec::Vec;
 
     #[test]
     fn simple_nix2() {
         let drv: &[u8] = br#"
             Derive([("out","","r:sha256","")],[("/nix/store/2ax7bvjdfkzim69q957i0jlg0nvmapg0-util-linux-2.37.2.drv",["dev"]),("/nix/store/6b55ssmh8pzqsc4q4kw1yl3kqvr4fvqj-bash-5.1-p12.drv",["out"]),("/nix/store/fp2vx24kczlzv84avds28wyzsmrn8kyv-source.drv",["out"]),("/nix/store/s6c2lm5hpsvdwnxq9y1g3ngncghjzc3k-stdenv-linux.drv",["out"]),("/nix/store/xlnzpf4mzghi8vl0krabrgcbnqk5qjf3-pkg-config-wrapper-0.29.2.drv",["out"])],["/nix/store/03sl46khd8gmjpsad7223m32ma965vy9-fix-static.patch","/nix/store/2q3z7587yhlz0i2xvfvvap42zk5carlv-bcache-udev-modern.patch","/nix/store/9krlzvny65gdc8s7kpb6lkx8cd02c25b-default-builder.sh"],"x86_64-linux","/0g15yibzzi3rmw29gqlbms05x9dbghbvh61v1qggydvmzh3bginw/bin/bash",["-e","/nix/store/9krlzvny65gdc8s7kpb6lkx8cd02c25b-default-builder.sh"],[("buildInputs","/0sdk1r4l43yw4g6lmqdhd92vhdfhlwz3m76jxzvzsqsv63czw2km"),("builder","/0g15yibzzi3rmw29gqlbms05x9dbghbvh61v1qggydvmzh3bginw/bin/bash"),("configureFlags",""),("depsBuildBuild",""),("depsBuildBuildPropagated",""),("depsBuildTarget",""),("depsBuildTargetPropagated",""),("depsHostHost",""),("depsHostHostPropagated",""),("depsTargetTarget",""),("depsTargetTargetPropagated",""),("doCheck",""),("doInstallCheck",""),("makeFlags","PREFIX=/1rz4g4znpzjwh1xymhjpm42vipw92pr73vdgl6xs1hycac8kf2n9 UDEVLIBDIR=/1rz4g4znpzjwh1xymhjpm42vipw92pr73vdgl6xs1hycac8kf2n9/lib/udev/"),("name","bcache-tools-1.0.7"),("nativeBuildInputs","/1kw0rwgdyq9q69wmmsa5d2kap6p52b0yldbzi4w17bhcq5g5cp2f"),("out","/1rz4g4znpzjwh1xymhjpm42vipw92pr73vdgl6xs1hycac8kf2n9"),("outputHashAlgo","sha256"),("outputHashMode","recursive"),("outputs","out"),("patches","/nix/store/2q3z7587yhlz0i2xvfvvap42zk5carlv-bcache-udev-modern.patch /nix/store/03sl46khd8gmjpsad7223m32ma965vy9-fix-static.patch"),("pname","bcache-tools"),("preBuild","sed -e \"s|/bin/sh|/0g15yibzzi3rmw29gqlbms05x9dbghbvh61v1qggydvmzh3bginw/bin/sh|\" -i *.rules\n"),("preInstall","mkdir -p \"$out/sbin\" \"$out/lib/udev/rules.d\" \"$out/share/man/man8\"\n"),("prePatch","sed -e \"/INSTALL.*initramfs\\/hook/d\" \\\n    -e \"/INSTALL.*initcpio\\/install/d\" \\\n    -e \"/INSTALL.*dracut\\/module-setup.sh/d\" \\\n    -e \"s/pkg-config/$PKG_CONFIG/\" \\\n    -i Makefile\n"),("propagatedBuildInputs",""),("propagatedNativeBuildInputs",""),("src","/nix/store/6izcafvfcbz19chi7hl20834g0fa043n-source"),("stdenv","/01ncyv8bxibj0imgfvmxgqy648n697bachil6aw6i46g1jk0bbds"),("strictDeps",""),("system","x86_64-linux"),("version","1.0.7")])
         "#;
-        // we convert everything into strings because it is way easier to compare elements in error messages
+        // we convert everything into strings because it is way easier to compare elements in error
+        // messages
         let refs: Vec<&str> = StoreRefScanner::new(drv, &StoreSpec::DFL_NIX2)
             .map(|i| core::str::from_utf8(i).unwrap())
             .collect();
