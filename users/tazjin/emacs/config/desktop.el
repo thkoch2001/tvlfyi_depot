@@ -132,13 +132,30 @@
 (fringe-mode 3)
 (exwm-enable)
 
-;; 's-N': Switch to certain workspace
+;; Create 10 EXWM workspaces
 (setq exwm-workspace-number 10)
+
+;; 's-N': Switch to certain workspace, but switch back to the previous
+;; one when tapping twice (emulates i3's `back_and_forth' feature)
+(defvar *exwm-workspace-from-to* '(-1 . -1))
+(defun exwm-workspace-switch-back-and-forth (target-idx)
+  ;; If the current workspace is the one we last jumped to, and we are
+  ;; asked to jump to it again, set the target back to the previous
+  ;; one.
+  (when (and (eq exwm-workspace-current-index (cdr *exwm-workspace-from-to*))
+             (eq target-idx exwm-workspace-current-index))
+    (setq target-idx (car *exwm-workspace-from-to*)))
+
+  (setq *exwm-workspace-from-to*
+        (cons exwm-workspace-current-index target-idx))
+
+  (exwm-workspace-switch-create target-idx))
+
 (dotimes (i 10)
   (exwm-input-set-key (kbd (format "s-%d" i))
                       `(lambda ()
                          (interactive)
-                         (exwm-workspace-switch-create ,i))))
+                         (exwm-workspace-switch-back-and-forth ,i))))
 
 ;; Implement MRU functionality for EXWM workspaces, making it possible
 ;; to jump to the previous/next workspace very easily.
