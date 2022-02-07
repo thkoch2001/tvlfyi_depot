@@ -80,9 +80,4 @@ joinable!(posts -> users (user_id));
 joinable!(threads -> users (user_id));
 joinable!(simple_posts -> threads (thread_id));
 
-allow_tables_to_appear_in_same_query!(
-    posts,
-    threads,
-    users,
-    simple_posts,
-);
+allow_tables_to_appear_in_same_query!(posts, threads, users, simple_posts,);
