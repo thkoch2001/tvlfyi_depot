@@ -169,5 +169,5 @@ in
     touch $out
   '';
 
-  meta.targets = [ "check" ];
+  meta.ci.targets = [ "check" ];
 }

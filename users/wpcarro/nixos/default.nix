@@ -18,5 +18,5 @@ in {
     ${pkgs.terraform}/bin/terraform -chdir="$TF_STATE_DIR" apply
   '';
 
-  meta.targets = [ "marcusSystem" ];
+  meta.ci.targets = [ "marcusSystem" ];
 }
