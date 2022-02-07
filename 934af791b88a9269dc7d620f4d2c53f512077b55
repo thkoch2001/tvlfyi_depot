@@ -16,6 +16,24 @@
       "message": "What\u0027s the license of this?",
       "revId": "934af791b88a9269dc7d620f4d2c53f512077b55",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "93f72865_834cc4e7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-02-07T19:05:17Z",
+      "side": 1,
+      "message": "I\u0027ll just use gruber-darker.qss (looks the same to me)",
+      "parentUuid": "5bde0bd5_4cc9d56f",
+      "revId": "934af791b88a9269dc7d620f4d2c53f512077b55",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
