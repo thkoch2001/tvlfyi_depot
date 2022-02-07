@@ -6,6 +6,26 @@ args@{ depot ? (import ../.. { })
 }:
 
 let
+  # Override some external dependencies for C++17 & clang compat.
+  abseil-cpp = pkgs.abseil-cpp.override {
+    stdenv = fullLlvm11Stdenv;
+    cxxStandard = "17";
+  };
+
+  protobuf = pkgs.protobuf.override {
+    stdenv = fullLlvm11Stdenv;
+  };
+
+  grpc = (pkgs.grpc.override {
+    inherit abseil-cpp protobuf;
+    stdenv = pkgs.fullLlvm11Stdenv;
+  }).overrideAttrs (orig: rec {
+    cmakeFlags = orig.cmakeFlags ++ [
+      "-DCMAKE_CXX_STANDARD_REQUIRED=ON"
+      "-DCMAKE_CXX_STANDARD=17"
+    ];
+  };
+
   aws-s3-cpp = pkgs.aws-sdk-cpp.override {
     apis = [ "s3" "transfer" ];
     customMemoryManagement = false;
@@ -92,8 +112,8 @@ lib.fix (self: pkgs.fullLlvm11Stdenv.mkDerivation {
     sqlite
     systemd.dev
     xz
-  ]) ++ (with depot.third_party; [
-    abseil_cpp
+  ]) ++ ([
+    abseil-cpp
     grpc
     protobuf
   ]);
