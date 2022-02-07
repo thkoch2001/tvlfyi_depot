@@ -207,7 +207,7 @@ in-progress."
   "Switch to the next workspace in the MRU workspace list."
   (interactive)
 
-  (if (<= *workspace-history-position* 1)
+  (if (= *workspace-history-position* 0)
       (message "No next workspace in history!")
     (let* (;; The next workspace is one position further up in the
            ;; history. This always exists unless someone messed with
