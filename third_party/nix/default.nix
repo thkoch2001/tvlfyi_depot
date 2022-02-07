@@ -1,11 +1,12 @@
 args@{ depot ? (import ../.. { })
-, pkgs ? depot.third_party.nixpkgs
 , lib
 , buildType ? "release"
 , ...
 }:
 
 let
+  pkgs = depot.third_party.nixpkgs.pkgsLLVM;
+
   aws-s3-cpp = pkgs.aws-sdk-cpp.override {
     apis = [ "s3" "transfer" ];
     customMemoryManagement = false;
@@ -61,7 +62,7 @@ let
   '';
 
 in
-lib.fix (self: pkgs.fullLlvm11Stdenv.mkDerivation {
+lib.fix (self: pkgs.stdenv.mkDerivation {
   pname = "tvix";
   version = "2.3.4";
   inherit src;
@@ -78,6 +79,7 @@ lib.fix (self: pkgs.fullLlvm11Stdenv.mkDerivation {
 
   # TODO(tazjin): Some of these might only be required for native inputs
   buildInputs = (with pkgs; [
+    abseil-cpp
     aws-s3-cpp
     brotli
     bzip2
@@ -93,7 +95,6 @@ lib.fix (self: pkgs.fullLlvm11Stdenv.mkDerivation {
     systemd.dev
     xz
   ]) ++ (with depot.third_party; [
-    abseil_cpp
     grpc
     protobuf
   ]);
@@ -210,7 +211,7 @@ lib.fix (self: pkgs.fullLlvm11Stdenv.mkDerivation {
     #    if the formatting is broken, and this build was submitted to CI
     #    it would be a good idea to get this feedback rather sooner than later
     #  - we don't want builds to differ between local and CI runs
-    checkfmt = pkgs.fullLlvm11Stdenv.mkDerivation {
+    checkfmt = pkgs.stdenv.mkDerivation {
       name = "tvix-checkfmt";
       inherit src;
       nativeBuildInputs = with pkgs; [ clang-tools_11 fd ];
