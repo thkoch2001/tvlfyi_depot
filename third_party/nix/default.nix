@@ -6,6 +6,34 @@ args@{ depot ? (import ../.. { })
 }:
 
 let
+  # Override some external dependencies for C++17 & clang compat.
+  abseil-cpp = pkgs.abseil-cpp.override {
+    stdenv = pkgs.fullLlvm11Stdenv;
+    cxxStandard = "17";
+  };
+
+  protobuf = pkgs.protobuf.override {
+    stdenv = pkgs.fullLlvm11Stdenv;
+    buildPackages = {
+      inherit (pkgs) which;
+      stdenv = pkgs.fullLlvm11Stdenv;
+    };
+  };
+
+  re2 = pkgs.re2.override {
+    stdenv = pkgs.fullLlvm11Stdenv;
+  };
+
+  grpc = (pkgs.grpc.override {
+    inherit abseil-cpp protobuf re2;
+    stdenv = pkgs.fullLlvm11Stdenv;
+  }).overrideAttrs (orig: rec {
+    cmakeFlags = orig.cmakeFlags ++ [
+      "-DCMAKE_CXX_STANDARD_REQUIRED=ON"
+      "-DCMAKE_CXX_STANDARD=17"
+    ];
+  });
+
   aws-s3-cpp = pkgs.aws-sdk-cpp.override {
     apis = [ "s3" "transfer" ];
     customMemoryManagement = false;
@@ -46,9 +74,9 @@ let
   protoSrcs = pkgs.runCommand "nix-proto-srcs" { } ''
     export PROTO_SRCS=${./src/proto}
     mkdir -p $out/libproto
-    ${depot.third_party.protobuf}/bin/protoc -I=$PROTO_SRCS \
+    ${protobuf}/bin/protoc -I=$PROTO_SRCS \
       --cpp_out=$out/libproto \
-      --plugin=protoc-gen-grpc=${depot.third_party.grpc}/bin/grpc_cpp_plugin \
+      --plugin=protoc-gen-grpc=${grpc}/bin/grpc_cpp_plugin \
         --grpc_out=$out/libproto \
         $PROTO_SRCS/*.proto
   '';
@@ -92,8 +120,8 @@ lib.fix (self: pkgs.fullLlvm11Stdenv.mkDerivation {
     sqlite
     systemd.dev
     xz
-  ]) ++ (with depot.third_party; [
-    abseil_cpp
+  ]) ++ ([
+    abseil-cpp
     grpc
     protobuf
   ]);
