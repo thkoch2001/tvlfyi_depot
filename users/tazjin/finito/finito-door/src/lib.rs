@@ -71,7 +71,8 @@
 //!
 //! Alright, enough foreplay, lets dive in!
 
-#[macro_use] extern crate serde_derive;
+#[macro_use]
+extern crate serde_derive;
 
 extern crate failure;
 extern crate finito;
@@ -292,11 +293,13 @@ mod tests {
     use finito::advance;
 
     fn test_fsm<S: FSM>(initial: S, events: Vec<S::Event>) -> (S, Vec<S::Action>) {
-        events.into_iter().fold((initial, vec![]), |(state, mut actions), event| {
-            let (new_state, mut new_actions) = advance(state, event);
-            actions.append(&mut new_actions);
-            (new_state, actions)
-        })
+        events
+            .into_iter()
+            .fold((initial, vec![]), |(state, mut actions), event| {
+                let (new_state, mut new_actions) = advance(state, event);
+                actions.append(&mut new_actions);
+                (new_state, actions)
+            })
     }
 
     #[test]
@@ -313,15 +316,24 @@ mod tests {
         ];
         let (final_state, actions) = test_fsm(initial, events);
 
-        assert_eq!(final_state, DoorState::Locked { code: 4567, attempts: 2 });
-        assert_eq!(actions, vec![
-            DoorAction::NotifyIRC("door was closed".into()),
-            DoorAction::NotifyIRC("door was opened".into()),
-            DoorAction::NotifyIRC("door was closed".into()),
-            DoorAction::NotifyIRC("door was locked".into()),
-            DoorAction::NotifyIRC("door was closed".into()),
-            DoorAction::NotifyIRC("door was locked".into()),
-            DoorAction::NotifyIRC("invalid code entered".into()),
-        ]);
+        assert_eq!(
+            final_state,
+            DoorState::Locked {
+                code: 4567,
+                attempts: 2
+            }
+        );
+        assert_eq!(
+            actions,
+            vec![
+                DoorAction::NotifyIRC("door was closed".into()),
+                DoorAction::NotifyIRC("door was opened".into()),
+                DoorAction::NotifyIRC("door was closed".into()),
+                DoorAction::NotifyIRC("door was locked".into()),
+                DoorAction::NotifyIRC("door was closed".into()),
+                DoorAction::NotifyIRC("door was locked".into()),
+                DoorAction::NotifyIRC("invalid code entered".into()),
+            ]
+        );
     }
 }

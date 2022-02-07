@@ -118,12 +118,7 @@ impl VM {
 
                 OpCode::OpNegate => {
                     let v = self.pop();
-                    with_type!(
-                        self,
-                        v,
-                        Value::Number(num),
-                        self.push(Value::Number(-num))
-                    );
+                    with_type!(self, v, Value::Number(num), self.push(Value::Number(-num)));
                 }
 
                 OpCode::OpSubtract => binary_op!(self, Number, -),
@@ -141,15 +136,18 @@ impl VM {
                             self.push(Value::String(new_s.into()));
                         }
 
-                        (Value::Number(n_a), Value::Number(n_b)) =>
-                            self.push(Value::Number(n_a + n_b)),
+                        (Value::Number(n_a), Value::Number(n_b)) => {
+                            self.push(Value::Number(n_a + n_b))
+                        }
 
-                        _ => return Err(Error {
-                            line: self.chunk.get_line(self.ip - 1),
-                            kind: ErrorKind::TypeError(
-                                "'+' operator only works on strings and numbers".into()
-                            ),
-                        })
+                        _ => {
+                            return Err(Error {
+                                line: self.chunk.get_line(self.ip - 1),
+                                kind: ErrorKind::TypeError(
+                                    "'+' operator only works on strings and numbers".into(),
+                                ),
+                            })
+                        }
                     }
                 }
 
@@ -205,8 +203,7 @@ impl VM {
                         self.stack.len() > local_idx.0,
                         "stack is not currently large enough for local"
                     );
-                    self.stack[local_idx.0] =
-                        self.stack.last().unwrap().clone();
+                    self.stack[local_idx.0] = self.stack.last().unwrap().clone();
                 }
 
                 OpCode::OpJumpPlaceholder(_) => {
@@ -255,9 +252,7 @@ impl VM {
     fn print_value(&self, val: Value) -> String {
         match val {
             Value::String(LoxString::Heap(s)) => s,
-            Value::String(LoxString::Interned(id)) => {
-                self.strings.lookup(id).into()
-            }
+            Value::String(LoxString::Interned(id)) => self.strings.lookup(id).into(),
             _ => format!("{:?}", val),
         }
     }
