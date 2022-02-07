@@ -21,3 +21,6 @@ c758de9d22506eb279c5abe61f621e5c8f61af95
 
 # style(3p/nix): Final act in the brace-wrapping saga
 39087321811e81e26a1a47d6967df1088dcf0e95
+
+# style: format entire depot with nixpkgs-fmt
+aa122cbae78ce97d60c0c98ba14df753d97e40b1
