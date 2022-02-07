@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e4afba63_4535e9f4",
+        "filename": "users/grfn/achilles/src/ast/hir.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2022-02-07T15:53:25Z",
+      "side": 1,
+      "message": "what version of rustfmt is this using, or is it using non-default settings? The version of rustfmt that runs in my editor on-save would remove this comma",
+      "revId": "ea90de39705f3f4cdc47524afd73f5bb8650493b",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
