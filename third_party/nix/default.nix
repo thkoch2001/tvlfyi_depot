@@ -85,15 +85,15 @@ lib.fix (self: pkgs.fullLlvm11Stdenv.mkDerivation {
     curl
     editline
     flex
+    glog
     libseccomp
     libsodium
-    systemd.dev
     openssl
     sqlite
+    systemd.dev
     xz
   ]) ++ (with depot.third_party; [
     abseil_cpp
-    glog
     grpc
     protobuf
   ]);
