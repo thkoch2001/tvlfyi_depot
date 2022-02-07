@@ -59,5 +59,5 @@ rec {
       -w ${layout}
   '';
 
-  meta.targets = [ "layout" ];
+  meta.ci.targets = [ "layout" ];
 }
