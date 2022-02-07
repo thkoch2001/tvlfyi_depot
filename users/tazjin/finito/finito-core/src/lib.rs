@@ -38,8 +38,8 @@
 //!
 //!   * an event type representing all possible events in the machine
 //!
-//!   * an action type representing a description of all possible
-//!     side-effects of the machine
+//!   * an action type representing a description of all possible side-effects
+//!     of the machine
 //!
 //! Using the definition above we can now say that a transition in a
 //! state-machine, involving these three types, takes an initial state
@@ -92,14 +92,13 @@
 //!
 //!   * `finito`: Core components and classes of Finito
 //!
-//!   * `finito-in-mem`: In-memory implementation of state machines
-//!     that do not need to live longer than an application using
-//!     standard library concurrency primitives.
+//!   * `finito-in-mem`: In-memory implementation of state machines that do not
+//!     need to live longer than an application using standard library
+//!     concurrency primitives.
 //!
-//!   * `finito-postgres`: Postgres-backed, persistent implementation
-//!     of state machines that, well, do need to live longer. Uses
-//!     Postgres for concurrency synchronisation, so keep that in
-//!     mind.
+//!   * `finito-postgres`: Postgres-backed, persistent implementation of state
+//!     machines that, well, do need to live longer. Uses Postgres for
+//!     concurrency synchronisation, so keep that in mind.
 //!
 //! Which should cover most use-cases. Okay, enough prose, lets dive
 //! in.
@@ -110,8 +109,8 @@
 
 extern crate serde;
 
-use serde::Serialize;
 use serde::de::DeserializeOwned;
+use serde::Serialize;
 use std::fmt::Debug;
 use std::mem;
 
@@ -120,7 +119,10 @@ use std::mem;
 ///
 /// This trait is used to implement transition logic and to "tie the
 /// room together", with the room being our triplet of types.
-pub trait FSM where Self: Sized {
+pub trait FSM
+where
+    Self: Sized,
+{
     /// A human-readable string uniquely describing what this FSM
     /// models. This is used in log messages, database tables and
     /// various other things throughout Finito.
@@ -166,7 +168,7 @@ pub trait FSM where Self: Sized {
 
     /// `act` interprets and executes FSM actions. This is the only
     /// part of an FSM in which side-effects are allowed.
-    fn act(Self::Action, &Self::State) -> Result<Vec<Self::Event>, Self::Error>;
+    fn act(action: Self::Action, state: &Self::State) -> Result<Vec<Self::Event>, Self::Error>;
 }
 
 /// This function is the primary function used to advance a state
@@ -223,11 +225,13 @@ pub trait FSMBackend<S: 'static> {
     /// Insert a new state-machine into the backend's storage and
     /// return its newly allocated key.
     fn insert_machine<F>(&self, initial: F) -> Result<Self::Key, Self::Error>
-    where F: FSM + Serialize + DeserializeOwned;
+    where
+        F: FSM + Serialize + DeserializeOwned;
 
     /// Retrieve the current state of an FSM by its key.
     fn get_machine<F: FSM>(&self, key: Self::Key) -> Result<F, Self::Error>
-    where F: FSM + Serialize + DeserializeOwned;
+    where
+        F: FSM + Serialize + DeserializeOwned;
 
     /// Advance a state machine by applying an event and persisting it
     /// as well as any resulting actions.
@@ -236,8 +240,9 @@ pub trait FSMBackend<S: 'static> {
     /// on the backend used. Please consult the backend's
     /// documentation for details.
     fn advance<'a, F: FSM>(&'a self, key: Self::Key, event: F::Event) -> Result<F, Self::Error>
-    where F: FSM + Serialize + DeserializeOwned,
-          F::State: From<&'a S>,
-          F::Event: Serialize + DeserializeOwned,
-          F::Action: Serialize + DeserializeOwned;
+    where
+        F: FSM + Serialize + DeserializeOwned,
+        F::State: From<&'a S>,
+        F::Event: Serialize + DeserializeOwned,
+        F::Action: Serialize + DeserializeOwned;
 }
