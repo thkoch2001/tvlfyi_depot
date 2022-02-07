@@ -124,56 +124,54 @@ pub enum Statement {
 
 // Parser
 
-/*
-program        → declaration* EOF ;
-
-declaration    → funDecl
-               | varDecl
-               | statement ;
-
-funDecl        → "fun" function ;
-function       → IDENTIFIER "(" parameters? ")" block ;
-parameters     → IDENTIFIER ( "," IDENTIFIER )* ;
-
-
-statement      → exprStmt
-               | forStmt
-               | ifStmt
-               | printStmt
-               | returnStmt
-               | whileStmt
-               | block ;
-
-forStmt        → "for" "(" ( varDecl | exprStmt | ";" )
-                 expression? ";"
-                 expression? ")" statement ;
-
-returnStmt     → "return" expression? ";" ;
-
-whileStmt      → "while" "(" expression ")" statement ;
-
-exprStmt       → expression ";" ;
-
-ifStmt         → "if" "(" expression ")" statement
-               ( "else" statement )? ;
-
-printStmt      → "print" expression ";" ;
-
-expression     → assignment ;
-assignment     → IDENTIFIER "=" assignment
-               | logic_or ;
-logic_or       → logic_and ( "or" logic_and )* ;
-logic_and      → equality ( "and" equality )* ;
-equality       → comparison ( ( "!=" | "==" ) comparison )* ;
-comparison     → term ( ( ">" | ">=" | "<" | "<=" ) term )* ;
-term           → factor ( ( "-" | "+" ) factor )* ;
-factor         → unary ( ( "/" | "*" ) unary )* ;
-unary          → ( "!" | "-" ) unary | call ;
-call           → primary ( "(" arguments? ")" )* ;
-arguments      → expression ( "," expression )* ;
-primary        → NUMBER | STRING | "true" | "false" | "nil"
-               | "(" expression ")" ;
-*/
+// program        → declaration* EOF ;
+//
+// declaration    → funDecl
+// | varDecl
+// | statement ;
+//
+// funDecl        → "fun" function ;
+// function       → IDENTIFIER "(" parameters? ")" block ;
+// parameters     → IDENTIFIER ( "," IDENTIFIER )* ;
+//
+//
+// statement      → exprStmt
+// | forStmt
+// | ifStmt
+// | printStmt
+// | returnStmt
+// | whileStmt
+// | block ;
+//
+// forStmt        → "for" "(" ( varDecl | exprStmt | ";" )
+// expression? ";"
+// expression? ")" statement ;
+//
+// returnStmt     → "return" expression? ";" ;
+//
+// whileStmt      → "while" "(" expression ")" statement ;
+//
+// exprStmt       → expression ";" ;
+//
+// ifStmt         → "if" "(" expression ")" statement
+// ( "else" statement )? ;
+//
+// printStmt      → "print" expression ";" ;
+//
+// expression     → assignment ;
+// assignment     → IDENTIFIER "=" assignment
+// | logic_or ;
+// logic_or       → logic_and ( "or" logic_and )* ;
+// logic_and      → equality ( "and" equality )* ;
+// equality       → comparison ( ( "!=" | "==" ) comparison )* ;
+// comparison     → term ( ( ">" | ">=" | "<" | "<=" ) term )* ;
+// term           → factor ( ( "-" | "+" ) factor )* ;
+// factor         → unary ( ( "/" | "*" ) unary )* ;
+// unary          → ( "!" | "-" ) unary | call ;
+// call           → primary ( "(" arguments? ")" )* ;
+// arguments      → expression ( "," expression )* ;
+// primary        → NUMBER | STRING | "true" | "false" | "nil"
+// | "(" expression ")" ;
 
 struct Parser {
     tokens: Vec<Token>,
@@ -213,9 +211,7 @@ impl Parser {
                 if params.len() >= 255 {
                     return Err(Error {
                         line: self.peek().line,
-                        kind: ErrorKind::InternalError(
-                            "255 parameter limit exceeded.".into(),
-                        ),
+                        kind: ErrorKind::InternalError("255 parameter limit exceeded.".into()),
                     });
                 }
 
@@ -429,10 +425,7 @@ impl Parser {
 
             return Err(Error {
                 line: equals.line,
-                kind: ErrorKind::InvalidAssignmentTarget(format!(
-                    "{:?}",
-                    equals
-                )),
+                kind: ErrorKind::InvalidAssignmentTarget(format!("{:?}", equals)),
             });
         }
 
@@ -495,9 +488,7 @@ impl Parser {
     }
 
     fn unary(&mut self) -> ExprResult {
-        if self.match_token(&TokenKind::Bang)
-            || self.match_token(&TokenKind::Minus)
-        {
+        if self.match_token(&TokenKind::Bang) || self.match_token(&TokenKind::Minus) {
             return Ok(Expr::Unary(Unary {
                 operator: self.previous().clone(),
                 right: Box::new(self.unary()?),
@@ -557,10 +548,7 @@ impl Parser {
 
             TokenKind::LeftParen => {
                 let expr = self.expression()?;
-                self.consume(
-                    &TokenKind::RightParen,
-                    ErrorKind::UnmatchedParens,
-                )?;
+                self.consume(&TokenKind::RightParen, ErrorKind::UnmatchedParens)?;
                 return Ok(Expr::Grouping(Grouping(Box::new(expr))));
             }
 
@@ -632,11 +620,7 @@ impl Parser {
         &self.tokens[self.current - 1]
     }
 
-    fn consume(
-        &mut self,
-        kind: &TokenKind,
-        err: ErrorKind,
-    ) -> Result<Token, Error> {
+    fn consume(&mut self, kind: &TokenKind, err: ErrorKind) -> Result<Token, Error> {
         if self.check_token(kind) {
             return Ok(self.advance());
         }

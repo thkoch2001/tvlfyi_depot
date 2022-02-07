@@ -1,10 +1,9 @@
 //! This module defines error types and conversions for issue that can
 //! occur while dealing with persisted state machines.
 
-use std::result;
-use std::fmt;
-use uuid::Uuid;
 use std::error::Error as StdError;
+use std::{fmt, result};
+use uuid::Uuid;
 
 // errors to chain:
 use postgres::Error as PgError;
@@ -41,20 +40,15 @@ impl fmt::Display for Error {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         use ErrorKind::*;
         let msg = match &self.kind {
-            Serialization(err) =>
-                format!("JSON serialization error: {}", err),
+            Serialization(err) => format!("JSON serialization error: {}", err),
 
-            Database(err) =>
-                format!("PostgreSQL error: {}", err),
+            Database(err) => format!("PostgreSQL error: {}", err),
 
-            DBPool(err) =>
-                format!("Database connection pool error: {}", err),
+            DBPool(err) => format!("Database connection pool error: {}", err),
 
-            FSMNotFound(id) =>
-                format!("FSM with ID {} not found", id),
+            FSMNotFound(id) => format!("FSM with ID {} not found", id),
 
-            ActionNotFound(id) =>
-                format!("Action with ID {} not found", id),
+            ActionNotFound(id) => format!("Action with ID {} not found", id),
         };
 
         match &self.context {
@@ -66,7 +60,7 @@ impl fmt::Display for Error {
 
 impl StdError for Error {}
 
-impl <E: Into<ErrorKind>> From<E> for Error {
+impl<E: Into<ErrorKind>> From<E> for Error {
     fn from(err: E) -> Error {
         Error {
             kind: err.into(),
@@ -99,11 +93,11 @@ pub trait ResultExt<T> {
     fn context<C: fmt::Display>(self, ctx: C) -> Result<T>;
 }
 
-impl <T, E: Into<Error>> ResultExt<T> for result::Result<T, E> {
+impl<T, E: Into<Error>> ResultExt<T> for result::Result<T, E> {
     fn context<C: fmt::Display>(self, ctx: C) -> Result<T> {
         self.map_err(|err| Error {
             context: Some(format!("{}", ctx)),
-            .. err.into()
+            ..err.into()
         })
     }
 }
