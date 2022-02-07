@@ -24,13 +24,14 @@
 (require 'dash)
 (require 'string)
 (require 'set)
-(require 'constants)
 (require 'general)
-(require 'tvl)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Constants
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(defgroup bookmark nil
+  "Customize group for bookmark configuration.")
 
 (cl-defstruct bookmark label path kbd)
 
@@ -40,18 +41,20 @@
     (cd path)
     (call-interactively #'project-find-file)))
 
-(defconst bookmark-handle-directory #'bookmark-handle-directory-dwim
-  "Function to call when a bookmark points to a directory.")
+(defcustom bookmark-handle-directory #'bookmark-handle-directory-dwim
+  "Function to call when a bookmark points to a directory."
+  :type 'function
+  :group 'bookmark)
 
-(defconst bookmark-handle-file #'counsel-find-file-action
-  "Function to call when a bookmark points to a file.")
+(defcustom bookmark-handle-file #'counsel-find-file-action
+  "Function to call when a bookmark points to a file."
+  :type 'function
+  :group 'bookmark)
 
-(defconst bookmark-whitelist
-  (list
-   (make-bookmark :label "depot"
-                  :path tvl-depot-path
-                  :kbd "d"))
-  "List of registered bookmarks.")
+(defcustom bookmark-whitelist nil
+  "List of registered bookmarks."
+  :type '(list bookmark)
+  :group 'bookmark)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; API

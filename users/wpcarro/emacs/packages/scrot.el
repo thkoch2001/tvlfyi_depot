@@ -17,7 +17,6 @@
 (require 'string)
 (require 'ts)
 (require 'clipboard)
-(require 'kbd)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Library

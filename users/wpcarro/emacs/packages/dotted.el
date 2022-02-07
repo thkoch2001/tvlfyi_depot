@@ -16,7 +16,6 @@
 ;; Dependencies
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(require 'prelude)
 (require 'macros)
 (require 'cl-lib)
 
@@ -40,18 +39,6 @@
 (defun dotted-second (x)
   "Return the second element of X."
   (cdr x))
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Tests
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-(progn
-  (prelude-assert
-   (equal '(fname . "Bob") (dotted-new 'fname "Bob")))
-  (prelude-assert
-   (dotted-instance? '(one . two)))
-  (prelude-refute
-   (dotted-instance? '(1 2 3))))
 
 (provide 'dotted)
 ;;; dotted.el ends here

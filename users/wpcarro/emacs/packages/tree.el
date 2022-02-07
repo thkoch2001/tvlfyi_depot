@@ -1,8 +1,7 @@
 ;;; tree.el --- Working with Trees -*- lexical-binding: t -*-
 
 ;; Author: William Carroll <wpcarro@gmail.com>
-;; Version: 0.0.1
-;; Package-Requires: ((emacs "25.1"))
+;; Version: 0.0.1 Package-Requires: ((emacs "25.1"))
 
 ;;; Commentary:
 ;; Some friendly functions that hopefully will make working with trees cheaper
@@ -29,11 +28,9 @@
 ;; Dependencies
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(require 'prelude)
 (require 'list)
 (require 'set)
 (require 'tuple)
-(require 'series)
 (require 'random)
 (require 'maybe)
 (require 'cl-lib)
@@ -152,48 +149,6 @@ A tree is balanced if none of the differences between any two depths of two leaf
             set-from-list
             set-count
             number-dec)))
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Tests
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-(defconst tree-enable-testing? t
-  "When t, test suite runs.")
-
-;; TODO: Create set of macros for a proper test suite including:
-;; - describe (arbitrarily nestable)
-;; - it (arbitrarily nestable)
-;; - line numbers for errors
-;; - accumulated output for synopsis
-;; - do we want describe *and* it? Why not a generic label that works for both?
-(when tree-enable-testing?
-  (let ((tree-a (tree-node 1
-                           (list (tree-node 2
-                                            (list (tree-node 5)
-                                                  (tree-node 6)))
-                                 (tree-node 3
-                                            (list (tree-node 7)
-                                                  (tree-node 8)))
-                                 (tree-node 4
-                                            (list (tree-node 9)
-                                                  (tree-node 10))))))
-        (tree-b (tree-node 1
-                           (list (tree-node 2
-                                            (list (tree-node 5)
-                                                  (tree-node 6)))
-                                 (tree-node 3)
-                                 (tree-node 4
-                                            (list (tree-node 9)
-                                                  (tree-node 10)))))))
-    ;; instance?
-    (prelude-assert (tree-instance? tree-a))
-    (prelude-assert (tree-instance? tree-b))
-    (prelude-refute (tree-instance? '(1 2 3)))
-    (prelude-refute (tree-instance? "oak"))
-    ;; balanced?
-    (prelude-assert (tree-balanced? 1 tree-a))
-    (prelude-refute (tree-balanced? 1 tree-b))
-    (message "Tests pass!")))
 
 (provide 'tree)
 ;;; tree.el ends here

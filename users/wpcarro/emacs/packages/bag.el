@@ -48,23 +48,5 @@
   "Return t if XS has X."
   (al-has-key? x (bag-xs xs)))
 
-;; TODO: Tabling this for now since working with structs seems to be
-;; disappointingly difficult.  Where is `struct-update'?
-;; (defun bag-add (x xs)
-;;   "Add X to XS.")
-
-;; TODO: What do we name delete vs. remove?
-;; (defun bag-remove (x xs)
-;;   "Remove X from XS.
-;; This is a no-op is X doesn't exist in XS.")
-
-(defun bag-from-list (xs)
-  "Map a list of `XS' into a bag."
-  (->> xs
-       (list-reduce
-        (bag-new)
-        (lambda (x acc)
-          (bag-add x 1 #'number-inc acc)))))
-
 (provide 'bag)
 ;;; bag.el ends here

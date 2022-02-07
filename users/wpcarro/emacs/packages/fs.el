@@ -31,8 +31,6 @@ Will error for inputs with a trailing slash."
        fs-ensure-dir)
   (f-touch path))
 
-(f-dirname "/tmp/a/b/file.txt")
-
 (defun fs-ensure-dir (path)
   "Ensure that a directory and its ancestor directories in `PATH' exist."
   (->> path

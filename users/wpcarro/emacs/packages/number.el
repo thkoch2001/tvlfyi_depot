@@ -33,15 +33,11 @@
 ;; Dependencies
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(require 'prelude)
 (require 'dash)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Library
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-(defconst number-test? t
-  "When t, run the test suite defined herein.")
 
 ;; TODO: What about int.el?
 
@@ -107,36 +103,6 @@ While this function is undeniably trivial, I have unintentionally done (- 1 x)
 (defun number-inc (x)
   "Add one to `X'."
   (+ x 1))
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Tests
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-(when number-test?
-  (prelude-assert
-   (number-positive? 10))
-  (prelude-assert
-   (number-natural? 10))
-  (prelude-assert
-   (number-whole? 10))
-  (prelude-assert
-   (number-whole? 0))
-  (prelude-assert
-   (number-integer? 10))
-  ;; (prelude-assert
-  ;;  (= 120 (number-factorial 5)))
-  (prelude-assert
-   (number-even? 6))
-  (prelude-refute
-   (number-odd? 6))
-  (prelude-refute
-   (number-positive? -10))
-  (prelude-refute
-   (number-natural? 10.0))
-  (prelude-refute
-   (number-natural? -10))
-  (prelude-refute
-   (number-natural? -10.0)))
 
 (provide 'number)
 ;;; number.el ends here

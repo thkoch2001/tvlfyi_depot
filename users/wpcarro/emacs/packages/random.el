@@ -14,12 +14,9 @@
 ;; Dependencies
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(require 'prelude)
 (require 'number)
 (require 'math)
-(require 'series)
 (require 'list)
-(require 'set)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Library
@@ -59,22 +56,6 @@
   (->> (series/range 0 (number-dec length))
        (list-map (lambda (_) (format "%x" (random-int 15))))
        (list-join "")))
-
-;; TODO: Support random-sample
-;; (defun random-sample (n xs)
-;;   "Return a randomly sample of list XS of size N."
-;;   (prelude-assert (and (>= n 0) (< n (list-length xs))))
-;;   (cl-labels ((do-sample
-;;                (n xs y ys)
-;;                (if (= n (set-count ys))
-;;                    (->> ys
-;;                         set-to-list
-;;                         (list-map (lambda (i)
-;;                                     (list-get i xs))))
-;;                  (if (set-contains? y ys)
-;;                      (do-sample n xs (random-int (list-length xs)) ys)
-;;                    (do-sample n xs y (set-add y ys))))))
-;;     (do-sample n xs (random-int (list-length xs)) (set-new))))
 
 (provide 'random)
 ;;; random.el ends here

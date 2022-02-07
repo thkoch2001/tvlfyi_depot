@@ -26,6 +26,7 @@
 (require 'screen-brightness)
 (require 'pulse-audio)
 (require 'scrot)
+(require 'ivy)
 (require 'ivy-clipmenu)
 (require 'ivy-helpers)
 (require 'general)
@@ -368,7 +369,7 @@
 (general-define-key
  :prefix "<SPC>"
  :states '(normal)
- "b" #'buffer-ivy-source-code
+ "b" #'ivy-switch-buffer
  "<SPC>" #'buffer-show-previous
  "k" #'kill-buffer)
 
@@ -408,6 +409,15 @@
  :states '(normal)
  "K" #'refine-delete
  "q" #'kill-this-buffer)
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; dired
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(general-define-key
+ :keymaps '(dired-mode-map)
+ :states '(normal)
+ "i" #'dired-toggle-read-only)
 
 (provide 'keybindings)
 ;;; keybindings.el ends here

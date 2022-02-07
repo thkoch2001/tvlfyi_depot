@@ -13,8 +13,6 @@
 ;; Dependencies
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(require 'prelude)
-(require 'macros)
 (require 'maybe)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -27,10 +25,6 @@
     (if (maybe-some? buffer)
         (get-buffer-window buffer)
       nil)))
-
-;; TODO: Find a way to incorporate these into function documentation.
-(macros-comment
- (window-find "*scratch*"))
 
 (defun window-delete (window)
   "Delete the WINDOW reference."

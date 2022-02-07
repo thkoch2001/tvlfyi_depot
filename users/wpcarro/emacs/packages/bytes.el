@@ -34,8 +34,11 @@
 ;;  overflow.  I imagine a larger integer type may exist, but for now, I'll
 ;;  treat this as a YAGNI.
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Dependencies
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
 (require 'prelude)
-(require 'tuple)
 (require 'math)
 (require 'number)
 
@@ -89,24 +92,6 @@
     (string-format "%d%s"
                    (round x (tuple/first base-and-unit))
                    (tuple/second base-and-unit))))
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Tests
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-(progn
-  (prelude-assert
-   (equal "1000B" (bytes-to-string 1000)))
-  (prelude-assert
-   (equal "2KB" (bytes-to-string (* 2 bytes-kb))))
-  (prelude-assert
-   (equal "17MB" (bytes-to-string (* 17 bytes-mb))))
-  (prelude-assert
-   (equal "419GB" (bytes-to-string (* 419 bytes-gb))))
-  (prelude-assert
-   (equal "999TB" (bytes-to-string (* 999 bytes-tb))))
-  (prelude-assert
-   (equal "2PB" (bytes-to-string (* 2 bytes-pb)))))
 
 (provide 'bytes)
 ;;; bytes.el ends here

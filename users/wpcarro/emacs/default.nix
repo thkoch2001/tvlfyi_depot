@@ -24,6 +24,11 @@ let
   emacsWithPackages = (emacsPackagesGen emacs27).emacsWithPackages;
 
   wpcarrosEmacs = emacsWithPackages (epkgs:
+    (with wpcarro.emacs.packages; [
+      buffer
+      prelude
+    ]) ++
+
     (with epkgs.tvlPackages; [
       tvl
     ]) ++
@@ -120,7 +125,7 @@ let
     ]));
 
   loadPath = concatStringsSep ":" [
-    ./.emacs.d/wpc
+    ./config/wpc
     # TODO(wpcarro): Explain why the trailing ":" is needed.
     "${wpcarrosEmacs.deps}/share/emacs/site-lisp:"
   ];
@@ -140,7 +145,7 @@ let
         --no-init-file \
         --no-site-file \
         --no-site-lisp \
-        --load ${./.emacs.d/init.el} \
+        --load ${./config/init.el} \
         ${concatStringsSep "\n  " (map (el: "--load ${el} \\") load)}
         "$@"
     '';
@@ -164,8 +169,8 @@ in
       --no-site-file \
       --no-site-lisp \
       --no-init-file \
-      --script ${./ci.el} \
-      ${./.emacs.d/init.el} && \
+      --script ${./scripts/ci.el} \
+      ${./config/init.el} && \
     touch $out
   '';
 

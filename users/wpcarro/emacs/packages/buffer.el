@@ -13,12 +13,10 @@
 ;; rename functions or reorder parameters is worth the effort in my opinion if
 ;; it improves discoverability (via intuition) and improve composability.
 ;;
-;; I support three ways for switching between what I'm calling "source code
+;; I support a few ways of switching between what I'm calling "source code
 ;; buffers":
 ;; 1. Toggling previous: <SPC><SPC>
-;; 2. Using `ivy-read': <SPC>b
-;; TODO: These obscure evil KBDs.  Maybe a hydra definition would be best?
-;; 3. Cycling (forwards/backwards): C-f, C-b
+;; 2. Cycling (forwards/backwards): C-f, C-b
 
 ;;; Code:
 
@@ -32,7 +30,6 @@
 (require 'cycle)
 (require 'struct)
 (require 'ts)
-(require 'general)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Library
@@ -49,9 +46,6 @@
            'org-mode
            'fundamental-mode)
   "A blacklist of major-modes to ignore for listing source code buffers.")
-
-(defconst buffer-ivy-source-code-whitelist '("*scratch*" "*Messages*")
-  "A whitelist of buffers to include when listing source code buffers.")
 
 (defconst buffer-source-code-timeout 2
   "Number of seconds to wait before invalidating the cycle.")
@@ -148,15 +142,6 @@ Return a reference to that buffer."
   "Cycle backward through the `buffer-source-code-buffers'."
   (interactive)
   (buffer-cycle #'cycle-prev))
-
-(defun buffer-ivy-source-code ()
-  "Use `ivy-read' to choose among all open source code buffers."
-  (interactive)
-  (ivy-read "Source code buffer: "
-            (-concat buffer-ivy-source-code-whitelist
-                     (-drop 1 (buffer-source-code-buffers)))
-            :sort nil
-            :action #'switch-to-buffer))
 
 (defun buffer-show-previous ()
   "Call `switch-to-buffer' on the previously visited buffer.

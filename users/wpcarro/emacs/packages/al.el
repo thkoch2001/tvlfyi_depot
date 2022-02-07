@@ -65,6 +65,7 @@
 ;; Dependencies:
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+(require 'map)
 (require 'macros)
 (require 'dash)
 (require 'tuple)
@@ -83,13 +84,6 @@
 ;; other mechanism.
 
 ;; TODO: Consider wrapping all of this with `(cl-defstruct alist xs)'.
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Constants
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-(defconst al-enable-tests? t
-  "When t, run the test suite.")
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Library
@@ -164,11 +158,6 @@ This only removes the first occurrence of K, since alists support multiple
 Mutative variant of `al-delete'."
   (delete (assoc k xs) xs))
 
-;; Additions to the CRUD API
-;; TODO: Implement this function.
-(defun al-dedupe-keys (xs)
-  "Remove the entries in XS where the keys are `equal'.")
-
 (defun al-dedupe-entries (xs)
   "Remove the entries in XS where the key-value pair are `equal'."
   (delete-dups xs))
@@ -232,23 +221,6 @@ In this case, the last writer wins, which is B."
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Tests
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-(when al-enable-tests?
-  (prelude-assert
-   (equal '((2 . one)
-            (3 . two))
-          (al-map-keys #'1+
-                          '((1 . one)
-                            (2 . two)))))
-  (prelude-assert
-   (equal '((one . 2)
-            (two . 3))
-          (al-map-values #'1+
-                            '((one . 1)
-                              (two . 2))))))
-
-
-;; TODO: Support test cases for the entire API.
 
 (provide 'al)
 ;;; al.el ends here

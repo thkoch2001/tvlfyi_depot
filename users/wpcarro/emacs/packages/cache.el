@@ -29,6 +29,7 @@
 (require 'prelude)
 (require 'struct)
 (require '>)
+(require 'cl-lib)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Library
@@ -58,31 +59,6 @@ If X isn't in XS (using `equal'), insert it at the front."
    (>-> (list-reject (lambda (y) (equal x y)))
        (list-cons x))
    xs))
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Tests
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-(progn
-  (let ((cache (cache-from-list '("chicken" "nugget"))))
-    ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-    ;; contains?/2
-    ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-    (prelude-refute
-     (cache-contains? "turkey" cache))
-    (prelude-assert
-     (cache-contains? "chicken" cache))
-    ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-    ;; touch/2
-    ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-    (prelude-assert
-     (equal
-      (cache-touch "nugget" cache)
-      (cache-from-list '("nugget" "chicken"))))
-    (prelude-assert
-     (equal
-      (cache-touch "spicy" cache)
-      (cache-from-list '("spicy" "chicken" "nugget"))))))
 
 (provide 'cache)
 ;;; cache.el ends here

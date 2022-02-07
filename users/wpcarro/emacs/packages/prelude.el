@@ -19,25 +19,15 @@
 ;; Dependencies
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+(require 'cl-lib)
 (require 'dash)
 (require 's)
 (require 'f)
-(require 'cl-lib)
+(require 'maybe)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Utilities
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-(defun prelude-to-string (x)
-  "Convert X to a string."
-  (format "%s" x))
-
-(defun prelude-inspect (&rest args)
-  "Message ARGS where ARGS are any type."
-  (->> args
-       (-map #'prelude-to-string)
-       (apply #'s-concat)
-       message))
 
 (defmacro prelude-call-process-to-string (cmd &rest args)
   "Return the string output of CMD called with ARGS."
@@ -49,17 +39,16 @@
 ;; Assertions
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-;; TODO: Should I `throw' instead of `error' here?
 (defmacro prelude-assert (x)
   "Errors unless X is t.
 These are strict assertions and purposely do not rely on truthiness."
-  (let ((as-string (prelude-to-string x)))
+  (let ((as-string (format "%s" x)))
     `(unless (equal t ,x)
        (error (s-concat "Assertion failed: " ,as-string)))))
 
 (defmacro prelude-refute (x)
   "Errors unless X is nil."
-  (let ((as-string (prelude-to-string x)))
+  (let ((as-string (format "%s" x)))
     `(unless (equal nil ,x)
        (error (s-concat "Refutation failed: " ,as-string)))))
 

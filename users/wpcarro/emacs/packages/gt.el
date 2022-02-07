@@ -23,6 +23,5 @@
     `(lambda (,sym)
        (->> ,sym ,@forms))))
 
-
 (provide '>)
 ;;; >.el ends here
