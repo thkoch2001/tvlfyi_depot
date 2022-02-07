@@ -1,0 +1,10 @@
+# -*- mode: snippet -*-
+# name: Jest describe/test block
+# key: dsc
+# --
+describe('$1', () => {
+  test('$2', () => {
+
+    expect($3).toEqual($4)
+  })
+})

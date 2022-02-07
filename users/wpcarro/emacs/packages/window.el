@@ -1,0 +1,34 @@
+;;; window.el --- Working with windows -*- lexical-binding: t -*-
+
+;; Author: William Carroll <wpcarro@gmail.com>
+;; Version: 0.0.1
+;; Package-Requires: ((emacs "25.1"))
+
+;;; Commentary:
+;; Utilities to make CRUDing windows in Emacs easier.
+
+;;; Code:
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Dependencies
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(require 'maybe)
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Library
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(defun window-find (name)
+  "Find a window by the NAME of the buffer it's hosting."
+  (let ((buffer (get-buffer name)))
+    (if (maybe-some? buffer)
+        (get-buffer-window buffer)
+      nil)))
+
+(defun window-delete (window)
+  "Delete the WINDOW reference."
+  (delete-window window))
+
+(provide 'window)
+;;; window.el ends here

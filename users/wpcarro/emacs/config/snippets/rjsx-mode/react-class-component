@@ -1,0 +1,11 @@
+# -*- mode: snippet -*-
+# name: React class extends
+# key: clz
+# --
+class $1 extends React.Component {
+  render() {
+    $2
+  }
+}
+
+export default $1

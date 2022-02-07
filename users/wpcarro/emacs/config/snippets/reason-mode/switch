@@ -1,0 +1,7 @@
+# -*- mode: snippet -*-
+# name: Switch statement
+# key: sw
+# --
+switch ($1) {
+| $2 =>
+}
