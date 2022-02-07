@@ -233,9 +233,7 @@ lib.fix (self: pkgs.fullLlvm11Stdenv.mkDerivation {
     test-vm = import ./test-vm.nix args;
   };
 
-  meta = {
-    targets = [
-      "checkfmt"
-    ];
-  };
+  meta.ci.targets = [
+    "checkfmt"
+  ];
 })
