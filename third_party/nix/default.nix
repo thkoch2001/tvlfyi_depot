@@ -78,6 +78,7 @@ lib.fix (self: pkgs.fullLlvm11Stdenv.mkDerivation {
 
   # TODO(tazjin): Some of these might only be required for native inputs
   buildInputs = (with pkgs; [
+    abseil-cpp
     aws-s3-cpp
     brotli
     bzip2
@@ -94,8 +95,6 @@ lib.fix (self: pkgs.fullLlvm11Stdenv.mkDerivation {
     sqlite
     systemd.dev
     xz
-  ]) ++ (with depot.third_party; [
-    abseil_cpp
   ]);
 
   doCheck = false;
