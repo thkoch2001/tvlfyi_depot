@@ -16,6 +16,24 @@
       "message": "what version of rustfmt is this using, or is it using non-default settings? The version of rustfmt that runs in my editor on-save would remove this comma",
       "revId": "ea90de39705f3f4cdc47524afd73f5bb8650493b",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b9d5401c_f1424ed3",
+        "filename": "users/grfn/achilles/src/ast/hir.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-02-07T15:55:38Z",
+      "side": 1,
+      "message": "Yes, we have some settings (which previously lived in //rustfmt.toml), see the next CL in the chain.\n\nNot sure how to make the editor respect them. Maybe we keep them in // and use path interpolation in the Nix config, hmm.",
+      "parentUuid": "e4afba63_4535e9f4",
+      "revId": "ea90de39705f3f4cdc47524afd73f5bb8650493b",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
