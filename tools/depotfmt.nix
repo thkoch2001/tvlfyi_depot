@@ -26,6 +26,13 @@ let
       "third_party/nix/tests/*",
       "third_party/nix/src/tests/*"
     ]
+
+    [formatter.rust]
+    command = "${pkgs.rustfmt}/bin/rustfmt"
+    includes = [ "*.rs" ]
+    excludes = [
+      "users/tazjin/*",
+    ]
   '';
 
   # helper tool for formatting the depot interactively
