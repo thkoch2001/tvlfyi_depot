@@ -164,7 +164,9 @@ let
 
               # meta is done via passthru to minimize rebuilds caused by overriding
               meta = (old.passthru.meta or { }) // {
-                inherit targets;
+                ci = (old.passthru.meta.ci or { }) // {
+                  inherit targets;
+                };
               };
             } // builtins.listToAttrs (builtins.map
               (impl: {
