@@ -63,9 +63,11 @@ enum Precedence {
     Equality,   // == !=
     Comparison, // < > <= >=
     Term,       // + -
-    Factor,     // * /
-    Unary,      // ! -
-    Call,       // . ()
+    Factor,     //
+    // 
+    // * /
+    Unary, // ! -
+    Call,  // . ()
     Primary,
 }
 
@@ -78,11 +80,7 @@ struct ParseRule<T: Iterator<Item = Token>> {
 }
 
 impl<T: Iterator<Item = Token>> ParseRule<T> {
-    fn new(
-        prefix: Option<ParseFn<T>>,
-        infix: Option<ParseFn<T>>,
-        precedence: Precedence,
-    ) -> Self {
+    fn new(prefix: Option<ParseFn<T>>, infix: Option<ParseFn<T>>, precedence: Precedence) -> Self {
         ParseRule {
             prefix,
             infix,
@@ -105,18 +103,16 @@ impl Precedence {
             Precedence::Factor => Precedence::Unary,
             Precedence::Unary => Precedence::Call,
             Precedence::Call => Precedence::Primary,
-            Precedence::Primary => panic!(
-                "invalid parser state: no higher precedence than Primary"
-            ),
+            Precedence::Primary => {
+                panic!("invalid parser state: no higher precedence than Primary")
+            },
         }
     }
 }
 
 fn rule_for<T: Iterator<Item = Token>>(token: &TokenKind) -> ParseRule<T> {
     match token {
-        TokenKind::LeftParen => {
-            ParseRule::new(Some(Compiler::grouping), None, Precedence::None)
-        }
+        TokenKind::LeftParen => ParseRule::new(Some(Compiler::grouping), None, Precedence::None),
 
         TokenKind::Minus => ParseRule::new(
             Some(Compiler::unary),
@@ -124,69 +120,43 @@ fn rule_for<T: Iterator<Item = Token>>(token: &TokenKind) -> ParseRule<T> {
             Precedence::Term,
         ),
 
-        TokenKind::Plus => {
-            ParseRule::new(None, Some(Compiler::binary), Precedence::Term)
-        }
+        TokenKind::Plus => ParseRule::new(None, Some(Compiler::binary), Precedence::Term),
 
-        TokenKind::Slash => {
-            ParseRule::new(None, Some(Compiler::binary), Precedence::Factor)
-        }
+        TokenKind::Slash => ParseRule::new(None, Some(Compiler::binary), Precedence::Factor),
 
-        TokenKind::Star => {
-            ParseRule::new(None, Some(Compiler::binary), Precedence::Factor)
-        }
+        TokenKind::Star => ParseRule::new(None, Some(Compiler::binary), Precedence::Factor),
 
-        TokenKind::Number(_) => {
-            ParseRule::new(Some(Compiler::number), None, Precedence::None)
-        }
+        TokenKind::Number(_) => ParseRule::new(Some(Compiler::number), None, Precedence::None),
 
-        TokenKind::True => {
-            ParseRule::new(Some(Compiler::literal), None, Precedence::None)
-        }
+        TokenKind::True => ParseRule::new(Some(Compiler::literal), None, Precedence::None),
 
-        TokenKind::False => {
-            ParseRule::new(Some(Compiler::literal), None, Precedence::None)
-        }
+        TokenKind::False => ParseRule::new(Some(Compiler::literal), None, Precedence::None),
 
-        TokenKind::Nil => {
-            ParseRule::new(Some(Compiler::literal), None, Precedence::None)
-        }
+        TokenKind::Nil => ParseRule::new(Some(Compiler::literal), None, Precedence::None),
 
-        TokenKind::Bang => {
-            ParseRule::new(Some(Compiler::unary), None, Precedence::None)
-        }
+        TokenKind::Bang => ParseRule::new(Some(Compiler::unary), None, Precedence::None),
 
-        TokenKind::BangEqual => {
-            ParseRule::new(None, Some(Compiler::binary), Precedence::Equality)
-        }
+        TokenKind::BangEqual => ParseRule::new(None, Some(Compiler::binary), Precedence::Equality),
 
-        TokenKind::EqualEqual => {
-            ParseRule::new(None, Some(Compiler::binary), Precedence::Equality)
-        }
+        TokenKind::EqualEqual => ParseRule::new(None, Some(Compiler::binary), Precedence::Equality),
 
-        TokenKind::Greater => {
-            ParseRule::new(None, Some(Compiler::binary), Precedence::Comparison)
-        }
+        TokenKind::Greater => ParseRule::new(None, Some(Compiler::binary), Precedence::Comparison),
 
         TokenKind::GreaterEqual => {
             ParseRule::new(None, Some(Compiler::binary), Precedence::Comparison)
-        }
+        },
 
-        TokenKind::Less => {
-            ParseRule::new(None, Some(Compiler::binary), Precedence::Comparison)
-        }
+        TokenKind::Less => ParseRule::new(None, Some(Compiler::binary), Precedence::Comparison),
 
         TokenKind::LessEqual => {
             ParseRule::new(None, Some(Compiler::binary), Precedence::Comparison)
-        }
+        },
 
         TokenKind::Identifier(_) => {
             ParseRule::new(Some(Compiler::variable), None, Precedence::None)
-        }
+        },
 
-        TokenKind::String(_) => {
-            ParseRule::new(Some(Compiler::string), None, Precedence::None)
-        }
+        TokenKind::String(_) => ParseRule::new(Some(Compiler::string), None, Precedence::None),
 
         _ => ParseRule::new(None, None, Precedence::None),
     }
@@ -236,9 +206,7 @@ impl<T: Iterator<Item = Token>> Compiler<T> {
 
     fn define_variable(&mut self, var: Option<ConstantIdx>) -> LoxResult<()> {
         if self.locals.scope_depth == 0 {
-            self.emit_op(OpCode::OpDefineGlobal(
-                var.expect("should be global"),
-            ));
+            self.emit_op(OpCode::OpDefineGlobal(var.expect("should be global")));
         } else {
             self.locals
                 .locals
@@ -305,9 +273,7 @@ impl<T: Iterator<Item = Token>> Compiler<T> {
     }
 
     fn block(&mut self) -> LoxResult<()> {
-        while !self.check(&TokenKind::RightBrace)
-            && !self.check(&TokenKind::Eof)
-        {
+        while !self.check(&TokenKind::RightBrace) && !self.check(&TokenKind::Eof) {
             self.declaration()?;
         }
 
@@ -412,7 +378,7 @@ impl<T: Iterator<Item = Token>> Compiler<T> {
             TokenKind::BangEqual => {
                 self.emit_op(OpCode::OpEqual);
                 self.emit_op(OpCode::OpNot)
-            }
+            },
 
             TokenKind::EqualEqual => self.emit_op(OpCode::OpEqual),
             TokenKind::Greater => self.emit_op(OpCode::OpGreater),
@@ -420,13 +386,13 @@ impl<T: Iterator<Item = Token>> Compiler<T> {
             TokenKind::GreaterEqual => {
                 self.emit_op(OpCode::OpLess);
                 self.emit_op(OpCode::OpNot)
-            }
+            },
 
             TokenKind::Less => self.emit_op(OpCode::OpLess),
             TokenKind::LessEqual => {
                 self.emit_op(OpCode::OpGreater);
                 self.emit_op(OpCode::OpNot)
-            }
+            },
 
             _ => unreachable!("only called for binary operator tokens"),
         };
@@ -502,10 +468,10 @@ impl<T: Iterator<Item = Token>> Compiler<T> {
             match rule_for::<T>(&self.previous().kind).infix {
                 Some(func) => {
                     func(self)?;
-                }
+                },
                 None => {
                     unreachable!("invalid compiler state: error in parse rules")
-                }
+                },
             }
         }
 
@@ -520,7 +486,7 @@ impl<T: Iterator<Item = Token>> Compiler<T> {
                     line: self.current().line,
                     kind: ErrorKind::ExpectedToken("Expected identifier"),
                 })
-            }
+            },
         };
 
         Ok(self.strings.intern(ident))
@@ -699,7 +665,7 @@ impl<T: Iterator<Item = Token>> Compiler<T> {
 
                 _ => {
                     self.advance();
-                }
+                },
             }
         }
     }
@@ -712,9 +678,8 @@ impl<T: Iterator<Item = Token>> Compiler<T> {
 
 pub fn compile(code: &str) -> Result<(Interner, Chunk), Vec<Error>> {
     let chars = code.chars().collect::<Vec<char>>();
-    let tokens = scanner::scan(&chars).map_err(|errors| {
-        errors.into_iter().map(Into::into).collect::<Vec<Error>>()
-    })?;
+    let tokens = scanner::scan(&chars)
+        .map_err(|errors| errors.into_iter().map(Into::into).collect::<Vec<Error>>())?;
 
     let mut compiler = Compiler {
         tokens: tokens.into_iter().peekable(),

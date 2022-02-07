@@ -8,12 +8,10 @@ use lazy_static::lazy_static;
 use regex::Regex;
 use std::cell::RefCell;
 use std::collections::HashMap;
-use std::env;
 use std::ffi::OsStr;
-use std::io;
-use std::io::BufRead;
-use std::io::Write;
+use std::io::{BufRead, Write};
 use std::path::Path;
+use std::{env, io};
 use syntect::dumps::from_binary;
 use syntect::easy::HighlightLines;
 use syntect::highlighting::{Theme, ThemeSet};
@@ -194,7 +192,7 @@ fn has_callout<'a>(node: &Node<'a, RefCell<Ast>>) -> Option<Callout> {
                 }
 
                 None
-            }
+            },
             _ => None,
         },
         _ => None,
@@ -268,7 +266,7 @@ pub fn format_markdown_with_shortlinks<R: BufRead, W: Write>(
                 } else {
                     None
                 }
-            }
+            },
             _ => None,
         };
 

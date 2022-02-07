@@ -39,7 +39,7 @@ fn query_setting(req: &Request, config: &mut bool, param: &str) {
     match req.get_param(param) {
         Some(s) if s == "true" => *config = true,
         Some(s) if s == "false" => *config = false,
-        _ => {}
+        _ => {},
     }
 }
 
@@ -57,8 +57,8 @@ impl Query {
             match cookie {
                 ("cs", "true") => {
                     query.cs = true;
-                }
-                _ => {}
+                },
+                _ => {},
             }
         }
 
@@ -246,24 +246,18 @@ mod tests {
     #[test]
     fn depot_path_sourcegraph_query() {
         assert_eq!(
-            dispatch(
-                &handlers(),
-                &Query {
-                    query: "//web/atward/default.nix".to_string(),
-                    cs: true,
-                }
-            ),
+            dispatch(&handlers(), &Query {
+                query: "//web/atward/default.nix".to_string(),
+                cs: true,
+            }),
             Some("https://cs.tvl.fyi/depot/-/tree/web/atward/default.nix".to_string()),
         );
 
         assert_eq!(
-            dispatch(
-                &handlers(),
-                &Query {
-                    query: "/not/a/depot/path".to_string(),
-                    cs: true,
-                }
-            ),
+            dispatch(&handlers(), &Query {
+                query: "/not/a/depot/path".to_string(),
+                cs: true,
+            }),
             None
         );
     }
@@ -271,13 +265,10 @@ mod tests {
     #[test]
     fn depot_root_cgit_query() {
         assert_eq!(
-            dispatch(
-                &handlers(),
-                &Query {
-                    query: "//".to_string(),
-                    cs: false,
-                }
-            ),
+            dispatch(&handlers(), &Query {
+                query: "//".to_string(),
+                cs: false,
+            }),
             Some("https://code.tvl.fyi/tree/".to_string()),
         );
     }

@@ -2,7 +2,7 @@ extern crate git2;
 use std::os::unix::ffi::OsStrExt;
 use std::path::PathBuf;
 
-const DEFAULT_BRANCH : &str = "refs/heads/main";
+const DEFAULT_BRANCH: &str = "refs/heads/main";
 
 fn main() {
     let git_db_dir = std::env::var_os("GIT_DB_DIR").expect("set GIT_DB_DIR");
@@ -16,8 +16,12 @@ fn main() {
             .bare(true)
             .mkpath(true)
             .description("git-db database")
-            .initial_head(DEFAULT_BRANCH)
-    ).expect(&format!("unable to create or open bare git repo at {}", &git_db.display()));
+            .initial_head(DEFAULT_BRANCH),
+    )
+    .expect(&format!(
+        "unable to create or open bare git repo at {}",
+        &git_db.display()
+    ));
 
     let mut index = repo.index().expect("cannot get the git index file");
     eprintln!("{:#?}", index.version());
@@ -34,8 +38,9 @@ fn main() {
 
     let data = "hi, it’s me".as_bytes();
 
-    index.add_frombuffer(
-        &git2::IndexEntry {
+    index
+        .add_frombuffer(
+            &git2::IndexEntry {
             mtime: now_git_time,
             ctime: now_git_time,
             // don’t make sense
@@ -50,25 +55,26 @@ fn main() {
             flags_extended: 0,
             path: "hi.txt".as_bytes().to_owned(),
         },
-        data
-    ).expect("could not add data to index");
+            data,
+        )
+        .expect("could not add data to index");
 
     let oid = index.write_tree().expect("could not write index tree");
 
-    let to_add_tree = repo.find_tree(oid)
+    let to_add_tree = repo
+        .find_tree(oid)
         .expect("we just created this tree, where did it go?");
 
     let parent_commits = match repo.find_reference(DEFAULT_BRANCH) {
-        Ok(ref_) => vec![
-            ref_
-            .peel_to_commit()
-            .expect(&format!("reference {} does not point to a commit", DEFAULT_BRANCH))
-        ],
+        Ok(ref_) => vec![ref_.peel_to_commit().expect(&format!(
+            "reference {} does not point to a commit",
+            DEFAULT_BRANCH
+        ))],
         Err(err) => match err.code() {
             // no commit exists yet
             git2::ErrorCode::NotFound => vec![],
             _ => panic!("could not read latest commit from {}", DEFAULT_BRANCH),
-        }
+        },
     };
     repo.commit(
         Some(DEFAULT_BRANCH),
@@ -79,7 +85,6 @@ fn main() {
          I wonder if it supports extended commit descriptions?\n",
         &to_add_tree,
         &parent_commits.iter().collect::<Vec<_>>()[..],
-    ).expect("could not commit the index we just wrote");
-
-
+    )
+    .expect("could not commit the index we just wrote");
 }

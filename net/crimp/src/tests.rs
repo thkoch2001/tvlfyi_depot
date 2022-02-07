@@ -6,7 +6,7 @@
 //    docker run --rm -p 4662:80 kennethreitz/httpbin
 
 use super::*;
-use serde_json::{Value, json};
+use serde_json::{json, Value};
 
 // These tests check whether the correct HTTP method is used in the
 // requests.
@@ -14,7 +14,8 @@ use serde_json::{Value, json};
 #[test]
 fn test_http_get() {
     let resp = Request::get("http://127.0.0.1:4662/get")
-        .send().expect("failed to send request");
+        .send()
+        .expect("failed to send request");
 
     assert!(resp.is_success(), "request should have succeeded");
 }
@@ -22,7 +23,8 @@ fn test_http_get() {
 #[test]
 fn test_http_delete() {
     let resp = Request::delete("http://127.0.0.1:4662/delete")
-        .send().expect("failed to send request");
+        .send()
+        .expect("failed to send request");
 
     assert_eq!(200, resp.status, "response status should be 200 OK");
 }
@@ -30,7 +32,8 @@ fn test_http_delete() {
 #[test]
 fn test_http_put() {
     let resp = Request::put("http://127.0.0.1:4662/put")
-        .send().expect("failed to send request");
+        .send()
+        .expect("failed to send request");
 
     assert_eq!(200, resp.status, "response status should be 200 OK");
 }
@@ -38,7 +41,8 @@ fn test_http_put() {
 #[test]
 fn test_http_patch() {
     let resp = Request::patch("http://127.0.0.1:4662/patch")
-        .send().expect("failed to send request");
+        .send()
+        .expect("failed to send request");
 
     assert_eq!(200, resp.status, "response status should be 200 OK");
 }
@@ -50,18 +54,25 @@ fn test_http_patch() {
 fn test_http_post() {
     let body = "test body";
     let response = Request::post("http://127.0.0.1:4662/post")
-        .user_agent("crimp test suite").expect("failed to set user-agent")
-        .timeout(Duration::from_secs(5)).expect("failed to set request timeout")
+        .user_agent("crimp test suite")
+        .expect("failed to set user-agent")
+        .timeout(Duration::from_secs(5))
+        .expect("failed to set request timeout")
         .body("text/plain", &body.as_bytes())
-        .send().expect("failed to send request")
-        .as_json::<Value>().expect("failed to deserialize response");
+        .send()
+        .expect("failed to send request")
+        .as_json::<Value>()
+        .expect("failed to deserialize response");
 
     let data = response.body;
 
     assert_eq!(200, response.status, "response status should be 200 OK");
 
-    assert_eq!(data.get("data").unwrap(), &json!("test body"),
-               "test body should have been POSTed");
+    assert_eq!(
+        data.get("data").unwrap(),
+        &json!("test body"),
+        "test body should have been POSTed"
+    );
 
     assert_eq!(
         data.get("headers").unwrap().get("Content-Type").unwrap(),
@@ -70,26 +81,34 @@ fn test_http_post() {
     );
 }
 
-#[cfg(feature = "json")] #[test]
+#[cfg(feature = "json")]
+#[test]
 fn test_http_post_json() {
     let body = json!({
         "purpose": "testing!"
     });
 
     let response = Request::post("http://127.0.0.1:4662/post")
-        .user_agent("crimp test suite").expect("failed to set user-agent")
-        .timeout(Duration::from_secs(5)).expect("failed to set request timeout")
-        .json(&body).expect("request serialization failed")
-        .send().expect("failed to send request")
-        .as_json::<Value>().expect("failed to deserialize response");
-
+        .user_agent("crimp test suite")
+        .expect("failed to set user-agent")
+        .timeout(Duration::from_secs(5))
+        .expect("failed to set request timeout")
+        .json(&body)
+        .expect("request serialization failed")
+        .send()
+        .expect("failed to send request")
+        .as_json::<Value>()
+        .expect("failed to deserialize response");
 
     let data = response.body;
 
     assert_eq!(200, response.status, "response status should be 200 OK");
 
-    assert_eq!(data.get("json").unwrap(), &body,
-               "test body should have been POSTed");
+    assert_eq!(
+        data.get("json").unwrap(),
+        &body,
+        "test body should have been POSTed"
+    );
 
     assert_eq!(
         data.get("headers").unwrap().get("Content-Type").unwrap(),
@@ -104,8 +123,10 @@ fn test_http_post_json() {
 #[test]
 fn test_bearer_auth() {
     let response = Request::get("http://127.0.0.1:4662/bearer")
-        .bearer_auth("some-token").expect("failed to set auth header")
-        .send().expect("failed to send request");
+        .bearer_auth("some-token")
+        .expect("failed to set auth header")
+        .send()
+        .expect("failed to send request");
 
     assert!(response.is_success(), "authorized request should succeed");
 }
@@ -115,8 +136,10 @@ fn test_basic_auth() {
     let request = Request::get("http://127.0.0.1:4662/basic-auth/alan_watts/oneness");
 
     let response = request
-        .basic_auth("alan_watts", "oneness").expect("failed to set auth header")
-        .send().expect("failed to send request");
+        .basic_auth("alan_watts", "oneness")
+        .expect("failed to set auth header")
+        .send()
+        .expect("failed to send request");
 
     assert!(response.is_success(), "authorized request should succeed");
 }
@@ -129,14 +152,20 @@ fn test_large_body() {
 
     let resp = Request::post("http://127.0.0.1:4662/post")
         .body("application/octet-stream", &[0; BODY_SIZE])
-        .send().expect("sending request")
-        .as_json::<Value>().expect("JSON deserialisation");
+        .send()
+        .expect("sending request")
+        .as_json::<Value>()
+        .expect("JSON deserialisation");
 
     // httpbin returns the uploaded data as a string in the `data`
     // field.
     let data = resp.body.get("data").unwrap().as_str().unwrap();
 
-    assert_eq!(BODY_SIZE, data.len(), "uploaded data length should be correct");
+    assert_eq!(
+        BODY_SIZE,
+        data.len(),
+        "uploaded data length should be correct"
+    );
 }
 
 // Tests for various other features.
@@ -144,9 +173,13 @@ fn test_large_body() {
 #[test]
 fn test_error_for_status() {
     let response = Request::get("http://127.0.0.1:4662/patch")
-        .send().expect("failed to send request")
+        .send()
+        .expect("failed to send request")
         .error_for_status(|resp| format!("Response error code: {}", resp.status));
 
-    assert_eq!(Err("Response error code: 405".into()), response,
-               "returned error should be converted into Result::Err");
+    assert_eq!(
+        Err("Response error code: 405".into()),
+        response,
+        "returned error should be converted into Result::Err"
+    );
 }

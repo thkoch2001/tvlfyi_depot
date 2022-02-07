@@ -23,22 +23,22 @@
 //! the tera templates stored in the `/templates` directory in the
 //! project root.
 
-use actix::prelude::*;
-use actix_web::*;
-use actix_web::http::Method;
-use actix_web::middleware::identity::RequestIdentity;
-use actix_web::middleware::{Started, Middleware};
-use actix_web;
 use crate::db::*;
-use crate::errors::{ConverseResult, ConverseError};
-use futures::Future;
+use crate::errors::{ConverseError, ConverseResult};
 use crate::models::*;
 use crate::oidc::*;
 use crate::render::*;
+use actix::prelude::*;
+use actix_web;
+use actix_web::http::Method;
+use actix_web::middleware::identity::RequestIdentity;
+use actix_web::middleware::{Middleware, Started};
+use actix_web::*;
+use futures::Future;
 
 use rouille::{Request, Response};
 
-type ConverseResponse = Box<dyn Future<Item=HttpResponse, Error=ConverseError>>;
+type ConverseResponse = Box<dyn Future<Item = HttpResponse, Error = ConverseError>>;
 
 const HTML: &'static str = "text/html";
 const ANONYMOUS: i32 = 1;
@@ -84,23 +84,31 @@ pub fn get_user_id_rouille(_req: &Request) -> i32 {
     ANONYMOUS
 }
 
-pub fn forum_thread_rouille(req: &Request, db: &DbExecutor, thread_id: i32)
-                            -> ConverseResult<Response> {
+pub fn forum_thread_rouille(
+    req: &Request,
+    db: &DbExecutor,
+    thread_id: i32,
+) -> ConverseResult<Response> {
     let user = get_user_id_rouille(&req);
     let thread = db.get_thread(thread_id)?;
     Ok(Response::html(thread_page(user, thread.0, thread.1)?))
 }
 
 /// This handler retrieves and displays a single forum thread.
-pub fn forum_thread(_: State<AppState>,
-                    _: HttpRequest<AppState>,
-                    _: Path<i32>) -> ConverseResponse {
+pub fn forum_thread(
+    _: State<AppState>,
+    _: HttpRequest<AppState>,
+    _: Path<i32>,
+) -> ConverseResponse {
     unimplemented!()
 }
 
 /// This handler presents the user with the "New Thread" form.
 pub fn new_thread(state: State<AppState>) -> ConverseResponse {
-    state.renderer.send(NewThreadPage::default()).flatten()
+    state
+        .renderer
+        .send(NewThreadPage::default())
+        .flatten()
         .map(|res| HttpResponse::Ok().content_type(HTML).body(res))
         .responder()
 }
@@ -113,9 +121,9 @@ pub struct NewThreadForm {
 
 /// This handler receives a "New thread"-form and redirects the user
 /// to the new thread after creation.
-pub fn submit_thread((state, input, req): (State<AppState>,
-                                           Form<NewThreadForm>,
-                                           HttpRequest<AppState>)) -> ConverseResponse {
+pub fn submit_thread(
+    (state, input, req): (State<AppState>, Form<NewThreadForm>, HttpRequest<AppState>),
+) -> ConverseResponse {
     // Trim whitespace out of inputs:
     let input = NewThreadForm {
         title: input.title.trim().into(),
@@ -124,7 +132,8 @@ pub fn submit_thread((state, input, req): (State<AppState>,
 
     // Perform simple validation and abort here if it fails:
     if input.title.is_empty() || input.post.is_empty() {
-        return state.renderer
+        return state
+            .renderer
             .send(NewThreadPage {
                 alerts: vec![NEW_THREAD_LENGTH_ERR],
                 title: Some(input.title),
@@ -147,14 +156,19 @@ pub fn submit_thread((state, input, req): (State<AppState>,
         post: input.post,
     };
 
-    state.db.send(msg)
+    state
+        .db
+        .send(msg)
         .from_err()
         .and_then(move |res| {
             let thread = res?;
-            info!("Created new thread \"{}\" with ID {}", thread.title, thread.id);
+            info!(
+                "Created new thread \"{}\" with ID {}",
+                thread.title, thread.id
+            );
             Ok(HttpResponse::SeeOther()
-               .header("Location", format!("/thread/{}", thread.id))
-               .finish())
+                .header("Location", format!("/thread/{}", thread.id))
+                .finish())
         })
         .responder()
 }
@@ -167,9 +181,11 @@ pub struct NewPostForm {
 
 /// This handler receives a "Reply"-form and redirects the user to the
 /// new post after creation.
-pub fn reply_thread(state: State<AppState>,
-                    input: Form<NewPostForm>,
-                    req: HttpRequest<AppState>) -> ConverseResponse {
+pub fn reply_thread(
+    state: State<AppState>,
+    input: Form<NewPostForm>,
+    req: HttpRequest<AppState>,
+) -> ConverseResponse {
     let user_id = get_user_id(&req);
 
     let new_post = NewPost {
@@ -178,14 +194,19 @@ pub fn reply_thread(state: State<AppState>,
         body: input.post.trim().into(),
     };
 
-    state.db.send(CreatePost(new_post))
+    state
+        .db
+        .send(CreatePost(new_post))
         .flatten()
         .from_err()
         .and_then(move |post| {
             info!("Posted reply {} to thread {}", post.id, post.thread_id);
             Ok(HttpResponse::SeeOther()
-               .header("Location", format!("/thread/{}#post-{}", post.thread_id, post.id))
-               .finish())
+                .header(
+                    "Location",
+                    format!("/thread/{}#post-{}", post.thread_id, post.id),
+                )
+                .finish())
         })
         .responder()
 }
@@ -194,12 +215,16 @@ pub fn reply_thread(state: State<AppState>,
 /// the user attempts to edit a post that they do not have access to,
 /// they are currently ungracefully redirected back to the post
 /// itself.
-pub fn edit_form(state: State<AppState>,
-                 req: HttpRequest<AppState>,
-                 query: Path<GetPost>) -> ConverseResponse {
+pub fn edit_form(
+    state: State<AppState>,
+    req: HttpRequest<AppState>,
+    query: Path<GetPost>,
+) -> ConverseResponse {
     let user_id = get_user_id(&req);
 
-    state.db.send(query.into_inner())
+    state
+        .db
+        .send(query.into_inner())
         .flatten()
         .from_err()
         .and_then(move |post| {
@@ -227,17 +252,21 @@ pub fn edit_form(state: State<AppState>,
 
 /// This handler "executes" an edit to a post if the current user owns
 /// the edited post.
-pub fn edit_post(state: State<AppState>,
-                 req: HttpRequest<AppState>,
-                 update: Form<UpdatePost>) -> ConverseResponse {
+pub fn edit_post(
+    state: State<AppState>,
+    req: HttpRequest<AppState>,
+    update: Form<UpdatePost>,
+) -> ConverseResponse {
     let user_id = get_user_id(&req);
 
-    state.db.send(GetPost { id: update.post_id })
+    state
+        .db
+        .send(GetPost { id: update.post_id })
         .flatten()
         .from_err()
         .and_then(move |post| {
             if user_id != 1 && post.user_id == user_id {
-                 Ok(())
+                Ok(())
             } else {
                 Err(ConverseError::PostEditForbidden {
                     user: user_id,
@@ -247,24 +276,34 @@ pub fn edit_post(state: State<AppState>,
         })
         .and_then(move |_| state.db.send(update.0).from_err())
         .flatten()
-        .map(|updated| HttpResponse::SeeOther()
-             .header("Location", format!("/thread/{}#post-{}",
-                                         updated.thread_id, updated.id))
-             .finish())
+        .map(|updated| {
+            HttpResponse::SeeOther()
+                .header(
+                    "Location",
+                    format!("/thread/{}#post-{}", updated.thread_id, updated.id),
+                )
+                .finish()
+        })
         .responder()
 }
 
 /// This handler executes a full-text search on the forum database and
 /// displays the results to the user.
-pub fn search_forum(state: State<AppState>,
-                    query: Query<SearchPosts>) -> ConverseResponse {
+pub fn search_forum(state: State<AppState>, query: Query<SearchPosts>) -> ConverseResponse {
     let query_string = query.query.clone();
-    state.db.send(query.into_inner())
+    state
+        .db
+        .send(query.into_inner())
         .flatten()
-        .and_then(move |results| state.renderer.send(SearchResultPage {
-            results,
-            query: query_string,
-        }).from_err())
+        .and_then(move |results| {
+            state
+                .renderer
+                .send(SearchResultPage {
+                    results,
+                    query: query_string,
+                })
+                .from_err()
+        })
         .flatten()
         .map(|res| HttpResponse::Ok().content_type(HTML).body(res))
         .responder()
@@ -272,11 +311,15 @@ pub fn search_forum(state: State<AppState>,
 
 /// This handler initiates an OIDC login.
 pub fn login(state: State<AppState>) -> ConverseResponse {
-    state.oidc.send(GetLoginUrl)
+    state
+        .oidc
+        .send(GetLoginUrl)
         .from_err()
-        .and_then(|url| Ok(HttpResponse::TemporaryRedirect()
-                           .header("Location", url)
-                           .finish()))
+        .and_then(|url| {
+            Ok(HttpResponse::TemporaryRedirect()
+                .header("Location", url)
+                .finish())
+        })
         .responder()
 }
 
@@ -286,21 +329,26 @@ pub fn login(state: State<AppState>) -> ConverseResponse {
 /// provider and a user lookup is performed. If a user with a matching
 /// email-address is found in the database, it is logged in -
 /// otherwise a new user is created.
-pub fn callback(state: State<AppState>,
-                data: Form<CodeResponse>,
-                req: HttpRequest<AppState>) -> ConverseResponse {
-    state.oidc.send(RetrieveToken(data.0)).flatten()
+pub fn callback(
+    state: State<AppState>,
+    data: Form<CodeResponse>,
+    req: HttpRequest<AppState>,
+) -> ConverseResponse {
+    state
+        .oidc
+        .send(RetrieveToken(data.0))
+        .flatten()
         .map(|author| LookupOrCreateUser {
             email: author.email,
             name: author.name,
         })
-        .and_then(move |msg| state.db.send(msg).from_err()).flatten()
+        .and_then(move |msg| state.db.send(msg).from_err())
+        .flatten()
         .and_then(move |user| {
             info!("Completed login for user {} ({})", user.email, user.id);
             req.remember(user.id.to_string());
-            Ok(HttpResponse::SeeOther()
-               .header("Location", "/")
-               .finish())})
+            Ok(HttpResponse::SeeOther().header("Location", "/").finish())
+        })
         .responder()
 }
 
@@ -317,9 +365,7 @@ impl EmbeddedFile for App<AppState> {
     fn static_file(self, path: &'static str, content: &'static [u8]) -> Self {
         self.route(path, Method::GET, move |_: HttpRequest<_>| {
             let mime = format!("{}", mime_guess::from_path(path).first_or_octet_stream());
-            HttpResponse::Ok()
-                .content_type(mime.as_str())
-                .body(content)
+            HttpResponse::Ok().content_type(mime.as_str()).body(content)
         })
     }
 }
@@ -327,7 +373,7 @@ impl EmbeddedFile for App<AppState> {
 /// Middleware used to enforce logins unceremoniously.
 pub struct RequireLogin;
 
-impl <S> Middleware<S> for RequireLogin {
+impl<S> Middleware<S> for RequireLogin {
     fn start(&self, req: &HttpRequest<S>) -> actix_web::Result<Started> {
         let logged_in = req.identity().is_some();
         let is_oidc_req = req.path().starts_with("/oidc");
@@ -336,7 +382,7 @@ impl <S> Middleware<S> for RequireLogin {
             Ok(Started::Response(
                 HttpResponse::SeeOther()
                     .header("Location", "/oidc/login")
-                    .finish()
+                    .finish(),
             ))
         } else {
             Ok(Started::Done)

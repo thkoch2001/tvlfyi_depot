@@ -44,25 +44,26 @@ impl<'a> Resolver<'a> {
                 }
 
                 Ok(())
-            }
+            },
 
             Statement::While(while_stmt) => {
                 self.resolve_expr(&mut while_stmt.condition)?;
                 self.resolve_stmt(&mut while_stmt.body)
-            }
+            },
 
             Statement::Function(func) => match Rc::get_mut(func) {
                 Some(func) => self.resolve_function(func),
                 // The resolver does not clone references, so unless
                 // the interpreter is called before the resolver this
                 // case should never happen.
-                None => return Err(Error {
-                    line: 0,
-                    kind: ErrorKind::InternalError(
-                        "multiple function references before interpretation"
-                            .into(),
-                    ),
-                }),
+                None => {
+                    return Err(Error {
+                        line: 0,
+                        kind: ErrorKind::InternalError(
+                            "multiple function references before interpretation".into(),
+                        ),
+                    })
+                },
             },
         }
     }
@@ -79,10 +80,7 @@ impl<'a> Resolver<'a> {
         Ok(())
     }
 
-    fn resolve_function(
-        &mut self,
-        func: &'a mut parser::Function,
-    ) -> Result<(), Error> {
+    fn resolve_function(&mut self, func: &'a mut parser::Function) -> Result<(), Error> {
         self.declare(&func.name.lexeme);
         self.define(&func.name.lexeme);
 
@@ -114,26 +112,22 @@ impl<'a> Resolver<'a> {
             Expr::Logical(log) => {
                 self.resolve_expr(&mut log.left)?;
                 self.resolve_expr(&mut log.right)
-            }
+            },
 
             Expr::Binary(binary) => {
                 self.resolve_expr(&mut binary.left)?;
                 self.resolve_expr(&mut binary.right)
-            }
+            },
         }
     }
 
-    fn resolve_variable(
-        &mut self,
-        var: &'a mut parser::Variable,
-    ) -> Result<(), Error> {
+    fn resolve_variable(&mut self, var: &'a mut parser::Variable) -> Result<(), Error> {
         if let Some(scope) = self.scopes.last_mut() {
             if let Some(false) = scope.get(var.name.lexeme.as_str()) {
                 return Err(Error {
                     line: var.name.line,
                     kind: ErrorKind::StaticError(
-                        "can't read local variable in its own initialiser"
-                            .into(),
+                        "can't read local variable in its own initialiser".into(),
                     ),
                 });
             }
@@ -143,10 +137,7 @@ impl<'a> Resolver<'a> {
         Ok(())
     }
 
-    fn resolve_assign(
-        &mut self,
-        assign: &'a mut parser::Assign,
-    ) -> Result<(), Error> {
+    fn resolve_assign(&mut self, assign: &'a mut parser::Assign) -> Result<(), Error> {
         self.resolve_expr(&mut assign.value)?;
         assign.depth = self.resolve_local(&assign.name);
         Ok(())
@@ -162,10 +153,7 @@ impl<'a> Resolver<'a> {
         None
     }
 
-    fn resolve_call(
-        &mut self,
-        call: &'a mut parser::Call,
-    ) -> Result<(), Error> {
+    fn resolve_call(&mut self, call: &'a mut parser::Call) -> Result<(), Error> {
         self.resolve_expr(&mut call.callee)?;
 
         for arg in call.args.iter_mut() {
@@ -198,10 +186,7 @@ impl<'a> Resolver<'a> {
     }
 }
 
-pub fn resolve(
-    globals: &[String],
-    block: &mut parser::Block,
-) -> Result<(), Error> {
+pub fn resolve(globals: &[String], block: &mut parser::Block) -> Result<(), Error> {
     let mut resolver: Resolver = Default::default();
 
     // Scope for static globals only starts, never ends.

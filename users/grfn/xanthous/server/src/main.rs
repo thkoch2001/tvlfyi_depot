@@ -13,11 +13,8 @@ use futures::Future;
 use metrics_exporter_prometheus::PrometheusBuilder;
 use nix::pty::Winsize;
 use pty::ChildHandle;
-use thrussh::ChannelId;
-use thrussh::{
-    server::{self, Auth, Session},
-    CryptoVec,
-};
+use thrussh::server::{self, Auth, Session};
+use thrussh::{ChannelId, CryptoVec};
 use thrussh_keys::decode_secret_key;
 use thrussh_keys::key::KeyPair;
 use tokio::fs::File;
@@ -245,17 +242,12 @@ impl server::Handler for Handler {
                 "PTY Requested"
             );
 
-            self.spawn_shell(
-                session.handle(),
-                channel,
-                term,
-                Winsize {
-                    ws_row: row_height as _,
-                    ws_col: col_width as _,
-                    ws_xpixel: pix_width as _,
-                    ws_ypixel: pix_height as _,
-                },
-            )
+            self.spawn_shell(session.handle(), channel, term, Winsize {
+                ws_row: row_height as _,
+                ws_col: col_width as _,
+                ws_xpixel: pix_width as _,
+                ws_ypixel: pix_height as _,
+            })
             .await?;
 
             Ok((self, session))

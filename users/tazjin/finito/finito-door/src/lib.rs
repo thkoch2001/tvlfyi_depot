@@ -27,15 +27,13 @@
 //! The door can only be locked if it is closed. Oh, and it has a few
 //! extra features:
 //!
-//! * whenever the door's state changes, an IRC channel receives a
-//!   message about that
+//! * whenever the door's state changes, an IRC channel receives a message about that
 //!
-//! * the door calls the police if the code is intered incorrectly more
-//!   than a specified number of times (mhm, lets say, three)
+//! * the door calls the police if the code is intered incorrectly more than a specified number of
+//!   times (mhm, lets say, three)
 //!
-//! * if the police is called the door can not be interacted with
-//!   anymore (and honestly, for the sake of this example, we don't
-//!   care how its functionality is restored)
+//! * if the police is called the door can not be interacted with anymore (and honestly, for the
+//!   sake of this example, we don't care how its functionality is restored)
 //!
 //! ## The Door - Visualized
 //!
@@ -71,7 +69,8 @@
 //!
 //! Alright, enough foreplay, lets dive in!
 
-#[macro_use] extern crate serde_derive;
+#[macro_use]
+extern crate serde_derive;
 
 extern crate failure;
 extern crate finito;
@@ -162,8 +161,7 @@ pub enum DoorAction {
 /// * Define the event-handling and state-entering logic (i.e. the meat of the
 /// ... door)
 ///
-/// * Implement the interpretation of our actions, i.e. implement actual
-///   side-effects
+/// * Implement the interpretation of our actions, i.e. implement actual side-effects
 impl FSM for DoorState {
     const FSM_NAME: &'static str = "door";
 
@@ -195,7 +193,7 @@ impl FSM for DoorState {
             // three:
             (DoorState::Closed, DoorEvent::Lock(code)) => {
                 return (DoorState::Locked { code, attempts: 3 }, vec![])
-            }
+            },
 
             // A locked door receiving an `Unlock`-event can do several
             // different things ...
@@ -223,7 +221,7 @@ impl FSM for DoorState {
                     },
                     vec![DoorAction::NotifyIRC("invalid code entered".into())],
                 );
-            }
+            },
 
             // This actually already concludes our event-handling logic. Our
             // uncaring door does absolutely nothing if you attempt to do
@@ -275,13 +273,13 @@ impl FSM for DoorState {
 
                 write!(file, "<doorbot> {}\n", msg)?;
                 Ok(vec![])
-            }
+            },
 
             DoorAction::CallThePolice => {
                 // TODO: call the police
                 println!("The police was called! For real!");
                 Ok(vec![])
-            }
+            },
         }
     }
 }
@@ -292,11 +290,13 @@ mod tests {
     use finito::advance;
 
     fn test_fsm<S: FSM>(initial: S, events: Vec<S::Event>) -> (S, Vec<S::Action>) {
-        events.into_iter().fold((initial, vec![]), |(state, mut actions), event| {
-            let (new_state, mut new_actions) = advance(state, event);
-            actions.append(&mut new_actions);
-            (new_state, actions)
-        })
+        events
+            .into_iter()
+            .fold((initial, vec![]), |(state, mut actions), event| {
+                let (new_state, mut new_actions) = advance(state, event);
+                actions.append(&mut new_actions);
+                (new_state, actions)
+            })
     }
 
     #[test]
@@ -313,7 +313,10 @@ mod tests {
         ];
         let (final_state, actions) = test_fsm(initial, events);
 
-        assert_eq!(final_state, DoorState::Locked { code: 4567, attempts: 2 });
+        assert_eq!(final_state, DoorState::Locked {
+            code: 4567,
+            attempts: 2
+        });
         assert_eq!(actions, vec![
             DoorAction::NotifyIRC("door was closed".into()),
             DoorAction::NotifyIRC("door was opened".into()),

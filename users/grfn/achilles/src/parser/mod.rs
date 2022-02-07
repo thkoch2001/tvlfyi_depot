@@ -155,39 +155,33 @@ mod tests {
     #[test]
     fn fn_decl() {
         let res = test_parse!(decl, "fn id x = x");
-        assert_eq!(
-            res,
-            Decl::Fun {
-                name: "id".try_into().unwrap(),
-                body: Fun {
-                    args: vec!["x".try_into().unwrap()],
-                    body: *ident_expr("x"),
-                }
+        assert_eq!(res, Decl::Fun {
+            name: "id".try_into().unwrap(),
+            body: Fun {
+                args: vec!["x".try_into().unwrap()],
+                body: *ident_expr("x"),
             }
-        )
+        })
     }
 
     #[test]
     fn ascripted_fn_args() {
         test_parse!(ascripted_arg, "(x : int)");
         let res = test_parse!(decl, "fn plus1 (x : int) = x + 1");
-        assert_eq!(
-            res,
-            Decl::Fun {
-                name: "plus1".try_into().unwrap(),
-                body: Fun {
-                    args: vec![Arg {
-                        ident: "x".try_into().unwrap(),
-                        type_: Some(Type::Int),
-                    }],
-                    body: Expr::BinaryOp {
-                        lhs: ident_expr("x"),
-                        op: BinaryOperator::Add,
-                        rhs: Box::new(Expr::Literal(Literal::Int(1))),
-                    }
+        assert_eq!(res, Decl::Fun {
+            name: "plus1".try_into().unwrap(),
+            body: Fun {
+                args: vec![Arg {
+                    ident: "x".try_into().unwrap(),
+                    type_: Some(Type::Int),
+                }],
+                body: Expr::BinaryOp {
+                    lhs: ident_expr("x"),
+                    op: BinaryOperator::Add,
+                    rhs: Box::new(Expr::Literal(Literal::Int(1))),
                 }
             }
-        );
+        });
     }
 
     #[test]
@@ -209,32 +203,26 @@ mod tests {
     #[test]
     fn top_level_ascription() {
         let res = test_parse!(toplevel, "ty id : fn a -> a");
-        assert_eq!(
-            res,
-            vec![Decl::Ascription {
-                name: "id".try_into().unwrap(),
-                type_: Type::Function(FunctionType {
-                    args: vec![Type::Var("a".try_into().unwrap())],
-                    ret: Box::new(Type::Var("a".try_into().unwrap()))
-                })
-            }]
-        )
+        assert_eq!(res, vec![Decl::Ascription {
+            name: "id".try_into().unwrap(),
+            type_: Type::Function(FunctionType {
+                args: vec![Type::Var("a".try_into().unwrap())],
+                ret: Box::new(Type::Var("a".try_into().unwrap()))
+            })
+        }])
     }
 
     #[test]
     fn return_unit() {
-        assert_eq!(
-            test_parse!(decl, "fn g _ = ()"),
-            Decl::Fun {
-                name: "g".try_into().unwrap(),
-                body: Fun {
-                    args: vec![Arg {
-                        ident: "_".try_into().unwrap(),
-                        type_: None,
-                    }],
-                    body: Expr::Literal(Literal::Unit),
-                },
-            }
-        )
+        assert_eq!(test_parse!(decl, "fn g _ = ()"), Decl::Fun {
+            name: "g".try_into().unwrap(),
+            body: Fun {
+                args: vec![Arg {
+                    ident: "_".try_into().unwrap(),
+                    type_: None,
+                }],
+                body: Expr::Literal(Literal::Unit),
+            },
+        })
     }
 }

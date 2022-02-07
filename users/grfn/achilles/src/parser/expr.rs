@@ -1,9 +1,8 @@
 use std::borrow::Cow;
 
-use nom::alt;
 use nom::character::complete::{digit1, multispace0, multispace1};
 use nom::{
-    call, char, complete, delimited, do_parse, flat_map, many0, map, named, opt, parse_to,
+    alt, call, char, complete, delimited, do_parse, flat_map, many0, map, named, opt, parse_to,
     preceded, separated_list0, separated_list1, tag, tuple,
 };
 use pratt::{Affix, Associativity, PrattParser, Precedence};
@@ -391,84 +390,69 @@ pub(crate) mod tests {
         fn mul_plus() {
             let (rem, res) = expr("x*y+z").unwrap();
             assert!(rem.is_empty());
-            assert_eq!(
-                res,
-                BinaryOp {
-                    lhs: Box::new(BinaryOp {
-                        lhs: ident_expr("x"),
-                        op: Mul,
-                        rhs: ident_expr("y")
-                    }),
-                    op: Add,
-                    rhs: ident_expr("z")
-                }
-            )
+            assert_eq!(res, BinaryOp {
+                lhs: Box::new(BinaryOp {
+                    lhs: ident_expr("x"),
+                    op: Mul,
+                    rhs: ident_expr("y")
+                }),
+                op: Add,
+                rhs: ident_expr("z")
+            })
         }
 
         #[test]
         fn mul_plus_ws() {
             let (rem, res) = expr("x * y    +    z").unwrap();
             assert!(rem.is_empty(), "non-empty remainder: \"{}\"", rem);
-            assert_eq!(
-                res,
-                BinaryOp {
-                    lhs: Box::new(BinaryOp {
-                        lhs: ident_expr("x"),
-                        op: Mul,
-                        rhs: ident_expr("y")
-                    }),
-                    op: Add,
-                    rhs: ident_expr("z")
-                }
-            )
+            assert_eq!(res, BinaryOp {
+                lhs: Box::new(BinaryOp {
+                    lhs: ident_expr("x"),
+                    op: Mul,
+                    rhs: ident_expr("y")
+                }),
+                op: Add,
+                rhs: ident_expr("z")
+            })
         }
 
         #[test]
         fn unary() {
             let (rem, res) = expr("x * -z").unwrap();
             assert!(rem.is_empty(), "non-empty remainder: \"{}\"", rem);
-            assert_eq!(
-                res,
-                BinaryOp {
-                    lhs: ident_expr("x"),
-                    op: Mul,
-                    rhs: Box::new(UnaryOp {
-                        op: Neg,
-                        rhs: ident_expr("z"),
-                    })
-                }
-            )
+            assert_eq!(res, BinaryOp {
+                lhs: ident_expr("x"),
+                op: Mul,
+                rhs: Box::new(UnaryOp {
+                    op: Neg,
+                    rhs: ident_expr("z"),
+                })
+            })
         }
 
         #[test]
         fn mul_literal() {
             let (rem, res) = expr("x * 3").unwrap();
             assert!(rem.is_empty());
-            assert_eq!(
-                res,
-                BinaryOp {
-                    lhs: ident_expr("x"),
-                    op: Mul,
-                    rhs: Box::new(Expr::Literal(Literal::Int(3))),
-                }
-            )
+            assert_eq!(res, BinaryOp {
+                lhs: ident_expr("x"),
+                op: Mul,
+                rhs: Box::new(Expr::Literal(Literal::Int(3))),
+            })
         }
 
         #[test]
         fn equ() {
             let res = test_parse!(expr, "x * 7 == 7");
-            assert_eq!(
-                res,
-                BinaryOp {
-                    lhs: Box::new(BinaryOp {
-                        lhs: ident_expr("x"),
-                        op: Mul,
-                        rhs: Box::new(Expr::Literal(Literal::Int(7)))
-                    }),
-                    op: Equ,
+            assert_eq!(res, BinaryOp {
+                lhs: Box::new(BinaryOp {
+                    lhs: ident_expr("x"),
+                    op: Mul,
                     rhs: Box::new(Expr::Literal(Literal::Int(7)))
-                }
-            )
+                }),
+                op: Equ,
+                rhs: Box::new(Expr::Literal(Literal::Int(7)))
+            })
         }
     }
 
@@ -511,152 +495,128 @@ pub(crate) mod tests {
     #[test]
     fn let_complex() {
         let res = test_parse!(expr, "let x = 1; y = x * 7 in (x + y) * 4");
-        assert_eq!(
-            res,
-            Let {
-                bindings: vec![
-                    Binding {
-                        pat: Pattern::Id(Ident::try_from("x").unwrap()),
-                        type_: None,
-                        body: Expr::Literal(Literal::Int(1))
-                    },
-                    Binding {
-                        pat: Pattern::Id(Ident::try_from("y").unwrap()),
-                        type_: None,
-                        body: Expr::BinaryOp {
-                            lhs: ident_expr("x"),
-                            op: Mul,
-                            rhs: Box::new(Expr::Literal(Literal::Int(7)))
-                        }
-                    }
-                ],
-                body: Box::new(Expr::BinaryOp {
-                    lhs: Box::new(Expr::BinaryOp {
+        assert_eq!(res, Let {
+            bindings: vec![
+                Binding {
+                    pat: Pattern::Id(Ident::try_from("x").unwrap()),
+                    type_: None,
+                    body: Expr::Literal(Literal::Int(1))
+                },
+                Binding {
+                    pat: Pattern::Id(Ident::try_from("y").unwrap()),
+                    type_: None,
+                    body: Expr::BinaryOp {
                         lhs: ident_expr("x"),
-                        op: Add,
-                        rhs: ident_expr("y"),
-                    }),
-                    op: Mul,
-                    rhs: Box::new(Expr::Literal(Literal::Int(4))),
-                })
-            }
-        )
+                        op: Mul,
+                        rhs: Box::new(Expr::Literal(Literal::Int(7)))
+                    }
+                }
+            ],
+            body: Box::new(Expr::BinaryOp {
+                lhs: Box::new(Expr::BinaryOp {
+                    lhs: ident_expr("x"),
+                    op: Add,
+                    rhs: ident_expr("y"),
+                }),
+                op: Mul,
+                rhs: Box::new(Expr::Literal(Literal::Int(4))),
+            })
+        })
     }
 
     #[test]
     fn if_simple() {
         let res = test_parse!(expr, "if x == 8 then 9 else 20");
-        assert_eq!(
-            res,
-            If {
-                condition: Box::new(BinaryOp {
-                    lhs: ident_expr("x"),
-                    op: Equ,
-                    rhs: Box::new(Expr::Literal(Literal::Int(8))),
-                }),
-                then: Box::new(Expr::Literal(Literal::Int(9))),
-                else_: Box::new(Expr::Literal(Literal::Int(20)))
-            }
-        )
+        assert_eq!(res, If {
+            condition: Box::new(BinaryOp {
+                lhs: ident_expr("x"),
+                op: Equ,
+                rhs: Box::new(Expr::Literal(Literal::Int(8))),
+            }),
+            then: Box::new(Expr::Literal(Literal::Int(9))),
+            else_: Box::new(Expr::Literal(Literal::Int(20)))
+        })
     }
 
     #[test]
     fn no_arg_call() {
         let res = test_parse!(expr, "f()");
-        assert_eq!(
-            res,
-            Expr::Call {
-                fun: ident_expr("f"),
-                args: vec![]
-            }
-        );
+        assert_eq!(res, Expr::Call {
+            fun: ident_expr("f"),
+            args: vec![]
+        });
     }
 
     #[test]
     fn unit_call() {
         let res = test_parse!(expr, "f ()");
-        assert_eq!(
-            res,
-            Expr::Call {
-                fun: ident_expr("f"),
-                args: vec![Expr::Literal(Literal::Unit)]
-            }
-        )
+        assert_eq!(res, Expr::Call {
+            fun: ident_expr("f"),
+            args: vec![Expr::Literal(Literal::Unit)]
+        })
     }
 
     #[test]
     fn call_with_args() {
         let res = test_parse!(expr, "f x 1");
-        assert_eq!(
-            res,
-            Expr::Call {
-                fun: ident_expr("f"),
-                args: vec![*ident_expr("x"), Expr::Literal(Literal::Int(1))]
-            }
-        )
+        assert_eq!(res, Expr::Call {
+            fun: ident_expr("f"),
+            args: vec![*ident_expr("x"), Expr::Literal(Literal::Int(1))]
+        })
     }
 
     #[test]
     fn call_funcref() {
         let res = test_parse!(expr, "(let x = 1 in x) 2");
-        assert_eq!(
-            res,
-            Expr::Call {
-                fun: Box::new(Expr::Let {
-                    bindings: vec![Binding {
-                        pat: Pattern::Id(Ident::try_from("x").unwrap()),
-                        type_: None,
-                        body: Expr::Literal(Literal::Int(1))
-                    }],
-                    body: ident_expr("x")
-                }),
-                args: vec![Expr::Literal(Literal::Int(2))]
-            }
-        )
+        assert_eq!(res, Expr::Call {
+            fun: Box::new(Expr::Let {
+                bindings: vec![Binding {
+                    pat: Pattern::Id(Ident::try_from("x").unwrap()),
+                    type_: None,
+                    body: Expr::Literal(Literal::Int(1))
+                }],
+                body: ident_expr("x")
+            }),
+            args: vec![Expr::Literal(Literal::Int(2))]
+        })
     }
 
     #[test]
     fn anon_function() {
         let res = test_parse!(expr, "let id = fn x = x in id 1");
-        assert_eq!(
-            res,
-            Expr::Let {
-                bindings: vec![Binding {
-                    pat: Pattern::Id(Ident::try_from("id").unwrap()),
-                    type_: None,
-                    body: Expr::Fun(Box::new(Fun {
-                        args: vec![Arg::try_from("x").unwrap()],
-                        body: *ident_expr("x")
-                    }))
-                }],
-                body: Box::new(Expr::Call {
-                    fun: ident_expr("id"),
-                    args: vec![Expr::Literal(Literal::Int(1))],
-                })
-            }
-        );
+        assert_eq!(res, Expr::Let {
+            bindings: vec![Binding {
+                pat: Pattern::Id(Ident::try_from("id").unwrap()),
+                type_: None,
+                body: Expr::Fun(Box::new(Fun {
+                    args: vec![Arg::try_from("x").unwrap()],
+                    body: *ident_expr("x")
+                }))
+            }],
+            body: Box::new(Expr::Call {
+                fun: ident_expr("id"),
+                args: vec![Expr::Literal(Literal::Int(1))],
+            })
+        });
     }
 
     #[test]
     fn tuple_binding() {
         let res = test_parse!(expr, "let (x, y) = (1, 2) in x");
-        assert_eq!(
-            res,
-            Expr::Let {
-                bindings: vec![Binding {
-                    pat: Pattern::Tuple(vec![
-                        Pattern::Id(Ident::from_str_unchecked("x")),
-                        Pattern::Id(Ident::from_str_unchecked("y"))
-                    ]),
-                    body: Expr::Tuple(vec![
-                        Expr::Literal(Literal::Int(1)),
-                        Expr::Literal(Literal::Int(2))
-                    ]),
-                    type_: None
-                }],
-                body: Box::new(Expr::Ident(Ident::from_str_unchecked("x")))
-            }
-        )
+        assert_eq!(res, Expr::Let {
+            bindings: vec![Binding {
+                pat: Pattern::Tuple(vec![
+                    Pattern::Id(Ident::from_str_unchecked("x")),
+                    Pattern::Id(Ident::from_str_unchecked("y"))
+                ]),
+                body: Expr::Tuple(vec![
+                    Expr::Literal(Literal::Int(1)),
+                    Expr::Literal(Literal::Int(2))
+                ]),
+                type_: None
+            }],
+            body: Box::new(Expr::Ident(Ident::from_str_unchecked("x")))
+        })
     }
 
     mod ascriptions {
@@ -665,54 +625,45 @@ pub(crate) mod tests {
         #[test]
         fn bare_ascription() {
             let res = test_parse!(expr, "1: float");
-            assert_eq!(
-                res,
-                Expr::Ascription {
-                    expr: Box::new(Expr::Literal(Literal::Int(1))),
-                    type_: Type::Float
-                }
-            )
+            assert_eq!(res, Expr::Ascription {
+                expr: Box::new(Expr::Literal(Literal::Int(1))),
+                type_: Type::Float
+            })
         }
 
         #[test]
         fn fn_body_ascription() {
             let res = test_parse!(expr, "let const_1 = fn x = 1: int in const_1 2");
-            assert_eq!(
-                res,
-                Expr::Let {
-                    bindings: vec![Binding {
-                        pat: Pattern::Id(Ident::try_from("const_1").unwrap()),
-                        type_: None,
-                        body: Expr::Fun(Box::new(Fun {
-                            args: vec![Arg::try_from("x").unwrap()],
-                            body: Expr::Ascription {
-                                expr: Box::new(Expr::Literal(Literal::Int(1))),
-                                type_: Type::Int,
-                            }
-                        }))
-                    }],
-                    body: Box::new(Expr::Call {
-                        fun: ident_expr("const_1"),
-                        args: vec![Expr::Literal(Literal::Int(2))]
-                    })
-                }
-            )
+            assert_eq!(res, Expr::Let {
+                bindings: vec![Binding {
+                    pat: Pattern::Id(Ident::try_from("const_1").unwrap()),
+                    type_: None,
+                    body: Expr::Fun(Box::new(Fun {
+                        args: vec![Arg::try_from("x").unwrap()],
+                        body: Expr::Ascription {
+                            expr: Box::new(Expr::Literal(Literal::Int(1))),
+                            type_: Type::Int,
+                        }
+                    }))
+                }],
+                body: Box::new(Expr::Call {
+                    fun: ident_expr("const_1"),
+                    args: vec![Expr::Literal(Literal::Int(2))]
+                })
+            })
         }
 
         #[test]
         fn let_binding_ascripted() {
             let res = test_parse!(expr, "let x: int = 1 in x");
-            assert_eq!(
-                res,
-                Expr::Let {
-                    bindings: vec![Binding {
-                        pat: Pattern::Id(Ident::try_from("x").unwrap()),
-                        type_: Some(Type::Int),
-                        body: Expr::Literal(Literal::Int(1))
-                    }],
-                    body: ident_expr("x")
-                }
-            )
+            assert_eq!(res, Expr::Let {
+                bindings: vec![Binding {
+                    pat: Pattern::Id(Ident::try_from("x").unwrap()),
+                    type_: Some(Type::Int),
+                    body: Expr::Literal(Literal::Int(1))
+                }],
+                body: ident_expr("x")
+            })
         }
     }
 }

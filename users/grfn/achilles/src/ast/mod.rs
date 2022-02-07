@@ -209,7 +209,7 @@ impl<'a> Expr<'a> {
             Expr::Literal(ref lit) => Expr::Literal(lit.to_owned()),
             Expr::Tuple(ref members) => {
                 Expr::Tuple(members.into_iter().map(Expr::to_owned).collect())
-            }
+            },
             Expr::UnaryOp { op, rhs } => Expr::UnaryOp {
                 op: *op,
                 rhs: Box::new((**rhs).to_owned()),
@@ -375,7 +375,7 @@ impl<'a> Type<'a> {
                             .zip(args2)
                             .all(|(a1, a2)| do_alpha_equiv(substs, a1, a2))
                         && do_alpha_equiv(substs, ret1, ret2)
-                }
+                },
                 _ => lhs == rhs,
             }
         }

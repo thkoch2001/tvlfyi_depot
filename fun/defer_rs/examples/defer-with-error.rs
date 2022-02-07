@@ -4,17 +4,17 @@ use std::rc::Rc;
 use std::sync::RwLock;
 
 struct Defer<F: Fn()> {
-    f: F
+    f: F,
 }
 
-impl <F: Fn()> Drop for Defer<F> {
+impl<F: Fn()> Drop for Defer<F> {
     fn drop(&mut self) {
         (self.f)()
     }
 }
 
 // Only added this for Go-syntax familiarity ;-)
-fn  defer<F: Fn()>(f: F) -> Defer<F> {
+fn defer<F: Fn()>(f: F) -> Defer<F> {
     Defer { f }
 }
 
@@ -29,7 +29,9 @@ type ErrorHandle<T> = Rc<RwLock<Option<T>>>;
 ///////////////////
 
 #[derive(Debug)] // Debug trait for some default way to print the type.
-enum Error { DropError }
+enum Error {
+    DropError,
+}
 
 fn main() {
     // Create a place to store the error.
@@ -60,7 +62,7 @@ fn main() {
 
     match *drop_err.read().unwrap() {
         Some(ref err) => println!("Oh no, an error occured: {:?}!", err),
-        None => println!("Phew, everything went well.")
+        None => println!("Phew, everything went well."),
     };
 }
 

@@ -48,7 +48,7 @@ macro_rules! with_type {
                         $val,
                     )),
                 })
-            }
+            },
         }
     };
 }
@@ -91,12 +91,12 @@ impl VM {
                     } else {
                         return Ok(Value::Nil);
                     }
-                }
+                },
 
                 OpCode::OpConstant(idx) => {
                     let c = self.chunk.constant(*idx).clone();
                     self.push(c);
-                }
+                },
 
                 OpCode::OpNil => self.push(Value::Nil),
                 OpCode::OpTrue => self.push(Value::Bool(true)),
@@ -105,26 +105,21 @@ impl VM {
                 OpCode::OpNot => {
                     let v = self.pop();
                     self.push(Value::Bool(v.is_falsey()));
-                }
+                },
 
                 OpCode::OpEqual => {
                     let b = self.pop();
                     let a = self.pop();
                     self.push(Value::Bool(a == b));
-                }
+                },
 
                 OpCode::OpLess => binary_op!(self, Number, Bool, <),
                 OpCode::OpGreater => binary_op!(self, Number, Bool, >),
 
                 OpCode::OpNegate => {
                     let v = self.pop();
-                    with_type!(
-                        self,
-                        v,
-                        Value::Number(num),
-                        self.push(Value::Number(-num))
-                    );
-                }
+                    with_type!(self, v, Value::Number(num), self.push(Value::Number(-num)));
+                },
 
                 OpCode::OpSubtract => binary_op!(self, Number, -),
                 OpCode::OpMultiply => binary_op!(self, Number, *),
@@ -139,28 +134,31 @@ impl VM {
                             let mut new_s = self.resolve_str(&s_a).to_string();
                             new_s.push_str(self.resolve_str(&s_b));
                             self.push(Value::String(new_s.into()));
-                        }
+                        },
 
-                        (Value::Number(n_a), Value::Number(n_b)) =>
-                            self.push(Value::Number(n_a + n_b)),
+                        (Value::Number(n_a), Value::Number(n_b)) => {
+                            self.push(Value::Number(n_a + n_b))
+                        },
 
-                        _ => return Err(Error {
-                            line: self.chunk.get_line(self.ip - 1),
-                            kind: ErrorKind::TypeError(
-                                "'+' operator only works on strings and numbers".into()
-                            ),
-                        })
+                        _ => {
+                            return Err(Error {
+                                line: self.chunk.get_line(self.ip - 1),
+                                kind: ErrorKind::TypeError(
+                                    "'+' operator only works on strings and numbers".into(),
+                                ),
+                            })
+                        },
                     }
-                }
+                },
 
                 OpCode::OpPrint => {
                     let val = self.pop();
                     println!("{}", self.print_value(val));
-                }
+                },
 
                 OpCode::OpPop => {
                     self.last_drop = Some(self.pop());
-                }
+                },
 
                 OpCode::OpDefineGlobal(name_idx) => {
                     let name = self.chunk.constant(*name_idx);
@@ -169,7 +167,7 @@ impl VM {
                         let val = self.pop();
                         self.globals.insert(name, val);
                     });
-                }
+                },
 
                 OpCode::OpGetGlobal(name_idx) => {
                     let name = self.chunk.constant(*name_idx);
@@ -180,7 +178,7 @@ impl VM {
                         };
                         self.push(val)
                     });
-                }
+                },
 
                 OpCode::OpSetGlobal(name_idx) => {
                     let name = self.chunk.constant(*name_idx).clone();
@@ -190,32 +188,31 @@ impl VM {
                             None => unimplemented!("variable not found error"),
                             Some(val) => {
                                 *val = new_val;
-                            }
+                            },
                         }
                     });
-                }
+                },
 
                 OpCode::OpGetLocal(local_idx) => {
                     let value = self.stack[local_idx.0].clone();
                     self.push(value);
-                }
+                },
 
                 OpCode::OpSetLocal(local_idx) => {
                     debug_assert!(
                         self.stack.len() > local_idx.0,
                         "stack is not currently large enough for local"
                     );
-                    self.stack[local_idx.0] =
-                        self.stack.last().unwrap().clone();
-                }
+                    self.stack[local_idx.0] = self.stack.last().unwrap().clone();
+                },
 
                 OpCode::OpJumpPlaceholder(_) => {
                     panic!("unpatched jump detected - this is a fatal compiler error!");
-                }
+                },
 
                 OpCode::OpJump(offset) => {
                     self.ip += offset.0;
-                }
+                },
 
                 OpCode::OpJumpIfFalse(offset) => {
                     if self
@@ -226,7 +223,7 @@ impl VM {
                     {
                         self.ip += offset.0;
                     }
-                }
+                },
             }
 
             #[cfg(feature = "disassemble")]
@@ -240,7 +237,7 @@ impl VM {
         match val {
             Value::String(string @ LoxString::Interned(_)) => {
                 Value::String(self.resolve_str(&string).to_string().into())
-            }
+            },
             _ => val,
         }
     }
@@ -255,9 +252,7 @@ impl VM {
     fn print_value(&self, val: Value) -> String {
         match val {
             Value::String(LoxString::Heap(s)) => s,
-            Value::String(LoxString::Interned(id)) => {
-                self.strings.lookup(id).into()
-            }
+            Value::String(LoxString::Interned(id)) => self.strings.lookup(id).into(),
             _ => format!("{:?}", val),
         }
     }

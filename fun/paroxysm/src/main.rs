@@ -7,8 +7,7 @@ use crate::cfg::Config;
 use crate::keyword::KeywordDetails;
 use diesel::pg::PgConnection;
 use diesel::r2d2::{ConnectionManager, Pool};
-use failure::format_err;
-use failure::Error;
+use failure::{format_err, Error};
 use irc::client::prelude::*;
 use lazy_static::lazy_static;
 use log::{debug, info, warn};
@@ -153,8 +152,9 @@ impl App {
         // Use `nick` here, so things like "grfn: see glittershark" work.
         let val = if let Some(last) = chan_lastmsgs.get(nick_to_grab) {
             if last.starts_with("\x01ACTION ") {
-                // Yes, this is inefficient, but it's better than writing some hacky CTCP parsing code
-                // I guess (also, characters are hard, so just blindly slicing seems like a bad idea)
+                // Yes, this is inefficient, but it's better than writing some hacky CTCP parsing
+                // code I guess (also, characters are hard, so just blindly slicing
+                // seems like a bad idea)
                 format!(
                     "* {} {}",
                     nick_to_grab,
@@ -221,7 +221,7 @@ impl App {
                     "*" => Some(-1),
                     x => x.parse::<usize>().map(|x| x as i32).ok(),
                 }
-            }
+            },
             None => None,
         };
         debug!("Querying {} with idx {:?}", subj, idx);
@@ -299,7 +299,7 @@ impl App {
                             .send_notice(target, format!("\x02{}\x0f: no entries yet", subj))?;
                     }
                 }
-            }
+            },
             None => {
                 // If someone just posts "??????????", don't spam the channel with
                 // an error message (but do allow joke entries to appear if set).
@@ -307,7 +307,7 @@ impl App {
                     self.client
                         .send_notice(target, format!("\x02{}\x0f: never heard of it", subj))?;
                 }
-            }
+            },
         }
         Ok(())
     }
@@ -349,14 +349,14 @@ impl App {
                         }
                     }
                 }
-            }
+            },
             Command::INVITE(nick, channel) => {
                 if self.cfg.admins.contains(&nick) {
                     info!("Joining {} after admin invite", channel);
                     self.client.send_join(channel)?;
                 }
-            }
-            _ => {}
+            },
+            _ => {},
         }
         Ok(())
     }

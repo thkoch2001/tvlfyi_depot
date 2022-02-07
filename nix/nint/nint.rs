@@ -1,11 +1,11 @@
 extern crate serde_json;
 
 use serde_json::Value;
+use std::convert::TryFrom;
 use std::ffi::OsString;
-use std::os::unix::ffi::{OsStringExt, OsStrExt};
-use std::io::{Error, ErrorKind, Write, stdout, stderr};
+use std::io::{stderr, stdout, Error, ErrorKind, Write};
+use std::os::unix::ffi::{OsStrExt, OsStringExt};
 use std::process::Command;
-use std::convert::{TryFrom};
 
 fn render_nix_string(s: &OsString) -> OsString {
     let mut rendered = Vec::new();
@@ -16,8 +16,8 @@ fn render_nix_string(s: &OsString) -> OsString {
         match char::from(*b) {
             '\"' => rendered.extend(b"\\\""),
             '\\' => rendered.extend(b"\\\\"),
-            '$'  => rendered.extend(b"\\$"),
-            _    => rendered.push(*b),
+            '$' => rendered.extend(b"\\$"),
+            _ => rendered.push(*b),
         }
     }
 
@@ -48,17 +48,14 @@ fn render_nix_list(arr: &[OsString]) -> OsString {
 macro_rules! handle_set_output {
     ($map_name:ident, $output_name:ident) => {
         match $map_name.get(stringify!($output_name)) {
-            Some(Value::String(s)) =>
-                $output_name().write_all(s.as_bytes()),
-            Some(_) => Err(
-                Error::new(
-                    ErrorKind::Other,
-                    format!("Attribute {} must be a string!", stringify!($output_name)),
-                )
-            ),
+            Some(Value::String(s)) => $output_name().write_all(s.as_bytes()),
+            Some(_) => Err(Error::new(
+                ErrorKind::Other,
+                format!("Attribute {} must be a string!", stringify!($output_name)),
+            )),
             None => Ok(()),
         }
-    }
+    };
 }
 
 fn main() -> std::io::Result<()> {
@@ -83,13 +80,13 @@ fn main() -> std::io::Result<()> {
         }
 
         if in_args {
-            match(arg.to_str()) {
+            match (arg.to_str()) {
                 Some("--arg") | Some("--argstr") => {
                     nix_args.push(arg);
                     nix_args.push(args.next().unwrap());
                     nix_args.push(args.next().unwrap());
                     Ok(())
-                }
+                },
                 _ => Err(Error::new(ErrorKind::Other, "unknown argument")),
             }?
         } else {
@@ -116,9 +113,7 @@ fn main() -> std::io::Result<()> {
 
         nix_args.push(argv[0].clone());
 
-        let run = Command::new("nix-instantiate")
-                          .args(nix_args)
-                          .output()?;
+        let run = Command::new("nix-instantiate").args(nix_args).output()?;
 
         match serde_json::from_slice(&run.stdout[..]) {
             Ok(Value::String(s)) => stdout().write_all(s.as_bytes()),
@@ -132,21 +127,19 @@ fn main() -> std::io::Result<()> {
 
                         match code {
                             Some(i) => std::process::exit(i),
-                            None => Err(
-                                Error::new(
-                                    ErrorKind::Other,
-                                    "Attribute exit is not an i32"
-                                )
-                            ),
+                            None => {
+                                Err(Error::new(ErrorKind::Other, "Attribute exit is not an i32"))
+                            },
                         }
                     },
-                    Some(_) => Err(
-                        Error::new(ErrorKind::Other, "exit must be a number")
-                    ),
+                    Some(_) => Err(Error::new(ErrorKind::Other, "exit must be a number")),
                     None => Ok(()),
                 }
             },
-            Ok(_) => Err(Error::new(ErrorKind::Other, "output must be a string or an object")),
+            Ok(_) => Err(Error::new(
+                ErrorKind::Other,
+                "output must be a string or an object",
+            )),
             _ => {
                 stderr().write_all(&run.stderr[..]);
                 Err(Error::new(ErrorKind::Other, "internal nix error"))

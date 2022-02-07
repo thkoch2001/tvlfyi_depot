@@ -173,7 +173,7 @@ impl<'ast> Typechecker<'ast> {
             Pattern::Id(ident) => {
                 self.env.set(ident.clone(), type_.clone());
                 Ok(hir::Pattern::Id(ident, type_))
-            }
+            },
             Pattern::Tuple(members) => {
                 let mut tys = Vec::with_capacity(members.len());
                 let mut hir_members = Vec::with_capacity(members.len());
@@ -185,7 +185,7 @@ impl<'ast> Typechecker<'ast> {
                 let tuple_type = Type::Tuple(tys);
                 self.unify(&tuple_type, &type_)?;
                 Ok(hir::Pattern::Tuple(hir_members))
-            }
+            },
         }
     }
 
@@ -198,7 +198,7 @@ impl<'ast> Typechecker<'ast> {
                     .ok_or_else(|| Error::UndefinedVariable(ident.to_owned()))?
                     .clone();
                 Ok(hir::Expr::Ident(ident, type_))
-            }
+            },
             ast::Expr::Literal(lit) => {
                 let type_ = match lit {
                     Literal::Int(_) => Type::Prim(PrimType::Int),
@@ -207,7 +207,7 @@ impl<'ast> Typechecker<'ast> {
                     Literal::Unit => Type::Unit,
                 };
                 Ok(hir::Expr::Literal(lit.to_owned(), type_))
-            }
+            },
             ast::Expr::Tuple(members) => {
                 let members = members
                     .into_iter()
@@ -215,7 +215,7 @@ impl<'ast> Typechecker<'ast> {
                     .collect::<Result<Vec<_>>>()?;
                 let type_ = Type::Tuple(members.iter().map(|expr| expr.type_().clone()).collect());
                 Ok(hir::Expr::Tuple(members, type_))
-            }
+            },
             ast::Expr::UnaryOp { op, rhs } => todo!(),
             ast::Expr::BinaryOp { lhs, op, rhs } => {
                 let lhs = self.tc_expr(*lhs)?;
@@ -224,14 +224,14 @@ impl<'ast> Typechecker<'ast> {
                     BinaryOperator::Equ | BinaryOperator::Neq => {
                         self.unify(lhs.type_(), rhs.type_())?;
                         Type::Prim(PrimType::Bool)
-                    }
+                    },
                     BinaryOperator::Add | BinaryOperator::Sub | BinaryOperator::Mul => {
                         let ty = self.unify(lhs.type_(), rhs.type_())?;
                         // if !matches!(ty, Type::Int | Type::Float) {
                         //     return Err(Error::NonNumeric(ty));
                         // }
                         ty
-                    }
+                    },
                     BinaryOperator::Div => todo!(),
                     BinaryOperator::Pow => todo!(),
                 };
@@ -241,7 +241,7 @@ impl<'ast> Typechecker<'ast> {
                     rhs: Box::new(rhs),
                     type_,
                 })
-            }
+            },
             ast::Expr::Let { bindings, body } => {
                 self.env.push();
                 let bindings = bindings
@@ -265,7 +265,7 @@ impl<'ast> Typechecker<'ast> {
                     type_: body.type_().clone(),
                     body: Box::new(body),
                 })
-            }
+            },
             ast::Expr::If {
                 condition,
                 then,
@@ -282,7 +282,7 @@ impl<'ast> Typechecker<'ast> {
                     else_: Box::new(else_),
                     type_,
                 })
-            }
+            },
             ast::Expr::Fun(f) => {
                 let ast::Fun { args, body } = *f;
                 self.env.push();
@@ -308,7 +308,7 @@ impl<'ast> Typechecker<'ast> {
                     args,
                     body: Box::new(body),
                 })
-            }
+            },
             ast::Expr::Call { fun, args } => {
                 let ret_ty = self.fresh_ex();
                 let arg_tys = args.iter().map(|_| self.fresh_ex()).collect::<Vec<_>>();
@@ -335,13 +335,13 @@ impl<'ast> Typechecker<'ast> {
                     args,
                     type_: ret_ty,
                 })
-            }
+            },
             ast::Expr::Ascription { expr, type_ } => {
                 let expr = self.tc_expr(*expr)?;
                 let type_ = self.type_from_ast_type(type_);
                 self.unify(expr.type_(), &type_)?;
                 Ok(expr)
-            }
+            },
         }
     }
 
@@ -379,12 +379,12 @@ impl<'ast> Typechecker<'ast> {
                     })),
                     _ => unreachable!(),
                 }
-            }
+            },
             ast::Decl::Ascription { name, type_ } => {
                 let type_ = self.type_from_ast_type(type_);
                 self.env.set(name.clone(), type_);
                 Ok(None)
-            }
+            },
             ast::Decl::Extern { name, type_ } => {
                 let type_ = self.type_from_ast_type(ast::Type::Function(type_));
                 self.env.set(name.clone(), type_.clone());
@@ -397,7 +397,7 @@ impl<'ast> Typechecker<'ast> {
                     arg_types,
                     ret_type,
                 }))
-            }
+            },
         }
     }
 
@@ -421,12 +421,12 @@ impl<'ast> Typechecker<'ast> {
                 Some(var @ ast::Type::Var(_)) => {
                     let var = self.type_from_ast_type(var);
                     self.unify(&var, ty)
-                }
+                },
                 Some(existing_ty) => match ty {
                     Type::Exist(_) => {
                         let rhs = self.type_from_ast_type(existing_ty);
                         self.unify(ty, &rhs)
-                    }
+                    },
                     _ => Err(Error::TypeMismatch {
                         expected: ty.clone(),
                         actual: self.type_from_ast_type(existing_ty),
@@ -449,9 +449,9 @@ impl<'ast> Typechecker<'ast> {
                     None => {
                         self.instantiations.set(ident, ty.clone());
                         Ok(ty.clone())
-                    }
+                    },
                 }
-            }
+            },
             (Type::Prim(p1), Type::Prim(p2)) if p1 == p2 => Ok(ty2.clone()),
             (Type::Tuple(t1), Type::Tuple(t2)) if t1.len() == t2.len() => {
                 let ts = t1
@@ -460,7 +460,7 @@ impl<'ast> Typechecker<'ast> {
                     .map(|(t1, t2)| self.unify(t1, t2))
                     .try_collect()?;
                 Ok(Type::Tuple(ts))
-            }
+            },
             (
                 Type::Fun {
                     args: args1,
@@ -481,7 +481,7 @@ impl<'ast> Typechecker<'ast> {
                     args,
                     ret: Box::new(ret),
                 })
-            }
+            },
             (Type::Nullary(_), _) | (_, Type::Nullary(_)) => todo!(),
             _ => Err(Error::TypeMismatch {
                 expected: ty1.clone(),
@@ -542,7 +542,7 @@ impl<'ast> Typechecker<'ast> {
                         Some(r) => r,
                         None => return Ok(None),
                     };
-                }
+                },
                 Type::Univ(tv) => {
                     let ident = self.name_univ(*tv);
                     if let Some(r) = self.instantiations.resolve(&ident) {
@@ -550,7 +550,7 @@ impl<'ast> Typechecker<'ast> {
                     } else {
                         break Some(ast::Type::Var(ident));
                     }
-                }
+                },
                 Type::Nullary(_) => todo!(),
                 Type::Prim(pr) => break Some((*pr).into()),
                 Type::Unit => break Some(ast::Type::Unit),
@@ -633,7 +633,7 @@ impl<'ast> Typechecker<'ast> {
         match (type_, ast_type) {
             (Type::Univ(u), ast::Type::Var(v)) => {
                 Some(u) == self.type_vars.borrow().0.get_by_left(v)
-            }
+            },
             (Type::Univ(_), _) => false,
             (Type::Exist(_), _) => false,
             (Type::Unit, ast::Type::Unit) => true,
@@ -652,7 +652,7 @@ impl<'ast> Typechecker<'ast> {
                         .zip(&ft.args)
                         .all(|(a1, a2)| self.types_match(a1, &a2))
                     && self.types_match(&*ret, &*ft.ret)
-            }
+            },
             (Type::Fun { .. }, _) => false,
         }
     }

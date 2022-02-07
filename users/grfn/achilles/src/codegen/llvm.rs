@@ -98,7 +98,7 @@ impl<'ctx, 'ast> Codegen<'ctx, 'ast> {
                         .unwrap();
                     self.bind_pattern(pat, member.into());
                 }
-            }
+            },
         }
     }
 
@@ -128,7 +128,7 @@ impl<'ctx, 'ast> Codegen<'ctx, 'ast> {
                     )),
                     Literal::Unit => Ok(None),
                 }
-            }
+            },
             Expr::UnaryOp { op, rhs, .. } => {
                 let rhs = self.codegen_expr(rhs)?.unwrap();
                 match op {
@@ -137,7 +137,7 @@ impl<'ctx, 'ast> Codegen<'ctx, 'ast> {
                         self.builder.build_int_neg(rhs.into_int_value(), "neg"),
                     ))),
                 }
-            }
+            },
             Expr::BinaryOp { lhs, op, rhs, .. } => {
                 let lhs = self.codegen_expr(lhs)?.unwrap();
                 let rhs = self.codegen_expr(rhs)?.unwrap();
@@ -148,21 +148,21 @@ impl<'ctx, 'ast> Codegen<'ctx, 'ast> {
                             rhs.into_int_value(),
                             "add",
                         ))))
-                    }
+                    },
                     BinaryOperator::Sub => {
                         Ok(Some(AnyValueEnum::IntValue(self.builder.build_int_sub(
                             lhs.into_int_value(),
                             rhs.into_int_value(),
                             "add",
                         ))))
-                    }
+                    },
                     BinaryOperator::Mul => {
                         Ok(Some(AnyValueEnum::IntValue(self.builder.build_int_sub(
                             lhs.into_int_value(),
                             rhs.into_int_value(),
                             "add",
                         ))))
-                    }
+                    },
                     BinaryOperator::Div => Ok(Some(AnyValueEnum::IntValue(
                         self.builder.build_int_signed_div(
                             lhs.into_int_value(),
@@ -181,7 +181,7 @@ impl<'ctx, 'ast> Codegen<'ctx, 'ast> {
                     ))),
                     BinaryOperator::Neq => todo!(),
                 }
-            }
+            },
             Expr::Let { bindings, body, .. } => {
                 self.env.push();
                 for Binding { pat, body, .. } in bindings {
@@ -192,7 +192,7 @@ impl<'ctx, 'ast> Codegen<'ctx, 'ast> {
                 let res = self.codegen_expr(body);
                 self.env.pop();
                 res
-            }
+            },
             Expr::If {
                 condition,
                 then,
@@ -233,7 +233,7 @@ impl<'ctx, 'ast> Codegen<'ctx, 'ast> {
                 } else {
                     Ok(None)
                 }
-            }
+            },
             Expr::Call { fun, args, .. } => {
                 if let Expr::Ident(id, _) = &**fun {
                     let function = self
@@ -254,7 +254,7 @@ impl<'ctx, 'ast> Codegen<'ctx, 'ast> {
                 } else {
                     todo!()
                 }
-            }
+            },
             Expr::Fun { args, body, .. } => {
                 let fname = self.fresh_ident("f");
                 let cur_block = self.builder.get_insert_block().unwrap();
@@ -263,7 +263,7 @@ impl<'ctx, 'ast> Codegen<'ctx, 'ast> {
                 self.builder.position_at_end(cur_block);
                 self.env.restore(env);
                 Ok(Some(function.into()))
-            }
+            },
             Expr::Tuple(members, ty) => {
                 let values = members
                     .into_iter()
@@ -276,7 +276,7 @@ impl<'ctx, 'ast> Codegen<'ctx, 'ast> {
                 let field_types = ty.as_tuple().unwrap();
                 let tuple_type = self.codegen_tuple_type(field_types);
                 Ok(Some(tuple_type.const_named_struct(&values).into()))
-            }
+            },
         }
     }
 
@@ -291,13 +291,10 @@ impl<'ctx, 'ast> Codegen<'ctx, 'ast> {
             .filter_map(|(_, at)| self.codegen_type(at))
             .collect::<Vec<_>>();
 
-        self.new_function(
-            name,
-            match self.codegen_type(body.type_()) {
-                Some(ret_ty) => ret_ty.fn_type(&arg_types, false),
-                None => self.context.void_type().fn_type(&arg_types, false),
-            },
-        );
+        self.new_function(name, match self.codegen_type(body.type_()) {
+            Some(ret_ty) => ret_ty.fn_type(&arg_types, false),
+            None => self.context.void_type().fn_type(&arg_types, false),
+        });
         self.env.push();
         for (i, (arg, _)) in args.iter().enumerate() {
             self.env.set(
@@ -338,7 +335,7 @@ impl<'ctx, 'ast> Codegen<'ctx, 'ast> {
             } => {
                 self.codegen_function(name.into(), args, body)?;
                 Ok(())
-            }
+            },
             Decl::Extern {
                 name,
                 arg_types,

@@ -50,7 +50,7 @@ impl<'a> fmt::Debug for Val<'a> {
             Val::String(s) => f.debug_tuple("String").field(s).finish(),
             Val::Function(Function { type_, .. }) => {
                 f.debug_struct("Function").field("type_", type_).finish()
-            }
+            },
             Val::Tuple(members) => f.debug_tuple("Tuple").field(members).finish(),
         }
     }

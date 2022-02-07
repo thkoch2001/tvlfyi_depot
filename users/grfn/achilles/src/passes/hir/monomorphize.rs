@@ -56,7 +56,7 @@ impl<'a, 'ast> Visitor<'a, 'ast, ast::Type<'ast>> for Monomorphize<'a, 'ast> {
                 } else {
                     None
                 }
-            }
+            },
             _ => todo!(),
         };
         if let Some(new_fun) = new_fun {
@@ -132,7 +132,7 @@ mod tests {
                 };
                 let called_decl = find_decl(fun.into());
                 assert_eq!(called_decl.type_().unwrap(), &expected_type);
-            }
+            },
             _ => unreachable!(),
         }
     }

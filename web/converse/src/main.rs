@@ -30,7 +30,6 @@ extern crate log;
 #[macro_use]
 extern crate serde_derive;
 
-extern crate rouille;
 extern crate actix;
 extern crate actix_web;
 extern crate chrono;
@@ -44,6 +43,7 @@ extern crate md5;
 extern crate mime_guess;
 extern crate r2d2;
 extern crate rand;
+extern crate rouille;
 extern crate serde;
 extern crate serde_json;
 extern crate tokio;
@@ -58,7 +58,7 @@ macro_rules! message {
         impl Message for $t {
             type Result = $r;
         }
-    }
+    };
 }
 
 pub mod db;
@@ -69,18 +69,18 @@ pub mod oidc;
 pub mod render;
 pub mod schema;
 
-use actix::prelude::*;
-use actix_web::*;
-use actix_web::http::Method;
-use actix_web::middleware::Logger;
-use actix_web::middleware::identity::{IdentityService, CookieIdentityPolicy};
 use crate::db::*;
-use diesel::pg::PgConnection;
-use diesel::r2d2::{ConnectionManager, Pool};
 use crate::handlers::*;
 use crate::oidc::OidcExecutor;
-use rand::{OsRng, Rng};
 use crate::render::Renderer;
+use actix::prelude::*;
+use actix_web::http::Method;
+use actix_web::middleware::identity::{CookieIdentityPolicy, IdentityService};
+use actix_web::middleware::Logger;
+use actix_web::*;
+use diesel::pg::PgConnection;
+use diesel::r2d2::{ConnectionManager, Pool};
+use rand::{OsRng, Rng};
 use std::env;
 
 fn config(name: &str) -> String {
@@ -96,16 +96,18 @@ fn start_db_executor() -> Addr<DbExecutor> {
     let db_url = config("DATABASE_URL");
 
     let manager = ConnectionManager::<PgConnection>::new(db_url);
-    let pool = Pool::builder().build(manager).expect("Failed to initialise DB pool");
+    let pool = Pool::builder()
+        .build(manager)
+        .expect("Failed to initialise DB pool");
 
     SyncArbiter::start(2, move || DbExecutor(pool.clone()))
 }
 
 fn schedule_search_refresh(db: Addr<DbExecutor>) {
+    use std::thread;
+    use std::time::{Duration, Instant};
     use tokio::prelude::*;
     use tokio::timer::Interval;
-    use std::time::{Duration, Instant};
-    use std::thread;
 
     let task = Interval::new(Instant::now(), Duration::from_secs(60))
         .from_err()
@@ -118,8 +120,8 @@ fn schedule_search_refresh(db: Addr<DbExecutor>) {
 fn start_oidc_executor(base_url: &str) -> Addr<OidcExecutor> {
     info!("Initialising OIDC integration ...");
     let oidc_url = config("OIDC_DISCOVERY_URL");
-    let oidc_config = oidc::load_oidc(&oidc_url)
-        .expect("Failed to retrieve OIDC discovery document");
+    let oidc_config =
+        oidc::load_oidc(&oidc_url).expect("Failed to retrieve OIDC discovery document");
 
     let oidc = oidc::OidcExecutor {
         oidc_config,
@@ -132,7 +134,7 @@ fn start_oidc_executor(base_url: &str) -> Addr<OidcExecutor> {
 }
 
 fn start_renderer() -> Addr<Renderer> {
-    let comrak = comrak::ComrakOptions{
+    let comrak = comrak::ComrakOptions {
         github_pre_lang: true,
         ext_strikethrough: true,
         ext_table: true,
@@ -143,22 +145,23 @@ fn start_renderer() -> Addr<Renderer> {
         ..Default::default()
     };
 
-    Renderer{ comrak }.start()
+    Renderer { comrak }.start()
 }
 
 fn gen_session_key() -> [u8; 64] {
     let mut key_bytes = [0; 64];
-    let mut rng = OsRng::new()
-        .expect("Failed to retrieve RNG for key generation");
+    let mut rng = OsRng::new().expect("Failed to retrieve RNG for key generation");
     rng.fill_bytes(&mut key_bytes);
 
     key_bytes
 }
 
-fn start_http_server(base_url: String,
-                     db_addr: Addr<DbExecutor>,
-                     oidc_addr: Addr<OidcExecutor>,
-                     renderer_addr: Addr<Renderer>) {
+fn start_http_server(
+    base_url: String,
+    db_addr: Addr<DbExecutor>,
+    oidc_addr: Addr<OidcExecutor>,
+    renderer_addr: Addr<Renderer>,
+) {
     info!("Initialising HTTP server ...");
     let bind_host = config_default("CONVERSE_BIND_HOST", "127.0.0.1:4567");
     let key = gen_session_key();
@@ -175,7 +178,7 @@ fn start_http_server(base_url: String,
             CookieIdentityPolicy::new(&key)
                 .name("converse_auth")
                 .path("/")
-                .secure(base_url.starts_with("https"))
+                .secure(base_url.starts_with("https")),
         );
 
         let app = App::with_state(state)
@@ -183,25 +186,37 @@ fn start_http_server(base_url: String,
             .middleware(identity)
             .resource("/", |r| r.method(Method::GET).with(forum_index))
             .resource("/thread/new", |r| r.method(Method::GET).with(new_thread))
-            .resource("/thread/submit", |r| r.method(Method::POST).with(submit_thread))
-            .resource("/thread/reply", |r| r.method(Method::POST).with(reply_thread))
+            .resource("/thread/submit", |r| {
+                r.method(Method::POST).with(submit_thread)
+            })
+            .resource("/thread/reply", |r| {
+                r.method(Method::POST).with(reply_thread)
+            })
             .resource("/thread/{id}", |r| r.method(Method::GET).with(forum_thread))
             .resource("/post/{id}/edit", |r| r.method(Method::GET).with(edit_form))
             .resource("/post/edit", |r| r.method(Method::POST).with(edit_post))
             .resource("/search", |r| r.method(Method::GET).with(search_forum))
             .resource("/oidc/login", |r| r.method(Method::GET).with(login))
             .resource("/oidc/callback", |r| r.method(Method::POST).with(callback))
-            .static_file("/static/highlight.css", include_bytes!("../static/highlight.css"))
-            .static_file("/static/highlight.js", include_bytes!("../static/highlight.js"))
+            .static_file(
+                "/static/highlight.css",
+                include_bytes!("../static/highlight.css"),
+            )
+            .static_file(
+                "/static/highlight.js",
+                include_bytes!("../static/highlight.js"),
+            )
             .static_file("/static/styles.css", include_bytes!("../static/styles.css"));
 
         if require_login {
             app.middleware(RequireLogin)
         } else {
             app
-        }})
-        .bind(&bind_host).expect(&format!("Could not bind on '{}'", bind_host))
-        .start();
+        }
+    })
+    .bind(&bind_host)
+    .expect(&format!("Could not bind on '{}'", bind_host))
+    .start();
 }
 
 fn main() {

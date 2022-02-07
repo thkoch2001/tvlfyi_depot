@@ -74,16 +74,16 @@ pub(crate) trait Visitor<'a, 'ast, T: 'ast>: Sized + 'a {
             Expr::Ident(id, t) => {
                 self.visit_ident(id)?;
                 self.visit_type(t)?;
-            }
+            },
             Expr::Literal(lit, t) => {
                 self.visit_literal(lit)?;
                 self.visit_type(t)?;
-            }
+            },
             Expr::UnaryOp { op, rhs, type_ } => {
                 self.visit_unary_operator(op)?;
                 self.visit_expr(rhs)?;
                 self.visit_type(type_)?;
-            }
+            },
             Expr::BinaryOp {
                 lhs,
                 op,
@@ -94,7 +94,7 @@ pub(crate) trait Visitor<'a, 'ast, T: 'ast>: Sized + 'a {
                 self.visit_binary_operator(op)?;
                 self.visit_expr(rhs)?;
                 self.visit_type(type_)?;
-            }
+            },
             Expr::Let {
                 bindings,
                 body,
@@ -105,7 +105,7 @@ pub(crate) trait Visitor<'a, 'ast, T: 'ast>: Sized + 'a {
                 }
                 self.visit_expr(body)?;
                 self.visit_type(type_)?;
-            }
+            },
             Expr::If {
                 condition,
                 then,
@@ -116,7 +116,7 @@ pub(crate) trait Visitor<'a, 'ast, T: 'ast>: Sized + 'a {
                 self.visit_expr(then)?;
                 self.visit_expr(else_)?;
                 self.visit_type(type_)?;
-            }
+            },
             Expr::Fun {
                 args,
                 body,
@@ -132,7 +132,7 @@ pub(crate) trait Visitor<'a, 'ast, T: 'ast>: Sized + 'a {
                 }
                 self.visit_expr(body)?;
                 self.visit_type(type_)?;
-            }
+            },
             Expr::Call {
                 fun,
                 args,
@@ -146,11 +146,11 @@ pub(crate) trait Visitor<'a, 'ast, T: 'ast>: Sized + 'a {
                 }
                 self.visit_type(type_)?;
                 self.post_visit_call(fun, type_args, args)?;
-            }
+            },
             Expr::Tuple(tup, type_) => {
                 self.visit_tuple(tup)?;
                 self.visit_type(type_)?;
-            }
+            },
         }
 
         Ok(())
@@ -191,7 +191,7 @@ pub(crate) trait Visitor<'a, 'ast, T: 'ast>: Sized + 'a {
                 self.visit_expr(body)?;
                 self.visit_type(type_)?;
                 self.post_visit_fun_decl(name, type_args, args, body, type_)?;
-            }
+            },
             Decl::Extern {
                 name,
                 arg_types,
@@ -202,7 +202,7 @@ pub(crate) trait Visitor<'a, 'ast, T: 'ast>: Sized + 'a {
                     self.visit_type(arg_t)?;
                 }
                 self.visit_type(ret_type)?;
-            }
+            },
         }
 
         self.post_visit_decl(decl)?;

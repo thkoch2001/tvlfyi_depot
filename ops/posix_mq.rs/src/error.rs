@@ -1,8 +1,5 @@
 use nix;
-use std::error;
-use std::fmt;
-use std::io;
-use std::num;
+use std::{error, fmt, io, num};
 
 /// This module implements a simple error type to match the errors that can be thrown from the C
 /// functions as well as some extra errors resulting from internal validations.
@@ -69,10 +66,10 @@ impl fmt::Display for Error {
             InsufficientSpace() => "insufficient space to call queue method",
             ProcessFileDescriptorLimitReached() => {
                 "maximum number of process file descriptors reached"
-            }
+            },
             SystemFileDescriptorLimitReached() => {
                 "maximum number of system file descriptors reached"
-            }
+            },
             UnknownForeignError(_) => "unknown foreign error occured: please report a bug!",
             UnknownInternalError() => "unknown internal error occured: please report a bug!",
         })

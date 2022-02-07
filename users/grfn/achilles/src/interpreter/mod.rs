@@ -34,7 +34,7 @@ impl<'a> Interpreter<'a> {
                 for (pat, val) in pats.iter().zip(value.as_tuple().unwrap().clone()) {
                     self.bind_pattern(pat, val);
                 }
-            }
+            },
         }
     }
 
@@ -51,7 +51,7 @@ impl<'a> Interpreter<'a> {
                     UnaryOperator::Neg => -rhs,
                     _ => unimplemented!(),
                 }
-            }
+            },
             Expr::BinaryOp { lhs, op, rhs, .. } => {
                 let lhs = self.eval(lhs)?;
                 let rhs = self.eval(rhs)?;
@@ -64,7 +64,7 @@ impl<'a> Interpreter<'a> {
                     BinaryOperator::Equ => Ok(lhs.eq(&rhs).into()),
                     BinaryOperator::Neq => todo!(),
                 }
-            }
+            },
             Expr::Let { bindings, body, .. } => {
                 self.env.push();
                 for Binding { pat, body, .. } in bindings {
@@ -74,7 +74,7 @@ impl<'a> Interpreter<'a> {
                 let res = self.eval(body)?;
                 self.env.pop();
                 Ok(res)
-            }
+            },
             Expr::If {
                 condition,
                 then,
@@ -87,7 +87,7 @@ impl<'a> Interpreter<'a> {
                 } else {
                     self.eval(else_)
                 }
-            }
+            },
             Expr::Call { ref fun, args, .. } => {
                 let fun = self.eval(fun)?;
                 let expected_type = FunctionType {
@@ -110,7 +110,7 @@ impl<'a> Interpreter<'a> {
                     interpreter.env.set(arg_name, arg_value);
                 }
                 Ok(Value::from(*interpreter.eval(body)?.as_type::<i64>()?))
-            }
+            },
             Expr::Fun {
                 type_args: _,
                 args,
@@ -128,7 +128,7 @@ impl<'a> Interpreter<'a> {
                     args: args.iter().map(|(arg, _)| arg.to_owned()).collect(),
                     body: (**body).to_owned(),
                 }))
-            }
+            },
             Expr::Tuple(members, _) => Ok(Val::Tuple(
                 members
                     .into_iter()

@@ -106,15 +106,9 @@ impl<'a> Scanner<'a> {
 
             // possible multi-character tokens
             '!' => self.add_if_next('=', TokenKind::BangEqual, TokenKind::Bang),
-            '=' => {
-                self.add_if_next('=', TokenKind::EqualEqual, TokenKind::Equal)
-            }
+            '=' => self.add_if_next('=', TokenKind::EqualEqual, TokenKind::Equal),
             '<' => self.add_if_next('=', TokenKind::LessEqual, TokenKind::Less),
-            '>' => self.add_if_next(
-                '=',
-                TokenKind::GreaterEqual,
-                TokenKind::Greater,
-            ),
+            '>' => self.add_if_next('=', TokenKind::GreaterEqual, TokenKind::Greater),
 
             '/' => {
                 // support comments until EOL by discarding characters
@@ -125,14 +119,14 @@ impl<'a> Scanner<'a> {
                 } else {
                     self.add_token(TokenKind::Slash);
                 }
-            }
+            },
 
             // ignore whitespace
             ws if ws.is_whitespace() => {
                 if ws == '\n' {
                     self.line += 1
                 }
-            }
+            },
 
             '"' => self.scan_string(),
 
@@ -234,8 +228,7 @@ impl<'a> Scanner<'a> {
             self.advance();
         }
 
-        let ident: String =
-            self.source[self.start..self.current].iter().collect();
+        let ident: String = self.source[self.start..self.current].iter().collect();
 
         // Determine whether this is an identifier, or a keyword:
         let token_kind = match ident.as_str() {

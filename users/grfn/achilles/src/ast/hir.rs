@@ -19,7 +19,7 @@ impl<'a, T> Pattern<'a, T> {
             Pattern::Id(id, t) => Pattern::Id(id.to_owned(), t.clone()),
             Pattern::Tuple(pats) => {
                 Pattern::Tuple(pats.into_iter().map(Pattern::to_owned).collect())
-            }
+            },
         }
     }
 
@@ -285,7 +285,7 @@ impl<'a, T> Expr<'a, T> {
             },
             Expr::Tuple(members, t) => {
                 Expr::Tuple(members.into_iter().map(Expr::to_owned).collect(), t.clone())
-            }
+            },
         }
     }
 }

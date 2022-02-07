@@ -31,11 +31,16 @@
 //! `GOOGLE_APPLICATION_CREDENTIALS`, `GOOGLE_CLOUD_PROJECT` and
 //! `LOG_NAME` environment variables.
 
-#[macro_use] extern crate failure;
-#[macro_use] extern crate log;
-#[macro_use] extern crate serde_derive;
-#[macro_use] extern crate serde_json;
-#[macro_use] extern crate lazy_static;
+#[macro_use]
+extern crate failure;
+#[macro_use]
+extern crate log;
+#[macro_use]
+extern crate serde_derive;
+#[macro_use]
+extern crate serde_json;
+#[macro_use]
+extern crate lazy_static;
 
 extern crate chrono;
 extern crate env_logger;
@@ -48,13 +53,11 @@ use chrono::offset::LocalResult;
 use chrono::prelude::{DateTime, TimeZone, Utc};
 use failure::ResultExt;
 use serde_json::{from_str, Value};
-use std::env;
-use std::fs::{self, File, rename};
-use std::io::{self, Read, ErrorKind, Write};
-use std::mem;
+use std::fs::{self, rename, File};
+use std::io::{self, ErrorKind, Read, Write};
 use std::path::PathBuf;
-use std::process;
 use std::time::{Duration, Instant};
+use std::{env, mem, process};
 use systemd::journal::{Journal, JournalFiles, JournalRecord, JournalSeek};
 
 #[cfg(test)]
@@ -62,10 +65,12 @@ mod tests;
 
 const LOGGING_SERVICE: &str = "https://logging.googleapis.com/google.logging.v2.LoggingServiceV2";
 const ENTRIES_WRITE_URL: &str = "https://logging.googleapis.com/v2/entries:write";
-const METADATA_TOKEN_URL: &str = "http://metadata.google.internal/computeMetadata/v1/instance/service-accounts/default/token";
+const METADATA_TOKEN_URL: &str =
+    "http://metadata.google.internal/computeMetadata/v1/instance/service-accounts/default/token";
 const METADATA_ID_URL: &str = "http://metadata.google.internal/computeMetadata/v1/instance/id";
 const METADATA_ZONE_URL: &str = "http://metadata.google.internal/computeMetadata/v1/instance/zone";
-const METADATA_PROJECT_URL: &str = "http://metadata.google.internal/computeMetadata/v1/project/project-id";
+const METADATA_PROJECT_URL: &str =
+    "http://metadata.google.internal/computeMetadata/v1/project/project-id";
 
 /// Convenience type alias for results using failure's `Error` type.
 type Result<T> = std::result::Result<T, failure::Error>;
@@ -134,14 +139,17 @@ fn get_metadata(url: &str) -> Result<String> {
 
     if response.ok() {
         // Whitespace is trimmed to remove newlines from responses.
-        let body = response.into_string()
+        let body = response
+            .into_string()
             .context("Failed to decode metadata response")?
-            .trim().to_string();
+            .trim()
+            .to_string();
 
         Ok(body)
     } else {
         let status = response.status_line().to_string();
-        let body = response.into_string()
+        let body = response
+            .into_string()
             .unwrap_or_else(|e| format!("Metadata body error: {}", e));
         bail!("Metadata failure: {} ({})", body, status)
     }
@@ -186,11 +194,9 @@ fn determine_monitored_resource() -> Value {
             }
         })
     } else {
-        let instance_id = get_metadata(METADATA_ID_URL)
-            .expect("Could not determine instance ID");
+        let instance_id = get_metadata(METADATA_ID_URL).expect("Could not determine instance ID");
 
-        let zone = get_metadata(METADATA_ZONE_URL)
-            .expect("Could not determine instance zone");
+        let zone = get_metadata(METADATA_ZONE_URL).expect("Could not determine instance zone");
 
         json!({
             "type": "gce_instance",
@@ -253,7 +259,8 @@ fn sign_service_account_token(credentials: &Credentials) -> Result<Token> {
     use medallion::{Algorithm, Header, Payload};
 
     let iat = Utc::now();
-    let exp = iat.checked_add_signed(chrono::Duration::seconds(3600))
+    let exp = iat
+        .checked_add_signed(chrono::Duration::seconds(3600))
         .ok_or_else(|| format_err!("Failed to calculate token expiry"))?;
 
     let header = Header {
@@ -323,7 +330,9 @@ enum Payload {
 /// text format.
 fn message_to_payload(message: Option<String>) -> Payload {
     match message {
-        None => Payload::TextPayload { text_payload: "empty log entry".into() },
+        None => Payload::TextPayload {
+            text_payload: "empty log entry".into(),
+        },
         Some(text_payload) => {
             // Attempt to deserialize the text payload as a generic
             // JSON value.
@@ -333,12 +342,12 @@ fn message_to_payload(message: Option<String>) -> Payload {
                 // expect other types of JSON payload) and return it
                 // in that case.
                 if json_payload.is_object() {
-                    return Payload::JsonPayload { json_payload }
+                    return Payload::JsonPayload { json_payload };
                 }
             }
 
             Payload::TextPayload { text_payload }
-        }
+        },
     }
 }
 
@@ -450,9 +459,7 @@ impl From<JournalRecord> for LogEntry {
         // Journald uses syslogd's concept of priority. No idea if this is
         // always present, but it's optional in the Stackdriver API, so we just
         // omit it if we can't find or parse it.
-        let severity = record
-            .remove("PRIORITY")
-            .and_then(priority_to_severity);
+        let severity = record.remove("PRIORITY").and_then(priority_to_severity);
 
         LogEntry {
             payload,
@@ -468,8 +475,7 @@ impl From<JournalRecord> for LogEntry {
 
 /// Attempt to read from the journal. If no new entry is present,
 /// await the next one up to the specified timeout.
-fn receive_next_record(timeout: Duration, journal: &mut Journal)
-                       -> Result<Option<JournalRecord>> {
+fn receive_next_record(timeout: Duration, journal: &mut Journal) -> Result<Option<JournalRecord>> {
     let next_record = journal.next_record()?;
     if next_record.is_some() {
         return Ok(next_record);
@@ -525,11 +531,10 @@ fn persist_cursor(cursor: String) -> Result<()> {
     if cursor.is_empty() {
         error!("Received empty journald cursor position, refusing to persist!");
         error!("Please report this message at https://github.com/tazjin/journaldriver/issues/2");
-        return Ok(())
+        return Ok(());
     }
 
-    let mut file = File::create(&*CURSOR_TMP_FILE)
-        .context("Failed to create cursor file")?;
+    let mut file = File::create(&*CURSOR_TMP_FILE).context("Failed to create cursor file")?;
 
     write!(file, "{}", cursor).context("Failed to write cursor file")?;
 
@@ -547,9 +552,7 @@ fn persist_cursor(cursor: String) -> Result<()> {
 ///
 /// If flushing is successful the last cursor position will be
 /// persisted to disk.
-fn flush(token: &mut Token,
-         entries: Vec<LogEntry>,
-         cursor: String) -> Result<()> {
+fn flush(token: &mut Token, entries: Vec<LogEntry>, cursor: String) -> Result<()> {
     if token.is_expired() {
         debug!("Refreshing Google metadata access token");
         let new_token = get_token()?;
@@ -598,7 +601,8 @@ fn write_entries(token: &Token, request: Value) -> Result<()> {
         Ok(())
     } else {
         let status = response.status_line().to_string();
-        let body = response.into_string()
+        let body = response
+            .into_string()
             .unwrap_or_else(|_| "no response body".into());
         bail!("Write failure: {} ({})", body, status)
     }
@@ -625,13 +629,11 @@ fn initial_cursor() -> Result<JournalSeek> {
             info!("No previous cursor position, reading from journal tail");
             Ok(JournalSeek::Tail)
         },
-        Err(err) => {
-            (Err(err).context("Could not read cursor position"))?
-        }
+        Err(err) => (Err(err).context("Could not read cursor position"))?,
     }
 }
 
-fn main () {
+fn main() {
     env_logger::init();
 
     // The directory in which cursor positions are persisted should
@@ -641,24 +643,24 @@ fn main () {
         process::exit(1);
     }
 
-    let cursor_position_dir = CURSOR_FILE.parent()
+    let cursor_position_dir = CURSOR_FILE
+        .parent()
         .expect("Invalid cursor position file path");
 
     fs::create_dir_all(cursor_position_dir)
         .expect("Could not create directory to store cursor position in");
 
-    let mut journal = Journal::open(JournalFiles::All, false, true)
-        .expect("Failed to open systemd journal");
+    let mut journal =
+        Journal::open(JournalFiles::All, false, true).expect("Failed to open systemd journal");
 
-    let seek_position = initial_cursor()
-        .expect("Failed to determine initial cursor position");
+    let seek_position = initial_cursor().expect("Failed to determine initial cursor position");
 
     match journal.seek(seek_position) {
         Ok(cursor) => info!("Opened journal at cursor '{}'", cursor),
         Err(err) => {
             error!("Failed to set initial journal position: {}", err);
             process::exit(1)
-        }
+        },
     }
 
     receiver_loop(journal).expect("log receiver encountered an unexpected error");
