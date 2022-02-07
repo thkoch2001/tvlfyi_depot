@@ -9,6 +9,33 @@ let
     echo "$@" | xargs -n1 ${pkgs.terraform}/bin/terraform fmt
   '';
 
+  rustfmtConfig = pkgs.writeTextDir "rustfmt.toml" ''
+    edition = "2018"
+    newline_style = "Unix"
+
+    # Default code with is 100 characters, comments should follow
+    # suit.
+    wrap_comments = true
+    comment_width = 100
+
+    # The default of this option creates hard-to-read nesting of
+    # conditionals, turn it off.
+    combine_control_expr = false
+
+    # Group imports by module, but no higher. This avoids hard-to-read
+    # nested use statements.
+    imports_granularity = "Module"
+
+    # Avoid vertical visual clutter by unnecessarily exploding
+    # block-like arguments.
+    overflow_delimited_expr = true
+
+    # Miscellaneous
+    format_code_in_doc_comments = true
+    match_block_trailing_comma = true
+    normalize_comments = true
+  '';
+
   config = pkgs.writeText "depot-treefmt-config" ''
     [formatter.go]
     command = "${pkgs.go}/bin/gofmt"
@@ -25,6 +52,13 @@ let
     excludes = [
       "third_party/nix/tests/*",
       "third_party/nix/src/tests/*"
+    ]
+
+    [formatter.rust]
+    command = "${pkgs.rustfmt}/bin/rustfmt"
+    includes = [ "*.rs" ]
+    options = [
+      "--config-path", "${rustfmtConfig}"
     ]
   '';
 
