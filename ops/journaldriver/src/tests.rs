@@ -15,7 +15,10 @@ fn test_text_entry_serialization() {
     let expected = "{\"labels\":null,\"textPayload\":\"test entry\"}";
     let result = to_string(&entry).expect("serialization failed");
 
-    assert_eq!(expected, result, "Plain text payload should serialize correctly")
+    assert_eq!(
+        expected, result,
+        "Plain text payload should serialize correctly"
+    )
 }
 
 #[test]
@@ -26,7 +29,7 @@ fn test_json_entry_serialization() {
         payload: Payload::JsonPayload {
             json_payload: json!({
                 "message": "JSON test"
-            })
+            }),
         },
         severity: None,
     };
@@ -45,7 +48,10 @@ fn test_plain_text_payload() {
         text_payload: "plain text payload".into(),
     };
 
-    assert_eq!(expected, payload, "Plain text payload should be detected correctly");
+    assert_eq!(
+        expected, payload,
+        "Plain text payload should be detected correctly"
+    );
 }
 
 #[test]
@@ -55,7 +61,10 @@ fn test_empty_payload() {
         text_payload: "empty log entry".into(),
     };
 
-    assert_eq!(expected, payload, "Empty payload should be handled correctly");
+    assert_eq!(
+        expected, payload,
+        "Empty payload should be handled correctly"
+    );
 }
 
 #[test]
@@ -66,10 +75,13 @@ fn test_json_payload() {
         json_payload: json!({
             "someKey": "someValue",
             "otherKey": 42
-        })
+        }),
     };
 
-    assert_eq!(expected, payload, "JSON payload should be detected correctly");
+    assert_eq!(
+        expected, payload,
+        "JSON payload should be detected correctly"
+    );
 }
 
 #[test]
@@ -82,14 +94,16 @@ fn test_json_no_object() {
         text_payload: "42".into(),
     };
 
-    assert_eq!(expected, payload, "Non-object JSON payload should be plain text");
+    assert_eq!(
+        expected, payload,
+        "Non-object JSON payload should be plain text"
+    );
 }
 
 #[test]
 fn test_parse_microseconds() {
     let input: String = "1529175149291187".into();
-    let expected: DateTime<Utc> = "2018-06-16T18:52:29.291187Z"
-        .to_string().parse().unwrap();
+    let expected: DateTime<Utc> = "2018-06-16T18:52:29.291187Z".to_string().parse().unwrap();
 
     assert_eq!(Some(expected), parse_microseconds(input));
 }

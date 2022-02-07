@@ -20,14 +20,14 @@
 //! data into whatever format is needed by the templates and rendering
 //! them.
 
+use crate::errors::*;
+use crate::models::*;
 use actix::prelude::*;
 use askama::Template;
-use crate::errors::*;
-use std::fmt;
-use md5;
-use crate::models::*;
 use chrono::prelude::{DateTime, Utc};
-use comrak::{ComrakOptions, markdown_to_html};
+use comrak::{markdown_to_html, ComrakOptions};
+use md5;
+use std::fmt;
 
 pub struct Renderer {
     pub comrak: ComrakOptions,
@@ -101,7 +101,9 @@ pub enum EditingMode {
 }
 
 impl Default for EditingMode {
-    fn default() -> EditingMode { EditingMode::NewThread }
+    fn default() -> EditingMode {
+        EditingMode::NewThread
+    }
 }
 
 /// This is the template used for rendering the new thread, edit post
@@ -215,19 +217,22 @@ pub fn index_page(threads: Vec<ThreadIndex>) -> Result<String> {
 
 // Render the page of a given thread.
 pub fn thread_page(user: i32, thread: Thread, posts: Vec<SimplePost>) -> Result<String> {
-    let posts = posts.into_iter().map(|post| {
-        let editable = user != 1 && post.user_id == user;
+    let posts = posts
+        .into_iter()
+        .map(|post| {
+            let editable = user != 1 && post.user_id == user;
 
-        let comrak = ComrakOptions::default(); // TODO(tazjin): cheddar
-        RenderablePost {
-            id: post.id,
-            body: markdown_to_html(&post.body, &comrak),
-            posted: FormattedDate(post.posted),
-            author_name: post.author_name.clone(),
-            author_gravatar: md5_hex(post.author_email.as_bytes()),
-            editable,
-        }
-    }).collect();
+            let comrak = ComrakOptions::default(); // TODO(tazjin): cheddar
+            RenderablePost {
+                id: post.id,
+                body: markdown_to_html(&post.body, &comrak),
+                posted: FormattedDate(post.posted),
+                author_name: post.author_name.clone(),
+                author_gravatar: md5_hex(post.author_email.as_bytes()),
+                editable,
+            }
+        })
+        .collect();
 
     let renderable = RenderableThreadPage {
         posts,

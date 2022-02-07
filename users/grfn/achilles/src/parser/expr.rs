@@ -1,9 +1,8 @@
 use std::borrow::Cow;
 
-use nom::alt;
 use nom::character::complete::{digit1, multispace0, multispace1};
 use nom::{
-    call, char, complete, delimited, do_parse, flat_map, many0, map, named, opt, parse_to,
+    alt, call, char, complete, delimited, do_parse, flat_map, many0, map, named, opt, parse_to,
     preceded, separated_list0, separated_list1, tag, tuple,
 };
 use pratt::{Affix, Associativity, PrattParser, Precedence};

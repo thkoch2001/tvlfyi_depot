@@ -6,7 +6,7 @@ use std::io::BufReader;
 const PART_2: bool = true;
 
 fn day01(is_part2: bool, numbers: &Vec<i64>) -> Result<String, anyhow::Error> {
-    //println!("{:?}", numbers);
+    // println!("{:?}", numbers);
 
     for n1 in numbers.iter() {
         for n2 in numbers.iter() {
@@ -50,7 +50,7 @@ fn parse(filename: &str) -> Result<Vec<i64>, anyhow::Error> {
 fn main() -> anyhow::Result<()> {
     let args: Vec<String> = std::env::args().collect();
 
-    //println!("{:?}", args);
+    // println!("{:?}", args);
     if args.len() != 2 {
         return Err(anyhow!("usage: day01 input_file"));
     }

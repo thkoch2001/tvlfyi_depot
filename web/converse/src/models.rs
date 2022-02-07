@@ -16,9 +16,9 @@
 // along with this program. If not, see
 // <https://www.gnu.org/licenses/>.
 
+use crate::schema::{posts, simple_posts, threads, users};
 use chrono::prelude::{DateTime, Utc};
-use crate::schema::{users, threads, posts, simple_posts};
-use diesel::sql_types::{Text, Integer};
+use diesel::sql_types::{Integer, Text};
 
 /// Represents a single user in the Converse database. Converse does
 /// not handle logins itself, but rather looks them up based on the
@@ -85,21 +85,21 @@ pub struct ThreadIndex {
 }
 
 #[derive(Deserialize, Insertable)]
-#[table_name="threads"]
+#[table_name = "threads"]
 pub struct NewThread {
     pub title: String,
     pub user_id: i32,
 }
 
 #[derive(Deserialize, Insertable)]
-#[table_name="users"]
+#[table_name = "users"]
 pub struct NewUser {
     pub email: String,
     pub name: String,
 }
 
 #[derive(Deserialize, Insertable)]
-#[table_name="posts"]
+#[table_name = "posts"]
 pub struct NewPost {
     pub thread_id: i32,
     pub body: String,
