@@ -34,6 +34,24 @@
       "parentUuid": "05c2aad5_33fff88e",
       "revId": "3a226aa2613960b5b083e59864fc7a6254871d00",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2542b4f9_5178bee2",
+        "filename": "web/panettone/src/authentication.lisp",
+        "patchSetId": 2
+      },
+      "lineNbr": 113,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2022-02-07T16:48:09Z",
+      "side": 1,
+      "message": "I meant errors that happen between creating the conn and unbinding it; I\u0027m reaching for the equivalent of a \"finally\" here",
+      "parentUuid": "4e1c29c1_88120da5",
+      "revId": "3a226aa2613960b5b083e59864fc7a6254871d00",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
