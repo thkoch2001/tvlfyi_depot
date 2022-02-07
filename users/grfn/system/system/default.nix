@@ -28,7 +28,7 @@ rec {
 
   iso = import ./iso.nix args;
 
-  meta.targets = [
+  meta.ci.targets = [
     "mugwumpSystem"
     "roswellSystem"
     "yerenSystem"

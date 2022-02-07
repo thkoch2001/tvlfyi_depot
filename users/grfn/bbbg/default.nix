@@ -10,7 +10,7 @@ let
   };
 in
 rec {
-  meta.targets = [
+  meta.ci.targets = [
     "db-util"
     "server"
     "tf"

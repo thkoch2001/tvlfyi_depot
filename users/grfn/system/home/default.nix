@@ -26,7 +26,7 @@ rec {
 
   yerenHome = yeren.activation-script;
 
-  meta.targets = [
+  meta.ci.targets = [
     "yerenHome"
   ];
 }
