@@ -86,16 +86,16 @@ lib.fix (self: pkgs.fullLlvm11Stdenv.mkDerivation {
     editline
     flex
     glog
+    grpc
     libseccomp
     libsodium
     openssl
+    protobuf
     sqlite
     systemd.dev
     xz
   ]) ++ (with depot.third_party; [
     abseil_cpp
-    grpc
-    protobuf
   ]);
 
   doCheck = false;
