@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "640a2dc6_c3cde6fa",
+        "filename": "nix/readTree/default.nix",
+        "patchSetId": 3
+      },
+      "lineNbr": 274,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2022-02-07T11:14:25Z",
+      "side": 1,
+      "message": "The contents of attrs.meta.ci should be preserved except for `targets`, in this fashion `extraSteps` would be deleted if drvTargets would be used.",
+      "range": {
+        "startLine": 274,
+        "startChar": 6,
+        "endLine": 274,
+        "endChar": 8
+      },
+      "revId": "7d7ce9b1ba8b578d81db2187f1338464f3058fcb",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
