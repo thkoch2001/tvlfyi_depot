@@ -357,5 +357,5 @@ in
     attr = [ "ripgrep" ];
   };
 
-  meta.targets = [ "testSingle" ];
+  meta.ci.targets = [ "testSingle" ];
 }

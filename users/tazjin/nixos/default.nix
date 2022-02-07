@@ -6,5 +6,5 @@ in {
   frogSystem = systemFor depot.users.tazjin.nixos.frog;
   tverskoySystem = systemFor depot.users.tazjin.nixos.tverskoy;
 
-  meta.targets = [ "camdenSystem" "frogSystem" "tverskoySystem" ];
+  meta.ci.targets = [ "camdenSystem" "frogSystem" "tverskoySystem" ];
 }
