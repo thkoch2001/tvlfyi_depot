@@ -16,7 +16,11 @@ fn test_insert_machine() {
     let door = insert_machine(&conn, initial).expect("Failed to insert door");
     let result = get_machine(&conn, &door, false).expect("Failed to fetch door");
 
-    assert_eq!(result, DoorState::Opened, "Inserted door state should match");
+    assert_eq!(
+        result,
+        DoorState::Opened,
+        "Inserted door state should match"
+    );
 }
 
 #[test]
@@ -41,7 +45,10 @@ fn test_advance() {
     }
 
     let result = get_machine(&conn, &door, false).expect("Failed to fetch door");
-    let expected = DoorState::Locked { code: 4567, attempts: 2 };
+    let expected = DoorState::Locked {
+        code: 4567,
+        attempts: 2,
+    };
 
     assert_eq!(result, expected, "Advanced door state should match");
 }
