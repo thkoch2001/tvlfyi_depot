@@ -34,6 +34,24 @@
       "parentUuid": "e4afba63_4535e9f4",
       "revId": "ea90de39705f3f4cdc47524afd73f5bb8650493b",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e6b215be_3ff95086",
+        "filename": "users/grfn/achilles/src/ast/hir.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-02-07T16:21:56Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b9d5401c_f1424ed3",
+      "revId": "ea90de39705f3f4cdc47524afd73f5bb8650493b",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
