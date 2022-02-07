@@ -220,7 +220,7 @@ buildLisp.library {
 
 Additionally a `brokenOn` parameter is accepted which takes a list of
 implementation names on which the derivation is not expected to work.
-This only influences `meta.targets` which is read by depot's CI to
+This only influences `meta.ci.targets` which is read by depot's CI to
 check which variants (see "Implementations") of the derivation to
 build, so it may not be useful outside of depot.
 
