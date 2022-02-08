@@ -4,10 +4,7 @@
 # should be thought of instead as two-minutes worth of work per day that is all
 # being completed upfront.
 * Tasks
-** TODO [20m] Create habit template in journal.
-*** Spend time choosing a habit that you can accomplish giving known traveling constraints.
-** TODO [45m] Assess previous month's performance.
-** TODO [10m] Book massage for the month.
-** TODO [05m] Register for HotPodYoga classes.
-** TODO [10m] Plan one museum date in London.
-** TODO [20m] Plan each weekend for month.
+** TODO [10m] create habit template in journal
+** TODO [30m] assess previous month's performance
+** TODO [10m] book massage for the month
+** TODO [10m] buy TSLA through tdameritrade.com

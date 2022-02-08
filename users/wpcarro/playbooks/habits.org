@@ -1,12 +1,7 @@
 * First of the year
 ** [1hr] Write a post mortem for the previous year
 * First of the month
-** [20m] Create habit template in journal.
-** [45m] Assess previous month's performance.
-** [10m] Book massage for the month.
-** [05m] Register for HotPodYoga classes.
-** [10m] Plan one museum date in London.
-** [20m] Plan each weekend for month.
+** see ./first-of-the-month.org
 * Payday
 ** [10m] Audit Monzo expenses
 ** [05m] Review "finances_2020" spreadsheet
