@@ -7,4 +7,5 @@
 ** TODO [10m] create habit template in journal
 ** TODO [30m] assess previous month's performance
 ** TODO [10m] book massage for the month
+** TODO [10m] create go/hallpass entries (BJJ, VHP)
 ** TODO [10m] buy TSLA through tdameritrade.com
