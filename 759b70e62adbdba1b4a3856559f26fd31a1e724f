@@ -1,0 +1,67 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "92c659ed_cedf54ec",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2022-02-08T12:04:55Z",
+      "side": 1,
+      "message": "Hopefully we can pull out this stuff when pkgsLLVM and nixpkgs will default to LLVM 11!",
+      "revId": "759b70e62adbdba1b4a3856559f26fd31a1e724f",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "68e4121d_ad4437a9",
+        "filename": "third_party/nix/default.nix",
+        "patchSetId": 4
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2022-02-08T12:04:55Z",
+      "side": 1,
+      "message": "Use pkgs.buildPackages.{which,fullLlvm11Stdenv}, no reason to introduce even an inconsequential incorrectness if we can help it easily",
+      "range": {
+        "startLine": 21,
+        "startChar": 15,
+        "endLine": 21,
+        "endChar": 19
+      },
+      "revId": "759b70e62adbdba1b4a3856559f26fd31a1e724f",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0adacbdc_2ea9eeb6",
+        "filename": "third_party/nix/default.nix",
+        "patchSetId": 4
+      },
+      "lineNbr": 125,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2022-02-08T12:04:55Z",
+      "side": 1,
+      "message": "You can drop this completely.",
+      "range": {
+        "startLine": 125,
+        "startChar": 2,
+        "endLine": 125,
+        "endChar": 10
+      },
+      "revId": "759b70e62adbdba1b4a3856559f26fd31a1e724f",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
