@@ -41,6 +41,30 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "e23d52f9_34403aa2",
+        "filename": "third_party/nix/default.nix",
+        "patchSetId": 4
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-02-08T17:19:39Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "68e4121d_ad4437a9",
+      "range": {
+        "startLine": 21,
+        "startChar": 15,
+        "endLine": 21,
+        "endChar": 19
+      },
+      "revId": "759b70e62adbdba1b4a3856559f26fd31a1e724f",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "0adacbdc_2ea9eeb6",
@@ -54,6 +78,30 @@
       "writtenOn": "2022-02-08T12:04:55Z",
       "side": 1,
       "message": "You can drop this completely.",
+      "range": {
+        "startLine": 125,
+        "startChar": 2,
+        "endLine": 125,
+        "endChar": 10
+      },
+      "revId": "759b70e62adbdba1b4a3856559f26fd31a1e724f",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "106771ec_ade7e242",
+        "filename": "third_party/nix/default.nix",
+        "patchSetId": 4
+      },
+      "lineNbr": 125,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-02-08T17:19:39Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0adacbdc_2ea9eeb6",
       "range": {
         "startLine": 125,
         "startChar": 2,
