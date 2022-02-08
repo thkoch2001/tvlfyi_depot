@@ -124,7 +124,7 @@
               (company-mode -1)
               (flyspell-mode 1)))
   (setq magit-display-buffer-function
-        #'magit-display-buffer-fullframe-status-v1))
+        #'magit-display-buffer-same-window-except-diff-v1))
 
 (use-package magit-popup)
 
