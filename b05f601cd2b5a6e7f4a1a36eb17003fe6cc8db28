@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9f5294e7_d9227a74",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-02-08T17:47:47Z",
+      "side": 1,
+      "message": "The Slack problem sorted itself out with another bump.",
+      "revId": "b05f601cd2b5a6e7f4a1a36eb17003fe6cc8db28",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
