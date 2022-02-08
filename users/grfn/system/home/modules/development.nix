@@ -210,6 +210,10 @@ with lib;
       gdelmerged = ''
         git branch --merged | egrep -v 'master' | tr -d '+ ' | xargs git branch -d
       '';
+
+      gref = ''
+        git show -s --pretty=reference "$1" | xclip -selection clipboard
+      '';
     };
   };
 }
