@@ -163,10 +163,8 @@ pkgs.makeOverridable
 
       # Expose telega/tdlib version check as a target that is built in
       # CI.
-      #
-      # TODO(tazjin): uncomment when telega works again
       inherit tdlibCheck;
-      # meta.targets = [ "tdlibCheck" ];
+      meta.ci.targets = [ "tdlibCheck" ];
     })
     null
     identity
