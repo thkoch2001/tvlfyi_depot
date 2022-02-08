@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "93bfe835_af855131",
+        "filename": "tools/rust-crates-advisory/default.nix",
+        "patchSetId": 1
+      },
+      "lineNbr": 112,
+      "author": {
+        "id": 1000040
+      },
+      "writtenOn": "2022-02-08T12:28:34Z",
+      "side": 1,
+      "message": "Can you explain the `sed` part?\nDoes `${lock-file-report}` require an absoloute path?",
+      "revId": "cae1527dab14c4d7721f10136ac4c88ade2b5954",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ba95a7e3_0d19f1b9",
+        "filename": "tools/rust-crates-advisory/default.nix",
+        "patchSetId": 1
+      },
+      "lineNbr": 115,
+      "author": {
+        "id": 1000040
+      },
+      "writtenOn": "2022-02-08T12:28:34Z",
+      "side": 1,
+      "message": "Why not letting find(1) execute?\n\n`-execdir` puts you in the directory containing Cargo.lock, so you\u0027d get `$depoPath` for free as `.` or `$(pwd)`.\n`$lockFile` would always be \".../Cargo.lock\", so not even `{}` would be required, just \"./Cargo.lock\" since you\u0027re in the directory already.\n\nThere would be no need for looping manually and taking care of filenames with spaces as you do now.\n\n```\nfind \"${1:-.}\" -type f -name Cargo.lock -execdir \\\n    ${lock-file-report} . \u0027{}\u0027 \\;\n```\n\nGeneral note:  Filter for file type first, then for names, otherwise you wastefully compare directory names as well.\nAlso, `-and` is implied (just like you did between `-type f` and `-print0`).",
+      "revId": "cae1527dab14c4d7721f10136ac4c88ade2b5954",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "df2d83b0_cd353172",
+        "filename": "tools/rust-crates-advisory/default.nix",
+        "patchSetId": 1
+      },
+      "lineNbr": 117,
+      "author": {
+        "id": 1000040
+      },
+      "writtenOn": "2022-02-08T12:28:34Z",
+      "side": 1,
+      "message": "find(1)\u0027s `-execdir command ;` would also have you covered wrt. the exit status (quote from the GNU manual):\n\n\u003e If any invocation returns a non-zero value as exit status,\n\u003e then find returns a non-zero exit status.\n\nGeneral note: No need for `exec` as `true` and `false` are shell builtins and you should use those rather than the executable from PATH.\n\nGiven that you only need it for the exit status, using `0`/`1` and `exit $status` would be simpler and explicit.",
+      "revId": "cae1527dab14c4d7721f10136ac4c88ade2b5954",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
