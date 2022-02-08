@@ -11,3 +11,5 @@ the top-level `depot` directory:
 ```shell
 $ nix-env -iA users.wpcarro.emacs.nixos
 ```
+
+Test edit (from depot).
