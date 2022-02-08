@@ -20,6 +20,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "5dbc7025_8e5e1e46",
+        "filename": "tools/rust-crates-advisory/default.nix",
+        "patchSetId": 1
+      },
+      "lineNbr": 112,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2022-02-08T12:53:08Z",
+      "side": 1,
+      "message": "The first parameter is just the label the lock file gets associated with in the final report. Assuming that we are at the root of depot, we get a path like `./foo/bar` and convert it to the familiar `//foo/bar` style path. Maybe this should be clarified in the code here as well.",
+      "parentUuid": "93bfe835_af855131",
+      "revId": "cae1527dab14c4d7721f10136ac4c88ade2b5954",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "ba95a7e3_0d19f1b9",
         "filename": "tools/rust-crates-advisory/default.nix",
         "patchSetId": 1
@@ -48,6 +66,24 @@
       "writtenOn": "2022-02-08T12:28:34Z",
       "side": 1,
       "message": "find(1)\u0027s `-execdir command ;` would also have you covered wrt. the exit status (quote from the GNU manual):\n\n\u003e If any invocation returns a non-zero value as exit status,\n\u003e then find returns a non-zero exit status.\n\nGeneral note: No need for `exec` as `true` and `false` are shell builtins and you should use those rather than the executable from PATH.\n\nGiven that you only need it for the exit status, using `0`/`1` and `exit $status` would be simpler and explicit.",
+      "revId": "cae1527dab14c4d7721f10136ac4c88ade2b5954",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3e13a6fb_2ce77530",
+        "filename": "tools/rust-crates-advisory/default.nix",
+        "patchSetId": 1
+      },
+      "lineNbr": 117,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2022-02-08T12:53:08Z",
+      "side": 1,
+      "message": "This doesn\u0027t seem to be the case from my testing, e. g. find . -type f -name \u0027Cargo.lock\u0027 -execdir \u0027bash\u0027 -c \u0027exit\u0027 \u00271\u0027 \\; will return 0 exit code for me sadly.\n\nalso a bit worrying is:\n\n\u003e When some error occurs, find may stop immediately, without completing\n\u003e all the actions specified.",
+      "parentUuid": "df2d83b0_cd353172",
       "revId": "cae1527dab14c4d7721f10136ac4c88ade2b5954",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
