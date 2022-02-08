@@ -51,6 +51,7 @@ in
     mkpasswd
     nmap
     python3
+    rink
     ripgrep
     tldr
     tokei
