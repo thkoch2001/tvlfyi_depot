@@ -25,7 +25,7 @@ set -gx ALTERNATE_EDITOR "emacs -q -nw"
 set -gx VISUAL "emacsclient"
 
 # Use my custom fish prompt
-source ~/.config/fish/prompt.fish
+source /depot/users/wpcarro/dotfiles/prompt.fish
 
 # Configure fuzzy history, file, directory searching
 source (fzf-share)/key-bindings.fish && fzf_key_bindings
