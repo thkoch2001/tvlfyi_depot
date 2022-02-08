@@ -128,7 +128,7 @@ pkgs.makeOverridable
       '';
   in
   lib.fix
-    (self: l: f: pkgs.writeShellScriptBin "tazjins-emacs" ''
+    (self: l: f: (pkgs.writeShellScriptBin "tazjins-emacs" ''
       export PATH="${emacsBinPath}:$PATH"
       exec ${tazjinsEmacs f}/bin/emacs \
         --debug-init \
@@ -137,35 +137,40 @@ pkgs.makeOverridable
         --no-init-file \
         --directory ${./config} ${if l != null then "--directory ${l}" else ""} \
         --eval "(require 'init)" $@
-    '' // {
-      # Call overrideEmacs with a function (pkgs -> pkgs) to modify the
-      # packages that should be included in this Emacs distribution.
-      overrideEmacs = f': self l f';
+    '').overrideAttrs
+      (_: {
+        passthru = {
+          # Call overrideEmacs with a function (pkgs -> pkgs) to modify the
+          # packages that should be included in this Emacs distribution.
+          overrideEmacs = f': self l f';
 
-      # Call withLocalConfig with the path to a *folder* containing a
-      # `local.el` which provides local system configuration.
-      withLocalConfig = confDir: self confDir f;
+          # Call withLocalConfig with the path to a *folder* containing a
+          # `local.el` which provides local system configuration.
+          withLocalConfig = confDir: self confDir f;
 
-      # Build a derivation that uses the specified local Emacs (i.e.
-      # built outside of Nix) instead
-      withLocalEmacs = emacsBin: pkgs.writeShellScriptBin "tazjins-emacs" ''
-        export PATH="${emacsBinPath}:$PATH"
-        export EMACSLOADPATH="${(tazjinsEmacs f).deps}/share/emacs/site-lisp:"
-        exec ${emacsBin} \
-          --debug-init \
-          --no-site-file \
-          --no-site-lisp \
-          --no-init-file \
-          --directory ${./config} \
-          ${if l != null then "--directory ${l}" else ""} \
-          --eval "(require 'init)" $@
-      '';
+          # Build a derivation that uses the specified local Emacs (i.e.
+          # built outside of Nix) instead
+          withLocalEmacs = emacsBin: pkgs.writeShellScriptBin "tazjins-emacs" ''
+            export PATH="${emacsBinPath}:$PATH"
+            export EMACSLOADPATH="${(tazjinsEmacs f).deps}/share/emacs/site-lisp:"
+            exec ${emacsBin} \
+              --debug-init \
+              --no-site-file \
+              --no-site-lisp \
+              --no-init-file \
+              --directory ${./config} \
+              ${if l != null then "--directory ${l}" else ""} \
+              --eval "(require 'init)" $@
+          '';
 
-      # Expose telega/tdlib version check as a target that is built in
-      # CI.
-      inherit tdlibCheck;
-      meta.ci.targets = [ "tdlibCheck" ];
-    })
+          # Expose telega/tdlib version check as a target that is built in
+          # CI.
+          #
+          # TODO(tazjin): uncomment when telega works again
+          inherit tdlibCheck;
+          meta.ci.targets = [ "tdlibCheck" ];
+        };
+      }))
     null
     identity
   )
