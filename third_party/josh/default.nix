@@ -26,4 +26,8 @@ depot.third_party.naersk.buildPackage {
     "-p"
     "josh-ui"
   ];
+
+  propagatedBuildInputs = [
+    pkgs.git
+  ];
 }
