@@ -29,5 +29,10 @@ depot.third_party.naersk.buildPackage {
 
   overrideMain = x: {
     patches = [ ./0001-josh-proxy-Always-require-authentication-when-pushin.patch ];
+
+    nativeBuildInputs = (x.nativeBuildInputs or [ ]) ++ [ pkgs.makeWrapper ];
+    postInstall = ''
+      wrapProgram $out/bin/josh-proxy --prefix PATH : "${pkgs.git}/bin"
+    '';
   };
 }
