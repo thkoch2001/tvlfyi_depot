@@ -1,23 +1,28 @@
-# magrathea helps you build planets
+# Externally importable TVL depot stack. This is intended to be called
+# with a supplied package set, otherwise the package set currently in
+# use by the TVL depot will be used.
 #
-# it is a tool for working with monorepos in the style of tvl's depot
-{ pkgs, ... }:
+# For now, readTree is not used inside of this configuration to keep
+# it simple. Adding it may be useful if we set up test scaffolding
+# around the exported workspace.
 
-pkgs.stdenv.mkDerivation {
-  name = "magrathea";
-  src = ./.;
-  dontInstall = true;
+{ pkgs ? (import ./nixpkgs {
+    depotOverlays = false;
+    depot.third_party.sources = import ./sources { };
+  })
+, ...
+}:
 
-  nativeBuildInputs = [ pkgs.chicken ];
-  buildInputs = with pkgs.chickenPackages.chickenEggs; [
-    matchable
-    srfi-13
-  ];
+pkgs.lib.fix (self: {
+  buildGo = import ./buildGo { inherit pkgs; };
+  readTree = import ./readTree { };
 
-  propagatedBuildInputs = [ pkgs.git ];
+  buildkite = import ./buildkite {
+    inherit pkgs;
+    depot.nix.readTree = self.readTree;
+  };
 
-  buildPhase = ''
-    mkdir -p $out/bin
-    csc -o $out/bin/mg -static ${./mg.scm}
-  '';
-}
+  besadii = import ./besadii {
+    depot.nix.buildGo = self.buildGo;
+  };
+})
