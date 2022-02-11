@@ -5,8 +5,8 @@ let
   src = pkgs.fetchFromGitHub {
     owner = "esrlabs";
     repo = "josh";
-    rev = "69dc986e506ba5631c8bbf52835da076a18ec8dc";
-    hash = "sha256:0ybc6ivjkm7bchaszs9lhbl1gbjnyhwq7a3vw6jml3ama84l52lb";
+    rev = "effe6290559136faba5591a115e56c2b30210329";
+    hash = "sha256:0kam9rqjk96brvh15wj3h3vm2sqnr5pckz91az2ida5617d5gp9v";
   };
 in
 depot.third_party.naersk.buildPackage {
