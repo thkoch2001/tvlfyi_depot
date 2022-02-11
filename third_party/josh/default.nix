@@ -26,4 +26,8 @@ depot.third_party.naersk.buildPackage {
     "-p"
     "josh-ui"
   ];
+
+  overrideMain = x: {
+    patches = [ ./0001-josh-proxy-Always-require-authentication-when-pushin.patch ];
+  };
 }
