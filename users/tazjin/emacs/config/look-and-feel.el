@@ -119,4 +119,13 @@
 ;; Don't wrap around when moving between buffers
 (setq windmove-wrap-around nil)
 
+;; Don't show me all emacs warnings immediately. Unfortunately this is
+;; not very granular, as emacs displays most of its warnings in the
+;; `emacs' "category", but without it every time I
+;; fullscreen/unfullscreen the warning buffer destroys my layout.
+;;
+;; Warnings suppressed by this are still logged to the warnings
+;; buffer.
+(setq warning-suppress-types '((emacs)))
+
 (provide 'look-and-feel)
