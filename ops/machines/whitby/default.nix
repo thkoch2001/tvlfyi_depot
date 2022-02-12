@@ -466,7 +466,8 @@ in
     htop
     hyperfine
     jq
-    kitty.terminfo
+    # TODO(sterni): re-enable when the kitty build is fixed upstreams
+    # kitty.terminfo
     nano
     nvd
     ripgrep

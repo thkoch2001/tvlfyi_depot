@@ -154,8 +154,7 @@ let
           let
             implementation = old.implementation or defaultImplementation;
             brokenOn = old.brokenOn or [ ];
-            # TODO(sterni): figure out why ccl stopped working and re-add the targets for it
-            targets = lib.subtractLists (brokenOn ++ [ "ccl" implementation.name ])
+            targets = lib.subtractLists (brokenOn ++ [ implementation.name ])
               (builtins.attrNames impls);
           in
           {
