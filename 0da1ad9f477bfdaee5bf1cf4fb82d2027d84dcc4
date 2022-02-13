@@ -39,6 +39,24 @@
       "message": "I think you also should delete the rust file no?",
       "revId": "0da1ad9f477bfdaee5bf1cf4fb82d2027d84dcc4",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "92f28b4c_94a47b2f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2022-02-13T16:43:32Z",
+      "side": 1,
+      "message": "If you mean pin.json for cl/4554, done.",
+      "parentUuid": "40ef9bff_4a448f44",
+      "revId": "0da1ad9f477bfdaee5bf1cf4fb82d2027d84dcc4",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
