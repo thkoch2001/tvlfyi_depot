@@ -49,6 +49,7 @@
 (require 'evil-surround)
 (require 'key-chord)
 (require 'edebug)
+(require 'avy)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; General Keybindings
@@ -408,6 +409,12 @@
  :states '(normal)
  "K" #'refine-delete
  "q" #'kill-this-buffer)
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; avy
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(global-set-key (kbd "C-;") #'avy-goto-char)
 
 (provide 'keybindings)
 ;;; keybindings.el ends here
