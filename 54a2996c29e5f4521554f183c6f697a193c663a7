@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9fcb93b0_628333cc",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2022-02-13T18:36:22Z",
+      "side": 1,
+      "message": "There are a few things I dislike but mostly they were either present before and this has just not removed them, or just something I\u0027ll deal with because in general the formatting is better and arguing about specific points isn\u0027t worthwhile.",
+      "revId": "54a2996c29e5f4521554f183c6f697a193c663a7",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
