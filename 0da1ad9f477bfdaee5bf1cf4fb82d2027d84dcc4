@@ -24,6 +24,30 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "f3c61880_1d36a605",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-02-13T17:08:12Z",
+      "side": 1,
+      "message": "It doesn\u0027t matter.",
+      "parentUuid": "970cff28_0e409da3",
+      "range": {
+        "startLine": 7,
+        "startChar": 0,
+        "endLine": 7,
+        "endChar": 8
+      },
+      "revId": "0da1ad9f477bfdaee5bf1cf4fb82d2027d84dcc4",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "40ef9bff_4a448f44",
