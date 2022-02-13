@@ -196,21 +196,18 @@ predicate."
        cycle-current
        window-manager-named-workspace-label))
 
-(defun window-manager-swap-workspaces ()
-  "Prompt the user to switch the current workspace with another."
+(defun window-manager-workspace-move ()
+  "Prompt the user to move the current workspace to another."
   (interactive)
-  (let* ((selection (->> window-manager-named-workspaces
-                         (-map #'window-manager-named-workspace-label)
-                         (-reject
-                          (lambda (x)
-                            (s-equals? x (window-manager-current-workspace))))
-                         (completing-read
-                          (format "Swap current workspace (i.e. \"%s\") with: "
-                                  (window-manager-current-workspace)))))
-         (i (-find-index (lambda (x)
-                           (s-equals? selection (window-manager-named-workspace-label x)))
-                                 window-manager-named-workspaces)))
-    (exwm-workspace-swap exwm-workspace--current (elt exwm-workspace--list i))))
+  (exwm-workspace-move
+   exwm-workspace--current
+   (window-manager--label->index
+    (completing-read "Move current workspace to: "
+                     (->> window-manager-named-workspaces
+                          (-map #'window-manager-named-workspace-label))
+                     nil
+                     t)
+    window-manager-named-workspaces)))
 
 (provide 'window-manager)
 ;;; window-manager.el ends here
