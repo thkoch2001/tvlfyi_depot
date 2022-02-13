@@ -24,6 +24,30 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "68bcc5bf_ab82148f",
+        "filename": "tools/rust-crates-advisory/default.nix",
+        "patchSetId": 4
+      },
+      "lineNbr": 152,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2022-02-13T16:31:24Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "96c070ef_0366cee2",
+      "range": {
+        "startLine": 152,
+        "startChar": 38,
+        "endLine": 152,
+        "endChar": 42
+      },
+      "revId": "17a3f353a6b5beae1afbcda17519cfa1f1c141ad",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "e2cf11e2_ec8a69e7",
@@ -37,6 +61,30 @@
       "writtenOn": "2022-02-13T16:26:34Z",
       "side": 1,
       "message": "Usually in scripts I’d say we should use long-form",
+      "range": {
+        "startLine": 155,
+        "startChar": 19,
+        "endLine": 155,
+        "endChar": 22
+      },
+      "revId": "17a3f353a6b5beae1afbcda17519cfa1f1c141ad",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "67849e12_6afd7fb4",
+        "filename": "tools/rust-crates-advisory/default.nix",
+        "patchSetId": 4
+      },
+      "lineNbr": 155,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2022-02-13T16:31:24Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e2cf11e2_ec8a69e7",
       "range": {
         "startLine": 155,
         "startChar": 19,
