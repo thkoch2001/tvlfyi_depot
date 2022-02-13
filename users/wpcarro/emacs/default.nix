@@ -33,6 +33,7 @@ let
     ]) ++
 
     (with epkgs.melpaPackages; [
+      avy
       org-bullets
       sly
       notmuch
