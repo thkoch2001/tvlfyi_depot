@@ -9,9 +9,6 @@
 ;;
 ;; Integrate with bburns/clipmon so that System Clipboard can integrate with
 ;; Emacs's kill-ring.
-;;
-;; Wish list:
-;; - Create an Emacs integration with github.com/cdown/clipmenud.
 
 ;;; Code:
 
