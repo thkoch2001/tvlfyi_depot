@@ -21,10 +21,10 @@ in
       ${pkgs.terraform}/bin/terraform -chdir="$TF_STATE_DIR" init
     fi
 
-    # function cleanup() {
-    #   rm -f "$TF_STATE_DIR/$(basename $STORE_PATH)"
-    # }
-    # trap cleanup EXIT
+    function cleanup() {
+      rm -f "$TF_STATE_DIR/$(basename $STORE_PATH)"
+    }
+    trap cleanup EXIT
 
     ${pkgs.terraform}/bin/terraform -chdir="$TF_STATE_DIR" apply
   '';
