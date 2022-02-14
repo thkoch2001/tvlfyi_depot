@@ -22,6 +22,30 @@
       },
       "revId": "cc86cf591c738182dbabfdadb9ebeae5ed04373c",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f2e60437_dc934e80",
+        "filename": "tools/magrathea/mg.scm",
+        "patchSetId": 2
+      },
+      "lineNbr": 260,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2022-02-14T11:12:20Z",
+      "side": 1,
+      "message": "It doesn\u0027t:\n\n\u003e ./bin/mg run lol\n[mg] building target lol\nerror: attribute \u0027lol\u0027 missing, at (string):1:17\n[mg] error: Couldn\u0027t build target //lol\n\nBasically it behaves as normal, but in the case of nix-build reading from stdout will return #!eof immediately.",
+      "parentUuid": "8a11741e_e361e1a0",
+      "range": {
+        "startLine": 260,
+        "startChar": 0,
+        "endLine": 260,
+        "endChar": 67
+      },
+      "revId": "cc86cf591c738182dbabfdadb9ebeae5ed04373c",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
