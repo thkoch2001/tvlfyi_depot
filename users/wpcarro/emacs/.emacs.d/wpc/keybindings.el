@@ -22,10 +22,10 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (require 'functions)
-(require 'clipboard)
 (require 'screen-brightness)
 (require 'pulse-audio)
 (require 'scrot)
+(require 'ivy)
 (require 'ivy-clipmenu)
 (require 'ivy-helpers)
 (require 'general)
@@ -408,6 +408,16 @@
  :states '(normal)
  "K" #'refine-delete
  "q" #'kill-this-buffer)
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; ivy
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+;; restore the ability to paste in ivy
+(general-define-key
+ :keymaps '(ivy-minibuffer-map)
+ "C-v" #'clipboard-yank
+ "C-S-v" #'clipboard-yank)
 
 (provide 'keybindings)
 ;;; keybindings.el ends here
