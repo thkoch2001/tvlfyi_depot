@@ -63,6 +63,7 @@ let
       all-the-icons
       all-the-icons-ivy
       ivy
+      ivy-clipmenu
       ivy-pass
       ivy-prescient
       restclient
