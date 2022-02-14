@@ -32,7 +32,7 @@ in
   # Rebuild NixOS for diogenes without applying terraform updates.
   rebuild-diogenes = pkgs.writeShellScriptBin "rebuild-diogenes" ''
     set -euo pipefail
-    readonly target="root@''${1}"
+    readonly target="root@billandhiscomputer.com"
 
     # We need to call nix-build here on the drvPath because it may not be in
     # /nix/store yet.
