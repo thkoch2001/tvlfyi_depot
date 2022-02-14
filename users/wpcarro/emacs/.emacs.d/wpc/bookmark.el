@@ -13,6 +13,7 @@
 ;; Dependencies
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+(require 'project)
 (require 'general)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -28,7 +29,7 @@
 (defun bookmark-open (b)
   "Open bookmark, B, as either a project directory or a regular directory."
   (with-temp-buffer
-    (cd path)
+    (cd (bookmark-path b))
     (call-interactively #'project-find-file)))
 
 (defun bookmark-install-kbd (b)
