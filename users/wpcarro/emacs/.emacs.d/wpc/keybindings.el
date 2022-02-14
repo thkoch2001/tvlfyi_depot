@@ -397,6 +397,11 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (bookmark-install-kbd
+ (make-bookmark :label "wpcarro"
+                :path (f-join tvl-depot-path "users/wpcarro")
+                :kbd "w"))
+
+(bookmark-install-kbd
  (make-bookmark :label "depot"
                 :path tvl-depot-path
                 :kbd "d"))
