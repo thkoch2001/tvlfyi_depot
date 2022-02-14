@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8a11741e_e361e1a0",
+        "filename": "tools/magrathea/mg.scm",
+        "patchSetId": 2
+      },
+      "lineNbr": 260,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-02-14T10:29:12Z",
+      "side": 1,
+      "message": "I think it raises an exception if the process terminated non-normally? Did you try it?\n\nFWIW, it seems that with this function getting the exit code itself is not possible, we\u0027d have to use a lower-level function and wire up the pipes.",
+      "range": {
+        "startLine": 260,
+        "startChar": 0,
+        "endLine": 260,
+        "endChar": 67
+      },
+      "revId": "cc86cf591c738182dbabfdadb9ebeae5ed04373c",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
