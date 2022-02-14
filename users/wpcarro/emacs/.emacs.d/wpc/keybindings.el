@@ -396,8 +396,10 @@
 ;; bookmarks
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-;; Install KBDs like <SPC>jb to search through my monorepo.
-(bookmark-install-kbds)
+(bookmark-install-kbd
+ (make-bookmark :label "depot"
+                :path tvl-depot-path
+                :kbd "d"))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; refine
