@@ -39,6 +39,201 @@ let
     builtins.match ".*<attrspat ellipsis=\"1\">.*"
       (builtins.toXML f) != null;
 
+  /* Return the number of arguments the given function accepts or 0 if the value
+     is not a function.
+
+     Example:
+
+       argCount argCount
+       => 1
+
+       argCount builtins.add
+       => 2
+
+       argCount pkgs.stdenv.mkDerivation
+       => 1
+  */
+  argCount = f:
+    let
+      # N.B. since we are only interested if the result of calling is a function
+      # as opposed to a normal value or evaluation failure, we never need to
+      # check success, as value will be false (i.e. not a function) in the
+      # failure case.
+      called = builtins.tryEval (
+        f (builtins.throw "You should never see this error message")
+      );
+    in
+    if !(builtins.isFunction f || builtins.isFunction (f.__functor or null))
+    then 0
+    else 1 + argCount called.value;
+
+  /* Call a given function with a given list of arguments.
+
+     Example:
+
+       apply builtins.sub [ 20 10 ]
+       => 10
+  */
+  apply = f: args:
+    builtins.foldl' (f: x: f x) f args;
+
+  # TODO(sterni): think of a better name for unapply
+  /* Collect n arguments into a list and pass them to the given function.
+     Allows calling a function that expects a list by feeding it the list
+     elements individually as function arguments - the limitation being
+     that the list must of constant length.
+
+     This is mainly useful for functions that wrap other, arbitrary functions
+     in conjunction with argCount and apply, since lists of arguments are
+     easier to deal with usually.
+
+     Example:
+
+       (unapply 3 lib.id) 1 2 3
+       => [ 1 2 3 ]
+
+       (unapply 5 lib.reverse) 1 2 null 4 5
+       => [ 5 4 null 2 1 ]
+
+       # unapply and apply compose the identity relation together
+
+       unapply (argCount f) (apply f)
+       # is equivalent to f (if the function is not variable length)
+
+       (unapply 2 (apply builtins.sub)) 20 10
+       => 10
+  */
+  unapply =
+    let
+      unapply' = acc: n: f: x:
+        if n == 1
+        then f (acc ++ [ x ])
+        else unapply' (acc ++ [ x ]) (n - 1) f;
+    in
+    unapply' [ ];
+
+  /* Optimize a tail recursive Nix function by intercepting the recursive
+     function application and expressing it in terms of builtins.genericClosure
+     instead. The main benefit of this optimization is that even a naively
+     written recursive algorithm won't overflow the stack.
+
+     For this to work the following things prerequisites are necessary:
+
+     - The passed function needs to be a fix point for its self reference,
+       i. e. the argument to tailCallOpt needs to be of the form
+       `self: # function body that uses self to call itself`.
+       This is because tailCallOpt needs to manipulate the call to self
+       which otherwise wouldn't be possible due to Nix's lexical scoping.
+
+     - The passed function may only call itself as a tail call, all other
+       forms of recursions will fail evaluation.
+
+     This function was mainly written to prove that builtins.genericClosure
+     can be used to express any (tail) recursive algorithm. It can be used
+     to avoid stack overflows for deeply recursive, but naively written
+     functions (in the context of Nix this mainly means using recursion
+     instead of (ab)using more performant and less limited builtins).
+     A better alternative to using this function is probably translating
+     the algorithm to builtins.genericClosure manually. Also note that
+     using tailCallOpt doesn't mean that the stack won't ever overflow:
+     Data structures, especially lazy ones, can still cause all the
+     available stack space to be consumed.
+
+     The optimization also only concerns avoiding stack overflows,
+     tailCallOpt will make functions slower if anything.
+
+     Type: (F -> F) -> F where F is any tail recursive function.
+
+     Example:
+
+     let
+       label' = self: acc: n:
+         if n == 0
+         then "This is " + acc + "cursed."
+         else self (acc + "very ") (n - 1);
+
+       # Equivalent to a naive recursive implementation in Nix
+       label = (lib.fix label') "";
+
+       labelOpt = tailCallOpt label' "";
+     in
+
+     label 5
+     => "This is very very very very very cursed."
+
+     labelOpt 5
+     => "This is very very very very very cursed."
+
+     label 10000
+     => error: stack overflow (possible infinite recursion)
+
+     labelOpt 10000
+     => "This is very very very … very very very cursed."
+  */
+  tailCallOpt = f:
+    let
+      argc = argCount (lib.fix f);
+
+      # This function simulates being f for f's self reference. Instead of
+      # recursing, it will just return the arguments received as a specially
+      # tagged set, so the recursion step can be performed later.
+      fakef = unapply argc (args: {
+        __tailCall = true;
+        inherit args;
+      });
+      # Pass fakef to f so that it'll be called instead of recursing, ensuring
+      # only one recursion step is performed at a time.
+      encodedf = f fakef;
+
+      opt = args:
+        let
+          steps = builtins.genericClosure {
+            # This is how we encode a (tail) call: A set with final == false
+            # and the list of arguments to pass to be found in args.
+            startSet = [
+              {
+                key = "0";
+                id = 0;
+                final = false;
+                inherit args;
+              }
+            ];
+
+            operator =
+              { id, final, ... }@state:
+              let
+                # Plumbing to make genericClosure happy
+                newIds = {
+                  key = toString (id + 1);
+                  id = id + 1;
+                };
+
+                # Perform recursion step
+                call = apply encodedf state.args;
+
+                # If call encodes a new call, return the new encoded call,
+                # otherwise signal that we're done.
+                newState =
+                  if builtins.isAttrs call && call.__tailCall or false
+                  then newIds // {
+                    final = false;
+                    inherit (call) args;
+                  } else newIds // {
+                    final = true;
+                    value = call;
+                  };
+              in
+
+              if final
+              then [ ] # end condition for genericClosure
+              else [ newState ];
+          };
+        in
+        # The list returned by genericClosure will contain all intermediate
+        # steps, so we need to search for the final value.
+        (builtins.head (builtins.filter (x: x.final) steps)).value;
+    in
+    unapply argc opt;
 in
 
 {
@@ -55,5 +250,9 @@ in
     lr
     lrs
     hasEllipsis
+    argCount
+    tailCallOpt
+    apply
+    unapply
     ;
 }
