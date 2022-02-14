@@ -19,6 +19,7 @@
 (require 'tvl)
 (require 'region)
 (require 'general)
+(require 'constants)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Configuration
