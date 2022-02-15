@@ -28,6 +28,7 @@
 (package! org-sticky-header)
 (package! gnuplot)
 (package! gnuplot-mode)
+(package! org-d20)
 
 ;; Presentation
 (package! epresent)
