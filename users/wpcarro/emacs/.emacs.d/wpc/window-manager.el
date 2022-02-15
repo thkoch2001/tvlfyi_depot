@@ -209,5 +209,20 @@ predicate."
                      t)
     window-manager-named-workspaces)))
 
+(defun window-manager-move-window ()
+  "Prompt the user to move the current window to another workspace."
+  (interactive)
+  (let ((window (get-buffer-window))
+        (dest (completing-read "Move current window to: "
+                               (->> window-manager-named-workspaces
+                                    (-map #'window-manager-named-workspace-label))
+                               nil
+                               t)))
+    (exwm-workspace-move-window
+     (exwm-workspace--workspace-from-frame-or-index
+      (window-manager--label->index dest window-manager-named-workspaces))
+     (exwm--buffer->id window))
+    (window-manager--switch dest)))
+
 (provide 'window-manager)
 ;;; window-manager.el ends here
