@@ -8,6 +8,7 @@ in
 {
   imports = [
     "${depot.path}/ops/modules/atward.nix"
+    "${depot.path}/ops/modules/cgit/default.nix"
     "${depot.path}/ops/modules/clbot.nix"
     "${depot.path}/ops/modules/gerrit-queue.nix"
     "${depot.path}/ops/modules/git-serving.nix"
@@ -392,6 +393,7 @@ in
     nixery.enable = true;
 
     # Run cgit & josh to serve git
+    cgit.enable = true;
     git-serving.enable = true;
 
     # Configure backups to GleSYS
