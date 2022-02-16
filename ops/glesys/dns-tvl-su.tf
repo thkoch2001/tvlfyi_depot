@@ -53,6 +53,13 @@ resource "glesys_dnsdomain_record" "tvl_su_whitby_AAAA" {
   data   = var.whitby_ipv6
 }
 
+resource "glesys_dnsdomain_record" "tvl_su_sanduny_A" {
+  domain = glesys_dnsdomain.tvl_su.id
+  host   = "sanduny"
+  type   = "A"
+  data   = var.sanduny_ipv4
+}
+
 # This record is responsible for hosting ~all TVL services. Be
 # mindful!
 resource "glesys_dnsdomain_record" "tvl_su_wildcard" {
