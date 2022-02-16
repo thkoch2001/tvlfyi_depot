@@ -1,14 +1,10 @@
-# This derivation configures a 'cgit' instance to serve repositories
-# from a different source.
-{ depot, pkgs, ... }:
+# Configuration for running the TVL cgit instance using thttpd.
+{ config, depot, lib, pkgs, ... }:
 
 let
-  inherit (pkgs)
-    mime-types
-    thttpd
-    writeShellScriptBin
-    writeText
-    ;
+  inherit (pkgs) writeText;
+
+  cfg = config.services.depot.cgit;
 
   cgitConfig = writeText "cgitrc" ''
     # Global configuration
@@ -21,7 +17,7 @@ let
     enable-log-linecount=1
     enable-follow-links=1
     enable-blame=1
-    mimetype-file=${mime-types}/etc/mime.types
+    mimetype-file=${pkgs.mime-types}/etc/mime.types
     logo=https://static.tvl.fyi/${depot.web.static.drvHash}/logo-animated.svg
 
     # Repository configuration
@@ -33,7 +29,7 @@ let
   '';
 
   thttpdConfig = writeText "thttpd.conf" ''
-    port=2448
+    port=${toString cfg.port}
     dir=${depot.third_party.cgit}/cgit
     nochroot
     novhost
@@ -45,8 +41,7 @@ let
   # configuration.
   #
   # Things are done this way because recompilation of thttpd is much
-  # faster than cgit and I don't want to wait long when iterating on
-  # config.
+  # faster than cgit.
   thttpdConfigPatch = writeText "thttpd_cgit_conf.patch" ''
     diff --git a/libhttpd.c b/libhttpd.c
     index c6b1622..eef4b73 100644
@@ -60,13 +55,38 @@ let
          envp[envn++] = build_env( "PATH=%s", CGI_PATH );
      #ifdef CGI_LD_LIBRARY_PATH
   '';
-  thttpdCgit = thttpd.overrideAttrs (old: {
+
+  thttpdCgit = pkgs.thttpd.overrideAttrs (old: {
     patches = [
       ./thttpd_cgi_idx.patch
       thttpdConfigPatch
     ];
   });
 in
-writeShellScriptBin "cgit-launch" ''
-  exec ${thttpdCgit}/bin/thttpd -D -C ${thttpdConfig}
-''
+{
+  options.services.depot.cgit = with lib; {
+    enable = mkEnableOption "Run cgit web interface for depot";
+
+    port = mkOption {
+      description = "Port on which cgit should listen";
+      type = types.int;
+      default = 2448;
+    };
+  };
+
+  config = lib.mkIf cfg.enable {
+    systemd.services.cgit = {
+      wantedBy = [ "multi-user.target" ];
+
+      serviceConfig = {
+        Restart = "on-failure";
+        User = "git";
+        Group = "git";
+
+        ExecStart = pkgs.writeShellScript "cgit-launch" ''
+          exec ${thttpdCgit}/bin/thttpd -D -C ${thttpdConfig}
+        '';
+      };
+    };
+  };
+}
