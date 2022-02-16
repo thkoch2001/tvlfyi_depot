@@ -2,13 +2,13 @@
 { config, depot, lib, pkgs, ... }:
 
 let
-  cfg = config.services.depot.git-serving;
+  cfg = config.services.depot.josh;
 in
 {
-  options.services.depot.git-serving = with lib; {
-    enable = mkEnableOption "Enable cgit & josh configuration";
+  options.services.depot.josh = with lib; {
+    enable = mkEnableOption "Enable josh for serving the depot";
 
-    joshPort = mkOption {
+    port = mkOption {
       description = "Port on which josh should listen";
       type = types.int;
       default = 5674;
@@ -26,7 +26,7 @@ in
         DynamicUser = true;
         StateDirectory = "josh";
         Restart = "always";
-        ExecStart = "${depot.third_party.josh}/bin/josh-proxy --no-background --local /var/lib/josh --port ${toString cfg.joshPort} --remote https://cl.tvl.fyi/";
+        ExecStart = "${depot.third_party.josh}/bin/josh-proxy --no-background --local /var/lib/josh --port ${toString cfg.port} --remote https://cl.tvl.fyi/";
       };
     };
   };

@@ -11,8 +11,8 @@ in
     "${depot.path}/ops/modules/cgit/default.nix"
     "${depot.path}/ops/modules/clbot.nix"
     "${depot.path}/ops/modules/gerrit-queue.nix"
-    "${depot.path}/ops/modules/git-serving.nix"
     "${depot.path}/ops/modules/irccat.nix"
+    "${depot.path}/ops/modules/josh.nix"
     "${depot.path}/ops/modules/monorepo-gerrit.nix"
     "${depot.path}/ops/modules/nixery.nix"
     "${depot.path}/ops/modules/oauth2_proxy.nix"
@@ -394,7 +394,7 @@ in
 
     # Run cgit & josh to serve git
     cgit.enable = true;
-    git-serving.enable = true;
+    josh.enable = true;
 
     # Configure backups to GleSYS
     restic = {
