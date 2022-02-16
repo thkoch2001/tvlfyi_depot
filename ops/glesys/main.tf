@@ -60,3 +60,8 @@ variable "whitby_ipv6" {
   type    = string
   default = "2a01:4f8:242:5b21:0:feed:edef:beef"
 }
+
+variable "sanduny_ipv4" {
+  type    = string
+  default = "85.119.82.231"
+}
