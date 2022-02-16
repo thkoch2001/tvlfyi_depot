@@ -1,6 +1,7 @@
 { depot, ... }:
 
 (with depot.ops.machines; [
+  sanduny
   whitby
 ]) ++
 

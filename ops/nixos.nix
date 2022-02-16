@@ -50,5 +50,6 @@ in rec {
 
   # Systems that should be built in CI
   whitbySystem = (nixosFor depot.ops.machines.whitby).system;
+  sandunySystem = (nixosFor depot.ops.machines.sanduny).system;
   meta.ci.targets = [ "whitbySystem" ];
 }
