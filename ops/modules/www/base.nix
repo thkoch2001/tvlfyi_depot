@@ -2,6 +2,11 @@
 
 {
   config = {
+    security.acme = {
+      acceptTerms = true;
+      defaults.email = "letsencrypt@tvl.su";
+    };
+
     services.nginx = {
       enable = true;
       enableReload = true;
