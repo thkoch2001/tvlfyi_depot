@@ -14,6 +14,7 @@ let
 in
 {
   imports = [
+    (mod "journaldriver.nix")
     (mod "tvl-users.nix")
   ];
 
