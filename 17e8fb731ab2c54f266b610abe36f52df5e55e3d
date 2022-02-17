@@ -46,6 +46,30 @@
       },
       "revId": "17e8fb731ab2c54f266b610abe36f52df5e55e3d",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ba87a9cc_a781edde",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2022-02-17T18:15:42Z",
+      "side": 1,
+      "message": "The other binaries don\u0027t need git? Otherwise LGTM.",
+      "parentUuid": "68508a06_73e22956",
+      "range": {
+        "startLine": 9,
+        "startChar": 0,
+        "endLine": 9,
+        "endChar": 1
+      },
+      "revId": "17e8fb731ab2c54f266b610abe36f52df5e55e3d",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
