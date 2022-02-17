@@ -9,7 +9,14 @@ _: # ignore readTree options
 
 { config, depot, lib, pkgs, ... }:
 
+let
+  mod = name: depot.path + ("/ops/modules/" + name);
+in
 {
+  imports = [
+    (mod "tvl-users.nix")
+  ];
+
   networking = {
     hostName = "sanduny";
     domain = "tvl.su";
@@ -31,13 +38,6 @@ _: # ignore readTree options
     defaultGateway6.address = "2001:ba8:1f1:f109::1";
 
     firewall.allowedTCPPorts = [ 22 80 443 ];
-  };
-
-  users.users.tazjin = {
-    isNormalUser = true;
-    extraGroups = [ "git" "wheel" ];
-    shell = pkgs.fish;
-    openssh.authorizedKeys.keys = depot.users.tazjin.keys.all;
   };
 
   security.sudo.wheelNeedsPassword = false;
