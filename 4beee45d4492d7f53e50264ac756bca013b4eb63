@@ -45,6 +45,30 @@
       },
       "revId": "4beee45d4492d7f53e50264ac756bca013b4eb63",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "485a01ad_a489c1be",
+        "filename": "web/panettone/src/model.lisp",
+        "patchSetId": 2
+      },
+      "lineNbr": 267,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-02-17T16:32:24Z",
+      "side": 1,
+      "message": "See above!)",
+      "parentUuid": "9679a9a6_9ed8d5dd",
+      "range": {
+        "startLine": 267,
+        "startChar": 11,
+        "endLine": 267,
+        "endChar": 25
+      },
+      "revId": "4beee45d4492d7f53e50264ac756bca013b4eb63",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
