@@ -24,6 +24,30 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "265c6f8b_77dbf681",
+        "filename": "web/panettone/src/model.lisp",
+        "patchSetId": 2
+      },
+      "lineNbr": 264,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-02-17T16:32:39Z",
+      "side": 1,
+      "message": "The reason I renamed the method is because this clashes with a field name. The method is actually unused, afaict.",
+      "parentUuid": "9b6eb677_0abf85e2",
+      "range": {
+        "startLine": 264,
+        "startChar": 41,
+        "endLine": 264,
+        "endChar": 53
+      },
+      "revId": "4beee45d4492d7f53e50264ac756bca013b4eb63",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "9679a9a6_9ed8d5dd",
