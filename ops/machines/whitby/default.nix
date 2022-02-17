@@ -24,6 +24,7 @@ in
     "${depot.path}/ops/modules/sourcegraph.nix"
     "${depot.path}/ops/modules/tvl-buildkite.nix"
     "${depot.path}/ops/modules/tvl-slapd/default.nix"
+    "${depot.path}/ops/modules/tvl-users.nix"
     "${depot.path}/ops/modules/www/atward.tvl.fyi.nix"
     "${depot.path}/ops/modules/www/auth.tvl.fyi.nix"
     "${depot.path}/ops/modules/www/b.tvl.fyi.nix"
@@ -456,24 +457,19 @@ in
   services.fail2ban.enable = true;
 
   environment.systemPackages = (with pkgs; [
-    alacritty.terminfo
     bat
     bb
     curl
     direnv
     emacs-nox
     fd
-    foot.terminfo
     git
     htop
     hyperfine
     jq
-    # TODO(sterni): re-enable when the kitty build is fixed upstreams
-    # kitty.terminfo
     nano
     nvd
     ripgrep
-    rxvt_unicode.terminfo
     tree
     unzip
     vim
@@ -645,81 +641,6 @@ in
   ];
 
   users = {
-    users.tazjin = {
-      isNormalUser = true;
-      extraGroups = [ "git" "wheel" ];
-      shell = pkgs.fish;
-      openssh.authorizedKeys.keys = depot.users.tazjin.keys.all;
-    };
-
-    users.lukegb = {
-      isNormalUser = true;
-      extraGroups = [ "git" "wheel" ];
-      openssh.authorizedKeys.keys = depot.users.lukegb.keys.all;
-    };
-
-    users.grfn = {
-      isNormalUser = true;
-      extraGroups = [ "git" "wheel" ];
-      openssh.authorizedKeys.keys = [
-        depot.users.grfn.keys.whitby
-      ];
-    };
-
-    users.isomer = {
-      isNormalUser = true;
-      extraGroups = [ "git" ];
-      openssh.authorizedKeys.keys = depot.users.isomer.keys.all;
-    };
-
-    users.riking = {
-      isNormalUser = true;
-      extraGroups = [ "git" ];
-      openssh.authorizedKeys.keys = depot.users.riking.keys.u2f ++ depot.users.riking.keys.passworded;
-    };
-
-    users.edef = {
-      isNormalUser = true;
-      extraGroups = [ "git" ];
-      openssh.authorizedKeys.keys = depot.users.edef.keys.all;
-    };
-
-    users.qyliss = {
-      isNormalUser = true;
-      extraGroups = [ "git" ];
-      openssh.authorizedKeys.keys = depot.users.qyliss.keys.all;
-    };
-
-    users.eta = {
-      isNormalUser = true;
-      extraGroups = [ "git" ];
-      openssh.authorizedKeys.keys = depot.users.eta.keys.whitby;
-    };
-
-    users.cynthia = {
-      isNormalUser = true; # I'm normal OwO :3
-      extraGroups = [ "git" ];
-      openssh.authorizedKeys.keys = depot.users.cynthia.keys.all;
-    };
-
-    users.firefly = {
-      isNormalUser = true;
-      extraGroups = [ "git" ];
-      openssh.authorizedKeys.keys = depot.users.firefly.keys.whitby;
-    };
-
-    users.sterni = {
-      isNormalUser = true;
-      extraGroups = [ "git" "wheel" ];
-      openssh.authorizedKeys.keys = depot.users.sterni.keys.all;
-    };
-
-    users.flokli = {
-      isNormalUser = true;
-      extraGroups = [ "git" ];
-      openssh.authorizedKeys.keys = depot.users.flokli.keys.all;
-    };
-
     # Set up a user & group for git shenanigans
     groups.git = { };
     users.git = {
