@@ -41,6 +41,7 @@ in
     "${depot.path}/ops/modules/www/todo.tvl.fyi.nix"
     "${depot.path}/ops/modules/www/tvl.fyi.nix"
     "${depot.path}/ops/modules/www/tvl.su.nix"
+    "${depot.path}/ops/modules/www/whitby.tvl.fyi.nix"
     "${depot.path}/ops/modules/www/wigglydonke.rs.nix"
     "${depot.third_party.agenix.src}/modules/age.nix"
     "${pkgs.path}/nixos/modules/services/web-apps/gerrit.nix"
