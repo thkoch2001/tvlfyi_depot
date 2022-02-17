@@ -12,28 +12,31 @@ let
     "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIJk+KvgvI2oJTppMASNUfMcMkA2G5ZNt+HnWDzaXKLlo"
   ];
 
+  sanduny = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIOag0XhylaTVhmT6HB8EN2Fv5Ymrc4ZfypOXONUkykTX";
   whitby = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAILNh/w4BSKov0jdz3gKBc98tpoLta5bb87fQXWBhAl2I";
 
-  default.publicKeys = tazjin ++ grfn ++ sterni ++ [ whitby ];
+  whitbyDefault.publicKeys = tazjin ++ grfn ++ sterni ++ [ whitby ];
+  allDefault.publicKeys = tazjin ++ grfn ++ sterni ++ [ sanduny whitby ];
 in
 {
-  "besadii.age" = default;
-  "buildkite-agent-token.age" = default;
-  "buildkite-graphql-token.age" = default;
-  "clbot-ssh.age" = default;
-  "clbot.age" = default;
-  "gerrit-queue.age" = default;
-  "gerrit-secrets.age" = default;
-  "grafana.age" = default;
-  "irccat.age" = default;
-  "keycloak-db.age" = default;
-  "nix-cache-priv.age" = default;
-  "nix-cache-pub.age" = default;
-  "oauth2_proxy.age" = default;
-  "owothia.age" = default;
-  "panettone.age" = default;
-  "smtprelay.age" = default;
-  "tf-glesys.age" = default;
-  "tf-keycloak.age" = default;
-  "tvl-alerts-bot-telegram-token.age" = default;
+  "besadii.age" = whitbyDefault;
+  "buildkite-agent-token.age" = whitbyDefault;
+  "buildkite-graphql-token.age" = whitbyDefault;
+  "clbot-ssh.age" = whitbyDefault;
+  "clbot.age" = whitbyDefault;
+  "gerrit-queue.age" = whitbyDefault;
+  "gerrit-secrets.age" = whitbyDefault;
+  "grafana.age" = whitbyDefault;
+  "irccat.age" = whitbyDefault;
+  "journaldriver.age" = allDefault;
+  "keycloak-db.age" = whitbyDefault;
+  "nix-cache-priv.age" = whitbyDefault;
+  "nix-cache-pub.age" = whitbyDefault;
+  "oauth2_proxy.age" = whitbyDefault;
+  "owothia.age" = whitbyDefault;
+  "panettone.age" = whitbyDefault;
+  "smtprelay.age" = whitbyDefault;
+  "tf-glesys.age" = whitbyDefault;
+  "tf-keycloak.age" = whitbyDefault;
+  "tvl-alerts-bot-telegram-token.age" = whitbyDefault;
 }
