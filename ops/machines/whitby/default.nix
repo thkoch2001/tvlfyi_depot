@@ -645,10 +645,5 @@ in
     };
   };
 
-  security.acme = {
-    acceptTerms = true;
-    defaults.email = "certs@tvl.fyi";
-  };
-
   system.stateVersion = "20.03";
 }
