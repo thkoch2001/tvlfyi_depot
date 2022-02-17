@@ -15,6 +15,7 @@ in
 {
   imports = [
     (mod "journaldriver.nix")
+    (mod "known-hosts.nix")
     (mod "tvl-users.nix")
     (mod "www/sanduny.tvl.su.nix")
   ];
