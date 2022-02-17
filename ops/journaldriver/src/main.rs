@@ -100,6 +100,23 @@ lazy_static! {
     /// Service account credentials (if configured)
     static ref SERVICE_ACCOUNT_CREDENTIALS: Option<Credentials> =
         env::var("GOOGLE_APPLICATION_CREDENTIALS").ok()
+        .map(PathBuf::from)
+        .map(|path| {
+            // if the path is relative and we have
+            // `CREDENTIALS_DIRECTORY` available, the application
+            // credentials likely come from systemd.
+            let creds_dir = env::var("CREDENTIALS_DIRECTORY").ok().map(PathBuf::from);
+
+            if let Some(mut final_path) = creds_dir {
+                if path.is_relative() {
+                    final_path.push(path);
+                    return final_path;
+                }
+            }
+
+            // otherwise just continue with this path as is
+            path
+        })
         .and_then(|path| File::open(path).ok())
         .and_then(|file| serde_json::from_reader(file).ok());
 
