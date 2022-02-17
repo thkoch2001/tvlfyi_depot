@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "10700c29_0ccc8a68",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2022-02-17T13:33:13Z",
+      "side": 1,
+      "message": "This isn\u0027t harmful per se, but I\u0027d rather see systemd support interpolating `$CREDENTIALS_DIRECTORY`, than applications using `$CREDENTIALS_DIRECTORY`.\n\nI opened https://github.com/systemd/systemd/issues/22549, let\u0027s collect some upstream feedback.",
+      "revId": "14b89a25f888ecdd5070b77d198548164866a53b",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
