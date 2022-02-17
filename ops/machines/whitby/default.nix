@@ -13,6 +13,7 @@ in
     "${depot.path}/ops/modules/gerrit-queue.nix"
     "${depot.path}/ops/modules/irccat.nix"
     "${depot.path}/ops/modules/josh.nix"
+    "${depot.path}/ops/modules/known-hosts.nix"
     "${depot.path}/ops/modules/monorepo-gerrit.nix"
     "${depot.path}/ops/modules/nixery.nix"
     "${depot.path}/ops/modules/oauth2_proxy.nix"
