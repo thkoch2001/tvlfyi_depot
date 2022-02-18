@@ -22,6 +22,27 @@ fn test_text_entry_serialization() {
 }
 
 #[test]
+fn test_timestamped_entry_serialization() {
+    let timestamp: DateTime<Utc> = "1952-10-07T12:00:00Z".to_string().parse().unwrap();
+    let entry = LogEntry {
+        labels: Value::Null,
+        timestamp: Some(timestamp),
+        payload: Payload::TextPayload {
+            text_payload: "test entry".into(),
+        },
+        severity: None,
+    };
+
+    let expected = "{\"labels\":null,\"timestamp\":\"1952-10-07T12:00:00Z\",\"textPayload\":\"test entry\"}";
+    let result = to_string(&entry).expect("serialization failed");
+
+    assert_eq!(
+        expected, result,
+        "Plain text payload should serialize correctly"
+    )
+}
+
+#[test]
 fn test_json_entry_serialization() {
     let entry = LogEntry {
         labels: Value::Null,
@@ -37,7 +58,7 @@ fn test_json_entry_serialization() {
     let expected = "{\"labels\":null,\"jsonPayload\":{\"message\":\"JSON test\"}}";
     let result = to_string(&entry).expect("serialization failed");
 
-    assert_eq!(expected, result, "JSOn payload should serialize correctly")
+    assert_eq!(expected, result, "JSON payload should serialize correctly")
 }
 
 #[test]
