@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3dde1982_79b63c32",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-02-18T08:48:24Z",
+      "side": 1,
+      "message": "Note that this is currently the \"best case\" in terms of vulnerabilities (still two reported for this project), because chrono is unmaintained and uses an old version of time, and medallion depends on chrono.",
+      "revId": "a48c2e54f94b73b29ab85a0217e9d39fdad1d316",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
