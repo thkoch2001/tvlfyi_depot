@@ -1,5 +1,6 @@
 use super::*;
 use serde_json::to_string;
+use time::macros::datetime;
 
 #[test]
 fn test_text_entry_serialization() {
@@ -23,10 +24,9 @@ fn test_text_entry_serialization() {
 
 #[test]
 fn test_timestamped_entry_serialization() {
-    let timestamp: DateTime<Utc> = "1952-10-07T12:00:00Z".to_string().parse().unwrap();
     let entry = LogEntry {
         labels: Value::Null,
-        timestamp: Some(timestamp),
+        timestamp: Some(datetime!(1952-10-07 12:00:00 UTC)),
         payload: Payload::TextPayload {
             text_payload: "test entry".into(),
         },
@@ -125,7 +125,7 @@ fn test_json_no_object() {
 #[test]
 fn test_parse_microseconds() {
     let input: String = "1529175149291187".into();
-    let expected: DateTime<Utc> = "2018-06-16T18:52:29.291187Z".to_string().parse().unwrap();
+    let expected: time::OffsetDateTime = datetime!(2018-06-16 18:52:29.291187 UTC);
 
     assert_eq!(Some(expected), parse_microseconds(input));
 }
