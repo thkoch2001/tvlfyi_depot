@@ -16,6 +16,24 @@
       "message": "Why no AAAA?",
       "revId": "b0c848af015454f19c078f84b94e7e27c913ee9a",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "dedcf51a_17c19f69",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-02-18T11:41:09Z",
+      "side": 1,
+      "message": "IPv6 wasn\u0027t set up yet, I\u0027ll make a change.",
+      "parentUuid": "d810c635_559ed25e",
+      "revId": "b0c848af015454f19c078f84b94e7e27c913ee9a",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
