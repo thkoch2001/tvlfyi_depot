@@ -31,28 +31,13 @@
 //! `GOOGLE_APPLICATION_CREDENTIALS`, `GOOGLE_CLOUD_PROJECT` and
 //! `LOG_NAME` environment variables.
 
-#[macro_use]
-extern crate anyhow;
-#[macro_use]
-extern crate log;
-#[macro_use]
-extern crate serde_derive;
-#[macro_use]
-extern crate serde_json;
-#[macro_use]
-extern crate lazy_static;
-
-extern crate chrono;
-extern crate env_logger;
-extern crate medallion;
-extern crate serde;
-extern crate systemd;
-extern crate ureq;
-
-use anyhow::{Context, Result};
+use anyhow::{bail, format_err, Context, Result};
 use chrono::offset::LocalResult;
 use chrono::prelude::{DateTime, TimeZone, Utc};
-use serde_json::{from_str, Value};
+use lazy_static::lazy_static;
+use log::{debug, error, info, trace};
+use serde::{Deserialize, Serialize};
+use serde_json::{from_str, json, Value};
 use std::fs::{self, rename, File};
 use std::io::{self, ErrorKind, Read, Write};
 use std::path::PathBuf;
