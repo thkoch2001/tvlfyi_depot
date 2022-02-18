@@ -31,13 +31,12 @@
 //! `GOOGLE_APPLICATION_CREDENTIALS`, `GOOGLE_CLOUD_PROJECT` and
 //! `LOG_NAME` environment variables.
 
-use anyhow::{bail, format_err, Context, Result};
-use chrono::offset::LocalResult;
-use chrono::prelude::{DateTime, TimeZone, Utc};
+use anyhow::{bail, Context, Result};
 use lazy_static::lazy_static;
 use log::{debug, error, info, trace};
 use serde::{Deserialize, Serialize};
 use serde_json::{from_str, json, Value};
+use std::convert::TryInto;
 use std::fs::{self, rename, File};
 use std::io::{self, ErrorKind, Read, Write};
 use std::path::PathBuf;
@@ -256,10 +255,8 @@ fn get_metadata_token() -> Result<Token> {
 fn sign_service_account_token(credentials: &Credentials) -> Result<Token> {
     use medallion::{Algorithm, Header, Payload};
 
-    let iat = Utc::now();
-    let exp = iat
-        .checked_add_signed(chrono::Duration::seconds(3600))
-        .ok_or_else(|| format_err!("Failed to calculate token expiry"))?;
+    let iat = time::OffsetDateTime::now_utc();
+    let exp = iat + time::Duration::seconds(3600);
 
     let header = Header {
         alg: Algorithm::RS256,
@@ -272,8 +269,8 @@ fn sign_service_account_token(credentials: &Credentials) -> Result<Token> {
         iss: Some(credentials.client_email.clone()),
         sub: Some(credentials.client_email.clone()),
         aud: Some(LOGGING_SERVICE.to_string()),
-        iat: Some(iat.timestamp() as u64),
-        exp: Some(exp.timestamp() as u64),
+        iat: Some(iat.unix_timestamp().try_into().unwrap()),
+        exp: Some(exp.unix_timestamp().try_into().unwrap()),
         ..Default::default()
     };
 
@@ -355,18 +352,15 @@ fn message_to_payload(message: Option<String>) -> Payload {
 /// Parse errors are dismissed and returned as empty options: There
 /// simply aren't any useful fallback mechanisms other than defaulting
 /// to ingestion time for journaldriver's use-case.
-fn parse_microseconds(input: String) -> Option<DateTime<Utc>> {
+fn parse_microseconds(input: String) -> Option<time::OffsetDateTime> {
     if input.len() != 16 {
         return None;
     }
 
-    let seconds: i64 = (&input[..10]).parse().ok()?;
-    let micros: u32 = (&input[10..]).parse().ok()?;
+    let micros: i128 = input.parse().ok()?;
+    let nanos: i128 = micros * 1000;
 
-    match Utc.timestamp_opt(seconds, micros * 1000) {
-        LocalResult::Single(time) => Some(time),
-        _ => None,
-    }
+    time::OffsetDateTime::from_unix_timestamp_nanos(nanos).ok()
 }
 
 /// Converts a journald log message priority to a
@@ -415,7 +409,8 @@ struct LogEntry {
     labels: Value,
 
     #[serde(skip_serializing_if = "Option::is_none")]
-    timestamp: Option<DateTime<Utc>>,
+    #[serde(with = "time::serde::rfc3339::option")]
+    timestamp: Option<time::OffsetDateTime>,
 
     #[serde(flatten)]
     payload: Payload,
