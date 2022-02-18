@@ -20,6 +20,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "f07b5c67_fab927ad",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 5
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2022-02-18T10:44:49Z",
+      "side": 1,
+      "message": "Can\u0027t we then do the following?\n\nExecStart\u003denv GOOGLE_APPLICATION_CREDENTIALS\u003d$CREDENTIALS_DIRECTORY/foo.json journaldriver",
+      "parentUuid": "25c5f470_27297aae",
+      "revId": "cfa16c13a3ce1b9e9d404db6bc82adb9c864196b",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "b9624c9e_cb87397d",
         "filename": "/COMMIT_MSG",
         "patchSetId": 5
