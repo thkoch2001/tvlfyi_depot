@@ -41,6 +41,14 @@ in
     defaultGateway6.address = "2001:ba8:1f1:f109::1";
 
     firewall.allowedTCPPorts = [ 22 80 443 ];
+
+    # https://bitfolk.com/customer_information.html#toc_2_DNS
+    nameservers = [
+      "85.119.80.232"
+      "85.119.80.233"
+      "2001:ba8:1f1:f205::53"
+      "2001:ba8:1f1:f206::53"
+    ];
   };
 
   security.sudo.wheelNeedsPassword = false;
