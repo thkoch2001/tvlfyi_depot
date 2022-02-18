@@ -32,7 +32,7 @@
 //! `LOG_NAME` environment variables.
 
 #[macro_use]
-extern crate failure;
+extern crate anyhow;
 #[macro_use]
 extern crate log;
 #[macro_use]
@@ -49,9 +49,9 @@ extern crate serde;
 extern crate systemd;
 extern crate ureq;
 
+use anyhow::{Context, Result};
 use chrono::offset::LocalResult;
 use chrono::prelude::{DateTime, TimeZone, Utc};
-use failure::ResultExt;
 use serde_json::{from_str, Value};
 use std::fs::{self, rename, File};
 use std::io::{self, ErrorKind, Read, Write};
@@ -71,9 +71,6 @@ const METADATA_ID_URL: &str = "http://metadata.google.internal/computeMetadata/v
 const METADATA_ZONE_URL: &str = "http://metadata.google.internal/computeMetadata/v1/instance/zone";
 const METADATA_PROJECT_URL: &str =
     "http://metadata.google.internal/computeMetadata/v1/project/project-id";
-
-/// Convenience type alias for results using failure's `Error` type.
-type Result<T> = std::result::Result<T, failure::Error>;
 
 /// Representation of static service account credentials for GCP.
 #[derive(Debug, Deserialize)]
@@ -158,8 +155,7 @@ fn get_metadata(url: &str) -> Result<String> {
 /// Convenience helper for determining the project ID.
 fn get_project_id() -> String {
     env::var("GOOGLE_CLOUD_PROJECT")
-        .map_err(Into::into)
-        .or_else(|_: failure::Error| get_metadata(METADATA_PROJECT_URL))
+        .or_else(|_| get_metadata(METADATA_PROJECT_URL))
         .expect("Could not determine project ID")
 }
 
