@@ -65,3 +65,8 @@ variable "sanduny_ipv4" {
   type    = string
   default = "85.119.82.231"
 }
+
+variable "sanduny_ipv6" {
+  type    = string
+  default = "2001:ba8:1f1:f109::feed:edef:beef"
+}

@@ -60,6 +60,13 @@ resource "glesys_dnsdomain_record" "tvl_su_sanduny_A" {
   data   = var.sanduny_ipv4
 }
 
+resource "glesys_dnsdomain_record" "tvl_su_sanduny_AAAA" {
+  domain = glesys_dnsdomain.tvl_su.id
+  host   = "sanduny"
+  type   = "AAAA"
+  data   = var.sanduny_ipv6
+}
+
 # This record is responsible for hosting ~all TVL services. Be
 # mindful!
 resource "glesys_dnsdomain_record" "tvl_su_wildcard" {
