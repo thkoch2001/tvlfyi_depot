@@ -3,6 +3,7 @@ name = "journaldriver"
 version = "1.1.0"
 authors = ["Vincent Ambo <mail@tazj.in>"]
 license = "GPL-3.0-or-later"
+edition = "2021"
 
 [dependencies]
 anyhow = "1.0"
