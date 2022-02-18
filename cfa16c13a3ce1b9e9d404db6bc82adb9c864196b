@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "25c5f470_27297aae",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 5
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2022-02-18T09:49:38Z",
+      "side": 1,
+      "message": "systemd /does/ support interpolating $CREDENTIALS_DIRECTORY when constructing `ExecStart\u003d` lines.\n\nWhat\u0027s missing is allowing some assembling of paths passed via `Environment\u003d`, so this wouldn\u0027t be an issue if `GOOGLE_APPLICATION_CREDENTIALS` (which we pass here as an env var) would be a command line parameter.\n\nPlease update the commit message and link to https://github.com/systemd/systemd/issues/22549",
+      "revId": "cfa16c13a3ce1b9e9d404db6bc82adb9c864196b",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b9624c9e_cb87397d",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 5
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2022-02-18T09:49:38Z",
+      "side": 1,
+      "message": "I don\u0027t think it\u0027s cleaner - you\u0027re reimplementing parts of what the Google SDK would do, but with a different behaviour.\n\nI don\u0027t think the Google SDK does pick from `$CREDENTIALS_DIRECTORY` if `GOOGLE_APPLICATION_CREDENTIALS` is a relative path.",
+      "revId": "cfa16c13a3ce1b9e9d404db6bc82adb9c864196b",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
