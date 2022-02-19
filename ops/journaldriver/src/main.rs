@@ -112,28 +112,21 @@ lazy_static! {
 
 /// Convenience helper for retrieving values from the metadata server.
 fn get_metadata(url: &str) -> Result<String> {
-    let response = ureq::get(url)
-        .set("Metadata-Flavor", "Google")
-        .timeout_connect(5000)
-        .timeout_read(5000)
-        .call();
+    let response = crimp::Request::get(url)
+        .header("Metadata-Flavor", "Google")?
+        .timeout(std::time::Duration::from_secs(5))?
+        .send()?
+        .as_string()?;
 
-    if response.ok() {
-        // Whitespace is trimmed to remove newlines from responses.
-        let body = response
-            .into_string()
-            .context("Failed to decode metadata response")?
-            .trim()
-            .to_string();
-
-        Ok(body)
-    } else {
-        let status = response.status_line().to_string();
-        let body = response
-            .into_string()
-            .unwrap_or_else(|e| format!("Metadata body error: {}", e));
-        bail!("Metadata failure: {} ({})", body, status)
+    if !response.is_success() {
+        bail!(
+            "Error response ({}) from metadata server: {}",
+            response.status,
+            response.body
+        );
     }
+
+    Ok(response.body.trim().to_owned())
 }
 
 /// Convenience helper for determining the project ID.
@@ -562,26 +555,28 @@ fn prepare_request(entries: &[LogEntry]) -> Value {
 
 /// Perform the log entry insertion in Stackdriver Logging.
 fn write_entries(token: &Token, request: Value) -> Result<()> {
-    let response = ureq::post(ENTRIES_WRITE_URL)
-        .set("Authorization", format!("Bearer {}", token.token).as_str())
+    let response = crimp::Request::post(ENTRIES_WRITE_URL)
+        .json(&request)?
+        .header("Authorization", format!("Bearer {}", token.token).as_str())?
         // The timeout values are set relatively high, not because of
         // an expectation of Stackdriver being slow but just to
-        // eventually hit an error case in case of network troubles.
+        // eventually force an error in case of network troubles.
         // Presumably no request in a functioning environment will
         // ever hit these limits.
-        .timeout_connect(2000)
-        .timeout_read(5000)
-        .send_json(request);
+        .timeout(std::time::Duration::from_secs(5))?
+        .send()?;
 
-    if response.ok() {
-        Ok(())
-    } else {
-        let status = response.status_line().to_string();
+    if !response.is_success() {
+        let status = response.status;
         let body = response
-            .into_string()
-            .unwrap_or_else(|_| "no response body".into());
-        bail!("Write failure: {} ({})", body, status)
+            .as_string()
+            .map(|r| r.body)
+            .unwrap_or_else(|_| "no valid response body".to_owned());
+
+        bail!("Writing to Stackdriver failed({}): {}", status, body);
     }
+
+    Ok(())
 }
 
 /// Attempt to read the initial cursor position from the configured
