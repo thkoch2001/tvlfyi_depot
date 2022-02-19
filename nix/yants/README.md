@@ -44,9 +44,9 @@ Currently lacking:
 Yants can be imported from its `default.nix`. A single attribute (`lib`) can be
 passed, which will otherwise be imported from `<nixpkgs>`.
 
-TIP: You do not need to clone my whole repository to use Yants! It is split out
-into the `nix/yants` branch which you can clone with, for example, `git clone -b
-nix/yants https://git.tazj.in yants`.
+TIP: You do not need to clone the entire TVL repository to use Yants!
+You can clone just this project through josh: `git clone
+https://code.tvl.fyi/depot.git:/nix/yants.git`
 
 Examples for the most common import methods would be:
 
