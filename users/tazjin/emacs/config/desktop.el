@@ -219,6 +219,21 @@ in-progress."
 
 (exwm-input-set-key (kbd "s-f") #'switch-to-next-workspace)
 
+;; Provide a binding for jumping to a buffer on a workspace.
+(defun exwm-jump-to-buffer ()
+  "Jump to a workspace on which the target buffer is displayed."
+  (interactive)
+  (let ((exwm-layout-show-all-buffers nil)
+        (initial exwm-workspace-current-index))
+    (call-interactively #'exwm-workspace-switch-to-buffer)
+    ;; After jumping, update the back-and-forth list like on a direct
+    ;; index jump.
+    (when (not (eq initial exwm-workspace-current-index))
+      (setq *exwm-workspace-from-to*
+            (cons initial exwm-workspace-current-index)))))
+
+(exwm-input-set-key (kbd "C-c j") #'exwm-jump-to-buffer)
+
 ;; Launch applications / any command with completion (dmenu style!)
 (exwm-input-set-key (kbd "s-d") #'counsel-linux-app)
 (exwm-input-set-key (kbd "s-x") #'run-external-command)
