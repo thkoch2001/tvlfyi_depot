@@ -135,9 +135,9 @@ lib.fix (self: pkgs.fullLlvm11Stdenv.mkDerivation {
   # Preserve debug symbols, for core dumps + other live debugging
   dontStrip = true;
 
-  installCheckInputs = with depot.third_party; [
+  installCheckInputs = with pkgs; [
     gtest
-    pkgs.fd
+    fd
     rapidcheck
   ];
 
