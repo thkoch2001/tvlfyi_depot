@@ -31,6 +31,13 @@ self: super: {
       exwm = esuper.exwm.overrideAttrs (_: {
         src = depot.path.origSrc + "/third_party/exwm";
       });
+
+      # Workaround for magit checking the git version at load time
+      magit = esuper.magit.overrideAttrs (_: {
+        propagatedNativeBuildInputs = [
+          self.git
+        ];
+      });
     })
   );
 
