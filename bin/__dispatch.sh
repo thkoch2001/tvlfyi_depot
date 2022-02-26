@@ -16,9 +16,6 @@ case "${TARGET_TOOL}" in
   age-keygen)
     attr="third_party.nixpkgs.age"
     ;;
-  depot-nixpkgs-update)
-    attr="tools.depot-nixpkgs-update"
-    ;;
   gerrit)
     attr="tools.gerrit-cli"
     ;;
