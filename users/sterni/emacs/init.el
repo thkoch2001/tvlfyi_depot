@@ -7,7 +7,6 @@
   (set-fontset-font t nil emoji-font))
 
 (setq inhibit-startup-message t
-      initial-buffer-choice (concat (getenv "HOME") "/files/sync/org/inbox.org")
       display-time-24hr-format t
       select-enable-clipboard t)
 
@@ -97,6 +96,10 @@
 
 (setq org-clock-persist 'history)
 (org-clock-persistence-insinuate)
+
+(let ((org-folder (concat (getenv "HOME") "/files/sync/org")))
+  (setq org-agenda-files (directory-files-recursively org-folder "\\.org$")
+        initial-buffer-choice (concat org-folder "/inbox.org")))
 
 ;;; Configure packages
 (require 'use-package)
