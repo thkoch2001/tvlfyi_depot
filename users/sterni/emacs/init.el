@@ -157,6 +157,8 @@
       (interactive)
       (whitespace-mode 'toggle)
       (display-fill-column-indicator-mode 'toggle)))
+  ;; org-mode
+  (evil-define-key 'normal 'global (kbd "<leader>oa") 'org-agenda)
   ;; elfeed bindings for evil (can't use-package elfeed apparently)
   (evil-define-key 'normal 'global (kbd "<leader>ff") 'elfeed)
   (evil-define-key '(normal visual) elfeed-search-mode-map
