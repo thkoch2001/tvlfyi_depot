@@ -101,6 +101,8 @@
   (setq org-agenda-files (directory-files-recursively org-folder "\\.org$")
         initial-buffer-choice (concat org-folder "/inbox.org")))
 
+(evil-define-key 'normal 'global (kbd "<leader>oa") 'org-agenda)
+
 ;;; Configure packages
 (require 'use-package)
 
