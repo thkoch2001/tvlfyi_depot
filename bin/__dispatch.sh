@@ -19,9 +19,6 @@ case "${TARGET_TOOL}" in
   depot-build)
     attr="tools.depot-build"
     ;;
-  depot-nixpkgs-update)
-    attr="tools.depot-nixpkgs-update"
-    ;;
   gerrit)
     attr="tools.gerrit-cli"
     ;;
