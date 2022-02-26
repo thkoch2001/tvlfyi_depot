@@ -16,9 +16,6 @@ case "${TARGET_TOOL}" in
   age-keygen)
     attr="third_party.nixpkgs.age"
     ;;
-  depot-build)
-    attr="tools.depot-build"
-    ;;
   depot-nixpkgs-update)
     attr="tools.depot-nixpkgs-update"
     ;;
