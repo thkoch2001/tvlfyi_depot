@@ -142,7 +142,7 @@ the GPG agent correctly."
     (eq (current-buffer) (window-buffer last-window))))
 
 (defhydra mc/mark-more-hydra (:color pink)
-  ("<up>" mmlte--up "Mark previous like this")
+  ("<up>" mc/mmlte--up "Mark previous like this")
   ("<down>" mc/mmlte--down "Mark next like this")
   ("<left>" mc/mmlte--left (if (eq mc/mark-more-like-this-extended-direction 'up)
                                "Skip past the cursor furthest up"
@@ -167,6 +167,16 @@ the GPG agent correctly."
       ;; but uses a hydra (`mc/mark-more-hydra') instead of a transient key map.
       (mc/mmlte--down)
       (mc/mark-more-hydra/body))))
+
+(setq mc/cmds-to-run-for-all '(kill-region paredit-newline))
+
+(setq mc/cmds-to-run-once '(mc/mark-dwim
+                            mc/mark-more-hydra/mc/mmlte--down
+                            mc/mark-more-hydra/mc/mmlte--left
+                            mc/mark-more-hydra/mc/mmlte--right
+                            mc/mark-more-hydra/mc/mmlte--up
+                            mc/mark-more-hydra/mmlte--up
+                            mc/mark-more-hydra/nil))
 
 (defun memespace-region ()
   "Make a meme out of it."
