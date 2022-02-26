@@ -31,23 +31,11 @@ case "${TARGET_TOOL}" in
   hash-password)
     attr="tools.hash-password"
     ;;
-  kontemplate)
-    attr="ops.kontemplate"
-    ;;
-  meson)
-    attr="third_party.nixpkgs.meson"
-    ;;
   mg)
     attr="tools.magrathea"
     ;;
-  ninja)
-    attr="third_party.nixpkgs.ninja"
-    ;;
   nint)
     attr="nix.nint"
-    ;;
-  perf-flamegraph)
-    attr="tools.perf-flamegraph"
     ;;
   rebuild-system)
     attr="ops.nixos.rebuild-system"
