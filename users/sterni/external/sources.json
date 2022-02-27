@@ -1,0 +1,14 @@
+{
+    "flipdot-gschichtler": {
+        "branch": "master",
+        "description": "send text to the flipdots, orderly queued",
+        "homepage": "https://flipdot.openlab-augsburg.de",
+        "owner": "openlab-aux",
+        "repo": "flipdot-gschichtler",
+        "rev": "93683a7fff04e167963b70a8906f982567646501",
+        "sha256": "134kgmlv63vzdvc3lr0rys55klmzip7qpfnyzssahihp4mjyyq16",
+        "type": "tarball",
+        "url": "https://github.com/openlab-aux/flipdot-gschichtler/archive/93683a7fff04e167963b70a8906f982567646501.tar.gz",
+        "url_template": "https://github.com/<owner>/<repo>/archive/<rev>.tar.gz"
+    }
+}
