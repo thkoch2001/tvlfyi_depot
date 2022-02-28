@@ -9,8 +9,8 @@ let
   easy-dhall-nix =
     import
       (builtins.fetchTarball {
-        url = "https://github.com/justinwoo/easy-dhall-nix/archive/eae7f64c4d6c70681e5a56c84198236930ba425e.tar.gz";
-        sha256 = "1y2x15v8a679vlpxazjpibfwajp6zph60f8wjcm4xflbvazk0dx7";
+        url = "https://github.com/justinwoo/easy-dhall-nix/archive/dce9acbb99776a7f1344db4751d6080380f76f57.tar.gz";
+        sha256 = "0ckp6515gfvbxm08yyll87d9vg8sq2l21gwav2npzvwc3xz2lccf";
       })
       { inherit pkgs; };
 in
