@@ -13,6 +13,7 @@ let
   runStow =
     {
       # “stow package” to stow (see manpage)
+      # TODO: allow this function to un-stow multiple packages!
       stowPackage
     , # “target directory” to stow in (see manpage)
       targetDir
@@ -139,33 +140,64 @@ let
       }))
     ];
 
+  scriptsStow =
+    lib.pipe { } [
+      (_: makeStowDir [{
+        stowPackage = "scripts";
+        originalDir = pkgs.linkFarm "scripts-farm"
+          ([
+            {
+              name = "scripts/ytextr";
+              path = depot.users.Profpatsch.ytextr;
+            }
+          ]
+          ++
+          (lib.pipe depot.users.Profpatsch.aliases [
+            readTreeNamespaceDrvs
+            (map ({ name, drv }: {
+              name = "scripts/${name}";
+              path = drv;
+            }))
+          ]));
+      }])
+      (d: runStow {
+        stowDir = d;
+        stowPackage = "scripts";
+        targetDir = "/home/philip";
+        stowDirOriginPath = "/home/philip/.local/share/nix-home/stow-origin";
+      })
+    ];
+
+
+
+  terminalEmulatorStow =
+    lib.pipe { } [
+      (_: makeStowDir [{
+        stowPackage = "terminal-emulator";
+        originalDir = pkgs.linkFarm "terminal-emulator-farm"
+          ([
+            {
+              name = "bin/terminal-emulator";
+              path = depot.users.Profpatsch.alacritty;
+            }
+          ]);
+
+      }])
+      (d: runStow {
+        stowDir = d;
+        stowPackage = "terminal-emulator";
+        targetDir = "/home/philip";
+        # TODO: this should only be done once, in a single runStow instead of multiple
+        stowDirOriginPath = "/home/philip/.local/share/nix-home/stow-origin-terminal-emulator";
+      })
+    ];
+
 in
 
-
-# TODO: temp setup
-lib.pipe { } [
-  (_: makeStowDir [{
-    stowPackage = "scripts";
-    originalDir = pkgs.linkFarm "scripts-farm"
-      ([
-        {
-          name = "scripts/ytextr";
-          path = depot.users.Profpatsch.ytextr;
-        }
-      ]
-      ++
-      (lib.pipe depot.users.Profpatsch.aliases [
-        readTreeNamespaceDrvs
-        (map ({ name, drv }: {
-          name = "scripts/${name}";
-          path = drv;
-        }))
-      ]));
-  }])
-  (d: runStow {
-    stowDir = d;
-    stowPackage = "scripts";
-    targetDir = "/home/philip";
-    stowDirOriginPath = "/home/philip/.local/share/nix-home/stow-origin";
-  })
+# TODO: run multiple stows with runStow?
+  # TODO: temp setup
+depot.nix.writeExecline "nix-home" { } [
+  "if"
+  [ scriptsStow ]
+  terminalEmulatorStow
 ]
