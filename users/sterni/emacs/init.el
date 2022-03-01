@@ -99,7 +99,8 @@
 
 (let ((org-folder (concat (getenv "HOME") "/files/sync/org")))
   (setq org-agenda-files (directory-files-recursively org-folder "\\.org$")
-        initial-buffer-choice (concat org-folder "/inbox.org")))
+        org-default-notes-file (concat org-folder "/inbox.org")
+        initial-buffer-choice org-default-notes-file))
 
 ;;; Configure packages
 (require 'use-package)
@@ -159,6 +160,7 @@
       (display-fill-column-indicator-mode 'toggle)))
   ;; org-mode
   (evil-define-key 'normal 'global (kbd "<leader>oa") 'org-agenda)
+  (evil-define-key 'normal 'global (kbd "<leader>oc") 'org-capture)
   ;; elfeed bindings for evil (can't use-package elfeed apparently)
   (evil-define-key 'normal 'global (kbd "<leader>ff") 'elfeed)
   (evil-define-key '(normal visual) elfeed-search-mode-map
