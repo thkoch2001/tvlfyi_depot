@@ -3,26 +3,29 @@ class Parser(object):
         self.tokens = tokens
         self.i = 0
 
-    def prev(self):
-        return self.tokens[self.i - 1]
+    def exhausted(self):
+        return self.i >= len(self.tokens)
 
-    def curr(self):
-        return self.tokens[self.i]
+    def peek(self, n=0):
+        return self.tokens[self.i + n]
 
-    def consume(self):
+    def advance(self):
         if not self.exhausted():
             self.i += 1
-            return self.prev()
+        return self.peek(n=-1)
 
     def match(self, xs):
-        if not self.exhausted() and self.curr() in xs:
-            self.consume()
+        if self.peek() in xs:
+            self.advance()
             return True
         return False
 
-    def expect(self, xs):
-        if not self.match(xs):
-            raise Exception("Expected token \"{}\" but received \"{}\"".format(xs, self.curr()))
+    def test(self, predicate):
+        return predicate(self.tokens, self.i)
 
-    def exhausted(self):
-        return self.i >= len(self.tokens)
+    def expect(self, predicate):
+        if self.exhausted():
+            raise Exception("Unexpected EOL")
+        if predicate(self.peek()):
+            return self.advance()
+        raise Exception("Unexpected token: \"{}\"".format(self.peek()))
