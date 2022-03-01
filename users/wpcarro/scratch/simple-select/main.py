@@ -5,6 +5,7 @@ import sqlite3
 import string
 from scanner import Scanner
 from parser import Parser
+import re
 
 ################################################################################
 # Predicates
@@ -205,6 +206,14 @@ def compile_query(negate, query):
     return "LIKE '%{}%'".format(query_string)
 
 ################################################################################
+# Helper Functions
+################################################################################
+
+def regexp(expr, x):
+  reg = re.compile(expr)
+  return reg.search(x) is not None
+
+################################################################################
 # Main
 ################################################################################
 
@@ -212,6 +221,9 @@ def main(csv_path=None, debug=False):
   # Import CSV to SQLite
   table = "main"
   con = sqlite3.connect(":memory:")
+
+  con.create_function("REGEXP", 2, regexp)
+
   cur = con.cursor()
   with open(csv_path, "r") as f:
     r = csv.DictReader(f)
