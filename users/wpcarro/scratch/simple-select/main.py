@@ -1,3 +1,4 @@
+import sqlite3
 import string
 from scanner import Scanner
 from parser import Parser
@@ -204,19 +205,25 @@ def compile_query(negate, query):
 # Main
 ################################################################################
 
+debug = False
+
 def main():
+  # TODO(wpcarro): Read path from command-line.
+  con = sqlite3.connect('/depot/users/wpcarro/todo-lists/imdb/db.sqlite3')
+  cur = con.cursor()
+  # TODO(wpcarro): Read columns from CSV.
+  columns = ["year", "rating", "haveWatched", "director", "isCartoon", "requiresSubtitles"]
+
   while True:
     x = input("> ")
-    print("tokens:\t{}".format(tokenize(x)))
-    print("AST:\t{}".format(parse(x)))
-    # TODO(wpcarro): Read columns from CSV.
-    print("query:\t\"{}\"".format(compile(x, "Movies", [
-        "year",
-        "rating",
-        "haveWatched",
-        "director",
-        "isCartoon",
-        "requiresSubtitles",
-    ])))
+
+    if debug:
+      print("tokens:\t{}".format(tokenize(x)))
+      print("AST:\t{}".format(parse(x)))
+      print("query:\t\"{}\"".format(compile(x, "Movies", columns)))
+
+    for row in cur.execute(compile(x, "Movies", columns)):
+      print("\t".join(str(cell) for cell in row))
+
 if __name__ == "__main__":
   main()
