@@ -1,3 +1,6 @@
+from argparse import ArgumentParser
+
+import csv
 import sqlite3
 import string
 from scanner import Scanner
@@ -205,14 +208,20 @@ def compile_query(negate, query):
 # Main
 ################################################################################
 
-debug = False
-
-def main():
-  # TODO(wpcarro): Read path from command-line.
-  con = sqlite3.connect('/depot/users/wpcarro/todo-lists/imdb/db.sqlite3')
+def main(csv_path=None, debug=False):
+  # Import CSV to SQLite
+  table = "main"
+  con = sqlite3.connect(":memory:")
   cur = con.cursor()
-  # TODO(wpcarro): Read columns from CSV.
-  columns = ["year", "rating", "haveWatched", "director", "isCartoon", "requiresSubtitles"]
+  with open(csv_path, "r") as f:
+    r = csv.DictReader(f)
+    columns = next(r).keys()
+
+    # TODO(wpcarro): Use safer interpolation variant of "?" here and throughout.
+    cur.execute("CREATE TABLE {} ({});".format(table, ",".join(columns)))
+    rows = [tuple(row[col] for col in columns) for row in r]
+    cur.executemany("INSERT INTO {} ({}) VALUES ({});".format(table, ",".join(columns), ",".join("?" for _ in columns)), rows)
+    con.commit()
 
   while True:
     x = input("> ")
@@ -220,10 +229,17 @@ def main():
     if debug:
       print("tokens:\t{}".format(tokenize(x)))
       print("AST:\t{}".format(parse(x)))
-      print("query:\t\"{}\"".format(compile(x, "Movies", columns)))
+      print("query:\t\"{}\"".format(compile(x, table, columns)))
 
-    for row in cur.execute(compile(x, "Movies", columns)):
+    for row in cur.execute(compile(x, table, columns)):
       print("\t".join(str(cell) for cell in row))
 
+  # TODO(wpcarro): Trap exits and ensure cleanup always runs.
+  con.close()
+
 if __name__ == "__main__":
-  main()
+  parser = ArgumentParser()
+  parser.add_argument("-f", "--file", dest="file", help="Path to the CSV from which to read", metavar="PATH")
+  parser.add_argument("-d", "--debug", dest="debug", default=False, action="store_true", help="Enable debugging")
+  args = parser.parse_args()
+  main(csv_path=args.file, debug=args.debug)
