@@ -15,7 +15,8 @@
 
 ;; Indent
 (setq-default indent-tabs-mode nil)
-(setq tab-width 2)
+(setq tab-width 2
+      css-indent-offset tab-width)
 
 ;; UTF-8
 (setq locale-coding-system 'utf-8)
