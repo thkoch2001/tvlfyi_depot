@@ -1,11 +1,12 @@
 from argparse import ArgumentParser
 
 import csv
+from parser import Parser
 import sqlite3
 import string
 from scanner import Scanner
-from parser import Parser
 import re
+import readline
 
 ################################################################################
 # Predicates
@@ -243,8 +244,12 @@ def main(csv_path=None, debug=False):
       print("AST:\t{}".format(parse(x)))
       print("query:\t\"{}\"".format(compile(x, table, columns)))
 
-    for row in cur.execute(compile(x, table, columns)):
-      print("\t".join(str(cell) for cell in row))
+    try:
+      compile(x, table, columns)
+      for row in cur.execute(compile(x, table, columns)):
+        print("\t".join(str(cell) for cell in row))
+    except:
+      print("Compilation error.")
 
   # TODO(wpcarro): Trap exits and ensure cleanup always runs.
   con.close()
