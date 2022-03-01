@@ -117,13 +117,11 @@ def expression(p):
 def conjunction(p):
   lhs = selection(p)
 
-  while not p.exhausted() and p.test(lambda tokens, i: tokens[i] not in {LPAREN, RPAREN}):
-    conj = p.advance() if p.peek()[0] == "CONJUNCTION" else AND
+  # TODO(wpcarro): Support default AND conjuctions when they're undefined.
+  while not p.exhausted() and p.match({AND, OR}):
+    conj = p.peek(n=-1)
     rhs = selection(p)
     lhs = ("CONJUNCTION", conj[1], lhs, rhs)
-
-  if not p.exhausted():
-    raise Exception("Encountered more tokens than we can parse: \"{}\"".format(p.tokens[p.i:]))
 
   return lhs
 
@@ -155,13 +153,70 @@ def grouping(p):
     return ("GROUPING", expr)
 
 ################################################################################
+# Compiler
+################################################################################
+
+def compile(source, table, columns):
+  ast = parse(source)
+  return "SELECT * FROM {} WHERE {};".format(table, do_compile(ast, columns))
+
+def do_compile(ast, columns):
+  if ast[0] == "REGEX":
+    cols = "({})".format(" || ".join(columns))
+    return "{} REGEXP '.*{}.*'".format(cols, ast[1])
+
+  if ast[0] == "STRING":
+    cols = "({})".format(" || ".join(columns))
+    return "{} LIKE '%{}%'".format(cols, ast[1])
+
+  if ast[0] == "SELECTION":
+    return compile_selection(ast)
+
+  if ast[0] == "CONJUNCTION":
+    _, conj, lhs, rhs = ast
+    lhs = do_compile(lhs, columns)
+    rhs = do_compile(rhs, columns)
+    return "{} {} {}".format(lhs, conj, rhs)
+
+  if ast[0] == "GROUPING":
+    return "({})".format(do_compile(ast[1], columns))
+
+  raise Exception("Unexpected AST: \"{}\"".format(ast))
+
+def compile_selection(ast):
+  _, negate, column, query = ast
+  match = compile_query(negate, query)
+  return "{} {}".format(column, match)
+
+def compile_query(negate, query):
+  query_type, query_string = query
+  if query_type == "REGEX":
+    if negate:
+      return "NOT REGEXP '.*{}.*'".format(query_string)
+    return "REGEXP '.*{}.*'".format(query_string)
+
+  if query_type == "STRING":
+    if negate:
+      return "NOT LIKE '%{}%'".format(query_string)
+    return "LIKE '%{}%'".format(query_string)
+
+################################################################################
 # Main
 ################################################################################
 
 def main():
   while True:
     x = input("> ")
-    print(parse(x))
-
+    print("tokens:\t{}".format(tokenize(x)))
+    print("AST:\t{}".format(parse(x)))
+    # TODO(wpcarro): Read columns from CSV.
+    print("query:\t\"{}\"".format(compile(x, "Movies", [
+        "year",
+        "rating",
+        "haveWatched",
+        "director",
+        "isCartoon",
+        "requiresSubtitles",
+    ])))
 if __name__ == "__main__":
   main()
