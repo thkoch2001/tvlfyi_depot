@@ -238,6 +238,10 @@ lib.fix (self: {
 
   time.timeZone = "Europe/Moscow";
 
+  nix = {
+    trustedUsers = [ "tazjin" ];
+  };
+
   users.users.tazjin = {
     isNormalUser = true;
     createHome = true;
