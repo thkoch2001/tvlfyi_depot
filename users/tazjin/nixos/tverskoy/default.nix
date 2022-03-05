@@ -236,7 +236,7 @@ lib.fix (self: {
     DefaultTimeoutStopSec=10s
   '';
 
-  time.timeZone = "Europe/Moscow";
+  time.timeZone = "Africa/Cairo";
 
   nix = {
     trustedUsers = [ "tazjin" ];
