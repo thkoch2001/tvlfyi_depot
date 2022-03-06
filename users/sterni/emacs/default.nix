@@ -46,8 +46,10 @@ let
           (setq bqn-interpreter-path "${pkgs.cbqn}/bin/BQN")
 
           ;; languagetool
-          (setq languagetool-java-bin "${pkgs.jre}/bin/java")
-          (setq languagetool-language-tool-jar "${pkgs.languagetool}/share/languagetool-commandline.jar")
+          (setq languagetool-java-bin "${pkgs.jre}/bin/java"
+                languagetool-console-command "${pkgs.languagetool}/share/languagetool-commandline.jar"
+                languagetool-server-command "${pkgs.languagetool}/share/languagetool-server.jar"
+                languagetool-java-arguments '("-Dfile.encoding=UTF-8"))
 
           (provide 'nix-inject)
         '';
