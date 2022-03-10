@@ -103,5 +103,10 @@ in
   programs.mtr.enable = true;
   services.openssh.enable = true;
 
+  services.zerotierone.enable = true;
+  services.zerotierone.joinNetworks = [
+    "35c192ce9bd4c8c7"
+  ];
+
   system.stateVersion = "20.09";
 }
