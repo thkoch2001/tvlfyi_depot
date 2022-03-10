@@ -19,6 +19,8 @@ in
   boot.loader.grub.device = "/dev/sda"; # or "nodev" for efi only
   boot.initrd.availableKernelModules = [ "ata_piix" "vmw_pvscsi" "sd_mod" "sr_mod" ];
 
+  nix.settings.trusted-users = [ "tazjin" ];
+
   fileSystems."/" =
     {
       device = "/dev/disk/by-uuid/4c51357a-1e34-4b59-b169-63af1fcdce71";
