@@ -56,7 +56,7 @@ in
     defaultGateway = "159.253.30.1";
     defaultGateway6.address = "2a02:750:7:3305::1";
 
-    firewall.enable = false;
+    firewall.enable = true;
 
     nameservers = [
       "79.99.4.100"
