@@ -19,6 +19,9 @@ in
   boot.loader.grub.device = "/dev/sda"; # or "nodev" for efi only
   boot.initrd.availableKernelModules = [ "ata_piix" "vmw_pvscsi" "sd_mod" "sr_mod" ];
 
+  virtualisation.vmware.guest.enable = true;
+  virtualisation.vmware.guest.headless = true;
+
   nix.settings.trusted-users = [ "tazjin" ];
 
   # Work around strongswan 5.9.4 being incompatible with servers not
