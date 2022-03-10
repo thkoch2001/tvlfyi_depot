@@ -71,6 +71,18 @@ in
     ];
   };
 
+  # Enable IPv4 forwarding
+  boot.kernel.sysctl = {
+    "net.ipv4.ip_forward" = 1;
+  };
+
+  # Configure zerotier gateway setup
+  networking.firewall.extraCommands = ''
+    iptables -t nat -A POSTROUTING -o ens192 -s 172.29.0.0/16 -j SNAT --to-source 159.253.30.129
+    iptables -A FORWARD -i zt+ -s 172.29.0.0/16 -d 0.0.0.0/0 -j ACCEPT
+    iptables -A FORWARD -i ens192 -s 0.0.0.0/0 -d 172.29.0.0/16 -j ACCEPT
+  '';
+
   time.timeZone = "UTC";
 
   security.acme.acceptTerms = true;
