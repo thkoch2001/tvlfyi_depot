@@ -43,6 +43,8 @@ in
   };
 
   config = with lib; mkIf cfg.enable {
+    networking.firewall.allowedTCPPorts = [ cfg.port ];
+
     systemd.services.quassel = {
       description = "Quassel IRC daemon";
       wantedBy = [ "multi-user.target" ];
