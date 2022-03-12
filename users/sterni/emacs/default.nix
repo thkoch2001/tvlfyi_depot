@@ -13,10 +13,13 @@ let
     epkgs.bqn-mode
     epkgs.elpaPackages.ada-mode
     epkgs.melpaPackages.adoc-mode
+    epkgs.melpaPackages.direnv
     epkgs.melpaPackages.dockerfile-mode
     epkgs.melpaPackages.haskell-mode
     epkgs.melpaPackages.jq-mode
     epkgs.melpaPackages.languagetool
+    epkgs.melpaPackages.lsp-mode
+    epkgs.melpaPackages.lsp-haskell
     epkgs.melpaPackages.markdown-mode
     epkgs.melpaPackages.nix-mode
     epkgs.melpaPackages.sly
