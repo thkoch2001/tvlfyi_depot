@@ -193,7 +193,15 @@
 (use-package nix-mode :mode "\\.nix\\'")
 (use-package nix-drv-mode :mode "\\.drv\\'")
 
+(use-package direnv
+  :config (direnv-mode))
+
 (use-package haskell-mode)
+(use-package lsp-mode
+  :hook ((haskell-mode . lsp-deferred))
+  :commands (lsp lsp-deferred))
+(use-package lsp-haskell)
+
 (use-package urweb-mode)
 (use-package bqn-mode
   :mode "\\.bqn\\'"
