@@ -51,7 +51,7 @@ in
     gdmap
     lsof
     tree
-    ncat
+    nmap
     iftop
 
     # Security
