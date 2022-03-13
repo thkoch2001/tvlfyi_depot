@@ -10,7 +10,7 @@ depot.third_party.naersk.buildPackage {
 
   buildInputs = with pkgs; [
     pkgconfig
-    dbus_libs
+    dbus
     glib
     openssl
     cairo

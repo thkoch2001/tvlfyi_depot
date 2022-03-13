@@ -5,7 +5,7 @@ with lib;
 
 let
 
-  emacsWithPackages = (pkgs.emacsPackagesGen pkgs.emacs27).emacsWithPackages;
+  emacsWithPackages = (pkgs.emacsPackagesFor pkgs.emacs27).emacsWithPackages;
 
   emacs = emacsWithPackages (p: with p; [
     org

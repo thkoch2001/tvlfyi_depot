@@ -294,7 +294,7 @@ lib.fix (self: {
       imagemagick
       jq
       lieer
-      manpages
+      man-pages
       mosh
       msmtp
       mullvad-vpn
@@ -309,7 +309,7 @@ lib.fix (self: {
       pavucontrol
       pinentry
       pinentry-emacs
-      pulseaudioLight # for pactl
+      pulseaudio # for pactl
       pwgen
       quasselClient
       rink
