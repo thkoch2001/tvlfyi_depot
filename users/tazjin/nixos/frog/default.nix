@@ -244,7 +244,7 @@ lib.fix (self: {
       jq
       kubectl
       linuxPackages.perf
-      manpages
+      man-pages
       miller
       msmtp
       nix-prefetch-github

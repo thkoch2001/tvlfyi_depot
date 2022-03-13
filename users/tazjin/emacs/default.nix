@@ -5,7 +5,7 @@
 pkgs.makeOverridable
   ({ emacs ? pkgs.emacsGcc }:
   let
-    emacsWithPackages = (pkgs.emacsPackagesGen emacs).emacsWithPackages;
+    emacsWithPackages = (pkgs.emacsPackagesFor emacs).emacsWithPackages;
 
     # If switching telega versions, use this variable because it will
     # keep the version check, binary path and so on in sync.
