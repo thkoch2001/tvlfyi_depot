@@ -31,7 +31,7 @@
     zip
     unzip
     tree
-    ncat
+    nmap
     bc
     pv
 
