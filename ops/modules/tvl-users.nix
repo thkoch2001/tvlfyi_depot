@@ -71,14 +71,14 @@
     users.isomer = {
       isNormalUser = true;
       extraGroups = [ "git" ];
-      shell = "${pkgs.nologin}/bin/nologin";
+      shell = "${pkgs.shadow}/bin/nologin";
       openssh.authorizedKeys.keys = depot.users.isomer.keys.all;
     };
 
     users.riking = {
       isNormalUser = true;
       extraGroups = [ "git" ];
-      shell = "${pkgs.nologin}/bin/nologin";
+      shell = "${pkgs.shadow}/bin/nologin";
       openssh.authorizedKeys.keys = depot.users.riking.keys.u2f ++ depot.users.riking.keys.passworded;
     };
   };

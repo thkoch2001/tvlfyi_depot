@@ -22,7 +22,7 @@ let
       libtool
       autoconf
       automake
-      x11
+      xlibsWrapper
       xorg.libXtst
       xorg.libXinerama
       xorg.libxkbfile

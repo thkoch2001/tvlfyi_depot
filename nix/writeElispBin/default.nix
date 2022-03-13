@@ -3,10 +3,10 @@
 { name, src, deps ? (_: [ ]), emacs ? pkgs.emacs27-nox }:
 
 let
-  inherit (pkgs) emacsPackages emacsPackagesGen;
+  inherit (pkgs) emacsPackages emacsPackagesFor;
   inherit (builtins) isString toFile;
 
-  finalEmacs = (emacsPackagesGen emacs).emacsWithPackages deps;
+  finalEmacs = (emacsPackagesFor emacs).emacsWithPackages deps;
 
   srcFile =
     if isString src
