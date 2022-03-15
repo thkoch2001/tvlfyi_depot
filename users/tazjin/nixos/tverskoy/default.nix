@@ -431,6 +431,8 @@ lib.fix (self: {
     systemd.user.startServices = true;
   };
 
+  services.tailscale.enable = true;
+
   services.zerotierone.enable = true;
   services.zerotierone.joinNetworks = [
     "35c192ce9bd4c8c7"
