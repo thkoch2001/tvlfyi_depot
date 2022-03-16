@@ -115,6 +115,8 @@ in
   programs.mosh.enable = true;
   services.openssh.enable = true;
 
+  services.tailscale.enable = true;
+
   services.zerotierone.enable = true;
   services.zerotierone.joinNetworks = [
     "35c192ce9bd4c8c7"
