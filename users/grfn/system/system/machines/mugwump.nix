@@ -138,6 +138,7 @@ with lib;
     recommendedGzipSettings = true;
     recommendedOptimisation = true;
     recommendedTlsSettings = true;
+    recommendedProxySettings = true;
 
     virtualHosts = {
       "metrics.gws.fyi" = {
