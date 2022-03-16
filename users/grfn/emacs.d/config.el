@@ -893,8 +893,7 @@
   (map! [remap counsel-org-capture] #'org-capture
         [remap org-capture] #'org-capture))
 
-(use-package! evil-snipe :disabled t)
-(evil-snipe-mode -1)
+(remove-hook 'doom-first-input-hook #'evil-snipe-mode)
 
 (use-package! rainbow-mode)
 
