@@ -26,6 +26,7 @@ in
     slack
     mysql
     graphviz
+    gnuplot
     mypaint
     xdot
     tdesktop
