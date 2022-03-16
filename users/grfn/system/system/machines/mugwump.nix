@@ -276,7 +276,7 @@ with lib;
       value = {
         inherit name;
         enable = true;
-        tokenPath = "/run/agenix/buildkite-agent-token";
+        tokenPath = "/run/agenix/buildkite-token";
         privateSshKeyPath = "/run/agenix/buildkite-ssh-key";
         runtimePackages = with pkgs; [
           docker
