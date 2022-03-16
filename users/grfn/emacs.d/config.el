@@ -467,6 +467,47 @@
 
 (setq projectile-create-missing-test-files 't)
 
+(setq grfn/jira-refs-re
+      (rx line-start
+          (or "Refs" "Fixes")
+          ": "
+          "ENG-" (one-or-more digit)
+          line-end))
+
+(defun grfn/add-jira-reference-to-commit-message ()
+  (interactive)
+  (when (org-tracker-current-backend t)
+    (when-let* ((jira-id (grfn/org-clocked-in-jira-ticket-id)))
+      (save-excursion
+        (save-match-data
+          (goto-char (point-min))
+          ;; Don't add one if we've already got one
+          (unless (search-forward-regexp grfn/jira-refs-re nil t)
+            (or
+             (and
+              (search-forward-regexp (rx line-start "Change-Id:") nil t)
+              (forward-line -1))
+             (and
+              (search-forward-regexp (rx line-start "# Please enter") nil t)
+              (forward-line -2)))
+            (insert (format "\nRefs: %s" jira-id))))))))
+
+(defun grfn/switch-jira-refs-fixes ()
+  (interactive)
+  (save-excursion
+    (save-match-data
+      (if (not (search-forward-regexp grfn/jira-refs-re nil t))
+          (message "Could not find reference to JIRA ticket")
+        (goto-char (point-at-bol))
+        (save-restriction
+          (narrow-to-region (point-at-bol)
+                            (point-at-eol))
+          (or
+           (and (search-forward "Refs" nil t)
+                (replace-match "Fixes"))
+           (and (search-forward "Fixes" nil t)
+                (replace-match "Refs"))))))))
+
 (after! magit
   (map! :map magit-mode-map
         ;; :n "] ]" #'magit-section-forward
@@ -537,7 +578,12 @@
   (transient-append-suffix
     #'magit-branch
     ["c"]
-    (list "M" "Rename branch to Tracker ticket" #'magit-rename-org-tracker-branch)))
+    (list "M" "Rename branch to Tracker ticket" #'magit-rename-org-tracker-branch))
+
+  (add-hook 'git-commit-setup-hook #'grfn/add-jira-reference-to-commit-message)
+  (map! (:map git-commit-mode-map
+         "C-c C-f" #'grfn/switch-jira-refs-fixes))
+  )
 
 ;; (defun grfn/split-window-more-sensibly (&optional window)
 ;;   (let ((window (or window (selected-window))))
@@ -740,15 +786,8 @@
         cider-save-file-on-load 't)
   )
 
-(defun +org-clocked-in-element ()
-  (when-let ((item (car org-clock-history)))
-    (save-mark-and-excursion
-    (with-current-buffer (marker-buffer item)
-      (goto-char (marker-position item))
-      (org-element-at-point)))))
-
 (comment
- (setq elt (+org-clocked-in-item))
+ (setq elt (+org-clocked-in-element))
 
  (eq 'headline (car elt))
  (plist-get (cadr elt) :raw-value)

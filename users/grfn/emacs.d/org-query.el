@@ -114,3 +114,17 @@
 (comment
  (grfn/org-current-clocked-in-task-message)
  )
+
+(defun grfn/org-clocked-in-jira-ticket-id ()
+  (grfn/at-org-clocked-in-item
+   (org-tracker-backend/extract-issue-id
+    (org-tracker-current-backend)
+    (cadr (org-element-at-point)))))
+
+(comment
+ (grfn/at-org-clocked-in-item
+  (org-tracker-backend/extract-issue-id
+   (org-tracker-current-backend)
+   (cadr (org-element-at-point))))
+
+ )
