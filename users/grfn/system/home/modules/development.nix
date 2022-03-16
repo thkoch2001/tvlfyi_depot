@@ -78,6 +78,8 @@ with lib;
     pg-dump-upsert
 
     nodePackages.prettier
+
+    linuxPackages.perf
   ] ++ optionals (stdenv.isLinux) [
     # TODO(grfn): replace with stable again once the current julia debacle
     # is resolved upstream, see https://github.com/NixOS/nixpkgs/pull/121114
