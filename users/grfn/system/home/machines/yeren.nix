@@ -75,4 +75,10 @@ in
   programs.zsh.shellAliases = {
     "graph" = "curl -s localhost:6033/graph | dot -Tpng | feh -";
   };
+
+  programs.ssh.matchBlocks."grfn-dev" = {
+    host = "grfn-dev";
+    forwardAgent = true;
+    user = "ubuntu";
+  };
 }
