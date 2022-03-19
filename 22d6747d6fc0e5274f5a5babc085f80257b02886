@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "13a993d2_2992082d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-03-19T17:06:19Z",
+      "side": 1,
+      "message": "approved on behalf of wpcarro who is busy moving atm",
+      "revId": "22d6747d6fc0e5274f5a5babc085f80257b02886",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
