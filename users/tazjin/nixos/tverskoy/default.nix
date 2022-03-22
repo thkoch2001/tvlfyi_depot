@@ -144,8 +144,11 @@ lib.fix (self: {
       "/var/cache/mullvad-vpn"
       "/var/lib/bluetooth"
       "/var/lib/systemd/coredump"
+      "/var/lib/tailscale"
+      "/var/lib/zerotier-one"
       "/var/log"
     ];
+
     files = [
       "/etc/machine-id"
     ];
