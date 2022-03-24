@@ -65,10 +65,16 @@ let
 in
 
 # sadly we can't give an init-file via the command line
-pkgs.writeShellScriptBin "emacs" ''
+(pkgs.writeShellScriptBin "emacs" ''
   exec ${emacs}/bin/emacs          \
     --no-init-file                 \
     --directory ${configDirectory} \
     --eval "(require 'init)"       \
     "$@"
-''
+'').overrideAttrs (super: {
+  buildCommand = ''
+    ${super.buildCommand}
+
+    ln -s "${emacs}/bin/emacsclient" "$out/bin/emacsclient"
+  '';
+})
