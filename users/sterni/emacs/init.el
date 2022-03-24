@@ -248,6 +248,9 @@
   (evil-define-key 'normal 'global (kbd "<leader>ls") 'languagetool-set-language)
   (evil-define-key 'normal 'global (kbd "<leader>lr") 'languagetool-clear-buffer))
 
+(unless (server-running-p)
+  (server-start))
+
 (require 'subscriptions)
 (require 'nix-inject)
 
