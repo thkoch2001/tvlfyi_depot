@@ -7,7 +7,7 @@ depot.nix.readTree.drvTargets {
   # https://gerrit.googlesource.com/plugins/owners
   owners = buildGerritBazelPlugin rec {
     name = "owners";
-    depsOutputHash = "sha256:0qx3675lkj241c1sqs6xia5jpcwha2ib3mv32cilmh0k3cwdyyh2";
+    depsOutputHash = "sha256:00nbqwr83wsqa6l67bv4ywv9795l1ibl0yv1kq5q811syrvk2xiz";
     src = pkgs.fetchgit {
       url = "https://gerrit.googlesource.com/plugins/owners";
       rev = "99a9ab585532d172d141b4641dfc70081513dfc2";
