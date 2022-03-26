@@ -19,6 +19,10 @@ let
     reverse_proxy = true
     set_xauthrequest = true
   '';
+
+  # Depend on the Keycloak service if it is running on the same
+  # machine.
+  depends_on = lib.optional config.services.keycloak.enable "keycloak.service";
 in
 {
   options.services.depot.oauth2_proxy = {
@@ -40,6 +44,8 @@ in
   config = lib.mkIf cfg.enable {
     systemd.services.oauth2_proxy = {
       inherit description;
+      after = depends_on;
+      wants = depends_on;
       wantedBy = [ "multi-user.target" ];
 
       serviceConfig = {
