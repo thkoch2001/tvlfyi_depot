@@ -279,6 +279,7 @@ lib.fix (self: {
       direnv
       dmd
       dnsutils
+      electrum
       emacsGcc # emacsclient
       exa
       fd
@@ -363,6 +364,7 @@ lib.fix (self: {
         ".config/quassel-irc.org"
         ".config/spotify"
         ".config/syncthing"
+        ".electrum"
         ".elfeed"
         ".gnupg"
         ".local/share/Steam"
