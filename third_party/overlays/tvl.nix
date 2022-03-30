@@ -74,4 +74,22 @@ self: super: {
       outputHash = "10if2lmv8d95j3walq3ggx3y423yfy4yl9vplw3apd0s671bly8b";
     });
   });
+
+  # Temporary workaround until the following commit is in channels:
+  # https://github.com/nixos/nixpkgs/commit/5819b99350d7ac6e20f91adce38e7bb22e4d6fc4
+  ocamlPackages = super.ocamlPackages.overrideScope' (oself: osuper: {
+    uutf =
+      let
+        expectedUrls = [
+          "https://erratique.ch/software/uutf/releases/uutf-${osuper.uutf.version}.tbz"
+        ];
+      in
+      assert osuper.uutf.src.urls != expectedUrls;
+      osuper.uutf.overrideAttrs (old: {
+        src = self.fetchurl {
+          urls = expectedUrls;
+          sha256 = old.src.outputHash;
+        };
+      });
+  });
 }
