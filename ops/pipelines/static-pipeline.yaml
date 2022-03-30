@@ -4,6 +4,8 @@
 # If something fails during the creation of the pipeline, the fallback
 # is executed instead which will simply report an error to Gerrit.
 ---
+env:
+  BUILDKITE_TOKEN_PATH: /run/agenix/buildkite-graphql-token
 steps:
   # Run pipeline for tvl-kit when new commits arrive on canon. Since
   # it is not part of the depot build tree, this is a useful
@@ -83,9 +85,11 @@ steps:
     command: |
       set -ueo pipefail
 
+      : ${BUILDKITE_TOKEN_PATH:=~/buildkite-token}
+
       readonly FAILED_JOBS=$(curl 'https://graphql.buildkite.com/v1' \
         --silent \
-        -H "Authorization: Bearer $(cat /run/agenix/buildkite-graphql-token)" \
+        -H "Authorization: Bearer $(cat ${BUILDKITE_TOKEN_PATH})" \
         -d "{\"query\": \"query BuildStatusQuery { build(uuid: \\\"$BUILDKITE_BUILD_ID\\\") { jobs(passed: false) { count } } }\"}" | \
         jq -r '.data.build.jobs.count')
 
