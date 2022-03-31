@@ -43,7 +43,7 @@ run = do
   ctx@T.Context{..} <- ask
   ctx
     |> server
-    |> serve (Proxy @ API)
+    |> serve (Proxy @API)
     |> cors (const $ Just corsPolicy)
     |> Warp.run contextServerPort
     |> liftIO

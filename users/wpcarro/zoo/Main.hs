@@ -157,4 +157,4 @@ parseInput x =
     _ -> Nothing
 
 main :: IO ()
-main = Warp.run 8000 $ serve (Proxy @ Api) server
+main = Warp.run 8000 $ serve (Proxy @Api) server
