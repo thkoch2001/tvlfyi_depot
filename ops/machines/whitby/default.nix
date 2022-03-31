@@ -489,6 +489,7 @@ in
   # Prometheus is inside the respective service modules.
   services.prometheus = {
     enable = true;
+    retentionTime = "90d";
 
     exporters = {
       node = {
