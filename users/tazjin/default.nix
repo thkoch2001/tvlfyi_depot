@@ -10,6 +10,9 @@ let
 
 in
 rustfmt.overrideAttrs (_: {
+  # rustfmt not respecting config atm, disable
+  meta.ci.skip = true;
+
   meta.ci.extraSteps.rustfmt = {
     command = rustfmt;
   };
