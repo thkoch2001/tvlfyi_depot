@@ -92,4 +92,19 @@ self: super: {
         };
       });
   });
+
+  # Apply security update for CVE-2018-25032 via overlay instead of waiting for channels.
+  zlib =
+    let
+      patchedVersion = "1.2.12";
+    in
+    assert self.lib.versionOlder super.zlib.version patchedVersion;
+    super.zlib.overrideAttrs (old: {
+      version = patchedVersion;
+      src = self.fetchurl {
+        url = "https://www.zlib.net/fossils/zlib-${patchedVersion}.tar.gz";
+        sha256 = "91844808532e5ce316b3c010929493c0244f3d37593afd6de04f71821d5136d9";
+      };
+      patches = [ ];
+    });
 }
