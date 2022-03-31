@@ -2,11 +2,11 @@ diff --git a/src/Test/QuickCheck/Arbitrary/Generic.hs b/src/Test/QuickCheck/Arbi
 index fed6ab3..91f59f1 100644
 --- a/src/Test/QuickCheck/Arbitrary/Generic.hs
 +++ b/src/Test/QuickCheck/Arbitrary/Generic.hs
-@@ -23,6 +23,7 @@ The generated 'arbitrary' method is equivalent to
+@@ -33,6 +33,7 @@
  
  module Test.QuickCheck.Arbitrary.Generic
-   ( Arbitrary(..)
-+  , GArbitrary
+   ( GenericArbitrary(..)
++  , GArbitrary(..)
+   , Arbitrary(..)
    , genericArbitrary
    , genericShrink
-   ) where
