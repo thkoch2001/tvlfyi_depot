@@ -75,21 +75,15 @@ self: super: {
     });
   });
 
-  # Temporary workaround until the following commit is in channels:
-  # https://github.com/nixos/nixpkgs/commit/5819b99350d7ac6e20f91adce38e7bb22e4d6fc4
-  ocamlPackages = super.ocamlPackages.overrideScope' (oself: osuper: {
-    uutf =
-      let
-        expectedUrls = [
-          "https://erratique.ch/software/uutf/releases/uutf-${osuper.uutf.version}.tbz"
-        ];
-      in
-      assert osuper.uutf.src.urls != expectedUrls;
-      osuper.uutf.overrideAttrs (old: {
-        src = self.fetchurl {
-          urls = expectedUrls;
-          sha256 = old.src.outputHash;
-        };
-      });
+  # upgrade home-manager until the service-generation fix has landed upstream
+  # https://github.com/nix-community/home-manager/issues/2846
+  home-manager = super.home-manager.overrideAttrs (old: rec {
+    version = assert super.home-manager.version == "2021-12-25"; "2022-04-08";
+    src = self.fetchFromGitHub {
+      owner = "nix-community";
+      repo = "home-manager";
+      rev = "f911ebbec927e8e9b582f2e32e2b35f730074cfc";
+      sha256 = "07qa2qkbjczj3d0m03jpw85hfj35cbjm48xhifz3viy4khjw88vl";
+    };
   });
 }
