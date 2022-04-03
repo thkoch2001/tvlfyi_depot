@@ -16,9 +16,11 @@ let
     ${pkgs.xorg.setxkbmap}/bin/setxkbmap -option caps:super
     exec ${pkgs.xsecurelock}/bin/xsecurelock
   '';
+  mod = name: depot.path + ("/ops/modules/" + name);
 in
 lib.fix (self: {
   imports = [
+    (mod "open_eid.nix")
     "${depot.third_party.impermanence}/nixos.nix"
     "${pkgs.home-manager.src}/nixos"
   ] ++ lib.optional (builtins.pathExists ./local-config.nix) ./local-config.nix;
