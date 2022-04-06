@@ -41,8 +41,6 @@ in
     })
 
     steam
-
-    awscli2
   ];
 
   systemd.user.services.laptop-keyboard = {
