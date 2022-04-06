@@ -12,9 +12,10 @@ engineer and musician
 
 * work
 
-i'm currently working for a relatively new stealth-mode startup. i can't talk much
-about it yet, but if you're interested in rust, distributed systems, and
-databases please reach out
+i work on database internals at [[https://readyset.io/][readyset]], an incrementally maintained, partially
+stateful materialized view maintenance system for sql that's wire-compatible
+with postgresql and mysql, based on [[https://github.com/mit-pdos/noria][noria]]. readyset is hiring - if you're
+interested, send me an email
 
 * projects
 
