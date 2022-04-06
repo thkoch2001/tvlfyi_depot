@@ -117,9 +117,10 @@
 
 (defun grfn/org-clocked-in-jira-ticket-id ()
   (grfn/at-org-clocked-in-item
-   (org-tracker-backend/extract-issue-id
-    (org-tracker-current-backend)
-    (cadr (org-element-at-point)))))
+   (when (org-tracker-current-backend t)
+     (org-tracker-backend/extract-issue-id
+      (org-tracker-current-backend)
+      (cadr (org-element-at-point))))))
 
 (comment
  (grfn/at-org-clocked-in-item

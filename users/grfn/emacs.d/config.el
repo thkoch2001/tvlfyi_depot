@@ -476,21 +476,20 @@
 
 (defun grfn/add-jira-reference-to-commit-message ()
   (interactive)
-  (when (org-tracker-current-backend t)
-    (when-let* ((jira-id (grfn/org-clocked-in-jira-ticket-id)))
-      (save-excursion
-        (save-match-data
-          (goto-char (point-min))
-          ;; Don't add one if we've already got one
-          (unless (search-forward-regexp grfn/jira-refs-re nil t)
-            (or
-             (and
-              (search-forward-regexp (rx line-start "Change-Id:") nil t)
-              (forward-line -1))
-             (and
-              (search-forward-regexp (rx line-start "# Please enter") nil t)
-              (forward-line -2)))
-            (insert (format "\nRefs: %s" jira-id))))))))
+  (when-let* ((jira-id (grfn/org-clocked-in-jira-ticket-id)))
+    (save-excursion
+      (save-match-data
+        (goto-char (point-min))
+        ;; Don't add one if we've already got one
+        (unless (search-forward-regexp grfn/jira-refs-re nil t)
+          (or
+           (and
+            (search-forward-regexp (rx line-start "Change-Id:") nil t)
+            (forward-line -1))
+           (and
+            (search-forward-regexp (rx line-start "# Please enter") nil t)
+            (forward-line -2)))
+          (insert (format "\nRefs: %s" jira-id)))))))
 
 (defun grfn/switch-jira-refs-fixes ()
   (interactive)
@@ -580,10 +579,11 @@
     ["c"]
     (list "M" "Rename branch to Tracker ticket" #'magit-rename-org-tracker-branch))
 
-  (add-hook 'git-commit-setup-hook #'grfn/add-jira-reference-to-commit-message)
-  (map! (:map git-commit-mode-map
-         "C-c C-f" #'grfn/switch-jira-refs-fixes))
   )
+
+(add-hook 'git-commit-setup-hook #'grfn/add-jira-reference-to-commit-message)
+(map! (:map git-commit-mode-map
+       "C-c C-f" #'grfn/switch-jira-refs-fixes))
 
 ;; (defun grfn/split-window-more-sensibly (&optional window)
 ;;   (let ((window (or window (selected-window))))
