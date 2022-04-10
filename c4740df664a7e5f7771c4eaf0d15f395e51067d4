@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e175a93a_edc03d5a",
+        "filename": "ops/modules/open_eid.nix",
+        "patchSetId": 1
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2022-04-10T10:39:54Z",
+      "side": 1,
+      "message": "Did you source this line from somewhere? Any docs you can link to?",
+      "revId": "c4740df664a7e5f7771c4eaf0d15f395e51067d4",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
