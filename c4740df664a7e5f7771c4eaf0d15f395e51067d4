@@ -20,6 +20,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "2ab15c84_2b5ae099",
+        "filename": "ops/modules/open_eid.nix",
+        "patchSetId": 1
+      },
+      "lineNbr": 6,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-04-11T21:37:49Z",
+      "side": 1,
+      "message": "It apparently does work in Firefox, but not in Chrome, for some Chrome-specific reason.",
+      "parentUuid": "22f003a7_8b75787c",
+      "revId": "c4740df664a7e5f7771c4eaf0d15f395e51067d4",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "e175a93a_edc03d5a",
         "filename": "ops/modules/open_eid.nix",
         "patchSetId": 1
@@ -31,6 +49,24 @@
       "writtenOn": "2022-04-10T10:39:54Z",
       "side": 1,
       "message": "Did you source this line from somewhere? Any docs you can link to?",
+      "revId": "c4740df664a7e5f7771c4eaf0d15f395e51067d4",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f9bd1346_24605016",
+        "filename": "ops/modules/open_eid.nix",
+        "patchSetId": 1
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-04-11T21:37:49Z",
+      "side": 1,
+      "message": "Based on https://github.com/open-eid/linux-installer/blob/master/esteid-update-nssdb",
+      "parentUuid": "e175a93a_edc03d5a",
       "revId": "c4740df664a7e5f7771c4eaf0d15f395e51067d4",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
