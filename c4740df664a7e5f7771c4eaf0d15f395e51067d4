@@ -38,6 +38,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "bf78c683_f7da5ade",
+        "filename": "ops/modules/open_eid.nix",
+        "patchSetId": 1
+      },
+      "lineNbr": 6,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2022-04-12T19:44:09Z",
+      "side": 1,
+      "message": "it might make sense to update the comment, and link to https://bugs.chromium.org/p/chromium/issues/detail?id\u003d16387, which provides some pointers on why this doesn\u0027t work with chrome (google simply didn\u0027t add the extra bit of code that\u0027s apparently required for this to work).",
+      "parentUuid": "2ab15c84_2b5ae099",
+      "revId": "c4740df664a7e5f7771c4eaf0d15f395e51067d4",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "e175a93a_edc03d5a",
         "filename": "ops/modules/open_eid.nix",
         "patchSetId": 1
@@ -67,6 +85,24 @@
       "side": 1,
       "message": "Based on https://github.com/open-eid/linux-installer/blob/master/esteid-update-nssdb",
       "parentUuid": "e175a93a_edc03d5a",
+      "revId": "c4740df664a7e5f7771c4eaf0d15f395e51067d4",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "278e2137_595d2200",
+        "filename": "ops/modules/open_eid.nix",
+        "patchSetId": 1
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2022-04-12T19:44:09Z",
+      "side": 1,
+      "message": "can you add this in a comment?",
+      "parentUuid": "f9bd1346_24605016",
       "revId": "c4740df664a7e5f7771c4eaf0d15f395e51067d4",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
