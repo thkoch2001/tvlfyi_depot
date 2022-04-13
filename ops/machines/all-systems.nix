@@ -17,5 +17,6 @@
 ]) ++
 
 (with depot.users.wpcarro.nixos; [
+  ava
   marcus
 ])

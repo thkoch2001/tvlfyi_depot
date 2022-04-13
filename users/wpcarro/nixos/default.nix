@@ -5,6 +5,8 @@ let
   systemFor = sys: (depot.ops.nixos.nixosFor sys).system;
 in
 {
+  avaSystem = systemFor depot.users.wpcarro.nixos.ava;
+
   marcusSystem = systemFor depot.users.wpcarro.nixos.marcus;
 
   # Apply terraform updates and rebuild NixOS for diogenes.
@@ -44,5 +46,8 @@ in
     ssh $target '${diogenes.osPath}/bin/switch-to-configuration switch'
   '';
 
-  meta.ci.targets = [ "marcusSystem" ];
+  meta.ci.targets = [
+    "avaSystem"
+    "marcusSystem"
+  ];
 }
