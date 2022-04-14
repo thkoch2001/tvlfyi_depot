@@ -391,13 +391,14 @@
                               #'local-time:timestamp<
                               :key #'created-at)))
          (markdownify-comment-bodies comments)
-         (who:htm
-          (:ol
-           :class "issue-history"
-           (dolist (item history)
-             (render/issue-history-item item))
-           (when *user*
-             (render/new-comment (id issue))))))))))
+         (when (or history *user*)
+           (who:htm
+            (:ol
+             :class "issue-history"
+             (dolist (item history)
+               (render/issue-history-item item))
+             (when *user*
+               (render/new-comment (id issue)))))))))))
 
 (defun render/not-found (entity-type)
   (render ()
