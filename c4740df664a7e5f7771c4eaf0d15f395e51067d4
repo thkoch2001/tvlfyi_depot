@@ -54,6 +54,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "9df161a6_efd9941a",
+        "filename": "ops/modules/open_eid.nix",
+        "patchSetId": 1
+      },
+      "lineNbr": 6,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-04-14T14:47:42Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "bf78c683_f7da5ade",
+      "revId": "c4740df664a7e5f7771c4eaf0d15f395e51067d4",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "e175a93a_edc03d5a",
@@ -103,6 +121,24 @@
       "side": 1,
       "message": "can you add this in a comment?",
       "parentUuid": "f9bd1346_24605016",
+      "revId": "c4740df664a7e5f7771c4eaf0d15f395e51067d4",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "56479222_fdfb5b41",
+        "filename": "ops/modules/open_eid.nix",
+        "patchSetId": 1
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-04-14T14:47:42Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "278e2137_595d2200",
       "revId": "c4740df664a7e5f7771c4eaf0d15f395e51067d4",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
