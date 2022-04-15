@@ -44,6 +44,7 @@ let
       password-store
       # TODO(wpcarro): Prefer an Emacs client for clipmenud.
       clipmon
+      dockerfile-mode
       evil
       evil-collection
       evil-commentary
@@ -119,6 +120,7 @@ let
       counsel
       flycheck
       emojify
+      yaml-mode
     ]));
 
   loadPath = concatStringsSep ":" [
