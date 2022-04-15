@@ -36,6 +36,8 @@ in
   };
 
   services = wpcarro.common.services // {
+    openssh.enable = true;
+
     xserver = {
       enable = true;
       layout = "us";
@@ -57,6 +59,9 @@ in
   hardware.pulseaudio.enable = true;
 
   users.mutableUsers = true;
+  users.users.root.openssh.authorizedKeys.keys = [
+    wpcarro.keys.nathan
+  ];
   users.users.wpcarro = {
     isNormalUser = true;
     extraGroups = [
@@ -65,6 +70,9 @@ in
       "docker"
     ];
     shell = pkgs.fish;
+    openssh.authorizedKeys.keys = [
+      wpcarro.keys.nathan
+    ];
   };
 
   security.sudo.wheelNeedsPassword = false;
