@@ -62,6 +62,7 @@ in
     extraGroups = [
       "networkmanager"
       "wheel"
+      "docker"
     ];
     shell = pkgs.fish;
   };
@@ -81,6 +82,8 @@ in
   };
 
   programs = wpcarro.common.programs;
+
+  virtualisation.docker.enable = true;
 
   environment.variables = {
     EDITOR = "emacsclient";
