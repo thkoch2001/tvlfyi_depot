@@ -41,7 +41,9 @@
 ;; enables ControlMaster.
 (setq tramp-use-ssh-controlmaster-options nil)
 
-(defcustom ssh-hosts '("wpcarro@wpcarro.dev")
+(defcustom ssh-hosts '("wpcarro@wpcarro.dev"
+                       "foundation"
+                       "edge")
   "List of hosts to which I commonly connect.")
 
 (defun ssh-sudo-buffer ()
@@ -49,7 +51,10 @@
   (interactive)
   (with-current-buffer (current-buffer)
     (if (s-starts-with? "/ssh:" buffer-file-name)
-        (message "[ssh.el] calling ssh-sudo-buffer for remote files isn't currently supported")
+        (pcase (s-split ":" buffer-file-name)
+          (`(,one ,two ,three) (find-file (format "/ssh:%s|sudo:%s:%s" two two three))))
+        (find-file
+         (s-join ":" (-insert-at 2 "|sudo" (s-split ":" buffer-file-name))))
       (find-file (format "/sudo::%s" buffer-file-name)))))
 
 (defun ssh-cd-home ()
