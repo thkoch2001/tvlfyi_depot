@@ -32,20 +32,6 @@ wpcarro.terraform.googleCloudVM {
         public_ptr_domain_name = "${domainName}.";
       };
     };
-
-    # monsterpoker.app
-    resource.google_dns_managed_zone."monsterpoker" = {
-      name = "monsterpoker";
-      dns_name = "monsterpoker.app.";
-    };
-
-    resource.google_dns_record_set."monsterpoker" = {
-      name = "monsterpoker.app.";
-      type = "A";
-      ttl = 300; # 5m
-      managed_zone = "\${google_dns_managed_zone.monsterpoker.name}";
-      rrdatas = [ "\${google_compute_instance.${name}.network_interface[0].access_config[0].nat_ip}" ];
-    };
   };
 
   configuration = {
@@ -164,11 +150,6 @@ wpcarro.terraform.googleCloudVM {
             addSSL = true;
             enableACME = true;
             root = wpcarro.website.root;
-          };
-          "monsterpoker.app" = {
-            addSSL = true;
-            enableACME = true;
-            root = wpcarro.clients.monsterpoker;
           };
         };
       };
