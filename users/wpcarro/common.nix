@@ -7,6 +7,8 @@ in
   programs = {
     fish.enable = true;
 
+    gnupg.agent.enable = true;
+
     ssh = {
       startAgent = true;
       extraConfig = ''
@@ -47,9 +49,11 @@ in
     fd
     fzf
     git
+    gnupg
     jq
     mkpasswd
     nmap
+    pass
     python3
     rink
     ripgrep
