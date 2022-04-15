@@ -19,6 +19,9 @@ in
   boot.loader.grub.device = "/dev/sda"; # or "nodev" for efi only
   boot.initrd.availableKernelModules = [ "ata_piix" "vmw_pvscsi" "sd_mod" "sr_mod" ];
 
+  # Adjust to disk size increases
+  boot.growPartition = true;
+
   virtualisation.vmware.guest.enable = true;
   virtualisation.vmware.guest.headless = true;
 
