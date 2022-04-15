@@ -31,6 +31,9 @@ case "${TARGET_TOOL}" in
   nint)
     attr="nix.nint"
     ;;
+  niv)
+    attr="third_party.nixpkgs.niv"
+    ;;
   rebuild-system)
     attr="ops.nixos.rebuild-system"
     ;;
