@@ -5,6 +5,8 @@ import Debug
 import Html exposing (Html, button, div, input, p, text)
 import Html.Attributes exposing (..)
 import Html.Events exposing (onInput)
+import Platform.Cmd as Cmd
+import Platform.Sub
 import String
 import Url
 import Url.Parser exposing ((</>), int, string)
@@ -20,12 +22,19 @@ type alias Model =
     }
 
 
+main : Program () Model Msg
 main =
-    Browser.sandbox { init = { url = "", tgLink = Nothing }, update = update, view = view }
+    Browser.document
+        { init = \_ -> ( { url = "", tgLink = Nothing }, Cmd.none )
+        , view = view
+        , update = update
+        , subscriptions = \_ -> Platform.Sub.none
+        }
 
 
 type Msg
     = UrlChange String
+    | NoOp
 
 
 tgLink : Url.Parser.Parser (TgLink -> a) a
@@ -54,14 +63,22 @@ parseUrl url =
 update msg model =
     case msg of
         UrlChange new ->
-            { model | url = new, tgLink = parseUrl new }
+            ( { model | url = new, tgLink = parseUrl new }, Cmd.none )
+
+        NoOp ->
+            ( model, Cmd.none )
 
 
+view : Model -> Browser.Document Msg
 view model =
-    div []
-        [ p [] [ text "tgsa: 1. paste telegram link 2. receive BBCode 3. post " ]
-        , input [ placeholder "Telegram message URL", onInput UrlChange ] []
-        , p []
-            [ text (Debug.toString model.tgLink)
+    { title = "tgsa"
+    , body =
+        [ div []
+            [ p [] [ text "tgsa: 1. paste telegram link 2. receive BBCode 3. post " ]
+            , input [ placeholder "Telegram message URL", onInput UrlChange ] []
+            , p []
+                [ text (Debug.toString model.tgLink)
+                ]
             ]
         ]
+    }
