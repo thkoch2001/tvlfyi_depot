@@ -7,10 +7,13 @@ _: # ignore readTree options
 
 let
   mod = name: depot.path + ("/ops/modules/" + name);
+  usermod = name: depot.path + ("/users/tazjin/nixos/modules/" + name);
 in
 {
   imports = [
     (mod "quassel.nix")
+    (mod "www/base.nix")
+    (usermod "tgsa.nix")
   ];
 
   # Use the GRUB 2 boot loader.
