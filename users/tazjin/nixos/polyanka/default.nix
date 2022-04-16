@@ -7,10 +7,13 @@ _: # ignore readTree options
 
 let
   mod = name: depot.path + ("/ops/modules/" + name);
+  usermod = name: depot.path + ("/users/tazjin/nixos/modules/" + name);
 in
 {
   imports = [
     (mod "quassel.nix")
+    (mod "www/base.nix")
+    (usermod "tgsa.nix")
   ];
 
   # Use the GRUB 2 boot loader.
@@ -63,6 +66,7 @@ in
     defaultGateway6.address = "2a02:750:7:3305::1";
 
     firewall.enable = true;
+    firewall.allowedTCPPorts = [ 22 80 443 ];
 
     nameservers = [
       "79.99.4.100"
