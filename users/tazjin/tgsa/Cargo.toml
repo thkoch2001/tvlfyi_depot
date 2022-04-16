@@ -6,5 +6,6 @@ edition = "2021"
 [dependencies]
 anyhow = "1.0"
 crimp = "0.2"
+rouille = "3.5"
 scraper = "0.12"
 url = "2.2"
