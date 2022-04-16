@@ -10,6 +10,27 @@ impl TgLink {
     fn to_url(&self) -> String {
         format!("https://t.me/{}/{}?embed=1", self.username, self.message_id)
     }
+
+    fn parse(url: &str) -> Option<Self> {
+        let url = url.strip_prefix("/")?;
+        let parsed = url::Url::parse(url).ok()?;
+
+        if parsed.host()? != url::Host::Domain("t.me") {
+            // only t.me links are supported
+            return None;
+        }
+
+        let parts = parsed.path_segments()?.collect::<Vec<&str>>();
+        if parts.len() != 2 {
+            // only message links are supported
+            return None;
+        }
+
+        Some(TgLink {
+            username: parts[0].into(),
+            message_id: parts[1].parse().ok()?,
+        })
+    }
 }
 
 fn fetch_embed(link: &TgLink) -> Result<String> {
@@ -138,18 +159,53 @@ fn to_bbcode(link: &TgLink, msg: &TgMessage) -> Result<String> {
     Ok(out)
 }
 
+fn handle_tg_link(link: &TgLink) -> Result<String> {
+    let embed = fetch_embed(&link)?;
+    let msg = parse_tgmessage(&embed)?;
+    to_bbcode(&link, &msg).context("failed to make bbcode")
+}
+
 fn main() {
     crimp::init();
 
-    let link = TgLink {
-        // username: "RWApodcast".into(),
-        // message_id: 113,
-        username: "intelslava".into(),
-        message_id: 25483,
-    };
+    rouille::start_server("0.0.0.0:8472", move |request| {
+        match TgLink::parse(request.raw_url()) {
+            None => rouille::Response::text(
+                r#"tgsa
+----
 
-    let embed = fetch_embed(&link).unwrap();
-    let msg = parse_tgmessage(&embed).unwrap();
+this is a stupid program that lets you turn telegram message links
+into BBcode suitable for pasting on somethingawful dot com
 
-    println!("{}", to_bbcode(&link, &msg).unwrap());
+you can use it by putting a valid telegram message link in the url and
+waiting a few seconds (yes it's currently slow, yes it's SA's fault,
+yes I could work around but can't be bothered atm)
+
+for example:
+
+  https://tgsa.tazj.in/https://t.me/RWApodcast/113
+
+yes, that looks stupid, but it works
+
+if you see this message and think you did the above correctly, you
+didn't. try again. idiot.
+
+pm me on the forums if this makes you mad or something.
+"#,
+            ),
+            Some(link) => {
+                let result = handle_tg_link(&link);
+                match result {
+                    Ok(bbcode) => rouille::Response::text(bbcode),
+                    Err(err) => rouille::Response::text(format!(
+                        r#"something broke: {}
+
+nobody has been alerted about this and it has probably not been
+logged. pm me on the forums if you think it's important enough."#,
+                        err
+                    )),
+                }
+            }
+        }
+    });
 }
