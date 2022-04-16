@@ -1,6 +1,8 @@
 use anyhow::{anyhow, Context, Result};
+use std::collections::HashMap;
+use std::sync::RwLock;
 
-#[derive(Debug)]
+#[derive(Clone, Debug, Eq, Hash, PartialEq)]
 struct TgLink {
     username: String,
     message_id: usize,
@@ -34,6 +36,7 @@ impl TgLink {
 }
 
 fn fetch_embed(link: &TgLink) -> Result<String> {
+    println!("fetching {}#{}", link.username, link.message_id);
     let response = crimp::Request::get(&link.to_url())
         .send()
         .context("failed to fetch embed data")?
@@ -159,14 +162,27 @@ fn to_bbcode(link: &TgLink, msg: &TgMessage) -> Result<String> {
     Ok(out)
 }
 
-fn handle_tg_link(link: &TgLink) -> Result<String> {
+type Cache = RwLock<HashMap<TgLink, String>>;
+
+fn handle_tg_link(cache: &Cache, link: &TgLink) -> Result<String> {
+    if let Some(bbcode) = cache.read().unwrap().get(&link) {
+        println!("serving {}#{} from cache", link.username, link.message_id);
+        return Ok(bbcode.to_string());
+    }
+
     let embed = fetch_embed(&link)?;
     let msg = parse_tgmessage(&embed)?;
-    to_bbcode(&link, &msg).context("failed to make bbcode")
+    let bbcode = to_bbcode(&link, &msg).context("failed to make bbcode")?;
+
+    cache.write().unwrap().insert(link.clone(), bbcode.clone());
+
+    Ok(bbcode)
 }
 
 fn main() {
     crimp::init();
+
+    let cache: Cache = RwLock::new(HashMap::new());
 
     rouille::start_server("0.0.0.0:8472", move |request| {
         match TgLink::parse(request.raw_url()) {
@@ -194,16 +210,19 @@ pm me on the forums if this makes you mad or something.
 "#,
             ),
             Some(link) => {
-                let result = handle_tg_link(&link);
+                let result = handle_tg_link(&cache, &link);
                 match result {
                     Ok(bbcode) => rouille::Response::text(bbcode),
-                    Err(err) => rouille::Response::text(format!(
-                        r#"something broke: {}
+                    Err(err) => {
+                        println!("something failed: {}", err);
+                        rouille::Response::text(format!(
+                            r#"something broke: {}
 
 nobody has been alerted about this and it has probably not been
 logged. pm me on the forums if you think it's important enough."#,
-                        err
-                    )),
+                            err
+                        ))
+                    }
                 }
             }
         }
