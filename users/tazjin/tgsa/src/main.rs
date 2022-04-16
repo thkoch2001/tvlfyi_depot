@@ -30,6 +30,7 @@ struct TgMessage {
     author: String,
     message: Option<String>,
     photos: Vec<String>,
+    videos: Vec<String>,
 }
 
 fn extract_photo_url(style: &str) -> Option<&str> {
@@ -70,71 +71,85 @@ fn parse_tgmessage(embed: &str) -> Result<TgMessage> {
         }
     }
 
+    let video_sel = Selector::parse("i.tgme_widget_message_video_thumb").unwrap();
+    let mut videos = vec![];
+
+    for video in doc.select(&video_sel) {
+        if let Some(style) = video.value().attr("style") {
+            if let Some(url) = extract_photo_url(style) {
+                videos.push(url.to_string())
+            }
+        }
+    }
+
     Ok(TgMessage {
         author,
         message,
         photos,
+        videos,
     })
 }
 
-fn shorten_photo_links(msg: &mut TgMessage) -> Result<()> {
+fn shorten_link(link: &str) -> Result<String> {
     let mut url = url::Url::parse("https://tinyurl.com/api-create.php")?;
-    let mut shortened = vec![];
+    url.query_pairs_mut().clear().append_pair("url", link);
 
-    for photo in &msg.photos {
-        url.query_pairs_mut().clear().append_pair("url", &photo);
-        let request = url.as_str();
+    let request = url.as_str();
 
-        let response = crimp::Request::get(request)
-            .send()
-            .context("failed to shorten URL")?
-            .as_string()
-            .context("failed to decode shortened URL")?
-            .error_for_status(|resp| {
-                anyhow!("tinyurl request failed: {} ({})", resp.body, resp.status)
-            })?;
+    let response = crimp::Request::get(request)
+        .send()
+        .context("failed to shorten URL")?
+        .as_string()
+        .context("failed to decode shortened URL")?
+        .error_for_status(|resp| {
+            anyhow!("tinyurl request failed: {} ({})", resp.body, resp.status)
+        })?;
 
-        shortened.push(response.body.trim().into());
-    }
-
-    msg.photos = shortened;
-
-    Ok(())
+    Ok(response.body.trim().into())
 }
 
-fn to_bbcode(link: &TgLink, msg: &TgMessage) -> String {
+fn to_bbcode(link: &TgLink, msg: &TgMessage) -> Result<String> {
     let mut out = String::new();
 
     out.push_str(&format!("[quote=\"{}\"]\n", msg.author));
 
+    for video in &msg.videos {
+        out.push_str(&format!("[url=\"{}\"]", link.to_url()));
+        out.push_str(&format!("[img]{}[/img]", shorten_link(video)?));
+        out.push_str("[/url]\n");
+        out.push_str("[sub](Click thumbnail to open video)[/sub]\n")
+    }
+
     for photo in &msg.photos {
-        out.push_str(&format!("[timg]{}[/timg]\n", photo));
+        out.push_str(&format!("[timg]{}[/timg]\n", shorten_link(photo)?));
     }
 
     if let Some(message) = &msg.message {
         out.push_str(message);
     }
 
-    out.push_str("\n[/quote]\n");
     out.push_str(&format!(
-        "[i](via [url=\"{}\"]Telegram[/url])[/i]",
+        "\n\n[sub](via [url=\"{}\"]Telegram[/url])[/sub]",
         link.to_url(),
     ));
 
-    return out;
+    out.push_str("\n[/quote]\n");
+
+    Ok(out)
 }
 
 fn main() {
     crimp::init();
 
     let link = TgLink {
-        username: "RWApodcast".into(),
-        message_id: 113,
+        // username: "RWApodcast".into(),
+        // message_id: 113,
+        username: "intelslava".into(),
+        message_id: 25483,
     };
 
     let embed = fetch_embed(&link).unwrap();
-    let mut msg = parse_tgmessage(&embed).unwrap();
-    shorten_photo_links(&mut msg).unwrap();
+    let msg = parse_tgmessage(&embed).unwrap();
 
-    println!("{}", to_bbcode(&link, &msg));
+    println!("{}", to_bbcode(&link, &msg).unwrap());
 }
