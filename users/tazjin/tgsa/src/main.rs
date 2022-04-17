@@ -9,6 +9,10 @@ struct TgLink {
 }
 
 impl TgLink {
+    fn human_friendly_url(&self) -> String {
+        format!("t.me/{}/{}", self.username, self.message_id)
+    }
+
     fn to_url(&self) -> String {
         format!("https://t.me/{}/{}?embed=1", self.username, self.message_id)
     }
@@ -153,8 +157,9 @@ fn to_bbcode(link: &TgLink, msg: &TgMessage) -> Result<String> {
     }
 
     out.push_str(&format!(
-        "\n\n[sub](via [url=\"{}\"]Telegram[/url])[/sub]",
+        "\n\n[sub](from [url=\"{}\"]{}[/url], via [url=\"https://tgsa.tazj.in\"]tgsa[/url])[/sub]",
         link.to_url(),
+        link.human_friendly_url(),
     ));
 
     out.push_str("\n[/quote]\n");
