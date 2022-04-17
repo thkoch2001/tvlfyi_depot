@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ff0f9318_42185e6d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2022-04-17T19:57:42Z",
+      "side": 1,
+      "message": "Is it possible to make an extra step that checks whether the registry parses?",
+      "revId": "299dba1694c70d9ac7127987614bccfc1b0dd8ca",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
