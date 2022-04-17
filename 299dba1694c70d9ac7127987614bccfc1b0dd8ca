@@ -16,6 +16,24 @@
       "message": "Is it possible to make an extra step that checks whether the registry parses?",
       "revId": "299dba1694c70d9ac7127987614bccfc1b0dd8ca",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fd04edd8_47a6ec42",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2022-04-17T19:58:00Z",
+      "side": 1,
+      "message": "although nevermind as soon as we have any elm2nix drvs it\u0027s irrelevant",
+      "parentUuid": "ff0f9318_42185e6d",
+      "revId": "299dba1694c70d9ac7127987614bccfc1b0dd8ca",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
