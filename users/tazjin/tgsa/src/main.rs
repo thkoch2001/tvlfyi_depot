@@ -59,6 +59,7 @@ struct TgMessage {
     message: Option<String>,
     photos: Vec<String>,
     videos: Vec<String>,
+    has_audio: bool,
 }
 
 fn extract_photo_url(style: &str) -> Option<&str> {
@@ -110,11 +111,18 @@ fn parse_tgmessage(embed: &str) -> Result<TgMessage> {
         }
     }
 
+    let audio_sel = Selector::parse("audio.tgme_widget_message_voice.js-message_voice").unwrap();
+    let mut has_audio = false;
+    if doc.select(&audio_sel).next().is_some() {
+        has_audio = true;
+    }
+
     Ok(TgMessage {
         author,
         message,
         photos,
         videos,
+        has_audio,
     })
 }
 
@@ -150,6 +158,13 @@ fn to_bbcode(link: &TgLink, msg: &TgMessage) -> Result<String> {
 
     for photo in &msg.photos {
         out.push_str(&format!("[timg]{}[/timg]\n", shorten_link(photo)?));
+    }
+
+    if msg.has_audio {
+        out.push_str(&format!(
+            "[i]This message has audio attached. Go [url=\"{}\"]to Telegram[/url] to listen.[/i]",
+            link.to_url(),
+        ));
     }
 
     if let Some(message) = &msg.message {
