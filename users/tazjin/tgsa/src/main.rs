@@ -153,7 +153,7 @@ fn to_bbcode(link: &TgLink, msg: &TgMessage) -> Result<String> {
     }
 
     out.push_str(&format!(
-        "\n\n[sub](via [url=\"{}\"]Telegram[/url])[/sub]",
+        "\n\n[sub](from [url=\"{}\"]Telegram[/url], via [url=\"https://tgsa.tazj.in\"]tgsa[/url])[/sub]",
         link.to_url(),
     ));
 
