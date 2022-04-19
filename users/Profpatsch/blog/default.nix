@@ -26,11 +26,11 @@ let
   # /notes/*
   notes = [
     {
-      route = [ "notes" "preventing-oom" ];
-      name = "Preventing out-of-memory (OOM) errors on Linux";
+      route = [ "notes" "an-idealized-conflang" ];
+      name = "An Idealized Configuration Language";
       page = { cssFile }: markdownToHtml {
-        name = "preventing-oom";
-        markdown = ./notes/preventing-oom.md;
+        name = "an-idealized-conflang";
+        markdown = ./notes/an-idealized-conflang.md;
         inherit cssFile;
       };
     }
@@ -40,6 +40,15 @@ let
       page = { cssFile }: markdownToHtml {
         name = "rust-string-conversions";
         markdown = ./notes/rust-string-conversions.md;
+        inherit cssFile;
+      };
+    }
+    {
+      route = [ "notes" "preventing-oom" ];
+      name = "Preventing out-of-memory (OOM) errors on Linux";
+      page = { cssFile }: markdownToHtml {
+        name = "preventing-oom";
+        markdown = ./notes/preventing-oom.md;
         inherit cssFile;
       };
     }
