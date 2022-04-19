@@ -126,38 +126,20 @@ fn parse_tgmessage(embed: &str) -> Result<TgMessage> {
     })
 }
 
-fn shorten_link(link: &str) -> Result<String> {
-    let mut url = url::Url::parse("https://tinyurl.com/api-create.php")?;
-    url.query_pairs_mut().clear().append_pair("url", link);
-
-    let request = url.as_str();
-
-    let response = crimp::Request::get(request)
-        .send()
-        .context("failed to shorten URL")?
-        .as_string()
-        .context("failed to decode shortened URL")?
-        .error_for_status(|resp| {
-            anyhow!("tinyurl request failed: {} ({})", resp.body, resp.status)
-        })?;
-
-    Ok(response.body.trim().into())
-}
-
-fn to_bbcode(link: &TgLink, msg: &TgMessage) -> Result<String> {
+fn to_bbcode(link: &TgLink, msg: &TgMessage) -> String {
     let mut out = String::new();
 
     out.push_str(&format!("[quote=\"{}\"]\n", msg.author));
 
     for video in &msg.videos {
         out.push_str(&format!("[url=\"{}\"]", link.to_url()));
-        out.push_str(&format!("[img]{}[/img]", shorten_link(video)?));
+        out.push_str(&format!("[img]{}[/img]", video));
         out.push_str("[/url]\n");
         out.push_str("[sub](Click thumbnail to open video)[/sub]\n")
     }
 
     for photo in &msg.photos {
-        out.push_str(&format!("[timg]{}[/timg]\n", shorten_link(photo)?));
+        out.push_str(&format!("[timg]{}[/timg]\n", photo));
     }
 
     if msg.has_audio {
@@ -179,7 +161,7 @@ fn to_bbcode(link: &TgLink, msg: &TgMessage) -> Result<String> {
 
     out.push_str("\n[/quote]\n");
 
-    Ok(out)
+    out
 }
 
 type Cache = RwLock<HashMap<TgLink, String>>;
@@ -192,7 +174,7 @@ fn handle_tg_link(cache: &Cache, link: &TgLink) -> Result<String> {
 
     let embed = fetch_embed(&link)?;
     let msg = parse_tgmessage(&embed)?;
-    let bbcode = to_bbcode(&link, &msg).context("failed to make bbcode")?;
+    let bbcode = to_bbcode(&link, &msg);
 
     cache.write().unwrap().insert(link.clone(), bbcode.clone());
 
@@ -214,8 +196,8 @@ this is a stupid program that lets you turn telegram message links
 into BBcode suitable for pasting on somethingawful dot com
 
 you can use it by putting a valid telegram message link in the url and
-waiting a few seconds (yes it's currently slow, yes it's SA's fault,
-yes I could work around but can't be bothered atm)
+waiting for some bbcode to show up. if there are images in the post the
+links will be very long, don't let this scare you.
 
 for example:
 
