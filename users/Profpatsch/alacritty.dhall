@@ -1,11 +1,17 @@
 let sol = (./solarized.dhall).hex
 
-let solarized-dark =
+let black = "#000000"
+
+let white = "#ffffff"
+
+let
+    -- todo: this looks not too good
+    solarized-dark =
       { --Colors (Solarized Dark)
         colors =
         { -- Default colors
           primary =
-          { background = sol.base03, foreground = sol.base0 }
+          { background = black, foreground = white }
         , -- Cursor colors
           cursor =
           { text = sol.base03, cursor = sol.base0 }
@@ -34,4 +40,9 @@ let solarized-dark =
         }
       }
 
-in  { font.size = 12 } // solarized-dark
+in  { alacritty-config = { font.size = 18, scolling.history = 100000 }
+    ,   -- This disables the dpi-sensitive scaling (cause otherwise the font will be humongous on my laptop screen)
+        alacritty-env
+      . WINIT_X11_SCALE_FACTOR
+      = 1
+    }
