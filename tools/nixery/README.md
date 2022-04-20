@@ -4,7 +4,7 @@
 
 -----------------
 
-[![Build Status](https://github.com/tazjin/nixery/actions/workflows/build-and-test.yaml/badge.svg)](https://github.com/tazjin/nixery/actions/workflows/build-and-test.yaml)
+[![Build status](https://badge.buildkite.com/016bff4b8ae2704a3bbbb0a250784e6692007c582983b6dea7.svg?branch=refs/heads/canon)](https://buildkite.com/tvl/depot)
 
 **Nixery** is a Docker-compatible container registry that is capable of
 transparently building and serving container images using [Nix][].
@@ -139,7 +139,7 @@ separate Nix function, which will make it possible to build images directly in
 Nix builds.
 
 [Nix]: https://nixos.org/
-[layering strategy]: https://storage.googleapis.com/nixdoc/nixery-layers.html
+[layering strategy]: https://tazj.in/blog/nixery-layers
 [gist]: https://gist.github.com/tazjin/08f3d37073b3590aacac424303e6f745
 [buildLayeredImage]: https://grahamc.com/blog/nix-and-layered-docker-images
 [public]: https://nixery.dev
