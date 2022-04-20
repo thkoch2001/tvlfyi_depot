@@ -84,10 +84,30 @@ fn parse_tgmessage(embed: &str) -> Result<TgMessage> {
         .concat();
 
     let msg_sel = Selector::parse("div.tgme_widget_message_text.js-message_text").unwrap();
-    let message = doc
-        .select(&msg_sel)
-        .next()
-        .map(|m| m.text().collect::<Vec<&str>>().concat());
+
+    // The ElementRef::text() iterator does not yield newlines present
+    // in the message, so it is partially reimplemented here.
+    let message = if let Some(msg_elem) = doc.select(&msg_sel).next() {
+        use ego_tree::iter::Edge;
+        use scraper::node::Node;
+
+        let mut out = String::new();
+
+        for edge in &mut msg_elem.traverse() {
+            if let Edge::Open(node) = edge {
+                match node.value() {
+                    Node::Text(ref text) => out.push_str(&*text),
+                    Node::Element(elem) if elem.name() == "br" => out.push_str("\n"),
+                    _ => {}
+                }
+            }
+        }
+
+        Some(out)
+    } else {
+        // Not all Telegram messages have a textual message.
+        None
+    };
 
     let photo_sel = Selector::parse("a.tgme_widget_message_photo_wrap").unwrap();
     let mut photos = vec![];
