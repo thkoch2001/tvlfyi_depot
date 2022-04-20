@@ -6,6 +6,7 @@ edition = "2021"
 [dependencies]
 anyhow = "1.0"
 crimp = "0.2"
+ego-tree = "0.6" # in tandem with 'scraper'
 rouille = "3.5"
 scraper = "0.12"
 url = "2.2"
