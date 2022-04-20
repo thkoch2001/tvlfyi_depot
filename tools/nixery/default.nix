@@ -12,7 +12,14 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-{ pkgs ? import ./nixpkgs-pin.nix
+# This function header aims to provide compatibility between builds of
+# Nixery taking place inside/outside of the TVL depot.
+#
+# In the future, Nixery will transition to using //nix/buildGo for its
+# build system and this will need some major adaptations to support
+# that.
+{ depot ? { nix.readTree.drvTargets = x: x; }
+, pkgs ? import <nixpkgs> {}
 , preLaunch ? ""
 , extraPackages ? []
 , maxLayers ? 20
@@ -46,7 +53,7 @@ let
       "-ldflags=-s -w -X main.version=${nixery-commit-hash}"
     ];
   };
-in rec {
+in depot.nix.readTree.drvTargets rec {
   # Implementation of the Nix image building logic
   nixery-prepare-image = import ./prepare-image { inherit pkgs; };
 
