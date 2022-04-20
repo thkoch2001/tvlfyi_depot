@@ -49,6 +49,9 @@ configuration is tracked in `//ops/{modules,machines}`.
 * [`//nix/readTree`](https://cs.tvl.fyi/depot/-/blob/nix/readTree/README.md)
   contains the Nix code which automatically registers projects in our Nix
   attribute hierarchy based on their in-tree location
+* [`//tools/nixery`](https://cs.tvl.fyi/depot/-/tree/tools/nixery)
+  contains the source code of [Nixery][], a container registry that
+  can build images ad-hoc from Nix packages
 * `//nix/yants` contains **Y**et **A**nother **N**ix **T**ype **S**ystem, which
   we use for a variety of things throughout the repository
 * `//nix/buildGo` implements a Nix library that can build Go software in the
@@ -119,3 +122,4 @@ Hackint also provide a [web chat][tvl-webchat].
 [hackint-xmpp]: https://hackint.org/transport/xmpp
 [tvl-xmpp]: xmpp:#tvl@irc.hackint.org?join
 [tvl-webchat]: https://webirc.hackint.org/#ircs://irc.hackint.org/#tvl
+[Nixery]: https://nixery.dev
