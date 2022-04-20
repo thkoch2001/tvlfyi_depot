@@ -24,7 +24,8 @@ let
     includes = [ "*.nix" ]
     excludes = [
       "third_party/nix/tests/*",
-      "third_party/nix/src/tests/*"
+      "third_party/nix/src/tests/*",
+      "tools/nixery/*"
     ]
 
     [formatter.rust]
