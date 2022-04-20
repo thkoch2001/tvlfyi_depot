@@ -153,13 +153,13 @@ fn to_bbcode(link: &TgLink, msg: &TgMessage) -> String {
         out.push_str(message);
     }
 
+    out.push_str("\n[/quote]\n");
+
     out.push_str(&format!(
-        "\n\n[sub](from [url=\"{}\"]{}[/url], via [url=\"https://tgsa.tazj.in\"]tgsa[/url])[/sub]",
+        "[sub](from [url=\"{}\"]{}[/url], via [url=\"https://tgsa.tazj.in\"]tgsa[/url])[/sub]\n",
         link.to_url(),
         link.human_friendly_url(),
     ));
-
-    out.push_str("\n[/quote]\n");
 
     out
 }
