@@ -28,7 +28,7 @@ in
         StateDirectory = "nixery";
         Restart = "always";
         ExecStartPre = "${pkgs.coreutils}/bin/mkdir -p ${storagePath}";
-        ExecStart = "${depot.third_party.nixery.nixery-bin}/bin/nixery";
+        ExecStart = "${depot.tools.nixery.nixery-bin}/bin/nixery";
       };
 
       environment = {
