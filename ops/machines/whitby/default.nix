@@ -604,7 +604,11 @@ in
   services.keycloak = {
     enable = true;
     httpPort = "5925"; # "kycl"
-    frontendUrl = "https://auth.tvl.fyi/auth/";
+
+    settings = {
+      hostname = "auth.tvl.fyi";
+      http-relative-path = "/auth";
+    };
 
     database = {
       type = "postgresql";
