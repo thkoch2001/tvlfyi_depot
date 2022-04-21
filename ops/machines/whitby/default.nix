@@ -604,24 +604,17 @@ in
   services.keycloak = {
     enable = true;
     httpPort = "5925"; # "kycl"
-    frontendUrl = "https://auth.tvl.fyi/auth/";
+
+    settings = {
+      hostname = "auth.tvl.fyi";
+      http-relative-path = "/auth";
+      proxy = "edge";
+    };
 
     database = {
       type = "postgresql";
       passwordFile = "/run/agenix/keycloak-db";
       createLocally = false;
-    };
-
-    # Configure Keycloak to look at forwarded headers from the reverse
-    # proxy.
-    extraConfig = {
-      "subsystem=undertow" = {
-        "server=default-server" = {
-          "http-listener=default" = {
-            proxy-address-forwarding = "true";
-          };
-        };
-      };
     };
   };
 
