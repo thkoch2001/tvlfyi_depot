@@ -3,7 +3,7 @@
 # TODO(wpcarro): See if it's possible to expose emacsclient on PATH, so that I
 # don't need to depend on wpcarros-emacs and emacs in my NixOS configurations.
 let
-  inherit (depot.third_party.nixpkgs) emacsPackagesFor emacs27;
+  inherit (depot.third_party.nixpkgs) emacsPackagesFor emacs28;
   inherit (depot.users) wpcarro;
   inherit (lib) mapAttrsToList;
   inherit (lib.strings) concatStringsSep makeBinPath;
@@ -21,7 +21,7 @@ let
     ])
   );
 
-  emacsWithPackages = (emacsPackagesFor emacs27).emacsWithPackages;
+  emacsWithPackages = (emacsPackagesFor emacs28).emacsWithPackages;
 
   wpcarrosEmacs = emacsWithPackages (epkgs:
     (with epkgs.tvlPackages; [

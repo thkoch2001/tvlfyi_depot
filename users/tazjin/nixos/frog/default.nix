@@ -227,7 +227,7 @@ lib.fix (self: {
       curl
       direnv
       dnsutils
-      emacs27 # mostly for emacsclient
+      emacs28 # mostly for emacsclient
       exa
       fd
       file
