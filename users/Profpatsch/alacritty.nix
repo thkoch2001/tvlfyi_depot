@@ -1,7 +1,7 @@
 { depot, pkgs, lib, ... }:
 
 let
-  bins = depot.nix.getBins pkgs.alacritty [ "alacritty" ];
+  bins = depot.nix.getBins pkgs.alacritty-stable [ "alacritty" ];
 
   config =
     depot.users.Profpatsch.importDhall.importDhall {
