@@ -12,7 +12,7 @@ let
     #hash = "sha256:0jnwrzxh04d0pyhx4n8fg4w1w6ak48byl5k2i8j7fk4h9vd9649k";
   };
 in
-{
+depot.nix.readTree.drvTargets {
   nix = (import "${nixSrc}/release.nix" {
     nix = nixSrc;
     nixpkgs = super.path;
