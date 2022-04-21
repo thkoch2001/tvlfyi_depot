@@ -2,10 +2,22 @@
 # nixpkgs tree, where required.
 { depot, ... }:
 
-self: super: {
-  # Rollback Nix to a stable version (2.3) while there is lots of
-  # random ecosystem breakage with the newer versions.
-  nix = super.nix_2_3;
+self: super:
+let
+  # Rollback Nix to a stable version (2.3) with backports for
+  # build-user problems applied.
+  nixSrc = builtins.fetchGit {
+    url = "https://github.com/tvlfyi/nix.git";
+    ref = "2.3-backport-await-users";
+    #hash = "sha256:0jnwrzxh04d0pyhx4n8fg4w1w6ak48byl5k2i8j7fk4h9vd9649k";
+  };
+in
+{
+  nix = (import "${nixSrc}/release.nix" {
+    nix = nixSrc;
+    nixpkgs = super.path;
+    systems = [ builtins.currentSystem ];
+  }).build;
 
   clang-tools_11 = self.clang-tools.override {
     llvmPackages = self.llvmPackages_11;
