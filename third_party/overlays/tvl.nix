@@ -32,7 +32,7 @@ let
     }
   ).tarball;
 in
-{
+depot.nix.readTree.drvTargets {
   nix_2_3 = super.nix_2_3.overrideAttrs (_: {
     src = "${nixTarball}/tarballs/nix-${nixTarball.version}.tar.xz";
   });
