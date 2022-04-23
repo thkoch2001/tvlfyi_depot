@@ -366,6 +366,7 @@ lib.fix (self: {
         ".config/quassel-irc.org"
         ".config/spotify"
         ".config/syncthing"
+        ".config/unity3d"
         ".electrum"
         ".elfeed"
         ".gnupg"
