@@ -123,7 +123,11 @@
 
 (use-package telephone-line) ;; configuration happens outside of use-package
 (use-package term-switcher)
-(use-package undo-tree :config (global-undo-tree-mode))
+
+(use-package undo-tree
+  :config (global-undo-tree-mode)
+  :custom (undo-tree-auto-save-history nil))
+
 (use-package uuidgen)
 (use-package which-key :config (which-key-mode t))
 
