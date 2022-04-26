@@ -21,4 +21,7 @@ depot.third_party.naersk.buildPackage {
   ]);
 
   doCheck = true;
+
+  # Trouble linking against LLVM, maybe since rustc's llvmPackages got bumped?
+  meta.ci.skip = true;
 }
