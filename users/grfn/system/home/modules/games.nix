@@ -11,6 +11,7 @@ let
     theme = null;
     enableIntro = false;
     enableFPS = true;
+    enableDFHack = false; # Fails to build currently
   });
 
   init = runCommand "init.txt" { } ''
