@@ -98,4 +98,26 @@ in
       sha256 = "07qa2qkbjczj3d0m03jpw85hfj35cbjm48xhifz3viy4khjw88vl";
     };
   });
+
+  # Fix compilation with GCC 11. Can be removed when
+  # https://github.com/NixOS/nixpkgs/pull/170157 lands in channels.
+  barrier = super.barrier.overrideAttrs (old: {
+    patches = old.patches or [ ] ++ [
+      (self.fetchpatch {
+        name = "barrier-gcc-11.patch";
+        url = "https://github.com/debauchee/barrier/commit/4b12265ae5d324b942698a3177e1d8b1749414d7.patch";
+        sha256 = "02a1hm07xgbs4d3529r2yj9vgxn1mix4y367hyw5h11kpczk2cva";
+      })
+    ];
+  });
+
+  python38 = super.python38.override {
+    packageOverrides = pySelf: pySuper: {
+      backports-zoneinfo = pySuper.backports-zoneinfo.overridePythonAttrs (_: {
+        # Outdated test-data, see https://github.com/pganssle/zoneinfo/pull/115
+        # Can be dropped when https://github.com/NixOS/nixpkgs/pull/170450 lands.
+        doCheck = false;
+      });
+    };
+  };
 }
