@@ -42,19 +42,32 @@ list. I own several of them and there will probably be more in the future. They
 last forever and your wrists will thank you in the future, even if you do not
 suffer from RSI yet.
 
+Kinesis have announced a split version of the Advantage. Once that is
+easily available, I will buy one and evaluate it.
+
 [advantage]: https://kinesis-ergo.com/shop/advantage2/
 
 ## Speakers
 
-The speakers that I've hooked up to my audio setup (including both record player
-& Chromecast / TV) are the [Teufel Motiv 2][motiv-2]. I've had these for over a
-decade and they're incredibly good, but unfortunately Teufel no longer makes
-them.
+There are two sets of speakers I use, unfortunately one pair has been in storage
+since I left the UK.
+
+My original favourite speakers are the [Teufel Motiv 2][motiv-2], usually hooked
+up to a Chromecast and a record player. I've had these for over a decade and
+they're incredibly good, but unfortunately Teufel no longer makes them. Mine are
+currently in a warehouse somewhere in London, and I don't know when I will see
+them again ...
 
 It's possible to grab a pair on eBay occasionally, so keep an eye out if you're
 interested!
 
+In my Moscow flat, I have a pair of [Wharfedale Diamond 12][diamond-12]
+connected to a Philips amplifier older than myself. These provide an excellent,
+balanced, "Wharfedale-sound". Some people find it needs some getting used to,
+but don't want to go back after that initial phase.
+
 [motiv-2]: https://www.teufelaudio.com/uk/pc/motiv-2-p167.html
+[diamond-12]: https://www.wharfedaleusa.com/collections/diamond-12
 
 ## Headphones
 
@@ -85,40 +98,37 @@ flat.
 
 ## Phone
 
-The best phone I have used in recent years is the [iPhone SE][se]. It was the
-*last* phone that had a reasonable size (up to 4") *and* a 3.5mm headphone jack.
+My current phone is the [Unihertz Atom L][atom-l]. It is a rugged, small-screen
+smartphone with a 3.5mm heapdhone jack. This phone is *weird* looking, getting
+one of these means you will constantly be asked what kind of device you have
+there. It does everything I need, and survives being thrown against a wall when
+the software misbehaves. As the Swedes would say, this phone is solidly *lagom*.
 
-Unfortunately, it runs iOS. Despite owning a whole bunch of SEs, I have finally
-moved on to an Android phone that is only moderately larger (still by an
-annoying amount), but does at least have a headphone jack: The [Samsung Galaxy
-S10e][s10e].
+The ruggedness is an additional bonus as it survives things like sauna / banya
+trips just fine.
 
-It has pretty good hardware and I can almost reach 70% of the screen, which is
-better than other phones out there right now. Unfortunately it runs Samsung's
-impossible-to-remove bloatware on top of Android, but that is still less
-annoying to use than iOS.
+Up until a few years ago I used the original [iPhone SE][se]. This was the last
+truly good phone anyone made, but unfortunately it was discontinued and is iOS
+only.
 
-QUESTION: This is the only item on this list for which I am actively seeking a
-replacement, so if you have any tips about new phones that might fit these
-criteria that I've missed please let me know!
-
+[atom-l]: https://www.unihertz.com/products/atom-l
 [se]: https://en.wikipedia.org/wiki/IPhone_SE
-[s10e]: https://www.phonearena.com/phones/Samsung-Galaxy-S10e_id11114
 
 # Other stuff
 
 ## Toothbrush
 
-The [Philips Sonicare][sonicare] (note: link goes to a newer generation than
-mine) is excellent and well worth its money.
+The [Philips Sonicare][sonicare] is excellent and well worth its price.
 
 I've had it for a few years and whereas I occasionally had minor teeth issues
 before, they seem to be mostly gone now. According to my dentist the state of my
 teeth is now usually pretty good and I draw a direct correlation back to this
 thing.
 
-The newer generations come with flashy features like apps and probably more
-LEDs, but I suspect that those can just be ignored.
+It has an app and stuff, but I just ignore that.
+
+I first got one of these in about 2014, and it lasted until 2020, at which point
+I upgraded to whatever the current model was.
 
 [sonicare]: https://www.philips.co.uk/c-m-pe/electric-toothbrushes
 
@@ -126,10 +136,12 @@ LEDs, but I suspect that those can just be ignored.
 
 The [Philipps SensoTouch 3D][sensotouch] is excellent. Super-comfortable close
 face shave in no time and leaves absolutely no mess around, as far as I can
-tell! I've had this for ~5 years and it's not showing any signs of aging yet.
+tell! I've had this for ~7 years and it's not showing any serious signs of aging
+yet.
 
-Another bonus is that its battery time is effectively infinite. I've never had
-to worry when bringing it on a longer trip!
+Another bonus is that its battery time is effectively infinite (in the order of
+months of use per charge). I've never had to worry when bringing it on a longer
+trip!
 
 [sensotouch]: https://www.philips.co.uk/c-p/1250X_40/norelco-sensotouch-3d-wet-and-dry-electric-razor-with-precision-trimmer
 
@@ -146,7 +158,17 @@ The one I settled on is the [Waterfield Muzetto][muzetto] leather bag. It's one
 of those things that comes with a bit of a price tag attached, but it's well
 worth it!
 
+**Unfortunately**, just like my speakers, this bag is now in storage somewhere
+in the UK since I left the country.
+
+After moving to Moscow I quickly ran into the same problem as in London when
+using the metro, but getting another Muzetto was kind of impractical.
+
+I couldn't find any other vertical messenger bags that I liked, and ended up
+going for a more traditional one: The [Brialdi Ostin][ostin].
+
 [muzetto]: https://www.sfbags.com/collections/shoulder-messenger-bags/products/muzetto-leather-bag
+[ostin]: https://www.brialdi.ru/shop/handbags/brialdi_ostin_brown/
 
 ## Wallet
 
