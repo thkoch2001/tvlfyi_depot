@@ -6,7 +6,7 @@
    [bbbg.util.sql :refer [count-where]]
    [honeysql.helpers
     :refer [merge-group-by merge-left-join merge-select merge-where]]
-   [java-time :refer [local-date]]))
+   [java-time :refer [local-date local-date-time local-time]]))
 
 (defn create! [db event]
   (db/insert! db :event (select-keys event [::event/date])))
@@ -29,8 +29,31 @@
   ([db day]
    (db/list db (on-day day))))
 
+
+(def end-of-day-hour
+  ;; 7am utc = 3am nyc
+  7)
+
+(defn current-day
+  ([] (current-day (local-date-time)))
+  ([dt]
+   (if (<= 0
+           (.getHour (local-time dt))
+           end-of-day-hour)
+     (java-time/minus
+      (local-date dt)
+      (java-time/days 1))
+     (local-date dt))))
+
+(comment
+  (current-day
+   (local-date-time
+    2022 5 1
+    1 13 0))
+  )
+
 (defn today
-  ([] (on-day (local-date)))
+  ([] (on-day (current-day)))
   ([db] (db/list db (today))))
 
 (defn upcoming
