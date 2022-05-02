@@ -21,6 +21,7 @@ let
     epkgs.melpaPackages.lsp-mode
     epkgs.melpaPackages.lsp-haskell
     epkgs.melpaPackages.markdown-mode
+    epkgs.melpaPackages.meson-mode
     epkgs.melpaPackages.nix-mode
     epkgs.melpaPackages.sly
     epkgs.melpaPackages.yaml-mode
