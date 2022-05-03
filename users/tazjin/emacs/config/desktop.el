@@ -320,14 +320,14 @@ in-progress."
   (shell-command "xrandr --output HDMI-A-0 --left-of eDP --auto")
   (exwm-randr-refresh))
 
-(defun randr-tverskoy-tv-above ()
-  "Split the workspace across two screens, assuming TV above."
+(defun randr-tverskoy-tv ()
+  "Split off a workspace to the TV over HDMI."
   (interactive)
   (set-randr-config
-   '(("eDP" 1 2 3 4 5 6 7)
-     ("HDMI-A-0" 8 9 0)))
+   '(("eDP" 1 2 3 4 5 6 7 8 9)
+     ("HDMI-A-0" 0)))
 
-  (shell-command "xrandr --output HDMI-A-0 --above eDP --mode 1920x1080")
+  (shell-command "xrandr --output HDMI-A-0 --left-of eDP --mode 1920x1080")
   (exwm-randr-refresh))
 
 ;; Layouts for frog (desktop)
