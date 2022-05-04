@@ -40,6 +40,5 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl2;
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ bjornfor ];
-    ci.skip = true; # needs subtree update to work with git 2.36
   };
 }
