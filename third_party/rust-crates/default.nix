@@ -39,18 +39,18 @@ rec {
 
   regex-syntax = buildRustCrate {
     pname = "regex-syntax";
-    version = "0.6.22";
+    version = "0.6.25";
     edition = "2015";
-    sha256 = "0r00n2dgyixacl1sczqp18gxf0xh7x272hcdp62412lypba2gqyg";
+    sha256 = "0i211p26m97ii169g0f4gf2a99r8an4xc1fdqj0sf5wpn17qhs29";
   };
 
   regex = buildRustCrate {
     pname = "regex";
-    version = "1.4.3";
+    version = "1.5.5";
     features = [ "std" ];
     dependencies = [ regex-syntax ];
-    edition = "2015";
-    sha256 = "0w0b4bh0ng20lf5y8raaxmxj46ikjqpgwy1iggzpby9lhv9vydkp";
+    edition = "2018";
+    sha256 = "0i7yrxsvxpx682vdbkvj7j4w3a3z2c1qwmaa795mm9a9prx4yzjk";
   };
 
   libloading = buildRustCrate {
