@@ -3,7 +3,7 @@
 { lib, pkgs, ... }:
 
 pkgs.makeOverridable
-  ({ emacs ? pkgs.emacsGcc }:
+  ({ emacs ? pkgs.emacsNativeComp }:
   let
     emacsWithPackages = (pkgs.emacsPackagesFor emacs).emacsWithPackages;
 

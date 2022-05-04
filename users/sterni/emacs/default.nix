@@ -1,7 +1,7 @@
 { depot, pkgs, ... }:
 
 let
-  inherit (pkgs.emacsGcc.pkgs) withPackages;
+  inherit (pkgs.emacsNativeComp.pkgs) withPackages;
 
   emacs = withPackages (epkgs: [
     # basic setup
