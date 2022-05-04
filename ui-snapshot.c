@@ -13,32 +13,32 @@
 
 static int write_archive_type(const char *format, const char *hex, const char *prefix)
 {
-	struct argv_array argv = ARGV_ARRAY_INIT;
+	struct strvec argv = STRVEC_INIT;
 	const char **nargv;
 	int result;
-	argv_array_push(&argv, "snapshot");
-	argv_array_push(&argv, format);
+	strvec_push(&argv, "snapshot");
+	strvec_push(&argv, format);
 	if (prefix) {
 		struct strbuf buf = STRBUF_INIT;
 		strbuf_addstr(&buf, prefix);
 		strbuf_addch(&buf, '/');
-		argv_array_push(&argv, "--prefix");
-		argv_array_push(&argv, buf.buf);
+		strvec_push(&argv, "--prefix");
+		strvec_push(&argv, buf.buf);
 		strbuf_release(&buf);
 	}
-	argv_array_push(&argv, hex);
+	strvec_push(&argv, hex);
 	/*
 	 * Now we need to copy the pointers to arguments into a new
 	 * structure because write_archive will rearrange its arguments
 	 * which may result in duplicated/missing entries causing leaks
-	 * or double-frees in argv_array_clear.
+	 * or double-frees in strvec_clear.
 	 */
-	nargv = xmalloc(sizeof(char *) * (argv.argc + 1));
-	/* argv_array guarantees a trailing NULL entry. */
-	memcpy(nargv, argv.argv, sizeof(char *) * (argv.argc + 1));
+	nargv = xmalloc(sizeof(char *) * (argv.nr + 1));
+	/* strvec guarantees a trailing NULL entry. */
+	memcpy(nargv, argv.v, sizeof(char *) * (argv.nr + 1));
 
-	result = write_archive(argv.argc, nargv, NULL, the_repository, NULL, 0);
-	argv_array_clear(&argv);
+	result = write_archive(argv.nr, nargv, NULL, the_repository, NULL, 0);
+	strvec_clear(&argv);
 	free(nargv);
 	return result;
 }
@@ -79,9 +79,21 @@ static int write_tar_bzip2_archive(const char *hex, const char *prefix)
 	return write_compressed_tar_archive(hex, prefix, argv);
 }
 
+static int write_tar_lzip_archive(const char *hex, const char *prefix)
+{
+	char *argv[] = { "lzip", NULL };
+	return write_compressed_tar_archive(hex, prefix, argv);
+}
+
 static int write_tar_xz_archive(const char *hex, const char *prefix)
 {
 	char *argv[] = { "xz", NULL };
+	return write_compressed_tar_archive(hex, prefix, argv);
+}
+
+static int write_tar_zstd_archive(const char *hex, const char *prefix)
+{
+	char *argv[] = { "zstd", "-T0", NULL };
 	return write_compressed_tar_archive(hex, prefix, argv);
 }
 
@@ -90,7 +102,9 @@ const struct cgit_snapshot_format cgit_snapshot_formats[] = {
 	{ ".tar",	"application/x-tar",	write_tar_archive	},
 	{ ".tar.gz",	"application/x-gzip",	write_tar_gzip_archive	},
 	{ ".tar.bz2",	"application/x-bzip2",	write_tar_bzip2_archive	},
+	{ ".tar.lz",	"application/x-lzip",	write_tar_lzip_archive	},
 	{ ".tar.xz",	"application/x-xz",	write_tar_xz_archive	},
+	{ ".tar.zst",	"application/x-zstd",	write_tar_zstd_archive	},
 	{ ".zip",	"application/x-zip",	write_zip_archive	},
 	{ NULL }
 };

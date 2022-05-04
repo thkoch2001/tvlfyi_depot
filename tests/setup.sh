@@ -80,13 +80,17 @@ mkrepo() {
 			git commit -m "commit $n"
 			n=$(expr $n + 1)
 		done
-		if test "$3" = "testplus"
-		then
+		case "$3" in
+		testplus)
 			echo "hello" >a+b
 			git add a+b
 			git commit -m "add a+b"
 			git branch "1+2"
-		fi
+			;;
+		commit-graph)
+			git commit-graph write
+			;;
+		esac
 	)
 }
 
@@ -95,7 +99,7 @@ setup_repos()
 	rm -rf cache
 	mkdir -p cache
 	mkrepo repos/foo 5 >/dev/null
-	mkrepo repos/bar 50 >/dev/null
+	mkrepo repos/bar 50 commit-graph >/dev/null
 	mkrepo repos/foo+bar 10 testplus >/dev/null
 	mkrepo "repos/with space" 2 >/dev/null
 	mkrepo repos/filter 5 testplus >/dev/null
@@ -104,7 +108,7 @@ virtual-root=/
 cache-root=$PWD/cache
 
 cache-size=1021
-snapshots=tar.gz tar.bz zip
+snapshots=tar.gz tar.bz tar.lz tar.xz tar.zst zip
 enable-log-filecount=1
 enable-log-linecount=1
 summary-log=5

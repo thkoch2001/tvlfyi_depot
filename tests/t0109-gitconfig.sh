@@ -9,6 +9,12 @@ test -n "$(which strace 2>/dev/null)" || {
 	exit
 }
 
+strace true 2>/dev/null || {
+	skip_all='Skipping access validation tests: strace not functional'
+	test_done
+	exit
+}
+
 test_no_home_access () {
 	non_existent_path="/path/to/some/place/that/does/not/possibly/exist"
 	while test -d "$non_existent_path"; do
@@ -19,7 +25,7 @@ test_no_home_access () {
 		-E CGIT_CONFIG="$PWD/cgitrc" \
 		-E QUERY_STRING="url=$1" \
 		-e access -f -o strace.out cgit &&
-	test_must_fail grep "$non_existent_path" strace.out
+	! grep "$non_existent_path" strace.out
 }
 
 test_no_home_access_success() {
