@@ -282,7 +282,7 @@ lib.fix (self: {
       dmd
       dnsutils
       electrum
-      emacsGcc # emacsclient
+      emacsNativeComp # emacsclient
       exa
       fd
       file
