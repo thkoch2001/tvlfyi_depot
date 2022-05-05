@@ -37,7 +37,8 @@ let
       cache = ".cache";
       cacheDhall = "${cache}/dhall";
 
-      typeAnnot = if type == null then "" else ": ${type}";
+      hadTypeAnnot = type != null;
+      typeAnnot = lib.optionalString hadTypeAnnot ": ${type}";
 
       convert = pkgs.runCommandLocal "dhall-to-nix" { inherit deps; } ''
         mkdir -p ${cacheDhall}
@@ -49,9 +50,19 @@ let
         # go into the source directory, so that the type can import files.
         # TODO: This is a bit of a hack hrm.
         cd "${src}"
-        printf '%s' ${lib.escapeShellArg "${src}/${main} ${typeAnnot}"} \
-          | ${pkgs.dhall-nix}/bin/dhall-to-nix \
-          > $out
+        ${if hadTypeAnnot then ''
+            printf '%s' ${lib.escapeShellArg "${src}/${main} ${typeAnnot}"} \
+              | ${pkgs.dhall-nix}/bin/dhall-to-nix \
+              > $out
+          ''
+          else ''
+            printf 'No type annotation given, the dhall expression type was:\n'
+            ${pkgs.dhall}/bin/dhall type --file "${src}/${main}"
+            printf '%s' ${lib.escapeShellArg "${src}/${main}"} \
+              | ${pkgs.dhall-nix}/bin/dhall-to-nix \
+              > $out
+          ''}
+
       '';
     in
     import convert;
