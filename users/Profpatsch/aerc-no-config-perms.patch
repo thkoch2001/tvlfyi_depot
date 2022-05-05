@@ -1,0 +1,12 @@
+diff --git a/config/config.go b/config/config.go
+index 0472daf..5eed379 100644
+--- a/config/config.go
++++ b/config/config.go
+@@ -779,6 +779,7 @@ func (config *AercConfig) LoadBinds(binds *ini.File, baseName string, baseGroup
+ // checkConfigPerms checks for too open permissions
+ // printing the fix on stdout and returning an error
+ func checkConfigPerms(filename string) error {
++        return nil;
+ 	info, err := os.Stat(filename)
+ 	if err != nil {
+ 		return nil // disregard absent files
