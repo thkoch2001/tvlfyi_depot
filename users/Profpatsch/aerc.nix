@@ -20,28 +20,9 @@ let
         deps = [ ];
       }
       {
-        concatNewline = lib.concatStringsSep "\n";
         aercFilter = name: "${aerc-patched}/share/aerc/filters/${name}";
-        toIni = getSections:
-          lib.generators.toINIWithGlobalSection { }
-            (getSections { } toIniDhall);
+        toIni = depot.users.Profpatsch.toINI {};
       };
-
-  toIniDhall = {
-    newSection = { };
-    add = key: val: sect: sect // { ${key} = val; };
-    addAll = keyVals: sect: sect // builtins.listToAttrs keyVals;
-    newSectionList = { };
-    addSection = key: val: sect: sect // { ${key} = val; };
-  };
-
-
-  ini-file = name: ini: lib.pipe ini [
-    (lib.generators.toINI { })
-    (pkgs.writeText name)
-  ];
-
-  binds-file = name: binds: pkgs.writeText name binds;
 
   aerc-config = pkgs.linkFarm "alacritty-config" [
     {
@@ -54,7 +35,7 @@ let
     }
     {
       name = "aerc/binds.conf";
-      path = binds-file "binds.conf" config.binds;
+      path = pkgs.writeText "binds.conf" config.binds;
     }
   ];
 
