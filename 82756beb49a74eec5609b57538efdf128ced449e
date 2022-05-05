@@ -22,6 +22,30 @@
       },
       "revId": "82756beb49a74eec5609b57538efdf128ced449e",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b9d93a69_b1fc698b",
+        "filename": "third_party/overlays/dhall/default.nix",
+        "patchSetId": 1
+      },
+      "lineNbr": 6,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2022-05-05T15:17:25Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "6ae984cd_8dbf0bf9",
+      "range": {
+        "startLine": 6,
+        "startChar": 48,
+        "endLine": 6,
+        "endChar": 61
+      },
+      "revId": "82756beb49a74eec5609b57538efdf128ced449e",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
