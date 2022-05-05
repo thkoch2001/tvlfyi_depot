@@ -24,15 +24,13 @@ let
       type ? null
     }:
     let
+      absRoot = path: toString root + "/" + path;
       src =
         depot.users.Profpatsch.exactSource
           root
           # exactSource wants nix paths, but I think relative paths
           # as strings are more intuitive.
-          (
-            let abs = path: toString root + "/" + path;
-            in ([ (abs main) ] ++ (map abs files))
-          );
+          ([ (absRoot main) ] ++ (map absRoot files));
 
       cache = ".cache";
       cacheDhall = "${cache}/dhall";
@@ -50,6 +48,12 @@ let
         # go into the source directory, so that the type can import files.
         # TODO: This is a bit of a hack hrm.
         cd "${src}"
+        printf 'Generating dhall nix code. Run
+        %s --file %s
+        to reproduce
+        ' \
+          ${pkgs.dhall}/bin/dhall \
+          ${absRoot main}
         ${if hadTypeAnnot then ''
             printf '%s' ${lib.escapeShellArg "${src}/${main} ${typeAnnot}"} \
               | ${pkgs.dhall-nix}/bin/dhall-to-nix \
