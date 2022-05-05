@@ -1,60 +1,16 @@
-let
-    -- DSL for building INI files
-    ToIniFns =
-      λ ( Ini
-        : { -- A Section in the ini
-            Section : Type
-          , -- A couple of sections
-            SectionList : Type
-          }
-        ) →
-        { -- Create a new section
-          newSection : Ini.Section
-        , -- Add a key/value pair to the section
-          add : Text → Text → Ini.Section → Ini.Section
-        , -- Add all these key/value pairs to the section
-          addAll :
-            List { name : Text, value : Text } → Ini.Section → Ini.Section
-        , -- Create a new SectionList
-          newSectionList : Ini.SectionList
-        , -- Add a section to the list of sections
-          addSection : Text → Ini.Section → Ini.SectionList → Ini.SectionList
-        }
+let NameVal = λ(T : Type) → { name : Text, value : T }
 
 in  λ ( imports
-      : { -- concatenate a list with newlines
-          concatNewline : List Text → Text
-        , -- Take an aerc filter from the aerc distribution /share directory
+      : { -- Take an aerc filter from the aerc distribution /share directory
           aercFilter : Text → Text
         , -- given a dsl of functions to create an Ini, render the ini file
           toIni :
-            ( ∀(Ini : { Section : Type, SectionList : Type }) →
-              ToIniFns Ini →
-                { globalSection : Ini.Section, sections : Ini.SectionList }
-            ) →
+            { globalSection : List (NameVal Text)
+            , sections : List (NameVal (List (NameVal Text)))
+            } →
               Text
         }
       ) →
-      let List/foldLeft
-          : ∀(a : Type) →
-            List a →
-            ∀(list : Type) →
-            ∀(cons : list → a → list) →
-            ∀(nil : list) →
-              list
-          = λ(a : Type) →
-            λ(xs : List a) →
-            λ(list : Type) →
-            λ(cons : list → a → list) →
-            λ(nil : list) →
-              List/fold
-                a
-                xs
-                (list → list)
-                (λ(x : a) → λ(f : list → list) → λ(l : list) → f (cons l x))
-                (λ(l : list) → l)
-                nil
-
       let List/map
           : ∀(a : Type) → ∀(b : Type) → (a → b) → List a → List b
           = λ(a : Type) →
@@ -68,67 +24,42 @@ in  λ ( imports
                     List/fold a xs list (λ(x : a) → cons (f x))
                 )
 
-      let
-          -- A builder is a list of “build methods” that go from (a -> a) and change the a step by step.
-          Builder/build =
-            λ(a : Type) →
-            λ(init : a) →
-            λ(builders : List (a → a)) →
-              List/foldLeft
-                (a → a)
-                builders
-                a
-                (λ(acc : a) → λ(f : a → a) → f acc)
-                init
-
       in  { accounts =
               imports.toIni
-                ( λ(Ini : { Section : Type, SectionList : Type }) →
-                  λ(ini : ToIniFns Ini) →
-                    { globalSection = ini.newSection
-                    , sections =
-                        ini.addSection
-                          "mail"
-                          ( ini.addAll
-                              [ { name = "archive", value = "Archive" }
-                              , { name = "copy-to", value = "Sent" }
-                              , { name = "default", value = "INBOX" }
-                              , { name = "from"
-                                , value = "Profpatsch <mail@profpatsch.de>"
-                                }
-                              , { name = "source"
-                                , value = "maildir://~/.Mail/mail"
-                                }
-                              , { name = "postpone", value = "Drafts" }
-                              ]
-                              ini.newSection
-                          )
-                          ini.newSectionList
+                { globalSection = [] : List (NameVal Text)
+                , sections =
+                  [ { name = "mail"
+                    , value =
+                      [ { name = "archive", value = "Archive" }
+                      , { name = "copy-to", value = "Sent" }
+                      , { name = "default", value = "INBOX" }
+                      , { name = "from"
+                        , value = "Profpatsch <mail@profpatsch.de>"
+                        }
+                      , { name = "source", value = "maildir://~/.Mail/mail" }
+                      , { name = "postpone", value = "Drafts" }
+                      ]
                     }
-                )
+                  ]
+                }
           , aerc =
               imports.toIni
-                ( λ(Ini : { Section : Type, SectionList : Type }) →
-                  λ(ini : ToIniFns Ini) →
-                    { globalSection = ini.newSection
-                    , sections =
-                        ini.addSection
-                          "filters"
-                          ( Builder/build
-                              Ini.Section
-                              ini.newSection
-                              [ ini.add "text/html" (imports.aercFilter "html")
-                              , let _ =
-                                      "-- TODO: this awk should be taken from nix!"
+                { globalSection = [] : List (NameVal Text)
+                , sections =
+                  [ { name = "filters"
+                    , value =
+                      [ { name = "text/html"
+                        , value = imports.aercFilter "html"
+                        }
+                      , let _ = "-- TODO: this awk should be taken from nix!"
 
-                                in  ini.add
-                                      "text/*"
-                                      "awk -f ${imports.aercFilter "plaintext"}"
-                              ]
-                          )
-                          ini.newSectionList
+                        in  { name = "text/*"
+                            , value = "awk -f ${imports.aercFilter "plaintext"}"
+                            }
+                      ]
                     }
-                )
+                  ]
+                }
           , binds =
               let
                   -- keybinding and command to run
@@ -140,21 +71,22 @@ in  λ ( imports
                       renderKey =
                         λ(k : Key) →
                           if    k.ctrl
-                          then  "<C-${k.key}> = ${k.cmd}"
-                          else  "${k.key} = ${k.cmd}"
+                          then  { name = "<C-${k.key}>", value = k.cmd }
+                          else  { name = k.key, value = k.cmd }
 
                   let
 
                       -- render a list of keys to config format
                       renderKeys =
-                        λ(keys : List Key) → List/map Key Text renderKey keys
+                        λ(keys : List Key) →
+                          List/map Key (NameVal Text) renderKey keys
 
                   let
                       -- create a section whith a name and a list of keys
                       sect =
                         λ(section : Text) →
                         λ(keys : List Key) →
-                          { section, keys = renderKeys keys }
+                          { name = section, value = renderKeys keys }
 
                   let
 
@@ -221,33 +153,5 @@ in  λ ( imports
                           ]
                         }
 
-                  let Section = { section : Text, keys : List Text }
-
-                  let iniToJson =
-                        λ ( ini
-                          : { globalSection : List Text
-                            , sections : List Section
-                            }
-                          ) →
-                          let mkKeys = imports.concatNewline
-
-                          let
-                              -- TODO: escaping section header?
-                              mkSection =
-                                λ(section : Section) →
-                                      ''
-                                      [${section.section}]
-                                      ''
-                                  ++  mkKeys section.keys
-
-                          in      mkKeys ini.globalSection
-                              ++  mkKeys
-                                    ( List/map
-                                        Section
-                                        Text
-                                        mkSection
-                                        ini.sections
-                                    )
-
-                  in  iniToJson config
+                  in  imports.toIni config
           }
