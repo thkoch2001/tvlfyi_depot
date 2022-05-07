@@ -9,6 +9,9 @@ let
   #
   # https://bugs.chromium.org/p/chromium/issues/detail?id=16387
   #
+  # Firefox users can just set
+  # extraPolicies.SecurityDevices.p11-kit-proxy "${pkgs.p11-kit}/lib/p11-kit-proxy.so";
+  # when overriding the firefox derivation.
   setup-browser-eid = pkgs.writeShellScriptBin "setup-browser-eid" ''
     NSSDB="''${HOME}/.pki/nssdb"
     mkdir -p ''${NSSDB}
