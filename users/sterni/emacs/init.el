@@ -146,12 +146,11 @@
   (evil-define-key 'normal 'global (kbd "<leader>bk") 'kill-buffer)
   (evil-define-key 'normal 'global (kbd "<leader>bb") 'switch-to-buffer)
   (evil-define-key 'normal 'global (kbd "<leader>bl") 'list-buffers)
-  ;; window management
-  (evil-define-key 'normal 'global (kbd "<leader>wk") 'delete-window)
-  (evil-define-key 'normal 'global (kbd "<leader>wo") 'delete-other-window)
-  (evil-define-key 'normal 'global (kbd "<leader>wh") 'split-window-below)
-  (evil-define-key 'normal 'global (kbd "<leader>wv") 'split-window-right)
-  (evil-define-key 'normal 'global (kbd "<leader>ww") 'other-window)
+  ;; window management: C-w hjkl is annoying in neo
+  (define-key evil-window-map (kbd "<left>") 'evil-window-left)
+  (define-key evil-window-map (kbd "<right>") 'evil-window-right)
+  (define-key evil-window-map (kbd "<up>") 'evil-window-up)
+  (define-key evil-window-map (kbd "<down>") 'evil-window-down)
   ;; emacs
   (evil-define-key 'visual 'global (kbd "<leader>ee") 'eval-region)
   (evil-define-key 'normal 'global (kbd "<leader>ee") 'eval-last-sexp)
