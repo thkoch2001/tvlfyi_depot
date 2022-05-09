@@ -111,6 +111,9 @@
 ; doesn't create new window for ediff controls which I always open accidentally
 (setq ediff-window-setup-function 'ediff-setup-windows-plain)
 
+;; man
+(setq Man-notify-method 'pushy) ; display man page in current window
+
 ;;; Configure packages
 (require 'use-package)
 
