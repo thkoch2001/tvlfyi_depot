@@ -1,5 +1,5 @@
 # //users/tazjin-specific CI configuration.
-{ pkgs, ... }:
+{ depot, pkgs, ... }:
 
 let
   rustfmt = pkgs.writeShellScript "rustfmt-tazjin" ''
@@ -9,11 +9,22 @@ let
   '';
 
 in
-rustfmt.overrideAttrs (_: {
-  # rustfmt not respecting config atm, disable
-  meta.ci.skip = true;
+depot.nix.readTree.drvTargets {
+  rustfmt = rustfmt.overrideAttrs (_: {
+    # rustfmt not respecting config atm, disable
+    meta.ci.skip = true;
 
-  meta.ci.extraSteps.rustfmt = {
-    command = rustfmt;
-  };
-})
+    meta.ci.extraSteps.rustfmt = {
+      command = rustfmt;
+    };
+  });
+
+  # Use a screen lock command that resets the keyboard layout
+  # before locking, to avoid locking me out when the layout is
+  # in Russian.
+  screenLock = pkgs.writeShellScriptBin "tazjin-screen-lock" ''
+    ${pkgs.xorg.setxkbmap}/bin/setxkbmap us
+    ${pkgs.xorg.setxkbmap}/bin/setxkbmap -option caps:super
+    exec ${pkgs.xsecurelock}/bin/xsecurelock
+  '';
+}
