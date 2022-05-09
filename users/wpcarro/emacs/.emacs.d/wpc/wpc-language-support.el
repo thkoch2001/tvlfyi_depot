@@ -30,6 +30,7 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (use-package csharp-mode)
+(use-package terraform-mode)
 
 (provide 'wpc-language-support)
 ;;; wpc-language-support.el ends here

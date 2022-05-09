@@ -83,6 +83,7 @@ let
       elisp-slime-nav
       py-yapf
       reason-mode
+      terraform-mode
       elixir-mode
       go-mode
       company
