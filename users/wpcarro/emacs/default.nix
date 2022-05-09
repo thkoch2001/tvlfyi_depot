@@ -44,6 +44,7 @@ let
       password-store
       # TODO(wpcarro): Prefer an Emacs client for clipmenud.
       clipmon
+      csharp-mode
       dockerfile-mode
       evil
       evil-collection
