@@ -42,6 +42,8 @@ in
   };
 
   services = wpcarro.common.services // {
+    tailscale.enable = true;
+
     openssh.enable = true;
 
     xserver = {
