@@ -98,7 +98,9 @@ in
     };
   };
 
-  programs = wpcarro.common.programs;
+  programs = wpcarro.common.programs // {
+    mosh.enable = true;
+  };
 
   virtualisation.docker.enable = true;
   virtualisation.virtualbox.host.enable = true;
