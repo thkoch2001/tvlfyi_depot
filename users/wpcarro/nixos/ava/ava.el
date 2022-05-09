@@ -35,8 +35,12 @@
              :kbd "c"
              :display display-secondary)
             (make-window-manager-named-workspace
-             :label "Coding"
-             :kbd "d"
+             :label "Coding I"
+             :kbd "1"
+             :display display-primary)
+            (make-window-manager-named-workspace
+             :label "Coding II"
+             :kbd "2"
              :display display-primary)
             (make-window-manager-named-workspace
              :label "Chatting"
@@ -44,3 +48,8 @@
              :display display-secondary)))
 
 (window-manager-init :init-hook #'display-arrange-main)
+
+(bookmark-install-kbd
+ (make-bookmark :label "hadrian"
+                :path (f-join tvl-depot-path "/hadrian")
+                :kbd "h"))
