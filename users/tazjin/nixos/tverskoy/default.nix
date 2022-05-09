@@ -8,19 +8,13 @@ let
     monolithic = false;
   };
 
-  # Use a screen lock command that resets the keyboard layout
-  # before locking, to avoid locking me out when the layout is
-  # in Russian.
-  screenLock = pkgs.writeShellScriptBin "tazjin-screen-lock" ''
-    ${pkgs.xorg.setxkbmap}/bin/setxkbmap us
-    ${pkgs.xorg.setxkbmap}/bin/setxkbmap -option caps:super
-    exec ${pkgs.xsecurelock}/bin/xsecurelock
-  '';
   mod = name: depot.path + ("/ops/modules/" + name);
+  usermod = name: depot.path + ("/users/tazjin/nixos/modules/" + name);
 in
 lib.fix (self: {
   imports = [
     (mod "open_eid.nix")
+    (usermod "physical.nix")
     "${depot.third_party.impermanence}/nixos.nix"
     "${pkgs.home-manager.src}/nixos"
   ] ++ lib.optional (builtins.pathExists ./local-config.nix) ./local-config.nix;
@@ -262,77 +256,6 @@ lib.fix (self: {
     fuse.userAllowOther = true;
   };
 
-  environment.systemPackages =
-    # programs from the depot
-    (with depot; [
-      screenLock
-      tools.nsfv-setup
-      users.tazjin.emacs
-      third_party.agenix.cli
-    ]) ++
-
-    # programs from nixpkgs
-    (with pkgs; [
-      amber
-      audacity
-      bat
-      curl
-      ddcutil
-      direnv
-      dmd
-      dnsutils
-      electrum
-      emacsNativeComp # emacsclient
-      exa
-      fd
-      file
-      firefox
-      fractal
-      gdb
-      gh
-      git
-      gnupg
-      google-chrome
-      gtk3 # for gtk-launch
-      htop
-      hyperfine
-      iftop
-      imagemagick
-      jq
-      lieer
-      man-pages
-      mosh
-      msmtp
-      mullvad-vpn
-      networkmanagerapplet
-      nix-prefetch-github
-      nmap
-      notmuch
-      openssh
-      openssl
-      paperlike-go
-      pass
-      pavucontrol
-      pinentry
-      pinentry-emacs
-      pulseaudio # for pactl
-      pwgen
-      quasselClient
-      rink
-      ripgrep
-      rustup
-      screen
-      scrot
-      tig
-      tokei
-      tree
-      unzip
-      vlc
-      whois
-      xsecurelock
-      zoxide
-    ]);
-
   systemd.user.services.lieer-tazjin = {
     description = "Synchronise mail@tazj.in via lieer";
     script = "${pkgs.lieer}/bin/gmi sync";
@@ -416,7 +339,7 @@ lib.fix (self: {
       enable = true;
       enableDetectSleep = true;
       inactiveInterval = 10; # minutes
-      lockCmd = "${screenLock}/bin/tazjin-screen-lock";
+      lockCmd = "${depot.users.tazjin.screenLock}/bin/tazjin-screen-lock";
     };
 
     services.picom = {
