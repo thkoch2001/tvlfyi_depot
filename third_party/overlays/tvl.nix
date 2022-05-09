@@ -6,11 +6,13 @@ self: super:
 let
   # Rollback Nix to a stable version (2.3) with backports for
   # build-user problems applied.
-  nixSrc = builtins.fetchGit {
-    url = "https://github.com/tvlfyi/nix.git";
-    ref = "2.3-backport-await-users";
-    #hash = "sha256:0jnwrzxh04d0pyhx4n8fg4w1w6ak48byl5k2i8j7fk4h9vd9649k";
-  };
+  nixSrc = self.fetchgit
+    {
+      url = "https://github.com/tvlfyi/nix.git";
+      # branch 2.3-backport-await-users
+      rev = "880a62b08443a6baa55dab027b69bb8b1551a588";
+      hash = "sha256:0jnwrzxh04d0pyhx4n8fg4w1w6ak48byl5k2i8j7fk4h9vd9649k";
+    } // { revCount = 0; shortRev = "880a62b0"; };
 in
 {
   nix = (import "${nixSrc}/release.nix" {
