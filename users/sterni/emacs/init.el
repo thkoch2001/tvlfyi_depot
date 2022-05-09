@@ -107,6 +107,10 @@
         org-default-notes-file (concat org-folder "/inbox.org")
         initial-buffer-choice org-default-notes-file))
 
+;; ediff
+; doesn't create new window for ediff controls which I always open accidentally
+(setq ediff-window-setup-function 'ediff-setup-windows-plain)
+
 ;;; Configure packages
 (require 'use-package)
 
