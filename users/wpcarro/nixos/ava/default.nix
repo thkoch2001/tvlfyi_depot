@@ -113,6 +113,7 @@ in
       alacritty
       firefox
       google-chrome
+      httpie
       pavucontrol
       quasselClient
       remmina
