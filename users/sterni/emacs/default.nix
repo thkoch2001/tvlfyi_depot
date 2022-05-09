@@ -9,6 +9,7 @@ let
     epkgs.elpaPackages.rainbow-mode
     epkgs.elpaPackages.undo-tree
     epkgs.melpaPackages.adoc-mode
+    epkgs.melpaPackages.cmake-mode
     epkgs.melpaPackages.direnv
     epkgs.melpaPackages.dockerfile-mode
     epkgs.melpaPackages.elfeed
