@@ -9,6 +9,7 @@
   camden
   frog
   tverskoy
+  zamalek
 ]) ++
 
 (with depot.users.grfn.system.system; [

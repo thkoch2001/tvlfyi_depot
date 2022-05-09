@@ -1,3 +1,4 @@
+# tverskoy is my Thinkpad X13 AMD 1st gen
 { depot, lib, pkgs, ... }:
 
 config:
