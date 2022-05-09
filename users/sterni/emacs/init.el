@@ -153,6 +153,7 @@
   (evil-define-key 'normal 'global (kbd "<leader>bk") 'kill-buffer)
   (evil-define-key 'normal 'global (kbd "<leader>bb") 'switch-to-buffer)
   (evil-define-key 'normal 'global (kbd "<leader>bl") 'list-buffers)
+  (evil-define-key 'normal 'global (kbd "<leader>br") 'revert-buffer)
   ;; window management: C-w hjkl is annoying in neo
   (define-key evil-window-map (kbd "<left>") 'evil-window-left)
   (define-key evil-window-map (kbd "<right>") 'evil-window-right)
