@@ -21,12 +21,6 @@ lib.fix (self: {
 
   tvl.cache.enable = true;
 
-  # Work around strongswan 5.9.4 being incompatible with servers not
-  # patched against some CVE. I need this for work ..
-  nixpkgs.overlays = [
-    depot.third_party.overlays.strongswan-workaround
-  ];
-
   boot = rec {
     initrd.availableKernelModules = [ "nvme" "ehci_pci" "xhci_pci" "usb_storage" "sd_mod" "rtsx_pci_sdmmc" ];
     initrd.kernelModules = [ ];
