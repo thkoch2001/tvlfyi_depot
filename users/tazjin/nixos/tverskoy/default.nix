@@ -15,10 +15,11 @@ lib.fix (self: {
   imports = [
     (mod "open_eid.nix")
     (usermod "fonts.nix")
+    (usermod "home-config.nix")
     (usermod "persistence.nix")
     (usermod "physical.nix")
     (usermod "zerotier.nix")
-    "${pkgs.home-manager.src}/nixos"
+    (pkgs.home-manager.src + "/nixos")
   ] ++ lib.optional (builtins.pathExists ./local-config.nix) ./local-config.nix;
 
   tvl.cache.enable = true;
@@ -192,19 +193,6 @@ lib.fix (self: {
 
   time.timeZone = "Africa/Cairo";
 
-  nix = {
-    trustedUsers = [ "tazjin" ];
-  };
-
-  users.users.tazjin = {
-    isNormalUser = true;
-    createHome = true;
-    extraGroups = [ "wheel" "networkmanager" "video" "adbusers" ];
-    uid = 1000;
-    shell = pkgs.fish;
-    initialHashedPassword = "$6$d3FywUNCuZnJ4l.$ZW2ul59MLYon1v1xhC3lTJZfZ91lWW6Tpi13MpME0cJcYZNrsx7ABdgQRn.K05awruG2Y9ARAzURnmiJ31WTS1";
-  };
-
   programs = {
     adb.enable = true;
     fish.enable = true;
@@ -234,9 +222,6 @@ lib.fix (self: {
       OnUnitActiveSec = "180";
     };
   };
-
-  home-manager.useGlobalPkgs = true;
-  home-manager.users.tazjin = depot.users.tazjin.home.tverskoy;
 
   services.tailscale.enable = true;
 
