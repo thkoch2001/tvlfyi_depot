@@ -115,6 +115,7 @@ in
       google-chrome
       pavucontrol
       quasselClient
+      remmina
       tdesktop
       wpcarrosEmacs
       xsecurelock
