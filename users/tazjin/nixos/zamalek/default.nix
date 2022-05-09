@@ -15,6 +15,7 @@ in
   imports = [
     (usermod "desktop.nix")
     (usermod "fonts.nix")
+    (usermod "hidpi.nix")
     (usermod "home-config.nix")
     (usermod "laptop.nix")
     (usermod "persistence.nix")
