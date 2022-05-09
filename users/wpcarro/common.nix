@@ -50,6 +50,7 @@ in
     fzf
     git
     gnupg
+    htop
     jq
     mkpasswd
     nmap
@@ -65,5 +66,6 @@ in
     # TODO(wpcarro): Debug this failing build.
     # wpcarro.tools.simple_vim
     xclip
+    zip
   ];
 }
