@@ -30,12 +30,6 @@ in
 
   nix.settings.trusted-users = [ "tazjin" ];
 
-  # Work around strongswan 5.9.4 being incompatible with servers not
-  # patched against some CVE. I need this for work ..
-  nixpkgs.overlays = [
-    depot.third_party.overlays.strongswan-workaround
-  ];
-
   fileSystems."/" =
     {
       device = "/dev/disk/by-uuid/4c51357a-1e34-4b59-b169-63af1fcdce71";
