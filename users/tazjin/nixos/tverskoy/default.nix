@@ -14,11 +14,14 @@ in
 lib.fix (self: {
   imports = [
     (mod "open_eid.nix")
+    (usermod "desktop.nix")
     (usermod "fonts.nix")
     (usermod "home-config.nix")
+    (usermod "laptop.nix")
     (usermod "persistence.nix")
     (usermod "physical.nix")
     (usermod "zerotier.nix")
+
     (pkgs.home-manager.src + "/nixos")
   ] ++ lib.optional (builtins.pathExists ./local-config.nix) ./local-config.nix;
 
@@ -111,24 +114,9 @@ lib.fix (self: {
     ];
   };
 
-  # from https://github.com/NixOS/nixpkgs/issues/64965
-  environment.etc."ipsec.secrets".text = ''
-    include ipsec.d/ipsec.nm-l2tp.secrets
-  '';
-
   security.rtkit.enable = true;
 
   services = {
-    pipewire = {
-      enable = true;
-      alsa.enable = true;
-      pulse.enable = true;
-    };
-
-    redshift.enable = true;
-    blueman.enable = true;
-    mullvad-vpn.enable = true;
-    fwupd.enable = true;
     printing.enable = true;
 
     # expose i2c device as /dev/i2c-amdgpu-dm and make it user-accessible
@@ -137,29 +125,7 @@ lib.fix (self: {
       SUBSYSTEM=="i2c-dev", ACTION=="add", DEVPATH=="/devices/pci0000:00/0000:00:08.1/0000:06:00.0/i2c-5/i2c-dev/i2c-5", SYMLINK+="i2c-amdgpu-dm", TAG+="uaccess"
     '';
 
-    # Enable power-saving features.
-    tlp.enable = true;
-
-    xserver = {
-      enable = true;
-      layout = "us";
-      xkbOptions = "caps:super";
-      videoDrivers = [ "amdgpu" ];
-
-      libinput.enable = true;
-
-      displayManager = {
-        # Give EXWM permission to control the session.
-        sessionCommands = "${pkgs.xorg.xhost}/bin/xhost +SI:localuser:$USER";
-        lightdm.enable = true;
-        # lightdm.greeters.gtk.clock-format = "%H:%M"; # TODO(tazjin): TZ?
-      };
-
-      windowManager.session = lib.singleton {
-        name = "exwm";
-        start = "${depot.users.tazjin.emacs}/bin/tazjins-emacs";
-      };
-    };
+    xserver.videoDrivers = [ "amdgpu" ];
 
     # Automatically collect garbage from the Nix store.
     depot.automatic-gc = {
@@ -171,38 +137,7 @@ lib.fix (self: {
     };
   };
 
-  # Set variables to enable EXWM-XIM
-  environment.sessionVariables = {
-    XMODIFIERS = "@im=exwm-xim";
-    GTK_IM_MODULE = "xim";
-    QT_IM_MODULE = "xim";
-    CLUTTER_IM_MODULE = "xim";
-  };
-
-  # Automatically detect location to use for redshift
-  location.provider = "geoclue2";
-
-  # Do not restart the display manager automatically
-  systemd.services.display-manager.restartIfChanged = lib.mkForce false;
-
-  # If something needs more than 10s to stop it should probably be
-  # killed.
-  systemd.extraConfig = ''
-    DefaultTimeoutStopSec=10s
-  '';
-
   time.timeZone = "Africa/Cairo";
-
-  programs = {
-    adb.enable = true;
-    fish.enable = true;
-    light.enable = true;
-    mosh.enable = true;
-    ssh.startAgent = true;
-
-    # Required by impermanence
-    fuse.userAllowOther = true;
-  };
 
   systemd.user.services.lieer-tazjin = {
     description = "Synchronise mail@tazj.in via lieer";

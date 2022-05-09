@@ -72,4 +72,16 @@
       xsecurelock
       zoxide
     ]);
+
+  # Run services & configure programs for all machines.
+  services = {
+    mullvad-vpn.enable = true;
+    fwupd.enable = true;
+  };
+
+  programs = {
+    fish.enable = true;
+    mosh.enable = true;
+    ssh.startAgent = true;
+  };
 }
