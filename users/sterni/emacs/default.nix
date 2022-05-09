@@ -4,38 +4,34 @@ let
   inherit (pkgs.emacsNativeComp.pkgs) withPackages;
 
   emacs = withPackages (epkgs: [
-    # basic setup
-    epkgs.elpaPackages.undo-tree
-    epkgs.melpaPackages.evil
-    epkgs.melpaPackages.evil-collection
-    epkgs.melpaPackages.use-package
-    # languages
     epkgs.bqn-mode
     epkgs.elpaPackages.ada-mode
+    epkgs.elpaPackages.rainbow-mode
+    epkgs.elpaPackages.undo-tree
     epkgs.melpaPackages.adoc-mode
     epkgs.melpaPackages.direnv
     epkgs.melpaPackages.dockerfile-mode
+    epkgs.melpaPackages.elfeed
+    epkgs.melpaPackages.evil
+    epkgs.melpaPackages.evil-collection
     epkgs.melpaPackages.haskell-mode
+    epkgs.melpaPackages.hl-todo
     epkgs.melpaPackages.jq-mode
     epkgs.melpaPackages.languagetool
-    epkgs.melpaPackages.lsp-mode
     epkgs.melpaPackages.lsp-haskell
+    epkgs.melpaPackages.lsp-mode
+    epkgs.melpaPackages.magit
     epkgs.melpaPackages.markdown-mode
     epkgs.melpaPackages.meson-mode
     epkgs.melpaPackages.nix-mode
+    epkgs.melpaPackages.paredit
+    epkgs.melpaPackages.rainbow-delimiters
     epkgs.melpaPackages.sly
+    epkgs.melpaPackages.use-package
     epkgs.melpaPackages.yaml-mode
     epkgs.rust-mode
-    epkgs.urweb-mode
-    # misc
-    epkgs.melpaPackages.hl-todo
-    epkgs.melpaPackages.paredit
-    epkgs.elpaPackages.rainbow-mode
-    epkgs.melpaPackages.rainbow-delimiters
-    # beyond text editing
-    epkgs.melpaPackages.elfeed
-    epkgs.melpaPackages.magit
     epkgs.tvlPackages.tvl
+    epkgs.urweb-mode
   ]);
 
   configDirectory = pkgs.symlinkJoin {
