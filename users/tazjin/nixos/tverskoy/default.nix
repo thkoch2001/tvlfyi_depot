@@ -15,6 +15,7 @@ lib.fix (self: {
   imports = [
     (mod "open_eid.nix")
     (usermod "physical.nix")
+    (usermod "fonts.nix")
     "${depot.third_party.impermanence}/nixos.nix"
     "${pkgs.home-manager.src}/nixos"
   ] ++ lib.optional (builtins.pathExists ./local-config.nix) ./local-config.nix;
@@ -106,25 +107,6 @@ lib.fix (self: {
       "8.8.8.8"
       "8.8.4.4"
     ];
-  };
-
-  fonts = {
-    fonts = with pkgs; [
-      corefonts
-      dejavu_fonts
-      jetbrains-mono
-      noto-fonts-cjk
-      noto-fonts-emoji
-    ];
-
-    fontconfig = {
-      hinting.enable = true;
-      subpixel.lcdfilter = "light";
-
-      defaultFonts = {
-        monospace = [ "JetBrains Mono" ];
-      };
-    };
   };
 
   environment.persistence."/persist" = {
