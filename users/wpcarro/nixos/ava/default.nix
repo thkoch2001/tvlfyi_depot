@@ -82,6 +82,7 @@ in
       wpcarro.keys.nathan
     ];
   };
+  users.extraGroups.vboxusers.members = [ "wpcarro" ];
 
   security.sudo.wheelNeedsPassword = false;
 
@@ -100,6 +101,7 @@ in
   programs = wpcarro.common.programs;
 
   virtualisation.docker.enable = true;
+  virtualisation.virtualbox.host.enable = true;
 
   environment.variables = {
     EDITOR = "emacsclient";
