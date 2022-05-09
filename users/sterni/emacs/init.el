@@ -63,6 +63,10 @@
 (setq savehist-additional-variables '(search-ring regexp-search-ring magit-cl-history))
 
 ;; buffers
+
+;; performance migitations
+(global-so-long-mode)
+
 ;; unique component should come first for better completion
 (setq uniquify-buffer-name-style 'forward)
 
