@@ -14,9 +14,10 @@ in
 lib.fix (self: {
   imports = [
     (mod "open_eid.nix")
-    (usermod "physical.nix")
     (usermod "fonts.nix")
-    "${depot.third_party.impermanence}/nixos.nix"
+    (usermod "persistence.nix")
+    (usermod "physical.nix")
+    (usermod "zerotier.nix")
     "${pkgs.home-manager.src}/nixos"
   ] ++ lib.optional (builtins.pathExists ./local-config.nix) ./local-config.nix;
 
@@ -106,23 +107,6 @@ lib.fix (self: {
     nameservers = [
       "8.8.8.8"
       "8.8.4.4"
-    ];
-  };
-
-  environment.persistence."/persist" = {
-    directories = [
-      "/etc/NetworkManager/system-connections"
-      "/etc/mullvad-vpn"
-      "/var/cache/mullvad-vpn"
-      "/var/lib/bluetooth"
-      "/var/lib/systemd/coredump"
-      "/var/lib/tailscale"
-      "/var/lib/zerotier-one"
-      "/var/log"
-    ];
-
-    files = [
-      "/etc/machine-id"
     ];
   };
 
@@ -339,11 +323,6 @@ lib.fix (self: {
   };
 
   services.tailscale.enable = true;
-
-  services.zerotierone.enable = true;
-  services.zerotierone.joinNetworks = [
-    "35c192ce9bd4c8c7"
-  ];
 
   system.stateVersion = "20.09";
 })
