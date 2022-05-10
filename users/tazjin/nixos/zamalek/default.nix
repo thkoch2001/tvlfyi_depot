@@ -34,6 +34,13 @@ in
     loader.efi.canTouchEfiVariables = true;
     supportedFilesystems = [ "zfs" ];
     zfs.devNodes = "/dev/";
+
+    extraModprobeConfig = ''
+      options snd_hda_intel power_save=1
+      options iwlwifi power_save=1
+      options iwldvm force_cam=0
+      options i915 enable_guc=3 enable_fbc=1
+    '';
   };
 
   fileSystems = {
