@@ -12,7 +12,7 @@ depot.nix.lazy-deps {
   mg.attr = "tools.magrathea";
   nint.attr = "nix.nint";
   niv.attr = "third_party.nixpkgs.niv";
-  rebuild-system.attr = "ops.nixos.rebuildSystem";
+  rebuild-system.attr = "ops.nixos.rebuild-system";
   rink.attr = "third_party.nixpkgs.rink";
 
   tf-glesys = {
