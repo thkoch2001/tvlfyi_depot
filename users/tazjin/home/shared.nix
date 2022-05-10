@@ -46,6 +46,7 @@
     extraConfig = {
       pull.rebase = true;
       init.defaultBranch = "canon";
+      safe.directory = [ "/depot" ];
     };
   };
 
