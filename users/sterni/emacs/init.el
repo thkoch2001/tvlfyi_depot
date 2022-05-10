@@ -119,6 +119,14 @@
 ; default, but allows ';' as prompt
 (setq shell-prompt-pattern "^[^#$%>;\n]*[#$%>;] *")
 
+;; projects (see also evil config)
+
+(setq project-switch-commands
+      '((project-find-file "Find file")
+        (project-find-regexp "Find regexp")
+        (project-dired "Dired")
+        (project-shell "Shell")))
+
 ;;; Configure packages
 (require 'use-package)
 
@@ -164,6 +172,14 @@
   (define-key evil-window-map (kbd "<right>") 'evil-window-right)
   (define-key evil-window-map (kbd "<up>") 'evil-window-up)
   (define-key evil-window-map (kbd "<down>") 'evil-window-down)
+  ;; projects
+  (evil-define-key 'normal 'global (kbd "<leader>pf") 'project-find-file)
+  (evil-define-key 'normal 'global (kbd "<leader>pg") 'project-find-regexp)
+  (evil-define-key 'normal 'global (kbd "<leader>pd") 'project-dired)
+  (evil-define-key 'normal 'global (kbd "<leader>ps") 'project-shell)
+  (evil-define-key 'normal 'global (kbd "<leader>pR") 'project-query-replace-regexp)
+  (evil-define-key 'normal 'global (kbd "<leader>pK") 'project-kill-buffers)
+  (evil-define-key 'normal 'global (kbd "<leader>pp") 'project-switch-project)
   ;; emacs
   (evil-define-key 'visual 'global (kbd "<leader>ee") 'eval-region)
   (evil-define-key 'normal 'global (kbd "<leader>ee") 'eval-last-sexp)
