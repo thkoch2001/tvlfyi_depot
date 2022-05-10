@@ -186,6 +186,7 @@
   (evil-define-key 'normal 'global (kbd "<leader>ep") 'eval-print-last-sexp)
   (evil-define-key 'normal 'global (kbd "<leader>eh") 'help)
   (evil-define-key 'normal 'global (kbd "<leader>em") 'man)
+  (evil-define-key '(normal visual) 'global (kbd "<leader>eu") 'browse-url-at-point)
   ;; modify what is displayed
   (evil-define-key 'normal 'global (kbd "<leader>dw")
     (lambda ()
