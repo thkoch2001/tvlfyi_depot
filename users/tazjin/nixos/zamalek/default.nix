@@ -74,5 +74,7 @@ in
     opengl.enable = true;
   };
 
+  services.xserver.libinput.touchpad.clickMethod = "clickfinger";
+
   system.stateVersion = "21.11";
 }
