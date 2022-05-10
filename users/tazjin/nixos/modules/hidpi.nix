@@ -13,5 +13,5 @@
   # Bump DPI across the board.
   # TODO(tazjin): This should actually be set per monitor, but I
   # haven't yet figured out the right interface for doing that.
-  services.xserver.dpi = 192;
+  services.xserver.dpi = 161;
 }
