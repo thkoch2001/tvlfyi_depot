@@ -52,6 +52,13 @@ let
                 languagetool-server-command "${pkgs.languagetool}/share/languagetool-server.jar"
                 languagetool-java-arguments '("-Dfile.encoding=UTF-8"))
 
+          ;; use bash instead of fish from SHELL for some things, as it plays
+          ;; nicer with TERM=dumb, as I don't need/want vterm anyways.
+          ;; We want it to source /etc/profile for some extra setup that
+          ;; kicks in if TERM=dumb, meaning we can't use dash/sh mode.
+          (setq shell-file-name "${pkgs.bash}/bin/bash"
+                explicit-bash-args '("-l"))
+
           (provide 'nix-inject)
         '';
       })
