@@ -114,6 +114,11 @@
 ;; man
 (setq Man-notify-method 'pushy) ; display man page in current window
 
+;; shell
+
+; default, but allows ';' as prompt
+(setq shell-prompt-pattern "^[^#$%>;\n]*[#$%>;] *")
+
 ;;; Configure packages
 (require 'use-package)
 
