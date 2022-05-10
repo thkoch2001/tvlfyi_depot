@@ -138,8 +138,6 @@ lib.fix (self: {
     };
   };
 
-  time.timeZone = "Africa/Cairo";
-
   systemd.user.services.lieer-tazjin = {
     description = "Synchronise mail@tazj.in via lieer";
     script = "${pkgs.lieer}/bin/gmi sync";
