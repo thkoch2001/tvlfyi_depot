@@ -25,6 +25,7 @@ let
     epkgs.melpaPackages.markdown-mode
     epkgs.melpaPackages.meson-mode
     epkgs.melpaPackages.nix-mode
+    epkgs.melpaPackages.org-clock-csv
     epkgs.melpaPackages.paredit
     epkgs.melpaPackages.rainbow-delimiters
     epkgs.melpaPackages.sly
