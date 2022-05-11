@@ -42,7 +42,6 @@ with lib;
     jq
     yq
     gron
-    gitAndTools.hub
     gitAndTools.tig
     gitAndTools.gh
     shellcheck
@@ -181,7 +180,6 @@ with lib;
       "ga" = "git add";
       "gnp" = "git --no-pager";
       "g" = "git";
-      "git" = "hub";
       "grim" = "git fetch && git rebase -i --autostash origin/master";
       "grom" = "git fetch && git rebase --autostash origin/master";
       "groc" = "git fetch && git rebase --autostash origin/canon";
