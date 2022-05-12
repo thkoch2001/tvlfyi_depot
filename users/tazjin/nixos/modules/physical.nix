@@ -1,6 +1,9 @@
 # Default configuration settings for physical machines that I use.
 { pkgs, depot, ... }:
 
+let
+  pass-otp = pkgs.pass.withExtensions (e: [ e.pass-otp ]);
+in
 {
   # Install all the default software.
   environment.systemPackages =
@@ -51,7 +54,7 @@
       openssh
       openssl
       paperlike-go
-      pass
+      pass-otp
       pavucontrol
       pinentry
       pinentry-emacs
