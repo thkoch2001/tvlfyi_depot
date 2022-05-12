@@ -230,6 +230,9 @@
 (use-package direnv
   :config (direnv-mode))
 
+(use-package editorconfig
+  :config (editorconfig-mode 1))
+
 (use-package haskell-mode)
 (use-package lsp-mode
   :hook ((haskell-mode . lsp-deferred))
