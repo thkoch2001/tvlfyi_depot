@@ -12,6 +12,7 @@ let
     epkgs.melpaPackages.cmake-mode
     epkgs.melpaPackages.direnv
     epkgs.melpaPackages.dockerfile-mode
+    epkgs.melpaPackages.editorconfig
     epkgs.melpaPackages.elfeed
     epkgs.melpaPackages.evil
     epkgs.melpaPackages.evil-collection
