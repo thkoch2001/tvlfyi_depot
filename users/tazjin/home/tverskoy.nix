@@ -11,7 +11,6 @@
   home.persistence."/persist/tazjin/home" = {
     directories = [
       ".config/spotify"
-      ".config/unity3d"
       ".local/share/Steam"
       ".electrum"
     ];
