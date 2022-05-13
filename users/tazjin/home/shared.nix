@@ -14,6 +14,7 @@
       ".config/audacity"
       ".config/google-chrome"
       ".config/quassel-irc.org"
+      ".config/unity3d"
       ".gnupg"
       ".local/share/audacity"
       ".local/share/direnv"
