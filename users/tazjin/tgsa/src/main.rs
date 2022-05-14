@@ -1,6 +1,7 @@
 use anyhow::{anyhow, Context, Result};
 use std::collections::HashMap;
 use std::sync::RwLock;
+use std::time::{Duration, Instant};
 
 #[derive(Clone, Debug, Eq, Hash, PartialEq)]
 struct TgLink {
@@ -184,19 +185,35 @@ fn to_bbcode(link: &TgLink, msg: &TgMessage) -> String {
     out
 }
 
-type Cache = RwLock<HashMap<TgLink, String>>;
+// cache everything for one hour
+const CACHE_EXPIRY: Duration = Duration::from_secs(60 * 60);
+
+struct CacheEntry {
+    bbcode: String,
+    at: Instant,
+}
+
+type Cache = RwLock<HashMap<TgLink, CacheEntry>>;
 
 fn handle_tg_link(cache: &Cache, link: &TgLink) -> Result<String> {
-    if let Some(bbcode) = cache.read().unwrap().get(&link) {
-        println!("serving {}#{} from cache", link.username, link.message_id);
-        return Ok(bbcode.to_string());
+    if let Some(entry) = cache.read().unwrap().get(&link) {
+        if Instant::now() - entry.at < CACHE_EXPIRY {
+            println!("serving {}#{} from cache", link.username, link.message_id);
+            return Ok(entry.bbcode.to_string());
+        }
     }
 
     let embed = fetch_embed(&link)?;
     let msg = parse_tgmessage(&embed)?;
     let bbcode = to_bbcode(&link, &msg);
 
-    cache.write().unwrap().insert(link.clone(), bbcode.clone());
+    cache.write().unwrap().insert(
+        link.clone(),
+        CacheEntry {
+            bbcode: bbcode.clone(),
+            at: Instant::now(),
+        },
+    );
 
     Ok(bbcode)
 }
