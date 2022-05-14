@@ -221,9 +221,9 @@ fn fetch_with_cache(cache: &Cache, link: &TgLink) -> Result<TgPost> {
     Ok(post)
 }
 
-fn handle_tg_link(cache: &Cache, link: &TgLink) -> Result<String> {
+fn handle_tg_link(cache: &Cache, link: &TgLink) -> Result<rouille::Response> {
     let post = fetch_with_cache(cache, link)?;
-    Ok(post.bbcode)
+    Ok(rouille::Response::text(post.bbcode))
 }
 
 fn main() {
@@ -232,9 +232,10 @@ fn main() {
     let cache: Cache = RwLock::new(HashMap::new());
 
     rouille::start_server("0.0.0.0:8472", move |request| {
-        match TgLink::parse(request.raw_url()) {
-            None => rouille::Response::text(
-                r#"tgsa
+        let response = {
+            match TgLink::parse(request.raw_url()) {
+                None => Ok(rouille::Response::text(
+                    r#"tgsa
 ----
 
 this is a stupid program that lets you turn telegram message links
@@ -255,22 +256,22 @@ didn't. try again. idiot.
 
 pm me on the forums if this makes you mad or something.
 "#,
-            ),
-            Some(link) => {
-                let result = handle_tg_link(&cache, &link);
-                match result {
-                    Ok(bbcode) => rouille::Response::text(bbcode),
-                    Err(err) => {
-                        println!("something failed: {}", err);
-                        rouille::Response::text(format!(
-                            r#"something broke: {}
+                )),
+                Some(link) => handle_tg_link(&cache, &link),
+            }
+        };
+
+        match response {
+            Ok(resp) => resp,
+            Err(err) => {
+                println!("something failed: {}", err);
+                rouille::Response::text(format!(
+                    r#"ugh, something broke: {}
 
 nobody has been alerted about this and it has probably not been
-logged. pm me on the forums if you think it's important enough."#,
-                            err
-                        ))
-                    }
-                }
+logged. pm me on the forums if you think it's important."#,
+                    err
+                ))
             }
         }
     });
