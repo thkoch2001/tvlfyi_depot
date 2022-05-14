@@ -192,6 +192,7 @@ const CACHE_EXPIRY: Duration = Duration::from_secs(60 * 60);
 struct TgPost {
     bbcode: String,
     at: Instant,
+    media: Vec<String>,
 }
 
 type Cache = RwLock<HashMap<TgLink, TgPost>>;
@@ -209,16 +210,59 @@ fn fetch_with_cache(cache: &Cache, link: &TgLink) -> Result<TgPost> {
     let mut writer = cache.write().unwrap();
 
     let embed = fetch_embed(&link)?;
-    let msg = parse_tgmessage(&embed)?;
+    let mut msg = parse_tgmessage(&embed)?;
+    let bbcode = to_bbcode(&link, &msg);
+
+    let mut media = vec![];
+    media.append(&mut msg.photos);
+    media.append(&mut msg.videos);
 
     let post = TgPost {
-        bbcode: to_bbcode(&link, &msg),
+        bbcode,
+        media,
         at: Instant::now(),
     };
 
     writer.insert(link.clone(), post.clone());
 
     Ok(post)
+}
+
+fn handle_img_redirect(cache: &Cache, img_path: &str) -> Result<rouille::Response> {
+    // img_path:
+    //
+    // RWApodcast/113/1
+    // ^          ^   ^
+    // |          |   |
+    // |          |   image (0-indexed)
+    // |          post ID
+    // username
+
+    let img_parts: Vec<&str> = img_path.split("/").collect();
+
+    if img_parts.len() != 3 {
+        println!("invalid image link: {}", img_path);
+        return Err(anyhow!("not a valid image link: {}", img_path));
+    }
+
+    let link = TgLink {
+        username: img_parts[0].into(),
+        message_id: img_parts[1].parse().context("failed to parse message_id")?,
+    };
+
+    let img_idx: usize = img_parts[2].parse().context("failed to parse img_idx")?;
+    let post = fetch_with_cache(cache, &link)?;
+
+    if img_idx >= post.media.len() {
+        return Err(anyhow!(
+            "there is no {}. image in {}/{}",
+            img_idx,
+            link.username,
+            link.message_id
+        ));
+    }
+
+    Ok(rouille::Response::redirect_303(post.media[img_idx].clone()))
 }
 
 fn handle_tg_link(cache: &Cache, link: &TgLink) -> Result<rouille::Response> {
@@ -232,8 +276,12 @@ fn main() {
     let cache: Cache = RwLock::new(HashMap::new());
 
     rouille::start_server("0.0.0.0:8472", move |request| {
-        let response = {
-            match TgLink::parse(request.raw_url()) {
+        let response = loop {
+            if request.raw_url().starts_with("/img/") {
+                break handle_img_redirect(&cache, &request.raw_url()[5..]);
+            }
+
+            break match TgLink::parse(request.raw_url()) {
                 None => Ok(rouille::Response::text(
                     r#"tgsa
 ----
@@ -258,7 +306,7 @@ pm me on the forums if this makes you mad or something.
 "#,
                 )),
                 Some(link) => handle_tg_link(&cache, &link),
-            }
+            };
         };
 
         match response {
