@@ -1,12 +1,12 @@
 use std::path::PathBuf;
 
-use clap::Clap;
+use clap::Parser;
 
 use crate::common::Result;
 use crate::compiler::{self, CompilerOptions};
 
 /// Compile a source file
-#[derive(Clap)]
+#[derive(Parser)]
 pub struct Compile {
     /// File to compile
     file: PathBuf,

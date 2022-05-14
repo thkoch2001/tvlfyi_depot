@@ -1,11 +1,11 @@
-use clap::Clap;
+use clap::Parser;
 use std::path::PathBuf;
 
 use crate::ast::Type;
 use crate::{parser, tc, Result};
 
 /// Typecheck a file or expression
-#[derive(Clap)]
+#[derive(Parser)]
 pub struct Check {
     /// File to check
     path: Option<PathBuf>,

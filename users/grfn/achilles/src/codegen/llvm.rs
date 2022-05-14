@@ -1,3 +1,5 @@
+mod util;
+
 use std::convert::{TryFrom, TryInto};
 use std::path::Path;
 use std::result;
@@ -16,6 +18,8 @@ use thiserror::Error;
 use crate::ast::hir::{Binding, Decl, Expr, Pattern};
 use crate::ast::{BinaryOperator, Ident, Literal, Type, UnaryOperator};
 use crate::common::env::Env;
+
+use self::util::{type_, value};
 
 #[derive(Debug, PartialEq, Eq, Error)]
 pub enum Error {
@@ -243,7 +247,11 @@ impl<'ctx, 'ast> Codegen<'ctx, 'ast> {
                         .ok_or_else(|| Error::UndefinedVariable(id.to_owned()))?;
                     let args = args
                         .iter()
-                        .map(|arg| Ok(self.codegen_expr(arg)?.unwrap().try_into().unwrap()))
+                        .map(|arg| {
+                            Ok(value::any_to_basic_metadata(
+                                self.codegen_expr(arg)?.unwrap(),
+                            ))
+                        })
                         .collect::<Result<Vec<_>>>()?;
                     Ok(self
                         .builder
@@ -289,6 +297,7 @@ impl<'ctx, 'ast> Codegen<'ctx, 'ast> {
         let arg_types = args
             .iter()
             .filter_map(|(_, at)| self.codegen_type(at))
+            .map(type_::basic_to_basic_metadata)
             .collect::<Vec<_>>();
 
         self.new_function(
@@ -318,7 +327,7 @@ impl<'ctx, 'ast> Codegen<'ctx, 'ast> {
     ) -> Result<()> {
         let arg_types = args
             .iter()
-            .map(|t| self.codegen_type(t).unwrap())
+            .map(|t| type_::basic_to_basic_metadata(self.codegen_type(t).unwrap()))
             .collect::<Vec<_>>();
         self.module.add_function(
             name,
@@ -388,7 +397,7 @@ impl<'ctx, 'ast> Codegen<'ctx, 'ast> {
         )
     }
 
-    fn codegen_int_type(&self, type_: &'ast Type) -> IntType<'ctx> {
+    fn codegen_int_type(&self, _type_: &'ast Type) -> IntType<'ctx> {
         // TODO
         self.context.i64_type()
     }

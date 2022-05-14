@@ -1,7 +1,7 @@
 { depot, pkgs, ... }:
 
 let
-  llvmPackages = pkgs.llvmPackages_11;
+  llvmPackages = pkgs.llvmPackages_14;
 in
 
 depot.third_party.naersk.buildPackage {
@@ -10,6 +10,7 @@ depot.third_party.naersk.buildPackage {
   buildInputs = [
     llvmPackages.clang
     llvmPackages.llvm
+    llvmPackages.libllvm.dev
     llvmPackages.bintools
     llvmPackages.libclang.lib
   ] ++ (with pkgs; [
@@ -21,7 +22,4 @@ depot.third_party.naersk.buildPackage {
   ]);
 
   doCheck = true;
-
-  # Trouble linking against LLVM, maybe since rustc's llvmPackages got bumped?
-  meta.ci.skip = true;
 }
