@@ -147,20 +147,38 @@ fn parse_tgmessage(embed: &str) -> Result<TgMessage> {
     })
 }
 
+// create a permanent media url that tgsa can redirect if telegram
+// changes its upstream links.
+//
+// assumes that tgsa lives at tgsa.tazj.in (which it does)
+fn media_url(link: &TgLink, idx: usize) -> String {
+    format!(
+        "https://tgsa.tazj.in/img/{}/{}/{}",
+        link.username, link.message_id, idx
+    )
+}
+
 fn to_bbcode(link: &TgLink, msg: &TgMessage) -> String {
     let mut out = String::new();
 
     out.push_str(&format!("[quote=\"{}\"]\n", msg.author));
 
-    for video in &msg.videos {
+    for video in 0..msg.videos.len() {
         out.push_str(&format!("[url=\"{}\"]", link.to_url()));
-        out.push_str(&format!("[img]{}[/img]", video));
+
+        // video thumbnail links are appended to the photos, hence the
+        // addition here
+        out.push_str(&format!(
+            "[img]{}[/img]",
+            media_url(link, video + msg.photos.len())
+        ));
+
         out.push_str("[/url]\n");
         out.push_str("[sub](Click thumbnail to open video)[/sub]\n")
     }
 
-    for photo in &msg.photos {
-        out.push_str(&format!("[timg]{}[/timg]\n", photo));
+    for photo in 0..msg.photos.len() {
+        out.push_str(&format!("[timg]{}[/timg]\n", media_url(link, photo)));
     }
 
     if msg.has_audio {
