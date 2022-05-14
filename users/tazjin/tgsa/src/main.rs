@@ -188,34 +188,42 @@ fn to_bbcode(link: &TgLink, msg: &TgMessage) -> String {
 // cache everything for one hour
 const CACHE_EXPIRY: Duration = Duration::from_secs(60 * 60);
 
-struct CacheEntry {
+#[derive(Clone)]
+struct TgPost {
     bbcode: String,
     at: Instant,
 }
 
-type Cache = RwLock<HashMap<TgLink, CacheEntry>>;
+type Cache = RwLock<HashMap<TgLink, TgPost>>;
 
-fn handle_tg_link(cache: &Cache, link: &TgLink) -> Result<String> {
+fn fetch_with_cache(cache: &Cache, link: &TgLink) -> Result<TgPost> {
     if let Some(entry) = cache.read().unwrap().get(&link) {
         if Instant::now() - entry.at < CACHE_EXPIRY {
             println!("serving {}#{} from cache", link.username, link.message_id);
-            return Ok(entry.bbcode.to_string());
+            return Ok(entry.clone());
         }
     }
 
+    // limit concurrent fetching
+    // TODO(tazjin): per link?
+    let mut writer = cache.write().unwrap();
+
     let embed = fetch_embed(&link)?;
     let msg = parse_tgmessage(&embed)?;
-    let bbcode = to_bbcode(&link, &msg);
 
-    cache.write().unwrap().insert(
-        link.clone(),
-        CacheEntry {
-            bbcode: bbcode.clone(),
-            at: Instant::now(),
-        },
-    );
+    let post = TgPost {
+        bbcode: to_bbcode(&link, &msg),
+        at: Instant::now(),
+    };
 
-    Ok(bbcode)
+    writer.insert(link.clone(), post.clone());
+
+    Ok(post)
+}
+
+fn handle_tg_link(cache: &Cache, link: &TgLink) -> Result<String> {
+    let post = fetch_with_cache(cache, link)?;
+    Ok(post.bbcode)
 }
 
 fn main() {
