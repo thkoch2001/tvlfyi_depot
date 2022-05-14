@@ -1,4 +1,4 @@
-use clap::Clap;
+use clap::Parser;
 
 pub mod ast;
 pub mod codegen;
@@ -13,13 +13,13 @@ pub mod tc;
 
 pub use common::{Error, Result};
 
-#[derive(Clap)]
+#[derive(Parser)]
 struct Opts {
     #[clap(subcommand)]
     subcommand: Command,
 }
 
-#[derive(Clap)]
+#[derive(Parser)]
 enum Command {
     Eval(commands::Eval),
     Compile(commands::Compile),

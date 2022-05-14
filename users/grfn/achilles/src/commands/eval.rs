@@ -1,9 +1,9 @@
-use clap::Clap;
+use clap::Parser;
 
 use crate::{codegen, interpreter, parser, tc, Result};
 
 /// Evaluate an expression and print its result
-#[derive(Clap)]
+#[derive(Parser)]
 pub struct Eval {
     /// JIT-compile with LLVM instead of interpreting
     #[clap(long)]

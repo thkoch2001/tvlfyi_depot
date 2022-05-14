@@ -3,7 +3,7 @@ use std::path::Path;
 use std::str::FromStr;
 use std::{fs, result};
 
-use clap::Clap;
+use clap::Parser;
 use test_strategy::Arbitrary;
 
 use crate::codegen::{self, Codegen};
@@ -47,9 +47,9 @@ impl Display for OutputFormat {
     }
 }
 
-#[derive(Clap, Debug, PartialEq, Eq, Default)]
+#[derive(Parser, Debug, PartialEq, Eq, Default)]
 pub struct CompilerOptions {
-    #[clap(long, short = 'f', default_value)]
+    #[clap(long, short = 'f', default_value_t)]
     format: OutputFormat,
 }
 
