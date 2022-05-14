@@ -2,11 +2,11 @@ with (import ../../.. { }).third_party.nixpkgs;
 
 mkShell {
   buildInputs = [
-    clang_11
-    llvm_11.lib
-    llvmPackages_11.bintools
-    llvmPackages_11.clang
-    llvmPackages_11.libclang.lib
+    clang_14
+    llvm_14.lib
+    llvmPackages_14.bintools
+    llvmPackages_14.clang
+    llvmPackages_14.libclang.lib
     zlib
     ncurses
     libxml2
@@ -14,5 +14,5 @@ mkShell {
     pkg-config
   ];
 
-  LLVM_SYS_110_PREFIX = llvmPackages_11.bintools;
+  LLVM_SYS_140_PREFIX = llvmPackages_14.libllvm.dev;
 }
