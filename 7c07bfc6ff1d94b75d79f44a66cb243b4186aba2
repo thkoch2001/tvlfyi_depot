@@ -22,6 +22,30 @@
       },
       "revId": "7c07bfc6ff1d94b75d79f44a66cb243b4186aba2",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c4fbcf66_9bfcce65",
+        "filename": "net/alcoholic_jwt/src/lib.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 249,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2022-05-16T15:35:03Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0ba531c3_690ce837",
+      "range": {
+        "startLine": 247,
+        "startChar": 0,
+        "endLine": 249,
+        "endChar": 0
+      },
+      "revId": "7c07bfc6ff1d94b75d79f44a66cb243b4186aba2",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
