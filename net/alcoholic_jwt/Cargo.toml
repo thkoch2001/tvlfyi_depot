@@ -10,7 +10,7 @@ homepage = "https://code.tvl.fyi/about/net/alcoholic_jwt"
 repository = "https://code.tvl.fyi/depot.git:/net/alcoholic_jwt.git"
 
 [dependencies]
-base64 = "0.10"
+base64 = "0.13"
 openssl = "0.10"
 serde = "1.0"
 serde_derive = "1.0"
