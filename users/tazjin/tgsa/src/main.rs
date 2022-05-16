@@ -308,8 +308,7 @@ this is a stupid program that lets you turn telegram message links
 into BBcode suitable for pasting on somethingawful dot com
 
 you can use it by putting a valid telegram message link in the url and
-waiting for some bbcode to show up. if there are images in the post the
-links will be very long, don't let this scare you.
+waiting for some bbcode to show up.
 
 for example:
 
