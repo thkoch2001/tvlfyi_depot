@@ -121,6 +121,7 @@ in
     wpcarro.common.shell-utils ++
     (with pkgs; [
       alacritty
+      ec2-api-tools
       firefox
       google-chrome
       httpie
