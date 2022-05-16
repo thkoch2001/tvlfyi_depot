@@ -84,6 +84,8 @@ use openssl::rsa::Rsa;
 use openssl::sign::Verifier;
 use serde::de::DeserializeOwned;
 use serde_json::Value;
+use std::error::Error;
+use std::fmt::{self, Display};
 use std::time::{Duration, SystemTime, UNIX_EPOCH};
 
 #[cfg(test)]
@@ -217,6 +219,38 @@ pub enum ValidationError {
     /// One or more claim validations failed. This variant contains
     /// human-readable validation errors.
     InvalidClaims(Vec<&'static str>),
+}
+
+impl Error for ValidationError {
+    fn source(&self) -> Option<&(dyn Error + 'static)> {
+        match self {
+            ValidationError::InvalidBase64(e) => Some(e),
+            ValidationError::OpenSSL(e) => Some(e),
+            ValidationError::JSON(e) => Some(e),
+            ValidationError::InvalidComponents
+            | ValidationError::InvalidJWK
+            | ValidationError::InvalidSignature
+            | ValidationError::InvalidClaims(_) => None,
+        }
+    }
+}
+
+impl Display for ValidationError {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        match self {
+            ValidationError::InvalidComponents => {
+                f.write_str("Invalid number of token components in JWT")
+            }
+            ValidationError::InvalidBase64(_) => f.write_str("Invalid Base64 encoding in JWT"),
+            ValidationError::InvalidJWK => f.write_str("JWK decoding failed"),
+            ValidationError::InvalidSignature => f.write_str("JWT signature validation failed"),
+            ValidationError::OpenSSL(e) => write!(f, "SSL error: {}", e),
+            ValidationError::JSON(e) => write!(f, "JSON error: {}", e),
+            ValidationError::InvalidClaims(errs) => {
+                write!(f, "Invalid claims: {}", errs.join(", "))
+            }
+        }
+    }
 }
 
 type JWTResult<T> = Result<T, ValidationError>;
