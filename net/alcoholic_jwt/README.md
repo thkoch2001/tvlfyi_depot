@@ -1,8 +1,6 @@
 alcoholic_jwt
 =============
 
-[![Build Status](https://travis-ci.org/aprilabank/alcoholic_jwt.svg?branch=master)](https://travis-ci.org/aprilabank/alcoholic_jwt)
-
 This is a library for **validation** of **RS256** JWTs using keys from
 a JWKS. Nothing more, nothing less.
 
