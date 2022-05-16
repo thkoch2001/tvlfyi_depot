@@ -1,4 +1,4 @@
-// Copyright (C) 2018  Aprila Bank ASA
+// Copyright (C) 2019-2022 The TVL Community
 //
 // alcoholic_jwt is free software: you can redistribute it and/or
 // modify it under the terms of the GNU General Public License as
