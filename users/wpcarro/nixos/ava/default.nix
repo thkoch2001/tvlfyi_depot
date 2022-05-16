@@ -42,6 +42,10 @@ in
   };
 
   services = wpcarro.common.services // {
+    # Check the amount of available memory and free swap a few times per second
+    # and kill the largest process if both are below 10%.
+    earlyoom.enable = true;
+
     tailscale.enable = true;
 
     openssh.enable = true;
