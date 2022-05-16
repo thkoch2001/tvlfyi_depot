@@ -1,12 +1,14 @@
 [package]
 name = "crimp"
 description = "Higher-level Rust API for cURL bindings"
-version = "0.2.2"
-authors = ["Vincent Ambo <mail@tazj.in>"]
+version = "4087.0.0"
+authors = ["Vincent Ambo <tazjin@tvl.su>"]
 keywords = [ "http", "curl" ]
 categories = [ "api-bindings" ]
 license = "GPL-3.0-or-later"
-repository = "https://github.com/tazjin/crimp"
+homepage = "https://code.tvl.fyi/about/net/crimp"
+repository = "https://code.tvl.fyi/depot.git:/net/crimp.git"
+
 
 [features]
 default = [ "json" ]
