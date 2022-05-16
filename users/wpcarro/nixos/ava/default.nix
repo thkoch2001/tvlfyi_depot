@@ -26,6 +26,8 @@ in
   # Support IP forwarding to use this device as a Tailscale exit node.
   boot.kernel.sysctl."net.ipv4.ip_forward" = true;
   boot.kernel.sysctl."net.ipv6.conf.all.forwarding" = true;
+  # Additionall exit node settings that Tailscale recommends.
+  networking.firewall.checkReversePath = "loose";
 
   time.timeZone = "America/Los_Angeles";
 
