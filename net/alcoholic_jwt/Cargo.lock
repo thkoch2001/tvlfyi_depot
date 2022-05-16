@@ -4,7 +4,7 @@ version = 3
 
 [[package]]
 name = "alcoholic_jwt"
-version = "4084.0.0"
+version = "4091.0.0"
 dependencies = [
  "base64",
  "openssl",
