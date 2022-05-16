@@ -54,7 +54,19 @@ This library aims to only use trustworthy off-the-shelf components to
 do the work. Cryptographic operations are provided by the `openssl`
 crate, JSON-serialisation is provided by `serde_json`.
 
+## Contributing
+
+This project is developed in the [TVL monorepo][depot]. To work on it,
+you can either use a local clone of the entire repository or clone
+just the `alcoholic_jwt` subtree:
+
+    https://code.tvl.fyi/depot.git:/net/alcoholic_jwt.git
+
+Please follow the TVL [contribution guidelines][contributing].
+
+
 [Google]: https://www.google.com/
 [Aprila]: https://www.aprila.no/
 [JWKS]: https://tools.ietf.org/html/rfc7517
 [`kid` claim]: https://tools.ietf.org/html/rfc7515#section-4.1.4
+[contributing]: https://code.tvl.fyi/about/docs/CONTRIBUTING.md
