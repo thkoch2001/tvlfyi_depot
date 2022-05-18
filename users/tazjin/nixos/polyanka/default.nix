@@ -118,5 +118,10 @@ in
     "35c192ce9bd4c8c7"
   ];
 
+  services.transmission = {
+    enable = true;
+    openPeerPorts = true;
+  };
+
   system.stateVersion = "20.09";
 }
