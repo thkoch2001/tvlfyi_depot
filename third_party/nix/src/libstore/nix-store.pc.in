@@ -1,9 +1,0 @@
-prefix=@CMAKE_INSTALL_PREFIX@
-libdir=@CMAKE_INSTALL_FULL_LIBDIR@
-includedir=@CMAKE_INSTALL_FULL_INCLUDEDIR@
-
-Name: Nix
-Description: Nix Package Manager
-Version: @PACKAGE_VERSION@
-Libs: -L${libdir} -lnixstore -lnixutil
-Cflags: -I${includedir}/nix
