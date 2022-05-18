@@ -118,5 +118,15 @@ in
     "35c192ce9bd4c8c7"
   ];
 
+  services.transmission = {
+    enable = true;
+    openPeerPorts = true;
+
+    # listen on zerotier
+    settings.rpc-bind-address = "172.29.97.128";
+    settings.rpc-whitelist-enabled = false;
+    settings.rpc-host-whitelist-enabled = false;
+  };
+
   system.stateVersion = "20.09";
 }
