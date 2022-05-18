@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "464cd9c8_6f98308a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2022-05-18T15:26:04Z",
+      "side": 1,
+      "message": "You can observe the double free by going to any file in cgit, going to the log few and clicking on a commit (error message is in the journal and at the bottom of the page).",
+      "revId": "9095cd6c75236957d9c5cf9df3b663ed407e1259",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
