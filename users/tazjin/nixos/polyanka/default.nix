@@ -61,6 +61,7 @@ in
 
     firewall.enable = true;
     firewall.allowedTCPPorts = [ 22 80 443 ];
+    firewall.trustedInterfaces = [ "zt7nnembs4" ];
 
     nameservers = [
       "79.99.4.100"
@@ -117,6 +118,16 @@ in
   services.zerotierone.joinNetworks = [
     "35c192ce9bd4c8c7"
   ];
+
+  services.transmission = {
+    enable = true;
+    openPeerPorts = true;
+
+    # listen on zerotier
+    settings.rpc-bind-address = "0.0.0.0";
+    settings.rpc-whitelist-enabled = false;
+    settings.rpc-host-whitelist-enabled = false;
+  };
 
   system.stateVersion = "20.09";
 }
