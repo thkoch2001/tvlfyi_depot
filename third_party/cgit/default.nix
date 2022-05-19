@@ -34,6 +34,8 @@ stdenv.mkDerivation rec {
     cat tvl-extra.css >> cgit.css
   '';
 
+  stripDebugList = [ "cgit" ];
+
   # We don't use the filters and they require wrapping to find their deps
   postInstall = ''
     rm -rf "$out/lib/cgit/filters"
