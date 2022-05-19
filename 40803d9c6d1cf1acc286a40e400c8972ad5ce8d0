@@ -48,6 +48,30 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "7e6860a4_fcd1c10f",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-05-19T09:05:08Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "96512713_b254c080",
+      "range": {
+        "startLine": 10,
+        "startChar": 39,
+        "endLine": 11,
+        "endChar": 7
+      },
+      "revId": "40803d9c6d1cf1acc286a40e400c8972ad5ce8d0",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "55ef9b16_3ff15404",
@@ -79,6 +103,24 @@
       "side": 1,
       "message": "The biggest change seems to be removal of lua support, the rest seems harmless. A test deploy seems prudent though, also to check nothing went wrong when merging (i.e. none of our patches was rolled back by accident).",
       "parentUuid": "55ef9b16_3ff15404",
+      "revId": "40803d9c6d1cf1acc286a40e400c8972ad5ce8d0",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2f9fc534_f520be32",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-05-19T09:05:08Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "a22b821b_955e0f01",
       "revId": "40803d9c6d1cf1acc286a40e400c8972ad5ce8d0",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
