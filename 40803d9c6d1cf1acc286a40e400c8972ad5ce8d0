@@ -3,6 +3,29 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "b2bc513f_e6c32e8a",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-05-19T08:58:39Z",
+      "side": 1,
+      "message": "does this also mean that we need to sync the git version more closely with this? (for now we\u0027ve been very yolo about it)",
+      "range": {
+        "startLine": 10,
+        "startChar": 39,
+        "endLine": 11,
+        "endChar": 7
+      },
+      "revId": "40803d9c6d1cf1acc286a40e400c8972ad5ce8d0",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "55ef9b16_3ff15404",
         "filename": "/PATCHSET_LEVEL",
         "patchSetId": 2
