@@ -208,7 +208,7 @@ impl App {
     pub fn handle_query(
         &mut self,
         target: &str,
-        nick: &str,
+        _nick: &str,
         chan: &str,
         query: Captures,
     ) -> Result<(), Error> {
