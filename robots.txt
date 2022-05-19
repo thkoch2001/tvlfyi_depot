@@ -1,0 +1,7 @@
+<<<<<<< HEAD   (e579aa fix(3p/cgit): Fix bad free in cgit_diff_tree)
+=======
+User-agent: *
+Disallow: /*/snapshot/*
+Disallow: /*/blame/*
+Allow: /
+>>>>>>> BRANCH (0c86e2 Squashed 'third_party/cgit/' changes from 8fc0c81bb..26ac844)
