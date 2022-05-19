@@ -378,7 +378,7 @@ static void prepare_context(void)
 	ctx.cfg.commit_sort = 0;
 	ctx.cfg.css = "/cgit.css";
 	ctx.cfg.logo = "/cgit.png";
-	ctx.cfg.favicon = "/favicon.ico";
+	ctx.cfg.favicon = NULL;
 	ctx.cfg.local_time = 0;
 	ctx.cfg.enable_http_clone = 1;
 	ctx.cfg.enable_index_owner = 1;
@@ -507,9 +507,11 @@ static inline void parse_readme(const char *readme, char **filename, char **ref,
 	/* Check if the readme is tracked in the git repo. */
 	colon = strchr(readme, ':');
 	if (colon && strlen(colon) > 1) {
-		/* If it starts with a colon, we want to use
-		 * the default branch */
-		if (colon == readme && repo->defbranch)
+		/* If it starts with a colon, we want to use head given
+		 * from query or the default branch */
+		if (colon == readme && ctx.qry.head)
+			*ref = xstrdup(ctx.qry.head);
+		else if (colon == readme && repo->defbranch)
 			*ref = xstrdup(repo->defbranch);
 		else
 			*ref = xstrndup(readme, colon - readme);
@@ -674,7 +676,7 @@ static inline void authenticate_post(void)
 		len = MAX_AUTHENTICATION_POST_BYTES;
 	if ((len = read(STDIN_FILENO, buffer, len)) < 0)
 		die_errno("Could not read POST from stdin");
-	if (write(STDOUT_FILENO, buffer, len) < 0)
+	if (fwrite(buffer, 1, len, stdout) < len)
 		die_errno("Could not write POST to stdout");
 	cgit_close_filter(ctx.cfg.auth_filter);
 	exit(0);
@@ -963,13 +965,7 @@ static void cgit_parse_args(int argc, const char **argv)
 
 	for (i = 1; i < argc; i++) {
 		if (!strcmp(argv[i], "--version")) {
-			printf("CGit %s | https://git.zx2c4.com/cgit/\n\nCompiled in features:\n", CGIT_VERSION);
-#ifdef NO_LUA
-			printf("[-] ");
-#else
-			printf("[+] ");
-#endif
-			printf("Lua scripting\n");
+			printf("CGit-pink %s | https://git.causal.agency/cgit-pink/\n\nCompiled in features:\n", CGIT_VERSION);
 #ifndef HAVE_LINUX_SENDFILE
 			printf("[-] ");
 #else
@@ -1051,7 +1047,6 @@ int cmd_main(int argc, const char **argv)
 	const char *path;
 	int err, ttl;
 
-	cgit_init_filters();
 	atexit(cgit_cleanup_filters);
 
 	prepare_context();

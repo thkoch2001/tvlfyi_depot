@@ -39,7 +39,7 @@ void cgit_print_commit(char *hex, const char *prefix)
 	}
 	info = cgit_parse_commit(commit);
 
-	format_display_notes(&oid, &notes, PAGE_ENCODING, 0);
+	format_display_notes(&oid, &notes, PAGE_ENCODING, 1);
 
 	load_ref_decorations(NULL, DECORATE_FULL_REFS);
 
@@ -121,11 +121,11 @@ void cgit_print_commit(char *hex, const char *prefix)
 	cgit_close_filter(ctx.repo->commit_filter);
 	show_commit_decorations(commit);
 	html("</div>");
-	html("<div class='commit-msg'>");
+	html("<pre class='commit-msg'>");
 	cgit_open_filter(ctx.repo->commit_filter);
 	html_txt(info->msg);
 	cgit_close_filter(ctx.repo->commit_filter);
-	html("</div>");
+	html("</pre>");
 	if (notes.len != 0) {
 		html("<div class='notes-header'>Notes</div>");
 		html("<div class='notes'>");

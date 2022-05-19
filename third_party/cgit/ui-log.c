@@ -75,11 +75,13 @@ void show_commit_decorations(struct commit *commit)
 			 * don't display anything. */
 			break;
 		case DECORATION_REF_LOCAL:
+			html(" ");
 			cgit_log_link(buf, NULL, "branch-deco", buf, NULL,
 				ctx.qry.vpath, 0, NULL, NULL,
 				ctx.qry.showmsg, 0);
 			break;
 		case DECORATION_REF_TAG:
+			html(" ");
 			if (!read_ref(deco->name, &oid_tag) && !peel_iterated_oid(&oid_tag, &peeled))
 				is_annotated = !oideq(&oid_tag, &peeled);
 			cgit_tag_link(buf, NULL, is_annotated ? "tag-annotated-deco" : "tag-deco", buf);
@@ -87,12 +89,14 @@ void show_commit_decorations(struct commit *commit)
 		case DECORATION_REF_REMOTE:
 			if (!ctx.repo->enable_remote_branches)
 				break;
+			html(" ");
 			cgit_log_link(buf, NULL, "remote-deco", NULL,
 				oid_to_hex(&commit->object.oid),
 				ctx.qry.vpath, 0, NULL, NULL,
 				ctx.qry.showmsg, 0);
 			break;
 		default:
+			html(" ");
 			cgit_commit_link(buf, NULL, "deco", ctx.qry.head,
 					oid_to_hex(&commit->object.oid),
 					ctx.qry.vpath);
@@ -489,8 +493,7 @@ void cgit_print_log(const char *tip, int ofs, int cnt, char *grep, char *pattern
 	for (i = 0; i < ofs && (commit = get_revision(&rev)) != NULL; /* nop */) {
 		if (show_commit(commit, &rev))
 			i++;
-		free_commit_buffer(the_repository->parsed_objects, commit);
-		free_commit_list(commit->parents);
+		release_commit_memory(the_repository->parsed_objects, commit);
 		commit->parents = NULL;
 	}
 
@@ -511,8 +514,7 @@ void cgit_print_log(const char *tip, int ofs, int cnt, char *grep, char *pattern
 			i++;
 			print_commit(commit, &rev);
 		}
-		free_commit_buffer(the_repository->parsed_objects, commit);
-		free_commit_list(commit->parents);
+		release_commit_memory(the_repository->parsed_objects, commit);
 		commit->parents = NULL;
 	}
 	if (pager) {

@@ -1,6 +1,6 @@
 all::
 
-CGIT_VERSION = v1.2.3
+CGIT_VERSION = 1.4.1
 CGIT_SCRIPT_NAME = cgit.cgi
 CGIT_SCRIPT_PATH = /var/www/htdocs/cgit
 CGIT_DATA_PATH = $(CGIT_SCRIPT_PATH)
@@ -14,7 +14,7 @@ htmldir = $(docdir)
 pdfdir = $(docdir)
 mandir = $(prefix)/share/man
 SHA1_HEADER = <openssl/sha.h>
-GIT_VER = 2.36.0
+GIT_VER = 2.36.1
 GIT_URL = https://www.kernel.org/pub/software/scm/git/git-$(GIT_VER).tar.xz
 INSTALL = install
 COPYTREE = cp -r
@@ -88,7 +88,6 @@ install: all
 	$(INSTALL) -m 0755 -d $(DESTDIR)$(CGIT_DATA_PATH)
 	$(INSTALL) -m 0644 cgit.css $(DESTDIR)$(CGIT_DATA_PATH)/cgit.css
 	$(INSTALL) -m 0644 cgit.png $(DESTDIR)$(CGIT_DATA_PATH)/cgit.png
-	$(INSTALL) -m 0644 favicon.ico $(DESTDIR)$(CGIT_DATA_PATH)/favicon.ico
 	$(INSTALL) -m 0644 robots.txt $(DESTDIR)$(CGIT_DATA_PATH)/robots.txt
 	$(INSTALL) -m 0755 -d $(DESTDIR)$(filterdir)
 	$(COPYTREE) filters/* $(DESTDIR)$(filterdir)
@@ -111,7 +110,6 @@ uninstall:
 	rm -f $(DESTDIR)$(CGIT_SCRIPT_PATH)/$(CGIT_SCRIPT_NAME)
 	rm -f $(DESTDIR)$(CGIT_DATA_PATH)/cgit.css
 	rm -f $(DESTDIR)$(CGIT_DATA_PATH)/cgit.png
-	rm -f $(DESTDIR)$(CGIT_DATA_PATH)/favicon.ico
 
 uninstall-doc: uninstall-man uninstall-html uninstall-pdf
 
