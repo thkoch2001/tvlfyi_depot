@@ -1,7 +1,7 @@
 { depot, lib, pkgs, ... }:
 
 let
-  inherit (pkgs) stdenv gzip bzip2 xz luajit zlib autoconf openssl pkgconfig;
+  inherit (pkgs) stdenv gzip bzip2 xz lzip zstd zlib openssl;
 in
 stdenv.mkDerivation rec {
   pname = "cgit-pink";
@@ -15,7 +15,9 @@ stdenv.mkDerivation rec {
   postPatch = ''
     sed -e 's|"gzip"|"${gzip}/bin/gzip"|' \
         -e 's|"bzip2"|"${bzip2.bin}/bin/bzip2"|' \
+        -e 's|"lzip"|"${lzip}/bin/lzip"|' \
         -e 's|"xz"|"${xz.bin}/bin/xz"|' \
+        -e 's|"zstd"|"${zstd}/bin/zstd"|' \
         -i ui-snapshot.c
   '';
 
