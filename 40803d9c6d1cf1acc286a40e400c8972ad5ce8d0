@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "55ef9b16_3ff15404",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-05-19T08:50:03Z",
+      "side": 1,
+      "message": "Are there any significant behavioural changes we should be aware of? Maybe we should test-deploy whitby and see what happens?",
+      "revId": "40803d9c6d1cf1acc286a40e400c8972ad5ce8d0",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
