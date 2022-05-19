@@ -34,6 +34,12 @@ stdenv.mkDerivation rec {
     cat tvl-extra.css >> cgit.css
   '';
 
+  # We don't use the filters and they require wrapping to find their deps
+  postInstall = ''
+    rm -rf "$out/lib/cgit/filters"
+    find "$out" -type d -empty -delete
+  '';
+
   meta = {
     hompepage = "https://git.causal.agency/cgit-pink/";
     description = "cgit fork aiming for better maintenance";
