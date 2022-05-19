@@ -60,12 +60,6 @@ fi
 
 FILTER_DIRECTORY=$(cd ../filters && pwd)
 
-if cgit --version | grep -F -q "[+] Lua scripting"; then
-	export CGIT_HAS_LUA=1
-else
-	export CGIT_HAS_LUA=0
-fi
-
 mkrepo() {
 	name=$1
 	count=$2
@@ -80,13 +74,17 @@ mkrepo() {
 			git commit -m "commit $n"
 			n=$(expr $n + 1)
 		done
-		if test "$3" = "testplus"
-		then
+		case "$3" in
+		testplus)
 			echo "hello" >a+b
 			git add a+b
 			git commit -m "add a+b"
 			git branch "1+2"
-		fi
+			;;
+		commit-graph)
+			git commit-graph write
+			;;
+		esac
 	)
 }
 
@@ -95,7 +93,7 @@ setup_repos()
 	rm -rf cache
 	mkdir -p cache
 	mkrepo repos/foo 5 >/dev/null
-	mkrepo repos/bar 50 >/dev/null
+	mkrepo repos/bar 50 commit-graph >/dev/null
 	mkrepo repos/foo+bar 10 testplus >/dev/null
 	mkrepo "repos/with space" 2 >/dev/null
 	mkrepo repos/filter 5 testplus >/dev/null
@@ -104,7 +102,7 @@ virtual-root=/
 cache-root=$PWD/cache
 
 cache-size=1021
-snapshots=tar.gz tar.bz zip
+snapshots=tar.gz tar.bz tar.lz tar.xz tar.zst zip
 enable-log-filecount=1
 enable-log-linecount=1
 summary-log=5
@@ -140,19 +138,6 @@ repo.email-filter=exec:$FILTER_DIRECTORY/dump.sh
 repo.source-filter=exec:$FILTER_DIRECTORY/dump.sh
 repo.readme=master:a+b
 EOF
-
-	if [ $CGIT_HAS_LUA -eq 1 ]; then
-		cat >>cgitrc <<EOF
-repo.url=filter-lua
-repo.path=$PWD/repos/filter/.git
-repo.desc=filtered repo
-repo.about-filter=lua:$FILTER_DIRECTORY/dump.lua
-repo.commit-filter=lua:$FILTER_DIRECTORY/dump.lua
-repo.email-filter=lua:$FILTER_DIRECTORY/dump.lua
-repo.source-filter=lua:$FILTER_DIRECTORY/dump.lua
-repo.readme=master:a+b
-EOF
-	fi
 }
 
 cgit_query()

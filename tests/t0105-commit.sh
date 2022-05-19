@@ -11,7 +11,7 @@ test_expect_success 'find commit subject' '
 	grep "<div class=.commit-subject.>commit 5<" tmp
 '
 
-test_expect_success 'find commit msg' 'grep "<div class=.commit-msg.></div>" tmp'
+test_expect_success 'find commit msg' 'grep "<pre class=.commit-msg.></pre>" tmp'
 test_expect_success 'find diffstat' 'grep "<table summary=.diffstat. class=.diffstat.>" tmp'
 
 test_expect_success 'find diff summary' '
@@ -25,12 +25,12 @@ test_expect_success 'get root commit' '
 '
 
 test_expect_success 'root commit contains diffstat' '
-	grep "<a href=./foo/diff/file-1.id=[0-9a-f]\{40\}.>file-1</a>" tmp
+	grep "<a href=./foo/diff/file-1.id=[0-9a-f]\{40,64\}.>file-1</a>" tmp
 '
 
 test_expect_success 'root commit contains diff' '
-	grep ">diff --git a/file-1 b/file-1<" tmp &&
-	grep "<div class=.add.>+1</div>" tmp
+	grep ">diff --git a/file-1 b/file-1" tmp &&
+	grep "<span class=.add.>+1</span>" tmp
 '
 
 test_done

@@ -10,7 +10,7 @@
 #include "ui-log.h"
 #include "html.h"
 #include "ui-shared.h"
-#include "argv-array.h"
+#include "strvec.h"
 
 static int files, add_lines, rem_lines, lines_counted;
 
@@ -65,8 +65,9 @@ void show_commit_decorations(struct commit *commit)
 		return;
 	html("<span class='decoration'>");
 	while (deco) {
-		struct object_id peeled;
+		struct object_id oid_tag, peeled;
 		int is_annotated = 0;
+
 		strlcpy(buf, prettify_refname(deco->name), sizeof(buf));
 		switch(deco->type) {
 		case DECORATION_NONE:
@@ -74,24 +75,28 @@ void show_commit_decorations(struct commit *commit)
 			 * don't display anything. */
 			break;
 		case DECORATION_REF_LOCAL:
+			html(" ");
 			cgit_log_link(buf, NULL, "branch-deco", buf, NULL,
 				ctx.qry.vpath, 0, NULL, NULL,
 				ctx.qry.showmsg, 0);
 			break;
 		case DECORATION_REF_TAG:
-			if (!peel_ref(deco->name, &peeled))
-				is_annotated = !oidcmp(&commit->object.oid, &peeled);
+			html(" ");
+			if (!read_ref(deco->name, &oid_tag) && !peel_iterated_oid(&oid_tag, &peeled))
+				is_annotated = !oideq(&oid_tag, &peeled);
 			cgit_tag_link(buf, NULL, is_annotated ? "tag-annotated-deco" : "tag-deco", buf);
 			break;
 		case DECORATION_REF_REMOTE:
 			if (!ctx.repo->enable_remote_branches)
 				break;
+			html(" ");
 			cgit_log_link(buf, NULL, "remote-deco", NULL,
 				oid_to_hex(&commit->object.oid),
 				ctx.qry.vpath, 0, NULL, NULL,
 				ctx.qry.showmsg, 0);
 			break;
 		default:
+			html(" ");
 			cgit_commit_link(buf, NULL, "deco", ctx.qry.head,
 					oid_to_hex(&commit->object.oid),
 					ctx.qry.vpath);
@@ -153,12 +158,12 @@ static int show_commit(struct commit *commit, struct rev_info *revs)
 	rem_lines = 0;
 
 	revs->diffopt.flags.recursive = 1;
-	diff_tree_oid(&parent->maybe_tree->object.oid,
-		      &commit->maybe_tree->object.oid,
+	diff_tree_oid(get_commit_tree_oid(parent),
+		      get_commit_tree_oid(commit),
 		      "", &revs->diffopt);
 	diffcore_std(&revs->diffopt);
 
-	found = !diff_queue_is_empty();
+	found = !diff_queue_is_empty(&revs->diffopt);
 	saved_fmt = revs->diffopt.output_format;
 	revs->diffopt.output_format = DIFF_FORMAT_CALLBACK;
 	revs->diffopt.format_callback = cgit_diff_tree_cb;
@@ -366,23 +371,23 @@ void cgit_print_log(const char *tip, int ofs, int cnt, char *grep, char *pattern
 {
 	struct rev_info rev;
 	struct commit *commit;
-	struct argv_array rev_argv = ARGV_ARRAY_INIT;
+	struct strvec rev_argv = STRVEC_INIT;
 	int i, columns = commit_graph ? 4 : 3;
 	int must_free_tip = 0;
 
 	/* rev_argv.argv[0] will be ignored by setup_revisions */
-	argv_array_push(&rev_argv, "log_rev_setup");
+	strvec_push(&rev_argv, "log_rev_setup");
 
 	if (!tip)
 		tip = ctx.qry.head;
 	tip = disambiguate_ref(tip, &must_free_tip);
-	argv_array_push(&rev_argv, tip);
+	strvec_push(&rev_argv, tip);
 
 	if (grep && pattern && *pattern) {
 		pattern = xstrdup(pattern);
 		if (!strcmp(grep, "grep") || !strcmp(grep, "author") ||
 		    !strcmp(grep, "committer")) {
-			argv_array_pushf(&rev_argv, "--%s=%s", grep, pattern);
+			strvec_pushf(&rev_argv, "--%s=%s", grep, pattern);
 		} else if (!strcmp(grep, "range")) {
 			char *arg;
 			/* Split the pattern at whitespace and add each token
@@ -390,14 +395,14 @@ void cgit_print_log(const char *tip, int ofs, int cnt, char *grep, char *pattern
 			 * rev-list options. Also, replace the previously
 			 * pushed tip (it's no longer relevant).
 			 */
-			argv_array_pop(&rev_argv);
+			strvec_pop(&rev_argv);
 			while ((arg = next_token(&pattern))) {
 				if (*arg == '-') {
 					fprintf(stderr, "Bad range expr: %s\n",
 						arg);
 					break;
 				}
-				argv_array_push(&rev_argv, arg);
+				strvec_push(&rev_argv, arg);
 			}
 		}
 	}
@@ -412,22 +417,22 @@ void cgit_print_log(const char *tip, int ofs, int cnt, char *grep, char *pattern
 	}
 
 	if (commit_graph && !ctx.qry.follow) {
-		argv_array_push(&rev_argv, "--graph");
-		argv_array_push(&rev_argv, "--color");
+		strvec_push(&rev_argv, "--graph");
+		strvec_push(&rev_argv, "--color");
 		graph_set_column_colors(column_colors_html,
 					COLUMN_COLORS_HTML_MAX);
 	}
 
 	if (commit_sort == 1)
-		argv_array_push(&rev_argv, "--date-order");
+		strvec_push(&rev_argv, "--date-order");
 	else if (commit_sort == 2)
-		argv_array_push(&rev_argv, "--topo-order");
+		strvec_push(&rev_argv, "--topo-order");
 
 	if (path && ctx.qry.follow)
-		argv_array_push(&rev_argv, "--follow");
-	argv_array_push(&rev_argv, "--");
+		strvec_push(&rev_argv, "--follow");
+	strvec_push(&rev_argv, "--");
 	if (path)
-		argv_array_push(&rev_argv, path);
+		strvec_push(&rev_argv, path);
 
 	init_revisions(&rev, NULL);
 	rev.abbrev = DEFAULT_ABBREV;
@@ -436,7 +441,7 @@ void cgit_print_log(const char *tip, int ofs, int cnt, char *grep, char *pattern
 	rev.show_root_diff = 0;
 	rev.ignore_missing = 1;
 	rev.simplify_history = 1;
-	setup_revisions(rev_argv.argc, rev_argv.argv, &rev, NULL);
+	setup_revisions(rev_argv.nr, rev_argv.v, &rev, NULL);
 	load_ref_decorations(NULL, DECORATE_FULL_REFS);
 	rev.show_decorations = 1;
 	rev.grep_filter.ignore_case = 1;
@@ -463,7 +468,7 @@ void cgit_print_log(const char *tip, int ofs, int cnt, char *grep, char *pattern
 	if (pager) {
 		html(" (");
 		cgit_log_link(ctx.qry.showmsg ? "Collapse" : "Expand", NULL,
-			      NULL, ctx.qry.head, ctx.qry.sha1,
+			      NULL, ctx.qry.head, ctx.qry.oid,
 			      ctx.qry.vpath, ctx.qry.ofs, ctx.qry.grep,
 			      ctx.qry.search, ctx.qry.showmsg ? 0 : 1,
 			      ctx.qry.follow);
@@ -488,8 +493,7 @@ void cgit_print_log(const char *tip, int ofs, int cnt, char *grep, char *pattern
 	for (i = 0; i < ofs && (commit = get_revision(&rev)) != NULL; /* nop */) {
 		if (show_commit(commit, &rev))
 			i++;
-		free_commit_buffer(the_repository->parsed_objects, commit);
-		free_commit_list(commit->parents);
+		release_commit_memory(the_repository->parsed_objects, commit);
 		commit->parents = NULL;
 	}
 
@@ -510,8 +514,7 @@ void cgit_print_log(const char *tip, int ofs, int cnt, char *grep, char *pattern
 			i++;
 			print_commit(commit, &rev);
 		}
-		free_commit_buffer(the_repository->parsed_objects, commit);
-		free_commit_list(commit->parents);
+		release_commit_memory(the_repository->parsed_objects, commit);
 		commit->parents = NULL;
 	}
 	if (pager) {
@@ -519,7 +522,7 @@ void cgit_print_log(const char *tip, int ofs, int cnt, char *grep, char *pattern
 		if (ofs > 0) {
 			html("<li>");
 			cgit_log_link("[prev]", NULL, NULL, ctx.qry.head,
-				      ctx.qry.sha1, ctx.qry.vpath,
+				      ctx.qry.oid, ctx.qry.vpath,
 				      ofs - cnt, ctx.qry.grep,
 				      ctx.qry.search, ctx.qry.showmsg,
 				      ctx.qry.follow);
@@ -528,7 +531,7 @@ void cgit_print_log(const char *tip, int ofs, int cnt, char *grep, char *pattern
 		if ((commit = get_revision(&rev)) != NULL) {
 			html("<li>");
 			cgit_log_link("[next]", NULL, NULL, ctx.qry.head,
-				      ctx.qry.sha1, ctx.qry.vpath,
+				      ctx.qry.oid, ctx.qry.vpath,
 				      ofs + cnt, ctx.qry.grep,
 				      ctx.qry.search, ctx.qry.showmsg,
 				      ctx.qry.follow);

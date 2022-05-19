@@ -324,11 +324,11 @@ static void querystring_cb(const char *name, const char *value)
 		ctx.qry.head = xstrdup(value);
 		ctx.qry.has_symref = 1;
 	} else if (!strcmp(name, "id")) {
-		ctx.qry.sha1 = xstrdup(value);
-		ctx.qry.has_sha1 = 1;
+		ctx.qry.oid = xstrdup(value);
+		ctx.qry.has_oid = 1;
 	} else if (!strcmp(name, "id2")) {
-		ctx.qry.sha2 = xstrdup(value);
-		ctx.qry.has_sha1 = 1;
+		ctx.qry.oid2 = xstrdup(value);
+		ctx.qry.has_oid = 1;
 	} else if (!strcmp(name, "ofs")) {
 		ctx.qry.ofs = atoi(value);
 	} else if (!strcmp(name, "path")) {
@@ -378,7 +378,7 @@ static void prepare_context(void)
 	ctx.cfg.commit_sort = 0;
 	ctx.cfg.css = "/cgit.css";
 	ctx.cfg.logo = "/cgit.png";
-	ctx.cfg.favicon = "/favicon.ico";
+	ctx.cfg.favicon = NULL;
 	ctx.cfg.local_time = 0;
 	ctx.cfg.enable_http_clone = 1;
 	ctx.cfg.enable_index_owner = 1;
@@ -428,7 +428,7 @@ static void prepare_context(void)
 	ctx.page.modified = time(NULL);
 	ctx.page.expires = ctx.page.modified;
 	ctx.page.etag = NULL;
-	string_list_init(&ctx.cfg.mimetypes, 1);
+	string_list_init_dup(&ctx.cfg.mimetypes);
 	if (ctx.env.script_name)
 		ctx.cfg.script_name = xstrdup(ctx.env.script_name);
 	if (ctx.env.query_string)
@@ -507,9 +507,11 @@ static inline void parse_readme(const char *readme, char **filename, char **ref,
 	/* Check if the readme is tracked in the git repo. */
 	colon = strchr(readme, ':');
 	if (colon && strlen(colon) > 1) {
-		/* If it starts with a colon, we want to use
-		 * the default branch */
-		if (colon == readme && repo->defbranch)
+		/* If it starts with a colon, we want to use head given
+		 * from query or the default branch */
+		if (colon == readme && ctx.qry.head)
+			*ref = xstrdup(ctx.qry.head);
+		else if (colon == readme && repo->defbranch)
 			*ref = xstrdup(repo->defbranch);
 		else
 			*ref = xstrndup(readme, colon - readme);
@@ -579,7 +581,7 @@ static void prepare_repo_env(int *nongit)
 	 * load local configuration from the git repository, so we do them both while
 	 * the HOME variables are unset. */
 	setup_git_directory_gently(nongit);
-	init_display_notes(NULL);
+	load_display_notes(NULL);
 }
 
 static int prepare_repo_cmd(int nongit)
@@ -674,7 +676,7 @@ static inline void authenticate_post(void)
 		len = MAX_AUTHENTICATION_POST_BYTES;
 	if ((len = read(STDIN_FILENO, buffer, len)) < 0)
 		die_errno("Could not read POST from stdin");
-	if (write(STDOUT_FILENO, buffer, len) < 0)
+	if (fwrite(buffer, 1, len, stdout) < len)
 		die_errno("Could not write POST to stdout");
 	cgit_close_filter(ctx.cfg.auth_filter);
 	exit(0);
@@ -963,13 +965,7 @@ static void cgit_parse_args(int argc, const char **argv)
 
 	for (i = 1; i < argc; i++) {
 		if (!strcmp(argv[i], "--version")) {
-			printf("CGit %s | https://git.zx2c4.com/cgit/\n\nCompiled in features:\n", CGIT_VERSION);
-#ifdef NO_LUA
-			printf("[-] ");
-#else
-			printf("[+] ");
-#endif
-			printf("Lua scripting\n");
+			printf("CGit-pink %s | https://git.causal.agency/cgit-pink/\n\nCompiled in features:\n", CGIT_VERSION);
 #ifndef HAVE_LINUX_SENDFILE
 			printf("[-] ");
 #else
@@ -992,9 +988,9 @@ static void cgit_parse_args(int argc, const char **argv)
 		} else if (skip_prefix(argv[i], "--head=", &arg)) {
 			ctx.qry.head = xstrdup(arg);
 			ctx.qry.has_symref = 1;
-		} else if (skip_prefix(argv[i], "--sha1=", &arg)) {
-			ctx.qry.sha1 = xstrdup(arg);
-			ctx.qry.has_sha1 = 1;
+		} else if (skip_prefix(argv[i], "--oid=", &arg)) {
+			ctx.qry.oid = xstrdup(arg);
+			ctx.qry.has_oid = 1;
 		} else if (skip_prefix(argv[i], "--ofs=", &arg)) {
 			ctx.qry.ofs = atoi(arg);
 		} else if (skip_prefix(argv[i], "--scan-tree=", &arg) ||
@@ -1037,7 +1033,7 @@ static int calc_ttl(void)
 	if (!strcmp(ctx.qry.page, "snapshot"))
 		return ctx.cfg.cache_snapshot_ttl;
 
-	if (ctx.qry.has_sha1)
+	if (ctx.qry.has_oid)
 		return ctx.cfg.cache_static_ttl;
 
 	if (ctx.qry.has_symref)
@@ -1051,7 +1047,6 @@ int cmd_main(int argc, const char **argv)
 	const char *path;
 	int err, ttl;
 
-	cgit_init_filters();
 	atexit(cgit_cleanup_filters);
 
 	prepare_context();

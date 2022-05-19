@@ -14,7 +14,7 @@
 #include <tag.h>
 #include <diff.h>
 #include <diffcore.h>
-#include <argv-array.h>
+#include <strvec.h>
 #include <refs.h>
 #include <revision.h>
 #include <log-tree.h>
@@ -164,7 +164,7 @@ struct reflist {
 
 struct cgit_query {
 	int has_symref;
-	int has_sha1;
+	int has_oid;
 	int has_difftype;
 	char *raw;
 	char *repo;
@@ -172,8 +172,8 @@ struct cgit_query {
 	char *search;
 	char *grep;
 	char *head;
-	char *sha1;
-	char *sha2;
+	char *oid;
+	char *oid2;
 	char *path;
 	char *name;
 	char *url;
@@ -385,7 +385,6 @@ extern void cgit_fprintf_filter(struct cgit_filter *filter, FILE *f, const char 
 extern void cgit_exec_filter_init(struct cgit_exec_filter *filter, char *cmd, char **argv);
 extern struct cgit_filter *cgit_new_filter(const char *cmd, filter_type filtertype);
 extern void cgit_cleanup_filters(void);
-extern void cgit_init_filters(void);
 
 extern void cgit_prepare_repo_env(struct cgit_repo * repo);
 

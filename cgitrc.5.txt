@@ -219,7 +219,7 @@ enable-tree-linenumbers::
 favicon::
 	Url used as link to a shortcut icon for cgit. It is suggested to use
 	the value "/favicon.ico" since certain browsers will ignore other
-	values. Default value: "/favicon.ico".
+	values. Default value: none.
 
 footer::
 	The content of the file specified with this option will be included
@@ -407,9 +407,12 @@ side-by-side-diffs::
 snapshots::
 	Text which specifies the default set of snapshot formats that cgit
 	generates links for. The value is a space-separated list of zero or
-	more of the values "tar", "tar.gz", "tar.bz2", "tar.xz" and "zip".
-	The special value "all" enables all snapshot formats.
-	Default value: none.
+	more of the values "tar", "tar.gz", "tar.bz2", "tar.lz", "tar.xz",
+	"tar.zst" and "zip". The special value "all" enables all snapshot
+	formats. Default value: none.
+	All compressors use default settings. Some settings can be influenced
+	with environment variables, for example set ZSTD_CLEVEL=10 in web
+	server environment for higher (but slower) zstd compression.
 
 source-filter::
 	Specifies a command which will be invoked to format plaintext blobs
@@ -576,11 +579,11 @@ repo.readme::
 	verbatim as the "About" page for this repo. You may also specify a
 	git refspec by head or by hash by prepending the refspec followed by
 	a colon. For example, "master:docs/readme.mkd". If the value begins
-	with a colon, i.e. ":docs/readme.rst", the default branch of the
-	repository will be used. Sharing any file will expose that entire
-	directory tree to the "/about/PATH" endpoints, so be sure that there
-	are no non-public files located in the same directory as the readme
-	file. Default value: <readme>.
+	with a colon, i.e. ":docs/readme.rst", the head giving in query or
+	the default branch of the repository will be used. Sharing any file
+	will expose that entire directory tree to the "/about/PATH" endpoints,
+	so be sure that there are no non-public files located in the same
+	directory as the readme file. Default value: <readme>.
 
 repo.section::
 	Override the current section name for this repository. Default value:
@@ -629,37 +632,6 @@ specification with the relevant string; available values are:
 'exec:'::
 	The default "one process per filter" mode.
 
-'lua:'::
-	Executes the script using a built-in Lua interpreter. The script is
-	loaded once per execution of cgit, and may be called multiple times
-	during cgit's lifetime, making it a good choice for repeated filters
-	such as the 'email filter'. It responds to three functions:
-
-	'filter_open(argument1, argument2, argument3, ...)'::
-		This is called upon activation of the filter for a particular
-		set of data.
-	'filter_write(buffer)'::
-		This is called whenever cgit writes data to the webpage.
-	'filter_close()'::
-		This is called when the current filtering operation is
-		completed. It must return an integer value. Usually 0
-		indicates success.
-
-	Additionally, cgit exposes to the Lua the following built-in functions:
-
-	'html(str)'::
-		Writes 'str' to the webpage.
-	'html_txt(str)'::
-		HTML escapes and writes 'str' to the webpage.
-	'html_attr(str)'::
-		HTML escapes for an attribute and writes "str' to the webpage.
-	'html_url_path(str)'::
-		URL escapes for a path and writes 'str' to the webpage.
-	'html_url_arg(str)'::
-		URL escapes for an argument and writes 'str' to the webpage.
-	'html_include(file)'::
-		Includes 'file' in webpage.
-
 
 Parameters are provided to filters as follows.
 
@@ -692,9 +664,6 @@ auth filter::
 	standard input, and should write a complete CGI response, preferably
 	with a 302 redirect, and write to output one or more "Set-Cookie"
 	HTTP headers, each followed by a newline.
-
-	Please see `filters/simple-authentication.lua` for a clear example
-	script that may be modified.
 
 commit filter::
 	This filter is given no arguments. The commit message text that is to

@@ -97,8 +97,8 @@ static void print_fileinfo(struct fileinfo *info)
 		html("]</span>");
 	}
 	htmlf("</td><td class='%s'>", class);
-	cgit_diff_link(info->new_path, NULL, NULL, ctx.qry.head, ctx.qry.sha1,
-		       ctx.qry.sha2, info->new_path);
+	cgit_diff_link(info->new_path, NULL, NULL, ctx.qry.head, ctx.qry.oid,
+		       ctx.qry.oid2, info->new_path);
 	if (info->status == DIFF_STATUS_COPIED || info->status == DIFF_STATUS_RENAMED) {
 		htmlf(" (%s from ",
 		      info->status == DIFF_STATUS_COPIED ? "copied" : "renamed");
@@ -194,8 +194,8 @@ static void cgit_print_diffstat(const struct object_id *old_oid,
 	int i;
 
 	html("<div class='diffstat-header'>");
-	cgit_diff_link("Diffstat", NULL, NULL, ctx.qry.head, ctx.qry.sha1,
-		       ctx.qry.sha2, NULL);
+	cgit_diff_link("Diffstat", NULL, NULL, ctx.qry.head, ctx.qry.oid,
+		       ctx.qry.oid2, NULL);
 	if (prefix) {
 		html(" (limited to '");
 		html_txt(prefix);
@@ -231,11 +231,11 @@ static void print_line(char *line, int len)
 	else if (line[0] == '@')
 		class = "hunk";
 
-	htmlf("<div class='%s'>", class);
+	htmlf("<span class='%s'>", class);
 	line[len-1] = '\0';
 	html_txt(line);
-	html("</div>");
 	line[len-1] = c;
+	html("</span>\n");
 }
 
 static void header(const struct object_id *oid1, char *path1, int mode1,
@@ -245,22 +245,23 @@ static void header(const struct object_id *oid1, char *path1, int mode1,
 	int subproject;
 
 	subproject = (S_ISGITLINK(mode1) || S_ISGITLINK(mode2));
-	html("<div class='head'>");
+	html("<span class='head'>");
 	html("diff --git a/");
 	html_txt(path1);
 	html(" b/");
 	html_txt(path2);
+	html("\n");
 
 	if (mode1 == 0)
-		htmlf("<br/>new file mode %.6o", mode2);
+		htmlf("new file mode %.6o\n", mode2);
 
 	if (mode2 == 0)
-		htmlf("<br/>deleted file mode %.6o", mode1);
+		htmlf("deleted file mode %.6o\n", mode1);
 
 	if (!subproject) {
 		abbrev1 = xstrdup(find_unique_abbrev(oid1, DEFAULT_ABBREV));
 		abbrev2 = xstrdup(find_unique_abbrev(oid2, DEFAULT_ABBREV));
-		htmlf("<br/>index %s..%s", abbrev1, abbrev2);
+		htmlf("index %s..%s", abbrev1, abbrev2);
 		free(abbrev1);
 		free(abbrev2);
 		if (mode1 != 0 && mode2 != 0) {
@@ -268,28 +269,31 @@ static void header(const struct object_id *oid1, char *path1, int mode1,
 			if (mode2 != mode1)
 				htmlf("..%.6o", mode2);
 		}
+		html("\n");
 		if (is_null_oid(oid1)) {
 			path1 = "dev/null";
-			html("<br/>--- /");
+			html("--- /");
 		} else
-			html("<br/>--- a/");
+			html("--- a/");
 		if (mode1 != 0)
 			cgit_tree_link(path1, NULL, NULL, ctx.qry.head,
 				       oid_to_hex(old_rev_oid), path1);
 		else
 			html_txt(path1);
+		html("\n");
 		if (is_null_oid(oid2)) {
 			path2 = "dev/null";
-			html("<br/>+++ /");
+			html("+++ /");
 		} else
-			html("<br/>+++ b/");
+			html("+++ b/");
 		if (mode2 != 0)
 			cgit_tree_link(path2, NULL, NULL, ctx.qry.head,
 				       oid_to_hex(new_rev_oid), path2);
 		else
 			html_txt(path2);
+		html("\n");
 	}
-	html("</div>");
+	html("</span>");
 }
 
 static void filepair_cb(struct diff_filepair *pair)
@@ -413,7 +417,7 @@ void cgit_print_diff(const char *new_rev, const char *old_rev,
 			"Bad commit: %s", oid_to_hex(new_rev_oid));
 		return;
 	}
-	new_tree_oid = &commit->maybe_tree->object.oid;
+	new_tree_oid = get_commit_tree_oid(commit);
 
 	if (old_rev) {
 		if (get_oid(old_rev, old_rev_oid)) {
@@ -434,7 +438,7 @@ void cgit_print_diff(const char *new_rev, const char *old_rev,
 				"Bad commit: %s", oid_to_hex(old_rev_oid));
 			return;
 		}
-		old_tree_oid = &commit2->maybe_tree->object.oid;
+		old_tree_oid = get_commit_tree_oid(commit2);
 	} else {
 		old_tree_oid = NULL;
 	}
@@ -488,12 +492,12 @@ void cgit_print_diff(const char *new_rev, const char *old_rev,
 		html("<table summary='ssdiff' class='ssdiff'>");
 	} else {
 		html("<table summary='diff' class='diff'>");
-		html("<tr><td>");
+		html("<tr><td><pre>");
 	}
 	cgit_diff_tree(old_rev_oid, new_rev_oid, filepair_cb, prefix,
 		       ctx.qry.ignorews);
 	if (!use_ssdiff)
-		html("</td></tr>");
+		html("</pre></td></tr>");
 	html("</table>");
 
 	if (show_ctrls)

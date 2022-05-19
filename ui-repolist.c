@@ -20,7 +20,7 @@ static time_t read_agefile(const char *path)
 
 	if (readfile(path, &buf, &size)) {
 		free(buf);
-		return -1;
+		return 0;
 	}
 
 	if (parse_date(buf, &date_buf) == 0)
@@ -321,7 +321,7 @@ void cgit_print_repolist(void)
 		}
 		htmlf("<tr><td class='%s'>",
 		      !sorted && section ? "sublevel-repo" : "toplevel-repo");
-		cgit_summary_link(ctx.repo->name, ctx.repo->name, NULL, NULL);
+		cgit_summary_link(ctx.repo->name, NULL, NULL, NULL);
 		html("</td><td>");
 		repourl = cgit_repourl(ctx.repo->url);
 		html_link_open(repourl, NULL, NULL);
@@ -353,8 +353,10 @@ void cgit_print_repolist(void)
 		if (ctx.cfg.enable_index_links) {
 			html("<td>");
 			cgit_summary_link("summary", NULL, "button", NULL);
+			html(" ");
 			cgit_log_link("log", NULL, "button", NULL, NULL, NULL,
 				      0, NULL, NULL, ctx.qry.showmsg, 0);
+			html(" ");
 			cgit_tree_link("tree", NULL, "button", NULL, NULL, NULL);
 			html("</td>");
 		}

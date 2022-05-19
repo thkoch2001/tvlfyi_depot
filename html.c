@@ -59,7 +59,7 @@ char *fmt(const char *format, ...)
 	va_start(args, format);
 	len = vsnprintf(buf[bufidx], sizeof(buf[bufidx]), format, args);
 	va_end(args);
-	if (len > sizeof(buf[bufidx])) {
+	if (len >= sizeof(buf[bufidx])) {
 		fprintf(stderr, "[html.c] string truncated: %s\n", format);
 		exit(1);
 	}
@@ -80,7 +80,7 @@ char *fmtalloc(const char *format, ...)
 
 void html_raw(const char *data, size_t size)
 {
-	if (write(STDOUT_FILENO, data, size) != size)
+	if (fwrite(data, 1, size, stdout) != size)
 		die_errno("write error on html output");
 }
 

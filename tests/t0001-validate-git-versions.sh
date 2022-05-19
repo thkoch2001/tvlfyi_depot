@@ -1,5 +1,9 @@
 #!/bin/sh
 
+if [ "${CGIT_TEST_NO_GIT_VERSION}" = "YesPlease" ]; then
+	exit 0
+fi
+
 test_description='Check Git version is correct'
 CGIT_TEST_NO_CREATE_REPOS=YesPlease
 . ./setup.sh
@@ -29,10 +33,10 @@ test_expect_success 'test submodule version matches Makefile' '
 	else
 		(
 			cd ../.. &&
-			sm_sha1=$(git ls-files --stage -- git |
+			sm_oid=$(git ls-files --stage -- git |
 				sed -e "s/^[0-9]* \\([0-9a-f]*\\) [0-9]	.*$/\\1/") &&
 			cd git &&
-			git describe --match "v[0-9]*" $sm_sha1
+			git describe --match "v[0-9]*" $sm_oid
 		) | sed -e "s/^v//" -e "s/-/./" >sm_version &&
 		test_cmp sm_version makefile_version
 	fi
