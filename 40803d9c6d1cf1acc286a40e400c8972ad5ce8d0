@@ -26,6 +26,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "96512713_b254c080",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2022-05-19T09:03:14Z",
+      "side": 1,
+      "message": "It depends; since cgit uses git internals, any update can, but doesn\u0027t have to break the cgit build. cgit usually prepares a branch for a new git revision we have merged in the past if the build started to fail.\n\nThis branch was poorly tested for git 2.36, cgit-pink at least merges the support into master relatively quickly (as opposed to not at all) and tests it.\n\nI\u0027d say nothing really changes, but there\u0027s a higher chance our new upstream has already taken a look at the new git version when nixpkgs updates.",
+      "parentUuid": "b2bc513f_e6c32e8a",
+      "range": {
+        "startLine": 10,
+        "startChar": 39,
+        "endLine": 11,
+        "endChar": 7
+      },
+      "revId": "40803d9c6d1cf1acc286a40e400c8972ad5ce8d0",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "55ef9b16_3ff15404",
         "filename": "/PATCHSET_LEVEL",
         "patchSetId": 2
@@ -37,6 +61,24 @@
       "writtenOn": "2022-05-19T08:50:03Z",
       "side": 1,
       "message": "Are there any significant behavioural changes we should be aware of? Maybe we should test-deploy whitby and see what happens?",
+      "revId": "40803d9c6d1cf1acc286a40e400c8972ad5ce8d0",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a22b821b_955e0f01",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2022-05-19T09:03:14Z",
+      "side": 1,
+      "message": "The biggest change seems to be removal of lua support, the rest seems harmless. A test deploy seems prudent though, also to check nothing went wrong when merging (i.e. none of our patches was rolled back by accident).",
+      "parentUuid": "55ef9b16_3ff15404",
       "revId": "40803d9c6d1cf1acc286a40e400c8972ad5ce8d0",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
