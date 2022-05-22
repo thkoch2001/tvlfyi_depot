@@ -61,6 +61,7 @@ pkgs.makeOverridable
       nginx-mode
       nix-mode
       notmuch
+      org-roam
       paredit
       password-store
       pinentry
