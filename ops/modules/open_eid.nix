@@ -2,7 +2,7 @@
 { pkgs, ... }:
 
 let
-  # Wrapper script to tell to Chrome/Chromium to use p11-kit-proxy to load
+  # Wrapper script to tello Chrome/Chromium to use p11-kit-proxy to load
   # security devices.
   # Each user needs to run this themselves, it does not work on a system level
   # due to a bug in Chromium:
@@ -29,6 +29,7 @@ in
   '';
 
   environment.systemPackages = with pkgs; [
+    libdigidocpp # provides digidoc-tool(1)
     qdigidoc
     setup-browser-eid
   ];
