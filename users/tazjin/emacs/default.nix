@@ -32,6 +32,7 @@ pkgs.makeOverridable
       counsel
       counsel-notmuch
       d-mode
+      deft
       direnv
       dockerfile-mode
       eglot
@@ -91,6 +92,7 @@ pkgs.makeOverridable
       xelb
       yaml-mode
       yasnippet
+      zetteldeft
       zoxide
 
       # Wonky stuff
