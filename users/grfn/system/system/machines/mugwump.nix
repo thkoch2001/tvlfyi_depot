@@ -153,7 +153,7 @@ with lib;
     zone = "gws.fyi";
     protocol = "cloudflare";
     username = "root@gws.fyi";
-    passwordFile = "/run/agenix/ddclient-password";
+    passwordFile = config.age.secretsDir + "/ddclient-password";
     quiet = true;
   };
 
@@ -161,7 +161,7 @@ with lib;
 
   security.acme.certs."metrics.gws.fyi" = {
     dnsProvider = "cloudflare";
-    credentialsFile = "/run/agenix/cloudflare";
+    credentialsFile = config.age.secretsDir + "/cloudflare";
     webroot = mkForce null;
   };
 
@@ -272,8 +272,8 @@ with lib;
       value = {
         inherit name;
         enable = true;
-        tokenPath = "/run/agenix/buildkite-token";
-        privateSshKeyPath = "/run/agenix/buildkite-ssh-key";
+        tokenPath = config.age.secretsDir + "/buildkite-token";
+        privateSshKeyPath = config.age.secretsDir + "/buildkite-ssh-key";
         runtimePackages = with pkgs; [
           docker
           nix
