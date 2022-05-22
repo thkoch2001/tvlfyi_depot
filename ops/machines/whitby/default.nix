@@ -334,7 +334,7 @@ in
     flags = {
       gerrit_host = "cl.tvl.fyi:29418";
       gerrit_ssh_auth_username = "clbot";
-      gerrit_ssh_auth_key = "/run/agenix/clbot-ssh";
+      gerrit_ssh_auth_key = config.age.secretsDir + "/clbot-ssh";
 
       irc_server = "localhost:${toString config.services.znc.config.Listener.l.Port}";
       irc_user = "tvlbot";
@@ -453,7 +453,7 @@ in
   services.nix-serve = {
     enable = true;
     port = 6443;
-    secretKeyFile = "/run/agenix/nix-cache-priv";
+    secretKeyFile = config.age.secretsDir + "/nix-cache-priv";
     bindAddress = "localhost";
   };
 
@@ -599,7 +599,7 @@ in
   };
 
   # Contains GF_AUTH_GENERIC_OAUTH_CLIENT_SECRET.
-  systemd.services.grafana.serviceConfig.EnvironmentFile = "/run/agenix/grafana";
+  systemd.services.grafana.serviceConfig.EnvironmentFile = config.age.secretsDir + "/grafana";
 
   services.keycloak = {
     enable = true;
@@ -613,7 +613,7 @@ in
 
     database = {
       type = "postgresql";
-      passwordFile = "/run/agenix/keycloak-db";
+      passwordFile = config.age.secretsDir + "/keycloak-db";
       createLocally = false;
     };
   };

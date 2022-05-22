@@ -37,7 +37,7 @@ in
         by systemd's EnvironmentFile
       '';
       type = types.str;
-      default = "/run/agenix/panettone";
+      default = config.age.secretsDir + "/panettone";
     };
 
     irccatHost = mkOption {
