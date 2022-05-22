@@ -24,7 +24,7 @@ in
 
     secretsFile = with lib; mkOption {
       description = "Path to a systemd EnvironmentFile containing secrets";
-      default = "/run/agenix/gerrit-queue";
+      default = config.age.secretsDir + "/gerrit-queue";
       type = types.str;
     };
   };

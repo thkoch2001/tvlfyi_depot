@@ -40,7 +40,7 @@ in
 
     secretsFile = mkOption {
       type = types.str;
-      default = "/run/agenix/smtprelay";
+      default = config.age.secretsDir + "/smtprelay";
     };
   };
 
