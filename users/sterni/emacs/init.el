@@ -256,7 +256,8 @@
   :config
   (evil-define-key '(normal insert) sly-mrepl-mode-map (kbd "C-r") 'isearch-backward))
 
-(use-package ada-mode)
+; TODO(sterni): https://github.com/NixOS/nixpkgs/pull/173893/files
+; (use-package ada-mode)
 
 (use-package rainbow-mode)
 (use-package hl-todo
