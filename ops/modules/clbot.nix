@@ -60,7 +60,7 @@ in
     secretsFile = mkOption {
       type = types.str;
       description = "EnvironmentFile from which to load secrets";
-      default = "/run/agenix/clbot";
+      default = config.age.secretsDir + "/clbot";
     };
   };
 

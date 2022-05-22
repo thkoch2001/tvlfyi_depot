@@ -40,7 +40,7 @@ in
     secretsFile = lib.mkOption {
       type = lib.types.str;
       description = "Path to the secrets file to be merged";
-      default = "/run/agenix/irccat";
+      default = config.age.secretsDir + "/irccat";
     };
   };
 

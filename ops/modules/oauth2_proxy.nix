@@ -37,7 +37,7 @@ in
     secretsFile = lib.mkOption {
       type = lib.types.str;
       description = "EnvironmentFile from which to load secrets";
-      default = "/run/agenix/oauth2_proxy";
+      default = config.age.secretsDir + "/oauth2_proxy";
     };
   };
 

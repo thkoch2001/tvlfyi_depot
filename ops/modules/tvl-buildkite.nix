@@ -40,7 +40,7 @@ in
         value = {
           inherit name;
           enable = true;
-          tokenPath = "/run/agenix/buildkite-agent-token";
+          tokenPath = config.age.secretsDir + "/buildkite-agent-token";
           hooks.post-command = "${buildkiteHooks}/bin/post-command";
 
           runtimePackages = with pkgs; [
