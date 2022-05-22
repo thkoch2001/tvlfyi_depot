@@ -5,7 +5,7 @@ let
 
   emacs = withPackages (epkgs: [
     epkgs.bqn-mode
-    epkgs.elpaPackages.ada-mode
+    #epkgs.elpaPackages.ada-mode
     epkgs.elpaPackages.rainbow-mode
     epkgs.elpaPackages.undo-tree
     epkgs.melpaPackages.adoc-mode
