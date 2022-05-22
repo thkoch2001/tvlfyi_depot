@@ -64,7 +64,7 @@ in
         serviceConfig = {
           DynamicUser = true;
           Restart = "always";
-          EnvironmentFile = "/run/agenix/bbbg";
+          EnvironmentFile = config.age.secretsDir + "/bbbg";
         };
 
         environment = {
@@ -88,7 +88,7 @@ in
 
         serviceConfig = {
           Type = "oneshot";
-          EnvironmentFile = "/run/agenix/bbbg";
+          EnvironmentFile = config.age.secretsDir + "/bbbg";
         };
 
         environment = {
