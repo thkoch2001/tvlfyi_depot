@@ -196,16 +196,7 @@
       (display-fill-column-indicator-mode 'toggle)))
   ;; org-mode
   (evil-define-key 'normal 'global (kbd "<leader>oa") 'org-agenda)
-  (evil-define-key 'normal 'global (kbd "<leader>oc") 'org-capture)
-  ;; elfeed bindings for evil (can't use-package elfeed apparently)
-  (evil-define-key 'normal 'global (kbd "<leader>ff") 'elfeed)
-  (evil-define-key '(normal visual) elfeed-search-mode-map
-    (kbd "o") 'elfeed-search-browse-url
-    (kbd "r") 'elfeed-search-untag-all-unread
-    (kbd "u") 'elfeed-search-tag-all-unread
-    (kbd "<leader>ff") 'elfeed-search-fetch
-    (kbd "<leader>fc") 'elfeed-db-compact
-    (kbd "<leader>fr") 'elfeed-search-update--force))
+  (evil-define-key 'normal 'global (kbd "<leader>oc") 'org-capture))
 
 (use-package evil-collection
   :after evil
@@ -290,7 +281,7 @@
 (unless (server-running-p)
   (server-start))
 
-(require 'subscriptions)
+(require 'subscriptions) ; elfeed config
 (require 'nix-inject)
 
 (provide 'init)
