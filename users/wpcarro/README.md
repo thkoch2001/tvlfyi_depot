@@ -43,4 +43,3 @@ Below I have outlined a few projects that you might find interesting.
   - old computer: `configs/.gnupg/export.sh $outdir`
   - new computer: `configs/.gnupg/import.sh <path-to-zip>`
   from the new machine.
-- Consult `Makefile`.
