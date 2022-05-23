@@ -1,13 +1,18 @@
 { depot, pkgs, ... }:
 
 let
-  inherit (depot.users.wpcarro.nixos) diogenes;
+  inherit (depot.users.wpcarro.nixos)
+    ava
+    diogenes
+    marcus
+    tarasco;
+
   systemFor = sys: (depot.ops.nixos.nixosFor sys).system;
 in
 {
-  avaSystem = systemFor depot.users.wpcarro.nixos.ava;
-
-  marcusSystem = systemFor depot.users.wpcarro.nixos.marcus;
+  avaSystem = systemFor ava;
+  marcusSystem = systemFor marcus;
+  tarascoSystem = systemFor ava;
 
   # Apply terraform updates and rebuild NixOS for diogenes.
   deploy-diogenes = pkgs.writeShellScriptBin "deploy-diogenes" ''
@@ -49,5 +54,6 @@ in
   meta.ci.targets = [
     "avaSystem"
     "marcusSystem"
+    "tarascoSystem"
   ];
 }

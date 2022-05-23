@@ -5,7 +5,7 @@ let
   inherit (depot.users) wpcarro;
 
   wpcarrosEmacs = wpcarro.emacs.nixos {
-    load = [ ./ava.el ];
+    load = [ ./tarasco.el ];
   };
 
   quasselClient = pkgs.quassel.override {
@@ -30,22 +30,16 @@ in
   time.timeZone = "America/Los_Angeles";
 
   networking = {
-    # The global useDHCP flag is deprecated, therefore explicitly set to false
-    # here.  Per-interface useDHCP will be mandatory in the future, so this
-    # generated config replicates the default behaviour.
     useDHCP = false;
-    hostName = "ava";
+    hostName = "tarasco";
     networkmanager.enable = true;
     interfaces.enp1s0.useDHCP = true;
     interfaces.enp3s0.useDHCP = true;
-    interfaces.wlp2s0.useDHCP = true;
+    # Disabling wifi because the Realtek network card drivers crash.
+    # interfaces.wlp2s0.useDHCP = true;
   };
 
   services = wpcarro.common.services // {
-    # Check the amount of available memory and free swap a few times per second
-    # and kill the largest process if both are below 10%.
-    earlyoom.enable = true;
-
     tailscale.enable = true;
 
     openssh.enable = true;
@@ -73,7 +67,7 @@ in
   users.mutableUsers = true;
   users.users.root.openssh.authorizedKeys.keys = [
     wpcarro.keys.nathan
-    wpcarro.keys.tarasco
+    wpcarro.keys.ava
   ];
   users.users.wpcarro = {
     isNormalUser = true;
@@ -85,7 +79,7 @@ in
     shell = pkgs.fish;
     openssh.authorizedKeys.keys = [
       wpcarro.keys.nathan
-      wpcarro.keys.tarasco
+      wpcarro.keys.ava
     ];
   };
   users.extraGroups.vboxusers.members = [ "wpcarro" ];
