@@ -36,10 +36,13 @@ Below I have outlined a few projects that you might find interesting.
 
 ### NixOS Machine
 
-- Ensure Nix is installed.
-- Ensure direnv is installed.
-- Ensure `~/.password-store` exists.
-- Transfer GPG stuffs:
-  - old computer: `configs/.gnupg/export.sh $outdir`
-  - new computer: `configs/.gnupg/import.sh <path-to-zip>`
-  from the new machine.
+```shell
+$ nix-shell -p nixos.{git,direnv}
+$ git clone https://code.tvl.fyi/depot.git /depot
+$ cd /depot
+$ eval "$(direnv hook bash)"
+$ HOSTNAME=base rebuild-system
+$ sudo tailscale up
+$ git clone 'user@host:~/.password-store' ~/.password-store
+$ scp -r 'user@host:~/.gnupg' ~/.gnupg
+```
