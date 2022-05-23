@@ -16,6 +16,24 @@
       "message": "Websites like http://cedric.dufour.name/blah/IT/SmartCardsHowto.html say one should use onepin-…, as otherwise things like the SSH agent try to unlock both tokens/slots:\n\n\u003e One MUST use OpenSC’s onepin-opensc-pkcs11.so library to prevent the SSH agent from attempting to unlock all tokens/slots with the same PIN and eventually locking those tokens/slots that do not match. This is also the reason why one MUST create the login token/slot as the first one on the smart card.\n\nWhat\u0027s the state of this? Is this still an issue?",
       "revId": "a86d843718f9b8863243a312564b12b22cfaf89c",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b80443a3_cd0aa39d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000040
+      },
+      "writtenOn": "2022-05-23T12:16:45Z",
+      "side": 1,
+      "message": "This guide points to the `onepin-opensc-pkcs11.so` module directly, not the `p11-pkit-proxy.so` one used here, so that should not be a problem (I don\u0027t see why one would use the proxy for SSH).\n\nEither way, there\u0027s a link[0] above the text you quoted which links to Fedora\u0027s OpenSSH patch[1] which documents that it was merged into OpenSSH 8.6p1[2] (released on 2021-04-19).\n\n0: https://fedoramagazine.org/fedora-28-better-smart-card-support-openssh/\n1: https://bugzilla.mindrot.org/show_bug.cgi?id\u003d2474\n2: https://www.openssh.com/txt/release-8.6\n\nSo this does not seem to be an issue any longer.",
+      "parentUuid": "a4082c58_f2579124",
+      "revId": "a86d843718f9b8863243a312564b12b22cfaf89c",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
