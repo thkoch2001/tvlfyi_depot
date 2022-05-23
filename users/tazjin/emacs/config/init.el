@@ -242,6 +242,20 @@
   :custom
   (passively-store-state "/persist/tazjin/known-russian-words.el"))
 
+;; Note taking configuration for deft.
+(use-package deft
+  :custom
+  (deft-directory "/persist/tazjin/deft/")
+  (deft-extensions '("md" "org" "txt")))
+
+(use-package zetteldeft
+  :custom
+  ;; Configure for Markdown
+  (zetteldeft-link-indicator "[[")
+  (zetteldeft-link-suffix "]]")
+  (zetteldeft-title-prefix "# ")
+  (zetteldeft-list-prefix "* "))
+
 ;; Initialise midnight.el, which by default automatically cleans up
 ;; unused buffers at midnight.
 (require 'midnight)
