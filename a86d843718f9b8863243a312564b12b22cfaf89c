@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a4082c58_f2579124",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2022-05-23T09:42:50Z",
+      "side": 1,
+      "message": "Websites like http://cedric.dufour.name/blah/IT/SmartCardsHowto.html say one should use onepin-…, as otherwise things like the SSH agent try to unlock both tokens/slots:\n\n\u003e One MUST use OpenSC’s onepin-opensc-pkcs11.so library to prevent the SSH agent from attempting to unlock all tokens/slots with the same PIN and eventually locking those tokens/slots that do not match. This is also the reason why one MUST create the login token/slot as the first one on the smart card.\n\nWhat\u0027s the state of this? Is this still an issue?",
+      "revId": "a86d843718f9b8863243a312564b12b22cfaf89c",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
