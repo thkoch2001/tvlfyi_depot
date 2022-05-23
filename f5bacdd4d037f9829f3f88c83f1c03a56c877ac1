@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "28e5a206_1568d823",
+        "filename": "ops/modules/open_eid.nix",
+        "patchSetId": 1
+      },
+      "lineNbr": 5,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2022-05-23T09:43:32Z",
+      "side": 1,
+      "message": "unrelated typo.",
+      "revId": "f5bacdd4d037f9829f3f88c83f1c03a56c877ac1",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
