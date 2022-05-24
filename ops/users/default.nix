@@ -67,6 +67,11 @@
     password = "{SSHA}OhWQkPJgH1rRJqYIaMUbbKC4iLEzvCev";
   }
   {
+    username = "j4m3s";
+    email = "james.landrein@gmail.com";
+    password = "{ARGON2}$argon2id$v=19$m=65536,t=2,p=1$dMYmo+Uym9irtzAGXB2eNw$69OFcuqCqoLPBXKmmtYaQCquXximpyxsb2Kf8U7GdxM";
+  }
+  {
     username = "kn";
     email = "klemens@posteo.de";
     password = "{ARGON2}$argon2id$v=19$m=65536,t=2,p=1$CoRZInysud4sduDoMjVOCw$/bdvAvyPO2DPxOcHlBiG2+rbTGF9XAcHUhPurxiIpZM";
