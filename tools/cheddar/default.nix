@@ -3,6 +3,7 @@
 depot.third_party.naersk.buildPackage {
   src = ./.;
   doDoc = false;
+  doCheck = true;
 
   override = x: {
     # Use our custom bat syntax set, which is everything from upstream,
