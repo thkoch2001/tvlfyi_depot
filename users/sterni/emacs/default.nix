@@ -8,6 +8,7 @@ let
     #epkgs.elpaPackages.ada-mode
     epkgs.elpaPackages.rainbow-mode
     epkgs.elpaPackages.undo-tree
+    epkgs.elpaPackages.which-key
     epkgs.melpaPackages.adoc-mode
     epkgs.melpaPackages.cmake-mode
     epkgs.melpaPackages.direnv
