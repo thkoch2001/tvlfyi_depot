@@ -121,11 +121,19 @@
 
 ;; projects (see also evil config)
 
+(defun project-magit ()
+  "Run magit in the current project dir"
+  (interactive)
+  (magit (project-root (project-current t))))
+
+(define-key project-prefix-map (kbd "G") 'project-magit)
+
 (setq project-switch-commands
       '((project-find-file "Find file")
         (project-find-regexp "Find regexp")
         (project-dired "Dired")
-        (project-shell "Shell")))
+        (project-shell "Shell")
+        (project-magit "Magit")))
 
 ;;; Configure packages
 (require 'use-package)
