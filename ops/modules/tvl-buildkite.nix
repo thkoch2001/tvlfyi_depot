@@ -41,6 +41,7 @@ in
           inherit name;
           enable = true;
           tokenPath = config.age.secretsDir + "/buildkite-agent-token";
+          privateSshKeyPath = config.age.secretsDir + "/buildkite-private-key";
           hooks.post-command = "${buildkiteHooks}/bin/post-command";
 
           runtimePackages = with pkgs; [
