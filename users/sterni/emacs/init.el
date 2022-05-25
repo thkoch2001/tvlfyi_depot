@@ -216,6 +216,8 @@
          (ielm-mode . paredit-mode)
          (lisp-interaction-mode . paredit-mode)))
 
+(use-package which-key :config (which-key-mode t))
+
 (use-package nix-mode :mode "\\.nix\\'")
 (use-package nix-drv-mode :mode "\\.drv\\'")
 
