@@ -248,6 +248,12 @@ in
         group = "buildkite-agents";
       };
 
+      buildkite-private-key = {
+        file = secretFile "buildkite-ssh-private-key";
+        mode = "0440";
+        group = "buildkite-agents";
+      };
+
       gerrit-besadii-config = {
         file = secretFile "besadii";
         owner = "git";
