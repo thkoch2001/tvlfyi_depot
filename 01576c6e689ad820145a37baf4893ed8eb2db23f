@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "79a8a171_87164490",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2022-05-25T23:27:58Z",
+      "side": 1,
+      "message": "quoting the variable substitutions throughout the script might be nice, just in case",
+      "revId": "01576c6e689ad820145a37baf4893ed8eb2db23f",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e07f7964_e2696767",
+        "filename": "tools/releases/default.nix",
+        "patchSetId": 5
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2022-05-25T23:27:58Z",
+      "side": 1,
+      "message": "do we need to do this? couldn\u0027t we just push unconditionally and let it be a no-op?",
+      "revId": "01576c6e689ad820145a37baf4893ed8eb2db23f",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
