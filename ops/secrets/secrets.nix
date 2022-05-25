@@ -24,6 +24,7 @@ in
 {
   "besadii.age" = whitbyDefault;
   "buildkite-agent-token.age" = whitbyDefault;
+  "buildkite-ssh-private-key.age" = whitbyDefault;
   "buildkite-graphql-token.age" = whitbyDefault;
   "clbot-ssh.age" = whitbyDefault;
   "clbot.age" = whitbyDefault;
