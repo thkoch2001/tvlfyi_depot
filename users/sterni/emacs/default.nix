@@ -52,8 +52,7 @@ let
           ;; languagetool
           (setq languagetool-java-bin "${pkgs.jre}/bin/java"
                 languagetool-console-command "${pkgs.languagetool}/share/languagetool-commandline.jar"
-                languagetool-server-command "${pkgs.languagetool}/share/languagetool-server.jar"
-                languagetool-java-arguments '("-Dfile.encoding=UTF-8"))
+                languagetool-server-command "${pkgs.languagetool}/share/languagetool-server.jar")
 
           ;; use bash instead of fish from SHELL for some things, as it plays
           ;; nicer with TERM=dumb, as I don't need/want vterm anyways.

@@ -289,7 +289,7 @@
   (evil-define-key 'normal 'global (kbd "<leader>ll") 'languagetool-check)
   (evil-define-key 'normal 'global (kbd "<leader>lc") 'languagetool-correct-at-point)
   (evil-define-key 'normal 'global (kbd "<leader>ls") 'languagetool-set-language)
-  (evil-define-key 'normal 'global (kbd "<leader>lr") 'languagetool-clear-buffer))
+  (evil-define-key 'normal 'global (kbd "<leader>lr") 'languagetool-clear-suggestions))
 
 (unless (server-running-p)
   (server-start))
