@@ -94,6 +94,30 @@
       },
       "revId": "2492f1ae5458fe949570b7613c61d3abeb1ec3f1",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "15a40808_7fd3be3b",
+        "filename": "tools/releases/default.nix",
+        "patchSetId": 1
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-05-25T19:16:08Z",
+      "side": 1,
+      "message": "[8:57:42 pm] \u003csterni\u003e tazjin: sure feel free to resolve",
+      "parentUuid": "51f97fe2_0caee123",
+      "range": {
+        "startLine": 24,
+        "startChar": 20,
+        "endLine": 24,
+        "endChar": 33
+      },
+      "revId": "2492f1ae5458fe949570b7613c61d3abeb1ec3f1",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
