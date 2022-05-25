@@ -20,6 +20,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "266d89fa_564af358",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-05-25T23:53:04Z",
+      "side": 1,
+      "message": "I don\u0027t see any unquoted ones. Do you mean the ones interpolated by Nix?",
+      "parentUuid": "79a8a171_87164490",
+      "revId": "01576c6e689ad820145a37baf4893ed8eb2db23f",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "e07f7964_e2696767",
         "filename": "tools/releases/default.nix",
         "patchSetId": 5
@@ -31,6 +49,24 @@
       "writtenOn": "2022-05-25T23:27:58Z",
       "side": 1,
       "message": "do we need to do this? couldn\u0027t we just push unconditionally and let it be a no-op?",
+      "revId": "01576c6e689ad820145a37baf4893ed8eb2db23f",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "79b4f6f7_bb72878b",
+        "filename": "tools/releases/default.nix",
+        "patchSetId": 5
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-05-25T23:53:04Z",
+      "side": 1,
+      "message": "Nope, because in case of a race (older commit running after newer) this will fail the push because it tries to update the reference (which would require force, and not be what we want).",
+      "parentUuid": "e07f7964_e2696767",
       "revId": "01576c6e689ad820145a37baf4893ed8eb2db23f",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
