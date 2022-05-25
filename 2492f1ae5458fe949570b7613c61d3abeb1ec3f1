@@ -22,6 +22,30 @@
       },
       "revId": "2492f1ae5458fe949570b7613c61d3abeb1ec3f1",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "dbe0cc72_ad34849c",
+        "filename": "tools/releases/default.nix",
+        "patchSetId": 1
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-05-25T16:24:06Z",
+      "side": 1,
+      "message": "How would it? They\u0027re all running in individual checkouts, in separate agents.",
+      "parentUuid": "f3d079af_ce4fa2ae",
+      "range": {
+        "startLine": 24,
+        "startChar": 20,
+        "endLine": 24,
+        "endChar": 33
+      },
+      "revId": "2492f1ae5458fe949570b7613c61d3abeb1ec3f1",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
