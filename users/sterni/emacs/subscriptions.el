@@ -3,14 +3,13 @@
   :after evil
   :config
   ;; elfeed bindings for evil
-  (evil-define-key 'normal 'global (kbd "<leader>ff") 'elfeed)
+  (evil-define-key 'normal 'global (kbd "<leader>mf") 'elfeed)
   (evil-define-key '(normal visual) elfeed-search-mode-map
     (kbd "o") 'elfeed-search-browse-url
     (kbd "r") 'elfeed-search-untag-all-unread
     (kbd "u") 'elfeed-search-tag-all-unread
-    (kbd "<leader>ff") 'elfeed-search-fetch
-    (kbd "<leader>fc") 'elfeed-db-compact
-    (kbd "<leader>fr") 'elfeed-search-update--force)
+    (kbd "ff") 'elfeed-search-fetch
+    (kbd "fc") 'elfeed-db-compact)
   ;; elfeed subscriptions
   (setq elfeed-feeds
         (append
