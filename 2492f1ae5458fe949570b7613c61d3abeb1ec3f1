@@ -70,6 +70,30 @@
       },
       "revId": "2492f1ae5458fe949570b7613c61d3abeb1ec3f1",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "51f97fe2_0caee123",
+        "filename": "tools/releases/default.nix",
+        "patchSetId": 1
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-05-25T16:34:09Z",
+      "side": 1,
+      "message": "Checkouts are cleaned up with `git clean -fxqd` between runs. This means a subsequent build *could* see a different `FILTERED_HEAD` ref *before* josh-filter is run, but not after.",
+      "parentUuid": "c84cb839_06fb00e9",
+      "range": {
+        "startLine": 24,
+        "startChar": 20,
+        "endLine": 24,
+        "endChar": 33
+      },
+      "revId": "2492f1ae5458fe949570b7613c61d3abeb1ec3f1",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
