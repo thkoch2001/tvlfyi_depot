@@ -239,7 +239,10 @@
 (use-package lsp-mode
   :hook ((haskell-mode . lsp-deferred))
   :commands (lsp lsp-deferred))
-(use-package lsp-haskell)
+(use-package lsp-haskell
+  :after lsp-mode
+  :custom
+  lsp-haskell-formatting-provider "ormolu")
 
 (use-package urweb-mode)
 (use-package bqn-mode
