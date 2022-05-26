@@ -4,12 +4,12 @@
 { pkgs, ... }:
 
 pkgs.terraform-providers.mkProvider rec {
-  version = "0.3.1";
+  version = "0.3.2";
 
   owner = "glesys";
   repo = "terraform-provider-glesys";
   rev = "v${version}";
-  sha256 = "1rcwzf31gdxjywkcnlq1nxv4y8fcrc2z2xrp73q61mglv01bqq8m";
+  sha256 = "1hlqa4f9d44hq614ff8ivg8a6fwg48jwz11zsrlghjzky82cfraq";
 
   vendorSha256 = "0g5g69absf0vmin0ff0anrxcgfq0bzx4iz3qci90p9xkvyph4nlw";
 
