@@ -303,7 +303,10 @@
   (evil-define-key 'normal 'global (kbd "<leader>mll") 'languagetool-check)
   (evil-define-key 'normal 'global (kbd "<leader>mlc") 'languagetool-correct-at-point)
   (evil-define-key 'normal 'global (kbd "<leader>mls") 'languagetool-set-language)
-  (evil-define-key 'normal 'global (kbd "<leader>mlr") 'languagetool-clear-suggestions))
+  (evil-define-key 'normal 'global (kbd "<leader>mlr") 'languagetool-clear-suggestions)
+  ;; Fill background of issues instead of just underlining to make it easier to read
+  (set-face-background 'languagetool-issue-default "yellow")
+  (set-face-background 'languagetool-issue-misspelling "red"))
 
 (unless (server-running-p)
   (server-start))
