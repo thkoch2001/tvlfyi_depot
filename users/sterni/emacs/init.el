@@ -253,6 +253,8 @@
 (use-package lsp-mode
   :hook ((haskell-mode . lsp-deferred))
   :commands (lsp lsp-deferred)
+  :custom
+  lsp-modeline-code-actions-segments '() ; using lsp-ui-sideline instead
   :config
   (evil-define-key 'normal 'global
     (kbd "<leader>lwr") 'lsp-workspace-restart
@@ -268,6 +270,9 @@
   lsp-ui-doc-delay 0.5
   :config
   (set-face-background 'lsp-ui-doc-background "WhiteSmoke")
+  (set-face-foreground 'lsp-ui-sideline-code-action "SaddleBrown")
+  (setq lsp-ui-sideline-code-actions-prefix "🔨 "
+        lsp-ui-sideline-show-code-actions t) ; is :custom, but won't take effect?
   (evil-define-key 'normal lsp-ui-mode-map
     ;; TODO(sterni): emulate using xref for non-lsp?
     (kbd "<leader>lgr") 'lsp-ui-peek-find-references
