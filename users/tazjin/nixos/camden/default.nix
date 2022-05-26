@@ -10,25 +10,13 @@ let
 
     extraConfig = "return 301 https://${to}$request_uri;";
   };
+  mod = name: depot.path.origSrc + ("/ops/modules/" + name);
 in
 lib.fix (self: {
-  # Disable the current ACME module and use the old one from 19.09
-  # instead, until the various regressions have been sorted out.
-  # TODO(tazjin): Remove this once the new ACME module works.
-  disabledModules = [ "security/acme" ];
-  imports =
-    let
-      oldChannel = fetchTarball {
-        # NixOS 19.09 on 2020-10-04
-        url = "https://github.com/NixOS/nixpkgs-channels/archive/75f4ba05c63be3f147bcc2f7bd4ba1f029cedcb1.tar.gz";
-        sha256 = "157c64220lf825ll4c0cxsdwg7cxqdx4z559fdp7kpz0g6p8fhhr";
-      };
-    in
-    [
-      "${depot.path}/ops/modules/quassel.nix"
-      "${depot.path}/ops/modules/smtprelay.nix"
-      "${oldChannel}/nixos/modules/security/acme.nix"
-    ];
+  imports = [
+    (mod "quassel.nix")
+    (mod "smtprelay.nix")
+  ];
 
   # camden is intended to boot unattended, despite having an encrypted
   # root partition.
