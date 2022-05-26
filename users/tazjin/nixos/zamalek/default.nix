@@ -3,8 +3,8 @@
 
 config:
 let
-  mod = name: depot.path + ("/ops/modules/" + name);
-  usermod = name: depot.path + ("/users/tazjin/nixos/modules/" + name);
+  mod = name: depot.path.origSrc + ("/ops/modules/" + name);
+  usermod = name: depot.path.origSrc + ("/users/tazjin/nixos/modules/" + name);
 
   zdevice = device: {
     inherit device;
