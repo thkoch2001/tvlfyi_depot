@@ -52,7 +52,10 @@ steps:
         PIPELINE_ARGS="--arg parentTargetMap tmp/parent-target-map.json"
       fi
 
-      nix-build -A ops.pipelines.depot -o pipeline --show-trace $$PIPELINE_ARGS
+      nix-build --option restrict-eval true --include "depot=$${PWD}"\
+        --allowed-uris 'https://' \
+        -A ops.pipelines.depot \
+        -o pipeline --show-trace $$PIPELINE_ARGS
 
       # Steps need to be uploaded in reverse order because pipeline
       # upload prepends instead of appending.
