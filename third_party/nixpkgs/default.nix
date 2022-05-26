@@ -22,6 +22,14 @@ let
   # required packages into the unstable set.
   stableNixpkgs = import depot.third_party.sources.nixpkgs-stable { };
 
+  # path is defined as `./.`. When it is used in `${}` path interpolation `path`
+  # is dumped to the store. Since it is already in the store (which the
+  # evaluation doesn't take into account), this is unnecessary. By passing in
+  # the actual source it was evaluated from we can prevent this problem.
+  pathOverlay = _: _: {
+    path = nixpkgsSrc;
+  };
+
   # Overlay for packages that should come from the stable channel
   # instead (e.g. because something is broken in unstable).
   # Use `stableNixpkgs` from above.
@@ -49,6 +57,7 @@ import nixpkgsSrc {
     };
 
   overlays = [
+    pathOverlay
     commitsOverlay
     stableOverlay
   ] ++ (if depotOverlays then [
