@@ -31,20 +31,20 @@
     , ...
     }:
     let
-      eval = import "${pkgs.path}/nixos/lib/eval-config.nix" {
+      eval = import (pkgs.path + "/nixos/lib/eval-config.nix") {
         inherit specialArgs system;
         modules = [
           configuration
-          (import "${depot.path + "/ops/modules/default-imports.nix"}")
+          (import (depot.path.origSrc + "/ops/modules/default-imports.nix"))
         ];
       };
 
       # This is for `nixos-rebuild build-vm'.
-      vmConfig = (import "${pkgs.path}/nixos/lib/eval-config.nix" {
+      vmConfig = (import (pkgs.path + "/nixos/lib/eval-config.nix") {
         inherit specialArgs system;
         modules = [
           configuration
-          "${pkgs.path}/nixos/modules/virtualisation/qemu-vm.nix"
+          (pkgs.path + "/nixos/modules/virtualisation/qemu-vm.nix")
         ];
       }).config;
     in
