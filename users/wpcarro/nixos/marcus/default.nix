@@ -16,8 +16,8 @@ let
 in
 {
   imports = [
-    (depot.path + "/users/wpcarro/nixos/marcus/hardware.nix")
-    "${pkgs.home-manager.src}/nixos"
+    (depot.path.origSrc + "/users/wpcarro/nixos/marcus/hardware.nix")
+    (pkgs.home-manager.src + "/nixos")
   ];
 
   # Use the TVL binary cache
