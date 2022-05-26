@@ -252,7 +252,27 @@
 (use-package haskell-mode)
 (use-package lsp-mode
   :hook ((haskell-mode . lsp-deferred))
-  :commands (lsp lsp-deferred))
+  :commands (lsp lsp-deferred)
+  :config
+  (evil-define-key 'normal 'global
+    (kbd "<leader>lwr") 'lsp-workspace-restart
+    (kbd "<leader>lwq") 'lsp-workspace-shutdown
+    (kbd "<leader>la=") 'lsp-format-buffer
+    (kbd "<leader>lar") 'lsp-rename
+    (kbd "<leader>laa") 'lsp-execute-code-action))
+(use-package lsp-ui
+  :after lsp-mode
+  :custom
+  lsp-ui-doc-enable t
+  lsp-ui-doc-border "DimGray"
+  lsp-ui-doc-delay 0.5
+  :config
+  (set-face-background 'lsp-ui-doc-background "WhiteSmoke")
+  (evil-define-key 'normal lsp-ui-mode-map
+    ;; TODO(sterni): emulate using xref for non-lsp?
+    (kbd "<leader>lgr") 'lsp-ui-peek-find-references
+    (kbd "<leader>lgd") 'lsp-ui-peek-find-definitions
+    (kbd "<leader>lc") 'lsp-ui-flycheck-list))
 (use-package lsp-haskell
   :after lsp-mode
   :custom
