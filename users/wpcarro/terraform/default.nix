@@ -5,7 +5,7 @@ let
   inherit (depot.users) wpcarro;
   inherit (pkgs) writeText;
 
-  images = import "${pkgs.path}/nixos/modules/virtualisation/gce-images.nix";
+  images = import (pkgs.path + "/nixos/modules/virtualisation/gce-images.nix");
   nixosImage = images."20.09";
 in
 {
@@ -31,7 +31,7 @@ in
 
       os = depot.ops.nixos.nixosFor (_: {
         imports = [
-          "${pkgs.path}/nixos/modules/virtualisation/google-compute-image.nix"
+          (pkgs.path + "/nixos/modules/virtualisation/google-compute-image.nix")
           configuration
         ];
 
