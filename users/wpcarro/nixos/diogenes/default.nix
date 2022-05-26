@@ -36,7 +36,7 @@ wpcarro.terraform.googleCloudVM {
 
   configuration = {
     imports = [
-      "${depot.path}/ops/modules/quassel.nix"
+      (depot.path.origSrc + "/ops/modules/quassel.nix")
     ];
 
     networking = {
