@@ -16,6 +16,24 @@
       "message": "How does that even make a difference?",
       "revId": "be4c11d0b02ceb8b8eaa5fb9164098ce566b10ac",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e4ba3aa8_27443f64",
+        "filename": "ops/nixos.nix",
+        "patchSetId": 2
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-05-26T14:15:08Z",
+      "side": 1,
+      "message": "I don\u0027t think it has a practical impact, but something about how the evaluator tracks the restrictions makes it angry if string interpolation is used here. Either way, we still get the duplicate path in the store.",
+      "parentUuid": "a51a7c33_151db30b",
+      "revId": "be4c11d0b02ceb8b8eaa5fb9164098ce566b10ac",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
