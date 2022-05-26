@@ -12,7 +12,6 @@
     directories = [
       ".config/spotify"
       ".local/share/Steam"
-      ".electrum"
     ];
   };
 }
