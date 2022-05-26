@@ -15,7 +15,7 @@
 let
   os = depot.ops.nixos.nixosFor ({ modulesPath, ... }: {
     imports = [
-      "${pkgs.path}/nixos/modules/virtualisation/amazon-image.nix"
+      (pkgs.path + "/nixos/modules/virtualisation/amazon-image.nix")
       configuration
     ];
 

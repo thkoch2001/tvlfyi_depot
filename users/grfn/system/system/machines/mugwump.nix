@@ -6,10 +6,10 @@ with lib;
   imports = [
     ../modules/common.nix
     (modulesPath + "/installer/scan/not-detected.nix")
-    "${depot.path}/ops/modules/prometheus-fail2ban-exporter.nix"
-    "${depot.path}/users/grfn/xanthous/server/module.nix"
-    "${depot.third_party.agenix.src}/modules/age.nix"
-    "${depot.path}/users/grfn/bbbg/module.nix"
+    (depot.path.origSrc + "/ops/modules/prometheus-fail2ban-exporter.nix")
+    (depot.path.origSrc + "/users/grfn/xanthous/server/module.nix")
+    (depot.third_party.agenix.src + "/modules/age.nix")
+    (depot.path.origSrc + "/users/grfn/bbbg/module.nix")
   ];
 
   networking.hostName = "mugwump";
