@@ -16,6 +16,24 @@
       "message": "probably because it handles `~/.gitignore_global`...\n\n\nA workaround for this - even if it\u0027s a different gitignore source implementation - would be really nice, as this is definitely going to negatively affect my workflow due to busting my shell cache all the time",
       "revId": "83d7c090b4c138ca041688dae507ff563be15f07",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1d1cebb6_387897d7",
+        "filename": "users/grfn/xanthous/server/default.nix",
+        "patchSetId": 6
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-05-26T16:23:56Z",
+      "side": 1,
+      "message": "Worked around by constructing a fake `root` (which is the thing that breaks when naersk IFDs it)",
+      "parentUuid": "2c7d3391_30e41a4b",
+      "revId": "83d7c090b4c138ca041688dae507ff563be15f07",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
