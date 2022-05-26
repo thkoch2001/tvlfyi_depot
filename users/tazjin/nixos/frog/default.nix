@@ -12,7 +12,7 @@ let
 in
 lib.fix (self: {
   imports = [
-    "${depot.path}/ops/modules/v4l2loopback.nix"
+    (depot.path.origSrc + "/ops/modules/v4l2loopback.nix")
   ];
 
   boot = {
