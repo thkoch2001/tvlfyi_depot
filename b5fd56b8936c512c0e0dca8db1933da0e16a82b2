@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "829b105e_f4fbba96",
+        "filename": "users/grfn/xanthous/server/default.nix",
+        "patchSetId": 7
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2022-05-26T16:26:33Z",
+      "side": 1,
+      "message": "maybe a link to the nix bug + naersk bug here?",
+      "revId": "b5fd56b8936c512c0e0dca8db1933da0e16a82b2",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
