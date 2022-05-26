@@ -89,12 +89,16 @@ let
       ((pathType ./symlink-directory).symlink or null) "directory")
     (assertEq "symlinks to symlinks to directories are detected correctly"
       ((pathType ./symlink-symlink-directory).symlink or null) "directory")
-    (assertEq "symlinks to files are detected-ish"
-      ((pathType ./symlink-file).symlink or null) "regular-or-missing")
-    (assertEq "symlinks to symlinks to files are detected-ish"
-      ((pathType ./symlink-symlink-file).symlink or null) "regular-or-missing")
     (assertEq "symlinks to nowhere are not distinguished from files"
       ((pathType ./missing).symlink or null) "regular-or-missing")
+
+    # These tests are commented out because they no longer work with
+    # restrict-eval turned on.
+
+    # (assertEq "symlinks to files are detected-ish"
+    #   ((pathType ./symlink-file).symlink or null) "regular-or-missing")
+    # (assertEq "symlinks to symlinks to files are detected-ish"
+    #   ((pathType ./symlink-symlink-file).symlink or null) "regular-or-missing")
   ];
 
   cheddarStorePath =
