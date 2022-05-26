@@ -6,7 +6,10 @@ args@{ depot ? import ../../../.. { }
 depot.third_party.naersk.buildPackage {
   name = "xanthous-server";
   version = "0.0.1";
-  src = depot.third_party.gitignoreSource ./.;
+
+  # TODO(grfn): restricted-eval breaks gitignoreSource here somehow, how?
+  src = ./.;
+
   passthru = {
     docker = import ./docker.nix args;
   };
