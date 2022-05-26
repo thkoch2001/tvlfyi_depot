@@ -50,6 +50,7 @@ in
 
       serviceConfig = {
         Restart = "always";
+        RestartSec = "5s";
         DynamicUser = true;
         EnvironmentFile = cfg.secretsFile;
         ExecStart = "${pkgs.oauth2_proxy}/bin/oauth2-proxy --config ${configFile}";
