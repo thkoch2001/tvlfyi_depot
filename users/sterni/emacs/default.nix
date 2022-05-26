@@ -23,6 +23,7 @@ let
     epkgs.melpaPackages.languagetool
     epkgs.melpaPackages.lsp-haskell
     epkgs.melpaPackages.lsp-mode
+    epkgs.melpaPackages.lsp-ui
     epkgs.melpaPackages.magit
     epkgs.melpaPackages.markdown-mode
     epkgs.melpaPackages.meson-mode
