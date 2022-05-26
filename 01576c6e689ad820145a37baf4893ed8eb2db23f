@@ -87,6 +87,24 @@
       "parentUuid": "e07f7964_e2696767",
       "revId": "01576c6e689ad820145a37baf4893ed8eb2db23f",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2ae6ccca_b21d9870",
+        "filename": "tools/releases/default.nix",
+        "patchSetId": 5
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2022-05-26T00:01:25Z",
+      "side": 1,
+      "message": "ah, of course, yes",
+      "parentUuid": "79b4f6f7_bb72878b",
+      "revId": "01576c6e689ad820145a37baf4893ed8eb2db23f",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
