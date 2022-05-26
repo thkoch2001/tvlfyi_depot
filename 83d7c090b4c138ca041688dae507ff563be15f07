@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2c7d3391_30e41a4b",
+        "filename": "users/grfn/xanthous/server/default.nix",
+        "patchSetId": 6
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2022-05-26T15:15:10Z",
+      "side": 1,
+      "message": "probably because it handles `~/.gitignore_global`...\n\n\nA workaround for this - even if it\u0027s a different gitignore source implementation - would be really nice, as this is definitely going to negatively affect my workflow due to busting my shell cache all the time",
+      "revId": "83d7c090b4c138ca041688dae507ff563be15f07",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
