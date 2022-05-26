@@ -10,7 +10,7 @@ _: # ignore readTree options
 { config, depot, lib, pkgs, ... }:
 
 let
-  mod = name: depot.path + ("/ops/modules/" + name);
+  mod = name: depot.path.origSrc + ("/ops/modules/" + name);
 in
 {
   imports = [
