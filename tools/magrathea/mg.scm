@@ -290,7 +290,7 @@ if you meant to pass these arguments to nix, please separate them with
 
 (define (shell args)
   (match args
-         [() (execute-shell (empty-target))]
+         [() (print "cannot open shell for the empty target")]
          [(arg) (execute-shell
                  (guarantee-success (parse-target arg)))]
          [other (print "not yet implemented")]))
