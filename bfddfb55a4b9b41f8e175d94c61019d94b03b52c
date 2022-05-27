@@ -34,6 +34,24 @@
       "parentUuid": "2bac5ae7_cca0cc15",
       "revId": "bfddfb55a4b9b41f8e175d94c61019d94b03b52c",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8721ad04_5cbc5492",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2022-05-27T16:35:12Z",
+      "side": 1,
+      "message": "Ack.\n\nSeems like the right solution would be for keycloak to become a notify type service to tell systemd when it\u0027s actually ready.",
+      "parentUuid": "2c35c1d5_a2fd71d3",
+      "revId": "bfddfb55a4b9b41f8e175d94c61019d94b03b52c",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
