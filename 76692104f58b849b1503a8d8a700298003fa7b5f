@@ -22,6 +22,30 @@
       },
       "revId": "76692104f58b849b1503a8d8a700298003fa7b5f",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5d62c3ca_9c80a0da",
+        "filename": "ops/gerrit-tvl/static/tvl.js",
+        "patchSetId": 1
+      },
+      "lineNbr": 87,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-05-27T21:39:23Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "de108dc3_75128991",
+      "range": {
+        "startLine": 87,
+        "startChar": 6,
+        "endLine": 87,
+        "endChar": 20
+      },
+      "revId": "76692104f58b849b1503a8d8a700298003fa7b5f",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
