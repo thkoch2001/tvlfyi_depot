@@ -120,6 +120,19 @@
                                  "/.config/emacs-custom/pa-jira.el")))
         (when (file-exists-p jira-config) (load jira-config))))))
 
+;; latex
+
+(defun latex-word-count ()
+  "Calls texcount on the file the current buffer points to and displays the result."
+  (interactive)
+  (save-buffer)
+  (let* ((file (buffer-file-name)) ; needs to happen outside with-current-buffer
+         (word-count
+             (with-output-to-string
+               (with-current-buffer standard-output
+                 (call-process "texcount" nil t nil "-brief" "-utf8" file)))))
+      (message (string-trim-right word-count))))
+
 ;; ediff
 ; doesn't create new window for ediff controls which I always open accidentally
 (setq ediff-window-setup-function 'ediff-setup-windows-plain)
