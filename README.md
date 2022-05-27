@@ -17,8 +17,8 @@ partially see this as [an experiment][] in tooling for monorepos.
 
 * Source code is available primarily through Sourcegraph on
   [cs.tvl.fyi](https://cs.tvl.fyi), where it is searchable and even semantically
-  indexed. A lower-tech view of the repository is also available via cgit on
-  [code.tvl.fyi](https://code.tvl.fyi).
+  indexed. A lower-tech view of the repository is also available via cgit-pink
+  on [code.tvl.fyi](https://code.tvl.fyi).
 
   The repository can be cloned using `git` from `https://cl.tvl.fyi/depot`.
 
@@ -60,10 +60,12 @@ configuration is tracked in `//ops/{modules,machines}`.
 * `//nix/buildLisp` implements a Nix library that can build Common Lisp
   software. Currently only SBCL is supported. Lisp programs in this repository
   are built using this library.
+* `//web/blog` and `//web/atom-feed`: A Nix-based static site generator which
+  generates the web page and Atom feed for [tazj.in](https://tazj.in)
+  (`//users/tazjin/homepage`) and [tvl.fyi](https://tvl.fyi) (`//web/tvl`)
 * `//web/bubblegum` contains a CGI-based web framework written in Nix.
 * `//nix/nint`: A shebang-compatible interpreter wrapper for Nix.
 * `//tvix` contains initial work towards a modular architecture for Nix.
-* `//third_party/nix` contains [our fork][tvix] of the Nix package manager.
 
 We have a variety of other tools and libraries in the `//nix` folder which may
 be of interest.
@@ -87,9 +89,6 @@ personal or experimental code that does not require review.
 
 Some examples:
 
-* `//users/tazjin/homepage` && `//users/tazjin/blog`: A Nix-based static site
-  generator which generates the web page and Atom feed for
-  [tazj.in](https://tazj.in)
 * `//users/grfn/xanthous`: A (WIP) TUI RPG, written in Haskell.
 * `//users/tazjin/emacs`: tazjin's Emacs & EXWM configuration
 * `//users/tazjin/finito`: A persistent finite-state machine library for Rust.
