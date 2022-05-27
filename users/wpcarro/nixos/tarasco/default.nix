@@ -20,12 +20,34 @@ in
   # Use the TVL binary cache
   tvl.cache.enable = true;
 
-  boot.loader.systemd-boot.enable = true;
-  boot.loader.efi.canTouchEfiVariables = true;
+  boot = {
+    loader.systemd-boot.enable = true;
+    loader.efi.canTouchEfiVariables = true;
 
-  # Support IP forwarding to use this device as a Tailscale exit node.
-  boot.kernel.sysctl."net.ipv4.ip_forward" = true;
-  boot.kernel.sysctl."net.ipv6.conf.all.forwarding" = true;
+    # Support IP forwarding to use this device as a Tailscale exit node.
+    kernel.sysctl."net.ipv4.ip_forward" = true;
+    kernel.sysctl."net.ipv6.conf.all.forwarding" = true;
+    kernelModules = [
+      "kvm-intel"
+    ];
+
+    # Can verify these settings with:
+    # $ lsmod
+    # ...or:
+    # $ cat /etc/modprobe.d/nixos.conf
+    blacklistedKernelModules = [
+      # Disabling this buggy network driver (and preferring ethernet) to prevent
+      # my machine from becoming unresponsive.
+      # TODO(wpcarro): Consider replacing this module with this fork (if NixOS
+      # isn't already): https://github.com/tomaspinho/rtl8821ce
+      "rtw88_8821ce"
+    ];
+
+    initrd.availableKernelModules = [ "xhci_pci" "ehci_pci" "ahci" "usb_storage" "usbhid" "sd_mod" ];
+    initrd.kernelModules = [ ];
+    extraModulePackages = [ ];
+  };
+
 
   time.timeZone = "America/Los_Angeles";
 
@@ -35,7 +57,8 @@ in
     networkmanager.enable = true;
     interfaces.enp1s0.useDHCP = true;
     interfaces.enp3s0.useDHCP = true;
-    # Disabling wifi because the Realtek network card drivers crash.
+    # Disabling wifi because the Realtek network card drivers crash. For more
+    # context, see the boot.blacklistedKernelModules configuration.
     # interfaces.wlp2s0.useDHCP = true;
   };
 
