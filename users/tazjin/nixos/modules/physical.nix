@@ -22,7 +22,7 @@ in
       curl
       ddcutil
       direnv
-      dmd
+      # dmd # TODO(tazjin): temporarily broken in nixpkgs, reinstall when it works again
       dnsutils
       electrum
       emacsNativeComp # emacsclient
