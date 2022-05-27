@@ -2,6 +2,14 @@
 # creating an ARGON2 password hash.
 { pkgs, ... }:
 
-pkgs.writeShellScriptBin "hash-password" ''
-  ${pkgs.openldap}/bin/slappasswd -o module-load=pw-argon2 -h '{ARGON2}'
-''
+let
+  script = pkgs.writeShellScriptBin "hash-password" ''
+    ${pkgs.openldap}/bin/slappasswd -o module-load=argon2 -h '{ARGON2}' "$@"
+  '';
+in
+script.overrideAttrs (old: {
+  doCheck = true;
+  checkPhase = ''
+    ${pkgs.stdenv.shell} $out/bin/hash-password -s example-password > /dev/null
+  '';
+})
