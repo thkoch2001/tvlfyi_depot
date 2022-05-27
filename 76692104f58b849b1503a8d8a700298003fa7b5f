@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "de108dc3_75128991",
+        "filename": "ops/gerrit-tvl/static/tvl.js",
+        "patchSetId": 1
+      },
+      "lineNbr": 87,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2022-05-27T21:37:54Z",
+      "side": 1,
+      "message": "I presume we should delete this and replace with an example sha?",
+      "range": {
+        "startLine": 87,
+        "startChar": 6,
+        "endLine": 87,
+        "endChar": 20
+      },
+      "revId": "76692104f58b849b1503a8d8a700298003fa7b5f",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
