@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "02146a58_f3da542d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-05-27T12:52:08Z",
+      "side": 1,
+      "message": "The empty target is the current target, i.e. if you\u0027re deeper in the tree running `mg shell` runs for that folder. `//` is always the root.",
+      "revId": "688f3ea981549b26a3132c0567672c32936df506",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
