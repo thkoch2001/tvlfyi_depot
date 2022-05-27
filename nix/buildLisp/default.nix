@@ -154,7 +154,8 @@ let
           let
             implementation = old.implementation or defaultImplementation;
             brokenOn = old.brokenOn or [ ];
-            targets = lib.subtractLists (brokenOn ++ [ implementation.name ])
+            # TODO(sterni): https://github.com/Clozure/ccl/issues/405
+            targets = lib.subtractLists (brokenOn ++ [ "ccl" implementation.name ])
               (builtins.attrNames impls);
           in
           {
