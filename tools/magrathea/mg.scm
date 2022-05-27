@@ -189,15 +189,21 @@ USAGE
   (string-translate* str '(("\"" . "\\\"")
                            ("${" . "\\${"))))
 
+;; create a nix expression for the given target
+;;
+;; an empty target will build the current folder instead.
+(define (nix-expr-for-target target)
+  (nix-expr-for-attrpath (normalised-components (normalise-target target))))
+
 ;; create a nix expression to build the attribute at the specified
 ;; components
 ;;
-;; an empty target will build the current folder instead.
+;; an empty attrpath will build the current folder instead.
 ;;
 ;; this uses builtins.getAttr explicitly to avoid problems with
 ;; escaping.
-(define (nix-expr-for target)
-  (let nest ((parts (normalised-components (normalise-target target)))
+(define (nix-expr-for-attrpath nix-attrpath)
+  (let nest ((parts nix-attrpath)
              (acc (conc "(import " (repository-root) " {})")))
     (match parts
            [() (conc "with builtins; " acc)]
@@ -218,7 +224,7 @@ USAGE
 
 (define-record build-args target passthru unknown)
 (define (execute-build args)
-  (let ((expr (nix-expr-for (build-args-target args))))
+  (let ((expr (nix-expr-for-target (build-args-target args))))
     (fprintf (current-error-port) "[mg] building target ~A~%" (build-args-target args))
     (process-execute "nix-build" (append (list "-E" expr "--show-trace")
                                          (or (build-args-passthru args) '())))))
@@ -277,7 +283,7 @@ if you meant to pass these arguments to nix, please separate them with
     (execute-build parsed)))
 
 (define (execute-shell t)
-  (let ((expr (nix-expr-for t))
+  (let ((expr (nix-expr-for-target t))
         (user-shell (or (get-environment-variable "SHELL") "bash")))
     (fprintf (current-error-port) "[mg] entering shell for ~A~%" t)
     (process-execute "nix-shell"
@@ -295,7 +301,7 @@ if you meant to pass these arguments to nix, please separate them with
 
 (define (execute-run t #!optional cmd-args)
   (fprintf (current-error-port) "[mg] building target ~A~%" t)
-  (let* ((expr (nix-expr-for t))
+  (let* ((expr (nix-expr-for-target t))
          (out (call-with-input-pipe
                (apply string-append
                       ;; TODO(sterni): temporary gc root
