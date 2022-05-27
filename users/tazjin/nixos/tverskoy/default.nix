@@ -41,7 +41,7 @@ lib.fix (self: {
     extraModulePackages = [ kernelPackages.acpi_call ];
 
     kernelModules = [ "kvm-amd" "i2c_dev" ];
-    kernelPackages = pkgs.linuxPackages_latest;
+    kernelPackages = pkgs.zfsUnstable.latestCompatibleLinuxPackages;
     loader.systemd-boot.enable = true;
     loader.efi.canTouchEfiVariables = true;
     zfs.enableUnstable = true;
