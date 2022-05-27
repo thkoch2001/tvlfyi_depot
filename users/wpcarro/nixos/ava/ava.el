@@ -53,3 +53,5 @@
  (make-bookmark :label "hadrian"
                 :path (f-join tvl-depot-path "/hadrian")
                 :kbd "h"))
+
+(add-to-list 'ssh-hosts "wpcarro@tarasco")
