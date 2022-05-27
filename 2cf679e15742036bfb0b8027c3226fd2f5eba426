@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ed3480bc_b0ca3c22",
+        "filename": "tools/magrathea/mg.scm",
+        "patchSetId": 2
+      },
+      "lineNbr": 204,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-05-27T22:10:59Z",
+      "side": 1,
+      "message": "might be useful to add the \"type\" to this name, too (i.e. `nix-expr-for-attrpath`).",
+      "range": {
+        "startLine": 204,
+        "startChar": 9,
+        "endLine": 204,
+        "endChar": 21
+      },
+      "revId": "2cf679e15742036bfb0b8027c3226fd2f5eba426",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
