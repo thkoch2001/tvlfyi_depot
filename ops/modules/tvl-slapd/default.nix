@@ -44,7 +44,7 @@ in
 
       "cn=module{0}".attrs = {
         objectClass = "olcModuleList";
-        olcModuleLoad = "pw-argon2";
+        olcModuleLoad = "argon2";
       };
 
       "cn=schema".includes =
