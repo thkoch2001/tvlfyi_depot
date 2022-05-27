@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ae782a04_c5aab41a",
+        "filename": "tools/magrathea/mg.scm",
+        "patchSetId": 2
+      },
+      "lineNbr": 296,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-05-27T12:57:34Z",
+      "side": 1,
+      "message": "are multiple targets for a shell a useful feature?\n\nmaybe this should fail saying something like \"received unexpected arguments\" instead and print usage, or something",
+      "range": {
+        "startLine": 296,
+        "startChar": 24,
+        "endLine": 296,
+        "endChar": 60
+      },
+      "revId": "c0ff626bf6a4f78ec48644c693a92df1e01000ba",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
