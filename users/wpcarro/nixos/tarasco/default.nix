@@ -57,6 +57,7 @@ in
     networkmanager.enable = true;
     interfaces.enp1s0.useDHCP = true;
     interfaces.enp3s0.useDHCP = true;
+    firewall.checkReversePath = "loose";
     # Disabling wifi because the Realtek network card drivers crash. For more
     # context, see the boot.blacklistedKernelModules configuration.
     # interfaces.wlp2s0.useDHCP = true;
