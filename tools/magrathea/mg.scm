@@ -293,7 +293,7 @@ if you meant to pass these arguments to nix, please separate them with
          [() (execute-shell (empty-target))]
          [(arg) (execute-shell
                  (guarantee-success (parse-target arg)))]
-         [other (print "not yet implemented")]))
+         [other (print "multiple targets not yet implemented")]))
 
 (define (execute-run t #!optional cmd-args)
   (fprintf (current-error-port) "[mg] building target ~A~%" t)
