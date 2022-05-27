@@ -1,6 +1,23 @@
 {
   "comments": [
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "24482742_6f8d9512",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2022-05-27T12:56:52Z",
+      "side": 1,
+      "message": "Quite simply, the empty target is interpreted relatively:\n\n$ cd tools/cheddar\n$ mg shell\n$ cargo build",
+      "revId": "688f3ea981549b26a3132c0567672c32936df506",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "02146a58_f3da542d",
