@@ -16,6 +16,24 @@
       "message": "Is it a matter of keycloak being not properly up when considered up by systemd or the service being started to early? \n\nI guess we could consider setting BindsTo\u003d either way",
       "revId": "bfddfb55a4b9b41f8e175d94c61019d94b03b52c",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2c35c1d5_a2fd71d3",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-05-27T16:34:00Z",
+      "side": 1,
+      "message": "\u003e Is it a matter of keycloak being not properly up when considered\n\nYep. Systemd says it\u0027s running, but in reality the weird architecture of Keycloak is loading a gajillion JARs at runtime before being able to actually do anything.\n\nWe already have After\u003d and Wants\u003d, I\u0027m not sure what BindsTo\u003d would give us in addition. Restarting oauth2_proxy if Keycloak is restarted? I don\u0027t think that gives us anything.",
+      "parentUuid": "2bac5ae7_cca0cc15",
+      "revId": "bfddfb55a4b9b41f8e175d94c61019d94b03b52c",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
