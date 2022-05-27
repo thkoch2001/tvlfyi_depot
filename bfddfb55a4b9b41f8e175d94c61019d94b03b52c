@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2bac5ae7_cca0cc15",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2022-05-27T16:16:16Z",
+      "side": 1,
+      "message": "Is it a matter of keycloak being not properly up when considered up by systemd or the service being started to early? \n\nI guess we could consider setting BindsTo\u003d either way",
+      "revId": "bfddfb55a4b9b41f8e175d94c61019d94b03b52c",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
