@@ -79,7 +79,7 @@ function jobStateToCheckRunStatus(state) {
 
 const tvlChecksProvider = {
   async fetch(change) {
-    let {changeNumber, patchsetNumber, repo} = change;
+    let {changeNumber, patchsetSha, repo} = change;
 
     const experiments = window.ENABLED_EXPERIMENTS || [];
     if (experiments.includes("UiFeature__tvl_check_debug")) {
@@ -96,6 +96,7 @@ const tvlChecksProvider = {
     const params = {
       // besadii groups different patchsets of the same CL under this fake ref
       branch: `cl/${changeNumber.toString()}`,
+      commit: patchsetSha,
     };
     const url = `https://api.buildkite.com/v2/organizations/tvl/pipelines/depot/builds?${encodeParams(params)}`;
     const resp = await fetch(url, {
