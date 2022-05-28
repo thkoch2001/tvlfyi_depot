@@ -1,7 +1,7 @@
 (defpackage panettone.util
   (:use :cl :klatre)
   (:import-from :alexandria :when-let)
-  (:export :integer-env))
+  (:export :integer-env :add-missing-base64-padding))
 
 (defpackage panettone.css
   (:use :cl :lass)
