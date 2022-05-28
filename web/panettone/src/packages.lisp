@@ -23,9 +23,12 @@
   (:import-from :defclass-std :defclass/std)
   (:import-from :alexandria :when-let :with-gensyms)
   (:export
-   :*user* :*ldap*
+   :*user*
+   :auth-url
+   :fetch-token
    :user :cn :dn :mail :displayname
-   :connect-ldap :find-user :find-user-by-dn :authenticate-user))
+   :find-user-by-dn
+   :initialise-oauth2))
 
 (defpackage panettone.model
   (:nicknames :model)
@@ -81,4 +84,4 @@
    :*pg-spec*)
   (:import-from :panettone.irc :send-irc-notification)
   (:shadow :next)
-  (:export :start-pannetone :config :main))
+  (:export :start-panettone :config :main))
