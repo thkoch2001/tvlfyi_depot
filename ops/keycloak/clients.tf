@@ -90,3 +90,17 @@ resource "keycloak_openid_audience_protocol_mapper" "oauth2_proxy_audience" {
   name                     = "oauth2-proxy-audience"
   included_custom_audience = keycloak_openid_client.oauth2_proxy.client_id
 }
+
+resource "keycloak_openid_client" "panettone" {
+  realm_id              = keycloak_realm.tvl.id
+  client_id             = "panettone"
+  name                  = "Panettone"
+  enabled               = true
+  access_type           = "CONFIDENTIAL"
+  standard_flow_enabled = true
+
+  valid_redirect_uris = [
+    "https://b.tvl.fyi/auth",
+    "http://localhost:6161/auth",
+  ]
+}
