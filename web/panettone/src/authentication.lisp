@@ -78,12 +78,6 @@ the user, however email addresses are temporarily not available."
      ;; TODO(tazjin): Figure out actual displayName mapping in tokens.
      :displayname username)))
 
-(defun add-missing-base64-padding (s)
-  "Add any missing padding characters to the (un-padded) base64 string `S', such
-that it can be successfully decoded by the `BASE64' package"
-  ;; I apologize
-  (format nil "~A~v@{~A~:*~}" s (- 4 (mod (length s) 4)) "="))
-
 (defun fetch-token (code)
   "Fetches the access token on completion of user authentication through
 the OAuth2 endpoint and returns the resulting user object."
@@ -117,5 +111,5 @@ the OAuth2 endpoint and returns the resulting user object."
                            ;; lisp base64 library doesn't know how to deal with
                            ;; that - we need to add those extra padding
                            ;; characters here.
-                           (add-missing-base64-padding payload)))))
+                           (panettone.util:add-missing-base64-padding payload)))))
             (claims-to-user claims))))))
