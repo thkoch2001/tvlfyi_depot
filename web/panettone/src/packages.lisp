@@ -23,9 +23,11 @@
   (:import-from :defclass-std :defclass/std)
   (:import-from :alexandria :when-let :with-gensyms)
   (:export
-   :*user* :*ldap*
+   :*user*
+   :auth-url
+   :fetch-token
    :user :cn :dn :mail :displayname
-   :connect-ldap :find-user :find-user-by-dn :authenticate-user))
+   :find-user-by-dn))
 
 (defpackage panettone.model
   (:nicknames :model)
