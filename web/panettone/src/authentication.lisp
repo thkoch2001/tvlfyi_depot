@@ -117,5 +117,5 @@ the OAuth2 endpoint and returns the resulting user object."
                            ;; lisp base64 library doesn't know how to deal with
                            ;; that - we need to add those extra padding
                            ;; characters here.
-                           (add-missing-base64-padding payload)))))
+                           (panettone.util:add-missing-base64-padding payload)))))
             (claims-to-user claims))))))
