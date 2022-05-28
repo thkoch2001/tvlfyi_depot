@@ -53,13 +53,7 @@ let
      * `regular`: is a regular file, always `true` if returned
      * `directory`: is a directory, always `true` if returned
      * `missing`: path does not exist, always `true` if returned
-     * `symlink`: path is a symlink, value is a string describing the type
-       of its realpath which may be either:
-
-       * `"directory"`: realpath of the symlink is a directory
-       * `"regular-or-missing`": realpath of the symlink is either a regular
-         file or does not exist. Due to limitations of the Nix expression
-         language, we can't tell which.
+     * `symlink`: path is a symlink, always `true` if returned
 
      Type: path(-like) -> tag
 
@@ -73,10 +67,10 @@ let
        => { directory = true; }
 
        pathType ./result
-       => { symlink = "directory"; }
+       => { symlink = true; }
 
        pathType ./link-to-file
-       => { symlink = "regular-or-missing"; }
+       => { symlink = true; }
 
        pathType /does/not/exist
        => { missing = true; }
@@ -90,12 +84,12 @@ let
 
        # Match on the result using //nix/tag
        nix.tag.match (nix.utils.pathType ./result) {
-         symlink = v: "symlink to ${v}";
+         symlink = _: "symlink";
          directory  = _: "directory";
          regular = _: "regular";
          missing = _: "path does not exist";
        }
-       => "symlink to directory"
+       => "symlink"
 
        # Query path type
        nix.tag.tagName (pathType /path)
@@ -122,11 +116,7 @@ let
       isSymlinkDir = builtins.pathExists (path' + "/.");
     in
     {
-      ${thisPathType} =
-        /**/
-        if thisPathType != "symlink" then true
-        else if isSymlinkDir then "directory"
-        else "regular-or-missing";
+      ${thisPathType} = true;
     };
 
   pathType' = path:
@@ -143,21 +133,6 @@ let
      Type: path(-like) -> bool
   */
   isDirectory = path: pathType' path ? directory;
-
-  /* Checks whether the given path is a directory or
-     a symlink to a directory. Throws if the path in
-     question doesn't exist.
-
-     Warning: Does not throw if the target file or
-     directory doesn't exist, but the symlink does.
-
-     Type: path(-like) -> bool
-  */
-  realPathIsDirectory = path:
-    let
-      pt = pathType' path;
-    in
-    pt ? directory || pt.symlink or null == "directory";
 
   /* Check whether the given path is a regular file.
      Throws if the path in question doesn't exist.
@@ -179,7 +154,6 @@ in
     storePathName
     pathType
     isDirectory
-    realPathIsDirectory
     isRegularFile
     isSymlink
     ;
