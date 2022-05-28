@@ -43,6 +43,21 @@ let
     else builtins.throw "Don't know how to get (base)name of "
       + lib.generators.toPretty { } p;
 
+  /* Retrieves the drvPath attribute from a given derivation, but ensures that
+     the resulting string only depends on the `.drv` file in the nix store and
+     not on its realised outputs as well.
+
+     Type: drv -> string
+  */
+  onlyDrvPath = drv:
+    let
+      inherit (drv) drvPath;
+      unsafeDrvPath = builtins.unsafeDiscardStringContext drvPath;
+    in
+    builtins.appendContext unsafeDrvPath {
+      ${unsafeDrvPath} = { path = true; };
+    };
+
   /* Query the type of a path exposing the same information as would be by
      `builtins.readDir`, but for a single, specific target path.
 
@@ -152,6 +167,7 @@ in
 {
   inherit
     storePathName
+    onlyDrvPath
     pathType
     isDirectory
     isRegularFile
