@@ -42,6 +42,7 @@ depot.nix.buildLisp.program {
       ./test/package.lisp
       ./test/model_test.lisp
       ./test/inline-markdown_test.lisp
+      ./test/util_test.lisp
     ];
 
     expression = "(fiveam:run!)";
