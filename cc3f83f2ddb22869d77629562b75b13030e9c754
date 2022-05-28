@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1b145686_92bb2595",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-05-28T13:36:17Z",
+      "side": 1,
+      "message": "Note that it *sometimes* works at the moment, like for patchset 1 here. lol.",
+      "revId": "cc3f83f2ddb22869d77629562b75b13030e9c754",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
