@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "33db5215_840fb57b",
+        "filename": "web/panettone/src/email.lisp",
+        "patchSetId": 1
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2022-05-28T16:27:37Z",
+      "side": 1,
+      "message": "nit: maybe just add this to the when-let, to avoid rightward drift and accessing the slot twice?",
+      "revId": "9179386f9b69a873502717bd82b69828f42f65d5",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
