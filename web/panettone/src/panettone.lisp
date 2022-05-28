@@ -485,7 +485,8 @@ given subject an body (in a thread, to avoid blocking)"
                  (id issue))
          :channel (or (uiop:getenvp "ISSUECHANNEL")
                       "#tvl"))
-        (hunchentoot:redirect "/"))))
+        (hunchentoot:redirect
+         (format nil "/issues/~A" (id issue))))))
 
 (defroute show-issue
     ("/issues/:id" :decorators (@auth-optional @handle-issue-not-found @db))
