@@ -16,7 +16,6 @@ depot.nix.buildLisp.program {
     lass
     local-time
     postmodern
-    trivial-ldap
 
     depot.lisp.klatre
   ];

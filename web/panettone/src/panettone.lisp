@@ -78,7 +78,7 @@
          (who:htm
           (:a :href
               (format nil
-                      "/login?original-uri=~A"
+                      "/auth?original-uri=~A"
                       (drakma:url-encode (hunchentoot:request-uri*)
                                          :utf-8))
               "Log In"))))))
@@ -134,36 +134,6 @@
   (who:with-html-output (*standard-output*)
     (when message
       (who:htm (:div :class "alert" (who:esc message))))))
-
-(defun render/login (&key message (original-uri "/"))
-  (render (:footer nil :header nil)
-    (:div
-     :class "login-form"
-     (:header
-      (:h1 "Login"))
-     (:main
-      :class "login-form"
-      (render/alert message)
-      (:form
-       :method :post :action "/login"
-       (:input :type "hidden" :name "original-uri"
-               :value (who:escape-string original-uri))
-       (:div
-        (:label :for "username"
-                "Username")
-        (:input :type "text"
-                :name "username"
-                :id "username"
-                :placeholder "username"))
-       (:div
-        (:label :for "password"
-                "Password")
-        (:input :type "password"
-                :name "password"
-                :id "password"
-                :placeholder "password"))
-       (:input :type "submit"
-               :value "Submit"))))))
 
 (defun render/settings ()
   (let ((settings (model:settings-for-user (dn *user*))))
@@ -434,7 +404,7 @@ given subject an body (in a thread, to avoid blocking)"
   (if-let ((*user* (hunchentoot:session-value 'user)))
     (funcall next)
     (hunchentoot:redirect
-     (format nil "/login?original-uri=~A"
+     (format nil "/auth?original-uri=~A"
              (drakma:url-encode
               (hunchentoot:request-uri*)
               :utf-8)))))
@@ -457,20 +427,16 @@ given subject an body (in a thread, to avoid blocking)"
       (render/not-found
        (format nil "Issue #~A" (model:not-found-id err))))))
 
-(defroute login-form ("/login" :method :get)
-    (original-uri)
-  (if (hunchentoot:session-value 'user)
-      (hunchentoot:redirect (or original-uri "/"))
-      (render/login :original-uri original-uri)))
-
-(defroute submit-login ("/login" :method :post)
-    (&post original-uri username password)
-  (if-let ((user (authenticate-user username password)))
-    (progn
+(defroute auth-handler ("/auth" :method :get :decorators (@auth-optional)) ()
+  (if-let ((code (hunchentoot:get-parameter "code")))
+    (let ((user (fetch-token code)))
       (setf (hunchentoot:session-value 'user) user)
-      (hunchentoot:redirect (or original-uri "/")))
-    (render/login :message "Invalid credentials"
-                  :original-uri original-uri)))
+      (hunchentoot:redirect (or (hunchentoot:session-value 'original-uri) "/")))
+
+    (progn
+      (when-let ((original-uri (hunchentoot:get-parameter "original-uri")))
+        (setf (hunchentoot:session-value 'original-uri) original-uri))
+      (hunchentoot:redirect (authn:auth-url)))))
 
 (defroute logout ("/logout" :method :post) ()
   (hunchentoot:delete-session-value 'user)
@@ -641,13 +607,7 @@ given subject an body (in a thread, to avoid blocking)"
   (pomo:with-connection *pg-spec*
     (model:ddl/init)))
 
-(defun start-panettone (&key port
-                          (ldap-host "localhost")
-                          (ldap-port 389)
-                          session-secret)
-  (connect-ldap :host ldap-host
-                :port ldap-port)
-
+(defun start-panettone (&key port session-secret)
   (model:prepare-db-connections)
   (migrate-db)
 
@@ -662,7 +622,6 @@ given subject an body (in a thread, to avoid blocking)"
 
 (defun main ()
   (let ((port (integer-env "PANETTONE_PORT" :default 6161))
-        (ldap-port (integer-env "LDAP_PORT" :default 389))
         (cheddar-url (uiop:getenvp "CHEDDAR_URL"))
         (session-secret (uiop:getenvp "SESSION_SECRET")))
     (when cheddar-url (setq *cheddar-url* cheddar-url))
@@ -670,7 +629,6 @@ given subject an body (in a thread, to avoid blocking)"
     (setq hunchentoot:*log-lisp-backtraces-p* nil)
 
     (start-panettone :port port
-                     :ldap-port ldap-port
                      :session-secret session-secret)
 
     (format t "launched panettone on port ~A~%" port)
@@ -683,9 +641,8 @@ given subject an body (in a thread, to avoid blocking)"
 
 (comment
  (setq hunchentoot:*catch-errors-p* nil)
- ;; to setup an ssh tunnel to ldap+cheddar+irccat for development:
- ;; ssh -NL 3899:localhost:389 -L 4238:localhost:4238 -L 4722:localhost:4722 whitby.tvl.fyi
+ ;; to setup an ssh tunnel to cheddar+irccat for development:
+ ;; ssh -N -L 4238:localhost:4238 -L 4722:localhost:4722 whitby.tvl.fyi
  (start-panettone :port 6161
-                  :ldap-port 3899
                   :session-secret "session-secret")
  )
