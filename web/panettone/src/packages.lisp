@@ -55,7 +55,7 @@
 (defpackage panettone.email
   (:nicknames :email)
   (:use :cl)
-  (:import-from :alexandria :when-let)
+  (:import-from :alexandria :when-let :when-let*)
   (:import-from :panettone.model
    :settings-for-user :enable-email-notifications-p)
   (:import-from :panettone.authentication

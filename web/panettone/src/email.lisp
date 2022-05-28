@@ -41,8 +41,9 @@ values of `*smtp-server*', `*smtp-server-port*' and `*email-notification-from*'"
   "Sends an email notification to the user with DN with the given SUBJECT and
   MESSAGE, iff that user has not disabled email notifications"
   (when (user-has-email-notifications-enabled-p dn)
-    (when-let ((user (find-user-by-dn dn)))
+    (when-let* ((user (find-user-by-dn dn))
+                (user-mail user))
       (send-email-notification
-       :to (mail user)
+       :to user-mail
        :subject subject
        :message message))))
