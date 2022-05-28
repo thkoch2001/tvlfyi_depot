@@ -35,7 +35,7 @@ in
     };
 
     virtualisation.oci-containers.containers.sourcegraph = {
-      image = "sourcegraph/server:3.35.2";
+      image = "sourcegraph/server:3.36.3";
 
       ports = [
         "127.0.0.1:${toString cfg.port}:7080"
