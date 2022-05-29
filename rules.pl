@@ -9,6 +9,9 @@
 % - The CI build has run successfully.
 % - The commit message conforms to our guidelines.
 %
+% It further conditionally allows autosubmission of changes if the
+% uploader was the change owner (see b/167 for background).
+%
 % It also implements the submit type decision, with the following
 % rules:
 %
@@ -92,6 +95,21 @@ build_check(Check) :-
 build_check(Check) :-
     gerrit:max_with_block(-1, 1, 'Verified', Check).
 
+% Allow autosubmit if the uploader is clbot (autosubmit already in
+% progress) or the change owner.
+%
+% This prepends to the existing checks because Gerrit's Prolog does
+% not have append/3.
+autosubmit(Current, New) :-
+    gerrit:uploader(Uploader),
+    (clbot(Uploader); gerrit:change_owner(Uploader)),
+    New = [label('Autosubmit', may(_)) | Current],
+    !.
+
+% Otherwise, do not allow autosubmit.
+autosubmit(Current, New) :-
+    New = Current.
+
 submit_rule(S) :-
     % Code review with +2 is required, -2 blocks the submit process.
     gerrit:max_with_block(-2, 2, 'Code-Review', ReviewCheck),
@@ -109,18 +127,18 @@ submit_rule(S) :-
     % CONTRIBUTING.md
     commit_message(CommitCheck),
 
-    % Allow the Autosubmit label to appear optionally.
-    Autosubmit = label('Autosubmit', may(_)),
-
+    % Check owners approval.
     code_owners(OwnerChecks),
+
+    % Check whether autosubmit is allowed.
+    autosubmit(OwnerChecks, AllOtherChecks),
 
     S =.. [submit,
            ReviewCheck,
            BuildCheck,
            CommentsCheck,
-           CommitCheck,
-           Autosubmit
-           | OwnerChecks].
+           CommitCheck
+           | AllOtherChecks ].
 
 submit_type(fast_forward_only) :-
     % Check if the commit type is a subtree commit.
