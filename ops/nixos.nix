@@ -7,10 +7,18 @@ in rec {
   baseModule = { ... }: {
     # Ensure that pkgs == third_party.nix
     nixpkgs.pkgs = depot.third_party.nixpkgs;
-    nix.nixPath = [
-      ("nixos=" + pkgs.path)
-      ("nixpkgs=" + pkgs.path)
-    ];
+    nix.nixPath =
+      let
+        # Due to nixpkgsBisectPath, pkgs.path is not always in the nix store
+        nixpkgsStorePath =
+          if lib.hasPrefix builtins.storeDir (toString pkgs.path)
+          then builtins.storePath pkgs.path # nixpkgs is already in the store
+          else pkgs.path; # we need to dump nixpkgs to the store either way
+      in
+      [
+        ("nixos=" + nixpkgsStorePath)
+        ("nixpkgs=" + nixpkgsStorePath)
+      ];
   };
 
   nixosFor = configuration: (depot.third_party.nixos {
