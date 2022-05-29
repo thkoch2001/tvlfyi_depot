@@ -16,6 +16,24 @@
       "message": "I guess defaulting to depot ? {} and pkgs ? import \u003cnixpkgs\u003e {}?",
       "revId": "f94a1ae92111720614a6bc57cb5a7bc280003a7b",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "deee0989_930650d0",
+        "filename": "nix/nix-1p/default.nix",
+        "patchSetId": 1
+      },
+      "lineNbr": 5,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-05-29T12:28:33Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c4c37f5b_6bfbaa55",
+      "revId": "f94a1ae92111720614a6bc57cb5a7bc280003a7b",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
