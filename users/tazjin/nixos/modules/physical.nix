@@ -42,6 +42,7 @@ in
       jq
       lieer
       man-pages
+      moreutils
       mosh
       msmtp
       mullvad-vpn
