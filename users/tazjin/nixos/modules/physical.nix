@@ -12,17 +12,16 @@ in
       users.tazjin.screenLock
       users.tazjin.emacs
       third_party.agenix.cli
+      third_party.josh
     ]) ++
 
     # programs from nixpkgs
     (with pkgs; [
       amber
-      audacity
       bat
       curl
       ddcutil
       direnv
-      # dmd # TODO(tazjin): temporarily broken in nixpkgs, reinstall when it works again
       dnsutils
       electrum
       emacsNativeComp # emacsclient
@@ -30,7 +29,6 @@ in
       fd
       file
       firefox
-      fractal
       gdb
       gh
       git
@@ -53,7 +51,6 @@ in
       notmuch
       openssh
       openssl
-      paperlike-go
       pass-otp
       pavucontrol
       pinentry
@@ -63,6 +60,7 @@ in
       quasselClient
       rink
       ripgrep
+      rust-analyzer
       rustup
       screen
       scrot
@@ -72,6 +70,7 @@ in
       unzip
       vlc
       whois
+      xclip
       xsecurelock
       zoxide
     ]);
