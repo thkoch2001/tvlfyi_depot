@@ -809,7 +809,6 @@ private/hlissner/snippets."
  ;; Rust
  (:after rust
    (:map rust-mode-map
-     "K"     #'racer-describe
      "g RET" #'cargo-process-test))
 
  ;; Elixir
