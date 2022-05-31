@@ -92,6 +92,10 @@ prompt_pure_nix_info() {
 }
 
 prompt_pure_precmd() {
+	if [[ "$TERM" == "dumb" ]]; then
+		return
+	fi
+
 	# shows the full path in the title
 	print -Pn '\e]0;%~\a'
 

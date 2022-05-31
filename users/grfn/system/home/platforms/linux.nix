@@ -15,8 +15,6 @@ in
     ../modules/email.nix
     ../modules/firefox.nix
     ../modules/games.nix
-    ../modules/obs.nix
-    ../modules/i3.nix
     ../modules/shell.nix
     ../modules/tarsnap.nix
     ../modules/vim.nix
@@ -77,15 +75,8 @@ in
     enable = true;
   };
 
-  gtk = {
-    enable = true;
-    gtk3.bookmarks = [
-      "file:///home/grfn/code"
-    ];
-  };
-
   programs.zsh.initExtra = ''
-    [[ ! $IN_NIX_SHELL ]] && alsi -l
+    [[ ! $IN_NIX_SHELL && "$TERM" != "dumb" ]] && alsi -l
   '';
 
   services.lorri.enable = true;

@@ -100,10 +100,7 @@ in
     }
     (mkIf pkgs.stdenv.isLinux {
       # Notes
-      services.syncthing = {
-        enable = true;
-        tray.enable = true;
-      };
+      services.syncthing.enable = true;
     })
   ];
 }

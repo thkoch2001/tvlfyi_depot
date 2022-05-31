@@ -68,7 +68,6 @@ in
   home.packages = with pkgs; [
     zsh
     autojump
-    ntfy
   ];
 
   home.sessionVariables = {
@@ -133,6 +132,12 @@ in
       };
     }];
 
+    initExtraFirst = ''
+      if [[ "$TERM" = "dumb" ]]; then
+        return
+      fi
+    '';
+
     initExtraBeforeCompInit = ''
       zstyle ':completion:*' completer _complete _ignored _correct _approximate
       zstyle ':completion:*' matcher-list \'\' 'm:{[:lower:]}={[:upper:]} m:{[:lower:][:upper:]}={[:upper:][:lower:]} r:|[._- :]=** r:|=**' 'l:|=* r:|=*'
@@ -145,33 +150,32 @@ in
     '';
 
     initExtra = ''
-      source ${./zshrc}
-      source ${pkgs.fetchFromGitHub {
-        owner = "zsh-users";
-        repo = "zsh-syntax-highlighting";
-        rev = "7678a8a22780141617f809002eeccf054bf8f448";
-        sha256 = "0xh4fbd54kvwwpqvabk8lpw7m80phxdzrd75q3y874jw0xx1a9q6";
-      }}/zsh-syntax-highlighting.zsh
-      source ${pkgs.autojump}/share/autojump/autojump.zsh
-      source ${pkgs.fetchFromGitHub {
-        owner = "chisui";
-        repo = "zsh-nix-shell";
-        rev = "a65382a353eaee5a98f068c330947c032a1263bb";
-        sha256 = "0l41ac5b7p8yyjvpfp438kw7zl9dblrpd7icjg1v3ig3xy87zv0n";
-      }}/nix-shell.plugin.zsh
+      if [[ "$TERM" != "dumb" ]]; then
+        source ${./zshrc}
+        source ${pkgs.fetchFromGitHub {
+          owner = "zsh-users";
+          repo = "zsh-syntax-highlighting";
+          rev = "7678a8a22780141617f809002eeccf054bf8f448";
+          sha256 = "0xh4fbd54kvwwpqvabk8lpw7m80phxdzrd75q3y874jw0xx1a9q6";
+        }}/zsh-syntax-highlighting.zsh
+        source ${pkgs.autojump}/share/autojump/autojump.zsh
+        source ${pkgs.fetchFromGitHub {
+          owner = "chisui";
+          repo = "zsh-nix-shell";
+          rev = "a65382a353eaee5a98f068c330947c032a1263bb";
+          sha256 = "0l41ac5b7p8yyjvpfp438kw7zl9dblrpd7icjg1v3ig3xy87zv0n";
+        }}/nix-shell.plugin.zsh
 
-      eval "$(${pkgs.ntfy}/bin/ntfy shell-integration)"
-
-      export RPS1=""
-      autoload -U promptinit; promptinit
-      prompt pure
+        export RPS1=""
+        autoload -U promptinit; promptinit
+        prompt pure
+      fi
 
       if [[ "$TERM" == "dumb" ]]; then
         unsetopt zle
         unsetopt prompt_cr
         unsetopt prompt_subst
-        unfunction precmd
-        unfunction preexec
+        unset zle_bracketed_paste
         export PS1='$ '
       fi
     '';
