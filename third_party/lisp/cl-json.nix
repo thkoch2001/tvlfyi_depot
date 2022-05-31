@@ -4,12 +4,7 @@
 let
   inherit (depot.nix) buildLisp;
 
-  src = pkgs.fetchFromGitHub {
-    owner = "hankhero";
-    repo = "cl-json";
-    rev = "6dfebb9540bfc3cc33582d0c03c9ec27cb913e79";
-    sha256 = "0fx3m3x3s5ji950yzpazz4s0img3l6b3d6l3jrfjv0lr702496lh";
-  };
+  src = pkgs.srcOnly pkgs.quicklispPackages.cl-json;
 in
 buildLisp.library {
   name = "cl-json";
