@@ -1,7 +1,7 @@
 { pkgs, lib, config, ... }:
 
 let
-  laptopKeyboardId = "5";
+  inherit (builtins) pathExists;
 in
 
 {
@@ -11,7 +11,9 @@ in
     ../modules/development.nix
     ../modules/emacs.nix
     ../modules/vim.nix
-  ];
+    ../modules/development/readyset.nix
+    ../modules/tmux.nix
+  ] ++ (lib.optional (pathExists ../modules/private.nix) ../modules/private.nix);
 
   home.packages = with pkgs; [
     # System utilities
@@ -36,6 +38,12 @@ in
     nix-prefetch-github
     nix-review
     cachix
+
+    # ReadySet stuff
+    nodejs
+    mysql80
+
+    (writeShellScriptBin "xdg-open" "echo xdg-open: \"$@\"")
   ];
 
   programs.password-store.enable = true;

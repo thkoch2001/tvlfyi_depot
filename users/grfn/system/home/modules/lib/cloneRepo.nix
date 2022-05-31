@@ -62,10 +62,13 @@ with lib;
           in hm.dag.entryAfter ([ "writeBoundary" ] ++ after) ''
             $DRY_RUN_CMD mkdir -p $(dirname "${path}")
             if [[ ! -d ${path} ]]; then
-              $DRY_RUN_CMD git clone "${repoURL}" "${path}"
-              pushd ${path}
-              $DRY_RUN_CMD ${onClone}
-              popd
+              if $DRY_RUN_CMD git clone "${repoURL}" "${path}"; then
+                pushd ${path}
+                $DRY_RUN_CMD ${onClone}
+                popd
+              else
+                echo "Git repository ${path} failed to clone"
+              fi
             fi
           '')
         config.grfn.impure.clonedRepos;

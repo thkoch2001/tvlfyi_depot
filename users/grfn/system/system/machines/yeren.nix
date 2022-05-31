@@ -105,15 +105,6 @@
   systemd.services.fprintd.environment.FP_TOD_DRIVERS_DIR =
     "${pkgs.libfprint-2-tod1-goodix}/usr/lib/libfprint-2/tod-1";
 
-  security.pam.loginLimits = [
-    {
-      domain = "grfn";
-      type = "soft";
-      item = "nofile";
-      value = "65535";
-    }
-  ];
-
   security.pam.services = {
     login.fprintAuth = true;
     sudo.fprintAuth = true;

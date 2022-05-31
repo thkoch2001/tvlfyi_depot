@@ -9,6 +9,8 @@ in
   imports = [
     ../platforms/linux.nix
     ../modules/common.nix
+    ../modules/desktop.nix
+    ../modules/development/agda.nix
     ../modules/development/readyset.nix
   ] ++ (lib.optional (pathExists ../modules/private.nix) ../modules/private.nix);
 

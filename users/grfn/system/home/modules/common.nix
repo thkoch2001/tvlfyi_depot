@@ -1,6 +1,7 @@
 { config, lib, pkgs, ... }:
 
-# Everything in here needs to work on linux or darwin
+# Everything in here needs to work on linux or darwin, with or without a desktop
+# environment
 
 {
   imports = [
@@ -55,6 +56,18 @@
       system=$(readlink -ef /tmp/mugwump)
       ssh mugwump sudo nix-env -p /nix/var/nix/profiles/system --set $system
       ssh mugwump sudo $system/bin/switch-to-configuration switch
+      rm /tmp/mugwump
+    '')
+    (writeShellScriptBin "rebuild-roswell" ''
+      set -eo pipefail
+      cd ~/code/depot
+      nix build -f . users.grfn.system.system.roswellSystem -o /tmp/roswell
+      nix copy -f . users.grfn.system.system.roswellSystem \
+        --to ssh://roswell
+      system=$(readlink -ef /tmp/roswell)
+      ssh roswell sudo nix-env -p /nix/var/nix/profiles/system --set $system
+      ssh roswell sudo $system/bin/switch-to-configuration switch
+      rm /tmp/roswell
     '')
     (writeShellScriptBin "rebuild-home" ''
       set -eo pipefail
@@ -95,7 +108,6 @@
 
       "roswell" = {
         host = "roswell";
-        hostname = "18.223.118.13";
         forwardAgent = true;
       };
     };

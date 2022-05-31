@@ -55,7 +55,6 @@ with lib;
       "wheel"
       "networkmanager"
       "audio"
-      "docker"
     ];
     shell = pkgs.zsh;
   };
