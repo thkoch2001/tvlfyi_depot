@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fd3b8e17_31c6faa5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-06-01T13:50:36Z",
+      "side": 1,
+      "message": "Not a Firefox user and unsure how this Firefox config is threaded through, but LGTM in principal.",
+      "revId": "a0390dd4e84c0b4c9bbd1cbce2a8c59494847356",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
