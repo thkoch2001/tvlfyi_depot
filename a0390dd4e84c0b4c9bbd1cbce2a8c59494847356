@@ -52,6 +52,24 @@
       "parentUuid": "77488377_03dd1219",
       "revId": "a0390dd4e84c0b4c9bbd1cbce2a8c59494847356",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "12a3f6bf_d701ffc3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000040
+      },
+      "writtenOn": "2022-06-01T15:13:41Z",
+      "side": 1,
+      "message": "Edit: `nixpkgs.config.firefox.smartcardSupport \u003d true;` of course\n(I\u0027m looking into the Thunderbird bits.)",
+      "parentUuid": "fa1e11c7_e42e9250",
+      "revId": "a0390dd4e84c0b4c9bbd1cbce2a8c59494847356",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
