@@ -34,6 +34,24 @@
       "parentUuid": "fd3b8e17_31c6faa5",
       "revId": "a0390dd4e84c0b4c9bbd1cbce2a8c59494847356",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fa1e11c7_e42e9250",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000040
+      },
+      "writtenOn": "2022-06-01T15:12:13Z",
+      "side": 1,
+      "message": "\u003e Actually looking at CI it does not look like this change affected NixOS systems which have Firefox and this module installed; so maybe something else is needed in addition?\n\nRebuild with\n\n```\nnixpkgs.config.thunderbird.smartcardSupport \u003d true;\nenvironment.systemPackages \u003d [ pkgs.firefox ];\n```\n\nsee how the wrapper now contains OpenSC bits\n```\n$ grep opensc $(which firefox)\ngrep opensc /nix/store/vrvxq52zc8didvwn767n50cm0jwsi5i1-firefox-100.0.2/bin/firefox \nLD_LIBRARY_PATH\u003d${LD_LIBRARY_PATH/\u0027:\u0027\u0027/nix/store/nyzcjni43ni3igm26saz0d5s4dkiyljy-opensc-0.22.0/lib64\u0027\u0027:\u0027/\u0027:\u0027}\nLD_LIBRARY_PATH\u003d\u0027/nix/store/nyzcjni43ni3igm26saz0d5s4dkiyljy-opensc-0.22.0/lib64\u0027$LD_LIBRARY_PATH\nLD_LIBRARY_PATH\u003d${LD_LIBRARY_PATH/\u0027:\u0027\u0027/nix/store/nyzcjni43ni3igm26saz0d5s4dkiyljy-opensc-0.22.0/lib\u0027\u0027:\u0027/\u0027:\u0027}\nLD_LIBRARY_PATH\u003d\u0027/nix/store/nyzcjni43ni3igm26saz0d5s4dkiyljy-opensc-0.22.0/lib\u0027$LD_LIBRARY_PATH\n```\n\nstart Firefox and confirm through `Settings \u003e Privacy \u0026 Security \u003e Security Devices... \u003e OpenSC PKCS#11 Module`.",
+      "parentUuid": "77488377_03dd1219",
+      "revId": "a0390dd4e84c0b4c9bbd1cbce2a8c59494847356",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
