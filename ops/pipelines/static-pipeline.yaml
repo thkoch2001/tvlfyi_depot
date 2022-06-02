@@ -100,8 +100,8 @@ steps:
         exit 1
       fi
 
-  # After duck, on success, upload and run any post-build steps that
-  # were output by the dynamic pipeline.
+  # After duck, on success, upload and run any release steps that were
+  # output by the dynamic pipeline.
   - label: ":arrow_heading_down:"
     depends_on:
       - step: ":duck:"
@@ -111,6 +111,6 @@ steps:
 
       buildkite-agent artifact download "pipeline/*" .
 
-      find ./pipeline -name 'post-chunk-*.json' | tac | while read chunk; do
+      find ./pipeline -name 'release-chunk-*.json' | tac | while read chunk; do
         buildkite-agent pipeline upload $$chunk
       done
