@@ -189,7 +189,8 @@ rec {
               map (mkExtraStep buildEnabled) steps)
             splitExtraSteps;
         in
-        extraSteps // {
+        if !buildEnabled then extraSteps
+        else extraSteps // {
           build = [ step ] ++ (extraSteps.build or [ ]);
         };
 
