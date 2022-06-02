@@ -70,6 +70,24 @@
       "parentUuid": "fa1e11c7_e42e9250",
       "revId": "a0390dd4e84c0b4c9bbd1cbce2a8c59494847356",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a7300d02_eacb6631",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-06-02T12:03:38Z",
+      "side": 1,
+      "message": "I mean, I have Firefox in the system closure of tverskoy, and also this module. I would have expected this change to affect the tverskoy closure hash because of that, but it did not.",
+      "parentUuid": "12a3f6bf_d701ffc3",
+      "revId": "a0390dd4e84c0b4c9bbd1cbce2a8c59494847356",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
