@@ -13,7 +13,7 @@ in
   filteredGitPush = { filter, remote, ref ? "refs/heads/canon" }: {
     label = ":git: push '${filter}' to external git repository";
     branches = [ "refs/heads/canon" ];
-    postBuild = true;
+    phase = "release";
 
     command = pkgs.writeShellScript "${sanitizeDerivationName filter}-push" ''
       set -e
