@@ -16,6 +16,24 @@
       "message": "What will happen with extra steps which logically depend on parent drv, but the build is disabled?",
       "revId": "d9eda750e8a7476b7b8bae74e17a7dbb3bbb7d4d",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3acf7115_3d504fe5",
+        "filename": "nix/buildkite/default.nix",
+        "patchSetId": 4
+      },
+      "lineNbr": 389,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-06-03T17:35:05Z",
+      "side": 1,
+      "message": "Depending on the step was always an optimisation, the extra step will build the parent derivation if necessary (by using its build command directly).",
+      "parentUuid": "f0281e34_0ddbfa55",
+      "revId": "d9eda750e8a7476b7b8bae74e17a7dbb3bbb7d4d",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
