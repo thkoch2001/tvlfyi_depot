@@ -46,6 +46,30 @@
       },
       "revId": "c0ff626bf6a4f78ec48644c693a92df1e01000ba",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0a013a7c_215921b9",
+        "filename": "tools/magrathea/mg.scm",
+        "patchSetId": 2
+      },
+      "lineNbr": 296,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2022-06-03T17:23:23Z",
+      "side": 1,
+      "message": "Feel free to implement it, I don’t want to block a small improvement",
+      "parentUuid": "a9417c73_e005a37c",
+      "range": {
+        "startLine": 296,
+        "startChar": 24,
+        "endLine": 296,
+        "endChar": 60
+      },
+      "revId": "c0ff626bf6a4f78ec48644c693a92df1e01000ba",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
