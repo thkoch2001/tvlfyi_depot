@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f0281e34_0ddbfa55",
+        "filename": "nix/buildkite/default.nix",
+        "patchSetId": 4
+      },
+      "lineNbr": 389,
+      "author": {
+        "id": 1000038
+      },
+      "writtenOn": "2022-06-03T13:42:53Z",
+      "side": 1,
+      "message": "What will happen with extra steps which logically depend on parent drv, but the build is disabled?",
+      "revId": "d9eda750e8a7476b7b8bae74e17a7dbb3bbb7d4d",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
