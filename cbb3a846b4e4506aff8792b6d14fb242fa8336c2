@@ -41,6 +41,30 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "e0e862e0_e79b2efb",
+        "filename": "nix/buildkite/default.nix",
+        "patchSetId": 2
+      },
+      "lineNbr": 155,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-06-03T17:38:43Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c59d3661_bdf25293",
+      "range": {
+        "startLine": 155,
+        "startChar": 56,
+        "endLine": 155,
+        "endChar": 60
+      },
+      "revId": "cbb3a846b4e4506aff8792b6d14fb242fa8336c2",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "5dd903a4_81d8d0ef",
@@ -54,6 +78,30 @@
       "writtenOn": "2022-06-03T13:02:00Z",
       "side": 1,
       "message": "what happens if unknown phase is requested?",
+      "range": {
+        "startLine": 162,
+        "startChar": 15,
+        "endLine": 162,
+        "endChar": 58
+      },
+      "revId": "cbb3a846b4e4506aff8792b6d14fb242fa8336c2",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "456aa82a_1a9ef3c9",
+        "filename": "nix/buildkite/default.nix",
+        "patchSetId": 2
+      },
+      "lineNbr": 162,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-06-03T17:38:43Z",
+      "side": 1,
+      "message": "Currently, nothing. I\u0027ll add a TODO to add a warning about that later.",
+      "parentUuid": "5dd903a4_81d8d0ef",
       "range": {
         "startLine": 162,
         "startChar": 15,
