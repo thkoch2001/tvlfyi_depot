@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f4e3e7f4_a9454d8d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000038
+      },
+      "writtenOn": "2022-06-03T10:45:24Z",
+      "side": 1,
+      "message": "I\u0027d imagine it\u0027s safe to call them Release steps, as everything related to integration testing should be executed before :duck:",
+      "revId": "cba51fd020f8bbae2bd44fc78e21a761fc34d08f",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
