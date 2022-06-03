@@ -40,6 +40,7 @@ in
   "owothia.age" = whitbyDefault;
   "panettone.age" = whitbyDefault;
   "smtprelay.age" = whitbyDefault;
+  "tf-buildkite.age" = whitbyDefault;
   "tf-glesys.age" = whitbyDefault;
   "tf-keycloak.age" = whitbyDefault;
   "tvl-alerts-bot-telegram-token.age" = whitbyDefault;
