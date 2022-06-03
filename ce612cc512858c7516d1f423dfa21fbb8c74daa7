@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "886bb86d_d6346f64",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-06-03T19:31:50Z",
+      "side": 1,
+      "message": "I think there should not be separate `shell` and `devshell` commands; rather magrathea should try to use an attribute we decide and fall back to a standard nix-shell for the derivation otherwise.\n\nThis fallback should probably be done on the Nix side of things to avoid evaluating twice. Also if you do add a message informing users about falling back or whatever, make sure it doesn\u0027t look \"scary\" - afterall *not* having a devshell attribute is not an error, it\u0027s perfectly sufficient for 99% of the software we have.",
+      "revId": "ce612cc512858c7516d1f423dfa21fbb8c74daa7",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
