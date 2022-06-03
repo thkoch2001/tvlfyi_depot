@@ -22,6 +22,30 @@
       },
       "revId": "2cf679e15742036bfb0b8027c3226fd2f5eba426",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "eb8b4b90_e9c48ceb",
+        "filename": "tools/magrathea/mg.scm",
+        "patchSetId": 2
+      },
+      "lineNbr": 204,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2022-06-03T17:17:52Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "ed3480bc_b0ca3c22",
+      "range": {
+        "startLine": 204,
+        "startChar": 9,
+        "endLine": 204,
+        "endChar": 21
+      },
+      "revId": "2cf679e15742036bfb0b8027c3226fd2f5eba426",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
