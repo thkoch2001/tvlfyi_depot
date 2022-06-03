@@ -15,6 +15,11 @@ depot.nix.lazy-deps {
   rebuild-system.attr = "ops.nixos.rebuild-system";
   rink.attr = "third_party.nixpkgs.rink";
 
+  tf-buildkite = {
+    attr = "ops.buildkite.terraform";
+    cmd = "terraform";
+  };
+
   tf-glesys = {
     attr = "ops.glesys.terraform";
     cmd = "terraform";
