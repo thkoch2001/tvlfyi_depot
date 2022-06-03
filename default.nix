@@ -5,6 +5,7 @@
 { nixpkgsBisectPath ? null
 , parentTargetMap ? null
 , nixpkgsConfig ? { }
+, system ? builtins.currentSystem
 , ...
 }@args:
 
@@ -74,6 +75,7 @@ let
 
 in
 readTree.fix (self: (readDepot {
+  inherit system;
   depot = self;
 
   # Pass third_party as 'pkgs' (for compatibility with external
