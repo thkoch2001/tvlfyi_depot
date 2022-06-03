@@ -1,4 +1,4 @@
-{ stdenv, pkgs, getBins }:
+{ stdenv, system, pkgs, getBins }:
 
 # The empty derivation. All it does is touch $out.
 # Basically the unit value for derivations.
@@ -15,9 +15,7 @@ let
 
   emptiness = {
     name = "empty-derivation";
-
-    # TODO(Profpatsch): can we get system from tvl?
-    inherit (stdenv) system;
+    inherit system;
 
     builder = bins.exec;
     args = [
