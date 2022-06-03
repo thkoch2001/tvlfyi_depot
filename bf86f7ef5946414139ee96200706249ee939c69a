@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "907fa3e4_a9d18717",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2022-06-03T23:23:42Z",
+      "side": 1,
+      "message": "Seeing as we have the same code at least trice now maybe we can move this into some kind of utility function?",
+      "revId": "bf86f7ef5946414139ee96200706249ee939c69a",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
