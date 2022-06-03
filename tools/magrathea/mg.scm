@@ -191,8 +191,13 @@ USAGE
 ;; create a nix expression for the given target
 ;;
 ;; an empty target will build the current folder instead.
-(define (nix-expr-for-target target)
-  (nix-expr-for-attrpath (normalised-components (normalise-target target))))
+;;
+;; The list of extra nix attrpaths is added to the target’s nix path.
+(define (nix-expr-for-target target #!optional (extra-nix-attrpath '()))
+  (nix-expr-for-attrpath
+    (append
+      (normalised-components (normalise-target target))
+      extra-nix-attrpath)))
 
 ;; create a nix expression to build the attribute at the specified
 ;; components
@@ -281,19 +286,28 @@ if you meant to pass these arguments to nix, please separate them with
 
     (execute-build parsed)))
 
-(define (execute-shell t)
-  (let ((expr (nix-expr-for-target t))
+(define (execute-shell shell-name t #!optional (extra-nix-attrpath '()))
+  (let ((expr (nix-expr-for-target t extra-nix-attrpath))
         (user-shell (or (get-environment-variable "SHELL") "bash")))
-    (fprintf (current-error-port) "[mg] entering shell for ~A~%" t)
+    (fprintf (current-error-port) "[mg] entering ~A for ~A~%" shell-name t)
     (process-execute "nix-shell"
                      (list "-E" expr "--command" user-shell))))
 
 (define (shell args)
   (match args
-         [() (execute-shell (empty-target))]
-         [(arg) (execute-shell
+         [() (execute-shell "shell" (empty-target) '())]
+         [(arg) (execute-shell "shell"
                  (guarantee-success (parse-target arg)))]
          [other (print "multiple targets not yet implemented")]))
+
+(define (devshell args)
+  (let ((extra-nix-attrpath '("passthru" "devshell")))
+    (match args
+          [() (execute-shell "devshell" (empty-target) extra-nix-attrpath)]
+          [(arg) (execute-shell "devshell"
+                  (guarantee-success (parse-target arg))
+                  extra-nix-attrpath)]
+          [other (print "multiple targets not yet implemented")])))
 
 (define (execute-run t #!optional cmd-args)
   (fprintf (current-error-port) "[mg] building target ~A~%" t)
@@ -357,6 +371,7 @@ if you meant to pass these arguments to nix, please separate them with
          [() (print usage)]
          [("build" . _) (build (cdr args))]
          [("shell" . _) (shell (cdr args))]
+         [("devshell" . _) (devshell (cdr args))]
          [("path" . _) (path (cdr args))]
          [("run" . _) (run (cdr args))]
          [other (begin (print "unknown command: mg " args)
