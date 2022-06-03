@@ -1,8 +1,8 @@
-{ depot, pkgs, ... }:
+{ depot, pkgs, system, ... }:
 
 let
   emptyDerivation = import ./emptyDerivation.nix {
-    inherit pkgs;
+    inherit pkgs system;
     inherit (pkgs) stdenv;
     inherit (depot.nix) getBins;
   };
