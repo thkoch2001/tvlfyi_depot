@@ -22,3 +22,10 @@ terraform {
 provider "buildkite" {
   organization = "tvl"
 }
+
+resource "buildkite_pipeline" "depot" {
+  name        = "depot"
+  description = "Run full CI pipeline of the depot, TVL's monorepo."
+  repository  = "https://cl.tvl.fyi/depot"
+  steps       = file("./steps-depot.yml")
+}

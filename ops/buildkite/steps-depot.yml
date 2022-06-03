@@ -1,0 +1,6 @@
+---
+steps:
+  - label: ":buildkite:"
+    key: ":init:"
+    command: |
+      buildkite-agent pipeline upload ops/pipelines/static-pipeline.yaml
