@@ -22,6 +22,30 @@
       },
       "revId": "d03e78e7ccf8963a8d0095f7b0e6f01fb544db0a",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9ea1b64a_eff675d2",
+        "filename": "tools/releases/default.nix",
+        "patchSetId": 1
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-06-03T17:38:43Z",
+      "side": 1,
+      "message": "Not necessary - you can click the \"eye icon\" in Buildkite and you\u0027ll see that skipped steps anyways (and you\u0027ll also see that the branch filter on them is working).",
+      "parentUuid": "1f4f8dfd_0904a7f2",
+      "range": {
+        "startLine": 15,
+        "startChar": 18,
+        "endLine": 15,
+        "endChar": 34
+      },
+      "revId": "d03e78e7ccf8963a8d0095f7b0e6f01fb544db0a",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
