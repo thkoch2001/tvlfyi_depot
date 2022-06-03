@@ -12,7 +12,7 @@ credentials.
 An example `direnv` configuration used by tazjin is this:
 
 ```
-# //ops/secrets/.envrc
+# //ops/keycloak/.envrc
 source_up
 eval $(age --decrypt -i ~/.ssh/id_ed25519 $(git rev-parse --show-toplevel)/ops/secrets/tf-keycloak.age)
 ```
