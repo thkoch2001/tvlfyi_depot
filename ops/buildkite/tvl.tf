@@ -29,3 +29,10 @@ resource "buildkite_pipeline" "depot" {
   repository  = "https://cl.tvl.fyi/depot"
   steps       = file("./steps-depot.yml")
 }
+
+resource "buildkite_pipeline" "tvl_kit" {
+  name        = "tvl-kit"
+  description = "TVL Kit, an exported subset of TVL depot"
+  repository  = "https://code.tvl.fyi/depot.git:workspace=views/kit.git"
+  steps       = file("./steps-tvl-kit.yml")
+}
