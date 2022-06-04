@@ -44,13 +44,16 @@ let
   # Overlay for packages that should come from the stable channel
   # instead (e.g. because something is broken in unstable).
   # Use `stableNixpkgs` from above.
-  stableOverlay = _unstableSelf: _unstableSuper: {
+  stableOverlay = unstableSelf: _unstableSuper: {
     # bat syntaxes changed with syntect 5.0, but cheddar is still on 4.x
     # TODO(tazjin): upgrade cheddar to syntect 5.0
     bat = stableNixpkgs.bat;
 
     # glimpse is broken in nixos-unstable at 2022-06-04
-    glimpse = stableNixpkgs.glimpse;
+    glimpse = unstableSelf.callPackage stableNixpkgs.glimpse.override {
+      AppKit = null;
+      Cocoa = null;
+    };
   };
 
   # Overlay to expose the nixpkgs commits we are using to other Nix code.
