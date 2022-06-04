@@ -48,6 +48,9 @@ let
     # bat syntaxes changed with syntect 5.0, but cheddar is still on 4.x
     # TODO(tazjin): upgrade cheddar to syntect 5.0
     bat = stableNixpkgs.bat;
+
+    # glimpse is broken in nixos-unstable at 2022-06-04
+    glimpse = stableNixpkgs.glimpse;
   };
 
   # Overlay to expose the nixpkgs commits we are using to other Nix code.
