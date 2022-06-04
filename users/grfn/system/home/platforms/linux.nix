@@ -40,7 +40,7 @@ in
     pandoc
     barrier
     depot.tools.nsfv-setup
-    glimpse # fork of gimp
+    gimp # TODO(grfn): use glimpse once it build again
 
     # System utilities
     powertop
