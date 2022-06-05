@@ -16,6 +16,24 @@
       "message": "Picking glimpse from stable increases closure size for grfn\u0027s machines. You ok with that, grfn?",
       "revId": "14c7d2929a628afc38b70c4706882eacec7f929b",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fa542646_d02b3a17",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-06-05T13:24:48Z",
+      "side": 1,
+      "message": "Agreed with grfn on IRC to replace it with gimp.",
+      "parentUuid": "24fe267c_e37ee366",
+      "revId": "14c7d2929a628afc38b70c4706882eacec7f929b",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
