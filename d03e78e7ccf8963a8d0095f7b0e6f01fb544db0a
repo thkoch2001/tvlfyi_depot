@@ -46,6 +46,30 @@
       },
       "revId": "d03e78e7ccf8963a8d0095f7b0e6f01fb544db0a",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1ef9b525_288bff80",
+        "filename": "tools/releases/default.nix",
+        "patchSetId": 1
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1000038
+      },
+      "writtenOn": "2022-06-06T11:59:44Z",
+      "side": 1,
+      "message": "Good to know, thanks",
+      "parentUuid": "9ea1b64a_eff675d2",
+      "range": {
+        "startLine": 15,
+        "startChar": 18,
+        "endLine": 15,
+        "endChar": 34
+      },
+      "revId": "d03e78e7ccf8963a8d0095f7b0e6f01fb544db0a",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
