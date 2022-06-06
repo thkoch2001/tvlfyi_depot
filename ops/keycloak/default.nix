@@ -6,9 +6,9 @@ depot.nix.readTree.drvTargets rec {
     p.keycloak
   ]);
 
-  validate = pkgs.runCommand "tf-validate-keycloak" { } ''
-    cp -r ${lib.cleanSource ./.}/* . && chmod -R u+w .
-    ${terraform}/bin/terraform init -upgrade -backend=false -input=false
-    ${terraform}/bin/terraform validate | tee $out
-  '';
+  validate = depot.tools.checks.validateTerraform {
+    inherit terraform;
+    name = "keycloak";
+    src = lib.cleanSource ./.;
+  };
 }
