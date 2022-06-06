@@ -6,12 +6,10 @@ depot.nix.readTree.drvTargets rec {
     depot.third_party.terraform-provider-glesys
   ]);
 
-  validate = pkgs.runCommand "tf-validate-glesys"
-    {
-      GLESYS_TOKEN = "ci-dummy";
-    } ''
-    cp -r ${lib.cleanSource ./.}/* . && chmod -R u+w .
-    ${terraform}/bin/terraform init -upgrade -backend=false -input=false
-    ${terraform}/bin/terraform validate | tee $out
-  '';
+  validate = depot.tools.checks.validateTerraform {
+    inherit terraform;
+    name = "glesys";
+    src = lib.cleanSource ./.;
+    env.GLESYS_TOKEN = "ci-dummy";
+  };
 }
