@@ -5,12 +5,10 @@ depot.nix.readTree.drvTargets rec {
     p.buildkite
   ]);
 
-  validate = pkgs.runCommand "tf-validate-buildkite"
-    {
-      BUILDKITE_API_TOKEN = "ci-dummy";
-    } ''
-    cp -r ${lib.cleanSource ./.}/* . && chmod -R u+w .
-    ${terraform}/bin/terraform init -upgrade -backend=false -input=false
-    ${terraform}/bin/terraform validate | tee $out
-  '';
+  validate = depot.tools.checks.validateTerraform {
+    inherit terraform;
+    name = "buildkite";
+    src = lib.cleanSource ./.;
+    env.BUILDKITE_API_TOKEN = "ci-dummy";
+  };
 }
