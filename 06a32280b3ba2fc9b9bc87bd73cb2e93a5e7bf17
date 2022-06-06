@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4cf9b112_e5968e36",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-06-06T11:04:35Z",
+      "side": 1,
+      "message": "Self-approval, this code works and nobody else is gonna feel confident reviewing TF I think.",
+      "revId": "06a32280b3ba2fc9b9bc87bd73cb2e93a5e7bf17",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
