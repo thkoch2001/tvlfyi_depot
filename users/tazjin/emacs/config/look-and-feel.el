@@ -56,6 +56,11 @@
     (when (bottom-right-window-p)
       (format "[%s]" exwm-workspace-current-index)))
 
+  ;; Display the current default sink volume
+  (telephone-line-defsegment telephone-line-current-volume ()
+    (when (bottom-right-window-p)
+      (cached-volume-icon)))
+
   ;; Define a highlight font for ~ important ~ information in the last
   ;; window.
   (defface special-highlight '((t (:foreground "white" :background "#5f627f"))) "")
@@ -69,6 +74,7 @@
   (setq telephone-line-rhs
         '((accent . (telephone-line-major-mode-segment))
           (nil . (telephone-line-last-window-segment
+                  ;; telephone-line-current-volume
                   telephone-line-exwm-workspace-index))
 
           ;; TODO(tazjin): lets not do this particular thing while I

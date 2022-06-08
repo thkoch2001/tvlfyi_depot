@@ -25,9 +25,35 @@
   "Command to decrease screen brightness."
   :group 'tazjin)
 
-(defun pactl (cmd)
-  (shell-command (concat "pactl " cmd))
-  (message "Volume command: %s" cmd))
+(defun pactl (cmd &optional quiet)
+  (let ((output (shell-command-to-string (concat "pactl " cmd))))
+    (unless quiet (message "Volume command: %s" cmd))
+    (s-trim output)))
+
+(defun current-volume-icon ()
+  "Represent current volume level of the default sink with an
+emoji, for use in the modeline."
+
+  (if (equal "Mute: yes" (pactl "get-sink-mute @DEFAULT_SINK@" t))
+      "🔇"
+    (let* ((volume-status (pactl "get-sink-volume @DEFAULT_SINK@" t))
+           (volume-pct-str (car (s-match "[0-9]+%" volume-status)))
+           (volume-pct (string-to-number volume-pct-str)))
+      (cond
+       ((<= volume-pct 33) "🔈")
+       ((<= volume-pct 66) "🔉")
+       ((> volume-pct 66) "🔊")))))
+
+;; Querying pactl for the sink volume status is pretty expensive (yes,
+;; really), so limit how much it is redrawn.
+(setq cached-volume `(0 . ,(current-volume-icon)))
+
+(defun cached-volume-icon ()
+  (let* ((now (time-convert nil 'integer))
+         (diff (- now (car cached-volume))))
+    (when (> diff 5)
+      (setq cached-volume (cons now (current-volume-icon))))
+    cached-volume))
 
 (defun volume-mute () (interactive) (pactl "set-sink-mute @DEFAULT_SINK@ toggle"))
 (defun volume-up () (interactive) (pactl "set-sink-volume @DEFAULT_SINK@ +5%"))
