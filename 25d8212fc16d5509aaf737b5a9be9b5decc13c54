@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "abb465af_a1e1330d",
+        "filename": "users/grfn/achilles/src/parser/expr.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 168,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2022-06-08T19:16:36Z",
+      "side": 1,
+      "message": "will need an extra pair of parens in the `Some`",
+      "revId": "25d8212fc16d5509aaf737b5a9be9b5decc13c54",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
