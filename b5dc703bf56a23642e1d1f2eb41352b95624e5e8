@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "98fdecfe_a6ad68e6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-06-09T15:13:24Z",
+      "side": 1,
+      "message": "Thanks! FWIW, this only affects the Sourcegraph update hook, no other besadii functionality. ",
+      "revId": "b5dc703bf56a23642e1d1f2eb41352b95624e5e8",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
