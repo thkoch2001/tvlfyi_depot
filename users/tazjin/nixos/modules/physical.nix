@@ -70,6 +70,7 @@ in
       tree
       unzip
       vlc
+      volumeicon
       whois
       xclip
       xsecurelock
