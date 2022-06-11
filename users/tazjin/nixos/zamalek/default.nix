@@ -61,6 +61,7 @@ in
     domain = "tvl.su";
     hostId = "ee399356";
     networkmanager.enable = true;
+    networkmanager.dns = "none";
 
     nameservers = [
       "8.8.8.8"
