@@ -76,12 +76,23 @@ let
         })
     else a // b;
 
+  fix = f: let x = f x; in x;
+
   # Import a file and enforce our calling convention
   importFile = args: scopedArgs: path: parts: filter:
     let
+      fullScopedArgs =
+        if scopedArgs != { }
+        then
+          fix
+            (self: scopedArgs // {
+              import = builtins.scopedImport self;
+            })
+        else { };
+
       importedFile =
         if scopedArgs != { }
-        then builtins.scopedImport scopedArgs path
+        then builtins.scopedImport fullScopedArgs path
         else import path;
       pathType = builtins.typeOf importedFile;
     in
@@ -262,7 +273,7 @@ in
   # be imported.
   #
   # It is often required to create the args attribute set.
-  fix = f: let x = f x; in x;
+  inherit fix;
 
   # Takes an attribute set and adds a meta.ci.targets attribute to it
   # which contains all direct children of the attribute set which are

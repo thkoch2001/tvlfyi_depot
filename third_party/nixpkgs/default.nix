@@ -39,7 +39,7 @@ let
 
   # Stable package set is imported, but not exposed, to overlay
   # required packages into the unstable set.
-  stableNixpkgs = import depot.third_party.sources.nixpkgs-stable commonNixpkgsArgs;
+  stableNixpkgs = builtins.import depot.third_party.sources.nixpkgs-stable commonNixpkgsArgs;
 
   # Overlay for packages that should come from the stable channel
   # instead (e.g. because something is broken in unstable).
@@ -58,7 +58,7 @@ let
     };
   };
 in
-import nixpkgsSrc (commonNixpkgsArgs // {
+builtins.import nixpkgsSrc (commonNixpkgsArgs // {
   overlays = [
     commitsOverlay
     stableOverlay
