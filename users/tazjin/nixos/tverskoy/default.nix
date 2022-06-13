@@ -49,9 +49,8 @@ lib.fix (self: {
 
   fileSystems = {
     "/" = {
-      device = "tmpfs";
-      fsType = "tmpfs";
-      options = [ "defaults" "size=8G" "mode=755" ];
+      device = "zpool/ephemeral/root";
+      fsType = "zfs";
     };
 
     "/home" = {
