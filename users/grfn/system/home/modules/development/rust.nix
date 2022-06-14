@@ -1,18 +1,28 @@
 { config, lib, pkgs, ... }:
 
-
+let
+  inherit (config.lib) depot;
+in
 {
+
   home.packages = with pkgs; [
     rustup
     rust-analyzer
     cargo-edit
     cargo-expand
-    cargo-flamegraph
     cargo-rr
     cargo-udeps
     cargo-bloat
     sccache
     evcxr
+
+    depot.users.grfn.pkgs.cargo-hakari
+    depot.users.grfn.pkgs.cargo-nextest
+
+    # benchmarking+profiling
+    cargo-criterion
+    cargo-flamegraph
+    coz
   ];
 
   programs.zsh.shellAliases = {
