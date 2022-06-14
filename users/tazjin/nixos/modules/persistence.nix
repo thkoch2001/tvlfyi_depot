@@ -3,7 +3,7 @@
 
 {
   imports = [
-    "${depot.third_party.impermanence}/nixos.nix"
+    (depot.third_party.sources.impermanence + "/nixos.nix")
   ];
 
   environment.persistence."/persist" = {
