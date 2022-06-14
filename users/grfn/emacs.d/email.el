@@ -40,3 +40,14 @@
                    (eq (car action)
                        'display-buffer-same-window))
   :ignore t)
+
+(defun apply-thread-patchset (repo branch)
+  (interactive "Dgit repo: \nsnew branch name: ")
+  (let ((tid notmuch-show-thread-id)
+        (tmp "/tmp/notmuch-patchset"))
+    (shell-command (format "notmuch-extract-patch %s > %s && ( cd %s && git checkout -b %s && git am %s )"
+                           (shell-quote-argument tid)
+                           (shell-quote-argument tmp)
+                           (shell-quote-argument (expand-file-name repo))
+                           (shell-quote-argument branch)
+                           (shell-quote-argument tmp)))))
