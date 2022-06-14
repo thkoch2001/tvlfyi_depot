@@ -37,6 +37,7 @@ in
   home.packages = with pkgs; [
     mu
     msmtp
+    config.lib.depot.users.grfn.pkgs.notmuch-extract-patch
   ];
 
   systemd.user.services = mapAttrs'
