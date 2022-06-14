@@ -35,4 +35,8 @@
       "public.ecr.aws" = "ecr-login";
     };
   };
+
+  programs.zsh.functions."purge_deployment" = ''
+    for key in $(http :8500/v1/kv/$1 keys==true | jq -r .'[]'); do http DELETE ":8500/v1/kv/$key"; done
+  '';
 }
