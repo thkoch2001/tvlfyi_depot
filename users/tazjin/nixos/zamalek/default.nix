@@ -22,7 +22,6 @@ in
     (usermod "physical.nix")
     (usermod "zerotier.nix")
 
-    (depot.third_party.impermanence + "/nixos.nix")
     (pkgs.home-manager.src + "/nixos")
   ] ++ lib.optional (builtins.pathExists ./local-config.nix) ./local-config.nix;
 

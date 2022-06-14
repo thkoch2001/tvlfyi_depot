@@ -4,7 +4,7 @@
 { config, lib, ... }: # home-manager
 
 {
-  imports = [ "${depot.third_party.impermanence}/home-manager.nix" ];
+  imports = [ (depot.third_party.sources.impermanence + "/home-manager.nix") ];
 
   home.persistence."/persist/tazjin/home" = {
     allowOther = true;
