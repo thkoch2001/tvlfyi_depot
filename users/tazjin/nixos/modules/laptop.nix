@@ -2,10 +2,11 @@
 { ... }:
 
 {
-  # Automatically detect location for redshift & timezone settings.
+  time.timeZone = "Europe/Moscow";
+
+  # Automatically detect location for redshift & so on ...
   services.geoclue2.enable = true;
   location.provider = "geoclue2";
-  services.localtimed.enable = true;
 
   # Enable power-saving features.
   services.tlp.enable = true;

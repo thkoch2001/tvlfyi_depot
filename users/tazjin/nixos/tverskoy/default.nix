@@ -47,6 +47,8 @@ lib.fix (self: {
     zfs.enableUnstable = true;
   };
 
+  virtualisation.virtualbox.host.enable = true;
+
   fileSystems = {
     "/" = {
       device = "zpool/ephemeral/root";
