@@ -19,8 +19,13 @@ let
     { name
     , libraries ? (_: [ ])
     , flakeIgnore ? [ ]
-    }: pkgs.writers.writePython3 name {
-      libraries = Libraries libraries pkgs.python3Packages;
+    }:
+    let
+      libs = pkgs.python310Packages;
+      python = libs.python;
+    in
+    pkgs.writers.makePythonWriter python libs name {
+      libraries = Libraries libraries libs;
       flakeIgnore =
         let
           ignoreTheseErrors = [
@@ -37,6 +42,10 @@ let
             # … between functions
             "E302"
             "E305"
+            # … if there’s too many of them
+            "E303"
+            # or lines that are too long
+            "E501"
           ];
         in
         list FlakeError (ignoreTheseErrors ++ flakeIgnore);
