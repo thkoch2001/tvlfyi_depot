@@ -7,8 +7,9 @@ let
     src = "${super.fetchFromGitHub {
       owner = "Profpatsch";
       repo = "dhall-haskell";
-      rev = "fix-dhall-to-nix-key-encoding";
-      sha256 = "sha256-P4MmQfyQ7MC5Jbs1o/+AJX/kdps2CjeOrtdpK85Tg68=";
+      # https://github.com/dhall-lang/dhall-haskell/pull/2426
+      rev = "82123817316192d39f9a3e68b8ce9c9cff0a48ed";
+      sha256 = "sha256-gbHoUKIdLPIttqeV471jsT8OJz6uiI6LpHOwtLbBGHY=";
     }}/${subdir}";
   };
 
@@ -21,7 +22,7 @@ let
         url = "https://github.com/justinwoo/easy-dhall-nix/archive/dce9acbb99776a7f1344db4751d6080380f76f57.tar.gz";
         sha256 = "0ckp6515gfvbxm08yyll87d9vg8sq2l21gwav2npzvwc3xz2lccf";
       })
-      { inherit self; };
+      { pkgs = self; };
 in
 {
   # TODO: this is to fix a bug in dhall-nix
