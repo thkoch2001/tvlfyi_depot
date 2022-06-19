@@ -15,13 +15,16 @@ let
         root = ./.;
         files = [
           "aerc.dhall"
+          "dhall/lib.dhall"
+          "ini/ini.dhall"
         ];
         main = "aerc.dhall";
-        deps = [ ];
+        deps = [
+        ];
       }
       {
         aercFilter = name: "${aerc-patched}/share/aerc/filters/${name}";
-        toIni = depot.users.Profpatsch.toINI { };
+        "Ini/externs" = depot.users.Profpatsch.ini.externs;
       };
 
   aerc-config = pkgs.linkFarm "alacritty-config" [
