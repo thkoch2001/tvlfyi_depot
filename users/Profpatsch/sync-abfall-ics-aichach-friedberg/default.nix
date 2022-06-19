@@ -10,5 +10,21 @@ let
       ]);
     } ./sync-ics-to-dir.py;
 
-in
-sync-to-dir
+  config =
+    depot.users.Profpatsch.importDhall.importDhall
+      {
+        root = ./..;
+        files = [
+          "sync-abfall-ics-aichach-friedberg/ics-to-caldav.dhall"
+          "dhall/lib.dhall"
+          "ini/ini.dhall"
+        ];
+        main = "sync-abfall-ics-aichach-friedberg/ics-to-caldav.dhall";
+        deps = [
+        ];
+      }
+      depot.users.Profpatsch.ini.externs;
+
+
+
+in { inherit config; }
