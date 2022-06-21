@@ -71,6 +71,16 @@ void show_commit_decorations(struct commit *commit)
 		strlcpy(buf, prettify_refname(deco->name), sizeof(buf));
 		switch(deco->type) {
 		case DECORATION_NONE:
+			/* If it is a depot revision, display it, otherwise
+			 * ... */
+			if (strncmp("refs/r/", buf, 7) == 0) {
+				html(" ");
+				cgit_log_link(/* trim 'refs/' */ buf + 5,
+					NULL, "rev-deco", buf, NULL,
+					ctx.qry.vpath, 0, NULL, NULL,
+					ctx.qry.showmsg, 0);
+			}
+
 			/* If the git-core doesn't recognize it,
 			 * don't display anything. */
 			break;
