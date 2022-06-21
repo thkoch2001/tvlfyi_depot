@@ -29,4 +29,11 @@
     content = ./posts/auto-reboot-nixos.md;
     draft = false;
   }
+  {
+    key = "csharp-unused-variables";
+    title = "Unused Variables Broke Prod";
+    date = 1655840877;
+    content = ./posts/csharp-unused-variables.md;
+    draft = false;
+  }
 ]
