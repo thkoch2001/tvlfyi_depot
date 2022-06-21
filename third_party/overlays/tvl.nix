@@ -74,22 +74,6 @@ in
     };
   }));
 
-  # bump nixpkgs-fmt to a version that doesn't touch whitespace in
-  # strings
-  nixpkgs-fmt = super.nixpkgs-fmt.overrideAttrs (old: rec {
-    src = self.fetchFromGitHub {
-      owner = "nix-community";
-      repo = "nixpkgs-fmt";
-      rev = "5ae8532b82eb040ca6b21ae2d02d9e88f604e76a";
-      sha256 = "0hjkbcgz62793hzfzlaxyah8a2c1k79n1k891lg7kfw8mkbq0w4p";
-    };
-
-    cargoDeps = old.cargoDeps.overrideAttrs (_: {
-      inherit src;
-      outputHash = "10if2lmv8d95j3walq3ggx3y423yfy4yl9vplw3apd0s671bly8b";
-    });
-  });
-
   # upgrade home-manager until the service-generation fix has landed upstream
   # https://github.com/nix-community/home-manager/issues/2846
   home-manager = super.home-manager.overrideAttrs (old: rec {
