@@ -253,9 +253,10 @@ static void print_commit(struct commit *commit, struct rev_info *revs)
 			strlcpy(info->subject + i, wrap_symbol, subject_len - i + 1);
 		}
 	}
+	show_commit_decorations(commit);
+        html("&nbsp;");
 	cgit_commit_link(info->subject, NULL, NULL, ctx.qry.head,
 			 oid_to_hex(&commit->object.oid), ctx.qry.vpath);
-	show_commit_decorations(commit);
 	html("</td><td>");
 	cgit_open_filter(ctx.repo->email_filter, info->author_email, "log");
 	html_txt(info->author);
