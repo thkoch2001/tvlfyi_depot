@@ -668,6 +668,13 @@ div#cgit a.branch-deco {
 	border: solid 1px #007700;
 }
 
+div#cgit a.rev-deco {
+	color: #000;
+	padding: 0px 0.25em;
+	background-color: #eee;
+	border: solid 1px #aaa;
+}
+
 div#cgit a.tag-deco {
 	color: #000;
 	padding: 0px 0.25em;
@@ -700,6 +707,7 @@ div#cgit div.commit-subject a.branch-deco,
 div#cgit div.commit-subject a.tag-deco,
 div#cgit div.commit-subject a.tag-annotated-deco,
 div#cgit div.commit-subject a.remote-deco,
+div#cgit div.commit-subject a.rev-deco,
 div#cgit div.commit-subject a.deco {
 	font-size: 75%;
 }
