@@ -1,12 +1,12 @@
-# Configuration for running the TVL cgit instance using thttpd.
-{ config, depot, lib, pkgs, ... }:
+# Wrapper for running cgit through thttpd with TVL-specific
+# configuration.
+#
+# In practice this is only used for //ops/modules/cgit, but exposing
+# it here makes it easy to experiment with cgit locally.
+{ depot, lib, pkgs, ... }:
 
 let
-  inherit (pkgs) writeText;
-
-  cfg = config.services.depot.cgit;
-
-  cgitConfig = writeText "cgitrc" ''
+  cgitConfig = repo: pkgs.writeText "cgitrc" ''
     # Global configuration
     virtual-root=/
     enable-http-clone=0
@@ -22,14 +22,14 @@ let
 
     # Repository configuration
     repo.url=depot
-    repo.path=/var/lib/gerrit/git/depot.git/
+    repo.path=${repo}
     repo.desc=monorepo for the virus lounge
     repo.owner=The Virus Lounge
     repo.clone-url=https://code.tvl.fyi/depot.git
   '';
 
-  thttpdConfig = writeText "thttpd.conf" ''
-    port=${toString cfg.port}
+  thttpdConfig = port: pkgs.writeText "thttpd.conf" ''
+    port=${toString port}
     dir=${depot.third_party.cgit}/cgit
     nochroot
     novhost
@@ -42,7 +42,7 @@ let
   #
   # Things are done this way because recompilation of thttpd is much
   # faster than cgit.
-  thttpdConfigPatch = writeText "thttpd_cgit_conf.patch" ''
+  thttpdConfigPatch = repo: pkgs.writeText "thttpd_cgit_conf.patch" ''
     diff --git a/libhttpd.c b/libhttpd.c
     index c6b1622..eef4b73 100644
     --- a/libhttpd.c
@@ -51,42 +51,21 @@ let
 
          envn = 0;
     +    // force cgit to load the correct configuration
-    +    envp[envn++] = "CGIT_CONFIG=${cgitConfig}";
+    +    envp[envn++] = "CGIT_CONFIG=${cgitConfig repo}";
          envp[envn++] = build_env( "PATH=%s", CGI_PATH );
      #ifdef CGI_LD_LIBRARY_PATH
   '';
 
-  thttpdCgit = pkgs.thttpd.overrideAttrs (old: {
+  thttpdCgit = repo: pkgs.thttpd.overrideAttrs (old: {
     patches = [
       ./thttpd_cgi_idx.patch
-      thttpdConfigPatch
+      (thttpdConfigPatch repo)
     ];
   });
-in
-{
-  options.services.depot.cgit = with lib; {
-    enable = mkEnableOption "Run cgit web interface for depot";
 
-    port = mkOption {
-      description = "Port on which cgit should listen";
-      type = types.int;
-      default = 2448;
-    };
-  };
-
-  config = lib.mkIf cfg.enable {
-    systemd.services.cgit = {
-      wantedBy = [ "multi-user.target" ];
-
-      serviceConfig = {
-        Restart = "on-failure";
-        User = "git";
-        Group = "git";
-
-        ExecStart = pkgs.writeShellScript "cgit-launch" ''
-          exec ${thttpdCgit}/bin/thttpd -D -C ${thttpdConfig}
-        '';
-      };
-    };
-  };
-}
+in lib.makeOverridable({
+  port ? 2448,
+  repo ? "/var/lib/gerrit/git/depot.git/"
+}: pkgs.writeShellScript "cgit-launch" ''
+  exec ${thttpdCgit repo}/bin/thttpd -D -C ${thttpdConfig port}
+'') {}
