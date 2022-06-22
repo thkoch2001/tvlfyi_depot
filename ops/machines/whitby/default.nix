@@ -10,7 +10,7 @@ in
 {
   imports = [
     (mod "atward.nix")
-    (mod "cgit/default.nix")
+    (mod "cgit.nix")
     (mod "clbot.nix")
     (mod "gerrit-queue.nix")
     (mod "irccat.nix")
