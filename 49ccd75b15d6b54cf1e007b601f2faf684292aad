@@ -16,6 +16,24 @@
       "message": "Very unsure about this one.\n\nCompare before/after:\n\nBefore: https://matrix.hackint.org/_matrix/media/r0/download/matrix.org/kLKwijrYAYiMwUTEHeoOMpxy/zamalek_2022-06-22_1655846040.png\n\nAfter: https://matrix.hackint.org/_matrix/media/r0/download/matrix.org/mTEpXZzlenLnRAWJXqKEwelo/zamalek_2022-06-22_1655845869.png",
       "revId": "49ccd75b15d6b54cf1e007b601f2faf684292aad",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "77fc6f94_c87a99c7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-06-22T10:41:36Z",
+      "side": 1,
+      "message": "Done. Several votes in favour.",
+      "parentUuid": "e8ca1144_c4562677",
+      "revId": "49ccd75b15d6b54cf1e007b601f2faf684292aad",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
