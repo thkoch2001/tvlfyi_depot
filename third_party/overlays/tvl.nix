@@ -56,6 +56,19 @@ in
     })
   );
 
+  # Upgrade to match telega in emacs-overlay
+  # TODO(tazjin): ugrade tdlib (+ telega?!) in nixpkgs
+  tdlib = assert super.tdlib.version == "1.8.3";
+    super.tdlib.overrideAttrs (old: {
+      version = "1.8.4";
+      src = self.fetchFromGitHub {
+        owner = "tdlib";
+        repo = "td";
+        rev = "7eabd8ca60de025e45e99d4e5edd39f4ebd9467e";
+        sha256 = "1chs0ibghjj275v9arsn3k68ppblpm7ysqk0za9kya5vdnldlld5";
+      };
+    });
+
   # dottime support for notmuch
   notmuch = super.notmuch.overrideAttrs (old: {
     passthru = old.passthru // {
@@ -66,6 +79,13 @@ in
   # nix-serve does not work with nix 2.4
   # https://github.com/edolstra/nix-serve/issues/28
   nix-serve = super.nix-serve.override { nix = super.nix_2_3; };
+
+  # Workaround for srcOnly with separateDebugInfo until
+  # https://github.com/NixOS/nixpkgs/pull/179170 is merged.
+  srcOnly = args: (super.srcOnly args).overrideAttrs (_: {
+    outputs = [ "out" ];
+    separateDebugInfo = false;
+  });
 
   # Avoid builds of mkShell derivations in CI.
   mkShell = super.lib.makeOverridable (args: (super.mkShell args).overrideAttrs (_: {
