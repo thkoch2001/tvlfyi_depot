@@ -67,6 +67,12 @@ in
   # https://github.com/edolstra/nix-serve/issues/28
   nix-serve = super.nix-serve.override { nix = super.nix_2_3; };
 
+  # Workaround for srcOnly with separateDebugInfo until
+  # https://github.com/NixOS/nixpkgs/pull/179170 is merged.
+  srcOnly = args: (super.srcOnly args).overrideAttrs (_: {
+    outputs = [ "out" ];
+  });
+
   # Avoid builds of mkShell derivations in CI.
   mkShell = super.lib.makeOverridable (args: (super.mkShell args).overrideAttrs (_: {
     passthru = {
