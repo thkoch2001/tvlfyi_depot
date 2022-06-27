@@ -3,8 +3,8 @@ use serde_json::{Value, json};
 
 // From the serde_json docs:
 //
-// > There are three common ways that you might find yourself needing to work with
-// > JSON data in Rust.
+// > There are three common ways that you might find yourself needing to work
+// > with JSON data in Rust.
 // >
 // > 1. As text data. An unprocessed string of JSON data that you receive on an
 // >    HTTP endpoint, read from a file, or prepare to send to a remote server.
