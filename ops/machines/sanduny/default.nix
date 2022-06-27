@@ -16,6 +16,7 @@ in
   imports = [
     (mod "journaldriver.nix")
     (mod "known-hosts.nix")
+    (mod "tvl-cache.nix")
     (mod "tvl-users.nix")
     (mod "www/self-redirect.nix")
   ];
@@ -102,6 +103,8 @@ in
       fsType = "ext4";
     };
   };
+
+  tvl.cache.enable = true;
 
   swapDevices = lib.singleton {
     device = "/dev/disk/by-uuid/df4ad9da-0a06-4c27-93e5-5d44e4750e55";
