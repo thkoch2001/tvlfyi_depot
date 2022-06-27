@@ -1,3 +1,4 @@
+use serde::{Deserialize, Serialize};
 use serde_json::{json, Value};
 
 // From the serde_json docs:
@@ -16,6 +17,21 @@ use serde_json::{json, Value};
 // >    done without JSON’s loosey-goosey nature tripping you up.
 //
 // So let's take a look at all three...
+
+////////////////////////////////////////////////////////////////////////////////
+// Types
+////////////////////////////////////////////////////////////////////////////////
+
+#[derive(Serialize, Deserialize, Debug)]
+struct Person {
+    fname: String,
+    lname: String,
+    age: u8,
+}
+
+////////////////////////////////////////////////////////////////////////////////
+// Functions
+////////////////////////////////////////////////////////////////////////////////
 
 // 1) Reading/writing from/to plain text.
 //    TL;DR:
@@ -48,6 +64,26 @@ fn two() {
     println!("result: {:?}", result);
 }
 
+// 3) Parse into a strongly typed structure.
+//    TL;DR:
+//    - read:  serde_json::from_str(data)
+//    - write: serde_json::to_string(x).unwrap()
+fn three() {
+    let data = r#"{"fname":"William","lname":"Carroll","age":30}"#;
+
+    let mut read: Person = serde_json::from_str(data).unwrap();
+    read.fname = "Norm".to_string();
+    read.lname = "Macdonald".to_string();
+    read.age = 61;
+
+    let write = serde_json::to_string(&read).unwrap();
+    println!("result: {:?}", write);
+}
+
+////////////////////////////////////////////////////////////////////////////////
+// Main
+////////////////////////////////////////////////////////////////////////////////
+
 fn main() {
-    two()
+    three()
 }
