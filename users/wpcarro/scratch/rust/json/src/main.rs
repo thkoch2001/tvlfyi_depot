@@ -1,4 +1,4 @@
-use serde_json::json;
+use serde_json::{Value, json};
 
 // From the serde_json docs:
 //
@@ -32,6 +32,22 @@ fn one() {
     println!("result: {:?}", data);
 }
 
+// 2) Parse into a loosely typed representation; mutate it; serialize it back.
+//    TL;DR:
+//    - read:  serde_json::from_str(data)
+//    - write: x.to_string()
+fn two() {
+    let data = r#"{"fname":"William","lname":"Carroll","age":30}"#;
+
+    let mut parsed: Value = serde_json::from_str(data).unwrap();
+    parsed["fname"] = json!("Norm");
+    parsed["lname"] = json!("Macdonald");
+    parsed["age"] = json!(61);
+
+    let result = parsed.to_string();
+    println!("result: {:?}", result);
+}
+
 fn main() {
-    one()
+    two()
 }
