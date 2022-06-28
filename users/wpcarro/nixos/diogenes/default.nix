@@ -4,6 +4,9 @@ let
   inherit (depot.users) wpcarro;
   name = "diogenes";
   domainName = "billandhiscomputer.com";
+
+  mod = name: depot.path.origSrc + ("/ops/modules/" + name);
+  usermod = name: depot.path.origSrc + ("/users/wpcarro/nixos/modules/" + name);
 in
 wpcarro.terraform.googleCloudVM {
   project = "wpcarros-infrastructure";
@@ -36,7 +39,10 @@ wpcarro.terraform.googleCloudVM {
 
   configuration = {
     imports = [
-      (depot.path.origSrc + "/ops/modules/quassel.nix")
+      (mod "quassel.nix")
+      (usermod "nginx.nix")
+      (usermod "www/billandhiscomputer.com.nix")
+      (usermod "www/wpcarro.dev.nix")
     ];
 
     networking = {
@@ -116,42 +122,6 @@ wpcarro.terraform.googleCloudVM {
         logStream = "home";
         googleCloudProject = "wpcarros-infrastructure";
         applicationCredentials = "/etc/gcp/key.json";
-      };
-
-      nginx = {
-        enable = true;
-        enableReload = true;
-
-        recommendedTlsSettings = true;
-        recommendedGzipSettings = true;
-        recommendedProxySettings = true;
-
-        # for journaldriver
-        commonHttpConfig = ''
-          log_format json_combined escape=json
-          '{'
-              '"remote_addr":"$remote_addr",'
-              '"method":"$request_method",'
-              '"host":"$host",'
-              '"uri":"$request_uri",'
-              '"status":$status,'
-              '"request_size":$request_length,'
-              '"response_size":$body_bytes_sent,'
-              '"response_time":$request_time,'
-              '"referrer":"$http_referer",'
-              '"user_agent":"$http_user_agent"'
-          '}';
-
-          access_log syslog:server=unix:/dev/log,nohostname json_combined;
-        '';
-
-        virtualHosts = {
-          "${domainName}" = {
-            addSSL = true;
-            enableACME = true;
-            root = wpcarro.website.root;
-          };
-        };
       };
     };
 
