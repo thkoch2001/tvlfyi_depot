@@ -150,6 +150,15 @@ let
               name = "scripts/ytextr";
               path = depot.users.Profpatsch.ytextr;
             }
+            {
+              name = "scripts/lorri-wait-for-eval";
+              path = depot.users.Profpatsch.lorri-wait-for-eval;
+            }
+            {
+              name = "scripts/lw";
+              path = depot.users.Profpatsch.lorri-wait-for-eval;
+            }
+
           ]
           ++
           (lib.pipe depot.users.Profpatsch.aliases [
