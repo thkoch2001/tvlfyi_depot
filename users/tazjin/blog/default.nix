@@ -8,7 +8,7 @@ let
   config = {
     name = "tazjin's blog";
     baseUrl = "https://tazj.in/blog";
-
+    staticUrl = "https://static.tvl.fyi/${depot.web.static.drvHash}";
     footer = ''
       <p class="footer">
         <a class="uncoloured-link" href="https://tazj.in">homepage</a>
