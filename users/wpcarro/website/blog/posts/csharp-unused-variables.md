@@ -1,5 +1,3 @@
-# Unused Variables Broke Prod
-
 **Problem**: This morning we broke production because (believe it or not) an
 unused variable went undetected.
 
