@@ -5,6 +5,7 @@
     name = "TVL's blog";
     footer = depot.web.tvl.footer { };
     baseUrl = "https://tvl.fyi/blog";
+    staticUrl = "https://static.tvl.fyi/${depot.web.static.drvHash}";
   };
 
   posts = [
