@@ -11,15 +11,13 @@ let
   inherit (pkgs) runCommandNoCC writeText;
   inherit (depot.nix) renderMarkdown;
 
-  staticUrl = "https://static.tvl.fyi/${depot.web.static.drvHash}";
-
   # Generate a post list for all listed, non-draft posts.
   isDraft = post: (hasAttr "draft" post) && post.draft;
   isUnlisted = post: (hasAttr "listed" post) && !post.listed;
 
   escape = replaceStrings [ "<" ">" "&" "'" ] [ "&lt;" "&gt;" "&amp;" "&#39;" ];
 
-  header = name: title: ''
+  header = name: title: staticUrl: ''
     <!DOCTYPE html>
     <head>
       <meta charset="utf-8">
@@ -61,8 +59,8 @@ let
     <hr>
   '';
 
-  renderPost = { name, footer, ... }: post: runCommandNoCC "${post.key}.html" { } ''
-    cat ${writeText "header.html" (header name post.title)} > $out
+  renderPost = { name, footer, staticUrl, ... }: post: runCommandNoCC "${post.key}.html" { } ''
+    cat ${writeText "header.html" (header name post.title staticUrl)} > $out
 
     # Write the post title & date
     echo '<article><h2 class="inline">${escape post.title}</h2>' >> $out
