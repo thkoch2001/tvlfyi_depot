@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "264bedd5_04b075a7",
+        "filename": "web/blog/fragments.nix",
+        "patchSetId": 1
+      },
+      "lineNbr": 62,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-06-30T23:03:42Z",
+      "side": 1,
+      "message": "can you default it to the previous value?",
+      "range": {
+        "startLine": 62,
+        "startChar": 31,
+        "endLine": 62,
+        "endChar": 40
+      },
+      "revId": "ff25c9577962e61ec24b9ab7d7f4f3c1b88c3201",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
