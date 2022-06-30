@@ -11,6 +11,7 @@ let
   config = {
     name = "bill and his blog";
     baseUrl = "https://${domain}/blog";
+    staticUrl = "https://static.tvl.fyi/latest";
     footer = "";
   };
 
