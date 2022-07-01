@@ -36,4 +36,11 @@
     content = ./posts/csharp-unused-variables.md;
     draft = false;
   }
+  {
+    key = "restic-field-guide";
+    title = "Beginner's Field Guide to restic";
+    date = 1656645093;
+    content = ./posts/restic.md;
+    draft = false;
+  }
 ]
