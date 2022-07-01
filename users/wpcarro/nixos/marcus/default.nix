@@ -4,6 +4,8 @@
 let
   inherit (depot.users) wpcarro;
 
+  usermod = name: depot.path.origSrc + ("/users/wpcarro/nixos/modules/${name}");
+
   wpcarrosEmacs = wpcarro.emacs.nixos {
     load = [ ./marcus.el ];
   };
@@ -18,6 +20,7 @@ in
   imports = [
     (depot.path.origSrc + "/users/wpcarro/nixos/marcus/hardware.nix")
     (pkgs.home-manager.src + "/nixos")
+    (usermod "laptop.nix")
   ];
 
   # Use the TVL binary cache
@@ -111,9 +114,7 @@ in
     };
   };
 
-  programs = wpcarro.common.programs // {
-    light.enable = true;
-  };
+  programs = wpcarro.common.programs;
 
   environment.variables = {
     EDITOR = "emacsclient";
