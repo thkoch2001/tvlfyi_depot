@@ -102,6 +102,24 @@ Similar to records, lists start with the length of their whole encoded content.
 * The list with text `foo` followed by i3 `-42`: `[14:t3:foo,i3:-42,]`
 * The list with `Some` and `None` tags: `[33:<4:Some|t3:foo,<4None|u,<4None|u,]`
 
+## parser security considerations
+
+The length field is a decimal number that is not length-restricted,
+which itself an attacker can give an infinite 
+thus overflowing your parser if it is not careful.
+
+You should have a practical length limit of a (configurable?) amount of decimals (2 decimals per byte)
+and then also enforce a length limit on how long the value can be.
+
+You can start by setting e.g. a max value length in bytes, by counting the number of decimal in your max value length.
+
+So if your max length should be 1024 bytes, your length field will be a maximum `count_digits(1024) == 4` bytes long.
+
+Thus, if you restrict your parser to a length field of 4 bytes,
+it should also never parse anything longer than 1024 bytes for the value
+(plus the 1 byte for the type tag, the 4 bytes for the length, and 2 bytes for the separator & ending character).
+
+
 ## motivation
 
 TODO
