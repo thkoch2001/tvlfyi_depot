@@ -6,14 +6,18 @@ self: super:
 let
   # Rollback Nix to a stable version (2.3) with backports for
   # build-user problems applied.
-  nixSrc = self.fetchFromGitHub
-    {
-      owner = "tvlfyi";
-      repo = "nix";
+  nixSrc =
+    let
       # branch 2.3-backport-await-users
-      rev = "880a62b08443a6baa55dab027b69bb8b1551a588";
-      hash = "sha256:0jnwrzxh04d0pyhx4n8fg4w1w6ak48byl5k2i8j7fk4h9vd9649k";
-    } // { revCount = 0; shortRev = "880a62b0"; };
+      rev = "4510dbc8a6802902cbab6444134659548fffb9b0";
+    in
+    self.fetchFromGitHub
+      {
+        owner = "tvlfyi";
+        repo = "nix";
+        inherit rev;
+        hash = "sha256:0vg2xzwc8q1sw20b26qbyd4flnws8668yhi1cg2h6z3jb3wamhr5";
+      } // { revCount = 0; shortRev = builtins.substring 0 7 rev; };
 in
 {
   nix = (import "${nixSrc}/release.nix" {
