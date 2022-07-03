@@ -24,10 +24,11 @@ in
 {
   "besadii.age" = whitbyDefault;
   "buildkite-agent-token.age" = whitbyDefault;
-  "buildkite-ssh-private-key.age" = whitbyDefault;
   "buildkite-graphql-token.age" = whitbyDefault;
+  "buildkite-ssh-private-key.age" = whitbyDefault;
   "clbot-ssh.age" = whitbyDefault;
   "clbot.age" = whitbyDefault;
+  "depot-replica-key.age" = whitbyDefault;
   "gerrit-queue.age" = whitbyDefault;
   "gerrit-secrets.age" = whitbyDefault;
   "grafana.age" = whitbyDefault;
