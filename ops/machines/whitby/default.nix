@@ -278,6 +278,14 @@ in
         file = secretFile "nix-cache-pub";
         mode = "0444";
       };
+
+      depot-replica-key = {
+        file = secretFile "depot-replica-key";
+        mode = "0500";
+        owner = "git";
+        group = "git";
+        path = "/var/lib/git/.ssh/id_ed25519";
+      };
     };
 
   # Automatically collect garbage from the Nix store.
