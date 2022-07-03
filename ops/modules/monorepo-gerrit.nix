@@ -20,9 +20,11 @@ in
     enable = true;
     listenAddress = "[::]:4778"; # 4778 - grrt
     serverId = "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36";
+
     builtinPlugins = [
       "download-commands"
       "hooks"
+      "replication"
     ];
 
     plugins = with depot.third_party.gerrit_plugins; [
@@ -128,6 +130,17 @@ in
         smtpEncryption = "none";
         smtpServer = "localhost";
         smtpServerPort = 2525;
+      };
+    };
+
+    # Replication of the depot repository to secondary machines, for
+    # serving cgit/josh.
+    replicationSettings = {
+      gerrit.replicateOnStartup = true;
+
+      remote.sanduny = {
+        url = "depot@sanduny.tvl.su:/var/lib/depot";
+        projects = "depot";
       };
     };
   };
