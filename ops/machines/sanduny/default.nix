@@ -14,6 +14,7 @@ let
 in
 {
   imports = [
+    (mod "depot-replica.nix")
     (mod "journaldriver.nix")
     (mod "known-hosts.nix")
     (mod "tvl-cache.nix")
@@ -75,6 +76,9 @@ in
     maxFreed = 5; # GiB
     preserveGenerations = "90d";
   };
+
+  # Allow Gerrit to replicate depot to /var/lib/depot
+  services.depot.replica.enable = true;
 
   time.timeZone = "UTC";
 
