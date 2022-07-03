@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b63772a3_32d0d754",
+        "filename": "ops/modules/depot-replica.nix",
+        "patchSetId": 4
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2022-07-03T14:59:34Z",
+      "side": 1,
+      "message": "maybe we should think about namespacing?\n\nFor other stuff we have tvl.… for example.",
+      "range": {
+        "startLine": 12,
+        "startChar": 2,
+        "endLine": 12,
+        "endChar": 32
+      },
+      "revId": "4a4715325f63e8775f0af674a4fba764c1763762",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
