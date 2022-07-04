@@ -23,5 +23,5 @@
 
 (defpackage :mime4cl-tests
   (:use :common-lisp
-        :rtest :mime4cl)
+        :rtest :mime4cl :mime4cl-ex-sclf)
   (:export))

@@ -1,6 +1,22 @@
+;; SPDX-License-Identifier: MIT AND LGPL-2.1-or-later
+;; SPDX-FileCopyrightText: Copyright (C) 2006-2010 by Walter C. Pelissero
+;; SPDX-FileCopyrightText: Copyright (C) 2022 by sterni
 (in-package :mblog)
 
 ;; util
+
+;; Taken from SCLF, written by Walter C. Pelissero
+(defun pathname-as-directory (pathname)
+  "Converts PATHNAME to directory form and return it."
+  (setf pathname (pathname pathname))
+  (if (pathname-name pathname)
+      (make-pathname :directory (append (or (pathname-directory pathname)
+                                            '(:relative))
+                                        (list (file-namestring pathname)))
+                     :name nil
+                     :type nil
+                     :defaults pathname)
+      pathname))
 
 (defmacro with-overwrite-file ((&rest args) &body body)
   "Like WITH-OPEN-FILE, but creates/supersedes the given file for writing."
