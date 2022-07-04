@@ -36,7 +36,6 @@
    :note)
   (:export :build-mblog)
   (:import-from :local-time :universal-to-timestamp)
-  (:import-from :sclf :pathname-as-directory)
   (:shadowing-import-from :common-lisp :list))
 
 (defpackage :cli
