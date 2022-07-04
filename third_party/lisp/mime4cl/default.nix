@@ -7,12 +7,12 @@ depot.nix.buildLisp.library {
 
   deps = [
     depot.third_party.lisp.babel
-    depot.third_party.lisp.sclf
     depot.third_party.lisp.npg
     depot.third_party.lisp.trivial-gray-streams
   ];
 
   srcs = [
+    ./ex-sclf.lisp
     ./package.lisp
     ./endec.lisp
     ./streams.lisp
@@ -34,6 +34,7 @@ depot.nix.buildLisp.library {
         ;; override auto discovery which doesn't work in store
         (defvar *sample1-file* (pathname "${./test/sample1.msg}"))
       '')
+      ./test/temp-file.lisp
       ./test/endec.lisp
       ./test/address.lisp
       ./test/mime.lisp
