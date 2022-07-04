@@ -702,7 +702,7 @@ body."
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(defconst +known-encodings+ '(:7BIT :8BIT :BINARY :QUOTED-PRINTABLE :BASE64)
+(defvar +known-encodings+ '(:7BIT :8BIT :BINARY :QUOTED-PRINTABLE :BASE64)
   "List of known content encodings.")
 
 (defun keywordify-encoding (string)

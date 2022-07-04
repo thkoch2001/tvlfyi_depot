@@ -23,13 +23,7 @@
 
 (defpackage :mime4cl
   (:nicknames :mime)
-  (:use :common-lisp :npg :sclf :trivial-gray-streams)
-  ;; this is stuff that comes from SCLF and clashes with CMUCL's EXT
-  ;; package
-  (:shadowing-import-from :sclf
-                          #:process-wait
-                          #:process-alive-p
-                          #:run-program)
+  (:use :common-lisp :npg :mime4cl-ex-sclf :trivial-gray-streams)
   (:import-from :babel :octets-to-string)
   (:import-from :babel-encodings :get-character-encoding)
   (:export #:*lazy-mime-decode*
