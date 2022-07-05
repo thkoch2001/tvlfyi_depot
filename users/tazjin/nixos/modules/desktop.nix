@@ -16,7 +16,7 @@
       enable = true;
       layout = "us";
       xkbOptions = "caps:super";
-
+      updateDbusEnvironment = true;
       libinput.enable = true;
 
       displayManager = {
@@ -32,6 +32,8 @@
       };
     };
   };
+
+  services.dbus.packages = [ pkgs.kbdd ];
 
   # Set variables to enable EXWM-XIM and other Emacs features.
   environment.sessionVariables = {

@@ -40,6 +40,7 @@ in
       iftop
       imagemagick
       jq
+      kbdd
       lieer
       man-pages
       moreutils
