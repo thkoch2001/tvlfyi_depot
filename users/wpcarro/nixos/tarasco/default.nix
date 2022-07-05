@@ -3,6 +3,7 @@
 
 let
   inherit (depot.users) wpcarro;
+  inherit (depot.users.wpcarro.lib) usermod;
 
   wpcarrosEmacs = wpcarro.emacs.nixos {
     load = [ ./tarasco.el ];
@@ -15,7 +16,9 @@ let
   };
 in
 {
-  imports = [ ./hardware.nix ];
+  imports = [
+    (usermod "hardware/nopn.nix")
+  ];
 
   # Use the TVL binary cache
   tvl.cache.enable = true;
@@ -27,25 +30,6 @@ in
     # Support IP forwarding to use this device as a Tailscale exit node.
     kernel.sysctl."net.ipv4.ip_forward" = true;
     kernel.sysctl."net.ipv6.conf.all.forwarding" = true;
-    kernelModules = [
-      "kvm-intel"
-    ];
-
-    # Can verify these settings with:
-    # $ lsmod
-    # ...or:
-    # $ cat /etc/modprobe.d/nixos.conf
-    blacklistedKernelModules = [
-      # Disabling this buggy network driver (and preferring ethernet) to prevent
-      # my machine from becoming unresponsive.
-      # TODO(wpcarro): Consider replacing this module with this fork (if NixOS
-      # isn't already): https://github.com/tomaspinho/rtl8821ce
-      "rtw88_8821ce"
-    ];
-
-    initrd.availableKernelModules = [ "xhci_pci" "ehci_pci" "ahci" "usb_storage" "usbhid" "sd_mod" ];
-    initrd.kernelModules = [ ];
-    extraModulePackages = [ ];
   };
 
 
