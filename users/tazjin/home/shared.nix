@@ -28,6 +28,7 @@
       ".ssh"
       ".steam"
       ".telega"
+      ".thunderbird"
       "go"
       "mail"
     ];
