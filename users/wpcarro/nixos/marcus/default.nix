@@ -3,8 +3,7 @@
 
 let
   inherit (depot.users) wpcarro;
-
-  usermod = name: depot.path.origSrc + ("/users/wpcarro/nixos/modules/${name}");
+  inherit (depot.users.wpcarro.lib) usermod;
 
   wpcarrosEmacs = wpcarro.emacs.nixos {
     load = [ ./marcus.el ];
