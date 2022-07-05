@@ -3,6 +3,7 @@
 
 let
   inherit (depot.users) wpcarro;
+  inherit (depot.users.wpcarro.lib) usermod;
 
   wpcarrosEmacs = wpcarro.emacs.nixos {
     load = [ ./ava.el ];
@@ -15,7 +16,9 @@ let
   };
 in
 {
-  imports = [ ./hardware.nix ];
+  imports = [
+    (usermod "hardware/nopn.nix")
+  ];
 
   # Use the TVL binary cache
   tvl.cache.enable = true;
