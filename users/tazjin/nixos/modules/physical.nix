@@ -40,6 +40,7 @@ in
       iftop
       imagemagick
       jq
+      kbdd
       lieer
       man-pages
       moreutils
@@ -82,6 +83,8 @@ in
     mullvad-vpn.enable = true;
     fwupd.enable = true;
   };
+
+  services.dbus.packages = [ pkgs.kbdd ];
 
   programs = {
     fish.enable = true;
