@@ -65,6 +65,7 @@ in
       rustup
       screen
       scrot
+      thunderbird
       tig
       tokei
       tree
