@@ -16,6 +16,24 @@
       "message": "Since the change is a bit more than trivial, I\u0027d also appreciate if reviewers could have a look at the upstream diff: https://github.com/sharplispers/cl-json/pull/12\n\nI don\u0027t think subtreeing is worth it yet, since it seems that there is at least some chance such a change will be merged into the sharplispers repository.",
       "revId": "6c48919b1511c02a1cb025f2781d674129e4d704",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fbab4012_e7f8a365",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2022-07-05T15:11:32Z",
+      "side": 1,
+      "message": "Okay, seems like no one wants to review this. I\u0027ll fix anything upstream points out, it seemed to work correctly for pannetone.",
+      "parentUuid": "f8ea6bdf_99d5f967",
+      "revId": "6c48919b1511c02a1cb025f2781d674129e4d704",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
