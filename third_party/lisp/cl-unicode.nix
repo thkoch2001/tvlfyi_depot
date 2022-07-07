@@ -56,10 +56,17 @@ let
 
 
   generated = runCommand "cl-unicode-generated" { } ''
+    # replicate source tree of cl-unicode the cl-unicode-build tool expects
     mkdir -p $out/build
     mkdir -p $out/test
     cd $out/build
     pwd
+
+    # this is mostly that the build script has a reference on the data file
+    # cl-unicode-build uses. The reference in the binary is not reliably
+    # retained if SBCL compression is enabled.
+    realpath ${src}/build/data/UnicodeData.txt
+
     ${cl-unicode-build}/bin/cl-unicode-build
   '';
 
