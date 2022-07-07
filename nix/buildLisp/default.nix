@@ -311,9 +311,6 @@ let
 
       # 'genDumpLisp' generates a Lisp file that instructs SBCL to dump
       # the currently loaded image as an executable to $out/bin/$name.
-      #
-      # TODO(tazjin): Compression is currently unsupported because the
-      # SBCL in nixpkgs is, by default, not compiled with zlib support.
       genDumpLisp = { name, main, deps }: writeText "sbcl-dump.lisp" ''
         (require 'sb-posix)
 
@@ -329,6 +326,7 @@ let
 
           (save-lisp-and-die outpath
                              :executable t
+                             :compression t
                              :toplevel
                              (lambda ()
                                ;; Filter out everything prior to the `--` we
