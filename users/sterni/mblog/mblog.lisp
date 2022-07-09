@@ -1,6 +1,7 @@
-;; SPDX-License-Identifier: MIT AND LGPL-2.1-or-later
-;; SPDX-FileCopyrightText: Copyright (C) 2006-2010 by Walter C. Pelissero
+;; SPDX-License-Identifier: GPL-3.0-only
 ;; SPDX-FileCopyrightText: Copyright (C) 2022 by sterni
+;; SPDX-FileCopyrightText: Copyright (C) 2006-2010 by Walter C. Pelissero
+
 (in-package :mblog)
 
 ;; util

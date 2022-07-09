@@ -1,3 +1,6 @@
+;; SPDX-License-Identifier: GPL-3.0-only
+;; SPDX-FileCopyrightText: Copyright (C) 2022 by sterni
+
 (defpackage :maildir
   (:use :common-lisp)
   (:shadow :list)
