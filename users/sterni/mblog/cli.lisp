@@ -1,3 +1,6 @@
+;; SPDX-License-Identifier: GPL-3.0-only
+;; SPDX-FileCopyrightText: Copyright (C) 2022 by sterni
+
 (in-package :cli)
 (declaim (optimize (safety 3)))
 
