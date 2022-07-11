@@ -48,6 +48,8 @@ in
             upquote
             varwidth
             wrapfig
+            bussproofs
+            bussproofs-extra
             ;
         })
 
