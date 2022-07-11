@@ -413,7 +413,11 @@ in
     nixery.enable = true;
 
     # Run cgit & josh to serve git
-    cgit.enable = true;
+    cgit = {
+      enable = true;
+      user = "git"; # run as the same user as gerrit
+    };
+
     josh.enable = true;
 
     # Configure backups to GleSYS
