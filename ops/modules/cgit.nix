@@ -3,6 +3,14 @@
 
 let
   cfg = config.services.depot.cgit;
+
+  userConfig =
+    if builtins.isNull cfg.user then {
+      DynamicUser = true;
+    } else {
+      User = cfg.user;
+      Group = cfg.user;
+    };
 in
 {
   options.services.depot.cgit = with lib; {
@@ -19,6 +27,13 @@ in
       type = types.str;
       default = "/var/lib/gerrit/git/depot.git/";
     };
+
+    user = mkOption {
+      # Expectation: group has the same name
+      description = "User to use for the cgit service";
+      type = with types; nullOr str;
+      default = null;
+    };
   };
 
   config = lib.mkIf cfg.enable {
@@ -27,13 +42,11 @@ in
 
       serviceConfig = {
         Restart = "on-failure";
-        User = "git";
-        Group = "git";
 
         ExecStart = depot.web.cgit-tvl.override {
           inherit (cfg) port repo;
         };
-      };
+      } // userConfig;
     };
   };
 }
