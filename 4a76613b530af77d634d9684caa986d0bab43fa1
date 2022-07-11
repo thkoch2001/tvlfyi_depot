@@ -22,6 +22,30 @@
       },
       "revId": "4a76613b530af77d634d9684caa986d0bab43fa1",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a4d59297_5340c7b7",
+        "filename": "ops/modules/cgit.nix",
+        "patchSetId": 2
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-07-11T17:38:24Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b206fef5_c86b35bb",
+      "range": {
+        "startLine": 32,
+        "startChar": 8,
+        "endLine": 32,
+        "endChar": 19
+      },
+      "revId": "4a76613b530af77d634d9684caa986d0bab43fa1",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
