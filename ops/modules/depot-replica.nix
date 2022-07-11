@@ -33,7 +33,7 @@ in
       isSystemUser = true;
       createHome = true;
       home = cfg.path;
-      homeMode = "750"; # group can read depot
+      homeMode = "755"; # everyone can read depot
       openssh.authorizedKeys.keys = lib.singleton cfg.key;
       shell = pkgs.bashInteractive; # gerrit needs to run shell commands
     };
