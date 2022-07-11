@@ -14,6 +14,7 @@ let
 in
 {
   imports = [
+    (mod "cgit.nix")
     (mod "depot-replica.nix")
     (mod "journaldriver.nix")
     (mod "known-hosts.nix")
@@ -79,6 +80,12 @@ in
 
   # Allow Gerrit to replicate depot to /var/lib/depot
   services.depot.replica.enable = true;
+
+  # Run git serving tools locally ...
+  services.depot.cgit = {
+    enable = true;
+    repo = "/var/lib/depot";
+  };
 
   time.timeZone = "UTC";
 
