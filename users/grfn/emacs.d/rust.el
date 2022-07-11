@@ -5,8 +5,9 @@
 (defun grfn/rust-setup ()
   (interactive)
 
-  (push '(?> . ("<" . ">")) evil-surround-pairs-alist)
-  (push '(?< . ("< " . " >")) evil-surround-pairs-alist)
+  (direnv--maybe-update-environment)
+
+  (+evil-embrace-angle-bracket-modes-hook-h)
 
   (setq lsp-rust-server 'rust-analyzer)
   (setq-local whitespace-line-column 100
