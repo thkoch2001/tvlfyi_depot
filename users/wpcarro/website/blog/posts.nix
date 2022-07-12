@@ -50,4 +50,11 @@
     content = ./posts/tee-time.md;
     draft = false;
   }
+  {
+    key = "ssh-oddities";
+    title = "SSH Oddities";
+    date = 1657647994;
+    content = ./posts/ssh-oddities.md;
+    draft = false;
+  }
 ]
