@@ -43,7 +43,7 @@ signature algorithm because it depends on SHA-1, which is considered insecure.
 OpenSSH_9.0p1, OpenSSL 1.1.1p  21 Jun 2022
 ```
 
-...and according to the `ssh -v` output, the server is running an pre-COVID(!!!)
+...and according to the `ssh -v` output, the server is running a pre-COVID(!!!)
 version of `ssh`:
 
 ```
