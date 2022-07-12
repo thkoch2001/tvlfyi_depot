@@ -48,6 +48,7 @@ lib.fix (self: {
   };
 
   virtualisation.virtualbox.host.enable = true;
+  users.users.tazjin.extraGroups = [ "vboxusers" ];
 
   fileSystems = {
     "/" = {
