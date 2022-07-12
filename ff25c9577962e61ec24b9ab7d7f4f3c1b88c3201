@@ -22,6 +22,30 @@
       },
       "revId": "ff25c9577962e61ec24b9ab7d7f4f3c1b88c3201",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c6411486_0b1a1024",
+        "filename": "web/blog/fragments.nix",
+        "patchSetId": 1
+      },
+      "lineNbr": 62,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-07-12T04:10:40Z",
+      "side": 1,
+      "message": "I thought about it when I was writing this, but I had a few thoughts:\n1. IMO \"latest\" would be a more expected default value (if there *should* be a default value).\n2. I replaced all of the instances already, so having a default value wouldn\u0027t affect the current behavior.\n\nwdyt?",
+      "parentUuid": "264bedd5_04b075a7",
+      "range": {
+        "startLine": 62,
+        "startChar": 31,
+        "endLine": 62,
+        "endChar": 40
+      },
+      "revId": "ff25c9577962e61ec24b9ab7d7f4f3c1b88c3201",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
