@@ -43,4 +43,11 @@
     content = ./posts/restic.md;
     draft = false;
   }
+  {
+    key = "tee-time";
+    title = "tee time";
+    date = 1657597870;
+    content = ./posts/tee-time.md;
+    draft = false;
+  }
 ]
