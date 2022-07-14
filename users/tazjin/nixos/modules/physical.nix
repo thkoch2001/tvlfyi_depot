@@ -1,5 +1,5 @@
 # Default configuration settings for physical machines that I use.
-{ pkgs, depot, ... }:
+{ lib, pkgs, depot, ... }:
 
 let
   pass-otp = pkgs.pass.withExtensions (e: [ e.pass-otp ]);
@@ -83,6 +83,9 @@ in
     mullvad-vpn.enable = true;
     fwupd.enable = true;
   };
+
+  # Disable the broken NetworkManager-wait-online.service
+  systemd.services.NetworkManager-wait-online.enable = lib.mkForce false;
 
   programs = {
     fish.enable = true;
