@@ -73,6 +73,8 @@
     backend = "glx";
   };
 
+  services.syncthing.enable = true;
+
   # Enable the dunst notification daemon, but force the
   # configuration file separately instead of going via the strange
   # Nix->dunstrc encoding route.
