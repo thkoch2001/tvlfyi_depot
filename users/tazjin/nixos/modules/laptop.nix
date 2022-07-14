@@ -10,7 +10,6 @@
 
   # Enable power-saving features.
   services.tlp.enable = true;
-  powerManagement.powertop.enable = true;
 
   programs.light.enable = true;
 }
