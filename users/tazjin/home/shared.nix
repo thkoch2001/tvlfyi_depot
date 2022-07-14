@@ -14,6 +14,7 @@
       ".config/audacity"
       ".config/google-chrome"
       ".config/quassel-irc.org"
+      ".config/syncthing"
       ".config/unity3d"
       ".electrum"
       ".gnupg"
