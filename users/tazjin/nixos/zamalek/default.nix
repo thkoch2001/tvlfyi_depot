@@ -78,6 +78,7 @@ in
   services.xserver.libinput.touchpad.clickMethod = "clickfinger";
   services.tailscale.enable = true;
   services.avahi.enable = true;
+  powerManagement.powertop.enable = true;
 
   system.stateVersion = "21.11";
 }
