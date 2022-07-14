@@ -1,5 +1,5 @@
 # Configuration for persistent (non-home) data.
-{ depot, pkgs, lib, ... }:
+{ config, depot, pkgs, lib, ... }:
 
 {
   imports = [
@@ -17,7 +17,7 @@
       "/var/log"
     ];
 
-    files = [
+    files = lib.optional (builtins.isNull config.networking.hostId) [
       "/etc/machine-id"
     ];
   };
