@@ -11,6 +11,7 @@
       enableACME = true;
       forceSSL = true;
       root = depot.users.tazjin.homepage;
+      serverAliases = [ "www.tazj.in" ];
 
       extraConfig = ''
         ${depot.users.tazjin.blog.oldRedirects}
