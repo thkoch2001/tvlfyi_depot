@@ -22,6 +22,10 @@ rec {
     };
   })).system;
 
+  ogopogo = import ./machines/ogopogo.nix;
+
+  ogopogoSystem = (depot.ops.nixos.nixosFor ogopogo).system;
+
   yeren = import ./machines/yeren.nix;
 
   yerenSystem = (depot.ops.nixos.nixosFor yeren).system;
@@ -31,6 +35,7 @@ rec {
   meta.ci.targets = [
     "mugwumpSystem"
     "roswellSystem"
+    "ogopogoSystem"
     "yerenSystem"
 
     "iso"

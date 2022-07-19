@@ -15,6 +15,7 @@
 (with depot.users.grfn.system.system; [
   yeren
   mugwump
+  ogopogo
 ]) ++
 
 (with depot.users.wpcarro.nixos; [
