@@ -14,6 +14,10 @@
       serverAliases = [ "www.tazj.in" ];
 
       extraConfig = ''
+        location = /en/rss.xml {
+          return 301 https://tazj.in/feed.atom;
+        }
+
         ${depot.users.tazjin.blog.oldRedirects}
         location /blog/ {
           alias ${depot.users.tazjin.blog.rendered}/;
