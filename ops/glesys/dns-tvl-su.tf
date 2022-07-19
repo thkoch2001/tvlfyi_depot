@@ -67,13 +67,13 @@ resource "glesys_dnsdomain_record" "tvl_su_sanduny_AAAA" {
   data   = var.sanduny_ipv6
 }
 
-# This record is responsible for hosting ~all TVL services. Be
-# mindful!
-resource "glesys_dnsdomain_record" "tvl_su_wildcard" {
-  domain = glesys_dnsdomain.tvl_su.id
-  host   = "*"
-  type   = "CNAME"
-  data   = "whitby.tvl.su."
+# Explicit records for all services running on whitby
+resource "glesys_dnsdomain_record" "tvl_su_whitby_services" {
+  domain   = glesys_dnsdomain.tvl_su.id
+  type     = "CNAME"
+  data     = "whitby.tvl.su."
+  host     = each.key
+  for_each = toset(local.whitby_services)
 }
 
 resource "glesys_dnsdomain_record" "tvl_su_TXT_google_site" {
