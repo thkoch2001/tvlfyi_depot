@@ -53,13 +53,13 @@ resource "glesys_dnsdomain_record" "tvl_fyi_whitby_AAAA" {
   data   = var.whitby_ipv6
 }
 
-# This record is responsible for hosting ~all TVL services. Be
-# mindful!
-resource "glesys_dnsdomain_record" "tvl_fyi_wildcard" {
-  domain = glesys_dnsdomain.tvl_fyi.id
-  host   = "*"
-  type   = "CNAME"
-  data   = "whitby.tvl.fyi."
+# Explicit records for all services running on whitby
+resource "glesys_dnsdomain_record" "tvl_fyi_whitby_services" {
+  domain   = glesys_dnsdomain.tvl_fyi.id
+  type     = "CNAME"
+  data     = "whitby.tvl.fyi."
+  host     = each.key
+  for_each = toset(local.whitby_services)
 }
 
 # Google Domains mail forwarding configuration (no sending)
