@@ -66,3 +66,22 @@ variable "sanduny_ipv6" {
   type    = string
   default = "2001:ba8:1f1:f109::feed:edef:beef"
 }
+
+locals {
+  # Hostnames of all public services on whitby
+  whitby_services = [
+    "at",
+    "atward",
+    "auth",
+    "b",
+    "cache",
+    "cl",
+    "code",
+    "cs",
+    "deploys",
+    "images",
+    "static",
+    "status",
+    "todo",
+  ]
+}
