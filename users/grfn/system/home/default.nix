@@ -22,6 +22,10 @@ rec {
 
   dobharchuHome = dobharchu.activation-script;
 
+  ogopogo = home ./machines/ogopogo.nix;
+
+  ogopogoHome = ogopogo.activation-script;
+
   yeren = home ./machines/yeren.nix;
 
   yerenHome = yeren.activation-script;

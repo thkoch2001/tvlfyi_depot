@@ -18,7 +18,7 @@
     settings = {
       substituters = [
         "https://cache.nixos.org"
-        "ssh://nix-ssh@whitby.tvl.fyi"
+        # "ssh://nix-ssh@whitby.tvl.fyi"
       ];
       trusted-substituters = [
         "https://cache.nixos.org"
