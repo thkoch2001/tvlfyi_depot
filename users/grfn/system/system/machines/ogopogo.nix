@@ -67,7 +67,16 @@
 
   services.tailscale.enable = true;
 
+  hardware.keyboard.zsa.enable = true;
+
   # Nvidia
-  services.xserver.videoDrivers = [ "nvidia" ];
+  services.xserver = {
+    videoDrivers = [ "nvidia" ];
+    dpi = 100;
+  };
   hardware.opengl.enable = true;
+  services.picom = {
+    enable = true;
+    vSync = true;
+  };
 }
