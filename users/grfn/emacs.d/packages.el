@@ -20,6 +20,7 @@
 (package! org-tracker
   :recipe (:host file
            :local-repo "~/code/org-tracker"))
+(package! jiralib2)
 (package! org-alert)
 (package! ob-http)
 (package! ob-ipython)
