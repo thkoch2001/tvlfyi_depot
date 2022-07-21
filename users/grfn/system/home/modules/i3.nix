@@ -23,18 +23,26 @@ let
 in
 {
   options = with lib; {
-    system.machine.wirelessInterface = mkOption {
-      description = ''
-        Name of the primary wireless interface. Used by i3status, etc.
-      '';
-      default = "wlp3s0";
-      type = types.str;
-    };
+    system.machine = {
+      wirelessInterface = mkOption {
+        description = ''
+          Name of the primary wireless interface. Used by i3status, etc.
+        '';
+        default = "wlp3s0";
+        type = types.str;
+      };
 
-    system.machine.i3FontSize = mkOption {
-      description = "Font size to use in i3 window decorations etc.";
-      default = 6;
-      type = types.int;
+      i3FontSize = mkOption {
+        description = "Font size to use in i3 window decorations etc.";
+        default = 6;
+        type = types.int;
+      };
+
+      battery = mkOption {
+        description = "Does this system have a battery?";
+        default = true;
+        type = types.bool;
+      };
     };
   };
 
@@ -231,7 +239,9 @@ in
                   order += "wireless ${config.system.machine.wirelessInterface}"
                   # order += "ethernet enp3s0f0"
                   order += "cpu_usage"
-                  order += "battery 0"
+                  ${lib.optionalString (config.system.machine.battery) ''
+                      order += "battery 0"
+                  ''}
                   # order += "volume master"
                   order += "time"
                   order += "tztime utc"
