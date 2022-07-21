@@ -98,19 +98,20 @@ flat.
 
 ## Phone
 
-My current phone is the [Unihertz Atom L][atom-l]. It is a rugged, small-screen
-smartphone with a 3.5mm heapdhone jack. This phone is *weird* looking, getting
-one of these means you will constantly be asked what kind of device you have
-there. It does everything I need, and survives being thrown against a wall when
-the software misbehaves. As the Swedes would say, this phone is solidly *lagom*.
+My current phone is the [Palm phone][palm-phone]. It's basically the smallest
+smartphone on the market at about the size of a credit card. I picked this phone
+because I am trying to not use a phone anymore, but some things simply require a
+smartphone.
 
-The ruggedness is an additional bonus as it survives things like sauna / banya
-trips just fine.
+The Palm has terrible battery life but is otherwise great. I always have it in
+power saving mode and only turn on receiving calls when I'm expecting a call,.
 
-Up until a few years ago I used the original [iPhone SE][se]. This was the last
-truly good phone anyone made, but unfortunately it was discontinued and is iOS
-only.
+Previous phones I used and liked were:
 
+* [Unihertz Atom L][atom-l] - small-screen, rugged phone with headphone jack
+* Original [iPhone SE][se] - perfect-sized phone, unfortunately with iOS
+
+[palm-phone]: https://palm.com/pages/product
 [atom-l]: https://www.unihertz.com/products/atom-l
 [se]: https://en.wikipedia.org/wiki/IPhone_SE
 
@@ -172,12 +173,12 @@ going for a more traditional one: The [Brialdi Ostin][ostin].
 
 ## Wallet
 
-My wallet is the [Bellroy Slim Sleeve][slim-sleeve]. It's near indestructible,
-looks great, is very slim and fits a ton of cards, business cards, receipts and
-whatever else you want to be lugging around with you!
+My wallet is the [Bellroy Coin Wallet][coin-wallet]. It's the slimmest wallet I
+could find that can deal with the volume of cards I (have to) carry around, as
+well as with cash.
 
-However, now that I'm spending a lot of time in Egypt (where cash is still
-king), not having a place to stash cash is a bit of an issue. So far, no
-solution!
+I've used Bellroy wallets for a long time, with the [Slim Sleeve][slim-sleeve]
+serving me in the days when I lived in no-cash countries.
 
+[coin-wallet]: https://bellroy.com/products/coin-wallet
 [slim-sleeve]: https://bellroy.com/products/slim-sleeve-wallet/default/charcoal
