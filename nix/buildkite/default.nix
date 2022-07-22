@@ -324,6 +324,7 @@ rec {
       # TODO(tazjin): Turn into hard-failure after 2022-10-01.
     , postBuild ? null
     , skip ? false
+    , agents ? null
     }:
     let
       parent = overridableParent parentOverride;
@@ -348,7 +349,8 @@ rec {
         needsOutput
         parent
         parentLabel
-        skip;
+        skip
+        agents;
 
       # //nix/buildkite is growing a new feature for adding different
       # "build phases" which supersedes the previous `postBuild`
@@ -393,6 +395,8 @@ rec {
         depends_on = lib.optional
           (buildEnabled && !cfg.alwaysRun && !cfg.needsOutput)
           cfg.parent.key;
+
+        agents = cfg.agents;
 
         branches =
           if cfg.branches != null
