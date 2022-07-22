@@ -16,6 +16,24 @@
       "message": "Just to clarify, this would be for cases where a step is e.g. temporarily broken?",
       "revId": "97a413879adda035a1bf0f7627308d9921ad39f5",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4661c8e3_47861c3f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000060
+      },
+      "writtenOn": "2022-07-22T23:38:06Z",
+      "side": 1,
+      "message": "That\u0027s right",
+      "parentUuid": "9cf3459f_6b042b8a",
+      "revId": "97a413879adda035a1bf0f7627308d9921ad39f5",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
