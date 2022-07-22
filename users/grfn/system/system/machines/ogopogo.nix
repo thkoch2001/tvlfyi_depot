@@ -7,7 +7,7 @@
     ../modules/xserver.nix
     ../modules/fonts.nix
     ../modules/sound.nix
-    # ../modules/tvl.nix
+    ../modules/tvl.nix
     ../modules/development.nix
     ../modules/work/kolide.nix
   ];
