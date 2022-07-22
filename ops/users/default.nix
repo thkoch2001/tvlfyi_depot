@@ -72,6 +72,11 @@
     password = "{ARGON2}$argon2id$v=19$m=65536,t=2,p=1$dMYmo+Uym9irtzAGXB2eNw$69OFcuqCqoLPBXKmmtYaQCquXximpyxsb2Kf8U7GdxM";
   }
   {
+    username = "jfroche";
+    email = "jfroche@pyxel.be";
+    password = "{ARGON2}$argon2id$v=19$m=65536,t=2,p=1$kA19gDabD1Fjy82olcmnsA$TTbkpAc0WYaA4DT2vc7+NAGXhC4Os1tPqZVpHFkzecE";
+  }
+  {
     username = "kn";
     email = "klemens@posteo.de";
     password = "{ARGON2}$argon2id$v=19$m=65536,t=2,p=1$CoRZInysud4sduDoMjVOCw$/bdvAvyPO2DPxOcHlBiG2+rbTGF9XAcHUhPurxiIpZM";
