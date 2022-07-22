@@ -72,12 +72,11 @@
 
 (defvar zle-kbds
   (let ((map (make-sparse-keymap)))
-    (bind-keys :map map
-               ("C-j"   . zle-subshell)
-               ("C-v"   . zle-variable)
-               ("C-M--" . zle-dash-dash)
-               ("M-'"   . zle-single-quote)
-               ("M-\""  . zle-double-quote))
+    (define-key map (kbd "C-j") #'zle-subshell)
+    (define-key map (kbd "C-v") #'zle-variable)
+    (define-key map (kbd "C-M--") #'zle-dash-dash)
+    (define-key map (kbd "M-'") #'zle-single-quote)
+    (define-key map (kbd "M-\"") #'zle-double-quote)
     map)
   "Keybindings shaving milliseconds off of typing.")
 
