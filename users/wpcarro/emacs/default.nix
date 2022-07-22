@@ -24,6 +24,10 @@ let
   emacsWithPackages = (emacsPackagesFor emacs28).emacsWithPackages;
 
   wpcarrosEmacs = emacsWithPackages (epkgs:
+    (with wpcarro.emacs.pkgs; [
+      zle
+    ]) ++
+
     (with epkgs.tvlPackages; [
       tvl
     ]) ++
