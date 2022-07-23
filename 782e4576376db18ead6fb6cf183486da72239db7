@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2d05aa87_2b9d19b3",
+        "filename": "nix/buildkite/default.nix",
+        "patchSetId": 1
+      },
+      "lineNbr": 399,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-07-23T11:14:15Z",
+      "side": 1,
+      "message": "Doing it like this will potentially add `\"agents\": null` in every step, I think I would prefer a merge with an optional attribute set at the end of this set, e.g.\n\n  // (lib.optionalAttrs !(builtins.isNull cfg.agents) { inherit (cfg) agents; })",
+      "range": {
+        "startLine": 399,
+        "startChar": 8,
+        "endLine": 399,
+        "endChar": 28
+      },
+      "revId": "782e4576376db18ead6fb6cf183486da72239db7",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
