@@ -325,6 +325,8 @@ rec {
     , postBuild ? null
     , skip ? false
     , agents ? null
+    , identifier ? null
+    , depends_on ? null
     }:
     let
       parent = overridableParent parentOverride;
@@ -350,7 +352,9 @@ rec {
         parent
         parentLabel
         skip
-        agents;
+        agents
+        identifier
+        depends_on;
 
       # //nix/buildkite is growing a new feature for adding different
       # "build phases" which supersedes the previous `postBuild`
@@ -408,7 +412,14 @@ rec {
       } // (lib.optionalAttrs (cfg.agents != null) { inherit (cfg) agents; })
       // (lib.optionalAttrs (cfg.branches != null) {
         branches = lib.concatStringsSep " " cfg.branches;
+      })
+      // (lib.optionalAttrs (cfg.identifier != null) {
+        key = cfg.identifier;
+      })
+      // (lib.optionalAttrs (cfg.depends_on != null) {
+        inherit (cfg) depends_on;
       });
+
     in
     if (isString cfg.prompt)
     then
