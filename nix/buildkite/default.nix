@@ -283,6 +283,16 @@ rec {
   #   alwaysRun (optional): If set to true, this step will always run,
   #     even if its parent has not been rebuilt.
   #
+  #   skip (optional): If set to true, this step will not be run.
+  #     Useful in case the step is temporarily failing.
+  #
+  #   agent (optional): Target the buildkite agent that will be running
+  #     the step.
+  #
+  #   identifier (optional): Unique identifier to manage dependencies.
+  #
+  #   depends_on (optional): List of steps identifier that this step depends on.
+  #
   # Note that gated steps are independent of each other.
 
   # Create a gated step in a step group, independent from any other
@@ -325,6 +335,8 @@ rec {
     , postBuild ? null
     , skip ? false
     , agents ? null
+    , identifier ? null
+    , depends_on ? null
     }:
     let
       parent = overridableParent parentOverride;
@@ -350,7 +362,9 @@ rec {
         parent
         parentLabel
         skip
-        agents;
+        agents
+        identifier
+        depends_on;
 
       # //nix/buildkite is growing a new feature for adding different
       # "build phases" which supersedes the previous `postBuild`
@@ -408,7 +422,14 @@ rec {
       } // (lib.optionalAttrs (cfg.agents != null) { inherit (cfg) agents; })
       // (lib.optionalAttrs (cfg.branches != null) {
         branches = lib.concatStringsSep " " cfg.branches;
+      })
+      // (lib.optionalAttrs (cfg.identifier != null) {
+        key = cfg.identifier;
+      })
+      // (lib.optionalAttrs (cfg.depends_on != null) {
+        inherit (cfg) depends_on;
       });
+
     in
     if (isString cfg.prompt)
     then
