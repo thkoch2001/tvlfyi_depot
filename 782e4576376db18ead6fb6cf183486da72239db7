@@ -22,6 +22,30 @@
       },
       "revId": "782e4576376db18ead6fb6cf183486da72239db7",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9ebe0262_e74186e5",
+        "filename": "nix/buildkite/default.nix",
+        "patchSetId": 1
+      },
+      "lineNbr": 399,
+      "author": {
+        "id": 1000060
+      },
+      "writtenOn": "2022-07-25T08:25:48Z",
+      "side": 1,
+      "message": "Good catch, I did the same for branches in the next commit",
+      "parentUuid": "2d05aa87_2b9d19b3",
+      "range": {
+        "startLine": 399,
+        "startChar": 8,
+        "endLine": 399,
+        "endChar": 28
+      },
+      "revId": "782e4576376db18ead6fb6cf183486da72239db7",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
