@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "693a9ae0_a4797206",
+        "filename": "nix/buildkite/default.nix",
+        "patchSetId": 1
+      },
+      "lineNbr": 409,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-07-25T08:34:55Z",
+      "side": 1,
+      "message": "I think a newline can\u0027t hurt here :) (and then let the formatter figure it out)",
+      "range": {
+        "startLine": 409,
+        "startChar": 0,
+        "endLine": 409,
+        "endChar": 106
+      },
+      "revId": "87e65cc7e2abf356e93dff858e1304dceb1e57f3",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
