@@ -293,6 +293,8 @@ rec {
   #
   #   dependsOn (optional): List of steps identifier that this step depends on.
   #
+  #   commandOverride (optional): A function (drv -> drv) to override
+  #     the command's definition.
   #
   # Note that gated steps are independent of each other.
 
@@ -338,6 +340,7 @@ rec {
     , agents ? null
     , identifier ? null
     , dependsOn ? null
+    , commandOverride ? (x: x)
     }:
     let
       parent = overridableParent parentOverride;
@@ -365,7 +368,8 @@ rec {
         skip
         agents
         identifier
-        dependsOn;
+        dependsOn
+        commandOverride;
 
       # //nix/buildkite is growing a new feature for adding different
       # "build phases" which supersedes the previous `postBuild`
@@ -411,7 +415,7 @@ rec {
           (buildEnabled && !cfg.alwaysRun && !cfg.needsOutput)
           cfg.parent.key;
 
-        command = pkgs.writeShellScript "${cfg.key}-script" ''
+        command = cfg.commandOverride (pkgs.writeShellScript "${cfg.key}-script" ''
           set -ueo pipefail
           ${lib.optionalString cfg.needsOutput
             "echo '~~~ Preparing build output of ${cfg.parentLabel}'"
@@ -419,7 +423,7 @@ rec {
           ${lib.optionalString cfg.needsOutput cfg.parent.command}
           echo '+++ Running extra step command'
           exec ${cfg.command}
-        '';
+        '');
       } // (lib.optionalAttrs (cfg.agents != null) { inherit (cfg) agents; })
       // (lib.optionalAttrs (cfg.branches != null) {
         branches = lib.concatStringsSep " " cfg.branches;
