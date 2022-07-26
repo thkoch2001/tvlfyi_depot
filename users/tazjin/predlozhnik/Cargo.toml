@@ -1,0 +1,8 @@
+[package]
+name = "predlozhnik"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+maplit = "1.0"
+lazy_static = "1.4"
