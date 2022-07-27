@@ -1,6 +1,9 @@
+use yew::prelude::*;
+
 use lazy_static::lazy_static;
 use maplit::hashmap;
 use std::collections::HashMap;
+use std::fmt::Write;
 
 #[derive(Debug, Hash, PartialEq, Eq)]
 enum Падеж {
@@ -95,11 +98,40 @@ lazy_static! {
     };
 }
 
-fn main() {
+fn example_output() -> String {
+    let mut out = String::new();
+
     for (пд, пги) in &*ПО_ПАДЕЖУ {
-        println!("Падеж: {:?}", пд);
+        write!(out, "Падеж: {:?}\n", пд).ok();
         for п in пги {
-            println!("\t{}", п);
+            write!(out, "\t{}\n", п).ok();
         }
     }
+
+    out
+}
+
+struct Model(());
+
+impl Component for Model {
+    type Message = ();
+    type Properties = ();
+
+    fn create(_ctx: &Context<Self>) -> Self {
+        Self(())
+    }
+
+    fn update(&mut self, _ctx: &Context<Self>, _msg: Self::Message) -> bool {
+        false
+    }
+
+    fn view(&self, _ctx: &Context<Self>) -> Html {
+        html! {
+            <pre>{example_output()}</pre>
+        }
+    }
+}
+
+fn main() {
+    yew::start_app::<Model>();
 }
