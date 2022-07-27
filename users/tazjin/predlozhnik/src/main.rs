@@ -5,7 +5,7 @@ use maplit::hashmap;
 use std::collections::HashMap;
 use std::fmt::Write;
 
-#[derive(Debug, Hash, PartialEq, Eq)]
+#[derive(Clone, Copy, Debug, Hash, PartialEq, Eq)]
 enum Падеж {
     Именительный,
     Родительный,
@@ -111,18 +111,72 @@ fn example_output() -> String {
     out
 }
 
-struct Model(());
+enum Сообщение {
+    ВыбралПадеж(Option<Падеж>),
+    ВыбралПредлог(Option<&'static str>),
+}
 
-impl Component for Model {
-    type Message = ();
+#[derive(Default)]
+struct Модель {
+    падеж: Option<Падеж>,
+    предлог: Option<&'static str>,
+}
+
+struct Вывод {
+    доступные_падежи: Vec<Падеж>,
+    доступные_предлоги: Vec<&'static str>,
+    объяснение: Option<Html>,
+}
+
+fn объяснить(падеж: Падеж, предлог: &str) -> Html {
+    html! {
+        {"NYI"}
+    }
+}
+
+fn ограничить(м: &Модель) -> Вывод {
+    match (м.падеж, &м.предлог) {
+        (Some(пж), Some(пл)) => Вывод {
+            доступные_падежи: vec![пж],
+            доступные_предлоги: vec![пл],
+            объяснение: Some(объяснить(пж, пл)),
+        },
+
+        (Some(пж), None) => Вывод {
+            доступные_падежи: vec![пж],
+            доступные_предлоги: (*ПО_ПАДЕЖУ)[&пж].clone(),
+            объяснение: None,
+        },
+
+        (None, Some(пл)) => Вывод {
+            доступные_падежи: (*ПО_ПРЕДЛОГУ)[пл].clone(),
+            доступные_предлоги: vec![пл],
+            объяснение: None,
+        },
+
+        (None, None) => Вывод {
+            доступные_падежи: vec![],
+            доступные_предлоги: vec![],
+            объяснение: None,
+        },
+    }
+}
+
+impl Component for Модель {
+    type Message = Сообщение;
     type Properties = ();
 
     fn create(_ctx: &Context<Self>) -> Self {
-        Self(())
+        Default::default()
     }
 
-    fn update(&mut self, _ctx: &Context<Self>, _msg: Self::Message) -> bool {
-        false
+    fn update(&mut self, _ctx: &Context<Self>, msg: Self::Message) -> bool {
+        match msg {
+            Сообщение::ВыбралПадеж(пж) => self.падеж = пж,
+            Сообщение::ВыбралПредлог(пл) => self.предлог = пл,
+        }
+
+        true
     }
 
     fn view(&self, _ctx: &Context<Self>) -> Html {
@@ -133,5 +187,5 @@ impl Component for Model {
 }
 
 fn main() {
-    yew::start_app::<Model>();
+    yew::start_app::<Модель>();
 }
