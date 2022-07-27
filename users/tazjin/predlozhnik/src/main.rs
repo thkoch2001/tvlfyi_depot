@@ -65,7 +65,7 @@ lazy_static! {
             "на" => BTreeSet::from([Винительный, Предложный]),
             "над" => BTreeSet::from([Творительный]),
             "нет" => BTreeSet::from([Родительный]),
-            "о" => BTreeSet::from([Винительный]),
+            "о" => BTreeSet::from([Винительный, Предложный]),
             "обо" => BTreeSet::from([Винительный]),
             "около" => BTreeSet::from([Родительный]),
             "от" => BTreeSet::from([Родительный]),
