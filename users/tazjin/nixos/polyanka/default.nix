@@ -14,6 +14,7 @@ in
     (mod "quassel.nix")
     (mod "www/base.nix")
     (usermod "tgsa.nix")
+    (usermod "predlozhnik.nix")
   ];
 
   # Use the GRUB 2 boot loader.
