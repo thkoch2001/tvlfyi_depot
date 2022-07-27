@@ -1,3 +1,4 @@
+use yew::html::Scope;
 use yew::prelude::*;
 
 use lazy_static::lazy_static;
@@ -97,6 +98,16 @@ lazy_static! {
 
         m
     };
+    static ref ПАДЕЖИ: BTreeSet<Падеж> = BTreeSet::from(Падеж::ВСЕ);
+    static ref ПРЕДЛОГИ: BTreeSet<&'static str> = {
+        let mut s: BTreeSet<&'static str> = BTreeSet::new();
+
+        for п in ПО_ПРЕДЛОГУ.keys() {
+            s.insert(п);
+        }
+
+        s
+    };
 }
 
 fn example_output() -> String {
@@ -156,10 +167,65 @@ fn ограничить(м: &Модель) -> Вывод {
         },
 
         (None, None) => Вывод {
-            доступные_падежи: BTreeSet::new(),
-            доступные_предлоги: BTreeSet::new(),
+            доступные_падежи: ПАДЕЖИ.clone(),
+            доступные_предлоги: ПРЕДЛОГИ.clone(),
             объяснение: None,
         },
+    }
+}
+
+fn покажи_предлог(
+    link: &Scope<Модель>,
+    м: &Модель,
+    вв: &Вывод,
+    п: &'static str,
+) -> Html {
+    let выбран = м.предлог == Some(п);
+    let доступен = вв.доступные_предлоги.contains(п);
+
+    let mut класс = "btn btn-ghost ".to_string();
+    класс += match (выбран, доступен) {
+        (true, _) => "btn-error",
+        (false, true) => "btn-primary",
+        (false, false) => "btn-default",
+    };
+
+    html! {
+        <button class={класс}
+         onclick={link.callback(move |_| if выбран {
+             Сообщение::ВыбралПредлог(None)
+         } else {
+             Сообщение::ВыбралПредлог(Some(п))
+         })}
+         disabled={!доступен}>
+        {п}
+        </button>
+    }
+}
+
+fn покажи_падеж(
+    link: &Scope<Модель>, м: &Модель, вв: &Вывод, п: Падеж
+) -> Html {
+    let выбран = м.падеж == Some(п);
+    let доступен = вв.доступные_падежи.contains(&п);
+
+    let mut класс = "btn btn-ghost ".to_string();
+    класс += match (выбран, доступен) {
+        (true, _) => "btn-error",
+        (false, true) => "btn-primary",
+        (false, false) => "btn-default",
+    };
+
+    html! {
+        <button class={класс}
+         onclick={link.callback(move |_| if выбран {
+             Сообщение::ВыбралПадеж(None)
+         } else {
+             Сообщение::ВыбралПадеж(Some(п))
+         })}
+         disabled={!доступен}>
+        {format!("{:?}", п)}
+        </button>
     }
 }
 
@@ -180,9 +246,36 @@ impl Component for Модель {
         true
     }
 
-    fn view(&self, _ctx: &Context<Self>) -> Html {
+    fn view(&self, ctx: &Context<Self>) -> Html {
+        let вв = ограничить(self);
+        let link = ctx.link();
+
+        let кнапки_предлогов = ПРЕДЛОГИ
+            .iter()
+            .map(|п| покажи_предлог(link, self, &вв, п))
+            .collect::<Html>();
+
+        let кнапки_падежов = ПАДЕЖИ
+            .iter()
+            .map(|п| покажи_падеж(link, self, &вв, *п))
+            .collect::<Html>();
+
         html! {
-            <pre>{example_output()}</pre>
+            <>
+                <link rel="stylesheet"
+                      href="https://unpkg.com/terminal.css@0.7.2/dist/terminal.min.css" />
+                <div id="predlogi">
+                  <h2>{"Предлоги:"}</h2>
+                  {кнапки_предлогов}
+                </div>
+                <hr/>
+
+                <div id="padezhi">
+                  <h2>{"Падежи:"}</h2>
+                  {кнапки_падежов}
+                </div>
+                <hr/>
+            </>
         }
     }
 }
