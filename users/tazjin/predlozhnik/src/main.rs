@@ -248,10 +248,7 @@ impl Component for Модель {
             .map(|п| покажи_падеж(link, self, &вв, *п))
             .collect::<Html>();
 
-        let объяснение = вв
-            .объяснение
-            .map(|exp| exp)
-            .unwrap_or_else(|| html! {});
+        let объяснение = вв.объяснение.map(|exp| exp).unwrap_or_else(|| html! {});
 
         let footer = html! {
             <footer>
@@ -262,6 +259,22 @@ impl Component for Модель {
                 {"сделано "}<a href="https://tvl.su">{"ООО \"ТВЛ\""}</a>
               </p>
             </footer>
+        };
+
+        let код_рекламы = r#"
+window.yaContextCb.push(()=>{
+  Ya.Context.AdvManager.render({
+    renderTo: 'yandex_rtb_R-A-1773485-1',
+    blockId: 'R-A-1773485-1'
+  })
+})
+"#;
+
+        let реклама = html! {
+            <div id="ad">
+              <div id="yandex_rtb_R-A-1773485-1"></div>
+              <script>{код_рекламы}</script>
+            </div>
         };
 
         html! {
@@ -284,6 +297,7 @@ impl Component for Модель {
 
                 {объяснение}
                 {footer}
+                {реклама}
             </>
         }
     }
