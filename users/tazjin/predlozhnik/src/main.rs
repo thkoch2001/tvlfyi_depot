@@ -5,7 +5,6 @@ use lazy_static::lazy_static;
 use maplit::hashmap;
 use std::collections::BTreeSet;
 use std::collections::HashMap;
-use std::fmt::Write;
 
 #[derive(Clone, Copy, Debug, Hash, PartialEq, Eq, PartialOrd, Ord)]
 enum Падеж {
@@ -110,19 +109,6 @@ lazy_static! {
     };
 }
 
-fn example_output() -> String {
-    let mut out = String::new();
-
-    for (пд, пги) in &*ПО_ПАДЕЖУ {
-        write!(out, "Падеж: {:?}\n", пд).ok();
-        for п in пги {
-            write!(out, "\t{}\n", п).ok();
-        }
-    }
-
-    out
-}
-
 enum Сообщение {
     ВыбралПадеж(Option<Падеж>),
     ВыбралПредлог(Option<&'static str>),
@@ -140,9 +126,13 @@ struct Вывод {
     объяснение: Option<Html>,
 }
 
-fn объяснить(падеж: Падеж, предлог: &str) -> Html {
+fn объясни(падеж: Падеж, предлог: &str) -> Html {
     html! {
-        {format!("{} {}", предлог, падеж.вопрос())}
+        <div id="obyasnenie">
+          <hr/>
+          <h2>{"Пример:"}</h2>
+          {format!("{} {}", предлог, падеж.вопрос())}
+        </div>
     }
 }
 
@@ -151,7 +141,7 @@ fn ограничить(м: &Модель) -> Вывод {
         (Some(пж), Some(пл)) => Вывод {
             доступные_падежи: BTreeSet::from([пж]),
             доступные_предлоги: BTreeSet::from([*пл]),
-            объяснение: Some(объяснить(пж, пл)),
+            объяснение: Some(объясни(пж, пл)),
         },
 
         (Some(пж), None) => Вывод {
@@ -174,6 +164,16 @@ fn ограничить(м: &Модель) -> Вывод {
     }
 }
 
+fn класс_кнопки(выбран: bool, доступен: bool) -> String {
+    let класс = "btn ".to_string();
+    класс
+        + match (выбран, доступен) {
+            (true, _) => "btn-primary",
+            (false, true) => "btn-ghost btn-primary",
+            (false, false) => "btn-ghost btn-default",
+        }
+}
+
 fn покажи_предлог(
     link: &Scope<Модель>,
     м: &Модель,
@@ -182,13 +182,7 @@ fn покажи_предлог(
 ) -> Html {
     let выбран = м.предлог == Some(п);
     let доступен = вв.доступные_предлоги.contains(п);
-
-    let mut класс = "btn btn-ghost ".to_string();
-    класс += match (выбран, доступен) {
-        (true, _) => "btn-error",
-        (false, true) => "btn-primary",
-        (false, false) => "btn-default",
-    };
+    let класс = класс_кнопки(выбран, доступен);
 
     html! {
         <button class={класс}
@@ -208,13 +202,7 @@ fn покажи_падеж(
 ) -> Html {
     let выбран = м.падеж == Some(п);
     let доступен = вв.доступные_падежи.contains(&п);
-
-    let mut класс = "btn btn-ghost ".to_string();
-    класс += match (выбран, доступен) {
-        (true, _) => "btn-error",
-        (false, true) => "btn-primary",
-        (false, false) => "btn-default",
-    };
+    let класс = класс_кнопки(выбран, доступен);
 
     html! {
         <button class={класс}
@@ -262,26 +250,40 @@ impl Component for Модель {
 
         let объяснение = вв
             .объяснение
-            .map(|s| html! {{s}})
+            .map(|exp| exp)
             .unwrap_or_else(|| html! {});
+
+        let footer = html! {
+            <footer>
+              <hr/>
+              <p class="footer">
+                <a href="https://code.tvl.fyi/tree/users/tazjin/predlozhnik">{"код"}</a>
+                {" | "}
+                {"сделано "}<a href="https://tvl.su">{"ООО \"ТВЛ\""}</a>
+              </p>
+            </footer>
+        };
 
         html! {
             <>
-                <link rel="stylesheet"
-                      href="https://unpkg.com/terminal.css@0.7.2/dist/terminal.min.css" />
+                <div id="header">
+                  <h1>{"Прелдожник"}</h1>
+                  <p>{"... показывает которые предлоги употребляются в каких падежах на русском языке."}</p>
+                </div>
+
+                <h2>{"Выбирай предлог:"}</h2>
                 <div id="predlogi">
-                  <h2>{"Предлоги:"}</h2>
                   {кнапки_предлогов}
                 </div>
                 <hr/>
 
+                <h2>{"Выбирай падеж:"}</h2>
                 <div id="padezhi">
-                  <h2>{"Падежи:"}</h2>
                   {кнапки_падежов}
                 </div>
-                <hr/>
 
                 {объяснение}
+                {footer}
             </>
         }
     }
