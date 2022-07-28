@@ -106,6 +106,15 @@ lazy_static! {
 
         s
     };
+    static ref EXCEPTIONS: HashMap<(&'static str, Падеж), &'static str> = {
+        use Падеж::*;
+
+        hashmap! {
+            ("в", Винительный) => "Во что? В кого?",
+            ("о", Винительный) => "О кого? Обо что? (редко используется)"
+
+        }
+    };
 }
 
 enum Сообщение {
@@ -126,11 +135,16 @@ struct Вывод {
 }
 
 fn объясни(падеж: Падеж, предлог: &str) -> Html {
+    let exp = match EXCEPTIONS.get(&(предлог, падеж)) {
+        Some(exp) => html! { exp },
+        None => html! { format!("{} {}", предлог, падеж.вопрос()) },
+    };
+
     html! {
         <div id="obyasnenie">
           <hr/>
           <h2>{"Пример:"}</h2>
-          {format!("{} {}", предлог, падеж.вопрос())}
+          {exp}
         </div>
     }
 }
