@@ -29,6 +29,10 @@
           try_files $uri $uri.html $uri/ =404;
         }
 
+        location = /predlozhnik {
+          return 302 https://predlozhnik.ru;
+        }
+
         # Temporary place for serving static files.
         location /blobs/ {
           alias /var/lib/tazjins-blobs/;
