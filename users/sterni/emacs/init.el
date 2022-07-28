@@ -1,3 +1,8 @@
+;; set up package infrastructure
+
+(require 'use-package)
+(package-initialize)
+
 ;; Set default font and fallback font via set-fontset-font
 ;; TODO(sterni): Investigate why ZWJ sequences aren't shaped properly
 (let ((mono-font "Bitstream Vera Sans Mono-12")
@@ -162,10 +167,6 @@
         (project-magit "Magit")))
 
 ;;; Configure packages
-(require 'use-package)
-
-(package-initialize)
-
 (use-package undo-tree
   :config
   (global-undo-tree-mode)
