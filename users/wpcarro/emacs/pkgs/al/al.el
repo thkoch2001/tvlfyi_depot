@@ -65,10 +65,9 @@
 ;; Dependencies:
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(require 'macros)
 (require 'dash)
-(require 'tuple)
-(require 'maybe)
+(require 'list)
+(require 'map)
 
 ;; TODO: Support function aliases for:
 ;; - create/set
@@ -83,13 +82,6 @@
 ;; other mechanism.
 
 ;; TODO: Consider wrapping all of this with `(cl-defstruct alist xs)'.
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Constants
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-(defconst al-enable-tests? t
-  "When t, run the test suite.")
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Library
@@ -183,11 +175,11 @@ Mutative variant of `al-delete'."
 
 (defun al-has-key? (k xs)
   "Return t if XS has a key `equal' to K."
-  (maybe-some? (assoc k xs)))
+  (not (eq nil (assoc k xs))))
 
 (defun al-has-value? (v xs)
   "Return t if XS has a value of V."
-  (maybe-some? (rassoc v xs)))
+  (not (eq nil (rassoc v xs))))
 
 (defun al-count (xs)
   "Return the number of entries in XS."
@@ -228,27 +220,6 @@ F should return a tuple.  See tuple.el for more information."
   "Return a new alist with a merge of alists, A and B.
 In this case, the last writer wins, which is B."
   (al-reduce a #'al-set b))
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Tests
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-(when al-enable-tests?
-  (prelude-assert
-   (equal '((2 . one)
-            (3 . two))
-          (al-map-keys #'1+
-                          '((1 . one)
-                            (2 . two)))))
-  (prelude-assert
-   (equal '((one . 2)
-            (two . 3))
-          (al-map-values #'1+
-                            '((one . 1)
-                              (two . 2))))))
-
-
-;; TODO: Support test cases for the entire API.
 
 (provide 'al)
 ;;; al.el ends here

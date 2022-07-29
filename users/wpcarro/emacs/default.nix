@@ -25,6 +25,10 @@ let
 
   wpcarrosEmacs = emacsWithPackages (epkgs:
     (with wpcarro.emacs.pkgs; [
+      al
+      list
+      set
+      struct
       zle
     ]) ++
 
