@@ -13,6 +13,7 @@
 ;; Dependencies
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+(require 'dash)
 (require 'maybe)
 (require 'cl-lib)
 
@@ -31,13 +32,13 @@
 ;; Int -> Int -> Int -> Boolean
 (cl-defun math-triangle-of-power (&key base power result)
   (cond
-   ((maybe-somes? base power result)
+   ((-all? #'maybe-some? (list base power result))
     (error "All three arguments should not be set"))
-   ((maybe-somes? power result)
+   ((-all? #'maybe-some? (list power result))
     (message "power and result"))
-   ((maybe-somes? base result)
+   ((-all? #'maybe-some? (list base result))
     (log result base))
-   ((maybe-somes? base power)
+   ((-all? #'maybe-some? (list base power))
     (expt base power))
    (t
     (error "Two of the three arguments must be set"))))

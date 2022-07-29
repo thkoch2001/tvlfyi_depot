@@ -27,6 +27,7 @@ let
     (with wpcarro.emacs.pkgs; [
       al
       list
+      maybe
       set
       struct
       zle
