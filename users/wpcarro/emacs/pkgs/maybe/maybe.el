@@ -32,19 +32,6 @@
 ;;; Code:
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Dependencies
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-(require 'list)
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Constants
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-(defvar maybe--run-tests? t
-  "When t, run the test suite defined herein.")
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Library
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
@@ -55,14 +42,6 @@
 (defun maybe-some? (x)
   "Return t when X is non-nil."
   (not (maybe-nil? x)))
-
-(defun maybe-nils? (&rest xs)
-  "Return t if all XS are nil."
-  (list-all? #'maybe-nil? xs))
-
-(defun maybe-somes? (&rest xs)
-  "Return t if all XS are non-nil."
-  (list-all? #'maybe-some? xs))
 
 (defun maybe-default (default x)
   "Return DEFAULT when X is nil."
