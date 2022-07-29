@@ -52,17 +52,8 @@
 ;; Dependencies
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-;; TODO: Move `prelude-assert' elsewhere so that I can require it without
-;; introducing the circular dependency of list.el -> prelude.el -> list.el.
-;;(require 'prelude)
 (require 'dash)
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Constants
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-(defconst list-tests? t
-  "When t, run the test suite.")
+(require 'set)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Library
@@ -154,6 +145,19 @@
   "Return the first x in XS that passes P or nil."
   (-find p xs))
 
+;; TODO: Support dedupe.
+;; TODO: Should we call this unique? Or distinct?
+
+;; TODO: Add tests.
+(defun list-dedupe-adjacent (xs)
+  "Return XS without adjacent duplicates."
+  (list-reduce (list (list-first xs))
+    (lambda (x acc)
+      (if (equal x (list-first acc))
+          acc
+        (list-cons x acc)))
+    xs))
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Predicates
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -184,38 +188,6 @@ Be leery of using this with things like alists.  Many data structures in Elisp
   "Return t if all elements in XS are distinct after applying F to each."
   (= (length xs)
      (->> xs (-map f) set-from-list set-count)))
-
-;; TODO: Support dedupe.
-;; TODO: Should we call this unique? Or distinct?
-
-;; TODO: Add tests.
-(defun list-dedupe-adjacent (xs)
-  "Return XS without adjacent duplicates."
-  (prelude-assert (not (list-empty? xs)))
-  (list-reduce (list (list-first xs))
-    (lambda (x acc)
-      (if (equal x (list-first acc))
-          acc
-        (list-cons x acc)))
-    xs))
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Tests
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-;; (when list-tests?
-;;   (prelude-assert
-;;    (= 0
-;;       (list-length '())))
-;;   (prelude-assert
-;;    (= 5
-;;       (list-length '(1 2 3 4 5))))
-;;   (prelude-assert
-;;    (= 16
-;;       (list-reduce 1 (lambda (x acc) (+ x acc)) '(1 2 3 4 5))))
-;;   (prelude-assert
-;;    (equal '(2 4 6 8 10)
-;;           (list-map (lambda (x) (* x 2)) '(1 2 3 4 5)))))
 
 (provide 'list)
 ;;; list.el ends here

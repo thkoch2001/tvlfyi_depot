@@ -9,8 +9,13 @@
 
 ;;; Code:
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Dependencies
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(require 'cl-lib)
+(require 'dash)
 (require 'ht) ;; friendlier API for hash-tables
-(require 'dotted)
 (require 'struct)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -27,13 +32,10 @@
 
 (cl-defstruct set xs)
 
-(defconst set-enable-testing? t
-  "Run tests when t.")
-
 (defun set-from-list (xs)
   "Create a new set from the list XS."
   (make-set :xs (->> xs
-                     (list-map #'dotted-new)
+                     (-map (lambda (x) (cons x nil)))
                      ht-from-alist)))
 
 (defun set-new (&rest args)
@@ -61,7 +63,7 @@
   "Return a new set by calling F on each element of XS and ACC."
   (->> xs
        set-to-list
-       (list-reduce acc f)))
+       (-reduce-from (lambda (acc x) (funcall f x acc)) acc)))
 
 (defun set-intersection (a b)
   "Return the set intersection between A and B."
@@ -104,71 +106,11 @@
   "Return t if A has all of the members of B."
   (->> b
        set-to-list
-       (list-all? (lambda (x) (set-contains? x a)))))
+       (-all? (lambda (x) (set-contains? x a)))))
 
 (defun set-subset? (a b)
   "Return t if each member of set A is present in set B."
   (set-superset? b a))
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Tests
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-(when set-enable-testing?
-  ;; set-distinct?
-  (prelude-assert
-   (set-distinct? (set-new 'one 'two 'three)
-                  (set-new 'a 'b 'c)))
-  (prelude-refute
-   (set-distinct? (set-new 1 2 3)
-                  (set-new 3 4 5)))
-  (prelude-refute
-   (set-distinct? (set-new 1 2 3)
-                  (set-new 1 2 3)))
-  ;; set-equal?
-  (prelude-refute
-   (set-equal? (set-new 'a 'b 'c)
-               (set-new 'x 'y 'z)))
-  (prelude-refute
-   (set-equal? (set-new 'a 'b 'c)
-               (set-new 'a 'b)))
-  (prelude-assert
-   (set-equal? (set-new 'a 'b 'c)
-               (set-new 'a 'b 'c)))
-  ;; set-intersection
-  (prelude-assert
-   (set-equal? (set-new 2 3)
-               (set-intersection (set-new 1 2 3)
-                                 (set-new 2 3 4))))
-  ;; set-{from,to}-list
-  (prelude-assert (equal '(1 2 3)
-                         (->> '(1 1 2 2 3 3)
-                              set-from-list
-                              set-to-list)))
-  (let ((primary-colors (set-new "red" "green" "blue")))
-    ;; set-subset?
-    (prelude-refute
-     (set-subset? (set-new "black" "grey")
-                  primary-colors))
-    (prelude-assert
-     (set-subset? (set-new "red")
-                  primary-colors))
-    ;; set-superset?
-    (prelude-refute
-     (set-superset? primary-colors
-                    (set-new "black" "grey")))
-    (prelude-assert
-     (set-superset? primary-colors
-                    (set-new "red" "green" "blue")))
-    (prelude-assert
-     (set-superset? primary-colors
-                    (set-new "red" "blue"))))
-  ;; set-empty?
-  (prelude-assert (set-empty? (set-new)))
-  (prelude-refute (set-empty? (set-new 1 2 3)))
-  ;; set-count
-  (prelude-assert (= 0 (set-count (set-new))))
-  (prelude-assert (= 2 (set-count (set-new 1 1 2 2)))))
 
 (provide 'set)
 ;;; set.el ends here
