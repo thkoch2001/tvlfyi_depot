@@ -8,7 +8,7 @@
 ;; What is a bag?  A bag should be thought of as a frequency table.  It's a way
 ;; to convert a list of something into a set that allows duplicates.  Isn't
 ;; allowing duplicates the whole thing with Sets?  Kind of.  But the interface
-;; of Sets is something that bags resemble, so multi-set isn't as bag of a name
+;; of Sets is something that bags resemble, so multi-set isn't as bad of a name
 ;; as it may first seem.
 ;;
 ;; If you've used Python's collections.Counter, the concept of a bag should be
@@ -27,7 +27,7 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (require 'al)
-(require 'number)
+(require 'list)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Library
@@ -35,36 +35,44 @@
 
 (cl-defstruct bag xs)
 
-(defun bag-update (f xs)
-  "Call F on alist in XS."
-  (let ((ys (bag-xs xs)))
-    (setf (bag-xs xs) (funcall f ys))))
-
 (defun bag-new ()
   "Create an empty bag."
   (make-bag :xs (al-new)))
 
-(defun bag-contains? (x xs)
-  "Return t if XS has X."
-  (al-has-key? x (bag-xs xs)))
-
-;; TODO: Tabling this for now since working with structs seems to be
-;; disappointingly difficult.  Where is `struct-update'?
-;; (defun bag-add (x xs)
-;;   "Add X to XS.")
-
-;; TODO: What do we name delete vs. remove?
-;; (defun bag-remove (x xs)
-;;   "Remove X from XS.
-;; This is a no-op is X doesn't exist in XS.")
-
 (defun bag-from-list (xs)
   "Map a list of `XS' into a bag."
   (->> xs
-       (list-reduce
-        (bag-new)
-        (lambda (x acc)
-          (bag-add x 1 #'number-inc acc)))))
+       (list-reduce (bag-new) #'bag-add)))
+
+(defun bag-add (x xs)
+  "Add X to XS."
+  (if (bag-contains? x xs)
+      (struct-update
+       bag xs (lambda (xs) (al-update x (lambda (x) (+ 1 x)) xs)) xs)
+    (struct-update bag xs (lambda (xs) (al-set x 1 xs)) xs)))
+
+(defun bag-remove (x xs)
+  "Remove X from XS.
+This is a no-op is X doesn't exist in XS."
+  (when (bag-contains? x xs)
+    (struct-update bag xs (lambda (xs) (al-delete x xs)) xs)))
+
+(defun bag-count (x xs)
+  "Return the number of occurrences of X in XS."
+  (al-get x (bag-xs xs) 0))
+
+(defun bag-total (xs)
+  "Return the total number of elements in XS."
+  (->> (bag-xs xs)
+       (al-reduce 0 (lambda (_key v acc) (+ acc v)))))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Predicates
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(defun bag-contains? (x xs)
+  "Return t if XS has X."
+  (al-has-key? x (bag-xs xs)))
 
 (provide 'bag)
 ;;; bag.el ends here
