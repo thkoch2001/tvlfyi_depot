@@ -33,6 +33,7 @@ let
       string
       struct
       symbol
+      vterm-mgt
       zle
     ]) ++
 
