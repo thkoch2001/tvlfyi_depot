@@ -5,7 +5,7 @@
 ;; Package-Requires: ((emacs "24"))
 
 ;;; Commentary:
-;; Library for working with string.
+;; Library for working with strings.
 
 ;;; Code:
 
@@ -15,30 +15,14 @@
 
 (require 's)
 (require 'dash)
-;; TODO: Resolve the circular dependency that this introduces.
-;; (require 'prelude)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Library
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(defun string-contains? (c x)
-  "Return t if X is in C."
-  (s-contains? c x))
-
-(defun string-hookify (x)
-  "Append \"-hook\" to X."
-  (s-append "-hook" x))
-
 (defun string-split (y x)
   "Map string X into a list of strings that were separated by Y."
   (s-split y x))
-
-(defun string-ensure-hookified (x)
-  "Ensure that X has \"-hook\" appended to it."
-  (if (s-ends-with? "-hook" x)
-      x
-    (string-hookify x)))
 
 (defun string-format (x &rest args)
   "Format template string X with ARGS."
@@ -48,11 +32,11 @@
   "Joins `STRINGS' into onto string."
   (apply #'s-concat strings))
 
-(defun string-->symbol (string)
+(defun string-to-symbol (string)
   "Maps `STRING' to a symbol."
   (intern string))
 
-(defun string-<-symbol (symbol)
+(defun string-from-symbol (symbol)
   "Maps `SYMBOL' into a string."
   (symbol-name symbol))
 
@@ -105,6 +89,10 @@
 (defun string-instance? (x)
   "Return t if X is a string."
   (stringp x))
+
+(defun string-contains? (c x)
+  "Return t if X is in C."
+  (s-contains? c x))
 
 (provide 'string)
 ;;; string.el ends here
