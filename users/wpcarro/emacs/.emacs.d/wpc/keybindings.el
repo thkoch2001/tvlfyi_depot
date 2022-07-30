@@ -21,7 +21,6 @@
 ;; Dependencies
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(require 'functions)
 (require 'screen-brightness)
 (require 'pulse-audio)
 (require 'scrot)
@@ -52,6 +51,41 @@
 (require 'avy)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Helper Functions
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(defun keybindings--window-vsplit-right ()
+  "Split the window vertically and focus the right half."
+  (interactive)
+  (evil-window-vsplit)
+  (windmove-right))
+
+(defun keybindings--window-split-down ()
+  "Split the window horizontal and focus the bottom half."
+  (interactive)
+  (evil-window-split)
+  (windmove-down))
+
+(defun keybindings--create-snippet ()
+  "Create a window split and then opens the Yasnippet editor."
+  (interactive)
+  (evil-window-vsplit)
+  (call-interactively #'yas-new-snippet))
+
+(defun keybindings--replace-under-point ()
+  "Faster than typing %s//thing/g."
+  (interactive)
+  (let ((term (s-replace "/" "\\/" (symbol-to-string (symbol-at-point)))))
+    (save-excursion
+      (evil-ex (concat "%s/\\b" term "\\b/")))))
+
+(defun keybindings--evil-ex-define-cmd-local (cmd f)
+  "Define CMD to F locally to a buffer."
+  (unless (local-variable-p 'evil-ex-commands)
+    (setq-local evil-ex-commands (copy-alist evil-ex-commands)))
+  (evil-ex-define-cmd cmd f))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; General Keybindings
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
@@ -78,10 +112,10 @@
   "L"   #'evil-end-of-line
   "_"   #'ranger
   "-"   #'dired-jump
-  "sl"  #'functions-evil-window-vsplit-right
+  "sl"  #'keybindings--window-vsplit-right
   "sh"  #'evil-window-vsplit
   "sk"  #'evil-window-split
-  "sj"  #'functions-evil-window-split-down)
+  "sj"  #'keybindings--window-split-down)
 
 (general-nmap
   :keymaps 'override
@@ -228,11 +262,11 @@
  "gss" #'magit-status
  "gsd" #'tvl-depot-status
  "E" #'refine
- "es" #'functions-create-snippet
+ "es" #'keybindings--create-snippet
  "l" #'linum-mode
  "B" #'magit-blame
  "w" #'save-buffer
- "r" #'functions-evil-replace-under-point
+ "r" #'keybindings--replace-under-point
  "R" #'deadgrep)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -277,19 +311,6 @@
  "<C-S-iso-lefttab>" #'notmuch-show-previous-thread-show
  "<C-tab>" #'notmuch-show-next-thread-show
  "e" #'notmuch-show-archive-message-then-next-or-next-thread)
-
-;; TODO(wpcarro): Consider moving this to a separate module
-(defun keybindings--evil-ex-define-cmd-local (cmd f)
-  "Define CMD to F locally to a buffer."
-  (unless (local-variable-p 'evil-ex-commands)
-    (setq-local evil-ex-commands (copy-alist evil-ex-commands)))
-  (evil-ex-define-cmd cmd f))
-
-;; TODO(wpcarro): Support a macro that can easily define evil-ex commands for a
-;; particular mode.
-;; Consumption:
-;; (evil-ex-for-mode 'notmuch-message-mode
-;;                   "x" #'notmuch-mua-send-and-exit)
 
 (add-hook 'notmuch-message-mode-hook
           (lambda ()
