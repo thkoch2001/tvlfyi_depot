@@ -32,6 +32,7 @@ let
       set
       string
       struct
+      vterm-mgt
       zle
     ]) ++
 
