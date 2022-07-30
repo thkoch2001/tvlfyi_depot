@@ -31,8 +31,6 @@ Will error for inputs with a trailing slash."
        fs-ensure-dir)
   (f-touch path))
 
-(f-dirname "/tmp/a/b/file.txt")
-
 (defun fs-ensure-dir (path)
   "Ensure that a directory and its ancestor directories in `PATH' exist."
   (->> path
@@ -44,26 +42,6 @@ Will error for inputs with a trailing slash."
 Should behave similarly in spirit to the Unix command, ls.
 If `FULL-PATH?' is set, return the full-path of the files."
   (-drop 2 (directory-files dir full-path?)))
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Tests
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-(ert-deftest fs-test-ensure-file ()
-  (let ((file "/tmp/file/a/b/c/file.txt"))
-    ;; Ensure this file doesn't exist first to prevent false-positives.
-    (f-delete file t)
-    (fs-ensure-file file)
-    (should (and (f-exists? file)
-                 (f-file? file)))))
-
-(ert-deftest fs-test-ensure-dir ()
-  (let ((dir "/tmp/dir/a/b/c"))
-    ;; Ensure the directory doesn't exist.
-    (f-delete dir t)
-    (fs-ensure-dir dir)
-    (should (and (f-exists? dir)
-                 (f-dir? dir)))))
 
 (provide 'fs)
 ;;; fs.el ends here
