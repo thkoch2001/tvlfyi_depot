@@ -12,6 +12,7 @@ let
             dash
           ]) ++
           (with depot.users.wpcarro.emacs.pkgs; [
+            maybe
             set
           ]);
       })
