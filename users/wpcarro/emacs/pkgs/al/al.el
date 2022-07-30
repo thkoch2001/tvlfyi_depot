@@ -111,10 +111,12 @@ Note that this doesn't append to the alist in the way that most alists handle
   (map-put! xs k v))
 
 ;; Read
-(defun al-get (k xs)
-  "Return the value at K in XS; otherwise, return nil.
+(defun al-get (k xs &optional default)
+  "Return the value at K in XS; otherwise, return nil or DEFAULT (if set).
 Returns the first occurrence of K in XS since alists support multiple entries."
-  (cdr (assoc k xs)))
+  (if (not (al-has-key? k xs))
+      default
+    (cdr (assoc k xs))))
 
 (defun al-get-entry (k xs)
   "Return the first key-value pair at K in XS."
