@@ -68,8 +68,8 @@
 (cl-defun fonts-cycle (&key forward?)
   "Cycle forwards when `FORWARD?' non-nil."
   (let ((font (if forward?
-                  (cycle-next fonts-whitelist)
-                (cycle-prev fonts-whitelist))))
+                  (cycle-next! fonts-whitelist)
+                (cycle-prev! fonts-whitelist))))
     (message (s-concat "Active font: " font))
     (fonts-set font)))
 
@@ -93,7 +93,7 @@
   "Focuses the FONT in the `fonts-whitelist' cycle.
 The size of the font is determined by `fonts-size'."
   (prelude-assert (cycle-contains? font fonts-whitelist))
-  (cycle-focus (lambda (x) (equal x font)) fonts-whitelist)
+  (cycle-focus! (lambda (x) (equal x font)) fonts-whitelist)
   (fonts-set (fonts-current) fonts-size))
 
 (defun fonts-ivy-select ()

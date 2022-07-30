@@ -135,7 +135,7 @@
   (with-current-buffer (current-buffer)
     (let ((cycle (irc-channel->cycle irc-server->channels (buffer-name))))
       (erc-join-channel
-       (cycle-next cycle))
+       (cycle-next! cycle))
       (irc-message
        (string-format "Current IRC channel: %s" (cycle-current cycle))))))
 
@@ -145,7 +145,7 @@
   (with-current-buffer (current-buffer)
     (let ((cycle (irc-channel->cycle irc-server->channels (buffer-name))))
       (erc-join-channel
-       (cycle-prev cycle))
+       (cycle-prev! cycle))
       (irc-message
        (string-format "Current IRC channel: %s" (cycle-current cycle))))))
 
