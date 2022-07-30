@@ -53,6 +53,7 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (require 'dash)
+(require 'maybe)
 (require 'set)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -73,7 +74,7 @@
       ""
     (list-reduce (list-first xs)
                  (lambda (x acc)
-                   (string-concat acc joint x))
+                   (format "%s%s%s" acc joint x))
                  (list-tail xs))))
 
 (defun list-length (xs)
@@ -151,12 +152,13 @@
 ;; TODO: Add tests.
 (defun list-dedupe-adjacent (xs)
   "Return XS without adjacent duplicates."
-  (list-reduce (list (list-first xs))
-    (lambda (x acc)
-      (if (equal x (list-first acc))
-          acc
-        (list-cons x acc)))
-    xs))
+  (list-reverse
+   (list-reduce (list (list-first xs))
+                (lambda (x acc)
+                  (if (equal x (list-first acc))
+                      acc
+                    (list-cons x acc)))
+                xs)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Predicates
@@ -182,7 +184,7 @@ Be leery of using this with things like alists.  Many data structures in Elisp
 
 (defun list-contains? (x xs)
   "Return t if X is in XS using `equal'."
-  (-contains? xs x))
+  (maybe-some? (-contains? xs x)))
 
 (defun list-xs-distinct-by? (f xs)
   "Return t if all elements in XS are distinct after applying F to each."
