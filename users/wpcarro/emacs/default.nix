@@ -29,6 +29,7 @@ let
       list
       maybe
       set
+      string
       struct
       zle
     ]) ++
