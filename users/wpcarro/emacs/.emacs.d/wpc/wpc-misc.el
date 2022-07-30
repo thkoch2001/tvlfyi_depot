@@ -332,6 +332,9 @@
     (interactive)
     (clipboard-copy (emojify-completing-read "Copy: "))))
 
+;; Always auto-close parantheses and other pairs
+(electric-pair-mode)
+
 ;; Start the Emacs server
 (when (not (server-running-p))
   (server-start))
