@@ -143,12 +143,12 @@ Return a reference to that buffer."
 (defun buffer-cycle-next ()
   "Cycle forward through the `buffer-source-code-buffers'."
   (interactive)
-  (buffer-cycle #'cycle-next))
+  (buffer-cycle #'cycle-next!))
 
 (defun buffer-cycle-prev ()
   "Cycle backward through the `buffer-source-code-buffers'."
   (interactive)
-  (buffer-cycle #'cycle-prev))
+  (buffer-cycle #'cycle-prev!))
 
 (defun buffer-ivy-source-code ()
   "Use `ivy-read' to choose among all open source code buffers."

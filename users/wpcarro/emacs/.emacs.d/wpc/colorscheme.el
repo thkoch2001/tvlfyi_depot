@@ -51,7 +51,7 @@ There is no hook that I'm aware of to handle this more elegantly."
 
 (defun colorscheme-whitelist-set (colorscheme)
   "Focus the COLORSCHEME in the `colorscheme-whitelist' cycle."
-  (cycle-focus (lambda (x) (equal x colorscheme)) colorscheme-whitelist)
+  (cycle-focus! (lambda (x) (equal x colorscheme)) colorscheme-whitelist)
   (colorscheme-set (colorscheme-current)))
 
 (defun colorscheme-ivy-select ()
@@ -66,8 +66,8 @@ There is no hook that I'm aware of to handle this more elegantly."
 Cycle prev otherwise."
   (disable-theme (cycle-current colorscheme-whitelist))
   (let ((theme (if forward?
-                   (cycle-next colorscheme-whitelist)
-                 (cycle-prev colorscheme-whitelist))))
+                   (cycle-next! colorscheme-whitelist)
+                 (cycle-prev! colorscheme-whitelist))))
     (colorscheme-set theme)
     (message (s-concat "Active theme: " (symbol-to-string theme)))))
 
