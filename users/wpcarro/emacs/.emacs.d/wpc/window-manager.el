@@ -97,12 +97,12 @@
 (defun window-manager-next-workspace ()
   "Cycle forwards to the next workspace."
   (interactive)
-  (window-manager--change-workspace (cycle-next window-manager--workspaces)))
+  (window-manager--change-workspace (cycle-next! window-manager--workspaces)))
 
 (defun window-manager-prev-workspace ()
   "Cycle backwards to the previous workspace."
   (interactive)
-  (window-manager--change-workspace (cycle-prev window-manager--workspaces)))
+  (window-manager--change-workspace (cycle-prev! window-manager--workspaces)))
 
 ;; Here is the code required to toggle EXWM's modes.
 (defun window-manager--line-mode ()
@@ -120,7 +120,7 @@
   (interactive)
   (with-current-buffer (window-buffer)
     (when (eq major-mode 'exwm-mode)
-      (funcall (cycle-next window-manager--modes)))))
+      (funcall (cycle-next! window-manager--modes)))))
 
 (defun window-manager--label->index (label workspaces)
   "Return the index of the workspace in WORKSPACES named LABEL."
@@ -152,10 +152,10 @@ Currently using super- as the prefix for switching workspaces."
 
 (defun window-manager--switch (label)
   "Switch to a named workspaces using LABEL."
-  (cycle-focus (lambda (x)
-                 (equal label
-                        (window-manager-named-workspace-label x)))
-               window-manager--workspaces)
+  (cycle-focus! (lambda (x)
+                  (equal label
+                         (window-manager-named-workspace-label x)))
+                window-manager--workspaces)
   (window-manager--change-workspace (cycle-current window-manager--workspaces)))
 
 (defun window-manager-toggle-previous ()

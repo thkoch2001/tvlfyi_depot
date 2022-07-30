@@ -55,8 +55,8 @@ This function should be called from a buffer running vterm."
   (interactive)
   (vterm-mgt--assert-vterm-buffer)
   (vterm-mgt-reconcile-state)
-  (cycle-focus-item (current-buffer) vterm-mgt--instances)
-  (switch-to-buffer (cycle-next vterm-mgt--instances))
+  (cycle-focus-item! (current-buffer) vterm-mgt--instances)
+  (switch-to-buffer (cycle-next! vterm-mgt--instances))
   (when vterm-mgt-scroll-on-focus (end-of-buffer)))
 
 (defun vterm-mgt-prev ()
@@ -65,8 +65,8 @@ This function should be called from a buffer running vterm."
   (interactive)
   (vterm-mgt--assert-vterm-buffer)
   (vterm-mgt-reconcile-state)
-  (cycle-focus-item (current-buffer) vterm-mgt--instances)
-  (switch-to-buffer (cycle-prev vterm-mgt--instances))
+  (cycle-focus-item! (current-buffer) vterm-mgt--instances)
+  (switch-to-buffer (cycle-prev! vterm-mgt--instances))
   (when vterm-mgt-scroll-on-focus (end-of-buffer)))
 
 (defun vterm-mgt-instantiate ()
@@ -81,8 +81,8 @@ If however you must call `vterm', if you'd like to cycle through vterm
   (interactive)
   (vterm-mgt-reconcile-state)
   (let ((buffer (vterm t)))
-    (cycle-append buffer vterm-mgt--instances)
-    (cycle-focus-item buffer vterm-mgt--instances)))
+    (cycle-append! buffer vterm-mgt--instances)
+    (cycle-focus-item! buffer vterm-mgt--instances)))
 
 (defun vterm-mgt-kill ()
   "Kill the current buffer and remove it from `vterm-mgt--instances'.
@@ -106,7 +106,7 @@ instance."
     (if (cycle-focused? vterm-mgt--instances)
         (switch-to-buffer (cycle-current vterm-mgt--instances))
       (progn
-        (cycle-jump 0 vterm-mgt--instances)
+        (cycle-jump! 0 vterm-mgt--instances)
         (switch-to-buffer (cycle-current vterm-mgt--instances))))))
 
 (defun vterm-mgt-rename-buffer (name)
