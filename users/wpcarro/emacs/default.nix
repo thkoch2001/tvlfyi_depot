@@ -26,6 +26,7 @@ let
   wpcarrosEmacs = emacsWithPackages (epkgs:
     (with wpcarro.emacs.pkgs; [
       al
+      cycle
       list
       maybe
       set
