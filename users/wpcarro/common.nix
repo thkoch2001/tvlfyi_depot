@@ -58,6 +58,7 @@ in
     python3
     rink
     ripgrep
+    sysz
     tldr
     tokei
     tree
