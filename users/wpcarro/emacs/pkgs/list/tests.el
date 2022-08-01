@@ -42,3 +42,13 @@
 (ert-deftest list-join ()
   (should (equal "foo-bar-baz"
                  (list-join "-" '("foo" "bar" "baz")))))
+
+(ert-deftest list-chunk ()
+  (should (equal '((1 2 3 4 5 6))
+                 (list-chunk 7 '(1 2 3 4 5 6))))
+  (should (equal '((1) (2) (3) (4) (5) (6))
+                 (list-chunk 1 '(1 2 3 4 5 6))))
+  (should (equal '((1 2 3) (4 5 6))
+                 (list-chunk 3 '(1 2 3 4 5 6))))
+  (should (equal '((1 2) (3 4) (5 6))
+                 (list-chunk 2 '(1 2 3 4 5 6)))))

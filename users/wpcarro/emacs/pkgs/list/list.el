@@ -160,6 +160,24 @@
                     (list-cons x acc)))
                 xs)))
 
+(defun list-chunk (n xs)
+  "Chunk XS into lists of size N."
+  (if (> n (length xs))
+      (list xs)
+    (->> xs
+         (list-reduce '(:curr () :result ())
+                      (lambda (x acc)
+                        (let ((curr (plist-get acc :curr))
+                              (result (plist-get acc :result)))
+                          (if (= (- n 1) (length curr))
+                              `(:curr () :result ,(list-cons (list-reverse (list-cons x curr)) result))
+                            `(:curr ,(list-cons x curr) :result ,result)))))
+         (funcall (lambda (xs)
+                    (let ((curr (plist-get xs :curr))
+                          (result (plist-get xs :result)))
+                      (if curr (list-cons curr result)) result)))
+         list-reverse)))
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Predicates
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
