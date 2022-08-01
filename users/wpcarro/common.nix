@@ -26,6 +26,9 @@ in
   };
 
   services = {
+    # Remodel the system clipboard as a list instead of a point.
+    clipmenu.enable = true;
+
     locate.enable = true;
 
     depot.automatic-gc = {

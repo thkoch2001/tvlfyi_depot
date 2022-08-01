@@ -12,7 +12,6 @@ let
   emacsBinPath = makeBinPath (
     wpcarro.common.shell-utils ++
     (with pkgs; [
-      clipmenu
       ispell
       nix
       pass
@@ -55,8 +54,6 @@ let
       vterm
       base16-theme
       password-store
-      # TODO(wpcarro): Prefer an Emacs client for clipmenud.
-      clipmon
       csharp-mode
       dockerfile-mode
       evil
