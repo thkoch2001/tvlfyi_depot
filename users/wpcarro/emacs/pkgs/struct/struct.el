@@ -39,6 +39,16 @@ This is immutable."
        (setf (,accessor copy) (funcall ,f (,accessor copy)))
        copy)))
 
+(defmacro struct-update! (type field f xs)
+  "Mutably apply F to FIELD in XS."
+  (let ((accessor (->> field
+                       symbol-name
+                       (s-prepend (s-concat (symbol-name type) "-"))
+                       intern)))
+    `(progn
+       (setf (,accessor ,xs) (funcall ,f (,accessor ,xs)))
+       ,xs)))
+
 (defmacro struct-set (type field x xs)
   "Immutably set FIELD in XS (struct TYPE) to X."
   (let ((copier (->> type
