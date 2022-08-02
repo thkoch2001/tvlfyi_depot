@@ -16,7 +16,6 @@ let
     { };
 
   emacs = (pkgs.emacsPackagesFor pkgs.emacs28).emacsWithPackages (epkgs: [
-    epkgs.dash
     struct
   ]);
 in
