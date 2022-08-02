@@ -18,7 +18,6 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (require 's)
-(require 'dash)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Library
@@ -27,38 +26,23 @@
 (defmacro struct-update (type field f xs)
   "Apply F to FIELD in XS, which is a struct of TYPE.
 This is immutable."
-  (let ((copier (->> type
-                     symbol-name
-                     (s-prepend "copy-")
-                     intern))
-        (accessor (->> field
-                       symbol-name
-                       (s-prepend (s-concat (symbol-name type) "-"))
-                       intern)))
+  (let ((copier (struct--copier-for type))
+        (accessor (struct--accessor-for type field)))
     `(let ((copy (,copier ,xs)))
        (setf (,accessor copy) (funcall ,f (,accessor copy)))
        copy)))
 
 (defmacro struct-update! (type field f xs)
   "Mutably apply F to FIELD in XS."
-  (let ((accessor (->> field
-                       symbol-name
-                       (s-prepend (s-concat (symbol-name type) "-"))
-                       intern)))
+  (let ((accessor (struct--accessor-for type field)))
     `(progn
        (setf (,accessor ,xs) (funcall ,f (,accessor ,xs)))
        ,xs)))
 
 (defmacro struct-set (type field x xs)
   "Immutably set FIELD in XS (struct TYPE) to X."
-  (let ((copier (->> type
-                     symbol-name
-                     (s-prepend "copy-")
-                     intern))
-        (accessor (->> field
-                       symbol-name
-                       (s-prepend (s-concat (symbol-name type) "-"))
-                       intern)))
+  (let ((copier (struct--copier-for type))
+        (accessor (struct--accessor-for type field)))
     `(let ((copy (,copier ,xs)))
        (setf (,accessor copy) ,x)
        copy)))
@@ -66,13 +50,21 @@ This is immutable."
 (defmacro struct-set! (type field x xs)
   "Set FIELD in XS (struct TYPE) to X mutably.
 This is an adapter interface to `setf'."
-  (let ((accessor (->> field
-                       symbol-name
-                       (s-prepend (s-concat (symbol-name type) "-"))
-                       intern)))
+  (let ((accessor (struct--accessor-for type field)))
     `(progn
        (setf (,accessor ,xs) ,x)
        ,xs)))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Helper Functions
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(defun struct--copier-for (type)
+  (intern (s-prepend "copy-" (symbol-name type))))
+
+(defun struct--accessor-for (type field)
+  (intern (s-prepend (s-concat (symbol-name type) "-")
+                     (symbol-name field))))
 
 (provide 'struct)
 ;;; struct.el ends here
