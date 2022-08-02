@@ -7,10 +7,7 @@ let
         pname = "struct";
         version = "1.0.0";
         src = ./struct.el;
-        packageRequires =
-          (with emacsPackages; [
-            s
-          ]);
+        packageRequires = [ ];
       })
     { };
 
