@@ -25,9 +25,6 @@
 ;; Nil     | Set
 ;;
 ;; NOTE: In Elisp, values like '() (i.e. the empty list) are aliases for nil.
-;; What else in Elisp is an alias in this way?
-;; Examples:
-;; TODO: Provide examples of other nil types in Elisp.
 
 ;;; Code:
 
@@ -37,7 +34,7 @@
 
 (defun maybe-nil? (x)
   "Return t if X is nil."
-  (eq nil x))
+  (null x))
 
 (defun maybe-some? (x)
   "Return t when X is non-nil."
