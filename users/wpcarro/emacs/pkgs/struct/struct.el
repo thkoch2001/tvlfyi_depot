@@ -1,7 +1,7 @@
 ;;; struct.el --- Helpers for working with structs -*- lexical-binding: t -*-
 
 ;; Author: William Carroll <wpcarro@gmail.com>
-;; Version: 0.0.1
+;; Version: 1.0.0
 ;; Package-Requires: ((emacs "24.3"))
 
 ;;; Commentary:
@@ -12,12 +12,6 @@
 ;; Sometimes `setf' just isn't enough.
 
 ;;; Code:
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Dependencies
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-(require 's)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Library
@@ -60,11 +54,12 @@ This is an adapter interface to `setf'."
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (defun struct--copier-for (type)
-  (intern (s-prepend "copy-" (symbol-name type))))
+  (intern (format "copy-%s" (symbol-name type))))
 
 (defun struct--accessor-for (type field)
-  (intern (s-prepend (s-concat (symbol-name type) "-")
-                     (symbol-name field))))
+  (intern (format "%s-%s"
+                  (symbol-name type)
+                  (symbol-name field))))
 
 (provide 'struct)
 ;;; struct.el ends here
