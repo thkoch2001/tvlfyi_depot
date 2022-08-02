@@ -9,7 +9,6 @@ let
         src = ./struct.el;
         packageRequires =
           (with emacsPackages; [
-            dash
             s
           ]);
       })
