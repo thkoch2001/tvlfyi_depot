@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0c4d9ce4_daf81c4d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2022-08-02T09:30:05Z",
+      "side": 1,
+      "message": "This breaks my emacs somehow; on startup it the `use-package` symbol is undefined. Unsure what is wrong exactly.",
+      "revId": "41f21cecb5f9454f49493c2d1f1375b595dc8fae",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
