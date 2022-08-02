@@ -21,4 +21,9 @@ struct.overrideAttrs (_old: {
     ${emacs}/bin/emacs -batch \
       -l ert -l ${./tests.el} -f ert-run-tests-batch-and-exit
   '';
+  passthru.meta.ci.extraSteps.github = depot.tools.releases.filteredGitPush {
+    filter = ":/users/wpcarro/emacs/pkgs/struct";
+    remote = "git@github.com:wpcarro/struct.el.git";
+    ref = "refs/heads/canon";
+  };
 })
