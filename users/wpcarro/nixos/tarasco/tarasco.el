@@ -2,12 +2,20 @@
 ;; Dependencies
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+(require 'bookmark)
 (require 'display)
 (require 'window-manager)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Monitor Configuration
+;; Configuration
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(bookmark-install-kbd
+ (make-bookmark :label "hadrian"
+                :path (f-join tvl-depot-path "/hadrian")
+                :kbd "h"))
+
+(add-to-list 'ssh-hosts "wpcarro@ava")
 
 (display-register primary
                   :output "HDMI-1"
@@ -47,11 +55,5 @@
              :kbd "h"
              :display display-secondary)))
 
+;; I *think* this needs to be the last statement in this file.
 (window-manager-init :init-hook #'display-arrange-main)
-
-(bookmark-install-kbd
- (make-bookmark :label "hadrian"
-                :path (f-join tvl-depot-path "/hadrian")
-                :kbd "h"))
-
-(add-to-list 'ssh-hosts "wpcarro@ava")
