@@ -22,16 +22,17 @@
 ;; Dependencies
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(require 'dash)
 (require 'cycle)
 (require 'vterm)
+(require 'seq)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Configuration
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (defgroup vterm-mgt nil
-  "Customization options for `vterm-mgt'.")
+  "Customization options for `vterm-mgt'."
+  :group 'vterm)
 
 (defcustom vterm-mgt-scroll-on-focus nil
   "When t, call `end-of-buffer' after focusing a vterm instance."
@@ -124,9 +125,7 @@ If for whatever reason, the state of `vterm-mgt--instances' is corrupted and
   restore the state."
   (interactive)
   (setq vterm-mgt--instances
-        (->> (buffer-list)
-             (-filter #'vterm-mgt--instance?)
-             cycle-from-list)))
+        (cycle-from-list (seq-filter #'vterm-mgt--instance? (buffer-list)))))
 
 (defun vterm-mgt-select ()
   "Select a vterm instance by name from the list in `vterm-mgt--instances'."
@@ -134,9 +133,7 @@ If for whatever reason, the state of `vterm-mgt--instances' is corrupted and
   (vterm-mgt-reconcile-state)
   (switch-to-buffer
    (completing-read "Switch to vterm: "
-                    (->> vterm-mgt--instances
-                         cycle-to-list
-                         (-map #'buffer-name)))))
+                    (seq-map #'buffer-name (cycle-to-list vterm-mgt--instances)))))
 
 (provide 'vterm-mgt)
 ;;; vterm-mgt.el ends here
