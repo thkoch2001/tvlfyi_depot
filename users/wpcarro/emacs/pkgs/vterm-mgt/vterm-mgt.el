@@ -111,11 +111,11 @@ instance."
         (switch-to-buffer (cycle-current vterm-mgt--instances))))))
 
 (defun vterm-mgt-rename-buffer (name)
-  "Rename the current buffer ensuring that its NAME is wrapped in *vterm*<...>.
+  "Rename the current buffer ensuring that its NAME is wrapped in *vterm<...>*.
 This function should be called from a buffer running vterm."
   (interactive "SRename vterm buffer: ")
   (vterm-mgt--assert-vterm-buffer)
-  (rename-buffer (format "*vterm*<%s>" name)))
+  (rename-buffer (format "*vterm<%s>*" name)))
 
 (defun vterm-mgt-reconcile-state ()
   "Fill `vterm-mgt--instances' with the existing vterm buffers.
