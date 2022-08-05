@@ -44,7 +44,7 @@
 
 (defun list-concat (&rest lists)
   "Joins `LISTS' into on list."
-  (apply #'-concat lists))
+  (apply #'append lists))
 
 (defun list-duplicate (n x)
   "Duplicates the given element, X, N times in a list."

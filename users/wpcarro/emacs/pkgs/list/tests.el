@@ -97,6 +97,10 @@
   (should (equal '(a b c) (list-delete 'b '(a b b c))))
   (should (equal '() (list-delete 'b '()))))
 
+(ert-deftest list-concat ()
+  (should (equal '(1 2 3 4 5) (list-concat '(1) '(2 3) '(4 5))))
+  (should (equal '(1 2 3) (list-concat '() '(1 2 3)))))
+
 ;; TODO(wpcarro): Supoprt this.
 ;; (ert-deftest list-zip ()
 ;;   (should (equal '((1 3 5) (2 4 6)) (list-zip '(1 2) '(3 4) '(5 6))))
