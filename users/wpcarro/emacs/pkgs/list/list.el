@@ -6,45 +6,23 @@
 
 ;;; Commentary:
 ;; Since I prefer having the `list-' namespace, I wrote this module to wrap many
-;; of the functions that are defined in the the global namespace in ELisp.  I
+;; of the functions that are defined in the the global namespace in Elisp.  I
 ;; sometimes forget the names of these functions, so it's nice for them to be
 ;; organized like this.
 ;;
 ;; Motivation:
-;; Here are some examples of function names that I cannot tolerate:
+;; Here are some examples of function names where I prefer more modern
+;; alternatives:
 ;; - `car': Return the first element (i.e. "head") of a linked list
 ;; - `cdr': Return the tail of a linked list
 
-;; As are most APIs for standard libraries that I write, this is heavily
-;; influenced by Elixir's standard library.
-;;
-;; Elixir's List library:
-;; - ++/2
-;; - --/2
-;; - hd/1
-;; - tl/1
-;; - in/2
-;; - length/1
+;; As are most APIs for standard libraries that I write, this is influenced by
+;; Elixir's standard library.
 ;;
 ;; Similar libraries:
-;; - dash.el: Functional library that mimmicks Clojure.  It is consumed herein.
+;; - dash.el: Excellent and widely adopted library for working with lists.
 ;; - list-utils.el: Utility library that covers things that dash.el may not
 ;;   cover.
-;;   stream.el: Elisp implementation of streams, "implemented as delayed
-;;   evaluation of cons cells."
-
-;; TODO: Consider naming this file linked-list.el.
-
-;; TODO: Support module-like macro that auto-namespaces functions.
-
-;; TODO: Consider wrapping most data structures like linked-lists,
-;; associative-lists, etc in a `cl-defstruct', so that the dispatching by type
-;; can be nominal instead of duck-typing.  I'm not sure if this is a good idea
-;; or not.  If I do this, I should provide isomorphisms to map between idiomatic
-;; ways of working with Elisp data structures and my wrapped variants.
-
-;; TODO: Are function aliases/synonyms even a good idea?  Or do they just
-;; bloat the API unnecessarily?
 
 ;;; Code:
 
@@ -159,10 +137,6 @@ Returns a new list without X. If X occurs more than once, only the first
   (list--assert-instance xs)
   (seq-find p xs))
 
-;; TODO: Support dedupe.
-;; TODO: Should we call this unique? Or distinct?
-
-;; TODO: Add tests.
 (defun list-dedupe-adjacent (xs)
   "Return XS without adjacent duplicates."
   (list-reverse
