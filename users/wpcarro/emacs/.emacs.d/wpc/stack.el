@@ -46,7 +46,7 @@
   "Look at the top element of `XS' without popping it off."
   (->> xs
        stack-xs
-       list-head))
+       list-first))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Update

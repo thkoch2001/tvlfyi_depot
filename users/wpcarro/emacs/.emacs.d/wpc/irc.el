@@ -106,7 +106,7 @@
   (let ((buffers (erc-buffer-list)))
     (if (list-empty? buffers)
         (error "[irc.el] No ERC buffers available")
-      (switch-to-buffer (list-head (erc-buffer-list))))))
+      (switch-to-buffer (list-first (erc-buffer-list))))))
 
 (defun irc-connect-to-freenode ()
   "Connect to Freenode IRC."

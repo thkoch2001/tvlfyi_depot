@@ -68,6 +68,10 @@
   "Joins `LISTS' into on list."
   (apply #'-concat lists))
 
+(defun list-duplicate (n x)
+  "Duplicates the given element, X, N times in a list."
+  (list-map (lambda (_) x) (number-sequence 1 n)))
+
 (defun list-join (joint xs)
   "Join a list of strings, XS, with JOINT."
   (if (list-empty? xs)
@@ -85,14 +89,17 @@
   "Return the value in `XS' at `I', or nil."
   (nth i xs))
 
-(defun list-head (xs)
-  "Return the head of `XS'."
-  (car xs))
-
-;; TODO: Learn how to write proper function aliases.
-(defun list-first (xs)
+(defun list-first (xs &optional default)
   "Alias for `list-head' for `XS'."
-  (list-head xs))
+  (if (list-empty? xs)
+      default
+    (car xs)))
+
+(defun list-last (xs &optional default)
+  "Returns the last element in XS or DEFAULT if empty."
+  (if (list-empty? xs)
+      default
+    (nth (- (length xs) 1) xs)))
 
 (defun list-tail (xs)
   "Return the tail of `XS'."
@@ -105,6 +112,17 @@
 (defun list-cons (x xs)
   "Add `X' to the head of `XS'."
   (cons x xs))
+
+(defun list-delete (x xs)
+  "Deletes the given element, X, from XS.
+Returns a new list without X. If X occurs more than once, only the first
+  occurrence is removed."
+  (let ((deleted? nil))
+    (list-reject (lambda (y)
+                   (if deleted? nil
+                     (when (equal x y)
+                       (setq deleted? t) t)))
+                 xs)))
 
 (defun list-filter (p xs)
   "Return a subset of XS where predicate P returned t."
@@ -202,12 +220,18 @@ Be leery of using this with things like alists.  Many data structures in Elisp
 (defun list-contains? (x xs)
   "Return t if X is in XS using `equal'."
   (list--assert-instance xs)
-  (maybe-some? (seq-contains xs x)))
+  (maybe-some? (seq-contains-p xs x)))
 
 (defun list-xs-distinct-by? (f xs)
   "Return t if all elements in XS are distinct after applying F to each."
   (= (length xs)
      (set-count (set-from-list (list-map f xs)))))
+
+(defun list-wrap (xs)
+  "Wraps XS in a list if it is not a list already."
+  (if (list-instance? xs)
+      xs
+    (list xs)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Helpers
