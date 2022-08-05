@@ -52,3 +52,16 @@
                  (list-chunk 3 '(1 2 3 4 5 6))))
   (should (equal '((1 2) (3 4) (5 6))
                  (list-chunk 2 '(1 2 3 4 5 6)))))
+
+(ert-deftest list-find ()
+  (should (equal 2 (list-find (lambda (x) (= 2 x)) '(1 2 3 4)))))
+
+(ert-deftest list-all? ()
+  (should (equal t (list-all? (lambda (x) (= 2 x)) nil)))
+  (should (null (list-all? (lambda (x) (= 2 x)) '(1 2 3))))
+  (should (equal t (list-all? (lambda (x) (= 2 x)) '(2 2 2 2)))))
+
+(ert-deftest list-any? ()
+  (should (null (list-any? (lambda (x) (= 2 x)) nil)))
+  (should (equal t (list-any? (lambda (x) (= 2 x)) '(1 2 3))))
+  (should (null (list-any? (lambda (x) (= 4 x)) '(1 2 3)))))
