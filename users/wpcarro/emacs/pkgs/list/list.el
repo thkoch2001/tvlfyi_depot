@@ -163,6 +163,12 @@ Returns a new list without X. If X occurs more than once, only the first
            (result (plist-get xs :result)))
       (list-reverse (if curr (list-cons curr result) result)))))
 
+(defun list-wrap (xs)
+  "Wraps XS in a list if it is not a list already."
+  (if (list-instance? xs)
+      xs
+    (list xs)))
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Predicates
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -200,12 +206,6 @@ Be leery of using this with things like alists.  Many data structures in Elisp
   "Return t if all elements in XS are distinct after applying F to each."
   (= (length xs)
      (set-count (set-from-list (list-map f xs)))))
-
-(defun list-wrap (xs)
-  "Wraps XS in a list if it is not a list already."
-  (if (list-instance? xs)
-      xs
-    (list xs)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Helpers
