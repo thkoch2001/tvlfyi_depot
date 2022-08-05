@@ -8,9 +8,6 @@ let
         version = "1.0.0";
         src = ./list.el;
         packageRequires =
-          (with emacsPackages; [
-            dash
-          ]) ++
           (with depot.users.wpcarro.emacs.pkgs; [
             maybe
             set
