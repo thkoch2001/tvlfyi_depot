@@ -39,15 +39,6 @@ in
     interfaces.wlp0s20f3.useDHCP = true;
   };
 
-  # Schedule daily reboots.
-  systemd.timers.auto-reboot = {
-    wantedBy = [ "timers.target" ];
-    timerConfig = {
-      OnCalendar = "*-*-* 03:00:00";
-      Unit = "reboot.target";
-    };
-  };
-
   services = wpcarro.common.services // {
     # Enable the Tailscale daemon to connect to work and personal Tailnet.
     tailscale.enable = true;
