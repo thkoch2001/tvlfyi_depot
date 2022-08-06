@@ -46,9 +46,10 @@
   "Return t if the buffer B is a vterm instance."
   (equal 'vterm-mode (buffer-local-value 'major-mode b)))
 
-(defmacro vterm-mgt--assert-vterm-buffer ()
+(defun vterm-mgt--assert-vterm-buffer ()
   "Error when the `current-buffer' is not a vterm buffer."
-  '(prelude-assert (vterm-mgt--instance? (current-buffer))))
+  (unless (vterm-mgt--instance? (current-buffer))
+    (error "Current buffer is not a vterm buffer")))
 
 (defun vterm-mgt-next ()
   "Replace the current buffer with the next item in `vterm-mgt--instances'.
