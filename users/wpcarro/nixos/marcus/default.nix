@@ -49,6 +49,9 @@ in
   };
 
   services = wpcarro.common.services // {
+    # Enable the Tailscale daemon to connect to work and personal Tailnet.
+    tailscale.enable = true;
+
     tzupdate.enable = true;
 
     depot.auto-deploy = {
