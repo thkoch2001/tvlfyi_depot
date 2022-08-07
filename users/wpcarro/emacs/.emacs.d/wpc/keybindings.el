@@ -454,5 +454,14 @@
  "C-v" #'clipboard-yank
  "C-S-v" #'clipboard-yank)
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Rust
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(general-define-key
+ :keymaps '(rust-mode-map)
+ "TAB" #'company-indent-or-complete-common
+ "gd" #'lsp-find-definition)
+
 (provide 'keybindings)
 ;;; keybindings.el ends here
