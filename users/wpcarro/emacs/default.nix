@@ -15,7 +15,8 @@ let
       ispell
       nix
       pass
-      racer
+      rls # Rust Language Server
+      rust-analyzer
       rustc
       rustfmt
       scrot
@@ -88,7 +89,6 @@ let
       direnv
       alert
       nix-mode
-      racer
       rust-mode
       rainbow-delimiters
       racket-mode
