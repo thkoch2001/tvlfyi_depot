@@ -22,8 +22,9 @@
 (use-package rust-mode
   :config
   (setq lsp-rust-server #'rust-analyzer)
-  (add-hook 'rust-mode-hook #'lsp)
-  (setq rust-format-on-save t))
+  (setq rust-format-show-buffer nil)
+  (setq rust-format-on-save t)
+  (add-hook 'rust-mode-hook #'lsp))
 
 (provide 'wpc-rust)
 ;;; wpc-rust.el ends here
