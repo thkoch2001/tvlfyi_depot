@@ -11,14 +11,19 @@ let
 
   emacsBinPath = makeBinPath (
     wpcarro.common.shell-utils ++
+    # Rust support
+    (with pkgs; [
+      cargo
+      rls
+      rust-analyzer
+      rustc
+      rustfmt
+    ]) ++
+    # misc support
     (with pkgs; [
       ispell
       nix
       pass
-      rls # Rust Language Server
-      rust-analyzer
-      rustc
-      rustfmt
       scrot
       xorg.xset
     ])
