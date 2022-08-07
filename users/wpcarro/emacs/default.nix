@@ -24,7 +24,8 @@ let
       ispell
       nix
       pass
-      racer
+      rls # Rust Language Server
+      rust-analyzer
       rustc
       rustfmt
       scrot
