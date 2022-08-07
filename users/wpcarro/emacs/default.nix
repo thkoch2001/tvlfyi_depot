@@ -15,6 +15,9 @@ let
       ispell
       nix
       pass
+      racer
+      rustc
+      rustfmt
       scrot
       xorg.xset
     ])

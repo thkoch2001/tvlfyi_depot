@@ -18,6 +18,7 @@
 ;; Dependencies
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+(require 'dash)
 (require 'macros)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -35,7 +36,7 @@
 (use-package rust-mode
   :config
   (add-hook 'rust-mode-hook #'racer-mode)
-  (macros-add-hook-before-save 'rust-mode-hook #'rust-format-buffer)
+  (setq rust-format-on-save t)
   (define-key rust-mode-map
     (kbd "TAB")
     #'company-indent-or-complete-common)
