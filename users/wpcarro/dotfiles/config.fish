@@ -18,8 +18,6 @@ alias edit 'emacsclient -n'
 # fs navigation
 alias d 'cd /depot'
 alias w 'cd /depot/users/wpcarro'
-# This allows me to call rebuild-system from any directory.
-alias rebuild-system 'sudo /depot/bin/rebuild-system'
 alias sc 'systemctl'
 
 # environment variables
