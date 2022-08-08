@@ -21,6 +21,7 @@
 
 (use-package rust-mode
   :config
+  (setq lsp-rust-server #'rust-analyzer)
   (add-hook 'rust-mode-hook #'lsp)
   (setq rust-format-on-save t))
 
