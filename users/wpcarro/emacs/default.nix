@@ -11,6 +11,15 @@ let
 
   emacsBinPath = makeBinPath (
     wpcarro.common.shell-utils ++
+    # Rust dependencies
+    (with pkgs; [
+      cargo
+      rls
+      rust-analyzer
+      rustc
+      rustfmt
+    ]) ++
+    # Misc dependencies
     (with pkgs; [
       ispell
       nix
@@ -85,7 +94,6 @@ let
       direnv
       alert
       nix-mode
-      racer
       rust-mode
       rainbow-delimiters
       racket-mode
