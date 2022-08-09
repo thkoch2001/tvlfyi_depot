@@ -37,7 +37,7 @@ struct Person {
 //    TL;DR:
 //    - read:  serde_json::from_str(data)
 //    - write: x.to_string()
-fn one() {
+pub fn one() {
     let data = json!({
         "fname": "William",
         "lname": "Carroll",
@@ -52,7 +52,7 @@ fn one() {
 //    TL;DR:
 //    - read:  serde_json::from_str(data)
 //    - write: x.to_string()
-fn two() {
+pub fn two() {
     let data = r#"{"fname":"William","lname":"Carroll","age":30}"#;
 
     let mut parsed: Value = serde_json::from_str(data).unwrap();
@@ -68,7 +68,7 @@ fn two() {
 //    TL;DR:
 //    - read:  serde_json::from_str(data)
 //    - write: serde_json::to_string(x).unwrap()
-fn three() {
+pub fn three() {
     let data = r#"{"fname":"William","lname":"Carroll","age":30}"#;
 
     let mut read: Person = serde_json::from_str(data).unwrap();
@@ -78,12 +78,4 @@ fn three() {
 
     let write = serde_json::to_string(&read).unwrap();
     println!("result: {:?}", write);
-}
-
-////////////////////////////////////////////////////////////////////////////////
-// Main
-////////////////////////////////////////////////////////////////////////////////
-
-fn main() {
-    three()
 }
