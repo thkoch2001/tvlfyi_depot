@@ -340,4 +340,15 @@ the GPG agent correctly."
   (interactive)
   (zoxide-open-with nil #'magit-status-setup-buffer))
 
+(defun toggle-nix-test-and-exp ()
+  "Switch between the .nix and .exp file in a Tvix/Nix test."
+  (interactive)
+  (let* ((file (buffer-file-name))
+         (other (if (s-suffix? ".nix" file)
+                    (s-replace-regexp ".nix$" ".exp" file)
+                  (if (s-suffix? ".exp" file)
+                      (s-replace-regexp ".exp$" ".nix" file)
+                    (error "Not a .nix/.exp file!")))))
+    (find-file other)))
+
 (provide 'functions)
