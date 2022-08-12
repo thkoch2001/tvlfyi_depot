@@ -104,6 +104,19 @@ passes. This is potentially dangerous, use with care."
   #'magit-push ["r"]
   (list "P" "push & rubberstamp to Gerrit" #'magit-gerrit-rubberstamp))
 
+(transient-define-suffix magit-gerrit-private ()
+  "Push a private change to Gerrit."
+  (interactive)
+  (magit-push-refspecs tvl-gerrit-remote
+                       (tvl--gerrit-ref tvl-target-branch
+                                        '("private"
+                                          "publish-comments"))
+                       nil))
+
+(transient-append-suffix
+  #'magit-push ["r"]
+  (list "Q" "push private change to Gerrit" #'magit-gerrit-private))
+
 (defvar magit-cl-history nil)
 (defun magit-read-cl (prompt remote)
   (let* ((refs (prog2 (message "Determining available refs...")
