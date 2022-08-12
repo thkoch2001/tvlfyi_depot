@@ -1,0 +1,90 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "91051d45_b5026f68",
+        "filename": "tvix/eval/src/chunk.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 5,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2022-08-12T12:52:44Z",
+      "side": 1,
+      "message": "can you describe the intent and usage of this type? Maybe if I had read crafting interpreters it\u0027d be immediately obvious to me what it\u0027s for, but without that I can\u0027t quite link the name \"chunk\" to the current implementation",
+      "range": {
+        "startLine": 5,
+        "startChar": 11,
+        "endLine": 5,
+        "endChar": 16
+      },
+      "revId": "70fe7758f39c77a98be256779c3c70f547dedc89",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2972b734_a0326aaa",
+        "filename": "tvix/eval/src/chunk.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2022-08-12T12:52:44Z",
+      "side": 1,
+      "message": "this seems unit-testable ;)",
+      "revId": "70fe7758f39c77a98be256779c3c70f547dedc89",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d265b6e7_f466e748",
+        "filename": "tvix/eval/src/chunk.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2022-08-12T12:52:44Z",
+      "side": 1,
+      "message": "I think \"push_op\" is a bit more precise - \"add\" doesn\u0027t really convey *where* it\u0027s being added",
+      "range": {
+        "startLine": 11,
+        "startChar": 11,
+        "endLine": 11,
+        "endChar": 14
+      },
+      "revId": "70fe7758f39c77a98be256779c3c70f547dedc89",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ca7b39d6_8f793f74",
+        "filename": "tvix/eval/src/chunk.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2022-08-12T12:52:44Z",
+      "side": 1,
+      "message": "same here",
+      "range": {
+        "startLine": 17,
+        "startChar": 11,
+        "endLine": 17,
+        "endChar": 14
+      },
+      "revId": "70fe7758f39c77a98be256779c3c70f547dedc89",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
