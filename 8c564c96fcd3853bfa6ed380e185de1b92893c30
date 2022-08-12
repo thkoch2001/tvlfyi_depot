@@ -24,6 +24,30 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "85b47445_13098d24",
+        "filename": "tvix/eval/src/opcode.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-08-12T12:53:05Z",
+      "side": 1,
+      "message": "Yeah, that\u0027s a good idea. I\u0027ll drop it in at the top. You\u0027ll see some wrapper types later (and stuff like ConstantIdx, CodeIdx which already exist) that should probably also have `#[repr(transparent)]` set explicitly.",
+      "parentUuid": "e5b867e7_07ab85b7",
+      "range": {
+        "startLine": 11,
+        "startChar": 9,
+        "endLine": 11,
+        "endChar": 15
+      },
+      "revId": "8c564c96fcd3853bfa6ed380e185de1b92893c30",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "f5f64b32_2e1eb94b",
@@ -37,6 +61,30 @@
       "writtenOn": "2022-08-12T12:49:18Z",
       "side": 1,
       "message": "having separate ops for pushing different kinds of literals seems a little odd to me - wouldn\u0027t it be more convenient to just have `OpConst(Value)` or something like that?",
+      "range": {
+        "startLine": 15,
+        "startChar": 0,
+        "endLine": 18,
+        "endChar": 12
+      },
+      "revId": "8c564c96fcd3853bfa6ed380e185de1b92893c30",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "00e78757_4e7b428f",
+        "filename": "tvix/eval/src/opcode.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-08-12T12:53:05Z",
+      "side": 1,
+      "message": "That\u0027s `OpConstant`, but note that you don\u0027t want to embed `Value` inside of the OpCode (Value is at least 24 bytes because it has a SmolStr/String variant) as these should be somewhat cache-efficient (better to keep the constant values in a separate array).",
+      "parentUuid": "f5f64b32_2e1eb94b",
       "range": {
         "startLine": 15,
         "startChar": 0,
