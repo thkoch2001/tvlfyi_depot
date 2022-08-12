@@ -1,0 +1,90 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "489379c9_f55f48d3",
+        "filename": "tvix/eval/src/main.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2022-08-12T12:37:18Z",
+      "side": 1,
+      "message": "I\u0027m sure this\u0027ll change eventually, but if you haven\u0027t tried clap\u0027s derive macros you absolutely should, they\u0027re *really good*.\n\nSee https://github.com/readysettech/readyset/blob/main/readyset-client-adapter/src/lib.rs#L136-L330 for an example of some pretty involved usage.",
+      "revId": "bbf2d3dfc5764f8d2c701cc59fbea227c19189a2",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e1267f0e_cf6038c0",
+        "filename": "tvix/eval/src/main.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2022-08-12T12:37:18Z",
+      "side": 1,
+      "message": "for when this grows to need errors, I think https://docs.rs/eyre/latest/eyre/ is probably state of the art.",
+      "range": {
+        "startLine": 25,
+        "startChar": 43,
+        "endLine": 25,
+        "endChar": 84
+      },
+      "revId": "bbf2d3dfc5764f8d2c701cc59fbea227c19189a2",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "70b85dc3_c81a5db2",
+        "filename": "tvix/eval/src/main.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2022-08-12T12:37:18Z",
+      "side": 1,
+      "message": "I\u0027ve used https://github.com/kkawakam/rustyline in the past, it\u0027s pretty good",
+      "range": {
+        "startLine": 33,
+        "startChar": 4,
+        "endLine": 41,
+        "endChar": 5
+      },
+      "revId": "bbf2d3dfc5764f8d2c701cc59fbea227c19189a2",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "eb1ed7e1_88910f81",
+        "filename": "tvix/eval/src/main.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2022-08-12T12:37:18Z",
+      "side": 1,
+      "message": "this will probably want to use Display eventually",
+      "range": {
+        "startLine": 46,
+        "startChar": 36,
+        "endLine": 46,
+        "endChar": 38
+      },
+      "revId": "bbf2d3dfc5764f8d2c701cc59fbea227c19189a2",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
