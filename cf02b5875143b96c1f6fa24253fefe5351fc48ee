@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0f3b6cdd_f7f8336a",
+        "filename": "tvix/eval/src/value.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 51,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2022-08-12T14:04:47Z",
+      "side": 1,
+      "message": "I\u0027m pretty sure this is literally just the macro expansion of\n```\nwrite!(f, \"{num}\")\n```",
+      "revId": "cf02b5875143b96c1f6fa24253fefe5351fc48ee",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
