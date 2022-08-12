@@ -24,6 +24,30 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "677062ca_3c79b03f",
+        "filename": "tvix/eval/src/vm.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-08-12T13:04:57Z",
+      "side": 1,
+      "message": "There\u0027s a point introduced downchain (popping function frames of the execution stack) where this might be applicable, but I\u0027d rather do some testing of it before going that way because I expect that there\u0027s very few \"stack size outliers\" during a whole nixpkgs evaluation.",
+      "parentUuid": "91dcabe7_a10c76d6",
+      "range": {
+        "startLine": 18,
+        "startChar": 19,
+        "endLine": 18,
+        "endChar": 24
+      },
+      "revId": "4ac024afa43f808ada8b27733368dfb102e25c7b",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "c9c267b4_bb4699e1",
@@ -37,6 +61,30 @@
       "writtenOn": "2022-08-12T12:56:51Z",
       "side": 1,
       "message": "`Vm::new`?",
+      "range": {
+        "startLine": 48,
+        "startChar": 4,
+        "endLine": 52,
+        "endChar": 6
+      },
+      "revId": "4ac024afa43f808ada8b27733368dfb102e25c7b",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e5ab29d7_01b41423",
+        "filename": "tvix/eval/src/vm.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 52,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-08-12T13:04:57Z",
+      "side": 1,
+      "message": "Yeah, but shows up much later (when function frames are introduced and the VM state gets more complicated).",
+      "parentUuid": "c9c267b4_bb4699e1",
       "range": {
         "startLine": 48,
         "startChar": 4,
