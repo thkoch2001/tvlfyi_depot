@@ -50,6 +50,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "eb879162_995edafa",
+        "filename": "tvix/eval/src/compiler.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2022-08-12T12:59:29Z",
+      "side": 1,
+      "message": "I don\u0027t think \"comprising of\" is correct. It\u0027d either be \"consisting of the literal\" or \"comprising the literal\"",
+      "parentUuid": "26c152f7_f6ff3c09",
+      "range": {
+        "startLine": 21,
+        "startChar": 47,
+        "endLine": 21,
+        "endChar": 57
+      },
+      "revId": "ff217dd540a52168d3ed6f4cc703850fb3c68942",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "302d8c10_d29fcd94",
         "filename": "tvix/eval/src/compiler.rs",
         "patchSetId": 1
