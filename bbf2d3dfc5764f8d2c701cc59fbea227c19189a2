@@ -18,6 +18,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "31b10ea6_692263ee",
+        "filename": "tvix/eval/src/main.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-08-12T12:39:11Z",
+      "side": 1,
+      "message": "Ah yeah, that\u0027ll happen eventually. Somewhere further in the chain I add rustyline instead for the REPL loop and that\u0027s still the state of things. CLI discussions are gonna be later though.",
+      "parentUuid": "489379c9_f55f48d3",
+      "revId": "bbf2d3dfc5764f8d2c701cc59fbea227c19189a2",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "e1267f0e_cf6038c0",
@@ -31,6 +49,30 @@
       "writtenOn": "2022-08-12T12:37:18Z",
       "side": 1,
       "message": "for when this grows to need errors, I think https://docs.rs/eyre/latest/eyre/ is probably state of the art.",
+      "range": {
+        "startLine": 25,
+        "startChar": 43,
+        "endLine": 25,
+        "endChar": 84
+      },
+      "revId": "bbf2d3dfc5764f8d2c701cc59fbea227c19189a2",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7c20cbd5_19fde974",
+        "filename": "tvix/eval/src/main.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-08-12T12:39:11Z",
+      "side": 1,
+      "message": "There\u0027s so many of these, we\u0027ll see. At the moment, downchain, the error type is manually implemented.",
+      "parentUuid": "e1267f0e_cf6038c0",
       "range": {
         "startLine": 25,
         "startChar": 43,
@@ -64,6 +106,30 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "71603399_5a25cd6b",
+        "filename": "tvix/eval/src/main.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-08-12T12:39:11Z",
+      "side": 1,
+      "message": "Done downchain :)",
+      "parentUuid": "70b85dc3_c81a5db2",
+      "range": {
+        "startLine": 33,
+        "startChar": 4,
+        "endLine": 41,
+        "endChar": 5
+      },
+      "revId": "bbf2d3dfc5764f8d2c701cc59fbea227c19189a2",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "eb1ed7e1_88910f81",
@@ -77,6 +143,30 @@
       "writtenOn": "2022-08-12T12:37:18Z",
       "side": 1,
       "message": "this will probably want to use Display eventually",
+      "range": {
+        "startLine": 46,
+        "startChar": 36,
+        "endLine": 46,
+        "endChar": 38
+      },
+      "revId": "bbf2d3dfc5764f8d2c701cc59fbea227c19189a2",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c8b3667f_9ae66dec",
+        "filename": "tvix/eval/src/main.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-08-12T12:39:11Z",
+      "side": 1,
+      "message": "Done downchain.",
+      "parentUuid": "eb1ed7e1_88910f81",
       "range": {
         "startLine": 46,
         "startChar": 36,
