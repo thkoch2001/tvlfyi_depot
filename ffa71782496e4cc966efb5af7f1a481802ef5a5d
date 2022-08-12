@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2a3f63de_082d335a",
+        "filename": "tools/emacs-pkgs/tvl/tvl.el",
+        "patchSetId": 1
+      },
+      "lineNbr": 107,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2022-08-12T12:39:54Z",
+      "side": 1,
+      "message": "the name didn\u0027t make it immediately obvious to me that this is pushing a change - WDYT about renaming this to `magit-gerrit-push-private`? Also mirrors `magit-gerrit-push-wip` etc.",
+      "range": {
+        "startLine": 107,
+        "startChar": 25,
+        "endLine": 107,
+        "endChar": 45
+      },
+      "revId": "ffa71782496e4cc966efb5af7f1a481802ef5a5d",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
