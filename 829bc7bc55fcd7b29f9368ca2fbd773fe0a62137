@@ -16,6 +16,24 @@
       "message": "This probably should be changed to nix-cli?",
       "revId": "829bc7bc55fcd7b29f9368ca2fbd773fe0a62137",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "42b7a015_376554c5",
+        "filename": "tvix/nix_cli/Cargo.toml",
+        "patchSetId": 1
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-08-12T11:03:48Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ec48e365_dba35b39",
+      "revId": "829bc7bc55fcd7b29f9368ca2fbd773fe0a62137",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
