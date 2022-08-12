@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e5b867e7_07ab85b7",
+        "filename": "tvix/eval/src/opcode.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2022-08-12T12:49:18Z",
+      "side": 1,
+      "message": "I\u0027m sure this\u0027ll happen eventually, but this is the kind of thing that is likely to be pervasive enough that it\u0027s worth having some assertions on its size.\n\nAt the very least you can put `#[warn(variant_size_differences)]` on this type - later you can do something like:\n\n```\n    #[test]\n    fn size() {\n        assert_eq!(std::mem::size_of::\u003cOpCode\u003e(), 4 /* or whatever */);\n    }\n```",
+      "range": {
+        "startLine": 11,
+        "startChar": 9,
+        "endLine": 11,
+        "endChar": 15
+      },
+      "revId": "8c564c96fcd3853bfa6ed380e185de1b92893c30",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f5f64b32_2e1eb94b",
+        "filename": "tvix/eval/src/opcode.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2022-08-12T12:49:18Z",
+      "side": 1,
+      "message": "having separate ops for pushing different kinds of literals seems a little odd to me - wouldn\u0027t it be more convenient to just have `OpConst(Value)` or something like that?",
+      "range": {
+        "startLine": 15,
+        "startChar": 0,
+        "endLine": 18,
+        "endChar": 12
+      },
+      "revId": "8c564c96fcd3853bfa6ed380e185de1b92893c30",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
