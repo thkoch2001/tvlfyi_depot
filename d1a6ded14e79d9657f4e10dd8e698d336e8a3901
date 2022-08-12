@@ -1,6 +1,23 @@
 {
   "comments": [
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "9ba5d10a_15d9f5ec",
+        "filename": "tvix/eval/src/value.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2022-08-12T13:17:07Z",
+      "side": 1,
+      "message": "this type is odd enough that I think it probably deserves a docstring explaining why it exists",
+      "revId": "d1a6ded14e79d9657f4e10dd8e698d336e8a3901",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "b8e079d4_842f5766",
