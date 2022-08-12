@@ -33,6 +33,24 @@
       "message": "this seems like it should be on the PartialEq impl for Value, perhaps",
       "revId": "52ff66ac144938f1c34f12f4afd45b99e076468c",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "da9cc66e_c4000ddd",
+        "filename": "tvix/eval/src/vm.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 103,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-08-12T14:04:10Z",
+      "side": 1,
+      "message": "See comment above :)",
+      "parentUuid": "58f1f4ec_dc38cd22",
+      "revId": "52ff66ac144938f1c34f12f4afd45b99e076468c",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
