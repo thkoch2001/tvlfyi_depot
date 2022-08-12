@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ee69b293_92d5971f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-08-12T13:30:37Z",
+      "side": 1,
+      "message": "Note that downchain a proper semantic implementation of equality shows up. Once thunks/laziness exist, it is no longer possible to do this via PartialEq/Eq traits.",
+      "revId": "52ff66ac144938f1c34f12f4afd45b99e076468c",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
