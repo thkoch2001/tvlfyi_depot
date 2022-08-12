@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ec48e365_dba35b39",
+        "filename": "tvix/nix_cli/Cargo.toml",
+        "patchSetId": 1
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2022-08-12T11:01:26Z",
+      "side": 1,
+      "message": "This probably should be changed to nix-cli?",
+      "revId": "829bc7bc55fcd7b29f9368ca2fbd773fe0a62137",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
