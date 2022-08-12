@@ -24,6 +24,30 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c362d2ca_e23bf210",
+        "filename": "tvix/eval/src/chunk.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 5,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-08-12T12:55:28Z",
+      "side": 1,
+      "message": "I\u0027ll sprinkle some comments on each type, some of them already have comments downchain.\n\nTL;DR - the chunk represents a single bit of code and associated constants; it is a separate type because it is part of the representation of functions and closures and not just the output of the top-level compilation.",
+      "parentUuid": "91051d45_b5026f68",
+      "range": {
+        "startLine": 5,
+        "startChar": 11,
+        "endLine": 5,
+        "endChar": 16
+      },
+      "revId": "70fe7758f39c77a98be256779c3c70f547dedc89",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "2972b734_a0326aaa",
@@ -37,6 +61,24 @@
       "writtenOn": "2022-08-12T12:52:44Z",
       "side": 1,
       "message": "this seems unit-testable ;)",
+      "revId": "70fe7758f39c77a98be256779c3c70f547dedc89",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ea5030aa_41536532",
+        "filename": "tvix/eval/src/chunk.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-08-12T12:55:28Z",
+      "side": 1,
+      "message": "Downchain",
+      "parentUuid": "2972b734_a0326aaa",
       "revId": "70fe7758f39c77a98be256779c3c70f547dedc89",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
@@ -64,6 +106,30 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "51a6bc75_602c4c87",
+        "filename": "tvix/eval/src/chunk.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-08-12T12:55:28Z",
+      "side": 1,
+      "message": "Good point, changing it downchain.",
+      "parentUuid": "d265b6e7_f466e748",
+      "range": {
+        "startLine": 11,
+        "startChar": 11,
+        "endLine": 11,
+        "endChar": 14
+      },
+      "revId": "70fe7758f39c77a98be256779c3c70f547dedc89",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "ca7b39d6_8f793f74",
@@ -77,6 +143,30 @@
       "writtenOn": "2022-08-12T12:52:44Z",
       "side": 1,
       "message": "same here",
+      "range": {
+        "startLine": 17,
+        "startChar": 11,
+        "endLine": 17,
+        "endChar": 14
+      },
+      "revId": "70fe7758f39c77a98be256779c3c70f547dedc89",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a7618b35_6a2089fd",
+        "filename": "tvix/eval/src/chunk.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-08-12T12:55:28Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "ca7b39d6_8f793f74",
       "range": {
         "startLine": 17,
         "startChar": 11,
