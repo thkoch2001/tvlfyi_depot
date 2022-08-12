@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b8e079d4_842f5766",
+        "filename": "tvix/eval/src/vm.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-08-12T13:15:08Z",
+      "side": 1,
+      "message": "FYI, this does not stay like this as the binary operators are expanded (there\u0027s a bunch of multi-type operators and stuff). You\u0027ll see.",
+      "range": {
+        "startLine": 26,
+        "startChar": 7,
+        "endLine": 26,
+        "endChar": 22
+      },
+      "revId": "d1a6ded14e79d9657f4e10dd8e698d336e8a3901",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
