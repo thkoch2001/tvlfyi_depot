@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "91dcabe7_a10c76d6",
+        "filename": "tvix/eval/src/vm.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2022-08-12T12:56:51Z",
+      "side": 1,
+      "message": "unclear how much this matters, but it\u0027s worth noting that rust\u0027s vec doesn\u0027t actually reclaim memory if its length changes - if memory leaks become an issue, it may become worthwhile to periodically call `shrink_to_fit` on the stack",
+      "range": {
+        "startLine": 18,
+        "startChar": 19,
+        "endLine": 18,
+        "endChar": 24
+      },
+      "revId": "4ac024afa43f808ada8b27733368dfb102e25c7b",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c9c267b4_bb4699e1",
+        "filename": "tvix/eval/src/vm.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 52,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2022-08-12T12:56:51Z",
+      "side": 1,
+      "message": "`Vm::new`?",
+      "range": {
+        "startLine": 48,
+        "startChar": 4,
+        "endLine": 52,
+        "endChar": 6
+      },
+      "revId": "4ac024afa43f808ada8b27733368dfb102e25c7b",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
