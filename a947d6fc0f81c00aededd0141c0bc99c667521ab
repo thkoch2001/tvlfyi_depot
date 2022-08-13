@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "31cdc24e_a9c31551",
+        "filename": "tvix/eval/src/vm.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 229,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2022-08-13T19:58:31Z",
+      "side": 1,
+      "message": "this feels like it breaks an abstraction boundary to me, vs `NixString::new()`",
+      "range": {
+        "startLine": 229,
+        "startChar": 28,
+        "endLine": 229,
+        "endChar": 52
+      },
+      "revId": "a947d6fc0f81c00aededd0141c0bc99c667521ab",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
