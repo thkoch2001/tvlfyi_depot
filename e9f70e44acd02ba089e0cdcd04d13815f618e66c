@@ -24,6 +24,30 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "b8496b25_50409a4e",
+        "filename": "tvix/eval/src/compiler.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 200,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-08-13T15:20:14Z",
+      "side": 1,
+      "message": "what the heck is it with me and this phrase atm smdh, fixing downchain",
+      "parentUuid": "e1adc244_d084bcfb",
+      "range": {
+        "startLine": 200,
+        "startChar": 38,
+        "endLine": 200,
+        "endChar": 47
+      },
+      "revId": "e9f70e44acd02ba089e0cdcd04d13815f618e66c",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "13b86530_c36a5d87",
@@ -37,6 +61,24 @@
       "writtenOn": "2022-08-13T14:56:31Z",
       "side": 1,
       "message": "makes me wish `node.items()` returned ExactSizeIterator...",
+      "revId": "e9f70e44acd02ba089e0cdcd04d13815f618e66c",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2ea6bee2_1855b117",
+        "filename": "tvix/eval/src/compiler.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 209,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-08-13T15:20:14Z",
+      "side": 1,
+      "message": "insha\u0027Allah",
+      "parentUuid": "13b86530_c36a5d87",
       "revId": "e9f70e44acd02ba089e0cdcd04d13815f618e66c",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
