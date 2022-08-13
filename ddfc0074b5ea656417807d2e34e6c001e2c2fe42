@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a450bd53_c9b360f0",
+        "filename": "tvix/eval/src/vm.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 172,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2022-08-13T19:55:20Z",
+      "side": 1,
+      "message": "some sort of constructor on Value seems appropriate for this to me, to abstract away the `Rc` complexity.",
+      "range": {
+        "startLine": 172,
+        "startChar": 30,
+        "endLine": 172,
+        "endChar": 64
+      },
+      "revId": "ddfc0074b5ea656417807d2e34e6c001e2c2fe42",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "907f3b2e_1289f253",
+        "filename": "tvix/eval/src/vm.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 177,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2022-08-13T19:55:20Z",
+      "side": 1,
+      "message": "relying on evaluation order of struct fields like this feels very spooky to me - feels much safer to assign them to local variables instead.",
+      "range": {
+        "startLine": 173,
+        "startChar": 24,
+        "endLine": 177,
+        "endChar": 26
+      },
+      "revId": "ddfc0074b5ea656417807d2e34e6c001e2c2fe42",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
