@@ -1,0 +1,142 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0927f8e8_b068a980",
+        "filename": "tvix/eval/src/vm.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 256,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2022-08-13T20:42:21Z",
+      "side": 1,
+      "message": "since there\u0027s no syntax that can make this happen, this feels to me like it could panic rather than trying to return an error.",
+      "range": {
+        "startLine": 254,
+        "startChar": 20,
+        "endLine": 256,
+        "endChar": 22
+      },
+      "revId": "c58b9f1827f6302621b3ce46781782c5d0910212",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "232977c5_f45d7e7e",
+        "filename": "tvix/eval/src/vm.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 309,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2022-08-13T20:42:21Z",
+      "side": 1,
+      "message": "seems cleaner to have an `AttrSet` struct and make this a method on it",
+      "range": {
+        "startLine": 308,
+        "startChar": 0,
+        "endLine": 309,
+        "endChar": 43
+      },
+      "revId": "c58b9f1827f6302621b3ce46781782c5d0910212",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4d9442f1_ab07ea61",
+        "filename": "tvix/eval/src/vm.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 311,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2022-08-13T20:42:21Z",
+      "side": 1,
+      "message": "usually for something like this I\u0027d use a `Vec1`[0]\n\n[0]: https://docs.rs/vec1/latest/vec1/",
+      "range": {
+        "startLine": 310,
+        "startChar": 4,
+        "endLine": 311,
+        "endChar": 29
+      },
+      "revId": "c58b9f1827f6302621b3ce46781782c5d0910212",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3b03f4c4_277e96c3",
+        "filename": "tvix/eval/src/vm.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 314,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2022-08-13T20:42:21Z",
+      "side": 1,
+      "message": "could use the (currently nightly only) raw entry API",
+      "range": {
+        "startLine": 314,
+        "startChar": 22,
+        "endLine": 314,
+        "endChar": 27
+      },
+      "revId": "c58b9f1827f6302621b3ce46781782c5d0910212",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "627836de_116e5758",
+        "filename": "tvix/eval/src/vm.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 320,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2022-08-13T20:42:21Z",
+      "side": 1,
+      "message": "nit: I think `use std::collections::btree_map` is a little nicer",
+      "range": {
+        "startLine": 320,
+        "startChar": 12,
+        "endLine": 320,
+        "endChar": 39
+      },
+      "revId": "c58b9f1827f6302621b3ce46781782c5d0910212",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "169c135f_21d56082",
+        "filename": "tvix/eval/src/vm.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 347,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2022-08-13T20:42:21Z",
+      "side": 1,
+      "message": "this seems like it could be rewritten to use some sort of `if let`, and avoid panicking",
+      "range": {
+        "startLine": 347,
+        "startChar": 37,
+        "endLine": 347,
+        "endChar": 74
+      },
+      "revId": "c58b9f1827f6302621b3ce46781782c5d0910212",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
