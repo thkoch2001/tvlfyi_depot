@@ -35,7 +35,7 @@ in
       "olcDatabase={1}mdb".attrs = {
         objectClass = [ "olcDatabaseConfig" "olcMdbConfig" ];
         olcDatabase = "{1}mdb";
-        olcDbDirectory = "/var/lib/openldap";
+        olcDbDirectory = "/var/lib/openldap/db";
         olcSuffix = "dc=tvl,dc=fyi";
         olcAccess = "to *  by * read";
         olcRootDN = "cn=admin,dc=tvl,dc=fyi";
