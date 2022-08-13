@@ -34,6 +34,24 @@
       "parentUuid": "cd274476_fa328bba",
       "revId": "db8b5967ac98fd1f43e478b91f2d873074654c5b",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "630f0cfe_eea3917e",
+        "filename": "tvix/eval/docs/opcodes-attrsets.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 62,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2022-08-13T15:30:10Z",
+      "side": 1,
+      "message": "I\u0027m gonna noodle on this, but we should wait until we\u0027re at HEAD before we make any changes.",
+      "parentUuid": "cbcd2906_bf358aae",
+      "revId": "db8b5967ac98fd1f43e478b91f2d873074654c5b",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
