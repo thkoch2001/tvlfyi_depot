@@ -24,6 +24,30 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "bf8fc796_ffeb9d21",
+        "filename": "tvix/eval/src/compiler.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 142,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-08-13T15:10:36Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "ec949fa6_4f52846b",
+      "range": {
+        "startLine": 135,
+        "startChar": 0,
+        "endLine": 142,
+        "endChar": 55
+      },
+      "revId": "99831282d4c1b05e1b32c4abbf2cea9453035e91",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "3abeff6b_198a6fcb",
@@ -37,6 +61,24 @@
       "writtenOn": "2022-08-13T14:49:08Z",
       "side": 1,
       "message": "I wonder if instead of having alternating key, value, key, value, it\u0027d be easier to follow if we actuaally made these `NixAttrs::Kv` values. Doesn\u0027t seem like there\u0027d be much of a performance cost, and the win in terms of comprehensibility seems high",
+      "revId": "99831282d4c1b05e1b32c4abbf2cea9453035e91",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7a5a155b_e55586d5",
+        "filename": "tvix/eval/src/compiler.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 187,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-08-13T15:10:36Z",
+      "side": 1,
+      "message": "I considered this, there\u0027s some arguments in both directions:\n\nPro:\n- easier to follow\n- something else I forgot\n\nCons:\n- NixAttrs::KV is not public later on, it\u0027s considered an implementation detail of the VM\n- Using NixAttrs::KV directly means that the size increases ([tag|name|value] instead of just [name|value])\n- Using NixAttrs::KV in the non-public variant means that access would have to go through the NixAttrs::* API, which makes some stuff a lot trickier (but is doable, e.g. `NixAttrs::kv(k,v) -\u003e NixAttrs` should probably exist anyways as it is needed by some builtin).\n- It can superficially make implementation bugs harder to spot, because the NixAttrs::KV leaking out of construction somehow would make the value behave like a real attribute set from the perspective of the user\n\nMaybe there\u0027s a third way in:\n- add an additional type with its own internal Value variant (there\u0027s some of these which have special handling in cases to crash immediately if they leak out to users)\n- use this type to push a KV-like struct\n\nEither way, I\u0027d like to not do either of that in this commit and instead do it at the end, because this code is about to go through some expand/contract.",
+      "parentUuid": "3abeff6b_198a6fcb",
       "revId": "99831282d4c1b05e1b32c4abbf2cea9453035e91",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
@@ -64,6 +106,30 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "9129fbd9_e4212416",
+        "filename": "tvix/eval/src/opcode.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-08-13T15:10:36Z",
+      "side": 1,
+      "message": "Downchain",
+      "parentUuid": "efdfd44d_ff21a66a",
+      "range": {
+        "startLine": 34,
+        "startChar": 12,
+        "endLine": 34,
+        "endChar": 17
+      },
+      "revId": "99831282d4c1b05e1b32c4abbf2cea9453035e91",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "03389536_14891929",
@@ -77,6 +143,24 @@
       "writtenOn": "2022-08-13T14:49:08Z",
       "side": 1,
       "message": "BTreeMap::extend_reserve isn\u0027t implemented, which means it does nothing: https://doc.rust-lang.org/src/alloc/collections/btree/map.rs.html#2103-2115",
+      "revId": "99831282d4c1b05e1b32c4abbf2cea9453035e91",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "880ed812_1798c0d7",
+        "filename": "tvix/eval/src/vm.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 136,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-08-13T15:10:36Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "03389536_14891929",
       "revId": "99831282d4c1b05e1b32c4abbf2cea9453035e91",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
