@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "11be8cab_20277e79",
+        "filename": "tvix/eval/src/opcode.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2022-08-13T14:55:22Z",
+      "side": 1,
+      "message": "it\u0027s pretty obvious from context, but I still feel like this is worth documenting",
+      "range": {
+        "startLine": 37,
+        "startChar": 11,
+        "endLine": 37,
+        "endChar": 16
+      },
+      "revId": "807fd43ce32fff73f1e5e099887073318d7db21d",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "26a8eaa0_e4927519",
+        "filename": "tvix/eval/src/vm.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 152,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2022-08-13T14:55:22Z",
+      "side": 1,
+      "message": "I kinda feel like it might end up being more efficient here to do this unsafely (with MaybeUninit), since it avoids having to initialize the list with `Value::Null`.",
+      "revId": "807fd43ce32fff73f1e5e099887073318d7db21d",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
