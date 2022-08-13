@@ -16,6 +16,24 @@
       "message": "my comment about having the values on the stack for construction of attrsets be AttrSet::Kv seems like potentially a more elegant path here",
       "revId": "db8b5967ac98fd1f43e478b91f2d873074654c5b",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cbcd2906_bf358aae",
+        "filename": "tvix/eval/docs/opcodes-attrsets.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 62,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-08-13T15:15:37Z",
+      "side": 1,
+      "message": "What would you put in the key in this case?\n\nFor what it\u0027s worth, I have thought up an alternative method of AttrSet construction but eventually figured out that it wasn\u0027t usable with dynamic keys easily.\n\nHere\u0027s my notes from back then on the alternative method:\n\n---------------\n\n   Proposal: Build intermediate map in compiler\n\n   When encountering an attribute set node, the compiler can iterate\n   the K/V pairs and branch its behaviour when encountering\n   multi-element attribute paths.\n\n   The compiler could keep an internal map of the first key elements\n   ...\n\n   PROBLEM: this does NOT work with dynamic keys :|\n   e.g. `let a \u003d \"foo\"; in { \"${a}\".bar \u003d 1; foo.baz \u003d 2; }`\n\n   Compiler would not know that `\"${a}\" \u003d\u003d foo`.\n\nThat bit that trails off is where I realised the dynamic keys issue (which doesn\u0027t affect `let` btw, because `let` forbids dynamic keys - so there a similar kind of structure is used).\n\nI\u0027m not happy with either method of constructing the nested attrs though, would like to brainstorm around it if you have ideas.",
+      "parentUuid": "cd274476_fa328bba",
+      "revId": "db8b5967ac98fd1f43e478b91f2d873074654c5b",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
