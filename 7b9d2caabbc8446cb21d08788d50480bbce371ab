@@ -39,6 +39,48 @@
       "message": "final version of this should probably skip the space on the last element (or do the space before, and skip it on the first element)",
       "revId": "7b9d2caabbc8446cb21d08788d50480bbce371ab",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3c45c4a7_06447caa",
+        "filename": "tvix/eval/src/value/list.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-08-13T18:28:32Z",
+      "side": 1,
+      "message": "The Nix representation of an empty list always contains a space:\n\n  nix-repl\u003e []\n  [ ]\n\nSo we have to do that, too 😊",
+      "parentUuid": "5fd38941_d56ab199",
+      "revId": "7b9d2caabbc8446cb21d08788d50480bbce371ab",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3a1b9922_c7b5ac7c",
+        "filename": "tvix/eval/src/value/list.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-08-13T18:28:32Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "d43d538a_fe1a9224",
+      "range": {
+        "startLine": 14,
+        "startChar": 12,
+        "endLine": 15,
+        "endChar": 30
+      },
+      "revId": "7b9d2caabbc8446cb21d08788d50480bbce371ab",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
