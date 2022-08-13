@@ -1,0 +1,119 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "615e152c_a2c4b3a7",
+        "filename": "tvix/eval/src/vm.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 298,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2022-08-13T20:45:31Z",
+      "side": 1,
+      "message": "dot",
+      "range": {
+        "startLine": 298,
+        "startChar": 33,
+        "endLine": 298,
+        "endChar": 34
+      },
+      "revId": "f88712a6d74af3a88ac35f34205006a6a184eb25",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "955c2e5f_b7628168",
+        "filename": "tvix/eval/src/vm.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 306,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2022-08-13T20:45:31Z",
+      "side": 1,
+      "message": "why even have the local variable?",
+      "range": {
+        "startLine": 304,
+        "startChar": 4,
+        "endLine": 306,
+        "endChar": 17
+      },
+      "revId": "f88712a6d74af3a88ac35f34205006a6a184eb25",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1e8dd812_d8bdfc48",
+        "filename": "tvix/eval/src/vm.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 308,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2022-08-13T20:45:31Z",
+      "side": 1,
+      "message": "this return is unnecessary",
+      "range": {
+        "startLine": 308,
+        "startChar": 12,
+        "endLine": 308,
+        "endChar": 18
+      },
+      "revId": "f88712a6d74af3a88ac35f34205006a6a184eb25",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c4bdc107_dde02316",
+        "filename": "tvix/eval/src/vm.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 315,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2022-08-13T20:45:31Z",
+      "side": 1,
+      "message": "this return is unnecessary",
+      "range": {
+        "startLine": 315,
+        "startChar": 13,
+        "endLine": 315,
+        "endChar": 26
+      },
+      "revId": "f88712a6d74af3a88ac35f34205006a6a184eb25",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1d85796f_abd418f8",
+        "filename": "tvix/eval/src/vm.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 346,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2022-08-13T20:45:31Z",
+      "side": 1,
+      "message": "another place where I feel like a dedicated local variable isn\u0027t getting us much",
+      "range": {
+        "startLine": 338,
+        "startChar": 4,
+        "endLine": 346,
+        "endChar": 17
+      },
+      "revId": "f88712a6d74af3a88ac35f34205006a6a184eb25",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
