@@ -24,6 +24,30 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "b826e35d_cd594487",
+        "filename": "tvix/eval/src/vm.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 172,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-08-13T20:13:16Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "a450bd53_c9b360f0",
+      "range": {
+        "startLine": 172,
+        "startChar": 30,
+        "endLine": 172,
+        "endChar": 64
+      },
+      "revId": "ddfc0074b5ea656417807d2e34e6c001e2c2fe42",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "907f3b2e_1289f253",
@@ -37,6 +61,30 @@
       "writtenOn": "2022-08-13T19:55:20Z",
       "side": 1,
       "message": "relying on evaluation order of struct fields like this feels very spooky to me - feels much safer to assign them to local variables instead.",
+      "range": {
+        "startLine": 173,
+        "startChar": 24,
+        "endLine": 177,
+        "endChar": 26
+      },
+      "revId": "ddfc0074b5ea656417807d2e34e6c001e2c2fe42",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8d67ab1d_90e2152a",
+        "filename": "tvix/eval/src/vm.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 177,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-08-13T20:13:16Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "907f3b2e_1289f253",
       "range": {
         "startLine": 173,
         "startChar": 24,
