@@ -47,6 +47,30 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "8c913d93_88f90aa2",
+        "filename": "tvix/eval/src/vm.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 309,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-08-13T23:55:36Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "232977c5_f45d7e7e",
+      "range": {
+        "startLine": 308,
+        "startChar": 0,
+        "endLine": 309,
+        "endChar": 43
+      },
+      "revId": "c58b9f1827f6302621b3ce46781782c5d0910212",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "4d9442f1_ab07ea61",
@@ -70,6 +94,30 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "02c8945b_ec977691",
+        "filename": "tvix/eval/src/vm.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 311,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-08-13T23:55:36Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "4d9442f1_ab07ea61",
+      "range": {
+        "startLine": 310,
+        "startChar": 4,
+        "endLine": 311,
+        "endChar": 29
+      },
+      "revId": "c58b9f1827f6302621b3ce46781782c5d0910212",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "3b03f4c4_277e96c3",
@@ -83,6 +131,30 @@
       "writtenOn": "2022-08-13T20:42:21Z",
       "side": 1,
       "message": "could use the (currently nightly only) raw entry API",
+      "range": {
+        "startLine": 314,
+        "startChar": 22,
+        "endLine": 314,
+        "endChar": 27
+      },
+      "revId": "c58b9f1827f6302621b3ce46781782c5d0910212",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "be8b021b_fff460fb",
+        "filename": "tvix/eval/src/vm.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 314,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-08-13T23:55:36Z",
+      "side": 1,
+      "message": "In what way does it help here? It seems to give manual control over ordering in this case?",
+      "parentUuid": "3b03f4c4_277e96c3",
       "range": {
         "startLine": 314,
         "startChar": 22,
@@ -129,6 +201,30 @@
       "writtenOn": "2022-08-13T20:42:21Z",
       "side": 1,
       "message": "this seems like it could be rewritten to use some sort of `if let`, and avoid panicking",
+      "range": {
+        "startLine": 347,
+        "startChar": 37,
+        "endLine": 347,
+        "endChar": 74
+      },
+      "revId": "c58b9f1827f6302621b3ce46781782c5d0910212",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "164d682f_e58e5e43",
+        "filename": "tvix/eval/src/vm.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 347,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-08-13T23:55:36Z",
+      "side": 1,
+      "message": "Switching this to vec1",
+      "parentUuid": "169c135f_21d56082",
       "range": {
         "startLine": 347,
         "startChar": 37,
