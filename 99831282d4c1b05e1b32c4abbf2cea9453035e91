@@ -1,0 +1,61 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ec949fa6_4f52846b",
+        "filename": "tvix/eval/src/compiler.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 142,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2022-08-13T14:49:08Z",
+      "side": 1,
+      "message": "should probably be an actual docstring (with 3 /s)",
+      "range": {
+        "startLine": 135,
+        "startChar": 0,
+        "endLine": 142,
+        "endChar": 55
+      },
+      "revId": "99831282d4c1b05e1b32c4abbf2cea9453035e91",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3abeff6b_198a6fcb",
+        "filename": "tvix/eval/src/compiler.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 187,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2022-08-13T14:49:08Z",
+      "side": 1,
+      "message": "I wonder if instead of having alternating key, value, key, value, it\u0027d be easier to follow if we actuaally made these `NixAttrs::Kv` values. Doesn\u0027t seem like there\u0027d be much of a performance cost, and the win in terms of comprehensibility seems high",
+      "revId": "99831282d4c1b05e1b32c4abbf2cea9453035e91",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "03389536_14891929",
+        "filename": "tvix/eval/src/vm.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 136,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2022-08-13T14:49:08Z",
+      "side": 1,
+      "message": "BTreeMap::extend_reserve isn\u0027t implemented, which means it does nothing: https://doc.rust-lang.org/src/alloc/collections/btree/map.rs.html#2103-2115",
+      "revId": "99831282d4c1b05e1b32c4abbf2cea9453035e91",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
