@@ -16,6 +16,24 @@
       "message": "is this allowed?",
       "revId": "a9c9cf50bf0e67f6b5ddcb7bea967fc11d10446d",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e2050daa_6885a60a",
+        "filename": "tvix/eval/src/value/attrs.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-08-13T19:55:47Z",
+      "side": 1,
+      "message": "it doesn\u0027t match the representation Nix uses, no, but I only keep these around for a little while until a few commits further down when there are tests for constructing the correct variant",
+      "parentUuid": "8f7ab3ba_b434f7e8",
+      "revId": "a9c9cf50bf0e67f6b5ddcb7bea967fc11d10446d",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
