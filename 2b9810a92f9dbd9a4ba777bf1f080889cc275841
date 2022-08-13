@@ -16,6 +16,24 @@
       "message": "this becoming pub in this commit seems unnecessary, perhaps",
       "revId": "2b9810a92f9dbd9a4ba777bf1f080889cc275841",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "20178f8c_3760b4b1",
+        "filename": "tvix/eval/src/value/string.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-08-13T11:50:33Z",
+      "side": 1,
+      "message": "This type doesn\u0027t exist like this anymore downchain (it\u0027s now an enum and an empty representation wrapper).",
+      "parentUuid": "4b1559d2_c7470411",
+      "revId": "2b9810a92f9dbd9a4ba777bf1f080889cc275841",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
