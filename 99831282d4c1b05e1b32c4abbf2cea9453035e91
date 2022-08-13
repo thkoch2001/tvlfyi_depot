@@ -43,6 +43,29 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "efdfd44d_ff21a66a",
+        "filename": "tvix/eval/src/opcode.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2022-08-13T14:52:33Z",
+      "side": 1,
+      "message": "I think it\u0027s worth documenting that this is the number of *key-value pairs*, not the number of values that get removed from the stack (which would be double the number of key-value pairs, if you decide not to implement my other comment)",
+      "range": {
+        "startLine": 34,
+        "startChar": 12,
+        "endLine": 34,
+        "endChar": 17
+      },
+      "revId": "99831282d4c1b05e1b32c4abbf2cea9453035e91",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "03389536_14891929",
         "filename": "tvix/eval/src/vm.rs",
         "patchSetId": 1
