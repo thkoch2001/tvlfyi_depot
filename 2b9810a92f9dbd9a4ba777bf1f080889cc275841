@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4b1559d2_c7470411",
+        "filename": "tvix/eval/src/value/string.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2022-08-13T00:33:40Z",
+      "side": 1,
+      "message": "this becoming pub in this commit seems unnecessary, perhaps",
+      "revId": "2b9810a92f9dbd9a4ba777bf1f080889cc275841",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
