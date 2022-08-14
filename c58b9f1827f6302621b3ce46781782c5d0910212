@@ -189,6 +189,30 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "a085a9dd_4d294b5e",
+        "filename": "tvix/eval/src/vm.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 314,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-08-14T00:23:19Z",
+      "side": 1,
+      "message": "Marking this as resolved to add two more on top, but I\u0027d like to hear how this can help (probably better on IRC or somewhere).",
+      "parentUuid": "be8b021b_fff460fb",
+      "range": {
+        "startLine": 314,
+        "startChar": 22,
+        "endLine": 314,
+        "endChar": 27
+      },
+      "revId": "c58b9f1827f6302621b3ce46781782c5d0910212",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "627836de_116e5758",
