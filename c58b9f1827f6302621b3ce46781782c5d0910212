@@ -24,6 +24,30 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "53022b65_ffbd370c",
+        "filename": "tvix/eval/src/vm.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 256,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-08-14T00:08:53Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "0927f8e8_b068a980",
+      "range": {
+        "startLine": 254,
+        "startChar": 20,
+        "endLine": 256,
+        "endChar": 22
+      },
+      "revId": "c58b9f1827f6302621b3ce46781782c5d0910212",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "232977c5_f45d7e7e",
@@ -178,6 +202,30 @@
       "writtenOn": "2022-08-13T20:42:21Z",
       "side": 1,
       "message": "nit: I think `use std::collections::btree_map` is a little nicer",
+      "range": {
+        "startLine": 320,
+        "startChar": 12,
+        "endLine": 320,
+        "endChar": 39
+      },
+      "revId": "c58b9f1827f6302621b3ce46781782c5d0910212",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "dfee1b2b_9d57def8",
+        "filename": "tvix/eval/src/vm.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 320,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-08-14T00:08:53Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "627836de_116e5758",
       "range": {
         "startLine": 320,
         "startChar": 12,
