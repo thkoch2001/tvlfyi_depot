@@ -4,7 +4,10 @@ pkgs.haskellPackages.mkDerivation {
   pname = "my-prelude";
   version = "0.0.1-unreleased";
 
-  src = ./.;
+  src = depot.users.Profpatsch.exactSource ./. [
+    ./my-prelude.cabal
+    ./MyPrelude.hs
+  ];
 
   isLibrary = true;
 
