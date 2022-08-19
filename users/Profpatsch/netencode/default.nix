@@ -11,6 +11,31 @@ let
     }
     (builtins.readFile ./netencode.rs);
 
+  netencode-hs = pkgs.haskellPackages.mkDerivation {
+    pname = "netencode";
+    version = "0.1.0";
+
+    src = depot.users.Profpatsch.exactSource ./. [
+      ./netencode.cabal
+      ./Netencode.hs
+    ];
+
+    libraryHaskellDepends = [
+      pkgs.haskellPackages.hedgehog
+      pkgs.haskellPackages.nonempty-containers
+      pkgs.haskellPackages.deriving-compat
+      pkgs.haskellPackages.data-fix
+      pkgs.haskellPackages.bytestring
+      pkgs.haskellPackages.attoparsec
+      depot.users.Profpatsch.my-prelude
+    ];
+
+    isLibrary = true;
+    license = lib.licenses.mit;
+
+
+  };
+
   gen = import ./gen.nix { inherit lib; };
 
   pretty-rs = depot.nix.writers.rustSimpleLib
@@ -149,6 +174,7 @@ in
 depot.nix.readTree.drvTargets {
   inherit
     netencode-rs
+    netencode-hs
     pretty-rs
     pretty
     netencode-mustache
