@@ -36,6 +36,27 @@ let
           t
       }
     '';
+
+    haskell = pkgs.haskellPackages.mkDerivation {
+      pname = "arglib-netencode";
+      version = "0.1.0";
+
+      src = depot.users.Profpatsch.exactSource ./. [
+        ./arglib-netencode.cabal
+        ./ArglibNetencode.hs
+      ];
+
+      libraryHaskellDepends = [
+        depot.users.Profpatsch.my-prelude
+        depot.users.Profpatsch.netencode
+      ];
+
+      isLibrary = true;
+      license = lib.licenses.mit;
+
+
+    };
+
   };
 
 in
