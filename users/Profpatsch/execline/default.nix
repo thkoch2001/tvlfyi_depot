@@ -7,6 +7,23 @@ let
     }
     (builtins.readFile ./exec_helpers.rs);
 
+  exec-helpers-hs = pkgs.haskellPackages.mkDerivation {
+    pname = "exec-helpers";
+    version = "0.1.0";
+
+    src = depot.users.Profpatsch.exactSource ./. [
+      ./exec-helpers.cabal
+      ./ExecHelpers.hs
+    ];
+
+    libraryHaskellDepends = [
+      depot.users.Profpatsch.my-prelude
+    ];
+
+    isLibrary = true;
+    license = lib.licenses.mit;
+  };
+
   print-one-env = depot.nix.writers.rustSimple
     {
       name = "print-one-env";
@@ -32,6 +49,7 @@ in
 depot.nix.readTree.drvTargets {
   inherit
     exec-helpers
+    exec-helpers-hs
     print-one-env
     ;
 }

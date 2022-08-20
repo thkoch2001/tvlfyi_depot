@@ -1,0 +1,14 @@
+cabal-version:      2.4
+name:               exec-helpers
+version:            0.1.0.0
+author:             Profpatsch
+maintainer:         mail@profpatsch.de
+
+library
+    exposed-modules:          ExecHelpers
+
+    build-depends:
+        base ^>=4.15.1.0,
+        my-prelude
+
+    default-language: Haskell2010
