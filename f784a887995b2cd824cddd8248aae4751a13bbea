@@ -34,6 +34,24 @@
       "parentUuid": "4490cb1a_5ab6a395",
       "revId": "f784a887995b2cd824cddd8248aae4751a13bbea",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "07ad2117_306121ab",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-08-22T14:43:25Z",
+      "side": 1,
+      "message": "Nope, lib.cleanSource is pretty \"stupid\" (it just matches on some regexes). We have gitignoreSource at `third_party.gitignoreSource` in depot, but it\u0027s actually a third-party project",
+      "parentUuid": "ea0cfe3a_142f7019",
+      "revId": "f784a887995b2cd824cddd8248aae4751a13bbea",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
