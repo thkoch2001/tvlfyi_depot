@@ -45,7 +45,7 @@ let
     } ''
     import test_lib
 
-    assert(test_lib.test() == "test 1 2 3")
+    assert test_lib.test() == "test 1 2 3"
   '');
 
 in
