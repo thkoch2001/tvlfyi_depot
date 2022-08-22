@@ -16,6 +16,24 @@
       "message": "This will exclude things like `.git` and some known backup directories etc.: https://github.com/NixOS/nixpkgs/blob/master/lib/sources.nix#L38\n\nIs that the right behaviour? In principle I\u0027m for the change!",
       "revId": "f784a887995b2cd824cddd8248aae4751a13bbea",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ea0cfe3a_142f7019",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2022-08-22T14:41:24Z",
+      "side": 1,
+      "message": "locally we have been using \n\n    inherit (pkgs)\n    gitignoreSource\n    ;\n  src \u003d gitignoreSource ./.;\n\nI was expecting it to be mostly similar. Is it not?",
+      "parentUuid": "4490cb1a_5ab6a395",
+      "revId": "f784a887995b2cd824cddd8248aae4751a13bbea",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
