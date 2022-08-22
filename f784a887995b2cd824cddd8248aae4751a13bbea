@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4490cb1a_5ab6a395",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-08-22T14:38:17Z",
+      "side": 1,
+      "message": "This will exclude things like `.git` and some known backup directories etc.: https://github.com/NixOS/nixpkgs/blob/master/lib/sources.nix#L38\n\nIs that the right behaviour? In principle I\u0027m for the change!",
+      "revId": "f784a887995b2cd824cddd8248aae4751a13bbea",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
