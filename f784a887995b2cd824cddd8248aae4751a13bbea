@@ -52,6 +52,24 @@
       "parentUuid": "ea0cfe3a_142f7019",
       "revId": "f784a887995b2cd824cddd8248aae4751a13bbea",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "395fa9d5_44dc7fa6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2022-08-23T06:32:04Z",
+      "side": 1,
+      "message": "Ok so that do not help my case then. Would you accept third_party.gitignoreSource change? \nNo problem if you do not. \n\nHaving random tmp files included in this derivation when deployed with \u0027terraform apply\u0027 creates \"null\" changes that I have to investigate ;-)",
+      "parentUuid": "07ad2117_306121ab",
+      "revId": "f784a887995b2cd824cddd8248aae4751a13bbea",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
