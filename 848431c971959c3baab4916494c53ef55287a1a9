@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8394dc9b_f2ee8801",
+        "filename": "tvix/eval/src/tests/mod.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2022-08-24T21:32:14Z",
+      "side": 1,
+      "message": "Better style imo (to make these a little bit more visible) would be to do a `#[cfg_attr(not(feature \u003d \"nix_tests\"), ignore)]` so the tests only get conditionally *ignored* based on that feature -- but I\u0027m not sure test_resources supports that.",
+      "revId": "848431c971959c3baab4916494c53ef55287a1a9",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
