@@ -16,6 +16,24 @@
       "message": "I feel reasonably strongly that having these all as their own file will make things a lot more difficult to follow + maintain, compared with having them in source code and generating the tests using some kind of macro. If you agree, I\u0027m happy to make that happen.",
       "revId": "647fa4aaf419a1ee62829d56e9b0df70b4d0505f",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "63e0ec9d_4546bcc4",
+        "filename": "tvix/eval/src/tests/tvix_tests/identity-bool-false.nix",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-08-24T23:00:46Z",
+      "side": 0,
+      "message": "I\u0027m not sure, the thing is that this structure follows what Nix does upstream, which makes the tests portable in *both* directions. There\u0027s a bunch more of these coming downchain, but I\u0027m not *against* porting them to something more compact further on!",
+      "parentUuid": "c8ed8232_c66fe202",
+      "revId": "647fa4aaf419a1ee62829d56e9b0df70b4d0505f",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
