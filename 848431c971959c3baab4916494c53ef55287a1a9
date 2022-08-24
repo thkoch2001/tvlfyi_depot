@@ -16,6 +16,24 @@
       "message": "Better style imo (to make these a little bit more visible) would be to do a `#[cfg_attr(not(feature \u003d \"nix_tests\"), ignore)]` so the tests only get conditionally *ignored* based on that feature -- but I\u0027m not sure test_resources supports that.",
       "revId": "848431c971959c3baab4916494c53ef55287a1a9",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9de01e93_2da70887",
+        "filename": "tvix/eval/src/tests/mod.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-08-24T22:58:43Z",
+      "side": 1,
+      "message": "Maybe there\u0027s a way to forward these attrs through, I\u0027ll take a look.",
+      "parentUuid": "8394dc9b_f2ee8801",
+      "revId": "848431c971959c3baab4916494c53ef55287a1a9",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
