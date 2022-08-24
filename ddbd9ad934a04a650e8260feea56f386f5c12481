@@ -16,6 +16,24 @@
       "message": "(as noted previously, this and other temporaries are probably unnecessary)",
       "revId": "ddbd9ad934a04a650e8260feea56f386f5c12481",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "22520838_119a74a5",
+        "filename": "tvix/eval/src/value/attrs.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 183,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-08-24T18:16:19Z",
+      "side": 1,
+      "message": "Gone in HEAD.",
+      "parentUuid": "1fb388a6_cf43939a",
+      "revId": "ddbd9ad934a04a650e8260feea56f386f5c12481",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
