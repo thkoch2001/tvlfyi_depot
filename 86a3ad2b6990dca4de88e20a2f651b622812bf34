@@ -24,6 +24,30 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "3d8043d1_c89d2678",
+        "filename": "tvix/eval/src/eval.rs",
+        "patchSetId": 3
+      },
+      "lineNbr": 5,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-08-24T21:21:48Z",
+      "side": 1,
+      "message": "Fixing downstream!",
+      "parentUuid": "94cf3aa4_79c3dc17",
+      "range": {
+        "startLine": 5,
+        "startChar": 23,
+        "endLine": 5,
+        "endChar": 27
+      },
+      "revId": "86a3ad2b6990dca4de88e20a2f651b622812bf34",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "55e8d179_6a122c7f",
@@ -37,6 +61,24 @@
       "writtenOn": "2022-08-24T21:05:26Z",
       "side": 1,
       "message": "the traditional way of doing integration tests in rust ime is to put them in `tests/` as a neighbor to `src/`; this has a number of advantages including providing for more selective compilation (eg I can run `cargo test --test nix-eval` or whatever to only actually compile the lib and that test suite) and clearer organization, without having to sprinkle `#[cfg(test)]` everywhere.",
+      "revId": "86a3ad2b6990dca4de88e20a2f651b622812bf34",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "41f91678_fcb718e0",
+        "filename": "tvix/eval/src/main.rs",
+        "patchSetId": 3
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-08-24T21:21:48Z",
+      "side": 1,
+      "message": "We need to refactor this into lib-mode first, which it currently isn\u0027t, but I\u0027ll put it on the list.",
+      "parentUuid": "55e8d179_6a122c7f",
       "revId": "86a3ad2b6990dca4de88e20a2f651b622812bf34",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
@@ -64,6 +106,30 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "4ca79f38_bec0d7cb",
+        "filename": "tvix/eval/src/tests/mod.rs",
+        "patchSetId": 3
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-08-24T21:21:48Z",
+      "side": 1,
+      "message": "huh, TIL, will need to try that.",
+      "parentUuid": "e7c592fc_24bc0da4",
+      "range": {
+        "startLine": 15,
+        "startChar": 19,
+        "endLine": 15,
+        "endChar": 42
+      },
+      "revId": "86a3ad2b6990dca4de88e20a2f651b622812bf34",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "a96dab8e_cc38fb21",
@@ -77,6 +143,30 @@
       "writtenOn": "2022-08-24T21:05:26Z",
       "side": 1,
       "message": "same nit here",
+      "range": {
+        "startLine": 21,
+        "startChar": 20,
+        "endLine": 21,
+        "endChar": 43
+      },
+      "revId": "86a3ad2b6990dca4de88e20a2f651b622812bf34",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "327671e5_35bc5fe7",
+        "filename": "tvix/eval/src/tests/mod.rs",
+        "patchSetId": 3
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-08-24T21:21:48Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "a96dab8e_cc38fb21",
       "range": {
         "startLine": 21,
         "startChar": 20,
