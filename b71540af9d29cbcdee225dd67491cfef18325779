@@ -18,6 +18,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "6162a92a_ee9023ee",
+        "filename": "tvix/eval/src/value/string.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 6,
+      "author": {
+        "id": 1000008
+      },
+      "writtenOn": "2022-08-24T17:53:27Z",
+      "side": 1,
+      "message": "Oh wait, not only did you fix this in the next commit, it\u0027s sausage-only, lol.",
+      "parentUuid": "6e68bea3_e91b4477",
+      "revId": "b71540af9d29cbcdee225dd67491cfef18325779",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "a9e06940_cee922df",
@@ -31,6 +49,24 @@
       "writtenOn": "2022-08-24T17:52:39Z",
       "side": 1,
       "message": "I feel like this should potentially make it a static if it\u0027s `name` or `value`.",
+      "revId": "b71540af9d29cbcdee225dd67491cfef18325779",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "94a2048a_a7342187",
+        "filename": "tvix/eval/src/value/string.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1000008
+      },
+      "writtenOn": "2022-08-24T17:53:27Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "a9e06940_cee922df",
       "revId": "b71540af9d29cbcdee225dd67491cfef18325779",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
