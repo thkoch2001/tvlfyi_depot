@@ -18,6 +18,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "2eb636b2_eefa2f59",
+        "filename": "tvix/eval/src/value/attrs.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 148,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-08-24T18:15:49Z",
+      "side": 1,
+      "message": "As discussed on IRC:\n\nThey\u0027re not popped off because the whole vector is dropped if this branch is taken (its *split off* from the stack).\n\nAs for the Value::Blackhole usage, I\u0027ve added a todo-list entry to see if we can get rid of that without paying a price.",
+      "parentUuid": "30e590d7_5eca61dc",
+      "revId": "268c797e4b553b3ff93e6ab5585445c45b4be4c7",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "4876fb06_90fab74b",
@@ -31,6 +49,24 @@
       "writtenOn": "2022-08-24T17:45:11Z",
       "side": 1,
       "message": "This fully-qualified path seems like overkill; just import it (perhaps just in that function if you\u0027re really worried).\n\n(also this happens later, too)",
+      "revId": "268c797e4b553b3ff93e6ab5585445c45b4be4c7",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6dc6067b_26d7b5f6",
+        "filename": "tvix/eval/src/value/attrs.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 163,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-08-24T18:15:49Z",
+      "side": 1,
+      "message": "This is cleaned up in HEAD to an import of btree_map (I think clippy suggested that).",
+      "parentUuid": "4876fb06_90fab74b",
       "revId": "268c797e4b553b3ff93e6ab5585445c45b4be4c7",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
