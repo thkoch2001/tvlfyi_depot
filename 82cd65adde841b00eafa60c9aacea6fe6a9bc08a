@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6203dbe9_1f0ac76c",
+        "filename": "tvix/eval/src/eval.rs",
+        "patchSetId": 3
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2022-08-24T21:06:43Z",
+      "side": 1,
+      "message": "this seems like it\u0027s rapidly growing towards wanting a clap app",
+      "revId": "82cd65adde841b00eafa60c9aacea6fe6a9bc08a",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
