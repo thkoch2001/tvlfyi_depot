@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "30e590d7_5eca61dc",
+        "filename": "tvix/eval/src/value/attrs.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 148,
+      "author": {
+        "id": 1000008
+      },
+      "writtenOn": "2022-08-24T17:45:11Z",
+      "side": 1,
+      "message": "Why does it do this instead of popping them off? Are they popped off later?",
+      "revId": "268c797e4b553b3ff93e6ab5585445c45b4be4c7",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4876fb06_90fab74b",
+        "filename": "tvix/eval/src/value/attrs.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 163,
+      "author": {
+        "id": 1000008
+      },
+      "writtenOn": "2022-08-24T17:45:11Z",
+      "side": 1,
+      "message": "This fully-qualified path seems like overkill; just import it (perhaps just in that function if you\u0027re really worried).\n\n(also this happens later, too)",
+      "revId": "268c797e4b553b3ff93e6ab5585445c45b4be4c7",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
