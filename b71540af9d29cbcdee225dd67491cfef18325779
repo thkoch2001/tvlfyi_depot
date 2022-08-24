@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6e68bea3_e91b4477",
+        "filename": "tvix/eval/src/value/string.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 6,
+      "author": {
+        "id": 1000008
+      },
+      "writtenOn": "2022-08-24T17:52:39Z",
+      "side": 1,
+      "message": "I feel like this `PartialEq` impl might be setting up a potential future landmine where you compare the strings directly instead of using `.as_str()` first...",
+      "revId": "b71540af9d29cbcdee225dd67491cfef18325779",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a9e06940_cee922df",
+        "filename": "tvix/eval/src/value/string.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1000008
+      },
+      "writtenOn": "2022-08-24T17:52:39Z",
+      "side": 1,
+      "message": "I feel like this should potentially make it a static if it\u0027s `name` or `value`.",
+      "revId": "b71540af9d29cbcdee225dd67491cfef18325779",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
