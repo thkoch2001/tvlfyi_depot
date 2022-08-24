@@ -16,6 +16,24 @@
       "message": "this seems like it\u0027s rapidly growing towards wanting a clap app",
       "revId": "82cd65adde841b00eafa60c9aacea6fe6a9bc08a",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "22b64333_1c82a1e4",
+        "filename": "tvix/eval/src/eval.rs",
+        "patchSetId": 3
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-08-24T21:22:24Z",
+      "side": 1,
+      "message": "does clap still have four trillion dependencies :/",
+      "parentUuid": "6203dbe9_1f0ac76c",
+      "revId": "82cd65adde841b00eafa60c9aacea6fe6a9bc08a",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
