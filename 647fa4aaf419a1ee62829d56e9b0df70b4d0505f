@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c8ed8232_c66fe202",
+        "filename": "tvix/eval/src/tests/tvix_tests/identity-bool-false.nix",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2022-08-24T21:35:01Z",
+      "side": 0,
+      "message": "I feel reasonably strongly that having these all as their own file will make things a lot more difficult to follow + maintain, compared with having them in source code and generating the tests using some kind of macro. If you agree, I\u0027m happy to make that happen.",
+      "revId": "647fa4aaf419a1ee62829d56e9b0df70b4d0505f",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
