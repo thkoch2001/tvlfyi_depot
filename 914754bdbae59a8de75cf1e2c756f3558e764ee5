@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "69c19418_d8398b68",
+        "filename": "tvix/eval/src/value/attrs/tests.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 1000008
+      },
+      "writtenOn": "2022-08-24T17:48:47Z",
+      "side": 1,
+      "message": "It would be nice to just have the `NixAttrs` implement `PartialEq`, but I assume you have some reason that you\u0027re not doing that.",
+      "revId": "914754bdbae59a8de75cf1e2c756f3558e764ee5",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
