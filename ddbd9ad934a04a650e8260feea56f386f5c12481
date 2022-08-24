@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1fb388a6_cf43939a",
+        "filename": "tvix/eval/src/value/attrs.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 183,
+      "author": {
+        "id": 1000008
+      },
+      "writtenOn": "2022-08-24T17:47:34Z",
+      "side": 1,
+      "message": "(as noted previously, this and other temporaries are probably unnecessary)",
+      "revId": "ddbd9ad934a04a650e8260feea56f386f5c12481",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
