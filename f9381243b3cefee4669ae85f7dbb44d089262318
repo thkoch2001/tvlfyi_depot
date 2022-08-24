@@ -16,6 +16,24 @@
       "message": "probably good to give an example invocation here too",
       "revId": "f9381243b3cefee4669ae85f7dbb44d089262318",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fe159ef1_67bd1361",
+        "filename": "tvix/eval/README.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-08-24T22:59:24Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "41046a56_84316fef",
+      "revId": "f9381243b3cefee4669ae85f7dbb44d089262318",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
