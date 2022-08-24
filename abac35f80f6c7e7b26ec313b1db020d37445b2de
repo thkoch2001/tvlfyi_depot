@@ -34,6 +34,24 @@
       "parentUuid": "aa8f5c58_6d92ad12",
       "revId": "abac35f80f6c7e7b26ec313b1db020d37445b2de",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ea947a39_42f7ebb1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-08-24T23:11:07Z",
+      "side": 1,
+      "message": "(it needs to be a few commits further down, where `tvix_tests` gain eval-okay-* tests)",
+      "parentUuid": "ee5badfd_6ca49067",
+      "revId": "abac35f80f6c7e7b26ec313b1db020d37445b2de",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
