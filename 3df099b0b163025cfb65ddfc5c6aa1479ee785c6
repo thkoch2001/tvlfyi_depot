@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6dbd1032_594ec162",
+        "filename": "tvix/eval/src/value/string.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 51,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2022-08-24T20:59:27Z",
+      "side": 1,
+      "message": "is this right?",
+      "range": {
+        "startLine": 51,
+        "startChar": 15,
+        "endLine": 51,
+        "endChar": 26
+      },
+      "revId": "3df099b0b163025cfb65ddfc5c6aa1479ee785c6",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "61ccc728_4d40fedf",
+        "filename": "tvix/eval/src/value/string.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 80,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2022-08-24T20:59:27Z",
+      "side": 1,
+      "message": "this seems like something that could use unit tests",
+      "revId": "3df099b0b163025cfb65ddfc5c6aa1479ee785c6",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
