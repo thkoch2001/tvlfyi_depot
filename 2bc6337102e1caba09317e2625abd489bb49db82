@@ -16,6 +16,24 @@
       "message": ".... you know what I\u0027m gonna say here",
       "revId": "2bc6337102e1caba09317e2625abd489bb49db82",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "79d89db8_bdc2648c",
+        "filename": "tvix/eval/src/compiler.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 370,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-08-25T15:59:00Z",
+      "side": 1,
+      "message": "in this case it could be implemented inside of OpJumpIfTrue (conditionally, since it would only pop on one of the paths), but since it\u0027s not possible for the other type of jump it seems strange to do it that way (the workings of those opcodes diverge). I\u0027d prefer to leave this as is with this pop being as explicit as the other ones.",
+      "parentUuid": "b8ac7d85_9492baf4",
+      "revId": "2bc6337102e1caba09317e2625abd489bb49db82",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
