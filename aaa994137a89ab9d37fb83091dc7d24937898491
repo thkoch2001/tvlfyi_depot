@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "97737cda_09c68d7d",
+        "filename": "third_party/overlays/tvl.nix",
+        "patchSetId": 1
+      },
+      "lineNbr": 104,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2022-08-25T22:14:30Z",
+      "side": 0,
+      "message": "curious this assert never fired…",
+      "range": {
+        "startLine": 104,
+        "startChar": 21,
+        "endLine": 104,
+        "endChar": 47
+      },
+      "revId": "aaa994137a89ab9d37fb83091dc7d24937898491",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
