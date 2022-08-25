@@ -24,6 +24,30 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c3cf5c25_18aca0bf",
+        "filename": "tvix/eval/src/value/attrs.rs",
+        "patchSetId": 3
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-08-25T14:25:50Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fa4b455c_caf89430",
+      "range": {
+        "startLine": 38,
+        "startChar": 37,
+        "endLine": 38,
+        "endChar": 47
+      },
+      "revId": "058e77bab20db90347ce1d91c41076ef56b61b26",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "7c3bcfe5_6c8380b4",
@@ -47,6 +71,30 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "b59187ca_857f7e16",
+        "filename": "tvix/eval/src/value/attrs.rs",
+        "patchSetId": 3
+      },
+      "lineNbr": 82,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-08-25T14:25:50Z",
+      "side": 1,
+      "message": "Done downchain.",
+      "parentUuid": "7c3bcfe5_6c8380b4",
+      "range": {
+        "startLine": 82,
+        "startChar": 20,
+        "endLine": 82,
+        "endChar": 47
+      },
+      "revId": "058e77bab20db90347ce1d91c41076ef56b61b26",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "eb11ebdb_aab214e8",
@@ -60,6 +108,30 @@
       "writtenOn": "2022-08-25T14:10:07Z",
       "side": 1,
       "message": "can avoid the clone of m2 here by using `m1.extend(m2)`",
+      "range": {
+        "startLine": 103,
+        "startChar": 28,
+        "endLine": 104,
+        "endChar": 35
+      },
+      "revId": "058e77bab20db90347ce1d91c41076ef56b61b26",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "da6be351_3f3c2a9a",
+        "filename": "tvix/eval/src/value/attrs.rs",
+        "patchSetId": 3
+      },
+      "lineNbr": 104,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-08-25T14:25:50Z",
+      "side": 1,
+      "message": "m2 is not owned at this point, so I think this doesn\u0027t gain anything",
+      "parentUuid": "eb11ebdb_aab214e8",
       "range": {
         "startLine": 103,
         "startChar": 28,
