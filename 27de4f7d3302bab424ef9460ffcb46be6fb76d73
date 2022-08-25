@@ -22,6 +22,30 @@
       },
       "revId": "27de4f7d3302bab424ef9460ffcb46be6fb76d73",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9274e710_d851d94f",
+        "filename": "tvix/eval/src/vm.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 74,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-08-25T11:09:44Z",
+      "side": 1,
+      "message": "I\u0027ll add a TODO item to detect this kind of mixing and emit a separate error.",
+      "parentUuid": "47923256_15a9951c",
+      "range": {
+        "startLine": 74,
+        "startChar": 24,
+        "endLine": 74,
+        "endChar": 78
+      },
+      "revId": "27de4f7d3302bab424ef9460ffcb46be6fb76d73",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
