@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ea0485b8_00a63fb3",
+        "filename": "tvix/eval/src/value/attrs.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2022-08-25T17:16:21Z",
+      "side": 1,
+      "message": "this feels like a very odd name to me (though maybe we\u0027re stuck with it since it\u0027s what the AST uses) - usually I\u0027d expect something like this to be called `get`",
+      "range": {
+        "startLine": 49,
+        "startChar": 7,
+        "endLine": 49,
+        "endChar": 13
+      },
+      "revId": "55e225611ea61111f574366d0cc44d6f1def7a82",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8d927a0d_e7fb1471",
+        "filename": "tvix/eval/src/value/attrs.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 62,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2022-08-25T17:16:21Z",
+      "side": 1,
+      "message": "usually I\u0027d try to avoid the short-circuiting returns here, ideally by just using a `match key` block. I find more linear control flow a lot easier to follow!",
+      "range": {
+        "startLine": 54,
+        "startChar": 16,
+        "endLine": 62,
+        "endChar": 20
+      },
+      "revId": "55e225611ea61111f574366d0cc44d6f1def7a82",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
