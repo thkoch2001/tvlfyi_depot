@@ -9,14 +9,14 @@ let
   nixSrc =
     let
       # branch 2.3-backport-await-users
-      rev = "4510dbc8a6802902cbab6444134659548fffb9b0";
+      rev = "abdc60f49f1104696bac723331d3ed0296d5a784";
     in
     self.fetchFromGitHub
       {
         owner = "tvlfyi";
         repo = "nix";
         inherit rev;
-        hash = "sha256:0vg2xzwc8q1sw20b26qbyd4flnws8668yhi1cg2h6z3jb3wamhr5";
+        hash = "sha256:0c1pmg8y0yafdkliz970k52s92z3qin3xrz3g0n2ss7xcfbg8nzy";
       } // { revCount = 0; shortRev = builtins.substring 0 7 rev; };
 in
 {
