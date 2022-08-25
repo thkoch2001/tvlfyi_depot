@@ -142,6 +142,30 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "04ff4d2e_108c3d46",
+        "filename": "tvix/eval/src/value/attrs.rs",
+        "patchSetId": 3
+      },
+      "lineNbr": 104,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-08-25T15:34:08Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "da6be351_3f3c2a9a",
+      "range": {
+        "startLine": 103,
+        "startChar": 28,
+        "endLine": 104,
+        "endChar": 35
+      },
+      "revId": "058e77bab20db90347ce1d91c41076ef56b61b26",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "d3d02aab_0f62c18f",
@@ -179,6 +203,30 @@
       "side": 1,
       "message": "They contain Rcs, so we could Rc::unwrap_or_clone (not stable yet, but we could do our own) at this point and always pass an owned version to the update function.\n\nI\u0027ll add it to the TODO list!",
       "parentUuid": "d3d02aab_0f62c18f",
+      "range": {
+        "startLine": 128,
+        "startChar": 51,
+        "endLine": 128,
+        "endChar": 67
+      },
+      "revId": "058e77bab20db90347ce1d91c41076ef56b61b26",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1f020e8d_a6b3c113",
+        "filename": "tvix/eval/src/vm.rs",
+        "patchSetId": 3
+      },
+      "lineNbr": 128,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-08-25T15:34:08Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "74ac423f_52b1e38a",
       "range": {
         "startLine": 128,
         "startChar": 51,
