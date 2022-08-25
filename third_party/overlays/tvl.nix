@@ -84,39 +84,10 @@ in
   # https://github.com/edolstra/nix-serve/issues/28
   nix-serve = super.nix-serve.override { nix = super.nix_2_3; };
 
-  # Workaround for srcOnly with separateDebugInfo until
-  # https://github.com/NixOS/nixpkgs/pull/179170 is merged.
-  srcOnly = args: (super.srcOnly args).overrideAttrs (_: {
-    outputs = [ "out" ];
-    separateDebugInfo = false;
-  });
-
   # Avoid builds of mkShell derivations in CI.
   mkShell = super.lib.makeOverridable (args: (super.mkShell args).overrideAttrs (_: {
     passthru = {
       meta.ci.skip = true;
     };
   }));
-
-  # upgrade home-manager until the service-generation fix has landed upstream
-  # https://github.com/nix-community/home-manager/issues/2846
-  home-manager = super.home-manager.overrideAttrs (old: rec {
-    version = assert super.home-manager.version == "2021-12-25"; "2022-04-08";
-    src = self.fetchFromGitHub {
-      owner = "nix-community";
-      repo = "home-manager";
-      rev = "f911ebbec927e8e9b582f2e32e2b35f730074cfc";
-      sha256 = "07qa2qkbjczj3d0m03jpw85hfj35cbjm48xhifz3viy4khjw88vl";
-    };
-  });
-
-  python38 = super.python38.override {
-    packageOverrides = pySelf: pySuper: {
-      backports-zoneinfo = pySuper.backports-zoneinfo.overridePythonAttrs (_: {
-        # Outdated test-data, see https://github.com/pganssle/zoneinfo/pull/115
-        # Can be dropped when https://github.com/NixOS/nixpkgs/pull/170450 lands.
-        doCheck = false;
-      });
-    };
-  };
 }
