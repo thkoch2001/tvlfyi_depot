@@ -16,6 +16,24 @@
       "message": "continuing to seem like we could just make OpJumpIfFalse do this for us",
       "revId": "fd444f3216aed4a5dc3d93d8f5c7015d8c124649",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "35ec0d53_a8b5a4a8",
+        "filename": "tvix/eval/src/compiler.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 349,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2022-08-25T14:42:51Z",
+      "side": 1,
+      "message": "Oh, I don\u0027t think so, because then the stack would be empty if it is false and we jump over the rhs.",
+      "parentUuid": "4ec950f0_601d3c3b",
+      "revId": "fd444f3216aed4a5dc3d93d8f5c7015d8c124649",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
