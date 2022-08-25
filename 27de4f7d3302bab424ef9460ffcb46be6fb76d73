@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "47923256_15a9951c",
+        "filename": "tvix/eval/src/vm.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 74,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2022-08-25T11:04:56Z",
+      "side": 1,
+      "message": "This will give bad error messages if you try adding something that is not a number to a string: E.g. `\"foo\" + null` would complain that it got a string instead of a number even.",
+      "range": {
+        "startLine": 74,
+        "startChar": 24,
+        "endLine": 74,
+        "endChar": 78
+      },
+      "revId": "27de4f7d3302bab424ef9460ffcb46be6fb76d73",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
