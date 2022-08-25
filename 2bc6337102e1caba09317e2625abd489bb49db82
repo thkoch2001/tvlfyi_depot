@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b8ac7d85_9492baf4",
+        "filename": "tvix/eval/src/compiler.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 370,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2022-08-25T14:25:41Z",
+      "side": 1,
+      "message": ".... you know what I\u0027m gonna say here",
+      "revId": "2bc6337102e1caba09317e2625abd489bb49db82",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
