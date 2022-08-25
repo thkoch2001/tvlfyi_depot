@@ -1,0 +1,84 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7a834092_d80dfe84",
+        "filename": "tvix/eval/src/compiler.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 291,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2022-08-25T14:20:49Z",
+      "side": 1,
+      "message": "if we keep the pops in (see below) I think it\u0027d be useful to include them here",
+      "range": {
+        "startLine": 285,
+        "startChar": 1,
+        "endLine": 291,
+        "endChar": 52
+      },
+      "revId": "1f2add152c4a8106a3c28700c64cedd9c141a5f7",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8ca893c3_355d4525",
+        "filename": "tvix/eval/src/compiler.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 303,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2022-08-25T14:20:49Z",
+      "side": 1,
+      "message": "we have to add all these pops for the condition value... why not just make `JUMP_IF_FALSE` pop the value?",
+      "revId": "1f2add152c4a8106a3c28700c64cedd9c141a5f7",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e7ca1aeb_7e31ade6",
+        "filename": "tvix/eval/src/compiler.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 311,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2022-08-25T14:20:49Z",
+      "side": 1,
+      "message": "the purpose of this function wasn\u0027t immediately obvious to me at the callsite - maybe add a short documentation comment?",
+      "revId": "1f2add152c4a8106a3c28700c64cedd9c141a5f7",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ee12d0b8_65e90e66",
+        "filename": "tvix/eval/src/opcode.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2022-08-25T14:20:49Z",
+      "side": 1,
+      "message": "should probably be an actual docstring (with three /s)",
+      "range": {
+        "startLine": 15,
+        "startChar": 4,
+        "endLine": 15,
+        "endChar": 7
+      },
+      "revId": "1f2add152c4a8106a3c28700c64cedd9c141a5f7",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
