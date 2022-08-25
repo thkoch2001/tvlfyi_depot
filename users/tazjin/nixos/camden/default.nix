@@ -74,16 +74,14 @@ lib.fix (self: {
     };
   };
 
-  nix = {
-    maxJobs = lib.mkDefault 4;
-
-    trustedUsers = [ "root" "tazjin" ];
-
-    binaryCaches = [
+  nix.settings = {
+    max-jobs = lib.mkDefault 4;
+    trusted-users = [ "root" "tazjin" ];
+    substituters = [
       "https://tazjin.cachix.org"
     ];
 
-    binaryCachePublicKeys = [
+    trusted-public-keys = [
       "tazjin.cachix.org-1:IZkgLeqfOr1kAZjypItHMg1NoBjm4zX9Zzep8oRSh7U="
     ];
   };

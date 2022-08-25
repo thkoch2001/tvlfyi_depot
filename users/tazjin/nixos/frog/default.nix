@@ -61,10 +61,10 @@ lib.fix (self: {
     };
   };
 
-  nix = {
-    maxJobs = 48;
-    binaryCaches = [ "ssh://nix-ssh@whitby.tvl.fyi" ];
-    binaryCachePublicKeys = [ "cache.tvl.fyi:fd+9d1ceCPvDX/xVhcfv8nAa6njEhAGAEe+oGJDEeoc=" ];
+  nix.settings = {
+    max-jobs = 48;
+    substituters = [ "ssh://nix-ssh@whitby.tvl.fyi" ];
+    trusted-public-keys = [ "cache.tvl.fyi:fd+9d1ceCPvDX/xVhcfv8nAa6njEhAGAEe+oGJDEeoc=" ];
   };
 
   networking = {

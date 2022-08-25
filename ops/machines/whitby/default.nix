@@ -184,17 +184,17 @@ in
 
   nix = {
     nrBuildUsers = 256;
-    maxJobs = lib.mkDefault 64;
-    extraOptions = ''
-      secret-key-files = /run/agenix/nix-cache-priv
-    '';
+    settings = {
+      max-jobs = lib.mkDefault 64;
+      secret-key-files = "/run/agenix/nix-cache-priv";
 
-    trustedUsers = [
-      "grfn"
-      "lukegb"
-      "tazjin"
-      "sterni"
-    ];
+      trusted-users = [
+        "grfn"
+        "lukegb"
+        "tazjin"
+        "sterni"
+      ];
+    };
 
     sshServe = {
       enable = true;
