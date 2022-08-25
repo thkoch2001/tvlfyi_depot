@@ -3,6 +3,29 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "e2e7a2cf_a5f6b6c3",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2022-08-25T17:05:24Z",
+      "side": 1,
+      "message": "It\u0027s a bit unclear to me what you mean by passed up.\n\nAIUI this is about the case where we have to look at the rhs / the value of the entire expression is the same as the right hand side:\n\ntrue \u0026\u0026 x\nfalse || x\n\netc. (This does behave incorrectly on current canon, as I\u0027ve confirmed.)",
+      "range": {
+        "startLine": 10,
+        "startChar": 58,
+        "endLine": 11,
+        "endChar": 22
+      },
+      "revId": "a61353ad21966f454910c93e800e5055565e2e38",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "8c912ef1_6ab29be9",
         "filename": "/PATCHSET_LEVEL",
         "patchSetId": 1
