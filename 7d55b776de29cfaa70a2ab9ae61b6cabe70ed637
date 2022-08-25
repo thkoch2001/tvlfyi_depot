@@ -16,6 +16,24 @@
       "message": "I wouldn\u0027t be surprised if it ends up being more efficient to have a dedicated NotEqual op... but we\u0027ll have to see",
       "revId": "7d55b776de29cfaa70a2ab9ae61b6cabe70ed637",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "13ce708f_33d4e94e",
+        "filename": "tvix/eval/src/compiler.rs",
+        "patchSetId": 3
+      },
+      "lineNbr": 143,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-08-25T15:33:56Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "c0e397c2_6bd75262",
+      "revId": "7d55b776de29cfaa70a2ab9ae61b6cabe70ed637",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
