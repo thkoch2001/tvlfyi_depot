@@ -88,6 +88,24 @@
       "parentUuid": "395fa9d5_44dc7fa6",
       "revId": "f784a887995b2cd824cddd8248aae4751a13bbea",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3290fe0d_dc9767ef",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2022-08-25T10:38:39Z",
+      "side": 1,
+      "message": "you have depot.third_party.gitignoreSource and we have it in lib. I do not know of a way to keep getting this to equal in our src and TVL. With my knowledge there do not exist an abstract \"top\" variable that could abstract out \u0027irma\u0027 and \u0027depot\u0027.\n\nI will abandon this change. We will maintain the diff locally if you do not have a suggestion.",
+      "parentUuid": "71d7dfe9_0603e93e",
+      "revId": "f784a887995b2cd824cddd8248aae4751a13bbea",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
