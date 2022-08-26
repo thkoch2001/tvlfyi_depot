@@ -104,6 +104,30 @@
       },
       "revId": "1162f5b2bcf5f80acc3d234aa4c620e4ff298982",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fbda5abc_e9f09e70",
+        "filename": "tvix/eval/src/vm.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 179,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-08-26T00:14:46Z",
+      "side": 1,
+      "message": "That exists downchain :)",
+      "parentUuid": "ea3cbba4_64da94e2",
+      "range": {
+        "startLine": 179,
+        "startChar": 45,
+        "endLine": 179,
+        "endChar": 81
+      },
+      "revId": "1162f5b2bcf5f80acc3d234aa4c620e4ff298982",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
