@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9d234484_6732d95a",
+        "filename": "tvix/eval/src/compiler.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 470,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2022-08-26T10:08:52Z",
+      "side": 1,
+      "message": "This implementation is incorrect. set ? x.y.z can not be rewritten to set.x.y ? z:\n\n{} ? x.y.z \u003d\u003d false, but in tvix it will at the moment fail with AttributeNotFound { name: \"x\" }\n\nI think the compiler should make use of the OpAttrOrNotFound instruction introduced in cl/6166.",
+      "range": {
+        "startLine": 470,
+        "startChar": 46,
+        "endLine": 470,
+        "endChar": 59
+      },
+      "revId": "dab693331db33c10dac975350d0c884e21bdf16b",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
