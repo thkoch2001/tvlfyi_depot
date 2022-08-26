@@ -18,6 +18,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "4b09360a_64e5f02f",
+        "filename": "tvix/eval/src/compiler.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 168,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-08-26T00:14:30Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "988ee138_ad61c34f",
+      "revId": "1162f5b2bcf5f80acc3d234aa4c620e4ff298982",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "c28ef7eb_895ab29d",
@@ -31,6 +49,30 @@
       "writtenOn": "2022-08-25T17:22:32Z",
       "side": 1,
       "message": "Why is this called IsSet btw? Intuitively I\u0027d expect InSet, is that an AST thing?",
+      "range": {
+        "startLine": 174,
+        "startChar": 23,
+        "endLine": 174,
+        "endChar": 28
+      },
+      "revId": "1162f5b2bcf5f80acc3d234aa4c620e4ff298982",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6eb6dd3a_ad446f15",
+        "filename": "tvix/eval/src/compiler.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 174,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-08-26T00:14:30Z",
+      "side": 1,
+      "message": "Yep, it\u0027s a thing in the AST at the version at which this was implemented: https://docs.rs/rnix/0.10.2/rnix/types/enum.BinOpKind.html#variant.IsSet\n\n(this differs from current rnix head, and we may try to clean this up a bit because rnix-parser maintainers are not afraid of doing breaking changes)",
+      "parentUuid": "c28ef7eb_895ab29d",
       "range": {
         "startLine": 174,
         "startChar": 23,
