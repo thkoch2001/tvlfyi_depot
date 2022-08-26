@@ -22,6 +22,30 @@
       },
       "revId": "dab693331db33c10dac975350d0c884e21bdf16b",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f3509fe4_d670b41b",
+        "filename": "tvix/eval/src/compiler.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 470,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-08-26T14:47:30Z",
+      "side": 1,
+      "message": "Yeah, this is done downchain somewhere, from HEAD:\n\n  tvix-repl\u003e {} ? x.y.z\n  \u003d\u003e false :: bool\n\nWe decided to preserve commits that are introducing bugs, too, to keep a \"how the sausage is made\" history. Since we do know this now, it might make sense to add it to the commit message though!",
+      "parentUuid": "9d234484_6732d95a",
+      "range": {
+        "startLine": 470,
+        "startChar": 46,
+        "endLine": 470,
+        "endChar": 59
+      },
+      "revId": "dab693331db33c10dac975350d0c884e21bdf16b",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
