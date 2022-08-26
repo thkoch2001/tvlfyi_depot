@@ -140,6 +140,30 @@
       },
       "revId": "085bad42cae8910905b18925fef2672496f021ec",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "130cd886_f014f378",
+        "filename": "tvix/eval/src/warnings.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-08-26T17:19:39Z",
+      "side": 1,
+      "message": "The result type is also `EvalResult`, we\u0027re kind of using \"eval\" to mean the whole process of compiling and running the bytecode. Idk. There might be cases where we can emit some warning at runtime, too, lets keep the option open for now.",
+      "parentUuid": "2bcefa36_2f48f81e",
+      "range": {
+        "startLine": 8,
+        "startChar": 11,
+        "endLine": 8,
+        "endChar": 22
+      },
+      "revId": "085bad42cae8910905b18925fef2672496f021ec",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
