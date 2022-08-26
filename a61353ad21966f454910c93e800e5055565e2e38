@@ -39,6 +39,24 @@
       "message": "Is there a way to have a test case for this right now or do we have that later?",
       "revId": "a61353ad21966f454910c93e800e5055565e2e38",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7f7f0307_8f4813b7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-08-26T00:04:15Z",
+      "side": 1,
+      "message": "We don\u0027t have a generic way for testing for eval *errors* (which this would require) even at HEAD, but anyone is very welcome to contribute that.\n\nThe main thing that\u0027s been keeping me from doing the obvious implementation of that is that the `eval-okay-*` tests can all easily be run against upstream nix - but `eval-fail-*` tests cannot, because errors diverge *significantly* between the implementations.\n\nI\u0027d like to discuss this more, fwiw, maybe on IRC.",
+      "parentUuid": "8c912ef1_6ab29be9",
+      "revId": "a61353ad21966f454910c93e800e5055565e2e38",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
