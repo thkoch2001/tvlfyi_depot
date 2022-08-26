@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "51ec1fbe_39e78196",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2022-08-26T19:14:28Z",
+      "side": 1,
+      "message": "Seems quite sensible for now, but we may need to do something a bit more interesting if we want to support windows in some way where maybe the multi backend thing of PathBuf could cause us some grief (since syntactically the paths would need to stay the same).",
+      "revId": "721868ce8895bd14ad2bb600c886b8e2397accad",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
