@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8e71134a_dbb5122d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2022-08-26T16:36:01Z",
+      "side": 1,
+      "message": "if it\u0027s worth anything, I did a big evaluation on this stuff for a work project and ended up settling on `directories` instead - though from a quick glance this seems fine for what we need to use it for.",
+      "revId": "031c2441548731f01efa869ecca2fa8f57a68225",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
