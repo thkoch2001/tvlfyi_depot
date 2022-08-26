@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "00d30a1d_7fe80289",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2022-08-26T15:04:31Z",
+      "side": 1,
+      "message": "it may become at least a little bit worthwhile to bring back *some sort* of const string, to make comparison and hashing cheaper - but benchmarks will tell!",
+      "revId": "1a018bf9140deab633c0578dce8c6b246409bd72",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
