@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5f3568b1_f1515c21",
+        "filename": "tvix/eval/src/compiler.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 492,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2022-08-26T11:17:03Z",
+      "side": 1,
+      "message": "Something that could be benchmarked is if it isn\u0027t better to save an instruction on every OpAttrOrNotFound: Instead of doing\n\n\u003cConstant\u003e\nOpAttrOrNotFound\nOpJumpIfNotFound\n\u003cConstant\u003e\nOpAttrOrNotFound\nOpJumpIfNotFound\nJump\n\u003cConstant\u003e\n…\n\nWe could do\n\n\u003cConstant\u003e\nOpAttrOrNotFound\n\u003cConstant\u003e\nOpAttrOrNotFound\nOpJumpIfNotFound\nJump\n\u003cConstant\u003e\n…\n\ngiven that OpAttrOrNotFound returns NotFound if it finds NotFound on the stack. Possibly this gives a slight benefit if the select chain is not very long and the compiler could opt to only emit the extra jumps if the select chain is bigger than n.",
+      "range": {
+        "startLine": 492,
+        "startChar": 8,
+        "endLine": 492,
+        "endChar": 55
+      },
+      "revId": "2a66e47dbf2cfaa98728cad0459eb55b813996f6",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bda4e1b4_b608d85d",
+        "filename": "tvix/eval/src/compiler.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 530,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2022-08-26T11:17:03Z",
+      "side": 1,
+      "message": "Couldn\u0027t the loop already end on this line?",
+      "revId": "2a66e47dbf2cfaa98728cad0459eb55b813996f6",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
