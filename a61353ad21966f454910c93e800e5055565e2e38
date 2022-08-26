@@ -50,6 +50,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "94421ee6_4ded5951",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2022-08-26T07:49:10Z",
+      "side": 1,
+      "message": "Yep, that\u0027s clear! Without this, you can make the operators return any value, e.g. true \u0026\u0026 \"string\". The new behavior seems to be correct and match how evalBool works in C++ Nix which is used for these operators.\n\nMy question was mostly about the commit description since it\u0027s not clear to me what \"they are not passed further up\" should mean.",
+      "parentUuid": "45c9b950_c69d2831",
+      "range": {
+        "startLine": 10,
+        "startChar": 58,
+        "endLine": 11,
+        "endChar": 22
+      },
+      "revId": "a61353ad21966f454910c93e800e5055565e2e38",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "8c912ef1_6ab29be9",
         "filename": "/PATCHSET_LEVEL",
         "patchSetId": 1
