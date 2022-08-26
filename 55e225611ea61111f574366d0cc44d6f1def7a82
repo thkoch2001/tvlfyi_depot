@@ -24,6 +24,30 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "b1cc2dac_91e6c375",
+        "filename": "tvix/eval/src/value/attrs.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-08-26T00:06:22Z",
+      "side": 1,
+      "message": "Agree, and I\u0027m not sure how to deal with significant divergences between how the AST names things and how I would name them, so far I\u0027ve been sticking to the AST to make things easier to understand.\n\nThere were some things in the rnix version that this chain is based on (it will be updated downchain) which are simply *wrong*, and there it gets very tricky. `select` vs. `get` however is a matter of taste ...\n\nI\u0027ll add a note to compare these again, the rnix folks are not afraid of making breaking changes so maybe we can figure out discrepancies and converge on something.",
+      "parentUuid": "ea0485b8_00a63fb3",
+      "range": {
+        "startLine": 49,
+        "startChar": 7,
+        "endLine": 49,
+        "endChar": 13
+      },
+      "revId": "55e225611ea61111f574366d0cc44d6f1def7a82",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "8d927a0d_e7fb1471",
