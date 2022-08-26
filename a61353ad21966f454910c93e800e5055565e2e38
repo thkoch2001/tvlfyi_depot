@@ -26,6 +26,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "45c9b950_c69d2831",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-08-26T00:12:39Z",
+      "side": 1,
+      "message": "Basically, both arguments to boolean logic operators are strictly coerced to booleans even if they aren\u0027t technically required to be evaluated for the result of the expression.\n\nIf you have an `a \u0026\u0026 b`, and your `a \u003d\u003d true`, then the result of the whole expression might naively be left as the value of `b` (because that is going to be its final value). This means that whatever `b` evaluates to should be a boolean, which is the final result of the expression.\n\nNix will raise the `not a boolean` type error immediately (i.e. *strictly*) when the logical operator is evaluated; to facilitate that we need to assert the type of the argument using a new operation.\n\nThis doesn\u0027t really change the semantics of the language, but it seems to me that in this case the point at which the error is surfaced is significant.\n\nDoes that make sense?",
+      "parentUuid": "e2e7a2cf_a5f6b6c3",
+      "range": {
+        "startLine": 10,
+        "startChar": 58,
+        "endLine": 11,
+        "endChar": 22
+      },
+      "revId": "a61353ad21966f454910c93e800e5055565e2e38",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "8c912ef1_6ab29be9",
         "filename": "/PATCHSET_LEVEL",
         "patchSetId": 1
