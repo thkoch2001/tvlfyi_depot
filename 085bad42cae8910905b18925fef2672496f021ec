@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cb71f841_5caced33",
+        "filename": "tvix/eval/src/compiler.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2022-08-26T16:40:06Z",
+      "side": 1,
+      "message": "maybe this is over-indexing, but my expectation is that basically anything with `Result` in the name is some alias for `std::result::Result` - if I encountered this in the wild I\u0027d probably try to treat it like such and be surprised that it didn\u0027t work. Maybe we can name this `CompilationOutput` or something?\n\nOr maybe I\u0027m being too finnicky, idk.",
+      "range": {
+        "startLine": 28,
+        "startChar": 11,
+        "endLine": 28,
+        "endChar": 28
+      },
+      "revId": "085bad42cae8910905b18925fef2672496f021ec",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "73efb4bb_64ef6ed1",
+        "filename": "tvix/eval/src/compiler.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 597,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2022-08-26T16:40:06Z",
+      "side": 1,
+      "message": "this looks ripe for a `From` impl\n\n\n...that, or `Compiler` should just have `CompilationResult` as a field (I think I prefer this)",
+      "range": {
+        "startLine": 594,
+        "startChar": 7,
+        "endLine": 597,
+        "endChar": 5
+      },
+      "revId": "085bad42cae8910905b18925fef2672496f021ec",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
