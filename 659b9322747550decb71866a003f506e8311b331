@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2eab1ae3_df920310",
+        "filename": "tvix/eval/src/opcode.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 51,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2022-08-26T15:07:44Z",
+      "side": 1,
+      "message": "maybe `OpAttrsTrySelect`?",
+      "revId": "659b9322747550decb71866a003f506e8311b331",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "58738ef2_a9a2f600",
+        "filename": "tvix/eval/src/value/mod.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2022-08-26T15:07:44Z",
+      "side": 1,
+      "message": "i think this is worth being a little bit more clear about *what* exactly is not found",
+      "revId": "659b9322747550decb71866a003f506e8311b331",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
