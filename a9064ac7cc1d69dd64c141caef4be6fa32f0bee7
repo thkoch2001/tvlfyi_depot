@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d0c65850_f76dc1b7",
+        "filename": "tvix/eval/src/main.rs",
+        "patchSetId": 4
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2022-08-26T16:37:29Z",
+      "side": 1,
+      "message": "what\u0027s going on here? Do we need a `?` here or something?\n\nOr if you\u0027re discarding the result, it\u0027s much better to just `let _ \u003d ...`",
+      "range": {
+        "startLine": 40,
+        "startChar": 34,
+        "endLine": 40,
+        "endChar": 40
+      },
+      "revId": "a9064ac7cc1d69dd64c141caef4be6fa32f0bee7",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
