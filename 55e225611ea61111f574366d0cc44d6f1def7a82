@@ -69,6 +69,30 @@
       },
       "revId": "55e225611ea61111f574366d0cc44d6f1def7a82",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "846de277_ee44a9be",
+        "filename": "tvix/eval/src/value/attrs.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 62,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-08-26T00:08:32Z",
+      "side": 1,
+      "message": "I\u0027m not sure if \"linear\" is the right word here, but I think I get what you mean :p fixing downchain!",
+      "parentUuid": "8d927a0d_e7fb1471",
+      "range": {
+        "startLine": 54,
+        "startChar": 16,
+        "endLine": 62,
+        "endChar": 20
+      },
+      "revId": "55e225611ea61111f574366d0cc44d6f1def7a82",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
