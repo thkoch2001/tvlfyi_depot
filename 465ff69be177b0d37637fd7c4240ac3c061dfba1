@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fae66689_4e7f39de",
+        "filename": "tvix/eval/src/main.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-08-26T15:25:00Z",
+      "side": 1,
+      "message": "iirc there is some kind of bug in this, but it is fixed later on",
+      "revId": "465ff69be177b0d37637fd7c4240ac3c061dfba1",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
