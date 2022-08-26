@@ -24,6 +24,54 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "4f772b05_6ec123b4",
+        "filename": "tvix/eval/src/compiler.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-08-26T17:18:33Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "cb71f841_5caced33",
+      "range": {
+        "startLine": 28,
+        "startChar": 11,
+        "endLine": 28,
+        "endChar": 28
+      },
+      "revId": "085bad42cae8910905b18925fef2672496f021ec",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a002d1cd_e6e9cd52",
+        "filename": "tvix/eval/src/compiler.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-08-26T17:18:33Z",
+      "side": 1,
+      "message": "Renaming downchain!",
+      "parentUuid": "cb71f841_5caced33",
+      "range": {
+        "startLine": 28,
+        "startChar": 11,
+        "endLine": 28,
+        "endChar": 28
+      },
+      "revId": "085bad42cae8910905b18925fef2672496f021ec",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "73efb4bb_64ef6ed1",
@@ -37,6 +85,30 @@
       "writtenOn": "2022-08-26T16:40:06Z",
       "side": 1,
       "message": "this looks ripe for a `From` impl\n\n\n...that, or `Compiler` should just have `CompilationResult` as a field (I think I prefer this)",
+      "range": {
+        "startLine": 594,
+        "startChar": 7,
+        "endLine": 597,
+        "endChar": 5
+      },
+      "revId": "085bad42cae8910905b18925fef2672496f021ec",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1b774b00_c1010b2d",
+        "filename": "tvix/eval/src/compiler.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 597,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-08-26T17:18:33Z",
+      "side": 1,
+      "message": "Having the result as a field makes all the accesses a bit more annoying, but yeah there\u0027s some room for improvement here. I\u0027d like to refactor it after the thunk \u0026 closure stuff has landed, because that touches the structure of the compiler quite a bit. Adding it to the list!",
+      "parentUuid": "73efb4bb_64ef6ed1",
       "range": {
         "startLine": 594,
         "startChar": 7,
