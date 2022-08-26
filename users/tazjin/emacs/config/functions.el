@@ -293,6 +293,16 @@ the GPG agent correctly."
 
 (add-to-list 'project-find-functions #'find-depot-project)
 
+(defun find-cargo-project (dir)
+  "Attempt to find the current project in `project-find-functions'
+by looking for a `Cargo.toml' file."
+  (unless (equal "/" dir)
+    (if (f-exists-p (f-join dir "Cargo.toml"))
+        (cons 'transient dir)
+      (find-cargo-project (f-parent dir)))))
+
+(add-to-list 'project-find-functions #'find-cargo-project)
+
 (defun magit-find-file-worktree ()
   (interactive)
   "Find a file in the current (ma)git worktree."
