@@ -16,6 +16,24 @@
       "message": "I\u0027ve never really been convinced of the value of doing something like this if you\u0027re not going to use it to guarantee that you can `std::mem::transmute`, tbh - without profiling, this is at best just noise and at worst potentially preventing the compiler from doing something even more optimal for you (though the last point may not actually ever happen). I used to push for it in review, but these days I try to leave any annotations out unless I\u0027ve determined they\u0027re actually necessary.\n\n+2 since I\u0027m sure you\u0027d rather move on with your life, but leaving unresolved in case you\u0027re convinced we shouldn\u0027t do this.",
       "revId": "b2a18e96e2378dd35b9853ce1a029b035399d0d1",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "df7438e1_7ec19a7c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-08-27T09:26:58Z",
+      "side": 1,
+      "message": "I think the situation is that this has no practical effect on the output of the compiler right now, but I see two benefits:\n\n- If someone changes one of these wrapper structs to do something that makes it impossible for the representation to be transparent, the compiler will yell at them. Essentially something like a `#[warn(not_transparentable)]`, which should give people pause.\n\n- It communicates the intent of \"this is just a compile-time only marker type\" more clearly to the readers.\n\nMy opinion isn\u0027t set in stone and I\u0027m happy to argue about it further (though not on this CL) 😊",
+      "parentUuid": "1117f592_a8ced45a",
+      "revId": "b2a18e96e2378dd35b9853ce1a029b035399d0d1",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
