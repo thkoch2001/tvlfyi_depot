@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1117f592_a8ced45a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2022-08-27T01:04:52Z",
+      "side": 1,
+      "message": "I\u0027ve never really been convinced of the value of doing something like this if you\u0027re not going to use it to guarantee that you can `std::mem::transmute`, tbh - without profiling, this is at best just noise and at worst potentially preventing the compiler from doing something even more optimal for you (though the last point may not actually ever happen). I used to push for it in review, but these days I try to leave any annotations out unless I\u0027ve determined they\u0027re actually necessary.\n\n+2 since I\u0027m sure you\u0027d rather move on with your life, but leaving unresolved in case you\u0027re convinced we shouldn\u0027t do this.",
+      "revId": "b2a18e96e2378dd35b9853ce1a029b035399d0d1",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
