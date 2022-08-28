@@ -24,6 +24,30 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "1218c3d8_410ccc01",
+        "filename": "tvix/eval/src/compiler.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 739,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-08-28T17:50:21Z",
+      "side": 1,
+      "message": "I don\u0027t remember why it was there initially, but it doesn\u0027t exist anymore at HEAD (this is now a method on the `Scope` type).",
+      "parentUuid": "2620eaca_5948e10d",
+      "range": {
+        "startLine": 739,
+        "startChar": 12,
+        "endLine": 739,
+        "endChar": 17
+      },
+      "revId": "140abe106c5b7d847cc6444bbb113c9fa86cf504",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "ada8879b_3c86af6e",
@@ -37,6 +61,30 @@
       "writtenOn": "2022-08-28T15:48:32Z",
       "side": 1,
       "message": "maybe we should make scope.locals a hashmap?",
+      "range": {
+        "startLine": 741,
+        "startChar": 8,
+        "endLine": 745,
+        "endChar": 9
+      },
+      "revId": "140abe106c5b7d847cc6444bbb113c9fa86cf504",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ee99c9b4_d4d5ef01",
+        "filename": "tvix/eval/src/compiler.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 745,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-08-28T17:50:21Z",
+      "side": 1,
+      "message": "No, that doesn\u0027t work - the ordering is very important and it becomes more and more important as more scope features are added on. The index of the local in the list is (more or less) a \"simulation\" of the runtime index of the corresponding value.\n\nAt most a secondary index structure ((name,depth) -\u003e local) could be used, but that\u0027d be kinda difficult to get right and I think the scans of the list that do occur (the number of scans decreases as the compiler gets more complex and starts directly tracking insertion indexes etc.) is palatable.",
+      "parentUuid": "ada8879b_3c86af6e",
       "range": {
         "startLine": 741,
         "startChar": 8,
