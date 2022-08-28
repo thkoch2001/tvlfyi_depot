@@ -16,6 +16,7 @@ let
   Libraries = defun [ (attrs any) (list drv) ];
 
   pythonPackages = pkgs.python310Packages;
+  buildPythonPackages = pkgs.buildPackages.python310Packages;
   python = pythonPackages.python;
 
   python3 =
@@ -25,7 +26,7 @@ let
     }:
     let
     in
-    pkgs.writers.makePythonWriter python pythonPackages name {
+    pkgs.writers.makePythonWriter python pythonPackages buildPythonPackages name {
       libraries = Libraries libraries pythonPackages;
       flakeIgnore =
         let
