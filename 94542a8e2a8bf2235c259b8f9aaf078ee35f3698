@@ -45,6 +45,29 @@
       },
       "revId": "94542a8e2a8bf2235c259b8f9aaf078ee35f3698",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1cdeb6ab_61f36d93",
+        "filename": "tvix/eval/src/compiler.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 183,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2022-08-28T09:06:37Z",
+      "side": 1,
+      "message": "If we drop support for __findFile and __nixPath this can happen at the same time as HOME path resolution – both would \"just\" depend on the environment.",
+      "range": {
+        "startLine": 183,
+        "startChar": 74,
+        "endLine": 183,
+        "endChar": 81
+      },
+      "revId": "94542a8e2a8bf2235c259b8f9aaf078ee35f3698",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
