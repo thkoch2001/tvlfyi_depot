@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "22476599_4cfb1abc",
+        "filename": "tvix/eval/src/tests/mod.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2022-08-28T09:11:37Z",
+      "side": 1,
+      "message": "Why not set the code path? For nix_tests resolving paths correctly will be required as more of the language is implemented (e.g. import).",
+      "range": {
+        "startLine": 14,
+        "startChar": 34,
+        "endLine": 14,
+        "endChar": 38
+      },
+      "revId": "c2ed6fe5cd20635f4d5f98a82ed3bb3fbc480aa3",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
