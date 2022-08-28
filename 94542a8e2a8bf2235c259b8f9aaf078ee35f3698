@@ -3,6 +3,29 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "5822613a_eb7abfda",
+        "filename": "tvix/eval/src/compiler.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 163,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2022-08-28T09:03:55Z",
+      "side": 1,
+      "message": "I guess we need to note that this will impose the limitation that we can\u0027t separate compilation and execution in a meaningful way because otherwise the path resolution depending on e.g. HOME may become invalid.\n\nNot sure how interesting having a bitcode-compiled nixpkgs in store could be in the long term.",
+      "range": {
+        "startLine": 163,
+        "startChar": 7,
+        "endLine": 163,
+        "endChar": 19
+      },
+      "revId": "94542a8e2a8bf2235c259b8f9aaf078ee35f3698",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "ccb68579_ca970d3f",
         "filename": "tvix/eval/src/compiler.rs",
         "patchSetId": 1
