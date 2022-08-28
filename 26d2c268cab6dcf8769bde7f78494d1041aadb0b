@@ -22,6 +22,30 @@
       },
       "revId": "26d2c268cab6dcf8769bde7f78494d1041aadb0b",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ee3a171b_8501393f",
+        "filename": "tvix/eval/src/compiler.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-08-28T17:47:14Z",
+      "side": 1,
+      "message": "These just exist at compile time, they\u0027re actually still `String` at HEAD. We can measure whether switching that has any impact, but it could actually be slower as they are sometimes constructed from already owned String values. Either way I expect the impact to be small, but putting it on the list!",
+      "parentUuid": "be869544_852e1d42",
+      "range": {
+        "startLine": 40,
+        "startChar": 10,
+        "endLine": 40,
+        "endChar": 16
+      },
+      "revId": "26d2c268cab6dcf8769bde7f78494d1041aadb0b",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
