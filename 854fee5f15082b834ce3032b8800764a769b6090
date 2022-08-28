@@ -18,6 +18,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "abc99ce6_2572a568",
+        "filename": "tvix/eval/src/compiler.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 726,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-08-28T17:39:59Z",
+      "side": 1,
+      "message": "See the next line, it\u0027s the operand to the instruction (so that the runtime doesn\u0027t need to resolve *which* things belong to which scope)",
+      "parentUuid": "001d3ef7_1e470a86",
+      "revId": "854fee5f15082b834ce3032b8800764a769b6090",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "a59dcb41_d3cb3ba4",
@@ -31,6 +49,30 @@
       "writtenOn": "2022-08-28T15:42:00Z",
       "side": 1,
       "message": "maybe just make it a named field? then this can be a docstring?",
+      "range": {
+        "startLine": 66,
+        "startChar": 25,
+        "endLine": 66,
+        "endChar": 51
+      },
+      "revId": "854fee5f15082b834ce3032b8800764a769b6090",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f67b79fa_44fa7174",
+        "filename": "tvix/eval/src/opcode.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 66,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-08-28T17:39:59Z",
+      "side": 1,
+      "message": "This becomes a typed field later (indicating what kind of thing it is, not just usize), and there\u0027s a backlog item for appropriately documenting all opcode behaviours in docstrings here, so we\u0027ll do that.",
+      "parentUuid": "a59dcb41_d3cb3ba4",
       "range": {
         "startLine": 66,
         "startChar": 25,
