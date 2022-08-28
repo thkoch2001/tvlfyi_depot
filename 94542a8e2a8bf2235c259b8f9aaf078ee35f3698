@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ccb68579_ca970d3f",
+        "filename": "tvix/eval/src/compiler.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 166,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2022-08-28T09:00:25Z",
+      "side": 1,
+      "message": "This makes the code a bit confusing to read because it shadows the `path` argument later, but inside the code determining the let path is still used.",
+      "range": {
+        "startLine": 166,
+        "startChar": 12,
+        "endLine": 166,
+        "endChar": 16
+      },
+      "revId": "94542a8e2a8bf2235c259b8f9aaf078ee35f3698",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
