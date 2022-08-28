@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fe4b5804_df32b445",
+        "filename": "tvix/eval/src/tests/tvix_tests/eval-okay-recursive-let.nix",
+        "patchSetId": 2
+      },
+      "lineNbr": 4,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2022-08-28T18:56:17Z",
+      "side": 1,
+      "message": "might be worth changing the order here",
+      "revId": "3806371d3de67e92a44d20e3473c55da55e27c97",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
