@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "94ebc619_7e0f027c",
+        "filename": "tvix/eval/src/compiler.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2022-08-28T10:43:41Z",
+      "side": 1,
+      "message": "Not doc comments.",
+      "range": {
+        "startLine": 35,
+        "startChar": 0,
+        "endLine": 35,
+        "endChar": 2
+      },
+      "revId": "20f5f036cfb150fd456c7457a70f28d186e04161",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1ac20f80_65b755dd",
+        "filename": "tvix/eval/src/compiler.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 56,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2022-08-28T10:43:41Z",
+      "side": 1,
+      "message": "Why do we need this here as well as in the Locals themselves?",
+      "range": {
+        "startLine": 56,
+        "startChar": 4,
+        "endLine": 56,
+        "endChar": 15
+      },
+      "revId": "20f5f036cfb150fd456c7457a70f28d186e04161",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
