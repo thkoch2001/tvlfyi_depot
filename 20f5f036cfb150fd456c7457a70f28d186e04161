@@ -24,6 +24,30 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "69305396_15b52d4b",
+        "filename": "tvix/eval/src/compiler.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-08-28T11:02:07Z",
+      "side": 1,
+      "message": "Fixed downchain.",
+      "parentUuid": "94ebc619_7e0f027c",
+      "range": {
+        "startLine": 35,
+        "startChar": 0,
+        "endLine": 35,
+        "endChar": 2
+      },
+      "revId": "20f5f036cfb150fd456c7457a70f28d186e04161",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "1ac20f80_65b755dd",
@@ -37,6 +61,30 @@
       "writtenOn": "2022-08-28T10:43:41Z",
       "side": 1,
       "message": "Why do we need this here as well as in the Locals themselves?",
+      "range": {
+        "startLine": 56,
+        "startChar": 4,
+        "endLine": 56,
+        "endChar": 15
+      },
+      "revId": "20f5f036cfb150fd456c7457a70f28d186e04161",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6d5c208f_d855da1a",
+        "filename": "tvix/eval/src/compiler.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 56,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-08-28T11:02:07Z",
+      "side": 1,
+      "message": "It\u0027s different things. The scope depths of the `Locals` struct (later renamed to `Scope`) tracks how deeply nested the entire scope is, a Local tracks the scope at which it was defined. This means that Locals::scope_depth can be deeper than the `depth` of a local in the tracking vector.\n\nYou\u0027ll see how this fits together!",
+      "parentUuid": "1ac20f80_65b755dd",
       "range": {
         "startLine": 56,
         "startChar": 4,
