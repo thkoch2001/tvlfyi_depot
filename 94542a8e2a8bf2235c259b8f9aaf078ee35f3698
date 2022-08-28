@@ -24,6 +24,30 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "b5b4ecbf_4e2480a8",
+        "filename": "tvix/eval/src/compiler.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 163,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-08-28T10:56:18Z",
+      "side": 1,
+      "message": "Yeah, this is a big concern and I do want to eventually be able to have a byte-compiled format. There\u0027s a commit down the chain that moves over to the new `rnix`, at which point this whole path handling breaks as the representation is completely different, and I\u0027ve not fixed it up on HEAD yet because I\u0027m thinking about the compiler just leaving \"path fragment\" (similar to string interpolation) and then instantiating it at runtime.",
+      "parentUuid": "5822613a_eb7abfda",
+      "range": {
+        "startLine": 163,
+        "startChar": 7,
+        "endLine": 163,
+        "endChar": 19
+      },
+      "revId": "94542a8e2a8bf2235c259b8f9aaf078ee35f3698",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "ccb68579_ca970d3f",
@@ -47,6 +71,30 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "6519ef51_e9d6efce",
+        "filename": "tvix/eval/src/compiler.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 166,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-08-28T10:56:18Z",
+      "side": 1,
+      "message": "Fortunately this code is gone downstream!",
+      "parentUuid": "ccb68579_ca970d3f",
+      "range": {
+        "startLine": 166,
+        "startChar": 12,
+        "endLine": 166,
+        "endChar": 16
+      },
+      "revId": "94542a8e2a8bf2235c259b8f9aaf078ee35f3698",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "1cdeb6ab_61f36d93",
@@ -60,6 +108,30 @@
       "writtenOn": "2022-08-28T09:06:37Z",
       "side": 1,
       "message": "If we drop support for __findFile and __nixPath this can happen at the same time as HOME path resolution – both would \"just\" depend on the environment.",
+      "range": {
+        "startLine": 183,
+        "startChar": 74,
+        "endLine": 183,
+        "endChar": 81
+      },
+      "revId": "94542a8e2a8bf2235c259b8f9aaf078ee35f3698",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "489f5e0f_2c5842ed",
+        "filename": "tvix/eval/src/compiler.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 183,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-08-28T10:56:18Z",
+      "side": 1,
+      "message": "See above",
+      "parentUuid": "1cdeb6ab_61f36d93",
       "range": {
         "startLine": 183,
         "startChar": 74,
