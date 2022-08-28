@@ -16,6 +16,24 @@
       "message": "might be worth changing the order here",
       "revId": "3806371d3de67e92a44d20e3473c55da55e27c97",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c8f10174_1f344aa6",
+        "filename": "tvix/eval/src/tests/tvix_tests/eval-okay-recursive-let.nix",
+        "patchSetId": 2
+      },
+      "lineNbr": 4,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-08-28T23:36:37Z",
+      "side": 1,
+      "message": "in what way?\n\nIf you want to test something like a and b being defined after c, that is a LOT further down the chain and requires a lot more machinery that has its own test. This one is just about recursing to the same scope, maybe the test should have a different name.",
+      "parentUuid": "fe4b5804_df32b445",
+      "revId": "3806371d3de67e92a44d20e3473c55da55e27c97",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
