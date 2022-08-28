@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "001d3ef7_1e470a86",
+        "filename": "tvix/eval/src/compiler.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 726,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2022-08-28T15:42:00Z",
+      "side": 1,
+      "message": "if we only care if it\u0027s \u003e 0, why fully track it? eg, why not just make this a boolean which we set to true?",
+      "revId": "854fee5f15082b834ce3032b8800764a769b6090",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a59dcb41_d3cb3ba4",
+        "filename": "tvix/eval/src/opcode.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 66,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2022-08-28T15:42:00Z",
+      "side": 1,
+      "message": "maybe just make it a named field? then this can be a docstring?",
+      "range": {
+        "startLine": 66,
+        "startChar": 25,
+        "endLine": 66,
+        "endChar": 51
+      },
+      "revId": "854fee5f15082b834ce3032b8800764a769b6090",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
