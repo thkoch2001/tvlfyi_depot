@@ -52,6 +52,24 @@
       "parentUuid": "c8f10174_1f344aa6",
       "revId": "3806371d3de67e92a44d20e3473c55da55e27c97",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c9578645_2789c7f5",
+        "filename": "tvix/eval/src/tests/tvix_tests/eval-okay-recursive-let.nix",
+        "patchSetId": 2
+      },
+      "lineNbr": 4,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-08-29T20:08:08Z",
+      "side": 1,
+      "message": "Renamed to `eval-okay-let-sibling-access`.",
+      "parentUuid": "5a2dd68e_b6d25edc",
+      "revId": "3806371d3de67e92a44d20e3473c55da55e27c97",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
