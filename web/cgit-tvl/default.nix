@@ -19,6 +19,7 @@ let
     enable-blame=1
     mimetype-file=${pkgs.mime-types}/etc/mime.types
     logo=https://static.tvl.fyi/${depot.web.static.drvHash}/logo-animated.svg
+    snapshots=tar.gz
 
     # Repository configuration
     repo.url=depot
