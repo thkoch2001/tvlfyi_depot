@@ -8,6 +8,7 @@ use crate::{
     errors::{Error, ErrorKind, EvalResult},
     opcode::{ConstantIdx, Count, JumpOffset, OpCode, StackIdx},
     value::{Closure, Lambda, NixAttrs, NixList, Value},
+    upvalues::UpvalueCarrier,
 };
 
 #[cfg(feature = "disassembler")]
