@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "830e7649_50f8601d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2022-08-29T14:08:22Z",
+      "side": 1,
+      "message": "I assume this later gains the ability to distinguish between useless and non-useless (after a with) inherits?",
+      "revId": "62a9e7f78a995490135f09af08ee0d7356bfc0f7",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
