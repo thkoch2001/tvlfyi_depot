@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b9235f98_033e5e2a",
+        "filename": "web/cgit-tvl/default.nix",
+        "patchSetId": 3
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2022-08-29T17:14:55Z",
+      "side": 1,
+      "message": "I think tar and gzip need to be in PATH for this to work, relatively sure this would not be the case in practice (you\u0027d need to test). PATH could be set via the thttpd patch probably.",
+      "revId": "d26a65da314259355e6bd65d6e7230a9687f0355",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
