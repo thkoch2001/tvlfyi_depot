@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "415c1cb8_3b2581aa",
+        "filename": "tvix/eval/src/compiler.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 362,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2022-08-30T17:31:06Z",
+      "side": 1,
+      "message": "Add a test for multiple attrsets and inherit from scope combined?",
+      "revId": "e68a6ca03599c7d22c2648007b18ebc2c2b17700",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fa1e454c_0b57405f",
+        "filename": "tvix/eval/src/compiler.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 378,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2022-08-30T17:31:06Z",
+      "side": 1,
+      "message": "This will be especially terrible for stuff like\n\n    inherit (callPackage ../development/libraries/boost { inherit (buildPackages) boost-\nbuild; })\n      boost155\n      boost159\n      boost160\n      # …\n      boost179\n    ;\n\nBut I think it\u0027s good to keep things as they are right now, since the main problem of this kind of compilation could also be addressed by floating the `from` expression into a let without having a subset operation.",
+      "revId": "e68a6ca03599c7d22c2648007b18ebc2c2b17700",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c4bde1f4_e60cbd81",
+        "filename": "tvix/eval/src/tests/tvix_tests/eval-okay-attrs-inherit.nix",
+        "patchSetId": 2
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2022-08-30T17:31:06Z",
+      "side": 1,
+      "message": "don\u0027t we have a test that\u0027s basically the same already from cl/6212? Would rather inherit from an attrset via an identifier here.",
+      "revId": "e68a6ca03599c7d22c2648007b18ebc2c2b17700",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
