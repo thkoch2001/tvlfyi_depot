@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4af28ebc_d3a5b94d",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2022-08-30T11:05:35Z",
+      "side": 1,
+      "message": "Are there plans to use this from rust unit tests in the future?",
+      "revId": "36748fe4f65d85049c5aec2df4828668803ad30b",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
