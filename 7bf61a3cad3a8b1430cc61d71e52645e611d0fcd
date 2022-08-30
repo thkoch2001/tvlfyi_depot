@@ -16,6 +16,24 @@
       "message": "I guess it would be nice if this shared actual code with the attribute set inherit eventually.",
       "revId": "7bf61a3cad3a8b1430cc61d71e52645e611d0fcd",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a45bc38c_3d2a365c",
+        "filename": "tvix/eval/src/compiler.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 750,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-08-30T21:39:14Z",
+      "side": 1,
+      "message": "The inheriting specifically diverges quite a bit, but there\u0027s some more code that gets shared between let \u0026 inherit later on (for example, attrsets accidentally grew a second scope resolution function which had a bug, that is later eliminated).",
+      "parentUuid": "28106fa3_6891a515",
+      "revId": "7bf61a3cad3a8b1430cc61d71e52645e611d0fcd",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
