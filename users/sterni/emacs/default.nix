@@ -1,10 +1,18 @@
 { depot, pkgs, ... }:
 
 let
-  inherit (pkgs.emacsNativeComp.pkgs) withPackages;
-
-  emacs = withPackages (epkgs: [
-    epkgs.bqn-mode
+  # emacsPgtkNativeComp is defined in emacs-overlay
+  emacs = (pkgs.emacsPackagesFor pkgs.emacsPgtkNativeComp).withPackages (epkgs: [
+    (epkgs.bqn-mode.overrideAttrs (old: {
+      patches = old.patches or [ ] ++ [
+        # emacs HEAD doesn't like a missing require in bqn-mode
+        (pkgs.fetchpatch {
+          name = "bqn-mode-emacs-head.patch";
+          url = "https://github.com/museoa/bqn-mode/pull/9/commits/b62d7aff12201a079f60c1842d86610b9331bf53.patch";
+          sha256 = "1i5f2w7rcd9vx8x50ydwqnkxd5c824p5kxj2c00kq3lmiczhr41a";
+        })
+      ];
+    }))
     #epkgs.elpaPackages.ada-mode
     epkgs.elpaPackages.rainbow-mode
     epkgs.elpaPackages.undo-tree
