@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "68bbea46_b443f8cf",
+        "filename": "tvix/eval/src/disassembler.rs",
+        "patchSetId": 4
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2022-08-30T13:00:15Z",
+      "side": 1,
+      "message": "I guess this could be passed in from disassemble_chunk once?",
+      "range": {
+        "startLine": 41,
+        "startChar": 8,
+        "endLine": 41,
+        "endChar": 18
+      },
+      "revId": "c174b22da5a7b1c231516253b7476bcaeceade87",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
