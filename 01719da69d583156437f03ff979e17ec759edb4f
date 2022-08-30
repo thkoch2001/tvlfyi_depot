@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b236693b_e2b31130",
+        "filename": "tvix/eval/src/compiler.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 376,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2022-08-30T17:08:35Z",
+      "side": 1,
+      "message": "what\u0027s this constant doing?",
+      "revId": "01719da69d583156437f03ff979e17ec759edb4f",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
