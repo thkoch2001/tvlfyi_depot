@@ -20,6 +20,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "9fe68a33_221369b0",
+        "filename": "tvix/eval/src/compiler.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 362,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-08-30T21:38:27Z",
+      "side": 1,
+      "message": "What do you mean by \"multiple attrsets\" here?",
+      "parentUuid": "415c1cb8_3b2581aa",
+      "revId": "e68a6ca03599c7d22c2648007b18ebc2c2b17700",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "fa1e454c_0b57405f",
         "filename": "tvix/eval/src/compiler.rs",
         "patchSetId": 2
@@ -31,6 +49,24 @@
       "writtenOn": "2022-08-30T17:31:06Z",
       "side": 1,
       "message": "This will be especially terrible for stuff like\n\n    inherit (callPackage ../development/libraries/boost { inherit (buildPackages) boost-\nbuild; })\n      boost155\n      boost159\n      boost160\n      # …\n      boost179\n    ;\n\nBut I think it\u0027s good to keep things as they are right now, since the main problem of this kind of compilation could also be addressed by floating the `from` expression into a let without having a subset operation.",
+      "revId": "e68a6ca03599c7d22c2648007b18ebc2c2b17700",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6e4c4349_88216861",
+        "filename": "tvix/eval/src/compiler.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 378,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-08-30T21:38:27Z",
+      "side": 1,
+      "message": "My gut feeling is that that floating would be less performant than resolving multiple of these in one operation and assigning identifiers, as the floated values may be thunks themselves and we might add a layer of unnecesary thunks doing this.\n\nLets benchmark and not speculate when we get there, adding your comment to the list :)",
+      "parentUuid": "fa1e454c_0b57405f",
       "revId": "e68a6ca03599c7d22c2648007b18ebc2c2b17700",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
@@ -48,6 +84,24 @@
       "writtenOn": "2022-08-30T17:31:06Z",
       "side": 1,
       "message": "don\u0027t we have a test that\u0027s basically the same already from cl/6212? Would rather inherit from an attrset via an identifier here.",
+      "revId": "e68a6ca03599c7d22c2648007b18ebc2c2b17700",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "dd556fd2_53029c10",
+        "filename": "tvix/eval/src/tests/tvix_tests/eval-okay-attrs-inherit.nix",
+        "patchSetId": 2
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-08-30T21:38:27Z",
+      "side": 1,
+      "message": "It grows a few more tests for this later on, but there\u0027s also quite a few bugs at this point, I\u0027ll add a note to re-evaluate the tests after the scope stuff is done. Feel free to produce cursed snippets and send them to me!",
+      "parentUuid": "c4bde1f4_e60cbd81",
       "revId": "e68a6ca03599c7d22c2648007b18ebc2c2b17700",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
