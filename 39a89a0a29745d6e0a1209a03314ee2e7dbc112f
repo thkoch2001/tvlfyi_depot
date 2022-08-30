@@ -16,6 +16,24 @@
       "message": "This case won\u0027t benefit from Empty / KV optimization. I guess the latter is very unlikely but there is a plausible implementation for an optionalAttr function like this:\n\n    cond: key: value: { ${if cond then key else null} \u003d value; }",
       "revId": "39a89a0a29745d6e0a1209a03314ee2e7dbc112f",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "901c44f9_cdd911e2",
+        "filename": "tvix/eval/src/value/attrs.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 206,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-08-30T00:45:48Z",
+      "side": 1,
+      "message": "Yeah, it could also be used only for some keys of an attribute set, so optimising against this case right now seems like a little bit too much. I don\u0027t think it will be that relevant.",
+      "parentUuid": "16579976_e3267556",
+      "revId": "39a89a0a29745d6e0a1209a03314ee2e7dbc112f",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
