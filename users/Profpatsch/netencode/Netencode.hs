@@ -39,17 +39,31 @@ import Text.Show.Deriving
 import Prelude hiding (sum)
 import Data.Maybe (fromMaybe)
 
+
+-- | Netencode type base functor.
+--
+-- Recursive elements have a @rec@.
 data TF rec
   = Unit
+  -- ^ Unit value
   | N1 Bool
+  -- ^ Boolean (2^1)
   | N3 Word8
+  -- ^ Byte (2^3)
   | N6 Word64
+  -- ^ 64-bit Natural (2^6)
   | I6 Int64
+  -- ^ 64-bit Integer (2^6)
   | Text Text
+  -- ^ Unicode Text
   | Bytes ByteString
+  -- ^ Arbitrary Bytestring
   | Sum (Tag Text rec)
+  -- ^ A constructor of a(n open) Sum
   | Record (NEMap Text rec)
+  -- ^ Record
   | List [rec]
+  -- ^ List
   deriving stock (Show, Eq, Functor)
 
 instance Eq1 TF where
@@ -65,6 +79,7 @@ instance Eq1 TF where
   liftEq eq (List xs) (List xs') = liftEq eq xs xs'
   liftEq _ _ _ = False
 
+-- | A tagged value
 data Tag tag val = Tag
   { tagTag :: tag,
     tagVal :: val
@@ -74,43 +89,57 @@ data Tag tag val = Tag
 $(Text.Show.Deriving.deriveShow1 ''Tag)
 $(Text.Show.Deriving.deriveShow1 ''TF)
 
+-- | The Netencode type
 newtype T = T (Fix TF)
   deriving stock (Eq, Show)
 
+-- | Create a unit
 unit :: T
 unit = T $ Fix Unit
 
+-- | Create a boolean
 n1 :: Bool -> T
 n1 = T . Fix . N1
 
+-- | Create a byte
 n3 :: Word8 -> T
 n3 = T . Fix . N3
 
+-- | Create a 64-bit natural
 n6 :: Word64 -> T
 n6 = T . Fix . N6
 
+-- | Create a 64-bit integer
 i6 :: Int64 -> T
 i6 = T . Fix . I6
 
+-- | Create a UTF-8 unicode text
 text :: Text -> T
 text = T . Fix . Text
 
+-- | Create an arbitrary bytestring
 bytes :: ByteString -> T
 bytes = T . Fix . Bytes
 
+-- | Create a tagged value from a tag name and a value
 tag :: Text -> T -> T
 tag key val = T $ Fix $ Sum $ coerce @(Tag Text T) @(Tag Text (Fix TF)) $ Tag key val
 
+-- | Create a record from a non-empty map
 record :: NEMap Text T -> T
 record = T . Fix . Record . coerce @(NEMap Text T) @(NEMap Text (Fix TF))
 
+-- | Create a list
 list :: [T] -> T
 list = T . Fix . List . coerce @[T] @([Fix TF])
 
+-- Stable encoding of a netencode value. Record keys will be sorted lexicographically ascending.
 netencodeEncodeStable :: T -> Builder
 netencodeEncodeStable (T fix) = Fix.foldFix (netencodeEncodeStableF id) fix
 
--- Stable encoding of a netencode value. Record keys will be sorted lexicographically ascending.
+-- Stable encoding of a netencode functor value. Record keys will be sorted lexicographically ascending.
+--
+-- The given function is used for encoding the recursive values.
 netencodeEncodeStableF :: (rec -> Builder) -> TF rec -> Builder
 netencodeEncodeStableF inner tf = builder go
   where
@@ -156,18 +185,23 @@ instance IsString BL where
           & Semi.Sum
       )
 
+-- | Retrieve the builder
 builder :: BL -> Builder
 builder (BL (b, _)) = b
 
+-- | Retrieve the bytestring length
 builderLen :: BL -> Natural
 builderLen (BL (_, len)) = Semi.getSum $ len
 
+-- | Take a 'BL' and create a new 'BL' that represents the length as a decimal integer
 builderLenDec :: BL -> BL
 builderLenDec (BL (_, len)) =
   let b = Builder.intDec $ (len & Semi.getSum & fromIntegral @Natural @Int)
    in b & fromBuilder
 
--- | Not efficient, goes back to a lazy bytestring to get the length
+-- | Create a 'BL' from a 'Builder'.
+--
+-- Not efficient, goes back to a lazy bytestring to get the length
 fromBuilder :: Builder -> BL
 fromBuilder b =
   BL
@@ -179,6 +213,7 @@ fromBuilder b =
         & Semi.Sum
     )
 
+-- | Create a 'BL' from a 'ByteString'.
 fromByteString :: ByteString -> BL
 fromByteString b =
   BL
@@ -189,14 +224,17 @@ fromByteString b =
         & Semi.Sum
     )
 
+-- | Create a 'BL' from a 'Text'.
 fromText :: Text -> BL
 fromText t = t & textToBytesUtf8 & fromByteString
 
+-- | Parser for a netencode value.
 netencodeParser :: Atto.Parser T
 netencodeParser = T <$> go
   where
     go = Fix <$> netencodeParserF go
 
+-- | Parser for one level of a netencode value. Requires a parser for the recursion.
 netencodeParserF :: Atto.Parser rec -> Atto.Parser (TF rec)
 netencodeParserF inner = do
   typeTag <- Atto.Char.anyChar
@@ -332,7 +370,9 @@ netencodeParserF inner = do
         '9' -> fail [fmt|n parser only supports numbers up to size 6, was 9|]
         o -> fail [fmt|n number with length {o & show} not possible|]
 
--- | via https://www.extrema.is/blog/2021/10/20/parsing-bounded-integers
+-- | Parser for a bounded decimal that does not overflow the decimal.
+--
+--  via https://www.extrema.is/blog/2021/10/20/parsing-bounded-integers
 boundedDecimal :: forall a. (Bounded a, Integral a) => Atto.Parser (Maybe a)
 boundedDecimal = do
   i :: Integer <- decimal
@@ -351,12 +391,14 @@ boundedDecimal = do
 {-# SPECIALIZE boundedDecimal :: Atto.Parser (Maybe Word8) #-}
 {-# SPECIALIZE boundedDecimal :: Atto.Parser (Maybe Word64) #-}
 
+-- | 'boundedDecimal', but fail the parser if the decimal overflows.
 boundedDecimalFail :: Atto.Parser Int
 boundedDecimalFail =
   boundedDecimal >>= \case
     Nothing -> fail "decimal out of range"
     Just a -> pure a
 
+-- | Hedgehog generator for a netencode value.
 genNetencode :: Hedge.MonadGen m => m T
 genNetencode =
   Gen.recursive
@@ -386,6 +428,7 @@ genNetencode =
             )
     ]
 
+-- | Hedgehog property: encoding a netencode value and parsing it again returns the same result.
 prop_netencodeRoundtrip :: Hedge.Property
 prop_netencodeRoundtrip = Hedge.property $ do
   enc <- Hedge.forAll genNetencode
