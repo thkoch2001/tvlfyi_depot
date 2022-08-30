@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d25b4e7c_dfb1f151",
+        "filename": "tvix/eval/src/main.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2022-08-30T17:11:07Z",
+      "side": 1,
+      "message": "again, `let _` is a much more obvious way of discarding errors here.",
+      "revId": "05170cfcfcc0f327ef6e2c1fbdfe954c75059e3c",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
