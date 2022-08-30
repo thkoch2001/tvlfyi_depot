@@ -16,6 +16,24 @@
       "message": "again, `let _` is a much more obvious way of discarding errors here.",
       "revId": "05170cfcfcc0f327ef6e2c1fbdfe954c75059e3c",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "faca70b8_0753b472",
+        "filename": "tvix/eval/src/main.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-08-30T21:32:00Z",
+      "side": 1,
+      "message": "This line disappears somewhere downchain, but I\u0027m adding a commit to replace all of the remaining `.ok();` with `let _`",
+      "parentUuid": "d25b4e7c_dfb1f151",
+      "revId": "05170cfcfcc0f327ef6e2c1fbdfe954c75059e3c",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
