@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "25010b60_40f250b2",
+        "filename": "tvix/eval/src/eval.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2022-08-30T10:15:33Z",
+      "side": 0,
+      "message": "This should probably changed in the future to check for non-empty because it\u0027s a bit annoying that you have to unset it to disable it again (which can\u0027t be done with env(1) afaik).",
+      "revId": "39adbaf4cac1765956a7739ef73ce7f2716475df",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
