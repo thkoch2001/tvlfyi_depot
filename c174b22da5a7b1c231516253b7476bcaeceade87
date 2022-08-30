@@ -22,6 +22,30 @@
       },
       "revId": "c174b22da5a7b1c231516253b7476bcaeceade87",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c5452303_123b6469",
+        "filename": "tvix/eval/src/disassembler.rs",
+        "patchSetId": 4
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-08-30T16:53:30Z",
+      "side": 1,
+      "message": "Fixed downchain, thanks",
+      "parentUuid": "68bbea46_b443f8cf",
+      "range": {
+        "startLine": 41,
+        "startChar": 8,
+        "endLine": 41,
+        "endChar": 18
+      },
+      "revId": "c174b22da5a7b1c231516253b7476bcaeceade87",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
