@@ -8,8 +8,8 @@ let
   src = pkgs.fetchFromGitHub {
     owner = "sternenseemann";
     repo = "cl-json";
-    rev = "479685029c511cb2011f2f2a99ca6c63aa2e4865";
-    sha256 = "1663xlzb0wj6kd0wy2cmhafrwip7vy0wlfckc519aj9j18aak5ja";
+    rev = "c059bec94e28a11102a994d6949e2e52764f21fd";
+    sha256 = "0l07syw1b1x2zi8kj4iph3rf6vi6c16b7fk69iv7x27wrdsr1qwj";
   };
 
   getSrcs = subdir: map (f: src + ("/" + subdir + "/" + f));
