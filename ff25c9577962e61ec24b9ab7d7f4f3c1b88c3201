@@ -46,6 +46,30 @@
       },
       "revId": "ff25c9577962e61ec24b9ab7d7f4f3c1b88c3201",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "326a3526_b70f75b8",
+        "filename": "web/blog/fragments.nix",
+        "patchSetId": 1
+      },
+      "lineNbr": 62,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2022-08-30T13:34:05Z",
+      "side": 1,
+      "message": "Having no default doesn\u0027t quite make sense to me as this needs to be a specific kind of staticUrl, not just any.\n\nUsing the drvHash of the revision of depot the website was built with also seems to make the most sense in principle?",
+      "parentUuid": "c6411486_0b1a1024",
+      "range": {
+        "startLine": 62,
+        "startChar": 31,
+        "endLine": 62,
+        "endChar": 40
+      },
+      "revId": "ff25c9577962e61ec24b9ab7d7f4f3c1b88c3201",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
