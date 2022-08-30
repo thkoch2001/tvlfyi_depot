@@ -16,6 +16,24 @@
       "message": "I guess this case will always be necessary as soon as the compiler can make the VM do operations in place and a builtins.removeAttrs could cause an attribute set to loose its only key.",
       "revId": "39adbaf4cac1765956a7739ef73ce7f2716475df",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cea3faa9_fcff27ce",
+        "filename": "tvix/eval/src/value/attrs.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 103,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-08-30T00:46:28Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "fa4dfbd6_4478c9c9",
+      "revId": "39adbaf4cac1765956a7739ef73ce7f2716475df",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
