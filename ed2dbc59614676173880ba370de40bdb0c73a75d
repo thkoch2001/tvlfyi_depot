@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e08f03aa_f94d2c7b",
+        "filename": "tvix/eval/src/vm.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 286,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2022-08-31T15:44:39Z",
+      "side": 1,
+      "message": "same with everything else, worth thinking about maybe occasionally also calling `shrink_to_fit()` here",
+      "revId": "ed2dbc59614676173880ba370de40bdb0c73a75d",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
