@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "87a6f437_f5125133",
+        "filename": "tvix/eval/src/vm.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 295,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2022-08-31T15:47:24Z",
+      "side": 1,
+      "message": "at first I was like \"hmm maybe we should be validating the type even if we never try to resolve a local\" but behold:\n```\nnix-repl\u003e with 7; 1\n1\n```\n\n^ consider maybe adding this as a test?",
+      "range": {
+        "startLine": 295,
+        "startChar": 51,
+        "endLine": 295,
+        "endChar": 63
+      },
+      "revId": "bbf39197c3dabcf6712a45461da86804becdea83",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
