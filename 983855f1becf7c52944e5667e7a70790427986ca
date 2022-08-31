@@ -18,6 +18,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "64bfd5b9_1798e8c8",
+        "filename": "tvix/eval/src/compiler.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 791,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-08-31T22:19:19Z",
+      "side": 1,
+      "message": "First we compile the value from which identifiers are accessed (the set of a with expression), which leaves a single value on the stack.\n\nThe compiler does accounting for all values that live on the stack, so that it can directly resolve identifiers to stack slots (unless they\u0027re upvalues). However, for a `with` we need to introduce a stack slot (the attribute set from which things are resolved) *without* making it available on the stack.\n\nThis is done by compiling the expression, and then leaving a \"phantom\" value in the accounting data structure of the compiler. This way the compiler knows that the stack slot is occupied, without allowing users to resolve it directly.\n\nAs per the comment above, going to add a doc on how scoping works, and then write up some more comments about it.",
+      "parentUuid": "3360a4c6_2afab964",
+      "revId": "983855f1becf7c52944e5667e7a70790427986ca",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "25b407a4_9b934592",
@@ -65,6 +83,30 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "3f61e817_d6ab267e",
+        "filename": "tvix/eval/src/compiler.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 865,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-08-31T22:19:19Z",
+      "side": 1,
+      "message": "Introducing an enum for this downchain! Note that it\u0027s technically possible to create an empty identifier in Nix (`let \"\" \u003d 1; in ...`), but you can\u0027t access it again.",
+      "parentUuid": "145bdc7d_d9d8a632",
+      "range": {
+        "startLine": 865,
+        "startChar": 12,
+        "endLine": 865,
+        "endChar": 28
+      },
+      "revId": "983855f1becf7c52944e5667e7a70790427986ca",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "49e9623a_022f6768",
@@ -78,6 +120,30 @@
       "writtenOn": "2022-08-31T12:13:03Z",
       "side": 1,
       "message": "When reading this code first I was confused why phantom locals where necessary and why we need to have them in the locals stack. I was thinking to myself: They should be in a separate stack. As it turns out, they later are more or less – that\u0027s the with stack.\n\nI assume phantom locals are needed, so the scope depth usize is increased and scope ending works correctly in the presence of with – i.e. with scopes are opened and closed lexically, but identifier resolving works by reordering the lexical scope, so the withs come last.\n\nWhen reading the code first, this role of phantom locals was not obvious to me and it should be documented in a comment at an appropriate location! (Also correct me if I\u0027m wrong here of course.)",
+      "range": {
+        "startLine": 875,
+        "startChar": 15,
+        "endLine": 875,
+        "endChar": 29
+      },
+      "revId": "983855f1becf7c52944e5667e7a70790427986ca",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9969e6e7_1f59816f",
+        "filename": "tvix/eval/src/compiler.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 875,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-08-31T22:19:19Z",
+      "side": 1,
+      "message": "The phantoms fill the much more important role of taking up a stack slot, and thus giving us the correct stack index of that slot, which is used for resolving the dynamic access of things at runtime (which you can roughly think of as `resolve(stack_slot, identifier)`).\n\n\"Phantom\" here means that it is a value that definitely exists on the stack, but is not directly accessible by users. For example, if you wrote `with { a \u003d 42; }; ...` you could access `a` but not the attribute self that contains `a` itself.\n\nThis definitely needs better docs, but scope still changes a *lot* after this commit. I\u0027d propose we write up something for how the scope works in general, and then document all the relevant types once things are a bit more stable. Going to look if we can add more info on phantoms in HEAD.",
+      "parentUuid": "49e9623a_022f6768",
       "range": {
         "startLine": 875,
         "startChar": 15,
