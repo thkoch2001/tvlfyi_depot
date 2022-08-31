@@ -54,6 +54,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "b030fba5_acc5d6c4",
+        "filename": "tvix/eval/src/compiler.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 362,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-08-31T22:09:03Z",
+      "side": 1,
+      "message": "Ack, adding downchain. This is affected by some scope logic changes ahead ...",
+      "parentUuid": "c0502df9_aa6c5814",
+      "revId": "e68a6ca03599c7d22c2648007b18ebc2c2b17700",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "fa1e454c_0b57405f",

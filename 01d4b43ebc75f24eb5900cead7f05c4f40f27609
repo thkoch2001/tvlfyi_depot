@@ -24,6 +24,30 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c4721f2e_211fca68",
+        "filename": "tvix/eval/src/compiler.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 750,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-08-31T22:09:03Z",
+      "side": 1,
+      "message": "This exists later 😊\n\nThere are still two spots (emitting thunks \u0026 closures) that can\u0027t use it, though",
+      "parentUuid": "78f52707_2062a330",
+      "range": {
+        "startLine": 747,
+        "startChar": 8,
+        "endLine": 750,
+        "endChar": 52
+      },
+      "revId": "01d4b43ebc75f24eb5900cead7f05c4f40f27609",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "e2c4da6c_9e153a4c",
@@ -37,6 +61,30 @@
       "writtenOn": "2022-08-31T15:40:22Z",
       "side": 1,
       "message": "oh, this helps a lot",
+      "range": {
+        "startLine": 743,
+        "startChar": 3,
+        "endLine": 751,
+        "endChar": 5
+      },
+      "revId": "01d4b43ebc75f24eb5900cead7f05c4f40f27609",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "961b5862_cff8df83",
+        "filename": "tvix/eval/src/compiler.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 751,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-08-31T22:09:03Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "e2c4da6c_9e153a4c",
       "range": {
         "startLine": 743,
         "startChar": 3,
