@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "eadc4898_f93f592a",
+        "filename": "tvix/eval/src/compiler.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 81,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2022-08-31T12:29:26Z",
+      "side": 1,
+      "message": "Not sure, but maybe using an Option here would make more sense. We never increment or decrement this, so »arriving back at the root scope« as we have with scope_depth is not a thing. I don\u0027t like the `\u003d\u003d 0` check everywhere particularly, to be honest.",
+      "revId": "2b154144d03c245aaa3095891852c5ebcae82bb5",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "53547aee_f989c88e",
+        "filename": "tvix/eval/src/compiler.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 890,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2022-08-31T12:29:26Z",
+      "side": 1,
+      "message": "Superfluous into",
+      "range": {
+        "startLine": 890,
+        "startChar": 23,
+        "endLine": 890,
+        "endChar": 27
+      },
+      "revId": "2b154144d03c245aaa3095891852c5ebcae82bb5",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
