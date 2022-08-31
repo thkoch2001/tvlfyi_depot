@@ -54,6 +54,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "8335f8c8_4efcc8cb",
+        "filename": "tvix/eval/src/compiler.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 81,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2022-08-31T22:47:43Z",
+      "side": 1,
+      "message": "Nice! I guess using NonZeroUsize then would nicely express that the root scope can never be poisoned by ordinary means.",
+      "parentUuid": "0830b54c_e813fe90",
+      "revId": "2b154144d03c245aaa3095891852c5ebcae82bb5",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "53547aee_f989c88e",
