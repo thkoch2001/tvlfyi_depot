@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "25b407a4_9b934592",
+        "filename": "tvix/eval/src/compiler.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 865,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2022-08-31T12:13:03Z",
+      "side": 1,
+      "message": "I\u0027d say this is a code smell, would be better to have an Enum which distinguishes between static local / phantom local or an option here…",
+      "range": {
+        "startLine": 865,
+        "startChar": 12,
+        "endLine": 865,
+        "endChar": 28
+      },
+      "revId": "983855f1becf7c52944e5667e7a70790427986ca",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "49e9623a_022f6768",
+        "filename": "tvix/eval/src/compiler.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 875,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2022-08-31T12:13:03Z",
+      "side": 1,
+      "message": "When reading this code first I was confused why phantom locals where necessary and why we need to have them in the locals stack. I was thinking to myself: They should be in a separate stack. As it turns out, they later are more or less – that\u0027s the with stack.\n\nI assume phantom locals are needed, so the scope depth usize is increased and scope ending works correctly in the presence of with – i.e. with scopes are opened and closed lexically, but identifier resolving works by reordering the lexical scope, so the withs come last.\n\nWhen reading the code first, this role of phantom locals was not obvious to me and it should be documented in a comment at an appropriate location! (Also correct me if I\u0027m wrong here of course.)",
+      "range": {
+        "startLine": 875,
+        "startChar": 15,
+        "endLine": 875,
+        "endChar": 29
+      },
+      "revId": "983855f1becf7c52944e5667e7a70790427986ca",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
