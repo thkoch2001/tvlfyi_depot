@@ -16,6 +16,24 @@
       "message": "Can\u0027t we rely on the phantom locals for this? I.e. shouldn\u0027t a phantom local precisely indicate to us when we are closing a scope that we need to pop a with. Then this extra loop and check would be obsolete.",
       "revId": "9e0fa8341a3fee6325a32ab96e10f5b9e7df75e8",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "198870d1_136767c5",
+        "filename": "tvix/eval/src/compiler.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 855,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-08-31T22:21:25Z",
+      "side": 1,
+      "message": "Yep, and this actually moves directly into `compile_with` later on because the right position is known there.",
+      "parentUuid": "8da6269f_ca4464ad",
+      "revId": "9e0fa8341a3fee6325a32ab96e10f5b9e7df75e8",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
