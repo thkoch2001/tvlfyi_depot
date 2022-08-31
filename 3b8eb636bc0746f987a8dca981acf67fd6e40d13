@@ -24,6 +24,30 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "f4f032f0_34ffdf37",
+        "filename": "tvix/eval/src/compiler.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 351,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-08-31T22:26:06Z",
+      "side": 1,
+      "message": "Disappears downchain!",
+      "parentUuid": "d25073e5_f3d49315",
+      "range": {
+        "startLine": 351,
+        "startChar": 0,
+        "endLine": 351,
+        "endChar": 2
+      },
+      "revId": "3b8eb636bc0746f987a8dca981acf67fd6e40d13",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "283ff659_4b2c40d0",
@@ -37,6 +61,30 @@
       "writtenOn": "2022-08-31T15:48:02Z",
       "side": 1,
       "message": "yeah, definitely feels like we should have a `self.push_constant` method",
+      "range": {
+        "startLine": 362,
+        "startChar": 24,
+        "endLine": 363,
+        "endChar": 67
+      },
+      "revId": "3b8eb636bc0746f987a8dca981acf67fd6e40d13",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7b5bddf0_d17dd1b3",
+        "filename": "tvix/eval/src/compiler.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 363,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-08-31T22:26:06Z",
+      "side": 1,
+      "message": "exists later on :)",
+      "parentUuid": "283ff659_4b2c40d0",
       "range": {
         "startLine": 362,
         "startChar": 24,
