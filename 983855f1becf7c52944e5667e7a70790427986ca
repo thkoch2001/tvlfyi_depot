@@ -3,6 +3,23 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "3360a4c6_2afab964",
+        "filename": "tvix/eval/src/compiler.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 791,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2022-08-31T15:43:39Z",
+      "side": 1,
+      "message": "what exactly is going on here? This is not obvious to me at all",
+      "revId": "983855f1becf7c52944e5667e7a70790427986ca",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "25b407a4_9b934592",
         "filename": "tvix/eval/src/compiler.rs",
         "patchSetId": 2
@@ -14,6 +31,30 @@
       "writtenOn": "2022-08-31T12:13:03Z",
       "side": 1,
       "message": "I\u0027d say this is a code smell, would be better to have an Enum which distinguishes between static local / phantom local or an option here…",
+      "range": {
+        "startLine": 865,
+        "startChar": 12,
+        "endLine": 865,
+        "endChar": 28
+      },
+      "revId": "983855f1becf7c52944e5667e7a70790427986ca",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "145bdc7d_d9d8a632",
+        "filename": "tvix/eval/src/compiler.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 865,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2022-08-31T15:43:39Z",
+      "side": 1,
+      "message": "+1",
+      "parentUuid": "25b407a4_9b934592",
       "range": {
         "startLine": 865,
         "startChar": 12,
