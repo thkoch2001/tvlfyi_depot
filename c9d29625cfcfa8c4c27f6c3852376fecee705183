@@ -34,6 +34,24 @@
       "parentUuid": "b472b903_a7c22d7a",
       "revId": "c9d29625cfcfa8c4c27f6c3852376fecee705183",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a2c3a3c5_64a19263",
+        "filename": "tvix/eval/src/eval.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-08-31T22:29:23Z",
+      "side": 1,
+      "message": "Fixed somewhere downchain. In general I think we haven\u0027t settled on an interface for the \"interpret\" function and in general what the eval API should look like. There\u0027s some questions around that especially once builtins get introduced which I don\u0027t yet have answers to.",
+      "parentUuid": "658f2a68_8624a902",
+      "revId": "c9d29625cfcfa8c4c27f6c3852376fecee705183",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
