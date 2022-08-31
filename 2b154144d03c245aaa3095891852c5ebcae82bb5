@@ -20,6 +20,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "70f1fd6f_7fa8bed7",
+        "filename": "tvix/eval/src/compiler.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 81,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2022-08-31T15:51:12Z",
+      "side": 1,
+      "message": "+1. Can use `NonZeroUsize` to avoid any extra memory usage",
+      "parentUuid": "eadc4898_f93f592a",
+      "revId": "2b154144d03c245aaa3095891852c5ebcae82bb5",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "53547aee_f989c88e",
         "filename": "tvix/eval/src/compiler.rs",
         "patchSetId": 1
