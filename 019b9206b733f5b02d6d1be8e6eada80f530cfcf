@@ -16,6 +16,29 @@
       "message": "Post 2.3 added some more, some of which are genuinely interesting (ceil, floor), but there are shims for all nixpkgs needs (e.g. the levenshtein one).",
       "revId": "019b9206b733f5b02d6d1be8e6eada80f530cfcf",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cec87275_e95c89ba",
+        "filename": "tvix/eval/docs/builtins.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2022-09-01T22:57:33Z",
+      "side": 1,
+      "message": "It\u0027s unclear what pure means here, most of them are pure functions.\n\nJudging from later CLs this is about them /only/ being in the builtins set?",
+      "range": {
+        "startLine": 13,
+        "startChar": 51,
+        "endLine": 13,
+        "endChar": 55
+      },
+      "revId": "019b9206b733f5b02d6d1be8e6eada80f530cfcf",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
