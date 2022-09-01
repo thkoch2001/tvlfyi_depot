@@ -24,6 +24,30 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "693675f7_afc15ae9",
+        "filename": "tvix/eval/src/errors.rs",
+        "patchSetId": 4
+      },
+      "lineNbr": 4,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-09-01T21:40:31Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "e97b0701_973c4b35",
+      "range": {
+        "startLine": 4,
+        "startChar": 9,
+        "endLine": 4,
+        "endChar": 18
+      },
+      "revId": "2191e978c473272a4ef589b11aa68f8ee0e9d2a4",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "b9f49762_7b6c1675",
@@ -37,6 +61,24 @@
       "writtenOn": "2022-09-01T20:32:08Z",
       "side": 1,
       "message": "A docstring on this field probably wouldn\u0027t hurt.",
+      "revId": "2191e978c473272a4ef589b11aa68f8ee0e9d2a4",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "106ee9bc_15558f99",
+        "filename": "tvix/eval/src/errors.rs",
+        "patchSetId": 4
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-09-01T21:40:31Z",
+      "side": 1,
+      "message": "Exists when it turns into a span!",
+      "parentUuid": "b9f49762_7b6c1675",
       "revId": "2191e978c473272a4ef589b11aa68f8ee0e9d2a4",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
