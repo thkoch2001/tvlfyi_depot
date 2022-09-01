@@ -36,6 +36,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "89d17cc7_e7edffe4",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-09-01T21:31:58Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "f2df2aee_86beaaaf",
+      "revId": "157f52c149eaec59a63e776ebc411c3ea6d40611",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "4d6ed9f9_b0282f67",
@@ -49,6 +67,24 @@
       "writtenOn": "2022-09-01T20:54:41Z",
       "side": 1,
       "message": "should this go away entirely?",
+      "revId": "157f52c149eaec59a63e776ebc411c3ea6d40611",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e1708a15_09fea2a9",
+        "filename": "tvix/eval/src/value/lambda.rs",
+        "patchSetId": 4
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-09-01T21:31:58Z",
+      "side": 1,
+      "message": "Adding a comment to it on HEAD.",
+      "parentUuid": "4d6ed9f9_b0282f67",
       "revId": "157f52c149eaec59a63e776ebc411c3ea6d40611",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
