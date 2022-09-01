@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5f43593a_52144d6d",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2022-09-01T23:02:13Z",
+      "side": 1,
+      "message": "+1",
+      "revId": "a603fc47c29b360220c6db8ae36e6b7bcdb46e96",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "57505a6d_c021b85f",
+        "filename": "tvix/eval/src/builtins/mod.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 55,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2022-09-01T23:02:13Z",
+      "side": 1,
+      "message": "import technically as well or is that parsed differently? For some reason tab completion doesn\u0027t show that, but it is in builtins and a global value.",
+      "revId": "a603fc47c29b360220c6db8ae36e6b7bcdb46e96",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
