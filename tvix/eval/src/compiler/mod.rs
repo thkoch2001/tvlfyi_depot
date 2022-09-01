@@ -584,15 +584,14 @@ impl Compiler<'_> {
         let mut jumps = vec![];
 
         for fragment in path.attrs() {
-            self.compile_attr(slot, fragment);
-            self.push_op_old(OpCode::OpAttrsTrySelect);
+            self.compile_attr(slot, fragment.clone());
+            self.push_op(OpCode::OpAttrsTrySelect, &fragment);
             jumps.push(
-                self.chunk()
-                    .push_op_old(OpCode::OpJumpIfNotFound(JumpOffset(0))),
+                self.push_op(OpCode::OpJumpIfNotFound(JumpOffset(0)), &fragment),
             );
         }
 
-        let final_jump = self.push_op_old(OpCode::OpJump(JumpOffset(0)));
+        let final_jump = self.push_op(OpCode::OpJump(JumpOffset(0)), &path);
 
         for jump in jumps {
             self.patch_jump(jump);
