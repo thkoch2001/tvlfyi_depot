@@ -39,6 +39,30 @@
       },
       "revId": "019b9206b733f5b02d6d1be8e6eada80f530cfcf",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "21038412_4a2f6236",
+        "filename": "tvix/eval/docs/builtins.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2022-09-01T22:59:37Z",
+      "side": 1,
+      "message": "\u003e Judging from later CLs this is about them /only/ being in the builtins set?\n\nThat\u0027s wrong, no clue then.",
+      "parentUuid": "cec87275_e95c89ba",
+      "range": {
+        "startLine": 13,
+        "startChar": 51,
+        "endLine": 13,
+        "endChar": 55
+      },
+      "revId": "019b9206b733f5b02d6d1be8e6eada80f530cfcf",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
