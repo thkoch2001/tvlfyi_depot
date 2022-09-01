@@ -34,6 +34,24 @@
       "parentUuid": "c3ce9acf_93a00bda",
       "revId": "e68a9f96016112b2d761d732785e726aa6005685",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "87db88aa_d27d73a5",
+        "filename": "tvix/eval/src/opcode.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 77,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-09-01T17:39:05Z",
+      "side": 1,
+      "message": "We had a bit of a discussion on IRC, and TL;DR for now is that we\u0027re leaving a note for this and tentatively keeping the instructions separate. It is possible that there is a hot code path through `tryEval` for cross compilation, in which case adding unnecessary jumps there for code deduplication should be avoided.",
+      "parentUuid": "bcf48e55_19155656",
+      "revId": "e68a9f96016112b2d761d732785e726aa6005685",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
