@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3c3309a3_fc93c690",
+        "filename": "tvix/eval/src/value/mod.rs",
+        "patchSetId": 3
+      },
+      "lineNbr": 56,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2022-09-01T22:40:32Z",
+      "side": 1,
+      "message": "This is wrong, type_of needs to be \"lambda\" as well. Whether something is a primop or not is (to my knowledge) not observable from within the language or at least not intended to be (as it turns out, seems like toXML leaks this information as one would expect…).\n\nConfusingly, some of the rendering functions will tell you whether something is a primop or not.",
+      "revId": "75cc659683d52684a590d9085d99aa2b9d4e13a6",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
