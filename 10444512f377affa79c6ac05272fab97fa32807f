@@ -52,6 +52,24 @@
       "parentUuid": "e7e1470b_0020acf8",
       "revId": "10444512f377affa79c6ac05272fab97fa32807f",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a5de42ff_898d4671",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000038
+      },
+      "writtenOn": "2022-09-01T14:34:51Z",
+      "side": 1,
+      "message": "Since the change doesn\u0027t change any default behavior I\u0027m assuming that it\u0027s ok to merge it.\nTVL will just not use this, while it\u0027s a nice optimization for Resoptima pipelines.",
+      "parentUuid": "00e8fdba_ece30020",
+      "revId": "10444512f377affa79c6ac05272fab97fa32807f",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
