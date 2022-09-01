@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8298ca04_2113fe4b",
+        "filename": "tvix/eval/src/builtins/mod.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2022-09-01T23:04:50Z",
+      "side": 1,
+      "message": "Depending on how much of VM state impure builtins can access, I guess we /could/ also implement tryEval/throw in Rust. Depends on how annoying the asymmetry with OpAssert would be.",
+      "revId": "c35bd1320332a825bba8824747e38498a31c6886",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
