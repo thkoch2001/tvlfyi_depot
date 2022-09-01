@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c74b860d_8cff0269",
+        "filename": "tvix/eval/src/vm.rs",
+        "patchSetId": 4
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2022-09-01T20:56:18Z",
+      "side": 1,
+      "message": "what is this field?",
+      "revId": "e63753ce60b3eb7cd29a706171799ff8e64cc6bf",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6c4f1d61_835f0688",
+        "filename": "tvix/eval/src/vm.rs",
+        "patchSetId": 4
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2022-09-01T20:56:18Z",
+      "side": 1,
+      "message": "I think docstrings for this would be nice to have.",
+      "range": {
+        "startLine": 16,
+        "startChar": 1,
+        "endLine": 20,
+        "endChar": 1
+      },
+      "revId": "e63753ce60b3eb7cd29a706171799ff8e64cc6bf",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
