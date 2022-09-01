@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e97b0701_973c4b35",
+        "filename": "tvix/eval/src/errors.rs",
+        "patchSetId": 4
+      },
+      "lineNbr": 4,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2022-09-01T20:32:08Z",
+      "side": 1,
+      "message": "My usual expectation is that a type called `\u003cthing\u003eKind` is a zero-field enum of just the *variants* of `\u003cthing\u003e` , without any of the extra data - seeing this was quite confusing for me at the callsite. I feel like a name like `ErrorInner` or `ErrorData` or something like that might be a bit more obvious.",
+      "range": {
+        "startLine": 4,
+        "startChar": 9,
+        "endLine": 4,
+        "endChar": 18
+      },
+      "revId": "2191e978c473272a4ef589b11aa68f8ee0e9d2a4",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b9f49762_7b6c1675",
+        "filename": "tvix/eval/src/errors.rs",
+        "patchSetId": 4
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2022-09-01T20:32:08Z",
+      "side": 1,
+      "message": "A docstring on this field probably wouldn\u0027t hurt.",
+      "revId": "2191e978c473272a4ef589b11aa68f8ee0e9d2a4",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
