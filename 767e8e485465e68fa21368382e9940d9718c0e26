@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "99571e31_892e7463",
+        "filename": "tvix/eval/src/value/mod.rs",
+        "patchSetId": 4
+      },
+      "lineNbr": 166,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2022-09-01T20:38:59Z",
+      "side": 1,
+      "message": "T.T",
+      "revId": "767e8e485465e68fa21368382e9940d9718c0e26",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
