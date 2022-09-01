@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a62d83f3_8701815e",
+        "filename": "tvix/eval/src/vm.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 115,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2022-09-01T21:26:45Z",
+      "side": 1,
+      "message": "what\u0027s going on here?",
+      "range": {
+        "startLine": 115,
+        "startChar": 37,
+        "endLine": 115,
+        "endChar": 55
+      },
+      "revId": "e70664f3fa28672a024b5aef2b17bf1ea7c048c8",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
