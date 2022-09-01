@@ -16,6 +16,24 @@
       "message": "Since in C++ Nix, asserts and throw mostly behave the same (carry a location in the source code and can be caught by tryEval), we should maybe strive to unify the implementation.\n\nAn alternative would be having an OpThrow(bool) where bool indicates whether to pop the stack for an error message (how to carry a source code location is another, larger topic I suppose).\n\n    assert val; …\n\ncould then be compiled as\n\n    _ \u003cval\u003e\n    _ OpJumpIfFalse(X)\n    _ OpThrow(false)\n    X \u003cexecution continues\u003e",
       "revId": "e68a9f96016112b2d761d732785e726aa6005685",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bcf48e55_19155656",
+        "filename": "tvix/eval/src/opcode.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 77,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2022-09-01T14:06:21Z",
+      "side": 1,
+      "message": "+1",
+      "parentUuid": "c3ce9acf_93a00bda",
+      "revId": "e68a9f96016112b2d761d732785e726aa6005685",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
