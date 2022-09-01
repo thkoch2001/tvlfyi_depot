@@ -18,6 +18,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "7c80ff28_cb4e3979",
+        "filename": "tvix/eval/src/vm.rs",
+        "patchSetId": 4
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-09-01T21:55:19Z",
+      "side": 1,
+      "message": "it\u0027s the instruction pointer, i.e. the index of the operation being executed, going to annotate this with comments in HEAD",
+      "parentUuid": "c74b860d_8cff0269",
+      "revId": "e63753ce60b3eb7cd29a706171799ff8e64cc6bf",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "6c4f1d61_835f0688",
@@ -31,6 +49,30 @@
       "writtenOn": "2022-09-01T20:56:18Z",
       "side": 1,
       "message": "I think docstrings for this would be nice to have.",
+      "range": {
+        "startLine": 16,
+        "startChar": 1,
+        "endLine": 20,
+        "endChar": 1
+      },
+      "revId": "e63753ce60b3eb7cd29a706171799ff8e64cc6bf",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7da2d11c_52dbe8f7",
+        "filename": "tvix/eval/src/vm.rs",
+        "patchSetId": 4
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-09-01T21:55:19Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "6c4f1d61_835f0688",
       "range": {
         "startLine": 16,
         "startChar": 1,
