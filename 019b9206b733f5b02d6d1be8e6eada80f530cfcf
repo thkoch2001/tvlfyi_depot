@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a0e7eede_00d8debb",
+        "filename": "tvix/eval/docs/builtins.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2022-09-01T22:42:20Z",
+      "side": 1,
+      "message": "Post 2.3 added some more, some of which are genuinely interesting (ceil, floor), but there are shims for all nixpkgs needs (e.g. the levenshtein one).",
+      "revId": "019b9206b733f5b02d6d1be8e6eada80f530cfcf",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
