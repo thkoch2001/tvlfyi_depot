@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "81fa80be_e470df43",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2022-09-01T22:50:48Z",
+      "side": 1,
+      "message": "Also with variable lookup can be optimized to a degree when the currently innermost `with` is `with builtins` and the builtins are unpoisoned. This is probably worth it, as it is a kind of common idiom.",
+      "revId": "b289e62828fe82a86fdf7ad7ec640364539211d1",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
