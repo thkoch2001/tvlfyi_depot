@@ -22,6 +22,30 @@
       },
       "revId": "e70664f3fa28672a024b5aef2b17bf1ea7c048c8",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "43175493_0a8d6d07",
+        "filename": "tvix/eval/src/vm.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 115,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-09-01T22:03:13Z",
+      "side": 1,
+      "message": "There are multiple different things that can be called: Closures/lambdas, thunks and builtins. The arity of these is not the same. The calling convention is to leave the arguments on the stack in the right order when the thing is called, so this argument represents how many things on top of the stack are left in the \"stack view\" of the callee.",
+      "parentUuid": "a62d83f3_8701815e",
+      "range": {
+        "startLine": 115,
+        "startChar": 37,
+        "endLine": 115,
+        "endChar": 55
+      },
+      "revId": "e70664f3fa28672a024b5aef2b17bf1ea7c048c8",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
