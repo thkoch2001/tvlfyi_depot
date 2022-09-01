@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9d5b9a1b_d3166dde",
+        "filename": "tvix/eval/src/vm.rs",
+        "patchSetId": 4
+      },
+      "lineNbr": 86,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2022-09-01T20:58:12Z",
+      "side": 1,
+      "message": "I think a docstring for this would be good",
+      "range": {
+        "startLine": 84,
+        "startChar": 1,
+        "endLine": 86,
+        "endChar": 5
+      },
+      "revId": "aa90be4debfbeebb1c7624f361cc2914a0038520",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
