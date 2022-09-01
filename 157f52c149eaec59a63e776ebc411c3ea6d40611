@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7beb0b04_de220a25",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2022-09-01T20:54:41Z",
+      "side": 1,
+      "message": "returning a lambda at the top-level like this ",
+      "revId": "157f52c149eaec59a63e776ebc411c3ea6d40611",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4d6ed9f9_b0282f67",
+        "filename": "tvix/eval/src/value/lambda.rs",
+        "patchSetId": 4
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2022-09-01T20:54:41Z",
+      "side": 1,
+      "message": "should this go away entirely?",
+      "revId": "157f52c149eaec59a63e776ebc411c3ea6d40611",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
