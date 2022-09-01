@@ -16,6 +16,24 @@
       "message": "LGTM, as long as the result reporting step still runs (which seems to be the case if I understand this correctly).\n\nIt would be nice if there was a \"fail build but keep running the step\", so that we do eventually accumulate all of the results. In the current form I think for TVL itself we might not enable this, idk, what does sterni think?",
       "revId": "10444512f377affa79c6ac05272fab97fa32807f",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e7e1470b_0020acf8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000038
+      },
+      "writtenOn": "2022-09-01T11:56:54Z",
+      "side": 1,
+      "message": "\"fail build but keep running the step\" - this is what happens if you enable \"Fast Fail\" on pipeline/organization and then leave `cancelOnBuildFailing` as false (this is by default).\n\nSteps are only canceled if pipeline is created with `cancelOnBuildFailing` \u003d true.",
+      "parentUuid": "89064efa_06b54af7",
+      "revId": "10444512f377affa79c6ac05272fab97fa32807f",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
