@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "323f7c4d_506972e1",
+        "filename": "tvix/eval/src/builtins/mod.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2022-09-01T22:54:34Z",
+      "side": 1,
+      "message": "Float toString requires you to unconditionally pad to 5 digits behind the point, as the next CL\u0027s tests reveal.",
+      "revId": "d33af952ab19213973a113456e1a8fedb03c35f6",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
