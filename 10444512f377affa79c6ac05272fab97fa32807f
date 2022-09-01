@@ -34,6 +34,24 @@
       "parentUuid": "89064efa_06b54af7",
       "revId": "10444512f377affa79c6ac05272fab97fa32807f",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "00e8fdba_ece30020",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2022-09-01T13:58:28Z",
+      "side": 1,
+      "message": "\u003e In the current form I think for TVL itself we might not enable this, idk, what does sterni think?\n\nMaybe for non-canon builds, although the early abort may hide unrelated errors later which, I can imagine, would cause more annoying round trips when doing channel bumps.\n\nOverall I think this feature would be obsolete as soon as we can figure out how to make cl/5063 fast / complete enough. Kinda wanna give this another shot some time.",
+      "parentUuid": "e7e1470b_0020acf8",
+      "revId": "10444512f377affa79c6ac05272fab97fa32807f",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
