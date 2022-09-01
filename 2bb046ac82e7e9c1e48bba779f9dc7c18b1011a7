@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "dbafb01c_248cd41a",
+        "filename": "tvix/eval/src/compiler.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 124,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2022-09-01T13:49:24Z",
+      "side": 1,
+      "message": "Seems like the branches here duplicate a lot of code?\n\nCan\u0027t we do\n\n    let idx \u003d match … { … };\n    self.chunk.push_op(OpConstant(idx));\n\ninstead?",
+      "revId": "2bb046ac82e7e9c1e48bba779f9dc7c18b1011a7",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c25dead4_8123f184",
+        "filename": "tvix/eval/src/compiler.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 359,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2022-09-01T13:49:24Z",
+      "side": 1,
+      "message": "I guess we should rename that as well then?",
+      "range": {
+        "startLine": 359,
+        "startChar": 35,
+        "endLine": 359,
+        "endChar": 47
+      },
+      "revId": "2bb046ac82e7e9c1e48bba779f9dc7c18b1011a7",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
