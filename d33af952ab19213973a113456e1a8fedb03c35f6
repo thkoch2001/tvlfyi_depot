@@ -16,6 +16,24 @@
       "message": "Float toString requires you to unconditionally pad to 5 digits behind the point, as the next CL\u0027s tests reveal.",
       "revId": "d33af952ab19213973a113456e1a8fedb03c35f6",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1924ae1e_6ea8d276",
+        "filename": "tvix/eval/src/builtins/mod.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-09-02T12:50:07Z",
+      "side": 1,
+      "message": "It seems to be *6* actually, 5 is for the REPL. Builtins change representation a bit between here and HEAD, so I\u0027m going to comment the float out of the test and fix it on HEAD to avoid sinking time into merge conflicts.",
+      "parentUuid": "323f7c4d_506972e1",
+      "revId": "d33af952ab19213973a113456e1a8fedb03c35f6",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
