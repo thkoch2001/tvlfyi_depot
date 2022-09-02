@@ -16,6 +16,24 @@
       "message": "With a quick benchmark this doesn\u0027t seem to make a difference:\n\n```\nmerge small attrs       time:   [11.829 µs 11.851 µs 11.882 µs]\n                        change: [-1.0590% -0.6863% -0.1939%] (p \u003d 0.00 \u003c 0.05)\n                        Change within noise threshold.\nFound 8 outliers among 100 measurements (8.00%)\n  1 (1.00%) high mild\n  7 (7.00%) high severe\n\nmerge large attrs with small attrs\n                        time:   [15.931 ms 16.504 ms 17.534 ms]\n                        change: [-1.2279% +2.5376% +9.8411%] (p \u003d 0.52 \u003e 0.05)\n                        No change in performance detected.\nFound 12 outliers among 100 measurements (12.00%)\n  3 (3.00%) high mild\n  9 (9.00%) high severe\n```\n\nSo probably not worth the complexity (though maybe there\u0027s some workload that this benefits more)",
       "revId": "91bf0154ad318ff7e116409d0271c1d0ba5922bb",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1f88b942_3df91bba",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2022-09-02T19:08:00Z",
+      "side": 1,
+      "message": "benchmarks ran: https://cl.tvl.fyi/c/depot/+/6286",
+      "parentUuid": "964b7c96_e4b718cb",
+      "revId": "91bf0154ad318ff7e116409d0271c1d0ba5922bb",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
