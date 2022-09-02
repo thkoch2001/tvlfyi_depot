@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5ef87564_9e6038e0",
+        "filename": "tvix/eval/src/value/string.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 100,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2022-09-02T13:34:16Z",
+      "side": 1,
+      "message": "For what it\u0027s worth my opinion would be that every `$` should be escaped, since it is always legal even when not required. But I\u0027m fine with revisiting that topic some other time.\n\nWould be nice if we could convince C++ Nix as well, I suppose…",
+      "revId": "bff552f90f3115b6baf3d2d030ff7cea4fabd2c5",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
