@@ -16,6 +16,24 @@
       "message": "Also with variable lookup can be optimized to a degree when the currently innermost `with` is `with builtins` and the builtins are unpoisoned. This is probably worth it, as it is a kind of common idiom.",
       "revId": "b289e62828fe82a86fdf7ad7ec640364539211d1",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e52f566e_7d7ebc7a",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-09-02T12:41:05Z",
+      "side": 1,
+      "message": "That\u0027s a good one I haven\u0027t thought about! Added it to the optimisation backlog, thanks.",
+      "parentUuid": "81fa80be_e470df43",
+      "revId": "b289e62828fe82a86fdf7ad7ec640364539211d1",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
