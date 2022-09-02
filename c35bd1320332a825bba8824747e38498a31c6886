@@ -16,6 +16,24 @@
       "message": "Depending on how much of VM state impure builtins can access, I guess we /could/ also implement tryEval/throw in Rust. Depends on how annoying the asymmetry with OpAssert would be.",
       "revId": "c35bd1320332a825bba8824747e38498a31c6886",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4d4f948e_22c40678",
+        "filename": "tvix/eval/src/builtins/mod.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-09-02T12:57:26Z",
+      "side": 1,
+      "message": "Builtins gain access to the VM instance later as they need to force values; so technically we could do that. What makes me hesitant is how we would handle this in a multi-threaded setup if we ever went there, but we can figure that out along the way. Adding your note to the list.",
+      "parentUuid": "8298ca04_2113fe4b",
+      "revId": "c35bd1320332a825bba8824747e38498a31c6886",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
