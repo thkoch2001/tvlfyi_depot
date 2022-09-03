@@ -16,6 +16,24 @@
       "message": "What just occurred to me: In the jump instruction a debug_assert!(offset !\u003d 0) would be nice in case you forget a patch_jump somewhere.",
       "revId": "bf14c37fed88e72f946041edc414ae3901385b8f",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e6e83a7d_4efe48fc",
+        "filename": "tvix/eval/src/vm.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 269,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-09-03T13:22:31Z",
+      "side": 1,
+      "message": "Good idea! Done at HEAD.",
+      "parentUuid": "844eceb1_a23cae61",
+      "revId": "bf14c37fed88e72f946041edc414ae3901385b8f",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
