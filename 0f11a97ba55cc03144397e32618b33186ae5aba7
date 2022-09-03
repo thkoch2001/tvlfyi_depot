@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "57780202_16c11353",
+        "filename": "tvix/eval/src/vm.rs",
+        "patchSetId": 3
+      },
+      "lineNbr": 392,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2022-09-03T16:43:50Z",
+      "side": 1,
+      "message": "nit: could factor this out.\n\nI\u0027m not sure how much I care though",
+      "range": {
+        "startLine": 390,
+        "startChar": 32,
+        "endLine": 392,
+        "endChar": 42
+      },
+      "revId": "0f11a97ba55cc03144397e32618b33186ae5aba7",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
