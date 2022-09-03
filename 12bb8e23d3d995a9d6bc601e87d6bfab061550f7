@@ -22,6 +22,30 @@
       },
       "revId": "12bb8e23d3d995a9d6bc601e87d6bfab061550f7",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6521b7e4_d4075243",
+        "filename": "tvix/eval/src/value/mod.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 116,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-09-03T21:53:47Z",
+      "side": 1,
+      "message": "These are all gone at HEAD and replaced with a macro that generates them (to remove the boilerplate of thunk traversal). This has the side-effect of none of them consuming `self` anymore, so fwiw there are no more `into_`-like functions later.",
+      "parentUuid": "b4963cc8_907a6b62",
+      "range": {
+        "startLine": 116,
+        "startChar": 11,
+        "endLine": 116,
+        "endChar": 13
+      },
+      "revId": "12bb8e23d3d995a9d6bc601e87d6bfab061550f7",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
