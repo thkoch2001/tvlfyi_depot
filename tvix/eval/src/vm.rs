@@ -210,7 +210,7 @@ impl VM {
                 }
 
                 OpCode::OpAttrsSelect => {
-                    let key = self.pop().to_string()?;
+                    let key = self.pop().into_string()?;
                     let attrs = self.pop().to_attrs()?;
 
                     match attrs.select(key.as_str()) {
@@ -226,7 +226,7 @@ impl VM {
                 }
 
                 OpCode::OpAttrsTrySelect => {
-                    let key = self.pop().to_string()?;
+                    let key = self.pop().into_string()?;
                     let value = match self.pop() {
                         Value::Attrs(attrs) => match attrs.select(key.as_str()) {
                             Some(value) => value.clone(),
@@ -240,7 +240,7 @@ impl VM {
                 }
 
                 OpCode::OpAttrsIsSet => {
-                    let key = self.pop().to_string()?;
+                    let key = self.pop().into_string()?;
                     let result = match self.pop() {
                         Value::Attrs(attrs) => attrs.contains(key.as_str()),
 
@@ -329,7 +329,7 @@ impl VM {
                 }
 
                 OpCode::OpResolveWith => {
-                    let ident = self.pop().to_string()?;
+                    let ident = self.pop().into_string()?;
                     let value = self.resolve_with(ident.as_str())?;
                     self.push(value)
                 }
@@ -416,7 +416,7 @@ impl VM {
         let mut path = Vec::with_capacity(count);
 
         for _ in 0..count {
-            path.push(self.pop().to_string()?);
+            path.push(self.pop().into_string()?);
         }
 
         self.push(Value::AttrPath(path));
@@ -436,7 +436,7 @@ impl VM {
         let mut out = String::new();
 
         for _ in 0..count {
-            out.push_str(self.pop().to_string()?.as_str());
+            out.push_str(self.pop().into_string()?.as_str());
         }
 
         self.push(Value::String(out.into()));

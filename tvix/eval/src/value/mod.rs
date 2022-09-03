@@ -91,7 +91,7 @@ impl Value {
         }
     }
 
-    pub fn to_string(self) -> EvalResult<NixString> {
+    pub fn into_string(self) -> EvalResult<NixString> {
         match self {
             Value::String(s) => Ok(s),
             other => Err(ErrorKind::TypeError {

@@ -17,12 +17,12 @@ fn pure_builtins() -> Vec<Builtin> {
     vec![
         Builtin::new("abort", 1, |mut args| {
             return Err(
-                ErrorKind::Abort(args.pop().unwrap().to_string()?.as_str().to_owned()).into(),
+                ErrorKind::Abort(args.pop().unwrap().into_string()?.as_str().to_owned()).into(),
             );
         }),
         Builtin::new("catAttrs", 2, |mut args| {
             let list = args.pop().unwrap().to_list()?;
-            let key = args.pop().unwrap().to_string()?;
+            let key = args.pop().unwrap().into_string()?;
             let mut output = vec![];
 
             for set in list.into_iter() {
@@ -65,7 +65,7 @@ fn pure_builtins() -> Vec<Builtin> {
         }),
         Builtin::new("throw", 1, |mut args| {
             return Err(
-                ErrorKind::Throw(args.pop().unwrap().to_string()?.as_str().to_owned()).into(),
+                ErrorKind::Throw(args.pop().unwrap().into_string()?.as_str().to_owned()).into(),
             );
         }),
         Builtin::new("toString", 1, |args| {
