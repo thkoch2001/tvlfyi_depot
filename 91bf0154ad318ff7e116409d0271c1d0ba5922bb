@@ -34,6 +34,24 @@
       "parentUuid": "964b7c96_e4b718cb",
       "revId": "91bf0154ad318ff7e116409d0271c1d0ba5922bb",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "683c9476_d9c4fb99",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-09-03T00:45:52Z",
+      "side": 1,
+      "message": "It might make a difference for attribute sets filled with values that are more expensive to clone (e.g. an attribute set filled with attribute sets, which would mean an attribute set full of Rcs that increment/decrement, which btw matches nixpkgs itself).",
+      "parentUuid": "1f88b942_3df91bba",
+      "revId": "91bf0154ad318ff7e116409d0271c1d0ba5922bb",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
