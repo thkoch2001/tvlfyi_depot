@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "844eceb1_a23cae61",
+        "filename": "tvix/eval/src/vm.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 269,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2022-09-03T06:57:33Z",
+      "side": 1,
+      "message": "What just occurred to me: In the jump instruction a debug_assert!(offset !\u003d 0) would be nice in case you forget a patch_jump somewhere.",
+      "revId": "bf14c37fed88e72f946041edc414ae3901385b8f",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
