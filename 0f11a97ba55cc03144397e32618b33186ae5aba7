@@ -22,6 +22,30 @@
       },
       "revId": "0f11a97ba55cc03144397e32618b33186ae5aba7",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6cb2ec66_0c098206",
+        "filename": "tvix/eval/src/vm.rs",
+        "patchSetId": 3
+      },
+      "lineNbr": 392,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-09-03T21:54:58Z",
+      "side": 1,
+      "message": "You mean pushing an upvalue into a closure/thunk? At HEAD there is a trait for upvalue-carrying objects which abstracts this.",
+      "parentUuid": "57780202_16c11353",
+      "range": {
+        "startLine": 390,
+        "startChar": 32,
+        "endLine": 392,
+        "endChar": 42
+      },
+      "revId": "0f11a97ba55cc03144397e32618b33186ae5aba7",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
