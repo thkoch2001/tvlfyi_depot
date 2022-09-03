@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f658df49_8cae3f45",
+        "filename": "tvix/eval/src/opcode.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2022-09-03T15:52:55Z",
+      "side": 1,
+      "message": "I think you may be able to remove this line now",
+      "revId": "3b469cbf5cc60994bbee612c1649f479e4b4b940",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
