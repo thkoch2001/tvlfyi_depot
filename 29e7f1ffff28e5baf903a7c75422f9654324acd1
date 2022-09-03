@@ -18,6 +18,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "12f0ee9e_e73f79b8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-09-03T00:47:14Z",
+      "side": 1,
+      "message": "Ack. Should check whether naersk can do it for us",
+      "parentUuid": "4d56b5ed_9df5dae7",
+      "revId": "29e7f1ffff28e5baf903a7c75422f9654324acd1",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "18f0c1a5_b77fd77b",
