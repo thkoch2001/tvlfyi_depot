@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c4352e95_43a2d60e",
+        "filename": "tvix/eval/src/vm.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 383,
+      "author": {
+        "id": 1000008
+      },
+      "writtenOn": "2022-09-04T18:02:47Z",
+      "side": 1,
+      "message": "Maybe this would be better as a block than an explicit call to drop()?",
+      "revId": "eafca80e0d82384aca65613716e8e52c3188cc30",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
