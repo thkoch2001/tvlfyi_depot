@@ -18,6 +18,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "7a5f782d_cfb539d9",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-09-04T17:26:17Z",
+      "side": 1,
+      "message": "Not sure what happened here, it\u0027s also possible I got distracted while committing this stuff.",
+      "parentUuid": "6fc7b5e9_61585895",
+      "revId": "6b8ce61c257c8089906be1ad7561d9a2e6c71338",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "b2576bc5_16dddae4",
@@ -31,6 +49,24 @@
       "writtenOn": "2022-09-04T11:45:10Z",
       "side": 1,
       "message": "btw, could Upvalues become Rcs? From what I understand, we could then avoid cloning them sometimes and they could be moved even when they are dropped at the original stack location (?).",
+      "revId": "6b8ce61c257c8089906be1ad7561d9a2e6c71338",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2a33865e_d3a65d0d",
+        "filename": "tvix/eval/src/vm.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 384,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-09-04T17:26:17Z",
+      "side": 1,
+      "message": "Cloning a value should not be much more expensive than cloning an Rc, but we\u0027ll have to experiment with this further down the line. It\u0027s definitely on the TODO-list for things to experiment with.",
+      "parentUuid": "b2576bc5_16dddae4",
       "revId": "6b8ce61c257c8089906be1ad7561d9a2e6c71338",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
