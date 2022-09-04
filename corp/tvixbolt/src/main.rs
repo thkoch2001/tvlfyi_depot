@@ -184,10 +184,10 @@ impl Output {
             <>
             {maybe_show("Parse errors:", &self.parse_errors)}
             {maybe_show("Warnings:", &self.warnings)}
+            {maybe_show("Output:", &self.output)}
             {maybe_show("Compiler errors:", &self.compiler_errors)}
             {maybe_show("Bytecode:", &String::from_utf8_lossy(&self.bytecode))}
             {maybe_show("Runtime errors:", &self.runtime_errors)}
-            {maybe_show("Output:", &self.output)}
             {maybe_show("Runtime trace:", &String::from_utf8_lossy(&self.trace))}
             </>
         }
