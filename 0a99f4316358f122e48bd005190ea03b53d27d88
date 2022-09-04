@@ -22,6 +22,30 @@
       },
       "revId": "0a99f4316358f122e48bd005190ea03b53d27d88",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "682fa4b8_1e58670a",
+        "filename": "tvix/eval/src/compiler/mod.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 1026,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-09-04T17:30:30Z",
+      "side": 1,
+      "message": "`below` actually goes away, but `above` remains, better naming might be a good idea (suggestions welcome!)",
+      "parentUuid": "e460ff22_6074a985",
+      "range": {
+        "startLine": 1026,
+        "startChar": 27,
+        "endLine": 1026,
+        "endChar": 32
+      },
+      "revId": "0a99f4316358f122e48bd005190ea03b53d27d88",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
