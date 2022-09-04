@@ -16,6 +16,24 @@
       "message": "Are there plans to use this from rust unit tests in the future?",
       "revId": "36748fe4f65d85049c5aec2df4828668803ad30b",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a1ddda32_cb4476c7",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-09-04T20:54:38Z",
+      "side": 1,
+      "message": "Yes, this was implemented back in https://cl.tvl.fyi/c/depot/+/6135/2/tvix/eval/src/tests/mod.rs when we initially introduced Tvix\u0027s own tests in this format.",
+      "parentUuid": "4af28ebc_d3a5b94d",
+      "revId": "36748fe4f65d85049c5aec2df4828668803ad30b",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
