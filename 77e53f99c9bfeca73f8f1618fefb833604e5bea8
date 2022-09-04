@@ -24,6 +24,30 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "446333c6_44b20d2c",
+        "filename": "tvix/eval/src/compiler/mod.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 188,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-09-04T17:39:01Z",
+      "side": 1,
+      "message": "Yeah, this is replaced by a method that calculates the runtime stack index of a local later on, which has much clearer naming and semantics.",
+      "parentUuid": "63c4348f_c4996eda",
+      "range": {
+        "startLine": 188,
+        "startChar": 69,
+        "endLine": 188,
+        "endChar": 83
+      },
+      "revId": "77e53f99c9bfeca73f8f1618fefb833604e5bea8",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "e241d859_04e48668",
@@ -37,6 +61,24 @@
       "writtenOn": "2022-09-04T12:24:26Z",
       "side": 1,
       "message": "I think we can do this more efficiently since the locals vector should be ordered by depth.",
+      "revId": "77e53f99c9bfeca73f8f1618fefb833604e5bea8",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "83b01508_83fadb91",
+        "filename": "tvix/eval/src/compiler/mod.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 204,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-09-04T17:39:01Z",
+      "side": 1,
+      "message": "The initialisation status becomes an explicit field later on and we filter on that, up to the local that we are looking for. I don\u0027t think the depth helps us with that though, as any of the locals up to the one we\u0027re calculating a slot for could be uninitialised (at any depth).",
+      "parentUuid": "e241d859_04e48668",
       "revId": "77e53f99c9bfeca73f8f1618fefb833604e5bea8",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
