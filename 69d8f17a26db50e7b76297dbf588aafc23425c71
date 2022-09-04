@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1f7bafd0_c1f9c1df",
+        "filename": "tvix/eval/src/compiler/mod.rs",
+        "patchSetId": 3
+      },
+      "lineNbr": 874,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2022-09-04T11:11:59Z",
+      "side": 1,
+      "message": "Why can\u0027t the op code not simply hold the vector directly (for now)?",
+      "revId": "69d8f17a26db50e7b76297dbf588aafc23425c71",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
