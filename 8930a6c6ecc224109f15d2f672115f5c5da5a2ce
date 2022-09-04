@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c0c80cf4_a363f7d1",
+        "filename": "tvix/eval/src/compiler/mod.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2022-09-04T11:48:52Z",
+      "side": 1,
+      "message": "Should be Un*in*itialised",
+      "range": {
+        "startLine": 46,
+        "startChar": 4,
+        "endLine": 46,
+        "endChar": 15
+      },
+      "revId": "8930a6c6ecc224109f15d2f672115f5c5da5a2ce",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "67548907_11731b45",
+        "filename": "tvix/eval/src/compiler/mod.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2022-09-04T11:48:52Z",
+      "side": 1,
+      "message": "Is the reasoning here that an uninitialised variable is assumed to always be at the same level as we are currently because a correct compiler implementation would make sure the variable is initialised by the time we get to the next scope depth?",
+      "revId": "8930a6c6ecc224109f15d2f672115f5c5da5a2ce",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
