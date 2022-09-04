@@ -16,6 +16,24 @@
       "message": "Maybe this would be better as a block than an explicit call to drop()?",
       "revId": "eafca80e0d82384aca65613716e8e52c3188cc30",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a105ed0f_c562d809",
+        "filename": "tvix/eval/src/vm.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 383,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-09-04T21:01:27Z",
+      "side": 1,
+      "message": "Personally I find it more readable with less nesting, but it\u0027s not a strong opinion, so happy to leave this to a vote ;)",
+      "parentUuid": "c4352e95_43a2d60e",
+      "revId": "eafca80e0d82384aca65613716e8e52c3188cc30",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
