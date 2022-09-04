@@ -1,17 +1,21 @@
 use std::fmt::Write;
 
 use std::rc::Rc;
-use tvix_eval::observer::DisassemblingObserver;
+use tvix_eval::observer::TracingObserver;
+use tvix_eval::observer::{DisassemblingObserver, NoOpObserver};
+use web_sys::HtmlInputElement;
 use web_sys::HtmlTextAreaElement;
 use yew::prelude::*;
 use yew::TargetCast;
 
 enum Msg {
     CodeChange(String),
+    ToggleTrace(bool),
 }
 
 struct Model {
     code: String,
+    trace: bool,
 }
 
 fn tvixbolt_overview() -> Html {
@@ -65,11 +69,17 @@ impl Component for Model {
     fn create(_ctx: &Context<Self>) -> Self {
         Self {
             code: String::new(),
+            trace: false,
         }
     }
 
     fn update(&mut self, _ctx: &Context<Self>, msg: Self::Message) -> bool {
         match msg {
+            Msg::ToggleTrace(trace) => {
+                self.trace = trace;
+                true
+            }
+
             Msg::CodeChange(new_code) => {
                 self.code = new_code;
                 true
@@ -102,8 +112,14 @@ impl Component for Model {
                     </div>
 
                     <div class="form-group">
-                      <label for="disable-bytecode">{"Disassemble:"}</label>
-                      <input for="disable-bytecode" type="checkbox" checked=true disabled=true />
+                      <label for="trace-runtime">{"Trace runtime:"}</label>
+                      <input
+                       for="trace-runtime" type="checkbox" checked={self.trace}
+                       onchange={link.callback(|e: Event| {
+                           let trace = e.target_unchecked_into::<HtmlInputElement>().checked();
+                           Msg::ToggleTrace(trace)
+                       })}
+                       />
                     </div>
                   </fieldset>
                 </form>
@@ -132,7 +148,7 @@ impl Model {
         html! {
             <>
               <h2>{"Result:"}</h2>
-              {eval(&self.code).display()}
+              {eval(self.trace, &self.code).display()}
             </>
         }
     }
@@ -146,6 +162,7 @@ struct Output {
     runtime_errors: String,
     output: String,
     bytecode: Vec<u8>,
+    trace: Vec<u8>,
 }
 
 fn maybe_show(title: &str, s: &str) -> Html {
@@ -171,12 +188,13 @@ impl Output {
             {maybe_show("Bytecode:", &String::from_utf8_lossy(&self.bytecode))}
             {maybe_show("Runtime errors:", &self.runtime_errors)}
             {maybe_show("Output:", &self.output)}
+            {maybe_show("Runtime trace:", &String::from_utf8_lossy(&self.trace))}
             </>
         }
     }
 }
 
-fn eval(code: &str) -> Output {
+fn eval(trace: bool, code: &str) -> Output {
     let mut out = Output::default();
 
     if code.is_empty() {
@@ -241,7 +259,11 @@ fn eval(code: &str) -> Output {
         return out;
     }
 
-    let result = tvix_eval::run_lambda(result.lambda);
+    let result = if trace {
+        tvix_eval::run_lambda(&mut TracingObserver::new(&mut out.trace), result.lambda)
+    } else {
+        tvix_eval::run_lambda(&mut NoOpObserver::default(), result.lambda)
+    };
 
     match result {
         Ok(value) => writeln!(&mut out.output, "{}", value).unwrap(),
