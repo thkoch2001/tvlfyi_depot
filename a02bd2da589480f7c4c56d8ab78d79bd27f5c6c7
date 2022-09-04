@@ -16,6 +16,24 @@
       "message": "At this point we can replace the stack with a counter?",
       "revId": "a02bd2da589480f7c4c56d8ab78d79bd27f5c6c7",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "18212d59_3e760d77",
+        "filename": "tvix/eval/src/compiler/mod.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 812,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-09-04T17:22:54Z",
+      "side": 1,
+      "message": "Done further down the chain",
+      "parentUuid": "5a55048f_96867cd5",
+      "revId": "a02bd2da589480f7c4c56d8ab78d79bd27f5c6c7",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
