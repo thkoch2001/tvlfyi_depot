@@ -1,4 +1,7 @@
-use std::{fmt::Write, rc::Rc};
+use std::fmt::Write;
+
+use std::rc::Rc;
+use tvix_eval::observer::DisassemblingObserver;
 use web_sys::HtmlTextAreaElement;
 use yew::prelude::*;
 use yew::TargetCast;
@@ -107,7 +110,7 @@ impl Output {
 fn eval(code: &str) -> Output {
     let mut out = Output::default();
 
-    if code == "" {
+    if code.is_empty() {
         return out;
     }
 
@@ -131,20 +134,17 @@ fn eval(code: &str) -> Output {
         .expr()
         .expect("expression should exist if no errors occured");
 
-    let mut result = tvix_eval::compiler::compile(
+    let codemap = Rc::new(codemap);
+    let mut compilation_observer = DisassemblingObserver::new(codemap, &mut out.bytecode);
+
+    let result = tvix_eval::compile(
         root_expr,
         Some("/nixbolt".into()),
         &file,
-        tvix_eval::builtins::global_builtins(),
-        Rc::new(codemap),
+        tvix_eval::global_builtins(),
+        &mut compilation_observer,
     )
     .unwrap();
-
-    let lambda = Rc::new(result.lambda);
-
-    tvix_eval::disassembler::disassemble_lambda(&mut out.bytecode, lambda.clone());
-
-    out.bytecode.append(&mut result.output);
 
     for warning in result.warnings {
         writeln!(
@@ -172,7 +172,7 @@ fn eval(code: &str) -> Output {
         return out;
     }
 
-    let result = tvix_eval::vm::run_lambda(lambda);
+    let result = tvix_eval::run_lambda(result.lambda);
 
     match result {
         Ok(value) => writeln!(&mut out.output, "{}", value).unwrap(),
