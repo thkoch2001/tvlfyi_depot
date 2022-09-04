@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e460ff22_6074a985",
+        "filename": "tvix/eval/src/compiler/mod.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 1026,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2022-09-04T12:08:21Z",
+      "side": 1,
+      "message": "Ok, I find this naming highly confusing. My intuition would be that this should be named \"above\" (meaning scope depth number is lower) because it is defined earlier – or as your comment even says: is defined in a /higher/ scope.\n\nI think we should find clearer names for this, maybe even go away from above/below.",
+      "range": {
+        "startLine": 1026,
+        "startChar": 27,
+        "endLine": 1026,
+        "endChar": 32
+      },
+      "revId": "0a99f4316358f122e48bd005190ea03b53d27d88",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
