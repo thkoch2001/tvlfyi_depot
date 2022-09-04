@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "069effdd_8c68bb33",
+        "filename": "tvix/eval/src/compiler/mod.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 714,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2022-09-04T16:07:30Z",
+      "side": 1,
+      "message": "FWIW this can be triggered using\n\nlet fix \u003d f: let x \u003d f x; in x; in fix (self: { a \u003d 1; b \u003d self. a + 1; })",
+      "revId": "a305f2885ecf510a61a9d3ee8fc8a5fbdf62bc45",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
