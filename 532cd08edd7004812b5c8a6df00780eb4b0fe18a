@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ff2a803d_140996d1",
+        "filename": "tvix/eval/src/compiler/mod.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 904,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2022-09-04T12:27:23Z",
+      "side": 1,
+      "message": "This computation should be implemented only once \u0026\u0026 also here I think we can avoid filtering the entire vec?",
+      "revId": "532cd08edd7004812b5c8a6df00780eb4b0fe18a",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
