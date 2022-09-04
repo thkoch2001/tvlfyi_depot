@@ -121,6 +121,30 @@
       },
       "revId": "77e53f99c9bfeca73f8f1618fefb833604e5bea8",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d2b6e46c_ea6c019b",
+        "filename": "tvix/eval/src/compiler/mod.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 878,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-09-04T17:39:51Z",
+      "side": 1,
+      "message": "by \"self-recursion\" here I meant \"accessing something from \u0027later\u0027 in the same scope\", you\u0027ll see how this works when we get to deferred upvalues",
+      "parentUuid": "5aa1dabd_1e3332c0",
+      "range": {
+        "startLine": 878,
+        "startChar": 65,
+        "endLine": 878,
+        "endChar": 72
+      },
+      "revId": "77e53f99c9bfeca73f8f1618fefb833604e5bea8",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
