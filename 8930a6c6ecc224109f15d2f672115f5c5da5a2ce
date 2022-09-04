@@ -24,6 +24,30 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "06dbe7d4_70c4d3ec",
+        "filename": "tvix/eval/src/compiler/mod.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-09-04T17:29:07Z",
+      "side": 1,
+      "message": "This enum is gone again a bit further down, as the two statuses tracked by it become explicit.",
+      "parentUuid": "c0c80cf4_a363f7d1",
+      "range": {
+        "startLine": 46,
+        "startChar": 4,
+        "endLine": 46,
+        "endChar": 15
+      },
+      "revId": "8930a6c6ecc224109f15d2f672115f5c5da5a2ce",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "67548907_11731b45",
@@ -37,6 +61,24 @@
       "writtenOn": "2022-09-04T11:48:52Z",
       "side": 1,
       "message": "Is the reasoning here that an uninitialised variable is assumed to always be at the same level as we are currently because a correct compiler implementation would make sure the variable is initialised by the time we get to the next scope depth?",
+      "revId": "8930a6c6ecc224109f15d2f672115f5c5da5a2ce",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3a551ea5_b4a30a16",
+        "filename": "tvix/eval/src/compiler/mod.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-09-04T17:29:07Z",
+      "side": 1,
+      "message": "More like, I did not realise the one case where the depth of an uninitialised variable is important - this shows up later on. Scoping from here becomes very volatile as it\u0027s kind of like a careful balance of hard-to-predict behaviours.",
+      "parentUuid": "67548907_11731b45",
       "revId": "8930a6c6ecc224109f15d2f672115f5c5da5a2ce",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
