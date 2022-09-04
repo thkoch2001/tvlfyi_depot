@@ -16,6 +16,24 @@
       "message": "Can we also add a test for a case where it resolves dynamically in the end:\n\n    let\n      f \u003d with { a \u003d 2 }; x: x + a;\n    in\n\n    let a \u003d 3; in\n\n    f 0 # \u003d\u003d 2",
       "revId": "3a604f70ae61076e4143cd1b8445181d6d192935",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b996a70a_81ab8793",
+        "filename": "tvix/eval/src/tests/tvix_tests/eval-okay-closure-with-shadowing.nix",
+        "patchSetId": 1
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-09-04T18:48:00Z",
+      "side": 1,
+      "message": "Sure, feel free to drop it in a CL, new tests don\u0027t conflict",
+      "parentUuid": "5576b892_54db78bb",
+      "revId": "3a604f70ae61076e4143cd1b8445181d6d192935",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
