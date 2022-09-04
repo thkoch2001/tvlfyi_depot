@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cdfa2c6c_59246b0d",
+        "filename": "tvix/eval/src/compiler/scope.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 104,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2022-09-04T14:40:00Z",
+      "side": 1,
+      "message": "Superfluous?",
+      "revId": "941a64feb70b2c576aa76f0a96771dd490de5e59",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "affebd53_d7e07e38",
+        "filename": "tvix/eval/src/compiler/scope.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 106,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2022-09-04T14:40:00Z",
+      "side": 1,
+      "message": "Also done.",
+      "revId": "941a64feb70b2c576aa76f0a96771dd490de5e59",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
