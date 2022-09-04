@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f34a02c6_65ab1978",
+        "filename": "tvix/eval/tests/nix_oracle.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-09-04T23:04:02Z",
+      "side": 1,
+      "message": "could you annotate what this is doing with a doc comment? it\u0027s a bit non-obvious to me at first",
+      "range": {
+        "startLine": 46,
+        "startChar": 0,
+        "endLine": 49,
+        "endChar": 0
+      },
+      "revId": "8eb7c2171ccc3becfed23d9885957a2e5955fa9a",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
