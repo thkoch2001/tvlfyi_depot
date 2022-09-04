@@ -1,0 +1,84 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "63c4348f_c4996eda",
+        "filename": "tvix/eval/src/compiler/mod.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 188,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2022-09-04T12:24:26Z",
+      "side": 1,
+      "message": "I think the name implies that it resolves an uninitialised value despite it actually resolving an initialised value – accounting for any uninitialised ones.",
+      "range": {
+        "startLine": 188,
+        "startChar": 69,
+        "endLine": 188,
+        "endChar": 83
+      },
+      "revId": "77e53f99c9bfeca73f8f1618fefb833604e5bea8",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e241d859_04e48668",
+        "filename": "tvix/eval/src/compiler/mod.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 204,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2022-09-04T12:24:26Z",
+      "side": 1,
+      "message": "I think we can do this more efficiently since the locals vector should be ordered by depth.",
+      "revId": "77e53f99c9bfeca73f8f1618fefb833604e5bea8",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5ec534e3_f640f5e9",
+        "filename": "tvix/eval/src/compiler/mod.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 610,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2022-09-04T12:24:26Z",
+      "side": 1,
+      "message": "Seems like it is only possible with inherit (from):\n\n    nix-repl\u003e let inherit y; in 12\n    error: undefined variable \u0027y\u0027 at (string):1:4\n\n    nix-repl\u003e let inherit (y) y; in y\n    error: infinite recursion encountered, at (string):1:14\n\nWe could make that case fail in the compiler already in theory if we wanted to.",
+      "revId": "77e53f99c9bfeca73f8f1618fefb833604e5bea8",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5aa1dabd_1e3332c0",
+        "filename": "tvix/eval/src/compiler/mod.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 878,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2022-09-04T12:24:26Z",
+      "side": 1,
+      "message": "not local?",
+      "range": {
+        "startLine": 878,
+        "startChar": 65,
+        "endLine": 878,
+        "endChar": 72
+      },
+      "revId": "77e53f99c9bfeca73f8f1618fefb833604e5bea8",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
