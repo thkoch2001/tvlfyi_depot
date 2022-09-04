@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b2576bc5_16dddae4",
+        "filename": "tvix/eval/src/vm.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 384,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2022-09-04T11:45:10Z",
+      "side": 1,
+      "message": "btw, could Upvalues become Rcs? From what I understand, we could then avoid cloning them sometimes and they could be moved even when they are dropped at the original stack location (?).",
+      "revId": "6b8ce61c257c8089906be1ad7561d9a2e6c71338",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
