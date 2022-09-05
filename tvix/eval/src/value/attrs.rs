@@ -216,6 +216,7 @@ impl NixAttrs {
         self.0.contains(key)
     }
 
+    /// Provide an iterator over all values of the attribute set.
     #[allow(clippy::needless_lifetimes)]
     pub fn iter<'a>(&'a self) -> Iter<KeyValue<'a>> {
         Iter(match &self.0 {
@@ -232,8 +233,6 @@ impl NixAttrs {
             },
         })
     }
-
-    /// Provide an iterator over all values of the attribute set.
 
     /// Implement construction logic of an attribute set, to encapsulate
     /// logic about attribute set optimisations inside of this module.
