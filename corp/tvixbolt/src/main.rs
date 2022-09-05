@@ -114,7 +114,7 @@ impl Component for Model {
                     <div class="form-group">
                       <label for="trace-runtime">{"Trace runtime:"}</label>
                       <input
-                       for="trace-runtime" type="checkbox" checked={self.trace}
+                       id="trace-runtime" type="checkbox" checked={self.trace}
                        onchange={link.callback(|e: Event| {
                            let trace = e.target_unchecked_into::<HtmlInputElement>().checked();
                            Msg::ToggleTrace(trace)
