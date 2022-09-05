@@ -31,6 +31,9 @@ pub enum ErrorKind {
         index: usize,
     },
 
+    /// Attempted to call `builtins.tail` on an empty list.
+    TailEmptyList,
+
     TypeError {
         expected: &'static str,
         actual: &'static str,
@@ -136,6 +139,8 @@ impl Error {
                 format!("list index '{}' is out of bounds", index)
             }
 
+            ErrorKind::TailEmptyList => format!("'tail' called on an empty list"),
+
             ErrorKind::TypeError { expected, actual } => format!(
                 "expected value of type '{}', but found a '{}'",
                 expected, actual
@@ -230,6 +235,7 @@ to a missing value in the attribute set(s) included via `with`."#,
             ErrorKind::NotCoercibleToString { .. } => "E018",
             ErrorKind::IndexOutOfBounds { .. } => "E019",
             ErrorKind::NotAnAbsolutePath(_) => "E020",
+            ErrorKind::TailEmptyList { .. } => "E021",
             ErrorKind::NotImplemented(_) => "E999",
         }
     }
