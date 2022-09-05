@@ -123,6 +123,20 @@ fn pure_builtins() -> Vec<Builtin> {
             let a = args.pop().unwrap();
             arithmetic_op!(a, b, -)
         }),
+        Builtin::new("tail", 1, |args, vm| {
+            force!(vm, &args[0], value, {
+                let xs = value.to_list()?;
+                if xs.len() == 0 {
+                    Err(ErrorKind::TailEmptyList)
+                } else {
+                    let mut output = vec![];
+                    for x in args[0].to_list()?.iter().skip(1) {
+                        output.push(x.clone());
+                    }
+                    Ok(Value::List(NixList::construct(output.len(), output)))
+                }
+            })
+        }),
         Builtin::new("throw", 1, |mut args, _| {
             return Err(ErrorKind::Throw(
                 args.pop().unwrap().to_str()?.as_str().to_owned(),
