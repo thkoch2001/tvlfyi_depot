@@ -24,6 +24,11 @@ pub enum ErrorKind {
         name: String,
     },
 
+    // Attempted to index into a list beyond its boundaries.
+    IndexOutOfBounds {
+        index: usize,
+    },
+
     TypeError {
         expected: &'static str,
         actual: &'static str,
@@ -116,6 +121,10 @@ impl Error {
                 name
             ),
 
+            ErrorKind::IndexOutOfBounds { index } => {
+                format!("list index '{}' is out of bounds", index)
+            }
+
             ErrorKind::TypeError { expected, actual } => format!(
                 "expected value of type '{}', but found a '{}'",
                 expected, actual
@@ -185,6 +194,7 @@ to a missing value in the attribute set(s) included via `with`."#,
             ErrorKind::ParseErrors(_) => "E015",
             ErrorKind::DuplicateAttrsKey { .. } => "E016",
             ErrorKind::ThunkForce(_) => "E017",
+            ErrorKind::IndexOutOfBounds { .. } => "E018",
             ErrorKind::NotImplemented(_) => "E999",
         }
     }
