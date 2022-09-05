@@ -24,6 +24,11 @@ pub enum ErrorKind {
         name: String,
     },
 
+    // Attempted to index into a list beyond its boundaries.
+    IndexOutOfBounds {
+        index: usize,
+    },
+
     TypeError {
         expected: &'static str,
         actual: &'static str,
