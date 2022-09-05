@@ -51,6 +51,19 @@ fn pure_builtins() -> Vec<Builtin> {
                 args.pop().unwrap().to_str()?.as_str().to_owned(),
             ));
         }),
+        Builtin::new("attrNames", 1, |args, vm| {
+            if let Value::Thunk(t) = &args[0] {
+                t.force(vm)?;
+            }
+            let xs = args[0].to_attrs()?;
+            let mut output = vec![];
+
+            for (key, _val) in xs.iter() {
+                output.push(Value::String(key.clone()));
+            }
+
+            Ok(Value::List(NixList::construct(output.len(), output)))
+        }),
         Builtin::new("catAttrs", 2, |mut args, _| {
             let list = args.pop().unwrap().to_list()?;
             let key = args.pop().unwrap().to_str()?;
