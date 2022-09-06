@@ -8,6 +8,7 @@
     ./hardware.nix
     ./network.nix
     # These modules configure services, websites etc.
+    ../../modules/disk-checkup.nix
     ./minecraft.nix
     ./gopher.nix
     ./http/sterni.lv.nix
