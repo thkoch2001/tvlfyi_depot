@@ -16,7 +16,7 @@ use crate::{
     value::{Builtin, NixAttrs, NixList, NixString, Value},
 };
 
-use crate::arithmetic_op;
+use crate::{arithmetic_op, cmp_op};
 
 /// Helper macro to ensure that a value has been forced. The structure
 /// of this is a little cumbersome as there are different reference
@@ -138,6 +138,11 @@ fn pure_builtins() -> Vec<Builtin> {
                 t.force(vm)?;
             }
             Ok(Value::Integer(args[0].to_list()?.len() as i64))
+        }),
+        Builtin::new("lessThan", 2, |mut args, _| {
+            let rhs = args.pop().unwrap();
+            let lhs = args.pop().unwrap();
+            cmp_op!(lhs, rhs, <)
         }),
         Builtin::new("hasAttr", 2, |args, vm| {
             if let Value::Thunk(t) = &args[1] {
