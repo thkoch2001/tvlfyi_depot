@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3f0c8baa_125c1f8c",
+        "filename": "tvix/eval/src/vm.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 383,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2022-09-06T14:17:27Z",
+      "side": 1,
+      "message": "This causes a copy that wasn\u0027t there before, doesn\u0027t it?",
+      "range": {
+        "startLine": 383,
+        "startChar": 75,
+        "endLine": 383,
+        "endChar": 81
+      },
+      "revId": "3dcbc0beb858080463b4d09f3f71b33a628135f4",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
