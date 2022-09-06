@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c6c281c1_4767fc30",
+        "filename": "tvix/eval/src/compiler/mod.rs",
+        "patchSetId": 6
+      },
+      "lineNbr": 845,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2022-09-06T13:42:53Z",
+      "side": 1,
+      "message": "I guess now we are missing Depth\u0027s above method…",
+      "range": {
+        "startLine": 845,
+        "startChar": 23,
+        "endLine": 845,
+        "endChar": 44
+      },
+      "revId": "90ca093522664127a710ba4977f9894c6569df4b",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
