@@ -22,6 +22,30 @@
       },
       "revId": "3dcbc0beb858080463b4d09f3f71b33a628135f4",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "411babfc_044761c1",
+        "filename": "tvix/eval/src/vm.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 383,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-09-06T14:58:49Z",
+      "side": 1,
+      "message": "Yep, and it\u0027s an expensive one. It\u0027ll be a bit tricky to get rid of it, but I have a note for it.",
+      "parentUuid": "3f0c8baa_125c1f8c",
+      "range": {
+        "startLine": 383,
+        "startChar": 75,
+        "endLine": 383,
+        "endChar": 81
+      },
+      "revId": "3dcbc0beb858080463b4d09f3f71b33a628135f4",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
