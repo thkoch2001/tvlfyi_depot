@@ -1,5 +1,6 @@
 use crate::spans::ToSpan;
 use crate::value::CoercionKind;
+use std::io;
 use std::path::PathBuf;
 use std::rc::Rc;
 use std::sync::Arc;
@@ -11,7 +12,7 @@ use smol_str::SmolStr;
 
 use crate::{SourceCode, Value};
 
-#[derive(Clone, Debug)]
+#[derive(Debug)]
 pub enum ErrorKind {
     /// These are user-generated errors through builtins.
     Throw(String),
@@ -126,6 +127,9 @@ pub enum ErrorKind {
         key: &'static str,
     },
 
+    /// I/O errors
+    IO(io::Error),
+
     /// Tvix internal warning for features triggered by users that are
     /// not actually implemented yet, and without which eval can not
     /// proceed.
@@ -147,7 +151,13 @@ impl From<Error> for ErrorKind {
     }
 }
 
-#[derive(Clone, Debug)]
+impl From<io::Error> for ErrorKind {
+    fn from(e: std::io::Error) -> Self {
+        ErrorKind::IO(e)
+    }
+}
+
+#[derive(Debug)]
 pub struct Error {
     pub kind: ErrorKind,
     pub span: Span,
@@ -313,6 +323,10 @@ to a missing value in the attribute set(s) included via `with`."#,
 
             ErrorKind::ListToAttrsKeyMissing { key } => {
                 write!(f, "'{key}' attribute missing in a call to 'listToAttrs'")
+            }
+
+            ErrorKind::IO(err) => {
+                write!(f, "I/O error: {err}")
             }
 
             ErrorKind::NotImplemented(feature) => {
@@ -593,6 +607,7 @@ impl Error {
             | ErrorKind::ImportParseError { .. }
             | ErrorKind::ImportCompilerError { .. }
             | ErrorKind::ListToAttrsKeyMissing { .. }
+            | ErrorKind::IO { .. }
             | ErrorKind::NotImplemented(_) => return None,
         };
 
@@ -631,6 +646,7 @@ impl Error {
             ErrorKind::ImportParseError { .. } => "E027",
             ErrorKind::ImportCompilerError { .. } => "E028",
             ErrorKind::ListToAttrsKeyMissing { .. } => "E029",
+            ErrorKind::IO { .. } => "E030",
 
             // Placeholder error while Tvix is under construction.
             ErrorKind::NotImplemented(_) => "E999",
