@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "440e0c0c_66b70af0",
+        "filename": "tvix/eval/src/compiler/mod.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 681,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2022-09-06T13:57:47Z",
+      "side": 1,
+      "message": "If we instead populate the list in the following loop we can save on iterating through the entries list once.",
+      "revId": "52eb1d42f72e9e3e29e05cc89de311faac387f71",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
