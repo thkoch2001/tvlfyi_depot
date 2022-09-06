@@ -15,6 +15,8 @@
                 :path (f-join tvl-depot-path "/hadrian")
                 :kbd "h"))
 
+(setq initial-buffer-choice "/hadrian")
+
 (add-to-list 'ssh-hosts "wpcarro@tarasco")
 
 (display-register primary

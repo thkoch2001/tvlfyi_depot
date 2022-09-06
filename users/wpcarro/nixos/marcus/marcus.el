@@ -2,6 +2,7 @@
 ;; Dependencies
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+(require 'tvl)
 (require 'display)
 (require 'window-manager)
 
@@ -19,6 +20,8 @@
                   :rotate normal)
 
 (display-arrangement primary :displays (laptop))
+
+(setq initial-buffer-choice tvl-depot-path)
 
 (setq window-manager-named-workspaces
       (list (make-window-manager-named-workspace
