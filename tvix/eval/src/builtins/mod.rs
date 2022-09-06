@@ -58,6 +58,9 @@ fn pure_builtins() -> Vec<Builtin> {
                 })
             })
         }),
+        Builtin::new("bitOr", 2, |args, _vm| {
+            Ok(Value::Integer(args[0].as_int()? | args[1].as_int()?))
+        }),
         Builtin::new("catAttrs", 2, |mut args, _| {
             let list = args.pop().unwrap().to_list()?;
             let key = args.pop().unwrap().to_str()?;
