@@ -12,7 +12,7 @@
 
 (bookmark-install-kbd
  (make-bookmark :label "hadrian"
-                :path (f-join tvl-depot-path "/hadrian")
+                :path "/hadrian"
                 :kbd "h"))
 
 (setq initial-buffer-choice "/hadrian")
