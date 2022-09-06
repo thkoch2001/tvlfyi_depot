@@ -85,6 +85,7 @@ macro_rules! arithmetic_op {
     }};
 }
 
+#[macro_export]
 macro_rules! cmp_op {
     ( $self:ident, $op:tt ) => {{
         let b = $self.pop();
@@ -107,6 +108,24 @@ macro_rules! cmp_op {
         };
 
         $self.push(Value::Bool(result));
+    }};
+
+    ( $a:expr, $b:expr, $op:tt ) => {{
+        match ($a, $b) {
+            (Value::Integer(i1), Value::Integer(i2)) => Ok(Value::Bool(i1 $op i2)),
+            (Value::Float(f1), Value::Float(f2)) => Ok(Value::Bool(f1 $op f2)),
+            (Value::Integer(i1), Value::Float(f2)) => Ok(Value::Bool((i1 as f64) $op f2)),
+            (Value::Float(f1), Value::Integer(i2)) => Ok(Value::Bool(f1 $op (i2 as f64))),
+
+            (v1, v2) => Err(ErrorKind::TypeError {
+                expected: "number (either int or float)",
+                actual: if v1.is_number() {
+                    v2.type_of()
+                } else {
+                    v1.type_of()
+                },
+            }),
+        }
     }};
 }
 
