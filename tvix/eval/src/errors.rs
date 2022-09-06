@@ -26,9 +26,9 @@ pub enum ErrorKind {
         name: String,
     },
 
-    // Attempted to index into a list beyond its boundaries.
+    /// Attempted to index into a list beyond its boundaries.
     IndexOutOfBounds {
-        index: usize,
+        index: i64,
     },
 
     TypeError {
@@ -76,6 +76,11 @@ pub enum ErrorKind {
 
     /// The given string doesn't represent an absolute path
     NotAnAbsolutePath(PathBuf),
+
+    /// A negative integer was used as a value representing length.
+    NegativeLength {
+        length: i64,
+    },
 
     /// Tvix internal warning for features triggered by users that are
     /// not actually implemented yet, and without which eval can not
@@ -200,6 +205,13 @@ to a missing value in the attribute set(s) included via `with`."#,
                 )
             }
 
+            ErrorKind::NegativeLength { length } => {
+                format!(
+                    "cannot use a negative integer, {}, for a value representing length",
+                    length
+                )
+            }
+
             ErrorKind::NotImplemented(feature) => {
                 format!("feature not yet implemented in Tvix: {}", feature)
             }
@@ -230,6 +242,7 @@ to a missing value in the attribute set(s) included via `with`."#,
             ErrorKind::NotCoercibleToString { .. } => "E018",
             ErrorKind::IndexOutOfBounds { .. } => "E019",
             ErrorKind::NotAnAbsolutePath(_) => "E020",
+            ErrorKind::NegativeLength { .. } => "E021",
             ErrorKind::NotImplemented(_) => "E999",
         }
     }
