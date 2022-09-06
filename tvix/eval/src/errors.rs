@@ -21,6 +21,12 @@ pub enum ErrorKind {
         index: usize,
     },
 
+    /// Cannot coerce type, `source`, into type, `target`.
+    UnsupportedCoercion {
+        source: &'static str,
+        target: &'static str,
+    },
+
     TypeError {
         expected: &'static str,
         actual: &'static str,
@@ -68,6 +74,12 @@ pub enum ErrorKind {
     /// not actually implemented yet, and without which eval can not
     /// proceed.
     NotImplemented(&'static str),
+}
+
+impl From<std::io::Error> for ErrorKind {
+    fn from(e: std::io::Error) -> Self {
+        ErrorKind::Abort(e.to_string())
+    }
 }
 
 #[derive(Clone, Debug)]
