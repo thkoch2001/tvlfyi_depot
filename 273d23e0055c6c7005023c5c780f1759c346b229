@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a03f658d_a058c7d4",
+        "filename": "tvix/eval/src/compiler/scope.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 215,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2022-09-06T14:04:13Z",
+      "side": 1,
+      "message": "maybe choosing another name for this is more sensible (push_local?) to avoid confusion with the compiler method",
+      "range": {
+        "startLine": 215,
+        "startChar": 11,
+        "endLine": 215,
+        "endChar": 24
+      },
+      "revId": "273d23e0055c6c7005023c5c780f1759c346b229",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
