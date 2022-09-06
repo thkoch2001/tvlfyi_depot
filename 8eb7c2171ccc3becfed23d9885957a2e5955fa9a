@@ -3,6 +3,52 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "6fa98f10_519b1e28",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2022-09-06T13:15:54Z",
+      "side": 1,
+      "message": "These can be covered by the file based test suite well enough which is also checked against C++ Nix. I suppose we could though merge both test suites into one mechanism though if we teach the oracle one to read files and optionally check against an `.exp` file.",
+      "range": {
+        "startLine": 17,
+        "startChar": 0,
+        "endLine": 17,
+        "endChar": 15
+      },
+      "revId": "8eb7c2171ccc3becfed23d9885957a2e5955fa9a",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b5821b62_c5f850dd",
+        "filename": "tvix/eval/tests/nix_oracle.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2022-09-06T13:15:54Z",
+      "side": 1,
+      "message": "Should probably also use pretty assertions like the main tvix test suite",
+      "range": {
+        "startLine": 41,
+        "startChar": 4,
+        "endLine": 41,
+        "endChar": 13
+      },
+      "revId": "8eb7c2171ccc3becfed23d9885957a2e5955fa9a",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "f34a02c6_65ab1978",
         "filename": "tvix/eval/tests/nix_oracle.rs",
         "patchSetId": 2
