@@ -16,6 +16,24 @@
       "message": "I think calling flush explicitly makes the intent clearer.",
       "revId": "fa617ed5ffe33031a3c5d267359386ebc1e02d92",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0fcec58c_22a42c17",
+        "filename": "tvix/eval/src/vm.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 445,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-09-06T14:52:25Z",
+      "side": 1,
+      "message": "This code is gone at HEAD, it\u0027s replaced with a much clearer \"Observer\" interface.",
+      "parentUuid": "89897e22_30be9bb8",
+      "revId": "fa617ed5ffe33031a3c5d267359386ebc1e02d92",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
