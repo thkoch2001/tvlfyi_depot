@@ -119,6 +119,18 @@ fn pure_builtins() -> Vec<Builtin> {
                 ))),
             }
         }),
+        Builtin::new("getAttr", 2, |args, vm| {
+            if let Value::Thunk(t) = &args[1] {
+                t.force(vm)?;
+            }
+            let k = args[0].to_str()?;
+            let xs = args[1].to_attrs()?;
+
+            match xs.select(k.as_str()) {
+                Some(x) => Ok(x.clone()),
+                None => Err(ErrorKind::Abort(format!("attribute '{}' missing", k))),
+            }
+        }),
         Builtin::new("length", 1, |args, vm| {
             if let Value::Thunk(t) = &args[0] {
                 t.force(vm)?;
