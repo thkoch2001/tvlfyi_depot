@@ -5,6 +5,7 @@
 
 use std::{
     collections::{BTreeMap, HashMap},
+    path::PathBuf,
     rc::Rc,
 };
 
@@ -209,10 +210,53 @@ fn pure_builtins() -> Vec<Builtin> {
     ]
 }
 
+// Return all impure builtins, which are builtins that rely on I/O and may not
+// be suitable for environments like WASM.
+fn impure_builtins() -> Vec<Builtin> {
+    vec![
+        Builtin::new("readDir", 1, |args, _| {
+            let do_read_dir = |x: &PathBuf| {
+                let mut stack_slice: Vec<Value> = vec![];
+                for entry in x.read_dir()? {
+                    if let Ok(entry) = entry {
+                        let file_type = entry.metadata().unwrap().file_type();
+                        let val = if file_type.is_dir() {
+                            "directory"
+                        } else if file_type.is_file() {
+                            "regular"
+                        } else {
+                            "symlink"
+                        };
+                        stack_slice.push(Value::String(entry.file_name().to_str().unwrap().into()));
+                        stack_slice.push(Value::String(val.into()));
+                    }
+                }
+                Ok(Value::Attrs(Rc::new(NixAttrs::construct(
+                    stack_slice.len() / 2,
+                    stack_slice,
+                )?)))
+            };
+
+            match &args[0] {
+                Value::String(x) => do_read_dir(&x.as_str().to_string().into()),
+                Value::Path(x) => do_read_dir(x),
+                x => Err(ErrorKind::Abort(format!(
+                    "cannot coerce a {} to a string",
+                    x.type_of()
+                ))),
+            }
+        }),
+    ]
+}
+
 fn builtins_set() -> NixAttrs {
     let mut map: BTreeMap<NixString, Value> = BTreeMap::new();
 
     for builtin in pure_builtins() {
+        map.insert(builtin.name().into(), Value::Builtin(builtin));
+    }
+
+    for builtin in impure_builtins() {
         map.insert(builtin.name().into(), Value::Builtin(builtin));
     }
 
