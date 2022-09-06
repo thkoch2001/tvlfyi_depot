@@ -69,6 +69,19 @@ fn pure_builtins() -> Vec<Builtin> {
             let a = args.pop().unwrap();
             arithmetic_op!(a, b, /)
         }),
+        Builtin::new("getAttr", 2, |args, vm| {
+            force!(vm, &args[0], value, {
+                force!(vm, &args[1], xs, {
+                    let k = args[0].to_str()?;
+                    match xs.to_attrs()?.select(k.as_str()) {
+                        Some(x) => Ok(x.clone()),
+                        None => Err(ErrorKind::AttributeNotFound {
+                            name: k.to_string(),
+                        }),
+                    }
+                })
+            })
+        }),
         Builtin::new("length", 1, |args, vm| {
             if let Value::Thunk(t) = &args[0] {
                 t.force(vm)?;
