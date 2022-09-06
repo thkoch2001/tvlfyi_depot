@@ -34,6 +34,24 @@
       "parentUuid": "c4352e95_43a2d60e",
       "revId": "eafca80e0d82384aca65613716e8e52c3188cc30",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0b782572_7022d2b0",
+        "filename": "tvix/eval/src/vm.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 383,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-09-06T06:30:10Z",
+      "side": 1,
+      "message": "From the IRC discussion it seems like we have no consensus on which way is better, so lets not hold up this CL based on that for now.",
+      "parentUuid": "a105ed0f_c562d809",
+      "revId": "eafca80e0d82384aca65613716e8e52c3188cc30",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
