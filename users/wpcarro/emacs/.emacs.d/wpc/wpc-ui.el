@@ -14,7 +14,6 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (require 'constants)
-(require 'tvl)
 (require 'prelude)
 (require 'al)
 (require 'fonts)
@@ -69,9 +68,6 @@
 
 ;; disable toolbar
 (tool-bar-mode -1)
-
-;; set default buffer for Emacs
-(setq initial-buffer-choice tvl-depot-path)
 
 ;; premium Emacs themes
 (use-package doom-themes
