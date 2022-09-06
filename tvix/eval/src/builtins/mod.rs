@@ -6,6 +6,7 @@
 use std::{
     cmp,
     collections::{BTreeMap, HashMap},
+    fs,
     path::PathBuf,
     rc::Rc,
 };
@@ -274,6 +275,20 @@ fn impure_builtins() -> Vec<Builtin> {
             match &args[0] {
                 Value::String(x) => do_read_dir(&x.as_str().to_string().into()),
                 Value::Path(x) => do_read_dir(x),
+                x => Err(ErrorKind::Abort(format!(
+                    "cannot coerce a {} to a string",
+                    x.type_of()
+                ))),
+            }
+        }),
+        Builtin::new("readFile", 1, |args, _| {
+            let do_read_file = |x: &PathBuf| Ok(Value::String(fs::read_to_string(x)?.into()));
+
+            match &args[0] {
+                Value::String(x) => do_read_file(&x.as_str().to_string().into()),
+                Value::Path(x) => do_read_file(x),
+                // TODO(wpcarro): Ensure we can coerce strings properly for
+                // inputs like: { __toString = _: "/path/to/foo.txt"; }
                 x => Err(ErrorKind::Abort(format!(
                     "cannot coerce a {} to a string",
                     x.type_of()
