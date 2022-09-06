@@ -4,6 +4,7 @@
 //! available builtins in Nix.
 
 use std::{
+    cmp,
     collections::{BTreeMap, HashMap},
     path::PathBuf,
     rc::Rc,
@@ -197,6 +198,18 @@ fn pure_builtins() -> Vec<Builtin> {
             let b = args.pop().unwrap();
             let a = args.pop().unwrap();
             arithmetic_op!(a, b, -)
+        }),
+        Builtin::new("substring", 3, |args, _| {
+            let beg = args[0].as_int()? as usize;
+            let end = args[1].as_int()? as usize;
+            let x = args[2].to_str()?;
+
+            if beg >= end {
+                Ok(Value::String("".into()))
+            } else {
+                let clamped = cmp::min(end, x.as_str().len());
+                Ok(Value::String(x.as_str()[beg..clamped].into()))
+            }
         }),
         Builtin::new("tail", 1, |args, vm| {
             if let Value::Thunk(t) = &args[0] {
