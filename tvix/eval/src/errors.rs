@@ -147,6 +147,12 @@ impl From<Error> for ErrorKind {
     }
 }
 
+impl From<std::io::Error> for ErrorKind {
+    fn from(e: std::io::Error) -> Self {
+        ErrorKind::Abort(e.to_string())
+    }
+}
+
 #[derive(Clone, Debug)]
 pub struct Error {
     pub kind: ErrorKind,
