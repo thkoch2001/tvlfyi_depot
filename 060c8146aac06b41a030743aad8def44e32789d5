@@ -16,6 +16,24 @@
       "message": "This is basically the same code as OpClosure…",
       "revId": "060c8146aac06b41a030743aad8def44e32789d5",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9f3187ee_c0f89365",
+        "filename": "tvix/eval/src/vm.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 430,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-09-06T16:54:14Z",
+      "side": 1,
+      "message": "Yeah, should refactor this to extract it out. I\u0027ll do that, just doing a change to how upvalues are populated first to sort out a problem.",
+      "parentUuid": "421904f7_5500ecc5",
+      "revId": "060c8146aac06b41a030743aad8def44e32789d5",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
