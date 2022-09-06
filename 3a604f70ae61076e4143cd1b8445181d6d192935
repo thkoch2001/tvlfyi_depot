@@ -34,6 +34,24 @@
       "parentUuid": "5576b892_54db78bb",
       "revId": "3a604f70ae61076e4143cd1b8445181d6d192935",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8c1d6bc5_3fef22ec",
+        "filename": "tvix/eval/src/tests/tvix_tests/eval-okay-closure-with-shadowing.nix",
+        "patchSetId": 1
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2022-09-06T13:22:41Z",
+      "side": 1,
+      "message": "covered by eval-okay-with-closure.nix now I think.",
+      "parentUuid": "b996a70a_81ab8793",
+      "revId": "3a604f70ae61076e4143cd1b8445181d6d192935",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
