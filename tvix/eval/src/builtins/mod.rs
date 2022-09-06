@@ -104,6 +104,20 @@ fn pure_builtins() -> Vec<Builtin> {
             let a = args.pop().unwrap();
             arithmetic_op!(a, b, /)
         }),
+        Builtin::new("elemAt", 2, |args, vm| {
+            if let Value::Thunk(t) = &args[0] {
+                t.force(vm)?;
+            }
+            let xs = args[0].to_list()?;
+            let i = args[1].as_int()? as usize;
+            match xs.get(i) {
+                Some(x) => Ok(x.clone()),
+                None => Err(ErrorKind::Abort(format!(
+                    "list index {} is out of bounds",
+                    i
+                ))),
+            }
+        }),
         Builtin::new("length", 1, |args, vm| {
             if let Value::Thunk(t) = &args[0] {
                 t.force(vm)?;
