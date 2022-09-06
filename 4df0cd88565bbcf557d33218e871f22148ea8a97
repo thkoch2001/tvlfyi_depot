@@ -22,6 +22,30 @@
       },
       "revId": "4df0cd88565bbcf557d33218e871f22148ea8a97",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "976a6e04_1366d308",
+        "filename": "tvix/eval/src/compiler/scope.rs",
+        "patchSetId": 4
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-09-06T06:37:16Z",
+      "side": 1,
+      "message": "Yeah good point, will refactor it at HEAD.",
+      "parentUuid": "ec8d602b_3f1d8692",
+      "range": {
+        "startLine": 30,
+        "startChar": 15,
+        "endLine": 30,
+        "endChar": 20
+      },
+      "revId": "4df0cd88565bbcf557d33218e871f22148ea8a97",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
