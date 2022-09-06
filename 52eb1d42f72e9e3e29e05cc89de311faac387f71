@@ -16,6 +16,24 @@
       "message": "If we instead populate the list in the following loop we can save on iterating through the entries list once.",
       "revId": "52eb1d42f72e9e3e29e05cc89de311faac387f71",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "03acd1c9_69046ce3",
+        "filename": "tvix/eval/src/compiler/mod.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 681,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-09-06T14:54:25Z",
+      "side": 1,
+      "message": "Good catch, fixing at HEAD.",
+      "parentUuid": "440e0c0c_66b70af0",
+      "revId": "52eb1d42f72e9e3e29e05cc89de311faac387f71",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
