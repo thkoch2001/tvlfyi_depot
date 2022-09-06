@@ -70,6 +70,30 @@
       },
       "revId": "ff25c9577962e61ec24b9ab7d7f4f3c1b88c3201",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f41f744f_d6c3fda8",
+        "filename": "web/blog/fragments.nix",
+        "patchSetId": 1
+      },
+      "lineNbr": 62,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-09-06T18:02:56Z",
+      "side": 1,
+      "message": "I\u0027ll restore the initial value as the default",
+      "parentUuid": "326a3526_b70f75b8",
+      "range": {
+        "startLine": 62,
+        "startChar": 31,
+        "endLine": 62,
+        "endChar": 40
+      },
+      "revId": "ff25c9577962e61ec24b9ab7d7f4f3c1b88c3201",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
