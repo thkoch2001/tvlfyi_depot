@@ -125,6 +125,15 @@ fn pure_builtins() -> Vec<Builtin> {
             }
             Ok(Value::Integer(args[0].to_list()?.len() as i64))
         }),
+        Builtin::new("hasAttr", 2, |args, vm| {
+            if let Value::Thunk(t) = &args[1] {
+                t.force(vm)?;
+            }
+            let k = args[0].to_str()?;
+            let xs = args[1].to_attrs()?;
+
+            Ok(Value::Bool(xs.contains(k.as_str())))
+        }),
         Builtin::new("head", 1, |args, vm| {
             force!(vm, &args[0], xs, {
                 match xs.to_list()?.get(0) {
