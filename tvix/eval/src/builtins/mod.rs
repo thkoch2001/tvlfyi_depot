@@ -4,7 +4,9 @@
 //! available builtins in Nix.
 
 use std::{
+    cmp,
     collections::{BTreeMap, HashMap},
+    fs,
     path::PathBuf,
     rc::Rc,
 };
@@ -194,6 +196,18 @@ fn pure_builtins() -> Vec<Builtin> {
             let a = args.pop().unwrap();
             arithmetic_op!(a, b, -)
         }),
+        Builtin::new("substring", 3, |args, _| {
+            let beg = args[0].as_int()? as usize;
+            let end = args[1].as_int()? as usize;
+            let x = args[2].to_str()?;
+
+            if beg >= end {
+                Ok(Value::String("".into()))
+            } else {
+                let clamped = cmp::min(end, x.as_str().len());
+                Ok(Value::String(x.as_str()[beg..clamped].into()))
+            }
+        }),
         Builtin::new("tail", 1, |args, vm| {
             if let Value::Thunk(t) = &args[0] {
                 t.force(vm)?;
@@ -230,38 +244,54 @@ fn pure_builtins() -> Vec<Builtin> {
 /// Return all impure builtins, which are builtins that rely on I/O and may not
 /// be suitable for environments like WASM.
 fn impure_builtins() -> Vec<Builtin> {
-    vec![Builtin::new("readDir", 1, |args, _| {
-        let do_read_dir = |x: &PathBuf| {
-            let mut stack_slice: Vec<Value> = vec![];
-            for entry in x.read_dir()? {
-                if let Ok(entry) = entry {
-                    let file_type = entry.metadata().unwrap().file_type();
-                    let val = if file_type.is_dir() {
-                        "directory"
-                    } else if file_type.is_file() {
-                        "regular"
-                    } else {
-                        "symlink"
-                    };
-                    stack_slice.push(Value::String(entry.file_name().to_str().unwrap().into()));
-                    stack_slice.push(Value::String(val.into()));
+    vec![
+        Builtin::new("readDir", 1, |args, _| {
+            let do_read_dir = |x: &PathBuf| {
+                let mut stack_slice: Vec<Value> = vec![];
+                for entry in x.read_dir()? {
+                    if let Ok(entry) = entry {
+                        let file_type = entry.metadata().unwrap().file_type();
+                        let val = if file_type.is_dir() {
+                            "directory"
+                        } else if file_type.is_file() {
+                            "regular"
+                        } else {
+                            "symlink"
+                        };
+                        stack_slice.push(Value::String(entry.file_name().to_str().unwrap().into()));
+                        stack_slice.push(Value::String(val.into()));
+                    }
                 }
-            }
-            Ok(Value::Attrs(Rc::new(NixAttrs::construct(
-                stack_slice.len() / 2,
-                stack_slice,
-            )?)))
-        };
+                Ok(Value::Attrs(Rc::new(NixAttrs::construct(
+                    stack_slice.len() / 2,
+                    stack_slice,
+                )?)))
+            };
 
-        match &args[0] {
-            Value::String(x) => do_read_dir(&PathBuf::from(&x.as_str())),
-            Value::Path(x) => do_read_dir(x),
-            x => Err(ErrorKind::UnsupportedCoercion {
-                source: x.type_of(),
-                target: "string",
-            }),
-        }
-    })]
+            match &args[0] {
+                Value::String(x) => do_read_dir(&PathBuf::from(&x.as_str())),
+                Value::Path(x) => do_read_dir(x),
+                x => Err(ErrorKind::UnsupportedCoercion {
+                    source: x.type_of(),
+                    target: "string",
+                }),
+            }
+        }),
+        Builtin::new("readFile", 1, |args, _| {
+            let do_read_file = |x: &PathBuf| Ok(Value::String(fs::read_to_string(x)?.into()));
+
+            match &args[0] {
+                Value::String(x) => do_read_file(&x.as_str().to_string().into()),
+                Value::Path(x) => do_read_file(x),
+                // TODO(wpcarro): Ensure we can coerce strings properly for
+                // inputs like: { __toString = _: "/path/to/foo.txt"; }
+                x => Err(ErrorKind::Abort(format!(
+                    "cannot coerce a {} to a string",
+                    x.type_of()
+                ))),
+            }
+        }),
+    ]
 }
 
 fn builtins_set() -> NixAttrs {
