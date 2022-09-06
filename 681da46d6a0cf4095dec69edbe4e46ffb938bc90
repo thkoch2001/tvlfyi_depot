@@ -22,6 +22,30 @@
       },
       "revId": "681da46d6a0cf4095dec69edbe4e46ffb938bc90",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "05dd9a24_3e54c40e",
+        "filename": "tvix/eval/src/compiler/mod.rs",
+        "patchSetId": 6
+      },
+      "lineNbr": 109,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-09-06T14:48:56Z",
+      "side": 1,
+      "message": "It\u0027s actually a `LocalIdx` (not sure if that exists at this commit yet), fixed later on.",
+      "parentUuid": "4581aa80_b7d2b639",
+      "range": {
+        "startLine": 109,
+        "startChar": 39,
+        "endLine": 109,
+        "endChar": 44
+      },
+      "revId": "681da46d6a0cf4095dec69edbe4e46ffb938bc90",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
