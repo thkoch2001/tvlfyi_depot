@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1dcff614_016d8aec",
+        "filename": "tvix/eval/src/compiler/mod.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 839,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2022-09-07T16:54:50Z",
+      "side": 1,
+      "message": "same as with assert, theses spans are often pretty big I think.",
+      "range": {
+        "startLine": 839,
+        "startChar": 52,
+        "endLine": 839,
+        "endChar": 56
+      },
+      "revId": "7ace645f0c5190fb7f9e9813560a3d4e87ea33cf",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
