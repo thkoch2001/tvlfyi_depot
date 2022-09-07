@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4a50b17a_108189eb",
+        "filename": "tvix/eval/src/eval.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 58,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2022-09-07T17:11:13Z",
+      "side": 1,
+      "message": "Would be nice if runtime errors in the VM would also be formatted in this way, seems to still be missing at HEAD.",
+      "revId": "4b65141e3d05b1f754a88b22c01a8247f9b02d70",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
