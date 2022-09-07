@@ -16,6 +16,24 @@
       "message": "Can\u0027t we just make .force() return this at the end?",
       "revId": "d7af9ba04a90df59031e4e02977c5a5ed9395ce6",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9edcb078_5304be0d",
+        "filename": "tvix/eval/src/value/thunk.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 103,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-09-07T15:24:04Z",
+      "side": 1,
+      "message": "It did that before, but given there are cases where we know a value has been forced or where a value is only forced but not (immediately) used, I think having it separated is better at the moment. Happy to re-evaluate",
+      "parentUuid": "7cc384e5_44198f86",
+      "revId": "d7af9ba04a90df59031e4e02977c5a5ed9395ce6",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
