@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "124deea7_2ca20b85",
+        "filename": "tvix/eval/src/vm.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 634,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2022-09-07T16:04:19Z",
+      "side": 1,
+      "message": "maybe we should list the other cases explicitly here so we don\u0027t forget to extend the list above?",
+      "range": {
+        "startLine": 634,
+        "startChar": 12,
+        "endLine": 634,
+        "endChar": 13
+      },
+      "revId": "51f07f4201fde39ef7c80b0d1a18aa2419392c20",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
