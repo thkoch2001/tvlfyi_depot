@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c5f6e5e9_95470f59",
+        "filename": "tvix/eval/src/compiler/mod.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 607,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2022-09-07T16:52:14Z",
+      "side": 1,
+      "message": "I guess the span for these may be huge in some cases, since it is basically the assert + the rest of the file in many cases",
+      "range": {
+        "startLine": 607,
+        "startChar": 40,
+        "endLine": 607,
+        "endChar": 44
+      },
+      "revId": "5b81c24c2d38eaa858cb032d4835504034f5249c",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
