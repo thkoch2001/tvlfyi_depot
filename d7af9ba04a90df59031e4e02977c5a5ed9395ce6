@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7cc384e5_44198f86",
+        "filename": "tvix/eval/src/value/thunk.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 103,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2022-09-07T14:57:51Z",
+      "side": 1,
+      "message": "Can\u0027t we just make .force() return this at the end?",
+      "revId": "d7af9ba04a90df59031e4e02977c5a5ed9395ce6",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
