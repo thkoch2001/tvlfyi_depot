@@ -16,6 +16,24 @@
       "message": "If there\u0027s an error here, it\u0027d basically be a compiler error though. I guess it doesn\u0027t really matter though, it\u0027d be confusing for users either way.",
       "revId": "3af4d8ad50f7fb3b467540c61adf73cc72d3074a",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "af73b6dc_5abfdeae",
+        "filename": "tvix/eval/src/compiler/mod.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 639,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-09-07T19:22:24Z",
+      "side": 1,
+      "message": "There may be some kind of case where this information is relevant not just for errors though (consider e.g. if tvixbolt was colouring ast nodes like godbolt does)",
+      "parentUuid": "da256d03_b1d7e979",
+      "revId": "3af4d8ad50f7fb3b467540c61adf73cc72d3074a",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
