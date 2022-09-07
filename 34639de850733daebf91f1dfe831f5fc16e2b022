@@ -16,6 +16,24 @@
       "message": "I wonder what the span is if something goes wrong on the second application of a two argument function?",
       "revId": "34639de850733daebf91f1dfe831f5fc16e2b022",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "be20fb4a_4c1d13ce",
+        "filename": "tvix/eval/src/compiler/mod.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 914,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-09-07T20:03:25Z",
+      "side": 1,
+      "message": "You mean at the call to the curried function?\n\ne.g.\n\n  f a b\n  f(a b)\n   ^  ^\n   |      --- first call starts here\n   |      --- second here",
+      "parentUuid": "e8eed56d_a5bcd8d7",
+      "revId": "34639de850733daebf91f1dfe831f5fc16e2b022",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
