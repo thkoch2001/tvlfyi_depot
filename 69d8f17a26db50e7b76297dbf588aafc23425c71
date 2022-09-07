@@ -16,6 +16,24 @@
       "message": "Why can\u0027t the op code not simply hold the vector directly (for now)?",
       "revId": "69d8f17a26db50e7b76297dbf588aafc23425c71",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d8f17a53_600591ae",
+        "filename": "tvix/eval/src/compiler/mod.rs",
+        "patchSetId": 3
+      },
+      "lineNbr": 874,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-09-07T16:13:01Z",
+      "side": 1,
+      "message": "It\u0027s one of the absolute hottest code paths, so there should be as little extra data in the ops as possible. In fact we should probably look at ways to reduce their size, rather than increase it.",
+      "parentUuid": "1f7bafd0_c1f9c1df",
+      "revId": "69d8f17a26db50e7b76297dbf588aafc23425c71",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
