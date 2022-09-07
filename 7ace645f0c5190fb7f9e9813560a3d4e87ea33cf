@@ -22,6 +22,30 @@
       },
       "revId": "7ace645f0c5190fb7f9e9813560a3d4e87ea33cf",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9978e350_0492cbee",
+        "filename": "tvix/eval/src/compiler/mod.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 839,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-09-07T19:24:24Z",
+      "side": 1,
+      "message": "maybe it should also track the expression it inherits from, or the combination of the token span + \"from-span\". making a note",
+      "parentUuid": "1dcff614_016d8aec",
+      "range": {
+        "startLine": 839,
+        "startChar": 52,
+        "endLine": 839,
+        "endChar": 56
+      },
+      "revId": "7ace645f0c5190fb7f9e9813560a3d4e87ea33cf",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
