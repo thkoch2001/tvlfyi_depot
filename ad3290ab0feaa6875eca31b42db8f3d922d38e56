@@ -16,6 +16,24 @@
       "message": "Would it make sense to use peek to check if there actually is a thunk on the stack to avoid  popping and pushing for a noop?",
       "revId": "ad3290ab0feaa6875eca31b42db8f3d922d38e56",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e42c9a54_4249ef8e",
+        "filename": "tvix/eval/src/vm.rs",
+        "patchSetId": 3
+      },
+      "lineNbr": 445,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-09-07T15:25:30Z",
+      "side": 1,
+      "message": "Yes. We can also add a `OpForceAt(StackIdx)` (potentially useful for builtins) that doesn\u0027t actually *replace* the stack value like we do here. Adding it to the list",
+      "parentUuid": "b87ff520_cf9696ad",
+      "revId": "ad3290ab0feaa6875eca31b42db8f3d922d38e56",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
