@@ -16,6 +16,24 @@
       "message": "Nix calls this `(string)` (which frankly is a terrible name). Maybe avoiding angle brackets is wise to avoid confusion with findFile?",
       "revId": "1f12aad47a4a4677662c43c3a0e6c42a97df9407",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c9778d18_5782c961",
+        "filename": "tvix/eval/src/eval.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-09-07T19:10:26Z",
+      "side": 1,
+      "message": "Hm yeah that confusion is a good point. Lets discuss on IRC",
+      "parentUuid": "0650f09e_9e6fa485",
+      "revId": "1f12aad47a4a4677662c43c3a0e6c42a97df9407",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
