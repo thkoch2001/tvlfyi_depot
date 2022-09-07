@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9bbb63b0_1b6ff866",
+        "filename": "tvix/eval/src/value/mod.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 56,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2022-09-07T21:04:28Z",
+      "side": 1,
+      "message": "I feel like we want to have wrappers around the casts as well for use in builtins implementation that also force, so we can\u0027t forget to.",
+      "range": {
+        "startLine": 56,
+        "startChar": 13,
+        "endLine": 56,
+        "endChar": 21
+      },
+      "revId": "dd6d2e2877bba788513845883c975ebf2b5317dc",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b3ec4793_f998def9",
+        "filename": "tvix/eval/src/value/mod.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 104,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2022-09-07T21:04:28Z",
+      "side": 1,
+      "message": "shouldn\u0027t this be to_bool?",
+      "range": {
+        "startLine": 104,
+        "startChar": 14,
+        "endLine": 104,
+        "endChar": 21
+      },
+      "revId": "dd6d2e2877bba788513845883c975ebf2b5317dc",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
