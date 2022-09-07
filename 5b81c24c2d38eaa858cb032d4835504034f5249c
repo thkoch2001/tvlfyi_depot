@@ -22,6 +22,30 @@
       },
       "revId": "5b81c24c2d38eaa858cb032d4835504034f5249c",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a099ecd1_bdd4c392",
+        "filename": "tvix/eval/src/compiler/mod.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 607,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-09-07T19:20:59Z",
+      "side": 1,
+      "message": "Hm, maybe it should point to the condition, I\u0027ll make a note",
+      "parentUuid": "c5f6e5e9_95470f59",
+      "range": {
+        "startLine": 607,
+        "startChar": 40,
+        "endLine": 607,
+        "endChar": 44
+      },
+      "revId": "5b81c24c2d38eaa858cb032d4835504034f5249c",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
