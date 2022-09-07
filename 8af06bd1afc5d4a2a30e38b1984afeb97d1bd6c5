@@ -16,6 +16,24 @@
       "message": "A bit annoying that we have to clone now in quite a few places?",
       "revId": "8af06bd1afc5d4a2a30e38b1984afeb97d1bd6c5",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e14d909b_465dcb58",
+        "filename": "tvix/eval/src/compiler/mod.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 410,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-09-07T19:59:43Z",
+      "side": 1,
+      "message": "Yes, but they\u0027re cheap. I guess we can measure the cost of pre-calculating the span vs. cloning this Rc, but right now we have bigger fish to fry.",
+      "parentUuid": "8a5673af_c7c289da",
+      "revId": "8af06bd1afc5d4a2a30e38b1984afeb97d1bd6c5",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
