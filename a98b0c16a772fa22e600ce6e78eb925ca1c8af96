@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ea95adbf_ef1a7930",
+        "filename": "tvix/eval/src/value/mod.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 214,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2022-09-07T16:01:41Z",
+      "side": 1,
+      "message": "Why are we not comparing two thunks?",
+      "revId": "a98b0c16a772fa22e600ce6e78eb925ca1c8af96",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
