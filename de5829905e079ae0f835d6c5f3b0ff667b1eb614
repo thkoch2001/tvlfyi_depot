@@ -16,6 +16,24 @@
       "message": "Why is this necessary? Conceptually a lambdas own scopes kind of start at 0, because it can\u0027t e.g. close scopes that were defined outside of it.",
       "revId": "de5829905e079ae0f835d6c5f3b0ff667b1eb614",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9957ab94_678d3131",
+        "filename": "tvix/eval/src/compiler/scope.rs",
+        "patchSetId": 3
+      },
+      "lineNbr": 189,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-09-08T12:51:30Z",
+      "side": 1,
+      "message": "As mentioned on IRC, I think this is required somewhere in the chain for some scope resolution thing to work correctly, but that behaviour was probably a bug, and at HEAD it makes no difference anymore. We\u0027ll clean it up there.",
+      "parentUuid": "a286aa54_ed021d3a",
+      "revId": "de5829905e079ae0f835d6c5f3b0ff667b1eb614",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
