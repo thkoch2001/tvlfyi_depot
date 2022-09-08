@@ -16,6 +16,24 @@
       "message": "Seems like you can still trigger the crash in this borrow, although I\u0027m not quite sure how it is triggered. The error complains about a mutable borrow already exsting, so it must be the thunk_mut reference…",
       "revId": "ddf0393137dd1b209d71eec36bf396a53e85b1cc",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d4c822c7_0cffaebe",
+        "filename": "tvix/eval/src/value/thunk.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 73,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-09-08T19:45:18Z",
+      "side": 1,
+      "message": "It\u0027s probably in the upvalue populating. Can you send me a test case? Can debug on my flight tomorrow",
+      "parentUuid": "7b7a5b19_722b0d46",
+      "revId": "ddf0393137dd1b209d71eec36bf396a53e85b1cc",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
