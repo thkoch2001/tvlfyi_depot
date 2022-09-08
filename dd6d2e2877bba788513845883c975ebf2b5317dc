@@ -45,6 +45,30 @@
       },
       "revId": "dd6d2e2877bba788513845883c975ebf2b5317dc",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8f1e076c_bc019e0b",
+        "filename": "tvix/eval/src/value/mod.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 104,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-09-08T07:59:10Z",
+      "side": 1,
+      "message": "Hm, need to double-check what the naming rules are if the type is Copy",
+      "parentUuid": "b3ec4793_f998def9",
+      "range": {
+        "startLine": 104,
+        "startChar": 14,
+        "endLine": 104,
+        "endChar": 21
+      },
+      "revId": "dd6d2e2877bba788513845883c975ebf2b5317dc",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
