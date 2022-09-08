@@ -16,6 +16,24 @@
       "message": "I think we also should do a similar thing for most typechecks: We should never return a type error of { expected: \"sometype\", actual: \"internal\" } to the user, realistically. Such a panic would help debugging.",
       "revId": "2e011a4659cfa4211e4a95de416142fdecc305aa",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6d43684d_69134d2a",
+        "filename": "tvix/eval/src/vm.rs",
+        "patchSetId": 5
+      },
+      "lineNbr": 677,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-09-08T13:04:50Z",
+      "side": 1,
+      "message": "Reasonable!",
+      "parentUuid": "f427d37a_8005bc59",
+      "revId": "2e011a4659cfa4211e4a95de416142fdecc305aa",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
