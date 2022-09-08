@@ -22,6 +22,30 @@
       },
       "revId": "e172cf6596b63e438275c49aae316d0b2562db8b",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "da6236bf_c0dd467e",
+        "filename": "tvix/eval/src/eval.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-09-08T07:58:13Z",
+      "side": 1,
+      "message": "The parse errors themselves contain more specific information; we\u0027ll have to deal with that in the display implementation for the `ParseErrors` variant",
+      "parentUuid": "38344a7d_99e698a1",
+      "range": {
+        "startLine": 28,
+        "startChar": 18,
+        "endLine": 28,
+        "endChar": 27
+      },
+      "revId": "e172cf6596b63e438275c49aae316d0b2562db8b",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
