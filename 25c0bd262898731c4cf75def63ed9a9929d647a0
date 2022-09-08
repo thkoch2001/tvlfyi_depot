@@ -16,6 +16,24 @@
       "message": "I guess conceptually phantoms are ignored atm (which in practice works by initialising them as used). We could emit warnings for phantoms/withs if there is no dynamically resolved name below a with.",
       "revId": "25c0bd262898731c4cf75def63ed9a9929d647a0",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1ddae677_60d76942",
+        "filename": "tvix/eval/src/compiler/scope.rs",
+        "patchSetId": 3
+      },
+      "lineNbr": 77,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-09-08T13:36:14Z",
+      "side": 1,
+      "message": "For phantoms this won\u0027t work, as they end up being used a *lot* more slightly further down, but we can probably do something around the time where the with-stack is popped. It\u0027s a good idea idea to warn for useless `with`, I\u0027ll add it to the list.",
+      "parentUuid": "d4f33be4_ce95dd79",
+      "revId": "25c0bd262898731c4cf75def63ed9a9929d647a0",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
