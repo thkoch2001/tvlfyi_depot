@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7b7a5b19_722b0d46",
+        "filename": "tvix/eval/src/value/thunk.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 73,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2022-09-08T18:59:02Z",
+      "side": 1,
+      "message": "Seems like you can still trigger the crash in this borrow, although I\u0027m not quite sure how it is triggered. The error complains about a mutable borrow already exsting, so it must be the thunk_mut reference…",
+      "revId": "ddf0393137dd1b209d71eec36bf396a53e85b1cc",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
