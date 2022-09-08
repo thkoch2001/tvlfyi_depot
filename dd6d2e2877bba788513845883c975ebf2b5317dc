@@ -24,6 +24,30 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "be1be6d9_0d866c8a",
+        "filename": "tvix/eval/src/value/mod.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 56,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-09-08T08:04:27Z",
+      "side": 1,
+      "message": "Yeah, probably. I\u0027ll see at HEAD if we can generate them in the same macro.",
+      "parentUuid": "9bbb63b0_1b6ff866",
+      "range": {
+        "startLine": 56,
+        "startChar": 13,
+        "endLine": 56,
+        "endChar": 21
+      },
+      "revId": "dd6d2e2877bba788513845883c975ebf2b5317dc",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "b3ec4793_f998def9",
@@ -61,6 +85,30 @@
       "side": 1,
       "message": "Hm, need to double-check what the naming rules are if the type is Copy",
       "parentUuid": "b3ec4793_f998def9",
+      "range": {
+        "startLine": 104,
+        "startChar": 14,
+        "endLine": 104,
+        "endChar": 21
+      },
+      "revId": "dd6d2e2877bba788513845883c975ebf2b5317dc",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "eb4355ef_9b7287df",
+        "filename": "tvix/eval/src/value/mod.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 104,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-09-08T08:04:27Z",
+      "side": 1,
+      "message": "It seems to be unclear: https://rust-lang.github.io/api-guidelines/naming.html#ad-hoc-conversions-follow-as_-to_-into_-conventions-c-conv\n\nDelegating discussion to IRC",
+      "parentUuid": "8f1e076c_bc019e0b",
       "range": {
         "startLine": 104,
         "startChar": 14,
