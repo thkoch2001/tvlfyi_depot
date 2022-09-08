@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d4f33be4_ce95dd79",
+        "filename": "tvix/eval/src/compiler/scope.rs",
+        "patchSetId": 3
+      },
+      "lineNbr": 77,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2022-09-08T09:36:52Z",
+      "side": 1,
+      "message": "I guess conceptually phantoms are ignored atm (which in practice works by initialising them as used). We could emit warnings for phantoms/withs if there is no dynamically resolved name below a with.",
+      "revId": "25c0bd262898731c4cf75def63ed9a9929d647a0",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
