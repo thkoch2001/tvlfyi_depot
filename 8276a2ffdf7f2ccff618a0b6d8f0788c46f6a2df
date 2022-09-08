@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6ed911f4_8dc3ffbe",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 5
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2022-09-08T09:14:41Z",
+      "side": 1,
+      "message": "Since the feature flag is gone at HEAD, we don\u0027t really need to discuss this here, right?",
+      "revId": "8276a2ffdf7f2ccff618a0b6d8f0788c46f6a2df",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
