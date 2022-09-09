@@ -94,6 +94,30 @@
       },
       "revId": "ff25c9577962e61ec24b9ab7d7f4f3c1b88c3201",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a484f154_559b1052",
+        "filename": "web/blog/fragments.nix",
+        "patchSetId": 1
+      },
+      "lineNbr": 62,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2022-09-09T15:05:51Z",
+      "side": 1,
+      "message": "If you remove the instances where the default is passed explicitly I think the list of owners that need to +2 is a bit smaller possibly?",
+      "parentUuid": "f41f744f_d6c3fda8",
+      "range": {
+        "startLine": 62,
+        "startChar": 31,
+        "endLine": 62,
+        "endChar": 40
+      },
+      "revId": "ff25c9577962e61ec24b9ab7d7f4f3c1b88c3201",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
