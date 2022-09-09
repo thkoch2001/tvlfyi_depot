@@ -34,6 +34,24 @@
       "parentUuid": "7b7a5b19_722b0d46",
       "revId": "ddf0393137dd1b209d71eec36bf396a53e85b1cc",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d21817e6_b477b493",
+        "filename": "tvix/eval/src/value/thunk.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 73,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2022-09-09T13:21:21Z",
+      "side": 1,
+      "message": "I discovered it in the following case:\n\n    let x \u003d x; in x\n\nSo upvalues check out I think.",
+      "parentUuid": "d4c822c7_0cffaebe",
+      "revId": "ddf0393137dd1b209d71eec36bf396a53e85b1cc",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
