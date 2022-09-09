@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3596efbf_a2df2d46",
+        "filename": "tvix/eval/src/errors.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2022-09-09T13:18:47Z",
+      "side": 1,
+      "message": "I think it makes sense to use the proper terminology of attribute name",
+      "range": {
+        "startLine": 11,
+        "startChar": 11,
+        "endLine": 11,
+        "endChar": 14
+      },
+      "revId": "99afa1bb8df2bf8e997526d7436860c1d0ffdf37",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
