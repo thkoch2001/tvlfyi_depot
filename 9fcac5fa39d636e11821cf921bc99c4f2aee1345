@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1e070bc4_0c74f6ac",
+        "filename": "tvix/eval/src/observer.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 153,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2022-09-09T12:34:04Z",
+      "side": 1,
+      "message": "Side Noted Should we also start using CodeIdx for the intstruction pointer?",
+      "range": {
+        "startLine": 153,
+        "startChar": 41,
+        "endLine": 153,
+        "endChar": 46
+      },
+      "revId": "9fcac5fa39d636e11821cf921bc99c4f2aee1345",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
