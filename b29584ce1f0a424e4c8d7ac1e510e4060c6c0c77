@@ -16,6 +16,24 @@
       "message": "Isn\u0027t this TODO still relevant?",
       "revId": "b29584ce1f0a424e4c8d7ac1e510e4060c6c0c77",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bd1a4e44_513e92af",
+        "filename": "tvix/eval/src/builtins/mod.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 100,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-09-09T21:11:45Z",
+      "side": 0,
+      "message": "Yeah, it is. I guess we should transition to moving some of this stuff into Panettone.",
+      "parentUuid": "55ba80b0_b89c11a8",
+      "revId": "b29584ce1f0a424e4c8d7ac1e510e4060c6c0c77",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
