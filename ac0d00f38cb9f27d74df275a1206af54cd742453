@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "582345f7_b9ff8ec6",
+        "filename": "tvix/eval/src/vm.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 221,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2022-09-09T12:15:44Z",
+      "side": 1,
+      "message": "Not sure I quite like this, since it is very implicit in place (like here) where the type is not immediately clear…\n\nWhat does grfn think?",
+      "revId": "ac0d00f38cb9f27d74df275a1206af54cd742453",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
