@@ -33,6 +33,24 @@
       "message": "Would it be possible to detect if we are tail calling the same closure as we are already in and thus keep the upvalues list as is to avoid this copy?",
       "revId": "c98c5565d0083017fee927904f11e2c0856d3d56",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "de2c4943_406a6f1a",
+        "filename": "tvix/eval/src/vm.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 472,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-09-09T21:14:06Z",
+      "side": 1,
+      "message": "Possibly yeah, though we don\u0027t store the Closure directly in the VM, could do it with some metadata. Adding a note.",
+      "parentUuid": "ebddc9d4_1f522f08",
+      "revId": "c98c5565d0083017fee927904f11e2c0856d3d56",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
