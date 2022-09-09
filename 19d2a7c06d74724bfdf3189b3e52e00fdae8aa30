@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bcd48ca7_56ce2488",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2022-09-09T13:16:11Z",
+      "side": 1,
+      "message": "I think it is still in the optimisation potential doc? Maybe clean that up.",
+      "revId": "19d2a7c06d74724bfdf3189b3e52e00fdae8aa30",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
