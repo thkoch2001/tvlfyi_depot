@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "55ba80b0_b89c11a8",
+        "filename": "tvix/eval/src/builtins/mod.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 100,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2022-09-09T12:36:31Z",
+      "side": 0,
+      "message": "Isn\u0027t this TODO still relevant?",
+      "revId": "b29584ce1f0a424e4c8d7ac1e510e4060c6c0c77",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
