@@ -20,6 +20,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "8336d306_41386e56",
+        "filename": "tvix/eval/src/vm.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 469,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-09-09T21:14:31Z",
+      "side": 1,
+      "message": "I don\u0027t understand what you mean. Overwriting how, by writing into slots through indexes?",
+      "parentUuid": "797d4ada_4291c3fe",
+      "revId": "c98c5565d0083017fee927904f11e2c0856d3d56",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "ebddc9d4_1f522f08",
         "filename": "tvix/eval/src/vm.rs",
         "patchSetId": 2
