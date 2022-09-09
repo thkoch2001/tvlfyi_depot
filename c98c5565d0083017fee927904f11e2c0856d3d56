@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "797d4ada_4291c3fe",
+        "filename": "tvix/eval/src/vm.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 469,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2022-09-09T13:13:59Z",
+      "side": 1,
+      "message": "Couldn\u0027t we keep the stack_offset from when the call frame was entered? Overwriting the stuff that frame placed on the stack shouldn\u0027t make any difference, right?",
+      "revId": "c98c5565d0083017fee927904f11e2c0856d3d56",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ebddc9d4_1f522f08",
+        "filename": "tvix/eval/src/vm.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 472,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2022-09-09T13:13:59Z",
+      "side": 1,
+      "message": "Would it be possible to detect if we are tail calling the same closure as we are already in and thus keep the upvalues list as is to avoid this copy?",
+      "revId": "c98c5565d0083017fee927904f11e2c0856d3d56",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
