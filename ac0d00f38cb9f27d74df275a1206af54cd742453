@@ -34,6 +34,24 @@
       "parentUuid": "582345f7_b9ff8ec6",
       "revId": "ac0d00f38cb9f27d74df275a1206af54cd742453",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "263a6c88_f032d1eb",
+        "filename": "tvix/eval/src/vm.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 221,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-09-09T21:09:28Z",
+      "side": 1,
+      "message": "The idea is more about avoiding accidentally indexing into the wrong vector; it might be better to have two separate functions that also take the typed index structs. Making a note of this.",
+      "parentUuid": "b7866278_4c3cf1a3",
+      "revId": "ac0d00f38cb9f27d74df275a1206af54cd742453",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
