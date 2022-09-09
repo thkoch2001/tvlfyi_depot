@@ -38,6 +38,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "06148d27_9e1ec187",
+        "filename": "tvix/eval/src/vm.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 469,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2022-09-09T22:53:06Z",
+      "side": 1,
+      "message": "Right, that is indeed a problem! I guess we would need to rework how pushing and popping from the stack works for this or split off stack_offset..stack.len() here.\n\nThis is based on the assumption I have that when doing a tail call there may e.g. locals left on the stack that are completely unreachable, but still occupy space (which we\u0027d ideally like to avoid in a tail call).",
+      "parentUuid": "8336d306_41386e56",
+      "revId": "c98c5565d0083017fee927904f11e2c0856d3d56",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "ebddc9d4_1f522f08",
         "filename": "tvix/eval/src/vm.rs",
         "patchSetId": 2
