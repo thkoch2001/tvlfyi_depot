@@ -22,6 +22,30 @@
       },
       "revId": "9fcac5fa39d636e11821cf921bc99c4f2aee1345",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "254d71d2_82ffd4ec",
+        "filename": "tvix/eval/src/observer.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 153,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-09-09T21:10:46Z",
+      "side": 1,
+      "message": "Yeah probably. Noting it.",
+      "parentUuid": "1e070bc4_0c74f6ac",
+      "range": {
+        "startLine": 153,
+        "startChar": 41,
+        "endLine": 153,
+        "endChar": 46
+      },
+      "revId": "9fcac5fa39d636e11821cf921bc99c4f2aee1345",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
