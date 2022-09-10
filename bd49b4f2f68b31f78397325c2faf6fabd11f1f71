@@ -16,6 +16,24 @@
       "message": "```norust\n\nfence maybe worth it to preserve alignment",
       "revId": "bd49b4f2f68b31f78397325c2faf6fabd11f1f71",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "304c4489_0cc8359f",
+        "filename": "tvix/eval/src/value/attrs.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 313,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-09-10T21:51:14Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9693af0c_2b127bd2",
+      "revId": "bd49b4f2f68b31f78397325c2faf6fabd11f1f71",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
