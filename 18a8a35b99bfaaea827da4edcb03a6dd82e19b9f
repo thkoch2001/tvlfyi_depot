@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f0dec37e_8c630d0f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-09-10T22:00:24Z",
+      "side": 1,
+      "message": "Giving a +2 because this commit is by sterni (see Author) and reviewed by me in the private repo.",
+      "revId": "18a8a35b99bfaaea827da4edcb03a6dd82e19b9f",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
