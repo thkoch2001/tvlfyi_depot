@@ -54,6 +54,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "6bbdab15_8b33a7d4",
+        "filename": "tvix/eval/src/vm.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 469,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-09-10T21:49:32Z",
+      "side": 1,
+      "message": "Actually realised (and tested) that the stack offset is always exactly the same as the frame tail-calling because all functions are single argument, hence we can drop this assignment completely and think about it when/if we implement a multi-arg optimisation.",
+      "parentUuid": "06148d27_9e1ec187",
+      "revId": "c98c5565d0083017fee927904f11e2c0856d3d56",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "ebddc9d4_1f522f08",
