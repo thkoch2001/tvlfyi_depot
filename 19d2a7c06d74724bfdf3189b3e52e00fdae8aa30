@@ -16,6 +16,24 @@
       "message": "I think it is still in the optimisation potential doc? Maybe clean that up.",
       "revId": "19d2a7c06d74724bfdf3189b3e52e00fdae8aa30",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5593bcac_0664552f",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-09-10T21:50:12Z",
+      "side": 1,
+      "message": "It\u0027s gone at HEAD, got rid of it somewhere.",
+      "parentUuid": "bcd48ca7_56ce2488",
+      "revId": "19d2a7c06d74724bfdf3189b3e52e00fdae8aa30",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
