@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1f20c93a_7d6765d6",
+        "filename": "tvix/eval/src/compiler/mod.rs",
+        "patchSetId": 4
+      },
+      "lineNbr": 468,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2022-09-11T11:06:17Z",
+      "side": 1,
+      "message": "Here scope_depth is also not decreased.",
+      "revId": "fa86501c6d7fb0c40c02ae732491720b83c682db",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
