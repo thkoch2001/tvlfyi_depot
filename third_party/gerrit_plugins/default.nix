@@ -7,11 +7,11 @@ depot.nix.readTree.drvTargets {
   # https://gerrit.googlesource.com/plugins/owners
   owners = buildGerritBazelPlugin rec {
     name = "owners";
-    depsOutputHash = "sha256:00nbqwr83wsqa6l67bv4ywv9795l1ibl0yv1kq5q811syrvk2xiz";
+    depsOutputHash = "sha256:129k0jz2pxfl3yvdd95wvvkcjjmmw6jy4g45ss1pgvb9dan0ca6j";
     src = pkgs.fetchgit {
       url = "https://gerrit.googlesource.com/plugins/owners";
-      rev = "99a9ab585532d172d141b4641dfc70081513dfc2";
-      sha256 = "sha256:1xn9qb7q94jxfx7yq0zjqjm16gfyzzif13sak9x6j4f9r68frcd4";
+      rev = "070820d2df4f253c7c470f2cbe68da8043e163d0";
+      sha256 = "sha256:0mw2fff3dca1xv2cvg9hsy5zw1h5gjidb5fh95x6yaj9g9lp0mxq";
     };
     overlayPluginCmd = ''
       chmod +w "$out" "$out/plugins/external_plugin_deps.bzl"
