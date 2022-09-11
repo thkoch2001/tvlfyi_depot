@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9b1c0562_f6996f7f",
+        "filename": "tvix/eval/src/vm.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 615,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2022-09-11T11:29:33Z",
+      "side": 1,
+      "message": "an",
+      "range": {
+        "startLine": 615,
+        "startChar": 43,
+        "endLine": 615,
+        "endChar": 45
+      },
+      "revId": "344612c4bddf8b1e4b1928b5e922a5ea61924b8f",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0dc8965a_106e2445",
+        "filename": "tvix/eval/src/vm.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 660,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2022-09-11T11:29:33Z",
+      "side": 1,
+      "message": "Just a note, this read a bit weird to me at first, not sure if it\u0027s just me though.\n\nFor some reason I thought the unwrap_or_else is if cloning fails (which it can\u0027t of course). Maybe a comment doesn\u0027t hurt either way.",
+      "revId": "344612c4bddf8b1e4b1928b5e922a5ea61924b8f",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
