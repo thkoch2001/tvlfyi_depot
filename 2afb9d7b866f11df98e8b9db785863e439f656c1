@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "37bd24e2_c6285fca",
+        "filename": "tvix/eval/README.md",
+        "patchSetId": 2
+      },
+      "lineNbr": 6,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2022-09-11T18:35:23Z",
+      "side": 1,
+      "message": "We should maybe figure out how to update that from buildkite, whitby deploys probably allow for quite a divergence between tvixbolt and HEAD…",
+      "range": {
+        "startLine": 6,
+        "startChar": 8,
+        "endLine": 6,
+        "endChar": 9
+      },
+      "revId": "2afb9d7b866f11df98e8b9db785863e439f656c1",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
