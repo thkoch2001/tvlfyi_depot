@@ -3,6 +3,29 @@
 
 use super::*;
 
+/// Helper type for carrying partially evaluated attribute key
+/// fragments.
+///
+/// This type is used to implement the phase-separation that exists
+/// between the evaluation of dynamic and static attribute set keys.
+/// Dynamic keys are always evaluated after static keys, and in
+/// recursive sets can have the partially constructed attribute set
+/// itself in scope.
+///
+/// To implement this efficiently, Tvix detects dynamic key fragments
+/// during compilation and - if fragments for the same attribute entry
+/// have already been emitted - removes them from the chunk again and
+/// stores them in this struct for later processing.
+struct PartialDynamicKey {
+    /// The literal code that was already emitted for key fragments if
+    /// any. This is guaranteed to be constant expressions, which are
+    /// referencing constants that already exist in the current chunk.
+    compiled: Option<Vec<OpCode>>,
+
+    /// Remaining key fragments collected from the iterator.
+    remaining: Vec<ast::Attr>,
+}
+
 impl Compiler<'_, '_> {
     pub(super) fn compile_attr(&mut self, slot: LocalIdx, node: ast::Attr) {
         match node {
@@ -19,6 +42,132 @@ impl Compiler<'_, '_> {
             ast::Attr::Ident(ident) => self.emit_literal_ident(&ident),
         }
     }
+
+    /// Compile the statically known entries of an attribute set. Which
+    /// keys are which is not known from the iterator, so discovered
+    /// dynamic keys are returned from here.
+    fn compile_static_attr_entries(
+        &mut self,
+        count: &mut usize,
+        entries: AstChildren<ast::AttrpathValue>,
+    ) -> Vec<(PartialDynamicKey, ast::Expr)> {
+        let mut dynamic_attrs: Vec<(Attr, ast::Expr)> = vec![];
+
+        'entries: for kv in entries {
+            *count += 1;
+
+            // Because attribute set literals can contain nested keys,
+            // there is potentially more than one key fragment. If
+            // this is the case, a special operation to construct a
+            // runtime value representing the attribute path is
+            // emitted.
+            let mut key_count = 0;
+            let key_span = self.span_for(&kv.attrpath().unwrap());
+            self.scope_mut().declare_phantom(key_span, false);
+
+            let attrpath = kv.attrpath().unwrap();
+            for fragment in attrpath.attrs() {
+                match self.expr_static_attr_str(&fragment) {
+                    Some(fs) => self.emit_constant(Value::String(fs.into()), &fragment),
+
+                    // If a dynamic fragment is encountered, remove
+                    // already compiled fragments from the chunk again,
+                    // clean up and move on to the next static key.
+                    None => {
+                        *count -= 1;
+
+                        // TODO: consider cleaning up the emitted
+                        // constants, too.
+
+                        for _ in 1..key_count {
+                            self.chunk().pop_op();
+                        }
+
+                        // Split off the emitted constant instructions,
+                        // but do *not* remove the constants - we are
+                        // still targeting the same chunk.
+                        let compiled = match key_count {
+                            0 => None,
+                            n => {
+                                let split_idx = self.chunk().code.len() - 1 - n;
+                                Some(self.chunk().code.split_off(split_idx))
+                            }
+                        };
+
+                        let mut remaining = vec![fragment];
+                        remaining.extend(attrs_iter);
+
+                        dynamic_attrs.push((
+                            PartialDynamicKey {
+                                compiled,
+                                remaining,
+                            },
+                            kv.value().unwrap(),
+                        ));
+
+                        // Finally clean up the allocated key slot.
+                        self.scope_mut().pop_local();
+
+                        continue 'entries;
+                    }
+                }
+
+                key_count += 1;
+            }
+
+            // We're done with the key if there was only one fragment,
+            // otherwise we need to emit an instruction to construct
+            // the attribute path.
+            if key_count > 1 {
+                self.push_op(
+                    OpCode::OpAttrPath(Count(key_count)),
+                    &kv.attrpath().unwrap(),
+                );
+
+                // Close the temporary scope that was set up for the
+                // key fragments.
+                self.scope_mut().end_scope();
+            }
+
+            // The value is just compiled as normal so that its
+            // resulting value is on the stack when the attribute set
+            // is constructed at runtime.
+            let value_span = self.span_for(&kv.value().unwrap());
+            let value_slot = self.scope_mut().declare_phantom(value_span, false);
+            self.compile(value_slot, kv.value().unwrap());
+            self.scope_mut().mark_initialised(value_slot);
+        }
+
+        dynamic_attrs
+    }
+
+    /*
+    /// Compile the dynamic entries of an attribute set, where keys
+    /// are only known at runtime.
+    fn compile_dynamic_attr_entries(
+        &mut self,
+        count: &mut usize,
+        entries: Vec<(PartialDynamicKey, ast::Expr)>,
+    ) {
+        for (key, value) in entries.into_iter() {
+            *count += 1;
+
+            let mut key_count = 0;
+            let key_span = self.span_for(&kv.attrpath().unwrap());
+
+            // re-emit already compiled fragment constant accesses
+            if let Some(mut compiled) = key.compiled {
+                for _ in 0..compiled.len() {
+                    self.scope_mut().declare_phantom(key_span, false);
+                }
+
+                self.chunk().code.append(&mut compiled);
+            }
+
+            let key_idx = self.scope_mut().declare_phantom(key_span, false);
+        }
+    }
+    */
 
     /// Compile attribute set literals into equivalent bytecode.
     ///
