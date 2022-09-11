@@ -249,6 +249,12 @@ impl Scope {
         LocalIdx(idx)
     }
 
+    /// Pop the last declared local off the stack. This is required in
+    /// cases where the compiler backtracks.
+    pub fn pop_local(&mut self) {
+        self.locals.pop();
+    }
+
     /// Mark local as initialised after compiling its expression.
     pub fn mark_initialised(&mut self, idx: LocalIdx) {
         self.locals[idx.0].initialised = true;
