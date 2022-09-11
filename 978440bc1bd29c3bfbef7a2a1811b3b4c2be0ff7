@@ -112,6 +112,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "e6440daa_eb8283f3",
+        "filename": "tvix/eval/src/compiler/mod.rs",
+        "patchSetId": 4
+      },
+      "lineNbr": 583,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-09-11T12:02:31Z",
+      "side": 1,
+      "message": "Fixed in cl/3500 by moving that into end_scope",
+      "parentUuid": "c6b49350_9cb0a525",
+      "revId": "978440bc1bd29c3bfbef7a2a1811b3b4c2be0ff7",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "f3691993_f58018a2",
@@ -135,6 +153,30 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "e68748b2_0938a01d",
+        "filename": "tvix/eval/src/compiler/mod.rs",
+        "patchSetId": 4
+      },
+      "lineNbr": 591,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-09-11T12:02:31Z",
+      "side": 1,
+      "message": "Fixed in cl/6501 (done there instead of here because the code moves)",
+      "parentUuid": "f3691993_f58018a2",
+      "range": {
+        "startLine": 591,
+        "startChar": 25,
+        "endLine": 591,
+        "endChar": 29
+      },
+      "revId": "978440bc1bd29c3bfbef7a2a1811b3b4c2be0ff7",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "03e04276_702c0af2",
@@ -148,6 +190,24 @@
       "writtenOn": "2022-09-11T11:04:32Z",
       "side": 1,
       "message": "We are not decreasing the scope depth here, then?",
+      "revId": "978440bc1bd29c3bfbef7a2a1811b3b4c2be0ff7",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "791d07a7_41a672c3",
+        "filename": "tvix/eval/src/compiler/mod.rs",
+        "patchSetId": 4
+      },
+      "lineNbr": 599,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-09-11T12:02:31Z",
+      "side": 1,
+      "message": "See above.",
+      "parentUuid": "03e04276_702c0af2",
       "revId": "978440bc1bd29c3bfbef7a2a1811b3b4c2be0ff7",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
