@@ -20,6 +20,99 @@ impl Compiler<'_, '_> {
         }
     }
 
+    /// Compile the statically known entries of an attribute set. Which
+    /// keys are which is not known from the iterator, so discovered
+    /// dynamic keys are returned from here.
+    fn compile_static_attr_entries(
+        &mut self,
+        count: &mut usize,
+        entries: AstChildren<ast::AttrpathValue>,
+    ) -> Vec<ast::AttrpathValue> {
+        let mut dynamic_attrs: Vec<ast::AttrpathValue> = vec![];
+
+        'entries: for kv in entries {
+            // Attempt to turn the attrpath into a list of static
+            // strings, but abort this process if any dynamic
+            // fragments are encountered.
+            let static_attrpath: Option<Vec<String>> = kv
+                .attrpath()
+                .unwrap()
+                .attrs()
+                .map(|a| self.expr_static_attr_str(&a))
+                .collect();
+
+            let fragments = match static_attrpath {
+                Some(fragments) => fragments,
+                None => {
+                    dynamic_attrs.push(kv);
+                    continue 'entries;
+                }
+            };
+
+            // At this point we can increase the counter because we
+            // know that this particular attribute is static and can
+            // thus be processed here.
+            *count += 1;
+
+            let key_count = fragments.len();
+            for fragment in fragments.into_iter() {
+                self.emit_constant(Value::String(fragment.into()), &kv.attrpath().unwrap());
+            }
+
+            // We're done with the key if there was only one fragment,
+            // otherwise we need to emit an instruction to construct
+            // the attribute path.
+            if key_count > 1 {
+                self.push_op(
+                    OpCode::OpAttrPath(Count(key_count)),
+                    &kv.attrpath().unwrap(),
+                );
+
+                // Close the temporary scope that was set up for the
+                // key fragments.
+                self.scope_mut().end_scope();
+            }
+
+            // The value is just compiled as normal so that its
+            // resulting value is on the stack when the attribute set
+            // is constructed at runtime.
+            let value_span = self.span_for(&kv.value().unwrap());
+            let value_slot = self.scope_mut().declare_phantom(value_span, false);
+            self.compile(value_slot, kv.value().unwrap());
+            self.scope_mut().mark_initialised(value_slot);
+        }
+
+        dynamic_attrs
+    }
+
+    /*
+    /// Compile the dynamic entries of an attribute set, where keys
+    /// are only known at runtime.
+    fn compile_dynamic_attr_entries(
+        &mut self,
+        count: &mut usize,
+        entries: Vec<(ast::AttrpathValue)>,
+    ) {
+        for (key, value) in entries.into_iter() {
+            *count += 1;
+
+            let mut key_count = 0;
+            let key_span = self.span_for(&kv.attrpath().unwrap());
+
+            // re-emit already compiled fragment constant accesses
+            if let Some(mut compiled) = key.compiled {
+                for _ in 0..compiled.len() {
+                    self.scope_mut().declare_phantom(key_span, false);
+                }
+
+                self.chunk().code.append(&mut compiled);
+            }
+
+            let key_idx = self.scope_mut().declare_phantom(key_span, false);
+        }
+    }
+    */
+
     /// Compile attribute set literals into equivalent bytecode.
     ///
     /// This is complicated by a number of features specific to Nix
