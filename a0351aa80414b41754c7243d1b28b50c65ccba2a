@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ca47eeec_209384d6",
+        "filename": "tvix/eval/src/chunk.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 67,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2022-09-11T11:59:41Z",
+      "side": 1,
+      "message": "let _ \u003d ?",
+      "revId": "a0351aa80414b41754c7243d1b28b50c65ccba2a",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
