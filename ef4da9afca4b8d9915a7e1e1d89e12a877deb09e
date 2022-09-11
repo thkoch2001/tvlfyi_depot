@@ -39,6 +39,24 @@
       "message": "Note that C++ Nix is able to generate a better error message here (\"called without required function argument\").\n\nMaybe the solution is to attach some kind of meta information to the Span we already track so the error message displayed to the user can make sense of the context the error was raised in better.",
       "revId": "ef4da9afca4b8d9915a7e1e1d89e12a877deb09e",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "57ae980b_83b82a7d",
+        "filename": "tvix/eval/src/compiler/mod.rs",
+        "patchSetId": 3
+      },
+      "lineNbr": 951,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-09-11T12:16:10Z",
+      "side": 1,
+      "message": "I think we have all the information about that available from the span, no?\n\nSome of the spans will need special handling (i.e. re-parse the AST, locate the actual semantic node and build a proper error based on that). It\u0027s something we haven\u0027t started on at all, but I do think all the relevant information is preserved.",
+      "parentUuid": "1f9ef807_7f96f16e",
+      "revId": "ef4da9afca4b8d9915a7e1e1d89e12a877deb09e",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
