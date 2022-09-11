@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1ed3cf05_fbf5aa54",
+        "filename": "tvix/eval/src/compiler/mod.rs",
+        "patchSetId": 3
+      },
+      "lineNbr": 455,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2022-09-11T10:41:34Z",
+      "side": 1,
+      "message": "I think this is not true for recursive sets, but I think we can just reevaluate the situation at proper HEAD.",
+      "range": {
+        "startLine": 455,
+        "startChar": 18,
+        "endLine": 455,
+        "endChar": 58
+      },
+      "revId": "f2471c6429dcc3e68d5c9baecdf16853fdf1784e",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
