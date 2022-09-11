@@ -1,0 +1,107 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3ae98ca9_488610d2",
+        "filename": "tvix/eval/src/compiler/mod.rs",
+        "patchSetId": 4
+      },
+      "lineNbr": 506,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2022-09-11T11:04:32Z",
+      "side": 1,
+      "message": "shouldn\u0027t this come from the phantom?",
+      "range": {
+        "startLine": 506,
+        "startChar": 43,
+        "endLine": 506,
+        "endChar": 47
+      },
+      "revId": "978440bc1bd29c3bfbef7a2a1811b3b4c2be0ff7",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "579165e9_adcab83d",
+        "filename": "tvix/eval/src/compiler/mod.rs",
+        "patchSetId": 4
+      },
+      "lineNbr": 558,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2022-09-11T11:04:32Z",
+      "side": 1,
+      "message": "I guess the iterator is not indexed?",
+      "range": {
+        "startLine": 558,
+        "startChar": 42,
+        "endLine": 558,
+        "endChar": 51
+      },
+      "revId": "978440bc1bd29c3bfbef7a2a1811b3b4c2be0ff7",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c6b49350_9cb0a525",
+        "filename": "tvix/eval/src/compiler/mod.rs",
+        "patchSetId": 4
+      },
+      "lineNbr": 583,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2022-09-11T11:04:32Z",
+      "side": 1,
+      "message": "Why are we not decreasing the scope depth here?\n\nAlso add a note that the phantom locals were consumed by OpAttrPath like below.",
+      "revId": "978440bc1bd29c3bfbef7a2a1811b3b4c2be0ff7",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f3691993_f58018a2",
+        "filename": "tvix/eval/src/compiler/mod.rs",
+        "patchSetId": 4
+      },
+      "lineNbr": 591,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2022-09-11T11:04:32Z",
+      "side": 1,
+      "message": "value_slot?",
+      "range": {
+        "startLine": 591,
+        "startChar": 25,
+        "endLine": 591,
+        "endChar": 29
+      },
+      "revId": "978440bc1bd29c3bfbef7a2a1811b3b4c2be0ff7",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "03e04276_702c0af2",
+        "filename": "tvix/eval/src/compiler/mod.rs",
+        "patchSetId": 4
+      },
+      "lineNbr": 599,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2022-09-11T11:04:32Z",
+      "side": 1,
+      "message": "We are not decreasing the scope depth here, then?",
+      "revId": "978440bc1bd29c3bfbef7a2a1811b3b4c2be0ff7",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
