@@ -24,6 +24,30 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "9c727cd5_8fb2959c",
+        "filename": "tvix/eval/src/compiler/mod.rs",
+        "patchSetId": 4
+      },
+      "lineNbr": 506,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-09-11T12:00:29Z",
+      "side": 1,
+      "message": "It\u0027s actually a bit more complicated and we need to fix it at HEAD, as the first one is actually in the slot passed in to the compile method. I\u0027ve been unable to create the test case that will fail this, but I\u0027m sure it exists. This slot shuffling changes with some upcoming attrset refactoring (preparing for `rec`), so I\u0027m leaving this as is.",
+      "parentUuid": "3ae98ca9_488610d2",
+      "range": {
+        "startLine": 506,
+        "startChar": 43,
+        "endLine": 506,
+        "endChar": 47
+      },
+      "revId": "978440bc1bd29c3bfbef7a2a1811b3b4c2be0ff7",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "579165e9_adcab83d",
@@ -37,6 +61,30 @@
       "writtenOn": "2022-09-11T11:04:32Z",
       "side": 1,
       "message": "I guess the iterator is not indexed?",
+      "range": {
+        "startLine": 558,
+        "startChar": 42,
+        "endLine": 558,
+        "endChar": 51
+      },
+      "revId": "978440bc1bd29c3bfbef7a2a1811b3b4c2be0ff7",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c59253f4_d214598c",
+        "filename": "tvix/eval/src/compiler/mod.rs",
+        "patchSetId": 4
+      },
+      "lineNbr": 558,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-09-11T12:00:29Z",
+      "side": 1,
+      "message": "We need this variable across different iterators, so I think it\u0027s cleaner to refer to it directly rather than treating the first one differently and enumerating the iterator (which you can do in Rust btw, it\u0027s a call to .enumerate() and then you\u0027ll get a tuple back where the first item is the index).",
+      "parentUuid": "579165e9_adcab83d",
       "range": {
         "startLine": 558,
         "startChar": 42,
