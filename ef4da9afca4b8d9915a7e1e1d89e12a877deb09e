@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "55ab0c67_22720ac6",
+        "filename": "tvix/eval/src/compiler/mod.rs",
+        "patchSetId": 3
+      },
+      "lineNbr": 917,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2022-09-11T10:30:59Z",
+      "side": 1,
+      "message": "Luckily not as convoluted… yet!",
+      "range": {
+        "startLine": 917,
+        "startChar": 11,
+        "endLine": 917,
+        "endChar": 37
+      },
+      "revId": "ef4da9afca4b8d9915a7e1e1d89e12a877deb09e",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
