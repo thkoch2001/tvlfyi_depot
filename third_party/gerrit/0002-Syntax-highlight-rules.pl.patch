@@ -1,0 +1,37 @@
+From ad3f389c20815f21ad932c0b295e861c6a21011c Mon Sep 17 00:00:00 2001
+From: Luke Granger-Brown <git@lukegb.com>
+Date: Thu, 2 Jul 2020 23:02:43 +0100
+Subject: [PATCH 2/3] Syntax highlight rules.pl
+
+---
+ .../app/embed/diff/gr-syntax-layer/gr-syntax-layer-worker.ts     | 1 +
+ resources/com/google/gerrit/server/mime/mime-types.properties    | 1 +
+ 2 files changed, 2 insertions(+)
+
+diff --git a/polygerrit-ui/app/embed/diff/gr-syntax-layer/gr-syntax-layer-worker.ts b/polygerrit-ui/app/embed/diff/gr-syntax-layer/gr-syntax-layer-worker.ts
+index f6f634ad31..36fd6090b4 100644
+--- a/polygerrit-ui/app/embed/diff/gr-syntax-layer/gr-syntax-layer-worker.ts
++++ b/polygerrit-ui/app/embed/diff/gr-syntax-layer/gr-syntax-layer-worker.ts
+@@ -68,6 +68,7 @@ const LANGUAGE_MAP = new Map<string, string>([
+   ['text/x-perl', 'perl'],
+   ['text/x-pgsql', 'pgsql'], // postgresql
+   ['text/x-php', 'php'],
++  ['text/x-prolog', 'prolog'],
+   ['text/x-properties', 'properties'],
+   ['text/x-protobuf', 'protobuf'],
+   ['text/x-puppet', 'puppet'],
+diff --git a/resources/com/google/gerrit/server/mime/mime-types.properties b/resources/com/google/gerrit/server/mime/mime-types.properties
+index c0c092c712..ee815b689d 100644
+--- a/resources/com/google/gerrit/server/mime/mime-types.properties
++++ b/resources/com/google/gerrit/server/mime/mime-types.properties
+@@ -200,6 +200,7 @@ rq = application/sparql-query
+ rs = text/x-rustsrc
+ rss = application/xml
+ rst = text/x-rst
++rules.pl = text/x-prolog
+ README.md = text/x-gfm
+ s = text/x-gas
+ sas = text/x-sas
+-- 
+2.36.0
+
