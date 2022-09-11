@@ -34,6 +34,24 @@
       "parentUuid": "a8069581_8bcafa88",
       "revId": "e8fcee3b42a3a9218d19655a92bba119b7a13134",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "be6f3c71_5b8a8bd3",
+        "filename": "tvix/eval/README.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2022-09-11T14:29:33Z",
+      "side": 1,
+      "message": "This might be related to https://github.com/NixOS/nix/issues/5313, but confusingly, even when temporarily using nix-build 2.3 to build, it still fails with the same errors.",
+      "parentUuid": "0ce8d776_d4cdc6d0",
+      "revId": "e8fcee3b42a3a9218d19655a92bba119b7a13134",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
