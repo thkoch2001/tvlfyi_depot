@@ -16,6 +16,24 @@
       "message": "in the future we may need to wrap this select computation in a thunk (like we later do for inherit (from) in let in.",
       "revId": "442e4c872a6f44147ee6451fe7cbb709ee756f54",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "dd172820_6815d927",
+        "filename": "tvix/eval/src/compiler/mod.rs",
+        "patchSetId": 4
+      },
+      "lineNbr": 486,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-09-11T11:48:52Z",
+      "side": 1,
+      "message": "Ack, added to notes.",
+      "parentUuid": "16a20dc4_b5c1522f",
+      "revId": "442e4c872a6f44147ee6451fe7cbb709ee756f54",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }

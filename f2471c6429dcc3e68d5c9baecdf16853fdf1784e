@@ -22,6 +22,30 @@
       },
       "revId": "f2471c6429dcc3e68d5c9baecdf16853fdf1784e",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6fe7efce_c55ce3bf",
+        "filename": "tvix/eval/src/compiler/mod.rs",
+        "patchSetId": 3
+      },
+      "lineNbr": 455,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-09-11T11:48:52Z",
+      "side": 1,
+      "message": "It is, according to the C++ source, for plain inherits (i.e. without `from`).",
+      "parentUuid": "1ed3cf05_fbf5aa54",
+      "range": {
+        "startLine": 455,
+        "startChar": 18,
+        "endLine": 455,
+        "endChar": 58
+      },
+      "revId": "f2471c6429dcc3e68d5c9baecdf16853fdf1784e",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
