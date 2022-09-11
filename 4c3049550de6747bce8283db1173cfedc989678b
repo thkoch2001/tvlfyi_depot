@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f3959bf4_7629e630",
+        "filename": "tvix/eval/src/compiler/mod.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 803,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2022-09-11T11:38:29Z",
+      "side": 1,
+      "message": "for the record, this introduces a bug fixed in a later CL where the value would be placed in the stack slot of another local at runtime when using plain inherits and normal bindings together (depending on ordering).",
+      "revId": "4c3049550de6747bce8283db1173cfedc989678b",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
