@@ -62,4 +62,8 @@
     (interactive)
     (notmuch-show-open-or-close-subthread t))) ;; open
 
+;; Get rid of the annoying `save-some-buffers' shortcut which I
+;; *NEVER* use intentionally.
+(unbind-key (kbd "C-x s") 'global-map)
+
 (provide 'bindings)
