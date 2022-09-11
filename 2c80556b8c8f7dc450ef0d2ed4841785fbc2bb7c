@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2d813eb8_706c31a0",
+        "filename": "tvix/eval/docs/recursive-attrs.md",
+        "patchSetId": 2
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2022-09-11T11:36:55Z",
+      "side": 1,
+      "message": "Only if there\u0027s no `from` expression!\n\n    nix-repl\u003e :p rec { test \u003d { foo \u003d 12; }; inherit (test) foo; }\n    { foo \u003d 12; test \u003d { foo \u003d 12; }; }",
+      "range": {
+        "startLine": 10,
+        "startChar": 9,
+        "endLine": 10,
+        "endChar": 24
+      },
+      "revId": "2c80556b8c8f7dc450ef0d2ed4841785fbc2bb7c",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
