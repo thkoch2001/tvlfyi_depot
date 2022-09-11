@@ -22,6 +22,30 @@
       },
       "revId": "2c80556b8c8f7dc450ef0d2ed4841785fbc2bb7c",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "59ffc5b3_91168237",
+        "filename": "tvix/eval/docs/recursive-attrs.md",
+        "patchSetId": 2
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-09-11T12:21:38Z",
+      "side": 1,
+      "message": "Yeah, that\u0027s what I mean, rephrased it to make it explicit.",
+      "parentUuid": "2d813eb8_706c31a0",
+      "range": {
+        "startLine": 10,
+        "startChar": 9,
+        "endLine": 10,
+        "endChar": 24
+      },
+      "revId": "2c80556b8c8f7dc450ef0d2ed4841785fbc2bb7c",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
