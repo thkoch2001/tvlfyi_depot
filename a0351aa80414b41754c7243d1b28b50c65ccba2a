@@ -16,6 +16,24 @@
       "message": "let _ \u003d ?",
       "revId": "a0351aa80414b41754c7243d1b28b50c65ccba2a",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "dfa15dd3_3af06de8",
+        "filename": "tvix/eval/src/chunk.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 67,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-09-11T12:22:57Z",
+      "side": 1,
+      "message": "Not needed as it doesn\u0027t return something that has `must_use`",
+      "parentUuid": "ca47eeec_209384d6",
+      "revId": "a0351aa80414b41754c7243d1b28b50c65ccba2a",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
