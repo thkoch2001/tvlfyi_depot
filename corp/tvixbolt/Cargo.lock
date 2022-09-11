@@ -483,6 +483,7 @@ dependencies = [
  "codemap",
  "rnix",
  "tvix-eval",
+ "wasm-bindgen",
  "web-sys",
  "yew",
 ]
