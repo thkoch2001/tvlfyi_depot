@@ -16,6 +16,24 @@
       "message": "Here scope_depth is also not decreased.",
       "revId": "fa86501c6d7fb0c40c02ae732491720b83c682db",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "74d83575_5953db43",
+        "filename": "tvix/eval/src/compiler/mod.rs",
+        "patchSetId": 4
+      },
+      "lineNbr": 468,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-09-11T12:16:36Z",
+      "side": 1,
+      "message": "Fixed in cl/6500",
+      "parentUuid": "1f20c93a_7d6765d6",
+      "revId": "fa86501c6d7fb0c40c02ae732491720b83c682db",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
