@@ -18,6 +18,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "88251fae_03cc76b3",
+        "filename": "corp/tvixbolt/default.nix",
+        "patchSetId": 2
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-09-11T10:43:27Z",
+      "side": 1,
+      "message": "Made it very explicit.",
+      "parentUuid": "3d2dff70_37b11ec0",
+      "revId": "ef6e8988c6952edce52a68e3930eaee6bbf66308",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "858b10f0_10508471",
@@ -41,6 +59,30 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "19c60bf2_ff10ac2b",
+        "filename": "corp/tvixbolt/default.nix",
+        "patchSetId": 2
+      },
+      "lineNbr": 68,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-09-11T10:43:27Z",
+      "side": 1,
+      "message": "lol this is the thing you think is ugly, but the patch above is not? 😄\n\nAck",
+      "parentUuid": "858b10f0_10508471",
+      "range": {
+        "startLine": 68,
+        "startChar": 2,
+        "endLine": 68,
+        "endChar": 12
+      },
+      "revId": "ef6e8988c6952edce52a68e3930eaee6bbf66308",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "2b5af620_ab222371",
@@ -54,6 +96,30 @@
       "writtenOn": "2022-09-11T10:39:36Z",
       "side": 1,
       "message": "this dir doesn\u0027t exist (actual one has no dot)",
+      "range": {
+        "startLine": 71,
+        "startChar": 17,
+        "endLine": 71,
+        "endChar": 26
+      },
+      "revId": "ef6e8988c6952edce52a68e3930eaee6bbf66308",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6df585dc_a06936c5",
+        "filename": "corp/tvixbolt/default.nix",
+        "patchSetId": 2
+      },
+      "lineNbr": 71,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-09-11T10:43:27Z",
+      "side": 1,
+      "message": "Fixed, also removed that extra `env` there.",
+      "parentUuid": "2b5af620_ab222371",
       "range": {
         "startLine": 71,
         "startChar": 17,
