@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a1989a08_63e3f574",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2022-09-12T15:22:54Z",
+      "side": 1,
+      "message": "isn\u0027t that just [ColorConfig::Always](https://docs.rs/codemap-diagnostic/0.1.1/codemap_diagnostic/enum.ColorConfig.html#variant.Always) ?",
+      "range": {
+        "startLine": 9,
+        "startChar": 43,
+        "endLine": 10,
+        "endChar": 61
+      },
+      "revId": "5c4ce8717b8b276daf655dc5459ae99ab3c4ec81",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
