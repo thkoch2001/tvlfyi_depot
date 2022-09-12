@@ -71,6 +71,30 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "d9dbd5d1_d91edec0",
+        "filename": "tvix/eval/tests/nix_oracle.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2022-09-12T15:35:27Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b5821b62_c5f850dd",
+      "range": {
+        "startLine": 41,
+        "startChar": 4,
+        "endLine": 41,
+        "endChar": 13
+      },
+      "revId": "8eb7c2171ccc3becfed23d9885957a2e5955fa9a",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "f34a02c6_65ab1978",
@@ -84,6 +108,30 @@
       "writtenOn": "2022-09-04T23:04:02Z",
       "side": 1,
       "message": "could you annotate what this is doing with a doc comment? it\u0027s a bit non-obvious to me at first",
+      "range": {
+        "startLine": 46,
+        "startChar": 0,
+        "endLine": 49,
+        "endChar": 0
+      },
+      "revId": "8eb7c2171ccc3becfed23d9885957a2e5955fa9a",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "84dd1c81_bfdbebca",
+        "filename": "tvix/eval/tests/nix_oracle.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2022-09-12T15:35:27Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f34a02c6_65ab1978",
       "range": {
         "startLine": 46,
         "startChar": 0,
