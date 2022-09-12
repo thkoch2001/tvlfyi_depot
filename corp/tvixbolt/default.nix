@@ -69,7 +69,7 @@ pkgs.rustPlatform.buildRustPackage rec {
     export PATH=${lib.makeBinPath deps}:$PATH
     mkdir home
     export HOME=$PWD/home
-    trunk build --release -d $out
+    trunk build --release --public-url '/tvixbolt/' -d $out
   '';
 
   dontInstall = true;
