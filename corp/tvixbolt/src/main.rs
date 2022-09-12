@@ -267,10 +267,8 @@ fn eval(trace: bool, code: &str) -> Output {
         for error in &result.errors {
             writeln!(
                 &mut out.compiler_errors,
-                "error: {:?} at `{}` [line {}]",
-                error.kind,
-                file.source_slice(error.span),
-                file.find_line(error.span.low()) + 1
+                "{}\n",
+                error.fancy_format_str(&codemap).trim(),
             )
             .unwrap();
         }
@@ -286,7 +284,12 @@ fn eval(trace: bool, code: &str) -> Output {
 
     match result {
         Ok(value) => writeln!(&mut out.output, "{}", value).unwrap(),
-        Err(err) => writeln!(&mut out.runtime_errors, "runtime error: {:?}", err).unwrap(),
+        Err(err) => writeln!(
+            &mut out.runtime_errors,
+            "{}",
+            err.fancy_format_str(&codemap).trim()
+        )
+        .unwrap(),
     };
 
     out
