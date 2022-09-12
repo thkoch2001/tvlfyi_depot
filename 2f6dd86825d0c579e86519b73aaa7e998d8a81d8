@@ -1,0 +1,90 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bb234298_a7c6b8b6",
+        "filename": "tvix/eval/src/builtins/mod.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 214,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2022-09-12T17:31:14Z",
+      "side": 1,
+      "message": "Could be a docstring.",
+      "range": {
+        "startLine": 214,
+        "startChar": 0,
+        "endLine": 214,
+        "endChar": 2
+      },
+      "revId": "2f6dd86825d0c579e86519b73aaa7e998d8a81d8",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a8570688_bf349753",
+        "filename": "tvix/eval/src/builtins/mod.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 240,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2022-09-12T17:31:14Z",
+      "side": 1,
+      "message": "This coercion logic should be factored out. The implementation here is also missing support for `{ __toString \u003d _: …; }`. Not sure if we need to consider anything else as well.",
+      "revId": "2f6dd86825d0c579e86519b73aaa7e998d8a81d8",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7013035c_215b1930",
+        "filename": "tvix/eval/src/builtins/mod.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 241,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2022-09-12T17:31:14Z",
+      "side": 1,
+      "message": "`PathBuf::from(\u0026x.as_str())` is probably nicer?",
+      "range": {
+        "startLine": 241,
+        "startChar": 48,
+        "endLine": 241,
+        "endChar": 78
+      },
+      "revId": "2f6dd86825d0c579e86519b73aaa7e998d8a81d8",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a3da5551_221be8a5",
+        "filename": "tvix/eval/src/builtins/mod.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 243,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2022-09-12T17:31:14Z",
+      "side": 1,
+      "message": "I think for coercion we can also create a custom ErrorKind",
+      "range": {
+        "startLine": 243,
+        "startChar": 36,
+        "endLine": 243,
+        "endChar": 41
+      },
+      "revId": "2f6dd86825d0c579e86519b73aaa7e998d8a81d8",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
