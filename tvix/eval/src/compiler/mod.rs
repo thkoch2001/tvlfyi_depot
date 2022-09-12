@@ -271,7 +271,11 @@ impl Compiler<'_, '_> {
                 // Interpolated expressions are compiled as normal and
                 // dealt with by the VM before being assembled into
                 // the final string.
-                ast::InterpolPart::Interpolation(node) => self.compile(slot, node.expr().unwrap()),
+                ast::InterpolPart::Interpolation(node) => {
+                    self.compile(slot, node.expr().unwrap());
+                    // TODO: can we get a more precise location?
+                    self.emit_force(&node);
+                }
 
                 ast::InterpolPart::Literal(lit) => {
                     self.emit_constant(Value::String(lit.into()), &node);
