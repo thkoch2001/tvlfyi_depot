@@ -76,9 +76,10 @@ in
   hardware.pulseaudio.enable = true;
 
   users.mutableUsers = true;
-  users.users.root.openssh.authorizedKeys.keys = [
-    wpcarro.keys.nathan
-    wpcarro.keys.tarasco
+  users.users.root.openssh.authorizedKeys.keys = with wpcarro.keys; [
+    iphone
+    nathan
+    tarasco
   ];
   users.users.wpcarro = {
     isNormalUser = true;
@@ -88,9 +89,10 @@ in
       "docker"
     ];
     shell = pkgs.fish;
-    openssh.authorizedKeys.keys = [
-      wpcarro.keys.nathan
-      wpcarro.keys.tarasco
+    openssh.authorizedKeys.keys = with wpcarro.keys; [
+      iphone
+      nathan
+      tarasco
     ];
   };
   users.extraGroups.vboxusers.members = [ "wpcarro" ];
