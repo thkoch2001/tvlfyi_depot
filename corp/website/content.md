@@ -17,6 +17,12 @@ example:
 * Software development in various languages (Rust, Common Lisp,
   Erlang, Java and more)
 
+We also provide some services on this page:
+
+* [tvixbolt](/tvixbolt), a web-frontend for the [Tvix][] evaluator
+* [code review](https://cl.tvl.su/) for the TVL repository
+* ... and other services listed on the community homepage
+
 We might be able to help you with other things on request.
 
 Note: We are still in the process of getting started and have limited
@@ -24,3 +30,4 @@ capacity at the moment. If you would like our help, please reach out
 at **contact {at} tvl.su** for a discussion.
 
 [tvl-fyi]: https://tvl.fyi
+[Tvix]: https://cs.tvl.fyi/depot/-/tree/tvix

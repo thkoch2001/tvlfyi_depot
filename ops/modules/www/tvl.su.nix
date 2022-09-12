@@ -15,6 +15,8 @@
       extraConfig = ''
         add_header Strict-Transport-Security "max-age=31536000; includeSubDomains; preload" always;
       '';
+
+      locations."/tvixbolt".root = depot.corp.tvixbolt;
     };
   };
 }
