@@ -24,6 +24,30 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "429d9210_12238ed2",
+        "filename": "tvix/eval/src/builtins/mod.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 214,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-09-12T19:07:49Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "bb234298_a7c6b8b6",
+      "range": {
+        "startLine": 214,
+        "startChar": 0,
+        "endLine": 214,
+        "endChar": 2
+      },
+      "revId": "2f6dd86825d0c579e86519b73aaa7e998d8a81d8",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "a8570688_bf349753",
@@ -64,6 +88,30 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "8805f909_e2b0c0a2",
+        "filename": "tvix/eval/src/builtins/mod.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 241,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-09-12T19:07:49Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7013035c_215b1930",
+      "range": {
+        "startLine": 241,
+        "startChar": 48,
+        "endLine": 241,
+        "endChar": 78
+      },
+      "revId": "2f6dd86825d0c579e86519b73aaa7e998d8a81d8",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "a3da5551_221be8a5",
@@ -77,6 +125,30 @@
       "writtenOn": "2022-09-12T17:31:14Z",
       "side": 1,
       "message": "I think for coercion we can also create a custom ErrorKind",
+      "range": {
+        "startLine": 243,
+        "startChar": 36,
+        "endLine": 243,
+        "endChar": 41
+      },
+      "revId": "2f6dd86825d0c579e86519b73aaa7e998d8a81d8",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5e2e9912_cc31b863",
+        "filename": "tvix/eval/src/builtins/mod.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 243,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-09-12T19:07:49Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a3da5551_221be8a5",
       "range": {
         "startLine": 243,
         "startChar": 36,
