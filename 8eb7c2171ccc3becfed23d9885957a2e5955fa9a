@@ -24,6 +24,30 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "f741a3e0_f075ccce",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2022-09-12T15:32:27Z",
+      "side": 1,
+      "message": "I really dislike thee \"directory with a ton of files\" approach to writing tests, up to a certain size of test.\n\nBut regaardless, this is really intended as a sink for automatically generated tests.",
+      "parentUuid": "6fa98f10_519b1e28",
+      "range": {
+        "startLine": 17,
+        "startChar": 0,
+        "endLine": 17,
+        "endChar": 15
+      },
+      "revId": "8eb7c2171ccc3becfed23d9885957a2e5955fa9a",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "b5821b62_c5f850dd",
