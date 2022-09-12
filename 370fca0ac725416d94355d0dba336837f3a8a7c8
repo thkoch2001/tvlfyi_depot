@@ -1,0 +1,67 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "79f2df9f_1cbc2fb5",
+        "filename": "tvix/eval/src/builtins/mod.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 123,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2022-09-12T17:21:08Z",
+      "side": 1,
+      "message": "Should probably use the force! macro now.",
+      "revId": "370fca0ac725416d94355d0dba336837f3a8a7c8",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "761700d4_416dd89e",
+        "filename": "tvix/eval/src/builtins/mod.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 131,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2022-09-12T17:21:08Z",
+      "side": 1,
+      "message": "Emit AttributeNotFound instead.",
+      "range": {
+        "startLine": 131,
+        "startChar": 39,
+        "endLine": 131,
+        "endChar": 44
+      },
+      "revId": "370fca0ac725416d94355d0dba336837f3a8a7c8",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c04322df_9a25542b",
+        "filename": "tvix/eval/src/tests/nix_tests/eval-okay-builtins-getattr.nix",
+        "patchSetId": 1
+      },
+      "lineNbr": 5,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2022-09-12T17:21:08Z",
+      "side": 1,
+      "message": "Some semicolons are missing here and the files belong in tvix_tests, not nix_tests!",
+      "range": {
+        "startLine": 5,
+        "startChar": 53,
+        "endLine": 5,
+        "endChar": 58
+      },
+      "revId": "370fca0ac725416d94355d0dba336837f3a8a7c8",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
