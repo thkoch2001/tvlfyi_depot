@@ -76,6 +76,17 @@ resource "glesys_dnsdomain_record" "tvl_su_whitby_services" {
   for_each = toset(local.whitby_services)
 }
 
+# Explicit records for corp-only services running on whitby.
+resource "glesys_dnsdomain_record" "tvl_su_corp_whitby_services" {
+  domain = glesys_dnsdomain.tvl_su.id
+  type   = "CNAME"
+  data   = "whitby.tvl.su."
+  host   = each.key
+  for_each = toset([
+    "tvixbolt",
+  ])
+}
+
 resource "glesys_dnsdomain_record" "tvl_su_TXT_google_site" {
   domain = glesys_dnsdomain.tvl_su.id
   host   = "@"
