@@ -14,5 +14,13 @@
       date = 1638381387;
       content = ./rewriting-nix.md;
     }
+
+    {
+      key = "tvix-status-september-22";
+      title = "Tvix Status - September '22";
+      date = 1662995534;
+      content = ./tvix-status-202209.md;
+      draft = true;
+    }
   ];
 }
