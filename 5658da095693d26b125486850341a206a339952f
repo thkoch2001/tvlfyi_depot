@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "014aa844_e37e8f9f",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2022-09-12T17:35:54Z",
+      "side": 1,
+      "message": "I don\u0027t feel like I have the full context to comment on this with confidence, but it seems to me like the compiler can be responsible for all forcing, since it\u0027s also responsible for (in the future) doing static analysis necessary to determine that things don\u0027t actually need to be forced.\n\nBut maybe there\u0027s a casee to be made for a safety-fallback force in the VM, idk.",
+      "range": {
+        "startLine": 14,
+        "startChar": 5,
+        "endLine": 15,
+        "endChar": 17
+      },
+      "revId": "5658da095693d26b125486850341a206a339952f",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
