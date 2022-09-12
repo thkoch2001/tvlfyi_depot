@@ -1,0 +1,90 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6436296c_1a1c446e",
+        "filename": "web/tvl/blog/tvix-status-202209.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2022-09-12T15:19:17Z",
+      "side": 1,
+      "message": "if there\u0027s a solid reason why this is the case, maybe it\u0027s worth saying what that is here?",
+      "revId": "6fbdd8135c5d1e22c92b21e60b7320b032459229",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5dcf8467_7bd3d6ec",
+        "filename": "web/tvl/blog/tvix-status-202209.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 59,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2022-09-12T15:19:17Z",
+      "side": 1,
+      "message": "the benchmarks we\u0027ve seen so far have been quite impressive - maybe it\u0027s worth talking about that as well?",
+      "range": {
+        "startLine": 47,
+        "startChar": 0,
+        "endLine": 59,
+        "endChar": 22
+      },
+      "revId": "6fbdd8135c5d1e22c92b21e60b7320b032459229",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "55cce5b1_ef82ba47",
+        "filename": "web/tvl/blog/tvix-status-202209.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 66,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2022-09-12T15:19:17Z",
+      "side": 1,
+      "message": "for people who aren\u0027t familiar with interpreted language design, this might feel like quite a bit of extra hassle to go through just to evaluate a laanguage. Maybe it\u0027s worth adding something (even if it\u0027s just a sentence) explaining *why* this is worth doing?",
+      "range": {
+        "startLine": 63,
+        "startChar": 0,
+        "endLine": 66,
+        "endChar": 33
+      },
+      "revId": "6fbdd8135c5d1e22c92b21e60b7320b032459229",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b672059a_74f424aa",
+        "filename": "web/tvl/blog/tvix-status-202209.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 72,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2022-09-12T15:19:17Z",
+      "side": 1,
+      "message": "nit: when do we run it?\n\nAlternatively, this could be \"We\u0027ve been running\"",
+      "range": {
+        "startLine": 72,
+        "startChar": 0,
+        "endLine": 72,
+        "endChar": 7
+      },
+      "revId": "6fbdd8135c5d1e22c92b21e60b7320b032459229",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
