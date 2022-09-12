@@ -222,7 +222,7 @@ fn eval(trace: bool, code: &str) -> Output {
         .expect("expression should exist if no errors occured");
 
     let codemap = Rc::new(codemap);
-    let mut compilation_observer = DisassemblingObserver::new(codemap, &mut out.bytecode);
+    let mut compilation_observer = DisassemblingObserver::new(codemap.clone(), &mut out.bytecode);
 
     let result = tvix_eval::compile(
         root_expr,
@@ -236,10 +236,8 @@ fn eval(trace: bool, code: &str) -> Output {
     for warning in result.warnings {
         writeln!(
             &mut out.warnings,
-            "warning: {:?} at `{}` [line {}]",
-            warning.kind,
-            file.source_slice(warning.span),
-            file.find_line(warning.span.low()) + 1
+            "{}\n",
+            warning.fancy_format_str(&codemap).trim(),
         )
         .unwrap();
     }
