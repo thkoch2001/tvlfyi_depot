@@ -26,6 +26,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "67f10bb1_17911381",
+        "filename": "web/tvl/blog/default.nix",
+        "patchSetId": 1
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2022-09-12T17:38:05Z",
+      "side": 1,
+      "message": "or spell things out :)",
+      "parentUuid": "20f5a682_f9015c74",
+      "range": {
+        "startLine": 20,
+        "startChar": 34,
+        "endLine": 20,
+        "endChar": 42
+      },
+      "revId": "6fbdd8135c5d1e22c92b21e60b7320b032459229",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "7b18f4d6_1a5d5e7b",
         "filename": "web/tvl/blog/tvix-status-202209.md",
         "patchSetId": 1
@@ -37,6 +61,30 @@
       "writtenOn": "2022-09-12T16:56:20Z",
       "side": 1,
       "message": "two variants of major in close succession reads a bit odd.",
+      "range": {
+        "startLine": 34,
+        "startChar": 7,
+        "endLine": 34,
+        "endChar": 15
+      },
+      "revId": "6fbdd8135c5d1e22c92b21e60b7320b032459229",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0d932f0e_652c5adf",
+        "filename": "web/tvl/blog/tvix-status-202209.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2022-09-12T17:38:05Z",
+      "side": 1,
+      "message": "I actually feel like most of the awkwardness there is the sentence above where you commented (lines 31-32)",
+      "parentUuid": "7b18f4d6_1a5d5e7b",
       "range": {
         "startLine": 34,
         "startChar": 7,
@@ -182,6 +230,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "0ea4a5a1_66560886",
+        "filename": "web/tvl/blog/tvix-status-202209.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 81,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2022-09-12T17:38:05Z",
+      "side": 1,
+      "message": "this idiom feels fine to me, fwiw - and it\u0027s probably exactly the wording I\u0027d use in conversation",
+      "parentUuid": "b48b15ea_45eea87f",
+      "range": {
+        "startLine": 81,
+        "startChar": 37,
+        "endLine": 81,
+        "endChar": 45
+      },
+      "revId": "6fbdd8135c5d1e22c92b21e60b7320b032459229",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "123727ca_e4f15d99",
         "filename": "web/tvl/blog/tvix-status-202209.md",
         "patchSetId": 1
@@ -216,6 +288,30 @@
       "writtenOn": "2022-09-12T16:56:20Z",
       "side": 1,
       "message": "I guess it\u0027d be nice to have a dedicated email address for bugs (maybe we can pipe that into panettone later even!).",
+      "range": {
+        "startLine": 127,
+        "startChar": 54,
+        "endLine": 127,
+        "endChar": 61
+      },
+      "revId": "6fbdd8135c5d1e22c92b21e60b7320b032459229",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f9983e9e_a62ef5ea",
+        "filename": "web/tvl/blog/tvix-status-202209.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 127,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2022-09-12T17:38:05Z",
+      "side": 1,
+      "message": "I\u0027d be willing to help develop that",
+      "parentUuid": "82076fe9_102d63a0",
       "range": {
         "startLine": 127,
         "startChar": 54,
