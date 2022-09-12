@@ -55,6 +55,11 @@ in
 
     openssh.enable = true;
 
+    printing = {
+      enable = true;
+      drivers = with pkgs; [ gutenprint ];
+    };
+
     xserver = {
       enable = true;
       layout = "us";
