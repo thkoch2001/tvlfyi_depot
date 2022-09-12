@@ -1,0 +1,101 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e14f970b_62f0d42d",
+        "filename": "tvix/eval/src/warnings.rs",
+        "patchSetId": 3
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2022-09-12T15:22:04Z",
+      "side": 1,
+      "message": "this *can* be a proper docstring, I think",
+      "revId": "aa0e693f280bae721f86c216cddea502f5b30dfe",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "52ec4a2f_39dd146a",
+        "filename": "tvix/eval/src/warnings.rs",
+        "patchSetId": 3
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2022-09-12T15:22:04Z",
+      "side": 1,
+      "message": "nit: since this is pub, maybe could use a docstring",
+      "revId": "aa0e693f280bae721f86c216cddea502f5b30dfe",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d2f6ffcf_680a5024",
+        "filename": "tvix/eval/src/warnings.rs",
+        "patchSetId": 3
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2022-09-12T15:22:04Z",
+      "side": 1,
+      "message": "this `vec!` is unnecessary, can just be a `\u0026[...]`",
+      "range": {
+        "startLine": 29,
+        "startChar": 52,
+        "endLine": 29,
+        "endChar": 56
+      },
+      "revId": "aa0e693f280bae721f86c216cddea502f5b30dfe",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d2fb7597_95fc1a4b",
+        "filename": "tvix/eval/src/warnings.rs",
+        "patchSetId": 3
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2022-09-12T15:22:04Z",
+      "side": 1,
+      "message": "nit: docstring here too",
+      "revId": "aa0e693f280bae721f86c216cddea502f5b30dfe",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "30cd5660_3c4504b9",
+        "filename": "tvix/eval/src/warnings.rs",
+        "patchSetId": 3
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2022-09-12T15:22:04Z",
+      "side": 1,
+      "message": "same here",
+      "range": {
+        "startLine": 34,
+        "startChar": 64,
+        "endLine": 34,
+        "endChar": 68
+      },
+      "revId": "aa0e693f280bae721f86c216cddea502f5b30dfe",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
