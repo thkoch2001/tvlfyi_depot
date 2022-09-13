@@ -1,3 +1,4 @@
+use crate::value::CoercionKind;
 use std::fmt::Display;
 
 #[derive(Clone, Debug)]
@@ -58,6 +59,12 @@ pub enum ErrorKind {
     /// An error occured while forcing a thunk, and needs to be
     /// chained up.
     ThunkForce(Box<Error>),
+
+    /// Given type can't be coerced to a string in the respective context
+    NotCoercibleToString {
+        given: &'static str,
+        kind: CoercionKind,
+    },
 
     /// Tvix internal warning for features triggered by users that are
     /// not actually implemented yet, and without which eval can not
