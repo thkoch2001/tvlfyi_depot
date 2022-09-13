@@ -18,6 +18,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "8d8401e9_c77d67d2",
+        "filename": "tvix/eval/src/warnings.rs",
+        "patchSetId": 3
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-09-13T11:07:52Z",
+      "side": 1,
+      "message": "No, it doesn\u0027t have anything to be attached to, however I am putting a doc comment on the public functions below instead.",
+      "parentUuid": "e14f970b_62f0d42d",
+      "revId": "aa0e693f280bae721f86c216cddea502f5b30dfe",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "52ec4a2f_39dd146a",
@@ -31,6 +49,24 @@
       "writtenOn": "2022-09-12T15:22:04Z",
       "side": 1,
       "message": "nit: since this is pub, maybe could use a docstring",
+      "revId": "aa0e693f280bae721f86c216cddea502f5b30dfe",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fa22fdca_5dee8683",
+        "filename": "tvix/eval/src/warnings.rs",
+        "patchSetId": 3
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-09-13T11:07:52Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "52ec4a2f_39dd146a",
       "revId": "aa0e693f280bae721f86c216cddea502f5b30dfe",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
@@ -58,6 +94,30 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "af9990ca_2a5635fd",
+        "filename": "tvix/eval/src/warnings.rs",
+        "patchSetId": 3
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-09-13T11:07:52Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d2f6ffcf_680a5024",
+      "range": {
+        "startLine": 29,
+        "startChar": 52,
+        "endLine": 29,
+        "endChar": 56
+      },
+      "revId": "aa0e693f280bae721f86c216cddea502f5b30dfe",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "d2fb7597_95fc1a4b",
@@ -75,6 +135,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "753edc81_2afee898",
+        "filename": "tvix/eval/src/warnings.rs",
+        "patchSetId": 3
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-09-13T11:07:52Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d2fb7597_95fc1a4b",
+      "revId": "aa0e693f280bae721f86c216cddea502f5b30dfe",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "30cd5660_3c4504b9",
@@ -88,6 +166,30 @@
       "writtenOn": "2022-09-12T15:22:04Z",
       "side": 1,
       "message": "same here",
+      "range": {
+        "startLine": 34,
+        "startChar": 64,
+        "endLine": 34,
+        "endChar": 68
+      },
+      "revId": "aa0e693f280bae721f86c216cddea502f5b30dfe",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d7f61234_19552958",
+        "filename": "tvix/eval/src/warnings.rs",
+        "patchSetId": 3
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-09-13T11:07:52Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "30cd5660_3c4504b9",
       "range": {
         "startLine": 34,
         "startChar": 64,
