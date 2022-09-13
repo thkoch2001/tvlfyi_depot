@@ -16,6 +16,24 @@
       "message": "I\u0027d probably also add a `color: black` there, and/or pick a darker background.\n\nOn screens with high brightness settings, the aliceblue background isn\u0027t really recognizable.",
       "revId": "aded1d0ab759fdfae72d616581fde5da7c570fa6",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "179608e9_a35cbbfa",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2022-09-13T14:06:50Z",
+      "side": 1,
+      "message": "I think we still want \u003ccode\u003e\u003ca\u003e to be blue?",
+      "parentUuid": "6e6a52d5_e9579c2f",
+      "revId": "aded1d0ab759fdfae72d616581fde5da7c570fa6",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
