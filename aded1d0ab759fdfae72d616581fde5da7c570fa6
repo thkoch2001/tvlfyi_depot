@@ -34,6 +34,24 @@
       "parentUuid": "6e6a52d5_e9579c2f",
       "revId": "aded1d0ab759fdfae72d616581fde5da7c570fa6",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d900c901_bd7d6114",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-09-13T14:29:28Z",
+      "side": 1,
+      "message": "\u003e On screens with high brightness settings, the aliceblue background isn\u0027t really recognizable.\n\nYou mean with low contrast settings? On all of my devices, brightness has no effect on the visibility.",
+      "parentUuid": "179608e9_a35cbbfa",
+      "revId": "aded1d0ab759fdfae72d616581fde5da7c570fa6",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
