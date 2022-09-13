@@ -1,133 +1,134 @@
-We've now been working on our rewrite of Nix, [Tvix][], on-and-off for
-over a year.
+We've now been working on our rewrite of Nix, [Tvix][], for over a
+year.
 
-Of course, for many of us, it's been a pretty turbulent time period.
-While steady progress has been made, we haven't really had the
-bandwidth to communicate and publicise what has been going on - this
-blog post aims to rectify that!
+As you can imagine, this past year has been turbulent, to say the
+least, given the regions where many of us live. As a result we haven't
+had as much time to work on fun things (like open-source software
+projects!) as we'd like.
+
+We've all been fortunate enough to continue making progress, but we
+just haven't had the bandwidth to communicate with you and keep you up
+to speed on what's going on. That's what this blog post is for.
 
 ## Nix language evaluator
 
-The most significant progress in the last months has been made on our
-Nix language evaluator. To address a big question right away: Yes, you
-can play with it - in [Tvixbolt][]!
+The most significant progress in the past six months has been on our
+Nix language evaluator. To answer the most important question: yes,
+you can play with it right now – in [Tvixbolt][]!
 
-We developed the evaluator to the current state by enumerating the
-various problems we were likely to encounter, and writing small-scale
-solutions to them before assembling them into a whole. Due to the
-nature of this process, we briefly ended up with a very large private
-source tree, which we [integrated][] into our monorepo in the last
-couple of weeks.
+We got the evaluator into its current state by first listing all the
+problems we were likely to encounter, then solving them independently,
+and finally assembling all those small-scale solutions into a coherent
+whole. As a result, we briefly had an impractically large private
+source tree, which we have since [integrated][] into our monorepo.
 
-This process was slow mostly due to code review bandwidth, but
-remember that we are just volunteers and such bottlenecks are to be
-expected!
+This process was much slower than we would have liked, due to code
+review bandwidth... which is to say, we're all volunteers. People have
+lives, bottlenecks happen.
 
-Most of this code was written or reviewed by [tazjin][], [grfn][]
-and [sterni][].
+Most of this code was either written or reviewed by [grfn][],
+[sterni][] and [tazjin][] (that's me!).
 
-### So, what's working now?
+### How much of eval is working?
 
-The answer is *most things*! You can enter many Nix language
-expressions in [Tvixbolt][] and observe how they are evaluated.
+*Most of it*! You can enter most (but not *all*, sorry! Not yet,
+anyway.) Nix language expressions in [Tvixbolt][] and observe how they
+are evaluated.
 
-There's a lot of interesting stuff going on under-the-hood, notably:
+There's a lot of interesting stuff going on under the hood, such as:
 
-* The Tvix compiler is built to be able to emit warnings & errors
-  without failing early, as well as retaining as much source
-  information as possible. This will enable developer tooling, such as
-  language servers, to be based on Tvix.
+* The Tvix compiler can emit warnings and errors without failing
+  early, and retains as much source information as possible. This will
+  enable you to use Tvix as the basis for developer tooling, such as
+  language servers.
 
-* The Tvix compiler performs very in-depth scope analysis, which
-  allows it to both generate efficient bytecode for accessing
-  identifiers, as well as alert users about problems in their code
-  before runtime.
+* The Tvix compiler performs in-depth scope analysis, so it can both
+  generate efficient bytecode for accessing identifiers, and alert you
+  about problems in your code before runtime.
 
-* The runtime supports tail-call optimisation in many (but not all
-  (yet!)) cases, allowing us to evaluate many recursive expressions in
+* The runtime supports tail-call optimisation in many (but – again –
+  not yet all) cases, so you can evaluate recursive expressions in
   constant stack space.
 
-* The runtime supports having different backing representations for
-  the same Nix type. For example, an attribute set may be represented
-  differently based on whether it is empty, a `name/value` pair or a
-  larger set.
+* The runtime can give you different backing representations for the
+  same Nix type. For example, an attribute set is represented
+  differently depending on whether you've constructed an empty one, a
+  `name/value` pair, or a larger set. This lets us optimise frequent,
+  well-known use-cases without impacting the general case much.
 
-We've also (constrained by the available features) run some initial
-benchmarks against C++ Nix, and in most cases Tvix evaluation is an
-order of magnitude faster. However, these benchmarks are in no way
-indicative of real-life performance when evaluating something like
-`nixpkgs` yet, so stay tuned for more information on performance.
+We've run some initial benchmarks against C++ Nix (using the features
+that are ready), and in most case Tvix evaluation is an order of
+magnitude faster. To be fair, though, these benchmarks are in no way
+indicative of real-life performance for things like `nixpkgs`. More
+information is coming... eventually.
 
 ### How does it all work?
 
-Tvix's evaluator is implemented using a custom abstract machine with a
-very Nix-specific instruction set, as well as a compiler that
-traverses a parsed Nix AST to emit this bytecode and perform a set of
-optimisations and other analysis. The most important benefit of this
-is that we can plan and lay out the execution of a program in a way
-that is better suited to an efficient runtime than directly traversing
-the AST.
+Tvix's evaluator uses a custom abstract machine with a Nix-specific
+instruction set, and a compiler that traverses a parsed Nix AST to
+emit this bytecode and perform a set of optimisations and other
+analysis. The most important benefit of this is that we can plan and
+lay out the execution of a program in a way that is better suited to
+an efficient runtime than directly traversing the AST.
 
 TIP: You can see the generated bytecode in [Tvixbolt][]!
 
-This is all written in Rust (of course) and is currently made up of
-less than 5000 lines of code (some of which look deceptively simple,
-especially around scope-handling!).
+This is all written in about 4000 lines of Rust (naturally), some of
+which – especially around scope-handling – are deceptively simple.
 
-We run the evaluator against many custom tests we have written as part
-of our CI suite (through `cargo test`), as well as against the
-upstream Nix test suite (which we do not yet pass, but are working
-towards).
+As part of our CI suite, we run the evaluator against some tests we
+wrote ourselves, as well as against the upstream Nix test suite (which
+we don't *quite* pass yet. We're working on it!).
 
 ### What's next for tvix-eval?
 
-Despite everything, there are some unfinished and important feature
-areas:
+Despite all our progress, there are still some unfinished feature
+areas, and some of them are pretty important:
 
-1. The majority of Nix's `builtins` are not yet implemented (including
-   fundamental ones such as `import` and `derivation`).
+1. The majority of Nix's builtins – including fundamental ones like
+   `import` and `derivation` – aren't implemented yet.
 
-2. Recursive attribute sets (`rec`) are not yet implemented. This is
-   actually not because of the recursion in itself, but because of the
-   handling of nested keys (such as `a.b`), for which we are designing
-   a more efficient solution than what is currently in place.
+2. Neither are recursive attribute sets (`rec`). This isn't because of
+   a problem with the recursion itself, but because of the handling of
+   nested keys (such as `a.b`). We have a lackluster solution already,
+   but are designing a more efficient one.
 
-In both cases we have mostly figured out how to do the remaining work
-and it is simply a question of time until we've done it. Progress is
-steady and can of course be tracked [in the source][src] (viewer
-without Javascript [here][src-noscript]).
+In both cases, we've mostly figured out what to do; now it's just a
+matter of finding the time to do it. Our progress is steady, and can
+be tracked [in the source][src] (viewer without Javascript
+[here][src-noscript]).
 
 Apart from that, the next steps are:
 
-* Comprehensive benchmarking. We are standing up an infrastructure for
-  continuous benchmarking to measure the impact of changes, and to be
-  able to identify and optimise hotspots.
+* Comprehensive benchmarking. We're standing up an infrastructure for
+  continuous benchmarking to measure the impact of changes. It'll also
+  let us identify and optimise hotspots
 
 * Implementing known optimisations. There are some areas of the code
-  where we are aware of (significant) possible speed gains, but we are
-  holding off of implementing them until the evaluator is feature
-  complete and passes the Nix language test suite.
+  that have the potential for significant speed gains, but we're
+  holding off implementing those until the evaluator is feature
+  complete and passes the Nix test suite.
 
-* Finishing our language specification. Based on the behaviours we've
-  learned, we are writing a specification of the Nix language that
-  captures its various (sometimes subtly tricky) behaviours.
+* Finishing our language specification. Based on what we've learned,
+  we're writing a specification of the Nix language that captures its
+  various behaviours in all their tricky subtlety and subtle trickery.
 
-Once we can evaluate `nixpkgs`, focus is likely to shift towards the
-other areas of Tvix.
+Once we can evaluate `nixpkgs`, we're likely to shift our focus
+towards the other areas of Tvix.
 
 ## The Other Areas of Tvix
 
 Speaking of these other areas (most importantly, the builder and store
-implementation), some progress has been made there also.
+implementation), we've made some nice progress there also.
 
-While we haven't begun piecing together the final implementations,
-[flokli][] and [adisbladis][] have been hard at work on [go-nix][]
-which aims to implement many of the low-level primitives required for
-Nix (hashing and encoding schemes, archive formats, reference scanning
-...).
+While we've yet to put together the final pieces, [flokli][] and
+[adisbladis][] have been hard at work on [go-nix][], which aims to
+implement many of the low-level primitives required for the Nix store
+and builder (hashing and encoding schemes, archive formats, reference
+scanning ...).
 
-We're looking forward to being able to tell you more about this in the
-next update!
+We're looking forward to telling you more in the next Tvix status
+update!
 
 ## Outro ...
 
@@ -138,16 +139,18 @@ touch with us if you'd like to join!
 Thanks also, of course, to [NLNet](https://nlnet.nl/) for sponsoring
 some of this work!
 
-And finally, we would like to thank and pay our respects to jD91mZM2 -
+And finally, we would like to thank and pay our respects to jD91mZM2 –
 the original author of
-[rnix-parser](https://github.com/nix-community/rnix-parser) - who
-sadly passed away. We use `rnix-parser` in our compiler, and its
-well-designed internals (also thanks to its new maintainers!) have
-saved us a lot of time.
+[rnix-parser](https://github.com/nix-community/rnix-parser) – who has
+sadly passed away. Please, tell people how important they are to you.
 
-That's it for this update, go play with [Tvixbolt][], tell us about
-the weird ways in which you break it, get in touch, and we'll see you
-around!
+We use `rnix-parser` in our compiler, and its well-designed internals
+(also thanks to its new maintainers!) have saved us a lot of time.
+
+That's it for this update. Go play with [Tvixbolt][], have fun
+figuring out weird ways to break it – and if you do, let us know.
+
+We'll see you around!
 
 [Tvix]: https://tvl.fyi/blog/rewriting-nix
 [Tvixbolt]: https://tvixbolt.tvl.su
