@@ -6,11 +6,13 @@
 use std::{
     collections::{BTreeMap, HashMap},
     rc::Rc,
+    path::PathBuf
 };
 
 use crate::{
     errors::ErrorKind,
     value::{Builtin, CoercionKind, NixAttrs, NixList, NixString, Value},
+    vm::VM,
 };
 
 use crate::arithmetic_op;
@@ -34,6 +36,33 @@ macro_rules! force {
     ( $vm:ident, $value:ident, $body:block ) => {
         force!($vm, &$value, $value, $body)
     };
+}
+
+
+
+/// Coerce a Nix Value to a plain path, e.g. in order to access the file it
+/// points to in an I/O builtin. This coercion can _never_ be performed in
+/// a Nix program directly (i.e. the trick `path: /. + path` to convert from
+/// a string to a path wouldn't hit this code), so the target file
+/// doesn't need to be realised or imported into the Nix store.
+pub fn coerce_value_to_path(v: &Value, vm: &mut VM) -> Result<PathBuf, ErrorKind> {
+    force!(vm, v, value, {
+        match value {
+            Value::Thunk(t) => coerce_value_to_path(&t.value(), vm),
+            Value::Path(p) => Ok(p.clone()),
+            _ => {
+                let string = value.coerce_to_string(CoercionKind::Weak, vm)?;
+
+                // Needs to be a nonempty string starting with a `/`
+                // TODO: This check only makes sense on POSIX
+                if string.chars().nth(0) != Some('/') {
+                    Err(ErrorKind::NotAnAbsolutePath(string))
+                } else {
+                    Ok(PathBuf::from(string.as_str()))
+                }
+            }
+        }
+    })
 }
 
 /// Return all pure builtins, that is all builtins that do not rely on
