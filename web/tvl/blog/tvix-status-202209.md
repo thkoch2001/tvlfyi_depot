@@ -16,7 +16,7 @@ We developed the evaluator to the current state by enumerating the
 various problems we were likely to encounter, and writing small-scale
 solutions to them before assembling them into a whole. Due to the
 nature of this process, we briefly ended up with a very large private
-source tree, which we [integrated]() into our monorepo in the last
+source tree, which we [integrated][] into our monorepo in the last
 couple of weeks.
 
 This process was slow mostly due to code review bandwidth, but
@@ -44,8 +44,8 @@ and it is simply a question of time until we've done it. Progress is
 steady and can of course be tracked [in the source][src] (viewer
 without Javascript [here][src-noscript]).
 
-At the same time, we've already implemented a variety of basics that
-are hopefully going to have a huge impact further down, such as:
+At the same time, we've already implemented some basics that are
+hopefully going to have a huge impact further down, such as:
 
 * The Tvix compiler is built to be able to emit warnings & errors
   without failing early, as well as retaining as much source
@@ -60,6 +60,11 @@ are hopefully going to have a huge impact further down, such as:
 * The runtime supports tail-call optimisation in many (but not all
   (yet!)) cases, allowing us to evaluate many recursive expressions in
   constant stack space.
+
+* The runtime supports having different backing representations for
+  the same Nix type. For example, an attribute set may be represented
+  differently based on whether it is empty, a `name/value` pair or a
+  larger set.
 
 ### How does this all work?
 
@@ -146,5 +151,5 @@ around!
 [grfn]: https://gws.fyi/
 [sterni]: https://github.com/sternenseemann
 [go-nix]: https://github.com/nix-community/go-nix
-[flokli]: https://github.com/flokli
+[flokli]: https://flokli.de/
 [adisbladis]: https://github.com/adisbladis
