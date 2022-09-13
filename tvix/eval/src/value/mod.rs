@@ -101,6 +101,8 @@ impl Value {
         kind: CoercionKind,
         vm: &mut VM,
     ) -> Result<NixString, ErrorKind> {
+        // TODO: eventually, this will need to handle string context and importing
+        // files into the Nix store depending on what context the coercion happens in
         if let Value::Thunk(t) = self {
             t.force(vm)?;
         }
@@ -217,6 +219,33 @@ impl Value {
             | (Value::Blueprint(_), _)
             | (Value::DeferredUpvalue(_), _) => {
                 panic!("tvix bug: .coerce_to_string() called on internal value")
+            }
+        }
+    }
+
+    /// Coerce a Nix Value to a plain path, e.g. in order to access the file it
+    /// points to in an I/O builtin. This coercion can _never_ be performed in
+    /// a Nix program directly (i.e. the trick `path: /. + path` to convert from
+    /// a string to a path wouldn't hit this code path), so the target file
+    /// doesn't need to be realised or imported into the Nix store.
+    pub fn coerce_to_path(&self, vm: &mut VM) -> Result<PathBuf, ErrorKind> {
+        if let Value::Thunk(t) = self {
+            t.force(vm)?;
+        }
+
+        match self {
+            Value::Thunk(t) => t.value().coerce_to_path(vm),
+            Value::Path(p) => Ok(p.clone()),
+            _ => {
+                let string = self.coerce_to_string(CoercionKind::Weak, vm)?;
+
+                // Needs to be a nonempty string starting with a `/`
+                // TODO: This check only makes sense on POSIX
+                if string.chars().nth(0) != Some('/') {
+                    Err(ErrorKind::NotAnAbsolutePath(string))
+                } else {
+                    Ok(PathBuf::from(string.as_str()))
+                }
             }
         }
     }
