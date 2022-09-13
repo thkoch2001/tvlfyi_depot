@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "da5021e8_c67a06cc",
+        "filename": "tvix/eval/src/builtins/mod.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 56,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2022-09-13T14:29:11Z",
+      "side": 1,
+      "message": "can use `force!`",
+      "revId": "27ed9350bfd80d9fcdb0af3ee6262fb62c70a831",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2473a269_85b2293a",
+        "filename": "tvix/eval/src/builtins/mod.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 59,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2022-09-13T14:29:11Z",
+      "side": 1,
+      "message": "I think getting the size of the attrset is cheap (is that true tazjin?), so using `with_capacity` seems sensible.",
+      "revId": "27ed9350bfd80d9fcdb0af3ee6262fb62c70a831",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0279f420_7e60a9b6",
+        "filename": "tvix/eval/src/tests/tvix_tests/eval-okay-builtins-attrnames.nix",
+        "patchSetId": 2
+      },
+      "lineNbr": 3,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2022-09-13T14:29:11Z",
+      "side": 1,
+      "message": "Can we test \"weirder\" strings and mixed casings to make sure the ordering is the same as in C++ Nix?",
+      "revId": "27ed9350bfd80d9fcdb0af3ee6262fb62c70a831",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
