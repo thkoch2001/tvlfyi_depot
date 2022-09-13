@@ -22,6 +22,30 @@
       },
       "revId": "5c4ce8717b8b276daf655dc5459ae99ab3c4ec81",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "60b53100_e2cf2a08",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-09-13T10:58:17Z",
+      "side": 1,
+      "message": "You can only set colour options when writing to stderr, not anywhere else. It\u0027s just not supported by this crate.",
+      "parentUuid": "a1989a08_63e3f574",
+      "range": {
+        "startLine": 9,
+        "startChar": 43,
+        "endLine": 10,
+        "endChar": 61
+      },
+      "revId": "5c4ce8717b8b276daf655dc5459ae99ab3c4ec81",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
