@@ -144,6 +144,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "0b207952_057c58d4",
+        "filename": "tvix/eval/src/errors.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 100,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2022-09-13T14:26:48Z",
+      "side": 1,
+      "message": "the [next CL in the chain](https://cl.tvl.fyi/c/depot/+/6535/9/corp/tvixbolt/src/main.rs) would benefit from my suggestion - actually:\n```\nwriteln!\n  \u0026mut out.compiler_errors,\n  \"{}\\n\",\n  error.fancy_format_str(\u0026codemap).trim()\n```\n\nunnecessarily allocates two strings.\n\nActually, another option here would be to return some reference-containing struct that impls `Display` itself, since the methods of Display do the right thing here.",
+      "parentUuid": "6e37ca67_1556ff67",
+      "range": {
+        "startLine": 100,
+        "startChar": 4,
+        "endLine": 100,
+        "endChar": 52
+      },
+      "revId": "e1348e59f498271a91f3c180a3ceee0f41a89688",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "8877b1bc_bbd46fd3",
         "filename": "tvix/eval/src/errors.rs",
         "patchSetId": 2
@@ -236,6 +260,30 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "d1f6d265_b41f8e9a",
+        "filename": "tvix/eval/src/errors.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 164,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2022-09-13T14:26:48Z",
+      "side": 1,
+      "message": "I don\u0027t disagree, to be honest. I dislike when something goes from a single variable to a complex expression and that requires me to refactor it out.\n\nMostly just wanted to educate ;)",
+      "parentUuid": "3357d6bd_f73667af",
+      "range": {
+        "startLine": 164,
+        "startChar": 62,
+        "endLine": 164,
+        "endChar": 66
+      },
+      "revId": "e1348e59f498271a91f3c180a3ceee0f41a89688",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "3baf773c_46f40c12",
@@ -273,6 +321,30 @@
       "side": 1,
       "message": "That would expect us to cover each variant though, no? We do have variants here which will hit completely different specialised code paths for printing their errors (e.g. if we need to re-parse the AST, retrieve surrounding elements etc. to create nice spans).",
       "parentUuid": "3baf773c_46f40c12",
+      "range": {
+        "startLine": 100,
+        "startChar": 4,
+        "endLine": 166,
+        "endChar": 9
+      },
+      "revId": "e1348e59f498271a91f3c180a3ceee0f41a89688",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "08d8aaca_292b93f9",
+        "filename": "tvix/eval/src/errors.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 166,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2022-09-13T14:26:48Z",
+      "side": 1,
+      "message": "I think we could factor those out into top-level functions in that case.\n\nBut yeah, maybe better to wait to try to generalize until after we\u0027ve seen more complex cases.",
+      "parentUuid": "5f6226d5_790010de",
       "range": {
         "startLine": 100,
         "startChar": 4,
