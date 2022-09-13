@@ -1,0 +1,61 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2d4b3c93_962104f6",
+        "filename": "tvix/eval/src/builtins/mod.rs",
+        "patchSetId": 7
+      },
+      "lineNbr": 142,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2022-09-13T15:06:49Z",
+      "side": 1,
+      "message": "Both sides need to be forced, e.g.\n\n    builtins.lessThan (builtins.add 1 2)  (builtins.add 2 3)",
+      "revId": "2f8b4ab3ca8beb47cdeb3dc0e011a1cba5a1afb4",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5108f0b2_86a9bde1",
+        "filename": "tvix/eval/src/vm.rs",
+        "patchSetId": 7
+      },
+      "lineNbr": 97,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2022-09-13T15:06:49Z",
+      "side": 1,
+      "message": "This match can be replaced by cmp_op!(a, b, \u003c), I think?!",
+      "revId": "2f8b4ab3ca8beb47cdeb3dc0e011a1cba5a1afb4",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1c9b7557_d2480d07",
+        "filename": "tvix/eval/src/vm.rs",
+        "patchSetId": 7
+      },
+      "lineNbr": 120,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2022-09-13T15:06:49Z",
+      "side": 1,
+      "message": "Should be Incomparable",
+      "range": {
+        "startLine": 120,
+        "startChar": 39,
+        "endLine": 120,
+        "endChar": 48
+      },
+      "revId": "2f8b4ab3ca8beb47cdeb3dc0e011a1cba5a1afb4",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}

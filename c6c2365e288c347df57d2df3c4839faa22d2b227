@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c4f5aff8_f08a1e15",
+        "filename": "tvix/eval/src/vm.rs",
+        "patchSetId": 7
+      },
+      "lineNbr": 101,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2022-09-13T15:06:49Z",
+      "side": 0,
+      "message": "String comparison also works for `builtins.lessThan`!",
+      "revId": "c6c2365e288c347df57d2df3c4839faa22d2b227",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
