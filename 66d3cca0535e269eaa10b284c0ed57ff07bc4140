@@ -369,6 +369,30 @@
       },
       "revId": "66d3cca0535e269eaa10b284c0ed57ff07bc4140",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "68a36cc0_403ea7b8",
+        "filename": "web/tvl/blog/tvix-status-202209.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 157,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2022-09-13T20:26:13Z",
+      "side": 1,
+      "message": "We write about tracking progress where it is linked from, but I guess the tree view is probably less confusing.",
+      "parentUuid": "ce797e5b_9742e901",
+      "range": {
+        "startLine": 157,
+        "startChar": 37,
+        "endLine": 157,
+        "endChar": 41
+      },
+      "revId": "66d3cca0535e269eaa10b284c0ed57ff07bc4140",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
