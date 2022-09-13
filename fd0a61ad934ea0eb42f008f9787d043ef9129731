@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "911cf138_3def32e6",
+        "filename": "tvix/eval/src/compiler/mod.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 276,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-09-13T12:26:08Z",
+      "side": 1,
+      "message": "This span will annotate the outer thunk force error (if there is one), while the inner one (expression inside the span) retains its own errors. We have all of those available at error rendering time.\n\nIs that not precise enough? :p",
+      "range": {
+        "startLine": 276,
+        "startChar": 0,
+        "endLine": 276,
+        "endChar": 64
+      },
+      "revId": "fd0a61ad934ea0eb42f008f9787d043ef9129731",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
