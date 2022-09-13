@@ -1,0 +1,147 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9d42c6b5_5ebbd707",
+        "filename": "tvix/eval/src/builtins/mod.rs",
+        "patchSetId": 5
+      },
+      "lineNbr": 213,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2022-09-13T14:58:06Z",
+      "side": 1,
+      "message": "I think using just `\u0026Path` and `.as_path()` is more idiomatic.",
+      "range": {
+        "startLine": 213,
+        "startChar": 31,
+        "endLine": 213,
+        "endChar": 38
+      },
+      "revId": "cfc3eccef5d226c1710568a8a2a4127b7f3b921c",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fff9b56d_3d34d406",
+        "filename": "tvix/eval/src/builtins/mod.rs",
+        "patchSetId": 5
+      },
+      "lineNbr": 217,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2022-09-13T14:58:06Z",
+      "side": 1,
+      "message": "Is this guaranteed to work? We should avoid crashing here.",
+      "range": {
+        "startLine": 217,
+        "startChar": 53,
+        "endLine": 217,
+        "endChar": 59
+      },
+      "revId": "cfc3eccef5d226c1710568a8a2a4127b7f3b921c",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a7206b20_c338f4e3",
+        "filename": "tvix/eval/src/builtins/mod.rs",
+        "patchSetId": 5
+      },
+      "lineNbr": 223,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2022-09-13T14:58:06Z",
+      "side": 1,
+      "message": "This is not guaranteed to be accurate, is it?",
+      "revId": "cfc3eccef5d226c1710568a8a2a4127b7f3b921c",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e0d16c13_958a3e1a",
+        "filename": "tvix/eval/src/builtins/mod.rs",
+        "patchSetId": 5
+      },
+      "lineNbr": 225,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2022-09-13T14:58:06Z",
+      "side": 1,
+      "message": "I\u0027d just use `to_string_lossy()` for now and add an TODO so we tackle this encoding issue later…",
+      "range": {
+        "startLine": 225,
+        "startChar": 78,
+        "endLine": 225,
+        "endChar": 84
+      },
+      "revId": "cfc3eccef5d226c1710568a8a2a4127b7f3b921c",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "aecf1eb7_36c28685",
+        "filename": "tvix/eval/src/builtins/mod.rs",
+        "patchSetId": 5
+      },
+      "lineNbr": 235,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2022-09-13T14:58:06Z",
+      "side": 1,
+      "message": "started working on the coercion logic in cl/6571, still missing `coerce_to_path()` though. (That also forces correctly.)",
+      "range": {
+        "startLine": 235,
+        "startChar": 14,
+        "endLine": 235,
+        "endChar": 22
+      },
+      "revId": "cfc3eccef5d226c1710568a8a2a4127b7f3b921c",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bcc63dca_61790d93",
+        "filename": "tvix/eval/src/builtins/mod.rs",
+        "patchSetId": 5
+      },
+      "lineNbr": 253,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2022-09-13T14:58:06Z",
+      "side": 1,
+      "message": "This shouldn\u0027t be added unconditionally or we\u0027ll break tvixbolt?!",
+      "revId": "cfc3eccef5d226c1710568a8a2a4127b7f3b921c",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "18a0b4e7_f0dd090e",
+        "filename": "tvix/eval/src/errors.rs",
+        "patchSetId": 5
+      },
+      "lineNbr": 79,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2022-09-13T14:58:06Z",
+      "side": 1,
+      "message": "I think an IO error kind makes sense?",
+      "revId": "cfc3eccef5d226c1710568a8a2a4127b7f3b921c",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
