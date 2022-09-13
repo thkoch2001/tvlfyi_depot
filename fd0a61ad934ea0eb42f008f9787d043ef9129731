@@ -22,6 +22,30 @@
       },
       "revId": "fd0a61ad934ea0eb42f008f9787d043ef9129731",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6225f612_b03d705e",
+        "filename": "tvix/eval/src/compiler/mod.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 276,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-09-13T12:27:38Z",
+      "side": 1,
+      "message": "We also probably want to refactor this to thunk interpolation, and not thunk non-interpolation. Maybe add a TODO for that.",
+      "parentUuid": "911cf138_3def32e6",
+      "range": {
+        "startLine": 276,
+        "startChar": 0,
+        "endLine": 276,
+        "endChar": 64
+      },
+      "revId": "fd0a61ad934ea0eb42f008f9787d043ef9129731",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
