@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "92b0cd01_133553d1",
+        "filename": "tvix/eval/src/builtins/mod.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 81,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2022-09-13T14:48:41Z",
+      "side": 1,
+      "message": "Pretty sure you need to force here, e.g. try adding a test\n\n    (builtins.bitAnd 8 (builtins.add 4 4))",
+      "revId": "d33f129fff8990987e2704bb9a148a89528fb669",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
