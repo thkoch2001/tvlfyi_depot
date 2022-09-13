@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6e6a52d5_e9579c2f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2022-09-13T12:48:06Z",
+      "side": 1,
+      "message": "I\u0027d probably also add a `color: black` there, and/or pick a darker background.\n\nOn screens with high brightness settings, the aliceblue background isn\u0027t really recognizable.",
+      "revId": "aded1d0ab759fdfae72d616581fde5da7c570fa6",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
