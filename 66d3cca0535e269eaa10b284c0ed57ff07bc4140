@@ -393,6 +393,30 @@
       },
       "revId": "66d3cca0535e269eaa10b284c0ed57ff07bc4140",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "322682c9_39306fc6",
+        "filename": "web/tvl/blog/tvix-status-202209.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 157,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-09-13T20:30:18Z",
+      "side": 1,
+      "message": "I think interested parties that opt for the cgit view should be capable of navigating to the log link themselves :p",
+      "parentUuid": "68a36cc0_403ea7b8",
+      "range": {
+        "startLine": 157,
+        "startChar": 37,
+        "endLine": 157,
+        "endChar": 41
+      },
+      "revId": "66d3cca0535e269eaa10b284c0ed57ff07bc4140",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
