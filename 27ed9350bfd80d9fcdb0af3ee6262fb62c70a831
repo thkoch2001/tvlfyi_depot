@@ -1,6 +1,23 @@
 {
   "comments": [
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "40ae283b_73ad2b31",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-09-13T17:52:55Z",
+      "side": 1,
+      "message": "Thanks for the feedback 😊",
+      "revId": "27ed9350bfd80d9fcdb0af3ee6262fb62c70a831",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "da5021e8_c67a06cc",
@@ -14,6 +31,42 @@
       "writtenOn": "2022-09-13T14:29:11Z",
       "side": 1,
       "message": "can use `force!`",
+      "revId": "27ed9350bfd80d9fcdb0af3ee6262fb62c70a831",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f4612baa_8b1a956d",
+        "filename": "tvix/eval/src/builtins/mod.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 56,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-09-13T17:52:55Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "da5021e8_c67a06cc",
+      "revId": "27ed9350bfd80d9fcdb0af3ee6262fb62c70a831",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "460b63a3_5b648ed9",
+        "filename": "tvix/eval/src/builtins/mod.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 56,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-09-13T17:52:55Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "da5021e8_c67a06cc",
       "revId": "27ed9350bfd80d9fcdb0af3ee6262fb62c70a831",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
@@ -35,6 +88,42 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "3a4d0a29_7a39a146",
+        "filename": "tvix/eval/src/builtins/mod.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 59,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-09-13T17:52:55Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2473a269_85b2293a",
+      "revId": "27ed9350bfd80d9fcdb0af3ee6262fb62c70a831",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "39e97500_0e193131",
+        "filename": "tvix/eval/src/builtins/mod.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 59,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-09-13T17:52:55Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2473a269_85b2293a",
+      "revId": "27ed9350bfd80d9fcdb0af3ee6262fb62c70a831",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "0279f420_7e60a9b6",
@@ -48,6 +137,24 @@
       "writtenOn": "2022-09-13T14:29:11Z",
       "side": 1,
       "message": "Can we test \"weirder\" strings and mixed casings to make sure the ordering is the same as in C++ Nix?",
+      "revId": "27ed9350bfd80d9fcdb0af3ee6262fb62c70a831",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e72aa354_c1c89e3a",
+        "filename": "tvix/eval/src/tests/tvix_tests/eval-okay-builtins-attrnames.nix",
+        "patchSetId": 2
+      },
+      "lineNbr": 3,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-09-13T17:52:55Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0279f420_7e60a9b6",
       "revId": "27ed9350bfd80d9fcdb0af3ee6262fb62c70a831",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
