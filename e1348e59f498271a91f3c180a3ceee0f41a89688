@@ -166,6 +166,30 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "dcc1bc54_9fc34422",
+        "filename": "tvix/eval/src/errors.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 100,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-09-13T14:41:44Z",
+      "side": 1,
+      "message": "As discussed on IRC, we have to allocate here anyways (the API for codemap_diagnostic doesn\u0027t allow writing to a reference writer), so we\u0027ll re-evaluate this if/when we switch to something like miette and focus on the display itself for now.",
+      "parentUuid": "0b207952_057c58d4",
+      "range": {
+        "startLine": 100,
+        "startChar": 4,
+        "endLine": 100,
+        "endChar": 52
+      },
+      "revId": "e1348e59f498271a91f3c180a3ceee0f41a89688",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "8877b1bc_bbd46fd3",
