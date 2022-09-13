@@ -36,6 +36,26 @@ fn tvixbolt_overview() -> Html {
     }
 }
 
+/// This renders an ad in the Tvixbolt footer. Most people that end up
+/// on Tvixbolt will probably block this anyways, but might as well.
+fn ad() -> Html {
+    let ad_code = r#"
+window.yaContextCb.push(()=>{
+  Ya.Context.AdvManager.render({
+    renderTo: 'yandex_rtb_R-A-1943274-1',
+    blockId: 'R-A-1943274-1'
+  })
+})
+"#;
+
+    html! {
+        <div id="ad">
+            <div id="yandex_rtb_R-A-1943274-1"></div>
+            <script>{ad_code}</script>
+        </div>
+    }
+}
+
 fn footer_link(location: &'static str, name: &str) -> Html {
     html! {
         <>
@@ -57,6 +77,7 @@ fn footer() -> Html {
             {"© ООО ТВЛ"}
           </p>
           <p class="lod">{"ಠ_ಠ"}</p>
+          {ad()}
         </footer>
         </>
     }
