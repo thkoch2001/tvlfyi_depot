@@ -68,6 +68,8 @@ pub enum ErrorKind {
         kind: CoercionKind,
     },
 
+    NotAnAbsolutePath,
+
     /// Tvix internal warning for features triggered by users that are
     /// not actually implemented yet, and without which eval can not
     /// proceed.
@@ -180,6 +182,8 @@ to a missing value in the attribute set(s) included via `with`."#,
                 format!("cannot ({kindly}) coerce {given} to a string{hint}")
             }
 
+            ErrorKind::NotAnAbsolutePath => "value doesn't represent an absolute path".to_string(),
+
             ErrorKind::NotImplemented(feature) => {
                 format!("feature not yet implemented in Tvix: {}", feature)
             }
@@ -208,6 +212,7 @@ to a missing value in the attribute set(s) included via `with`."#,
             ErrorKind::DuplicateAttrsKey { .. } => "E016",
             ErrorKind::ThunkForce(_) => "E017",
             ErrorKind::NotCoercibleToString { .. } => "E018",
+            ErrorKind::NotAnAbsolutePath => "E019",
             ErrorKind::NotImplemented(_) => "E999",
         }
     }

@@ -221,6 +221,28 @@ impl Value {
         }
     }
 
+    pub fn coerce_to_path(&self, vm: &mut VM) -> Result<PathBuf, ErrorKind> {
+        if let Value::Thunk(t) = self {
+            t.force(vm)?;
+        }
+
+        match self {
+            Value::Thunk(t) =>
+                t.value().coerce_to_path(vm),
+            Value::Path(p) => Ok(p.clone()),
+            _ => {
+                let string = self.coerce_to_string(CoercionKind::Weak, vm)?;
+
+                // Needs to be a nonempty string starting with a `/`
+                if string.chars().nth(0) != Some('/') {
+                    Err(ErrorKind::NotAnAbsolutePath)
+                } else {
+                    Ok(PathBuf::from(string.as_str()))
+                }
+            }
+        }
+    }
+
     pub fn type_of(&self) -> &'static str {
         match self {
             Value::Null => "null",
