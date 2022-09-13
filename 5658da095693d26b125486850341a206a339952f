@@ -46,6 +46,30 @@
       },
       "revId": "5658da095693d26b125486850341a206a339952f",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7b8d157f_041c377b",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2022-09-13T14:01:09Z",
+      "side": 1,
+      "message": "I think in this concrete case it makes more sense to do it in the compiler with how things currently are?",
+      "parentUuid": "653d1ab0_8b00e227",
+      "range": {
+        "startLine": 14,
+        "startChar": 5,
+        "endLine": 15,
+        "endChar": 17
+      },
+      "revId": "5658da095693d26b125486850341a206a339952f",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
