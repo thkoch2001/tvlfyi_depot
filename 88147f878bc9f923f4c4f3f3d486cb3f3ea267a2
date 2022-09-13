@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d10121eb_047ffe6c",
+        "filename": "tvix/eval/src/builtins/mod.rs",
+        "patchSetId": 7
+      },
+      "lineNbr": 123,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2022-09-13T15:00:00Z",
+      "side": 1,
+      "message": "This also needs to be forced in case it is a thunk.",
+      "revId": "88147f878bc9f923f4c4f3f3d486cb3f3ea267a2",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
