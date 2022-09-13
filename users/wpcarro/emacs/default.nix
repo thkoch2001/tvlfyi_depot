@@ -14,7 +14,6 @@ let
     # Rust dependencies
     (with pkgs; [
       cargo
-      rls
       rust-analyzer
       rustc
       rustfmt
@@ -24,7 +23,6 @@ let
       ispell
       nix
       pass
-      rls # Rust Language Server
       rust-analyzer
       rustc
       rustfmt
