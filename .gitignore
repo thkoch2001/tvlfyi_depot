@@ -2,6 +2,9 @@
 # trash locally that might be valuable in the future.
 garbage/
 
+# Nix gcroot symlinks created by .envrc
+/.gcroots/*
+
 # Ignore Nix result symlinks
 result
 result-*
