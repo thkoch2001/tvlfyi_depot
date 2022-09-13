@@ -28,24 +28,10 @@ and [sterni][].
 
 ### So, what's working now?
 
-The answer is *most things*! However, there are some unfinished and
-important feature areas:
+The answer is *most things*! You can enter many Nix language
+expressions in [Tvixbolt][] and observe how they are evaluated.
 
-1. The majority of Nix's `builtins` are not yet implemented (including
-   fundamental ones such as `import` and `derivation`).
-
-2. Recursive attribute sets (`rec`) are not yet implemented. This is
-   actually not because of the recursion in itself, but because of the
-   handling of nested keys (such as `a.b`), for which we are designing
-   a more efficient solution than what is currently in place.
-
-In both cases we have mostly figured out how to do the remaining work
-and it is simply a question of time until we've done it. Progress is
-steady and can of course be tracked [in the source][src] (viewer
-without Javascript [here][src-noscript]).
-
-At the same time, we've already implemented some basics that are
-hopefully going to have a huge impact further down, such as:
+There's a lot of interesting stuff going on under-the-hood, notably:
 
 * The Tvix compiler is built to be able to emit warnings & errors
   without failing early, as well as retaining as much source
@@ -66,7 +52,13 @@ hopefully going to have a huge impact further down, such as:
   differently based on whether it is empty, a `name/value` pair or a
   larger set.
 
-### How does this all work?
+We've also (constrained by the available features) run some initial
+benchmarks against C++ Nix, and in most cases Tvix evaluation is an
+order of magnitude faster. However, these benchmarks are in no way
+indicative of real-life performance when evaluating something like
+`nixpkgs` yet, so stay tuned for more information on performance.
+
+### How does it all work?
 
 Tvix's evaluator is implemented using a custom abstract machine with a
 very Nix-specific instruction set, as well as a compiler that
@@ -89,8 +81,23 @@ towards).
 
 ### What's next for tvix-eval?
 
-Apart from the missing language features outlined above, the next
-steps are:
+Despite everything, there are some unfinished and important feature
+areas:
+
+1. The majority of Nix's `builtins` are not yet implemented (including
+   fundamental ones such as `import` and `derivation`).
+
+2. Recursive attribute sets (`rec`) are not yet implemented. This is
+   actually not because of the recursion in itself, but because of the
+   handling of nested keys (such as `a.b`), for which we are designing
+   a more efficient solution than what is currently in place.
+
+In both cases we have mostly figured out how to do the remaining work
+and it is simply a question of time until we've done it. Progress is
+steady and can of course be tracked [in the source][src] (viewer
+without Javascript [here][src-noscript]).
+
+Apart from that, the next steps are:
 
 * Comprehensive benchmarking. We are standing up an infrastructure for
   continuous benchmarking to measure the impact of changes, and to be
