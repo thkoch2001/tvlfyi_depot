@@ -1,0 +1,61 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ae6bf8eb_807be311",
+        "filename": "tvix/eval/src/builtins/mod.rs",
+        "patchSetId": 3
+      },
+      "lineNbr": 109,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2022-09-13T14:51:08Z",
+      "side": 1,
+      "message": "can use `force!`.",
+      "revId": "b8af07b01c177643e35737ea65f7058a6b4afff8",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c61910d8_4c3ee5a9",
+        "filename": "tvix/eval/src/builtins/mod.rs",
+        "patchSetId": 3
+      },
+      "lineNbr": 112,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2022-09-13T14:51:08Z",
+      "side": 1,
+      "message": "If the integer is negative, we need to create an IndexOutOfBounds error:\n\n   nix-repl\u003e builtins.elemAt [ 1 2 3 ] (-1)\n   error: list index -1 is out of bounds, at (string):1:1",
+      "revId": "b8af07b01c177643e35737ea65f7058a6b4afff8",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6b1c5f93_220d4be7",
+        "filename": "tvix/eval/src/builtins/mod.rs",
+        "patchSetId": 3
+      },
+      "lineNbr": 115,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2022-09-13T14:51:08Z",
+      "side": 1,
+      "message": "Use IndexOutOfBounds error kind.",
+      "range": {
+        "startLine": 115,
+        "startChar": 39,
+        "endLine": 115,
+        "endChar": 44
+      },
+      "revId": "b8af07b01c177643e35737ea65f7058a6b4afff8",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
