@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3f26b8df_9cab86ee",
+        "filename": "tvix/eval/src/builtins/mod.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 84,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2022-09-13T14:49:01Z",
+      "side": 1,
+      "message": "Force (see cl/6548)",
+      "revId": "2c3686379fc66980dab19808731e45d705345bdb",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
