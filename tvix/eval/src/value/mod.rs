@@ -12,6 +12,8 @@ mod thunk;
 
 use crate::errors::ErrorKind;
 use crate::opcode::StackIdx;
+use crate::upvalues::UpvalueCarrier;
+use crate::vm::VM;
 pub use attrs::NixAttrs;
 pub use builtin::Builtin;
 pub use function::{Closure, Lambda};
@@ -78,7 +80,132 @@ macro_rules! gen_is {
     };
 }
 
+/// Describes what input types are allowed when coercing a `Value` to a string
+#[derive(Clone, Copy, Debug)]
+pub enum CoercionKind {
+    /// Only coerce already "stringly" types like strings and paths, but also
+    /// coerce sets that have a `__toString` attribute. Equivalent to
+    /// `!coerceMore` in C++ Nix.
+    Weak,
+    /// Coerce all value types included by `Weak`, but also coerce `null`,
+    /// booleans, integers, floats and lists of coercible types. Equivalent to
+    /// `coerceMore` in C++ Nix.
+    Strong,
+}
+
 impl Value {
+    pub fn coerce_to_string(
+        &self,
+        kind: CoercionKind,
+        vm: &mut VM,
+    ) -> Result<NixString, ErrorKind> {
+        if let Value::Thunk(t) = self {
+            t.force(vm)?;
+        }
+
+        match (self, kind) {
+            // coercions that are always done
+            (Value::Thunk(t), _) => t.value().coerce_to_string(kind, vm),
+            (Value::String(s), _) => Ok(s.clone()),
+            // TODO(sterni): Think about proper encoding handling here. This needs
+            // general consideration anyways, since one current discrepancy between
+            // C++ Nix and Tvix is that the former's strings are arbitrary byte
+            // sequences without NUL bytes, whereas Tvix only allows valid
+            // Unicode.
+            (Value::Path(p), _) => Ok(p.to_string_lossy().into_owned().into()),
+            (Value::Attrs(attrs), _) => {
+                match attrs.select("__toString") {
+                    None => Err(ErrorKind::NotCoercibleToString {
+                        given: "set",
+                        kind: kind,
+                    }),
+
+                    Some(v) => {
+                        let call_to_string = |value: &Value, vm: &mut VM| {
+                            // TODO(sterni): this should be extracted into a helper
+                            let result = match value {
+                                Value::Closure(c) => {
+                                    vm.push(self.clone());
+                                    vm.call(c.lambda(), c.upvalues().clone(), 1)
+                                        .map_err(|e| e.kind)
+                                }
+
+                                Value::Builtin(b) => {
+                                    vm.push(self.clone());
+                                    vm.call_builtin(b.clone()).map_err(|e| e.kind)?;
+                                    Ok(vm.pop())
+                                }
+
+                                _ => Err(ErrorKind::NotCallable),
+                            }?;
+
+                            match result {
+                                Value::String(s) => Ok(s),
+                                // __toString actually works recursively, you can
+                                // even return /another/ set with a __toString attr.
+                                _ => result.coerce_to_string(kind, vm),
+                            }
+                        };
+
+                        if let Value::Thunk(t) = v {
+                            t.force(vm)?;
+                            let guard = t.value();
+                            call_to_string(&*guard, vm)
+                        } else {
+                            call_to_string(&v, vm)
+                        }
+                    }
+                }
+            }
+
+            // strong coercions
+            (Value::Null, CoercionKind::Strong) | (Value::Bool(false), CoercionKind::Strong) => {
+                Ok("".into())
+            }
+            (Value::Bool(true), CoercionKind::Strong) => Ok("1".into()),
+
+            (Value::Integer(i), CoercionKind::Strong) => Ok(format!("{i}").into()),
+            (Value::Float(f), CoercionKind::Strong) => {
+                // contrary to normal Display, coercing a float to a string will
+                // result in unconditional 6 decimal places
+                Ok(format!("{:.6}", f).into())
+            }
+
+            (Value::List(l), CoercionKind::Strong) => {
+                // TODO(sterni): use intersperse when it becomes available?
+                // https://github.com/rust-lang/rust/issues/79524
+                l.iter()
+                    .map(|v| v.coerce_to_string(kind, vm))
+                    .reduce(|acc, string| {
+                        let a = acc?;
+                        let s = &string?;
+                        Ok(a.concat(&" ".into()).concat(s))
+                    })
+                    // None from reduce indicates empty iterator
+                    .unwrap_or(Ok("".into()))
+            }
+
+            (Value::Closure(_), _)
+            | (Value::Builtin(_), _)
+            | (Value::Null, _)
+            | (Value::Bool(_), _)
+            | (Value::Integer(_), _)
+            | (Value::Float(_), _)
+            | (Value::List(_), _) => Err(ErrorKind::NotCoercibleToString {
+                given: self.type_of(),
+                kind: kind,
+            }),
+
+            (Value::AttrPath(_), _)
+            | (Value::AttrNotFound, _)
+            | (Value::DynamicUpvalueMissing(_), _)
+            | (Value::Blueprint(_), _)
+            | (Value::DeferredUpvalue(_), _) => {
+                panic!("tvix bug: .coerce_to_string() called on internal value")
+            }
+        }
+    }
+
     pub fn type_of(&self) -> &'static str {
         match self {
             Value::Null => "null",
