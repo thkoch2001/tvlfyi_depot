@@ -24,6 +24,30 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "0b0252a5_599b8a26",
+        "filename": "web/tvl/blog/tvix-status-202209.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-09-13T20:18:26Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "399a3a30_b09154c4",
+      "range": {
+        "startLine": 49,
+        "startChar": 67,
+        "endLine": 49,
+        "endChar": 68
+      },
+      "revId": "66d3cca0535e269eaa10b284c0ed57ff07bc4140",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "75ec5106_7ec59b1e",
@@ -88,6 +112,30 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "e59e92f7_34c5f4ed",
+        "filename": "web/tvl/blog/tvix-status-202209.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 75,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-09-13T20:18:26Z",
+      "side": 1,
+      "message": "We went back \u0026 forth on this a bit, I\u0027m not sure anymore, if you prefer it postfixed lets do that. Done.",
+      "parentUuid": "678912b5_e0e169ff",
+      "range": {
+        "startLine": 75,
+        "startChar": 43,
+        "endLine": 75,
+        "endChar": 54
+      },
+      "revId": "66d3cca0535e269eaa10b284c0ed57ff07bc4140",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "7379fba2_138dd8b5",
@@ -101,6 +149,30 @@
       "writtenOn": "2022-09-13T19:36:04Z",
       "side": 1,
       "message": "`–`?",
+      "range": {
+        "startLine": 76,
+        "startChar": 6,
+        "endLine": 76,
+        "endChar": 7
+      },
+      "revId": "66d3cca0535e269eaa10b284c0ed57ff07bc4140",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7c8bdb34_de2aa63e",
+        "filename": "web/tvl/blog/tvix-status-202209.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 76,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-09-13T20:18:26Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7379fba2_138dd8b5",
       "range": {
         "startLine": 76,
         "startChar": 6,
@@ -134,6 +206,30 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "eb904571_03d6e66e",
+        "filename": "web/tvl/blog/tvix-status-202209.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 79,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-09-13T20:18:26Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "418e4466_65dc7fcb",
+      "range": {
+        "startLine": 79,
+        "startChar": 59,
+        "endLine": 79,
+        "endChar": 65
+      },
+      "revId": "66d3cca0535e269eaa10b284c0ed57ff07bc4140",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "72090cfa_26802d6b",
@@ -147,6 +243,30 @@
       "writtenOn": "2022-09-13T19:36:04Z",
       "side": 1,
       "message": "This comparison is missing context in the text, the reader doesn\u0027t know that we have a lackluster implementation for this already.",
+      "range": {
+        "startLine": 93,
+        "startChar": 50,
+        "endLine": 93,
+        "endChar": 54
+      },
+      "revId": "66d3cca0535e269eaa10b284c0ed57ff07bc4140",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9e06740c_8c57cbf6",
+        "filename": "web/tvl/blog/tvix-status-202209.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 93,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-09-13T20:18:26Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "72090cfa_26802d6b",
       "range": {
         "startLine": 93,
         "startChar": 50,
@@ -180,6 +300,30 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "27d19212_4962e66b",
+        "filename": "web/tvl/blog/tvix-status-202209.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 142,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-09-13T20:18:26Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ec21cead_c5cbbe1a",
+      "range": {
+        "startLine": 142,
+        "startChar": 62,
+        "endLine": 142,
+        "endChar": 65
+      },
+      "revId": "66d3cca0535e269eaa10b284c0ed57ff07bc4140",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "74b69aa8_2878343d",
@@ -193,6 +337,30 @@
       "writtenOn": "2022-09-13T19:36:04Z",
       "side": 1,
       "message": "Maybe we should link to `log` here?",
+      "range": {
+        "startLine": 157,
+        "startChar": 37,
+        "endLine": 157,
+        "endChar": 41
+      },
+      "revId": "66d3cca0535e269eaa10b284c0ed57ff07bc4140",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ce797e5b_9742e901",
+        "filename": "web/tvl/blog/tvix-status-202209.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 157,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-09-13T20:18:26Z",
+      "side": 1,
+      "message": "Why?",
+      "parentUuid": "74b69aa8_2878343d",
       "range": {
         "startLine": 157,
         "startChar": 37,
