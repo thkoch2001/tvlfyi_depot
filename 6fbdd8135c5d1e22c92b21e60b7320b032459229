@@ -207,6 +207,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "c86ffab1_7177ea1c",
+        "filename": "web/tvl/blog/tvix-status-202209.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 72,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2022-09-13T09:19:13Z",
+      "side": 1,
+      "message": "It\u0027s looped into cargo test, no?",
+      "parentUuid": "b672059a_74f424aa",
+      "range": {
+        "startLine": 72,
+        "startChar": 0,
+        "endLine": 72,
+        "endChar": 7
+      },
+      "revId": "6fbdd8135c5d1e22c92b21e60b7320b032459229",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "b48b15ea_45eea87f",
         "filename": "web/tvl/blog/tvix-status-202209.md",
         "patchSetId": 1
@@ -312,6 +336,30 @@
       "side": 1,
       "message": "I\u0027d be willing to help develop that",
       "parentUuid": "82076fe9_102d63a0",
+      "range": {
+        "startLine": 127,
+        "startChar": 54,
+        "endLine": 127,
+        "endChar": 61
+      },
+      "revId": "6fbdd8135c5d1e22c92b21e60b7320b032459229",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7d0b28c0_9a28096f",
+        "filename": "web/tvl/blog/tvix-status-202209.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 127,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2022-09-13T09:19:13Z",
+      "side": 1,
+      "message": "It shouldn\u0027t block this article - I\u0027d assume people reporting bugs/opinions whatever in the IRC channel is better than no feedback at all :-)",
+      "parentUuid": "f9983e9e_a62ef5ea",
       "range": {
         "startLine": 127,
         "startChar": 54,
