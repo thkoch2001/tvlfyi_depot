@@ -139,6 +139,10 @@ pre {
     overflow: auto;
 }
 
+code {
+    background: aliceblue;
+}
+
 img {
     max-width: 100%;
 }
