@@ -48,6 +48,30 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "5377e665_acb2e2a8",
+        "filename": "web/tvl/blog/default.nix",
+        "patchSetId": 1
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-09-13T11:25:56Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "67f10bb1_17911381",
+      "range": {
+        "startLine": 20,
+        "startChar": 34,
+        "endLine": 20,
+        "endChar": 42
+      },
+      "revId": "6fbdd8135c5d1e22c92b21e60b7320b032459229",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "7b18f4d6_1a5d5e7b",
@@ -95,6 +119,30 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "4a827cfb_02ad0854",
+        "filename": "web/tvl/blog/tvix-status-202209.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-09-13T11:25:56Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0d932f0e_652c5adf",
+      "range": {
+        "startLine": 34,
+        "startChar": 7,
+        "endLine": 34,
+        "endChar": 15
+      },
+      "revId": "6fbdd8135c5d1e22c92b21e60b7320b032459229",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "6436296c_1a1c446e",
@@ -112,6 +160,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "9b23c44d_1db33360",
+        "filename": "web/tvl/blog/tvix-status-202209.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-09-13T11:25:56Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6436296c_1a1c446e",
+      "revId": "6fbdd8135c5d1e22c92b21e60b7320b032459229",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "5dcf8467_7bd3d6ec",
@@ -125,6 +191,30 @@
       "writtenOn": "2022-09-12T15:19:17Z",
       "side": 1,
       "message": "the benchmarks we\u0027ve seen so far have been quite impressive - maybe it\u0027s worth talking about that as well?",
+      "range": {
+        "startLine": 47,
+        "startChar": 0,
+        "endLine": 59,
+        "endChar": 22
+      },
+      "revId": "6fbdd8135c5d1e22c92b21e60b7320b032459229",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7174e357_797161f4",
+        "filename": "web/tvl/blog/tvix-status-202209.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 59,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-09-13T11:25:56Z",
+      "side": 1,
+      "message": "I\u0027m not sure. It\u0027s currently hard to simulate real-life conditions, and because of Nix\u0027s *parser* being so incredibly slow it is difficult for us to benchmark the actual *evaluation* without being able to evaluate a larger part of the codebase.",
+      "parentUuid": "5dcf8467_7bd3d6ec",
       "range": {
         "startLine": 47,
         "startChar": 0,
@@ -182,6 +272,30 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "fb36bf01_4b49717d",
+        "filename": "web/tvl/blog/tvix-status-202209.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 66,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-09-13T11:25:56Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4893b390_8e3ab68f",
+      "range": {
+        "startLine": 63,
+        "startChar": 0,
+        "endLine": 66,
+        "endChar": 33
+      },
+      "revId": "6fbdd8135c5d1e22c92b21e60b7320b032459229",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "b672059a_74f424aa",
@@ -219,6 +333,30 @@
       "side": 1,
       "message": "It\u0027s looped into cargo test, no?",
       "parentUuid": "b672059a_74f424aa",
+      "range": {
+        "startLine": 72,
+        "startChar": 0,
+        "endLine": 72,
+        "endChar": 7
+      },
+      "revId": "6fbdd8135c5d1e22c92b21e60b7320b032459229",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d4584a90_30312c4f",
+        "filename": "web/tvl/blog/tvix-status-202209.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 72,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-09-13T11:25:56Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c86ffab1_7177ea1c",
       "range": {
         "startLine": 72,
         "startChar": 0,
@@ -276,6 +414,30 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "fc0da16f_c6eea78c",
+        "filename": "web/tvl/blog/tvix-status-202209.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 81,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-09-13T11:25:56Z",
+      "side": 1,
+      "message": "I\u0027ve always heard \"standing up\" when it\u0027s about infrastructure like this.",
+      "parentUuid": "0ea4a5a1_66560886",
+      "range": {
+        "startLine": 81,
+        "startChar": 37,
+        "endLine": 81,
+        "endChar": 45
+      },
+      "revId": "6fbdd8135c5d1e22c92b21e60b7320b032459229",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "123727ca_e4f15d99",
@@ -289,6 +451,30 @@
       "writtenOn": "2022-09-12T16:56:20Z",
       "side": 1,
       "message": "Maybe the milestone should rather be: once we can evaluate nixpkgs? Probably working on tying evaluator and store impl together is not very interesting if we can only evaluate trivial hand rolled derivations.",
+      "range": {
+        "startLine": 94,
+        "startChar": 19,
+        "endLine": 94,
+        "endChar": 57
+      },
+      "revId": "6fbdd8135c5d1e22c92b21e60b7320b032459229",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "61c2153f_badf540b",
+        "filename": "web/tvl/blog/tvix-status-202209.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 94,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-09-13T11:25:56Z",
+      "side": 1,
+      "message": "Good point, done.",
+      "parentUuid": "123727ca_e4f15d99",
       "range": {
         "startLine": 94,
         "startChar": 19,
@@ -360,6 +546,30 @@
       "side": 1,
       "message": "It shouldn\u0027t block this article - I\u0027d assume people reporting bugs/opinions whatever in the IRC channel is better than no feedback at all :-)",
       "parentUuid": "f9983e9e_a62ef5ea",
+      "range": {
+        "startLine": 127,
+        "startChar": 54,
+        "endLine": 127,
+        "endChar": 61
+      },
+      "revId": "6fbdd8135c5d1e22c92b21e60b7320b032459229",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "26d60d64_a5de2b3d",
+        "filename": "web/tvl/blog/tvix-status-202209.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 127,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-09-13T11:25:56Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "7d0b28c0_9a28096f",
       "range": {
         "startLine": 127,
         "startChar": 54,
