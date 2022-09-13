@@ -1,0 +1,182 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "399a3a30_b09154c4",
+        "filename": "web/tvl/blog/tvix-status-202209.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2022-09-13T19:36:04Z",
+      "side": 1,
+      "message": "Should be `–`, no?",
+      "range": {
+        "startLine": 49,
+        "startChar": 67,
+        "endLine": 49,
+        "endChar": 68
+      },
+      "revId": "66d3cca0535e269eaa10b284c0ed57ff07bc4140",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "75ec5106_7ec59b1e",
+        "filename": "web/tvl/blog/tvix-status-202209.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2022-09-13T19:36:04Z",
+      "side": 1,
+      "message": "I guess it\u0027d make sense to clarify why this is good (memory usage, cheaper operations).",
+      "revId": "66d3cca0535e269eaa10b284c0ed57ff07bc4140",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "61b853b6_c715c70c",
+        "filename": "web/tvl/blog/tvix-status-202209.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 75,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2022-09-13T19:36:04Z",
+      "side": 1,
+      "message": "Maybe it\u0027s just me, but this would work better postfixed, I feel like.",
+      "range": {
+        "startLine": 75,
+        "startChar": 43,
+        "endLine": 75,
+        "endChar": 54
+      },
+      "revId": "66d3cca0535e269eaa10b284c0ed57ff07bc4140",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7379fba2_138dd8b5",
+        "filename": "web/tvl/blog/tvix-status-202209.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 76,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2022-09-13T19:36:04Z",
+      "side": 1,
+      "message": "`–`?",
+      "range": {
+        "startLine": 76,
+        "startChar": 6,
+        "endLine": 76,
+        "endChar": 7
+      },
+      "revId": "66d3cca0535e269eaa10b284c0ed57ff07bc4140",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "418e4466_65dc7fcb",
+        "filename": "web/tvl/blog/tvix-status-202209.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 79,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2022-09-13T19:36:04Z",
+      "side": 1,
+      "message": "custom is a bit redundant if we have \"we wrote ourselves\" following up?",
+      "range": {
+        "startLine": 79,
+        "startChar": 59,
+        "endLine": 79,
+        "endChar": 65
+      },
+      "revId": "66d3cca0535e269eaa10b284c0ed57ff07bc4140",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "72090cfa_26802d6b",
+        "filename": "web/tvl/blog/tvix-status-202209.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 93,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2022-09-13T19:36:04Z",
+      "side": 1,
+      "message": "This comparison is missing context in the text, the reader doesn\u0027t know that we have a lackluster implementation for this already.",
+      "range": {
+        "startLine": 93,
+        "startChar": 50,
+        "endLine": 93,
+        "endChar": 54
+      },
+      "revId": "66d3cca0535e269eaa10b284c0ed57ff07bc4140",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ec21cead_c5cbbe1a",
+        "filename": "web/tvl/blog/tvix-status-202209.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 142,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2022-09-13T19:36:04Z",
+      "side": 1,
+      "message": "I think \"who has\" would be more idiomatic?",
+      "range": {
+        "startLine": 142,
+        "startChar": 62,
+        "endLine": 142,
+        "endChar": 65
+      },
+      "revId": "66d3cca0535e269eaa10b284c0ed57ff07bc4140",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "74b69aa8_2878343d",
+        "filename": "web/tvl/blog/tvix-status-202209.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 157,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2022-09-13T19:36:04Z",
+      "side": 1,
+      "message": "Maybe we should link to `log` here?",
+      "range": {
+        "startLine": 157,
+        "startChar": 37,
+        "endLine": 157,
+        "endChar": 41
+      },
+      "revId": "66d3cca0535e269eaa10b284c0ed57ff07bc4140",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
