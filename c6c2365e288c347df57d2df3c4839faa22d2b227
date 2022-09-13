@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5f6a7981_d2f1909d",
+        "filename": "tvix/eval/src/builtins/mod.rs",
+        "patchSetId": 7
+      },
+      "lineNbr": 199,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2022-09-13T15:03:09Z",
+      "side": 1,
+      "message": "All arguments need to be forced…",
+      "revId": "c6c2365e288c347df57d2df3c4839faa22d2b227",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5b1edf1a_b999678e",
+        "filename": "tvix/eval/src/builtins/mod.rs",
+        "patchSetId": 7
+      },
+      "lineNbr": 200,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2022-09-13T15:03:09Z",
+      "side": 1,
+      "message": "Should return the proper error for negative indices.",
+      "revId": "c6c2365e288c347df57d2df3c4839faa22d2b227",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8948530d_1f528f69",
+        "filename": "tvix/eval/src/builtins/mod.rs",
+        "patchSetId": 7
+      },
+      "lineNbr": 201,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2022-09-13T15:03:09Z",
+      "side": 1,
+      "message": "This refers to the length of the substring, not the end:\n\n    nix-repl\u003e builtins.substring 2 3 \"foobar\" \n    \"oba\"\n\nSee test failure as well.",
+      "revId": "c6c2365e288c347df57d2df3c4839faa22d2b227",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3070567d_fa32be3b",
+        "filename": "tvix/eval/src/builtins/mod.rs",
+        "patchSetId": 7
+      },
+      "lineNbr": 280,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2022-09-13T15:03:09Z",
+      "side": 1,
+      "message": "I think you slipped this in here by accident.",
+      "revId": "c6c2365e288c347df57d2df3c4839faa22d2b227",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
