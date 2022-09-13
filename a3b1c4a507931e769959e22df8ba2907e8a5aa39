@@ -16,6 +16,24 @@
       "message": "I think I preferred having the caveat in front, since you\u0027d probably expect »most things« to include `callPackage`, `derivation`, …\n\nNot willing to die on this hill, though.",
       "revId": "a3b1c4a507931e769959e22df8ba2907e8a5aa39",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "51319dae_99ee6460",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-09-13T20:13:36Z",
+      "side": 1,
+      "message": "The idea is that this makes for a nicer flow, setting up with what we achieved first before going into more details about what is still lacking, rather than \"tick-tocking\" between the two. Personally I agree with zimbatm on that and prefer this version.",
+      "parentUuid": "cf662262_8354524c",
+      "revId": "a3b1c4a507931e769959e22df8ba2907e8a5aa39",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
