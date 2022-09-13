@@ -73,6 +73,7 @@ let
       then ''date --date="@${toString post.updated}" '+ (updated %Y-%m-%d)' >> $out''
       else ""
     }
+    ${if post ? author then "echo ' by ${post.author}' >> $out" else ""}
     echo '</aside>' >> $out
 
     ${

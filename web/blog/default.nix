@@ -24,6 +24,9 @@ let
     # Path to the Markdown file containing the post content.
     content = path;
 
+    # Optional name of the author to display.
+    author = option string;
+
     # Should this post be included in the index? (defaults to true)
     listed = option bool;
 

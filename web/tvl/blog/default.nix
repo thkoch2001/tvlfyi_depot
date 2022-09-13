@@ -13,6 +13,7 @@
       title = "Tvix: We are rewriting Nix";
       date = 1638381387;
       content = ./rewriting-nix.md;
+      author = "tazjin";
     }
 
     {
@@ -20,6 +21,7 @@
       title = "Tvix Status - September '22";
       date = 1662995534;
       content = ./tvix-status-202209.md;
+      author = "tazjin";
       draft = true;
     }
   ];
