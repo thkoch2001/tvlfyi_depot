@@ -1,3 +1,4 @@
+use crate::value::CoercionKind;
 use std::fmt::Display;
 
 use codemap::{CodeMap, Span};
@@ -60,6 +61,12 @@ pub enum ErrorKind {
     /// An error occured while forcing a thunk, and needs to be
     /// chained up.
     ThunkForce(Box<Error>),
+
+    /// Given type can't be coerced to a string in the respective context
+    NotCoercibleToString {
+        given: &'static str,
+        kind: CoercionKind,
+    },
 
     /// Tvix internal warning for features triggered by users that are
     /// not actually implemented yet, and without which eval can not
@@ -158,6 +165,21 @@ to a missing value in the attribute set(s) included via `with`."#,
             // delegating to the inner error
             ErrorKind::ThunkForce(err) => err.message(codemap),
 
+            ErrorKind::NotCoercibleToString { kind, given } => {
+                let kindly = match kind {
+                    CoercionKind::Strong => "strongly",
+                    CoercionKind::Weak => "weakly",
+                };
+
+                let hint = if *given == "set" {
+                    ". Is the `__toString` attribute missing?"
+                } else {
+                    ""
+                };
+
+                format!("cannot ({kindly}) coerce {given} to a string{hint}")
+            }
+
             ErrorKind::NotImplemented(feature) => {
                 format!("feature not yet implemented in Tvix: {}", feature)
             }
@@ -185,6 +207,7 @@ to a missing value in the attribute set(s) included via `with`."#,
             ErrorKind::ParseErrors(_) => "E015",
             ErrorKind::DuplicateAttrsKey { .. } => "E016",
             ErrorKind::ThunkForce(_) => "E017",
+            ErrorKind::NotCoercibleToString { .. } => "E018",
             ErrorKind::NotImplemented(_) => "E999",
         }
     }
