@@ -65,6 +65,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "de27062f_00c28058",
+        "filename": "web/tvl/blog/tvix-status-202209.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-09-13T21:18:11Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "75ec5106_7ec59b1e",
+      "revId": "66d3cca0535e269eaa10b284c0ed57ff07bc4140",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "61b853b6_c715c70c",
