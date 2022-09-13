@@ -225,6 +225,30 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "658f536d_e9dd3620",
+        "filename": "web/tvl/blog/tvix-status-202209.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 59,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-09-13T11:54:06Z",
+      "side": 1,
+      "message": "Marking as resolved so we can get the draft up, but lets continue discussing it.",
+      "parentUuid": "7174e357_797161f4",
+      "range": {
+        "startLine": 47,
+        "startChar": 0,
+        "endLine": 59,
+        "endChar": 22
+      },
+      "revId": "6fbdd8135c5d1e22c92b21e60b7320b032459229",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "55cce5b1_ef82ba47",
