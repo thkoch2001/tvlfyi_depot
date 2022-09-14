@@ -22,7 +22,6 @@
       date = 1662995534;
       content = ./tvix-status-202209.md;
       author = "tazjin";
-      draft = true;
     }
   ];
 }
