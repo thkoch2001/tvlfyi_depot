@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2cfcef04_44d32bd8",
+        "filename": "web/tvl/blog/tvix-status-202209.md",
+        "patchSetId": 4
+      },
+      "lineNbr": 76,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2022-09-14T07:24:51Z",
+      "side": 1,
+      "message": "As much as I like Rust, I don\u0027t think the \"of course\"/\"naturally\" bits should be in here.\n\nAs written in the WIP architecture post, one of the main strengths of Tvix will be the stronger split of components, with defined interfaces in between, so whatever language makes sense for what component can be used.\n\nWe shouldn\u0027t pretentiously state Rust is naturally the only valid thing to write this in.",
+      "revId": "453dffaf11be0308090498ddfc1f0995116db93f",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1d3b9527_936f8e0a",
+        "filename": "web/tvl/blog/tvix-status-202209.md",
+        "patchSetId": 4
+      },
+      "lineNbr": 124,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2022-09-14T07:24:51Z",
+      "side": 1,
+      "message": "This implies it\u0027s almost there :-D\n\nStore-wise I\u0027ve settled with some interface which might be the real thing (tm), but there\u0027s still a lot of work, rebasing/re-doing everything on top of that.",
+      "revId": "453dffaf11be0308090498ddfc1f0995116db93f",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3db824b7_46a46e52",
+        "filename": "web/tvl/blog/tvix-status-202209.md",
+        "patchSetId": 4
+      },
+      "lineNbr": 126,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2022-09-14T07:24:51Z",
+      "side": 1,
+      "message": "I don\u0027t know how to word it exactly, but I think this should again have a stronger emphasis on mostly being store and builder related stuff.",
+      "revId": "453dffaf11be0308090498ddfc1f0995116db93f",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "648e9745_ca0c72da",
+        "filename": "web/tvl/blog/tvix-status-202209.md",
+        "patchSetId": 4
+      },
+      "lineNbr": 129,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2022-09-14T07:24:51Z",
+      "side": 1,
+      "message": "… in one of the following updates, if that\u0027s supposed to refer to the go-nix code, or if it\u0027s a generic statement, this should probably move somewhere down, to further split it from the paragraph above?",
+      "revId": "453dffaf11be0308090498ddfc1f0995116db93f",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
