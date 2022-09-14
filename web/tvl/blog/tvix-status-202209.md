@@ -57,7 +57,7 @@ There's a lot of interesting stuff going on under the hood, such as:
   well-known use-cases without impacting the general case much.
 
 We've run some initial benchmarks against C++ Nix (using the features
-that are ready), and in most case Tvix evaluation is an order of
+that are ready), and in most cases Tvix evaluation is an order of
 magnitude faster. To be fair, though, these benchmarks are in no way
 indicative of real-life performance for things like `nixpkgs`. More
 information is coming... eventually.
