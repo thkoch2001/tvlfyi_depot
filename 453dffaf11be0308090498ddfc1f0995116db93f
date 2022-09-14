@@ -18,6 +18,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "94c06521_f423903d",
+        "filename": "web/tvl/blog/tvix-status-202209.md",
+        "patchSetId": 4
+      },
+      "lineNbr": 76,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-09-14T09:23:11Z",
+      "side": 1,
+      "message": "Disagree, I don\u0027t think this has to be a sterile post without any personal notes. Rust truly is *natural* here in several ways, in order of importance:\n\n- It\u0027s probably the language best known by TVL contributors (esp. the ones working on tvix-eval).\n\n- It\u0027s probably the most popular \u0026 well-known language in the community of people who write Nix tooling.\n\n- It is actually the only modern language I can think of you would write something like an evaluator in. Sure, the \"modern\" qualifier does a lot of work - but starting a project of this size in C is insane, and in C++ unthinkable (unless you\u0027re a big organisation with massive C++ legacy). So what remains? Zig? I don\u0027t even think that\u0027s a finished language yet.\n\nSo yeah, I do think it\u0027s natural, and it\u0027s a post with my name on it and I would definitely say this.",
+      "parentUuid": "2cfcef04_44d32bd8",
+      "revId": "453dffaf11be0308090498ddfc1f0995116db93f",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "1d3b9527_936f8e0a",
@@ -31,6 +49,24 @@
       "writtenOn": "2022-09-14T07:24:51Z",
       "side": 1,
       "message": "This implies it\u0027s almost there :-D\n\nStore-wise I\u0027ve settled with some interface which might be the real thing (tm), but there\u0027s still a lot of work, rebasing/re-doing everything on top of that.",
+      "revId": "453dffaf11be0308090498ddfc1f0995116db93f",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a9056d78_367b2ffb",
+        "filename": "web/tvl/blog/tvix-status-202209.md",
+        "patchSetId": 4
+      },
+      "lineNbr": 124,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-09-14T09:23:11Z",
+      "side": 1,
+      "message": "\"While we\u0027ve yet to start assembling the actual pieces, \" ?",
+      "parentUuid": "1d3b9527_936f8e0a",
       "revId": "453dffaf11be0308090498ddfc1f0995116db93f",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
@@ -52,6 +88,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "bb30a554_4b9c940a",
+        "filename": "web/tvl/blog/tvix-status-202209.md",
+        "patchSetId": 4
+      },
+      "lineNbr": 126,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-09-14T09:23:11Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3db824b7_46a46e52",
+      "revId": "453dffaf11be0308090498ddfc1f0995116db93f",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "648e9745_ca0c72da",
@@ -65,6 +119,24 @@
       "writtenOn": "2022-09-14T07:24:51Z",
       "side": 1,
       "message": "… in one of the following updates, if that\u0027s supposed to refer to the go-nix code, or if it\u0027s a generic statement, this should probably move somewhere down, to further split it from the paragraph above?",
+      "revId": "453dffaf11be0308090498ddfc1f0995116db93f",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "842cfbaf_77ab73e4",
+        "filename": "web/tvl/blog/tvix-status-202209.md",
+        "patchSetId": 4
+      },
+      "lineNbr": 129,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-09-14T09:23:11Z",
+      "side": 1,
+      "message": "rewrote it to say \"in the next Tvix status update!\" to make it clear that it\u0027s referring to the blog post",
+      "parentUuid": "648e9745_ca0c72da",
       "revId": "453dffaf11be0308090498ddfc1f0995116db93f",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
