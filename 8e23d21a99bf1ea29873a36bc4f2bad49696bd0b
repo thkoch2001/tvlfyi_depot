@@ -22,6 +22,30 @@
       },
       "revId": "8e23d21a99bf1ea29873a36bc4f2bad49696bd0b",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6473b6e6_bc987c25",
+        "filename": "tvix/eval/src/value/mod.rs",
+        "patchSetId": 7
+      },
+      "lineNbr": 149,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2022-09-15T11:43:15Z",
+      "side": 1,
+      "message": "Hm, that\u0027s true. Alternatively we could reuse `NotCoercibleToString` and make the `hint` include the bit about a function being necessary?",
+      "parentUuid": "caccde5a_c167e099",
+      "range": {
+        "startLine": 149,
+        "startChar": 41,
+        "endLine": 149,
+        "endChar": 63
+      },
+      "revId": "8e23d21a99bf1ea29873a36bc4f2bad49696bd0b",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
