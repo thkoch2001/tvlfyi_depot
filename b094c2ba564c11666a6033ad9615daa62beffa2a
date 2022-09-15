@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "edd0c42a_d3c339b2",
+        "filename": "tvix/eval/src/compiler/mod.rs",
+        "patchSetId": 5
+      },
+      "lineNbr": 262,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-09-15T15:29:39Z",
+      "side": 1,
+      "message": "I think parts is a `Vec`, right? So we can skip making a local here as `.len()` just accesses a field.",
+      "range": {
+        "startLine": 262,
+        "startChar": 0,
+        "endLine": 262,
+        "endChar": 32
+      },
+      "revId": "b094c2ba564c11666a6033ad9615daa62beffa2a",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
