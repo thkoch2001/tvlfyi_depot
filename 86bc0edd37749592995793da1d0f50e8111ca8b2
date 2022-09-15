@@ -3,6 +3,23 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "0a1f210b_e75a9973",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-09-15T17:27:07Z",
+      "side": 1,
+      "message": "thanks for supporting this 😊",
+      "revId": "86bc0edd37749592995793da1d0f50e8111ca8b2",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "50b76d89_0c94c083",
         "filename": "tvix/eval/src/errors.rs",
         "patchSetId": 7
