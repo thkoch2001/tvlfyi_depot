@@ -23,5 +23,13 @@
       content = ./tvix-status-202209.md;
       author = "tazjin";
     }
+    {
+      key = "tvix-architecture-design";
+      title = "Tvix Architecture design";
+      date = 1663246783;
+      content = ./tvix-architecture-design.md;
+      draft = true;
+      author = "flokli";
+    }
   ];
 }
