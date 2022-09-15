@@ -7,7 +7,7 @@
     baseUrl = "https://tvl.fyi/blog";
   };
 
-  posts = [
+  posts = builtins.sort (a: b: a.date > b.date) [
     {
       key = "rewriting-nix";
       title = "Tvix: We are rewriting Nix";
