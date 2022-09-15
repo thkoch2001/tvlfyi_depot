@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "42ce395b_14e3dbc0",
+        "filename": "tvix/eval/src/value/attrs.rs",
+        "patchSetId": 4
+      },
+      "lineNbr": 215,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2022-09-15T16:56:47Z",
+      "side": 1,
+      "message": "This has 2 attribute names \"name\" and \"value\"",
+      "range": {
+        "startLine": 215,
+        "startChar": 35,
+        "endLine": 215,
+        "endChar": 36
+      },
+      "revId": "9f3f09cc1cfceee869d7ad8bee7aaacf35dc56e8",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
