@@ -26,6 +26,9 @@ in
     systems = [ builtins.currentSystem ];
   }).build."${builtins.currentSystem}";
 
+  # Replace nix-serve with nix-serve-ng
+  nix-serve = depot.third_party.nix-serve-ng;
+
   clang-tools_11 = self.clang-tools.override {
     llvmPackages = self.llvmPackages_11;
   };
