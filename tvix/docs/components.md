@@ -63,12 +63,14 @@ to generate configuration without any build or store involvement.
 command itself. We give it filesystem access to handle things like
 imports or `builtins.readFile`.
 
-In the future, we might abstract away raw filesystem access by
-allowing the evaluator to request files from the coordinator (which
-will query the store for it). This might get messy, and the benefits
-are questionable. We might be okay with running the evaluator with
-filesystem access for now and can extend the interface if the need
-arises.
+To support IFD usecases, the Evaluator also needs access to store paths. This
+could be implemented by having the coordinator provide an interface to retrieve
+files from a store path, or by ensuring a "realized version of the store" is
+accessible by the evaluator (this could be a fuse filesystem, or the "real"
+/nix/store on disk.
+
+We might be okay with running the evaluator with filesystem access for now and
+can extend the interface if the need arises.
 
 ## Builder
 
@@ -95,20 +97,66 @@ dominant Linux containerisation technology, by default.
 With a well-defined builder abstraction, it's also easy to imagine
 other backends such as a Kubernetes-based one in the future.
 
+The environment in which builds happen is currently very nix-specific.
+We might want to avoid having to maintain all the delicacies of a
+Nix-specific sandboxing environment in every builder, and instead only provide
+a more generic interface, receiving build requests (and have the coordinator
+translate derivations to that format). [^1]
+
+To build, the builder needs to be able to mount all build inputs into the build
+environment. For this, it needs the store to expose a filesystem interface.
+
 ## Store
 
 *Purpose:* Store takes care of storing build results. It provides a
-unified interface to get file paths and upload new ones.
+unified interface to get store paths and upload new ones, as well as querying
+for the existence of a store path, and its metadata (references, signatures,
+…).
 
-Most likely, we will end up with multiple implementations of store, a
-few possible ones that come to mind are:
+There's been some improvements on the underlying store protocol. Instead of
+transferring around NAR files, which don't provide an index and don't allow
+seekable access, a concept similar to git tree hashing is used.
 
-- Local
-- SSH
-- GCP
-- S3
-- Ceph
+This allows more granular substitution, chunk reusage and parallel download of
+individual files, reducing bandwidth usage.
+As these chunks are content-addressed, it opens up the potential for
+peer-to-peer trustless substitution of most of the data, as long as we sign the
+root of the index.
+
+We still keep the old-style signatures, NAR hashes and NAR size around. This is
+necessary to carry around "old-style signatures", and is also valuable to be
+able to reconstruct .nar and .narinfo files for communication with existing
+implementations.
+
+Old-style binary caches (like cache.nixos.org) can still be exposed via the new
+interface, by doing on-the-fly (re)chunking/ingestion.
+
+Most likely, we will end up with multiple implementations of store, some
+storing things locally, some exposing a "remote view".
+
+A few possible ones that come to mind are:
+
+- Local store
+- SFTP/ GCP / S3 / HTTP
+- NAR/NARInfo protocol: HTTP, S3
+
+A remote tvix store can be connected by simply connecting to its GRPC
+interface, possibly using SSH tunneling, but there doesn't need to be an
+additional "wire format" like the Nix `ssh(+ng)://` protocol.
+
+Setting on one interface allows composition of stores, meaning it becomes
+possible to express substitution from remote caches as a proxy layer.
+
+It'd also be possible to write a FUSE implementation on top of the RPC interface.
+
+If that's what's used in a builder, it can dramatically reduce the amount of
+build inputs transferred to there, and by this, speed up the amount of time
+spent copying things around.
 
 # Figures
 
 ![component flow](./component-flow.svg)
+
+[^1]: There have already been some discussions in the Nix community, to switch
+  to REAPI:
+  https://discourse.nixos.org/t/a-proposal-for-replacing-the-nix-worker-protocol/20926/22
