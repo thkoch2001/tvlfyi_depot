@@ -1,6 +1,7 @@
 {
   "comments": [
     {
+      "unresolved": true,
       "key": {
         "uuid": "3338e67a_b4fc083a",
         "filename": "third_party/nix/src/proto/common.proto",
@@ -20,10 +21,10 @@
         "endChar": 48
       },
       "revId": "5bf9c4514d5e010093e4218ea1a15130f08458c0",
-      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
-      "unresolved": true
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": true,
       "key": {
         "uuid": "e9203ee6_91e2f3e9",
         "filename": "third_party/nix/src/proto/worker.proto",
@@ -43,8 +44,8 @@
         "endChar": 8
       },
       "revId": "5bf9c4514d5e010093e4218ea1a15130f08458c0",
-      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
-      "unresolved": true
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
-  ]
+  ],
+  "submitRequirementResults": []
 }
