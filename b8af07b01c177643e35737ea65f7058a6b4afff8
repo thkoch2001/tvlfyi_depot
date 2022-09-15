@@ -18,6 +18,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "2f02277e_6d80434d",
+        "filename": "tvix/eval/src/builtins/mod.rs",
+        "patchSetId": 3
+      },
+      "lineNbr": 109,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-09-15T17:22:09Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ae6bf8eb_807be311",
+      "revId": "b8af07b01c177643e35737ea65f7058a6b4afff8",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "c61910d8_4c3ee5a9",
@@ -35,6 +53,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "ced0bffc_8c531cee",
+        "filename": "tvix/eval/src/builtins/mod.rs",
+        "patchSetId": 3
+      },
+      "lineNbr": 112,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-09-15T17:22:09Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c61910d8_4c3ee5a9",
+      "revId": "b8af07b01c177643e35737ea65f7058a6b4afff8",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "6b1c5f93_220d4be7",
@@ -48,6 +84,30 @@
       "writtenOn": "2022-09-13T14:51:08Z",
       "side": 1,
       "message": "Use IndexOutOfBounds error kind.",
+      "range": {
+        "startLine": 115,
+        "startChar": 39,
+        "endLine": 115,
+        "endChar": 44
+      },
+      "revId": "b8af07b01c177643e35737ea65f7058a6b4afff8",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7901660c_22592367",
+        "filename": "tvix/eval/src/builtins/mod.rs",
+        "patchSetId": 3
+      },
+      "lineNbr": 115,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-09-15T17:22:09Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6b1c5f93_220d4be7",
       "range": {
         "startLine": 115,
         "startChar": 39,
