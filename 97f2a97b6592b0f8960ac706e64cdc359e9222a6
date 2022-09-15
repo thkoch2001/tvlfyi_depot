@@ -16,6 +16,24 @@
       "message": "This is only relevant for builtins as far as I can tell from the C++ Nix code. Should we move it into the builtins module?",
       "revId": "97f2a97b6592b0f8960ac706e64cdc359e9222a6",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c7805329_e9d7a6cc",
+        "filename": "tvix/eval/src/value/mod.rs",
+        "patchSetId": 5
+      },
+      "lineNbr": 231,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-09-15T15:16:18Z",
+      "side": 1,
+      "message": "Yeah, that sounds reasonable.",
+      "parentUuid": "9ba96159_b6b7bbb5",
+      "revId": "97f2a97b6592b0f8960ac706e64cdc359e9222a6",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
