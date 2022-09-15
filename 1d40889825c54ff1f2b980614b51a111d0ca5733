@@ -22,6 +22,167 @@
       },
       "revId": "1d40889825c54ff1f2b980614b51a111d0ca5733",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "11ee5b52_e14b061b",
+        "filename": "web/tvl/blog/tvix-architecture-design.md",
+        "patchSetId": 3
+      },
+      "lineNbr": 3,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-09-15T13:46:21Z",
+      "side": 1,
+      "message": "\"showing\"",
+      "range": {
+        "startLine": 3,
+        "startChar": 74,
+        "endLine": 3,
+        "endChar": 81
+      },
+      "revId": "1d40889825c54ff1f2b980614b51a111d0ca5733",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8c679d85_5816c369",
+        "filename": "web/tvl/blog/tvix-architecture-design.md",
+        "patchSetId": 3
+      },
+      "lineNbr": 3,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-09-15T13:46:21Z",
+      "side": 1,
+      "message": "just \"describes\"",
+      "range": {
+        "startLine": 3,
+        "startChar": 14,
+        "endLine": 3,
+        "endChar": 34
+      },
+      "revId": "1d40889825c54ff1f2b980614b51a111d0ca5733",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4f1c838b_c2b89ca7",
+        "filename": "web/tvl/blog/tvix-architecture-design.md",
+        "patchSetId": 3
+      },
+      "lineNbr": 5,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-09-15T13:46:21Z",
+      "side": 1,
+      "message": "\"One of our goals with Tvix\"",
+      "range": {
+        "startLine": 5,
+        "startChar": 0,
+        "endLine": 5,
+        "endChar": 33
+      },
+      "revId": "1d40889825c54ff1f2b980614b51a111d0ca5733",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "55b0b123_de0786ef",
+        "filename": "web/tvl/blog/tvix-architecture-design.md",
+        "patchSetId": 3
+      },
+      "lineNbr": 5,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-09-15T13:46:21Z",
+      "side": 1,
+      "message": "it\u0027s not immediately clear here that this is about the components that implicitly exist in Nix, maybe something like \"of what we think are the components that implicitly exist in Nix, but currently lack well-defined interfaces in between\"",
+      "range": {
+        "startLine": 5,
+        "startChar": 55,
+        "endLine": 5,
+        "endChar": 77
+      },
+      "revId": "1d40889825c54ff1f2b980614b51a111d0ca5733",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d4e37f31_48879c08",
+        "filename": "web/tvl/blog/tvix-architecture-design.md",
+        "patchSetId": 3
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-09-15T13:46:21Z",
+      "side": 1,
+      "message": "multiple",
+      "range": {
+        "startLine": 7,
+        "startChar": 24,
+        "endLine": 7,
+        "endChar": 32
+      },
+      "revId": "1d40889825c54ff1f2b980614b51a111d0ca5733",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "512c091d_e8fa7030",
+        "filename": "web/tvl/blog/tvix-architecture-design.md",
+        "patchSetId": 3
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-09-15T13:46:21Z",
+      "side": 1,
+      "message": "\"We can experiment with [...] without impacting the existing codebase too much\"",
+      "range": {
+        "startLine": 7,
+        "startChar": 199,
+        "endLine": 7,
+        "endChar": 323
+      },
+      "revId": "1d40889825c54ff1f2b980614b51a111d0ca5733",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "01242cee_73284170",
+        "filename": "web/tvl/blog/tvix-architecture-design.md",
+        "patchSetId": 3
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-09-15T13:46:21Z",
+      "side": 1,
+      "message": "we have pretty specific meaning for \"evaluated\" in the Tvix context, maybe \"explored\"?",
+      "range": {
+        "startLine": 7,
+        "startChar": 114,
+        "endLine": 7,
+        "endChar": 123
+      },
+      "revId": "1d40889825c54ff1f2b980614b51a111d0ca5733",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
