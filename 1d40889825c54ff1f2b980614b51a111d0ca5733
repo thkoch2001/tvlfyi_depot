@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "125ddd54_cfdaa31b",
+        "filename": "web/tvl/blog/default.nix",
+        "patchSetId": 3
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-09-15T13:27:20Z",
+      "side": 1,
+      "message": "set `draft \u003d true` here as well, then we can do a first pass and publish it for staging without it being linked or included in the RSS feed",
+      "range": {
+        "startLine": 31,
+        "startChar": 0,
+        "endLine": 31,
+        "endChar": 24
+      },
+      "revId": "1d40889825c54ff1f2b980614b51a111d0ca5733",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
