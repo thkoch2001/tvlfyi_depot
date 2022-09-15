@@ -24,6 +24,30 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "bf99a079_87383e86",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 6
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-09-15T17:43:53Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1fca71d2_bb787b76",
+      "range": {
+        "startLine": 9,
+        "startChar": 0,
+        "endLine": 9,
+        "endChar": 27
+      },
+      "revId": "c61988a2919349db12ac36532295dfa0dab1a904",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "494e19c7_de2830ae",
@@ -37,6 +61,24 @@
       "writtenOn": "2022-09-13T14:59:17Z",
       "side": 1,
       "message": "Can use `force!`.",
+      "revId": "c61988a2919349db12ac36532295dfa0dab1a904",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a78255a9_4f06379d",
+        "filename": "tvix/eval/src/builtins/mod.rs",
+        "patchSetId": 6
+      },
+      "lineNbr": 130,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-09-15T17:43:53Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "494e19c7_de2830ae",
       "revId": "c61988a2919349db12ac36532295dfa0dab1a904",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
