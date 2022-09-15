@@ -18,6 +18,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "d0e33bb0_2c834612",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-09-15T18:54:06Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "b1725ffe_122234c9",
+      "revId": "aa4e67fdac2a718eba4ada6af285d4e2418ac24a",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "2092d812_d79c0e5f",
@@ -113,6 +131,24 @@
       "writtenOn": "2022-09-13T14:22:34Z",
       "side": 1,
       "message": "I think it\u0027s easier and more efficient to create a slice `[1..]` of the original vector and cloning it via `.to_owned()`?",
+      "revId": "aa4e67fdac2a718eba4ada6af285d4e2418ac24a",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e1932b2f_521471af",
+        "filename": "tvix/eval/src/builtins/mod.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 137,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-09-15T18:54:06Z",
+      "side": 1,
+      "message": "Couldn\u0027t figure out how to slice the underlying. Would this require implementing SliceIndex for NixList?",
+      "parentUuid": "cd2987c2_60ac1f1e",
       "revId": "aa4e67fdac2a718eba4ada6af285d4e2418ac24a",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
