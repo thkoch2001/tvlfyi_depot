@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "50b76d89_0c94c083",
+        "filename": "tvix/eval/src/errors.rs",
+        "patchSetId": 7
+      },
+      "lineNbr": 188,
+      "author": {
+        "id": 1000002
+      },
+      "writtenOn": "2022-09-15T16:06:08Z",
+      "side": 1,
+      "message": "suggest adding \u0027quotes\u0027 around string",
+      "range": {
+        "startLine": 188,
+        "startChar": 32,
+        "endLine": 188,
+        "endChar": 39
+      },
+      "revId": "86bc0edd37749592995793da1d0f50e8111ca8b2",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
