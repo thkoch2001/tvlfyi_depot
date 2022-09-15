@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9be179a1_efe7c5f8",
+        "filename": "tvix/eval/src/builtins/mod.rs",
+        "patchSetId": 9
+      },
+      "lineNbr": 55,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-09-15T18:46:09Z",
+      "side": 1,
+      "message": "if you construct the `PathBuf` first, you can probably use Path::is_absolute instead",
+      "range": {
+        "startLine": 55,
+        "startChar": 0,
+        "endLine": 55,
+        "endChar": 61
+      },
+      "revId": "a9f66bfc279e49d52404aca3c2f7fba2d51cb946",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
