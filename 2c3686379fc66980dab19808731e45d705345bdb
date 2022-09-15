@@ -16,6 +16,24 @@
       "message": "Force (see cl/6548)",
       "revId": "2c3686379fc66980dab19808731e45d705345bdb",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8c4e3cc2_af11b319",
+        "filename": "tvix/eval/src/builtins/mod.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 84,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-09-15T17:12:07Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3f26b8df_9cab86ee",
+      "revId": "2c3686379fc66980dab19808731e45d705345bdb",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
