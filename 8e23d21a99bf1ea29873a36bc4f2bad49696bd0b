@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "caccde5a_c167e099",
+        "filename": "tvix/eval/src/value/mod.rs",
+        "patchSetId": 7
+      },
+      "lineNbr": 149,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-09-15T11:19:48Z",
+      "side": 1,
+      "message": "I think this might lead to a confusing error message, as the location will be the point where the \"coercion\" happens. Might want to have an explicit variant just to be able to render a nice error here, but we can do that in a separate CL.",
+      "range": {
+        "startLine": 149,
+        "startChar": 41,
+        "endLine": 149,
+        "endChar": 63
+      },
+      "revId": "8e23d21a99bf1ea29873a36bc4f2bad49696bd0b",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
