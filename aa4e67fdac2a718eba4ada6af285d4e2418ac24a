@@ -35,6 +35,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "a46e72f4_ed729bba",
+        "filename": "tvix/eval/src/builtins/mod.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 128,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-09-15T18:52:29Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2092d812_d79c0e5f",
+      "revId": "aa4e67fdac2a718eba4ada6af285d4e2418ac24a",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "08200bdf_4efce7b7",
@@ -48,6 +66,30 @@
       "writtenOn": "2022-09-13T14:22:34Z",
       "side": 1,
       "message": "We also want a custom error variant for this, not sure if we should integrate it into IndexOutOfBounds somehow or make a new kind.",
+      "range": {
+        "startLine": 132,
+        "startChar": 31,
+        "endLine": 132,
+        "endChar": 36
+      },
+      "revId": "aa4e67fdac2a718eba4ada6af285d4e2418ac24a",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bdf9aa9a_8f75a91a",
+        "filename": "tvix/eval/src/builtins/mod.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 132,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-09-15T18:52:29Z",
+      "side": 1,
+      "message": "Decided for a dedicated error type, `ErrorKind::TailEmptyList`",
+      "parentUuid": "08200bdf_4efce7b7",
       "range": {
         "startLine": 132,
         "startChar": 31,
