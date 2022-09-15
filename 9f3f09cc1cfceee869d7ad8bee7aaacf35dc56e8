@@ -22,6 +22,30 @@
       },
       "revId": "9f3f09cc1cfceee869d7ad8bee7aaacf35dc56e8",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a5872d3e_20b766f3",
+        "filename": "tvix/eval/src/value/attrs.rs",
+        "patchSetId": 4
+      },
+      "lineNbr": 215,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-09-15T17:32:46Z",
+      "side": 1,
+      "message": "ah so `AttrsRep::KV` is equivalent to `{ name \u003d \"key\"; value \u003d 1; }`? Got it.",
+      "parentUuid": "42ce395b_14e3dbc0",
+      "range": {
+        "startLine": 215,
+        "startChar": 35,
+        "endLine": 215,
+        "endChar": 36
+      },
+      "revId": "9f3f09cc1cfceee869d7ad8bee7aaacf35dc56e8",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
