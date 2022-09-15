@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3916cd02_46e49e55",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2022-09-15T14:27:26Z",
+      "side": 1,
+      "message": "Let\u0027s close this, I\u0027ll send a PR updating `tvix/docs/components.md` instead ;-)",
+      "revId": "40acba381c082303ce6cb3e00f20db23e2bede3a",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
