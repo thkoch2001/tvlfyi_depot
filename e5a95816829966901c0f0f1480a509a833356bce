@@ -18,6 +18,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "7dab352e_cd78012e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-09-15T15:15:20Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "9f61d2da_4e1c79c8",
+      "revId": "e5a95816829966901c0f0f1480a509a833356bce",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "e0a14ded_1714761e",
@@ -31,6 +49,30 @@
       "writtenOn": "2022-09-14T20:43:06Z",
       "side": 1,
       "message": "You could say something like: \"The interpreter is working, with just enough language features to test that our lazy VM approach is viable. Thanks to Rust it was easy to convert to WASM and you can play with the demo over here: ...\".\n\nPeople would probably infer \"most things\" to inclue interactions with the filesystem and store.",
+      "range": {
+        "startLine": 31,
+        "startChar": 0,
+        "endLine": 32,
+        "endChar": 63
+      },
+      "revId": "e5a95816829966901c0f0f1480a509a833356bce",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "eced0f95_d93177d3",
+        "filename": "web/tvl/blog/tvix-status-202209.md",
+        "patchSetId": 2
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-09-15T15:15:20Z",
+      "side": 1,
+      "message": "It\u0027s quite a bit more than a \"proof of concept\" though :) Anyways, we\u0027ve published it with what the editor helped us write!",
+      "parentUuid": "e0a14ded_1714761e",
       "range": {
         "startLine": 31,
         "startChar": 0,
