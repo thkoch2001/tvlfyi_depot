@@ -22,6 +22,30 @@
       },
       "revId": "86bc0edd37749592995793da1d0f50e8111ca8b2",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "696919e7_154f2cd8",
+        "filename": "tvix/eval/src/errors.rs",
+        "patchSetId": 7
+      },
+      "lineNbr": 188,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2022-09-15T16:13:07Z",
+      "side": 1,
+      "message": "I think the Display trait of Value will quote it by default.",
+      "parentUuid": "50b76d89_0c94c083",
+      "range": {
+        "startLine": 188,
+        "startChar": 32,
+        "endLine": 188,
+        "endChar": 39
+      },
+      "revId": "86bc0edd37749592995793da1d0f50e8111ca8b2",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
