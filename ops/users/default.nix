@@ -114,6 +114,11 @@
     password = "{ARGON2}$argon2id$v=19$m=65536,t=2,p=1$o2OcfhfKOry+UrcmODyQCw$qloaQgoIRDESwaA3yqPxxy8sgLk3mrjYFBbF41elVrM";
   }
   {
+    username = "talyz";
+    email = "kim.lindberger@gmail.com";
+    password = "{ARGON2}$argon2id$v=19$m=65536,t=2,p=1$KYgHYsxX/DZDhnxdkzn1/w$L2Yyc2lYAREZP0FD3iX57MB6gzoOCcVmCGDxIsUGAgk";
+  }
+  {
     username = "tazjin";
     email = "tazjin@tvl.su";
     password = "{ARGON2}$argon2id$v=19$m=65536,t=2,p=1$wOPEl9D3kSke//oLtbvqrg$j0npwwXgaXQ/emefKUwL59tH8hdmtzbgH2rQzWSmE2Y";
