@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a90fdd60_b274fabf",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2022-09-16T17:46:33Z",
+      "side": 1,
+      "message": "I guess this is slightly confusing because in the comment it now says \"Second\" (since the first pass is technically when we look for plain inherits).",
+      "range": {
+        "startLine": 9,
+        "startChar": 60,
+        "endLine": 9,
+        "endChar": 65
+      },
+      "revId": "d260172fe5c56a7bc3e54a16d78a4e09ea9a6be8",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
