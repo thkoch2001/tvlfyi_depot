@@ -24,6 +24,30 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "9b25187f_9f25e17d",
+        "filename": "tvix/docs/components.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 66,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2022-09-16T07:46:46Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e4860298_635a13c5",
+      "range": {
+        "startLine": 66,
+        "startChar": 15,
+        "endLine": 66,
+        "endChar": 23
+      },
+      "revId": "3506837e850bfadff14d186eae368403c6e35d6f",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "1ddee09d_83156b77",
@@ -37,6 +61,30 @@
       "writtenOn": "2022-09-15T20:04:33Z",
       "side": 1,
       "message": "should be \"FUSE\"",
+      "range": {
+        "startLine": 69,
+        "startChar": 45,
+        "endLine": 69,
+        "endChar": 49
+      },
+      "revId": "3506837e850bfadff14d186eae368403c6e35d6f",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "68dcef65_4fe54a13",
+        "filename": "tvix/docs/components.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 69,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2022-09-16T07:46:46Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1ddee09d_83156b77",
       "range": {
         "startLine": 69,
         "startChar": 45,
@@ -70,6 +118,30 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "9ab0c7a5_b6828883",
+        "filename": "tvix/docs/components.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 100,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2022-09-16T07:46:46Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9e129e78_61d8a190",
+      "range": {
+        "startLine": 100,
+        "startChar": 57,
+        "endLine": 100,
+        "endChar": 60
+      },
+      "revId": "3506837e850bfadff14d186eae368403c6e35d6f",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "2e7968c3_d5f87a8e",
@@ -93,6 +165,30 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "fccd1c7a_e36c0e37",
+        "filename": "tvix/docs/components.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 101,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2022-09-16T07:46:46Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2e7968c3_d5f87a8e",
+      "range": {
+        "startLine": 101,
+        "startChar": 50,
+        "endLine": 101,
+        "endChar": 60
+      },
+      "revId": "3506837e850bfadff14d186eae368403c6e35d6f",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "66ccb2f7_425229af",
@@ -106,6 +202,30 @@
       "writtenOn": "2022-09-15T20:04:33Z",
       "side": 1,
       "message": "drop this comma",
+      "range": {
+        "startLine": 113,
+        "startChar": 33,
+        "endLine": 113,
+        "endChar": 34
+      },
+      "revId": "3506837e850bfadff14d186eae368403c6e35d6f",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "100e50a8_94fa0463",
+        "filename": "tvix/docs/components.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 113,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2022-09-16T07:46:46Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "66ccb2f7_425229af",
       "range": {
         "startLine": 113,
         "startChar": 33,
@@ -164,6 +284,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "badc7b51_ebb3b492",
+        "filename": "tvix/docs/components.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 116,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2022-09-16T07:46:46Z",
+      "side": 1,
+      "message": "This document describes the (desired) architecture, so doesn\u0027t need to do too much storytelling.  I replaced this statement with \"Tvix natively uses an improved store protocol.\", and leave the details and storytelling to a blogpost :-D",
+      "parentUuid": "aa19b302_3f3450ed",
+      "range": {
+        "startLine": 116,
+        "startChar": 0,
+        "endLine": 116,
+        "endChar": 30
+      },
+      "revId": "3506837e850bfadff14d186eae368403c6e35d6f",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "20594a54_2cff9c5d",
         "filename": "tvix/docs/components.md",
         "patchSetId": 1
@@ -208,6 +352,54 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "4680d1b0_3aafb499",
+        "filename": "tvix/docs/components.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 143,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2022-09-16T07:46:46Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f64501a2_44e2be3f",
+      "range": {
+        "startLine": 143,
+        "startChar": 65,
+        "endLine": 143,
+        "endChar": 69
+      },
+      "revId": "3506837e850bfadff14d186eae368403c6e35d6f",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ac7502b6_f5367330",
+        "filename": "tvix/docs/components.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 143,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2022-09-16T07:46:46Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "20594a54_2cff9c5d",
+      "range": {
+        "startLine": 143,
+        "startChar": 9,
+        "endLine": 143,
+        "endChar": 13
+      },
+      "revId": "3506837e850bfadff14d186eae368403c6e35d6f",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "c0db66f2_90e35371",
@@ -233,6 +425,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "6bb557e7_edb12445",
+        "filename": "tvix/docs/components.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 147,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2022-09-16T07:46:46Z",
+      "side": 1,
+      "message": "yes, but I typo\u0027ed. This is now fixed. So you have another proposal?",
+      "parentUuid": "c0db66f2_90e35371",
+      "range": {
+        "startLine": 147,
+        "startChar": 0,
+        "endLine": 147,
+        "endChar": 53
+      },
+      "revId": "3506837e850bfadff14d186eae368403c6e35d6f",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "3699fe56_0b8c84ca",
         "filename": "tvix/docs/components.md",
         "patchSetId": 1
@@ -244,6 +460,30 @@
       "writtenOn": "2022-09-15T20:04:33Z",
       "side": 1,
       "message": "I don\u0027t really understand this paragraph, I think it\u0027s too many \"this\" and \"there\", not sure what exactly refers to what.",
+      "range": {
+        "startLine": 152,
+        "startChar": 0,
+        "endLine": 154,
+        "endChar": 28
+      },
+      "revId": "3506837e850bfadff14d186eae368403c6e35d6f",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b8bbecb4_7abc2faf",
+        "filename": "tvix/docs/components.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 154,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2022-09-16T07:46:46Z",
+      "side": 1,
+      "message": "Builds (and IFD eval, but that\u0027s unrelated here) need file-level access to store paths.\n\nIn a remote build context, these store paths can be provided by having a sidecar super-lazy FUSE filesystem, using the improved store protocol under the hood. This avoids having to copy around stuff before it\u0027s needed.\n\nI merged the two paragraphs, and tried to reword it. PTAL. I\u0027m still not sure if that paragraph makes sense here, but I couldn\u0027t find another spot that\u0027d fit more naturally. PTAL.",
+      "parentUuid": "3699fe56_0b8c84ca",
       "range": {
         "startLine": 152,
         "startChar": 0,
