@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "01d9b97a_cda18a06",
+        "filename": "tvix/eval/src/compiler/attrs.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 224,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2022-09-16T18:01:51Z",
+      "side": 1,
+      "message": "maybe we\u0027ll want to count ourselves instead of using the iterator in the future.",
+      "range": {
+        "startLine": 224,
+        "startChar": 47,
+        "endLine": 224,
+        "endChar": 69
+      },
+      "revId": "e166efd6d91fbd3f3b43e15ae7cc0a6ed2cab5ac",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
