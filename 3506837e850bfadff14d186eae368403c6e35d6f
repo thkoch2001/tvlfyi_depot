@@ -306,6 +306,30 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "339ab6c0_f9f692bc",
+        "filename": "tvix/docs/components.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 116,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-09-16T11:45:50Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "badc7b51_ebb3b492",
+      "range": {
+        "startLine": 116,
+        "startChar": 0,
+        "endLine": 116,
+        "endChar": 30
+      },
+      "revId": "3506837e850bfadff14d186eae368403c6e35d6f",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "20594a54_2cff9c5d",
@@ -447,6 +471,30 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "6aee1453_1697af6e",
+        "filename": "tvix/docs/components.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 147,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-09-16T11:45:50Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "6bb557e7_edb12445",
+      "range": {
+        "startLine": 147,
+        "startChar": 0,
+        "endLine": 147,
+        "endChar": 53
+      },
+      "revId": "3506837e850bfadff14d186eae368403c6e35d6f",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "3699fe56_0b8c84ca",
@@ -484,6 +532,30 @@
       "side": 1,
       "message": "Builds (and IFD eval, but that\u0027s unrelated here) need file-level access to store paths.\n\nIn a remote build context, these store paths can be provided by having a sidecar super-lazy FUSE filesystem, using the improved store protocol under the hood. This avoids having to copy around stuff before it\u0027s needed.\n\nI merged the two paragraphs, and tried to reword it. PTAL. I\u0027m still not sure if that paragraph makes sense here, but I couldn\u0027t find another spot that\u0027d fit more naturally. PTAL.",
       "parentUuid": "3699fe56_0b8c84ca",
+      "range": {
+        "startLine": 152,
+        "startChar": 0,
+        "endLine": 154,
+        "endChar": 28
+      },
+      "revId": "3506837e850bfadff14d186eae368403c6e35d6f",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0d7f22ce_4f1c5c37",
+        "filename": "tvix/docs/components.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 154,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-09-16T11:45:50Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "b8bbecb4_7abc2faf",
       "range": {
         "startLine": 152,
         "startChar": 0,
