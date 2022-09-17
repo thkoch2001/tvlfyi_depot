@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "54bdf7fe_2fb9609a",
+        "filename": "tvix/eval/src/builtins/mod.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 146,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-09-17T14:25:25Z",
+      "side": 1,
+      "message": "Side note: We should probably add Value::force as well, for cases like this where the `force!` macro would be more noisy. Still not settled on how to best do this forcing in builtins .... hmm.",
+      "range": {
+        "startLine": 143,
+        "startChar": 0,
+        "endLine": 146,
+        "endChar": 0
+      },
+      "revId": "6a702df7e089198e3bf30423f8f3a968493b4aa8",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bab404d3_0e832af4",
+        "filename": "tvix/eval/src/builtins/versions.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-09-17T14:25:25Z",
+      "side": 1,
+      "message": "I think you can use\n\n  let cached_part \u003d std::mem::replace(\u0026mut cached_part, InternalPart::Break);\n  \nin these instead, making it a little shorter and avoiding `mut`. Not that important, so up to you.",
+      "range": {
+        "startLine": 45,
+        "startChar": 0,
+        "endLine": 47,
+        "endChar": 0
+      },
+      "revId": "6a702df7e089198e3bf30423f8f3a968493b4aa8",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
