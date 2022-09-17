@@ -34,6 +34,24 @@
       "parentUuid": "3ee2881e_1a149a13",
       "revId": "535ec244193a48909e264dc84e6d66c83bf3aa0e",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ac4693a2_763d6ae1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2022-09-17T11:44:16Z",
+      "side": 1,
+      "message": "Arguably, the parts where nix-env relies on the behavior of builtins (parseDrvName, compareVersions, ...) are its most brittle ones, so I don\u0027t think we\u0027ll want to replicate that in any form. Ideally, we\u0027ll find a declarative solution and there and avoid version comparison altogether :)\n\n\u003e builtins::versions would be a good place for now in my opinion.\n\n+1",
+      "parentUuid": "9f8ec102_c97e0e64",
+      "revId": "535ec244193a48909e264dc84e6d66c83bf3aa0e",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
