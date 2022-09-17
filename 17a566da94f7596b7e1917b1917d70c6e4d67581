@@ -18,6 +18,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "ab61a99e_6073070d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2022-09-17T12:50:05Z",
+      "side": 1,
+      "message": "Yeah, but it has to be named this to be picked up by lorri (and direnv?). FWIW at least building the env is very quick.",
+      "parentUuid": "29f217a3_316d7afd",
+      "revId": "17a566da94f7596b7e1917b1917d70c6e4d67581",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "380d91cd_dfb8d544",
@@ -31,6 +49,30 @@
       "writtenOn": "2022-09-17T11:52:08Z",
       "side": 1,
       "message": "what is this going to do here? use the shell.nix?",
+      "range": {
+        "startLine": 4,
+        "startChar": 0,
+        "endLine": 4,
+        "endChar": 9
+      },
+      "revId": "17a566da94f7596b7e1917b1917d70c6e4d67581",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a4f425c4_04fe48d1",
+        "filename": "tvix/eval/.envrc",
+        "patchSetId": 2
+      },
+      "lineNbr": 4,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2022-09-17T12:50:05Z",
+      "side": 1,
+      "message": "The `shell.nix` from my testing.",
+      "parentUuid": "380d91cd_dfb8d544",
       "range": {
         "startLine": 4,
         "startChar": 0,
