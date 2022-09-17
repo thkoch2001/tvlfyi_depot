@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3ee2881e_1a149a13",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-09-17T11:09:34Z",
+      "side": 1,
+      "message": "Thanks \u0026 welcome!\n\nMy first thought is that we should probably put this in a submodule of builtins instead, as it doesn\u0027t seem to (unless I missed something?) need internal APIs of the `NixString` type.\n\nAre there more builtins that will need this? In that case we may want to introduce `builtins::versions` and move it there, otherwise I think having a `builtins::compare_versions` (i.e. specifically for this function) is also ok.",
+      "revId": "535ec244193a48909e264dc84e6d66c83bf3aa0e",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
