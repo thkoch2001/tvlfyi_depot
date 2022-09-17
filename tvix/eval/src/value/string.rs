@@ -1,5 +1,7 @@
 //! This module implements Nix language strings and their different
 //! backing implementations.
+use proptest::prelude::{any_with, Arbitrary};
+use proptest::strategy::{BoxedStrategy, Strategy};
 use smol_str::SmolStr;
 use std::hash::Hash;
 use std::{borrow::Cow, fmt::Display, str::Chars};
@@ -13,6 +15,16 @@ enum StringRepr {
 #[repr(transparent)]
 #[derive(Clone, Debug)]
 pub struct NixString(StringRepr);
+
+impl Arbitrary for NixString {
+    type Parameters = <String as Arbitrary>::Parameters;
+
+    type Strategy = BoxedStrategy<Self>;
+
+    fn arbitrary_with(args: Self::Parameters) -> Self::Strategy {
+        any_with::<String>(args).prop_map(Self::from).boxed()
+    }
+}
 
 impl PartialEq for NixString {
     fn eq(&self, other: &Self) -> bool {
