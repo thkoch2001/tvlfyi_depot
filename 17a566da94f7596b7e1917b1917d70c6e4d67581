@@ -1,6 +1,23 @@
 {
   "comments": [
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "29f217a3_316d7afd",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-09-17T11:52:53Z",
+      "side": 1,
+      "message": "this shell.nix won\u0027t be built in CI I think",
+      "revId": "17a566da94f7596b7e1917b1917d70c6e4d67581",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "380d91cd_dfb8d544",
