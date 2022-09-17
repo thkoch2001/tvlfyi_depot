@@ -62,6 +62,7 @@ impl Hash for NixString {
 mod arbitrary {
     use super::*;
     use proptest::prelude::{any_with, Arbitrary};
+    use proptest::prop_oneof;
     use proptest::strategy::{BoxedStrategy, Strategy};
 
     impl Arbitrary for NixString {
@@ -70,7 +71,11 @@ mod arbitrary {
         type Strategy = BoxedStrategy<Self>;
 
         fn arbitrary_with(args: Self::Parameters) -> Self::Strategy {
-            any_with::<String>(args).prop_map(Self::from).boxed()
+            prop_oneof![
+                any_with::<String>(args).prop_map(Self::from),
+                any_with::<String>(args).prop_map(|s| Self::from(s.as_str())),
+            ]
+            .boxed()
         }
     }
 }
