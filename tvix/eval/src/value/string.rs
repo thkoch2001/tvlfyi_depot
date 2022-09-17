@@ -1,5 +1,7 @@
 //! This module implements Nix language strings and their different
 //! backing implementations.
+use proptest::prelude::{any_with, Arbitrary};
+use proptest::strategy::{BoxedStrategy, Strategy};
 use smol_str::SmolStr;
 use std::hash::Hash;
 use std::{borrow::Cow, fmt::Display, str::Chars};
@@ -55,6 +57,17 @@ impl From<SmolStr> for NixString {
 impl Hash for NixString {
     fn hash<H: std::hash::Hasher>(&self, state: &mut H) {
         self.as_str().hash(state)
+    }
+}
+
+#[cfg(feature = "arbitrary")]
+impl Arbitrary for NixString {
+    type Parameters = <String as Arbitrary>::Parameters;
+
+    type Strategy = BoxedStrategy<Self>;
+
+    fn arbitrary_with(args: Self::Parameters) -> Self::Strategy {
+        any_with::<String>(args).prop_map(Self::from).boxed()
     }
 }
 
