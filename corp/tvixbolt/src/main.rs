@@ -256,7 +256,7 @@ fn eval(trace: bool, code: &str) -> Output {
     let result = tvix_eval::compile(
         root_expr,
         Some("/nixbolt".into()),
-        &file,
+        file.clone(),
         tvix_eval::global_builtins(),
         &mut compilation_observer,
     )
