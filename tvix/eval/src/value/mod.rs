@@ -18,7 +18,7 @@ pub use attrs::NixAttrs;
 pub use builtin::Builtin;
 pub use function::{Closure, Lambda};
 pub use list::NixList;
-pub use string::NixString;
+pub use string::{NixString, VersionPart, VersionPartsIter};
 pub use thunk::Thunk;
 
 #[warn(variant_size_differences)]

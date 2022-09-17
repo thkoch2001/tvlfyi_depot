@@ -2,6 +2,7 @@
 //! backing implementations.
 use smol_str::SmolStr;
 use std::hash::Hash;
+use std::ops::RangeInclusive;
 use std::{borrow::Cow, fmt::Display, str::Chars};
 
 #[derive(Clone, Debug)]
@@ -104,6 +105,18 @@ impl NixString {
             StringRepr::Smol(s) => s.chars(),
         }
     }
+
+    /// Assumes the string is a version number and returns an iterator
+    /// over the parts
+    ///
+    /// This can then be directly used to compare two versions
+    pub fn version_parts(&self) -> VersionPartsIter {
+        VersionPartsIter {
+            cached_part: InternalPart::Break,
+            iter: self.as_str().char_indices(),
+            version: self.as_str(),
+        }
+    }
 }
 
 fn nix_escape_char(ch: char, next: Option<&char>) -> Option<&'static str> {
@@ -151,5 +164,106 @@ impl Display for NixString {
         f.write_str("\"")?;
         f.write_str(&nix_escape_string(self.as_str()))?;
         f.write_str("\"")
+    }
+}
+
+/// Version strings can be broken up into Parts.
+/// One Part represents either a string of digits or characters.
+/// '.' and '_' represent deviders between parts and are not included in any part.
+#[derive(PartialEq, Eq, PartialOrd, Ord, Clone, Debug)]
+pub enum VersionPart<'a> {
+    Word(&'a str),
+    Number(u64),
+}
+
+/// Type used to hold information about a VersionPart during creation
+enum InternalPart {
+    Number { range: RangeInclusive<usize> },
+    Word { range: RangeInclusive<usize> },
+    Break,
+}
+
+/// An iterator which yields the parts of a version string.
+///
+/// This `struct` is created by the [`version_parts`] method on [`NixString`]. See
+/// its documentation for more.
+///
+/// [`step_by`]: NixString::version_parts
+/// [`NixString`]: struct.NixString.html
+pub struct VersionPartsIter<'a> {
+    cached_part: InternalPart,
+    iter: std::str::CharIndices<'a>,
+    version: &'a str,
+}
+
+impl<'a> Iterator for VersionPartsIter<'a> {
+    type Item = VersionPart<'a>;
+
+    fn next(&mut self) -> Option<Self::Item> {
+        let char = self.iter.next();
+
+        if char.is_none() {
+            let mut cached_part = InternalPart::Break;
+            std::mem::swap(&mut cached_part, &mut self.cached_part);
+            match cached_part {
+                InternalPart::Break => return None,
+                InternalPart::Number { range } => {
+                    return Some(VersionPart::Number(self.version[range].parse().unwrap()))
+                }
+                InternalPart::Word { range } => {
+                    return Some(VersionPart::Word(&self.version[range]))
+                }
+            }
+        }
+
+        let (pos, char) = char.unwrap();
+        match char {
+            // Divider encountered
+            '.' | '_' => {
+                let mut cached_part = InternalPart::Break;
+                std::mem::swap(&mut cached_part, &mut self.cached_part);
+                match cached_part {
+                    InternalPart::Number { range } => {
+                        Some(VersionPart::Number(self.version[range].parse().unwrap()))
+                    }
+                    InternalPart::Word { range } => Some(VersionPart::Word(&self.version[range])),
+                    InternalPart::Break => self.next(),
+                }
+            }
+
+            // digit encountered
+            _ if char.is_ascii_digit() => {
+                let mut cached_part = InternalPart::Number { range: pos..=pos };
+                std::mem::swap(&mut cached_part, &mut self.cached_part);
+                match cached_part {
+                    InternalPart::Number { range } => {
+                        self.cached_part = InternalPart::Number {
+                            range: *range.start()..=*range.end() + 1,
+                        };
+                        self.next()
+                    }
+                    InternalPart::Word { range } => Some(VersionPart::Word(&self.version[range])),
+                    InternalPart::Break => self.next(),
+                }
+            }
+
+            // char encountered
+            _ => {
+                let mut cached_part = InternalPart::Word { range: pos..=pos };
+                std::mem::swap(&mut cached_part, &mut self.cached_part);
+                match cached_part {
+                    InternalPart::Word { range } => {
+                        self.cached_part = InternalPart::Word {
+                            range: *range.start()..=*range.end() + char.len_utf8(),
+                        };
+                        self.next()
+                    }
+                    InternalPart::Number { range } => {
+                        Some(VersionPart::Number(self.version[range].parse().unwrap()))
+                    }
+                    InternalPart::Break => self.next(),
+                }
+            }
+        }
     }
 }

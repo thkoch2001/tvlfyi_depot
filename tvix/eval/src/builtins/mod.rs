@@ -135,6 +135,23 @@ fn pure_builtins() -> Vec<Builtin> {
 
             Ok(Value::List(NixList::construct(output.len(), output)))
         }),
+        Builtin::new("compareVersions", 2, |mut args, vm| {
+            if let Value::Thunk(t) = &args[0] {
+                t.force(vm)?;
+            }
+            if let Value::Thunk(t) = &args[1] {
+                t.force(vm)?;
+            }
+
+            let s1 = args.pop().unwrap().to_str()?;
+            let s2 = args.pop().unwrap().to_str()?;
+
+            match s1.version_parts().cmp(s2.version_parts()) {
+                std::cmp::Ordering::Less => Ok(Value::Integer(1)),
+                std::cmp::Ordering::Equal => Ok(Value::Integer(0)),
+                std::cmp::Ordering::Greater => Ok(Value::Integer(-1)),
+            }
+        }),
         Builtin::new("div", 2, |mut args, _| {
             let b = args.pop().unwrap();
             let a = args.pop().unwrap();
