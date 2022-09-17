@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8d69c84f_eabf71c3",
+        "filename": "tvix/eval/src/value/string.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 74,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2022-09-17T19:19:12Z",
+      "side": 1,
+      "message": "This should have comment annotations describing the intention behind this, since it is non-obvious to the reader.\n\nSucks a bit that we have to rely on knowledge of From impl internals, but I guess we can\u0027t do much better.",
+      "revId": "1237dd044d86e743264ae19ad1e4d1479fbcdbf3",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
