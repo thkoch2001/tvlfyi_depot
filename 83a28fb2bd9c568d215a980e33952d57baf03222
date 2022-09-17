@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7e3a85e9_9c669a7b",
+        "filename": "tvix/eval/src/lib.rs",
+        "patchSetId": 3
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-09-17T23:38:44Z",
+      "side": 1,
+      "message": "on the off-chance somebody were to compile for test, but without default features, this would fail - right?\n\nI don\u0027t really think we need to cater to that use-case, just curious",
+      "range": {
+        "startLine": 14,
+        "startChar": 0,
+        "endLine": 14,
+        "endChar": 15
+      },
+      "revId": "83a28fb2bd9c568d215a980e33952d57baf03222",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
