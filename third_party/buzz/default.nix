@@ -12,7 +12,7 @@ depot.third_party.naersk.buildPackage {
     pkgconfig
     dbus
     glib
-    openssl
+    openssl_1_1
     cairo
     pango
     atk
