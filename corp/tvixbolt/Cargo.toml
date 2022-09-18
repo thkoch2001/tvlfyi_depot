@@ -22,3 +22,7 @@ rev = "97b438e34be5211a4b48aeed9cc3ded489b4d6da"
 [dependencies.tvix-eval]
 path = "../../tvix/eval"
 default-features = false
+
+[dependencies.serde]
+version = "*" # pinned by yew
+features = [ "derive" ]

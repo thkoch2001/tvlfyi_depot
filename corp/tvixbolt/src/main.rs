@@ -1,5 +1,6 @@
 use std::fmt::Write;
 
+use serde::{Deserialize, Serialize};
 use std::rc::Rc;
 use tvix_eval::observer::TracingObserver;
 use tvix_eval::observer::{DisassemblingObserver, NoOpObserver};
@@ -7,12 +8,14 @@ use web_sys::HtmlInputElement;
 use web_sys::HtmlTextAreaElement;
 use yew::prelude::*;
 use yew::TargetCast;
+use yew_router::{prelude::*, AnyRoute};
 
 enum Msg {
     CodeChange(String),
     ToggleTrace(bool),
 }
 
+#[derive(Clone, Serialize, Deserialize)]
 struct Model {
     code: String,
     trace: bool,
@@ -87,25 +90,30 @@ impl Component for Model {
     type Message = Msg;
     type Properties = ();
 
-    fn create(_ctx: &Context<Self>) -> Self {
-        Self {
-            code: String::new(),
-            trace: false,
-        }
+    fn create(_: &Context<Self>) -> Self {
+        BrowserHistory::new()
+            .location()
+            .query::<Self>()
+            .unwrap_or_else(|_| Self {
+                code: String::new(),
+                trace: false,
+            })
     }
 
-    fn update(&mut self, _ctx: &Context<Self>, msg: Self::Message) -> bool {
+    fn update(&mut self, _: &Context<Self>, msg: Self::Message) -> bool {
         match msg {
             Msg::ToggleTrace(trace) => {
                 self.trace = trace;
-                true
             }
 
             Msg::CodeChange(new_code) => {
                 self.code = new_code;
-                true
             }
         }
+
+        let _ = BrowserHistory::new().replace_with_query(AnyRoute::new("/"), self.clone());
+
+        true
     }
 
     fn view(&self, ctx: &Context<Self>) -> Html {
@@ -128,8 +136,8 @@ impl Component for Model {
                              Msg::CodeChange(ta)
 
                          })}
-                         id="code" cols="30" rows="10">
-                        </textarea>
+                         id="code" cols="30" rows="10" value={self.code.clone()}>
+                         </textarea>
                     </div>
 
                     <div class="form-group">
