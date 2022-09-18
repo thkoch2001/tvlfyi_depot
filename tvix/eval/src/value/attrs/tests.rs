@@ -9,16 +9,14 @@ mod nix_eq {
 
     #[proptest(ProptestConfig { cases: 5, ..Default::default() })]
     fn reflexive(x: NixAttrs) {
-        let mut observer = NoOpObserver {};
-        let mut vm = VM::new(&mut observer);
+        let mut vm = VM::new(Box::new(NoOpObserver {}));
 
         assert!(x.nix_eq(&x, &mut vm).unwrap())
     }
 
     #[proptest(ProptestConfig { cases: 5, ..Default::default() })]
     fn symmetric(x: NixAttrs, y: NixAttrs) {
-        let mut observer = NoOpObserver {};
-        let mut vm = VM::new(&mut observer);
+        let mut vm = VM::new(Box::new(NoOpObserver {}));
 
         assert_eq!(
             x.nix_eq(&y, &mut vm).unwrap(),
@@ -28,8 +26,7 @@ mod nix_eq {
 
     #[proptest(ProptestConfig { cases: 5, ..Default::default() })]
     fn transitive(x: NixAttrs, y: NixAttrs, z: NixAttrs) {
-        let mut observer = NoOpObserver {};
-        let mut vm = VM::new(&mut observer);
+        let mut vm = VM::new(Box::new(NoOpObserver {}));
 
         if x.nix_eq(&y, &mut vm).unwrap() && y.nix_eq(&z, &mut vm).unwrap() {
             assert!(x.nix_eq(&z, &mut vm).unwrap())
