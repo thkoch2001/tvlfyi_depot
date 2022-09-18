@@ -58,7 +58,7 @@ pkgs.rustPlatform.buildRustPackage rec {
 
   cargoLock.lockFile = ./Cargo.lock;
   cargoLock.outputHashes = {
-    "rnix-0.11.0-dev" = "sha256:1dd8gf2v4v6451r3n9iaks7bqk55izgblkqzymx77advpqwlpymq";
+    "rnix-0.11.0-dev" = "sha256:1vvpnv0jbyr96z8cb1r6k613zqsryan9awi53f901q3qjc856iz0";
   };
 
   patches = [
