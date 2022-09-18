@@ -71,62 +71,46 @@ pub fn coerce_value_to_path(v: &Value, vm: &mut VM) -> Result<PathBuf, ErrorKind
 /// WASM).
 fn pure_builtins() -> Vec<Builtin> {
     vec![
-        Builtin::new("add", 2, |mut args, _| {
+        Builtin::new("add", &[true, true], |mut args, _| {
             let b = args.pop().unwrap();
             let a = args.pop().unwrap();
             arithmetic_op!(a, b, +)
         }),
-        Builtin::new("abort", 1, |mut args, _| {
+        Builtin::new("abort", &[true], |mut args, _| {
             return Err(ErrorKind::Abort(
                 args.pop().unwrap().to_str()?.as_str().to_owned(),
             ));
         }),
-        Builtin::new("attrNames", 1, |args, vm| {
-            force!(vm, &args[0], value, {
-                let xs = value.to_attrs()?;
-                let mut output = Vec::with_capacity(xs.len());
+        Builtin::new("attrNames", &[true], |args, _| {
+            let xs = args[0].to_attrs()?;
+            let mut output = Vec::with_capacity(xs.len());
 
-                for (key, _val) in xs.iter() {
-                    output.push(Value::String(key.clone()));
-                }
+            for (key, _val) in xs.iter() {
+                output.push(Value::String(key.clone()));
+            }
 
-                Ok(Value::List(NixList::construct(output.len(), output)))
-            })
+            Ok(Value::List(NixList::construct(output.len(), output)))
         }),
-        Builtin::new("attrValues", 1, |args, vm| {
-            force!(vm, &args[0], value, {
-                let xs = value.to_attrs()?;
-                let mut output = Vec::with_capacity(xs.len());
+        Builtin::new("attrValues", &[true], |args, _| {
+            let xs = args[0].to_attrs()?;
+            let mut output = Vec::with_capacity(xs.len());
 
-                for (_key, val) in xs.iter() {
-                    output.push(val.clone());
-                }
+            for (_key, val) in xs.iter() {
+                output.push(val.clone());
+            }
 
-                Ok(Value::List(NixList::construct(output.len(), output)))
-            })
+            Ok(Value::List(NixList::construct(output.len(), output)))
         }),
-        Builtin::new("bitAnd", 2, |args, vm| {
-            force!(vm, &args[0], x, {
-                force!(vm, &args[1], y, {
-                    Ok(Value::Integer(x.as_int()? & y.as_int()?))
-                })
-            })
+        Builtin::new("bitAnd", &[true, true], |args, _| {
+            Ok(Value::Integer(args[0].as_int()? & args[1].as_int()?))
         }),
-        Builtin::new("bitOr", 2, |args, vm| {
-            force!(vm, &args[0], x, {
-                force!(vm, &args[1], y, {
-                    Ok(Value::Integer(x.as_int()? | y.as_int()?))
-                })
-            })
+        Builtin::new("bitOr", &[true, true], |args, _| {
+            Ok(Value::Integer(args[0].as_int()? | args[1].as_int()?))
         }),
-        Builtin::new("bitXor", 2, |args, vm| {
-            force!(vm, &args[0], x, {
-                force!(vm, &args[1], y, {
-                    Ok(Value::Integer(x.as_int()? ^ y.as_int()?))
-                })
-            })
+        Builtin::new("bitXor", &[true, true], |args, _| {
+            Ok(Value::Integer(args[0].as_int()? ^ args[1].as_int()?))
         }),
-        Builtin::new("catAttrs", 2, |mut args, _| {
+        Builtin::new("catAttrs", &[true, true], |mut args, _| {
             let list = args.pop().unwrap().to_list()?;
             let key = args.pop().unwrap().to_str()?;
             let mut output = vec![];
@@ -139,14 +123,7 @@ fn pure_builtins() -> Vec<Builtin> {
 
             Ok(Value::List(NixList::construct(output.len(), output)))
         }),
-        Builtin::new("compareVersions", 2, |mut args, vm| {
-            if let Value::Thunk(t) = &args[0] {
-                t.force(vm)?;
-            }
-            if let Value::Thunk(t) = &args[1] {
-                t.force(vm)?;
-            }
-
+        Builtin::new("compareVersions", &[true, true], |mut args, _| {
             let s1 = args.pop().unwrap().to_str()?;
             let s1 = VersionPartsIter::new(s1.as_str());
             let s2 = args.pop().unwrap().to_str()?;
@@ -158,93 +135,82 @@ fn pure_builtins() -> Vec<Builtin> {
                 std::cmp::Ordering::Greater => Ok(Value::Integer(-1)),
             }
         }),
-        Builtin::new("div", 2, |mut args, _| {
+        Builtin::new("div", &[true, true], |mut args, _| {
             let b = args.pop().unwrap();
             let a = args.pop().unwrap();
             arithmetic_op!(a, b, /)
         }),
-        Builtin::new("elemAt", 2, |args, vm| {
-            force!(vm, &args[0], value, {
-                let xs = value.to_list()?;
-                let i = args[1].as_int()?;
-                if i < 0 {
-                    Err(ErrorKind::IndexOutOfBounds { index: i })
-                } else {
-                    match xs.get(i as usize) {
-                        Some(x) => Ok(x.clone()),
-                        None => Err(ErrorKind::IndexOutOfBounds { index: i }),
-                    }
+        Builtin::new("elemAt", &[true, true], |args, _| {
+            let xs = args[0].to_list()?;
+            let i = args[1].as_int()?;
+            if i < 0 {
+                Err(ErrorKind::IndexOutOfBounds { index: i })
+            } else {
+                match xs.get(i as usize) {
+                    Some(x) => Ok(x.clone()),
+                    None => Err(ErrorKind::IndexOutOfBounds { index: i }),
                 }
-            })
-        }),
-        Builtin::new("length", 1, |args, vm| {
-            if let Value::Thunk(t) = &args[0] {
-                t.force(vm)?;
             }
+        }),
+        Builtin::new("length", &[true, true], |args, _| {
             Ok(Value::Integer(args[0].to_list()?.len() as i64))
         }),
-        Builtin::new("head", 1, |args, vm| {
-            force!(vm, &args[0], xs, {
-                match xs.to_list()?.get(0) {
-                    Some(x) => Ok(x.clone()),
-                    None => Err(ErrorKind::IndexOutOfBounds { index: 0 }),
-                }
-            })
+        Builtin::new("head", &[true], |args, _| match args[0].to_list()?.get(0) {
+            Some(x) => Ok(x.clone()),
+            None => Err(ErrorKind::IndexOutOfBounds { index: 0 }),
         }),
-        Builtin::new("isAttrs", 1, |args, _| {
+        Builtin::new("isAttrs", &[true], |args, _| {
             Ok(Value::Bool(matches!(args[0], Value::Attrs(_))))
         }),
-        Builtin::new("isBool", 1, |args, _| {
+        Builtin::new("isBool", &[true], |args, _| {
             Ok(Value::Bool(matches!(args[0], Value::Bool(_))))
         }),
-        Builtin::new("isFloat", 1, |args, _| {
+        Builtin::new("isFloat", &[true], |args, _| {
             Ok(Value::Bool(matches!(args[0], Value::Float(_))))
         }),
-        Builtin::new("isFunction", 1, |args, _| {
+        Builtin::new("isFunction", &[true], |args, _| {
             Ok(Value::Bool(matches!(
                 args[0],
                 Value::Closure(_) | Value::Builtin(_)
             )))
         }),
-        Builtin::new("isInt", 1, |args, _| {
+        Builtin::new("isInt", &[true], |args, _| {
             Ok(Value::Bool(matches!(args[0], Value::Integer(_))))
         }),
-        Builtin::new("isList", 1, |args, _| {
+        Builtin::new("isList", &[true], |args, _| {
             Ok(Value::Bool(matches!(args[0], Value::List(_))))
         }),
-        Builtin::new("isNull", 1, |args, _| {
+        Builtin::new("isNull", &[true], |args, _| {
             Ok(Value::Bool(matches!(args[0], Value::Null)))
         }),
-        Builtin::new("isPath", 1, |args, _| {
+        Builtin::new("isPath", &[true], |args, _| {
             Ok(Value::Bool(matches!(args[0], Value::Path(_))))
         }),
-        Builtin::new("isString", 1, |args, _| {
+        Builtin::new("isString", &[true], |args, _| {
             Ok(Value::Bool(matches!(args[0], Value::String(_))))
         }),
-        Builtin::new("mul", 2, |mut args, _| {
+        Builtin::new("mul", &[true, true], |mut args, _| {
             let b = args.pop().unwrap();
             let a = args.pop().unwrap();
             arithmetic_op!(a, b, *)
         }),
-        Builtin::new("sub", 2, |mut args, _| {
+        Builtin::new("sub", &[true, true], |mut args, _| {
             let b = args.pop().unwrap();
             let a = args.pop().unwrap();
             arithmetic_op!(a, b, -)
         }),
-        Builtin::new("throw", 1, |mut args, _| {
+        Builtin::new("throw", &[true], |mut args, _| {
             return Err(ErrorKind::Throw(
                 args.pop().unwrap().to_str()?.as_str().to_owned(),
             ));
         }),
-        Builtin::new("toString", 1, |args, vm| {
+        Builtin::new("toString", &[true], |args, vm| {
             args[0]
                 .coerce_to_string(CoercionKind::Strong, vm)
                 .map(Value::String)
         }),
-        Builtin::new("typeOf", 1, |args, vm| {
-            force!(vm, &args[0], value, {
-                Ok(Value::String(value.type_of().into()))
-            })
+        Builtin::new("typeOf", &[true], |args, _| {
+            Ok(Value::String(args[0].type_of().into()))
         }),
     ]
 }
