@@ -1,12 +1,21 @@
 //! This module implements the virtual (or abstract) machine that runs
 //! Tvix bytecode.
 
-use std::{cell::RefMut, rc::Rc};
+use std::{
+    cell::{Ref, RefCell, RefMut},
+    collections::HashMap,
+    path::PathBuf,
+    rc::Rc,
+};
+
+use codemap::CodeMap;
 
 use crate::{
     chunk::Chunk,
+    compiler::{CompilationOutput, Compiler, GlobalsMap},
     errors::{Error, ErrorKind, EvalResult},
-    observer::Observer,
+    eval,
+    observer::{DisassemblingObserver, NoOpObserver, Observer, TracingObserver},
     opcode::{CodeIdx, Count, JumpOffset, OpCode, StackIdx, UpvalueIdx},
     upvalues::{UpvalueCarrier, Upvalues},
     value::{Builtin, Closure, CoercionKind, Lambda, NixAttrs, NixList, Thunk, Value},
@@ -43,7 +52,11 @@ pub struct VM {
     /// dynamically resolved (`with`).
     with_stack: Vec<usize>,
 
+    codemap: Rc<RefCell<codemap::CodeMap>>,
+    globals: GlobalsMap,
+
     observer: Box<dyn Observer>,
+    compiler_observer: Box<dyn Observer>,
 }
 
 /// This macro wraps a computation that returns an ErrorKind or a
@@ -120,9 +133,29 @@ macro_rules! cmp_op {
 }
 
 impl VM {
-    pub fn new(observer: Box<dyn Observer>) -> Self {
+    pub fn new(globals: HashMap<&'static str, Value>, options: eval::Options) -> Self {
+        let codemap = Rc::new(RefCell::new(CodeMap::new()));
+
+        let observer = if options.trace_runtime {
+            Box::new(TracingObserver::new(std::io::stderr())) as _
+        } else {
+            Box::new(NoOpObserver::default()) as _
+        };
+
+        let compiler_observer = if options.dump_bytecode {
+            Box::new(DisassemblingObserver::new(
+                codemap.clone(),
+                std::io::stderr(),
+            )) as _
+        } else {
+            Box::new(NoOpObserver::default()) as _
+        };
+
         Self {
+            compiler_observer,
             observer,
+            globals: prepare_globals(globals),
+            codemap,
             frames: vec![],
             stack: vec![],
             with_stack: vec![],
@@ -173,6 +206,48 @@ impl VM {
             kind,
             span: self.current_span(),
         }
+    }
+
+    pub fn compile(
+        &mut self,
+        code: &str,
+        location: Option<PathBuf>,
+    ) -> EvalResult<CompilationOutput> {
+        let file = self.codemap.borrow_mut().add_file(
+            location
+                .as_ref()
+                .map(|p| p.to_string_lossy().to_string())
+                .unwrap_or_else(|| "[tvix-repl]".into()),
+            code.into(),
+        );
+
+        let parsed = rnix::ast::Root::parse(code);
+        let errors = parsed.errors();
+
+        if !errors.is_empty() {
+            for err in errors {
+                eprintln!("parse error: {}", err);
+            }
+            return Err(Error {
+                kind: ErrorKind::ParseErrors(errors.to_vec()),
+                span: file.span,
+            });
+        }
+
+        // If we've reached this point, there are no errors.
+        let root_expr = parsed
+            .tree()
+            .expr()
+            .expect("expression should exist if no errors occured");
+
+        let mut c = Compiler::new(location, file, &self.globals, &mut *self.compiler_observer)?;
+        let lambda = c.compile_toplevel(&root_expr)?;
+
+        Ok(CompilationOutput {
+            lambda,
+            warnings: c.warnings,
+            errors: c.errors,
+        })
     }
 
     #[allow(clippy::let_and_return)] // due to disassembler
@@ -750,17 +825,61 @@ impl VM {
 
         Ok(())
     }
+
+    pub fn codemap(&self) -> Ref<CodeMap> {
+        self.codemap.borrow()
+    }
+
+    pub(crate) fn call_toplevel(&mut self, lambda: Rc<Lambda>) -> Result<Value, Error> {
+        let value = self.call(lambda, Upvalues::with_capacity(0), 0)?;
+        self.force_for_output(&value)?;
+        Ok(value)
+    }
+}
+
+/// Prepare the full set of globals from additional globals supplied
+/// by the caller of the compiler, as well as the built-in globals
+/// that are always part of the language.
+///
+/// Note that all builtin functions are *not* considered part of the
+/// language in this sense and MUST be supplied as additional global
+/// values, including the `builtins` set itself.
+fn prepare_globals(additional: HashMap<&'static str, Value>) -> GlobalsMap {
+    let mut globals: GlobalsMap = HashMap::new();
+
+    globals.insert(
+        "true",
+        Rc::new(|compiler, node| {
+            compiler.push_op(OpCode::OpTrue, &node);
+        }),
+    );
+
+    globals.insert(
+        "false",
+        Rc::new(|compiler, node| {
+            compiler.push_op(OpCode::OpFalse, &node);
+        }),
+    );
+
+    globals.insert(
+        "null",
+        Rc::new(|compiler, node| {
+            compiler.push_op(OpCode::OpNull, &node);
+        }),
+    );
+
+    for (ident, value) in additional.into_iter() {
+        globals.insert(
+            ident,
+            Rc::new(move |compiler, node| compiler.emit_constant(value.clone(), &node)),
+        );
+    }
+
+    globals
 }
 
 // TODO: use Rc::unwrap_or_clone once it is stabilised.
 // https://doc.rust-lang.org/std/rc/struct.Rc.html#method.unwrap_or_clone
 fn unwrap_or_clone_rc<T: Clone>(rc: Rc<T>) -> T {
     Rc::try_unwrap(rc).unwrap_or_else(|rc| (*rc).clone())
-}
-
-pub fn run_lambda(observer: Box<dyn Observer>, lambda: Rc<Lambda>) -> EvalResult<Value> {
-    let mut vm = VM::new(observer);
-    let value = vm.call(lambda, Upvalues::with_capacity(0), 0)?;
-    vm.force_for_output(&value)?;
-    Ok(value)
 }
