@@ -198,25 +198,103 @@ pub fn text(s: String) -> T {
     T::Text(s)
 }
 
-pub fn u_from_stdin_or_die_user_error<'a>(prog_name: &'_ str, stdin_buf: &'a mut Vec<u8>) -> U<'a> {
-    std::io::stdin().lock().read_to_end(stdin_buf);
-    let u = match parse::u_u(stdin_buf) {
-        Ok((rest, u)) => match rest {
-            b"" => u,
-            _ => exec_helpers::die_user_error(
+pub fn t_from_stdin_or_die_user_error<'a>(prog_name: &'_ str) -> T {
+    match t_from_stdin_or_die_user_error_with_rest(prog_name, &vec![]) {
+        None => exec_helpers::die_user_error(prog_name, "stdin was empty"),
+        Some((rest, t)) => {
+            if rest.is_empty() {
+                t
+            } else {
+                exec_helpers::die_user_error(
+                    prog_name,
+                    format!(
+                        "stdin contained some soup after netencode value: {:?}",
+                        String::from_utf8_lossy(&rest)
+                    ),
+                )
+            }
+        }
+    }
+}
+
+/// Read a netencode value from stdin incrementally, return bytes that could not be read.
+/// Nothing if there was nothing to read from stdin & no initial_bytes were provided.
+/// These can be passed back as `initial_bytes` if more values should be read.
+pub fn t_from_stdin_or_die_user_error_with_rest<'a>(
+    prog_name: &'_ str,
+    initial_bytes: &[u8],
+) -> Option<(Vec<u8>, T)> {
+    let mut chonker = Chunkyboi::new(std::io::stdin().lock(), 4096);
+    // The vec to pass to the parser on each step
+    let mut parser_vec: Vec<u8> = initial_bytes.to_vec();
+    // whether stdin was already empty
+    let mut was_empty: bool = false;
+    loop {
+        match chonker.next() {
+            None => {
+                if parser_vec.is_empty() {
+                    return None;
+                } else {
+                    was_empty = true
+                }
+            }
+            Some(Err(err)) => exec_helpers::die_temporary(
                 prog_name,
-                format!(
-                    "stdin contained some soup after netencode value: {:?}",
-                    String::from_utf8_lossy(rest)
-                ),
+                &format!("could not read from stdin: {:?}", err),
             ),
-        },
-        Err(err) => exec_helpers::die_user_error(
-            prog_name,
-            format!("unable to parse netencode from stdin: {:?}", err),
-        ),
-    };
-    u
+            Some(Ok(mut new_bytes)) => parser_vec.append(&mut new_bytes),
+        }
+
+        match parse::t_t(&parser_vec) {
+            Ok((rest, t)) => return Some((rest.to_owned(), t)),
+            Err(nom::Err::Incomplete(Needed)) => {
+                if was_empty {
+                    exec_helpers::die_user_error(
+                        prog_name,
+                        &format!(
+                            "unable to parse netencode from stdin, input incomplete: {:?}",
+                            parser_vec
+                        ),
+                    );
+                }
+                // read more from stdin and try parsing again
+                continue;
+            }
+            Err(err) => exec_helpers::die_user_error(
+                prog_name,
+                &format!("unable to parse netencode from stdin: {:?}", err),
+            ),
+        }
+    }
+}
+
+// iter helper
+// TODO: put into its own module
+struct Chunkyboi<T> {
+    inner: T,
+    buf: Vec<u8>,
+}
+
+impl<R: Read> Chunkyboi<R> {
+    fn new(inner: R, chunksize: usize) -> Self {
+        let buf = vec![0; chunksize];
+        Chunkyboi { inner, buf }
+    }
+}
+
+impl<R: Read> Iterator for Chunkyboi<R> {
+    type Item = std::io::Result<Vec<u8>>;
+
+    fn next(&mut self) -> Option<std::io::Result<Vec<u8>>> {
+        match self.inner.read(&mut self.buf) {
+            Ok(0) => None,
+            Ok(read) => {
+                // clone a new buffer so we can reuse the internal one
+                Some(Ok(self.buf[..read].to_owned()))
+            }
+            Err(err) => Some(Err(err)),
+        }
+    }
 }
 
 pub mod parse {

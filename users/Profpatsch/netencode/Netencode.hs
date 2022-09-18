@@ -133,11 +133,11 @@ record = T . Fix . Record . coerce @(NEMap Text T) @(NEMap Text (Fix TF))
 list :: [T] -> T
 list = T . Fix . List . coerce @[T] @([Fix TF])
 
--- Stable encoding of a netencode value. Record keys will be sorted lexicographically ascending.
+-- | Stable encoding of a netencode value. Record keys will be sorted lexicographically ascending.
 netencodeEncodeStable :: T -> Builder
 netencodeEncodeStable (T fix) = Fix.foldFix (netencodeEncodeStableF id) fix
 
--- Stable encoding of a netencode functor value. Record keys will be sorted lexicographically ascending.
+-- | Stable encoding of a netencode functor value. Record keys will be sorted lexicographically ascending.
 --
 -- The given function is used for encoding the recursive values.
 netencodeEncodeStableF :: (rec -> Builder) -> TF rec -> Builder
