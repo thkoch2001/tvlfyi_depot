@@ -3,6 +3,23 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "a7ef2815_44e9c961",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2022-09-18T21:19:56Z",
+      "side": 1,
+      "message": "cl/6655 adds a more elaborate impure builtins mechanism cl/6655",
+      "revId": "cfc3eccef5d226c1710568a8a2a4127b7f3b921c",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "9d42c6b5_5ebbd707",
         "filename": "tvix/eval/src/builtins/mod.rs",
         "patchSetId": 5
