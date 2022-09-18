@@ -36,7 +36,10 @@ pub type BuiltinFn = fn(arg: Vec<Value>, vm: &mut VM) -> Result<Value, ErrorKind
 #[derive(Clone)]
 pub struct Builtin {
     name: &'static str,
-    arity: usize,
+    /// Array reference that describes how many arguments there are (usually 1
+    /// or 2) and whether they are forced. `true` causes the corresponding
+    /// argument to be forced before `func` is called.
+    force_args: &'static [bool],
     func: BuiltinFn,
 
     /// Partially applied function arguments.
@@ -44,10 +47,10 @@ pub struct Builtin {
 }
 
 impl Builtin {
-    pub fn new(name: &'static str, arity: usize, func: BuiltinFn) -> Self {
+    pub fn new(name: &'static str, force_args: &'static [bool], func: BuiltinFn) -> Self {
         Builtin {
             name,
-            arity,
+            force_args,
             func,
             partials: vec![],
         }
@@ -63,7 +66,15 @@ impl Builtin {
     pub fn apply(mut self, vm: &mut VM, arg: Value) -> Result<Value, ErrorKind> {
         self.partials.push(arg);
 
-        if self.partials.len() == self.arity {
+        if self.partials.len() == self.force_args.len() {
+            for (idx, force) in self.force_args.iter().enumerate() {
+                if *force {
+                    // TODO(sterni): cl/6656
+                    if let Value::Thunk(t) = &self.partials[idx] {
+                        t.force(vm)?;
+                    }
+                }
+            }
             return (self.func)(self.partials, vm);
         }
 
