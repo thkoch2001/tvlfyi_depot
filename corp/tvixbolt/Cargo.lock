@@ -592,6 +592,7 @@ version = "0.1.0"
 dependencies = [
  "codemap",
  "rnix",
+ "serde",
  "serde_urlencoded",
  "tvix-eval",
  "wasm-bindgen",
