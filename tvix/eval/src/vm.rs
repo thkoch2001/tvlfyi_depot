@@ -266,7 +266,7 @@ impl<'o> VM<'o> {
                     let v2 = self.pop();
                     let v1 = self.pop();
 
-                    self.push(Value::Bool(v1 == v2))
+                    self.push(Value::Bool(v1.nix_eq(&v2)?))
                 }
 
                 OpCode::OpLess => cmp_op!(self, <),
