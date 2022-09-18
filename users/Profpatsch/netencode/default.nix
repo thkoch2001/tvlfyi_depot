@@ -62,9 +62,8 @@ let
 
     fn main() {
       let (_, prog) = exec_helpers::args_for_exec("netencode-pretty", 0);
-      let mut buf = vec![];
-      let u = netencode::u_from_stdin_or_die_user_error("netencode-pretty", &mut buf);
-      match netencode_pretty::Pretty::from_u(u).print_multiline(&mut std::io::stdout()) {
+      let t = netencode::t_from_stdin_or_die_user_error("netencode-pretty");
+      match netencode_pretty::Pretty::from_u(t.to_u()).print_multiline(&mut std::io::stdout()) {
         Ok(()) => {},
         Err(err) => exec_helpers::die_temporary("netencode-pretty", format!("could not write to stdout: {}", err))
       }
@@ -89,24 +88,21 @@ let
       dependencies = [
         netencode-rs
         depot.users.Profpatsch.execline.exec-helpers
-        depot.users.Profpatsch.arglib.netencode.rust
       ];
     } ''
     extern crate netencode;
-    extern crate arglib_netencode;
     extern crate exec_helpers;
     use netencode::{encode, dec};
     use netencode::dec::{Decoder, DecodeError};
 
     fn main() {
-        let mut buf = vec![];
         let args = exec_helpers::args("record-get", 1);
         let field = match std::str::from_utf8(&args[0]) {
             Ok(f) => f,
             Err(_e) => exec_helpers::die_user_error("record-get", format!("The field name needs to be valid unicode"))
         };
-        let u = netencode::u_from_stdin_or_die_user_error("record-get", &mut buf);
-        match (dec::RecordDot {field, inner: dec::AnyU }).dec(u) {
+        let t = netencode::t_from_stdin_or_die_user_error("record-get");
+        match (dec::RecordDot {field, inner: dec::AnyU }).dec(t.to_u()) {
             Ok(u) => encode(&mut std::io::stdout(), &u).expect("encoding to stdout failed"),
             Err(DecodeError(err)) => exec_helpers::die_user_error("record-get", err)
         }
@@ -126,10 +122,9 @@ let
     use netencode::dec::{Record, Try, ScalarAsBytes, Decoder, DecodeError};
 
     fn main() {
-        let mut buf = vec![];
-        let u = netencode::u_from_stdin_or_die_user_error("record-splice-env", &mut buf);
+        let t = netencode::t_from_stdin_or_die_user_error("record-splice-env");
         let (_, prog) = exec_helpers::args_for_exec("record-splice-env", 0);
-        match Record(Try(ScalarAsBytes)).dec(u) {
+        match Record(Try(ScalarAsBytes)).dec(t.to_u()) {
             Ok(map) => {
                 exec_helpers::exec_into_args(
                     "record-splice-env",
