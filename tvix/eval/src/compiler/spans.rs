@@ -5,7 +5,7 @@ use codemap::{File, Span};
 use rowan::ast::AstNode;
 
 /// Trait implemented by all types from which we can retrieve a span.
-pub(super) trait ToSpan {
+pub(crate) trait ToSpan {
     fn span_for(&self, file: &File) -> Span;
 }
 
@@ -77,7 +77,7 @@ expr_to_span!(ast::Str);
 expr_to_span!(ast::UnaryOp);
 expr_to_span!(ast::With);
 
-impl Compiler<'_> {
+impl Compiler<'_, '_> {
     pub(super) fn span_for<S: ToSpan>(&self, to_span: &S) -> Span {
         to_span.span_for(&self.file)
     }

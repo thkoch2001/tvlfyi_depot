@@ -5,6 +5,7 @@
 //! runtime, and so on.
 
 use codemap::CodeMap;
+use std::cell::RefCell;
 use std::io::Write;
 use std::rc::Rc;
 use tabwriter::TabWriter;
@@ -65,12 +66,12 @@ impl Observer for NoOpObserver {}
 /// internal writer whenwever the compiler emits a toplevel function,
 /// closure or thunk.
 pub struct DisassemblingObserver<W: Write> {
-    codemap: Rc<CodeMap>,
+    codemap: Rc<RefCell<CodeMap>>,
     writer: TabWriter<W>,
 }
 
 impl<W: Write> DisassemblingObserver<W> {
-    pub fn new(codemap: Rc<CodeMap>, writer: W) -> Self {
+    pub fn new(codemap: Rc<RefCell<CodeMap>>, writer: W) -> Self {
         Self {
             codemap,
             writer: TabWriter::new(writer),
@@ -92,7 +93,12 @@ impl<W: Write> DisassemblingObserver<W> {
         let width = format!("{:#x}", chunk.code.len() - 1).len();
 
         for (idx, _) in chunk.code.iter().enumerate() {
-            let _ = chunk.disassemble_op(&mut self.writer, &self.codemap, width, CodeIdx(idx));
+            let _ = chunk.disassemble_op(
+                &mut self.writer,
+                &self.codemap.borrow(),
+                width,
+                CodeIdx(idx),
+            );
         }
     }
 }

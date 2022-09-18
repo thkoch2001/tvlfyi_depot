@@ -72,12 +72,12 @@ impl LambdaCtx {
 
 /// Alias for the map of globally available functions that should
 /// implicitly be resolvable in the global scope.
-type GlobalsMap = HashMap<&'static str, Rc<dyn Fn(&mut Compiler, rnix::ast::Ident)>>;
+pub type GlobalsMap = HashMap<&'static str, Rc<dyn Fn(&mut Compiler, rnix::ast::Ident)>>;
 
-struct Compiler<'observer> {
+pub struct Compiler<'observer, 'globals> {
     contexts: Vec<LambdaCtx>,
-    warnings: Vec<EvalWarning>,
-    errors: Vec<Error>,
+    pub(super) warnings: Vec<EvalWarning>,
+    pub(super) errors: Vec<Error>,
     root_dir: PathBuf,
 
     /// Carries all known global tokens; the full set of which is
@@ -86,7 +86,7 @@ struct Compiler<'observer> {
     /// Each global has an associated token, which when encountered as
     /// an identifier is resolved against the scope poisoning logic,
     /// and a function that should emit code for the token.
-    globals: GlobalsMap,
+    globals: &'globals GlobalsMap,
 
     /// File reference in the codemap contains all known source code
     /// and is used to track the spans from which instructions where
@@ -99,11 +99,11 @@ struct Compiler<'observer> {
 }
 
 /// Compiler construction
-impl<'observer> Compiler<'observer> {
+impl<'observer, 'globals> Compiler<'observer, 'globals> {
     pub(crate) fn new(
         location: Option<PathBuf>,
         file: Arc<codemap::File>,
-        globals: HashMap<&'static str, Value>,
+        globals: &'globals GlobalsMap,
         observer: &'observer mut dyn Observer,
     ) -> EvalResult<Self> {
         let mut root_dir = match location {
@@ -128,17 +128,33 @@ impl<'observer> Compiler<'observer> {
             root_dir,
             file,
             observer,
-            globals: prepare_globals(globals),
+            globals,
             contexts: vec![LambdaCtx::new()],
             warnings: vec![],
             errors: vec![],
         })
     }
+
+    pub(crate) fn compile_toplevel(&mut self, expr: &ast::Expr) -> EvalResult<Rc<Lambda>> {
+        let root_span = self.span_for(expr);
+        let root_slot = self.scope_mut().declare_phantom(root_span, false);
+        self.compile(root_slot, expr.clone());
+
+        // The final operation of any top-level Nix program must always be
+        // `OpForce`. A thunk should not be returned to the user in an
+        // unevaluated state (though in practice, a value *containing* a
+        // thunk might be returned).
+        self.emit_force(expr);
+
+        let lambda = Rc::new(self.contexts.pop().unwrap().lambda);
+        self.observer.observe_compiled_toplevel(&lambda);
+        Ok(lambda)
+    }
 }
 
 // Helper functions for emitting code and metadata to the internal
 // structures of the compiler.
-impl Compiler<'_> {
+impl Compiler<'_, '_> {
     fn context(&self) -> &LambdaCtx {
         &self.contexts[self.contexts.len() - 1]
     }
@@ -162,21 +178,21 @@ impl Compiler<'_> {
 
     /// Push a single instruction to the current bytecode chunk and
     /// track the source span from which it was compiled.
-    fn push_op<T: ToSpan>(&mut self, data: OpCode, node: &T) -> CodeIdx {
+    pub(super) fn push_op<T: ToSpan>(&mut self, data: OpCode, node: &T) -> CodeIdx {
         let span = self.span_for(node);
         self.chunk().push_op(data, span)
     }
 
     /// Emit a single constant to the current bytecode chunk and track
     /// the source span from which it was compiled.
-    fn emit_constant<T: ToSpan>(&mut self, value: Value, node: &T) {
+    pub(super) fn emit_constant<T: ToSpan>(&mut self, value: Value, node: &T) {
         let idx = self.chunk().push_constant(value);
         self.push_op(OpCode::OpConstant(idx), node);
     }
 }
 
 // Actual code-emitting AST traversal methods.
-impl Compiler<'_> {
+impl Compiler<'_, '_> {
     fn compile(&mut self, slot: LocalIdx, expr: ast::Expr) {
         match expr {
             ast::Expr::Literal(literal) => self.compile_literal(literal),
@@ -1381,69 +1397,15 @@ fn optimise_tail_call(chunk: &mut Chunk) {
     }
 }
 
-/// Prepare the full set of globals from additional globals supplied
-/// by the caller of the compiler, as well as the built-in globals
-/// that are always part of the language.
-///
-/// Note that all builtin functions are *not* considered part of the
-/// language in this sense and MUST be supplied as additional global
-/// values, including the `builtins` set itself.
-fn prepare_globals(additional: HashMap<&'static str, Value>) -> GlobalsMap {
-    let mut globals: GlobalsMap = HashMap::new();
-
-    globals.insert(
-        "true",
-        Rc::new(|compiler, node| {
-            compiler.push_op(OpCode::OpTrue, &node);
-        }),
-    );
-
-    globals.insert(
-        "false",
-        Rc::new(|compiler, node| {
-            compiler.push_op(OpCode::OpFalse, &node);
-        }),
-    );
-
-    globals.insert(
-        "null",
-        Rc::new(|compiler, node| {
-            compiler.push_op(OpCode::OpNull, &node);
-        }),
-    );
-
-    for (ident, value) in additional.into_iter() {
-        globals.insert(
-            ident,
-            Rc::new(move |compiler, node| compiler.emit_constant(value.clone(), &node)),
-        );
-    }
-
-    globals
-}
-
 pub fn compile(
     expr: ast::Expr,
     location: Option<PathBuf>,
     file: Arc<codemap::File>,
-    globals: HashMap<&'static str, Value>,
+    globals: &GlobalsMap,
     observer: &mut dyn Observer,
 ) -> EvalResult<CompilationOutput> {
     let mut c = Compiler::new(location, file, globals, observer)?;
-
-    let root_span = c.span_for(&expr);
-    let root_slot = c.scope_mut().declare_phantom(root_span, false);
-    c.compile(root_slot, expr.clone());
-
-    // The final operation of any top-level Nix program must always be
-    // `OpForce`. A thunk should not be returned to the user in an
-    // unevaluated state (though in practice, a value *containing* a
-    // thunk might be returned).
-    c.emit_force(&expr);
-
-    let lambda = Rc::new(c.contexts.pop().unwrap().lambda);
-    c.observer.observe_compiled_toplevel(&lambda);
-
+    let lambda = c.compile_toplevel(&expr)?;
     Ok(CompilationOutput {
         lambda,
         warnings: c.warnings,
