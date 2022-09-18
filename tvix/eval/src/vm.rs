@@ -35,7 +35,7 @@ impl CallFrame {
     }
 }
 
-pub struct VM<'o> {
+pub struct VM {
     frames: Vec<CallFrame>,
     stack: Vec<Value>,
 
@@ -43,7 +43,7 @@ pub struct VM<'o> {
     /// dynamically resolved (`with`).
     with_stack: Vec<usize>,
 
-    observer: &'o mut dyn Observer,
+    observer: Box<dyn Observer>,
 }
 
 /// This macro wraps a computation that returns an ErrorKind or a
@@ -119,8 +119,8 @@ macro_rules! cmp_op {
     }};
 }
 
-impl<'o> VM<'o> {
-    pub fn new(observer: &'o mut dyn Observer) -> Self {
+impl VM {
+    pub fn new(observer: Box<dyn Observer>) -> Self {
         Self {
             observer,
             frames: vec![],
@@ -758,7 +758,7 @@ fn unwrap_or_clone_rc<T: Clone>(rc: Rc<T>) -> T {
     Rc::try_unwrap(rc).unwrap_or_else(|rc| (*rc).clone())
 }
 
-pub fn run_lambda(observer: &mut dyn Observer, lambda: Rc<Lambda>) -> EvalResult<Value> {
+pub fn run_lambda(observer: Box<dyn Observer>, lambda: Rc<Lambda>) -> EvalResult<Value> {
     let mut vm = VM::new(observer);
     let value = vm.call(lambda, Upvalues::with_capacity(0), 0)?;
     vm.force_for_output(&value)?;
