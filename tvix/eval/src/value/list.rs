@@ -1,7 +1,7 @@
 //! This module implements Nix lists.
 use std::fmt::Display;
 
-use crate::EvalResult;
+use crate::{vm::VM, EvalResult};
 
 use super::Value;
 
@@ -83,13 +83,13 @@ impl NixList {
     }
 
     /// Compare `self` against `other` for equality using Nix equality semantics
-    pub fn nix_eq(&self, other: &Self) -> EvalResult<bool> {
+    pub fn nix_eq(&self, other: &Self, vm: &mut VM) -> EvalResult<bool> {
         if self.len() != other.len() {
             return Ok(false);
         }
 
         for (v1, v2) in self.iter().zip(other.iter()) {
-            if !v1.nix_eq(v2)? {
+            if !v1.nix_eq(v2, vm)? {
                 return Ok(false);
             }
         }
