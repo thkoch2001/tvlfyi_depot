@@ -220,7 +220,7 @@ fn write_dict<'buf, 'a>(
 }
 
 // iter helper
-
+// TODO: put into its own module
 struct Chunkyboi<T> {
     inner: T,
     buf: Vec<u8>,
