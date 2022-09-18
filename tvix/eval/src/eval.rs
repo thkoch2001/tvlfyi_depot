@@ -94,8 +94,11 @@ pub fn interpret(code: &str, location: Option<PathBuf>, options: Options) -> Eva
     }
 
     if options.trace_runtime {
-        crate::vm::run_lambda(&mut TracingObserver::new(std::io::stderr()), result.lambda)
+        crate::vm::run_lambda(
+            Box::new(TracingObserver::new(std::io::stderr())),
+            result.lambda,
+        )
     } else {
-        crate::vm::run_lambda(&mut NoOpObserver::default(), result.lambda)
+        crate::vm::run_lambda(Box::new(NoOpObserver::default()), result.lambda)
     }
 }
