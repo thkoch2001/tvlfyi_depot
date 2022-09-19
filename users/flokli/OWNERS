@@ -1,3 +1,3 @@
-inherited: false
-owners:
-  - flokli
+set noparent
+
+flokli

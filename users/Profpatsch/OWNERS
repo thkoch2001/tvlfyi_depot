@@ -1,4 +1,4 @@
-inherited: false
-owners:
-  - Profpatsch
-  - sterni
+set noparent
+
+Profpatsch
+sterni
