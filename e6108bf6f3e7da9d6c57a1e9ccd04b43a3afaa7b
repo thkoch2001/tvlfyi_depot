@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b0026ee2_307dec1a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-09-19T10:30:44Z",
+      "side": 1,
+      "message": "Just run `depotfmt` if you have our `direnv` config enabled, otherwise you can also directly build `-A tools.depotfmt` and run that.",
+      "revId": "e6108bf6f3e7da9d6c57a1e9ccd04b43a3afaa7b",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
