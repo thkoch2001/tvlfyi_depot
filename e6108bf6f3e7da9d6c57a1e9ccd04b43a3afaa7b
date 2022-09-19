@@ -16,6 +16,24 @@
       "message": "Just run `depotfmt` if you have our `direnv` config enabled, otherwise you can also directly build `-A tools.depotfmt` and run that.",
       "revId": "e6108bf6f3e7da9d6c57a1e9ccd04b43a3afaa7b",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ef62b455_a59b35ee",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000064
+      },
+      "writtenOn": "2022-09-19T10:45:43Z",
+      "side": 1,
+      "message": "When I do, it only fixes formatting in https://cl.tvl.fyi/c/depot/+/6695, strangely, but that seemed to do the trick :)",
+      "parentUuid": "b0026ee2_307dec1a",
+      "revId": "e6108bf6f3e7da9d6c57a1e9ccd04b43a3afaa7b",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
