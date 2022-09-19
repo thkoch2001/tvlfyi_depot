@@ -31,6 +31,7 @@ import (
 	mf "github.com/google/nixery/manifest"
 	"github.com/google/nixery/storage"
 	log "github.com/sirupsen/logrus"
+	"github.com/im7mortal/kmutex"
 )
 
 // ManifestMediaType is the Content-Type used for the manifest itself. This
@@ -257,10 +258,11 @@ func main() {
 	}
 
 	state := builder.State{
-		Cache:   &cache,
-		Cfg:     cfg,
-		Pop:     pop,
-		Storage: s,
+		Cache:       &cache,
+		Cfg:         cfg,
+		Pop:         pop,
+		Storage:     s,
+		UploadMutex: kmutex.New(),
 	}
 
 	log.WithFields(log.Fields{
