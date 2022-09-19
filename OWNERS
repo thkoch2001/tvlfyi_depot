@@ -1,6 +1,6 @@
-inherited: false
-owners:
-  - tazjin
-  - lukegb
-  - grfn
-  - sterni
+set noparent
+
+tazjin
+lukegb
+grfn
+sterni
