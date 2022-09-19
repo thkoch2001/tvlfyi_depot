@@ -22,6 +22,30 @@
       },
       "revId": "f068e57ce5247f164457130744db5c168857ef7d",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "67156aae_654b3a20",
+        "filename": "tvix/eval/src/builtins/mod.rs",
+        "patchSetId": 3
+      },
+      "lineNbr": 94,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2022-09-19T15:21:54Z",
+      "side": 1,
+      "message": "They are, see cl/6662. That\u0027s just taking care of the outer level though.\n\nIt\u0027s a bit more implicit, but hopefully harder to forget (as long as you use the casting accessors).",
+      "parentUuid": "b4760f34_c02cad2f",
+      "range": {
+        "startLine": 93,
+        "startChar": 12,
+        "endLine": 94,
+        "endChar": 42
+      },
+      "revId": "f068e57ce5247f164457130744db5c168857ef7d",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
