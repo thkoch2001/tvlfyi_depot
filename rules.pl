@@ -3,8 +3,6 @@
 % checks:
 %
 % - All default Gerrit submit checks pass.
-% - If a codepath has owners, the change must either have a +2 from one
-%   of the owners or be proposed by one of them.
 % - No unresolved comments exist.
 % - The CI build has run successfully.
 % - The commit message conforms to our guidelines.
@@ -72,21 +70,6 @@ commit_message(Check) :-
 commit_message(Check) :-
     Check = label('Conformant-Commit-Message', need(_)).
 
-code_owners(Checks) :-
-    % Retrieve all `Code-Review: +2` approvers, as well as the
-    % change owner, and run the owners check against these.
-    findall(U, gerrit:commit_label(label('Code-Review', 2), U), Approvers),
-    applicable_owner(ChangeOwner),
-    gerrit_owners:add_owner_approval([ChangeOwner | Approvers], [], OwnerChecks),
-    ( OwnerChecks = [] ->
-      % gerrit_owners:add_owner_approval/3 only adds the label if there *isn't*
-      % code-review from owners, but it's nice for UI consistency if we also
-      % have an ok label if there *is* - so we check for no output from
-      % gerrit_owners:add_owner_approval/3 and add an ok(ChangeOwner) if so.
-      Checks = [label('Code-Review-from-owners', ok(ChangeOwner))]
-    ; Checks = OwnerChecks
-    ).
-
 % Require CI to pass, except for CLs to refs/meta/config.
 build_check(Check) :-
     gerrit:change_branch('refs/meta/config'),
@@ -127,11 +110,8 @@ submit_rule(S) :-
     % CONTRIBUTING.md
     commit_message(CommitCheck),
 
-    % Check owners approval.
-    code_owners(OwnerChecks),
-
     % Check whether autosubmit is allowed.
-    autosubmit(OwnerChecks, AllOtherChecks),
+    autosubmit([], AllOtherChecks),
 
     S =.. [submit,
            ReviewCheck,
