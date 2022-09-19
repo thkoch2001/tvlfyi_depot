@@ -16,6 +16,24 @@
       "message": "Same note here about formatting",
       "revId": "a97222d2ee5a23be520779472bd776ded2ee5828",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d32eaf2a_e425fef7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000064
+      },
+      "writtenOn": "2022-09-19T11:22:08Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8a544675_e049c452",
+      "revId": "a97222d2ee5a23be520779472bd776ded2ee5828",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
