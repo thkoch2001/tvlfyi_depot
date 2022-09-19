@@ -22,6 +22,30 @@
       },
       "revId": "d98605c27ad7f2ea512c5205ad68e92f9da9b1a5",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "90cfa086_2523cba2",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2022-09-19T09:51:43Z",
+      "side": 1,
+      "message": "nix-instantiate always outputs a trailing newline, whereas the exp file may be missing it. Not sure if diff(1) can be made to ignore that discrepancy.",
+      "parentUuid": "a279dc11_c5b11fda",
+      "range": {
+        "startLine": 9,
+        "startChar": 0,
+        "endLine": 9,
+        "endChar": 61
+      },
+      "revId": "d98605c27ad7f2ea512c5205ad68e92f9da9b1a5",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
