@@ -1,5 +1,2 @@
-# -*- mode: yaml; -*-
-inherited: true
-owners:
-  - eta
-  - grfn
+eta
+grfn
