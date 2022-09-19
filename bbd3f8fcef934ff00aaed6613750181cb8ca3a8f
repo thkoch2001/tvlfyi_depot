@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e0991ca3_b51802f2",
+        "filename": "ops/modules/monorepo-gerrit.nix",
+        "patchSetId": 1
+      },
+      "lineNbr": 116,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2022-09-19T09:47:02Z",
+      "side": 1,
+      "message": "How does this work exactly? If this sets CRFO in a way that\u0027s visible to `gerrit-queue`, CLs to owned dirs will be submitted automatically always if Autosubmit is set to true.\n\nThis would the case e.g. for `//tvix/eval` kind of frequently.",
+      "revId": "bbd3f8fcef934ff00aaed6613750181cb8ca3a8f",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
