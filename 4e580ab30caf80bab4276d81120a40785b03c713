@@ -39,6 +39,23 @@
       "message": "Excellent as always",
       "revId": "4e580ab30caf80bab4276d81120a40785b03c713",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5de89932_98ab1296",
+        "filename": "third_party/gerrit_plugins/builder.nix",
+        "patchSetId": 2
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2022-09-19T09:44:27Z",
+      "side": 1,
+      "message": "has the underlying thing a custom patchPhase or why can\u0027t we append to the normal patches list?",
+      "revId": "4e580ab30caf80bab4276d81120a40785b03c713",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
