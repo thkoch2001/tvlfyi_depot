@@ -26,6 +26,30 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "1f7675ba_5d97e45f",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2022-09-19T10:53:07Z",
+      "side": 1,
+      "message": "In _theory_ yes, but in practice I just pretend that usernames are email addresses rather than fixing their rusted-in-place abstraction. To upstream it properly I think I\u0027d need to put a bit more work into it and replace it with a tagged-union AutoOneOf thing.",
+      "parentUuid": "1f2e061a_fe537edb",
+      "range": {
+        "startLine": 30,
+        "startChar": 0,
+        "endLine": 30,
+        "endChar": 40
+      },
+      "revId": "4e580ab30caf80bab4276d81120a40785b03c713",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "01d543d4_01a3acad",
         "filename": "/PATCHSET_LEVEL",
         "patchSetId": 2
@@ -54,6 +78,24 @@
       "writtenOn": "2022-09-19T09:44:27Z",
       "side": 1,
       "message": "has the underlying thing a custom patchPhase or why can\u0027t we append to the normal patches list?",
+      "revId": "4e580ab30caf80bab4276d81120a40785b03c713",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cc20221c_0d9bc38e",
+        "filename": "third_party/gerrit_plugins/builder.nix",
+        "patchSetId": 2
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2022-09-19T10:53:07Z",
+      "side": 1,
+      "message": "We can\u0027t append to the normal patches list because the patches here are expected to be in the context of the plugin directory rather than the source root and I couldn\u0027t be bothered to figure out how to do this better at the time.",
+      "parentUuid": "5de89932_98ab1296",
       "revId": "4e580ab30caf80bab4276d81120a40785b03c713",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
