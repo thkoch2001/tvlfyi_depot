@@ -28,7 +28,7 @@ in
     ];
 
     plugins = with depot.third_party.gerrit_plugins; [
-      owners
+      code-owners
       oauth
       depot.ops.gerrit-tvl
     ];
@@ -105,6 +105,15 @@ in
         realm = "TVL";
         client-id = "gerrit";
         # client-secret is set in /var/lib/gerrit/etc/secure.config.
+      };
+
+      plugin.code-owners = {
+        # A Code-Review +2 vote is required from a code owner.
+        requiredApproval = "Code-Review+2";
+        # The OWNERS check can be overriden using an Owners-Override vote.
+        overrideApproval = "Owners-Override+1";
+        # People implicitly approve their own changes automatically.
+        enableImplicitApprovals = "TRUE";
       };
 
       # Allow users to add additional email addresses to their accounts.
