@@ -34,6 +34,24 @@
       "parentUuid": "e0991ca3_b51802f2",
       "revId": "bbd3f8fcef934ff00aaed6613750181cb8ca3a8f",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "25a54387_edd8982b",
+        "filename": "ops/modules/monorepo-gerrit.nix",
+        "patchSetId": 1
+      },
+      "lineNbr": 116,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2022-09-19T11:15:36Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "039f6f7b_aa8a85d1",
+      "revId": "bbd3f8fcef934ff00aaed6613750181cb8ca3a8f",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
