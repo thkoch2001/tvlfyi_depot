@@ -16,6 +16,24 @@
       "message": "I\u0027m not sure these comments are that necessary, tbh - I think we\u0027ll get pretty used to this function over time",
       "revId": "f6f83e25b862c396ec232c2d3acaa72cbdd62bf9",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1561d1c4_916a03fe",
+        "filename": "tvix/eval/src/builtins/mod.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 185,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2022-09-19T15:23:07Z",
+      "side": 1,
+      "message": "After cl/6662, we can often avoid forcing explicitly, so I added this here to clear it up. Hopefully there\u0027s a neater solution down the line.",
+      "parentUuid": "8e2c6239_393d3a39",
+      "revId": "f6f83e25b862c396ec232c2d3acaa72cbdd62bf9",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
