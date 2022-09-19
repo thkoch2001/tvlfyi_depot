@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7eb8a830_bc9925c2",
+        "filename": "tvix/eval/src/value/builtin.rs",
+        "patchSetId": 4
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-09-19T09:22:36Z",
+      "side": 1,
+      "message": "I think `strict_args` would be a better name (it\u0027s a description of something, not a command).\n\nI originally called this \"strictness map\", but that sounds a bit silly, I think `strict_args` is the perfect balance.",
+      "range": {
+        "startLine": 42,
+        "startChar": 4,
+        "endLine": 42,
+        "endChar": 14
+      },
+      "revId": "658e2456f9f0b495221882a0e1be4420e1340b02",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
