@@ -16,6 +16,24 @@
       "message": "Is this testable?",
       "revId": "8633ef2d7c2e535752bebeb678ea4dcae259b066",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "48349839_35b3df70",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2022-09-19T15:19:24Z",
+      "side": 1,
+      "message": "Yeah, e.g. cl/6698 depends on this, but I guess we can make a clearer test for this…",
+      "parentUuid": "acc8d81f_6e701e6f",
+      "revId": "8633ef2d7c2e535752bebeb678ea4dcae259b066",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
