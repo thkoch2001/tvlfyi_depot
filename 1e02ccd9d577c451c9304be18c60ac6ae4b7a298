@@ -22,6 +22,30 @@
       },
       "revId": "1e02ccd9d577c451c9304be18c60ac6ae4b7a298",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "67a52b22_f1f5b369",
+        "filename": "tvix/eval/src/vm.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 189,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-09-20T23:31:58Z",
+      "side": 1,
+      "message": "What do you mean by it working like plain call?\n\nA plain call enters a new call frame in the VM, a builtin call, well, calls some Rust code - they\u0027re structurally not the same.",
+      "parentUuid": "971ee3b5_723fcf51",
+      "range": {
+        "startLine": 189,
+        "startChar": 21,
+        "endLine": 189,
+        "endChar": 33
+      },
+      "revId": "1e02ccd9d577c451c9304be18c60ac6ae4b7a298",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
