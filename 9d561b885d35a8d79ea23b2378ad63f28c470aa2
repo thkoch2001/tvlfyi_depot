@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a282786a_e632b886",
+        "filename": "tvix/eval/src/builtins/mod.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 150,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2022-09-20T21:05:46Z",
+      "side": 1,
+      "message": "This is not enough, i.e. consider `builtins.map (builtins.add 1) [ 1 2 3 ]`. `Value::coerce_to_string` has the logic for this, probably can move that into a helper thingy.",
+      "revId": "9d561b885d35a8d79ea23b2378ad63f28c470aa2",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b01e4390_058ab135",
+        "filename": "tvix/eval/src/builtins/mod.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 160,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2022-09-20T21:05:46Z",
+      "side": 1,
+      "message": "Is that new? I think a bunch of stuff in builtins still uses construct which we should probably get rid of.",
+      "range": {
+        "startLine": 160,
+        "startChar": 49,
+        "endLine": 160,
+        "endChar": 53
+      },
+      "revId": "9d561b885d35a8d79ea23b2378ad63f28c470aa2",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
