@@ -16,6 +16,24 @@
       "message": "is there any actual utility in differentiating these now?",
       "revId": "d12123cab4aa0a026bd52d88a76871a8c511af94",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "265990ba_f3d13c26",
+        "filename": "tvix/eval/src/builtins/versions.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2022-09-20T23:36:47Z",
+      "side": 1,
+      "message": "Yes, this is used in the comparison code I\u0027m working on. There a number always wins against a word of any kind, so this can be decided without parsing any numbers.\n\nBut it\u0027s a good suggestion to think about dropping this distinction in the enum, since we could drop it and distinguish based on the result of `parse()` plus avoid unwrapping. I\u0027ll think about it.",
+      "parentUuid": "22582717_3ffe1cec",
+      "revId": "d12123cab4aa0a026bd52d88a76871a8c511af94",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
