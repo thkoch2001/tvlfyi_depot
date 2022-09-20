@@ -1,6 +1,6 @@
 # Configure TVL Keycloak instance.
 #
-# TODO(tazjin): Configure GitHub/GitLab IDP
+# TODO(tazjin): Configure GitLab IDP
 
 terraform {
   required_providers {
@@ -31,4 +31,15 @@ resource "keycloak_realm" "tvl" {
   enabled                     = true
   display_name                = "The Virus Lounge"
   default_signature_algorithm = "RS256"
+
+  smtp_server {
+    from              = "tvlbot@tazj.in"
+    from_display_name = "The Virus Lounge"
+    host              = "127.0.0.1"
+    port              = "25"
+    reply_to          = "depot@tazj.in"
+    ssl               = false
+    starttls          = false
+  }
+
 }
