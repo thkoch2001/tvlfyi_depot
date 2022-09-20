@@ -44,6 +44,9 @@ pub enum ErrorKind {
         rhs: &'static str,
     },
 
+    /// Encountered invalid Unicode while attempting to convert to a string.
+    InvalidUnicode,
+
     /// Resolving a user-supplied path literal failed in some way.
     PathResolution(String),
 
@@ -160,6 +163,10 @@ impl Error {
                 expected, actual
             ),
 
+            ErrorKind::InvalidUnicode => {
+                format!("cannot encode value as a string because it contains invalid Unicode")
+            }
+
             ErrorKind::Incomparable { lhs, rhs } => {
                 format!("can not compare a {} with a {}", lhs, rhs)
             }
@@ -263,6 +270,7 @@ to a missing value in the attribute set(s) included via `with`."#,
             ErrorKind::ParseIntError(_) => "E021",
             ErrorKind::NegativeLength { .. } => "E022",
             ErrorKind::TailEmptyList { .. } => "E023",
+            ErrorKind::InvalidUnicode => "E024",
             ErrorKind::NotImplemented(_) => "E999",
         }
     }

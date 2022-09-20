@@ -78,6 +78,15 @@ fn pure_builtins() -> Vec<Builtin> {
 
             Ok(Value::List(NixList::construct(output.len(), output)))
         }),
+        // coerce_to_string forces for us
+        Builtin::new("baseNameOf", &[false], |args, vm| {
+            let path = args[0].coerce_to_string(CoercionKind::Weak, vm)?;
+
+            match path.as_str().rsplit("/").next() {
+                Some(result) => Ok(Value::String(result.into())),
+                None => Ok(Value::String(path.into())),
+            }
+        }),
         Builtin::new("bitAnd", &[true, true], |args, _| {
             Ok(Value::Integer(args[0].as_int()? & args[1].as_int()?))
         }),
