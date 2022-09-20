@@ -13,7 +13,7 @@
 //! by the code in this module, `debug_assert!` has been used to catch
 //! mistakes early during development.
 
-mod attrs;
+mod bindings;
 mod scope;
 mod spans;
 
@@ -551,223 +551,6 @@ impl Compiler<'_> {
         self.patch_jump(else_idx); // patch jump *over* else body
     }
 
-    fn compile_recursive_scope<N>(&mut self, slot: LocalIdx, rec_attrs: bool, node: &N)
-    where
-        N: ToSpan + ast::HasEntry,
-    {
-        self.scope_mut().begin_scope();
-
-        // First pass to find all plain inherits (if they are not useless).
-        // Since they always resolve to a higher scope, we can just compile and
-        // declare them immediately. This needs to happen *before* we declare
-        // any other locals in the scope or the stack order gets messed up.
-        // While we are looping through the inherits, already note all inherit
-        // (from) expressions, that may very well resolve recursively and need
-        // to be compiled like normal let in bindings.
-        let mut inherit_froms: Vec<(ast::Expr, ast::Ident)> = vec![];
-        for inherit in node.inherits() {
-            match inherit.from() {
-                // Within a `let` binding, inheriting from the outer
-                // scope is a no-op *if* the identifier can be
-                // statically resolved.
-                None if !rec_attrs && !self.scope().has_with() => {
-                    self.emit_warning(&inherit, WarningKind::UselessInherit);
-                    continue;
-                }
-
-                None => {
-                    for ident in inherit.idents() {
-                        // If the identifier resolves statically in a
-                        // `let`, it has precedence over dynamic
-                        // bindings, and the inherit is useless.
-                        if !rec_attrs
-                            && matches!(
-                                self.scope_mut()
-                                    .resolve_local(ident.ident_token().unwrap().text()),
-                                LocalPosition::Known(_)
-                            )
-                        {
-                            self.emit_warning(&ident, WarningKind::UselessInherit);
-                            continue;
-                        }
-
-                        if rec_attrs {
-                            self.emit_literal_ident(&ident);
-                            let span = self.span_for(&ident);
-                            self.scope_mut().declare_phantom(span, true);
-                        }
-
-                        self.compile_ident(slot, ident.clone());
-                        let idx = self.declare_local(&ident, ident.ident_token().unwrap().text());
-                        self.scope_mut().mark_initialised(idx);
-                    }
-                }
-
-                Some(from) => {
-                    for ident in inherit.idents() {
-                        inherit_froms.push((from.expr().unwrap(), ident));
-                    }
-                }
-            }
-        }
-
-        // Data structures to track the bindings observed in the
-        // second path, and forward the information needed to compile
-        // their value.
-        enum BindingKind {
-            InheritFrom {
-                namespace: ast::Expr,
-                ident: ast::Ident,
-            },
-
-            Plain {
-                expr: ast::Expr,
-            },
-        }
-
-        struct KeySlot {
-            slot: LocalIdx,
-            name: SmolStr,
-        }
-
-        struct TrackedBinding {
-            key_slot: Option<KeySlot>,
-            value_slot: LocalIdx,
-            kind: BindingKind,
-        }
-
-        // Vector to track these observed bindings.
-        let mut bindings: Vec<TrackedBinding> = vec![];
-
-        // Begin second pass to ensure that all remaining identifiers
-        // (that may resolve recursively) are known.
-
-        // Begin with the inherit (from)s since they all become a thunk anyway
-        for (from, ident) in inherit_froms {
-            let key_slot = if rec_attrs {
-                let span = self.span_for(&ident);
-                Some(KeySlot {
-                    slot: self.scope_mut().declare_phantom(span, false),
-                    name: SmolStr::new(ident.ident_token().unwrap().text()),
-                })
-            } else {
-                None
-            };
-
-            let value_slot = self.declare_local(&ident, ident.ident_token().unwrap().text());
-
-            bindings.push(TrackedBinding {
-                key_slot,
-                value_slot,
-                kind: BindingKind::InheritFrom {
-                    ident,
-                    namespace: from,
-                },
-            });
-        }
-
-        // Declare all regular bindings
-        for entry in node.attrpath_values() {
-            let mut path = match self.normalise_ident_path(entry.attrpath().unwrap().attrs()) {
-                Ok(p) => p,
-                Err(err) => {
-                    self.errors.push(err);
-                    continue;
-                }
-            };
-
-            if path.len() != 1 {
-                self.emit_error(
-                    &entry,
-                    ErrorKind::NotImplemented("nested bindings in recursive scope :("),
-                );
-                continue;
-            }
-
-            let key_slot = if rec_attrs {
-                let span = self.span_for(&entry.attrpath().unwrap());
-                Some(KeySlot {
-                    slot: self.scope_mut().declare_phantom(span, false),
-                    name: SmolStr::new(&path[0]),
-                })
-            } else {
-                None
-            };
-
-            let value_slot = self.declare_local(&entry.attrpath().unwrap(), path.pop().unwrap());
-
-            bindings.push(TrackedBinding {
-                key_slot,
-                value_slot,
-                kind: BindingKind::Plain {
-                    expr: entry.value().unwrap(),
-                },
-            });
-        }
-
-        // Third pass to place the values in the correct stack slots.
-        let mut value_indices: Vec<LocalIdx> = vec![];
-        for binding in bindings.into_iter() {
-            value_indices.push(binding.value_slot);
-
-            if let Some(key_slot) = binding.key_slot {
-                // TODO: emit_constant should be able to take a span directly
-                let span = self.scope()[key_slot.slot].span;
-                let idx = self
-                    .chunk()
-                    .push_constant(Value::String(key_slot.name.into()));
-
-                self.chunk().push_op(OpCode::OpConstant(idx), span);
-                self.scope_mut().mark_initialised(key_slot.slot);
-            }
-
-            match binding.kind {
-                // This entry is an inherit (from) expr. The value is
-                // placed on the stack by selecting an attribute.
-                BindingKind::InheritFrom { namespace, ident } => {
-                    // Create a thunk wrapping value (which may be one as well) to
-                    // avoid forcing the from expr too early.
-                    self.thunk(binding.value_slot, &namespace, move |c, n, s| {
-                        c.compile(s, n.clone());
-                        c.emit_force(n);
-
-                        c.emit_literal_ident(&ident);
-                        c.push_op(OpCode::OpAttrsSelect, &ident);
-                    })
-                }
-
-                // Binding is "just" a plain expression that needs to
-                // be compiled.
-                BindingKind::Plain { expr } => self.compile(binding.value_slot, expr),
-            }
-
-            // Any code after this point will observe the value in the
-            // right stack slot, so mark it as initialised.
-            self.scope_mut().mark_initialised(binding.value_slot);
-        }
-
-        // Fourth pass to emit finaliser instructions if necessary.
-        for idx in value_indices {
-            if self.scope()[idx].needs_finaliser {
-                let stack_idx = self.scope().stack_index(idx);
-                self.push_op(OpCode::OpFinalise(stack_idx), node);
-            }
-        }
-    }
-
-    /// Compile a standard `let ...; in ...` expression.
-    ///
-    /// Unless in a non-standard scope, the encountered values are
-    /// simply pushed on the stack and their indices noted in the
-    /// entries vector.
-    fn compile_let_in(&mut self, slot: LocalIdx, node: ast::LetIn) {
-        self.compile_recursive_scope(slot, false, &node);
-
-        // Deal with the body, then clean up the locals afterwards.
-        self.compile(slot, node.body().unwrap());
-        self.cleanup_scope(&node);
-    }
-
     fn compile_ident(&mut self, slot: LocalIdx, node: ast::Ident) {
         let ident = node.ident_token().unwrap();
 
@@ -1026,13 +809,108 @@ impl Compiler<'_> {
         self.push_op(OpCode::OpCall, &node);
     }
 
-    fn compile_legacy_let(&mut self, slot: LocalIdx, node: ast::LegacyLet) {
-        self.emit_warning(&node, WarningKind::DeprecatedLegacyLet);
-        self.scope_mut().begin_scope();
-        self.compile_recursive_scope(slot, true, &node);
-        self.push_op(OpCode::OpAttrs(Count(node.entries().count())), &node);
-        self.emit_constant(Value::String(SmolStr::new_inline("body").into()), &node);
-        self.push_op(OpCode::OpAttrsSelect, &node);
+    pub(super) fn compile_has_attr(&mut self, slot: LocalIdx, node: ast::HasAttr) {
+        // Put the attribute set on the stack.
+        self.compile(slot, node.expr().unwrap());
+        self.emit_force(&node);
+
+        // Push all path fragments with an operation for fetching the
+        // next nested element, for all fragments except the last one.
+        for (count, fragment) in node.attrpath().unwrap().attrs().enumerate() {
+            if count > 0 {
+                self.push_op(OpCode::OpAttrsTrySelect, &fragment);
+                self.emit_force(&fragment);
+            }
+
+            self.compile_attr(slot, fragment);
+        }
+
+        // After the last fragment, emit the actual instruction that
+        // leaves a boolean on the stack.
+        self.push_op(OpCode::OpHasAttr, &node);
+    }
+
+    pub(super) fn compile_select(&mut self, slot: LocalIdx, node: ast::Select) {
+        let set = node.expr().unwrap();
+        let path = node.attrpath().unwrap();
+
+        if node.or_token().is_some() {
+            self.compile_select_or(slot, set, path, node.default_expr().unwrap());
+            return;
+        }
+
+        // Push the set onto the stack
+        self.compile(slot, set.clone());
+
+        // Compile each key fragment and emit access instructions.
+        //
+        // TODO: multi-select instruction to avoid re-pushing attrs on
+        // nested selects.
+        for fragment in path.attrs() {
+            // Force the current set value.
+            self.emit_force(&fragment);
+
+            self.compile_attr(slot, fragment.clone());
+            self.push_op(OpCode::OpAttrsSelect, &fragment);
+        }
+    }
+
+    /// Compile an `or` expression into a chunk of conditional jumps.
+    ///
+    /// If at any point during attribute set traversal a key is
+    /// missing, the `OpAttrOrNotFound` instruction will leave a
+    /// special sentinel value on the stack.
+    ///
+    /// After each access, a conditional jump evaluates the top of the
+    /// stack and short-circuits to the default value if it sees the
+    /// sentinel.
+    ///
+    /// Code like `{ a.b = 1; }.a.c or 42` yields this bytecode and
+    /// runtime stack:
+    ///
+    /// ```notrust
+    ///            Bytecode                     Runtime stack
+    ///  ┌────────────────────────────┐   ┌─────────────────────────┐
+    ///  │    ...                     │   │ ...                     │
+    ///  │ 5  OP_ATTRS(1)             │ → │ 5  [ { a.b = 1; }     ] │
+    ///  │ 6  OP_CONSTANT("a")        │ → │ 6  [ { a.b = 1; } "a" ] │
+    ///  │ 7  OP_ATTR_OR_NOT_FOUND    │ → │ 7  [ { b = 1; }       ] │
+    ///  │ 8  JUMP_IF_NOT_FOUND(13)   │ → │ 8  [ { b = 1; }       ] │
+    ///  │ 9  OP_CONSTANT("C")        │ → │ 9  [ { b = 1; } "c"   ] │
+    ///  │ 10 OP_ATTR_OR_NOT_FOUND    │ → │ 10 [ NOT_FOUND        ] │
+    ///  │ 11 JUMP_IF_NOT_FOUND(13)   │ → │ 11 [                  ] │
+    ///  │ 12 JUMP(14)                │   │ ..     jumped over      │
+    ///  │ 13 CONSTANT(42)            │ → │ 12 [ 42 ]               │
+    ///  │ 14 ...                     │   │ ..   ....               │
+    ///  └────────────────────────────┘   └─────────────────────────┘
+    /// ```
+    fn compile_select_or(
+        &mut self,
+        slot: LocalIdx,
+        set: ast::Expr,
+        path: ast::Attrpath,
+        default: ast::Expr,
+    ) {
+        self.compile(slot, set.clone());
+        let mut jumps = vec![];
+
+        for fragment in path.attrs() {
+            self.emit_force(&fragment);
+            self.compile_attr(slot, fragment.clone());
+            self.push_op(OpCode::OpAttrsTrySelect, &fragment);
+            jumps.push(self.push_op(OpCode::OpJumpIfNotFound(JumpOffset(0)), &fragment));
+        }
+
+        let final_jump = self.push_op(OpCode::OpJump(JumpOffset(0)), &path);
+
+        for jump in jumps {
+            self.patch_jump(jump);
+        }
+
+        // Compile the default value expression and patch the final
+        // jump to point *beyond* it.
+        self.compile(slot, default);
+        self.patch_jump(final_jump);
     }
 
     /// Compile an expression into a runtime thunk which should be
