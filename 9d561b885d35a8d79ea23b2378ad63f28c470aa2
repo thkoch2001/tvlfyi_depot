@@ -39,6 +39,30 @@
       },
       "revId": "9d561b885d35a8d79ea23b2378ad63f28c470aa2",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f51a0cbe_70762cbc",
+        "filename": "tvix/eval/src/builtins/mod.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 160,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-09-20T21:07:15Z",
+      "side": 1,
+      "message": "I\u0027m not sure when it showed up actually",
+      "parentUuid": "b01e4390_058ab135",
+      "range": {
+        "startLine": 160,
+        "startChar": 49,
+        "endLine": 160,
+        "endChar": 53
+      },
+      "revId": "9d561b885d35a8d79ea23b2378ad63f28c470aa2",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
