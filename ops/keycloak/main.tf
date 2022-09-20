@@ -1,6 +1,6 @@
 # Configure TVL Keycloak instance.
 #
-# TODO(tazjin): Configure GitHub/GitLab IDP
+# TODO(tazjin): Configure GitLab IDP
 
 terraform {
   required_providers {
