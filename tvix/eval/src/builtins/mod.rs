@@ -27,19 +27,23 @@ pub mod versions;
 /// a Nix program directly (i.e. the trick `path: /. + path` to convert from
 /// a string to a path wouldn't hit this code), so the target file
 /// doesn't need to be realised or imported into the Nix store.
-pub fn coerce_value_to_path(v: &Value, vm: &mut VM) -> Result<PathBuf, ErrorKind> {
+pub fn coerce_value_to_path(
+    v: &Value,
+    vm: &mut VM,
+    assert_absolute: bool,
+) -> Result<PathBuf, ErrorKind> {
     let value = v.force(vm)?;
     match &*value {
-        Value::Thunk(t) => coerce_value_to_path(&t.value(), vm),
+        Value::Thunk(t) => coerce_value_to_path(&t.value(), vm, assert_absolute),
         Value::Path(p) => Ok(p.clone()),
         _ => value
             .coerce_to_string(CoercionKind::Weak, vm)
             .map(|s| PathBuf::from(s.as_str()))
             .and_then(|path| {
-                if path.is_absolute() {
-                    Ok(path)
-                } else {
+                if assert_absolute && !path.is_absolute() {
                     Err(ErrorKind::NotAnAbsolutePath(path))
+                } else {
+                    Ok(path)
                 }
             }),
     }
@@ -77,6 +81,20 @@ fn pure_builtins() -> Vec<Builtin> {
             }
 
             Ok(Value::List(NixList::construct(output.len(), output)))
+        }),
+        Builtin::new("baseNameOf", &[true], |args, vm| {
+            let path = coerce_value_to_path(&args[0], vm, false)?;
+
+            // This builtin needs to accept both paths and strings, but it
+            // should do the basename calculation on a string to allow for
+            // inputs like: `builtins.baseNameOf "./rel/dir/.."`
+            match path.to_str() {
+                Some(x) => match x.rsplit("/").next() {
+                    Some(result) => Ok(Value::String(result.into())),
+                    None => Ok(Value::String(x.into())),
+                },
+                None => Err(ErrorKind::InvalidUnicode),
+            }
         }),
         Builtin::new("bitAnd", &[true, true], |args, _| {
             Ok(Value::Integer(args[0].as_int()? & args[1].as_int()?))
