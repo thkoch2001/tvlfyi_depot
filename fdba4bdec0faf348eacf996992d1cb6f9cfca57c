@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f1020dfc_a02749ff",
+        "filename": "tvix/eval/src/compiler/mod.rs",
+        "patchSetId": 4
+      },
+      "lineNbr": 119,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-09-20T10:44:58Z",
+      "side": 1,
+      "message": "I\u0027m thinking we should probably *always* pass the location in, and deal with the defaulting outside (the REPL should be the only thing ever using the current_dir()), but we can fix that separately.",
+      "range": {
+        "startLine": 109,
+        "startChar": 0,
+        "endLine": 119,
+        "endChar": 0
+      },
+      "revId": "fdba4bdec0faf348eacf996992d1cb6f9cfca57c",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
