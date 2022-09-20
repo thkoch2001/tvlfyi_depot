@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "348edf7f_d7817e91",
+        "filename": "tvix/eval/src/builtins/mod.rs",
+        "patchSetId": 3
+      },
+      "lineNbr": 157,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-09-20T10:01:22Z",
+      "side": 1,
+      "message": "I think we might not need this comment every single time ^^",
+      "range": {
+        "startLine": 157,
+        "startChar": 0,
+        "endLine": 157,
+        "endChar": 69
+      },
+      "revId": "45df0f9d9ec5fdcb71ddb3fd5a3042afbb9f84e6",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
