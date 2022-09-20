@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "971ee3b5_723fcf51",
+        "filename": "tvix/eval/src/vm.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 189,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2022-09-20T23:29:56Z",
+      "side": 1,
+      "message": "why don\u0027t we have this work like plain call btw? Is there an advantage?",
+      "range": {
+        "startLine": 189,
+        "startChar": 21,
+        "endLine": 189,
+        "endChar": 33
+      },
+      "revId": "1e02ccd9d577c451c9304be18c60ac6ae4b7a298",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
