@@ -227,8 +227,10 @@ fn pure_builtins() -> Vec<Builtin> {
                 .collect::<Vec<Value>>();
             Ok(Value::List(NixList::construct(parts.len(), parts)))
         }),
-        Builtin::new("sub", &[false, false], |args, vm| {
-            arithmetic_op!(&*args[0].force(vm)?, &*args[1].force(vm)?, -)
+        Builtin::new("stringLength", &[false], |args, vm| {
+            // also forces the value
+            let s = args[0].coerce_to_string(CoercionKind::Weak, vm)?;
+            Ok(Value::Integer(s.as_str().len() as i64))
         }),
         Builtin::new(
             "sub",
