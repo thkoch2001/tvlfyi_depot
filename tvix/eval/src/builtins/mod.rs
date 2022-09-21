@@ -50,10 +50,8 @@ pub fn coerce_value_to_path(v: &Value, vm: &mut VM) -> Result<PathBuf, ErrorKind
 /// WASM).
 fn pure_builtins() -> Vec<Builtin> {
     vec![
-        Builtin::new("add", &[true, true], |mut args, _| {
-            let b = args.pop().unwrap();
-            let a = args.pop().unwrap();
-            arithmetic_op!(a, b, +)
+        Builtin::new("add", &[false, false], |args, vm| {
+            arithmetic_op!(&*args[0].force(vm)?, &*args[1].force(vm)?, +)
         }),
         Builtin::new("abort", &[true], |args, _| {
             return Err(ErrorKind::Abort(args[0].to_str()?.to_string()));
@@ -113,10 +111,8 @@ fn pure_builtins() -> Vec<Builtin> {
                 std::cmp::Ordering::Greater => Ok(Value::Integer(1)),
             }
         }),
-        Builtin::new("div", &[true, true], |mut args, _| {
-            let b = args.pop().unwrap();
-            let a = args.pop().unwrap();
-            arithmetic_op!(a, b, /)
+        Builtin::new("div", &[false, false], |args, vm| {
+            arithmetic_op!(&*args[0].force(vm)?, &*args[1].force(vm)?, /)
         }),
         Builtin::new("elemAt", &[true, true], |args, _| {
             let xs = args[0].to_list()?;
@@ -208,10 +204,8 @@ fn pure_builtins() -> Vec<Builtin> {
             let value = args[0].force(vm)?;
             Ok(Value::Bool(matches!(*value, Value::String(_))))
         }),
-        Builtin::new("mul", &[true, true], |mut args, _| {
-            let b = args.pop().unwrap();
-            let a = args.pop().unwrap();
-            arithmetic_op!(a, b, *)
+        Builtin::new("mul", &[false, false], |args, vm| {
+            arithmetic_op!(&*args[0].force(vm)?, &*args[1].force(vm)?, *)
         }),
         Builtin::new("splitVersion", &[true], |args, _| {
             let s = args[0].to_str()?;
@@ -227,10 +221,13 @@ fn pure_builtins() -> Vec<Builtin> {
                 .collect::<Vec<Value>>();
             Ok(Value::List(NixList::construct(parts.len(), parts)))
         }),
-        Builtin::new("sub", &[true, true], |mut args, _| {
-            let b = args.pop().unwrap();
-            let a = args.pop().unwrap();
-            arithmetic_op!(a, b, -)
+        Builtin::new("stringLength", &[false], |args, vm| {
+            // also forces the value
+            let s = args[0].coerce_to_string(CoercionKind::Weak, vm)?;
+            Ok(Value::Integer(s.as_str().len() as i64))
+        }),
+        Builtin::new("sub", &[false, false], |args, vm| {
+            arithmetic_op!(&*args[0].force(vm)?, &*args[1].force(vm)?, -)
         }),
         Builtin::new("substring", &[true, true, true], |args, _| {
             let beg = args[0].as_int()?;
