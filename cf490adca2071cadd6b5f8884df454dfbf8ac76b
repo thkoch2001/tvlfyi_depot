@@ -34,6 +34,24 @@
       "parentUuid": "ed54dfb2_a240c335",
       "revId": "cf490adca2071cadd6b5f8884df454dfbf8ac76b",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b694c3c1_f735b7f0",
+        "filename": "tvix/eval/src/compiler/mod.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 631,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2022-09-22T23:16:13Z",
+      "side": 1,
+      "message": "Hm, okay that also checks out (it wasn\u0027t quite apparent to me on the first look). I think, though, it would be more sensible to pick either the local declaration or the value compilation as the place to count, since we don\u0027t always create a binding for every AST note (i.e. useless inherits).\n\nAll in all this code is probably going to change enough so that there\u0027s no use growing any gray hairs over this.",
+      "parentUuid": "bdeb29e4_52af53ba",
+      "revId": "cf490adca2071cadd6b5f8884df454dfbf8ac76b",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
