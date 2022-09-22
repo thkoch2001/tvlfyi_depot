@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2cdc787d_4624acd1",
+        "filename": "tvix/eval/src/builtins/mod.rs",
+        "patchSetId": 6
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-09-22T00:57:59Z",
+      "side": 1,
+      "message": "should probably move the pure ones out, too, so that this file is only for the machinery. can do that later tho",
+      "range": {
+        "startLine": 24,
+        "startChar": 0,
+        "endLine": 24,
+        "endChar": 11
+      },
+      "revId": "802465fef8f7a4f1de4588a361a8138d7736aa73",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
