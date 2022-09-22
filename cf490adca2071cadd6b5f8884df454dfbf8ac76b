@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ed54dfb2_a240c335",
+        "filename": "tvix/eval/src/compiler/mod.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 631,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2022-09-22T22:44:01Z",
+      "side": 1,
+      "message": "What about moving the counters for inherit (form) and regular binding both into the bindings loop which is shared by both. Then we only have to count up in two places (for plain inherits and when we compile the other bindings\u0027 values).",
+      "revId": "cf490adca2071cadd6b5f8884df454dfbf8ac76b",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
