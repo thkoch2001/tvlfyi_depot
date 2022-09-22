@@ -41,6 +41,30 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "bddfd2f3_3835d704",
+        "filename": "tvix/eval/src/compiler/attrs.rs",
+        "patchSetId": 3
+      },
+      "lineNbr": 70,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-09-22T23:04:28Z",
+      "side": 1,
+      "message": "It\u0027s already an owned String here, so I just wanted to avoid this for now because it wasn\u0027t necessary, but I wanna do a pass to make all runtime identifier-like things SmolStr. Will open an issue for that.",
+      "parentUuid": "42262cc9_76d04997",
+      "range": {
+        "startLine": 70,
+        "startChar": 57,
+        "endLine": 70,
+        "endChar": 61
+      },
+      "revId": "a4e0d34f5eb7e928f799fdda109c233f717394f7",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "e7e9adf2_6f1329e0",
@@ -54,6 +78,24 @@
       "writtenOn": "2022-09-22T23:00:30Z",
       "side": 1,
       "message": "Can\u0027t we avoid creating this SmolStr which is also (duplicated) in the wrapping TrackedBinding struct?",
+      "revId": "a4e0d34f5eb7e928f799fdda109c233f717394f7",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1fec1294_69d72013",
+        "filename": "tvix/eval/src/compiler/mod.rs",
+        "patchSetId": 3
+      },
+      "lineNbr": 671,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-09-22T23:04:28Z",
+      "side": 1,
+      "message": "We can put it in a local and clone it in the previous one, but I don\u0027t think that that\u0027s actually faster (they\u0027ll both still end up taking the same amount of space fwiw).",
+      "parentUuid": "e7e9adf2_6f1329e0",
       "revId": "a4e0d34f5eb7e928f799fdda109c233f717394f7",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
