@@ -69,6 +69,24 @@
       "parentUuid": "7f777aef_3c05a8a6",
       "revId": "d2b6a5a7bf9aa32cdfd02a65776abfc526d23482",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e9903914_df211c7e",
+        "filename": "tvix/eval/src/tests/tvix_tests/eval-okay-builtins-baseNameOf.nix",
+        "patchSetId": 3
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2022-09-22T17:52:42Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "41077262_e8ebf0a2",
+      "revId": "d2b6a5a7bf9aa32cdfd02a65776abfc526d23482",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
