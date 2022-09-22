@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f71573a0_e6b0535e",
+        "filename": "tvix/eval/src/errors.rs",
+        "patchSetId": 3
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2022-09-22T17:37:11Z",
+      "side": 1,
+      "message": "We can remove this now.",
+      "revId": "d2b6a5a7bf9aa32cdfd02a65776abfc526d23482",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7f777aef_3c05a8a6",
+        "filename": "tvix/eval/src/tests/tvix_tests/eval-okay-builtins-baseNameOf.nix",
+        "patchSetId": 3
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2022-09-22T17:37:11Z",
+      "side": 1,
+      "message": "Seems like you forgot to update the result for this.",
+      "revId": "d2b6a5a7bf9aa32cdfd02a65776abfc526d23482",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
