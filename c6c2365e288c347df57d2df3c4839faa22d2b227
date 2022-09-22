@@ -16,6 +16,24 @@
       "message": "String comparison also works for `builtins.lessThan`!",
       "revId": "c6c2365e288c347df57d2df3c4839faa22d2b227",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "946a08b9_72a49c50",
+        "filename": "tvix/eval/src/vm.rs",
+        "patchSetId": 7
+      },
+      "lineNbr": 101,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-09-22T17:23:20Z",
+      "side": 0,
+      "message": "Yes. It\u0027s working in tvix and nix similarly. I added some unit tests.",
+      "parentUuid": "c4f5aff8_f08a1e15",
+      "revId": "c6c2365e288c347df57d2df3c4839faa22d2b227",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }

@@ -18,6 +18,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "04dd2065_30d3749a",
+        "filename": "tvix/eval/src/builtins/mod.rs",
+        "patchSetId": 7
+      },
+      "lineNbr": 142,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-09-22T17:23:20Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2d4b3c93_962104f6",
+      "revId": "2f8b4ab3ca8beb47cdeb3dc0e011a1cba5a1afb4",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "5108f0b2_86a9bde1",
@@ -35,6 +53,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "fe7e6db1_d308dc3d",
+        "filename": "tvix/eval/src/vm.rs",
+        "patchSetId": 7
+      },
+      "lineNbr": 97,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-09-22T17:23:20Z",
+      "side": 1,
+      "message": "Good eye :)",
+      "parentUuid": "5108f0b2_86a9bde1",
+      "revId": "2f8b4ab3ca8beb47cdeb3dc0e011a1cba5a1afb4",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "1c9b7557_d2480d07",
@@ -48,6 +84,30 @@
       "writtenOn": "2022-09-13T15:06:49Z",
       "side": 1,
       "message": "Should be Incomparable",
+      "range": {
+        "startLine": 120,
+        "startChar": 39,
+        "endLine": 120,
+        "endChar": 48
+      },
+      "revId": "2f8b4ab3ca8beb47cdeb3dc0e011a1cba5a1afb4",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "923b7857_347d8c82",
+        "filename": "tvix/eval/src/vm.rs",
+        "patchSetId": 7
+      },
+      "lineNbr": 120,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-09-22T17:23:20Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1c9b7557_d2480d07",
       "range": {
         "startLine": 120,
         "startChar": 39,
