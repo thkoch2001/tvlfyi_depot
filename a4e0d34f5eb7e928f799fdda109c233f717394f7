@@ -65,6 +65,30 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c3efd91a_5810dc3c",
+        "filename": "tvix/eval/src/compiler/attrs.rs",
+        "patchSetId": 3
+      },
+      "lineNbr": 70,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2022-09-22T23:06:29Z",
+      "side": 1,
+      "message": "Okay, was confused because we do construct a SmolStr from the same value a few lines above.",
+      "parentUuid": "bddfd2f3_3835d704",
+      "range": {
+        "startLine": 70,
+        "startChar": 57,
+        "endLine": 70,
+        "endChar": 61
+      },
+      "revId": "a4e0d34f5eb7e928f799fdda109c233f717394f7",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "e7e9adf2_6f1329e0",
