@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e4940176_7ea89d2b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-09-23T13:09:48Z",
+      "side": 1,
+      "message": "Note: This is one of the changes that will absorb the work-in-progress monster-CL cl/6712",
+      "revId": "8a912edf75626e819d10c2b20b5a6e01ab9a9f05",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
