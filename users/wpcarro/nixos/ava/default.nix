@@ -87,6 +87,7 @@ in
     tarasco
   ];
   users.users.wpcarro = {
+    initialPassword = "password";
     isNormalUser = true;
     extraGroups = [
       "networkmanager"
