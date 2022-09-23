@@ -16,6 +16,40 @@
       "message": "Note: This is one of the changes that will absorb the work-in-progress monster-CL cl/6712",
       "revId": "8a912edf75626e819d10c2b20b5a6e01ab9a9f05",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "891db31f_b642032e",
+        "filename": "tvix/eval/src/compiler/bindings.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2022-09-23T16:54:15Z",
+      "side": 1,
+      "message": "do you want to elaborate on the different passes from compile_recursive_scope and overall strategy you\u0027re taking (what\u0027s used where and why) in the top-of-the-file comment?\n\nThis mentions a second pass, but while reading here, no passes are is introduced.",
+      "revId": "8a912edf75626e819d10c2b20b5a6e01ab9a9f05",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4cd2b40e_683a5bc9",
+        "filename": "tvix/eval/src/compiler/bindings.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2022-09-23T16:54:15Z",
+      "side": 1,
+      "message": "is there an example for this in the test cases? might make sense to link to it, and/or add an inline example here.",
+      "revId": "8a912edf75626e819d10c2b20b5a6e01ab9a9f05",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
