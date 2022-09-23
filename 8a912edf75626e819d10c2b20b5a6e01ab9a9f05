@@ -35,6 +35,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "1fd7a236_b183926d",
+        "filename": "tvix/eval/src/compiler/bindings.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-09-23T17:13:05Z",
+      "side": 1,
+      "message": "Yeah, but we\u0027ll have to do that much later, this is extremely in flux right now and the number of passes etc. will change until we\u0027re done with nested keys.",
+      "parentUuid": "891db31f_b642032e",
+      "revId": "8a912edf75626e819d10c2b20b5a6e01ab9a9f05",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "4cd2b40e_683a5bc9",
@@ -48,6 +66,24 @@
       "writtenOn": "2022-09-23T16:54:15Z",
       "side": 1,
       "message": "is there an example for this in the test cases? might make sense to link to it, and/or add an inline example here.",
+      "revId": "8a912edf75626e819d10c2b20b5a6e01ab9a9f05",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "881593d8_8597d335",
+        "filename": "tvix/eval/src/compiler/bindings.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-09-23T17:13:05Z",
+      "side": 1,
+      "message": "It\u0027s actually not possible to write a valid expression that tests this specifically, it\u0027s not directly observable but is required for internal accounting in the compiler to work out. If this wasn\u0027t happening correctly, we\u0027d get various runtime crashes in mixed bindings (for which we do have tests).",
+      "parentUuid": "4cd2b40e_683a5bc9",
       "revId": "8a912edf75626e819d10c2b20b5a6e01ab9a9f05",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
