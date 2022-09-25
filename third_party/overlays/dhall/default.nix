@@ -25,13 +25,8 @@ let
       { pkgs = self; };
 in
 {
-  # TODO: this is to fix a bug in dhall-nix
-  haskellPackages = super.haskellPackages.override {
-    overrides = hsSelf: hsSuper: {
-      dhall = dhall-source "dhall" hsSuper.dhall;
-      dhall-nix = dhall-source "dhall-nix" hsSuper.dhall-nix;
-    };
-  };
+  # ATTN: see the haskell overlay for some overrides we need.
+
   # dhall = easy-dhall-nix.dhall-simple;
   # dhall-nix = easy-dhall-nix.dhall-nix-simple;
   dhall-bash = easy-dhall-nix.dhall-bash-simple;
