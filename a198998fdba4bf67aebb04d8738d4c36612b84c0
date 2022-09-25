@@ -1,0 +1,67 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fc55da67_025d41f6",
+        "filename": "docs/designs/PLNIX.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-09-25T14:10:09Z",
+      "side": 1,
+      "message": "I think a single context-setting sentence (\"Proposal for a new language in Postgres etc\") could set a good intro here, otherwise this is completely context-free :)",
+      "revId": "a198998fdba4bf67aebb04d8738d4c36612b84c0",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c6458c95_c638238b",
+        "filename": "docs/designs/PLNIX.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 100,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-09-25T14:10:09Z",
+      "side": 1,
+      "message": "So something converts this to a Nix value?",
+      "range": {
+        "startLine": 100,
+        "startChar": 40,
+        "endLine": 100,
+        "endChar": 42
+      },
+      "revId": "a198998fdba4bf67aebb04d8738d4c36612b84c0",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d9158cd0_814a99a2",
+        "filename": "docs/designs/PLNIX.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 121,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-09-25T14:10:09Z",
+      "side": 1,
+      "message": "so there\u0027s an implicit conversation of Nix value -\u003e json at the end? Is this always the case?",
+      "range": {
+        "startLine": 121,
+        "startChar": 36,
+        "endLine": 121,
+        "endChar": 49
+      },
+      "revId": "a198998fdba4bf67aebb04d8738d4c36612b84c0",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
