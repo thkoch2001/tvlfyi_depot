@@ -3,15 +3,6 @@
 self: super:
 
 let
-  dhall-source = subdir: pkg: super.haskell.lib.overrideSrc pkg {
-    src = "${super.fetchFromGitHub {
-      owner = "Profpatsch";
-      repo = "dhall-haskell";
-      # https://github.com/dhall-lang/dhall-haskell/pull/2426
-      rev = "82123817316192d39f9a3e68b8ce9c9cff0a48ed";
-      sha256 = "sha256-gbHoUKIdLPIttqeV471jsT8OJz6uiI6LpHOwtLbBGHY=";
-    }}/${subdir}";
-  };
 
   # binary releases of dhall tools, since the build in nixpkgs is
   # broken most of the time. The binaries are also fully static
@@ -25,13 +16,8 @@ let
       { pkgs = self; };
 in
 {
-  # TODO: this is to fix a bug in dhall-nix
-  haskellPackages = super.haskellPackages.override {
-    overrides = hsSelf: hsSuper: {
-      dhall = dhall-source "dhall" hsSuper.dhall;
-      dhall-nix = dhall-source "dhall-nix" hsSuper.dhall-nix;
-    };
-  };
+  # ATTN: see the haskell overlay for some overrides we need.
+
   # dhall = easy-dhall-nix.dhall-simple;
   # dhall-nix = easy-dhall-nix.dhall-nix-simple;
   dhall-bash = easy-dhall-nix.dhall-bash-simple;
