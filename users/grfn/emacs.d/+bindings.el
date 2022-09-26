@@ -119,6 +119,7 @@ private/hlissner/snippets."
 
 (evil-set-command-property 'flycheck-next-error :repeat nil)
 (evil-set-command-property 'flycheck-prev-error :repeat nil)
+(evil-set-command-property 'flycheck-previous-error :repeat nil)
 (evil-set-command-property 'smerge-next :repeat nil)
 (evil-set-command-property 'smerge-prev :repeat nil)
 
