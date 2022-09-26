@@ -27,7 +27,7 @@ in
 {
   inherit domain renderTemplate withBrand;
 
-  root = pkgs.runCommandNoCC "wpcarro.dev" { } ''
+  root = pkgs.runCommand "wpcarro.dev" { } ''
     mkdir -p $out
 
     # /

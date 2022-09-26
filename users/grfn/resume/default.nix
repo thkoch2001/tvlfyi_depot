@@ -2,7 +2,7 @@
 
 with pkgs.lib;
 
-pkgs.runCommandNoCC "resume.pdf"
+pkgs.runCommand "resume.pdf"
 {
   buildInputs = [
     (pkgs.texlive.combine {

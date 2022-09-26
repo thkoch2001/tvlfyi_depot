@@ -8,7 +8,7 @@ let
   inherit (pkgs)
     jq
     ripgrep
-    runCommandNoCC
+    runCommand
     writeTextFile
     ;
 
@@ -39,7 +39,7 @@ let
     user = string;
   };
 
-  allTodos = fromJSON (readFile (runCommandNoCC "depot-todos.json" { } ''
+  allTodos = fromJSON (readFile (runCommand "depot-todos.json" { } ''
     ${ripgrep}/bin/rg --json 'TODO\(\w+\):.*$' ${depot.path} | \
       ${jq}/bin/jq -s -f ${./extract-todos.jq} > $out
   ''));

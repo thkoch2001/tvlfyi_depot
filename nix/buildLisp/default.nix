@@ -8,7 +8,7 @@
 
 let
   inherit (builtins) map elemAt match filter;
-  inherit (pkgs) lib runCommandNoCC makeWrapper writeText writeShellScriptBin sbcl ecl-static ccl;
+  inherit (pkgs) lib runCommand makeWrapper writeText writeShellScriptBin sbcl ecl-static ccl;
   inherit (pkgs.stdenv) targetPlatform;
 
   #
@@ -187,7 +187,7 @@ let
       lispNativeDeps = allNative native lispDeps;
       filteredSrcs = implFilter implementation srcs;
     in
-    runCommandNoCC name
+    runCommand name
       {
         LD_LIBRARY_PATH = lib.makeLibraryPath lispNativeDeps;
         LANG = "C.UTF-8";
@@ -475,7 +475,7 @@ let
           } $@
         '';
 
-      bundled = name: runCommandNoCC "${name}-cllib"
+      bundled = name: runCommand "${name}-cllib"
         {
           passthru = {
             lispName = name;
@@ -640,7 +640,7 @@ let
             }
         else null;
     in
-    lib.fix (self: runCommandNoCC "${name}-cllib"
+    lib.fix (self: runCommand "${name}-cllib"
       {
         LD_LIBRARY_PATH = lib.makeLibraryPath lispNativeDeps;
         LANG = "C.UTF-8";
@@ -707,7 +707,7 @@ let
             }
         else null;
     in
-    lib.fix (self: runCommandNoCC "${name}"
+    lib.fix (self: runCommand "${name}"
       {
         nativeBuildInputs = [ makeWrapper ];
         LD_LIBRARY_PATH = libPath;

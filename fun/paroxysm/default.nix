@@ -7,7 +7,7 @@ depot.third_party.naersk.buildPackage {
 
   buildInputs = with pkgs; [
     openssl
-    pkgconfig
+    pkg-config
     postgresql.lib
     curl
   ];

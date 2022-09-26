@@ -2,7 +2,7 @@
 { depot, pkgs, ... }:
 
 let
-  checkZone = zone: file: pkgs.runCommandNoCC "${zone}-check" { } ''
+  checkZone = zone: file: pkgs.runCommand "${zone}-check" { } ''
     ${pkgs.bind}/bin/named-checkzone -i local ${zone} ${file} | tee $out
   '';
 

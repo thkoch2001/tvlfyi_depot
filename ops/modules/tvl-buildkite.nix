@@ -13,7 +13,7 @@ let
 
   # All Buildkite hooks are actually besadii, but it's being invoked
   # with different names.
-  buildkiteHooks = pkgs.runCommandNoCC "buildkite-hooks" { } ''
+  buildkiteHooks = pkgs.runCommand "buildkite-hooks" { } ''
     mkdir -p $out/bin
     ln -s ${besadiiWithConfig "post-command"} $out/bin/post-command
   '';

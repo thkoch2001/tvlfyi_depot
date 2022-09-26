@@ -7,7 +7,7 @@ with depot.nix.yants;
 let
   inherit (builtins) foldl' map readFile replaceStrings sort;
   inherit (lib) concatStrings concatStringsSep max removeSuffix;
-  inherit (pkgs) runCommandNoCC;
+  inherit (pkgs) runCommand;
 
   # 'link' describes a related link to a feed, or feed element.
   #
@@ -90,7 +90,7 @@ let
 
   # Feed generation functions:
 
-  renderEpoch = epoch: removeSuffix "\n" (readFile (runCommandNoCC "date-${toString epoch}" { } ''
+  renderEpoch = epoch: removeSuffix "\n" (readFile (runCommand "date-${toString epoch}" { } ''
     date --date='@${toString epoch}' --utc --iso-8601='seconds' > $out
   ''));
 

@@ -17,7 +17,7 @@ depot.third_party.naersk.buildPackage {
     ncurses
     libxml2
     libffi
-    pkgconfig
+    pkg-config
   ]);
 
   doCheck = true;

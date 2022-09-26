@@ -9,14 +9,15 @@ let
   nixSrc =
     let
       # branch 2.3-backport-await-users
-      rev = "abdc60f49f1104696bac723331d3ed0296d5a784";
+      # XXX(tazjin): merge https://github.com/tvlfyi/nix/pull/3
+      rev = "22efe1ed25dff2fa15345a0f187e5ad450552599";
     in
     self.fetchFromGitHub
       {
         owner = "tvlfyi";
         repo = "nix";
         inherit rev;
-        hash = "sha256:0c1pmg8y0yafdkliz970k52s92z3qin3xrz3g0n2ss7xcfbg8nzy";
+        hash = "sha256:0rwyrh471c5y64axyd8vzzzmzlscg97fsrjbgbm1a93wnzxcvnvk";
       } // { revCount = 0; shortRev = builtins.substring 0 7 rev; };
 in
 {

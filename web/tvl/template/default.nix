@@ -14,11 +14,11 @@
 }@args:
 
 let
-  inherit (pkgs) runCommandNoCC lib;
+  inherit (pkgs) runCommand lib;
   inherit (depot.tools) cheddar;
 in
 
-runCommandNoCC "${lib.strings.sanitizeDerivationName title}-index.html"
+runCommand "${lib.strings.sanitizeDerivationName title}-index.html"
 {
   headerPart = ''
     <!DOCTYPE html>

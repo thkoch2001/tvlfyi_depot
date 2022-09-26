@@ -42,7 +42,7 @@ let
 
   drvmap = depot.nix.buildkite.mkDrvmap depot.ci.targets;
 in
-pkgs.runCommandNoCC "depot-pipeline" { } ''
+pkgs.runCommand "depot-pipeline" { } ''
   mkdir $out
   cp -r ${pipeline}/* $out
   cp ${drvmap} $out/drvmap.json

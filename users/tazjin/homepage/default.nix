@@ -12,7 +12,7 @@ with nix.yants;
 
 let
   inherit (builtins) readFile replaceStrings sort;
-  inherit (pkgs) writeFile runCommandNoCC;
+  inherit (pkgs) writeFile runCommand;
 
   # The different types of entries on the homepage.
   entryClass = enum "entryClass" [ "blog" "project" "misc" ];
@@ -35,7 +35,7 @@ let
     date = post.date;
   });
 
-  formatDate = defun [ int string ] (date: readFile (runCommandNoCC "date" { } ''
+  formatDate = defun [ int string ] (date: readFile (runCommand "date" { } ''
     date --date='@${toString date}' '+%Y-%m-%d' > $out
   ''));
 
@@ -68,7 +68,7 @@ let
   homepage = index ((map postToEntry users.tazjin.blog.posts) ++ pageEntries);
   atomFeed = import ./feed.nix (args // { inherit entry pageEntries; });
 in
-runCommandNoCC "website" { } ''
+runCommand "website" { } ''
   mkdir $out
   cp ${homepage} $out/index.html
   cp ${atomFeed} $out/feed.atom

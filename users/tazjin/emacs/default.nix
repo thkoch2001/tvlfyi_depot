@@ -124,7 +124,7 @@ pkgs.makeOverridable
             (kill-emacs 1))
         '';
       in
-      pkgs.runCommandNoCC "tdlibCheck" { } ''
+      pkgs.runCommand "tdlibCheck" { } ''
         export PATH="${emacsBinPath}:$PATH"
         ${tgEmacs}/bin/emacs --script ${verifyTdlibVersion} && touch $out
       '';

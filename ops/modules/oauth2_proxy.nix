@@ -53,7 +53,7 @@ in
         RestartSec = "5s";
         DynamicUser = true;
         EnvironmentFile = cfg.secretsFile;
-        ExecStart = "${pkgs.oauth2_proxy}/bin/oauth2-proxy --config ${configFile}";
+        ExecStart = "${pkgs.oauth2-proxy}/bin/oauth2-proxy --config ${configFile}";
       };
     };
   };

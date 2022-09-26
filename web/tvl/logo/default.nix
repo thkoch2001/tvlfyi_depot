@@ -78,7 +78,7 @@ depot.nix.readTree.drvTargets (lib.fix (self: {
   logoSvg = style: pkgs.writeText "logo.svg" (logoSvg style);
 
   # Create a PNG of the TVL logo with the specified style and DPI.
-  logoPng = style: dpi: pkgs.runCommandNoCC "logo.png" { } ''
+  logoPng = style: dpi: pkgs.runCommand "logo.png" { } ''
     ${pkgs.inkscape}/bin/inkscape \
       --export-area-drawing \
       --export-background-opacity 0 \

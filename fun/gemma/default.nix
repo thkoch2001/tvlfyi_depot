@@ -1,7 +1,7 @@
 { depot, pkgs, ... }:
 
 let
-  inherit (pkgs) cacert iana-etc libredirect stdenv runCommandNoCC writeText;
+  inherit (pkgs) cacert iana-etc libredirect stdenv runCommand writeText;
   elmPackages = depot.third_party.elmPackages_0_18;
 
   frontend = stdenv.mkDerivation {
@@ -28,7 +28,7 @@ let
 
   injectFrontend = writeText "gemma-frontend.lisp" ''
     (in-package :gemma)
-    (setq *static-file-location* "${runCommandNoCC "frontend" {} ''
+    (setq *static-file-location* "${runCommand "frontend" {} ''
       mkdir -p $out
       cp ${frontend} $out/index.html
     ''}/")

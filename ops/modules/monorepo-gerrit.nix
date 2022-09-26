@@ -9,7 +9,7 @@ let
     exec -a ${name} ${depot.ops.besadii}/bin/besadii "$@"
   '';
 
-  gerritHooks = pkgs.runCommandNoCC "gerrit-hooks" { } ''
+  gerritHooks = pkgs.runCommand "gerrit-hooks" { } ''
     mkdir -p $out
     ln -s ${besadiiWithConfig "change-merged"} $out/change-merged
     ln -s ${besadiiWithConfig "patchset-created"} $out/patchset-created

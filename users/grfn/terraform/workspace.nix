@@ -3,7 +3,7 @@ name: { plugins }: module_tf:
 
 let
 
-  inherit (pkgs) lib runCommandNoCC writeText writeScript;
+  inherit (pkgs) lib runCommand writeText writeScript;
   inherit (lib) filterAttrsRecursive;
 
   allPlugins = (p: plugins p ++ (with p; [
@@ -38,7 +38,7 @@ let
     plugins = plugins_tf;
   };
 
-  module = runCommandNoCC "module" { } ''
+  module = runCommand "module" { } ''
     mkdir $out
     ${lib.concatStrings (lib.mapAttrsToList (k: config_tf:
       (let
@@ -72,7 +72,7 @@ let
   '';
 
   # TODO: import (-config)
-  tfcmds = runCommandNoCC "${name}-tfcmds" { } ''
+  tfcmds = runCommand "${name}-tfcmds" { } ''
     mkdir -p $out/bin
     ln -s ${init} $out/bin/init
     ln -s ${tfcmd} $out/bin/validate
@@ -95,7 +95,7 @@ in
   #   destroy = depot.nix.nixRunWrapper "destroy" tfcmds;
   # };
 
-  test = runCommandNoCC "${name}-test" { } ''
+  test = runCommand "${name}-test" { } ''
     set -e
     export TF_STATE_ROOT=$(pwd)
     ${tfcmds}/bin/init

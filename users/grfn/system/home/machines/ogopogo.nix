@@ -26,7 +26,7 @@ in
   home.packages = with pkgs; [
     zoom-us
     slack
-    mysql
+    mariadb
     graphviz
     gnuplot
     mypaint

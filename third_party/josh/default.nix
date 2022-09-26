@@ -15,7 +15,7 @@ depot.third_party.naersk.buildPackage {
   buildInputs = with pkgs; [
     libgit2
     openssl
-    pkgconfig
+    pkg-config
   ];
 
   cargoBuildOptions = x: x ++ [

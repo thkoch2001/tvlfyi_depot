@@ -4,7 +4,7 @@ with depot.nix.yants;
 
 let
   inherit (builtins) filter;
-  inherit (pkgs) graphviz runCommandNoCC writeText;
+  inherit (pkgs) graphviz runCommand writeText;
   inherit (depot.web) atom-feed blog tvl;
 
   listPosts = defun [ (list blog.post) string ] (posts:
@@ -16,7 +16,7 @@ let
       (map (p: "cp ${blog.renderPost tvl.blog.config p} $out/blog/${p.key}.html") posts)
   );
 
-  tvlGraph = runCommandNoCC "tvl.svg"
+  tvlGraph = runCommand "tvl.svg"
     {
       nativeBuildInputs = with pkgs; [ fontconfig freetype cairo jetbrains-mono ];
     } ''
@@ -123,7 +123,7 @@ let
     '';
   };
 in
-runCommandNoCC "website" { } ''
+runCommand "website" { } ''
   mkdir -p $out/blog
   cp ${homepage} $out/index.html
   ${postRenderingCommands tvl.blog.posts}
