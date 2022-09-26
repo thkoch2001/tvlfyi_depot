@@ -4,16 +4,16 @@ with pkgs;
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-nextest";
-  version = "0.9.14";
+  version = "0.9.36";
 
   src = fetchFromGitHub {
     owner = "nextest-rs";
     repo = "nextest";
     rev = "cargo-nextest-${version}";
-    sha256 = "0nc8xz90m03yydj7zafjgciv4vxwzbz814pnjdi49ddkr4q20sc3";
+    sha256 = "1g40r38bqmdhc0dy07pj27vkc64d3fw6v5z2vwn82xld2h9dg7w2";
   };
 
-  cargoSha256 = "0rcsh573qryllgc199ah2dbrn1xcp215q2xkjb3f4ps757m7scnm";
+  cargoSha256 = "1g862azgkn3xk3v3chs8hv1b1prj1pq2vfzbhcx6ir9l00kv6gcv";
 
   cargoTestFlags = [
     "--"
