@@ -45,7 +45,7 @@
     # Nix things
     nixfmt
     nix-prefetch-github
-    nix-review
+    nixpkgs-review
     cachix
     (writeShellScriptBin "rebuild-mugwump" ''
       set -eo pipefail

@@ -9,7 +9,7 @@ depot.third_party.naersk.buildPackage {
   };
 
   buildInputs = with pkgs; [
-    pkgconfig
+    pkg-config
     dbus
     glib
     openssl_1_1

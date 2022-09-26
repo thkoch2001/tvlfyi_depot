@@ -23,7 +23,7 @@ let
 
   posts = filter includePost (list post (import ./posts.nix));
 
-  rendered = pkgs.runCommandNoCC "tazjins-blog" { } ''
+  rendered = pkgs.runCommand "tazjins-blog" { } ''
     mkdir -p $out
 
     ${lib.concatStringsSep "\n" (map (post:

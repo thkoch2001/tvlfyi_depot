@@ -56,7 +56,7 @@ let
     if !(drv ? cargoDeps.outPath)
     then null
     else
-      pkgs.runCommandNoCC "${drv.name}-Cargo.lock" { } ''
+      pkgs.runCommand "${drv.name}-Cargo.lock" { } ''
         if test -d "${drv.cargoDeps}"; then
           cp "${drv.cargoDeps}/Cargo.lock" "$out"
         fi

@@ -8,7 +8,7 @@ let
   };
 
 in
-pkgs.runCommandNoCC "notmuch-extract-patch"
+pkgs.runCommand "notmuch-extract-patch"
 {
   buildInputs = [ pkgs.python3 ];
 } ''

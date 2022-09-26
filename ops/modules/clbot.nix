@@ -3,7 +3,7 @@
 
 let
   inherit (builtins) attrValues concatStringsSep mapAttrs readFile;
-  inherit (pkgs) runCommandNoCC;
+  inherit (pkgs) runCommand;
 
   inherit (lib)
     listToAttrs
@@ -21,7 +21,7 @@ let
       (attrValues (mapAttrs (key: value: "-${key} \"${toString value}\"") flags));
 
   # Escapes a unit name for use in systemd
-  systemdEscape = name: removeSuffix "\n" (readFile (runCommandNoCC "unit-name" { } ''
+  systemdEscape = name: removeSuffix "\n" (readFile (runCommand "unit-name" { } ''
     ${pkgs.systemd}/bin/systemd-escape '${name}' >> $out
   ''));
 

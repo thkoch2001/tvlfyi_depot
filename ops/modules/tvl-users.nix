@@ -86,7 +86,7 @@
   environment.systemPackages = with pkgs; [
     alacritty.terminfo
     foot.terminfo
-    rxvt_unicode.terminfo
+    rxvt-unicode-unwrapped.terminfo
 
     # TODO(sterni): re-enable when the kitty build is fixed upstreams
     # kitty.terminfo

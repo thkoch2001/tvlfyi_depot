@@ -29,6 +29,10 @@ let
 
 in
 {
+  # 2022-09-26: workaround for home-manager defaulting to removed pkgs.gmailieer
+  # attribute, can likely be removed soon
+  programs.lieer.package = pkgs.lieer;
+
   programs.lieer.enable = true;
   programs.notmuch.enable = true;
   services.lieer.enable = true;
@@ -45,7 +49,7 @@ in
       name = escapeUnitName "lieer-${name}";
       value.Service = {
         ExecStart = mkForce "${pkgs.writeShellScript "sync-${name}" ''
-        ${pkgs.gmailieer}/bin/gmi sync --path ~/mail/${name}
+        ${pkgs.lieer}/bin/gmi sync --path ~/mail/${name}
       ''}";
         Environment = "NOTMUCH_CONFIG=${config.home.sessionVariables.NOTMUCH_CONFIG}";
       };

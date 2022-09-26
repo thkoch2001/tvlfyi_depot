@@ -5,7 +5,7 @@ pkgs.buildGoModule rec {
   pname = "irccat";
   version = "20201108";
   meta.license = lib.licenses.gpl3;
-  vendorSha256 = "06a985y4alw1rsghgmhfyczns6klz7bbkfn5mnqc9fdfclgg4s3r";
+  vendorHash = "sha256:06a985y4alw1rsghgmhfyczns6klz7bbkfn5mnqc9fdfclgg4s3r";
 
   src = pkgs.fetchFromGitHub {
     owner = "irccloud";

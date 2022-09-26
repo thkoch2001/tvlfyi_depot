@@ -17,7 +17,7 @@ let
   posts = sort (x: y: x.date > y.date)
     (filter includePost (list post (import ./posts.nix)));
 
-  rendered = pkgs.runCommandNoCC "blog-posts" { } ''
+  rendered = pkgs.runCommand "blog-posts" { } ''
     mkdir -p $out
 
     ${lib.concatStringsSep "\n" (map (post:
@@ -25,7 +25,7 @@ let
     ) posts)}
   '';
 
-  formatDate = date: readFile (pkgs.runCommandNoCC "date" { } ''
+  formatDate = date: readFile (pkgs.runCommand "date" { } ''
     date --date='@${toString date}' '+%B %e, %Y' > $out
   '');
 
@@ -39,7 +39,7 @@ let
     postDate = formatDate post.date;
   });
 in
-pkgs.runCommandNoCC "blog" { } ''
+pkgs.runCommand "blog" { } ''
   mkdir -p $out
   cp ${withBrand (readFile postsHtml)} $out/index.html
   cp -r ${rendered} $out/posts

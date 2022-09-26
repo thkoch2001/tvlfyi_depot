@@ -5,7 +5,7 @@
 pkgs.buildGoModule {
   pname = "buf";
   version = "v0.20.1";
-  vendorSha256 = "1gg5c7aiqb4w1zxwsraxxpln33xkmkzlp1h69xgi9i08zvrfipqs";
+  vendorHash = "sha256:1gg5c7aiqb4w1zxwsraxxpln33xkmkzlp1h69xgi9i08zvrfipqs";
 
   src = pkgs.fetchFromGitHub {
     owner = "bufbuild";

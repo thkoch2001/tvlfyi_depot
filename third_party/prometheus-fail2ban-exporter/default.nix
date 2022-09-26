@@ -7,7 +7,7 @@ let
   };
 
   python = pkgs.python3.withPackages (p: [
-    p.prometheus_client
+    p.prometheus-client
   ]);
 
 in

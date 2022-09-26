@@ -4,7 +4,7 @@
 pkgs.buildGoModule rec {
   pname = "smtprelay";
   version = "1.7.0";
-  vendorSha256 = "00nb81hdg5pv5l0q7w5lv08dv4v72vml7jha351frani0gpg27pn";
+  vendorHash = "sha256:00nb81hdg5pv5l0q7w5lv08dv4v72vml7jha351frani0gpg27pn";
 
   src = pkgs.fetchFromGitHub {
     owner = "decke";

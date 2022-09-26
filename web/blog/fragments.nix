@@ -8,7 +8,7 @@
 
 let
   inherit (builtins) filter map hasAttr replaceStrings;
-  inherit (pkgs) runCommandNoCC writeText;
+  inherit (pkgs) runCommand writeText;
   inherit (depot.nix) renderMarkdown;
 
   staticUrl = "https://static.tvl.fyi/${depot.web.static.drvHash}";
@@ -61,7 +61,7 @@ let
     <hr>
   '';
 
-  renderPost = { name, footer, ... }: post: runCommandNoCC "${post.key}.html" { } ''
+  renderPost = { name, footer, ... }: post: runCommand "${post.key}.html" { } ''
     cat ${writeText "header.html" (header name post.title)} > $out
 
     # Write the post title & date

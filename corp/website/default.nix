@@ -31,7 +31,7 @@ let
     '';
   };
 in
-pkgs.runCommandNoCC "corp-website" { } ''
+pkgs.runCommand "corp-website" { } ''
   mkdir $out
   cp ${index} $out/index.html
 ''

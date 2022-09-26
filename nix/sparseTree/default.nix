@@ -64,7 +64,7 @@ in
 
 # TODO(sterni): teach readTree to also read symlinked directories,
   # so we ln -sT instead of cp -aT.
-pkgs.runCommandNoCC "sparse-${builtins.baseNameOf root}" { } (
+pkgs.runCommand "sparse-${builtins.baseNameOf root}" { } (
   lib.concatMapStrings
     ({ src, dst }: ''
       mkdir -p "$(dirname "$out${dst}")"

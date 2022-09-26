@@ -75,7 +75,7 @@ let
   ]);
 in
 
-pkgs.runCommandNoCC "html.nix.html"
+pkgs.runCommand "html.nix.html"
 {
   passAsFile = [ "exampleDocument" ];
   inherit exampleDocument;

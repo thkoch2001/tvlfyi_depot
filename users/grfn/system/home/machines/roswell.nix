@@ -36,7 +36,7 @@ in
     # Nix things
     nixfmt
     nix-prefetch-github
-    nix-review
+    nixpkgs-review
     cachix
 
     # ReadySet stuff
