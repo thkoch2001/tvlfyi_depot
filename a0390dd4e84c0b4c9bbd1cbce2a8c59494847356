@@ -88,6 +88,24 @@
       "parentUuid": "12a3f6bf_d701ffc3",
       "revId": "a0390dd4e84c0b4c9bbd1cbce2a8c59494847356",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e2b70d0a_b1951353",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2022-09-28T11:15:41Z",
+      "side": 1,
+      "message": "I debugged this a bit further. It looks like setting this via `nixpkgs.config` in system config doesn\u0027t have an effect, but setting `firefox.smartcardSupport \u003d true` in the call to import nixpkgs itself does:\n\n```\n  pkgs \u003d import sources.nixpkgs {\n    inherit system;\n    config \u003d {\n      allowUnfree \u003d true;\n      firefox.smartcardSupport \u003d true;\n    };\n    overlays \u003d [\n      (import ./overlay.nix)\n    ];\n  };\n```",
+      "parentUuid": "a7300d02_eacb6631",
+      "revId": "a0390dd4e84c0b4c9bbd1cbce2a8c59494847356",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
