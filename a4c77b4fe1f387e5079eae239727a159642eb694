@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b5fa8092_4c72606a",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2022-09-28T12:37:21Z",
+      "side": 1,
+      "message": "Can we let rustfmt do that? I guess this commit was done using Meta+q in emacs?",
+      "revId": "a4c77b4fe1f387e5079eae239727a159642eb694",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
