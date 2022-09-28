@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c7d5645d_4af9bb02",
+        "filename": "tvix/eval/src/compiler/bindings.rs",
+        "patchSetId": 4
+      },
+      "lineNbr": 229,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2022-09-28T12:42:28Z",
+      "side": 1,
+      "message": "This also affects regular attribute sets",
+      "revId": "d0aa02766c75da8a91ee5fb97476f140dd4290f2",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
