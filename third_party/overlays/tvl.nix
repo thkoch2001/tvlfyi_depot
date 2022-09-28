@@ -9,8 +9,7 @@ let
   nixSrc =
     let
       # branch 2.3-backport-await-users
-      # XXX(tazjin): merge https://github.com/tvlfyi/nix/pull/3
-      rev = "22efe1ed25dff2fa15345a0f187e5ad450552599";
+      rev = "46a91f2abaee85135cbb447c13957d3c5e9091a9";
     in
     self.fetchFromGitHub
       {
