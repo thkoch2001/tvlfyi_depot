@@ -3,6 +3,23 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "86ffc3e9_0a212183",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2022-09-28T13:00:35Z",
+      "side": 1,
+      "message": "I guess so, yeah.\n\nThis would imply the stance that the fact that you can observe partially constructed attribute sets is indeed a bug. This is fair enough, I believe, since allowing this observation also allows observing evaluation order which ideally is opaque to the language\u0027s user.",
+      "revId": "6d2e4169938f29b948f95b8633bc0f337c98cc38",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "f2bba94a_b225834e",
         "filename": "tvix/eval/src/compiler/bindings.rs",
         "patchSetId": 4
