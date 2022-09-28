@@ -1,0 +1,61 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f2bba94a_b225834e",
+        "filename": "tvix/eval/src/compiler/bindings.rs",
+        "patchSetId": 4
+      },
+      "lineNbr": 237,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2022-09-28T12:53:47Z",
+      "side": 1,
+      "message": "I think it\u0027d read a bit cleaner to just have a block with an if {} else {} in both cases.",
+      "revId": "6d2e4169938f29b948f95b8633bc0f337c98cc38",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6ed3f6a5_c90cd94c",
+        "filename": "tvix/eval/src/compiler/bindings.rs",
+        "patchSetId": 4
+      },
+      "lineNbr": 240,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2022-09-28T12:53:47Z",
+      "side": 1,
+      "message": "Note that this is going to do the wrong thing as soon as we have `path.len() \u003e 1`.",
+      "range": {
+        "startLine": 240,
+        "startChar": 31,
+        "endLine": 240,
+        "endChar": 34
+      },
+      "revId": "6d2e4169938f29b948f95b8633bc0f337c98cc38",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c0435436_344c33f0",
+        "filename": "tvix/eval/src/compiler/bindings.rs",
+        "patchSetId": 4
+      },
+      "lineNbr": 260,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2022-09-28T12:53:47Z",
+      "side": 1,
+      "message": "Maybe note here that this is unreachable if `BindingsKind::LetIn`, since it confused me at first.",
+      "revId": "6d2e4169938f29b948f95b8633bc0f337c98cc38",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
