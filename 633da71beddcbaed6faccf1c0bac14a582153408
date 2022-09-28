@@ -22,6 +22,30 @@
       },
       "revId": "633da71beddcbaed6faccf1c0bac14a582153408",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1bdff884_633c3b4c",
+        "filename": "tvix/eval/src/compiler/bindings.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 422,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-09-28T00:01:26Z",
+      "side": 0,
+      "message": "Ack. We\u0027ll have to do a pass over all these comments when everything is done, but I\u0027m afraid even the passes we have right now are still very much in flux :/",
+      "parentUuid": "87dcc2da_cfc4b383",
+      "range": {
+        "startLine": 422,
+        "startChar": 11,
+        "endLine": 422,
+        "endChar": 16
+      },
+      "revId": "633da71beddcbaed6faccf1c0bac14a582153408",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
