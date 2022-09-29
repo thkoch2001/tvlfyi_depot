@@ -26,6 +26,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "6368e6ed_e2e04427",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-09-29T09:14:11Z",
+      "side": 1,
+      "message": "what?",
+      "parentUuid": "366bc28d_a5d11309",
+      "range": {
+        "startLine": 18,
+        "startChar": 24,
+        "endLine": 18,
+        "endChar": 27
+      },
+      "revId": "4cb7071b14be0c2fe81967b4dca1b2384d4c9b82",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "bea8b220_0333f2ee",
         "filename": "tvix/eval/src/compiler/bindings.rs",
         "patchSetId": 4
@@ -37,6 +61,30 @@
       "writtenOn": "2022-09-28T12:56:37Z",
       "side": 1,
       "message": "I guess this could also use a rename at some point now that it compiles non-recursive attribute sets (which are at least technically scopes in the compiler…).",
+      "range": {
+        "startLine": 297,
+        "startChar": 33,
+        "endLine": 297,
+        "endChar": 43
+      },
+      "revId": "4cb7071b14be0c2fe81967b4dca1b2384d4c9b82",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fee75975_caef007e",
+        "filename": "tvix/eval/src/compiler/bindings.rs",
+        "patchSetId": 4
+      },
+      "lineNbr": 297,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-09-29T09:14:11Z",
+      "side": 1,
+      "message": "cl/6794",
+      "parentUuid": "bea8b220_0333f2ee",
       "range": {
         "startLine": 297,
         "startChar": 33,
