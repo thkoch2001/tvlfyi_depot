@@ -16,6 +16,24 @@
       "message": "This also affects regular attribute sets",
       "revId": "d0aa02766c75da8a91ee5fb97476f140dd4290f2",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a65b1204_03ddc979",
+        "filename": "tvix/eval/src/compiler/bindings.rs",
+        "patchSetId": 4
+      },
+      "lineNbr": 229,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-09-29T00:48:05Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "c7d5645d_4af9bb02",
+      "revId": "d0aa02766c75da8a91ee5fb97476f140dd4290f2",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
