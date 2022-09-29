@@ -22,6 +22,30 @@
       },
       "revId": "e628bc932445d718d2eb2b2fcfe0f23b4c3bef05",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cb429cec_ad6e2da1",
+        "filename": "tvix/eval/src/compiler/bindings.rs",
+        "patchSetId": 5
+      },
+      "lineNbr": 412,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-09-29T00:46:40Z",
+      "side": 1,
+      "message": "Better suggestions welcome! The whole naming here gets more and more awkward ...",
+      "parentUuid": "3bf89ee4_d0c89226",
+      "range": {
+        "startLine": 412,
+        "startChar": 17,
+        "endLine": 412,
+        "endChar": 21
+      },
+      "revId": "e628bc932445d718d2eb2b2fcfe0f23b4c3bef05",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
