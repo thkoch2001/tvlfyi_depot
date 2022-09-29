@@ -16,6 +16,24 @@
       "message": "The count should be moved after the path len check so that we don\u0027t miscalculate it in case of `continue` being called. (Don\u0027t remember exactly when that would fail compilation, but best to correctly position this either way I think (wish we could just avoid it).)",
       "revId": "ed8fca3225737151e12d4153e2b3d5e03d8ce691",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c3dcaeda_922f4e74",
+        "filename": "tvix/eval/src/compiler/bindings.rs",
+        "patchSetId": 5
+      },
+      "lineNbr": 214,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-09-29T00:46:01Z",
+      "side": 1,
+      "message": "Fixed downchain.",
+      "parentUuid": "7044d725_822b77d1",
+      "revId": "ed8fca3225737151e12d4153e2b3d5e03d8ce691",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
