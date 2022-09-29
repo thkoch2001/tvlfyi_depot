@@ -16,6 +16,24 @@
       "message": "Should probably also add test cases with inherits in merged attrsets to the test suite.",
       "revId": "6336af03cccd0a33eecbe16fcffcea89e7c0f879",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c9f70ebb_803990f4",
+        "filename": "tvix/eval/src/compiler/bindings.rs",
+        "patchSetId": 4
+      },
+      "lineNbr": 111,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-09-29T17:45:50Z",
+      "side": 1,
+      "message": "LGTM, feel free to CL the most cursed ones you can come up with (esp. at the end of the chain, where nested keys are now working)",
+      "parentUuid": "307abb5a_c2d5cc95",
+      "revId": "6336af03cccd0a33eecbe16fcffcea89e7c0f879",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
