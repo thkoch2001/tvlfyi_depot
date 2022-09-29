@@ -48,6 +48,30 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "836cff54_183c3c50",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-09-29T11:43:54Z",
+      "side": 1,
+      "message": "Aha, in the detail view this makes more sense. Done",
+      "parentUuid": "6368e6ed_e2e04427",
+      "range": {
+        "startLine": 18,
+        "startChar": 24,
+        "endLine": 18,
+        "endChar": 27
+      },
+      "revId": "4cb7071b14be0c2fe81967b4dca1b2384d4c9b82",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "bea8b220_0333f2ee",
