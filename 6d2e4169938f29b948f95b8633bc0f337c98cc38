@@ -53,6 +53,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "fccbed49_ff755c42",
+        "filename": "tvix/eval/src/compiler/bindings.rs",
+        "patchSetId": 4
+      },
+      "lineNbr": 237,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-09-29T11:42:42Z",
+      "side": 1,
+      "message": "Fixing in a separate CL to avoid conflicting too hard.",
+      "parentUuid": "f2bba94a_b225834e",
+      "revId": "6d2e4169938f29b948f95b8633bc0f337c98cc38",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "6ed3f6a5_c90cd94c",
@@ -76,6 +94,30 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "e79fc022_469d73f2",
+        "filename": "tvix/eval/src/compiler/bindings.rs",
+        "patchSetId": 4
+      },
+      "lineNbr": 240,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-09-29T11:42:42Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "6ed3f6a5_c90cd94c",
+      "range": {
+        "startLine": 240,
+        "startChar": 31,
+        "endLine": 240,
+        "endChar": 34
+      },
+      "revId": "6d2e4169938f29b948f95b8633bc0f337c98cc38",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "c0435436_344c33f0",
@@ -89,6 +131,24 @@
       "writtenOn": "2022-09-28T12:53:47Z",
       "side": 1,
       "message": "Maybe note here that this is unreachable if `BindingsKind::LetIn`, since it confused me at first.",
+      "revId": "6d2e4169938f29b948f95b8633bc0f337c98cc38",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c43abf85_4f09b88c",
+        "filename": "tvix/eval/src/compiler/bindings.rs",
+        "patchSetId": 4
+      },
+      "lineNbr": 260,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-09-29T11:42:42Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c0435436_344c33f0",
       "revId": "6d2e4169938f29b948f95b8633bc0f337c98cc38",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
