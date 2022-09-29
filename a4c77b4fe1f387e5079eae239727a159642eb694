@@ -16,6 +16,24 @@
       "message": "Can we let rustfmt do that? I guess this commit was done using Meta+q in emacs?",
       "revId": "a4c77b4fe1f387e5079eae239727a159642eb694",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "99060bb8_04ff0139",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-09-29T00:47:47Z",
+      "side": 1,
+      "message": "Nope, it doesn\u0027t touch comments. And yes, it was. It was prompted by a discussion I had with grfn who complained about my fill-column sometimes being too narrow. There\u0027s something in my Emacs that changes it sometimes, but it\u0027s hard to predict when it happens, so for this commit I manually set it to 80.",
+      "parentUuid": "b5fa8092_4c72606a",
+      "revId": "a4c77b4fe1f387e5079eae239727a159642eb694",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
