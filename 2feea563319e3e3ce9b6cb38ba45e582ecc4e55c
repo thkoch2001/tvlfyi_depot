@@ -41,6 +41,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "24a85e47_af0912f9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-09-30T12:27:31Z",
+      "side": 1,
+      "message": "I mean, it\u0027s not simple at all. This is like the scoping stuff - it *looks* simple but the way there is complex.",
+      "parentUuid": "54028049_a8fd31ad",
+      "revId": "2feea563319e3e3ce9b6cb38ba45e582ecc4e55c",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "4808ddf2_02e9a427",
@@ -64,6 +82,30 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "b03797e9_1d60956c",
+        "filename": "tvix/eval/src/compiler/bindings.rs",
+        "patchSetId": 3
+      },
+      "lineNbr": 216,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-09-30T12:27:31Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4808ddf2_02e9a427",
+      "range": {
+        "startLine": 216,
+        "startChar": 12,
+        "endLine": 216,
+        "endChar": 16
+      },
+      "revId": "2feea563319e3e3ce9b6cb38ba45e582ecc4e55c",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "876d9c16_e4ed85d0",
@@ -77,6 +119,24 @@
       "writtenOn": "2022-09-30T10:59:18Z",
       "side": 1,
       "message": "If I understand it correctly, this works without creating the `Binding::Set`s recursively right away, because `bind_values` will later call `compile_bindings` again when it encounters a `Binding::Set`.\n\nThis seems fine, but is a bit hard to follow.",
+      "revId": "2feea563319e3e3ce9b6cb38ba45e582ecc4e55c",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a1b727e4_f7ba92d3",
+        "filename": "tvix/eval/src/compiler/bindings.rs",
+        "patchSetId": 3
+      },
+      "lineNbr": 516,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-09-30T12:27:31Z",
+      "side": 1,
+      "message": "Recursing right away isn\u0027t possible, it would \"upset the thunk balance\", so doing it this way by following the normal control flow is the only sane way I could come up with.\n\nEssentially one way to think about it is that `Binding::Set` is like a synthesised AST node that we just pass into the machinery again at the right point.\n\nWe should take a look at just cleaning up this file though ...",
+      "parentUuid": "876d9c16_e4ed85d0",
       "revId": "2feea563319e3e3ce9b6cb38ba45e582ecc4e55c",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
