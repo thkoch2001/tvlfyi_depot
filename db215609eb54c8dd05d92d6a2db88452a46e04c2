@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3f6f7154_968c1e4d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2022-10-01T16:46:10Z",
+      "side": 1,
+      "message": "There\u0027s a catch, not sure if we want to do this (unconditionally)?",
+      "revId": "db215609eb54c8dd05d92d6a2db88452a46e04c2",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
