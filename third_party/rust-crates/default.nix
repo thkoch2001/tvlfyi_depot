@@ -168,11 +168,11 @@ rec {
 
   chrono = buildRustCrate {
     pname = "chrono";
-    version = "0.4.19";
-    edition = "2015";
+    version = "0.4.22";
+    edition = "2018";
     dependencies = [ num-traits num-integer ];
     features = [ "alloc" "std" ];
-    sha256 = "0cjf5dnfbk99607vz6n5r6bhwykcypq5psihvk845sxrhnzadsar";
+    sha256 = "01vbn93ba1q2afq10qis41j847damk5ifgn1all337mcscl345fn";
   };
 
   imap-proto = buildRustCrate {
