@@ -33,6 +33,24 @@
       "message": "Wait, so this introduces potentially hard-to-debug reference tracking bugs? What is the benefit?",
       "revId": "db215609eb54c8dd05d92d6a2db88452a46e04c2",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d6356bc5_2adbd484",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2022-10-02T15:38:29Z",
+      "side": 1,
+      "message": "Smaller dumped image size:\n\n    lukas@wolfgang ~/s/depot (canon)\u003e nix path-info -hS /nix/store/jplbwji16kpks468fw0i50w4wc4fnhpy-panettone\n    /nix/store/jplbwji16kpks468fw0i50w4wc4fnhpy-panettone\t281.1M\n    lukas@wolfgang ~/s/depot (canon)\u003e nix path-info -hS /nix/store/xlsdw6fhfbzqndgpshjvc9qz5h57q3d9-panettone\n    /nix/store/xlsdw6fhfbzqndgpshjvc9qz5h57q3d9-panettone\t 64.4M\n\nNote that this also includes the disk space saved by loosing a bunch of references to dependencies. This is probably a good side effect since everything needed should be in the image in terms of generated code.",
+      "parentUuid": "999746b5_bd306c54",
+      "revId": "db215609eb54c8dd05d92d6a2db88452a46e04c2",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
