@@ -22,5 +22,20 @@ pub(super) fn builtins() -> BTreeMap<NixString, Value> {
         .map(|b| (b.name().into(), Value::Builtin(b)))
         .collect();
 
+    // currentTime pins the time at which evaluation was started
+    {
+        let seconds = match SystemTime::now().duration_since(UNIX_EPOCH) {
+            Ok(dur) => dur.as_secs() as i64,
+
+            // This case is hit if the system time is *before* epoch.
+            Err(err) => -(err.duration().as_secs() as i64),
+        };
+
+        map.insert(
+            SmolStr::new_inline("currentTime").into(),
+            Value::Integer(seconds),
+        );
+    }
+
     map
 }
