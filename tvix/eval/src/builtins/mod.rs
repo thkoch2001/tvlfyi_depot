@@ -3,12 +3,13 @@
 //! See //tvix/eval/docs/builtins.md for a some context on the
 //! available builtins in Nix.
 
-use std::{
-    cmp,
-    collections::{BTreeMap, HashMap},
-    path::PathBuf,
-    rc::Rc,
-};
+use std::cmp;
+use std::collections::{BTreeMap, HashMap};
+use std::path::PathBuf;
+use std::rc::Rc;
+use std::time::{SystemTime, UNIX_EPOCH};
+
+use smol_str::SmolStr;
 
 use crate::{
     errors::ErrorKind,
@@ -386,6 +387,21 @@ fn builtins_set() -> NixAttrs {
     #[cfg(feature = "impure")]
     {
         add_builtins(impure::builtins());
+    }
+
+    // currentTime pins the time at which evaluation was started
+    {
+        let seconds = match SystemTime::now().duration_since(UNIX_EPOCH) {
+            Ok(dur) => dur.as_secs(),
+
+            // This case is hit if the system time is *before* epoch.
+            Err(err) => err.duration().as_secs(),
+        };
+
+        map.insert(
+            SmolStr::new_inline("currentTime").into(),
+            Value::Integer(seconds as i64),
+        );
     }
 
     NixAttrs::from_map(map)
