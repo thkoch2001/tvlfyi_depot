@@ -213,7 +213,7 @@ in
   services.openssh = {
     enable = true;
     passwordAuthentication = false;
-    challengeResponseAuthentication = false;
+    kbdInteractiveAuthentication = false;
   };
 
   # Configure secrets for services that need them.
