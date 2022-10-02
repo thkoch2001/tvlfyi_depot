@@ -624,9 +624,9 @@ in
 
   services.keycloak = {
     enable = true;
-    httpPort = "5925"; # "kycl"
 
     settings = {
+      http-port = 5925; # kycl
       hostname = "auth.tvl.fyi";
       http-relative-path = "/auth";
       proxy = "edge";
