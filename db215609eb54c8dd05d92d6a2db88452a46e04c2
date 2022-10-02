@@ -16,6 +16,23 @@
       "message": "There\u0027s a catch, not sure if we want to do this (unconditionally)?",
       "revId": "db215609eb54c8dd05d92d6a2db88452a46e04c2",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "999746b5_bd306c54",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-10-02T14:31:09Z",
+      "side": 1,
+      "message": "Wait, so this introduces potentially hard-to-debug reference tracking bugs? What is the benefit?",
+      "revId": "db215609eb54c8dd05d92d6a2db88452a46e04c2",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
