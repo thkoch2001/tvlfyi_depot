@@ -63,7 +63,6 @@
 
   services.screen-locker = {
     enable = true;
-    enableDetectSleep = true;
     inactiveInterval = 10; # minutes
     lockCmd = "${depot.users.tazjin.screenLock}/bin/tazjin-screen-lock";
   };
