@@ -193,15 +193,16 @@ lib.fix (self: {
       email = "mail@tazj.in";
       group = "nginx";
       webroot = "/var/lib/acme/acme-challenge";
-      extraDomains = {
-        "cs.tazj.in" = null;
-        "git.tazj.in" = null;
-        "www.tazj.in" = null;
+      postRun = "systemctl reload nginx";
+
+      extraDomainNames = [
+        "cs.tazj.in"
+        "git.tazj.in"
+        "www.tazj.in"
 
         # Local domains (for this machine only)
-        "camden.tazj.in" = null;
-      };
-      postRun = "systemctl reload nginx";
+        "camden.tazj.in"
+      ];
     };
 
     certs."quassel.tazj.in" = {
