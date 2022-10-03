@@ -51,6 +51,24 @@
       "message": "We only need to negate in the `Err` case, no?",
       "revId": "33b06f667abc7cb56a3d7c15a13a750d0acce105",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "99d0b811_66852ce3",
+        "filename": "tvix/eval/src/builtins/mod.rs",
+        "patchSetId": 4
+      },
+      "lineNbr": 403,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-10-03T17:46:00Z",
+      "side": 1,
+      "message": "Yes, you may have noticed that I wrote this while distracted :p\n\nRejuggled the chain a bit to let this whole thing make more sense and to avoid a HEAD-commit that breaks tvixbolt.",
+      "parentUuid": "82e2ee38_02a11b12",
+      "revId": "33b06f667abc7cb56a3d7c15a13a750d0acce105",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
