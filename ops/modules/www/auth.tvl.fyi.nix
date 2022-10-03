@@ -13,7 +13,7 @@
 
       extraConfig = ''
         location / {
-          proxy_pass http://localhost:${config.services.keycloak.httpPort};
+          proxy_pass http://localhost:${toString config.services.keycloak.settings.http-port};
           proxy_set_header X-Forwarded-For $remote_addr;
           proxy_set_header X-Forwarded-Proto https;
           proxy_set_header Host $host;
