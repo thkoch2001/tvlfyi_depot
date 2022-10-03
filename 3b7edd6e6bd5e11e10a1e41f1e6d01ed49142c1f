@@ -18,6 +18,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "8db1e5ac_bb192ac6",
+        "filename": "tvix/eval/src/vm.rs",
+        "patchSetId": 4
+      },
+      "lineNbr": 210,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-10-03T07:47:48Z",
+      "side": 1,
+      "message": "The function just doesn\u0027t need to be `pub`, fixed it.",
+      "parentUuid": "4b3cbcd8_1d13e0eb",
+      "revId": "3b7edd6e6bd5e11e10a1e41f1e6d01ed49142c1f",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "718cbba0_31106853",
@@ -31,6 +49,24 @@
       "writtenOn": "2022-10-02T16:21:08Z",
       "side": 1,
       "message": "We should probably also add a hint to the error message that `__functor` is required for sets to be called (like we do with `__toString` for coercions).",
+      "revId": "3b7edd6e6bd5e11e10a1e41f1e6d01ed49142c1f",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "54d20462_24724ff4",
+        "filename": "tvix/eval/src/vm.rs",
+        "patchSetId": 4
+      },
+      "lineNbr": 227,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-10-03T07:47:48Z",
+      "side": 1,
+      "message": "I\u0027m not sure. I thought about it, but `__functor` is kind of one of the \"strange\" features of Nix that people might not expect/know about. It might be better if we *don\u0027t* tell more people about it. Lets bikeshed on IRC!",
+      "parentUuid": "718cbba0_31106853",
       "revId": "3b7edd6e6bd5e11e10a1e41f1e6d01ed49142c1f",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
