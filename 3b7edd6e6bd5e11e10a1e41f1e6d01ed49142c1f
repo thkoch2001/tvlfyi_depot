@@ -36,6 +36,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "0f99218f_e112fe4b",
+        "filename": "tvix/eval/src/vm.rs",
+        "patchSetId": 4
+      },
+      "lineNbr": 210,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2022-10-03T09:58:43Z",
+      "side": 1,
+      "message": "May be still good to fail on a Thunk, since the compiler should emit an `OpForce` before, right?",
+      "parentUuid": "8db1e5ac_bb192ac6",
+      "revId": "3b7edd6e6bd5e11e10a1e41f1e6d01ed49142c1f",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "718cbba0_31106853",
