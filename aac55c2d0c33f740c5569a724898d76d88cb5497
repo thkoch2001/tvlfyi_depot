@@ -20,6 +20,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "5d268976_4f716c06",
+        "filename": "tvix/eval/src/builtins/impure.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2022-10-03T15:58:29Z",
+      "side": 1,
+      "message": "It\u0027s done on the return, but I think it shouldn\u0027t be done unconditionally:\n\nhttps://cl.tvl.fyi/c/depot/+/6846/comments/82e2ee38_02a11b12",
+      "parentUuid": "09831fe4_f6844233",
+      "revId": "aac55c2d0c33f740c5569a724898d76d88cb5497",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "d391a6d6_587bf549",
         "filename": "tvix/eval/src/builtins/impure.rs",
         "patchSetId": 1
