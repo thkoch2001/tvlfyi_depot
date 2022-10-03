@@ -36,6 +36,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "5535d617_a805ef79",
+        "filename": "tvix/eval/src/builtins/impure.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-10-03T17:48:15Z",
+      "side": 1,
+      "message": "Done (in cl/6846)",
+      "parentUuid": "5d268976_4f716c06",
+      "revId": "aac55c2d0c33f740c5569a724898d76d88cb5497",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "d391a6d6_587bf549",
@@ -49,6 +67,24 @@
       "writtenOn": "2022-10-03T15:25:01Z",
       "side": 1,
       "message": "I feel like this should just be using `NixString::from`, to keep that abstracted (eg in case we want to change the internal repr of NixString at some point)",
+      "revId": "aac55c2d0c33f740c5569a724898d76d88cb5497",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ae05c4b9_29a7e38e",
+        "filename": "tvix/eval/src/builtins/impure.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-10-03T17:48:15Z",
+      "side": 1,
+      "message": "Done, though note that this code is now in cl/6846 instead.",
+      "parentUuid": "d391a6d6_587bf549",
       "revId": "aac55c2d0c33f740c5569a724898d76d88cb5497",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
