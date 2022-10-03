@@ -16,6 +16,24 @@
       "message": "\u003e Returns the positive duration which represents how far forward the second system time was from the first.\n\nI think we need to negate the return value?",
       "revId": "17e69aa488f18fd327429afb173ccc6ca680ddf6",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e59388ad_e3b9a418",
+        "filename": "tvix/eval/src/builtins/mod.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 398,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-10-03T07:45:51Z",
+      "side": 1,
+      "message": "You\u0027re right, I thought about it while writing the commit message and then forgot.",
+      "parentUuid": "e72f2467_52a8ac53",
+      "revId": "17e69aa488f18fd327429afb173ccc6ca680ddf6",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
