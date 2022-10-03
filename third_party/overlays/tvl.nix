@@ -90,4 +90,19 @@ in
       meta.ci.skip = true;
     };
   }));
+
+
+  # Build electrum with protobuf >= 4 by following hypothetical instructions from
+  # upstream commit that pins to < 4
+  # https://github.com/spesmilo/electrum/commit/52b73880f95be5cf51742fec10cde0a2e4b23de4
+  # https://github.com/NixOS/nixpkgs/pull/194112
+  electrum = super.electrum.overrideAttrs (old: {
+    postPatch = ''
+      # make compatible with protobuf4 by easing dependencies ...
+      substituteInPlace ./contrib/requirements/requirements.txt \
+        --replace "protobuf>=3.12,<4" "protobuf>=3.12"
+      # ... and regenerating the paymentrequest_pb2.py file
+      protoc --python_out=. electrum/paymentrequest.proto
+    '' + old.postPatch;
+  });
 }
