@@ -254,7 +254,7 @@ fn eval(trace: bool, code: &str) -> Output {
     let mut compilation_observer = DisassemblingObserver::new(codemap.clone(), &mut out.bytecode);
 
     let result = tvix_eval::compile(
-        root_expr,
+        &root_expr,
         Some("/nixbolt".into()),
         file.clone(),
         tvix_eval::global_builtins(),
