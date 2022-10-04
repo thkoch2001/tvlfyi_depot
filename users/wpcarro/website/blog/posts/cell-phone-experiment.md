@@ -5,16 +5,16 @@ on it.
 
 ### Explore/Exploit
 
-Ever since I read Charles Duhigg's book, [The Power of Habit](poh), I try to
+Ever since I read Charles Duhigg's book, [The Power of Habit][poh], I try to
 habituate as many aspects of my life as I can.
 
 Making my bed every morning is an example of a habit -- so too is flossing at
 night before bed.
 
-The *exploit* axis of the [explore/exploit tradeoff](exp-exp) endows habits with
+The *exploit* axis of the [explore/exploit tradeoff][exp-exp] endows habits with
 their power. Brian Christian and Tom Griffiths explain this concept more clearly
 than I can in Chapter 2 of their exceptional book, [Algorithms to Live
-By](algos).
+By][algos].
 
 Habits are powerful, but if I overly exploit an activity, I may settle on a
 local optimum in lieu of settling on a global optimum; these are the opportunity
