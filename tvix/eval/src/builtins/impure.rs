@@ -43,7 +43,7 @@ pub(super) fn builtins() -> BTreeMap<NixString, Value> {
 /// it needs to capture the [crate::SourceCode] structure to correctly track
 /// source code locations while invoking a compiler.
 // TODO: need to be able to pass through a CompilationObserver, too.
-pub fn builtins_import(source: SourceCode) -> Builtin {
+pub fn builtins_import(globals: Rc<HashMap<&'static str, Value>>, source: SourceCode) -> Builtin {
     Builtin::new(
         "import",
         &[true],
@@ -83,7 +83,7 @@ pub fn builtins_import(source: SourceCode) -> Builtin {
                 &parsed.tree().expr().unwrap(),
                 Some(path.clone()),
                 file,
-                HashMap::new(), // TODO: pass through globals
+                globals.clone(),
                 &mut NoOpObserver::default(),
             )
             .map_err(|err| ErrorKind::ImportCompilerError {
