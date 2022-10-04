@@ -1,4 +1,4 @@
-use std::path::PathBuf;
+use std::{collections::HashMap, path::PathBuf, rc::Rc};
 
 use crate::{
     builtins::global_builtins,
@@ -59,13 +59,29 @@ pub fn interpret(code: &str, location: Option<PathBuf>, options: Options) -> Eva
     }
 
     // TODO: encapsulate this import weirdness in builtins
-    let mut builtins = global_builtins();
 
-    #[cfg(feature = "impure")]
-    builtins.insert(
-        "import",
-        Value::Builtin(crate::builtins::impure::builtins_import(source.clone())),
-    );
+    let builtins = if cfg!(feature = "impure") {
+        let builtins = Rc::new(global_builtins());
+        let import = Value::Builtin(crate::builtins::impure::builtins_import(
+            builtins.clone(),
+            source.clone(),
+        ));
+
+        // Unsafe justification: We need to insert import into the
+        // builtins, but the builtins passed to import must have import
+        // *in it*. We know that during construction nothing else can
+        // access the builtins, so mutating the shared value is safe in
+        // this block (for now). We do need to get rid of this, though.
+        unsafe {
+            let ptr: *mut HashMap<&'static str, Value> = Rc::as_ptr(&builtins) as _;
+            let mut_map: &mut HashMap<&'static str, Value> = &mut (*ptr);
+            mut_map.insert("import", import);
+        }
+
+        builtins
+    } else {
+        Rc::new(global_builtins())
+    };
 
     let result = if options.dump_bytecode {
         crate::compiler::compile(
