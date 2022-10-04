@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a5bbc884_ad43c641",
+        "filename": "tvix/eval/src/builtins/impure.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 62,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-10-04T21:09:20Z",
+      "side": 1,
+      "message": "Can `coerce_value_to_path` help here? https://cs.tvl.fyi/depot/-/blob/tvix/eval/src/builtins/mod.rs?L31:8",
+      "range": {
+        "startLine": 51,
+        "startChar": 0,
+        "endLine": 62,
+        "endChar": 14
+      },
+      "revId": "c2a02d74ca329046d901f229cf5c29bab992f01e",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d024ca68_27791cbb",
+        "filename": "tvix/eval/src/builtins/impure.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 77,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-10-04T21:09:20Z",
+      "side": 1,
+      "message": "Should `ImportParseError` render the parse errors it encounters?\n\nerror[E027]: 2 parse errors occured while importing \u0027/tmp/foo.nix\u0027\n --\u003e [tvix-repl]:1:1\n  |\n1 | import /tmp/foo.nix \"\"\n  | ^^^^^^^^^^^^^^^^^^^",
+      "range": {
+        "startLine": 74,
+        "startChar": 27,
+        "endLine": 77,
+        "endChar": 17
+      },
+      "revId": "c2a02d74ca329046d901f229cf5c29bab992f01e",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
