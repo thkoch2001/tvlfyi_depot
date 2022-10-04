@@ -57,4 +57,11 @@
     content = ./posts/ssh-oddities.md;
     draft = false;
   }
+  {
+    key = "nix-shell";
+    title = "nix-shell (note to self)";
+    date = 1664902186;
+    content = ./posts/nix-shell-note.md;
+    draft = false;
+  }
 ]
