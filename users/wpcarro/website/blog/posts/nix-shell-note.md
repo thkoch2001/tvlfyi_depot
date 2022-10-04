@@ -28,7 +28,7 @@ Pass the Nix expression to `nix-shell -p`:
 ## Explanation
 
 This works because Nix forwards the arguments passed to `-p` (i.e. `--packages`)
-and interpolates them into this expression here: [source](nix-src)
+and interpolates them into this expression here: [source][nix-src]
 
 ```nix
 { ... }@args:
@@ -43,7 +43,7 @@ with import <nixpkgs> args;
 ```
 
 So really you can pass-in *any* valid Nix expression that produces a derivation
-and `nix-shell` will put their outputs on your `PATH`.
+and `nix-shell` will put its outputs on your `PATH`.
 
 Enjoy!
 
