@@ -1,9 +1,9 @@
 use std::fmt::Write;
 
 use serde::{Deserialize, Serialize};
-use std::rc::Rc;
 use tvix_eval::observer::TracingObserver;
 use tvix_eval::observer::{DisassemblingObserver, NoOpObserver};
+use tvix_eval::SourceCode;
 use web_sys::HtmlInputElement;
 use web_sys::HtmlTextAreaElement;
 use yew::prelude::*;
@@ -230,9 +230,6 @@ fn eval(trace: bool, code: &str) -> Output {
         return out;
     }
 
-    let mut codemap = codemap::CodeMap::new();
-    let file = codemap.add_file("nixbolt".to_string(), code.into());
-
     let parsed = rnix::ast::Root::parse(code);
     let errors = parsed.errors();
 
@@ -250,8 +247,10 @@ fn eval(trace: bool, code: &str) -> Output {
         .expr()
         .expect("expression should exist if no errors occured");
 
-    let codemap = Rc::new(codemap);
-    let mut compilation_observer = DisassemblingObserver::new(codemap.clone(), &mut out.bytecode);
+    let source = SourceCode::new();
+    let file = source.add_file("nixbolt".to_string(), code.into());
+
+    let mut compilation_observer = DisassemblingObserver::new(source.clone(), &mut out.bytecode);
 
     let result = tvix_eval::compile(
         &root_expr,
@@ -266,7 +265,7 @@ fn eval(trace: bool, code: &str) -> Output {
         writeln!(
             &mut out.warnings,
             "{}\n",
-            warning.fancy_format_str(&codemap).trim(),
+            warning.fancy_format_str(&source).trim(),
         )
         .unwrap();
     }
@@ -276,7 +275,7 @@ fn eval(trace: bool, code: &str) -> Output {
             writeln!(
                 &mut out.compiler_errors,
                 "{}\n",
-                error.fancy_format_str(&codemap).trim(),
+                error.fancy_format_str(&source).trim(),
             )
             .unwrap();
         }
@@ -295,7 +294,7 @@ fn eval(trace: bool, code: &str) -> Output {
         Err(err) => writeln!(
             &mut out.runtime_errors,
             "{}",
-            err.fancy_format_str(&codemap).trim()
+            err.fancy_format_str(&source).trim()
         )
         .unwrap(),
     };
