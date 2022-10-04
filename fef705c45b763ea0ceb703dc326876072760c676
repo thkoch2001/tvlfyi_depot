@@ -16,6 +16,23 @@
       "message": "Adding some of our more active nixpkgs contributors as reviewers, as I\u0027m not actually up-to-date with these convention changes.",
       "revId": "fef705c45b763ea0ceb703dc326876072760c676",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f390be89_add1aba5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2022-10-04T19:06:19Z",
+      "side": 1,
+      "message": "I’ve seen changes like this in the nix docs, and I have to admit it makes sense from a UX perspective",
+      "revId": "fef705c45b763ea0ceb703dc326876072760c676",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
