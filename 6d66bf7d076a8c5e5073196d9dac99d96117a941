@@ -16,6 +16,24 @@
       "message": "Let\u0027s add a case to the compareVersions test that `builtins.compareVersions \"2.3\" builtins.nixVersion  \u003d\u003d -1`.",
       "revId": "6d66bf7d076a8c5e5073196d9dac99d96117a941",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7110a23d_3fb8eefc",
+        "filename": "tvix/eval/src/builtins/mod.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 394,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2022-10-04T16:07:51Z",
+      "side": 1,
+      "message": "Or maybe better to do it separately since it is not really a necessary property of the Nix language per se (although for one that works on nixpkgs).",
+      "parentUuid": "6d9bb0a1_8bb2ca5f",
+      "revId": "6d66bf7d076a8c5e5073196d9dac99d96117a941",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
