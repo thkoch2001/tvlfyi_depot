@@ -1,4 +1,5 @@
 use std::fmt::Write;
+use std::rc::Rc;
 
 use serde::{Deserialize, Serialize};
 use tvix_eval::observer::TracingObserver;
@@ -256,7 +257,7 @@ fn eval(trace: bool, code: &str) -> Output {
         &root_expr,
         Some("/nixbolt".into()),
         file.clone(),
-        tvix_eval::global_builtins(),
+        Rc::new(tvix_eval::global_builtins()),
         &mut compilation_observer,
     )
     .unwrap();
