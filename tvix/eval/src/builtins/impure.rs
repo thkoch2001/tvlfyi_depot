@@ -1,8 +1,11 @@
 use std::{
     collections::{BTreeMap, HashMap},
+    path::PathBuf,
     rc::Rc,
     time::{SystemTime, UNIX_EPOCH},
 };
+
+use path_clean::PathClean;
 
 use crate::{
     errors::ErrorKind,
@@ -50,9 +53,11 @@ pub fn builtins_import(source: SourceCode) -> Builtin {
         move |mut args: Vec<Value>, _: &mut VM| {
             let path = match args.pop().unwrap() {
                 Value::Path(path) => path,
-                Value::String(_) => {
-                    return Err(ErrorKind::NotImplemented("importing from string-paths"))
-                }
+
+                // Subject string "paths" to the same normalisation logic as
+                // path literals.
+                Value::String(s) => PathBuf::from(s.as_str()).clean(),
+
                 other => {
                     return Err(ErrorKind::TypeError {
                         expected: "path or string",
