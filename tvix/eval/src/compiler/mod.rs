@@ -103,7 +103,7 @@ impl<'observer> Compiler<'observer> {
     pub(crate) fn new(
         location: Option<PathBuf>,
         file: Arc<codemap::File>,
-        globals: HashMap<&'static str, Value>,
+        globals: Rc<HashMap<&'static str, Value>>,
         observer: &'observer mut dyn CompilerObserver,
     ) -> EvalResult<Self> {
         let mut root_dir = match location {
@@ -1103,7 +1103,7 @@ fn optimise_tail_call(chunk: &mut Chunk) {
 /// Note that all builtin functions are *not* considered part of the
 /// language in this sense and MUST be supplied as additional global
 /// values, including the `builtins` set itself.
-fn prepare_globals(additional: HashMap<&'static str, Value>) -> GlobalsMap {
+fn prepare_globals(additional: Rc<HashMap<&'static str, Value>>) -> GlobalsMap {
     let mut globals: GlobalsMap = HashMap::new();
 
     globals.insert(
@@ -1127,7 +1127,8 @@ fn prepare_globals(additional: HashMap<&'static str, Value>) -> GlobalsMap {
         }),
     );
 
-    for (ident, value) in additional.into_iter() {
+    for (ident, value) in additional.iter() {
+        let value: Value = value.clone();
         globals.insert(
             ident,
             Rc::new(move |compiler, span| compiler.emit_constant(value.clone(), &span)),
@@ -1141,7 +1142,7 @@ pub fn compile(
     expr: &ast::Expr,
     location: Option<PathBuf>,
     file: Arc<codemap::File>,
-    globals: HashMap<&'static str, Value>,
+    globals: Rc<HashMap<&'static str, Value>>,
     observer: &mut dyn CompilerObserver,
 ) -> EvalResult<CompilationOutput> {
     let mut c = Compiler::new(location, file, globals, observer)?;
