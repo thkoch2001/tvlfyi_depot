@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9a9c6c4c_ba47a03e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-10-04T04:37:06Z",
+      "side": 1,
+      "message": "Are these messages reporting the correct error codes?\n\n```\ntvix-repl\u003e 8 * \"testing\"\nerror[E017]: expected value of type \u0027number (either int or float)\u0027, but found a \u0027stri --\u003e [tvix-repl]:1:1\n  |\n1 | 8 * \"testing\"\n  | ^^^^^^^^^^^^^\n\ntvix-repl\u003e builtins.tail []\nerror[E017]: \u0027tail\u0027 called on an empty list\n --\u003e [tvix-repl]:1:1\n  |\n1 | builtins.tail []\n  | ^^^^^^^^^^^^^^^^\n\ntvix-repl\u003e 8 \u003c {}\nerror[E017]: can not compare a int with a set\n --\u003e [tvix-repl]:1:1\n  |\n1 | 8 \u003c {}\n  | ^^^^^^\n```\n\nI was expecting:\n- E006\n- E023\n- E007",
+      "revId": "a0b370ecf2d316f68ca5033486fafa10b24547c7",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
