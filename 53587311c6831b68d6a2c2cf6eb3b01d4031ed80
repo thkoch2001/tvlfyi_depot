@@ -18,6 +18,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "17a13262_3aa94cdd",
+        "filename": "tvix/eval/src/builtins/impure.rs",
+        "patchSetId": 6
+      },
+      "lineNbr": 80,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-10-05T13:10:11Z",
+      "side": 1,
+      "message": "You\u0027re asking if we can import the same file twice, yes? I think so, however, the plan is to avoid recompiling in that case and retrieve a stored thunk instead. This is not yet a complete implementation ...",
+      "parentUuid": "2f09c823_95e7f74c",
+      "revId": "53587311c6831b68d6a2c2cf6eb3b01d4031ed80",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "b8b833e7_592a19fa",
@@ -31,6 +49,24 @@
       "writtenOn": "2022-10-05T12:27:01Z",
       "side": 1,
       "message": "I wonder if we can improve this error emitting mechanism to prevent this kind of thing where you have to check for errors a second time.",
+      "revId": "53587311c6831b68d6a2c2cf6eb3b01d4031ed80",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ab588656_b69d9811",
+        "filename": "tvix/eval/src/builtins/impure.rs",
+        "patchSetId": 6
+      },
+      "lineNbr": 94,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-10-05T13:10:11Z",
+      "side": 1,
+      "message": "I think so, but we have to move this complexity somewhere. It might make more sense to encapsulate it *within* the compiler module though, I\u0027ll take a look at that separately.",
+      "parentUuid": "b8b833e7_592a19fa",
       "revId": "53587311c6831b68d6a2c2cf6eb3b01d4031ed80",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
