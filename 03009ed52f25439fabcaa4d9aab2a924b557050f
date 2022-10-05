@@ -16,6 +16,24 @@
       "message": "This is incorrect. You should use `path.coerce_to_path()` which also coerces string value from paths. This also coerces stuff like `{ outPath \u003d \"/nix/store/…\"; }` etc. correctly.\n\nIt is probably fine to call `clean` on the path in `coerce_to_path` though, we could add that. Nix, however does no normalization on strings coerced to paths which leaks out, e.g. you can use `builtins.pathExists (toString ./result + \"/.\")` to check if the `result` symlink is a directory. That is weird edge case behavior, though, and even unreliable in C++ Nix: https://github.com/NixOS/nix/issues/6579",
       "revId": "03009ed52f25439fabcaa4d9aab2a924b557050f",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b9b4d502_5124bd56",
+        "filename": "tvix/eval/src/builtins/impure.rs",
+        "patchSetId": 3
+      },
+      "lineNbr": 59,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2022-10-05T15:38:13Z",
+      "side": 1,
+      "message": "Done.\n\nI guess let\u0027s think about the normalisation problem elsewhere?",
+      "parentUuid": "85f7b551_62fd9687",
+      "revId": "03009ed52f25439fabcaa4d9aab2a924b557050f",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
