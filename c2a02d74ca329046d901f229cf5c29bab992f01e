@@ -24,6 +24,30 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "02b71d94_98502bff",
+        "filename": "tvix/eval/src/builtins/impure.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 62,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-10-05T10:35:26Z",
+      "side": 1,
+      "message": "Yes, but we\u0027re doing that in cl/6866",
+      "parentUuid": "a5bbc884_ad43c641",
+      "range": {
+        "startLine": 51,
+        "startChar": 0,
+        "endLine": 62,
+        "endChar": 14
+      },
+      "revId": "c2a02d74ca329046d901f229cf5c29bab992f01e",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "d024ca68_27791cbb",
@@ -37,6 +61,30 @@
       "writtenOn": "2022-10-04T21:09:20Z",
       "side": 1,
       "message": "Should `ImportParseError` render the parse errors it encounters?\n\nerror[E027]: 2 parse errors occured while importing \u0027/tmp/foo.nix\u0027\n --\u003e [tvix-repl]:1:1\n  |\n1 | import /tmp/foo.nix \"\"\n  | ^^^^^^^^^^^^^^^^^^^",
+      "range": {
+        "startLine": 74,
+        "startChar": 27,
+        "endLine": 77,
+        "endChar": 17
+      },
+      "revId": "c2a02d74ca329046d901f229cf5c29bab992f01e",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "40169953_62d487bb",
+        "filename": "tvix/eval/src/builtins/impure.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 77,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-10-05T10:35:26Z",
+      "side": 1,
+      "message": "Yes, see the comments on the error variants noting that we need to implement this later. It is quite complex to do correctly, so we haven\u0027t tackled it yet.",
+      "parentUuid": "d024ca68_27791cbb",
       "range": {
         "startLine": 74,
         "startChar": 27,
