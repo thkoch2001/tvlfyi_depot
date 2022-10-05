@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2f09c823_95e7f74c",
+        "filename": "tvix/eval/src/builtins/impure.rs",
+        "patchSetId": 6
+      },
+      "lineNbr": 80,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2022-10-05T12:27:01Z",
+      "side": 1,
+      "message": "Do file names have to be unique in a codemap?",
+      "revId": "53587311c6831b68d6a2c2cf6eb3b01d4031ed80",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b8b833e7_592a19fa",
+        "filename": "tvix/eval/src/builtins/impure.rs",
+        "patchSetId": 6
+      },
+      "lineNbr": 94,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2022-10-05T12:27:01Z",
+      "side": 1,
+      "message": "I wonder if we can improve this error emitting mechanism to prevent this kind of thing where you have to check for errors a second time.",
+      "revId": "53587311c6831b68d6a2c2cf6eb3b01d4031ed80",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
