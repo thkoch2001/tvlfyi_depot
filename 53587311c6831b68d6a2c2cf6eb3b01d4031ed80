@@ -36,6 +36,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "772d6d7b_32feff24",
+        "filename": "tvix/eval/src/builtins/impure.rs",
+        "patchSetId": 6
+      },
+      "lineNbr": 80,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2022-10-05T15:00:04Z",
+      "side": 1,
+      "message": "No, I meant mostly it if it codemap can deal with duplicate file names. Due to `to_string_lossy()` it is even conceivable that we add the same file name twice with different contents.",
+      "parentUuid": "17a13262_3aa94cdd",
+      "revId": "53587311c6831b68d6a2c2cf6eb3b01d4031ed80",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "b8b833e7_592a19fa",
