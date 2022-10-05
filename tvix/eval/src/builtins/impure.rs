@@ -47,7 +47,7 @@ pub fn builtins_import(globals: Rc<HashMap<&'static str, Value>>, source: Source
     Builtin::new(
         "import",
         &[true],
-        move |mut args: Vec<Value>, _: &mut VM| {
+        move |mut args: Vec<Value>, vm: &mut VM| {
             let path = match args.pop().unwrap() {
                 Value::Path(path) => path,
                 Value::String(_) => {
@@ -98,9 +98,9 @@ pub fn builtins_import(globals: Rc<HashMap<&'static str, Value>>, source: Source
                 });
             }
 
-            // TODO: deal with runtime *warnings* (most likely through an
-            // emit_warning function on the VM that might return it together with
-            // the result)
+            for warning in result.warnings {
+                vm.push_warning(warning);
+            }
 
             // Compilation succeeded, we can construct a thunk from whatever it spat
             // out and return that.
