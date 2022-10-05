@@ -291,7 +291,18 @@ fn eval(trace: bool, code: &str) -> Output {
     };
 
     match result {
-        Ok(value) => writeln!(&mut out.output, "{}", value).unwrap(),
+        Ok(result) => {
+            for warning in result.warnings {
+                writeln!(
+                    &mut out.warnings,
+                    "{}\n",
+                    warning.fancy_format_str(&source).trim(),
+                )
+                .unwrap();
+            }
+
+            writeln!(&mut out.output, "{}", result.value).unwrap()
+        }
         Err(err) => writeln!(
             &mut out.runtime_errors,
             "{}",
