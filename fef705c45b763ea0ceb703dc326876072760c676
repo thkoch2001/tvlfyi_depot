@@ -50,6 +50,23 @@
       "message": "vpfeiffer pointed out on Github:\n\n\u003e I realized I missed that there are some examples in the nixpkgs documentation[0] that use final and prev but just not in the overlays section yet.\n\u003e [0]: https://nixos.org/manual/nixpkgs/stable/#packaging-beam-applications",
       "revId": "fef705c45b763ea0ceb703dc326876072760c676",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1461cac1_4317bcae",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-10-05T11:12:09Z",
+      "side": 1,
+      "message": "+2 in light of the updated docs \u0026 Profpatsch\u0027s approval",
+      "revId": "fef705c45b763ea0ceb703dc326876072760c676",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
