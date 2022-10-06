@@ -59,14 +59,15 @@ pub fn builtins_import(globals: Rc<HashMap<&'static str, Value>>, source: Source
             let parsed = rnix::ast::Root::parse(&contents);
             let errors = parsed.errors();
 
+            let file = source.add_file(path.to_string_lossy().to_string(), contents);
+
             if !errors.is_empty() {
                 return Err(ErrorKind::ImportParseError {
                     path,
+                    file,
                     errors: errors.to_vec(),
                 });
             }
-
-            let file = source.add_file(path.to_string_lossy().to_string(), contents);
 
             let result = crate::compile(
                 &parsed.tree().expr().unwrap(),
