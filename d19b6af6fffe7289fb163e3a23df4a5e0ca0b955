@@ -18,6 +18,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "07079727_a8d56ec7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2022-10-06T10:14:26Z",
+      "side": 1,
+      "message": "It does work with Nix 2.3! To demonstrate I\u0027ve added an example to CI that doesn\u0027t take forever to evaluate hopefully. As a result you\u0027ll need to +2 again.",
+      "parentUuid": "29cad4a4_8552c487",
+      "revId": "d19b6af6fffe7289fb163e3a23df4a5e0ca0b955",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "2a24858e_31c1acd4",
@@ -31,6 +49,30 @@
       "writtenOn": "2022-10-06T09:30:57Z",
       "side": 1,
       "message": "corresponding",
+      "range": {
+        "startLine": 15,
+        "startChar": 39,
+        "endLine": 15,
+        "endChar": 52
+      },
+      "revId": "d19b6af6fffe7289fb163e3a23df4a5e0ca0b955",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5d44ed96_30fcf3f1",
+        "filename": "nix/dependency-analyzer/default.nix",
+        "patchSetId": 2
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2022-10-06T10:14:26Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2a24858e_31c1acd4",
       "range": {
         "startLine": 15,
         "startChar": 39,
