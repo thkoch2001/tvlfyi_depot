@@ -13,7 +13,7 @@ serde_urlencoded = "*" # pinned by yew
 web-sys = "*" # pinned by yew
 
 # needs to be in sync with nixpkgs
-wasm-bindgen = "= 0.2.82"
+wasm-bindgen = "= 0.2.83"
 
 [dependencies.rnix]
 git = "https://github.com/nix-community/rnix-parser.git"
