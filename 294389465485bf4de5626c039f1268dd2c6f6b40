@@ -34,6 +34,24 @@
       "parentUuid": "be81dc15_11c6f8ff",
       "revId": "294389465485bf4de5626c039f1268dd2c6f6b40",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5f71977a_1df14bf2",
+        "filename": "web/static/tvl.css",
+        "patchSetId": 3
+      },
+      "lineNbr": 50,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-10-06T10:30:49Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "00cf5eb6_1491183e",
+      "revId": "294389465485bf4de5626c039f1268dd2c6f6b40",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
