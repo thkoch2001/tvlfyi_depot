@@ -24,6 +24,30 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "6247ec3a_567e1861",
+        "filename": "tvix/eval/src/eval.rs",
+        "patchSetId": 10
+      },
+      "lineNbr": 73,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-10-06T17:05:47Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3e6d056d_1023e76c",
+      "range": {
+        "startLine": 73,
+        "startChar": 11,
+        "endLine": 73,
+        "endChar": 32
+      },
+      "revId": "ab3ea26effac529cb8a6e2d98fe1f00df6cca31f",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "6dba2028_72554b9a",
@@ -37,6 +61,30 @@
       "writtenOn": "2022-10-06T15:25:08Z",
       "side": 1,
       "message": "I think this could be written without any unsafe using [`Rc::get_mut`](https://doc.rust-lang.org/std/rc/struct.Rc.html#method.get_mut)",
+      "range": {
+        "startLine": 79,
+        "startChar": 12,
+        "endLine": 81,
+        "endChar": 45
+      },
+      "revId": "ab3ea26effac529cb8a6e2d98fe1f00df6cca31f",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "efa1b200_6e5ad0a6",
+        "filename": "tvix/eval/src/eval.rs",
+        "patchSetId": 10
+      },
+      "lineNbr": 81,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-10-06T17:05:47Z",
+      "side": 1,
+      "message": "Nope, the strong count is already \u003e1 at this point.",
+      "parentUuid": "6dba2028_72554b9a",
       "range": {
         "startLine": 79,
         "startChar": 12,
