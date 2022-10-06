@@ -21,7 +21,7 @@ let
 
   inherit (depot.web.blog) post includePost renderPost;
 
-  posts = filter includePost (list post (import ./posts.nix));
+  posts = list post (import ./posts.nix);
 
   rendered = pkgs.runCommand "tazjins-blog" { } ''
     mkdir -p $out
@@ -33,7 +33,10 @@ let
 
 in
 {
-  inherit posts rendered config;
+  inherit rendered config;
+
+  # Filter unlisted posts from the index
+  posts = filter includePost posts;
 
   # Generate embeddable nginx configuration for redirects from old post URLs
   oldRedirects = lib.concatStringsSep "\n" (map
