@@ -54,4 +54,11 @@
     content = ./posts/nsa-zettabytes.md;
     oldKey = "1375310627";
   }
+  {
+    key = "thoughts";
+    title = "Some thoughts";
+    date = 1665095948;
+    content = ./posts/thoughts.md;
+    listed = false;
+  }
 ]
