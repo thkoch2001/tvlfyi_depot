@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "29cad4a4_8552c487",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-10-06T09:30:57Z",
+      "side": 1,
+      "message": "I didn\u0027t try it (because I don\u0027t have \u003e2.3 nix anywhere), but it SGTM",
+      "revId": "d19b6af6fffe7289fb163e3a23df4a5e0ca0b955",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2a24858e_31c1acd4",
+        "filename": "nix/dependency-analyzer/default.nix",
+        "patchSetId": 2
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-10-06T09:30:57Z",
+      "side": 1,
+      "message": "corresponding",
+      "range": {
+        "startLine": 15,
+        "startChar": 39,
+        "endLine": 15,
+        "endChar": 52
+      },
+      "revId": "d19b6af6fffe7289fb163e3a23df4a5e0ca0b955",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
