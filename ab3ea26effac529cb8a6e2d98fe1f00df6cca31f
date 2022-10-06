@@ -93,6 +93,30 @@
       },
       "revId": "ab3ea26effac529cb8a6e2d98fe1f00df6cca31f",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4bead12e_b7f03a25",
+        "filename": "tvix/eval/src/eval.rs",
+        "patchSetId": 10
+      },
+      "lineNbr": 81,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2022-10-06T19:45:50Z",
+      "side": 1,
+      "message": "In that case, this is likely actually unsound. The rust safety rules specify that it is *always* unsound to mutate an aliased reference, even if nothing is *accessing* the aliases during the mutation.",
+      "parentUuid": "efa1b200_6e5ad0a6",
+      "range": {
+        "startLine": 79,
+        "startChar": 12,
+        "endLine": 81,
+        "endChar": 45
+      },
+      "revId": "ab3ea26effac529cb8a6e2d98fe1f00df6cca31f",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
