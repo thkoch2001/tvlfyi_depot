@@ -117,6 +117,30 @@
       },
       "revId": "ab3ea26effac529cb8a6e2d98fe1f00df6cca31f",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "80256331_42346670",
+        "filename": "tvix/eval/src/eval.rs",
+        "patchSetId": 10
+      },
+      "lineNbr": 81,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-10-06T21:55:57Z",
+      "side": 1,
+      "message": "I don\u0027t think it is UB in practice; you wouldn\u0027t think twice about writing this with std::shared_ptr in C++ for example.\n\nEither way, the only method to avoid it is to introduce RefCell or something here then.",
+      "parentUuid": "4bead12e_b7f03a25",
+      "range": {
+        "startLine": 79,
+        "startChar": 12,
+        "endLine": 81,
+        "endChar": 45
+      },
+      "revId": "ab3ea26effac529cb8a6e2d98fe1f00df6cca31f",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
