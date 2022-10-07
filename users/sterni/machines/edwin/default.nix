@@ -21,7 +21,17 @@
     time.timeZone = "Europe/Berlin";
 
     nixpkgs.config.allowUnfreeRedistributable = true;
-    nix.package = pkgs.nix_2_3;
+    nix = {
+      package = pkgs.nix_2_3;
+      settings = {
+        trusted-public-keys = lib.mkAfter [
+          "headcounter.org:/7YANMvnQnyvcVB6rgFTdb8p5LG1OTXaO+21CaOSBzg="
+        ];
+        substituters = lib.mkAfter [
+          "https://hydra.build"
+        ];
+      };
+    };
     tvl.cache.enable = true;
 
     services = {
