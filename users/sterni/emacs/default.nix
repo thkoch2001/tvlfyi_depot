@@ -54,27 +54,27 @@ let
       (pkgs.writeTextFile {
         name = "injected-emacs.d";
         destination = "/nix-inject.el";
-        text = ''
-          ;; bqn-mode
-          (setq bqn-interpreter-path "${pkgs.cbqn}/bin/BQN")
-        ''
-        # Java doesn't seem to be available for non 64bit platforms in nixpkgs
-        + lib.optionalString is64bit ''
+        text =
+          # Java doesn't seem to be available for non 64bit platforms in nixpkgs
+          # CBQN doesn't seem to support i686 at least
+          lib.optionalString is64bit ''
+            ;; bqn-mode
+            (setq bqn-interpreter-path "${pkgs.cbqn}/bin/BQN")
 
-          ;; languagetool
-          (setq languagetool-java-bin "${pkgs.jre}/bin/java"
-                languagetool-console-command "${pkgs.languagetool}/share/languagetool-commandline.jar"
-                languagetool-server-command "${pkgs.languagetool}/share/languagetool-server.jar")
+            ;; languagetool
+            (setq languagetool-java-bin "${pkgs.jre}/bin/java"
+                  languagetool-console-command "${pkgs.languagetool}/share/languagetool-commandline.jar"
+                  languagetool-server-command "${pkgs.languagetool}/share/languagetool-server.jar")
           '' + ''
 
-          ;; use bash instead of fish from SHELL for some things, as it plays
-          ;; nicer with TERM=dumb, as I don't need/want vterm anyways.
-          ;; We want it to source /etc/profile for some extra setup that
-          ;; kicks in if TERM=dumb, meaning we can't use dash/sh mode.
-          (setq shell-file-name "${pkgs.bash}/bin/bash"
-                explicit-bash-args '("-l"))
+            ;; use bash instead of fish from SHELL for some things, as it plays
+            ;; nicer with TERM=dumb, as I don't need/want vterm anyways.
+            ;; We want it to source /etc/profile for some extra setup that
+            ;; kicks in if TERM=dumb, meaning we can't use dash/sh mode.
+            (setq shell-file-name "${pkgs.bash}/bin/bash"
+                  explicit-bash-args '("-l"))
 
-          (provide 'nix-inject)
+            (provide 'nix-inject)
         '';
       })
     ];
