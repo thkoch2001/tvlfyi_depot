@@ -7,19 +7,19 @@
 
 ## Problem
 
-If the `git` garbage-collects any of the commits to which services are pinned,
-and that service attempts to deploy/redeploy, it will fail.
+If `git` garbage-collects any of the commits to which services are pinned, and
+that service attempts to redeploy, the deployment will fail.
 
 `git for-each-ref --contains $SHA` will report all of the refs that can reach
-some commit, `$SHA`. This may be things like:
-- `refs/replace`: `git-filter-repo` artifacts
+some commit, `$SHA`. This may report things like:
+- `refs/replace` (i.e. `git-filter-repo` artifacts)
 - `refs/stash`
 - some local branches
 - some remote branches
 
-One solution might involve avoid garbage-collection. But if any of our pinned
-commits contained sensitive cleartext we will *want* to ensure that `git` purges
-these.
+One solution might involve creating references to avoid garbage-collection. But
+if any of our pinned commits contains sensitive cleartext we *want* to ensure
+that `git` purges these.
 
 Instead let's find the SHAs of the new, rewritten commits and replace the pinned
 versions with those.
@@ -29,7 +29,7 @@ versions with those.
 Essentially we want to find a commit with the same *tree* state as the currently
 pinned commit. Here are two ways to get that info...
 
-This way is indirect, but provides more context:
+This way is indirect, but provides more context about the change:
 
 ```shell
 λ git cat-file -p $SHA
@@ -43,14 +43,14 @@ feat(florp): Florp can now flarp
 You're welcome :)
 ```
 
-This way is more direct:
+This way is more direct (read: code-golf-friendly):
 
 ```shell
 λ git log -1 --format=%T $SHA
 ```
 
-Now that we have the SHA of the desired *tree* state, let's query `git` for
-commits that share this state.
+Now that we have the SHA of the desired tree state, let's use it to query `git`
+for commits with the same tree SHA.
 
 ```shell
 λ git log --format='%H %T' | grep $(git log --format=%T -1 $SHA) | awk '{ print $1 }'
