@@ -64,4 +64,11 @@
     content = ./posts/nix-shell-note.md;
     draft = false;
   }
+  {
+    key = "git-filter-repo-note";
+    title = "git-filter-repo (note to self)";
+    date = 1665163559;
+    content = ./posts/git-filter-repo-note.md;
+    draft = false;
+  }
 ]
