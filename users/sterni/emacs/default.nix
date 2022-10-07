@@ -54,17 +54,17 @@ let
       (pkgs.writeTextFile {
         name = "injected-emacs.d";
         destination = "/nix-inject.el";
-        text = ''
-          ;; bqn-mode
-          (setq bqn-interpreter-path "${pkgs.cbqn}/bin/BQN")
-        ''
-        # Java doesn't seem to be available for non 64bit platforms in nixpkgs
-        + lib.optionalString is64bit ''
+        text =
+          # Java doesn't seem to be available for non 64bit platforms in nixpkgs
+          # CBQN doesn't seem to support i686 at least
+          lib.optionalString is64bit ''
+            ;; bqn-mode
+            (setq bqn-interpreter-path "${pkgs.cbqn}/bin/BQN")
 
-          ;; languagetool
-          (setq languagetool-java-bin "${pkgs.jre}/bin/java"
-                languagetool-console-command "${pkgs.languagetool}/share/languagetool-commandline.jar"
-                languagetool-server-command "${pkgs.languagetool}/share/languagetool-server.jar")
+            ;; languagetool
+            (setq languagetool-java-bin "${pkgs.jre}/bin/java"
+                  languagetool-console-command "${pkgs.languagetool}/share/languagetool-commandline.jar"
+                  languagetool-server-command "${pkgs.languagetool}/share/languagetool-server.jar")
           '' + ''
 
           ;; use bash instead of fish from SHELL for some things, as it plays
