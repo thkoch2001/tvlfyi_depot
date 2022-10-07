@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1107b263_c0dad5f6",
+        "filename": "tvix/eval/src/builtins/impure.rs",
+        "patchSetId": 12
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2022-10-07T14:17:37Z",
+      "side": 1,
+      "message": "kinda feel like this could use a type alias - or a struct wrapping it",
+      "range": {
+        "startLine": 48,
+        "startChar": 13,
+        "endLine": 48,
+        "endChar": 55
+      },
+      "revId": "f4900cd2577f02fd101924606e2be69b3e732135",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
