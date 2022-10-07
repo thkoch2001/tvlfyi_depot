@@ -1,3 +1,5 @@
 [user]
 	name = "William Carroll"
 	email = "wpcarro@gmail.com"
+[diff]
+  external = difft
