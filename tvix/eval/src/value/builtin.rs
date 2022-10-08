@@ -51,6 +51,14 @@ pub struct Builtin {
 }
 
 impl Builtin {
+    /// Construct a new [`Builtin`] given a name, an argument strictness list, and a closure
+    /// implementing the behavior of the builtin itself.
+    ///
+    /// The argument strictness list should have the same length as the number of arguments to the
+    /// function. For each argument, that argument will be [`force`][force]d by the VM before the
+    /// function is called.
+    ///
+    /// [`force`]: crate::value::Thunk::force
     pub fn new<F: BuiltinFn + 'static>(
         name: &'static str,
         strict_args: &'static [bool],
