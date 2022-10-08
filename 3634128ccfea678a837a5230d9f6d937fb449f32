@@ -1,0 +1,146 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "33603301_338044d3",
+        "filename": "tvix/eval/src/errors.rs",
+        "patchSetId": 4
+      },
+      "lineNbr": 166,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2022-10-08T13:32:52Z",
+      "side": 1,
+      "message": "Why clause for `in` and `else`, but not e.g. `then` etc.?",
+      "revId": "3634128ccfea678a837a5230d9f6d937fb449f32",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "159680ec_71aa2fee",
+        "filename": "tvix/eval/src/errors.rs",
+        "patchSetId": 4
+      },
+      "lineNbr": 195,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2022-10-08T13:32:52Z",
+      "side": 1,
+      "message": "That\u0027s `\u0026\u0026`, no?",
+      "revId": "3634128ccfea678a837a5230d9f6d937fb449f32",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b2671872_6ff941d0",
+        "filename": "tvix/eval/src/errors.rs",
+        "patchSetId": 4
+      },
+      "lineNbr": 196,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2022-10-08T13:32:52Z",
+      "side": 1,
+      "message": "Probably `\u003d\u003d`?",
+      "revId": "3634128ccfea678a837a5230d9f6d937fb449f32",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5029951b_8d42331e",
+        "filename": "tvix/eval/src/errors.rs",
+        "patchSetId": 4
+      },
+      "lineNbr": 249,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2022-10-08T13:32:52Z",
+      "side": 1,
+      "message": "Is the assignment token `\u003d` missing?",
+      "revId": "3634128ccfea678a837a5230d9f6d937fb449f32",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b6907efe_6cc411a5",
+        "filename": "tvix/eval/src/errors.rs",
+        "patchSetId": 4
+      },
+      "lineNbr": 280,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2022-10-08T13:32:52Z",
+      "side": 1,
+      "message": "Only for EOF?",
+      "range": {
+        "startLine": 280,
+        "startChar": 35,
+        "endLine": 280,
+        "endChar": 56
+      },
+      "revId": "3634128ccfea678a837a5230d9f6d937fb449f32",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d5c2d93a_1ed9db09",
+        "filename": "tvix/eval/src/errors.rs",
+        "patchSetId": 4
+      },
+      "lineNbr": 352,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2022-10-08T13:32:52Z",
+      "side": 1,
+      "message": "https://sourcegraph.com/github.com/nix-community/rnix-parser/-/blob/src/parser.rs?L351 but I can\u0027t figure out what it means?",
+      "revId": "3634128ccfea678a837a5230d9f6d937fb449f32",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "16894693_a779ccf2",
+        "filename": "tvix/eval/src/errors.rs",
+        "patchSetId": 4
+      },
+      "lineNbr": 462,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2022-10-08T13:32:52Z",
+      "side": 1,
+      "message": "Can you note in a comment why the data is not used here? The other variants do embed it in the message.",
+      "revId": "3634128ccfea678a837a5230d9f6d937fb449f32",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "06ea6b5a_95372d51",
+        "filename": "tvix/eval/src/errors.rs",
+        "patchSetId": 4
+      },
+      "lineNbr": 522,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2022-10-08T13:32:52Z",
+      "side": 1,
+      "message": "Also here.",
+      "revId": "3634128ccfea678a837a5230d9f6d937fb449f32",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
