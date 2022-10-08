@@ -121,6 +121,11 @@ pub enum ErrorKind {
         errors: Vec<Error>,
     },
 
+    /// An expected key was missing in a call to `builtins.listToAttrs`
+    ListToAttrsKeyMissing {
+        key: &'static str,
+    },
+
     /// Tvix internal warning for features triggered by users that are
     /// not actually implemented yet, and without which eval can not
     /// proceed.
@@ -424,6 +429,7 @@ impl Error {
             | ErrorKind::ReadFileError { .. }
             | ErrorKind::ImportParseError { .. }
             | ErrorKind::ImportCompilerError { .. }
+            | ErrorKind::ListToAttrsKeyMissing { .. }
             | ErrorKind::NotImplemented(_) => return None,
         };
 
@@ -575,6 +581,10 @@ to a missing value in the attribute set(s) included via `with`."#,
                 )
             }
 
+            ErrorKind::ListToAttrsKeyMissing { key } => {
+                format!("'{key}' attribute missing in a call to 'listToAttrs'")
+            }
+
             ErrorKind::NotImplemented(feature) => {
                 format!("feature not yet implemented in Tvix: {}", feature)
             }
@@ -612,6 +622,7 @@ to a missing value in the attribute set(s) included via `with`."#,
             ErrorKind::ReadFileError { .. } => "E026",
             ErrorKind::ImportParseError { .. } => "E027",
             ErrorKind::ImportCompilerError { .. } => "E028",
+            ErrorKind::ListToAttrsKeyMissing { .. } => "E029",
 
             // Placeholder error while Tvix is under construction.
             ErrorKind::NotImplemented(_) => "E999",
