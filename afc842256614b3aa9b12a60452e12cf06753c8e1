@@ -33,6 +33,29 @@
       "message": "Funny that the Nix test suite has a reimplementation of effectively foldl\u0027 and concatStringsSep \"\"",
       "revId": "afc842256614b3aa9b12a60452e12cf06753c8e1",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c17983ce_2f8adff0",
+        "filename": "tvix/eval/src/value/builtin.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 58,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-10-08T18:56:06Z",
+      "side": 1,
+      "message": "This comment flows off my screen in a normal split screen situation, I have my fill-column at 80, I think a maximum of 90 is tolerable (but borderline), this is too much :p",
+      "range": {
+        "startLine": 58,
+        "startChar": 0,
+        "endLine": 58,
+        "endChar": 97
+      },
+      "revId": "afc842256614b3aa9b12a60452e12cf06753c8e1",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
