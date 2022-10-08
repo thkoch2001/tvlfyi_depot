@@ -18,6 +18,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "ecab87ba_55ee3e61",
+        "filename": "tvix/eval/src/errors.rs",
+        "patchSetId": 4
+      },
+      "lineNbr": 166,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-10-08T17:24:53Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "33603301_338044d3",
+      "revId": "3634128ccfea678a837a5230d9f6d937fb449f32",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "159680ec_71aa2fee",
@@ -31,6 +49,24 @@
       "writtenOn": "2022-10-08T13:32:52Z",
       "side": 1,
       "message": "That\u0027s `\u0026\u0026`, no?",
+      "revId": "3634128ccfea678a837a5230d9f6d937fb449f32",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9db5a501_2954765f",
+        "filename": "tvix/eval/src/errors.rs",
+        "patchSetId": 4
+      },
+      "lineNbr": 195,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-10-08T17:24:53Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "159680ec_71aa2fee",
       "revId": "3634128ccfea678a837a5230d9f6d937fb449f32",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
@@ -52,6 +88,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "0237dd71_748455c3",
+        "filename": "tvix/eval/src/errors.rs",
+        "patchSetId": 4
+      },
+      "lineNbr": 196,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-10-08T17:24:53Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b2671872_6ff941d0",
+      "revId": "3634128ccfea678a837a5230d9f6d937fb449f32",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "5029951b_8d42331e",
@@ -65,6 +119,24 @@
       "writtenOn": "2022-10-08T13:32:52Z",
       "side": 1,
       "message": "Is the assignment token `\u003d` missing?",
+      "revId": "3634128ccfea678a837a5230d9f6d937fb449f32",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ada4531e_9620222d",
+        "filename": "tvix/eval/src/errors.rs",
+        "patchSetId": 4
+      },
+      "lineNbr": 249,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-10-08T17:24:53Z",
+      "side": 1,
+      "message": "No, it\u0027s `rnix::SyntaxKind::TOKEN_ASSIGN`",
+      "parentUuid": "5029951b_8d42331e",
       "revId": "3634128ccfea678a837a5230d9f6d937fb449f32",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
@@ -92,6 +164,30 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "b011bbc0_03938c65",
+        "filename": "tvix/eval/src/errors.rs",
+        "patchSetId": 4
+      },
+      "lineNbr": 280,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-10-08T17:24:53Z",
+      "side": 1,
+      "message": "No, that\u0027s just the most annoying one. I think we will want to fold the errors somehow, but that\u0027ll be a commit down the line.",
+      "parentUuid": "b6907efe_6cc411a5",
+      "range": {
+        "startLine": 280,
+        "startChar": 35,
+        "endLine": 280,
+        "endChar": 56
+      },
+      "revId": "3634128ccfea678a837a5230d9f6d937fb449f32",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "d5c2d93a_1ed9db09",
@@ -105,6 +201,24 @@
       "writtenOn": "2022-10-08T13:32:52Z",
       "side": 1,
       "message": "https://sourcegraph.com/github.com/nix-community/rnix-parser/-/blob/src/parser.rs?L351 but I can\u0027t figure out what it means?",
+      "revId": "3634128ccfea678a837a5230d9f6d937fb449f32",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "61c5108c_9260b5ef",
+        "filename": "tvix/eval/src/errors.rs",
+        "patchSetId": 4
+      },
+      "lineNbr": 352,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-10-08T17:24:53Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "d5c2d93a_1ed9db09",
       "revId": "3634128ccfea678a837a5230d9f6d937fb449f32",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
@@ -126,6 +240,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "ac43a5c9_d09c341a",
+        "filename": "tvix/eval/src/errors.rs",
+        "patchSetId": 4
+      },
+      "lineNbr": 462,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-10-08T17:24:53Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "16894693_a779ccf2",
+      "revId": "3634128ccfea678a837a5230d9f6d937fb449f32",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "06ea6b5a_95372d51",
@@ -139,6 +271,24 @@
       "writtenOn": "2022-10-08T13:32:52Z",
       "side": 1,
       "message": "Also here.",
+      "revId": "3634128ccfea678a837a5230d9f6d937fb449f32",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1df12b96_a191346d",
+        "filename": "tvix/eval/src/errors.rs",
+        "patchSetId": 4
+      },
+      "lineNbr": 522,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-10-08T17:24:53Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "06ea6b5a_95372d51",
       "revId": "3634128ccfea678a837a5230d9f6d937fb449f32",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
