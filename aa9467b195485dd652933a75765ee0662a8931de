@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0613afd9_81ae3924",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2022-10-08T18:11:24Z",
+      "side": 1,
+      "message": "Not a blocker for this change, but we should eventually also add this feature to the command line.",
+      "revId": "aa9467b195485dd652933a75765ee0662a8931de",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
