@@ -56,6 +56,30 @@
       },
       "revId": "afc842256614b3aa9b12a60452e12cf06753c8e1",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "961265fd_191c2be1",
+        "filename": "tvix/eval/src/value/builtin.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 58,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2022-10-08T19:01:00Z",
+      "side": 1,
+      "message": "I certainly am not complaining about narrower lines, but we should configure rustfmt to wrap our comments for us if this is going to be a general rule.",
+      "parentUuid": "c17983ce_2f8adff0",
+      "range": {
+        "startLine": 58,
+        "startChar": 0,
+        "endLine": 58,
+        "endChar": 97
+      },
+      "revId": "afc842256614b3aa9b12a60452e12cf06753c8e1",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
