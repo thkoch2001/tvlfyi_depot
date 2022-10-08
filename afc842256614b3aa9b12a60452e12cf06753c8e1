@@ -18,6 +18,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "2d731fc3_a2866b49",
+        "filename": "tvix/eval/src/builtins/mod.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 305,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2022-10-08T19:14:44Z",
+      "side": 1,
+      "message": "Curious what tazjin thinks here - I don\u0027t have strong feelings one way or another",
+      "parentUuid": "bf4c3a49_652f8ba1",
+      "revId": "afc842256614b3aa9b12a60452e12cf06753c8e1",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "2011494d_a7d33bbc",
