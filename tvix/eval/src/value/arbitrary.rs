@@ -70,7 +70,7 @@ fn non_internal_value() -> impl Strategy<Value = Value> {
                 Default::default(),
                 Parameters::Strategy(inner.clone())
             ))
-            .prop_map(|a| Value::Attrs(Rc::new(a))),
+            .prop_map(Value::attrs),
             any_with::<NixList>((Default::default(), Parameters::Strategy(inner)))
                 .prop_map(Value::List)
         ]

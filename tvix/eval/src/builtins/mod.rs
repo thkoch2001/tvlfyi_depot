@@ -439,7 +439,7 @@ pub fn global_builtins() -> HashMap<&'static str, Value> {
         }
     }
 
-    globals.insert("builtins", Value::Attrs(Rc::new(builtins)));
+    globals.insert("builtins", Value::attrs(builtins));
 
     globals
 }
