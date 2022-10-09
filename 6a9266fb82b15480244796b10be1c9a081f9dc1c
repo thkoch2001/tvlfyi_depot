@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "dac13ec9_c7aeb7d6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000066
+      },
+      "writtenOn": "2022-10-09T04:51:33Z",
+      "side": 1,
+      "message": "I\u0027ve never used gerrit before (but I already like it a lot more than github), so please tell me all the really stupid things I did wrong here.\n\nLikewise on the codebase, which I\u0027m still learning my way around.\n\nAlso not sure which reviewers to invite, so I basically guessed.",
+      "revId": "6a9266fb82b15480244796b10be1c9a081f9dc1c",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
