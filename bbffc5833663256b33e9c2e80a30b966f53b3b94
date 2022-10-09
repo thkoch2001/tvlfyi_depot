@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d750f45a_16594b54",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000066
+      },
+      "writtenOn": "2022-10-09T18:53:45Z",
+      "side": 1,
+      "message": "Definitely a good idea to factor this out.  I think there\u0027s a duplicated `call_with()` (see below); other than that LGTM.\n\nIf anybody can explain why the tests ran for CI but hit SIGABRT for me I\u0027d appreciate it.  I\u0027m sure I\u0027m doing something really stupid.",
+      "revId": "bbffc5833663256b33e9c2e80a30b966f53b3b94",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b270fb7a_25c5afb0",
+        "filename": "tvix/eval/src/vm.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 253,
+      "author": {
+        "id": 1000066
+      },
+      "writtenOn": "2022-10-09T18:53:45Z",
+      "side": 1,
+      "message": "I think the preceding three lines need to be deleted.  The arguments have already been pushed onto the stack.  Other than this the rest of the patchset LGTM; definitely a good idea to factor this out.\n\nWith these three lines present, `cargo test --features nix_tests` gets SIGABRT due to stack overflow (see below)... but CI approved this, so maybe I\u0027m running the tests incorrectly?\n\nIn any event, deleting the three lines above runs the tests to completion with 217 passes.\n\n```\nthread \u0027tests::nix_eval_okay_src_tests_nix_tests_eval_okay_arithmetic_nix\u0027 has overflowed its stack\nfatal runtime error: stack overflow\nerror: test failed, to rerun pass \u0027--lib\u0027\n\nCaused by:\n  process didn\u0027t exit successfully: `/git/depot/tvix/eval/target/debug/deps/tvix_eval-780ba16dafc50801` (signal: 6, SIGABRT: process abort signal)\n```",
+      "revId": "bbffc5833663256b33e9c2e80a30b966f53b3b94",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
