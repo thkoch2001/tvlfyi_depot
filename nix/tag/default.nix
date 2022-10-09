@@ -78,7 +78,7 @@ let
   # Like `discrDef`, but fail if there is no match.
   discr = fs: v:
     let res = discrDef null fs v; in
-    assert lib.assertMsg (res != null)
+    assert lib.assertMsg (res != { })
       "tag.discr: No predicate found that matches ${lib.generators.toPretty {} v}";
     res;
 
