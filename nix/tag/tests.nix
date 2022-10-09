@@ -4,6 +4,7 @@ let
   inherit (depot.nix.runTestsuite)
     runTestsuite
     assertEq
+    assertThrows
     it
     ;
 
@@ -50,6 +51,10 @@ let
         { int = lib.isInt; }
       ] "foo")
       { def = "foo"; })
+    (assertThrows "throws failing to match"
+      (discr [
+        { fish = x: x == 42; }
+      ] 21))
   ];
 
   match-test = it "can match things" [
