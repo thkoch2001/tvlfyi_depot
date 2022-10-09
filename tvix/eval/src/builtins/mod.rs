@@ -52,71 +52,117 @@ fn pure_builtins() -> Vec<Builtin> {
     vec![
         Builtin::new(
             "add",
+            "Return the sum of the numbers e1 and e2",
             &[false, false],
             |args: Vec<Value>, vm: &mut VM| arithmetic_op!(&*args[0].force(vm)?, &*args[1].force(vm)?, +),
         ),
-        Builtin::new("abort", &[true], |args: Vec<Value>, _: &mut VM| {
-            Err(ErrorKind::Abort(args[0].to_str()?.to_string()))
-        }),
-        Builtin::new("all", &[true, true], |args: Vec<Value>, vm: &mut VM| {
-            for value in args[1].to_list()?.into_iter() {
-                let pred_result = {
-                    vm.push(value);
-                    vm.call_value(&args[0])
-                }?;
+        Builtin::new(
+            "abort",
+            "Abort Nix expression evaluation and print the error message s.",
+            &[true],
+            |args: Vec<Value>, _: &mut VM| Err(ErrorKind::Abort(args[0].to_str()?.to_string())),
+        ),
+        Builtin::new(
+            "all",
+            "Return true if the function pred returns true for all elements of list, and false \
+             otherwise.",
+            &[true, true],
+            |args: Vec<Value>, vm: &mut VM| {
+                for value in args[1].to_list()?.into_iter() {
+                    let pred_result = {
+                        vm.push(value);
+                        vm.call_value(&args[0])
+                    }?;
 
-                if !pred_result.force(vm)?.as_bool()? {
-                    return Ok(Value::Bool(false));
+                    if !pred_result.force(vm)?.as_bool()? {
+                        return Ok(Value::Bool(false));
+                    }
                 }
-            }
 
-            Ok(Value::Bool(true))
-        }),
-        Builtin::new("any", &[true, true], |args: Vec<Value>, vm: &mut VM| {
-            for value in args[1].to_list()?.into_iter() {
-                let pred_result = {
-                    vm.push(value);
-                    vm.call_value(&args[0])
-                }?;
+                Ok(Value::Bool(true))
+            },
+        ),
+        Builtin::new(
+            "any",
+            "Return true if the function pred returns true for at least one element of list, and \
+             false otherwise.",
+            &[true, true],
+            |args: Vec<Value>, vm: &mut VM| {
+                for value in args[1].to_list()?.into_iter() {
+                    let pred_result = {
+                        vm.push(value);
+                        vm.call_value(&args[0])
+                    }?;
 
-                if pred_result.force(vm)?.as_bool()? {
-                    return Ok(Value::Bool(true));
+                    if pred_result.force(vm)?.as_bool()? {
+                        return Ok(Value::Bool(true));
+                    }
                 }
-            }
 
-            Ok(Value::Bool(false))
-        }),
-        Builtin::new("attrNames", &[true], |args: Vec<Value>, _: &mut VM| {
-            let xs = args[0].to_attrs()?;
-            let mut output = Vec::with_capacity(xs.len());
+                Ok(Value::Bool(false))
+            },
+        ),
+        Builtin::new(
+            "attrNames",
+            "Return the names of the attributes in the set set in an alphabetically sorted list. \
+             For instance, builtins.attrNames { y = 1; x = \"foo\"; } evaluates to \
+             [ \"x\" \"y\" ].",
+            &[true],
+            |args: Vec<Value>, _: &mut VM| {
+                let xs = args[0].to_attrs()?;
+                let mut output = Vec::with_capacity(xs.len());
 
-            for (key, _val) in xs.iter() {
-                output.push(Value::String(key.clone()));
-            }
+                for (key, _val) in xs.iter() {
+                    output.push(Value::String(key.clone()));
+                }
 
-            Ok(Value::List(NixList::construct(output.len(), output)))
-        }),
-        Builtin::new("attrValues", &[true], |args: Vec<Value>, _: &mut VM| {
-            let xs = args[0].to_attrs()?;
-            let mut output = Vec::with_capacity(xs.len());
+                Ok(Value::List(NixList::construct(output.len(), output)))
+            },
+        ),
+        Builtin::new(
+            "attrValues",
+            "Return the values of the attributes in the set set in the order corresponding to the \
+             sorted attribute names.",
+            &[true],
+            |args: Vec<Value>, _: &mut VM| {
+                let xs = args[0].to_attrs()?;
+                let mut output = Vec::with_capacity(xs.len());
 
-            for (_key, val) in xs.iter() {
-                output.push(val.clone());
-            }
+                for (_key, val) in xs.iter() {
+                    output.push(val.clone());
+                }
 
-            Ok(Value::List(NixList::construct(output.len(), output)))
-        }),
-        Builtin::new("bitAnd", &[true, true], |args: Vec<Value>, _: &mut VM| {
-            Ok(Value::Integer(args[0].as_int()? & args[1].as_int()?))
-        }),
-        Builtin::new("bitOr", &[true, true], |args: Vec<Value>, _: &mut VM| {
-            Ok(Value::Integer(args[0].as_int()? | args[1].as_int()?))
-        }),
-        Builtin::new("bitXor", &[true, true], |args: Vec<Value>, _: &mut VM| {
-            Ok(Value::Integer(args[0].as_int()? ^ args[1].as_int()?))
-        }),
+                Ok(Value::List(NixList::construct(output.len(), output)))
+            },
+        ),
+        Builtin::new(
+            "bitAnd",
+            "Return the bitwise AND of the integers e1 and e2.",
+            &[true, true],
+            |args: Vec<Value>, _: &mut VM| {
+                Ok(Value::Integer(args[0].as_int()? & args[1].as_int()?))
+            },
+        ),
+        Builtin::new(
+            "bitOr",
+            "Return the bitwise OR of the integers e1 and e2.",
+            &[true, true],
+            |args: Vec<Value>, _: &mut VM| {
+                Ok(Value::Integer(args[0].as_int()? | args[1].as_int()?))
+            },
+        ),
+        Builtin::new(
+            "bitXor",
+            "Return the bitwise XOR of the integers e1 and e2.",
+            &[true, true],
+            |args: Vec<Value>, _: &mut VM| {
+                Ok(Value::Integer(args[0].as_int()? ^ args[1].as_int()?))
+            },
+        ),
         Builtin::new(
             "catAttrs",
+            "Collect each attribute named attr from a list of attribute sets. Attrsets that don't \
+             contain the named attribute are ignored.",
             &[true, true],
             |args: Vec<Value>, vm: &mut VM| {
                 let key = args[0].to_str()?;
@@ -135,6 +181,9 @@ fn pure_builtins() -> Vec<Builtin> {
         ),
         Builtin::new(
             "compareVersions",
+            "Compare two strings representing versions and return -1 if version s1 is older than \
+             version s2, 0 if they are the same, and 1 if s1 is newer than s2. The version \
+             comparison algorithm is the same as the one used by nix-env -u.",
             &[true, true],
             |args: Vec<Value>, _: &mut VM| {
                 let s1 = args[0].to_str()?;
@@ -149,22 +198,29 @@ fn pure_builtins() -> Vec<Builtin> {
                 }
             },
         ),
-        Builtin::new("concatLists", &[true], |args: Vec<Value>, vm: &mut VM| {
-            let list = args[0].to_list()?;
-            let lists = list
-                .into_iter()
-                .map(|elem| {
-                    let value = elem.force(vm)?;
-                    value.to_list()
-                })
-                .collect::<Result<Vec<NixList>, ErrorKind>>()?;
+        Builtin::new(
+            "concatLists",
+            "Concatenate a list of lists into a single list.",
+            &[true],
+            |args: Vec<Value>, vm: &mut VM| {
+                let list = args[0].to_list()?;
+                let lists = list
+                    .into_iter()
+                    .map(|elem| {
+                        let value = elem.force(vm)?;
+                        value.to_list()
+                    })
+                    .collect::<Result<Vec<NixList>, ErrorKind>>()?;
 
-            Ok(Value::List(NixList::from(
-                lists.into_iter().flatten().collect::<Vec<Value>>(),
-            )))
-        }),
+                Ok(Value::List(NixList::from(
+                    lists.into_iter().flatten().collect::<Vec<Value>>(),
+                )))
+            },
+        ),
         Builtin::new(
             "concatMap",
+            "This function is equivalent to builtins.concatLists (map f list) but is more \
+             efficient.",
             &[true, true],
             |args: Vec<Value>, vm: &mut VM| {
                 let list = args[1].to_list()?;
@@ -178,61 +234,80 @@ fn pure_builtins() -> Vec<Builtin> {
         ),
         Builtin::new(
             "div",
+            "Return the quotient of the numbers e1 and e2.",
             &[false, false],
             |args: Vec<Value>, vm: &mut VM| arithmetic_op!(&*args[0].force(vm)?, &*args[1].force(vm)?, /),
         ),
-        Builtin::new("elemAt", &[true, true], |args: Vec<Value>, _: &mut VM| {
-            let xs = args[0].to_list()?;
-            let i = args[1].as_int()?;
-            if i < 0 {
-                Err(ErrorKind::IndexOutOfBounds { index: i })
-            } else {
-                match xs.get(i as usize) {
-                    Some(x) => Ok(x.clone()),
-                    None => Err(ErrorKind::IndexOutOfBounds { index: i }),
+        Builtin::new(
+            "elemAt",
+            "Return element n from the list xs. Elements are counted starting from 0. A fatal \
+             error occurs if the index is out of bounds.",
+            &[true, true],
+            |args: Vec<Value>, _: &mut VM| {
+                let xs = args[0].to_list()?;
+                let i = args[1].as_int()?;
+                if i < 0 {
+                    Err(ErrorKind::IndexOutOfBounds { index: i })
+                } else {
+                    match xs.get(i as usize) {
+                        Some(x) => Ok(x.clone()),
+                        None => Err(ErrorKind::IndexOutOfBounds { index: i }),
+                    }
                 }
-            }
-        }),
-        Builtin::new("filter", &[true, true], |args: Vec<Value>, vm: &mut VM| {
-            let list: NixList = args[1].to_list()?;
+            },
+        ),
+        Builtin::new(
+            "filter",
+            "Return a list consisting of the elements of list for which the function f returns \
+             true.",
+            &[true, true],
+            |args: Vec<Value>, vm: &mut VM| {
+                let list: NixList = args[1].to_list()?;
 
-            list.into_iter()
-                .filter_map(|elem| {
-                    vm.push(elem.clone());
+                list.into_iter()
+                    .filter_map(|elem| {
+                        vm.push(elem.clone());
 
-                    let result = match vm.call_value(&args[0]) {
-                        Err(err) => return Some(Err(err)),
-                        Ok(result) => result,
-                    };
+                        let result = match vm.call_value(&args[0]) {
+                            Err(err) => return Some(Err(err)),
+                            Ok(result) => result,
+                        };
 
-                    // Must be assigned to a local to avoid a borrowcheck
-                    // failure related to the ForceResult destructor.
-                    let result = match result.force(vm) {
-                        Err(err) => Some(Err(vm.error(err))),
-                        Ok(value) => match value.as_bool() {
-                            Ok(true) => Some(Ok(elem)),
-                            Ok(false) => None,
+                        // Must be assigned to a local to avoid a borrowcheck
+                        // failure related to the ForceResult destructor.
+                        let result = match result.force(vm) {
                             Err(err) => Some(Err(vm.error(err))),
-                        },
-                    };
+                            Ok(value) => match value.as_bool() {
+                                Ok(true) => Some(Ok(elem)),
+                                Ok(false) => None,
+                                Err(err) => Some(Err(vm.error(err))),
+                            },
+                        };
 
-                    result
-                })
-                .collect::<Result<Vec<Value>, _>>()
-                .map(|list| Value::List(NixList::from(list)))
-                .map_err(Into::into)
-        }),
-        Builtin::new("genList", &[true, true], |args: Vec<Value>, vm: &mut VM| {
-            let len = args[1].as_int()?;
-            (0..len)
-                .map(|i| {
-                    vm.push(i.into());
-                    vm.call_value(&args[0])
-                })
-                .collect::<Result<Vec<Value>, _>>()
-                .map(|list| Value::List(NixList::from(list)))
-                .map_err(Into::into)
-        }),
+                        result
+                    })
+                    .collect::<Result<Vec<Value>, _>>()
+                    .map(|list| Value::List(NixList::from(list)))
+                    .map_err(Into::into)
+            },
+        ),
+        Builtin::new(
+            "genList",
+            "Generate list of size length, with each element i equal to the value returned by \
+             generator i.",
+            &[true, true],
+            |args: Vec<Value>, vm: &mut VM| {
+                let len = args[1].as_int()?;
+                (0..len)
+                    .map(|i| {
+                        vm.push(i.into());
+                        vm.call_value(&args[0])
+                    })
+                    .collect::<Result<Vec<Value>, _>>()
+                    .map(|list| Value::List(NixList::from(list)))
+                    .map_err(Into::into)
+            },
+        ),
         Builtin::new("getAttr", &[true, true], |args: Vec<Value>, _: &mut VM| {
             let k = args[0].to_str()?;
             let xs = args[1].to_attrs()?;

@@ -40,6 +40,8 @@ impl<F: Fn(Vec<Value>, &mut VM) -> Result<Value, ErrorKind>> BuiltinFn for F {}
 #[derive(Clone)]
 pub struct Builtin {
     name: &'static str,
+    /// Documentation for the builtin (currently unused)
+    docs: &'static str,
     /// Array reference that describes how many arguments there are (usually 1
     /// or 2) and whether they need to be forced. `true` causes the
     /// corresponding argument to be forced before `func` is called.
@@ -53,11 +55,13 @@ pub struct Builtin {
 impl Builtin {
     pub fn new<F: BuiltinFn + 'static>(
         name: &'static str,
+        docs: &'static str,
         strict_args: &'static [bool],
         func: F,
     ) -> Self {
         Builtin {
             name,
+            docs,
             strict_args,
             func: Rc::new(func),
             partials: vec![],
