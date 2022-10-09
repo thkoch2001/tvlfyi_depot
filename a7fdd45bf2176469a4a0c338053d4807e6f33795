@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d4f0e149_fe75fd35",
+        "filename": "users/tazjin/blog/posts/thoughts.md",
+        "patchSetId": 2
+      },
+      "lineNbr": 113,
+      "author": {
+        "id": 1000066
+      },
+      "writtenOn": "2022-10-09T20:16:53Z",
+      "side": 1,
+      "message": "This would make a fitting sequel to MOPI.\n\nhttp://www.localroger.com/prime-intellect/",
+      "revId": "a7fdd45bf2176469a4a0c338053d4807e6f33795",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
