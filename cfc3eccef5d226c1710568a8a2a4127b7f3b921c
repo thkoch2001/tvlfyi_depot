@@ -333,6 +333,24 @@
       "message": "I think an IO error kind makes sense?",
       "revId": "cfc3eccef5d226c1710568a8a2a4127b7f3b921c",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "426ce2b8_f56f43e2",
+        "filename": "tvix/eval/src/errors.rs",
+        "patchSetId": 5
+      },
+      "lineNbr": 79,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2022-10-09T15:56:21Z",
+      "side": 1,
+      "message": "unfortunately have to shove a string in there because io::Error doesn\u0027t impl Clone, but that\u0027s probably not a huge deal",
+      "parentUuid": "18a0b4e7_f0dd090e",
+      "revId": "cfc3eccef5d226c1710568a8a2a4127b7f3b921c",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
