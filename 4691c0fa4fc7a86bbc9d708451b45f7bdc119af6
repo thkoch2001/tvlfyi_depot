@@ -1,6 +1,29 @@
 {
   "comments": [
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "fa1dd130_3c9800f9",
+        "filename": "tvix/eval/src/errors.rs",
+        "patchSetId": 12
+      },
+      "lineNbr": 127,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-10-10T13:57:34Z",
+      "side": 1,
+      "message": "Error handling is not performanc critical, I\u0027d prefer if we dealt with this like the `ReadFileError` above.\n\nI\u0027m also not sure if I really like having a completely generic IO error variant. It seems useful to retain e.g. the path in this, and I don\u0027t think we have IO errors (for now) that are not related to a path in some way.",
+      "range": {
+        "startLine": 127,
+        "startChar": 0,
+        "endLine": 127,
+        "endChar": 80
+      },
+      "revId": "4691c0fa4fc7a86bbc9d708451b45f7bdc119af6",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "40e1b318_50ec9f96",
