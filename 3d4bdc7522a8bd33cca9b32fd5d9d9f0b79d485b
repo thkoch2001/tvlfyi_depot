@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ac12aa3d_cf1f39c7",
+        "filename": "tvix/eval/src/builtins/mod.rs",
+        "patchSetId": 6
+      },
+      "lineNbr": 174,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-10-10T13:53:17Z",
+      "side": 1,
+      "message": "hmm, it would be really nice if we had some way of dealing with this without allocating the intermediate lists, something to think about",
+      "range": {
+        "startLine": 174,
+        "startChar": 0,
+        "endLine": 174,
+        "endChar": 79
+      },
+      "revId": "3d4bdc7522a8bd33cca9b32fd5d9d9f0b79d485b",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
