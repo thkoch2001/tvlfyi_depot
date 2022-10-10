@@ -50,6 +50,30 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "0a097d58_0185fcf0",
+        "filename": "tvix/eval/src/errors.rs",
+        "patchSetId": 12
+      },
+      "lineNbr": 127,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2022-10-10T17:30:35Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9fbf6ead_25174c4f",
+      "range": {
+        "startLine": 127,
+        "startChar": 0,
+        "endLine": 127,
+        "endChar": 80
+      },
+      "revId": "4691c0fa4fc7a86bbc9d708451b45f7bdc119af6",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "40e1b318_50ec9f96",
         "filename": "tvix/eval/src/tests/tvix_tests/readDir/foo/git-hates-directories",
         "patchSetId": 12
