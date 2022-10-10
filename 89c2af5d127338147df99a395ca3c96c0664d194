@@ -18,6 +18,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "283f72f2_df988929",
+        "filename": "tools/nixery/default.nix",
+        "patchSetId": 1
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-10-10T20:44:43Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ba0d92f2_4d99f999",
+      "revId": "89c2af5d127338147df99a395ca3c96c0664d194",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "7a979036_7a73bc9f",
@@ -31,6 +49,30 @@
       "writtenOn": "2022-10-10T20:28:38Z",
       "side": 1,
       "message": "What overriding mechanism is there? I guess this could actually be a usecase for `__overrides`.",
+      "range": {
+        "startLine": 40,
+        "startChar": 4,
+        "endLine": 40,
+        "endChar": 14
+      },
+      "revId": "89c2af5d127338147df99a395ca3c96c0664d194",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ea283b98_ba3b1ec1",
+        "filename": "tools/nixery/default.nix",
+        "patchSetId": 1
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-10-10T20:44:43Z",
+      "side": 1,
+      "message": "It\u0027s a runtime envvar, nothing in the Nix side of things.",
+      "parentUuid": "7a979036_7a73bc9f",
       "range": {
         "startLine": 40,
         "startChar": 4,
