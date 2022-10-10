@@ -70,6 +70,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "25a7d5ca_6225a8a9",
+        "filename": "tvix/eval/src/tests/tvix_tests/eval-okay-fromjson.nix",
+        "patchSetId": 2
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2022-10-10T15:29:18Z",
+      "side": 1,
+      "message": "\u003e  I\u0027m fine with skipping this test in the cpp Nix test thingy we have\n\nHow would I go about doing that? Just explicitly skipping th",
+      "parentUuid": "3b748801_998840cd",
+      "revId": "1f500290784a276e2622797f630985fd890d88ce",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "f545222a_d2058867",
