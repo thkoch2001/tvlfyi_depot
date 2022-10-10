@@ -160,12 +160,11 @@ rec {
     , cancelOnBuildFailing ? false
     }:
     let
-      # Currently the only known phases are 'build' (Nix builds and
-      # extra steps that are not post-build steps) and 'release' (all
-      # post-build steps).
-      #
-      # TODO(tazjin): Fully configurable set of phases?
-      knownPhases = [ "build" "release" ];
+      # Currently the only default phases are 'build' and
+      # 'release'. Adding a new active phase will automatically extend
+      # the list of known phases. Extended phases list allows
+      # designing multi-step dynamic pipelines.
+      knownPhases = lib.unique (activePhases ++ [ "build" "release" ]);
 
       # List of phases to include.
       phases = lib.intersectLists activePhases knownPhases;
