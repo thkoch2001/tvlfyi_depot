@@ -20,6 +20,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "2c4661c8_d8b70b97",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2022-10-10T15:09:36Z",
+      "side": 1,
+      "message": "oh, are you recommending getting rid of `\u003c...\u003e` paths entirely? We can\u0027t import depot if we do that due to https://cs.tvl.fyi/depot/-/blob/third_party/sources/default.nix?L49",
+      "parentUuid": "31d10324_02a27a3d",
+      "revId": "da8b5c799dc2acc75b9da7fa59efecd175a08fb4",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "e3422285_89b285dd",
         "filename": "tvix/eval/src/compiler/mod.rs",
         "patchSetId": 4
