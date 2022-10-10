@@ -39,6 +39,30 @@
       },
       "revId": "54f0a76ba77ac51d7f8672bee4f42458026d39a7",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e9ad7335_f0c72964",
+        "filename": "tvix/eval/src/builtins/impure.rs",
+        "patchSetId": 15
+      },
+      "lineNbr": 58,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2022-10-10T23:24:44Z",
+      "side": 1,
+      "message": "yeah, I think that\u0027s a good idea! I\u0027d like to put a pin in it for now, but I\u0027ve left a TODO comment.",
+      "parentUuid": "bea6a3ee_80b7df04",
+      "range": {
+        "startLine": 58,
+        "startChar": 12,
+        "endLine": 58,
+        "endChar": 22
+      },
+      "revId": "54f0a76ba77ac51d7f8672bee4f42458026d39a7",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
