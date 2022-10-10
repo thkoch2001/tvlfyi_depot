@@ -3,6 +3,40 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "9d8f5549_32fdd673",
+        "filename": "tvix/eval/src/builtins/mod.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 256,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2022-10-10T10:33:24Z",
+      "side": 1,
+      "message": "`fromJSON` does apparently not coerce to string (lol):\n\n```\nnix-repl\u003e builtins.fromJSON { outPath \u003d \"12\"; }       \nerror: value is a set while a string was expected, at (string):1:1\n```",
+      "revId": "1f500290784a276e2622797f630985fd890d88ce",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "dc3e1635_8cb7bfcc",
+        "filename": "tvix/eval/src/tests/tvix_tests/eval-okay-fromjson-escapes.nix",
+        "patchSetId": 2
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2022-10-10T10:33:24Z",
+      "side": 1,
+      "message": "Have you tried a UTF-16 surrogate pair for a codepoint beyond the BMP?",
+      "revId": "1f500290784a276e2622797f630985fd890d88ce",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "c70d73a5_ef76e4ed",
         "filename": "tvix/eval/src/tests/tvix_tests/eval-okay-fromjson.nix",
         "patchSetId": 2
@@ -14,6 +48,41 @@
       "writtenOn": "2022-10-10T10:18:43Z",
       "side": 1,
       "message": "Floats too floaty for C++ Nix 😭😭",
+      "revId": "1f500290784a276e2622797f630985fd890d88ce",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3b748801_998840cd",
+        "filename": "tvix/eval/src/tests/tvix_tests/eval-okay-fromjson.nix",
+        "patchSetId": 2
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2022-10-10T10:33:24Z",
+      "side": 1,
+      "message": "All in all I\u0027m fine with skipping this test in the cpp Nix test thingy we have, since I\u0027m not on board with reimplementing that part of C++ Nix. Maybe someone should sit down and fix this float truncation nonsense there as well…",
+      "parentUuid": "c70d73a5_ef76e4ed",
+      "revId": "1f500290784a276e2622797f630985fd890d88ce",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f545222a_d2058867",
+        "filename": "tvix/eval/src/value/attrs.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 279,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2022-10-10T10:33:24Z",
+      "side": 1,
+      "message": "This is actually kind of nice for benchmarking if the KV thing is worth it later.",
       "revId": "1f500290784a276e2622797f630985fd890d88ce",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
