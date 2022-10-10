@@ -71,6 +71,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "56b188b2_ba49a886",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2022-10-10T15:04:17Z",
+      "side": 1,
+      "message": "Per the other thread, I think this is probably just a stop-gap solution until we get around to actually implementing scopedImport",
+      "parentUuid": "d7d84bd6_4c538880",
+      "revId": "62e8661245461b8a01da954baed9f3c5269d5480",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "eb1d59da_b4de6cb0",
@@ -84,6 +102,24 @@
       "writtenOn": "2022-10-10T10:17:17Z",
       "side": 1,
       "message": "Why not just `scopedArgs !\u003d { } \u0026\u0026 builtins ? scopedImport`?",
+      "revId": "62e8661245461b8a01da954baed9f3c5269d5480",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2f58fbb2_5d8a8d28",
+        "filename": "nix/readTree/default.nix",
+        "patchSetId": 2
+      },
+      "lineNbr": 83,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2022-10-10T15:04:17Z",
+      "side": 1,
+      "message": "er, yes, I didn\u0027t even notice both the else blocks were identical :P",
+      "parentUuid": "eb1d59da_b4de6cb0",
       "revId": "62e8661245461b8a01da954baed9f3c5269d5480",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
