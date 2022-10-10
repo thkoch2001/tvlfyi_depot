@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9a37a72e_befc2960",
+        "filename": "tvix/eval/src/nix_path.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2022-10-10T18:52:43Z",
+      "side": 1,
+      "message": "we likely want to also rename this file/module to `nix_search_path.rs`",
+      "revId": "913431ebd69b3a76e19f3c02fb3d66c72506e5cb",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
