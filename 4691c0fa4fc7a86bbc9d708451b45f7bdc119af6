@@ -39,6 +39,24 @@
       "message": "git doesn\u0027t hate directories, it just doesn\u0027t really know about them",
       "revId": "4691c0fa4fc7a86bbc9d708451b45f7bdc119af6",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f60fffc2_4adf3915",
+        "filename": "tvix/eval/src/tests/tvix_tests/readDir/foo/git-hates-directories",
+        "patchSetId": 12
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2022-10-10T14:36:26Z",
+      "side": 1,
+      "message": "i know that! this is copied verbatim from the nix test suite",
+      "parentUuid": "40e1b318_50ec9f96",
+      "revId": "4691c0fa4fc7a86bbc9d708451b45f7bdc119af6",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
