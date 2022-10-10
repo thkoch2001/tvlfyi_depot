@@ -18,6 +18,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "7d97a214_4fb85f02",
+        "filename": "tvix/eval/src/builtins/mod.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 256,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2022-10-10T21:53:29Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9d8f5549_32fdd673",
+      "revId": "1f500290784a276e2622797f630985fd890d88ce",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "dc3e1635_8cb7bfcc",
@@ -31,6 +49,24 @@
       "writtenOn": "2022-10-10T10:33:24Z",
       "side": 1,
       "message": "Have you tried a UTF-16 surrogate pair for a codepoint beyond the BMP?",
+      "revId": "1f500290784a276e2622797f630985fd890d88ce",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "93f69daa_e5506fc3",
+        "filename": "tvix/eval/src/tests/tvix_tests/eval-okay-fromjson-escapes.nix",
+        "patchSetId": 2
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2022-10-10T21:53:29Z",
+      "side": 1,
+      "message": "can you give an example?",
+      "parentUuid": "dc3e1635_8cb7bfcc",
       "revId": "1f500290784a276e2622797f630985fd890d88ce",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
