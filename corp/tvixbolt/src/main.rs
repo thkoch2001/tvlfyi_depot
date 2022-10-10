@@ -286,9 +286,17 @@ fn eval(trace: bool, code: &str) -> Output {
     }
 
     let result = if trace {
-        tvix_eval::run_lambda(&mut TracingObserver::new(&mut out.trace), result.lambda)
+        tvix_eval::run_lambda(
+            Default::default(),
+            &mut TracingObserver::new(&mut out.trace),
+            result.lambda,
+        )
     } else {
-        tvix_eval::run_lambda(&mut NoOpObserver::default(), result.lambda)
+        tvix_eval::run_lambda(
+            Default::default(),
+            &mut NoOpObserver::default(),
+            result.lambda,
+        )
     };
 
     match result {
