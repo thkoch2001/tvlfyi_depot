@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d9d7f3f5_2b69221b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000066
+      },
+      "writtenOn": "2022-10-10T03:24:25Z",
+      "side": 1,
+      "message": "LGTM except that in a large number of situations `path_clean` does not do the same thing as cppnix\u0027s `canonPath()`.  We should call attention to this so it isn\u0027t forgotten.",
+      "revId": "6b5aeb75a9ec1bf887395cd2cae786368ae1eff2",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "93de3051_1b171df3",
+        "filename": "tvix/eval/src/vm.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 360,
+      "author": {
+        "id": 1000066
+      },
+      "writtenOn": "2022-10-10T03:24:25Z",
+      "side": 1,
+      "message": "I\u0027m pretty sure this is not right... `path_clean` uses some rules from Go which are totally different from what cppnix does:\n\nhttps://docs.rs/path-clean/latest/path_clean/\n\n... but I\u0027m having trouble figuring out how to run the nix_oracle tests.  `cargo test --features nix_tests` doesn\u0027t seem to run them.\n\ncppnix calls this \"`canonPath()`\".  If this is just a placeholder we should probably mention that the behavior disagrees.  I\u0027m sure this will crop up later but maybe it\u0027s not the top priority right now?\n\nAlso, cppnix seems to invoke it at parse time (and other times) rather than concatenation-time.",
+      "revId": "6b5aeb75a9ec1bf887395cd2cae786368ae1eff2",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
