@@ -51,6 +51,24 @@
       "parentUuid": "b270fb7a_25c5afb0",
       "revId": "bbffc5833663256b33e9c2e80a30b966f53b3b94",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "66b3a57a_c18224ef",
+        "filename": "tvix/eval/src/vm.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 253,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2022-10-10T01:24:01Z",
+      "side": 1,
+      "message": "This is definitely not inherent to this implementation, as eg with the current version of this CL:\n```\ntvix-repl\u003e builtins.foldl\u0027 builtins.add 0 [1 2 3 4]\n\u003d\u003e 10 :: int\n```",
+      "parentUuid": "1102d719_b2b161de",
+      "revId": "bbffc5833663256b33e9c2e80a30b966f53b3b94",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
