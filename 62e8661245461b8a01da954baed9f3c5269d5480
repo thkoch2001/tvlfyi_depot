@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d7d84bd6_4c538880",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2022-10-10T10:17:17Z",
+      "side": 1,
+      "message": "Not sure if we want to notify the user about this situation somehow. What does tazjin think?",
+      "revId": "62e8661245461b8a01da954baed9f3c5269d5480",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "eb1d59da_b4de6cb0",
+        "filename": "nix/readTree/default.nix",
+        "patchSetId": 2
+      },
+      "lineNbr": 83,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2022-10-10T10:17:17Z",
+      "side": 1,
+      "message": "Why not just `scopedArgs !\u003d { } \u0026\u0026 builtins ? scopedImport`?",
+      "revId": "62e8661245461b8a01da954baed9f3c5269d5480",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
