@@ -3,6 +3,23 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "31d10324_02a27a3d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-10-10T14:46:37Z",
+      "side": 1,
+      "message": "To me it seems like ths prefix-based paths are some kind of Nix legacy feature, I think we shouldn\u0027t copy that just because it exists in C++ Nix (even if it\u0027s not hard to implement). We have a chance to get rid of legacy stuff and we should use it.",
+      "revId": "da8b5c799dc2acc75b9da7fa59efecd175a08fb4",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "e3422285_89b285dd",
         "filename": "tvix/eval/src/compiler/mod.rs",
         "patchSetId": 4
