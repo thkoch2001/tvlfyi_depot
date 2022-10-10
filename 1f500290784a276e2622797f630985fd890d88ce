@@ -124,6 +124,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "abb99b1e_d4dc4a0e",
+        "filename": "tvix/eval/src/tests/tvix_tests/eval-okay-fromjson.nix",
+        "patchSetId": 2
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2022-10-10T19:13:35Z",
+      "side": 1,
+      "message": "done",
+      "parentUuid": "e883bde8_41fb4f5e",
+      "revId": "1f500290784a276e2622797f630985fd890d88ce",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "f545222a_d2058867",
@@ -154,6 +172,24 @@
       "writtenOn": "2022-10-10T14:34:44Z",
       "side": 1,
       "message": "oops",
+      "revId": "1f500290784a276e2622797f630985fd890d88ce",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "673de7c5_c63ae2cf",
+        "filename": "tvix/eval/src/value/attrs.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 294,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2022-10-10T19:13:35Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4de85c3f_c53c7fe6",
       "revId": "1f500290784a276e2622797f630985fd890d88ce",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
