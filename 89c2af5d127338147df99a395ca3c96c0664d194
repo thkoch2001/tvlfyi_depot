@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ba0d92f2_4d99f999",
+        "filename": "tools/nixery/default.nix",
+        "patchSetId": 1
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2022-10-10T20:28:38Z",
+      "side": 1,
+      "message": "This can be deleted, right?",
+      "revId": "89c2af5d127338147df99a395ca3c96c0664d194",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7a979036_7a73bc9f",
+        "filename": "tools/nixery/default.nix",
+        "patchSetId": 1
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2022-10-10T20:28:38Z",
+      "side": 1,
+      "message": "What overriding mechanism is there? I guess this could actually be a usecase for `__overrides`.",
+      "range": {
+        "startLine": 40,
+        "startChar": 4,
+        "endLine": 40,
+        "endChar": 14
+      },
+      "revId": "89c2af5d127338147df99a395ca3c96c0664d194",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
