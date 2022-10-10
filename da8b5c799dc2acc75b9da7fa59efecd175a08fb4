@@ -36,6 +36,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "75fd6bc7_37a1d29e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-10-10T15:32:06Z",
+      "side": 1,
+      "message": "No, I am only talking about this prefix path feature (vs. named paths), but it seems from IRC that people both know about this and have all kinds of cursed use-cases, so I guess we\u0027re stuck with it.",
+      "parentUuid": "2c4661c8_d8b70b97",
+      "revId": "da8b5c799dc2acc75b9da7fa59efecd175a08fb4",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "e3422285_89b285dd",
