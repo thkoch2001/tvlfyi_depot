@@ -3,6 +3,29 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "2a2bdf88_eca8b93f",
+        "filename": "tvix/eval/src/nix_path.rs",
+        "patchSetId": 3
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-10-10T14:12:07Z",
+      "side": 1,
+      "message": "Can we add doc comments on here? I\u0027m not sure what a prefixed nix path entry is right away, for example",
+      "range": {
+        "startLine": 11,
+        "startChar": 0,
+        "endLine": 11,
+        "endChar": 46
+      },
+      "revId": "93305de9e20a76f0d95218238cab4c8d4d1f570f",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "5d93b9d6_7ec0e7fd",
         "filename": "tvix/eval/src/nix_path.rs",
         "patchSetId": 3
