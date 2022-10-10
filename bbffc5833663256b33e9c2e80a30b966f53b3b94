@@ -87,6 +87,24 @@
       "parentUuid": "66b3a57a_c18224ef",
       "revId": "bbffc5833663256b33e9c2e80a30b966f53b3b94",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "582fa68b_1c6e8bb1",
+        "filename": "tvix/eval/src/vm.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 253,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2022-10-10T01:40:51Z",
+      "side": 1,
+      "message": "turns out I accidentally made `foldl\u0027` into `foldl`",
+      "parentUuid": "b41c612d_8a2f02cc",
+      "revId": "bbffc5833663256b33e9c2e80a30b966f53b3b94",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
