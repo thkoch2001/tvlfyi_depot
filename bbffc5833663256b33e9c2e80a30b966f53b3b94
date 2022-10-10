@@ -69,6 +69,24 @@
       "parentUuid": "1102d719_b2b161de",
       "revId": "bbffc5833663256b33e9c2e80a30b966f53b3b94",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b41c612d_8a2f02cc",
+        "filename": "tvix/eval/src/vm.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 253,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2022-10-10T01:25:57Z",
+      "side": 1,
+      "message": "even more bizarre, this appears to be something specific about the test harness, as just importing the test works fine:\n```\n❯ cargo r\n    Finished dev [unoptimized + debuginfo] target(s) in 0.08s\n     Running `target/debug/tvix-eval`\ntvix-repl\u003e import ./src/tests/nix_tests/eval-okay-arithmetic.nix\nwarning[W005]: legacy `let` syntax used, please rewrite this as `let .. in ...`\n  --\u003e /home/grfn/code/depot/tvix/eval/src/tests/nix_tests/eval-okay-arithmetic.nix:3:1\n   |\n3  | / let {\n4  | |\n5  | |   /* Supposedly tail recursive version:\n6  | |\n...  |\n58 | |\n59 | | }\n   | |_^\n\nwarning[W003]: variable \u0027y\u0027 is declared, but never used:\n  --\u003e /home/grfn/code/depot/tvix/eval/src/tests/nix_tests/lib.nix:54:14\n   |\n54 |   const \u003d x: y: x;\n   |              ^ variable declared here\n\n\u003d\u003e 2216 :: int\n```",
+      "parentUuid": "66b3a57a_c18224ef",
+      "revId": "bbffc5833663256b33e9c2e80a30b966f53b3b94",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
