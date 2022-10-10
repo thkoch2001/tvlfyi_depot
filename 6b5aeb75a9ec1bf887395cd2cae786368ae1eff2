@@ -51,6 +51,41 @@
       "parentUuid": "93de3051_1b171df3",
       "revId": "6b5aeb75a9ec1bf887395cd2cae786368ae1eff2",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ad833529_6772406c",
+        "filename": "tvix/eval/src/vm.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 360,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2022-10-10T10:15:41Z",
+      "side": 1,
+      "message": "It\u0027s probably close enough, but we probably should have a second look some time. At least C++ Nix does canonicalize the path in this situation, in my estimate it\u0027d be a bigger problem if we introduced a `clean()` somewhere where there isn\u0027t one in C++ Nix. E.g. `./foo + \"/.\" \u003d\u003d ./foo`.",
+      "parentUuid": "0a5e642d_1204c8dd",
+      "revId": "6b5aeb75a9ec1bf887395cd2cae786368ae1eff2",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "51d767e3_e700c286",
+        "filename": "tvix/eval/tests/nix_oracle.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 77,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2022-10-10T10:15:41Z",
+      "side": 1,
+      "message": "Would be nice to have a case for this in the regular test suite as well.",
+      "revId": "6b5aeb75a9ec1bf887395cd2cae786368ae1eff2",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
