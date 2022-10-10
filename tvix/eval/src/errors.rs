@@ -127,6 +127,9 @@ pub enum ErrorKind {
         String, /* Can't be std::io::Error because that doesn't impl Clone :/ */
     ),
 
+    /// Errors converting JSON to a value
+    FromJsonError(String),
+
     /// Tvix internal warning for features triggered by users that are
     /// not actually implemented yet, and without which eval can not
     /// proceed.
@@ -151,6 +154,13 @@ impl From<Error> for ErrorKind {
 impl From<io::Error> for ErrorKind {
     fn from(e: io::Error) -> Self {
         ErrorKind::IO(e.to_string())
+    }
+}
+
+impl From<serde_json::Error> for ErrorKind {
+    fn from(err: serde_json::Error) -> Self {
+        // Can't just put the `serde_json::Error` in the ErrorKind since it doesn't impl `Clone`
+        Self::FromJsonError(format!("Error parsing JSON: {err}"))
     }
 }
 
@@ -320,6 +330,10 @@ to a missing value in the attribute set(s) included via `with`."#,
 
             ErrorKind::IO(err) => {
                 write!(f, "I/O error: {err}")
+            }
+
+            ErrorKind::FromJsonError(msg) => {
+                write!(f, "Error converting JSON to a Nix value: {msg}")
             }
 
             ErrorKind::NotImplemented(feature) => {
@@ -600,6 +614,7 @@ impl Error {
             | ErrorKind::ImportParseError { .. }
             | ErrorKind::ImportCompilerError { .. }
             | ErrorKind::IO { .. }
+            | ErrorKind::FromJsonError(_)
             | ErrorKind::NotImplemented(_) => return None,
         };
 
@@ -638,6 +653,7 @@ impl Error {
             ErrorKind::ImportParseError { .. } => "E027",
             ErrorKind::ImportCompilerError { .. } => "E028",
             ErrorKind::IO { .. } => "E029",
+            ErrorKind::FromJsonError { .. } => "E030",
 
             // Placeholder error while Tvix is under construction.
             ErrorKind::NotImplemented(_) => "E999",

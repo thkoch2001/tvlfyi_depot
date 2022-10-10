@@ -274,6 +274,12 @@ impl NixAttrs {
         NixAttrs(AttrsRep::Map(map))
     }
 
+    /// Construct an optimized "KV"-style attribute set given the value for the
+    /// `"name"` key, and the value for the `"value"` key
+    pub(crate) fn from_kv(name: Value, value: Value) -> Self {
+        NixAttrs(AttrsRep::KV { name, value })
+    }
+
     /// Compare `self` against `other` for equality using Nix equality semantics
     pub fn nix_eq(&self, other: &Self, vm: &mut VM) -> Result<bool, ErrorKind> {
         match (&self.0, &other.0) {
@@ -285,7 +291,7 @@ impl NixAttrs {
             // Preventing this would incur a cost on all attribute set
             // construction (we'd have to check the actual number of
             // elements after key construction). In practice this
-            // probably does not happen, so it's better to just bite
+            // probably does not happen, so its better to just bite
             // the bullet and implement this branch.
             (AttrsRep::Empty, AttrsRep::Map(map)) | (AttrsRep::Map(map), AttrsRep::Empty) => {
                 Ok(map.is_empty())
@@ -376,10 +382,10 @@ fn attempt_optimise_kv(slice: &mut [Value]) -> Option<NixAttrs> {
         }
     };
 
-    Some(NixAttrs(AttrsRep::KV {
-        name: slice[name_idx].clone(),
-        value: slice[value_idx].clone(),
-    }))
+    Some(NixAttrs::from_kv(
+        slice[name_idx].clone(),
+        slice[value_idx].clone(),
+    ))
 }
 
 /// Set an attribute on an in-construction attribute set, while
