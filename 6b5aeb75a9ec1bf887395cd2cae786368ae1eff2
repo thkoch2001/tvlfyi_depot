@@ -71,6 +71,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "7431441d_d536d50f",
+        "filename": "tvix/eval/src/vm.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 360,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-10-10T17:43:13Z",
+      "side": 1,
+      "message": "We\u0027re already using path_clean in the path literals, I think it makes sense to stick to that here and figure out the (relevant!) discrepancies with C++ Nix separately (someone should file a bug for that). Marking this as resolved for now.",
+      "parentUuid": "ad833529_6772406c",
+      "revId": "6b5aeb75a9ec1bf887395cd2cae786368ae1eff2",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "51d767e3_e700c286",
