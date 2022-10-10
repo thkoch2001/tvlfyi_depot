@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c70d73a5_ef76e4ed",
+        "filename": "tvix/eval/src/tests/tvix_tests/eval-okay-fromjson.nix",
+        "patchSetId": 2
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2022-10-10T10:18:43Z",
+      "side": 1,
+      "message": "Floats too floaty for C++ Nix 😭😭",
+      "revId": "1f500290784a276e2622797f630985fd890d88ce",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
