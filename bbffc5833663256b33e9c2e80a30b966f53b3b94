@@ -33,6 +33,24 @@
       "message": "I think the preceding three lines need to be deleted.  The arguments have already been pushed onto the stack.  Other than this the rest of the patchset LGTM; definitely a good idea to factor this out.\n\nWith these three lines present, `cargo test --features nix_tests` gets SIGABRT due to stack overflow (see below)... but CI approved this, so maybe I\u0027m running the tests incorrectly?\n\nIn any event, deleting the three lines above runs the tests to completion with 217 passes.\n\n```\nthread \u0027tests::nix_eval_okay_src_tests_nix_tests_eval_okay_arithmetic_nix\u0027 has overflowed its stack\nfatal runtime error: stack overflow\nerror: test failed, to rerun pass \u0027--lib\u0027\n\nCaused by:\n  process didn\u0027t exit successfully: `/git/depot/tvix/eval/target/debug/deps/tvix_eval-780ba16dafc50801` (signal: 6, SIGABRT: process abort signal)\n```",
       "revId": "bbffc5833663256b33e9c2e80a30b966f53b3b94",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1102d719_b2b161de",
+        "filename": "tvix/eval/src/vm.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 253,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2022-10-10T01:20:27Z",
+      "side": 1,
+      "message": "hmm, that is interesting - I don\u0027t think that\u0027s *entirely* sufficient, as without the repeated application we don\u0027t actually fully call the function (since nix functions are all curried) - eg `eval_okay_arithmetic` fails with:\n```\n---- tests::nix_eval_okay_src_tests_nix_tests_eval_okay_arithmetic_nix stdout ----\nthread \u0027tests::nix_eval_okay_src_tests_nix_tests_eval_okay_arithmetic_nix\u0027 panicked at \u0027assertion failed: `(left \u003d\u003d right)`: result value representation (left) must match expectation (right)\n\nDiff \u003c left / right \u003e :\n\u003clambda\n\u003e2216\n```\n\nwhich is why I wrote it this way in the first place.\nI will need to look into this further.",
+      "parentUuid": "b270fb7a_25c5afb0",
+      "revId": "bbffc5833663256b33e9c2e80a30b966f53b3b94",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
