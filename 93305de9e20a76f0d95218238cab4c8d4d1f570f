@@ -69,6 +69,30 @@
       },
       "revId": "93305de9e20a76f0d95218238cab4c8d4d1f570f",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "66e8147f_8e87a559",
+        "filename": "tvix/eval/src/nix_path.rs",
+        "patchSetId": 3
+      },
+      "lineNbr": 106,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-10-10T14:54:55Z",
+      "side": 1,
+      "message": "The Nix manual isn\u0027t the law, we can change it to something else here. I\u0027d prefer to not have Eelco\u0027s name in our codebase.",
+      "parentUuid": "e36a0304_368fb6fc",
+      "range": {
+        "startLine": 106,
+        "startChar": 36,
+        "endLine": 106,
+        "endChar": 61
+      },
+      "revId": "93305de9e20a76f0d95218238cab4c8d4d1f570f",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
