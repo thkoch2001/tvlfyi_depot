@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "845f0857_02204c9c",
+        "filename": "tvix/eval/src/opcode.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 119,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2022-10-10T03:52:58Z",
+      "side": 1,
+      "message": "I considered making this take a `ConstantIdx` rather than popping off the stack but this felt more in line with the rest of the ops; happy to go with the other approach if people prefer that though.",
+      "revId": "a5a767b418571009f467de210a8002e995655ffa",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
