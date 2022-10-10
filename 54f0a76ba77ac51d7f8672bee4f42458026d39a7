@@ -16,6 +16,29 @@
       "message": "LGTM",
       "revId": "54f0a76ba77ac51d7f8672bee4f42458026d39a7",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bea6a3ee_80b7df04",
+        "filename": "tvix/eval/src/builtins/impure.rs",
+        "patchSetId": 15
+      },
+      "lineNbr": 58,
+      "author": {
+        "id": 1000002
+      },
+      "writtenOn": "2022-10-10T22:47:53Z",
+      "side": 1,
+      "message": "I don\u0027t see any existing uses of File::open - is there a fs abstraction we\u0027re using? https://cs.tvl.fyi/search?q\u003dcontext:global+repo:%5Edepot%24+%22File::open%22+lang:Rust+\u0026patternType\u003dregexp\n\nSupporting nix evals on virtual file systems or jailed directory trees seems like something valuable. I would expect to see something like vm.open_file().",
+      "range": {
+        "startLine": 58,
+        "startChar": 12,
+        "endLine": 58,
+        "endChar": 22
+      },
+      "revId": "54f0a76ba77ac51d7f8672bee4f42458026d39a7",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
