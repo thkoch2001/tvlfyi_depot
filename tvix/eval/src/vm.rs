@@ -580,10 +580,8 @@ impl<'o> VM<'o> {
                     }
                 }
 
-                OpCode::OpAssert => {
-                    if !fallible!(self, self.pop().as_bool()) {
-                        return Err(self.error(ErrorKind::AssertionFailed));
-                    }
+                OpCode::OpAssertFail => {
+                    return Err(self.error(ErrorKind::AssertionFailed));
                 }
 
                 OpCode::OpCall => {
