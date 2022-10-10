@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e3422285_89b285dd",
+        "filename": "tvix/eval/src/compiler/mod.rs",
+        "patchSetId": 4
+      },
+      "lineNbr": 289,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2022-10-10T09:46:31Z",
+      "side": 1,
+      "message": "tazjin and I were discussing that we may actually want to implement the cursed `__findFile` mechanism, due to the following reasons:\n\n1. The VM proper doesn\u0027t need to care about findFile, it can just be an ordinary builtin.\n2. We definitely want to resolve `NIX_PATH` at runtime, so we can have cacheable bytecode at some point in the future.\n\nThanks to poison tracking and using the top level `__findFile` the dispatch should also be very cheap.\n\nThe big annoyance about `__findFile` is the `__nixPath` value it uses, I suppose, but this is also easy to add in impure VM initialisation now. I agree that `__findFile` is kind of a misfeature, especially when considering the C++ Nix treewalking evaluator, but since our bytecode compiler does need a clean compile/run time separation, this crude thing actually works out quite well for us.",
+      "revId": "da8b5c799dc2acc75b9da7fa59efecd175a08fb4",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
