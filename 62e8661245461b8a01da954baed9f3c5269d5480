@@ -122,6 +122,24 @@
       "parentUuid": "eb1d59da_b4de6cb0",
       "revId": "62e8661245461b8a01da954baed9f3c5269d5480",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ee804a34_ffc50881",
+        "filename": "nix/readTree/default.nix",
+        "patchSetId": 2
+      },
+      "lineNbr": 83,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2022-10-10T15:29:58Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2f58fbb2_5d8a8d28",
+      "revId": "62e8661245461b8a01da954baed9f3c5269d5480",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
