@@ -856,6 +856,7 @@ impl<'o> VM<'o> {
         let result = fallible!(self, builtin.apply(self, arg));
 
         self.observer.observe_exit_builtin(builtin_name);
+        self.observer.observe_builtin_result(&result);
 
         self.push(result);
 

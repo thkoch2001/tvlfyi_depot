@@ -54,6 +54,9 @@ pub trait RuntimeObserver {
     /// Called when the runtime exits a builtin.
     fn observe_exit_builtin(&mut self, _name: &'static str) {}
 
+    /// Called with the result returned by a builtin application
+    fn observe_builtin_result(&mut self, _value: &Value) {}
+
     /// Called when the runtime *begins* executing an instruction. The
     /// provided stack is the state at the beginning of the operation.
     fn observe_execute_op(&mut self, _ip: CodeIdx, _: &OpCode, _: &[Value]) {}
@@ -156,6 +159,10 @@ impl<W: Write> RuntimeObserver for TracingObserver<W> {
 
     fn observe_exit_builtin(&mut self, name: &'static str) {
         let _ = writeln!(&mut self.writer, "=== exiting builtin {} ===", name);
+    }
+
+    fn observe_builtin_result(&mut self, value: &Value) {
+        let _ = writeln!(&mut self.writer, "    > result: {}", value);
     }
 
     fn observe_tail_call(&mut self, frame_at: usize, lambda: &Rc<Lambda>) {
