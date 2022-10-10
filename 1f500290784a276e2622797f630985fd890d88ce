@@ -85,6 +85,23 @@
       "message": "This is actually kind of nice for benchmarking if the KV thing is worth it later.",
       "revId": "1f500290784a276e2622797f630985fd890d88ce",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4de85c3f_c53c7fe6",
+        "filename": "tvix/eval/src/value/attrs.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 294,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2022-10-10T14:34:44Z",
+      "side": 1,
+      "message": "oops",
+      "revId": "1f500290784a276e2622797f630985fd890d88ce",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
