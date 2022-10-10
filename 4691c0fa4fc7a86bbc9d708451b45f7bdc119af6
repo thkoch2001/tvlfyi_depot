@@ -24,6 +24,30 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "9fbf6ead_25174c4f",
+        "filename": "tvix/eval/src/errors.rs",
+        "patchSetId": 12
+      },
+      "lineNbr": 127,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2022-10-10T15:01:38Z",
+      "side": 1,
+      "message": "How would you feel about a generic *path-related* IO error variant? Otherwise it seems like we\u0027re basically going to have an IO error per builtin, which feels excessive given our conversation around listToAttrs",
+      "parentUuid": "fa1dd130_3c9800f9",
+      "range": {
+        "startLine": 127,
+        "startChar": 0,
+        "endLine": 127,
+        "endChar": 80
+      },
+      "revId": "4691c0fa4fc7a86bbc9d708451b45f7bdc119af6",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "40e1b318_50ec9f96",
