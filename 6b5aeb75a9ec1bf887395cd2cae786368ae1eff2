@@ -86,6 +86,24 @@
       "message": "Would be nice to have a case for this in the regular test suite as well.",
       "revId": "6b5aeb75a9ec1bf887395cd2cae786368ae1eff2",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2c58ea88_795304f3",
+        "filename": "tvix/eval/tests/nix_oracle.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 77,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-10-10T14:08:13Z",
+      "side": 1,
+      "message": "+1",
+      "parentUuid": "51d767e3_e700c286",
+      "revId": "6b5aeb75a9ec1bf887395cd2cae786368ae1eff2",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
