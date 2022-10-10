@@ -81,7 +81,9 @@ let
     let
       importedFile =
         if scopedArgs != { }
-        then builtins.scopedImport scopedArgs path
+        then if builtins ? scopedImport # For tvix
+             then builtins.scopedImport scopedArgs path
+             else import path
         else import path;
       pathType = builtins.typeOf importedFile;
     in
