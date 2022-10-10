@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "135a7a75_ca18313f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000066
+      },
+      "writtenOn": "2022-10-10T02:45:58Z",
+      "side": 1,
+      "message": "LGTM with the import path fix below.",
+      "revId": "6a16b49bce2d6c6eaddfecae41061c5883ba083b",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5f6a9aca_411a1e47",
+        "filename": "tvix/eval/src/tests/tvix_tests/eval-okay-elem.nix",
+        "patchSetId": 1
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1000066
+      },
+      "writtenOn": "2022-10-10T02:45:58Z",
+      "side": 1,
+      "message": "I think you mean\n\n```\nwith import ../nix_tests/lib.nix;\n```\n\ndoes gerrit have a github-like ```suggestion mechanism?",
+      "revId": "6a16b49bce2d6c6eaddfecae41061c5883ba083b",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
