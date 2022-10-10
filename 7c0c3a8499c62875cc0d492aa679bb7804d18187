@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6ccd6764_feaf8d6a",
+        "filename": "tvix/eval/src/vm.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 189,
+      "author": {
+        "id": 1000066
+      },
+      "writtenOn": "2022-10-10T21:35:01Z",
+      "side": 1,
+      "message": "Or `Thunk::new()` could take a `VM` instead of exposing this.  Six of one, half-dozen of the other...",
+      "revId": "7c0c3a8499c62875cc0d492aa679bb7804d18187",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
