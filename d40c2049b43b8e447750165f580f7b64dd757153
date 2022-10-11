@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d9da0ab3_22e59d7e",
+        "filename": "tvix/eval/src/value/mod.rs",
+        "patchSetId": 19
+      },
+      "lineNbr": 428,
+      "author": {
+        "id": 1000002
+      },
+      "writtenOn": "2022-10-11T22:43:33Z",
+      "side": 1,
+      "message": "Please add a test case for this feature.",
+      "range": {
+        "startLine": 426,
+        "startChar": 20,
+        "endLine": 428,
+        "endChar": 50
+      },
+      "revId": "d40c2049b43b8e447750165f580f7b64dd757153",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
