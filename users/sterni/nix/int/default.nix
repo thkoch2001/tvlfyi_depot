@@ -100,6 +100,8 @@ let
 
   inRange = a: b: x: x >= a && x <= b;
 
+  sum = builtins.foldl' (a: b: a + b) 0;
+
 in
 {
   inherit
@@ -122,5 +124,6 @@ in
     toHex
     fromHex
     inRange
+    sum
     ;
 }
