@@ -5,6 +5,7 @@ mod errors;
 mod eval;
 pub mod observer;
 mod opcode;
+mod pretty_ast;
 mod source;
 mod spans;
 mod upvalues;
