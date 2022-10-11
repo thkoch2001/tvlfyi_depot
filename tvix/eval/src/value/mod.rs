@@ -21,6 +21,7 @@ pub use attrs::NixAttrs;
 pub use builtin::Builtin;
 pub use function::{Closure, Lambda};
 pub use list::NixList;
+pub(crate) use string::nix_escape_string;
 pub use string::NixString;
 pub use thunk::Thunk;
 

@@ -149,7 +149,7 @@ fn nix_escape_char(ch: char, next: Option<&char>) -> Option<&'static str> {
 /// are escaped strings.
 ///
 /// Note that this does not add the outer pair of surrounding quotes.
-fn nix_escape_string(input: &str) -> Cow<str> {
+pub(crate) fn nix_escape_string(input: &str) -> Cow<str> {
     let mut iter = input.chars().enumerate().peekable();
 
     while let Some((i, c)) = iter.next() {

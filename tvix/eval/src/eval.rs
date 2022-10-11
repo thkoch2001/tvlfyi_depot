@@ -5,6 +5,7 @@ use crate::{
     errors::{Error, ErrorKind, EvalResult},
     nix_path::NixPath,
     observer::{DisassemblingObserver, NoOpObserver, TracingObserver},
+    pretty_ast::PrettyAST,
     value::Value,
     SourceCode,
 };
@@ -59,7 +60,7 @@ pub fn interpret(code: &str, location: Option<PathBuf>, options: Options) -> Eva
         .expect("expression should exist if no errors occured");
 
     if options.display_ast {
-        println!("{:?}", root_expr);
+        println!("{}", PrettyAST::from_expr(&root_expr).pretty_string());
     }
 
     // TODO: encapsulate this import weirdness in builtins
