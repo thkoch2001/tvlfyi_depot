@@ -482,6 +482,9 @@ RAW-DATA contains unmarshalled ClientMessage event data."
       (exwm-workspace-switch (elt data 0)))
      ;; _NET_ACTIVE_WINDOW.
      ((= type xcb:Atom:_NET_ACTIVE_WINDOW)
+      (dolist (f exwm-workspace--list)
+        (when (eq id (frame-parameter f 'exwm-outer-id))
+          (x-focus-frame f t)))
       (let ((buffer (exwm--id->buffer id))
             iconic window)
         (if (buffer-live-p buffer)
