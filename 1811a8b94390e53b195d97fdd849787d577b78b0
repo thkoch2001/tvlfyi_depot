@@ -60,6 +60,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "42778183_158fc9d4",
+        "filename": "tvix/eval/src/builtins/mod.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 509,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2022-10-12T11:32:51Z",
+      "side": 1,
+      "message": "Judging from the list qyliss posted, it seems it would be `i*86`. We need to map that to `i686` like [Nix does](https://github.com/NixOS/nix/blob/f3193edd87be915910f0ae239b058713ef685c74/configure.ac#L15-L16) (for better or worse).",
+      "parentUuid": "5e90693e_479fe292",
+      "revId": "1811a8b94390e53b195d97fdd849787d577b78b0",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "025ef2fc_bea33a15",
         "filename": "tvix/eval/src/builtins/mod.rs",
         "patchSetId": 2
