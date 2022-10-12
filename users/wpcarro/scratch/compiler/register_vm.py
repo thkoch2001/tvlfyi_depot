@@ -60,7 +60,7 @@ stack = []
 
 def reg_name(i):
     if i == X: return 'x'
-    if i == Y: return 'x'
+    if i == Y: return 'y'
     if i == RES: return 'res'
 
 def print_instructions(xs):
