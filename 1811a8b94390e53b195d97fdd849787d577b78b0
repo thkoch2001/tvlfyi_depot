@@ -20,6 +20,69 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "88e52334_ea021de0",
+        "filename": "tvix/eval/build.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 6,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2022-10-12T11:31:39Z",
+      "side": 1,
+      "message": "Does LLVM/cargo/rustc [normalize](https://llvm.org/doxygen/classllvm_1_1Triple.html#a17b5b7102b637681083b66c660d2f7d1) the triple before setting `TARGET`?",
+      "range": {
+        "startLine": 6,
+        "startChar": 19,
+        "endLine": 6,
+        "endChar": 25
+      },
+      "revId": "1811a8b94390e53b195d97fdd849787d577b78b0",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5e90693e_479fe292",
+        "filename": "tvix/eval/src/builtins/mod.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 509,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2022-10-12T11:31:39Z",
+      "side": 1,
+      "message": "I think LLVM returns `x86` for i*86, so we\u0027d need to map this to `i686` which Nix expects (for all variants of the 32bit x86 architectures).",
+      "revId": "1811a8b94390e53b195d97fdd849787d577b78b0",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "025ef2fc_bea33a15",
+        "filename": "tvix/eval/src/builtins/mod.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 511,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2022-10-12T11:31:39Z",
+      "side": 1,
+      "message": "FTR LLVM calls this “environment“.",
+      "range": {
+        "startLine": 511,
+        "startChar": 27,
+        "endLine": 511,
+        "endChar": 35
+      },
+      "revId": "1811a8b94390e53b195d97fdd849787d577b78b0",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "a7a0739d_e8800bbf",
         "filename": "tvix/eval/src/builtins/mod.rs",
         "patchSetId": 2
@@ -48,6 +111,24 @@
       "writtenOn": "2022-10-12T11:28:08Z",
       "side": 1,
       "message": "I\u0027ve just gone through the list of supported Rust platforms, and I think this is the complete set of triples it would make sense to test, as things stand with Nix.  It\u0027s a long list, but these are just test cases — I don\u0027t expect your implementation to become significantly more complicated, although there are a few things that\u0027ll need to be done, e.g. implementing normalisation of 32-bit x86 architectures to \"i686\" like Nix does.\n\naarch64-unknown-linux-gnu\ni686-unknown-linux-gnu\nx86_64-apple-darwin\nx86_64-unknown-linux-gnu\naarch64-apple-darwin\naarch64-unknown-linux-musl\narm-unknown-linux-gnueabi\narm-unknown-linux-gnueabihf\narmv7-unknown-linux-gnueabihf\nmips-unknown-linux-gnu\nmips64-unknown-linux-gnuabi64\nmips64el-unknown-linux-gnuabi64\nmipsel-unknown-linux-gnu\npowerpc-unknown-linux-gnu\npowerpc64-unknown-linux-gnu\npowerpc64le-unknown-linux-gnu\nriscv64gc-unknown-linux-gnu\ns390x-unknown-linux-gnu\nx86_64-unknown-linux-musl\nx86_64-unknown-netbsd\naarch64-linux-android\narm-linux-androideabi\narm-unknown-linux-musleabi\narm-unknown-linux-musleabihf\narmv5te-unknown-linux-gnueabi\narmv5te-unknown-linux-musleabi\narmv7-linux-androideabi\narmv7-unknown-linux-gnueabi\narmv7-unknown-linux-musleabi\narmv7-unknown-linux-musleabihf\ni586-unknown-linux-gnu\ni586-unknown-linux-musl\ni686-linux-android\ni686-unknown-linux-musl\nmips-unknown-linux-musl\nmips64-unknown-linux-muslabi64\nmips64el-unknown-linux-muslabi64\nmipsel-unknown-linux-musl\nsparc64-unknown-linux-gnu\nthumbv7neon-linux-androideabi\nthumbv7neon-unknown-linux-gnueabihf\nx86_64-linux-android\nx86_64-unknown-linux-gnux32\naarch64-unknown-linux-gnu_ilp32\naarch64-unknown-netbsd\naarch64_be-unknown-linux-gnu_ilp32\naarch64_be-unknown-linux-gnu\narmeb-unknown-linux-gnueabi\narmv4t-unknown-linux-gnueabi\narmv6-unknown-netbsd-eabihf\narmv7-unknown-linux-uclibceabi\narmv7-unknown-linux-uclibceabihf\narmv7-unknown-netbsd-eabihf\nhexagon-unknown-linux-musl\ni686-unknown-netbsd\nm68k-unknown-linux-gnu\nmips-unknown-linux-uclibc\nmips64-openwrt-linux-musl\nmipsel-unknown-linux-uclibc\nmipsisa32r6-unknown-linux-gnu\nmipsisa32r6el-unknown-linux-gnu\nmipsisa64r6-unknown-linux-gnuabi64\nmipsisa64r6el-unknown-linux-gnuabi64\npowerpc-unknown-linux-gnuspe\npowerpc-unknown-linux-musl\npowerpc-unknown-netbsd\npowerpc64-unknown-linux-musl\npowerpc64le-unknown-linux-musl\nriscv32gc-unknown-linux-gnu\nriscv32gc-unknown-linux-musl\nriscv64gc-unknown-linux-musl\ns390x-unknown-linux-musl\nsparc-unknown-linux-gnu\nsparc64-unknown-netbsd\nthumbv7neon-unknown-linux-musleabihf",
+      "parentUuid": "a7a0739d_e8800bbf",
+      "revId": "1811a8b94390e53b195d97fdd849787d577b78b0",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1d54a80f_d1c3a817",
+        "filename": "tvix/eval/src/builtins/mod.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 516,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2022-10-12T11:31:39Z",
+      "side": 1,
+      "message": "That would be a good improvement. What it\u0027d be really nice if we could reuse the `LLVM::Triple` API somehow, but it would complicate building Tvix – the C API available via `llvm-sys` doesn\u0027t allow accessing it in a nice way anyways.\n\nWe should check if there is some LLVM CLI tool which helps us a bit, otherwise we\u0027ll just need to do string manipulation ourselves which is fine if `TARGET` gets normalized before we see it.",
       "parentUuid": "a7a0739d_e8800bbf",
       "revId": "1811a8b94390e53b195d97fdd849787d577b78b0",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
