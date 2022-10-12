@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "85be810c_d467d8e0",
+        "filename": "tvix/eval/src/builtins/mod.rs",
+        "patchSetId": 5
+      },
+      "lineNbr": 387,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2022-10-12T18:52:55Z",
+      "side": 1,
+      "message": "Doesn\u0027t seem to coerce to string:\n\n```\nnix-repl\u003e builtins.parseDrvName { outPath \u003d \"lol\"; }\nerror: value is a set while a string was expected, at (string):1:1\n```",
+      "range": {
+        "startLine": 387,
+        "startChar": 28,
+        "endLine": 387,
+        "endChar": 44
+      },
+      "revId": "8111f2de1e324cd08405a89f4d6a9a61f6621078",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
