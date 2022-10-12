@@ -493,6 +493,9 @@ fn pure_builtins() -> Vec<Builtin> {
     ]
 }
 
+// we set TVIX_CURRENT_SYSTEM in build.rs
+pub const CURRENT_PLATFORM: &str = env!("TVIX_CURRENT_SYSTEM");
+
 fn builtins_set() -> NixAttrs {
     let mut map: BTreeMap<NixString, Value> = BTreeMap::new();
 
@@ -500,6 +503,21 @@ fn builtins_set() -> NixAttrs {
     map.insert(
         "nixVersion".into(),
         Value::String("2.3-compat-tvix-0.1".into()),
+    );
+
+    let parts : Vec<&str> = CURRENT_PLATFORM.split('-').collect();
+    let cpu = parts[0];
+    let os =
+        match parts[1..] {
+            [ _vendor, "linux", _libcabi ] => "linux",
+            [          "linux", _libcabi ] => "linux",
+            [ _vendor, "darwin"          ] => "darwin",
+            _ => panic!("unrecognized host triple {CURRENT_PLATFORM}"),
+        };
+    let current_platform = format!("{cpu}-{os}");
+    map.insert(
+        "currentSystem".into(),
+        current_platform.into(),
     );
 
     let mut add_builtins = |builtins: Vec<Builtin>| {
