@@ -20,6 +20,23 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "b59ca5b9_f6115c2c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000066
+      },
+      "writtenOn": "2022-10-12T18:43:46Z",
+      "side": 1,
+      "message": "Note to self: replicate special handling of `i*86` and `armv[67]` from cppnix here:\n\nhttps://github.com/NixOS/nix/blob/a6239eb5700ebb85b47bb5f12366404448361f8d/configure.ac#L20",
+      "revId": "1811a8b94390e53b195d97fdd849787d577b78b0",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "88e52334_ea021de0",
         "filename": "tvix/eval/build.rs",
         "patchSetId": 2
