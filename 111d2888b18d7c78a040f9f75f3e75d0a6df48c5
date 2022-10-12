@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7e2d0465_97db19f5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-10-12T10:00:22Z",
+      "side": 1,
+      "message": "I think the assumption is that people use direnv, but I\u0027m not sure how directly we tell people to do that. Gonna accept this change as is for now.\n\nNote btw that there are non-TVL uses of magrathea, in the companies that use the TVL stack.",
+      "revId": "111d2888b18d7c78a040f9f75f3e75d0a6df48c5",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
