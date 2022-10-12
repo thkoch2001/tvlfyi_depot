@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "28524071_c77cee34",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000066
+      },
+      "writtenOn": "2022-10-12T05:33:51Z",
+      "side": 1,
+      "message": "I think marking this \"Autosubmit +1\" means that it will be submitted automatically, without need for any action by me, as soon as the code owners approve it.  That\u0027s what I want, so I\u0027m marking it that way.  I hope that\u0027s correct...",
+      "revId": "b832969d08e235480f69bedf8e8d27566af99aff",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
