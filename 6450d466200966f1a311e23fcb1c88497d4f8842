@@ -16,6 +16,24 @@
       "message": "Related b/189.\n\nI think we first need to check as well what rnix does, if it can\u0027t parse invalid literals, this is also troublesome. Also it\u0027s still an open question if we need bytestring for nixpkgs compat.",
       "revId": "6450d466200966f1a311e23fcb1c88497d4f8842",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bd6d6e2d_575545f6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000066
+      },
+      "writtenOn": "2022-10-12T04:49:46Z",
+      "side": 1,
+      "message": "I looked at this, and rnix assumes the input is UTF-8.  And that assumption is embedded pretty deeply.  So matching cppnix\u0027s behavior here is definitely not worth the effort in the near term.",
+      "parentUuid": "adda9afe_b520d970",
+      "revId": "6450d466200966f1a311e23fcb1c88497d4f8842",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ],
   "submitRequirementResults": []
