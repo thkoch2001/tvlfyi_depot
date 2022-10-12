@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "67381c08_e8a44411",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2022-10-12T10:54:02Z",
+      "side": 1,
+      "message": "i guess this is fine. we might want to add something to CI to ensure this file is up to date, so we spot regressions, e.g. in case of cheddar css class updates.\n\nhowever, that can be done as a followup.",
+      "revId": "adb799d9964dfc1d86c1d6927b8419ae46c49075",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
