@@ -26,6 +26,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "a5fce487_683045bf",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1000066
+      },
+      "writtenOn": "2022-10-12T04:32:56Z",
+      "side": 1,
+      "message": "Will do.\n\n(I guess \"Ack\" also resolves the comment, which I didn\u0027t intend yet).",
+      "parentUuid": "212972f5_9472cc9e",
+      "range": {
+        "startLine": 9,
+        "startChar": 0,
+        "endLine": 9,
+        "endChar": 76
+      },
+      "revId": "45d9709d707310375c7c5bc7dee1b2379bcb339a",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "0916f676_53050e18",
         "filename": "tvix/eval/src/builtins/mod.rs",
         "patchSetId": 2
@@ -37,6 +61,30 @@
       "writtenOn": "2022-10-11T22:54:32Z",
       "side": 1,
       "message": "Huh? UTF-8 has no coding conflicts - all continuation bytes are 0b10xxxxxx.\n\nThe mishandling is when you have a true dash followed by a non-ASCII alphabetic character.\n\n\u003e This replicates cppnix\u0027s mishandling of UTF-8 by considering a non-ASCII codepoint appearing immediately after a hyphen to be non-alphabetic.",
+      "range": {
+        "startLine": 303,
+        "startChar": 12,
+        "endLine": 305,
+        "endChar": 44
+      },
+      "revId": "45d9709d707310375c7c5bc7dee1b2379bcb339a",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "758e71fa_23669ccb",
+        "filename": "tvix/eval/src/builtins/mod.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 305,
+      "author": {
+        "id": 1000066
+      },
+      "writtenOn": "2022-10-12T04:32:56Z",
+      "side": 1,
+      "message": "You are correct.  Thank you for pointing this out.  Fixed in patchset 3.",
+      "parentUuid": "0916f676_53050e18",
       "range": {
         "startLine": 303,
         "startChar": 12,
