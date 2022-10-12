@@ -33,6 +33,24 @@
       "message": "I\u0027d like to see this factored out into a (ideally const) function that takes an LLVM triple and returns a Nix double.  That way, you could add unit tests and ensure it gives the right answer for all platforms we currently know about.  (I\u0027d do every architecture supported by Rust, for Linux, NetBSD, and Darwin as applicable.)",
       "revId": "1811a8b94390e53b195d97fdd849787d577b78b0",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3bf2337c_bdd1581a",
+        "filename": "tvix/eval/src/builtins/mod.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 516,
+      "author": {
+        "id": 1000018
+      },
+      "writtenOn": "2022-10-12T11:28:08Z",
+      "side": 1,
+      "message": "I\u0027ve just gone through the list of supported Rust platforms, and I think this is the complete set of triples it would make sense to test, as things stand with Nix.  It\u0027s a long list, but these are just test cases — I don\u0027t expect your implementation to become significantly more complicated, although there are a few things that\u0027ll need to be done, e.g. implementing normalisation of 32-bit x86 architectures to \"i686\" like Nix does.\n\naarch64-unknown-linux-gnu\ni686-unknown-linux-gnu\nx86_64-apple-darwin\nx86_64-unknown-linux-gnu\naarch64-apple-darwin\naarch64-unknown-linux-musl\narm-unknown-linux-gnueabi\narm-unknown-linux-gnueabihf\narmv7-unknown-linux-gnueabihf\nmips-unknown-linux-gnu\nmips64-unknown-linux-gnuabi64\nmips64el-unknown-linux-gnuabi64\nmipsel-unknown-linux-gnu\npowerpc-unknown-linux-gnu\npowerpc64-unknown-linux-gnu\npowerpc64le-unknown-linux-gnu\nriscv64gc-unknown-linux-gnu\ns390x-unknown-linux-gnu\nx86_64-unknown-linux-musl\nx86_64-unknown-netbsd\naarch64-linux-android\narm-linux-androideabi\narm-unknown-linux-musleabi\narm-unknown-linux-musleabihf\narmv5te-unknown-linux-gnueabi\narmv5te-unknown-linux-musleabi\narmv7-linux-androideabi\narmv7-unknown-linux-gnueabi\narmv7-unknown-linux-musleabi\narmv7-unknown-linux-musleabihf\ni586-unknown-linux-gnu\ni586-unknown-linux-musl\ni686-linux-android\ni686-unknown-linux-musl\nmips-unknown-linux-musl\nmips64-unknown-linux-muslabi64\nmips64el-unknown-linux-muslabi64\nmipsel-unknown-linux-musl\nsparc64-unknown-linux-gnu\nthumbv7neon-linux-androideabi\nthumbv7neon-unknown-linux-gnueabihf\nx86_64-linux-android\nx86_64-unknown-linux-gnux32\naarch64-unknown-linux-gnu_ilp32\naarch64-unknown-netbsd\naarch64_be-unknown-linux-gnu_ilp32\naarch64_be-unknown-linux-gnu\narmeb-unknown-linux-gnueabi\narmv4t-unknown-linux-gnueabi\narmv6-unknown-netbsd-eabihf\narmv7-unknown-linux-uclibceabi\narmv7-unknown-linux-uclibceabihf\narmv7-unknown-netbsd-eabihf\nhexagon-unknown-linux-musl\ni686-unknown-netbsd\nm68k-unknown-linux-gnu\nmips-unknown-linux-uclibc\nmips64-openwrt-linux-musl\nmipsel-unknown-linux-uclibc\nmipsisa32r6-unknown-linux-gnu\nmipsisa32r6el-unknown-linux-gnu\nmipsisa64r6-unknown-linux-gnuabi64\nmipsisa64r6el-unknown-linux-gnuabi64\npowerpc-unknown-linux-gnuspe\npowerpc-unknown-linux-musl\npowerpc-unknown-netbsd\npowerpc64-unknown-linux-musl\npowerpc64le-unknown-linux-musl\nriscv32gc-unknown-linux-gnu\nriscv32gc-unknown-linux-musl\nriscv64gc-unknown-linux-musl\ns390x-unknown-linux-musl\nsparc-unknown-linux-gnu\nsparc64-unknown-netbsd\nthumbv7neon-unknown-linux-musleabihf",
+      "parentUuid": "a7a0739d_e8800bbf",
+      "revId": "1811a8b94390e53b195d97fdd849787d577b78b0",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
