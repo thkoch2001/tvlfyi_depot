@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5874eacb_2cc75cef",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1000018
+      },
+      "writtenOn": "2022-10-12T11:16:46Z",
+      "side": 1,
+      "message": "Nixpkgs has substantially more than four supported platforms!  The platforms you\u0027ve listed are just the platforms Hydra builds for.  The actual \"supported\" platforms are the ones listed in lib.systems.doubles, but of course the degree to which they are supported varies.\n\nBut the relevant \"support\" here is the platforms Nix produces sensible doubles for, I think, and that\u0027s really only linux, darwin, and netbsd, because what to do about platforms like OpenBSD with very unstable, versioned ABIs is still unclear.  (We\u0027ll have to look into this soon as part of John\u0027s work on FreeBSD enablement.)",
+      "revId": "1811a8b94390e53b195d97fdd849787d577b78b0",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a7a0739d_e8800bbf",
+        "filename": "tvix/eval/src/builtins/mod.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 516,
+      "author": {
+        "id": 1000018
+      },
+      "writtenOn": "2022-10-12T11:16:46Z",
+      "side": 1,
+      "message": "I\u0027d like to see this factored out into a (ideally const) function that takes an LLVM triple and returns a Nix double.  That way, you could add unit tests and ensure it gives the right answer for all platforms we currently know about.  (I\u0027d do every architecture supported by Rust, for Linux, NetBSD, and Darwin as applicable.)",
+      "revId": "1811a8b94390e53b195d97fdd849787d577b78b0",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
