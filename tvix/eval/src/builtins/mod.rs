@@ -189,6 +189,19 @@ fn pure_builtins() -> Vec<Builtin> {
             &[false, false],
             |args: Vec<Value>, vm: &mut VM| arithmetic_op!(&*args[0].force(vm)?, &*args[1].force(vm)?, /),
         ),
+        Builtin::new("dirOf", &[true], |args: Vec<Value>, vm: &mut VM| {
+            let s = args[0].coerce_to_string(CoercionKind::Weak, vm)?;
+            let result: String = s
+                .rsplit_once('/')
+                .map(|(x, _)| x)
+                .unwrap_or(s.as_str())
+                .into();
+            if args[0].is_path() {
+                Ok(Value::Path(result.into()))
+            } else {
+                Ok(result.into())
+            }
+        }),
         Builtin::new("elem", &[true, true], |args: Vec<Value>, vm: &mut VM| {
             for val in args[1].to_list()? {
                 if val.nix_eq(&args[0], vm)? {
