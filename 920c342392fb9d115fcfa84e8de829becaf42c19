@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "db037e47_52d6f113",
+        "filename": "tvix/eval/src/eval.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2022-10-12T22:40:42Z",
+      "side": 1,
+      "message": "I think we probably want to `#[cfg(test)]` this to prevent unused warnings when not building for tests",
+      "revId": "920c342392fb9d115fcfa84e8de829becaf42c19",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
