@@ -523,6 +523,9 @@ fn pure_builtins() -> Vec<Builtin> {
     ]
 }
 
+// we set TVIX_CURRENT_SYSTEM in build.rs
+pub const CURRENT_PLATFORM: &str = env!("TVIX_CURRENT_SYSTEM");
+
 fn builtins_set() -> NixAttrs {
     let mut map: BTreeMap<NixString, Value> = BTreeMap::new();
 
@@ -530,6 +533,11 @@ fn builtins_set() -> NixAttrs {
     map.insert(
         "nixVersion".into(),
         Value::String("2.3-compat-tvix-0.1".into()),
+    );
+
+    map.insert(
+        "currentSystem".into(),
+        crate::systems::llvm_triple_to_nix_double(CURRENT_PLATFORM).into(),
     );
 
     let mut add_builtins = |builtins: Vec<Builtin>| {

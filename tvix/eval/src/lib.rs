@@ -7,6 +7,7 @@ pub mod observer;
 mod opcode;
 mod source;
 mod spans;
+mod systems;
 mod upvalues;
 mod value;
 mod vm;
