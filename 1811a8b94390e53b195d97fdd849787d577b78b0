@@ -78,6 +78,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "86dc6d05_1943b2b7",
+        "filename": "tvix/eval/src/builtins/mod.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 509,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2022-10-12T11:33:29Z",
+      "side": 1,
+      "message": "Similarly `armv6` and `armv7` get mapped to `armv6l` and `armv7l` etc.",
+      "parentUuid": "42778183_158fc9d4",
+      "revId": "1811a8b94390e53b195d97fdd849787d577b78b0",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "025ef2fc_bea33a15",
         "filename": "tvix/eval/src/builtins/mod.rs",
         "patchSetId": 2
