@@ -851,47 +851,6 @@ impl<'o> VM<'o> {
         Ok(())
     }
 
-    /// Strictly evaluate the supplied value for outputting it. This
-    /// will ensure that lists and attribute sets do not contain
-    /// chunks which, for users, are displayed in a strange and often
-    /// unexpected way.
-    fn force_for_output(&mut self, value: &Value) -> EvalResult<()> {
-        match value {
-            Value::Attrs(attrs) => {
-                for (_, value) in attrs.iter() {
-                    self.force_for_output(value)?;
-                }
-                Ok(())
-            }
-
-            Value::List(list) => list.iter().try_for_each(|elem| self.force_for_output(elem)),
-
-            Value::Thunk(thunk) => {
-                fallible!(self, thunk.force(self));
-                let value = thunk.value().clone();
-                self.force_for_output(&value)
-            }
-
-            // If any of these internal values are encountered here a
-            // critical error has happened (likely a compiler bug).
-            Value::AttrNotFound
-            | Value::Blueprint(_)
-            | Value::DeferredUpvalue(_)
-            | Value::UnresolvedPath(_) => {
-                panic!("tvix bug: internal value left on stack: {:?}", value)
-            }
-
-            Value::Null
-            | Value::Bool(_)
-            | Value::Integer(_)
-            | Value::Float(_)
-            | Value::String(_)
-            | Value::Path(_)
-            | Value::Closure(_)
-            | Value::Builtin(_) => Ok(()),
-        }
-    }
-
     pub fn call_builtin(&mut self, builtin: Builtin) -> EvalResult<()> {
         let builtin_name = builtin.name();
         self.observer.observe_enter_builtin(builtin_name);
@@ -922,7 +881,7 @@ pub fn run_lambda(
     let mut vm = VM::new(nix_search_path, observer);
     vm.enter_frame(lambda, Upvalues::with_capacity(0), 0)?;
     let value = vm.pop();
-    vm.force_for_output(&value)?;
+    value.deep_force(&mut vm).map_err(|e| vm.error(e))?;
 
     Ok(RuntimeResult {
         value,
