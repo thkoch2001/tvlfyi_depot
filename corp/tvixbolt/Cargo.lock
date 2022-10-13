@@ -582,6 +582,8 @@ dependencies = [
  "path-clean",
  "rnix",
  "rowan",
+ "serde",
+ "serde_json",
  "smol_str",
  "tabwriter",
 ]
