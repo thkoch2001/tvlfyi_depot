@@ -71,6 +71,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "b5a0965a_0ea2f646",
+        "filename": "tvix/eval/src/tests/tvix_tests/eval-okay-fromjson-escapes.nix",
+        "patchSetId": 2
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-10-13T16:34:26Z",
+      "side": 1,
+      "message": "Ack after talking to sterni on Meet. TL;DR, if we added a test for this it would break the build because this is broken in C++ Nix (which we run our tests against)",
+      "parentUuid": "93f69daa_e5506fc3",
+      "revId": "1f500290784a276e2622797f630985fd890d88ce",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "c70d73a5_ef76e4ed",
