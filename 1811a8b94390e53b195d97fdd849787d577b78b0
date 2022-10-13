@@ -18,6 +18,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "355bcee5_1cfc229c",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1000066
+      },
+      "writtenOn": "2022-10-13T04:11:18Z",
+      "side": 1,
+      "message": "I didn\u0027t know Ericson2314 was working on bootstrapping nixpkgs on FreeBSD.  That is way cool.\n\nI\u0027ve updated the commit message (see patchset 3).",
+      "parentUuid": "5874eacb_2cc75cef",
+      "revId": "1811a8b94390e53b195d97fdd849787d577b78b0",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "b59ca5b9_f6115c2c",
@@ -31,6 +49,23 @@
       "writtenOn": "2022-10-12T18:43:46Z",
       "side": 1,
       "message": "Note to self: replicate special handling of `i*86` and `armv[67]` from cppnix here:\n\nhttps://github.com/NixOS/nix/blob/a6239eb5700ebb85b47bb5f12366404448361f8d/configure.ac#L20",
+      "revId": "1811a8b94390e53b195d97fdd849787d577b78b0",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b5db2288_97fb5b59",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000066
+      },
+      "writtenOn": "2022-10-13T04:11:18Z",
+      "side": 1,
+      "message": "Okay, patchset 3 is not perfect, but it\u0027s an improvement over patchset 2...",
       "revId": "1811a8b94390e53b195d97fdd849787d577b78b0",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
@@ -111,6 +146,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "6e4fdf64_a8bd53bf",
+        "filename": "tvix/eval/src/builtins/mod.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 509,
+      "author": {
+        "id": 1000066
+      },
+      "writtenOn": "2022-10-13T04:11:18Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "86dc6d05_1943b2b7",
+      "revId": "1811a8b94390e53b195d97fdd849787d577b78b0",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "025ef2fc_bea33a15",
@@ -124,6 +177,30 @@
       "writtenOn": "2022-10-12T11:31:39Z",
       "side": 1,
       "message": "FTR LLVM calls this “environment“.",
+      "range": {
+        "startLine": 511,
+        "startChar": 27,
+        "endLine": 511,
+        "endChar": 35
+      },
+      "revId": "1811a8b94390e53b195d97fdd849787d577b78b0",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5cbd051e_6f30d02c",
+        "filename": "tvix/eval/src/builtins/mod.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 511,
+      "author": {
+        "id": 1000066
+      },
+      "writtenOn": "2022-10-13T04:11:18Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "025ef2fc_bea33a15",
       "range": {
         "startLine": 511,
         "startChar": 27,
@@ -201,6 +278,24 @@
       "side": 1,
       "message": "\u003e I\u0027ve just gone through the list of supported Rust platforms\n\nGerrit needs the Github\u0027s \"reacts with heart\" button.\n\nSo far that is the only thing I\u0027ve found that I like better about github. 😊",
       "parentUuid": "1d54a80f_d1c3a817",
+      "revId": "1811a8b94390e53b195d97fdd849787d577b78b0",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "355d278b_08e06465",
+        "filename": "tvix/eval/src/builtins/mod.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 516,
+      "author": {
+        "id": 1000066
+      },
+      "writtenOn": "2022-10-13T04:11:18Z",
+      "side": 1,
+      "message": "hrm, gerrit seems to only let me mark entire threads as resolved.  patchset 3 addresses qyliss\u0027 comment (or at least tries to), so I\u0027m marking this resolved.\n\nSterni, I agree, if we could find some way to have a *build-time* dependency on the proper LLVM triple parser that would be great.",
+      "parentUuid": "afe0cf0f_f7fa11e7",
       "revId": "1811a8b94390e53b195d97fdd849787d577b78b0",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
