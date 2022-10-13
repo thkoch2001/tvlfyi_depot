@@ -113,6 +113,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "6a4655ee_fa608e0f",
+        "filename": "tvix/eval/build.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 6,
+      "author": {
+        "id": 1000066
+      },
+      "writtenOn": "2022-10-13T04:13:42Z",
+      "side": 1,
+      "message": "I don\u0027t know.",
+      "parentUuid": "88e52334_ea021de0",
+      "range": {
+        "startLine": 6,
+        "startChar": 19,
+        "endLine": 6,
+        "endChar": 25
+      },
+      "revId": "1811a8b94390e53b195d97fdd849787d577b78b0",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "5e90693e_479fe292",
         "filename": "tvix/eval/src/builtins/mod.rs",
         "patchSetId": 2
