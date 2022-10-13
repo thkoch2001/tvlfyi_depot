@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a7a7046a_585bb4b8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-10-13T09:40:12Z",
+      "side": 1,
+      "message": "It seems that this crate does not build on WASM, so anything using it would have to be moved to impure builtins.\n\nWhat is the difference between what this crate does, and path_clean?",
+      "revId": "7b2620dda4e6c59ceaa3ede92df791ce77565aff",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
