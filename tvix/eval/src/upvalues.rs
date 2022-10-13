@@ -2,6 +2,10 @@
 //! relevant to both thunks (delayed computations for lazy-evaluation)
 //! as well as closures (lambdas that capture variables from the
 //! surrounding scope).
+//!
+//! The upvalues of a scope are whatever data are needed at runtime
+//! in order to resolve each free variable in the scope to a value.
+//! "Upvalue" is a term taken from Lua.
 
 use std::{
     cell::{Ref, RefMut},
@@ -10,12 +14,30 @@ use std::{
 
 use crate::{opcode::UpvalueIdx, Value};
 
-/// Structure for carrying upvalues inside of thunks & closures. The
-/// implementation of this struct encapsulates the logic for capturing
-/// and accessing upvalues.
+/// Structure for carrying upvalues of an UpvalueCarrier.  The
+/// implementation of this struct encapsulates the logic for
+/// capturing and accessing upvalues.
+///
+/// Nix's `with` cannot be used to shadow an enclosing binding --
+/// like Rust's `use xyz::*` construct, but unlike Javascript's
+/// `with (xyz)`.  This means that Nix has two kinds of variables,
+/// which can be distinguished at parse time:
+///
+/// - *Bound* variables, which are bound in some enclosing scope by
+///   `let`, `name:` or `{name}:`
+/// - *With-resolved* variables, which are not bound in any
+///   enclosing scope
 #[derive(Clone, Debug, PartialEq)]
 pub struct Upvalues {
+    /// The upvalues of bound variables.  Each bound variable is
+    /// assigned an integer identifier at parse time.  This field is
+    /// essentially an optimized representation of Map<usize,Value>
+    /// for a dense keyspace.
     upvalues: Vec<Value>,
+
+    /// The upvalues of with-resolved variables, if any exist.  This
+    /// consists of the value passed to each enclosing `with val;`,
+    /// from outermost to innermost.
     with_stack: Option<Vec<Value>>,
 }
 
