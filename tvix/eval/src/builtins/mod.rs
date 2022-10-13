@@ -503,6 +503,12 @@ fn pure_builtins() -> Vec<Builtin> {
             Ok(Value::attrs(NixAttrs::from_map(res)))
         }),
         // coerce_to_string forces for us
+        Builtin::new("toPath", &[false], |args: Vec<Value>, vm: &mut VM| {
+            args[0]
+                .coerce_to_string(CoercionKind::Strong, vm)
+                .map(Value::String)
+        }),
+        // coerce_to_string forces for us
         Builtin::new("toString", &[false], |args: Vec<Value>, vm: &mut VM| {
             args[0]
                 .coerce_to_string(CoercionKind::Strong, vm)
