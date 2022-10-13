@@ -332,6 +332,41 @@ impl Value {
             _ => Ok(ForceResult::Immediate(self)),
         }
     }
+
+    /// Ensure `self` is *deeply* forced, including all recursive sub-values, and return a reference
+    /// to the resulting value
+    pub(crate) fn deep_force(&self, vm: &mut VM) -> Result<(), ErrorKind> {
+        match self {
+            Value::Null
+            | Value::Bool(_)
+            | Value::Integer(_)
+            | Value::Float(_)
+            | Value::String(_)
+            | Value::Path(_)
+            | Value::Closure(_)
+            | Value::Builtin(_)
+            | Value::AttrNotFound
+            | Value::DynamicUpvalueMissing(_)
+            | Value::Blueprint(_)
+            | Value::DeferredUpvalue(_) => Ok(()),
+            Value::Attrs(a) => {
+                for (_, v) in a.iter() {
+                    v.deep_force(vm)?;
+                }
+                Ok(())
+            }
+            Value::List(l) => {
+                for val in l {
+                    val.deep_force(vm)?;
+                }
+                Ok(())
+            }
+            Value::Thunk(thunk) => {
+                thunk.force(vm)?;
+                thunk.value().deep_force(vm)
+            }
+        }
+    }
 }
 
 impl Display for Value {
