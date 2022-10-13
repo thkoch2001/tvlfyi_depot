@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1da67a21_499ef999",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 5
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2022-10-13T17:01:40Z",
+      "side": 1,
+      "message": "This thing has 2 uses in nixpkgs (which probably should be removed). The only remaining legitimate use of this seems to be to check if a path represented as a string is an absolute path?!",
+      "revId": "7835d697198670c4fa892f3af85a969edb7d583f",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0b1865ab_a858a7d6",
+        "filename": "tvix/eval/src/builtins/mod.rs",
+        "patchSetId": 5
+      },
+      "lineNbr": 506,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2022-10-13T17:01:40Z",
+      "side": 1,
+      "message": "`builtins.toPath` doesn\u0027t actually copy anything into the store.",
+      "revId": "7835d697198670c4fa892f3af85a969edb7d583f",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
