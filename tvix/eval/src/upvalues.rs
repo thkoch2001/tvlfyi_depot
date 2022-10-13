@@ -2,6 +2,9 @@
 //! relevant to both thunks (delayed computations for lazy-evaluation)
 //! as well as closures (lambdas that capture variables from the
 //! surrounding scope).
+//!
+//! The upvalues of a scope are the runtime representation of its
+//! free variables.  "Upvalue" is a term taken from Lua.
 
 use std::{
     cell::{Ref, RefMut},
@@ -16,6 +19,11 @@ use crate::{opcode::UpvalueIdx, Value};
 #[derive(Clone, Debug, PartialEq)]
 pub struct Upvalues {
     upvalues: Vec<Value>,
+    /// The values supplied to each enclosing `with` clause; these
+    /// are used to resolve free variables which are not bound by
+    /// any enclosing scope using e.g. `let` or `arg:`.  Like
+    /// Rust's `use xyz::*` (and unlike Javascript's `with`) Nix's
+    /// `with` cannot be used to shadow an enclosing binding.
     with_stack: Option<Vec<Value>>,
 }
 
