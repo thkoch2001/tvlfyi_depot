@@ -615,6 +615,7 @@ dependencies = [
  "regex",
  "rnix",
  "rowan",
+ "serde",
  "serde_json",
  "smol_str",
  "tabwriter",
