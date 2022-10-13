@@ -16,6 +16,24 @@
       "message": "i have a slight preference for this being a debug_assert",
       "revId": "ebb0e2051c3de1a8d1921cc96381e44f629e22a2",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "86ec03fd_324850ba",
+        "filename": "tvix/eval/src/compiler/mod.rs",
+        "patchSetId": 8
+      },
+      "lineNbr": 142,
+      "author": {
+        "id": 1000066
+      },
+      "writtenOn": "2022-10-13T09:44:07Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f44e85de_4f0dfebb",
+      "revId": "ebb0e2051c3de1a8d1921cc96381e44f629e22a2",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
