@@ -35,6 +35,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "65a5cb5f_c2a4a55c",
+        "filename": "tvix/eval/src/systems.rs",
+        "patchSetId": 4
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1000066
+      },
+      "writtenOn": "2022-10-13T19:32:39Z",
+      "side": 1,
+      "message": "How embarrassing, for some reason I thought cppnix had that.",
+      "parentUuid": "31736bc9_e5fe76ff",
+      "revId": "6ad6a255b953952f350407bea315b6887e10d983",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "ee11cc1a_f84350ad",
@@ -48,6 +66,24 @@
       "writtenOn": "2022-10-13T19:17:53Z",
       "side": 1,
       "message": "Should this say target instead of host, to be consistent with Rust/LLVM naming?",
+      "revId": "6ad6a255b953952f350407bea315b6887e10d983",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f7ab8f53_f3200ff9",
+        "filename": "tvix/eval/src/systems.rs",
+        "patchSetId": 4
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1000066
+      },
+      "writtenOn": "2022-10-13T19:32:39Z",
+      "side": 1,
+      "message": "This is actually a tricky question.\n\nRight now `llvm_triple_to_nix_double` executes at `tvix`-runtime, since it isn\u0027t `const` (since it allocates memory), and `tvix` doesn\u0027t have a notion of a target platform.\n\nI\u0027ll just remove the word `host`.",
+      "parentUuid": "ee11cc1a_f84350ad",
       "revId": "6ad6a255b953952f350407bea315b6887e10d983",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
@@ -69,6 +105,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "bb75c1b5_02779f99",
+        "filename": "tvix/eval/src/systems.rs",
+        "patchSetId": 4
+      },
+      "lineNbr": 65,
+      "author": {
+        "id": 1000066
+      },
+      "writtenOn": "2022-10-13T19:32:39Z",
+      "side": 1,
+      "message": "`config.sub` considers `arm-unknown-linux-gnueabi` to be canonical, and there is no special-case handling for it in cppnix (as there is for `armv6` and `armv7`), so I don\u0027t think we have any reason to change it, do we?",
+      "parentUuid": "603c7752_e5b4f7d2",
+      "revId": "6ad6a255b953952f350407bea315b6887e10d983",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "8b07b443_b5e49ad5",
@@ -82,6 +136,24 @@
       "writtenOn": "2022-10-13T19:17:53Z",
       "side": 1,
       "message": "Is \"mips\" what GNU calls this architecture?  I can believe it would, but we don\u0027t seem to support big-endian MIPS in Nixpkgs so it\u0027s not easy for me to check.",
+      "revId": "6ad6a255b953952f350407bea315b6887e10d983",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ba116988_9b4b06eb",
+        "filename": "tvix/eval/src/systems.rs",
+        "patchSetId": 4
+      },
+      "lineNbr": 77,
+      "author": {
+        "id": 1000066
+      },
+      "writtenOn": "2022-10-13T19:32:39Z",
+      "side": 1,
+      "message": "Yes, the gnu-name for *big*-endian MIPS cpus is \"mips\".  The name for little-endian is \"mipsel\".",
+      "parentUuid": "8b07b443_b5e49ad5",
       "revId": "6ad6a255b953952f350407bea315b6887e10d983",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
@@ -103,6 +175,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "3791d71a_0ed9e320",
+        "filename": "tvix/eval/src/systems.rs",
+        "patchSetId": 4
+      },
+      "lineNbr": 113,
+      "author": {
+        "id": 1000066
+      },
+      "writtenOn": "2022-10-13T19:32:39Z",
+      "side": 1,
+      "message": "Yeah `config.sub` rejects it, so I have removed that test case.  What is the \"gc\" supposed to mean?",
+      "parentUuid": "35337ff6_74154597",
+      "revId": "6ad6a255b953952f350407bea315b6887e10d983",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "4b946e4f_093bb0f1",
@@ -116,6 +206,24 @@
       "writtenOn": "2022-10-13T19:17:53Z",
       "side": 1,
       "message": "Should this be armv5tel?  That\u0027s what lib.systems.doubles calls it.",
+      "revId": "6ad6a255b953952f350407bea315b6887e10d983",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "953abb10_ff1c1b06",
+        "filename": "tvix/eval/src/systems.rs",
+        "patchSetId": 4
+      },
+      "lineNbr": 145,
+      "author": {
+        "id": 1000066
+      },
+      "writtenOn": "2022-10-13T19:32:39Z",
+      "side": 1,
+      "message": "cppnix will only insert an extra \"l\" if the cpu-name is exactly \"armv6\" or exactly \"armv7\":\n\nhttps://github.com/NixOS/nix/blob/27ed3d04581b39b2653a50c0251b3d82fdade6f3/configure.ac#L19",
+      "parentUuid": "4b946e4f_093bb0f1",
       "revId": "6ad6a255b953952f350407bea315b6887e10d983",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
@@ -137,6 +245,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "3315f054_99484bf3",
+        "filename": "tvix/eval/src/systems.rs",
+        "patchSetId": 4
+      },
+      "lineNbr": 205,
+      "author": {
+        "id": 1000066
+      },
+      "writtenOn": "2022-10-13T19:32:39Z",
+      "side": 1,
+      "message": "Yep, `config.sub` accepts that.",
+      "parentUuid": "03a84c43_85bc9e4c",
+      "revId": "6ad6a255b953952f350407bea315b6887e10d983",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "10a4c371_8244d02f",
@@ -150,6 +276,24 @@
       "writtenOn": "2022-10-13T19:17:53Z",
       "side": 1,
       "message": "Does GNU use the same naming with the _be?",
+      "revId": "6ad6a255b953952f350407bea315b6887e10d983",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1e8aba2e_bfac15fe",
+        "filename": "tvix/eval/src/systems.rs",
+        "patchSetId": 4
+      },
+      "lineNbr": 229,
+      "author": {
+        "id": 1000066
+      },
+      "writtenOn": "2022-10-13T19:32:39Z",
+      "side": 1,
+      "message": "Yes.\n\nIsn\u0027t it lovely how there are four totally different conventions for expressing the endianness of a CPU? ;)",
+      "parentUuid": "10a4c371_8244d02f",
       "revId": "6ad6a255b953952f350407bea315b6887e10d983",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
