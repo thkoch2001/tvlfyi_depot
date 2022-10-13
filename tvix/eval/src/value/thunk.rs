@@ -86,16 +86,16 @@ impl Thunk {
         })))
     }
 
-    /// Evaluate the content of a thunk, potentially repeatedly, until
-    /// a non-thunk value is returned.
-    ///
-    /// This will change the existing thunk (and thus all references
-    /// to it, providing memoization) through interior mutability. In
-    /// case of nested thunks, the intermediate thunk representations
-    /// are replaced.
-    pub fn force(&self, vm: &mut VM) -> Result<(), ErrorKind> {
+    /// Try to force a thunk (potentially repeatedly) until a non-thunk value is
+    /// encountered. Returns `Ok(false)` if the thunk is already borrowed, a
+    /// distinction which is necessary for deep-forcing of values.
+    pub fn try_force(&self, vm: &mut VM) -> Result<bool, ErrorKind> {
         loop {
-            let mut thunk_mut = self.0.borrow_mut();
+            let mut thunk_mut = if let Ok(inner) = self.0.try_borrow_mut() {
+                inner
+            } else {
+                return Ok(false);
+            };
 
             match *thunk_mut {
                 ThunkRepr::Evaluated(Value::Thunk(ref inner_thunk)) => {
@@ -103,7 +103,7 @@ impl Thunk {
                     *thunk_mut = inner_repr;
                 }
 
-                ThunkRepr::Evaluated(_) => return Ok(()),
+                ThunkRepr::Evaluated(_) => return Ok(true),
                 ThunkRepr::Blackhole => return Err(ErrorKind::InfiniteRecursion),
 
                 ThunkRepr::Suspended { .. } => {
@@ -121,6 +121,20 @@ impl Thunk {
                 }
             }
         }
+    }
+
+    /// Evaluate the content of a thunk, potentially repeatedly, until a
+    /// non-thunk value is returned.
+    ///
+    /// This will change the existing thunk (and thus all references to it,
+    /// providing memoization) through interior mutability. In case of nested
+    /// thunks, the intermediate thunk representations are replaced.
+    pub fn force(&self, vm: &mut VM) -> Result<(), ErrorKind> {
+        if !self.try_force(vm)? {
+            panic!("`force` called on an already mutably-borrowed Thunk");
+        }
+
+        Ok(())
     }
 
     pub fn finalise(&self, stack: &[Value]) {
