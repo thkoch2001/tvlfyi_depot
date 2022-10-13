@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ac6569a6_10da1bbf",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000038
+      },
+      "writtenOn": "2022-10-13T11:06:32Z",
+      "side": 1,
+      "message": "Where does ",
+      "revId": "ad1982977015a35f53d3c0ae7ca37d8927ab5455",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2df0b870_e8515498",
+        "filename": "nix/buildkite/default.nix",
+        "patchSetId": 1
+      },
+      "lineNbr": 343,
+      "author": {
+        "id": 1000038
+      },
+      "writtenOn": "2022-10-13T11:06:32Z",
+      "side": 1,
+      "message": "What is the usage scenario for that?\n\nFeels a bit weird to have both `command` and `commandOverride` arguments for the same step.",
+      "range": {
+        "startLine": 343,
+        "startChar": 6,
+        "endLine": 343,
+        "endChar": 21
+      },
+      "revId": "ad1982977015a35f53d3c0ae7ca37d8927ab5455",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
