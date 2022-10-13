@@ -185,6 +185,24 @@
       "parentUuid": "a7a0739d_e8800bbf",
       "revId": "1811a8b94390e53b195d97fdd849787d577b78b0",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "afe0cf0f_f7fa11e7",
+        "filename": "tvix/eval/src/builtins/mod.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 516,
+      "author": {
+        "id": 1000066
+      },
+      "writtenOn": "2022-10-13T03:33:27Z",
+      "side": 1,
+      "message": "\u003e I\u0027ve just gone through the list of supported Rust platforms\n\nGerrit needs the Github\u0027s \"reacts with heart\" button.\n\nSo far that is the only thing I\u0027ve found that I like better about github. 😊",
+      "parentUuid": "1d54a80f_d1c3a817",
+      "revId": "1811a8b94390e53b195d97fdd849787d577b78b0",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
