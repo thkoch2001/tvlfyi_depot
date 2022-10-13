@@ -16,6 +16,24 @@
       "message": "I think we should be able to leave this as a `str` and avoid the intermediate `String` allocation",
       "revId": "af0bc779de5bf4e88f7237a1db9c99c72a043c37",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b2ed73a0_65d36f06",
+        "filename": "tvix/eval/src/builtins/mod.rs",
+        "patchSetId": 10
+      },
+      "lineNbr": 202,
+      "author": {
+        "id": 1000066
+      },
+      "writtenOn": "2022-10-13T18:25:20Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8e607d40_bdf9f83c",
+      "revId": "af0bc779de5bf4e88f7237a1db9c99c72a043c37",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
