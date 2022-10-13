@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a46b4d46_63f68a9d",
+        "filename": "tvix/eval/src/builtins/mod.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 449,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-10-13T16:38:33Z",
+      "side": 1,
+      "message": "I don\u0027t think the second one is forced though?\n\nPaging sterni",
+      "range": {
+        "startLine": 449,
+        "startChar": 36,
+        "endLine": 449,
+        "endChar": 40
+      },
+      "revId": "dc09071429faccfd6c4231322408e03a4980b8fb",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
