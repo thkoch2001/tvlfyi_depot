@@ -129,6 +129,11 @@ impl<'observer> Compiler<'observer> {
             root_dir.pop();
         }
 
+        use path_absolutize::*;
+        let root_dir = root_dir.absolutize().unwrap();
+        assert!(root_dir.is_absolute());
+        let root_dir: PathBuf = root_dir.into();
+
         let globals = globals.borrow();
 
         Ok(Self {
