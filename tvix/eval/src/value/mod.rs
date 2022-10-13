@@ -19,6 +19,7 @@ use crate::opcode::StackIdx;
 use crate::vm::VM;
 pub use attrs::NixAttrs;
 pub use builtin::Builtin;
+pub(crate) use function::Formals;
 pub use function::{Closure, Lambda};
 pub use list::NixList;
 pub use string::NixString;

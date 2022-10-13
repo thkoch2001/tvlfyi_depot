@@ -1,6 +1,7 @@
 //! This module implements the runtime representation of functions.
 use std::{
     cell::{Ref, RefCell, RefMut},
+    collections::HashMap,
     rc::Rc,
 };
 
@@ -9,19 +10,30 @@ use crate::{
     upvalues::{UpvalueCarrier, Upvalues},
 };
 
+use super::NixString;
+
+#[derive(Clone, Debug, PartialEq)]
+pub(crate) struct Formals {
+    /// Map from argument name, to whether that argument is required
+    pub(crate) arguments: HashMap<NixString, bool>,
+
+    /// Do the formals of this function accept extra arguments
+    pub(crate) ellipsis: bool,
+}
+
 #[derive(Clone, Debug, PartialEq)]
 pub struct Lambda {
-    // name: Option<NixString>,
     pub(crate) chunk: Chunk,
     pub(crate) upvalue_count: usize,
+    pub(crate) formals: Option<Formals>,
 }
 
 impl Lambda {
     pub fn new_anonymous() -> Self {
         Lambda {
-            // name: None,
             chunk: Default::default(),
             upvalue_count: 0,
+            formals: None,
         }
     }
 
