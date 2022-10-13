@@ -125,6 +125,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "c551be84_47ea2a65",
+        "filename": "tvix/eval/src/systems.rs",
+        "patchSetId": 4
+      },
+      "lineNbr": 65,
+      "author": {
+        "id": 1000018
+      },
+      "writtenOn": "2022-10-13T20:22:08Z",
+      "side": 1,
+      "message": "config.sub canonicalizes GNU triples.  You can\u0027t put an LLVM triple into it and expect it to give the result config.guess would give on that hardware.",
+      "parentUuid": "bb75c1b5_02779f99",
+      "revId": "6ad6a255b953952f350407bea315b6887e10d983",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "8b07b443_b5e49ad5",
         "filename": "tvix/eval/src/systems.rs",
         "patchSetId": 4
@@ -189,6 +207,24 @@
       "side": 1,
       "message": "Yeah `config.sub` rejects it, so I have removed that test case.  What is the \"gc\" supposed to mean?",
       "parentUuid": "35337ff6_74154597",
+      "revId": "6ad6a255b953952f350407bea315b6887e10d983",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f3aa1583_8ea472db",
+        "filename": "tvix/eval/src/systems.rs",
+        "patchSetId": 4
+      },
+      "lineNbr": 113,
+      "author": {
+        "id": 1000018
+      },
+      "writtenOn": "2022-10-13T20:22:08Z",
+      "side": 1,
+      "message": "I think it\u0027s GPU extensions.",
+      "parentUuid": "3791d71a_0ed9e320",
       "revId": "6ad6a255b953952f350407bea315b6887e10d983",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
