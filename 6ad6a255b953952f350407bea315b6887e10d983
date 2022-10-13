@@ -1,0 +1,157 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ffc720af_19c85176",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000018
+      },
+      "writtenOn": "2022-10-13T19:17:53Z",
+      "side": 1,
+      "message": "Looking great.  There are some platforms where I think we need to check we\u0027re matching the C++ Nix (GNU) behaviour, but not too many.",
+      "revId": "6ad6a255b953952f350407bea315b6887e10d983",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "31736bc9_e5fe76ff",
+        "filename": "tvix/eval/src/systems.rs",
+        "patchSetId": 4
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1000018
+      },
+      "writtenOn": "2022-10-13T19:17:53Z",
+      "side": 1,
+      "message": "What triple is this case for?",
+      "revId": "6ad6a255b953952f350407bea315b6887e10d983",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ee11cc1a_f84350ad",
+        "filename": "tvix/eval/src/systems.rs",
+        "patchSetId": 4
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1000018
+      },
+      "writtenOn": "2022-10-13T19:17:53Z",
+      "side": 1,
+      "message": "Should this say target instead of host, to be consistent with Rust/LLVM naming?",
+      "revId": "6ad6a255b953952f350407bea315b6887e10d983",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "603c7752_e5b4f7d2",
+        "filename": "tvix/eval/src/systems.rs",
+        "patchSetId": 4
+      },
+      "lineNbr": 65,
+      "author": {
+        "id": 1000018
+      },
+      "writtenOn": "2022-10-13T19:17:53Z",
+      "side": 1,
+      "message": "This is armv6 according to the Rust documentation, and I suspect GNU (and therefore C++ Nix) would call it that rather than just \"arm\", although I haven\u0027t run config.guess on an armv6 system to check…",
+      "revId": "6ad6a255b953952f350407bea315b6887e10d983",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8b07b443_b5e49ad5",
+        "filename": "tvix/eval/src/systems.rs",
+        "patchSetId": 4
+      },
+      "lineNbr": 77,
+      "author": {
+        "id": 1000018
+      },
+      "writtenOn": "2022-10-13T19:17:53Z",
+      "side": 1,
+      "message": "Is \"mips\" what GNU calls this architecture?  I can believe it would, but we don\u0027t seem to support big-endian MIPS in Nixpkgs so it\u0027s not easy for me to check.",
+      "revId": "6ad6a255b953952f350407bea315b6887e10d983",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "35337ff6_74154597",
+        "filename": "tvix/eval/src/systems.rs",
+        "patchSetId": 4
+      },
+      "lineNbr": 113,
+      "author": {
+        "id": 1000018
+      },
+      "writtenOn": "2022-10-13T19:17:53Z",
+      "side": 1,
+      "message": "I\u0027d like this one double checked too, since I\u0027ve never seen the \"gc\" included in a Nix double, but could believe it might be.",
+      "revId": "6ad6a255b953952f350407bea315b6887e10d983",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4b946e4f_093bb0f1",
+        "filename": "tvix/eval/src/systems.rs",
+        "patchSetId": 4
+      },
+      "lineNbr": 145,
+      "author": {
+        "id": 1000018
+      },
+      "writtenOn": "2022-10-13T19:17:53Z",
+      "side": 1,
+      "message": "Should this be armv5tel?  That\u0027s what lib.systems.doubles calls it.",
+      "revId": "6ad6a255b953952f350407bea315b6887e10d983",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "03a84c43_85bc9e4c",
+        "filename": "tvix/eval/src/systems.rs",
+        "patchSetId": 4
+      },
+      "lineNbr": 205,
+      "author": {
+        "id": 1000018
+      },
+      "writtenOn": "2022-10-13T19:17:53Z",
+      "side": 1,
+      "message": "Also worth checking I think.",
+      "revId": "6ad6a255b953952f350407bea315b6887e10d983",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "10a4c371_8244d02f",
+        "filename": "tvix/eval/src/systems.rs",
+        "patchSetId": 4
+      },
+      "lineNbr": 229,
+      "author": {
+        "id": 1000018
+      },
+      "writtenOn": "2022-10-13T19:17:53Z",
+      "side": 1,
+      "message": "Does GNU use the same naming with the _be?",
+      "revId": "6ad6a255b953952f350407bea315b6887e10d983",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
