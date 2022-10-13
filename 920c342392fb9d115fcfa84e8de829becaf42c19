@@ -16,6 +16,24 @@
       "message": "I think we probably want to `#[cfg(test)]` this to prevent unused warnings when not building for tests",
       "revId": "920c342392fb9d115fcfa84e8de829becaf42c19",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f664852f_2a31c02b",
+        "filename": "tvix/eval/src/eval.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 1000066
+      },
+      "writtenOn": "2022-10-13T02:39:21Z",
+      "side": 1,
+      "message": "Okay.  I had to mark src/tests/mod.rs as `#[cfg(nix_tests)]` as well to prevent a compilation error -- let me know if that\u0027s not what you intended.",
+      "parentUuid": "db037e47_52d6f113",
+      "revId": "920c342392fb9d115fcfa84e8de829becaf42c19",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
