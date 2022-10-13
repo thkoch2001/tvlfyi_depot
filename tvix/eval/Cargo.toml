@@ -25,6 +25,10 @@ proptest = { version = "1.0.0", default_features = false, features = ["std", "al
 test-strategy = { version = "0.2.1", optional = true }
 clap = { version = "3.2.22", optional = true, features = ["derive", "env"] }
 
+# until resolution of https://github.com/rust-lang/rust/issues/92750
+path-absolutize = "3.0.13"
+path-dedot = "3.0.17"
+
 # rnix has not been released in a while (as of 2022-09-23), we will
 # use it from git.
 [dependencies.rnix]
