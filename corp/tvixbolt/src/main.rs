@@ -6,22 +6,31 @@ use serde::{Deserialize, Serialize};
 use tvix_eval::observer::TracingObserver;
 use tvix_eval::observer::{DisassemblingObserver, NoOpObserver};
 use tvix_eval::SourceCode;
-use web_sys::HtmlInputElement;
+use web_sys::HtmlDetailsElement;
 use web_sys::HtmlTextAreaElement;
 use yew::prelude::*;
 use yew::TargetCast;
 use yew_router::{prelude::*, AnyRoute};
 
+#[derive(Clone)]
 enum Msg {
     CodeChange(String),
     ToggleTrace(bool),
     ToggleDisplayAst(bool),
+
+    // Required because browsers are stupid and it's easy to get into
+    // infinite loops with `ontoggle` events.
+    NoOp,
 }
 
 #[derive(Clone, Serialize, Deserialize)]
 struct Model {
     code: String,
+
+    // #[serde(skip_serializing)]
     trace: bool,
+
+    // #[serde(skip_serializing)]
     display_ast: bool,
 }
 
@@ -118,6 +127,8 @@ impl Component for Model {
             Msg::CodeChange(new_code) => {
                 self.code = new_code;
             }
+
+            Msg::NoOp => {}
         }
 
         let _ = BrowserHistory::new().replace_with_query(AnyRoute::new("/"), self.clone());
@@ -148,32 +159,10 @@ impl Component for Model {
                          id="code" cols="30" rows="10" value={self.code.clone()}>
                          </textarea>
                     </div>
-
-                    <div class="form-group">
-                      <label for="trace-runtime">{"Trace runtime:"}</label>
-                      <input
-                       id="trace-runtime" type="checkbox" checked={self.trace}
-                       onchange={link.callback(|e: Event| {
-                           let trace = e.target_unchecked_into::<HtmlInputElement>().checked();
-                           Msg::ToggleTrace(trace)
-                       })}
-                       />
-                    </div>
-
-                    <div class="form-group">
-                      <label for="display-ast">{"Display parsed AST:"}</label>
-                      <input
-                       id="display-ast" type="checkbox" checked={self.display_ast}
-                       onchange={link.callback(|e: Event| {
-                           let trace = e.target_unchecked_into::<HtmlInputElement>().checked();
-                           Msg::ToggleDisplayAst(trace)
-                       })}
-                       />
-                    </div>
                   </fieldset>
                 </form>
                 <hr />
-                {self.run()}
+                {self.run(ctx)}
                 {footer()}
             </div>
             </>
@@ -182,7 +171,7 @@ impl Component for Model {
 }
 
 impl Model {
-    fn run(&self) -> Html {
+    fn run(&self, ctx: &Context<Self>) -> Html {
         if self.code.is_empty() {
             return html! {
                 <p>
@@ -197,7 +186,7 @@ impl Model {
         html! {
             <>
               <h2>{"Result:"}</h2>
-            {eval(self.trace, self.display_ast, &self.code).display()}
+            {eval(self).display(ctx, self)}
             </>
         }
     }
@@ -228,8 +217,50 @@ fn maybe_show(title: &str, s: &str) -> Html {
     }
 }
 
+fn maybe_details(
+    ctx: &Context<Model>,
+    title: &str,
+    s: &str,
+    display: bool,
+    toggle: fn(bool) -> Msg,
+) -> Html {
+    let link = ctx.link();
+    if display {
+        let msg = toggle(false);
+        html! {
+            <details open=true
+                     ontoggle={link.callback(move |e: Event| {
+                         let details = e.target_unchecked_into::<HtmlDetailsElement>();
+                         if !details.open() {
+                             msg.clone()
+                         } else {
+                             Msg::NoOp
+                         }
+                     })}>
+
+              <summary><h3 style="display: inline;">{title}</h3></summary>
+              <pre>{s}</pre>
+            </details>
+        }
+    } else {
+        let msg = toggle(true);
+        html! {
+            <details ontoggle={link.callback(move |e: Event| {
+                         let details = e.target_unchecked_into::<HtmlDetailsElement>();
+                         if details.open() {
+                             msg.clone()
+                         } else {
+                             Msg::NoOp
+                         }
+                     })}>
+              <summary><h3 style="display: inline;">{title}</h3></summary>
+            </details>
+        }
+    }
+}
+
 impl Output {
-    fn display(self) -> Html {
+    fn display(self, ctx: &Context<Model>, model: &Model) -> Html {
         html! {
             <>
             {maybe_show("Parse errors:", &self.parse_errors)}
@@ -238,21 +269,21 @@ impl Output {
             {maybe_show("Compiler errors:", &self.compiler_errors)}
             {maybe_show("Bytecode:", &String::from_utf8_lossy(&self.bytecode))}
             {maybe_show("Runtime errors:", &self.runtime_errors)}
-            {maybe_show("Runtime trace:", &String::from_utf8_lossy(&self.trace))}
-            {maybe_show("Parsed AST:", &self.ast)}
+            {maybe_details(ctx, "Runtime trace:", &String::from_utf8_lossy(&self.trace), model.trace, Msg::ToggleTrace)}
+            {maybe_details(ctx, "Parsed AST:", &self.ast, model.display_ast, Msg::ToggleDisplayAst)}
             </>
         }
     }
 }
 
-fn eval(trace: bool, display_ast: bool, code: &str) -> Output {
+fn eval(model: &Model) -> Output {
     let mut out = Output::default();
 
-    if code.is_empty() {
+    if model.code.is_empty() {
         return out;
     }
 
-    let parsed = rnix::ast::Root::parse(code);
+    let parsed = rnix::ast::Root::parse(&model.code);
     let errors = parsed.errors();
 
     if !errors.is_empty() {
@@ -269,12 +300,12 @@ fn eval(trace: bool, display_ast: bool, code: &str) -> Output {
         .expr()
         .expect("expression should exist if no errors occured");
 
-    if display_ast {
+    if model.display_ast {
         out.ast = tvix_eval::pretty_print_expr(&root_expr);
     }
 
     let source = SourceCode::new();
-    let file = source.add_file("nixbolt".to_string(), code.into());
+    let file = source.add_file("nixbolt".to_string(), model.code.clone());
 
     let mut compilation_observer = DisassemblingObserver::new(source.clone(), &mut out.bytecode);
 
@@ -309,7 +340,7 @@ fn eval(trace: bool, display_ast: bool, code: &str) -> Output {
         return out;
     }
 
-    let result = if trace {
+    let result = if model.trace {
         tvix_eval::run_lambda(
             Default::default(),
             &mut TracingObserver::new(&mut out.trace),
