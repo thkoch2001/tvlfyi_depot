@@ -10,7 +10,6 @@ yew = "0.19.3"
 yew-router = "0.16"
 codemap = "0.1.3"
 serde_urlencoded = "*" # pinned by yew
-web-sys = "*" # pinned by yew
 
 # needs to be in sync with nixpkgs
 wasm-bindgen = "= 0.2.83"
@@ -26,3 +25,7 @@ default-features = false
 [dependencies.serde]
 version = "*" # pinned by yew
 features = [ "derive" ]
+
+[dependencies.web-sys]
+version = "*" # pinned by yew
+features = [ "HtmlDetailsElement" ]
