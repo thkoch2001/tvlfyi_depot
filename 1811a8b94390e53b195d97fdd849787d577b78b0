@@ -135,6 +135,30 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "ba7891aa_abd10312",
+        "filename": "tvix/eval/build.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 6,
+      "author": {
+        "id": 1000066
+      },
+      "writtenOn": "2022-10-13T18:23:00Z",
+      "side": 1,
+      "message": "Yes, it does: https://github.com/rust-lang/rust/blob/6b3ede3f7bc502eba7bbd202b4b9312d812adcd7/compiler/rustc_llvm/llvm-wrapper/PassWrapper.cpp#L391",
+      "parentUuid": "6a4655ee_fa608e0f",
+      "range": {
+        "startLine": 6,
+        "startChar": 19,
+        "endLine": 6,
+        "endChar": 25
+      },
+      "revId": "1811a8b94390e53b195d97fdd849787d577b78b0",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "5e90693e_479fe292",
@@ -338,6 +362,24 @@
       "side": 1,
       "message": "hrm, gerrit seems to only let me mark entire threads as resolved.  patchset 3 addresses qyliss\u0027 comment (or at least tries to), so I\u0027m marking this resolved.\n\nSterni, I agree, if we could find some way to have a *build-time* dependency on the proper LLVM triple parser that would be great.",
       "parentUuid": "afe0cf0f_f7fa11e7",
+      "revId": "1811a8b94390e53b195d97fdd849787d577b78b0",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "747cfe4e_f8b4ebb5",
+        "filename": "tvix/eval/src/builtins/mod.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 516,
+      "author": {
+        "id": 1000066
+      },
+      "writtenOn": "2022-10-13T18:23:00Z",
+      "side": 1,
+      "message": "I don\u0027t think we\u0027re going to get access to the proper triple-handling routines by way of `cargo` -- `cargo`\u0027s source code is full of stuff like `target_triple.ends_with(\"-windows-msvc\")`.  The cargo source code doesn\u0027t even reference LLVM\u0027s `Triple.h`, so I don\u0027t think it uses the proper parsing APIs.\n\nrustc does reference `Triple.h`, but only once, and doesn\u0027t seem to expose much via environment variables.\n\nI poked around the LLVM CLI and didn\u0027t find anything useful, but it still might be there, just buried in a non-obvious place.  If it isn\u0027t hidden in there somewhere I think our only other option will be to add a dependency.  There are rust crates for this; is it worth adding a build-time crate dependency?",
+      "parentUuid": "355d278b_08e06465",
       "revId": "1811a8b94390e53b195d97fdd849787d577b78b0",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
