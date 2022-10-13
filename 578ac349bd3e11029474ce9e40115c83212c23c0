@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "439f91b0_cdf240fa",
+        "filename": "nix/buildkite/default.nix",
+        "patchSetId": 3
+      },
+      "lineNbr": 292,
+      "author": {
+        "id": 1000038
+      },
+      "writtenOn": "2022-10-13T11:04:16Z",
+      "side": 1,
+      "message": "A small nit, but maybe we should use original Buildkite terminology for buildkite parameters?\n\nhaving `key` instead of `identifier` would simplify finding Buildkite documentation without necessity of reading tvl-kite source code.\n\nOtherwise look great, this should allow modelling complicated extra step graphs when needed.",
+      "range": {
+        "startLine": 292,
+        "startChar": 6,
+        "endLine": 292,
+        "endChar": 16
+      },
+      "revId": "578ac349bd3e11029474ce9e40115c83212c23c0",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
