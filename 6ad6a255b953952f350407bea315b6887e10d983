@@ -301,6 +301,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "24e877d3_64873370",
+        "filename": "tvix/eval/src/systems.rs",
+        "patchSetId": 4
+      },
+      "lineNbr": 205,
+      "author": {
+        "id": 1000018
+      },
+      "writtenOn": "2022-10-13T20:23:15Z",
+      "side": 1,
+      "message": "(Unresolving until we\u0027re agreed on config.sub)",
+      "parentUuid": "3315f054_99484bf3",
+      "revId": "6ad6a255b953952f350407bea315b6887e10d983",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "10a4c371_8244d02f",
         "filename": "tvix/eval/src/systems.rs",
         "patchSetId": 4
@@ -330,6 +348,24 @@
       "side": 1,
       "message": "Yes.\n\nIsn\u0027t it lovely how there are four totally different conventions for expressing the endianness of a CPU? ;)",
       "parentUuid": "10a4c371_8244d02f",
+      "revId": "6ad6a255b953952f350407bea315b6887e10d983",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "342b2130_1ab34db6",
+        "filename": "tvix/eval/src/systems.rs",
+        "patchSetId": 4
+      },
+      "lineNbr": 229,
+      "author": {
+        "id": 1000018
+      },
+      "writtenOn": "2022-10-13T20:23:15Z",
+      "side": 1,
+      "message": "(Unresolving until we\u0027re agreed on config.sub)",
+      "parentUuid": "1e8aba2e_bfac15fe",
       "revId": "6ad6a255b953952f350407bea315b6887e10d983",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
