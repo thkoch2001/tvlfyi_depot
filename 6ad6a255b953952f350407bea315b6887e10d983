@@ -231,6 +231,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "591fea63_27730475",
+        "filename": "tvix/eval/src/systems.rs",
+        "patchSetId": 4
+      },
+      "lineNbr": 113,
+      "author": {
+        "id": 1000018
+      },
+      "writtenOn": "2022-10-13T20:25:28Z",
+      "side": 1,
+      "message": "\u003e I think it\u0027s GPU extensions.\n\n*C*PU extensions, I mean.",
+      "parentUuid": "f3aa1583_8ea472db",
+      "revId": "6ad6a255b953952f350407bea315b6887e10d983",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "4b946e4f_093bb0f1",
         "filename": "tvix/eval/src/systems.rs",
         "patchSetId": 4
