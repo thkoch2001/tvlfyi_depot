@@ -52,6 +52,24 @@
       "parentUuid": "648e5a8e_5c929e17",
       "revId": "7b2620dda4e6c59ceaa3ede92df791ce77565aff",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "55e8816b_1bdcfae7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000066
+      },
+      "writtenOn": "2022-10-13T18:34:45Z",
+      "side": 1,
+      "message": "Yeah sorry about that.\n\nI got so frustrated with `cargo build` failing in CI but working fine on my local machine that I just gave up on being able to add new crate dependencies and wrote my own \"absolutify this path\" routine.\n\nProbably better in the long run.",
+      "parentUuid": "f7cc9f3c_bb237fbb",
+      "revId": "7b2620dda4e6c59ceaa3ede92df791ce77565aff",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
