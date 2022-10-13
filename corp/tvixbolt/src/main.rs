@@ -15,12 +15,14 @@ use yew_router::{prelude::*, AnyRoute};
 enum Msg {
     CodeChange(String),
     ToggleTrace(bool),
+    ToggleDisplayAst(bool),
 }
 
 #[derive(Clone, Serialize, Deserialize)]
 struct Model {
     code: String,
     trace: bool,
+    display_ast: bool,
 }
 
 fn tvixbolt_overview() -> Html {
@@ -99,6 +101,7 @@ impl Component for Model {
             .unwrap_or_else(|_| Self {
                 code: String::new(),
                 trace: false,
+                display_ast: false,
             })
     }
 
@@ -106,6 +109,10 @@ impl Component for Model {
         match msg {
             Msg::ToggleTrace(trace) => {
                 self.trace = trace;
+            }
+
+            Msg::ToggleDisplayAst(display_ast) => {
+                self.display_ast = display_ast;
             }
 
             Msg::CodeChange(new_code) => {
@@ -152,6 +159,17 @@ impl Component for Model {
                        })}
                        />
                     </div>
+
+                    <div class="form-group">
+                      <label for="display-ast">{"Display parsed AST:"}</label>
+                      <input
+                       id="display-ast" type="checkbox" checked={self.display_ast}
+                       onchange={link.callback(|e: Event| {
+                           let trace = e.target_unchecked_into::<HtmlInputElement>().checked();
+                           Msg::ToggleDisplayAst(trace)
+                       })}
+                       />
+                    </div>
                   </fieldset>
                 </form>
                 <hr />
@@ -179,7 +197,7 @@ impl Model {
         html! {
             <>
               <h2>{"Result:"}</h2>
-              {eval(self.trace, &self.code).display()}
+            {eval(self.trace, self.display_ast, &self.code).display()}
             </>
         }
     }
@@ -194,6 +212,7 @@ struct Output {
     output: String,
     bytecode: Vec<u8>,
     trace: Vec<u8>,
+    ast: String,
 }
 
 fn maybe_show(title: &str, s: &str) -> Html {
@@ -220,12 +239,13 @@ impl Output {
             {maybe_show("Bytecode:", &String::from_utf8_lossy(&self.bytecode))}
             {maybe_show("Runtime errors:", &self.runtime_errors)}
             {maybe_show("Runtime trace:", &String::from_utf8_lossy(&self.trace))}
+            {maybe_show("Parsed AST:", &self.ast)}
             </>
         }
     }
 }
 
-fn eval(trace: bool, code: &str) -> Output {
+fn eval(trace: bool, display_ast: bool, code: &str) -> Output {
     let mut out = Output::default();
 
     if code.is_empty() {
@@ -248,6 +268,10 @@ fn eval(trace: bool, code: &str) -> Output {
         .tree()
         .expr()
         .expect("expression should exist if no errors occured");
+
+    if display_ast {
+        out.ast = tvix_eval::pretty_print_expr(&root_expr);
+    }
 
     let source = SourceCode::new();
     let file = source.add_file("nixbolt".to_string(), code.into());
