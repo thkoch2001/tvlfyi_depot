@@ -1,0 +1,61 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ab8736a5_9c8e8a3a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000059
+      },
+      "writtenOn": "2022-10-13T15:52:28Z",
+      "side": 1,
+      "message": "Looks nice! Lots of repetitive stuff that macros (I guess ?) could help there. ",
+      "revId": "af8bdc0d7e8dd1582c8a9330115ede927bbed368",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7979e89a_4be874c9",
+        "filename": "tvix/eval/src/pretty_ast.rs",
+        "patchSetId": 3
+      },
+      "lineNbr": 426,
+      "author": {
+        "id": 1000059
+      },
+      "writtenOn": "2022-10-13T15:52:28Z",
+      "side": 1,
+      "message": "Why is this not a reference compared to other Serialize impl ? (probably related to my lack of rust knowledge :) ).",
+      "range": {
+        "startLine": 426,
+        "startChar": 32,
+        "endLine": 426,
+        "endChar": 41
+      },
+      "revId": "af8bdc0d7e8dd1582c8a9330115ede927bbed368",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4099b561_1e5d00d8",
+        "filename": "tvix/eval/src/pretty_ast.rs",
+        "patchSetId": 3
+      },
+      "lineNbr": 436,
+      "author": {
+        "id": 1000059
+      },
+      "writtenOn": "2022-10-13T15:52:28Z",
+      "side": 1,
+      "message": "Same question about reference",
+      "revId": "af8bdc0d7e8dd1582c8a9330115ede927bbed368",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
