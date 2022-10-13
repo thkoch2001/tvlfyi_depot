@@ -1211,6 +1211,8 @@ dependencies = [
  "rnix",
  "rowan",
  "rustyline",
+ "serde",
+ "serde_json",
  "smol_str",
  "tabwriter",
  "tempdir",
