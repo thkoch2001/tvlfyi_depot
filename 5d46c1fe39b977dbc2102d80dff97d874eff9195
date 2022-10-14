@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e22672ef_e67bd098",
+        "filename": "tvix/eval/src/compiler/mod.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 878,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-10-14T08:52:00Z",
+      "side": 1,
+      "message": "closure",
+      "range": {
+        "startLine": 878,
+        "startChar": 45,
+        "endLine": 878,
+        "endChar": 51
+      },
+      "revId": "5d46c1fe39b977dbc2102d80dff97d874eff9195",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
