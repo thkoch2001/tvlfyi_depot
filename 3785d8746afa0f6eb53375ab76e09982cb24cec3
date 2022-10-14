@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "867b86d4_240cf70c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000059
+      },
+      "writtenOn": "2022-10-14T22:08:02Z",
+      "side": 1,
+      "message": "I didn\u0027t know this terminology, thanks for the explanation 😊 (I\u0027ll let someone else more familiar with the implementation in case +2)",
+      "revId": "3785d8746afa0f6eb53375ab76e09982cb24cec3",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
