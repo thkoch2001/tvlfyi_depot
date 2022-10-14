@@ -4,8 +4,9 @@
 //! surrounding scope).
 
 use std::{
-    cell::{Ref, RefMut},
+    cell::{Ref, RefCell, RefMut},
     ops::Index,
+    rc::Rc,
 };
 
 use crate::{opcode::UpvalueIdx, Value};
@@ -58,27 +59,51 @@ impl Index<UpvalueIdx> for Upvalues {
 }
 
 /// `UpvalueCarrier` is implemented by all types that carry upvalues.
-pub trait UpvalueCarrier {
+pub trait UpvalueCarrier<'a, U>
+where
+    U: AsMut<Upvalues> + AsRef<crate::value::InnerClosure> + 'a,
+{
     fn upvalue_count(&self) -> usize;
 
     /// Read-only accessor for the stored upvalues.
-    fn upvalues(&self) -> Ref<'_, Upvalues>;
+    fn upvalues(&self) -> Ref<'_, U>;
 
     /// Mutable accessor for stored upvalues.
-    fn upvalues_mut(&self) -> RefMut<'_, Upvalues>;
+    fn upvalues_mut(&self) -> RefMut<'_, U>;
 
     /// Read an upvalue at the given index.
-    fn upvalue(&self, idx: UpvalueIdx) -> Ref<'_, Value> {
-        Ref::map(self.upvalues(), |v| &v.upvalues[idx.0])
+    fn upvalue(&'a self, idx: UpvalueIdx) -> Ref<'a, Value> {
+        Ref::map(self.upvalues(), |v| &v.as_ref().upvalues.upvalues[idx.0])
     }
 
     /// Resolve deferred upvalues from the provided stack slice,
     /// mutating them in the internal upvalue slots.
-    fn resolve_deferred_upvalues(&self, stack: &[Value]) {
-        for upvalue in self.upvalues_mut().upvalues.iter_mut() {
-            if let Value::DeferredUpvalue(idx) = upvalue {
-                *upvalue = stack[idx.0].clone();
+    fn resolve_deferred_upvalues(&'a self, stack: &[Value]) {
+        RefMut::map(self.upvalues_mut(), |upvalues| {
+            for upvalue in upvalues.as_mut().upvalues.iter_mut() {
+                if let Value::DeferredUpvalue(idx) = upvalue {
+                    *upvalue = stack[idx.0].clone();
+                }
             }
-        }
+            upvalues
+        });
+    }
+}
+
+impl<'a, T, U> UpvalueCarrier<'a, U> for T
+where
+    T: AsRef<Rc<RefCell<U>>>,
+    U: AsMut<Upvalues> + AsRef<crate::value::InnerClosure> + 'a,
+{
+    fn upvalue_count(&self) -> usize {
+        self.as_ref().borrow().as_ref().lambda.upvalue_count
+    }
+
+    fn upvalues(&self) -> Ref<'_, U> {
+        self.as_ref().borrow()
+    }
+
+    fn upvalues_mut(&self) -> RefMut<'_, U> {
+        self.as_ref().borrow_mut()
     }
 }

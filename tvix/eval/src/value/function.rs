@@ -36,6 +36,18 @@ pub struct InnerClosure {
     pub upvalues: Upvalues,
 }
 
+impl AsRef<InnerClosure> for InnerClosure {
+    fn as_ref(&self) -> &InnerClosure {
+        &self
+    }
+}
+
+impl AsMut<Upvalues> for InnerClosure {
+    fn as_mut(&mut self) -> &mut Upvalues {
+        &mut self.upvalues
+    }
+}
+
 #[repr(transparent)]
 #[derive(Clone, Debug, PartialEq)]
 pub struct Closure(Rc<RefCell<InnerClosure>>);
@@ -57,16 +69,8 @@ impl Closure {
     }
 }
 
-impl UpvalueCarrier for Closure {
-    fn upvalue_count(&self) -> usize {
-        self.0.borrow().lambda.upvalue_count
-    }
-
-    fn upvalues(&self) -> Ref<'_, Upvalues> {
-        Ref::map(self.0.borrow(), |c| &c.upvalues)
-    }
-
-    fn upvalues_mut(&self) -> RefMut<'_, Upvalues> {
-        RefMut::map(self.0.borrow_mut(), |c| &mut c.upvalues)
+impl AsRef<Rc<RefCell<InnerClosure>>> for Closure {
+    fn as_ref(&self) -> &Rc<RefCell<InnerClosure>> {
+        &self.0
     }
 }

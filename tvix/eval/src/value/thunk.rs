@@ -19,7 +19,7 @@
 //! memoisable slot.
 
 use std::{
-    cell::{Ref, RefCell, RefMut},
+    cell::{Ref, RefCell},
     fmt::Display,
     rc::Rc,
 };
@@ -28,7 +28,7 @@ use codemap::Span;
 
 use crate::{
     errors::{Error, ErrorKind},
-    upvalues::{UpvalueCarrier, Upvalues},
+    upvalues::Upvalues,
     value::function::InnerClosure,
     vm::VM,
     Value,
@@ -38,7 +38,7 @@ use super::Lambda;
 
 /// Internal representation of the different states of a thunk.
 #[derive(Clone, Debug, PartialEq)]
-enum ThunkRepr {
+pub enum ThunkRepr {
     /// Thunk is closed over some values, suspended and awaiting
     /// execution.
     Suspended(InnerClosure),
@@ -124,27 +124,29 @@ impl Thunk {
     }
 }
 
-impl UpvalueCarrier for Thunk {
-    fn upvalue_count(&self) -> usize {
-        if let ThunkRepr::Suspended(InnerClosure { lambda, .. }) = &*self.inner.borrow() {
-            return lambda.upvalue_count;
+impl AsRef<Rc<RefCell<ThunkRepr>>> for Thunk {
+    fn as_ref(&self) -> &Rc<RefCell<ThunkRepr>> {
+        &self.inner
+    }
+}
+
+impl AsMut<Upvalues> for ThunkRepr {
+    fn as_mut(&mut self) -> &mut Upvalues {
+        if let ThunkRepr::Suspended(ic) = self {
+            &mut ic.upvalues
+        } else {
+            panic!("upvalues() on non-suspended thunk");
         }
-
-        panic!("upvalues() on non-suspended thunk");
     }
+}
 
-    fn upvalues(&self) -> Ref<'_, Upvalues> {
-        Ref::map(self.inner.borrow(), |thunk| match thunk {
-            ThunkRepr::Suspended(InnerClosure { upvalues, .. }) => upvalues,
-            _ => panic!("upvalues() on non-suspended thunk"),
-        })
-    }
-
-    fn upvalues_mut(&self) -> RefMut<'_, Upvalues> {
-        RefMut::map(self.inner.borrow_mut(), |thunk| match thunk {
-            ThunkRepr::Suspended(InnerClosure { upvalues, .. }) => upvalues,
-            thunk => panic!("upvalues() on non-suspended thunk: {thunk:?}"),
-        })
+impl AsRef<InnerClosure> for ThunkRepr {
+    fn as_ref(&self) -> &InnerClosure {
+        if let ThunkRepr::Suspended(ic) = self {
+            &ic
+        } else {
+            panic!("upvalues() on non-suspended thunk");
+        }
     }
 }
 

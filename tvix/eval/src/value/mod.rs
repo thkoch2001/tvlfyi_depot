@@ -20,7 +20,7 @@ use crate::opcode::StackIdx;
 use crate::vm::VM;
 pub use attrs::NixAttrs;
 pub use builtin::Builtin;
-pub use function::{Closure, Lambda};
+pub use function::{Closure, InnerClosure, Lambda};
 pub use list::NixList;
 pub use path::canon_path;
 pub use string::NixString;

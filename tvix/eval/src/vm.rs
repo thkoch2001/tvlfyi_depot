@@ -219,7 +219,9 @@ impl<'o> VM<'o> {
     /// been forced.
     pub fn call_value(&mut self, callable: &Value) -> EvalResult<()> {
         match callable {
-            Value::Closure(c) => self.enter_frame(c.lambda(), c.upvalues().clone(), 1),
+            Value::Closure(c) => {
+                self.enter_frame(c.lambda(), c.upvalues().as_ref().upvalues.clone(), 1)
+            }
 
             Value::Builtin(b) => self.call_builtin(b.clone()),
 
@@ -289,7 +291,7 @@ impl<'o> VM<'o> {
                 // that of the tail-called closure.
                 let mut frame = self.frame_mut();
                 frame.lambda = lambda;
-                frame.upvalues = closure.upvalues().clone();
+                frame.upvalues = closure.upvalues().as_ref().upvalues.clone();
                 frame.ip = CodeIdx(0); // reset instruction pointer to beginning
                 Ok(())
             }
@@ -648,7 +650,6 @@ impl<'o> VM<'o> {
                 );
 
                 let closure = Closure::new(blueprint);
-                let upvalues = closure.upvalues_mut();
                 self.push(Value::Closure(closure.clone()));
 
                 // From this point on we internally mutate the
@@ -656,7 +657,7 @@ impl<'o> VM<'o> {
                 // already in its stack slot, which means that it
                 // can capture itself as an upvalue for
                 // self-recursion.
-                self.populate_upvalues(upvalue_count, upvalues)?;
+                self.populate_upvalues(upvalue_count, closure)?;
             }
 
             OpCode::OpThunk(idx) => {
@@ -667,10 +668,9 @@ impl<'o> VM<'o> {
 
                 let upvalue_count = blueprint.upvalue_count;
                 let thunk = Thunk::new(blueprint, self.current_span());
-                let upvalues = thunk.upvalues_mut();
 
                 self.push(Value::Thunk(thunk.clone()));
-                self.populate_upvalues(upvalue_count, upvalues)?;
+                self.populate_upvalues(upvalue_count, thunk)?;
             }
 
             OpCode::OpForce => {
@@ -779,24 +779,27 @@ impl<'o> VM<'o> {
     }
 
     /// Populate the upvalue fields of a thunk or closure under construction.
-    fn populate_upvalues(
-        &mut self,
-        count: usize,
-        mut upvalues: RefMut<'_, Upvalues>,
-    ) -> EvalResult<()> {
+    fn populate_upvalues<'a, U, UC>(&mut self, count: usize, upvalues_carrier: UC) -> EvalResult<()>
+    where
+        U: AsMut<Upvalues> + AsRef<crate::value::InnerClosure> + 'a,
+        UC: UpvalueCarrier<'a, U>,
+    {
         for _ in 0..count {
             match self.inc_ip() {
                 OpCode::DataLocalIdx(StackIdx(local_idx)) => {
                     let idx = self.frame().stack_offset + local_idx;
-                    upvalues.push(self.stack[idx].clone());
+                    RefMut::map(upvalues_carrier.upvalues_mut(), |v| v.as_mut())
+                        .push(self.stack[idx].clone());
                 }
 
                 OpCode::DataUpvalueIdx(upv_idx) => {
-                    upvalues.push(self.frame().upvalue(upv_idx).clone());
+                    RefMut::map(upvalues_carrier.upvalues_mut(), |v| v.as_mut())
+                        .push(self.frame().upvalue(upv_idx).clone());
                 }
 
                 OpCode::DataDeferredLocal(idx) => {
-                    upvalues.push(Value::DeferredUpvalue(idx));
+                    RefMut::map(upvalues_carrier.upvalues_mut(), |v| v.as_mut())
+                        .push(Value::DeferredUpvalue(idx));
                 }
 
                 OpCode::DataCaptureWith => {
@@ -814,7 +817,8 @@ impl<'o> VM<'o> {
                         captured_with_stack.push(self.stack[*idx].clone());
                     }
 
-                    upvalues.set_with_stack(captured_with_stack);
+                    RefMut::map(upvalues_carrier.upvalues_mut(), |v| v.as_mut())
+                        .set_with_stack(captured_with_stack);
                 }
 
                 _ => panic!("compiler error: missing closure operand"),
