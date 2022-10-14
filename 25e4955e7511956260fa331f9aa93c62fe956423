@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "04d50d53_7bf365e1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-10-14T08:39:08Z",
+      "side": 1,
+      "message": "That branch was surprisingly expensive when we last checked, but maybe things are different now with general rejuggling of code in this area, lets get rid of the unsafe and reevaluate later.",
+      "revId": "25e4955e7511956260fa331f9aa93c62fe956423",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
