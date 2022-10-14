@@ -5,7 +5,7 @@ use codemap_diagnostic::{ColorConfig, Diagnostic, Emitter, Level, SpanLabel, Spa
 
 use crate::SourceCode;
 
-#[derive(Debug)]
+#[derive(Debug, Clone, Copy)]
 pub enum WarningKind {
     DeprecatedLiteralURL,
     UselessInherit,
@@ -18,7 +18,7 @@ pub enum WarningKind {
     NotImplemented(&'static str),
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone, Copy)]
 pub struct EvalWarning {
     pub kind: WarningKind,
     pub span: codemap::Span,
