@@ -29,6 +29,7 @@ use codemap::Span;
 use crate::{
     errors::{Error, ErrorKind},
     upvalues::{UpvalueCarrier, Upvalues},
+    value::function::InnerClosure,
     vm::VM,
     Value,
 };
@@ -40,10 +41,7 @@ use super::Lambda;
 enum ThunkRepr {
     /// Thunk is closed over some values, suspended and awaiting
     /// execution.
-    Suspended {
-        lambda: Rc<Lambda>,
-        upvalues: Upvalues,
-    },
+    Suspended(InnerClosure),
 
     /// Thunk currently under-evaluation; encountering a blackhole
     /// value means that infinite recursion has occured.
@@ -62,10 +60,10 @@ pub struct Thunk {
 impl Thunk {
     pub fn new(lambda: Rc<Lambda>, span: Span) -> Self {
         Thunk {
-            inner: Rc::new(RefCell::new(ThunkRepr::Suspended {
+            inner: Rc::new(RefCell::new(ThunkRepr::Suspended(InnerClosure {
                 upvalues: Upvalues::with_capacity(lambda.upvalue_count),
                 lambda: lambda.clone(),
-            })),
+            }))),
             span,
         }
     }
@@ -91,7 +89,7 @@ impl Thunk {
                 ThunkRepr::Blackhole => return Err(ErrorKind::InfiniteRecursion),
 
                 ThunkRepr::Suspended { .. } => {
-                    if let ThunkRepr::Suspended { lambda, upvalues } =
+                    if let ThunkRepr::Suspended(InnerClosure { lambda, upvalues }) =
                         std::mem::replace(&mut *thunk_mut, ThunkRepr::Blackhole)
                     {
                         drop(thunk_mut);
@@ -128,7 +126,7 @@ impl Thunk {
 
 impl UpvalueCarrier for Thunk {
     fn upvalue_count(&self) -> usize {
-        if let ThunkRepr::Suspended { lambda, .. } = &*self.inner.borrow() {
+        if let ThunkRepr::Suspended(InnerClosure { lambda, .. }) = &*self.inner.borrow() {
             return lambda.upvalue_count;
         }
 
@@ -137,14 +135,14 @@ impl UpvalueCarrier for Thunk {
 
     fn upvalues(&self) -> Ref<'_, Upvalues> {
         Ref::map(self.inner.borrow(), |thunk| match thunk {
-            ThunkRepr::Suspended { upvalues, .. } => upvalues,
+            ThunkRepr::Suspended(InnerClosure { upvalues, .. }) => upvalues,
             _ => panic!("upvalues() on non-suspended thunk"),
         })
     }
 
     fn upvalues_mut(&self) -> RefMut<'_, Upvalues> {
         RefMut::map(self.inner.borrow_mut(), |thunk| match thunk {
-            ThunkRepr::Suspended { upvalues, .. } => upvalues,
+            ThunkRepr::Suspended(InnerClosure { upvalues, .. }) => upvalues,
             thunk => panic!("upvalues() on non-suspended thunk: {thunk:?}"),
         })
     }

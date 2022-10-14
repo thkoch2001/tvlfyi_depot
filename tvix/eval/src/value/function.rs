@@ -33,7 +33,7 @@ impl Lambda {
 #[derive(Clone, Debug, PartialEq)]
 pub struct InnerClosure {
     pub lambda: Rc<Lambda>,
-    upvalues: Upvalues,
+    pub upvalues: Upvalues,
 }
 
 #[repr(transparent)]
