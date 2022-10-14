@@ -36,6 +36,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "94114ccf_b8f4a7dd",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 5
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2022-10-14T09:25:46Z",
+      "side": 1,
+      "message": "nixpkgs doesn\u0027t really have a policy for or against anything, we can just omit support for stuff it empirically doesn\u0027t use (and we think it won\u0027t ever).",
+      "parentUuid": "5c828f32_8307aad0",
+      "revId": "7835d697198670c4fa892f3af85a969edb7d583f",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "0b1865ab_a858a7d6",
