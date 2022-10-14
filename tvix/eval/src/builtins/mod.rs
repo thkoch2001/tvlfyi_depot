@@ -6,6 +6,7 @@
 use std::cmp;
 use std::collections::{BTreeMap, HashMap, HashSet};
 use std::path::PathBuf;
+use std::rc::Rc;
 
 use crate::{
     errors::ErrorKind,
@@ -391,6 +392,31 @@ fn pure_builtins() -> Vec<Builtin> {
                 ("version".into(), version),
             ]))))
         }),
+        Builtin::new(
+            "partition",
+            &[true, true],
+            |args: Vec<Value>, vm: &mut VM| {
+                let mut right: Vec<Value> = vec![];
+                let mut wrong: Vec<Value> = vec![];
+
+                let list: NixList = args[1].to_list()?;
+                for elem in list.into_iter() {
+                    let result = vm.call_with(&args[0], [elem.clone()])?;
+
+                    if result.force(vm)?.as_bool()? {
+                        right.push(elem);
+                    } else {
+                        wrong.push(elem);
+                    };
+                }
+
+                let mut res: BTreeMap<NixString, Value> = BTreeMap::new();
+                res.insert("right".into(), Value::List(right.into()));
+                res.insert("wrong".into(), Value::List(wrong.into()));
+
+                Ok(Value::Attrs(Rc::new(NixAttrs::from_map(res))))
+            },
+        ),
         Builtin::new(
             "removeAttrs",
             &[true, true],
