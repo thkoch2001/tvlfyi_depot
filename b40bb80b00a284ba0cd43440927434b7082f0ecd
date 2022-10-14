@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f2c07feb_8199cfa6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-10-14T08:36:10Z",
+      "side": 1,
+      "message": "You are right, we missed this when doing the last upvalue refactor. The system used to work slightly differently (we were closing over individual dynamic resolution), but we found out later that this didn\u0027t exactly mimic Nix\u0027s behaviour and changed to capturing the entire with-stack.",
+      "revId": "b40bb80b00a284ba0cd43440927434b7082f0ecd",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
