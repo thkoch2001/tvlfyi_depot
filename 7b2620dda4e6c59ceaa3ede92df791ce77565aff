@@ -70,6 +70,24 @@
       "parentUuid": "f7cc9f3c_bb237fbb",
       "revId": "7b2620dda4e6c59ceaa3ede92df791ce77565aff",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4be8f6db_f74abcf5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-10-14T08:54:51Z",
+      "side": 1,
+      "message": "Did you try to build the webassembly target locally, too? From what I saw earlier it was likely because of that. Anyways, leaving this resolved as there\u0027s no such change in this CL anymore :)",
+      "parentUuid": "55e8816b_1bdcfae7",
+      "revId": "7b2620dda4e6c59ceaa3ede92df791ce77565aff",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
