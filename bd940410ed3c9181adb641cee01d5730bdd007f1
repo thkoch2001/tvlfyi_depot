@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7da3001e_5d498b4a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2022-10-15T15:23:43Z",
+      "side": 1,
+      "message": "`builtins.tryEval ~/src/depot` is still caught in tvixbolt for some reason, but doesn\u0027t seem to behave the same in normal tvix eval (tested this by replacing `dirs::home_dir()` with `None` unconditionally.",
+      "revId": "bd940410ed3c9181adb641cee01d5730bdd007f1",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
