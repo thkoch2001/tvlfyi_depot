@@ -3,10 +3,7 @@
 //! as well as closures (lambdas that capture variables from the
 //! surrounding scope).
 
-use std::{
-    cell::{Ref, RefMut},
-    ops::Index,
-};
+use std::ops::Index;
 
 use crate::{opcode::UpvalueIdx, Value};
 
@@ -47,6 +44,16 @@ impl Upvalues {
             Some(stack) => stack.len(),
         }
     }
+
+    /// Resolve deferred upvalues from the provided stack slice,
+    /// mutating them in the internal upvalue slots.
+    pub fn resolve_deferred_upvalues(&mut self, stack: &[Value]) {
+        for upvalue in self.upvalues.iter_mut() {
+            if let Value::DeferredUpvalue(update_from_idx) = upvalue {
+                *upvalue = stack[update_from_idx.0].clone();
+            }
+        }
+    }
 }
 
 impl Index<UpvalueIdx> for Upvalues {
@@ -54,31 +61,5 @@ impl Index<UpvalueIdx> for Upvalues {
 
     fn index(&self, index: UpvalueIdx) -> &Self::Output {
         &self.upvalues[index.0]
-    }
-}
-
-/// `UpvalueCarrier` is implemented by all types that carry upvalues.
-pub trait UpvalueCarrier {
-    fn upvalue_count(&self) -> usize;
-
-    /// Read-only accessor for the stored upvalues.
-    fn upvalues(&self) -> Ref<'_, Upvalues>;
-
-    /// Mutable accessor for stored upvalues.
-    fn upvalues_mut(&self) -> RefMut<'_, Upvalues>;
-
-    /// Read an upvalue at the given index.
-    fn upvalue(&self, idx: UpvalueIdx) -> Ref<'_, Value> {
-        Ref::map(self.upvalues(), |v| &v.upvalues[idx.0])
-    }
-
-    /// Resolve deferred upvalues from the provided stack slice,
-    /// mutating them in the internal upvalue slots.
-    fn resolve_deferred_upvalues(&self, stack: &[Value]) {
-        for upvalue in self.upvalues_mut().upvalues.iter_mut() {
-            if let Value::DeferredUpvalue(idx) = upvalue {
-                *upvalue = stack[idx.0].clone();
-            }
-        }
     }
 }
