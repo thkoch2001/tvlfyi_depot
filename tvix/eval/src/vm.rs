@@ -524,14 +524,17 @@ impl<'o> VM<'o> {
                 self.push(Value::String(string));
             }
 
-            OpCode::OpFindFile => {
-                let path = self.pop().to_str().map_err(|e| self.error(e))?;
-                let resolved = self
-                    .nix_search_path
-                    .resolve(path)
-                    .map_err(|e| self.error(e))?;
-                self.push(resolved.into());
-            }
+            OpCode::OpFindFile => match self.pop() {
+                Value::UnresolvedPath(path) => {
+                    let resolved = self
+                        .nix_search_path
+                        .resolve(path)
+                        .map_err(|e| self.error(e))?;
+                    self.push(resolved.into());
+                }
+
+                _ => panic!("tvix compiler bug: OpFindFile called on non-UnresolvedPath"),
+            },
 
             OpCode::OpJump(JumpOffset(offset)) => {
                 debug_assert!(offset != 0);
@@ -839,7 +842,8 @@ impl<'o> VM<'o> {
             Value::AttrNotFound
             | Value::DynamicUpvalueMissing(_)
             | Value::Blueprint(_)
-            | Value::DeferredUpvalue(_) => {
+            | Value::DeferredUpvalue(_)
+            | Value::UnresolvedPath(_) => {
                 panic!("tvix bug: internal value left on stack: {:?}", value)
             }
 

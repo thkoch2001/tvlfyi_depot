@@ -47,6 +47,7 @@ pub enum Value {
     DynamicUpvalueMissing(NixString),
     Blueprint(Rc<Lambda>),
     DeferredUpvalue(StackIdx),
+    UnresolvedPath(PathBuf),
 }
 
 // Helper macros to generate the to_*/as_* macros while accounting for
@@ -242,7 +243,8 @@ impl Value {
             (Value::AttrNotFound, _)
             | (Value::DynamicUpvalueMissing(_), _)
             | (Value::Blueprint(_), _)
-            | (Value::DeferredUpvalue(_), _) => {
+            | (Value::DeferredUpvalue(_), _)
+            | (Value::UnresolvedPath(_), _) => {
                 panic!("tvix bug: .coerce_to_string() called on internal value")
             }
         }
@@ -265,7 +267,8 @@ impl Value {
             | Value::AttrNotFound
             | Value::DynamicUpvalueMissing(_)
             | Value::Blueprint(_)
-            | Value::DeferredUpvalue(_) => "internal",
+            | Value::DeferredUpvalue(_)
+            | Value::UnresolvedPath(_) => "internal",
         }
     }
 
@@ -368,6 +371,7 @@ impl Display for Value {
             Value::DynamicUpvalueMissing(name) => {
                 write!(f, "internal[no_dyn_upvalue({name})]")
             }
+            Value::UnresolvedPath(_) => f.write_str("internal[unresolved_path]"),
         }
     }
 }
