@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3f5f772e_0ac8d6ee",
+        "filename": "tvix/eval/src/builtins/impure.rs",
+        "patchSetId": 17
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2022-10-15T18:16:01Z",
+      "side": 1,
+      "message": "This doesn\u0027t actually seem to coerce, i.e. `builtins.getEnv { outPath \u003d \"PATH\"; }` fails.",
+      "range": {
+        "startLine": 22,
+        "startChar": 32,
+        "endLine": 22,
+        "endChar": 48
+      },
+      "revId": "90ec632fd11a8767954f064a9344af8830d9fdc6",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
