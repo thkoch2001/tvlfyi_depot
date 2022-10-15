@@ -37,6 +37,52 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "3181d40a_107f6426",
+        "filename": "tvix/eval/src/systems.rs",
+        "patchSetId": 5
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2022-10-15T17:25:33Z",
+      "side": 1,
+      "message": "It rather matters what autoconf would put in host_os, keeping that list in sync is really annoying…\n\nIt\u0027s probably fine to stick with “empirical” nix systems.",
+      "range": {
+        "startLine": 1,
+        "startChar": 40,
+        "endLine": 1,
+        "endChar": 49
+      },
+      "revId": "f8d262004e0977ce4481fbc7484dcae6dd51ab41",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7eddda56_4fa6f9f4",
+        "filename": "tvix/eval/src/systems.rs",
+        "patchSetId": 5
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2022-10-15T17:25:33Z",
+      "side": 1,
+      "message": "I think this check is irrelevant, since we can safely assume that it is the second coordinate. A four-part LLVM triple is always arch-vendor-os-environment.\n\nOTOH succeeding here with an unknown os, but failing in a three triple case would be confusing, so maybe we can just add another case for a 4 triple which has an error message that\u0027s more descriptive, i.e. unknown os.",
+      "range": {
+        "startLine": 25,
+        "startChar": 43,
+        "endLine": 25,
+        "endChar": 63
+      },
+      "revId": "f8d262004e0977ce4481fbc7484dcae6dd51ab41",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "070316ee_4827f287",
         "filename": "tvix/eval/src/systems.rs",
         "patchSetId": 5
@@ -48,6 +94,24 @@
       "writtenOn": "2022-10-13T20:29:47Z",
       "side": 1,
       "message": "What case is this for btw?",
+      "revId": "f8d262004e0977ce4481fbc7484dcae6dd51ab41",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "81ef1be9_66568f57",
+        "filename": "tvix/eval/src/systems.rs",
+        "patchSetId": 5
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2022-10-15T17:25:33Z",
+      "side": 1,
+      "message": "I think e.g. x86_64-linux-gnu (lacking a vendor part). It seems like LLVM triples in this form are accepted, but if cargo normalizes TARGET, we would never get such a triple.",
+      "parentUuid": "070316ee_4827f287",
       "revId": "f8d262004e0977ce4481fbc7484dcae6dd51ab41",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }

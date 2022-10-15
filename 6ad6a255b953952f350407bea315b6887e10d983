@@ -143,6 +143,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "b69fb2fd_a8047d8e",
+        "filename": "tvix/eval/src/systems.rs",
+        "patchSetId": 4
+      },
+      "lineNbr": 65,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2022-10-15T17:25:33Z",
+      "side": 1,
+      "message": "In LLVM triples arm and armv6 are have the same archtype, they just differ in subarchtype (the former has none, the latter v6). So my suspicion would be that in both systems the plain arm is some kind of generic/default case and you default to armv6 when encountering it usually, but no actual platform has this as its “most canonical“ architecture type.",
+      "parentUuid": "c551be84_47ea2a65",
+      "revId": "6ad6a255b953952f350407bea315b6887e10d983",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "8b07b443_b5e49ad5",
         "filename": "tvix/eval/src/systems.rs",
         "patchSetId": 4
