@@ -103,10 +103,13 @@ impl NixSearchPath {
                 return Ok(p);
             }
         }
-        Err(ErrorKind::PathResolution(format!(
-            "path '{}' was not found in the Nix search path",
-            path.display()
-        )))
+        Err(ErrorKind::PathResolution {
+            msg: format!(
+                "path '{}' was not found in the Nix search path",
+                path.display()
+            ),
+            catchable: true,
+        })
     }
 }
 
@@ -178,7 +181,13 @@ mod tests {
             let nix_search_path = NixSearchPath::from_str("./.").unwrap();
             let err = nix_search_path.resolve("nope").unwrap_err();
             assert!(
-                matches!(err, ErrorKind::PathResolution(..)),
+                matches!(
+                    err,
+                    ErrorKind::PathResolution {
+                        catchable: true,
+                        ..
+                    }
+                ),
                 "err = {err:?}"
             );
         }

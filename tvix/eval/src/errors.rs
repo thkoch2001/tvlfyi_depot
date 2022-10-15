@@ -51,7 +51,12 @@ pub enum ErrorKind {
     },
 
     /// Resolving a user-supplied path literal failed in some way.
-    PathResolution(String),
+    PathResolution {
+        /// User facing error message describing the problem
+        msg: String,
+        /// Whether the error can be caught and handled using `builtins.tryEval`
+        catchable: bool,
+    },
 
     /// Dynamic keys are not allowed in some scopes.
     DynamicKeyInScope(&'static str),
@@ -172,7 +177,8 @@ impl ErrorKind {
     /// Returns `true` if this error can be caught by `builtins.tryEval`
     pub fn is_catchable(&self) -> bool {
         match self {
-            Self::Throw(_) | Self::AssertionFailed | Self::PathResolution(_) => true,
+            Self::Throw(_) | Self::AssertionFailed => true,
+            Self::PathResolution { catchable, .. } => *catchable,
             Self::ThunkForce(err) => err.kind.is_catchable(),
             _ => false,
         }
@@ -232,7 +238,7 @@ impl Display for Error {
                 write!(f, "can not compare a {} with a {}", lhs, rhs)
             }
 
-            ErrorKind::PathResolution(err) => write!(f, "could not resolve path: {}", err),
+            ErrorKind::PathResolution { msg, .. } => write!(f, "could not resolve path: {}", msg),
 
             ErrorKind::DynamicKeyInScope(scope) => {
                 write!(f, "dynamically evaluated keys are not allowed in {}", scope)
@@ -605,7 +611,7 @@ impl Error {
         let label = match &self.kind {
             ErrorKind::DuplicateAttrsKey { .. } => "in this attribute set",
             ErrorKind::InvalidAttributeName(_) => "in this attribute set",
-            ErrorKind::PathResolution(_) => "in this path literal",
+            ErrorKind::PathResolution { .. } => "in this path literal",
 
             // The spans for some errors don't have any more descriptive stuff
             // in them, or we don't utilise it yet.
@@ -653,7 +659,7 @@ impl Error {
             ErrorKind::AttributeNotFound { .. } => "E005",
             ErrorKind::TypeError { .. } => "E006",
             ErrorKind::Incomparable { .. } => "E007",
-            ErrorKind::PathResolution(_) => "E008",
+            ErrorKind::PathResolution { .. } => "E008",
             ErrorKind::DynamicKeyInScope(_) => "E009",
             ErrorKind::UnknownStaticVariable => "E010",
             ErrorKind::UnknownDynamicVariable(_) => "E011",
