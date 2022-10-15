@@ -21,6 +21,7 @@
 use std::{
     cell::{Ref, RefCell, RefMut},
     fmt::Display,
+    ops::Deref,
     rc::Rc,
 };
 
@@ -28,7 +29,8 @@ use codemap::Span;
 
 use crate::{
     errors::{Error, ErrorKind},
-    upvalues::{UpvalueCarrier, Upvalues},
+    upvalues::Upvalues,
+    value::Closure,
     vm::VM,
     Value,
 };
@@ -36,6 +38,10 @@ use crate::{
 use super::Lambda;
 
 /// Internal representation of the different states of a thunk.
+///
+/// Upvalues must be finalised before leaving the initial state
+/// (Suspended or RecursiveClosure).  The [`value()`] function may
+/// not be called until the thunk is in the final state (Evaluated).
 #[derive(Clone, Debug, PartialEq)]
 enum ThunkRepr {
     /// Thunk is closed over some values, suspended and awaiting
@@ -43,6 +49,7 @@ enum ThunkRepr {
     Suspended {
         lambda: Rc<Lambda>,
         upvalues: Upvalues,
+        span: Span,
     },
 
     /// Thunk currently under-evaluation; encountering a blackhole
@@ -53,21 +60,28 @@ enum ThunkRepr {
     Evaluated(Value),
 }
 
+/// A thunk is created for any value which requires non-strict
+/// evaluation due to self-reference or lazy semantics (or both).
+/// Every reference cycle involving `Value`s will contain at least
+/// one `Thunk`.
 #[derive(Clone, Debug, PartialEq)]
-pub struct Thunk {
-    inner: Rc<RefCell<ThunkRepr>>,
-    span: Span,
-}
+pub struct Thunk(Rc<RefCell<ThunkRepr>>);
 
 impl Thunk {
-    pub fn new(lambda: Rc<Lambda>, span: Span) -> Self {
-        Thunk {
-            inner: Rc::new(RefCell::new(ThunkRepr::Suspended {
+    pub fn new(lambda: Rc<Lambda>, span: Span, is_closure: bool) -> Self {
+        Thunk(Rc::new(RefCell::new(if is_closure {
+            ThunkRepr::Evaluated(Value::Closure(Closure {
                 upvalues: Upvalues::with_capacity(lambda.upvalue_count),
                 lambda: lambda.clone(),
-            })),
-            span,
-        }
+                is_finalised: false,
+            }))
+        } else {
+            ThunkRepr::Suspended {
+                upvalues: Upvalues::with_capacity(lambda.upvalue_count),
+                lambda: lambda.clone(),
+                span,
+            }
+        })))
     }
 
     /// Evaluate the content of a thunk, potentially repeatedly, until
@@ -79,11 +93,11 @@ impl Thunk {
     /// are replaced.
     pub fn force(&self, vm: &mut VM) -> Result<(), ErrorKind> {
         loop {
-            let mut thunk_mut = self.inner.borrow_mut();
+            let mut thunk_mut = self.0.borrow_mut();
 
             match *thunk_mut {
                 ThunkRepr::Evaluated(Value::Thunk(ref inner_thunk)) => {
-                    let inner_repr = inner_thunk.inner.borrow().clone();
+                    let inner_repr = inner_thunk.0.borrow().clone();
                     *thunk_mut = inner_repr;
                 }
 
@@ -91,22 +105,36 @@ impl Thunk {
                 ThunkRepr::Blackhole => return Err(ErrorKind::InfiniteRecursion),
 
                 ThunkRepr::Suspended { .. } => {
-                    if let ThunkRepr::Suspended { lambda, upvalues } =
-                        std::mem::replace(&mut *thunk_mut, ThunkRepr::Blackhole)
+                    if let ThunkRepr::Suspended {
+                        lambda,
+                        upvalues,
+                        span,
+                    } = std::mem::replace(&mut *thunk_mut, ThunkRepr::Blackhole)
                     {
                         drop(thunk_mut);
-                        vm.enter_frame(lambda, upvalues, 0).map_err(|e| {
-                            ErrorKind::ThunkForce(Box::new(Error {
-                                span: self.span,
-                                ..e
-                            }))
-                        })?;
-                        let evaluated = ThunkRepr::Evaluated(vm.pop());
-                        (*self.inner.borrow_mut()) = evaluated;
+                        vm.enter_frame(lambda, upvalues, 0)
+                            .map_err(|e| ErrorKind::ThunkForce(Box::new(Error { span, ..e })))?;
+                        (*self.0.borrow_mut()) = ThunkRepr::Evaluated(vm.pop())
                     }
                 }
             }
         }
+    }
+
+    pub fn finalise(&self) {
+        let inner: &mut ThunkRepr = &mut self.0.as_ref().borrow_mut();
+        if let ThunkRepr::Evaluated(Value::Closure(c)) = inner {
+            c.is_finalised = true;
+        }
+    }
+    pub fn is_unforced_recursive_closure(&self) -> bool {
+        matches!(
+            self.0.as_ref().borrow().deref(),
+            ThunkRepr::Evaluated(Value::Closure(Closure {
+                is_finalised: false,
+                ..
+            }))
+        )
     }
 
     /// Returns a reference to the inner evaluated value of a thunk.
@@ -116,35 +144,46 @@ impl Thunk {
     // difficult to represent in the type system without impacting the
     // API too much.
     pub fn value(&self) -> Ref<Value> {
-        Ref::map(self.inner.borrow(), |thunk| {
+        Ref::map(self.0.borrow(), |thunk| {
             if let ThunkRepr::Evaluated(value) = thunk {
+                if matches!(
+                    value,
+                    Value::Closure(Closure {
+                        is_finalised: false,
+                        ..
+                    })
+                ) {
+                    panic!("Thunk::value called on an unfinalised closure");
+                }
                 return value;
             }
 
             panic!("Thunk::value called on non-evaluated thunk");
         })
     }
-}
 
-impl UpvalueCarrier for Thunk {
-    fn upvalue_count(&self) -> usize {
-        if let ThunkRepr::Suspended { lambda, .. } = &*self.inner.borrow() {
-            return lambda.upvalue_count;
-        }
-
-        panic!("upvalues() on non-suspended thunk");
-    }
-
-    fn upvalues(&self) -> Ref<'_, Upvalues> {
-        Ref::map(self.inner.borrow(), |thunk| match thunk {
+    pub fn upvalues(&self) -> Ref<'_, Upvalues> {
+        Ref::map(self.0.borrow(), |thunk| match thunk {
             ThunkRepr::Suspended { upvalues, .. } => upvalues,
+            ThunkRepr::Evaluated(Value::Closure(Closure { upvalues, .. })) => upvalues,
             _ => panic!("upvalues() on non-suspended thunk"),
         })
     }
 
-    fn upvalues_mut(&self) -> RefMut<'_, Upvalues> {
-        RefMut::map(self.inner.borrow_mut(), |thunk| match thunk {
+    pub fn upvalues_mut(&self) -> RefMut<'_, Upvalues> {
+        RefMut::map(self.0.borrow_mut(), |thunk| match thunk {
             ThunkRepr::Suspended { upvalues, .. } => upvalues,
+            ThunkRepr::Evaluated(Value::Closure(Closure {
+                upvalues,
+                is_finalised,
+                ..
+            })) => {
+                if !*is_finalised {
+                    upvalues
+                } else {
+                    panic!("Thunk::upvalues_mut() called on a finalised closure");
+                }
+            }
             thunk => panic!("upvalues() on non-suspended thunk: {thunk:?}"),
         })
     }
@@ -152,7 +191,7 @@ impl UpvalueCarrier for Thunk {
 
 impl Display for Thunk {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        match self.inner.try_borrow() {
+        match self.0.try_borrow() {
             Ok(repr) => match &*repr {
                 ThunkRepr::Evaluated(v) => v.fmt(f),
                 _ => f.write_str("internal[thunk]"),

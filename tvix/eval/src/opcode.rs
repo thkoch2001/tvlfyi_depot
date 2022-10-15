@@ -153,6 +153,7 @@ pub enum OpCode {
     /// Finalise initialisation of the upvalues of the value in the
     /// given stack index after the scope is fully bound.
     OpFinalise(StackIdx),
+    OpFinaliseClosure,
 
     // [`OpClosure`] and [`OpThunk`] have a variable number of
     // arguments to the instruction, which is represented here by
