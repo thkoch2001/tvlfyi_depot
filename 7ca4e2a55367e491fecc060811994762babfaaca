@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fc06d1c5_85d0faea",
+        "filename": "tvix/eval/src/builtins/mod.rs",
+        "patchSetId": 3
+      },
+      "lineNbr": 417,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-10-15T12:00:07Z",
+      "side": 1,
+      "message": "use Value::attrs(NixAttrs...) here, then we can avoid the Rc implementation detail here",
+      "range": {
+        "startLine": 417,
+        "startChar": 0,
+        "endLine": 417,
+        "endChar": 66
+      },
+      "revId": "7ca4e2a55367e491fecc060811994762babfaaca",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
