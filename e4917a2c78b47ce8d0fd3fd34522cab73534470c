@@ -16,6 +16,24 @@
       "message": "Small me thing: I expect “pretty print” to be “human readable” and not intended for parsing again, but as I understand this is a machine-readable json repr.",
       "revId": "e4917a2c78b47ce8d0fd3fd34522cab73534470c",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ee08b22f_5c6c6c82",
+        "filename": "tvix/eval/src/eval.rs",
+        "patchSetId": 6
+      },
+      "lineNbr": 80,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-10-15T16:40:38Z",
+      "side": 1,
+      "message": "It is quite human readable in this shape (and is printed with indentation and stuff for pleasing display), we\u0027ve been using it to debug some issues (via humans) already.",
+      "parentUuid": "515e2ff9_931141fc",
+      "revId": "e4917a2c78b47ce8d0fd3fd34522cab73534470c",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
