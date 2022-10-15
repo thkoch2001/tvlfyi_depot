@@ -925,14 +925,14 @@ impl Compiler<'_> {
 
         // If no upvalues are captured, emit directly and move on.
         if lambda.upvalue_count == 0 {
-            self.emit_constant(
-                if is_thunk {
-                    Value::Thunk(Thunk::new(lambda, span))
-                } else {
-                    Value::Closure(Closure::new(lambda))
-                },
-                node,
-            );
+            if is_thunk {
+                self.emit_constant(Value::Thunk(Thunk::new(lambda, span, false)), node);
+            } else {
+                self.emit_constant(Value::Closure(Closure::new(lambda)), node);
+                // Since no OpFinalise will be emitted, we need to force
+                // the recursive closure at this point; see [`Thunk::force()`].
+                self.emit_force(&span);
+            }
             return;
         }
 
@@ -957,6 +957,12 @@ impl Compiler<'_> {
             compiled.scope.upvalues,
             compiled.captures_with_stack,
         );
+
+        if !is_thunk && !self.scope()[outer_slot].needs_finaliser {
+            // Since no OpFinalise will be emitted, we need to force
+            // the recursive closure at this point; see [`Thunk::force()`].
+            self.push_op(OpCode::OpForce, &self.span_for(node));
+        }
     }
 
     fn compile_apply(&mut self, slot: LocalIdx, node: &ast::Apply) {
