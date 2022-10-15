@@ -115,10 +115,10 @@ impl<'observer> Compiler<'observer> {
             Some(dir) if cfg!(target_arch = "wasm32") || dir.is_absolute() => Ok(dir),
             _ => {
                 let current_dir = std::env::current_dir().map_err(|e| Error {
-                    kind: ErrorKind::PathResolution(format!(
-                        "could not determine current directory: {}",
-                        e
-                    )),
+                    kind: ErrorKind::PathResolution {
+                        msg: format!("could not determine current directory: {}", e),
+                        catchable: false, // compile time anyways
+                    },
                     span: file.span,
                 })?;
                 if let Some(dir) = location {
@@ -290,7 +290,10 @@ impl Compiler<'_> {
             if raw_path.len() == 2 {
                 return self.emit_error(
                     node,
-                    ErrorKind::PathResolution("Empty <> path not allowed".into()),
+                    ErrorKind::PathResolution {
+                        msg: "Empty <> path not allowed".into(),
+                        catchable: false, // compile time anyways
+                    },
                 );
             }
             let path = &raw_path[1..(raw_path.len() - 1)];

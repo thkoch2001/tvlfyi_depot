@@ -555,9 +555,10 @@ impl<'o> VM<'o> {
                 Value::UnresolvedPath(path) => {
                     match dirs::home_dir() {
                         None => {
-                            return Err(self.error(ErrorKind::PathResolution(
-                                "failed to determine home directory".into(),
-                            )));
+                            return Err(self.error(ErrorKind::PathResolution {
+                                msg: "failed to determine home directory".into(),
+                                catchable: false,
+                            }));
                         }
                         Some(mut buf) => {
                             buf.push(path);
