@@ -70,6 +70,30 @@
       },
       "revId": "56557792d8856680644355532c033a9c57e354d0",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4e1e68bf_39573599",
+        "filename": "tvix/eval/src/builtins/mod.rs",
+        "patchSetId": 3
+      },
+      "lineNbr": 373,
+      "author": {
+        "id": 1000002
+      },
+      "writtenOn": "2022-10-15T19:19:44Z",
+      "side": 1,
+      "message": "Yes, consecutive anchors are a no-op.\nAdditionally, multi-line mode is off so these are true start/end of expression anchors.",
+      "parentUuid": "f561e252_c197492e",
+      "range": {
+        "startLine": 373,
+        "startChar": 53,
+        "endLine": 373,
+        "endChar": 57
+      },
+      "revId": "56557792d8856680644355532c033a9c57e354d0",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
