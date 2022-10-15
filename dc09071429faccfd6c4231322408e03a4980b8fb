@@ -46,6 +46,30 @@
       },
       "revId": "dc09071429faccfd6c4231322408e03a4980b8fb",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8e7f4b0a_949584d5",
+        "filename": "tvix/eval/src/builtins/mod.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 449,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2022-10-15T19:59:04Z",
+      "side": 1,
+      "message": "Oh, that\u0027s actually wrong. The thunk we are seeing here is the thunk of the application. C++ Nix actually forces both: https://sourcegraph.com/github.com/NixOS/nix/-/blob/src/libexpr/primops.cc?L931. In practice it probably doesn\u0027t make a difference since you\u0027d force the function application which would also force the returned thunk (if any).",
+      "parentUuid": "461cc745_15806a43",
+      "range": {
+        "startLine": 449,
+        "startChar": 36,
+        "endLine": 449,
+        "endChar": 40
+      },
+      "revId": "dc09071429faccfd6c4231322408e03a4980b8fb",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
