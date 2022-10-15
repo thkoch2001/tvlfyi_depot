@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1f327d99_af6fcd67",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-10-15T17:40:25Z",
+      "side": 1,
+      "message": "LGTM for now, but in general I\u0027d like findFile to become a builtins call.",
+      "revId": "795f2445bd563b1cd3d0e39cdc16d4aa29c735b9",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
