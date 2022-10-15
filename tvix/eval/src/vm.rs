@@ -536,6 +536,32 @@ impl<'o> VM<'o> {
                 _ => panic!("tvix compiler bug: OpFindFile called on non-UnresolvedPath"),
             },
 
+            OpCode::OpResolveHomePath => {
+                // Important to pop this before doing any kind of validation
+                // to prevent it being left on the stack in case of an error
+                let unresolved = self.pop();
+
+                match dirs::home_dir() {
+                    None => {
+                        return Err(self.error(ErrorKind::PathResolution(
+                            "failed to determine home directory".into(),
+                        )));
+                    }
+                    Some(mut buf) => {
+                        match unresolved {
+                            Value::UnresolvedPath(path) => {
+                                buf.push(path);
+                                self.push(buf.into())
+                            }
+
+                            _ => {
+                                panic!("tvix compiler bug: OpResolveHomePath called on non-UnresolvedPath")
+                            }
+                        }
+                    }
+                }
+            }
+
             OpCode::OpJump(JumpOffset(offset)) => {
                 debug_assert!(offset != 0);
                 self.frame_mut().ip += offset;
