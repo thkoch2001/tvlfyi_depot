@@ -1,6 +1,75 @@
 {
   "comments": [
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "9b99f6a4_3fe6d877",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1000066
+      },
+      "writtenOn": "2022-10-16T06:44:14Z",
+      "side": 1,
+      "message": "I assume SPATH means \"something between angle brackets\"?",
+      "range": {
+        "startLine": 9,
+        "startChar": 65,
+        "endLine": 9,
+        "endChar": 70
+      },
+      "revId": "795f2445bd563b1cd3d0e39cdc16d4aa29c735b9",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "44b4dd72_814f8409",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1000066
+      },
+      "writtenOn": "2022-10-16T06:44:14Z",
+      "side": 1,
+      "message": "operate",
+      "range": {
+        "startLine": 10,
+        "startChar": 58,
+        "endLine": 10,
+        "endChar": 67
+      },
+      "revId": "795f2445bd563b1cd3d0e39cdc16d4aa29c735b9",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "61dd96e8_463b9da5",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1000066
+      },
+      "writtenOn": "2022-10-16T06:44:14Z",
+      "side": 1,
+      "message": "does) in the future,",
+      "range": {
+        "startLine": 16,
+        "startChar": 0,
+        "endLine": 16,
+        "endChar": 20
+      },
+      "revId": "795f2445bd563b1cd3d0e39cdc16d4aa29c735b9",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "1f327d99_af6fcd67",
@@ -14,6 +83,40 @@
       "writtenOn": "2022-10-15T17:40:25Z",
       "side": 1,
       "message": "LGTM for now, but in general I\u0027d like findFile to become a builtins call.",
+      "revId": "795f2445bd563b1cd3d0e39cdc16d4aa29c735b9",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "616f16b4_02eed37a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000066
+      },
+      "writtenOn": "2022-10-16T06:44:14Z",
+      "side": 1,
+      "message": "I\u0027m sort of unclear on what the problem is with handling `~/path` and `\u003cpath\u003e` as syntax sugar at parse time (it seems like that\u0027s what cppnix is doing), but I\u0027m sure you have a good reason.",
+      "revId": "795f2445bd563b1cd3d0e39cdc16d4aa29c735b9",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c4474d80_3824924c",
+        "filename": "tvix/eval/src/value/mod.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 271,
+      "author": {
+        "id": 1000066
+      },
+      "writtenOn": "2022-10-16T06:44:14Z",
+      "side": 1,
+      "message": "Are all of these cases `internal` because Nix code can somehow see them (with `tryEval` or something?) and we are forced to imitate cppnix here?\n\nI was debugging what turned out to be an attempted eval of `DynamicUpvalueMissing` and the `\"internal\"` in the error messages wasn\u0027t too helpful, so I changed this block to print differently for each case, but didn\u0027t submit the patch because I figured there was a reason for this.",
       "revId": "795f2445bd563b1cd3d0e39cdc16d4aa29c735b9",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
