@@ -34,6 +34,24 @@
       "parentUuid": "423bf7cb_d27dd6ec",
       "revId": "c1957ce3d118a84c2f09cc6d6693806ed1e884c4",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a135258b_db0e33df",
+        "filename": "tvix/eval/src/vm.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 545,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-10-16T09:42:48Z",
+      "side": 0,
+      "message": "You can run `trunk serve` in //corp/tvixbolt if you have trunk and the Rust wasm toolchain *in your environment* (trunk is not very Nix-friendly)",
+      "parentUuid": "cc540d34_f9a95fcc",
+      "revId": "c1957ce3d118a84c2f09cc6d6693806ed1e884c4",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
