@@ -3,6 +3,69 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "f2979dc0_38ddc928",
+        "filename": "tvix/eval/src/compiler/mod.rs",
+        "patchSetId": 6
+      },
+      "lineNbr": 925,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2022-10-16T16:05:38Z",
+      "side": 1,
+      "message": "Adding the note about the finaliser here as well seems sensible.",
+      "revId": "bd451b7b5a294a333754353ac3cfe6e1c20f2b67",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e2b1b590_d524895b",
+        "filename": "tvix/eval/src/value/thunk.rs",
+        "patchSetId": 6
+      },
+      "lineNbr": 70,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2022-10-16T16:05:38Z",
+      "side": 1,
+      "message": "Maybe I\u0027m dense, but I don\u0027t get why this is needed now and I can\u0027t figure out from the diffs what changed that might require it?",
+      "range": {
+        "startLine": 70,
+        "startChar": 4,
+        "endLine": 70,
+        "endChar": 20
+      },
+      "revId": "bd451b7b5a294a333754353ac3cfe6e1c20f2b67",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4720bd57_fc7f84cc",
+        "filename": "tvix/eval/src/value/thunk.rs",
+        "patchSetId": 6
+      },
+      "lineNbr": 108,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2022-10-16T16:05:38Z",
+      "side": 1,
+      "message": "OpFinalise (tvix is british)",
+      "range": {
+        "startLine": 108,
+        "startChar": 29,
+        "endLine": 108,
+        "endChar": 39
+      },
+      "revId": "bd451b7b5a294a333754353ac3cfe6e1c20f2b67",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "06aa06c8_5ae78fb1",
         "filename": "tvix/eval/src/value/thunk.rs",
         "patchSetId": 6
@@ -20,6 +83,47 @@
         "endLine": 111,
         "endChar": 0
       },
+      "revId": "bd451b7b5a294a333754353ac3cfe6e1c20f2b67",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fea491c8_7713a382",
+        "filename": "tvix/eval/src/value/thunk.rs",
+        "patchSetId": 6
+      },
+      "lineNbr": 111,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2022-10-16T16:05:38Z",
+      "side": 1,
+      "message": "+1\n\nI was also confused here, since blackholing the thunk is not necessary (as the comment above even explains), since no computation can happen before we set it to Evaluated.",
+      "parentUuid": "06aa06c8_5ae78fb1",
+      "range": {
+        "startLine": 109,
+        "startChar": 0,
+        "endLine": 111,
+        "endChar": 0
+      },
+      "revId": "bd451b7b5a294a333754353ac3cfe6e1c20f2b67",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b983bc1c_9b1f3ca3",
+        "filename": "tvix/eval/src/value/thunk.rs",
+        "patchSetId": 6
+      },
+      "lineNbr": 145,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2022-10-16T16:05:38Z",
+      "side": 1,
+      "message": "I think we generally use `matches!()` for these kinds of things (in fact clippy I think complains otherwise).",
       "revId": "bd451b7b5a294a333754353ac3cfe6e1c20f2b67",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
