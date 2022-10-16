@@ -22,6 +22,23 @@
       },
       "revId": "c49113bc774987941c7862ed4a369a98f568da6c",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c00e14a4_9640482b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000066
+      },
+      "writtenOn": "2022-10-16T10:16:59Z",
+      "side": 1,
+      "message": "This is great, and I totally understand that hand-writing the marshalling code is a lot less work than creating a generator.\n\nBut I can\u0027t really vouch for the correctness of this code... I tried reading it and promptly fell asleep.  That\u0027s not a criticism, it\u0027s just the nature of handwritten marshalling code.  You\u0027ll get two kinds of reviewers: the ones who admit they can\u0027t vouch for it, and the ones that lie. 😊\n\nAnyways this is really useful, so we should merge it.",
+      "revId": "c49113bc774987941c7862ed4a369a98f568da6c",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
