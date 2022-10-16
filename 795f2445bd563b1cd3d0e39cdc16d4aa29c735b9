@@ -119,6 +119,24 @@
       "message": "Are all of these cases `internal` because Nix code can somehow see them (with `tryEval` or something?) and we are forced to imitate cppnix here?\n\nI was debugging what turned out to be an attempted eval of `DynamicUpvalueMissing` and the `\"internal\"` in the error messages wasn\u0027t too helpful, so I changed this block to print differently for each case, but didn\u0027t submit the patch because I figured there was a reason for this.",
       "revId": "795f2445bd563b1cd3d0e39cdc16d4aa29c735b9",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8f0d95c3_94d0212f",
+        "filename": "tvix/eval/src/value/mod.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 271,
+      "author": {
+        "id": 1000066
+      },
+      "writtenOn": "2022-10-16T06:45:01Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c4474d80_3824924c",
+      "revId": "795f2445bd563b1cd3d0e39cdc16d4aa29c735b9",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
