@@ -16,6 +16,24 @@
       "message": "I\u0027m having trouble reproducing any of these uncatchable exceptions in cppnix.  If I set `HOME` to something invalid cppnix is quite happy to resolve `~/path`.  And `builtins.tryEval \u003cblah\u003e` evaluates to `{ success \u003d false; value \u003d false; }`.",
       "revId": "c1957ce3d118a84c2f09cc6d6693806ed1e884c4",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cc540d34_f9a95fcc",
+        "filename": "tvix/eval/src/vm.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 545,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2022-10-16T08:50:33Z",
+      "side": 0,
+      "message": "I\u0027ve been building `//corp/tvixbolt` and serving it with a local http server which is a bit annoying, but works.",
+      "parentUuid": "423bf7cb_d27dd6ec",
+      "revId": "c1957ce3d118a84c2f09cc6d6693806ed1e884c4",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
