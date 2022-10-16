@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "423bf7cb_d27dd6ec",
+        "filename": "tvix/eval/src/vm.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 545,
+      "author": {
+        "id": 1000066
+      },
+      "writtenOn": "2022-10-16T06:58:38Z",
+      "side": 0,
+      "message": "I\u0027m having trouble reproducing any of these uncatchable exceptions in cppnix.  If I set `HOME` to something invalid cppnix is quite happy to resolve `~/path`.  And `builtins.tryEval \u003cblah\u003e` evaluates to `{ success \u003d false; value \u003d false; }`.",
+      "revId": "c1957ce3d118a84c2f09cc6d6693806ed1e884c4",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
