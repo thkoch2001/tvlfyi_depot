@@ -9,10 +9,18 @@ use crate::{
     upvalues::{UpvalueCarrier, Upvalues},
 };
 
+/// The opcodes for a thunk or closure, plus the number of
+/// non-executable opcodes which are allowed after an OpClosure or
+/// OpThunk referencing it.  At runtime `Lambda` is usually wrapped
+/// in `Rc` to avoid copying the `Chunk` it holds (which can be
+/// quite large).
 #[derive(Clone, Debug, PartialEq)]
 pub struct Lambda {
     // name: Option<NixString>,
     pub(crate) chunk: Chunk,
+
+    /// How many non-executable opcodes ([`OpCode::DataLocalIdx`])
+    /// are allowed after an opcode which references this Lambda.
     pub(crate) upvalue_count: usize,
 }
 
