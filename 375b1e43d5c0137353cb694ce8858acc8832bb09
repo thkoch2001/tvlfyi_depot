@@ -16,6 +16,24 @@
       "message": "When do we need to copy/clone them? (I\u0027m guessing there\u0027s a followup change coming?)",
       "revId": "375b1e43d5c0137353cb694ce8858acc8832bb09",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6bf0ec99_33690574",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000066
+      },
+      "writtenOn": "2022-10-16T07:10:41Z",
+      "side": 1,
+      "message": "Sorry, this was not supposed to be submitted.  It was part of another series that tuned out to be a really bad idea.",
+      "parentUuid": "fb8f7b91_b9641dc6",
+      "revId": "375b1e43d5c0137353cb694ce8858acc8832bb09",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ],
   "submitRequirementResults": []
