@@ -22,6 +22,30 @@
       },
       "revId": "38ada52b500d66f323ab9f9922c748ff90b2b0d4",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "91b58465_81dd0f2a",
+        "filename": "tvix/eval/src/builtins/mod.rs",
+        "patchSetId": 4
+      },
+      "lineNbr": 402,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-10-16T18:24:15Z",
+      "side": 1,
+      "message": "my guess would be because the partitioner is fallible, and iterators + result \u003d pain",
+      "parentUuid": "b4a59e99_658f3214",
+      "range": {
+        "startLine": 402,
+        "startChar": 33,
+        "endLine": 402,
+        "endChar": 42
+      },
+      "revId": "38ada52b500d66f323ab9f9922c748ff90b2b0d4",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
