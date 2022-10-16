@@ -66,6 +66,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "98279195_f4b61375",
+        "filename": "tvix/eval/src/value/thunk.rs",
+        "patchSetId": 6
+      },
+      "lineNbr": 108,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-10-16T23:08:15Z",
+      "side": 1,
+      "message": "wonder if there\u0027s some cargo flag that will check the validity of doc references?",
+      "parentUuid": "4720bd57_fc7f84cc",
+      "range": {
+        "startLine": 108,
+        "startChar": 29,
+        "endLine": 108,
+        "endChar": 39
+      },
+      "revId": "bd451b7b5a294a333754353ac3cfe6e1c20f2b67",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "06aa06c8_5ae78fb1",
         "filename": "tvix/eval/src/value/thunk.rs",
         "patchSetId": 6
