@@ -26,6 +26,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "608de9c8_c6327967",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2022-10-16T12:37:55Z",
+      "side": 1,
+      "message": "Yes that\u0027s what \u003cfoobar\u003e expressions are called in the C++ Nix parser.",
+      "parentUuid": "9b99f6a4_3fe6d877",
+      "range": {
+        "startLine": 9,
+        "startChar": 65,
+        "endLine": 9,
+        "endChar": 70
+      },
+      "revId": "795f2445bd563b1cd3d0e39cdc16d4aa29c735b9",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "44b4dd72_814f8409",
         "filename": "/COMMIT_MSG",
         "patchSetId": 1
@@ -37,6 +61,30 @@
       "writtenOn": "2022-10-16T06:44:14Z",
       "side": 1,
       "message": "operate",
+      "range": {
+        "startLine": 10,
+        "startChar": 58,
+        "endLine": 10,
+        "endChar": 67
+      },
+      "revId": "795f2445bd563b1cd3d0e39cdc16d4aa29c735b9",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7c237f23_296405f0",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2022-10-16T12:37:55Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "44b4dd72_814f8409",
       "range": {
         "startLine": 10,
         "startChar": 58,
@@ -60,6 +108,30 @@
       "writtenOn": "2022-10-16T06:44:14Z",
       "side": 1,
       "message": "does) in the future,",
+      "range": {
+        "startLine": 16,
+        "startChar": 0,
+        "endLine": 16,
+        "endChar": 20
+      },
+      "revId": "795f2445bd563b1cd3d0e39cdc16d4aa29c735b9",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6d53f058_2b676583",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2022-10-16T12:37:55Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "61dd96e8_463b9da5",
       "range": {
         "startLine": 16,
         "startChar": 0,
@@ -100,6 +172,24 @@
       "writtenOn": "2022-10-16T06:44:14Z",
       "side": 1,
       "message": "I\u0027m sort of unclear on what the problem is with handling `~/path` and `\u003cpath\u003e` as syntax sugar at parse time (it seems like that\u0027s what cppnix is doing), but I\u0027m sure you have a good reason.",
+      "revId": "795f2445bd563b1cd3d0e39cdc16d4aa29c735b9",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "77a3a1f5_a5a1d31c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2022-10-16T12:37:55Z",
+      "side": 1,
+      "message": "I think this is explained in some commit message already. Basically we want to distinguish between compile and run time in such a way that it becomes possible to separate the two: I.e. it should not matter for the evaluation result if we freshly compile an expression or reuse (previously serialized) bytecode. In such a case, caching environment lookups would be incorrect.",
+      "parentUuid": "616f16b4_02eed37a",
       "revId": "795f2445bd563b1cd3d0e39cdc16d4aa29c735b9",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
