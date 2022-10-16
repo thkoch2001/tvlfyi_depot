@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d7c24fb3_e6d2b7d9",
+        "filename": "tvix/eval/src/opcode.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 52,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-10-16T09:16:09Z",
+      "side": 1,
+      "message": "Hm, this isn\u0027t quite right I think. You could add a variant that does a heap allocation (with a `Box` for example) that will _not_ increase the size of the variants beyond the limit at which `variant_size_differences` warns (i.e. it wouldn\u0027t change the fact that the OpCodes are constant size).\n\nIt\u0027s something more like \"Individual opcodes should carry as little data as possible to avoid increasing the size of the type\u0027s memory representation when adding new variants. Rust detects and warns us about this\"",
+      "range": {
+        "startLine": 52,
+        "startChar": 0,
+        "endLine": 52,
+        "endChar": 46
+      },
+      "revId": "d8c7955b0b55fc4e535a4ff1d76fef8641f162ba",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0ee72a36_fc12c177",
+        "filename": "tvix/eval/src/value/function.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-10-16T09:16:09Z",
+      "side": 1,
+      "message": "I think the data carrying opcodes are an implementation detail, so I\u0027d write the comment more semantically as something like \"Number of upvalues which the code in this Lambda closes over, and which need to be initialised at runtime. Information about the variables is emitted using data-carrying opcodes.\" or something like that\n\nLinking the variant(s) might make sense, but will also eventually get out of sync.",
+      "range": {
+        "startLine": 23,
+        "startChar": 12,
+        "endLine": 23,
+        "endChar": 19
+      },
+      "revId": "d8c7955b0b55fc4e535a4ff1d76fef8641f162ba",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
