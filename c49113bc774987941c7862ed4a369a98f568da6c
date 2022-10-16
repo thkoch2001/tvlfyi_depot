@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "75f0cc62_29d34493",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 8
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1000066
+      },
+      "writtenOn": "2022-10-16T06:45:24Z",
+      "side": 1,
+      "message": "Bummer that rnix upstream doesn\u0027t have this :(",
+      "range": {
+        "startLine": 16,
+        "startChar": 34,
+        "endLine": 17,
+        "endChar": 7
+      },
+      "revId": "c49113bc774987941c7862ed4a369a98f568da6c",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
