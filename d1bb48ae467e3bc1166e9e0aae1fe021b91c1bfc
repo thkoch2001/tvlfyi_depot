@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8295142c_9d0e2457",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-10-16T12:26:51Z",
+      "side": 1,
+      "message": "Same comment as on the previous CL, +2 because it\u0027s been reviewed by people but not approved.",
+      "revId": "d1bb48ae467e3bc1166e9e0aae1fe021b91c1bfc",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
