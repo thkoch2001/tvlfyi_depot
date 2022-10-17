@@ -1,6 +1,23 @@
 {
   "comments": [
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "dbdc303f_2e294bb9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000066
+      },
+      "writtenOn": "2022-10-17T00:32:15Z",
+      "side": 1,
+      "message": "See next patchset.",
+      "revId": "bd451b7b5a294a333754353ac3cfe6e1c20f2b67",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "f2979dc0_38ddc928",
@@ -18,6 +35,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "5f9cfec5_2faeca72",
+        "filename": "tvix/eval/src/compiler/mod.rs",
+        "patchSetId": 6
+      },
+      "lineNbr": 925,
+      "author": {
+        "id": 1000066
+      },
+      "writtenOn": "2022-10-17T00:32:15Z",
+      "side": 1,
+      "message": "Done.  In general please let me know if I\u0027m commenting too much or not enough, or the right amount but too verbosely.",
+      "parentUuid": "f2979dc0_38ddc928",
+      "revId": "bd451b7b5a294a333754353ac3cfe6e1c20f2b67",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "e2b1b590_d524895b",
@@ -31,6 +66,30 @@
       "writtenOn": "2022-10-16T16:05:38Z",
       "side": 1,
       "message": "Maybe I\u0027m dense, but I don\u0027t get why this is needed now and I can\u0027t figure out from the diffs what changed that might require it?",
+      "range": {
+        "startLine": 70,
+        "startChar": 4,
+        "endLine": 70,
+        "endChar": 20
+      },
+      "revId": "bd451b7b5a294a333754353ac3cfe6e1c20f2b67",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b09fd233_1d8d0601",
+        "filename": "tvix/eval/src/value/thunk.rs",
+        "patchSetId": 6
+      },
+      "lineNbr": 70,
+      "author": {
+        "id": 1000066
+      },
+      "writtenOn": "2022-10-17T00:32:15Z",
+      "side": 1,
+      "message": "It is not safe to `OpCall` a `Thunk(ThunkRepr::RecursiveClosure(_))` since its upvalues have not yet been realised.\n\nIn theory we could avoid adding a variant, and use `Thunk(Evaluated(_))` for this purpose.  Here are the disadvantages of doing so:\n\n1. If there is a bug in the compiler that leads to a `Thunk(Evaluated(Closure(_)))` getting `OpCall`ed before all of its upvalues are realised, that bug will be much harder to find.  Right now if that happens you get an error at the call site rather than later on when those unrealised upvalues get used (and only *if* they get used).\n\n2. It would become acceptable to call `upvalues_mut()` on a `ThunkRepr::Evaluated`, which is currently not the case and is currently a sign of a serious bug.  We would have to start allowing that to happen.  Any compiler bug which resulted in an attempt at \"finalising the upvalues\" of `Thunk(Suspended()).force()` that happened to evaluate to a Closure.\n\nMaybe these disadvantages are not worth the extra variant/code?  After thinking about it a bit I\u0027m no longer sure either way.  @sterni / @tazjin, please let me know which you prefer.  If you want to leave the variant let me know if you think I should add the justification (basically points 1 and 2 above) in a comment somewhere.\n\nPlease unresolve this when you\u0027ve decided.",
+      "parentUuid": "e2b1b590_d524895b",
       "range": {
         "startLine": 70,
         "startChar": 4,
@@ -88,6 +147,30 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "54022592_5c386d39",
+        "filename": "tvix/eval/src/value/thunk.rs",
+        "patchSetId": 6
+      },
+      "lineNbr": 108,
+      "author": {
+        "id": 1000066
+      },
+      "writtenOn": "2022-10-17T00:32:15Z",
+      "side": 1,
+      "message": "That would be great.  I try to remember the brit spelling but don\u0027t always get it right.",
+      "parentUuid": "98279195_f4b61375",
+      "range": {
+        "startLine": 108,
+        "startChar": 29,
+        "endLine": 108,
+        "endChar": 39
+      },
+      "revId": "bd451b7b5a294a333754353ac3cfe6e1c20f2b67",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "06aa06c8_5ae78fb1",
@@ -135,6 +218,30 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "8484a7c9_5f50f0ba",
+        "filename": "tvix/eval/src/value/thunk.rs",
+        "patchSetId": 6
+      },
+      "lineNbr": 111,
+      "author": {
+        "id": 1000066
+      },
+      "writtenOn": "2022-10-17T00:32:15Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fea491c8_7713a382",
+      "range": {
+        "startLine": 109,
+        "startChar": 0,
+        "endLine": 111,
+        "endChar": 0
+      },
+      "revId": "bd451b7b5a294a333754353ac3cfe6e1c20f2b67",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "b983bc1c_9b1f3ca3",
@@ -152,6 +259,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "28d65139_34d36508",
+        "filename": "tvix/eval/src/value/thunk.rs",
+        "patchSetId": 6
+      },
+      "lineNbr": 145,
+      "author": {
+        "id": 1000066
+      },
+      "writtenOn": "2022-10-17T00:32:15Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b983bc1c_9b1f3ca3",
+      "revId": "bd451b7b5a294a333754353ac3cfe6e1c20f2b67",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "67ae8cf6_aebbb634",
@@ -165,6 +290,30 @@
       "writtenOn": "2022-10-16T09:41:47Z",
       "side": 1,
       "message": "I\u0027d prefer if this was an explicit constructor over a `From`. The reason is that I tried figuring out where these are actually constructed, but due to this instance it\u0027s not possible to simply grep for it.",
+      "range": {
+        "startLine": 184,
+        "startChar": 0,
+        "endLine": 184,
+        "endChar": 30
+      },
+      "revId": "bd451b7b5a294a333754353ac3cfe6e1c20f2b67",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fe64bd23_9c18c375",
+        "filename": "tvix/eval/src/value/thunk.rs",
+        "patchSetId": 6
+      },
+      "lineNbr": 184,
+      "author": {
+        "id": 1000066
+      },
+      "writtenOn": "2022-10-17T00:32:15Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "67ae8cf6_aebbb634",
       "range": {
         "startLine": 184,
         "startChar": 0,
@@ -198,6 +347,30 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "4d3e2b25_6f9dadb3",
+        "filename": "tvix/eval/src/vm.rs",
+        "patchSetId": 6
+      },
+      "lineNbr": 680,
+      "author": {
+        "id": 1000066
+      },
+      "writtenOn": "2022-10-17T00:32:15Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fb2be244_a5afc0fc",
+      "range": {
+        "startLine": 680,
+        "startChar": 49,
+        "endLine": 680,
+        "endChar": 71
+      },
+      "revId": "bd451b7b5a294a333754353ac3cfe6e1c20f2b67",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "1875dba3_5e1b5c5a",
@@ -211,6 +384,30 @@
       "writtenOn": "2022-10-16T09:41:47Z",
       "side": 1,
       "message": "Why clone the thunk at this point?",
+      "range": {
+        "startLine": 688,
+        "startChar": 50,
+        "endLine": 688,
+        "endChar": 57
+      },
+      "revId": "bd451b7b5a294a333754353ac3cfe6e1c20f2b67",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "aa320e63_6c0813a9",
+        "filename": "tvix/eval/src/vm.rs",
+        "patchSetId": 6
+      },
+      "lineNbr": 688,
+      "author": {
+        "id": 1000066
+      },
+      "writtenOn": "2022-10-17T00:32:15Z",
+      "side": 1,
+      "message": "Because it\u0027s the only way to release the borrow of `\u0026mut self` so we can pass a reborrow of the same thing to `Thunk::force(\u0026mut VM)`.\n\nNonlexical lifetimes are cool, but they do have their limitations.",
+      "parentUuid": "1875dba3_5e1b5c5a",
       "range": {
         "startLine": 688,
         "startChar": 50,
