@@ -6,6 +6,7 @@
 use std::cmp;
 use std::collections::{BTreeMap, HashMap, HashSet};
 use std::path::PathBuf;
+use math::round;
 
 use regex::Regex;
 
@@ -131,6 +132,13 @@ fn pure_builtins() -> Vec<Builtin> {
                 }
 
                 Ok(Value::List(NixList::construct(output.len(), output)))
+            },
+        ),
+        Builtin::new(
+            "ceil",
+            &[true],
+            |args: Vec<Value>, _: &mut VM| {
+                Ok(Value::Integer(math::round::ceil(args[0].as_float()?, 0) as i64))
             },
         ),
         Builtin::new(
