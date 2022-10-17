@@ -1,6 +1,52 @@
 {
   "comments": [
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "b8e21b65_9b17c637",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-10-17T09:47:10Z",
+      "side": 1,
+      "message": "the with stack itself is captured as an upvalue (if we detect that the scope it encloses refers to a dynamic identifier)",
+      "range": {
+        "startLine": 14,
+        "startChar": 26,
+        "endLine": 14,
+        "endChar": 64
+      },
+      "revId": "3785d8746afa0f6eb53375ab76e09982cb24cec3",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9b4c5c9b_f49a3ef9",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-10-17T09:47:10Z",
+      "side": 1,
+      "message": "If you mean \"are *individual* dynamic identifiers closed over as upvalues\", the answer is no. In fact it used to work that way until cl/6486, at which point we started capturing the entire with stack.\n\nThe primary reason is that forcing the with stack should only happen at the actual point of dynamic access (not when instantiating the thunk or closure that closes over upvalues), as you change the force-order in breaking ways otherwise.\n\nFor example, this expression is valid Nix that evaluates to 42:\n\n    with (abort \"oh no!\"); let a \u003d dynamic; in 42\n\nIf we closed over individual dynamic identifiers we\u0027d have to resolve the `with` namespace when instantiating the thunk that binds the local `a` as an upvalue.\n\nIn fact I just noticed that we don\u0027t have a test for this and that something broke it, so I\u0027m going to go ahead and fix that now 😄",
+      "range": {
+        "startLine": 15,
+        "startChar": 6,
+        "endLine": 16,
+        "endChar": 41
+      },
+      "revId": "3785d8746afa0f6eb53375ab76e09982cb24cec3",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "867b86d4_240cf70c",
@@ -14,6 +60,75 @@
       "writtenOn": "2022-10-14T22:08:02Z",
       "side": 1,
       "message": "I didn\u0027t know this terminology, thanks for the explanation 😊 (I\u0027ll let someone else more familiar with the implementation in case +2)",
+      "revId": "3785d8746afa0f6eb53375ab76e09982cb24cec3",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c47e0e71_d86f946c",
+        "filename": "tvix/eval/src/upvalues.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-10-17T09:47:10Z",
+      "side": 1,
+      "message": "compile",
+      "range": {
+        "startLine": 24,
+        "startChar": 34,
+        "endLine": 24,
+        "endChar": 39
+      },
+      "revId": "3785d8746afa0f6eb53375ab76e09982cb24cec3",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1af4b7c3_a19bb7af",
+        "filename": "tvix/eval/src/upvalues.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-10-17T09:47:10Z",
+      "side": 1,
+      "message": "We\u0027ve been calling these \"dynamic identifiers\" or something to that extent, to highlight that they are resolved at runtime (and not statically like everything else)",
+      "range": {
+        "startLine": 28,
+        "startChar": 7,
+        "endLine": 28,
+        "endChar": 31
+      },
+      "revId": "3785d8746afa0f6eb53375ab76e09982cb24cec3",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "91ac3ef8_9f297363",
+        "filename": "tvix/eval/src/upvalues.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-10-17T09:47:10Z",
+      "side": 1,
+      "message": "it happens at compile time, not at parse time, and it\u0027s not really an arbitrary integer identifier, it\u0027s a stack offset.\n\nMore specifically, the compiler tracks locals (all known bound identifiers) and their stack slots. The IDs of locals don\u0027t exist at runtime anymore, they\u0027re used by the compiler to figure out initialisation order (e.g. to answer questions like \"is this identifier already bound to a value at this point?\").\n\nSame thing happens for upvalues, as we just track their offset in the upvalues vector. It seems a bit strange to call it a `Map\u003cusize, Value\u003e` because the index of the thing in the vector _is_ its \"ID\" (it\u0027s not a \"representation of\" its ID)",
+      "range": {
+        "startLine": 33,
+        "startChar": 8,
+        "endLine": 33,
+        "endChar": 52
+      },
       "revId": "3785d8746afa0f6eb53375ab76e09982cb24cec3",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
