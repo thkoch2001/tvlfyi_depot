@@ -98,6 +98,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "0f7d2ef1_b29ef271",
+        "filename": "tvix/eval/src/builtins/mod.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 194,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2022-10-17T22:34:41Z",
+      "side": 1,
+      "message": "But how would anything happen to `argv[0]` here?",
+      "parentUuid": "3361d790_b1c3b16a",
+      "range": {
+        "startLine": 194,
+        "startChar": 20,
+        "endLine": 194,
+        "endChar": 23
+      },
+      "revId": "634bf7ca1998a6e41f96ce50bbc0cac8f86eb2b3",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "08cc69cb_53c23c12",
         "filename": "tvix/eval/src/value/mod.rs",
         "patchSetId": 1
