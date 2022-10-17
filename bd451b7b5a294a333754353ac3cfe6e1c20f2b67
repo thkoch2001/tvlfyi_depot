@@ -100,6 +100,30 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "92f2095c_29ec6695",
+        "filename": "tvix/eval/src/value/thunk.rs",
+        "patchSetId": 6
+      },
+      "lineNbr": 70,
+      "author": {
+        "id": 1000066
+      },
+      "writtenOn": "2022-10-17T00:38:06Z",
+      "side": 1,
+      "message": "please append \"would be very hard to debug\" to the end of point #2 above",
+      "parentUuid": "b09fd233_1d8d0601",
+      "range": {
+        "startLine": 70,
+        "startChar": 4,
+        "endLine": 70,
+        "endChar": 20
+      },
+      "revId": "bd451b7b5a294a333754353ac3cfe6e1c20f2b67",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "4720bd57_fc7f84cc",
