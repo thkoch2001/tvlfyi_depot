@@ -47,6 +47,30 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "e17687dd_a470efc1",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-10-17T14:53:28Z",
+      "side": 1,
+      "message": "Fixed in cl/7031",
+      "parentUuid": "9b4c5c9b_f49a3ef9",
+      "range": {
+        "startLine": 15,
+        "startChar": 6,
+        "endLine": 16,
+        "endChar": 41
+      },
+      "revId": "3785d8746afa0f6eb53375ab76e09982cb24cec3",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "867b86d4_240cf70c",
