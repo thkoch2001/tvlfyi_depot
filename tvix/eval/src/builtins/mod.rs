@@ -134,6 +134,13 @@ fn pure_builtins() -> Vec<Builtin> {
             },
         ),
         Builtin::new(
+            "ceil",
+            &[true],
+            |args: Vec<Value>, _: &mut VM| {
+                Ok(Value::Integer(math::round::ceil(args[0].as_float()?, 0) as i64))
+            },
+        ),
+        Builtin::new(
             "compareVersions",
             &[true, true],
             |args: Vec<Value>, _: &mut VM| {
