@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "090e3789_ba5a2b8f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-10-17T14:53:13Z",
+      "side": 1,
+      "message": "This fixes the issue I found while commenting on cl/7007",
+      "revId": "23e791ea13a4be098fd09f3501904086a1d4b6c7",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
