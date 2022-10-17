@@ -22,6 +22,30 @@
       },
       "revId": "4c8b0cc82ea26e4881a402bbec74d1157fc55c84",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b6e4be5e_a4e9716f",
+        "filename": "tvix/eval/src/opcode.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2022-10-17T22:33:56Z",
+      "side": 1,
+      "message": "You have looked at the code more recently though, so feel free to contradict me on this.",
+      "parentUuid": "213c5250_53e8ecef",
+      "range": {
+        "startLine": 31,
+        "startChar": 4,
+        "endLine": 31,
+        "endChar": 17
+      },
+      "revId": "4c8b0cc82ea26e4881a402bbec74d1157fc55c84",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
