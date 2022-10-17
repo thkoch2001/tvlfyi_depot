@@ -266,6 +266,13 @@ fn pure_builtins() -> Vec<Builtin> {
                 .map_err(Into::into)
         }),
         Builtin::new(
+            "floor",
+            &[true],
+            |args: Vec<Value>, _: &mut VM| {
+                Ok(Value::Integer(math::round::floor(args[0].as_float()?, 0) as i64))
+            },
+        ),
+        Builtin::new(
             "foldl'",
             &[true, false, true],
             |mut args: Vec<Value>, vm: &mut VM| {
