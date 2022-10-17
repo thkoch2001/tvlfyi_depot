@@ -113,6 +113,16 @@ lib.fix (self: depot.third_party.naersk.buildPackage (lib.fix (naerskArgs: {
               echo "SKIPPED: $i"
               continue
               ;;
+            # These builtins are not present in nix 2.3
+            # TODO: We should add some tests against newer versions of nix
+            eval-okay-floor.nix)
+              echo "SKIPPED: $i"
+              continue
+              ;;
+            eval-okay-ceil.nix)
+              echo "SKIPPED: $i"
+              continue
+              ;;
             *) ;;
           esac
 
