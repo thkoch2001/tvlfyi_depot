@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7ab40ac4_ee6c7088",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-10-17T11:02:34Z",
+      "side": 1,
+      "message": "[1:56:44 pm] \u003ctazjin\u003e grfn: I\u0027m considering to adopt some of your CLs to get them through, as I suspect you\u0027ll be mostly unavailable during your trip \n[1:57:15 pm] \u003cgrfn\u003e tazjin: go for it\n",
+      "revId": "115d676f253f825ea10027a18736c557b7224ad1",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
