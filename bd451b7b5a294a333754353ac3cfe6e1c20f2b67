@@ -124,6 +124,30 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "604156d1_8b8005d5",
+        "filename": "tvix/eval/src/value/thunk.rs",
+        "patchSetId": 6
+      },
+      "lineNbr": 70,
+      "author": {
+        "id": 1000066
+      },
+      "writtenOn": "2022-10-17T00:43:57Z",
+      "side": 1,
+      "message": "There\u0027s a third option as well: delete the `RecursiveClosure` variant, and add a `bool` to the `Evaluated` variant which indicates that it is unfinalised (and therefore okay to call `upvalues_mut()` on it).  Flipping this `bool` is a lot easier (way less code) than replacing the `ThunkRepr`.\n\nThis extra field could be omitted from release builds, since it\u0027s only useful for chasing down compiler bugs.\n\nI\u0027m sort of leaning towards this third option.  Let me know if you would like to see a CL for it before deciding.",
+      "parentUuid": "92f2095c_29ec6695",
+      "range": {
+        "startLine": 70,
+        "startChar": 4,
+        "endLine": 70,
+        "endChar": 20
+      },
+      "revId": "bd451b7b5a294a333754353ac3cfe6e1c20f2b67",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "4720bd57_fc7f84cc",
