@@ -24,6 +24,30 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "0f1c0c46_2fb6b811",
+        "filename": "tvix/eval/src/opcode.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 52,
+      "author": {
+        "id": 1000066
+      },
+      "writtenOn": "2022-10-17T00:05:58Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d7c24fb3_e6d2b7d9",
+      "range": {
+        "startLine": 52,
+        "startChar": 0,
+        "endLine": 52,
+        "endChar": 46
+      },
+      "revId": "d8c7955b0b55fc4e535a4ff1d76fef8641f162ba",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "0ee72a36_fc12c177",
@@ -37,6 +61,30 @@
       "writtenOn": "2022-10-16T09:16:09Z",
       "side": 1,
       "message": "I think the data carrying opcodes are an implementation detail, so I\u0027d write the comment more semantically as something like \"Number of upvalues which the code in this Lambda closes over, and which need to be initialised at runtime. Information about the variables is emitted using data-carrying opcodes.\" or something like that\n\nLinking the variant(s) might make sense, but will also eventually get out of sync.",
+      "range": {
+        "startLine": 23,
+        "startChar": 12,
+        "endLine": 23,
+        "endChar": 19
+      },
+      "revId": "d8c7955b0b55fc4e535a4ff1d76fef8641f162ba",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d1d0050d_ea7234a8",
+        "filename": "tvix/eval/src/value/function.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1000066
+      },
+      "writtenOn": "2022-10-17T00:05:58Z",
+      "side": 1,
+      "message": "\u003e I think the data carrying opcodes are an implementation detail\n\n... but that implementation detail is the only reason why the field exists.\n\nAnd it\u0027s also the answer to the question \"what\u0027s the difference between a `Chunk` and a `Lambda`\".  That was the first question I had when I read this part of the code.  So I tried removing the `upvalue_count` field to see what would break.",
+      "parentUuid": "0ee72a36_fc12c177",
       "range": {
         "startLine": 23,
         "startChar": 12,
