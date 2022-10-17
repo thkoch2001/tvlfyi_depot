@@ -505,6 +505,48 @@ fn pure_builtins() -> Vec<Builtin> {
                 Ok(Value::attrs(NixAttrs::from_map(res)))
             },
         ),
+        Builtin::new(
+            "replaceStrings",
+            &[true, true, true],
+            |args: Vec<Value>, _: &mut VM| {
+                let string = args[2].to_str()?;
+
+                let mut res: String = String::new();
+
+                let from = args[0].to_list()?.into_iter().map(|v| v.to_str());
+                let to = args[1].to_list()?.into_iter().map(|v| v.to_str());
+
+                let mut i: usize = 0;
+
+                // This can't be implemented using Rust's string.replace() since we need to break on the
+                // first successful replace. Also, Rust's string.replace allocates a new string on every
+                // call which is not preferable.
+                while i < string.len() {
+                    // Try a match in all the from strings
+                    for elem in std::iter::zip(from.clone(), to.clone()) {
+                        // Error when doing it on a single line, hence, two shadowed variable
+                        let from = elem.0?;
+                        let from = from.as_str();
+                        let to = elem.1?;
+                        let to = to.as_str();
+
+                        if i + from.len() >= string.len() {
+                            continue;
+                        }
+
+                        if &string[i..i + from.len()] == from {
+                            res += to;
+                            i += from.len();
+                            break;
+                        }
+                    }
+
+                    res += &string[i..i + 1];
+                    i += 1;
+                }
+                Ok(Value::String(res.into()))
+            },
+        ),
         Builtin::new("seq", &[true, true], |mut args: Vec<Value>, _: &mut VM| {
             // The builtin calling infra has already forced both args for us, so we just return the
             // second and ignore the first
