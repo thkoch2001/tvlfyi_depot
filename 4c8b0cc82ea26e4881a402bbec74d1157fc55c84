@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "213c5250_53e8ecef",
+        "filename": "tvix/eval/src/opcode.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2022-10-17T22:33:22Z",
+      "side": 1,
+      "message": "While this is true, it\u0027s also absolute in the current callframe – so in both cases the callframe matters for what is zero.\n\nMaybe it\u0027s clearer if we rephrase this to add the stack_base thing as an implementation detail, i.e. it exists to hide the fact that we are dealing with relative offsets from the compiler (iirc).",
+      "range": {
+        "startLine": 31,
+        "startChar": 4,
+        "endLine": 31,
+        "endChar": 17
+      },
+      "revId": "4c8b0cc82ea26e4881a402bbec74d1157fc55c84",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
