@@ -228,7 +228,7 @@ impl Compiler<'_> {
             ast::Expr::Ident(ident) => self.compile_ident(slot, ident),
             ast::Expr::With(with) => self.thunk(slot, with, |c, s| c.compile_with(s, with)),
             ast::Expr::Lambda(lambda) => {
-                self.compile_lambda_or_thunk(false, slot, lambda, |c, s| {
+                self.compile_closure_or_suspension(false, slot, lambda, |c, s| {
                     c.compile_lambda(s, lambda)
                 })
             }
@@ -879,13 +879,13 @@ impl Compiler<'_> {
         N: ToSpan,
         F: FnOnce(&mut Compiler, LocalIdx),
     {
-        self.compile_lambda_or_thunk(true, outer_slot, node, content)
+        self.compile_closure_or_suspension(true, outer_slot, node, content)
     }
 
     /// Compile an expression into a runtime cloure or thunk
-    fn compile_lambda_or_thunk<N, F>(
+    fn compile_closure_or_suspension<N, F>(
         &mut self,
-        is_thunk: bool,
+        is_suspended_thunk: bool,
         outer_slot: LocalIdx,
         node: &N,
         content: F,
@@ -917,7 +917,7 @@ impl Compiler<'_> {
         }
 
         let lambda = Rc::new(compiled.lambda);
-        if is_thunk {
+        if is_suspended_thunk {
             self.observer.observe_compiled_thunk(&lambda);
         } else {
             self.observer.observe_compiled_lambda(&lambda);
@@ -926,7 +926,7 @@ impl Compiler<'_> {
         // If no upvalues are captured, emit directly and move on.
         if lambda.upvalue_count == 0 {
             self.emit_constant(
-                if is_thunk {
+                if is_suspended_thunk {
                     Value::Thunk(Thunk::new_suspended(lambda, span))
                 } else {
                     Value::Closure(Closure::new(lambda))
@@ -943,7 +943,7 @@ impl Compiler<'_> {
         let blueprint_idx = self.chunk().push_constant(Value::Blueprint(lambda));
 
         let code_idx = self.push_op(
-            if is_thunk {
+            if is_suspended_thunk {
                 OpCode::OpThunkSuspended(blueprint_idx)
             } else {
                 OpCode::OpThunkClosure(blueprint_idx)
@@ -958,7 +958,7 @@ impl Compiler<'_> {
             compiled.captures_with_stack,
         );
 
-        if !is_thunk && !self.scope()[outer_slot].needs_finaliser {
+        if !is_suspended_thunk && !self.scope()[outer_slot].needs_finaliser {
             if !self.scope()[outer_slot].must_thunk {
                 // The closure has upvalues, but is not recursive.  Therefore no thunk is required,
                 // which saves us the overhead of Rc<RefCell<>>
