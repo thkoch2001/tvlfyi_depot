@@ -24,6 +24,30 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "649c45ab_88c911cc",
+        "filename": "docs/REVIEWS.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 167,
+      "author": {
+        "id": 1000066
+      },
+      "writtenOn": "2022-10-18T09:45:09Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "395e9076_4b07a6ac",
+      "range": {
+        "startLine": 167,
+        "startChar": 0,
+        "endLine": 167,
+        "endChar": 65
+      },
+      "revId": "fe0a340a5af7c26554744881b3be0c2aa9d3dd7d",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "fc176144_bc6acf9b",
@@ -37,6 +61,30 @@
       "writtenOn": "2022-10-18T09:39:02Z",
       "side": 1,
       "message": "Or, again, you can add them to the attention set manually by hovering over their name and clicking \"Add to attention set\"",
+      "range": {
+        "startLine": 176,
+        "startChar": 0,
+        "endLine": 176,
+        "endChar": 64
+      },
+      "revId": "fe0a340a5af7c26554744881b3be0c2aa9d3dd7d",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f8b3bc7e_416bf993",
+        "filename": "docs/REVIEWS.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 176,
+      "author": {
+        "id": 1000066
+      },
+      "writtenOn": "2022-10-18T09:45:09Z",
+      "side": 1,
+      "message": "Wow that is an incredibly nonintuitive UI.",
+      "parentUuid": "fc176144_bc6acf9b",
       "range": {
         "startLine": 176,
         "startChar": 0,
