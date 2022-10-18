@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "23b459ae_a408dba0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 12
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000066
+      },
+      "writtenOn": "2022-10-18T07:43:12Z",
+      "side": 1,
+      "message": "Updated to eliminate the need for an additional variant.  Thanks to @sterni for prodding me to find a way to do that.\n\nLatest patchset also does a better job of compiling closures: an `Rc\u003cRefCell\u003c\u003e\u003e` is now created only for closures which do not have self-references or deferred upvalues, instead of for *all* closures.  This should allow more accurate aliasing analysis from rustc and eliminate a bunch of heap allocations.",
+      "revId": "13125d682b75211908b8fb3cf6b73dbadb8caf73",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
