@@ -47,6 +47,7 @@ default = [ "repl", "impure", "arbitrary" ]
 # Enables running the Nix language test suite from the original C++
 # Nix implementation (at version 2.3) against Tvix.
 nix_tests = []
+expected_failures = []
 
 # Enables building the binary (tvix-eval REPL)
 repl = [ "dep:rustyline", "dep:clap" ]
