@@ -1,0 +1,67 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b8ce3765_17f44c39",
+        "filename": "tvix/eval/src/tests/mod.rs",
+        "patchSetId": 3
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2022-10-18T11:40:52Z",
+      "side": 1,
+      "message": "notyetpassing, no?",
+      "range": {
+        "startLine": 27,
+        "startChar": 85,
+        "endLine": 27,
+        "endChar": 98
+      },
+      "revId": "12c0ba5ca305a0c2d8e3d5a0b0f64444b2927c12",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "57ccfce7_76bf4704",
+        "filename": "tvix/eval/src/tests/mod.rs",
+        "patchSetId": 3
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2022-10-18T11:40:52Z",
+      "side": 1,
+      "message": "nit: could be:\n```\nassert_ne!(result_str, exp.trim(), \"test passed unexpectedly!  consider moving it out of notpassingyet\");\n```",
+      "range": {
+        "startLine": 26,
+        "startChar": 20,
+        "endLine": 28,
+        "endChar": 21
+      },
+      "revId": "12c0ba5ca305a0c2d8e3d5a0b0f64444b2927c12",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e5055996_5c145c90",
+        "filename": "tvix/eval/src/tests/mod.rs",
+        "patchSetId": 3
+      },
+      "lineNbr": 105,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2022-10-18T11:40:52Z",
+      "side": 1,
+      "message": "should this go away?",
+      "revId": "12c0ba5ca305a0c2d8e3d5a0b0f64444b2927c12",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}

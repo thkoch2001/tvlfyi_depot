@@ -46,6 +46,30 @@
       },
       "revId": "a897d51eb2a072f56c5e428022f52730755c0f64",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "477f8a33_17756473",
+        "filename": "tvix/eval/src/tests/mod.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 98,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2022-10-18T11:40:52Z",
+      "side": 1,
+      "message": "yeah, xfail has been on my cargo test wishlist for a while now.",
+      "parentUuid": "b045200a_82186367",
+      "range": {
+        "startLine": 96,
+        "startChar": 0,
+        "endLine": 98,
+        "endChar": 30
+      },
+      "revId": "a897d51eb2a072f56c5e428022f52730755c0f64",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
