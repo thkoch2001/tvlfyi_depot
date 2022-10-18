@@ -16,6 +16,24 @@
       "message": "As noted by sterni, these builtins are not in nix 2.3 (but are on nix 2.4). Hence why the current CI failure. ",
       "revId": "73089c84d8c6bc0a9d34717d5554e1c1f0422b5d",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fc032f18_e3e5c093",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2022-10-18T10:39:21Z",
+      "side": 1,
+      "message": "we\u0027ll need to ignore them [here](https://cs.tvl.fyi/depot/-/blob/tvix/eval/default.nix?L110-111)",
+      "parentUuid": "5eeaebca_bbdc91a3",
+      "revId": "73089c84d8c6bc0a9d34717d5554e1c1f0422b5d",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
