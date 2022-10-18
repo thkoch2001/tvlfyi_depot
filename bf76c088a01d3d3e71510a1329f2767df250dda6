@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0aaf6203_bf3154ef",
+        "filename": "tvix/eval/src/opcode.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2022-10-18T10:38:02Z",
+      "side": 1,
+      "message": "nit: I think this would read slightly nicer as a full stop.",
+      "range": {
+        "startLine": 30,
+        "startChar": 41,
+        "endLine": 30,
+        "endChar": 44
+      },
+      "revId": "bf76c088a01d3d3e71510a1329f2767df250dda6",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cdb8e039_70c13bcd",
+        "filename": "tvix/eval/src/opcode.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2022-10-18T10:38:02Z",
+      "side": 1,
+      "message": "same here",
+      "range": {
+        "startLine": 38,
+        "startChar": 8,
+        "endLine": 38,
+        "endChar": 10
+      },
+      "revId": "bf76c088a01d3d3e71510a1329f2767df250dda6",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
