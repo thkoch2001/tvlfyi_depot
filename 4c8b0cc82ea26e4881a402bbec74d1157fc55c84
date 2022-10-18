@@ -46,6 +46,30 @@
       },
       "revId": "4c8b0cc82ea26e4881a402bbec74d1157fc55c84",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "782b0b91_2c2f0f56",
+        "filename": "tvix/eval/src/opcode.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1000066
+      },
+      "writtenOn": "2022-10-18T09:41:55Z",
+      "side": 1,
+      "message": "I agree that it is absolute within the relevant callframe.\n\nBut we don\u0027t create a fresh `Vec\u003cValue\u003e` for each callframe, nor do we pass around subslices of `VM::stack` (for some reason the code always passes references to the whole stack).\n\nIt\u0027s an implementation detail that has unfortunately leaked into the rest of the codebase.\n\nI tried to introduce a new `struct StackFrame` to represent subslices of `VM::stack`, so we can properly hide the implementation detail.  It turned out to be harder than I thought, but I may go back to that.  If I succeed I will definitely remove this comment.",
+      "parentUuid": "b6e4be5e_a4e9716f",
+      "range": {
+        "startLine": 31,
+        "startChar": 4,
+        "endLine": 31,
+        "endChar": 17
+      },
+      "revId": "4c8b0cc82ea26e4881a402bbec74d1157fc55c84",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
