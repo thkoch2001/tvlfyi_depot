@@ -49,6 +49,14 @@ mod arbitrary {
 }
 
 impl NixList {
+    pub fn new() -> Self {
+        Self(vec![])
+    }
+
+    pub fn push(&mut self, val: Value) {
+        self.0.push(val)
+    }
+
     pub fn concat(&self, other: &Self) -> Self {
         let mut lhs = self.clone();
         let mut rhs = other.clone();
