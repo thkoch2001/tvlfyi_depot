@@ -22,6 +22,30 @@
       },
       "revId": "a897d51eb2a072f56c5e428022f52730755c0f64",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b045200a_82186367",
+        "filename": "tvix/eval/src/tests/mod.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 98,
+      "author": {
+        "id": 1000066
+      },
+      "writtenOn": "2022-10-18T11:32:32Z",
+      "side": 1,
+      "message": "Hey that\u0027s a good idea.\n\nI really wish `cargo test` had more outcomes than just pass/fail, but for our needs I guess expecting the not-yet-passing tests to fail is close enough.",
+      "parentUuid": "963f3ea2_861bd50c",
+      "range": {
+        "startLine": 96,
+        "startChar": 0,
+        "endLine": 98,
+        "endChar": 30
+      },
+      "revId": "a897d51eb2a072f56c5e428022f52730755c0f64",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
