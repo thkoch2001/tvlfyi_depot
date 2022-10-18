@@ -10,6 +10,7 @@ TVL Code Reviews
     - [Review process & approvals](#review-process--approvals)
     - [Registration](#registration)
     - [Submitting changes via email](#submitting-changes-via-email)
+    - [Gerrit for Github users](#gerrit-for-github-users)
 
 <!-- markdown-toc end -->
 
@@ -145,6 +146,37 @@ Create an appropriate commit locally and send it us using either of these option
 
 The email address is a [public group][].
 
+## Gerrit for Github Users
+
+There is a walkthrough that describes [only the parts that differ
+from Github][github-diff], although it does not cover [attention
+sets][], which are important to understand.
+
+### Attention Sets
+
+The attention set of a CL is somewhat similar to the set of Github
+users who have unread notifications for a PR.  The "your turn" list
+on the dashboard is similar to your unread notifications list in
+Github.  These similarities are only rough approximations, however.
+
+Unfortunately the rules for updating attention sets are very
+different and complex.  If you don't read and understand them, you
+may end up leaving comments that nobody ever finds out about.  Here
+are a few unexpected features:
+
+- Voting on or replying to a CL will remove you from the attention
+  set.  You can also do this by clicking on the gray chevron shape
+  next to your name.
+
+- If you comment on a merged or abandoned change without marking
+  your comment "unresolved", *nobody will be notified of your
+  comment*.  If you want to the owner of a merged or abandoned
+  change to read your comment, you must mark it as "unresolved".
+
+There are many more [rules][attention-set-rules], which you should
+read.
+
+
 [Gerrit SSH]: https://cl.tvl.fyi/settings/#SSHKeys
 [Gerrit walkthrough]: https://gerrit-review.googlesource.com/Documentation/intro-gerrit-walkthrough.html
 [OWNERS]: https://cl.tvl.fyi/plugins/owners/Documentation/config.md
@@ -152,3 +184,6 @@ The email address is a [public group][].
 [ops-users]: ../ops/users/default.nix
 [public group]: https://groups.google.com/a/tazj.in/forum/?hl=en#!forum/depot
 [hackint]: https://hackint.org
+[github-diff]: https://gerrit.wikimedia.org/r/Documentation/intro-gerrit-walkthrough-github.html
+[attention sets]: https://gerrit-review.googlesource.com/Documentation/user-attention-set.html
+[attention-set-rules]: https://gerrit-review.googlesource.com/Documentation/user-attention-set.html#_rules
