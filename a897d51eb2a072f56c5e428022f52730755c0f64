@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "963f3ea2_861bd50c",
+        "filename": "tvix/eval/src/tests/mod.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 98,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2022-10-18T10:41:37Z",
+      "side": 1,
+      "message": "could we *actually* make these expected failures, perhaps, so that if we accidentally fix one of the tests we get a build failure which pokes us towards moving them to expected passing?",
+      "range": {
+        "startLine": 96,
+        "startChar": 0,
+        "endLine": 98,
+        "endChar": 30
+      },
+      "revId": "a897d51eb2a072f56c5e428022f52730755c0f64",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
