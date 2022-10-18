@@ -24,6 +24,30 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "f91d3738_75efa58a",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1000066
+      },
+      "writtenOn": "2022-10-18T09:31:27Z",
+      "side": 1,
+      "message": "Yeah, I get it.  It\u0027s an upvalue, but not in `upvalues`.  So maybe `Upvalues::upvalues` needs a better name...",
+      "parentUuid": "b8e21b65_9b17c637",
+      "range": {
+        "startLine": 14,
+        "startChar": 26,
+        "endLine": 14,
+        "endChar": 64
+      },
+      "revId": "3785d8746afa0f6eb53375ab76e09982cb24cec3",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "9b4c5c9b_f49a3ef9",
@@ -61,6 +85,30 @@
       "side": 1,
       "message": "Fixed in cl/7031",
       "parentUuid": "9b4c5c9b_f49a3ef9",
+      "range": {
+        "startLine": 15,
+        "startChar": 6,
+        "endLine": 16,
+        "endChar": 41
+      },
+      "revId": "3785d8746afa0f6eb53375ab76e09982cb24cec3",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "95d0fa20_f0cdf647",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1000066
+      },
+      "writtenOn": "2022-10-18T09:31:27Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e17687dd_a470efc1",
       "range": {
         "startLine": 15,
         "startChar": 6,
@@ -111,6 +159,30 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "b12032dc_6b9cf931",
+        "filename": "tvix/eval/src/upvalues.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1000066
+      },
+      "writtenOn": "2022-10-18T09:31:27Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c47e0e71_d86f946c",
+      "range": {
+        "startLine": 24,
+        "startChar": 34,
+        "endLine": 24,
+        "endChar": 39
+      },
+      "revId": "3785d8746afa0f6eb53375ab76e09982cb24cec3",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "1af4b7c3_a19bb7af",
@@ -134,6 +206,30 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "272696ca_1ca49661",
+        "filename": "tvix/eval/src/upvalues.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 1000066
+      },
+      "writtenOn": "2022-10-18T09:31:27Z",
+      "side": 1,
+      "message": "That is an excellent name for them.",
+      "parentUuid": "1af4b7c3_a19bb7af",
+      "range": {
+        "startLine": 28,
+        "startChar": 7,
+        "endLine": 28,
+        "endChar": 31
+      },
+      "revId": "3785d8746afa0f6eb53375ab76e09982cb24cec3",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "91ac3ef8_9f297363",
@@ -147,6 +243,30 @@
       "writtenOn": "2022-10-17T09:47:10Z",
       "side": 1,
       "message": "it happens at compile time, not at parse time, and it\u0027s not really an arbitrary integer identifier, it\u0027s a stack offset.\n\nMore specifically, the compiler tracks locals (all known bound identifiers) and their stack slots. The IDs of locals don\u0027t exist at runtime anymore, they\u0027re used by the compiler to figure out initialisation order (e.g. to answer questions like \"is this identifier already bound to a value at this point?\").\n\nSame thing happens for upvalues, as we just track their offset in the upvalues vector. It seems a bit strange to call it a `Map\u003cusize, Value\u003e` because the index of the thing in the vector _is_ its \"ID\" (it\u0027s not a \"representation of\" its ID)",
+      "range": {
+        "startLine": 33,
+        "startChar": 8,
+        "endLine": 33,
+        "endChar": 52
+      },
+      "revId": "3785d8746afa0f6eb53375ab76e09982cb24cec3",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9a939499_1d4aff11",
+        "filename": "tvix/eval/src/upvalues.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 1000066
+      },
+      "writtenOn": "2022-10-18T09:31:27Z",
+      "side": 1,
+      "message": "\u003e More specifically, the compiler tracks locals (all known bound identifiers) and their stack slots.\n\nYeah, I got more familiar with that part of the compiler since I submitted this CL.\n\nI still think the StackIdx-vs-LocalIdx thing is incredibly confusing though.  I have a lot of trouble figuring out which is which.",
+      "parentUuid": "91ac3ef8_9f297363",
       "range": {
         "startLine": 33,
         "startChar": 8,
