@@ -37,6 +37,23 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "c0459ff7_f7d39988",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000066
+      },
+      "writtenOn": "2022-10-18T10:05:56Z",
+      "side": 1,
+      "message": "I have to admit I have kinda lost my motivation for this PR.  @qyliss, are you by any chance interested in taking over?  You put a lot of effort into compiling that list; at this point the PR is really more your work than it is mine.\n\nI really have no strong opinions -- or for that matter any opinions at all -- about the routine that nix uses to infer its kooky doubles.\n\nNix doubles are fundamentally lossy and lack essential information.  Frankly I think nixpkgs should work gradually toward eliminating any use of them.  And in fact, on mips64 nixpkgs doesn\u0027t use them at all -- because it can\u0027t.  Nix doubles are ambiguous on mips64, so I haven\u0027t submitted the PR to make use of `builtins.currentSystem` on that platform, and I never will.\n\nTo summarize: I find it hard to muster any motivation to improve anything related to nix doubles beyond the bare minimum needed to make tests pass and (someday) have nixpkgs not barf.  I would be quite happy if you would take over dealing with this.",
+      "revId": "f8d262004e0977ce4481fbc7484dcae6dd51ab41",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "3181d40a_107f6426",
         "filename": "tvix/eval/src/systems.rs",
         "patchSetId": 5
