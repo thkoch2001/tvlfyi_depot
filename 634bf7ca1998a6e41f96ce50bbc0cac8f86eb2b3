@@ -120,6 +120,30 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "217850bd_fd30d286",
+        "filename": "tvix/eval/src/builtins/mod.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 194,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2022-10-18T11:31:36Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0f7d2ef1_b29ef271",
+      "range": {
+        "startLine": 194,
+        "startChar": 20,
+        "endLine": 194,
+        "endChar": 23
+      },
+      "revId": "634bf7ca1998a6e41f96ce50bbc0cac8f86eb2b3",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "08cc69cb_53c23c12",
@@ -133,6 +157,30 @@
       "writtenOn": "2022-10-15T20:07:43Z",
       "side": 1,
       "message": "Function does not actually return anything, but communicates through interior mutability",
+      "range": {
+        "startLine": 336,
+        "startChar": 78,
+        "endLine": 337,
+        "endChar": 30
+      },
+      "revId": "634bf7ca1998a6e41f96ce50bbc0cac8f86eb2b3",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8278920a_6b721b35",
+        "filename": "tvix/eval/src/value/mod.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 337,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2022-10-18T11:31:36Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "08cc69cb_53c23c12",
       "range": {
         "startLine": 336,
         "startChar": 78,
@@ -180,6 +228,30 @@
       "side": 1,
       "message": "+1",
       "parentUuid": "ee98918a_280ddb29",
+      "range": {
+        "startLine": 338,
+        "startChar": 18,
+        "endLine": 338,
+        "endChar": 28
+      },
+      "revId": "634bf7ca1998a6e41f96ce50bbc0cac8f86eb2b3",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e95f539c_eb227752",
+        "filename": "tvix/eval/src/value/mod.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 338,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2022-10-18T11:31:36Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "17f490bc_4606583a",
       "range": {
         "startLine": 338,
         "startChar": 18,
