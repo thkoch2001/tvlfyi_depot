@@ -34,6 +34,24 @@
       "parentUuid": "5eeaebca_bbdc91a3",
       "revId": "73089c84d8c6bc0a9d34717d5554e1c1f0422b5d",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "71a68600_0210620a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000059
+      },
+      "writtenOn": "2022-10-19T13:00:44Z",
+      "side": 1,
+      "message": "I added the exceptions for testing as well as a TODO. Does that work for you ?",
+      "parentUuid": "fc032f18_e3e5c093",
+      "revId": "73089c84d8c6bc0a9d34717d5554e1c1f0422b5d",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
