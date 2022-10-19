@@ -24,6 +24,30 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "9d9ee476_77867c5f",
+        "filename": "tvix/eval/src/tests/mod.rs",
+        "patchSetId": 3
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1000066
+      },
+      "writtenOn": "2022-10-19T04:42:09Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b8ce3765_17f44c39",
+      "range": {
+        "startLine": 27,
+        "startChar": 85,
+        "endLine": 27,
+        "endChar": 98
+      },
+      "revId": "12c0ba5ca305a0c2d8e3d5a0b0f64444b2927c12",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "57ccfce7_76bf4704",
@@ -47,6 +71,30 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "4016d34e_c739c2f3",
+        "filename": "tvix/eval/src/tests/mod.rs",
+        "patchSetId": 3
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 1000066
+      },
+      "writtenOn": "2022-10-19T04:42:09Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "57ccfce7_76bf4704",
+      "range": {
+        "startLine": 26,
+        "startChar": 20,
+        "endLine": 28,
+        "endChar": 21
+      },
+      "revId": "12c0ba5ca305a0c2d8e3d5a0b0f64444b2927c12",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "e5055996_5c145c90",
@@ -60,6 +108,24 @@
       "writtenOn": "2022-10-18T11:40:52Z",
       "side": 1,
       "message": "should this go away?",
+      "revId": "12c0ba5ca305a0c2d8e3d5a0b0f64444b2927c12",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3295ca17_734e8832",
+        "filename": "tvix/eval/src/tests/mod.rs",
+        "patchSetId": 3
+      },
+      "lineNbr": 105,
+      "author": {
+        "id": 1000066
+      },
+      "writtenOn": "2022-10-19T04:42:09Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e5055996_5c145c90",
       "revId": "12c0ba5ca305a0c2d8e3d5a0b0f64444b2927c12",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
