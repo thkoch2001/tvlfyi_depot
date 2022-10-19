@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7b1ad75a_fc3b1211",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 18
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-10-19T10:31:08Z",
+      "side": 1,
+      "message": "fwiw, I don\u0027t think this is the optimal structure for this yet, but I kinda see where it\u0027s going - lets get this in before the CL gets larger and more complex - it\u0027s always easier to refactor more once we\u0027ve all got the same tree",
+      "revId": "b2dee65569be79eeb7a9862399b8cd0c44424697",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
