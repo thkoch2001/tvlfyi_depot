@@ -26,6 +26,8 @@ in
     systems = [ builtins.currentSystem ];
   }).build."${builtins.currentSystem}";
 
+  nix_latest = super.nix;
+
   clang-tools_11 = self.clang-tools.override {
     llvmPackages = self.llvmPackages_11;
   };
