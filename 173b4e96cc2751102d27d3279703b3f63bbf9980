@@ -24,6 +24,30 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "9946305f_3660091c",
+        "filename": "tvix/eval/src/builtins/mod.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 514,
+      "author": {
+        "id": 1000059
+      },
+      "writtenOn": "2022-10-19T12:45:41Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1e4b4509_a2ce8895",
+      "range": {
+        "startLine": 514,
+        "startChar": 27,
+        "endLine": 514,
+        "endChar": 36
+      },
+      "revId": "173b4e96cc2751102d27d3279703b3f63bbf9980",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "39f224bb_1316e026",
@@ -49,6 +73,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "f5ea2c52_53571c65",
+        "filename": "tvix/eval/src/builtins/mod.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 523,
+      "author": {
+        "id": 1000059
+      },
+      "writtenOn": "2022-10-19T12:45:41Z",
+      "side": 1,
+      "message": "Running depotfmt doesn\u0027t seem to fix that (nor warn about it) so I\u0027m not sure where the enforcing has been decided ? (Fixed anyway)",
+      "parentUuid": "39f224bb_1316e026",
+      "range": {
+        "startLine": 521,
+        "startChar": 15,
+        "endLine": 523,
+        "endChar": 48
+      },
+      "revId": "173b4e96cc2751102d27d3279703b3f63bbf9980",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "3bef9d1c_aff95087",
         "filename": "tvix/eval/src/builtins/mod.rs",
         "patchSetId": 2
@@ -60,6 +108,24 @@
       "writtenOn": "2022-10-18T11:33:48Z",
       "side": 1,
       "message": "I\u0027m not quite sure what this comment means",
+      "revId": "173b4e96cc2751102d27d3279703b3f63bbf9980",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fff2c3ba_ecbf6832",
+        "filename": "tvix/eval/src/builtins/mod.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 527,
+      "author": {
+        "id": 1000059
+      },
+      "writtenOn": "2022-10-19T12:45:41Z",
+      "side": 1,
+      "message": "I get the following error : \n```\n   Compiling tvix-eval v0.1.0 (/home/j4m3s/Projects/tvl/code.tvl.fyi/tvix/eval)\nerror[E0716]: temporary value dropped while borrowed\n   --\u003e src/builtins/mod.rs:528:36\n    |\n528 |                         let from \u003d elem.0?.as_str();\n    |                                    ^^^^^^^         - temporary value is freed at the end of this statement\n    |                                    |\n    |                                    creates a temporary which is freed while still in use\n...\n532 |                         if i + \u0026from.len() \u003e\u003d string.len() {\n    |                                 ---------- borrow later used here\n    |\n    \u003d note: consider using a `let` binding to create a longer lived value\n\nFor more information about this error, try `rustc --explain E0716`.\nerror: could not compile `tvix-eval` due to previous error\n```\nWhich I can fix by doing the shadowing in the code. I\u0027m not quite sure how to fix it otherwise. If you have a solution (and maybe an explanation), I\u0027m all ears!",
+      "parentUuid": "3bef9d1c_aff95087",
       "revId": "173b4e96cc2751102d27d3279703b3f63bbf9980",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
