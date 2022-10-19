@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ed9d7414_3369f4d6",
+        "filename": "tvix/eval/src/compiler/mod.rs",
+        "patchSetId": 3
+      },
+      "lineNbr": 886,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-10-19T10:30:28Z",
+      "side": 1,
+      "message": "I don\u0027t really like this renaming, \"a suspension\" is not something we talk about really. Being suspended is just a state of a thunk. \"Thunk\" is the term we\u0027re all familiar with, the fact that closures have a partial unification with thunks during construction now is an implementation detail. I\u0027d leave this as is",
+      "range": {
+        "startLine": 886,
+        "startChar": 7,
+        "endLine": 886,
+        "endChar": 36
+      },
+      "revId": "e0cd85e23c721503d6ea3345a1f90a0287dd4db1",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
