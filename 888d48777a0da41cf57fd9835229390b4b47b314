@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f88162ac_8b54720d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-10-19T10:36:40Z",
+      "side": 1,
+      "message": "I think we\u0027ll want to experiment with persistent data structures, but before we do that I want to eval nixpkgs so that we can actually see the impact it has.",
+      "revId": "888d48777a0da41cf57fd9835229390b4b47b314",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
