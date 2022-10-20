@@ -305,11 +305,11 @@ rec {
     inherit (step) depends_on;
     group = label;
     skip = parent.skip or false;
+    branches = step.branches or [];
 
     steps = [
       {
-        inherit (step) branches;
-        inherit prompt;
+        inherit prompt branches;
         block = ":radio_button: Run ${label}? (from ${parent.env.READTREE_TARGET})";
       }
 
