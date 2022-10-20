@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6a80a049_0a7f5a1a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-10-20T17:39:37Z",
+      "side": 1,
+      "message": "So after thinking about this for a bit longer I think that I\u0027m still of the opinion I said on IRC a few days ago: This should be a separate error variant.\n\nIf this kind of error has specific behaviour attached to handling it that means it\u0027s a new ErrorKind; we pay the cost for those mostly at compile time anyways so lets just add one.",
+      "revId": "1c827f65893bd2b343d98648afb0356b3b9fbd5e",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
