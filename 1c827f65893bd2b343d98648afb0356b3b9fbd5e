@@ -16,6 +16,24 @@
       "message": "So after thinking about this for a bit longer I think that I\u0027m still of the opinion I said on IRC a few days ago: This should be a separate error variant.\n\nIf this kind of error has specific behaviour attached to handling it that means it\u0027s a new ErrorKind; we pay the cost for those mostly at compile time anyways so lets just add one.",
       "revId": "1c827f65893bd2b343d98648afb0356b3b9fbd5e",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7304b6da_82f66e2c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2022-10-20T22:57:09Z",
+      "side": 1,
+      "message": "Amended this change to my original cl/7025 which was done in that spirit. I\u0027ll keep this CL around, since I think it\u0027d be interesting to see what impact being strict here has, but that would need benchmarking definitely.",
+      "parentUuid": "6a80a049_0a7f5a1a",
+      "revId": "1c827f65893bd2b343d98648afb0356b3b9fbd5e",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
