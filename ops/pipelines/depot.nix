@@ -8,7 +8,7 @@ let
   # flawed changes.
   protoCheck = {
     command = "${depot.nix.bufCheck}/bin/ci-buf-check";
-    label = ":water_buffalo:";
+    label = ":water_buffalo: protoCheck";
   };
 
   pipeline = depot.nix.buildkite.mkPipeline {
