@@ -18,19 +18,25 @@ message ScanRequest {
   string attr = 2;
   // Optionally, the attr to evaluate can be provided as a path to a folder or a
   // .nix file.  This is used by the HTTP service.
+  // buf:lint:ignore FIELD_LOWER_SNAKE_CASE
   string attrAsPath = 3;
 }
 
 message ScanResponse {
+  // buf:lint:ignore FIELD_LOWER_SNAKE_CASE
   repeated string depotPath = 1;
+  // buf:lint:ignore FIELD_LOWER_SNAKE_CASE
   repeated string nixStorePath = 2;
+  // buf:lint:ignore FIELD_LOWER_SNAKE_CASE
   repeated string corePkgsPath = 4;
+  // buf:lint:ignore FIELD_LOWER_SNAKE_CASE
   repeated string otherPath = 3;
 
   bytes derivation = 5;
 }
 
 message ArchiveRequest {
+  // buf:lint:ignore FIELD_LOWER_SNAKE_CASE
   repeated string depotPath = 1;
 }
 
