@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e37d5411_1cfe26d7",
+        "filename": "tvix/eval/src/value/display.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2022-10-22T17:11:51Z",
+      "side": 1,
+      "message": "I\u0027m not sure this *quite* passes the threshold at which I\u0027d put it in its own module, personally (unless you do all the impls for TotalDisplay here, which I think should work) but also I don\u0027t care *that* much",
+      "revId": "4aebf45797de33f9133801980b6d5e41de1ccc83",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
