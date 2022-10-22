@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d68341ae_bc25a8d7",
+        "filename": "tvix/eval/src/value/thunk.rs",
+        "patchSetId": 9
+      },
+      "lineNbr": 77,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2022-10-22T17:09:09Z",
+      "side": 1,
+      "message": "kinda feel like this might be nice to have in its own CL",
+      "range": {
+        "startLine": 76,
+        "startChar": 16,
+        "endLine": 77,
+        "endChar": 36
+      },
+      "revId": "5349cc21de2b0757dc05a95ba7ddec9e69686043",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c30c5886_983d6796",
+        "filename": "tvix/eval/src/value/thunk.rs",
+        "patchSetId": 9
+      },
+      "lineNbr": 215,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2022-10-22T17:09:09Z",
+      "side": 1,
+      "message": "I think this name is quite misleading, given that it mutates `self`. I would prefer if we just defer to the naming of the equivalent method in the rust stdlib and call this `insert` (and invert the boolean)",
+      "range": {
+        "startLine": 215,
+        "startChar": 11,
+        "endLine": 215,
+        "endChar": 20
+      },
+      "revId": "5349cc21de2b0757dc05a95ba7ddec9e69686043",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
