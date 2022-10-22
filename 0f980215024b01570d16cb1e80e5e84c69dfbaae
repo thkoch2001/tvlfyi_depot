@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d8446724_367bbd19",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-10-22T12:33:22Z",
+      "side": 1,
+      "message": "This is phrased like it\u0027s a change for all of our targets, it should prob. mention that this is only about the protoCheck (otherwise it looks very confusing when looking at the history of that particular file)",
+      "range": {
+        "startLine": 7,
+        "startChar": 0,
+        "endLine": 7,
+        "endChar": 53
+      },
+      "revId": "0f980215024b01570d16cb1e80e5e84c69dfbaae",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
