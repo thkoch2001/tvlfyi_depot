@@ -95,6 +95,30 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "a5ff18fe_7896ac50",
+        "filename": "tvix/eval/src/builtins/mod.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 523,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-10-22T13:55:56Z",
+      "side": 1,
+      "message": "It\u0027s not enforced, just a convention.",
+      "parentUuid": "f5ea2c52_53571c65",
+      "range": {
+        "startLine": 521,
+        "startChar": 15,
+        "endLine": 523,
+        "endChar": 48
+      },
+      "revId": "173b4e96cc2751102d27d3279703b3f63bbf9980",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "3bef9d1c_aff95087",
