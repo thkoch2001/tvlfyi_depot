@@ -539,6 +539,15 @@ fn pure_builtins() -> Vec<Builtin> {
             // second and ignore the first
             Ok(args.pop().unwrap())
         }),
+        Builtin::new("sort", &[true, true], |args: Vec<Value>, vm: &mut VM| {
+            let mut res = args[1].to_list()?;
+            crate::util::sort::fallible_merge_sort(&mut res, |a: &Value, b: &Value| {
+                vm.call_with(&args[0], [a.clone(), b.clone()])?
+                    .force(vm)?
+                    .as_bool()
+            })?;
+            Ok(Value::List(res))
+        }),
         Builtin::new("splitVersion", &[true], |args: Vec<Value>, _: &mut VM| {
             let s = args[0].to_str()?;
             let s = VersionPartsIter::new(s.as_str());
