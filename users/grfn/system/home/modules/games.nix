@@ -55,7 +55,7 @@ mkMerge [
   (mkIf stdenv.isLinux {
     home.packages = [
       df
-      polymc
+      prismlauncher
     ];
   })
 ]
