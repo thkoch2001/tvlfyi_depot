@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f654edb9_8189532f",
+        "filename": "tvix/eval/src/builtins/mod.rs",
+        "patchSetId": 9
+      },
+      "lineNbr": 653,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2022-10-23T15:18:26Z",
+      "side": 1,
+      "message": "can probably change later, but might be nice to do this via a loop over function names.",
+      "range": {
+        "startLine": 646,
+        "startChar": 4,
+        "endLine": 653,
+        "endChar": 6
+      },
+      "revId": "f621f66482ae43db232d18cad18d27b4e5540bce",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
