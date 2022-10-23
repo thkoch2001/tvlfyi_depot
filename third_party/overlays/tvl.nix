@@ -72,12 +72,12 @@ in
   # TODO(tazjin): ugrade tdlib (+ telega?!) in nixpkgs
   tdlib = assert super.tdlib.version == "1.8.3";
     super.tdlib.overrideAttrs (old: {
-      version = "1.8.4";
+      version = "1.8.7";
       src = self.fetchFromGitHub {
         owner = "tdlib";
         repo = "td";
-        rev = "7eabd8ca60de025e45e99d4e5edd39f4ebd9467e";
-        sha256 = "1chs0ibghjj275v9arsn3k68ppblpm7ysqk0za9kya5vdnldlld5";
+        rev = "a7a17b34b3c8fd3f7f6295f152746beb68f34d83";
+        sha256 = "sha256:0a5609knn7rmiiblz315yrvc9f2r207l2nl6brjy5bnhjdspmzs6";
       };
     });
 
