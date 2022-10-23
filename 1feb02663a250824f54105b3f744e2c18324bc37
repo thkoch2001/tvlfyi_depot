@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f57c1afc_2ea556ac",
+        "filename": "tvix/eval/src/value/mod.rs",
+        "patchSetId": 3
+      },
+      "lineNbr": 338,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-10-23T23:03:53Z",
+      "side": 1,
+      "message": "Hmm, I think we\u0027re not handling thunks correctly here (though that bug is presumably already present?)",
+      "revId": "1feb02663a250824f54105b3f744e2c18324bc37",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
