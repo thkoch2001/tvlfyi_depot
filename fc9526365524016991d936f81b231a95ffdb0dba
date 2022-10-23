@@ -16,6 +16,24 @@
       "message": "Could be nice to have at least sanity checks for such warnings (and errors maybe?) eventually!",
       "revId": "fc9526365524016991d936f81b231a95ffdb0dba",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "690218b3_3d242f14",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2022-10-23T15:18:58Z",
+      "side": 1,
+      "message": "+1",
+      "parentUuid": "958f44cc_46636648",
+      "revId": "fc9526365524016991d936f81b231a95ffdb0dba",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
