@@ -16,6 +16,24 @@
       "message": "Hmm, I think we\u0027re not handling thunks correctly here (though that bug is presumably already present?)",
       "revId": "1feb02663a250824f54105b3f744e2c18324bc37",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a398559b_d77d7874",
+        "filename": "tvix/eval/src/value/mod.rs",
+        "patchSetId": 3
+      },
+      "lineNbr": 338,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-10-23T23:13:46Z",
+      "side": 1,
+      "message": "Aha, I missed that Value::force !\u003d Thunk::force, so I guess it\u0027s correct",
+      "parentUuid": "f57c1afc_2ea556ac",
+      "revId": "1feb02663a250824f54105b3f744e2c18324bc37",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
