@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ba4121eb_7c587bee",
+        "filename": "tvix/eval/src/compiler/mod.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2022-10-23T15:23:12Z",
+      "side": 1,
+      "message": "tbh I\u0027m not sure how I feel about this change - I feel like we lose some semantic value here vs the previous name",
+      "revId": "b7436d29dcc2bdd3bd86ae22ddc2f64ca47af2d1",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "dd9fbfb4_a3c6315c",
+        "filename": "tvix/eval/src/value/function.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2022-10-23T15:23:12Z",
+      "side": 1,
+      "message": "nit: I think this would read a little nicer as a parenthetical rather than a comma phrase",
+      "range": {
+        "startLine": 47,
+        "startChar": 18,
+        "endLine": 48,
+        "endChar": 18
+      },
+      "revId": "b7436d29dcc2bdd3bd86ae22ddc2f64ca47af2d1",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
