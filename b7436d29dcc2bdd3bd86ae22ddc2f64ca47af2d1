@@ -18,6 +18,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "ae5d3509_727b68f5",
+        "filename": "tvix/eval/src/compiler/mod.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-10-23T15:52:02Z",
+      "side": 1,
+      "message": "To me the previous name implied that there\u0027s a \"non anonymous constructor\", but that\u0027s not how the compiler is wired up, and the content of that function is literally equivalent to Default::default. If we juggle around the constructors to set the name earlier or something like that I wouldn\u0027t be opposed to reintroducing named versions, but right now it seems pointless to me.",
+      "parentUuid": "ba4121eb_7c587bee",
+      "revId": "b7436d29dcc2bdd3bd86ae22ddc2f64ca47af2d1",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "dd9fbfb4_a3c6315c",
@@ -31,6 +49,30 @@
       "writtenOn": "2022-10-23T15:23:12Z",
       "side": 1,
       "message": "nit: I think this would read a little nicer as a parenthetical rather than a comma phrase",
+      "range": {
+        "startLine": 47,
+        "startChar": 18,
+        "endLine": 48,
+        "endChar": 18
+      },
+      "revId": "b7436d29dcc2bdd3bd86ae22ddc2f64ca47af2d1",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "89323267_d7ef8199",
+        "filename": "tvix/eval/src/value/function.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-10-23T15:52:02Z",
+      "side": 1,
+      "message": "Done, we have so much Lisp code we may as well nest some parens here, too.",
+      "parentUuid": "dd9fbfb4_a3c6315c",
       "range": {
         "startLine": 47,
         "startChar": 18,
