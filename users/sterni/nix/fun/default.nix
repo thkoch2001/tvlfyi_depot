@@ -192,20 +192,18 @@ let
             # and the list of arguments to pass to be found in args.
             startSet = [
               {
-                key = "0";
-                id = 0;
+                key = 0;
                 final = false;
                 inherit args;
               }
             ];
 
             operator =
-              { id, final, ... }@state:
+              { key, final, ... }@state:
               let
                 # Plumbing to make genericClosure happy
-                newIds = {
-                  key = toString (id + 1);
-                  id = id + 1;
+                newId = {
+                  key = key + 1;
                 };
 
                 # Perform recursion step
@@ -215,10 +213,10 @@ let
                 # otherwise signal that we're done.
                 newState =
                   if builtins.isAttrs call && call.__tailCall or false
-                  then newIds // {
+                  then newId // {
                     final = false;
                     inherit (call) args;
-                  } else newIds // {
+                  } else newId // {
                     final = true;
                     value = call;
                   };
