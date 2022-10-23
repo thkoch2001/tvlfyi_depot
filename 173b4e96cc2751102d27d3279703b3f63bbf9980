@@ -152,6 +152,24 @@
       "parentUuid": "3bef9d1c_aff95087",
       "revId": "173b4e96cc2751102d27d3279703b3f63bbf9980",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "90d31264_52290141",
+        "filename": "tvix/eval/src/builtins/mod.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 527,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2022-10-23T15:15:26Z",
+      "side": 1,
+      "message": "yeah, the rules around lifetimes of temporaries in rust are frequently a little surprising - though honestly in this case I think it\u0027s the kind of thing that\u0027s common enough to be pretty harmless. Personally, I\u0027d remove the comment, since I think it introduces more confusion than it resolves.",
+      "parentUuid": "fff2c3ba_ecbf6832",
+      "revId": "173b4e96cc2751102d27d3279703b3f63bbf9980",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
