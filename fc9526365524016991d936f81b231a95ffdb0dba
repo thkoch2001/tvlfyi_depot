@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "958f44cc_46636648",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2022-10-23T15:00:31Z",
+      "side": 1,
+      "message": "Could be nice to have at least sanity checks for such warnings (and errors maybe?) eventually!",
+      "revId": "fc9526365524016991d936f81b231a95ffdb0dba",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
