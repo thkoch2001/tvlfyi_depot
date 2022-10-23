@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4bac4c01_1bed8cfd",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-10-23T22:46:45Z",
+      "side": 1,
+      "message": "I\u0027d rather not do things this way. Disregarding any discussions about how we\u0027d have to handle license disclaimers in this part of the code (if at all, honestly I have no idea), I think it\u0027s more reasonable to use a method like having a mutable `Option\u003cError\u003e` outside of the sort closure and set it in case of failure from inside of the closure.\n\nIn that case it doesn\u0027t matter what the comparator actually returns if it sets the failure, as long as that is correctly handled outside (e.g. by wrapping it into a Thunk error and returning that as the builtin result).",
+      "revId": "12eea7effab0fb9fa59d60909e69fc136908a112",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
