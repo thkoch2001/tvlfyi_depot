@@ -1,5 +1,5 @@
 //! This module implements Nix lists.
-use std::ops::Deref;
+use std::ops::{Deref, DerefMut};
 
 use crate::errors::ErrorKind;
 use crate::vm::VM;
@@ -128,5 +128,11 @@ impl Deref for NixList {
 
     fn deref(&self) -> &Self::Target {
         &self.0
+    }
+}
+
+impl DerefMut for NixList {
+    fn deref_mut(&mut self) -> &mut Self::Target {
+        &mut self.0
     }
 }
