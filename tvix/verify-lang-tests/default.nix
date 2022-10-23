@@ -51,6 +51,7 @@ let
     "eval-okay-zipAttrsWith.nix" = [ nix ];
     # Comparable lists are not in Nix 2.3
     "eval-okay-sort.nix" = [ nix ];
+    "eval-okay-compare-lists.nix" = true;
     # getAttrPos gains support for functionArgs-returned sets after 2.3
     "eval-okay-getattrpos-functionargs.nix" = [ nix ];
   };
