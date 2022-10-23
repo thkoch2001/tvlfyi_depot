@@ -20,6 +20,7 @@ mod properties;
 mod test_utils;
 #[cfg(test)]
 mod tests;
+mod util;
 
 // Re-export the public interface used by other crates.
 pub use crate::builtins::global_builtins;
