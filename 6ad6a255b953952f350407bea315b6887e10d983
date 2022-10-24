@@ -159,6 +159,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "aab25589_31c6f211",
+        "filename": "tvix/eval/src/systems.rs",
+        "patchSetId": 4
+      },
+      "lineNbr": 65,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-10-24T12:18:08Z",
+      "side": 1,
+      "message": "Acknowledging this because I think the current solution is \"good enough\" for now (as qyliss said).",
+      "parentUuid": "b69fb2fd_a8047d8e",
+      "revId": "6ad6a255b953952f350407bea315b6887e10d983",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "8b07b443_b5e49ad5",
@@ -265,6 +283,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "cab259ef_f2841260",
+        "filename": "tvix/eval/src/systems.rs",
+        "patchSetId": 4
+      },
+      "lineNbr": 113,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-10-24T12:18:08Z",
+      "side": 1,
+      "message": "Acknowledging this because I think the current solution is \"good enough\" for now (as qyliss said).",
+      "parentUuid": "591fea63_27730475",
+      "revId": "6ad6a255b953952f350407bea315b6887e10d983",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "4b946e4f_093bb0f1",
@@ -353,6 +389,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "6a882910_5e388243",
+        "filename": "tvix/eval/src/systems.rs",
+        "patchSetId": 4
+      },
+      "lineNbr": 205,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-10-24T12:18:08Z",
+      "side": 1,
+      "message": "Acknowledging this because I think the current solution is \"good enough\" for now (as qyliss said).",
+      "parentUuid": "24e877d3_64873370",
+      "revId": "6ad6a255b953952f350407bea315b6887e10d983",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "10a4c371_8244d02f",
@@ -402,6 +456,24 @@
       "side": 1,
       "message": "(Unresolving until we\u0027re agreed on config.sub)",
       "parentUuid": "1e8aba2e_bfac15fe",
+      "revId": "6ad6a255b953952f350407bea315b6887e10d983",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1b718529_6359aaac",
+        "filename": "tvix/eval/src/systems.rs",
+        "patchSetId": 4
+      },
+      "lineNbr": 229,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-10-24T12:18:08Z",
+      "side": 1,
+      "message": "Acknowledging this because I think the current solution is \"good enough\" for now (as qyliss said).",
+      "parentUuid": "342b2130_1ab34db6",
       "revId": "6ad6a255b953952f350407bea315b6887e10d983",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }

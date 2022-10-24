@@ -52,6 +52,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "ef12c96c_7bd880cb",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-10-24T12:18:08Z",
+      "side": 1,
+      "message": "I\u0027m adopting this, thanks for the work you put into it so far!",
+      "parentUuid": "c0459ff7_f7d39988",
+      "revId": "f8d262004e0977ce4481fbc7484dcae6dd51ab41",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "3181d40a_107f6426",
@@ -75,6 +93,30 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "27417250_835c0ca5",
+        "filename": "tvix/eval/src/systems.rs",
+        "patchSetId": 5
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-10-24T12:18:08Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "3181d40a_107f6426",
+      "range": {
+        "startLine": 1,
+        "startChar": 40,
+        "endLine": 1,
+        "endChar": 49
+      },
+      "revId": "f8d262004e0977ce4481fbc7484dcae6dd51ab41",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "7eddda56_4fa6f9f4",
@@ -88,6 +130,30 @@
       "writtenOn": "2022-10-15T17:25:33Z",
       "side": 1,
       "message": "I think this check is irrelevant, since we can safely assume that it is the second coordinate. A four-part LLVM triple is always arch-vendor-os-environment.\n\nOTOH succeeding here with an unknown os, but failing in a three triple case would be confusing, so maybe we can just add another case for a 4 triple which has an error message that\u0027s more descriptive, i.e. unknown os.",
+      "range": {
+        "startLine": 25,
+        "startChar": 43,
+        "endLine": 25,
+        "endChar": 63
+      },
+      "revId": "f8d262004e0977ce4481fbc7484dcae6dd51ab41",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "237d0b03_65c36967",
+        "filename": "tvix/eval/src/systems.rs",
+        "patchSetId": 5
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-10-24T12:18:08Z",
+      "side": 1,
+      "message": "Acknowledging this because I think the current solution is \"good enough\" for now (as qyliss said).",
+      "parentUuid": "7eddda56_4fa6f9f4",
       "range": {
         "startLine": 25,
         "startChar": 43,
