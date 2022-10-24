@@ -6,7 +6,7 @@
   because one of the goals was to see how similar this OCaml implementation
   could be to the Python implementation.
 
-  Conclusion: It's pretty easily to switch between the two languages.
+  Conclusion: It's pretty easy to switch between the two languages.
 
   Usage: Recommended compilation settings I hastily found online:
   $ ocamlopt -w +A-42-48 -warn-error +A-3-44 ./register_vm.ml && ./a.out
