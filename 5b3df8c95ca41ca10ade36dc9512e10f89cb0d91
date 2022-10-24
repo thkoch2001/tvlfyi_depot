@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9177df4b_8c56a93b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2022-10-24T13:27:26Z",
+      "side": 1,
+      "message": "We should look into `langVersion` historically again, maybe writing the spec is a good opportunity to do so.\n\nOverall it\u0027s kind of a question how to handle `langVersion` and `nixVersion` going forward, but that\u0027s probably a question for when tvix is usable.",
+      "revId": "5b3df8c95ca41ca10ade36dc9512e10f89cb0d91",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
