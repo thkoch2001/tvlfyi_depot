@@ -7,6 +7,7 @@
  ******************************************************************************)
 
 open Types
+open Debug
 
 (*******************************************************************************
  * Library
@@ -107,25 +108,25 @@ let rec unify (a : _type) (b : _type) : substitution option =
       let* s1 = unify a c in
       let* s2 = unify (substitute_type s1 b) (substitute_type s1 d) in
       let s3 = compose_substitutions [s1; s2] in
-      s1 |> Types.debug_substitution |> Printf.sprintf "s1: %s\n" |> print_string;
-      s2 |> Types.debug_substitution |> Printf.sprintf "s2: %s\n" |> print_string;
-      s3 |> Types.debug_substitution |> Printf.sprintf "s3: %s\n" |> print_string;
+      s1 |> Debug.substitution |> Printf.sprintf "s1: %s\n" |> print_string;
+      s2 |> Debug.substitution |> Printf.sprintf "s2: %s\n" |> print_string;
+      s3 |> Debug.substitution |> Printf.sprintf "s3: %s\n" |> print_string;
       Some s3
   | _ -> None
 
 let print_env (env : env) =
-  Printf.sprintf "env: %s\n" (Types.debug_env env)
+  Printf.sprintf "env: %s\n" (Debug.env env)
   |> print_string
 
 let print_val (x : value) =
-  Printf.sprintf "val: %s\n" (Types.debug_value x)
+  Printf.sprintf "val: %s\n" (Debug.value x)
   |> print_string
 
 let print_inference (x : inference option) =
   match x with
   | None -> "no inference\n" |> print_string
   | Some x ->
-     Printf.sprintf "inf: %s\n" (Types.debug_inference x)
+     Printf.sprintf "inf: %s\n" (Debug.inference x)
      |> print_string
 
 let rec infer (env : env) (x : value) : inference option =

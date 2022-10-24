@@ -28,6 +28,8 @@
 
 open Parser
 open Inference
+open Debug
+open Prettify
 
 let to_array (q : 'a Queue.t) : 'a array =
   let result = Array.make (Queue.length q) "" in
@@ -149,27 +151,6 @@ let parse_language (x : string) : Types.value option =
   print_tokens tokens;
   parse_expression (new parser tokens)
 
-let rec debug (ast : Types.value) : string =
-  match ast with
-  | ValueLiteral (LiteralBool x) ->
-     Printf.sprintf "ValueLiteral (LiteralBool %s)" (string_of_bool x)
-  | ValueLiteral (LiteralInt x) ->
-     Printf.sprintf "ValueLiteral (LiteralInt %s)" (string_of_int x)
-  | ValueVariable x ->
-     Printf.sprintf "ValueVariable %s" x
-  | ValueFunction (x, body) ->
-     Printf.sprintf "ValueFunction (%s, %s)" x (debug body)
-  | ValueApplication (f, x) ->
-     Printf.sprintf "ValueApplication (%s, %s)" (debug f) (debug x)
-  | ValueVarApplication (f, x) ->
-     Printf.sprintf "ValueVarApplication (%s, %s)" f (debug x)
-  | ValueBinder (k, v, x) ->
-      Printf.sprintf "ValueBinder (%s, %s, %s)" k (debug v) (debug x)
-
-let debug_ast (ast : Types.value) : Types.value =
-  ast |> debug |> Printf.sprintf "ast: %s" |> print_string |> print_newline;
-  ast
-
 let main =
   while true do
     begin
@@ -177,14 +158,14 @@ let main =
       let x = read_line () in
       match parse_language x with
       | Some ast ->
-         (match ast |> debug_ast |> do_infer with
+         (match ast |> Debug.print Debug.ast "ast" |> do_infer with
           | None ->
              "Type-check failed"
              |> print_string
              |> print_newline
           | Some x ->
              x
-             |> Types.pretty
+             |> Prettify.type'
              |> print_string
              |> print_newline)
       | None ->

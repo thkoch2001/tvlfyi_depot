@@ -12,6 +12,7 @@
  ******************************************************************************)
 
 open Types
+open Prettify
 open Parser
 open Inference
 
@@ -20,10 +21,7 @@ type side = LHS | RHS
 let ( let* ) = Option.bind
 
 let printsub (s : substitution) =
-  FromString.fold (fun k v acc -> Printf.sprintf "%s\"%s\" |-> %s;" acc k (pretty v)) s ""
-  |> Printf.sprintf "Sub { %s }"
-  |> print_string
-  |> print_newline
+  s |> Debug.substitution |> print_string |> print_newline
 
 let to_array (q : 'a Queue.t) : 'a array =
   let result = Array.make (Queue.length q) "" in
@@ -80,7 +78,7 @@ let print_tokens (xs : string array) =
   |> print_string |> print_newline
 
 let print_type (t : _type) =
-  t |> pretty |> Printf.sprintf "type: %s" |> print_string |> print_newline
+  t |> Debug.type' |> Printf.sprintf "type: %s" |> print_string |> print_newline
 
 let parse_input (x : string) : _type option =
   let tokens = tokenize x in
@@ -109,7 +107,7 @@ let main =
       let rhs = read_type RHS in
       match unify lhs rhs with
       | None ->
-         Printf.printf "Cannot unify \"%s\" with \"%s\"\n" (pretty lhs) (pretty rhs)
+         Printf.printf "Cannot unify \"%s\" with \"%s\"\n" (Debug.type' lhs) (Debug.type' rhs)
       | Some x -> printsub x
     end
   done
