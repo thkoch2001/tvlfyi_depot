@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "164f9cfc_793258b6",
+        "filename": "tvix/verify-lang-tests/default.nix",
+        "patchSetId": 5
+      },
+      "lineNbr": 54,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2022-10-24T13:24:57Z",
+      "side": 1,
+      "message": "This should be `[ nix ]`, since the test should be executable with `nix_latest` just fine.",
+      "revId": "9f3d9ab15ae7642444b910a05e7fb61c88de2148",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
