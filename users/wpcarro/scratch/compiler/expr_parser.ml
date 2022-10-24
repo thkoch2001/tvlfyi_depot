@@ -5,6 +5,7 @@
  *
  *   Helpers:
  *     symbol     -> [-a-z]+
+ *     string     -> '"' [^"]* '"'
  *     boolean    -> 'true' | 'false'
  *     integer    -> [1-9][0-9]*
  *
@@ -13,7 +14,7 @@
  *     binding    -> '(' 'let' symbol expr expr ')'
  *     funcdef    -> '(' 'fn' symbol expr ')'
  *     funccall   -> '(' ( symbol | funcdef) expr ')'
- *     literal    -> boolean | integer
+ *     literal    -> string | boolean | integer
  *     variable   -> symbol
  *
  * Example Usage:
@@ -52,6 +53,17 @@ let tokenize (x : string) : token array =
   while !i < String.length x do
     match x.[!i] with
     | ' ' -> i := !i + 1
+    (* strings *)
+    | '"' ->
+      let curr = ref "\"" in 
+      i := !i + 1;
+      while x.[!i] != '"' do
+        curr := !curr ^ "?";
+        i := !i + 1
+      done;
+      curr := !curr ^ "\"";
+      Queue.push !curr q;
+      i := !i + 1
     | '(' ->
         Queue.push "(" q;
         i := !i + 1
@@ -95,7 +107,14 @@ let parse_literal (p : parser) : Types.value option =
       | Some n ->
          p#advance;
          Some (ValueLiteral (LiteralInt n))
-      | _ -> parse_variable p)
+      | _ -> 
+        if String.starts_with "\"" x then
+          begin
+            p#advance;
+            Some (ValueLiteral (LiteralString x))
+          end
+        else
+          parse_variable p)
   | _ -> None
 
 let rec parse_expression (p : parser) : Types.value option =
@@ -144,7 +163,8 @@ let print_tokens (xs : string array) =
   |> List.map (Printf.sprintf "\"%s\"")
   |> String.concat ", "
   |> Printf.sprintf "tokens: [ %s ]"
-  |> print_string |> print_newline
+  |> print_string 
+  |> print_newline
 
 let parse_language (x : string) : Types.value option =
   let tokens = tokenize x in

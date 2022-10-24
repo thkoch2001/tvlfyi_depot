@@ -1,4 +1,7 @@
-type literal = LiteralInt of int | LiteralBool of bool
+type literal 
+  = LiteralInt of int 
+  | LiteralBool of bool
+  | LiteralString of string
 
 (* Lambda Calculus definition *)
 type value =
@@ -14,6 +17,7 @@ module FromString = Map.Make (String)
 type _type =
   | TypeInt
   | TypeBool
+  | TypeString
   | TypeVariable of string
   | TypeArrow of _type * _type
 
