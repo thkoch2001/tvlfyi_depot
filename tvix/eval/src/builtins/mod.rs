@@ -6,7 +6,7 @@
 use crate::compiler::{GlobalsMap, GlobalsMapFunc};
 use crate::source::SourceCode;
 use std::cmp::{self, Ordering};
-use std::collections::{BTreeMap, HashMap, HashSet};
+use std::collections::{BTreeMap, BTreeSet, HashMap, HashSet};
 use std::path::PathBuf;
 use std::rc::Rc;
 
@@ -343,6 +343,48 @@ fn pure_builtins() -> Vec<Builtin> {
             }
             Ok(Value::attrs(NixAttrs::from_map(res)))
         }),
+        Builtin::new(
+            "genericClosure",
+            &[true],
+            |args: Vec<Value>, vm: &mut VM| {
+                let attrs = args[0].to_attrs()?;
+                let mut work_set = attrs
+                    .select("startSet")
+                    .ok_or_else(|| ErrorKind::AttributeNotFound {
+                        name: "startSet".into(),
+                    })?
+                    .to_list()?;
+                let operator =
+                    attrs
+                        .select("operator")
+                        .ok_or_else(|| ErrorKind::AttributeNotFound {
+                            name: "operator".into(),
+                        })?;
+                let mut res = NixList::new();
+                let mut done_keys: Vec<&Value> = vec![];
+                let mut insert_key = move |k, vm| -> Result<bool, ErrorKind> {
+                    for existing in &done_keys {
+                        if existing.nix_eq(k, vm)? {
+                            return Ok(false);
+                        }
+                    }
+                    done_keys.push(k);
+                    Ok(true)
+                };
+
+                while let Some(val) = work_set.pop() {
+                    let attrs = val.force(vm)?.to_attrs()?;
+                    let key = attrs
+                        .select("key")
+                        .ok_or_else(|| ErrorKind::AttributeNotFound { name: "key".into() })?;
+                    if !insert_key(key, vm)? {
+                        continue;
+                    }
+                }
+
+                Ok(Value::List(res))
+            },
+        ),
         Builtin::new("hasAttr", &[true, true], |args: Vec<Value>, _: &mut VM| {
             let k = args[0].to_str()?;
             let xs = args[1].to_attrs()?;
