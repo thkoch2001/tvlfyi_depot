@@ -29,6 +29,7 @@ let rec free_type_vars (t : _type) : set =
   | TypeVariable k -> FromString.singleton k true
   | TypeInt -> FromString.empty
   | TypeBool -> FromString.empty
+  | TypeString -> FromString.empty
   | TypeArrow (a, b) -> lww (free_type_vars a) (free_type_vars b)
 
 let i : int ref = ref 0
@@ -51,6 +52,7 @@ let rec instantiate (q : quantified_type) : _type =
   match t with
   | TypeInt -> TypeInt
   | TypeBool -> TypeBool
+  | TypeString -> TypeString
   | TypeVariable k ->
       if List.exists (( == ) k) names then make_type_var () else TypeVariable k
   | TypeArrow (a, b) ->
@@ -83,6 +85,7 @@ let rec substitute_type (s : substitution) (t : _type) : _type =
   | TypeArrow (a, b) -> TypeArrow (substitute_type s a, substitute_type s b)
   | TypeInt -> TypeInt
   | TypeBool -> TypeBool
+  | TypeString -> TypeString
 
 let substitute_quantified_type (s : substitution) (q : quantified_type) : quantified_type =
   let (QuantifiedType (names, t)) = q in
@@ -102,6 +105,7 @@ let rec unify (a : _type) (b : _type) : substitution option =
   match (a, b) with
   | TypeInt, TypeInt -> Some FromString.empty
   | TypeBool, TypeBool -> Some FromString.empty
+  | TypeString, TypeString -> Some FromString.empty
   | TypeVariable k, _ -> Some (bind_var k b)
   | _, TypeVariable k -> Some (bind_var k a)
   | TypeArrow (a, b), TypeArrow (c, d) ->
@@ -136,7 +140,8 @@ let rec infer (env : env) (x : value) : inference option =
   | ValueLiteral lit -> (
       match lit with
       | LiteralInt _ -> Some (Inference (FromString.empty, TypeInt))
-      | LiteralBool _ -> Some (Inference (FromString.empty, TypeBool)))
+      | LiteralBool _ -> Some (Inference (FromString.empty, TypeBool))
+      | LiteralString _ -> Some (Inference (FromString.empty, TypeString)))
   | ValueVariable k ->
       let* v = FromString.find_opt k env in
       Some (Inference (FromString.empty, instantiate v))
