@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3b6b9c58_eb2563da",
+        "filename": "tools/depotfmt.nix",
+        "patchSetId": 3
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2022-10-25T18:54:51Z",
+      "side": 1,
+      "message": "Not sure, seems like this adds another 700MB to the closure of `depotfmt`. Downloading `terraform` is already terrible. (Doesn\u0027t have to be a blocker, just want to raise the question.)",
+      "revId": "b4b2e82b64589adc08601a2b21fee73b792d7bbe",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
