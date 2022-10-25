@@ -15,6 +15,7 @@ open Types
 open Prettify
 open Parser
 open Inference
+open Vec
 
 type side = LHS | RHS
 
@@ -23,18 +24,8 @@ let ( let* ) = Option.bind
 let printsub (s : substitution) =
   s |> Debug.substitution |> print_string |> print_newline
 
-let to_array (q : 'a Queue.t) : 'a array =
-  let result = Array.make (Queue.length q) "" in
-  let i = ref 0 in
-  Queue.iter
-    (fun x ->
-      result.(!i) <- x;
-      i := !i + 1)
-    q;
-  result
-
-let tokenize (x : string) : token array =
-  let q = Queue.create () in
+let tokenize (x : string) : token vec =
+  let xs = Vec.create () in
   let i = ref 0 in
   while !i < String.length x do
     match x.[!i] with
@@ -44,9 +35,9 @@ let tokenize (x : string) : token array =
        while (!i < String.length x) && (x.[!i] != ' ') do
          i := !i + 1
        done;
-       Queue.push (String.sub x beg (!i - beg)) q
+       Vec.append (String.sub x beg (!i - beg)) xs
   done;
-  to_array q
+  xs
 
 let rec parse_type (p : parser) : _type option =
   parse_function p
@@ -69,13 +60,13 @@ and parse_variable (p : parser) : _type option =
   | Some x when String.length x = 1 -> p#advance; Some (TypeVariable x)
   | _ -> None
 
-let print_tokens (xs : string array) =
+let print_tokens (xs : string vec) =
   xs
-  |> Array.to_list
-  |> List.map (Printf.sprintf "\"%s\"")
-  |> String.concat ", "
+  |> Vec.map (Printf.sprintf "\"%s\"")
+  |> Vec.join ", "
   |> Printf.sprintf "tokens: [ %s ]"
-  |> print_string |> print_newline
+  |> print_string 
+  |> print_newline
 
 let print_type (t : _type) =
   t |> Debug.type' |> Printf.sprintf "type: %s" |> print_string |> print_newline
