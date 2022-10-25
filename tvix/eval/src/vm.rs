@@ -734,7 +734,7 @@ impl<'o> VM<'o> {
 
             // Data-carrying operands should never be executed,
             // that is a critical error in the VM.
-            OpCode::DataLocalIdx(_)
+            OpCode::DataStackIdx(_)
             | OpCode::DataDeferredLocal(_)
             | OpCode::DataUpvalueIdx(_)
             | OpCode::DataCaptureWith => {
@@ -813,8 +813,8 @@ impl<'o> VM<'o> {
     ) -> EvalResult<()> {
         for _ in 0..count {
             match self.inc_ip() {
-                OpCode::DataLocalIdx(StackIdx(local_idx)) => {
-                    let idx = self.frame().stack_offset + local_idx;
+                OpCode::DataStackIdx(StackIdx(stack_idx)) => {
+                    let idx = self.frame().stack_offset + stack_idx;
 
                     let val = match self.stack.get(idx) {
                         Some(val) => val.clone(),
