@@ -15,6 +15,8 @@
   $ ocamlformat --inplace --enable-outside-detected-project ./register_vm.ml
  *)
 
+open Vec
+
 type reg = X | Y | Res
 type binop = int -> int -> int
 
@@ -41,10 +43,10 @@ type opcode1 =
   | Op1PopAndSet of int
   | Op1Null
 
-type opcodes0 = opcode0 array
-type opcodes1 = opcode1 array
+type opcodes0 = opcode0 vec
+type opcodes1 = opcode1 vec
 
-let registers : int array = Array.make 8 0
+let registers : int vec = Vec.make 8 0
 let stack : int Stack.t = Stack.create ()
 let reg_idx (r : reg) : int = match r with X -> 0 | Y -> 1 | Res -> 2
 
@@ -64,40 +66,26 @@ let print_opcodes0 (xs : opcodes0) : opcodes0 =
           (reg_name rhs)
     | Op0Null -> ()
   in
-  Array.iter print_opcode xs;
+  Vec.iter print_opcode xs;
   xs
 
-(* Mutatively add xs to ys *)
-let add_ops (xs : opcodes0) (ys : opcodes0) (i : int ref) : unit =
-  let j = ref 0 in
-  while xs.(!j) != Op0Null do
-    ys.(!i) <- xs.(!j);
-    i := !i + 1;
-    j := !j + 1
-  done
-
 let rec compile (ast : ast) : opcodes0 =
-  let result : opcodes0 = Array.make 20 Op0Null and i : int ref = ref 0 in
+  let result : opcodes0 = Vec.create () in
   (match ast with
-  | Const x ->
-      result.(!i) <- Op0AssignRegLit (Res, x);
-      i := !i + 1
-  | Add (lhs, rhs) -> compile_bin_op ( + ) lhs rhs result i
-  | Sub (lhs, rhs) -> compile_bin_op ( - ) lhs rhs result i
-  | Mul (lhs, rhs) -> compile_bin_op ( * ) lhs rhs result i
-  | Div (lhs, rhs) -> compile_bin_op ( / ) lhs rhs result i);
+   | Const x -> Vec.append (Op0AssignRegLit (Res, x)) result;
+   | Add (lhs, rhs) -> compile_bin_op ( + ) lhs rhs result
+   | Sub (lhs, rhs) -> compile_bin_op ( - ) lhs rhs result
+   | Mul (lhs, rhs) -> compile_bin_op ( * ) lhs rhs result
+   | Div (lhs, rhs) -> compile_bin_op ( / ) lhs rhs result);
   result
 
-and compile_bin_op (f : binop) (lhs : ast) (rhs : ast) (result : opcodes0)
-    (i : int ref) =
-  add_ops (compile lhs) result i;
-  result.(!i) <- Op0PushReg Res;
-  i := !i + 1;
-  add_ops (compile rhs) result i;
-  result.(!i + 1) <- Op0PopAndSet X;
-  result.(!i) <- Op0AssignRegReg (Y, Res);
-  result.(!i + 2) <- Op0BinOp (f, X, Y, Res);
-  i := !i + 3
+and compile_bin_op (f : binop) (lhs : ast) (rhs : ast) (result : opcodes0) =
+  lhs |> compile |> Vec.append_to result;
+  Vec.append (Op0PushReg Res) result;
+  rhs |> compile |> Vec.append_to result;
+  Vec.append (Op0PopAndSet X) result;
+  Vec.append (Op0AssignRegReg (Y, Res)) result;
+  Vec.append (Op0BinOp (f, X, Y, Res)) result
 
 let compile_registers (xs : opcodes0) : opcodes1 =
   let do_compile x =
@@ -106,34 +94,35 @@ let compile_registers (xs : opcodes0) : opcodes1 =
     | Op0AssignRegReg (dst, src) -> Op1AssignRegReg (reg_idx dst, reg_idx src)
     | Op0PushReg src -> Op1PushReg (reg_idx src)
     | Op0PopAndSet dst -> Op1PopAndSet (reg_idx dst)
-    | Op0BinOp (f, lhs, rhs, dst) ->
-        Op1BinOp (f, reg_idx lhs, reg_idx rhs, reg_idx dst)
+    | Op0BinOp (f, lhs, rhs, dst) -> Op1BinOp (f, reg_idx lhs, reg_idx rhs, reg_idx dst)
     | Op0Null -> Op1Null
   in
-  Array.map do_compile xs
+  Vec.map do_compile xs
 
 let eval (xs : opcodes1) : int =
   let ip = ref 0 in
-  while !ip < Array.length xs do
-    match xs.(!ip) with
+  while !ip < Vec.length xs do
+    match Vec.get_unsafe !ip xs with
     | Op1AssignRegLit (dst, x) ->
-        registers.(dst) <- x;
+        Vec.set dst x registers;
         ip := !ip + 1
     | Op1AssignRegReg (dst, src) ->
-        registers.(dst) <- registers.(src);
+        Vec.set dst (Vec.get_unsafe src registers) registers;
         ip := !ip + 1
     | Op1PushReg src ->
-        Stack.push registers.(src) stack;
+        Stack.push (Vec.get_unsafe src registers) stack;
         ip := !ip + 1
     | Op1PopAndSet dst ->
-        registers.(dst) <- Stack.pop stack;
+        Vec.set dst (Stack.pop stack) registers;
         ip := !ip + 1
     | Op1BinOp (f, lhs, rhs, dst) ->
-        registers.(dst) <- f registers.(lhs) registers.(rhs);
+        let lhs = Vec.get_unsafe lhs registers in
+        let rhs = Vec.get_unsafe rhs registers in
+        Vec.set dst (f lhs rhs) registers;
         ip := !ip + 1
     | Op1Null -> ip := !ip + 1
   done;
-  registers.(reg_idx Res)
+  Vec.get_unsafe (reg_idx Res) registers
 ;;
 
 Add (Mul (Const 2, Div (Const 100, Const 2)), Const 5)
