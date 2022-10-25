@@ -32,6 +32,11 @@ let
     excludes = [
       "users/tazjin/*",
     ]
+
+    [formatter.ocaml]
+    command = "${pkgs.ocamlformat}/bin/ocamlformat"
+    options = [ "--inplace", "--enable-outside-detected-project" ]
+    includes = [ "*.ml" ]
   '';
 
   # helper tool for formatting the depot interactively

@@ -1,5 +1,5 @@
-type literal 
-  = LiteralInt of int 
+type literal =
+  | LiteralInt of int
   | LiteralBool of bool
   | LiteralString of string
 
@@ -22,10 +22,7 @@ type _type =
   | TypeArrow of _type * _type
 
 type quantified_type = QuantifiedType of string list * _type
-
 type set = bool FromString.t
 type substitution = _type FromString.t
-
 type env = quantified_type FromString.t
-
 type inference = Inference of substitution * _type

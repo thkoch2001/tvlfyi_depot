@@ -13,7 +13,6 @@ class parser (tokens : token vec) =
   object (self)
     val tokens = tokens
     val mutable i = 0
-
     method advance = i <- i + 1
     method prev : token option = Vec.get (i - 1) tokens
     method curr : token option = Vec.get i tokens
@@ -35,11 +34,9 @@ class parser (tokens : token vec) =
       match self#curr with
       | None -> false
       | Some y ->
-          if x = y then
-            begin
-              self#advance;
-              true
-            end
+          if x = y then (
+            self#advance;
+            true)
           else false
 
     method exhausted : bool = i >= Vec.length tokens

@@ -57,7 +57,8 @@ let rec instantiate (q : quantified_type) : _type =
       if List.exists (( == ) k) names then make_type_var () else TypeVariable k
   | TypeArrow (a, b) ->
       TypeArrow
-        (instantiate (QuantifiedType (names, a)), instantiate (QuantifiedType (names, b)))
+        ( instantiate (QuantifiedType (names, a)),
+          instantiate (QuantifiedType (names, b)) )
 
 let quantified_type_ftvs (q : quantified_type) : set =
   let (QuantifiedType (names, t)) = q in
@@ -78,8 +79,8 @@ let generalize (env : env) (t : _type) : quantified_type =
 
 let rec substitute_type (s : substitution) (t : _type) : _type =
   match t with
-  | TypeVariable k as tvar ->
-     (match FromString.find_opt k s with
+  | TypeVariable k as tvar -> (
+      match FromString.find_opt k s with
       | Some v -> substitute_type s v
       | None -> tvar)
   | TypeArrow (a, b) -> TypeArrow (substitute_type s a, substitute_type s b)
@@ -87,7 +88,8 @@ let rec substitute_type (s : substitution) (t : _type) : _type =
   | TypeBool -> TypeBool
   | TypeString -> TypeString
 
-let substitute_quantified_type (s : substitution) (q : quantified_type) : quantified_type =
+let substitute_quantified_type (s : substitution) (q : quantified_type) :
+    quantified_type =
   let (QuantifiedType (names, t)) = q in
   let s1 =
     FromString.filter (fun k v -> List.exists (fun x -> k != x) names) s
@@ -98,7 +100,9 @@ let substitute_env (s : substitution) (env : env) : env =
   FromString.map (fun q -> substitute_quantified_type s q) env
 
 let compose_substitutions (xs : substitution list) : substitution =
-  let do_compose_substitutions s1 s2 = lww s2 (FromString.map (substitute_type s2) s1) in
+  let do_compose_substitutions s1 s2 =
+    lww s2 (FromString.map (substitute_type s2) s1)
+  in
   List.fold_left do_compose_substitutions FromString.empty xs
 
 let rec unify (a : _type) (b : _type) : substitution option =
@@ -111,7 +115,7 @@ let rec unify (a : _type) (b : _type) : substitution option =
   | TypeArrow (a, b), TypeArrow (c, d) ->
       let* s1 = unify a c in
       let* s2 = unify (substitute_type s1 b) (substitute_type s1 d) in
-      let s3 = compose_substitutions [s1; s2] in
+      let s3 = compose_substitutions [ s1; s2 ] in
       s1 |> Debug.substitution |> Printf.sprintf "s1: %s\n" |> print_string;
       s2 |> Debug.substitution |> Printf.sprintf "s2: %s\n" |> print_string;
       s3 |> Debug.substitution |> Printf.sprintf "s3: %s\n" |> print_string;
@@ -119,65 +123,65 @@ let rec unify (a : _type) (b : _type) : substitution option =
   | _ -> None
 
 let print_env (env : env) =
-  Printf.sprintf "env: %s\n" (Debug.env env)
-  |> print_string
+  Printf.sprintf "env: %s\n" (Debug.env env) |> print_string
 
 let print_val (x : value) =
-  Printf.sprintf "val: %s\n" (Debug.value x)
-  |> print_string
+  Printf.sprintf "val: %s\n" (Debug.value x) |> print_string
 
 let print_inference (x : inference option) =
   match x with
   | None -> "no inference\n" |> print_string
-  | Some x ->
-     Printf.sprintf "inf: %s\n" (Debug.inference x)
-     |> print_string
+  | Some x -> Printf.sprintf "inf: %s\n" (Debug.inference x) |> print_string
 
 let rec infer (env : env) (x : value) : inference option =
   print_env env;
   print_val x;
-  let res = match x with
-  | ValueLiteral lit -> (
-      match lit with
-      | LiteralInt _ -> Some (Inference (FromString.empty, TypeInt))
-      | LiteralBool _ -> Some (Inference (FromString.empty, TypeBool))
-      | LiteralString _ -> Some (Inference (FromString.empty, TypeString)))
-  | ValueVariable k ->
-      let* v = FromString.find_opt k env in
-      Some (Inference (FromString.empty, instantiate v))
-  | ValueFunction (param, body) ->
-      let typevar = make_type_var () in
-      let env1 = FromString.remove param env in
-      let env2 = lww (FromString.singleton param (QuantifiedType ([], typevar))) env1 in
-      let* (Inference (s1, t1)) = infer env2 body in
-      Some (Inference (s1, TypeArrow (substitute_type s1 typevar, t1)))
-  | ValueApplication (f, x) ->
-      let result = make_type_var () in
-      let* (Inference (s1, t1)) = infer env f in
-      let* (Inference (s2, t2)) = infer (substitute_env s1 env) x in
-      let* s3 = unify (substitute_type s2 t1) (TypeArrow (t2, result)) in
-      Some (Inference
-              ( compose_substitutions [s3; s2; s1],
-                substitute_type s3 result ))
-  | ValueVarApplication (name, x) ->
-      let* v = FromString.find_opt name env in
-      let t1 = instantiate v in
-      let typevar = make_type_var () in
-      let* (Inference (s2, t2)) = infer env x in
-      let* s3 = unify (substitute_type s2 t1) (TypeArrow (t2, typevar)) in
-      Some (Inference
-              ( compose_substitutions [s2; s3],
-                substitute_type s3 typevar ))
-  | ValueBinder (k, v, body) ->
-      let* (Inference (s1, t1)) = infer env v in
-      let env1 = FromString.remove k env in
-      let tg = generalize (substitute_env s1 env) t1 in
-      let env2 = FromString.add k tg env1 in
-      let* (Inference (s2, t2)) = infer (substitute_env s1 env2) body in
-      Some (Inference (compose_substitutions [s1; s2], t2)) in
+  let res =
+    match x with
+    | ValueLiteral lit -> (
+        match lit with
+        | LiteralInt _ -> Some (Inference (FromString.empty, TypeInt))
+        | LiteralBool _ -> Some (Inference (FromString.empty, TypeBool))
+        | LiteralString _ -> Some (Inference (FromString.empty, TypeString)))
+    | ValueVariable k ->
+        let* v = FromString.find_opt k env in
+        Some (Inference (FromString.empty, instantiate v))
+    | ValueFunction (param, body) ->
+        let typevar = make_type_var () in
+        let env1 = FromString.remove param env in
+        let env2 =
+          lww (FromString.singleton param (QuantifiedType ([], typevar))) env1
+        in
+        let* (Inference (s1, t1)) = infer env2 body in
+        Some (Inference (s1, TypeArrow (substitute_type s1 typevar, t1)))
+    | ValueApplication (f, x) ->
+        let result = make_type_var () in
+        let* (Inference (s1, t1)) = infer env f in
+        let* (Inference (s2, t2)) = infer (substitute_env s1 env) x in
+        let* s3 = unify (substitute_type s2 t1) (TypeArrow (t2, result)) in
+        Some
+          (Inference
+             (compose_substitutions [ s3; s2; s1 ], substitute_type s3 result))
+    | ValueVarApplication (name, x) ->
+        let* v = FromString.find_opt name env in
+        let t1 = instantiate v in
+        let typevar = make_type_var () in
+        let* (Inference (s2, t2)) = infer env x in
+        let* s3 = unify (substitute_type s2 t1) (TypeArrow (t2, typevar)) in
+        Some
+          (Inference
+             (compose_substitutions [ s2; s3 ], substitute_type s3 typevar))
+    | ValueBinder (k, v, body) ->
+        let* (Inference (s1, t1)) = infer env v in
+        let env1 = FromString.remove k env in
+        let tg = generalize (substitute_env s1 env) t1 in
+        let env2 = FromString.add k tg env1 in
+        let* (Inference (s2, t2)) = infer (substitute_env s1 env2) body in
+        Some (Inference (compose_substitutions [ s1; s2 ], t2))
+  in
   print_inference res;
   res
 
 let do_infer (x : value) : _type option =
-  let* Inference (_, t) = infer FromString.empty x in
+  let* (Inference (_, t)) = infer FromString.empty x in
   Some t

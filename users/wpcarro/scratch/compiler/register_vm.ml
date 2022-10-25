@@ -1,19 +1,13 @@
-(*
-  Rewriting the Python implementation of the register VM in OCaml to see how
-  how much imperative/mutative programming OCaml allows.
-
-  Note: Some of this code is intentionally not written in a functional style
-  because one of the goals was to see how similar this OCaml implementation
-  could be to the Python implementation.
-
-  Conclusion: It's pretty easy to switch between the two languages.
-
-  Usage: Recommended compilation settings I hastily found online:
-  $ ocamlopt -w +A-42-48 -warn-error +A-3-44 ./register_vm.ml && ./a.out
-
-  Formatting:
-  $ ocamlformat --inplace --enable-outside-detected-project ./register_vm.ml
- *)
+(*******************************************************************************
+ * Rewriting the Python implementation of the register VM in OCaml to see how
+ * how much imperative/mutative programming OCaml allows.
+ *
+ * Note: Some of this code is intentionally not written in a functional style
+ * because one of the goals was to see how similar this OCaml implementation
+ * could be to the Python implementation.
+ *
+ * Conclusion: It's pretty easy to switch between the two languages.
+ *******************************************************************************)
 
 open Vec
 
@@ -72,11 +66,11 @@ let print_opcodes0 (xs : opcodes0) : opcodes0 =
 let rec compile (ast : ast) : opcodes0 =
   let result : opcodes0 = Vec.create () in
   (match ast with
-   | Const x -> Vec.append (Op0AssignRegLit (Res, x)) result;
-   | Add (lhs, rhs) -> compile_bin_op ( + ) lhs rhs result
-   | Sub (lhs, rhs) -> compile_bin_op ( - ) lhs rhs result
-   | Mul (lhs, rhs) -> compile_bin_op ( * ) lhs rhs result
-   | Div (lhs, rhs) -> compile_bin_op ( / ) lhs rhs result);
+  | Const x -> Vec.append (Op0AssignRegLit (Res, x)) result
+  | Add (lhs, rhs) -> compile_bin_op ( + ) lhs rhs result
+  | Sub (lhs, rhs) -> compile_bin_op ( - ) lhs rhs result
+  | Mul (lhs, rhs) -> compile_bin_op ( * ) lhs rhs result
+  | Div (lhs, rhs) -> compile_bin_op ( / ) lhs rhs result);
   result
 
 and compile_bin_op (f : binop) (lhs : ast) (rhs : ast) (result : opcodes0) =
@@ -94,7 +88,8 @@ let compile_registers (xs : opcodes0) : opcodes1 =
     | Op0AssignRegReg (dst, src) -> Op1AssignRegReg (reg_idx dst, reg_idx src)
     | Op0PushReg src -> Op1PushReg (reg_idx src)
     | Op0PopAndSet dst -> Op1PopAndSet (reg_idx dst)
-    | Op0BinOp (f, lhs, rhs, dst) -> Op1BinOp (f, reg_idx lhs, reg_idx rhs, reg_idx dst)
+    | Op0BinOp (f, lhs, rhs, dst) ->
+        Op1BinOp (f, reg_idx lhs, reg_idx rhs, reg_idx dst)
     | Op0Null -> Op1Null
   in
   Vec.map do_compile xs
