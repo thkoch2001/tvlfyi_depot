@@ -31,24 +31,15 @@ open Parser
 open Inference
 open Debug
 open Prettify
-
-let to_array (q : 'a Queue.t) : 'a array =
-  let result = Array.make (Queue.length q) "" in
-  let i = ref 0 in
-  Queue.iter
-    (fun x ->
-      result.(!i) <- x;
-      i := !i + 1)
-    q;
-  result
+open Vec
 
 type literal = LiteralBool of bool | LiteralInt of int
 
 let ( let* ) = Option.bind
 let map = Option.map
 
-let tokenize (x : string) : token array =
-  let q = Queue.create () in
+let tokenize (x : string) : token vec =
+  let xs = Vec.create () in
   let i = ref 0 in
   while !i < String.length x do
     match x.[!i] with
@@ -62,13 +53,13 @@ let tokenize (x : string) : token array =
         i := !i + 1
       done;
       curr := !curr ^ "\"";
-      Queue.push !curr q;
+      Vec.append !curr xs;
       i := !i + 1
     | '(' ->
-        Queue.push "(" q;
+        Vec.append "(" xs;
         i := !i + 1
     | ')' ->
-        Queue.push ")" q;
+        Vec.append ")" xs;
         i := !i + 1
     | _ ->
         let token = ref "" in
@@ -76,9 +67,9 @@ let tokenize (x : string) : token array =
           token := !token ^ String.make 1 x.[!i];
           i := !i + 1
         done;
-        Queue.push !token q
+        Vec.append !token xs
   done;
-  to_array q
+  xs
 
 let parse_symbol (p : parser) : string option =
   let* x = p#curr in
@@ -108,7 +99,7 @@ let parse_literal (p : parser) : Types.value option =
          p#advance;
          Some (ValueLiteral (LiteralInt n))
       | _ -> 
-        if String.starts_with "\"" x then
+        if String.starts_with ~prefix:"\"" x then
           begin
             p#advance;
             Some (ValueLiteral (LiteralString x))
@@ -158,10 +149,10 @@ and parse_binding (p : parser) : Types.value option =
      Some (Types.ValueBinder (name, value, body))
   | _ -> parse_funcdef p
 
-let print_tokens (xs : string array) =
-  xs |> Array.to_list
-  |> List.map (Printf.sprintf "\"%s\"")
-  |> String.concat ", "
+let print_tokens (xs : string vec) : unit =
+  xs 
+  |> Vec.map (Printf.sprintf "\"%s\"")
+  |> Vec.join ", "
   |> Printf.sprintf "tokens: [ %s ]"
   |> print_string 
   |> print_newline
