@@ -11,13 +11,13 @@ type state = { i : int; tokens : token vec }
 
 class parser (tokens : token vec) =
   object (self)
-    val mutable tokens = tokens
-    val mutable i = ref 0
+    val tokens = tokens
+    val mutable i = 0
 
-    method advance = i := !i + 1
-    method prev : token option = Vec.get (!i - 1) tokens
-    method curr : token option = Vec.get !i tokens
-    method next : token option = Vec.get (!i + 1) tokens
+    method advance = i <- i + 1
+    method prev : token option = Vec.get (i - 1) tokens
+    method curr : token option = Vec.get i tokens
+    method next : token option = Vec.get (i + 1) tokens
 
     method consume : token option =
       match self#curr with
@@ -42,6 +42,5 @@ class parser (tokens : token vec) =
             end
           else false
 
-    method exhausted : bool = !i >= Vec.length tokens
-    method state : state = { i = !i; tokens }
+    method exhausted : bool = i >= Vec.length tokens
   end
