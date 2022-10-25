@@ -24,6 +24,30 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "b06128ec_53ceeea6",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2022-10-25T15:06:57Z",
+      "side": 1,
+      "message": "It\u0027s called `chore(ops/pipelines/depot/protoCheck): include name in label` now, which is the name of the atribute that\u0027s added to `additionalSteps`.",
+      "parentUuid": "d8446724_367bbd19",
+      "range": {
+        "startLine": 7,
+        "startChar": 0,
+        "endLine": 7,
+        "endChar": 53
+      },
+      "revId": "0f980215024b01570d16cb1e80e5e84c69dfbaae",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "298b3c02_4c11bc56",
@@ -37,6 +61,30 @@
       "writtenOn": "2022-10-23T15:16:23Z",
       "side": 1,
       "message": "if we\u0027re gonna add a label here, why not make it something a little bit more friendly - like \"check protobuf backwards compatibility\" or something like that",
+      "range": {
+        "startLine": 11,
+        "startChar": 29,
+        "endLine": 11,
+        "endChar": 39
+      },
+      "revId": "0f980215024b01570d16cb1e80e5e84c69dfbaae",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "618bdd53_6e03fb15",
+        "filename": "ops/pipelines/depot.nix",
+        "patchSetId": 2
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2022-10-25T15:06:57Z",
+      "side": 1,
+      "message": "Well, it does run `buf lint`, and an informational `buf breaking` check against the previous version.\n\n`protoCheck` is how the attribute is called, it\u0027s probably better more explaining than bufCheck (because people might not know what buf is), but my point is, it\u0027s multiple checks.",
+      "parentUuid": "298b3c02_4c11bc56",
       "range": {
         "startLine": 11,
         "startChar": 29,
