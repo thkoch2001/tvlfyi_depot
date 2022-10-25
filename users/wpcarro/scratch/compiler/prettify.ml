@@ -5,5 +5,6 @@ let rec type' (t : _type) : string =
   match t with
   | TypeInt -> "Integer"
   | TypeBool -> "Boolean"
+  | TypeString -> "String"
   | TypeVariable k -> Printf.sprintf "%s" k
   | TypeArrow (a, b) -> Printf.sprintf "%s -> %s" (type' a) (type' b)

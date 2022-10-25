@@ -11,6 +11,8 @@ let rec ast (tree : Types.value) : string =
      Printf.sprintf "ValueLiteral (LiteralBool %s)" (string_of_bool x)
   | ValueLiteral (LiteralInt x) ->
      Printf.sprintf "ValueLiteral (LiteralInt %s)" (string_of_int x)
+  | ValueLiteral (LiteralString x) ->
+     Printf.sprintf "ValueLiteral (LiteralString %s)" x
   | ValueVariable x ->
      Printf.sprintf "ValueVariable %s" x
   | ValueFunction (x, body) ->
@@ -28,6 +30,8 @@ let rec value (x : value) : string =
      Printf.sprintf "Int %d" x
   | ValueLiteral (LiteralBool x) ->
      Printf.sprintf "Bool %b" x
+  | ValueLiteral (LiteralString x) ->
+     Printf.sprintf "String %s" x
   | ValueVariable x ->
      Printf.sprintf "Var %s" x
   | ValueFunction (name, x) ->
@@ -43,6 +47,7 @@ let rec type' (t : _type) : string =
   match t with
   | TypeInt -> "Integer"
   | TypeBool -> "Boolean"
+  | TypeString -> "String"
   | TypeVariable k -> Printf.sprintf "%s" k
   | TypeArrow (a, b) -> Printf.sprintf "%s -> %s" (type' a) (type' b)
 
