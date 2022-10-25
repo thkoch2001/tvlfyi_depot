@@ -675,20 +675,20 @@ impl Compiler<'_> {
         ident: &str,
         node: &N,
     ) {
-        // If the identifier is a global, and it is not poisoned, emit the
-        // global directly.
-        if let Some(global) = self.globals.get(ident) {
-            if !self.scope().is_poisoned(ident) {
-                global.clone()(self, self.span_for(node));
-                return;
-            }
-        }
-
         match self.scope_mut().resolve_local(ident) {
             LocalPosition::Unknown => {
                 // Are we possibly dealing with an upvalue?
                 if let Some(idx) = self.resolve_upvalue(self.contexts.len() - 1, ident, node) {
                     self.push_op(OpCode::OpGetUpvalue(idx), node);
+                    return;
+                }
+
+                // Globals are the "upmost upvalues": they behave
+                // exactly like a `let ... in` prepended to the
+                // program's text, and the global scope is nothing
+                // more than the parent scope of the root scope.
+                if let Some(global) = self.globals.get(ident) {
+                    self.emit_constant(global.clone(), &self.span_for(node));
                     return;
                 }
 

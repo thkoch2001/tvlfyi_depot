@@ -2,18 +2,15 @@
 //! compiler.
 //!
 //! Scoping in Nix is fairly complicated, there are features like
-//! mutually recursive bindings, `with`, upvalue capturing, builtin
-//! poisoning and so on that introduce a fair bit of complexity.
+//! mutually recursive bindings, `with`, upvalue capturing, and so
+//! on that introduce a fair bit of complexity.
 //!
 //! Tvix attempts to do as much of the heavy lifting of this at
 //! compile time, and leave the runtime to mostly deal with known
 //! stack indices. To do this, the compiler simulates where locals
 //! will be at runtime using the data structures implemented here.
 
-use std::{
-    collections::{hash_map, HashMap},
-    ops::Index,
-};
+use std::ops::Index;
 
 use smol_str::SmolStr;
 
@@ -90,7 +87,7 @@ impl Local {
     }
 }
 
-/// Represents the current position of a local as resolved in a scope.
+/// Represents the current position of an identifier as resolved in a scope.
 pub enum LocalPosition {
     /// Local is not known in this scope.
     Unknown,
@@ -140,14 +137,6 @@ pub struct Scope {
 
     /// Current size of the `with`-stack at runtime.
     with_stack_size: usize,
-
-    /// Users are allowed to override globally defined symbols like
-    /// `true`, `false` or `null` in scopes. We call this "scope
-    /// poisoning", as it requires runtime resolution of those tokens.
-    ///
-    /// To support this efficiently, the depth at which a poisoning
-    /// occured is tracked here.
-    poisoned_tokens: HashMap<&'static str, usize>,
 }
 
 impl Index<LocalIdx> for Scope {
@@ -159,39 +148,13 @@ impl Index<LocalIdx> for Scope {
 }
 
 impl Scope {
-    /// Mark a globally defined token as poisoned.
-    pub fn poison(&mut self, name: &'static str, depth: usize) {
-        match self.poisoned_tokens.entry(name) {
-            hash_map::Entry::Occupied(_) => {
-                /* do nothing, as the token is already poisoned at a
-                 * lower scope depth */
-            }
-            hash_map::Entry::Vacant(entry) => {
-                entry.insert(depth);
-            }
-        }
-    }
-
     /// Inherit scope details from a parent scope (required for
     /// correctly nesting scopes in lambdas and thunks when special
-    /// scope features like poisoning are present).
+    /// scope features like ??? are present).
     pub fn inherit(&self) -> Self {
         Self {
-            poisoned_tokens: self.poisoned_tokens.clone(),
             ..Default::default()
         }
-    }
-
-    /// Check whether a given token is poisoned.
-    pub fn is_poisoned(&self, name: &str) -> bool {
-        self.poisoned_tokens.contains_key(name)
-    }
-
-    /// "Unpoison" tokens that were poisoned at the current depth.
-    /// Used when scopes are closed.
-    fn unpoison(&mut self) {
-        self.poisoned_tokens
-            .retain(|_, poisoned_at| *poisoned_at != self.scope_depth);
     }
 
     /// Increase the `with`-stack size of this scope.
@@ -308,10 +271,6 @@ impl Scope {
     /// unused binding warnings).
     pub fn end_scope(&mut self) -> (usize, Vec<codemap::Span>) {
         debug_assert!(self.scope_depth != 0, "can not end top scope");
-
-        // If this scope poisoned any builtins or special identifiers,
-        // they need to be reset.
-        self.unpoison();
 
         let mut pops = 0;
         let mut unused_spans = vec![];

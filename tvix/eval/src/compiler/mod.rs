@@ -71,9 +71,10 @@ impl LambdaCtx {
 
 /// Alias for the map of globally available functions that should
 /// implicitly be resolvable in the global scope.
-type GlobalsMap = HashMap<&'static str, Rc<dyn Fn(&mut Compiler, Span)>>;
+pub type GlobalsMap = HashMap<&'static str, Value>;
 
 struct Compiler<'observer> {
+    /// the scope stack
     contexts: Vec<LambdaCtx>,
     warnings: Vec<EvalWarning>,
     errors: Vec<Error>,
@@ -1086,9 +1087,6 @@ impl Compiler<'_> {
     /// Open a new lambda context within which to compile a function,
     /// closure or thunk.
     fn new_context(&mut self) {
-        // This must inherit the scope-poisoning status of the parent
-        // in order for upvalue resolution to work correctly with
-        // poisoned identifiers.
         self.contexts.push(self.context().inherit());
     }
 
@@ -1099,16 +1097,10 @@ impl Compiler<'_> {
         let name = name.into();
         let depth = self.scope().scope_depth();
 
-        // Do this little dance to get ahold of the *static* key and
-        // use it for poisoning if required.
-        let key: Option<&'static str> = match self.globals.get_key_value(name.as_str()) {
-            Some((key, _)) => Some(*key),
-            None => None,
-        };
-
-        if let Some(global_ident) = key {
+        // Do this little dance to turn name:&'a str into the same
+        // string with &'static lifetime, as required by WarningKind
+        if let Some((global_ident, _)) = self.globals.get_key_value(name.as_str()) {
             self.emit_warning(node, WarningKind::ShadowedGlobal(global_ident));
-            self.scope_mut().poison(global_ident, depth);
         }
 
         for other in self.scope().locals.iter().rev() {
@@ -1182,33 +1174,15 @@ fn optimise_tail_call(chunk: &mut Chunk) {
 fn prepare_globals(additional: &HashMap<&'static str, Value>) -> GlobalsMap {
     let mut globals: GlobalsMap = HashMap::new();
 
-    globals.insert(
-        "true",
-        Rc::new(|compiler, span| {
-            compiler.push_op(OpCode::OpTrue, &span);
-        }),
-    );
+    globals.insert("true", Value::Bool(true));
 
-    globals.insert(
-        "false",
-        Rc::new(|compiler, span| {
-            compiler.push_op(OpCode::OpFalse, &span);
-        }),
-    );
+    globals.insert("false", Value::Bool(false));
 
-    globals.insert(
-        "null",
-        Rc::new(|compiler, span| {
-            compiler.push_op(OpCode::OpNull, &span);
-        }),
-    );
+    globals.insert("null", Value::Null);
 
     for (ident, value) in additional.iter() {
         let value: Value = value.clone();
-        globals.insert(
-            ident,
-            Rc::new(move |compiler, span| compiler.emit_constant(value.clone(), &span)),
-        );
+        globals.insert(ident, value);
     }
 
     globals
