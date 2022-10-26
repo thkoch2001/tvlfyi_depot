@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1c62b4e5_73423fe3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000066
+      },
+      "writtenOn": "2022-10-26T09:13:53Z",
+      "side": 1,
+      "message": "This resolves my comment here: https://cl.tvl.fyi/c/depot/+/7034/comments/caaafa0f_f73b562e",
+      "revId": "f628cc88eb04455922b848cc844f2e68ad9dc23b",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
