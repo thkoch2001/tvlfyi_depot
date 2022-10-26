@@ -71,4 +71,11 @@
     content = ./posts/git-filter-repo-note.md;
     draft = false;
   }
+  {
+    key = "nixos-disk-full-note";
+    title = "disk full (note to self)";
+    date = 1666801882;
+    content = ./posts/nixos-disk-full-note.md;
+    draft = false;
+  }
 ]
