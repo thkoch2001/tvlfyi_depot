@@ -147,6 +147,9 @@ in
     };
 
     systemd.user.startServices = true;
+
+    # Previous default version, see https://github.com/nix-community/home-manager/blob/master/docs/release-notes/rl-2211.adoc
+    home.stateVersion = "18.09";
   };
 
   environment.systemPackages =

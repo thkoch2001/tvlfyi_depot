@@ -28,6 +28,12 @@ in
 
   nix_latest = super.nix;
 
+  home-manager = super.home-manager.overrideAttrs (_: {
+    src = depot.third_party.sources.home-manager;
+    version = "git-"
+      + builtins.substring 0 7 depot.third_party.sources.home-manager.rev;
+  });
+
   clang-tools_11 = self.clang-tools.override {
     llvmPackages = self.llvmPackages_11;
   };
