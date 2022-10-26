@@ -10,6 +10,7 @@ digraph tvl {
   subgraph {
     Irenes [href="https://www.pluralpride.com/"];
     adisbladis [href="http://nixos.expert/"];
+    amjoseph [href="https://git.sr.ht/~amjoseph"];
     andi [label="andi-" href="https://andreas.rammhold.de/"];
     anon1 [color="grey" fontcolor="grey"];
     aurora [href="https://nonegenderleftfox.aventine.se/"];
@@ -92,6 +93,7 @@ digraph tvl {
     Profpatsch -> nix;
     lassulus -> nix;
     j4m3s -> nix;
+    amjoseph -> nix;
 
     // via edef
     benjojo -> edef;
