@@ -36,6 +36,23 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "1897a3db_98611c9a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000066
+      },
+      "writtenOn": "2022-10-26T19:55:17Z",
+      "side": 1,
+      "message": "I have rewritten CL/7097 so it no longer depends on this CL.  However if both of them merge, that one gets much simpler.",
+      "revId": "4d6479e506dc1ccd17cda19c7f03ce12aa46e5c4",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "4546ec12_2aec2d2c",
