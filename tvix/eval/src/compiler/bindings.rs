@@ -687,7 +687,7 @@ impl Compiler<'_> {
                 // exactly like a `let ... in` prepended to the
                 // program's text, and the global scope is nothing
                 // more than the parent scope of the root scope.
-                if let Some(global) = self.globals.get(ident) {
+                if let Some(global) = self.globals.as_ref().get(ident) {
                     self.emit_constant(global.clone(), &self.span_for(node));
                     return;
                 }

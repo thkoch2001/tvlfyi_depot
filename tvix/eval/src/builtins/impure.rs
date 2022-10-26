@@ -1,10 +1,9 @@
 use std::{
-    cell::RefCell,
     collections::{BTreeMap, HashMap},
     env,
     fs::File,
     io::{self, Read},
-    rc::Rc,
+    rc::{Rc, Weak},
     time::{SystemTime, UNIX_EPOCH},
 };
 
@@ -95,9 +94,15 @@ pub(super) fn builtins() -> BTreeMap<NixString, Value> {
 /// source code locations while invoking a compiler.
 // TODO: need to be able to pass through a CompilationObserver, too.
 pub fn builtins_import(
-    globals: Rc<RefCell<HashMap<&'static str, Value>>>,
+    globals: &Weak<HashMap<&'static str, Value>>,
     source: SourceCode,
 ) -> Builtin {
+    // This (very cheap, once-per-compiler-startup) clone exists
+    // solely in order to keep the borrow checker happy.  It
+    // resolves the tension between the requirements of
+    // Rc::new_cyclic() and Builtin::new()
+    let globals = globals.clone();
+
     Builtin::new(
         "import",
         &[true],
@@ -126,11 +131,18 @@ pub fn builtins_import(
                 });
             }
 
-            let result = crate::compile(
+            let result = crate::compiler::compile(
                 &parsed.tree().expr().unwrap(),
                 Some(path.clone()),
                 file,
-                globals.clone(),
+                // The VM must ensure that a strong reference to the
+                // globals outlives any self-references (which are
+                // weak) embedded within the globals.  If the
+                // expect() below panics, it means that did not
+                // happen.
+                globals
+                    .upgrade()
+                    .expect("globals dropped while still in use"),
                 &mut NoOpObserver::default(),
             )
             .map_err(|err| ErrorKind::ImportCompilerError {
