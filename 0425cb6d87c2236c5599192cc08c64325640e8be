@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "524c67c0_8f3b8953",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000066
+      },
+      "writtenOn": "2022-10-26T19:54:39Z",
+      "side": 1,
+      "message": "I have rewritten this to not depend on CL/7089.\n\nHowever if both CL/7089 and this CL merge, this CL becomes much simpler.",
+      "revId": "0425cb6d87c2236c5599192cc08c64325640e8be",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
