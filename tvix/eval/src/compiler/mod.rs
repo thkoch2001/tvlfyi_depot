@@ -19,10 +19,9 @@ mod scope;
 use codemap::Span;
 use rnix::ast::{self, AstToken};
 use smol_str::SmolStr;
-use std::cell::RefCell;
 use std::collections::HashMap;
 use std::path::{Path, PathBuf};
-use std::rc::Rc;
+use std::rc::{Rc, Weak};
 use std::sync::Arc;
 
 use crate::chunk::Chunk;
@@ -42,6 +41,10 @@ pub struct CompilationOutput {
     pub lambda: Rc<Lambda>,
     pub warnings: Vec<EvalWarning>,
     pub errors: Vec<Error>,
+
+    // This field must outlive the rc::Weak reference which breaks
+    // the builtins -> import -> builtins reference cycle.
+    pub globals: Rc<Globals>,
 }
 
 /// Represents the lambda currently being compiled.
@@ -69,9 +72,17 @@ impl LambdaCtx {
     }
 }
 
-/// Alias for the map of globally available functions that should
-/// implicitly be resolvable in the global scope.
-pub type GlobalsMap = HashMap<&'static str, Value>;
+/// The map of globally available functions that should implicitly
+/// be resolvable in the global scope.
+pub type Globals = HashMap<&'static str, Value>;
+
+/// Functions with this type are used to construct a
+/// self-referential `builtins` object; it takes a weak reference to
+/// its own result, similar to how nixpkgs' overlays work.
+/// Rc::new_cyclic() is what "ties the knot".  The heap allocation
+/// (Box) and vtable (dyn) do not impair runtime or compile-time
+/// performance; they exist only during compiler startup.
+pub type GlobalsMap = Box<dyn FnOnce(&Weak<Globals>) -> Globals>;
 
 struct Compiler<'observer> {
     /// the scope stack
@@ -86,7 +97,7 @@ struct Compiler<'observer> {
     /// Each global has an associated token, which when encountered as
     /// an identifier is resolved against the scope poisoning logic,
     /// and a function that should emit code for the token.
-    globals: GlobalsMap,
+    globals: Rc<Globals>,
 
     /// File reference in the codemap contains all known source code
     /// and is used to track the spans from which instructions where
@@ -109,7 +120,7 @@ impl<'observer> Compiler<'observer> {
     pub(crate) fn new(
         location: Option<PathBuf>,
         file: Arc<codemap::File>,
-        globals: Rc<RefCell<HashMap<&'static str, Value>>>,
+        globals: Rc<Globals>,
         observer: &'observer mut dyn CompilerObserver,
     ) -> EvalResult<Self> {
         let mut root_dir = match location {
@@ -137,8 +148,6 @@ impl<'observer> Compiler<'observer> {
             root_dir.pop();
         }
 
-        let globals = globals.borrow();
-
         #[cfg(not(target_arch = "wasm32"))]
         debug_assert!(root_dir.is_absolute());
 
@@ -146,7 +155,7 @@ impl<'observer> Compiler<'observer> {
             root_dir,
             file,
             observer,
-            globals: prepare_globals(&globals),
+            globals,
             contexts: vec![LambdaCtx::new()],
             warnings: vec![],
             errors: vec![],
@@ -1166,36 +1175,31 @@ fn optimise_tail_call(chunk: &mut Chunk) {
 
 /// Prepare the full set of globals from additional globals supplied
 /// by the caller of the compiler, as well as the built-in globals
-/// that are always part of the language.
+/// that are always part of the language.  This also "ties the knot"
+/// required in order for import to have a reference cycle back to
+/// the globals.
 ///
 /// Note that all builtin functions are *not* considered part of the
 /// language in this sense and MUST be supplied as additional global
 /// values, including the `builtins` set itself.
-fn prepare_globals(additional: &HashMap<&'static str, Value>) -> GlobalsMap {
-    let mut globals: GlobalsMap = HashMap::new();
-
-    globals.insert("true", Value::Bool(true));
-
-    globals.insert("false", Value::Bool(false));
-
-    globals.insert("null", Value::Null);
-
-    for (ident, value) in additional.iter() {
-        let value: Value = value.clone();
-        globals.insert(ident, value);
-    }
-
-    globals
+pub fn prepare_globals(additional: GlobalsMap) -> Rc<Globals> {
+    Rc::new_cyclic(Box::new(|weak: &Weak<Globals>| {
+        let mut globals = additional(weak);
+        globals.insert("true", Value::Bool(true));
+        globals.insert("false", Value::Bool(false));
+        globals.insert("null", Value::Null);
+        globals
+    }))
 }
 
 pub fn compile(
     expr: &ast::Expr,
     location: Option<PathBuf>,
     file: Arc<codemap::File>,
-    globals: Rc<RefCell<HashMap<&'static str, Value>>>,
+    globals: Rc<Globals>,
     observer: &mut dyn CompilerObserver,
 ) -> EvalResult<CompilationOutput> {
-    let mut c = Compiler::new(location, file, globals, observer)?;
+    let mut c = Compiler::new(location, file, globals.clone(), observer)?;
 
     let root_span = c.span_for(expr);
     let root_slot = c.scope_mut().declare_phantom(root_span, false);
@@ -1214,5 +1218,6 @@ pub fn compile(
         lambda,
         warnings: c.warnings,
         errors: c.errors,
+        globals: globals,
     })
 }
