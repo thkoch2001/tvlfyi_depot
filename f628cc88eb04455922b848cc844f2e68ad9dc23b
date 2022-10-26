@@ -16,6 +16,23 @@
       "message": "This resolves my comment here: https://cl.tvl.fyi/c/depot/+/7034/comments/caaafa0f_f73b562e",
       "revId": "f628cc88eb04455922b848cc844f2e68ad9dc23b",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "546011e3_5351d9ee",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000059
+      },
+      "writtenOn": "2022-10-26T22:07:43Z",
+      "side": 1,
+      "message": "Indeed, that\u0027s way more intelligent than what I was doing 😊",
+      "revId": "f628cc88eb04455922b848cc844f2e68ad9dc23b",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
