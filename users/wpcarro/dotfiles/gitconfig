@@ -5,3 +5,5 @@
   external = difft
 [push]
 	default = current
+[rebase]
+	autoStash = true
