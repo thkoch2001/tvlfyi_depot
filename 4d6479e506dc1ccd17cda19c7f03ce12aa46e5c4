@@ -104,6 +104,24 @@
       "parentUuid": "67dd2b17_7edadc88",
       "revId": "4d6479e506dc1ccd17cda19c7f03ce12aa46e5c4",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "75c57390_999f28b5",
+        "filename": "tvix/eval/docs/known-optimisation-potential.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 60,
+      "author": {
+        "id": 1000066
+      },
+      "writtenOn": "2022-10-26T22:27:53Z",
+      "side": 1,
+      "message": "Tell you what, let\u0027s revisit this later, once we have some meaningful chunk of nixpkgs evaluating.  Reviewer time is precious, and right now there are better uses of it.",
+      "parentUuid": "2f1f8a19_5d18c13c",
+      "revId": "4d6479e506dc1ccd17cda19c7f03ce12aa46e5c4",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
