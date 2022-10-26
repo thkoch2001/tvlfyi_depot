@@ -308,12 +308,11 @@ fn eval(model: &Model) -> Output {
     let file = source.add_file("nixbolt".to_string(), model.code.clone());
 
     let mut compilation_observer = DisassemblingObserver::new(source.clone(), &mut out.bytecode);
-
     let result = tvix_eval::compile(
         &root_expr,
         Some("/nixbolt".into()),
         file.clone(),
-        Rc::new(RefCell::new(tvix_eval::global_builtins())),
+        tvix_eval::prepare_globals(Box::new(tvix_eval::global_builtins(source.clone()))),
         &mut compilation_observer,
     )
     .unwrap();
