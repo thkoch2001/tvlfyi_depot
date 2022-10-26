@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "69395e96_e780e211",
+        "filename": "nix/buildkite/default.nix",
+        "patchSetId": 1
+      },
+      "lineNbr": 334,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-10-26T18:45:04Z",
+      "side": 1,
+      "message": "tbh I\u0027m not crazy ab softFail casing and might prefer soft_fail even though that doesn\u0027t comply with the camelCase used elsewhere...",
+      "revId": "1e15ef74087e5b7a25626ee920c3e3b11ff887fc",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
