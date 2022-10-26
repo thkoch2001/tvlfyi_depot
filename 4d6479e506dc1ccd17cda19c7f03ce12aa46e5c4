@@ -86,6 +86,24 @@
       "parentUuid": "4546ec12_2aec2d2c",
       "revId": "4d6479e506dc1ccd17cda19c7f03ce12aa46e5c4",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2f1f8a19_5d18c13c",
+        "filename": "tvix/eval/docs/known-optimisation-potential.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 60,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2022-10-26T21:18:21Z",
+      "side": 1,
+      "message": "Right, that would work. I guess it now depends on how much the cheaper poison map lookup saves in practice in order to decide what to do.",
+      "parentUuid": "67dd2b17_7edadc88",
+      "revId": "4d6479e506dc1ccd17cda19c7f03ce12aa46e5c4",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
