@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7bf8cd96_44a174b8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000066
+      },
+      "writtenOn": "2022-10-26T09:12:03Z",
+      "side": 1,
+      "message": "Awesome!  LGTM.\n\nOnly nitpick is the `clone()` calls; I wrote https://cl.tvl.fyi/c/depot/+/7095 to avoid that.",
+      "revId": "e5c2d4f85601f90b5e2ee1dff5c5c459f561358e",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b2ad02fb_64eed266",
+        "filename": "tvix/eval/src/builtins/mod.rs",
+        "patchSetId": 7
+      },
+      "lineNbr": 568,
+      "author": {
+        "id": 1000066
+      },
+      "writtenOn": "2022-10-26T09:12:03Z",
+      "side": 1,
+      "message": "It kind of threw me off that the comment says \"we need to break\" but there\u0027s no `break` anywhere in the code that follows.",
+      "revId": "e5c2d4f85601f90b5e2ee1dff5c5c459f561358e",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "caaafa0f_f73b562e",
+        "filename": "tvix/eval/src/builtins/mod.rs",
+        "patchSetId": 7
+      },
+      "lineNbr": 573,
+      "author": {
+        "id": 1000066
+      },
+      "writtenOn": "2022-10-26T09:12:03Z",
+      "side": 1,
+      "message": "For an N-character long `args[2]` this will make a deep-copy of each of the `from` and `to` lists N times.  See https://cl.tvl.fyi/c/depot/+/7095 for a way to do this without `clone()`.",
+      "revId": "e5c2d4f85601f90b5e2ee1dff5c5c459f561358e",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cdd480d8_e406ef48",
+        "filename": "tvix/eval/src/builtins/mod.rs",
+        "patchSetId": 7
+      },
+      "lineNbr": 611,
+      "author": {
+        "id": 1000066
+      },
+      "writtenOn": "2022-10-26T09:12:03Z",
+      "side": 1,
+      "message": "Same as above.",
+      "revId": "e5c2d4f85601f90b5e2ee1dff5c5c459f561358e",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
