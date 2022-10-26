@@ -37,6 +37,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "d08e84c8_a3dfbf9b",
+        "filename": "tvix/eval/src/builtins/mod.rs",
+        "patchSetId": 7
+      },
+      "lineNbr": 568,
+      "author": {
+        "id": 1000059
+      },
+      "writtenOn": "2022-10-26T22:29:04Z",
+      "side": 1,
+      "message": "Indeed, I will revisit it. Initially that code had a break but it didn\u0027t handle all cases so I reworked the code.",
+      "parentUuid": "b2ad02fb_64eed266",
+      "revId": "e5c2d4f85601f90b5e2ee1dff5c5c459f561358e",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "caaafa0f_f73b562e",
         "filename": "tvix/eval/src/builtins/mod.rs",
         "patchSetId": 7
@@ -48,6 +66,24 @@
       "writtenOn": "2022-10-26T09:12:03Z",
       "side": 1,
       "message": "For an N-character long `args[2]` this will make a deep-copy of each of the `from` and `to` lists N times.  See https://cl.tvl.fyi/c/depot/+/7095 for a way to do this without `clone()`.",
+      "revId": "e5c2d4f85601f90b5e2ee1dff5c5c459f561358e",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "24741dcf_3447627d",
+        "filename": "tvix/eval/src/builtins/mod.rs",
+        "patchSetId": 7
+      },
+      "lineNbr": 573,
+      "author": {
+        "id": 1000059
+      },
+      "writtenOn": "2022-10-26T22:29:04Z",
+      "side": 1,
+      "message": "Thanks for the input! I didn\u0027t think of using iterators that way. :).",
+      "parentUuid": "caaafa0f_f73b562e",
       "revId": "e5c2d4f85601f90b5e2ee1dff5c5c459f561358e",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
@@ -65,6 +101,24 @@
       "writtenOn": "2022-10-26T09:12:03Z",
       "side": 1,
       "message": "Same as above.",
+      "revId": "e5c2d4f85601f90b5e2ee1dff5c5c459f561358e",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3aa37450_444b0325",
+        "filename": "tvix/eval/src/builtins/mod.rs",
+        "patchSetId": 7
+      },
+      "lineNbr": 611,
+      "author": {
+        "id": 1000059
+      },
+      "writtenOn": "2022-10-26T22:29:04Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "cdd480d8_e406ef48",
       "revId": "e5c2d4f85601f90b5e2ee1dff5c5c459f561358e",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
