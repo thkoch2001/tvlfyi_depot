@@ -18,6 +18,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "8298ad98_68e93397",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000066
+      },
+      "writtenOn": "2022-10-26T19:23:01Z",
+      "side": 1,
+      "message": "\u003e The problem with taking a decision on this CL is also that it kind of hinges on how good a future optimization (the builtins select optimization which depends on poisoning, as I\u0027ve outlined below) would be.\n\nWould it help if I implemented that optimization now, so the decision can be taken with all the consequences visible?\n\nAlso see below; I think the change to the optimization (when it is implemented) is very simple and local.  But perhaps I\u0027ve misunderstood something.",
+      "parentUuid": "3914d1d4_c9a10498",
+      "revId": "4d6479e506dc1ccd17cda19c7f03ce12aa46e5c4",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "4546ec12_2aec2d2c",
@@ -31,6 +49,24 @@
       "writtenOn": "2022-10-26T13:09:10Z",
       "side": 1,
       "message": "This optimization is no longer possible after this change. It would be implemented in `compile_select` where we could branch on the lhs. If it is an identifier and `builtins` we can check if it is unpoisoned and skip `compile_identifier_access` altogether, emitting a constant.\n\nWith the current code we would need to unconditionally call `compile_identifier_access` and somehow detect if we encountered the `builtins` global and then backtrack – probably very error prone and not very efficient.",
+      "revId": "4d6479e506dc1ccd17cda19c7f03ce12aa46e5c4",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "67dd2b17_7edadc88",
+        "filename": "tvix/eval/docs/known-optimisation-potential.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 60,
+      "author": {
+        "id": 1000066
+      },
+      "writtenOn": "2022-10-26T19:23:01Z",
+      "side": 1,
+      "message": "\u003e we can check if it is unpoisoned\n\nWhy couldn\u0027t you just change\n\n```\nif !self.scope().is_poisoned(ident) {\n ...\n}\n```\n\ninto\n\n```\nif self.scope().resolve_local(ident) \u003d\u003d LocalPosition::Unknown {\n ...\n}\n```\n\n?",
+      "parentUuid": "4546ec12_2aec2d2c",
       "revId": "4d6479e506dc1ccd17cda19c7f03ce12aa46e5c4",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
