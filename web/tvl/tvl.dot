@@ -12,7 +12,6 @@ digraph tvl {
     adisbladis [href="http://nixos.expert/"];
     amjoseph [href="https://git.sr.ht/~amjoseph"];
     andi [label="andi-" href="https://andreas.rammhold.de/"];
-    anon1 [color="grey" fontcolor="grey"];
     aurora [href="https://nonegenderleftfox.aventine.se/"];
     benjojo [href="https://benjojo.co.uk/"];
     cynthia [href="https://cynthia.re/"];
@@ -25,7 +24,6 @@ digraph tvl {
     fzakaria [href="https://fzakaria.com/"];
     ghuntley [href="https://ghuntley.com/"];
     grfn [href="http://gws.fyi"];
-    htbf [href="https://htbf.dev/"];
     implr [href="https://twitter.com/implring"];
     isomer [href="https://www.lorier.net/"];
     j4m3s [href="https://github.com/j4m3s-s"];
@@ -39,7 +37,6 @@ digraph tvl {
     ncl;
     nikky [href="http://nikky.moe/"];
     nyanotech [href="https://twitter.com/nyanotech"];
-    poigon;
     Profpatsch [href="http://profpatsch.de/"];
     qyliss [href="https://alyssa.is"];
     seven [href="https://open.spotify.com/user/so7"];
@@ -62,8 +59,8 @@ digraph tvl {
     node [color="#db4437" fontcolor="#db4437"];
     eve [href="https://www.eveonline.com/"];
     nix [href="https://nixos.org/nix/"];
+    tvix [href="https://code.tvl.fyi/tree/tvix"];
     ircv3 [href="https://ircv3.net/"];
-    lgbtslack [label="lgbt.tech" href="https://lgbtq.technology/"];
     muccc [label="µccc" href="https://muc.ccc.de/"];
     afra [label="AfRA" href="https://afra-berlin.de/"];
   }
@@ -77,7 +74,9 @@ digraph tvl {
   // primary edges (how did they end up in TVL?)
   subgraph {
     // Direct edges
-    nix -> tazjin;
+    nix -> TVL;
+    tvix -> TVL;
+
     spotify -> tazjin;
     google -> tazjin;
     eve -> tazjin;
@@ -92,8 +91,10 @@ digraph tvl {
     andi -> nix;
     Profpatsch -> nix;
     lassulus -> nix;
-    j4m3s -> nix;
-    amjoseph -> nix;
+
+    // via tvix
+    j4m3s -> tvix;
+    amjoseph -> tvix;
 
     // via edef
     benjojo -> edef;
@@ -107,7 +108,6 @@ digraph tvl {
     seven -> spotify;
 
     // via google
-    htbf -> google;
     Irenes -> google;
     isomer -> google;
     lukegb -> google;
@@ -117,13 +117,11 @@ digraph tvl {
 
     // random primary
     grfn -> wpcarro;
-    anon1 -> google;
     aurora -> eve;
     cynthia -> benjojo;
-    eta -> anon1;
+    eta -> unspecific;
     ericvolp -> lukegb;
     marcusr -> unspecific;
-    poigon -> eve;
     implr -> lukegb;
     afra -> unspecific;
     nikky -> afra;
@@ -136,11 +134,6 @@ digraph tvl {
   // secondary edges (how are they connected otherwise?)
   subgraph {
     edge [weight=0 style="dotted" color="grey" arrowhead="none"];
-
-    // lgbt slack
-    aurora -> lgbtslack;
-    leah2 -> lgbtslack;
-    edef -> lgbtslack;
 
     // ircv3
     eta -> ircv3;
