@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3914d1d4_c9a10498",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2022-10-26T13:09:10Z",
+      "side": 1,
+      "message": "This is an interesting change, but I\u0027m not sure if it is good or bad:\n\n1. How does tvix before and after this change perform? We were operating on the assumption that globals are basically never poisoned, so skipping a lookup could be a good time save. This of course needs benchmarking, ideally on a real world Nix expression (maybe grfn can help).\n2. The problem with taking a decision on this CL is also that it kind of hinges on how good a future optimization (the builtins select optimization which depends on poisoning, as I\u0027ve outlined below) would be.\n\nOne advantage is that the code is simpler, so we could contemplate applying it and reverting it later when we want to implement any poisoning-related optimisations (let\u0027s hope the antidote doesn\u0027t render the poison ineffictive indefinitely).",
+      "revId": "4d6479e506dc1ccd17cda19c7f03ce12aa46e5c4",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4546ec12_2aec2d2c",
+        "filename": "tvix/eval/docs/known-optimisation-potential.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 60,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2022-10-26T13:09:10Z",
+      "side": 1,
+      "message": "This optimization is no longer possible after this change. It would be implemented in `compile_select` where we could branch on the lhs. If it is an identifier and `builtins` we can check if it is unpoisoned and skip `compile_identifier_access` altogether, emitting a constant.\n\nWith the current code we would need to unconditionally call `compile_identifier_access` and somehow detect if we encountered the `builtins` global and then backtrack – probably very error prone and not very efficient.",
+      "revId": "4d6479e506dc1ccd17cda19c7f03ce12aa46e5c4",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
