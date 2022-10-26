@@ -78,4 +78,11 @@
     content = ./posts/nixos-disk-full-note.md;
     draft = false;
   }
+  {
+    key = "git-rev-refs";
+    title = "git revision numbers as refs (note to self)";
+    date = 1666823030;
+    content = ./posts/git-rev-refs.md;
+    draft = false;
+  }
 ]
