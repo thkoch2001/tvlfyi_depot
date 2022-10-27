@@ -20,6 +20,7 @@ digraph tvl {
     espes;
     eta [href="https://theta.eu.org/"];
     etu [href="https://elis.nu/"];
+    ezemtsov [href="https://github.com/ezemtsov"];
     firefly [href="http://firefly.nu/"];
     flokli [href="https://flokli.de/"];
     fzakaria [href="https://fzakaria.com/"];
@@ -83,6 +84,7 @@ digraph tvl {
     eve -> tazjin;
     unspecific -> tazjin;
     edef -> tazjin;
+    ezemtsov -> tazjin;
 
     // via nix
     adisbladis -> nix;
@@ -160,6 +162,7 @@ digraph tvl {
     edef -> nix;
     spacekookie -> afra;
     qyliss -> afra;
+    ezemtsov -> nix;
   }
 
   // baby
