@@ -51,6 +51,24 @@
       "parentUuid": "524c67c0_8f3b8953",
       "revId": "0425cb6d87c2236c5599192cc08c64325640e8be",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "913a3b06_16d4e90a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000066
+      },
+      "writtenOn": "2022-10-27T21:33:22Z",
+      "side": 1,
+      "message": "Exactly!\n\nAt VM runtime (once opcodes start executing) everything is the same as before this CL, except that the Rc\u003cRefCell\u003c\u003e\u003e introduced by CL/6867 is turned into an rc::Weak\u003c\u003e.\n\nI\u0027ve edited the commit message to include the previous paragraph.",
+      "parentUuid": "557ae409_cae9a925",
+      "revId": "0425cb6d87c2236c5599192cc08c64325640e8be",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
