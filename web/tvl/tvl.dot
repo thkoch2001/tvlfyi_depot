@@ -19,6 +19,7 @@ digraph tvl {
     ericvolp [href="https://ericv.me"];
     espes;
     eta [href="https://theta.eu.org/"];
+    etu [href="https://elis.nu/"];
     firefly [href="http://firefly.nu/"];
     flokli [href="https://flokli.de/"];
     fzakaria [href="https://fzakaria.com/"];
@@ -91,6 +92,7 @@ digraph tvl {
     andi -> nix;
     Profpatsch -> nix;
     lassulus -> nix;
+    etu -> nix;
 
     // via tvix
     j4m3s -> tvix;
