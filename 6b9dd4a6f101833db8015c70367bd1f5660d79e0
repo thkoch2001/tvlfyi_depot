@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "43a1eee7_434f0782",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-10-27T08:46:53Z",
+      "side": 1,
+      "message": "I\u0027m taking the +1 from sterni as \"technically looks good, but I don\u0027t want to decide who is on the graph\", so with that technical endorsement I\u0027m adding my +2 for the second part :)",
+      "revId": "6b9dd4a6f101833db8015c70367bd1f5660d79e0",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
