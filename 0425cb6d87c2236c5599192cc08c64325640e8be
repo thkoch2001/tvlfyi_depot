@@ -16,6 +16,41 @@
       "message": "I have rewritten this to not depend on CL/7089.\n\nHowever if both CL/7089 and this CL merge, this CL becomes much simpler.",
       "revId": "0425cb6d87c2236c5599192cc08c64325640e8be",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "557ae409_cae9a925",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-10-27T12:42:53Z",
+      "side": 1,
+      "message": "Ah, it took me a little while to understand that \"tying the knot\" in this case is done by retaining the weak reference \"at Tvix runtime\" and upgrading/dropping it when `import` is used, but that makes sense.\n\nIt\u0027s surely not more expensive than the overhead of the RefCell setup.\n\nIf my understanding of this is correct, feel free to just Ack this comment :)",
+      "revId": "0425cb6d87c2236c5599192cc08c64325640e8be",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "30636c4d_b2d91264",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-10-27T12:42:53Z",
+      "side": 1,
+      "message": "The other one is a little more complex in its implications, so I\u0027ll take this one first :)",
+      "parentUuid": "524c67c0_8f3b8953",
+      "revId": "0425cb6d87c2236c5599192cc08c64325640e8be",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
