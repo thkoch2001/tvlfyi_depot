@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a3387c6b_d6924548",
+        "filename": "tvix/eval/src/systems.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2022-10-27T22:39:37Z",
+      "side": 1,
+      "message": "I don\u0027t think this works correctly sine `wasm32` wouldn\u0027t be in the vendor position.",
+      "revId": "b1c6a8b11b899283eb2beb9370962361b64dac1d",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
