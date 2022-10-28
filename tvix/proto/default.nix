@@ -1,10 +1,22 @@
 # Build protocol buffer definitions to ensure that protos are valid in
 # CI. Note that the output of this build target is not actually used
 # anywhere, it just functions as a CI check for now.
-{ pkgs, ... }:
+{ pkgs, depot, ... }:
 
-pkgs.runCommand "tvix-cc-proto" { } ''
-  mkdir $out
-  ${pkgs.protobuf}/bin/protoc -I ${./.} castore.proto --cpp_out=$out
-  ${pkgs.protobuf}/bin/protoc -I ${./.} evaluator.proto --cpp_out=$out
-''
+let
+  # Only select the protos from $out/tvix/proto, so the import paths relative
+  # to the root work without importing all of depot into the store on every
+  # build.
+  onlyProtos = depot.nix.sparseTree depot.path.origSrc [
+    ./castore.proto
+    ./evaluator.proto
+    ./pathinfo.proto
+  ];
+in
+{
+  inherit onlyProtos;
+  ccProtos = pkgs.runCommand "tvix-cc-proto" { } ''
+    mkdir -p $out
+    ${pkgs.protobuf}/bin/protoc -I ${onlyProtos}/ ${onlyProtos}/tvix/proto/*.proto --cpp_out=$out
+  '';
+}
