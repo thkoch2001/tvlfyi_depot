@@ -1,0 +1,30 @@
+// SPDX-License-Identifier: MIT
+// Copyright © 2022 The Tvix Authors
+syntax = "proto3";
+
+package tvix.proto.v1;
+
+import "tvix/proto/castore.proto";
+
+// PathInfo shows information about a Nix Store Path.
+// That's an element inside /nix/store.
+message PathInfo {
+    // /nix/store can contain directories, files or symlinks.
+    oneof root_node {
+        DirectoryNode root_directory = 1;
+        FileNode root_file = 2;
+        SymlinkNode root_symlink = 3;
+    }
+
+    // List of references (output path hashes)
+    repeated bytes references = 4;
+
+    // Nix C++ uses NAR (Nix Archive) as a format to transfer store paths,
+    // and Signature mechanisms are based on that representation.
+    // We store the attributes necessary to still be able to render .narinfo
+    // files and present these signatures to old clients.
+    // TODO(flokli): move to a separate message and store separately instead?
+    bytes nar_hash = 5;
+    uint32 nar_size = 6;
+    repeated bytes narinfo_signatures = 7;
+}
