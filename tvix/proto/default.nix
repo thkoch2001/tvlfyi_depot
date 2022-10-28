@@ -3,8 +3,10 @@
 # anywhere, it just functions as a CI check for now.
 { pkgs, ... }:
 
+# Copy the protos into $out/tvix/proto, so the import paths relative to the
+# root work without importing all of depot into the store on every build.
 pkgs.runCommand "tvix-cc-proto" { } ''
-  mkdir $out
-  ${pkgs.protobuf}/bin/protoc -I ${./.} castore.proto --cpp_out=$out
-  ${pkgs.protobuf}/bin/protoc -I ${./.} evaluator.proto --cpp_out=$out
+  mkdir -p $out/tvix/proto
+  cp -R ${./.}/*.proto $out/tvix/proto
+  ${pkgs.protobuf}/bin/protoc -I$out $out/tvix/proto/*.proto --cpp_out=$out
 ''
