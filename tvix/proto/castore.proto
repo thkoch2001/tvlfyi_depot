@@ -22,13 +22,6 @@ message DirectoryNode {
     string name = 1;
     // The blake3 hash of a Directory message, serialized in protobuf canonical form.
     bytes ref = 2;
-    // Number of child elements in the Directory referred to by ref.
-    // Calculated by summing up the numbers of `directories`, `files` and `symlinks`,
-    // and for each directory, its size field. Used for inode number calculation
-    // TODO(flokli): These numbers can't really be verified until you know the whole graph.
-    //               Is this a problem? Should we instead only have this field
-    //               in our local representation?
-    uint32 size = 3;
 }
 
 // A FileNode represents a regular or executable file in a Directory.
