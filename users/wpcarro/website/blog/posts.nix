@@ -85,4 +85,11 @@
     content = ./posts/git-rev-refs.md;
     draft = false;
   }
+  {
+    key = "import-subtree-checklist";
+    title = "Checklist for Importing Subtrees";
+    date = 1666903846;
+    content = ./posts/importing-subtrees.md;
+    draft = false;
+  }
 ]
