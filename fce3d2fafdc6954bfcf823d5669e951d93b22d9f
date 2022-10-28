@@ -46,6 +46,30 @@
       },
       "revId": "fce3d2fafdc6954bfcf823d5669e951d93b22d9f",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "85293048_2fc00a95",
+        "filename": "tvix/proto/pathinfo.proto",
+        "patchSetId": 3
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2022-10-28T22:01:04Z",
+      "side": 1,
+      "message": "Store Path would be `${storeDir}/${root_node.name}` (just the path, not the metadata).\n\nStore object also feels a bit misplaced - I feel very uncomfortable using this to store .drv files too.",
+      "parentUuid": "1111a7ea_62002e2a",
+      "range": {
+        "startLine": 9,
+        "startChar": 38,
+        "endLine": 9,
+        "endChar": 52
+      },
+      "revId": "fce3d2fafdc6954bfcf823d5669e951d93b22d9f",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
