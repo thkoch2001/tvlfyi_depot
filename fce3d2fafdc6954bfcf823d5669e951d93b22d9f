@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9a7ca479_2aed26d5",
+        "filename": "tvix/proto/pathinfo.proto",
+        "patchSetId": 3
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1000066
+      },
+      "writtenOn": "2022-10-28T20:08:24Z",
+      "side": 1,
+      "message": "This is for immediate children of `/nix/store`, right?  If so, I think this should be \"Nix Store Object\".\n\nhttps://nixos.org/manual/nix/unstable/glossary.html#gloss-store-path\n\nhttps://nixos.org/manual/nix/unstable/glossary.html#gloss-store-object\n\nalso, edolstra\u0027s thesis section 5.2.2",
+      "range": {
+        "startLine": 9,
+        "startChar": 38,
+        "endLine": 9,
+        "endChar": 52
+      },
+      "revId": "fce3d2fafdc6954bfcf823d5669e951d93b22d9f",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
