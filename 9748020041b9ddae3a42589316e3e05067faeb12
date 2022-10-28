@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "db0352bf_69b94f3e",
+        "filename": "tvix/proto/castore.proto",
+        "patchSetId": 1
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 1000066
+      },
+      "writtenOn": "2022-10-28T20:09:39Z",
+      "side": 1,
+      "message": "I think `rev` should be `ref`?",
+      "revId": "9748020041b9ddae3a42589316e3e05067faeb12",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
