@@ -22,6 +22,30 @@
       },
       "revId": "fce3d2fafdc6954bfcf823d5669e951d93b22d9f",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1111a7ea_62002e2a",
+        "filename": "tvix/proto/pathinfo.proto",
+        "patchSetId": 3
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2022-10-28T20:26:46Z",
+      "side": 1,
+      "message": "Please see the latest version of the CL, this might explain things better.\n\nThe proto message here doesn\u0027t really map to nixcpp terminology. It essentially contains all metadata about a `/nix/store/…-…` element.",
+      "parentUuid": "9a7ca479_2aed26d5",
+      "range": {
+        "startLine": 9,
+        "startChar": 38,
+        "endLine": 9,
+        "endChar": 52
+      },
+      "revId": "fce3d2fafdc6954bfcf823d5669e951d93b22d9f",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
