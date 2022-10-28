@@ -16,6 +16,24 @@
       "message": "I think `rev` should be `ref`?",
       "revId": "9748020041b9ddae3a42589316e3e05067faeb12",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "22dc202b_8f4be9f1",
+        "filename": "tvix/proto/castore.proto",
+        "patchSetId": 1
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2022-10-28T20:14:23Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "db0352bf_69b94f3e",
+      "revId": "9748020041b9ddae3a42589316e3e05067faeb12",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
