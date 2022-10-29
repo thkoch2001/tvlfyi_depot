@@ -16,6 +16,29 @@
       "message": "Can you give some context in the commit message for what ripple is and how it relates to Tvix, i.e. why we are using a proto from there? I for one don\u0027t know :)",
       "revId": "6d13283c07d720f2cbad4083d99be5890535b725",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "caacd6fa_9fb2dba2",
+        "filename": "tvix/proto/castore.proto",
+        "patchSetId": 1
+      },
+      "lineNbr": 6,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-10-29T11:04:30Z",
+      "side": 1,
+      "message": "I don\u0027t know what this is, but it should probably be the same namespace as other Tvix stuff.",
+      "range": {
+        "startLine": 6,
+        "startChar": 0,
+        "endLine": 6,
+        "endChar": 21
+      },
+      "revId": "6d13283c07d720f2cbad4083d99be5890535b725",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
