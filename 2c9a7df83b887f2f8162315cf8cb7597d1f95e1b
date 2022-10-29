@@ -52,6 +52,24 @@
       "parentUuid": "fb5b151a_86b135e7",
       "revId": "2c9a7df83b887f2f8162315cf8cb7597d1f95e1b",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cba4a9f3_d24ed3d9",
+        "filename": "tvix/proto/castore.proto",
+        "patchSetId": 2
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2022-10-29T15:45:47Z",
+      "side": 1,
+      "message": "It\u0027s not, but IPLD is another content-addressed merkle structure, and eliminating that possibility of confusion, by making it very explicit this is a symlink, and not something else should be a no-brainer.",
+      "parentUuid": "f8019264_f6781ffb",
+      "revId": "2c9a7df83b887f2f8162315cf8cb7597d1f95e1b",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
