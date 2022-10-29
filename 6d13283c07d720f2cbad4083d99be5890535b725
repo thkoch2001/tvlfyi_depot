@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "031deedf_2d241226",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-10-29T10:55:38Z",
+      "side": 1,
+      "message": "Can you give some context in the commit message for what ripple is and how it relates to Tvix, i.e. why we are using a proto from there? I for one don\u0027t know :)",
+      "revId": "6d13283c07d720f2cbad4083d99be5890535b725",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
