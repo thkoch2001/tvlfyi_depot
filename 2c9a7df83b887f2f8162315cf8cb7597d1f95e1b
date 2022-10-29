@@ -34,6 +34,24 @@
       "parentUuid": "4ba53ce3_10f79ccc",
       "revId": "2c9a7df83b887f2f8162315cf8cb7597d1f95e1b",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f8019264_f6781ffb",
+        "filename": "tvix/proto/castore.proto",
+        "patchSetId": 2
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 1000005
+      },
+      "writtenOn": "2022-10-29T15:40:53Z",
+      "side": 1,
+      "message": "I\u0027m not sure when *IPFS* became part of the domain context here. We\u0027re operating in the world of POSIX filesystems etc where `readlink` is unambiguous, IPFS is not intrinsically part of our domain.",
+      "parentUuid": "fb5b151a_86b135e7",
+      "revId": "2c9a7df83b887f2f8162315cf8cb7597d1f95e1b",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
