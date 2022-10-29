@@ -16,6 +16,24 @@
       "message": "tbh I\u0027m not crazy ab softFail casing and might prefer soft_fail even though that doesn\u0027t comply with the camelCase used elsewhere...",
       "revId": "1e15ef74087e5b7a25626ee920c3e3b11ff887fc",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a3f92df4_c525b26c",
+        "filename": "nix/buildkite/default.nix",
+        "patchSetId": 1
+      },
+      "lineNbr": 334,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-10-29T10:33:17Z",
+      "side": 1,
+      "message": "Consistency is more important here.",
+      "parentUuid": "69395e96_e780e211",
+      "revId": "1e15ef74087e5b7a25626ee920c3e3b11ff887fc",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
