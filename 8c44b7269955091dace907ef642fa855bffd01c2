@@ -63,6 +63,30 @@
       },
       "revId": "8c44b7269955091dace907ef642fa855bffd01c2",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c2581130_7e2dfa65",
+        "filename": "tvix/proto/castore.proto",
+        "patchSetId": 2
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-10-29T14:06:07Z",
+      "side": 1,
+      "message": "Why not just `digest` or `hash` for both?",
+      "parentUuid": "4ced93a8_78d69cbe",
+      "range": {
+        "startLine": 39,
+        "startChar": 10,
+        "endLine": 39,
+        "endChar": 13
+      },
+      "revId": "8c44b7269955091dace907ef642fa855bffd01c2",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
