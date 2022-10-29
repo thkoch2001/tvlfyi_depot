@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c7a2b1c2_b7d12585",
+        "filename": "tvix/eval/src/builtins/mod.rs",
+        "patchSetId": 6
+      },
+      "lineNbr": 646,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2022-10-29T12:27:19Z",
+      "side": 1,
+      "message": "Why are we wrapping the error in a thunkforce error?",
+      "revId": "273d1b658b3cd5efd208ba69bc036258fe8658a3",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b3e29b7f_ecc37652",
+        "filename": "tvix/eval/src/builtins/mod.rs",
+        "patchSetId": 6
+      },
+      "lineNbr": 653,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2022-10-29T12:27:19Z",
+      "side": 1,
+      "message": "Wonder if there could ever be an edge case with this being Greater instead of Greater or Equal, but doesn\u0027t look like it (cl/7133).",
+      "revId": "273d1b658b3cd5efd208ba69bc036258fe8658a3",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8dd29b43_6718a16b",
+        "filename": "tvix/eval/src/builtins/mod.rs",
+        "patchSetId": 6
+      },
+      "lineNbr": 657,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2022-10-29T12:27:19Z",
+      "side": 1,
+      "message": "Let\u0027s hope `std` conceives of error throwing compare in the future :)",
+      "revId": "273d1b658b3cd5efd208ba69bc036258fe8658a3",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
