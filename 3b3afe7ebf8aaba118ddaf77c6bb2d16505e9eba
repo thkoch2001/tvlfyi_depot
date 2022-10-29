@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9965037d_efb65eef",
+        "filename": "tvix/proto/castore.proto",
+        "patchSetId": 2
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1000005
+      },
+      "writtenOn": "2022-10-29T13:01:53Z",
+      "side": 0,
+      "message": "This field is precisely as verifiable as any other Merkle tree edge. Resolve `ref`, and you can compute it incrementally. Resolve the entire tree, and you can fully compute it from scratch.\nA credulous implementation won\u0027t reject an excessive size, but this is harmless: you\u0027ll have some ordinals without nodes. Undersizing is obvious and easy to reject: you won\u0027t have an ordinal for some nodes.",
+      "revId": "3b3afe7ebf8aaba118ddaf77c6bb2d16505e9eba",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
