@@ -12,6 +12,7 @@ let
     ./evaluator.proto
     ./pathinfo.proto
     ./rpc_blobstore.proto
+    ./rpc_pathinfo.proto
   ];
 in
 
