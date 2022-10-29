@@ -63,6 +63,30 @@
       },
       "revId": "6d13283c07d720f2cbad4083d99be5890535b725",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "daf8ca36_5a882ed0",
+        "filename": "tvix/proto/castore.proto",
+        "patchSetId": 1
+      },
+      "lineNbr": 6,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-10-29T11:05:38Z",
+      "side": 1,
+      "message": "Nevermind, I saw cl/7130",
+      "parentUuid": "56d89af5_a78ee22c",
+      "range": {
+        "startLine": 6,
+        "startChar": 0,
+        "endLine": 6,
+        "endChar": 21
+      },
+      "revId": "6d13283c07d720f2cbad4083d99be5890535b725",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
