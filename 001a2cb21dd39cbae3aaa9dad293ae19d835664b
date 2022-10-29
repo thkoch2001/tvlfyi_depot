@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f3ae2f76_2d09b1a6",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1000005
+      },
+      "writtenOn": "2022-10-29T15:38:58Z",
+      "side": 1,
+      "message": "Co-authored-by is the canonical form, Change-Id is a bit unusual in this respect",
+      "revId": "001a2cb21dd39cbae3aaa9dad293ae19d835664b",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
