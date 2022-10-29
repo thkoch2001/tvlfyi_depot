@@ -111,6 +111,30 @@
       },
       "revId": "8c44b7269955091dace907ef642fa855bffd01c2",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "83d2c160_4aa59fa7",
+        "filename": "tvix/proto/castore.proto",
+        "patchSetId": 2
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2022-10-29T15:53:52Z",
+      "side": 1,
+      "message": "At least for the remote store RPC protocol, blobs are requested via a different RPC method than Directory objects - in fact, there\u0027s currently no separate method to retrieve a `Directory` message at all, as  all `Directory` messages below a nix path are sent as a part of the initial request - and there\u0027s no requirement for the blob RPC method to return the serialized proto messages either, so they could live in different stores…\n\nI\u0027m tempted to call this specific attribute `[content_]digest`, WDYT?",
+      "parentUuid": "b8cbdc5e_78565954",
+      "range": {
+        "startLine": 39,
+        "startChar": 10,
+        "endLine": 39,
+        "endChar": 13
+      },
+      "revId": "8c44b7269955091dace907ef642fa855bffd01c2",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
