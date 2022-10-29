@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4ba53ce3_10f79ccc",
+        "filename": "tvix/proto/castore.proto",
+        "patchSetId": 2
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 1000005
+      },
+      "writtenOn": "2022-10-29T13:04:23Z",
+      "side": 1,
+      "message": "This change could use some clarification: the intention of naming it \"Link\" was to emphasise that these are the sole kind of links supported, since we don\u0027t support hardlinks.",
+      "revId": "2c9a7df83b887f2f8162315cf8cb7597d1f95e1b",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
