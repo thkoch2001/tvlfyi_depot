@@ -5,6 +5,7 @@ let
     ./protos/castore.proto
     ./protos/pathinfo.proto
     ./protos/rpc_blobstore.proto
+    ./protos/rpc_pathinfo.proto
   ];
 in
 lib.fix (self: depot.third_party.naersk.buildPackage (lib.fix (naerskArgs: {
