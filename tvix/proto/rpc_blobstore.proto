@@ -1,0 +1,31 @@
+// SPDX-License-Identifier: MIT
+// Copyright © 2022 The Tvix Authors
+syntax = "proto3";
+
+package tvix.proto.v1;
+
+service BlobService {
+    rpc Get(GetBlobRequest) returns (GetBlobResponse);
+    rpc Put(PutBlobRequest) returns (PutBlobResponse);
+
+    // TODO: separate requests for baos,
+    // range requests?
+}
+
+message GetBlobRequest {
+    // The blake3 digest of the blob requested
+    bytes digest = 1;
+}
+
+message GetBlobResponse {
+    bytes data = 1;
+}
+
+message PutBlobRequest {
+    bytes data = 1;
+}
+
+message PutBlobResponse {
+    // The blake3 digest of the data that was sent.
+    bytes digest = 1;
+}
