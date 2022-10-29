@@ -4,6 +4,7 @@ let
   protoRoot = depot.nix.sparseTree depot.path.origSrc [
     ./protos/castore.proto
     ./protos/pathinfo.proto
+    ./protos/rpc_blobstore.proto
   ];
 in
 lib.fix (self: depot.third_party.naersk.buildPackage (lib.fix (naerskArgs: {
