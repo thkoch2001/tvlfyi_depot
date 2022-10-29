@@ -177,6 +177,30 @@
       },
       "revId": "8c44b7269955091dace907ef642fa855bffd01c2",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ea8981ec_16f0b692",
+        "filename": "tvix/proto/castore.proto",
+        "patchSetId": 2
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1000005
+      },
+      "writtenOn": "2022-10-29T20:43:07Z",
+      "side": 1,
+      "message": "I\u0027d prefer at least `digest` over `hash`. I prefer reserving the latter for a choice of hash function, rather than its output.",
+      "parentUuid": "effa72b1_6f6a544e",
+      "range": {
+        "startLine": 39,
+        "startChar": 10,
+        "endLine": 39,
+        "endChar": 13
+      },
+      "revId": "8c44b7269955091dace907ef642fa855bffd01c2",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
