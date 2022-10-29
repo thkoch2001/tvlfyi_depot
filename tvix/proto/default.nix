@@ -11,6 +11,7 @@ let
     ./castore.proto
     ./evaluator.proto
     ./pathinfo.proto
+    ./rpc_blobstore.proto
   ];
 in
 
