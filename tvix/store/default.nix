@@ -5,6 +5,7 @@ let
     ./protos/castore.proto
     ./protos/pathinfo.proto
     ./protos/rpc_blobstore.proto
+    ./protos/rpc_pathinfo.proto
   ];
 in
 depot.third_party.naersk.buildPackage {
