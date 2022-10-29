@@ -20,6 +20,24 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "bc8e1e26_9a9e8e9f",
+        "filename": "tvix/eval/src/builtins/mod.rs",
+        "patchSetId": 6
+      },
+      "lineNbr": 646,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-10-29T14:03:28Z",
+      "side": 1,
+      "message": "The other option is discarding the metadata of the inner error (such as location), as the builtin must return an ErrorKind (which is then populated with the location of the builtin call). That\u0027s not what we want, though.",
+      "parentUuid": "c7a2b1c2_b7d12585",
+      "revId": "273d1b658b3cd5efd208ba69bc036258fe8658a3",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "b3e29b7f_ecc37652",
         "filename": "tvix/eval/src/builtins/mod.rs",
         "patchSetId": 6
