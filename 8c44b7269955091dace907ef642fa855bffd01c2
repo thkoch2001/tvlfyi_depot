@@ -153,6 +153,30 @@
       },
       "revId": "8c44b7269955091dace907ef642fa855bffd01c2",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "effa72b1_6f6a544e",
+        "filename": "tvix/proto/castore.proto",
+        "patchSetId": 2
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-10-29T17:27:11Z",
+      "side": 1,
+      "message": "\u003e It\u0027s specifically a reference (a Merkle edge) to another object\n\nI think there\u0027s no difference between that and \"it\u0027s the hash of the file the node refers to\", given that we\u0027re talking about a protocol for fetching things by hash.\n\nI guess the objection to `content_digest` is that a `Directory` message isn\u0027t _content_ as such, but _the thing itself_, in which case just `digest` (or simply `hash` - because everyone knows what that is!) seems fine to me.",
+      "parentUuid": "83d2c160_4aa59fa7",
+      "range": {
+        "startLine": 39,
+        "startChar": 10,
+        "endLine": 39,
+        "endChar": 13
+      },
+      "revId": "8c44b7269955091dace907ef642fa855bffd01c2",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
