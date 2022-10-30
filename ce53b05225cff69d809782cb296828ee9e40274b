@@ -20,6 +20,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "aae43831_9e2e12ad",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2022-10-30T20:02:11Z",
+      "side": 1,
+      "message": "https://tvl.fyi/blog/rewriting-nix said:\n\n\u003e Well-defined interaction protocols for how the three different components (evaluator, builder, store) interact.\n\n… and we started an initial .proto file, including a GRPC interface more than a year ago: https://code.tvl.fyi/commit/tvix/proto?id\u003d8c2084d0a1bbfc7d0bfa12ef1f5bda3cb02bff56\n\nThe main idea is that you can write different store/evaluator/builder implementations/proxies in whatever programming language you want, all using the same standardized interface.\n\nI\u0027m not against using another RPC protocol, that allows us to keep at least the message definitions, but using a widely-adopted one feels important.\n\nDuring some of the go-nix development, we also looked at https://connect.build/, which would consume the same RPC definitions, but use another transport. However, last time I checked, there was no Rust support yet. I really don\u0027t want to define my own custom RPC protocol, so please propose what standardized protocol you\u0027d like to use instead ;-)",
+      "parentUuid": "a527d2d1_c9c28f85",
+      "revId": "ce53b05225cff69d809782cb296828ee9e40274b",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "3dd710b6_0d10c784",
         "filename": "tvix/proto/rpc_pathinfo.proto",
         "patchSetId": 2
@@ -71,6 +89,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "656fa02d_199d1e9e",
+        "filename": "tvix/proto/rpc_pathinfo.proto",
+        "patchSetId": 2
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2022-10-30T20:02:11Z",
+      "side": 1,
+      "message": "Let\u0027s continue this discussion in the comment thead above, \"I\u0027m very concerned about the leap to impose gRPC here.\".",
+      "parentUuid": "86a25d0e_59653d6b",
+      "revId": "ce53b05225cff69d809782cb296828ee9e40274b",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "e29cf3a3_1f9d1182",
@@ -102,6 +138,24 @@
       "side": 1,
       "message": "Ack",
       "parentUuid": "e29cf3a3_1f9d1182",
+      "revId": "ce53b05225cff69d809782cb296828ee9e40274b",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "98bba735_c803480a",
+        "filename": "tvix/proto/rpc_pathinfo.proto",
+        "patchSetId": 2
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2022-10-30T20:02:11Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "71d153f0_438f3906",
       "revId": "ce53b05225cff69d809782cb296828ee9e40274b",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
@@ -155,6 +209,24 @@
       "side": 1,
       "message": "\u003e These docs are mostly written for patterns where you\u0027re talking to a remote end, like a binary cache\n\nSo these protobufs will absolutely not be used for the eval\u003c-\u003estore interface?  Because nothing in the code says that, and the naming is so general that it\u0027s likely to get used by default when that interface is created...\n\n\u003e I think there\u0027s some confusion here\n\nPerhaps the protocol could use additional clarification, then?\n\nThe fact that `Put` returns unnecessary data which the sender already has should, at minimum, be noted.\n\nThe \"multiple return\" phenomenon will come up again.",
       "parentUuid": "1051ba51_da30260a",
+      "revId": "ce53b05225cff69d809782cb296828ee9e40274b",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "14ce37c5_80580574",
+        "filename": "tvix/proto/rpc_pathinfo.proto",
+        "patchSetId": 2
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2022-10-30T20:02:11Z",
+      "side": 1,
+      "message": "Yes, there needs more documentation, and usage examples. But the amount of documentation and usage examples for `evaluator.proto` is similarly slim, tbh, so I don\u0027t see why this should block this CL that adds the protos.\n\nI wanted to start writing a bridge/translation layer between NAR/NARInfo and these RPC methods to get some more usage examples, and plan to refine documentation and comments as I proceed with these.\n\nThe evaluator is probably not gonna interact with the store directly via these interfaces. It might end up emitting Derivations that might cause the local store to substitute from a remote end, or build locally, which might upload things to a store, but that\u0027s all probably more a job of the Coordinator and Builders.\n\nI added a comment on the return value of the Put() RPC call.",
+      "parentUuid": "64c02ccb_3ed30903",
       "revId": "ce53b05225cff69d809782cb296828ee9e40274b",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
