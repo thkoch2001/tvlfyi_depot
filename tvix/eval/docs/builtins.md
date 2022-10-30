@@ -58,7 +58,7 @@ See also https://nixos.org/manual/nix/stable/expressions/builtins.html
 | getEnv                        | false  |       | false |
 | hasAttr                       | false  |       |       |
 | hasContext                    | false  |       |       |
-| hashFile                      | false  |       |       |
+| hashFile                      | false  |       | false |
 | hashString                    | false  |       |       |
 | head                          | false  |       |       |
 | import                        | true   |       |       |
@@ -86,10 +86,10 @@ See also https://nixos.org/manual/nix/stable/expressions/builtins.html
 | parseDrvName                  | false  |       |       |
 | partition                     | false  |       |       |
 | path                          | false  |       |       |
-| pathExists                    | false  |       |       |
+| pathExists                    | false  |       | false |
 | placeholder                   | true   |       |       |
-| readDir                       | false  |       |       |
-| readFile                      | false  |       |       |
+| readDir                       | false  |       | false |
+| readFile                      | false  |       | false |
 | removeAttrs                   | true   |       |       |
 | replaceStrings                | false  |       |       |
 | scopedImport                  | true   |       |       |
