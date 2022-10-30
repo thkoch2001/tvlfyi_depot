@@ -62,6 +62,10 @@ in
     networkmanager.enable = true;
     networkmanager.dns = "none";
 
+    extraHosts = ''
+      10.101.240.1 wifi.silja.fi
+    '';
+
     nameservers = [
       "8.8.8.8"
       "8.8.4.4"
