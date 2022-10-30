@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "33ce18ac_a02b69c9",
+        "filename": "tvix/proto/rpc_directory.proto",
+        "patchSetId": 5
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 1000066
+      },
+      "writtenOn": "2022-10-30T23:31:52Z",
+      "side": 1,
+      "message": "Is this the \"blake3 hash of a Directory message\" like here? https://code.tvl.fyi/tree/tvix/proto/castore.proto?id\u003df6078cce4faf46aab644e9eced854fd6412f06d5#n26\n\nIf so (and even if not) could you add a comment to mention that?",
+      "revId": "f6078cce4faf46aab644e9eced854fd6412f06d5",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
