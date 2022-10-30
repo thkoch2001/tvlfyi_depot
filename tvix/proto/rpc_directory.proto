@@ -1,0 +1,42 @@
+// SPDX-License-Identifier: MIT
+// Copyright © 2022 The Tvix Authors
+syntax = "proto3";
+
+package tvix.proto.v1;
+
+import "tvix/proto/castore.proto";
+
+service DirectoryService {
+    // Get retrieves a single Directory message, by using the lookup parameters
+    // in GetDirectoryRequest.
+    rpc Get(GetDirectoryRequest) returns (Directory);
+
+    // GetRecursive retrieves a Directory message, and recursively all child
+    // Directory messages it contains.
+    // Directory messages SHOULD be streamed in a recursive breadth-first walk,
+    // but other orders are also fine, as long as Directory messages are only
+    // sent after they are referred to from previously sent Directory messages.
+    rpc GetRecursive(GetDirectoryRequest) returns (stream Directory);
+
+    // Put uploads a Directory message. It MUST block until the Directory
+    // object has been written.
+    // The remote end MAY check if a DirectoryNode has already been
+    // uploaded.
+    rpc Put(Directory) returns (PutDirectoryResponse);
+
+    // PutRecursive uploads a tree of Directory messages.
+    // Individual Directory messages need to be send in an order walking up
+    // from the leaves to the root - a Directory message can only refer to
+    // Directory messages previously sent in the same stream.
+    rpc PutRecursive(stream Directory) returns (PutDirectoryResponse);
+}
+
+message GetDirectoryRequest {
+    oneof by_what {
+        bytes ref = 1;
+    }
+}
+
+message PutDirectoryResponse {
+    bytes digest = 1;
+}
