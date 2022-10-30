@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b3bf229e_145b2707",
+        "filename": "tvix/eval/docs/builtins.md",
+        "patchSetId": 3
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2022-10-30T23:53:01Z",
+      "side": 1,
+      "message": "I think this is misleading terminology, actually. These are just ways to add a path to the store, much like `toFile`. Only `fetchGit` even returns a set, most others  just give you strings with context.",
+      "revId": "07cfee64e1b671dd7643ba7c7dd36db0c275a0c7",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
