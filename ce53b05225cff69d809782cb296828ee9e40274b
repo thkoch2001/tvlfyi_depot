@@ -20,6 +20,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "f88f39e6_0cfd5c3a",
+        "filename": "tvix/proto/rpc_pathinfo.proto",
+        "patchSetId": 2
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2022-10-30T18:52:56Z",
+      "side": 1,
+      "message": "These methods are mostly tailored to remote binary caches. Some RPC protocol with a concept of request/response mapping makes sense, and grpc was the obvious choice, considering we juggle with Protos anyways.",
+      "parentUuid": "3dd710b6_0d10c784",
+      "revId": "ce53b05225cff69d809782cb296828ee9e40274b",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "e29cf3a3_1f9d1182",
         "filename": "tvix/proto/rpc_pathinfo.proto",
         "patchSetId": 2
@@ -37,6 +55,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "71d153f0_438f3906",
+        "filename": "tvix/proto/rpc_pathinfo.proto",
+        "patchSetId": 2
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2022-10-30T18:52:56Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "e29cf3a3_1f9d1182",
+      "revId": "ce53b05225cff69d809782cb296828ee9e40274b",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "c7f6d644_e0b79c1b",
         "filename": "tvix/proto/rpc_pathinfo.proto",
         "patchSetId": 2
@@ -48,6 +84,24 @@
       "writtenOn": "2022-10-30T18:42:12Z",
       "side": 1,
       "message": "Note that this is forbidding useful parallelism.  The caller may have ways of making use of the outpath without needing to be sure it has been written to disk.  This is forbidding the caller from doing so.\n\nUsing RPC forces you to choose between one or the other.\n\nWith a stream-of-messages protocol you can have a call \"return twice\" -- in other words, if I send a `Put`, you will respond with two messages at different times in the future: a `PutResponseHash` (telling me the hash you calculated) and a `PutResponseComplete` (telling me that you have committed my bytes to the disk).\n\nAssuming that network protocols look like local-cpu procedure calls has a long history of causing misery...",
+      "revId": "ce53b05225cff69d809782cb296828ee9e40274b",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1051ba51_da30260a",
+        "filename": "tvix/proto/rpc_pathinfo.proto",
+        "patchSetId": 2
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2022-10-30T18:52:56Z",
+      "side": 1,
+      "message": "These docs are mostly written for patterns where you\u0027re talking to a remote end, like a binary cache, and blocking until the other side has finished calculating and somewhat persisted to disk (so that subsequent reads can get it) is a good property.\n\nI think there\u0027s some confusion here - this is explicitly NOT used to calculate output path hashes, the client issuing the Put already sends a PathInfo message with the name in the root node populated.\n\nThe returned PathInfo object is mostly to signal success, and propagate potentially server-side added signatures. We can use another response type here, but the important part is that the PathInfo object and hash calculation has already been done.",
+      "parentUuid": "c7f6d644_e0b79c1b",
       "revId": "ce53b05225cff69d809782cb296828ee9e40274b",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
