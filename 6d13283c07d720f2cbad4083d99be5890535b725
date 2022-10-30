@@ -20,6 +20,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "d3a4e349_7aee5905",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2022-10-30T12:22:32Z",
+      "side": 1,
+      "message": "I had a lot of discussion with many different people around how to represent the contents of a path inside the nix store.\n\nAfter playing many different models, I decided on deriving something by starting from Fossil, the store used by Ripple (https://nlnet.nl/project/Ripple/), and subsequent CLs rename the protos a bit.\n\nThis doesn\u0027t mean Tvix has to use Ripple, or stay wire-compatible with it at all costs, but this was the design that I liked the most.\n\nI\u0027m not sure all of this should be in the commit message, especially the \"future roadmap\" plans. This commit message vendors in a proto file, and properly links to the source, and that\u0027s about it.\n\nHave a look at the subsequent CLs, especially the RPC ones to see how I\u0027m thinking about using this. I also intend to write more documentation somewhere, once there\u0027s some actual code using this :-)",
+      "parentUuid": "031deedf_2d241226",
+      "revId": "6d13283c07d720f2cbad4083d99be5890535b725",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "caacd6fa_9fb2dba2",
         "filename": "tvix/proto/castore.proto",
         "patchSetId": 1
