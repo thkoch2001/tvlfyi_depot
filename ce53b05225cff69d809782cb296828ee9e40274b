@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3dd710b6_0d10c784",
+        "filename": "tvix/proto/rpc_pathinfo.proto",
+        "patchSetId": 2
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1000066
+      },
+      "writtenOn": "2022-10-30T18:42:12Z",
+      "side": 1,
+      "message": "Do we really need heavyweight RPC here?\n\nThere is a lot of subtle concurrency wrapped up in the concept of blocking.  Hiding all of that from users requires extremely heavyweight mechanisms like gRPC or HTTP, and either threads or async-trickery as well.\n\nAlso my understanding of the protobuf `rpc` keyword is that it is defacto biased towards gRPC.  Yes, in theory you can swap in other rpc layers, but they are all relegated to \"third party status\", and none of them work in all the places where protobufs work.",
+      "revId": "ce53b05225cff69d809782cb296828ee9e40274b",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e29cf3a3_1f9d1182",
+        "filename": "tvix/proto/rpc_pathinfo.proto",
+        "patchSetId": 2
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1000066
+      },
+      "writtenOn": "2022-10-30T18:42:12Z",
+      "side": 1,
+      "message": "\"It MUST block\" \u003d\u003e \"It MUST not return\"",
+      "revId": "ce53b05225cff69d809782cb296828ee9e40274b",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c7f6d644_e0b79c1b",
+        "filename": "tvix/proto/rpc_pathinfo.proto",
+        "patchSetId": 2
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1000066
+      },
+      "writtenOn": "2022-10-30T18:42:12Z",
+      "side": 1,
+      "message": "Note that this is forbidding useful parallelism.  The caller may have ways of making use of the outpath without needing to be sure it has been written to disk.  This is forbidding the caller from doing so.\n\nUsing RPC forces you to choose between one or the other.\n\nWith a stream-of-messages protocol you can have a call \"return twice\" -- in other words, if I send a `Put`, you will respond with two messages at different times in the future: a `PutResponseHash` (telling me the hash you calculated) and a `PutResponseComplete` (telling me that you have committed my bytes to the disk).\n\nAssuming that network protocols look like local-cpu procedure calls has a long history of causing misery...",
+      "revId": "ce53b05225cff69d809782cb296828ee9e40274b",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
