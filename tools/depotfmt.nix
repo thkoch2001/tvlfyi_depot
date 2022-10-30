@@ -9,9 +9,10 @@ let
     echo "$@" | xargs -n1 ${pkgs.terraform}/bin/terraform fmt
   '';
 
+  # TODO: Upgrade to Go 1.19 and reformat tree
   config = pkgs.writeText "depot-treefmt-config" ''
     [formatter.go]
-    command = "${pkgs.go}/bin/gofmt"
+    command = "${pkgs.go_1_18}/bin/gofmt"
     options = [ "-w" ]
     includes = ["*.go"]
 
