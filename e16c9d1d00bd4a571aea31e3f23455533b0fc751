@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cd528572_40568d56",
+        "filename": "tvix/eval/docs/builtins.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 96,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-10-30T21:01:10Z",
+      "side": 1,
+      "message": "isn\u0027t that just `false`?",
+      "range": {
+        "startLine": 96,
+        "startChar": 51,
+        "endLine": 96,
+        "endChar": 60
+      },
+      "revId": "e16c9d1d00bd4a571aea31e3f23455533b0fc751",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
