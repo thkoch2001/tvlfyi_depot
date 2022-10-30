@@ -68,19 +68,6 @@ in
     })
   );
 
-  # Upgrade to match telega in emacs-overlay
-  # TODO(tazjin): ugrade tdlib (+ telega?!) in nixpkgs
-  tdlib = assert super.tdlib.version == "1.8.3";
-    super.tdlib.overrideAttrs (old: {
-      version = "1.8.7";
-      src = self.fetchFromGitHub {
-        owner = "tdlib";
-        repo = "td";
-        rev = "a7a17b34b3c8fd3f7f6295f152746beb68f34d83";
-        sha256 = "sha256:0a5609knn7rmiiblz315yrvc9f2r207l2nl6brjy5bnhjdspmzs6";
-      };
-    });
-
   # dottime support for notmuch
   notmuch = super.notmuch.overrideAttrs (old: {
     passthru = old.passthru // {
