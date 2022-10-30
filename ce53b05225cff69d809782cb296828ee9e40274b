@@ -3,6 +3,23 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "a527d2d1_c9c28f85",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000066
+      },
+      "writtenOn": "2022-10-30T19:21:21Z",
+      "side": 1,
+      "message": "I\u0027m very concerned about the leap to impose gRPC here.",
+      "revId": "ce53b05225cff69d809782cb296828ee9e40274b",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "3dd710b6_0d10c784",
         "filename": "tvix/proto/rpc_pathinfo.proto",
         "patchSetId": 2
@@ -32,6 +49,24 @@
       "side": 1,
       "message": "These methods are mostly tailored to remote binary caches. Some RPC protocol with a concept of request/response mapping makes sense, and grpc was the obvious choice, considering we juggle with Protos anyways.",
       "parentUuid": "3dd710b6_0d10c784",
+      "revId": "ce53b05225cff69d809782cb296828ee9e40274b",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "86a25d0e_59653d6b",
+        "filename": "tvix/proto/rpc_pathinfo.proto",
+        "patchSetId": 2
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1000066
+      },
+      "writtenOn": "2022-10-30T19:21:21Z",
+      "side": 1,
+      "message": "\u003e Some RPC protocol with a concept of request/response mapping makes sense... and grpc was the obvious choice\n\nThis seems... unsupported.",
+      "parentUuid": "f88f39e6_0cfd5c3a",
       "revId": "ce53b05225cff69d809782cb296828ee9e40274b",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
@@ -102,6 +137,24 @@
       "side": 1,
       "message": "These docs are mostly written for patterns where you\u0027re talking to a remote end, like a binary cache, and blocking until the other side has finished calculating and somewhat persisted to disk (so that subsequent reads can get it) is a good property.\n\nI think there\u0027s some confusion here - this is explicitly NOT used to calculate output path hashes, the client issuing the Put already sends a PathInfo message with the name in the root node populated.\n\nThe returned PathInfo object is mostly to signal success, and propagate potentially server-side added signatures. We can use another response type here, but the important part is that the PathInfo object and hash calculation has already been done.",
       "parentUuid": "c7f6d644_e0b79c1b",
+      "revId": "ce53b05225cff69d809782cb296828ee9e40274b",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "64c02ccb_3ed30903",
+        "filename": "tvix/proto/rpc_pathinfo.proto",
+        "patchSetId": 2
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1000066
+      },
+      "writtenOn": "2022-10-30T19:21:21Z",
+      "side": 1,
+      "message": "\u003e These docs are mostly written for patterns where you\u0027re talking to a remote end, like a binary cache\n\nSo these protobufs will absolutely not be used for the eval\u003c-\u003estore interface?  Because nothing in the code says that, and the naming is so general that it\u0027s likely to get used by default when that interface is created...\n\n\u003e I think there\u0027s some confusion here\n\nPerhaps the protocol could use additional clarification, then?\n\nThe fact that `Put` returns unnecessary data which the sender already has should, at minimum, be noted.\n\nThe \"multiple return\" phenomenon will come up again.",
+      "parentUuid": "1051ba51_da30260a",
       "revId": "ce53b05225cff69d809782cb296828ee9e40274b",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
