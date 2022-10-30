@@ -38,8 +38,8 @@ message DirectoryNode {
 message FileNode {
     // The (base)name of the file
     string name = 1;
-    // The blake3 hash of the file contents
-    bytes ref = 2;
+    // The blake3 digest of the file contents
+    bytes digest = 2;
     // The file content size
     uint32 size = 3;
     // Whether the file is executable
