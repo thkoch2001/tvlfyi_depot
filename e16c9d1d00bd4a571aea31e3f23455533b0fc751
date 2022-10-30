@@ -22,6 +22,30 @@
       },
       "revId": "e16c9d1d00bd4a571aea31e3f23455533b0fc751",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bd760630_39ad8ba4",
+        "filename": "tvix/eval/docs/builtins.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 96,
+      "author": {
+        "id": 1000066
+      },
+      "writtenOn": "2022-10-30T21:06:17Z",
+      "side": 1,
+      "message": "If the `sha256` attribute is present on the argument to `builtins.path`, I believe it is pure.  But I could be wrong about that.",
+      "parentUuid": "cd528572_40568d56",
+      "range": {
+        "startLine": 96,
+        "startChar": 51,
+        "endLine": 96,
+        "endChar": 60
+      },
+      "revId": "e16c9d1d00bd4a571aea31e3f23455533b0fc751",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
