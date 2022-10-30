@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0f69e38d_a4f0369d",
+        "filename": "tvix/proto/pathinfo.proto",
+        "patchSetId": 9
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1000066
+      },
+      "writtenOn": "2022-10-30T23:58:11Z",
+      "side": 1,
+      "message": "are these base32-encoded?",
+      "revId": "89167c1afbd43f72272ff578918186e3c7455a62",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "98de40ef_84bbf12e",
+        "filename": "tvix/proto/pathinfo.proto",
+        "patchSetId": 9
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1000066
+      },
+      "writtenOn": "2022-10-30T23:58:11Z",
+      "side": 1,
+      "message": "It might be helpful to add a comment reminding readers that this is *without* base32 encoding.  I\u0027m sure that someday, somebody will accidentally put the base32-encoded string bytes in here by mistake :)",
+      "revId": "89167c1afbd43f72272ff578918186e3c7455a62",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ca65ec5c_ea835aae",
+        "filename": "tvix/proto/pathinfo.proto",
+        "patchSetId": 9
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 1000066
+      },
+      "writtenOn": "2022-10-30T23:58:11Z",
+      "side": 1,
+      "message": "truncated to 160 bits? or not?",
+      "revId": "89167c1afbd43f72272ff578918186e3c7455a62",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
