@@ -546,68 +546,69 @@ in
       }];
   };
 
+  # XXX: Adapt to https://github.com/NixOS/nixpkgs/pull/191768
   services.grafana = {
-    enable = true;
+    enable = false;
     port = 4723; # "graf" on phone keyboard
     domain = "status.tvl.su";
     rootUrl = "https://status.tvl.su";
     analytics.reporting.enable = false;
-    extraOptions =
-      let
-        options = {
-          auth = {
-            generic_oauth = {
-              enabled = true;
-              client_id = "grafana";
-              scopes = "openid profile email";
-              name = "TVL";
-              email_attribute_path = "mail";
-              login_attribute_path = "sub";
-              name_attribute_path = "displayName";
-              auth_url = "https://auth.tvl.fyi/auth/realms/TVL/protocol/openid-connect/auth";
-              token_url = "https://auth.tvl.fyi/auth/realms/TVL/protocol/openid-connect/token";
-              api_url = "https://auth.tvl.fyi/auth/realms/TVL/protocol/openid-connect/userinfo";
+    # extraOptions =
+    #   let
+    #     options = {
+    #       auth = {
+    #         generic_oauth = {
+    #           enabled = true;
+    #           client_id = "grafana";
+    #           scopes = "openid profile email";
+    #           name = "TVL";
+    #           email_attribute_path = "mail";
+    #           login_attribute_path = "sub";
+    #           name_attribute_path = "displayName";
+    #           auth_url = "https://auth.tvl.fyi/auth/realms/TVL/protocol/openid-connect/auth";
+    #           token_url = "https://auth.tvl.fyi/auth/realms/TVL/protocol/openid-connect/token";
+    #           api_url = "https://auth.tvl.fyi/auth/realms/TVL/protocol/openid-connect/userinfo";
 
-              # Give lukegb, grfn, tazjin "Admin" rights.
-              role_attribute_path = "((sub == 'lukegb' || sub == 'grfn' || sub == 'tazjin') && 'Admin') || 'Editor'";
+    #           # Give lukegb, grfn, tazjin "Admin" rights.
+    #           role_attribute_path = "((sub == 'lukegb' || sub == 'grfn' || sub == 'tazjin') && 'Admin') || 'Editor'";
 
-              # Allow creating new Grafana accounts from OAuth accounts.
-              allow_sign_up = true;
-            };
+    #           # Allow creating new Grafana accounts from OAuth accounts.
+    #           allow_sign_up = true;
+    #         };
 
-            anonymous = {
-              enabled = true;
-              org_name = "The Virus Lounge";
-              org_role = "Viewer";
-            };
+    #         anonymous = {
+    #           enabled = true;
+    #           org_name = "The Virus Lounge";
+    #           org_role = "Viewer";
+    #         };
 
-            basic.enabled = false;
-            oauth_auto_login = true;
-            disable_login_form = true;
-          };
-        };
-        inherit (builtins) typeOf replaceStrings listToAttrs concatLists;
-        inherit (lib) toUpper mapAttrsToList nameValuePair concatStringsSep;
+    #         basic.enabled = false;
+    #         oauth_auto_login = true;
+    #         disable_login_form = true;
+    #       };
+    #     };
+    #     inherit (builtins) typeOf replaceStrings listToAttrs concatLists;
+    #     inherit (lib) toUpper mapAttrsToList nameValuePair concatStringsSep;
 
-        # Take ["auth" "generic_oauth" "enabled"] and turn it into OPTIONS_GENERIC_OAUTH_ENABLED.
-        encodeName = raw: replaceStrings [ "." ] [ "_" ] (toUpper (concatStringsSep "_" raw));
+    #     # Take ["auth" "generic_oauth" "enabled"] and turn it into OPTIONS_GENERIC_OAUTH_ENABLED.
+    #     encodeName = raw: replaceStrings [ "." ] [ "_" ] (toUpper (concatStringsSep "_" raw));
 
-        # Turn an option value into a string, but we want bools to be sensible strings and not "1" or "".
-        optionToString = value:
-          if (typeOf value) == "bool" then
-            if value then "true" else "false"
-          else builtins.toString value;
+    #     # Turn an option value into a string, but we want bools to be sensible strings and not "1" or "".
+    #     optionToString = value:
+    #       if (typeOf value) == "bool" then
+    #         if value then "true" else "false"
+    #       else builtins.toString value;
 
-        # Turn an nested options attrset into a flat listToAttrs-compatible list.
-        encodeOptions = prefix: inp: concatLists (mapAttrsToList
-          (name: value:
-            if (typeOf value) == "set"
-            then encodeOptions (prefix ++ [ name ]) value
-            else [ (nameValuePair (encodeName (prefix ++ [ name ])) (optionToString value)) ]
-          )
-          inp);
-      in
-      listToAttrs (encodeOptions [ ] options);
+    #     # Turn an nested options attrset into a flat listToAttrs-compatible list.
+    #     encodeOptions = prefix: inp: concatLists (mapAttrsToList
+    #       (name: value:
+    #         if (typeOf value) == "set"
+    #         then encodeOptions (prefix ++ [ name ]) value
+    #         else [ (nameValuePair (encodeName (prefix ++ [ name ])) (optionToString value)) ]
+    #       )
+    #       inp);
+    #   in
+    #   listToAttrs (encodeOptions [ ] options);
 
     provision = {
       enable = true;
