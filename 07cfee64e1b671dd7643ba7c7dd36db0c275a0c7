@@ -16,6 +16,24 @@
       "message": "I think this is misleading terminology, actually. These are just ways to add a path to the store, much like `toFile`. Only `fetchGit` even returns a set, most others  just give you strings with context.",
       "revId": "07cfee64e1b671dd7643ba7c7dd36db0c275a0c7",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "77fcc9ea_146048f7",
+        "filename": "tvix/eval/docs/builtins.md",
+        "patchSetId": 3
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1000066
+      },
+      "writtenOn": "2022-10-31T00:17:20Z",
+      "side": 1,
+      "message": "good point.  done.",
+      "parentUuid": "b3bf229e_145b2707",
+      "revId": "07cfee64e1b671dd7643ba7c7dd36db0c275a0c7",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
