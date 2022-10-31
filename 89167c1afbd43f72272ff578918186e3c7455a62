@@ -20,6 +20,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "8fba2819_7b588b49",
+        "filename": "tvix/proto/pathinfo.proto",
+        "patchSetId": 9
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2022-10-31T00:47:51Z",
+      "side": 1,
+      "message": "No, these are bytes - meant so you can call PathInfoService.Get() with them.\n\nThe nixbase32 encoding (and the name) only exists in the .narinfo format, and is in narinfo.reference_names.",
+      "parentUuid": "0f69e38d_a4f0369d",
+      "revId": "89167c1afbd43f72272ff578918186e3c7455a62",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "98de40ef_84bbf12e",
         "filename": "tvix/proto/pathinfo.proto",
         "patchSetId": 9
@@ -37,6 +55,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "dc059cea_2dd1c3b2",
+        "filename": "tvix/proto/pathinfo.proto",
+        "patchSetId": 9
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2022-10-31T00:47:51Z",
+      "side": 1,
+      "message": "Good point. I\u0027ll add it here and for references.",
+      "parentUuid": "98de40ef_84bbf12e",
+      "revId": "89167c1afbd43f72272ff578918186e3c7455a62",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "ca65ec5c_ea835aae",
         "filename": "tvix/proto/pathinfo.proto",
         "patchSetId": 9
@@ -48,6 +84,24 @@
       "writtenOn": "2022-10-30T23:58:11Z",
       "side": 1,
       "message": "truncated to 160 bits? or not?",
+      "revId": "89167c1afbd43f72272ff578918186e3c7455a62",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8d2bb466_ca05a403",
+        "filename": "tvix/proto/pathinfo.proto",
+        "patchSetId": 9
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2022-10-31T00:47:51Z",
+      "side": 1,
+      "message": "No. That\u0027s to represent checksums in .narinfo files with the `sha256:` and similar prefixes. I tried to make this clear by nesting this inside the NARInfo message.",
+      "parentUuid": "ca65ec5c_ea835aae",
       "revId": "89167c1afbd43f72272ff578918186e3c7455a62",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
