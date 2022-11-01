@@ -18,6 +18,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "ed4ae9de_41b1d408",
+        "filename": "tvix/proto/rpc_blobstore.proto",
+        "patchSetId": 1
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2022-11-01T07:42:36Z",
+      "side": 1,
+      "message": "https://github.com/oconnor663/bao/blob/master/docs/spec.md - if we have a separate method to get the intermediate hashes for a given root hash, we can do more granular streaming. I want to reserve most of that for a later PR, because right now you can only request the full blob anyways.\n\nI added a more verbose comment and linked to this, but speccing this out is something for later.",
+      "parentUuid": "c0eba02e_9e74621d",
+      "revId": "297e8a79223fe53f33e9b5ace754a6bd5877824f",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "ffb9744b_7fef6ea7",
@@ -31,6 +49,24 @@
       "writtenOn": "2022-11-01T00:43:50Z",
       "side": 1,
       "message": "maybe also\n\n```\n  optional bytes digest \u003d 2;  // sender-calculated\n```\n\n... and of course the store will verify the digest calculation and fail the request if it was calculated incorrectly.",
+      "revId": "297e8a79223fe53f33e9b5ace754a6bd5877824f",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2c981f3d_dc38b202",
+        "filename": "tvix/proto/rpc_blobstore.proto",
+        "patchSetId": 1
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2022-11-01T07:42:36Z",
+      "side": 1,
+      "message": "As an additional safeguard? I\u0027m personally leaning towards \"clients should check the PutBlobResponse.digest matches their calculations\", instead of introducing another field here.",
+      "parentUuid": "ffb9744b_7fef6ea7",
       "revId": "297e8a79223fe53f33e9b5ace754a6bd5877824f",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
