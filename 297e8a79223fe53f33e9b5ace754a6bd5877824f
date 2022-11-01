@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c0eba02e_9e74621d",
+        "filename": "tvix/proto/rpc_blobstore.proto",
+        "patchSetId": 1
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1000066
+      },
+      "writtenOn": "2022-11-01T00:43:50Z",
+      "side": 1,
+      "message": "baos?",
+      "revId": "297e8a79223fe53f33e9b5ace754a6bd5877824f",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ffb9744b_7fef6ea7",
+        "filename": "tvix/proto/rpc_blobstore.proto",
+        "patchSetId": 1
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1000066
+      },
+      "writtenOn": "2022-11-01T00:43:50Z",
+      "side": 1,
+      "message": "maybe also\n\n```\n  optional bytes digest \u003d 2;  // sender-calculated\n```\n\n... and of course the store will verify the digest calculation and fail the request if it was calculated incorrectly.",
+      "revId": "297e8a79223fe53f33e9b5ace754a6bd5877824f",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
