@@ -1,6 +1,46 @@
 {
   "comments": [
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "86507980_0c2f74ae",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-11-01T20:39:04Z",
+      "side": 1,
+      "message": "Thanks for working on this. We want something like this at my company atm as well 😎",
+      "revId": "578ac349bd3e11029474ce9e40115c83212c23c0",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a7d01ea0_e77c208f",
+        "filename": "nix/buildkite/default.nix",
+        "patchSetId": 3
+      },
+      "lineNbr": 290,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-11-01T20:39:04Z",
+      "side": 1,
+      "message": "nit: does this change need to be rebased? these changes feel outside the scope of this CL",
+      "range": {
+        "startLine": 286,
+        "startChar": 2,
+        "endLine": 290,
+        "endChar": 17
+      },
+      "revId": "578ac349bd3e11029474ce9e40115c83212c23c0",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "439f91b0_cdf240fa",
@@ -20,6 +60,47 @@
         "endLine": 292,
         "endChar": 16
       },
+      "revId": "578ac349bd3e11029474ce9e40115c83212c23c0",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7efaf12a_c079a428",
+        "filename": "nix/buildkite/default.nix",
+        "patchSetId": 3
+      },
+      "lineNbr": 292,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-11-01T20:39:04Z",
+      "side": 1,
+      "message": "drive-by comment: +1 wrt aligning Buildkite terminology",
+      "parentUuid": "439f91b0_cdf240fa",
+      "range": {
+        "startLine": 292,
+        "startChar": 6,
+        "endLine": 292,
+        "endChar": 16
+      },
+      "revId": "578ac349bd3e11029474ce9e40115c83212c23c0",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0cc06bdb_98ba265d",
+        "filename": "nix/buildkite/default.nix",
+        "patchSetId": 3
+      },
+      "lineNbr": 428,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-11-01T20:39:04Z",
+      "side": 1,
+      "message": "How do we feel about a final step that `builtins.throw`s when `cfg.key` doesn\u0027t exist in the pipeline?\n\nSomething like: https://gist.github.com/wpcarro/a9d98f52915e71477e7299223410aab6",
       "revId": "578ac349bd3e11029474ce9e40115c83212c23c0",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
