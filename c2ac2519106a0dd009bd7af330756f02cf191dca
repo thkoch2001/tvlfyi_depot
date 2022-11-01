@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "217f0fd3_efa7dcfd",
+        "filename": "tvix/eval/src/value/attrs/tests.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 84,
+      "author": {
+        "id": 1000002
+      },
+      "writtenOn": "2022-11-01T03:07:28Z",
+      "side": 1,
+      "message": "this seems common enough that it should be a function -- Value.eq_strings() ?",
+      "range": {
+        "startLine": 84,
+        "startChar": 15,
+        "endLine": 84,
+        "endChar": 46
+      },
+      "revId": "c2ac2519106a0dd009bd7af330756f02cf191dca",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
