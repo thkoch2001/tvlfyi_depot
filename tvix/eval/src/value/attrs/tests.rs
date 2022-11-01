@@ -80,7 +80,9 @@ fn test_kv_attrs() {
     .expect("constructing K/V pair attrs should succeed");
 
     match kv_attrs {
-        NixAttrs(AttrsRep::KV { name, value }) if name == meaning_val || value == forty_two_val => {
+        NixAttrs(AttrsRep::KV { name, value })
+            if name.to_str().unwrap().as_str() == meaning_val.to_str().unwrap().as_str()
+                || value.to_str().unwrap().as_str() == forty_two_val.to_str().unwrap().as_str() => {
         }
 
         _ => panic!(
@@ -93,7 +95,7 @@ fn test_kv_attrs() {
 #[test]
 fn test_empty_attrs_iter() {
     let attrs = NixAttrs::construct(0, vec![]).unwrap();
-    assert_eq!(attrs.iter().next(), None);
+    assert!(attrs.iter().next().is_none());
 }
 
 #[test]
@@ -114,13 +116,18 @@ fn test_kv_attrs_iter() {
     )
     .expect("constructing K/V pair attrs should succeed");
 
-    assert_eq!(
-        kv_attrs.iter().collect::<Vec<_>>(),
-        vec![
-            (NixString::NAME_REF, &meaning_val),
-            (NixString::VALUE_REF, &forty_two_val)
-        ]
-    );
+    let mut iter = kv_attrs
+        .iter()
+        .collect::<Vec<_>>()
+        .into_iter()
+        .map(|(k, v)| (k, v));
+    let (k, v) = iter.next().unwrap();
+    assert!(k == NixString::NAME_REF);
+    assert!(v.to_str().unwrap().as_str() == meaning_val.to_str().unwrap().as_str());
+    let (k, v) = iter.next().unwrap();
+    assert!(k == NixString::VALUE_REF);
+    assert!(v.as_int().unwrap() == forty_two_val.as_int().unwrap());
+    assert!(iter.next().is_none());
 }
 
 #[test]
@@ -131,8 +138,9 @@ fn test_map_attrs_iter() {
     )
     .expect("simple attr construction should succeed");
 
-    assert_eq!(
-        attrs.iter().collect::<Vec<_>>(),
-        vec![(&NixString::from("key"), &Value::String("value".into()))],
-    );
+    let mut iter = attrs.iter().collect::<Vec<_>>().into_iter();
+    let (k, v) = iter.next().unwrap();
+    assert!(k == &NixString::from("key"));
+    assert!(v.to_str().unwrap().as_str() == "value");
+    assert!(iter.next().is_none());
 }
