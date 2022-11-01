@@ -18,6 +18,23 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "e2180f33_731eda73",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-11-01T21:07:24Z",
+      "side": 1,
+      "message": "Another drive-by comment for anyone not familiar with why this might be useful:\n\nImagine you have a deployment step that looks ~like this:\n\n```\n# Terraform\nterraform plan -out\u003dtfplan\nterraform apply -input\u003dfalse tfplan\nterraform output -raw kubeconfig \u003e config.yaml\n\n# Kubernetes\nkubectl set image deployment/foo bar\u003dbaz/potato:r1234 --kubeconfig\u003dconfig.yaml\nkubectl rollout restart deployment/foo --kubeconfig\u003dconfig.yaml\n```\n\nIn this case it would be nice to have two steps like so:\n\n```\nmeta.ci.extraSteps \u003d {\n  terraform \u003d {\n    phase \u003d \"deploy\";\n    label \u003d \":terraform: Read remote state\";\n    command \u003d \u0027\u0027\n      terraform plan -out\u003dtfplan\n      terraform apply -input\u003dfalse tfplan\n      terraform output -raw kubeconfig \u003e kubecfg.yaml\n      buildkite-agent artifact upload kubecfg.yaml\n    \u0027\u0027;\n  };\n  kubernetes \u003d {\n    phase \u003d \"deploy\";\n    label \u003d \":k8s: Deploy cluster\";\n    command \u003d \u0027\u0027\n      buildkite-agent artifact download kubecfg.yaml .\n      kubectl set image deployment/foo bar\u003dbaz/potato:r1234 --kubeconfig\u003dkubecfg.yaml\n      kubectl rollout restart deployment/foo --kubeconfig\u003dkubecfg.yaml\n    \u0027\u0027;\n  };\n};\n```\n\nThat way if either one of the steps failed, we could use the Buildkite UI to retry that step.",
+      "revId": "578ac349bd3e11029474ce9e40115c83212c23c0",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "a7d01ea0_e77c208f",
