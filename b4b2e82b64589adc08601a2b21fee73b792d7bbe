@@ -52,6 +52,24 @@
       "parentUuid": "977fb96e_eebf7015",
       "revId": "b4b2e82b64589adc08601a2b21fee73b792d7bbe",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ac367f3f_ed36aed6",
+        "filename": "tools/depotfmt.nix",
+        "patchSetId": 3
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-11-01T02:59:54Z",
+      "side": 1,
+      "message": "Is this how one does that?\n\n```\n$ nix path-info --closure-size $(nix-build /depot -A tools.depotfmt)\n```",
+      "parentUuid": "652e7124_8c189cf3",
+      "revId": "b4b2e82b64589adc08601a2b21fee73b792d7bbe",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
