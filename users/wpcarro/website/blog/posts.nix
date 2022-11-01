@@ -92,4 +92,11 @@
     content = ./posts/importing-subtrees.md;
     draft = false;
   }
+  {
+    key = "nix-env-note";
+    title = "nix-env (note to self)";
+    date = 1667343279;
+    content = ./posts/nix-env-note.md;
+    draft = false;
+  }
 ]
