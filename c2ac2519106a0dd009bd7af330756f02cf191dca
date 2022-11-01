@@ -22,6 +22,30 @@
       },
       "revId": "c2ac2519106a0dd009bd7af330756f02cf191dca",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "40960bac_8f23534e",
+        "filename": "tvix/eval/src/value/attrs/tests.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 84,
+      "author": {
+        "id": 1000066
+      },
+      "writtenOn": "2022-11-01T03:51:28Z",
+      "side": 1,
+      "message": "Okay the `.as_str()`s were not needed, I\u0027ve removed them in patchset 2.\n\nWhen we do call `to_str()` in non-test code it\u0027s usually `to_str()?`, but test cases don\u0027t return `Result` so I can\u0027t do that here.\n\nIt turns out that this one set of test cases was the only thing left in tvix-eval that used `\u003d\u003d` on `Value`, and since it\u0027s a test case I didn\u0027t put as much care into updating it as I probably should have.\n\nThe common usage is `Value::coerce_to_string()`, but you have to pass a `\u0026mut VM` to it, which we don\u0027t have here.",
+      "parentUuid": "217f0fd3_efa7dcfd",
+      "range": {
+        "startLine": 84,
+        "startChar": 15,
+        "endLine": 84,
+        "endChar": 46
+      },
+      "revId": "c2ac2519106a0dd009bd7af330756f02cf191dca",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
