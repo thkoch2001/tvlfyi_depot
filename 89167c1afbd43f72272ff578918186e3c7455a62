@@ -89,6 +89,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "81aa3533_a10ca6ff",
+        "filename": "tvix/proto/pathinfo.proto",
+        "patchSetId": 9
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2022-11-01T07:42:36Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "dc059cea_2dd1c3b2",
+      "revId": "89167c1afbd43f72272ff578918186e3c7455a62",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "ca65ec5c_ea835aae",
