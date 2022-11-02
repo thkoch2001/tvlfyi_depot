@@ -36,6 +36,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "0b52bf1a_33594b84",
+        "filename": "tvix/proto/rpc_blobstore.proto",
+        "patchSetId": 1
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1000066
+      },
+      "writtenOn": "2022-11-02T08:47:16Z",
+      "side": 1,
+      "message": "Oh neat; I knew BLAKE2 had a tree-hashing mode.  I didn\u0027t know the BLAKE3 version had a name for that mode.",
+      "parentUuid": "ed4ae9de_41b1d408",
+      "revId": "297e8a79223fe53f33e9b5ace754a6bd5877824f",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "ffb9744b_7fef6ea7",
@@ -85,6 +103,24 @@
       "side": 1,
       "message": "I mean, we\u0027ll probably add some HEAD requests at some point, so clients can lookup for blobs to already exist before uploading them.\n\nBut there\u0027s no way for servers to prevent the upload if it already exist (as long as we don\u0027t make this a two-roundtrip call which I\u0027d like to avoid).",
       "parentUuid": "2c981f3d_dc38b202",
+      "revId": "297e8a79223fe53f33e9b5ace754a6bd5877824f",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9b08cebc_b45b5432",
+        "filename": "tvix/proto/rpc_blobstore.proto",
+        "patchSetId": 1
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1000066
+      },
+      "writtenOn": "2022-11-02T08:47:16Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7960305f_c4cef43c",
       "revId": "297e8a79223fe53f33e9b5ace754a6bd5877824f",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
