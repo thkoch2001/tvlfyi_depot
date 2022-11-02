@@ -10,7 +10,7 @@ digraph tvl {
   subgraph {
     Irenes [href="https://www.pluralpride.com/"];
     adisbladis [href="http://nixos.expert/"];
-    amjoseph [href="https://git.sr.ht/~amjoseph"];
+    amjoseph;
     andi [label="andi-" href="https://andreas.rammhold.de/"];
     aurora [href="https://nonegenderleftfox.aventine.se/"];
     benjojo [href="https://benjojo.co.uk/"];
