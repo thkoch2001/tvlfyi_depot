@@ -1,0 +1,12 @@
+diff --git a/src/nvd b/src/nvd
+index 4caf646..793fc60 100755
+--- a/src/nvd
++++ b/src/nvd
+@@ -440,7 +440,6 @@ def query_closure_disk_usage_bytes(target: Path) -> Optional[int]:
+         stdout = subprocess.run(
+                 [
+                     make_nix_bin_path("nix"), "path-info",
+-                    "--extra-experimental-features", "nix-command",
+                     "--closure-size", target_str,
+                 ],
+                 stdout=PIPE,

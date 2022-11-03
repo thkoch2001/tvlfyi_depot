@@ -35,6 +35,12 @@ in
 
   nix_latest = super.nix;
 
+  nvd = super.nvd.overrideAttrs (old: {
+    patches = old.patches or [ ] ++ [
+      ./patches/nvd-nix-2.3.patch
+    ];
+  });
+
   home-manager = super.home-manager.overrideAttrs (_: {
     src = depot.third_party.sources.home-manager;
     version = "git-"
