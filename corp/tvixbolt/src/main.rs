@@ -3,6 +3,7 @@ use std::fmt::Write;
 use std::rc::Rc;
 
 use serde::{Deserialize, Serialize};
+use tvix_eval::observer::RuntimeObserver;
 use tvix_eval::observer::TracingObserver;
 use tvix_eval::observer::{DisassemblingObserver, NoOpObserver};
 use tvix_eval::SourceCode;
@@ -341,15 +342,19 @@ fn eval(model: &Model) -> Output {
     }
 
     let result = if model.trace {
-        tvix_eval::run_lambda(
+        let ret = tvix_eval::run_lambda(
             Default::default(),
-            &mut TracingObserver::new(&mut out.trace),
+            // FIXME(amjoseph): stop cheating here
+            Some(Rc::new(RefCell::new(Box::new(TracingObserver::new(
+                vec![],
+            ))))),
             result.lambda,
-        )
+        );
+        ret
     } else {
         tvix_eval::run_lambda(
             Default::default(),
-            &mut NoOpObserver::default(),
+            Some(Rc::new(RefCell::new(Box::new(NoOpObserver::default())))),
             result.lambda,
         )
     };
