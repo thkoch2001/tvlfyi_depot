@@ -116,13 +116,13 @@ pub fn interpret(code: &str, location: Option<PathBuf>, options: Options) -> Eva
     let result = if options.trace_runtime {
         crate::vm::run_lambda(
             options.nix_search_path.unwrap_or_default(),
-            &mut TracingObserver::new(std::io::stderr()),
+            Box::new(TracingObserver::new(std::io::stderr())),
             result.lambda,
         )
     } else {
         crate::vm::run_lambda(
             options.nix_search_path.unwrap_or_default(),
-            &mut NoOpObserver::default(),
+            Box::new(NoOpObserver::default()),
             result.lambda,
         )
     };
