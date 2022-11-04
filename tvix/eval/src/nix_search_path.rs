@@ -6,7 +6,7 @@ use std::str::FromStr;
 use crate::errors::ErrorKind;
 
 #[derive(Debug, Clone, PartialEq, Eq)]
-enum NixSearchPathEntry {
+pub enum NixSearchPathEntry {
     /// Resolve subdirectories of this path within `<...>` brackets. This
     /// corresponds to bare paths within the `NIX_PATH` environment variable
     ///
