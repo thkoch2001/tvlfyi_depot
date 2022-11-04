@@ -18,16 +18,16 @@ use crate::{
 
 fn impure_builtins() -> Vec<Builtin> {
     vec![
-        Builtin::new("getEnv", &[true], |args: Vec<Value>, _: &mut VM| {
+        Builtin::new("getEnv", &[true], |args: Vec<Value>| {
             Ok(env::var(args[0].to_str()?)
                 .unwrap_or_else(|_| "".into())
                 .into())
         }),
-        Builtin::new("pathExists", &[true], |args: Vec<Value>, vm: &mut VM| {
-            Ok(super::coerce_value_to_path(&args[0], vm)?.exists().into())
+        Builtin::new("pathExists", &[true], |args: Vec<Value>| {
+            Ok(super::coerce_value_to_path(&args[0])?.exists().into())
         }),
-        Builtin::new("readDir", &[true], |args: Vec<Value>, vm: &mut VM| {
-            let path = super::coerce_value_to_path(&args[0], vm)?;
+        Builtin::new("readDir", &[true], |args: Vec<Value>| {
+            let path = super::coerce_value_to_path(&args[0])?;
             let mk_err = |err: io::Error| ErrorKind::IO {
                 path: Some(path.clone()),
                 error: Rc::new(err),
@@ -59,9 +59,9 @@ fn impure_builtins() -> Vec<Builtin> {
             }
             Ok(Value::attrs(NixAttrs::from_map(res)))
         }),
-        Builtin::new("readFile", &[true], |args: Vec<Value>, vm: &mut VM| {
+        Builtin::new("readFile", &[true], |args: Vec<Value>| {
             let mut buf = String::new();
-            File::open(&super::coerce_value_to_path(&args[0], vm)?)?.read_to_string(&mut buf)?;
+            File::open(&super::coerce_value_to_path(&args[0])?)?.read_to_string(&mut buf)?;
             Ok(buf.into())
         }),
     ]
@@ -101,70 +101,65 @@ pub fn builtins_import(globals: &Weak<GlobalsMap>, source: SourceCode) -> Builti
     // Rc::new_cyclic() and Builtin::new()
     let globals = globals.clone();
 
-    Builtin::new(
-        "import",
-        &[true],
-        move |mut args: Vec<Value>, vm: &mut VM| {
-            let mut path = super::coerce_value_to_path(&args.pop().unwrap(), vm)?;
-            if path.is_dir() {
-                path.push("default.nix");
-            }
+    Builtin::new("import", &[true], move |mut args: Vec<Value>| {
+        let mut path = super::coerce_value_to_path(&args.pop().unwrap())?;
+        if path.is_dir() {
+            path.push("default.nix");
+        }
 
-            let contents =
-                std::fs::read_to_string(&path).map_err(|err| ErrorKind::ReadFileError {
-                    path: path.clone(),
-                    error: Rc::new(err),
-                })?;
+        let contents = std::fs::read_to_string(&path).map_err(|err| ErrorKind::ReadFileError {
+            path: path.clone(),
+            error: Rc::new(err),
+        })?;
 
-            let parsed = rnix::ast::Root::parse(&contents);
-            let errors = parsed.errors();
+        let parsed = rnix::ast::Root::parse(&contents);
+        let errors = parsed.errors();
 
-            let file = source.add_file(path.to_string_lossy().to_string(), contents);
+        let file = source.add_file(path.to_string_lossy().to_string(), contents);
 
-            if !errors.is_empty() {
-                return Err(ErrorKind::ImportParseError {
-                    path,
-                    file,
-                    errors: errors.to_vec(),
-                });
-            }
-
-            let result = crate::compiler::compile(
-                &parsed.tree().expr().unwrap(),
-                Some(path.clone()),
+        if !errors.is_empty() {
+            return Err(ErrorKind::ImportParseError {
+                path,
                 file,
-                // The VM must ensure that a strong reference to the
-                // globals outlives any self-references (which are
-                // weak) embedded within the globals.  If the
-                // expect() below panics, it means that did not
-                // happen.
-                globals
-                    .upgrade()
-                    .expect("globals dropped while still in use"),
-                &mut NoOpObserver::default(),
-            )
-            .map_err(|err| ErrorKind::ImportCompilerError {
-                path: path.clone(),
-                errors: vec![err],
-            })?;
+                errors: errors.to_vec(),
+            });
+        }
 
-            if !result.errors.is_empty() {
-                return Err(ErrorKind::ImportCompilerError {
-                    path,
-                    errors: result.errors,
-                });
-            }
+        let result = crate::compiler::compile(
+            &parsed.tree().expr().unwrap(),
+            Some(path.clone()),
+            file,
+            // The VM must ensure that a strong reference to the
+            // globals outlives any self-references (which are
+            // weak) embedded within the globals.  If the
+            // expect() below panics, it means that did not
+            // happen.
+            globals
+                .upgrade()
+                .expect("globals dropped while still in use"),
+            &mut NoOpObserver::default(),
+        )
+        .map_err(|err| ErrorKind::ImportCompilerError {
+            path: path.clone(),
+            errors: vec![err],
+        })?;
 
-            for warning in result.warnings {
-                vm.push_warning(warning);
-            }
+        if !result.errors.is_empty() {
+            return Err(ErrorKind::ImportCompilerError {
+                path,
+                errors: result.errors,
+            });
+        }
 
-            // Compilation succeeded, we can construct a thunk from whatever it spat
-            // out and return that.
-            Ok(Value::Thunk(Thunk::new_suspended(
-                result.lambda,
-                vm.current_span(),
-            )))
-        },
-    )
+        for warning in result.warnings {
+            VM::vm_push_warning(warning);
+        }
+
+        // Compilation succeeded, we can construct a thunk from whatever it spat
+        // out and return that.
+        Ok(Value::Thunk(Thunk::new_suspended(
+            result.lambda,
+            VM::vm_current_span(),
+        )))
+    })
 }
