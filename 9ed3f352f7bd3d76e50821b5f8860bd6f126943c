@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9999342f_bf611054",
+        "filename": "tvix/proto/rpc_blobstore.proto",
+        "patchSetId": 5
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-11-04T20:20:47Z",
+      "side": 1,
+      "message": "what takes care of the chunking here?",
+      "range": {
+        "startLine": 22,
+        "startChar": 0,
+        "endLine": 22,
+        "endChar": 19
+      },
+      "revId": "9ed3f352f7bd3d76e50821b5f8860bd6f126943c",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
