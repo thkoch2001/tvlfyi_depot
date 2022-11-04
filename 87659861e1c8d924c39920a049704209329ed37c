@@ -22,6 +22,30 @@
       },
       "revId": "87659861e1c8d924c39920a049704209329ed37c",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cf32108b_d93b690a",
+        "filename": "tvix/proto/default.nix",
+        "patchSetId": 13
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2022-11-04T23:55:37Z",
+      "side": 1,
+      "message": "This is as designed I think (?).\n\nIn these proto files, import paths are relative to the top level source directory - see how `tvix/proto/pathinfo.proto` does import `tvix/proto/castore.proto`.\n\nI have some (unpublished) Rust plumbing, that essentially does a\n\n```\n    prost_build::compile_protos(\n        \u0026[\"tvix/proto/castore.proto\", \"tvix/proto/pathinfo.proto\"],\n        \u0026[\"../../\"],\n    )?;\n```\n\n, and it\u0027s also able to resolve this.",
+      "parentUuid": "bc514cec_3638c954",
+      "range": {
+        "startLine": 10,
+        "startChar": 0,
+        "endLine": 10,
+        "endChar": 56
+      },
+      "revId": "87659861e1c8d924c39920a049704209329ed37c",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
