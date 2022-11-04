@@ -54,6 +54,23 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "b8410ffb_37fa299f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-11-04T21:52:45Z",
+      "side": 1,
+      "message": "Thanks for trailblazing this, Jean-Francois! 😊\n\nI fiddled-around with this locally and was able to get it to work. Posting the patch in case anyone\u0027s interested:\n\nhttps://gist.github.com/wpcarro/b18c376a55e79926bb703c67c145798a",
+      "revId": "578ac349bd3e11029474ce9e40115c83212c23c0",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "a7d01ea0_e77c208f",
         "filename": "nix/buildkite/default.nix",
         "patchSetId": 3
@@ -124,6 +141,23 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "cf5afa18_d7d57d7b",
+        "filename": "nix/buildkite/default.nix",
+        "patchSetId": 3
+      },
+      "lineNbr": 340,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-11-04T21:52:45Z",
+      "side": 1,
+      "message": "nit: after looking at some of my *-chunk-*.json artifacts, it looks like these default to an empty list, so maybe `dependsOn ? []`?",
+      "revId": "578ac349bd3e11029474ce9e40115c83212c23c0",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "0cc06bdb_98ba265d",
         "filename": "nix/buildkite/default.nix",
         "patchSetId": 3
@@ -135,6 +169,23 @@
       "writtenOn": "2022-11-01T20:39:04Z",
       "side": 1,
       "message": "How do we feel about a final step that `builtins.throw`s when `cfg.key` doesn\u0027t exist in the pipeline?\n\nSomething like: https://gist.github.com/wpcarro/a9d98f52915e71477e7299223410aab6",
+      "revId": "578ac349bd3e11029474ce9e40115c83212c23c0",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "89dedbb4_7d660f75",
+        "filename": "nix/buildkite/default.nix",
+        "patchSetId": 3
+      },
+      "lineNbr": 431,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-11-04T21:52:45Z",
+      "side": 1,
+      "message": "If we default `dependsOn ? []` then this can just be:\n\n```\ndepends_on \u003d cfg.dependsOn # likely somewhere after the `command \u003d` assignment (above).\n```",
       "revId": "578ac349bd3e11029474ce9e40115c83212c23c0",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
