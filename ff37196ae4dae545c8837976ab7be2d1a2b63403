@@ -16,6 +16,24 @@
       "message": "If you still want to go with a hand-rolled loop, you can leave the pretty-printing to find:\n\n(simplified code):\n```\nwhile read label lockFile; do\n    ${lock-file-report} \"$label\" \"$lockFile\" || status\u003d1\ndone \u003c(find ... -printf \u0027%h %P\\n\u0027)\n```\n\nSee find(1)\u0027s `-printf` documentation, it does exactly what you want wrt. stripping the root, getting the file name, etc.",
       "revId": "ff37196ae4dae545c8837976ab7be2d1a2b63403",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a7b2f8e1_c3d5d1a7",
+        "filename": "tools/rust-crates-advisory/default.nix",
+        "patchSetId": 2
+      },
+      "lineNbr": 116,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2022-11-04T21:28:18Z",
+      "side": 1,
+      "message": "Done, improves the code a bit, but I couldn\u0027t drop the sed for the nice label :/",
+      "parentUuid": "3c3e02e6_ffa7a896",
+      "revId": "ff37196ae4dae545c8837976ab7be2d1a2b63403",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }

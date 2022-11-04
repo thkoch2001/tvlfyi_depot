@@ -71,6 +71,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "3ce6e7fa_c42c60db",
+        "filename": "tools/rust-crates-advisory/default.nix",
+        "patchSetId": 1
+      },
+      "lineNbr": 115,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2022-11-04T21:28:18Z",
+      "side": 1,
+      "message": "Using -and, but -execdir doesn\u0027t seem to work out (see below).",
+      "parentUuid": "ba95a7e3_0d19f1b9",
+      "revId": "cae1527dab14c4d7721f10136ac4c88ade2b5954",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "df2d83b0_cd353172",
@@ -120,6 +138,24 @@
       "side": 1,
       "message": "\u003e This doesn\u0027t seem to be the case from my testing, e. g. find . -type f -name \u0027Cargo.lock\u0027 -execdir \u0027bash\u0027 -c \u0027exit\u0027 \u00271\u0027 \\; will return 0 exit code for me sadly.\n\nYour quoting is wrong, bash\u0027s `-c` takes a single argument:\n```\n$ bash -c echo foo\n\n$ bash -c \u0027echo foo\u0027\nfoo\n```\n\nSo this must be `find ... -exec bash -c \u0027exit 1\u0027 \\;` for the command to actually return non-zero.\n\n\u003e also a bit worrying is:\n\u003e \n\u003e \u003e When some error occurs, find may stop immediately, without completing\n\u003e \u003e all the actions specified.\n\nToo bad we can\u0027t trust the documentation.\n\nBut you can still use find like this and simply do something when a command failed (nix-level escaping omitted):\n```\nfind \"${1:-.}\" -type f -name Cargo.lock \\\n    \\( -execdir bash -c \u0027${lock-file-report} /$(pwd) {}\u0027 \\; -o -print \\)\n```\n\nThis just prints the filename;  you can then check for non-empty output and exit non-zero accordingly.",
       "parentUuid": "3e13a6fb_2ce77530",
+      "revId": "cae1527dab14c4d7721f10136ac4c88ade2b5954",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3d4b0533_05ffc573",
+        "filename": "tools/rust-crates-advisory/default.nix",
+        "patchSetId": 1
+      },
+      "lineNbr": 117,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2022-11-04T21:28:18Z",
+      "side": 1,
+      "message": "I\u0027ve looked into it and the `-o` is neat, but not great, since we can\u0027t use it to influence the exit code (which will be `0` despite failures from my testing).\n\nWe would need to use some external means of signalling back to the script, a magic string or a created file which is both ugly. I\u0027ve opted to keep the loop and use your suggestion below.",
+      "parentUuid": "a887a332_fa175ba4",
       "revId": "cae1527dab14c4d7721f10136ac4c88ade2b5954",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
