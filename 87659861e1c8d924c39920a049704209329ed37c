@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bc514cec_3638c954",
+        "filename": "tvix/proto/default.nix",
+        "patchSetId": 13
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-11-04T20:20:02Z",
+      "side": 1,
+      "message": "did you verify what this builds? I would expect this to do something nonsensical, as `depot.path.origSrc` points at the root of depot, not //tvix/proto",
+      "range": {
+        "startLine": 10,
+        "startChar": 0,
+        "endLine": 10,
+        "endChar": 56
+      },
+      "revId": "87659861e1c8d924c39920a049704209329ed37c",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
