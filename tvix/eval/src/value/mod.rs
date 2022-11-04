@@ -159,20 +159,16 @@ impl Value {
 impl Value {
     /// Coerce a `Value` to a string. See `CoercionKind` for a rundown of what
     /// input types are accepted under what circumstances.
-    pub fn coerce_to_string(
-        &self,
-        kind: CoercionKind,
-        vm: &mut VM,
-    ) -> Result<NixString, ErrorKind> {
+    pub fn coerce_to_string(&self, kind: CoercionKind) -> Result<NixString, ErrorKind> {
         // TODO: eventually, this will need to handle string context and importing
         // files into the Nix store depending on what context the coercion happens in
         if let Value::Thunk(t) = self {
-            t.force(vm)?;
+            t.force()?;
         }
 
         match (self, kind) {
             // deal with thunks
-            (Value::Thunk(t), _) => t.value().coerce_to_string(kind, vm),
+            (Value::Thunk(t), _) => t.value().coerce_to_string(kind),
 
             // coercions that are always done
             (Value::String(s), _) => Ok(s.clone()),
@@ -193,32 +189,32 @@ impl Value {
 
                     (Some(f), _) => {
                         // use a closure here to deal with the thunk borrow we need to do below
-                        let call_to_string = |value: &Value, vm: &mut VM| {
+                        let call_to_string = |value: &Value| {
                             // Leave self on the stack as an argument to the function call.
-                            vm.push(self.clone());
-                            vm.call_value(value)?;
-                            let result = vm.pop();
+                            VM::vm_push(self.clone());
+                            VM::vm_call_value(value)?;
+                            let result = VM::vm_pop();
 
                             match result {
                                 Value::String(s) => Ok(s),
                                 // Attribute set coercion actually works
                                 // recursively, e.g. you can even return
                                 // /another/ set with a __toString attr.
-                                _ => result.coerce_to_string(kind, vm),
+                                _ => result.coerce_to_string(kind),
                             }
                         };
 
                         if let Value::Thunk(t) = f {
-                            t.force(vm)?;
+                            t.force()?;
                             let guard = t.value();
-                            call_to_string(&*guard, vm)
+                            call_to_string(&*guard)
                         } else {
-                            call_to_string(f, vm)
+                            call_to_string(f)
                         }
                     }
 
                     // Similarly to `__toString` we also coerce recursively for `outPath`
-                    (None, Some(s)) => s.coerce_to_string(kind, vm),
+                    (None, Some(s)) => s.coerce_to_string(kind),
                 }
             }
 
@@ -240,7 +236,7 @@ impl Value {
                 // TODO(sterni): use intersperse when it becomes available?
                 // https://github.com/rust-lang/rust/issues/79524
                 l.iter()
-                    .map(|v| v.coerce_to_string(kind, vm))
+                    .map(|v| v.coerce_to_string(kind))
                     .reduce(|acc, string| {
                         let a = acc?;
                         let s = &string?;
@@ -308,12 +304,12 @@ impl Value {
     /// Compare `self` against `other` for equality using Nix equality semantics.
     ///
     /// Takes a reference to the `VM` to allow forcing thunks during comparison
-    pub fn nix_eq(&self, other: &Self, vm: &mut VM) -> Result<bool, ErrorKind> {
+    pub fn nix_eq(&self, other: &Self) -> Result<bool, ErrorKind> {
         match (self, other) {
             // Trivial comparisons
             (Value::Null, Value::Null) => Ok(true),
             (Value::Bool(b1), Value::Bool(b2)) => Ok(b1 == b2),
-            (Value::List(l1), Value::List(l2)) => l1.nix_eq(l2, vm),
+            (Value::List(l1), Value::List(l2)) => l1.nix_eq(l2),
             (Value::String(s1), Value::String(s2)) => Ok(s1 == s2),
             (Value::Path(p1), Value::Path(p2)) => Ok(p1 == p2),
 
@@ -324,23 +320,23 @@ impl Value {
             (Value::Float(f), Value::Integer(i)) => Ok(*i as f64 == *f),
 
             // Optimised attribute set comparison
-            (Value::Attrs(a1), Value::Attrs(a2)) => Ok(Rc::ptr_eq(a1, a2) || a1.nix_eq(a2, vm)?),
+            (Value::Attrs(a1), Value::Attrs(a2)) => Ok(Rc::ptr_eq(a1, a2) || a1.nix_eq(a2)?),
 
             // If either value is a thunk, the thunk should be forced, and then the resulting value
             // must be compared instead.
             (Value::Thunk(lhs), Value::Thunk(rhs)) => {
-                lhs.force(vm)?;
-                rhs.force(vm)?;
+                lhs.force()?;
+                rhs.force()?;
 
-                lhs.value().nix_eq(&*rhs.value(), vm)
+                lhs.value().nix_eq(&*rhs.value())
             }
             (Value::Thunk(lhs), rhs) => {
-                lhs.force(vm)?;
-                lhs.value().nix_eq(rhs, vm)
+                lhs.force()?;
+                lhs.value().nix_eq(rhs)
             }
             (lhs, Value::Thunk(rhs)) => {
-                rhs.force(vm)?;
-                lhs.nix_eq(&*rhs.value(), vm)
+                rhs.force()?;
+                lhs.nix_eq(&*rhs.value())
             }
 
             // Everything else is either incomparable (e.g. internal
@@ -351,7 +347,7 @@ impl Value {
     }
 
     /// Compare `self` against other using (fallible) Nix ordering semantics.
-    pub fn nix_cmp(&self, other: &Self, vm: &mut VM) -> Result<Option<Ordering>, ErrorKind> {
+    pub fn nix_cmp(&self, other: &Self) -> Result<Option<Ordering>, ErrorKind> {
         match (self, other) {
             // same types
             (Value::Integer(i1), Value::Integer(i2)) => Ok(i1.partial_cmp(i2)),
@@ -363,8 +359,8 @@ impl Value {
                         return Ok(Some(Ordering::Greater));
                     } else if i == l1.len() {
                         return Ok(Some(Ordering::Less));
-                    } else if !l1[i].nix_eq(&l2[i], vm)? {
-                        return l1[i].force(vm)?.nix_cmp(&*l2[i].force(vm)?, vm);
+                    } else if !l1[i].nix_eq(&l2[i])? {
+                        return l1[i].force()?.nix_cmp(&*l2[i].force()?);
                     }
                 }
 
@@ -384,10 +380,11 @@ impl Value {
     }
 
     /// Ensure `self` is forced if it is a thunk, and return a reference to the resulting value.
-    pub(crate) fn force(&self, vm: &mut VM) -> Result<ForceResult, ErrorKind> {
+
+    pub(crate) fn force(&self) -> Result<ForceResult, ErrorKind> {
         match self {
             Self::Thunk(thunk) => {
-                thunk.force(vm)?;
+                thunk.force()?;
                 Ok(ForceResult::ForcedThunk(thunk.value()))
             }
             _ => Ok(ForceResult::Immediate(self)),
@@ -395,11 +392,7 @@ impl Value {
     }
 
     /// Ensure `self` is *deeply* forced, including all recursive sub-values
-    pub(crate) fn deep_force(
-        &self,
-        vm: &mut VM,
-        thunk_set: &mut ThunkSet,
-    ) -> Result<(), ErrorKind> {
+    pub(crate) fn deep_force(&self, thunk_set: &mut ThunkSet) -> Result<(), ErrorKind> {
         match self {
             Value::Null
             | Value::Bool(_)
@@ -415,13 +408,13 @@ impl Value {
             | Value::UnresolvedPath(_) => Ok(()),
             Value::Attrs(a) => {
                 for (_, v) in a.iter() {
-                    v.deep_force(vm, thunk_set)?;
+                    v.deep_force(thunk_set)?;
                 }
                 Ok(())
             }
             Value::List(l) => {
                 for val in l {
-                    val.deep_force(vm, thunk_set)?;
+                    val.deep_force(thunk_set)?;
                 }
                 Ok(())
             }
@@ -430,9 +423,9 @@ impl Value {
                     return Ok(());
                 }
 
-                thunk.force(vm)?;
+                thunk.force()?;
                 let value = thunk.value().clone();
-                value.deep_force(vm, thunk_set)
+                value.deep_force(thunk_set)
             }
         }
     }
@@ -567,42 +560,41 @@ mod tests {
 
         #[proptest(ProptestConfig { cases: 5, ..Default::default() })]
         fn reflexive(x: Value) {
-            let mut observer = NoOpObserver {};
-            let mut vm = VM::new(Default::default(), &mut observer);
+            let observer = NoOpObserver {};
+            let mut vm = VM::new(Default::default(), Box::new(observer));
 
-            assert!(x.nix_eq(&x, &mut vm).unwrap())
+            vm.pass(|| assert!(x.nix_eq(&x).unwrap()))
         }
 
         #[proptest(ProptestConfig { cases: 5, ..Default::default() })]
         fn symmetric(x: Value, y: Value) {
-            let mut observer = NoOpObserver {};
-            let mut vm = VM::new(Default::default(), &mut observer);
+            let observer = NoOpObserver {};
+            let mut vm = VM::new(Default::default(), Box::new(observer));
 
-            assert_eq!(
-                x.nix_eq(&y, &mut vm).unwrap(),
-                y.nix_eq(&x, &mut vm).unwrap()
-            )
+            vm.pass(|| assert_eq!(x.nix_eq(&y).unwrap(), y.nix_eq(&x).unwrap()))
         }
 
         #[proptest(ProptestConfig { cases: 5, ..Default::default() })]
         fn transitive(x: Value, y: Value, z: Value) {
-            let mut observer = NoOpObserver {};
-            let mut vm = VM::new(Default::default(), &mut observer);
+            let observer = NoOpObserver {};
+            let mut vm = VM::new(Default::default(), Box::new(observer));
 
-            if x.nix_eq(&y, &mut vm).unwrap() && y.nix_eq(&z, &mut vm).unwrap() {
-                assert!(x.nix_eq(&z, &mut vm).unwrap())
-            }
+            vm.pass(|| {
+                if x.nix_eq(&y).unwrap() && y.nix_eq(&z).unwrap() {
+                    assert!(x.nix_eq(&z).unwrap())
+                }
+            })
         }
 
         #[test]
         fn list_int_float_fungibility() {
-            let mut observer = NoOpObserver {};
-            let mut vm = VM::new(Default::default(), &mut observer);
+            let observer = NoOpObserver {};
+            let mut vm = VM::new(Default::default(), Box::new(observer));
 
             let v1 = Value::List(NixList::from(vec![Value::Integer(1)]));
             let v2 = Value::List(NixList::from(vec![Value::Float(1.0)]));
 
-            assert!(v1.nix_eq(&v2, &mut vm).unwrap())
+            vm.pass(|| assert!(v1.nix_eq(&v2).unwrap()))
         }
     }
 }
