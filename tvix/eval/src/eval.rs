@@ -1,4 +1,6 @@
+use std::cell::RefCell;
 use std::path::PathBuf;
+use std::rc::Rc;
 
 use crate::{
     builtins::global_builtins,
@@ -116,13 +118,15 @@ pub fn interpret(code: &str, location: Option<PathBuf>, options: Options) -> Eva
     let result = if options.trace_runtime {
         crate::vm::run_lambda(
             options.nix_search_path.unwrap_or_default(),
-            &mut TracingObserver::new(std::io::stderr()),
+            Some(Rc::new(RefCell::new(Box::new(TracingObserver::new(
+                std::io::stderr(),
+            ))))),
             result.lambda,
         )
     } else {
         crate::vm::run_lambda(
             options.nix_search_path.unwrap_or_default(),
-            &mut NoOpObserver::default(),
+            Some(Rc::new(RefCell::new(Box::new(NoOpObserver::default())))),
             result.lambda,
         )
     };

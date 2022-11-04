@@ -2,7 +2,8 @@
 //! Tvix bytecode.
 
 use serde_json::json;
-use std::{cmp::Ordering, ops::DerefMut, path::PathBuf, rc::Rc};
+use std::cell::Cell;
+use std::{cell::RefCell, cmp::Ordering, ops::DerefMut, path::PathBuf, rc::Rc};
 
 use crate::{
     chunk::Chunk,
@@ -38,7 +39,32 @@ impl CallFrame {
     }
 }
 
-pub struct VM<'o> {
+#[repr(transparent)]
+#[derive(Default)]
+pub struct VM(Option<Box<VmUnboxed>>);
+
+impl std::ops::Deref for VM {
+    type Target = VmUnboxed;
+    fn deref(&self) -> &VmUnboxed {
+        &self
+            .0
+            .as_ref()
+            .expect("call to VM::with() outside of a VM::pass()")
+    }
+}
+
+impl std::ops::DerefMut for VM {
+    fn deref_mut(&mut self) -> &mut VmUnboxed {
+        self.0
+            .as_mut()
+            .expect("call to VM::with() outside of a VM::pass()")
+    }
+}
+
+type VmObserver = Option<Rc<RefCell<Box<dyn RuntimeObserver>>>>;
+
+#[derive(Default)]
+pub struct VmUnboxed {
     /// The VM call stack.  One element is pushed onto this stack
     /// each time a function is called or a thunk is forced.
     frames: Vec<CallFrame>,
@@ -61,13 +87,14 @@ pub struct VM<'o> {
 
     nix_search_path: NixSearchPath,
 
-    observer: &'o mut dyn RuntimeObserver,
+    observer: VmObserver,
 }
 
 /// The result of a VM's runtime evaluation.
 pub struct RuntimeResult {
     pub value: Value,
     pub warnings: Vec<EvalWarning>,
+    pub observer: VmObserver,
 }
 
 /// This macro wraps a computation that returns an ErrorKind or a
@@ -123,7 +150,7 @@ macro_rules! cmp_op {
     ( $self:ident, $op:tt ) => {{
         let b = $self.pop();
         let a = $self.pop();
-        let ordering = fallible!($self, a.nix_cmp(&b, $self));
+        let ordering = fallible!($self, $self.pass(|| { a.nix_cmp(&b) }));
         let result = Value::Bool(cmp_op!(@order $op ordering));
         $self.push(result);
     }};
@@ -145,16 +172,16 @@ macro_rules! cmp_op {
     };
 }
 
-impl<'o> VM<'o> {
-    pub fn new(nix_search_path: NixSearchPath, observer: &'o mut dyn RuntimeObserver) -> Self {
-        Self {
+impl VM {
+    pub fn new(nix_search_path: NixSearchPath, observer: VmObserver) -> Self {
+        Self(Some(Box::new(VmUnboxed {
             nix_search_path,
             observer,
             frames: vec![],
             stack: vec![],
             with_stack: vec![],
             warnings: vec![],
-        }
+        })))
     }
 
     fn frame(&self) -> &CallFrame {
@@ -165,15 +192,21 @@ impl<'o> VM<'o> {
         &self.frame().lambda.chunk
     }
 
-    fn frame_mut(&mut self) -> &mut CallFrame {
+    /// overwrites the current frame
+    fn set_frame(&mut self, frame: CallFrame) {
         let idx = self.frames.len() - 1;
-        &mut self.frames[idx]
+        self.frames[idx] = frame;
+    }
+
+    fn add_ip(&mut self, arg: usize) -> OpCode {
+        let op = self.chunk()[self.frame().ip];
+        let idx = self.frames.len() - 1;
+        self.frames[idx].ip += arg;
+        op
     }
 
     fn inc_ip(&mut self) -> OpCode {
-        let op = self.chunk()[self.frame().ip];
-        self.frame_mut().ip += 1;
-        op
+        self.add_ip(1)
     }
 
     pub fn pop(&mut self) -> Value {
@@ -290,14 +323,20 @@ impl<'o> VM<'o> {
 
             Value::Closure(closure) => {
                 let lambda = closure.lambda();
-                self.observer.observe_tail_call(self.frames.len(), &lambda);
+                if let Some(o) = &self.observer {
+                    o.as_ref()
+                        .borrow_mut()
+                        .observe_tail_call(self.frames.len(), &lambda);
+                }
 
                 // Replace the current call frames internals with
                 // that of the tail-called closure.
-                let mut frame = self.frame_mut();
-                frame.lambda = lambda;
-                frame.upvalues = closure.upvalues().clone();
-                frame.ip = CodeIdx(0); // reset instruction pointer to beginning
+                self.set_frame(CallFrame {
+                    lambda,
+                    upvalues: closure.upvalues().clone(),
+                    ip: CodeIdx(0), // reset instruction pointer to beginning
+                    ..*self.frame()
+                });
                 Ok(())
             }
 
@@ -328,8 +367,11 @@ impl<'o> VM<'o> {
         upvalues: Upvalues,
         arg_count: usize,
     ) -> EvalResult<()> {
-        self.observer
-            .observe_enter_frame(arg_count, &lambda, self.frames.len() + 1);
+        if let Some(o) = &self.observer {
+            o.as_ref()
+                .borrow_mut()
+                .observe_enter_frame(arg_count, &lambda, self.frames.len() + 1);
+        }
 
         let frame = CallFrame {
             lambda,
@@ -341,8 +383,11 @@ impl<'o> VM<'o> {
         self.frames.push(frame);
         let result = self.run();
 
-        self.observer
-            .observe_exit_frame(self.frames.len() + 1, &self.stack);
+        if let Some(o) = &self.observer {
+            o.as_ref()
+                .borrow_mut()
+                .observe_exit_frame(self.frames.len() + 1, &self.stack);
+        }
 
         result
     }
@@ -364,8 +409,12 @@ impl<'o> VM<'o> {
 
             let op = self.inc_ip();
 
-            self.observer
-                .observe_execute_op(self.frame().ip, &op, &self.stack);
+            let ip = self.frame().ip;
+            if let Some(o) = &self.observer {
+                o.as_ref()
+                    .borrow_mut()
+                    .observe_execute_op(ip, &op, &self.stack);
+            }
 
             let res = self.run_op(op);
 
@@ -397,10 +446,8 @@ impl<'o> VM<'o> {
                     (Value::String(s1), Value::String(s2)) => Value::String(s1.concat(s2)),
                     (Value::Path(p), v) => {
                         let mut path = p.to_string_lossy().into_owned();
-                        path.push_str(
-                            &v.coerce_to_string(CoercionKind::Weak, self)
-                                .map_err(|ek| self.error(ek))?,
-                        );
+                        let coerced = self.pass(|| v.coerce_to_string(CoercionKind::Weak));
+                        path.push_str(&coerced.map_err(|ek| self.error(ek))?);
                         crate::value::canon_path(PathBuf::from(path)).into()
                     }
                     _ => fallible!(self, arithmetic_op!(&a, &b, +)),
@@ -432,7 +479,7 @@ impl<'o> VM<'o> {
             OpCode::OpEqual => {
                 let v2 = self.pop();
                 let v1 = self.pop();
-                let res = fallible!(self, v1.nix_eq(&v2, self));
+                let res = fallible!(self, self.pass(|| { v1.nix_eq(&v2) }));
 
                 self.push(Value::Bool(res))
             }
@@ -513,8 +560,8 @@ impl<'o> VM<'o> {
             }
 
             OpCode::OpList(Count(count)) => {
-                let list =
-                    NixList::construct(count, self.stack.split_off(self.stack.len() - count));
+                let split_point = self.stack.len() - count;
+                let list = NixList::construct(count, self.stack.split_off(split_point));
                 self.push(Value::List(list));
             }
 
@@ -527,11 +574,12 @@ impl<'o> VM<'o> {
             OpCode::OpInterpolate(Count(count)) => self.run_interpolate(count)?,
 
             OpCode::OpCoerceToString => {
+                let popped = self.pop();
+                let coerced = self.pass(|| popped.coerce_to_string(CoercionKind::Weak));
                 // TODO: handle string context, copying to store
                 let string = fallible!(
-                    self,
-                    // note that coerce_to_string also forces
-                    self.pop().coerce_to_string(CoercionKind::Weak, self)
+                    self, // note that coerce_to_string also forces
+                    coerced
                 );
                 self.push(Value::String(string));
             }
@@ -570,20 +618,20 @@ impl<'o> VM<'o> {
 
             OpCode::OpJump(JumpOffset(offset)) => {
                 debug_assert!(offset != 0);
-                self.frame_mut().ip += offset;
+                self.add_ip(offset);
             }
 
             OpCode::OpJumpIfTrue(JumpOffset(offset)) => {
                 debug_assert!(offset != 0);
                 if fallible!(self, self.peek(0).as_bool()) {
-                    self.frame_mut().ip += offset;
+                    self.add_ip(offset);
                 }
             }
 
             OpCode::OpJumpIfFalse(JumpOffset(offset)) => {
                 debug_assert!(offset != 0);
                 if !fallible!(self, self.peek(0).as_bool()) {
-                    self.frame_mut().ip += offset;
+                    self.add_ip(offset);
                 }
             }
 
@@ -591,7 +639,7 @@ impl<'o> VM<'o> {
                 debug_assert!(offset != 0);
                 if matches!(self.peek(0), Value::AttrNotFound) {
                     self.pop();
-                    self.frame_mut().ip += offset;
+                    self.add_ip(offset);
                 }
             }
 
@@ -629,7 +677,8 @@ impl<'o> VM<'o> {
             }
 
             OpCode::OpPushWith(StackIdx(idx)) => {
-                self.with_stack.push(self.frame().stack_offset + idx)
+                let val = self.frame().stack_offset + idx;
+                self.with_stack.push(val)
             }
 
             OpCode::OpPopWith => {
@@ -710,7 +759,7 @@ impl<'o> VM<'o> {
                 let mut value = self.pop();
 
                 if let Value::Thunk(thunk) = value {
-                    fallible!(self, thunk.force(self));
+                    fallible!(self, self.pass(|| { thunk.force() }));
                     value = thunk.value().clone();
                 }
 
@@ -746,9 +795,10 @@ impl<'o> VM<'o> {
     }
 
     fn run_attrset(&mut self, count: usize) -> EvalResult<()> {
+        let split_point = self.stack.len() - count * 2;
         let attrs = fallible!(
             self,
-            NixAttrs::construct(count, self.stack.split_off(self.stack.len() - count * 2))
+            NixAttrs::construct(count, self.stack.split_off(split_point))
         );
 
         self.push(Value::attrs(attrs));
@@ -777,7 +827,7 @@ impl<'o> VM<'o> {
             let with = self.stack[self.with_stack[with_stack_idx]].clone();
 
             if let Value::Thunk(thunk) = &with {
-                fallible!(self, thunk.force(self));
+                fallible!(self, self.pass(|| { thunk.force() }));
             }
 
             match fallible!(self, with.to_attrs()).select(ident) {
@@ -793,7 +843,7 @@ impl<'o> VM<'o> {
             // that the stack is present.
             let with = self.frame().upvalues.with_stack().unwrap()[idx].clone();
             if let Value::Thunk(thunk) = &with {
-                fallible!(self, thunk.force(self));
+                fallible!(self, self.pass(|| { thunk.force() }));
             }
 
             match fallible!(self, with.to_attrs()).select(ident) {
@@ -870,17 +920,106 @@ impl<'o> VM<'o> {
 
     pub fn call_builtin(&mut self, builtin: Builtin) -> EvalResult<()> {
         let builtin_name = builtin.name();
-        self.observer.observe_enter_builtin(builtin_name);
+        if let Some(o) = &self.observer {
+            o.as_ref().borrow_mut().observe_enter_builtin(builtin_name);
+        }
 
         let arg = self.pop();
-        let result = fallible!(self, builtin.apply(self, arg));
+        let result = fallible!(self, self.pass(|| { builtin.apply(arg) }));
 
-        self.observer
-            .observe_exit_builtin(builtin_name, &self.stack);
+        if let Some(o) = &self.observer {
+            o.as_ref()
+                .borrow_mut()
+                .observe_exit_builtin(builtin_name, &self.stack);
+        }
 
         self.push(result);
 
         Ok(())
+    }
+}
+
+// Thread-local storage of the VM
+impl VM {
+    thread_local!(static TLS: Cell<VM> = const { Cell::new(VM(None)) });
+
+    /// invokes the closure argument, passing it a &mut VM
+    pub fn with<F, R>(f: F) -> R
+    where
+        F: FnOnce(&mut VM) -> R,
+    {
+        VM::TLS.with(move |vmcell| {
+            let mut storage = Cell::new(VM::default());
+            vmcell.swap(&storage);
+            let ret = f(storage.get_mut());
+            vmcell.swap(&storage);
+            ret
+        })
+    }
+
+    /// Invokes the (0-argument) closure argument with the TLS-VM
+    /// set to `vm` for the duration of the closure's execution.
+    /// The preexisting TLS value is restored after the closure
+    /// returns.
+    pub fn pass<F, R>(&mut self, f: F) -> R
+    where
+        F: FnOnce() -> R,
+    {
+        VM::TLS.with(move |vmcell| {
+            let storage = Cell::from_mut(self);
+            vmcell.swap(storage);
+            let ret = f();
+            vmcell.swap(storage);
+            ret
+        })
+    }
+}
+
+// Convenience methods which wrap VM::with()
+impl VM {
+    #[track_caller]
+    pub fn vm_call_with<I>(callable: &Value, args: I) -> EvalResult<Value>
+    where
+        I: IntoIterator<Item = Value>,
+        I::IntoIter: DoubleEndedIterator,
+    {
+        VM::with(|vm: &mut VM| vm.call_with(callable, args))
+    }
+
+    pub fn vm_enter_frame(
+        lambda: Rc<Lambda>,
+        upvalues: Upvalues,
+        arg_count: usize,
+    ) -> EvalResult<()> {
+        VM::with(|vm: &mut VM| vm.enter_frame(lambda, upvalues, arg_count))
+    }
+
+    pub fn vm_pop() -> Value {
+        VM::with(|vm: &mut VM| vm.pop())
+    }
+
+    pub fn vm_push(value: Value) {
+        VM::with(move |vm: &mut VM| vm.push(value));
+    }
+
+    pub fn vm_error(kind: ErrorKind) -> Error {
+        VM::with(|vm| vm.error(kind))
+    }
+
+    pub fn vm_emit_warning(kind: WarningKind) {
+        VM::with(|vm| vm.emit_warning(kind))
+    }
+
+    pub fn vm_push_warning(warning: EvalWarning) {
+        VM::with(|vm| vm.push_warning(warning))
+    }
+
+    pub(crate) fn vm_current_span() -> codemap::Span {
+        VM::with(|vm| vm.current_span())
+    }
+
+    pub fn vm_call_value(callable: &Value) -> EvalResult<()> {
+        VM::with(|vm| vm.call_value(callable))
     }
 }
 
@@ -892,31 +1031,43 @@ fn unwrap_or_clone_rc<T: Clone>(rc: Rc<T>) -> T {
 
 pub fn run_lambda(
     nix_search_path: NixSearchPath,
-    observer: &mut dyn RuntimeObserver,
+    observer: VmObserver,
     lambda: Rc<Lambda>,
 ) -> EvalResult<RuntimeResult> {
     let mut vm = VM::new(nix_search_path, observer);
+    let value = VM::pass(&mut vm, || {
+        // Retain the top-level span of the expression in this lambda, as
+        // synthetic "calls" in deep_force will otherwise not have a span
+        // to fall back to.
+        //
+        // We exploit the fact that the compiler emits a final instruction
+        // with the span of the entire file for top-level expressions.
+        let root_span = lambda.chunk.get_span(CodeIdx(lambda.chunk.code.len() - 1));
 
-    // Retain the top-level span of the expression in this lambda, as
-    // synthetic "calls" in deep_force will otherwise not have a span
-    // to fall back to.
-    //
-    // We exploit the fact that the compiler emits a final instruction
-    // with the span of the entire file for top-level expressions.
-    let root_span = lambda.chunk.get_span(CodeIdx(lambda.chunk.code.len() - 1));
+        VM::vm_enter_frame(lambda, Upvalues::with_capacity(0), 0)?;
+        let value = VM::vm_pop();
 
-    vm.enter_frame(lambda, Upvalues::with_capacity(0), 0)?;
-    let value = vm.pop();
+        value
+            .deep_force(&mut Default::default())
+            .map_err(|kind| Error {
+                kind,
+                span: root_span,
+            })?;
 
-    value
-        .deep_force(&mut vm, &mut Default::default())
-        .map_err(|kind| Error {
-            kind,
-            span: root_span,
-        })?;
+        Ok(value)
+    })?;
 
-    Ok(RuntimeResult {
-        value,
-        warnings: vm.warnings,
-    })
+    if let VM(Some(boxvm)) = vm {
+        match *boxvm {
+            VmUnboxed {
+                warnings, observer, ..
+            } => Ok(RuntimeResult {
+                value,
+                warnings,
+                observer,
+            }),
+        }
+    } else {
+        panic!("extremely unlikely bug: VM::pass() overwrote its argument");
+    }
 }
