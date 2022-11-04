@@ -2,7 +2,6 @@
 use std::ops::{Deref, DerefMut};
 
 use crate::errors::ErrorKind;
-use crate::vm::VM;
 
 use super::thunk::ThunkSet;
 use super::TotalDisplay;
@@ -89,13 +88,13 @@ impl NixList {
     }
 
     /// Compare `self` against `other` for equality using Nix equality semantics
-    pub fn nix_eq(&self, other: &Self, vm: &mut VM) -> Result<bool, ErrorKind> {
+    pub fn nix_eq(&self, other: &Self) -> Result<bool, ErrorKind> {
         if self.len() != other.len() {
             return Ok(false);
         }
 
         for (v1, v2) in self.iter().zip(other.iter()) {
-            if !v1.nix_eq(v2, vm)? {
+            if !v1.nix_eq(v2)? {
                 return Ok(false);
             }
         }
@@ -103,9 +102,8 @@ impl NixList {
         Ok(true)
     }
 
-    /// force each element of the list (shallowly), making it safe to call .get().value()
-    pub fn force_elements(&self, vm: &mut VM) -> Result<(), ErrorKind> {
-        self.iter().try_for_each(|v| v.force(vm).map(|_| ()))
+    pub fn force_elements(&self) -> Result<(), ErrorKind> {
+        self.iter().try_for_each(|v| v.force().map(|_| ()))
     }
 }
 

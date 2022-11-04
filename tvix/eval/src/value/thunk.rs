@@ -92,7 +92,7 @@ impl Thunk {
     /// This will change the existing thunk (and thus all references to it,
     /// providing memoization) through interior mutability. In case of nested
     /// thunks, the intermediate thunk representations are replaced.
-    pub fn force(&self, vm: &mut VM) -> Result<(), ErrorKind> {
+    pub fn force(&self) -> Result<(), ErrorKind> {
         loop {
             let mut thunk_mut = self.0.borrow_mut();
 
@@ -113,9 +113,9 @@ impl Thunk {
                     } = std::mem::replace(&mut *thunk_mut, ThunkRepr::Blackhole)
                     {
                         drop(thunk_mut);
-                        vm.enter_frame(lambda, upvalues, 0)
+                        VM::vm_enter_frame(lambda, upvalues, 0)
                             .map_err(|e| ErrorKind::ThunkForce(Box::new(Error { span, ..e })))?;
-                        (*self.0.borrow_mut()) = ThunkRepr::Evaluated(vm.pop())
+                        (*self.0.borrow_mut()) = ThunkRepr::Evaluated(VM::vm_pop())
                     }
                 }
             }
