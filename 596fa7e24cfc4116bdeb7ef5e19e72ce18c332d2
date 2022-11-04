@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "158b393c_42e01215",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 9
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-11-04T20:47:47Z",
+      "side": 1,
+      "message": "I\u0027m fine with this as long as the existing comments are resolved where possible.",
+      "revId": "596fa7e24cfc4116bdeb7ef5e19e72ce18c332d2",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
