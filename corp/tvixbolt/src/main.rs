@@ -204,6 +204,17 @@ struct Output {
     ast: String,
 }
 
+struct OutputRcRef(Rc<RefCell<Output>>);
+
+impl std::io::Write for OutputRcRef {
+    fn write(&mut self, buf: &[u8]) -> std::io::Result<usize> {
+        self.0.as_ref().borrow_mut().trace.write(buf)
+    }
+    fn flush(&mut self) -> std::io::Result<()> {
+        self.0.as_ref().borrow_mut().trace.flush()
+    }
+}
+
 fn maybe_show(title: &str, s: &str) -> Html {
     if s.is_empty() {
         html! {}
@@ -340,19 +351,25 @@ fn eval(model: &Model) -> Output {
         return out;
     }
 
+    let out = Rc::new(RefCell::new(out));
     let result = if model.trace {
-        tvix_eval::run_lambda(
+        let ret = tvix_eval::run_lambda(
             Default::default(),
-            &mut TracingObserver::new(&mut out.trace),
+            Box::new(TracingObserver::new(OutputRcRef(out.clone()))),
             result.lambda,
-        )
+        );
+        ret
     } else {
         tvix_eval::run_lambda(
             Default::default(),
-            &mut NoOpObserver::default(),
+            Box::new(NoOpObserver::default()),
             result.lambda,
         )
     };
+    let mut out = Rc::try_unwrap(out)
+        .map_err(|_| ())
+        .expect("VM held on to references to the observer!")
+        .into_inner();
 
     match result {
         Ok(result) => {

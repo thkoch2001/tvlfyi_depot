@@ -567,16 +567,16 @@ mod tests {
 
         #[proptest(ProptestConfig { cases: 5, ..Default::default() })]
         fn reflexive(x: Value) {
-            let mut observer = NoOpObserver {};
-            let mut vm = VM::new(Default::default(), &mut observer);
+            let observer = NoOpObserver {};
+            let mut vm = VM::new(Default::default(), Box::new(observer));
 
             assert!(x.nix_eq(&x, &mut vm).unwrap())
         }
 
         #[proptest(ProptestConfig { cases: 5, ..Default::default() })]
         fn symmetric(x: Value, y: Value) {
-            let mut observer = NoOpObserver {};
-            let mut vm = VM::new(Default::default(), &mut observer);
+            let observer = NoOpObserver {};
+            let mut vm = VM::new(Default::default(), Box::new(observer));
 
             assert_eq!(
                 x.nix_eq(&y, &mut vm).unwrap(),
@@ -586,8 +586,8 @@ mod tests {
 
         #[proptest(ProptestConfig { cases: 5, ..Default::default() })]
         fn transitive(x: Value, y: Value, z: Value) {
-            let mut observer = NoOpObserver {};
-            let mut vm = VM::new(Default::default(), &mut observer);
+            let observer = NoOpObserver {};
+            let mut vm = VM::new(Default::default(), Box::new(observer));
 
             if x.nix_eq(&y, &mut vm).unwrap() && y.nix_eq(&z, &mut vm).unwrap() {
                 assert!(x.nix_eq(&z, &mut vm).unwrap())
@@ -596,8 +596,8 @@ mod tests {
 
         #[test]
         fn list_int_float_fungibility() {
-            let mut observer = NoOpObserver {};
-            let mut vm = VM::new(Default::default(), &mut observer);
+            let observer = NoOpObserver {};
+            let mut vm = VM::new(Default::default(), Box::new(observer));
 
             let v1 = Value::List(NixList::from(vec![Value::Integer(1)]));
             let v2 = Value::List(NixList::from(vec![Value::Float(1.0)]));
