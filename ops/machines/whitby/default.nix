@@ -546,73 +546,54 @@ in
       }];
   };
 
-  # XXX: Adapt to https://github.com/NixOS/nixpkgs/pull/191768
   services.grafana = {
-    enable = false;
-    port = 4723; # "graf" on phone keyboard
-    domain = "status.tvl.su";
-    rootUrl = "https://status.tvl.su";
-    analytics.reporting.enable = false;
-    # extraOptions =
-    #   let
-    #     options = {
-    #       auth = {
-    #         generic_oauth = {
-    #           enabled = true;
-    #           client_id = "grafana";
-    #           scopes = "openid profile email";
-    #           name = "TVL";
-    #           email_attribute_path = "mail";
-    #           login_attribute_path = "sub";
-    #           name_attribute_path = "displayName";
-    #           auth_url = "https://auth.tvl.fyi/auth/realms/TVL/protocol/openid-connect/auth";
-    #           token_url = "https://auth.tvl.fyi/auth/realms/TVL/protocol/openid-connect/token";
-    #           api_url = "https://auth.tvl.fyi/auth/realms/TVL/protocol/openid-connect/userinfo";
+    enable = true;
 
-    #           # Give lukegb, grfn, tazjin "Admin" rights.
-    #           role_attribute_path = "((sub == 'lukegb' || sub == 'grfn' || sub == 'tazjin') && 'Admin') || 'Editor'";
+    settings = {
+      server = {
+        http_port = 4723; # "graf" on phone keyboard
+        domain = "status.tvl.su";
+        root_url = "https://status.tvl.su";
+      };
 
-    #           # Allow creating new Grafana accounts from OAuth accounts.
-    #           allow_sign_up = true;
-    #         };
+      analytics.reporting_enabled = false;
 
-    #         anonymous = {
-    #           enabled = true;
-    #           org_name = "The Virus Lounge";
-    #           org_role = "Viewer";
-    #         };
+      "auth.generic_oauth" = {
+        enabled = true;
+        client_id = "grafana";
+        scopes = "openid profile email";
+        name = "TVL";
+        email_attribute_path = "mail";
+        login_attribute_path = "sub";
+        name_attribute_path = "displayName";
+        auth_url = "https://auth.tvl.fyi/auth/realms/TVL/protocol/openid-connect/auth";
+        token_url = "https://auth.tvl.fyi/auth/realms/TVL/protocol/openid-connect/token";
+        api_url = "https://auth.tvl.fyi/auth/realms/TVL/protocol/openid-connect/userinfo";
 
-    #         basic.enabled = false;
-    #         oauth_auto_login = true;
-    #         disable_login_form = true;
-    #       };
-    #     };
-    #     inherit (builtins) typeOf replaceStrings listToAttrs concatLists;
-    #     inherit (lib) toUpper mapAttrsToList nameValuePair concatStringsSep;
+        # Give lukegb, grfn, tazjin "Admin" rights.
+        role_attribute_path = "((sub == 'lukegb' || sub == 'grfn' || sub == 'tazjin') && 'Admin') || 'Editor'";
 
-    #     # Take ["auth" "generic_oauth" "enabled"] and turn it into OPTIONS_GENERIC_OAUTH_ENABLED.
-    #     encodeName = raw: replaceStrings [ "." ] [ "_" ] (toUpper (concatStringsSep "_" raw));
+        # Allow creating new Grafana accounts from OAuth accounts.
+        allow_sign_up = true;
+      };
 
-    #     # Turn an option value into a string, but we want bools to be sensible strings and not "1" or "".
-    #     optionToString = value:
-    #       if (typeOf value) == "bool" then
-    #         if value then "true" else "false"
-    #       else builtins.toString value;
+      "auth.anonymous" = {
+        enabled = true;
+        org_name = "The Virus Lounge";
+        org_role = "Viewer";
+      };
 
-    #     # Turn an nested options attrset into a flat listToAttrs-compatible list.
-    #     encodeOptions = prefix: inp: concatLists (mapAttrsToList
-    #       (name: value:
-    #         if (typeOf value) == "set"
-    #         then encodeOptions (prefix ++ [ name ]) value
-    #         else [ (nameValuePair (encodeName (prefix ++ [ name ])) (optionToString value)) ]
-    #       )
-    #       inp);
-    #   in
-    #   listToAttrs (encodeOptions [ ] options);
+      "auth.basic".enabled = false;
+
+      auth = {
+        oauth_auto_login = true;
+        disable_login_form = true;
+      };
+    };
 
     provision = {
       enable = true;
-      datasources = [{
+      datasources.settings.datasources = [{
         name = "Prometheus";
         type = "prometheus";
         url = "http://localhost:9090";
