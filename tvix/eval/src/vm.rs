@@ -146,7 +146,7 @@ macro_rules! cmp_op {
     ( $self:ident, $op:tt ) => {{
         let b = $self.pop();
         let a = $self.pop();
-        let ordering = fallible!($self, a.nix_cmp(&b, $self));
+        let ordering = fallible!($self, $self.pass(|| { a.nix_cmp(&b) }));
         let result = Value::Bool(cmp_op!(@order $op ordering));
         $self.push(result);
     }};
@@ -435,10 +435,8 @@ impl VM {
                     (Value::String(s1), Value::String(s2)) => Value::String(s1.concat(s2)),
                     (Value::Path(p), v) => {
                         let mut path = p.to_string_lossy().into_owned();
-                        path.push_str(
-                            &v.coerce_to_string(CoercionKind::Weak, self)
-                                .map_err(|ek| self.error(ek))?,
-                        );
+                        let coerced = self.pass(|| v.coerce_to_string(CoercionKind::Weak));
+                        path.push_str(&coerced.map_err(|ek| self.error(ek))?);
                         crate::value::canon_path(PathBuf::from(path)).into()
                     }
                     _ => fallible!(self, arithmetic_op!(&a, &b, +)),
@@ -470,7 +468,7 @@ impl VM {
             OpCode::OpEqual => {
                 let v2 = self.pop();
                 let v1 = self.pop();
-                let res = fallible!(self, v1.nix_eq(&v2, self));
+                let res = fallible!(self, self.pass(|| { v1.nix_eq(&v2) }));
 
                 self.push(Value::Bool(res))
             }
@@ -565,11 +563,12 @@ impl VM {
             OpCode::OpInterpolate(Count(count)) => self.run_interpolate(count)?,
 
             OpCode::OpCoerceToString => {
+                let popped = self.pop();
+                let coerced = self.pass(|| popped.coerce_to_string(CoercionKind::Weak));
                 // TODO: handle string context, copying to store
                 let string = fallible!(
-                    self,
-                    // note that coerce_to_string also forces
-                    self.pop().coerce_to_string(CoercionKind::Weak, self)
+                    self, // note that coerce_to_string also forces
+                    coerced
                 );
                 self.push(Value::String(string));
             }
@@ -749,7 +748,7 @@ impl VM {
                 let mut value = self.pop();
 
                 if let Value::Thunk(thunk) = value {
-                    fallible!(self, thunk.force(self));
+                    fallible!(self, self.pass(|| { thunk.force() }));
                     value = thunk.value().clone();
                 }
 
@@ -817,7 +816,7 @@ impl VM {
             let with = self.stack[self.with_stack[with_stack_idx]].clone();
 
             if let Value::Thunk(thunk) = &with {
-                fallible!(self, thunk.force(self));
+                fallible!(self, self.pass(|| { thunk.force() }));
             }
 
             match fallible!(self, with.to_attrs()).select(ident) {
@@ -833,7 +832,7 @@ impl VM {
             // that the stack is present.
             let with = self.frame().upvalues.with_stack().unwrap()[idx].clone();
             if let Value::Thunk(thunk) = &with {
-                fallible!(self, thunk.force(self));
+                fallible!(self, self.pass(|| { thunk.force() }));
             }
 
             match fallible!(self, with.to_attrs()).select(ident) {
@@ -915,7 +914,7 @@ impl VM {
             .observe_enter_builtin(builtin_name);
 
         let arg = self.pop();
-        let result = fallible!(self, builtin.apply(self, arg));
+        let result = fallible!(self, self.pass(|| { builtin.apply(arg) }));
 
         match self.deref_mut() {
             VmUnboxed {
@@ -1039,8 +1038,8 @@ pub fn run_lambda(
         VM::with(|vm: &mut VM| vm.enter_frame(lambda, Upvalues::with_capacity(0), 0))?;
         let value = VM::with(|vm: &mut VM| vm.pop());
 
-        VM::with(|vm| value
-                 .deep_force(vm, &mut Default::default()))
+        value
+            .deep_force(&mut Default::default())
             .map_err(|kind| Error {
                 kind,
                 span: root_span,
