@@ -58,6 +58,13 @@ let
     __readTreeChildren = builtins.attrNames children;
   };
 
+  # Return the attribute path to target's tree location as a string.
+  mkAttrPath = target:
+    let result = concatStringsSep "." target.__readTree;
+    in if target ? __subtarget
+    then "${result}.${target.__subtarget}"
+    else result;
+
   # Create a label from a target's tree location.
   mkLabel = target:
     let label = concatStringsSep "/" target.__readTree;
@@ -210,7 +217,7 @@ let
   isDerivation = x: isAttrs x && x ? type && x.type == "derivation";
 in
 {
-  inherit gather mkLabel;
+  inherit gather mkAttrPath mkLabel;
 
   __functor = _:
     { path

@@ -26,7 +26,7 @@ let
     unsafeDiscardStringContext;
 
   inherit (pkgs) lib runCommand writeText;
-  inherit (depot.nix.readTree) mkLabel;
+  inherit (depot.nix.readTree) mkAttrPath mkLabel;
 in
 rec {
   # Creates a Nix expression that yields the target at the specified
@@ -74,7 +74,7 @@ rec {
     in
     {
       label = ":nix: " + label;
-      key = hashString "sha1" label;
+      key = builtins.hashString "sha1" (mkAttrPath target);
       skip = shouldSkip' label drvPath;
       command = mkBuildCommand target drvPath;
       env.READTREE_TARGET = label;
@@ -324,14 +324,15 @@ rec {
   # generating build steps, in order to use user-provided metadata
   # during the pipeline generation.
   normaliseExtraStep = phases: overridableParent: key:
-    { command
+    { command ? null
+    , group ? null
     , label ? key
     , needsOutput ? false
     , parentOverride ? (x: x)
     , branches ? null
     , alwaysRun ? false
     , prompt ? false
-    , softFail ? false
+    , softFail ? null
 
       # TODO(tazjin): Default to 'build' after 2022-10-01.
     , phase ? if (isNull postBuild || !postBuild) then "build" else "release"
@@ -340,6 +341,7 @@ rec {
     , postBuild ? null
     , skip ? false
     , agents ? null
+    , dependsOn ? [ ]
     }:
     let
       parent = overridableParent parentOverride;
@@ -359,6 +361,7 @@ rec {
         alwaysRun
         branches
         command
+        group
         key
         label
         needsOutput
@@ -367,6 +370,10 @@ rec {
         softFail
         skip
         agents;
+      # The Buildkite API supports a string and list of strings.
+      dependsOn =
+        let result = if builtins.isString dependsOn then [ dependsOn ] else dependsOn;
+        in map (key: builtins.hashString "sha1" key) result;
 
       # //nix/buildkite is growing a new feature for adding different
       # "build phases" which supersedes the previous `postBuild`
@@ -419,10 +426,17 @@ rec {
           in
           if cfg.alwaysRun then false else skip';
 
-        depends_on = lib.optional
-          (buildEnabled && !cfg.alwaysRun && !cfg.needsOutput)
-          cfg.parent.key;
+        depends_on =
+          if buildEnabled && !cfg.alwaysRun && !cfg.needsOutput then
+            [ cfg.parent.key ] ++ cfg.dependsOn
+          else
+            cfg.dependsOn;
 
+        key = builtins.hashString "sha1" "${cfg.parent.key}.meta.ci.extraSteps.${cfg.key}";
+      }
+      // (lib.optionalAttrs (cfg.softFail != null) { soft_fail = cfg.softFail; })
+      // (lib.optionalAttrs (cfg.group != null) { inherit (cfg) group; })
+      // (lib.optionalAttrs (cfg.command != null) {
         command = pkgs.writeShellScript "${cfg.key}-script" ''
           set -ueo pipefail
           ${lib.optionalString cfg.needsOutput
@@ -432,9 +446,8 @@ rec {
           echo '+++ Running extra step command'
           exec ${cfg.command}
         '';
-
-        soft_fail = cfg.softFail;
-      } // (lib.optionalAttrs (cfg.agents != null) { inherit (cfg) agents; })
+      })
+      // (lib.optionalAttrs (cfg.agents != null) { inherit (cfg) agents; })
       // (lib.optionalAttrs (cfg.branches != null) {
         branches = lib.concatStringsSep " " cfg.branches;
       });
