@@ -13,6 +13,8 @@ with lib;
 
   networking.hostName = "mugwump";
 
+  system.stateVersion = "22.05";
+
   boot = {
     loader.systemd-boot.enable = true;
 
@@ -106,15 +108,20 @@ with lib;
 
   services.grafana = {
     enable = true;
-    port = 3000;
-    domain = "metrics.gws.fyi";
-    rootUrl = "https://metrics.gws.fyi";
     dataDir = "/var/lib/grafana";
-    analytics.reporting.enable = false;
+
+    settings = {
+      server = {
+        http_port = 3000;
+        root_url = "https://metrics.gws.fyi";
+        domain = "metrics.gws.fyi";
+      };
+      analytics.reporting_enabled = false;
+    };
 
     provision = {
       enable = true;
-      datasources = [{
+      datasources.settings.datasources = [{
         name = "Prometheus";
         type = "prometheus";
         url = "http://localhost:9090";
