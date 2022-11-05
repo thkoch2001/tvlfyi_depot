@@ -1,4 +1,4 @@
-From ad3f389c20815f21ad932c0b295e861c6a21011c Mon Sep 17 00:00:00 2001
+From aedf8ac8fa5113843bcd83ff85e2d9f3bffdb16c Mon Sep 17 00:00:00 2001
 From: Luke Granger-Brown <git@lukegb.com>
 Date: Thu, 2 Jul 2020 23:02:43 +0100
 Subject: [PATCH 2/3] Syntax highlight rules.pl
@@ -9,7 +9,7 @@ Subject: [PATCH 2/3] Syntax highlight rules.pl
  2 files changed, 2 insertions(+)
 
 diff --git a/polygerrit-ui/app/embed/diff/gr-syntax-layer/gr-syntax-layer-worker.ts b/polygerrit-ui/app/embed/diff/gr-syntax-layer/gr-syntax-layer-worker.ts
-index f6f634ad31..36fd6090b4 100644
+index 385249f280..7cb3068494 100644
 --- a/polygerrit-ui/app/embed/diff/gr-syntax-layer/gr-syntax-layer-worker.ts
 +++ b/polygerrit-ui/app/embed/diff/gr-syntax-layer/gr-syntax-layer-worker.ts
 @@ -68,6 +68,7 @@ const LANGUAGE_MAP = new Map<string, string>([
@@ -21,7 +21,7 @@ index f6f634ad31..36fd6090b4 100644
    ['text/x-protobuf', 'protobuf'],
    ['text/x-puppet', 'puppet'],
 diff --git a/resources/com/google/gerrit/server/mime/mime-types.properties b/resources/com/google/gerrit/server/mime/mime-types.properties
-index c0c092c712..ee815b689d 100644
+index 739818ec05..58eb727bf9 100644
 --- a/resources/com/google/gerrit/server/mime/mime-types.properties
 +++ b/resources/com/google/gerrit/server/mime/mime-types.properties
 @@ -200,6 +200,7 @@ rq = application/sparql-query
@@ -33,5 +33,5 @@ index c0c092c712..ee815b689d 100644
  s = text/x-gas
  sas = text/x-sas
 -- 
-2.36.0
+2.37.3
 
