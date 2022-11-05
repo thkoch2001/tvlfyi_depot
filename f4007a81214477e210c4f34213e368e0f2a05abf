@@ -16,6 +16,24 @@
       "message": "I have a slight preference for making a `utils` module (and perhaps `pub use`ing it here)",
       "revId": "f4007a81214477e210c4f34213e368e0f2a05abf",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cb71d6ff_bf2dceb6",
+        "filename": "tvix/eval/src/lib.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-11-05T22:08:08Z",
+      "side": 1,
+      "message": "I have a slight preference against that :p",
+      "parentUuid": "608b0f46_609eaec9",
+      "revId": "f4007a81214477e210c4f34213e368e0f2a05abf",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
