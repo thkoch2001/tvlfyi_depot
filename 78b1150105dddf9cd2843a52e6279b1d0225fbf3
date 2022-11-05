@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "16efabbc_915a54c2",
+        "filename": "tvix/eval/src/builtins/mod.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 843,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2022-11-05T12:48:13Z",
+      "side": 1,
+      "message": "I guess in principle these force their argument, but hardly matters atm.",
+      "revId": "78b1150105dddf9cd2843a52e6279b1d0225fbf3",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0eaf7ece_f40a0365",
+        "filename": "tvix/eval/src/builtins/mod.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 862,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2022-11-05T12:48:13Z",
+      "side": 1,
+      "message": "We have some code in depot that makes assumptions about the hash length, so we should do it right, i.e. `/nix/store/00000000000000000000000000000000-mock` and the corresponding drv path.",
+      "revId": "78b1150105dddf9cd2843a52e6279b1d0225fbf3",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
