@@ -23,7 +23,7 @@ let
     runScript = "/bin/bazel-run";
   };
   bazel = bazelTop // { override = x: bazelTop; };
-  version = "3.6.1";
+  version = "3.7.0-rc4";
 in
 pkgs.lib.makeOverridable pkgs.buildBazelPackage {
   pname = "gerrit";
@@ -31,9 +31,9 @@ pkgs.lib.makeOverridable pkgs.buildBazelPackage {
 
   src = pkgs.fetchgit {
     url = "https://gerrit.googlesource.com/gerrit";
-    rev = "028b90fc362051cc7005e540030e497320b83c92";
+    rev = "3e445c7833c4acf49f1171fe4c82ceb32e93c780";
     branchName = "v${version}";
-    sha256 = "sha256:0rwmrix4h9jvgxr1gzp5f090g3xz3qlss3l1xvs2s6f3ynbxixa7";
+    sha256 = "sha256:002aw2bfifyla66v8khyiq4m9qj6ahs6r1dzb5kjk8xqpf6c6q9p";
     fetchSubmodules = true;
   };
 
@@ -55,7 +55,7 @@ pkgs.lib.makeOverridable pkgs.buildBazelPackage {
   fetchConfigured = true;
 
   fetchAttrs = {
-    sha256 = "sha256:1ggp5zrj25g5jc6ny9y333q0g76a7s1544j1ps9j3xhra9vbc1vq";
+    sha256 = "sha256:09nfjw8376amrymblnjl4v85zgxrvc93zblvxrh23k7af62bk1nk";
     preBuild = ''
       rm .bazelversion
     '';
@@ -99,7 +99,14 @@ pkgs.lib.makeOverridable pkgs.buildBazelPackage {
       # Normalize permissions on .yarn-{tarball,metadata} files
       find $bazelOut/external/yarn_cache \( -name .yarn-tarball.tgz -or -name .yarn-metadata.json \) -exec chmod 644 {} +
 
-      (cd $bazelOut/ && tar czf $out --sort=name --mtime='@1' --owner=0 --group=0 --numeric-owner external/)
+      mkdir $bazelOut/_bits/
+      find . -name node_modules -prune -print | while read d; do
+        echo "$d" "$(dirname $d)"
+        mkdir -p $bazelOut/_bits/$(dirname $d)
+        cp -R "$d" "$bazelOut/_bits/$(dirname $d)/node_modules"
+      done
+
+      (cd $bazelOut/ && tar czf $out --sort=name --mtime='@1' --owner=0 --group=0 --numeric-owner external/ _bits/)
 
       runHook postInstall
     '';
@@ -108,6 +115,8 @@ pkgs.lib.makeOverridable pkgs.buildBazelPackage {
   buildAttrs = {
     preConfigure = ''
       rm .bazelversion
+
+      cp -R $bazelOut/_bits/* ./
     '';
     postPatch = ''
       # Disable all errorprone checks, since we might be using a different version.
