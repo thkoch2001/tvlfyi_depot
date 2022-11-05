@@ -2,6 +2,7 @@
 //! Tvix bytecode.
 
 use serde_json::json;
+use std::cell::Cell;
 use std::{cmp::Ordering, ops::DerefMut, path::PathBuf, rc::Rc};
 
 use crate::{
@@ -38,7 +39,29 @@ impl CallFrame {
     }
 }
 
-pub struct VM {
+#[repr(transparent)]
+#[derive(Default)]
+pub struct VM(Option<Box<VmUnboxed>>);
+
+impl std::ops::Deref for VM {
+    type Target = VmUnboxed;
+    fn deref(&self) -> &VmUnboxed {
+        &self
+            .0
+            .as_ref()
+            .expect("call to VM::with() outside of a VM::pass()")
+    }
+}
+
+impl std::ops::DerefMut for VM {
+    fn deref_mut(&mut self) -> &mut VmUnboxed {
+        self.0
+            .as_mut()
+            .expect("call to VM::with() outside of a VM::pass()")
+    }
+}
+
+pub struct VmUnboxed {
     /// The VM call stack.  One element is pushed onto this stack
     /// each time a function is called or a thunk is forced.
     frames: Vec<CallFrame>,
@@ -147,14 +170,14 @@ macro_rules! cmp_op {
 
 impl VM {
     pub fn new(nix_search_path: NixSearchPath, observer: Box<dyn RuntimeObserver>) -> Self {
-        Self {
+        Self(Some(Box::new(VmUnboxed {
             nix_search_path,
             observer,
             frames: vec![],
             stack: vec![],
             with_stack: vec![],
             warnings: vec![],
-        }
+        })))
     }
 
     fn frame(&self) -> &CallFrame {
@@ -344,8 +367,8 @@ impl VM {
         self.frames.push(frame);
         let result = self.run();
 
-        match self {
-            VM {
+        match self.deref_mut() {
+            VmUnboxed {
                 observer,
                 stack,
                 frames,
@@ -376,8 +399,8 @@ impl VM {
             let op = self.inc_ip();
 
             let ip = self.frame().ip;
-            match self {
-                VM {
+            match self.deref_mut() {
+                VmUnboxed {
                     observer, stack, ..
                 } => observer.observe_execute_op(ip, &op, stack),
             };
@@ -528,8 +551,8 @@ impl VM {
             }
 
             OpCode::OpList(Count(count)) => {
-                let list =
-                    NixList::construct(count, self.stack.split_off(self.stack.len() - count));
+                let split_point = self.stack.len() - count;
+                let list = NixList::construct(count, self.stack.split_off(split_point));
                 self.push(Value::List(list));
             }
 
@@ -644,7 +667,8 @@ impl VM {
             }
 
             OpCode::OpPushWith(StackIdx(idx)) => {
-                self.with_stack.push(self.frame().stack_offset + idx)
+                let val = self.frame().stack_offset + idx;
+                self.with_stack.push(val)
             }
 
             OpCode::OpPopWith => {
@@ -761,9 +785,10 @@ impl VM {
     }
 
     fn run_attrset(&mut self, count: usize) -> EvalResult<()> {
+        let split_point = self.stack.len() - count * 2;
         let attrs = fallible!(
             self,
-            NixAttrs::construct(count, self.stack.split_off(self.stack.len() - count * 2))
+            NixAttrs::construct(count, self.stack.split_off(split_point))
         );
 
         self.push(Value::attrs(attrs));
@@ -892,8 +917,8 @@ impl VM {
         let arg = self.pop();
         let result = fallible!(self, builtin.apply(self, arg));
 
-        match self {
-            VM {
+        match self.deref_mut() {
+            VmUnboxed {
                 observer, stack, ..
             } => observer
                 .deref_mut()
@@ -903,6 +928,42 @@ impl VM {
         self.push(result);
 
         Ok(())
+    }
+}
+
+// Thread-local storage of the VM
+impl VM {
+    thread_local!(static TLS: Cell<VM> = const { Cell::new(VM(None)) });
+
+    /// invokes the closure argument, passing it a &mut VM
+    pub fn with<F, R>(f: F) -> R
+    where
+        F: FnOnce(&mut VM) -> R,
+    {
+        VM::TLS.with(move |vmcell| {
+            let mut storage = Cell::new(VM::default());
+            vmcell.swap(&storage);
+            let ret = f(storage.get_mut());
+            vmcell.swap(&storage);
+            ret
+        })
+    }
+
+    /// Invokes the (0-argument) closure argument with the TLS-VM
+    /// set to `vm` for the duration of the closure's execution.
+    /// The preexisting TLS value is restored after the closure
+    /// returns.
+    pub fn pass<F, R>(&mut self, f: F) -> R
+    where
+        F: FnOnce() -> R,
+    {
+        VM::TLS.with(move |vmcell| {
+            let storage = Cell::from_mut(self);
+            vmcell.swap(storage);
+            let ret = f();
+            vmcell.swap(storage);
+            ret
+        })
     }
 }
 
@@ -918,27 +979,31 @@ pub fn run_lambda(
     lambda: Rc<Lambda>,
 ) -> EvalResult<RuntimeResult> {
     let mut vm = VM::new(nix_search_path, observer);
+    let value = VM::pass(&mut vm, || {
+        // Retain the top-level span of the expression in this lambda, as
+        // synthetic "calls" in deep_force will otherwise not have a span
+        // to fall back to.
+        //
+        // We exploit the fact that the compiler emits a final instruction
+        // with the span of the entire file for top-level expressions.
+        let root_span = lambda.chunk.get_span(CodeIdx(lambda.chunk.code.len() - 1));
 
-    // Retain the top-level span of the expression in this lambda, as
-    // synthetic "calls" in deep_force will otherwise not have a span
-    // to fall back to.
-    //
-    // We exploit the fact that the compiler emits a final instruction
-    // with the span of the entire file for top-level expressions.
-    let root_span = lambda.chunk.get_span(CodeIdx(lambda.chunk.code.len() - 1));
+        VM::with(|vm: &mut VM| vm.enter_frame(lambda, Upvalues::with_capacity(0), 0))?;
+        let value = VM::with(|vm: &mut VM| vm.pop());
 
-    vm.enter_frame(lambda, Upvalues::with_capacity(0), 0)?;
-    let value = vm.pop();
-
-    value
-        .deep_force(&mut vm, &mut Default::default())
-        .map_err(|kind| Error {
+        VM::with(|vm| value.deep_force(vm, &mut Default::default())).map_err(|kind| Error {
             kind,
             span: root_span,
         })?;
 
-    Ok(RuntimeResult {
-        value,
-        warnings: vm.warnings,
-    })
+        Ok(value)
+    })?;
+
+    if let VM(Some(boxvm)) = vm {
+        match *boxvm {
+            VmUnboxed { warnings, .. } => Ok(RuntimeResult { value, warnings }),
+        }
+    } else {
+        panic!("extremely unlikely bug: VM::pass() overwrote its argument");
+    }
 }
