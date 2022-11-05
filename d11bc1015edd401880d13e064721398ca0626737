@@ -1,0 +1,67 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c3f3d972_46dbbdc0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-11-05T22:12:28Z",
+      "side": 1,
+      "message": "Thanks for writing this all up (and of course for the initial implementations!)!",
+      "revId": "d11bc1015edd401880d13e064721398ca0626737",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3418997b_0dbd0b65",
+        "filename": "tvix/eval/docs/abandoned/thread-local-vm.md",
+        "patchSetId": 2
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-11-05T22:12:28Z",
+      "side": 1,
+      "message": "it is however inside the \"TVL compatibility\" scope (we have lots of IFD - and it is very slow in Nix, which was a big motivator for starting the Tvix project!)\n\nI think we point out in the Tvix announcement blog post that well-working IFD is a priority for Tvix, as this allows us to compete with e.g. Bazel in the future (which isn\u0027t possible nicely without IFD).",
+      "range": {
+        "startLine": 8,
+        "startChar": 1,
+        "endLine": 8,
+        "endChar": 59
+      },
+      "revId": "d11bc1015edd401880d13e064721398ca0626737",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "992b8167_c70ea4b0",
+        "filename": "tvix/eval/docs/abandoned/thread-local-vm.md",
+        "patchSetId": 2
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-11-05T22:12:28Z",
+      "side": 1,
+      "message": "It\u0027s a big blocker, however I\u0027d also add that I (and to some extent also grfn) are skeptical about things like VM just \"appearing\". It\u0027s got a bit of spooky-action-at-a-distance feeling, which isn\u0027t necessarily bad but it feels a bit too early to add stuff like that (before *we* even really understand everything, as it\u0027s possible that we\u0027ll add things like multithreading to the VM later which might have an impact on this).",
+      "range": {
+        "startLine": 16,
+        "startChar": 0,
+        "endLine": 16,
+        "endChar": 41
+      },
+      "revId": "d11bc1015edd401880d13e064721398ca0626737",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
