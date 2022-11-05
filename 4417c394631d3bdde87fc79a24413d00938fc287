@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b22e20ef_223018f6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-11-05T10:23:09Z",
+      "side": 1,
+      "message": "Finally an unstable version again! Unlike the previous stable version, uhh.",
+      "revId": "4417c394631d3bdde87fc79a24413d00938fc287",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
