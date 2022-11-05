@@ -38,7 +38,7 @@ impl CallFrame {
     }
 }
 
-pub struct VM<'o> {
+pub struct VM {
     /// The VM call stack.  One element is pushed onto this stack
     /// each time a function is called or a thunk is forced.
     frames: Vec<CallFrame>,
@@ -61,7 +61,7 @@ pub struct VM<'o> {
 
     nix_search_path: NixSearchPath,
 
-    observer: &'o mut dyn RuntimeObserver,
+    observer: Box<dyn RuntimeObserver>,
 }
 
 /// The result of a VM's runtime evaluation.
@@ -145,8 +145,8 @@ macro_rules! cmp_op {
     };
 }
 
-impl<'o> VM<'o> {
-    pub fn new(nix_search_path: NixSearchPath, observer: &'o mut dyn RuntimeObserver) -> Self {
+impl VM {
+    pub fn new(nix_search_path: NixSearchPath, observer: Box<dyn RuntimeObserver>) -> Self {
         Self {
             nix_search_path,
             observer,
@@ -290,7 +290,8 @@ impl<'o> VM<'o> {
 
             Value::Closure(closure) => {
                 let lambda = closure.lambda();
-                self.observer.observe_tail_call(self.frames.len(), &lambda);
+                let len = self.frames.len();
+                self.observer.deref_mut().observe_tail_call(len, &lambda);
 
                 // Replace the current call frames internals with
                 // that of the tail-called closure.
@@ -328,8 +329,10 @@ impl<'o> VM<'o> {
         upvalues: Upvalues,
         arg_count: usize,
     ) -> EvalResult<()> {
+        let len = self.frames.len() + 1;
         self.observer
-            .observe_enter_frame(arg_count, &lambda, self.frames.len() + 1);
+            .deref_mut()
+            .observe_enter_frame(arg_count, &lambda, len);
 
         let frame = CallFrame {
             lambda,
@@ -341,8 +344,16 @@ impl<'o> VM<'o> {
         self.frames.push(frame);
         let result = self.run();
 
-        self.observer
-            .observe_exit_frame(self.frames.len() + 1, &self.stack);
+        match self {
+            VM {
+                observer,
+                stack,
+                frames,
+                ..
+            } => observer
+                .deref_mut()
+                .observe_exit_frame(frames.len() + 1, stack),
+        };
 
         result
     }
@@ -364,8 +375,12 @@ impl<'o> VM<'o> {
 
             let op = self.inc_ip();
 
-            self.observer
-                .observe_execute_op(self.frame().ip, &op, &self.stack);
+            let ip = self.frame().ip;
+            match self {
+                VM {
+                    observer, stack, ..
+                } => observer.observe_execute_op(ip, &op, stack),
+            };
 
             let res = self.run_op(op);
 
@@ -870,13 +885,20 @@ impl<'o> VM<'o> {
 
     pub fn call_builtin(&mut self, builtin: Builtin) -> EvalResult<()> {
         let builtin_name = builtin.name();
-        self.observer.observe_enter_builtin(builtin_name);
+        self.observer
+            .deref_mut()
+            .observe_enter_builtin(builtin_name);
 
         let arg = self.pop();
         let result = fallible!(self, builtin.apply(self, arg));
 
-        self.observer
-            .observe_exit_builtin(builtin_name, &self.stack);
+        match self {
+            VM {
+                observer, stack, ..
+            } => observer
+                .deref_mut()
+                .observe_exit_builtin(builtin_name, stack),
+        };
 
         self.push(result);
 
@@ -892,7 +914,7 @@ fn unwrap_or_clone_rc<T: Clone>(rc: Rc<T>) -> T {
 
 pub fn run_lambda(
     nix_search_path: NixSearchPath,
-    observer: &mut dyn RuntimeObserver,
+    observer: Box<dyn RuntimeObserver>,
     lambda: Rc<Lambda>,
 ) -> EvalResult<RuntimeResult> {
     let mut vm = VM::new(nix_search_path, observer);
