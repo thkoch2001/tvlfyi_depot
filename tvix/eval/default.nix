@@ -1,4 +1,4 @@
-{ depot, pkgs, lib, ... }:
+args @ { depot, pkgs, lib, ... }:
 
 lib.fix (self: depot.third_party.naersk.buildPackage (lib.fix (naerskArgs: {
   src = depot.third_party.gitignoreSource ./.;
@@ -13,18 +13,25 @@ lib.fix (self: depot.third_party.naersk.buildPackage (lib.fix (naerskArgs: {
 
   meta.ci.targets = builtins.attrNames self.passthru;
 
-  passthru.benchmarks = depot.third_party.naersk.buildPackage (naerskArgs // {
-    name = "tvix-eval-benchmarks";
+  copySources = [
+    "builtin-macros"
+  ];
 
-    doCheck = false;
+  passthru = {
+    benchmarks = depot.third_party.naersk.buildPackage (naerskArgs // {
+      name = "tvix-eval-benchmarks";
 
-    cargoBuildOptions = opts: opts ++ [ "--benches" ];
+      doCheck = false;
 
-    copyBinsFilter = ''
+      cargoBuildOptions = opts: opts ++ [ "--benches" ];
+
+      copyBinsFilter = ''
       select(.reason == "compiler-artifact" and any(.target.kind[] == "bench"; .))
     '';
 
-    passthru = { };
-  });
-}))
-)
+      passthru = { };
+    });
+
+    builtin-macros = import ./builtin-macros args;
+  };
+})))
