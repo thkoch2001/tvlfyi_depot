@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "608b0f46_609eaec9",
+        "filename": "tvix/eval/src/lib.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2022-11-05T14:25:31Z",
+      "side": 1,
+      "message": "I have a slight preference for making a `utils` module (and perhaps `pub use`ing it here)",
+      "revId": "f4007a81214477e210c4f34213e368e0f2a05abf",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
