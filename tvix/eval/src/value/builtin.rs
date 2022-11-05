@@ -3,7 +3,7 @@
 //!
 //! Builtins are directly backed by Rust code operating on Nix values.
 
-use crate::{errors::ErrorKind, vm::VM};
+use crate::errors::ErrorKind;
 
 use super::Value;
 
@@ -22,8 +22,8 @@ use std::{
 ///
 /// Errors returned from a builtin will be annotated with the location
 /// of the call to the builtin.
-pub trait BuiltinFn: Fn(Vec<Value>, &mut VM) -> Result<Value, ErrorKind> {}
-impl<F: Fn(Vec<Value>, &mut VM) -> Result<Value, ErrorKind>> BuiltinFn for F {}
+pub trait BuiltinFn: Fn(Vec<Value>) -> Result<Value, ErrorKind> {}
+impl<F: Fn(Vec<Value>) -> Result<Value, ErrorKind>> BuiltinFn for F {}
 
 /// Represents a single built-in function which directly executes Rust
 /// code that operates on a Nix value.
@@ -71,16 +71,16 @@ impl Builtin {
     /// Apply an additional argument to the builtin, which will either
     /// lead to execution of the function or to returning a partial
     /// builtin.
-    pub fn apply(mut self, vm: &mut VM, arg: Value) -> Result<Value, ErrorKind> {
+    pub fn apply(mut self, arg: Value) -> Result<Value, ErrorKind> {
         self.partials.push(arg);
 
         if self.partials.len() == self.strict_args.len() {
             for (idx, force) in self.strict_args.iter().enumerate() {
                 if *force {
-                    self.partials[idx].force(vm)?;
+                    self.partials[idx].force()?;
                 }
             }
-            return (self.func)(self.partials, vm);
+            return (self.func)(self.partials);
         }
 
         // Function is not yet ready to be called.
