@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "eafcb25f_0f8f94fa",
+        "filename": "tvix/eval/src/value/attrs.rs",
+        "patchSetId": 3
+      },
+      "lineNbr": 222,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2022-11-05T14:30:08Z",
+      "side": 1,
+      "message": "why not spell out `required`?",
+      "range": {
+        "startLine": 222,
+        "startChar": 18,
+        "endLine": 222,
+        "endChar": 21
+      },
+      "revId": "eace32dd52231796d95dcf967994a2e46b722ee7",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2d7997ee_8cde9a71",
+        "filename": "tvix/eval/src/value/attrs.rs",
+        "patchSetId": 3
+      },
+      "lineNbr": 222,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2022-11-05T14:30:08Z",
+      "side": 1,
+      "message": "probably not relevant to this CL, but I\u0027ve always been kinda annoyed that this is called `select` and not `get` like the stdlib calls it.",
+      "range": {
+        "startLine": 222,
+        "startChar": 11,
+        "endLine": 222,
+        "endChar": 17
+      },
+      "revId": "eace32dd52231796d95dcf967994a2e46b722ee7",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
