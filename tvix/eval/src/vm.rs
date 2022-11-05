@@ -967,6 +967,54 @@ impl VM {
     }
 }
 
+// Convenience methods which wrap VM::with()
+impl VM {
+    #[track_caller]
+    pub fn vm_call_with<I>(callable: &Value, args: I) -> EvalResult<Value>
+    where
+        I: IntoIterator<Item = Value>,
+        I::IntoIter: DoubleEndedIterator,
+    {
+        VM::with(|vm: &mut VM| vm.call_with(callable, args))
+    }
+
+    pub fn vm_enter_frame(
+        lambda: Rc<Lambda>,
+        upvalues: Upvalues,
+        arg_count: usize,
+    ) -> EvalResult<()> {
+        VM::with(|vm: &mut VM| vm.enter_frame(lambda, upvalues, arg_count))
+    }
+
+    pub fn vm_pop() -> Value {
+        VM::with(|vm: &mut VM| vm.pop())
+    }
+
+    pub fn vm_push(value: Value) {
+        VM::with(move |vm: &mut VM| vm.push(value));
+    }
+
+    pub fn vm_error(kind: ErrorKind) -> Error {
+        VM::with(|vm| vm.error(kind))
+    }
+
+    pub fn vm_emit_warning(kind: WarningKind) {
+        VM::with(|vm| vm.emit_warning(kind))
+    }
+
+    pub fn vm_call_value(callable: &Value) -> EvalResult<()> {
+        VM::with(|vm| vm.call_value(callable))
+    }
+
+    pub(crate) fn vm_current_span() -> codemap::Span {
+        VM::with(|vm| vm.current_span())
+    }
+
+    pub fn vm_push_warning(warning: EvalWarning) {
+        VM::with(|vm| vm.warnings.push(warning))
+    }
+}
+
 // TODO: use Rc::unwrap_or_clone once it is stabilised.
 // https://doc.rust-lang.org/std/rc/struct.Rc.html#method.unwrap_or_clone
 fn unwrap_or_clone_rc<T: Clone>(rc: Rc<T>) -> T {
