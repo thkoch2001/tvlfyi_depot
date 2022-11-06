@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "eb12a242_dfb177ee",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 9
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-11-06T20:33:19Z",
+      "side": 1,
+      "message": "I like this approach, I think. Before giving +2, also curious about input from sterni and/or amjoseph!",
+      "revId": "a1c40e49e63a83e6a74f8e5c565d3616db629510",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
