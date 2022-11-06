@@ -19,5 +19,9 @@ lib.fix (self: depot.third_party.naersk.buildPackage (lib.fix (naerskArgs: {
   PROTO_ROOT = protoRoot;
 
   doCheck = true;
+
+  passthru = {
+    inherit protoRoot;
+  };
 }))
 )
