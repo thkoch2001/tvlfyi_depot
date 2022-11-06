@@ -145,7 +145,7 @@ with lib;
         enableACME = true;
         forceSSL = true;
         locations."/" = {
-          proxyPass = "http://localhost:${toString config.services.grafana.port}";
+          proxyPass = "http://localhost:${toString config.services.grafana.settings.server.http_port}";
         };
       };
     };
