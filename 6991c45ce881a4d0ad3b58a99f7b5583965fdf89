@@ -16,6 +16,24 @@
       "message": "so, after looking at https://cl.tvl.fyi/c/depot/+/7201 it looks like this approach isn\u0027t really going to work - there are all sorts of inconsistencies in local state introduced by eg rust-analyzer etc when developing locally.\n\nGoing to try an alternate approach where I annotate an inline module with an attribute macro - something like:\n\n```\n#[builtins]\nmod impure_builtins {\n    #[builtin(\"abort\", [true])]\n    fn builtin_abort(_: \u0026mut VM, x: Value) -\u003e // ...\n    \n```",
       "revId": "6991c45ce881a4d0ad3b58a99f7b5583965fdf89",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "96d7b2f6_9d9a18f3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2022-11-06T14:44:26Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2da53451_d1c76ad4",
+      "revId": "6991c45ce881a4d0ad3b58a99f7b5583965fdf89",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
