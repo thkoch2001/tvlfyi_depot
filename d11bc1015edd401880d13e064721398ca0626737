@@ -41,6 +41,30 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "27181312_deb7bb40",
+        "filename": "tvix/eval/docs/abandoned/thread-local-vm.md",
+        "patchSetId": 2
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 1000066
+      },
+      "writtenOn": "2022-11-06T23:15:34Z",
+      "side": 1,
+      "message": "Done; please see https://cl.tvl.fyi/c/depot/+/7193/4",
+      "parentUuid": "3418997b_0dbd0b65",
+      "range": {
+        "startLine": 8,
+        "startChar": 1,
+        "endLine": 8,
+        "endChar": 59
+      },
+      "revId": "d11bc1015edd401880d13e064721398ca0626737",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "992b8167_c70ea4b0",
@@ -54,6 +78,30 @@
       "writtenOn": "2022-11-05T22:12:28Z",
       "side": 1,
       "message": "It\u0027s a big blocker, however I\u0027d also add that I (and to some extent also grfn) are skeptical about things like VM just \"appearing\". It\u0027s got a bit of spooky-action-at-a-distance feeling, which isn\u0027t necessarily bad but it feels a bit too early to add stuff like that (before *we* even really understand everything, as it\u0027s possible that we\u0027ll add things like multithreading to the VM later which might have an impact on this).",
+      "range": {
+        "startLine": 16,
+        "startChar": 0,
+        "endLine": 16,
+        "endChar": 41
+      },
+      "revId": "d11bc1015edd401880d13e064721398ca0626737",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f99dba02_377147f8",
+        "filename": "tvix/eval/docs/abandoned/thread-local-vm.md",
+        "patchSetId": 2
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1000066
+      },
+      "writtenOn": "2022-11-06T23:15:34Z",
+      "side": 1,
+      "message": "\u003e I (and to some extent also grfn) are skeptical about things like VM just \"appearing\".  It\u0027s got a bit of spooky-action-at-a-distance feeling, \n\nDo you find it spooky that the CPU\u0027s call stack is thread-local?\n\nTvix\u0027s `struct VM` really ought to be called `struct VmStack` since that\u0027s what it is.  I actually find it bizzare to have a call stack that *isn\u0027t* thread-local!  Indeed, the call stack is the \"most thread-localish\" thing there is.\n\n\u003e it\u0027s possible that we\u0027ll add things like multithreading to the VM later which might have an impact on this).\n\nI suspect you may find the opposite to be true when you get to that point, which is why I put so much time into cleaning this up and documenting it carefully.  In particular I made sure that cl/7195 would be easy to rebase, even months from now.  The other CLs in the series are search-and-replace and keeping the borrowchecker happy; they won\u0027t need to be rebased.\n\nYou can\u0027t \"let go of\" a `\u0026mut self`, but this CL shows you how to move it into a thread-local (and get it back), and do so at arbitrarily-deep nesting.\n\nSo remember this trick, you may need it some day.",
+      "parentUuid": "992b8167_c70ea4b0",
       "range": {
         "startLine": 16,
         "startChar": 0,
