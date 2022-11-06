@@ -7,7 +7,8 @@ use syn::parse::Parse;
 use syn::punctuated::Punctuated;
 use syn::spanned::Spanned;
 use syn::{
-    bracketed, parse_macro_input, parse_quote, Ident, Item, ItemMod, LitBool, LitStr, Token,
+    bracketed, parse_macro_input, parse_quote, FnArg, Ident, Item, ItemMod, LitBool, LitStr, Pat,
+    PatIdent, PatType, Token,
 };
 
 struct BuiltinArgs {
@@ -91,16 +92,52 @@ pub fn builtins(_args: TokenStream, item: TokenStream) -> TokenStream {
                 }
 
                 let fn_name = f.sig.ident.clone();
-                let args = (0..(f.sig.inputs.len() - 1))
+                let num_args = f.sig.inputs.len() - 1;
+                let args = (0..num_args)
                     .map(|n| Ident::new(&format!("arg_{n}"), Span::call_site()))
                     .collect::<Vec<_>>();
                 let mut reversed_args = args.clone();
                 reversed_args.reverse();
 
+                if strictness.len() != num_args {
+                    return (quote_spanned!(f.sig.inputs.span() =>
+                       compile_error!("Function arguments and strictness map have different lengths")
+                    )).into();
+                }
+
+                let builtin_arguments = strictness
+                    .into_iter()
+                    .zip(f.sig.inputs.iter().skip(1))
+                    .map(|(strict, arg)| {
+                        let name = match arg {
+                            FnArg::Receiver(_) => {
+                                return Err(quote_spanned!(arg.span() => {
+                                    compile_error!("Unexpected receiver argument in builtin")
+                                }))
+                            }
+                            FnArg::Typed(PatType { pat, .. }) => match pat.as_ref() {
+                                Pat::Ident(PatIdent { ident, .. }) => ident.to_string(),
+                                _ => "unknown".to_string(),
+                            },
+                        };
+                        Ok(quote_spanned!(arg.span() => {
+                            crate::internal::BuiltinArgument {
+                                strict: #strict,
+                                name: #name,
+                            }
+                        }))
+                    })
+                    .collect::<Result<Vec<_>, _>>();
+
+                let builtin_arguments = match builtin_arguments {
+                    Ok(args) => args,
+                    Err(err) => return err.into(),
+                };
+
                 builtins.push(quote_spanned! { builtin_attr.span() => {
                     crate::internal::Builtin::new(
                         #name,
-                        &[#strictness],
+                        &[#(#builtin_arguments),*],
                         |mut args: Vec<crate::Value>, vm: &mut crate::internal::VM| {
                             #(let #reversed_args = args.pop().unwrap();)*
                             #fn_name(vm, #(#args),*)
