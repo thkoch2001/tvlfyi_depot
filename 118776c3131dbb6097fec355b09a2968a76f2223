@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ef096ad2_91b0392f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000066
+      },
+      "writtenOn": "2022-11-06T22:58:59Z",
+      "side": 1,
+      "message": "When I first wrote this, I assumed that in order to make the VM a thread-local, it would be necessary to give up genericity (including being generic over the lifetime of the RuntimeObserver), since thread-locals cannot be generic.\n\nThis assumption is incorrect.\n\nThe trick is that instead of making the *VM* generic, you instead make *Value* generic!  Then you can thread any genericity you like (types, lifetimes, etc) through the entire program.  And you can even thread that genericity through the rust `std` traits: `impl\u003c\u0027o\u003e PartialEq for Value\u003c\u0027o\u003e { ... }`.\n\nIn hindsight this is sort of obvious; as a pure functional language, the central object of Nix is its *values*, not its call stack.",
+      "revId": "118776c3131dbb6097fec355b09a2968a76f2223",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
