@@ -7,6 +7,7 @@ mod builtins {
     use tvix_eval::internal::VM;
     use tvix_eval::{ErrorKind, Value};
 
+    /// Test docstring
     #[builtin("identity", [true])]
     pub fn builtin_identity(_vm: &mut VM, x: Value) -> Result<Value, ErrorKind> {
         Ok(x)
@@ -17,4 +18,8 @@ mod builtins {
 fn builtins() {
     let builtins = builtins::builtins();
     assert_eq!(builtins.len(), 1);
+    assert_eq!(
+        builtins.first().unwrap().documentation(),
+        Some(" Test docstring")
+    );
 }
