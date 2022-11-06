@@ -41,7 +41,7 @@ in
     (mod "www/nixery.dev.nix")
     (mod "www/self-redirect.nix")
     (mod "www/static.tvl.fyi.nix")
-    # (mod "www/status.tvl.su.nix")
+    (mod "www/status.tvl.su.nix")
     (mod "www/tazj.in.nix")
     (mod "www/todo.tvl.fyi.nix")
     (mod "www/tvixbolt.tvl.su.nix")
