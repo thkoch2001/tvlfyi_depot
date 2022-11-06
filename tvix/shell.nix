@@ -8,6 +8,7 @@ pkgs.mkShell {
   packages = [
     pkgs.cargo
     pkgs.clippy
+    pkgs.protobuf
     pkgs.rust-analyzer
     pkgs.rustc
     pkgs.rustfmt
