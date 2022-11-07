@@ -67,6 +67,24 @@
       "message": "I saw some mention in IRC of putting the strictness annotation on the argument, like\n\n```\npub fn builtin_identity(_vm: \u0026mut VM, #[strict] x: Value)...\n```\n\nwhich seemed incredibly cool... is that still planned?",
       "revId": "a1c40e49e63a83e6a74f8e5c565d3616db629510",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bd5b7668_39d99d4d",
+        "filename": "tvix/eval/builtin-macros/src/lib.rs",
+        "patchSetId": 9
+      },
+      "lineNbr": 52,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2022-11-07T13:16:52Z",
+      "side": 1,
+      "message": "we could certainly do that if that\u0027s overall preferred - I vastly prefer it, but wasn\u0027t sure how tazjin feels",
+      "parentUuid": "b774479d_61c2ffea",
+      "revId": "a1c40e49e63a83e6a74f8e5c565d3616db629510",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
