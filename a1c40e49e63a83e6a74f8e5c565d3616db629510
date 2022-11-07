@@ -16,6 +16,57 @@
       "message": "I like this approach, I think. Before giving +2, also curious about input from sterni and/or amjoseph!",
       "revId": "a1c40e49e63a83e6a74f8e5c565d3616db629510",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f072b3f2_c99dcac7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 9
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000066
+      },
+      "writtenOn": "2022-11-07T02:02:27Z",
+      "side": 1,
+      "message": "This is way cool!\n\nI don\u0027t have much experience with proc macros, so this review probably doesn\u0027t count for much.  But I am very happy about this functionality being added.",
+      "revId": "a1c40e49e63a83e6a74f8e5c565d3616db629510",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8324b9b2_f102b257",
+        "filename": "tvix/eval/builtin-macros/src/lib.rs",
+        "patchSetId": 9
+      },
+      "lineNbr": 52,
+      "author": {
+        "id": 1000066
+      },
+      "writtenOn": "2022-11-07T02:02:27Z",
+      "side": 1,
+      "message": "Is there a reason why `identity` has to appear twice (both in the attribute and the function name)?  Can\u0027t the macro look at the function name and strip the leading `builtin_` (and panic if it is missing) to get the builtin\u0027s attrset key?",
+      "revId": "a1c40e49e63a83e6a74f8e5c565d3616db629510",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b774479d_61c2ffea",
+        "filename": "tvix/eval/builtin-macros/src/lib.rs",
+        "patchSetId": 9
+      },
+      "lineNbr": 52,
+      "author": {
+        "id": 1000066
+      },
+      "writtenOn": "2022-11-07T02:02:27Z",
+      "side": 1,
+      "message": "I saw some mention in IRC of putting the strictness annotation on the argument, like\n\n```\npub fn builtin_identity(_vm: \u0026mut VM, #[strict] x: Value)...\n```\n\nwhich seemed incredibly cool... is that still planned?",
+      "revId": "a1c40e49e63a83e6a74f8e5c565d3616db629510",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
