@@ -58,6 +58,68 @@ pub enum Value {
     UnresolvedPath(PathBuf),
 }
 
+impl Value {
+    pub fn to_json(&self, vm: &mut VM, acc: &mut String) {
+        match self {
+            Value::Null => acc.push_str("null"),
+            Value::Bool(b) => match b {
+                true => acc.push_str("true"),
+                false => acc.push_str("false"),
+            },
+            Value::Integer(i) => acc.push_str(&i.to_string()),
+            Value::Float(f) => acc.push_str(&f.to_string()),
+            Value::String(s) => {
+                acc.push('"');
+                acc.push_str(s.as_str());
+                acc.push('"');
+            },
+            // FIXME: how do we get a String out of a path?
+            //Path(p) => acc.push_str(p),
+            // FIXME: implement callable __toString
+            Value::Attrs(attr) => {
+                acc.push('{');
+
+                // FIXME: unwrap
+                for (k, v) in attr.iter() {
+                    acc.push('"');
+                    acc.push_str(k.as_str());
+                    acc.push('"');
+
+                    acc.push(':');
+                    v.to_json(vm, acc);
+                    acc.push(',');
+                }
+                if attr.len() != 0 {
+                    // We remove the last comma, otherwise it's not valid json
+                    acc.pop();
+                }
+
+                acc.push('}');
+            },
+            Value::List(l) => {
+                // FIXME: unwrap
+                acc.push('[');
+
+                // FIXME: why does force elements doesn't work but force does?
+                //l.force_elements(vm).unwrap();
+
+                for elt in l.iter() {
+                    elt.force(vm).unwrap().to_json(vm, acc);
+                    acc.push(',');
+                }
+                if l.len() != 0 {
+                    // Remove last comma
+                    acc.pop();
+                }
+
+                acc.push(']');
+            },
+            // FIXME: closure, notably
+            e => panic!("toJSON: shouldn't be called on this value type {}", e.to_string()),
+        };
+    }
+}
+
 // Helper macros to generate the to_*/as_* macros while accounting for
 // thunks.
 

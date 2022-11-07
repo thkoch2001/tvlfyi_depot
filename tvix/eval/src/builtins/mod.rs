@@ -809,6 +809,12 @@ fn pure_builtins() -> Vec<Builtin> {
             }
             Ok(Value::attrs(NixAttrs::from_map(res)))
         }),
+        Builtin::new("toJSON", &[true], |args: Vec<Value>, vm: &mut VM| {
+            let arg = &args[0].force(vm)?;
+            let mut res = String::new();
+            arg.to_json(vm, &mut res);
+            Ok(res.into())
+        }),
         Builtin::new("toPath", &[false], |args: Vec<Value>, vm: &mut VM| {
             let path: Value = crate::value::canon_path(coerce_value_to_path(&args[0], vm)?).into();
             Ok(path.coerce_to_string(CoercionKind::Weak, vm)?.into())
