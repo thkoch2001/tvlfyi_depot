@@ -85,6 +85,42 @@
       "parentUuid": "b774479d_61c2ffea",
       "revId": "a1c40e49e63a83e6a74f8e5c565d3616db629510",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8e6da6ae_06338070",
+        "filename": "tvix/eval/builtin-macros/src/lib.rs",
+        "patchSetId": 9
+      },
+      "lineNbr": 52,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-11-07T15:25:11Z",
+      "side": 1,
+      "message": "I think it makes sense to specify the names explicitly, most of Nix\u0027s builtins are camelCased and we\u0027d end up with weird things like `builtins_toString` and are then doing string operations on that.",
+      "parentUuid": "8324b9b2_f102b257",
+      "revId": "a1c40e49e63a83e6a74f8e5c565d3616db629510",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c3d2decd_bd5b1586",
+        "filename": "tvix/eval/builtin-macros/src/lib.rs",
+        "patchSetId": 9
+      },
+      "lineNbr": 52,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-11-07T15:25:11Z",
+      "side": 1,
+      "message": "I think it\u0027s a bit weird, but I\u0027m not strongly against it. It seems that in line with Rust, the default should be for an argument to be strict and the annotation should be `#[lazy]`.",
+      "parentUuid": "bd5b7668_39d99d4d",
+      "revId": "a1c40e49e63a83e6a74f8e5c565d3616db629510",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
