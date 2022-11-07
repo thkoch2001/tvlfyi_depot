@@ -58,6 +58,137 @@ pub enum Value {
     UnresolvedPath(PathBuf),
 }
 
+impl Value {
+    fn inner_to_json(&self, vm: &mut VM, acc: &mut String) -> Result<(), ErrorKind> {
+        match self {
+            Value::Null => acc.push_str("null"),
+            Value::Bool(b) => match b {
+                true => acc.push_str("true"),
+                false => acc.push_str("false"),
+            },
+            Value::Integer(i) => acc.push_str(&i.to_string()),
+            Value::Float(f) => acc.push_str(&f.to_string()),
+            Value::String(s) => {
+                acc.push('"');
+                acc.push_str(s.as_str());
+                acc.push('"');
+            },
+            Value::Path(p) => acc.push_str(&p.to_string_lossy().into_owned()),
+            // FIXME outPath
+            Value::Attrs(attrs) => match attrs.select("__toString") {
+                // Normal case, attrs is a JSON Dict
+                None => {
+                    acc.push('{');
+
+                    for (k, v) in attrs.iter() {
+                        acc.push('"');
+                        acc.push_str(k.as_str());
+                        acc.push('"');
+
+                        acc.push(':');
+                        v.inner_to_json(vm, acc)?;
+                        acc.push(',');
+                    }
+                    if attrs.len() != 0 {
+                        // We remove the last comma, otherwise it's not valid json
+                        acc.pop();
+                    }
+
+                    acc.push('}');
+                },
+                Some(f) => {
+                    // use a closure here to deal with the thunk borrow we need to do below
+                    let mut call_to_string = |value: &Value, vm: &mut VM| {
+                        // Leave self on the stack as an argument to the function call.
+                        vm.push(self.clone());
+                        vm.call_value(value)?;
+                        let result = vm.pop();
+
+                        match result {
+                            Value::String(s) => {
+                                acc.push('"');
+                                acc.push_str(s.as_str());
+                                acc.push('"');
+                                Ok(()) as Result<(), ErrorKind>
+                            },
+                            // Attribute set coercion actually works
+                            // recursively, e.g. you can even return
+                            // /another/ set with a __toString attr.
+                            _ => {
+                                Ok(result.inner_to_json(vm, acc)?)
+                            },
+                        }
+                    };
+
+                    if let Value::Thunk(t) = f {
+                        t.force(vm)?;
+                        let guard = t.value();
+                        call_to_string(&*guard, vm)?;
+                    } else {
+                        call_to_string(f, vm)?;
+                    }
+                },
+                // FIXME: should this be quoted ?
+                //(None, Some(s)) => s.to_json(vm, acc),
+            },
+            Value::Thunk(t) => {
+                t.force(vm)?;
+                let guard = t.value();
+
+                // use a closure here to deal with the thunk borrow we need to do below
+                let mut call_to_string = |value: &Value, vm: &mut VM| {
+                    // Leave self on the stack as an argument to the function call.
+                    vm.push(self.clone());
+                    vm.call_value(value)?;
+                    let result = vm.pop();
+
+                    match result {
+                        Value::String(s) => {
+                            acc.push('"');
+                            acc.push_str(s.as_str());
+                            acc.push('"');
+                            Ok(()) as Result<(), ErrorKind>
+                        },
+                        // Attribute set coercion actually works
+                        // recursively, e.g. you can even return
+                        // /another/ set with a __toString attr.
+                        _ => {
+                            Ok(result.inner_to_json(vm, acc)?)
+                        },
+                    }
+                };
+                call_to_string(&*guard, vm)?;
+            }
+            Value::List(l) => {
+                acc.push('[');
+
+                // FIXME: why does force elements doesn't work but force does?
+                //l.force_elements(vm).unwrap();
+
+                for elt in l.iter() {
+                    elt.force(vm)?.inner_to_json(vm, acc)?;
+                    acc.push(',');
+                }
+                if l.len() != 0 {
+                    // Remove last comma
+                    acc.pop();
+                }
+
+                acc.push(']');
+            },
+            // FIXME: closure, notably
+            e => panic!("toJSON: shouldn't be called on this value type {}", e.to_string()),
+        };
+        Ok(())
+    }
+
+    pub fn to_json(&self, vm: &mut VM) -> Result<Value, ErrorKind> {
+        let mut res = String::new();
+        self.inner_to_json(vm, &mut res)?;
+        Ok(res.into())
+    }
+}
+
 // Helper macros to generate the to_*/as_* macros while accounting for
 // thunks.
 
