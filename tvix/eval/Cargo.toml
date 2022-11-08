@@ -61,7 +61,3 @@ arbitrary = [ "proptest", "test-strategy" ]
 [[bench]]
 name = "eval"
 harness = false
-
-[profile.release-with-debug]
-inherits = "release"
-debug = true
