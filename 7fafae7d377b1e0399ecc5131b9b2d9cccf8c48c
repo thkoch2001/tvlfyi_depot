@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a3ab1e3c_b1f219da",
+        "filename": "tvix/eval/builtin-macros/src/lib.rs",
+        "patchSetId": 10
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-11-08T08:00:10Z",
+      "side": 1,
+      "message": "outdated?",
+      "range": {
+        "startLine": 29,
+        "startChar": 41,
+        "endLine": 30,
+        "endChar": 30
+      },
+      "revId": "7fafae7d377b1e0399ecc5131b9b2d9cccf8c48c",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
