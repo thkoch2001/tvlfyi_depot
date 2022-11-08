@@ -46,6 +46,30 @@
       },
       "revId": "3613f905def137a52e9932a2181d0c2678dc133a",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ed91b9ca_6c38c7f5",
+        "filename": "tvix/eval/src/builtins/mod.rs",
+        "patchSetId": 7
+      },
+      "lineNbr": 55,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-11-08T08:01:08Z",
+      "side": 1,
+      "message": "Ack. I consider that a Rust bug, someone else probably does as well, gonna look into it at some point.",
+      "parentUuid": "cdd2d529_c6484468",
+      "range": {
+        "startLine": 55,
+        "startChar": 0,
+        "endLine": 55,
+        "endChar": 19
+      },
+      "revId": "3613f905def137a52e9932a2181d0c2678dc133a",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
