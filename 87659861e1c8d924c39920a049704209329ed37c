@@ -46,6 +46,30 @@
       },
       "revId": "87659861e1c8d924c39920a049704209329ed37c",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b136e72b_956c8056",
+        "filename": "tvix/proto/default.nix",
+        "patchSetId": 13
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2022-11-08T17:56:46Z",
+      "side": 1,
+      "message": "I\u0027m gonna resolve this, if this turns out to be broken we can still fix it later.",
+      "parentUuid": "cf32108b_d93b690a",
+      "range": {
+        "startLine": 10,
+        "startChar": 0,
+        "endLine": 10,
+        "endChar": 56
+      },
+      "revId": "87659861e1c8d924c39920a049704209329ed37c",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
