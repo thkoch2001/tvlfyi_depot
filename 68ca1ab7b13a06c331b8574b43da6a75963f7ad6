@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e148f5b4_9d789882",
+        "filename": "tvix/eval/builtin-macros/src/lib.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-11-08T08:06:35Z",
+      "side": 1,
+      "message": "Just out of curiosity: what happens with newlines?",
+      "range": {
+        "startLine": 26,
+        "startChar": 0,
+        "endLine": 26,
+        "endChar": 97
+      },
+      "revId": "68ca1ab7b13a06c331b8574b43da6a75963f7ad6",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
