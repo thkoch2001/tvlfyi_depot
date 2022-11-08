@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "decb2ccd_75eedfb2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-11-08T07:58:43Z",
+      "side": 1,
+      "message": "Default Emacs colour scheme is where it\u0027s at.",
+      "revId": "2f5bdd7f167cc944516d4ef5b9553b747ba78aa3",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
