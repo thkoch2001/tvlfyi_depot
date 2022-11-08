@@ -15,7 +15,6 @@ let
     isSymlink
     pathType
     storePathName
-    onlyDrvPath
     ;
 
   assertUtilsPred = msg: act: exp: [
@@ -92,19 +91,9 @@ let
       (storePathName cleanedSource)
       cleanedSource.name)
   ];
-
-  onlyDrvPathTests = it "correctly updates the string context of drvPath" [
-    (assertEq "onlyDrvPath only produces path dependencies"
-      (builtins.all
-        (dep: dep.path or false)
-        (builtins.attrValues
-          (builtins.getContext (onlyDrvPath depot.tools.cheddar))))
-      true)
-  ];
 in
 
 runTestsuite "nix.utils" [
   pathPredicates
   storePathNameTests
-  onlyDrvPathTests
 ]
