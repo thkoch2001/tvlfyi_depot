@@ -121,6 +121,42 @@
       "parentUuid": "bd5b7668_39d99d4d",
       "revId": "a1c40e49e63a83e6a74f8e5c565d3616db629510",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "83e826ad_d90fecdd",
+        "filename": "tvix/eval/builtin-macros/src/lib.rs",
+        "patchSetId": 9
+      },
+      "lineNbr": 52,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2022-11-08T01:46:38Z",
+      "side": 1,
+      "message": "yeah, agreed.",
+      "parentUuid": "8e6da6ae_06338070",
+      "revId": "a1c40e49e63a83e6a74f8e5c565d3616db629510",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b533585b_9ced6ee5",
+        "filename": "tvix/eval/builtin-macros/src/lib.rs",
+        "patchSetId": 9
+      },
+      "lineNbr": 52,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2022-11-08T01:46:38Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c3d2decd_bd5b1586",
+      "revId": "a1c40e49e63a83e6a74f8e5c565d3616db629510",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
