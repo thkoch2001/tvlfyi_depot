@@ -2,6 +2,7 @@
 let
   mod = "Mod4";
   solarized = import ../common/solarized.nix;
+  selenized = import ../common/selenized.nix;
   # TODO pull this out into lib
   emacsclient = eval: pkgs.writeShellScript "emacsclient-eval" ''
     msg=$(emacsclient --eval '${eval}' 2>&1)
@@ -194,21 +195,21 @@ in
 
           inherit fonts;
 
-          colors = with solarized; rec {
+          colors = with selenized; rec {
             focused = {
-              border = base01;
-              background = base01;
-              text = base3;
+              border = dark_bg;
+              background = fg;
+              text = bg;
               indicator = red;
-              childBorder = base02;
+              childBorder = dark_bg;
             };
             focusedInactive = focused // {
-              border = base03;
-              background = base03;
-              # text = base1;
+              border = dark_bg;
+              background = dark_bg;
+              childBorder = dark_bg;
             };
             unfocused = focusedInactive;
-            background = base03;
+            background = dark_bg;
           };
 
           modes.resize = {
@@ -316,18 +317,18 @@ in
               "py3status -c ${i3status-conf}";
             inherit fonts;
             position = "top";
-            colors = with solarized; rec {
-              background = base03;
-              statusline = base3;
-              separator = base1;
+            colors = with selenized; rec {
+              background = dark_bg;
+              statusline = bg;
+              separator = bg;
               activeWorkspace = {
-                border = base03;
-                background = base1;
-                text = base3;
+                border = dark_bg;
+                background = fg;
+                text = bg;
               };
               focusedWorkspace = activeWorkspace;
               inactiveWorkspace = activeWorkspace // {
-                background = base01;
+                background = dark_black;
               };
               urgentWorkspace = activeWorkspace // {
                 background = red;
@@ -339,7 +340,7 @@ in
 
       services.dunst = {
         enable = true;
-        settings = with solarized; {
+        settings = with selenized; {
           global = {
             font = "MesloLGSDZ ${toString (config.system.machine.i3FontSize * 1.5)}";
             allow_markup = true;
@@ -362,20 +363,20 @@ in
           };
 
           urgency_low = {
-            background = base03;
-            foreground = base3;
+            background = dark_bg;
+            foreground = dark_white;
             timeout = 5;
           };
 
           urgency_normal = {
-            background = base02;
-            foreground = base3;
+            background = dark_bg;
+            foreground = dark_white;
             timeout = 7;
           };
 
           urgency_critical = {
             background = red;
-            foreground = base3;
+            foreground = dark_br_white;
             timeout = 0;
           };
         };

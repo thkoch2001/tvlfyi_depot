@@ -1,6 +1,12 @@
 { config, lib, pkgs, ... }:
 
-{
+let
+  inherit (builtins)
+    mapAttrs
+    substring
+    stringLength
+    ;
+in {
   programs.alacritty = {
     enable = true;
     settings = {
@@ -17,36 +23,39 @@
         }
       ];
 
-      colors = with import ../common/solarized.nix; rec {
+      colors = with (
+        let selenized = import ../common/selenized.nix;
+        in mapAttrs
+          (_: color: "0x${substring 1 (stringLength color) color}")
+          selenized
+      ); {
         # Default colors
         primary = {
-          background = base3;
-          foreground = base00;
+          background = bg;
+          foreground = fg;
         };
 
-        cursor = {
-          text = base3;
-          cursor = base00;
-        };
+        # cursor = {
+        #   text = bg;
+        #   cursor = fg;
+        # };
 
         # Normal colors
         normal = {
-          inherit red green yellow blue magenta cyan;
-          black = base02;
-          white = base2;
+          inherit black red green yellow blue magenta cyan white;
         };
 
         # Bright colors
         # bright = normal;
         bright = {
-          black = base03;
-          red = orange;
-          green = base01;
-          yellow = base00;
-          blue = base0;
-          magenta = violet;
-          cyan = base1;
-          white = base3;
+          black = br_black;
+          red = br_red;
+          green = br_green;
+          yellow = br_yellow;
+          blue = br_blue;
+          magenta = br_magenta;
+          cyan = br_cyan;
+          white = br_white;
         };
 
         vi_mode_cursor.cursor = red;
