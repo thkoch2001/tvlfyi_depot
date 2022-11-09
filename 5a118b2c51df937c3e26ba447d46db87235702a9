@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "80485473_775b08f2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-11-09T10:07:51Z",
+      "side": 1,
+      "message": "fwiw, I personally find the .envrc very annoying and have to do stuff to make sure it gets correctly ignored locally",
+      "revId": "5a118b2c51df937c3e26ba447d46db87235702a9",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
