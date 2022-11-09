@@ -16,6 +16,24 @@
       "message": "fwiw, I personally find the .envrc very annoying and have to do stuff to make sure it gets correctly ignored locally",
       "revId": "5a118b2c51df937c3e26ba447d46db87235702a9",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "045b4741_eb8a730e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2022-11-09T10:35:40Z",
+      "side": 1,
+      "message": "What part of it? I think it makes a lot of sense to ensure having cargo, rust-analyzer etc. in the depot, and not just in the root.\n\nIn any case, that \"stuff you have to do to make sure it gets ignored locally\" already exists for //tvix/eval, so you can probably just move that one level up, too?",
+      "parentUuid": "80485473_775b08f2",
+      "revId": "5a118b2c51df937c3e26ba447d46db87235702a9",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
