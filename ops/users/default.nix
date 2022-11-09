@@ -77,6 +77,11 @@
     password = "{ARGON2}$argon2id$v=19$m=65536,t=2,p=1$kA19gDabD1Fjy82olcmnsA$TTbkpAc0WYaA4DT2vc7+NAGXhC4Os1tPqZVpHFkzecE";
   }
   {
+    username = "jrhahn";
+    email = "mail.jhahn@gmail.com";
+    password = "{ARGON2}$argon2id$v=19$m=65536,t=2,p=1$giiu99hS7CzfsDZgxMNvKg$JiZZnFxOGHZRlUziYd3TkEiUplMz7Emy8fXfyLawPS0";
+  }
+  {
     username = "kn";
     email = "klemens@posteo.de";
     password = "{ARGON2}$argon2id$v=19$m=65536,t=2,p=1$CoRZInysud4sduDoMjVOCw$/bdvAvyPO2DPxOcHlBiG2+rbTGF9XAcHUhPurxiIpZM";
