@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2acfa1a0_d76dac14",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-11-09T10:08:35Z",
+      "side": 1,
+      "message": "What is this for? I want //tvix/eval to be independent of other parts of Tvix.\n\nOther parts of Tvix can of course *depend* on it, but the crate should not be mixed together with other stuff.",
+      "revId": "6acea68757d062194a694acef096b54895f7c8de",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
