@@ -34,6 +34,24 @@
       "parentUuid": "80485473_775b08f2",
       "revId": "5a118b2c51df937c3e26ba447d46db87235702a9",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "82009a5a_4d06faf0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2022-11-09T17:11:53Z",
+      "side": 1,
+      "message": "I rely on the .envrc for my workflow, fwiw - I avoid installing language tooling globally.",
+      "parentUuid": "045b4741_eb8a730e",
+      "revId": "5a118b2c51df937c3e26ba447d46db87235702a9",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
