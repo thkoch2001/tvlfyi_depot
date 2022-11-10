@@ -12,7 +12,7 @@
 #    other folders below //third_party, other than the ones mentioned
 #    above.
 
-{ pkgs, depot, ... }:
+{ pkgs, depot, localSystem, ... }:
 
 {
   # Expose a partially applied NixOS, expecting an attribute set with
@@ -27,7 +27,7 @@
   nixos =
     { configuration
     , specialArgs ? { }
-    , system ? builtins.currentSystem
+    , system ? localSystem
     , ...
     }:
     let
