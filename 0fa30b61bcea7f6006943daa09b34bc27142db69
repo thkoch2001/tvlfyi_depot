@@ -16,6 +16,24 @@
       "message": "Leftover comments",
       "revId": "0fa30b61bcea7f6006943daa09b34bc27142db69",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f4bd0a88_6f29f13d",
+        "filename": "tvix/eval/src/vm.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 417,
+      "author": {
+        "id": 1000067
+      },
+      "writtenOn": "2022-11-10T12:28:24Z",
+      "side": 1,
+      "message": "fixed",
+      "parentUuid": "79da3d6e_e53707aa",
+      "revId": "0fa30b61bcea7f6006943daa09b34bc27142db69",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
