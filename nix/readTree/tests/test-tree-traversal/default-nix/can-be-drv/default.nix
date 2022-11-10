@@ -1,7 +1,7 @@
-{ ... }:
+{ localSystem, ... }:
 derivation {
   name = "im-a-drv";
-  system = builtins.currentSystem;
+  system = localSystem;
   builder = "/bin/sh";
   args = [ "-c" ''echo "" > $out'' ];
 }
