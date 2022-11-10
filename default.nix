@@ -62,6 +62,9 @@ let
     filter = parts: args: corpFilter parts (usersFilter parts args);
     scopedArgs = {
       __findFile = _: _: throw "Do not import from NIX_PATH in the depot!";
+      builtins = builtins // {
+        currentSystem = throw "Use localSystem from the readTree args instead of builtins.currentSystem!";
+      };
     };
   };
 
