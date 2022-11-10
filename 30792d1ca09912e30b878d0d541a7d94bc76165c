@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f76cff46_50df5bd7",
+        "filename": "default.nix",
+        "patchSetId": 1
+      },
+      "lineNbr": 65,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-11-10T13:55:38Z",
+      "side": 1,
+      "message": "I don\u0027t think this works? It\u0027ll set `currentSystem` in the top-level scope, but not within `builtins` (is it even available at the top-level?)",
+      "range": {
+        "startLine": 65,
+        "startChar": 0,
+        "endLine": 65,
+        "endChar": 104
+      },
+      "revId": "30792d1ca09912e30b878d0d541a7d94bc76165c",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
