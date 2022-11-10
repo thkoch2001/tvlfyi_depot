@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "71ab802d_69905e90",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2022-11-10T13:58:11Z",
+      "side": 1,
+      "message": "Confirmed that now just one version of Nix is in whitby\u0027s closure.",
+      "revId": "ff006928ddb4cb955d386c837348f38c47fea533",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
