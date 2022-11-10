@@ -18,6 +18,19 @@ let
         inherit rev;
         hash = "sha256:0rwyrh471c5y64axyd8vzzzmzlscg97fsrjbgbm1a93wnzxcvnvk";
       } // { revCount = 0; shortRev = builtins.substring 0 7 rev; };
+
+  nixTarball = (scopedImport
+    {
+      # The tarball job always uses currentSystem which we need to purify
+      builtins = builtins // { currentSystem = localSystem; };
+    }
+    "${nixSrc}/release.nix"
+    {
+      nix = nixSrc;
+      nixpkgs = self.path;
+      systems = [ ];
+    }
+  ).tarball;
 in
 {
   buf = super.buf.overrideAttrs (old: {
@@ -27,12 +40,10 @@ in
     ] ++ old.patches or [ ];
   });
 
-  nix = (import "${nixSrc}/release.nix" {
-    nix = nixSrc;
-    nixpkgs = super.path;
-    systems = [ localSystem ];
-  }).build."${localSystem}";
-
+  nix_2_3 = super.nix_2_3.overrideAttrs (_: {
+    src = "${nixTarball}/tarballs/nix-${nixTarball.version}.tar.xz";
+  });
+  nix = self.nix_2_3;
   nix_latest = super.nix;
 
   nvd = super.nvd.overrideAttrs (old: {
