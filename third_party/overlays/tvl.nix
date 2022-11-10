@@ -1,6 +1,6 @@
 # This overlay is used to make TVL-specific modifications in the
 # nixpkgs tree, where required.
-{ depot, ... }:
+{ depot, localSystem, ... }:
 
 self: super:
 let
@@ -30,8 +30,8 @@ in
   nix = (import "${nixSrc}/release.nix" {
     nix = nixSrc;
     nixpkgs = super.path;
-    systems = [ builtins.currentSystem ];
-  }).build."${builtins.currentSystem}";
+    systems = [ localSystem ];
+  }).build."${localSystem}";
 
   nix_latest = super.nix;
 
