@@ -22,6 +22,30 @@
       },
       "revId": "30792d1ca09912e30b878d0d541a7d94bc76165c",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "66119304_270acedd",
+        "filename": "default.nix",
+        "patchSetId": 1
+      },
+      "lineNbr": 65,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2022-11-10T14:00:42Z",
+      "side": 1,
+      "message": "Indeed, fixed!",
+      "parentUuid": "f76cff46_50df5bd7",
+      "range": {
+        "startLine": 65,
+        "startChar": 0,
+        "endLine": 65,
+        "endChar": 104
+      },
+      "revId": "30792d1ca09912e30b878d0d541a7d94bc76165c",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
