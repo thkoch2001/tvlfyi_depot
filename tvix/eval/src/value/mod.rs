@@ -411,15 +411,18 @@ impl Value {
             | Value::DeferredUpvalue(_)
             | Value::UnresolvedPath(_) => Ok(()),
             Value::Attrs(a) => {
-                for (_, v) in a.iter() {
+                vm.fork(a.iter(), |vm, (_, v)| {
                     v.deep_force(vm, thunk_set)?;
-                }
+                    Ok(())
+                })?;
+
                 Ok(())
             }
             Value::List(l) => {
-                for val in l {
+                vm.fork(l.iter(), |vm, val| {
                     val.deep_force(vm, thunk_set)?;
-                }
+                    Ok(())
+                })?;
                 Ok(())
             }
             Value::Thunk(thunk) => {

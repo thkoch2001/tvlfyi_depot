@@ -31,7 +31,7 @@ pub enum FileType {
 }
 
 /// Defines how filesystem interaction occurs inside of tvix-eval.
-pub trait EvalIO {
+pub trait EvalIO: Sync {
     /// Verify whether the file at the specified path exists.
     fn path_exists(&self, path: PathBuf) -> Result<bool, ErrorKind>;
 

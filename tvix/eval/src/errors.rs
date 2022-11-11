@@ -1,5 +1,6 @@
 use crate::spans::ToSpan;
 use crate::value::{CoercionKind, NixString};
+use crate::vm::Spark;
 use std::io;
 use std::path::PathBuf;
 use std::rc::Rc;
@@ -125,7 +126,7 @@ pub enum ErrorKind {
     /// I/O errors
     IO {
         path: Option<PathBuf>,
-        error: Rc<io::Error>,
+        error: Arc<io::Error>,
     },
 
     /// Errors converting JSON to a value
@@ -137,11 +138,15 @@ pub enum ErrorKind {
         formals_span: Span,
     },
 
+    NoSuspensionsAllowed,
+
+    Spark(Spark),
+
     /// Variant for code paths that are known bugs in Tvix (usually
     /// issues with the compiler/VM interaction).
     TvixBug {
         msg: &'static str,
-        metadata: Option<Rc<dyn Debug>>,
+        metadata: Option<Arc<dyn Debug + Send + Sync + 'static>>,
     },
 
     /// Tvix internal warning for features triggered by users that are
@@ -175,7 +180,7 @@ impl From<io::Error> for ErrorKind {
     fn from(e: io::Error) -> Self {
         ErrorKind::IO {
             path: None,
-            error: Rc::new(e),
+            error: Arc::new(e),
         }
     }
 }
@@ -371,6 +376,17 @@ to a missing value in the attribute set(s) included via `with`."#,
                     "Unexpected argument `{}` supplied to function",
                     arg.as_str()
                 )
+            }
+
+            ErrorKind::NoSuspensionsAllowed => {
+                write!(
+                    f,
+                    "Interacting with the store is not allowed in this execution mode"
+                )
+            }
+
+            ErrorKind::Spark(_) => {
+                write!(f, "Tvix bug: Uncaught suspension")
             }
 
             ErrorKind::TvixBug { msg, metadata } => {
@@ -666,6 +682,8 @@ impl Error {
             | ErrorKind::IO { .. }
             | ErrorKind::FromJsonError(_)
             | ErrorKind::TvixBug { .. }
+            | ErrorKind::NoSuspensionsAllowed
+            | ErrorKind::Spark(_)
             | ErrorKind::NotImplemented(_) => return None,
         };
 
@@ -707,10 +725,11 @@ impl Error {
             ErrorKind::UnexpectedArgument { .. } => "E031",
             ErrorKind::RelativePathResolution(_) => "E032",
             ErrorKind::DivisionByZero => "E033",
+            ErrorKind::NoSuspensionsAllowed => "E034",
 
-            // Special error code that is not part of the normal
+            // Special error codes that are not part of the normal
             // ordering.
-            ErrorKind::TvixBug { .. } => "E998",
+            ErrorKind::Spark(_) | ErrorKind::TvixBug { .. } => "E998",
 
             // Placeholder error while Tvix is under construction.
             ErrorKind::NotImplemented(_) => "E999",

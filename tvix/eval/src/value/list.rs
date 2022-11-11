@@ -98,6 +98,7 @@ impl NixList {
             return Ok(false);
         }
 
+        // TODO: how do we fork here?
         for (v1, v2) in self.iter().zip(other.iter()) {
             if !v1.nix_eq(v2, vm)? {
                 return Ok(false);
@@ -109,7 +110,7 @@ impl NixList {
 
     /// force each element of the list (shallowly), making it safe to call .get().value()
     pub fn force_elements(&self, vm: &mut VM) -> Result<(), ErrorKind> {
-        self.iter().try_for_each(|v| v.force(vm).map(|_| ()))
+        vm.fork(self, |vm, v| v.force(vm).map(|_| ())).map(|_| ())
     }
 
     pub fn into_vec(self) -> Vec<Value> {

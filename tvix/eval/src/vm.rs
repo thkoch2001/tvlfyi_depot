@@ -1,8 +1,17 @@
 //! This module implements the virtual (or abstract) machine that runs
 //! Tvix bytecode.
 
+use scoped_threadpool::Pool;
 use serde_json::json;
-use std::{cmp::Ordering, collections::BTreeMap, ops::DerefMut, path::PathBuf, rc::Rc};
+use std::{
+    cmp::Ordering,
+    collections::BTreeMap,
+    fmt::Debug,
+    ops::DerefMut,
+    path::PathBuf,
+    rc::Rc,
+    sync::{mpsc, Arc},
+};
 
 use crate::{
     chunk::Chunk,
@@ -17,6 +26,26 @@ use crate::{
     value::{Builtin, Closure, CoercionKind, Lambda, NixAttrs, NixList, Thunk, Value},
     warnings::{EvalWarning, WarningKind},
 };
+
+pub struct Spark(Box<dyn FnOnce(&dyn EvalIO) -> Result<Value, ErrorKind> + Send + 'static>);
+
+impl Clone for Spark {
+    fn clone(&self) -> Self {
+        panic!("Cannot clone a spark")
+    }
+}
+
+impl Debug for Spark {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        f.write_str("Spark(..)")
+    }
+}
+
+impl Spark {
+    fn run(self, io: &dyn EvalIO) -> Result<Value, ErrorKind> {
+        (*self.0)(io)
+    }
+}
 
 /// Representation of a VM continuation;
 /// see: https://en.wikipedia.org/wiki/Continuation-passing_style#CPS_in_Haskell
@@ -117,6 +146,8 @@ pub struct VM<'o> {
     io_handle: Box<dyn EvalIO>,
 
     observer: &'o mut dyn RuntimeObserver,
+
+    thread_pool: Pool,
 }
 
 /// The result of a VM's runtime evaluation.
@@ -224,6 +255,9 @@ impl<'o> VM<'o> {
             with_stack: vec![],
             warnings: vec![],
             import_cache: Default::default(),
+            thread_pool: Pool::new(
+                num_cpus::get().try_into().unwrap(), /* TODO: make configurable */
+            ),
         }
     }
 
@@ -370,6 +404,40 @@ impl<'o> VM<'o> {
         }
 
         Ok(res)
+    }
+
+    pub fn fork<I, F, T>(&mut self, elems: I, mut f: F) -> Result<Vec<Value>, ErrorKind>
+    where
+        I: IntoIterator<Item = T>,
+        F: FnMut(&mut VM, T) -> Result<Value, ErrorKind>,
+        T: Clone,
+    {
+        self.thread_pool.scoped(|s| {
+            let elems = elems.into_iter();
+            let mut result = Vec::with_capacity(elems.size_hint().0);
+            let (tx, rx) = mpsc::channel();
+            for v in elems {
+                match f(self, v.clone()) {
+                    Ok(res) => result.push(res),
+                    Err(ErrorKind::Spark(spark)) => {
+                        let io = self.io();
+                        let tx = tx.clone();
+                        s.execute(move || tx.send(spark.run(io.as_ref())).unwrap())
+                    }
+                    Err(e) => return Err(e),
+                }
+            }
+
+            while let Ok(res) = rx.recv() {
+                match res {
+                    Ok(res) => result.push(res),
+                    Err(ErrorKind::Spark(_)) => todo!("double spark!"),
+                    Err(e) => return Err(e),
+                }
+            }
+
+            Ok(result)
+        })
     }
 
     fn tail_call_value(&mut self, callable: Value) -> EvalResult<()> {
@@ -1122,7 +1190,7 @@ impl<'o> VM<'o> {
                         None => {
                             return Err(self.error(ErrorKind::TvixBug {
                                 msg: "upvalue to be captured was missing on stack",
-                                metadata: Some(Rc::new(json!({
+                                metadata: Some(Arc::new(json!({
                                     "ip": format!("{:#x}", self.frame().ip.0 - 1),
                                     "stack_idx(relative)": stack_idx,
                                     "stack_idx(absolute)": idx,
