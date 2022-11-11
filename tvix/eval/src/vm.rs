@@ -284,6 +284,24 @@ impl<'o> VM<'o> {
         Ok(res)
     }
 
+    pub fn fork<I, F, T, U>(&mut self, elems: I, mut f: F) -> Result<Vec<U>, ErrorKind>
+    where
+        I: IntoIterator<Item = T>,
+        F: FnMut(&mut VM, T) -> Result<U, ErrorKind>,
+        T: Clone,
+    {
+        let elems = elems.into_iter();
+        let mut result = Vec::with_capacity(elems.size_hint().0);
+        for v in elems {
+            match f(self, v.clone()) {
+                Ok(res) => result.push(res),
+                Err(ErrorKind::Suspend(suspension)) => todo!("handle suspension"),
+                Err(e) => return Err(e),
+            }
+        }
+        Ok(result)
+    }
+
     fn tail_call_value(&mut self, callable: Value) -> EvalResult<()> {
         match callable {
             Value::Builtin(builtin) => self.call_builtin(builtin),

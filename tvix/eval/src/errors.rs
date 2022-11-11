@@ -1,4 +1,5 @@
 use crate::spans::ToSpan;
+use crate::suspension::Suspension;
 use crate::value::{CoercionKind, NixString};
 use std::io;
 use std::path::PathBuf;
@@ -142,6 +143,10 @@ pub enum ErrorKind {
         arg: NixString,
         formals_span: Span,
     },
+
+    NoSuspensionsAllowed,
+
+    Suspend(Suspension),
 
     /// Variant for code paths that are known bugs in Tvix (usually
     /// issues with the compiler/VM interaction).
@@ -385,6 +390,17 @@ to a missing value in the attribute set(s) included via `with`."#,
                     "Unexpected argument `{}` supplied to function",
                     arg.as_str()
                 )
+            }
+
+            ErrorKind::NoSuspensionsAllowed => {
+                write!(
+                    f,
+                    "Interacting with the store is not allowed in this execution mode"
+                )
+            }
+
+            ErrorKind::Suspend(_) => {
+                write!(f, "Tvix bug: Uncaught suspension")
             }
 
             ErrorKind::TvixBug { msg, metadata } => {
@@ -681,6 +697,8 @@ impl Error {
             | ErrorKind::IO { .. }
             | ErrorKind::FromJsonError(_)
             | ErrorKind::TvixBug { .. }
+            | ErrorKind::NoSuspensionsAllowed
+            | ErrorKind::Suspend(_)
             | ErrorKind::NotImplemented(_) => return None,
         };
 
@@ -723,10 +741,11 @@ impl Error {
             ErrorKind::UnexpectedArgument { .. } => "E031",
             ErrorKind::RelativePathResolution(_) => "E032",
             ErrorKind::DivisionByZero => "E033",
+            ErrorKind::NoSuspensionsAllowed => "E034",
 
-            // Special error code that is not part of the normal
+            // Special error codes that are not part of the normal
             // ordering.
-            ErrorKind::TvixBug { .. } => "E998",
+            ErrorKind::Suspend(_) | ErrorKind::TvixBug { .. } => "E998",
 
             // Placeholder error while Tvix is under construction.
             ErrorKind::NotImplemented(_) => "E999",
