@@ -39,6 +39,48 @@
       "message": "why?",
       "revId": "8fe91b1c050050e094c943a362842efc8b5822c1",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3615001f_6147c157",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2022-11-11T20:04:29Z",
+      "side": 1,
+      "message": "See https://cl.tvl.fyi/c/depot/+/7261/comments/23dc78d3_abd6a757. As a historical note, this was originally introduced so I could build depot stuff for my i686-linux laptop.",
+      "parentUuid": "ace40b40_f2aee2ff",
+      "revId": "8fe91b1c050050e094c943a362842efc8b5822c1",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8ff32790_a7f8edda",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2022-11-11T20:04:29Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "721abf10_2aeaf05f",
+      "range": {
+        "startLine": 7,
+        "startChar": 49,
+        "endLine": 7,
+        "endChar": 53
+      },
+      "revId": "8fe91b1c050050e094c943a362842efc8b5822c1",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
