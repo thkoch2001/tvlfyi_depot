@@ -70,6 +70,23 @@
       "parentUuid": "82009a5a_4d06faf0",
       "revId": "5a118b2c51df937c3e26ba447d46db87235702a9",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4563305c_8e5f601b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2022-11-11T19:51:08Z",
+      "side": 1,
+      "message": "I guess this is not worse than what we have right now, a bit annoying for `//tvix/docs` I suppose though.",
+      "revId": "5a118b2c51df937c3e26ba447d46db87235702a9",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
