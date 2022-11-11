@@ -16,6 +16,24 @@
       "message": "why?",
       "revId": "b9c88c8f16015333f1d0e643b2d4e238289afc65",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "928ad6eb_e337e52b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2022-11-11T19:59:58Z",
+      "side": 1,
+      "message": "I want to enforce that `localSystem` as passed to depot at the root is respected everywhere. This is relevant if you want to build on/for a different `system` as you are evaluating on.\n\nIf `builtin.currentSystem` is used, this no longer works as intended.",
+      "parentUuid": "23dc78d3_abd6a757",
+      "revId": "b9c88c8f16015333f1d0e643b2d4e238289afc65",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
