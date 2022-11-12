@@ -81,6 +81,24 @@
       },
       "revId": "8fe91b1c050050e094c943a362842efc8b5822c1",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f5cd7d29_b7b60725",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2022-11-12T19:19:58Z",
+      "side": 1,
+      "message": "\u003e As a historical note, this was originally introduced so I could build depot stuff for my i686-linux laptop.\n\nthat could go in the commit message",
+      "parentUuid": "3615001f_6147c157",
+      "revId": "8fe91b1c050050e094c943a362842efc8b5822c1",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
