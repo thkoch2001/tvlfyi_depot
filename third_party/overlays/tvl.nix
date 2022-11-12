@@ -33,13 +33,6 @@ let
   ).tarball;
 in
 {
-  buf = super.buf.overrideAttrs (old: {
-    patches = [
-      # Rebased on 1.9.0: https://github.com/bufbuild/buf/commit/bcaa77f8bbb8f6c198154c7c8d53596da4506dab
-      ./patches/buf-tests-dont-use-file-transport.patch
-    ] ++ old.patches or [ ];
-  });
-
   nix_2_3 = super.nix_2_3.overrideAttrs (_: {
     src = "${nixTarball}/tarballs/nix-${nixTarball.version}.tar.xz";
   });
