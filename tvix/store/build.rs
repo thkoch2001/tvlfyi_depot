@@ -1,7 +1,10 @@
 use std::io::Result;
 
 fn main() -> Result<()> {
-    prost_build::compile_protos(
+    tonic_build::configure()
+      .build_server(true)
+      .build_client(true)
+      .compile(
         &[
             "tvix/store/protos/castore.proto",
             "tvix/store/protos/pathinfo.proto",
