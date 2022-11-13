@@ -1,0 +1,89 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c8135106_4a0812fc",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000066
+      },
+      "writtenOn": "2022-11-13T20:36:22Z",
+      "side": 1,
+      "message": "This is a good start!\n\nI suggest renaming `Thunk::Suspended` to something else (anything else; doesn\u0027t matter what) as part of this CL so we don\u0027t wind up with confusingly-similar names for unrelated concepts (unless you\u0027re planning on using `Thunk`s to implement suspension handlers, which would be kinda interesting...)",
+      "revId": "70612abe4c8e3b0dca4b9eb2f6c71e456f35cd5c",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "256b470d_680c4143",
+        "filename": "tvix/eval/src/value/list.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 97,
+      "author": {
+        "id": 1000066
+      },
+      "writtenOn": "2022-11-13T20:36:22Z",
+      "side": 1,
+      "message": "```\nvm.fork(self.iter().zip(other.iter()),\n        |vm, (v1, v2)| v1.nix_eq(v2, vm)\n  .map(|b| Value::from(b))\n```\n\nNote the `Value::from()`, since `vm.fork()` can\u0027t return a `bool`.",
+      "revId": "70612abe4c8e3b0dca4b9eb2f6c71e456f35cd5c",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "662850ae_b2b5fcd5",
+        "filename": "tvix/eval/src/vm.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 287,
+      "author": {
+        "id": 1000066
+      },
+      "writtenOn": "2022-11-13T20:36:22Z",
+      "side": 1,
+      "message": "Should this be `Result\u003cVec\u003cU\u003e, Vec\u003cErrorKind\u003e\u003e`?\n\nI can see arguments both ways.",
+      "revId": "70612abe4c8e3b0dca4b9eb2f6c71e456f35cd5c",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e41add0f_3947c54d",
+        "filename": "tvix/eval/src/vm.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 290,
+      "author": {
+        "id": 1000066
+      },
+      "writtenOn": "2022-11-13T20:36:22Z",
+      "side": 1,
+      "message": "Passing a `\u0026mut VM` to the suspension will mean we can\u0027t download multiple tarballs in parallel, right?  (I mean without cloning the VM).\n\nDo suspensions need a `\u0026mut VM`?  Maybe some of them do, but there\u0027s definitely a useful subclass (tarball downloaders) that don\u0027t, and which would benefit from paralleli{s,z}ation.",
+      "revId": "70612abe4c8e3b0dca4b9eb2f6c71e456f35cd5c",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7aaecf92_4fb892f4",
+        "filename": "tvix/eval/src/vm.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 298,
+      "author": {
+        "id": 1000066
+      },
+      "writtenOn": "2022-11-13T20:36:22Z",
+      "side": 1,
+      "message": "What do you have in mind here that will work with a `\u0026mut VM` argument?  I don\u0027t think we can use async yield/await in that context, but maybe I\u0027m missing something.",
+      "revId": "70612abe4c8e3b0dca4b9eb2f6c71e456f35cd5c",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
