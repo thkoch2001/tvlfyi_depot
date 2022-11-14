@@ -172,7 +172,7 @@
   {
     username = "wpcarro";
     email = "wpcarro@gmail.com";
-    password = "{ARGON2}$argon2id$v=19$m=65536,t=2,p=1$NQdBVPNwh2ioDq9zWfMusA$2cABJGI8cU2JZirnVU5E5C28sTiePkiOPEAaqNUp/Fk";
+    password = "{ARGON2}$argon2id$v=19$m=65536,t=2,p=1$h4hfETpy0ZwSAndN8kGrWg$NPTxDgxehMHZEcm30u0PwWgcVLBtvOnY4KfJxWPPghQ";
   }
   {
     username = "zseri";
