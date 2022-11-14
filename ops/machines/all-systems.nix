@@ -20,6 +20,7 @@
 
 (with depot.users.wpcarro.nixos; [
   ava
+  kyoko
   marcus
   tarasco
 ])
