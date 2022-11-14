@@ -99,4 +99,11 @@
     content = ./posts/nix-env-note.md;
     draft = false;
   }
+  {
+    key = "nginx-virtual-host-note";
+    title = "Nginx Virtual Host (note to self)";
+    date = 1668448541;
+    content = ./posts/nginx-curl-note.md;
+    draft = false;
+  }
 ]
