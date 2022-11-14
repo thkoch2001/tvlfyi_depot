@@ -4,6 +4,7 @@ let
   inherit (depot.users.wpcarro.nixos)
     ava
     diogenes
+    kyoko
     marcus
     tarasco;
 
@@ -11,6 +12,7 @@ let
 in
 {
   avaSystem = systemFor ava;
+  kyokoSystem = systemFor kyoko;
   marcusSystem = systemFor marcus;
   tarascoSystem = systemFor ava;
 
@@ -53,6 +55,7 @@ in
 
   meta.ci.targets = [
     "avaSystem"
+    "kyokoSystem"
     "marcusSystem"
     "tarascoSystem"
   ];
