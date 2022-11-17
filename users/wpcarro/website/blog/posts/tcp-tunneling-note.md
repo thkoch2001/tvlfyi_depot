@@ -16,7 +16,7 @@ on the remote. It's quite cool!
 Run the following on your local machine to forward your remote's traffic:
 
 ```shell
-$ ssh -R 4317:127.0.0.1:4317 -N -f user@remote
+λ ssh -R 4317:127.0.0.1:4317 -N -f user@remote
 ```
 
 Here is an abridged explanation of the flags we're passing from `man ssh`:
@@ -34,19 +34,14 @@ ssh: Could not resolve hostname 4317:127.0.0.1:4317: Name or service not known
 ```
 
 The remote should now be forwarding traffic from port `4317` to our
-machine. We can verify with the following:
-
-```shell
-$ nc -l 4317 -k
-```
+machine.
 
 ## Testing
 
-Let's generate some traffic on the remote. **Note:** you should see the output
-in the shell in which you're running `nc -l 4317 -k`.
+Let's generate some traffic on the remote:
 
 ```shell
-$ telnet localhost 4317
+λ telnet localhost 4317
 Trying ::1...
 Connected to localhost.
 Escape character is '^]'.
@@ -57,7 +52,7 @@ world
 Locally you should see:
 
 ```shell
-λ nc -l 4317 -k
+λ nc -l 4317 -k # run this *before* running the above command
 hello
 world
 ```
