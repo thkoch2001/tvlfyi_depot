@@ -1,5 +1,3 @@
-## Note to Self
-
 Use the following to make requests to Nginx virtual hosts from the host itself:
 
 ```shell
