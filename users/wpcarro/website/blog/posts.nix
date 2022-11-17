@@ -106,4 +106,11 @@
     content = ./posts/nginx-curl-note.md;
     draft = false;
   }
+  {
+    key = "tcp-tunneling-note";
+    title = "TCP Tunneling (note to self)";
+    date = 1668709613;
+    content = ./posts/tcp-tunneling-note.md;
+    draft = false;
+  }
 ]
