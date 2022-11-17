@@ -34,6 +34,24 @@
       "parentUuid": "2acfa1a0_d76dac14",
       "revId": "6acea68757d062194a694acef096b54895f7c8de",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6c823616_80d0be83",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000066
+      },
+      "writtenOn": "2022-11-17T05:52:44Z",
+      "side": 1,
+      "message": "I haven\u0027t had a need for workspaces since I discovered https://github.com/kolloch/crate2nix -- unlike all the other rust-nix tools, it uses `nix` instead of `cargo` to drive the builds and manage artifacts.\n\nBut maybe there\u0027s some killer benefit to workspaces that I\u0027m not aware of?\n\nOne place where workspaces make a lot of sense is projects where not all of the devs use nix.  But I think that might not apply here.",
+      "parentUuid": "9b705c27_753c8f1b",
+      "revId": "6acea68757d062194a694acef096b54895f7c8de",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
