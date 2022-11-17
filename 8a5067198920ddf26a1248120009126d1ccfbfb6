@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b2e38df1_3470effb",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 15
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000066
+      },
+      "writtenOn": "2022-11-17T03:57:49Z",
+      "side": 1,
+      "message": "It is really cool how `message Directory` is inherently content-addressable.\n\nWe might want to warn the reader that it is normal for two `DirectoryNode`s or two `FileNode`s in a `stream Directory` to have the same `digest`, even if they aren\u0027t hardlinks to the same inode.",
+      "revId": "8a5067198920ddf26a1248120009126d1ccfbfb6",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "79e53835_617bbf25",
+        "filename": "tvix/store/protos/rpc_directory.proto",
+        "patchSetId": 15
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1000066
+      },
+      "writtenOn": "2022-11-17T03:57:49Z",
+      "side": 1,
+      "message": "s/send/sent/",
+      "revId": "8a5067198920ddf26a1248120009126d1ccfbfb6",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
