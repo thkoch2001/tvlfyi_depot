@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3af84a0d_2744545e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 10
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000066
+      },
+      "writtenOn": "2022-11-17T05:52:18Z",
+      "side": 1,
+      "message": "I don\u0027t see any issues with any of this but I\u0027m having a hard time understanding how it fits together with `rpc_directory`.  Is there some not-yet-written protocol definition that connects the two?",
+      "revId": "7841cd439eea2ea532bc5bb775b69b7e860bac82",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b7e34664_e6b8d281",
+        "filename": "tvix/store/protos/rpc_blobstore.proto",
+        "patchSetId": 10
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1000066
+      },
+      "writtenOn": "2022-11-17T05:52:18Z",
+      "side": 1,
+      "message": "I\u0027m a bit unclear on the relationship between a `Blob` and `FileNode.digest`.  Are they the same thing?  If I get back a string of bytes in a `FileNode.digest`, can I use that string of bytes in a `GetBlobRequest`?\n\nI guess there\u0027s a lot of things called \"digest\" and I\u0027m having trouble figuring out which of those can be passed to `GetBlobRequest`.  Is it all of them?",
+      "revId": "7841cd439eea2ea532bc5bb775b69b7e860bac82",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "89f50f8a_16440154",
+        "filename": "tvix/store/protos/rpc_blobstore.proto",
+        "patchSetId": 10
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1000066
+      },
+      "writtenOn": "2022-11-17T05:52:18Z",
+      "side": 1,
+      "message": "Does this mean that the blob is vulnerable to being garbage-collected until it is referenced by something?",
+      "revId": "7841cd439eea2ea532bc5bb775b69b7e860bac82",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
