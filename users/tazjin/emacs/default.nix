@@ -75,7 +75,7 @@ pkgs.makeOverridable
       restclient
       rust-mode
       sly
-      string-edit
+      string-edit-at-point
       swiper
       telephone-line
       terraform-mode

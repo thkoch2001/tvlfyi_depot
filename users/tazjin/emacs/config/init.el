@@ -115,7 +115,7 @@
 (use-package rainbow-delimiters :hook (prog-mode . rainbow-delimiters-mode))
 (use-package rainbow-mode)
 (use-package s)
-(use-package string-edit)
+(use-package string-edit-at-point)
 
 (use-package swiper
   :after (counsel ivy)
