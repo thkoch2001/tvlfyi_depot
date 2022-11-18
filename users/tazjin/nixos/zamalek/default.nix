@@ -60,7 +60,6 @@ in
     domain = "tvl.su";
     hostId = "ee399356";
     networkmanager.enable = true;
-    networkmanager.dns = "none";
 
     extraHosts = ''
       10.101.240.1 wifi.silja.fi
