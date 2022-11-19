@@ -164,8 +164,12 @@
 (colorscheme-whitelist-set 'doom-peacock)
 
 (when window-system
-  (let ((font "Monospace"))
-    (fonts-whitelist-set font)
+  ;; On OSX, JetBrainsMono is installed as "JetBrains Mono", and I'm
+  ;; not sure how to change that.
+  (let ((font (if (memq window-system '(ns))
+		  "JetBrains Mono"
+		"JetBrainsMono")))
+    (fonts-set font)
     ;; Some themes (e.g. doom-acario-*) change the font for comments. This
     ;; should prevent that.
     (set-face-attribute font-lock-comment-face nil
