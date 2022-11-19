@@ -44,7 +44,7 @@ in
   # machines.
   shell-utils = with pkgs; [
     bat
-    dig
+    coreutils
     direnv
     diskus
     emacs
@@ -55,13 +55,11 @@ in
     gnupg
     htop
     jq
-    mkpasswd
     nmap
     pass
     python3
     rink
     ripgrep
-    sysz
     tldr
     tokei
     tree
@@ -71,5 +69,14 @@ in
     # wpcarro.tools.simple_vim
     xclip
     zip
-  ];
+  ] ++
+  (if pkgs.stdenv.isLinux then [
+    mkpasswd
+    sysz
+    # This depends on compiler-rt-libc-10.0.1, which is marked as broken on
+    # aarch64-darwin, but depot sets `allowBroken = true`, which means any
+    # build that depends on dig will fail on OSX (e.g. emacs).
+    # https://cs.tvl.fyi/github.com/NixOS/nixpkgs@e9b195248c6cd7961a453b10294aea9ab58e01b4/-/blob/pkgs/development/compilers/llvm/10/compiler-rt/default.nix?L122
+    dig
+  ] else [ ]);
 }
