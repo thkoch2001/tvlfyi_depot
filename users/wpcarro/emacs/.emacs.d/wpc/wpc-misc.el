@@ -180,12 +180,6 @@
 ;; configure ibuffer
 (setq ibuffer-default-sorting-mode 'major-mode)
 
-;; config Emacs to use $PATH values
-(use-package exec-path-from-shell
-  :if (memq window-system '(mac ns))
-  :config
-  (exec-path-from-shell-initialize))
-
 ;; Emacs autosave, backup, interlocking files
 (setq auto-save-default nil
       make-backup-files nil
@@ -326,11 +320,7 @@
   ;; Disable the default styles of:
   ;; - ascii  :P (When this is enabled, the vim command, :x, renders as 😶)
   ;; - github :smile:
-  (setq emojify-emoji-styles '(unicode))
-  (defun wpc-misc-copy-emoji ()
-    "Select an emoji from the completing-read menu."
-    (interactive)
-    (clipboard-copy (emojify-completing-read "Copy: "))))
+  (setq emojify-emoji-styles '(unicode)))
 
 ;; Always auto-close parantheses and other pairs
 (electric-pair-mode)

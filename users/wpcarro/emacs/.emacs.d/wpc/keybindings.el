@@ -36,7 +36,6 @@
 (require 'bookmark)
 (require 'tvl)
 (require 'window-manager)
-(require 'wpc-misc)
 
 ;; Note: The following lines must be sorted this way.
 (setq evil-want-integration t)
@@ -210,7 +209,13 @@
 (keybindings-exwm "<M-S-iso-lefttab>" #'window-manager-prev-workspace)
 (keybindings-exwm "C-S-f" #'window-manager-toggle-previous)
 (keybindings-exwm "C-M-\\" #'ivy-pass)
-(keybindings-exwm "s-e" #'wpc-misc-copy-emoji)
+
+(defun keybindings-copy-emoji ()
+  "Select an emoji from the completing-read menu."
+  (interactive)
+  (clipboard-copy (emojify-completing-read "Copy: ")))
+
+(keybindings-exwm "s-e" #'keybindings-copy-emoji)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Workspaces

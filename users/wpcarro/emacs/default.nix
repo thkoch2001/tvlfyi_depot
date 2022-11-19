@@ -1,3 +1,9 @@
+# My Emacs distribution, which is supporting the following platforms:
+# - Linux
+# - Darwin
+#
+# USAGE:
+#   $ mg build //users/wpcarro/emacs:osx
 { depot, pkgs, lib, ... }:
 
 # TODO(wpcarro): See if it's possible to expose emacsclient on PATH, so that I
@@ -26,9 +32,11 @@ let
       rust-analyzer
       rustc
       rustfmt
+    ] ++
+    (if pkgs.stdenv.isLinux then [
       scrot
       xorg.xset
-    ])
+    ] else [ ]))
   );
 
   emacsWithPackages = (emacsPackagesFor emacs28).emacsWithPackages;
@@ -114,8 +122,6 @@ let
       request
       pcre2el
       helpful
-      # TODO(wpcarro): Determine if Nix solves this problem.
-      exec-path-from-shell
       yasnippet
       projectile
       deadgrep
@@ -171,13 +177,24 @@ let
         "$@"
     '';
 in
-{
-  inherit withEmacsPath;
-
+depot.nix.readTree.drvTargets {
+  # TODO(wpcarro): Support this with base.overrideAttrs or something similar.
   nixos = { load ? [ ] }: withEmacsPath {
     inherit load;
     emacsBin = "${wpcarrosEmacs}/bin/emacs";
   };
+
+  osx = writeShellScriptBin "wpcarros-emacs" ''
+    export PATH="${emacsBinPath}:$PATH"
+    export EMACSLOADPATH="${loadPath}"
+    exec ${wpcarrosEmacs}/bin/emacs \
+      --debug-init \
+      --no-init-file \
+      --no-site-file \
+      --no-site-lisp \
+      --load ${./.emacs.d/init.el} \
+      "$@"
+  '';
 
   # Script that asserts my Emacs can initialize without warnings or errors.
   check = runCommand "check-emacs" { } ''
@@ -194,6 +211,4 @@ in
       ${./.emacs.d/init.el} && \
     touch $out
   '';
-
-  meta.ci.targets = [ "check" ];
 }
