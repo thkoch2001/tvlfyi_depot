@@ -92,6 +92,11 @@
     password = "{SSHA}7a85VNhpFElFw+N5xcjgGmt4HnBsaGp4";
   }
   {
+    username = "noteed";
+    email = "noteed@gmail.com";
+    password = "{ARGON2}$argon2id$v=19$m=65536,t=2,p=1$rcLfF9xXysSx5sahVQLiMA$EgRgAVXn8+r2Csa3XgIHIEBf3hX4Y58pOHf2eDaBUnA";
+  }
+  {
     username = "nyanotech";
     email = "nyanotechnology@gmail.com";
     password = "{SSHA}NIJ2RCRb1+Q4Bs63cyE91VZyiN47DG6y";
