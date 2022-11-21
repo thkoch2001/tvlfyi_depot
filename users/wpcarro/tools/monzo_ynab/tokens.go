@@ -1,7 +1,7 @@
 // Creating a Tokens server to manage my access and refresh tokens. Keeping this
 // as a separate server allows me to develop and use the access tokens without
 // going through client authorization.
-package main
+package tokens
 
 ////////////////////////////////////////////////////////////////////////////////
 // Dependencies
@@ -46,7 +46,7 @@ type setTokensRequest struct {
 
 // This is our application state.
 type state struct {
-	accessToken  string `json:"access_token"`
+	AccessToken  string `json:"access_token"`
 	refreshToken string `json:"refresh_token"`
 }
 
@@ -90,7 +90,7 @@ func logTokens(access string, refresh string) {
 }
 
 func (state *state) String() string {
-	return fmt.Sprintf("state{\n\taccessToken: \"%s\",\n\trefreshToken: \"%s\"\n}\n", state.accessToken, state.refreshToken)
+	return fmt.Sprintf("state{\n\tAccessToken: \"%s\",\n\trefreshToken: \"%s\"\n}\n", state.AccessToken, state.refreshToken)
 }
 
 // Schedule a token refresh for `expiresIn` seconds using the provided
@@ -104,10 +104,10 @@ func scheduleTokenRefresh(expiresIn int, refreshToken string) {
 	log.Printf("Scheduling token refresh for %v\n", timestamp)
 	time.Sleep(duration)
 	log.Println("Refreshing tokens now...")
-	accessToken, refreshToken := refreshTokens(refreshToken)
+	AccessToken, refreshToken := refreshTokens(refreshToken)
 	log.Println("Successfully refreshed tokens.")
-	logTokens(accessToken, refreshToken)
-	setState(accessToken, refreshToken)
+	logTokens(AccessToken, refreshToken)
+	setState(AccessToken, refreshToken)
 }
 
 // Exchange existing credentials for a new access token and `refreshToken`. Also
@@ -169,8 +169,8 @@ func handleInterrupts() {
 	go func() {
 		sig := <-sigs
 		log.Printf("Received signal to shutdown. %v\n", sig)
-		state := getState()
-		persistTokens(state.accessToken, state.refreshToken)
+		state := GetState()
+		persistTokens(state.AccessToken, state.refreshToken)
 		done <- true
 	}()
 
@@ -179,25 +179,21 @@ func handleInterrupts() {
 	os.Exit(0)
 }
 
-// Set `accessToken` and `refreshToken` on application state.
-func setState(accessToken string, refreshToken string) {
-	msg := writeMsg{state{accessToken, refreshToken}, make(chan bool)}
+// Set `AccessToken` and `refreshToken` on application state.
+func setState(AccessToken string, refreshToken string) {
+	msg := writeMsg{state{AccessToken, refreshToken}, make(chan bool)}
 	chans.writes <- msg
 	<-msg.sender
 }
 
 // Return our application state.
-func getState() state {
+func GetState() state {
 	msg := readMsg{make(chan state)}
 	chans.reads <- msg
 	return <-msg.sender
 }
 
-////////////////////////////////////////////////////////////////////////////////
-// Main
-////////////////////////////////////////////////////////////////////////////////
-
-func main() {
+func StartServer() {
 	// Manage application state.
 	go func() {
 		state := &state{}
@@ -215,7 +211,7 @@ func main() {
 				// As an attempt to maintain consistency between application
 				// state and persisted state, everytime we write to the
 				// application state, we will write to the store.
-				persistTokens(state.accessToken, state.refreshToken)
+				persistTokens(state.AccessToken, state.refreshToken)
 				msg.sender <- true
 			}
 		}
@@ -251,7 +247,7 @@ func main() {
 	log.Fatal(http.ListenAndServe(":4242",
 		http.HandlerFunc(func(w http.ResponseWriter, req *http.Request) {
 			if req.URL.Path == "/refresh-tokens" && req.Method == "POST" {
-				state := getState()
+				state := GetState()
 				go scheduleTokenRefresh(0, state.refreshToken)
 				fmt.Fprintf(w, "Done.")
 			} else if req.URL.Path == "/set-tokens" && req.Method == "POST" {
@@ -273,7 +269,7 @@ func main() {
 			} else if req.URL.Path == "/state" && req.Method == "GET" {
 				// TODO(wpcarro): Ensure that this returns serialized state.
 				w.Header().Set("Content-type", "application/json")
-				state := getState()
+				state := GetState()
 				payload, _ := json.Marshal(state)
 				io.WriteString(w, string(payload))
 			} else {

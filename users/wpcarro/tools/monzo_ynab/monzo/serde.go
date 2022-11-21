@@ -1,11 +1,9 @@
 // This package hosts the serialization and deserialization logic for all of the
 // data types with which our application interacts from the Monzo API.
-package main
+package monzoSerde
 
 import (
 	"encoding/json"
-	"fmt"
-	"io/ioutil"
 	"time"
 )
 
@@ -71,12 +69,4 @@ func deserializeTx(x string) (*Transaction, error) {
 	target := &Transaction{}
 	err := json.Unmarshal([]byte(x), target)
 	return target, err
-}
-
-func main() {
-	b, _ := ioutil.ReadFile("./fixture.json")
-	tx := string(b)
-	target, _ := deserializeTx(tx)
-	out, _ := serializeTx(target)
-	fmt.Println(out)
 }

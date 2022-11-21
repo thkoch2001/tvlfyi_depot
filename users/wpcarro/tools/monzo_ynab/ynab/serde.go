@@ -1,10 +1,9 @@
 // This package hosts the serialization and deserialization logic for all of the
 // data types with which our application interacts from the YNAB API.
-package main
+package ynabSerde
 
 import (
 	"encoding/json"
-	"fmt"
 	"time"
 )
 
@@ -42,11 +41,4 @@ func deserializeTx(x string) (*Transaction, error) {
 	target := &Transaction{}
 	err := json.Unmarshal([]byte(x), target)
 	return target, err
-}
-
-func main() {
-	target, _ := deserializeTx(tx)
-	out, _ := serializeTx(target)
-	fmt.Println(out)
-	fmt.Println(ynabOut)
 }
