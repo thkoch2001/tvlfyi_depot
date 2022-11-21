@@ -16,6 +16,24 @@
       "message": "Can\u0027t we use a binary tree based set for this? Order of done_keys seems irrelevant.",
       "revId": "37c32df2c9b79b18c343f25aa71c729839d94565",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "34d6fb23_17725049",
+        "filename": "tvix/eval/src/builtins/mod.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 364,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-11-21T14:09:10Z",
+      "side": 1,
+      "message": "I\u0027m not sure how this would work, as Value is not ordered. I\u0027d like a more efficient way to do this for sure, maybe we can take the discussion outside of this CL (a generic ValueSet type would be nice).",
+      "parentUuid": "d0b68514_447ca4c0",
+      "revId": "37c32df2c9b79b18c343f25aa71c729839d94565",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
