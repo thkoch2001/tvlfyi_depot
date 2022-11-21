@@ -10,8 +10,11 @@
 package main
 
 import (
+	"monzoClient"
 	"monzoSerde"
 	"os"
+	"ynabClient"
+	"ynabSerde"
 )
 
 var (
@@ -34,11 +37,12 @@ func toYnab(tx monzoSerde.Transaction) ynabSerde.Transaction {
 }
 
 func main() {
+	monzo := monzoClient.Create()
 	txs := monzo.TransactionsLast24Hours()
 	var ynabTxs []ynabSerde.Transaction
-	for tx := range txs {
-		append(ynabTxs, toYnab(tx))
+	for _, tx := range txs {
+		ynabTxs = append(ynabTxs, toYnab(tx))
 	}
-	ynab.PostTransactions(ynabTxs)
+	ynabClient.PostTransactions(ynabTxs)
 	os.Exit(0)
 }

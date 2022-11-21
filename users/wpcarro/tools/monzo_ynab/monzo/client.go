@@ -27,8 +27,8 @@ func Create() *Client {
 }
 
 // Returns a slice of transactions from the last 24 hours.
-func (c *Client) Transactions24Hours() []monzoSerde.Transaction {
-	token := tokens.AccessToken()
+func (c *Client) TransactionsLast24Hours() []monzoSerde.Transaction {
+	token := tokens.GetState().AccessToken
 	form := url.Values{"account_id": {accountID}}
 	client := http.Client{}
 	req, _ := http.NewRequest("POST", "https://api.monzo.com/transactions",
