@@ -16,6 +16,24 @@
       "message": "Can / should we use the constants we defined for this?",
       "revId": "b41b498120251462703716ce4af1e302620ff201",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fd493314_c936e246",
+        "filename": "tvix/eval/src/builtins/mod.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 540,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-11-21T14:11:54Z",
+      "side": 1,
+      "message": "The NixString constants? That doesn\u0027t work, these are `\u0026str`. I think it will get optimised away either way.",
+      "parentUuid": "fd655c31_36af53e4",
+      "revId": "b41b498120251462703716ce4af1e302620ff201",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
