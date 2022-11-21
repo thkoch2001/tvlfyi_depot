@@ -2,62 +2,28 @@ package main
 
 import (
 	"os"
-	"os/signal"
 
-	"google.golang.org/grpc"
-	"google.golang.org/grpc/credentials/insecure"
-
-	"code.tvl.fyi/tvix/nar-bridge/pkg/server"
-	storev1pb "code.tvl.fyi/tvix/store/protos"
 	"github.com/alecthomas/kong"
-	log "github.com/sirupsen/logrus"
 )
 
-var CLI struct {
-	ListenAddr      string `name:"listen-addr" help:"The address this service listens on" type:"string" default:"[::]:9000"` //nolint:lll
-	EnableAccessLog bool   `name:"access-log" help:"Enable access logging" type:"bool" default:"true" negatable:""`          //nolint:lll
-	StoreAddr       string `name:"store-addr" help:"The address to the tvix-store RPC interface this will connect to"`
+//nolint:gochecknoglobals
+var cli struct {
+	Import ImportCmd `kong:"cmd,name='import',help='Import a local NAR file into a tvix-store'"`
+	Serve  ServeCmd  `kong:"cmd,name='serve',help='Expose a tvix-store RPC interface as NAR/NARInfo'"`
 }
 
-// `help:"Expose a tvix-store RPC interface as NAR/NARInfo"`
-
 func main() {
-	retcode := 0
-
-	defer func() { os.Exit(retcode) }()
-
-	_ = kong.Parse(&CLI)
-
-	c := make(chan os.Signal, 1)
-	signal.Notify(c, os.Interrupt)
-
-	go func() {
-		for range c {
-			log.Info("Received Signal, shutting down…")
-			//s.Close()
-			os.Exit(1)
-		}
-	}()
-
-	// connect to tvix-store
-	log.Debugf("Dialing to %v", CLI.StoreAddr)
-	conn, err := grpc.Dial(CLI.StoreAddr, grpc.WithTransportCredentials(insecure.NewCredentials()))
+	parser, err := kong.New(&cli)
 	if err != nil {
-		log.Fatalf("did not connect: %v", err)
+		panic(err)
 	}
-	defer conn.Close()
 
-	log.Printf("Starting nar-bridge at %v", CLI.ListenAddr)
-	s := server.New(
-		storev1pb.NewDirectoryServiceClient(conn),
-		storev1pb.NewBlobServiceClient(conn),
-		storev1pb.NewPathInfoServiceClient(conn),
-		CLI.EnableAccessLog,
-		30,
-	)
-
-	err = s.ListenAndServe(CLI.ListenAddr)
+	ctx, err := parser.Parse(os.Args[1:])
 	if err != nil {
-		log.Error("Server failed: %w", err)
+		panic(err)
 	}
+	// Call the Run() method of the selected parsed command.
+	err = ctx.Run()
+
+	ctx.FatalIfErrorf(err)
 }
