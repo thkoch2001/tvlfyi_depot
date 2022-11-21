@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "487c9791_89a2c8b7",
+        "filename": "tvix/nar-bridge/go.mod",
+        "patchSetId": 4
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2022-11-21T14:06:52Z",
+      "side": 1,
+      "message": "//nix/buildGo is somewhat borked with multiple-file protos (b/221), and buildGoModule doesn\u0027t seem to work with relative replacement directives easily, so I can\u0027t package it like //fun/tvl-ebooks either. I guess we need to have a nix-based build for this eventually, but that\u0027s another can of worms I\u0027d like to open at a later point.",
+      "revId": "f7c98b8eec07e816cdbf8896630bb8c60931f235",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
