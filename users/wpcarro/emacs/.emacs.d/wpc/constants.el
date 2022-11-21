@@ -20,7 +20,10 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (defconst constants-ci? (maybe-some? (getenv "CI"))
-  "Encoded as t when Emacs is running in CI.")
+  "Defined as t when Emacs is running in CI.")
+
+(defconst constants-osx? (eq system-type 'darwin)
+  "Defined as t when OSX is running.")
 
 (provide 'constants)
 ;;; constants.el ends here
