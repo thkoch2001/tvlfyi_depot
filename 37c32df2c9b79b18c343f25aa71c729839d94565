@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d0b68514_447ca4c0",
+        "filename": "tvix/eval/src/builtins/mod.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 364,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2022-11-21T01:11:06Z",
+      "side": 1,
+      "message": "Can\u0027t we use a binary tree based set for this? Order of done_keys seems irrelevant.",
+      "revId": "37c32df2c9b79b18c343f25aa71c729839d94565",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
