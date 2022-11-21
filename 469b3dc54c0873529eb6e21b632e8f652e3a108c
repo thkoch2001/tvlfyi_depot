@@ -16,6 +16,24 @@
       "message": "Don\u0027t think so, e.g. `let x \u003d throw \"foo\"; in x \u003d\u003d x`.",
       "revId": "469b3dc54c0873529eb6e21b632e8f652e3a108c",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a616517a_87e95f5d",
+        "filename": "tvix/eval/src/value/mod.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 336,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-11-21T14:13:06Z",
+      "side": 1,
+      "message": "Interesting. Done.",
+      "parentUuid": "7b3d7e05_87c68f08",
+      "revId": "469b3dc54c0873529eb6e21b632e8f652e3a108c",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
