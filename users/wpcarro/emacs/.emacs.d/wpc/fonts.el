@@ -9,15 +9,10 @@
 
 ;;; Code:
 
-;; TODO: `defcustom' font-size.
-;; TODO: `defcustom' fonts.
-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Dependencies
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(require 'prelude)
-(require 'cycle)
 (require 'maybe)
 (require 'cl-lib)
 
@@ -25,15 +20,16 @@
 ;; Constants
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-;; TODO: Troubleshoot why "8" appears so large on my desktop.
+(defgroup fonts nil
+  "Customize group for fonts configuration.")
 
-;; TODO: Consider having a different font size when I'm using my 4K monitor.
+(defcustom fonts-size "10"
+  "My preferred default font-size."
+  :group 'fonts)
 
-(defconst fonts-size "10"
-  "My preferred default font-size.")
-
-(defconst fonts-size-step 10
-  "The amount (%) by which to increase or decrease a font.")
+(defcustom fonts-size-step 10
+  "The amount (%) by which to increase or decrease a font."
+  :group 'fonts)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Functions
@@ -44,6 +40,10 @@
   (if (maybe-some? size)
       (set-frame-font (string-format "%s %s" font size) nil t)
     (set-frame-font font nil t)))
+
+(defun fonts-current ()
+  "Return the currently enabled font."
+  (symbol-name (font-get (face-attribute 'default :font) :family)))
 
 (defun fonts-increase-size ()
   "Increase font size."
