@@ -145,21 +145,23 @@ impl Thunk {
     // API too much.
     pub fn value(&self) -> Ref<Value> {
         Ref::map(self.0.borrow(), |thunk| {
-            if let ThunkRepr::Evaluated(value) = thunk {
-                #[cfg(debug_assertions)]
-                if matches!(
-                    value,
-                    Value::Closure(Closure {
-                        is_finalised: false,
-                        ..
-                    })
-                ) {
-                    panic!("Thunk::value called on an unfinalised closure");
-                }
-                return value;
+            match thunk {
+                ThunkRepr::Evaluated(value) => {
+                    #[cfg(debug_assertions)]
+                    if matches!(
+                        value,
+                        Value::Closure(Closure {
+                            is_finalised: false,
+                            ..
+                        })
+                    ) {
+                        panic!("Thunk::value called on an unfinalised closure");
+                    }
+                    return value;
+                },
+                ThunkRepr::Blackhole => panic!("Thunk::value called on a black-holed thunk"),
+                ThunkRepr::Suspended { .. } => panic!("Thunk::value called on a suspended thunk"),
             }
-
-            panic!("Thunk::value called on non-evaluated thunk");
         })
     }
 
