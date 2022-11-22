@@ -1,7 +1,7 @@
 { depot, pkgs, lib, ... }:
 
 let
-  protoRoot = depot.nix.sparseTree depot.path.origSrc [
+  protoRoot = depot.nix.sparseTree ./. [
     ./protos/castore.proto
     ./protos/pathinfo.proto
     ./protos/rpc_blobstore.proto
