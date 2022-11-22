@@ -9,8 +9,6 @@ import (
 	"github.com/go-chi/chi/v5"
 	"github.com/nix-community/go-nix/pkg/nixbase32"
 	log "github.com/sirupsen/logrus"
-	"io"
-	"io/ioutil"
 	"net/http"
 )
 
@@ -54,48 +52,8 @@ func registerNarPut(s *Server) {
 		rd := reader.New(r.Body)
 		pathInfo, err := rd.Import(
 			ctx,
-			func(fileReader io.Reader) error {
-				// Read from fileReader into a buffer.
-				// We currently buffer all contents and send them to blobServiceClient at once,
-				// but that's about to change.
-				contents, err := ioutil.ReadAll(fileReader)
-				resp, err := s.blobServiceClient.Put(
-					ctx,
-					&storev1pb.PutBlobRequest{
-						Data: contents,
-					},
-				)
-				if err != nil {
-					// return error to the importer
-					return fmt.Errorf("error from blob service: %w", err)
-				}
-
-				log.WithField("digest", hex.EncodeToString(resp.GetDigest())).Info("uploaded blob")
-
-				return nil
-			},
-			func(directory *storev1pb.Directory) error {
-				// If the client doesn't exist yet, set it up
-				if directoryServicePutStream == nil {
-					directoryServicePutStream, err = s.directoryServiceClient.Put(ctx)
-					if err != nil {
-						return fmt.Errorf("error initializing directory service put stream: %w", err)
-					}
-				}
-
-				directoryDgst, err := directory.Digest()
-				if err != nil {
-					return fmt.Errorf("failed calculating directory digest: %w", err)
-				}
-				// Send the directory to the directory service
-				err = directoryServicePutStream.Send(directory)
-				if err != nil {
-					return fmt.Errorf("error sending directory: %w", err)
-				}
-				log.WithField("digest", hex.EncodeToString(directoryDgst)).Info("uploaded directory")
-
-				return nil
-			},
+			genBlobServiceWriteCb(ctx, s.blobServiceClient),
+			genDirectoryUploadCb(directoryServicePutStream),
 		)
 
 		if err != nil {
