@@ -9,8 +9,6 @@ import (
 	"github.com/go-chi/chi/v5"
 	"github.com/nix-community/go-nix/pkg/nixbase32"
 	log "github.com/sirupsen/logrus"
-	"io"
-	"io/ioutil"
 	"net/http"
 )
 
@@ -37,70 +35,15 @@ func registerNarPut(s *Server) {
 		// We are already certain it's 32 or 64 bytes, because our regex on the
 		// nixbase32 representation of it ensures it.
 
-		// Initialize directoryServicePutStream
-		// This should not send any data over the wire, only prepare client-side plumbing..
-		directoryServicePutStream, err := s.directoryServiceClient.Put(ctx)
-		if err != nil {
-			log.Errorf("unable to initialize directory service put stream: %v", err)
-			w.WriteHeader(http.StatusInternalServerError)
-			_, err := w.Write([]byte("unable to initialize directory put stream"))
-			if err != nil {
-				log.WithError(err).Errorf("unable to write error message to client")
-			}
-
-			return
-		}
-		// We want to make sure it gets closed.
-		defer func() {
-			if err := directoryServicePutStream.CloseSend(); err != nil {
-				log.WithError(err).Errorf("unable to close directory service put stream: %v", err)
-			}
-		}()
+		directoriesUploader := NewDirectoriesUploader(ctx, s.directoryServiceClient)
+		defer directoriesUploader.Done() //nolint:errcheck
 
 		rd := reader.New(r.Body)
 		pathInfo, err := rd.Import(
 			ctx,
-			func(fileReader io.Reader) error {
-				// Read from fileReader into a buffer.
-				// We currently buffer all contents and send them to blobServiceClient at once,
-				// but that's about to change.
-				contents, err := ioutil.ReadAll(fileReader)
-				resp, err := s.blobServiceClient.Put(
-					ctx,
-					&storev1pb.PutBlobRequest{
-						Data: contents,
-					},
-				)
-				if err != nil {
-					// return error to the importer
-					return fmt.Errorf("error from blob service: %w", err)
-				}
-
-				log.WithField("digest", hex.EncodeToString(resp.GetDigest())).Info("uploaded blob")
-
-				return nil
-			},
+			genBlobServiceWriteCb(ctx, s.blobServiceClient),
 			func(directory *storev1pb.Directory) error {
-				// If the client doesn't exist yet, set it up
-				if directoryServicePutStream == nil {
-					directoryServicePutStream, err = s.directoryServiceClient.Put(ctx)
-					if err != nil {
-						return fmt.Errorf("error initializing directory service put stream: %w", err)
-					}
-				}
-
-				directoryDgst, err := directory.Digest()
-				if err != nil {
-					return fmt.Errorf("failed calculating directory digest: %w", err)
-				}
-				// Send the directory to the directory service
-				err = directoryServicePutStream.Send(directory)
-				if err != nil {
-					return fmt.Errorf("error sending directory: %w", err)
-				}
-				log.WithField("digest", hex.EncodeToString(directoryDgst)).Info("uploaded directory")
-
-				return nil
+				return directoriesUploader.Put(directory)
 			},
 		)
 
@@ -115,13 +58,23 @@ func registerNarPut(s *Server) {
 			return
 		}
 
-		// FIXME: do something with the root hash
-		putResponse, err := directoryServicePutStream.CloseAndRecv()
+		log.Infof("closing the stream")
+
+		// Close the stream
+		putResponse, err := directoriesUploader.Done()
 		if err != nil {
 			log.WithError(err).Error("error receiving put response")
 		}
+		log.Infof("closed the stream")
 
-		log.Infof("%v+", putResponse)
+		// check the root digest received back matches what we refer to in our pathInfo
+		if !bytes.Equal(
+			pathInfo.GetDirectory().GetDigest(),
+			putResponse.GetRootDigest(),
+		) {
+			log.WithField("root_digest_pathinfo", pathInfo.GetDirectory().GetDigest()).WithField("root_digest_directory_service", putResponse.GetRootDigest()).Errorf("returned root digest doesn't match what's calculated")
+			return
+		}
 
 		// extract the narhash (sha256 and sha512)
 		var narHashSha256Dgst []byte
