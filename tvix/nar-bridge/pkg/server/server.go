@@ -65,6 +65,7 @@ func New(
 	}
 
 	registerNarPut(s)
+	registerNarinfoPut(s)
 
 	return s
 }
