@@ -2,11 +2,11 @@
 
 let
   protoRoot = depot.nix.sparseTree depot.path.origSrc [
-    ./protos/castore.proto
-    ./protos/pathinfo.proto
-    ./protos/rpc_blobstore.proto
-    ./protos/rpc_directory.proto
-    ./protos/rpc_pathinfo.proto
+    ./tvix/store/protos/castore.proto
+    ./tvix/store/protos/pathinfo.proto
+    ./tvix/store/protos/rpc_blobstore.proto
+    ./tvix/store/protos/rpc_directory.proto
+    ./tvix/store/protos/rpc_pathinfo.proto
   ];
 in
 lib.fix (self: depot.third_party.naersk.buildPackage (lib.fix (naerskArgs: {

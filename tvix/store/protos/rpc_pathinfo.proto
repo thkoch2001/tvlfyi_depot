@@ -4,7 +4,7 @@ syntax = "proto3";
 
 package tvix.store.v1;
 
-import "tvix/store/protos/pathinfo.proto";
+import "protos/pathinfo.proto";
 
 service PathInfoService {
     // Get retrieves a PathInfo object, by using the lookup parameters in
