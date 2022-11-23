@@ -107,6 +107,15 @@ impl Thunk {
         ))))
     }
 
+    pub fn new_blackhole() -> Self {
+        Thunk(Rc::new(RefCell::new(ThunkRepr::Blackhole)))
+    }
+
+    pub fn fill_blackhole(&mut self, v: Value) {
+        let should_be_blackhole = self.0.replace(ThunkRepr::Evaluated(v));
+        assert!(matches!(should_be_blackhole, ThunkRepr::Blackhole));
+    }
+
     /// Evaluate the content of a thunk, potentially repeatedly, until a
     /// non-thunk value is returned.
     ///
