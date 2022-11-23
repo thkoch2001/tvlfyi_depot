@@ -4,6 +4,8 @@
 use serde_json::json;
 use std::{cmp::Ordering, collections::BTreeMap, ops::DerefMut, path::PathBuf, rc::Rc};
 
+use codemap::Span;
+
 use crate::{
     chunk::Chunk,
     errors::{Error, ErrorKind, EvalResult},
@@ -15,6 +17,43 @@ use crate::{
     value::{Builtin, Closure, CoercionKind, Lambda, NixAttrs, NixList, Thunk, Value},
     warnings::{EvalWarning, WarningKind},
 };
+
+/// Representation of a VM continuation;
+/// see: https://en.wikipedia.org/wiki/Continuation-passing_style#CPS_in_Haskell
+type Cont = Box<dyn FnOnce(&mut VM) -> EvalResult<Tramp>>;
+
+#[must_use = "this `Tramp` may be a continuation request, which should be handled"]
+#[derive(Default)]
+pub struct Tramp {
+    /// The action to perform upon return to the trampoline
+    pub action: Option<TrampAction>,
+
+    /// The continuation to execute after the action has completed
+    pub cont: Option<Box<dyn FnOnce(&mut VM) -> EvalResult<Tramp>>>,
+}
+
+impl Tramp {
+    pub fn append_to_continuation(self, f: Cont) -> Self {
+        Tramp {
+            action: self.action,
+            cont: match self.cont {
+                None => Some(f),
+                Some(f0) => Some(Box::new(move |vm| {
+                    let tramp = f0(vm)?;
+                    Ok(tramp.append_to_continuation(f))
+                })),
+            },
+        }
+    }
+}
+
+pub enum TrampAction {
+    EnterFrame {
+        lambda: Rc<Lambda>,
+        upvalues: Upvalues,
+        span: Span,
+    },
+}
 
 struct CallFrame {
     /// The lambda currently being executed.
@@ -30,6 +69,8 @@ struct CallFrame {
 
     /// Stack offset, i.e. the frames "view" into the VM's full stack.
     stack_offset: usize,
+
+    cont: Option<Cont>,
 }
 
 impl CallFrame {
@@ -357,31 +398,22 @@ impl<'o> VM<'o> {
             upvalues,
             ip: CodeIdx(0),
             stack_offset: self.stack.len() - arg_count,
+            cont: None,
         };
 
+        let starting_frames_depth = self.frames.len();
         self.frames.push(frame);
-        let result = self.run();
 
-        self.observer
-            .observe_exit_frame(self.frames.len() + 1, &self.stack);
-
-        result
-    }
-
-    /// Run the VM's current call frame to completion.
-    ///
-    /// On successful return, the top of the stack is the value that
-    /// the frame evaluated to. The frame itself is popped off. It is
-    /// up to the caller to consume the value.
-    fn run(&mut self) -> EvalResult<()> {
-        loop {
+        let result = loop {
             // Break the loop if this call frame has already run to
             // completion, pop it off, and return the value to the
             // caller.
+            /*
             if self.frame().ip.0 == self.chunk().code.len() {
                 self.frames.pop();
-                return Ok(());
+                break Ok(());
             }
+             */
 
             let op = self.inc_ip();
 
@@ -390,16 +422,70 @@ impl<'o> VM<'o> {
 
             let res = self.run_op(op);
 
+            let mut retramp: Option<Cont> = None;
+
+            // we need to pop the frame before checking `res` for an
+            // error in order to implement `tryEval` correctly.
             if self.frame().ip.0 == self.chunk().code.len() {
-                self.frames.pop();
-                return res;
-            } else {
-                res?;
+                let frame = self.frames.pop();
+                retramp = frame.map(|frame| frame.cont).flatten();
             }
-        }
+            let mut tramp = res?;
+            loop {
+                match tramp.action {
+                    None => (),
+                    Some(TrampAction::EnterFrame {
+                        lambda,
+                        upvalues,
+                        span: _,
+                    }) => {
+                        let frame = CallFrame {
+                            lambda,
+                            upvalues,
+                            ip: CodeIdx(0),
+                            stack_offset: self.stack.len() - arg_count,
+                            cont: match retramp {
+                                None => tramp.cont,
+                                Some(retramp) => match tramp.cont {
+                                    None => None,
+                                    Some(cont) => Some(Box::new(|vm| {
+                                        Ok(cont(vm)?.append_to_continuation(retramp))
+                                    })),
+                                },
+                            },
+                        };
+                        //assert!(matches!(retramp, None));
+                        self.frames.push(frame);
+                        break ();
+                    }
+                }
+                match tramp.cont {
+                    None => {
+                        let retramp_ = std::mem::replace(&mut retramp, None);
+                        if let Some(cont) = retramp_ {
+                            tramp = cont(self)?;
+                        } else {
+                            break ();
+                        }
+                    }
+                    Some(cont) => {
+                        tramp = cont(self)?;
+                        continue;
+                    }
+                }
+            }
+            if self.frames.len() == starting_frames_depth {
+                break Ok(());
+            }
+        };
+
+        self.observer
+            .observe_exit_frame(self.frames.len() + 1, &self.stack);
+
+        result
     }
 
-    fn run_op(&mut self, op: OpCode) -> EvalResult<()> {
+    pub(crate) fn run_op(&mut self, op: OpCode) -> EvalResult<Tramp> {
         match op {
             OpCode::OpConstant(idx) => {
                 let c = self.chunk()[idx].clone();
@@ -805,14 +891,15 @@ impl<'o> VM<'o> {
             }
 
             OpCode::OpForce => {
-                let mut value = self.pop();
+                let value = self.pop();
 
                 if let Value::Thunk(thunk) = value {
-                    fallible!(self, thunk.force(self));
-                    value = thunk.value().clone();
+                    self.push(Value::Thunk(thunk.clone()));
+                    let tramp = fallible!(self, Thunk::force_tramp(self));
+                    return Ok(tramp);
+                } else {
+                    self.push(value);
                 }
-
-                self.push(value);
             }
 
             OpCode::OpFinalise(StackIdx(idx)) => {
@@ -840,7 +927,7 @@ impl<'o> VM<'o> {
             }
         }
 
-        Ok(())
+        Ok(Tramp::default())
     }
 
     fn run_attrset(&mut self, count: usize) -> EvalResult<()> {
