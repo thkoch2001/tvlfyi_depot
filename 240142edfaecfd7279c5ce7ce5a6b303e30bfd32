@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "610787c2_c57dc6fc",
+        "filename": "tvix/store/build.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1000066
+      },
+      "writtenOn": "2022-11-23T00:04:48Z",
+      "side": 1,
+      "message": "Yeah, this breaks inside of `crate2nix` builds too, since `.` !\u003d `../../tvix/store`.  Are you sure that assumption is valid?\n\nCan\u0027t we just change all these paths to be `protos/xyz.proto` instead of `tvix/store/protos/xyz.proto` like you did in `default.nix`?  It seems like tonic really wants the paths to be relative to the place where `Cargo.toml` is.\n\nIf those paths have to start with `tvix/store` then we should consider moving them into something like\n\n```\ndepot/tvix/store/protos/tvix/store/protos/xyz.proto\n```",
+      "revId": "240142edfaecfd7279c5ce7ce5a6b303e30bfd32",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
