@@ -30,7 +30,7 @@ use crate::{
     errors::{Error, ErrorKind},
     upvalues::Upvalues,
     value::Closure,
-    vm::VM,
+    vm::{Tramp, TrampAction, VM},
     Value,
 };
 
@@ -86,13 +86,49 @@ impl Thunk {
         })))
     }
 
+    /// Force a thunk from a context that can't handle trampoline
+    /// continuations.  Calling `force_tramp()` instead should be
+    /// preferred whenever possible.
+    pub fn force(&self, vm: &mut VM) -> Result<(), ErrorKind> {
+        vm.push(Value::Thunk(self.clone()));
+        let mut tramp = Self::force_tramp_stack(vm)?;
+        loop {
+            match tramp.action {
+                None => (),
+                Some(TrampAction::EnterFrame {
+                    lambda,
+                    upvalues,
+                    span,
+                }) => vm.enter_frame(lambda, upvalues, 0)?,
+            }
+            match tramp.cont {
+                None => break (),
+                Some(cont) => {
+                    tramp = cont(vm)?;
+                    continue;
+                }
+            }
+        }
+        vm.pop();
+        Ok(())
+    }
+
     /// Evaluate the content of a thunk, potentially repeatedly, until a
     /// non-thunk value is returned.
     ///
     /// This will change the existing thunk (and thus all references to it,
     /// providing memoization) through interior mutability. In case of nested
     /// thunks, the intermediate thunk representations are replaced.
-    pub fn force(&self, vm: &mut VM) -> Result<(), ErrorKind> {
+    pub fn force_tramp_stack(vm: &mut VM) -> Result<Tramp, ErrorKind> {
+        match vm.pop() {
+            Value::Thunk(thunk) => return thunk.force_tramp(vm),
+            v => {
+                vm.push(v);
+                return Ok(Tramp::default());
+            }
+        }
+    }
+    pub fn force_tramp(&self, vm: &mut VM) -> Result<Tramp, ErrorKind> {
         loop {
             let mut thunk_mut = self.0.borrow_mut();
 
@@ -102,7 +138,10 @@ impl Thunk {
                     *thunk_mut = inner_repr;
                 }
 
-                ThunkRepr::Evaluated(_) => return Ok(()),
+                ThunkRepr::Evaluated(ref v) => {
+                    vm.push(v.clone());
+                    return Ok(Tramp::default());
+                }
                 ThunkRepr::Blackhole => return Err(ErrorKind::InfiniteRecursion),
 
                 ThunkRepr::Suspended { .. } => {
@@ -113,9 +152,20 @@ impl Thunk {
                     } = std::mem::replace(&mut *thunk_mut, ThunkRepr::Blackhole)
                     {
                         drop(thunk_mut);
-                        vm.enter_frame(lambda, upvalues, 0)
-                            .map_err(|e| ErrorKind::ThunkForce(Box::new(Error { span, ..e })))?;
-                        (*self.0.borrow_mut()) = ThunkRepr::Evaluated(vm.pop())
+                        let self_clone = self.clone();
+                        return Ok(Tramp {
+                            action: Some(TrampAction::EnterFrame {
+                                lambda,
+                                upvalues,
+                                span,
+                            }),
+                            cont: Some(Box::new(move |vm| {
+                                (*self_clone.0.borrow_mut()) = ThunkRepr::Evaluated(vm.pop());
+                                vm.push(Value::Thunk(self_clone.clone()));
+                                return Self::force_tramp_stack(vm)
+                                    .map_err(|kind| Error { kind, span });
+                            })),
+                        });
                     }
                 }
             }
@@ -144,24 +194,22 @@ impl Thunk {
     // difficult to represent in the type system without impacting the
     // API too much.
     pub fn value(&self) -> Ref<Value> {
-        Ref::map(self.0.borrow(), |thunk| {
-            match thunk {
-                ThunkRepr::Evaluated(value) => {
-                    #[cfg(debug_assertions)]
-                    if matches!(
-                        value,
-                        Value::Closure(Closure {
-                            is_finalised: false,
-                            ..
-                        })
-                    ) {
-                        panic!("Thunk::value called on an unfinalised closure");
-                    }
-                    return value;
-                },
-                ThunkRepr::Blackhole => panic!("Thunk::value called on a black-holed thunk"),
-                ThunkRepr::Suspended { .. } => panic!("Thunk::value called on a suspended thunk"),
+        Ref::map(self.0.borrow(), |thunk| match thunk {
+            ThunkRepr::Evaluated(value) => {
+                #[cfg(debug_assertions)]
+                if matches!(
+                    value,
+                    Value::Closure(Closure {
+                        is_finalised: false,
+                        ..
+                    })
+                ) {
+                    panic!("Thunk::value called on an unfinalised closure");
+                }
+                return value;
             }
+            ThunkRepr::Blackhole => panic!("Thunk::value called on a black-holed thunk"),
+            ThunkRepr::Suspended { .. } => panic!("Thunk::value called on a suspended thunk"),
         })
     }
 
