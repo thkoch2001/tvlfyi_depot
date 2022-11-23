@@ -290,7 +290,7 @@ rec {
         dependencies = [
           {
             name = "hermit-abi";
-            packageId = "hermit-abi";
+            packageId = "hermit-abi 0.1.19";
             target = { target, features }: (target."os" == "hermit");
           }
           {
@@ -864,12 +864,12 @@ rec {
           }
           {
             name = "clap_derive";
-            packageId = "clap_derive";
+            packageId = "clap_derive 3.2.18";
             optional = true;
           }
           {
             name = "clap_lex";
-            packageId = "clap_lex";
+            packageId = "clap_lex 0.2.4";
           }
           {
             name = "indexmap";
@@ -923,7 +923,73 @@ rec {
         };
         resolvedDefaultFeatures = [ "atty" "clap_derive" "color" "default" "derive" "env" "once_cell" "std" "strsim" "suggestions" "termcolor" ];
       };
-      "clap_derive" = rec {
+      "clap 4.0.29" = rec {
+        crateName = "clap";
+        version = "4.0.29";
+        edition = "2021";
+        crateBin = [];
+        sha256 = "0795z39bqsi974h9d03n2a0rlk9amqxifb6jgaavjwbjq3lvjqsd";
+        dependencies = [
+          {
+            name = "bitflags";
+            packageId = "bitflags";
+          }
+          {
+            name = "clap_derive";
+            packageId = "clap_derive 4.0.21";
+            optional = true;
+          }
+          {
+            name = "clap_lex";
+            packageId = "clap_lex 0.3.0";
+          }
+          {
+            name = "is-terminal";
+            packageId = "is-terminal";
+            optional = true;
+          }
+          {
+            name = "once_cell";
+            packageId = "once_cell";
+            optional = true;
+          }
+          {
+            name = "strsim";
+            packageId = "strsim";
+            optional = true;
+          }
+          {
+            name = "termcolor";
+            packageId = "termcolor";
+            optional = true;
+          }
+          {
+            name = "unicase";
+            packageId = "unicase";
+            optional = true;
+          }
+          {
+            name = "unicode-width";
+            packageId = "unicode-width";
+            optional = true;
+          }
+        ];
+        features = {
+          "cargo" = [ "dep:once_cell" ];
+          "color" = [ "dep:is-terminal" "dep:termcolor" ];
+          "debug" = [ "clap_derive?/debug" "dep:backtrace" ];
+          "default" = [ "std" "color" "help" "usage" "error-context" "suggestions" ];
+          "deprecated" = [ "clap_derive?/deprecated" ];
+          "derive" = [ "dep:clap_derive" "dep:once_cell" ];
+          "suggestions" = [ "dep:strsim" "error-context" ];
+          "unicode" = [ "dep:unicode-width" "dep:unicase" ];
+          "unstable-doc" = [ "derive" "cargo" "wrap_help" "env" "unicode" "string" "unstable-replace" "unstable-grouped" ];
+          "unstable-v5" = [ "clap_derive?/unstable-v5" "deprecated" ];
+          "wrap_help" = [ "help" "dep:terminal_size" ];
+        };
+        resolvedDefaultFeatures = [ "color" "default" "derive" "env" "error-context" "help" "std" "suggestions" "unicode" "usage" ];
+      };
+      "clap_derive 3.2.18" = rec {
         crateName = "clap_derive";
         version = "3.2.18";
         edition = "2021";
@@ -958,11 +1024,61 @@ rec {
         };
         resolvedDefaultFeatures = [ "default" ];
       };
-      "clap_lex" = rec {
+      "clap_derive 4.0.21" = rec {
+        crateName = "clap_derive";
+        version = "4.0.21";
+        edition = "2021";
+        sha256 = "054h5c62jy5c5li58696ymly0avyjvcbn1krcaawkbq2kwzk2xq1";
+        procMacro = true;
+        dependencies = [
+          {
+            name = "heck";
+            packageId = "heck";
+          }
+          {
+            name = "proc-macro-error";
+            packageId = "proc-macro-error";
+          }
+          {
+            name = "proc-macro2";
+            packageId = "proc-macro2 1.0.47";
+          }
+          {
+            name = "quote";
+            packageId = "quote 1.0.21";
+          }
+          {
+            name = "syn";
+            packageId = "syn 1.0.103";
+            features = [ "full" ];
+          }
+        ];
+        features = {
+          "raw-deprecated" = [ "deprecated" ];
+          "unstable-v5" = [ "deprecated" ];
+        };
+        resolvedDefaultFeatures = [ "default" ];
+      };
+      "clap_lex 0.2.4" = rec {
         crateName = "clap_lex";
         version = "0.2.4";
         edition = "2021";
         sha256 = "1ib1a9v55ybnaws11l63az0jgz5xiy24jkdgsmyl7grcm3sz4l18";
+        dependencies = [
+          {
+            name = "os_str_bytes";
+            packageId = "os_str_bytes";
+            usesDefaultFeatures = false;
+            features = [ "raw_os_str" ];
+          }
+        ];
+
+      };
+      "clap_lex 0.3.0" = rec {
+        crateName = "clap_lex";
+        version = "0.3.0";
+        edition = "2021";
+        sha256 = "1a4dzbnlxiamfsn0pnkhn7n9bdfjh66j9fxm6mmr7d227vvrhh8d";
         dependencies = [
           {
             name = "os_str_bytes";
@@ -2075,7 +2191,7 @@ rec {
         };
         resolvedDefaultFeatures = [ "default" ];
       };
-      "hermit-abi" = rec {
+      "hermit-abi 0.1.19" = rec {
         crateName = "hermit-abi";
         version = "0.1.19";
         edition = "2018";
@@ -2096,6 +2212,44 @@ rec {
           "rustc-dep-of-std" = [ "core" "compiler_builtins/rustc-dep-of-std" "libc/rustc-dep-of-std" ];
         };
         resolvedDefaultFeatures = [ "default" ];
+      };
+      "hermit-abi 0.2.6" = rec {
+        crateName = "hermit-abi";
+        version = "0.2.6";
+        edition = "2021";
+        sha256 = "1iz439yz9qzk3rh9pqx2rz5c4107v3qbd7bppfsbzb1mzr02clgf";
+        authors = [
+          "Stefan Lankes"
+        ];
+        dependencies = [
+          {
+            name = "libc";
+            packageId = "libc";
+            usesDefaultFeatures = false;
+          }
+        ];
+        features = {
+          "alloc" = [ "dep:alloc" ];
+          "compiler_builtins" = [ "dep:compiler_builtins" ];
+          "core" = [ "dep:core" ];
+          "rustc-dep-of-std" = [ "core" "alloc" "compiler_builtins/rustc-dep-of-std" "libc/rustc-dep-of-std" ];
+        };
+        resolvedDefaultFeatures = [ "default" ];
+      };
+      "hex" = rec {
+        crateName = "hex";
+        version = "0.4.3";
+        edition = "2018";
+        sha256 = "0w1a4davm1lgzpamwnba907aysmlrnygbqmfis2mqjx5m552a93z";
+        authors = [
+          "KokaKiwi <kokakiwi@kokakiwi.net>"
+        ];
+        features = {
+          "default" = [ "std" ];
+          "serde" = [ "dep:serde" ];
+          "std" = [ "alloc" ];
+        };
+        resolvedDefaultFeatures = [ "alloc" "default" "std" ];
       };
       "http" = rec {
         crateName = "http";
@@ -2414,7 +2568,41 @@ rec {
           "tokio" = [ "dep:tokio" ];
           "windows-sys" = [ "dep:windows-sys" ];
         };
-        resolvedDefaultFeatures = [ "close" "libc" "windows-sys" ];
+        resolvedDefaultFeatures = [ "close" "default" "libc" "windows-sys" ];
+      };
+      "is-terminal" = rec {
+        crateName = "is-terminal";
+        version = "0.4.1";
+        edition = "2018";
+        sha256 = "0c2322dg9s35h87ln33w6qsjlgplhzza89rwmkvac4r9ikvhjxlj";
+        authors = [
+          "softprops <d.tangren@gmail.com>"
+          "Dan Gohman <dev@sunfishcode.online>"
+        ];
+        dependencies = [
+          {
+            name = "hermit-abi";
+            packageId = "hermit-abi 0.2.6";
+            target = { target, features }: (target."os" == "hermit");
+          }
+          {
+            name = "io-lifetimes";
+            packageId = "io-lifetimes";
+          }
+          {
+            name = "rustix";
+            packageId = "rustix";
+            target = { target, features }: (!((target."windows" or false) || (target."os" == "hermit") || (target."os" == "unknown")));
+            features = [ "termios" ];
+          }
+          {
+            name = "windows-sys";
+            packageId = "windows-sys";
+            target = { target, features }: (target."windows" or false);
+            features = [ "Win32_Foundation" "Win32_System_Console" ];
+          }
+        ];
+
       };
       "itertools" = rec {
         crateName = "itertools";
@@ -2852,7 +3040,7 @@ rec {
         dependencies = [
           {
             name = "hermit-abi";
-            packageId = "hermit-abi";
+            packageId = "hermit-abi 0.1.19";
             target = { target, features }: (((target."arch" == "x86_64") || (target."arch" == "aarch64")) && (target."os" == "hermit"));
           }
           {
@@ -4175,9 +4363,9 @@ rec {
       };
       "rustix" = rec {
         crateName = "rustix";
-        version = "0.36.3";
+        version = "0.36.5";
         edition = "2018";
-        sha256 = "0gi2v2a66h5mgaacq7ih1fw4pa0rpdh7gx1dq28d7cafzi6vn7qb";
+        sha256 = "1265qi4s8wfy6wly9z0hzxv97xw8p5gypldcx79k764h21fpp053";
         authors = [
           "Dan Gohman <dev@sunfishcode.online>"
           "Jakub Konka <kubkon@jakubkonka.com>"
@@ -4276,13 +4464,14 @@ rec {
           "libc_errno" = [ "dep:libc_errno" ];
           "once_cell" = [ "dep:once_cell" ];
           "os_pipe" = [ "io-lifetimes/os_pipe" ];
+          "param" = [ "fs" ];
           "procfs" = [ "once_cell" "itoa" "fs" ];
           "rustc-dep-of-std" = [ "core" "alloc" "compiler_builtins" "linux-raw-sys/rustc-dep-of-std" "bitflags/rustc-dep-of-std" ];
           "std" = [ "io-lifetimes" ];
           "use-libc" = [ "libc_errno" "libc" ];
           "use-libc-auxv" = [ "libc" ];
         };
-        resolvedDefaultFeatures = [ "default" "fs" "io-lifetimes" "libc" "std" "use-libc-auxv" ];
+        resolvedDefaultFeatures = [ "default" "fs" "io-lifetimes" "libc" "std" "termios" "use-libc-auxv" ];
       };
       "rustversion" = rec {
         crateName = "rustversion";
@@ -5109,6 +5298,11 @@ rec {
             optional = true;
           }
           {
+            name = "num_cpus";
+            packageId = "num_cpus";
+            optional = true;
+          }
+          {
             name = "pin-project-lite";
             packageId = "pin-project-lite";
           }
@@ -5176,7 +5370,7 @@ rec {
           "tracing" = [ "dep:tracing" ];
           "windows-sys" = [ "dep:windows-sys" ];
         };
-        resolvedDefaultFeatures = [ "bytes" "default" "io-std" "io-util" "libc" "macros" "memchr" "mio" "net" "rt" "socket2" "sync" "time" "tokio-macros" "windows-sys" ];
+        resolvedDefaultFeatures = [ "bytes" "default" "io-std" "io-util" "libc" "macros" "memchr" "mio" "net" "num_cpus" "rt" "rt-multi-thread" "socket2" "sync" "time" "tokio-macros" "windows-sys" ];
       };
       "tokio-io-timeout" = rec {
         crateName = "tokio-io-timeout";
@@ -6104,8 +6298,26 @@ rec {
             features = [ "rayon" "std" ];
           }
           {
+            name = "clap";
+            packageId = "clap 4.0.29";
+            features = [ "derive" "env" "unicode" ];
+          }
+          {
+            name = "hex";
+            packageId = "hex";
+          }
+          {
             name = "prost";
             packageId = "prost";
+          }
+          {
+            name = "tempfile";
+            packageId = "tempfile";
+          }
+          {
+            name = "tokio";
+            packageId = "tokio";
+            features = [ "rt-multi-thread" ];
           }
           {
             name = "tonic";
@@ -6137,6 +6349,23 @@ rec {
         features = {
           "scale-info" = [ "dep:scale-info" ];
           "scale_info" = [ "scale-info/derive" ];
+        };
+      };
+      "unicase" = rec {
+        crateName = "unicase";
+        version = "2.6.0";
+        edition = "2015";
+        sha256 = "1xmlbink4ycgxrkjspp0mf7pghcx4m7vxq7fpfm04ikr2zk7pwsh";
+        authors = [
+          "Sean McArthur <sean@seanmonstar.com>"
+        ];
+        buildDependencies = [
+          {
+            name = "version_check";
+            packageId = "version_check";
+          }
+        ];
+        features = {
         };
       };
       "unicode-ident" = rec {
@@ -7358,7 +7587,7 @@ rec {
           "Win32_UI_Xaml" = [ "Win32_UI" ];
           "Win32_UI_Xaml_Diagnostics" = [ "Win32_UI_Xaml" ];
         };
-        resolvedDefaultFeatures = [ "Win32" "Win32_Foundation" "Win32_NetworkManagement" "Win32_NetworkManagement_IpHelper" "Win32_Networking" "Win32_Networking_WinSock" "Win32_Security" "Win32_Security_Authorization" "Win32_Storage" "Win32_Storage_FileSystem" "Win32_System" "Win32_System_IO" "Win32_System_Pipes" "Win32_System_SystemServices" "Win32_System_Threading" "Win32_System_WindowsProgramming" "default" ];
+        resolvedDefaultFeatures = [ "Win32" "Win32_Foundation" "Win32_NetworkManagement" "Win32_NetworkManagement_IpHelper" "Win32_Networking" "Win32_Networking_WinSock" "Win32_Security" "Win32_Security_Authorization" "Win32_Storage" "Win32_Storage_FileSystem" "Win32_System" "Win32_System_Console" "Win32_System_IO" "Win32_System_Pipes" "Win32_System_SystemServices" "Win32_System_Threading" "Win32_System_WindowsProgramming" "default" ];
       };
       "windows_aarch64_gnullvm" = rec {
         crateName = "windows_aarch64_gnullvm";
