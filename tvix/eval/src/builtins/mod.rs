@@ -1001,12 +1001,18 @@ fn placeholders() -> Vec<Builtin> {
                         "outPath".into(),
                         "/nix/store/00000000000000000000000000000000-mock".into(),
                     ),
+                    ("outputName".into(), "out".into()),
                     (
                         "drvPath".into(),
                         "/nix/store/00000000000000000000000000000000-mock.drv".into(),
                     ),
                     ("type".into(), "derivation".into()),
                 ])));
+                let attrs0 = attrs.clone();
+                let attrs = attrs.update(NixAttrs::from_map(BTreeMap::from([(
+                    "out".into(),
+                    Value::Attrs(Rc::new(attrs0)),
+                )])));
 
                 Ok(Value::Attrs(Rc::new(attrs)))
             },
