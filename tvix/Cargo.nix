@@ -939,6 +939,16 @@ rec {
             packageId = "termcolor";
             optional = true;
           }
+          {
+            name = "unicase";
+            packageId = "unicase";
+            optional = true;
+          }
+          {
+            name = "unicode-width";
+            packageId = "unicode-width";
+            optional = true;
+          }
         ];
         features = {
           "cargo" = [ "dep:once_cell" ];
@@ -953,7 +963,7 @@ rec {
           "unstable-v5" = [ "clap_derive?/unstable-v5" "deprecated" ];
           "wrap_help" = [ "help" "dep:terminal_size" ];
         };
-        resolvedDefaultFeatures = [ "color" "default" "derive" "env" "error-context" "help" "std" "suggestions" "usage" ];
+        resolvedDefaultFeatures = [ "color" "default" "derive" "env" "error-context" "help" "std" "suggestions" "unicode" "usage" ];
       };
       "clap_derive" = rec {
         crateName = "clap_derive";
@@ -2113,6 +2123,21 @@ rec {
         };
         resolvedDefaultFeatures = [ "default" ];
       };
+      "hex" = rec {
+        crateName = "hex";
+        version = "0.4.3";
+        edition = "2018";
+        sha256 = "0w1a4davm1lgzpamwnba907aysmlrnygbqmfis2mqjx5m552a93z";
+        authors = [
+          "KokaKiwi <kokakiwi@kokakiwi.net>"
+        ];
+        features = {
+          "default" = [ "std" ];
+          "serde" = [ "dep:serde" ];
+          "std" = [ "alloc" ];
+        };
+        resolvedDefaultFeatures = [ "alloc" "default" "std" ];
+      };
       "http" = rec {
         crateName = "http";
         version = "0.2.8";
@@ -2433,9 +2458,9 @@ rec {
       };
       "is-terminal" = rec {
         crateName = "is-terminal";
-        version = "0.4.0";
+        version = "0.4.1";
         edition = "2018";
-        sha256 = "0b9mcxb46mzz1q1i4cdmp5j7g042ccqg3q5357prs75l5rpbrrda";
+        sha256 = "0c2322dg9s35h87ln33w6qsjlgplhzza89rwmkvac4r9ikvhjxlj";
         authors = [
           "softprops <d.tangren@gmail.com>"
           "Dan Gohman <dev@sunfishcode.online>"
@@ -2453,7 +2478,7 @@ rec {
           {
             name = "rustix";
             packageId = "rustix";
-            target = { target, features }: (!((target."windows" or false) || ("hermit" == target."os")));
+            target = { target, features }: (!((target."windows" or false) || ("hermit" == target."os") || ("unknown" == target."os")));
             features = [ "termios" ];
           }
           {
@@ -4204,9 +4229,9 @@ rec {
       };
       "rustix" = rec {
         crateName = "rustix";
-        version = "0.36.3";
+        version = "0.36.5";
         edition = "2018";
-        sha256 = "0gi2v2a66h5mgaacq7ih1fw4pa0rpdh7gx1dq28d7cafzi6vn7qb";
+        sha256 = "1265qi4s8wfy6wly9z0hzxv97xw8p5gypldcx79k764h21fpp053";
         authors = [
           "Dan Gohman <dev@sunfishcode.online>"
           "Jakub Konka <kubkon@jakubkonka.com>"
@@ -4306,6 +4331,7 @@ rec {
           "libc_errno" = [ "dep:libc_errno" ];
           "once_cell" = [ "dep:once_cell" ];
           "os_pipe" = [ "io-lifetimes/os_pipe" ];
+          "param" = [ "fs" ];
           "procfs" = [ "once_cell" "itoa" "fs" ];
           "rustc-dep-of-std" = [ "core" "alloc" "compiler_builtins" "linux-raw-sys/rustc-dep-of-std" "bitflags/rustc-dep-of-std" ];
           "std" = [ "io-lifetimes" ];
@@ -5108,6 +5134,11 @@ rec {
             optional = true;
           }
           {
+            name = "num_cpus";
+            packageId = "num_cpus";
+            optional = true;
+          }
+          {
             name = "pin-project-lite";
             packageId = "pin-project-lite";
           }
@@ -5175,7 +5206,7 @@ rec {
           "tracing" = [ "dep:tracing" ];
           "windows-sys" = [ "dep:windows-sys" ];
         };
-        resolvedDefaultFeatures = [ "bytes" "default" "io-std" "io-util" "libc" "macros" "memchr" "mio" "net" "rt" "socket2" "sync" "time" "tokio-macros" "windows-sys" ];
+        resolvedDefaultFeatures = [ "bytes" "default" "io-std" "io-util" "libc" "macros" "memchr" "mio" "net" "num_cpus" "rt" "rt-multi-thread" "socket2" "sync" "time" "tokio-macros" "windows-sys" ];
       };
       "tokio-io-timeout" = rec {
         crateName = "tokio-io-timeout";
@@ -6142,8 +6173,26 @@ rec {
             features = [ "rayon" "std" ];
           }
           {
+            name = "clap";
+            packageId = "clap 4.0.27";
+            features = [ "derive" "env" "unicode" ];
+          }
+          {
+            name = "hex";
+            packageId = "hex";
+          }
+          {
             name = "prost";
             packageId = "prost";
+          }
+          {
+            name = "tempfile";
+            packageId = "tempfile";
+          }
+          {
+            name = "tokio";
+            packageId = "tokio";
+            features = [ "rt-multi-thread" ];
           }
           {
             name = "tonic";
@@ -6176,6 +6225,22 @@ rec {
           "scale-info" = [ "dep:scale-info" ];
           "scale_info" = [ "scale-info/derive" ];
         };
+      };
+      "unicase" = rec {
+        crateName = "unicase";
+        version = "2.6.0";
+        edition = "2015";
+        sha256 = "1xmlbink4ycgxrkjspp0mf7pghcx4m7vxq7fpfm04ikr2zk7pwsh";
+        authors = [
+          "Sean McArthur <sean@seanmonstar.com>"
+        ];
+        buildDependencies = [
+          {
+            name = "version_check";
+            packageId = "version_check";
+          }
+        ];
+        features = { };
       };
       "unicode-ident" = rec {
         crateName = "unicode-ident";
