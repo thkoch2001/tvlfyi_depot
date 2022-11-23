@@ -3,6 +3,23 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "7780e8e2_8d919c7b",
+        "filename": "tvix/docs/value-pointer-equality.md",
+        "patchSetId": 2
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2022-11-23T22:51:35Z",
+      "side": 1,
+      "message": "s/set/sets/ (the 2nd one)",
+      "revId": "5c9bc044b32be8e876f26d21b26bfe6dc827ab06",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "0cf93fef_7bf5664c",
         "filename": "tvix/docs/value-pointer-equality.md",
         "patchSetId": 2
@@ -37,6 +54,30 @@
       "writtenOn": "2022-11-23T21:09:30Z",
       "side": 1,
       "message": "This is so totally batshit crazy.",
+      "range": {
+        "startLine": 99,
+        "startChar": 0,
+        "endLine": 99,
+        "endChar": 94
+      },
+      "revId": "5c9bc044b32be8e876f26d21b26bfe6dc827ab06",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f815b1e3_3ce33a57",
+        "filename": "tvix/docs/value-pointer-equality.md",
+        "patchSetId": 2
+      },
+      "lineNbr": 99,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2022-11-23T22:51:35Z",
+      "side": 1,
+      "message": "\u003c3",
+      "parentUuid": "4bb32687_c07e8e81",
       "range": {
         "startLine": 99,
         "startChar": 0,
