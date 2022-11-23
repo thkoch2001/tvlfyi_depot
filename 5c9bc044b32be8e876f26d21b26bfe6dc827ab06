@@ -24,6 +24,75 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "4bb32687_c07e8e81",
+        "filename": "tvix/docs/value-pointer-equality.md",
+        "patchSetId": 2
+      },
+      "lineNbr": 99,
+      "author": {
+        "id": 1000066
+      },
+      "writtenOn": "2022-11-23T21:09:30Z",
+      "side": 1,
+      "message": "This is so totally batshit crazy.",
+      "range": {
+        "startLine": 99,
+        "startChar": 0,
+        "endLine": 99,
+        "endChar": 94
+      },
+      "revId": "5c9bc044b32be8e876f26d21b26bfe6dc827ab06",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d0b7988f_c6aa0699",
+        "filename": "tvix/docs/value-pointer-equality.md",
+        "patchSetId": 2
+      },
+      "lineNbr": 120,
+      "author": {
+        "id": 1000066
+      },
+      "writtenOn": "2022-11-23T21:09:30Z",
+      "side": 1,
+      "message": "s/value/attributes\u0027 values/",
+      "range": {
+        "startLine": 120,
+        "startChar": 97,
+        "endLine": 120,
+        "endChar": 102
+      },
+      "revId": "5c9bc044b32be8e876f26d21b26bfe6dc827ab06",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "372b8047_8fa4b86e",
+        "filename": "tvix/docs/value-pointer-equality.md",
+        "patchSetId": 2
+      },
+      "lineNbr": 123,
+      "author": {
+        "id": 1000066
+      },
+      "writtenOn": "2022-11-23T21:09:30Z",
+      "side": 1,
+      "message": "s/incomparable/otherwise-incomparable/\n\nor just delete incomparable\n\nor leave it and ACK this, it\u0027s a matter of taste.  (I had to re-read this clause a few times to figure out what was going on but maybe it\u0027s just me)",
+      "range": {
+        "startLine": 123,
+        "startChar": 66,
+        "endLine": 123,
+        "endChar": 78
+      },
+      "revId": "5c9bc044b32be8e876f26d21b26bfe6dc827ab06",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "128b64d9_5b653c99",
@@ -88,6 +157,52 @@
         "startChar": 0,
         "endLine": 134,
         "endChar": 3
+      },
+      "revId": "5c9bc044b32be8e876f26d21b26bfe6dc827ab06",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fe143350_3ac90647",
+        "filename": "tvix/docs/value-pointer-equality.md",
+        "patchSetId": 2
+      },
+      "lineNbr": 139,
+      "author": {
+        "id": 1000066
+      },
+      "writtenOn": "2022-11-23T21:09:30Z",
+      "side": 1,
+      "message": "Ugh.  Because if we do allow pointer inequality, we won\u0027t force them, and we could continue evaluation in a situation where cppnix would throw or abort.\n\nUgh.",
+      "range": {
+        "startLine": 138,
+        "startChar": 0,
+        "endLine": 139,
+        "endChar": 95
+      },
+      "revId": "5c9bc044b32be8e876f26d21b26bfe6dc827ab06",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "aa77c2ee_149cec51",
+        "filename": "tvix/docs/value-pointer-equality.md",
+        "patchSetId": 2
+      },
+      "lineNbr": 189,
+      "author": {
+        "id": 1000066
+      },
+      "writtenOn": "2022-11-23T21:09:30Z",
+      "side": 1,
+      "message": "+1",
+      "range": {
+        "startLine": 187,
+        "startChar": 58,
+        "endLine": 189,
+        "endChar": 52
       },
       "revId": "5c9bc044b32be8e876f26d21b26bfe6dc827ab06",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
