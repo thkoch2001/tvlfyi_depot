@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d2df750e_4e32a1e2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000066
+      },
+      "writtenOn": "2022-11-23T00:12:28Z",
+      "side": 1,
+      "message": "See https://cl.tvl.fyi/c/depot/+/7352 for an example usage.",
+      "revId": "9e2c986e056352331fe048c0cdd3e3bf5110ddd9",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
