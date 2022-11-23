@@ -5,7 +5,11 @@ edition = "2021"
 
 [dependencies]
 blake3 = { version = "1.3.1", features = ["rayon", "std"] }
+clap = { version = "4.0.26", features = ["derive", "env", "unicode"] }
+hex = "0.4.3"
 prost = "0.11.2"
+tempfile = "3.1.1"
+tokio =  { version = "1.22.0", features = ["rt-multi-thread"] }
 tonic = "0.8.2"
 
 [build-dependencies]
