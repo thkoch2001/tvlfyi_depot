@@ -184,4 +184,9 @@
     email = "zseri.devel@ytrizja.de";
     password = "{ARGON2}$argon2id$v=19$m=65536,t=2,p=1$wVNkImXloXIkCycnecdFeA$ECAdGdNzUUEq9sFGsIl0jb7AALGsHE+ndWRn6ilSmdE";
   }
+  {
+    username = "brainrake";
+    email = "martonboros@gmail.com";
+    password = "{ARGON2}$argon2id$v=19$m=65536,t=2,p=1$f4/ewdyRBQbClL4KzqypHg$6Ql/xkmfIr60Qp1XMaFherqhh4cekLIbsi7KMM6izfE";
+  }
 ]
