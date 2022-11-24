@@ -24,6 +24,30 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "7547fc50_74c9dd08",
+        "filename": "tvix/docs/value-pointer-equality.md",
+        "patchSetId": 2
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2022-11-24T13:12:33Z",
+      "side": 1,
+      "message": "True, but this is just meant to be an introduction, so I want to start with the “real world” use case. Eventually we\u0027ll move this document into the spec anyways and then this can go away.\n\nI guess I wanted to this doc to be a bit entertaining to read, maybe for the worse?",
+      "parentUuid": "487ae06c_c984f89e",
+      "range": {
+        "startLine": 16,
+        "startChar": 0,
+        "endLine": 17,
+        "endChar": 46
+      },
+      "revId": "5c9bc044b32be8e876f26d21b26bfe6dc827ab06",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "844548bc_b855c78c",
@@ -37,6 +61,30 @@
       "writtenOn": "2022-11-24T06:42:25Z",
       "side": 1,
       "message": "We should probably mention that \"function pointer equality\" means pointer equality of both the lambda and its upvalues.  Importantly, the upvalues must be *pointer*-equal, not merely normal-form equal.  See cl/7372.",
+      "range": {
+        "startLine": 19,
+        "startChar": 38,
+        "endLine": 19,
+        "endChar": 63
+      },
+      "revId": "5c9bc044b32be8e876f26d21b26bfe6dc827ab06",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "801b835d_22b3c0bc",
+        "filename": "tvix/docs/value-pointer-equality.md",
+        "patchSetId": 2
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2022-11-24T13:12:33Z",
+      "side": 1,
+      "message": "I tend to disagree with this account or would at least argue that it is confusing. Equality is determined by checking if the two values have the same memory address (when this is the case is of course not well defined), but in general it means that both values have been constructed at the same place.\n\nThis is well illustrated by this REPL session, it needs to be the same individual value and there is no way to trick Nix into “deduplicating” the same values to a single memory location if they are constructed independently.\n\nnix-repl\u003e let mk \u003d x: name: x + \", \" + name; in [ (mk \"foo\") ] \u003d\u003d [ (mk \"foo\") ]\nfalse\n\nnix-repl\u003e let mk \u003d x: name: x + \", \" + name; x \u003d \"foo\"; in [ (mk x) ] \u003d\u003d [ (mk x) ]         \nfalse\n\nnix-repl\u003e let mk \u003d x: name: x + \", \" + name; x \u003d mk \"foo\"; in [ x ] \u003d\u003d [ x ]           \ntrue\n\nThe only way for things to be pointer equal seems to be if they eventually resolve to the same let binding, maybe there are more though?",
+      "parentUuid": "844548bc_b855c78c",
       "range": {
         "startLine": 19,
         "startChar": 38,
@@ -70,6 +118,30 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "8efa9ae9_0b04837f",
+        "filename": "tvix/docs/value-pointer-equality.md",
+        "patchSetId": 2
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2022-11-24T13:12:33Z",
+      "side": 1,
+      "message": "This bit is meant to be an introduction and I think this description of the behavior is a common misconception which is why I write “which is not entirely accurate, as we\u0027ll see”.\n\nLMK if that is unclear.",
+      "parentUuid": "36308769_51afe33a",
+      "range": {
+        "startLine": 22,
+        "startChar": 5,
+        "endLine": 22,
+        "endChar": 24
+      },
+      "revId": "5c9bc044b32be8e876f26d21b26bfe6dc827ab06",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "7780e8e2_8d919c7b",
@@ -87,6 +159,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "7f4c945e_513a4c79",
+        "filename": "tvix/docs/value-pointer-equality.md",
+        "patchSetId": 2
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2022-11-24T13:12:33Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7780e8e2_8d919c7b",
+      "revId": "5c9bc044b32be8e876f26d21b26bfe6dc827ab06",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "0cf93fef_7bf5664c",
@@ -100,6 +190,30 @@
       "writtenOn": "2022-11-23T20:12:42Z",
       "side": 1,
       "message": "does",
+      "range": {
+        "startLine": 83,
+        "startChar": 57,
+        "endLine": 83,
+        "endChar": 59
+      },
+      "revId": "5c9bc044b32be8e876f26d21b26bfe6dc827ab06",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7b4896be_176bf3ca",
+        "filename": "tvix/docs/value-pointer-equality.md",
+        "patchSetId": 2
+      },
+      "lineNbr": 83,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2022-11-24T13:12:33Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0cf93fef_7bf5664c",
       "range": {
         "startLine": 83,
         "startChar": 57,
@@ -180,6 +294,30 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "9fd1d81d_a4e14596",
+        "filename": "tvix/docs/value-pointer-equality.md",
+        "patchSetId": 2
+      },
+      "lineNbr": 120,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2022-11-24T13:12:33Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d0b7988f_c6aa0699",
+      "range": {
+        "startLine": 120,
+        "startChar": 97,
+        "endLine": 120,
+        "endChar": 102
+      },
+      "revId": "5c9bc044b32be8e876f26d21b26bfe6dc827ab06",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "372b8047_8fa4b86e",
@@ -193,6 +331,30 @@
       "writtenOn": "2022-11-23T21:09:30Z",
       "side": 1,
       "message": "s/incomparable/otherwise-incomparable/\n\nor just delete incomparable\n\nor leave it and ACK this, it\u0027s a matter of taste.  (I had to re-read this clause a few times to figure out what was going on but maybe it\u0027s just me)",
+      "range": {
+        "startLine": 123,
+        "startChar": 66,
+        "endLine": 123,
+        "endChar": 78
+      },
+      "revId": "5c9bc044b32be8e876f26d21b26bfe6dc827ab06",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "409bf51e_ebf149d4",
+        "filename": "tvix/docs/value-pointer-equality.md",
+        "patchSetId": 2
+      },
+      "lineNbr": 123,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2022-11-24T13:12:33Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "372b8047_8fa4b86e",
       "range": {
         "startLine": 123,
         "startChar": 66,
@@ -226,6 +388,30 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "d65644ac_762da100",
+        "filename": "tvix/docs/value-pointer-equality.md",
+        "patchSetId": 2
+      },
+      "lineNbr": 124,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2022-11-24T13:12:33Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "128b64d9_5b653c99",
+      "range": {
+        "startLine": 124,
+        "startChar": 44,
+        "endLine": 124,
+        "endChar": 48
+      },
+      "revId": "5c9bc044b32be8e876f26d21b26bfe6dc827ab06",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "c84c2180_92328bf2",
@@ -239,6 +425,24 @@
       "writtenOn": "2022-11-23T21:43:57Z",
       "side": 1,
       "message": "missing `",
+      "revId": "5c9bc044b32be8e876f26d21b26bfe6dc827ab06",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9ca42e66_d8138e0a",
+        "filename": "tvix/docs/value-pointer-equality.md",
+        "patchSetId": 2
+      },
+      "lineNbr": 125,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2022-11-24T13:12:33Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c84c2180_92328bf2",
       "revId": "5c9bc044b32be8e876f26d21b26bfe6dc827ab06",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
@@ -266,6 +470,30 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "76fb3911_cdedf1d1",
+        "filename": "tvix/docs/value-pointer-equality.md",
+        "patchSetId": 2
+      },
+      "lineNbr": 127,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2022-11-24T13:12:33Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f210cfd8_3c226eea",
+      "range": {
+        "startLine": 127,
+        "startChar": 23,
+        "endLine": 127,
+        "endChar": 26
+      },
+      "revId": "5c9bc044b32be8e876f26d21b26bfe6dc827ab06",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "37a00ccf_2569f8f7",
@@ -279,6 +507,30 @@
       "writtenOn": "2022-11-23T20:12:42Z",
       "side": 1,
       "message": "at the same exact location in memory",
+      "range": {
+        "startLine": 134,
+        "startChar": 0,
+        "endLine": 134,
+        "endChar": 3
+      },
+      "revId": "5c9bc044b32be8e876f26d21b26bfe6dc827ab06",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7f90ce47_92f96059",
+        "filename": "tvix/docs/value-pointer-equality.md",
+        "patchSetId": 2
+      },
+      "lineNbr": 134,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2022-11-24T13:12:33Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "37a00ccf_2569f8f7",
       "range": {
         "startLine": 134,
         "startChar": 0,
