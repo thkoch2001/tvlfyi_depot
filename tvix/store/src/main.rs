@@ -6,6 +6,7 @@ use crate::proto::blob_service_server::BlobServiceServer;
 use crate::proto::directory_service_server::DirectoryServiceServer;
 
 mod file_blob_service;
+mod memory_directory_service;
 mod null_blob_service;
 mod null_directory_service;
 mod proto;
