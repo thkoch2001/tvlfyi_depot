@@ -10,10 +10,10 @@ pub struct NullBlobService {}
 /// BlobService that always returns error
 impl BlobService for NullBlobService {
     async fn get(&self, _request: Request<GetBlobRequest>) -> Result<Response<GetBlobResponse>> {
-        Err(Status::unknown("error"))
+        Err(Status::unimplemented(""))
     }
     async fn put(&self, _request: Request<PutBlobRequest>) -> Result<Response<PutBlobResponse>> {
-        Err(Status::unknown("error"))
+        Err(Status::unimplemented(""))
     }
 }
 
@@ -35,13 +35,22 @@ mod tests {
             .await;
 
         assert!(result.is_err());
+        if let Err(status) = result {
+            assert_eq!(status.code(), tonic::Code::Unimplemented)
+        } else {
+            assert!(false)
+        }
 
         let result = service
             .get(tonic::Request::new(GetBlobRequest {
                 digest: blake3::hash(b"Hello").as_bytes().to_vec(),
             }))
             .await;
-
         assert!(result.is_err());
+        if let Err(status) = result {
+            assert_eq!(status.code(), tonic::Code::Unimplemented)
+        } else {
+            assert!(false)
+        }
     }
 }
