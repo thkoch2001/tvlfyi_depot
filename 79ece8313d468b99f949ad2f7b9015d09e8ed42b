@@ -16,6 +16,24 @@
       "message": "So if I understand correctly, this can be used to fetch\n\n```\n  /nix/store/lf8ghiy89rfhqqyh9j98270afwjqzyrb-boost-1.79.0\n```\n\nby calling `GetPathInfoRequest` with `by_what.by_output_hash \u003d base32_decode(\"lf8ghiy89rfhqqyh9j98270afwjqzyrb\")`, right?\n\nIf so, then I think that in order to be accurate the description and field name need to be `hash_part` or just `hash` or else `address`.  Because the store object above is *input* addressed.  `lf8ghiy89rfhqqyh9j98270afwjqzyrb` is actually the hash of the *input* to the process that built `boost`; it isn\u0027t a hash of any part of the build output.\n\nThis can also be used to request pathinfo for a `.drv` file by its own drv-hash, which is the hash of the derivation (not the hash of its outputs).  In other words, you could use this to get path information for\n\n```\n  /nix/store/4zwkgb6cg46j3n8nzpnqw4s6x33ynmi5-boost-1.79.0.drv\n```\n\nusing `GetPathInfoRequest(by_what.by_output_hash\u003dbase32_decode(\"4zwkgb6cg46j3n8nzpnqw4s6x33ynmi5\"))`, I think.\n\nFinally, if/when we support content-addressible derivations, this method will let you request path info by the output address *of a content-addressible derivation*.\n\nSo there are really three cases here, but the implementation logic is the same for all of them:\n\n1. Look up an ordinary derivation output by its input-address\n2. Look up a derivation by its content-address (the hash of the derivation itself)\n3. (Someday) look up a CA-derivation output by its output-address\n\nThe logic for all three cases is the same: just look up the path by its address.  Sometimes that\u0027s the output address, sometimes it\u0027s the input address.\n\nOr maybe I\u0027ve just totally misunderstood what this does.\n\nI probably wrote way too much here.",
       "revId": "79ece8313d468b99f949ad2f7b9015d09e8ed42b",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "57251460_f24b272c",
+        "filename": "tvix/store/protos/rpc_pathinfo.proto",
+        "patchSetId": 12
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2022-11-24T19:50:50Z",
+      "side": 1,
+      "message": "The first part about the base32decode is right. also, see nar-bridge.\n\nThe messages in castore.proto, Blob and Directory services don\u0027t care about how the storepath calculation works. It has no consciousness/understanding about store path calculation, for it every {Directory,File,Symlink}Node simply has a Name field, and how that name is decided on is nothing it cares about.\n\nIt doesn\u0027t even really know which of the Directory messages are \"root store paths\".\n\nPathInfo provides pointers / an index / lookup table into this world, and another path hashing algorithm would return PathInfo with different values in the Name fields, and a different lookup type.",
+      "parentUuid": "877d2173_f11020fa",
+      "revId": "79ece8313d468b99f949ad2f7b9015d09e8ed42b",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
