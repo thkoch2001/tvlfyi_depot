@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e6c264aa_af2f075b",
+        "filename": "tvix/eval/src/vm.rs",
+        "patchSetId": 11
+      },
+      "lineNbr": 407,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2022-11-24T13:31:43Z",
+      "side": 1,
+      "message": "This is kind of the implementation idea I had as well nice :)",
+      "revId": "b0fb8d5b05ee0d08e01878dfd5dcc76d83dfdfa4",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bb73d57d_54eb54d0",
+        "filename": "tvix/eval/src/vm.rs",
+        "patchSetId": 11
+      },
+      "lineNbr": 413,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2022-11-24T13:31:43Z",
+      "side": 1,
+      "message": "This is inaccurate, it is on arbitrary values. Since this (pointer equality vs. equality by value) is only a meaningful difference for thunks and functions I think we can only care about those in tvix.\n\nNonetheless it should be clear that it\u0027s not only about functions.\n\nAlternative is of course to specifically declare that we only care about function equality which we could get probably away with in case of nixpkgs, *but* we then miss out on the ability to short circuit on thunk pointer equality, saving on extra evaluating and comparing.",
+      "range": {
+        "startLine": 413,
+        "startChar": 16,
+        "endLine": 413,
+        "endChar": 51
+      },
+      "revId": "b0fb8d5b05ee0d08e01878dfd5dcc76d83dfdfa4",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
