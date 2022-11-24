@@ -20,6 +20,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "fedef6e8_77b4e61a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 10
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2022-11-24T19:42:34Z",
+      "side": 1,
+      "message": "I think it\u0027ll become more understandable when you see an actual consumer of this. Did you read nar-bridge, and does this make more sense now?",
+      "parentUuid": "3af84a0d_2744545e",
+      "revId": "7841cd439eea2ea532bc5bb775b69b7e860bac82",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "b7e34664_e6b8d281",
         "filename": "tvix/store/protos/rpc_blobstore.proto",
         "patchSetId": 10
@@ -37,6 +55,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "81edf97d_b14f4707",
+        "filename": "tvix/store/protos/rpc_blobstore.proto",
+        "patchSetId": 10
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2022-11-24T19:42:34Z",
+      "side": 1,
+      "message": "Currently, you use the digest (bytes!) specified in a FileNode to look up the whole blob in the Blob store.\n\nYou use the digest specified in a DirectoryNode to look up a Directory message. The directory service could potentially use a BlobStore as a backing storage (because a Directory digest is just the blake3 digests of it\u0027s canonical proto serialization, and you can store that in a BlobStore), but it\u0027s up to the individual implementations on how they do that.\n\nThere\u0027s some more fancy things that can be done when it comes to breaking files into chunks, but that\u0027s all left for later.",
+      "parentUuid": "b7e34664_e6b8d281",
+      "revId": "7841cd439eea2ea532bc5bb775b69b7e860bac82",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "89f50f8a_16440154",
         "filename": "tvix/store/protos/rpc_blobstore.proto",
         "patchSetId": 10
@@ -48,6 +84,24 @@
       "writtenOn": "2022-11-17T05:52:18Z",
       "side": 1,
       "message": "Does this mean that the blob is vulnerable to being garbage-collected until it is referenced by something?",
+      "revId": "7841cd439eea2ea532bc5bb775b69b7e860bac82",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b36cfb4b_37d1d31b",
+        "filename": "tvix/store/protos/rpc_blobstore.proto",
+        "patchSetId": 10
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2022-11-24T19:42:34Z",
+      "side": 1,
+      "message": "There\u0027s nothing implementing any GC, or deletion operations right now. I have some thoughts about GC at a later point, but didn\u0027t want to block the initial MVP for this on GC. It is doable, and I intend to write down my thoughts at some point.",
+      "parentUuid": "89f50f8a_16440154",
       "revId": "7841cd439eea2ea532bc5bb775b69b7e860bac82",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
