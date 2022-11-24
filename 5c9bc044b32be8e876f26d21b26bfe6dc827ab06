@@ -3,6 +3,75 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "487ae06c_c984f89e",
+        "filename": "tvix/docs/value-pointer-equality.md",
+        "patchSetId": 2
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1000066
+      },
+      "writtenOn": "2022-11-24T06:42:25Z",
+      "side": 1,
+      "message": "Nixlang changes much more slowly than nixpkgs, and this document is likely to remain relevant for much longer than nixpkgs\u0027 current `lib/systems` will.  Perhaps it might be worthwhile to use examples that don\u0027t depend on today\u0027s `stdenv`?  E.g.\n\nFor any function `func` and attrset `attrs` all three of these are true:\n\n```\n                   func !\u003d func\n          { f \u003d func; } \u003d\u003d { f \u003d func; }\n { f \u003d func; } // attrs \u003d\u003d { f \u003d func; } // attrs\n```",
+      "range": {
+        "startLine": 16,
+        "startChar": 0,
+        "endLine": 17,
+        "endChar": 46
+      },
+      "revId": "5c9bc044b32be8e876f26d21b26bfe6dc827ab06",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "844548bc_b855c78c",
+        "filename": "tvix/docs/value-pointer-equality.md",
+        "patchSetId": 2
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1000066
+      },
+      "writtenOn": "2022-11-24T06:42:25Z",
+      "side": 1,
+      "message": "We should probably mention that \"function pointer equality\" means pointer equality of both the lambda and its upvalues.  Importantly, the upvalues must be *pointer*-equal, not merely normal-form equal.  See cl/7372.",
+      "range": {
+        "startLine": 19,
+        "startChar": 38,
+        "endLine": 19,
+        "endChar": 63
+      },
+      "revId": "5c9bc044b32be8e876f26d21b26bfe6dc827ab06",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "36308769_51afe33a",
+        "filename": "tvix/docs/value-pointer-equality.md",
+        "patchSetId": 2
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1000066
+      },
+      "writtenOn": "2022-11-24T06:42:25Z",
+      "side": 1,
+      "message": "or list",
+      "range": {
+        "startLine": 22,
+        "startChar": 5,
+        "endLine": 22,
+        "endChar": 24
+      },
+      "revId": "5c9bc044b32be8e876f26d21b26bfe6dc827ab06",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "7780e8e2_8d919c7b",
         "filename": "tvix/docs/value-pointer-equality.md",
         "patchSetId": 2
