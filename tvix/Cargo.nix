@@ -111,9 +111,9 @@ rec {
     crates = {
       "addr2line" = rec {
         crateName = "addr2line";
-        version = "0.17.0";
+        version = "0.19.0";
         edition = "2015";
-        sha256 = "0sw16zqy6w0ar633z69m7lw6gb0k1y7xj3387a8wly43ij5div5r";
+        sha256 = "15ywmr5wx22q69ffnn79qp65ir5p1x0k2q06plcpv6v74c5xcvx7";
         dependencies = [
           {
             name = "gimli";
@@ -265,7 +265,7 @@ rec {
           }
           {
             name = "syn";
-            packageId = "syn 1.0.103";
+            packageId = "syn 1.0.105";
             features = [ "full" "visit-mut" ];
           }
         ];
@@ -291,7 +291,7 @@ rec {
           }
           {
             name = "syn";
-            packageId = "syn 1.0.103";
+            packageId = "syn 1.0.105";
             features = [ "full" "visit-mut" ];
           }
         ];
@@ -526,9 +526,9 @@ rec {
       };
       "backtrace" = rec {
         crateName = "backtrace";
-        version = "0.3.66";
+        version = "0.3.67";
         edition = "2018";
-        sha256 = "19yrfx0gprqmzphmf6qv32g93w76ny5g751ks1abdkqnsqcl7f6a";
+        sha256 = "1jk48laqafvbyc0mn1v0didk307qc0zji3z5jcq2lpqqdmnkfg93";
         authors = [
           "The Rust Project Developers"
         ];
@@ -600,7 +600,7 @@ rec {
           }
           {
             name = "nix";
-            packageId = "nix 0.23.1";
+            packageId = "nix 0.23.2";
           }
         ];
 
@@ -755,10 +755,10 @@ rec {
       };
       "cc" = rec {
         crateName = "cc";
-        version = "1.0.77";
+        version = "1.0.78";
         edition = "2018";
         crateBin = [ ];
-        sha256 = "1r7bv6sxwmpw9xaibz4fdfs2w8xfdabki1yi35dr0zcg6c2kbxz9";
+        sha256 = "0gcch8g41jsjs4zk8fy7k4jhc33sfqdab4nxsrcsds2w6gi080d2";
         authors = [
           "Alex Crichton <alex@alexcrichton.com>"
         ];
@@ -990,7 +990,7 @@ rec {
           }
           {
             name = "syn";
-            packageId = "syn 1.0.103";
+            packageId = "syn 1.0.105";
             features = [ "full" ];
           }
         ];
@@ -1408,7 +1408,7 @@ rec {
           }
           {
             name = "syn";
-            packageId = "syn 1.0.103";
+            packageId = "syn 1.0.105";
             usesDefaultFeatures = false;
             features = [ "full" "parsing" "printing" "proc-macro" ];
           }
@@ -1757,6 +1757,67 @@ rec {
         ];
 
       };
+      "futures" = rec {
+        crateName = "futures";
+        version = "0.3.25";
+        edition = "2018";
+        sha256 = "1c0v0lv6fgr95k1nw26n2v9vb40j7k32jg558m8pmhrxfq202f9q";
+        dependencies = [
+          {
+            name = "futures-channel";
+            packageId = "futures-channel";
+            usesDefaultFeatures = false;
+            features = [ "sink" ];
+          }
+          {
+            name = "futures-core";
+            packageId = "futures-core";
+            usesDefaultFeatures = false;
+          }
+          {
+            name = "futures-executor";
+            packageId = "futures-executor";
+            optional = true;
+            usesDefaultFeatures = false;
+          }
+          {
+            name = "futures-io";
+            packageId = "futures-io";
+            usesDefaultFeatures = false;
+          }
+          {
+            name = "futures-sink";
+            packageId = "futures-sink";
+            usesDefaultFeatures = false;
+          }
+          {
+            name = "futures-task";
+            packageId = "futures-task";
+            usesDefaultFeatures = false;
+          }
+          {
+            name = "futures-util";
+            packageId = "futures-util";
+            usesDefaultFeatures = false;
+            features = [ "sink" ];
+          }
+        ];
+        features = {
+          "alloc" = [ "futures-core/alloc" "futures-task/alloc" "futures-sink/alloc" "futures-channel/alloc" "futures-util/alloc" ];
+          "async-await" = [ "futures-util/async-await" "futures-util/async-await-macro" ];
+          "bilock" = [ "futures-util/bilock" ];
+          "compat" = [ "std" "futures-util/compat" ];
+          "default" = [ "std" "async-await" "executor" ];
+          "executor" = [ "std" "futures-executor/std" ];
+          "futures-executor" = [ "dep:futures-executor" ];
+          "io-compat" = [ "compat" "futures-util/io-compat" ];
+          "std" = [ "alloc" "futures-core/std" "futures-task/std" "futures-io/std" "futures-sink/std" "futures-util/std" "futures-util/io" "futures-util/channel" ];
+          "thread-pool" = [ "executor" "futures-executor/thread-pool" ];
+          "unstable" = [ "futures-core/unstable" "futures-task/unstable" "futures-channel/unstable" "futures-io/unstable" "futures-util/unstable" ];
+          "write-all-vectored" = [ "futures-util/write-all-vectored" ];
+        };
+        resolvedDefaultFeatures = [ "alloc" "async-await" "default" "executor" "futures-executor" "std" ];
+      };
       "futures-channel" = rec {
         crateName = "futures-channel";
         version = "0.3.25";
@@ -1768,6 +1829,12 @@ rec {
             packageId = "futures-core";
             usesDefaultFeatures = false;
           }
+          {
+            name = "futures-sink";
+            packageId = "futures-sink";
+            optional = true;
+            usesDefaultFeatures = false;
+          }
         ];
         features = {
           "alloc" = [ "futures-core/alloc" ];
@@ -1776,7 +1843,7 @@ rec {
           "sink" = [ "futures-sink" ];
           "std" = [ "alloc" "futures-core/std" ];
         };
-        resolvedDefaultFeatures = [ "alloc" "default" "std" ];
+        resolvedDefaultFeatures = [ "alloc" "default" "futures-sink" "sink" "std" ];
       };
       "futures-core" = rec {
         crateName = "futures-core";
@@ -1788,6 +1855,69 @@ rec {
           "std" = [ "alloc" ];
         };
         resolvedDefaultFeatures = [ "alloc" "default" "std" ];
+      };
+      "futures-executor" = rec {
+        crateName = "futures-executor";
+        version = "0.3.25";
+        edition = "2018";
+        sha256 = "1qkll0s12i4ry48yqh08ikl7n8gyz8in2f6zbsmpdh8lczgqbk3s";
+        dependencies = [
+          {
+            name = "futures-core";
+            packageId = "futures-core";
+            usesDefaultFeatures = false;
+          }
+          {
+            name = "futures-task";
+            packageId = "futures-task";
+            usesDefaultFeatures = false;
+          }
+          {
+            name = "futures-util";
+            packageId = "futures-util";
+            usesDefaultFeatures = false;
+          }
+        ];
+        features = {
+          "default" = [ "std" ];
+          "num_cpus" = [ "dep:num_cpus" ];
+          "std" = [ "futures-core/std" "futures-task/std" "futures-util/std" ];
+          "thread-pool" = [ "std" "num_cpus" ];
+        };
+        resolvedDefaultFeatures = [ "std" ];
+      };
+      "futures-io" = rec {
+        crateName = "futures-io";
+        version = "0.3.25";
+        edition = "2018";
+        sha256 = "1szl4w206x2inliipf5hvjbrd8w8i0gnglz8akmsvp3bl19gpx80";
+        features = {
+          "default" = [ "std" ];
+        };
+        resolvedDefaultFeatures = [ "std" ];
+      };
+      "futures-macro" = rec {
+        crateName = "futures-macro";
+        version = "0.3.25";
+        edition = "2018";
+        sha256 = "0pc3c5mydmwy50f0whcljcd41f0z1ci0r65dka8r2syqagh8ryxx";
+        procMacro = true;
+        dependencies = [
+          {
+            name = "proc-macro2";
+            packageId = "proc-macro2 1.0.47";
+          }
+          {
+            name = "quote";
+            packageId = "quote 1.0.21";
+          }
+          {
+            name = "syn";
+            packageId = "syn 1.0.105";
+            features = [ "full" ];
+          }
+        ];
+
       };
       "futures-sink" = rec {
         crateName = "futures-sink";
@@ -1809,7 +1939,7 @@ rec {
           "default" = [ "std" ];
           "std" = [ "alloc" ];
         };
-        resolvedDefaultFeatures = [ "alloc" ];
+        resolvedDefaultFeatures = [ "alloc" "std" ];
       };
       "futures-util" = rec {
         crateName = "futures-util";
@@ -1818,8 +1948,34 @@ rec {
         sha256 = "1mk5vh8q5bkkvxji8r1nimh87hgi190nz4l4zynrqbxxgac7cxhr";
         dependencies = [
           {
+            name = "futures-channel";
+            packageId = "futures-channel";
+            optional = true;
+            usesDefaultFeatures = false;
+            features = [ "std" ];
+          }
+          {
             name = "futures-core";
             packageId = "futures-core";
+            usesDefaultFeatures = false;
+          }
+          {
+            name = "futures-io";
+            packageId = "futures-io";
+            optional = true;
+            usesDefaultFeatures = false;
+            features = [ "std" ];
+          }
+          {
+            name = "futures-macro";
+            packageId = "futures-macro";
+            optional = true;
+            usesDefaultFeatures = false;
+          }
+          {
+            name = "futures-sink";
+            packageId = "futures-sink";
+            optional = true;
             usesDefaultFeatures = false;
           }
           {
@@ -1828,12 +1984,22 @@ rec {
             usesDefaultFeatures = false;
           }
           {
+            name = "memchr";
+            packageId = "memchr";
+            optional = true;
+          }
+          {
             name = "pin-project-lite";
             packageId = "pin-project-lite";
           }
           {
             name = "pin-utils";
             packageId = "pin-utils";
+          }
+          {
+            name = "slab";
+            packageId = "slab";
+            optional = true;
           }
         ];
         features = {
@@ -1857,7 +2023,7 @@ rec {
           "unstable" = [ "futures-core/unstable" "futures-task/unstable" ];
           "write-all-vectored" = [ "io" ];
         };
-        resolvedDefaultFeatures = [ "alloc" ];
+        resolvedDefaultFeatures = [ "alloc" "async-await" "async-await-macro" "channel" "futures-channel" "futures-io" "futures-macro" "futures-sink" "io" "memchr" "sink" "slab" "std" ];
       };
       "generic-array" = rec {
         crateName = "generic-array";
@@ -1924,9 +2090,9 @@ rec {
       };
       "gimli" = rec {
         crateName = "gimli";
-        version = "0.26.2";
+        version = "0.27.0";
         edition = "2018";
-        sha256 = "0pafbk64rznibgnvfidhm1pqxd14a5s9m50yvsgnbv38b8n0w0r2";
+        sha256 = "14vpz00gmw2d4fi6hm8n9lwvhvxfxd997by1fwvbvkb05n8sziyy";
         features = {
           "alloc" = [ "dep:alloc" ];
           "compiler_builtins" = [ "dep:compiler_builtins" ];
@@ -2421,9 +2587,9 @@ rec {
       };
       "io-lifetimes" = rec {
         crateName = "io-lifetimes";
-        version = "1.0.1";
+        version = "1.0.3";
         edition = "2018";
-        sha256 = "11rwfr6as9p5fgx6g43gnd5gdaa19xq7yhqzw3c18d1z9c16glx7";
+        sha256 = "0g76f1c4w3cgyl6qn3kfmi7srphrmjhx3a0rl4qks4ib4n9jl4a6";
         authors = [
           "Dan Gohman <dev@sunfishcode.online>"
         ];
@@ -2554,9 +2720,9 @@ rec {
       };
       "libc" = rec {
         crateName = "libc";
-        version = "0.2.137";
+        version = "0.2.138";
         edition = "2015";
-        sha256 = "12dz2lk4a7lm03k079n2rkm1l6cpdhvy6nrngbfprzrv19icqzzw";
+        sha256 = "1y6f8qalriadl0f9sk43ljwpm64bpkx2lsm4nzx5sb2nkhr7wvfv";
         authors = [
           "The Rust Project Developers"
         ];
@@ -2570,9 +2736,9 @@ rec {
       };
       "linux-raw-sys" = rec {
         crateName = "linux-raw-sys";
-        version = "0.1.3";
+        version = "0.1.4";
         edition = "2018";
-        sha256 = "0zxlp1c4h7kkc4ldgcj5cn7dzynvlksg8y0s9czn2v1sjvc0i7wg";
+        sha256 = "1926520si5wkn4m6iz6ka97ya5q1dgr8ib3fd705fscfgixgflgh";
         authors = [
           "Dan Gohman <dev@sunfishcode.online>"
         ];
@@ -2684,9 +2850,9 @@ rec {
       };
       "miniz_oxide" = rec {
         crateName = "miniz_oxide";
-        version = "0.5.4";
+        version = "0.6.2";
         edition = "2018";
-        sha256 = "0d2xcypr8s0skd81dhlrylas1j794qyz74snm11jc8kmy6l0nncn";
+        sha256 = "1yp8z6yll5ypz1ldmgnv7zi0r78kbvmqmn2mii77jzmk5069axdj";
         authors = [
           "Frommi <daniil.liferenko@gmail.com>"
           "oyvindln <oyvindln@users.noreply.github.com>"
@@ -2702,6 +2868,7 @@ rec {
           "alloc" = [ "dep:alloc" ];
           "compiler_builtins" = [ "dep:compiler_builtins" ];
           "core" = [ "dep:core" ];
+          "default" = [ "with-alloc" ];
           "rustc-dep-of-std" = [ "core" "alloc" "compiler_builtins" "adler/rustc-dep-of-std" ];
           "simd" = [ "simd-adler32" ];
           "simd-adler32" = [ "dep:simd-adler32" ];
@@ -2779,11 +2946,11 @@ rec {
         ];
 
       };
-      "nix 0.23.1" = rec {
+      "nix 0.23.2" = rec {
         crateName = "nix";
-        version = "0.23.1";
+        version = "0.23.2";
         edition = "2018";
-        sha256 = "1iimixk7y2qk0jswqich4mkd8kqyzdghcgy6203j8fmxmhbn71lz";
+        sha256 = "0p5kxhm5d8lry0szqbsllpcb5i3z7lg1dkglw0ni2l011b090dwg";
         authors = [
           "The nix-rust Project Developers"
         ];
@@ -2816,11 +2983,11 @@ rec {
         ];
 
       };
-      "nix 0.24.2" = rec {
+      "nix 0.24.3" = rec {
         crateName = "nix";
-        version = "0.24.2";
+        version = "0.24.3";
         edition = "2018";
-        sha256 = "1z35n1bhzslr7zawy2c0fl90jjy9l5b3lnsidls3908vfk0xnp0r";
+        sha256 = "0sc0yzdl51b49bqd9l9cmimp1sw1hxb8iyv4d35ww6d7m5rfjlps";
         authors = [
           "The nix-rust Project Developers"
         ];
@@ -2935,9 +3102,9 @@ rec {
       };
       "object" = rec {
         crateName = "object";
-        version = "0.29.0";
+        version = "0.30.0";
         edition = "2018";
-        sha256 = "0lzblxwxcih7j4z2cfx9094caax97hlfm9n0y5hlavda6cn8n591";
+        sha256 = "1yrpnpb58wixkmzx6mn34w46v9x8x7pfza457zs7kafgj3rag793";
         dependencies = [
           {
             name = "memchr";
@@ -2961,6 +3128,7 @@ rec {
           "read" = [ "read_core" "archive" "coff" "elf" "macho" "pe" "unaligned" ];
           "rustc-dep-of-std" = [ "core" "compiler_builtins" "alloc" "memchr/rustc-dep-of-std" ];
           "std" = [ "memchr/std" ];
+          "unstable-all" = [ "all" "unstable" "xcoff" ];
           "wasm" = [ "wasmparser" ];
           "wasmparser" = [ "dep:wasmparser" ];
           "write" = [ "write_std" "coff" "elf" "macho" "pe" ];
@@ -3116,7 +3284,7 @@ rec {
           }
           {
             name = "syn";
-            packageId = "syn 1.0.103";
+            packageId = "syn 1.0.105";
             features = [ "full" "visit-mut" ];
           }
         ];
@@ -3290,7 +3458,7 @@ rec {
           }
           {
             name = "syn";
-            packageId = "syn 1.0.103";
+            packageId = "syn 1.0.105";
             usesDefaultFeatures = false;
             features = [ "full" ];
           }
@@ -3298,7 +3466,7 @@ rec {
         devDependencies = [
           {
             name = "syn";
-            packageId = "syn 1.0.103";
+            packageId = "syn 1.0.105";
             usesDefaultFeatures = false;
             features = [ "parsing" ];
           }
@@ -3330,7 +3498,7 @@ rec {
           }
           {
             name = "syn";
-            packageId = "syn 1.0.103";
+            packageId = "syn 1.0.105";
             optional = true;
             usesDefaultFeatures = false;
           }
@@ -3520,9 +3688,9 @@ rec {
       };
       "prost-build" = rec {
         crateName = "prost-build";
-        version = "0.11.3";
+        version = "0.11.4";
         edition = "2021";
-        sha256 = "0166q6qi1dilq6rds9gaclcq5m6xxpl9k8yg5cnb2mnv2q9vyc73";
+        sha256 = "155flscbpb42b3lpy3n7ld9qil58ni9dshmfs99yvc41ybvp0r17";
         authors = [
           "Dan Burkert <dan@danburkert.com>"
           "Lucio Franco <luciofranco14@gmail.com>"
@@ -3583,7 +3751,7 @@ rec {
           }
           {
             name = "syn";
-            packageId = "syn 1.0.103";
+            packageId = "syn 1.0.105";
             optional = true;
             features = [ "full" ];
           }
@@ -3637,7 +3805,7 @@ rec {
           }
           {
             name = "syn";
-            packageId = "syn 1.0.103";
+            packageId = "syn 1.0.105";
             features = [ "extra-traits" ];
           }
         ];
@@ -3950,18 +4118,14 @@ rec {
       };
       "rayon" = rec {
         crateName = "rayon";
-        version = "1.6.0";
+        version = "1.6.1";
         edition = "2021";
-        sha256 = "02wfm1lqmcc59jbpbkbs7dqqcy21m6g1q52lyracb4w18f0041hy";
+        sha256 = "1dsr0yyfgdsg8ggh37kq678mfa5j3js6p16ksb7knazhml9s5cvd";
         authors = [
           "Niko Matsakis <niko@alum.mit.edu>"
           "Josh Stone <cuviper@gmail.com>"
         ];
         dependencies = [
-          {
-            name = "crossbeam-deque";
-            packageId = "crossbeam-deque";
-          }
           {
             name = "either";
             packageId = "either";
@@ -4397,7 +4561,7 @@ rec {
           }
           {
             name = "nix";
-            packageId = "nix 0.24.2";
+            packageId = "nix 0.24.3";
             usesDefaultFeatures = false;
             target = { target, features }: (target."unix" or false);
             features = [ "fs" "ioctl" "poll" "signal" "term" ];
@@ -4490,9 +4654,9 @@ rec {
       };
       "serde" = rec {
         crateName = "serde";
-        version = "1.0.147";
+        version = "1.0.151";
         edition = "2015";
-        sha256 = "0rc9jj8bbhf3lkf07ln8kyljigyzc4kk90nzg4dc2gwqmsdxd4yi";
+        sha256 = "187bgyl6zclk4js5xhaj7cas24cmwqsnknz68k898jd2q4gx9zlp";
         authors = [
           "Erick Tryzelaar <erick.tryzelaar@gmail.com>"
           "David Tolnay <dtolnay@gmail.com>"
@@ -4519,9 +4683,9 @@ rec {
       };
       "serde_derive" = rec {
         crateName = "serde_derive";
-        version = "1.0.147";
+        version = "1.0.151";
         edition = "2015";
-        sha256 = "0ln8rqbybpxmk4fvh6lgm75acs1d8x90fi44fhx3x77wm0n3c7ag";
+        sha256 = "1n4sf4n7i80vq84fciclp7qb3y8j1hr7ns0d342mr62s2adbwni5";
         procMacro = true;
         authors = [
           "Erick Tryzelaar <erick.tryzelaar@gmail.com>"
@@ -4538,7 +4702,7 @@ rec {
           }
           {
             name = "syn";
-            packageId = "syn 1.0.103";
+            packageId = "syn 1.0.105";
           }
         ];
         features = { };
@@ -4719,13 +4883,13 @@ rec {
           }
           {
             name = "syn";
-            packageId = "syn 1.0.103";
+            packageId = "syn 1.0.105";
           }
         ];
         devDependencies = [
           {
             name = "syn";
-            packageId = "syn 1.0.103";
+            packageId = "syn 1.0.105";
             features = [ "full" ];
           }
         ];
@@ -4751,7 +4915,7 @@ rec {
           }
           {
             name = "syn";
-            packageId = "syn 1.0.103";
+            packageId = "syn 1.0.105";
           }
         ];
 
@@ -4802,11 +4966,11 @@ rec {
         };
         resolvedDefaultFeatures = [ "clone-impls" "default" "derive" "full" "parsing" "printing" "proc-macro" "quote" ];
       };
-      "syn 1.0.103" = rec {
+      "syn 1.0.105" = rec {
         crateName = "syn";
-        version = "1.0.103";
+        version = "1.0.105";
         edition = "2018";
-        sha256 = "0pa4b6g938drphblgdhmjnzclp7gcbf4zdgkmfaxlfhk54i08r58";
+        sha256 = "0279ivl07g0y5fs5bwmglhkdvi99ypcm36yb774f8bbh8lyv9fb0";
         authors = [
           "David Tolnay <dtolnay@gmail.com>"
         ];
@@ -5006,7 +5170,7 @@ rec {
           }
           {
             name = "syn";
-            packageId = "syn 1.0.103";
+            packageId = "syn 1.0.105";
             features = [ "visit" "full" ];
           }
         ];
@@ -5078,7 +5242,7 @@ rec {
           }
           {
             name = "syn";
-            packageId = "syn 1.0.103";
+            packageId = "syn 1.0.105";
           }
         ];
 
@@ -5256,7 +5420,7 @@ rec {
           }
           {
             name = "syn";
-            packageId = "syn 1.0.103";
+            packageId = "syn 1.0.105";
             features = [ "full" ];
           }
         ];
@@ -5560,7 +5724,7 @@ rec {
           }
           {
             name = "syn";
-            packageId = "syn 1.0.103";
+            packageId = "syn 1.0.105";
           }
         ];
         features = {
@@ -5887,7 +6051,7 @@ rec {
           }
           {
             name = "syn";
-            packageId = "syn 1.0.103";
+            packageId = "syn 1.0.105";
             usesDefaultFeatures = false;
             features = [ "full" "parsing" "printing" "visit" "visit-mut" "clone-impls" "extra-traits" "proc-macro" ];
           }
@@ -6137,7 +6301,7 @@ rec {
           }
           {
             name = "syn";
-            packageId = "syn 1.0.103";
+            packageId = "syn 1.0.105";
             features = [ "full" "parsing" "printing" "visit" "visit-mut" "extra-traits" ];
           }
         ];
@@ -6176,6 +6340,10 @@ rec {
             name = "clap";
             packageId = "clap 4.0.27";
             features = [ "derive" "env" "unicode" ];
+          }
+          {
+            name = "futures";
+            packageId = "futures";
           }
           {
             name = "hex";
@@ -6439,7 +6607,7 @@ rec {
           }
           {
             name = "syn";
-            packageId = "syn 1.0.103";
+            packageId = "syn 1.0.105";
             features = [ "full" ];
           }
           {
@@ -6496,7 +6664,7 @@ rec {
           }
           {
             name = "syn";
-            packageId = "syn 1.0.103";
+            packageId = "syn 1.0.105";
             features = [ "visit" "full" ];
           }
           {
