@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "32633922_a411d902",
+        "filename": "tvix/eval/src/tests/tvix_tests/eval-okay-closure-pointer-compare.nix",
+        "patchSetId": 3
+      },
+      "lineNbr": 6,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2022-11-24T12:58:42Z",
+      "side": 1,
+      "message": "What happens if we do `let x \u003d \"a\"; in { q \u003d g x; } \u003d\u003d { q \u003d g x; }`?",
+      "revId": "fecae53a5c874c4b6bf88e8011a034f4d670e1ac",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
