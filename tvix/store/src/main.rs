@@ -6,6 +6,7 @@ use crate::proto::blob_service_server::BlobServiceServer;
 use crate::proto::directory_service_server::DirectoryServiceServer;
 
 mod file_blob_service;
+mod memory_directory_service;
 mod null_blob_service;
 mod null_directory_service;
 mod proto;
@@ -34,7 +35,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
             .unwrap_or(PathBuf::from("tvix-store"))
             .join("blob"),
     };
-    let directory_service = crate::null_directory_service::NullDirectoryService {};
+    let directory_service = crate::memory_directory_service::MemoryDirectoryService::default();
 
     println!("tvix-store listening on {}", listen_address);
     Server::builder()
