@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "49dbc3e2_389e161f",
+        "filename": "tvix/eval/src/tests/tvix_tests/eval-okay-value-pointer-compare.nix",
+        "patchSetId": 1
+      },
+      "lineNbr": 3,
+      "author": {
+        "id": 1000066
+      },
+      "writtenOn": "2022-11-24T06:41:26Z",
+      "side": 1,
+      "message": "😊",
+      "revId": "958cb3eaed1eece014d93557ce1f7b99540deff0",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
