@@ -16,6 +16,24 @@
       "message": "Does this work? I was assuming the import path should normally be fully qualified from the repo root dir. This could probably also work, assuming `package` only ends up in the proto wire format.\n\nCan you get CI to work?",
       "revId": "afe160ab164508fdb64da6f77958c72c6ab74fec",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "530470d0_b0e7ea5e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2022-11-24T10:44:23Z",
+      "side": 1,
+      "message": "I think one reasoning behind this import path was also that people vendoring in these protos can also use them without the import path being overly generic. Maybe @tazjin has some opinions.",
+      "parentUuid": "5350afd0_68f630da",
+      "revId": "afe160ab164508fdb64da6f77958c72c6ab74fec",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
