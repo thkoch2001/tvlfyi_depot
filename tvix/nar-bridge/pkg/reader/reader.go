@@ -20,6 +20,12 @@ type Reader struct {
 	hrSha512 *Hasher
 }
 
+// An item on the directories stack
+type Item struct {
+	itemPath string
+	itemDirectory *storev1pb.Directory
+}
+
 func New(r io.Reader) *Reader {
 	// Instead of using the underlying reader itself, wrap the reader
 	// with a hasher calculating sha256 and one calculating sha512,
@@ -51,47 +57,50 @@ func (r *Reader) Import(
 	}
 	defer narReader.Close()
 
-	// if we store a symlink or regular file at the root, these are not nil
+	// If we store a symlink or regular file at the root, these are not nil.
+	// If they are nil, we instead have a stackDirectory.
 	var rootSymlink *storev1pb.SymlinkNode
 	var rootFile *storev1pb.FileNode
+	var stackDirectory *storev1pb.Directory
 
-	var stackPaths = []string{}
-	var stackDirectories = []*storev1pb.Directory{}
+	var stack = []Item{}
 
-	// popFromStack returns the current top of the stack,
-	// but before returning, adds that element to the element underneath.
+	// popFromStack is used when we transition to a different directory or
+	// drain the stack when we reach the end of the NAR.
+	// It adds the popped element to the element underneath if any,
+	// and passes it to the directoryCb callback.
 	// This function may only be called if the stack is not already empty.
-	popFromStack := func() (*storev1pb.Directory, error) {
-		toPopDirectory := stackDirectories[len(stackDirectories)-1]
-		toPopPath := stackPaths[len(stackPaths)-1]
-
-		// "resize" the two stack slices
+	popFromStack := func() error {
+		// Keep the top item, and "resize" the stack slice.
 		// This will only make the last element unaccessible, but chances are high
 		// we're re-using that space anyways.
-		stackDirectories = stackDirectories[:len(stackDirectories)-1]
-		stackPaths = stackPaths[:len(stackPaths)-1]
+		toPop := stack[len(stack)-1]
+		stack = stack[:len(stack)-1]
 
 		// if there's still a parent left on the stack, refer to it from there.
-		if len(stackDirectories) > 0 {
-			topOfStack := stackDirectories[len(stackDirectories)-1]
-
-			dgst, err := toPopDirectory.Digest()
+		if len(stack) > 0 {
+			dgst, err := toPop.itemDirectory.Digest()
 			if err != nil {
-				return nil, fmt.Errorf("unable to calculate digest: %w", err)
+				return fmt.Errorf("unable to calculate directory digest: %w", err)
 			}
 
+			topOfStack := stack[len(stack)-1].itemDirectory
 			topOfStack.Directories = append(topOfStack.Directories, &storev1pb.DirectoryNode{
-				Name:   path.Base(toPopPath),
+				Name:   path.Base(toPop.itemPath),
 				Digest: dgst,
-				Size:   toPopDirectory.Size(),
+				Size:   toPop.itemDirectory.Size(),
 			})
 		}
-		// In case there's no directory left on the stack, just return toPopDirectory directly.
-		return toPopDirectory, nil
+		// call the directoryCb
+		if err := directoryCb(toPop.itemDirectory); err != nil {
+			return fmt.Errorf("failed calling directoryCb: %w", err)
+		}
+		// Keep track that we have encounter at least one directory
+		stackDirectory = toPop.itemDirectory
+		return nil
 	}
 
-	// Assemble PathInfo struct
-	// Nodes is populated later.
+	// Assemble a PathInfo struct, the Node is populated later.
 	assemblePathInfo := func() *storev1pb.PathInfo {
 		return &storev1pb.PathInfo{
 			Node:       nil,
@@ -130,66 +139,54 @@ func (r *Reader) Import(
 		default:
 			hdr, err := narReader.Next()
 			if err != nil {
-				// If the NAR has been read all the way to the end…
-				if errors.Is(err, io.EOF) {
-					// Make sure we read all the way to the end, closing the narReader.
-					if err := narReader.Close(); err != nil {
-						return nil, fmt.Errorf("unable to close nar reader: %w", err)
-					}
-
-					// Check he stack. While it's not empty, we need to pop things off the stack.
-					for len(stackDirectories) > 0 {
-						directory, err := popFromStack()
-						if err != nil {
-							return nil, fmt.Errorf("unable to pop from stack: %w", err)
-						}
-
-						// call the directoryCb
-						if err := directoryCb(directory); err != nil {
-							return nil, fmt.Errorf("failed calling directoryCb: %w", err)
-						}
-
-						// If the stack now is empty, we popped off the last directory element, which
-						// will become the root node in the PathInfo struct.
-						if len(stackDirectories) == 0 {
-							pi := assemblePathInfo()
-
-							// calculate digest
-							dgst, err := directory.Digest()
-							if err != nil {
-								return nil, fmt.Errorf("unable to calculate root directory digest: %w", err)
-							}
-
-							pi.Node = &storev1pb.PathInfo_Directory{
-								Directory: &storev1pb.DirectoryNode{
-									Name:   "",
-									Digest: dgst,
-									Size:   directory.Size(),
-								},
-							}
-
-							// return PathInfo, done!
-							return pi, nil
-						}
-					}
-
-					// Stack is empty. We now either have a regular or symlink root node, 					// so
-					// assemble pathInfo with these and return.
-					pi := assemblePathInfo()
-					if rootFile != nil {
-						pi.Node = &storev1pb.PathInfo_File{
-							File: rootFile,
-						}
-					} else if rootSymlink != nil {
-						pi.Node = &storev1pb.PathInfo_Symlink{
-							Symlink: rootSymlink,
-						}
-					}
-					return pi, nil
-
-				} else {
+				if !errors.Is(err, io.EOF) {
 					return nil, fmt.Errorf("failed getting next nar element: %w", err)
 				}
+
+				// The NAR has been read all the way to the end…
+				// Make sure we read all the way to the end, closing the narReader.
+				if err := narReader.Close(); err != nil {
+					return nil, fmt.Errorf("unable to close nar reader: %w", err)
+				}
+
+				// Check the stack. While it's not empty, we need to pop things off the stack.
+				for len(stack) > 0 {
+					err := popFromStack()
+					if err != nil {
+						return nil, fmt.Errorf("unable to pop from stack: %w", err)
+					}
+
+				}
+
+				// Stack is empty. We now either have a regular or symlink root node, or we encountered at least one directory.
+				// assemble pathInfo with these and return.
+				pi := assemblePathInfo()
+				if rootFile != nil {
+					pi.Node = &storev1pb.PathInfo_File{
+						File: rootFile,
+					}
+				}
+				if rootSymlink != nil {
+					pi.Node = &storev1pb.PathInfo_Symlink{
+						Symlink: rootSymlink,
+					}
+				}
+				if stackDirectory != nil {
+					// calculate digest (i.e. after we received all ites content)
+					dgst, err := stackDirectory.Digest()
+					if err != nil {
+						return nil, fmt.Errorf("unable to calculate root directory digest: %w", err)
+					}
+
+					pi.Node = &storev1pb.PathInfo_Directory{
+						Directory: &storev1pb.DirectoryNode{
+							Name:   "",
+							Digest: dgst,
+							Size:   stackDirectory.Size(),
+						},
+					}
+				}
+				return pi, nil
 			}
 
 			// Check for valid path transitions, pop from stack if needed
@@ -199,15 +196,10 @@ func (r *Reader) Import(
 
 			// We don't need to worry about the root node case, because we can only finish the root "/"
 			// If we're at the end of the NAR reader (covered by the EOF check)
-			if len(stackPaths) > 0 && !strings.HasPrefix(hdr.Path, stackPaths[len(stackPaths)-1]) {
-				directory, err := popFromStack()
+			if len(stack) > 0 && !strings.HasPrefix(hdr.Path, stack[len(stack)-1].itemPath) {
+				err := popFromStack()
 				if err != nil {
 					return nil, fmt.Errorf("unable to pop from stack: %w", err)
-				}
-
-				// call the directoryCb
-				if err := directoryCb(directory); err != nil {
-					return nil, fmt.Errorf("failed calling directoryCb: %w", err)
 				}
 			}
 
@@ -216,14 +208,12 @@ func (r *Reader) Import(
 					Name:   getBasename(hdr.Path),
 					Target: hdr.LinkTarget,
 				}
-				if len(stackDirectories) > 0 {
-					topOfStack := stackDirectories[len(stackDirectories)-1]
+				if len(stack) > 0 {
+					topOfStack := stack[len(stack)-1].itemDirectory
 					topOfStack.Symlinks = append(topOfStack.Symlinks, symlinkNode)
-					continue
+				} else {
+					rootSymlink = symlinkNode
 				}
-
-				rootSymlink = symlinkNode
-				continue
 
 			}
 			if hdr.Type == nar.TypeRegular {
@@ -253,23 +243,23 @@ func (r *Reader) Import(
 					Size:       uint32(hdr.Size),
 					Executable: hdr.Executable,
 				}
-				if len(stackDirectories) > 0 {
-					topOfStack := stackDirectories[len(stackDirectories)-1]
+				if len(stack) > 0 {
+					topOfStack := stack[len(stack)-1].itemDirectory
 					topOfStack.Files = append(topOfStack.Files, fileNode)
-					continue
+				} else {
+					rootFile = fileNode
 				}
-
-				rootFile = fileNode
-				continue
 			}
 			if hdr.Type == nar.TypeDirectory {
-				stackDirectories = append(stackDirectories, &storev1pb.Directory{
+				directory := &storev1pb.Directory{
 					Directories: []*storev1pb.DirectoryNode{},
 					Files:       []*storev1pb.FileNode{},
 					Symlinks:    []*storev1pb.SymlinkNode{},
+				}
+				stack = append(stack, Item{
+					itemDirectory: directory,
+					itemPath: hdr.Path,
 				})
-				stackPaths = append(stackPaths, hdr.Path)
-				continue
 			}
 		}
 	}
