@@ -982,6 +982,30 @@ fn placeholders() -> Vec<Builtin> {
             },
         ),
         Builtin::new(
+            "unsafeGetAttrPos",
+            &[
+                BuiltinArgument {
+                    strict: true,
+                    name: "name",
+                },
+                BuiltinArgument {
+                    strict: true,
+                    name: "attrset",
+                },
+            ],
+            None,
+            |mut args: Vec<Value>, vm: &mut VM| {
+                vm.emit_warning(WarningKind::NotImplemented("builtins.unsafeGetAttrsPos"));
+                let _attrset = args.pop().unwrap().to_attrs();
+                let _name = args.pop().unwrap().to_str();
+                let mut res: BTreeMap<NixString, Value> = BTreeMap::new();
+                res.insert("line".into(), 42.into());
+                res.insert("col".into(), 42.into());
+                res.insert("file".into(), Value::Path("/deep/thought".into()));
+                Ok(Value::attrs(NixAttrs::from_map(res)))
+            },
+        ),
+        Builtin::new(
             "derivation",
             &[BuiltinArgument {
                 strict: true,
@@ -996,18 +1020,50 @@ fn placeholders() -> Vec<Builtin> {
                 //
                 // Crucially this means we do not yet *validate* the values either.
                 let attrs = unwrap_or_clone_rc(args[0].to_attrs()?);
+                let attrs = attrs.update(NixAttrs::from_map(BTreeMap::from([(
+                    "allowedRequisites".into(),
+                    Value::Null,
+                )])));
+                let attrs_orig = attrs.clone();
                 let attrs = attrs.update(NixAttrs::from_map(BTreeMap::from([
                     (
                         "outPath".into(),
                         "/nix/store/00000000000000000000000000000000-mock".into(),
                     ),
                     (
+                        "all".into(),
+                        "/nix/store/00000000000000000000000000000000-mock".into(),
+                    ),
+                    ("outputName".into(), "out".into()),
+                    (
                         "drvPath".into(),
                         "/nix/store/00000000000000000000000000000000-mock.drv".into(),
                     ),
                     ("type".into(), "derivation".into()),
                 ])));
-
+                let outputs = attrs
+                    .select("outputs")
+                    .unwrap_or(&Value::from(vec![Value::from("out")]))
+                    .clone()
+                    .force(vm)?
+                    .to_list()?
+                    .clone();
+                let attrs0 = attrs.clone();
+                let attrs = attrs.update(NixAttrs::from_map(
+                    outputs
+                        .iter()
+                        .map(|output| {
+                            (
+                                output.to_str().unwrap(),
+                                Value::Attrs(Rc::new(attrs0.clone())),
+                            )
+                        })
+                        .collect(),
+                ));
+                let attrs = attrs.update(NixAttrs::from_map(BTreeMap::from([(
+                    "drvAttrs".into(),
+                    Value::Attrs(Rc::new(attrs_orig)),
+                )])));
                 Ok(Value::Attrs(Rc::new(attrs)))
             },
         ),

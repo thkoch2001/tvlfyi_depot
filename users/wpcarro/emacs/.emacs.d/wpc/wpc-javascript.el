@@ -42,11 +42,6 @@
       js-indent-level 2
       css-indent-offset 2)
 
-;; Flow for Javascript
-(use-package add-node-modules-path
-  :config
-  (general-add-hook wpc-javascript--js-hooks #'add-node-modules-path))
-
 (use-package web-mode
   :mode "\\.html\\'"
   :config
