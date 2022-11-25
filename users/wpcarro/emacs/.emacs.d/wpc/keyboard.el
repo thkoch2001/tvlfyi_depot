@@ -15,8 +15,6 @@
 ;; Dependencies
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(require 'string)
-(require 'number)
 (require 'cl-lib)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -46,7 +44,7 @@
 
 (defun keyboard-message (x)
   "Message X in a structured way."
-  (message (string-format "[keyboard.el] %s" x)))
+  (message (format "[keyboard.el] %s" x)))
 
 (cl-defun keyboard-set-key-repeat (&key
                                    (rate keyboard-repeat-rate)
@@ -54,7 +52,7 @@
   "Use xset to set the key-repeat RATE and DELAY."
   (prelude-start-process
    :name "keyboard-set-key-repeat"
-   :command (string-format "xset r rate %s %s" delay rate)))
+   :command (format "xset r rate %s %s" delay rate)))
 
 ;; NOTE: Settings like this are machine-dependent. For instance I only need to
 ;; do this on my laptop and other devices where I don't have access to my split
@@ -76,42 +74,42 @@
 (defun keyboard-inc-repeat-rate ()
   "Increment `keyboard-repeat-rate'."
   (interactive)
-  (setq keyboard-repeat-rate (number-inc keyboard-repeat-rate))
+  (setq keyboard-repeat-rate (1+ keyboard-repeat-rate))
   (keyboard-set-key-repeat :rate keyboard-repeat-rate)
   (keyboard-message
-   (string-format "Rate: %s" keyboard-repeat-rate)))
+   (format "Rate: %s" keyboard-repeat-rate)))
 
 (defun keyboard-dec-repeat-rate ()
   "Decrement `keyboard-repeat-rate'."
   (interactive)
-  (setq keyboard-repeat-rate (number-dec keyboard-repeat-rate))
+  (setq keyboard-repeat-rate (1- keyboard-repeat-rate))
   (keyboard-set-key-repeat :rate keyboard-repeat-rate)
   (keyboard-message
-   (string-format "Rate: %s" keyboard-repeat-rate)))
+   (format "Rate: %s" keyboard-repeat-rate)))
 
 (defun keyboard-inc-repeat-delay ()
   "Increment `keyboard-repeat-delay'."
   (interactive)
-  (setq keyboard-repeat-delay (number-inc keyboard-repeat-delay))
+  (setq keyboard-repeat-delay (1+ keyboard-repeat-delay))
   (keyboard-set-key-repeat :delay keyboard-repeat-delay)
   (keyboard-message
-   (string-format "Delay: %s" keyboard-repeat-delay)))
+   (format "Delay: %s" keyboard-repeat-delay)))
 
 (defun keyboard-dec-repeat-delay ()
   "Decrement `keyboard-repeat-delay'."
   (interactive)
-  (setq keyboard-repeat-delay (number-dec keyboard-repeat-delay))
+  (setq keyboard-repeat-delay (1- keyboard-repeat-delay))
   (keyboard-set-key-repeat :delay keyboard-repeat-delay)
   (keyboard-message
-   (string-format "Delay: %s" keyboard-repeat-delay)))
+   (format "Delay: %s" keyboard-repeat-delay)))
 
 (defun keyboard-print-key-repeat ()
   "Print the currently set values for key repeat."
   (interactive)
   (keyboard-message
-   (string-format "Rate: %s. Delay: %s"
-                  keyboard-repeat-rate
-                  keyboard-repeat-delay)))
+   (format "Rate: %s. Delay: %s"
+           keyboard-repeat-rate
+           keyboard-repeat-delay)))
 
 (defun keyboard-set-preferences ()
   "Reset the keyboard preferences to their default values.
