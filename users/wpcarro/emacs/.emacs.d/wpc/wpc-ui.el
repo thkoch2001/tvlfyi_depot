@@ -17,11 +17,12 @@
 (require 'prelude)
 (require 'al)
 (require 'fonts)
-(require 'colorscheme)
+(require 'theme)
 (require 'device)
 (require 'laptop-battery)
 (require 'modeline)
 (require 'general)
+(require '>)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Configuration
@@ -161,7 +162,15 @@
 ;; during initialization?
 (when (device-laptop?) (laptop-battery-display))
 
-(colorscheme-whitelist-set 'doom-peacock)
+(setq theme-whitelist
+      (->> (custom-available-themes)
+           (list-map #'symbol-name)
+           (list-filter (>-> (s-starts-with? "doom-")))
+           (list-map #'intern)))
+(setq theme-linum-color-override "da5478")
+(add-hook 'theme-after-change
+          (lambda () (prelude-set-line-number-color "#da5478")))
+(theme-whitelist-set 'doom-flatwhite)
 
 (when window-system
   ;; On OSX, JetBrainsMono is installed as "JetBrains Mono", and I'm
