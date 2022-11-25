@@ -1,14 +1,17 @@
 package server
 
 import (
+	"bufio"
+	"bytes"
+	"fmt"
+	"net/http"
+
 	"code.tvl.fyi/tvix/nar-bridge/pkg/reader"
 	storev1pb "code.tvl.fyi/tvix/store/protos"
-	"fmt"
 	"github.com/go-chi/chi/v5"
 	nixhash "github.com/nix-community/go-nix/pkg/hash"
 	"github.com/nix-community/go-nix/pkg/nixbase32"
 	log "github.com/sirupsen/logrus"
-	"net/http"
 )
 
 func registerNarPut(s *Server) {
@@ -35,7 +38,7 @@ func registerNarPut(s *Server) {
 		directoriesUploader := NewDirectoriesUploader(ctx, s.directoryServiceClient)
 		defer directoriesUploader.Done()
 
-		rd := reader.New(r.Body)
+		rd := reader.New(bufio.NewReader(r.Body))
 		pathInfo, err := rd.Import(
 			ctx,
 			genBlobServiceWriteCb(ctx, s.blobServiceClient),
