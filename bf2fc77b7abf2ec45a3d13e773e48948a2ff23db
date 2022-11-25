@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "563e8e4e_8b29d840",
+        "filename": "tvix/eval/crate.nix",
+        "patchSetId": 4
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2022-11-25T23:26:09Z",
+      "side": 1,
+      "message": "Does crate2nix not have an IFD mode, producing Cargo.nix and crate-hashes.json in a derivation and importing this again?",
+      "revId": "bf2fc77b7abf2ec45a3d13e773e48948a2ff23db",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
