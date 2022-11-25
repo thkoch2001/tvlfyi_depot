@@ -53,6 +53,7 @@ let
       string
       struct
       symbol
+      theme
       tuple
       vterm-mgt
       zle
