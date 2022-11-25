@@ -47,6 +47,7 @@ let
       bookmark
       cycle
       list
+      macros
       maybe
       set
       string
