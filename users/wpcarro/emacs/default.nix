@@ -53,6 +53,7 @@ let
       string
       struct
       symbol
+      theme
       tuple
       vterm-mgt
       zle
@@ -181,8 +182,7 @@ depot.nix.readTree.drvTargets {
     emacsBin = "${wpcarrosEmacs}/bin/emacs";
   };
 
-  osx = writeShellScriptBin "wpcarros-emacs" ''
-    export PATH="${emacsBinPath}:$PATH"
+  osx2 = pkgs.writeShellScriptBin "wpcarros-emacs" ''
     export EMACSLOADPATH="${loadPath}"
     exec ${wpcarrosEmacs}/bin/emacs \
       --debug-init \
@@ -192,6 +192,40 @@ depot.nix.readTree.drvTargets {
       --load ${./.emacs.d/init.el} \
       "$@"
   '';
+
+  # To install GUI:
+  # $ nix-build -A users.wpcarro.emacs.osx -o /Applications/BillsEmacs.app
+  osx = pkgs.stdenv.mkDerivation {
+    # Skip because whitby cannot build aarch64-darwin targets.
+    skip = true;
+    pname = "bills-emacs";
+    version = "0.0.1";
+    src = ./.;
+    dontFixup = true;
+    installPhase = ''
+      runHook preInstall
+      APP="$out"
+      mkdir -p "$APP/Contents/MacOS"
+      mkdir -p "$APP/Contents/Resources"
+      cp ${infoPlist}      "$APP/Contents/Info.plist"
+      cp ${versionPlist}   "$APP/Contents/version.plist"
+      cp ${./AppIcon.icns} "$APP/Contents/Resources/AppIcon.icns"
+      echo "APPL????"  > "$APP/Contents/PkgInfo"
+      cat << EOF > "$APP/Contents/MacOS/BillsEmacs"
+      #!${pkgs.stdenvNoCC.shell}
+      export EMACSLOADPATH="${loadPath}"
+      exec ${wpcarrosEmacs}/bin/emacs \
+        --debug-init \
+        --no-init-file \
+        --no-site-file \
+        --no-site-lisp \
+        --load ${./.emacs.d/init.el}
+      EOF
+      chmod +x "$APP/Contents/MacOS/BillsEmacs"
+      runHook postInstall
+    '';
+    meta.platforms = [ "aarch64-darwin" ];
+  };
 
   # Script that asserts my Emacs can initialize without warnings or errors.
   check = runCommand "check-emacs" { } ''
@@ -205,6 +239,22 @@ depot.nix.readTree.drvTargets {
       --no-site-lisp \
       --no-init-file \
       --script ${./ci.el} \
+      ${./.emacs.d/init.el} && \
+    touch $out
+  '';
+
+  # Script that asserts my Emacs can initialize without warnings or errors.
+  profile = runCommand "profile-emacs" { } ''
+    # Even though Buildkite defines this, I'd still like still be able to test
+    # this locally without depending on my ability to remember to set CI=true.
+    export CI=true
+    export PATH="${emacsBinPath}:$PATH"
+    export EMACSLOADPATH="${loadPath}"
+    ${wpcarrosEmacs}/bin/emacs \
+      --no-site-file \
+      --no-site-lisp \
+      --no-init-file \
+      --script ${./profile.el} \
       ${./.emacs.d/init.el} && \
     touch $out
   '';

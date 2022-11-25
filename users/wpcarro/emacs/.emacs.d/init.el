@@ -3,7 +3,7 @@
 (require 'wpc-package)
 (require 'wpc-misc)
 (require 'ssh)
-(require 'keyboard)
+;; (require 'keyboard)
 (require 'irc)
 (require 'email)
 (require 'keybindings)
