@@ -16,6 +16,24 @@
       "message": "Does crate2nix not have an IFD mode, producing Cargo.nix and crate-hashes.json in a derivation and importing this again?",
       "revId": "bf2fc77b7abf2ec45a3d13e773e48948a2ff23db",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "70334d46_2ac731c1",
+        "filename": "tvix/eval/crate.nix",
+        "patchSetId": 4
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000066
+      },
+      "writtenOn": "2022-11-25T23:35:56Z",
+      "side": 1,
+      "message": "It does!\n\n  https://github.com/kolloch/crate2nix/commit/667ec0008c12d6327b451e7f2f8977f4edfa351c#diff-b335630551682c19a781afebcf4d07bf978fb1f8ac04c6bf87428ed5106870f5R314\n\nApparently it has had this for a while but they didn\u0027t add the documentation for it until two months ago.\n\nI will update this CL to use IFD instead of bash.",
+      "parentUuid": "563e8e4e_8b29d840",
+      "revId": "bf2fc77b7abf2ec45a3d13e773e48948a2ff23db",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
