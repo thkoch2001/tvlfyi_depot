@@ -170,7 +170,10 @@ func registerNarinfoPut(s *Server) {
 			}
 		}
 
-		receivedPathInfo, err := s.pathInfoServiceClient.Put(ctx, pathInfoToUpload)
+		receivedPathInfo, err := s.pathInfoServiceClient.Put(ctx, &storev1pb.PutPathInfoRequest{
+			PathInfo:   pathInfoToUpload,
+			OutputHash: outputHash,
+		})
 		if err != nil {
 			log.WithError(err).Error("unable to upload pathinfo to service")
 			w.WriteHeader(http.StatusInternalServerError)
