@@ -1,12 +1,11 @@
 package server
 
 import (
-	"bytes"
 	"code.tvl.fyi/tvix/nar-bridge/pkg/reader"
 	storev1pb "code.tvl.fyi/tvix/store/protos"
-	"encoding/hex"
 	"fmt"
 	"github.com/go-chi/chi/v5"
+	nixhash "github.com/nix-community/go-nix/pkg/hash"
 	"github.com/nix-community/go-nix/pkg/nixbase32"
 	log "github.com/sirupsen/logrus"
 	"net/http"
@@ -17,23 +16,21 @@ func registerNarPut(s *Server) {
 		defer r.Body.Close()
 
 		ctx := r.Context()
-		log := log.WithField("narhash_url", chi.URLParamFromCtx(ctx, "narhash"))
 
-		// parse the narhash sent in the request URL, and keep it for later.
-		narHashFromUrl, err := nixbase32.DecodeString(chi.URLParamFromCtx(ctx, "narhash"))
+		// parse the narhash sent in the request URL
+		narHashFromUrl, err := parseNarHashFromUrl(chi.URLParamFromCtx(ctx, "narhash"))
 		if err != nil {
-			log.Errorf("unable to decode nar hash from url: %v", err)
+			log.WithError(err).WithField("url", r.URL).Error("unable to decode nar hash from url")
 			w.WriteHeader(http.StatusBadRequest)
 			_, err := w.Write([]byte("unable to decode nar hash from url"))
 			if err != nil {
-				log.WithError(err).Errorf("unable to write error message to client")
+				log.WithError(err).Error("unable to write error message to client")
 			}
 
 			return
 		}
 
-		// We are already certain it's 32 or 64 bytes, because our regex on the
-		// nixbase32 representation of it ensures it.
+		log := log.WithField("narhash_url", narHashFromUrl.SRIString())
 
 		// Initialize directoryServicePutStream
 		// This should not send any data over the wire, only prepare client-side plumbing..
@@ -74,56 +71,58 @@ func registerNarPut(s *Server) {
 		}
 
 		// extract the narhash (sha256 and sha512)
-		var narHashSha256Dgst []byte
-		var narHashSha512Dgst []byte
+		var piNarHashSha256 *nixhash.Hash
+		var piNarHashSha512 *nixhash.Hash
 
-		for _, narHash := range pathInfo.Narinfo.NarHashes {
-			if narHash.GetAlgo() == storev1pb.NARInfo_SHA256 {
-				narHashSha256Dgst = narHash.GetDigest()
-			}
-		}
-
-		for _, narHash := range pathInfo.Narinfo.NarHashes {
-			if narHash.GetAlgo() == storev1pb.NARInfo_SHA512 {
-				narHashSha512Dgst = narHash.GetDigest()
-			}
-		}
-
-		// Compare the nar hash specified in the URL with the calculated one.
-		// Depending on the size, we need to either compare with the sha256 or sha512.
-		if len(narHashFromUrl) == 32 {
-			if !bytes.Equal(narHashSha256Dgst, narHashFromUrl) {
-				log.Errorf("received bytes don't match narHash specified in URL")
-				log.WithField("narhash", hex.EncodeToString(narHashSha256Dgst)).Error("received bytes don't match narhash from URL")
-
-				w.WriteHeader(http.StatusBadRequest)
-				_, err := w.Write([]byte("received bytes don't match narHash specified in URL"))
+		// TOOD: this is a bit silly right now. We should be able to construct a nixhash
+		// by passing its bytes along, without having to encode and decode again.
+		for _, piNarHash := range pathInfo.Narinfo.NarHashes {
+			if piNarHash.GetAlgo() == storev1pb.NARInfo_SHA256 {
+				piNarHashSha256, err = nixhash.ParseNixBase32(
+					"sha256:" + nixbase32.EncodeToString(piNarHash.GetDigest()),
+				)
 				if err != nil {
-					log.WithError(err).Errorf("unable to write error message to client")
+					panic(err)
 				}
-
-				return
 			}
-		} else if len(narHashFromUrl) == 64 {
-			if !bytes.Equal(narHashSha512Dgst, narHashFromUrl) {
-				log.Errorf("received bytes don't match narHash specified in URL")
-				log.WithField("narhash", hex.EncodeToString(narHashSha256Dgst)).Error("received bytes don't match narhash from URL")
-				w.WriteHeader(http.StatusBadRequest)
-
-				_, err := w.Write([]byte("received bytes don't match narHash specified in URL"))
+			if piNarHash.GetAlgo() == storev1pb.NARInfo_SHA512 {
+				piNarHashSha512, err = nixhash.ParseNixBase32(
+					"sha512:" + nixbase32.EncodeToString(piNarHash.GetDigest()),
+				)
 				if err != nil {
-					log.WithError(err).Errorf("unable to write error message to client")
+					panic(err)
 				}
-
-				return
 			}
 		}
 
-		// Insert the partial pathinfo structs into our lookup map.
-		// The same  might exist already, but it'll have the same contents (so replacing will be a no-op)
+		// Compare the nar hash specified in the URL with the one that has been
+		// calculated while processing the NAR file
+		// We know the reader populates both fields in the pathinfo struct, so receivedNarHashSha{256,512} are not null.
+
+		if narHashFromUrl.SRIString() != piNarHashSha256.SRIString() && narHashFromUrl.SRIString() != piNarHashSha512.SRIString() {
+			log := log.WithField("narhash_received_sha256", piNarHashSha256.SRIString())
+			log = log.WithField("narhash_received_sha512", piNarHashSha512.SRIString())
+
+			log.WithField("narsize", pathInfo.Narinfo.NarSize).Error("received bytes don't match narhash from URL")
+
+			w.WriteHeader(http.StatusBadRequest)
+			_, err := w.Write([]byte("received bytes don't match narHash specified in URL"))
+			if err != nil {
+				log.WithError(err).Errorf("unable to write error message to client")
+			}
+
+			return
+
+		}
+
+		// Insert the partial pathinfo structs into our lookup map,
+		// so requesting the NAR file will be possible.
+		// The same  might exist already, but it'll have the same contents (so
+		// replacing will be a no-op), except maybe the root node Name field value, which
+		// is safe to ignore (as not part of the NAR).
 		s.narHashToPathInfoMu.Lock()
-		s.narHashSha256ToPathInfo[hex.EncodeToString(narHashSha256Dgst)] = pathInfo
-		s.narHashSha512ToPathInfo[hex.EncodeToString(narHashSha512Dgst)] = pathInfo
+		s.narHashToPathInfo[piNarHashSha256.SRIString()] = pathInfo
+		s.narHashToPathInfo[piNarHashSha512.SRIString()] = pathInfo
 		s.narHashToPathInfoMu.Unlock()
 
 		// Done!
