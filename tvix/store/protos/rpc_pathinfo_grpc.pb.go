@@ -37,7 +37,7 @@ type PathInfoServiceClient interface {
 	// PathInfo, Directories and Blobs.
 	// The returned PathInfo object MAY contain additional narinfo signatures,
 	// but is otherwise left untouched.
-	Put(ctx context.Context, in *PathInfo, opts ...grpc.CallOption) (*PathInfo, error)
+	Put(ctx context.Context, in *PutPathInfoRequest, opts ...grpc.CallOption) (*PathInfo, error)
 }
 
 type pathInfoServiceClient struct {
@@ -57,7 +57,7 @@ func (c *pathInfoServiceClient) Get(ctx context.Context, in *GetPathInfoRequest,
 	return out, nil
 }
 
-func (c *pathInfoServiceClient) Put(ctx context.Context, in *PathInfo, opts ...grpc.CallOption) (*PathInfo, error) {
+func (c *pathInfoServiceClient) Put(ctx context.Context, in *PutPathInfoRequest, opts ...grpc.CallOption) (*PathInfo, error) {
 	out := new(PathInfo)
 	err := c.cc.Invoke(ctx, "/tvix.store.v1.PathInfoService/Put", in, out, opts...)
 	if err != nil {
@@ -85,7 +85,7 @@ type PathInfoServiceServer interface {
 	// PathInfo, Directories and Blobs.
 	// The returned PathInfo object MAY contain additional narinfo signatures,
 	// but is otherwise left untouched.
-	Put(context.Context, *PathInfo) (*PathInfo, error)
+	Put(context.Context, *PutPathInfoRequest) (*PathInfo, error)
 	mustEmbedUnimplementedPathInfoServiceServer()
 }
 
@@ -96,7 +96,7 @@ type UnimplementedPathInfoServiceServer struct {
 func (UnimplementedPathInfoServiceServer) Get(context.Context, *GetPathInfoRequest) (*PathInfo, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Get not implemented")
 }
-func (UnimplementedPathInfoServiceServer) Put(context.Context, *PathInfo) (*PathInfo, error) {
+func (UnimplementedPathInfoServiceServer) Put(context.Context, *PutPathInfoRequest) (*PathInfo, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Put not implemented")
 }
 func (UnimplementedPathInfoServiceServer) mustEmbedUnimplementedPathInfoServiceServer() {}
@@ -131,7 +131,7 @@ func _PathInfoService_Get_Handler(srv interface{}, ctx context.Context, dec func
 }
 
 func _PathInfoService_Put_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(PathInfo)
+	in := new(PutPathInfoRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
@@ -143,7 +143,7 @@ func _PathInfoService_Put_Handler(srv interface{}, ctx context.Context, dec func
 		FullMethod: "/tvix.store.v1.PathInfoService/Put",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(PathInfoServiceServer).Put(ctx, req.(*PathInfo))
+		return srv.(PathInfoServiceServer).Put(ctx, req.(*PutPathInfoRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
