@@ -10,8 +10,6 @@
 
   system.stateVersion = "22.05";
 
-  ec2.hvm = true;
-
   networking.hostName = "roswell";
 
   users.users.grfn.openssh.authorizedKeys.keys = [
