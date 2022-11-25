@@ -18,9 +18,9 @@
 (require 'al)
 (require 'fonts)
 (require 'theme)
-(require 'laptop-battery)
 (require 'modeline)
 (require 'general)
+(require 'battery)
 (require '>)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -157,7 +157,7 @@
   :config
   (setq alert-default-style 'notifier))
 
-(laptop-battery-display)
+(display-battery-mode 1)
 
 (setq theme-whitelist
       (->> (custom-available-themes)
