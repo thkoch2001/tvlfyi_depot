@@ -1,13 +1,11 @@
 package server
 
 import (
-	"encoding/hex"
 	"net/http"
 	"path"
 
 	storev1pb "code.tvl.fyi/tvix/store/protos"
 	"github.com/go-chi/chi/v5"
-	mh "github.com/multiformats/go-multihash/core"
 	"github.com/nix-community/go-nix/pkg/narinfo"
 	"github.com/nix-community/go-nix/pkg/nixbase32"
 	"github.com/nix-community/go-nix/pkg/nixpath"
@@ -53,26 +51,17 @@ func registerNarinfoPut(s *Server) {
 		}
 
 		log = log.WithFields(logrus.Fields{
-			"narhash":     narInfo.NarHash.NixString(),
+			"narhash":     narInfo.NarHash.SRIString(),
 			"output_path": narInfo.StorePath,
 		})
 
 		var pathInfo *storev1pb.PathInfo
 
-		// look up the narHash in our temporary map(s) - sha256
-		if narInfo.NarHash.HashType == mh.SHA2_256 {
-			foundPathInfo, found := s.narHashSha256ToPathInfo[hex.EncodeToString(narInfo.NarHash.Digest())]
-			if found {
-				pathInfo = foundPathInfo
-			}
-		} else if narInfo.NarHash.HashType == mh.SHA2_512 {
-			foundPathInfo, found := s.narHashSha512ToPathInfo[hex.EncodeToString(narInfo.NarHash.Digest())]
-			if found {
-				pathInfo = foundPathInfo
-			}
-		}
-
-		if pathInfo == nil {
+		// look up the narHash in our temporary map
+		s.narHashToPathInfoMu.Lock()
+		pathInfo, found := s.narHashToPathInfo[narInfo.NarHash.SRIString()]
+		s.narHashToPathInfoMu.Unlock()
+		if !found {
 			log.Error("unable to find referred NAR")
 			w.WriteHeader(http.StatusBadRequest)
 			_, err := w.Write([]byte("unable to find referred NAR"))
