@@ -456,6 +456,8 @@
 ;; restore the ability to paste in ivy
 (general-define-key
  :keymaps '(ivy-minibuffer-map)
+ "C-k" #'kill-line
+ "C-u" (lambda () (interactive) (kill-line 0))
  "C-v" #'clipboard-yank
  "C-S-v" #'clipboard-yank)
 
