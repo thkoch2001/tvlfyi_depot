@@ -34,6 +34,24 @@
       "parentUuid": "32633922_a411d902",
       "revId": "fecae53a5c874c4b6bf88e8011a034f4d670e1ac",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a1cdfd47_48c74396",
+        "filename": "tvix/eval/src/tests/tvix_tests/eval-okay-closure-pointer-compare.nix",
+        "patchSetId": 3
+      },
+      "lineNbr": 6,
+      "author": {
+        "id": 1000066
+      },
+      "writtenOn": "2022-11-25T00:43:10Z",
+      "side": 1,
+      "message": "\u003e Also false, but probably this and a `let f \u003d g \"lol\"; in { q \u003d f; } \u003d\u003d { q \u003d f; }` test case are worthwhile to add?\n\nRight, because the lambdas are normal-form-equal but not pointer-equal.",
+      "parentUuid": "1e50e580_6a265d14",
+      "revId": "fecae53a5c874c4b6bf88e8011a034f4d670e1ac",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
