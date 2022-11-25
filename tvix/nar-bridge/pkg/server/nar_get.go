@@ -15,8 +15,50 @@ import (
 	log "github.com/sirupsen/logrus"
 )
 
+const (
+	narUrl = "/nar/{narhash:^([" + nixbase32.Alphabet + "]{52}|[" + nixbase32.Alphabet + "]{103})$}.nar"
+)
+
 func registerNarGet(s *Server) {
-	s.handler.Get("/nar/{narhash:^(["+nixbase32.Alphabet+"]{52}|["+nixbase32.Alphabet+"]{103})$}.nar", func(w http.ResponseWriter, r *http.Request) {
+	// TODO: properly compose this
+	s.handler.Head(narUrl, func(w http.ResponseWriter, r *http.Request) {
+		defer r.Body.Close()
+
+		ctx := r.Context()
+
+		// parse the narhash sent in the request URL
+		narHash, err := parseNarHashFromUrl(chi.URLParamFromCtx(ctx, "narhash"))
+		if err != nil {
+			log.WithError(err).WithField("url", r.URL).Error("unable to decode nar hash from url")
+			w.WriteHeader(http.StatusBadRequest)
+			_, err := w.Write([]byte("unable to decode nar hash from url"))
+			if err != nil {
+				log.WithError(err).Errorf("unable to write error message to client")
+			}
+
+			return
+		}
+
+		log := log.WithField("narhash_url", narHash.SRIString())
+
+		// look in the lookup table
+		s.narHashToPathInfoMu.Lock()
+		_, found := s.narHashToPathInfo[narHash.SRIString()]
+
+		// if we didn't find anything, return 404.
+		if !found {
+			w.WriteHeader(http.StatusNotFound)
+			_, err := w.Write([]byte("narHash not found"))
+			if err != nil {
+				log.WithError(err).Errorf("unable to write error message to client")
+			}
+
+			return
+		}
+		w.WriteHeader(http.StatusNoContent)
+
+	})
+	s.handler.Get(narUrl, func(w http.ResponseWriter, r *http.Request) {
 		defer r.Body.Close()
 
 		ctx := r.Context()
