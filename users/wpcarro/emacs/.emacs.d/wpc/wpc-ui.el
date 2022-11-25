@@ -13,16 +13,15 @@
 ;; Dependencies
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(require 'constants)
-(require 'prelude)
-(require 'al)
-(require 'fonts)
-(require 'theme)
-(require 'laptop-battery)
-(require 'modeline)
-(require 'general)
-(require 'dash)
 (require '>)
+(require 'al)
+(require 'constants)
+(require 'dash)
+(require 'fonts)
+(require 'general)
+(require 'modeline)
+(require 'prelude)
+(require 'theme)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Configuration
@@ -159,7 +158,7 @@
   :config
   (setq alert-default-style 'notifier))
 
-(laptop-battery-display)
+(display-battery-mode 1)
 
 (setq theme-whitelist
       (->> (custom-available-themes)
