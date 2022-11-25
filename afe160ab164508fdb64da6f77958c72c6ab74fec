@@ -34,6 +34,24 @@
       "parentUuid": "5350afd0_68f630da",
       "revId": "afe160ab164508fdb64da6f77958c72c6ab74fec",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bcfe0f7d_1293c00b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000066
+      },
+      "writtenOn": "2022-11-25T00:42:07Z",
+      "side": 1,
+      "message": "Sorry, I had a streak there where I was making a lot of progress towards evaluating nixpkgs and I dropped the ball on this.\n\nLatest patchset ought to work, both in depot and via `crate.nix` (cl/7352).",
+      "parentUuid": "530470d0_b0e7ea5e",
+      "revId": "afe160ab164508fdb64da6f77958c72c6ab74fec",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
