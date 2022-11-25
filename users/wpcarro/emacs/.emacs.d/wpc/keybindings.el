@@ -31,7 +31,6 @@
 (require 'exwm)
 (require 'vterm-mgt)
 (require 'buffer)
-(require 'device)
 (require 'fonts)
 (require 'bookmark)
 (require 'tvl)
