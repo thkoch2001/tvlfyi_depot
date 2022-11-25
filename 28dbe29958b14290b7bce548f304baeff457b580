@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "591b4664_b1dde47b",
+        "filename": "tvix/eval/src/vm.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 476,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2022-11-25T23:41:54Z",
+      "side": 1,
+      "message": "I think it needs to be an actual string, not coerced.",
+      "revId": "28dbe29958b14290b7bce548f304baeff457b580",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "49f73945_acaac837",
+        "filename": "tvix/eval/src/vm.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 489,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2022-11-25T23:41:54Z",
+      "side": 1,
+      "message": "This /can/ probably be a coercible thing in practice, the question is whether this is wise / needed for anything.",
+      "range": {
+        "startLine": 489,
+        "startChar": 33,
+        "endLine": 489,
+        "endChar": 49
+      },
+      "revId": "28dbe29958b14290b7bce548f304baeff457b580",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
