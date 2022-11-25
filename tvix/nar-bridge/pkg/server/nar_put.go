@@ -15,7 +15,7 @@ import (
 )
 
 func registerNarPut(s *Server) {
-	s.handler.Put("/nar/{narhash:^(["+nixbase32.Alphabet+"]{52}|["+nixbase32.Alphabet+"]{103})$}.nar", func(w http.ResponseWriter, r *http.Request) {
+	s.handler.Put(narUrl, func(w http.ResponseWriter, r *http.Request) {
 		defer r.Body.Close()
 
 		ctx := r.Context()
