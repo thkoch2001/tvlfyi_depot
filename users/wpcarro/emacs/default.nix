@@ -67,91 +67,85 @@ let
     ]) ++
 
     (with epkgs.melpaPackages; [
+      alert
+      all-the-icons
+      all-the-icons-ivy
       avy
-      org-bullets
-      sly
-      notmuch
-      elm-mode
-      ts
-      vterm
       base16-theme
-      password-store
+      cider
+      clojure-mode
+      company
+      counsel
+      counsel-projectile
       csharp-mode
+      dap-mode
+      dash
+      deadgrep
+      deferred
+      diminish
+      direnv
       dockerfile-mode
+      doom-themes
+      eglot
+      elisp-slime-nav
+      elixir-mode
+      elm-mode
+      emojify
+      engine-mode
       evil
       evil-collection
       evil-commentary
       evil-surround
-      key-chord
-      # TODO(wpcarro): Assess whether or not I need this with Nix.
-      add-node-modules-path
-      web-mode
-      rjsx-mode
-      tide
-      prettier-js
+      f
+      fish-mode
       flycheck
-      diminish
-      doom-themes
-      telephone-line
-      which-key
-      all-the-icons
-      all-the-icons-ivy
+      flymake-shellcheck
+      general
+      go-mode
+      haskell-mode
+      helpful
       ivy
       ivy-clipmenu
       ivy-pass
       ivy-prescient
-      restclient
-      package-lint
-      parsec
-      magit-popup
-      direnv
-      alert
-      nix-mode
-      rust-mode
-      rainbow-delimiters
-      racket-mode
+      key-chord
       lispyville
-      elisp-slime-nav
-      py-yapf
-      reason-mode
-      terraform-mode
-      elixir-mode
-      go-mode
-      company
-      markdown-mode
-      refine
-      deferred
-      magit
-      request
-      pcre2el
-      helpful
-      yasnippet
-      projectile
-      deadgrep
-      counsel
-      counsel-projectile
-      # TODO(wpcarro): Learn what this is.
-      engine-mode
-      eglot
-      dap-mode
       lsp-ui
-      suggest
+      magit
+      magit-popup
+      markdown-mode
+      nix-mode
+      notmuch
+      org-bullets
+      package-lint
       paradox
-      flymake-shellcheck
-      fish-mode
+      parsec
+      password-store
+      pcre2el
+      prettier-js
+      projectile
+      py-yapf
+      racket-mode
+      rainbow-delimiters
+      reason-mode
+      refine
+      request
+      restclient
+      rjsx-mode
+      rust-mode
+      sly
+      suggest
+      telephone-line
+      terraform-mode
+      tide
+      ts
       tuareg
-      haskell-mode
       use-package
-      general
-      clojure-mode
-      cider
-      f
-      dash
-      company
-      counsel
-      flycheck
-      emojify
+      vterm
+      web-mode
+      which-key
       yaml-mode
+      yasnippet
     ]));
 
   loadPath = concatStringsSep ":" [
