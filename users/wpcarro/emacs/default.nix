@@ -52,6 +52,7 @@ let
       string
       struct
       symbol
+      tuple
       vterm-mgt
       zle
     ]) ++
