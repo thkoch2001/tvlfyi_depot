@@ -25,7 +25,7 @@ service PathInfoService {
     // PathInfo, Directories and Blobs.
     // The returned PathInfo object MAY contain additional narinfo signatures,
     // but is otherwise left untouched.
-    rpc Put(PathInfo) returns (PathInfo);
+    rpc Put(PutPathInfoRequest) returns (PathInfo);
 }
 
 // GetPathInfoRequest describes the lookup parameters that can be used to
@@ -38,4 +38,10 @@ message GetPathInfoRequest {
 
       // placeholder: by_drv and output name?
     }
+}
+
+// PutPathInfoRequest wraps the PathInfo message that we sent and annotates it with metadata
+message PutPathInfoRequest{
+  PathInfo path_info = 1;
+  bytes output_hash = 2;
 }
