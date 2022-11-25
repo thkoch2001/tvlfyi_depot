@@ -44,6 +44,7 @@ let
   wpcarrosEmacs = emacsWithPackages (epkgs:
     (with wpcarro.emacs.pkgs; [
       al
+      bookmark
       cycle
       list
       maybe
