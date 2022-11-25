@@ -1,14 +1,17 @@
 package server
 
 import (
+	"bytes"
+	"fmt"
+	"io"
+	"net/http"
+
 	"code.tvl.fyi/tvix/nar-bridge/pkg/reader"
 	storev1pb "code.tvl.fyi/tvix/store/protos"
-	"fmt"
 	"github.com/go-chi/chi/v5"
 	nixhash "github.com/nix-community/go-nix/pkg/hash"
 	"github.com/nix-community/go-nix/pkg/nixbase32"
 	log "github.com/sirupsen/logrus"
-	"net/http"
 )
 
 func registerNarPut(s *Server) {
@@ -52,7 +55,12 @@ func registerNarPut(s *Server) {
 			}
 		}()
 
-		rd := reader.New(r.Body)
+		var buf bytes.Buffer
+		_, err = io.Copy(&buf, r.Body)
+		if err != nil {
+			panic(err)
+		}
+		rd := reader.New(&buf)
 		pathInfo, err := rd.Import(
 			ctx,
 			genBlobServiceWriteCb(ctx, s.blobServiceClient),
