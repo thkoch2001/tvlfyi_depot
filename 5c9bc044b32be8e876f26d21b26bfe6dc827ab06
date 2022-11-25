@@ -119,6 +119,30 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "d7cb2445_d703694d",
+        "filename": "tvix/docs/value-pointer-equality.md",
+        "patchSetId": 2
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2022-11-25T10:25:30Z",
+      "side": 1,
+      "message": "I see, updated the wording a bit. Also linked to the relevant upstream issue below.",
+      "parentUuid": "bcb55b21_870a6f61",
+      "range": {
+        "startLine": 19,
+        "startChar": 38,
+        "endLine": 19,
+        "endChar": 63
+      },
+      "revId": "5c9bc044b32be8e876f26d21b26bfe6dc827ab06",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "36308769_51afe33a",
