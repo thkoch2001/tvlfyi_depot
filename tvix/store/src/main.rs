@@ -4,11 +4,14 @@ use tonic::{transport::Server, Result};
 
 use crate::proto::blob_service_server::BlobServiceServer;
 use crate::proto::directory_service_server::DirectoryServiceServer;
+use crate::proto::path_info_service_server::PathInfoServiceServer;
 
 mod file_blob_service;
 mod memory_directory_service;
+mod memory_path_info_service;
 mod null_blob_service;
 mod null_directory_service;
+mod null_path_info_service;
 mod proto;
 
 #[derive(Parser)]
@@ -36,11 +39,13 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
             .join("blob"),
     };
     let directory_service = crate::memory_directory_service::MemoryDirectoryService::default();
+    let path_info_service = crate::memory_path_info_service::MemoryPathInfoService::default();
 
     println!("BlobService listening on {}", listen_address);
     Server::builder()
         .add_service(BlobServiceServer::new(blob_service))
         .add_service(DirectoryServiceServer::new(directory_service))
+        .add_service(PathInfoServiceServer::new(path_info_service))
         .serve(listen_address)
         .await?;
     Ok(())
