@@ -20,12 +20,11 @@ func registerNarGet(s *Server) {
 		defer r.Body.Close()
 
 		ctx := r.Context()
-		log := log.WithField("narhash_url", chi.URLParamFromCtx(ctx, "narhash"))
 
 		// parse the narhash sent in the request URL
-		narHash, err := nixbase32.DecodeString(chi.URLParamFromCtx(ctx, "narhash"))
+		narHash, err := parseNarHashFromUrl(chi.URLParamFromCtx(ctx, "narhash"))
 		if err != nil {
-			log.Errorf("unable to decode nar hash from url: %v", err)
+			log.WithError(err).WithField("url", r.URL).Error("unable to decode nar hash from url")
 			w.WriteHeader(http.StatusBadRequest)
 			_, err := w.Write([]byte("unable to decode nar hash from url"))
 			if err != nil {
@@ -35,24 +34,16 @@ func registerNarGet(s *Server) {
 			return
 		}
 
+		log := log.WithField("narhash_url", narHash.SRIString())
+
 		var pathInfo *storev1pb.PathInfo
 
-		// based on the length of the narhash, look in one of the two lookup tables
+		// look in the lookup table
 		s.narHashToPathInfoMu.Lock()
-		if len(narHash) == 32 {
-			foundPathInfo, found := s.narHashSha256ToPathInfo[hex.EncodeToString(narHash)]
-			if found {
-				pathInfo = foundPathInfo
-			}
-		} else if len(narHash) == 64 {
-			foundPathInfo, found := s.narHashSha512ToPathInfo[hex.EncodeToString(narHash)]
-			if found {
-				pathInfo = foundPathInfo
-			}
-		}
+		pathInfo, found := s.narHashToPathInfo[narHash.SRIString()]
 
 		// if we didn't find anything, return 404.
-		if pathInfo == nil {
+		if !found {
 			w.WriteHeader(http.StatusNotFound)
 			_, err := w.Write([]byte("narHash not found"))
 			if err != nil {
