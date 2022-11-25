@@ -97,6 +97,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "bcb55b21_870a6f61",
+        "filename": "tvix/docs/value-pointer-equality.md",
+        "patchSetId": 2
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1000066
+      },
+      "writtenOn": "2022-11-25T01:33:13Z",
+      "side": 1,
+      "message": "My point is that, as you are using it,\n\n```\nfunction pointer equality \u003d\u003d function (pointer equality)\nfunction pointer equality !\u003d (function pointer) equality\n```\n\n(a closure is a `function pointer` plus the values of all captured variables).\n\nLet\u0027s hope the reader infers parentheses the same way you do.  I didn\u0027t, at least not at first.\n\n\u003e there is no way to trick Nix into “deduplicating” the same values\n\nCorrect, but that\u0027s not what I was talking about.\n\nIf you understand that my point is about parsing `function pointer equality` and don\u0027t think other readers will misparenthesize it like I did, just ACK this.",
+      "parentUuid": "801b835d_22b3c0bc",
+      "range": {
+        "startLine": 19,
+        "startChar": 38,
+        "endLine": 19,
+        "endChar": 63
+      },
+      "revId": "5c9bc044b32be8e876f26d21b26bfe6dc827ab06",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "36308769_51afe33a",
         "filename": "tvix/docs/value-pointer-equality.md",
         "patchSetId": 2
