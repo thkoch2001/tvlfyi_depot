@@ -33,6 +33,24 @@
       "message": "If a `narinfo` file has more than one `NarHash` line, cppnix will silently ignore all but the last one.\n\nThis is important, because a `Signature` signs the `NarHash`.\n\nIf we allow multiple `NarHash` lines, we have to explain *which* of them is signed by (each) signature.  I see three possible solutions:\n\n1. Delete `repeated` from this line.\n\n2. Leave `repeated`, but imitate cppnix\u0027s behavior (silently ignore all but the *last* `element of `nar_hashes`), and add a comment documenting this.\n\n3. Move `repeated Signature signatures` from `message NARInfo` into `message NarHash`.  Then it is unambiguous which `NarHash` a given `Signature` is signing.\n\n#1 is the simplest.  #3 lets us support multiple `NarHashes` (including, e.g. ipfs-hashes) in the future without a protocol change.  I personally lean towards #3, but any of these (or something else entirely) is fine too.",
       "revId": "7b5f53679cc119f991e9efae61f8db16a21926c5",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b427731c_0c0a1962",
+        "filename": "tvix/store/protos/pathinfo.proto",
+        "patchSetId": 18
+      },
+      "lineNbr": 62,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2022-11-25T23:49:50Z",
+      "side": 1,
+      "message": "I don\u0027t really intend using the existing signature mechanism in the long term. Long term, I\u0027d like to have some signature on (a subset of) a PathInfo message, so we can do partial substitution without having to assemble the whole NAR in memory first, to determine is the signature is correct or not. So not sure how much thought we should put into this.\n\nThe idea was to store both the sha256 and sha512 of a NAR file while receiving it through //tvix/nar-bridge.\n\nWe receive the .narinfo (which contains the signatures) in a later `PUT /$outputHash.narinfo` request, but at that point we need to glue it to the previously-received-but-converted-to-pathinfo object - and nix could use either sha256 or sha512.\n\nOf course, we could guess from the previous length of the URL which narhash format will likely be used, but calculating both and storing it in there felt not too much of work.\n\nI\u0027m wondering if we could circumvent this problem by being a smarter when rendering the .narinfo file to a Nixcpp client - calculate the theoretical fingerprint for both a sha256 and sha512 narhash, and use the one where the signatures are actually valid.",
+      "parentUuid": "6a360e02_aed7a800",
+      "revId": "7b5f53679cc119f991e9efae61f8db16a21926c5",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
