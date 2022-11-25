@@ -1,7 +1,8 @@
 package server
 
 import (
-	"encoding/hex"
+	"bytes"
+	"io"
 	"net/http"
 	"path"
 	"strings"
@@ -68,32 +69,32 @@ func registerNarinfoGet(s *Server) {
 			return
 		}
 
-		// lookup nar hashes
-		narHashSha256 := make([]byte, 32)
-		s.narHashToPathInfoMu.Lock()
-		for _, narHash := range pathInfo.Narinfo.GetNarHashes() {
-			if narHash.Algo == storev1pb.NARInfo_SHA256 {
-				s.narHashSha256ToPathInfo[hex.EncodeToString(narHash.Digest)] = pathInfo
-				narHashSha256 = narHash.Digest
-			} else if narHash.Algo == storev1pb.NARInfo_SHA512 {
-				s.narHashSha512ToPathInfo[hex.EncodeToString(narHash.Digest)] = pathInfo
+		// We need to use one of the nar hashes specified in the pathInfo object to
+		// use in the URL field in the .narinfo file we render.
+		var narHash *nixhash.Hash
+		for _, piNarHash := range pathInfo.Narinfo.GetNarHashes() {
+			if piNarHash.GetAlgo() == storev1pb.NARInfo_SHA256 {
+				narHash, err = nixhash.ParseNixBase32("sha256:" + nixbase32.EncodeToString(piNarHash.GetDigest()))
+				if err != nil {
+					panic(err)
+				}
+			} else if piNarHash.GetAlgo() == storev1pb.NARInfo_SHA512 {
+				narHash, err = nixhash.ParseNixBase32("sha256:" + nixbase32.EncodeToString(piNarHash.GetDigest()))
+				if err != nil {
+					panic(err)
+				}
 			}
 		}
-		s.narHashToPathInfoMu.Unlock()
-
-		// TODO: go-nix should have better constructor if you already have the bytes
-		narNh, err := nixhash.ParseNixBase32("sha256:" + nixbase32.EncodeToString(narHashSha256))
-		if err != nil {
-			log.WithError(err).Error("Unable to construct nar hash for .narinfo")
+		if narHash == nil {
+			log.Error("No usable NarHash found in PathInfo")
 			w.WriteHeader(http.StatusInternalServerError)
-			_, err := w.Write([]byte("Unable to construct nar hash for .narinfo"))
+			_, err := w.Write([]byte("Unable to get pathinfo from store"))
 			if err != nil {
 				log.WithError(err).Errorf("unable to write error message to client")
 			}
 
 			return
 		}
-
 		// convert the signatures from storev1pb signatures to narinfo signatures
 		narinfoSignatures := make([]signature.Signature, len(pathInfo.Narinfo.Signatures))
 		for _, pathInfoSignature := range pathInfo.Narinfo.Signatures {
@@ -103,7 +104,7 @@ func registerNarinfoGet(s *Server) {
 			})
 		}
 
-		// extract the name of the node in the pathInfo structure
+		// extract the name of the node in the pathInfo structure, which will become the output path
 		nodeName := ""
 		switch v := (pathInfo.Node).(type) {
 		case *storev1pb.PathInfo_File:
@@ -116,9 +117,9 @@ func registerNarinfoGet(s *Server) {
 
 		narInfo := narinfo.NarInfo{
 			StorePath:   path.Join(nixpath.StoreDir, nodeName),
-			URL:         "nar/" + nixbase32.EncodeToString(narHashSha256) + ".nar",
+			URL:         "nar/" + nixbase32.EncodeToString(narHash.Digest()) + ".nar",
 			Compression: "none", // TODO: implement zstd compression
-			NarHash:     narNh,
+			NarHash:     narHash,
 			NarSize:     uint64(pathInfo.Narinfo.NarSize),
 			References:  pathInfo.Narinfo.GetReferenceNames(),
 			Signatures:  narinfoSignatures,
