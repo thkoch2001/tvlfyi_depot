@@ -18,7 +18,6 @@
 (require 'al)
 (require 'fonts)
 (require 'theme)
-(require 'device)
 (require 'laptop-battery)
 (require 'modeline)
 (require 'general)
@@ -158,9 +157,7 @@
   :config
   (setq alert-default-style 'notifier))
 
-;; TODO: Should `device-laptop?' be a function or a constant that gets set
-;; during initialization?
-(when (device-laptop?) (laptop-battery-display))
+(laptop-battery-display)
 
 (setq theme-whitelist
       (->> (custom-available-themes)
