@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a8ce60bb_b746902a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2022-11-26T11:49:19Z",
+      "side": 1,
+      "message": "Originally when I wrote this logic I wanted it so that it could be unambiguous without `--` as long as a target is given (or the empty target `\"\"`).\n\nMaybe this way is better (always requiring `--`), since it also allows us adding a `-b` flag to choose the executable to run in case of multiple ones and it probably also makes it easier to allow passing Nix flags somehow (probably after a second `--`).\n\nI say: let\u0027s do it if tazjin agrees. Feel free to resolve.",
+      "revId": "45117c2148eda1c09ff4f53b4dde28783e0d6494",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
