@@ -1,6 +1,6 @@
 use std::io::Write;
-
 use tonic::{Request, Response, Result, Status};
+use tracing::{debug, error, info_span, instrument, warn};
 
 use crate::proto::blob_service_server::BlobService;
 use crate::proto::{GetBlobRequest, GetBlobResponse, PutBlobRequest, PutBlobResponse};
@@ -13,53 +13,80 @@ pub struct FileBlobService {
 #[tonic::async_trait]
 /// BlobService that stores all blobs as files named by digest, in subdirectories for each possible first byte.
 impl BlobService for FileBlobService {
+    #[instrument(skip(self))]
     async fn get(&self, request: Request<GetBlobRequest>) -> Result<Response<GetBlobResponse>> {
         let digest = request.into_inner().digest;
+        let _ = info_span!("digest", "{}", hex::encode(digest.clone())).enter();
         if digest.len() != 32 {
-            return Err(Status::unknown(format!(
-                "Digest has wrong length: {}",
-                digest.len()
-            )));
+            let msg = format!(
+                "Digest has wrong length {} but expected {}.)",
+                digest.len(),
+                32
+            );
+            warn!(msg);
+            return Err(Status::invalid_argument(msg));
         }
         let (head, _) = digest.split_at(1);
         let dir_path = self.store_path.join(hex::encode(head));
         let blob_path = dir_path.join(hex::encode(digest.clone()));
 
         if blob_path.is_file() {
-            if let Ok(data) = std::fs::read(blob_path) {
-                Ok(tonic::Response::new(GetBlobResponse { data: data }))
-            } else {
-                Err(Status::unknown("Error reading file."))
+            match std::fs::read(blob_path) {
+                Ok(data) => {
+                    debug!("OK.");
+                    Ok(tonic::Response::new(GetBlobResponse { data: data }))
+                }
+                Err(ref err) => {
+                    let msg = "Error reading file.";
+                    error!("{} {:?}", msg, err);
+                    Err(Status::unknown(msg))
+                }
             }
         } else {
-            Err(Status::not_found("Not found."))
+            let msg = "Not found.";
+            debug!(msg);
+            Err(Status::not_found(msg))
         }
     }
 
+    #[instrument(skip(self))]
     async fn put(&self, request: Request<PutBlobRequest>) -> Result<Response<PutBlobResponse>> {
         let data = &request.into_inner().data;
         let digest = blake3::hash(data).as_bytes().to_vec();
         let (head, _) = digest.split_at(1);
         let dir_path = self.store_path.join(hex::encode(head));
         let blob_path = dir_path.join(hex::encode(digest.clone()));
+        let _ = info_span!("digest", "{}", hex::encode(digest.clone())).enter();
 
         if !dir_path.is_dir() {
-            if let Err(_) = std::fs::create_dir_all(dir_path.clone()) {
-                return Err(Status::unknown("Error creating directory."));
+            if let Err(err) = std::fs::create_dir_all(dir_path.clone()) {
+                let msg = "Error creating directory.";
+                error!("{} {:?}", msg, err);
+                return Err(Status::internal(msg));
             }
         }
         if blob_path.exists() {
+            debug!("blob already exists");
             return Ok(tonic::Response::new(PutBlobResponse { digest: digest }));
         }
         match tempfile::NamedTempFile::new_in(dir_path) {
-            Err(err) => Err(Status::unknown(format!("Error creating file: ?{}", err))),
+            Err(err) => {
+                let msg = "Error creating file.";
+                error!("{} {:?}", msg, err);
+                Err(Status::internal(msg))
+            }
             Ok(file) => {
                 if let Err(err) = file.as_file().write_all(data) {
-                    return Err(Status::unknown(format!("Error writing file: ?{}", err)));
+                    let msg = "Error writing file.";
+                    error!("{} {:?}", msg, err);
+                    return Err(Status::internal(msg));
                 }
                 if let Err(err) = file.persist(blob_path) {
-                    return Err(Status::unknown(format!("Error renaming file: ?{}", err)));
+                    let msg = "Error renaming file.";
+                    error!("{} {:?}", msg, err);
+                    return Err(Status::internal(msg));
                 }
+                debug!("OK.");
                 Ok(tonic::Response::new(PutBlobResponse { digest: digest }))
             }
         }
