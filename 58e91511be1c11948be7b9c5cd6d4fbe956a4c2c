@@ -46,6 +46,30 @@
       },
       "revId": "58e91511be1c11948be7b9c5cd6d4fbe956a4c2c",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ac1e9d19_cfd147d7",
+        "filename": "tvix/store/protos/LICENSE",
+        "patchSetId": 3
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2022-11-26T00:00:42Z",
+      "side": 1,
+      "message": "dropped the year here and in the other file in //tvix/eval.",
+      "parentUuid": "b08f59c6_b344faa6",
+      "range": {
+        "startLine": 1,
+        "startChar": 12,
+        "endLine": 1,
+        "endChar": 16
+      },
+      "revId": "58e91511be1c11948be7b9c5cd6d4fbe956a4c2c",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
