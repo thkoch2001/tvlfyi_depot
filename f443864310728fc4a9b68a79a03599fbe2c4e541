@@ -70,6 +70,24 @@
       "parentUuid": "dcd2b33e_9cfdaf88",
       "revId": "f443864310728fc4a9b68a79a03599fbe2c4e541",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2a484c3e_b8fa707a",
+        "filename": "tvix/store/default.nix",
+        "patchSetId": 2
+      },
+      "lineNbr": 3,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2022-11-26T00:00:42Z",
+      "side": 1,
+      "message": "Dropped.",
+      "parentUuid": "a8a4a3cc_7ef05f7f",
+      "revId": "f443864310728fc4a9b68a79a03599fbe2c4e541",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
