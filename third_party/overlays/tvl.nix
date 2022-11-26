@@ -96,6 +96,13 @@ in
   # https://github.com/j3pic/lisp-binary/issues/59
   sbcl = self.sbcl_2_2_9;
 
+  # `Call $methodName --bytes-as-base64` support for evans
+  evans = super.evans.overrideAttrs (old: {
+    patches = old.patches or [ ] ++ [
+      ./patches/evans-add-support-for-bytes-as-base64.patch
+    ];
+  });
+
   # nix-serve does not work with nix 2.4
   # https://github.com/edolstra/nix-serve/issues/28
   nix-serve = super.nix-serve.override { nix = super.nix_2_3; };
