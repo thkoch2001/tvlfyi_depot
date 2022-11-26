@@ -36,6 +36,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "cb09dc5c_0b101358",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 15
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2022-11-26T00:00:42Z",
+      "side": 1,
+      "message": "I added a comment on the Directory situation (as both clients and servers can omit sending subsequent ones). Talking about references to blobs feels a bit out of place here, I left it out.",
+      "parentUuid": "b22d37c7_a49ac675",
+      "revId": "8a5067198920ddf26a1248120009126d1ccfbfb6",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "79e53835_617bbf25",
