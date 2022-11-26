@@ -1,5 +1,6 @@
+use base64;
 use prost::Message;
-
+use std::fmt;
 tonic::include_proto!("tvix.store.v1");
 
 impl Directory {
@@ -18,6 +19,26 @@ impl Directory {
         let mut hasher = blake3::Hasher::new();
 
         hasher.update(&self.encode_to_vec()).finalize().as_bytes()[..].to_vec()
+    }
+}
+
+impl fmt::Display for crate::proto::get_directory_request::ByWhat {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        match self {
+            crate::proto::get_directory_request::ByWhat::Digest(digest) => {
+                write!(f, "Digest({})", base64::encode(digest))
+            }
+        }
+    }
+}
+
+impl fmt::Display for crate::proto::get_path_info_request::ByWhat {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        match self {
+            crate::proto::get_path_info_request::ByWhat::ByOutputHash(digest) => {
+                write!(f, "ByOutputHash({})", base64::encode(digest))
+            }
+        }
     }
 }
 

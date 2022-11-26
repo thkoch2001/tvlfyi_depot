@@ -4,9 +4,12 @@ use std::sync::Arc;
 use tokio::sync::{mpsc, RwLock};
 use tokio_stream::wrappers::ReceiverStream;
 use tonic::{Request, Response, Result, Status, Streaming};
+use tracing::{debug, error, info_span, instrument, warn};
 
 use crate::proto::directory_service_server::DirectoryService;
-use crate::proto::{get_directory_request, Directory, GetDirectoryRequest, PutDirectoryResponse};
+use crate::proto::{
+    get_directory_request::ByWhat, Directory, GetDirectoryRequest, PutDirectoryResponse,
+};
 
 #[derive(Debug, Default)]
 pub struct MemoryDirectoryService {
@@ -18,6 +21,7 @@ pub struct MemoryDirectoryService {
 impl DirectoryService for MemoryDirectoryService {
     type GetStream = ReceiverStream<Result<Directory>>;
 
+    #[instrument(skip(self))]
     async fn get(
         &self,
         request: Request<GetDirectoryRequest>,
@@ -25,10 +29,12 @@ impl DirectoryService for MemoryDirectoryService {
         let get_directory_request = request.into_inner();
 
         match get_directory_request.by_what {
-            Some(get_directory_request::ByWhat::Digest(root_digest)) => {
+            Some(ByWhat::Digest(root_digest)) => {
+                let _ = info_span!("by_what", "{}", ByWhat::Digest(root_digest.clone()));
+
                 let (tx, rx) = mpsc::channel(10);
 
-                let mut directory_queue: VecDeque<Vec<u8>> = VecDeque::from([root_digest]);
+                let mut directory_queue: VecDeque<Vec<u8>> = VecDeque::from([root_digest.clone()]);
 
                 // clone self.directories, so we can use it inside the closure
                 let directories = self.directories.clone();
@@ -40,6 +46,8 @@ impl DirectoryService for MemoryDirectoryService {
                         // check for directories to return
                         match directory_queue.pop_front() {
                             Some(dgst) => {
+                                let _ = info_span!("digest", "{}", base64::encode(dgst.clone()));
+                                debug!("Found digest.");
                                 // check if that digest has already been sent.
                                 // If it was, continue with the next.
                                 // This can be the case if multiple directories in a closure point to the same contents.
@@ -63,14 +71,17 @@ impl DirectoryService for MemoryDirectoryService {
                                     }
 
                                     // send out the current directory
-                                    tx.send(Ok(d.clone())).await.unwrap();
+                                    if let Err(err) = tx.send(Ok(d.clone())).await {
+                                        let msg = "Error sending directory.";
+                                        error!("{} {:?}", msg, err);
+                                        break;
+                                    };
                                     directory_digests_sent.insert(dgst);
                                 } else {
-                                    tx.send(Err(Status::internal(
-                                        "unable to find referred directory",
-                                    )))
-                                    .await
-                                    .unwrap();
+                                    let msg = "Unable to find referred directory.";
+                                    error!(msg);
+                                    tx.send(Err(Status::internal(msg))).await.ok();
+                                    break;
                                 }
                             }
                             None => {
@@ -79,14 +90,20 @@ impl DirectoryService for MemoryDirectoryService {
                             }
                         };
                     }
+                    ()
                 });
-
-                Ok(Response::new(ReceiverStream::new(rx)))
+                let receiver_stream = ReceiverStream::new(rx);
+                Ok(Response::new(receiver_stream))
             }
-            None => Err(Status::invalid_argument("digest needs to be specified")),
+            None => {
+                let msg = "The by_what field needs to be present and contain Digest.";
+                warn!("Invalid argument. {}", msg);
+                Err(Status::invalid_argument(msg))
+            }
         }
     }
 
+    #[instrument(skip(self, request))]
     async fn put(
         &self,
         request: Request<Streaming<Directory>>,
@@ -96,17 +113,18 @@ impl DirectoryService for MemoryDirectoryService {
 
         // keep a reference to the last directory received
         let mut last_directory_digest: Option<Vec<u8>> = None;
-        // Receive all directory messages that are sent one by one
 
+        // Receive all directory messages that are sent one by one
         loop {
             match directory_stream.next().await {
                 Some(Ok(directory)) => {
+                    debug!("Got directory: {:?}", directory);
                     // for each referenced directory, we need to check if it has been sent in the stream
                     for child_directory in &directory.directories {
                         if !received_directories.contains_key(&child_directory.digest) {
-                            return Err(Status::failed_precondition(
-                                "received directory contains unknown child directory",
-                            ));
+                            let msg = "Received directory contains unknown child directory.";
+                            warn!("Failed precondition. {}", msg);
+                            return Err(Status::failed_precondition(msg));
                         }
                     }
                     // calculate the digest of the directory before it gets partially moved during iter
@@ -118,7 +136,7 @@ impl DirectoryService for MemoryDirectoryService {
                 }
                 Some(Err(e)) => {
                     // error from the client. We simply bounce it back :-P
-                    // TODO: log it
+                    warn!("Received error in directory stream: {:?}", e);
                     return Err(e);
                 }
                 // end of the stream
@@ -131,12 +149,14 @@ impl DirectoryService for MemoryDirectoryService {
         // we need to have received at least one directory, to be able to return the root digest of the tree that has been sent.
         if let Some(last_d) = last_directory_digest {
             // merge received_directories with the global hashmap
+            debug!("Received directories: {:?}", received_directories);
             for (k, v) in received_directories {
                 let found = {
                     let directories_r = self.directories.read().await;
                     directories_r.contains_key(&k)
                 };
                 if !found {
+                    debug!("Inserting directory: {}", hex::encode(k.clone()));
                     let mut directories_w = self.directories.write().await;
                     directories_w.insert(k, v);
                 }
@@ -146,7 +166,9 @@ impl DirectoryService for MemoryDirectoryService {
                 root_digest: last_d,
             }));
         } else {
-            return Err(Status::invalid_argument("no directories received"));
+            let err = "No directories received.";
+            warn!("Invalid argument. {}", err);
+            return Err(Status::invalid_argument(err));
         }
     }
 }
