@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "347cd8fb_298595e4",
+        "filename": "tvix/store/src/main.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2022-11-26T18:58:06Z",
+      "side": 1,
+      "message": "Can we ask for the log level, instead of just the verbose option?",
+      "revId": "2a417c92ccb0da4ec741a155b0728c83343f40da",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "563008c3_efb1cbb0",
+        "filename": "tvix/store/src/main.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 58,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2022-11-26T18:58:06Z",
+      "side": 1,
+      "message": "Can you squash that line into one of the previous commits?",
+      "revId": "2a417c92ccb0da4ec741a155b0728c83343f40da",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
