@@ -3,6 +3,40 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "5ad3c13a_4f0c5ec7",
+        "filename": "tvix/store/src/file_blob_service.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2022-11-26T22:13:02Z",
+      "side": 1,
+      "message": "base64 encoding pls",
+      "revId": "2a417c92ccb0da4ec741a155b0728c83343f40da",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5fa3835c_2c7c8bc9",
+        "filename": "tvix/store/src/file_blob_service.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 52,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2022-11-26T22:13:02Z",
+      "side": 1,
+      "message": "Can we skip PutBlobRequest.data at least?",
+      "revId": "2a417c92ccb0da4ec741a155b0728c83343f40da",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "347cd8fb_298595e4",
         "filename": "tvix/store/src/main.rs",
         "patchSetId": 1
