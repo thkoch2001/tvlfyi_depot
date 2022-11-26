@@ -71,6 +71,23 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "8b788a7c_5e11d4b0",
+        "filename": "tvix/store/src/memory_directory_service.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 121,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2022-11-26T22:18:58Z",
+      "side": 1,
+      "message": "I think we need a more concise representation for a Directory (or more, the *Node) representation inside.\n\nCan we list all the nodes digests as base64?",
+      "revId": "2a417c92ccb0da4ec741a155b0728c83343f40da",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "d153c32f_9b4164a4",
         "filename": "tvix/store/src/memory_directory_service.rs",
         "patchSetId": 1
