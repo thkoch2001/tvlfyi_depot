@@ -22,6 +22,30 @@
       },
       "revId": "82994374a62874be94cf6705e33ba57780f53502",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "da870131_37b4f135",
+        "filename": "tvix/store/protos/castore.pb.go",
+        "patchSetId": 6
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2022-11-26T15:26:51Z",
+      "side": 1,
+      "message": "I didn\u0027t create this, but `buf` (which used `protoc-gen-go`).\n\nThis enforces the version of protoimpl (which defines that constant) to be at a specific minimum version, preventing to use this code with a too old version of protoimpl.",
+      "parentUuid": "ff5b12d8_16cfb98f",
+      "range": {
+        "startLine": 21,
+        "startChar": 30,
+        "endLine": 21,
+        "endChar": 32
+      },
+      "revId": "82994374a62874be94cf6705e33ba57780f53502",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
