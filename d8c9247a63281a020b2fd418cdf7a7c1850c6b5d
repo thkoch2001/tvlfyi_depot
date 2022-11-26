@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "683b4bfc_777c440e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-11-26T21:17:29Z",
+      "side": 1,
+      "message": "The parent CL is marked work-in-progress, but this one is ready for review. What\u0027s the status?",
+      "revId": "d8c9247a63281a020b2fd418cdf7a7c1850c6b5d",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
