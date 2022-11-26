@@ -9,6 +9,7 @@ pkgs.mkShell {
     pkgs.buf-language-server
     pkgs.cargo
     pkgs.clippy
+    pkgs.evans
     pkgs.rust-analyzer
     pkgs.rustc
     pkgs.rustfmt
