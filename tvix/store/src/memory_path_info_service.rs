@@ -2,6 +2,7 @@ use std::collections::HashMap;
 use std::sync::Arc;
 use tokio::sync::RwLock;
 use tonic::{Request, Response, Result, Status};
+use tracing::{debug, info_span, instrument, warn};
 
 use crate::proto::get_path_info_request::ByWhat::ByOutputHash;
 use crate::proto::path_info_service_server::PathInfoService;
@@ -15,37 +16,52 @@ pub struct MemoryPathInfoService {
 #[tonic::async_trait]
 /// PathinfoService that stores PathInfo in memory
 impl PathInfoService for MemoryPathInfoService {
+    #[instrument(skip(self))]
     async fn get(&self, request: Request<GetPathInfoRequest>) -> Result<Response<PathInfo>> {
         let get_path_info_request = request.into_inner();
         if let Some(ByOutputHash(output_hash)) = get_path_info_request.by_what {
+            info_span!("by_what", "{}", ByOutputHash(output_hash.clone()));
             let path_infos_r = self.path_infos.read().await;
             if let Some(path_info) = path_infos_r.get(&output_hash) {
+                debug!("Found.");
                 Ok(Response::new(path_info.clone()))
             } else {
+                debug!("Not found.");
                 Err(Status::not_found("Not found."))
             }
         } else {
-            Err(Status::invalid_argument(
-                "The by_what field must be present and contain ByOutputHash",
-            ))
+            let msg = "The by_what field must be present and contain ByOutputHash.";
+            warn!("Invalid argument: {}", msg);
+            Err(Status::invalid_argument(msg))
         }
     }
+    #[instrument(skip(self))]
     async fn put(&self, request: Request<PutPathInfoRequest>) -> Result<Response<PathInfo>> {
         let put_path_info_request = request.into_inner();
         if let Some(path_info) = put_path_info_request.path_info {
+            info_span!(
+                "output_hash",
+                "{}",
+                base64::encode(put_path_info_request.output_hash.clone())
+            );
             // TODO: verify output hash
             let found = {
                 let path_infos_r = self.path_infos.read().await;
                 path_infos_r.contains_key(&put_path_info_request.output_hash)
             };
             // TODO: check if they match
-            if !found {
-                let mut path_infos_w = self.path_infos.write().await;
-                path_infos_w.insert(put_path_info_request.output_hash, path_info.clone());
+            if found {
+                debug!("PathInfo with this output_hash already exists. Replacing.");
+            } else {
+                debug!("Inserting PathInfo.");
             }
+            let mut path_infos_w = self.path_infos.write().await;
+            path_infos_w.insert(put_path_info_request.output_hash, path_info.clone());
             Ok(Response::new(path_info))
         } else {
-            Err(Status::invalid_argument("The path_info field is missing."))
+            let msg = "The path_info field is missing.";
+            warn!("Invalid argument. {}", msg);
+            Err(Status::invalid_argument(msg))
         }
     }
 }
@@ -66,7 +82,7 @@ mod tests {
             narinfo: None,
             node: None,
         };
-        // let hash = vec![0,32];
+
         let hash = "fake-hash".as_bytes().to_vec();
 
         let result = service
