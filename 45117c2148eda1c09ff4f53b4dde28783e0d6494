@@ -16,6 +16,24 @@
       "message": "Originally when I wrote this logic I wanted it so that it could be unambiguous without `--` as long as a target is given (or the empty target `\"\"`).\n\nMaybe this way is better (always requiring `--`), since it also allows us adding a `-b` flag to choose the executable to run in case of multiple ones and it probably also makes it easier to allow passing Nix flags somehow (probably after a second `--`).\n\nI say: let\u0027s do it if tazjin agrees. Feel free to resolve.",
       "revId": "45117c2148eda1c09ff4f53b4dde28783e0d6494",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "edaac8c2_565a4314",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-11-26T11:53:03Z",
+      "side": 1,
+      "message": "I lean towards things being more explicit (e.g. always require `--`). I didn\u0027t expect us to be able to pass args without `--` at all, so I\u0027m in favour.",
+      "parentUuid": "a8ce60bb_b746902a",
+      "revId": "45117c2148eda1c09ff4f53b4dde28783e0d6494",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
