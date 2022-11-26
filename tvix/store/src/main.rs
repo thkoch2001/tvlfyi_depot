@@ -5,6 +5,7 @@ use tonic::{transport::Server, Result};
 use crate::proto::blob_service_server::BlobServiceServer;
 use crate::proto::directory_service_server::DirectoryServiceServer;
 use crate::proto::path_info_service_server::PathInfoServiceServer;
+use crate::proto::FILE_DESCRIPTOR_SET;
 
 mod file_blob_service;
 mod memory_directory_service;
@@ -41,12 +42,21 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     let directory_service = crate::memory_directory_service::MemoryDirectoryService::default();
     let path_info_service = crate::memory_path_info_service::MemoryPathInfoService::default();
 
+    let mut server = Server::builder();
     println!("tvix-store listening on {}", listen_address);
-    Server::builder()
+
+    let mut router = server
         .add_service(BlobServiceServer::new(blob_service))
         .add_service(DirectoryServiceServer::new(directory_service))
-        .add_service(PathInfoServiceServer::new(path_info_service))
-        .serve(listen_address)
-        .await?;
+        .add_service(PathInfoServiceServer::new(path_info_service));
+    #[cfg(feature = "reflection")]
+    {
+        let reflection_svc = tonic_reflection::server::Builder::configure()
+            .register_encoded_file_descriptor_set(FILE_DESCRIPTOR_SET)
+            .build()?;
+        router = router.add_service(reflection_svc);
+    }
+
+    router.serve(listen_address).await?;
     Ok(())
 }
