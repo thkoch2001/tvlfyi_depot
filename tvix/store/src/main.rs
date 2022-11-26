@@ -1,6 +1,7 @@
 use clap::Parser;
 use std::path::PathBuf;
 use tonic::{transport::Server, Result};
+use tracing::{info, Level};
 
 use crate::proto::blob_service_server::BlobServiceServer;
 use crate::proto::directory_service_server::DirectoryServiceServer;
@@ -21,6 +22,9 @@ struct Cli {
     #[arg(long)]
     store_path: Option<PathBuf>,
 
+    #[arg(short, long)]
+    verbose: bool,
+
     #[arg()]
     listen_address: Option<String>,
 }
@@ -33,6 +37,15 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         .unwrap_or("[::]:8000".to_string())
         .parse()
         .unwrap();
+
+    let level = if cli.verbose {
+        Level::DEBUG
+    } else {
+        Level::INFO
+    };
+    let subscriber = tracing_subscriber::fmt().with_max_level(level).finish();
+    tracing::subscriber::set_global_default(subscriber).ok();
+
     let blob_service = crate::file_blob_service::FileBlobService {
         store_path: cli
             .store_path
@@ -42,7 +55,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     let directory_service = crate::memory_directory_service::MemoryDirectoryService::default();
     let path_info_service = crate::memory_path_info_service::MemoryPathInfoService::default();
 
-    println!("BlobService listening on {}", listen_address);
+    info!("tvix-store listening on {}", listen_address);
 
     let mut server = Server::builder();
     let mut router = server
