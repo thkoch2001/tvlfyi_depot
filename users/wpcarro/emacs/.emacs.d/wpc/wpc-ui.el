@@ -115,7 +115,8 @@
 (use-package all-the-icons
   :config
   (unless (or constants-ci?
-              (f-exists? "~/.local/share/fonts/all-the-icons.ttf"))
+              (f-exists? "~/.local/share/fonts/all-the-icons.ttf")
+              (f-exists? "~/Library/Fonts/all-the-icons.ttf"))
     (all-the-icons-install-fonts t)))
 
 ;; icons for Ivy
