@@ -3792,6 +3792,7 @@ rec {
           "default" = [ "std" ];
           "std" = [ "prost/std" ];
         };
+        resolvedDefaultFeatures = [ "default" "std" ];
       };
       "quick-error" = rec {
         crateName = "quick-error";
@@ -5443,7 +5444,7 @@ rec {
           "time" = [ "tokio/time" ];
           "tokio-util" = [ "dep:tokio-util" ];
         };
-        resolvedDefaultFeatures = [ "default" "time" ];
+        resolvedDefaultFeatures = [ "default" "net" "time" ];
       };
       "tokio-util" = rec {
         crateName = "tokio-util";
@@ -5711,6 +5712,53 @@ rec {
           "prost-build" = [ "dep:prost-build" ];
         };
         resolvedDefaultFeatures = [ "default" "prost" "prost-build" "transport" ];
+      };
+      "tonic-reflection" = rec {
+        crateName = "tonic-reflection";
+        version = "0.5.0";
+        edition = "2018";
+        sha256 = "05i6c1fcbwkkj0p2r63vb5iac60b22a5rif3zx5li8a0slqgfm84";
+        authors = [
+          "James Nugent <james@jen20.com>"
+          "Samani G. Gikandi <samani@gojulas.com>"
+        ];
+        dependencies = [
+          {
+            name = "bytes";
+            packageId = "bytes";
+          }
+          {
+            name = "prost";
+            packageId = "prost";
+          }
+          {
+            name = "prost-types";
+            packageId = "prost-types";
+          }
+          {
+            name = "tokio";
+            packageId = "tokio";
+            features = [ "sync" ];
+          }
+          {
+            name = "tokio-stream";
+            packageId = "tokio-stream";
+            features = [ "net" ];
+          }
+          {
+            name = "tonic";
+            packageId = "tonic";
+            features = [ "codegen" "prost" ];
+          }
+        ];
+        buildDependencies = [
+          {
+            name = "tonic-build";
+            packageId = "tonic-build";
+            features = [ "transport" "prost" ];
+          }
+        ];
+
       };
       "tower" = rec {
         crateName = "tower";
@@ -6371,6 +6419,11 @@ rec {
             name = "tonic";
             packageId = "tonic";
           }
+          {
+            name = "tonic-reflection";
+            packageId = "tonic-reflection";
+            optional = true;
+          }
         ];
         buildDependencies = [
           {
@@ -6382,7 +6435,12 @@ rec {
             packageId = "tonic-build";
           }
         ];
-
+        features = {
+          "default" = [ "reflection" ];
+          "reflection" = [ "tonic-reflection" ];
+          "tonic-reflection" = [ "dep:tonic-reflection" ];
+        };
+        resolvedDefaultFeatures = [ "default" "reflection" "tonic-reflection" ];
       };
       "typenum" = rec {
         crateName = "typenum";
