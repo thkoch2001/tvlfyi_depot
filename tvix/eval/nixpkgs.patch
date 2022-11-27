@@ -1,0 +1,38 @@
+diff --git a/pkgs/build-support/fetchurl/boot.nix b/pkgs/build-support/fetchurl/boot.nix
+index 8f8c78b7a454..9224a8361a55 100644
+--- a/pkgs/build-support/fetchurl/boot.nix
++++ b/pkgs/build-support/fetchurl/boot.nix
+@@ -7,6 +7,7 @@ let mirrors = import ./mirrors.nix; in
+ , sha256 ? ""
+ , hash ? ""
+ , name ? baseNameOf (toString url)
++, ...
+ }:
+ 
+ # assert exactly one hash is set
+diff --git a/pkgs/development/interpreters/perl/default.nix b/pkgs/development/interpreters/perl/default.nix
+index 4d95ebf2052b..fbe448fcf1dd 100644
+--- a/pkgs/development/interpreters/perl/default.nix
++++ b/pkgs/development/interpreters/perl/default.nix
+@@ -4,7 +4,7 @@
+ , enableCrypt ? true, libxcrypt ? null
+ , zlib
+ }:
+-
++let enableCrypt = false; in
+ assert (enableCrypt -> (libxcrypt != null));
+ 
+ # Note: this package is used for bootstrapping fetchurl, and thus
+diff --git a/pkgs/stdenv/linux/default.nix b/pkgs/stdenv/linux/default.nix
+index dbaff342fb1a..9a0e8e849f69 100644
+--- a/pkgs/stdenv/linux/default.nix
++++ b/pkgs/stdenv/linux/default.nix
+@@ -188,6 +188,8 @@ in
+       };
+       coreutils = bootstrapTools;
+       gnugrep = bootstrapTools;
++      perl = bootstrapTools;
++      zlib = bootstrapTools;
+     };
+   })
+ 
