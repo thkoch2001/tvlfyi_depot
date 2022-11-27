@@ -4,41 +4,56 @@
 let
   virtualHost = "code.sterni.lv";
 
-  repos = {
-    spacecookie = {
-      description = "gopher server (and library for Haskell)";
-    };
-    gopher-proxy = {
-      description = "Gopher over HTTP proxy";
-    };
-    emoji-generic = {
-      description = "generic emoji library for Haskell (wip)";
-    };
-    grav2ty = {
-      description = "“realistic” 2d space game";
-    };
-    likely-music = {
-      description = "experimental application for probabilistic music composition";
-    };
-    logbook = {
-      description = "file format for keeping a personal log";
-    };
-    sternenblog = {
-      description = "file based cgi blog software";
-    };
-    haskell-dot-time = {
-      description = "UTC-centric time library for haskell with dot time support";
-      defaultBranch = "main";
-    };
-    buchstabensuppe = {
-      description = "toy font rendering for low pixelcount, high contrast displays";
-      defaultBranch = "main";
-    };
-  };
+  repoSections = [
+    {
+      section = "active";
+      repos = {
+        spacecookie = {
+          description = "gopher server (and library for Haskell)";
+        };
+      };
+    }
+    {
+      section = "poc";
+      repos = {
+        emoji-generic = {
+          description = "generic emoji library for Haskell";
+        };
+        grav2ty = {
+          description = "“realistic” 2d space game";
+        };
+        haskell-dot-time = {
+          description = "UTC-centric time library for haskell with dot time support";
+          defaultBranch = "main";
+        };
+        buchstabensuppe = {
+          description = "toy font rendering for low pixelcount, high contrast displays";
+          defaultBranch = "main";
+        };
+      };
+    }
+    {
+      section = "archive";
+      repos = {
+        gopher-proxy = {
+          description = "Gopher over HTTP proxy";
+        };
+        likely-music = {
+          description = "experimental application for probabilistic music composition";
+        };
+        logbook = {
+          description = "file format for keeping a personal log";
+        };
+        sternenblog = {
+          description = "file based cgi blog software";
+        };
+      };
+    }
+  ];
 
   cgitRepoEntry = name: repo:
     let
-      repoName = repos.name or name;
+      repoName = repo.name or name;
       path = repo.path or "${repoName}.git";
     in
     lib.concatStringsSep "\n" (
@@ -75,8 +90,7 @@ let
     enable-blame=1
     enable-commit-graph=1
 
-    root-title=code
-    root-desc=sterni's git repositories
+    root-title=code.sterni.lv
     css=/cgit.css
     head-include=${cgitHead}
 
@@ -87,7 +101,15 @@ let
     readme=:README.md
     readme=:readme.md
 
-    ${builtins.concatStringsSep "\n\n" (lib.mapAttrsToList cgitRepoEntry repos)}
+    section-sort=0
+    ${
+      lib.concatMapStringsSep "\n" (section:
+        ''
+          section=${section.section}
+        ''
+        + builtins.concatStringsSep "\n\n" (lib.mapAttrsToList cgitRepoEntry section.repos)
+      ) repoSections
+    }
   '';
 in
 
