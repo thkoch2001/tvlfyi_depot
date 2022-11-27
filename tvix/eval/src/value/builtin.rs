@@ -52,7 +52,7 @@ pub struct Builtin {
     arguments: &'static [BuiltinArgument],
     /// Optional documentation for the builtin.
     documentation: Option<&'static str>,
-    func: Rc<dyn BuiltinFn>,
+    pub func: Rc<dyn BuiltinFn>,
 
     /// Partially applied function arguments.
     partials: Vec<Value>,
