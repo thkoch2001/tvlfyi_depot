@@ -79,6 +79,7 @@ in
   };
 
   services.xserver.libinput.touchpad.clickMethod = "clickfinger";
+  services.xserver.libinput.touchpad.tapping = false;
   services.tailscale.enable = true;
   services.avahi.enable = true;
   powerManagement.powertop.enable = true;
