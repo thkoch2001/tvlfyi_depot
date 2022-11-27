@@ -24,7 +24,14 @@ use crate::{opcode::UpvalueIdx, Value};
 ///   `let`, `name:` or `{name}:`
 /// - Dynamic identifiers, which are not bound in any enclosing
 ///   scope
-#[derive(Clone, Debug)]
+///
+/// In order to correctly reproduce cppnix's "pointer equality"
+/// semantics it is important that we never clone an Upvalues-set --
+/// use Rc<Upvalues>::clone() instead.  This struct deliberately
+/// does not `derive(Clone)` in order to prevent this from being
+/// done accidentally.
+///
+#[derive(/* do not add Clone here */ Debug)]
 pub struct Upvalues {
     /// The upvalues of static identifiers.  Each static identifier
     /// is assigned an integer identifier at compile time, which is
