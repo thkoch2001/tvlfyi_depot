@@ -66,4 +66,46 @@
 ;; *NEVER* use intentionally.
 (unbind-key (kbd "C-x s") 'global-map)
 
+;; German keyboard layout with Y and Z in the correct place.
+
+(quail-define-package
+ "german-qwerty" "German" "DE@" t
+ "German (Deutsch) input method with QWERTY keys"
+ nil t t t t nil nil nil nil nil t)
+
+;; 1!  2"  3§  4$  5%  6&  7/  8(  9)  0=  ß?  [{  ]}
+;;  qQ  wW  eE  rR  tT  yY  uU  iI  oO  pP  üÜ  +*
+;;   aA  sS  dD  fF  gG  hH  jJ  kK  lL  öÖ  äÄ  #^
+;;    zZ  xX  cC  vV  bB  nN  mM  ,;  .:  -_
+
+(quail-define-rules
+ ("-" ?ß)
+ ("=" ?\[)
+ ("`" ?\])
+ ("[" ?ü)
+ ("]" ?+)
+ (";" ?ö)
+ ("'" ?ä)
+ ("\\" ?#)
+ ("/" ?-)
+
+ ("@" ?\")
+ ("#" ?§)
+ ("^" ?&)
+ ("&" ?/)
+ ("*" ?\()
+ ("(" ?\))
+ (")" ?=)
+ ("_" ??)
+ ("+" ?{)
+ ("~" ?})
+ ("{" ?Ü)
+ ("}" ?*)
+ (":" ?Ö)
+ ("\"" ?Ä)
+ ("|" ?^)
+ ("<" ?\;)
+ (">" ?:)
+ ("?" ?_))
+
 (provide 'bindings)
