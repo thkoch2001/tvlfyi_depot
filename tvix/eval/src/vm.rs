@@ -2,7 +2,9 @@
 //! Tvix bytecode.
 
 use serde_json::json;
-use std::{cmp::Ordering, ops::DerefMut, path::PathBuf, rc::Rc};
+use std::{cmp::Ordering, collections::BTreeMap, ops::DerefMut, path::PathBuf, rc::Rc};
+
+use codemap::Span;
 
 use crate::{
     chunk::Chunk,
@@ -16,13 +18,51 @@ use crate::{
     warnings::{EvalWarning, WarningKind},
 };
 
+/// Representation of a VM continuation;
+/// see: https://en.wikipedia.org/wiki/Continuation-passing_style#CPS_in_Haskell
+type Cont = Box<dyn FnOnce(&mut VM) -> EvalResult<Tramp>>;
+
+#[must_use = "this `Tramp` may be a continuation request, which should be handled"]
+#[derive(Default)]
+pub struct Tramp {
+    /// The action to perform upon return to the trampoline
+    pub action: Option<TrampAction>,
+
+    /// The continuation to execute after the action has completed
+    pub cont: Option<Box<dyn FnOnce(&mut VM) -> EvalResult<Tramp>>>,
+}
+
+impl Tramp {
+    pub fn append_to_continuation(self, f: Cont) -> Self {
+        Tramp {
+            action: self.action,
+            cont: match self.cont {
+                None => Some(f),
+                Some(f0) => Some(Box::new(move |vm| {
+                    let tramp = f0(vm)?;
+                    Ok(tramp.append_to_continuation(f))
+                })),
+            },
+        }
+    }
+}
+
+pub enum TrampAction {
+    EnterFrame {
+        lambda: Rc<Lambda>,
+        upvalues: Rc<Upvalues>,
+        span: Span,
+        arg_count: usize,
+    },
+}
+
 struct CallFrame {
     /// The lambda currently being executed.
     lambda: Rc<Lambda>,
 
     /// Optional captured upvalues of this frame (if a thunk or
     /// closure if being evaluated).
-    upvalues: Upvalues,
+    upvalues: Rc<Upvalues>,
 
     /// Instruction pointer to the instruction currently being
     /// executed.
@@ -30,6 +70,8 @@ struct CallFrame {
 
     /// Stack offset, i.e. the frames "view" into the VM's full stack.
     stack_offset: usize,
+
+    cont: Option<Cont>,
 }
 
 impl CallFrame {
@@ -59,6 +101,8 @@ pub struct VM<'o> {
 
     /// Runtime warnings collected during evaluation.
     warnings: Vec<EvalWarning>,
+
+    pub import_cache: Box<BTreeMap<PathBuf, Value>>,
 
     nix_search_path: NixSearchPath,
 
@@ -164,6 +208,7 @@ impl<'o> VM<'o> {
             stack: vec![],
             with_stack: vec![],
             warnings: vec![],
+            import_cache: Default::default(),
         }
     }
 
@@ -239,7 +284,7 @@ impl<'o> VM<'o> {
     /// been forced.
     pub fn call_value(&mut self, callable: &Value) -> EvalResult<()> {
         match callable {
-            Value::Closure(c) => self.enter_frame(c.lambda(), c.upvalues().clone(), 1),
+            Value::Closure(c) => self.enter_frame(c.lambda(), c.upvalues(), 1),
 
             Value::Builtin(b) => self.call_builtin(b.clone()),
 
@@ -343,7 +388,7 @@ impl<'o> VM<'o> {
     pub fn enter_frame(
         &mut self,
         lambda: Rc<Lambda>,
-        upvalues: Upvalues,
+        upvalues: Rc<Upvalues>,
         arg_count: usize,
     ) -> EvalResult<()> {
         self.observer
@@ -354,31 +399,22 @@ impl<'o> VM<'o> {
             upvalues,
             ip: CodeIdx(0),
             stack_offset: self.stack.len() - arg_count,
+            cont: None,
         };
 
+        let starting_frames_depth = self.frames.len();
         self.frames.push(frame);
-        let result = self.run();
 
-        self.observer
-            .observe_exit_frame(self.frames.len() + 1, &self.stack);
-
-        result
-    }
-
-    /// Run the VM's current call frame to completion.
-    ///
-    /// On successful return, the top of the stack is the value that
-    /// the frame evaluated to. The frame itself is popped off. It is
-    /// up to the caller to consume the value.
-    fn run(&mut self) -> EvalResult<()> {
-        loop {
+        let result = loop {
             // Break the loop if this call frame has already run to
             // completion, pop it off, and return the value to the
             // caller.
+            /*
             if self.frame().ip.0 == self.chunk().code.len() {
                 self.frames.pop();
-                return Ok(());
+                break Ok(());
             }
+             */
 
             let op = self.inc_ip();
 
@@ -387,13 +423,72 @@ impl<'o> VM<'o> {
 
             let res = self.run_op(op);
 
+            let mut retramp: Option<Cont> = None;
+
+            // we need to pop the frame before checking `res` for an
+            // error in order to implement `tryEval` correctly.
             if self.frame().ip.0 == self.chunk().code.len() {
-                self.frames.pop();
-                return res;
-            } else {
-                res?;
+                let frame = self.frames.pop();
+                retramp = frame.map(|frame| frame.cont).flatten();
+            }
+            self.tramp_loop(res?, retramp)?;
+            if self.frames.len() == starting_frames_depth {
+                break Ok(());
+            }
+        };
+
+        self.observer
+            .observe_exit_frame(self.frames.len() + 1, &self.stack);
+
+        result
+    }
+
+    fn tramp_loop(&mut self, mut tramp: Tramp, mut retramp: Option<Cont>) -> EvalResult<()> {
+        loop {
+            match tramp.action {
+                None => (),
+                Some(TrampAction::EnterFrame {
+                    lambda,
+                    upvalues,
+                    arg_count,
+                    span: _,
+                }) => {
+                    let frame = CallFrame {
+                        lambda,
+                        upvalues,
+                        ip: CodeIdx(0),
+                        stack_offset: self.stack.len() - arg_count,
+                        cont: match retramp {
+                            None => tramp.cont,
+                            Some(retramp) => match tramp.cont {
+                                None => None,
+                                Some(cont) => Some(Box::new(|vm| {
+                                    Ok(cont(vm)?.append_to_continuation(retramp))
+                                })),
+                            },
+                        },
+                    };
+                    //assert!(matches!(retramp, None));
+                    self.frames.push(frame);
+                    break;
+                }
+            }
+            match tramp.cont {
+                None => {
+                    let retramp_ = std::mem::replace(&mut retramp, None);
+                    if let Some(cont) = retramp_ {
+                        tramp = cont(self)?;
+                    } else {
+                        break;
+                    }
+                }
+                Some(cont) => {
+                    tramp = cont(self)?;
+                    continue;
+                }
             }
         }
+        Ok(())
     }
 
     pub(crate) fn nix_eq(
@@ -404,7 +499,8 @@ impl<'o> VM<'o> {
     ) -> EvalResult<bool> {
         self.push(v1);
         self.push(v2);
-        self.nix_op_eq(allow_top_level_pointer_equality_on_functions_and_thunks)?;
+        let res = self.nix_op_eq(allow_top_level_pointer_equality_on_functions_and_thunks);
+        self.tramp_loop(res?, None)?;
         match self.pop() {
             Value::Bool(b) => Ok(b),
             v => panic!("run_op(OpEqual) left a non-boolean on the stack: {v:#?}"),
@@ -414,7 +510,7 @@ impl<'o> VM<'o> {
     pub(crate) fn nix_op_eq(
         &mut self,
         allow_top_level_pointer_equality_on_functions_and_thunks: bool,
-    ) -> EvalResult<()> {
+    ) -> EvalResult<Tramp> {
         // This bit gets set to `true` (if it isn't already) as soon
         // as we start comparing the contents of two
         // {lists,attrsets} -- but *not* the contents of two thunks.
@@ -435,7 +531,7 @@ impl<'o> VM<'o> {
                 Value::Thunk(thunk) => {
                     if allow_top_level_pointer_equality_on_functions_and_thunks {
                         if let Value::Thunk(t1) = &v1 {
-                            if t1.ptr_eq(&thunk, self) {
+                            if t1.ptr_eq(&thunk) {
                                 continue;
                             }
                         }
@@ -448,6 +544,13 @@ impl<'o> VM<'o> {
             let v1 = match v1 {
                 Value::Thunk(thunk) => {
                     fallible!(self, thunk.force(self));
+                    if allow_top_level_pointer_equality_on_functions_and_thunks {
+                        if let Value::Thunk(t2) = &v2 {
+                            if t2.ptr_eq(&thunk) {
+                                continue;
+                            }
+                        }
+                    }
                     thunk.value().clone()
                 }
                 v => v,
@@ -477,6 +580,38 @@ impl<'o> VM<'o> {
                         }
                     }
                     allow_pointer_equality_on_functions_and_thunks = true;
+                    match (a1.select("type"), a2.select("type")) {
+                        (Some(v1), Some(v2))
+                            if "derivation"
+                                == fallible!(
+                                    self,
+                                    v1.coerce_to_string(CoercionKind::ThunksOnly, self)
+                                )
+                                .as_str()
+                                && "derivation"
+                                    == fallible!(
+                                        self,
+                                        v2.coerce_to_string(CoercionKind::ThunksOnly, self)
+                                    )
+                                    .as_str() =>
+                        {
+                            if fallible!(
+                                self,
+                                a1.select("outPath")
+                                    .expect("encountered a derivation with no `outPath` attribute!")
+                                    .coerce_to_string(CoercionKind::ThunksOnly, self)
+                            ) == fallible!(
+                                self,
+                                a2.select("outPath")
+                                    .expect("encountered a derivation with no `outPath` attribute!")
+                                    .coerce_to_string(CoercionKind::ThunksOnly, self)
+                            ) {
+                                continue;
+                            }
+                            break false;
+                        }
+                        _ => {}
+                    }
                     let iter1 = unwrap_or_clone_rc(a1).into_iter_sorted();
                     let iter2 = unwrap_or_clone_rc(a2).into_iter_sorted();
                     if iter1.len() != iter2.len() {
@@ -499,6 +634,11 @@ impl<'o> VM<'o> {
                         if let (Value::Closure(c1), Value::Closure(c2)) = (&v1, &v2) {
                             if Rc::ptr_eq(c1, c2) {
                                 continue;
+                                // TODO(amjoseph): commenting out the second half of the conjunction below is very obviously wrong
+                            } else if Rc::ptr_eq(&c1.lambda, &c2.lambda)
+                            //&& Rc::ptr_eq(&c1.upvalues, &c2.upvalues)
+                            {
+                                continue;
                             }
                         }
                     }
@@ -510,10 +650,10 @@ impl<'o> VM<'o> {
         };
         self.pop_then_drop(numpairs * 2);
         self.push(Value::Bool(res));
-        Ok(())
+        Ok(Tramp::default())
     }
 
-    fn run_op(&mut self, op: OpCode) -> EvalResult<()> {
+    pub(crate) fn run_op(&mut self, op: OpCode) -> EvalResult<Tramp> {
         match op {
             OpCode::OpConstant(idx) => {
                 let c = self.chunk()[idx].clone();
@@ -862,14 +1002,15 @@ impl<'o> VM<'o> {
             }
 
             OpCode::OpForce => {
-                let mut value = self.pop();
+                let value = self.pop();
 
                 if let Value::Thunk(thunk) = value {
-                    fallible!(self, thunk.force(self));
-                    value = thunk.value().clone();
+                    self.push(Value::Thunk(thunk.clone()));
+                    let tramp = fallible!(self, Thunk::force_tramp(self));
+                    return Ok(tramp);
+                } else {
+                    self.push(value);
                 }
-
-                self.push(value);
             }
 
             OpCode::OpFinalise(StackIdx(idx)) => {
@@ -897,7 +1038,7 @@ impl<'o> VM<'o> {
             }
         }
 
-        Ok(())
+        Ok(Tramp::default())
     }
 
     fn run_attrset(&mut self, count: usize) -> EvalResult<()> {
@@ -1054,7 +1195,7 @@ pub fn run_lambda(
     // with the span of the entire file for top-level expressions.
     let root_span = lambda.chunk.get_span(CodeIdx(lambda.chunk.code.len() - 1));
 
-    vm.enter_frame(lambda, Upvalues::with_capacity(0), 0)?;
+    vm.enter_frame(lambda, Rc::new(Upvalues::with_capacity(0)), 0)?;
     let value = vm.pop();
 
     value
