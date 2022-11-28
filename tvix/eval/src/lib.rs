@@ -8,6 +8,7 @@ mod opcode;
 mod pretty_ast;
 mod source;
 mod spans;
+mod store;
 mod systems;
 mod upvalues;
 mod value;

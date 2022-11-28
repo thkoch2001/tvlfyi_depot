@@ -10,6 +10,7 @@ use crate::{
     nix_search_path::NixSearchPath,
     observer::RuntimeObserver,
     opcode::{CodeIdx, Count, JumpOffset, OpCode, StackIdx, UpvalueIdx},
+    store::driver::{default_store_driver, StoreDriver},
     unwrap_or_clone_rc,
     upvalues::Upvalues,
     value::{Builtin, Closure, CoercionKind, Lambda, NixAttrs, NixList, Thunk, Value},
@@ -63,6 +64,8 @@ pub struct VM<'o> {
     nix_search_path: NixSearchPath,
 
     observer: &'o mut dyn RuntimeObserver,
+
+    pub store_driver: Box<dyn StoreDriver>,
 }
 
 /// The result of a VM's runtime evaluation.
@@ -160,6 +163,7 @@ impl<'o> VM<'o> {
         Self {
             nix_search_path,
             observer,
+            store_driver: Box::new(default_store_driver()),
             frames: vec![],
             stack: vec![],
             with_stack: vec![],
