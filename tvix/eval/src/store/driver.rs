@@ -7,6 +7,10 @@ use super::derivation::Derivation;
 /// hide latency.  Different store implementations will typically
 /// require different store drivers.
 pub trait StoreDriver {
+
+    /// The value of `builtins.storeDir`
+    fn get_store_dir(&self) -> String;
+
     // The default implementations of `getDrvName()` and
     // `getOutPath` do their calculation locally, in the evaluator
     // process.  Out-of-process stores can reimplement `getDrvName`
@@ -41,7 +45,11 @@ pub trait StoreDriver {
 
 struct DefaultStoreDriver;
 
-impl StoreDriver for DefaultStoreDriver {}
+impl StoreDriver for DefaultStoreDriver {
+    fn get_store_dir(&self) -> String {
+        "/nix/store".to_string()
+    }
+}
 
 pub fn default_store_driver() -> impl StoreDriver {
     DefaultStoreDriver

@@ -17,7 +17,7 @@ use regex::Regex;
 use crate::warnings::WarningKind;
 use crate::{
     errors::ErrorKind,
-    value::{Builtin, CoercionKind, NixAttrs, NixList, NixString, Value},
+    value::{Builtin, CoercionKind, NixAttrs, NixList, NixString, Value, Thunk},
     vm::VM,
 };
 
@@ -1066,6 +1066,10 @@ pub fn global_builtins(source: SourceCode) -> GlobalsMapFunc {
 
         #[cfg(feature = "impure")]
         {
+            map.insert("storeDir", Value::Thunk(Thunk::new_suspended_native(Rc::new(Box::new(|vm:&mut VM| {
+                Ok(vm.store_driver.get_store_dir().into())
+            })))));
+
             map.extend(impure::builtins());
 
             // We need to insert import into the builtins, but the
