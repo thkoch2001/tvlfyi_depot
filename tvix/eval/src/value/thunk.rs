@@ -27,9 +27,10 @@ use std::{
 use codemap::Span;
 
 use crate::{
+    chunk::Chunk,
     errors::{Error, ErrorKind},
     upvalues::Upvalues,
-    value::Closure,
+    value::{Builtin, Closure},
     vm::VM,
     Value,
 };
@@ -83,6 +84,35 @@ impl Thunk {
             upvalues: Rc::new(Upvalues::with_capacity(lambda.upvalue_count)),
             lambda: lambda.clone(),
             span,
+        })))
+    }
+
+    pub fn new_suspended_native(
+        native: Rc<Box<dyn Fn(&mut VM) -> Result<Value, ErrorKind>>>,
+    ) -> Self {
+        let span = codemap::CodeMap::new()
+            .add_file("<internal>".to_owned(), "<internal>".to_owned())
+            .span;
+        let builtin = Builtin::new(
+            "Thunk::new_suspended_native()",
+            Default::default(),
+            None,
+            move |_v: Vec<Value>, vm: &mut VM| native(vm),
+        );
+        let mut chunk = Chunk::default();
+        let constant_idx = chunk.push_constant(Value::Builtin(builtin));
+        chunk.push_op(crate::opcode::OpCode::OpConstant(constant_idx), span);
+        chunk.push_op(crate::opcode::OpCode::OpTailCall, span);
+        let lambda = Lambda {
+            name: None,
+            formals: None,
+            upvalue_count: 0,
+            chunk,
+        };
+        Thunk(Rc::new(RefCell::new(ThunkRepr::Suspended {
+            lambda: Rc::new(lambda),
+            upvalues: Rc::new(Upvalues::with_capacity(0)),
+            span: span,
         })))
     }
 
