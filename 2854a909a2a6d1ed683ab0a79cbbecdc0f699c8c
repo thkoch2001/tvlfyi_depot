@@ -16,6 +16,24 @@
       "message": "I\u0027d probably make this a constant shared between the different code parts for now, like it\u0027s in go-nix.\n\nI wouldn\u0027t recommend providing a false illusion of this being configurable.\n\nWe didn\u0027t fully sort out if the same store should be allowed to work with different StoreDirs, and there\u0027s some assumptions in nixpkgs on this too.",
       "revId": "2854a909a2a6d1ed683ab0a79cbbecdc0f699c8c",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8e4f60f1_189ffed8",
+        "filename": "tvix/eval/src/eval.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 1000066
+      },
+      "writtenOn": "2022-11-28T18:28:10Z",
+      "side": 1,
+      "message": "Ah, good point!\n\nI wrote this commit before cl/7447.  Having the `StoreDriver` provide the value of `builtins.storeDir` makes much more sense.\n\nYou\u0027re right, `builtins.storeDir` isn\u0027t really configurable at runtime, except when creating a brand new store.",
+      "parentUuid": "936a6ae9_d61d82f7",
+      "revId": "2854a909a2a6d1ed683ab0a79cbbecdc0f699c8c",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
