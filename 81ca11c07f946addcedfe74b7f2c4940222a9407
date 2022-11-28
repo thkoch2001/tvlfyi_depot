@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e2e22e0a_bc985232",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2022-11-28T15:09:10Z",
+      "side": 1,
+      "message": "I think we should have some deeper discussion to make sure we find the right abstraction here.",
+      "revId": "81ca11c07f946addcedfe74b7f2c4940222a9407",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "20eb230b_343ac4f6",
+        "filename": "tvix/eval/src/store/driver.rs",
+        "patchSetId": 3
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2022-11-28T15:09:10Z",
+      "side": 1,
+      "message": "I\u0027m not sure we mean the same here with store.\n\nA store is something storing files and information about store paths, and a store driver would be something implementing the client side of the (gRPC) interfaces defined in //tvix/store/protos/rpc_*. Let\u0027s say, if you want to read the contents of /nix/store/xxxxx-foo/bar.txt, you\u0027d need to consult your store client code to lookup information about `xxxxx-foo`, and then traverse to bar.\n\nA store does not store Derivations itself, these are instructions on how to build stuff.\n\nOutput path calculation is mostly pure hashing on ATerms produced so far during the current evaluation run.\n\nThe only place where you need store interaction is when \"crafting\" fixed-output derivations on your own, by importing a whole directory or individual files into the Nix store.",
+      "revId": "81ca11c07f946addcedfe74b7f2c4940222a9407",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
