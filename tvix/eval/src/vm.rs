@@ -2,7 +2,7 @@
 //! Tvix bytecode.
 
 use serde_json::json;
-use std::{cmp::Ordering, ops::DerefMut, path::PathBuf, rc::Rc};
+use std::{cmp::Ordering, collections::BTreeMap, ops::DerefMut, path::PathBuf, rc::Rc};
 
 use crate::{
     chunk::Chunk,
@@ -10,6 +10,7 @@ use crate::{
     nix_search_path::NixSearchPath,
     observer::RuntimeObserver,
     opcode::{CodeIdx, Count, JumpOffset, OpCode, StackIdx, UpvalueIdx},
+    store::driver::{default_store_driver, StoreDriver},
     unwrap_or_clone_rc,
     upvalues::Upvalues,
     value::{Builtin, Closure, CoercionKind, Lambda, NixAttrs, NixList, Thunk, Value},
@@ -22,7 +23,7 @@ struct CallFrame {
 
     /// Optional captured upvalues of this frame (if a thunk or
     /// closure if being evaluated).
-    upvalues: Upvalues,
+    upvalues: Rc<Upvalues>,
 
     /// Instruction pointer to the instruction currently being
     /// executed.
@@ -60,9 +61,13 @@ pub struct VM<'o> {
     /// Runtime warnings collected during evaluation.
     warnings: Vec<EvalWarning>,
 
+    pub import_cache: Box<BTreeMap<PathBuf, Value>>,
+
     nix_search_path: NixSearchPath,
 
     observer: &'o mut dyn RuntimeObserver,
+
+    pub store_driver: Box<dyn StoreDriver>,
 }
 
 /// The result of a VM's runtime evaluation.
@@ -160,10 +165,12 @@ impl<'o> VM<'o> {
         Self {
             nix_search_path,
             observer,
+            store_driver: Box::new(default_store_driver()),
             frames: vec![],
             stack: vec![],
             with_stack: vec![],
             warnings: vec![],
+            import_cache: Default::default(),
         }
     }
 
@@ -239,7 +246,7 @@ impl<'o> VM<'o> {
     /// been forced.
     pub fn call_value(&mut self, callable: &Value) -> EvalResult<()> {
         match callable {
-            Value::Closure(c) => self.enter_frame(c.lambda(), c.upvalues().clone(), 1),
+            Value::Closure(c) => self.enter_frame(c.lambda(), c.upvalues(), 1),
 
             Value::Builtin(b) => self.call_builtin(b.clone()),
 
@@ -343,7 +350,7 @@ impl<'o> VM<'o> {
     pub fn enter_frame(
         &mut self,
         lambda: Rc<Lambda>,
-        upvalues: Upvalues,
+        upvalues: Rc<Upvalues>,
         arg_count: usize,
     ) -> EvalResult<()> {
         self.observer
@@ -477,6 +484,38 @@ impl<'o> VM<'o> {
                         }
                     }
                     allow_pointer_equality_on_functions_and_thunks = true;
+                    match (a1.select("type"), a2.select("type")) {
+                        (Some(v1), Some(v2))
+                            if "derivation"
+                                == fallible!(
+                                    self,
+                                    v1.coerce_to_string(CoercionKind::ThunksOnly, self)
+                                )
+                                .as_str()
+                                && "derivation"
+                                    == fallible!(
+                                        self,
+                                        v2.coerce_to_string(CoercionKind::ThunksOnly, self)
+                                    )
+                                    .as_str() =>
+                        {
+                            if fallible!(
+                                self,
+                                a1.select("outPath")
+                                    .expect("encountered a derivation with no `outPath` attribute!")
+                                    .coerce_to_string(CoercionKind::ThunksOnly, self)
+                            ) == fallible!(
+                                self,
+                                a2.select("outPath")
+                                    .expect("encountered a derivation with no `outPath` attribute!")
+                                    .coerce_to_string(CoercionKind::ThunksOnly, self)
+                            ) {
+                                continue;
+                            }
+                            break false;
+                        }
+                        _ => {}
+                    }
                     let iter1 = unwrap_or_clone_rc(a1).into_iter_sorted();
                     let iter2 = unwrap_or_clone_rc(a2).into_iter_sorted();
                     if iter1.len() != iter2.len() {
@@ -497,7 +536,7 @@ impl<'o> VM<'o> {
                 (v1, v2) => {
                     if allow_pointer_equality_on_functions_and_thunks {
                         if let (Value::Closure(c1), Value::Closure(c2)) = (&v1, &v2) {
-                            if c1.ptr_eq(c2) {
+                            if Rc::ptr_eq(c1, c2) {
                                 continue;
                             }
                         }
@@ -828,10 +867,10 @@ impl<'o> VM<'o> {
                 );
                 let mut upvalues = Upvalues::with_capacity(blueprint.upvalue_count);
                 self.populate_upvalues(upvalue_count, &mut upvalues)?;
-                self.push(Value::Closure(Closure::new_with_upvalues(
+                self.push(Value::Closure(Rc::new(Closure::new_with_upvalues(
                     Rc::new(upvalues),
                     blueprint,
-                )));
+                ))));
             }
 
             OpCode::OpThunkSuspended(idx) | OpCode::OpThunkClosure(idx) => {
@@ -1054,7 +1093,7 @@ pub fn run_lambda(
     // with the span of the entire file for top-level expressions.
     let root_span = lambda.chunk.get_span(CodeIdx(lambda.chunk.code.len() - 1));
 
-    vm.enter_frame(lambda, Upvalues::with_capacity(0), 0)?;
+    vm.enter_frame(lambda, Rc::new(Upvalues::with_capacity(0)), 0)?;
     let value = vm.pop();
 
     value

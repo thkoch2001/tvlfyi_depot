@@ -323,7 +323,7 @@ mod pure_builtins {
 
     #[builtin("functionArgs")]
     fn builtin_function_args(_: &mut VM, f: Value) -> Result<Value, ErrorKind> {
-        let lambda = f.to_closure()?.lambda();
+        let lambda = &f.as_closure()?.lambda();
         let formals = if let Some(formals) = &lambda.formals {
             formals
         } else {
@@ -899,6 +899,13 @@ mod pure_builtins {
             .map(Value::String)
     }
 
+    #[builtin("placeholder")]
+    fn builtin_placeholder(vm: &mut VM, #[lazy] _: Value) -> Result<Value, ErrorKind> {
+        // TODO(amjoseph)
+        vm.emit_warning(WarningKind::NotImplemented("builtins.placeholder"));
+        Ok("<builtins.placeholder-is-not-implemented-in-tvix-yet>".into())
+    }
+
     #[builtin("trace")]
     fn builtin_trace(_: &mut VM, message: Value, value: Value) -> Result<Value, ErrorKind> {
         // TODO(grfn): `trace` should be pluggable and capturable, probably via a method on
@@ -1041,7 +1048,7 @@ fn placeholders() -> Vec<Builtin> {
 pub const CURRENT_PLATFORM: &str = env!("TVIX_CURRENT_SYSTEM");
 
 /// Set of Nix builtins that are globally available.
-pub fn global_builtins(source: SourceCode) -> GlobalsMapFunc {
+pub fn global_builtins(source: SourceCode, store_dir: Option<String>) -> GlobalsMapFunc {
     Box::new(move |globals: &std::rc::Weak<GlobalsMap>| {
         let mut map: BTreeMap<&'static str, Value> = BTreeMap::new();
 
@@ -1066,6 +1073,10 @@ pub fn global_builtins(source: SourceCode) -> GlobalsMapFunc {
 
         #[cfg(feature = "impure")]
         {
+            if let Some(store_dir) = store_dir {
+                map.insert("storeDir", Value::String(store_dir.into()));
+            }
+
             map.extend(impure::builtins());
 
             // We need to insert import into the builtins, but the
