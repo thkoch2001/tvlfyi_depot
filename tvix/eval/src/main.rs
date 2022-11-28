@@ -18,7 +18,6 @@ struct Args {
 
 fn main() {
     let args = Args::parse();
-
     if let Some(file) = args.script {
         run_file(file, args.eval_options)
     } else if let Some(expr) = args.expr {
