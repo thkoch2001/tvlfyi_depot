@@ -37,6 +37,10 @@ pub struct Options {
     #[cfg_attr(feature = "repl", clap(long, short = 'I', env = "NIX_PATH"))]
     nix_search_path: Option<NixSearchPath>,
 
+    /// The value returned by `builtins.storeDir`, if any
+    #[cfg_attr(feature = "repl", clap(long, env = "NIX_STORE"))]
+    store_dir: Option<String>,
+
     #[cfg_attr(feature = "repl", clap(long))]
     pub raw: bool,
 }
@@ -83,7 +87,10 @@ pub fn interpret(code: &str, location: Option<PathBuf>, options: Options) -> Eva
         println!("{}", pretty_print_expr(&root_expr));
     }
 
-    let builtins = crate::compiler::prepare_globals(Box::new(global_builtins(source.clone())));
+    let builtins = crate::compiler::prepare_globals(Box::new(global_builtins(
+        source.clone(),
+        options.store_dir,
+    )));
     let result = if options.dump_bytecode {
         crate::compiler::compile(
             &root_expr,
