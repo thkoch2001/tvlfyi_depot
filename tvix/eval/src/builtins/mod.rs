@@ -1041,7 +1041,7 @@ fn placeholders() -> Vec<Builtin> {
 pub const CURRENT_PLATFORM: &str = env!("TVIX_CURRENT_SYSTEM");
 
 /// Set of Nix builtins that are globally available.
-pub fn global_builtins(source: SourceCode) -> GlobalsMapFunc {
+pub fn global_builtins(source: SourceCode, store_dir: Option<String>) -> GlobalsMapFunc {
     Box::new(move |globals: &std::rc::Weak<GlobalsMap>| {
         let mut map: BTreeMap<&'static str, Value> = BTreeMap::new();
 
@@ -1066,6 +1066,10 @@ pub fn global_builtins(source: SourceCode) -> GlobalsMapFunc {
 
         #[cfg(feature = "impure")]
         {
+            if let Some(store_dir) = store_dir {
+                map.insert("storeDir", Value::String(store_dir.into()));
+            }
+
             map.extend(impure::builtins());
 
             // We need to insert import into the builtins, but the
