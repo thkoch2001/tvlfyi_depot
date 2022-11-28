@@ -51,12 +51,25 @@ enum ThunkRepr {
         span: Span,
     },
 
+    /// A thunk which, when forced, calls native (e.g. Rust) code
+    /// rather than interpreted opcodes
+    SuspendedNative(SuspendedNative),
+
     /// Thunk currently under-evaluation; encountering a blackhole
     /// value means that infinite recursion has occured.
     Blackhole,
 
     /// Fully evaluated thunk.
     Evaluated(Value),
+}
+
+#[derive(Clone)]
+struct SuspendedNative(Rc<Box<dyn Fn(&mut VM) -> Result<Value, ErrorKind>>>);
+
+impl std::fmt::Debug for SuspendedNative {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> Result<(), std::fmt::Error> {
+        write!(f, "<native-thunk>")
+    }
 }
 
 /// A thunk is created for any value which requires non-strict
@@ -86,6 +99,14 @@ impl Thunk {
         })))
     }
 
+    pub fn new_suspended_native(
+        native: Rc<Box<dyn Fn(&mut VM) -> Result<Value, ErrorKind>>>,
+    ) -> Self {
+        Thunk(Rc::new(RefCell::new(ThunkRepr::SuspendedNative(
+            SuspendedNative(native),
+        ))))
+    }
+
     /// Evaluate the content of a thunk, potentially repeatedly, until a
     /// non-thunk value is returned.
     ///
@@ -94,29 +115,38 @@ impl Thunk {
     /// thunks, the intermediate thunk representations are replaced.
     pub fn force(&self, vm: &mut VM) -> Result<(), ErrorKind> {
         loop {
-            let mut thunk_mut = self.0.borrow_mut();
-
-            match *thunk_mut {
-                ThunkRepr::Evaluated(Value::Thunk(ref inner_thunk)) => {
-                    let inner_repr = inner_thunk.0.borrow().clone();
-                    *thunk_mut = inner_repr;
+            if !self.is_suspended() {
+                let thunk = self.0.borrow();
+                match *thunk {
+                    ThunkRepr::Evaluated(Value::Thunk(ref inner_thunk)) => {
+                        let inner_repr = inner_thunk.0.borrow().clone();
+                        drop(thunk);
+                        self.0.replace(inner_repr);
+                    }
+                    ThunkRepr::Evaluated(_) => return Ok(()),
+                    ThunkRepr::Blackhole => return Err(ErrorKind::InfiniteRecursion),
+                    ThunkRepr::Suspended { .. } | ThunkRepr::SuspendedNative(_) => {
+                        panic!("Thunk::is_suspended() lied to us")
+                    }
                 }
-
-                ThunkRepr::Evaluated(_) => return Ok(()),
-                ThunkRepr::Blackhole => return Err(ErrorKind::InfiniteRecursion),
-
-                ThunkRepr::Suspended { .. } => {
-                    if let ThunkRepr::Suspended {
+            } else {
+                match self.0.replace(ThunkRepr::Blackhole) {
+                    ThunkRepr::SuspendedNative(f) => {
+                        let res = f.0(vm)?;
+                        let should_be_blackhole = self.0.replace(ThunkRepr::Evaluated(res));
+                        assert!(matches!(should_be_blackhole, ThunkRepr::Blackhole));
+                        continue;
+                    }
+                    ThunkRepr::Suspended {
                         lambda,
                         upvalues,
                         span,
-                    } = std::mem::replace(&mut *thunk_mut, ThunkRepr::Blackhole)
-                    {
-                        drop(thunk_mut);
+                    } => {
                         vm.enter_frame(lambda, upvalues, 0)
                             .map_err(|e| ErrorKind::ThunkForce(Box::new(Error { span, ..e })))?;
                         (*self.0.borrow_mut()) = ThunkRepr::Evaluated(vm.pop())
                     }
+                    _ => panic!("impossible"),
                 }
             }
         }
@@ -137,6 +167,11 @@ impl Thunk {
 
     pub fn is_evaluated(&self) -> bool {
         matches!(*self.0.borrow(), ThunkRepr::Evaluated(_))
+    }
+
+    pub fn is_suspended(&self) -> bool {
+        matches!(*self.0.borrow(), ThunkRepr::Suspended { .. })
+            || matches!(*self.0.borrow(), ThunkRepr::SuspendedNative { .. })
     }
 
     /// Returns a reference to the inner evaluated value of a thunk.
@@ -164,12 +199,14 @@ impl Thunk {
             }
             ThunkRepr::Blackhole => panic!("Thunk::value called on a black-holed thunk"),
             ThunkRepr::Suspended { .. } => panic!("Thunk::value called on a suspended thunk"),
+            ThunkRepr::SuspendedNative { .. } => panic!("Thunk::value called on a suspended thunk"),
         })
     }
 
     pub fn upvalues(&self) -> Ref<'_, Upvalues> {
         Ref::map(self.0.borrow(), |thunk| match thunk {
             ThunkRepr::Suspended { upvalues, .. } => upvalues.as_ref(),
+            ThunkRepr::SuspendedNative(_) => panic!("upvalues() on a nativethunk"),
             ThunkRepr::Evaluated(Value::Closure(c)) => &c.upvalues,
             _ => panic!("upvalues() on non-suspended thunk"),
         })
@@ -178,6 +215,7 @@ impl Thunk {
     pub fn upvalues_mut(&self) -> RefMut<'_, Upvalues> {
         RefMut::map(self.0.borrow_mut(), |thunk| match thunk {
             ThunkRepr::Suspended { upvalues, .. } => Rc::get_mut(upvalues).unwrap(),
+            ThunkRepr::SuspendedNative(_) => panic!("upvalues_mut() on a nativethunk"),
             ThunkRepr::Evaluated(Value::Closure(c)) => Rc::get_mut(
                 &mut Rc::get_mut(c).unwrap().upvalues,
             )
