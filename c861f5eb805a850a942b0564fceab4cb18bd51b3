@@ -34,6 +34,24 @@
       "parentUuid": "06fbf660_721d9c08",
       "revId": "c861f5eb805a850a942b0564fceab4cb18bd51b3",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "07cc165b_a33b7b37",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000066
+      },
+      "writtenOn": "2022-11-28T19:25:38Z",
+      "side": 1,
+      "message": "\u003e I\u0027m not yet sure about what I\u0027m seeing here.\n\nIt\u0027s https://github.com/NixOS/nix/blob/master/src/libexpr/primops/derivation.nix implemented in native code rather than interpreted code.\n\n\u003e Can we get some (isolated) test cases describing what this is doing?\n\nSure, good idea -- I\u0027ll add some.  I\u0027m surprised that cppnix doesn\u0027t have any tests covering this.",
+      "parentUuid": "1814b06a_8a0374e4",
+      "revId": "c861f5eb805a850a942b0564fceab4cb18bd51b3",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
