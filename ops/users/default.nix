@@ -62,6 +62,11 @@
     password = "{ARGON2}$argon2id$v=19$m=65536,t=2,p=1$2iVXQQfd26icaIguHJg/CQ$hA9ziqn7kQ06AV6uQxJCGXoG8f+LWmH+nVlk00a1n/c";
   }
   {
+    username = "IslandUsurper";
+    email = "lyle@menteeth.us";
+    password = "{ARGON2}$argon2id$v=19$m=65536,t=2,p=1$rNSsa8aYU4qvxeFnADgW1g$Zu6B6Al2usRRNfAKhWXzCAfiTfV3XQb0W6Op5TYN1oI";
+  }
+  {
     username = "isomer";
     email = "isomer@tvl.fyi";
     password = "{SSHA}OhWQkPJgH1rRJqYIaMUbbKC4iLEzvCev";
