@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "936a6ae9_d61d82f7",
+        "filename": "tvix/eval/src/eval.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2022-11-28T14:54:31Z",
+      "side": 1,
+      "message": "I\u0027d probably make this a constant shared between the different code parts for now, like it\u0027s in go-nix.\n\nI wouldn\u0027t recommend providing a false illusion of this being configurable.\n\nWe didn\u0027t fully sort out if the same store should be allowed to work with different StoreDirs, and there\u0027s some assumptions in nixpkgs on this too.",
+      "revId": "2854a909a2a6d1ed683ab0a79cbbecdc0f699c8c",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
