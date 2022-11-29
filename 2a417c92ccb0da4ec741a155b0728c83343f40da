@@ -18,6 +18,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "865105c6_605ac8dc",
+        "filename": "tvix/store/src/file_blob_service.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1000069
+      },
+      "writtenOn": "2022-11-29T17:34:50Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5ad3c13a_4f0c5ec7",
+      "revId": "2a417c92ccb0da4ec741a155b0728c83343f40da",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "5fa3835c_2c7c8bc9",
@@ -31,6 +49,24 @@
       "writtenOn": "2022-11-26T22:13:02Z",
       "side": 1,
       "message": "Can we skip PutBlobRequest.data at least?",
+      "revId": "2a417c92ccb0da4ec741a155b0728c83343f40da",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0b6a1cff_b4d4e90d",
+        "filename": "tvix/store/src/file_blob_service.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 52,
+      "author": {
+        "id": 1000069
+      },
+      "writtenOn": "2022-11-29T17:34:50Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5fa3835c_2c7c8bc9",
       "revId": "2a417c92ccb0da4ec741a155b0728c83343f40da",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
@@ -52,6 +88,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "7fa69bdb_1a54d57f",
+        "filename": "tvix/store/src/main.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1000069
+      },
+      "writtenOn": "2022-11-29T17:34:50Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "347cd8fb_298595e4",
+      "revId": "2a417c92ccb0da4ec741a155b0728c83343f40da",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "563008c3_efb1cbb0",
@@ -65,6 +119,24 @@
       "writtenOn": "2022-11-26T18:58:06Z",
       "side": 1,
       "message": "Can you squash that line into one of the previous commits?",
+      "revId": "2a417c92ccb0da4ec741a155b0728c83343f40da",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f3b23b6d_4e856dcf",
+        "filename": "tvix/store/src/main.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 58,
+      "author": {
+        "id": 1000069
+      },
+      "writtenOn": "2022-11-29T17:34:50Z",
+      "side": 1,
+      "message": "added to 7367\n:",
+      "parentUuid": "563008c3_efb1cbb0",
       "revId": "2a417c92ccb0da4ec741a155b0728c83343f40da",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
@@ -86,6 +158,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "cfb913dd_086e3a64",
+        "filename": "tvix/store/src/memory_directory_service.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 121,
+      "author": {
+        "id": 1000069
+      },
+      "writtenOn": "2022-11-29T17:34:50Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8b788a7c_5e11d4b0",
+      "revId": "2a417c92ccb0da4ec741a155b0728c83343f40da",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "d153c32f_9b4164a4",
@@ -99,6 +189,24 @@
       "writtenOn": "2022-11-26T21:25:11Z",
       "side": 1,
       "message": "This gets a bit noisy. Can you log each received received directory at the head of the loop, or add its hash to a new span?",
+      "revId": "2a417c92ccb0da4ec741a155b0728c83343f40da",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9fa93c7f_862dbd03",
+        "filename": "tvix/store/src/memory_directory_service.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 152,
+      "author": {
+        "id": 1000069
+      },
+      "writtenOn": "2022-11-29T17:34:50Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d153c32f_9b4164a4",
       "revId": "2a417c92ccb0da4ec741a155b0728c83343f40da",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
@@ -120,6 +228,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "a953e622_60b09963",
+        "filename": "tvix/store/src/memory_directory_service.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 155,
+      "author": {
+        "id": 1000069
+      },
+      "writtenOn": "2022-11-29T17:34:50Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "632002f5_c1205cca",
+      "revId": "2a417c92ccb0da4ec741a155b0728c83343f40da",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "42cc5b78_e864b20b",
@@ -133,6 +259,24 @@
       "writtenOn": "2022-11-26T21:25:11Z",
       "side": 1,
       "message": "base64 encode pls",
+      "revId": "2a417c92ccb0da4ec741a155b0728c83343f40da",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "45667391_b8a917fa",
+        "filename": "tvix/store/src/memory_directory_service.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 159,
+      "author": {
+        "id": 1000069
+      },
+      "writtenOn": "2022-11-29T17:34:50Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "42cc5b78_e864b20b",
       "revId": "2a417c92ccb0da4ec741a155b0728c83343f40da",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }

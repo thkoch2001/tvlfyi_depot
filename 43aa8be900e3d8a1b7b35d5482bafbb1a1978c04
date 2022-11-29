@@ -18,6 +18,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "786a92ee_f214b825",
+        "filename": "tvix/store/src/memory_path_info_service.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1000069
+      },
+      "writtenOn": "2022-11-29T17:34:50Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8da143fa_24881d10",
+      "revId": "43aa8be900e3d8a1b7b35d5482bafbb1a1978c04",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "9456aea4_156a8b25",
@@ -31,6 +49,24 @@
       "writtenOn": "2022-11-27T09:33:10Z",
       "side": 1,
       "message": "PathInfo is the only non-content-addressed bit. Can we replace it, but log a message it is being replaced?",
+      "revId": "43aa8be900e3d8a1b7b35d5482bafbb1a1978c04",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bb1672dd_7af36c96",
+        "filename": "tvix/store/src/memory_path_info_service.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 54,
+      "author": {
+        "id": 1000069
+      },
+      "writtenOn": "2022-11-29T17:34:50Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9456aea4_156a8b25",
       "revId": "43aa8be900e3d8a1b7b35d5482bafbb1a1978c04",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
