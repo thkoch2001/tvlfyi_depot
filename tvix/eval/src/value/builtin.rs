@@ -100,6 +100,13 @@ impl Builtin {
         // Function is not yet ready to be called.
         Ok(Value::Builtin(self))
     }
+
+    /// Clone out a reference to the `func` field.  Unlike `Builtin`
+    /// this implements `Copy` -- making it less of a headache to
+    /// use inside of Rust closures.
+    pub(crate) fn func(&self) -> Rc<dyn BuiltinFn> {
+        self.func.clone()
+    }
 }
 
 impl Debug for Builtin {

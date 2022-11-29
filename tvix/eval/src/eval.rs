@@ -29,7 +29,7 @@ pub struct Options {
     /// Print warnings
     #[cfg_attr(
         feature = "repl",
-        clap(long, env = "TVIX_WARNINGS", default_value = "true")
+        clap(long, env = "TVIX_WARNINGS", default_value = "true", action = clap::builder::ArgAction::Set)
     )]
     warnings: bool,
 
