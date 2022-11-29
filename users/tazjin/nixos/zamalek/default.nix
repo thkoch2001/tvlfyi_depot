@@ -20,7 +20,6 @@ in
     (usermod "laptop.nix")
     (usermod "persistence.nix")
     (usermod "physical.nix")
-    (usermod "zerotier.nix")
 
     (pkgs.home-manager.src + "/nixos")
   ] ++ lib.optional (builtins.pathExists ./local-config.nix) ./local-config.nix;
@@ -80,7 +79,6 @@ in
 
   services.xserver.libinput.touchpad.clickMethod = "clickfinger";
   services.xserver.libinput.touchpad.tapping = false;
-  services.tailscale.enable = true;
   services.avahi.enable = true;
   powerManagement.powertop.enable = true;
 
