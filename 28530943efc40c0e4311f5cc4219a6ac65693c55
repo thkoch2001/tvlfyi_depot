@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f50b4d7c_8e08e828",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 6
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2022-11-29T08:14:20Z",
+      "side": 1,
+      "message": "Hmmh, can we use this in IFD mode somehow? I\u0027m a bit hesitant on having the build of this rely on a .gitignore\u0027d file, which requires invoking another command first (and repeatedly in case any dependency changes) to build it.",
+      "revId": "28530943efc40c0e4311f5cc4219a6ac65693c55",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "56c5089d_b0f885d5",
+        "filename": "tvix/store/crate.nix",
+        "patchSetId": 6
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2022-11-29T08:14:20Z",
+      "side": 1,
+      "message": "This should probably be some $(nix-build -A third_party.nixpkgs.crate2nix --no-out-link)/bin/crate2nix generate invocation, to make sure it uses crate2nix from depot.",
+      "revId": "28530943efc40c0e4311f5cc4219a6ac65693c55",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "40f8b4f2_de22aa14",
+        "filename": "tvix/store/crate.nix",
+        "patchSetId": 6
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2022-11-29T08:14:20Z",
+      "side": 1,
+      "message": "This should use the depot nixpkgs.",
+      "revId": "28530943efc40c0e4311f5cc4219a6ac65693c55",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
