@@ -52,6 +52,24 @@
       "parentUuid": "530470d0_b0e7ea5e",
       "revId": "afe160ab164508fdb64da6f77958c72c6ab74fec",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1c600f84_2ca576e7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2022-11-29T08:16:52Z",
+      "side": 1,
+      "message": "I mean, I\u0027d like to get crate2nix to work without having to edit the import path of the proto files, and I don\u0027t see a reason why it could be not get made to work.",
+      "parentUuid": "bcfe0f7d_1293c00b",
+      "revId": "afe160ab164508fdb64da6f77958c72c6ab74fec",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
