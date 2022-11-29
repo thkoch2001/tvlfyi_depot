@@ -27,10 +27,11 @@ use std::{
 use codemap::Span;
 
 use crate::{
+    chunk::Chunk,
     errors::{Error, ErrorKind},
     upvalues::Upvalues,
-    value::Closure,
-    vm::VM,
+    value::{Builtin, Closure},
+    vm::{Tramp, TrampAction, VM},
     Value,
 };
 
@@ -47,7 +48,7 @@ enum ThunkRepr {
     /// execution.
     Suspended {
         lambda: Rc<Lambda>,
-        upvalues: Upvalues,
+        upvalues: Rc<Upvalues>,
         span: Span,
     },
 
@@ -69,21 +70,100 @@ pub struct Thunk(Rc<RefCell<ThunkRepr>>);
 impl Thunk {
     pub fn new_closure(lambda: Rc<Lambda>) -> Self {
         Thunk(Rc::new(RefCell::new(ThunkRepr::Evaluated(Value::Closure(
-            Closure {
+            Rc::new(Closure {
                 upvalues: Rc::new(Upvalues::with_capacity(lambda.upvalue_count)),
                 lambda: lambda.clone(),
-                #[cfg(debug_assertions)]
-                is_finalised: false,
-            },
+                //#[cfg(debug_assertions)]
+                //is_finalised: false,
+            }),
         )))))
     }
 
     pub fn new_suspended(lambda: Rc<Lambda>, span: Span) -> Self {
         Thunk(Rc::new(RefCell::new(ThunkRepr::Suspended {
-            upvalues: Upvalues::with_capacity(lambda.upvalue_count),
+            upvalues: Rc::new(Upvalues::with_capacity(lambda.upvalue_count)),
             lambda: lambda.clone(),
             span,
         })))
+    }
+
+    pub fn new_suspended_native(
+        native: Rc<Box<dyn Fn(&mut VM) -> Result<Value, ErrorKind>>>,
+    ) -> Self {
+        let span = codemap::CodeMap::new()
+            .add_file("<internal>".to_owned(), "<internal>".to_owned())
+            .span;
+        let builtin = Builtin::new(
+            "Thunk::new_suspended_native()",
+            &[crate::value::builtin::BuiltinArgument {
+                strict: true,
+                name: "fake",
+            }],
+            None,
+            move |v: Vec<Value>, vm: &mut VM| {
+                // sanity check that only the dummy argument was popped
+                assert!(v.len() == 1);
+                assert!(matches!(v[0], Value::Null));
+                native(vm)
+            },
+        );
+        let mut chunk = Chunk::default();
+        let constant_idx = chunk.push_constant(Value::Builtin(builtin));
+        // Tvix doesn't have "0-ary" builtins, so we have to push a fake argument
+        chunk.push_op(crate::opcode::OpCode::OpNull, span);
+        chunk.push_op(crate::opcode::OpCode::OpConstant(constant_idx), span);
+        chunk.push_op(crate::opcode::OpCode::OpCall, span);
+        let lambda = Lambda {
+            name: None,
+            formals: None,
+            upvalue_count: 0,
+            chunk,
+        };
+        Thunk(Rc::new(RefCell::new(ThunkRepr::Suspended {
+            lambda: Rc::new(lambda),
+            upvalues: Rc::new(Upvalues::with_capacity(0)),
+            span: span,
+        })))
+    }
+
+    pub fn new_blackhole() -> Self {
+        Thunk(Rc::new(RefCell::new(ThunkRepr::Blackhole)))
+    }
+
+    pub fn fill_blackhole(&mut self, v: Value) {
+        let should_be_blackhole = self.0.replace(ThunkRepr::Evaluated(v));
+        assert!(matches!(should_be_blackhole, ThunkRepr::Blackhole));
+    }
+
+    /// Force a thunk from a context that can't handle trampoline
+    /// continuations.  Calling `force_tramp()` instead should be
+    /// preferred whenever possible.
+    pub fn force(&self, vm: &mut VM) -> Result<(), ErrorKind> {
+        if self.is_forced() {
+            return Ok(());
+        }
+        vm.push(Value::Thunk(self.clone()));
+        let mut tramp = Self::force_tramp(vm)?;
+        loop {
+            match tramp.action {
+                None => (),
+                Some(TrampAction::EnterFrame {
+                    lambda,
+                    upvalues,
+                    arg_count,
+                    span: _,
+                }) => vm.enter_frame(lambda, upvalues, arg_count)?,
+            }
+            match tramp.cont {
+                None => break (),
+                Some(cont) => {
+                    tramp = cont(vm)?;
+                    continue;
+                }
+            }
+        }
+        vm.pop();
+        Ok(())
     }
 
     /// Evaluate the content of a thunk, potentially repeatedly, until a
@@ -92,31 +172,64 @@ impl Thunk {
     /// This will change the existing thunk (and thus all references to it,
     /// providing memoization) through interior mutability. In case of nested
     /// thunks, the intermediate thunk representations are replaced.
-    pub fn force(&self, vm: &mut VM) -> Result<(), ErrorKind> {
+    ///
+    /// The thunk to be forced should be at the top of the VM stack,
+    /// and will be left there (but possibly partially forced) when
+    /// this function returns.
+    pub fn force_tramp(vm: &mut VM) -> Result<Tramp, ErrorKind> {
+        match vm.pop() {
+            Value::Thunk(thunk) /*if !thunk.is_forced()*/ =>
+                return thunk.force_tramp_self(vm),
+            v => {
+                vm.push(v);
+                return Ok(Tramp::default());
+            }
+        }
+    }
+
+    fn force_tramp_self(&self, vm: &mut VM) -> Result<Tramp, ErrorKind> {
         loop {
-            let mut thunk_mut = self.0.borrow_mut();
+            if !self.is_suspended() {
+                let thunk = self.0.borrow();
+                match *thunk {
+                    ThunkRepr::Evaluated(Value::Thunk(ref inner_thunk)) => {
+                        let inner_repr = inner_thunk.0.borrow().clone();
+                        drop(thunk);
+                        self.0.replace(inner_repr);
+                    }
 
-            match *thunk_mut {
-                ThunkRepr::Evaluated(Value::Thunk(ref inner_thunk)) => {
-                    let inner_repr = inner_thunk.0.borrow().clone();
-                    *thunk_mut = inner_repr;
+                    ThunkRepr::Evaluated(ref v) => {
+                        vm.push(v.clone());
+                        return Ok(Tramp::default());
+                    }
+                    ThunkRepr::Blackhole => return Err(ErrorKind::InfiniteRecursion),
+                    _ => panic!("impossible"),
                 }
-
-                ThunkRepr::Evaluated(_) => return Ok(()),
-                ThunkRepr::Blackhole => return Err(ErrorKind::InfiniteRecursion),
-
-                ThunkRepr::Suspended { .. } => {
-                    if let ThunkRepr::Suspended {
+            } else {
+                match self.0.replace(ThunkRepr::Blackhole) {
+                    ThunkRepr::Suspended {
                         lambda,
                         upvalues,
                         span,
-                    } = std::mem::replace(&mut *thunk_mut, ThunkRepr::Blackhole)
-                    {
-                        drop(thunk_mut);
-                        vm.enter_frame(lambda, upvalues, 0)
-                            .map_err(|e| ErrorKind::ThunkForce(Box::new(Error { span, ..e })))?;
-                        (*self.0.borrow_mut()) = ThunkRepr::Evaluated(vm.pop())
+                    } => {
+                        let self_clone = self.clone();
+                        return Ok(Tramp {
+                            action: Some(TrampAction::EnterFrame {
+                                lambda,
+                                upvalues: upvalues.clone(),
+                                arg_count: 0,
+                                span,
+                            }),
+                            cont: Some(Box::new(move |vm| {
+                                let should_be_blackhole =
+                                    self_clone.0.replace(ThunkRepr::Evaluated(vm.pop()));
+                                assert!(matches!(should_be_blackhole, ThunkRepr::Blackhole));
+                                vm.push(Value::Thunk(self_clone));
+                                return Self::force_tramp(vm).map_err(|kind| Error { kind, span });
+                            })),
+                        });
                     }
+                    _ => panic!("impossible"),
                 }
             }
         }
@@ -124,17 +237,33 @@ impl Thunk {
 
     pub fn finalise(&self, stack: &[Value]) {
         self.upvalues_mut().resolve_deferred_upvalues(stack);
+        /*
         #[cfg(debug_assertions)]
         {
             let inner: &mut ThunkRepr = &mut self.0.as_ref().borrow_mut();
-            if let ThunkRepr::Evaluated(Value::Closure(c)) = inner {
+            if let ThunkRepr::Evaluated(Value::Closure(_c)) = inner {
                 c.is_finalised = true;
             }
         }
+        */
     }
 
     pub fn is_evaluated(&self) -> bool {
         matches!(*self.0.borrow(), ThunkRepr::Evaluated(_))
+    }
+
+    pub fn is_suspended(&self) -> bool {
+        matches!(*self.0.borrow(), ThunkRepr::Suspended { .. })
+    }
+
+    /// Returns true if forcing this thunk will not change it.
+    pub fn is_forced(&self) -> bool {
+        match *self.0.borrow() {
+            ThunkRepr::Blackhole => panic!("is_forced() called on a blackholed thunk"),
+            ThunkRepr::Evaluated(Value::Thunk(_)) => false,
+            ThunkRepr::Evaluated(_) => true,
+            _ => false,
+        }
     }
 
     /// Returns a reference to the inner evaluated value of a thunk.
@@ -146,6 +275,7 @@ impl Thunk {
     pub fn value(&self) -> Ref<Value> {
         Ref::map(self.0.borrow(), |thunk| match thunk {
             ThunkRepr::Evaluated(value) => {
+                /*
                 #[cfg(debug_assertions)]
                 if matches!(
                     value,
@@ -156,6 +286,7 @@ impl Thunk {
                 ) {
                     panic!("Thunk::value called on an unfinalised closure");
                 }
+                */
                 return value;
             }
             ThunkRepr::Blackhole => panic!("Thunk::value called on a black-holed thunk"),
@@ -165,28 +296,21 @@ impl Thunk {
 
     pub fn upvalues(&self) -> Ref<'_, Upvalues> {
         Ref::map(self.0.borrow(), |thunk| match thunk {
-            ThunkRepr::Suspended { upvalues, .. } => upvalues,
-            ThunkRepr::Evaluated(Value::Closure(Closure { upvalues, .. })) => upvalues,
+            ThunkRepr::Suspended { upvalues, .. } => upvalues.as_ref(),
+            ThunkRepr::Evaluated(Value::Closure(c)) => &c.upvalues,
             _ => panic!("upvalues() on non-suspended thunk"),
         })
     }
 
     pub fn upvalues_mut(&self) -> RefMut<'_, Upvalues> {
         RefMut::map(self.0.borrow_mut(), |thunk| match thunk {
-            ThunkRepr::Suspended { upvalues, .. } => upvalues,
-            ThunkRepr::Evaluated(Value::Closure(Closure {
-                upvalues,
-                #[cfg(debug_assertions)]
-                is_finalised,
-                ..
-            })) => {
-                #[cfg(debug_assertions)]
-                if *is_finalised {
-                    panic!("Thunk::upvalues_mut() called on a finalised closure");
-                }
-                Rc::get_mut(upvalues)
-                    .expect("upvalues_mut() was called on a thunk which already had multiple references to it")
-            }
+            ThunkRepr::Suspended { upvalues, .. } => Rc::get_mut(upvalues).unwrap(),
+            ThunkRepr::Evaluated(Value::Closure(c)) => Rc::get_mut(
+                &mut Rc::get_mut(c).unwrap().upvalues,
+            )
+            .expect(
+                "upvalues_mut() was called on a thunk which already had multiple references to it",
+            ),
             thunk => panic!("upvalues() on non-suspended thunk: {thunk:?}"),
         })
     }
@@ -194,7 +318,26 @@ impl Thunk {
     /// Do not use this without first reading and understanding
     /// `tvix/docs/value-pointer-equality.md`.
     pub(crate) fn ptr_eq(&self, other: &Self) -> bool {
-        Rc::ptr_eq(&self.0, &other.0)
+        if Rc::ptr_eq(&self.0, &other.0) {
+            return true;
+        }
+        match &*self.0.borrow() {
+            ThunkRepr::Evaluated(Value::Closure(c1)) => match &*other.0.borrow() {
+                ThunkRepr::Evaluated(Value::Closure(c2)) => {
+                    if Rc::ptr_eq(c1, c2) {
+                        true
+                    /*
+                                            } else if Rc::ptr_eq(&c1.lambda, &c2.lambda) {
+                                                true
+                    */
+                    } else {
+                        false
+                    }
+                }
+                _ => false,
+            },
+            _ => false,
+        }
     }
 }
 

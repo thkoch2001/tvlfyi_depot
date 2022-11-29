@@ -17,7 +17,7 @@ use regex::Regex;
 use crate::warnings::WarningKind;
 use crate::{
     errors::ErrorKind,
-    value::{Builtin, CoercionKind, NixAttrs, NixList, NixString, Value},
+    value::{Builtin, CoercionKind, NixAttrs, NixList, NixString, Thunk, Value},
     vm::VM,
 };
 
@@ -323,7 +323,7 @@ mod pure_builtins {
 
     #[builtin("functionArgs")]
     fn builtin_function_args(_: &mut VM, f: Value) -> Result<Value, ErrorKind> {
-        let lambda = f.to_closure()?.lambda();
+        let lambda = &f.as_closure()?.lambda();
         let formals = if let Some(formals) = &lambda.formals {
             formals
         } else {
@@ -899,6 +899,13 @@ mod pure_builtins {
             .map(Value::String)
     }
 
+    #[builtin("placeholder")]
+    fn builtin_placeholder(vm: &mut VM, #[lazy] _: Value) -> Result<Value, ErrorKind> {
+        // TODO(amjoseph)
+        vm.emit_warning(WarningKind::NotImplemented("builtins.placeholder"));
+        Ok("<builtins.placeholder-is-not-implemented-in-tvix-yet>".into())
+    }
+
     #[builtin("trace")]
     fn builtin_trace(_: &mut VM, message: Value, value: Value) -> Result<Value, ErrorKind> {
         // TODO(grfn): `trace` should be pluggable and capturable, probably via a method on
@@ -948,6 +955,205 @@ pub use pure_builtins::builtins as pure_builtins;
 ///
 /// These are used as a crutch to make progress on nixpkgs evaluation.
 fn placeholders() -> Vec<Builtin> {
+    #[allow(non_snake_case)]
+    let derivationStrict = Builtin::new(
+        "derivationStrict",
+        &[BuiltinArgument {
+            strict: true,
+            name: "args",
+        }],
+        None,
+        |argsvec: Vec<Value>, vm: &mut VM| {
+            let mut ret: BTreeMap<NixString, Value> = Default::default();
+            let drv_attrs = crate::unwrap_or_clone_rc(argsvec.get(0).unwrap().to_attrs()?);
+            ret.insert(
+                "name".into(),
+                drv_attrs
+                    .select("name")
+                    .expect("derivation is missing a `name` field")
+                    .coerce_to_string(CoercionKind::Strong, vm)?
+                    .into(),
+            );
+            #[allow(non_snake_case, unused_assignments)]
+            let __structuredAttrs = drv_attrs
+                .select("__structuredAttrs")
+                .unwrap_or(&Value::Bool(false))
+                .force(vm)?
+                .as_bool()?;
+
+            // stdenv.mkDerivation always sets this to `true`
+            #[allow(non_snake_case, unused_assignments)]
+            let __ignoreNulls = drv_attrs
+                .select("__ignoreNulls")
+                .unwrap_or(&Value::Bool(false))
+                .force(vm)?
+                .as_bool()?;
+
+            #[allow(non_snake_case, unused_assignments)]
+            let mut __impure = false;
+            #[allow(non_snake_case, unused_assignments)]
+            let mut __contentAddressed = false;
+            let mut outputs: Vec<String> = vec![];
+            outputs.push("out".into());
+            let mut builder: Option<String> = None;
+            let mut name: Option<String> = None;
+            let mut system: Option<String> = None;
+            #[allow(non_snake_case, unused_assignments, unused_variables)]
+            let mut outputHash: Option<String> = None;
+            #[allow(non_snake_case, unused_assignments, unused_variables)]
+            let mut outputHashAlgo: Option<String> = None;
+            #[allow(non_snake_case, unused_assignments, unused_variables)]
+            let mut outputHashMode: Option<String> = None;
+            let mut args: Vec<String> = vec![];
+
+            for (k, v) in drv_attrs.into_iter() {
+                let key = k.as_str();
+                if k.as_str() == "args" {
+                    for arg in v.force(vm)?.to_list()?.into_iter() {
+                        args.push(
+                            arg.coerce_to_string(CoercionKind::Strong, vm)?
+                                .as_str()
+                                .to_owned(),
+                        );
+                    }
+                } else if key == "__impure" {
+                    __impure = v.force(vm)?.as_bool()?;
+                } else if key == "__contentAddressed" {
+                    __contentAddressed = v.force(vm)?.as_bool()?;
+                } else {
+                    // attrs in the if-clauses above are not present in
+                    // the builder's environment; all others are.
+                    let val = v.coerce_to_string(CoercionKind::Strong, vm)?;
+                    if key == "builder" {
+                        builder = Some(val.as_str().to_owned());
+                    } else if key == "name" {
+                        name = Some(val.as_str().to_owned());
+                    } else if key == "system" {
+                        system = Some(val.as_str().to_owned());
+                    } else if key == "outputHash" {
+                        outputHash = Some(val.as_str().to_owned());
+                    } else if key == "outputHashAlgo" {
+                        outputHashAlgo = Some(val.as_str().to_owned());
+                    } else if key == "outputHashMode" {
+                        outputHashMode = Some(val.as_str().to_owned());
+                    } else if key == "outputs" {
+                        outputs.clear();
+                        // TODO(amjoseph): reject duplicates
+                        // unfortunately `outputs` can be a `[ \t\n\r]`-separated list :(
+                        outputs.extend(
+                            val.split([' ', '\t', '\n', '\r'])
+                                .into_iter()
+                                .map(|x| x.to_owned()),
+                        );
+                        if outputs.len() == 0 {
+                            return Err(ErrorKind::DerivationMalformed("outputs list was empty"));
+                        }
+                        if outputs.iter().any(|s| s == "drv") {
+                            return Err(ErrorKind::DerivationMalformed(
+                                "`drv` may not be used as an output name",
+                            ));
+                        }
+                    }
+                    ret.insert(k.clone(), Value::String(val));
+                }
+            }
+            if __impure {
+                return Err(ErrorKind::NotImplemented("__impure is not implemented"));
+            }
+            if __contentAddressed {
+                return Err(ErrorKind::NotImplemented(
+                    "__contentAddressed is not implemented",
+                ));
+            }
+            if __structuredAttrs {
+                return Err(ErrorKind::NotImplemented(
+                    "__structuredAttrs is not implemented",
+                ));
+            }
+            let name = match name {
+                None => return Err(ErrorKind::NotImplemented("`name` attribute missing")),
+                Some(s) => {
+                    if s.ends_with(".drv") {
+                        return Err(ErrorKind::NotImplemented(
+                            "derivation names must end in `.drv`",
+                        ));
+                    } else {
+                        s
+                    }
+                }
+            };
+            let builder =
+                builder.ok_or(ErrorKind::NotImplemented("`builder` attribute missing"))?;
+            let system = system.ok_or(ErrorKind::NotImplemented("`builder` attribute missing"))?;
+            let outputHashSpec: Option<crate::store::derivation::OutputHashSpec> =
+                if let Some(outputHash) = outputHash {
+                    if outputs != vec!["out"] {
+                        return Err(ErrorKind::NotImplemented(
+                            "fixed-output derivations must have exactly one output, named `out`",
+                        ));
+                    }
+                    // TODO(amjoseph): validate outputHash, outputHashAlgo, outputHashMode
+                    Some(crate::store::derivation::OutputHashSpec {
+                        outputHash,
+                        outputHashAlgo: outputHashAlgo.ok_or(ErrorKind::NotImplemented(
+                            "fixed-output derivation lacks an `outputHashAlgo` attribute",
+                        ))?,
+                        outputHashMode: outputHashMode.ok_or(ErrorKind::NotImplemented(
+                            "fixed-output derivation lacks an `outputHashMode` attribute",
+                        ))?,
+                    })
+                } else {
+                    None
+                };
+
+            // TODO(amjoseph): populate inputSrcs from context (entries whose path starts with `=`)
+            // TODO(amjoseph): populate inputDrvs from context (entries whose path starts with `=` and isDerivation)
+            // TODO(amjoseph): populate inputDrvs from context (entries whose path starts with `!<name>!<path>`)
+            // TODO(amjoseph): populate inputSrcs from context (all other entries)
+            let primary_output = outputs[0].clone();
+            let derivation = crate::store::derivation::Derivation {
+                __impure,
+                __contentAddressed,
+                __ignoreNulls,
+                __structuredAttrs,
+                name: name.clone(),
+                system,
+                inputSrcs: vec![], // FIXME
+                inputDrvs: vec![], // FIXME
+                builder,
+                args,
+                outputs,
+                outputHashSpec,
+            };
+
+            let mut drvPath = "/nix/store/".to_owned();
+            drvPath.push_str(&vm.store_driver.get_drv_path(&derivation));
+            let mut primary_outpath = "/nix/store/".to_owned();
+            primary_outpath.push_str(&vm.store_driver.get_out_path(&derivation, &primary_output));
+            let outputs = NixAttrs::from_map(
+                derivation
+                    .outputs
+                    .iter()
+                    .map(|output| {
+                        let mut value = "/nix/store/".to_owned();
+                        value.push_str(&vm.store_driver.get_out_path(&derivation, output));
+                        (output.clone().into(), value.into())
+                    })
+                    .collect(),
+            )
+            .update(NixAttrs::from_map(
+                [
+                    // TODO(amjoseph): implement this
+                    ("drvPath".into(), drvPath.into()),
+                    // TODO(amjoseph): implement this
+                    ("outPath".into(), primary_outpath.into()),
+                ]
+                .into_iter()
+                .collect(),
+            ));
+            Ok(Value::Attrs(Rc::new(outputs)))
+        },
+    );
     vec![
         Builtin::new(
             "addErrorContext",
@@ -1005,34 +1211,114 @@ fn placeholders() -> Vec<Builtin> {
                 Ok(Value::attrs(NixAttrs::from_map(res)))
             },
         ),
+        derivationStrict.clone(),
+        // TODO(amjoseph): this might be insufficiently lazy in some places
+        #[allow(non_snake_case)]
         Builtin::new(
             "derivation",
             &[BuiltinArgument {
                 strict: true,
-                name: "attrs",
+                name: "drvAttrs",
             }],
             None,
-            |args: Vec<Value>, vm: &mut VM| {
-                vm.emit_warning(WarningKind::NotImplemented("builtins.derivation"));
+            move |args: Vec<Value>, vm: &mut VM| {
+                let drvAttrs = args.get(0).unwrap().to_attrs()?;
+                let drvAttrs = Rc::new(NixAttrs::from_map(
+                    unwrap_or_clone_rc(drvAttrs).into_iter().collect(),
+                ));
 
-                // We do not implement derivations yet, so this function sets mock
-                // values on the fields that a real derivation would contain.
-                //
-                // Crucially this means we do not yet *validate* the values either.
-                let attrs = unwrap_or_clone_rc(args[0].to_attrs()?);
-                let attrs = attrs.update(NixAttrs::from_map(BTreeMap::from([
-                    (
-                        "outPath".into(),
-                        "/nix/store/00000000000000000000000000000000-mock".into(),
-                    ),
-                    (
-                        "drvPath".into(),
-                        "/nix/store/00000000000000000000000000000000-mock.drv".into(),
-                    ),
-                    ("type".into(), "derivation".into()),
-                ])));
+                let mut outputs = vec![];
+                for output in drvAttrs
+                    .select("outputs")
+                    .unwrap_or(&Value::List(vec![NixString::from("out").into()].into()))
+                    .force(vm)?
+                    .to_list()?
+                    .into_iter()
+                {
+                    outputs.push(output.force(vm)?.to_str()?);
+                }
 
-                Ok(Value::Attrs(Rc::new(attrs)))
+                // extract the `drvPath`
+
+                // a list of (key,value) attrsets, one for each output; the key is the output name and the value is:
+                //    commonAttrs // {
+                //      type = "derivation";
+                //      inherit outputName;
+                //      outPath = strict."${outputName}";
+                //      drvPath = strict.drvPath;
+                //    }
+                let outputsThunks: Vec<(NixString, Thunk)> = outputs
+                    .into_iter()
+                    .map(|outputName| (outputName, Thunk::new_blackhole()))
+                    .collect();
+
+                let mut all = Thunk::new_blackhole();
+
+                // `(builtins.listToAttrs outputsList) // drvAttrs // { inherit all; }`
+                let commonAttrs = NixAttrs::from_map(
+                    outputsThunks
+                        .iter()
+                        .map(|(k, t)| (k.clone(), Value::Thunk(t.clone())))
+                        .collect(),
+                )
+                .update((*drvAttrs).clone())
+                .update(NixAttrs::from_map(BTreeMap::from([(
+                    "all".into(),
+                    Value::Thunk(all.clone()),
+                )])))
+                .update(NixAttrs::from_map(BTreeMap::from([(
+                    "drvAttrs".into(),
+                    Value::Attrs(drvAttrs.clone()),
+                )])));
+
+                // `map (x: x.value) outputsList`
+                let all_list: Vec<Value> = outputsThunks
+                    .into_iter()
+                    .map(|(outputName, mut thunk)| {
+                        let outputName_ = outputName.clone();
+                        let derivationStrictArgs = vec![Value::Attrs(drvAttrs.clone())];
+                        let derivationStrict_func = derivationStrict.func().clone();
+                        let outPath =
+                            Thunk::new_suspended_native(Rc::new(Box::new(move |vm: &mut VM| {
+                                let strict =
+                                    (derivationStrict_func)(derivationStrictArgs.clone(), vm)?;
+                                Ok(strict
+                                    .to_attrs()
+                                    .unwrap()
+                                    .select_required(&outputName_)
+                                    .unwrap()
+                                    .clone())
+                            })));
+                        let derivationStrictArgs = vec![Value::Attrs(drvAttrs.clone())];
+
+                        let derivationStrict_func = derivationStrict.func().clone();
+                        let drvPath =
+                            Thunk::new_suspended_native(Rc::new(Box::new(move |vm: &mut VM| {
+                                let strict =
+                                    (derivationStrict_func)(derivationStrictArgs.clone(), vm)?;
+                                Ok(strict
+                                    .to_attrs()
+                                    .unwrap()
+                                    .select_required("drvPath")
+                                    .unwrap()
+                                    .clone())
+                            })));
+                        let value = Value::Attrs(Rc::new(commonAttrs.clone().update(
+                            NixAttrs::from_map(BTreeMap::from([
+                                ("type".into(), Value::String("derivation".into())),
+                                ("outputName".into(), outputName.clone().into()),
+                                ("outPath".into(), Value::Thunk(outPath)),
+                                ("drvPath".into(), Value::Thunk(drvPath)),
+                            ])),
+                        )));
+                        thunk.fill_blackhole(value.clone());
+                        value
+                    })
+                    .collect();
+
+                let ret = all_list[0].clone();
+                all.fill_blackhole(Value::List(NixList::from(all_list)));
+                Ok(ret)
             },
         ),
     ]
@@ -1066,6 +1352,13 @@ pub fn global_builtins(source: SourceCode) -> GlobalsMapFunc {
 
         #[cfg(feature = "impure")]
         {
+            map.insert(
+                "storeDir",
+                Value::Thunk(Thunk::new_suspended_native(Rc::new(Box::new(
+                    |vm: &mut VM| Ok(vm.store_driver.get_store_dir().into()),
+                )))),
+            );
+
             map.extend(impure::builtins());
 
             // We need to insert import into the builtins, but the

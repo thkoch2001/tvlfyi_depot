@@ -76,6 +76,9 @@ pub enum ErrorKind {
     /// Infinite recursion encountered while forcing thunks.
     InfiniteRecursion,
 
+    /// Uses of `builtins.derivation` with a malformed argument
+    DerivationMalformed(&'static str),
+
     ParseErrors(Vec<rnix::parser::ParseError>),
 
     /// An error occured while forcing a thunk, and needs to be
@@ -282,6 +285,11 @@ to a missing value in the attribute set(s) included via `with`."#,
             }
 
             ErrorKind::InfiniteRecursion => write!(f, "infinite recursion encountered"),
+
+            ErrorKind::DerivationMalformed(msg) => write!(
+                f,
+                "builtins.derivation called with malformed argument: {msg}"
+            ),
 
             // Errors themselves ignored here & handled in Self::spans instead
             ErrorKind::ParseErrors(_) => write!(f, "failed to parse Nix code:"),
@@ -668,6 +676,7 @@ impl Error {
             | ErrorKind::VariableAlreadyDefined(_)
             | ErrorKind::NotCallable(_)
             | ErrorKind::InfiniteRecursion
+            | ErrorKind::DerivationMalformed(_)
             | ErrorKind::ParseErrors(_)
             | ErrorKind::ThunkForce(_)
             | ErrorKind::NotCoercibleToString { .. }
@@ -708,6 +717,7 @@ impl Error {
             ErrorKind::InfiniteRecursion => "E014",
             ErrorKind::ParseErrors(_) => "E015",
             ErrorKind::DuplicateAttrsKey { .. } => "E016",
+            ErrorKind::DerivationMalformed(_) => "E017",
             ErrorKind::NotCoercibleToString { .. } => "E018",
             ErrorKind::IndexOutOfBounds { .. } => "E019",
             ErrorKind::NotAnAbsolutePath(_) => "E020",
