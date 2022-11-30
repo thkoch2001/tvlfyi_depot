@@ -1,6 +1,5 @@
 { depot, pkgs, lib, config, ... }:
 
-# TODO(sterni): automatically sync repositories with upstream if needed
 let
   virtualHost = "code.sterni.lv";
 
@@ -10,6 +9,7 @@ let
       repos = {
         spacecookie = {
           description = "gopher server (and library for Haskell)";
+          upstream = "https://github.com/sternenseemann/spacecookie.git";
         };
       };
     }
@@ -18,9 +18,11 @@ let
       repos = {
         emoji-generic = {
           description = "generic emoji library for Haskell";
+          upstream = "https://github.com/sternenseemann/emoji-generic.git";
         };
         grav2ty = {
           description = "“realistic” 2d space game";
+          upstream = "https://github.com/sternenseemann/grav2ty.git";
         };
         haskell-dot-time = {
           description = "UTC-centric time library for haskell with dot time support";
@@ -29,6 +31,7 @@ let
         buchstabensuppe = {
           description = "toy font rendering for low pixelcount, high contrast displays";
           defaultBranch = "main";
+          upstream = "https://github.com/sternenseemann/buchstabensuppe.git";
         };
       };
     }
@@ -37,29 +40,31 @@ let
       repos = {
         gopher-proxy = {
           description = "Gopher over HTTP proxy";
+          upstream = "https://github.com/sternenseemann/gopher-proxy.git";
         };
         likely-music = {
           description = "experimental application for probabilistic music composition";
+          upstream = "https://github.com/sternenseemann/likely-music.git";
         };
         logbook = {
           description = "file format for keeping a personal log";
+          upstream = "https://github.com/sternenseemann/logbook.git";
         };
         sternenblog = {
           description = "file based cgi blog software";
+          upstream = "https://github.com/sternenseemann/sternenblog.git";
         };
       };
     }
   ];
 
+  repoPath = name: repo: repo.path or "/srv/git/${name}.git";
+
   cgitRepoEntry = name: repo:
-    let
-      repoName = repo.name or name;
-      path = repo.path or "${repoName}.git";
-    in
     lib.concatStringsSep "\n" (
       [
-        "repo.url=${repoName}"
-        "repo.path=/srv/git/${path}"
+        "repo.url=${name}"
+        "repo.path=${repoPath name repo}"
       ]
       ++ lib.optional (repo ? description) "repo.desc=${repo.description}"
       ++ lib.optional (repo ? defaultBranch) "repo.defbranch=${repo.defaultBranch}"
@@ -111,6 +116,25 @@ let
       ) repoSections
     }
   '';
+
+  /* Merge a list of attrs, but fail when the same attribute occurs twice.
+
+     Type: [ attrs ] -> attrs
+  */
+  mergeManyDistinctAttrs = lib.foldAttrs
+    (
+      val: nul:
+        if nul == null then val else throw "Every attribute name may occur only once"
+    )
+    null;
+
+  flatRepos = mergeManyDistinctAttrs
+    (builtins.map (section: section.repos) repoSections);
+
+  reposToMirror = lib.filterAttrs (_: repo: repo ? upstream) flatRepos;
+
+  # User and group name used for running the mirror scripts
+  mirroredReposOwner = "git";
 in
 
 {
@@ -138,5 +162,74 @@ in
         }
       '';
     };
+
+    users = {
+      users.${mirroredReposOwner} = {
+        group = mirroredReposOwner;
+        isSystemUser = true;
+      };
+
+      groups.${mirroredReposOwner} = { };
+    };
+
+
+    systemd.timers = lib.mapAttrs'
+      (
+        name: repo:
+          {
+            name = "mirror-${name}";
+            value = {
+              description = "regularly update mirror git repository ${name}";
+              wantedBy = [ "timers.target" ];
+              enable = true;
+              timerConfig = {
+                # Fire every 6h and distribute the workload over next 6h randomly
+                OnCalendar = "*-*-* 00/6:00:00";
+                AccuracySec = "6h";
+                RandomizedDelaySec = "6h";
+                Persistent = true;
+              };
+            };
+          }
+      )
+      reposToMirror;
+
+    systemd.services = lib.mapAttrs'
+      (
+        name: repo:
+          {
+            name = "mirror-${name}";
+            value = {
+              description = "mirror git repository ${name}";
+              after = [ "network.target" ];
+              script =
+                let
+                  path = repoPath name repo;
+                in
+                ''
+                  set -euo pipefail
+
+                  export PATH="${lib.makeBinPath [ pkgs.coreutils pkgs.git ]}"
+
+                  if test ! -d "${path}"; then
+                    mkdir -p "$(dirname "${path}")"
+                    git clone --mirror "${repo.upstream}" "${path}"
+                    exit 0
+                  fi
+
+                  cd "${path}"
+
+                  git fetch "${repo.upstream}" '+refs/*:refs/*' --prune
+                '';
+
+              serviceConfig = {
+                Type = "oneshot";
+                User = mirroredReposOwner;
+                Group = mirroredReposOwner;
+              };
+            };
+          }
+      )
+      reposToMirror;
   };
 }
