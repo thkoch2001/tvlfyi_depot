@@ -11,6 +11,18 @@ let
           description = "gopher server (and library for Haskell)";
           upstream = "https://github.com/sternenseemann/spacecookie.git";
         };
+        "mirror/depot" = {
+          description = "monorepo for the virus lounge";
+          upstream = "https://code.tvl.fyi";
+        };
+        "mirror/flipdot-gschichtler" = {
+          description = "message queue system for OpenLab's flipdot display";
+          upstream = "https://github.com/openlab-aux/flipdot-gschichtler.git";
+        };
+        "mirror/nixpkgs" = {
+          description = "Nix packages collection";
+          upstream = "https://github.com/nixos/nixpkgs.git";
+        };
       };
     }
     {
@@ -32,6 +44,10 @@ let
           description = "toy font rendering for low pixelcount, high contrast displays";
           defaultBranch = "main";
           upstream = "https://github.com/sternenseemann/buchstabensuppe.git";
+        };
+        "mirror/saneterm" = {
+          description = "modern line-oriented terminal emulator without support for TUIs";
+          upstream = "git://git.8pit.net/saneterm.git";
         };
       };
     }
@@ -135,6 +151,9 @@ let
 
   # User and group name used for running the mirror scripts
   mirroredReposOwner = "git";
+
+  # Make repo name suitable for systemd unit/timer
+  unitName = name: "mirror-${lib.strings.sanitizeDerivationName name}";
 in
 
 {
@@ -177,7 +196,7 @@ in
       (
         name: repo:
           {
-            name = "mirror-${name}";
+            name = unitName name;
             value = {
               description = "regularly update mirror git repository ${name}";
               wantedBy = [ "timers.target" ];
@@ -198,7 +217,7 @@ in
       (
         name: repo:
           {
-            name = "mirror-${name}";
+            name = unitName name;
             value = {
               description = "mirror git repository ${name}";
               after = [ "network.target" ];
