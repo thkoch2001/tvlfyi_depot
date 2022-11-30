@@ -1,7 +1,6 @@
 package server
 
 import (
-	"bytes"
 	"context"
 	"encoding/base64"
 	"encoding/hex"
@@ -111,14 +110,12 @@ func renderNar(
 		},
 		func(blobRef []byte) (io.ReadCloser, error) {
 			log.Infof("Get blob with digest: %x", blobRef)
-			resp, err := blobServiceClient.Get(ctx, &storev1pb.GetBlobRequest{
-				Digest: blobRef,
-			})
+
+			blobReader, err := NewBlobReader(ctx, blobServiceClient, blobRef)
 			if err != nil {
 				return nil, fmt.Errorf("unable to get blob: %w", err)
-
 			}
-			return io.NopCloser(bytes.NewReader(resp.GetData())), nil
+			return blobReader, nil
 		},
 	)
 	if err != nil {
