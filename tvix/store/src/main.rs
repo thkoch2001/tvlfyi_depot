@@ -11,7 +11,7 @@ use crate::proto::FILE_DESCRIPTOR_SET;
 mod file_blob_service;
 mod memory_directory_service;
 mod memory_path_info_service;
-mod null_blob_service;
+// mod null_blob_service;
 mod null_directory_service;
 mod null_path_info_service;
 mod proto;
