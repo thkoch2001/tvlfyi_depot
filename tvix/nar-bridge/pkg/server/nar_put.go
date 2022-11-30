@@ -4,6 +4,7 @@ import (
 	"bufio"
 	"bytes"
 	"fmt"
+	"io"
 	"net/http"
 
 	"code.tvl.fyi/tvix/nar-bridge/pkg/reader"
@@ -41,7 +42,20 @@ func registerNarPut(s *Server) {
 		rd := reader.New(bufio.NewReader(r.Body))
 		pathInfo, err := rd.Import(
 			ctx,
-			genBlobServiceWriteCb(ctx, s.blobServiceClient),
+			func(fileReader io.Reader) error {
+				blobWriter, err := NewBlobWriter(ctx, s.blobServiceClient)
+				if err != nil {
+					return fmt.Errorf("unable to create blob writer: %w", err)
+				}
+
+				defer blobWriter.Close()
+
+				_, err = io.Copy(blobWriter, fileReader)
+				if err != nil {
+					return fmt.Errorf("unable to write blob: %w", err)
+				}
+				return nil
+			},
 			func(directory *storev1pb.Directory) error {
 				return directoriesUploader.Put(directory)
 			},
