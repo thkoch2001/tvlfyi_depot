@@ -72,7 +72,7 @@
         root.openssh.authorizedKeys.keys = depot.users.sterni.keys.all;
         lukas = {
           isNormalUser = true;
-          extraGroups = [ "wheel" "http" ];
+          extraGroups = [ "wheel" "http" "git" ];
           openssh.authorizedKeys.keys = depot.users.sterni.keys.all;
           shell = "${pkgs.fish}/bin/fish";
         };
