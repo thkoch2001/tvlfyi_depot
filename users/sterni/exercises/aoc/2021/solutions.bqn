@@ -4,16 +4,9 @@
 # Utilities
 #
 
-IsAsciiNum ← ('0'⊸≤∧≤⟜'9')
-
-ReadInt ← {(𝕨⊸×+⊣)´∘⌽-⟜'0'𝕩} # stolen from leah2
-ReadDec ← 10⊸ReadInt
+⟨IsAsciiNum,ReadInt,ReadDec,SplitOn,_fix⟩ ← •Import •path∾"/../lib.bqn"
 
 ReadInput ← {•file.Lines ∾ •path‿"/input/day"‿(•Fmt 𝕩)}
-
-SplitOn ← ((⊢ (-1˙)⍟⊣¨ +`∘(1⊸»<⊢))∘(≡¨)⊔⊢)
-
-_fix ← {𝕩 𝕊∘⊢⍟≢ 𝔽 𝕩}
 
 #
 # 2021-12-01
