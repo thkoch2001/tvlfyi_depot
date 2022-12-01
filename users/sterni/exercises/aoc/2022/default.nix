@@ -1,7 +1,7 @@
 { depot, pkgs, lib, ... }:
 
 let
-  inherit (pkgs.buildPackages) cbqn;
+  inherit (pkgs.buildPackages) cbqn ngn-k;
 
   # input files are not checked in
   meta.ci.skip = true;
@@ -12,6 +12,7 @@ depot.nix.readTree.drvTargets {
     name = "aoc-2022-shell";
     packages = [
       cbqn
+      ngn-k
       depot.tvix.eval
     ];
   };
