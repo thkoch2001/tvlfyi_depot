@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3349ea52_7b88fd10",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-12-01T10:30:01Z",
+      "side": 1,
+      "message": "This is an interesting approach, but I\u0027m not convinced it will be the correct one.\n\nI think there are two different places where we need to interact with the store:\n\n* coerceToString on a literal path, which has to initiate copying into the store\n\n* builtins.derivation(Strict), which has to \"emit\" the created derivation and return something that contains the correct paths\n\nI also have this thought that eval doesn\u0027t really need to know what\u0027s going on in either of these cases, so I\u0027m kind of leaning towards an interface where:\n\n1. most impure builtins are injected into eval from the outside\n2. there\u0027s an (optional) path handler \"thing\" that can be supplied (a sort of fn(path: PathBuf) -\u003e StorePath which does ~whatever in the background, and if this isn\u0027t set then Tvix yields an error on paths that are being coerced)\n3. the first point encompasses builtins.derivation\n\nI think that may be the entire surface we need to cover, but it\u0027s possible I\u0027m missing something.",
+      "revId": "821dccf9c35a0cb795a5dc08ddc52d735aba06d4",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "24fffe5d_efc6155c",
+        "filename": "tvix/eval/src/store/derivation.rs",
+        "patchSetId": 6
+      },
+      "lineNbr": 5,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-12-01T10:30:01Z",
+      "side": 1,
+      "message": "Maybe there\u0027s a possible future optimisation here where it is a value variant, or where attrs encapsulates an optimised representation that already has a `Derivation` inside or something. Anyways, that\u0027s for later.",
+      "range": {
+        "startLine": 5,
+        "startChar": 0,
+        "endLine": 5,
+        "endChar": 53
+      },
+      "revId": "821dccf9c35a0cb795a5dc08ddc52d735aba06d4",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
