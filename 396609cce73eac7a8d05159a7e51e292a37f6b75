@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "79c0ed7d_d199f9e8",
+        "filename": "tvix/eval/src/eval.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2022-12-02T16:49:33Z",
+      "side": 1,
+      "message": "my *usual* MO here is to just make the flag `no_warnings` and invert its behavior. That\u0027s a little wonky from the code, but I think the resulting CLI is more user-friendly.",
+      "revId": "396609cce73eac7a8d05159a7e51e292a37f6b75",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
