@@ -51,6 +51,24 @@
       "parentUuid": "6a360e02_aed7a800",
       "revId": "7b5f53679cc119f991e9efae61f8db16a21926c5",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e213d32c_9e50666a",
+        "filename": "tvix/store/protos/pathinfo.proto",
+        "patchSetId": 18
+      },
+      "lineNbr": 62,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-12-02T11:36:13Z",
+      "side": 1,
+      "message": "From what I understood from talking to flokli, this proto message is a temporary stopgap measure anyways (it\u0027s for being able to serve cppnix clients), and our signature concept shouldn\u0027t necessarily even be related to that.\n\nFrom that perspective, I think it\u0027s fine the way it is (though I don\u0027t fully understand why this is a proto message, and not an internal type of the nar-bridge).",
+      "parentUuid": "b427731c_0c0a1962",
+      "revId": "7b5f53679cc119f991e9efae61f8db16a21926c5",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
