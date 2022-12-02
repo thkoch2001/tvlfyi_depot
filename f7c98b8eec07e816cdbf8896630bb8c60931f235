@@ -16,6 +16,24 @@
       "message": "//nix/buildGo is somewhat borked with multiple-file protos (b/221), and buildGoModule doesn\u0027t seem to work with relative replacement directives easily, so I can\u0027t package it like //fun/tvl-ebooks either. I guess we need to have a nix-based build for this eventually, but that\u0027s another can of worms I\u0027d like to open at a later point.",
       "revId": "f7c98b8eec07e816cdbf8896630bb8c60931f235",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d81bc9cb_f6f017d5",
+        "filename": "tvix/nar-bridge/go.mod",
+        "patchSetId": 4
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-12-02T14:30:56Z",
+      "side": 1,
+      "message": "Just use buildGoModule until we\u0027ve found a better way to deal with protogen (in both cases)",
+      "parentUuid": "487c9791_89a2c8b7",
+      "revId": "f7c98b8eec07e816cdbf8896630bb8c60931f235",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
