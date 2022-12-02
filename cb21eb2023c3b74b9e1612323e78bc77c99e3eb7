@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "54adef72_8c320f57",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-12-02T07:31:32Z",
+      "side": 1,
+      "message": "I do wonder if the optimiser notices a BTreeMap -\u003e Iterator -\u003e BTreeMap pipeline and optimises it away. Leaning in the direction of always using from_iter as it will make it easier to switch attrs representation in the future (we have plans to experiment with persistent data structures, for example).",
+      "range": {
+        "startLine": 12,
+        "startChar": 4,
+        "endLine": 12,
+        "endChar": 44
+      },
+      "revId": "cb21eb2023c3b74b9e1612323e78bc77c99e3eb7",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "dc3eb0f0_4955b026",
+        "filename": "tvix/eval/src/value/attrs.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 101,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-12-02T07:31:32Z",
+      "side": 1,
+      "message": "bonus points if we can combine this with the logic for optimised construction later, i.e. we could have a second from_sized_iter which has a SizedIterator constraint to construct the empty repr, and the logic for creating KV pairs.\n\nfor now perfectly happy with this though!",
+      "range": {
+        "startLine": 101,
+        "startChar": 0,
+        "endLine": 101,
+        "endChar": 31
+      },
+      "revId": "cb21eb2023c3b74b9e1612323e78bc77c99e3eb7",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
