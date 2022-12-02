@@ -13,7 +13,8 @@ let
         };
         "mirror/depot" = {
           description = "monorepo for the virus lounge";
-          upstream = "https://code.tvl.fyi";
+          upstream = "https://code.tvl.fyi/depot.git";
+          defaultBranch = "canon";
         };
         "mirror/flipdot-gschichtler" = {
           description = "message queue system for OpenLab's flipdot display";
