@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c776041d_23a7c26a",
+        "filename": "nix/bufCheck/default.nix",
+        "patchSetId": 9
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-12-02T11:18:37Z",
+      "side": 1,
+      "message": "this isn\u0027t the right place for this, it should be an extra build target inside of the store folder or something like that",
+      "range": {
+        "startLine": 10,
+        "startChar": 0,
+        "endLine": 10,
+        "endChar": 39
+      },
+      "revId": "be87ec1c6d724fd9d6f77bd9354373cff0a36e21",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
