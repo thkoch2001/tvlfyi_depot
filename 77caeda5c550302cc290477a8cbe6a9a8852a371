@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3cc8c228_6a2d1e72",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-12-02T13:28:21Z",
+      "side": 1,
+      "message": "We should probably base this on a hashing scheme, but it\u0027s fine for now.",
+      "revId": "77caeda5c550302cc290477a8cbe6a9a8852a371",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
