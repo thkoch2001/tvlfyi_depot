@@ -34,6 +34,24 @@
       "parentUuid": "487c9791_89a2c8b7",
       "revId": "f7c98b8eec07e816cdbf8896630bb8c60931f235",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "195e01a5_346a843e",
+        "filename": "tvix/nar-bridge/go.mod",
+        "patchSetId": 4
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2022-12-02T14:51:18Z",
+      "side": 1,
+      "message": "See the second part of the comment, I couldn\u0027t get the \"replacing go.mod file relative paths with store paths\" to work and ran in hash failures.",
+      "parentUuid": "d81bc9cb_f6f017d5",
+      "revId": "f7c98b8eec07e816cdbf8896630bb8c60931f235",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
