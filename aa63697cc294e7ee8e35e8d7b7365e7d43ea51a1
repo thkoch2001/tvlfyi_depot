@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "78ce6f0d_e3f2b286",
+        "filename": "tvix/store/default.nix",
+        "patchSetId": 8
+      },
+      "lineNbr": 4,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-12-02T14:40:27Z",
+      "side": 1,
+      "message": "doesn\u0027t this just need ./protos?",
+      "range": {
+        "startLine": 4,
+        "startChar": 35,
+        "endLine": 4,
+        "endChar": 53
+      },
+      "revId": "aa63697cc294e7ee8e35e8d7b7365e7d43ea51a1",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
