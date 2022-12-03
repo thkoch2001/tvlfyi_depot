@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e3b62424_0e647c24",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000070
+      },
+      "writtenOn": "2022-12-03T05:25:42Z",
+      "side": 1,
+      "message": "Decided to roll with the feedback given in 7492 and remove `from_map` entirely.",
+      "revId": "e105814591a2126c204883d6f16732920e73c81b",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
