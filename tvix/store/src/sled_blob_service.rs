@@ -7,7 +7,9 @@ use tonic::{Request, Response, Result, Status, Streaming};
 use tracing::{debug, error, info_span, instrument, warn};
 
 use crate::proto::blob_service_server::BlobService;
-use crate::proto::{BlobChunk, GetBlobRequest, PutBlobResponse};
+use crate::proto::{
+    blob_meta::ChunkMeta, BlobChunk, BlobMeta, PutBlobResponse, ReadBlobRequest, StatBlobRequest,
+};
 
 pub struct SledBlobService {
     db: sled::Db,
@@ -30,13 +32,13 @@ impl SledBlobService {
 // TODO: we need to store smaller chunks here, ideally using a CDC to persist stuff.
 // TODO: our intermediate chunking info struct should probably be a proto too.
 impl BlobService for SledBlobService {
-    type GetStream = ReceiverStream<Result<BlobChunk>>;
+    type ReadStream = ReceiverStream<Result<BlobChunk>>;
 
     #[instrument(skip(self))]
-    async fn get(
+    async fn read(
         &self,
-        request: Request<GetBlobRequest>,
-    ) -> Result<Response<Self::GetStream>, Status> {
+        request: Request<ReadBlobRequest>,
+    ) -> Result<Response<Self::ReadStream>, Status> {
         let digest = request.into_inner().digest;
         let _ = info_span!("digest", "{}", base64::encode(digest.clone())).enter();
         if digest.len() != 32 {
@@ -86,6 +88,17 @@ impl BlobService for SledBlobService {
         Ok(Response::new(receiver_stream))
     }
 
+    #[instrument(skip(self))]
+    async fn stat(&self, request: Request<StatBlobRequest>) -> Result<Response<BlobMeta>> {
+        Ok(Response::new(BlobMeta {
+            chunks: vec![ChunkMeta {
+                digest: request.into_inner().digest,
+                size: 0x42, // TODO: implement
+            }],
+            inline_bao: vec![],
+        }))
+    }
+
     #[instrument(skip(self, request))]
     async fn put(
         &self,
@@ -116,6 +129,9 @@ impl BlobService for SledBlobService {
 
         let _ = info_span!("digest", "{}", base64::encode(&digest));
 
+        // TODO: pipe data through a chunker, and store individual chunks
+        // build up a chunk meta and on EOF store this to sled as well.
+
         // TODO: can there be no failures here?
         let dgst = digest.clone();
         let resp = self.db.transaction::<_, (), Status>(move |db_txn| {
@@ -144,7 +160,7 @@ mod tests {
     use tokio_stream::StreamExt;
 
     use crate::proto::blob_service_server::BlobService;
-    use crate::proto::{BlobChunk, GetBlobRequest};
+    use crate::proto::{BlobChunk, ReadBlobRequest};
     use crate::sled_blob_service::SledBlobService;
 
     #[tokio::test]
@@ -169,7 +185,7 @@ mod tests {
         assert_eq!(put_response.digest.len(), 32);
 
         let mut get_stream = service
-            .get(tonic::Request::new(GetBlobRequest {
+            .read(tonic::Request::new(ReadBlobRequest {
                 digest: put_response.digest,
             }))
             .await
@@ -216,7 +232,7 @@ mod tests {
     //         .digest;
     //     assert_eq!(digest, digest2);
     //     let data = service
-    //         .get(tonic::Request::new(GetBlobRequest { digest: digest }))
+    //         .get(tonic::Request::new(ReadBlobRequest { digest: digest }))
     //         .await
     //         .unwrap()
     //         .into_inner()
@@ -238,7 +254,7 @@ mod tests {
     //         .as_bytes()
     //         .to_vec();
     //     let result = service
-    //         .get(tonic::Request::new(GetBlobRequest {
+    //         .get(tonic::Request::new(ReadBlobRequest {
     //             digest: digest.clone(),
     //         }))
     //         .await;
