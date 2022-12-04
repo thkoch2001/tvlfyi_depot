@@ -63,6 +63,30 @@
       },
       "revId": "93e8c68272c35956b9ff3128076d25146bc9574f",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "79dbd7d5_1ae1e77a",
+        "filename": "ops/modules/panettone.nix",
+        "patchSetId": 1
+      },
+      "lineNbr": 116,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-12-04T18:24:00Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "adad3f1e_b1607068",
+      "range": {
+        "startLine": 116,
+        "startChar": 17,
+        "endLine": 116,
+        "endChar": 23
+      },
+      "revId": "93e8c68272c35956b9ff3128076d25146bc9574f",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
