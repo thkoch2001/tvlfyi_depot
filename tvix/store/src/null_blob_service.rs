@@ -1,7 +1,7 @@
 use tonic::{Request, Response, Result, Status};
 
 use crate::proto::blob_service_server::BlobService;
-use crate::proto::{GetBlobRequest, GetBlobResponse, PutBlobRequest, PutBlobResponse};
+use crate::proto::{GetBlobResponse, PutBlobRequest, PutBlobResponse, ReadBlobRequest};
 
 #[derive(Debug, Default)]
 pub struct NullBlobService {}
@@ -9,7 +9,7 @@ pub struct NullBlobService {}
 #[tonic::async_trait]
 /// BlobService that always returns error
 impl BlobService for NullBlobService {
-    async fn get(&self, _request: Request<GetBlobRequest>) -> Result<Response<GetBlobResponse>> {
+    async fn get(&self, _request: Request<ReadBlobRequest>) -> Result<Response<GetBlobResponse>> {
         Err(Status::unimplemented(""))
     }
     async fn put(&self, _request: Request<PutBlobRequest>) -> Result<Response<PutBlobResponse>> {
@@ -21,7 +21,7 @@ impl BlobService for NullBlobService {
 mod tests {
     use crate::null_blob_service::NullBlobService;
     use crate::proto::blob_service_server::BlobService;
-    use crate::proto::{GetBlobRequest, PutBlobRequest};
+    use crate::proto::{PutBlobRequest, ReadBlobRequest};
 
     #[tokio::test]
     async fn test_err() {
@@ -42,7 +42,7 @@ mod tests {
         }
 
         let result = service
-            .get(tonic::Request::new(GetBlobRequest {
+            .get(tonic::Request::new(ReadBlobRequest {
                 digest: blake3::hash(b"Hello").as_bytes().to_vec(),
             }))
             .await;
