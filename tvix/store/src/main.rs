@@ -8,14 +8,14 @@ use crate::proto::directory_service_server::DirectoryServiceServer;
 use crate::proto::path_info_service_server::PathInfoServiceServer;
 use crate::proto::FILE_DESCRIPTOR_SET;
 
-mod file_blob_service;
+//mod file_blob_service;
 mod memory_directory_service;
 mod memory_path_info_service;
-mod sled_blob_service;
-// mod null_blob_service;
+//mod null_blob_service;
 mod null_directory_service;
 mod null_path_info_service;
 mod proto;
+mod sled_blob_service;
 mod sled_directory_service;
 
 #[derive(Parser)]
