@@ -104,5 +104,16 @@ in
         ISSUECHANNEL = cfg.irccatChannel;
       };
     };
+
+    systemd.services.panettone-fixer = {
+      description = "Restart panettone regularly to work around b/225";
+      wantedBy = [ "multi-user.target" ];
+      script = "${pkgs.systemd}/bin/systemctl restart panettone";
+      serviceConfig.Type = "oneshot";
+
+      # We don't exactly know how frequently this occurs, but
+      # _probably_ not more than hourly.
+      startAt = "hourly";
+    };
   };
 }
