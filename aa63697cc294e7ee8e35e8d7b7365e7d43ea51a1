@@ -22,6 +22,30 @@
       },
       "revId": "aa63697cc294e7ee8e35e8d7b7365e7d43ea51a1",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ff90cef9_99d7e91e",
+        "filename": "tvix/store/default.nix",
+        "patchSetId": 8
+      },
+      "lineNbr": 4,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2022-12-04T10:41:28Z",
+      "side": 1,
+      "message": "If you look further up (CL7322), this folder will also receive a bunch of .pb.go files, which is why I was explicit here.",
+      "parentUuid": "78ce6f0d_e3f2b286",
+      "range": {
+        "startLine": 4,
+        "startChar": 35,
+        "endLine": 4,
+        "endChar": 53
+      },
+      "revId": "aa63697cc294e7ee8e35e8d7b7365e7d43ea51a1",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
