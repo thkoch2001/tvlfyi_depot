@@ -12,7 +12,7 @@ import (
 // BlobReader reads a blob from a BlobService.
 type BlobReader struct {
 	ctx    context.Context
-	stream storev1pb.BlobService_GetClient
+	stream storev1pb.BlobService_ReadClient
 	buf    bytes.Buffer
 }
 
@@ -20,7 +20,7 @@ type BlobReader struct {
 var _ io.ReadCloser = &BlobReader{}
 
 func NewBlobReader(ctx context.Context, blobServiceClient storev1pb.BlobServiceClient, blobRef []byte) (*BlobReader, error) {
-	stream, err := blobServiceClient.Get(ctx, &storev1pb.GetBlobRequest{
+	stream, err := blobServiceClient.Read(ctx, &storev1pb.ReadBlobRequest{
 		Digest: blobRef,
 	})
 	if err != nil {
