@@ -15,6 +15,7 @@ mod memory_path_info_service;
 mod null_directory_service;
 mod null_path_info_service;
 mod proto;
+mod sled_directory_service;
 
 #[derive(Parser)]
 #[command(author, version, about, long_about = None)]
@@ -48,7 +49,10 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
             .unwrap_or(PathBuf::from("tvix-store"))
             .join("blob"),
     };
-    let directory_service = crate::memory_directory_service::MemoryDirectoryService::default();
+    // let directory_service = crate::memory_directory_service::MemoryDirectoryService::default();
+    let directory_service = crate::sled_directory_service::SledDirectoryService::new(
+        PathBuf::from("directories.sled"),
+    )?;
     let path_info_service = crate::memory_path_info_service::MemoryPathInfoService::default();
 
     info!("tvix-store listening on {}", listen_address);
