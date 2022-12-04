@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e090c47f_b69f5c1c",
+        "filename": "tvix/eval/src/builtins/impure.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 1000002
+      },
+      "writtenOn": "2022-12-04T07:06:32Z",
+      "side": 1,
+      "message": "I think this ends up dropping errors instead of eagerly checking for errors before creating the attrs",
+      "range": {
+        "startLine": 43,
+        "startChar": 63,
+        "endLine": 43,
+        "endChar": 71
+      },
+      "revId": "f4e17caae88a1180444d8120ba35565e9853199d",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
