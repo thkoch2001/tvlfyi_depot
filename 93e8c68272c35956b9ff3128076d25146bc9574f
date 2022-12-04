@@ -39,6 +39,30 @@
       },
       "revId": "93e8c68272c35956b9ff3128076d25146bc9574f",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "adad3f1e_b1607068",
+        "filename": "ops/modules/panettone.nix",
+        "patchSetId": 1
+      },
+      "lineNbr": 116,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-12-04T17:40:27Z",
+      "side": 1,
+      "message": "Sometimes it shuts down cleanly, sometimes it waits until it gets killed, what determines that - I don\u0027t know.\n\nIn any case, I think ~hourly seconds-long downtime is better than ~daily hours-long downtime.",
+      "parentUuid": "f3c422fc_4277d7df",
+      "range": {
+        "startLine": 116,
+        "startChar": 17,
+        "endLine": 116,
+        "endChar": 23
+      },
+      "revId": "93e8c68272c35956b9ff3128076d25146bc9574f",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
