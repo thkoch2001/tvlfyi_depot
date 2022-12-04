@@ -6,7 +6,7 @@ use tonic::{Request, Response, Result, Status, Streaming};
 use tracing::{debug, error, info_span, instrument, warn};
 
 use crate::proto::blob_service_server::BlobService;
-use crate::proto::{BlobChunk, GetBlobRequest, PutBlobResponse};
+use crate::proto::{BlobChunk, PutBlobResponse, ReadBlobRequest};
 
 #[derive(Debug)]
 pub struct FileBlobService {
@@ -17,13 +17,13 @@ pub struct FileBlobService {
 /// BlobService that stores all blobs as files named by digest, in subdirectories for each possible first byte.
 // We currently send one big chunk for the whole file.
 impl BlobService for FileBlobService {
-    type GetStream = ReceiverStream<Result<BlobChunk>>;
+    type ReadStream = ReceiverStream<Result<BlobChunk>>;
 
     #[instrument(skip(self))]
-    async fn get(
+    async fn read(
         &self,
-        request: Request<GetBlobRequest>,
-    ) -> Result<Response<Self::GetStream>, Status> {
+        request: Request<ReadBlobRequest>,
+    ) -> Result<Response<Self::ReadStream>, Status> {
         let digest = request.into_inner().digest;
         let _ = info_span!("digest", "{}", base64::encode(digest.clone())).enter();
         if digest.len() != 32 {
@@ -138,7 +138,7 @@ mod tests {
 
     use crate::file_blob_service::FileBlobService;
     use crate::proto::blob_service_server::BlobService;
-    use crate::proto::{BlobChunk, GetBlobRequest};
+    use crate::proto::{BlobChunk, ReadBlobRequest};
 
     #[tokio::test]
     /// Put a blob and get it by the returned digest.
@@ -163,7 +163,7 @@ mod tests {
         assert_eq!(put_response.digest.len(), 32);
 
         let mut get_stream = service
-            .get(tonic::Request::new(GetBlobRequest {
+            .get(tonic::Request::new(ReadBlobRequest {
                 digest: put_response.digest,
             }))
             .await
@@ -209,7 +209,7 @@ mod tests {
     //         .digest;
     //     assert_eq!(digest, digest2);
     //     let data = service
-    //         .get(tonic::Request::new(GetBlobRequest { digest: digest }))
+    //         .get(tonic::Request::new(ReadBlobRequest { digest: digest }))
     //         .await
     //         .unwrap()
     //         .into_inner()
@@ -231,7 +231,7 @@ mod tests {
     //         .as_bytes()
     //         .to_vec();
     //     let result = service
-    //         .get(tonic::Request::new(GetBlobRequest {
+    //         .get(tonic::Request::new(ReadBlobRequest {
     //             digest: digest.clone(),
     //         }))
     //         .await;
