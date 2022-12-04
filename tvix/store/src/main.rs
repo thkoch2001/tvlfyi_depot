@@ -11,6 +11,7 @@ use crate::proto::FILE_DESCRIPTOR_SET;
 mod file_blob_service;
 mod memory_directory_service;
 mod memory_path_info_service;
+mod sled_blob_service;
 // mod null_blob_service;
 mod null_directory_service;
 mod null_path_info_service;
@@ -43,12 +44,13 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     let subscriber = tracing_subscriber::fmt().with_max_level(level).finish();
     tracing::subscriber::set_global_default(subscriber).ok();
 
-    let blob_service = crate::file_blob_service::FileBlobService {
-        store_path: cli
-            .store_path
-            .unwrap_or(PathBuf::from("tvix-store"))
-            .join("blob"),
-    };
+    // let blob_service = crate::file_blob_service::FileBlobService {
+    //     store_path: cli
+    //         .store_path
+    //         .unwrap_or(PathBuf::from("tvix-store"))
+    //         .join("blob"),
+    // };
+    let blob_service = crate::sled_blob_service::SledBlobService::new(PathBuf::from("blobs.sled"))?;
     // let directory_service = crate::memory_directory_service::MemoryDirectoryService::default();
     let directory_service = crate::sled_directory_service::SledDirectoryService::new(
         PathBuf::from("directories.sled"),
