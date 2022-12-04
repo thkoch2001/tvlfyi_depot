@@ -46,6 +46,30 @@
       },
       "revId": "82994374a62874be94cf6705e33ba57780f53502",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f6e22dfa_deeaa146",
+        "filename": "tvix/store/protos/castore.pb.go",
+        "patchSetId": 6
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2022-12-04T10:48:58Z",
+      "side": 1,
+      "message": "Marked as resolved.",
+      "parentUuid": "da870131_37b4f135",
+      "range": {
+        "startLine": 21,
+        "startChar": 30,
+        "endLine": 21,
+        "endChar": 32
+      },
+      "revId": "82994374a62874be94cf6705e33ba57780f53502",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
