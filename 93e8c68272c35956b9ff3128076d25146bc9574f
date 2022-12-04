@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9ae12748_273f7574",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2022-12-04T17:34:31Z",
+      "side": 1,
+      "message": "-.-",
+      "revId": "93e8c68272c35956b9ff3128076d25146bc9574f",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f3c422fc_4277d7df",
+        "filename": "ops/modules/panettone.nix",
+        "patchSetId": 1
+      },
+      "lineNbr": 116,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2022-12-04T17:34:31Z",
+      "side": 1,
+      "message": "Do you know if panettone becomes unresponsive when stopped? Or does it just ignore the signal until it gets SIGKILLed? In that case this is very fine, otherwise maybe not so much?",
+      "range": {
+        "startLine": 116,
+        "startChar": 17,
+        "endLine": 116,
+        "endChar": 23
+      },
+      "revId": "93e8c68272c35956b9ff3128076d25146bc9574f",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
