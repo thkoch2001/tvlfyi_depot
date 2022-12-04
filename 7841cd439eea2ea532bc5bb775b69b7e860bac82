@@ -122,6 +122,24 @@
       "parentUuid": "b36cfb4b_37d1d31b",
       "revId": "7841cd439eea2ea532bc5bb775b69b7e860bac82",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a57ae60a_d9188dc4",
+        "filename": "tvix/store/protos/rpc_blobstore.proto",
+        "patchSetId": 10
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2022-12-04T10:48:10Z",
+      "side": 1,
+      "message": "I don\u0027t understand how this is relates to the shape of the PutBlobResponse message, sorry. Can you elaborate?",
+      "parentUuid": "f68be29a_2fe94710",
+      "revId": "7841cd439eea2ea532bc5bb775b69b7e860bac82",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
