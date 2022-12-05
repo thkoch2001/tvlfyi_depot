@@ -52,6 +52,11 @@
     password = "{ARGON2}$argon2id$v=19$m=65536,t=2,p=1$TrezbwIY5TKLnJiii0wafQ$K0S2p9I8tiqP907nkgoK6IbG9ia4IuDiylTcIs5pesw";
   }
   {
+    username = "ghuntley";
+    email = "ghuntley@ghuntley.com";
+    password = "{ARGON2}$argon2id$v=19$m=65536,t=2,p=1$ciCuQHeA7csqrFUv7+asgw$7GUC5fLJWWVoHP8DvpA+C1u4+iFdV2E311kwTFwGzaQ";
+  }
+  {
     username = "grfn";
     email = "grfn@gws.fyi";
     password = "{ARGON2}$argon2id$v=19$m=65536,t=2,p=1$5NEYPJ19nDITK5sGr4bzhQ$Xzpzth6y4w+HGvioHiYgzqFiwMDx0B7HAh+PVbkRuuk";
