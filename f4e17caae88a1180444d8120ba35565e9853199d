@@ -22,6 +22,30 @@
       },
       "revId": "f4e17caae88a1180444d8120ba35565e9853199d",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "33e91959_eb67ea33",
+        "filename": "tvix/eval/src/builtins/impure.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 1000070
+      },
+      "writtenOn": "2022-12-05T15:19:07Z",
+      "side": 1,
+      "message": "Oh, you\u0027re right. That\u0027s one of the problems with introducing a closure into a Result-returning function. I think what I really want here is a try_map function.\n\nWhat\u0027s the error-handling philosophy here? Give up on any error, or try to keep going with what did succeed (logging things that didn\u0027t work)?",
+      "parentUuid": "e090c47f_b69f5c1c",
+      "range": {
+        "startLine": 43,
+        "startChar": 63,
+        "endLine": 43,
+        "endChar": 71
+      },
+      "revId": "f4e17caae88a1180444d8120ba35565e9853199d",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
