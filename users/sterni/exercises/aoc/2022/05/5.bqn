@@ -9,11 +9,10 @@ stacks ← {
 
 cmds ← {0‿1‿1-˜ ReadDec¨ ((∧´IsAsciiNum)¨/⊢) (<' ') SplitOn 𝕩}¨ rc
 
-ModestTake ← ↑⍟(<⟜≠)
 _ApplyCmd ← {
-  c‿f‿t ← 𝕩
-  m ← 𝔽 c ModestTake f⊑𝕨
-  (m⊸∾)⌾(t⊸⊑) (c⊸↓)⌾(f⊸⊑)𝕨
+  s Fn _self c‿f‿t :
+  m‿k ← 2↑ c ((≤⟜(↕≠))⊔⊢) f⊑s
+  (Fn m)⊸∾⌾(t⊸⊑) k˙⌾(f⊸⊑) s
 }
 
 •Out "day05.1: "∾⊑¨stacks ⌽_ApplyCmd˜´ ⌽ cmds
