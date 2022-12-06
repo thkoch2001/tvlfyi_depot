@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "972c2eeb_4ab0594b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2022-12-06T15:19:43Z",
+      "side": 1,
+      "message": "Ah crap, //tools-depot-scanner still uses this.",
+      "revId": "e20ddeb54676a98acabfb5894b854d93ef0f0b1a",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
