@@ -158,6 +158,24 @@
       "parentUuid": "a57ae60a_d9188dc4",
       "revId": "7841cd439eea2ea532bc5bb775b69b7e860bac82",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1e01595a_f15ef483",
+        "filename": "tvix/store/protos/rpc_blobstore.proto",
+        "patchSetId": 10
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2022-12-06T11:05:57Z",
+      "side": 1,
+      "message": "GC is out of scope for now, we can revisit GC behavior and implementation strategies when we come to it.",
+      "parentUuid": "8b7cc4a9_4bfb9e0d",
+      "revId": "7841cd439eea2ea532bc5bb775b69b7e860bac82",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
