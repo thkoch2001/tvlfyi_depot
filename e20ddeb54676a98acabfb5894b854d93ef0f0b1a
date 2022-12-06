@@ -16,6 +16,24 @@
       "message": "Ah crap, //tools-depot-scanner still uses this.",
       "revId": "e20ddeb54676a98acabfb5894b854d93ef0f0b1a",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "54dde1a3_337bb7c2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-12-06T18:38:36Z",
+      "side": 1,
+      "message": "I think we should have some utility function for generating proto sources (which we\u0027ll need for the Go parts of Tvix also), and then just call buildGo\u0027s standard functions on that.\n\nFWIW, depot-scanner is not used by anything and IMHO we can just disable it in CI for now. It also probably never will be used as we can do the same thing in a nicer way using Tvix, so maybe we should just delete it.",
+      "parentUuid": "972c2eeb_4ab0594b",
+      "revId": "e20ddeb54676a98acabfb5894b854d93ef0f0b1a",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
