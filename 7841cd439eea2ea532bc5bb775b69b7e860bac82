@@ -140,6 +140,24 @@
       "parentUuid": "f68be29a_2fe94710",
       "revId": "7841cd439eea2ea532bc5bb775b69b7e860bac82",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8b7cc4a9_4bfb9e0d",
+        "filename": "tvix/store/protos/rpc_blobstore.proto",
+        "patchSetId": 10
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-12-06T09:08:47Z",
+      "side": 1,
+      "message": "It relates to the previous comment.",
+      "parentUuid": "a57ae60a_d9188dc4",
+      "revId": "7841cd439eea2ea532bc5bb775b69b7e860bac82",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
