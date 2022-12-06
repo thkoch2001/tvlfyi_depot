@@ -52,6 +52,24 @@
       "parentUuid": "0e8f1747_683c95d6",
       "revId": "e94cf1993f4e5b084ecbc2a3937da2907e3e4e1e",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d66ddc1e_5ee567bd",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-12-06T18:25:36Z",
+      "side": 1,
+      "message": "Basically my workflow is very simple: I want the top-level depot envrc configuration, and nothing else, no matter where in depot I am. Having an .envrc at this level does ~random things (loading stuff from Nix, or something with lorry, idk) and I have to essentially currently do `git update-index --assume-unchanged` on this `.envrc` after changing it to just `source_up` and nothing else.\n\nIn my opinion, things like lorry are _special_ tooling and files that load them should be opt-in. I\u0027ve got no problem with some mechanism that makes arbitrary additional things available (with all the drawbacks of that, such as slow `cd`) for people that *opt-in* to it, but it should IMO not be default behaviour of `direnv` users in depot.\n\nI discussed this with zimbatm on IRC recently and he also agreed that the nested envrc files are not a good pattern and that people should explicitly enter shells when they want them. About that, ...\n\n----------------\n\n\u003e Also, running mg shell even when inside tvix folder breaks\n\nWhat did you expect it to do?\n\n`//tvix` is not a project in itself, but `//tvix/store` or `//tvix/eval` (or `//tools/besadii` or whatever, for that matter) _are_. You run `mg shell` with any buildable target and it will give you a shell for that.\n\n\u003e I don\u0027t think it\u0027s a good alternative right now.\n\nYou can also build a manual nix-shell invocation if you want.\n\n\u003e There\u0027s 30 .envrc files in all of depot, so having them clearly seems to be a usecase.\n\nI see 29, and 25 of those are under `//users` (mostly under `//users/wpcarro`). One of them is the top-level, so there are 3 random ones which I probably would also consider to be bugs.",
+      "parentUuid": "889c959e_744c732a",
+      "revId": "e94cf1993f4e5b084ecbc2a3937da2907e3e4e1e",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
