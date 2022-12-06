@@ -37,19 +37,20 @@ let
   # Cargo.toml needs to be patched with the /nix/store source path of
   # tvix-eval.
   cargoTomlPatch = pkgs.writeText "tvix-eval-src.patch" ''
-    diff --git a/Cargo.toml b/Cargo.toml
-    index 2e6c793..67280e7 100644
-    --- a/Cargo.toml
-    +++ b/Cargo.toml
-    @@ -18,5 +18,5 @@ git = "https://github.com/nix-community/rnix-parser.git"
-     rev = "97b438e34be5211a4b48aeed9cc3ded489b4d6da"
+    diff --git a/corp/tvixbolt/Cargo.toml b/corp/tvixbolt/Cargo.toml
+    index 75006bec18..6ca244bbb2 100644
+    --- a/corp/tvixbolt/Cargo.toml
+    +++ b/corp/tvixbolt/Cargo.toml
+    @@ -16,7 +16,7 @@ rnix = "0.11.0"
+     wasm-bindgen = "= 0.2.83"
 
      [dependencies.tvix-eval]
     -path = "../../tvix/eval"
     +path = "${depot.tvix.eval.src}"
      default-features = false
-  '';
 
+     [dependencies.serde]
+  '';
 in
 pkgs.rustPlatform.buildRustPackage rec {
   pname = "tvixbolt";
@@ -57,9 +58,6 @@ pkgs.rustPlatform.buildRustPackage rec {
   src = lib.cleanSource ./.;
 
   cargoLock.lockFile = ./Cargo.lock;
-  cargoLock.outputHashes = {
-    "rnix-0.11.0-dev" = "sha256:01c3fdsfyp8iwr36nv2mvr2xw33ci3vcx6pw8a9qrc8pjr6q22f8";
-  };
 
   patches = [
     cargoTomlPatch
