@@ -88,6 +88,24 @@
       "parentUuid": "d66ddc1e_5ee567bd",
       "revId": "e94cf1993f4e5b084ecbc2a3937da2907e3e4e1e",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "dccf987b_293c254a",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-12-06T22:48:46Z",
+      "side": 1,
+      "message": "\u003e By that same logic\n\nThat\u0027s not the same logic. Direnv is supposed to provide some repository-wide helper tools, and I think initially it wasn\u0027t even for that (.envrcs weren\u0027t supposed to be shared).\n\n\u003e If we come up with a mg shell hook or something\n\nI think it shouldn\u0027t be too hard for you to write one, just hook it into the prompt command of your shell or something like that.",
+      "parentUuid": "79bdb818_f09e6e3d",
+      "revId": "e94cf1993f4e5b084ecbc2a3937da2907e3e4e1e",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
