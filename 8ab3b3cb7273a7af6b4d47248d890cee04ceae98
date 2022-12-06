@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "253bbbb2_4ba57983",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-12-06T14:37:47Z",
+      "side": 1,
+      "message": "Note also that a goal is to have a sane set of crate2nix dependencies, this is a step in the direction which I envision this taking.",
+      "revId": "8ab3b3cb7273a7af6b4d47248d890cee04ceae98",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
