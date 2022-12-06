@@ -34,6 +34,24 @@
       "parentUuid": "9bbf927d_997736a6",
       "revId": "e94cf1993f4e5b084ecbc2a3937da2907e3e4e1e",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "889c959e_744c732a",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2022-12-06T14:57:02Z",
+      "side": 1,
+      "message": "Can you explain which of *your* workflow gets broken, that you need to workaround?\n\n--\n\nThere\u0027s 30 .envrc files in all of depot, so having them clearly seems to be a usecase.\n\nAlso, running `mg shell` even when inside `tvix` folder breaks:\n\n```\n❯ mg shell\n[mg] entering shell for //tvix\nerror: nix-shell requires a single derivation\nTry \u0027nix-shell --help\u0027 for more information.\n```\n\nSo no matter what, the commit message needs updating.\n\n`mg shell` and that whole workflow probably needs better UX/help too. It\u0027s not documented, and has no `--help`:\n\n```\n❯ mg shell --help\n[mg] entering shell for //--help\nerror: attribute \u0027\"--help\"\u0027 missing for call to \u0027getAttr\u0027\n\n       at «string»:1:17:\n\n            1| with builtins; (getAttr \"--help\" (import /home/flokli/dev/nixos/code.tvl.fyi-2 {}))\n             |                 ^\n```\n\nI don\u0027t think it\u0027s a good alternative right now.\n\n---\n\nSo far I only heard \"your workflow is getting broken\", but not how that one looks like, and how it can potentially be supported?",
+      "parentUuid": "0e8f1747_683c95d6",
+      "revId": "e94cf1993f4e5b084ecbc2a3937da2907e3e4e1e",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
