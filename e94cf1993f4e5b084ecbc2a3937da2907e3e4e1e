@@ -16,6 +16,24 @@
       "message": "mg shell //tvix:shell to be exact",
       "revId": "e94cf1993f4e5b084ecbc2a3937da2907e3e4e1e",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0e8f1747_683c95d6",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-12-06T14:37:07Z",
+      "side": 1,
+      "message": "Well, I\u0027d guess most people would run it *inside* the folder. Dunno, it\u0027s up to people to figure out.",
+      "parentUuid": "9bbf927d_997736a6",
+      "revId": "e94cf1993f4e5b084ecbc2a3937da2907e3e4e1e",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
