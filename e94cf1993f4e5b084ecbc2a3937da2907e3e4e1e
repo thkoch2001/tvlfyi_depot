@@ -70,6 +70,24 @@
       "parentUuid": "889c959e_744c732a",
       "revId": "e94cf1993f4e5b084ecbc2a3937da2907e3e4e1e",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "79bdb818_f09e6e3d",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2022-12-06T19:20:52Z",
+      "side": 1,
+      "message": "\u003e In my opinion, things like lorry are special tooling and files that load them should be opt-in. I\n\nI also don\u0027t think the lorri bits makes a lot of sense and should probably be dropped.\n\n\u003e I\u0027ve got no problem with some mechanism that makes arbitrary additional things available (with all the drawbacks of that, such as slow cd) for people that opt-in to it, but it should IMO not be default behaviour of direnv users in depot.\n\nIf I can opt into this in a more persistent way than manually having to run mg shell //something whenever I enter a directory that\u0027d totally fine for me. That\u0027s what `.envrc` currently does. If we come up with a mg shell hook or something, and an allowlist on which shells we like, that\u0027d be a sufficient workaround.\n\n\u003e I discussed this with zimbatm on IRC recently and he also agreed that the nested envrc files are not a good pattern and that people should explicitly enter shells when they want them. About that, ...\n\nWe also rely on the top-level `.envrc` to bring `mg` into scope. By that same logic, do you want to drop the top-level one too, and people need to mg shell once when they enter depot?",
+      "parentUuid": "d66ddc1e_5ee567bd",
+      "revId": "e94cf1993f4e5b084ecbc2a3937da2907e3e4e1e",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
