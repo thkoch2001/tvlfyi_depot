@@ -106,6 +106,24 @@
       "parentUuid": "79bdb818_f09e6e3d",
       "revId": "e94cf1993f4e5b084ecbc2a3937da2907e3e4e1e",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6398c848_28382716",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-12-07T10:03:44Z",
+      "side": 1,
+      "message": "Here\u0027s the core of why I think this file must not exist in the current version:\n\nIt adds a \"feature\" that is impossible to opt out of, but which not everyone uses. If you opt-in, it will load a bunch of stuff that e.g. I do *not* want, all the time. If I opt-out, it unloads _all_ of the configuration - including the global config that I want to retain.\n\nIn my view, the people who want the extra feature need to implement a way of doing it without disturbing other people\u0027s workflows.",
+      "parentUuid": "dccf987b_293c254a",
+      "revId": "e94cf1993f4e5b084ecbc2a3937da2907e3e4e1e",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
