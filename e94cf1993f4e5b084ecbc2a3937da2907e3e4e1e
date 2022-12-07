@@ -124,6 +124,24 @@
       "parentUuid": "dccf987b_293c254a",
       "revId": "e94cf1993f4e5b084ecbc2a3937da2907e3e4e1e",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "963cc8b9_f9603607",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2022-12-07T15:45:45Z",
+      "side": 1,
+      "message": "The top level envrc has been designed so that it is very cheap (i.e. it only downloads what you would need anyways, mg etc. are only downloaded when actually executed).\n\nThe tvix envrc with cargo and rustc is a different story.\n\nThe big problem is that with envrc, any envrc in a directory will break any parent .envrc\u0027s /unless/ it is allowed and contains source_up. So if you don\u0027t want the tvix envrc you won\u0027t have mg inside the directory and there\u0027s nothing you can do.",
+      "parentUuid": "6398c848_28382716",
+      "revId": "e94cf1993f4e5b084ecbc2a3937da2907e3e4e1e",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
