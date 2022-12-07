@@ -178,6 +178,24 @@
       "parentUuid": "288e17b7_3fed3f23",
       "revId": "e94cf1993f4e5b084ecbc2a3937da2907e3e4e1e",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d6e9a83b_7517e087",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-12-07T21:46:21Z",
+      "side": 1,
+      "message": "No, direnv does not support that. You\u0027d have to patch it to add that behaviour.\n\nThe thing is, the workaround for the ones wanting this feature (running one command to enter a shell!) is massively less disruptive than doing git-index magic and editing files constantly to avoid having ones environment get messed up.\n\nDue to that, I consider this file (and likely the 3 others like it that are sprinkled around depot) broken. Will audit and make CLs to remove the others, too, if they also have this behaviour.",
+      "parentUuid": "692ffbad_4a5557df",
+      "revId": "e94cf1993f4e5b084ecbc2a3937da2907e3e4e1e",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
