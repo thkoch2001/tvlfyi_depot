@@ -142,6 +142,24 @@
       "parentUuid": "6398c848_28382716",
       "revId": "e94cf1993f4e5b084ecbc2a3937da2907e3e4e1e",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "288e17b7_3fed3f23",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2022-12-07T16:55:46Z",
+      "side": 1,
+      "message": "so what if direnv would still load parent .envrc files, instead of failing entirely, if you simply don\u0027t *trust* the //tvix .envrc? would this also fix your usecase?",
+      "parentUuid": "963cc8b9_f9603607",
+      "revId": "e94cf1993f4e5b084ecbc2a3937da2907e3e4e1e",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
