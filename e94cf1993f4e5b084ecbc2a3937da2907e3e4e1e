@@ -160,6 +160,24 @@
       "parentUuid": "963cc8b9_f9603607",
       "revId": "e94cf1993f4e5b084ecbc2a3937da2907e3e4e1e",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "692ffbad_4a5557df",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2022-12-07T19:57:07Z",
+      "side": 1,
+      "message": "No, because `direnv {block,deny,revoke}` are all aliases. You can not do anything more than not trusting a envrc which will still unload any active envrcs.",
+      "parentUuid": "288e17b7_3fed3f23",
+      "revId": "e94cf1993f4e5b084ecbc2a3937da2907e3e4e1e",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
