@@ -52,6 +52,24 @@
       "parentUuid": "b7009e96_d4fbd086",
       "revId": "f1ebc70e73953fa005132b26cbd8e7e8a49d1ecd",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "273a7366_f05f19f8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-12-08T17:09:49Z",
+      "side": 1,
+      "message": "Figured out that you mean the manually written `shell.nix` file. We\u0027ve made that a depot target now in cl/7540.",
+      "parentUuid": "c22471d3_736b5311",
+      "revId": "f1ebc70e73953fa005132b26cbd8e7e8a49d1ecd",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
