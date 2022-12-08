@@ -51,6 +51,24 @@
       "message": "depot-scanner is used by tvlc, which is referred to in docs/designs/SPARSE_CHECKOUTS.md, and maybe in ops/gerrit-tvl/static/tvl.js.",
       "revId": "e20ddeb54676a98acabfb5894b854d93ef0f0b1a",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ba104516_69e21c3f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2022-12-08T11:00:55Z",
+      "side": 1,
+      "message": "unresolved",
+      "parentUuid": "baf68cf3_0afeb8e9",
+      "revId": "e20ddeb54676a98acabfb5894b854d93ef0f0b1a",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
