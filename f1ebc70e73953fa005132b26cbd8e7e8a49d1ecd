@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "639c1ed3_39241d7e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2022-12-08T10:51:19Z",
+      "side": 1,
+      "message": "This (or the previous CL) breaks `mg shell //tvix:shell` entirely.",
+      "revId": "f1ebc70e73953fa005132b26cbd8e7e8a49d1ecd",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
