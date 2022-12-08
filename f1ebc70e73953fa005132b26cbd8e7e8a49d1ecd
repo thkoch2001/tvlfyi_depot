@@ -34,6 +34,24 @@
       "parentUuid": "639c1ed3_39241d7e",
       "revId": "f1ebc70e73953fa005132b26cbd8e7e8a49d1ecd",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c22471d3_736b5311",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-12-08T11:46:54Z",
+      "side": 1,
+      "message": "//tvix is not a target, //tvix/store, //tvix/eval etc. are. I see that there\u0027s a manually written shell.nix there, maybe move that into the //tvix/default.nix config with a virtual target name that matches what you\u0027d expect.\n\nIn general I don\u0027t think it\u0027s reasonable to have a \"tvix-wide\" shell, but adding that also doesn\u0027t break anything so I\u0027m not strongly against it.",
+      "parentUuid": "b7009e96_d4fbd086",
+      "revId": "f1ebc70e73953fa005132b26cbd8e7e8a49d1ecd",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
