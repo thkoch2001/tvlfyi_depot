@@ -214,6 +214,24 @@
       "parentUuid": "d6e9a83b_7517e087",
       "revId": "e94cf1993f4e5b084ecbc2a3937da2907e3e4e1e",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b242aa3b_490c0f76",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-12-08T11:08:46Z",
+      "side": 1,
+      "message": "`cargo test` not working is not related to this change, it\u0027s related to the workspace move. This CL changes nothing about how `cargo test` is invoked, or how the toolchain of depot projects is loaded. Feel free to add whatever documentation you think is adequate though!",
+      "parentUuid": "71665a62_0f00d276",
+      "revId": "e94cf1993f4e5b084ecbc2a3937da2907e3e4e1e",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
