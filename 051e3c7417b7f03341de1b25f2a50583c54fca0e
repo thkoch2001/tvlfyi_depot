@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2387412c_84acd9fd",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-12-09T17:51:05Z",
+      "side": 1,
+      "message": "Consider me also on the Reviewer line, as this code was 99% written by Adam :)",
+      "revId": "051e3c7417b7f03341de1b25f2a50583c54fca0e",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
