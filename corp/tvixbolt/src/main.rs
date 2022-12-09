@@ -1,11 +1,7 @@
-use std::cell::RefCell;
 use std::fmt::Write;
-use std::rc::Rc;
 
 use serde::{Deserialize, Serialize};
-use tvix_eval::observer::TracingObserver;
-use tvix_eval::observer::{DisassemblingObserver, NoOpObserver};
-use tvix_eval::SourceCode;
+use tvix_eval::observer::{DisassemblingObserver, TracingObserver};
 use web_sys::HtmlDetailsElement;
 use web_sys::HtmlTextAreaElement;
 use yew::prelude::*;
@@ -194,10 +190,8 @@ impl Model {
 
 #[derive(Default)]
 struct Output {
-    parse_errors: String,
+    errors: String,
     warnings: String,
-    compiler_errors: String,
-    runtime_errors: String,
     output: String,
     bytecode: Vec<u8>,
     trace: Vec<u8>,
@@ -263,12 +257,10 @@ impl Output {
     fn display(self, ctx: &Context<Model>, model: &Model) -> Html {
         html! {
             <>
-            {maybe_show("Parse errors:", &self.parse_errors)}
+            {maybe_show("Errors:", &self.errors)}
             {maybe_show("Warnings:", &self.warnings)}
             {maybe_show("Output:", &self.output)}
-            {maybe_show("Compiler errors:", &self.compiler_errors)}
             {maybe_show("Bytecode:", &String::from_utf8_lossy(&self.bytecode))}
-            {maybe_show("Runtime errors:", &self.runtime_errors)}
             {maybe_details(ctx, "Runtime trace:", &String::from_utf8_lossy(&self.trace), model.trace, Msg::ToggleTrace)}
             {maybe_details(ctx, "Parsed AST:", &self.ast, model.display_ast, Msg::ToggleDisplayAst)}
             </>
@@ -283,40 +275,26 @@ fn eval(model: &Model) -> Output {
         return out;
     }
 
-    let parsed = rnix::ast::Root::parse(&model.code);
-    let errors = parsed.errors();
+    let mut eval = tvix_eval::Evaluation::new(&model.code, Some("/nixbolt".into()));
+    let source = eval.source_map();
 
-    if !errors.is_empty() {
-        for err in errors {
-            writeln!(&mut out.parse_errors, "parse error: {}", err).unwrap();
+    let result = {
+        let mut compiler_observer = DisassemblingObserver::new(source.clone(), &mut out.bytecode);
+        eval.compiler_observer = Some(&mut compiler_observer);
+
+        let mut runtime_observer = TracingObserver::new(&mut out.trace);
+        if model.trace {
+            eval.runtime_observer = Some(&mut runtime_observer);
         }
 
-        return out;
-    }
-
-    // If we've reached this point, there are no errors.
-    let root_expr = parsed
-        .tree()
-        .expr()
-        .expect("expression should exist if no errors occured");
+        eval.evaluate()
+    };
 
     if model.display_ast {
-        out.ast = tvix_eval::pretty_print_expr(&root_expr);
+        if let Some(ref expr) = result.expr {
+            out.ast = tvix_eval::pretty_print_expr(expr);
+        }
     }
-
-    let source = SourceCode::new();
-    let file = source.add_file("nixbolt".to_string(), model.code.clone());
-
-    let mut compilation_observer = DisassemblingObserver::new(source.clone(), &mut out.bytecode);
-
-    let result = tvix_eval::compile(
-        &root_expr,
-        Some("/nixbolt".into()),
-        file.clone(),
-        tvix_eval::prepare_globals(Box::new(tvix_eval::global_builtins(source.clone()))),
-        &mut compilation_observer,
-    )
-    .unwrap();
 
     for warning in result.warnings {
         writeln!(
@@ -330,7 +308,7 @@ fn eval(model: &Model) -> Output {
     if !result.errors.is_empty() {
         for error in &result.errors {
             writeln!(
-                &mut out.compiler_errors,
+                &mut out.errors,
                 "{}\n",
                 error.fancy_format_str(&source).trim(),
             )
@@ -339,41 +317,6 @@ fn eval(model: &Model) -> Output {
 
         return out;
     }
-
-    let result = if model.trace {
-        tvix_eval::run_lambda(
-            Default::default(),
-            &mut TracingObserver::new(&mut out.trace),
-            result.lambda,
-        )
-    } else {
-        tvix_eval::run_lambda(
-            Default::default(),
-            &mut NoOpObserver::default(),
-            result.lambda,
-        )
-    };
-
-    match result {
-        Ok(result) => {
-            for warning in result.warnings {
-                writeln!(
-                    &mut out.warnings,
-                    "{}\n",
-                    warning.fancy_format_str(&source).trim(),
-                )
-                .unwrap();
-            }
-
-            writeln!(&mut out.output, "{}", result.value).unwrap()
-        }
-        Err(err) => writeln!(
-            &mut out.runtime_errors,
-            "{}",
-            err.fancy_format_str(&source).trim()
-        )
-        .unwrap(),
-    };
 
     out
 }
