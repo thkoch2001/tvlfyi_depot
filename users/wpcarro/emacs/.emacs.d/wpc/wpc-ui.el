@@ -109,8 +109,6 @@
   (unless constants-ci?
     (prescient-persist-mode 1)))
 
-(use-package ivy-pass)
-
 ;; all-the-icons
 (use-package all-the-icons
   :config
