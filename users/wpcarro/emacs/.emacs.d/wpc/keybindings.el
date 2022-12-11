@@ -47,6 +47,7 @@
 (require 'key-chord)
 (require 'edebug)
 (require 'avy)
+(require 'passage)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Helper Functions
@@ -207,7 +208,7 @@
 (keybindings-exwm "<M-tab>" #'window-manager-next-workspace)
 (keybindings-exwm "<M-S-iso-lefttab>" #'window-manager-prev-workspace)
 (keybindings-exwm "C-S-f" #'window-manager-toggle-previous)
-(keybindings-exwm "C-M-\\" #'ivy-pass)
+(keybindings-exwm "C-M-\\" #'passage-select)
 
 (defun keybindings-copy-emoji ()
   "Select an emoji from the completing-read menu."
