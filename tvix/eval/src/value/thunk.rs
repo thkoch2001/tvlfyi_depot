@@ -24,11 +24,10 @@ use std::{
     rc::Rc,
 };
 
-use codemap::Span;
-
 use crate::{
     chunk::Chunk,
     errors::{Error, ErrorKind},
+    spans::LightSpan,
     upvalues::Upvalues,
     value::{Builtin, Closure},
     vm::{Tramp, TrampAction, VM},
@@ -49,7 +48,7 @@ enum ThunkRepr {
     Suspended {
         lambda: Rc<Lambda>,
         upvalues: Rc<Upvalues>,
-        span: Span,
+        light_span: LightSpan,
     },
 
     /// Thunk currently under-evaluation; encountering a blackhole
@@ -77,11 +76,11 @@ impl Thunk {
         )))))
     }
 
-    pub fn new_suspended(lambda: Rc<Lambda>, span: Span) -> Self {
+    pub fn new_suspended(lambda: Rc<Lambda>, light_span: LightSpan) -> Self {
         Thunk(Rc::new(RefCell::new(ThunkRepr::Suspended {
             upvalues: Rc::new(Upvalues::with_capacity(lambda.upvalue_count)),
             lambda: lambda.clone(),
-            span,
+            light_span,
         })))
     }
 
@@ -124,7 +123,7 @@ impl Thunk {
         Thunk(Rc::new(RefCell::new(ThunkRepr::Suspended {
             lambda: Rc::new(lambda),
             upvalues: Rc::new(Upvalues::with_capacity(0)),
-            span: span,
+            light_span: LightSpan::new_actual(span),
         })))
     }
 
@@ -153,7 +152,7 @@ impl Thunk {
                     lambda,
                     upvalues,
                     arg_count,
-                    span: _,
+                    light_span: _,
                 }) => vm.enter_frame(lambda, upvalues, arg_count)?,
             }
             match tramp.cont {
@@ -212,7 +211,7 @@ impl Thunk {
                     ThunkRepr::Suspended {
                         lambda,
                         upvalues,
-                        span,
+                        light_span,
                     } => {
                         let self_clone = self.clone();
                         return Ok(Tramp {
@@ -220,14 +219,17 @@ impl Thunk {
                                 lambda,
                                 upvalues: upvalues.clone(),
                                 arg_count: 0,
-                                span,
+                                light_span: light_span.clone(),
                             }),
                             cont: Some(Box::new(move |vm| {
                                 let should_be_blackhole =
                                     self_clone.0.replace(ThunkRepr::Evaluated(vm.pop()));
                                 assert!(matches!(should_be_blackhole, ThunkRepr::Blackhole));
                                 vm.push(Value::Thunk(self_clone));
-                                return Self::force_tramp(vm).map_err(|kind| Error { kind, span });
+                                return Self::force_tramp(vm).map_err(|kind| Error {
+                                    kind,
+                                    span: light_span.span(),
+                                });
                             })),
                         });
                     }
