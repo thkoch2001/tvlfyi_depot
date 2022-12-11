@@ -49,6 +49,7 @@ let
       list
       macros
       maybe
+      passage
       set
       string
       struct
@@ -107,7 +108,6 @@ let
       helpful
       ivy
       ivy-clipmenu
-      ivy-pass
       ivy-prescient
       key-chord
       lispyville
