@@ -4,14 +4,13 @@
 use serde_json::json;
 use std::{cmp::Ordering, collections::BTreeMap, ops::DerefMut, path::PathBuf, rc::Rc};
 
-use codemap::Span;
-
 use crate::{
     chunk::Chunk,
     errors::{Error, ErrorKind, EvalResult},
     nix_search_path::NixSearchPath,
     observer::RuntimeObserver,
     opcode::{CodeIdx, Count, JumpOffset, OpCode, StackIdx, UpvalueIdx},
+    spans::LightSpan,
     unwrap_or_clone_rc,
     upvalues::Upvalues,
     value::{Builtin, Closure, CoercionKind, Lambda, NixAttrs, NixList, Thunk, Value},
@@ -51,7 +50,7 @@ pub enum TrampAction {
     EnterFrame {
         lambda: Rc<Lambda>,
         upvalues: Rc<Upvalues>,
-        span: Span,
+        light_span: LightSpan,
         arg_count: usize,
     },
 }
@@ -253,6 +252,12 @@ impl<'o> VM<'o> {
         self.chunk().get_span(self.frame().ip - 1)
     }
 
+    /// Returns the information needed to calculate the current span,
+    /// but without performing that calculation.
+    fn current_light_span(&self) -> LightSpan {
+        LightSpan::new_delayed(self.frame().lambda.clone(), self.frame().ip - 1)
+    }
+
     /// Construct an error from the given ErrorKind and the source
     /// span of the current instruction.
     pub fn error(&self, kind: ErrorKind) -> Error {
@@ -441,7 +446,7 @@ impl<'o> VM<'o> {
                     lambda,
                     upvalues,
                     arg_count,
-                    span: _,
+                    light_span: _,
                 }) => {
                     let frame = CallFrame {
                         lambda,
@@ -966,7 +971,7 @@ impl<'o> VM<'o> {
                     );
                     Thunk::new_closure(blueprint)
                 } else {
-                    Thunk::new_suspended(blueprint, self.current_span())
+                    Thunk::new_suspended(blueprint, self.current_light_span())
                 };
                 let upvalues = thunk.upvalues_mut();
                 self.push(Value::Thunk(thunk.clone()));
