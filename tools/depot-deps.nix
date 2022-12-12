@@ -5,6 +5,7 @@
 depot.nix.lazy-deps {
   age-keygen.attr = "third_party.nixpkgs.age";
   age.attr = "third_party.nixpkgs.age";
+  crate2nix = "third_party.nixpkgs.crate2nix";
   depotfmt.attr = "tools.depotfmt";
   gerrit-update.attr = "tools.gerrit-update";
   gerrit.attr = "tools.gerrit-cli";
