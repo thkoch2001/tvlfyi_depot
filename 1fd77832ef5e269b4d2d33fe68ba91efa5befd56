@@ -69,6 +69,24 @@
       "parentUuid": "b860ece3_a145edd9",
       "revId": "1fd77832ef5e269b4d2d33fe68ba91efa5befd56",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e32b250a_e0c49575",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 8
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2022-12-12T10:22:25Z",
+      "side": 1,
+      "message": "The second part of my comment was not about running crate2nix inside a derivation, but ensuring it\u0027s always up to date. Check cl/7322 again, we `mg run` that check, and ensure there\u0027s no dirty working tree.\n\nAlso, please add some documentation around this workflow to the //tvix README.\n\nConsidering this all is not just a `cargo build` / `cargo test` anymore, I feel like it makes sense to document the workflow.",
+      "parentUuid": "67137fd3_6575549d",
+      "revId": "1fd77832ef5e269b4d2d33fe68ba91efa5befd56",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
