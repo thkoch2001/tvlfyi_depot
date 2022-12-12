@@ -30,3 +30,6 @@ node_modules/
 .gitsecret/keys/random_seed
 !*.secret
 secrets.json
+
+# Nix gcroots symlinks created by .envrc
+/.gcroots/*
