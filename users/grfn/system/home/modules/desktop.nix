@@ -13,10 +13,6 @@
     ntfy
   ];
 
-  programs.zsh.initExtra = ''
-    eval "$(${pkgs.ntfy}/bin/ntfy shell-integration)"
-  '';
-
   services.syncthing.tray.enable = true;
 
   gtk = {
