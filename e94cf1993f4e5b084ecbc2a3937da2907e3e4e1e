@@ -232,6 +232,24 @@
       "parentUuid": "71665a62_0f00d276",
       "revId": "e94cf1993f4e5b084ecbc2a3937da2907e3e4e1e",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0f703667_0dba208f",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-12-12T09:16:18Z",
+      "side": 1,
+      "message": "It doesn\u0027t seem like we\u0027re getting further in this discussion, but my view is very strongly that individual projects inside depot should not behave in surprising ways like this and break higher-level config.\n\nDue to that and for the simple reason that working around the broken behaviour is hard, but adapting the correct behaviour is easy, I\u0027m going to submit this.",
+      "parentUuid": "b242aa3b_490c0f76",
+      "revId": "e94cf1993f4e5b084ecbc2a3937da2907e3e4e1e",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
