@@ -43,6 +43,7 @@ in
   # Command-line tools I commonly used and want available on most (or all) of my
   # machines.
   shell-utils = with pkgs; [
+    age
     bat
     coreutils
     direnv
@@ -56,7 +57,7 @@ in
     htop
     jq
     nmap
-    pass
+    passage
     python3
     rink
     ripgrep

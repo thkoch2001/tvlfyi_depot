@@ -28,7 +28,6 @@ let
     (with pkgs; [
       ispell
       nix
-      pass
       rust-analyzer
       rustc
       rustfmt
@@ -121,7 +120,6 @@ let
       package-lint
       paradox
       parsec
-      password-store
       pcre2el
       prettier-js
       projectile
