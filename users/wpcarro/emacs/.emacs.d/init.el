@@ -4,7 +4,6 @@
 (require 'wpc-misc)
 (require 'ssh)
 (require 'keyboard)
-(require 'irc)
 (require 'email)
 (require 'keybindings)
 (require 'window-manager)
