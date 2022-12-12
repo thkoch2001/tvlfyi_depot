@@ -33,6 +33,24 @@
       "message": "crate2nix isn\u0027t made available in the toplevel direnv, and it\u0027s also not available in an `mg shell //tvix:shell` after cl/7540\n\nWhenever we check in generated files, I feel like we should have CI to ensure the file doesn\u0027t get out of sync - see cl/7322 for an example.",
       "revId": "1fd77832ef5e269b4d2d33fe68ba91efa5befd56",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "67137fd3_6575549d",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 8
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-12-12T09:14:35Z",
+      "side": 1,
+      "message": "Generating these files in derivations (and by extension in IFD) is hard, and the only supported way (which is in the official crate2nix repo) apparently has some Nix \u003e2.5 (!) specific code which I don\u0027t have the time to rewrite/debug at the moment.\n\nI\u0027ll add crate2nix to the top-level direnv, we might start using it for other stuff, too.",
+      "parentUuid": "b860ece3_a145edd9",
+      "revId": "1fd77832ef5e269b4d2d33fe68ba91efa5befd56",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
