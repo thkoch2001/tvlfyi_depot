@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e646b75a_45b55294",
+        "filename": "tvix/eval/src/lib.rs",
+        "patchSetId": 3
+      },
+      "lineNbr": 157,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2022-12-12T08:57:56Z",
+      "side": 1,
+      "message": "I think we should also make configurable which builtins are available, to allow passing in other builtins without having to edit this file.\n\nFor example, we might:\n - want to only make available non-IO builtins\n - redefine builtins.currentSystem to something else\n - run an evaluation with different flavors of builtins.derivation\n\nCurrently, these are all defined in `pub fn global_builtins`, and we use feature flags to comment out some of the code defining some of the builtins, but this could potentially be a runtime thing.",
+      "revId": "33baaafae1e840aed9152b06a0333e44df4931da",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
