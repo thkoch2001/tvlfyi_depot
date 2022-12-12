@@ -2,22 +2,18 @@
 { depot, pkgs, ... }:
 
 let
-  src = pkgs.fetchFromGitHub {
-    owner = "j3pic";
-    repo = "lisp-binary";
-    rev = "052df578900dea59bf951e0a6749281fa73432e4";
-    sha256 = "1i1s5g01aimfq6lndcl1pnw7ly5hdh0wmjp2dj9cjjwbkz9lnwcf";
-  };
+  src = pkgs.srcOnly pkgs.lispPackages.lisp-binary;
 in
 depot.nix.buildLisp.library {
   name = "lisp-binary";
 
   deps = with depot.third_party.lisp; [
+    alexandria
     cffi
-    quasiquote_2
-    moptilities
-    flexi-streams
     closer-mop
+    flexi-streams
+    moptilities
+    quasiquote_2
   ];
 
   srcs = map (f: src + ("/" + f)) [
@@ -32,6 +28,6 @@ depot.nix.buildLisp.library {
   ];
 
   brokenOn = [
-    "ecl" # dynamic cffi
+    "ecl" # TODO(sterni): disable conditionally cffi for ECL
   ];
 }
