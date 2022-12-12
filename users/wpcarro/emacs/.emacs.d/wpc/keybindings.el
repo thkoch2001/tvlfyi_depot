@@ -300,7 +300,9 @@
  "<s-backspace>" #'vterm-mgt-rename-buffer
  ;; Without this, typing "+" is effectively no-op. Try for yourself:
  ;; (vterm-send-key "<kp-add>")
- "<kp-add>" "+")
+ "<kp-add>" "+"
+ "M--" #'evil-window-split
+ "M-\\" #'evil-window-vsplit)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; notmuch
