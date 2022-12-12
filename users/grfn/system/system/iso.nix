@@ -11,6 +11,10 @@ let
     networking.useDHCP = false;
     networking.firewall.enable = false;
     networking.wireless.enable = lib.mkForce false;
+
+    # TODO(grfn): enabling this (in the minimal profile) fails the iso build,
+    # since gtk+3 needs to be built which fails due to cairo without xlibs
+    environment.noXlibs = false;
   };
 in
 (depot.third_party.nixos {
