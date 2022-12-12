@@ -16,6 +16,24 @@
       "message": "Different crate2nix versions can produce different outputs - we should probably refer to the nix-build invocation that pulls it from the tvl nixpkgs pin - or the `mg run` command.",
       "revId": "4a25f9c3bdfb0c415f518345c7d0b956ad21183a",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5be2a5a9_df1e5e21",
+        "filename": "tvix/README.md",
+        "patchSetId": 9
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-12-12T11:09:16Z",
+      "side": 1,
+      "message": "Updated to point people only towards the depot sources of `crate2nix`.",
+      "parentUuid": "9da02940_2cbb9fd4",
+      "revId": "4a25f9c3bdfb0c415f518345c7d0b956ad21183a",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }

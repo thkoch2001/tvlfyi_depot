@@ -105,6 +105,24 @@
       "parentUuid": "e32b250a_e0c49575",
       "revId": "1fd77832ef5e269b4d2d33fe68ba91efa5befd56",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "55607701_49b6453e",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 8
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-12-12T11:09:16Z",
+      "side": 1,
+      "message": "I filed a bug for checking the generated files: b/230\n\nI don\u0027t think this needs to be 100% perfect at the first commit. For now, random people that are not familiar with the workflow are unlikely to modify this file and we\u0027d likely get CI failures on the Rust side of things anyways.\n\n\u003e but not on the \"how to build and test this\" part\n\nThere\u0027s nothing special about how tvix parts are built vs. other projects in depot. You can use either `nix-build -A path.to.the.thing` or the `mg` command. We don\u0027t usually put this into the documentation of each depot project, but I would definitely accept a CL adding whatever documentation you think is useful here.",
+      "parentUuid": "ca9d6cb1_6d576292",
+      "revId": "1fd77832ef5e269b4d2d33fe68ba91efa5befd56",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
