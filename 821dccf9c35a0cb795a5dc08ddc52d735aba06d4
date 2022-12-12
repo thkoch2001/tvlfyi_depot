@@ -18,6 +18,23 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "04267228_72aa4e30",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-12-12T18:55:46Z",
+      "side": 1,
+      "message": "Alright, my take on how this should work (and it\u0027s not done yet) starts in cl/7565\n\nThe TL;DR is that I\u0027m starting one layer higher up - all filesystem interaction goes through the same API; this way eval itself doesn\u0027t care about stores and such (except for `builtins.storeDir`), as interaction with the store is \"intercepted\" at a higher-level where the implementation is passed in.\n\nTo me this design seems pretty reasonable as it seems to cover a fairly large surface with a reasonably small interface, for example with just three methods we could already make an emulated FS layer for e.g. tests or WebAssembly use-cases.",
+      "revId": "821dccf9c35a0cb795a5dc08ddc52d735aba06d4",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "24fffe5d_efc6155c",
