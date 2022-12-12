@@ -92,6 +92,10 @@ in
     };
   });
 
+  # SBCL 2.2.10 breaks lisp-binary somehow
+  # https://github.com/j3pic/lisp-binary/issues/59
+  sbcl = self.sbcl_2_2_9;
+
   # nix-serve does not work with nix 2.4
   # https://github.com/edolstra/nix-serve/issues/28
   nix-serve = super.nix-serve.override { nix = super.nix_2_3; };

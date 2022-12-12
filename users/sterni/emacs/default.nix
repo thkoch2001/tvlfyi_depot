@@ -3,8 +3,8 @@
 let
   inherit (pkgs.stdenv.hostPlatform) is64bit;
 
-  # emacsPgtkNativeComp is defined in emacs-overlay
-  emacs = (pkgs.emacsPackagesFor pkgs.emacsPgtkNativeComp).withPackages (epkgs: [
+  # emacsPgtk is defined in emacs-overlay
+  emacs = (pkgs.emacsPackagesFor pkgs.emacsPgtk).withPackages (epkgs: [
     epkgs.bqn-mode
     #epkgs.elpaPackages.ada-mode
     epkgs.elpaPackages.rainbow-mode
