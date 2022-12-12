@@ -15,6 +15,13 @@ depot.nix.readTree.drvTargets {
       ngn-k
       depot.tvix.eval
     ];
+
+    BQNLIBS = pkgs.fetchFromGitHub {
+      owner = "mlochbaum";
+      repo = "bqn-libs";
+      rev = "d56d8ea0b8c294fac7274678d9ab112553a03f42";
+      sha256 = "1c1bkqj62v8m13jgaa32ridy0fk5iqysq5b2qwxbqxhky5zwnk9h";
+    };
   };
 
   bqn = pkgs.runCommand "bqn-aoc-2022"
