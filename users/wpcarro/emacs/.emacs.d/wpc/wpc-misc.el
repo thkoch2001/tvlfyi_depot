@@ -68,9 +68,6 @@
 (setq sh-basic-offset 2)
 (setq sh-indentation 2)
 
-;; Emacs library that interfaces with my Linux password manager.
-(use-package password-store)
-
 (use-package vterm
   :config
   (general-define-key

@@ -43,6 +43,5 @@ $ cd /depot
 $ eval "$(direnv hook bash)"
 $ HOSTNAME=base rebuild-system
 $ sudo tailscale up
-$ git clone 'user@host:~/.password-store' ~/.password-store
-$ scp -r 'user@host:~/.gnupg' ~/.gnupg
+$ git clone 'user@host:~/.passage' ~/.passage
 ```
