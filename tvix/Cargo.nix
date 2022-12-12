@@ -4194,7 +4194,7 @@ rec {
         edition = "2021";
         crateBin = [
           {
-            name = "tvix-cli";
+            name = "tvix";
             path = "src/main.rs";
             requiredFeatures = [ ];
           }
