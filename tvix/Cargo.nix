@@ -4209,7 +4209,7 @@ rec {
         version = "0.1.0";
         edition = "2021";
         crateBin = [
-          { name = "tvix-cli"; path = "src/main.rs"; }
+          { name = "tvix"; path = "src/main.rs"; }
         ];
         src = lib.cleanSourceWith { filter = sourceFilter; src = ./cli; };
         dependencies = [
