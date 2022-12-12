@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1ef0a6c3_05e4c6c1",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 8
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2022-12-12T08:58:36Z",
+      "side": 1,
+      "message": "I think this should be added to the README, not only the commit history. People tinkering with Tvix will inevitably run into having to do this, so it makes sense for it to be documented.",
+      "revId": "1fd77832ef5e269b4d2d33fe68ba91efa5befd56",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b860ece3_a145edd9",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 8
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2022-12-12T08:58:36Z",
+      "side": 1,
+      "message": "crate2nix isn\u0027t made available in the toplevel direnv, and it\u0027s also not available in an `mg shell //tvix:shell` after cl/7540\n\nWhenever we check in generated files, I feel like we should have CI to ensure the file doesn\u0027t get out of sync - see cl/7322 for an example.",
+      "revId": "1fd77832ef5e269b4d2d33fe68ba91efa5befd56",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
