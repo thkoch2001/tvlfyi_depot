@@ -5,8 +5,8 @@ let
   src = pkgs.fetchFromGitHub {
     owner = "j3pic";
     repo = "lisp-binary";
-    rev = "052df578900dea59bf951e0a6749281fa73432e4";
-    sha256 = "1i1s5g01aimfq6lndcl1pnw7ly5hdh0wmjp2dj9cjjwbkz9lnwcf";
+    rev = "711c38c2d9862bec7b83c8bf42823dd3985dc517";
+    sha256 = "0vn1kjvcch9ky50rq1axg5hixf3zkbb46as99g0aks1b7y250a17";
   };
 in
 depot.nix.buildLisp.library {
@@ -14,6 +14,7 @@ depot.nix.buildLisp.library {
 
   deps = with depot.third_party.lisp; [
     cffi
+    alexandria
     quasiquote_2
     moptilities
     flexi-streams
@@ -32,6 +33,6 @@ depot.nix.buildLisp.library {
   ];
 
   brokenOn = [
-    "ecl" # dynamic cffi
+    "ecl" # TODO(sterni): disable conditionally cffi for ECL
   ];
 }
