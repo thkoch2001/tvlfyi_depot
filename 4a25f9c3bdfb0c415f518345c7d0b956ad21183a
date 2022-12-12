@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9da02940_2cbb9fd4",
+        "filename": "tvix/README.md",
+        "patchSetId": 9
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2022-12-12T10:24:49Z",
+      "side": 1,
+      "message": "Different crate2nix versions can produce different outputs - we should probably refer to the nix-build invocation that pulls it from the tvl nixpkgs pin - or the `mg run` command.",
+      "revId": "4a25f9c3bdfb0c415f518345c7d0b956ad21183a",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}

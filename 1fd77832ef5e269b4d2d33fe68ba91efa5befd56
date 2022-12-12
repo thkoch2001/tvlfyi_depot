@@ -87,6 +87,24 @@
       "parentUuid": "67137fd3_6575549d",
       "revId": "1fd77832ef5e269b4d2d33fe68ba91efa5befd56",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ca9d6cb1_6d576292",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 8
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2022-12-12T10:24:49Z",
+      "side": 1,
+      "message": "Sorry, I initially missed the now-existing docs on crate2nix (and now commented there), but not on the \"how to build and test this\" part.",
+      "parentUuid": "e32b250a_e0c49575",
+      "revId": "1fd77832ef5e269b4d2d33fe68ba91efa5befd56",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
