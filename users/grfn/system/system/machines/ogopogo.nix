@@ -79,4 +79,5 @@
     enable = true;
     vSync = true;
   };
+  hardware.opengl.driSupport32Bit = true;
 }
