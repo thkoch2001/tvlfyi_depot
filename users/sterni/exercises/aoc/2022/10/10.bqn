@@ -22,4 +22,4 @@ _vm ← {
 
 •Out "day10.1: "∾•Fmt sum
 •Out "day10.2:"
-•Show (⊑⟜".#")¨ ∘‿40⥊pic
+•Show ".#" ⊏˜ ∘‿40⥊pic
