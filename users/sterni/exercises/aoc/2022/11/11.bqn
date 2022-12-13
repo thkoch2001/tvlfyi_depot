@@ -1,6 +1,6 @@
 # needs export BQNLIBS=/path/to/mlochbaum/bqn-libs
-⟨Split⟩ ← •Import "/strings.bqn"∾˜¯1↓1⊑•SH "printenv"‿"BQNLIBS"
-⟨ReadDec⟩ ← •Import "../../lib.bqn"
+⟨ReadDec,ImportBqnLibs⟩ ← •Import "../../lib.bqn"
+⟨Split⟩ ← ImportBqnLibs "strings.bqn"
 MakeOp ← {
   𝕊 a‿"+"‿b: 𝕊 a‿+‿b;
   𝕊 a‿"*"‿b: 𝕊 a‿×‿b;
