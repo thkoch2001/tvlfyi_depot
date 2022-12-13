@@ -4327,6 +4327,10 @@ rec {
             packageId = "rustyline";
           }
           {
+            name = "smol_str";
+            packageId = "smol_str";
+          }
+          {
             name = "tvix-eval";
             packageId = "tvix-eval";
           }
