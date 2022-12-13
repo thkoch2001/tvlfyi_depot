@@ -1494,6 +1494,7 @@ dependencies = [
  "clap 3.2.23",
  "dirs",
  "rustyline",
+ "smol_str",
  "tvix-eval",
 ]
 
