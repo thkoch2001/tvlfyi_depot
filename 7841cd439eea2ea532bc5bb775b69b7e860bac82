@@ -71,6 +71,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "e7de271c_ed8d9b55",
+        "filename": "tvix/store/protos/rpc_blobstore.proto",
+        "patchSetId": 10
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-12-13T14:19:57Z",
+      "side": 1,
+      "message": "I think we can resolve this for now. In my view there\u0027s some split APIs dealing with digests which we probably want to unify once the overall structure is more clear.",
+      "parentUuid": "81edf97d_b14f4707",
+      "revId": "7841cd439eea2ea532bc5bb775b69b7e860bac82",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "89f50f8a_16440154",

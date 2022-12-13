@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "29663b7f_218c2224",
+        "filename": "tvix/store/protos/rpc_blobstore.proto",
+        "patchSetId": 18
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-12-13T14:19:57Z",
+      "side": 1,
+      "message": "so the maximum size of a blob is equivalent to the maximum size of a proto message? that implies mandatory chunking, which I definitely think is a step too far for the API (it basically makes it impossible for anyone to reasonably reimplement it as an experiment), or does this turn into a stream somewhere?",
+      "range": {
+        "startLine": 22,
+        "startChar": 0,
+        "endLine": 22,
+        "endChar": 19
+      },
+      "revId": "1b0b9877437bd2ba8021b0b44ca82c5c6d828a2b",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
