@@ -3,6 +3,23 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "d3d8bf0f_a485388d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 18
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-12-13T14:20:41Z",
+      "side": 1,
+      "message": "An overall thought I have is that the protocol might not want to dictate the type of hash used at all, i.e. blob identifiers should be treated as opaque strings in the protocol and be up to the store implementation.\n\nThis would make it fairly easy for someone to implement an \"inefficient but simple\" file-backed store.",
+      "revId": "1b0b9877437bd2ba8021b0b44ca82c5c6d828a2b",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "29663b7f_218c2224",
         "filename": "tvix/store/protos/rpc_blobstore.proto",
         "patchSetId": 18
