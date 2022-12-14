@@ -36,6 +36,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "71cc8aca_3455b340",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 18
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2022-12-14T10:31:41Z",
+      "side": 1,
+      "message": "The blob store is intrinsically content-addressed, which means you get back the identifier under which you can refer to it from the store.\n\nBut mixing hashing functions really calls for trouble - there\u0027s some very strong arguments why exactly one hash function, and why blake3 was chosen. But let\u0027s leave this discussion for later.",
+      "parentUuid": "6f5a375b_29a52aad",
+      "revId": "1b0b9877437bd2ba8021b0b44ca82c5c6d828a2b",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "29663b7f_218c2224",
@@ -49,6 +67,30 @@
       "writtenOn": "2022-12-13T14:19:57Z",
       "side": 1,
       "message": "so the maximum size of a blob is equivalent to the maximum size of a proto message? that implies mandatory chunking, which I definitely think is a step too far for the API (it basically makes it impossible for anyone to reasonably reimplement it as an experiment), or does this turn into a stream somewhere?",
+      "range": {
+        "startLine": 22,
+        "startChar": 0,
+        "endLine": 22,
+        "endChar": 19
+      },
+      "revId": "1b0b9877437bd2ba8021b0b44ca82c5c6d828a2b",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "59d29077_91466f5a",
+        "filename": "tvix/store/protos/rpc_blobstore.proto",
+        "patchSetId": 18
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2022-12-14T10:31:41Z",
+      "side": 1,
+      "message": "There is some chunking in cl/7467, which will make that RPC method return a stream of chunks.",
+      "parentUuid": "29663b7f_218c2224",
       "range": {
         "startLine": 22,
         "startChar": 0,
