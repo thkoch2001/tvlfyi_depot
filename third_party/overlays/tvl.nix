@@ -102,4 +102,22 @@ in
       meta.ci.skip = true;
     };
   }));
+
+  # Pin a newer version of crate2nix from git, which is not officially
+  # released but supports `dep:`
+  crate2nix = super.crate2nix.overrideAttrs (old: rec {
+    version = "0.11.0-rc.1";
+
+    src = self.fetchFromGitHub {
+      owner = "kolloch";
+      repo = "crate2nix";
+      rev = "v0.11.0-rc.1";
+      hash = "sha256:02yvn61w16sgkdxa019l5y9i2ybyk8h4516718gmarqxx5ws2kz8";
+    };
+
+    cargoDeps = old.cargoDeps.overrideAttrs (_: {
+      inherit src;
+      outputHash = "sha256:03yny9ikqzfpi2mr27r82g54an2s8k9lqi2i4fqalg7g0s2cr2yd";
+    });
+  });
 }
