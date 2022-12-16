@@ -226,7 +226,7 @@ rec {
         dependencies = [
           {
             name = "hermit-abi";
-            packageId = "hermit-abi";
+            packageId = "hermit-abi 0.1.19";
             target = { target, features }: (target."os" == "hermit");
           }
           {
@@ -555,7 +555,7 @@ rec {
           }
           {
             name = "textwrap";
-            packageId = "textwrap 0.11.0";
+            packageId = "textwrap";
           }
           {
             name = "unicode-width";
@@ -578,18 +578,13 @@ rec {
           "yaml-rust" = [ "dep:yaml-rust" ];
         };
       };
-      "clap 3.2.23" = rec {
+      "clap 4.0.27" = rec {
         crateName = "clap";
-        version = "3.2.23";
+        version = "4.0.27";
         edition = "2021";
         crateBin = [ ];
-        sha256 = "19bkwkj49ha7mlip0gxsqb9xmd3jpr7ghvcx1hkx6icqrd2mqrbi";
+        sha256 = "0rjr4wacx5sz1sc4dikz4p8z4k53dfpm1s3sil8dfq0aib9dijqa";
         dependencies = [
-          {
-            name = "atty";
-            packageId = "atty";
-            optional = true;
-          }
           {
             name = "bitflags";
             packageId = "bitflags";
@@ -604,8 +599,9 @@ rec {
             packageId = "clap_lex";
           }
           {
-            name = "indexmap";
-            packageId = "indexmap";
+            name = "is-terminal";
+            packageId = "is-terminal";
+            optional = true;
           }
           {
             name = "once_cell";
@@ -622,44 +618,27 @@ rec {
             packageId = "termcolor";
             optional = true;
           }
-          {
-            name = "textwrap";
-            packageId = "textwrap 0.16.0";
-            usesDefaultFeatures = false;
-          }
         ];
         features = {
-          "atty" = [ "dep:atty" ];
-          "backtrace" = [ "dep:backtrace" ];
-          "cargo" = [ "once_cell" ];
-          "clap_derive" = [ "dep:clap_derive" ];
-          "color" = [ "atty" "termcolor" ];
-          "debug" = [ "clap_derive/debug" "backtrace" ];
-          "default" = [ "std" "color" "suggestions" ];
-          "deprecated" = [ "clap_derive/deprecated" ];
-          "derive" = [ "clap_derive" "once_cell" ];
-          "once_cell" = [ "dep:once_cell" ];
-          "regex" = [ "dep:regex" ];
-          "std" = [ "indexmap/std" ];
-          "strsim" = [ "dep:strsim" ];
-          "suggestions" = [ "strsim" ];
-          "termcolor" = [ "dep:termcolor" ];
-          "terminal_size" = [ "dep:terminal_size" ];
-          "unicase" = [ "dep:unicase" ];
-          "unicode" = [ "textwrap/unicode-width" "unicase" ];
-          "unstable-doc" = [ "derive" "cargo" "wrap_help" "yaml" "env" "unicode" "regex" "unstable-replace" "unstable-grouped" ];
-          "unstable-v4" = [ "clap_derive/unstable-v4" "deprecated" ];
-          "wrap_help" = [ "terminal_size" "textwrap/terminal_size" ];
-          "yaml" = [ "yaml-rust" ];
-          "yaml-rust" = [ "dep:yaml-rust" ];
+          "cargo" = [ "dep:once_cell" ];
+          "color" = [ "dep:is-terminal" "dep:termcolor" ];
+          "debug" = [ "clap_derive?/debug" "dep:backtrace" ];
+          "default" = [ "std" "color" "help" "usage" "error-context" "suggestions" ];
+          "deprecated" = [ "clap_derive?/deprecated" ];
+          "derive" = [ "dep:clap_derive" "dep:once_cell" ];
+          "suggestions" = [ "dep:strsim" "error-context" ];
+          "unicode" = [ "dep:unicode-width" "dep:unicase" ];
+          "unstable-doc" = [ "derive" "cargo" "wrap_help" "env" "unicode" "string" "unstable-replace" "unstable-grouped" ];
+          "unstable-v5" = [ "clap_derive?/unstable-v5" "deprecated" ];
+          "wrap_help" = [ "help" "dep:terminal_size" ];
         };
-        resolvedDefaultFeatures = [ "atty" "clap_derive" "color" "default" "derive" "env" "once_cell" "std" "strsim" "suggestions" "termcolor" ];
+        resolvedDefaultFeatures = [ "color" "default" "derive" "env" "error-context" "help" "std" "suggestions" "usage" ];
       };
       "clap_derive" = rec {
         crateName = "clap_derive";
-        version = "3.2.18";
+        version = "4.0.21";
         edition = "2021";
-        sha256 = "0r9az0cl33xx0i9g18l56l3vd5ayjvcflvza2gdf8jwcab78n37a";
+        sha256 = "054h5c62jy5c5li58696ymly0avyjvcbn1krcaawkbq2kwzk2xq1";
         procMacro = true;
         dependencies = [
           {
@@ -686,15 +665,15 @@ rec {
         ];
         features = {
           "raw-deprecated" = [ "deprecated" ];
-          "unstable-v4" = [ "deprecated" ];
+          "unstable-v5" = [ "deprecated" ];
         };
         resolvedDefaultFeatures = [ "default" ];
       };
       "clap_lex" = rec {
         crateName = "clap_lex";
-        version = "0.2.4";
+        version = "0.3.0";
         edition = "2021";
-        sha256 = "1ib1a9v55ybnaws11l63az0jgz5xiy24jkdgsmyl7grcm3sz4l18";
+        sha256 = "1a4dzbnlxiamfsn0pnkhn7n9bdfjh66j9fxm6mmr7d227vvrhh8d";
         dependencies = [
           {
             name = "os_str_bytes";
@@ -1617,7 +1596,7 @@ rec {
         };
         resolvedDefaultFeatures = [ "default" ];
       };
-      "hermit-abi" = rec {
+      "hermit-abi 0.1.19" = rec {
         crateName = "hermit-abi";
         version = "0.1.19";
         edition = "2018";
@@ -1636,6 +1615,29 @@ rec {
           "compiler_builtins" = [ "dep:compiler_builtins" ];
           "core" = [ "dep:core" ];
           "rustc-dep-of-std" = [ "core" "compiler_builtins/rustc-dep-of-std" "libc/rustc-dep-of-std" ];
+        };
+        resolvedDefaultFeatures = [ "default" ];
+      };
+      "hermit-abi 0.2.6" = rec {
+        crateName = "hermit-abi";
+        version = "0.2.6";
+        edition = "2021";
+        sha256 = "1iz439yz9qzk3rh9pqx2rz5c4107v3qbd7bppfsbzb1mzr02clgf";
+        authors = [
+          "Stefan Lankes"
+        ];
+        dependencies = [
+          {
+            name = "libc";
+            packageId = "libc";
+            usesDefaultFeatures = false;
+          }
+        ];
+        features = {
+          "alloc" = [ "dep:alloc" ];
+          "compiler_builtins" = [ "dep:compiler_builtins" ];
+          "core" = [ "dep:core" ];
+          "rustc-dep-of-std" = [ "core" "alloc" "compiler_builtins/rustc-dep-of-std" "libc/rustc-dep-of-std" ];
         };
         resolvedDefaultFeatures = [ "default" ];
       };
@@ -1666,7 +1668,6 @@ rec {
           "serde" = [ "dep:serde" ];
           "serde-1" = [ "serde" ];
         };
-        resolvedDefaultFeatures = [ "std" ];
       };
       "instant" = rec {
         crateName = "instant";
@@ -1725,7 +1726,41 @@ rec {
           "tokio" = [ "dep:tokio" ];
           "windows-sys" = [ "dep:windows-sys" ];
         };
-        resolvedDefaultFeatures = [ "close" "libc" "windows-sys" ];
+        resolvedDefaultFeatures = [ "close" "default" "libc" "windows-sys" ];
+      };
+      "is-terminal" = rec {
+        crateName = "is-terminal";
+        version = "0.4.0";
+        edition = "2018";
+        sha256 = "0b9mcxb46mzz1q1i4cdmp5j7g042ccqg3q5357prs75l5rpbrrda";
+        authors = [
+          "softprops <d.tangren@gmail.com>"
+          "Dan Gohman <dev@sunfishcode.online>"
+        ];
+        dependencies = [
+          {
+            name = "hermit-abi";
+            packageId = "hermit-abi 0.2.6";
+            target = { target, features }: (target."os" == "hermit");
+          }
+          {
+            name = "io-lifetimes";
+            packageId = "io-lifetimes";
+          }
+          {
+            name = "rustix";
+            packageId = "rustix";
+            target = { target, features }: (!((target."windows" or false) || (target."os" == "hermit")));
+            features = [ "termios" ];
+          }
+          {
+            name = "windows-sys";
+            packageId = "windows-sys";
+            target = { target, features }: (target."windows" or false);
+            features = [ "Win32_Foundation" "Win32_System_Console" ];
+          }
+        ];
+
       };
       "itertools" = rec {
         crateName = "itertools";
@@ -2055,7 +2090,7 @@ rec {
         dependencies = [
           {
             name = "clap";
-            packageId = "clap 3.2.23";
+            packageId = "clap 4.0.27";
           }
           {
             name = "tempfile";
@@ -2096,7 +2131,7 @@ rec {
         dependencies = [
           {
             name = "hermit-abi";
-            packageId = "hermit-abi";
+            packageId = "hermit-abi 0.1.19";
             target = { target, features }: (((target."arch" == "x86_64") || (target."arch" == "aarch64")) && (target."os" == "hermit"));
           }
           {
@@ -3460,7 +3495,7 @@ rec {
           "use-libc" = [ "libc_errno" "libc" ];
           "use-libc-auxv" = [ "libc" ];
         };
-        resolvedDefaultFeatures = [ "default" "fs" "io-lifetimes" "libc" "std" "use-libc-auxv" ];
+        resolvedDefaultFeatures = [ "default" "fs" "io-lifetimes" "libc" "std" "termios" "use-libc-auxv" ];
       };
       "rustyline" = rec {
         crateName = "rustyline";
@@ -4089,7 +4124,7 @@ rec {
           "serde" = [ "dep:serde" ];
         };
       };
-      "textwrap 0.11.0" = rec {
+      "textwrap" = rec {
         crateName = "textwrap";
         version = "0.11.0";
         edition = "2015";
@@ -4106,23 +4141,6 @@ rec {
         features = {
           "hyphenation" = [ "dep:hyphenation" ];
           "term_size" = [ "dep:term_size" ];
-        };
-      };
-      "textwrap 0.16.0" = rec {
-        crateName = "textwrap";
-        version = "0.16.0";
-        edition = "2021";
-        sha256 = "0gbwkjf15l6p3x2rkr75fa4cpcs1ly4c8pmlfx5bl6zybcm24ai2";
-        authors = [
-          "Martin Geisler <martin@geisler.net>"
-        ];
-        features = {
-          "default" = [ "unicode-linebreak" "unicode-width" "smawk" ];
-          "hyphenation" = [ "dep:hyphenation" ];
-          "smawk" = [ "dep:smawk" ];
-          "terminal_size" = [ "dep:terminal_size" ];
-          "unicode-linebreak" = [ "dep:unicode-linebreak" ];
-          "unicode-width" = [ "dep:unicode-width" ];
         };
       };
       "thiserror" = rec {
@@ -4197,7 +4215,7 @@ rec {
         dependencies = [
           {
             name = "clap";
-            packageId = "clap 3.2.23";
+            packageId = "clap 4.0.27";
             features = [ "derive" "env" ];
           }
           {
@@ -5591,7 +5609,7 @@ rec {
           "Win32_UI_Xaml" = [ "Win32_UI" ];
           "Win32_UI_Xaml_Diagnostics" = [ "Win32_UI_Xaml" ];
         };
-        resolvedDefaultFeatures = [ "Win32" "Win32_Foundation" "Win32_NetworkManagement" "Win32_NetworkManagement_IpHelper" "Win32_Networking" "Win32_Networking_WinSock" "Win32_Security" "Win32_Storage" "Win32_Storage_FileSystem" "Win32_System" "Win32_System_IO" "Win32_System_Threading" "default" ];
+        resolvedDefaultFeatures = [ "Win32" "Win32_Foundation" "Win32_NetworkManagement" "Win32_NetworkManagement_IpHelper" "Win32_Networking" "Win32_Networking_WinSock" "Win32_Security" "Win32_Storage" "Win32_Storage_FileSystem" "Win32_System" "Win32_System_Console" "Win32_System_IO" "Win32_System_Threading" "default" ];
       };
       "windows_aarch64_gnullvm" = rec {
         crateName = "windows_aarch64_gnullvm";
