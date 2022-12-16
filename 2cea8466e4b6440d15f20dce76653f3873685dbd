@@ -52,6 +52,24 @@
       "parentUuid": "e7f8f09e_e1de1b12",
       "revId": "2cea8466e4b6440d15f20dce76653f3873685dbd",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "38199ae5_eb0397fa",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 9
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-12-16T16:51:27Z",
+      "side": 1,
+      "message": "Nope. It actually makes it easier, since the start value won\u0027t have to be cloned around.",
+      "parentUuid": "e00a8e2d_2acdbd47",
+      "revId": "2cea8466e4b6440d15f20dce76653f3873685dbd",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
