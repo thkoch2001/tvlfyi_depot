@@ -34,6 +34,24 @@
       "parentUuid": "31dfbf16_077d2e79",
       "revId": "2cea8466e4b6440d15f20dce76653f3873685dbd",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e00a8e2d_2acdbd47",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 9
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2022-12-16T15:55:56Z",
+      "side": 1,
+      "message": "Okay, so cl/7546 won\u0027t make this more complicated?",
+      "parentUuid": "e7f8f09e_e1de1b12",
+      "revId": "2cea8466e4b6440d15f20dce76653f3873685dbd",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
