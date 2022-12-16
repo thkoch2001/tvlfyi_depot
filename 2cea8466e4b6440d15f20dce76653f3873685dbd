@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "31dfbf16_077d2e79",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 9
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2022-12-16T15:35:13Z",
+      "side": 1,
+      "message": "How is this used when evaluating/building individual attribute(s) of the toplevel? (nix-build -A foo -A bar), or passing additional arguments (nix-build --argstr foo bar)?\n\nIn //tvix/proto/evaluator.proto we had EvaluateFile.attribute(s) and EvaluateFile.arguments to convey this.\n\n\"Will be added later\" is also a valid response, but I feel we want to drop a note about the how here.",
+      "revId": "2cea8466e4b6440d15f20dce76653f3873685dbd",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
