@@ -13,3 +13,5 @@ SplitAt ← ((⊣≤↕∘≠∘⊢)⊔⊢)
 _fix ⇐ {𝕩 𝕊∘⊢⍟≢ 𝔽 𝕩}
 
 ImportBqnLibs ⇐ {•Import 𝕩∾˜"/"∾˜¯1↓1⊑•SH "printenv"‿"BQNLIBS"}
+
+Xor ⇐ (¬⊸∧∨∧⟜¬)
