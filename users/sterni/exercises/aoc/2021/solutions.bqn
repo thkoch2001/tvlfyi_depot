@@ -1,5 +1,7 @@
 #!/usr/bin/env BQN
 
+⟨Xor⟩ ← •Import "../lib.bqn"
+
 #
 # Utilities
 #
@@ -469,7 +471,6 @@ _EnhancedPixelCount ← {+´⥊⊑ (𝕨⊸Enhance)⍟𝕗 𝕩}
 day25Input ← ".>v" ⊐ > ReadInput 25
 day25ExampleInput ← ".>v"⊐∘‿10⥊"v...>>.vv>.vv>>.vv..>>.>v>...v>>v>>.>.v.v>v.vv.v..>.>>..v....vv..>.>v.v.v..>>v.v....v..v.>"
 
-Xor ← (¬⊸∧∨∧⟜¬)
 MoveHerd ← {(𝕩∧𝕩≠𝕨)+𝕨× (𝕨=𝕩) (Xor⟜(1⊸⌽)∨⊢) (0=𝕩)∧(-1)⌽𝕨=𝕩}
 
 _fixCount ← {
