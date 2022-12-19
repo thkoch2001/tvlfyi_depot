@@ -47,8 +47,8 @@ lib.fix (self: {
     zfs.enableUnstable = true;
   };
 
-  virtualisation.virtualbox.host.enable = true;
-  users.users.tazjin.extraGroups = [ "vboxusers" ];
+  # virtualisation.virtualbox.host.enable = true;
+  # users.users.tazjin.extraGroups = [ "vboxusers" ];
 
   fileSystems = {
     "/" = {
@@ -158,8 +158,6 @@ lib.fix (self: {
       OnUnitActiveSec = "180";
     };
   };
-
-  services.tailscale.enable = true;
 
   system.stateVersion = "20.09";
 })
