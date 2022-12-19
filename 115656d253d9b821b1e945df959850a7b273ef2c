@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5e0d9d6a_d0af8865",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-12-19T11:30:30Z",
+      "side": 1,
+      "message": "The commit message says that this is a NAR writer, but when generating the docs and looking at the public API it looks more like a reader.\n\nAt least, I can\u0027t quite tell how I would e.g. construct a `Node` from scratch. Can you clarify?",
+      "revId": "115656d253d9b821b1e945df959850a7b273ef2c",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
