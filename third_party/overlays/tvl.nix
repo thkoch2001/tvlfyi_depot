@@ -55,6 +55,12 @@ in
     llvmPackages = self.llvmPackages_11;
   };
 
+  # Backport fix from
+  # https://github.com/NixOS/nixpkgs/pull/206745
+  clisp = super.clisp.override (old: {
+    readline = assert old.readline != self.readline6; self.readline6;
+  });
+
   # stdenv which uses clang, lld and libc++; full is a slight exaggeration,
   # we for example don't use LLVM's libunwind
   fullLlvm11Stdenv = self.overrideCC self.stdenv
@@ -91,10 +97,6 @@ in
       patches = old.patches ++ [ ./patches/notmuch-dottime.patch ];
     };
   });
-
-  # SBCL 2.2.10 breaks lisp-binary somehow
-  # https://github.com/j3pic/lisp-binary/issues/59
-  sbcl = self.sbcl_2_2_9;
 
   # nix-serve does not work with nix 2.4
   # https://github.com/edolstra/nix-serve/issues/28
