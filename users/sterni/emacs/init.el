@@ -112,19 +112,6 @@
         org-default-notes-file (concat org-folder "/inbox.org")
         initial-buffer-choice org-default-notes-file))
 
-;; load org-tracker and mutable config on work laptop
-(let ((org-tracker-src (concat (getenv "HOME")
-                               "/src/el/org-tracker")))
-  (when (file-exists-p org-tracker-src)
-    (add-to-list 'load-path org-tracker-src)
-
-    (use-package org-tracker
-      :hook (org-mode . org-tracker-mode)
-      :config
-      (let ((jira-config (concat (getenv "HOME")
-                                 "/.config/emacs-custom/pa-jira.el")))
-        (when (file-exists-p jira-config) (load jira-config))))))
-
 ;; latex
 
 (defun latex-word-count ()
