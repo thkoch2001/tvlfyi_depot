@@ -1,8 +1,7 @@
-{ depot, pkgs, ... }:
+{ depot, ... }:
 
 let
-  inherit (pkgs) cacert iana-etc libredirect stdenv runCommand writeText;
-  elmPackages = depot.third_party.elmPackages_0_18;
+  inherit (depot.third_party.elmPackages_0_18) cacert iana-etc libredirect stdenv runCommand writeText elmPackages;
 
   frontend = stdenv.mkDerivation {
     name = "gemma-frontend.html";
