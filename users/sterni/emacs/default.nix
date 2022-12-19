@@ -37,12 +37,6 @@ let
     epkgs.rust-mode
     epkgs.tvlPackages.tvl
     epkgs.urweb-mode
-
-    # TODO(sterni): until org-tracker is part of depot
-    epkgs.ivy
-    epkgs.dash
-    epkgs.s
-    epkgs.jiralib2
   ] ++ lib.optionals is64bit [
     epkgs.melpaPackages.languagetool
   ]);
