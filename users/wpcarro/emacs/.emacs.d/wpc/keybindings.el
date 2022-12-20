@@ -155,6 +155,20 @@
         (after advice-for-evil-search-previous activate)
       (evil-scroll-line-to-center (line-number-at-pos)))))
 
+(general-define-key
+ :keymaps '(isearch-mode-map)
+ "C-p" #'isearch-ring-retreat
+ "C-n" #'isearch-ring-advance
+ "<up>" #'isearch-ring-retreat
+ "<down>" #'isearch-ring-advance)
+
+(general-define-key
+ :keymaps '(minibuffer-local-isearch-map)
+ "C-p" #'previous-line-or-history-element
+ "C-n" #'next-line-or-history-element
+ "<up>" #'previous-line-or-history-element
+ "<down>" #'next-line-or-history-element)
+
 (key-chord-mode 1)
 (key-chord-define evil-insert-state-map "jk" 'evil-normal-state)
 
