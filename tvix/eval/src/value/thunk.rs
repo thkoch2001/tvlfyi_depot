@@ -154,7 +154,7 @@ impl Thunk {
                 }) => vm.enter_frame(lambda, upvalues, arg_count)?,
             }
             match tramp.cont {
-                None => break (),
+                None => break,
                 Some(cont) => {
                     tramp = cont(vm)?;
                     continue;
@@ -178,10 +178,10 @@ impl Thunk {
     pub fn force_tramp(vm: &mut VM) -> Result<Tramp, ErrorKind> {
         match vm.pop() {
             Value::Thunk(thunk) /*if !thunk.is_forced()*/ =>
-                return thunk.force_tramp_self(vm),
+                thunk.force_tramp_self(vm),
             v => {
                 vm.push(v);
-                return Ok(Tramp::default());
+                Ok(Tramp::default())
             }
         }
     }
@@ -215,7 +215,7 @@ impl Thunk {
                         return Ok(Tramp {
                             action: Some(TrampAction::EnterFrame {
                                 lambda,
-                                upvalues: upvalues.clone(),
+                                upvalues,
                                 arg_count: 0,
                                 light_span: light_span.clone(),
                             }),
@@ -224,10 +224,10 @@ impl Thunk {
                                     self_clone.0.replace(ThunkRepr::Evaluated(vm.pop()));
                                 assert!(matches!(should_be_blackhole, ThunkRepr::Blackhole));
                                 vm.push(Value::Thunk(self_clone));
-                                return Self::force_tramp(vm).map_err(|kind| Error {
+                                Self::force_tramp(vm).map_err(|kind| Error {
                                     kind,
                                     span: light_span.span(),
-                                });
+                                })
                             })),
                         });
                     }
@@ -289,7 +289,7 @@ impl Thunk {
                     panic!("Thunk::value called on an unfinalised closure");
                 }
                 */
-                return value;
+                value
             }
             ThunkRepr::Blackhole => panic!("Thunk::value called on a black-holed thunk"),
             ThunkRepr::Suspended { .. } => panic!("Thunk::value called on a suspended thunk"),

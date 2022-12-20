@@ -804,7 +804,7 @@ impl Compiler<'_> {
         }
 
         if let Some(ast::InterpolPart::Literal(lit)) = parts.pop() {
-            return Some(SmolStr::new(&lit));
+            return Some(SmolStr::new(lit));
         }
 
         None
