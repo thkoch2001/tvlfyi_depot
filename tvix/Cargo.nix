@@ -6,11 +6,7 @@
 , pkgs ? import nixpkgs { config = { }; }
 , lib ? pkgs.lib
 , stdenv ? pkgs.stdenv
-, buildRustCrateForPkgs ? if buildRustCrate != null
-  then lib.warn "crate2nix: Passing `buildRustCrate` as argument to Cargo.nix is deprecated. If you don't customize `buildRustCrate`, replace `callPackage ./Cargo.nix {}` by `import ./Cargo.nix { inherit pkgs; }`, and if you need to customize `buildRustCrate`, use `buildRustCrateForPkgs` instead." (_: buildRustCrate)
-  else pkgs: pkgs.buildRustCrate
-  # Deprecated
-, buildRustCrate ? null
+, buildRustCrateForPkgs ? pkgs: pkgs.buildRustCrate
   # This is used as the `crateOverrides` argument for `buildRustCrate`.
 , defaultCrateOverrides ? pkgs.defaultCrateOverrides
   # The features to enable for the root_crate or the workspace_members.
@@ -61,6 +57,16 @@ rec {
       packageId = "tvix-eval-builtin-macros";
       build = internal.buildRustCrateWithFeatures {
         packageId = "tvix-eval-builtin-macros";
+      };
+
+      # Debug support which might change between releases.
+      # File a bug if you depend on any for non-debug work!
+      debug = internal.debugCrate { inherit packageId; };
+    };
+    "tvix-nar" = rec {
+      packageId = "tvix-nar";
+      build = internal.buildRustCrateWithFeatures {
+        packageId = "tvix-nar";
       };
 
       # Debug support which might change between releases.
@@ -217,7 +223,7 @@ rec {
           {
             name = "hermit-abi";
             packageId = "hermit-abi";
-            target = { target, features }: (target."os" == "hermit");
+            target = { target, features }: ("hermit" == target."os");
           }
           {
             name = "libc";
@@ -1236,7 +1242,7 @@ rec {
             name = "redox_users";
             packageId = "redox_users";
             usesDefaultFeatures = false;
-            target = { target, features }: (target."os" == "redox");
+            target = { target, features }: ("redox" == target."os");
           }
           {
             name = "winapi";
@@ -1265,7 +1271,7 @@ rec {
             name = "redox_users";
             packageId = "redox_users";
             usesDefaultFeatures = false;
-            target = { target, features }: (target."os" == "redox");
+            target = { target, features }: ("redox" == target."os");
           }
           {
             name = "winapi";
@@ -1312,17 +1318,17 @@ rec {
           {
             name = "errno-dragonfly";
             packageId = "errno-dragonfly";
-            target = { target, features }: (target."os" == "dragonfly");
+            target = { target, features }: ("dragonfly" == target."os");
           }
           {
             name = "libc";
             packageId = "libc";
-            target = { target, features }: (target."os" == "hermit");
+            target = { target, features }: ("hermit" == target."os");
           }
           {
             name = "libc";
             packageId = "libc";
-            target = { target, features }: (target."os" == "wasi");
+            target = { target, features }: ("wasi" == target."os");
           }
           {
             name = "libc";
@@ -1396,14 +1402,14 @@ rec {
           {
             name = "instant";
             packageId = "instant";
-            target = { target, features }: (target."arch" == "wasm32");
+            target = { target, features }: ("wasm32" == target."arch");
           }
         ];
         devDependencies = [
           {
             name = "instant";
             packageId = "instant";
-            target = { target, features }: (target."arch" == "wasm32");
+            target = { target, features }: ("wasm32" == target."arch");
             features = [ "wasm-bindgen" ];
           }
         ];
@@ -1510,7 +1516,7 @@ rec {
           {
             name = "wasi";
             packageId = "wasi";
-            target = { target, features }: (target."os" == "wasi");
+            target = { target, features }: ("wasi" == target."os");
           }
         ];
         features = {
@@ -1981,14 +1987,14 @@ rec {
           {
             name = "memoffset";
             packageId = "memoffset 0.6.5";
-            target = { target, features }: (!(target."os" == "redox"));
+            target = { target, features }: (!("redox" == target."os"));
           }
         ];
         buildDependencies = [
           {
             name = "cc";
             packageId = "cc";
-            target = { target, features }: (target."os" == "dragonfly");
+            target = { target, features }: ("dragonfly" == target."os");
           }
         ];
 
@@ -2038,10 +2044,23 @@ rec {
         version = "0.1.0";
         edition = "2021";
         crateBin = [
-          { name = "nix-store"; path = "src/bin/nix-store.rs"; }
-          { name = "nix-cli"; path = "src/main.rs"; }
+          {
+            name = "nix-cli";
+            path = "src/main.rs";
+            requiredFeatures = [ ];
+          }
+          {
+            name = "nix-store";
+            path = "src/bin/nix-store.rs";
+            requiredFeatures = [ ];
+          }
         ];
-        src = lib.cleanSourceWith { filter = sourceFilter; src = ./nix_cli; };
+        # We can't filter paths with references in Nix 2.4
+        # See https://github.com/NixOS/nix/issues/5410
+        src =
+          if (lib.versionOlder builtins.nixVersion "2.4pre20211007")
+          then lib.cleanSourceWith { filter = sourceFilter; src = ./nix_cli; }
+          else ./nix_cli;
         dependencies = [
           {
             name = "clap";
@@ -2087,7 +2106,7 @@ rec {
           {
             name = "hermit-abi";
             packageId = "hermit-abi";
-            target = { target, features }: (((target."arch" == "x86_64") || (target."arch" == "aarch64")) && (target."os" == "hermit"));
+            target = { target, features }: ((("x86_64" == target."arch") || ("aarch64" == target."arch")) && ("hermit" == target."os"));
           }
           {
             name = "libc";
@@ -2262,12 +2281,12 @@ rec {
           {
             name = "wasm-bindgen";
             packageId = "wasm-bindgen";
-            target = { target, features }: ((target."arch" == "wasm32") && (!(target."os" == "wasi")));
+            target = { target, features }: (("wasm32" == target."arch") && (!("wasi" == target."os")));
           }
           {
             name = "web-sys";
             packageId = "web-sys";
-            target = { target, features }: ((target."arch" == "wasm32") && (!(target."os" == "wasi")));
+            target = { target, features }: (("wasm32" == target."arch") && (!("wasi" == target."os")));
             features = [ "Document" "DomRect" "Element" "HtmlElement" "Node" "Window" "HtmlCanvasElement" "CanvasRenderingContext2d" ];
           }
         ];
@@ -2856,7 +2875,7 @@ rec {
           {
             name = "fuchsia-cprng";
             packageId = "fuchsia-cprng";
-            target = { target, features }: (target."os" == "fuchsia");
+            target = { target, features }: ("fuchsia" == target."os");
           }
           {
             name = "libc";
@@ -2868,12 +2887,12 @@ rec {
             name = "rand_core";
             packageId = "rand_core 0.3.1";
             usesDefaultFeatures = false;
-            target = { target, features }: (target."env" == "sgx");
+            target = { target, features }: ("sgx" == target."env");
           }
           {
             name = "rdrand";
             packageId = "rdrand";
-            target = { target, features }: (target."env" == "sgx");
+            target = { target, features }: ("sgx" == target."env");
           }
           {
             name = "winapi";
@@ -3361,14 +3380,14 @@ rec {
             rename = "libc_errno";
             optional = true;
             usesDefaultFeatures = false;
-            target = { target, features }: ((!(target."rustix_use_libc" or false)) && (!(target."miri" or false)) && (target."os" == "linux") && ((target."arch" == "x86") || ((target."arch" == "x86_64") && (target."pointer_width" == "64")) || ((target."endian" == "little") && ((target."arch" == "arm") || ((target."arch" == "aarch64") && (target."pointer_width" == "64")) || (target."arch" == "powerpc64") || (target."arch" == "riscv64") || (target."arch" == "mips") || (target."arch" == "mips64")))));
+            target = { target, features }: ((!(target."rustix_use_libc" or false)) && (!(target."miri" or false)) && ("linux" == target."os") && (("x86" == target."arch") || (("x86_64" == target."arch") && ("64" == target."pointer_width")) || (("little" == target."endian") && (("arm" == target."arch") || (("aarch64" == target."arch") && ("64" == target."pointer_width")) || ("powerpc64" == target."arch") || ("riscv64" == target."arch") || ("mips" == target."arch") || ("mips64" == target."arch")))));
           }
           {
             name = "errno";
             packageId = "errno";
             rename = "libc_errno";
             usesDefaultFeatures = false;
-            target = { target, features }: ((target."rustix_use_libc" or false) || (target."miri" or false) || (!((target."os" == "linux") && ((target."arch" == "x86") || ((target."arch" == "x86_64") && (target."pointer_width" == "64")) || ((target."endian" == "little") && ((target."arch" == "arm") || ((target."arch" == "aarch64") && (target."pointer_width" == "64")) || (target."arch" == "powerpc64") || (target."arch" == "riscv64") || (target."arch" == "mips") || (target."arch" == "mips64")))))));
+            target = { target, features }: ((target."rustix_use_libc" or false) || (target."miri" or false) || (!(("linux" == target."os") && (("x86" == target."arch") || (("x86_64" == target."arch") && ("64" == target."pointer_width")) || (("little" == target."endian") && (("arm" == target."arch") || (("aarch64" == target."arch") && ("64" == target."pointer_width")) || ("powerpc64" == target."arch") || ("riscv64" == target."arch") || ("mips" == target."arch") || ("mips64" == target."arch")))))));
           }
           {
             name = "io-lifetimes";
@@ -3381,27 +3400,27 @@ rec {
             name = "libc";
             packageId = "libc";
             optional = true;
-            target = { target, features }: ((!(target."rustix_use_libc" or false)) && (!(target."miri" or false)) && (target."os" == "linux") && ((target."arch" == "x86") || ((target."arch" == "x86_64") && (target."pointer_width" == "64")) || ((target."endian" == "little") && ((target."arch" == "arm") || ((target."arch" == "aarch64") && (target."pointer_width" == "64")) || (target."arch" == "powerpc64") || (target."arch" == "riscv64") || (target."arch" == "mips") || (target."arch" == "mips64")))));
+            target = { target, features }: ((!(target."rustix_use_libc" or false)) && (!(target."miri" or false)) && ("linux" == target."os") && (("x86" == target."arch") || (("x86_64" == target."arch") && ("64" == target."pointer_width")) || (("little" == target."endian") && (("arm" == target."arch") || (("aarch64" == target."arch") && ("64" == target."pointer_width")) || ("powerpc64" == target."arch") || ("riscv64" == target."arch") || ("mips" == target."arch") || ("mips64" == target."arch")))));
             features = [ "extra_traits" ];
           }
           {
             name = "libc";
             packageId = "libc";
-            target = { target, features }: ((target."rustix_use_libc" or false) || (target."miri" or false) || (!((target."os" == "linux") && ((target."arch" == "x86") || ((target."arch" == "x86_64") && (target."pointer_width" == "64")) || ((target."endian" == "little") && ((target."arch" == "arm") || ((target."arch" == "aarch64") && (target."pointer_width" == "64")) || (target."arch" == "powerpc64") || (target."arch" == "riscv64") || (target."arch" == "mips") || (target."arch" == "mips64")))))));
+            target = { target, features }: ((target."rustix_use_libc" or false) || (target."miri" or false) || (!(("linux" == target."os") && (("x86" == target."arch") || (("x86_64" == target."arch") && ("64" == target."pointer_width")) || (("little" == target."endian") && (("arm" == target."arch") || (("aarch64" == target."arch") && ("64" == target."pointer_width")) || ("powerpc64" == target."arch") || ("riscv64" == target."arch") || ("mips" == target."arch") || ("mips64" == target."arch")))))));
             features = [ "extra_traits" ];
           }
           {
             name = "linux-raw-sys";
             packageId = "linux-raw-sys";
             usesDefaultFeatures = false;
-            target = { target, features }: (((target."os" == "android") || (target."os" == "linux")) && ((target."rustix_use_libc" or false) || (target."miri" or false) || (!((target."os" == "linux") && ((target."arch" == "x86") || ((target."arch" == "x86_64") && (target."pointer_width" == "64")) || ((target."endian" == "little") && ((target."arch" == "arm") || ((target."arch" == "aarch64") && (target."pointer_width" == "64")) || (target."arch" == "powerpc64") || (target."arch" == "riscv64") || (target."arch" == "mips") || (target."arch" == "mips64"))))))));
+            target = { target, features }: ((("android" == target."os") || ("linux" == target."os")) && ((target."rustix_use_libc" or false) || (target."miri" or false) || (!(("linux" == target."os") && (("x86" == target."arch") || (("x86_64" == target."arch") && ("64" == target."pointer_width")) || (("little" == target."endian") && (("arm" == target."arch") || (("aarch64" == target."arch") && ("64" == target."pointer_width")) || ("powerpc64" == target."arch") || ("riscv64" == target."arch") || ("mips" == target."arch") || ("mips64" == target."arch"))))))));
             features = [ "general" "no_std" ];
           }
           {
             name = "linux-raw-sys";
             packageId = "linux-raw-sys";
             usesDefaultFeatures = false;
-            target = { target, features }: ((!(target."rustix_use_libc" or false)) && (!(target."miri" or false)) && (target."os" == "linux") && ((target."arch" == "x86") || ((target."arch" == "x86_64") && (target."pointer_width" == "64")) || ((target."endian" == "little") && ((target."arch" == "arm") || ((target."arch" == "aarch64") && (target."pointer_width" == "64")) || (target."arch" == "powerpc64") || (target."arch" == "riscv64") || (target."arch" == "mips") || (target."arch" == "mips64")))));
+            target = { target, features }: ((!(target."rustix_use_libc" or false)) && (!(target."miri" or false)) && ("linux" == target."os") && (("x86" == target."arch") || (("x86_64" == target."arch") && ("64" == target."pointer_width")) || (("little" == target."endian") && (("arm" == target."arch") || (("aarch64" == target."arch") && ("64" == target."pointer_width")) || ("powerpc64" == target."arch") || ("riscv64" == target."arch") || ("mips" == target."arch") || ("mips64" == target."arch")))));
             features = [ "general" "errno" "ioctl" "no_std" ];
           }
           {
@@ -3415,6 +3434,7 @@ rec {
           {
             name = "errno";
             packageId = "errno";
+            rename = "libc_errno";
             usesDefaultFeatures = false;
           }
           {
@@ -3969,12 +3989,12 @@ rec {
           {
             name = "libc";
             packageId = "libc";
-            target = { target, features }: ((target."unix" or false) || (target."os" == "wasi"));
+            target = { target, features }: ((target."unix" or false) || ("wasi" == target."os"));
           }
           {
             name = "redox_syscall";
             packageId = "redox_syscall";
-            target = { target, features }: (target."os" == "redox");
+            target = { target, features }: ("redox" == target."os");
           }
           {
             name = "remove_dir_all";
@@ -4181,9 +4201,18 @@ rec {
         version = "0.1.0";
         edition = "2021";
         crateBin = [
-          { name = "tvix-eval"; path = "src/main.rs"; }
+          {
+            name = "tvix-eval";
+            path = "src/main.rs";
+            requiredFeatures = [ "repl" ];
+          }
         ];
-        src = lib.cleanSourceWith { filter = sourceFilter; src = ./eval; };
+        # We can't filter paths with references in Nix 2.4
+        # See https://github.com/NixOS/nix/issues/5410
+        src =
+          if (lib.versionOlder builtins.nixVersion "2.4pre20211007")
+          then lib.cleanSourceWith { filter = sourceFilter; src = ./eval; }
+          else ./eval;
         libName = "tvix_eval";
         dependencies = [
           {
@@ -4303,7 +4332,12 @@ rec {
         crateName = "tvix-eval-builtin-macros";
         version = "0.0.1";
         edition = "2021";
-        src = lib.cleanSourceWith { filter = sourceFilter; src = ./eval/builtin-macros; };
+        # We can't filter paths with references in Nix 2.4
+        # See https://github.com/NixOS/nix/issues/5410
+        src =
+          if (lib.versionOlder builtins.nixVersion "2.4pre20211007")
+          then lib.cleanSourceWith { filter = sourceFilter; src = ./eval/builtin-macros; }
+          else ./eval/builtin-macros;
         procMacro = true;
         authors = [
           "Griffin Smith <root@gws.fyi>"
@@ -4331,14 +4365,35 @@ rec {
         ];
 
       };
+      "tvix-nar" = rec {
+        crateName = "tvix-nar";
+        version = "0.0.0";
+        edition = "2021";
+        # We can't filter paths with references in Nix 2.4
+        # See https://github.com/NixOS/nix/issues/5410
+        src =
+          if (lib.versionOlder builtins.nixVersion "2.4pre20211007")
+          then lib.cleanSourceWith { filter = sourceFilter; src = ./nar; }
+          else ./nar;
+
+      };
       "tvix-store" = rec {
         crateName = "tvix-store";
         version = "0.1.0";
         edition = "2021";
         crateBin = [
-          { name = "tvix-store"; path = "src/main.rs"; }
+          {
+            name = "tvix-store";
+            path = "src/main.rs";
+            requiredFeatures = [ ];
+          }
         ];
-        src = lib.cleanSourceWith { filter = sourceFilter; src = ./store; };
+        # We can't filter paths with references in Nix 2.4
+        # See https://github.com/NixOS/nix/issues/5410
+        src =
+          if (lib.versionOlder builtins.nixVersion "2.4pre20211007")
+          then lib.cleanSourceWith { filter = sourceFilter; src = ./store; }
+          else ./store;
         dependencies = [
           {
             name = "blake3";
@@ -5127,12 +5182,12 @@ rec {
           {
             name = "winapi-i686-pc-windows-gnu";
             packageId = "winapi-i686-pc-windows-gnu";
-            target = { target, features }: (stdenv.hostPlatform.config == "i686-pc-windows-gnu");
+            target = { target, features }: (pkgs.rust.lib.toRustTarget stdenv.hostPlatform == "i686-pc-windows-gnu");
           }
           {
             name = "winapi-x86_64-pc-windows-gnu";
             packageId = "winapi-x86_64-pc-windows-gnu";
-            target = { target, features }: (stdenv.hostPlatform.config == "x86_64-pc-windows-gnu");
+            target = { target, features }: (pkgs.rust.lib.toRustTarget stdenv.hostPlatform == "x86_64-pc-windows-gnu");
           }
         ];
         features = {
@@ -5190,62 +5245,62 @@ rec {
           {
             name = "windows_aarch64_gnullvm";
             packageId = "windows_aarch64_gnullvm";
-            target = { target, features }: (stdenv.hostPlatform.config == "aarch64-pc-windows-gnullvm");
+            target = { target, features }: (pkgs.rust.lib.toRustTarget stdenv.hostPlatform == "aarch64-pc-windows-gnullvm");
           }
           {
             name = "windows_aarch64_msvc";
             packageId = "windows_aarch64_msvc";
-            target = { target, features }: (stdenv.hostPlatform.config == "aarch64-pc-windows-msvc");
+            target = { target, features }: (pkgs.rust.lib.toRustTarget stdenv.hostPlatform == "aarch64-pc-windows-msvc");
           }
           {
             name = "windows_aarch64_msvc";
             packageId = "windows_aarch64_msvc";
-            target = { target, features }: (stdenv.hostPlatform.config == "aarch64-uwp-windows-msvc");
+            target = { target, features }: (pkgs.rust.lib.toRustTarget stdenv.hostPlatform == "aarch64-uwp-windows-msvc");
           }
           {
             name = "windows_i686_gnu";
             packageId = "windows_i686_gnu";
-            target = { target, features }: (stdenv.hostPlatform.config == "i686-pc-windows-gnu");
+            target = { target, features }: (pkgs.rust.lib.toRustTarget stdenv.hostPlatform == "i686-pc-windows-gnu");
           }
           {
             name = "windows_i686_gnu";
             packageId = "windows_i686_gnu";
-            target = { target, features }: (stdenv.hostPlatform.config == "i686-uwp-windows-gnu");
+            target = { target, features }: (pkgs.rust.lib.toRustTarget stdenv.hostPlatform == "i686-uwp-windows-gnu");
           }
           {
             name = "windows_i686_msvc";
             packageId = "windows_i686_msvc";
-            target = { target, features }: (stdenv.hostPlatform.config == "i686-pc-windows-msvc");
+            target = { target, features }: (pkgs.rust.lib.toRustTarget stdenv.hostPlatform == "i686-pc-windows-msvc");
           }
           {
             name = "windows_i686_msvc";
             packageId = "windows_i686_msvc";
-            target = { target, features }: (stdenv.hostPlatform.config == "i686-uwp-windows-msvc");
+            target = { target, features }: (pkgs.rust.lib.toRustTarget stdenv.hostPlatform == "i686-uwp-windows-msvc");
           }
           {
             name = "windows_x86_64_gnu";
             packageId = "windows_x86_64_gnu";
-            target = { target, features }: (stdenv.hostPlatform.config == "x86_64-pc-windows-gnu");
+            target = { target, features }: (pkgs.rust.lib.toRustTarget stdenv.hostPlatform == "x86_64-pc-windows-gnu");
           }
           {
             name = "windows_x86_64_gnu";
             packageId = "windows_x86_64_gnu";
-            target = { target, features }: (stdenv.hostPlatform.config == "x86_64-uwp-windows-gnu");
+            target = { target, features }: (pkgs.rust.lib.toRustTarget stdenv.hostPlatform == "x86_64-uwp-windows-gnu");
           }
           {
             name = "windows_x86_64_gnullvm";
             packageId = "windows_x86_64_gnullvm";
-            target = { target, features }: (stdenv.hostPlatform.config == "x86_64-pc-windows-gnullvm");
+            target = { target, features }: (pkgs.rust.lib.toRustTarget stdenv.hostPlatform == "x86_64-pc-windows-gnullvm");
           }
           {
             name = "windows_x86_64_msvc";
             packageId = "windows_x86_64_msvc";
-            target = { target, features }: (stdenv.hostPlatform.config == "x86_64-pc-windows-msvc");
+            target = { target, features }: (pkgs.rust.lib.toRustTarget stdenv.hostPlatform == "x86_64-pc-windows-msvc");
           }
           {
             name = "windows_x86_64_msvc";
             packageId = "windows_x86_64_msvc";
-            target = { target, features }: (stdenv.hostPlatform.config == "x86_64-uwp-windows-msvc");
+            target = { target, features }: (pkgs.rust.lib.toRustTarget stdenv.hostPlatform == "x86_64-uwp-windows-msvc");
           }
         ];
         features = {
@@ -5660,26 +5715,25 @@ rec {
     /* Target (platform) data for conditional dependencies.
       This corresponds roughly to what buildRustCrate is setting.
     */
-    defaultTarget = {
-      unix = true;
-      windows = false;
+    makeDefaultTarget = platform: {
+      unix = platform.isUnix;
+      windows = platform.isWindows;
       fuchsia = true;
       test = false;
 
-      # This doesn't appear to be officially documented anywhere yet.
-      # See https://github.com/rust-lang-nursery/rust-forge/issues/101.
-      os =
-        if stdenv.hostPlatform.isDarwin
-        then "macos"
-        else stdenv.hostPlatform.parsed.kernel.name;
-      arch = stdenv.hostPlatform.parsed.cpu.name;
-      family = "unix";
+      /* We are choosing an arbitrary rust version to grab `lib` from,
+      which is unfortunate, but `lib` has been version-agnostic the
+      whole time so this is good enough for now.
+      */
+      os = pkgs.rust.lib.toTargetOs platform;
+      arch = pkgs.rust.lib.toTargetArch platform;
+      family = pkgs.rust.lib.toTargetFamily platform;
       env = "gnu";
       endian =
-        if stdenv.hostPlatform.parsed.cpu.significantByte.name == "littleEndian"
+        if platform.parsed.cpu.significantByte.name == "littleEndian"
         then "little" else "big";
-      pointer_width = toString stdenv.hostPlatform.parsed.cpu.bits;
-      vendor = stdenv.hostPlatform.parsed.vendor.name;
+      pointer_width = toString platform.parsed.cpu.bits;
+      vendor = platform.parsed.vendor.name;
       debug_assertions = false;
     };
 
@@ -5882,12 +5936,12 @@ rec {
       , crateConfigs ? crates
       , buildRustCrateForPkgsFunc
       , runTests
-      , target ? defaultTarget
+      , makeTarget ? makeDefaultTarget
       } @ args:
         assert (builtins.isAttrs crateConfigs);
         assert (builtins.isString packageId);
         assert (builtins.isList features);
-        assert (builtins.isAttrs target);
+        assert (builtins.isAttrs (makeTarget stdenv.hostPlatform));
         assert (builtins.isBool runTests);
         let
           rootPackageId = packageId;
@@ -5895,7 +5949,7 @@ rec {
             (
               args // {
                 inherit rootPackageId;
-                target = target // { test = runTests; };
+                target = makeTarget stdenv.hostPlatform // { test = runTests; };
               }
             );
           # Memoize built packages so that reappearing packages are only built once.
@@ -5904,6 +5958,7 @@ rec {
             let
               self = {
                 crates = lib.mapAttrs (packageId: value: buildByPackageIdForPkgsImpl self pkgs packageId) crateConfigs;
+                target = makeTarget pkgs.stdenv.hostPlatform;
                 build = mkBuiltByPackageIdByPkgs pkgs.buildPackages;
               };
             in
@@ -5920,7 +5975,8 @@ rec {
                   (crateConfig'.devDependencies or [ ]);
               dependencies =
                 dependencyDerivations {
-                  inherit features target;
+                  inherit features;
+                  inherit (self) target;
                   buildByPackageId = depPackageId:
                     # proc_macro crates must be compiled for the build architecture
                     if crateConfigs.${depPackageId}.procMacro or false
@@ -5932,24 +5988,26 @@ rec {
                 };
               buildDependencies =
                 dependencyDerivations {
-                  inherit features target;
+                  inherit features;
+                  inherit (self.build) target;
                   buildByPackageId = depPackageId:
                     self.build.crates.${depPackageId};
                   dependencies = crateConfig.buildDependencies or [ ];
                 };
-              filterEnabledDependenciesForThis = dependencies: filterEnabledDependencies {
-                inherit dependencies features target;
-              };
               dependenciesWithRenames =
-                lib.filter (d: d ? "rename")
-                  (
-                    filterEnabledDependenciesForThis
-                      (
-                        (crateConfig.buildDependencies or [ ])
-                        ++ (crateConfig.dependencies or [ ])
-                        ++ devDependencies
-                      )
-                  );
+                let
+                  buildDeps = filterEnabledDependencies {
+                    inherit features;
+                    inherit (self) target;
+                    dependencies = crateConfig.dependencies or [ ] ++ devDependencies;
+                  };
+                  hostDeps = filterEnabledDependencies {
+                    inherit features;
+                    inherit (self.build) target;
+                    dependencies = crateConfig.buildDependencies or [ ];
+                  };
+                in
+                lib.filter (d: d ? "rename") (hostDeps ++ buildDeps);
               # Crate renames have the form:
               #
               # {
@@ -6024,7 +6082,7 @@ rec {
       else val;
 
     /* Returns various tools to debug a crate. */
-    debugCrate = { packageId, target ? defaultTarget }:
+    debugCrate = { packageId, target ? makeDefaultTarget stdenv.hostPlatform }:
       assert (builtins.isString packageId);
       let
         debug = rec {
@@ -6200,15 +6258,14 @@ rec {
         dependencies;
 
     /* Returns whether the given feature should enable the given dependency. */
-    doesFeatureEnableDependency = { name, rename ? null, ... }: feature:
+    doesFeatureEnableDependency = dependency: feature:
       let
+        name = dependency.rename or dependency.name;
         prefix = "${name}/";
         len = builtins.stringLength prefix;
         startsWithPrefix = builtins.substring 0 len feature == prefix;
       in
-      (rename == null && feature == name)
-      || (rename != null && rename == feature)
-      || startsWithPrefix;
+      feature == name || feature == "dep:" + name || startsWithPrefix;
 
     /* Returns the expanded features for the given inputFeatures by applying the
       rules in featureMap.
@@ -6243,7 +6300,9 @@ rec {
               let
                 enabled = builtins.any (doesFeatureEnableDependency dependency) features;
               in
-              if (dependency.optional or false) && enabled then [ dependency.name ] else [ ]
+              if (dependency.optional or false) && enabled
+              then [ (dependency.rename or dependency.name) ]
+              else [ ]
           )
           dependencies;
       in

@@ -20,6 +20,7 @@
 members = [
   "eval",
   "eval/builtin-macros",
+  "nar",
   "nix_cli",
   "store",
 ]
