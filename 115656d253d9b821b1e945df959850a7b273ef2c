@@ -16,6 +16,24 @@
       "message": "The commit message says that this is a NAR writer, but when generating the docs and looking at the public API it looks more like a reader.\n\nAt least, I can\u0027t quite tell how I would e.g. construct a `Node` from scratch. Can you clarify?",
       "revId": "115656d253d9b821b1e945df959850a7b273ef2c",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6d621d05_c3347cba",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2022-12-20T10:36:36Z",
+      "side": 1,
+      "message": "I think you call `open()`, which gets you the root node, which you can then call symlink/file/directory on.\n\nBut I agree it\u0027s hard to grasp just by reading the code - some comments and a usage example / test would be good.",
+      "parentUuid": "5e0d9d6a_d0af8865",
+      "revId": "115656d253d9b821b1e945df959850a7b273ef2c",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
