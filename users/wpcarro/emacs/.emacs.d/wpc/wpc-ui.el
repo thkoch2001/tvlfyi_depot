@@ -136,8 +136,8 @@
   ;; example, Google Java projects prefer 100 character width instead of 80
   ;; character width.
   (setq whitespace-line-column 80)
-  (setq whitespace-style '(face lines-tail))
-  (add-hook 'prog-mode-hook #'whitespace-mode))
+  (setq whitespace-style '(face lines-tail tabs))
+  (global-whitespace-mode t))
 
 ;; dirname/filename instead of filename<dirname>
 (setq uniquify-buffer-name-style 'forward)
