@@ -52,6 +52,23 @@
       "parentUuid": "6d621d05_c3347cba",
       "revId": "115656d253d9b821b1e945df959850a7b273ef2c",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f01dfe52_fb1e6d7f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-12-20T15:47:40Z",
+      "side": 1,
+      "message": "Setting autosubmit with depot-interventions.",
+      "revId": "115656d253d9b821b1e945df959850a7b273ef2c",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
