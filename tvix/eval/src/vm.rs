@@ -267,8 +267,8 @@ impl<'o> VM<'o> {
     }
 
     /// Access the I/O handle used for filesystem access in this VM.
-    pub(crate) fn io(&self) -> &Box<dyn EvalIO> {
-        &self.io_handle
+    pub(crate) fn io(&self) -> &dyn EvalIO {
+        &*self.io_handle
     }
 
     /// Construct an error from the given ErrorKind and the source
@@ -377,7 +377,7 @@ impl<'o> VM<'o> {
                 // that of the tail-called closure.
                 let mut frame = self.frame_mut();
                 frame.lambda = lambda;
-                frame.upvalues = closure.upvalues().clone();
+                frame.upvalues = closure.upvalues();
                 frame.ip = CodeIdx(0); // reset instruction pointer to beginning
                 Ok(())
             }
@@ -437,7 +437,7 @@ impl<'o> VM<'o> {
             // error in order to implement `tryEval` correctly.
             if self.frame().ip.0 == self.chunk().code.len() {
                 let frame = self.frames.pop();
-                retramp = frame.map(|frame| frame.cont).flatten();
+                retramp = frame.and_then(|frame| frame.cont);
             }
             self.tramp_loop(res?, retramp)?;
             if self.frames.len() == starting_frames_depth {
@@ -483,7 +483,7 @@ impl<'o> VM<'o> {
             }
             match tramp.cont {
                 None => {
-                    let retramp_ = std::mem::replace(&mut retramp, None);
+                    let retramp_ = retramp.take();
                     if let Some(cont) = retramp_ {
                         tramp = cont(self)?;
                     } else {
@@ -575,10 +575,8 @@ impl<'o> VM<'o> {
                 (Value::List(_), _) => break false,
 
                 (Value::Attrs(a1), Value::Attrs(a2)) => {
-                    if allow_pointer_equality_on_functions_and_thunks {
-                        if Rc::ptr_eq(&a1, &a2) {
-                            continue;
-                        }
+                    if allow_pointer_equality_on_functions_and_thunks && Rc::ptr_eq(&a1, &a2) {
+                        continue;
                     }
                     allow_pointer_equality_on_functions_and_thunks = true;
                     match (a1.select("type"), a2.select("type")) {
@@ -699,7 +697,7 @@ impl<'o> VM<'o> {
                 match b {
                     Value::Integer(0) => return Err(self.error(ErrorKind::DivisionByZero)),
                     Value::Float(b) => {
-                        if *b == (0.0 as f64) {
+                        if *b == 0.0_f64 {
                             return Err(self.error(ErrorKind::DivisionByZero));
                         }
                         arithmetic_op!(self, /)
@@ -1001,7 +999,7 @@ impl<'o> VM<'o> {
                 let value = self.pop();
 
                 if let Value::Thunk(thunk) = value {
-                    self.push(Value::Thunk(thunk.clone()));
+                    self.push(Value::Thunk(thunk));
                     let tramp = fallible!(self, Thunk::force_tramp(self));
                     return Ok(tramp);
                 } else {
