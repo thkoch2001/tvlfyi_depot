@@ -24,12 +24,12 @@
 (require 'wpc-rust)
 (require 'wpc-clojure)
 (require 'wpc-prolog)
+(require 'wpc-dotnet)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Miscellaneous Configuration
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(use-package csharp-mode)
 (use-package terraform-mode)
 
 (provide 'wpc-language-support)
