@@ -18,6 +18,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "ecbcf6b2_b83b9658",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 12
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-12-21T22:21:16Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7242d8d0_6756b49d",
+      "revId": "6d85c5eefe0cdea877269692b00c63312d803b4d",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "ca2d3965_f7475da5",
@@ -31,6 +49,24 @@
       "writtenOn": "2022-12-21T13:36:37Z",
       "side": 1,
       "message": "our convention has historically been:\n```\nRefs: b/229\n```",
+      "revId": "6d85c5eefe0cdea877269692b00c63312d803b4d",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "073e4c1d_170fcaa3",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 12
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-12-21T22:21:16Z",
+      "side": 1,
+      "message": "Don\u0027t remember ever seeing that before, but I also don\u0027t care much, so done",
+      "parentUuid": "ca2d3965_f7475da5",
       "revId": "6d85c5eefe0cdea877269692b00c63312d803b4d",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
