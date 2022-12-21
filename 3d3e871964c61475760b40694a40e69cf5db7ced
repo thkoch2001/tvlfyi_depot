@@ -84,6 +84,24 @@
       "message": "@grfn, thoughts?",
       "revId": "3d3e871964c61475760b40694a40e69cf5db7ced",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6af6cf3a_3e1f7fd1",
+        "filename": "tvix/nar/src/lib.rs",
+        "patchSetId": 3
+      },
+      "lineNbr": 199,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2022-12-21T14:08:53Z",
+      "side": 1,
+      "message": "panic-in-drop is extremely fraught. See https://faultlore.com/blah/linear-rust/ for a longer explanation of the kind of thing you are reaching for here - but the tl;dr is that we kinda can\u0027t do it",
+      "parentUuid": "49af06c2_a20791bc",
+      "revId": "3d3e871964c61475760b40694a40e69cf5db7ced",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
