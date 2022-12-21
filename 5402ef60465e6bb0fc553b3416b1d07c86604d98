@@ -1,0 +1,96 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c301fbb8_defffa49",
+        "filename": "tvix/eval/src/value/function.rs",
+        "patchSetId": 19
+      },
+      "lineNbr": 73,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2022-12-21T13:22:28Z",
+      "side": 1,
+      "message": "what\u0027s going on here?",
+      "range": {
+        "startLine": 69,
+        "startChar": 4,
+        "endLine": 73,
+        "endChar": 6
+      },
+      "revId": "5402ef60465e6bb0fc553b3416b1d07c86604d98",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "74007725_203460e2",
+        "filename": "tvix/eval/src/value/function.rs",
+        "patchSetId": 19
+      },
+      "lineNbr": 91,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2022-12-21T13:22:28Z",
+      "side": 1,
+      "message": "?",
+      "range": {
+        "startLine": 88,
+        "startChar": 12,
+        "endLine": 91,
+        "endChar": 15
+      },
+      "revId": "5402ef60465e6bb0fc553b3416b1d07c86604d98",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ab144573_a535e0c3",
+        "filename": "tvix/eval/src/value/thunk.rs",
+        "patchSetId": 19
+      },
+      "lineNbr": 76,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2022-12-21T13:22:28Z",
+      "side": 1,
+      "message": "...",
+      "range": {
+        "startLine": 75,
+        "startChar": 16,
+        "endLine": 76,
+        "endChar": 38
+      },
+      "revId": "5402ef60465e6bb0fc553b3416b1d07c86604d98",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "572f2bf2_4ddab9ce",
+        "filename": "tvix/eval/src/value/thunk.rs",
+        "patchSetId": 19
+      },
+      "lineNbr": 135,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2022-12-21T13:22:28Z",
+      "side": 1,
+      "message": "...etc",
+      "range": {
+        "startLine": 127,
+        "startChar": 8,
+        "endLine": 135,
+        "endChar": 10
+      },
+      "revId": "5402ef60465e6bb0fc553b3416b1d07c86604d98",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
