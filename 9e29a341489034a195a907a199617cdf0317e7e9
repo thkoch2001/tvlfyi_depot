@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c666ae53_22ff6032",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 16
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2022-12-21T13:58:49Z",
+      "side": 1,
+      "message": "lmao https://github.com/NixOS/nix/issues/4082",
+      "revId": "9e29a341489034a195a907a199617cdf0317e7e9",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
