@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a3a36d61_214b5075",
+        "filename": "corp/tvixbolt/src/main.rs",
+        "patchSetId": 13
+      },
+      "lineNbr": 283,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2022-12-21T13:03:00Z",
+      "side": 1,
+      "message": "I have a *slight* preference for either setters or some kind of Builder API over directly setting fields like this - but I can\u0027t really back that up with anything other than a gut feeling",
+      "range": {
+        "startLine": 283,
+        "startChar": 8,
+        "endLine": 283,
+        "endChar": 32
+      },
+      "revId": "bb62ef3872089188e131fbdbb7b1851a28c67061",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
