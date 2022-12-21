@@ -1,0 +1,89 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "331cccd8_a232cd83",
+        "filename": "tvix/nar/src/lib.rs",
+        "patchSetId": 3
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2022-12-21T14:05:25Z",
+      "side": 1,
+      "message": "It\u0027s a tree of nodes, and directories have entries, which are nodes again.",
+      "revId": "3d3e871964c61475760b40694a40e69cf5db7ced",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4c6db0a1_b5c0e3a9",
+        "filename": "tvix/nar/src/lib.rs",
+        "patchSetId": 3
+      },
+      "lineNbr": 66,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2022-12-21T14:05:25Z",
+      "side": 1,
+      "message": "This is more like a \"make this Node a symlink\".",
+      "revId": "3d3e871964c61475760b40694a40e69cf5db7ced",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3a669f06_8ad652ee",
+        "filename": "tvix/nar/src/lib.rs",
+        "patchSetId": 3
+      },
+      "lineNbr": 87,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2022-12-21T14:05:25Z",
+      "side": 1,
+      "message": "This is more like a \"make this Node a single file\".",
+      "revId": "3d3e871964c61475760b40694a40e69cf5db7ced",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7cf3de19_a34f8f42",
+        "filename": "tvix/nar/src/lib.rs",
+        "patchSetId": 3
+      },
+      "lineNbr": 118,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2022-12-21T14:05:25Z",
+      "side": 1,
+      "message": "Same as above.",
+      "revId": "3d3e871964c61475760b40694a40e69cf5db7ced",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "49af06c2_a20791bc",
+        "filename": "tvix/nar/src/lib.rs",
+        "patchSetId": 3
+      },
+      "lineNbr": 199,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2022-12-21T14:05:25Z",
+      "side": 1,
+      "message": "@grfn, thoughts?",
+      "revId": "3d3e871964c61475760b40694a40e69cf5db7ced",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
