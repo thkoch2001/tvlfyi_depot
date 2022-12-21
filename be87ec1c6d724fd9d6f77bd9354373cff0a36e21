@@ -22,6 +22,30 @@
       },
       "revId": "be87ec1c6d724fd9d6f77bd9354373cff0a36e21",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "17ca85b6_c75d8cf3",
+        "filename": "nix/bufCheck/default.nix",
+        "patchSetId": 9
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2022-12-21T15:28:49Z",
+      "side": 1,
+      "message": "`buf generate` is a global thing, like `buf lint` is.\n\nIt\u0027ll emit .pb.go files alongside .proto files repo-wide, or in a subpath specified.\n\nThe only problem is that `buf generate` will fail if we load the go and go-grpc plugins, but there\u0027s no `go_package` option in a `.proto` file, which is why I opt in to the ones I want this code to be generated for.\n\nThe only two other .proto files are `tools/depot-scanner/depot_scanner.proto` and `nix/buildGo/example/thing.proto`. The former seems semi-unused (see comments on cl/7536), and the latter is removed by the same CL.\n\nOnce both of them are gone, we can drop the `--path` argument and make this a depot-wide thing, but explicitly allow-listing a certain path here unblocks this.",
+      "parentUuid": "c776041d_23a7c26a",
+      "range": {
+        "startLine": 10,
+        "startChar": 0,
+        "endLine": 10,
+        "endChar": 39
+      },
+      "revId": "be87ec1c6d724fd9d6f77bd9354373cff0a36e21",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
