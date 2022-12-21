@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9b9fa206_f5be0745",
+        "filename": "tvix/eval/src/value/mod.rs",
+        "patchSetId": 5
+      },
+      "lineNbr": 460,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2022-12-21T14:48:21Z",
+      "side": 1,
+      "message": "should we maybe have a different explanation for unforced thunks, rather than just panicking here?",
+      "range": {
+        "startLine": 460,
+        "startChar": 32,
+        "endLine": 460,
+        "endChar": 40
+      },
+      "revId": "e068e4795a0e8e234303fe6dcc59a583a19808f6",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
