@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a8e3b89d_b9b19a11",
+        "filename": "tvix/eval/src/value/thunk.rs",
+        "patchSetId": 20
+      },
+      "lineNbr": 151,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2022-12-21T14:33:17Z",
+      "side": 1,
+      "message": "this too",
+      "range": {
+        "startLine": 140,
+        "startChar": 4,
+        "endLine": 151,
+        "endChar": 19
+      },
+      "revId": "4c51b48a2da27359ac674071461888e6f58facf9",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
