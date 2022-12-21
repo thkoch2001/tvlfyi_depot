@@ -34,6 +34,24 @@
       "parentUuid": "877d2173_f11020fa",
       "revId": "79ece8313d468b99f949ad2f7b9015d09e8ed42b",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "04eadbdc_e32a0d1d",
+        "filename": "tvix/store/protos/rpc_pathinfo.proto",
+        "patchSetId": 12
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2022-12-21T15:06:46Z",
+      "side": 1,
+      "message": "I\u0027ll extended the comment to further clarify what\u0027s used here. We can rename the field or add other fields once we get to it.",
+      "parentUuid": "57251460_f24b272c",
+      "revId": "79ece8313d468b99f949ad2f7b9015d09e8ed42b",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
