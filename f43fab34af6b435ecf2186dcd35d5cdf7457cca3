@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8ce1ae6f_9748a67a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 11
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2022-12-21T20:08:05Z",
+      "side": 1,
+      "message": "neato",
+      "revId": "f43fab34af6b435ecf2186dcd35d5cdf7457cca3",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9dc2c6cb_4ef49942",
+        "filename": "tvix/cli/src/nix_compat.rs",
+        "patchSetId": 11
+      },
+      "lineNbr": 72,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2022-12-21T20:08:05Z",
+      "side": 1,
+      "message": "my gut is telling me we should be using `from_utf8` here and returning an error if we actually get some non-utf8 stuff from the command, rather than silently converting it to ascii. Could be convinced otherwise though",
+      "range": {
+        "startLine": 72,
+        "startChar": 29,
+        "endLine": 72,
+        "endChar": 35
+      },
+      "revId": "f43fab34af6b435ecf2186dcd35d5cdf7457cca3",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
