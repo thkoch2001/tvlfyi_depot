@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1b2e13cf_66113235",
+        "filename": "tvix/eval/src/io.rs",
+        "patchSetId": 10
+      },
+      "lineNbr": 95,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2022-12-21T13:57:24Z",
+      "side": 1,
+      "message": "we may want to use [camino](https://docs.rs/camino/latest/camino/) at some point to avoid this",
+      "range": {
+        "startLine": 95,
+        "startChar": 55,
+        "endLine": 95,
+        "endChar": 73
+      },
+      "revId": "1468a2154844f057922df5ee27febc1d39ea5a98",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
