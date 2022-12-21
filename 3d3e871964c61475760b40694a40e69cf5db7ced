@@ -18,6 +18,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "2efce194_4ffd8847",
+        "filename": "tvix/nar/src/lib.rs",
+        "patchSetId": 3
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-12-21T14:29:28Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "331cccd8_a232cd83",
+      "revId": "3d3e871964c61475760b40694a40e69cf5db7ced",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "4c6db0a1_b5c0e3a9",
@@ -31,6 +49,24 @@
       "writtenOn": "2022-12-21T14:05:25Z",
       "side": 1,
       "message": "This is more like a \"make this Node a symlink\".",
+      "revId": "3d3e871964c61475760b40694a40e69cf5db7ced",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d3366c5f_ea68dfee",
+        "filename": "tvix/nar/src/lib.rs",
+        "patchSetId": 3
+      },
+      "lineNbr": 66,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-12-21T14:29:28Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4c6db0a1_b5c0e3a9",
       "revId": "3d3e871964c61475760b40694a40e69cf5db7ced",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
@@ -52,6 +88,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "09be3cbc_9acf101c",
+        "filename": "tvix/nar/src/lib.rs",
+        "patchSetId": 3
+      },
+      "lineNbr": 87,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-12-21T14:29:28Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3a669f06_8ad652ee",
+      "revId": "3d3e871964c61475760b40694a40e69cf5db7ced",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "7cf3de19_a34f8f42",
@@ -65,6 +119,24 @@
       "writtenOn": "2022-12-21T14:05:25Z",
       "side": 1,
       "message": "Same as above.",
+      "revId": "3d3e871964c61475760b40694a40e69cf5db7ced",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "870d7280_bffff68c",
+        "filename": "tvix/nar/src/lib.rs",
+        "patchSetId": 3
+      },
+      "lineNbr": 118,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-12-21T14:29:28Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7cf3de19_a34f8f42",
       "revId": "3d3e871964c61475760b40694a40e69cf5db7ced",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
@@ -100,6 +172,24 @@
       "side": 1,
       "message": "panic-in-drop is extremely fraught. See https://faultlore.com/blah/linear-rust/ for a longer explanation of the kind of thing you are reaching for here - but the tl;dr is that we kinda can\u0027t do it",
       "parentUuid": "49af06c2_a20791bc",
+      "revId": "3d3e871964c61475760b40694a40e69cf5db7ced",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "effae503_eaea258c",
+        "filename": "tvix/nar/src/lib.rs",
+        "patchSetId": 3
+      },
+      "lineNbr": 199,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-12-21T14:29:28Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "6af6cf3a_3e1f7fd1",
       "revId": "3d3e871964c61475760b40694a40e69cf5db7ced",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
