@@ -34,6 +34,29 @@
       "parentUuid": "e9af9083_3a3d089b",
       "revId": "3776bbefc96196deec318a78f0be286f8ee73307",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "10fa076d_05329d81",
+        "filename": "tvix/Cargo.lock",
+        "patchSetId": 15
+      },
+      "lineNbr": 1807,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-12-22T07:27:16Z",
+      "side": 1,
+      "message": "goodbye, reasonable compile times\n\n(to the tune of \"goodbye moonmen\")",
+      "range": {
+        "startLine": 1807,
+        "startChar": 8,
+        "endLine": 1807,
+        "endChar": 13
+      },
+      "revId": "3776bbefc96196deec318a78f0be286f8ee73307",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
