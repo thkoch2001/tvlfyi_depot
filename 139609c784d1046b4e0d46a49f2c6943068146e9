@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2daa9d3c_9fc1e2dd",
+        "filename": "tvix/store/docs/api.md",
+        "patchSetId": 3
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2022-12-22T12:47:34Z",
+      "side": 1,
+      "message": "s/or for IFD/or for any other forms of IDF)",
+      "revId": "139609c784d1046b4e0d46a49f2c6943068146e9",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0390e3d6_f7bc1ba3",
+        "filename": "tvix/store/docs/api.md",
+        "patchSetId": 3
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2022-12-22T12:47:34Z",
+      "side": 1,
+      "message": "I\u0027d assume the builder, or something triggering the builder takes care of uploading builds to a store, but definitely not the evaluator.\n\nEspecially in a remote builder use case, the Tvix CLI doesn\u0027t want to collect all intermediate build outputs.\n\nWe don\u0027t need to go that far - I\u0027d probably simply split \"1.\" to Evaluator usecases and builder usecases. The first two bullet items being the former, and the last bullet item the latter. And mention we can reuse the same code for the two types of uploading.",
+      "revId": "139609c784d1046b4e0d46a49f2c6943068146e9",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7a29e8ed_00681de2",
+        "filename": "tvix/store/docs/api.md",
+        "patchSetId": 3
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2022-12-22T12:47:34Z",
+      "side": 1,
+      "message": "s/a store/a blob store/.\n\nWe likely don\u0027t end up using a BlobStore to act as a backing store for Directory messages, even though they are both addressed by their blake3 hash.\n\nThe three different types of store (Directory*, Blob*, PathInfo*) are already documented in cl/7439, I\u0027d prefer linking to there instead of repeating this again, and maybe moving some of the \"How things tie together\" parts to that README.",
+      "revId": "139609c784d1046b4e0d46a49f2c6943068146e9",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6dc9859e_d695563a",
+        "filename": "tvix/store/docs/api.md",
+        "patchSetId": 3
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2022-12-22T12:47:34Z",
+      "side": 1,
+      "message": "The PathInfo objects are not stored by their blake3 hash, and the PathInfo service only allows a lookup by the (nixbase32-decoded) hash part in `/nix/store/xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx-somename`.\n\nAs explained in the README there, the PathInfo information is the (only) not content-addressed part, providing \"mounts\"/\"pointers\" into the content-addressed world provided by DirectoryService and BlobService.",
+      "revId": "139609c784d1046b4e0d46a49f2c6943068146e9",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
