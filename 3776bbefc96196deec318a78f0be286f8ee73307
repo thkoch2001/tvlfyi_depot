@@ -38,6 +38,24 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "47e193a3_9ded8193",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 15
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2022-12-22T12:25:41Z",
+      "side": 1,
+      "message": "I updated the commit message, PTAL.",
+      "parentUuid": "d544dc08_d63acede",
+      "revId": "3776bbefc96196deec318a78f0be286f8ee73307",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "10fa076d_05329d81",
         "filename": "tvix/Cargo.lock",
         "patchSetId": 15
