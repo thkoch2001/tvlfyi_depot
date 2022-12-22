@@ -16,6 +16,24 @@
       "message": "very hard to imagine how this would be used or evaluate its correctness without it being integrated into a larger system. I\u0027m also concerned about gRPC generally",
       "revId": "46614c630f36110ee0e52936679abba740b97d09",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7f9181e5_d93992dd",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 23
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-12-22T07:23:03Z",
+      "side": 1,
+      "message": "I started writing a higher-level document at cl/7585 to explain why these APIs look like they do, at least my understanding based on conversations with flokli. I agree that reading the protos does not explain it, so IMO that document should be fairly high priority to get done as I\u0027m lacking things in there that are still in flokli\u0027s/edef\u0027s heads :) \n\nAlso concerned about gRPC, not necessarily about the proto definitions themselves but about the overhead (in complexity) of the implementations.\n\nWe do have to start somewhere and again, this is a do-ocracy, so someone would have to sketch out what the alternative looks like.",
+      "parentUuid": "d9341e7d_0c008bd8",
+      "revId": "46614c630f36110ee0e52936679abba740b97d09",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
