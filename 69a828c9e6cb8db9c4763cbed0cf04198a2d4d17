@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4898dd37_b11db1b7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2022-12-22T21:37:26Z",
+      "side": 1,
+      "message": "@tazjin: this has been absorbed into cl/7439, can you abandon?",
+      "revId": "69a828c9e6cb8db9c4763cbed0cf04198a2d4d17",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
