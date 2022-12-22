@@ -52,6 +52,24 @@
       "parentUuid": "7f9181e5_d93992dd",
       "revId": "46614c630f36110ee0e52936679abba740b97d09",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "17bc4278_ea26cf84",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 23
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2022-12-22T12:28:51Z",
+      "side": 1,
+      "message": "I absorbed the two CLs into this chain, so it won\u0027t get lost.",
+      "parentUuid": "b31960a1_f81a1ce1",
+      "revId": "46614c630f36110ee0e52936679abba740b97d09",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
