@@ -18,6 +18,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "80bd9678_5a44c01e",
+        "filename": "tvix/store/README.md",
+        "patchSetId": 19
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2022-12-23T16:41:12Z",
+      "side": 1,
+      "message": "Moved.",
+      "parentUuid": "11191e29_24bde080",
+      "revId": "5c2f69612881e4962a9bf60b204dfba3dffce329",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "b9b5d431_a9e64947",
@@ -31,6 +49,24 @@
       "writtenOn": "2022-12-23T14:19:39Z",
       "side": 1,
       "message": "This can be dropped, it\u0027s already covered in more detail in api.md.",
+      "revId": "5c2f69612881e4962a9bf60b204dfba3dffce329",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "68be4aa0_691d9e19",
+        "filename": "tvix/store/README.md",
+        "patchSetId": 19
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2022-12-23T16:41:12Z",
+      "side": 1,
+      "message": "Dropped.",
+      "parentUuid": "b9b5d431_a9e64947",
       "revId": "5c2f69612881e4962a9bf60b204dfba3dffce329",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
@@ -70,6 +106,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "da0bcf98_2f5c0cb2",
+        "filename": "tvix/store/docs/api.md",
+        "patchSetId": 19
+      },
+      "lineNbr": 174,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2022-12-23T16:41:12Z",
+      "side": 1,
+      "message": "I updated this paragraph, PTAL.",
+      "parentUuid": "bf97c72b_b2299450",
+      "revId": "5c2f69612881e4962a9bf60b204dfba3dffce329",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "4fd07545_db9a214e",
@@ -105,6 +159,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "f39ef10e_d0f185ef",
+        "filename": "tvix/store/docs/api.md",
+        "patchSetId": 19
+      },
+      "lineNbr": 201,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2022-12-23T16:41:12Z",
+      "side": 1,
+      "message": "Whitespace dropped.",
+      "parentUuid": "ed3b5704_dd563d3d",
+      "revId": "5c2f69612881e4962a9bf60b204dfba3dffce329",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "829b564d_860ee559",
@@ -136,6 +208,24 @@
       "side": 1,
       "message": "Ack. I think i missed this here, will add.",
       "parentUuid": "829b564d_860ee559",
+      "revId": "5c2f69612881e4962a9bf60b204dfba3dffce329",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "51d0ff60_c6893764",
+        "filename": "tvix/store/docs/castore.md",
+        "patchSetId": 19
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2022-12-23T16:41:12Z",
+      "side": 1,
+      "message": "Resolved.",
+      "parentUuid": "d27f41b5_f7171418",
       "revId": "5c2f69612881e4962a9bf60b204dfba3dffce329",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
