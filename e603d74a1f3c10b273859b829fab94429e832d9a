@@ -16,6 +16,24 @@
       "message": "MUST be*",
       "revId": "e603d74a1f3c10b273859b829fab94429e832d9a",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d9a1fcbd_65e9296a",
+        "filename": "tvix/store/protos/castore.proto",
+        "patchSetId": 21
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2022-12-23T18:19:58Z",
+      "side": 1,
+      "message": "Fixed.",
+      "parentUuid": "b1f45abe_6d2ace46",
+      "revId": "e603d74a1f3c10b273859b829fab94429e832d9a",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
