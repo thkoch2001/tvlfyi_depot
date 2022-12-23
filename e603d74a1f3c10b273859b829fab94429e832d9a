@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b1f45abe_6d2ace46",
+        "filename": "tvix/store/protos/castore.proto",
+        "patchSetId": 21
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1000005
+      },
+      "writtenOn": "2022-12-23T17:20:35Z",
+      "side": 1,
+      "message": "MUST be*",
+      "revId": "e603d74a1f3c10b273859b829fab94429e832d9a",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
