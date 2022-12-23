@@ -1,4 +1,5 @@
 IsAsciiNum ⇐ ('0'⊸≤∧≤⟜'9')
+IsAlpha ⇐ (('a'⊸≤∧≤⟜'z')∨('A'⊸≤∧≤⟜'Z'))
 
 # based on leah2's function
 ReadInt ⇐ {
