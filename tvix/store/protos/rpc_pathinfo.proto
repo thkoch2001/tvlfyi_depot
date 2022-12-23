@@ -39,6 +39,13 @@ message GetPathInfoRequest {
       // this field would contain nixbase32dec("xm35nga2g20mz5sm5l6n8v3bdm86yj83").
       bytes by_output_hash = 1;
 
+      // The root node of a content-addressed store path.
+      // Strictly speaking, this does insert a PathInfo into the store.
+      // This can be used to trigger the NAR hashing on the store side,
+      // and returns a PathInfo with the root_node.Name field populated
+      // based on the hash of the NAR representation.
+      Node by_root_node = 2;
+
       // placeholder: by_drv and output name?
     }
 }
