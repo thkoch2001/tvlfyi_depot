@@ -33,6 +33,57 @@
       "message": "This can be dropped, it\u0027s already covered in more detail in api.md.",
       "revId": "5c2f69612881e4962a9bf60b204dfba3dffce329",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b97fa6c9_369d1963",
+        "filename": "tvix/store/docs/api.md",
+        "patchSetId": 19
+      },
+      "lineNbr": 174,
+      "author": {
+        "id": 1000005
+      },
+      "writtenOn": "2022-12-23T14:32:31Z",
+      "side": 1,
+      "message": "Lexicographic ordering has no bearing on upload order/parallelism. Do we mean dependency ordering here?",
+      "revId": "5c2f69612881e4962a9bf60b204dfba3dffce329",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4fd07545_db9a214e",
+        "filename": "tvix/store/docs/api.md",
+        "patchSetId": 19
+      },
+      "lineNbr": 201,
+      "author": {
+        "id": 1000005
+      },
+      "writtenOn": "2022-12-23T14:32:31Z",
+      "side": 1,
+      "message": "nit: Trailing whitespace. Do we have a linter for this / should we?",
+      "revId": "5c2f69612881e4962a9bf60b204dfba3dffce329",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "829b564d_860ee559",
+        "filename": "tvix/store/docs/castore.md",
+        "patchSetId": 19
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1000005
+      },
+      "writtenOn": "2022-12-23T14:32:31Z",
+      "side": 1,
+      "message": "We should maybe explicitly spec that `name` fields MUST be unique across all three lists, and what names are permissible.",
+      "revId": "5c2f69612881e4962a9bf60b204dfba3dffce329",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
