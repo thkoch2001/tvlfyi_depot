@@ -4,7 +4,6 @@
 (package-initialize)
 
 ;; Set default font and fallback font via set-fontset-font
-;; TODO(sterni): Investigate why ZWJ sequences aren't shaped properly
 (let ((mono-font "Bitstream Vera Sans Mono-12")
       (emoji-font "Noto Color Emoji-12"))
   (setq default-frame-alist `((font . ,mono-font)))
@@ -251,6 +250,8 @@
   :config (editorconfig-mode 1))
 
 (use-package haskell-mode)
+(use-package flycheck
+  :init (global-flycheck-mode))
 (use-package lsp-mode
   :hook ((haskell-mode . lsp-deferred))
   :commands (lsp lsp-deferred)
@@ -273,6 +274,7 @@
   (set-face-background 'lsp-ui-doc-background "WhiteSmoke")
   (set-face-foreground 'lsp-ui-sideline-code-action "SaddleBrown")
   (setq lsp-ui-sideline-code-actions-prefix "🔨 "
+        lsp-ui-sideline-show-diagnostics nil
         lsp-ui-sideline-show-code-actions t) ; is :custom, but won't take effect?
   (evil-define-key 'normal lsp-ui-mode-map
     ;; TODO(sterni): emulate using xref for non-lsp?
