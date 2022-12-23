@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "11191e29_24bde080",
+        "filename": "tvix/store/README.md",
+        "patchSetId": 19
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2022-12-23T14:19:39Z",
+      "side": 1,
+      "message": "I should probably move this to nar-bridge README, and only mention the name at the end of L14.",
+      "revId": "5c2f69612881e4962a9bf60b204dfba3dffce329",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b9b5d431_a9e64947",
+        "filename": "tvix/store/README.md",
+        "patchSetId": 19
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2022-12-23T14:19:39Z",
+      "side": 1,
+      "message": "This can be dropped, it\u0027s already covered in more detail in api.md.",
+      "revId": "5c2f69612881e4962a9bf60b204dfba3dffce329",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
