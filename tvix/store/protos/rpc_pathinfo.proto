@@ -46,6 +46,11 @@ message GetPathInfoRequest {
       // based on the hash of the NAR representation.
       Node by_root_node = 2;
 
+      // The sha256 of the NAR representation.
+      // This relies on a previous request to by_root_node, or a Put(), to ensure a
+      // PathInfo object with that sha256 is to be found.
+      bytes by_nar_sha256 = 3;
+
       // placeholder: by_drv and output name?
     }
 }
