@@ -18,6 +18,7 @@ let
     epkgs.melpaPackages.elfeed
     epkgs.melpaPackages.evil
     epkgs.melpaPackages.evil-collection
+    epkgs.melpaPackages.flycheck
     epkgs.melpaPackages.haskell-mode
     epkgs.melpaPackages.hl-todo
     epkgs.melpaPackages.jq-mode
