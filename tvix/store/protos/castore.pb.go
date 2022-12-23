@@ -27,8 +27,9 @@ const (
 // Each of these nodes have a name attribute, which is the basename in that directory
 // and node type specific attributes.
 // The name attribute:
-//   - may not contain slashes or null bytes
-//   - needs to be unique across all three lists
+//   - MUST not contain slashes or null bytes
+//   - MUST not be '.' or '..'
+//   - MUST to be unique across all three lists
 //
 // Elements in each list need to be lexicographically ordered by the name
 // attribute.
