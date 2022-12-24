@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "91661d27_1e6ba85f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000073
+      },
+      "writtenOn": "2022-12-24T23:27:09Z",
+      "side": 1,
+      "message": "I feel like there\u0027s some impedence mismatch between the front facing Value we would like to deserialize from user inputs and internal Value we may want to *serialize/deserialize* for any evaluation-related reasons.\n\nI have let some comments where I have my doubts.",
+      "revId": "6fee6083b77961eb5c86fe5f27f9fa5c35be43bc",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}

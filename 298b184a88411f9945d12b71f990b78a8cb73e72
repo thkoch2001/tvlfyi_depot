@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9be22e7f_6f5f09b0",
+        "filename": "tvix/eval/src/value/attrs.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 166,
+      "author": {
+        "id": 1000073
+      },
+      "writtenOn": "2022-12-24T23:27:09Z",
+      "side": 1,
+      "message": "Here, I am not sure how we should lift the ErrorKind into a proper A::Error, an easy way would be to fork to `serde::de::Error::custom`, but that requires a `impl Display` thing, which `ErrorKind` do not provide, and `Error` require a span, which I don\u0027t have at hand.",
+      "revId": "298b184a88411f9945d12b71f990b78a8cb73e72",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3a99e1fd_a08b6695",
+        "filename": "tvix/eval/src/value/mod.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1000073
+      },
+      "writtenOn": "2022-12-24T23:27:09Z",
+      "side": 1,
+      "message": "I\u0027d like to introduce unit testing with `serde_test`, unsure if it\u0027s a good idea though.",
+      "revId": "298b184a88411f9945d12b71f990b78a8cb73e72",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2f1a319f_ecd6b2c7",
+        "filename": "tvix/eval/src/value/mod.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 1000073
+      },
+      "writtenOn": "2022-12-24T23:27:09Z",
+      "side": 1,
+      "message": "Those are ugly, but I\u0027m not sure if we have a better way to manage this.",
+      "revId": "298b184a88411f9945d12b71f990b78a8cb73e72",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
