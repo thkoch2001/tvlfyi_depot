@@ -87,6 +87,13 @@ resource "glesys_dnsdomain_record" "tvl_su_corp_whitby_services" {
   ])
 }
 
+resource "glesys_dnsdomain_record" "tvl_su_inbox_CNAME" {
+  domain = glesys_dnsdomain.tvl_su.id
+  type   = "CNAME"
+  data   = "sanduny.tvl.su."
+  host   = "inbox.tvl.su."
+}
+
 resource "glesys_dnsdomain_record" "tvl_su_TXT_google_site" {
   domain = glesys_dnsdomain.tvl_su.id
   host   = "@"
