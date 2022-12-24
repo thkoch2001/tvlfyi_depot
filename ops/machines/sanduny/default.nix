@@ -15,11 +15,13 @@ in
 {
   imports = [
     (mod "cgit.nix")
+    (mod "depot-inbox.nix")
     (mod "depot-replica.nix")
     (mod "journaldriver.nix")
     (mod "known-hosts.nix")
     (mod "tvl-cache.nix")
     (mod "tvl-users.nix")
+    (mod "www/inbox.tvl.su.nix")
     (mod "www/self-redirect.nix")
   ];
 
@@ -86,6 +88,9 @@ in
     enable = true;
     repo = "/var/lib/depot";
   };
+
+  # Serve public-inbox ...
+  services.depot.inbox.enable = true;
 
   time.timeZone = "UTC";
 
