@@ -2,6 +2,8 @@
 use std::ops::Deref;
 use std::rc::Rc;
 
+use serde::Deserialize;
+
 use crate::errors::ErrorKind;
 use crate::vm::VM;
 
@@ -10,7 +12,7 @@ use super::TotalDisplay;
 use super::Value;
 
 #[repr(transparent)]
-#[derive(Clone, Debug)]
+#[derive(Clone, Debug, Deserialize)]
 pub struct NixList(Rc<Vec<Value>>);
 
 impl TotalDisplay for NixList {
