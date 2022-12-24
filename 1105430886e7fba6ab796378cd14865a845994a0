@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f8443f73_6549ee32",
+        "filename": "tvix/eval/Cargo.toml",
+        "patchSetId": 2
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-12-24T23:01:11Z",
+      "side": 1,
+      "message": "you\u0027ll need to run `crate2nix generate` in `//tvix`, followed by `depotfmt`.\n\nBoth of these commands are available in your $PATH if you use our direnv config.",
+      "range": {
+        "startLine": 21,
+        "startChar": 0,
+        "endLine": 21,
+        "endChar": 48
+      },
+      "revId": "1105430886e7fba6ab796378cd14865a845994a0",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
