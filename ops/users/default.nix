@@ -204,4 +204,9 @@
     email = "martonboros@gmail.com";
     password = "{ARGON2}$argon2id$v=19$m=65536,t=2,p=1$f4/ewdyRBQbClL4KzqypHg$6Ql/xkmfIr60Qp1XMaFherqhh4cekLIbsi7KMM6izfE";
   }
+  {
+    username = "raitobezarius";
+    email = "tvl@lahfa.xyz";
+    password = "{ARGON2}$argon2id$v=19$m=65536,t=2,p=1$3NZTBbF5dZssAHC/ktcA/Q$AZxHGG0ycNMOkIxC/ONYbyhNxC9hb6cpWvnsNH8LWZk";
+  }
 ]
