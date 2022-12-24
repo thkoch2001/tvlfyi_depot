@@ -3665,7 +3665,7 @@ rec {
           "derive" = [ "serde_derive" ];
           "serde_derive" = [ "dep:serde_derive" ];
         };
-        resolvedDefaultFeatures = [ "alloc" "default" "derive" "serde_derive" "std" ];
+        resolvedDefaultFeatures = [ "alloc" "default" "derive" "rc" "serde_derive" "std" ];
       };
       "serde_derive" = rec {
         crateName = "serde_derive";
@@ -4295,6 +4295,7 @@ rec {
           {
             name = "serde";
             packageId = "serde";
+            features = [ "rc" "derive" ];
           }
           {
             name = "serde_json";
