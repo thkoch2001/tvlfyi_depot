@@ -103,6 +103,7 @@ in
 
       settings.publicinbox.wwwlisting = "all";
       settings.publicinbox.nntpserver = [ "inbox.tvl.su" ];
+      settings.publicinbox.imapserver = "inbox.tvl.su";
     };
 
     networking.firewall.allowedTCPPorts = [
