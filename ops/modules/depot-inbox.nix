@@ -64,11 +64,17 @@ in
 
       http.enable = true;
       http.port = 8053;
-      # nntp.enable = true;
 
       imap = {
         enable = true;
         port = 993;
+        cert = "/var/lib/public-inbox/tls/fullchain.pem";
+        key = "/var/lib/public-inbox/tls/key.pem";
+      };
+
+      nntp = {
+        enable = true;
+        port = 563;
         cert = "/var/lib/public-inbox/tls/fullchain.pem";
         key = "/var/lib/public-inbox/tls/key.pem";
       };
@@ -96,7 +102,10 @@ in
       settings.publicinbox.wwwlisting = "all";
     };
 
-    networking.firewall.allowedTCPPorts = [ /* imap = */ 993 ];
+    networking.firewall.allowedTCPPorts = [
+      993 # imap
+      563 # nntp
+    ];
 
     age.secrets.depot-inbox-imap = {
       file = depot.ops.secrets."depot-inbox-imap.age";
