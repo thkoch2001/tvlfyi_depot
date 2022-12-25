@@ -101,9 +101,17 @@ in
         cgitUrl = "https://code.tvl.fyi";
       };
 
-      settings.publicinbox.wwwlisting = "all";
-      settings.publicinbox.nntpserver = [ "inbox.tvl.su" ];
-      settings.publicinbox.imapserver = "inbox.tvl.su";
+      settings.publicinbox = {
+        wwwlisting = "all";
+        nntpserver = [ "inbox.tvl.su" ];
+        imapserver = "inbox.tvl.su";
+
+        depot.obfuscate = true;
+        noObfuscate = [
+          "tvl.su"
+          "tvl.fyi"
+        ];
+      };
     };
 
     networking.firewall.allowedTCPPorts = [
