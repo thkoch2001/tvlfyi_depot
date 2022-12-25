@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a57f0197_5f4dba09",
+        "filename": "users/tazjin/blog/posts/nix-config-generators.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 3,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2022-12-25T16:12:14Z",
+      "side": 1,
+      "message": "\u003e Inventing a DSL for generating a program’s config file is one of the hallowed …",
+      "revId": "41d9e3c6bc0a548ac01e6baf77764021136fc9de",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
