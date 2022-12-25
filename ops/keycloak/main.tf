@@ -37,7 +37,7 @@ resource "keycloak_realm" "tvl" {
     from_display_name = "The Virus Lounge"
     host              = "127.0.0.1"
     port              = "25"
-    reply_to          = "depot@tazj.in"
+    reply_to          = "depot@tvl.su"
     ssl               = false
     starttls          = false
   }
