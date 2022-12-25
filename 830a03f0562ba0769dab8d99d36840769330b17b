@@ -24,6 +24,30 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "eb8b5f8b_b9827152",
+        "filename": "tvix/store/docs/api.md",
+        "patchSetId": 22
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2022-12-25T15:10:56Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "afc482b8_2809f190",
+      "range": {
+        "startLine": 7,
+        "startChar": 18,
+        "endLine": 7,
+        "endChar": 23
+      },
+      "revId": "830a03f0562ba0769dab8d99d36840769330b17b",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "37e8a22c_9bd9a1a4",
@@ -47,6 +71,30 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "3f9def7a_6b647192",
+        "filename": "tvix/store/docs/api.md",
+        "patchSetId": 22
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2022-12-25T15:10:56Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "37e8a22c_9bd9a1a4",
+      "range": {
+        "startLine": 27,
+        "startChar": 0,
+        "endLine": 27,
+        "endChar": 1
+      },
+      "revId": "830a03f0562ba0769dab8d99d36840769330b17b",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "8649ef0a_43c88b36",
@@ -60,6 +108,30 @@
       "writtenOn": "2022-12-25T10:58:13Z",
       "side": 1,
       "message": "isn\u0027t it also used to store e.g. hashed directory messages? or are there two blob stores?\n\nif not, this should probably read something like \"Stores an object based on its hash. These objects could be regular files, or directory messages (described below).\"",
+      "range": {
+        "startLine": 47,
+        "startChar": 14,
+        "endLine": 47,
+        "endChar": 49
+      },
+      "revId": "830a03f0562ba0769dab8d99d36840769330b17b",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b81e9431_b5ca2122",
+        "filename": "tvix/store/docs/api.md",
+        "patchSetId": 22
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2022-12-25T15:10:56Z",
+      "side": 1,
+      "message": "There\u0027s nothing requiring implementors of DirectoryStore to use a BlobStore as an underlying storage (and I didn\u0027t intend to either).\nEspecially, there\u0027s no guarantees that on asking your BlobStore for the hash of a Directory proto message you get it back - you should be using DirectoryService.Get() for that.\n\n\nBlobStore has some more stuff regarding chunking, which doesn\u0027t make too much sense for (small) Directory objects either. The best is to consider these two separate things, and contents of regular (or executable) files is what gets put into the BlobStore.",
+      "parentUuid": "8649ef0a_43c88b36",
       "range": {
         "startLine": 47,
         "startChar": 14,
