@@ -100,6 +100,7 @@ in
       };
 
       settings.publicinbox.wwwlisting = "all";
+      settings.publicinbox.imapserver = "inbox.tvl.su";
     };
 
     networking.firewall.allowedTCPPorts = [ /* imap = */ 993 ];
