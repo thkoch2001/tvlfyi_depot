@@ -58,6 +58,10 @@ in
         description = "TVL depot development";
         coderepo = [ "depot" ];
         url = "https://inbox.tvl.su/depot";
+
+        watch = [
+          "maildir:/var/lib/public-inbox/depot-imap/INBOX/"
+        ];
       };
 
       settings.coderepo.depot = {
