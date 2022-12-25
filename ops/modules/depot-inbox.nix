@@ -41,13 +41,37 @@ in
   };
 
   config = lib.mkIf cfg.enable {
+    # Having nginx *and* other services use ACME certificates for the
+    # same hostname is unsupported in NixOS without resorting to doing
+    # all ACME configuration manually.
+    #
+    # To work around this, we duplicate the TLS certificate used by
+    # nginx to a location that is readable by public-inbox daemons.
+    systemd.services.inbox-cert-sync = {
+      startAt = "daily";
+
+      script = ''
+        ${pkgs.coreutils}/bin/install -D -g ${config.users.groups."public-inbox".name} -m 0440 \
+          /var/lib/acme/inbox.tvl.su/fullchain.pem /var/lib/public-inbox/tls/fullchain.pem
+
+        ${pkgs.coreutils}/bin/install -D -g ${config.users.groups."public-inbox".name} -m 0440 \
+          /var/lib/acme/inbox.tvl.su/key.pem /var/lib/public-inbox/tls/key.pem
+      '';
+    };
+
     services.public-inbox = {
       enable = true;
 
       http.enable = true;
       http.port = 8053;
-      # imap.enable = true;
       # nntp.enable = true;
+
+      imap = {
+        enable = true;
+        port = 993;
+        cert = "/var/lib/public-inbox/tls/fullchain.pem";
+        key = "/var/lib/public-inbox/tls/key.pem";
+      };
 
       inboxes.depot = rec {
         address = [
@@ -69,6 +93,8 @@ in
         cgitUrl = "https://code.tvl.fyi";
       };
     };
+
+    networking.firewall.allowedTCPPorts = [ /* imap = */ 993 ];
 
     age.secrets.depot-inbox-imap = {
       file = depot.ops.secrets."depot-inbox-imap.age";
