@@ -20,6 +20,7 @@ let
 
   whitbyDefault.publicKeys = tazjin ++ grfn ++ sterni ++ [ whitby ];
   allDefault.publicKeys = tazjin ++ grfn ++ sterni ++ [ sanduny whitby ];
+  sandunyDefault.publicKeys = tazjin ++ grfn ++ sterni ++ [ sanduny ];
 in
 {
   "besadii.age" = whitbyDefault;
@@ -28,6 +29,7 @@ in
   "buildkite-ssh-private-key.age" = whitbyDefault;
   "clbot-ssh.age" = whitbyDefault;
   "clbot.age" = whitbyDefault;
+  "depot-inbox-imap.age" = sandunyDefault;
   "depot-replica-key.age" = whitbyDefault;
   "gerrit-queue.age" = whitbyDefault;
   "gerrit-secrets.age" = whitbyDefault;
