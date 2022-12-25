@@ -64,11 +64,17 @@ in
 
       http.enable = true;
       http.port = 8053;
-      # nntp.enable = true;
 
       imap = {
         enable = true;
         port = 993;
+        cert = "/var/lib/public-inbox/tls/fullchain.pem";
+        key = "/var/lib/public-inbox/tls/key.pem";
+      };
+
+      nntp = {
+        enable = true;
+        port = 563;
         cert = "/var/lib/public-inbox/tls/fullchain.pem";
         key = "/var/lib/public-inbox/tls/key.pem";
       };
@@ -86,6 +92,8 @@ in
         watch = [
           "maildir:/var/lib/public-inbox/depot-imap/INBOX/"
         ];
+
+        newsgroup = "su.tvl.depot";
       };
 
       settings.coderepo.depot = {
@@ -94,9 +102,13 @@ in
       };
 
       settings.publicinbox.wwwlisting = "all";
+      settings.publicinbox.nntpserver = [ "inbox.tvl.su" ];
     };
 
-    networking.firewall.allowedTCPPorts = [ /* imap = */ 993 ];
+    networking.firewall.allowedTCPPorts = [
+      993 # imap
+      563 # nntp
+    ];
 
     age.secrets.depot-inbox-imap = {
       file = depot.ops.secrets."depot-inbox-imap.age";
