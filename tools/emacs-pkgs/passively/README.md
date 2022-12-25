@@ -68,7 +68,7 @@ can clone passively like this:
 
 Passively depends on `ht.el`.
 
-Feel free to contribute patches by emailing them to `depot@tazj.in`
+Feel free to contribute patches by emailing them to `depot@tvl.su`.
 
 ## Use-cases
 

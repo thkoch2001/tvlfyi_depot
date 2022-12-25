@@ -29,8 +29,8 @@ When adding a feature you should consider whether it is only useful for your
 particular use-case or whether it is generally applicable for other users of the
 project.
 
-When in doubt - just ask! You can reach out to us at
-[depot@tazj.in](mailto:depot@tazj.in) or on Twitter, IRC, etc.
+When in doubt - just ask! You can reach out to us via mail at
+[depot@tvl.su](mailto:depot@tvl.su) or on IRC.
 
 ## Commit messages
 
