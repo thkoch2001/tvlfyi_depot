@@ -134,8 +134,8 @@ instructions:
 
 ## Submitting changes via email
 
-You can submit a patch via email to `depot@tazj.in` and it will be added to
-Gerrit by a contributor.
+You can submit a patch via email to `depot@tvl.su` and it will be
+added to Gerrit by a contributor.
 
 Create an appropriate commit locally and send it us using either of these options:
 
@@ -144,7 +144,7 @@ Create an appropriate commit locally and send it us using either of these option
 * `git send-email`: If configured on your system, this will take care of the
   whole emailing process for you.
 
-The email address is a [public group][].
+The email address is a [public inbox][].
 
 ## Gerrit for Github Users
 
@@ -184,7 +184,7 @@ read.
 [OWNERS]: https://cl.tvl.fyi/plugins/owners/Documentation/config.md
 [guidelines]: ./CONTRIBUTING.md#commit-messages
 [ops-users]: ../ops/users/default.nix
-[public group]: https://groups.google.com/a/tazj.in/forum/?hl=en#!forum/depot
+[public inbox]: https://inbox.tvl.su/depot/
 [hackint]: https://hackint.org
 [github-diff]: https://gerrit.wikimedia.org/r/Documentation/intro-gerrit-walkthrough-github.html
 [attention sets]: https://gerrit-review.googlesource.com/Documentation/user-attention-set.html
