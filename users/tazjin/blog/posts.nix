@@ -1,6 +1,13 @@
 # This file defines all the blog posts.
 [
   {
+    key = "nix-config-generators";
+    title = "Config generators in Nix are a mistake";
+    date = 1671980807;
+    content = ./posts/nix-config-generators.md;
+    draft = true;
+  }
+  {
     key = "emacs-is-underrated";
     title = "Emacs is the most underrated tool";
     date = 1581286656;
