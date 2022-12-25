@@ -85,7 +85,7 @@ in
           "depot@tazj.in" # legacy address
         ];
 
-        description = "TVL depot development";
+        description = "TVL depot development (mail to depot@tvl.su)";
         coderepo = [ "depot" ];
         url = "https://inbox.tvl.su/depot";
 
