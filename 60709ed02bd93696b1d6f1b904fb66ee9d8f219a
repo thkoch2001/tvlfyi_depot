@@ -18,6 +18,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "824f294a_7eef510d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 14
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2022-12-25T16:41:50Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "bebbe29c_bbe02492",
+      "revId": "60709ed02bd93696b1d6f1b904fb66ee9d8f219a",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "dbdc1399_78499071",
@@ -133,6 +151,54 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "d102584a_3caf0976",
+        "filename": "tvix/eval/src/value/thunk.rs",
+        "patchSetId": 14
+      },
+      "lineNbr": 179,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2022-12-25T16:41:50Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e1d31632_64496ac7",
+      "range": {
+        "startLine": 179,
+        "startChar": 46,
+        "endLine": 179,
+        "endChar": 51
+      },
+      "revId": "60709ed02bd93696b1d6f1b904fb66ee9d8f219a",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "aeae7ca4_1ef6ef5a",
+        "filename": "tvix/eval/src/value/thunk.rs",
+        "patchSetId": 14
+      },
+      "lineNbr": 179,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2022-12-25T16:41:50Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ba3c8689_a60e5139",
+      "range": {
+        "startLine": 179,
+        "startChar": 17,
+        "endLine": 179,
+        "endChar": 22
+      },
+      "revId": "60709ed02bd93696b1d6f1b904fb66ee9d8f219a",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "e1e12c24_bbe2a4bc",
@@ -202,6 +268,30 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "6f1a42eb_50638e14",
+        "filename": "tvix/eval/src/vm.rs",
+        "patchSetId": 14
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2022-12-25T16:41:50Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "12dea18b_f409958f",
+      "range": {
+        "startLine": 27,
+        "startChar": 10,
+        "endLine": 27,
+        "endChar": 17
+      },
+      "revId": "60709ed02bd93696b1d6f1b904fb66ee9d8f219a",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "87403e61_337587e8",
@@ -255,6 +345,24 @@
       "writtenOn": "2022-12-21T12:52:48Z",
       "side": 1,
       "message": "probably remove this?",
+      "revId": "60709ed02bd93696b1d6f1b904fb66ee9d8f219a",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "96802b99_d4044d63",
+        "filename": "tvix/eval/src/vm.rs",
+        "patchSetId": 14
+      },
+      "lineNbr": 461,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2022-12-25T16:41:50Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1f9a255e_20e95b8d",
       "revId": "60709ed02bd93696b1d6f1b904fb66ee9d8f219a",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
