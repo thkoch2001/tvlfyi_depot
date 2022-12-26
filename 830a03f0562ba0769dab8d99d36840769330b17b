@@ -140,6 +140,30 @@
       },
       "revId": "830a03f0562ba0769dab8d99d36840769330b17b",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "59ed2566_e01f0a6c",
+        "filename": "tvix/store/docs/api.md",
+        "patchSetId": 22
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-12-26T07:56:30Z",
+      "side": 1,
+      "message": "If it\u0027s not arbitrary blobs, I think it should be renamed to \"FileStore\". We can do that separately.",
+      "parentUuid": "b81e9431_b5ca2122",
+      "range": {
+        "startLine": 47,
+        "startChar": 14,
+        "endLine": 47,
+        "endChar": 49
+      },
+      "revId": "830a03f0562ba0769dab8d99d36840769330b17b",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
