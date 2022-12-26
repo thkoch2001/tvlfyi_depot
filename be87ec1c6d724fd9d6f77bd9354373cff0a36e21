@@ -46,6 +46,30 @@
       },
       "revId": "be87ec1c6d724fd9d6f77bd9354373cff0a36e21",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4960cde7_d72939a5",
+        "filename": "nix/bufCheck/default.nix",
+        "patchSetId": 9
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-12-26T09:53:17Z",
+      "side": 1,
+      "message": "See cl/7639",
+      "parentUuid": "17ca85b6_c75d8cf3",
+      "range": {
+        "startLine": 10,
+        "startChar": 0,
+        "endLine": 10,
+        "endChar": 39
+      },
+      "revId": "be87ec1c6d724fd9d6f77bd9354373cff0a36e21",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
