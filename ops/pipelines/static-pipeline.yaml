@@ -41,7 +41,7 @@ steps:
 
       if test -n "$${GERRIT_CHANGE_URL-}"; then
         echo "This is a build of [cl/$$GERRIT_CHANGE_ID]($$GERRIT_CHANGE_URL) (at patchset #$$GERRIT_PATCHSET)" | \
-          buildkite-agent annotate
+          buildkite-agent annotate --context cl-annotation
       fi
 
       # Attempt to fetch a target map from a parent commit on canon,
