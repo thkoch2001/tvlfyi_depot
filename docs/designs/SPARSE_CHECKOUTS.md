@@ -1,3 +1,9 @@
+NOTE: This proposal is archived. We run `josh` instead, and long-term
+might want to integrate per-target dependency analysis with josh's
+workspace functionality.
+
+-------------
+
 Below is a prototype for a script to create Git sparse checkouts of the depot.
 The script below works today with relatively recent versions of git.
 
