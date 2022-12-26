@@ -16,6 +16,74 @@
       "message": "\u003e Inventing a DSL for generating a program’s config file is one of the hallowed …",
       "revId": "41d9e3c6bc0a548ac01e6baf77764021136fc9de",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a60e9685_aea0196e",
+        "filename": "users/tazjin/blog/posts/nix-config-generators.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 163,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2022-12-26T12:57:45Z",
+      "side": 1,
+      "message": "One additional motivation (albeit it not necessarily makes sense always) is composability. I.e. if nginx /only/ has a `configFile` option for configuring it becomes more error prone for modules to add to the config if they want to use nginx as a proxy or something – or at least more error prone, since you can only merge multiple config snippets together (with some control over ordering). With structured options conflicts can be caught by the mering logic for example.",
+      "revId": "41d9e3c6bc0a548ac01e6baf77764021136fc9de",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c4ada6aa_5f918348",
+        "filename": "users/tazjin/blog/posts/nix-config-generators.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 170,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2022-12-26T12:57:45Z",
+      "side": 1,
+      "message": "You should mention here that a lot is also unchecked – e.g. `attrsOf` and `listOf` don\u0027t check the inner type (it is purely informational) because the C++ evaluator can\u0027t cope with doing this in addition to the already-slow module system.",
+      "revId": "41d9e3c6bc0a548ac01e6baf77764021136fc9de",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "82bc3416_712522bd",
+        "filename": "users/tazjin/blog/posts/nix-config-generators.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 183,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2022-12-26T12:57:45Z",
+      "side": 1,
+      "message": "Note that RFC0042 is basically the solution to this problem, as it intends for arbitrary (or rather any possible) configuration to be able to be expressed by the module.",
+      "revId": "41d9e3c6bc0a548ac01e6baf77764021136fc9de",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a9f879f5_07a21d95",
+        "filename": "users/tazjin/blog/posts/nix-config-generators.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 194,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2022-12-26T12:57:45Z",
+      "side": 1,
+      "message": "A common pattern is a `configFile` attribute as an escape hatch. We could also codify that this exists in addition to RFC 42 settings, although it only alleviates the problem to an extent.",
+      "revId": "41d9e3c6bc0a548ac01e6baf77764021136fc9de",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
