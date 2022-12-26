@@ -29,4 +29,11 @@ depot.nix.lazy-deps {
     attr = "ops.keycloak.terraform";
     cmd = "terraform";
   };
+
+  terraform.attr = "third_party.nixkpgs.terraform";
+  go = {
+    attr = "third_party.nixpkgs.go_1_18";
+    cmd = "gofmt";
+  };
+  rustfmt.attr = "third_party.nixpkgs.rustfmt";
 }

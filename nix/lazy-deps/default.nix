@@ -13,7 +13,7 @@
 
 let
   inherit (builtins) attrNames attrValues mapAttrs;
-  inherit (pkgs.lib) concatStringsSep;
+  inherit (pkgs.lib) concatStringsSep escapeShellArg;
 
   # Create the case statement for a command invocations, optionally
   # overriding the `TARGET_TOOL` variable.
@@ -44,6 +44,7 @@ let
       text = ''
         #!${pkgs.runtimeShell}
         set -ue
+        set -x
 
         if ! type git>/dev/null || ! type nix-build>/dev/null; then
           echo "The 'git' and 'nix-build' commands must be available." >&2
@@ -71,6 +72,15 @@ let
         name = "${self.name}-shell";
         packages = [ self ];
       };
+
+      # Create an attrset that contains a lazy invocation for every tool.
+      # This is to be used from nix code, to prevent calling nonexistant tools.
+      passthru.lazyCommands =
+        mapAttrs
+          (commandName: _: pkgs.writers.writeDash "${commandName}-lazy" ''
+            ${self}/bin/${escapeShellArg commandName} "$@"
+          '')
+          tools;
     }
     ''
       # Write the dispatch code

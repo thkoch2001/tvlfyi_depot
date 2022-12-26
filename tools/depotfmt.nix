@@ -3,16 +3,18 @@
 { depot, pkgs, ... }:
 
 let
+  lazy = depot.tools.depot-deps.lazyCommands;
+
   # terraform fmt can't handle multiple paths at once, but treefmt
   # expects this
   terraformat = pkgs.writeShellScript "terraformat" ''
-    echo "$@" | xargs -n1 ${pkgs.terraform}/bin/terraform fmt
+    echo "$@" | xargs -n1 ${lazy.terraform} fmt
   '';
 
   # TODO: Upgrade to Go 1.19 and reformat tree
   config = pkgs.writeText "depot-treefmt-config" ''
     [formatter.go]
-    command = "${pkgs.go_1_18}/bin/gofmt"
+    command = "${lazy.go}"
     options = [ "-w" ]
     includes = ["*.go"]
 
@@ -28,7 +30,7 @@ let
     ]
 
     [formatter.rust]
-    command = "${pkgs.rustfmt}/bin/rustfmt"
+    command = "${lazy.rustfmt}"
     includes = [ "*.rs" ]
     excludes = [
       "users/tazjin/*",
