@@ -114,6 +114,7 @@ depot.nix.readTree.drvTargets {
       command = buildkiteReportStep {
         command = [ depot-rust-crates-advisory-report ];
         style = "warning";
+        context = "depot-crate-advisories";
       };
     };
   };
