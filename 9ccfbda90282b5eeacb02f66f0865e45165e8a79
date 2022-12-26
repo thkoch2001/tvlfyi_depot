@@ -34,6 +34,24 @@
       "parentUuid": "62647663_346f965b",
       "revId": "9ccfbda90282b5eeacb02f66f0865e45165e8a79",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "75e57c60_94029052",
+        "filename": "tvix/store/protos/castore.go",
+        "patchSetId": 28
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2022-12-26T10:07:09Z",
+      "side": 1,
+      "message": "This is only a Todo for me to not forget, it\u0027s unrelated to this CL specifically. feel free to review the rest.",
+      "parentUuid": "9589c1c0_dc09ee7d",
+      "revId": "9ccfbda90282b5eeacb02f66f0865e45165e8a79",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
