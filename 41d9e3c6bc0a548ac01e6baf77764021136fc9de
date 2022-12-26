@@ -71,6 +71,23 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "72a7f86f_5c1f088c",
+        "filename": "users/tazjin/blog/posts/nix-config-generators.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 185,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2022-12-26T13:08:34Z",
+      "side": 1,
+      "message": "Not everything maps well to attribute sets:\n\nhttps://github.com/NixOS/nixpkgs/issues/107491\nhttps://github.com/NixOS/nixpkgs/pull/118925\nhttps://github.com/NixOS/nixpkgs/pull/164088",
+      "revId": "41d9e3c6bc0a548ac01e6baf77764021136fc9de",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "a9f879f5_07a21d95",
         "filename": "users/tazjin/blog/posts/nix-config-generators.md",
         "patchSetId": 1
