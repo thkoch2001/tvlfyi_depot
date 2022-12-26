@@ -1,6 +1,7 @@
 {
   "comments": [
     {
+      "unresolved": true,
       "key": {
         "uuid": "0ccfd40d_8caae2f7",
         "filename": "default.nix",
@@ -20,10 +21,10 @@
         "endChar": 53
       },
       "revId": "51cd3e8abe826c8b2c20ef7cfef39a8595028a33",
-      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
-      "unresolved": true
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": true,
       "key": {
         "uuid": "3a4ad52b_15e8df1a",
         "filename": "default.nix",
@@ -43,8 +44,8 @@
         "endChar": 63
       },
       "revId": "51cd3e8abe826c8b2c20ef7cfef39a8595028a33",
-      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36",
-      "unresolved": true
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
-  ]
+  ],
+  "submitRequirementResults": []
 }
