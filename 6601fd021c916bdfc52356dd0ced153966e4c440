@@ -16,6 +16,24 @@
       "message": "Note that `serde` with `rc` feature perform naive deserialization, i.e. no deduplication of those.\nI don\u0027t know if this is something wanted in the current implementation or not.",
       "revId": "6601fd021c916bdfc52356dd0ced153966e4c440",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "543873c1_7cbd914d",
+        "filename": "tvix/eval/src/value/mod.rs",
+        "patchSetId": 5
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-12-26T09:44:55Z",
+      "side": 1,
+      "message": "It\u0027d probably be pretty hard to deduplicate these globally on deserialisation, so I think that\u0027s fine for now.",
+      "parentUuid": "3a0faff6_7152ec60",
+      "revId": "6601fd021c916bdfc52356dd0ced153966e4c440",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }

@@ -20,6 +20,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "aa5aed56_51020bfe",
+        "filename": "tvix/eval/src/value/attrs.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 166,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-12-26T09:44:55Z",
+      "side": 1,
+      "message": "Hmm. The only error that can occur here is `DuplicateAttrsKey`. I\u0027m leaning in the direction of handling that error here explicitly and raising the serde duplicate_field error, then actually adding a `todo!()` branch for other errors so that we crash (it is a bug afterall) if some new/unexpected error occurs here.",
+      "parentUuid": "9be22e7f_6f5f09b0",
+      "revId": "298b184a88411f9945d12b71f990b78a8cb73e72",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "3a99e1fd_a08b6695",
         "filename": "tvix/eval/src/value/mod.rs",
         "patchSetId": 1
@@ -31,6 +49,24 @@
       "writtenOn": "2022-12-24T23:27:09Z",
       "side": 1,
       "message": "I\u0027d like to introduce unit testing with `serde_test`, unsure if it\u0027s a good idea though.",
+      "revId": "298b184a88411f9945d12b71f990b78a8cb73e72",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9cb4f84e_bb1a476d",
+        "filename": "tvix/eval/src/value/mod.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-12-26T09:44:55Z",
+      "side": 1,
+      "message": "Never used it, not sure if it\u0027s valuable. Probably? Feel free to do it in a separate CL, it\u0027s not a blocker for this one.",
+      "parentUuid": "3a99e1fd_a08b6695",
       "revId": "298b184a88411f9945d12b71f990b78a8cb73e72",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },

@@ -16,6 +16,24 @@
       "message": "I feel like there\u0027s some impedence mismatch between the front facing Value we would like to deserialize from user inputs and internal Value we may want to *serialize/deserialize* for any evaluation-related reasons.\n\nI have let some comments where I have my doubts.",
       "revId": "6fee6083b77961eb5c86fe5f27f9fa5c35be43bc",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c1e36381_a1a2504e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-12-26T09:44:55Z",
+      "side": 1,
+      "message": "I\u0027ve previously thought we might want to have a sort of \"FFI\"-safe `ExternalValue` type which only contains the serialisable stuff. That\u0027s not necessary for this CL though.",
+      "parentUuid": "91661d27_1e6ba85f",
+      "revId": "6fee6083b77961eb5c86fe5f27f9fa5c35be43bc",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
