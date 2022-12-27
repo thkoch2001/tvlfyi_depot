@@ -63,6 +63,20 @@ let
       Feel free to explore the tech we have built so far, all our
       systems are linked in the footer.
 
+      ----------------
+
+      ## Blog
+
+      Here are the most recent TVL blog posts.
+
+      ${listPosts publishedPosts}
+
+      You can also follow our [atom feed](https://tvl.fyi/feed.atom).
+
+      ----------------
+
+      ## Getting in touch
+
       We mostly hang out on IRC. You can find us in [`#tvl`][tvl-irc]
       on [hackint][], which is also reachable [via XMPP][hackint-xmpp]
       at [`#tvl@irc.hackint.org`][tvl-xmpp] (sic!) and [via
@@ -78,15 +92,11 @@ let
       [tvl-matrix]: https://matrix.to/#/#tvl:hackint.org
       [tvl-webchat]: https://webirc.hackint.org/#ircs://irc.hackint.org/#tvl
 
-      ----------------
+      Discussions of our software, patches, and anything else really
+      can also be sent to us via email to **depot@tvl.su**. You can
+      see the mails submitted to that list in our [public inbox][].
 
-      ## Blog
-
-      Here are the most recent TVL blog posts.
-
-      ${listPosts publishedPosts}
-
-      You can also follow our [atom feed](https://tvl.fyi/feed.atom).
+      [public inbox]: https://inbox.tvl.su
 
       ----------------
 
