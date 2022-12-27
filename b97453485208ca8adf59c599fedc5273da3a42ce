@@ -20,6 +20,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "8a7b1f7b_3d3811e2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2022-12-27T23:18:40Z",
+      "side": 1,
+      "message": "I used ..Default::default() in most of the occurences, but it didn\u0027t help too much in terms of pure line count.\n\nThe tests in some places intentionally place things into different lists, so it\u0027s hard to write generic constructors. PTAL.",
+      "parentUuid": "a959b83b_8aebd1b5",
+      "revId": "b97453485208ca8adf59c599fedc5273da3a42ce",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "b259aed2_506f621a",
         "filename": "tvix/store/src/proto.rs",
         "patchSetId": 3
@@ -31,6 +49,30 @@
       "writtenOn": "2022-12-27T20:38:37Z",
       "side": 1,
       "message": "doc comments in rust start with three slashes (`///`)",
+      "range": {
+        "startLine": 39,
+        "startChar": 4,
+        "endLine": 39,
+        "endChar": 6
+      },
+      "revId": "b97453485208ca8adf59c599fedc5273da3a42ce",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0f612939_22e7d819",
+        "filename": "tvix/store/src/proto.rs",
+        "patchSetId": 3
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2022-12-27T23:18:40Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b259aed2_506f621a",
       "range": {
         "startLine": 39,
         "startChar": 4,
@@ -64,6 +106,30 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c3a9dc12_9da092c6",
+        "filename": "tvix/store/src/proto.rs",
+        "patchSetId": 3
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2022-12-27T23:18:40Z",
+      "side": 1,
+      "message": "The three lists in a Directory message are (Vecs of) DirectoryNode, FileNode and SymlinkNode, that\u0027s what I meant here. I can also explicitly list (and link) them here.",
+      "parentUuid": "25a5cb57_b44870cb",
+      "range": {
+        "startLine": 41,
+        "startChar": 35,
+        "endLine": 41,
+        "endChar": 40
+      },
+      "revId": "b97453485208ca8adf59c599fedc5273da3a42ce",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "3c02e8f1_3784dc63",
@@ -77,6 +143,30 @@
       "writtenOn": "2022-12-27T20:38:37Z",
       "side": 1,
       "message": "the usage below is quite verbose, I think it would be better to have this already return a `Result\u003c(), *Error\u003e` so that you can just call `name_is_valid(foo.name)?` below.\n\nAlso, since this function does not take a `Self` or `self` parameter, it should be moved out of the `impl` block (it is not related to the `Directory` type)",
+      "range": {
+        "startLine": 43,
+        "startChar": 39,
+        "endLine": 43,
+        "endChar": 43
+      },
+      "revId": "b97453485208ca8adf59c599fedc5273da3a42ce",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "948f709c_04f9b6bb",
+        "filename": "tvix/store/src/proto.rs",
+        "patchSetId": 3
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2022-12-27T23:18:40Z",
+      "side": 1,
+      "message": "is_valid implies it returns a boolean.\n\nI renamed it to validate_node_name and have it return an Error.\n\nI also factored out the three other checks into similar functions.",
+      "parentUuid": "3c02e8f1_3784dc63",
       "range": {
         "startLine": 43,
         "startChar": 39,
@@ -110,6 +200,30 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "bec5b85f_505ea4e0",
+        "filename": "tvix/store/src/proto.rs",
+        "patchSetId": 3
+      },
+      "lineNbr": 59,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2022-12-27T23:18:40Z",
+      "side": 1,
+      "message": "Done.",
+      "parentUuid": "3e71626b_b05a4274",
+      "range": {
+        "startLine": 59,
+        "startChar": 41,
+        "endLine": 59,
+        "endChar": 53
+      },
+      "revId": "b97453485208ca8adf59c599fedc5273da3a42ce",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "d1fcbe85_8e3336f0",
@@ -123,6 +237,30 @@
       "writtenOn": "2022-12-27T20:50:04Z",
       "side": 1,
       "message": "I think rather than duplicating all of this logic so much you might want to have a helper function returning the `Result` already and call it as `helper(\u0026directory_node.name)?` (etc.)",
+      "range": {
+        "startLine": 66,
+        "startChar": 0,
+        "endLine": 72,
+        "endChar": 0
+      },
+      "revId": "b97453485208ca8adf59c599fedc5273da3a42ce",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "aeffa7d3_a132f34c",
+        "filename": "tvix/store/src/proto.rs",
+        "patchSetId": 3
+      },
+      "lineNbr": 72,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2022-12-27T23:18:40Z",
+      "side": 1,
+      "message": "I can move the name checks and error synthesis to the helper function, yes.",
+      "parentUuid": "d1fcbe85_8e3336f0",
       "range": {
         "startLine": 66,
         "startChar": 0,
@@ -156,6 +294,30 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "f8eeddcf_711fd7f2",
+        "filename": "tvix/store/src/proto.rs",
+        "patchSetId": 3
+      },
+      "lineNbr": 80,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2022-12-27T23:18:40Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e85c2b0b_7d6bbf67",
+      "range": {
+        "startLine": 80,
+        "startChar": 0,
+        "endLine": 80,
+        "endChar": 58
+      },
+      "revId": "b97453485208ca8adf59c599fedc5273da3a42ce",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "c5816091_3a326a95",
@@ -169,6 +331,30 @@
       "writtenOn": "2022-12-27T20:50:04Z",
       "side": 1,
       "message": "you don\u0027t have to `clone` here if you use references, which should work fine inside this entire function (the borrowed data outlives this function and nothing is returned from here)",
+      "range": {
+        "startLine": 82,
+        "startChar": 40,
+        "endLine": 82,
+        "endChar": 48
+      },
+      "revId": "b97453485208ca8adf59c599fedc5273da3a42ce",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "17e47739_427cf198",
+        "filename": "tvix/store/src/proto.rs",
+        "patchSetId": 3
+      },
+      "lineNbr": 82,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2022-12-27T23:18:40Z",
+      "side": 1,
+      "message": "Done.",
+      "parentUuid": "c5816091_3a326a95",
       "range": {
         "startLine": 82,
         "startChar": 40,
