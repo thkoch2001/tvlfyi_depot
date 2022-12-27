@@ -1,4 +1,4 @@
-{ config, ... }:
+{ config, depot, ... }:
 
 {
   imports = [
@@ -12,7 +12,7 @@
 
       extraConfig = ''
         location = / {
-          return 302 https://inbox.tvl.su/depot;
+          alias ${depot.web.inbox};
         }
 
         location / {
