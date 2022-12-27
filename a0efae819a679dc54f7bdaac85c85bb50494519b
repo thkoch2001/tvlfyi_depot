@@ -89,6 +89,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "6bd8466a_2fe3a2d7",
+        "filename": "tools/fetch-depot-inbox.nix",
+        "patchSetId": 2
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-12-27T19:42:37Z",
+      "side": 1,
+      "message": "You mean the shell script does not work for you like this, or you just do not under any circumstances want to run offlineimap?",
+      "parentUuid": "2fc5c061_aa2b5f3c",
+      "revId": "a0efae819a679dc54f7bdaac85c85bb50494519b",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "686482ef_9d4d626f",
@@ -102,6 +120,24 @@
       "writtenOn": "2022-12-27T19:30:06Z",
       "side": 1,
       "message": "/etc/ssl/certs/ca-bundle.crt, for the same reasons as in cl/7630.",
+      "revId": "a0efae819a679dc54f7bdaac85c85bb50494519b",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7aea8800_c2c6a89c",
+        "filename": "tools/fetch-depot-inbox.nix",
+        "patchSetId": 2
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-12-27T19:42:37Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "686482ef_9d4d626f",
       "revId": "a0efae819a679dc54f7bdaac85c85bb50494519b",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
