@@ -28,7 +28,6 @@ in
       exa
       fd
       file
-      firefox
       gdb
       gh
       git
