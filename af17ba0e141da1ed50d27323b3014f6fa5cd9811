@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d736c6e6_67d8b098",
+        "filename": "tvix/store/protos/castore.go",
+        "patchSetId": 2
+      },
+      "lineNbr": 61,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-12-27T18:13:16Z",
+      "side": 1,
+      "message": "nit: three",
+      "range": {
+        "startLine": 61,
+        "startChar": 52,
+        "endLine": 61,
+        "endChar": 56
+      },
+      "revId": "af17ba0e141da1ed50d27323b3014f6fa5cd9811",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "95966016_e3904dc6",
+        "filename": "tvix/store/protos/castore.go",
+        "patchSetId": 2
+      },
+      "lineNbr": 65,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-12-27T18:13:16Z",
+      "side": 1,
+      "message": "if empty strings as names are allowed, and we start with the empty string here, is there a potential for incorrect duplicate errors and other weird problems?",
+      "range": {
+        "startLine": 65,
+        "startChar": 20,
+        "endLine": 65,
+        "endChar": 22
+      },
+      "revId": "af17ba0e141da1ed50d27323b3014f6fa5cd9811",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7819ece8_5b421719",
+        "filename": "tvix/store/protos/castore.go",
+        "patchSetId": 2
+      },
+      "lineNbr": 76,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-12-27T18:13:16Z",
+      "side": 1,
+      "message": "\"in sorted order\", because it\u0027s not the name *itself* that isn\u0027t sorted (and it shouldn\u0027t be, afterall you\u0027re not fikklo)",
+      "range": {
+        "startLine": 76,
+        "startChar": 32,
+        "endLine": 76,
+        "endChar": 38
+      },
+      "revId": "af17ba0e141da1ed50d27323b3014f6fa5cd9811",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
