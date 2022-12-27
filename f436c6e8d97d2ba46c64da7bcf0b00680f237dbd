@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3c4a2a05_d8c8145a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-12-27T18:26:27Z",
+      "side": 1,
+      "message": "LGTM, besides the comments. Of course I\u0027m low-key annoyed by the verbosity of Go, but that\u0027s what we get.",
+      "revId": "f436c6e8d97d2ba46c64da7bcf0b00680f237dbd",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
