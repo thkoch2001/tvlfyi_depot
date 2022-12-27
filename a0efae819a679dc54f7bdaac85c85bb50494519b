@@ -18,6 +18,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "7b0abfa0_c0953e1c",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-12-27T14:02:23Z",
+      "side": 1,
+      "message": "I\u0027ll experiment with it a bit, see how it performs. So far all the clients I\u0027ve tried have really struggled.",
+      "parentUuid": "15eade25_77e4fc8a",
+      "revId": "a0efae819a679dc54f7bdaac85c85bb50494519b",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "dbbcd40f_36ebdfe1",
@@ -31,6 +49,24 @@
       "writtenOn": "2022-12-27T13:19:26Z",
       "side": 1,
       "message": "I personally really prefer mbsync over offlineimap, and use it to sync my emails.\n\nIt\u0027s *much* faster.",
+      "revId": "a0efae819a679dc54f7bdaac85c85bb50494519b",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fc7d8b91_a652bd55",
+        "filename": "tools/fetch-depot-inbox.nix",
+        "patchSetId": 2
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-12-27T14:02:23Z",
+      "side": 1,
+      "message": "This does a full sync in about 3 seconds, that seems alright for now. We already have the config for the server side of things, but I\u0027m not opposed to a CL that rewrites this to use mbsync instead (I have no preference).",
+      "parentUuid": "dbbcd40f_36ebdfe1",
       "revId": "a0efae819a679dc54f7bdaac85c85bb50494519b",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
