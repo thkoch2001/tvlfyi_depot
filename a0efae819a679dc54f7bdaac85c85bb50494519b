@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "15eade25_77e4fc8a",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2022-12-27T13:19:26Z",
+      "side": 1,
+      "message": "That\u0027s `neomutt -f path/to/maildir`.",
+      "revId": "a0efae819a679dc54f7bdaac85c85bb50494519b",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "dbbcd40f_36ebdfe1",
+        "filename": "tools/fetch-depot-inbox.nix",
+        "patchSetId": 2
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2022-12-27T13:19:26Z",
+      "side": 1,
+      "message": "I personally really prefer mbsync over offlineimap, and use it to sync my emails.\n\nIt\u0027s *much* faster.",
+      "revId": "a0efae819a679dc54f7bdaac85c85bb50494519b",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
