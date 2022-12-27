@@ -33,6 +33,24 @@
       "message": "I\u0027d probably impurely point to `/etc/ssl/certs/ca-bundle.crt` here - this allows `security.pki.certificate*` to have control over what certs are trusted.",
       "revId": "a69066bef4902ce3b2bf2800959b67f69642e7ed",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "662b3069_d8320fc5",
+        "filename": "ops/modules/depot-inbox.nix",
+        "patchSetId": 6
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-12-27T19:41:23Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f49a9304_4d09caea",
+      "revId": "a69066bef4902ce3b2bf2800959b67f69642e7ed",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
