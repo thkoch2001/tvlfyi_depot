@@ -7,15 +7,19 @@
 self: super: # overlay parameters for the nixpkgs overlay
 
 let
-  dhall-source = subdir: pkg: super.haskell.lib.overrideSrc pkg {
-    src = "${super.fetchFromGitHub {
-      owner = "Profpatsch";
-      repo = "dhall-haskell";
-      # https://github.com/dhall-lang/dhall-haskell/pull/2426
-      rev = "82123817316192d39f9a3e68b8ce9c9cff0a48ed";
-      sha256 = "sha256-gbHoUKIdLPIttqeV471jsT8OJz6uiI6LpHOwtLbBGHY=";
-    }}/${subdir}";
-  };
+  dhall-source = subdir: pkg:
+    with self.haskell.lib.compose;
+    overrideSrc
+      {
+        src = "${super.fetchFromGitHub {
+          owner = "Profpatsch";
+          repo = "dhall-haskell";
+          # https://github.com/dhall-lang/dhall-haskell/pull/2426
+          rev = "5e3a407d8ac826597d935d8398825a0ca73fc4e9";
+          sha256 = "005plj6kgxlkm9npaq07kmsgmiqk50dpwb9li9w1ly4aj1zgfjnd";
+        }}/${subdir}";
+      }
+      (overrideCabal { patches = [ ]; } pkg);
 
 
 in
