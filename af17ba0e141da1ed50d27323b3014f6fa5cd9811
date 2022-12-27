@@ -26,6 +26,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "6b4595ab_196bbf81",
+        "filename": "tvix/store/protos/castore.go",
+        "patchSetId": 2
+      },
+      "lineNbr": 61,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2022-12-27T18:40:18Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "d736c6e6_67d8b098",
+      "range": {
+        "startLine": 61,
+        "startChar": 52,
+        "endLine": 61,
+        "endChar": 56
+      },
+      "revId": "af17ba0e141da1ed50d27323b3014f6fa5cd9811",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "95966016_e3904dc6",
         "filename": "tvix/store/protos/castore.go",
         "patchSetId": 2
@@ -49,6 +73,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "754267d4_9b148e7d",
+        "filename": "tvix/store/protos/castore.go",
+        "patchSetId": 2
+      },
+      "lineNbr": 65,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2022-12-27T18:40:18Z",
+      "side": 1,
+      "message": "I think empty strings as names should not be allowed to be included in a `Directory` message (it doesn\u0027t make sense in a \"directory listing\") - but it\u0027s possible to encounter *Node objects in a \"root_node\" of a PathInfo object without a name.\n\nAs long as we don\u0027t move the name validation checks to individual *Node structs, and enforce them there, this should be fine - and I should probably make this clear in the comments (both here and the Rust counterpart).",
+      "parentUuid": "95966016_e3904dc6",
+      "range": {
+        "startLine": 65,
+        "startChar": 20,
+        "endLine": 65,
+        "endChar": 22
+      },
+      "revId": "af17ba0e141da1ed50d27323b3014f6fa5cd9811",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "7819ece8_5b421719",
         "filename": "tvix/store/protos/castore.go",
         "patchSetId": 2
@@ -60,6 +108,30 @@
       "writtenOn": "2022-12-27T18:13:16Z",
       "side": 1,
       "message": "\"in sorted order\", because it\u0027s not the name *itself* that isn\u0027t sorted (and it shouldn\u0027t be, afterall you\u0027re not fikklo)",
+      "range": {
+        "startLine": 76,
+        "startChar": 32,
+        "endLine": 76,
+        "endChar": 38
+      },
+      "revId": "af17ba0e141da1ed50d27323b3014f6fa5cd9811",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1dca25d8_9afaa729",
+        "filename": "tvix/store/protos/castore.go",
+        "patchSetId": 2
+      },
+      "lineNbr": 76,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2022-12-27T18:40:18Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "7819ece8_5b421719",
       "range": {
         "startLine": 76,
         "startChar": 32,
