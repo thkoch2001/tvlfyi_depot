@@ -26,6 +26,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "0dc83b27_8942f5dd",
+        "filename": "tvix/store/protos/castore.go",
+        "patchSetId": 32
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2022-12-27T18:35:21Z",
+      "side": 1,
+      "message": "I wanted to put an emphasis on that a DirectoryEntry increments by one in addition to incrementing by its \"size\" attribute.\n\n`castore.proto` mentions the following:\n\n```\n    // […]\n    // Calculated by summing up the numbers of `directories`, `files` and\n    // `symlinks`, and for each directory, its size field. Used for inode\n    // number calculation.\n```\n\nWhat about using this here as well?",
+      "parentUuid": "5451cf16_85d5f826",
+      "range": {
+        "startLine": 10,
+        "startChar": 44,
+        "endLine": 11,
+        "endChar": 58
+      },
+      "revId": "e20d1bb0b3f54edf0ccba8a24a4afa6dfe75b2d7",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "d63c8d31_9089f4a1",
         "filename": "tvix/store/protos/castore.go",
         "patchSetId": 32
@@ -49,6 +73,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "e40568f0_ef8516c4",
+        "filename": "tvix/store/protos/castore.go",
+        "patchSetId": 32
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2022-12-27T18:35:21Z",
+      "side": 1,
+      "message": "The naming is the same as the size field in `DirectoryNode` in `tvix/store/protos/castore.proto`, as well as the function names in `tvix/store/src/proto.rs`, introduced in cl/7254 in the rust counterpart.\n\nIf we can find a more meaningful but still concise name, happy to change it in a followup, but it should be changed in all three places then.",
+      "parentUuid": "d63c8d31_9089f4a1",
+      "range": {
+        "startLine": 12,
+        "startChar": 20,
+        "endLine": 12,
+        "endChar": 24
+      },
+      "revId": "e20d1bb0b3f54edf0ccba8a24a4afa6dfe75b2d7",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "a6813450_e8566bc2",
         "filename": "tvix/store/protos/castore.go",
         "patchSetId": 32
@@ -60,6 +108,30 @@
       "writtenOn": "2022-12-27T18:00:59Z",
       "side": 1,
       "message": "Is there a difference between the `Size` field and the `Size()` method?",
+      "range": {
+        "startLine": 16,
+        "startChar": 14,
+        "endLine": 16,
+        "endChar": 20
+      },
+      "revId": "e20d1bb0b3f54edf0ccba8a24a4afa6dfe75b2d7",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "dbed0bd8_1e8deb1f",
+        "filename": "tvix/store/protos/castore.go",
+        "patchSetId": 32
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2022-12-27T18:35:21Z",
+      "side": 1,
+      "message": "The `Size()` function on a `Directory` message/struct can be used to calculate what\u0027s being put into the `Size` field of a `DirectoryNode` (while assembling a graph / uploading a structure).",
+      "parentUuid": "a6813450_e8566bc2",
       "range": {
         "startLine": 16,
         "startChar": 14,
