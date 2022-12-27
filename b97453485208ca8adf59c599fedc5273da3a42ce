@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b259aed2_506f621a",
+        "filename": "tvix/store/src/proto.rs",
+        "patchSetId": 3
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-12-27T20:38:37Z",
+      "side": 1,
+      "message": "doc comments in rust start with three slashes (`///`)",
+      "range": {
+        "startLine": 39,
+        "startChar": 4,
+        "endLine": 39,
+        "endChar": 6
+      },
+      "revId": "b97453485208ca8adf59c599fedc5273da3a42ce",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "25a5cb57_b44870cb",
+        "filename": "tvix/store/src/proto.rs",
+        "patchSetId": 3
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-12-27T20:38:37Z",
+      "side": 1,
+      "message": "typo?\n\nEither way, in the doc comments you can auto-link to resolvable identifiers using e.g. `[Node]`",
+      "range": {
+        "startLine": 41,
+        "startChar": 35,
+        "endLine": 41,
+        "endChar": 40
+      },
+      "revId": "b97453485208ca8adf59c599fedc5273da3a42ce",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3c02e8f1_3784dc63",
+        "filename": "tvix/store/src/proto.rs",
+        "patchSetId": 3
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-12-27T20:38:37Z",
+      "side": 1,
+      "message": "the usage below is quite verbose, I think it would be better to have this already return a `Result\u003c(), *Error\u003e` so that you can just call `name_is_valid(foo.name)?` below.\n\nAlso, since this function does not take a `Self` or `self` parameter, it should be moved out of the `impl` block (it is not related to the `Directory` type)",
+      "range": {
+        "startLine": 43,
+        "startChar": 39,
+        "endLine": 43,
+        "endChar": 43
+      },
+      "revId": "b97453485208ca8adf59c599fedc5273da3a42ce",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
