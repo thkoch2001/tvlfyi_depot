@@ -13,7 +13,7 @@ library
     -- LANGUAGE extensions used by modules in this package.
     -- other-extensions:
     build-depends:
-       base ^>=4.15.1.0
+       base >=4.15 && <5
      , PyF
      , validation-selective
      , these
