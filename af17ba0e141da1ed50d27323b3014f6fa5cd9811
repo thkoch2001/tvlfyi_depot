@@ -48,6 +48,30 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c9e9d203_213fcf8f",
+        "filename": "tvix/store/protos/castore.go",
+        "patchSetId": 2
+      },
+      "lineNbr": 61,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2022-12-27T19:01:03Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6b4595ab_196bbf81",
+      "range": {
+        "startLine": 61,
+        "startChar": 52,
+        "endLine": 61,
+        "endChar": 56
+      },
+      "revId": "af17ba0e141da1ed50d27323b3014f6fa5cd9811",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "95966016_e3904dc6",
@@ -95,6 +119,30 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "49562085_f3db277f",
+        "filename": "tvix/store/protos/castore.go",
+        "patchSetId": 2
+      },
+      "lineNbr": 65,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2022-12-27T19:01:03Z",
+      "side": 1,
+      "message": "I updated the check to also disallow the empty string, and mentioned the special case explicitly (both here and in the Rust counterpart)",
+      "parentUuid": "754267d4_9b148e7d",
+      "range": {
+        "startLine": 65,
+        "startChar": 20,
+        "endLine": 65,
+        "endChar": 22
+      },
+      "revId": "af17ba0e141da1ed50d27323b3014f6fa5cd9811",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "7819ece8_5b421719",
@@ -132,6 +180,30 @@
       "side": 1,
       "message": "Ack",
       "parentUuid": "7819ece8_5b421719",
+      "range": {
+        "startLine": 76,
+        "startChar": 32,
+        "endLine": 76,
+        "endChar": 38
+      },
+      "revId": "af17ba0e141da1ed50d27323b3014f6fa5cd9811",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e01ad3b6_5098f4b7",
+        "filename": "tvix/store/protos/castore.go",
+        "patchSetId": 2
+      },
+      "lineNbr": 76,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2022-12-27T19:01:03Z",
+      "side": 1,
+      "message": "Resolved.",
+      "parentUuid": "1dca25d8_9afaa729",
       "range": {
         "startLine": 76,
         "startChar": 32,
