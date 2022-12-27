@@ -48,6 +48,30 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "abb24edb_4446fc24",
+        "filename": "tvix/store/protos/castore.go",
+        "patchSetId": 32
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2022-12-27T19:01:03Z",
+      "side": 1,
+      "message": "This now reads:\n\n```\n+// The size of a directory is calculated by summing up the numbers of\n+// `directories`, `files` and `symlinks`, and for each directory, its size\n+// field.\n```\n\nPTAL.",
+      "parentUuid": "0dc83b27_8942f5dd",
+      "range": {
+        "startLine": 10,
+        "startChar": 44,
+        "endLine": 11,
+        "endChar": 58
+      },
+      "revId": "e20d1bb0b3f54edf0ccba8a24a4afa6dfe75b2d7",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "d63c8d31_9089f4a1",
