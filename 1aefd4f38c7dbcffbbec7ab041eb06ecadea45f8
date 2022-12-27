@@ -20,6 +20,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "901ba197_0ad82530",
+        "filename": "ops/modules/depot-inbox.nix",
+        "patchSetId": 5
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-12-27T19:57:45Z",
+      "side": 1,
+      "message": "public-inbox is a lot of different binaries that all run as systemd services, they would all need to have this done and I think some of them are even generated / there\u0027s no API to ensure we caught all of them.\n\nThis seems like a worse solution to me than the timer thing, which should work fine even at a daily interval because certificate renewal has a time buffer.\n\nKind of unrelated, we should monitor cert expiry to catch breakage in the acme module though ...",
+      "parentUuid": "cb65e18a_8741b8e1",
+      "revId": "1aefd4f38c7dbcffbbec7ab041eb06ecadea45f8",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "80f368de_d6dad768",
         "filename": "ops/modules/depot-inbox.nix",
         "patchSetId": 5
@@ -31,6 +49,24 @@
       "writtenOn": "2022-12-27T19:27:51Z",
       "side": 1,
       "message": "/run/credentials/public-inbox.service/{fullchain,key}.pem",
+      "revId": "1aefd4f38c7dbcffbbec7ab041eb06ecadea45f8",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3349522a_d3230621",
+        "filename": "ops/modules/depot-inbox.nix",
+        "patchSetId": 5
+      },
+      "lineNbr": 73,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-12-27T19:57:45Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "80f368de_d6dad768",
       "revId": "1aefd4f38c7dbcffbbec7ab041eb06ecadea45f8",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
