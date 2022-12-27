@@ -52,6 +52,24 @@
       "parentUuid": "9589c1c0_dc09ee7d",
       "revId": "9ccfbda90282b5eeacb02f66f0865e45165e8a79",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "627ffe73_f344107b",
+        "filename": "tvix/store/protos/castore.go",
+        "patchSetId": 28
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2022-12-27T15:19:42Z",
+      "side": 1,
+      "message": "The golang part is in cl/7648, rust will come in a bit.",
+      "parentUuid": "75e57c60_94029052",
+      "revId": "9ccfbda90282b5eeacb02f66f0865e45165e8a79",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
