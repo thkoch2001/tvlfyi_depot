@@ -29,21 +29,21 @@ struct SourceSpan {
 /// instructions, associated constants and additional metadata as
 /// emitted by the compiler.
 #[derive(Debug, Default)]
-pub struct Chunk {
+pub struct Chunk<RO: ?Sized> {
     pub code: Vec<OpCode>,
-    pub constants: Vec<Value>,
+    pub constants: Vec<Value<RO>>,
     spans: Vec<SourceSpan>,
 }
 
-impl Index<ConstantIdx> for Chunk {
-    type Output = Value;
+impl<RO> Index<ConstantIdx> for Chunk<RO> {
+    type Output = Value<RO>;
 
     fn index(&self, index: ConstantIdx) -> &Self::Output {
         &self.constants[index.0]
     }
 }
 
-impl Index<CodeIdx> for Chunk {
+impl<RO> Index<CodeIdx> for Chunk<RO> {
     type Output = OpCode;
 
     fn index(&self, index: CodeIdx) -> &Self::Output {
@@ -51,13 +51,13 @@ impl Index<CodeIdx> for Chunk {
     }
 }
 
-impl IndexMut<CodeIdx> for Chunk {
+impl<RO> IndexMut<CodeIdx> for Chunk<RO> {
     fn index_mut(&mut self, index: CodeIdx) -> &mut Self::Output {
         &mut self.code[index.0]
     }
 }
 
-impl Chunk {
+impl<RO> Chunk<RO> {
     pub fn push_op(&mut self, data: OpCode, span: codemap::Span) -> CodeIdx {
         let idx = self.code.len();
         self.code.push(data);
@@ -87,7 +87,7 @@ impl Chunk {
         }
     }
 
-    pub fn push_constant(&mut self, data: Value) -> ConstantIdx {
+    pub fn push_constant(&mut self, data: Value<RO>) -> ConstantIdx {
         let idx = self.constants.len();
         self.constants.push(data);
         ConstantIdx(idx)

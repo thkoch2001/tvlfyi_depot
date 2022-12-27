@@ -11,10 +11,14 @@ use super::Value;
 
 #[repr(transparent)]
 #[derive(Clone, Debug)]
-pub struct NixList(Rc<Vec<Value>>);
+pub struct NixList<RO>(Rc<Vec<Value<RO>>>);
 
-impl TotalDisplay for NixList {
-    fn total_fmt(&self, f: &mut std::fmt::Formatter<'_>, set: &mut ThunkSet) -> std::fmt::Result {
+impl<RO> TotalDisplay for NixList<RO> {
+    fn total_fmt(
+        &self,
+        f: &mut std::fmt::Formatter<'_>,
+        set: &mut ThunkSet<RO>,
+    ) -> std::fmt::Result {
         f.write_str("[ ")?;
 
         for v in self.0.as_ref() {
@@ -26,14 +30,14 @@ impl TotalDisplay for NixList {
     }
 }
 
-impl From<Rc<Vec<Value>>> for NixList {
-    fn from(v: Rc<Vec<Value>>) -> Self {
+impl<RO> From<Rc<Vec<Value<RO>>>> for NixList<RO> {
+    fn from(v: Rc<Vec<Value<RO>>>) -> Self {
         Self(v)
     }
 }
 
-impl From<Vec<Value>> for NixList {
-    fn from(vs: Vec<Value>) -> Self {
+impl<RO> From<Vec<Value<RO>>> for NixList<RO> {
+    fn from(vs: Vec<Value<RO>>) -> Self {
         Self(Rc::new(vs))
     }
 }
@@ -47,8 +51,8 @@ mod arbitrary {
 
     use super::*;
 
-    impl Arbitrary for NixList {
-        type Parameters = <Vec<Value> as Arbitrary>::Parameters;
+    impl<RO> Arbitrary for NixList<RO> {
+        type Parameters = <Vec<Value<RO>> as Arbitrary>::Parameters;
         type Strategy = BoxedStrategy<Self>;
 
         fn arbitrary_with(args: Self::Parameters) -> Self::Strategy {
@@ -57,7 +61,7 @@ mod arbitrary {
     }
 }
 
-impl NixList {
+impl<RO> NixList<RO> {
     pub fn new() -> Self {
         Self(Rc::new(vec![]))
     }
@@ -66,11 +70,11 @@ impl NixList {
         self.0.len()
     }
 
-    pub fn get(&self, i: usize) -> Option<&Value> {
+    pub fn get(&self, i: usize) -> Option<&Value<RO>> {
         self.0.get(i)
     }
 
-    pub fn construct(count: usize, stack_slice: Vec<Value>) -> Self {
+    pub fn construct(count: usize, stack_slice: Vec<Value<RO>>) -> Self {
         debug_assert!(
             count == stack_slice.len(),
             "NixList::construct called with count == {}, but slice.len() == {}",
@@ -81,7 +85,7 @@ impl NixList {
         NixList(Rc::new(stack_slice))
     }
 
-    pub fn iter(&self) -> std::slice::Iter<Value> {
+    pub fn iter(&self) -> std::slice::Iter<Value<RO>> {
         self.0.iter()
     }
 
@@ -90,7 +94,7 @@ impl NixList {
     }
 
     /// Compare `self` against `other` for equality using Nix equality semantics
-    pub fn nix_eq(&self, other: &Self, vm: &mut VM) -> Result<bool, ErrorKind> {
+    pub fn nix_eq(&self, other: &Self, vm: &mut VM<RO>) -> Result<bool, ErrorKind> {
         if self.ptr_eq(other) {
             return Ok(true);
         }
@@ -108,36 +112,36 @@ impl NixList {
     }
 
     /// force each element of the list (shallowly), making it safe to call .get().value()
-    pub fn force_elements(&self, vm: &mut VM) -> Result<(), ErrorKind> {
+    pub fn force_elements(&self, vm: &mut VM<RO>) -> Result<(), ErrorKind> {
         self.iter().try_for_each(|v| v.force(vm).map(|_| ()))
     }
 
-    pub fn into_vec(self) -> Vec<Value> {
+    pub fn into_vec(self) -> Vec<Value<RO>> {
         crate::unwrap_or_clone_rc(self.0)
     }
 }
 
-impl IntoIterator for NixList {
-    type Item = Value;
-    type IntoIter = std::vec::IntoIter<Value>;
+impl<RO> IntoIterator for NixList<RO> {
+    type Item = Value<RO>;
+    type IntoIter = std::vec::IntoIter<Value<RO>>;
 
-    fn into_iter(self) -> std::vec::IntoIter<Value> {
+    fn into_iter(self) -> std::vec::IntoIter<Value<RO>> {
         self.into_vec().into_iter()
     }
 }
 
-impl<'a> IntoIterator for &'a NixList {
-    type Item = &'a Value;
+impl<'a, RO> IntoIterator for &'a NixList<RO> {
+    type Item = &'a Value<RO>;
 
-    type IntoIter = std::slice::Iter<'a, Value>;
+    type IntoIter = std::slice::Iter<'a, Value<RO>>;
 
     fn into_iter(self) -> Self::IntoIter {
         self.0.iter()
     }
 }
 
-impl Deref for NixList {
-    type Target = Vec<Value>;
+impl<RO> Deref for NixList<RO> {
+    type Target = Vec<Value<RO>>;
 
     fn deref(&self) -> &Self::Target {
         &self.0

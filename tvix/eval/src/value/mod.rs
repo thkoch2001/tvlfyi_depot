@@ -32,27 +32,27 @@ use self::thunk::ThunkSet;
 
 #[warn(variant_size_differences)]
 #[derive(Clone, Debug)]
-pub enum Value {
+pub enum Value<RO> {
     Null,
     Bool(bool),
     Integer(i64),
     Float(f64),
     String(NixString),
     Path(PathBuf),
-    Attrs(Rc<NixAttrs>),
-    List(NixList),
-    Closure(Rc<Closure>), // must use Rc<Closure> here in order to get proper pointer equality
-    Builtin(Builtin),
+    Attrs(Rc<NixAttrs<RO>>),
+    List(NixList<RO>),
+    Closure(Rc<Closure<RO>>), // must use Rc<Closure> here in order to get proper pointer equality
+    Builtin(Builtin<RO>),
 
     // Internal values that, while they technically exist at runtime,
     // are never returned to or created directly by users.
-    Thunk(Thunk),
+    Thunk(Thunk<RO>),
 
     // See [`compiler::compile_select_or()`] for explanation
     AttrNotFound,
 
     // this can only occur in Chunk::Constants and nowhere else
-    Blueprint(Rc<Lambda>),
+    Blueprint(Rc<Lambda<RO>>),
 
     DeferredUpvalue(StackIdx),
     UnresolvedPath(PathBuf),
@@ -125,13 +125,13 @@ pub enum CoercionKind {
 /// originally a thunk or not.
 ///
 /// Implements [`Deref`] to [`Value`], so can generally be used as a [`Value`]
-pub(crate) enum ForceResult<'a> {
-    ForcedThunk(Ref<'a, Value>),
-    Immediate(&'a Value),
+pub(crate) enum ForceResult<'a, RO> {
+    ForcedThunk(Ref<'a, Value<RO>>),
+    Immediate(&'a Value<RO>),
 }
 
-impl<'a> Deref for ForceResult<'a> {
-    type Target = Value;
+impl<'a, RO> Deref for ForceResult<'a, RO> {
+    type Target = Value<RO>;
 
     fn deref(&self) -> &Self::Target {
         match self {
@@ -141,7 +141,7 @@ impl<'a> Deref for ForceResult<'a> {
     }
 }
 
-impl<T> From<T> for Value
+impl<RO, T> From<T> for Value<RO>
 where
     T: Into<NixString>,
 {
@@ -150,21 +150,18 @@ where
     }
 }
 
-/// Constructors
-impl Value {
+impl<RO> Value<RO> {
     /// Construct a [`Value::Attrs`] from a [`NixAttrs`].
-    pub fn attrs(attrs: NixAttrs) -> Self {
+    pub fn attrs(attrs: NixAttrs<RO>) -> Self {
         Self::Attrs(Rc::new(attrs))
     }
-}
 
-impl Value {
     /// Coerce a `Value` to a string. See `CoercionKind` for a rundown of what
     /// input types are accepted under what circumstances.
     pub fn coerce_to_string(
         &self,
         kind: CoercionKind,
-        vm: &mut VM,
+        vm: &mut VM<RO>,
     ) -> Result<NixString, ErrorKind> {
         // TODO: eventually, this will need to handle string context and importing
         // files into the Nix store depending on what context the coercion happens in
@@ -303,17 +300,23 @@ impl Value {
     gen_cast!(as_int, i64, "int", Value::Integer(x), *x);
     gen_cast!(as_float, f64, "float", Value::Float(x), *x);
     gen_cast!(to_str, NixString, "string", Value::String(s), s.clone());
-    gen_cast!(to_attrs, Rc<NixAttrs>, "set", Value::Attrs(a), a.clone());
-    gen_cast!(to_list, NixList, "list", Value::List(l), l.clone());
+    gen_cast!(
+        to_attrs,
+        Rc<NixAttrs<RO>>,
+        "set",
+        Value::Attrs(a),
+        a.clone()
+    );
+    gen_cast!(to_list, NixList<RO>, "list", Value::List(l), l.clone());
     gen_cast!(
         as_closure,
-        Rc<Closure>,
+        Rc<Closure<RO>>,
         "lambda",
         Value::Closure(c),
         c.clone()
     );
 
-    gen_cast_mut!(as_list_mut, NixList, "list", List);
+    gen_cast_mut!(as_list_mut, NixList<RO>, "list", List);
 
     gen_is!(is_path, Value::Path(_));
     gen_is!(is_number, Value::Integer(_) | Value::Float(_));
@@ -322,7 +325,7 @@ impl Value {
     /// Compare `self` against `other` for equality using Nix equality semantics.
     ///
     /// Takes a reference to the `VM` to allow forcing thunks during comparison
-    pub fn nix_eq(&self, other: &Self, vm: &mut VM) -> Result<bool, ErrorKind> {
+    pub fn nix_eq(&self, other: &Self, vm: &mut VM<RO>) -> Result<bool, ErrorKind> {
         match (self, other) {
             // Trivial comparisons
             (Value::Null, Value::Null) => Ok(true),
@@ -348,7 +351,7 @@ impl Value {
     }
 
     /// Compare `self` against other using (fallible) Nix ordering semantics.
-    pub fn nix_cmp(&self, other: &Self, vm: &mut VM) -> Result<Option<Ordering>, ErrorKind> {
+    pub fn nix_cmp(&self, other: &Self, vm: &mut VM<RO>) -> Result<Option<Ordering>, ErrorKind> {
         match (self, other) {
             // same types
             (Value::Integer(i1), Value::Integer(i2)) => Ok(i1.partial_cmp(i2)),
@@ -381,7 +384,7 @@ impl Value {
     }
 
     /// Ensure `self` is forced if it is a thunk, and return a reference to the resulting value.
-    pub(crate) fn force(&self, vm: &mut VM) -> Result<ForceResult, ErrorKind> {
+    pub(crate) fn force(&self, vm: &mut VM<RO>) -> Result<ForceResult<RO>, ErrorKind> {
         match self {
             Self::Thunk(thunk) => {
                 thunk.force(vm)?;
@@ -394,8 +397,8 @@ impl Value {
     /// Ensure `self` is *deeply* forced, including all recursive sub-values
     pub(crate) fn deep_force(
         &self,
-        vm: &mut VM,
-        thunk_set: &mut ThunkSet,
+        vm: &mut VM<RO>,
+        thunk_set: &mut ThunkSet<RO>,
     ) -> Result<(), ErrorKind> {
         match self {
             Value::Null
@@ -476,17 +479,25 @@ impl Value {
 }
 
 trait TotalDisplay {
-    fn total_fmt(&self, f: &mut std::fmt::Formatter<'_>, set: &mut ThunkSet) -> std::fmt::Result;
+    fn total_fmt<RO>(
+        &self,
+        f: &mut std::fmt::Formatter<'_>,
+        set: &mut ThunkSet<RO>,
+    ) -> std::fmt::Result;
 }
 
-impl Display for Value {
+impl<RO> Display for Value<RO> {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         self.total_fmt(f, &mut Default::default())
     }
 }
 
-impl TotalDisplay for Value {
-    fn total_fmt(&self, f: &mut std::fmt::Formatter<'_>, set: &mut ThunkSet) -> std::fmt::Result {
+impl<RO> TotalDisplay for Value<RO> {
+    fn total_fmt(
+        &self,
+        f: &mut std::fmt::Formatter<'_>,
+        set: &mut ThunkSet<RO>,
+    ) -> std::fmt::Result {
         match self {
             Value::Null => f.write_str("null"),
             Value::Bool(true) => f.write_str("true"),
@@ -518,37 +529,37 @@ impl TotalDisplay for Value {
     }
 }
 
-impl From<bool> for Value {
+impl<RO> From<bool> for Value<RO> {
     fn from(b: bool) -> Self {
         Value::Bool(b)
     }
 }
 
-impl From<i64> for Value {
+impl<RO> From<i64> for Value<RO> {
     fn from(i: i64) -> Self {
         Self::Integer(i)
     }
 }
 
-impl From<f64> for Value {
+impl<RO> From<f64> for Value<RO> {
     fn from(i: f64) -> Self {
         Self::Float(i)
     }
 }
 
-impl From<PathBuf> for Value {
+impl<RO> From<PathBuf> for Value<RO> {
     fn from(path: PathBuf) -> Self {
         Self::Path(path)
     }
 }
 
-impl From<Vec<Value>> for Value {
-    fn from(val: Vec<Value>) -> Self {
+impl<RO> From<Vec<Value<RO>>> for Value<RO> {
+    fn from(val: Vec<Value<RO>>) -> Self {
         Self::List(NixList::from(val))
     }
 }
 
-impl TryFrom<serde_json::Value> for Value {
+impl<RO> TryFrom<serde_json::Value> for Value<RO> {
     type Error = ErrorKind;
 
     fn try_from(value: serde_json::Value) -> Result<Self, Self::Error> {
@@ -591,7 +602,7 @@ impl TryFrom<serde_json::Value> for Value {
     }
 }
 
-fn type_error(expected: &'static str, actual: &Value) -> ErrorKind {
+fn type_error<RO>(expected: &'static str, actual: &Value<RO>) -> ErrorKind {
     ErrorKind::TypeError {
         expected,
         actual: actual.type_of(),

@@ -198,7 +198,7 @@ pub fn builtins(_args: TokenStream, item: TokenStream) -> TokenStream {
                         #name,
                         &[#(#builtin_arguments),*],
                         #docstring,
-                        |mut args: Vec<crate::Value>, vm: &mut crate::internal::VM| {
+                        |mut args: Vec<crate::Value<_>>, vm: &mut crate::internal::VM<_>| {
                             #(let #reversed_args = args.pop().unwrap();)*
                             #fn_name(vm, #(#args),*)
                         }
@@ -209,7 +209,7 @@ pub fn builtins(_args: TokenStream, item: TokenStream) -> TokenStream {
     }
 
     items.push(parse_quote! {
-        pub fn builtins() -> Vec<crate::internal::Builtin> {
+        pub fn builtins<RO>() -> Vec<crate::internal::Builtin<RO>> {
             vec![#(#builtins),*]
         }
     });

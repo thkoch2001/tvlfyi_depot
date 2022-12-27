@@ -34,7 +34,7 @@ pub mod versions;
 /// builtin. This coercion can _never_ be performed in a Nix program
 /// without using builtins (i.e. the trick `path: /. + path` to
 /// convert from a string to a path wouldn't hit this code).
-pub fn coerce_value_to_path(v: &Value, vm: &mut VM) -> Result<PathBuf, ErrorKind> {
+pub fn coerce_value_to_path<RO>(v: &Value<RO>, vm: &mut VM<RO>) -> Result<PathBuf, ErrorKind> {
     let value = v.force(vm)?;
     match &*value {
         Value::Thunk(t) => coerce_value_to_path(&t.value(), vm),
@@ -59,17 +59,25 @@ mod pure_builtins {
     use super::*;
 
     #[builtin("abort")]
-    fn builtin_abort(_vm: &mut VM, message: Value) -> Result<Value, ErrorKind> {
+    fn builtin_abort<RO>(_: &mut VM<RO>, message: Value<RO>) -> Result<Value<RO>, ErrorKind> {
         Err(ErrorKind::Abort(message.to_str()?.to_string()))
     }
 
     #[builtin("add")]
-    fn builtin_add(vm: &mut VM, #[lazy] x: Value, #[lazy] y: Value) -> Result<Value, ErrorKind> {
+    fn builtin_add<RO>(
+        vm: &mut VM<RO>,
+        #[lazy] x: Value<RO>,
+        #[lazy] y: Value<RO>,
+    ) -> Result<Value<RO>, ErrorKind> {
         arithmetic_op!(&*x.force(vm)?, &*y.force(vm)?, +)
     }
 
     #[builtin("all")]
-    fn builtin_all(vm: &mut VM, pred: Value, list: Value) -> Result<Value, ErrorKind> {
+    fn builtin_all<RO>(
+        vm: &mut VM<RO>,
+        pred: Value<RO>,
+        list: Value<RO>,
+    ) -> Result<Value<RO>, ErrorKind> {
         for value in list.to_list()?.into_iter() {
             let pred_result = vm.call_with(&pred, [value])?;
 
@@ -82,7 +90,11 @@ mod pure_builtins {
     }
 
     #[builtin("any")]
-    fn builtin_any(vm: &mut VM, pred: Value, list: Value) -> Result<Value, ErrorKind> {
+    fn builtin_any<RO>(
+        vm: &mut VM<RO>,
+        pred: Value<RO>,
+        list: Value<RO>,
+    ) -> Result<Value<RO>, ErrorKind> {
         for value in list.to_list()?.into_iter() {
             let pred_result = vm.call_with(&pred, [value])?;
 
@@ -95,7 +107,7 @@ mod pure_builtins {
     }
 
     #[builtin("attrNames")]
-    fn builtin_attr_names(_: &mut VM, set: Value) -> Result<Value, ErrorKind> {
+    fn builtin_attr_names<RO>(_: &mut VM<RO>, set: Value<RO>) -> Result<Value<RO>, ErrorKind> {
         let xs = set.to_attrs()?;
         let mut output = Vec::with_capacity(xs.len());
 
@@ -107,7 +119,7 @@ mod pure_builtins {
     }
 
     #[builtin("attrValues")]
-    fn builtin_attr_values(_: &mut VM, set: Value) -> Result<Value, ErrorKind> {
+    fn builtin_attr_values<RO>(_: &mut VM<RO>, set: Value<RO>) -> Result<Value<RO>, ErrorKind> {
         let xs = set.to_attrs()?;
         let mut output = Vec::with_capacity(xs.len());
 
@@ -119,29 +131,45 @@ mod pure_builtins {
     }
 
     #[builtin("baseNameOf")]
-    fn builtin_base_name_of(vm: &mut VM, s: Value) -> Result<Value, ErrorKind> {
+    fn builtin_base_name_of<RO>(vm: &mut VM<RO>, s: Value<RO>) -> Result<Value<RO>, ErrorKind> {
         let s = s.coerce_to_string(CoercionKind::Weak, vm)?;
         let result: String = s.rsplit_once('/').map(|(_, x)| x).unwrap_or(&s).into();
         Ok(result.into())
     }
 
     #[builtin("bitAnd")]
-    fn builtin_bit_and(_: &mut VM, x: Value, y: Value) -> Result<Value, ErrorKind> {
+    fn builtin_bit_and<RO>(
+        _: &mut VM<RO>,
+        x: Value<RO>,
+        y: Value<RO>,
+    ) -> Result<Value<RO>, ErrorKind> {
         Ok(Value::Integer(x.as_int()? & y.as_int()?))
     }
 
     #[builtin("bitOr")]
-    fn builtin_bit_or(_: &mut VM, x: Value, y: Value) -> Result<Value, ErrorKind> {
+    fn builtin_bit_or<RO>(
+        _: &mut VM<RO>,
+        x: Value<RO>,
+        y: Value<RO>,
+    ) -> Result<Value<RO>, ErrorKind> {
         Ok(Value::Integer(x.as_int()? | y.as_int()?))
     }
 
     #[builtin("bitXor")]
-    fn builtin_bit_xor(_: &mut VM, x: Value, y: Value) -> Result<Value, ErrorKind> {
+    fn builtin_bit_xor<RO>(
+        _: &mut VM<RO>,
+        x: Value<RO>,
+        y: Value<RO>,
+    ) -> Result<Value<RO>, ErrorKind> {
         Ok(Value::Integer(x.as_int()? ^ y.as_int()?))
     }
 
     #[builtin("catAttrs")]
-    fn builtin_cat_attrs(vm: &mut VM, key: Value, list: Value) -> Result<Value, ErrorKind> {
+    fn builtin_cat_attrs<RO>(
+        vm: &mut VM<RO>,
+        key: Value<RO>,
+        list: Value<RO>,
+    ) -> Result<Value<RO>, ErrorKind> {
         let key = key.to_str()?;
         let list = list.to_list()?;
         let mut output = vec![];
@@ -157,12 +185,16 @@ mod pure_builtins {
     }
 
     #[builtin("ceil")]
-    fn builtin_ceil(_: &mut VM, double: Value) -> Result<Value, ErrorKind> {
+    fn builtin_ceil<RO>(_: &mut VM<RO>, double: Value<RO>) -> Result<Value<RO>, ErrorKind> {
         Ok(Value::Integer(double.as_float()?.ceil() as i64))
     }
 
     #[builtin("compareVersions")]
-    fn builtin_compare_versions(_: &mut VM, x: Value, y: Value) -> Result<Value, ErrorKind> {
+    fn builtin_compare_versions<RO>(
+        _: &mut VM<RO>,
+        x: Value<RO>,
+        y: Value<RO>,
+    ) -> Result<Value<RO>, ErrorKind> {
         let s1 = x.to_str()?;
         let s1 = VersionPartsIter::new_for_cmp(s1.as_str());
         let s2 = y.to_str()?;
@@ -176,7 +208,7 @@ mod pure_builtins {
     }
 
     #[builtin("concatLists")]
-    fn builtin_concat_lists(vm: &mut VM, lists: Value) -> Result<Value, ErrorKind> {
+    fn builtin_concat_lists<RO>(vm: &mut VM<RO>, lists: Value<RO>) -> Result<Value<RO>, ErrorKind> {
         let list = lists.to_list()?;
         let lists = list
             .into_iter()
@@ -192,7 +224,11 @@ mod pure_builtins {
     }
 
     #[builtin("concatMap")]
-    fn builtin_concat_map(vm: &mut VM, f: Value, list: Value) -> Result<Value, ErrorKind> {
+    fn builtin_concat_map<RO>(
+        vm: &mut VM<RO>,
+        f: Value<RO>,
+        list: Value<RO>,
+    ) -> Result<Value<RO>, ErrorKind> {
         let list = list.to_list()?;
         let mut res = Vec::new();
         for val in list {
@@ -202,11 +238,11 @@ mod pure_builtins {
     }
 
     #[builtin("concatStringsSep")]
-    fn builtin_concat_strings_sep(
-        vm: &mut VM,
-        separator: Value,
-        list: Value,
-    ) -> Result<Value, ErrorKind> {
+    fn builtin_concat_strings_sep<RO>(
+        vm: &mut VM<RO>,
+        separator: Value<RO>,
+        list: Value<RO>,
+    ) -> Result<Value<RO>, ErrorKind> {
         let separator = separator.to_str()?;
         let list = list.to_list()?;
         let mut res = String::new();
@@ -220,18 +256,26 @@ mod pure_builtins {
     }
 
     #[builtin("deepSeq")]
-    fn builtin_deep_seq(vm: &mut VM, x: Value, y: Value) -> Result<Value, ErrorKind> {
+    fn builtin_deep_seq<RO>(
+        vm: &mut VM<RO>,
+        x: Value<RO>,
+        y: Value<RO>,
+    ) -> Result<Value<RO>, ErrorKind> {
         x.deep_force(vm, &mut Default::default())?;
         Ok(y)
     }
 
     #[builtin("div")]
-    fn builtin_div(vm: &mut VM, #[lazy] x: Value, #[lazy] y: Value) -> Result<Value, ErrorKind> {
+    fn builtin_div<RO>(
+        vm: &mut VM<RO>,
+        #[lazy] x: Value<RO>,
+        #[lazy] y: Value<RO>,
+    ) -> Result<Value<RO>, ErrorKind> {
         arithmetic_op!(&*x.force(vm)?, &*y.force(vm)?, /)
     }
 
     #[builtin("dirOf")]
-    fn builtin_dir_of(vm: &mut VM, s: Value) -> Result<Value, ErrorKind> {
+    fn builtin_dir_of<RO>(vm: &mut VM<RO>, s: Value<RO>) -> Result<Value<RO>, ErrorKind> {
         let str = s.coerce_to_string(CoercionKind::Weak, vm)?;
         let result = str
             .rsplit_once('/')
@@ -248,7 +292,11 @@ mod pure_builtins {
     }
 
     #[builtin("elem")]
-    fn builtin_elem(vm: &mut VM, x: Value, xs: Value) -> Result<Value, ErrorKind> {
+    fn builtin_elem<RO>(
+        vm: &mut VM<RO>,
+        x: Value<RO>,
+        xs: Value<RO>,
+    ) -> Result<Value<RO>, ErrorKind> {
         for val in xs.to_list()? {
             if vm.nix_eq(val, x.clone(), true)? {
                 return Ok(true.into());
@@ -258,7 +306,11 @@ mod pure_builtins {
     }
 
     #[builtin("elemAt")]
-    fn builtin_elem_at(_: &mut VM, xs: Value, i: Value) -> Result<Value, ErrorKind> {
+    fn builtin_elem_at<RO>(
+        _: &mut VM<RO>,
+        xs: Value<RO>,
+        i: Value<RO>,
+    ) -> Result<Value<RO>, ErrorKind> {
         let xs = xs.to_list()?;
         let i = i.as_int()?;
         if i < 0 {
@@ -272,7 +324,11 @@ mod pure_builtins {
     }
 
     #[builtin("filter")]
-    fn builtin_filter(vm: &mut VM, pred: Value, list: Value) -> Result<Value, ErrorKind> {
+    fn builtin_filter<RO>(
+        vm: &mut VM<RO>,
+        pred: Value<RO>,
+        list: Value<RO>,
+    ) -> Result<Value<RO>, ErrorKind> {
         let list: NixList = list.to_list()?;
 
         list.into_iter()
@@ -301,17 +357,17 @@ mod pure_builtins {
     }
 
     #[builtin("floor")]
-    fn builtin_floor(_: &mut VM, double: Value) -> Result<Value, ErrorKind> {
+    fn builtin_floor<RO>(_: &mut VM<RO>, double: Value<RO>) -> Result<Value<RO>, ErrorKind> {
         Ok(Value::Integer(double.as_float()?.floor() as i64))
     }
 
     #[builtin("foldl'")]
-    fn builtin_foldl(
-        vm: &mut VM,
-        op: Value,
-        #[lazy] mut nul: Value,
-        list: Value,
-    ) -> Result<Value, ErrorKind> {
+    fn builtin_foldl<RO>(
+        vm: &mut VM<RO>,
+        op: Value<RO>,
+        #[lazy] mut nul: Value<RO>,
+        list: Value<RO>,
+    ) -> Result<Value<RO>, ErrorKind> {
         let list = list.to_list()?;
         for val in list {
             nul = vm.call_with(&op, [nul, val])?;
@@ -322,7 +378,7 @@ mod pure_builtins {
     }
 
     #[builtin("functionArgs")]
-    fn builtin_function_args(_: &mut VM, f: Value) -> Result<Value, ErrorKind> {
+    fn builtin_function_args<RO>(_: &mut VM<RO>, f: Value<RO>) -> Result<Value<RO>, ErrorKind> {
         let lambda = &f.as_closure()?.lambda();
         let formals = if let Some(formals) = &lambda.formals {
             formals
@@ -335,14 +391,17 @@ mod pure_builtins {
     }
 
     #[builtin("fromJSON")]
-    fn builtin_from_json(_: &mut VM, json: Value) -> Result<Value, ErrorKind> {
+    fn builtin_from_json<RO>(_: &mut VM<RO>, json: Value<RO>) -> Result<Value<RO>, ErrorKind> {
         let json_str = json.to_str()?;
         let json: serde_json::Value = serde_json::from_str(&json_str)?;
         json.try_into()
     }
 
     #[builtin("genericClosure")]
-    fn builtin_generic_closure(vm: &mut VM, input: Value) -> Result<Value, ErrorKind> {
+    fn builtin_generic_closure<RO>(
+        vm: &mut VM<RO>,
+        input: Value<RO>,
+    ) -> Result<Value<RO>, ErrorKind> {
         let attrs = input.to_attrs()?;
 
         // The work set is maintained as a VecDeque because new items
@@ -359,7 +418,7 @@ mod pure_builtins {
         let mut res: Vec<Value> = vec![];
         let mut done_keys: Vec<Value> = vec![];
 
-        let mut insert_key = |k: Value, vm: &mut VM| -> Result<bool, ErrorKind> {
+        let mut insert_key = |k: Value<RO>, vm: &mut VM| -> Result<bool, ErrorKind> {
             for existing in &done_keys {
                 if existing.nix_eq(&k, vm)? {
                     return Ok(false);
@@ -387,7 +446,11 @@ mod pure_builtins {
     }
 
     #[builtin("genList")]
-    fn builtin_gen_list(vm: &mut VM, generator: Value, length: Value) -> Result<Value, ErrorKind> {
+    fn builtin_gen_list<RO>(
+        vm: &mut VM<RO>,
+        generator: Value<RO>,
+        length: Value<RO>,
+    ) -> Result<Value<RO>, ErrorKind> {
         let len = length.as_int()?;
         (0..len)
             .map(|i| vm.call_with(&generator, [i.into()]))
@@ -397,7 +460,11 @@ mod pure_builtins {
     }
 
     #[builtin("getAttr")]
-    fn builtin_get_attr(_: &mut VM, key: Value, set: Value) -> Result<Value, ErrorKind> {
+    fn builtin_get_attr<RO>(
+        _: &mut VM<RO>,
+        key: Value<RO>,
+        set: Value<RO>,
+    ) -> Result<Value<RO>, ErrorKind> {
         let k = key.to_str()?;
         let xs = set.to_attrs()?;
 
@@ -410,7 +477,11 @@ mod pure_builtins {
     }
 
     #[builtin("groupBy")]
-    fn builtin_group_by(vm: &mut VM, f: Value, list: Value) -> Result<Value, ErrorKind> {
+    fn builtin_group_by<RO>(
+        vm: &mut VM<RO>,
+        f: Value<RO>,
+        list: Value<RO>,
+    ) -> Result<Value<RO>, ErrorKind> {
         let mut res: BTreeMap<NixString, Vec<Value>> = BTreeMap::new();
         for val in list.to_list()? {
             let key = vm.call_with(&f, [val.clone()])?.force(vm)?.to_str()?;
@@ -423,7 +494,11 @@ mod pure_builtins {
     }
 
     #[builtin("hasAttr")]
-    fn builtin_has_attr(_: &mut VM, key: Value, set: Value) -> Result<Value, ErrorKind> {
+    fn builtin_has_attr<RO>(
+        _: &mut VM<RO>,
+        key: Value<RO>,
+        set: Value<RO>,
+    ) -> Result<Value<RO>, ErrorKind> {
         let k = key.to_str()?;
         let xs = set.to_attrs()?;
 
@@ -431,7 +506,7 @@ mod pure_builtins {
     }
 
     #[builtin("head")]
-    fn builtin_head(_: &mut VM, list: Value) -> Result<Value, ErrorKind> {
+    fn builtin_head<RO>(_: &mut VM<RO>, list: Value<RO>) -> Result<Value<RO>, ErrorKind> {
         match list.to_list()?.get(0) {
             Some(x) => Ok(x.clone()),
             None => Err(ErrorKind::IndexOutOfBounds { index: 0 }),
@@ -439,7 +514,11 @@ mod pure_builtins {
     }
 
     #[builtin("intersectAttrs")]
-    fn builtin_intersect_attrs(_: &mut VM, x: Value, y: Value) -> Result<Value, ErrorKind> {
+    fn builtin_intersect_attrs<RO>(
+        _: &mut VM<RO>,
+        x: Value<RO>,
+        y: Value<RO>,
+    ) -> Result<Value<RO>, ErrorKind> {
         let attrs1 = x.to_attrs()?;
         let attrs2 = y.to_attrs()?;
         let res = attrs2.iter().filter_map(|(k, v)| {
@@ -455,25 +534,28 @@ mod pure_builtins {
     // For `is*` predicates we force manually, as Value::force also unwraps any Thunks
 
     #[builtin("isAttrs")]
-    fn builtin_is_attrs(vm: &mut VM, #[lazy] x: Value) -> Result<Value, ErrorKind> {
+    fn builtin_is_attrs<RO>(vm: &mut VM<RO>, #[lazy] x: Value<RO>) -> Result<Value<RO>, ErrorKind> {
         let value = x.force(vm)?;
         Ok(Value::Bool(matches!(*value, Value::Attrs(_))))
     }
 
     #[builtin("isBool")]
-    fn builtin_is_bool(vm: &mut VM, #[lazy] x: Value) -> Result<Value, ErrorKind> {
+    fn builtin_is_bool<RO>(vm: &mut VM<RO>, #[lazy] x: Value<RO>) -> Result<Value<RO>, ErrorKind> {
         let value = x.force(vm)?;
         Ok(Value::Bool(matches!(*value, Value::Bool(_))))
     }
 
     #[builtin("isFloat")]
-    fn builtin_is_float(vm: &mut VM, #[lazy] x: Value) -> Result<Value, ErrorKind> {
+    fn builtin_is_float<RO>(vm: &mut VM<RO>, #[lazy] x: Value<RO>) -> Result<Value<RO>, ErrorKind> {
         let value = x.force(vm)?;
         Ok(Value::Bool(matches!(*value, Value::Float(_))))
     }
 
     #[builtin("isFunction")]
-    fn builtin_is_function(vm: &mut VM, #[lazy] x: Value) -> Result<Value, ErrorKind> {
+    fn builtin_is_function<RO>(
+        vm: &mut VM<RO>,
+        #[lazy] x: Value<RO>,
+    ) -> Result<Value<RO>, ErrorKind> {
         let value = x.force(vm)?;
         Ok(Value::Bool(matches!(
             *value,
@@ -482,46 +564,49 @@ mod pure_builtins {
     }
 
     #[builtin("isInt")]
-    fn builtin_is_int(vm: &mut VM, #[lazy] x: Value) -> Result<Value, ErrorKind> {
+    fn builtin_is_int<RO>(vm: &mut VM<RO>, #[lazy] x: Value<RO>) -> Result<Value<RO>, ErrorKind> {
         let value = x.force(vm)?;
         Ok(Value::Bool(matches!(*value, Value::Integer(_))))
     }
 
     #[builtin("isList")]
-    fn builtin_is_list(vm: &mut VM, #[lazy] x: Value) -> Result<Value, ErrorKind> {
+    fn builtin_is_list<RO>(vm: &mut VM<RO>, #[lazy] x: Value<RO>) -> Result<Value<RO>, ErrorKind> {
         let value = x.force(vm)?;
         Ok(Value::Bool(matches!(*value, Value::List(_))))
     }
 
     #[builtin("isNull")]
-    fn builtin_is_null(vm: &mut VM, #[lazy] x: Value) -> Result<Value, ErrorKind> {
+    fn builtin_is_null<RO>(vm: &mut VM<RO>, #[lazy] x: Value<RO>) -> Result<Value<RO>, ErrorKind> {
         let value = x.force(vm)?;
         Ok(Value::Bool(matches!(*value, Value::Null)))
     }
 
     #[builtin("isPath")]
-    fn builtin_is_path(vm: &mut VM, #[lazy] x: Value) -> Result<Value, ErrorKind> {
+    fn builtin_is_path<RO>(vm: &mut VM<RO>, #[lazy] x: Value<RO>) -> Result<Value<RO>, ErrorKind> {
         let value = x.force(vm)?;
         Ok(Value::Bool(matches!(*value, Value::Path(_))))
     }
 
     #[builtin("isString")]
-    fn builtin_is_string(vm: &mut VM, #[lazy] x: Value) -> Result<Value, ErrorKind> {
+    fn builtin_is_string<RO>(
+        vm: &mut VM<RO>,
+        #[lazy] x: Value<RO>,
+    ) -> Result<Value<RO>, ErrorKind> {
         let value = x.force(vm)?;
         Ok(Value::Bool(matches!(*value, Value::String(_))))
     }
 
     #[builtin("length")]
-    fn builtin_length(_: &mut VM, list: Value) -> Result<Value, ErrorKind> {
+    fn builtin_length<RO>(_: &mut VM<RO>, list: Value<RO>) -> Result<Value<RO>, ErrorKind> {
         Ok(Value::Integer(list.to_list()?.len() as i64))
     }
 
     #[builtin("lessThan")]
-    fn builtin_less_than(
-        vm: &mut VM,
-        #[lazy] x: Value,
-        #[lazy] y: Value,
-    ) -> Result<Value, ErrorKind> {
+    fn builtin_less_than<RO>(
+        vm: &mut VM<RO>,
+        #[lazy] x: Value<RO>,
+        #[lazy] y: Value<RO>,
+    ) -> Result<Value<RO>, ErrorKind> {
         Ok(Value::Bool(matches!(
             x.force(vm)?.nix_cmp(&*y.force(vm)?, vm)?,
             Some(Ordering::Less)
@@ -529,7 +614,7 @@ mod pure_builtins {
     }
 
     #[builtin("listToAttrs")]
-    fn builtin_list_to_attrs(vm: &mut VM, list: Value) -> Result<Value, ErrorKind> {
+    fn builtin_list_to_attrs<RO>(vm: &mut VM<RO>, list: Value<RO>) -> Result<Value<RO>, ErrorKind> {
         let list = list.to_list()?;
         let mut map = BTreeMap::new();
         for val in list {
@@ -543,7 +628,11 @@ mod pure_builtins {
     }
 
     #[builtin("map")]
-    fn builtin_map(vm: &mut VM, f: Value, list: Value) -> Result<Value, ErrorKind> {
+    fn builtin_map<RO>(
+        vm: &mut VM<RO>,
+        f: Value<RO>,
+        list: Value<RO>,
+    ) -> Result<Value<RO>, ErrorKind> {
         let list: NixList = list.to_list()?;
 
         list.into_iter()
@@ -554,7 +643,11 @@ mod pure_builtins {
     }
 
     #[builtin("mapAttrs")]
-    fn builtin_map_attrs(vm: &mut VM, f: Value, attrs: Value) -> Result<Value, ErrorKind> {
+    fn builtin_map_attrs<RO>(
+        vm: &mut VM<RO>,
+        f: Value<RO>,
+        attrs: Value<RO>,
+    ) -> Result<Value<RO>, ErrorKind> {
         let attrs = attrs.to_attrs()?;
         let res =
             attrs
@@ -568,7 +661,11 @@ mod pure_builtins {
     }
 
     #[builtin("match")]
-    fn builtin_match(_: &mut VM, regex: Value, str: Value) -> Result<Value, ErrorKind> {
+    fn builtin_match<RO>(
+        _: &mut VM<RO>,
+        regex: Value<RO>,
+        str: Value<RO>,
+    ) -> Result<Value<RO>, ErrorKind> {
         let s = str.to_str()?;
         let re = regex.to_str()?;
         let re: Regex = Regex::new(&format!("^{}$", re.as_str())).unwrap();
@@ -584,12 +681,16 @@ mod pure_builtins {
     }
 
     #[builtin("mul")]
-    fn builtin_mul(vm: &mut VM, #[lazy] x: Value, #[lazy] y: Value) -> Result<Value, ErrorKind> {
+    fn builtin_mul<RO>(
+        vm: &mut VM<RO>,
+        #[lazy] x: Value<RO>,
+        #[lazy] y: Value<RO>,
+    ) -> Result<Value<RO>, ErrorKind> {
         arithmetic_op!(&*x.force(vm)?, &*y.force(vm)?, *)
     }
 
     #[builtin("parseDrvName")]
-    fn builtin_parse_drv_name(_vm: &mut VM, s: Value) -> Result<Value, ErrorKind> {
+    fn builtin_parse_drv_name<RO>(_: &mut VM<RO>, s: Value<RO>) -> Result<Value<RO>, ErrorKind> {
         // This replicates cppnix's (mis?)handling of codepoints
         // above U+007f following 0x2d ('-')
         let s = s.to_str()?;
@@ -613,7 +714,11 @@ mod pure_builtins {
         )))
     }
     #[builtin("partition")]
-    fn builtin_partition(vm: &mut VM, pred: Value, list: Value) -> Result<Value, ErrorKind> {
+    fn builtin_partition<RO>(
+        vm: &mut VM<RO>,
+        pred: Value<RO>,
+        list: Value<RO>,
+    ) -> Result<Value<RO>, ErrorKind> {
         let mut right: Vec<Value> = vec![];
         let mut wrong: Vec<Value> = vec![];
 
@@ -634,7 +739,11 @@ mod pure_builtins {
     }
 
     #[builtin("removeAttrs")]
-    fn builtin_remove_attrs(_: &mut VM, attrs: Value, keys: Value) -> Result<Value, ErrorKind> {
+    fn builtin_remove_attrs<RO>(
+        _: &mut VM<RO>,
+        attrs: Value<RO>,
+        keys: Value<RO>,
+    ) -> Result<Value<RO>, ErrorKind> {
         let attrs = attrs.to_attrs()?;
         let keys = keys
             .to_list()?
@@ -652,12 +761,12 @@ mod pure_builtins {
     }
 
     #[builtin("replaceStrings")]
-    fn builtin_replace_strings(
-        vm: &mut VM,
-        from: Value,
-        to: Value,
-        s: Value,
-    ) -> Result<Value, ErrorKind> {
+    fn builtin_replace_strings<RO>(
+        vm: &mut VM<RO>,
+        from: Value<RO>,
+        to: Value<RO>,
+        s: Value<RO>,
+    ) -> Result<Value<RO>, ErrorKind> {
         let from = from.to_list()?;
         from.force_elements(vm)?;
         let to = to.to_list()?;
@@ -728,14 +837,22 @@ mod pure_builtins {
     }
 
     #[builtin("seq")]
-    fn builtin_seq(_: &mut VM, _x: Value, y: Value) -> Result<Value, ErrorKind> {
+    fn builtin_seq<RO>(
+        _: &mut VM<RO>,
+        _x: Value<RO>,
+        y: Value<RO>,
+    ) -> Result<Value<RO>, ErrorKind> {
         // The builtin calling infra has already forced both args for us, so
         // we just return the second and ignore the first
         Ok(y)
     }
 
     #[builtin("split")]
-    fn builtin_split(_: &mut VM, regex: Value, str: Value) -> Result<Value, ErrorKind> {
+    fn builtin_split<RO>(
+        _: &mut VM<RO>,
+        regex: Value<RO>,
+        str: Value<RO>,
+    ) -> Result<Value<RO>, ErrorKind> {
         let s = str.to_str()?;
         let text = s.as_str();
         let re = regex.to_str()?;
@@ -771,7 +888,11 @@ mod pure_builtins {
     }
 
     #[builtin("sort")]
-    fn builtin_sort(vm: &mut VM, comparator: Value, list: Value) -> Result<Value, ErrorKind> {
+    fn builtin_sort<RO>(
+        vm: &mut VM<RO>,
+        comparator: Value<RO>,
+        list: Value<RO>,
+    ) -> Result<Value<RO>, ErrorKind> {
         let mut list = list.to_list()?.into_vec();
 
         // Used to let errors "escape" from the sorting closure. If anything
@@ -809,7 +930,7 @@ mod pure_builtins {
     }
 
     #[builtin("splitVersion")]
-    fn builtin_split_version(_: &mut VM, s: Value) -> Result<Value, ErrorKind> {
+    fn builtin_split_version<RO>(_: &mut VM<RO>, s: Value<RO>) -> Result<Value<RO>, ErrorKind> {
         let s = s.to_str()?;
         let s = VersionPartsIter::new(s.as_str());
 
@@ -825,24 +946,31 @@ mod pure_builtins {
     }
 
     #[builtin("stringLength")]
-    fn builtin_string_length(vm: &mut VM, #[lazy] s: Value) -> Result<Value, ErrorKind> {
+    fn builtin_string_length<RO>(
+        vm: &mut VM<RO>,
+        #[lazy] s: Value<RO>,
+    ) -> Result<Value<RO>, ErrorKind> {
         // also forces the value
         let s = s.coerce_to_string(CoercionKind::Weak, vm)?;
         Ok(Value::Integer(s.as_str().len() as i64))
     }
 
     #[builtin("sub")]
-    fn builtin_sub(vm: &mut VM, #[lazy] x: Value, #[lazy] y: Value) -> Result<Value, ErrorKind> {
+    fn builtin_sub<RO>(
+        vm: &mut VM<RO>,
+        #[lazy] x: Value<RO>,
+        #[lazy] y: Value<RO>,
+    ) -> Result<Value<RO>, ErrorKind> {
         arithmetic_op!(&*x.force(vm)?, &*y.force(vm)?, -)
     }
 
     #[builtin("substring")]
-    fn builtin_substring(
-        _: &mut VM,
-        start: Value,
-        len: Value,
-        s: Value,
-    ) -> Result<Value, ErrorKind> {
+    fn builtin_substring<RO>(
+        _: &mut VM<RO>,
+        start: Value<RO>,
+        len: Value<RO>,
+        s: Value<RO>,
+    ) -> Result<Value<RO>, ErrorKind> {
         let beg = start.as_int()?;
         let len = len.as_int()?;
         let x = s.to_str()?;
@@ -870,7 +998,7 @@ mod pure_builtins {
     }
 
     #[builtin("tail")]
-    fn builtin_tail(_: &mut VM, list: Value) -> Result<Value, ErrorKind> {
+    fn builtin_tail<RO>(_: &mut VM<RO>, list: Value<RO>) -> Result<Value<RO>, ErrorKind> {
         let xs = list.to_list()?;
 
         if xs.len() == 0 {
@@ -882,26 +1010,36 @@ mod pure_builtins {
     }
 
     #[builtin("throw")]
-    fn builtin_throw(_: &mut VM, message: Value) -> Result<Value, ErrorKind> {
+    fn builtin_throw<RO>(_: &mut VM<RO>, message: Value<RO>) -> Result<Value<RO>, ErrorKind> {
         Err(ErrorKind::Throw(message.to_str()?.to_string()))
     }
 
     #[builtin("toString")]
-    fn builtin_to_string(vm: &mut VM, #[lazy] x: Value) -> Result<Value, ErrorKind> {
+    fn builtin_to_string<RO>(
+        vm: &mut VM<RO>,
+        #[lazy] x: Value<RO>,
+    ) -> Result<Value<RO>, ErrorKind> {
         // coerce_to_string forces for us
         x.coerce_to_string(CoercionKind::Strong, vm)
             .map(Value::String)
     }
 
     #[builtin("placeholder")]
-    fn builtin_placeholder(vm: &mut VM, #[lazy] _: Value) -> Result<Value, ErrorKind> {
+    fn builtin_placeholder<RO>(
+        vm: &mut VM<RO>,
+        #[lazy] _: Value<RO>,
+    ) -> Result<Value<RO>, ErrorKind> {
         // TODO(amjoseph)
         vm.emit_warning(WarningKind::NotImplemented("builtins.placeholder"));
         Ok("<builtins.placeholder-is-not-implemented-in-tvix-yet>".into())
     }
 
     #[builtin("trace")]
-    fn builtin_trace(_: &mut VM, message: Value, value: Value) -> Result<Value, ErrorKind> {
+    fn builtin_trace<RO>(
+        _: &mut VM<RO>,
+        message: Value<RO>,
+        value: Value<RO>,
+    ) -> Result<Value<RO>, ErrorKind> {
         // TODO(grfn): `trace` should be pluggable and capturable, probably via a method on
         // the VM
         println!("trace: {} :: {}", message, message.type_of());
@@ -909,13 +1047,13 @@ mod pure_builtins {
     }
 
     #[builtin("toPath")]
-    fn builtin_to_path(vm: &mut VM, #[lazy] s: Value) -> Result<Value, ErrorKind> {
+    fn builtin_to_path<RO>(vm: &mut VM<RO>, #[lazy] s: Value<RO>) -> Result<Value<RO>, ErrorKind> {
         let path: Value = crate::value::canon_path(coerce_value_to_path(&s, vm)?).into();
         Ok(path.coerce_to_string(CoercionKind::Weak, vm)?.into())
     }
 
     #[builtin("tryEval")]
-    fn builtin_try_eval(vm: &mut VM, #[lazy] e: Value) -> Result<Value, ErrorKind> {
+    fn builtin_try_eval<RO>(vm: &mut VM<RO>, #[lazy] e: Value<RO>) -> Result<Value<RO>, ErrorKind> {
         let res = match e.force(vm) {
             Ok(value) => [("value", (*value).clone()), ("success", true.into())],
             Err(e) if e.is_catchable() => [("value", false.into()), ("success", false.into())],
@@ -925,7 +1063,7 @@ mod pure_builtins {
     }
 
     #[builtin("typeOf")]
-    fn builtin_type_of(vm: &mut VM, #[lazy] x: Value) -> Result<Value, ErrorKind> {
+    fn builtin_type_of<RO>(vm: &mut VM<RO>, #[lazy] x: Value<RO>) -> Result<Value<RO>, ErrorKind> {
         // We force manually here because it also unwraps the Thunk
         // representation, if any.
         // TODO(sterni): it'd be nice if we didn't have to worry about this
@@ -941,7 +1079,7 @@ pub use pure_builtins::builtins as pure_builtins;
 /// within a pure evaluation context.
 ///
 /// These are used as a crutch to make progress on nixpkgs evaluation.
-fn placeholders() -> Vec<Builtin> {
+fn placeholders<RO>() -> Vec<Builtin<RO>> {
     vec![
         Builtin::new(
             "addErrorContext",
@@ -1039,7 +1177,7 @@ fn placeholders() -> Vec<Builtin> {
 pub const CURRENT_PLATFORM: &str = env!("TVIX_CURRENT_SYSTEM");
 
 /// Set of Nix builtins that are globally available.
-pub fn global_builtins(source: SourceCode) -> GlobalsMapFunc {
+pub fn global_builtins<RO>(source: SourceCode) -> GlobalsMapFunc<RO> {
     Box::new(move |globals: &std::rc::Weak<GlobalsMap>| {
         let mut map: BTreeMap<&'static str, Value> = BTreeMap::new();
 

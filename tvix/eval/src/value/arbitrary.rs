@@ -6,8 +6,8 @@ use std::ffi::OsString;
 use super::{NixAttrs, NixList, NixString, Value};
 
 #[derive(Clone)]
-pub enum Parameters {
-    Strategy(BoxedStrategy<Value>),
+pub enum Parameters<RO> {
+    Strategy(BoxedStrategy<Value<RO>>),
     Parameters {
         generate_internal_values: bool,
         generate_functions: bool,
@@ -15,7 +15,7 @@ pub enum Parameters {
     },
 }
 
-impl Default for Parameters {
+impl<RO> Default for Parameters<RO> {
     fn default() -> Self {
         Self::Parameters {
             generate_internal_values: false,
@@ -25,8 +25,8 @@ impl Default for Parameters {
     }
 }
 
-impl Arbitrary for Value {
-    type Parameters = Parameters;
+impl<RO> Arbitrary for Value<RO> {
+    type Parameters = Parameters<RO>;
     type Strategy = BoxedStrategy<Self>;
 
     fn arbitrary_with(args: Self::Parameters) -> Self::Strategy {

@@ -20,26 +20,27 @@ use crate::{
 
 /// Representation of a VM continuation;
 /// see: https://en.wikipedia.org/wiki/Continuation-passing_style#CPS_in_Haskell
-type Continuation = Box<dyn FnOnce(&mut VM) -> EvalResult<Trampoline>>;
+type Continuation<RO> = Box<dyn FnOnce(&mut VM<RO>) -> EvalResult<Trampoline<RO>>>;
 
-/// A description of how to continue evaluation of a thunk when returned to by the VM
+/// A description of how to continue evaluation of a thunk when returned to by
+/// the VM.
 ///
-/// This struct is used when forcing thunks to avoid stack-based recursion, which for deeply nested
-/// evaluation can easily overflow the stack.
+/// This struct is used when forcing thunks to avoid stack-based recursion,
+/// which for deeply nested evaluation can easily overflow the stack.
 #[must_use = "this `Trampoline` may be a continuation request, which should be handled"]
 #[derive(Default)]
-pub struct Trampoline {
+pub struct Trampoline<RO> {
     /// The action to perform upon return to the trampoline
-    pub action: Option<TrampolineAction>,
+    pub action: Option<TrampolineAction<RO>>,
 
     /// The continuation to execute after the action has completed
-    pub continuation: Option<Continuation>,
+    pub continuation: Option<Continuation<RO>>,
 }
 
-impl Trampoline {
+impl<RO> Trampoline<RO> {
     /// Add the execution of a new [`Continuation`] to the existing continuation
     /// of this `Trampoline`, returning the resulting `Trampoline`.
-    pub fn append_to_continuation(self, f: Continuation) -> Self {
+    pub fn append_to_continuation(self, f: Continuation<RO>) -> Self {
         Trampoline {
             action: self.action,
             continuation: match self.continuation {
@@ -54,23 +55,23 @@ impl Trampoline {
 }
 
 /// Description of an action to perform upon return to a [`Trampoline`] by the VM
-pub enum TrampolineAction {
+pub enum TrampolineAction<RO> {
     /// Enter a new stack frame
     EnterFrame {
-        lambda: Rc<Lambda>,
-        upvalues: Rc<Upvalues>,
-        light_span: LightSpan,
+        lambda: Rc<Lambda<RO>>,
+        upvalues: Rc<Upvalues<RO>>,
+        light_span: LightSpan<RO>,
         arg_count: usize,
     },
 }
 
-struct CallFrame {
+struct CallFrame<RO> {
     /// The lambda currently being executed.
-    lambda: Rc<Lambda>,
+    lambda: Rc<Lambda<RO>>,
 
     /// Optional captured upvalues of this frame (if a thunk or
     /// closure if being evaluated).
-    upvalues: Rc<Upvalues>,
+    upvalues: Rc<Upvalues<RO>>,
 
     /// Instruction pointer to the instruction currently being
     /// executed.
@@ -79,20 +80,20 @@ struct CallFrame {
     /// Stack offset, i.e. the frames "view" into the VM's full stack.
     stack_offset: usize,
 
-    continuation: Option<Continuation>,
+    continuation: Option<Continuation<RO>>,
 }
 
-impl CallFrame {
+impl<RO> CallFrame<RO> {
     /// Retrieve an upvalue from this frame at the given index.
-    fn upvalue(&self, idx: UpvalueIdx) -> &Value {
+    fn upvalue(&self, idx: UpvalueIdx) -> &Value<RO> {
         &self.upvalues[idx]
     }
 }
 
-pub struct VM<'o> {
+pub struct VM<'ro, RO> {
     /// The VM call stack.  One element is pushed onto this stack
     /// each time a function is called or a thunk is forced.
-    frames: Vec<CallFrame>,
+    frames: Vec<CallFrame<RO>>,
 
     /// The VM value stack.  This is actually a "stack of stacks",
     /// with one stack-of-Values for each CallFrame in frames.  This
@@ -100,7 +101,7 @@ pub struct VM<'o> {
     /// Vec<Vec<Value>> or a Vec<Value> inside CallFrame for
     /// efficiency reasons: it avoids having to allocate a Vec on
     /// the heap each time a CallFrame is entered.
-    stack: Vec<Value>,
+    stack: Vec<Value<RO>>,
 
     /// Stack indices (absolute indexes into `stack`) of attribute
     /// sets from which variables should be dynamically resolved
@@ -110,18 +111,18 @@ pub struct VM<'o> {
     /// Runtime warnings collected during evaluation.
     warnings: Vec<EvalWarning>,
 
-    pub import_cache: Box<BTreeMap<PathBuf, Value>>,
+    pub import_cache: Box<BTreeMap<PathBuf, Value<RO>>>,
 
     nix_search_path: NixSearchPath,
 
     io_handle: Box<dyn EvalIO>,
 
-    observer: &'o mut dyn RuntimeObserver,
+    observer: &'ro mut RO,
 }
 
 /// The result of a VM's runtime evaluation.
-pub struct RuntimeResult {
-    pub value: Value,
+pub struct RuntimeResult<RO> {
+    pub value: Value<RO>,
     pub warnings: Vec<EvalWarning>,
 }
 
@@ -200,11 +201,11 @@ macro_rules! cmp_op {
     };
 }
 
-impl<'o> VM<'o> {
+impl<'ro, RO> VM<'ro, RO> {
     pub fn new(
         nix_search_path: NixSearchPath,
         io_handle: Box<dyn EvalIO>,
-        observer: &'o mut dyn RuntimeObserver,
+        observer: &'ro mut RO,
     ) -> Self {
         // Backtrace-on-stack-overflow is some seriously weird voodoo and
         // very unsafe.  This double-guard prevents it from accidentally
@@ -227,15 +228,15 @@ impl<'o> VM<'o> {
         }
     }
 
-    fn frame(&self) -> &CallFrame {
+    fn frame(&self) -> &CallFrame<RO> {
         &self.frames[self.frames.len() - 1]
     }
 
-    fn chunk(&self) -> &Chunk {
+    fn chunk(&self) -> &Chunk<RO> {
         &self.frame().lambda.chunk
     }
 
-    fn frame_mut(&mut self) -> &mut CallFrame {
+    fn frame_mut(&mut self) -> &mut CallFrame<RO> {
         let idx = self.frames.len() - 1;
         &mut self.frames[idx]
     }
@@ -246,7 +247,7 @@ impl<'o> VM<'o> {
         op
     }
 
-    pub fn pop(&mut self) -> Value {
+    pub fn pop(&mut self) -> Value<RO> {
         self.stack.pop().expect("runtime stack empty")
     }
 
@@ -254,11 +255,11 @@ impl<'o> VM<'o> {
         self.stack.truncate(self.stack.len() - num_items);
     }
 
-    pub fn push(&mut self, value: Value) {
+    pub fn push(&mut self, value: Value<RO>) {
         self.stack.push(value)
     }
 
-    fn peek(&self, offset: usize) -> &Value {
+    fn peek(&self, offset: usize) -> &Value<RO> {
         &self.stack[self.stack.len() - 1 - offset]
     }
 
@@ -270,7 +271,7 @@ impl<'o> VM<'o> {
 
     /// Returns the information needed to calculate the current span,
     /// but without performing that calculation.
-    pub(crate) fn current_light_span(&self) -> LightSpan {
+    pub(crate) fn current_light_span(&self) -> LightSpan<RO> {
         LightSpan::new_delayed(self.frame().lambda.clone(), self.frame().ip - 1)
     }
 
@@ -308,7 +309,7 @@ impl<'o> VM<'o> {
     /// The stack of the VM must be prepared with all required
     /// arguments before calling this and the value must have already
     /// been forced.
-    pub fn call_value(&mut self, callable: &Value) -> EvalResult<()> {
+    pub fn call_value(&mut self, callable: &Value<RO>) -> EvalResult<()> {
         match callable {
             Value::Closure(c) => self.enter_frame(c.lambda(), c.upvalues(), 1),
 
@@ -345,9 +346,9 @@ impl<'o> VM<'o> {
     ///
     /// Panics if the passed list of `args` is empty
     #[track_caller]
-    pub fn call_with<I>(&mut self, callable: &Value, args: I) -> EvalResult<Value>
+    pub fn call_with<I>(&mut self, callable: &Value<RO>, args: I) -> EvalResult<Value<RO>>
     where
-        I: IntoIterator<Item = Value>,
+        I: IntoIterator<Item = Value<RO>>,
         I::IntoIter: DoubleEndedIterator,
     {
         let mut num_args = 0_usize;
@@ -372,7 +373,7 @@ impl<'o> VM<'o> {
         Ok(res)
     }
 
-    fn tail_call_value(&mut self, callable: Value) -> EvalResult<()> {
+    fn tail_call_value(&mut self, callable: Value<RO>) -> EvalResult<()> {
         match callable {
             Value::Builtin(builtin) => self.call_builtin(builtin),
             Value::Thunk(thunk) => self.tail_call_value(thunk.value().clone()),
@@ -413,8 +414,8 @@ impl<'o> VM<'o> {
     /// computed value on its stack after the frame completes.
     pub fn enter_frame(
         &mut self,
-        lambda: Rc<Lambda>,
-        upvalues: Rc<Upvalues>,
+        lambda: Rc<Lambda<RO>>,
+        upvalues: Rc<Upvalues<RO>>,
         arg_count: usize,
     ) -> EvalResult<()> {
         self.observer
@@ -461,8 +462,8 @@ impl<'o> VM<'o> {
 
     fn trampoline_loop(
         &mut self,
-        mut trampoline: Trampoline,
-        mut retrampoline: Option<Continuation>,
+        mut trampoline: Trampoline<RO>,
+        mut retrampoline: Option<Continuation<RO>>,
     ) -> EvalResult<()> {
         loop {
             if let Some(TrampolineAction::EnterFrame {
@@ -510,8 +511,8 @@ impl<'o> VM<'o> {
 
     pub(crate) fn nix_eq(
         &mut self,
-        v1: Value,
-        v2: Value,
+        v1: Value<RO>,
+        v2: Value<RO>,
         allow_top_level_pointer_equality_on_functions_and_thunks: bool,
     ) -> EvalResult<bool> {
         self.push(v1);
@@ -527,7 +528,7 @@ impl<'o> VM<'o> {
     pub(crate) fn nix_op_eq(
         &mut self,
         allow_top_level_pointer_equality_on_functions_and_thunks: bool,
-    ) -> EvalResult<Trampoline> {
+    ) -> EvalResult<Trampoline<RO>> {
         // This bit gets set to `true` (if it isn't already) as soon
         // as we start comparing the contents of two
         // {lists,attrsets} -- but *not* the contents of two thunks.
@@ -656,7 +657,7 @@ impl<'o> VM<'o> {
         Ok(Trampoline::default())
     }
 
-    pub(crate) fn run_op(&mut self, op: OpCode) -> EvalResult<Trampoline> {
+    pub(crate) fn run_op(&mut self, op: OpCode) -> EvalResult<Trampoline<RO>> {
         match op {
             OpCode::OpConstant(idx) => {
                 let c = self.chunk()[idx].clone();
@@ -1069,7 +1070,7 @@ impl<'o> VM<'o> {
     }
 
     /// Resolve a dynamic identifier through the with-stack at runtime.
-    fn resolve_with(&mut self, ident: &str) -> EvalResult<Value> {
+    fn resolve_with(&mut self, ident: &str) -> EvalResult<Value<RO>> {
         // Iterate over the with_stack manually to avoid borrowing
         // self, which is required for forcing the set.
         for with_stack_idx in (0..self.with_stack.len()).rev() {
@@ -1108,7 +1109,7 @@ impl<'o> VM<'o> {
     fn populate_upvalues(
         &mut self,
         count: usize,
-        mut upvalues: impl DerefMut<Target = Upvalues>,
+        mut upvalues: impl DerefMut<Target = Upvalues<RO>>,
     ) -> EvalResult<()> {
         for _ in 0..count {
             match self.inc_ip() {
@@ -1167,7 +1168,7 @@ impl<'o> VM<'o> {
         Ok(())
     }
 
-    pub fn call_builtin(&mut self, builtin: Builtin) -> EvalResult<()> {
+    pub fn call_builtin(&mut self, builtin: Builtin<RO>) -> EvalResult<()> {
         let builtin_name = builtin.name();
         self.observer.observe_enter_builtin(builtin_name);
 
@@ -1183,12 +1184,12 @@ impl<'o> VM<'o> {
     }
 }
 
-pub fn run_lambda(
+pub fn run_lambda<RO: RuntimeObserver>(
     nix_search_path: NixSearchPath,
     io_handle: Box<dyn EvalIO>,
-    observer: &mut dyn RuntimeObserver,
-    lambda: Rc<Lambda>,
-) -> EvalResult<RuntimeResult> {
+    observer: &mut RO,
+    lambda: Rc<Lambda<RO>>,
+) -> EvalResult<RuntimeResult<RO>> {
     let mut vm = VM::new(nix_search_path, io_handle, observer);
 
     // Retain the top-level span of the expression in this lambda, as

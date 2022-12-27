@@ -25,19 +25,19 @@ use crate::{opcode::UpvalueIdx, Value};
 /// - Dynamic identifiers, which are not bound in any enclosing
 ///   scope
 #[derive(Clone, Debug)]
-pub struct Upvalues {
+pub struct Upvalues<RO> {
     /// The upvalues of static identifiers.  Each static identifier
     /// is assigned an integer identifier at compile time, which is
     /// an index into this Vec.
-    static_upvalues: Vec<Value>,
+    static_upvalues: Vec<Value<RO>>,
 
     /// The upvalues of dynamic identifiers, if any exist.  This
     /// consists of the value passed to each enclosing `with val;`,
     /// from outermost to innermost.
-    with_stack: Option<Vec<Value>>,
+    with_stack: Option<Vec<Value<RO>>>,
 }
 
-impl Upvalues {
+impl<RO> Upvalues<RO> {
     pub fn with_capacity(count: usize) -> Self {
         Upvalues {
             static_upvalues: Vec::with_capacity(count),
@@ -46,16 +46,16 @@ impl Upvalues {
     }
 
     /// Push an upvalue at the end of the upvalue list.
-    pub fn push(&mut self, value: Value) {
+    pub fn push(&mut self, value: Value<RO>) {
         self.static_upvalues.push(value);
     }
 
     /// Set the captured with stack.
-    pub fn set_with_stack(&mut self, with_stack: Vec<Value>) {
+    pub fn set_with_stack(&mut self, with_stack: Vec<Value<RO>>) {
         self.with_stack = Some(with_stack);
     }
 
-    pub fn with_stack(&self) -> Option<&Vec<Value>> {
+    pub fn with_stack(&self) -> Option<&Vec<Value<RO>>> {
         self.with_stack.as_ref()
     }
 
@@ -68,7 +68,7 @@ impl Upvalues {
 
     /// Resolve deferred upvalues from the provided stack slice,
     /// mutating them in the internal upvalue slots.
-    pub fn resolve_deferred_upvalues(&mut self, stack: &[Value]) {
+    pub fn resolve_deferred_upvalues(&mut self, stack: &[Value<RO>]) {
         for upvalue in self.static_upvalues.iter_mut() {
             if let Value::DeferredUpvalue(update_from_idx) = upvalue {
                 *upvalue = stack[update_from_idx.0].clone();
@@ -77,8 +77,8 @@ impl Upvalues {
     }
 }
 
-impl Index<UpvalueIdx> for Upvalues {
-    type Output = Value;
+impl<RO> Index<UpvalueIdx> for Upvalues<RO> {
+    type Output = Value<RO>;
 
     fn index(&self, index: UpvalueIdx) -> &Self::Output {
         &self.static_upvalues[index.0]

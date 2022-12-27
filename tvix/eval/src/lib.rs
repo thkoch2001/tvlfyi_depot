@@ -46,7 +46,7 @@ pub use crate::builtins::global_builtins;
 pub use crate::compiler::{compile, prepare_globals};
 pub use crate::errors::{Error, ErrorKind, EvalResult};
 pub use crate::io::{DummyIO, EvalIO, FileType};
-use crate::observer::{CompilerObserver, RuntimeObserver};
+use crate::observer::CompilerObserver;
 pub use crate::pretty_ast::pretty_print_expr;
 pub use crate::source::SourceCode;
 pub use crate::value::Value;
@@ -75,7 +75,7 @@ pub(crate) fn unwrap_or_clone_rc<T: Clone>(rc: Rc<T>) -> T {
 ///
 /// Public fields are intended to be set by the caller. Setting all
 /// fields is optional.
-pub struct Evaluation<'code, 'co, 'ro> {
+pub struct Evaluation<'code, 'co, 'ro, RO> {
     /// The Nix source code to be evaluated.
     code: &'code str,
 
@@ -106,16 +106,16 @@ pub struct Evaluation<'code, 'co, 'ro> {
 
     /// (optional) runtime observer, for reporting on execution steps
     /// of Nix code.
-    pub runtime_observer: Option<&'ro mut dyn RuntimeObserver>,
+    pub runtime_observer: Option<&'ro mut RO>,
 }
 
 /// Result of evaluating a piece of Nix code. If evaluation succeeded, a value
 /// will be present (and potentially some warnings!). If evaluation failed,
 /// errors will be present.
 #[derive(Debug, Default)]
-pub struct EvaluationResult {
+pub struct EvaluationResult<RO> {
     /// Nix value that the code evaluated to.
-    pub value: Option<Value>,
+    pub value: Option<Value<RO>>,
 
     /// Errors that occured during evaluation (if any).
     pub errors: Vec<Error>,
@@ -128,7 +128,7 @@ pub struct EvaluationResult {
     pub expr: Option<rnix::ast::Expr>,
 }
 
-impl<'code, 'co, 'ro> Evaluation<'code, 'co, 'ro> {
+impl<'code, 'co, 'ro, RO> Evaluation<'code, 'co, 'ro, RO> {
     /// Initialise an `Evaluation` for the given Nix source code snippet, and
     /// an optional code location.
     pub fn new(code: &'code str, location: Option<PathBuf>) -> Self {
@@ -160,7 +160,7 @@ impl<'code, 'co, 'ro> Evaluation<'code, 'co, 'ro> {
     }
 
     /// Evaluate the provided source code.
-    pub fn evaluate(mut self) -> EvaluationResult {
+    pub fn evaluate(mut self) -> EvaluationResult<RO> {
         let mut result = EvaluationResult::default();
         let parsed = rnix::ast::Root::parse(self.code);
         let parse_errors = parsed.errors();

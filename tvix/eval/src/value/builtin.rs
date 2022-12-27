@@ -22,8 +22,8 @@ use std::{
 ///
 /// Errors returned from a builtin will be annotated with the location
 /// of the call to the builtin.
-pub trait BuiltinFn: Fn(Vec<Value>, &mut VM) -> Result<Value, ErrorKind> {}
-impl<F: Fn(Vec<Value>, &mut VM) -> Result<Value, ErrorKind>> BuiltinFn for F {}
+pub trait BuiltinFn<RO>: Fn(Vec<Value<RO>>, &mut VM<RO>) -> Result<Value<RO>, ErrorKind> {}
+impl<RO, F: Fn(Vec<Value<RO>>, &mut VM<RO>) -> Result<Value<RO>, ErrorKind>> BuiltinFn<RO> for F {}
 
 /// Description of a single argument passed to a builtin
 pub struct BuiltinArgument {
@@ -46,20 +46,20 @@ pub struct BuiltinArgument {
 /// "capture" the partially applied arguments, and are treated
 /// specially when printing their representation etc.
 #[derive(Clone)]
-pub struct Builtin {
+pub struct Builtin<RO> {
     name: &'static str,
     /// Array of arguments to the builtin.
     arguments: &'static [BuiltinArgument],
     /// Optional documentation for the builtin.
     documentation: Option<&'static str>,
-    func: Rc<dyn BuiltinFn>,
+    func: Rc<dyn BuiltinFn<RO>>,
 
     /// Partially applied function arguments.
-    partials: Vec<Value>,
+    partials: Vec<Value<RO>>,
 }
 
-impl Builtin {
-    pub fn new<F: BuiltinFn + 'static>(
+impl<RO> Builtin<RO> {
+    pub fn new<F: BuiltinFn<RO> + 'static>(
         name: &'static str,
         arguments: &'static [BuiltinArgument],
         documentation: Option<&'static str>,
@@ -85,7 +85,7 @@ impl Builtin {
     /// Apply an additional argument to the builtin, which will either
     /// lead to execution of the function or to returning a partial
     /// builtin.
-    pub fn apply(mut self, vm: &mut VM, arg: Value) -> Result<Value, ErrorKind> {
+    pub fn apply(mut self, vm: &mut VM<RO>, arg: Value<RO>) -> Result<Value<RO>, ErrorKind> {
         self.partials.push(arg);
 
         if self.partials.len() == self.arguments.len() {
@@ -102,13 +102,13 @@ impl Builtin {
     }
 }
 
-impl Debug for Builtin {
+impl<RO> Debug for Builtin<RO> {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         write!(f, "builtin[{}]", self.name)
     }
 }
 
-impl Display for Builtin {
+impl<RO> Display for Builtin<RO> {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         if !self.partials.is_empty() {
             f.write_str("<<primop-app>>")
@@ -119,7 +119,7 @@ impl Display for Builtin {
 }
 
 /// Builtins are uniquely identified by their name
-impl PartialEq for Builtin {
+impl<RO> PartialEq for Builtin<RO> {
     fn eq(&self, other: &Self) -> bool {
         self.name == other.name
     }

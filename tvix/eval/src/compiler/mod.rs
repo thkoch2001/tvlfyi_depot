@@ -38,24 +38,24 @@ use self::scope::{LocalIdx, LocalPosition, Scope, Upvalue, UpvalueKind};
 /// Represents the result of compiling a piece of Nix code. If
 /// compilation was successful, the resulting bytecode can be passed
 /// to the VM.
-pub struct CompilationOutput {
-    pub lambda: Rc<Lambda>,
+pub struct CompilationOutput<RO> {
+    pub lambda: Rc<Lambda<RO>>,
     pub warnings: Vec<EvalWarning>,
     pub errors: Vec<Error>,
 
     // This field must outlive the rc::Weak reference which breaks
     // the builtins -> import -> builtins reference cycle.
-    pub globals: Rc<GlobalsMap>,
+    pub globals: Rc<GlobalsMap<RO>>,
 }
 
 /// Represents the lambda currently being compiled.
-struct LambdaCtx {
-    lambda: Lambda,
+struct LambdaCtx<RO> {
+    lambda: Lambda<RO>,
     scope: Scope,
     captures_with_stack: bool,
 }
 
-impl LambdaCtx {
+impl<RO> LambdaCtx<RO> {
     fn new() -> Self {
         LambdaCtx {
             lambda: Lambda::default(),
@@ -75,7 +75,7 @@ impl LambdaCtx {
 
 /// The map of globally available functions that should implicitly
 /// be resolvable in the global scope.
-pub type GlobalsMap = HashMap<&'static str, Rc<dyn Fn(&mut Compiler, Span)>>;
+pub type GlobalsMap<RO> = HashMap<&'static str, Rc<dyn Fn(&mut Compiler<RO>, Span)>>;
 
 /// Functions with this type are used to construct a
 /// self-referential `builtins` object; it takes a weak reference to
@@ -83,10 +83,10 @@ pub type GlobalsMap = HashMap<&'static str, Rc<dyn Fn(&mut Compiler, Span)>>;
 /// Rc::new_cyclic() is what "ties the knot".  The heap allocation
 /// (Box) and vtable (dyn) do not impair runtime or compile-time
 /// performance; they exist only during compiler startup.
-pub type GlobalsMapFunc = Box<dyn FnOnce(&Weak<GlobalsMap>) -> GlobalsMap>;
+pub type GlobalsMapFunc<RO> = Box<dyn FnOnce(&Weak<GlobalsMap<RO>>) -> GlobalsMap<RO>>;
 
-pub struct Compiler<'observer> {
-    contexts: Vec<LambdaCtx>,
+pub struct Compiler<'observer, RO> {
+    contexts: Vec<LambdaCtx<RO>>,
     warnings: Vec<EvalWarning>,
     errors: Vec<Error>,
     root_dir: PathBuf,
@@ -97,7 +97,7 @@ pub struct Compiler<'observer> {
     /// Each global has an associated token, which when encountered as
     /// an identifier is resolved against the scope poisoning logic,
     /// and a function that should emit code for the token.
-    globals: Rc<GlobalsMap>,
+    globals: Rc<GlobalsMap<RO>>,
 
     /// File reference in the codemap contains all known source code
     /// and is used to track the spans from which instructions where
@@ -109,18 +109,18 @@ pub struct Compiler<'observer> {
     observer: &'observer mut dyn CompilerObserver,
 }
 
-impl Compiler<'_> {
+impl<RO> Compiler<'_, RO> {
     pub(super) fn span_for<S: ToSpan>(&self, to_span: &S) -> Span {
         to_span.span_for(&self.file)
     }
 }
 
 /// Compiler construction
-impl<'observer> Compiler<'observer> {
+impl<'observer, RO> Compiler<'observer, RO> {
     pub(crate) fn new(
         location: Option<PathBuf>,
         file: Arc<codemap::File>,
-        globals: Rc<GlobalsMap>,
+        globals: Rc<GlobalsMap<RO>>,
         observer: &'observer mut dyn CompilerObserver,
     ) -> EvalResult<Self> {
         let mut root_dir = match location {
@@ -165,17 +165,17 @@ impl<'observer> Compiler<'observer> {
 
 // Helper functions for emitting code and metadata to the internal
 // structures of the compiler.
-impl Compiler<'_> {
-    fn context(&self) -> &LambdaCtx {
+impl<RO> Compiler<'_, RO> {
+    fn context(&self) -> &LambdaCtx<RO> {
         &self.contexts[self.contexts.len() - 1]
     }
 
-    fn context_mut(&mut self) -> &mut LambdaCtx {
+    fn context_mut(&mut self) -> &mut LambdaCtx<RO> {
         let idx = self.contexts.len() - 1;
         &mut self.contexts[idx]
     }
 
-    fn chunk(&mut self) -> &mut Chunk {
+    fn chunk(&mut self) -> &mut Chunk<RO> {
         &mut self.context_mut().lambda.chunk
     }
 
@@ -196,14 +196,14 @@ impl Compiler<'_> {
 
     /// Emit a single constant to the current bytecode chunk and track
     /// the source span from which it was compiled.
-    pub(super) fn emit_constant<T: ToSpan>(&mut self, value: Value, node: &T) {
+    pub(super) fn emit_constant<T: ToSpan>(&mut self, value: Value<RO>, node: &T) {
         let idx = self.chunk().push_constant(value);
         self.push_op(OpCode::OpConstant(idx), node);
     }
 }
 
 // Actual code-emitting AST traversal methods.
-impl Compiler<'_> {
+impl<RO> Compiler<'_, RO> {
     fn compile(&mut self, slot: LocalIdx, expr: &ast::Expr) {
         match expr {
             ast::Expr::Literal(literal) => self.compile_literal(literal),
@@ -891,7 +891,7 @@ impl Compiler<'_> {
     fn thunk<N, F>(&mut self, outer_slot: LocalIdx, node: &N, content: F)
     where
         N: ToSpan,
-        F: FnOnce(&mut Compiler, LocalIdx),
+        F: FnOnce(&mut Self, LocalIdx),
     {
         self.compile_lambda_or_thunk(true, outer_slot, node, content)
     }
@@ -905,7 +905,7 @@ impl Compiler<'_> {
         content: F,
     ) where
         N: ToSpan,
-        F: FnOnce(&mut Compiler, LocalIdx),
+        F: FnOnce(&mut Self, LocalIdx),
     {
         let name = self.scope()[outer_slot].name();
         self.new_context();
@@ -1172,7 +1172,7 @@ impl Compiler<'_> {
 
 /// Perform tail-call optimisation if the last call within a
 /// compiled chunk is another call.
-fn optimise_tail_call(chunk: &mut Chunk) {
+fn optimise_tail_call<RO>(chunk: &mut Chunk<RO>) {
     let last_op = chunk
         .code
         .last_mut()
@@ -1192,8 +1192,8 @@ fn optimise_tail_call(chunk: &mut Chunk) {
 /// Note that all builtin functions are *not* considered part of the
 /// language in this sense and MUST be supplied as additional global
 /// values, including the `builtins` set itself.
-pub fn prepare_globals(additional: GlobalsMapFunc) -> Rc<GlobalsMap> {
-    Rc::new_cyclic(Box::new(|weak: &Weak<GlobalsMap>| {
+pub fn prepare_globals<RO>(additional: GlobalsMapFunc<RO>) -> Rc<GlobalsMap<RO>> {
+    Rc::new_cyclic(Box::new(|weak: &Weak<GlobalsMap<RO>>| {
         let mut globals = additional(weak);
 
         globals.insert(
@@ -1221,13 +1221,13 @@ pub fn prepare_globals(additional: GlobalsMapFunc) -> Rc<GlobalsMap> {
     }))
 }
 
-pub fn compile(
+pub fn compile<RO>(
     expr: &ast::Expr,
     location: Option<PathBuf>,
     file: Arc<codemap::File>,
-    globals: Rc<GlobalsMap>,
+    globals: Rc<GlobalsMap<RO>>,
     observer: &mut dyn CompilerObserver,
-) -> EvalResult<CompilationOutput> {
+) -> EvalResult<CompilationOutput<RO>> {
     let mut c = Compiler::new(location, file, globals.clone(), observer)?;
 
     let root_span = c.span_for(expr);

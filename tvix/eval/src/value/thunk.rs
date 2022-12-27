@@ -42,13 +42,13 @@ use super::{Lambda, TotalDisplay};
 /// (Suspended or RecursiveClosure).  The [`value()`] function may
 /// not be called until the thunk is in the final state (Evaluated).
 #[derive(Clone, Debug)]
-enum ThunkRepr {
+enum ThunkRepr<RO> {
     /// Thunk is closed over some values, suspended and awaiting
     /// execution.
     Suspended {
-        lambda: Rc<Lambda>,
-        upvalues: Rc<Upvalues>,
-        light_span: LightSpan,
+        lambda: Rc<Lambda<RO>>,
+        upvalues: Rc<Upvalues<RO>>,
+        light_span: LightSpan<RO>,
     },
 
     /// Thunk currently under-evaluation; encountering a blackhole
@@ -56,7 +56,7 @@ enum ThunkRepr {
     Blackhole,
 
     /// Fully evaluated thunk.
-    Evaluated(Value),
+    Evaluated(Value<RO>),
 }
 
 /// A thunk is created for any value which requires non-strict
@@ -64,10 +64,10 @@ enum ThunkRepr {
 /// Every reference cycle involving `Value`s will contain at least
 /// one `Thunk`.
 #[derive(Clone, Debug)]
-pub struct Thunk(Rc<RefCell<ThunkRepr>>);
+pub struct Thunk<RO>(Rc<RefCell<ThunkRepr<RO>>>);
 
-impl Thunk {
-    pub fn new_closure(lambda: Rc<Lambda>) -> Self {
+impl<RO> Thunk<RO> {
+    pub fn new_closure(lambda: Rc<Lambda<RO>>) -> Self {
         Thunk(Rc::new(RefCell::new(ThunkRepr::Evaluated(Value::Closure(
             Rc::new(Closure {
                 upvalues: Rc::new(Upvalues::with_capacity(lambda.upvalue_count)),
@@ -76,7 +76,7 @@ impl Thunk {
         )))))
     }
 
-    pub fn new_suspended(lambda: Rc<Lambda>, light_span: LightSpan) -> Self {
+    pub fn new_suspended(lambda: Rc<Lambda<RO>>, light_span: LightSpan<RO>) -> Self {
         Thunk(Rc::new(RefCell::new(ThunkRepr::Suspended {
             upvalues: Rc::new(Upvalues::with_capacity(lambda.upvalue_count)),
             lambda: lambda.clone(),
@@ -85,7 +85,7 @@ impl Thunk {
     }
 
     pub fn new_suspended_native(
-        native: Rc<Box<dyn Fn(&mut VM) -> Result<Value, ErrorKind>>>,
+        native: Rc<Box<dyn Fn(&mut VM<RO>) -> Result<Value<RO>, ErrorKind>>>,
     ) -> Self {
         let span = codemap::CodeMap::new()
             .add_file("<internal>".to_owned(), "<internal>".to_owned())
@@ -126,7 +126,7 @@ impl Thunk {
     /// Force a thunk from a context that can't handle trampoline
     /// continuations, eg outside the VM's normal execution loop.  Calling
     /// `force_trampoline()` instead should be preferred whenever possible.
-    pub fn force(&self, vm: &mut VM) -> Result<(), ErrorKind> {
+    pub fn force(&self, vm: &mut VM<RO>) -> Result<(), ErrorKind> {
         if self.is_forced() {
             return Ok(());
         }
@@ -164,7 +164,7 @@ impl Thunk {
     /// The thunk to be forced should be at the top of the VM stack,
     /// and will be left there (but possibly partially forced) when
     /// this function returns.
-    pub fn force_trampoline(vm: &mut VM) -> Result<Trampoline, ErrorKind> {
+    pub fn force_trampoline(vm: &mut VM<RO>) -> Result<Trampoline<RO>, ErrorKind> {
         match vm.pop() {
             Value::Thunk(thunk) => thunk.force_trampoline_self(vm),
             v => {
@@ -174,7 +174,7 @@ impl Thunk {
         }
     }
 
-    fn force_trampoline_self(&self, vm: &mut VM) -> Result<Trampoline, ErrorKind> {
+    fn force_trampoline_self(&self, vm: &mut VM<RO>) -> Result<Trampoline<RO>, ErrorKind> {
         loop {
             if !self.is_suspended() {
                 let thunk = self.0.borrow();
@@ -225,7 +225,7 @@ impl Thunk {
         }
     }
 
-    pub fn finalise(&self, stack: &[Value]) {
+    pub fn finalise(&self, stack: &[Value<RO>]) {
         self.upvalues_mut().resolve_deferred_upvalues(stack);
     }
 
@@ -253,7 +253,7 @@ impl Thunk {
     // Note: Due to the interior mutability of thunks this is
     // difficult to represent in the type system without impacting the
     // API too much.
-    pub fn value(&self) -> Ref<Value> {
+    pub fn value(&self) -> Ref<Value<RO>> {
         Ref::map(self.0.borrow(), |thunk| match thunk {
             ThunkRepr::Evaluated(value) => {
                 /*
@@ -275,7 +275,7 @@ impl Thunk {
         })
     }
 
-    pub fn upvalues(&self) -> Ref<'_, Upvalues> {
+    pub fn upvalues(&self) -> Ref<'_, Upvalues<RO>> {
         Ref::map(self.0.borrow(), |thunk| match thunk {
             ThunkRepr::Suspended { upvalues, .. } => upvalues.as_ref(),
             ThunkRepr::Evaluated(Value::Closure(c)) => &c.upvalues,
@@ -283,7 +283,7 @@ impl Thunk {
         })
     }
 
-    pub fn upvalues_mut(&self) -> RefMut<'_, Upvalues> {
+    pub fn upvalues_mut(&self) -> RefMut<'_, Upvalues<RO>> {
         RefMut::map(self.0.borrow_mut(), |thunk| match thunk {
             ThunkRepr::Suspended { upvalues, .. } => Rc::get_mut(upvalues).unwrap(),
             ThunkRepr::Evaluated(Value::Closure(c)) => Rc::get_mut(
@@ -312,8 +312,12 @@ impl Thunk {
     }
 }
 
-impl TotalDisplay for Thunk {
-    fn total_fmt(&self, f: &mut std::fmt::Formatter<'_>, set: &mut ThunkSet) -> std::fmt::Result {
+impl<RO> TotalDisplay for Thunk<RO> {
+    fn total_fmt(
+        &self,
+        f: &mut std::fmt::Formatter<'_>,
+        set: &mut ThunkSet<RO>,
+    ) -> std::fmt::Result {
         if !set.insert(self) {
             return f.write_str("<CYCLE>");
         }
@@ -335,12 +339,12 @@ impl TotalDisplay for Thunk {
 /// The inner `HashSet` is not available on the outside, as it would be
 /// potentially unsafe to interact with the pointers in the set.
 #[derive(Default)]
-pub struct ThunkSet(HashSet<*mut ThunkRepr>);
+pub struct ThunkSet<RO>(HashSet<*mut ThunkRepr<RO>>);
 
-impl ThunkSet {
+impl<RO> ThunkSet<RO> {
     /// Check whether the given thunk has already been seen. Will mark the thunk
     /// as seen otherwise.
-    pub fn insert(&mut self, thunk: &Thunk) -> bool {
+    pub fn insert(&mut self, thunk: &Thunk<RO>) -> bool {
         let ptr: *mut ThunkRepr = thunk.0.as_ptr();
         self.0.insert(ptr)
     }

@@ -1,5 +1,3 @@
-use crate::spans::ToSpan;
-use crate::value::{CoercionKind, NixString};
 use std::io;
 use std::path::PathBuf;
 use std::rc::Rc;
@@ -11,7 +9,9 @@ use codemap::{File, Span};
 use codemap_diagnostic::{ColorConfig, Diagnostic, Emitter, Level, SpanLabel, SpanStyle};
 use smol_str::SmolStr;
 
-use crate::{SourceCode, Value};
+use crate::spans::ToSpan;
+use crate::value::{CoercionKind, NixString};
+use crate::SourceCode;
 
 #[derive(Clone, Debug)]
 pub enum ErrorKind {
@@ -28,7 +28,9 @@ pub enum ErrorKind {
 
     /// Attempted to specify an invalid key type (e.g. integer) in a
     /// dynamic attribute name.
-    InvalidAttributeName(Value),
+    InvalidAttributeName {
+        invalid_type: &'static str,
+    },
 
     AttributeNotFound {
         name: String,
@@ -217,11 +219,10 @@ impl Display for Error {
                 write!(f, "attribute key '{}' already defined", key)
             }
 
-            ErrorKind::InvalidAttributeName(val) => write!(
+            ErrorKind::InvalidAttributeName { invalid_type } => write!(
                 f,
-                "found attribute name '{}' of type '{}', but attribute names must be strings",
-                val,
-                val.type_of()
+                "found attribute name of type '{}', but attribute names must be strings",
+                invalid_type,
             ),
 
             ErrorKind::AttributeNotFound { name } => write!(
@@ -629,7 +630,7 @@ impl Error {
     fn span_label(&self) -> Option<String> {
         let label = match &self.kind {
             ErrorKind::DuplicateAttrsKey { .. } => "in this attribute set",
-            ErrorKind::InvalidAttributeName(_) => "in this attribute set",
+            ErrorKind::InvalidAttributeName { .. } => "in this attribute set",
             ErrorKind::NixPathResolution(_) | ErrorKind::RelativePathResolution(_) => {
                 "in this path literal"
             }

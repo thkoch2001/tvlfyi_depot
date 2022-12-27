@@ -47,8 +47,8 @@ impl Formals {
 /// done accidentally.
 ///
 #[derive(/* do not add Clone here */ Debug, Default)]
-pub struct Lambda {
-    pub(crate) chunk: Chunk,
+pub struct Lambda<RO: ?Sized> {
+    pub(crate) chunk: Chunk<RO>,
 
     /// Name of the function (equivalent to the name of the
     /// identifier (e.g. a value in a let-expression or an attribute
@@ -63,8 +63,8 @@ pub struct Lambda {
     pub(crate) formals: Option<Formals>,
 }
 
-impl Lambda {
-    pub fn chunk(&mut self) -> &mut Chunk {
+impl<RO> Lambda<RO> {
+    pub fn chunk(&mut self) -> &mut Chunk<RO> {
         &mut self.chunk
     }
 }
@@ -77,32 +77,32 @@ impl Lambda {
 /// done accidentally.
 ///
 #[derive(/* do not add Clone here */ Debug)]
-pub struct Closure {
-    pub lambda: Rc<Lambda>,
-    pub upvalues: Rc<Upvalues>,
+pub struct Closure<RO> {
+    pub lambda: Rc<Lambda<RO>>,
+    pub upvalues: Rc<Upvalues<RO>>,
 }
 
-impl Closure {
-    pub fn new(lambda: Rc<Lambda>) -> Self {
+impl<RO> Closure<RO> {
+    pub fn new(lambda: Rc<Lambda<RO>>) -> Self {
         Self::new_with_upvalues(
             Rc::new(Upvalues::with_capacity(lambda.upvalue_count)),
             lambda,
         )
     }
 
-    pub fn new_with_upvalues(upvalues: Rc<Upvalues>, lambda: Rc<Lambda>) -> Self {
+    pub fn new_with_upvalues(upvalues: Rc<Upvalues<RO>>, lambda: Rc<Lambda<RO>>) -> Self {
         Closure { upvalues, lambda }
     }
 
-    pub fn chunk(&self) -> &Chunk {
+    pub fn chunk(&self) -> &Chunk<RO> {
         &self.lambda.chunk
     }
 
-    pub fn lambda(&self) -> Rc<Lambda> {
+    pub fn lambda(&self) -> Rc<Lambda<RO>> {
         self.lambda.clone()
     }
 
-    pub fn upvalues(&self) -> Rc<Upvalues> {
+    pub fn upvalues(&self) -> Rc<Upvalues<RO>> {
         self.upvalues.clone()
     }
 }

@@ -24,18 +24,18 @@ mod impure_builtins {
     use crate::builtins::coerce_value_to_path;
 
     #[builtin("getEnv")]
-    fn builtin_get_env(_: &mut VM, var: Value) -> Result<Value, ErrorKind> {
+    fn builtin_get_env<RO>(_: &mut VM<RO>, var: Value<RO>) -> Result<Value<RO>, ErrorKind> {
         Ok(env::var(var.to_str()?).unwrap_or_else(|_| "".into()).into())
     }
 
     #[builtin("pathExists")]
-    fn builtin_path_exists(vm: &mut VM, s: Value) -> Result<Value, ErrorKind> {
+    fn builtin_path_exists<RO>(vm: &mut VM<RO>, s: Value<RO>) -> Result<Value<RO>, ErrorKind> {
         let path = coerce_value_to_path(&s, vm)?;
         vm.io().path_exists(path).map(Value::Bool)
     }
 
     #[builtin("readDir")]
-    fn builtin_read_dir(vm: &mut VM, path: Value) -> Result<Value, ErrorKind> {
+    fn builtin_read_dir<RO>(vm: &mut VM<RO>, path: Value<RO>) -> Result<Value<RO>, ErrorKind> {
         let path = coerce_value_to_path(&path, vm)?;
 
         let res = vm.io().read_dir(path)?.into_iter().map(|(name, ftype)| {
@@ -57,7 +57,7 @@ mod impure_builtins {
     }
 
     #[builtin("readFile")]
-    fn builtin_read_file(vm: &mut VM, path: Value) -> Result<Value, ErrorKind> {
+    fn builtin_read_file<RO>(vm: &mut VM<RO>, path: Value<RO>) -> Result<Value<RO>, ErrorKind> {
         let path = coerce_value_to_path(&path, vm)?;
         vm.io()
             .read_to_string(path)
@@ -67,7 +67,7 @@ mod impure_builtins {
 
 /// Return all impure builtins, that is all builtins which may perform I/O
 /// outside of the VM and so cannot be used in all contexts (e.g. WASM).
-pub(super) fn builtins() -> BTreeMap<&'static str, Value> {
+pub(super) fn builtins<RO>() -> BTreeMap<&'static str, Value<RO>> {
     let mut map: BTreeMap<&'static str, Value> = impure_builtins::builtins()
         .into_iter()
         .map(|b| (b.name(), Value::Builtin(b)))
@@ -102,7 +102,7 @@ pub(super) fn builtins() -> BTreeMap<&'static str, Value> {
 /// it needs to capture the [crate::SourceCode] structure to correctly track
 /// source code locations while invoking a compiler.
 // TODO: need to be able to pass through a CompilationObserver, too.
-pub fn builtins_import(globals: &Weak<GlobalsMap>, source: SourceCode) -> Builtin {
+pub fn builtins_import<RO>(globals: &Weak<GlobalsMap<RO>>, source: SourceCode) -> Builtin<RO> {
     // This (very cheap, once-per-compiler-startup) clone exists
     // solely in order to keep the borrow checker happy.  It
     // resolves the tension between the requirements of

@@ -21,29 +21,29 @@ use super::Value;
 mod tests;
 
 #[derive(Clone, Debug)]
-enum AttrsRep {
+enum AttrsRep<RO> {
     Empty,
-    Map(BTreeMap<NixString, Value>),
+    Map(BTreeMap<NixString, Value<RO>>),
 
     /// Warning: this represents a **two**-attribute attrset, with
     /// attribute names "name" and "value", like `{name="foo";
     /// value="bar";}`, *not* `{foo="bar";}`!
     KV {
-        name: Value,
-        value: Value,
+        name: Value<RO>,
+        value: Value<RO>,
     },
 }
 
-impl Default for AttrsRep {
+impl<RO> Default for AttrsRep<RO> {
     fn default() -> Self {
         AttrsRep::Empty
     }
 }
 
-impl AttrsRep {
+impl<RO> AttrsRep<RO> {
     /// Retrieve reference to a mutable map inside of an attrs,
     /// optionally changing the representation if required.
-    fn map_mut(&mut self) -> &mut BTreeMap<NixString, Value> {
+    fn map_mut(&mut self) -> &mut BTreeMap<NixString, Value<RO>> {
         match self {
             AttrsRep::Map(m) => m,
 
@@ -62,7 +62,7 @@ impl AttrsRep {
         }
     }
 
-    fn select(&self, key: &str) -> Option<&Value> {
+    fn select(&self, key: &str) -> Option<&Value<RO>> {
         match self {
             AttrsRep::Empty => None,
 
@@ -87,14 +87,14 @@ impl AttrsRep {
 
 #[repr(transparent)]
 #[derive(Clone, Debug, Default)]
-pub struct NixAttrs(AttrsRep);
+pub struct NixAttrs<RO>(AttrsRep<RO>);
 
-impl<K, V> FromIterator<(K, V)> for NixAttrs
+impl<RO, K, V> FromIterator<(K, V)> for NixAttrs<RO>
 where
-    NixString: From<K>,
-    Value: From<V>,
+    K: Into<NixString>,
+    V: Into<Value<RO>>,
 {
-    fn from_iter<T>(iter: T) -> NixAttrs
+    fn from_iter<T>(iter: T) -> NixAttrs<RO>
     where
         T: IntoIterator<Item = (K, V)>,
     {
@@ -106,8 +106,12 @@ where
     }
 }
 
-impl TotalDisplay for NixAttrs {
-    fn total_fmt(&self, f: &mut std::fmt::Formatter<'_>, set: &mut ThunkSet) -> std::fmt::Result {
+impl<RO> TotalDisplay for NixAttrs<RO> {
+    fn total_fmt(
+        &self,
+        f: &mut std::fmt::Formatter<'_>,
+        set: &mut ThunkSet<RO>,
+    ) -> std::fmt::Result {
         f.write_str("{ ")?;
 
         match &self.0 {
@@ -144,8 +148,8 @@ mod arbitrary {
     use proptest::prop_oneof;
     use proptest::strategy::{BoxedStrategy, Just, Strategy};
 
-    impl Arbitrary for NixAttrs {
-        type Parameters = <BTreeMap<NixString, Value> as Arbitrary>::Parameters;
+    impl<RO> Arbitrary for NixAttrs<RO> {
+        type Parameters = <BTreeMap<NixString, Value<RO>> as Arbitrary>::Parameters;
 
         type Strategy = BoxedStrategy<Self>;
 
@@ -153,11 +157,11 @@ mod arbitrary {
             prop_oneof![
                 Just(Self(AttrsRep::Empty)),
                 (
-                    any_with::<Value>(args.2.clone()),
-                    any_with::<Value>(args.2.clone())
+                    any_with::<Value<RO>>(args.2.clone()),
+                    any_with::<Value<RO>>(args.2.clone())
                 )
                     .prop_map(|(name, value)| Self(AttrsRep::KV { name, value })),
-                any_with::<BTreeMap<NixString, Value>>(args)
+                any_with::<BTreeMap<NixString, Value<RO>>>(args)
                     .prop_map(|map| Self(AttrsRep::Map(map)))
             ]
             .boxed()
@@ -165,7 +169,7 @@ mod arbitrary {
     }
 }
 
-impl NixAttrs {
+impl<RO> NixAttrs<RO> {
     pub fn empty() -> Self {
         Self(AttrsRep::Empty)
     }
@@ -237,13 +241,13 @@ impl NixAttrs {
     }
 
     /// Select a value from an attribute set by key.
-    pub fn select(&self, key: &str) -> Option<&Value> {
+    pub fn select(&self, key: &str) -> Option<&Value<RO>> {
         self.0.select(key)
     }
 
     /// Select a required value from an attribute set by key, return
     /// an `AttributeNotFound` error if it is missing.
-    pub fn select_required(&self, key: &str) -> Result<&Value, ErrorKind> {
+    pub fn select_required(&self, key: &str) -> Result<&Value<RO>, ErrorKind> {
         self.select(key)
             .ok_or_else(|| ErrorKind::AttributeNotFound { name: key.into() })
     }
@@ -254,7 +258,7 @@ impl NixAttrs {
 
     /// Construct an iterator over all the key-value pairs in the attribute set.
     #[allow(clippy::needless_lifetimes)]
-    pub fn iter<'a>(&'a self) -> Iter<KeyValue<'a>> {
+    pub fn iter<'a>(&'a self) -> Iter<KeyValue<'a, RO>> {
         Iter(match &self.0 {
             AttrsRep::Map(map) => KeyValue::Map(map.iter()),
             AttrsRep::Empty => KeyValue::Empty,
@@ -270,7 +274,7 @@ impl NixAttrs {
         })
     }
 
-    pub fn into_iter(self) -> IntoIter {
+    pub fn into_iter(self) -> IntoIter<RO> {
         match self.0 {
             AttrsRep::Empty => IntoIter(IntoIterRepr::Empty),
             AttrsRep::KV { name, value } => IntoIter(IntoIterRepr::Finite(
@@ -286,12 +290,12 @@ impl NixAttrs {
 
     /// Same as into_iter(), but marks call sites which rely on the
     /// iteration being lexicographic.
-    pub fn into_iter_sorted(self) -> IntoIter {
+    pub fn into_iter_sorted(self) -> IntoIter<RO> {
         self.into_iter()
     }
 
     /// Construct an iterator over all the keys of the attribute set
-    pub fn keys(&self) -> Keys {
+    pub fn keys(&self) -> Keys<RO> {
         Keys(match &self.0 {
             AttrsRep::Empty => KeysInner::Empty,
             AttrsRep::Map(m) => KeysInner::Map(m.keys()),
@@ -301,7 +305,7 @@ impl NixAttrs {
 
     /// Implement construction logic of an attribute set, to encapsulate
     /// logic about attribute set optimisations inside of this module.
-    pub fn construct(count: usize, mut stack_slice: Vec<Value>) -> Result<Self, ErrorKind> {
+    pub fn construct(count: usize, mut stack_slice: Vec<Value<RO>>) -> Result<Self, ErrorKind> {
         debug_assert!(
             stack_slice.len() == count * 2,
             "construct_attrs called with count == {}, but slice.len() == {}",
@@ -337,7 +341,11 @@ impl NixAttrs {
                     continue;
                 }
 
-                other => return Err(ErrorKind::InvalidAttributeName(other)),
+                other => {
+                    return Err(ErrorKind::InvalidAttributeName {
+                        invalid_type: other.type_of(),
+                    })
+                }
             }
         }
 
@@ -346,12 +354,12 @@ impl NixAttrs {
 
     /// Construct an optimized "KV"-style attribute set given the value for the
     /// `"name"` key, and the value for the `"value"` key
-    pub(crate) fn from_kv(name: Value, value: Value) -> Self {
+    pub(crate) fn from_kv(name: Value<RO>, value: Value<RO>) -> Self {
         NixAttrs(AttrsRep::KV { name, value })
     }
 
     /// Compare `self` against `other` for equality using Nix equality semantics
-    pub fn nix_eq(&self, other: &Self, vm: &mut VM) -> Result<bool, ErrorKind> {
+    pub fn nix_eq(&self, other: &Self, vm: &mut VM<RO>) -> Result<bool, ErrorKind> {
         match (&self.0, &other.0) {
             (AttrsRep::Empty, AttrsRep::Empty) => Ok(true),
 
@@ -430,7 +438,7 @@ impl NixAttrs {
 ///   index:   0       1 2      3
 ///   stack:   3       2 1      0
 /// ```
-fn attempt_optimise_kv(slice: &mut [Value]) -> Option<NixAttrs> {
+fn attempt_optimise_kv<RO>(slice: &mut [Value<RO>]) -> Option<NixAttrs<RO>> {
     let (name_idx, value_idx) = {
         match (&slice[2], &slice[0]) {
             (Value::String(s1), Value::String(s2))
@@ -460,7 +468,11 @@ fn attempt_optimise_kv(slice: &mut [Value]) -> Option<NixAttrs> {
 
 /// Set an attribute on an in-construction attribute set, while
 /// checking against duplicate keys.
-fn set_attr(attrs: &mut NixAttrs, key: NixString, value: Value) -> Result<(), ErrorKind> {
+fn set_attr<RO>(
+    attrs: &mut NixAttrs<RO>,
+    key: NixString,
+    value: Value<RO>,
+) -> Result<(), ErrorKind> {
     match attrs.0.map_mut().entry(key) {
         btree_map::Entry::Occupied(entry) => Err(ErrorKind::DuplicateAttrsKey {
             key: entry.key().as_str().to_string(),
@@ -496,16 +508,16 @@ impl IterKV {
 /// Iterator representation over the keys *and* values of an attribute
 /// set.
 #[derive(Debug)]
-pub enum KeyValue<'a> {
+pub enum KeyValue<'a, RO> {
     Empty,
 
     KV {
-        name: &'a Value,
-        value: &'a Value,
+        name: &'a Value<RO>,
+        value: &'a Value<RO>,
         at: IterKV,
     },
 
-    Map(btree_map::Iter<'a, NixString, Value>),
+    Map(btree_map::Iter<'a, NixString, Value<RO>>),
 }
 
 /// Iterator over a Nix attribute set.
@@ -514,8 +526,8 @@ pub enum KeyValue<'a> {
 #[repr(transparent)]
 pub struct Iter<T>(T);
 
-impl<'a> Iterator for Iter<KeyValue<'a>> {
-    type Item = (&'a NixString, &'a Value);
+impl<'a, RO> Iterator for Iter<KeyValue<'a, RO>> {
+    type Item = (&'a NixString, &'a Value<RO>);
 
     fn next(&mut self) -> Option<Self::Item> {
         match &mut self.0 {
@@ -539,7 +551,7 @@ impl<'a> Iterator for Iter<KeyValue<'a>> {
     }
 }
 
-impl<'a> ExactSizeIterator for Iter<KeyValue<'a>> {
+impl<'a, RO> ExactSizeIterator for Iter<KeyValue<'a, RO>> {
     fn len(&self) -> usize {
         match &self.0 {
             KeyValue::Empty => 0,
@@ -549,15 +561,15 @@ impl<'a> ExactSizeIterator for Iter<KeyValue<'a>> {
     }
 }
 
-enum KeysInner<'a> {
+enum KeysInner<'a, RO> {
     Empty,
     KV(IterKV),
-    Map(btree_map::Keys<'a, NixString, Value>),
+    Map(btree_map::Keys<'a, NixString, Value<RO>>),
 }
 
-pub struct Keys<'a>(KeysInner<'a>);
+pub struct Keys<'a, RO>(KeysInner<'a, RO>);
 
-impl<'a> Iterator for Keys<'a> {
+impl<'a, RO> Iterator for Keys<'a, RO> {
     type Item = &'a NixString;
 
     fn next(&mut self) -> Option<Self::Item> {
@@ -577,17 +589,17 @@ impl<'a> Iterator for Keys<'a> {
     }
 }
 
-impl<'a> IntoIterator for &'a NixAttrs {
-    type Item = (&'a NixString, &'a Value);
+impl<'a, RO> IntoIterator for &'a NixAttrs<RO> {
+    type Item = (&'a NixString, &'a Value<RO>);
 
-    type IntoIter = Iter<KeyValue<'a>>;
+    type IntoIter = Iter<KeyValue<'a, RO>>;
 
     fn into_iter(self) -> Self::IntoIter {
         self.iter()
     }
 }
 
-impl<'a> ExactSizeIterator for Keys<'a> {
+impl<'a, RO> ExactSizeIterator for Keys<'a, RO> {
     fn len(&self) -> usize {
         match &self.0 {
             KeysInner::Empty => 0,
@@ -598,17 +610,17 @@ impl<'a> ExactSizeIterator for Keys<'a> {
 }
 
 /// Internal representation of an owning attrset iterator
-pub enum IntoIterRepr {
+pub enum IntoIterRepr<RO> {
     Empty,
-    Finite(std::vec::IntoIter<(NixString, Value)>),
-    Map(std::collections::btree_map::IntoIter<NixString, Value>),
+    Finite(std::vec::IntoIter<(NixString, Value<RO>)>),
+    Map(std::collections::btree_map::IntoIter<NixString, Value<RO>>),
 }
 
 #[repr(transparent)]
-pub struct IntoIter(IntoIterRepr);
+pub struct IntoIter<RO>(IntoIterRepr<RO>);
 
-impl Iterator for IntoIter {
-    type Item = (NixString, Value);
+impl<RO> Iterator for IntoIter<RO> {
+    type Item = (NixString, Value<RO>);
 
     fn next(&mut self) -> Option<Self::Item> {
         match &mut self.0 {
@@ -619,7 +631,7 @@ impl Iterator for IntoIter {
     }
 }
 
-impl ExactSizeIterator for IntoIter {
+impl<RO> ExactSizeIterator for IntoIter<RO> {
     fn len(&self) -> usize {
         match &self.0 {
             IntoIterRepr::Empty => 0,

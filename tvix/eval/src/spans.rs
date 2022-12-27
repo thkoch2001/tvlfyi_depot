@@ -15,18 +15,21 @@ use std::rc::Rc;
 /// are frequently instantiated but spans are only used in error or
 /// warning cases.
 #[derive(Clone, Debug)]
-pub enum LightSpan {
+pub enum LightSpan<RO> {
     /// The span has already been computed and can just be used right
     /// away.
     Actual { span: Span },
 
     /// The span needs to be computed from the provided data, but only
     /// when it is required.
-    Delayed { lambda: Rc<Lambda>, offset: CodeIdx },
+    Delayed {
+        lambda: Rc<Lambda<RO>>,
+        offset: CodeIdx,
+    },
 }
 
-impl LightSpan {
-    pub fn new_delayed(lambda: Rc<Lambda>, offset: CodeIdx) -> Self {
+impl<RO> LightSpan<RO> {
+    pub fn new_delayed(lambda: Rc<Lambda<RO>>, offset: CodeIdx) -> Self {
         Self::Delayed { lambda, offset }
     }
 

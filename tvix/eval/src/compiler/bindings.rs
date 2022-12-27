@@ -56,7 +56,7 @@ impl ToSpan for AttributeSet {
 }
 
 impl AttributeSet {
-    fn from_ast(c: &Compiler, node: &ast::AttrSet) -> Self {
+    fn from_ast<RO>(c: &Compiler<RO>, node: &ast::AttrSet) -> Self {
         AttributeSet {
             span: c.span_for(node),
 
@@ -104,9 +104,9 @@ enum Binding {
 impl Binding {
     /// Merge the provided value into the current binding, or emit an
     /// error if this turns out to be impossible.
-    fn merge(
+    fn merge<RO>(
         &mut self,
-        c: &mut Compiler,
+        c: &mut Compiler<RO>,
         span: Span,
         mut remaining_path: PeekableAttrs,
         value: ast::Expr,
@@ -210,9 +210,9 @@ impl TrackedBindings {
     ///
     /// Returns true if the binding was merged, false if it needs to be compiled
     /// separately as a new binding.
-    fn try_merge(
+    fn try_merge<RO>(
         &mut self,
-        c: &mut Compiler,
+        c: &mut Compiler<RO>,
         span: Span,
         name: &ast::Attr,
         mut remaining_path: PeekableAttrs,
@@ -300,7 +300,7 @@ impl HasEntryProxy for AttributeSet {
 }
 
 /// AST-traversing functions related to bindings.
-impl Compiler<'_> {
+impl<RO> Compiler<'_, RO> {
     /// Compile all inherits of a node with entries that do *not* have a
     /// namespace to inherit from, and return the remaining ones that do.
     fn compile_plain_inherits<N>(
@@ -736,7 +736,7 @@ impl Compiler<'_> {
 }
 
 /// Private compiler helpers related to bindings.
-impl Compiler<'_> {
+impl<RO> Compiler<'_, RO> {
     fn resolve_upvalue<N: ToSpan>(
         &mut self,
         ctx_idx: usize,

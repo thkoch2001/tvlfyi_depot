@@ -21,7 +21,7 @@ use crate::Value;
 pub trait CompilerObserver {
     /// Called when the compiler finishes compilation of the top-level
     /// of an expression (usually the root Nix expression of a file).
-    fn observe_compiled_toplevel(&mut self, _: &Rc<Lambda>) {}
+    fn observe_compiled_toplevel(&mut self, _: &Rc<Lambda<Self>>) {}
 
     /// Called when the compiler finishes compilation of a
     /// user-defined function.
@@ -29,34 +29,35 @@ pub trait CompilerObserver {
     /// Note that in Nix there are only single argument functions, so
     /// in an expression like `a: b: c: ...` this method will be
     /// called three times.
-    fn observe_compiled_lambda(&mut self, _: &Rc<Lambda>) {}
+    fn observe_compiled_lambda(&mut self, _: &Rc<Lambda<Self>>) {}
 
     /// Called when the compiler finishes compilation of a thunk.
-    fn observe_compiled_thunk(&mut self, _: &Rc<Lambda>) {}
+    fn observe_compiled_thunk(&mut self, _: &Rc<Lambda<Self>>) {}
 }
 
 /// Implemented by types that wish to observe internal happenings of
 /// the Tvix virtual machine at runtime.
 pub trait RuntimeObserver {
     /// Called when the runtime enters a new call frame.
-    fn observe_enter_frame(&mut self, _arg_count: usize, _: &Rc<Lambda>, _call_depth: usize) {}
+    fn observe_enter_frame(&mut self, _arg_count: usize, _: &Rc<Lambda<Self>>, _call_depth: usize) {
+    }
 
     /// Called when the runtime exits a call frame.
-    fn observe_exit_frame(&mut self, _frame_at: usize, _stack: &[Value]) {}
+    fn observe_exit_frame(&mut self, _frame_at: usize, _stack: &[Value<Self>]) {}
 
     /// Called when the runtime replaces the current call frame for a
     /// tail call.
-    fn observe_tail_call(&mut self, _frame_at: usize, _: &Rc<Lambda>) {}
+    fn observe_tail_call(&mut self, _frame_at: usize, _: &Rc<Lambda<Self>>) {}
 
     /// Called when the runtime enters a builtin.
     fn observe_enter_builtin(&mut self, _name: &'static str) {}
 
     /// Called when the runtime exits a builtin.
-    fn observe_exit_builtin(&mut self, _name: &'static str, _stack: &[Value]) {}
+    fn observe_exit_builtin(&mut self, _name: &'static str, _stack: &[Value<Self>]) {}
 
     /// Called when the runtime *begins* executing an instruction. The
     /// provided stack is the state at the beginning of the operation.
-    fn observe_execute_op(&mut self, _ip: CodeIdx, _: &OpCode, _: &[Value]) {}
+    fn observe_execute_op(&mut self, _ip: CodeIdx, _: &OpCode, _: &[Value<Self>]) {}
 }
 
 #[derive(Default)]
@@ -81,7 +82,7 @@ impl<W: Write> DisassemblingObserver<W> {
         }
     }
 
-    fn lambda_header(&mut self, kind: &str, lambda: &Rc<Lambda>) {
+    fn lambda_header(&mut self, kind: &str, lambda: &Rc<Lambda<Self>>) {
         let _ = writeln!(
             &mut self.writer,
             "=== compiled {} @ {:p} ({} ops) ===",
@@ -91,7 +92,7 @@ impl<W: Write> DisassemblingObserver<W> {
         );
     }
 
-    fn disassemble_chunk(&mut self, chunk: &Chunk) {
+    fn disassemble_chunk(&mut self, chunk: &Chunk<Self>) {
         // calculate width of the widest address in the chunk
         let width = format!("{:#x}", chunk.code.len() - 1).len();
 
@@ -102,19 +103,19 @@ impl<W: Write> DisassemblingObserver<W> {
 }
 
 impl<W: Write> CompilerObserver for DisassemblingObserver<W> {
-    fn observe_compiled_toplevel(&mut self, lambda: &Rc<Lambda>) {
+    fn observe_compiled_toplevel(&mut self, lambda: &Rc<Lambda<Self>>) {
         self.lambda_header("toplevel", lambda);
         self.disassemble_chunk(&lambda.chunk);
         let _ = self.writer.flush();
     }
 
-    fn observe_compiled_lambda(&mut self, lambda: &Rc<Lambda>) {
+    fn observe_compiled_lambda(&mut self, lambda: &Rc<Lambda<Self>>) {
         self.lambda_header("lambda", lambda);
         self.disassemble_chunk(&lambda.chunk);
         let _ = self.writer.flush();
     }
 
-    fn observe_compiled_thunk(&mut self, lambda: &Rc<Lambda>) {
+    fn observe_compiled_thunk(&mut self, lambda: &Rc<Lambda<Self>>) {
         self.lambda_header("thunk", lambda);
         self.disassemble_chunk(&lambda.chunk);
         let _ = self.writer.flush();
@@ -136,7 +137,12 @@ impl<W: Write> TracingObserver<W> {
 }
 
 impl<W: Write> RuntimeObserver for TracingObserver<W> {
-    fn observe_enter_frame(&mut self, arg_count: usize, lambda: &Rc<Lambda>, call_depth: usize) {
+    fn observe_enter_frame(
+        &mut self,
+        arg_count: usize,
+        lambda: &Rc<Lambda<Self>>,
+        call_depth: usize,
+    ) {
         let _ = write!(&mut self.writer, "=== entering ");
 
         let _ = if arg_count == 0 {
@@ -156,7 +162,7 @@ impl<W: Write> RuntimeObserver for TracingObserver<W> {
         );
     }
 
-    fn observe_exit_frame(&mut self, frame_at: usize, stack: &[Value]) {
+    fn observe_exit_frame(&mut self, frame_at: usize, stack: &[Value<Self>]) {
         let _ = write!(&mut self.writer, "=== exiting frame {} ===\t[ ", frame_at);
 
         for val in stack {
@@ -170,7 +176,7 @@ impl<W: Write> RuntimeObserver for TracingObserver<W> {
         let _ = writeln!(&mut self.writer, "=== entering builtin {} ===", name);
     }
 
-    fn observe_exit_builtin(&mut self, name: &'static str, stack: &[Value]) {
+    fn observe_exit_builtin(&mut self, name: &'static str, stack: &[Value<Self>]) {
         let _ = write!(&mut self.writer, "=== exiting builtin {} ===\t[ ", name);
 
         for val in stack {
@@ -180,7 +186,7 @@ impl<W: Write> RuntimeObserver for TracingObserver<W> {
         let _ = writeln!(&mut self.writer, "]");
     }
 
-    fn observe_tail_call(&mut self, frame_at: usize, lambda: &Rc<Lambda>) {
+    fn observe_tail_call(&mut self, frame_at: usize, lambda: &Rc<Lambda<Self>>) {
         let _ = writeln!(
             &mut self.writer,
             "=== tail-calling {:p} in frame[{}] ===",
@@ -188,7 +194,7 @@ impl<W: Write> RuntimeObserver for TracingObserver<W> {
         );
     }
 
-    fn observe_execute_op(&mut self, ip: CodeIdx, op: &OpCode, stack: &[Value]) {
+    fn observe_execute_op(&mut self, ip: CodeIdx, op: &OpCode, stack: &[Value<Self>]) {
         let _ = write!(&mut self.writer, "{:04} {:?}\t[ ", ip.0, op);
 
         for val in stack {
