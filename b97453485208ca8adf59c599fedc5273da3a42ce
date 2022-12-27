@@ -3,6 +3,23 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "a959b83b_8aebd1b5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-12-27T20:50:38Z",
+      "side": 1,
+      "message": "Just a suggestion, but maybe add helpers for generating the test fixtures (or constructors in general?)? They are quite verbose otherwise.",
+      "revId": "b97453485208ca8adf59c599fedc5273da3a42ce",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "b259aed2_506f621a",
         "filename": "tvix/store/src/proto.rs",
         "patchSetId": 3
