@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2777267f_40b9a40d",
+        "filename": "tvix/store/protos/castore.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 62,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2022-12-27T15:27:04Z",
+      "side": 1,
+      "message": "@tazjin mentioned we only really need to track the last name so far here, so don\u0027t need to keep all names. Will update.",
+      "revId": "1c94fd8411e2927bd084c7c9bc883fe1306bc50e",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
