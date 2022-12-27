@@ -69,6 +69,41 @@
       "parentUuid": "dbbcd40f_36ebdfe1",
       "revId": "a0efae819a679dc54f7bdaac85c85bb50494519b",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2fc5c061_aa2b5f3c",
+        "filename": "tools/fetch-depot-inbox.nix",
+        "patchSetId": 2
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2022-12-27T19:30:06Z",
+      "side": 1,
+      "message": "Fair enough, I didn\u0027t mean to block this from going in because of that. I can\u0027t really easily test any of that on whitby though, so will probably wait proposing anything until I incorporated this into my mbsync pipeline ;-)\n\nI\u0027ll mark this as resolved for now.",
+      "parentUuid": "fc7d8b91_a652bd55",
+      "revId": "a0efae819a679dc54f7bdaac85c85bb50494519b",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "686482ef_9d4d626f",
+        "filename": "tools/fetch-depot-inbox.nix",
+        "patchSetId": 2
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2022-12-27T19:30:06Z",
+      "side": 1,
+      "message": "/etc/ssl/certs/ca-bundle.crt, for the same reasons as in cl/7630.",
+      "revId": "a0efae819a679dc54f7bdaac85c85bb50494519b",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
