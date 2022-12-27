@@ -8,7 +8,7 @@ executable ical-smolify
     main-is: IcalSmolify.hs
 
     build-depends:
-        base ^>=4.15.1.0,
+        base >=4.15 && <5,
         my-prelude,
         exec-helpers
         data-default
