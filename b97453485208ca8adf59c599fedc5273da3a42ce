@@ -68,6 +68,98 @@
       },
       "revId": "b97453485208ca8adf59c599fedc5273da3a42ce",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3e71626b_b05a4274",
+        "filename": "tvix/store/src/proto.rs",
+        "patchSetId": 3
+      },
+      "lineNbr": 59,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-12-27T20:50:04Z",
+      "side": 1,
+      "message": "I think these can just be `\u0026mut str` instead of `mut String`, as the lifetime of `\u0026self` outlives the body.",
+      "range": {
+        "startLine": 59,
+        "startChar": 41,
+        "endLine": 59,
+        "endChar": 53
+      },
+      "revId": "b97453485208ca8adf59c599fedc5273da3a42ce",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d1fcbe85_8e3336f0",
+        "filename": "tvix/store/src/proto.rs",
+        "patchSetId": 3
+      },
+      "lineNbr": 72,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-12-27T20:50:04Z",
+      "side": 1,
+      "message": "I think rather than duplicating all of this logic so much you might want to have a helper function returning the `Result` already and call it as `helper(\u0026directory_node.name)?` (etc.)",
+      "range": {
+        "startLine": 66,
+        "startChar": 0,
+        "endLine": 72,
+        "endChar": 0
+      },
+      "revId": "b97453485208ca8adf59c599fedc5273da3a42ce",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e85c2b0b_7d6bbf67",
+        "filename": "tvix/store/src/proto.rs",
+        "patchSetId": 3
+      },
+      "lineNbr": 80,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-12-27T20:50:04Z",
+      "side": 1,
+      "message": "same as above (and same below, won\u0027t comment on all fo them)",
+      "range": {
+        "startLine": 80,
+        "startChar": 0,
+        "endLine": 80,
+        "endChar": 58
+      },
+      "revId": "b97453485208ca8adf59c599fedc5273da3a42ce",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c5816091_3a326a95",
+        "filename": "tvix/store/src/proto.rs",
+        "patchSetId": 3
+      },
+      "lineNbr": 82,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-12-27T20:50:04Z",
+      "side": 1,
+      "message": "you don\u0027t have to `clone` here if you use references, which should work fine inside this entire function (the borrowed data outlives this function and nothing is returned from here)",
+      "range": {
+        "startLine": 82,
+        "startChar": 40,
+        "endLine": 82,
+        "endChar": 48
+      },
+      "revId": "b97453485208ca8adf59c599fedc5273da3a42ce",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
