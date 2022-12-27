@@ -70,6 +70,24 @@
       "parentUuid": "75e57c60_94029052",
       "revId": "9ccfbda90282b5eeacb02f66f0865e45165e8a79",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "531b17c9_82e33a1d",
+        "filename": "tvix/store/protos/castore.go",
+        "patchSetId": 28
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2022-12-27T17:13:46Z",
+      "side": 1,
+      "message": "Rust is in cl/7650, marking this as resolved.",
+      "parentUuid": "627ffe73_f344107b",
+      "revId": "9ccfbda90282b5eeacb02f66f0865e45165e8a79",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
