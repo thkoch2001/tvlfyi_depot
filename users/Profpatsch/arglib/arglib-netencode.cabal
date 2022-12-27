@@ -8,7 +8,7 @@ library
     exposed-modules:          ArglibNetencode
 
     build-depends:
-        base ^>=4.15.1.0,
+        base >=4.15 && <5,
         my-prelude,
         netencode,
         exec-helpers,

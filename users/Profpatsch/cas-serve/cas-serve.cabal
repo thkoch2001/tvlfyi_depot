@@ -8,7 +8,7 @@ executable cas-serve
     main-is:          CasServe.hs
 
     build-depends:
-        base ^>=4.15.1.0,
+        base >=4.15 && <5,
         text,
         sqlite-simple,
         http-types,
