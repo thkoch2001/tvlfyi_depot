@@ -1,0 +1,96 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5451cf16_85d5f826",
+        "filename": "tvix/store/protos/castore.go",
+        "patchSetId": 32
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-12-27T18:00:59Z",
+      "side": 1,
+      "message": "This reads somewhat confused, maybe\n\n\u003e of all entries, as well as the size (field?) of nested directory entries.",
+      "range": {
+        "startLine": 10,
+        "startChar": 44,
+        "endLine": 11,
+        "endChar": 58
+      },
+      "revId": "e20d1bb0b3f54edf0ccba8a24a4afa6dfe75b2d7",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d63c8d31_9089f4a1",
+        "filename": "tvix/store/protos/castore.go",
+        "patchSetId": 32
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-12-27T18:00:59Z",
+      "side": 1,
+      "message": "It does seem weird to call this \"size\" (as I\u0027d usually expect that to be the actual disk size of the various things), but it\u0027s also not \"len\" because it does this nested unrolling.\n\nI guess this is the \"total recursive count of entries\"? I think it may want to have a more specific name, but it\u0027s easier to understand what\u0027s going on with some context for what this is used for.",
+      "range": {
+        "startLine": 12,
+        "startChar": 20,
+        "endLine": 12,
+        "endChar": 24
+      },
+      "revId": "e20d1bb0b3f54edf0ccba8a24a4afa6dfe75b2d7",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a6813450_e8566bc2",
+        "filename": "tvix/store/protos/castore.go",
+        "patchSetId": 32
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-12-27T18:00:59Z",
+      "side": 1,
+      "message": "Is there a difference between the `Size` field and the `Size()` method?",
+      "range": {
+        "startLine": 16,
+        "startChar": 14,
+        "endLine": 16,
+        "endChar": 20
+      },
+      "revId": "e20d1bb0b3f54edf0ccba8a24a4afa6dfe75b2d7",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e4fdadb0_8fa57428",
+        "filename": "tvix/store/protos/castore.go",
+        "patchSetId": 32
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-12-27T18:00:59Z",
+      "side": 1,
+      "message": "Surprised that there isn\u0027t an `io.Writer`-compatible API for byte marshaling.",
+      "range": {
+        "startLine": 24,
+        "startChar": 3,
+        "endLine": 24,
+        "endChar": 13
+      },
+      "revId": "e20d1bb0b3f54edf0ccba8a24a4afa6dfe75b2d7",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
