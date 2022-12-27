@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cb65e18a_8741b8e1",
+        "filename": "ops/modules/depot-inbox.nix",
+        "patchSetId": 5
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2022-12-27T19:27:51Z",
+      "side": 1,
+      "message": "Use the same approach suggested for opensmtpd in https://nixos.org/manual/nixos/stable/index.html#module-security-acme-root-owned\n\nPseudocode:\n\n```\nsystemd.services.public-inbox.requires \u003d [\"acme-finished-inbox.tvl.su.target\"];\nsystemd.services.public-inbox.serviceConfig.LoadCredential \u003d let\n  certDir \u003d config.security.acme.certs.\"inbox.tvl.su\".directory;\nin [\n  \"fullchain.pem:${certDir}/fullchain.pem\"\n  \"key.pem:${certDir}/key.pem\"\n];\n```",
+      "revId": "1aefd4f38c7dbcffbbec7ab041eb06ecadea45f8",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "80f368de_d6dad768",
+        "filename": "ops/modules/depot-inbox.nix",
+        "patchSetId": 5
+      },
+      "lineNbr": 73,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2022-12-27T19:27:51Z",
+      "side": 1,
+      "message": "/run/credentials/public-inbox.service/{fullchain,key}.pem",
+      "revId": "1aefd4f38c7dbcffbbec7ab041eb06ecadea45f8",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
