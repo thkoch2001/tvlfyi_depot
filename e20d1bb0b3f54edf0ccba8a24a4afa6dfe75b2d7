@@ -119,6 +119,30 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "57004dbc_30626ff9",
+        "filename": "tvix/store/protos/castore.go",
+        "patchSetId": 32
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-12-27T20:33:50Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "e40568f0_ef8516c4",
+      "range": {
+        "startLine": 12,
+        "startChar": 20,
+        "endLine": 12,
+        "endChar": 24
+      },
+      "revId": "e20d1bb0b3f54edf0ccba8a24a4afa6dfe75b2d7",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "a6813450_e8566bc2",
@@ -156,6 +180,30 @@
       "side": 1,
       "message": "The `Size()` function on a `Directory` message/struct can be used to calculate what\u0027s being put into the `Size` field of a `DirectoryNode` (while assembling a graph / uploading a structure).",
       "parentUuid": "a6813450_e8566bc2",
+      "range": {
+        "startLine": 16,
+        "startChar": 14,
+        "endLine": 16,
+        "endChar": 20
+      },
+      "revId": "e20d1bb0b3f54edf0ccba8a24a4afa6dfe75b2d7",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1ccabdf7_b2156421",
+        "filename": "tvix/store/protos/castore.go",
+        "patchSetId": 32
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-12-27T20:33:50Z",
+      "side": 1,
+      "message": "Ack. In both cases I still don\u0027t know what this is for, though.",
+      "parentUuid": "dbed0bd8_1e8deb1f",
       "range": {
         "startLine": 16,
         "startChar": 14,
