@@ -24,6 +24,30 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "dc386b2a_cdfebb4e",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2022-12-27T19:01:03Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "f00ecec2_2dd0e691",
+      "range": {
+        "startLine": 7,
+        "startChar": 0,
+        "endLine": 7,
+        "endChar": 4
+      },
+      "revId": "a293dc3e392eb75efd64edb260ff82c7268ea239",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "f7de5ee8_912970d7",
@@ -37,6 +61,30 @@
       "writtenOn": "2022-12-27T18:28:34Z",
       "side": 1,
       "message": "I think these changes belong to the next CL in the chain",
+      "range": {
+        "startLine": 5031,
+        "startChar": 0,
+        "endLine": 5031,
+        "endChar": 27
+      },
+      "revId": "a293dc3e392eb75efd64edb260ff82c7268ea239",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9bd8fa3c_1b5d4a61",
+        "filename": "tvix/Cargo.nix",
+        "patchSetId": 2
+      },
+      "lineNbr": 5031,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2022-12-27T19:01:03Z",
+      "side": 1,
+      "message": "ack, updated.",
+      "parentUuid": "f7de5ee8_912970d7",
       "range": {
         "startLine": 5031,
         "startChar": 0,
