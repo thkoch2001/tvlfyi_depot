@@ -146,6 +146,52 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "6b39636c_c60671c4",
+        "filename": "tvix/store/src/serializer.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 65,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-12-28T12:03:54Z",
+      "side": 1,
+      "message": "It\u0027s probably better to qualify this as `fmt::Error` here, otherwise it requires looking up what\u0027s going on in the imports. In Rust, if a type is just called `Error` it is often the local error type of the crate.",
+      "range": {
+        "startLine": 65,
+        "startChar": 87,
+        "endLine": 65,
+        "endChar": 92
+      },
+      "revId": "0987c2214eda96eb2862793056201649bfaece6f",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ac5d2f0b_e5e2395e",
+        "filename": "tvix/store/src/serializer.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 182,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-12-28T12:03:54Z",
+      "side": 1,
+      "message": "TODO(jhahn): ...",
+      "range": {
+        "startLine": 182,
+        "startChar": 15,
+        "endLine": 182,
+        "endChar": 19
+      },
+      "revId": "0987c2214eda96eb2862793056201649bfaece6f",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "58529d61_43a66dc5",
         "filename": "tvix/store/src/serializer.rs",
         "patchSetId": 1
