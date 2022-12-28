@@ -33,6 +33,16 @@ rec {
   # You can override the features with
   # workspaceMembers."${crateName}".build.override { features = [ "default" "feature1" ... ]; }.
   workspaceMembers = {
+    "derivation" = rec {
+      packageId = "derivation";
+      build = internal.buildRustCrateWithFeatures {
+        packageId = "derivation";
+      };
+
+      # Debug support which might change between releases.
+      # File a bug if you depend on any for non-debug work!
+      debug = internal.debugCrate { inherit packageId; };
+    };
     "nix-cli" = rec {
       packageId = "nix-cli";
       build = internal.buildRustCrateWithFeatures {
@@ -1411,6 +1421,39 @@ rec {
             packageId = "syn 1.0.103";
             usesDefaultFeatures = false;
             features = [ "full" "parsing" "printing" "proc-macro" ];
+          }
+        ];
+
+      };
+      "derivation" = rec {
+        crateName = "derivation";
+        version = "0.1.0";
+        edition = "2021";
+        # We can't filter paths with references in Nix 2.4
+        # See https://github.com/NixOS/nix/issues/5410
+        src =
+          if (lib.versionOlder builtins.nixVersion "2.4pre20211007")
+          then lib.cleanSourceWith { filter = sourceFilter; src = ./derivation; }
+          else ./derivation;
+        dependencies = [
+          {
+            name = "glob";
+            packageId = "glob";
+          }
+          {
+            name = "serde";
+            packageId = "serde";
+            features = [ "derive" ];
+          }
+        ];
+        devDependencies = [
+          {
+            name = "serde_json";
+            packageId = "serde_json";
+          }
+          {
+            name = "test-generator";
+            packageId = "test-generator";
           }
         ];
 
