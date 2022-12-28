@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "759797df_b342e39a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-12-28T08:17:40Z",
+      "side": 1,
+      "message": "Approving because this definitely works, and it\u0027s blocking some downstream stuff.",
+      "revId": "ca9845d0f230dde8ed30879814a7c761d0563dff",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}

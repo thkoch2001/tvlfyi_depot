@@ -36,6 +36,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "f15576bd_e09f19c4",
+        "filename": "ops/modules/depot-inbox.nix",
+        "patchSetId": 5
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-12-28T08:17:40Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "901ba197_0ad82530",
+      "revId": "1aefd4f38c7dbcffbbec7ab041eb06ecadea45f8",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "80f368de_d6dad768",
