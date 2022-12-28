@@ -1,0 +1,19 @@
+{
+  "outputs": {
+    "out": {
+      "path": "/nix/store/x1f6jfq9qgb6i8jrmpifkn9c64fg4hcm-latin1"
+    }
+  },
+  "input_sources": [],
+  "input_derivations": {},
+  "platform": ":",
+  "builder": ":",
+  "arguments": [],
+  "environment": {
+    "builder": ":",
+    "chars": "ÅÄÖ",
+    "name": "latin1",
+    "out": "/nix/store/x1f6jfq9qgb6i8jrmpifkn9c64fg4hcm-latin1",
+    "system": ":"
+  }
+}
