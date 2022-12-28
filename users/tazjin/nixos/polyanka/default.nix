@@ -97,6 +97,15 @@ in
     ];
   };
 
+  # Automatically collect garbage from the Nix store.
+  services.depot.automatic-gc = {
+    enable = true;
+    interval = "daily";
+    diskThreshold = 2; # GiB
+    maxFreed = 8; # GiB
+    preserveGenerations = "14d";
+  };
+
   # List packages installed in system profile. To search, run:
   # $ nix search wget
   environment.systemPackages = with pkgs; [
