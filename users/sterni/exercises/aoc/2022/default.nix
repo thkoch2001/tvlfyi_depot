@@ -13,7 +13,6 @@ depot.nix.readTree.drvTargets {
     packages = [
       cbqn
       ngn-k
-      depot.tvix.eval
     ];
 
     BQNLIBS = pkgs.fetchFromGitHub {
@@ -48,28 +47,5 @@ depot.nix.readTree.drvTargets {
     }
     ''
       find "$aoc/2022" -name '*.bqn' -exec BQN {} \; | tee "$out"
-    '';
-
-  nix = import ./nix.nix { inherit lib; };
-
-  tvixed-nix = pkgs.runCommand "tvix-aoc-2022"
-    {
-      nativeBuildInputs = [
-        depot.tvix.eval
-      ];
-      solutions = builtins.path {
-        name = "nix-aoc-2022";
-        path = ./.;
-        filter = path: type:
-          type == "directory"
-          || lib.hasSuffix "nix.nix" path
-          || lib.hasSuffix "/input" path;
-      };
-
-      inherit meta;
-    }
-    ''
-      tvix-eval -E "import $solutions/nix.nix { lib = import ${pkgs.path}/lib; }" \
-        | tee "$out"
     '';
 }
