@@ -5,6 +5,13 @@ let
 
   # input files are not checked in
   meta.ci.skip = true;
+
+  BQNLIBS = pkgs.fetchFromGitHub {
+    owner = "mlochbaum";
+    repo = "bqn-libs";
+    rev = "d56d8ea0b8c294fac7274678d9ab112553a03f42";
+    sha256 = "1c1bkqj62v8m13jgaa32ridy0fk5iqysq5b2qwxbqxhky5zwnk9h";
+  };
 in
 
 depot.nix.readTree.drvTargets {
@@ -15,12 +22,7 @@ depot.nix.readTree.drvTargets {
       ngn-k
     ];
 
-    BQNLIBS = pkgs.fetchFromGitHub {
-      owner = "mlochbaum";
-      repo = "bqn-libs";
-      rev = "d56d8ea0b8c294fac7274678d9ab112553a03f42";
-      sha256 = "1c1bkqj62v8m13jgaa32ridy0fk5iqysq5b2qwxbqxhky5zwnk9h";
-    };
+    inherit BQNLIBS;
   };
 
   bqn = pkgs.runCommand "bqn-aoc-2022"
@@ -43,7 +45,7 @@ depot.nix.readTree.drvTargets {
           );
       };
 
-      inherit meta;
+      inherit meta BQNLIBS;
     }
     ''
       find "$aoc/2022" -name '*.bqn' -exec BQN {} \; | tee "$out"
