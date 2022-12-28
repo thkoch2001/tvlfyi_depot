@@ -16,6 +16,57 @@
       "message": "Ran `mg run //tvix:crate2nixGenerate --`and committed the changes in Cargo.nix",
       "revId": "1f203be73d53de14eec53f71e665d71e643079c0",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a71b81f3_f6dccce8",
+        "filename": "tvix/derivation/src/lib.rs",
+        "patchSetId": 4
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2022-12-28T19:19:40Z",
+      "side": 1,
+      "message": "Can you `#[derive(Serialize, Deserialize)]` here?",
+      "revId": "1f203be73d53de14eec53f71e665d71e643079c0",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7359b3d1_321b3ff4",
+        "filename": "tvix/derivation/src/lib.rs",
+        "patchSetId": 4
+      },
+      "lineNbr": 214,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2022-12-28T19:19:40Z",
+      "side": 1,
+      "message": "Like further down in L244, I\u0027d probably simply provide serialized-as-json Derivation structs as test fixtures, and compare them to their ATerm counterparts.",
+      "revId": "1f203be73d53de14eec53f71e665d71e643079c0",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cb5617a7_60f33547",
+        "filename": "tvix/derivation/src/lib.rs",
+        "patchSetId": 4
+      },
+      "lineNbr": 244,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2022-12-28T19:19:40Z",
+      "side": 1,
+      "message": "It\u0027s probably cleaner to pull these fixtures in via `test_resources`, like we do in `tvix/eval/src/tests/mod.rs` (and steal some of the fixtures from go-nix).",
+      "revId": "1f203be73d53de14eec53f71e665d71e643079c0",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
