@@ -72,6 +72,29 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "3aff069d_0d9f8748",
+        "filename": "tvix/store/src/serializer.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-12-28T11:55:19Z",
+      "side": 1,
+      "message": "These structs and their fields should probably be `pub` (and this should, as flokli said, be moved into a separate crate).",
+      "range": {
+        "startLine": 12,
+        "startChar": 0,
+        "endLine": 12,
+        "endChar": 15
+      },
+      "revId": "0987c2214eda96eb2862793056201649bfaece6f",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "365133ea_aa9e2198",
         "filename": "tvix/store/src/serializer.rs",
         "patchSetId": 1
