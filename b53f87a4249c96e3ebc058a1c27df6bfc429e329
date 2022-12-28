@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "606d126b_4c0bc82c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 10
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2022-12-28T14:59:33Z",
+      "side": 1,
+      "message": "I think I’m gonna drop all base bounds, they are just toil.",
+      "revId": "b53f87a4249c96e3ebc058a1c27df6bfc429e329",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
