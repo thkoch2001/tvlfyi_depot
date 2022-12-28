@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2b91d170_61d15bb1",
+        "filename": "tvix/store/protos/rpc_pathinfo.proto",
+        "patchSetId": 14
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2022-12-28T12:08:30Z",
+      "side": 1,
+      "message": "This comment needs to be updated.",
+      "revId": "19f6dc1a02592a0db4902fbdcc7dbfdcefc3e27e",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
