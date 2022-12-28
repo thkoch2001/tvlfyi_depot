@@ -909,12 +909,12 @@ rec {
         };
         resolvedDefaultFeatures = [ "std" ];
       };
-      "clap 4.0.27" = rec {
+      "clap 4.0.32" = rec {
         crateName = "clap";
-        version = "4.0.27";
+        version = "4.0.32";
         edition = "2021";
         crateBin = [ ];
-        sha256 = "0rjr4wacx5sz1sc4dikz4p8z4k53dfpm1s3sil8dfq0aib9dijqa";
+        sha256 = "0fcsz3zggk0g0y76vv7v7ivn72p1v980h2yhi0zf9y9mr45p1nx7";
         dependencies = [
           {
             name = "bitflags";
@@ -2443,9 +2443,9 @@ rec {
       };
       "is-terminal" = rec {
         crateName = "is-terminal";
-        version = "0.4.0";
+        version = "0.4.2";
         edition = "2018";
-        sha256 = "0b9mcxb46mzz1q1i4cdmp5j7g042ccqg3q5357prs75l5rpbrrda";
+        sha256 = "12c11c8iv2wwyadzajzffmy1fy9nphdpvdj54d367k0c234bdpr8";
         authors = [
           "softprops <d.tangren@gmail.com>"
           "Dan Gohman <dev@sunfishcode.online>"
@@ -2463,14 +2463,14 @@ rec {
           {
             name = "rustix";
             packageId = "rustix";
-            target = { target, features }: (!((target."windows" or false) || ("hermit" == target."os")));
+            target = { target, features }: (!((target."windows" or false) || ("hermit" == target."os") || ("unknown" == target."os")));
             features = [ "termios" ];
           }
           {
             name = "windows-sys";
             packageId = "windows-sys";
             target = { target, features }: (target."windows" or false);
-            features = [ "Win32_Foundation" "Win32_System_Console" ];
+            features = [ "Win32_Foundation" "Win32_Storage_FileSystem" "Win32_System_Console" ];
           }
         ];
 
@@ -2866,7 +2866,7 @@ rec {
         dependencies = [
           {
             name = "clap";
-            packageId = "clap 4.0.27";
+            packageId = "clap 4.0.32";
           }
           {
             name = "tempfile";
@@ -4214,9 +4214,9 @@ rec {
       };
       "rustix" = rec {
         crateName = "rustix";
-        version = "0.36.3";
+        version = "0.36.6";
         edition = "2018";
-        sha256 = "0gi2v2a66h5mgaacq7ih1fw4pa0rpdh7gx1dq28d7cafzi6vn7qb";
+        sha256 = "0ja5vcjlfc10d97dgdz57c7spv1nrm4jdqgdqhlw7il2nrywzsjg";
         authors = [
           "Dan Gohman <dev@sunfishcode.online>"
           "Jakub Konka <kubkon@jakubkonka.com>"
@@ -4316,6 +4316,7 @@ rec {
           "libc_errno" = [ "dep:libc_errno" ];
           "once_cell" = [ "dep:once_cell" ];
           "os_pipe" = [ "io-lifetimes/os_pipe" ];
+          "param" = [ "fs" ];
           "procfs" = [ "once_cell" "itoa" "fs" ];
           "rustc-dep-of-std" = [ "core" "alloc" "compiler_builtins" "linux-raw-sys/rustc-dep-of-std" "bitflags/rustc-dep-of-std" ];
           "std" = [ "io-lifetimes" ];
@@ -5118,6 +5119,11 @@ rec {
             optional = true;
           }
           {
+            name = "num_cpus";
+            packageId = "num_cpus";
+            optional = true;
+          }
+          {
             name = "pin-project-lite";
             packageId = "pin-project-lite";
           }
@@ -5185,7 +5191,7 @@ rec {
           "tracing" = [ "dep:tracing" ];
           "windows-sys" = [ "dep:windows-sys" ];
         };
-        resolvedDefaultFeatures = [ "bytes" "default" "io-std" "io-util" "libc" "macros" "memchr" "mio" "net" "rt" "socket2" "sync" "time" "tokio-macros" "windows-sys" ];
+        resolvedDefaultFeatures = [ "bytes" "default" "io-std" "io-util" "libc" "macros" "memchr" "mio" "net" "num_cpus" "rt" "rt-multi-thread" "socket2" "sync" "time" "tokio-macros" "windows-sys" ];
       };
       "tokio-io-timeout" = rec {
         crateName = "tokio-io-timeout";
@@ -5962,7 +5968,7 @@ rec {
         dependencies = [
           {
             name = "clap";
-            packageId = "clap 4.0.27";
+            packageId = "clap 4.0.32";
             features = [ "derive" "env" ];
           }
           {
@@ -6172,6 +6178,11 @@ rec {
             features = [ "rayon" "std" ];
           }
           {
+            name = "clap";
+            packageId = "clap 4.0.32";
+            features = [ "derive" "env" ];
+          }
+          {
             name = "lazy_static";
             packageId = "lazy_static";
           }
@@ -6182,6 +6193,15 @@ rec {
           {
             name = "thiserror";
             packageId = "thiserror";
+          }
+          {
+            name = "tokio";
+            packageId = "tokio";
+            features = [ "rt-multi-thread" ];
+          }
+          {
+            name = "tokio-stream";
+            packageId = "tokio-stream";
           }
           {
             name = "tonic";
