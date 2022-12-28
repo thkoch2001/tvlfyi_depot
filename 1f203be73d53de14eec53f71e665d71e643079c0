@@ -75,6 +75,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "8f2ab9f5_70b7c5bd",
+        "filename": "tvix/derivation/src/lib.rs",
+        "patchSetId": 4
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1000067
+      },
+      "writtenOn": "2022-12-28T23:30:56Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a71b81f3_f6dccce8",
+      "revId": "1f203be73d53de14eec53f71e665d71e643079c0",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "7359b3d1_321b3ff4",
@@ -106,6 +124,24 @@
       "side": 1,
       "message": "https://github.com/serde-rs/json#parsing-json-as-strongly-typed-data-structures",
       "parentUuid": "7359b3d1_321b3ff4",
+      "revId": "1f203be73d53de14eec53f71e665d71e643079c0",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2b4fd48f_b50e6c0f",
+        "filename": "tvix/derivation/src/lib.rs",
+        "patchSetId": 4
+      },
+      "lineNbr": 214,
+      "author": {
+        "id": 1000067
+      },
+      "writtenOn": "2022-12-28T23:30:56Z",
+      "side": 1,
+      "message": "Done. There are two files containing utf-8 chars. The original file encoding was ISO-8859-1 and I changed it to utf-8. Otherwise the tests would fail. Not sure if this is okay.",
+      "parentUuid": "278427df_d0751902",
       "revId": "1f203be73d53de14eec53f71e665d71e643079c0",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
@@ -146,6 +182,24 @@
       "writtenOn": "2022-12-28T19:19:40Z",
       "side": 1,
       "message": "It\u0027s probably cleaner to pull these fixtures in via `test_resources`, like we do in `tvix/eval/src/tests/mod.rs` (and steal some of the fixtures from go-nix).",
+      "revId": "1f203be73d53de14eec53f71e665d71e643079c0",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "165882b7_871e9d8e",
+        "filename": "tvix/derivation/src/lib.rs",
+        "patchSetId": 4
+      },
+      "lineNbr": 244,
+      "author": {
+        "id": 1000067
+      },
+      "writtenOn": "2022-12-28T23:30:56Z",
+      "side": 1,
+      "message": "I guess I can delete this test now?",
+      "parentUuid": "cb5617a7_60f33547",
       "revId": "1f203be73d53de14eec53f71e665d71e643079c0",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
