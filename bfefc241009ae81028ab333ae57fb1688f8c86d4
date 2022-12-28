@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ccd0e8c2_be334f5c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-12-28T13:57:01Z",
+      "side": 1,
+      "message": "LGTM, but I\u0027d like to see if maybe we don\u0027t need to do this if we move to the fully persistent data structure libraries. It\u0027ll require some benchmarking ...",
+      "revId": "bfefc241009ae81028ab333ae57fb1688f8c86d4",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
