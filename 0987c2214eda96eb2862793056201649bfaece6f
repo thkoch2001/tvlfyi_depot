@@ -1,0 +1,123 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b0f14188_d8bb6509",
+        "filename": "tvix/Cargo.lock",
+        "patchSetId": 1
+      },
+      "lineNbr": 2077,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2022-12-28T09:40:50Z",
+      "side": 1,
+      "message": "You probably need to regenerate Cargo.nix so this still builds outside of `cargo build` (instructions in //tvix/README).",
+      "revId": "0987c2214eda96eb2862793056201649bfaece6f",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "46b257ff_41e13dd7",
+        "filename": "tvix/store/src/main.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2022-12-28T09:40:50Z",
+      "side": 1,
+      "message": "This should probably go into its own crate (like `//tvix/nar`), because it\u0027s mostly library code, so consumers (eval/tvix-cli) don\u0027t need to pull in all of the store dependencies.",
+      "revId": "0987c2214eda96eb2862793056201649bfaece6f",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8d64e8b5_0785c333",
+        "filename": "tvix/store/src/serializer.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 5,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2022-12-28T09:40:50Z",
+      "side": 1,
+      "message": "s/PARENT/PAREN/",
+      "revId": "0987c2214eda96eb2862793056201649bfaece6f",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "365133ea_aa9e2198",
+        "filename": "tvix/store/src/serializer.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2022-12-28T09:40:50Z",
+      "side": 1,
+      "message": "Can probably be removed for now.",
+      "revId": "0987c2214eda96eb2862793056201649bfaece6f",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a470fd0a_f9332943",
+        "filename": "tvix/store/src/serializer.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2022-12-28T09:40:50Z",
+      "side": 1,
+      "message": "TODO(jhahn): … is the canonical style",
+      "revId": "0987c2214eda96eb2862793056201649bfaece6f",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fe278621_06087cdc",
+        "filename": "tvix/store/src/serializer.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2022-12-28T09:40:50Z",
+      "side": 1,
+      "message": "same for comment style. Don\u0027t you already do this, by propagating writing errors to the caller?",
+      "revId": "0987c2214eda96eb2862793056201649bfaece6f",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "58529d61_43a66dc5",
+        "filename": "tvix/store/src/serializer.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 262,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2022-12-28T09:40:50Z",
+      "side": 1,
+      "message": "As this is a unit test, you can probably just serialize_derivation(…).expect(\"must serialize\");",
+      "revId": "0987c2214eda96eb2862793056201649bfaece6f",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
