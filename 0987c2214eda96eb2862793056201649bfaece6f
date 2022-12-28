@@ -53,6 +53,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "762fc93a_b42ec8a4",
+        "filename": "tvix/Cargo.lock",
+        "patchSetId": 1
+      },
+      "lineNbr": 2077,
+      "author": {
+        "id": 1000067
+      },
+      "writtenOn": "2022-12-28T17:19:44Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0f2b1a27_1579ecb3",
+      "revId": "0987c2214eda96eb2862793056201649bfaece6f",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "46b257ff_41e13dd7",
