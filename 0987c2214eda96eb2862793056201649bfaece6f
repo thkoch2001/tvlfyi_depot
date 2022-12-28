@@ -1,6 +1,23 @@
 {
   "comments": [
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "4fa9aeba_30a3720e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2022-12-28T14:02:02Z",
+      "side": 1,
+      "message": "You might also want to look at cl/7363, I think amjoseph did do some tinkering in the Nix source code for some of the validations.",
+      "revId": "0987c2214eda96eb2862793056201649bfaece6f",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "b0f14188_d8bb6509",
