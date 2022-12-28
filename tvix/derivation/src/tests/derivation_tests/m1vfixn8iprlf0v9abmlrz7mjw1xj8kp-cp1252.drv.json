@@ -1,0 +1,19 @@
+{
+  "outputs": {
+    "out": {
+      "path": "/nix/store/drr2mjp9fp9vvzsf5f9p0a80j33dxy7m-cp1252"
+    }
+  },
+  "input_sources": [],
+  "input_derivations": {},
+  "platform": ":",
+  "builder": ":",
+  "arguments": [],
+  "environment": {
+    "builder": ":",
+    "chars": "ÅÄÖ",
+    "name": "cp1252",
+    "out": "/nix/store/drr2mjp9fp9vvzsf5f9p0a80j33dxy7m-cp1252",
+    "system": ":"
+  }
+}
