@@ -18,6 +18,23 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "5bc1b1d4_9c6c1f6a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-12-28T22:15:26Z",
+      "side": 1,
+      "message": "Note that you have a different email address set as your git commit email address than what you registered in Gerrit. That\u0027s generally fine, but a bit confusing. I think you can add more email addresses in your Gerrit profile.",
+      "revId": "1f203be73d53de14eec53f71e665d71e643079c0",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "9260fde5_394422f6",
