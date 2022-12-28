@@ -54,6 +54,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "278427df_d0751902",
+        "filename": "tvix/derivation/src/lib.rs",
+        "patchSetId": 4
+      },
+      "lineNbr": 214,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2022-12-28T19:19:59Z",
+      "side": 1,
+      "message": "https://github.com/serde-rs/json#parsing-json-as-strongly-typed-data-structures",
+      "parentUuid": "7359b3d1_321b3ff4",
+      "revId": "1f203be73d53de14eec53f71e665d71e643079c0",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "cb5617a7_60f33547",
         "filename": "tvix/derivation/src/lib.rs",
         "patchSetId": 4
