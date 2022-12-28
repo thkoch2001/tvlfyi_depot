@@ -20,6 +20,29 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "9260fde5_394422f6",
+        "filename": "tvix/derivation/Cargo.toml",
+        "patchSetId": 4
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-12-28T22:12:18Z",
+      "side": 1,
+      "message": "It seems like `maplit` is the only one of these dependencies that is being used in this crate, so the other ones can be removed.\n\nFrom what I see, `maplit` is also only used in the tests so it can be moved into a `[dev-dependencies]` section (i.e. stuff that is only pulled in for tests, and not propagated to library consumers).",
+      "range": {
+        "startLine": 10,
+        "startChar": 0,
+        "endLine": 10,
+        "endChar": 16
+      },
+      "revId": "1f203be73d53de14eec53f71e665d71e643079c0",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "a71b81f3_f6dccce8",
         "filename": "tvix/derivation/src/lib.rs",
         "patchSetId": 4
