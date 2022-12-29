@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c0d569b9_26697337",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2022-12-29T12:08:46Z",
+      "side": 1,
+      "message": "I think this is a good and easy direction to go in.\n\nIn the future we can make a list algorithms test suite and compare against C++ Nix as well as in place operations with reference counting if we feel performance is lacking.",
+      "revId": "a2ec78cbc6fb1d6804f4539951cd7a3aa6c4ef54",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
