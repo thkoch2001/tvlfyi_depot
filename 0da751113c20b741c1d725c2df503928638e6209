@@ -51,6 +51,24 @@
       "message": "Would we want to remove this eventually?",
       "revId": "0da751113c20b741c1d725c2df503928638e6209",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5420195f_e126657b",
+        "filename": "tvix/eval/src/value/attrs.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 508,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-12-29T16:33:08Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "60d6d191_40699d1c",
+      "revId": "0da751113c20b741c1d725c2df503928638e6209",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
