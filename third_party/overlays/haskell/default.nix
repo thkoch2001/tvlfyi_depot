@@ -25,6 +25,16 @@ in
       # TODO: this is to fix a bug in dhall-nix
       dhall = dhall-source "dhall" hsSuper.dhall;
       dhall-nix = dhall-source "dhall-nix" hsSuper.dhall-nix;
+
+      # GHC 9.2 and newer cabal version support
+      graphmod = super.haskell.lib.overrideSrc hsSuper.graphmod {
+        src = super.fetchFromGitHub {
+          owner = "yav";
+          repo = "graphmod";
+          rev = "983c38f73d3d6d232c954416fd1ab019f24c9fc5";
+          sha256 = "sha256-P+cXEiOZ1b1oFtQEYKZlc/CBYzSV/CAU8YJxlqd1K1w=";
+        };
+      };
     };
   };
 
