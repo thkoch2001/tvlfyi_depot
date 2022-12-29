@@ -1,4 +1,5 @@
 mod proto;
+mod nixbase32;
 
 #[cfg(test)]
 mod tests;
