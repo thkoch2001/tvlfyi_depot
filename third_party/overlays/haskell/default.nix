@@ -58,11 +58,8 @@ in
         random-fu = hsSelf.callPackage ./extra-pkgs/random-fu-0.2.nix { };
         rvar = hsSelf.callPackage ./extra-pkgs/rvar-0.2.nix { };
 
-        # TODO(grfn): port to brick 1.4
-        # Breaking changes since 0.68:
-        # - handleEditorEvent takes a BrickEvent (0.72)
-        # - EventM gains an additional type argument (1.0)
-        brick = hsSelf.callPackage ./extra-pkgs/brick-0.71.1.nix { };
+        # TODO(grfn): port to brick 1.4 (EventM gains an additional type argument in 1.0)
+        brick = hsSelf.callPackage ./extra-pkgs/brick-0.73.nix { };
 
         # TODO(sterni): upstream into nixpkgs
         binary-orphans =
