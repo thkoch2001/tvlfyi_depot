@@ -5,7 +5,7 @@ with lib;
     grfn.impure.clonedRepos = mkOption {
       description = "Repositories to clone";
       default = { };
-      type = with types; loaOf (
+      type = with types; attrsOf (
         let
           sm = submodule {
             options = {
