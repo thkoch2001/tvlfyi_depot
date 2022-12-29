@@ -148,6 +148,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "4d00de77_9ceacc47",
+        "filename": "tvix/derivation/src/lib.rs",
+        "patchSetId": 4
+      },
+      "lineNbr": 214,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2022-12-29T12:28:28Z",
+      "side": 1,
+      "message": "Pls drop the cp1252 and latin1 tests. Their only purpose was to actually test a different encoding.",
+      "parentUuid": "2b4fd48f_b50e6c0f",
+      "revId": "1f203be73d53de14eec53f71e665d71e643079c0",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "8b5addf1_c0419ac8",
         "filename": "tvix/derivation/src/lib.rs",
         "patchSetId": 4
@@ -200,6 +218,24 @@
       "side": 1,
       "message": "I guess I can delete this test now?",
       "parentUuid": "cb5617a7_60f33547",
+      "revId": "1f203be73d53de14eec53f71e665d71e643079c0",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e52bf787_2d910b77",
+        "filename": "tvix/derivation/src/lib.rs",
+        "patchSetId": 4
+      },
+      "lineNbr": 244,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2022-12-29T12:28:28Z",
+      "side": 1,
+      "message": "If we have the same/a similar example in the fixtures, yes.",
+      "parentUuid": "165882b7_871e9d8e",
       "revId": "1f203be73d53de14eec53f71e665d71e643079c0",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
