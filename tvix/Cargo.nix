@@ -1438,6 +1438,20 @@ rec {
         ];
 
       };
+      "data-encoding" = rec {
+        crateName = "data-encoding";
+        version = "2.3.3";
+        edition = "2018";
+        sha256 = "1yq8jnivxsjzl3mjbjdjg5kfvd17wawbmg1jvsfw6cqmn1n6dn13";
+        authors = [
+          "Julien Cretin <git@ia0.eu>"
+        ];
+        features = {
+          "default" = [ "std" ];
+          "std" = [ "alloc" ];
+        };
+        resolvedDefaultFeatures = [ "alloc" "default" "std" ];
+      };
       "derivation" = rec {
         crateName = "derivation";
         version = "0.1.0";
@@ -1450,31 +1464,23 @@ rec {
           else ./derivation;
         dependencies = [
           {
-            name = "blake3";
-            packageId = "blake3";
-            features = [ "rayon" "std" ];
+            name = "glob";
+            packageId = "glob";
           }
           {
-            name = "maplit";
-            packageId = "maplit";
-          }
-          {
-            name = "prost";
-            packageId = "prost";
-          }
-          {
-            name = "tonic";
-            packageId = "tonic";
+            name = "serde";
+            packageId = "serde";
+            features = [ "derive" ];
           }
         ];
-        buildDependencies = [
+        devDependencies = [
           {
-            name = "prost-build";
-            packageId = "prost-build";
+            name = "serde_json";
+            packageId = "serde_json";
           }
           {
-            name = "tonic-build";
-            packageId = "tonic-build";
+            name = "test-generator";
+            packageId = "test-generator";
           }
         ];
 
@@ -2723,16 +2729,6 @@ rec {
           "sval" = [ "dep:sval" ];
           "value-bag" = [ "dep:value-bag" ];
         };
-      };
-      "maplit" = rec {
-        crateName = "maplit";
-        version = "1.0.2";
-        edition = "2015";
-        sha256 = "07b5kjnhrrmfhgqm9wprjw8adx6i225lqp49gasgqg74lahnabiy";
-        authors = [
-          "bluss"
-        ];
-
       };
       "matchit" = rec {
         crateName = "matchit";
@@ -6336,6 +6332,14 @@ rec {
             features = [ "rayon" "std" ];
           }
           {
+            name = "data-encoding";
+            packageId = "data-encoding";
+          }
+          {
+            name = "lazy_static";
+            packageId = "lazy_static";
+          }
+          {
             name = "prost";
             packageId = "prost";
           }
@@ -6356,12 +6360,6 @@ rec {
           {
             name = "tonic-build";
             packageId = "tonic-build";
-          }
-        ];
-        devDependencies = [
-          {
-            name = "lazy_static";
-            packageId = "lazy_static";
           }
         ];
 
