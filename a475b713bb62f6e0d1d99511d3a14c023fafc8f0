@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b071f963_03db9522",
+        "filename": "users/Profpatsch/haskell-module-deps/default.nix",
+        "patchSetId": 2
+      },
+      "lineNbr": 5,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2022-12-29T14:35:55Z",
+      "side": 1,
+      "message": "graphmod doesn\u0027t work with GHC 9.2 yet, because they did not bother to release a version with support to hackage.",
+      "revId": "a475b713bb62f6e0d1d99511d3a14c023fafc8f0",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
