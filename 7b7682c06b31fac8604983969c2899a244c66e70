@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "525ef283_4b1761ea",
+        "filename": "tvix/store/src/proto.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2022-12-29T11:46:08Z",
+      "side": 1,
+      "message": "I couldn\u0027t get this to only apply for the things that the macro emits in L8, but addressed the other lint for L11.",
+      "revId": "7b7682c06b31fac8604983969c2899a244c66e70",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
