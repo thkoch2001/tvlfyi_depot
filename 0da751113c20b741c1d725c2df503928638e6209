@@ -18,6 +18,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "3272d66c_bc10be6e",
+        "filename": "tvix/eval/src/value/attrs.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 156,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-12-29T16:33:03Z",
+      "side": 1,
+      "message": "It\u0027s a fork of `im`, so yes`, but I don\u0027t know how to use it. I tried adding the features that turn on the dependencies but it didn\u0027t do anything. grfn should probably take a look, resolving for now.",
+      "parentUuid": "5d6bff24_3c765171",
+      "revId": "0da751113c20b741c1d725c2df503928638e6209",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "60d6d191_40699d1c",
