@@ -24,6 +24,20 @@ pub enum ValidateDirectoryError {
     InvalidDigestLen(usize),
 }
 
+/// Errors that can occur during the validation of PathInfo messages.
+#[derive(Debug, Error, PartialEq)]
+pub enum ValidatePathInfoError {
+    /// No node present
+    #[error("No node present")]
+    NoNodePresent(),
+    /// Invalid Name encountered. This includes both empty paths, as well as paths with wrong encoding.
+    #[error("{0} is an invalid node name")]
+    InvalidName(String),
+    /// Directory failed validation
+    #[error("node failed name validation")]
+    InvalidDirectory(ValidateDirectoryError),
+}
+
 /// Checks a Node name for validity as an intermediate node, and returns an
 /// error that's generated from the supplied constructor.
 ///
@@ -34,6 +48,43 @@ fn validate_node_name<E>(name: &str, err: fn(String) -> E) -> Result<(), E> {
         return Err(err(name.to_string()));
     }
     Ok(())
+}
+
+/// Parses a root node name.
+///
+/// On success, this returns the parsed NixPath.
+/// On error, it returns an error generated from the supplied constructor.
+///
+/// We disallow slashes, null bytes, '.', '..' and the empty string.
+fn parse_node_name_root<E>(name: &str, err: fn(String) -> E) -> Result<[u8; 20], E> {
+    // TODO(flokli): call NixPath::parse_without_store_dir_prefix() here
+    Ok(())
+}
+
+impl PathInfo {
+    pub fn validate(&self) -> Result<(), ValidatePathInfoError> {
+        match self.node {
+            None => Err(ValidatePathInfoError::NoNodePresent()),
+            Some(Node { node }) => match node {
+                None => Err(ValidatePathInfoError::NoNodePresent()),
+                Some(node::Node::Directory(directory_node)) => {
+                    validate_node_name(&directory_node.name, ValidatePathInfoError::InvalidName)?;
+                    // TODO: more checks
+                    Ok(())
+                }
+                Some(node::Node::File(file_node)) => {
+                    validate_node_name(&file_node.name, ValidatePathInfoError::InvalidName)?;
+                    // TODO: more checks
+                    Ok(())
+                }
+                Some(node::Node::Symlink(symlink_node)) => {
+                    validate_node_name(&symlink_node.name, ValidatePathInfoError::InvalidName)?;
+                    // TODO: more checks
+                    Ok(())
+                }
+            },
+        }
+    }
 }
 
 /// Checks a digest for validity.
