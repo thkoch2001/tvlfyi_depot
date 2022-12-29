@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f3d49a9c_6b2f2eb7",
+        "filename": "users/Profpatsch/nix-shell-env/README.md",
+        "patchSetId": 90
+      },
+      "lineNbr": 3,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2022-12-29T22:48:31Z",
+      "side": 1,
+      "message": "A semilattice is probably sufficient.",
+      "revId": "be91dd5bbc2b08e114eed5e467edfa6656d2288f",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
