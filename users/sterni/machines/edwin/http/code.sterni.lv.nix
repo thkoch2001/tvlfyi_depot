@@ -14,7 +14,7 @@ let
         "mirror/depot" = {
           description = "monorepo for the virus lounge";
           upstream = "https://code.tvl.fyi/depot.git";
-          defaultBranch = "canon";
+          cgit.defaultBranch = "canon";
         };
         "mirror/flipdot-gschichtler" = {
           description = "message queue system for OpenLab's flipdot display";
@@ -23,6 +23,7 @@ let
         "mirror/nixpkgs" = {
           description = "Nix packages collection";
           upstream = "https://github.com/nixos/nixpkgs.git";
+          cgit.enable-commit-graph = "0"; # too slow
         };
       };
     }
@@ -39,11 +40,11 @@ let
         };
         haskell-dot-time = {
           description = "UTC-centric time library for haskell with dot time support";
-          defaultBranch = "main";
+          cgit.defaultBranch = "main";
         };
         buchstabensuppe = {
           description = "toy font rendering for low pixelcount, high contrast displays";
-          defaultBranch = "main";
+          cgit.defaultBranch = "main";
           upstream = "https://github.com/sternenseemann/buchstabensuppe.git";
         };
         "mirror/saneterm" = {
@@ -53,6 +54,7 @@ let
       };
     }
     {
+      # TODO(sterni): resisort, klammeraffe, cl-ca, ponify, tinyrl
       section = "archive";
       repos = {
         gopher-proxy = {
@@ -84,7 +86,7 @@ let
         "repo.path=${repoPath name repo}"
       ]
       ++ lib.optional (repo ? description) "repo.desc=${repo.description}"
-      ++ lib.optional (repo ? defaultBranch) "repo.defbranch=${repo.defaultBranch}"
+      ++ lib.mapAttrsToList (n: v: "repo.${n}=${v}") repo.cgit or {}
     );
 
   cgitHead = pkgs.writeText "cgit-head.html" ''
