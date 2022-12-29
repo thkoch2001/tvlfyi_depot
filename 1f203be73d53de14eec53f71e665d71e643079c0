@@ -58,6 +58,30 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "e2b83aa4_f1f7b329",
+        "filename": "tvix/derivation/Cargo.toml",
+        "patchSetId": 4
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1000067
+      },
+      "writtenOn": "2022-12-29T13:38:28Z",
+      "side": 1,
+      "message": "The test (and hence the dependency) became redundant. removed.",
+      "parentUuid": "9260fde5_394422f6",
+      "range": {
+        "startLine": 10,
+        "startChar": 0,
+        "endLine": 10,
+        "endChar": 16
+      },
+      "revId": "1f203be73d53de14eec53f71e665d71e643079c0",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "a71b81f3_f6dccce8",
@@ -164,6 +188,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "7c2a3492_a01214de",
+        "filename": "tvix/derivation/src/lib.rs",
+        "patchSetId": 4
+      },
+      "lineNbr": 214,
+      "author": {
+        "id": 1000067
+      },
+      "writtenOn": "2022-12-29T13:38:28Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4d00de77_9ceacc47",
+      "revId": "1f203be73d53de14eec53f71e665d71e643079c0",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "8b5addf1_c0419ac8",
@@ -177,6 +219,30 @@
       "writtenOn": "2022-12-28T22:14:36Z",
       "side": 1,
       "message": "I personally don\u0027t think this gives us much over the builtin BTreeMap::from instance for `[(K, V); N]`, e.g.\n\n```\nBTreeMap::From([\n   (\"builder\".to_string(), \":\".to_string),\n   (\"name\".to_string(), \"bar\".to_string),\n   // ... and so on\n]);\n```\n\nbut it\u0027s also not very important, so feel free to just ack this comment.",
+      "range": {
+        "startLine": 224,
+        "startChar": 0,
+        "endLine": 224,
+        "endChar": 29
+      },
+      "revId": "1f203be73d53de14eec53f71e665d71e643079c0",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c79acbcb_33189032",
+        "filename": "tvix/derivation/src/lib.rs",
+        "patchSetId": 4
+      },
+      "lineNbr": 224,
+      "author": {
+        "id": 1000067
+      },
+      "writtenOn": "2022-12-29T13:38:28Z",
+      "side": 1,
+      "message": "I was actually looking for that. I will keep it in mind for the future. For now, removed.",
+      "parentUuid": "8b5addf1_c0419ac8",
       "range": {
         "startLine": 224,
         "startChar": 0,
@@ -236,6 +302,24 @@
       "side": 1,
       "message": "If we have the same/a similar example in the fixtures, yes.",
       "parentUuid": "165882b7_871e9d8e",
+      "revId": "1f203be73d53de14eec53f71e665d71e643079c0",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "eb05a06d_836bc2e4",
+        "filename": "tvix/derivation/src/lib.rs",
+        "patchSetId": 4
+      },
+      "lineNbr": 244,
+      "author": {
+        "id": 1000067
+      },
+      "writtenOn": "2022-12-29T13:38:28Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e52bf787_2d910b77",
       "revId": "1f203be73d53de14eec53f71e665d71e643079c0",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
