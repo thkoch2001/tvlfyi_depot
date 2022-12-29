@@ -4,6 +4,7 @@ use crate::proto::path_info_service_server::PathInfoServiceServer;
 
 #[cfg(feature = "reflection")]
 use crate::proto::FILE_DESCRIPTOR_SET;
+use crate::sled_path_info_service::SledPathInfoService;
 
 use clap::Parser;
 use tonic::{transport::Server, Result};
@@ -11,10 +12,10 @@ use tracing::{info, Level};
 
 mod dummy_blob_service;
 mod dummy_directory_service;
-mod dummy_path_info_service;
 mod nixbase32;
 mod nixpath;
 mod proto;
+mod sled_path_info_service;
 
 #[cfg(test)]
 mod tests;
@@ -46,7 +47,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 
     let blob_service = dummy_blob_service::DummyBlobService {};
     let directory_service = dummy_directory_service::DummyDirectoryService {};
-    let path_info_service = dummy_path_info_service::DummyPathInfoService {};
+    let path_info_service = SledPathInfoService::new("pathinfo.sled".into())?;
 
     let mut router = server
         .add_service(BlobServiceServer::new(blob_service))
