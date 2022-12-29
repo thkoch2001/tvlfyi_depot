@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5d6bff24_3c765171",
+        "filename": "tvix/eval/src/value/attrs.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 156,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2022-12-29T14:48:49Z",
+      "side": 1,
+      "message": "Does imbl potentially have an instance for this already? Noting it here would be good as well.",
+      "revId": "0da751113c20b741c1d725c2df503928638e6209",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "60d6d191_40699d1c",
+        "filename": "tvix/eval/src/value/attrs.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 508,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2022-12-29T14:48:49Z",
+      "side": 1,
+      "message": "Would we want to remove this eventually?",
+      "revId": "0da751113c20b741c1d725c2df503928638e6209",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
