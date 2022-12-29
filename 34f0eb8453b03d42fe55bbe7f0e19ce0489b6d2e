@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "10f89916_d7c65355",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 9
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2022-12-29T13:43:37Z",
+      "side": 1,
+      "message": "that\u0027s now tvix/derivation ;-)",
+      "revId": "34f0eb8453b03d42fe55bbe7f0e19ce0489b6d2e",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "355f769c_17c4f88e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 9
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2022-12-29T13:43:37Z",
+      "side": 1,
+      "message": "One small commit message nit, otherwise this looks good!",
+      "revId": "34f0eb8453b03d42fe55bbe7f0e19ce0489b6d2e",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
