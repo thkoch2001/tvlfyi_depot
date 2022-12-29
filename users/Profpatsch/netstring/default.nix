@@ -1,16 +1,11 @@
 { lib, pkgs, depot, ... }:
 let
-  toNetstring = s:
-    "${toString (builtins.stringLength s)}:${s},";
+  toNetstring = depot.nix.netstring.fromString;
 
   toNetstringList = xs:
     lib.concatStrings (map toNetstring xs);
 
-  toNetstringKeyVal = attrs:
-    lib.concatStrings
-      (lib.mapAttrsToList
-        (k: v: toNetstring (toNetstring k + toNetstring v))
-        attrs);
+  toNetstringKeyVal = depot.nix.netstring.attrsToKeyValList;
 
   python-netstring = depot.users.Profpatsch.writers.python3Lib
     {
