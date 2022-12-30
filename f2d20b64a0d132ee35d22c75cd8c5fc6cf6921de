@@ -18,6 +18,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "d6ec7fa1_da5bf7e0",
+        "filename": "tvix/store/src/nixpath.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 1000067
+      },
+      "writtenOn": "2022-12-30T13:00:12Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0a2f7480_1367c0cc",
+      "revId": "f2d20b64a0d132ee35d22c75cd8c5fc6cf6921de",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "8a1fe348_995b8e1b",
@@ -31,6 +49,24 @@
       "writtenOn": "2022-12-30T12:04:42Z",
       "side": 1,
       "message": "I had to blink twice here - maybe add a comment that the body of the if case runs on all characters outside the [a-zA-Z0-9] range, and the match checks for the remaining allowed characters. \n\nA more readable alternative would be inverting the condition, immediately continuing the loop in case a character inside that range is found.",
+      "revId": "f2d20b64a0d132ee35d22c75cd8c5fc6cf6921de",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c79dc1e0_6d0bf49c",
+        "filename": "tvix/store/src/nixpath.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1000067
+      },
+      "writtenOn": "2022-12-30T13:00:12Z",
+      "side": 1,
+      "message": "Agree. I inverted the logic to check for valid chars.",
+      "parentUuid": "8a1fe348_995b8e1b",
       "revId": "f2d20b64a0d132ee35d22c75cd8c5fc6cf6921de",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
@@ -52,6 +88,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "1ea5a9a7_f132103c",
+        "filename": "tvix/store/src/nixpath.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 61,
+      "author": {
+        "id": 1000067
+      },
+      "writtenOn": "2022-12-30T13:00:12Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "88294b16_c41e8ffb",
+      "revId": "f2d20b64a0d132ee35d22c75cd8c5fc6cf6921de",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "67d3943d_09acc863",
@@ -69,6 +123,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "9b909185_709d6d42",
+        "filename": "tvix/store/src/nixpath.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 69,
+      "author": {
+        "id": 1000067
+      },
+      "writtenOn": "2022-12-30T13:00:12Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "67d3943d_09acc863",
+      "revId": "f2d20b64a0d132ee35d22c75cd8c5fc6cf6921de",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "67b70f78_44762646",
@@ -82,6 +154,24 @@
       "writtenOn": "2022-12-30T12:04:42Z",
       "side": 1,
       "message": "If you derive Eq for NixPath, you can directly compare the two structs.",
+      "revId": "f2d20b64a0d132ee35d22c75cd8c5fc6cf6921de",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "06cac6c1_dd316eac",
+        "filename": "tvix/store/src/nixpath.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 91,
+      "author": {
+        "id": 1000067
+      },
+      "writtenOn": "2022-12-30T13:00:12Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "67b70f78_44762646",
       "revId": "f2d20b64a0d132ee35d22c75cd8c5fc6cf6921de",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
