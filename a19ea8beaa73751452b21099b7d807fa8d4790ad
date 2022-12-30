@@ -22,6 +22,30 @@
       },
       "revId": "a19ea8beaa73751452b21099b7d807fa8d4790ad",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "986172e3_f8087a58",
+        "filename": "tvix/store/src/proto.rs",
+        "patchSetId": 29
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2022-12-30T20:23:02Z",
+      "side": 1,
+      "message": "You were right, this (and an import) had to be conditional on the feature being enabled as well.\n\nI validated this now also builds with `cargo build --bin tvix-store --no-default-features`",
+      "parentUuid": "4cdfa752_268a3af1",
+      "range": {
+        "startLine": 13,
+        "startChar": 0,
+        "endLine": 13,
+        "endChar": 92
+      },
+      "revId": "a19ea8beaa73751452b21099b7d807fa8d4790ad",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
