@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4cdfa752_268a3af1",
+        "filename": "tvix/store/src/proto.rs",
+        "patchSetId": 29
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2022-12-30T20:02:25Z",
+      "side": 1,
+      "message": "should this be gated on the `reflection` feature? does it have any effect if the feature is turned off?",
+      "range": {
+        "startLine": 13,
+        "startChar": 0,
+        "endLine": 13,
+        "endChar": 92
+      },
+      "revId": "a19ea8beaa73751452b21099b7d807fa8d4790ad",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
