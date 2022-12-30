@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "83527063_a634b809",
+        "filename": "tvix/store/src/nixpath.rs",
+        "patchSetId": 5
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2022-12-30T13:31:31Z",
+      "side": 1,
+      "message": "These cases are not data_encoding::DecodeErrors - they are not about broken base32 decoding, but invalid characters in the name part.\n\nYou probably need an additional error struct for this stuff, like we have in src/proto.rs for ValidateDirectoryError.",
+      "revId": "e05208a661100acff0afeccb167fb174ce2ec97f",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "02479944_192f632c",
+        "filename": "tvix/store/src/nixpath.rs",
+        "patchSetId": 5
+      },
+      "lineNbr": 96,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2022-12-30T13:31:31Z",
+      "side": 1,
+      "message": "This is hard to read. It\u0027s probably better to use .expect_err(\"must fail to parse\"), which will panic if there is no_error (if you care about the error), or assert!(….is_err()) if you only want to check for an error to be returned (the counterpart to is_ok())",
+      "revId": "e05208a661100acff0afeccb167fb174ce2ec97f",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
