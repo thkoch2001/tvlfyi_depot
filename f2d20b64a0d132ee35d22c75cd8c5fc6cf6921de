@@ -1,0 +1,89 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0a2f7480_1367c0cc",
+        "filename": "tvix/store/src/nixpath.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2022-12-30T12:04:42Z",
+      "side": 1,
+      "message": "TODO: drop all the STORE_DIRECTORY references. It\u0027s probably more in line with the rest of the code to store this without a store prefix, and leave it up to the caller to potentially strip it from the input before passing it to the from_string method.",
+      "revId": "f2d20b64a0d132ee35d22c75cd8c5fc6cf6921de",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8a1fe348_995b8e1b",
+        "filename": "tvix/store/src/nixpath.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2022-12-30T12:04:42Z",
+      "side": 1,
+      "message": "I had to blink twice here - maybe add a comment that the body of the if case runs on all characters outside the [a-zA-Z0-9] range, and the match checks for the remaining allowed characters. \n\nA more readable alternative would be inverting the condition, immediately continuing the loop in case a character inside that range is found.",
+      "revId": "f2d20b64a0d132ee35d22c75cd8c5fc6cf6921de",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "88294b16_c41e8ffb",
+        "filename": "tvix/store/src/nixpath.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 61,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2022-12-30T12:04:42Z",
+      "side": 1,
+      "message": "Can be dropped, we don\u0027t want to handle STORE_DIRECTORY.",
+      "revId": "f2d20b64a0d132ee35d22c75cd8c5fc6cf6921de",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "67d3943d_09acc863",
+        "filename": "tvix/store/src/nixpath.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 69,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2022-12-30T12:04:42Z",
+      "side": 1,
+      "message": "I think the more canonical way would be to impl std::fmt::Display here.",
+      "revId": "f2d20b64a0d132ee35d22c75cd8c5fc6cf6921de",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "67b70f78_44762646",
+        "filename": "tvix/store/src/nixpath.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 91,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2022-12-30T12:04:42Z",
+      "side": 1,
+      "message": "If you derive Eq for NixPath, you can directly compare the two structs.",
+      "revId": "f2d20b64a0d132ee35d22c75cd8c5fc6cf6921de",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
