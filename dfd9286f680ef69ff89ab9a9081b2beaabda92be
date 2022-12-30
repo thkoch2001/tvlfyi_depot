@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4551ba4b_e89ade36",
+        "filename": "tvix/store/protos/castore.go",
+        "patchSetId": 5
+      },
+      "lineNbr": 67,
+      "author": {
+        "id": 1000005
+      },
+      "writtenOn": "2022-12-30T11:07:08Z",
+      "side": 1,
+      "message": "Go idiom: var x, y, z string",
+      "revId": "dfd9286f680ef69ff89ab9a9081b2beaabda92be",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
