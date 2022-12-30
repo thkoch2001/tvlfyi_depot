@@ -33,6 +33,24 @@
       "message": "\"size is known\"",
       "revId": "dbc69bcbcf88e640b2394d98db0cf6d699e3586b",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ea24feff_76509e8d",
+        "filename": "tvix/store/src/nixpath.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 54,
+      "author": {
+        "id": 1000067
+      },
+      "writtenOn": "2022-12-30T15:50:09Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "abe36674_3ac0a9cf",
+      "revId": "dbc69bcbcf88e640b2394d98db0cf6d699e3586b",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
