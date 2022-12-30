@@ -18,6 +18,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "394915db_df540fea",
+        "filename": "tvix/store/src/nixpath.rs",
+        "patchSetId": 5
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1000067
+      },
+      "writtenOn": "2022-12-30T14:38:32Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "35146d69_d5bfbd9c",
+      "revId": "e05208a661100acff0afeccb167fb174ce2ec97f",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "83527063_a634b809",
@@ -35,6 +53,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "daf3affd_1e3fbad5",
+        "filename": "tvix/store/src/nixpath.rs",
+        "patchSetId": 5
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 1000067
+      },
+      "writtenOn": "2022-12-30T14:38:32Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "83527063_a634b809",
+      "revId": "e05208a661100acff0afeccb167fb174ce2ec97f",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "02479944_192f632c",
@@ -48,6 +84,24 @@
       "writtenOn": "2022-12-30T13:31:31Z",
       "side": 1,
       "message": "This is hard to read. It\u0027s probably better to use .expect_err(\"must fail to parse\"), which will panic if there is no_error (if you care about the error), or assert!(….is_err()) if you only want to check for an error to be returned (the counterpart to is_ok())",
+      "revId": "e05208a661100acff0afeccb167fb174ce2ec97f",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6864ef7b_04bdfd2a",
+        "filename": "tvix/store/src/nixpath.rs",
+        "patchSetId": 5
+      },
+      "lineNbr": 96,
+      "author": {
+        "id": 1000067
+      },
+      "writtenOn": "2022-12-30T14:38:32Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "02479944_192f632c",
       "revId": "e05208a661100acff0afeccb167fb174ce2ec97f",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
