@@ -16,6 +16,23 @@
       "message": "@tazjin mentioned you might be able to just do\n\n`digest: digest.try_into().expect(\"size is known\")`\n\nhere",
       "revId": "5520bf3682040fc0eabba9cd55d6c403f35c8775",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b80e41e8_0b0c5af4",
+        "filename": "tvix/store/src/nixpath.rs",
+        "patchSetId": 7
+      },
+      "lineNbr": 120,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2022-12-30T15:21:15Z",
+      "side": 1,
+      "message": "I\u0027d probably call these things a \"Must error\", to make clear we\u0027re expecting an error to be returned, so no error raised is actually a undesirable outcome, at least here.",
+      "revId": "5520bf3682040fc0eabba9cd55d6c403f35c8775",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
