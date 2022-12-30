@@ -1,0 +1,89 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e8c29d6c_e4d0a3e6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000067
+      },
+      "writtenOn": "2022-12-30T09:46:40Z",
+      "side": 1,
+      "message": "Go code consistency and making the structure public",
+      "revId": "277c46513b53e695048568480cf65beefa66f062",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bd4422e4_fd28ee6b",
+        "filename": "tvix/store/src/nixbase32.rs",
+        "patchSetId": 7
+      },
+      "lineNbr": 6,
+      "author": {
+        "id": 1000067
+      },
+      "writtenOn": "2022-12-30T09:46:40Z",
+      "side": 1,
+      "message": "pub",
+      "revId": "277c46513b53e695048568480cf65beefa66f062",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "74ae7473_32bda6d1",
+        "filename": "tvix/store/src/nixbase32.rs",
+        "patchSetId": 7
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1000067
+      },
+      "writtenOn": "2022-12-30T09:46:40Z",
+      "side": 1,
+      "message": "pub",
+      "revId": "277c46513b53e695048568480cf65beefa66f062",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b5fef460_fec9b8d0",
+        "filename": "tvix/store/src/nixbase32.rs",
+        "patchSetId": 7
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1000067
+      },
+      "writtenOn": "2022-12-30T09:46:40Z",
+      "side": 1,
+      "message": "If you want to make it consistent with the go version: decoded_len",
+      "revId": "277c46513b53e695048568480cf65beefa66f062",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "16f0d07f_f38f55f5",
+        "filename": "tvix/store/src/nixbase32.rs",
+        "patchSetId": 7
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1000067
+      },
+      "writtenOn": "2022-12-30T09:46:40Z",
+      "side": 1,
+      "message": "and encoded_len",
+      "revId": "277c46513b53e695048568480cf65beefa66f062",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
