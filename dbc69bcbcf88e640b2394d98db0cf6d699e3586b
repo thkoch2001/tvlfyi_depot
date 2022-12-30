@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7c1adb8b_bd1171f7",
+        "filename": "tvix/Cargo.lock",
+        "patchSetId": 1
+      },
+      "lineNbr": 2149,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2022-12-30T15:44:32Z",
+      "side": 1,
+      "message": "unrelated, but yeah, good :-)\n\nI proably messed up some rebase earlier, and didn\u0027t properly sort it.",
+      "revId": "dbc69bcbcf88e640b2394d98db0cf6d699e3586b",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "abe36674_3ac0a9cf",
+        "filename": "tvix/store/src/nixpath.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 54,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2022-12-30T15:44:32Z",
+      "side": 1,
+      "message": "\"size is known\"",
+      "revId": "dbc69bcbcf88e640b2394d98db0cf6d699e3586b",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
