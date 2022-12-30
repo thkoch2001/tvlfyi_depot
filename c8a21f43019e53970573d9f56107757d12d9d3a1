@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "396fd7ad_10abbb53",
+        "filename": "tvix/store/src/nixbase32.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2022-12-30T09:02:32Z",
+      "side": 1,
+      "message": "The `\u0026[u8]` needs to be dereferenced here somehow.",
+      "revId": "c8a21f43019e53970573d9f56107757d12d9d3a1",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
