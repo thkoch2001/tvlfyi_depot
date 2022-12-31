@@ -1,49 +1,38 @@
-{-# LANGUAGE AllowAmbiguousTypes #-}
 {-# LANGUAGE DataKinds #-}
 {-# LANGUAGE DerivingStrategies #-}
-{-# LANGUAGE FlexibleContexts #-}
-{-# LANGUAGE FlexibleInstances #-}
-{-# LANGUAGE GeneralizedNewtypeDeriving #-}
 {-# LANGUAGE LambdaCase #-}
-{-# LANGUAGE MultiParamTypeClasses #-}
-{-# LANGUAGE MultiWayIf #-}
-{-# LANGUAGE OverloadedLabels #-}
+{-# LANGUAGE OverloadedRecordDot #-}
 {-# LANGUAGE OverloadedStrings #-}
 {-# LANGUAGE QuasiQuotes #-}
 {-# LANGUAGE RecordWildCards #-}
-{-# LANGUAGE ScopedTypeVariables #-}
 {-# LANGUAGE TypeApplications #-}
-{-# LANGUAGE TypeFamilies #-}
-{-# LANGUAGE TypeOperators #-}
-{-# LANGUAGE UndecidableInstances #-}
 {-# OPTIONS_GHC -Wall #-}
 {-# OPTIONS_GHC -Wno-orphans #-}
 
 module Main where
 
 import Control.Applicative
-import qualified Crypto.Hash as Crypto
-import qualified Data.ByteArray as ByteArray
-import qualified Data.ByteString.Lazy as ByteString.Lazy
-import qualified Data.ByteString.Lazy as Lazy
+import Control.Monad.Reader
+import Crypto.Hash qualified as Crypto
+import Data.ByteArray qualified as ByteArray
+import Data.ByteString.Lazy qualified as ByteString.Lazy
+import Data.ByteString.Lazy qualified as Lazy
 import Data.Functor.Compose
 import Data.Int (Int64)
-import qualified Data.List as List
+import Data.List qualified as List
 import Data.Maybe (fromMaybe)
-import qualified Data.Text as Text
-import qualified Data.Text.IO as Text
+import Data.Text qualified as Text
+import Data.Text.IO qualified as Text
 import Database.SQLite.Simple (NamedParam ((:=)))
-import qualified Database.SQLite.Simple as Sqlite
-import qualified Database.SQLite.Simple.FromField as Sqlite
-import qualified Database.SQLite.Simple.QQ as Sqlite
-import GHC.TypeLits (Symbol)
+import Database.SQLite.Simple qualified as Sqlite
+import Database.SQLite.Simple.FromField qualified as Sqlite
+import Database.SQLite.Simple.QQ qualified as Sqlite
+import Label
 import MyPrelude
-import qualified Network.HTTP.Types as Http
-import qualified Network.Wai as Wai
-import qualified Network.Wai.Handler.Warp as Warp
-import qualified SuperRecord as Rec
+import Network.HTTP.Types qualified as Http
+import Network.Wai qualified as Wai
+import Network.Wai.Handler.Warp qualified as Warp
 import System.IO (stderr)
-import Control.Monad.Reader
 
 main :: IO ()
 main = do
@@ -85,7 +74,7 @@ data Env = Env
 
 -- | I don’t need any fancy routing in this, so a handler is just something that returns a @Just (IO a)@ if it wants to handle the request.
 newtype Handler a
-  = Handler ( ReaderT (Wai.Request, Env) (Compose Maybe IO) a )
+  = Handler (ReaderT (Wai.Request, Env) (Compose Maybe IO) a)
   deriving newtype (Functor, Applicative, Alternative)
 
 handler :: ((Wai.Request, Env) -> Maybe (IO a)) -> Handler a
@@ -105,11 +94,13 @@ getById = handler $ \(req, env) -> do
   case req & Wai.pathInfo of
     ["v0", "by-id", filename] -> Just $ do
       Sqlite.queryNamed
-        @( Rec.Rec
-             [ "mimetype" Rec.:= Text,
-               "content" Rec.:= ByteString,
-               "size" Rec.:= Int
-             ]
+        @( T3
+             "mimetype"
+             Text
+             "content"
+             ByteString
+             "size"
+             Int
          )
         (env & envData)
         [Sqlite.sql|
@@ -129,11 +120,11 @@ getById = handler $ \(req, env) -> do
           [] -> Left (Http.status404, "File not found.")
           [res] ->
             Right
-              ( [ ("Content-Type", res & Rec.get #mimetype & textToBytesUtf8),
-                  ("Content-Length", res & Rec.get #size & showToText & textToBytesUtf8)
+              ( [ ("Content-Type", res.mimetype & textToBytesUtf8),
+                  ("Content-Length", res.size & showToText & textToBytesUtf8)
                 ],
                 -- TODO: should this be lazy/streamed?
-                res & Rec.get #content
+                res.content
               )
           _more -> Left "file_references must be unique (in type and name)" & unwrapError
     _ -> Nothing
@@ -235,13 +226,14 @@ getNameFromWordlist env =
 
 -- | We can use a Rec with a named list of types to parse a returning row of sqlite!!
 instance
-  ( Rec.UnsafeRecBuild rec rec FromFieldC
+  ( Sqlite.FromField t1,
+    Sqlite.FromField t2,
+    Sqlite.FromField t3
   ) =>
-  Sqlite.FromRow (Rec.Rec rec)
+  Sqlite.FromRow (T3 l1 t1 l2 t2 l3 t3)
   where
   fromRow = do
-    Rec.unsafeRecBuild @rec @rec @FromFieldC (\_lbl _proxy -> Sqlite.field)
-
-class (Sqlite.FromField a) => FromFieldC (lbl :: Symbol) a
-
-instance (Sqlite.FromField a) => FromFieldC lbl a
+    T3
+      <$> (label @l1 <$> Sqlite.field)
+      <*> (label @l2 <$> Sqlite.field)
+      <*> (label @l3 <$> Sqlite.field)
