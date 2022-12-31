@@ -7,6 +7,7 @@ pkgs.haskellPackages.mkDerivation {
   src = depot.users.Profpatsch.exactSource ./. [
     ./my-prelude.cabal
     ./MyPrelude.hs
+    ./Label.hs
   ];
 
   isLibrary = true;

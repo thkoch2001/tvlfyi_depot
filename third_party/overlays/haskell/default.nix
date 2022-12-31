@@ -30,20 +30,6 @@ in
       dhall = dhall-source "dhall" hsSuper.dhall;
       dhall-nix = dhall-source "dhall-nix" hsSuper.dhall-nix;
 
-      # TODO(Profpatsch): move cas-serve off superrecord
-      # https://github.com/agrafix/superrecord/pull/35
-      # https://github.com/agrafix/superrecord/pull/37
-      superrecord = haskellLib.overrideSrc
-        {
-          src = self.fetchFromGitHub {
-            owner = "possehl-analytics";
-            repo = "superrecord";
-            rev = "05c8fdd724af5189a9a8be2f30dfa55a67f8b656";
-            sha256 = "0p6a280kils12ycdlp6dd7392940yzzy6xi8pjar975j38fm3x5a";
-          };
-        }
-        hsSuper.superrecord;
-
       # Use recently-released version that has 9.2 support
       graphmod = assert hsSuper.graphmod != "1.4.5.1";
         hsSelf.callPackage ./extra-pkgs/graphmod-1.4.5.1.nix { };
