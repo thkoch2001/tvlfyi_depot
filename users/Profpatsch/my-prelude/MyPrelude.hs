@@ -1,3 +1,4 @@
+{-# LANGUAGE GHC2021 #-}
 {-# LANGUAGE ImplicitParams #-}
 {-# LANGUAGE LambdaCase #-}
 {-# LANGUAGE MagicHash #-}
@@ -5,6 +6,7 @@
 {-# LANGUAGE PolyKinds #-}
 {-# LANGUAGE RankNTypes #-}
 {-# LANGUAGE ScopedTypeVariables #-}
+{-# OPTIONS_GHC -fexpose-all-unfoldings #-}
 
 module MyPrelude
   ( -- * Text conversions
@@ -37,6 +39,9 @@ module MyPrelude
     -- * WIP code
     todo,
 
+    -- * Records
+    HasField,
+
     -- * Control flow
     (&),
     (<&>),
@@ -59,9 +64,11 @@ module MyPrelude
     first,
     second,
     bimap,
+    both,
     foldMap,
     fold,
     foldl',
+    fromMaybe,
     mapMaybe,
     findMaybe,
     Traversable,
@@ -105,6 +112,8 @@ module MyPrelude
     sconcat,
     Monoid,
     mconcat,
+    ifTrue,
+    ifExists,
     Void,
     absurd,
     Identity (Identity, runIdentity),
@@ -120,8 +129,8 @@ module MyPrelude
     rmap,
     Semigroupoid,
     Category,
-    (<<<),
     (>>>),
+    (&>>),
 
     -- * Enum definition
     inverseFunction,
@@ -130,12 +139,11 @@ module MyPrelude
     -- * Error handling
     HasCallStack,
     module Data.Error,
-    smushErrors,
   )
 where
 
 import Control.Applicative ((<|>))
-import Control.Category (Category, (<<<), (>>>))
+import Control.Category (Category, (>>>))
 import Control.Monad (guard, join, unless, when)
 import Control.Monad.Except
   ( ExceptT,
@@ -150,13 +158,13 @@ import Data.Bifunctor (Bifunctor, bimap, first, second)
 import Data.ByteString
   ( ByteString,
   )
-import qualified Data.ByteString.Lazy
-import qualified Data.Char
+import Data.ByteString.Lazy qualified
+import Data.Char qualified
 import Data.Coerce (Coercible, coerce)
 import Data.Data (Proxy (Proxy))
 import Data.Error
 import Data.Foldable (Foldable (foldMap', toList), fold, foldl', for_, traverse_)
-import qualified Data.Foldable as Foldable
+import Data.Foldable qualified as Foldable
 import Data.Function ((&))
 import Data.Functor ((<&>))
 import Data.Functor.Contravariant (Contravariant (contramap), (>$<))
@@ -165,22 +173,22 @@ import Data.List.NonEmpty (NonEmpty ((:|)), nonEmpty)
 import Data.Map.Strict
   ( Map,
   )
-import qualified Data.Map.Strict as Map
-import Data.Maybe (mapMaybe)
-import qualified Data.Maybe as Maybe
+import Data.Map.Strict qualified as Map
+import Data.Maybe (fromMaybe, mapMaybe)
+import Data.Maybe qualified as Maybe
 import Data.Profunctor (Profunctor, dimap, lmap, rmap)
 import Data.Semigroup (Max (Max, getMax), Min (Min, getMin), sconcat)
 import Data.Semigroup.Foldable (Foldable1 (fold1), foldMap1)
 import Data.Semigroup.Traversable (Traversable1)
-import Data.Semigroupoid (Semigroupoid)
+import Data.Semigroupoid (Semigroupoid (o))
 import Data.Text
   ( Text,
   )
-import qualified Data.Text
-import qualified Data.Text.Encoding
-import qualified Data.Text.Encoding.Error
-import qualified Data.Text.Lazy
-import qualified Data.Text.Lazy.Encoding
+import Data.Text qualified
+import Data.Text.Encoding qualified
+import Data.Text.Encoding.Error qualified
+import Data.Text.Lazy qualified
+import Data.Text.Lazy.Encoding qualified
 import Data.These (These (That, These, This))
 import Data.Traversable (for)
 import Data.Void (Void, absurd)
@@ -189,10 +197,11 @@ import GHC.Exception (errorCallWithCallStackException)
 import GHC.Exts (RuntimeRep, TYPE, raise#)
 import GHC.Generics (Generic)
 import GHC.Natural (Natural)
+import GHC.Records (HasField)
 import GHC.Stack (HasCallStack)
 import PyF (fmt)
-import qualified System.Exit
-import qualified System.IO
+import System.Exit qualified
+import System.IO qualified
 import Validation
   ( Validation (Failure, Success),
     eitherToValidation,
@@ -207,6 +216,20 @@ import Validation
 (>&<) = flip contramap
 
 infixl 5 >&<
+
+-- | Forward semigroupoid application. The same as '(>>>)', but 'Semigroupoid' is not a superclass of 'Category' (yet).
+--
+-- Specialized examples:
+--
+-- @@
+-- for functions : (a -> b) -> (b -> c) -> (a -> c)
+-- for Folds: Fold a b -> Fold b c -> Fold a c
+-- @@
+(&>>) :: Semigroupoid s => s a b -> s b c -> s a c
+(&>>) = flip Data.Semigroupoid.o
+
+-- like >>>
+infixr 1 &>>
 
 -- | encode a Text to a UTF-8 encoded Bytestring
 textToBytesUtf8 :: Text -> ByteString
@@ -308,6 +331,10 @@ annotate :: err -> Maybe a -> Either err a
 annotate err = \case
   Nothing -> Left err
   Just a -> Right a
+
+-- | Map the same function over both sides of a Bifunctor (e.g. a tuple).
+both :: Bifunctor bi => (a -> b) -> bi a a -> bi b b
+both f = bimap f f
 
 -- | Find the first element for which pred returns `Just a`, and return the `a`.
 --
@@ -430,33 +457,6 @@ traverseFold1 f xs = fold1 <$> traverse f xs
 todo :: forall (r :: RuntimeRep). forall (a :: TYPE r). HasCallStack => a
 todo = raise# (errorCallWithCallStackException "This code was not yet implemented: TODO" ?callStack)
 
--- TODO: use a Text.Builder?
-
--- | Pretty print a bunch of errors, on multiple lines, prefixed by the given message,
--- then turn the result back into an 'Error'.
---
--- Example:
---
--- smushErrors "There was a problem with the frobl"
---   [ (anyhow "frobz")
---   , (errorContext "oh no" (anyhow "barz"))
---   ]
---
--- ==>
--- "There was a problem with the frobl\n\
--- - frobz\n\
--- - oh no: barz\n"
--- @
---
--- TODO how do we make this compatible with/integrate it into the Error library?
-smushErrors :: Foldable t => Text -> t Error -> Error
-smushErrors msg errs =
-  errs
-    -- hrm, pretty printing and then creating a new error is kinda shady
-    & foldMap (\err -> "\n- " <> prettyError err)
-    & newError
-    & errorContext msg
-
 -- | Convert an integer to a 'Natural' if possible
 --
 -- Named the same as the function from "GHC.Natural", but does not crash.
@@ -536,5 +536,51 @@ inverseMap f =
     <&> (\a -> (f a, a))
     & Map.fromList
   where
-    universe :: (Bounded a, Enum a) => [a]
+    universe :: [a]
     universe = [minBound .. maxBound]
+
+-- | If the predicate is true, return the @m@, else 'mempty'.
+--
+-- This can be used (together with `ifExists`) to e.g. create lists with optional elements:
+--
+-- >>> import Data.Monoid (Sum(..))
+--
+-- >>> :{ mconcat [
+--   ifTrue (1 == 1) [1],
+--   [2, 3, 4],
+--   ifTrue False [5],
+-- ]
+-- :}
+-- [1,2,3,4]
+--
+-- Or any other Monoid:
+--
+-- >>> mconcat [ Sum 1, ifTrue (1 == 1) (Sum 2), Sum 3 ]
+
+-- Sum {getSum = 6}
+
+ifTrue :: Monoid m => Bool -> m -> m
+ifTrue pred' m = if pred' then m else mempty
+
+-- | If the given @Maybe@ is @Just@, return the @m@, else return mempty.
+
+-- This can be used (together with `ifTrue`) to e.g. create lists with optional elements:
+--
+-- >>> import Data.Monoid (Sum(..))
+--
+-- >>> :{ mconcat [
+--   ifExists (Just [1]),
+--   [2, 3, 4],
+--   ifExists Nothing,
+-- ]
+-- :}
+-- [1,2,3,4]
+--
+-- Or any other Monoid:
+--
+-- >>> mconcat [ Sum 1, ifExists (Just (Sum 2)), Sum 3 ]
+
+-- Sum {getSum = 6}
+
+ifExists :: Monoid m => Maybe m -> m
+ifExists = fold
