@@ -8,6 +8,7 @@ pkgs.haskellPackages.mkDerivation {
     ./my-prelude.cabal
     ./MyPrelude.hs
     ./Label.hs
+    ./Pretty.hs
   ];
 
   isLibrary = true;
@@ -21,6 +22,9 @@ pkgs.haskellPackages.mkDerivation {
     pkgs.haskellPackages.validation-selective
     pkgs.haskellPackages.error
 
+    pkgs.haskellPackages.hscolour
+    pkgs.haskellPackages.nicify-lib
+    pkgs.haskellPackages.ansi-terminal
   ];
 
   license = lib.licenses.mit;
