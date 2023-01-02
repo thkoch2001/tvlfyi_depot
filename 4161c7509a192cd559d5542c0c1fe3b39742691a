@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d86cfa52_a941d124",
+        "filename": "tvix/derivation/src/lib.rs",
+        "patchSetId": 3
+      },
+      "lineNbr": 100,
+      "author": {
+        "id": 1000067
+      },
+      "writtenOn": "2023-01-02T15:40:33Z",
+      "side": 1,
+      "message": "Is it okay to handle the error by the except? I can\u0027t pass the result to the caller since the signature of `to_string` requires a `String` as return type (not a `Result`)",
+      "revId": "4161c7509a192cd559d5542c0c1fe3b39742691a",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
