@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e2fdc122_04bb3266",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-01-02T20:55:13Z",
+      "side": 1,
+      "message": "This seems to annoyingly shadow everything from lib in e.g. cargo doc outputs - we might need to rename the bin differently, or proceed splitting more stuff out.",
+      "revId": "9d8bd6633a4713ea17887356b96c6fc70449592e",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
