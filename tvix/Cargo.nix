@@ -6626,6 +6626,7 @@ rec {
           if (lib.versionOlder builtins.nixVersion "2.4pre20211007")
           then lib.cleanSourceWith { filter = sourceFilter; src = ./store; }
           else ./store;
+        libName = "tvix_store";
         dependencies = [
           {
             name = "anyhow";
