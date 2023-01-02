@@ -3,7 +3,7 @@ use data_encoding::DecodeError;
 use std::fmt;
 use thiserror::Error;
 
-const PATH_HASH_SIZE: usize = 20;
+pub const PATH_DIGEST_SIZE: usize = 20;
 
 /// Errors that can occur during the validation of name characters.
 #[derive(Debug, PartialEq, Eq, Error)]
@@ -18,13 +18,13 @@ pub enum ParseNixPathError {
 
 #[derive(Debug, PartialEq, Eq)]
 pub struct NixPath {
-    pub digest: [u8; PATH_HASH_SIZE],
+    pub digest: [u8; PATH_DIGEST_SIZE],
     pub name: String,
 }
 
 impl NixPath {
     pub fn from_string(s: &str) -> Result<NixPath, ParseNixPathError> {
-        let encoded_path_hash_size = NIXBASE32.encode_len(PATH_HASH_SIZE);
+        let encoded_path_hash_size = NIXBASE32.encode_len(PATH_DIGEST_SIZE);
         let name_offset = encoded_path_hash_size + 1;
 
         // the whole string needs to be at least:
@@ -88,7 +88,7 @@ impl fmt::Display for NixPath {
 
 #[cfg(test)]
 mod tests {
-    use crate::nixpath::PATH_HASH_SIZE;
+    use crate::nixpath::PATH_DIGEST_SIZE;
 
     use super::NixPath;
 
@@ -99,7 +99,7 @@ mod tests {
         let nixpath =
             NixPath::from_string(&example_nix_path_str).expect("Error parsing example string");
 
-        let expected_digest: [u8; PATH_HASH_SIZE] = [
+        let expected_digest: [u8; PATH_DIGEST_SIZE] = [
             0x8a, 0x12, 0x32, 0x15, 0x22, 0xfd, 0x91, 0xef, 0xbd, 0x60, 0xeb, 0xb2, 0x48, 0x1a,
             0xf8, 0x85, 0x80, 0xf6, 0x16, 0x00,
         ];
