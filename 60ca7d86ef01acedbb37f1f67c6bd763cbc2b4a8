@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "98797555_85de826d",
+        "filename": "tvix/serde/src/de.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 224,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-01-02T11:51:49Z",
+      "side": 1,
+      "message": "pls squash into the CL where these are introduced.",
+      "revId": "60ca7d86ef01acedbb37f1f67c6bd763cbc2b4a8",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
