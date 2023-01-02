@@ -1,0 +1,106 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ccc832e2_e29e5ba0",
+        "filename": "tvix/derivation/src/lib.rs",
+        "patchSetId": 6
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-01-02T18:32:50Z",
+      "side": 1,
+      "message": "FILE_SUFFIX maybe?",
+      "revId": "3a0c4febea2a7192c14d79af71aedd80901db606",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e5fefbad_e5bacf98",
+        "filename": "tvix/derivation/src/lib.rs",
+        "patchSetId": 6
+      },
+      "lineNbr": 58,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-01-02T18:32:50Z",
+      "side": 1,
+      "message": "This needs a docstring (probably you can copy the new one from https://github.com/nix-community/go-nix/pull/102/files).\n\nThe function should probably be called `calculate_drv_path` (do better distinguish from the output path calculation we do in a followup CL)",
+      "revId": "3a0c4febea2a7192c14d79af71aedd80901db606",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "24bac5c3_4d1c26c6",
+        "filename": "tvix/derivation/src/lib.rs",
+        "patchSetId": 6
+      },
+      "lineNbr": 61,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-01-02T18:32:50Z",
+      "side": 1,
+      "message": "Instead of \"step 1, 2, 3\", can you write (in prose) what you\u0027re doing?\n\nAka: collect the list of paths from input_sources and input_derivations into a sorted list, and join them by `:`.",
+      "revId": "3a0c4febea2a7192c14d79af71aedd80901db606",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0083b584_571bcbde",
+        "filename": "tvix/derivation/src/lib.rs",
+        "patchSetId": 6
+      },
+      "lineNbr": 69,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-01-02T18:32:50Z",
+      "side": 1,
+      "message": "It\u0027s probably easier to loop over the sorted list and feed it into the hasher directly.",
+      "revId": "3a0c4febea2a7192c14d79af71aedd80901db606",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "90547293_c78fd19a",
+        "filename": "tvix/derivation/src/lib.rs",
+        "patchSetId": 6
+      },
+      "lineNbr": 76,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-01-02T18:32:50Z",
+      "side": 1,
+      "message": "Calculate the sha256 hash of the ATerm representation, and represent it as a hex-encoded string (prefixed with `sha256:`).\n\nMaybe you could even make closures with assingments in front.",
+      "revId": "3a0c4febea2a7192c14d79af71aedd80901db606",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1caa60cb_e3019aac",
+        "filename": "tvix/derivation/src/nix_hash.rs",
+        "patchSetId": 6
+      },
+      "lineNbr": 6,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-01-02T18:32:50Z",
+      "side": 1,
+      "message": "I\u0027m nov very convinced this belongs into /tvix/derivation, but until we have a better place it probably doesn\u0027t hurt ;-)",
+      "revId": "3a0c4febea2a7192c14d79af71aedd80901db606",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
