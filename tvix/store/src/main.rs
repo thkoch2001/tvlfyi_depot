@@ -12,12 +12,6 @@ use tracing::{info, Level};
 mod dummy_blob_service;
 mod dummy_directory_service;
 mod dummy_path_info_service;
-mod nixbase32;
-mod nixpath;
-mod proto;
-
-#[cfg(test)]
-mod tests;
 
 #[derive(Parser)]
 #[command(author, version, about, long_about = None)]
