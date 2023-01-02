@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "34753dc8_a077b899",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-01-02T13:22:03Z",
+      "side": 1,
+      "message": "cl/7715 does sufficiently cover this?",
+      "revId": "8ac7e856501f6efab02f7fbf04efce343079b8e9",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
