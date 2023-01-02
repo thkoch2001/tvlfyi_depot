@@ -1,5 +1,6 @@
 {-# LANGUAGE DataKinds #-}
 {-# LANGUAGE DerivingStrategies #-}
+{-# LANGUAGE GHC2021 #-}
 {-# LANGUAGE InstanceSigs #-}
 {-# LANGUAGE KindSignatures #-}
 {-# LANGUAGE RankNTypes #-}
@@ -28,7 +29,7 @@ import GHC.TypeLits (KnownSymbol, Symbol, symbolVal)
 -- then use dot-syntax to get the inner value.
 newtype Label (label :: Symbol) value = Label value
   deriving stock (Eq, Ord)
-  deriving newtype (Typeable)
+  deriving newtype (Typeable, Semigroup, Monoid)
 
 instance (KnownSymbol label, Show value) => Show (Label label value) where
   showsPrec d (Label val) =
@@ -91,6 +92,12 @@ instance HasField l1 (T2 l1 t1 l2 t2) t1 where
 instance HasField l2 (T2 l1 t1 l2 t2) t2 where
   getField (T2 _ t2) = getField @l2 t2
 
+instance (Semigroup t1, Semigroup t2) => Semigroup (T2 l1 t1 l2 t2) where
+  T2 t1 t2 <> T2 t1' t2' = T2 (t1 <> t1') (t2 <> t2')
+
+instance (Monoid t1, Monoid t2) => Monoid (T2 l1 t1 l2 t2) where
+  mempty = T2 mempty mempty
+
 -- | A named 3-element tuple. Since the elements are named, you can access them with `.`. See 'T2' for an example.
 data T3 (l1 :: Symbol) t1 (l2 :: Symbol) t2 (l3 :: Symbol) t3 = T3 (Label l1 t1) (Label l2 t2) (Label l3 t3)
 
@@ -105,3 +112,9 @@ instance HasField l2 (T3 l1 t1 l2 t2 l3 t3) t2 where
 -- | Access the third field by label
 instance HasField l3 (T3 l1 t1 l2 t2 l3 t3) t3 where
   getField (T3 _ _ t3) = getField @l3 t3
+
+instance (Semigroup t1, Semigroup t2, Semigroup t3) => Semigroup (T3 l1 t1 l2 t2 l3 t3) where
+  T3 t1 t2 t3 <> T3 t1' t2' t3' = T3 (t1 <> t1') (t2 <> t2') (t3 <> t3')
+
+instance (Monoid t1, Monoid t2, Monoid t3) => Monoid (T3 l1 t1 l2 t2 l3 t3) where
+  mempty = T3 mempty mempty mempty
