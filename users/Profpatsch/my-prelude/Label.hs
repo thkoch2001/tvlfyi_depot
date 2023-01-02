@@ -20,15 +20,23 @@ import Data.Data (Proxy (..))
 import Data.Function ((&))
 import Data.Typeable (Typeable)
 import GHC.Records (HasField (..))
-import GHC.TypeLits (Symbol)
+import GHC.TypeLits (KnownSymbol, Symbol, symbolVal)
 
 -- | A labelled value.
 --
 -- Use 'label'/'label'' to construct,
 -- then use dot-syntax to get the inner value.
 newtype Label (label :: Symbol) value = Label value
-  deriving stock (Show, Eq, Ord)
+  deriving stock (Eq, Ord)
   deriving newtype (Typeable)
+
+instance (KnownSymbol label, Show value) => Show (Label label value) where
+  showsPrec d (Label val) =
+    showParen (d > 10) $
+      showString "Label @"
+        . showsPrec 11 (symbolVal (Proxy @label))
+        . showString " "
+        . showsPrec 11 val
 
 -- | Attach a label to a value; should be used with a type application to name the label.
 --
