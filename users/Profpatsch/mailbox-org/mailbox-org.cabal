@@ -10,11 +10,14 @@ executable mailbox-org
     build-depends:
         base >=4.15 && <5,
         my-prelude,
+        exec-helpers,
         random,
         http-conduit,
         http-client,
         aeson,
+        aeson-better-errors,
         bytestring,
-        process
+        process,
+        containers,
 
     default-language: Haskell2010
