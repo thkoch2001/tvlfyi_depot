@@ -19,7 +19,7 @@ import Data.ByteString qualified as ByteString
 import Data.ByteString.Char8 qualified as Char8
 import Data.Error.Tree (prettyErrorTree)
 import Data.List qualified as List
-import Data.Map qualified as Map
+import Data.Map.Strict qualified as Map
 import ExecHelpers
 import GHC.Records (HasField (..))
 import Label
@@ -45,15 +45,56 @@ secret = do
         <&> textToBytesUtf8
         <&> Char8.strip
 
-progName :: Text
+progName :: CurrentProgramName
 progName = "mailbox-org"
 
 log :: Error -> IO ()
 log err = do
-  putStderrLn (errorContext progName err & prettyError)
+  putStderrLn (errorContext progName.unCurrentProgramName err & prettyError)
 
 main :: IO ()
-main = run (CurrentProgramName progName) =<< secret
+main =
+  secret
+    >>= run applyFilters
+
+run ::
+  ( HasField "email" dat ByteString,
+    HasField "password" dat ByteString
+  ) =>
+  (Session -> IO ()) ->
+  dat ->
+  IO ()
+run act loginData = do
+  session <- login loginData
+  act session
+
+listFilterConfig :: Session -> IO ()
+listFilterConfig session = do
+  mailfilter
+    session
+    "config"
+    mempty
+    (Json.key "data" Json.asObject)
+    ()
+    >>= printPretty
+
+applyFilterRule ::
+  ( HasField "folderId" dat Text,
+    HasField "rulename" dat Text
+  ) =>
+  dat ->
+  Session ->
+  IO ()
+applyFilterRule dat session = do
+  mailfilter
+    session
+    "apply"
+    ( T2
+        (label @"extraQueryParams" [("folderId", Just (dat.folderId & textToBytesUtf8))])
+        mempty
+    )
+    (Json.key "data" Json.asArray >> pure ())
+    (Json.Object mempty)
 
 data MailfilterList = MailfilterList
   { id_ :: Json.Value,
@@ -61,41 +102,39 @@ data MailfilterList = MailfilterList
   }
   deriving stock (Show, Eq)
 
-run ::
-  ( HasField "email" dat ByteString,
-    HasField "password" dat ByteString
-  ) =>
-  CurrentProgramName ->
-  dat ->
-  IO ()
-run currentProg loginData = do
-  session <- login loginData
+applyFilters :: Session -> IO ()
+applyFilters session = do
   filters <-
     mailfilter
       session
       "list"
+      mempty
       ( Json.key "data" $ do
           ( Json.eachInArray $ asDat @"mailfilter" $ do
               id_ <- Json.key "id" Json.asValue
               rulename <- Json.key "rulename" Json.asText
               pure MailfilterList {..}
             )
-            <&> mapFromListOn (\dat -> getLabel @"id_" dat.parsed)
+            <&> mapFromListOn (\dat -> getLabel @"rulename" dat.parsed)
       )
       ([] :: [()])
-  filters
-    & Map.elems
-    & traverse_
-      ( updateIfDifferent
-          session
-          ( \el ->
-              pure $
-                el.original.mailfilter
-                  & KeyMap.insert "active" (Json.Bool False)
-          )
-          (pure ())
-      )
+  let goal = Map.fromList [(label @"rulename" "another", 32), (label @"rulename" "xyz", 23)]
+  let actions = declarativeUpdate goal filters
+  log [fmt|Would * create: {actions.toCreate & Map.keys & show}, * update: {actions.toUpdate & Map.keys & show}, * delete: {actions.toDelete & Map.keys & show}|]
   where
+    -- filters
+    --   & Map.elems
+    --   & traverse_
+    --     ( updateIfDifferent
+    --         session
+    --         ( \el ->
+    --             pure $
+    --               el.original.mailfilter
+    --                 & KeyMap.insert "active" (Json.Bool False)
+    --         )
+    --         (pure ())
+    --     )
+
     mapFromListOn :: Ord k => (a -> k) -> [a] -> Map k a
     mapFromListOn on xs = xs <&> (\x -> (on x, x)) & Map.fromList
     updateIfDifferent ::
@@ -113,39 +152,79 @@ run currentProg loginData = do
       if new /= getField @label dat.original
         then do
           log [fmt|Updating filter "{dat.parsed.rulename}" (id {dat.parsed.id_ & show @Json.Value})|]
-          mailfilter session "update" parser new
+          mailfilter
+            session
+            "update"
+            mempty
+            parser
+            new
         else do
           log [fmt|Skipping updating filter "{dat.parsed.rulename}" (id {dat.parsed.id_ & show @Json.Value}) because nothing changed.|]
 
+-- | https://oxpedia.org/wiki/index.php?title=HTTP_API_MailFilter
+mailfilter ::
+  ( Json.ToJSON a,
+    Show b
+  ) =>
+  Session ->
+  ByteString ->
+  T2
+    "extraQueryParams"
+    Client.Query
+    "httpMethod"
+    (Maybe ByteString) ->
+  Json.Parse Error b ->
+  a ->
+  IO b
+mailfilter session action opts parser body = do
+  req <-
+    Client.parseRequest "https://office.mailbox.org/appsuite/api/mailfilter/v2"
+      <&> Client.setQueryString
+        ( [ ("action", Just action),
+            ("colums", Just "1")
+          ]
+            <> opts.extraQueryParams
+        )
+      <&> Client.setRequestMethod (opts.httpMethod & fromMaybe "PUT")
+      <&> Client.setRequestBodyJSON body
+      <&> addSession session
+  req
+    & httpJSON [fmt|Cannot parse result for {req & prettyRequestShort}|] parser
+    >>= okOrDie
+    -- >>= (\resp -> printPretty resp >> pure resp)
+    <&> Client.responseBody
+  where
     prettyRequestShort :: Client.Request -> Text
     prettyRequestShort req = [fmt|request {req & Client.method}: {req & Client.host}{req & Client.path}{req & Client.queryString}|]
 
-    -- https://oxpedia.org/wiki/index.php?title=HTTP_API_MailFilter
-    mailfilter session action parser body = do
-      req <-
-        Client.parseRequest "https://office.mailbox.org/appsuite/api/mailfilter/v2"
-          <&> Client.setQueryString
-            [ ("action", Just action),
-              ("colums", Just "1")
-            ]
-          <&> Client.setRequestMethod "PUT"
-          <&> Client.setRequestBodyJSON body
-          <&> addSession session
-      req
-        & httpJSON currentProg [fmt|Cannot parse result for {req & prettyRequestShort}|] parser
-        >>= okOrDie
-        >>= (\resp -> printPretty resp >> pure resp)
-        <&> Client.responseBody
+-- | Given a goal and the actual state, return which elements to delete, update and create.
+declarativeUpdate ::
+  Ord k =>
+  -- | goal map
+  Map k a ->
+  -- | actual map
+  Map k b ->
+  T3
+    "toCreate"
+    (Map k a)
+    "toDelete"
+    (Map k b)
+    "toUpdate"
+    (Map k a)
+declarativeUpdate goal actual =
+  T3
+    (label @"toCreate" $ goal `Map.difference` actual)
+    (label @"toDelete" $ actual `Map.difference` goal)
+    (label @"toUpdate" $ goal `Map.intersection` actual)
 
 newtype Session = Session Client.CookieJar
 
 httpJSON ::
-  CurrentProgramName ->
   Error ->
   Json.Parse Error b ->
   Client.Request ->
   IO (Client.Response b)
-httpJSON currentProg errMsg parser req = do
+httpJSON errMsg parser req = do
   req
     & Client.httpJSON @_ @Json.Value
     >>= traverse
@@ -155,14 +234,14 @@ httpJSON currentProg errMsg parser req = do
               | "error" `KeyMap.member` obj
                   && "error_desc" `KeyMap.member` obj -> do
                   printPretty obj
-                  diePanic currentProg "Server returned above inline error"
+                  diePanic progName "Server returned above inline error"
             _ -> pure ()
           val & Json.parseValue parser & \case
             Left errs ->
               errs
                 & parseErrorTree errMsg
                 & prettyErrorTree
-                & diePanic currentProg
+                & diePanic progName
             Right a -> pure a
       )
 
