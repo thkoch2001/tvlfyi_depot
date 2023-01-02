@@ -10,6 +10,12 @@ pub const BRACKET_CLOSE: char = ']';
 pub const COMMA: char = ',';
 pub const QUOTE: char = '"';
 
+pub const COLON: &str = ":";
+pub const TEXT_COLON: &str = "text:";
+pub const SHA256_COLON: &str = "sha256:";
+pub const STORE_PATH_COLON: &str = "/nix/store:";
+pub const DOT_FILE_EXT: &str = ".drv";
+
 fn write_array_elements(
     writer: &mut impl Write,
     quote: bool,
@@ -42,7 +48,7 @@ fn write_array_elements(
 
 pub fn write_outputs(
     writer: &mut impl Write,
-    outputs: BTreeMap<String, Output>,
+    outputs: &BTreeMap<String, Output>,
 ) -> Result<(), fmt::Error> {
     writer.write_char(BRACKET_OPEN)?;
     for (ii, (output_name, output)) in outputs.iter().enumerate() {
@@ -73,7 +79,7 @@ pub fn write_outputs(
 
 pub fn write_input_derivations(
     writer: &mut impl Write,
-    input_derivations: BTreeMap<String, Vec<String>>,
+    input_derivations: &BTreeMap<String, Vec<String>>,
 ) -> Result<(), fmt::Error> {
     writer.write_char(COMMA)?;
     writer.write_char(BRACKET_OPEN)?;
@@ -107,7 +113,7 @@ pub fn write_input_derivations(
 
 pub fn write_input_sources(
     writer: &mut impl Write,
-    input_sources: Vec<String>,
+    input_sources: &[String],
 ) -> Result<(), fmt::Error> {
     writer.write_char(COMMA)?;
     write_array_elements(
@@ -133,7 +139,7 @@ pub fn write_builder(writer: &mut impl Write, builder: &str) -> Result<(), fmt::
     Ok(())
 }
 
-pub fn write_arguments(writer: &mut impl Write, arguments: Vec<String>) -> Result<(), fmt::Error> {
+pub fn write_arguments(writer: &mut impl Write, arguments: &[String]) -> Result<(), fmt::Error> {
     writer.write_char(COMMA)?;
     write_array_elements(
         writer,
@@ -148,7 +154,7 @@ pub fn write_arguments(writer: &mut impl Write, arguments: Vec<String>) -> Resul
 
 pub fn write_enviroment(
     writer: &mut impl Write,
-    environment: BTreeMap<String, String>,
+    environment: &BTreeMap<String, String>,
 ) -> Result<(), fmt::Error> {
     writer.write_char(COMMA)?;
     writer.write_char(BRACKET_OPEN)?;
