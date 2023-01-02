@@ -16,6 +16,24 @@
       "message": "refactor, not refractors",
       "revId": "200220f961ca60fdd597f641e10dde660291d595",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7cfbd149_69430bb4",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000067
+      },
+      "writtenOn": "2023-01-02T20:54:48Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "18b1609e_0bd0f1f8",
+      "revId": "200220f961ca60fdd597f641e10dde660291d595",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
