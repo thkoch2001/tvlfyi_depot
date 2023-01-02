@@ -9,11 +9,15 @@ pkgs.haskellPackages.mkDerivation {
     ./MyPrelude.hs
     ./Label.hs
     ./Pretty.hs
+    ./Data/Error/Tree.hs
+    ./Aeson.hs
   ];
 
   isLibrary = true;
 
   libraryHaskellDepends = [
+    pkgs.haskellPackages.aeson
+    pkgs.haskellPackages.aeson-better-errors
     pkgs.haskellPackages.PyF
     pkgs.haskellPackages.errors
     pkgs.haskellPackages.profunctors
@@ -21,10 +25,12 @@ pkgs.haskellPackages.mkDerivation {
     pkgs.haskellPackages.these
     pkgs.haskellPackages.validation-selective
     pkgs.haskellPackages.error
-
+    pkgs.haskellPackages.hspec
+    pkgs.haskellPackages.hspec-expectations-pretty-diff
     pkgs.haskellPackages.hscolour
     pkgs.haskellPackages.nicify-lib
     pkgs.haskellPackages.ansi-terminal
+    pkgs.haskellPackages.vector
   ];
 
   license = lib.licenses.mit;
