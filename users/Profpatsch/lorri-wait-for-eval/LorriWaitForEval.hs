@@ -11,33 +11,33 @@
 module Main where
 
 import Conduit
-import qualified Conduit as Cond
+import Conduit qualified as Cond
 import Control.Concurrent
-import qualified Control.Concurrent.Async as Async
+import Control.Concurrent.Async qualified as Async
 import Control.Monad
-import qualified Data.Aeson.BetterErrors as Json
+import Data.Aeson.BetterErrors qualified as Json
 import Data.Bifunctor
 import Data.ByteString (ByteString)
-import qualified Data.Conduit.Binary as Conduit.Binary
-import qualified Data.Conduit.Combinators as Cond
+import Data.Conduit.Binary qualified as Conduit.Binary
+import Data.Conduit.Combinators qualified as Cond
 import Data.Conduit.Process
 import Data.Error
 import Data.Function
 import Data.Functor
 import Data.List.NonEmpty (NonEmpty ((:|)), nonEmpty)
 import Data.Text (Text)
-import qualified Data.Text as Text
-import qualified Data.Text.Encoding
-import qualified Data.Text.Encoding.Error
+import Data.Text qualified as Text
+import Data.Text.Encoding qualified
+import Data.Text.Encoding.Error qualified
 import Data.Text.IO (hPutStrLn)
 import PyF
-import qualified System.Directory as Dir
-import qualified System.Environment as Env
-import qualified System.Exit as Exit
+import System.Directory qualified as Dir
+import System.Environment qualified as Env
+import System.Exit qualified as Exit
 import System.FilePath (takeDirectory)
-import qualified System.FilePath.Posix as FilePath
+import System.FilePath.Posix qualified as FilePath
 import System.IO (stderr)
-import qualified System.Posix as Posix
+import System.Posix qualified as Posix
 import Prelude hiding (log)
 
 data LorriEvent = LorriEvent
@@ -45,11 +45,6 @@ data LorriEvent = LorriEvent
     eventType :: LorriEventType
   }
   deriving stock (Show)
-
-data ChanToken a
-  = -- | so we can see that the lorri thread has been initialized
-    NoEventYet
-  | ChanEvent a
 
 data LorriEventType
   = Completed
@@ -168,8 +163,12 @@ findShellNix curDir = do
         let file = dir FilePath.</> "shell.nix"
         Dir.doesFileExist file >>= \case
           True -> pure (Just file)
-          False -> pure Nothing
-  go curDir
+          False -> do
+            let parent = FilePath.takeDirectory dir
+            if parent == dir
+              then pure Nothing
+              else go parent
+  go (FilePath.normalise curDir)
 
 textToString :: Text -> String
 textToString = Text.unpack
