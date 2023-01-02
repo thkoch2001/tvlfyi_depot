@@ -1,5 +1,9 @@
+mod nix_hash;
+
 use serde::{Deserialize, Serialize};
-use std::{collections::BTreeMap, fmt, fmt::Write};
+use sha2::{Digest, Sha256};
+use std::{collections::BTreeMap, fmt, fmt::Write, iter::FromIterator};
+use tvix_store::nixbase32::NIXBASE32;
 
 #[cfg(test)]
 mod tests;
@@ -11,6 +15,12 @@ const BRACKET_OPEN: char = '[';
 const BRACKET_CLOSE: char = ']';
 const COMMA: char = ',';
 const QUOTE: char = '"';
+
+const COLON: &str = ":";
+const TEXT_COLON: &str = "text:";
+const SHA256_COLON: &str = "sha256:";
+const STORE_PATH_COLON: &str = "/nix/store:";
+const DOT_FILE_EXT: &str = ".drv";
 
 const STRING_ESCAPER: [(char, &str); 5] = [
     ('\\', "\\\\"),
@@ -44,14 +54,62 @@ pub struct Derivation {
     environment: BTreeMap<String, String>,
 }
 
-fn escape_string(s: &String) -> String {
-    let mut s_replaced = s.clone();
+impl Derivation {
+    fn get_path(&self, name: &str) -> String {
+        let mut hasher = Sha256::new();
+
+        // step 1: input sources and derivations
+        hasher.update(TEXT_COLON);
+
+        let mut concat_inputs: Vec<String> = self.input_sources.clone();
+        let input_derivation_keys: Vec<String> = self.input_derivations.keys().cloned().collect();
+        concat_inputs.extend(input_derivation_keys);
+        concat_inputs.sort();
+
+        let mut concated_inputs_as_strings = concat_inputs.join(":");
+
+        if !concat_inputs.is_empty() {
+            concated_inputs_as_strings += ":";
+        }
+        hasher.update(concated_inputs_as_strings);
+
+        // step 2: aterm hash
+        hasher.update(SHA256_COLON);
+        let mut derivation_hasher = Sha256::new();
+        derivation_hasher.update(self.to_string());
+
+        let aterm_digest = derivation_hasher.finalize();
+        hasher.update(format!("{:x}", aterm_digest));
+        hasher.update(COLON);
+
+        // step 3: store path including name
+        hasher.update(STORE_PATH_COLON);
+        hasher.update(name);
+        hasher.update(DOT_FILE_EXT);
+
+        let aterm_digest = Vec::from_iter(hasher.finalize());
+        let compressed = nix_hash::compress_hash(aterm_digest, 20);
+
+        format!("{}-{}{}", NIXBASE32.encode(&compressed), name, DOT_FILE_EXT)
+    }
+}
+
+impl ToString for Derivation {
+    fn to_string(&self) -> String {
+        let mut serialized_derivation = String::new();
+        serialize_derivation(self, &mut serialized_derivation).unwrap();
+        serialized_derivation
+    }
+}
+
+fn escape_string(s: &str) -> String {
+    let mut s_replaced = s.to_string();
 
     for escape_sequence in STRING_ESCAPER {
         s_replaced = s_replaced.replace(escape_sequence.0, escape_sequence.1);
     }
 
-    return format!("\"{}\"", s_replaced);
+    format!("\"{}\"", s_replaced)
 }
 
 fn write_array_elements(
@@ -81,11 +139,11 @@ fn write_array_elements(
 
     writer.write_str(closing)?;
 
-    return Ok(());
+    Ok(())
 }
 
 pub fn serialize_derivation(
-    derivation: Derivation,
+    derivation: &Derivation,
     writer: &mut impl Write,
 ) -> Result<(), fmt::Error> {
     writer.write_str(DERIVATION_PREFIX)?;
@@ -141,7 +199,7 @@ pub fn serialize_derivation(
                 true,
                 &BRACKET_OPEN.to_string(),
                 &BRACKET_CLOSE.to_string(),
-                input_derivation.iter().map(|s| s).collect(),
+                input_derivation.iter().collect(),
             )?;
 
             writer.write_char(PAREN_CLOSE)?;
@@ -158,20 +216,20 @@ pub fn serialize_derivation(
             true,
             &BRACKET_OPEN.to_string(),
             &BRACKET_CLOSE.to_string(),
-            derivation.input_sources.iter().map(|s| s).collect(),
+            derivation.input_sources.iter().collect(),
         )?;
     }
 
     // Step 4: Write platform
     {
         writer.write_char(COMMA)?;
-        writer.write_str(&escape_string(&derivation.platform).as_str())?;
+        writer.write_str(escape_string(&derivation.platform).as_str())?;
     }
 
     // Step 5: Write builder
     {
         writer.write_char(COMMA)?;
-        writer.write_str(&escape_string(&derivation.builder).as_str())?;
+        writer.write_str(escape_string(&derivation.builder).as_str())?;
     }
 
     // Step 6: Write arguments
@@ -182,7 +240,7 @@ pub fn serialize_derivation(
             true,
             &BRACKET_OPEN.to_string(),
             &BRACKET_CLOSE.to_string(),
-            derivation.arguments.iter().map(|s| s).collect(),
+            derivation.arguments.iter().collect(),
         )?;
     }
 
@@ -202,7 +260,7 @@ pub fn serialize_derivation(
                 false,
                 &PAREN_OPEN.to_string(),
                 &PAREN_CLOSE.to_string(),
-                vec![&escape_string(key), &escape_string(&environment)],
+                vec![&escape_string(key), &escape_string(environment)],
             )?;
         }
 
@@ -212,5 +270,5 @@ pub fn serialize_derivation(
     // Step 8: Close Derive call
     writer.write_char(PAREN_CLOSE)?;
 
-    return Ok(());
+    Ok(())
 }
