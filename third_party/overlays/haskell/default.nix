@@ -30,9 +30,9 @@ in
       dhall = dhall-source "dhall" hsSuper.dhall;
       dhall-nix = dhall-source "dhall-nix" hsSuper.dhall-nix;
 
-      # Use recently-released version that has 9.2 support
-      graphmod = assert hsSuper.graphmod != "1.4.5.1";
-        hsSelf.callPackage ./extra-pkgs/graphmod-1.4.5.1.nix { };
+      # Wait for upstream to remove the broken flag
+      graphmod = assert hsSuper.graphmod.meta.broken;
+        haskellLib.markUnbroken hsSuper.graphmod;
     };
   };
 
