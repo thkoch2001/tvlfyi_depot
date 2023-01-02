@@ -30,6 +30,8 @@ const STRING_ESCAPER: [(char, &str); 5] = [
     ('\"', "\\\""),
 ];
 
+/// this is necessary to teach serde what to do in case fields are not present
+/// in the JSON it's trying to parse.
 fn default_resource() -> String {
     "".to_string()
 }
