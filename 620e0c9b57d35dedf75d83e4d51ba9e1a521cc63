@@ -39,6 +39,30 @@
       },
       "revId": "620e0c9b57d35dedf75d83e4d51ba9e1a521cc63",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2aa2d0ee_d62533cb",
+        "filename": "tvix/store/src/sled_path_info_service.rs",
+        "patchSetId": 11
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-01-03T15:37:43Z",
+      "side": 1,
+      "message": "it doesn\u0027t need to, but it\u0027ll make potential spans less spammy. I\u0027ll add it, thanks!",
+      "parentUuid": "414a4a52_dc647492",
+      "range": {
+        "startLine": 35,
+        "startChar": 4,
+        "endLine": 35,
+        "endChar": 23
+      },
+      "revId": "620e0c9b57d35dedf75d83e4d51ba9e1a521cc63",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
