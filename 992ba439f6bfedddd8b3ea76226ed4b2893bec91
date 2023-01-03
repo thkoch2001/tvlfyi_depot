@@ -16,6 +16,24 @@
       "message": "should be redundant after the refactoring. I added a similar comment in that CL.",
       "revId": "992ba439f6bfedddd8b3ea76226ed4b2893bec91",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1bab33ae_aa8f0dba",
+        "filename": "tvix/derivation/src/lib.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-01-03T17:55:07Z",
+      "side": 1,
+      "message": "For posterity: This was added in cl/7733, at https://cl.tvl.fyi/c/depot/+/7733/3/tvix/derivation/src/output.rs.",
+      "parentUuid": "a21560f6_34e8350e",
+      "revId": "992ba439f6bfedddd8b3ea76226ed4b2893bec91",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
