@@ -52,6 +52,24 @@
       "parentUuid": "55e783bb_aa535f6f",
       "revId": "4161c7509a192cd559d5542c0c1fe3b39742691a",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ea4ada73_fb9177fa",
+        "filename": "tvix/derivation/src/lib.rs",
+        "patchSetId": 3
+      },
+      "lineNbr": 100,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-01-03T20:53:36Z",
+      "side": 1,
+      "message": "I think it\u0027s fine if we move all of the contents of serialize() into the to_string() method. These ATerms are not too big, we can probably keep them in memory.",
+      "parentUuid": "e98eb7ce_334a36b5",
+      "revId": "4161c7509a192cd559d5542c0c1fe3b39742691a",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
