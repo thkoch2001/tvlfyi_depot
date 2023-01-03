@@ -16,6 +16,24 @@
       "message": "cl/7715 does sufficiently cover this?",
       "revId": "8ac7e856501f6efab02f7fbf04efce343079b8e9",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "626f65d0_a3a82918",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2023-01-03T00:18:08Z",
+      "side": 1,
+      "message": "It covers the nesting (since the dispatching is handled by serde), but we could separately handle more primitive type cases (though only the integer ones are really interesting as everything else is basically just a mapping of Rust types to Rust types, so we\u0027re not really testing anything not already ensured by the type system).",
+      "parentUuid": "34753dc8_a077b899",
+      "revId": "8ac7e856501f6efab02f7fbf04efce343079b8e9",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
