@@ -194,7 +194,7 @@ pub fn builtins(_args: TokenStream, item: TokenStream) -> TokenStream {
                 };
 
                 builtins.push(quote_spanned! { builtin_attr.span() => {
-                    crate::internal::Builtin::new(
+                    crate::internal::Builtin::new_fn(
                         #name,
                         &[#(#builtin_arguments),*],
                         #docstring,

@@ -90,7 +90,7 @@ impl Thunk {
         let span = codemap::CodeMap::new()
             .add_file("<internal>".to_owned(), "<internal>".to_owned())
             .span;
-        let builtin = Builtin::new(
+        let builtin = Builtin::new_closure(
             "Thunk::new_suspended_native()",
             &[crate::value::builtin::BuiltinArgument {
                 strict: true,

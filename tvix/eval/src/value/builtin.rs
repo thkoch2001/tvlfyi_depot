@@ -22,8 +22,30 @@ use std::{
 ///
 /// Errors returned from a builtin will be annotated with the location
 /// of the call to the builtin.
-pub trait BuiltinFn: Fn(Vec<Value>, &mut VM) -> Result<Value, ErrorKind> {}
-impl<F: Fn(Vec<Value>, &mut VM) -> Result<Value, ErrorKind>> BuiltinFn for F {}
+pub trait BuiltinClosure: Fn(Vec<Value>, &mut VM) -> Result<Value, ErrorKind> {}
+impl<F: Fn(Vec<Value>, &mut VM) -> Result<Value, ErrorKind>> BuiltinClosure for F {}
+
+pub type BuiltinFnPtr = fn(arg: Vec<Value>, vm: &mut VM) -> Result<Value, ErrorKind>;
+
+/// Type of function contained in a builtin.
+#[derive(Clone)]
+pub enum FuncType {
+    /// Simple function pointer, for builtins with no access to their environment.
+    FnPtr(BuiltinFnPtr),
+
+    /// Closure type, for builtins that need to close over something
+    /// (the most common example being `builtins.import`).
+    Closure(Rc<dyn BuiltinClosure>),
+}
+
+impl FuncType {
+    fn call(&self, arg: Vec<Value>, vm: &mut VM) -> Result<Value, ErrorKind> {
+        match self {
+            FuncType::FnPtr(f) => f(arg, vm),
+            FuncType::Closure(c) => c(arg, vm),
+        }
+    }
+}
 
 /// Description of a single argument passed to a builtin
 pub struct BuiltinArgument {
@@ -52,14 +74,14 @@ pub struct Builtin {
     arguments: &'static [BuiltinArgument],
     /// Optional documentation for the builtin.
     documentation: Option<&'static str>,
-    func: Rc<dyn BuiltinFn>,
+    func: FuncType,
 
     /// Partially applied function arguments.
     partials: Vec<Value>,
 }
 
 impl Builtin {
-    pub fn new<F: BuiltinFn + 'static>(
+    pub fn new_closure<F: BuiltinClosure + 'static>(
         name: &'static str,
         arguments: &'static [BuiltinArgument],
         documentation: Option<&'static str>,
@@ -69,7 +91,22 @@ impl Builtin {
             name,
             arguments,
             documentation,
-            func: Rc::new(func),
+            func: FuncType::Closure(Rc::new(func)),
+            partials: vec![],
+        }
+    }
+
+    pub fn new_fn(
+        name: &'static str,
+        arguments: &'static [BuiltinArgument],
+        documentation: Option<&'static str>,
+        func: BuiltinFnPtr,
+    ) -> Self {
+        Builtin {
+            name,
+            arguments,
+            documentation,
+            func: FuncType::FnPtr(func),
             partials: vec![],
         }
     }
@@ -94,7 +131,7 @@ impl Builtin {
                     self.partials[idx].force(vm)?;
                 }
             }
-            return (self.func)(self.partials, vm);
+            return self.func.call(self.partials, vm);
         }
 
         // Function is not yet ready to be called.

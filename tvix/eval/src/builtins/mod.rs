@@ -976,7 +976,7 @@ pub fn pure_builtins() -> Vec<(&'static str, Value)> {
 /// These are used as a crutch to make progress on nixpkgs evaluation.
 pub fn placeholders() -> Vec<(&'static str, Value)> {
     let ph = vec![
-        Builtin::new(
+        Builtin::new_closure(
             "addErrorContext",
             &[
                 BuiltinArgument {
@@ -994,7 +994,7 @@ pub fn placeholders() -> Vec<(&'static str, Value)> {
                 Ok(args.pop().unwrap())
             },
         ),
-        Builtin::new(
+        Builtin::new_closure(
             "unsafeDiscardStringContext",
             &[BuiltinArgument {
                 strict: true,
@@ -1008,7 +1008,7 @@ pub fn placeholders() -> Vec<(&'static str, Value)> {
                 Ok(args.pop().unwrap())
             },
         ),
-        Builtin::new(
+        Builtin::new_closure(
             "unsafeGetAttrPos",
             &[
                 BuiltinArgument {
@@ -1033,7 +1033,7 @@ pub fn placeholders() -> Vec<(&'static str, Value)> {
                 Ok(Value::attrs(NixAttrs::from_iter(res.into_iter())))
             },
         ),
-        Builtin::new(
+        Builtin::new_closure(
             "derivation",
             &[BuiltinArgument {
                 strict: true,

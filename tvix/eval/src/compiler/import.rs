@@ -29,7 +29,7 @@ pub(super) fn builtins_import(globals: &Weak<GlobalsMap>, source: SourceCode) ->
     // Rc::new_cyclic() and Builtin::new()
     let globals = globals.clone();
 
-    Builtin::new(
+    Builtin::new_closure(
         "import",
         &[BuiltinArgument {
             strict: true,
