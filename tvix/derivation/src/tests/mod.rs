@@ -18,9 +18,7 @@ fn assert_derivation_ok(path_to_drv_file: &str) {
     let data = read_file(&format!("{}.json", path_to_drv_file));
     let derivation: Derivation = serde_json::from_str(&data).expect("JSON was not well-formatted");
 
-    let mut serialized_derivation = String::new();
-    derivation.serialize(&mut serialized_derivation).unwrap();
-
+    let serialized_derivation = derivation.to_string();
     let expected = read_file(path_to_drv_file);
 
     assert_eq!(expected, serialized_derivation);
