@@ -52,6 +52,24 @@
       "parentUuid": "170c1198_ab2d37ce",
       "revId": "9d8bd6633a4713ea17887356b96c6fc70449592e",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "991018ed_f9940ada",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2023-01-03T12:12:13Z",
+      "side": 1,
+      "message": "For me the docs don\u0027t build anyways as something in a dependency\u0027s doc build seems to rely on unstable Rust:\n\n```\nerror[E0554]: `#![feature]` may not be used on the stable release channel\n   --\u003e /home/tazjin/.cargo/registry/src/github.com-1ecc6299db9ec823/anyhow-1.0.68/src/lib.rs:214:32\n    |\n214 | #![cfg_attr(backtrace, feature(error_generic_member_access, provide_any))]\n    |                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^\n```\n\nThe root problem is probably that the lib and binary have exactly the same crate name, but also for now I just don\u0027t care that much so lets move on until someone wants the docs enough to fix it.",
+      "parentUuid": "01a75d41_5415fac8",
+      "revId": "9d8bd6633a4713ea17887356b96c6fc70449592e",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
