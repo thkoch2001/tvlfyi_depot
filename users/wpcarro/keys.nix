@@ -3,7 +3,6 @@
 
 rec {
   ava = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIB/5Fuo7wi8rNXVXgNaCK2X6ePCh9LQs/9h7Tj6UeXrl wpcarro@ava";
-  diogenes = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAILFDRfpNXDxQuTJAqVg8+Mm/hOfE5VAJP+Lpw9kA5cDG wpcarro@gmail.com";
   iphone = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIEU1tsRQ/cMxi9Hd7Xo+YpiWB5i6qx24EJLCEFBK4q4W wpcarro@iphone";
   kyoko = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIBFILKdkNqfTP5WeoQAV6K3MdTzsDW65ToXGc6KlQ9yl wpcarro@kyoko";
   marcus = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIJkNQJBXekuSzZJ8+gxT+V1+eXTm3hYsfigllr/ARXkf wpcarro@gmail.com";
@@ -12,7 +11,6 @@ rec {
 
   all = [
     ava
-    diogenes
     iphone
     kyoko
     marcus
