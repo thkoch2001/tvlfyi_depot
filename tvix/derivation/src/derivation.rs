@@ -1,7 +1,7 @@
 use crate::output::Output;
 use crate::write;
 use serde::{Deserialize, Serialize};
-use std::{collections::BTreeMap, fmt, fmt::Write};
+use std::collections::BTreeMap;
 
 #[derive(Serialize, Deserialize)]
 pub struct Derivation {
@@ -14,21 +14,23 @@ pub struct Derivation {
     environment: BTreeMap<String, String>,
 }
 
-impl Derivation {
-    pub fn serialize(self: Self, writer: &mut impl Write) -> Result<(), fmt::Error> {
-        writer.write_str(write::DERIVATION_PREFIX)?;
-        writer.write_char(write::PAREN_OPEN)?;
+impl ToString for Derivation {
+    fn to_string(&self) -> String {
+        let mut buffer = String::new();
 
-        write::write_outputs(writer, self.outputs)?;
-        write::write_input_derivations(writer, self.input_derivations)?;
-        write::write_input_sources(writer, self.input_sources)?;
-        write::write_platfrom(writer, &self.platform)?;
-        write::write_builder(writer, &self.builder)?;
-        write::write_arguments(writer, self.arguments)?;
-        write::write_enviroment(writer, self.environment)?;
+        buffer.push_str(write::DERIVATION_PREFIX);
+        buffer.push_str(write::PAREN_OPEN);
 
-        writer.write_char(write::PAREN_CLOSE)?;
+        write::append_outputs(&mut buffer, &self.outputs);
+        write::append_input_derivations(&mut buffer, &self.input_derivations);
+        write::append_input_sources(&mut buffer, &self.input_sources);
+        write::append_platfrom(&mut buffer, &self.platform);
+        write::append_builder(&mut buffer, &self.builder);
+        write::append_arguments(&mut buffer, &self.arguments);
+        write::append_environment(&mut buffer, &self.environment);
 
-        Ok(())
+        buffer.push_str(write::PAREN_CLOSE);
+
+        buffer
     }
 }
