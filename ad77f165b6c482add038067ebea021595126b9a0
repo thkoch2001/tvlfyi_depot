@@ -16,6 +16,23 @@
       "message": "feat(tvix/derivation): ...",
       "revId": "ad77f165b6c482add038067ebea021595126b9a0",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ce7f078e_4fe9cd53",
+        "filename": "tvix/derivation/src/derivation.rs",
+        "patchSetId": 9
+      },
+      "lineNbr": 81,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-01-03T21:01:47Z",
+      "side": 1,
+      "message": "There\u0027s no step 2 or 1 anymore.",
+      "revId": "ad77f165b6c482add038067ebea021595126b9a0",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
