@@ -211,6 +211,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "ecde9efc_c4ddb034",
+        "filename": "tvix/derivation/src/lib.rs",
+        "patchSetId": 6
+      },
+      "lineNbr": 76,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-01-03T20:59:53Z",
+      "side": 1,
+      "message": "Do a let aterm_digest \u003d { .... ; ...}, using the value of the last expression to stronger convey what you want to calculate and what\u0027s intermediate helper vars.",
+      "parentUuid": "df2f82a4_97b7b793",
+      "revId": "3a0c4febea2a7192c14d79af71aedd80901db606",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "1caa60cb_e3019aac",
