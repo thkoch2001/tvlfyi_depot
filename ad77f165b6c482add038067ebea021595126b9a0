@@ -37,6 +37,23 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "eab52cb6_7c34c2c3",
+        "filename": "tvix/derivation/src/derivation.rs",
+        "patchSetId": 9
+      },
+      "lineNbr": 86,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-01-03T21:05:46Z",
+      "side": 1,
+      "message": "that name is confusing - it\u0027s not the aterm digest, but the digest of that weird fingerprint we\u0027re generating. it\u0027s probably better to call this \u0027digest\u0027 only.",
+      "revId": "ad77f165b6c482add038067ebea021595126b9a0",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "51eb6bc0_3fb76a21",
         "filename": "tvix/derivation/src/write.rs",
         "patchSetId": 9
