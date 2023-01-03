@@ -16,6 +16,24 @@
       "message": "👀",
       "revId": "f3592a77bc9c63353afd84a8b20b4b835c6e3468",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e29f1b1f_45524549",
+        "filename": "tvix/serde/src/de.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 395,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2023-01-03T13:36:48Z",
+      "side": 1,
+      "message": "Well, it\u0027s a todo because I\u0027m not doing it now. It only affects the error message produced and I\u0027m not yet sure how verbose it\u0027s going to be.",
+      "parentUuid": "ab4030f2_58cc2950",
+      "revId": "f3592a77bc9c63353afd84a8b20b4b835c6e3468",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
