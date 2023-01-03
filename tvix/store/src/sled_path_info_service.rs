@@ -1,17 +1,21 @@
 use prost::Message;
+use sha2::Digest;
+use sha2::Sha256;
 use std::path::PathBuf;
+use tonic::transport::channel::Channel;
 
+use crate::proto;
+use crate::proto::blob_service_client::BlobServiceClient;
+use crate::proto::directory_service_client::DirectoryServiceClient;
 use crate::proto::get_path_info_request::ByWhat;
 use crate::proto::path_info_service_server::PathInfoService;
 use crate::proto::CalculateNarResponse;
 use crate::proto::GetPathInfoRequest;
-use crate::proto::Node;
 use crate::proto::PathInfo;
 use crate::store_path::DIGEST_SIZE;
+use count_write::CountWrite;
 use tonic::{Request, Response, Result, Status};
 use tracing::{instrument, warn};
-
-const NOT_IMPLEMENTED_MSG: &str = "not implemented";
 
 /// SledPathInfoService stores PathInfo in a [sled](https://github.com/spacejam/sled).
 ///
@@ -19,14 +23,25 @@ const NOT_IMPLEMENTED_MSG: &str = "not implemented";
 /// as that's currently the only request type available.
 pub struct SledPathInfoService {
     db: sled::Db,
+
+    blob_service_client: BlobServiceClient<Channel>,
+    directory_service_client: DirectoryServiceClient<Channel>,
 }
 
 impl SledPathInfoService {
-    pub fn new(p: PathBuf) -> Result<Self, anyhow::Error> {
+    pub fn new(
+        p: PathBuf,
+        directory_service_client: DirectoryServiceClient<Channel>,
+        blob_service_client: BlobServiceClient<Channel>,
+    ) -> Result<Self, anyhow::Error> {
         let config = sled::Config::default().use_compression(true).path(p);
         let db = config.open()?;
 
-        Ok(Self { db })
+        Ok(Self {
+            db,
+            blob_service_client,
+            directory_service_client,
+        })
     }
 }
 
@@ -81,9 +96,31 @@ impl PathInfoService for SledPathInfoService {
     #[instrument(skip(self))]
     async fn calculate_nar(
         &self,
-        _request: Request<Node>,
+        _request: Request<proto::Node>,
     ) -> Result<Response<CalculateNarResponse>> {
-        warn!(NOT_IMPLEMENTED_MSG);
-        Err(Status::unimplemented(NOT_IMPLEMENTED_MSG))
+        // match request.into_inner().node {
+        //     None => Err(Status::invalid_argument("no root node sent")),
+        //     Some(rq_root_node) => {
+        //         let h = Sha256::new();
+        //         let mut cw = CountWrite::from(h);
+
+        //         let write_nar_result = crate::nar::write_nar(
+        //             &mut cw,
+        //             rq_root_node,
+        //             &self.directory_service_client,
+        //             &self.blob_service_client,
+        //         );
+
+        //         if let Err(e) = write_nar_result {
+        //             return Err(Status::internal(format!("failed to render NAR: {}", e)));
+        //         }
+
+        //         Ok(Response::new(CalculateNarResponse {
+        //             nar_size: cw.count() as u32,
+        //             nar_sha256: cw.into_inner().finalize().to_vec(),
+        //         }))
+        //     }
+        // }
+        Err(Status::unimplemented("not implemented"))
     }
 }

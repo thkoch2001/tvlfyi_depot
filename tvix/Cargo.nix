@@ -1184,6 +1184,21 @@ rec {
         ];
 
       };
+      "count-write" = rec {
+        crateName = "count-write";
+        version = "0.1.0";
+        edition = "2018";
+        sha256 = "11bswmgr81s3jagdci1pr6qh9vnz9zsbbf2dqpi260daa2mhgmff";
+        authors = [
+          "SOFe <sofe2038@gmail.com>"
+        ];
+        features = {
+          "futures" = [ "futures-io-preview" ];
+          "futures-io-preview" = [ "dep:futures-io-preview" ];
+          "tokio" = [ "tokio-io" ];
+          "tokio-io" = [ "dep:tokio-io" ];
+        };
+      };
       "countme" = rec {
         crateName = "countme";
         version = "3.0.1";
@@ -7759,6 +7774,10 @@ rec {
             features = [ "derive" "env" ];
           }
           {
+            name = "count-write";
+            packageId = "count-write";
+          }
+          {
             name = "data-encoding";
             packageId = "data-encoding";
           }
@@ -7773,6 +7792,10 @@ rec {
           {
             name = "prost";
             packageId = "prost";
+          }
+          {
+            name = "sha2";
+            packageId = "sha2";
           }
           {
             name = "sled";
@@ -7808,6 +7831,10 @@ rec {
           {
             name = "tracing-subscriber";
             packageId = "tracing-subscriber";
+          }
+          {
+            name = "tvix-nar";
+            packageId = "tvix-nar";
           }
         ];
         buildDependencies = [
