@@ -67,6 +67,24 @@
       "message": "How is actually using validate()?\n\nWould it be more helpful to raise specific errors?",
       "revId": "dcd01454ff1f9f7e59dd65639ff011195f9f8540",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a274e5c2_fce2337b",
+        "filename": "tvix/derivation/src/lib.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 75,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2023-01-03T17:01:53Z",
+      "side": 1,
+      "message": "Yes, in library code you should raise an actual matchable error type, these \"errors made simple\" libraries are usually intended for executables where there\u0027s now downstream handling (only presenting) of errors.",
+      "parentUuid": "e15fbb0b_2f002668",
+      "revId": "dcd01454ff1f9f7e59dd65639ff011195f9f8540",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
