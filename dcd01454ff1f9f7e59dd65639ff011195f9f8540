@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "06fc3619_bc2d1db8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000067
+      },
+      "writtenOn": "2023-01-03T15:07:28Z",
+      "side": 1,
+      "message": "If you prefer I can also do the rebasing and solve the conflicts. Those are mainly due to the refactoring.",
+      "revId": "dcd01454ff1f9f7e59dd65639ff011195f9f8540",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "84fc1b0d_353dc259",
+        "filename": "tvix/derivation/src/lib.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 50,
+      "author": {
+        "id": 1000067
+      },
+      "writtenOn": "2023-01-03T15:07:28Z",
+      "side": 1,
+      "message": "moved to output.rs",
+      "revId": "dcd01454ff1f9f7e59dd65639ff011195f9f8540",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cafb68f1_b914702b",
+        "filename": "tvix/derivation/src/lib.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 73,
+      "author": {
+        "id": 1000067
+      },
+      "writtenOn": "2023-01-03T15:07:28Z",
+      "side": 1,
+      "message": "moved to derivation.rs",
+      "revId": "dcd01454ff1f9f7e59dd65639ff011195f9f8540",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e15fbb0b_2f002668",
+        "filename": "tvix/derivation/src/lib.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 75,
+      "author": {
+        "id": 1000067
+      },
+      "writtenOn": "2023-01-03T15:07:28Z",
+      "side": 1,
+      "message": "How is actually using validate()?\n\nWould it be more helpful to raise specific errors?",
+      "revId": "dcd01454ff1f9f7e59dd65639ff011195f9f8540",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
