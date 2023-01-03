@@ -231,6 +231,24 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "a0a3dbf1_e6b4e16f",
+        "filename": "tvix/derivation/src/lib.rs",
+        "patchSetId": 6
+      },
+      "lineNbr": 76,
+      "author": {
+        "id": 1000067
+      },
+      "writtenOn": "2023-01-03T22:01:09Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ecde9efc_c4ddb034",
+      "revId": "3a0c4febea2a7192c14d79af71aedd80901db606",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "1caa60cb_e3019aac",
         "filename": "tvix/derivation/src/nix_hash.rs",
         "patchSetId": 6

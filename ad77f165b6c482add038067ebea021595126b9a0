@@ -18,6 +18,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "183ffb21_ce02c8d5",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 9
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000067
+      },
+      "writtenOn": "2023-01-03T22:01:09Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e31d8e79_b4544287",
+      "revId": "ad77f165b6c482add038067ebea021595126b9a0",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "ce7f078e_4fe9cd53",
@@ -31,6 +49,24 @@
       "writtenOn": "2023-01-03T21:01:47Z",
       "side": 1,
       "message": "There\u0027s no step 2 or 1 anymore.",
+      "revId": "ad77f165b6c482add038067ebea021595126b9a0",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "03fa3947_4ccb71f1",
+        "filename": "tvix/derivation/src/derivation.rs",
+        "patchSetId": 9
+      },
+      "lineNbr": 81,
+      "author": {
+        "id": 1000067
+      },
+      "writtenOn": "2023-01-03T22:01:09Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ce7f078e_4fe9cd53",
       "revId": "ad77f165b6c482add038067ebea021595126b9a0",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
@@ -52,6 +88,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "d5e50ee2_3507af6f",
+        "filename": "tvix/derivation/src/derivation.rs",
+        "patchSetId": 9
+      },
+      "lineNbr": 86,
+      "author": {
+        "id": 1000067
+      },
+      "writtenOn": "2023-01-03T22:01:09Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "eab52cb6_7c34c2c3",
+      "revId": "ad77f165b6c482add038067ebea021595126b9a0",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "51eb6bc0_3fb76a21",
@@ -65,6 +119,24 @@
       "writtenOn": "2023-01-03T21:02:42Z",
       "side": 1,
       "message": "These are more clippy lints, which should probably go into a previous CL.",
+      "revId": "ad77f165b6c482add038067ebea021595126b9a0",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "36d66125_a09f727d",
+        "filename": "tvix/derivation/src/write.rs",
+        "patchSetId": 9
+      },
+      "lineNbr": 51,
+      "author": {
+        "id": 1000067
+      },
+      "writtenOn": "2023-01-03T22:01:09Z",
+      "side": 1,
+      "message": "No, this is not because of clippy. Needed to make these changes since to_string requires \u0026self while serialize accepted self so far. So I had to change the serializer once more.",
+      "parentUuid": "51eb6bc0_3fb76a21",
       "revId": "ad77f165b6c482add038067ebea021595126b9a0",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
