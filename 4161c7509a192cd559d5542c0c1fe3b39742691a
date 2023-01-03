@@ -88,6 +88,24 @@
       "parentUuid": "ea4ada73_fb9177fa",
       "revId": "4161c7509a192cd559d5542c0c1fe3b39742691a",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3fa38961_7763f62c",
+        "filename": "tvix/derivation/src/lib.rs",
+        "patchSetId": 3
+      },
+      "lineNbr": 100,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2023-01-03T22:55:52Z",
+      "side": 1,
+      "message": "Why does this need to be a `ToString` impl at all?\n\nIf it\u0027s a fallible process I\u0027d expect it to just be a method on the type, and leave `ToString` to the derived `Display` impl",
+      "parentUuid": "c346b705_c7c2a6c2",
+      "revId": "4161c7509a192cd559d5542c0c1fe3b39742691a",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
