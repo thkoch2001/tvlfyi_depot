@@ -16,6 +16,29 @@
       "message": "Code looks good to me but I don\u0027t feel qualified enough for a proper review.",
       "revId": "620e0c9b57d35dedf75d83e4d51ba9e1a521cc63",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "414a4a52_dc647492",
+        "filename": "tvix/store/src/sled_path_info_service.rs",
+        "patchSetId": 11
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2023-01-03T15:27:08Z",
+      "side": 1,
+      "message": "does this also need the annotation from below?",
+      "range": {
+        "startLine": 35,
+        "startChar": 4,
+        "endLine": 35,
+        "endChar": 23
+      },
+      "revId": "620e0c9b57d35dedf75d83e4d51ba9e1a521cc63",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
