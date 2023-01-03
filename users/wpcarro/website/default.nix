@@ -23,11 +23,28 @@ let
   withBrand = contentHtml: renderTemplate ./fragments/template.html {
     inherit contentHtml;
   };
+
+  # Create a simple static file server using nginx to serve `content`.
+  nginxCfgFor = content: pkgs.writeText "nginx.conf" ''
+    user nobody nobody;
+    daemon off;
+    error_log /dev/stdout info;
+    pid /dev/null;
+    events {}
+    http {
+      server {
+        listen 8080;
+        location / {
+          root ${content};
+        }
+      }
+    }
+  '';
 in
-{
+rec {
   inherit domain renderTemplate withBrand;
 
-  root = pkgs.runCommand "wpcarro.dev" { } ''
+  content = pkgs.runCommand "wpcarro.dev" { } ''
     mkdir -p $out
 
     # /
@@ -40,4 +57,21 @@ in
     # /blog
     cp -r ${wpcarro.website.blog} $out/blog
   '';
+
+  # Create a docker image suitable for Google Cloud Run (to save costs).
+  image = pkgs.dockerTools.buildLayeredImage {
+    name = "website";
+    tag = "latest";
+    contents = [ pkgs.fakeNss ];
+    extraCommands = ''
+      mkdir -p tmp/nginx_client_body
+      mkdir -p var/log/nginx
+    '';
+    config = {
+      Cmd = [ "${pkgs.nginx}/bin/nginx" "-c" (nginxCfgFor content) ];
+      ExposedPorts = { "8080/tcp" = { }; };
+    };
+  };
+
+  meta.ci.targets = [ "root" "image" ];
 }
