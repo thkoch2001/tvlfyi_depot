@@ -70,6 +70,24 @@
       "parentUuid": "01a75d41_5415fac8",
       "revId": "9d8bd6633a4713ea17887356b96c6fc70449592e",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5dcfca3f_db78d425",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-01-03T12:16:05Z",
+      "side": 1,
+      "message": "Turns out, I could rename tvix-store bin crate to tvix-store-bin, to avoid the problem of two crates with the same name. PTAL.",
+      "parentUuid": "991018ed_f9940ada",
+      "revId": "9d8bd6633a4713ea17887356b96c6fc70449592e",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
