@@ -1147,6 +1147,21 @@ rec {
         ];
 
       };
+      "count-write" = rec {
+        crateName = "count-write";
+        version = "0.1.0";
+        edition = "2018";
+        sha256 = "11bswmgr81s3jagdci1pr6qh9vnz9zsbbf2dqpi260daa2mhgmff";
+        authors = [
+          "SOFe <sofe2038@gmail.com>"
+        ];
+        features = {
+          "futures" = [ "futures-io-preview" ];
+          "futures-io-preview" = [ "dep:futures-io-preview" ];
+          "tokio" = [ "tokio-io" ];
+          "tokio-io" = [ "dep:tokio-io" ];
+        };
+      };
       "countme" = rec {
         crateName = "countme";
         version = "3.0.1";
@@ -1162,6 +1177,33 @@ rec {
           "print_at_exit" = [ "enable" ];
           "rustc-hash" = [ "dep:rustc-hash" ];
         };
+      };
+      "cpufeatures" = rec {
+        crateName = "cpufeatures";
+        version = "0.2.5";
+        edition = "2018";
+        sha256 = "08535izlz4kx8z1kkcp0gy80gqk7k19dqiiysj6r5994bsyrgn98";
+        authors = [
+          "RustCrypto Developers"
+        ];
+        dependencies = [
+          {
+            name = "libc";
+            packageId = "libc";
+            target = { target, features }: (pkgs.rust.lib.toRustTarget stdenv.hostPlatform == "aarch64-apple-darwin");
+          }
+          {
+            name = "libc";
+            packageId = "libc";
+            target = { target, features }: (pkgs.rust.lib.toRustTarget stdenv.hostPlatform == "aarch64-linux-android");
+          }
+          {
+            name = "libc";
+            packageId = "libc";
+            target = { target, features }: (("aarch64" == target."arch") && ("linux" == target."os"));
+          }
+        ];
+
       };
       "crc32fast" = rec {
         crateName = "crc32fast";
@@ -4964,6 +5006,46 @@ rec {
         };
         resolvedDefaultFeatures = [ "default" "std" ];
       };
+      "sha2" = rec {
+        crateName = "sha2";
+        version = "0.10.6";
+        edition = "2018";
+        sha256 = "1h5xrrv2y06kr1gsz4pwrm3lsp206nm2gjxgbf21wfrfzsavgrl2";
+        authors = [
+          "RustCrypto Developers"
+        ];
+        dependencies = [
+          {
+            name = "cfg-if";
+            packageId = "cfg-if";
+          }
+          {
+            name = "cpufeatures";
+            packageId = "cpufeatures";
+            target = { target, features }: (("aarch64" == target."arch") || ("x86_64" == target."arch") || ("x86" == target."arch"));
+          }
+          {
+            name = "digest";
+            packageId = "digest";
+          }
+        ];
+        devDependencies = [
+          {
+            name = "digest";
+            packageId = "digest";
+            features = [ "dev" ];
+          }
+        ];
+        features = {
+          "asm" = [ "sha2-asm" ];
+          "asm-aarch64" = [ "asm" ];
+          "default" = [ "std" ];
+          "oid" = [ "digest/oid" ];
+          "sha2-asm" = [ "dep:sha2-asm" ];
+          "std" = [ "digest/std" ];
+        };
+        resolvedDefaultFeatures = [ "default" "std" ];
+      };
       "sharded-slab" = rec {
         crateName = "sharded-slab";
         version = "0.1.4";
@@ -6933,6 +7015,10 @@ rec {
             features = [ "derive" "env" ];
           }
           {
+            name = "count-write";
+            packageId = "count-write";
+          }
+          {
             name = "data-encoding";
             packageId = "data-encoding";
           }
@@ -6943,6 +7029,10 @@ rec {
           {
             name = "prost";
             packageId = "prost";
+          }
+          {
+            name = "sha2";
+            packageId = "sha2";
           }
           {
             name = "sled";
@@ -6978,6 +7068,10 @@ rec {
           {
             name = "tracing-subscriber";
             packageId = "tracing-subscriber";
+          }
+          {
+            name = "tvix-nar";
+            packageId = "tvix-nar";
           }
         ];
         buildDependencies = [
