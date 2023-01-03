@@ -1,15 +1,19 @@
 use prost::Message;
+use sha2::Digest;
+use sha2::Sha256;
 use std::path::PathBuf;
 
+use crate::proto;
 use crate::proto::get_path_info_request::ByWhat;
 use crate::proto::path_info_service_server::PathInfoService;
 use crate::proto::CalculateNarResponse;
 use crate::proto::GetPathInfoRequest;
-use crate::proto::Node;
 use crate::proto::PathInfo;
 use crate::store_path::DIGEST_SIZE;
+use count_write::CountWrite;
 use tonic::{Request, Response, Result, Status};
 use tracing::{instrument, warn};
+use tvix_nar;
 
 const NOT_IMPLEMENTED_MSG: &str = "not implemented";
 
@@ -17,21 +21,65 @@ const NOT_IMPLEMENTED_MSG: &str = "not implemented";
 ///
 /// The PathInfo messages are stored as encoded protos, and keyed by their output hash,
 /// as that's currently the only request type available.
-pub struct SledPathInfoService {
+pub struct SledPathInfoService<C: std::marker::Send> {
     db: sled::Db,
+
+    blob_service_client: crate::proto::blob_service_client::BlobServiceClient<C>,
+    directory_service_client: crate::proto::directory_service_client::DirectoryServiceClient<C>,
 }
 
-impl SledPathInfoService {
-    pub fn new(p: PathBuf) -> Result<Self, anyhow::Error> {
+impl<C: Send + Sync + 'static> SledPathInfoService<C> {
+    pub fn new(
+        p: PathBuf,
+        blob_service_client: crate::proto::blob_service_client::BlobServiceClient<C>,
+        directory_service_client: crate::proto::directory_service_client::DirectoryServiceClient<C>,
+    ) -> Result<Self, anyhow::Error> {
         let config = sled::Config::default().use_compression(true).path(p);
         let db = config.open()?;
 
-        Ok(Self { db })
+        Ok(Self {
+            db,
+            blob_service_client,
+            directory_service_client,
+        })
+    }
+
+    fn walk_node(
+        &self,
+        nar_node: tvix_nar::Node,
+        proto_node: proto::node::Node,
+    ) -> Result<(), Status> {
+        match proto_node {
+            proto::node::Node::Directory(_directory_node) => {
+                // ask the directory_service_client for all directory messages
+                // (we can use recursive here and put all in a HashSet)
+
+                // let nar_node_directory = nar_node.directory()?;
+
+                // enumerate over the three different lists directory_node, pick the smallest one
+                // TODO: do we want an iterator for that on Directory, returning proto::node::Node ?
+
+                // for each of these, invoke
+                // nar_node_directory.entry("the_name") and pass the result along to walk_node
+                warn!(NOT_IMPLEMENTED_MSG);
+                return Err(Status::unimplemented(NOT_IMPLEMENTED_MSG));
+            }
+            proto::node::Node::File(file_node) => {
+                // TODO: implement reader for blob client?
+                nar_node.file(file_node.executable, file_node.size.into(), todo!("reader"))?;
+                Ok(())
+            }
+            proto::node::Node::Symlink(symlink_node) => {
+                nar_node.symlink(&symlink_node.target)?;
+
+                Ok(())
+            }
+        }
     }
 }
 
 #[tonic::async_trait]
-impl PathInfoService for SledPathInfoService {
+impl<C: Send + Sync + 'static> PathInfoService for SledPathInfoService<C> {
     #[instrument(skip(self))]
     async fn get(&self, request: Request<GetPathInfoRequest>) -> Result<Response<PathInfo>> {
         match request.into_inner().by_what {
@@ -94,9 +142,23 @@ impl PathInfoService for SledPathInfoService {
     #[instrument(skip(self))]
     async fn calculate_nar(
         &self,
-        _request: Request<Node>,
+        request: Request<proto::Node>,
     ) -> Result<Response<CalculateNarResponse>> {
-        warn!(NOT_IMPLEMENTED_MSG);
-        Err(Status::unimplemented(NOT_IMPLEMENTED_MSG))
+        match request.into_inner().node {
+            None => Err(Status::invalid_argument("no root node present")),
+            Some(rq_root_node) => {
+                let h = Sha256::new();
+                let mut cw = CountWrite::from(h);
+                {
+                    let nar_root_node = tvix_nar::open(&mut cw)?;
+
+                    self.walk_node(nar_root_node, rq_root_node)?;
+                }
+                Ok(Response::new(CalculateNarResponse {
+                    nar_size: cw.count() as u32,
+                    nar_sha256: cw.into_inner().finalize().to_vec(),
+                }))
+            }
+        }
     }
 }
