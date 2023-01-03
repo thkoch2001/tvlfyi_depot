@@ -134,6 +134,30 @@
       },
       "revId": "620e0c9b57d35dedf75d83e4d51ba9e1a521cc63",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7a52408c_f773b2d7",
+        "filename": "tvix/store/src/sled_path_info_service.rs",
+        "patchSetId": 11
+      },
+      "lineNbr": 67,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2023-01-03T20:01:01Z",
+      "side": 1,
+      "message": "That\u0027s basically the old `std::error::Error::description` method, but you\u0027re not supposed to use that anymore. The `Display` impl of an error is supposed to produce human-readable output, so it *should* be the right thing to return here.\n\nYou could add a `description` method or something to the impl of the error and do it there, but I\u0027d encourage making sure that `Display` is actually .. displayable.",
+      "parentUuid": "d52b9eae_9a311b39",
+      "range": {
+        "startLine": 67,
+        "startChar": 22,
+        "endLine": 67,
+        "endChar": 30
+      },
+      "revId": "620e0c9b57d35dedf75d83e4d51ba9e1a521cc63",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
