@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0b25d24c_ccc8bfd0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2023-01-03T19:56:33Z",
+      "side": 1,
+      "message": "I\u0027m not yet sure if this is worth it, so marking as WIP for now.",
+      "revId": "7cc595befeb1712bd1bb6923b95e750c6513d90d",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
