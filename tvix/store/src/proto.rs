@@ -174,6 +174,16 @@ impl NamedNode for &SymlinkNode {
     }
 }
 
+impl NamedNode for node::Node {
+    fn get_name(&self) -> &str {
+        match self {
+            node::Node::File(node_file) => &node_file.name,
+            node::Node::Directory(node_directory) => &node_directory.name,
+            node::Node::Symlink(node_symlink) => &node_symlink.name,
+        }
+    }
+}
+
 /// Accepts a name, and a mutable reference to the previous name.
 /// If the passed name is larger than the previous one, the reference is updated.
 /// If it's not, an error is returned.

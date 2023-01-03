@@ -123,7 +123,7 @@ impl BlobService for SledBlobService {
         let tree_blobmeta = self.tree_blobmeta.clone();
         let tree_chunks = self.tree_chunks.clone();
 
-        /// NOTE: this currently sends one chunk per message.
+        // NOTE: this currently sends one chunk per message.
         // Depending on what chunking size we end up with, we might want to
         // split chunks during streaming.
         task::spawn_blocking(move || {

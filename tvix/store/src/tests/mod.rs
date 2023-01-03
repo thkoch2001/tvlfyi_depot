@@ -1,3 +1,4 @@
+mod blob_service;
 mod directory;
 mod directory_nodes_iterator;
 mod directory_service;
