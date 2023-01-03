@@ -1,174 +1,172 @@
 use crate::output::Output;
 use crate::string_escape::escape_string;
-use std::{collections::BTreeMap, fmt, fmt::Write};
+use std::collections::BTreeMap;
 
 pub const DERIVATION_PREFIX: &str = "Derive";
-pub const PAREN_OPEN: char = '(';
-pub const PAREN_CLOSE: char = ')';
-pub const BRACKET_OPEN: char = '[';
-pub const BRACKET_CLOSE: char = ']';
-pub const COMMA: char = ',';
-pub const QUOTE: char = '"';
+pub const PAREN_OPEN: &str = "(";
+pub const PAREN_CLOSE: &str = ")";
+pub const BRACKET_OPEN: &str = "[";
+pub const BRACKET_CLOSE: &str = "]";
+pub const COMMA: &str = ",";
+pub const QUOTE: &str = "\"";
 
-fn write_array_elements(
-    writer: &mut impl Write,
-    quote: bool,
-    open: &str,
-    closing: &str,
-    elements: Vec<&String>,
-) -> Result<(), fmt::Error> {
-    writer.write_str(open)?;
+pub const COLON: &str = ":";
+pub const TEXT_COLON: &str = "text:";
+pub const SHA256_COLON: &str = "sha256:";
+pub const STORE_PATH_COLON: &str = "/nix/store:";
+pub const DOT_FILE_EXT: &str = ".drv";
+
+fn write_array_elements(quote: bool, open: &str, closing: &str, elements: &[String]) -> String {
+    let mut buffer = String::new();
+    buffer.push_str(open);
 
     for (index, element) in elements.iter().enumerate() {
         if index > 0 {
-            writer.write_char(COMMA)?;
+            buffer.push_str(COMMA);
         }
 
         if quote {
-            writer.write_char(QUOTE)?;
+            buffer.push_str(QUOTE);
         }
 
-        writer.write_str(element)?;
+        buffer.push_str(element);
 
         if quote {
-            writer.write_char(QUOTE)?;
+            buffer.push_str(QUOTE);
         }
     }
 
-    writer.write_str(closing)?;
+    buffer.push_str(closing);
 
-    Ok(())
+    buffer
 }
 
-pub fn write_outputs(
-    writer: &mut impl Write,
-    outputs: BTreeMap<String, Output>,
-) -> Result<(), fmt::Error> {
-    writer.write_char(BRACKET_OPEN)?;
+pub fn write_outputs(outputs: &BTreeMap<String, Output>) -> String {
+    let mut buffer = String::new();
+
+    buffer.push_str(BRACKET_OPEN);
     for (ii, (output_name, output)) in outputs.iter().enumerate() {
         if ii > 0 {
-            writer.write_char(COMMA)?;
+            buffer.push_str(COMMA);
         }
 
         // TODO(jrhahn) option to strip output
-        let elements = vec![
-            output_name,
-            &output.path,
-            &output.hash_algorithm,
-            &output.hash,
+        let elements: [String; 4] = [
+            output_name.to_string(),
+            output.path.to_string(),
+            output.hash_algorithm.to_string(),
+            output.hash.to_string(),
         ];
 
-        write_array_elements(
-            writer,
+        buffer.push_str(&write_array_elements(
             true,
-            &PAREN_OPEN.to_string(),
-            &PAREN_CLOSE.to_string(),
-            elements,
-        )?
+            PAREN_OPEN,
+            PAREN_CLOSE,
+            &elements,
+        ));
     }
-    writer.write_char(BRACKET_CLOSE)?;
+    buffer.push_str(BRACKET_CLOSE);
 
-    Ok(())
+    buffer
 }
 
-pub fn write_input_derivations(
-    writer: &mut impl Write,
-    input_derivations: BTreeMap<String, Vec<String>>,
-) -> Result<(), fmt::Error> {
-    writer.write_char(COMMA)?;
-    writer.write_char(BRACKET_OPEN)?;
+pub fn write_input_derivations(input_derivations: &BTreeMap<String, Vec<String>>) -> String {
+    let mut buffer = String::new();
+    buffer.push_str(COMMA);
+    buffer.push_str(BRACKET_OPEN);
 
     for (ii, (input_derivation_path, input_derivation)) in input_derivations.iter().enumerate() {
         if ii > 0 {
-            writer.write_char(COMMA)?;
+            buffer.push_str(COMMA);
         }
 
-        writer.write_char(PAREN_OPEN)?;
-        writer.write_char(QUOTE)?;
-        writer.write_str(input_derivation_path.as_str())?;
-        writer.write_char(QUOTE)?;
-        writer.write_char(COMMA)?;
+        buffer.push_str(PAREN_OPEN);
+        buffer.push_str(QUOTE);
+        buffer.push_str(input_derivation_path);
+        buffer.push_str(QUOTE);
+        buffer.push_str(COMMA);
 
-        write_array_elements(
-            writer,
+        buffer.push_str(&write_array_elements(
             true,
-            &BRACKET_OPEN.to_string(),
-            &BRACKET_CLOSE.to_string(),
-            input_derivation.iter().collect(),
-        )?;
+            BRACKET_OPEN,
+            BRACKET_CLOSE,
+            input_derivation,
+        ));
 
-        writer.write_char(PAREN_CLOSE)?;
+        buffer.push_str(PAREN_CLOSE);
     }
 
-    writer.write_char(BRACKET_CLOSE)?;
+    buffer.push_str(BRACKET_CLOSE);
 
-    Ok(())
+    buffer
 }
 
-pub fn write_input_sources(
-    writer: &mut impl Write,
-    input_sources: Vec<String>,
-) -> Result<(), fmt::Error> {
-    writer.write_char(COMMA)?;
-    write_array_elements(
-        writer,
+pub fn write_input_sources(input_sources: &[String]) -> String {
+    let mut buffer = String::new();
+
+    buffer.push_str(COMMA);
+    buffer.push_str(&write_array_elements(
         true,
-        &BRACKET_OPEN.to_string(),
-        &BRACKET_CLOSE.to_string(),
-        input_sources.iter().collect(),
-    )?;
+        BRACKET_OPEN,
+        BRACKET_CLOSE,
+        input_sources,
+    ));
 
-    Ok(())
+    buffer
 }
 
-pub fn write_platfrom(writer: &mut impl Write, platform: &str) -> Result<(), fmt::Error> {
-    writer.write_char(COMMA)?;
-    writer.write_str(escape_string(platform).as_str())?;
-    Ok(())
+pub fn write_platfrom(platform: &str) -> String {
+    let mut buffer = String::new();
+    buffer.push_str(COMMA);
+    buffer.push_str(&escape_string(platform));
+
+    buffer
 }
 
-pub fn write_builder(writer: &mut impl Write, builder: &str) -> Result<(), fmt::Error> {
-    writer.write_char(COMMA)?;
-    writer.write_str(escape_string(builder).as_str())?;
-    Ok(())
+pub fn write_builder(builder: &str) -> String {
+    let mut buffer = String::new();
+    buffer.push_str(COMMA);
+    buffer.push_str(&escape_string(builder));
+
+    buffer
 }
 
-pub fn write_arguments(writer: &mut impl Write, arguments: Vec<String>) -> Result<(), fmt::Error> {
-    writer.write_char(COMMA)?;
-    write_array_elements(
-        writer,
+pub fn write_arguments(arguments: &[String]) -> String {
+    let mut buffer = String::new();
+    buffer.push_str(COMMA);
+    buffer.push_str(&write_array_elements(
         true,
-        &BRACKET_OPEN.to_string(),
-        &BRACKET_CLOSE.to_string(),
-        arguments.iter().collect(),
-    )?;
+        BRACKET_OPEN,
+        BRACKET_CLOSE,
+        arguments,
+    ));
 
-    Ok(())
+    buffer
 }
 
-pub fn write_enviroment(
-    writer: &mut impl Write,
-    environment: BTreeMap<String, String>,
-) -> Result<(), fmt::Error> {
-    writer.write_char(COMMA)?;
-    writer.write_char(BRACKET_OPEN)?;
+pub fn write_enviroment(environment: &BTreeMap<String, String>) -> String {
+    let mut buffer = String::new();
+    buffer.push_str(COMMA);
+    buffer.push_str(BRACKET_OPEN);
 
     for (ii, (key, environment)) in environment.iter().enumerate() {
         if ii > 0 {
-            writer.write_char(COMMA)?;
+            buffer.push_str(COMMA);
         }
 
         // TODO(jrhahn) add strip option
-        write_array_elements(
-            writer,
+        buffer.push_str(&write_array_elements(
             false,
-            &PAREN_OPEN.to_string(),
-            &PAREN_CLOSE.to_string(),
-            vec![&escape_string(key), &escape_string(environment)],
-        )?;
+            PAREN_OPEN,
+            PAREN_CLOSE,
+            &[
+                escape_string(key).to_string(),
+                escape_string(environment).to_string(),
+            ],
+        ));
     }
 
-    writer.write_char(BRACKET_CLOSE)?;
+    buffer.push_str(BRACKET_CLOSE);
 
-    Ok(())
+    buffer
 }
