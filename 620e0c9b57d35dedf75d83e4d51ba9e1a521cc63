@@ -65,6 +65,30 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "bc85121d_dc13f24f",
+        "filename": "tvix/store/src/sled_path_info_service.rs",
+        "patchSetId": 11
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-01-03T17:14:04Z",
+      "side": 1,
+      "message": "Added.",
+      "parentUuid": "2aa2d0ee_d62533cb",
+      "range": {
+        "startLine": 35,
+        "startChar": 4,
+        "endLine": 35,
+        "endChar": 23
+      },
+      "revId": "620e0c9b57d35dedf75d83e4d51ba9e1a521cc63",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "f2b558bc_39ab4c08",
@@ -78,6 +102,30 @@
       "writtenOn": "2023-01-03T15:39:52Z",
       "side": 1,
       "message": "I feel like this should be part of a trait impl or method on the error type (Display?), i.e. I\u0027d expect this to just be `\u003d\u003e Err(Status::invalid_argument(e.to_string()),` or something like that.\n\nOtherwise this is a weird boundary leak, where adding new error variants requires changes near the error itself and here.",
+      "range": {
+        "startLine": 67,
+        "startChar": 22,
+        "endLine": 67,
+        "endChar": 30
+      },
+      "revId": "620e0c9b57d35dedf75d83e4d51ba9e1a521cc63",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d52b9eae_9a311b39",
+        "filename": "tvix/store/src/sled_path_info_service.rs",
+        "patchSetId": 11
+      },
+      "lineNbr": 67,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-01-03T17:14:04Z",
+      "side": 1,
+      "message": "I\u0027m a bit concerned about simply e.to_string and showing them to the user - in case these wrap other errors and these maybe contain info that the user is not supposed to see.\n\nI\u0027m less concerned about rustc telling me I now need to handle this match arm too.\n\nI feel like I only want to report the kind of error, not the details back to the user (but for some kinds, we might want to log them).\n\nI\u0027d like to get some opinion / best practices, maybe there is something like that. @grfn?",
+      "parentUuid": "f2b558bc_39ab4c08",
       "range": {
         "startLine": 67,
         "startChar": 22,
