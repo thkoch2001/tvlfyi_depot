@@ -16,6 +16,24 @@
       "message": "Can be dev dependencies only",
       "revId": "d836e7abfaef2a1e6949854724b2af990fa2cd18",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f7ec3809_ec5e4194",
+        "filename": "tvix/store/Cargo.toml",
+        "patchSetId": 9
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-01-03T12:51:23Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2ad96a7c_a5496ae5",
+      "revId": "d836e7abfaef2a1e6949854724b2af990fa2cd18",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
