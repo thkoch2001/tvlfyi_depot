@@ -34,6 +34,24 @@
       "parentUuid": "d86cfa52_a941d124",
       "revId": "4161c7509a192cd559d5542c0c1fe3b39742691a",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e98eb7ce_334a36b5",
+        "filename": "tvix/derivation/src/lib.rs",
+        "patchSetId": 3
+      },
+      "lineNbr": 100,
+      "author": {
+        "id": 1000067
+      },
+      "writtenOn": "2023-01-03T20:45:01Z",
+      "side": 1,
+      "message": "Sure, that would be an option. Does it mean we would drop support for the current serialize function? Still, I think both would be highly similar - that\u0027s why I\u0027m using the serialization function right now.\n\nDo you see any other use case where we would not write to a string?",
+      "parentUuid": "55e783bb_aa535f6f",
+      "revId": "4161c7509a192cd559d5542c0c1fe3b39742691a",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }

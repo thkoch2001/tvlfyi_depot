@@ -18,6 +18,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "a1491924_18b8c2ef",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000067
+      },
+      "writtenOn": "2023-01-03T20:45:01Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7932cd2b_e64e1d19",
+      "revId": "3a0c4febea2a7192c14d79af71aedd80901db606",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "ccc832e2_e29e5ba0",
@@ -31,6 +49,24 @@
       "writtenOn": "2023-01-02T18:32:50Z",
       "side": 1,
       "message": "FILE_SUFFIX maybe?",
+      "revId": "3a0c4febea2a7192c14d79af71aedd80901db606",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2675c6ac_c13c4e93",
+        "filename": "tvix/derivation/src/lib.rs",
+        "patchSetId": 6
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1000067
+      },
+      "writtenOn": "2023-01-03T20:45:01Z",
+      "side": 1,
+      "message": "I would like to keep DOT_... to inform that the constant already contains the \u0027.\u0027. Otherwise users might be tempted to add an additional one in their code.",
+      "parentUuid": "ccc832e2_e29e5ba0",
       "revId": "3a0c4febea2a7192c14d79af71aedd80901db606",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
@@ -52,6 +88,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "dc71240a_63c576fd",
+        "filename": "tvix/derivation/src/lib.rs",
+        "patchSetId": 6
+      },
+      "lineNbr": 58,
+      "author": {
+        "id": 1000067
+      },
+      "writtenOn": "2023-01-03T20:45:01Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e5fefbad_e5bacf98",
+      "revId": "3a0c4febea2a7192c14d79af71aedd80901db606",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "24bac5c3_4d1c26c6",
@@ -65,6 +119,24 @@
       "writtenOn": "2023-01-02T18:32:50Z",
       "side": 1,
       "message": "Instead of \"step 1, 2, 3\", can you write (in prose) what you\u0027re doing?\n\nAka: collect the list of paths from input_sources and input_derivations into a sorted list, and join them by `:`.",
+      "revId": "3a0c4febea2a7192c14d79af71aedd80901db606",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "05ad7039_800b866e",
+        "filename": "tvix/derivation/src/lib.rs",
+        "patchSetId": 6
+      },
+      "lineNbr": 61,
+      "author": {
+        "id": 1000067
+      },
+      "writtenOn": "2023-01-03T20:45:01Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "24bac5c3_4d1c26c6",
       "revId": "3a0c4febea2a7192c14d79af71aedd80901db606",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
@@ -86,6 +158,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "24862bf5_2a818cc3",
+        "filename": "tvix/derivation/src/lib.rs",
+        "patchSetId": 6
+      },
+      "lineNbr": 69,
+      "author": {
+        "id": 1000067
+      },
+      "writtenOn": "2023-01-03T20:45:01Z",
+      "side": 1,
+      "message": "i changed it now. though i\u0027m not sure what is slower:\na) building up the string (first implementation)\nb) calling hasher.update(..) now for every input string",
+      "parentUuid": "0083b584_571bcbde",
+      "revId": "3a0c4febea2a7192c14d79af71aedd80901db606",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "90547293_c78fd19a",
@@ -99,6 +189,24 @@
       "writtenOn": "2023-01-02T18:32:50Z",
       "side": 1,
       "message": "Calculate the sha256 hash of the ATerm representation, and represent it as a hex-encoded string (prefixed with `sha256:`).\n\nMaybe you could even make closures with assingments in front.",
+      "revId": "3a0c4febea2a7192c14d79af71aedd80901db606",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "df2f82a4_97b7b793",
+        "filename": "tvix/derivation/src/lib.rs",
+        "patchSetId": 6
+      },
+      "lineNbr": 76,
+      "author": {
+        "id": 1000067
+      },
+      "writtenOn": "2023-01-03T20:45:01Z",
+      "side": 1,
+      "message": "\u003e Maybe you could even make closures with assingments in front.\n\nNot sure what you mean by this. Simply blocks? {} or do you mean to have each \u0027part\u0027 as functions?",
+      "parentUuid": "90547293_c78fd19a",
       "revId": "3a0c4febea2a7192c14d79af71aedd80901db606",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
