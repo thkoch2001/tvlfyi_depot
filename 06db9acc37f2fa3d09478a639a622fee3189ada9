@@ -16,6 +16,24 @@
       "message": "We still need to implement this, this will fail before.",
       "revId": "06db9acc37f2fa3d09478a639a622fee3189ada9",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "dbe85518_68847a28",
+        "filename": "tvix/derivation/src/validate.rs",
+        "patchSetId": 5
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-01-04T15:26:05Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "af83811e_111bbc6d",
+      "revId": "06db9acc37f2fa3d09478a639a622fee3189ada9",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
