@@ -76,7 +76,13 @@ fn add_to_store(path: &Path) -> Result<PathBuf, io::Error> {
     let out_path_str = String::from_utf8(out.stdout)
         .map_err(|err| io::Error::new(io::ErrorKind::InvalidData, err))?;
 
+    crate::derivation::KNOWN_PATHS
+        .write()
+        .unwrap()
+        .plain(&out_path_str);
+
     let mut out_path = PathBuf::new();
     out_path.push(out_path_str.trim());
+
     Ok(out_path)
 }

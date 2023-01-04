@@ -13,33 +13,16 @@ use std::io;
 
 /// Represents a "primed" reference scanner with an automaton that knows the set
 /// of store paths to scan for.
-pub struct ReferenceScanner<'s> {
-    candidates: Vec<&'s str>,
+pub struct ReferenceScanner {
+    candidates: Vec<String>,
     searcher: AhoCorasick,
-    matches: BTreeSet<&'s str>,
+    matches: Vec<usize>,
 }
 
-pub trait ToOwnedVec<T> {
-    fn to_owned_vec(self) -> Vec<T>;
-}
-
-impl<T: Clone> ToOwnedVec<T> for &[T] {
-    fn to_owned_vec(self) -> Vec<T> {
-        self.to_vec()
-    }
-}
-
-impl<T> ToOwnedVec<T> for Vec<T> {
-    fn to_owned_vec(self) -> Vec<T> {
-        self
-    }
-}
-
-impl<'s> ReferenceScanner<'s> {
+impl ReferenceScanner {
     /// Construct a new `ReferenceScanner` that knows how to scan for the given
     /// candidate store paths.
-    pub fn new<V: ToOwnedVec<&'s str>>(candidates: V) -> Self {
-        let candidates = candidates.to_owned_vec();
+    pub fn new(candidates: Vec<String>) -> Self {
         let searcher = AhoCorasick::new_auto_configured(&candidates);
 
         ReferenceScanner {
@@ -53,8 +36,7 @@ impl<'s> ReferenceScanner<'s> {
     /// in the scanner.
     pub fn scan_str<H: AsRef<[u8]>>(&mut self, haystack: H) {
         for m in self.searcher.find_iter(&haystack) {
-            let needle = self.candidates[m.pattern()];
-            self.matches.insert(needle);
+            self.matches.push(m.pattern());
         }
     }
 
@@ -67,16 +49,18 @@ impl<'s> ReferenceScanner<'s> {
     /// [`AhoCorasick::stream_find_iter`] for details on this.
     pub fn scan_stream<R: io::Read>(&mut self, stream: R) -> io::Result<()> {
         for m in self.searcher.stream_find_iter(stream) {
-            let needle = self.candidates[m?.pattern()];
-            self.matches.insert(needle);
+            self.matches.push(m?.pattern());
         }
 
         Ok(())
     }
 
     /// Finalise the reference scanner and return the resulting matches.
-    pub fn finalise(self) -> BTreeSet<&'s str> {
+    pub fn finalise(mut self) -> BTreeSet<String> {
         self.matches
+            .into_iter()
+            .map(|idx| self.candidates.remove(idx))
+            .collect()
     }
 }
 
