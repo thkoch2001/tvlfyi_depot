@@ -53,6 +53,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "6c89e084_8f084e74",
+        "filename": "tvix/derivation/src/lib.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 50,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-01-04T12:33:56Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "92917479_9767f1e9",
+      "revId": "dcd01454ff1f9f7e59dd65639ff011195f9f8540",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "cafb68f1_b914702b",
@@ -84,6 +102,24 @@
       "side": 1,
       "message": "pls rebase cl/7729, so I can address this.",
       "parentUuid": "cafb68f1_b914702b",
+      "revId": "dcd01454ff1f9f7e59dd65639ff011195f9f8540",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a39f7a28_71538968",
+        "filename": "tvix/derivation/src/lib.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 73,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-01-04T12:33:56Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "18fb163b_d09a0bb8",
       "revId": "dcd01454ff1f9f7e59dd65639ff011195f9f8540",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
@@ -155,6 +191,24 @@
       "side": 1,
       "message": "Okay, but add a `TODO` please.",
       "parentUuid": "b28efb4b_a775d571",
+      "revId": "dcd01454ff1f9f7e59dd65639ff011195f9f8540",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "27fb5210_a530c5e7",
+        "filename": "tvix/derivation/src/lib.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 75,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-01-04T12:33:56Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "78a069df_810e398b",
       "revId": "dcd01454ff1f9f7e59dd65639ff011195f9f8540",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
