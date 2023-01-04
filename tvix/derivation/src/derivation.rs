@@ -1,5 +1,5 @@
 use crate::nix_hash;
-use crate::output::Output;
+use crate::output::{Hash, Output};
 use crate::write;
 use serde::{Deserialize, Serialize};
 use sha2::{Digest, Sha256};
@@ -147,6 +147,73 @@ impl Derivation {
         build_store_path(true, &*hasher.finalize(), name)
     }
 
+    /// This (re)calculates all output paths of a Derivation.
+    /// For each output, the output path is added to self.environment[$outputName],
+    /// as well as self.outputs[$outputName].path.
+    ///
+    /// As output path calculation for non-fixed output derivations also
+    /// require knowledge about other derivations, a lookup function needs to be provided (TODO)
+    pub fn calculate_output_paths(&mut self, name: &str) -> anyhow::Result<()> {
+        match self.get_fixed_output() {
+            Some((fixed_output, hash)) => {
+                let digest = {
+                    // Fixed-output derivation.
+                    let mut hasher = Sha256::new();
+                    // There's two different hashing strategies in place, depending on the value of hash.algo.
+                    // This code is _weird_ but it is what Nix is doing. See:
+                    // https://github.com/NixOS/nix/blob/1385b2007804c8a0370f2a6555045a00e34b07c7/src/libstore/store-api.cc#L178-L196
+                    if hash.algo == "r:sha256" {
+                        hasher.update("source");
+                        hasher.update(":");
+                        hasher.update("sha256");
+                        hasher.update(":");
+                        hasher.update(hash.digest.clone()); // nixbase32
+                    } else {
+                        hasher.update("output");
+                        hasher.update(":");
+                        hasher.update("out");
+                        hasher.update(":");
+                        hasher.update("sha256");
+                        hasher.update(":");
+                        let fixed = {
+                            let mut hasher_fixed = Sha256::new();
+                            hasher_fixed.update("fixed");
+                            hasher_fixed.update(":");
+                            hasher_fixed.update("out");
+                            hasher_fixed.update(":");
+                            hasher_fixed.update(hash.algo.clone());
+                            hasher_fixed.update(":");
+                            hasher_fixed.update(hash.digest.clone());
+                            hasher_fixed.update(":");
+                            hasher_fixed.finalize()
+                        };
+                        hasher.update(format!("{:x}", fixed));
+                    }
+                    hasher.update(":");
+                    hasher.update(tvix_store::nixpath::STORE_DIR);
+                    hasher.update(":");
+                    hasher.update(name);
+                    hasher.finalize()
+                };
+
+                let abs_store_path = format!(
+                    "{}/{}",
+                    tvix_store::nixpath::STORE_DIR,
+                    build_store_path(false, &digest, name).to_string()
+                );
+
+                // TODO: split this into different functions
+                self.environment
+                    .insert("out".to_string(), abs_store_path.clone());
+                self.outputs.get_mut("out").unwrap().path = abs_store_path;
+
+                return Ok(());
+            }
+            None => {
+                // non-FOD case, bail
+                unimplemented!()
+            }
+        }
     }
 }
 
