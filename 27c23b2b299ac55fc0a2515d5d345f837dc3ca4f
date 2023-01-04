@@ -16,6 +16,24 @@
       "message": "probably it is more efficient to pass this buffer to all sub functions such that they do not need to create new buffers. though i feel that, in general, would be quite annoying to do. what do you think?",
       "revId": "27c23b2b299ac55fc0a2515d5d345f837dc3ca4f",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "21c92c4c_8de4b638",
+        "filename": "tvix/derivation/src/derivation.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-01-04T09:51:59Z",
+      "side": 1,
+      "message": "Hmmh, if the function is named append_*, consumes the string as an argument and returns it back as return value, you can chain the calls. Shouldn\u0027t be too annoying 🤔",
+      "parentUuid": "3e2f5a4c_f653bcaa",
+      "revId": "27c23b2b299ac55fc0a2515d5d345f837dc3ca4f",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
