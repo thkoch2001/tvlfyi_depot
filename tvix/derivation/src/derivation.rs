@@ -34,6 +34,7 @@ impl Derivation {
 }
 
 impl fmt::Display for Derivation {
+    /// formats the content to the ATerm representation
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         self.serialize(f)
     }
