@@ -1,4 +1,5 @@
 use std::{error, fmt::Display, rc::Rc};
+use tvix_derivation::DerivationError;
 
 #[derive(Debug)]
 pub enum Error {
@@ -6,14 +7,9 @@ pub enum Error {
     InvalidOutputName(String),
     DuplicateOutput(String),
     ConflictingOutputTypes,
-    MissingFODFields,
     DuplicateEnvVar(String),
     ShadowedOutput(String),
-
-    // This error variant is constructed from the untyped
-    // //tvix/derivation errors.
-    // TODO: add typed variants for these
-    InvalidDerivation(String),
+    InvalidDerivation(DerivationError),
 }
 
 impl Display for Error {
@@ -30,10 +26,14 @@ impl Display for Error {
                 "fixed-output derivations can only have the default `out`-output"
             ),
 
-            Error::MissingFODFields => write!(f, "both `outputHash` and `outputHashAlgo` must be specified for fixed-output derivations"),
-
-            Error::DuplicateEnvVar(name) => write!(f, "the environment variable '{name}' has already been set in this derivation"),
-            Error::ShadowedOutput(name) => write!(f, "the environment variable '{name}' shadows the name of an output"),
+            Error::DuplicateEnvVar(name) => write!(
+                f,
+                "the environment variable '{name}' has already been set in this derivation"
+            ),
+            Error::ShadowedOutput(name) => write!(
+                f,
+                "the environment variable '{name}' shadows the name of an output"
+            ),
             Error::InvalidDerivation(error) => write!(f, "invalid derivation parameters: {error}"),
         }
     }
