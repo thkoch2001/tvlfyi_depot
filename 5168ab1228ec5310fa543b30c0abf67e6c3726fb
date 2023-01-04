@@ -20,6 +20,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "5d482a20_fd7a1215",
+        "filename": "tvix/derivation/src/derivation.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 166,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-01-04T21:55:11Z",
+      "side": 1,
+      "message": "This is still very WIP, will update/optimize once all code paths work :-)",
+      "parentUuid": "e9529ba9_52047907",
+      "revId": "5168ab1228ec5310fa543b30c0abf67e6c3726fb",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "5ae23990_1cd3909e",
         "filename": "tvix/derivation/src/derivation.rs",
         "patchSetId": 1
@@ -31,6 +49,24 @@
       "writtenOn": "2023-01-04T21:36:25Z",
       "side": 1,
       "message": "unwrap might crash, right?",
+      "revId": "5168ab1228ec5310fa543b30c0abf67e6c3726fb",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "df9fb489_b15d1007",
+        "filename": "tvix/derivation/src/derivation.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 208,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-01-04T21:55:11Z",
+      "side": 1,
+      "message": "We know the output output already exists, but yes, see the TODO above. This could probably be expressed more elegantly, while iterating over every output.",
+      "parentUuid": "5ae23990_1cd3909e",
       "revId": "5168ab1228ec5310fa543b30c0abf67e6c3726fb",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
