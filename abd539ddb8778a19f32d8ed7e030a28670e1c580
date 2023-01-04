@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b0062bc9_73864e32",
+        "filename": "tvix/derivation/src/derivation.rs",
+        "patchSetId": 3
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-01-04T11:40:13Z",
+      "side": 1,
+      "message": "probably add to the docstring that this is the aterm representation.",
+      "revId": "abd539ddb8778a19f32d8ed7e030a28670e1c580",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
