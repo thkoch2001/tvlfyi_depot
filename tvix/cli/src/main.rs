@@ -1,3 +1,4 @@
+mod derivation;
 mod nix_compat;
 
 use std::{fs, path::PathBuf};
@@ -43,6 +44,7 @@ fn interpret(code: &str, path: Option<PathBuf>, args: &Args, explain: bool) -> b
     let mut eval = tvix_eval::Evaluation::new_impure(code, path);
     eval.io_handle = Box::new(nix_compat::NixCompatIO::new());
     eval.nix_path = args.nix_search_path.clone();
+    eval.builtins.extend(derivation::derivation_builtins());
 
     let source_map = eval.source_map();
     let result = {
