@@ -8,9 +8,9 @@ fn default_resource() -> String {
 
 #[derive(Serialize, Deserialize)]
 pub struct Output {
-    pub path: String,
+    pub(crate) path: String,
     #[serde(default = "default_resource")]
-    pub hash_algorithm: String,
+    pub(crate) hash_algorithm: String,
     #[serde(default = "default_resource")]
-    pub hash: String,
+    pub(crate) hash: String,
 }
