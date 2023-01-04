@@ -14,3 +14,9 @@ pub struct Output {
     #[serde(default = "default_resource")]
     pub(crate) hash: String,
 }
+
+impl Output {
+    pub fn is_fixed(&self) -> bool {
+        !self.hash_algorithm.is_empty()
+    }
+}
