@@ -6850,12 +6850,20 @@ rec {
             packageId = "dirs";
           }
           {
+            name = "lazy_static";
+            packageId = "lazy_static";
+          }
+          {
             name = "rustyline";
             packageId = "rustyline";
           }
           {
             name = "smol_str";
             packageId = "smol_str";
+          }
+          {
+            name = "tvix-derivation";
+            packageId = "tvix-derivation";
           }
           {
             name = "tvix-eval";
