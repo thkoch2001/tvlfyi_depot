@@ -16,6 +16,24 @@
       "message": "Nice! Can we make use of this for the serialization of Derivation?",
       "revId": "41411376d7c6bf1fe3f6c540f745e11cac609699",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e8311ada_04c6933c",
+        "filename": "tvix/derivation/src/output.rs",
+        "patchSetId": 7
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-01-04T20:23:19Z",
+      "side": 1,
+      "message": "I don\u0027t see why it wouldn\u0027t work in the other direction.\n\nWe already use serde_json to read in JSON, and cl/7757 aligns it further with how `nix show-derivation` labels the keys.",
+      "parentUuid": "1f6cf2ea_2ea86190",
+      "revId": "41411376d7c6bf1fe3f6c540f745e11cac609699",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
