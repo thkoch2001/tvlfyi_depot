@@ -16,6 +16,24 @@
       "message": "Should we have them here even? The placeholders are (mostly?) placeholders for impure builtins.",
       "revId": "6a496ab06960d601b2fffd546138de815b7adcfb",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "93a8b5f8_dc37114c",
+        "filename": "tvix/eval/src/lib.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 149,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2023-01-04T12:28:38Z",
+      "side": 1,
+      "message": "For now yeah, lets just stick them somewhere and get rid of them. Working on that now actually ... :)",
+      "parentUuid": "a10a0485_0b62075e",
+      "revId": "6a496ab06960d601b2fffd546138de815b7adcfb",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
