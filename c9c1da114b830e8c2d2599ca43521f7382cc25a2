@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c878e810_9d4634fa",
+        "filename": "tvix/derivation/src/derivation.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-01-04T11:54:48Z",
+      "side": 1,
+      "message": "/// Formats the Derivation in ATerm representation.",
+      "revId": "c9c1da114b830e8c2d2599ca43521f7382cc25a2",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
