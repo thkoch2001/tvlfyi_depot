@@ -16,6 +16,24 @@
       "message": "refactor(…)",
       "revId": "7f7d40d8bc455d8e6f43f9c081c7bc880568661b",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4d962e0e_65a692cd",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-01-04T17:30:33Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ee294637_4db654db",
+      "revId": "7f7d40d8bc455d8e6f43f9c081c7bc880568661b",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
