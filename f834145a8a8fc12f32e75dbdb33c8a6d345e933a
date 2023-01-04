@@ -16,6 +16,23 @@
       "message": "I rebased on the latest version. Ready for the final review",
       "revId": "f834145a8a8fc12f32e75dbdb33c8a6d345e933a",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e6287ff1_fc425d14",
+        "filename": "tvix/derivation/Cargo.toml",
+        "patchSetId": 12
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-01-04T11:58:32Z",
+      "side": 1,
+      "message": "Are you sure you depend on tvix-store-bin, not tvix_store?",
+      "revId": "f834145a8a8fc12f32e75dbdb33c8a6d345e933a",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
