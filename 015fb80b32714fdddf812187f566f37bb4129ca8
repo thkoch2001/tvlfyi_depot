@@ -22,6 +22,30 @@
       },
       "revId": "015fb80b32714fdddf812187f566f37bb4129ca8",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2387ce0e_7177761c",
+        "filename": "tvix/derivation/src/output.rs",
+        "patchSetId": 5
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-01-04T18:09:31Z",
+      "side": 1,
+      "message": "I moved both `hash_algorithm` and `hash` into a `Hash` struct, which is available at a `pub hash: Option\u003cHash\u003e` attribute. PTAL.",
+      "parentUuid": "839094ca_63bd4161",
+      "range": {
+        "startLine": 13,
+        "startChar": 24,
+        "endLine": 13,
+        "endChar": 30
+      },
+      "revId": "015fb80b32714fdddf812187f566f37bb4129ca8",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
