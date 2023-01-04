@@ -1036,7 +1036,7 @@ pub fn placeholders() -> Vec<(&'static str, Value)> {
                 Ok(Value::attrs(NixAttrs::from_iter(res.into_iter())))
             },
         ),
-        Builtin::new(
+        /*Builtin::new(
             "derivation",
             &[BuiltinArgument {
                 strict: true,
@@ -1068,7 +1068,7 @@ pub fn placeholders() -> Vec<(&'static str, Value)> {
 
                 Ok(Value::Attrs(Box::new(attrs)))
             },
-        ),
+        ),*/
     ];
 
     ph.into_iter().map(builtin_tuple).collect()
