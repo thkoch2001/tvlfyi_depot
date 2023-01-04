@@ -106,6 +106,24 @@
       "parentUuid": "c346b705_c7c2a6c2",
       "revId": "4161c7509a192cd559d5542c0c1fe3b39742691a",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3d7be893_4d0afecd",
+        "filename": "tvix/derivation/src/lib.rs",
+        "patchSetId": 3
+      },
+      "lineNbr": 100,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-01-04T09:55:46Z",
+      "side": 1,
+      "message": "implementing std::fmt::Display requires us to return a `Result\u003c(), Error\u003e`, but the only errors we\u0027re emitting is errors propagated by the writer we write to.\n\ncl/7740 moves the serialization to ToString.",
+      "parentUuid": "3fa38961_7763f62c",
+      "revId": "4161c7509a192cd559d5542c0c1fe3b39742691a",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
