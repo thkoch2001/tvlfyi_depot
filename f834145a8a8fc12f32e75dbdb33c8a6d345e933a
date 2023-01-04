@@ -33,6 +33,24 @@
       "message": "Are you sure you depend on tvix-store-bin, not tvix_store?",
       "revId": "f834145a8a8fc12f32e75dbdb33c8a6d345e933a",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "662c48b3_f71e67c4",
+        "filename": "tvix/derivation/Cargo.toml",
+        "patchSetId": 12
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1000067
+      },
+      "writtenOn": "2023-01-04T12:12:34Z",
+      "side": 1,
+      "message": "That\u0027s the only version that works. Neither tvix-store nor tvix_store work. Both result in a build error.",
+      "parentUuid": "e6287ff1_fc425d14",
+      "revId": "f834145a8a8fc12f32e75dbdb33c8a6d345e933a",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
