@@ -2308,8 +2308,10 @@ dependencies = [
  "aho-corasick",
  "clap 4.0.32",
  "dirs",
+ "lazy_static",
  "rustyline",
  "smol_str",
+ "tvix-derivation",
  "tvix-eval",
 ]
 
