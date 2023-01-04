@@ -68,6 +68,7 @@ in
       tig
       tokei
       tree
+      ungoogled-chromium
       unzip
       vlc
       volumeicon

@@ -12,6 +12,7 @@
     directories = [
       ".cargo"
       ".config/audacity"
+      ".config/chromium"
       ".config/google-chrome"
       ".config/quassel-irc.org"
       ".config/syncthing"
