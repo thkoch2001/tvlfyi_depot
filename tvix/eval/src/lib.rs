@@ -47,9 +47,12 @@ pub use crate::io::{DummyIO, EvalIO, FileType};
 use crate::observer::{CompilerObserver, RuntimeObserver};
 pub use crate::pretty_ast::pretty_print_expr;
 pub use crate::source::SourceCode;
-pub use crate::value::{Builtin, BuiltinArgument, NixAttrs, NixList, NixString, Value};
 pub use crate::vm::{run_lambda, VM};
 pub use crate::warnings::{EvalWarning, WarningKind};
+
+pub use crate::value::{
+    Builtin, BuiltinArgument, CoercionKind, NixAttrs, NixList, NixString, Value,
+};
 
 #[cfg(feature = "impure")]
 pub use crate::io::StdIO;

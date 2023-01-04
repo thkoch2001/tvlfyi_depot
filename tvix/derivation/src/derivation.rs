@@ -7,7 +7,7 @@ use std::{collections::BTreeMap, fmt, fmt::Write, iter::FromIterator};
 use tvix_store::nixbase32::NIXBASE32;
 use tvix_store::nixpath::STORE_DIR;
 
-#[derive(Serialize, Deserialize)]
+#[derive(Default, Deserialize, Serialize)]
 pub struct Derivation {
     pub outputs: BTreeMap<String, Output>,
     pub input_sources: Vec<String>,

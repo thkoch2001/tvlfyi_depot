@@ -7,3 +7,5 @@ mod derivation;
 
 #[cfg(test)]
 mod tests;
+
+pub use derivation::Derivation;

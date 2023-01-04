@@ -1,6 +1,6 @@
 use serde::{Deserialize, Serialize};
 
-#[derive(Serialize, Deserialize)]
+#[derive(Default, Deserialize, Serialize)]
 pub struct Output {
     pub path: String,
 
