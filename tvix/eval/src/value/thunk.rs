@@ -85,7 +85,7 @@ impl Thunk {
     }
 
     pub fn new_suspended_native(
-        native: Rc<Box<dyn Fn(&mut VM) -> Result<Value, ErrorKind>>>,
+        native: Rc<dyn Fn(&mut VM) -> Result<Value, ErrorKind>>,
     ) -> Self {
         let span = codemap::CodeMap::new()
             .add_file("<internal>".to_owned(), "<internal>".to_owned())
