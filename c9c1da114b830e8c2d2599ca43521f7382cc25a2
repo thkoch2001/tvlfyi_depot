@@ -16,6 +16,24 @@
       "message": "/// Formats the Derivation in ATerm representation.",
       "revId": "c9c1da114b830e8c2d2599ca43521f7382cc25a2",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9cd47bec_c4f3f255",
+        "filename": "tvix/derivation/src/derivation.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1000067
+      },
+      "writtenOn": "2023-01-04T12:00:54Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c878e810_9d4634fa",
+      "revId": "c9c1da114b830e8c2d2599ca43521f7382cc25a2",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
