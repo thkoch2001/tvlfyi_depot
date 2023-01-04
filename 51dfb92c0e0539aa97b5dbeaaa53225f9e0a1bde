@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cf4b46cf_67c628f0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2023-01-04T12:38:28Z",
+      "side": 1,
+      "message": "Note that there isn\u0027t actually a way to use this library at this commit, as there\u0027s no public way to create a `Derivation`.",
+      "revId": "51dfb92c0e0539aa97b5dbeaaa53225f9e0a1bde",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
