@@ -1257,7 +1257,9 @@ pub fn prepare_globals(
         let weak_globals = weak.clone();
         builtins_under_construction.insert(
             "builtins",
-            Value::Thunk(Thunk::new_suspended_native(Rc::new(move |_| {
+            Value::Thunk(Thunk::new_suspended_native(Rc::new(move |vm| {
+                vm.emit_warning(WarningKind::NestedBuiltin("builtins"));
+
                 let file = source.add_file("builtins-dot-builtins.nix".into(), "builtins".into());
                 let span = file.span;
                 let mut observer = NoOpObserver::default();

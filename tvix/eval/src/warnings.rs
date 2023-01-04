@@ -13,6 +13,7 @@ pub enum WarningKind {
     ShadowedGlobal(&'static str),
     DeprecatedLegacyLet,
     InvalidNixPath(String),
+    NestedBuiltin(&'static str),
 
     /// Tvix internal warning for features triggered by users that are
     /// not actually implemented yet, but do not cause runtime failures.
@@ -85,6 +86,13 @@ impl EvalWarning {
                 format!("invalid NIX_PATH resulted in a parse error: {}", err)
             }
 
+            WarningKind::NestedBuiltin(builtin) => {
+                format!(
+                    "instead of accessing `builtins.{}`, access `{}` directly",
+                    builtin, builtin
+                )
+            }
+
             WarningKind::NotImplemented(what) => {
                 format!("feature not yet implemented in tvix: {}", what)
             }
@@ -101,6 +109,7 @@ impl EvalWarning {
             WarningKind::ShadowedGlobal(_) => "W004",
             WarningKind::DeprecatedLegacyLet => "W005",
             WarningKind::InvalidNixPath(_) => "W006",
+            WarningKind::NestedBuiltin(_) => "W007",
             WarningKind::NotImplemented(_) => "W999",
         }
     }
