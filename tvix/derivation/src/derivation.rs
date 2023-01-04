@@ -68,6 +68,27 @@ impl Derivation {
         Ok(())
     }
 
+    /// Returns the fixed output (if the Derivation is fixed output) and its hash,
+    /// or None if there is no fixed output.
+    /// This takes some shortcuts in case more than one output exists, as this
+    /// can't be a valid fixed-output Derivation.
+    pub fn get_fixed_output(&self) -> Option<(&Output, &Hash)> {
+        if self.outputs.len() != 1 {
+            return None;
+        }
+
+        match self.outputs.get("out") {
+            Some(out_output) => {
+                if let Some(hash) = &out_output.hash {
+                    Some((out_output, hash))
+                } else {
+                    None
+                }
+            }
+            None => None,
+        }
+    }
+
     /// Returns the drv path of a Derivation struct.
     ///
     /// The drv path is calculated like this:
