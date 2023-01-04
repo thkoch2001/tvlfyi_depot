@@ -8,13 +8,13 @@ use tvix_store::nixbase32::NIXBASE32;
 
 #[derive(Serialize, Deserialize)]
 pub struct Derivation {
-    outputs: BTreeMap<String, Output>,
-    input_sources: Vec<String>,
-    input_derivations: BTreeMap<String, Vec<String>>,
-    platform: String,
-    builder: String,
-    arguments: Vec<String>,
-    environment: BTreeMap<String, String>,
+    pub outputs: BTreeMap<String, Output>,
+    pub input_sources: Vec<String>,
+    pub input_derivations: BTreeMap<String, Vec<String>>,
+    pub platform: String,
+    pub builder: String,
+    pub arguments: Vec<String>,
+    pub environment: BTreeMap<String, String>,
 }
 
 impl Derivation {
