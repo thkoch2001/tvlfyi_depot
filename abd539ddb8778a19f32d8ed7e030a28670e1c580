@@ -16,6 +16,24 @@
       "message": "probably add to the docstring that this is the aterm representation.",
       "revId": "abd539ddb8778a19f32d8ed7e030a28670e1c580",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6f6bf2c7_d0543a99",
+        "filename": "tvix/derivation/src/derivation.rs",
+        "patchSetId": 3
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-01-04T11:55:51Z",
+      "side": 1,
+      "message": "addressed in cl/7742.",
+      "parentUuid": "b0062bc9_73864e32",
+      "revId": "abd539ddb8778a19f32d8ed7e030a28670e1c580",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
