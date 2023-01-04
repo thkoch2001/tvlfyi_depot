@@ -24,6 +24,30 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "b818c35f_2aa60b70",
+        "filename": "tvix/derivation/src/derivation.rs",
+        "patchSetId": 11
+      },
+      "lineNbr": 70,
+      "author": {
+        "id": 1000067
+      },
+      "writtenOn": "2023-01-04T11:56:22Z",
+      "side": 1,
+      "message": "That makes sense. I just don\u0027t know how to do it :)",
+      "parentUuid": "23f93f3d_0e2137a5",
+      "range": {
+        "startLine": 70,
+        "startChar": 0,
+        "endLine": 70,
+        "endChar": 36
+      },
+      "revId": "9640fb861e6accbc1cf397e22f7b23eb6d231e51",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "3daf9026_48ccf0d2",
@@ -37,6 +61,30 @@
       "writtenOn": "2023-01-04T10:44:07Z",
       "side": 1,
       "message": "probably just remove this `impl`, it\u0027s strange to have fallible serialisation inside of `ToString` (that\u0027s not what it\u0027s for). Having people call the serialisation method explicitly seems better.",
+      "range": {
+        "startLine": 105,
+        "startChar": 0,
+        "endLine": 105,
+        "endChar": 30
+      },
+      "revId": "9640fb861e6accbc1cf397e22f7b23eb6d231e51",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2747ad4d_0ebb1875",
+        "filename": "tvix/derivation/src/derivation.rs",
+        "patchSetId": 11
+      },
+      "lineNbr": 105,
+      "author": {
+        "id": 1000067
+      },
+      "writtenOn": "2023-01-04T11:56:22Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3daf9026_48ccf0d2",
       "range": {
         "startLine": 105,
         "startChar": 0,
