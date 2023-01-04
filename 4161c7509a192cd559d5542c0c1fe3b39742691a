@@ -124,6 +124,24 @@
       "parentUuid": "3fa38961_7763f62c",
       "revId": "4161c7509a192cd559d5542c0c1fe3b39742691a",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8049ace3_56d70ae6",
+        "filename": "tvix/derivation/src/lib.rs",
+        "patchSetId": 3
+      },
+      "lineNbr": 100,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2023-01-04T10:11:39Z",
+      "side": 1,
+      "message": "So if I understand correctly you are moving to `ToString` to avoid having to deal with fallible writers? There are still cases where that might be more efficient, probably, but it\u0027s not that important for now so lets just move on with whatever works.\n\nHowever, having an `.expect()` in there indicates that something *is* still fallible on our end.",
+      "parentUuid": "3d7be893_4d0afecd",
+      "revId": "4161c7509a192cd559d5542c0c1fe3b39742691a",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
