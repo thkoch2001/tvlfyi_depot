@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "23f93f3d_0e2137a5",
+        "filename": "tvix/derivation/src/derivation.rs",
+        "patchSetId": 11
+      },
+      "lineNbr": 70,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2023-01-04T10:42:35Z",
+      "side": 1,
+      "message": "I think `concat_inputs` is not used again, so we can avoid that allocation by doing this directly over the keys iterator above. We can clean that up later, so feel free to just Ack.",
+      "range": {
+        "startLine": 70,
+        "startChar": 0,
+        "endLine": 70,
+        "endChar": 36
+      },
+      "revId": "9640fb861e6accbc1cf397e22f7b23eb6d231e51",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
