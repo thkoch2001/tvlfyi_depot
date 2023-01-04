@@ -67,3 +67,41 @@ fn derivation_path(name: &str, expected_path: &str) {
         NixPath::from_string(expected_path).unwrap()
     );
 }
+
+#[test_case("bar","0hm2f1psjpcwg8fijsmr4wwxrx59s092-bar.drv"; "fixed_sha256")]
+// #[test_case("foo", "4wvvbi4jwn0prsdxb7vs673qa5h9gr7x-foo.drv"; "simple-sha256")]
+#[test_case("bar", "ss2p4wmxijn652haqyd7dckxwl4c7hxx-bar.drv"; "fixed-sha1")]
+// #[test_case("foo", "ch49594n9avinrf8ip0aslidkc4lxkqv-foo.drv"; "simple-sha1")]
+// #[test_case("has-multi-out", "h32dahq0bx5rp1krcdx3a53asj21jvhk-has-multi-out.drv"; "multiple-outputs")]
+// #[test_case("structured-attrs", "9lj1lkjm2ag622mh4h9rpy6j607an8g2-structured-attrs.drv"; "structured-attrs")]
+// #[test_case("unicode", "52a9id8hx688hvlnz4d1n25ml1jdykz0-unicode.drv"; "unicode")]
+fn output_paths(name: &str, expected_path: &str) {
+    // read in the fixture
+    let data = read_file(&format!("{}/{}.json", RESOURCES_PATHS, expected_path));
+    let mut derivation: Derivation =
+        serde_json::from_str(&data).expect("JSON was not well-formatted");
+
+    let expected_derivation = derivation.clone();
+
+    // set outputs[$outputName].path to an empty string for all outputs,
+    // and delete environment[$outputName].
+    let mut trimmed_env = derivation.environment.clone();
+    let mut trimmed_outputs = derivation.outputs.clone();
+
+    for (output_name, _) in derivation.outputs {
+        trimmed_env.remove(&output_name);
+
+        let trimmed_output = trimmed_outputs.get_mut(&output_name).unwrap();
+        trimmed_output.path = "".to_string();
+    }
+
+    // replace environment and outputs with the trimmed variants
+    derivation.environment = trimmed_env;
+    derivation.outputs = trimmed_outputs;
+
+    // invoke calculate_output_paths
+    derivation.calculate_output_paths(&name).unwrap();
+
+    // The derivation should now look like it was before
+    assert_eq!(expected_derivation, derivation);
+}
