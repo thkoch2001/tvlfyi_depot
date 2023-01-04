@@ -16,6 +16,24 @@
       "message": "I don\u0027t know yet if this is a good idea, we might want to map over the list of outputs (and have an assertion on being the only one in case of fixed-output), instead of special-casing over a fixed-output derivation.",
       "revId": "6acb8ce311188a8b82d2cd66bdf9d2e05bfb253f",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "be41f5f1_90ca2e48",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-01-04T22:14:20Z",
+      "side": 1,
+      "message": "unresolved",
+      "parentUuid": "c9ff4827_618eb81f",
+      "revId": "6acb8ce311188a8b82d2cd66bdf9d2e05bfb253f",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
