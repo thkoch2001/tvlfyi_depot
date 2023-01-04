@@ -139,6 +139,24 @@
       "parentUuid": "a274e5c2_fce2337b",
       "revId": "dcd01454ff1f9f7e59dd65639ff011195f9f8540",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "78a069df_810e398b",
+        "filename": "tvix/derivation/src/lib.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 75,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2023-01-04T11:05:53Z",
+      "side": 1,
+      "message": "Okay, but add a `TODO` please.",
+      "parentUuid": "b28efb4b_a775d571",
+      "revId": "dcd01454ff1f9f7e59dd65639ff011195f9f8540",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
