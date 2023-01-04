@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1f6cf2ea_2ea86190",
+        "filename": "tvix/derivation/src/output.rs",
+        "patchSetId": 7
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1000067
+      },
+      "writtenOn": "2023-01-04T18:57:21Z",
+      "side": 1,
+      "message": "Nice! Can we make use of this for the serialization of Derivation?",
+      "revId": "41411376d7c6bf1fe3f6c540f745e11cac609699",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
