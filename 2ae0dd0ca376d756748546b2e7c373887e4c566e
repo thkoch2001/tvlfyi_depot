@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "94cf57e9_8b2f39b3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-01-04T11:07:56Z",
+      "side": 1,
+      "message": "We spoke a bit, looks like implementing fmt::Display will automatically provide a to_string() method that returns just a string - so we might not need this at all.",
+      "revId": "2ae0dd0ca376d756748546b2e7c373887e4c566e",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
