@@ -29,10 +29,6 @@ in
       # TODO: this is to fix a bug in dhall-nix
       dhall = dhall-source "dhall" hsSuper.dhall;
       dhall-nix = dhall-source "dhall-nix" hsSuper.dhall-nix;
-
-      # Wait for upstream to remove the broken flag
-      graphmod = assert hsSuper.graphmod.meta.broken;
-        haskellLib.markUnbroken hsSuper.graphmod;
     };
   };
 
