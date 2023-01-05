@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5714adf9_49c8eb6d",
+        "filename": "tvix/derivation/src/derivation.rs",
+        "patchSetId": 4
+      },
+      "lineNbr": 235,
+      "author": {
+        "id": 1000067
+      },
+      "writtenOn": "2023-01-05T16:17:44Z",
+      "side": 1,
+      "message": "This function is quite long. maybe you want to extract function from the `None` and `Some` block",
+      "revId": "5c12868e84b93a5d019be5bbd8880eed1cb91b5e",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
