@@ -16,6 +16,24 @@
       "message": "This function is quite long. maybe you want to extract function from the `None` and `Some` block",
       "revId": "5c12868e84b93a5d019be5bbd8880eed1cb91b5e",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "16e78616_0d43cd8d",
+        "filename": "tvix/derivation/src/derivation.rs",
+        "patchSetId": 4
+      },
+      "lineNbr": 235,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-01-05T16:48:54Z",
+      "side": 1,
+      "message": "See the long rant in the docstring, i think this will change a bit in the future anyways, so I\u0027d leave that to a later refactor/cleanup, once the functionality has ended up in the tvix-store library.",
+      "parentUuid": "5714adf9_49c8eb6d",
+      "revId": "5c12868e84b93a5d019be5bbd8880eed1cb91b5e",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
