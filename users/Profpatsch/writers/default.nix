@@ -99,10 +99,22 @@ let
     };
 
 
+  ghcBins = libraries: depot.nix.getBins (pkgs.ghc.withPackages (_: libraries)) [ "runghc" ];
+
+  writeHaskellInteractive = name: { libraries, ghcArgs ? [ ] }: path:
+    depot.nix.writeExecline name { } ([
+      (ghcBins libraries).runghc
+      "--"
+    ] ++ ghcArgs ++ [
+      "--"
+      path
+    ]);
+
 in
 {
   inherit
     python3
     python3Lib
+    writeHaskellInteractive
     ;
 }
