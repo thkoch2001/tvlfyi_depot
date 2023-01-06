@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1a0088cf_a3dc0647",
+        "filename": "tvix/derivation/src/derivation.rs",
+        "patchSetId": 5
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-01-06T22:21:01Z",
+      "side": 1,
+      "message": "Can you drop this and rebase on top of cl/7788?",
+      "revId": "5d295e194d1ff245800998d27d5d679de2efc9df",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
