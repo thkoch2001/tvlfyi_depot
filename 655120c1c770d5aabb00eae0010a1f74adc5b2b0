@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "37bc4998_5b17ae26",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-01-06T16:03:37Z",
+      "side": 1,
+      "message": "I think you\u0027ll also need Output and Hash - check the construction test example.",
+      "revId": "655120c1c770d5aabb00eae0010a1f74adc5b2b0",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
