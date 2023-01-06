@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bb4a5f3f_205ef4ce",
+        "filename": "tvix/eval/src/tests/mod.rs",
+        "patchSetId": 3
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2023-01-06T22:41:39Z",
+      "side": 1,
+      "message": "should be builtin_derivation, no?",
+      "revId": "6b6bd307721cec7c00ef0f68a6d639755e8c677f",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
