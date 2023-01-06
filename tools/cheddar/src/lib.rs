@@ -12,7 +12,7 @@ use std::ffi::OsStr;
 use std::io::{BufRead, Write};
 use std::path::Path;
 use std::{env, io};
-use syntect::dumps::from_binary;
+use syntect::dumps::from_uncompressed_data;
 use syntect::easy::HighlightLines;
 use syntect::highlighting::{Theme, ThemeSet};
 use syntect::parsing::{SyntaxReference, SyntaxSet};
@@ -33,7 +33,9 @@ lazy_static! {
     // Note that the syntax set is included from the path pointed to
     // by the BAT_SYNTAXES environment variable at compile time. This
     // variable is populated by Nix and points to TVL's syntax set.
-    static ref SYNTAXES: SyntaxSet = from_binary(include_bytes!(env!("BAT_SYNTAXES")));
+    static ref SYNTAXES: SyntaxSet = from_uncompressed_data(include_bytes!(env!("BAT_SYNTAXES")))
+            .expect("failed to deserialise SyntaxSet");
+
     pub static ref THEMES: ThemeSet = ThemeSet::load_defaults();
 
     // Configure Comrak's Markdown rendering with all the bells &
@@ -153,8 +155,11 @@ fn highlight_code_block(code_block: &NodeCodeBlock) -> NodeValue {
         let mut buf = BLOCK_PRE.to_string();
 
         for line in LinesWithEndings::from(&code) {
-            let regions = hl.highlight(line, &SYNTAXES);
-            append_highlighted_html_for_styled_line(&regions[..], IncludeBackground::No, &mut buf);
+            let regions = hl
+                .highlight_line(line, &SYNTAXES)
+                .expect("highlight_line failed");
+            append_highlighted_html_for_styled_line(&regions[..], IncludeBackground::No, &mut buf)
+                .expect("appending HTML failed");
         }
 
         buf.push_str("</pre>");
@@ -317,13 +322,16 @@ pub fn format_code<R: BufRead, W: Write>(
     // newlines to be efficient, and those are stripped in the lines
     // iterator.
     while should_continue(&read_result) {
-        let regions = hl.highlight(&linebuf, &SYNTAXES);
+        let regions = hl
+            .highlight_line(&linebuf, &SYNTAXES)
+            .expect("highlight_line failed");
 
         append_highlighted_html_for_styled_line(
             &regions[..],
             IncludeBackground::IfDifferent(bg),
             &mut outbuf,
-        );
+        )
+        .expect("appending highlighted HTML failed");
 
         // immediately output the current state to avoid keeping
         // things in memory

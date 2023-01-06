@@ -103,3 +103,8 @@ fn highlights_multiple_shortlinks() {
 fn ignores_invalid_shortlinks() {
     expect_markdown("b/abc is not a real bug", "<p>b/abc is not a real bug</p>");
 }
+
+#[test]
+fn syntax_set_loaded() {
+    assert!(SYNTAXES.syntaxes().len() > 0)
+}
