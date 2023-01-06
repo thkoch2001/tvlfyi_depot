@@ -1,7 +1,8 @@
 { depot, pkgs, lib, ... }:
 
 let
-  cas-serve = pkgs.writers.writeHaskell "mailbox-org"
+
+  cas-serve = depot.users.Profpatsch.writers.writeHaskellInteractive "mailbox-org"
     {
       libraries = [
         depot.users.Profpatsch.my-prelude
