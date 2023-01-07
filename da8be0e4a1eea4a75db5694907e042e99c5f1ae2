@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4fc6ef7b_d30bebed",
+        "filename": "tvix/eval/src/builtins/mod.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 622,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2023-01-07T18:29:41Z",
+      "side": 1,
+      "message": "Why default over `vector![]`?",
+      "revId": "da8be0e4a1eea4a75db5694907e042e99c5f1ae2",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "39f0a115_84e9a180",
+        "filename": "tvix/eval/src/value/mod.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 565,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2023-01-07T18:29:41Z",
+      "side": 1,
+      "message": "Shouldn\u0027t we make an abstract constructor again to encapsulate the internal represenattion?",
+      "revId": "da8be0e4a1eea4a75db5694907e042e99c5f1ae2",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
