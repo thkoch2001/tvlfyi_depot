@@ -39,7 +39,7 @@ git = "https://github.com/JamesGuthrie/test-generator.git"
 rev = "82e799979980962aec1aa324ec6e0e4cad781f41"
 
 [features]
-default = [ "impure", "arbitrary", "nix_tests", "backtrace_overflow" ]
+default = [ "impure", "nix_tests", "backtrace_overflow" ]
 
 # Enables running the Nix language test suite from the original C++
 # Nix implementation (at version 2.3) against Tvix.
@@ -49,7 +49,7 @@ nix_tests = []
 impure = []
 
 # Enables Arbitrary impls for internal types (required to run tests)
-arbitrary = [ "proptest", "test-strategy" ]
+arbitrary = [ "proptest", "test-strategy", "imbl/proptest" ]
 
 # For debugging use only; not appropriate for production use.
 backtrace_overflow = [ "backtrace-on-stack-overflow" ]
