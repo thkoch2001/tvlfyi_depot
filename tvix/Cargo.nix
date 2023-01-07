@@ -649,6 +649,43 @@ rec {
         };
         resolvedDefaultFeatures = [ "default" "std" ];
       };
+      "bit-set" = rec {
+        crateName = "bit-set";
+        version = "0.5.3";
+        edition = "2015";
+        sha256 = "1wcm9vxi00ma4rcxkl3pzzjli6ihrpn9cfdi0c5b4cvga2mxs007";
+        authors = [
+          "Alexis Beingessner <a.beingessner@gmail.com>"
+        ];
+        dependencies = [
+          {
+            name = "bit-vec";
+            packageId = "bit-vec";
+            usesDefaultFeatures = false;
+          }
+        ];
+        features = {
+          "default" = [ "std" ];
+          "std" = [ "bit-vec/std" ];
+        };
+        resolvedDefaultFeatures = [ "default" "std" ];
+      };
+      "bit-vec" = rec {
+        crateName = "bit-vec";
+        version = "0.6.3";
+        edition = "2015";
+        sha256 = "1ywqjnv60cdh1slhz67psnp422md6jdliji6alq0gmly2xm9p7rl";
+        authors = [
+          "Alexis Beingessner <a.beingessner@gmail.com>"
+        ];
+        features = {
+          "default" = [ "std" ];
+          "serde" = [ "dep:serde" ];
+          "serde_no_std" = [ "serde/alloc" ];
+          "serde_std" = [ "std" "serde/std" ];
+        };
+        resolvedDefaultFeatures = [ "std" ];
+      };
       "bitflags" = rec {
         crateName = "bitflags";
         version = "1.3.2";
@@ -2446,6 +2483,11 @@ rec {
             packageId = "imbl-sized-chunks";
           }
           {
+            name = "proptest";
+            packageId = "proptest";
+            optional = true;
+          }
+          {
             name = "rand_core";
             packageId = "rand_core 0.6.4";
           }
@@ -2460,6 +2502,12 @@ rec {
             packageId = "version_check";
           }
         ];
+        devDependencies = [
+          {
+            name = "proptest";
+            packageId = "proptest";
+          }
+        ];
         features = {
           "arbitrary" = [ "dep:arbitrary" ];
           "proptest" = [ "dep:proptest" ];
@@ -2468,6 +2516,7 @@ rec {
           "refpool" = [ "dep:refpool" ];
           "serde" = [ "dep:serde" ];
         };
+        resolvedDefaultFeatures = [ "proptest" ];
       };
       "imbl-sized-chunks" = rec {
         crateName = "imbl-sized-chunks";
@@ -3589,6 +3638,11 @@ rec {
         ];
         dependencies = [
           {
+            name = "bit-set";
+            packageId = "bit-set";
+            optional = true;
+          }
+          {
             name = "bitflags";
             packageId = "bitflags";
           }
@@ -3609,7 +3663,7 @@ rec {
           }
           {
             name = "quick-error";
-            packageId = "quick-error";
+            packageId = "quick-error 2.0.1";
             optional = true;
           }
           {
@@ -3633,6 +3687,12 @@ rec {
             optional = true;
           }
           {
+            name = "rusty-fork";
+            packageId = "rusty-fork";
+            optional = true;
+            usesDefaultFeatures = false;
+          }
+          {
             name = "tempfile";
             packageId = "tempfile";
             optional = true;
@@ -3653,7 +3713,7 @@ rec {
           "timeout" = [ "fork" "rusty-fork/timeout" ];
           "x86" = [ "dep:x86" ];
         };
-        resolvedDefaultFeatures = [ "alloc" "break-dead-code" "lazy_static" "quick-error" "regex-syntax" "std" "tempfile" ];
+        resolvedDefaultFeatures = [ "alloc" "bit-set" "break-dead-code" "default" "fork" "lazy_static" "quick-error" "regex-syntax" "rusty-fork" "std" "tempfile" "timeout" ];
       };
       "prost" = rec {
         crateName = "prost";
@@ -3837,7 +3897,18 @@ rec {
         };
         resolvedDefaultFeatures = [ "default" "std" ];
       };
-      "quick-error" = rec {
+      "quick-error 1.2.3" = rec {
+        crateName = "quick-error";
+        version = "1.2.3";
+        edition = "2015";
+        sha256 = "1q6za3v78hsspisc197bg3g7rpc989qycy8ypr8ap8igv10ikl51";
+        authors = [
+          "Paul Colomiets <paul@colomiets.name>"
+          "Colin Kiegel <kiegel@gmx.de>"
+        ];
+
+      };
+      "quick-error 2.0.1" = rec {
         crateName = "quick-error";
         version = "2.0.1";
         edition = "2018";
@@ -4536,6 +4607,40 @@ rec {
           "David Tolnay <dtolnay@gmail.com>"
         ];
 
+      };
+      "rusty-fork" = rec {
+        crateName = "rusty-fork";
+        version = "0.3.0";
+        edition = "2018";
+        sha256 = "0kxwq5c480gg6q0j3bg4zzyfh2kwmc3v2ba94jw8ncjc8mpcqgfb";
+        authors = [
+          "Jason Lingle"
+        ];
+        dependencies = [
+          {
+            name = "fnv";
+            packageId = "fnv";
+          }
+          {
+            name = "quick-error";
+            packageId = "quick-error 1.2.3";
+          }
+          {
+            name = "tempfile";
+            packageId = "tempfile";
+          }
+          {
+            name = "wait-timeout";
+            packageId = "wait-timeout";
+            optional = true;
+          }
+        ];
+        features = {
+          "default" = [ "timeout" ];
+          "timeout" = [ "wait-timeout" ];
+          "wait-timeout" = [ "dep:wait-timeout" ];
+        };
+        resolvedDefaultFeatures = [ "timeout" "wait-timeout" ];
       };
       "rustyline" = rec {
         crateName = "rustyline";
@@ -6644,7 +6749,7 @@ rec {
           }
         ];
         features = {
-          "arbitrary" = [ "proptest" "test-strategy" ];
+          "arbitrary" = [ "proptest" "test-strategy" "imbl/proptest" ];
           "backtrace-on-stack-overflow" = [ "dep:backtrace-on-stack-overflow" ];
           "backtrace_overflow" = [ "backtrace-on-stack-overflow" ];
           "default" = [ "impure" "arbitrary" "nix_tests" "backtrace_overflow" ];
@@ -6921,6 +7026,24 @@ rec {
         sha256 = "0gs8grwdlgh0xq660d7wr80x14vxbizmd8dbp29p2pdncx8lp1s9";
         authors = [
           "Sergio Benitez <sb@sergio.bz>"
+        ];
+
+      };
+      "wait-timeout" = rec {
+        crateName = "wait-timeout";
+        version = "0.2.0";
+        edition = "2015";
+        crateBin = [ ];
+        sha256 = "1xpkk0j5l9pfmjfh1pi0i89invlavfrd9av5xp0zhxgb29dhy84z";
+        authors = [
+          "Alex Crichton <alex@alexcrichton.com>"
+        ];
+        dependencies = [
+          {
+            name = "libc";
+            packageId = "libc";
+            target = { target, features }: (target."unix" or false);
+          }
         ];
 
       };
