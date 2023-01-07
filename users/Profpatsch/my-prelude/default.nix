@@ -11,6 +11,7 @@ pkgs.haskellPackages.mkDerivation {
     ./Pretty.hs
     ./Data/Error/Tree.hs
     ./Aeson.hs
+    ./Test.hs
   ];
 
   isLibrary = true;
