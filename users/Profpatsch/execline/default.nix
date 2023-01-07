@@ -1,12 +1,6 @@
 { depot, pkgs, lib, ... }:
 
 let
-  exec-helpers = depot.nix.writers.rustSimpleLib
-    {
-      name = "exec-helpers";
-    }
-    (builtins.readFile ./exec_helpers.rs);
-
   exec-helpers-hs = pkgs.haskellPackages.mkDerivation {
     pname = "exec-helpers";
     version = "0.1.0";
@@ -48,7 +42,6 @@ let
 in
 depot.nix.readTree.drvTargets {
   inherit
-    exec-helpers
     exec-helpers-hs
     print-one-env
     ;
