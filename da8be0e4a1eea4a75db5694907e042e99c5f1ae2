@@ -33,6 +33,24 @@
       "message": "Shouldn\u0027t we make an abstract constructor again to encapsulate the internal represenattion?",
       "revId": "da8be0e4a1eea4a75db5694907e042e99c5f1ae2",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b6326c75_4c1ee319",
+        "filename": "tvix/eval/src/value/mod.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 565,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2023-01-07T21:23:30Z",
+      "side": 1,
+      "message": "There technically is one, but I had some type inference problems with it because there\u0027s an extremely generic instance of `from T\u003c: Into\u003cNixString\u003e\u003e for Value` which made things confusing with the multiple `.into()` calls (it kept trying to resolve into that instance).\n\nDefinitely some cleanup potential though.",
+      "parentUuid": "39f0a115_84e9a180",
+      "revId": "da8be0e4a1eea4a75db5694907e042e99c5f1ae2",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
