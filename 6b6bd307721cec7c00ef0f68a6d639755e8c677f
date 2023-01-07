@@ -16,6 +16,24 @@
       "message": "should be builtin_derivation, no?",
       "revId": "6b6bd307721cec7c00ef0f68a6d639755e8c677f",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b6159f23_ad9b0642",
+        "filename": "tvix/eval/src/tests/mod.rs",
+        "patchSetId": 3
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2023-01-07T12:28:32Z",
+      "side": 1,
+      "message": "Fixed in cl/7789",
+      "parentUuid": "bb4a5f3f_205ef4ce",
+      "revId": "6b6bd307721cec7c00ef0f68a6d639755e8c677f",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
