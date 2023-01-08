@@ -16,6 +16,24 @@
       "message": "Can you drop this and rebase on top of cl/7788?",
       "revId": "5d295e194d1ff245800998d27d5d679de2efc9df",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "74147f21_ead51634",
+        "filename": "tvix/derivation/src/derivation.rs",
+        "patchSetId": 5
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2023-01-08T11:49:36Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "1a0088cf_a3dc0647",
+      "revId": "5d295e194d1ff245800998d27d5d679de2efc9df",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
