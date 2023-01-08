@@ -18,6 +18,7 @@ let
     src = depot.users.Profpatsch.exactSource ./. [
       ./netencode.cabal
       ./Netencode.hs
+      ./Netencode/Parse.hs
     ];
 
     libraryHaskellDepends = [

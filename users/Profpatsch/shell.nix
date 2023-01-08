@@ -37,6 +37,7 @@ pkgs.mkShell {
       h.hspec-expectations-pretty-diff
       depot.users.Profpatsch.my-prelude
       depot.users.Profpatsch.netencode.netencode-hs
+      depot.users.Profpatsch.arglib.netencode.haskell
       depot.users.Profpatsch.execline.exec-helpers-hs
 
     ]))
