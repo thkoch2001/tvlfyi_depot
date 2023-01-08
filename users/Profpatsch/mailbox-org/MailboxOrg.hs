@@ -1,37 +1,48 @@
+{-# LANGUAGE ApplicativeDo #-}
 {-# LANGUAGE DataKinds #-}
 {-# LANGUAGE DerivingStrategies #-}
+{-# LANGUAGE DerivingVia #-}
 {-# LANGUAGE GHC2021 #-}
 {-# LANGUAGE LambdaCase #-}
 {-# LANGUAGE OverloadedRecordDot #-}
 {-# LANGUAGE OverloadedStrings #-}
 {-# LANGUAGE QuasiQuotes #-}
 {-# LANGUAGE RecordWildCards #-}
+{-# LANGUAGE NoFieldSelectors #-}
 {-# OPTIONS_GHC -Wall #-}
 
 module Main where
 
 import Aeson (parseErrorTree)
+import Control.Exception (try)
 import Control.Monad (replicateM)
 import Data.Aeson qualified as Json
 import Data.Aeson.BetterErrors qualified as Json
 import Data.Aeson.KeyMap qualified as KeyMap
 import Data.ByteString qualified as ByteString
 import Data.ByteString.Char8 qualified as Char8
-import Data.Error.Tree (prettyErrorTree)
+import Data.Error.Tree
+import Data.Functor.Compose
 import Data.List qualified as List
 import Data.Map.Strict qualified as Map
+import Data.Text qualified as Text
 import ExecHelpers
 import GHC.Records (HasField (..))
 import Label
 import MyPrelude
+import Netencode qualified
 import Network.HTTP.Conduit qualified as Client
 import Network.HTTP.Simple qualified as Client
 import Pretty
+import System.Directory qualified as File
+import System.Environment qualified as Env
 import System.Exit qualified as Exit
+import System.FilePath ((</>))
 import System.Process qualified as Proc
 import System.Random qualified as Random
 import System.Random.Stateful qualified as Random
 import Prelude hiding (log)
+import qualified Netencode.Parse as NetParse
 
 secret :: IO (T2 "email" ByteString "password" ByteString)
 secret = do
@@ -51,6 +62,93 @@ progName = "mailbox-org"
 log :: Error -> IO ()
 log err = do
   putStderrLn (errorContext progName.unCurrentProgramName err & prettyError)
+
+data Tools = Tools
+  { sieveTest :: Tool
+  }
+  deriving stock (Show)
+
+newtype Tool = Tool FilePath
+  deriving stock Show
+
+parseTools :: Applicative m => (Text -> m (Either Error Tool)) -> m (Either ErrorTree Tools)
+parseTools getTool = do
+  ( do
+        sieveTest <- get "sieve-test"
+        pure Tools {..}
+    ).getCompose <&> first (errorTree "Error reading tools") <&> validationToEither
+
+  where
+   get name = name & getTool <&> eitherToListValidation & Compose
+-- | Parse the tools from the given arglib input, and check that the executables exist
+parseToolsArglib :: Netencode.T -> IO Tools
+parseToolsArglib t = do
+  let oneTool name =
+        NetParse.asText
+          <&> textToString
+          <&> ( \path ->
+                  path
+                    & File.getPermissions
+                    <&> File.executable
+                    <&> ( \case
+                            False -> Left $  [fmt|Tool "{name}" is not an executable|]
+                            True -> Right (Tool path)
+                        )
+              )
+  let allTools =
+        parseTools (\name -> Compose $ NetParse.key name >>> oneTool name)
+          & getCompose
+  t
+    & NetParse.runParse
+      "test"
+      -- TODO: a proper ParseT for netencode values
+      ( NetParse.asRecord
+          >>> NetParse.key "BINS"
+          >>> NetParse.asRecord
+          >>> allTools
+      )
+    & orDo diePanic'
+    & join @IO
+    >>= orDo (\errs -> errs  & diePanic')
+
+-- | Just assume the tools exist by name in the environment.
+parseToolsToolname :: IO Tools
+parseToolsToolname =
+  parseTools
+    ( \name ->
+        checkInPath name <&> \case
+          False -> Left [fmt|"Cannot find "{name}" in PATH|]
+          True -> Right $ Tool (name & textToString)
+    )
+    >>= orDo diePanic'
+
+checkInPath :: Text -> IO Bool
+checkInPath name = do
+  Env.lookupEnv "PATH"
+    <&> annotate "No PATH set"
+    >>= orDo diePanic'
+    <&> stringToText
+    <&> Text.split (== ':')
+    <&> filter (/= "")
+    >>= traverse
+      ( \p ->
+          File.getPermissions ((textToString p) </> (textToString name))
+            <&> File.executable
+            & try @IOError
+            >>= \case
+              Left _ioError -> pure False
+              Right isExe -> pure isExe
+      )
+    <&> or
+
+diePanic' :: ErrorTree -> IO a
+diePanic' errs = errs & prettyErrorTree & diePanic progName
+
+orDo :: Applicative f => (t -> f a) -> Either t a -> f a
+orDo f = \case
+  Left e -> f e
+  Right a -> pure a
+
 
 main :: IO ()
 main =
@@ -96,6 +194,11 @@ applyFilterRule dat session = do
     (Json.key "data" Json.asArray >> pure ())
     (Json.Object mempty)
 
+data FilterRule = FilterRule
+  { actioncmds :: NonEmpty Json.Object,
+    test :: NonEmpty Json.Object
+  }
+
 data MailfilterList = MailfilterList
   { id_ :: Json.Value,
     rulename :: Text
@@ -120,7 +223,7 @@ applyFilters session = do
       ([] :: [()])
   let goal = Map.fromList [(label @"rulename" "another", 32), (label @"rulename" "xyz", 23)]
   let actions = declarativeUpdate goal filters
-  log [fmt|Would * create: {actions.toCreate & Map.keys & show}, * update: {actions.toUpdate & Map.keys & show}, * delete: {actions.toDelete & Map.keys & show}|]
+  log [fmt|To * create: {actions.toCreate & Map.keys & show}, * update: {actions.toUpdate & Map.keys & show}, * delete: {actions.toDelete & Map.keys & show}|]
   where
     -- filters
     --   & Map.elems
@@ -234,14 +337,13 @@ httpJSON errMsg parser req = do
               | "error" `KeyMap.member` obj
                   && "error_desc" `KeyMap.member` obj -> do
                   printPretty obj
-                  diePanic progName "Server returned above inline error"
+                  diePanic' "Server returned above inline error"
             _ -> pure ()
           val & Json.parseValue parser & \case
             Left errs ->
               errs
                 & parseErrorTree errMsg
-                & prettyErrorTree
-                & diePanic progName
+                & diePanic'
             Right a -> pure a
       )
 
