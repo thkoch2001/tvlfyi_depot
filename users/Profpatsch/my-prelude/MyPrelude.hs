@@ -1,4 +1,3 @@
-{-# LANGUAGE GHC2021 #-}
 {-# LANGUAGE ImplicitParams #-}
 {-# LANGUAGE LambdaCase #-}
 {-# LANGUAGE MagicHash #-}
@@ -52,10 +51,10 @@ module MyPrelude
     when,
     unless,
     guard,
-    ExceptT,
+    ExceptT (..),
     runExceptT,
-    MonadError,
-    throwError,
+    MonadThrow,
+    throwM,
     MonadIO,
     liftIO,
     MonadReader,
@@ -79,6 +78,8 @@ module MyPrelude
     traverseFold,
     traverseFold1,
     traverseFoldDefault,
+    MonadTrans,
+    lift,
 
     -- * Data types
     Coercible,
@@ -145,15 +146,15 @@ where
 import Control.Applicative ((<|>))
 import Control.Category (Category, (>>>))
 import Control.Monad (guard, join, unless, when)
+import Control.Monad.Catch (MonadThrow (throwM))
 import Control.Monad.Except
-  ( ExceptT,
-    MonadError,
+  ( ExceptT (..),
     runExceptT,
-    throwError,
   )
 import Control.Monad.IO.Class (MonadIO, liftIO)
 import Control.Monad.Identity (Identity (Identity))
 import Control.Monad.Reader (MonadReader, asks)
+import Control.Monad.Trans (MonadTrans (lift))
 import Data.Bifunctor (Bifunctor, bimap, first, second)
 import Data.ByteString
   ( ByteString,
