@@ -1,6 +1,7 @@
 {-# LANGUAGE AllowAmbiguousTypes #-}
 {-# LANGUAGE DeriveFunctor #-}
 {-# LANGUAGE DerivingStrategies #-}
+{-# LANGUAGE GHC2021 #-}
 {-# LANGUAGE GeneralizedNewtypeDeriving #-}
 {-# LANGUAGE LambdaCase #-}
 {-# LANGUAGE OverloadedStrings #-}
@@ -13,57 +14,56 @@
 module Netencode where
 
 import Control.Applicative (many)
-import qualified Data.Attoparsec.ByteString as Atto
-import qualified Data.Attoparsec.ByteString.Char8 as Atto.Char
-import qualified Data.ByteString as ByteString
+import Data.Attoparsec.ByteString qualified as Atto
+import Data.Attoparsec.ByteString.Char8 qualified as Atto.Char
+import Data.ByteString qualified as ByteString
 import Data.ByteString.Builder (Builder)
-import qualified Data.ByteString.Builder as Builder
-import qualified Data.ByteString.Lazy as ByteString.Lazy
+import Data.ByteString.Builder qualified as Builder
+import Data.ByteString.Lazy qualified as ByteString.Lazy
 import Data.Coerce (coerce)
 import Data.Fix (Fix (Fix))
-import qualified Data.Fix as Fix
+import Data.Fix qualified as Fix
 import Data.Functor.Classes (Eq1 (liftEq))
 import Data.Int (Int16, Int32, Int64, Int8)
 import Data.List.NonEmpty (nonEmpty)
 import Data.Map.NonEmpty (NEMap)
-import qualified Data.Map.NonEmpty as NEMap
-import qualified Data.Semigroup as Semi
+import Data.Map.NonEmpty qualified as NEMap
+import Data.Maybe (fromMaybe)
+import Data.Semigroup qualified as Semi
 import Data.String (IsString)
 import Data.Word (Word16, Word32, Word64)
 import GHC.Exts (fromString)
-import qualified Hedgehog as Hedge
-import qualified Hedgehog.Gen as Gen
-import qualified Hedgehog.Range as Range
+import Hedgehog qualified as Hedge
+import Hedgehog.Gen qualified as Gen
+import Hedgehog.Range qualified as Range
 import MyPrelude
 import Text.Show.Deriving
 import Prelude hiding (sum)
-import Data.Maybe (fromMaybe)
-
 
 -- | Netencode type base functor.
 --
 -- Recursive elements have a @rec@.
 data TF rec
-  = Unit
-  -- ^ Unit value
-  | N1 Bool
-  -- ^ Boolean (2^1)
-  | N3 Word8
-  -- ^ Byte (2^3)
-  | N6 Word64
-  -- ^ 64-bit Natural (2^6)
-  | I6 Int64
-  -- ^ 64-bit Integer (2^6)
-  | Text Text
-  -- ^ Unicode Text
-  | Bytes ByteString
-  -- ^ Arbitrary Bytestring
-  | Sum (Tag Text rec)
-  -- ^ A constructor of a(n open) Sum
-  | Record (NEMap Text rec)
-  -- ^ Record
-  | List [rec]
-  -- ^ List
+  = -- | Unit value
+    Unit
+  | -- | Boolean (2^1)
+    N1 Bool
+  | -- | Byte (2^3)
+    N3 Word8
+  | -- | 64-bit Natural (2^6)
+    N6 Word64
+  | -- | 64-bit Integer (2^6)
+    I6 Int64
+  | -- | Unicode Text
+    Text Text
+  | -- | Arbitrary Bytestring
+    Bytes ByteString
+  | -- | A constructor of a(n open) Sum
+    Sum (Tag Text rec)
+  | -- | Record
+    Record (NEMap Text rec)
+  | -- | List
+    List [rec]
   deriving stock (Show, Eq, Functor)
 
 instance Eq1 TF where
@@ -90,7 +90,7 @@ $(Text.Show.Deriving.deriveShow1 ''Tag)
 $(Text.Show.Deriving.deriveShow1 ''TF)
 
 -- | The Netencode type
-newtype T = T (Fix TF)
+newtype T = T {unT :: Fix TF}
   deriving stock (Eq, Show)
 
 -- | Create a unit
@@ -291,7 +291,8 @@ netencodeParserF inner = do
           Nothing -> fail "record is not allowed to have 0 elements"
           Just tags ->
             pure $
-              tags <&> (\t -> (t & tagTag, t & tagVal))
+              tags
+                <&> (\t -> (t & tagTag, t & tagVal))
                 -- later keys are preferred if they are duplicates, according to the standard
                 & NEMap.fromList
       _ <- Atto.Char.char '}' Atto.<?> "record did not end with }"
@@ -421,7 +422,9 @@ genNetencode =
       record
         <$> ( let k = Gen.text (Range.linear 3 10) Gen.lower
                   v = genNetencode
-               in NEMap.insertMap <$> k <*> v
+               in NEMap.insertMap
+                    <$> k
+                    <*> v
                     <*> ( (Gen.map (Range.linear 0 3)) $
                             (,) <$> k <*> v
                         )
