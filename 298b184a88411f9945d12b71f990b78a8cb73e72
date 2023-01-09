@@ -36,6 +36,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "9c2d860f_5db8a4f3",
+        "filename": "tvix/eval/src/value/attrs.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 166,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2023-01-09T23:09:09Z",
+      "side": 1,
+      "message": "It turns out that the explicit duplicate_field error doesn\u0027t work here, but serde allows us to map our error kind into its error type with the small change from cl/7802. I\u0027ve opted for that instead.",
+      "parentUuid": "aa5aed56_51020bfe",
+      "revId": "298b184a88411f9945d12b71f990b78a8cb73e72",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "3a99e1fd_a08b6695",
@@ -102,6 +120,24 @@
       "writtenOn": "2022-12-24T23:27:09Z",
       "side": 1,
       "message": "Those are ugly, but I\u0027m not sure if we have a better way to manage this.",
+      "revId": "298b184a88411f9945d12b71f990b78a8cb73e72",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cf7d8bf0_9302094f",
+        "filename": "tvix/eval/src/value/mod.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2023-01-09T23:09:09Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "2f1a319f_ecd6b2c7",
       "revId": "298b184a88411f9945d12b71f990b78a8cb73e72",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
