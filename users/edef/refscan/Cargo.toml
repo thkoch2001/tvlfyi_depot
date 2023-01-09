@@ -1,3 +1,6 @@
+# SPDX-FileCopyrightText: edef <edef@edef.eu>
+# SPDX-License-Identifier: MPL-2.0
+
 [package]
 name = "refscan"
 version = "0.1.0"

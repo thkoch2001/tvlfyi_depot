@@ -1,3 +1,6 @@
+// SPDX-FileCopyrightText: edef <edef@edef.eu>
+// SPDX-License-Identifier: MPL-2.0
+
 use std::{
     collections::BTreeSet as Set,
     convert::TryInto,

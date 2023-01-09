@@ -1,2 +1,5 @@
+# SPDX-FileCopyrightText: edef <edef@edef.eu>
+# SPDX-License-Identifier: CC0-1.0
+
 /target
 **/*.rs.bk
