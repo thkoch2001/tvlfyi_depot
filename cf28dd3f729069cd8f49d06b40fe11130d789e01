@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "dc8cf667_1bbabda0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2023-01-09T22:51:57Z",
+      "side": 1,
+      "message": "I\u0027m adopting this CL after discussing with Ryan on IRC.",
+      "revId": "cf28dd3f729069cd8f49d06b40fe11130d789e01",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
