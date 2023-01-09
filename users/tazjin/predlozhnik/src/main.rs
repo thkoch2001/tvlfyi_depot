@@ -49,6 +49,7 @@ lazy_static! {
             "в" => BTreeSet::from([Винительный, Предложный]),
             "вместо" => BTreeSet::from([Родительный]),
             "вне" => BTreeSet::from([Родительный]),
+            "внутри" => BTreeSet::from([Родительный]),
             "возле" => BTreeSet::from([Родительный]),
             "вокруг" => BTreeSet::from([Родительный]),
             "вроде" => BTreeSet::from([Родительный]),
