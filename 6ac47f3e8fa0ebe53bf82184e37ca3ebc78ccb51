@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3c64737f_90186a4b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2023-01-09T23:09:40Z",
+      "side": 1,
+      "message": "My changes are pretty minor and otherwise this LGTM, so I\u0027m approving.",
+      "revId": "6ac47f3e8fa0ebe53bf82184e37ca3ebc78ccb51",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
