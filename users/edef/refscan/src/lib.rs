@@ -1,3 +1,6 @@
+// SPDX-FileCopyrightText: edef <edef@edef.eu>
+// SPDX-License-Identifier: MPL-2.0
+
 use self::simd::u8x32;
 
 fn prefilter(haystack: u8x32) -> u32 {
