@@ -182,6 +182,30 @@
       },
       "revId": "620e0c9b57d35dedf75d83e4d51ba9e1a521cc63",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "afd8503e_a9d4d044",
+        "filename": "tvix/store/src/sled_path_info_service.rs",
+        "patchSetId": 11
+      },
+      "lineNbr": 67,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-01-09T14:37:12Z",
+      "side": 1,
+      "message": "I improved the error messages, and updated this to use to_string(). PTAL.",
+      "parentUuid": "61b3e4e5_88190018",
+      "range": {
+        "startLine": 67,
+        "startChar": 22,
+        "endLine": 67,
+        "endChar": 30
+      },
+      "revId": "620e0c9b57d35dedf75d83e4d51ba9e1a521cc63",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
