@@ -68,7 +68,7 @@ impl EvalWarning {
             }
 
             WarningKind::UselessInherit => {
-                format!("inherit does nothing (this variable already exists with the same value)")
+                "inherit does nothing (this variable already exists with the same value)".to_string()
             }
 
             WarningKind::UnusedBinding => {
@@ -95,19 +95,19 @@ impl EvalWarning {
             }
 
             WarningKind::DeadCode => {
-                format!("this code will never be executed")
+                "this code will never be executed".to_string()
             }
 
             WarningKind::EmptyInherit => {
-                format!("this `inherit` statement is empty")
+                "this `inherit` statement is empty".to_string()
             }
 
             WarningKind::EmptyLet => {
-                format!("this `let`-expression contains no bindings")
+                "this `let`-expression contains no bindings".to_string()
             }
 
             WarningKind::UselessParens => {
-                format!("these parenthesis can be removed")
+                "these parenthesis can be removed".to_string()
             }
 
             WarningKind::NotImplemented(what) => {
