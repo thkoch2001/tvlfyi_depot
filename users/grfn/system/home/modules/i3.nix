@@ -334,6 +334,8 @@ in
               };
             };
           }];
+
+          window.titlebar = true;
         };
       };
 
