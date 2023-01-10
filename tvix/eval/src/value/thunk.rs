@@ -25,6 +25,8 @@ use std::{
     rc::Rc,
 };
 
+use serde::Serialize;
+
 use crate::{
     errors::{Error, ErrorKind},
     spans::LightSpan,
@@ -304,6 +306,15 @@ impl TotalDisplay for Thunk {
 
             _ => f.write_str("internal[thunk]"),
         }
+    }
+}
+
+impl Serialize for Thunk {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        self.value().serialize(serializer)
     }
 }
 
