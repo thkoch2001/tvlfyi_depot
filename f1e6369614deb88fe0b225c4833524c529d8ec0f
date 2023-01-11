@@ -18,6 +18,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "209df15a_d79d281a",
+        "filename": "tvix/eval/docs/build-references.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2023-01-11T09:30:00Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "63731430_2ef13779",
+      "revId": "f1e6369614deb88fe0b225c4833524c529d8ec0f",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "a3b2ec9b_6103431c",
@@ -31,6 +49,24 @@
       "writtenOn": "2023-01-11T07:25:24Z",
       "side": 1,
       "message": "There also is builtins.storePath (https://nixos.org/manual/nix/stable/language/builtins.html#builtins-storePath), which can do the above. We should probably mention it here.",
+      "revId": "f1e6369614deb88fe0b225c4833524c529d8ec0f",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a8212902_68b30638",
+        "filename": "tvix/eval/docs/build-references.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 56,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2023-01-11T09:30:00Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a3b2ec9b_6103431c",
       "revId": "f1e6369614deb88fe0b225c4833524c529d8ec0f",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
@@ -52,6 +88,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "93d18834_2607ab05",
+        "filename": "tvix/eval/docs/build-references.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 65,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2023-01-11T09:30:00Z",
+      "side": 1,
+      "message": "It\u0027s the *set* of all outputs of that drv that were contained in the context, and which form part of the build closure of that derivation. In practice I suppose it uses this for granular sandboxing, as build sequencing is output-independent.",
+      "parentUuid": "d796383f_48b3b17d",
+      "revId": "f1e6369614deb88fe0b225c4833524c529d8ec0f",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "89cf79c3_cda22788",
@@ -69,6 +123,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "e9dac1a3_d352569e",
+        "filename": "tvix/eval/docs/build-references.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 67,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2023-01-11T09:30:00Z",
+      "side": 1,
+      "message": "We don\u0027t have a way to check (yet). However, I don\u0027t see a code path in C++ Nix that would create this condition (so far). Hence keeping a todo around.",
+      "parentUuid": "89cf79c3_cda22788",
+      "revId": "f1e6369614deb88fe0b225c4833524c529d8ec0f",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "d21ba8a9_182ab708",
@@ -82,6 +154,24 @@
       "writtenOn": "2023-01-11T07:25:24Z",
       "side": 1,
       "message": "It\u0027s also used to avoid pulling in a whole closure in some cases.",
+      "revId": "f1e6369614deb88fe0b225c4833524c529d8ec0f",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4d4bb01a_2d6969cd",
+        "filename": "tvix/eval/docs/build-references.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 153,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2023-01-11T09:30:00Z",
+      "side": 1,
+      "message": "Isn\u0027t that pretty much exclusively done to avoid IFD? The only useful thing you could do with that is let the actual build happen later, otherwise you just receive an output referencing things that don\u0027t exist (which you probably can\u0027t do anything with).",
+      "parentUuid": "d21ba8a9_182ab708",
       "revId": "f1e6369614deb88fe0b225c4833524c529d8ec0f",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
