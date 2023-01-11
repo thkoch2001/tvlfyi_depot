@@ -174,6 +174,24 @@
       "parentUuid": "d21ba8a9_182ab708",
       "revId": "f1e6369614deb88fe0b225c4833524c529d8ec0f",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b01613c9_3e1bf48b",
+        "filename": "tvix/eval/docs/build-references.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 153,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-01-11T11:21:02Z",
+      "side": 1,
+      "message": "no, check the sshd initrd config example, which uses it to avoid pulling in too much stuff into initrd",
+      "parentUuid": "4d4bb01a_2d6969cd",
+      "revId": "f1e6369614deb88fe0b225c4833524c529d8ec0f",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
