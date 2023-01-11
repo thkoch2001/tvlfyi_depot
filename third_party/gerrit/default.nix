@@ -13,7 +13,12 @@ let
       (pkgs.bazel_5.override { enableNixHacks = true; })
       pkgs.jdk11_headless
       pkgs.zlib
-      pkgs.python
+      (pkgs.python.overrideAttrs (old: {
+        meta = old.meta // {
+          # Ignore Python 2.7 EOL since it's a build only dependency here
+          knownVulnerabilities = [ /* I pretend I do not see it */ ];
+        };
+      }))
       pkgs.curl
       pkgs.nodejs
       pkgs.yarn
