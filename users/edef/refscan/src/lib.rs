@@ -65,6 +65,7 @@ mod simd {
         std::ptr,
     };
 
+    #[allow(non_camel_case_types)]
     #[derive(Copy, Clone)]
     pub struct u8x32(__m256i);
 
