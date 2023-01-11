@@ -103,6 +103,25 @@ depot.nix.readTree.drvTargets {
   # https://github.com/edolstra/nix-serve/issues/28
   nix-serve = super.nix-serve.override { nix = super.nix_2_3; };
 
+  # To make //users/tazjin/emacs:tdlibCheck happy
+  # TODO(tazjin): upstream into nixpkgs
+  tdlib = super.tdlib.overrideAttrs (oldAttrs:
+    let
+      newVersion = "1.8.10";
+      rev = "64406035a72d523421fef6d0c07bdf56fee0761e";
+      sha256 = "018f5h9lpfqllbr08szqaxq3dk3sz2ljspbf3iifs8cq1jakm4c4";
+    in
+    assert self.lib.versionOlder oldAttrs.version newVersion;
+    {
+      version = newVersion;
+      src = self.fetchFromGitHub {
+        owner = "tdlib";
+        repo = "td";
+        inherit rev sha256;
+      };
+    }
+  );
+
   # Avoid builds of mkShell derivations in CI.
   mkShell = super.lib.makeOverridable (args: (super.mkShell args).overrideAttrs (_: {
     passthru = {
