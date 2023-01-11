@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b6a16713_85c41be2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-01-11T19:30:48Z",
+      "side": 1,
+      "message": "I was able to run cargo test on this from an aarch64-linux box.",
+      "revId": "7a1f72fe80898a9e87b5d1220113e689794cd9c2",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
