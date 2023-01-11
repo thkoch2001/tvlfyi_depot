@@ -1,0 +1,89 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "63731430_2ef13779",
+        "filename": "tvix/eval/docs/build-references.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-01-11T07:25:24Z",
+      "side": 1,
+      "message": "*not* pull in its outputs.",
+      "revId": "f1e6369614deb88fe0b225c4833524c529d8ec0f",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a3b2ec9b_6103431c",
+        "filename": "tvix/eval/docs/build-references.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 56,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-01-11T07:25:24Z",
+      "side": 1,
+      "message": "There also is builtins.storePath (https://nixos.org/manual/nix/stable/language/builtins.html#builtins-storePath), which can do the above. We should probably mention it here.",
+      "revId": "f1e6369614deb88fe0b225c4833524c529d8ec0f",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d796383f_48b3b17d",
+        "filename": "tvix/eval/docs/build-references.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 65,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-01-11T07:25:24Z",
+      "side": 1,
+      "message": "Dot at the end of the phrase. What means \"accessible\" here? The list of output names referenced in the .drv? Or the list if all outputs that .drv has?",
+      "revId": "f1e6369614deb88fe0b225c4833524c529d8ec0f",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "89cf79c3_cda22788",
+        "filename": "tvix/eval/docs/build-references.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 67,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-01-11T07:25:24Z",
+      "side": 1,
+      "message": "Do we have examples in nixpkgs with this condition?",
+      "revId": "f1e6369614deb88fe0b225c4833524c529d8ec0f",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d21ba8a9_182ab708",
+        "filename": "tvix/eval/docs/build-references.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 153,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-01-11T07:25:24Z",
+      "side": 1,
+      "message": "It\u0027s also used to avoid pulling in a whole closure in some cases.",
+      "revId": "f1e6369614deb88fe0b225c4833524c529d8ec0f",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
