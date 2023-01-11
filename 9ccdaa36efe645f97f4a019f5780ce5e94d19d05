@@ -33,6 +33,24 @@
       "message": "I\u0027d probably use the Derivation struct here, and its to_string() method, rather than dumping a big ATerm here, but that\u0027s personal taste.",
       "revId": "9ccdaa36efe645f97f4a019f5780ce5e94d19d05",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c44f149c_290f6835",
+        "filename": "tvix/cli/src/refscan.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 54,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2023-01-11T15:54:47Z",
+      "side": 1,
+      "message": "I prefer having an explicit literal here, not everyone opening the code might be intricately familiar with how a derivation serialises.",
+      "parentUuid": "009768fb_0b3ab49a",
+      "revId": "9ccdaa36efe645f97f4a019f5780ce5e94d19d05",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
