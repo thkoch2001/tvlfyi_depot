@@ -55,6 +55,7 @@ mod test {
     }
 }
 
+#[cfg(any(target_arch = "x86", target_arch = "x86_64"))]
 mod simd {
     #[cfg(target_arch = "x86")]
     use std::arch::x86 as arch;
@@ -84,6 +85,65 @@ mod simd {
         #[inline(always)]
         pub fn gt(self, b: Self) -> u32 {
             unsafe { _mm256_movemask_epi8(_mm256_cmpgt_epi8(self.0, b.0)) as u32 }
+        }
+
+        #[inline(always)]
+        pub fn lt(self, b: Self) -> u32 {
+            b.gt(self)
+        }
+    }
+}
+
+#[cfg(target_arch = "aarch64")]
+mod simd {
+    use std::{
+        arch::aarch64::{
+            uint8x16_t as u8x16, vaddv_u8, vandq_u8, vcgtq_u8, vdupq_n_u8, vget_high_u8,
+            vget_low_u8, vshlq_u8,
+        },
+        mem, ptr,
+    };
+
+    #[allow(non_camel_case_types)]
+    #[derive(Copy, Clone)]
+    #[repr(transparent)]
+    pub struct u8x32([u8x16; 2]);
+
+    impl u8x32 {
+        #[cfg(target_endian = "little")]
+        #[inline(always)]
+        pub fn from_slice_unaligned(slice: &[u8]) -> Self {
+            assert_eq!(slice.len(), 32);
+            u8x32(unsafe { ptr::read_unaligned(slice.as_ptr().cast()) })
+        }
+
+        #[inline(always)]
+        pub fn splat(x: u8) -> Self {
+            u8x32(unsafe {
+                let x = vdupq_n_u8(x);
+                [x, x]
+            })
+        }
+
+        #[inline(always)]
+        pub fn gt(&self, b: Self) -> u32 {
+            let u8x32([al, ah]) = *self;
+            let u8x32([bl, bh]) = b;
+
+            fn f(a: u8x16, b: u8x16) -> u32 {
+                unsafe {
+                    let c = vshlq_u8(
+                        vandq_u8(vdupq_n_u8(0x80), vcgtq_u8(a, b)),
+                        mem::transmute([
+                            -7, -6, -5, -4, -3, -2, -1, 0, -7, -6, -5, -4, -3, -2, -1, 0i8,
+                        ]),
+                    );
+
+                    (vaddv_u8(vget_low_u8(c)) as u32) << 0 | (vaddv_u8(vget_high_u8(c)) as u32) << 8
+                }
+            }
+
+            f(al, bl) << 0 | f(ah, bh) << 16
         }
 
         #[inline(always)]
