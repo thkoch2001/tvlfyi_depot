@@ -192,6 +192,24 @@
       "parentUuid": "4d4bb01a_2d6969cd",
       "revId": "f1e6369614deb88fe0b225c4833524c529d8ec0f",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "280e05c2_88c0a9f0",
+        "filename": "tvix/eval/docs/build-references.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 153,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2023-01-11T12:23:59Z",
+      "side": 1,
+      "message": "I checked that example and quite a few others. The initrd one is a workaround for incorrectly retained string context in cppnix (a bug). It seems there are no valid uses in nixpkgs itself. There might be some in the wild (like [0]), but I haven\u0027t verified those yet.\n\nThe sentence remains true as is :)\n\n[0]: https://github.com/infinisil/nixus/blob/master/modules/secrets.nix",
+      "parentUuid": "b01613c9_3e1bf48b",
+      "revId": "f1e6369614deb88fe0b225c4833524c529d8ec0f",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }

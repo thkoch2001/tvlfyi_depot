@@ -20,6 +20,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "06b5b6b7_e578fa6d",
+        "filename": "tvix/eval/docs/build-references.md",
+        "patchSetId": 3
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2023-01-11T12:23:59Z",
+      "side": 1,
+      "message": "That only covers one half of it, it would also be having `!\u003cout\u003e!\u003cdrv\u003e` entries for every other path that *occurs* inside the drv (including its inputs).",
+      "parentUuid": "f18fe9ac_8add6bc2",
+      "revId": "8b53ad11f8969c6c2d65e91060ba8883e99518d8",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "6c822bc3_fb63c519",
         "filename": "tvix/eval/docs/build-references.md",
         "patchSetId": 3
@@ -31,6 +49,24 @@
       "writtenOn": "2023-01-11T11:24:09Z",
       "side": 1,
       "message": "C++ Nix (on master) calls these `NixStringContextElem::Built`.",
+      "revId": "8b53ad11f8969c6c2d65e91060ba8883e99518d8",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e34bc41d_1f723ed1",
+        "filename": "tvix/eval/docs/build-references.md",
+        "patchSetId": 3
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2023-01-11T12:23:59Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "6c822bc3_fb63c519",
       "revId": "8b53ad11f8969c6c2d65e91060ba8883e99518d8",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
@@ -52,6 +88,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "babbbf1e_55461289",
+        "filename": "tvix/eval/docs/build-references.md",
+        "patchSetId": 3
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2023-01-11T12:23:59Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "9a25fe61_88b4c988",
+      "revId": "8b53ad11f8969c6c2d65e91060ba8883e99518d8",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "80261717_66ce565c",
@@ -69,6 +123,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "1a425680_bb9020a4",
+        "filename": "tvix/eval/docs/build-references.md",
+        "patchSetId": 3
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2023-01-11T12:23:59Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "80261717_66ce565c",
+      "revId": "8b53ad11f8969c6c2d65e91060ba8883e99518d8",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "679061dd_3156c092",
@@ -82,6 +154,30 @@
       "writtenOn": "2023-01-11T11:24:09Z",
       "side": 1,
       "message": "Some kinds of (invisible) coercion, e.g. what builtins.import, builtins.readFile do with their argument.",
+      "range": {
+        "startLine": 52,
+        "startChar": 23,
+        "endLine": 52,
+        "endChar": 43
+      },
+      "revId": "8b53ad11f8969c6c2d65e91060ba8883e99518d8",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "988b5443_18fb9a0b",
+        "filename": "tvix/eval/docs/build-references.md",
+        "patchSetId": 3
+      },
+      "lineNbr": 52,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2023-01-11T12:23:59Z",
+      "side": 1,
+      "message": "Yeah, all of their operations add these things to Tvix\u0027s known paths.",
+      "parentUuid": "679061dd_3156c092",
       "range": {
         "startLine": 52,
         "startChar": 23,
