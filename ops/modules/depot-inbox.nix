@@ -106,6 +106,7 @@ in
         nntpserver = [ "inbox.tvl.su" ];
         imapserver = "inbox.tvl.su";
 
+        depot.listid = "inbox.tvl.su";
         depot.obfuscate = true;
         noObfuscate = [
           "tvl.su"
