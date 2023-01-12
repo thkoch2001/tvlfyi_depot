@@ -133,6 +133,13 @@ in
       script = ''
         mkdir -p /var/lib/public-inbox/depot-imap
         ${pkgs.offlineimap}/bin/offlineimap -c ${imapConfig}
+
+        # for all new mails, use msed to add the List-Id header if not present.
+        for f in new/*; do
+          tf=$(mktemp -p tmp)
+          ${pkgs.mblaze}/bin/msed /List-Id/a/<inbox.tvl.su>/ - < $f > $tf
+          mv $tf $f;
+        done
       '';
 
       serviceConfig = {
