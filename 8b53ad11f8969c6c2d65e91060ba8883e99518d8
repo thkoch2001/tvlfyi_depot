@@ -36,6 +36,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "8d0a0fc4_9729d4fe",
+        "filename": "tvix/eval/docs/build-references.md",
+        "patchSetId": 3
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2023-01-12T11:01:38Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "06b5b6b7_e578fa6d",
+      "revId": "8b53ad11f8969c6c2d65e91060ba8883e99518d8",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "6c822bc3_fb63c519",
@@ -178,6 +196,30 @@
       "side": 1,
       "message": "Yeah, all of their operations add these things to Tvix\u0027s known paths.",
       "parentUuid": "679061dd_3156c092",
+      "range": {
+        "startLine": 52,
+        "startChar": 23,
+        "endLine": 52,
+        "endChar": 43
+      },
+      "revId": "8b53ad11f8969c6c2d65e91060ba8883e99518d8",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9f02ec76_784ac16d",
+        "filename": "tvix/eval/docs/build-references.md",
+        "patchSetId": 3
+      },
+      "lineNbr": 52,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2023-01-12T11:01:38Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "988b5443_18fb9a0b",
       "range": {
         "startLine": 52,
         "startChar": 23,
