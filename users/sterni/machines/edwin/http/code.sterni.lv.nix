@@ -14,7 +14,7 @@ let
         "mirror/depot" = {
           description = "monorepo for the virus lounge";
           upstream = "https://code.tvl.fyi/depot.git";
-          cgit.defaultBranch = "canon";
+          cgit.defbranch = "canon";
         };
         "mirror/flipdot-gschichtler" = {
           description = "message queue system for OpenLab's flipdot display";
@@ -40,12 +40,12 @@ let
         };
         haskell-dot-time = {
           description = "UTC-centric time library for haskell with dot time support";
-          cgit.defaultBranch = "main";
+          cgit.defbranch = "main";
         };
         buchstabensuppe = {
           description = "toy font rendering for low pixelcount, high contrast displays";
-          cgit.defaultBranch = "main";
           upstream = "https://github.com/sternenseemann/buchstabensuppe.git";
+          cgit.defbranch = "main";
         };
         "mirror/saneterm" = {
           description = "modern line-oriented terminal emulator without support for TUIs";
@@ -130,6 +130,7 @@ let
       lib.concatMapStringsSep "\n" (section:
         ''
           section=${section.section}
+
         ''
         + builtins.concatStringsSep "\n\n" (lib.mapAttrsToList cgitRepoEntry section.repos)
       ) repoSections
