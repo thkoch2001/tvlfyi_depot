@@ -13,17 +13,18 @@ use std::io;
 
 /// Represents a "primed" reference scanner with an automaton that knows the set
 /// of store paths to scan for.
-pub struct ReferenceScanner<'c, 's> {
-    candidates: &'c [&'s str],
+pub struct ReferenceScanner<'s> {
+    candidates: Vec<&'s str>,
     searcher: AhoCorasick,
     matches: BTreeSet<&'s str>,
 }
 
-impl<'c, 's> ReferenceScanner<'c, 's> {
+impl<'s> ReferenceScanner<'s> {
     /// Construct a new `ReferenceScanner` that knows how to scan for the given
     /// candidate store paths.
-    pub fn new(candidates: &'c [&'s str]) -> Self {
-        let searcher = AhoCorasick::new_auto_configured(candidates);
+    pub fn new<V: Into<Vec<&'s str>>>(candidates: V) -> Self {
+        let candidates = candidates.into();
+        let searcher = AhoCorasick::new_auto_configured(&candidates);
 
         ReferenceScanner {
             searcher,
