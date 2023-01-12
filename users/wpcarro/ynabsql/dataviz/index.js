@@ -27,15 +27,21 @@ function randomExpense() {
 }
 
 // Browser starts to choke around 10,000 data points.
-function generateData() {
-  return Array(2000).fill(0).map(x => ({
-    // select a random day [0, 365]
-    x: Math.floor(Math.random() * 365),
-    // select a random USD amount in the range [1, 5,000]
-    y: randomExpense(),
-    // TODO(wpcarro): Attach transaction to `metadata` key.
-    metadata: { foo: 'bar' },
-  }));
+function curateData(data) {
+  const xs = data.data.transactions
+    .filter(x => x.Account === 'USAA (checking)')
+    .map(x => ({ ...x, Outflow: parseFloat(x.Outflow.slice(1)) }))
+    .filter(x => x.Outflow > 500);
+
+  return data.data.transactions
+    .filter(x => x.Account === 'USAA (checking)')
+    .map(x => ({ ...x, Outflow: parseFloat(x.Outflow.slice(1)) }))
+    .filter(x => x.Outflow > 500)
+    .map(x => ({
+      x: new Date(x.Date),
+      y: x.Outflow,
+      metadata: x,
+    }));
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -50,12 +56,20 @@ new Chart(mount, {
     datasets: [
       {
         label: 'Expenses',
-        data: generateData(),
+        data: curateData(data),
         backgroundColor: colors.red,
       }
     ],
   },
   options: {
+    scales: {
+      x: {
+          type: 'time',
+          time: {
+              unit: 'month'
+          }
+      },
+    },
     plugins: {
       tooltip: {
         callbacks: {
@@ -63,7 +77,11 @@ new Chart(mount, {
             return `$${x[0].raw.y}`;
           },
           label: function (x) {
-            return JSON.stringify(x.raw.metadata);
+            const { Category, Payee, Memo } = x.raw.metadata;
+            if (Memo === '') {
+              return `${Payee} (${Category})`;
+            }
+            return `${Payee} (${Category}) - ${Memo}`;
           },
         },
       },
