@@ -87,6 +87,7 @@ in
 
         description = "TVL depot development (mail to depot@tvl.su)";
         coderepo = [ "depot" ];
+        listid = "inbox.tvl.su";
         url = "https://inbox.tvl.su/depot";
 
         watch = [
@@ -133,6 +134,13 @@ in
       script = ''
         mkdir -p /var/lib/public-inbox/depot-imap
         ${pkgs.offlineimap}/bin/offlineimap -c ${imapConfig}
+
+        # for all new mails, use msed to add the List-Id header if not present.
+        for f in /var/lib/public-inbox/depot-imap/INBOX/new/*; do
+          tf=$(mktemp -p tmp)
+          ${pkgs.mblaze}/bin/msed '/List-Id/a/<inbox.tvl.su>/' - < $f > $tf
+          mv $tf $f;
+        done
       '';
 
       serviceConfig = {
