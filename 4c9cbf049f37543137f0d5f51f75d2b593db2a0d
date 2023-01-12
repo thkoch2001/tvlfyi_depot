@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7fe398b2_934b5211",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2023-01-12T14:35:32Z",
+      "side": 1,
+      "message": "This only affects ingestion into public inbox. Public inbox does not modify the mails to add headers.",
+      "revId": "4c9cbf049f37543137f0d5f51f75d2b593db2a0d",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
