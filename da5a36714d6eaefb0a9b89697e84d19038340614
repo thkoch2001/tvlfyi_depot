@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e4b21bda_baf3bcb4",
+        "filename": "tvix/cli/src/known_paths.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-01-13T09:22:26Z",
+      "side": 1,
+      "message": "Should this be a StorePath instead of a string?",
+      "revId": "da5a36714d6eaefb0a9b89697e84d19038340614",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1a352955_e3289659",
+        "filename": "tvix/cli/src/known_paths.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-01-13T09:22:26Z",
+      "side": 1,
+      "message": "Should this be a StorePath instead of a string?",
+      "revId": "da5a36714d6eaefb0a9b89697e84d19038340614",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b68e46ab_ca75ddbd",
+        "filename": "tvix/cli/src/known_paths.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-01-13T09:22:26Z",
+      "side": 1,
+      "message": "They key is by store path, so this is mostly a rant about multiple copies of a .drv path in the structure?",
+      "revId": "da5a36714d6eaefb0a9b89697e84d19038340614",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
