@@ -59,10 +59,10 @@ new Chart(mount, {
     plugins: {
       tooltip: {
         callbacks: {
-          title: function (x) {
+          title: function(x) {
             return `$${x[0].raw.y}`;
           },
-          label: function (x) {
+          label: function(x) {
             return JSON.stringify(x.raw.metadata);
           },
         },
