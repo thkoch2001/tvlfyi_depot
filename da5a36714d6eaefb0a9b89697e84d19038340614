@@ -18,6 +18,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "ef27c382_50e75eed",
+        "filename": "tvix/cli/src/known_paths.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2023-01-13T09:29:41Z",
+      "side": 1,
+      "message": "No, as the reference scanner needs to borrow the fully constructed string of the whole path while running. It\u0027d also just be converting to/from String at every use-site, I don\u0027t think that adds any value.",
+      "parentUuid": "e4b21bda_baf3bcb4",
+      "revId": "da5a36714d6eaefb0a9b89697e84d19038340614",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "1a352955_e3289659",
@@ -35,6 +53,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "b131cc07_6553d9ce",
+        "filename": "tvix/cli/src/known_paths.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2023-01-13T09:29:41Z",
+      "side": 1,
+      "message": "same as above",
+      "parentUuid": "1a352955_e3289659",
+      "revId": "da5a36714d6eaefb0a9b89697e84d19038340614",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "b68e46ab_ca75ddbd",
@@ -48,6 +84,24 @@
       "writtenOn": "2023-01-13T09:22:26Z",
       "side": 1,
       "message": "They key is by store path, so this is mostly a rant about multiple copies of a .drv path in the structure?",
+      "revId": "da5a36714d6eaefb0a9b89697e84d19038340614",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "92b443b3_b5881aec",
+        "filename": "tvix/cli/src/known_paths.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2023-01-13T09:29:41Z",
+      "side": 1,
+      "message": "I can remove the comment, but yes if there are paths in the enum variants then they\u0027re always duplicated (as they definitely also exist as map keys).",
+      "parentUuid": "b68e46ab_ca75ddbd",
       "revId": "da5a36714d6eaefb0a9b89697e84d19038340614",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
