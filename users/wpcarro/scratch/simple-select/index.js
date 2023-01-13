@@ -1,6 +1,3 @@
-// const input = '-director:"Von \\"Fluke\\" Neumann" foo:/this is a test/ (director:"Tarantino" OR director:"Scorsese")';
-const input = 'director:"Tarantino" OR director:"Scorsese"';
-
 const state = {
     // Match values case sensitively when filtering.
     caseSensitive: false,
@@ -8,8 +5,8 @@ const state = {
     preferRegex: false,
 };
 
-// TODO(wpcarro): Support global queries like "Tarantino" that try to match against all columns in a row.
 // TODO(wpcarro): Support filtering by date (before, after).
+// TODO(wpcarro): Support grouping with parentheses.
 
 function select(query, xs) {
     const predicate = compile(parse(query));
@@ -37,6 +34,24 @@ function compile(ast) {
         return function(row) {
             return ast.negate ? f(row[ast.key]) : f(row[ast.key]);
         };
+    }
+    if (ast.type === 'MATCH_ALL') {
+        if (ast.matchType === 'STRING') {
+            return function(row) {
+                return Object.values(row).some(x => {
+                    if (state.caseSensitive) {
+                        return x === ast.val;
+                    } else {
+                        return x.toLowerCase() === ast.val.toLowerCase();
+                    }
+                })
+            };
+        }
+        if (ast.matchType === 'REGEX') {
+            return function(row) {
+                return Object.values(row).some(x => ast.val.test(x));
+            };
+        }
     }
     if (ast.type === 'STRING') {
         return function(x) {
@@ -225,9 +240,18 @@ function conjunction(p) {
     };
 }
 
+function peekType(n, p) {
+    if (p.i + n < p.tokens.length) {
+        return p.tokens[p.i + n][0];
+    }
+    return null;
+}
+
 function selection(p) {
     // column:value OR -column:value
-    if (matches((type, _) => type === 'ATOM' || type === 'NEGATE', p)) {
+
+    if ((peekType(0, p) === 'ATOM' && peekType(1, p) === 'COLON') ||
+        (peekType(0, p) === 'NEGATE' && peekType(1, p) === 'ATOM' && peekType(2, p) === 'COLON')) {
         let negate = false;
         if (p.tokens[p.i][0] === 'NEGATE') {
             negate = true;
@@ -243,8 +267,33 @@ function selection(p) {
             val,
         };
     } else {
-        return value(p);
+        return matchAll(p);
     }
+}
+
+function matchAll(p) {
+    const [type, val] = p.tokens[p.i];
+
+    // Cast atoms into strings or regexes depending on the current state.
+    if (type === 'ATOM') {
+        p.i += 1;
+        if (state.preferRegex) {
+            const regex = state.caseSensitive ? new RegExp(val) : new RegExp(val, "i");
+            return { type: 'MATCH_ALL', matchType: 'REGEX', val: regex };
+        } else {
+            return { type: 'MATCH_ALL', matchType: 'STRING', val }
+        }
+    }
+    if (type === 'STRING') {
+        p.i += 1;
+        return { type: 'MATCH_ALL', matchType: 'STRING', val };
+    }
+    if (type === 'REGEX') {
+        p.i += 1;
+        const regex = state.caseSensitive ? new RegExp(val) : new RegExp(val, "i");
+        return { type: 'MATCH_ALL', matchType: 'REGEX', val: regex };
+    }
+    throw `Parse Error: Expected a regular expression or a string, but got: ${p.tokens[p.i]}; ${JSON.stringify(p)}`;
 }
 
 function value(p) {
