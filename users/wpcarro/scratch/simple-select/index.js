@@ -2,7 +2,9 @@ const state = {
     // Match values case sensitively when filtering.
     caseSensitive: false,
     // Coerce values into regular expressions (instead of strings) when they're defined as atoms.
-    preferRegex: false,
+    preferRegex: true,
+    // The key in the JS object that hosts the Date type against which we filter.
+    dateKey: 'Date',
 };
 
 // TODO(wpcarro): Support filtering by date (before, after).
@@ -29,10 +31,40 @@ function compile(ast) {
             };
         }
     }
+    if (ast.type === 'DATE_SELECTION') {
+        if (ast.key === 'before') {
+            return function(row) {
+                let t = new Date();
+                if (ast.val === 'yesterday') {
+                    t.setDate(t.getDate() - 1);
+                    console.log(t);
+                } 
+                // MM/DD/YYYY
+                else {
+                    t = new Date(ast.val);
+                }
+                return row[state.dateKey] < t;
+            };
+        }
+        if (ast.key === 'after') {
+            return function(row) {
+                let t = new Date();
+                if (ast.val === 'yesterday') {
+                    t.setDate(t.getDate() - 1);
+                    console.log(t);
+                } 
+                // MM/DD/YYYY
+                else {
+                    t = new Date(ast.val);
+                }
+                return row[state.dateKey] > t;
+            };
+        }
+    }
     if (ast.type === 'SELECTION') {
         const f = compile(ast.val);
         return function(row) {
-            return ast.negate ? f(row[ast.key]) : f(row[ast.key]);
+            return ast.negate ? !f(row[ast.key]) : f(row[ast.key]);
         };
     }
     if (ast.type === 'MATCH_ALL') {
@@ -249,23 +281,34 @@ function peekType(n, p) {
 
 function selection(p) {
     // column:value OR -column:value
-
     if ((peekType(0, p) === 'ATOM' && peekType(1, p) === 'COLON') ||
         (peekType(0, p) === 'NEGATE' && peekType(1, p) === 'ATOM' && peekType(2, p) === 'COLON')) {
+
         let negate = false;
         if (p.tokens[p.i][0] === 'NEGATE') {
             negate = true;
             p.i += 1;
         }
+
         const key = match((type, _) => type === 'ATOM', 'a column label', p);
         expect((type, val) => type === 'COLON', 'a colon', p);
-        const val = value(p);
-        return {
-            type: 'SELECTION',
-            negate,
-            key,
-            val,
-        };
+
+        if (key === 'before' || key === 'after') {
+            const val = date(p);
+            return {
+                type: 'DATE_SELECTION',
+                key,
+                val,
+            };
+        } else {
+            const val = value(p);
+            return {
+                type: 'SELECTION',
+                negate,
+                key,
+                val,
+            };
+        }
     } else {
         return matchAll(p);
     }
@@ -319,4 +362,11 @@ function value(p) {
         return { type, val: regex };
     }
     throw `Parse Error: Expected a regular expression or a string, but got: ${p.tokens[p.i]}; ${JSON.stringify(p)}`;
+}
+
+function date(p) {
+    const [type, val] = p.tokens[p.i];
+    p.i += 1;
+
+    return val;
 }
