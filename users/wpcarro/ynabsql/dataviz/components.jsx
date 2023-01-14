@@ -1,4 +1,9 @@
-const colors = { 
+import React from 'react';
+import ReactDOM from 'react-dom/client';
+import Chart from 'chart.js/auto';
+import 'chartjs-adapter-date-fns';
+
+const colors = {
     red: 'rgb(255, 45, 70)',
     green: 'rgb(75, 192, 35)',
     white: 'rgb(249, 246, 238)',
@@ -8,7 +13,7 @@ const colors = {
     brown: 'rgb(205, 127, 50)',
     black: 'rgb(53, 57, 53)',
 };
-  
+
 const months = [
     'January',
     'February',
@@ -23,21 +28,22 @@ const months = [
     'November',
     'December',
 ];
-  
+
 function getWeek(x) {
     const dowOffset = 0;
-    var newYear = new Date(x.getFullYear(), 0, 1);
-    var day = newYear.getDay() - dowOffset; //the day of week the year begins on
+    const newYear = new Dte(x.getFullYear(), 0, 1);
+    let day = newYear.getDay() - dowOffset; //the day of week the year begins on
     day = (day >= 0 ? day : day + 7);
-    var daynum = Math.floor((x.getTime() - newYear.getTime() -
+    const daynum = Math.floor((x.getTime() - newYear.getTime() -
         (x.getTimezoneOffset() - newYear.getTimezoneOffset()) * 60000) / 86400000) + 1;
-    var weeknum;
+    let weeknum;
+
     //if the year starts before the middle of a week
     if (day < 4) {
         weeknum = Math.floor((daynum + day - 1) / 7) + 1;
         if (weeknum > 52) {
-            nYear = new Date(x.getFullYear() + 1, 0, 1);
-            nday = nYear.getDay() - dowOffset;
+            const nYear = new Date(x.getFullYear() + 1, 0, 1);
+            let nday = nYear.getDay() - dowOffset;
             nday = nday >= 0 ? nday : nday + 7;
             /*if the next year starts before the middle of
               the week, it is week #1 of that year*/
@@ -49,7 +55,32 @@ function getWeek(x) {
     }
     return weeknum;
 }
-  
+
+// Convert a sorting expressions (e.g. "Outflow DESC; Date ASC; Category ASC")
+// into a function that can be passed to Array.prototype.sort.
+function compileSort(expr) {
+    return expr.split(/\s*;\s*/).reverse().reduce((acc, x) => {
+        const [k, dir] = x.split(/\s+/);
+        if (dir === 'ASC') {
+            return function(x, y) {
+                if (x[k] > y[k]) { return 1; }
+                if (x[k] < y[k]) { return -1; }
+                else { return acc(x, y); }
+            };
+        }
+        if (dir === 'DESC') {
+            return function(x, y) {
+                if (x[k] > y[k]) { return -1; }
+                if (x[k] < y[k]) { return 1; }
+                else { return acc(x, y); }
+            };
+        }
+        else {
+            throw new Error(`Sort direction not supported, ${dir}, must be either "ASC" or "DESC"`);
+        }
+    }, function(x, y) { return 0; })
+}
+
 function dollars(n, sensitive) {
     if (sensitive) {
         const order = magnitude(n);
@@ -95,49 +126,37 @@ function dollars(n, sensitive) {
     }
     return usd.format(n);
 }
-  
+
 const usd = new Intl.NumberFormat('en-US', {
-  style: 'currency',
-  currency: 'USD',
+    style: 'currency',
+    currency: 'USD',
 });
-  
-const categories = data.data.transactions.reduce((xs, x) => { 
+
+const categories = data.data.transactions.reduce((xs, x) => {
     if (!(x.Category in xs)) {
         xs[x.Category] = [];
     }
     xs[x.Category].push(x);
     return xs;
 }, {});
-  
+
 const queries = {
     housing: 'Category:/(rent|electric)/',
     food: 'Category:/(eating|alcohol|grocer)/',
     commute: 'Category:/(vacation|gasoline|parking|car maintenance)/',
 };
-  
+
 /**
  * Return the Order of Magnitude of some value, x.
  */
 function magnitude(x) {
     return Math.floor(Math.log(x) / Math.LN10 + 0.000000001);
 }
-  
+
 function getSum(transactions) {
     return transactions.reduce((acc, x) => acc + x.Outflow, 0);
 }
-  
-function sortTransactions(transactions) {
-    return [...transactions].sort((x, y) => {
-        if (x.Outflow < y.Outflow) {
-            return 1;
-        } else if (x.Outflow > y.Outflow) {
-            return -1;
-        } else {
-            return 0;
-        }
-    });
-}
-  
+
 function transactionKey(x) {
     const keys = [
         'Account',
@@ -152,7 +171,56 @@ function transactionKey(x) {
     ];
     return keys.map(k => x[k]).join('|');
 }
-  
+
+function parseCSV(csv) {
+  var lines=csv.split("\n");
+  var result = [];
+
+  // Strip the surrounding 2x-quotes from the header.
+  //
+  // NOTE: If your columns contain commas in their values, you'll need
+  // to deal with those before doing the next step 
+  var headers = lines[0].split(",").map(x => x.slice(1, -1));
+
+  for(var i = 1; i < lines.length; i += 1) {
+      var obj = {};
+      var currentline=lines[i].split(",");
+
+      for(var j = 0; j <  headers.length; j += 1) { 
+        obj[headers[j]] = currentline[j].slice(1, -1);
+      }
+
+      result.push(obj);
+  }
+
+  return result.map(x => ({
+    ...x,
+    Date: new Date(x.Date),
+    Inflow: parseFloat(x.Inflow),
+    Outflow: parseFloat(x.Outflow),
+  }));
+}
+
+
+class UploadJSON extends React.Component {
+    handleUpload(e) {
+        let files = e.target.files;
+        if (!files.length) {
+            alert('No file selected!');
+            return;
+        }
+        let file = files[0];
+        let reader = new FileReader();
+        reader.onload = (event) => {
+            this.props.onUpload(parseCSV(event.target.result));
+        };
+        reader.readAsText(file);
+    }
+    render() {
+        return <input onChange={e => this.handleUpload(e)} id="json-upload" type="file" accept="application/csv" />;
+    }
+}
+
 class ScatterChart extends React.Component {
     constructor(props) {
         super(props);
@@ -178,66 +246,66 @@ class ScatterChart extends React.Component {
     componentDidMount() {
         const mount = document.getElementById(this.id);
         this.chart = new Chart(mount, {
-          type: 'scatter',
-          data: {
-            datasets: [
-              {
-                label: 'Revenue',
-                data: this.props.transactions.filter(x => x.Inflow > 0).map(x => ({
-                  x: x.Date,
-                  y: x.Inflow,
-                  metadata: x,
-                })),
-                backgroundColor: colors.green,
-              },
-              {
-                label: 'Expenses',
-                data: this.props.transactions.filter(x => x.Outflow).map(x => ({
-                  x: x.Date,
-                  y: x.Outflow,
-                  metadata: x,
-                })),
-                backgroundColor: colors.red,
-              },
-            ],
-          },
-          options: {
-            scales: {
-              x: {
-                type: 'time',
-                title: {
-                  display: true,
-                  text: 'Date',
-                },
-              },
-              y: {
-                title: {
-                  display: true,
-                  text: 'Amount ($USD)'
-                },
-              },
+            type: 'scatter',
+            data: {
+                datasets: [
+                    {
+                        label: 'Revenue',
+                        data: this.props.transactions.filter(x => x.Inflow > 0).map(x => ({
+                            x: x.Date,
+                            y: x.Inflow,
+                            metadata: x,
+                        })),
+                        backgroundColor: colors.green,
+                    },
+                    {
+                        label: 'Expenses',
+                        data: this.props.transactions.filter(x => x.Outflow).map(x => ({
+                            x: x.Date,
+                            y: x.Outflow,
+                            metadata: x,
+                        })),
+                        backgroundColor: colors.red,
+                    },
+                ],
             },
-            plugins: {
-              tooltip: {
-                callbacks: {
-                  title: function(x) {
-                    return `$${x[0].raw.y} (${x[0].raw.metadata.Date.toLocaleDateString()})`;
-                  },
-                  label: function(x) {
-                    const { Category, Payee, Memo } = x.raw.metadata;
-                    return `${Payee} - ${Category} (${Memo})`;
-                  },
+            options: {
+                scales: {
+                    x: {
+                        type: 'time',
+                        title: {
+                            display: true,
+                            text: 'Date',
+                        },
+                    },
+                    y: {
+                        title: {
+                            display: true,
+                            text: 'Amount ($USD)'
+                        },
+                    },
                 },
-              },
+                plugins: {
+                    tooltip: {
+                        callbacks: {
+                            title: function (x) {
+                                return `$${x[0].raw.y} (${x[0].raw.metadata.Date.toLocaleDateString()})`;
+                            },
+                            label: function (x) {
+                                const { Category, Payee, Memo } = x.raw.metadata;
+                                return `${Payee} - ${Category} (${Memo})`;
+                            },
+                        },
+                    },
+                },
             },
-          },
         });
     }
     render() {
         return <canvas id={this.id}></canvas>;
     }
 }
-  
+
 /**
  * Generic line chart parameterized by:
  * - datasets: forwarded to chart.js library
@@ -513,15 +581,30 @@ class SavingsRateLineChart extends React.Component {
 class App extends React.Component {
     constructor(props) {
         super(props);
-        const query = 'Account:/checking/ after:"01/01/2022" before:"01/01/2023"';
-        const savingsView = 'after:"01/01/2022" before:"01/01/2023"';
+        const query = 'Account:/checking/ (Inflow>1000 OR Outflow>1000)';
+        const allTransactions = data.data.transactions;
+        const savingsView = 'after:"01/01/2022"';
         const inflowQuery = 'Account:/checking/';
         const outflowQuery = 'Account:/checking/ -Category:/(stocks|crypto)/';
 
+        // slx configuration
+        const slxCaseSensitive = false;
+        const slxPreferRegex = true;
+        const slxDateKey = 'Date';
+
         this.state = {
             query,
+            transactionsView: 'table',
             sensitive: false,
-            transactions: select(query, data.data.transactions),
+            allTransactions,
+            slxCaseSensitive,
+            slxPreferRegex,
+            slxDateKey,
+            filteredTransactions: select(query, allTransactions, {
+                caseSensitive: slxCaseSensitive,
+                preferRegex: slxPreferRegex,
+                dateKey: slxDateKey,
+            }),
             saved: {},
             focus: {
                 sum: false,
@@ -532,30 +615,30 @@ class App extends React.Component {
                 0.1: false,
             },
             budget: [
-                { 
-                    label: 'Flexible', 
+                {
+                    label: 'Flexible',
                     children: [
-                        { label: 'groceries', savings: false, monthly: 400.00 },
-                        { label: 'eating out', savings: false, monthly: 200.00 },
-                        { label: 'alcohol', savings: false, monthly: 200.00 },
-                        { label: 'household items', savings: false, monthly: 50.00 },
-                        { label: 'toiletries', savings: false, monthly: 200.00 / 12 },
-                        { label: 'haircuts', savings: false, monthly: 400.00 / 12 },
-                        { label: 'gasoline', savings: false, monthly: 100.00 },
-                        { label: 'parking', savings: false, monthly: 10.00 },
-                        { label: 'ride services', savings: false, monthly: 50.00 },
-                        { label: 'LMNT', savings: false, monthly: 45.00 },
-                        { label: 'books', savings: false, monthly: 25.00 },
-                        { label: 'vacation', savings: false, monthly: 4000.00 / 12 },
-                        { label: 'reimbursement', savings: false, monthly: 0.00 },
+                        { label: 'groceries - $200/mo', savings: false, monthly: 400.00 },
+                        { label: 'eating out - $150/mo', savings: false, monthly: 200.00 },
+                        { label: 'alcohol - $200/mo', savings: false, monthly: 200.00 },
+                        { label: 'household items - $50/mo', savings: false, monthly: 50.00 },
+                        { label: 'toiletries - $200/yr', savings: false, monthly: 200.00 / 12 },
+                        { label: 'haircuts - $400/yr', savings: false, monthly: 400.00 / 12 },
+                        { label: 'gasoline - $100/mo', savings: false, monthly: 100.00 },
+                        { label: 'parking - $10/mo', savings: false, monthly: 10.00 },
+                        { label: 'ride services - $25/mo', savings: false, monthly: 50.00 },
+                        { label: 'LMNT - $45/mo', savings: false, monthly: 45.00 },
+                        { label: 'books - $25/mo', savings: false, monthly: 25.00 },
+                        { label: 'vacation - $4,000/yr', savings: false, monthly: 4000.00 / 12 },
+                        { label: 'reimbursements - $5,000 balance', savings: false, monthly: 0.00 },
                     ],
                 },
-                { 
-                    label: 'Fixed', 
+                {
+                    label: 'Fixed',
                     children: [
-                        { label: 'rent', savings: false, monthly: 3100.00 },
-                        { label: 'electric', savings: false, monthly: 50.00 },
-                        { label: 'gas', savings: false, monthly: 30.00 },
+                        { label: 'rent - $3,100/mo', savings: false, monthly: 3100.00 },
+                        { label: 'electric - $50/mo', savings: false, monthly: 50.00 },
+                        { label: 'SoCalGas - $30/mo', savings: false, monthly: 30.00 },
                         { label: 'YNAB', savings: false, monthly: 100.00 / 12 },
                         { label: 'Robinhood Gold', savings: false, monthly: 5.00 },
                         { label: 'Spotify', savings: false, monthly: 10.00 },
@@ -596,34 +679,60 @@ class App extends React.Component {
                 {
                     label: 'Error Budget',
                     children: [
-                        { label: 'stuff I forgot to budget for', savings: false, monthly: 0.00 },
+                        { label: 'stuff I forgot to budget for - $2,254/mo', savings: false, monthly: 0.00 },
                     ],
                 },
             ],
             paycheck: 6000.00,
-            view: 'budget',
+            view: 'query',
             savingsView,
             inflowQuery,
             outflowQuery,
-            inflowTransactions: select(inflowQuery, select(savingsView, data.data.transactions)),
-            outflowTransactions: select(outflowQuery, select(savingsView, data.data.transactions)),
+            inflowTransactions: select(inflowQuery, select(savingsView, allTransactions, {
+                caseSensitive: slxCaseSensitive,
+                preferRegex: slxPreferRegex,
+                dateKey: slxDateKey,
+            }), {
+                caseSensitive: slxCaseSensitive,
+                preferRegex: slxPreferRegex,
+                dateKey: slxDateKey,
+            }),
+            outflowTransactions: select(outflowQuery, select(savingsView, allTransactions, {
+                caseSensitive: slxCaseSensitive,
+                preferRegex: slxPreferRegex,
+                dateKey: slxDateKey,
+            }), {
+                caseSensitive: slxCaseSensitive,
+                preferRegex: slxPreferRegex,
+                dateKey: slxDateKey,
+            }),
+            sortExpr: 'Date DESC; Outflow DESC',
         };
     }
 
     render() {
-        const sum = this.state.transactions.reduce((acc, { Outflow }) => acc + Outflow, 0);
+        const sum = this.state.filteredTransactions.reduce((acc, { Outflow }) => acc + Outflow, 0);
         const savedSum = Object.values(this.state.saved).reduce((acc, sum) => acc + sum, 0);
 
         let view = null;
         if (this.state.view === 'query') {
             view = (
                 <QueryView
+                    transactionsView={this.state.transactionsView}
+                    sortExpr={this.state.sortExpr}
+                    onSortExprChange={sortExpr => this.setState({ sortExpr })}
                     sensitive={this.state.sensitive}
                     query={this.state.query}
                     focus={this.state.focus}
-                    transactions={this.state.transactions}
+                    allTransactions={this.state.allTransactions}
+                    transactions={this.state.filteredTransactions}
                     saved={this.state.saved}
                     setState={this.setState.bind(this)}
+                    slxConfig={{
+                        caseSensitive: this.state.slxCaseSensitive,
+                        preferRegex: this.state.slxPreferRegex,
+                        dateKey: this.state.slxDateKey,
+                    }}
                 />
             );
         } else if (this.state.view === 'savings') {
@@ -636,14 +745,46 @@ class App extends React.Component {
                     inflowTransactions={this.state.inflowTransactions}
                     outflowTransactions={this.state.outflowTransactions}
                     onFilterInflow={() => this.setState({
-                        inflowTransactions: select(this.state.inflowQuery, select(this.state.savingsView, data.data.transactions)),
+                        inflowTransactions: select(this.state.inflowQuery, select(this.state.savingsView, this.state.allTransactions, {
+                            caseSensitive: this.state.slxCaseSensitive,
+                            preferRegex: this.state.slxPreferRegex,
+                            dateKey: this.state.slxDateKey,
+                        }), {
+                            caseSensitive: this.state.slxCaseSensitive,
+                            preferRegex: this.state.slxPreferRegex,
+                            dateKey: this.state.slxDateKey,
+                        }),
                     })}
                     onFilterOutflow={() => this.setState({
-                        outflowTransactions: select(this.state.outflowQuery, select(this.state.savingsView, data.data.transactions)),
+                        outflowTransactions: select(this.state.outflowQuery, select(this.state.savingsView, this.state.allTransactions, {
+                            caseSensitive: this.state.slxCaseSensitive,
+                            preferRegex: this.state.slxPreferRegex,
+                            dateKey: this.state.slxDateKey,
+                        }), {
+                            caseSensitive: this.state.slxCaseSensitive,
+                            preferRegex: this.state.slxPreferRegex,
+                            dateKey: this.state.slxDateKey,
+                        }),
                     })}
                     onFilterSavingsView={() => this.setState({
-                        inflowTransactions: select(this.state.inflowQuery, select(this.state.savingsView, data.data.transactions)),
-                        outflowTransactions: select(this.state.outflowQuery, select(this.state.savingsView, data.data.transactions)),
+                        inflowTransactions: select(this.state.inflowQuery, select(this.state.savingsView, this.state.allTransactions, {
+                            caseSensitive: this.state.slxCaseSensitive,
+                            preferRegex: this.state.slxPreferRegex,
+                            dateKey: this.state.slxDateKey,
+                        }), {
+                            caseSensitive: this.state.slxCaseSensitive,
+                            preferRegex: this.state.slxPreferRegex,
+                            dateKey: this.state.slxDateKey,
+                        }),
+                        outflowTransactions: select(this.state.outflowQuery, select(this.state.savingsView, this.state.allTransactions, {
+                            caseSensitive: this.state.slxCaseSensitive,
+                            preferRegex: this.state.slxPreferRegex,
+                            dateKey: this.state.slxDateKey,
+                        }), {
+                            caseSensitive: this.state.slxCaseSensitive,
+                            preferRegex: this.state.slxPreferRegex,
+                            dateKey: this.state.slxDateKey,
+                        }),
                     })}
                     onSavingsViewChange={x => this.setState({ savingsView: x })}
                     onInflowQueryChange={x => this.setState({ inflowQuery: x })}
@@ -687,7 +828,24 @@ class App extends React.Component {
                         {this.state.budget.map(x => (
                             <li>
                                 <div>{x.label} - {dollars(x.children.reduce((acc, x) => acc + x.monthly, 0), this.state.sensitive)}</div>
-                                <ul>{x.children.map(y => <li>{y.label} - {dollars(y.monthly, this.state.sensitive)}</li>)}</ul>
+                                <table>
+                                    <thead>
+                                        <tr>
+                                            <th>category</th>
+                                            <th>assigned (target)</th>
+                                            <th>last year (actual)</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {x.children.map(y => (
+                                            <tr>
+                                                <td>{y.label}</td>
+                                                <td>{dollars(y.monthly, this.state.sensitive)}</td>
+                                                <td>{dollars((categories[y.label] || []).reduce((acc, x) => acc + x.Outflow, 0) / 12, this.state.sensitive)}</td>
+                                            </tr>
+                                        ))}
+                                    </tbody>
+                                </table>
                             </li>
                         ))}
                     </ul>
@@ -705,13 +863,14 @@ class App extends React.Component {
                         <li><a href="#" onClick={() => this.setState({ sensitive: !this.state.sensitive })}>sensitive</a></li>
                     </ul>
                 </nav>
+                <UploadJSON onUpload={xs => this.setState({ allTnransactions: xs })} />
                 {view}
             </div>
         );
     }
 }
 
-const QueryView = ({ sensitive, query, focus, transactions, saved, setState }) => (
+const QueryView = ({ sensitive, query, focus, allTransactions, transactions, saved, setState, slxConfig, sortExpr, transactionsView }) => (
     <div>
         <Query
             query={query}
@@ -719,18 +878,31 @@ const QueryView = ({ sensitive, query, focus, transactions, saved, setState }) =
                 query,
             })}
             onFilter={() => setState({
-                transactions: select(query, data.data.transactions),
+                filteredTransactions: select(query, allTransactions, slxConfig),
             })}
         />
+        <fieldset>
+            <legend>Sort</legend>
+            <div className="form-group">
+                <input type="text" value={sortExpr} onChange={e => setState({ sortExpr: e.target.value, })} />
+            </div>
+            <div className="form-group">
+                <button className="btn btn-default" onClick={() => setState({
+                    filteredTransactions: transactions.slice().sort(compileSort(sortExpr)),
+                })}>Sort</button>
+            </div>
+        </fieldset>
         <hr />
         <ScatterChart transactions={transactions} />
         <hr />
         <Transactions
+            transactionsView={transactionsView}
             sensitive={sensitive}
-            transactions={sortTransactions(transactions)}
+            transactions={transactions}
             onClick={x => setState({
                 saved: { ...saved, [transactionKey(x)]: x.Outflow }
             })}
+            onViewChange={transactionsView => setState({ transactionsView })}
         />
     </div>
 );
@@ -814,7 +986,7 @@ const SavingsView = ({
                 <li>inflow: {dollars(inflow, sensitive)}</li>
                 <li>outflow: {dollars(outflow)}</li>
                 <li>savings: {dollars(inflow - outflow)}</li>
-                <li>rate: {parseFloat((inflow - outflow) / inflow * 100).toFixed(2)+"%"} ({classifyRate((inflow - outflow) / inflow)})</li>
+                <li>rate: {parseFloat((inflow - outflow) / inflow * 100).toFixed(2) + "%"} ({classifyRate((inflow - outflow) / inflow)})</li>
             </ul>
             <SavingsRateLineChart rate={(inflow - outflow) / inflow} transactions={outflowTransactions} />
             {/* O($1,000) */}
@@ -884,14 +1056,14 @@ const SavingsView = ({
                     </tr>
                 </thead>
                 <tbody>
-                {months.map((x, i) => (
-                    <tr key={i}>
-                        <td>{x}</td>
-                        <td>{dollars(delta25Sum[i], sensitive)}</td>
-                        <td>{dollars(delta50Sum[i], sensitive)}</td>
-                        <td>{dollars(delta75Sum[i], sensitive)}</td>
-                    </tr>
-                ))}
+                    {months.map((x, i) => (
+                        <tr key={i}>
+                            <td>{x}</td>
+                            <td>{dollars(delta25Sum[i], sensitive)}</td>
+                            <td>{dollars(delta50Sum[i], sensitive)}</td>
+                            <td>{dollars(delta75Sum[i], sensitive)}</td>
+                        </tr>
+                    ))}
                 </tbody>
             </table>
         </section>
@@ -911,69 +1083,6 @@ const Calculator = ({ sensitive, saved, onClear }) => (
         <button className="btn btn-default" onClick={() => onClear()}>clear</button>
     </div>
 );
-
-const Forecast = ({ sensitive, paycheck, onPaycheck }) => {
-    const getModel = k => {
-        const max = paycheck / 3;
-        const lastYear = getSum(select(`Account:/checking/ after:"01/01/2022" before:"01/01/2023" ${queries[k]}`, data.data.transactions)) / 12;
-        return {
-            max,
-            lastYear,
-            surplus: max - lastYear,
-        };
-    };
-
-    const housing = getModel('housing');
-    const food = getModel('food');
-    const commute = getModel('commute');
-
-    return (
-        <fieldset>
-            <legend>Forecasting</legend>
-            <label htmlFor="paycheck">Paycheck</label>
-            <input
-                name="paycheck" type="text" placeholder="Last paycheck ($USD)"
-                value={paycheck}
-                onChange={e => onPaycheck(parseFloat(e.target.value))} />
-            <table>
-                <thead>
-                    <tr>
-                        <th>category</th>
-                        <th>max</th>
-                        <th>last year</th>
-                        <th>surplus</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>Housing</td>
-                        <td>{dollars(housing.max, sensitive)}</td>
-                        <td>{dollars(housing.lastYear, sensitive)}</td>
-                        <td>{dollars(housing.surplus, sensitive)}</td>
-                    </tr>
-                    <tr>
-                        <td>Food</td>
-                        <td>{dollars(food.max, sensitive)}</td>
-                        <td>{dollars(food.lastYear, sensitive)}</td>
-                        <td>{dollars(food.surplus, sensitive)}</td>
-                    </tr>
-                    <tr>
-                        <td>Commute</td>
-                        <td>{dollars(commute.max, sensitive)}</td>
-                        <td>{dollars(commute.lastYear, sensitive)}</td>
-                        <td>{dollars(commute.surplus, sensitive)}</td>
-                    </tr>
-                    <tr>
-                        <td>Sum</td>
-                        <td>-</td>
-                        <td>-</td>
-                        <td>{dollars(housing.surplus + food.surplus + commute.surplus, sensitive)}</td>
-                    </tr>
-                </tbody>
-            </table>
-        </fieldset>
-    );
-};
 
 /**
  * Table rendering information about transactions bucketed by its order of
@@ -1005,7 +1114,7 @@ const Magnitable = ({ sensitive, label, transactions }) => {
     return (
         <React.Fragment>
             {keys.map(k => (
-                <tr style={{backgroundColor: '#F0F8FF'}}>
+                <tr style={{ backgroundColor: '#F0F8FF' }}>
                     <td>{k}</td><td>{dollars(categories[k], sensitive)}</td>
                 </tr>
             ))}
@@ -1024,7 +1133,7 @@ const AggregateTable = ({ sensitive, focus, onFocus, transactions }) => {
         const bucket = Math.pow(10, order);
         acc[bucket].push(x);
         return acc;
-    }, {0.1: [], 0: [], 1: [], 10: [], 100: [], 1000: []});
+    }, { 0.1: [], 0: [], 1: [], 10: [], 100: [], 1000: [] });
 
     return (
         <div>
@@ -1066,42 +1175,72 @@ const Query = ({ query, onChange, onFilter }) => (
         <legend>Query</legend>
         <div className="form-group">
             <input name="query" type="text" value={query} onChange={e => onChange(e.target.value)} />
-            <div className="btn-group">
-                <button className="btn btn-default" onClick={() => onFilter()}>Filter</button>
-            </div>
+        </div>
+        <div className="form-group">
+            <button className="btn btn-default" onClick={() => onFilter()}>Filter</button>
         </div>
     </fieldset>
 );
 
-const Transactions = ({ sensitive, transactions, onClick }) => (
-    <table>
-        <caption>Transactions</caption>
-        <thead>
-            <tr>
-                <th>Account</th>
-                <th>Category</th>
-                <th>Date</th>
-                <th>Inflow</th>
-                <th>Outflow</th>
-                <th>Payee</th>
-                <th>Memo</th>
-            </tr>
-        </thead>
-        <tbody>
-            {transactions.map(x => (
-                <tr onClick={() => onClick(x)}>
-                    <td>{x.Account}</td>
-                    <td>{x.Category}</td>
-                    <td>{x.Date.toLocaleDateString()}</td>
-                    <td>{dollars(x.Inflow, sensitive)}</td>
-                    <td>{dollars(x.Outflow, sensitive)}</td>
-                    <td>{x.Payee}</td>
-                    <td>{x.Memo}</td>
-                </tr>
-            ))}
-        </tbody>
-    </table>
-);
+const tableHeaders = [
+    'Account',
+    'Category',
+    'Date',
+    'Inflow',
+    'Outflow',
+    'Payee',
+    'Memo',
+];
+
+const Transactions = ({ sensitive, transactions, onSort, onClick, onViewChange, transactionsView }) => {
+    let view = null;
+    if (transactionsView === 'table') {
+        view = (
+            <table>
+                <thead>
+                    <tr>
+                        {tableHeaders.map(x => <th>{x}</th>)}
+                    </tr>
+                </thead>
+                <tbody>
+                    {transactions.map(x => (
+                        <tr onClick={() => onClick(x)}>
+                            <td>{x.Account}</td>
+                            <td>{x.Category}</td>
+                            <td>{x.Date.toLocaleDateString()}</td>
+                            <td>{dollars(x.Inflow, sensitive)}</td>
+                            <td>{dollars(x.Outflow, sensitive)}</td>
+                            <td>{x.Payee}</td>
+                            <td>{x.Memo}</td>
+                        </tr>
+                    ))}
+                </tbody>
+            </table>
+        );
+    } 
+    else if (transactionsView === 'csv') {
+        view = (
+            <code>{tableHeaders.join(',') + '\n' + transactions.map(x => tableHeaders.map(k => x[k]).join(',')).join("\n")}</code>
+        );
+    }
+    else if (transactionsView === 'json') {
+        view = (
+            <code>{JSON.stringify(transactions)}</code>
+        );
+    }
+
+    return (
+        <div>
+            <caption>Transactions</caption>
+            <div className="btn-group">
+                <button onClick={() => onViewChange('table')} className="btn btn-default btn-ghost">Table</button>
+                <button onClick={() => onViewChange('csv')} className="btn btn-default btn-ghost">CSV</button>
+                <button onClick={() => onViewChange('json')} className="btn btn-default btn-ghost">JSON</button>
+            </div>
+            {view}
+        </div>
+    );
+}
 
 const domContainer = document.querySelector('#mount');
 const root = ReactDOM.createRoot(domContainer);
