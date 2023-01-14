@@ -14,13 +14,14 @@
 module Main where
 
 import Aeson (parseErrorTree)
+import ArglibNetencode
 import Control.Exception (try)
 import Control.Monad (replicateM)
 import Data.Aeson qualified as Json
 import Data.Aeson.BetterErrors qualified as Json
 import Data.Aeson.KeyMap qualified as KeyMap
 import Data.ByteString qualified as ByteString
-import Data.ByteString.Char8 qualified as Char8
+import Data.Char qualified as Char
 import Data.Error.Tree
 import Data.Functor.Compose
 import Data.List qualified as List
@@ -31,30 +32,28 @@ import GHC.Records (HasField (..))
 import Label
 import MyPrelude
 import Netencode qualified
+import Netencode.Parse qualified as NetParse
 import Network.HTTP.Conduit qualified as Client
 import Network.HTTP.Simple qualified as Client
 import Pretty
 import System.Directory qualified as File
 import System.Environment qualified as Env
+import System.Exit (ExitCode (ExitFailure, ExitSuccess))
 import System.Exit qualified as Exit
 import System.FilePath ((</>))
-import System.Process qualified as Proc
+import System.Process.Typed qualified as Process
 import System.Random qualified as Random
 import System.Random.Stateful qualified as Random
 import Prelude hiding (log)
-import qualified Netencode.Parse as NetParse
 
-secret :: IO (T2 "email" ByteString "password" ByteString)
-secret = do
+secret :: Tools -> IO (T2 "email" ByteString "password" ByteString)
+secret tools = do
   T2
     (label @"email" "mail@profpatsch.de")
     <$> (label @"password" <$> fromPass "email/mailbox.org")
   where
     fromPass name =
-      Proc.readProcess "pass" [name] ""
-        <&> stringToText
-        <&> textToBytesUtf8
-        <&> Char8.strip
+      tools.pass & runToolExpect0 [name]
 
 progName :: CurrentProgramName
 progName = "mailbox-org"
@@ -64,95 +63,35 @@ log err = do
   putStderrLn (errorContext progName.unCurrentProgramName err & prettyError)
 
 data Tools = Tools
-  { sieveTest :: Tool
+  { sieveTest :: Tool,
+    pass :: Tool
   }
   deriving stock (Show)
 
-newtype Tool = Tool FilePath
-  deriving stock Show
+newtype Tool = Tool {unTool :: FilePath}
+  deriving stock (Show)
 
 parseTools :: Applicative m => (Text -> m (Either Error Tool)) -> m (Either ErrorTree Tools)
 parseTools getTool = do
-  ( do
-        sieveTest <- get "sieve-test"
-        pure Tools {..}
-    ).getCompose <&> first (errorTree "Error reading tools") <&> validationToEither
-
+  let parser =
+        ( do
+            sieveTest <- get "sieve-test"
+            pass <- get "pass"
+            pure Tools {..}
+        )
+  parser & finalize
   where
-   get name = name & getTool <&> eitherToListValidation & Compose
--- | Parse the tools from the given arglib input, and check that the executables exist
-parseToolsArglib :: Netencode.T -> IO Tools
-parseToolsArglib t = do
-  let oneTool name =
-        NetParse.asText
-          <&> textToString
-          <&> ( \path ->
-                  path
-                    & File.getPermissions
-                    <&> File.executable
-                    <&> ( \case
-                            False -> Left $  [fmt|Tool "{name}" is not an executable|]
-                            True -> Right (Tool path)
-                        )
-              )
-  let allTools =
-        parseTools (\name -> Compose $ NetParse.key name >>> oneTool name)
-          & getCompose
-  t
-    & NetParse.runParse
-      "test"
-      -- TODO: a proper ParseT for netencode values
-      ( NetParse.asRecord
-          >>> NetParse.key "BINS"
-          >>> NetParse.asRecord
-          >>> allTools
-      )
-    & orDo diePanic'
-    & join @IO
-    >>= orDo (\errs -> errs  & diePanic')
-
--- | Just assume the tools exist by name in the environment.
-parseToolsToolname :: IO Tools
-parseToolsToolname =
-  parseTools
-    ( \name ->
-        checkInPath name <&> \case
-          False -> Left [fmt|"Cannot find "{name}" in PATH|]
-          True -> Right $ Tool (name & textToString)
-    )
-    >>= orDo diePanic'
-
-checkInPath :: Text -> IO Bool
-checkInPath name = do
-  Env.lookupEnv "PATH"
-    <&> annotate "No PATH set"
-    >>= orDo diePanic'
-    <&> stringToText
-    <&> Text.split (== ':')
-    <&> filter (/= "")
-    >>= traverse
-      ( \p ->
-          File.getPermissions ((textToString p) </> (textToString name))
-            <&> File.executable
-            & try @IOError
-            >>= \case
-              Left _ioError -> pure False
-              Right isExe -> pure isExe
-      )
-    <&> or
-
-diePanic' :: ErrorTree -> IO a
-diePanic' errs = errs & prettyErrorTree & diePanic progName
-
-orDo :: Applicative f => (t -> f a) -> Either t a -> f a
-orDo f = \case
-  Left e -> f e
-  Right a -> pure a
-
+    get name = name & getTool <&> eitherToListValidation & Compose
+    finalize p =
+      p.getCompose
+        <&> first (errorTree "Error reading tools")
+        <&> validationToEither
 
 main :: IO ()
 main =
-  secret
+  arglibNetencode progName Nothing
+    >>= parseToolsArglib
+    >>= secret
     >>= run applyFilters
 
 run ::
@@ -415,4 +354,126 @@ okOrDie resp =
     200 -> pure resp
     _ -> do
       printPretty resp
-      Exit.die "non-200 result"
+      diePanic' "non-200 result"
+
+diePanic' :: ErrorTree -> IO a
+diePanic' errs = errs & prettyErrorTree & diePanic progName
+
+-- | Parse the tools from the given arglib input, and check that the executables exist
+parseToolsArglib :: Netencode.T -> IO Tools
+parseToolsArglib t = do
+  let oneTool name =
+        NetParse.asText
+          <&> textToString
+          <&> ( \path ->
+                  path
+                    & File.getPermissions
+                    <&> File.executable
+                    <&> ( \case
+                            False -> Left $ [fmt|Tool "{name}" is not an executable|]
+                            True -> Right (Tool path)
+                        )
+              )
+  let allTools =
+        parseTools (\name -> Compose $ NetParse.key name >>> oneTool name)
+          & getCompose
+  t
+    & NetParse.runParse
+      "test"
+      -- TODO: a proper ParseT for netencode values
+      ( NetParse.asRecord
+          >>> NetParse.key "BINS"
+          >>> NetParse.asRecord
+          >>> allTools
+      )
+    & orDo diePanic'
+    & join @IO
+    >>= orDo (\errs -> errs & diePanic')
+
+-- | Just assume the tools exist by name in the environment.
+parseToolsToolname :: IO Tools
+parseToolsToolname =
+  parseTools
+    ( \name ->
+        checkInPath name <&> \case
+          False -> Left [fmt|"Cannot find "{name}" in PATH|]
+          True -> Right $ Tool (name & textToString)
+    )
+    >>= orDo diePanic'
+
+checkInPath :: Text -> IO Bool
+checkInPath name = do
+  Env.lookupEnv "PATH"
+    <&> annotate "No PATH set"
+    >>= orDo diePanic'
+    <&> stringToText
+    <&> Text.split (== ':')
+    <&> filter (/= "")
+    >>= traverse
+      ( \p ->
+          File.getPermissions ((textToString p) </> (textToString name))
+            <&> File.executable
+            & try @IOError
+            >>= \case
+              Left _ioError -> pure False
+              Right isExe -> pure isExe
+      )
+    <&> or
+
+orDo :: Applicative f => (t -> f a) -> Either t a -> f a
+orDo f = \case
+  Left e -> f e
+  Right a -> pure a
+
+runTool :: [Text] -> Tool -> IO (Exit.ExitCode, ByteString)
+runTool args tool = do
+  let bashArgs = prettyArgsForBash ((tool.unTool & stringToText) : args)
+  log [fmt|Running: $ {bashArgs}|]
+  Process.proc
+    tool.unTool
+    (args <&> textToString)
+    & Process.readProcessStdout
+    <&> second toStrictBytes
+    <&> second stripWhitespaceFromEnd
+
+-- | Like `runCommandExpect0`, run the given tool, given a tool accessor.
+runToolExpect0 :: [Text] -> Tool -> IO ByteString
+runToolExpect0 args tool =
+  tool & runTool args >>= \(ex, stdout) -> do
+    checkStatus0 tool.unTool ex
+    pure stdout
+
+-- | Check whether a command exited 0 or crash.
+checkStatus0 :: FilePath -> ExitCode -> IO ()
+checkStatus0 executable = \case
+  ExitSuccess -> pure ()
+  ExitFailure status -> do
+    diePanic' [fmt|Command `{executable}` did not exit with status 0 (success), but status {status}|]
+
+stripWhitespaceFromEnd :: ByteString -> ByteString
+stripWhitespaceFromEnd = ByteString.reverse . ByteString.dropWhile (\w -> w == charToWordUnsafe '\n') . ByteString.reverse
+
+-- | Pretty print a command line in a way that can be copied to bash.
+prettyArgsForBash :: [Text] -> Text
+prettyArgsForBash = Text.intercalate " " . map simpleBashEscape
+
+-- | Simple escaping for bash words. If they contain anything that’s not ascii chars
+-- and a bunch of often-used special characters, put the word in single quotes.
+simpleBashEscape :: Text -> Text
+simpleBashEscape t = do
+  case Text.find (not . isSimple) t of
+    Just _ -> escapeSingleQuote t
+    Nothing -> t
+  where
+    -- any word that is just ascii characters is simple (no spaces or control characters)
+    -- or contains a few often-used characters like - or .
+    isSimple c =
+      Char.isAsciiLower c
+        || Char.isAsciiUpper c
+        || Char.isDigit c
+        -- These are benign, bash will not interpret them as special characters.
+        || List.elem c ['-', '.', ':', '/']
+    -- Put the word in single quotes
+    -- If there is a single quote in the word,
+    -- close the single quoted word, add a single quote, open the word again
+    escapeSingleQuote t' = "'" <> Text.replace "'" "'\\''" t' <> "'"
