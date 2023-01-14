@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7d075fdb_245332ec",
+        "filename": "tvix/cli/src/known_paths.rs",
+        "patchSetId": 3
+      },
+      "lineNbr": 107,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-01-14T09:07:12Z",
+      "side": 1,
+      "message": "unrelated to this CL.",
+      "revId": "2836d5533e917d0dc06514d7cdd7be42b2151df4",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
