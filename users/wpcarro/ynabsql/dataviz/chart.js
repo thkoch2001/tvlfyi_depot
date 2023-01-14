@@ -5,7 +5,7 @@ const colors = {
   green: 'rgb(75, 192, 192)',
   blue: 'rgb(54, 162, 235)',
   purple: 'rgb(153, 102, 255)',
-  grey: 'rgb(201, 203, 207)'
+  grey: 'rgb(100, 100, 100)'
 };
 
 function randomExpense() {
@@ -44,29 +44,59 @@ function generateData() {
 
 const mount = document.getElementById('mount');
 
-new Chart(mount, {
+const chart = new Chart(mount, {
   type: 'scatter',
   data: {
     datasets: [
       {
+        label: 'Revenue',
+        data: data.data.transactions.filter(x => x.Inflow > 0).map(x => ({
+          x: x.Date,
+          y: x.Inflow,
+          metadata: x,
+        })),
+        backgroundColor: colors.green,
+      },
+      {
         label: 'Expenses',
-        data: generateData(),
+        data: data.data.transactions.filter(x => x.Outflow).map(x => ({
+          x: x.Date,
+          y: x.Outflow,
+          metadata: x,
+        })),
         backgroundColor: colors.red,
-      }
+      },
     ],
   },
   options: {
+    scales: {
+      x: {
+        type: 'time',
+        title: {
+          display: true,
+          text: 'Date',
+        },
+      },
+      y: {
+        title: {
+          display: true,
+          text: 'Amount ($USD)'
+        },
+      },
+    },
     plugins: {
       tooltip: {
         callbacks: {
           title: function(x) {
-            return `$${x[0].raw.y}`;
+            return `$${x[0].raw.y} (${x[0].raw.metadata.Date.toLocaleDateString()})`;
           },
           label: function(x) {
-            return JSON.stringify(x.raw.metadata);
+            const { Category, Payee, Memo } = x.raw.metadata;
+            return `${Payee} - ${Category} (${Memo})`;
           },
         },
       },
     },
   },
-})
+});
+ 
