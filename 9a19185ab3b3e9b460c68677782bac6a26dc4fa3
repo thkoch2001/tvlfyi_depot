@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0e50dc39_75fa3cc6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2023-01-15T23:20:21Z",
+      "side": 1,
+      "message": "I\u0027ve never really used proc-macro stuff before, so this is the first time I even opened the docs for `syn` and all of that. This is probably not done in the nicest possible way, but it works.",
+      "revId": "9a19185ab3b3e9b460c68677782bac6a26dc4fa3",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
