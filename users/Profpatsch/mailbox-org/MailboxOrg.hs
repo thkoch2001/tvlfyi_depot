@@ -14,6 +14,7 @@
 module Main where
 
 import Aeson (parseErrorTree)
+import AesonQQ (aesonQQ)
 import ArglibNetencode
 import Control.Exception (try)
 import Control.Monad (replicateM)
@@ -21,6 +22,7 @@ import Data.Aeson qualified as Json
 import Data.Aeson.BetterErrors qualified as Json
 import Data.Aeson.KeyMap qualified as KeyMap
 import Data.ByteString qualified as ByteString
+import Data.ByteString.Lazy qualified as Lazy
 import Data.Char qualified as Char
 import Data.Error.Tree
 import Data.Functor.Compose
@@ -63,8 +65,7 @@ log err = do
   putStderrLn (errorContext progName.unCurrentProgramName err & prettyError)
 
 data Tools = Tools
-  { sieveTest :: Tool,
-    pass :: Tool
+  { pass :: Tool
   }
   deriving stock (Show)
 
@@ -75,7 +76,6 @@ parseTools :: Applicative m => (Text -> m (Either Error Tool)) -> m (Either Erro
 parseTools getTool = do
   let parser =
         ( do
-            sieveTest <- get "sieve-test"
             pass <- get "pass"
             pure Tools {..}
         )
@@ -143,6 +143,54 @@ data MailfilterList = MailfilterList
     rulename :: Text
   }
   deriving stock (Show, Eq)
+
+simpleRule ::
+  ( HasField "rulename" r Text,
+    HasField "id" r Natural,
+    HasField "emailContains" r Text,
+    HasField "subjectStartsWith" r Text
+  ) =>
+  r ->
+  Json.Value
+simpleRule dat = do
+  [aesonQQ|{
+    "id": |dat.id & enc @Natural|,
+    "position": 3,
+    "rulename": |dat.rulename & enc @Text|,
+    "active": true,
+    "flags": [],
+    "test": {
+      "id": "allof",
+      "tests": [
+        {
+          "id": "from",
+          "comparison": "contains",
+          "values": [
+            |dat.emailContains & enc @Text|
+          ]
+        },
+        {
+          "id": "subject",
+          "comparison": "startswith",
+          "values": [
+            |dat.subjectStartsWith & enc @Text|
+          ]
+        }
+      ]
+    },
+    "actioncmds": [
+      {
+        "id": "move",
+        "into": "default0/Archive"
+      },
+      {
+        "id": "stop"
+      }
+    ]
+  }|]
+  where
+    enc :: forall a. Json.ToJSON a => a -> Lazy.ByteString
+    enc val = val & Json.toJSON & Json.encode
 
 applyFilters :: Session -> IO ()
 applyFilters session = do

@@ -5,7 +5,7 @@ let
   # Add the given nix arguments to the program as ARGLIB_NETENCODE envvar
   #
   # Calls `netencode.gen.dwim` on the provided nix args value.
-  with-args = args: prog: depot.nix.writeExecline "${prog.name}-with-args" { } [
+  with-args = name: args: prog: depot.nix.writeExecline "${name}-with-args" { } [
     "export"
     "ARGLIB_NETENCODE"
     (depot.users.Profpatsch.netencode.gen.dwim args)
