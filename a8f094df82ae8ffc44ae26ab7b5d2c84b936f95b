@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "83ca31ea_a7a1a81c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2023-01-15T11:54:39Z",
+      "side": 1,
+      "message": "This still needs closure serialisation and special cases of attrs (such as whatever cppnix does with derivations here)",
+      "revId": "a8f094df82ae8ffc44ae26ab7b5d2c84b936f95b",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
