@@ -105,6 +105,15 @@ impl Thunk {
         )))))
     }
 
+    pub fn new_blackhole() -> Self {
+        Thunk(Rc::new(RefCell::new(ThunkRepr::Blackhole)))
+    }
+
+    pub fn fill_blackhole(&mut self, v: Value) {
+        let should_be_blackhole = self.0.replace(ThunkRepr::Evaluated(v));
+        assert!(matches!(should_be_blackhole, ThunkRepr::Blackhole));
+    }
+
     /// Force a thunk from a context that can't handle trampoline
     /// continuations, eg outside the VM's normal execution loop.  Calling
     /// `force_trampoline()` instead should be preferred whenever possible.
