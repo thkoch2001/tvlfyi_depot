@@ -25,6 +25,7 @@ impl Output {
     }
 
     pub fn validate(&self) -> Result<(), ParseStorePathError> {
+        // TODO: add validation for hash, hashAlgo, expose validate_path boolean
         if let Err(e) = StorePath::from_absolute_path(&self.path) {
             return Err(e);
         }
