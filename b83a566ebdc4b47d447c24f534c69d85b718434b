@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b88aa61d_d3cb3a5d",
+        "filename": "tvix/cli/src/derivation.rs",
+        "patchSetId": 37
+      },
+      "lineNbr": 84,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-01-16T23:12:44Z",
+      "side": 1,
+      "message": "You can probably reuse the errors from cl/7847 here, or simply leave the error path to Derivation::validate().",
+      "revId": "b83a566ebdc4b47d447c24f534c69d85b718434b",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a0c7708f_963a7f95",
+        "filename": "tvix/cli/src/derivation.rs",
+        "patchSetId": 37
+      },
+      "lineNbr": 200,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-01-16T23:12:44Z",
+      "side": 1,
+      "message": "My proposal would be to call `validate(false)` from cl/7848 here for the error path.",
+      "revId": "b83a566ebdc4b47d447c24f534c69d85b718434b",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "39290ff8_e8b5c58d",
+        "filename": "tvix/cli/src/derivation.rs",
+        "patchSetId": 37
+      },
+      "lineNbr": 208,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-01-16T23:12:44Z",
+      "side": 1,
+      "message": "… and not call validate() here anymore, because it\u0027d only validate changes that `calculate_output_paths` would have done, and these are correct.",
+      "revId": "b83a566ebdc4b47d447c24f534c69d85b718434b",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
