@@ -16,6 +16,24 @@
       "message": "Shouldn\u0027t this be part of tvix/derivation, and be returned by the validate() function in there?",
       "revId": "432b1de3182a0757b44637085826cd68576d169a",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f1aadb5f_e249efde",
+        "filename": "tvix/cli/src/errors.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 4,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2023-01-16T13:12:20Z",
+      "side": 1,
+      "message": "Well, some of these come from eval data structures, so not directly. However, tvix/derivation *should* use typed errors instead of anyhow::Result (that\u0027s a code smell in library code).\n\nFor now these need to live somewhere, and as you can see in the WIP commit many of these errors are no longer possible to construct correctly after the Derivation structure is populated, so the obvious place is here.",
+      "parentUuid": "7fe42f12_b34033bf",
+      "revId": "432b1de3182a0757b44637085826cd68576d169a",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
