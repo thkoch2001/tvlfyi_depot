@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9fa3b921_53b77009",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2023-01-16T22:23:16Z",
+      "side": 1,
+      "message": "I wouldn\u0027t have used a dependency for the ~10 or so lines this saves, but I feel like we\u0027re at a point where that\u0027s a lost cause in the sea of dependencies 😜",
+      "revId": "917cd4f52450201c90e1df0f8db9e0355658b6cf",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
