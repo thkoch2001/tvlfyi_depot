@@ -4,7 +4,11 @@ use tvix_store::store_path::StorePath;
 impl Derivation {
     /// validate ensures a Derivation struct is properly populated,
     /// and returns a [ValidateDerivationError] if not.
-    pub fn validate(&self) -> Result<(), ValidateDerivationError> {
+    /// if `validate_output_paths` is set to false, the output paths are
+    /// excluded from validation.
+    /// This is helpful to validate struct population before invoking
+    /// [Derivation::calculate_output_paths].
+    pub fn validate(&self, validate_output_paths: bool) -> Result<(), ValidateDerivationError> {
         // Ensure the number of outputs is > 1
         if self.outputs.is_empty() {
             return Err(ValidateDerivationError::NoOutputs());
@@ -31,12 +35,14 @@ impl Derivation {
                 break;
             }
 
-            if let Err(e) = output.validate() {
-                return Err(ValidateDerivationError::InvalidOutputPath(
-                    output_name.to_string(),
-                    e,
-                ));
-            };
+            if validate_output_paths {
+                if let Err(e) = output.validate() {
+                    return Err(ValidateDerivationError::InvalidOutputPath(
+                        output_name.to_string(),
+                        e,
+                    ));
+                };
+            }
         }
 
         // Validate all input_derivations
