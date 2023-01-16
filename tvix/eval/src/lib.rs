@@ -57,7 +57,7 @@ pub use crate::warnings::{EvalWarning, WarningKind};
 pub use builtin_macros;
 
 pub use crate::value::{
-    Builtin, BuiltinArgument, CoercionKind, NixAttrs, NixList, NixString, Value,
+    Builtin, BuiltinArgument, CoercionKind, NixAttrs, NixList, NixString, Thunk, Value,
 };
 
 #[cfg(feature = "impure")]
