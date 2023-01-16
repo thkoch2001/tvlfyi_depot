@@ -36,6 +36,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "1778c949_478e3037",
+        "filename": "tvix/cli/src/known_paths.rs",
+        "patchSetId": 11
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-01-16T13:45:15Z",
+      "side": 1,
+      "message": "That has been done during cl/7843, even though I still think it should be squashed into here, don\u0027t see how it\u0027d cause conflicts.",
+      "parentUuid": "ff88e74e_a7173747",
+      "revId": "c032b25f816bc8c103efa3e3b558917aa82b9589",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "6d8f25e1_00b81b12",
