@@ -16,6 +16,24 @@
       "message": "I don\u0027t think this change is necessary. Calling validate twice with different parameters seems strange, and some of these things are caught earlier on the eval side anyways.",
       "revId": "eb33ec8f492a430460be7695817deafc45720d5a",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9b560c1e_206f06fa",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-01-16T23:07:52Z",
+      "side": 1,
+      "message": "The idea was to allow exposing some parts of the \"what makes up a valid derivation\" logic *before* output path calculation, so you can reduce the amount of code in cl/7842.",
+      "parentUuid": "c0e9ad4d_247677fe",
+      "revId": "eb33ec8f492a430460be7695817deafc45720d5a",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
