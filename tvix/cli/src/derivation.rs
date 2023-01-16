@@ -6,7 +6,7 @@ use std::collections::BTreeSet;
 use std::rc::Rc;
 use tvix_derivation::Derivation;
 use tvix_eval::builtin_macros::builtins;
-use tvix_eval::{CoercionKind, ErrorKind, NixAttrs, Value, VM};
+use tvix_eval::{CoercionKind, ErrorKind, NixAttrs, NixString, Thunk, Value, VM};
 
 use crate::errors::Error;
 use crate::known_paths::{KnownPaths, PathType};
@@ -250,8 +250,94 @@ mod derivation_builtins {
     ///
     /// Calling this function immediately causes a build to start.
     #[builtin("derivation")]
-    fn builtin_derivation(_vm: &mut VM, _args: Value) -> Result<Value, ErrorKind> {
-        Err(ErrorKind::NotImplemented("builtins.derivation"))
+    fn builtin_derivation(
+        state: Rc<RefCell<KnownPaths>>,
+        vm: &mut VM,
+        drv_attrs: Value,
+    ) -> Result<Value, ErrorKind> {
+        let drvAttrs = drv_attrs.to_attrs()?;
+
+        // TODO: why did he add this?
+        // let drvAttrs = Rc::new(NixAttrs::from_map(
+        //     unwrap_or_clone_rc(drvAttrs).into_iter().collect(),
+        // ));
+
+        let mut outputs = vec![NixString::OUT];
+
+        if let Some(outputs_arg) = drvAttrs.select("outputs") {
+            outputs_arg.force(vm)?;
+
+            outputs.clear();
+            for output in outputs_arg.to_list()?.into_iter() {
+                outputs.push(output.to_str()?);
+            }
+        }
+
+        let outputsThunks: Vec<(NixString, Thunk)> = outputs
+            .into_iter()
+            .map(|outputName| (outputName, Thunk::new_blackhole()))
+            .collect();
+
+        let mut all = Thunk::new_blackhole();
+
+        let commonAttrs = NixAttrs::from_iter(
+            outputsThunks
+                .iter()
+                .map(|(k, t)| (k.clone(), Value::Thunk(t.clone()))),
+        )
+        .update((*drvAttrs).clone())
+        .update(NixAttrs::from_map(BTreeMap::from([(
+            "all".into(),
+            Value::Thunk(all.clone()),
+        )])))
+        .update(NixAttrs::from_map(BTreeMap::from([(
+            "drvAttrs".into(),
+            Value::Attrs(drvAttrs.clone()),
+        )])));
+
+        let all_list: Vec<Value> = outputsThunks
+            .into_iter()
+            .map(|(outputName, mut thunk)| {
+                let outputName_ = outputName.clone();
+                let derivationStrictArgs = vec![Value::Attrs(drvAttrs.clone())];
+                let derivationStrict_func = derivationStrict.func().clone();
+                let outPath = Thunk::new_suspended_native(Rc::new(Box::new(move |vm: &mut VM| {
+                    let strict = (derivationStrict_func)(derivationStrictArgs.clone(), vm)?;
+                    Ok(strict
+                        .to_attrs()
+                        .unwrap()
+                        .select_required(&outputName_)
+                        .unwrap()
+                        .clone())
+                })));
+                let derivationStrictArgs = vec![Value::Attrs(drvAttrs.clone())];
+
+                let derivationStrict_func = derivationStrict.func().clone();
+                let drvPath = Thunk::new_suspended_native(Rc::new(Box::new(move |vm: &mut VM| {
+                    let strict = (derivationStrict_func)(derivationStrictArgs.clone(), vm)?;
+                    Ok(strict
+                        .to_attrs()
+                        .unwrap()
+                        .select_required("drvPath")
+                        .unwrap()
+                        .clone())
+                })));
+                let value = Value::Attrs(Rc::new(commonAttrs.clone().update(NixAttrs::from_map(
+                    BTreeMap::from([
+                        ("type".into(), Value::String("derivation".into())),
+                        ("outputName".into(), outputName.clone().into()),
+                        ("outPath".into(), Value::Thunk(outPath)),
+                        ("drvPath".into(), Value::Thunk(drvPath)),
+                    ]),
+                ))));
+                thunk.fill_blackhole(value.clone());
+                value
+            })
+            .collect();
+
+        let ret = all_list[0].clone();
+        all.fill_blackhole(Value::List(NixList::from(all_list)));
+        Ok(ret)
     }
 }
 
