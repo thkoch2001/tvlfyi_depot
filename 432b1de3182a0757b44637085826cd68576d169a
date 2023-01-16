@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7fe42f12_b34033bf",
+        "filename": "tvix/cli/src/errors.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 4,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-01-16T12:28:35Z",
+      "side": 1,
+      "message": "Shouldn\u0027t this be part of tvix/derivation, and be returned by the validate() function in there?",
+      "revId": "432b1de3182a0757b44637085826cd68576d169a",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
