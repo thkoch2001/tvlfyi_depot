@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a0e7e9c3_c4349890",
+        "filename": "tvix/cli/src/known_paths.rs",
+        "patchSetId": 11
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-01-16T12:22:46Z",
+      "side": 1,
+      "message": "only panic\u0027ing in the drv() function case, but not in the other two feels a bit odd. The HashMap can only store one specific PathType for a given path (string), so mutating its type is something we should notice in all three cases, no?",
+      "revId": "c032b25f816bc8c103efa3e3b558917aa82b9589",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6d8f25e1_00b81b12",
+        "filename": "tvix/cli/src/known_paths.rs",
+        "patchSetId": 11
+      },
+      "lineNbr": 113,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-01-16T12:22:46Z",
+      "side": 1,
+      "message": "Can you add some unit tests here? This is a fairly brittle piece of code, I feel like it could get some more coverage, other than just being used during evaluation.",
+      "revId": "c032b25f816bc8c103efa3e3b558917aa82b9589",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
