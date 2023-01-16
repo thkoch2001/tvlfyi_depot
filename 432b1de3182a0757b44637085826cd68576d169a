@@ -34,6 +34,24 @@
       "parentUuid": "7fe42f12_b34033bf",
       "revId": "432b1de3182a0757b44637085826cd68576d169a",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "72d3e53a_bdc4424e",
+        "filename": "tvix/cli/src/errors.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 4,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-01-16T13:23:22Z",
+      "side": 1,
+      "message": "Only for the shadowing parts, the rest is pretty much errors that could also be emitted (in similar form) by Derivation::validate().\n\nI\u0027m up to improving the error situation in the tvix/derivation side of things if you don\u0027t want to touch it, but I don\u0027t think we should add more smell here because the errors are not (yet) properly exposed.",
+      "parentUuid": "f1aadb5f_e249efde",
+      "revId": "432b1de3182a0757b44637085826cd68576d169a",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
