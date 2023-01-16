@@ -136,6 +136,9 @@ impl NixString {
     pub const VALUE: Self = NixString(StringRepr::Smol(SmolStr::new_inline("value")));
     pub const VALUE_REF: &'static Self = &Self::VALUE;
 
+    pub const OUT: Self = NixString(StringRepr::Smol(SmolStr::new_inline("out")));
+    pub const OUT_REF: &'static Self = &Self::OUT;
+
     pub fn as_str(&self) -> &str {
         match &self.0 {
             StringRepr::Smol(s) => s.as_str(),
