@@ -18,6 +18,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "ff88e74e_a7173747",
+        "filename": "tvix/cli/src/known_paths.rs",
+        "patchSetId": 11
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2023-01-16T13:09:21Z",
+      "side": 1,
+      "message": "The chain is too deep to change that in this CL, as there are several conflicting commits, so it\u0027ll have to be refactored on top of the chain.",
+      "parentUuid": "a0e7e9c3_c4349890",
+      "revId": "c032b25f816bc8c103efa3e3b558917aa82b9589",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "6d8f25e1_00b81b12",
@@ -31,6 +49,24 @@
       "writtenOn": "2023-01-16T12:22:46Z",
       "side": 1,
       "message": "Can you add some unit tests here? This is a fairly brittle piece of code, I feel like it could get some more coverage, other than just being used during evaluation.",
+      "revId": "c032b25f816bc8c103efa3e3b558917aa82b9589",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bad2d5c7_0c5093ce",
+        "filename": "tvix/cli/src/known_paths.rs",
+        "patchSetId": 11
+      },
+      "lineNbr": 113,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2023-01-16T13:09:21Z",
+      "side": 1,
+      "message": "Sure, but on top of the chain, I don\u0027t want to rebase this file with multiple modifications all the way through.\n\nAlso curious what you think is brittle here!",
+      "parentUuid": "6d8f25e1_00b81b12",
       "revId": "c032b25f816bc8c103efa3e3b558917aa82b9589",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
