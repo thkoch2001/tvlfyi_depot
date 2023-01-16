@@ -6,7 +6,7 @@ use std::collections::BTreeSet;
 use std::rc::Rc;
 use tvix_derivation::Derivation;
 use tvix_eval::builtin_macros::builtins;
-use tvix_eval::{CoercionKind, ErrorKind, NixAttrs, Value, VM};
+use tvix_eval::{AddContext, CoercionKind, ErrorKind, NixAttrs, NixString, Thunk, Value, VM};
 
 use crate::errors::Error;
 use crate::known_paths::{KnownPaths, PathType};
@@ -33,7 +33,10 @@ mod derivation_builtins {
         arg: NixList,
     ) -> Result<(), ErrorKind> {
         for output in arg {
-            let output_name = output.force(vm)?.to_str()?;
+            let output_name = output
+                .force(vm)?
+                .to_str()
+                .context("determining output name")?;
 
             if output_name.as_str() == "drv" {
                 return Err(Error::InvalidOutputName(output_name.as_str().into()).into());
@@ -41,6 +44,7 @@ mod derivation_builtins {
 
             // TODO: further validate output name
             if let Some(_) = outputs.insert(output_name.as_str().into(), Default::default()) {
+                dbg!(outputs);
                 return Err(Error::DuplicateOutput(output_name.as_str().into()).into());
             }
         }
@@ -59,7 +63,11 @@ mod derivation_builtins {
         input: Value,
     ) -> Result<Value, ErrorKind> {
         let input = input.to_attrs()?;
-        let name = input.select_required("name")?.force(vm)?.to_str()?;
+        let name = input
+            .select_required("name")?
+            .force(vm)?
+            .to_str()
+            .context("determining derivation name")?;
 
         // Check whether attributes should be passed as a JSON file.
         // TODO: the JSON serialisation has to happen here.
@@ -119,7 +127,12 @@ mod derivation_builtins {
                 "args" => {
                     let args = value.to_list()?;
                     for arg in args {
-                        drv.arguments.push(arg.force(vm)?.to_str()?.to_string());
+                        drv.arguments.push(
+                            arg.force(vm)?
+                                .coerce_to_string(CoercionKind::Strong, vm)
+                                .context("handling command-line builder arguments")?
+                                .to_string(),
+                        );
                     }
                     continue;
                 }
@@ -127,6 +140,7 @@ mod derivation_builtins {
                 // Explicitly specified drv outputs (instead of default [ "out" ])
                 "outputs" => {
                     let outputs = value.to_list()?;
+                    drv.outputs.clear();
                     populate_outputs(vm, &mut drv.outputs, outputs)?;
                 }
 
@@ -167,7 +181,9 @@ mod derivation_builtins {
         let mut known_paths = state.borrow_mut();
         for reference in build_references.into_iter() {
             match &known_paths[&reference] {
-                PathType::Plain => drv.input_sources.push(reference.to_string()),
+                PathType::Plain => {
+                    drv.input_sources.insert(reference.to_string());
+                }
 
                 PathType::Output { name, derivation } => {
                     match drv.input_derivations.entry(derivation.clone()) {
@@ -249,8 +265,81 @@ mod derivation_builtins {
     ///
     /// Calling this function immediately causes a build to start.
     #[builtin("derivation")]
-    fn builtin_derivation(_vm: &mut VM, _args: Value) -> Result<Value, ErrorKind> {
-        Err(ErrorKind::NotImplemented("builtins.derivation"))
+    fn builtin_derivation(
+        state: Rc<RefCell<KnownPaths>>,
+        vm: &mut VM,
+        drv_args: Value,
+    ) -> Result<Value, ErrorKind> {
+        let drv_attrs = drv_args.to_attrs()?;
+
+        // TODO: why did he add this?
+        // let drvAttrs = Rc::new(NixAttrs::from_map(
+        //     unwrap_or_clone_rc(drvAttrs).into_iter().collect(),
+        // ));
+
+        let mut outputs = vec![NixString::OUT];
+
+        if let Some(outputs_arg) = drv_attrs.select("outputs") {
+            outputs_arg.force(vm)?;
+
+            outputs.clear();
+            for output in outputs_arg.to_list()?.into_iter() {
+                outputs.push(output.to_str()?);
+            }
+        }
+
+        let mut all = Thunk::new_blackhole();
+
+        let output_thunks = outputs
+            .into_iter()
+            .map(|output_name| (output_name, Thunk::new_blackhole()))
+            .collect::<Vec<_>>();
+
+        let mut new_attrs = output_thunks
+            .clone() // clone this because we need the "raw thunks" down below
+            .into_iter()
+            .map(|(name, thunk)| (name, Value::Thunk(thunk)))
+            .collect::<Vec<_>>();
+
+        new_attrs.extend_from_slice(&[
+            ("all".into(), Value::Thunk(all.clone())),
+            ("drvAttrs".into(), Value::Attrs(drv_attrs.clone())),
+        ]);
+
+        let common_attrs = drv_attrs.update(new_attrs.into_iter().collect());
+
+        let mut all_list: Vec<Value> = vec![];
+
+        // call the underlying derivationStrict function
+        // TODO: amjoseph introduced an extra thunk around the call to
+        // *Strict, why?
+        let strict_drv = builtin_derivation_strict(state, vm, drv_args)?.to_attrs()?;
+        let drv_path = strict_drv.select_required("drvPath")?;
+
+        for (output_name, mut thunk) in output_thunks {
+            let out_path = strict_drv.select_required(&output_name)?;
+
+            let output_attrs: Vec<(NixString, Value)> = vec![
+                ("type".into(), Value::String("derivation".into())),
+                ("outputName".into(), output_name.into()),
+                ("outPath".into(), out_path.clone()),
+                ("drvPath".into(), drv_path.clone()),
+            ];
+
+            let final_attrs = common_attrs
+                .clone()
+                .update(NixAttrs::from_iter(output_attrs.into_iter()));
+
+            let value = Value::Attrs(Box::new(final_attrs));
+
+            thunk.fill_blackhole(value.clone());
+
+            all_list.push(value);
+        }
+
+        let ret = all_list[0].clone();
+        all.fill_blackhole(Value::List(NixList::construct(all_list.len(), all_list)));
+        Ok(ret)
     }
 }
 
