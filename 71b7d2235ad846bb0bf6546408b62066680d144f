@@ -34,6 +34,24 @@
       "parentUuid": "7f4f451b_b6b93351",
       "revId": "71b7d2235ad846bb0bf6546408b62066680d144f",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "537f5ba9_08528f0d",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 5
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-01-17T17:56:45Z",
+      "side": 1,
+      "message": "Yeah agree, was only a remark, nothing to block this CL :-)",
+      "parentUuid": "d57f92f3_debfdff1",
+      "revId": "71b7d2235ad846bb0bf6546408b62066680d144f",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
