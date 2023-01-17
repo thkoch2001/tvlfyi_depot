@@ -16,6 +16,24 @@
       "message": "also needs to be applied here.",
       "revId": "eb59db68b068a4ef2a66e320c87cf8e42587cf8e",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c095c062_495f507f",
+        "filename": "tvix/derivation/src/validate.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-01-17T11:34:13Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e39fb047_5e3bde07",
+      "revId": "eb59db68b068a4ef2a66e320c87cf8e42587cf8e",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
