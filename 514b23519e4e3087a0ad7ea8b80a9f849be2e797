@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "283dc100_3e4f9180",
+        "filename": "tvix/derivation/src/errors.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2023-01-17T14:38:37Z",
+      "side": 1,
+      "message": "What is this intermediate type for, i.e. why not a variant of the DerivationError above?",
+      "range": {
+        "startLine": 47,
+        "startChar": 0,
+        "endLine": 47,
+        "endChar": 22
+      },
+      "revId": "514b23519e4e3087a0ad7ea8b80a9f849be2e797",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
