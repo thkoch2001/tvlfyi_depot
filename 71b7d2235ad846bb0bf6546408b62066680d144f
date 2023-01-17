@@ -16,6 +16,24 @@
       "message": "We should probably do something similar for warnings, so for example a \"unused function argument\" can carry the additional info.",
       "revId": "71b7d2235ad846bb0bf6546408b62066680d144f",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d57f92f3_debfdff1",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 5
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2023-01-17T14:43:56Z",
+      "side": 1,
+      "message": "Yeah, but not in this CL. We have someone who wants to look at linter stuff, so this will likely fold into that.",
+      "parentUuid": "7f4f451b_b6b93351",
+      "revId": "71b7d2235ad846bb0bf6546408b62066680d144f",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
