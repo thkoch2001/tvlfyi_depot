@@ -16,6 +16,24 @@
       "message": "Not sure if we want to propagate that error here or not.",
       "revId": "db004c506628cc236e8009b529767e26bb2927f4",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4821f441_e060c93c",
+        "filename": "tvix/derivation/src/errors.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 51,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2023-01-17T14:43:03Z",
+      "side": 1,
+      "message": "It\u0027s fine like this.",
+      "parentUuid": "edaabaf0_64c680ca",
+      "revId": "db004c506628cc236e8009b529767e26bb2927f4",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
