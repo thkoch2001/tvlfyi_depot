@@ -3,7 +3,7 @@
 
 {
   services.nginx.virtualHosts."predlozhnik.ru" = {
-    root = depot.users.tazjin.predlozhnik;
+    root = depot.corp.russian.predlozhnik;
     enableACME = true;
     forceSSL = true;
   };
