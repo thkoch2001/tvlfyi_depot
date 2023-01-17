@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f98fad99_074d6e18",
+        "filename": "tvix/cli/src/derivation.rs",
+        "patchSetId": 42
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-01-17T10:57:43Z",
+      "side": 1,
+      "message": "Let me move this to Derivation::validate (done in cl/7850)",
+      "revId": "b86785b1e92d8d1b133937112f35baca69708be1",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5bac8977_aa6a2d42",
+        "filename": "tvix/cli/src/derivation.rs",
+        "patchSetId": 42
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-01-17T10:57:43Z",
+      "side": 1,
+      "message": "Already covered by Derivation::validate()",
+      "revId": "b86785b1e92d8d1b133937112f35baca69708be1",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}

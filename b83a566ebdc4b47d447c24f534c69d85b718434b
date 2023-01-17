@@ -20,6 +20,23 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "c4755371_37ea99d6",
+        "filename": "tvix/cli/src/derivation.rs",
+        "patchSetId": 37
+      },
+      "lineNbr": 103,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-01-17T10:57:43Z",
+      "side": 1,
+      "message": "yes, we need to pass this along",
+      "revId": "b83a566ebdc4b47d447c24f534c69d85b718434b",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "a0c7708f_963a7f95",
         "filename": "tvix/cli/src/derivation.rs",
         "patchSetId": 37
