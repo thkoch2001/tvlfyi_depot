@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e39fb047_5e3bde07",
+        "filename": "tvix/derivation/src/validate.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-01-17T11:15:50Z",
+      "side": 1,
+      "message": "also needs to be applied here.",
+      "revId": "eb59db68b068a4ef2a66e320c87cf8e42587cf8e",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
