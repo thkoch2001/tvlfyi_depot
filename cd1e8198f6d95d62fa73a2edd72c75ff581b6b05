@@ -22,6 +22,30 @@
       },
       "revId": "cd1e8198f6d95d62fa73a2edd72c75ff581b6b05",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "18518d21_6b5711be",
+        "filename": "tvix/derivation/src/validate.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 73,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-01-17T14:52:02Z",
+      "side": 1,
+      "message": "That\u0027s the output names of the input derivation.\n\nYou can\u0027t construct these if you called validate on all input derivations and while they were produced, but let\u0027s say if you\u0027d populate the struct from somewhere else, like parsing ATerm, or receiving it \"over the wire\", you still want to validate.",
+      "parentUuid": "36f10253_a3df2518",
+      "range": {
+        "startLine": 73,
+        "startChar": 0,
+        "endLine": 73,
+        "endChar": 52
+      },
+      "revId": "cd1e8198f6d95d62fa73a2edd72c75ff581b6b05",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
