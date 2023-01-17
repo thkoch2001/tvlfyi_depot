@@ -62,13 +62,20 @@ impl Derivation {
             }
 
             for output_name in output_names.iter() {
-                if output_name.is_empty() {
+                // empty output names are invalid.
+                //
+                // `drv` is an invalid output name too, as this would cause
+                // a `builtins.derivation` call to return an attrset with a
+                // `drvPath` key (which already exists) and has a different
+                // meaning.
+                //
+                // TODO: do we need to apply more name validation here?
+                if output_name.is_empty() || output_name == "drv" {
                     return Err(ValidateDerivationError::InvalidInputDerivationOutputName(
                         input_derivation_path.to_string(),
                         output_name.to_string(),
                     ));
                 }
-                // TODO: do we need to apply more name validation here?
             }
         }
 
