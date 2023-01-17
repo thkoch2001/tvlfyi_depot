@@ -1,5 +1,7 @@
 use serde::{Deserialize, Serialize};
-use tvix_store::store_path::{ParseStorePathError, StorePath};
+use tvix_store::store_path::StorePath;
+
+use crate::DerivationError;
 
 #[derive(Clone, Debug, Default, Eq, PartialEq, Serialize, Deserialize)]
 pub struct Output {
@@ -22,9 +24,10 @@ impl Output {
         self.hash.is_some()
     }
 
-    pub fn validate(&self) -> Result<(), ParseStorePathError> {
+    pub fn validate(&self) -> Result<(), DerivationError> {
+        // TODO: add validation for hash, hashAlgo, expose validate_path boolean
         if let Err(e) = StorePath::from_absolute_path(&self.path) {
-            return Err(e);
+            return Err(DerivationError::InvalidOutputPath(self.path.to_string(), e));
         }
         Ok(())
     }

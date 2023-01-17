@@ -38,12 +38,7 @@ impl Derivation {
                 break;
             }
 
-            if let Err(e) = output.validate() {
-                return Err(DerivationError::InvalidOutputPath(
-                    output_name.to_string(),
-                    e,
-                ));
-            };
+            output.validate()?;
         }
 
         // Validate all input_derivations
