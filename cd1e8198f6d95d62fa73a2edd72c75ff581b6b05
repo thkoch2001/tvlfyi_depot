@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "36f10253_a3df2518",
+        "filename": "tvix/derivation/src/validate.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 73,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2023-01-17T14:32:49Z",
+      "side": 1,
+      "message": "I\u0027m not sure what situation could lead to this branch containing invalid information. Can you clarify?",
+      "range": {
+        "startLine": 73,
+        "startChar": 0,
+        "endLine": 73,
+        "endChar": 52
+      },
+      "revId": "cd1e8198f6d95d62fa73a2edd72c75ff581b6b05",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
