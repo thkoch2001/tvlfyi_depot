@@ -69,17 +69,25 @@ fn main() {
         .filter_level(log::LevelFilter::Info)
         .init();
 
-    let input_path = env::args()
-        .skip(1)
-        .next()
-        .ensure("must specify the input filename as the only argument");
+    let (input_path, output_path) = {
+        let mut args = env::args().collect::<Vec<_>>();
 
-    info!("reading from {input_path}");
+        if args.len() != 3 {
+            bail(format!(
+                "usage: {} <input-file> <output-file>",
+                args.first().map(String::as_str).unwrap_or("data-import")
+            ));
+        }
+
+        (args.remove(1), args.remove(1))
+    };
+
+    info!("reading from {input_path}; writing output to {output_path}");
     let input_file = File::open(input_path).ensure("failed to open input file");
 
     let mut parser = oc_parser::OpenCorporaParser::new(BufReader::new(input_file));
 
-    let conn = Connection::open("out.db").ensure("failed to open DB connection");
+    let conn = Connection::open(output_path).ensure("failed to open DB connection");
 
     db_setup::initial_schema(&conn);
 
