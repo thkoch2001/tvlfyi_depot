@@ -29,6 +29,15 @@ in
       # TODO: this is to fix a bug in dhall-nix
       dhall = dhall-source "dhall" hsSuper.dhall;
       dhall-nix = dhall-source "dhall-nix" hsSuper.dhall-nix;
+
+      # https://github.com/NixOS/nixpkgs/pull/211438
+      curl =
+        assert hsSuper.curl.configureFlags == [ ];
+        haskellLib.appendConfigureFlags
+          [
+            "--ghc-option=-DCURL_DISABLE_TYPECHECK"
+          ]
+          hsSuper.curl;
     };
   };
 
@@ -42,10 +51,6 @@ in
 
         # TODO(grfn): port to brick 1.4 (EventM gains an additional type argument in 1.0)
         brick = hsSelf.callPackage ./extra-pkgs/brick-0.73.nix { };
-
-        # TODO(sterni): upstream into nixpkgs
-        binary-orphans =
-          haskellLib.addBuildDepends [ hsSelf.OneTuple ] hsSuper.binary-orphans;
       };
     };
   };
