@@ -55,7 +55,7 @@ pkgs.lib.makeOverridable pkgs.buildBazelPackage {
   fetchConfigured = true;
 
   fetchAttrs = {
-    sha256 = "sha256:1nmx8w0n5l2qhdf9w79dlxxp4fghdlmbbw60w082y8g3y4lpzafn";
+    sha256 = "sha256:0vx936j75drpj45px9ixjspxrbbgh2k4xz0v2z1wh60mzm242a9c";
     preBuild = ''
       rm .bazelversion
     '';

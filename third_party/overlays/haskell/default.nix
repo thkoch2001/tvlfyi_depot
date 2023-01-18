@@ -42,10 +42,6 @@ in
 
         # TODO(grfn): port to brick 1.4 (EventM gains an additional type argument in 1.0)
         brick = hsSelf.callPackage ./extra-pkgs/brick-0.73.nix { };
-
-        # TODO(sterni): upstream into nixpkgs
-        binary-orphans =
-          haskellLib.addBuildDepends [ hsSelf.OneTuple ] hsSuper.binary-orphans;
       };
     };
   };
