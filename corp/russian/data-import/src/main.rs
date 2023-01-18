@@ -80,11 +80,11 @@ fn main() {
     let mut out = BufWriter::new(std::io::stdout().lock());
 
     while let Some(elem) = parser.next_element() {
-        match elem {
-            oc_parser::OcElement::Grammeme(g) => {
-                writeln!(out, "{:?}", g).ensure("writing element failed")
+        if let oc_parser::OcElement::Lemma(lemma) = elem {
+            if lemma.lemma.word == "тяжёлый" {
+                writeln!(out, "{:?}", lemma).ensure("writing output failed");
+                break;
             }
-            oc_parser::OcElement::Lemma(_) => continue,
         }
     }
 

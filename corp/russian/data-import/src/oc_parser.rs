@@ -1,5 +1,6 @@
 use super::{bail, Ensure};
 use log::info;
+use std::str::FromStr;
 use xml::attribute::OwnedAttribute;
 use xml::name::OwnedName;
 use xml::reader::XmlEvent;
@@ -7,14 +8,26 @@ use xml::EventReader;
 
 #[derive(Default, Debug)]
 pub struct Grammeme {
-    parent: Option<String>,
-    name: String,
-    alias: String,
-    description: String,
+    pub parent: Option<String>,
+    pub name: String,
+    pub alias: String,
+    pub description: String,
 }
 
-#[derive(Debug)]
-pub struct Lemma {}
+/// Single form of a word (either its lemma, or the variations).
+#[derive(Debug, Default)]
+pub struct Variation {
+    pub word: String,
+    pub grammemes: Vec<String>,
+}
+
+#[derive(Debug, Default)]
+pub struct Lemma {
+    pub id: u64,
+    pub lemma: Variation,
+    pub grammemes: Vec<String>,
+    pub variations: Vec<Variation>,
+}
 
 #[derive(Debug)]
 pub enum OcElement {
@@ -33,6 +46,12 @@ enum ParserState {
 
     /// Parser is parsing lemmata.
     Lemmata,
+
+    /// Parser is inside a lemma's actual lemma.
+    Lemma,
+
+    /// Parser is parsing a morphological variation of a lemma.
+    Variation,
 
     /// Parser has seen the end of the line and nothing more is
     /// available.
@@ -133,7 +152,7 @@ impl<R: std::io::Read> OpenCorporaParser<R> {
                 // actual beginning of an actual element, dispatch accordingly
                 event @ XmlEvent::StartElement {
                     name, attributes, ..
-                } => match self.state {
+                } => match &self.state {
                     ParserState::Grammemes => {
                         return Some(OcElement::Grammeme(self.parse_grammeme(name, attributes)))
                     }
@@ -144,6 +163,11 @@ impl<R: std::io::Read> OpenCorporaParser<R> {
                     ParserState::Init | ParserState::Ended => bail(format!(
                         "parser received an unexpected start element while in state {:?}: {:?}",
                         self.state, event
+                    )),
+
+                    other => bail(format!(
+                        "next_element() called while parser was in state {:?}",
+                        other
                     )),
                 },
 
@@ -199,6 +223,7 @@ impl<R: std::io::Read> OpenCorporaParser<R> {
         }
     }
 
+    /// Parse a single `<grammeme>` tag.
     fn parse_grammeme(&mut self, name: &OwnedName, attributes: &[OwnedAttribute]) -> Grammeme {
         if name.local_name != "grammeme" {
             bail(format!(
@@ -247,7 +272,7 @@ impl<R: std::io::Read> OpenCorporaParser<R> {
         grammeme
     }
 
-    fn parse_lemma(&mut self, name: &OwnedName, _attributes: &[OwnedAttribute]) -> Lemma {
+    fn parse_lemma(&mut self, name: &OwnedName, attributes: &[OwnedAttribute]) -> Lemma {
         if name.local_name != "lemma" {
             bail(format!(
                 "expected to parse a lemma, but found <{}>",
@@ -255,8 +280,104 @@ impl<R: std::io::Read> OpenCorporaParser<R> {
             ));
         }
 
-        self.skip_section("lemma");
+        self.state = ParserState::Lemma;
+        let mut lemma = Lemma::default();
 
-        Lemma {}
+        for attr in attributes {
+            if attr.name.local_name == "id" {
+                lemma.id = u64::from_str(&attr.value).ensure("failed to parse lemma ID");
+            }
+        }
+
+        loop {
+            match self.next() {
+                // <lemma> has ended
+                XmlEvent::EndElement { name } if name.local_name == "lemma" => {
+                    self.state = ParserState::Lemmata;
+                    return lemma;
+                }
+
+                // actual lemma content
+                XmlEvent::StartElement {
+                    name, attributes, ..
+                } => {
+                    match name.local_name.as_str() {
+                        // beginning to parse the lemma itself
+                        "l" => {
+                            lemma.lemma.word = attributes
+                                .into_iter()
+                                .find(|attr| attr.name.local_name == "t")
+                                .map(|attr| attr.value)
+                                .ensure(format!("lemma {} had no actual word", lemma.id));
+                        }
+
+                        // parsing a lemma variation
+                        "f" => {
+                            self.state = ParserState::Variation;
+
+                            let word = attributes
+                                .into_iter()
+                                .find(|attr| attr.name.local_name == "t")
+                                .map(|attr| attr.value)
+                                .ensure(format!(
+                                    "variation of lemma {} had no actual word",
+                                    lemma.id
+                                ));
+
+                            lemma.variations.push(Variation {
+                                word,
+                                grammemes: vec![],
+                            });
+                        }
+
+                        // parse a grammeme association
+                        "g" => {
+                            let grammeme = attributes
+                                .into_iter()
+                                .find(|attr| attr.name.local_name == "v")
+                                .map(|attr| attr.value)
+                                .ensure(format!(
+                                    "grammeme association in lemma {} missing ID",
+                                    lemma.id
+                                ));
+
+                            match self.state {
+                                ParserState::Lemma => {
+                                    lemma.grammemes.push(grammeme);
+                                }
+
+                                ParserState::Variation => {
+                                    lemma
+                                        .variations
+                                        .last_mut()
+                                        .ensure("variations should be non-empty")
+                                        .grammemes
+                                        .push(grammeme);
+                                }
+
+                                _ => bail(format!("invalid parser state: encountered grammeme association while in {:?}", self.state)),
+                            }
+                        }
+
+                        other => bail(format!("unexpected element while parsing lemma: {other}")),
+                    };
+                }
+
+                XmlEvent::EndElement { name } => match name.local_name.as_str() {
+                    "l" if self.state == ParserState::Lemma => continue,
+                    "f" if self.state == ParserState::Variation => {
+                        self.state = ParserState::Lemma;
+                        continue;
+                    }
+                    "g" => continue,
+                    other => bail(format!(
+                        "unexpected </{other}> while parsing lemma {}",
+                        lemma.id
+                    )),
+                },
+
+                _ => continue,
+            }
+        }
     }
 }
