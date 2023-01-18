@@ -29,6 +29,13 @@ in
       # TODO: this is to fix a bug in dhall-nix
       dhall = dhall-source "dhall" hsSuper.dhall;
       dhall-nix = dhall-source "dhall-nix" hsSuper.dhall-nix;
+
+      # https://github.com/NixOS/nixpkgs/pull/211438
+      curl =
+        assert hsSuper.curl.configureFlags == [ ];
+        haskellLib.appendConfigureFlags [
+          "--ghc-option=-DCURL_DISABLE_TYPECHECK"
+        ] hsSuper.spacecookie;
     };
   };
 
