@@ -3,6 +3,29 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "57261506_f4d71f8b",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2023-01-18T15:39:21Z",
+      "side": 1,
+      "message": "too long",
+      "range": {
+        "startLine": 7,
+        "startChar": 0,
+        "endLine": 7,
+        "endChar": 71
+      },
+      "revId": "514b23519e4e3087a0ad7ea8b80a9f849be2e797",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "283dc100_3e4f9180",
         "filename": "tvix/derivation/src/errors.rs",
         "patchSetId": 2
