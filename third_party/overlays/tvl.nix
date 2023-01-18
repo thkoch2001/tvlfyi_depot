@@ -45,6 +45,14 @@ depot.nix.readTree.drvTargets {
     ];
   });
 
+  # Apply workaround from https://github.com/NixOS/nixpkgs/pull/211469
+  # until it hits the nixos-unstable channel
+  mullvad = super.mullvad.overrideAttrs (old: {
+    nativeBuildInputs = old.nativeBuildInputs ++ [
+      self.buildPackages.git
+    ];
+  });
+
   home-manager = super.home-manager.overrideAttrs (_: {
     src = depot.third_party.sources.home-manager;
     version = "git-"
