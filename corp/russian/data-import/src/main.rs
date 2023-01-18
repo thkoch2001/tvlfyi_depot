@@ -107,6 +107,8 @@ fn main() {
 
         count += 1;
     }
+
+    tx.commit().ensure("final commit failed");
 }
 
 /// It's like `expect`, but through `log::error`.
