@@ -1,10 +1,10 @@
-//! This program imports Russian language data from OpenCorpora
-//! ("Открытый корпус") into a SQLite database that can be used for
-//! [//corp/russian][corp-russian] projects.
+//! This program imports Russian language data from OpenCorpora and
+//! OpenRussian ("Открытый корпус") into a SQLite database that can be
+//! used for [//corp/russian][corp-russian] projects.
 //!
 //! [corp-russian]: https://at.tvl.fyi/?q=%2F%2Fcorp%2Frussian
 //!
-//! Ideally, running this on an OpenCorpora dump should yield a fully
+//! Ideally, running this on intact dumps should yield a fully
 //! functional SQLite database compatible with all other tools
 //! consuming it.
 //!
@@ -53,6 +53,55 @@
 //!
 //!   For example, a relationship `cardinal/ordinal` might be established
 //!   between the lemmas "два" and "второй".
+//!
+//! ## OpenRussian format
+//!
+//! The [OpenRussian](https://en.openrussian.org/dictionary) project
+//! lets users export its database as a set of CSV-files. For our
+//! purposes, we download the files using `<tab>` separators.
+//!
+//! Whereas OpenCorpora opts for a flat structure with a "tag" system
+//! (through its flexible grammemes), OpenRussian has a fixed pre-hoc
+//! structure into which it sorts some words with their morphologies.
+//! The OpenRussian database is much smaller as of January 2023 (~1.7
+//! million words vs. >5 million for OpenCorpora), but some of the
+//! information is much more practically useful.
+//!
+//! Two very important bits of information OpenRussian has are accent
+//! marks (most tables containing actual words have a normal form
+//! containing and accent mark, and a "bare" form without) and
+//! translations into English and German.
+//!
+//! The full dump includes the following tables (and some more):
+//!
+//! * `words`: List of lemmas in the corpus, with various bits of
+//!    metadata as well as hand-written notes.
+//!
+//! * `adjectives`: Contains IDs for words that are adjectives.
+//!
+//! * `nouns`: IDs for words that are nouns; and noun metadata (e.g.
+//!   gender, declinability)
+//!
+//! * `verbs`: IDs of words that are verbs, including their aspect and
+//!   "partnered" verb in the other aspect
+//!
+//! * `words_forms`: Contains all morphed variants of the lemmas from
+//!   `words`, including information about their grammeme, and accent
+//!   marks.
+//!
+//! * `words_rels`: Contains relations between words, containing
+//!   information like "synonyms" or general relation between words.
+//!
+//! * `translations`: Contains translations tagged by target language,
+//!   as well as examples and (occasionally) additional information.
+//!
+//! These tables also contain something, but have not been analysed
+//! yet:
+//!
+//! * `expressions_words`
+//! * `sentences`
+//! * `sentences_translations`
+//! * `sentences_words`
 
 use log::{error, info};
 use rusqlite::{Connection, Result};
