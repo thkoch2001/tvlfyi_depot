@@ -12,11 +12,11 @@ use log::{debug, info};
 use rusqlite::Connection;
 
 /// Sets up an initial schema which matches the OpenCorpora data.
-pub fn initial_schema(conn: &Connection) {
+pub fn initial_oc_schema(conn: &Connection) {
     conn.execute_batch(
         r#"
 -- table for plain import of grammemes from XML
-CREATE TABLE grammemes (
+CREATE TABLE oc_grammemes (
     name TEXT PRIMARY KEY,
     parent TEXT,
     alias TEXT,
@@ -24,47 +24,47 @@ CREATE TABLE grammemes (
 ) STRICT;
 
 -- table for plain import of lemmas (*not* their variations!)
-CREATE TABLE lemmas (
+CREATE TABLE oc_lemmas (
     id INTEGER PRIMARY KEY,
     lemma TEXT NOT NULL
 ) STRICT;
 
 -- table for relationship between grammemes and lemmas
-CREATE TABLE lemma_grammemes (
+CREATE TABLE oc_lemma_grammemes (
     lemma INTEGER,
     grammeme TEXT NOT NULL,
-    FOREIGN KEY(lemma) REFERENCES lemmas(id)
+    FOREIGN KEY(lemma) REFERENCES oc_lemmas(id)
 ) STRICT;
 
 -- table for all words, i.e. including variations of lemmata
-CREATE TABLE words (
+CREATE TABLE oc_words (
     lemma INTEGER NOT NULL,
     word TEXT NOT NULL,
-    FOREIGN KEY(lemma) REFERENCES lemmas(id)
+    FOREIGN KEY(lemma) REFERENCES oc_lemmas(id)
 ) STRICT;
 
 -- table for relationship between words and grammemes
-CREATE TABLE word_grammemes (
+CREATE TABLE oc_word_grammemes (
     word INTEGER NOT NULL,
     grammeme TEXT NOT NULL,
-    FOREIGN KEY(word) REFERENCES words(ROWID)
+    FOREIGN KEY(word) REFERENCES oc_words(ROWID)
 ) STRICT;
 
 -- table for link types
-CREATE TABLE link_types (
+CREATE TABLE oc_link_types (
   id INTEGER PRIMARY KEY,
   name TEXT
 ) STRICT;
 
 -- table for links between lemmata
-CREATE TABLE links (
+CREATE TABLE oc_links (
   id INTEGER PRIMARY KEY,
   link_type INTEGER NOT NULL,
   from_lemma INTEGER NOT NULL,
   to_lemma INTEGER NOT NULL,
-  FOREIGN KEY(link_type) REFERENCES link_types(id),
-  FOREIGN KEY(from_lemma) REFERENCES lemmas(id),
-  FOREIGN KEY(to_lemma) REFERENCES lemmas(id)
+  FOREIGN KEY(link_type) REFERENCES oc_link_types(id),
+  FOREIGN KEY(from_lemma) REFERENCES oc_lemmas(id),
+  FOREIGN KEY(to_lemma) REFERENCES oc_lemmas(id)
 ) STRICT;
 
 "#,
@@ -79,7 +79,7 @@ pub fn insert_oc_element(conn: &Connection, elem: OcElement) {
     match elem {
         OcElement::Grammeme(grammeme) => {
             conn.execute(
-                "INSERT INTO grammemes (name, parent, alias, description) VALUES (?1, ?2, ?3, ?4)",
+                "INSERT INTO oc_grammemes (name, parent, alias, description) VALUES (?1, ?2, ?3, ?4)",
                 (
                     &grammeme.name,
                     &grammeme.parent,
@@ -96,7 +96,7 @@ pub fn insert_oc_element(conn: &Connection, elem: OcElement) {
 
         OcElement::LinkType(lt) => {
             conn.execute(
-                "INSERT INTO link_types (id, name) VALUES (?1, ?2)",
+                "INSERT INTO oc_link_types (id, name) VALUES (?1, ?2)",
                 (&lt.id, &lt.name),
             )
             .ensure("failed to insert link type");
@@ -107,7 +107,7 @@ pub fn insert_oc_element(conn: &Connection, elem: OcElement) {
         OcElement::Link(link) => {
             let mut stmt = conn
                 .prepare_cached(
-                    "INSERT INTO links (id, link_type, from_lemma, to_lemma) VALUES (?1, ?2, ?3, ?4)",
+                    "INSERT INTO oc_links (id, link_type, from_lemma, to_lemma) VALUES (?1, ?2, ?3, ?4)",
                 )
                 .ensure("failed to prepare link statement");
 
@@ -124,7 +124,7 @@ pub fn insert_oc_element(conn: &Connection, elem: OcElement) {
 fn insert_lemma(conn: &Connection, lemma: Lemma) {
     // insert the lemma itself
     let mut stmt = conn
-        .prepare_cached("INSERT INTO lemmas (id, lemma) VALUES (?1, ?2)")
+        .prepare_cached("INSERT INTO oc_lemmas (id, lemma) VALUES (?1, ?2)")
         .ensure("failed to prepare statement");
 
     stmt.execute((&lemma.id, &lemma.lemma.word))
@@ -132,7 +132,7 @@ fn insert_lemma(conn: &Connection, lemma: Lemma) {
 
     // followed by its relations to the grammemes set
     let mut stmt = conn
-        .prepare_cached("INSERT INTO lemma_grammemes (lemma, grammeme) VALUES (?1, ?2)")
+        .prepare_cached("INSERT INTO oc_lemma_grammemes (lemma, grammeme) VALUES (?1, ?2)")
         .ensure("failed to prepare statement");
 
     for grammeme in lemma.grammemes {
@@ -142,11 +142,11 @@ fn insert_lemma(conn: &Connection, lemma: Lemma) {
 
     // followed by all of its variations ...
     let mut word_insert = conn
-        .prepare_cached("INSERT INTO words (lemma, word) VALUES (?1, ?2)")
+        .prepare_cached("INSERT INTO oc_words (lemma, word) VALUES (?1, ?2)")
         .unwrap();
 
     let mut word_grammeme = conn
-        .prepare_cached("INSERT INTO word_grammemes (word, grammeme) VALUES (?1, ?2)")
+        .prepare_cached("INSERT INTO oc_word_grammemes (word, grammeme) VALUES (?1, ?2)")
         .unwrap();
 
     for variation in lemma.variations {

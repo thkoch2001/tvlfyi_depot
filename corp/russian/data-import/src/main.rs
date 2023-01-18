@@ -89,7 +89,7 @@ fn main() {
 
     let conn = Connection::open(output_path).ensure("failed to open DB connection");
 
-    db_setup::initial_schema(&conn);
+    db_setup::initial_oc_schema(&conn);
 
     // afterwards:
     // add actual IDs to grammemes
