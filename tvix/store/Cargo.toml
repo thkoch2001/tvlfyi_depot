@@ -20,6 +20,7 @@ tokio-stream = "0.1.11"
 tonic = "0.8.2"
 tracing-subscriber = "0.3.16"
 tracing = "0.1.37"
+base64 = "0.21.0"
 
 [dependencies.tonic-reflection]
 optional = true
