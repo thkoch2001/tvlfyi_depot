@@ -50,6 +50,12 @@ CREATE TABLE word_grammemes (
     FOREIGN KEY(word) REFERENCES words(ROWID)
 ) STRICT;
 
+-- table for link types
+CREATE TABLE link_types (
+  id INTEGER PRIMARY KEY,
+  name TEXT
+) STRICT;
+
 "#,
     )
     .ensure("setting up initial table schema failed");
@@ -76,6 +82,16 @@ pub fn insert_oc_element(conn: &Connection, elem: OcElement) {
         }
 
         OcElement::Lemma(lemma) => insert_lemma(conn, lemma),
+
+        OcElement::LinkType(lt) => {
+            conn.execute(
+                "INSERT INTO link_types (id, name) VALUES (?1, ?2)",
+                (&lt.id, &lt.name),
+            )
+            .ensure("failed to insert link type");
+
+            info!("inserted link type {}", lt.name);
+        }
     }
 }
 

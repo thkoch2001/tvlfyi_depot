@@ -29,10 +29,17 @@ pub struct Lemma {
     pub variations: Vec<Variation>,
 }
 
+#[derive(Debug, Default)]
+pub struct LinkType {
+    pub id: u64,
+    pub name: String,
+}
+
 #[derive(Debug)]
 pub enum OcElement {
     Grammeme(Grammeme),
     Lemma(Lemma),
+    LinkType(LinkType),
 }
 
 #[derive(Debug, PartialEq)]
@@ -52,6 +59,9 @@ enum ParserState {
 
     /// Parser is parsing a morphological variation of a lemma.
     Variation,
+
+    /// Parser is parsing link types.
+    LinkTypes,
 
     /// Parser has seen the end of the line and nothing more is
     /// available.
@@ -77,8 +87,8 @@ enum SectionState {
 
 fn section_state(section: &str) -> SectionState {
     match section {
-        "grammemes" | "lemmata" => SectionState::Active,
-        "restrictions" | "link_types" | "links" => SectionState::Inactive,
+        "grammemes" | "lemmata" | "link_types" => SectionState::Active,
+        "restrictions" | "links" => SectionState::Inactive,
         _ => SectionState::Unknown,
     }
 }
@@ -137,6 +147,7 @@ impl<R: std::io::Read> OpenCorporaParser<R> {
                     self.state = match name.local_name.as_str() {
                         "grammemes" => ParserState::Grammemes,
                         "lemmata" => ParserState::Lemmata,
+                        "link_types" => ParserState::LinkTypes,
                         _ => unreachable!(),
                     };
                 }
@@ -156,8 +167,13 @@ impl<R: std::io::Read> OpenCorporaParser<R> {
                     ParserState::Grammemes => {
                         return Some(OcElement::Grammeme(self.parse_grammeme(name, attributes)))
                     }
+
                     ParserState::Lemmata => {
                         return Some(OcElement::Lemma(self.parse_lemma(name, attributes)))
+                    }
+
+                    ParserState::LinkTypes => {
+                        return Some(OcElement::LinkType(self.parse_link_type(name, attributes)))
                     }
 
                     ParserState::Init | ParserState::Ended => bail(format!(
@@ -379,5 +395,25 @@ impl<R: std::io::Read> OpenCorporaParser<R> {
                 _ => continue,
             }
         }
+    }
+
+    fn parse_link_type(&mut self, name: &OwnedName, attributes: &[OwnedAttribute]) -> LinkType {
+        if name.local_name != "type" {
+            bail(format!(
+                "expected to parse a link type, but found <{}>",
+                name.local_name
+            ));
+        }
+
+        let mut link_type = LinkType::default();
+
+        for attr in attributes {
+            if attr.name.local_name == "id" {
+                link_type.id = u64::from_str(&attr.value).ensure("failed to parse link type ID");
+            }
+        }
+
+        link_type.name = self.parse_string("type");
+        link_type
     }
 }
