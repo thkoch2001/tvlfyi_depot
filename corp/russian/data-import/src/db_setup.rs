@@ -56,6 +56,17 @@ CREATE TABLE link_types (
   name TEXT
 ) STRICT;
 
+-- table for links between lemmata
+CREATE TABLE links (
+  id INTEGER PRIMARY KEY,
+  link_type INTEGER NOT NULL,
+  from_lemma INTEGER NOT NULL,
+  to_lemma INTEGER NOT NULL,
+  FOREIGN KEY(link_type) REFERENCES link_types(id),
+  FOREIGN KEY(from_lemma) REFERENCES lemmas(id),
+  FOREIGN KEY(to_lemma) REFERENCES lemmas(id)
+) STRICT;
+
 "#,
     )
     .ensure("setting up initial table schema failed");
@@ -91,6 +102,19 @@ pub fn insert_oc_element(conn: &Connection, elem: OcElement) {
             .ensure("failed to insert link type");
 
             info!("inserted link type {}", lt.name);
+        }
+
+        OcElement::Link(link) => {
+            let mut stmt = conn
+                .prepare_cached(
+                    "INSERT INTO links (id, link_type, from_lemma, to_lemma) VALUES (?1, ?2, ?3, ?4)",
+                )
+                .ensure("failed to prepare link statement");
+
+            stmt.execute((&link.id, &link.link_type, &link.from, &link.to))
+                .ensure("failed to insert link");
+
+            debug!("inserted link {}", link.id);
         }
     }
 }

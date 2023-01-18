@@ -1,5 +1,5 @@
 use super::{bail, Ensure};
-use log::info;
+use log::{info, warn};
 use std::str::FromStr;
 use xml::attribute::OwnedAttribute;
 use xml::name::OwnedName;
@@ -35,11 +35,20 @@ pub struct LinkType {
     pub name: String,
 }
 
+#[derive(Debug, Default)]
+pub struct Link {
+    pub id: u64,   // link itself
+    pub from: u64, // lemma
+    pub to: u64,   // lemma
+    pub link_type: u64,
+}
+
 #[derive(Debug)]
 pub enum OcElement {
     Grammeme(Grammeme),
     Lemma(Lemma),
     LinkType(LinkType),
+    Link(Link),
 }
 
 #[derive(Debug, PartialEq)]
@@ -62,6 +71,9 @@ enum ParserState {
 
     /// Parser is parsing link types.
     LinkTypes,
+
+    /// Parser is parsing links.
+    Links,
 
     /// Parser has seen the end of the line and nothing more is
     /// available.
@@ -87,8 +99,8 @@ enum SectionState {
 
 fn section_state(section: &str) -> SectionState {
     match section {
-        "grammemes" | "lemmata" | "link_types" => SectionState::Active,
-        "restrictions" | "links" => SectionState::Inactive,
+        "grammemes" | "lemmata" | "link_types" | "links" => SectionState::Active,
+        "restrictions" => SectionState::Inactive,
         _ => SectionState::Unknown,
     }
 }
@@ -148,6 +160,7 @@ impl<R: std::io::Read> OpenCorporaParser<R> {
                         "grammemes" => ParserState::Grammemes,
                         "lemmata" => ParserState::Lemmata,
                         "link_types" => ParserState::LinkTypes,
+                        "links" => ParserState::Links,
                         _ => unreachable!(),
                     };
                 }
@@ -174,6 +187,10 @@ impl<R: std::io::Read> OpenCorporaParser<R> {
 
                     ParserState::LinkTypes => {
                         return Some(OcElement::LinkType(self.parse_link_type(name, attributes)))
+                    }
+
+                    ParserState::Links if name.local_name == "link" => {
+                        return Some(OcElement::Link(self.parse_link(attributes)))
                     }
 
                     ParserState::Init | ParserState::Ended => bail(format!(
@@ -415,5 +432,39 @@ impl<R: std::io::Read> OpenCorporaParser<R> {
 
         link_type.name = self.parse_string("type");
         link_type
+    }
+
+    fn parse_link(&mut self, attributes: &[OwnedAttribute]) -> Link {
+        let mut link = Link::default();
+
+        for attr in attributes {
+            let i_val = || u64::from_str(&attr.value).ensure("failed to parse link field");
+
+            match attr.name.local_name.as_str() {
+                "id" => {
+                    link.id = i_val();
+                }
+                "from" => {
+                    link.from = i_val();
+                }
+                "to" => {
+                    link.to = i_val();
+                }
+                "type" => {
+                    link.link_type = i_val();
+                }
+
+                other => {
+                    warn!("unexpected attribute {} on <link>", other);
+                    continue;
+                }
+            }
+        }
+
+        // expect the end of the <link> element, though since these
+        // are empty it should be immediate.
+        self.skip_section("link");
+
+        link
     }
 }
