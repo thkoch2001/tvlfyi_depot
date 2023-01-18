@@ -635,11 +635,25 @@ rec {
         ];
 
       };
-      "base64" = rec {
+      "base64 0.13.1" = rec {
         crateName = "base64";
         version = "0.13.1";
         edition = "2018";
         sha256 = "1s494mqmzjb766fy1kqlccgfg2sdcjb6hzbvzqv2jw65fdi5h6wy";
+        authors = [
+          "Alice Maz <alice@alicemaz.com>"
+          "Marshall Pierce <marshall@mpierce.org>"
+        ];
+        features = {
+          "default" = [ "std" ];
+        };
+        resolvedDefaultFeatures = [ "default" "std" ];
+      };
+      "base64 0.21.0" = rec {
+        crateName = "base64";
+        version = "0.21.0";
+        edition = "2021";
+        sha256 = "0sidjip5b33sr6w7kasfj9qxpbda41nw0x4gjjk55g55a6mdv954";
         authors = [
           "Alice Maz <alice@alicemaz.com>"
           "Marshall Pierce <marshall@mpierce.org>"
@@ -6248,7 +6262,7 @@ rec {
           }
           {
             name = "base64";
-            packageId = "base64";
+            packageId = "base64 0.13.1";
           }
           {
             name = "bytes";
@@ -7343,6 +7357,10 @@ rec {
           {
             name = "anyhow";
             packageId = "anyhow";
+          }
+          {
+            name = "base64";
+            packageId = "base64 0.21.0";
           }
           {
             name = "blake3";
