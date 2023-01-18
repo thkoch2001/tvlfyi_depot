@@ -1,4 +1,4 @@
-{ depot, pkgs, ... }:
+{ depot, lib, pkgs, ... }:
 
 let
   buildInputs = with pkgs; [
@@ -26,14 +26,18 @@ let
     # make OPENCORPORA_DATA available in the environment
     OPENCORPORA_DATA = inputData;
   };
+
 in
-depot.third_party.naersk.buildPackage {
+lib.fix (self: depot.third_party.naersk.buildPackage {
   src = depot.third_party.gitignoreSource ./.;
   inherit buildInputs;
 
-  passthru = {
-    inherit shell;
+  passthru = depot.nix.readTree.drvTargets {
+    inherit shell inputData;
 
-
+    # target that actually builds an entire database
+    database = pkgs.runCommand "tvl-russian-db.sqlite" { } ''
+      ${self}/bin/data-import ${inputData} $out
+    '';
   };
-}
+})
