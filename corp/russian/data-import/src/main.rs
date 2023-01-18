@@ -55,11 +55,13 @@
 //!   between the lemmas "два" and "второй".
 
 use log::{error, info};
+use rusqlite::{Connection, Result};
 use std::env;
 use std::fmt::Display;
 use std::fs::File;
-use std::io::{BufReader, BufWriter, Write};
+use std::io::BufReader;
 
+mod db_setup;
 mod oc_parser;
 
 fn main() {
@@ -77,18 +79,34 @@ fn main() {
 
     let mut parser = oc_parser::OpenCorporaParser::new(BufReader::new(input_file));
 
-    let mut out = BufWriter::new(std::io::stdout().lock());
+    let conn = Connection::open("out.db").ensure("failed to open DB connection");
+
+    db_setup::initial_schema(&conn);
+
+    // afterwards:
+    // add actual IDs to grammemes
+    // properly reference keys internally
+    // add foreign key constraint on lemma_grammemes.grammeme
+
+    let mut tx = conn
+        .unchecked_transaction()
+        .ensure("failed to start transaction");
+    let mut count = 0;
 
     while let Some(elem) = parser.next_element() {
-        if let oc_parser::OcElement::Lemma(lemma) = elem {
-            if lemma.lemma.word == "тяжёлый" {
-                writeln!(out, "{:?}", lemma).ensure("writing output failed");
-                break;
-            }
+        // commit every 1000 things
+        if count % 1000 == 0 {
+            tx.commit().ensure("transaction failed");
+            tx = conn
+                .unchecked_transaction()
+                .ensure("failed to start new transaction");
+            info!("transaction committed at watermark {}", count);
         }
-    }
 
-    out.flush().ensure("flushing the out buffer failed");
+        db_setup::insert_oc_element(&tx, elem);
+
+        count += 1;
+    }
 }
 
 /// It's like `expect`, but through `log::error`.
