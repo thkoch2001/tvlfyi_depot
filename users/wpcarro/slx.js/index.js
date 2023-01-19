@@ -1,21 +1,9 @@
-const state = {
-    // Match values case sensitively when filtering.
-    caseSensitive: false,
-    // Coerce values into regular expressions (instead of strings) when they're defined as atoms.
-    preferRegex: true,
-    // The key in the JS object that hosts the Date type against which we filter.
-    dateKey: 'Date',
-};
-
-// TODO(wpcarro): Support filtering by date (before, after).
-// TODO(wpcarro): Support grouping with parentheses.
-
-function select(query, xs) {
-    const predicate = compile(parse(query));
+function select(query, xs, config) {
+    const predicate = compile(parse(query), config);
     return xs.filter(predicate);
 }
 
-function compile(ast) {
+function compile(ast, config) {
     if (ast.type === 'CONJUNCTION') {
         const lhs = compile(ast.lhs);
         const rhs = compile(ast.rhs);
@@ -38,12 +26,12 @@ function compile(ast) {
                 if (ast.val === 'yesterday') {
                     t.setDate(t.getDate() - 1);
                     console.log(t);
-                } 
+                }
                 // MM/DD/YYYY
                 else {
                     t = new Date(ast.val);
                 }
-                return row[state.dateKey] < t;
+                return row[config.dateKey] < t;
             };
         }
         if (ast.key === 'after') {
@@ -52,12 +40,12 @@ function compile(ast) {
                 if (ast.val === 'yesterday') {
                     t.setDate(t.getDate() - 1);
                     console.log(t);
-                } 
+                }
                 // MM/DD/YYYY
                 else {
                     t = new Date(ast.val);
                 }
-                return row[state.dateKey] > t;
+                return row[config.dateKey] > t;
             };
         }
     }
@@ -71,7 +59,7 @@ function compile(ast) {
         if (ast.matchType === 'STRING') {
             return function(row) {
                 return Object.values(row).some(x => {
-                    if (state.caseSensitive) {
+                    if (config.caseSensitive) {
                         return x === ast.val;
                     } else {
                         return x.toLowerCase() === ast.val.toLowerCase();
@@ -87,7 +75,7 @@ function compile(ast) {
     }
     if (ast.type === 'STRING') {
         return function(x) {
-            if (state.caseSensitive) {
+            if (config.caseSensitive) {
                 return x === ast.val;
             } else {
                 return x.toLowerCase() === ast.val.toLowerCase();
@@ -310,18 +298,18 @@ function selection(p) {
             };
         }
     } else {
-        return matchAll(p);
+        return matchAll(p, config);
     }
 }
 
-function matchAll(p) {
+function matchAll(p, config) {
     const [type, val] = p.tokens[p.i];
 
-    // Cast atoms into strings or regexes depending on the current state.
+    // Cast atoms into strings or regexes depending on the current config.
     if (type === 'ATOM') {
         p.i += 1;
-        if (state.preferRegex) {
-            const regex = state.caseSensitive ? new RegExp(val) : new RegExp(val, "i");
+        if (config.preferRegex) {
+            const regex = config.caseSensitive ? new RegExp(val) : new RegExp(val, "i");
             return { type: 'MATCH_ALL', matchType: 'REGEX', val: regex };
         } else {
             return { type: 'MATCH_ALL', matchType: 'STRING', val }
@@ -333,20 +321,20 @@ function matchAll(p) {
     }
     if (type === 'REGEX') {
         p.i += 1;
-        const regex = state.caseSensitive ? new RegExp(val) : new RegExp(val, "i");
+        const regex = config.caseSensitive ? new RegExp(val) : new RegExp(val, "i");
         return { type: 'MATCH_ALL', matchType: 'REGEX', val: regex };
     }
     throw `Parse Error: Expected a regular expression or a string, but got: ${p.tokens[p.i]}; ${JSON.stringify(p)}`;
 }
 
-function value(p) {
+function value(p, config) {
     const [type, val] = p.tokens[p.i];
 
-    // Cast atoms into strings or regexes depending on the current state.
+    // Cast atoms into strings or regexes depending on the current config.
     if (type === 'ATOM') {
         p.i += 1;
-        if (state.preferRegex) {
-            const regex = state.caseSensitive ? new RegExp(val) : new RegExp(val, "i");
+        if (config.preferRegex) {
+            const regex = config.caseSensitive ? new RegExp(val) : new RegExp(val, "i");
             return { type: 'REGEX', val: regex };
         } else {
             return { type: 'STRING', val }
@@ -358,7 +346,7 @@ function value(p) {
     }
     if (type === 'REGEX') {
         p.i += 1;
-        const regex = state.caseSensitive ? new RegExp(val) : new RegExp(val, "i");
+        const regex = config.caseSensitive ? new RegExp(val) : new RegExp(val, "i");
         return { type, val: regex };
     }
     throw `Parse Error: Expected a regular expression or a string, but got: ${p.tokens[p.i]}; ${JSON.stringify(p)}`;
