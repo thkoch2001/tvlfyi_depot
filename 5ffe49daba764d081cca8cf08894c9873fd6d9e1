@@ -18,6 +18,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "9c4cb9cf_58062ff6",
+        "filename": "tvix/eval/src/vm.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 112,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2023-01-20T22:26:16Z",
+      "side": 1,
+      "message": "oh lol, fixed",
+      "parentUuid": "846d17a2_e8ec00d1",
+      "revId": "5ffe49daba764d081cca8cf08894c9873fd6d9e1",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "3141c064_a33d8d8d",
@@ -31,6 +49,24 @@
       "writtenOn": "2023-01-20T21:51:29Z",
       "side": 1,
       "message": "We should probably add a note on on our behaviour / expectations if someone changes a file while the eval is kicked off.",
+      "revId": "5ffe49daba764d081cca8cf08894c9873fd6d9e1",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b1debca6_0f5e870a",
+        "filename": "tvix/eval/src/vm.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 113,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2023-01-20T22:26:16Z",
+      "side": 1,
+      "message": "There are no expectations, the entire current `import_cache` was just a quick fix amjoseph put in, so there\u0027s not really anything to write down until we actually think about it.",
+      "parentUuid": "3141c064_a33d8d8d",
       "revId": "5ffe49daba764d081cca8cf08894c9873fd6d9e1",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
@@ -52,6 +88,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "18633b0e_e5660ad2",
+        "filename": "tvix/eval/src/vm.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 114,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2023-01-20T22:26:16Z",
+      "side": 1,
+      "message": "We don\u0027t have any decisions on what the behaviour should be, the current import cache is explicitly a crude hack (see cl/7361). We\u0027ll have to think this through at some point and figure out what we want it to do.\n\nFWIW, hash(file + absolute location) is probably enough as that should be the only \"external\" thing that can influence the behaviour of files. It\u0027s a topic for later now, for now this works \"good enough\" in non-adversarial situations.",
+      "parentUuid": "da086bc3_986296d5",
+      "revId": "5ffe49daba764d081cca8cf08894c9873fd6d9e1",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "09a71e7c_957cccf2",
@@ -65,6 +119,24 @@
       "writtenOn": "2023-01-20T21:52:55Z",
       "side": 1,
       "message": "… and forgive me my previous ignorance, but is PathBuf here relative to the working directory of the tvix-eval process? Or relative to the surrounding directory of where the eval was kicked off? We should probably add this in the docstring too.",
+      "revId": "5ffe49daba764d081cca8cf08894c9873fd6d9e1",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "40d4b461_f7f9e441",
+        "filename": "tvix/eval/src/vm.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 115,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2023-01-20T22:26:16Z",
+      "side": 1,
+      "message": "It\u0027s absolute, we normalise all paths in the evaluator as soon as they\u0027re instantiated",
+      "parentUuid": "09a71e7c_957cccf2",
       "revId": "5ffe49daba764d081cca8cf08894c9873fd6d9e1",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
