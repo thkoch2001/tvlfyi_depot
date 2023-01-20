@@ -16,6 +16,23 @@
       "message": "Approving for now, but we should be using the native tonic way instead of this dead code. Please file a bug for that.",
       "revId": "fe70f587cfb65552d3c9f5e9ed595379a00701ba",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d9368489_df763d03",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2023-01-20T16:11:38Z",
+      "side": 1,
+      "message": "oh, also this is a `chore` - it\u0027s a maintenance commit that adds no features",
+      "revId": "fe70f587cfb65552d3c9f5e9ed595379a00701ba",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
