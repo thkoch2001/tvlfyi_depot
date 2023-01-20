@@ -18,6 +18,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "85c5633e_0dab10a8",
+        "filename": "tvix/cli/src/derivation.rs",
+        "patchSetId": 42
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2023-01-20T11:02:45Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f98fad99_074d6e18",
+      "revId": "b86785b1e92d8d1b133937112f35baca69708be1",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "5bac8977_aa6a2d42",
@@ -31,6 +49,24 @@
       "writtenOn": "2023-01-17T10:57:43Z",
       "side": 1,
       "message": "Already covered by Derivation::validate()",
+      "revId": "b86785b1e92d8d1b133937112f35baca69708be1",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e3ec3d28_dc1d8989",
+        "filename": "tvix/cli/src/derivation.rs",
+        "patchSetId": 42
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2023-01-20T11:02:45Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "5bac8977_aa6a2d42",
       "revId": "b86785b1e92d8d1b133937112f35baca69708be1",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }

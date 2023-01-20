@@ -18,6 +18,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "5ccede0c_158472eb",
+        "filename": "tvix/cli/src/derivation.rs",
+        "patchSetId": 37
+      },
+      "lineNbr": 84,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2023-01-20T11:02:45Z",
+      "side": 1,
+      "message": "Lets tackle this later, down the line I want to clean up the way `Derivation` is constructed to avoid being able to represent so many invalid states in the first place, and that\u0027ll cause a pass over these errors.",
+      "parentUuid": "b88aa61d_d3cb3a5d",
+      "revId": "b83a566ebdc4b47d447c24f534c69d85b718434b",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "c4755371_37ea99d6",
@@ -52,6 +70,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "d6ef7791_dbe398c7",
+        "filename": "tvix/cli/src/derivation.rs",
+        "patchSetId": 37
+      },
+      "lineNbr": 200,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2023-01-20T11:02:45Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a0c7708f_963a7f95",
+      "revId": "b83a566ebdc4b47d447c24f534c69d85b718434b",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "39290ff8_e8b5c58d",
@@ -65,6 +101,24 @@
       "writtenOn": "2023-01-16T23:12:44Z",
       "side": 1,
       "message": "… and not call validate() here anymore, because it\u0027d only validate changes that `calculate_output_paths` would have done, and these are correct.",
+      "revId": "b83a566ebdc4b47d447c24f534c69d85b718434b",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "aebeeb9f_6027e387",
+        "filename": "tvix/cli/src/derivation.rs",
+        "patchSetId": 37
+      },
+      "lineNbr": 208,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2023-01-20T11:02:45Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "39290ff8_e8b5c58d",
       "revId": "b83a566ebdc4b47d447c24f534c69d85b718434b",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
