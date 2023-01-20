@@ -16,6 +16,23 @@
       "message": "this commit should be `chore`",
       "revId": "7dc6d4bdd27890dbbb52cd76cbd107b4b54b69df",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "033237e1_fc184d20",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2023-01-20T16:12:16Z",
+      "side": 1,
+      "message": "Why do we need a second base64 library as a direct dependency?",
+      "revId": "7dc6d4bdd27890dbbb52cd76cbd107b4b54b69df",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
