@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "87979a8a_a57dd8d1",
+        "filename": "tvix/store/src/sled_directory_service.rs",
+        "patchSetId": 7
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-01-20T15:43:54Z",
+      "side": 1,
+      "message": "I have a feeling that something like this (but with an Iterator interface, and using a *client*) will end up in a more wider used library, and one that calculate_nar is using - but I\u0027ll leave that refactor to when we know exactly what we need there.",
+      "revId": "32828da58e44241be1d7d0ea599d969d6c4c7833",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
