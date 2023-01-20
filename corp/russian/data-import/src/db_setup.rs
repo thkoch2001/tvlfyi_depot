@@ -8,6 +8,7 @@
 
 use super::{bail, Ensure};
 use crate::oc_parser::*;
+use crate::or_parser;
 use log::{debug, info};
 use rusqlite::Connection;
 
@@ -69,7 +70,7 @@ CREATE TABLE oc_links (
 
 "#,
     )
-    .ensure("setting up initial table schema failed");
+    .ensure("setting up OpenCorpora table schema failed");
 
     info!("set up initial table schema for OpenCorpora import");
 }
@@ -165,4 +166,52 @@ fn insert_lemma(conn: &Connection, lemma: Lemma) {
     }
 
     debug!("inserted lemma {}", lemma.id);
+}
+
+/// Sets up an initial schema for the OpenRussian data.
+pub fn initial_or_schema(conn: &Connection) {
+    conn.execute_batch(
+        r#"
+CREATE TABLE or_words (
+    id INTEGER PRIMARY KEY,
+    bare TEXT NOT NULL,
+    accented TEXT,
+    derived_from_word_id INTEGER,
+    rank TEXT,
+    word_type TEXT,
+    level TEXT
+) STRICT;
+"#,
+    )
+    .ensure("setting up OpenRussian table schema failed");
+
+    info!("set up initial table schema for OpenRussian import");
+}
+
+pub fn insert_or_words<I: Iterator<Item = or_parser::Word>>(conn: &Connection, words: I) {
+    let mut stmt = conn
+        .prepare_cached(
+            "
+INSERT INTO or_words (id, bare, accented, derived_from_word_id, rank, word_type, level)
+VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7)
+",
+        )
+        .ensure("failed to prepare OR words statement");
+    let mut count = 0;
+
+    for word in words {
+        stmt.execute((
+            word.id,
+            word.bare,
+            word.accented,
+            word.derived_from_word_id,
+            word.rank,
+            word.word_type,
+            word.level,
+        ))
+        .ensure("failed to insert OR word");
+        count += 1;
+    }
+
+    info!("inserted {} OpenRussian words", count);
 }
