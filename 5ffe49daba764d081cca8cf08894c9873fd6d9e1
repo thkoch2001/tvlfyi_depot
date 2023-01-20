@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "846d17a2_e8ec00d1",
+        "filename": "tvix/eval/src/vm.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 112,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-01-20T21:51:29Z",
+      "side": 1,
+      "message": "Value? Evaluation value?",
+      "revId": "5ffe49daba764d081cca8cf08894c9873fd6d9e1",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3141c064_a33d8d8d",
+        "filename": "tvix/eval/src/vm.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 113,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-01-20T21:51:29Z",
+      "side": 1,
+      "message": "We should probably add a note on on our behaviour / expectations if someone changes a file while the eval is kicked off.",
+      "revId": "5ffe49daba764d081cca8cf08894c9873fd6d9e1",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "da086bc3_986296d5",
+        "filename": "tvix/eval/src/vm.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 114,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-01-20T21:51:29Z",
+      "side": 1,
+      "message": "I don\u0027t think we can simply cache by file content hash.\n\nIf you have `a/default.nix` and `b/default.nix`, each with identical file contents:\n\n```\n(import foo.nix)\n```\n\nThey will behave differently, because `a/foo.nix` and `b/foo.nix` can differ. This is not trivial.\n\nIf we properly document we don\u0027t support files to change mid-evaluation (and maybe alert on detected changes changes, by maintaining a tuple (mtime, content_hash) for all files we did already read once), we can have an import cache.",
+      "revId": "5ffe49daba764d081cca8cf08894c9873fd6d9e1",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
