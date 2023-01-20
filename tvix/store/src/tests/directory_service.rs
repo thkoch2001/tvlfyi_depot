@@ -19,6 +19,21 @@ lazy_static! {
         }],
         ..Default::default()
     };
+    static ref DIRECTORY_C: Directory = Directory {
+        directories: vec![
+            DirectoryNode {
+                name: "a".to_string(),
+                digest: DIRECTORY_A.digest(),
+                size: 1,
+            },
+            DirectoryNode {
+                name: "a'".to_string(),
+                digest: DIRECTORY_A.digest(),
+                size: 1,
+            }
+        ],
+        ..Default::default()
+    };
 }
 
 /// Send the specified GetDirectoryRequest.
@@ -156,6 +171,38 @@ async fn put_get_multiple() -> anyhow::Result<()> {
 
     Ok(())
 }
+
+/// Put multiple Directories into the store, and omit duplicates.
+#[tokio::test]
+async fn put_get_dedup() -> anyhow::Result<()> {
+    let service = SledDirectoryService::new(TempDir::new()?.path().to_path_buf())?;
+
+    // Send "A", then "C", which refers to "A" two times
+    // Pretend we're a dumb client sending A twice.
+    let put_resp = service
+        .put(tonic_mock::streaming_request(vec![
+            DIRECTORY_A.clone(),
+            DIRECTORY_A.clone(),
+            DIRECTORY_C.clone(),
+        ]))
+        .await
+        .expect("must succeed");
+
+    assert_eq!(DIRECTORY_C.digest(), put_resp.into_inner().root_digest);
+
+    // Ask for "C" recursively. We expect to only get "A" once, as there's no point sending it twice.
+    let items = get_directories(
+        &service,
+        GetDirectoryRequest {
+            recursive: true,
+            by_what: Some(ByWhat::Digest(DIRECTORY_C.digest())),
+        },
+    )
+    .await
+    .expect("must not error");
+
+    // We expect to get C, and then A (once, as the second A has been deduplicated).
+    assert_eq!(vec![DIRECTORY_C.clone(), DIRECTORY_A.clone()], items);
 
     Ok(())
 }
