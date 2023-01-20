@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c935bf3a_f1739fb3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2023-01-20T23:04:34Z",
+      "side": 1,
+      "message": "I\u0027ve rebased and in the process co-authored parts of this change, but giving my approval for the parts written by Adam which I\u0027ve reviewed.",
+      "revId": "6471d095ce31ed06179e0dd24634451288d3caae",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
