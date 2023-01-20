@@ -1,6 +1,6 @@
-//! This program imports Russian language data from OpenCorpora and
-//! OpenRussian ("Открытый корпус") into a SQLite database that can be
-//! used for [//corp/russian][corp-russian] projects.
+//! This program imports Russian language data from OpenCorpora
+//! ("Открытый корпус") and OpenRussian into a SQLite database that
+//! can be used for [//corp/russian][corp-russian] projects.
 //!
 //! [corp-russian]: https://at.tvl.fyi/?q=%2F%2Fcorp%2Frussian
 //!
@@ -112,42 +112,77 @@ use std::io::BufReader;
 
 mod db_setup;
 mod oc_parser;
+mod or_parser;
 
-fn main() {
-    env_logger::builder()
-        .filter_level(log::LevelFilter::Info)
-        .init();
+struct Args {
+    output: String,
+    or_input: String,
+    oc_input: String,
+}
 
-    let (input_path, output_path) = {
-        let mut args = env::args().collect::<Vec<_>>();
+impl Args {
+    fn populated(&self) -> bool {
+        !(self.output.is_empty() || self.or_input.is_empty() || self.oc_input.is_empty())
+    }
+}
 
-        if args.len() != 3 {
-            bail(format!(
-                "usage: {} <input-file> <output-file>",
-                args.first().map(String::as_str).unwrap_or("data-import")
-            ));
-        }
+fn usage(binary_name: &str) {
+    bail(format!(
+        "usage: {} --output <output-file> --or-input <or-input> --oc-input <oc-input>",
+        binary_name
+    ));
+}
 
-        (args.remove(1), args.remove(1))
+fn parse_args() -> Args {
+    let mut args_iter = env::args();
+    let binary_name = args_iter.next().unwrap();
+
+    let mut args = Args {
+        output: "".into(),
+        or_input: env::var("OPENRUSSIAN_DATA").unwrap_or_default(),
+        oc_input: env::var("OPENCORPORA_DATA").unwrap_or_default(),
     };
 
-    info!("reading from {input_path}; writing output to {output_path}");
-    let input_file = File::open(input_path).ensure("failed to open input file");
+    loop {
+        if args.populated() {
+            break;
+        }
 
+        while let Some(arg) = args_iter.next() {
+            match arg.as_str() {
+                "--output" => {
+                    args.output = args_iter.next().unwrap();
+                }
+
+                "--or-input" => {
+                    args.or_input = args_iter.next().unwrap();
+                }
+
+                "--oc-input" => {
+                    args.oc_input = args_iter.next().unwrap();
+                }
+
+                _ => usage(&binary_name),
+            }
+        }
+    }
+
+    if args.output.is_empty() || args.or_input.is_empty() || args.oc_input.is_empty() {
+        usage(&binary_name);
+    }
+
+    args
+}
+
+fn open_corpora(conn: &Connection, args: &Args) {
+    let input_file = File::open(&args.oc_input).ensure("failed to open input file");
     let mut parser = oc_parser::OpenCorporaParser::new(BufReader::new(input_file));
-
-    let conn = Connection::open(output_path).ensure("failed to open DB connection");
-
     db_setup::initial_oc_schema(&conn);
-
-    // afterwards:
-    // add actual IDs to grammemes
-    // properly reference keys internally
-    // add foreign key constraint on lemma_grammemes.grammeme
 
     let mut tx = conn
         .unchecked_transaction()
         .ensure("failed to start transaction");
+
     let mut count = 0;
 
     while let Some(elem) = parser.next_element() {
@@ -165,7 +200,46 @@ fn main() {
         count += 1;
     }
 
-    tx.commit().ensure("final commit failed");
+    tx.commit().ensure("final OpenCorpora commit failed");
+
+    info!("finished OpenCorpora import");
+}
+
+fn open_russian(conn: &Connection, args: &Args) {
+    let parser = or_parser::OpenRussianParser::new(&args.or_input);
+
+    db_setup::initial_or_schema(conn);
+
+    let tx = conn
+        .unchecked_transaction()
+        .ensure("failed to start transaction");
+
+    db_setup::insert_or_words(&tx, parser.words());
+    tx.commit().ensure("OpenRussian words commit failed");
+
+    info!("finished OpenRussian import");
+}
+
+fn main() {
+    env_logger::builder()
+        .filter_level(log::LevelFilter::Info)
+        .init();
+
+    let args = parse_args();
+
+    info!("output path: {}", args.output);
+    info!("OpenCorpora input path: {}", args.oc_input);
+    info!("OpenRussian input path: {}", args.or_input);
+
+    let conn = Connection::open(&args.output).ensure("failed to open DB connection");
+
+    open_corpora(&conn, &args);
+    open_russian(&conn, &args);
+
+    // afterwards:
+    // add actual IDs to grammemes
+    // properly reference keys internally
+    // add foreign key constraint on lemma_grammemes.grammeme
 }
 
 /// It's like `expect`, but through `log::error`.
