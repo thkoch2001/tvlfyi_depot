@@ -19,6 +19,9 @@ let
     ${pkgs.bzip2}/bin/bunzip2 -k -c ${openCorporaArchive} > $out
   '';
 
+  # mirrored input data from OpenRussian, as of 2023-01-17.
+  #
+  # This data is licensed under CC-BY-SA.
   openRussianArchive = pkgs.fetchzip {
     name = "openrussian-20230117";
     url = "https://tazj.in/blobs/openrussian-20230117.tar.xz";
@@ -43,8 +46,10 @@ lib.fix (self: depot.third_party.naersk.buildPackage {
     inherit shell openCorpora;
 
     # target that actually builds an entire database
-    database = pkgs.runCommand "tvl-russian-db.sqlite" { } ''
-      ${self}/bin/data-import ${openCorpora} $out
-    '';
+    database = pkgs.runCommand "tvl-russian-db.sqlite"
+      {
+        OPENCORPORA_DATA = openCorpora;
+        OPENRUSSIAN_DATA = openRussianArchive;
+      } "${self}/bin/data-import --output $out";
   };
 })
