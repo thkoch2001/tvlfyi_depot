@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3dd87652_f19347e1",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2023-01-21T12:57:21Z",
+      "side": 1,
+      "message": "this is a bit misleading as the docs folders are untouched.",
+      "revId": "29cf37003f6d3535afbddf1d8c5012fb867afe8c",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "08bd6e20_56ed5e29",
+        "filename": "tvix/README.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2023-01-21T12:57:21Z",
+      "side": 1,
+      "message": "Is this even relevant anymore with crate2nix?",
+      "range": {
+        "startLine": 15,
+        "startChar": 2,
+        "endLine": 15,
+        "endChar": 16
+      },
+      "revId": "29cf37003f6d3535afbddf1d8c5012fb867afe8c",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
