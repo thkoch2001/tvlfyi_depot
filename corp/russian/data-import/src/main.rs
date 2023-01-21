@@ -228,6 +228,15 @@ fn open_russian(conn: &Connection, args: &Args) {
         tx.commit().ensure("OpenRussian word forms commit failed");
     }
 
+    {
+        let tx = conn
+            .unchecked_transaction()
+            .ensure("failed to start transaction");
+
+        db_setup::insert_or_translations(&tx, parser.translations());
+        tx.commit().ensure("OpenRussian translations commit failed");
+    }
+
     info!("finished OpenRussian import");
 }
 
