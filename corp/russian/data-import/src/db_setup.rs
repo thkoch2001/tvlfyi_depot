@@ -191,6 +191,16 @@ CREATE TABLE or_words_forms (
     form_bare TEXT,
     FOREIGN KEY(word_id) REFERENCES words(id)
 ) STRICT;
+
+CREATE TABLE or_translations (
+    id INTEGER PRIMARY KEY,
+    word_id INTEGER NOT NULL,
+    translation TEXT,
+    example_ru TEXT,
+    example_tl TEXT,
+    info TEXT,
+    FOREIGN KEY(word_id) REFERENCES words(id)
+) STRICT;
 "#,
     )
     .ensure("setting up OpenRussian table schema failed");
@@ -251,4 +261,38 @@ VALUES (?1, ?2, ?3, ?4, ?5, ?6)
     }
 
     info!("inserted {} OpenRussian word forms", count);
+}
+
+pub fn insert_or_translations<I: Iterator<Item = or_parser::Translation>>(
+    conn: &Connection,
+    translations: I,
+) {
+    let mut stmt = conn
+        .prepare_cached(
+            "INSERT INTO or_translations (id, word_id, translation, example_ru, example_tl, info)
+             VALUES (?1, ?2, ?3, ?4, ?5, ?6)",
+        )
+        .ensure("failed to prepare OR translation statement");
+
+    let mut count = 0;
+
+    for tl in translations {
+        if tl.lang != "en" {
+            continue;
+        }
+
+        stmt.execute((
+            tl.id,
+            tl.word_id,
+            tl.tl,
+            tl.example_ru,
+            tl.example_tl,
+            tl.info,
+        ))
+        .ensure("failed to insert OR translation");
+
+        count += 1;
+    }
+
+    info!("inserted {} OpenRussian translations", count);
 }

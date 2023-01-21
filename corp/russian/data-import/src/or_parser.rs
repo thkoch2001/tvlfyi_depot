@@ -44,6 +44,19 @@ pub struct WordForm {
     pub form_bare: String,
 }
 
+/// A translation from the `translations` table.
+#[derive(Debug, Deserialize)]
+pub struct Translation {
+    pub id: usize,
+    pub lang: String,
+    pub word_id: usize,
+    pub position: String,
+    pub tl: String, // unknown
+    pub example_ru: String,
+    pub example_tl: String,
+    pub info: String,
+}
+
 pub struct OpenRussianParser {
     or_directory: PathBuf,
 }
@@ -63,6 +76,10 @@ impl OpenRussianParser {
 
     pub fn words_forms(&self) -> DynIter<WordForm> {
         self.parser_for("words_forms.csv")
+    }
+
+    pub fn translations(&self) -> DynIter<Translation> {
+        self.parser_for("translations.csv")
     }
 
     fn parser_for<T: serde::de::DeserializeOwned + 'static>(
