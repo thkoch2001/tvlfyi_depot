@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cde15126_2b5af16a",
+        "filename": "tvix/README.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2023-01-21T12:56:15Z",
+      "side": 1,
+      "message": "`[tfl.fyi](https://tvl.fyi/#getting-in-touch)`.",
+      "range": {
+        "startLine": 9,
+        "startChar": 39,
+        "endLine": 9,
+        "endChar": 54
+      },
+      "revId": "16e0d1dbaba580c539a248157d6ec2521daba0c9",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
