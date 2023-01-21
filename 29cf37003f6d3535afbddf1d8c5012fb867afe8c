@@ -20,6 +20,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "2be3f59e_6bd919f6",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-01-21T13:18:21Z",
+      "side": 1,
+      "message": "The docs(…) prefix is required by \"Conformant-Commit-Message\". What about `docs(tvix): move parts from  //tvix/eval README up to //tvix` (hoping that\u0027s within the line limit)?",
+      "parentUuid": "3dd87652_f19347e1",
+      "revId": "29cf37003f6d3535afbddf1d8c5012fb867afe8c",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "08bd6e20_56ed5e29",
         "filename": "tvix/README.md",
         "patchSetId": 1
@@ -31,6 +49,30 @@
       "writtenOn": "2023-01-21T12:57:21Z",
       "side": 1,
       "message": "Is this even relevant anymore with crate2nix?",
+      "range": {
+        "startLine": 15,
+        "startChar": 2,
+        "endLine": 15,
+        "endChar": 16
+      },
+      "revId": "29cf37003f6d3535afbddf1d8c5012fb867afe8c",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0ef8a083_53e93dc1",
+        "filename": "tvix/README.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-01-21T13:18:21Z",
+      "side": 1,
+      "message": "I think it still makes sense as a disclaimer that we\u0027re looking at Nix 2.3 behaviour mostly, if people compare Tvix behaviour with some more recent Nix.",
+      "parentUuid": "08bd6e20_56ed5e29",
       "range": {
         "startLine": 15,
         "startChar": 2,
