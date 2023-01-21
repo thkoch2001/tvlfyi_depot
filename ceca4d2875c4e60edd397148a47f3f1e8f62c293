@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "60ab6edb_bc4c31e5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-01-21T11:49:22Z",
+      "side": 1,
+      "message": "It looks like public-inbox doesn\u0027t ever move mails from `new` to `cur`, so this would touch mails all the time, including those that have already been published. This probably needs a buffered approach, where we sync and tag new email first, and then push it to the maildir ingested by public-inbox.",
+      "revId": "ceca4d2875c4e60edd397148a47f3f1e8f62c293",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
