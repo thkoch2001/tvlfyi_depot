@@ -210,12 +210,23 @@ fn open_russian(conn: &Connection, args: &Args) {
 
     db_setup::initial_or_schema(conn);
 
-    let tx = conn
-        .unchecked_transaction()
-        .ensure("failed to start transaction");
+    {
+        let tx = conn
+            .unchecked_transaction()
+            .ensure("failed to start transaction");
 
-    db_setup::insert_or_words(&tx, parser.words());
-    tx.commit().ensure("OpenRussian words commit failed");
+        db_setup::insert_or_words(&tx, parser.words());
+        tx.commit().ensure("OpenRussian words commit failed");
+    }
+
+    {
+        let tx = conn
+            .unchecked_transaction()
+            .ensure("failed to start transaction");
+
+        db_setup::insert_or_word_forms(&tx, parser.words_forms());
+        tx.commit().ensure("OpenRussian word forms commit failed");
+    }
 
     info!("finished OpenRussian import");
 }

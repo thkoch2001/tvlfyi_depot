@@ -6,7 +6,7 @@
 //! introduce things like foreign key constraints between tables that
 //! represent relations.
 
-use super::{bail, Ensure};
+use super::Ensure;
 use crate::oc_parser::*;
 use crate::or_parser;
 use log::{debug, info};
@@ -181,6 +181,16 @@ CREATE TABLE or_words (
     word_type TEXT,
     level TEXT
 ) STRICT;
+
+CREATE TABLE or_words_forms (
+    id INTEGER PRIMARY KEY,
+    word_id INTEGER NOT NULL,
+    form_type TEXT,
+    position TEXT,
+    form TEXT,
+    form_bare TEXT,
+    FOREIGN KEY(word_id) REFERENCES words(id)
+) STRICT;
 "#,
     )
     .ensure("setting up OpenRussian table schema failed");
@@ -214,4 +224,31 @@ VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7)
     }
 
     info!("inserted {} OpenRussian words", count);
+}
+
+pub fn insert_or_word_forms<I: Iterator<Item = or_parser::WordForm>>(conn: &Connection, forms: I) {
+    let mut stmt = conn
+        .prepare_cached(
+            "
+INSERT INTO or_words_forms (id, word_id, form_type, position, form, form_bare)
+VALUES (?1, ?2, ?3, ?4, ?5, ?6)
+",
+        )
+        .ensure("failed to prepare OR word forms statement");
+    let mut count = 0;
+
+    for form in forms {
+        stmt.execute((
+            form.id,
+            form.word_id,
+            form.form_type,
+            form.position,
+            form.form,
+            form.form_bare,
+        ))
+        .ensure("failed to insert OR word form");
+        count += 1;
+    }
+
+    info!("inserted {} OpenRussian word forms", count);
 }

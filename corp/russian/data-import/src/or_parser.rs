@@ -33,6 +33,17 @@ pub struct Word {
     pub created_at: String, // TODO: unknown
 }
 
+/// A word form from the `words_forms` table.
+#[derive(Debug, Deserialize)]
+pub struct WordForm {
+    pub id: usize,
+    pub word_id: usize,
+    pub form_type: String,
+    pub position: String,
+    pub form: String,
+    pub form_bare: String,
+}
+
 pub struct OpenRussianParser {
     or_directory: PathBuf,
 }
@@ -48,6 +59,10 @@ impl OpenRussianParser {
 
     pub fn words(&self) -> DynIter<Word> {
         self.parser_for("words.csv")
+    }
+
+    pub fn words_forms(&self) -> DynIter<WordForm> {
+        self.parser_for("words_forms.csv")
     }
 
     fn parser_for<T: serde::de::DeserializeOwned + 'static>(
