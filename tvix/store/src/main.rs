@@ -34,7 +34,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 
     let mut server = Server::builder();
 
-    let blob_service = tvix_store::dummy_blob_service::DummyBlobService {};
+    let blob_service = tvix_store::sled_blob_service::SledBlobService::new("blobs.sled".into())?;
     let directory_service =
         tvix_store::sled_directory_service::SledDirectoryService::new("directories.sled".into())?;
     let path_info_service =
