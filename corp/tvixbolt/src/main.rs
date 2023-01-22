@@ -296,6 +296,11 @@ fn eval(model: &Model) -> Output {
         }
     }
 
+    out.output = match result.value {
+        Some(val) => val.to_string(),
+        None => "".to_string(),
+    };
+
     for warning in result.warnings {
         writeln!(
             &mut out.warnings,
