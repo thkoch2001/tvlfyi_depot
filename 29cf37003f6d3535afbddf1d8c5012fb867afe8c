@@ -123,6 +123,54 @@
       },
       "revId": "29cf37003f6d3535afbddf1d8c5012fb867afe8c",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5e7ca2a9_498553e5",
+        "filename": "tvix/README.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-01-22T19:37:19Z",
+      "side": 1,
+      "message": "I think it\u0027s a bit of both.\n\nMost of the development of (and with) Tvix happened by looking at Nix 2.3 behaviour. That fact wasn\u0027t really documented (at least not in the README), and this note was added when I tried building it with Nix \u003e2.3 and ran into https://github.com/nix-community/naersk/issues/265.\n\nThis specific has been worked around in cl/7532, which updated the crate to a version not using git-lfs - not the switch to crate2nix. For now, building tvix seems to succeed from more recent versions of Nix.\n\nI\u0027m honestly not sure if you or @tazjin are still using Nix 2.3 on their machines, or switched to something more recent due to cache.nixos.org using zstd these days, which is not supported by Nix 2.3.\n\ncl/7043 pulled in more recent changes in the testsuite from Nix \u003e 2.3.\n\nI think this paragraph should be reworked to reflect the current level of support w.r.t. Nix version (both in terms of tvix behaviour, as well as build requirements).",
+      "parentUuid": "373a6d10_bbe2631f",
+      "range": {
+        "startLine": 15,
+        "startChar": 2,
+        "endLine": 15,
+        "endChar": 16
+      },
+      "revId": "29cf37003f6d3535afbddf1d8c5012fb867afe8c",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3b0a7951_f7a77af0",
+        "filename": "tvix/README.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-01-22T19:37:19Z",
+      "side": 1,
+      "message": "I think it\u0027s a bit of both (even though there\u0027s cl/7043).\n\ntvix-eval is mostly built while looking at Nix 2.3 behaviour (and this caveat/note should definitely go into the README).\n\nYou and @tazjin were mostly running Nix 2.3, and when I tried to build tvix-eval via a more recent Nix, I ran into",
+      "parentUuid": "373a6d10_bbe2631f",
+      "range": {
+        "startLine": 15,
+        "startChar": 2,
+        "endLine": 15,
+        "endChar": 16
+      },
+      "revId": "29cf37003f6d3535afbddf1d8c5012fb867afe8c",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
