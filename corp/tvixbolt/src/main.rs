@@ -196,6 +196,7 @@ struct Output {
     bytecode: Vec<u8>,
     trace: Vec<u8>,
     ast: String,
+    value: String,
 }
 
 fn maybe_show(title: &str, s: &str) -> Html {
@@ -260,6 +261,7 @@ impl Output {
             {maybe_show("Errors:", &self.errors)}
             {maybe_show("Warnings:", &self.warnings)}
             {maybe_show("Output:", &self.output)}
+            {maybe_show("Value:", &self.value)}
             {maybe_show("Bytecode:", &String::from_utf8_lossy(&self.bytecode))}
             {maybe_details(ctx, "Runtime trace:", &String::from_utf8_lossy(&self.trace), model.trace, Msg::ToggleTrace)}
             {maybe_details(ctx, "Parsed AST:", &self.ast, model.display_ast, Msg::ToggleDisplayAst)}
@@ -295,6 +297,9 @@ fn eval(model: &Model) -> Output {
             out.ast = tvix_eval::pretty_print_expr(expr);
         }
     }
+
+    let result_str = result.value.unwrap().to_string();
+    out.value = result_str;
 
     for warning in result.warnings {
         writeln!(
