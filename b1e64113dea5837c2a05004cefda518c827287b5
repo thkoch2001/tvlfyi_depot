@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "05695edd_51301022",
+        "filename": "corp/tvixbolt/src/main.rs",
+        "patchSetId": 3
+      },
+      "lineNbr": 301,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2023-01-22T13:49:10Z",
+      "side": 1,
+      "message": "you should set `out.output`, which is already supposed to be the field for that. It seems that the current bug is that this was not set at all after the refactoring of the eval API",
+      "range": {
+        "startLine": 301,
+        "startChar": 4,
+        "endLine": 301,
+        "endChar": 13
+      },
+      "revId": "b1e64113dea5837c2a05004cefda518c827287b5",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
