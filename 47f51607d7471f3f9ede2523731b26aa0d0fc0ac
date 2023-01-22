@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "09427756_95c65b07",
+        "filename": "tvix/eval/src/tests/one_offs.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 4,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-01-22T19:49:46Z",
+      "side": 1,
+      "message": "Thanks for the test :-)",
+      "revId": "47f51607d7471f3f9ede2523731b26aa0d0fc0ac",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
