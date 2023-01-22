@@ -99,6 +99,30 @@
       },
       "revId": "29cf37003f6d3535afbddf1d8c5012fb867afe8c",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "373a6d10_bbe2631f",
+        "filename": "tvix/README.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2023-01-22T00:04:41Z",
+      "side": 1,
+      "message": "Well the comment\u0027s not about Tvix\u0027s behavior, but the ability to build it using Nix \u003e\u003d 2.4, since there was a problem relating to fetchGit iirc.",
+      "parentUuid": "0ef8a083_53e93dc1",
+      "range": {
+        "startLine": 15,
+        "startChar": 2,
+        "endLine": 15,
+        "endChar": 16
+      },
+      "revId": "29cf37003f6d3535afbddf1d8c5012fb867afe8c",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
