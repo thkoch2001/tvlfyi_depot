@@ -46,6 +46,30 @@
       },
       "revId": "b1e64113dea5837c2a05004cefda518c827287b5",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f0b6752b_e29d3670",
+        "filename": "corp/tvixbolt/src/main.rs",
+        "patchSetId": 3
+      },
+      "lineNbr": 301,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2023-01-22T16:22:28Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "05695edd_51301022",
+      "range": {
+        "startLine": 301,
+        "startChar": 4,
+        "endLine": 301,
+        "endChar": 13
+      },
+      "revId": "b1e64113dea5837c2a05004cefda518c827287b5",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }

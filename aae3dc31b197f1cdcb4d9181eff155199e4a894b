@@ -16,6 +16,23 @@
       "message": "Please re-review :).",
       "revId": "aae3dc31b197f1cdcb4d9181eff155199e4a894b",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "871a5bac_f74d6eb6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2023-01-22T16:22:28Z",
+      "side": 1,
+      "message": "Cool, thanks. Note that since tvixbolt is a `//corp` project, contributions would normally require copyright assignment. However, since this is a small contribution that isn\u0027t necessary here.\n\nWe do follow similar rules as the FSF regarding copyright assignment, meaning that cumulative contributions exceeding ~15 lines under the `//corp` subfolder will eventually require assignment.",
+      "revId": "aae3dc31b197f1cdcb4d9181eff155199e4a894b",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
