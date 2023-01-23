@@ -7769,12 +7769,20 @@ rec {
             packageId = "dirs";
           }
           {
+            name = "lazy_static";
+            packageId = "lazy_static";
+          }
+          {
             name = "nix-compat";
             packageId = "nix-compat";
           }
           {
             name = "rustyline";
             packageId = "rustyline";
+          }
+          {
+            name = "serde_json";
+            packageId = "serde_json";
           }
           {
             name = "sha2";
@@ -7787,6 +7795,10 @@ rec {
           {
             name = "ssri";
             packageId = "ssri";
+          }
+          {
+            name = "tempfile";
+            packageId = "tempfile";
           }
           {
             name = "thiserror";
