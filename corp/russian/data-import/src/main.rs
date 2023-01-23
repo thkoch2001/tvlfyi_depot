@@ -111,6 +111,7 @@ use std::fs::File;
 use std::io::BufReader;
 
 mod db_setup;
+mod mappings;
 mod oc_parser;
 mod or_parser;
 
