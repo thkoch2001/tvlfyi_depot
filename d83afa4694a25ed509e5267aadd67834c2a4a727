@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "be1c2ecc_287fdc9f",
+        "filename": "tvix/cli/src/derivation.rs",
+        "patchSetId": 4
+      },
+      "lineNbr": 109,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-01-23T18:56:18Z",
+      "side": 1,
+      "message": "I thought you consider interpolation here a misfeature? ;-)",
+      "revId": "d83afa4694a25ed509e5267aadd67834c2a4a727",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
