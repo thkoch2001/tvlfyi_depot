@@ -16,6 +16,24 @@
       "message": "this is not golang ;-)",
       "revId": "4aa5bd319381398c9544e4489ce420b407aa3b26",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0674aad9_c5f38009",
+        "filename": "tvix/cli/src/derivation.rs",
+        "patchSetId": 49
+      },
+      "lineNbr": 190,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2023-01-23T11:59:33Z",
+      "side": 1,
+      "message": "That\u0027s the joke!",
+      "parentUuid": "3e5ea042_c7622fc1",
+      "revId": "4aa5bd319381398c9544e4489ce420b407aa3b26",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
