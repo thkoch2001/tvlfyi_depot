@@ -132,14 +132,6 @@ const usd = new Intl.NumberFormat('en-US', {
     currency: 'USD',
 });
 
-const categories = data.data.transactions.reduce((xs, x) => {
-    if (!(x.Category in xs)) {
-        xs[x.Category] = [];
-    }
-    xs[x.Category].push(x);
-    return xs;
-}, {});
-
 const queries = {
     housing: 'Category:/(rent|electric)/',
     food: 'Category:/(eating|alcohol|grocer)/',
@@ -581,8 +573,8 @@ class SavingsRateLineChart extends React.Component {
 class App extends React.Component {
     constructor(props) {
         super(props);
-        const query = 'Account:/checking/ (Inflow>1000 OR Outflow>1000)';
-        const allTransactions = data.data.transactions;
+        const query = 'Account:/checking/';
+        const allTransactions = [];
         const savingsView = 'after:"01/01/2022"';
         const inflowQuery = 'Account:/checking/';
         const outflowQuery = 'Account:/checking/ -Category:/(stocks|crypto)/';
@@ -713,6 +705,13 @@ class App extends React.Component {
     render() {
         const sum = this.state.filteredTransactions.reduce((acc, { Outflow }) => acc + Outflow, 0);
         const savedSum = Object.values(this.state.saved).reduce((acc, sum) => acc + sum, 0);
+        const categories = this.state.allTransactions.reduce((acc, x) => {
+            if (!(x.Category in acc)) {
+                acc[x.Category] = [];
+            }
+            acc[x.Category].push(x);
+            return acc;
+        }, {});
 
         let view = null;
         if (this.state.view === 'query') {
@@ -738,6 +737,7 @@ class App extends React.Component {
         } else if (this.state.view === 'savings') {
             view = (
                 <SavingsView
+                    categories={categories}
                     sensitive={this.state.sensitive}
                     savingsView={this.state.savingsView}
                     inflowQuery={this.state.inflowQuery}
@@ -924,6 +924,7 @@ function classifyRate(x) {
 
 const SavingsView = ({
     sensitive,
+    categories,
     savingsView,
     inflowQuery,
     outflowQuery,
