@@ -9,7 +9,7 @@ use ast::Expr;
 pub(super) fn optimise_expr(c: &mut Compiler, slot: LocalIdx, expr: ast::Expr) -> ast::Expr {
     match expr {
         Expr::BinOp(_) => optimise_bin_op(c, slot, expr),
-        Expr::Paren(_) => optimise_paren(c, expr),
+        // Expr::Paren(_) => optimise_paren(c, expr),
         _ => expr.to_owned(),
     }
 }
