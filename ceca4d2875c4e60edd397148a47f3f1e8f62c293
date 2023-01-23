@@ -33,6 +33,24 @@
       "message": "Too bad `msed` does not have an `-i` flag like `sed` does.",
       "revId": "ceca4d2875c4e60edd397148a47f3f1e8f62c293",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4c7d2176_01657ff0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-01-23T10:33:49Z",
+      "side": 1,
+      "message": "I think this is intentional - normally, in Maildir, mails are supposed to end in `tmp` while being received, and are then atomically moved to `new`, so stuff in `new` and `cur` can be always assumed to be complete (and immutable?).\n\nThe problems mentioned in https://cl.tvl.fyi/c/depot/+/7815/comments/60ab6edb_bc4c31e5 are what\u0027s currently blocking this from going in - we probably need to receive into one maildir, apply the transformation and then sync into another maildir, that\u0027s consumed by public-inbox - and maybe do some existing email state surgery on the box, because maybe modifying existing already-served email will be a problem?",
+      "parentUuid": "2689b9a6_6a07bdad",
+      "revId": "ceca4d2875c4e60edd397148a47f3f1e8f62c293",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
