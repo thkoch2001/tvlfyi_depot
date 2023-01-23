@@ -51,6 +51,23 @@
       "parentUuid": "2689b9a6_6a07bdad",
       "revId": "ceca4d2875c4e60edd397148a47f3f1e8f62c293",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "092bb636_5fac776f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2023-01-23T17:27:19Z",
+      "side": 1,
+      "message": "Just saw this pop up on the dashboard again, and after thinking about it for a while I think this *will* actually behave correctly if we set the `listid` option in addition.\n\nIt would work like this: public-inbox-watch scans the maildir for mails, but discards any that lack the right header. The script runs and adds the header. The next public-inbox-watch run then correctly finds the mails.\n\nThat way, race-condition problem with this version would be fixed.",
+      "revId": "ceca4d2875c4e60edd397148a47f3f1e8f62c293",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
