@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "dcf97055_04eb7f4a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-01-23T17:42:55Z",
+      "side": 1,
+      "message": "Hmm, do we still want to make this opt-in? In some cases it does make sense to see this warning...",
+      "revId": "1bce008b6a4ab6caaa1066bb224e37b9fb6cb3fc",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
