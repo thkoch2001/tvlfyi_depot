@@ -2,24 +2,28 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <link rel="stylesheet" href="https://unpkg.com/terminal.css@0.7.2/dist/terminal.min.css" />
-    <link rel="stylesheet" href="https://unpkg.com/terminal.css@0.7.1/dist/terminal.min.css" />
-    <link rel="stylesheet" href="https://unpkg.com/terminal.css@0.7.1/dist/terminal.min.css" />
+    <!-- TODO(wpcarro): Cache these locally -->
+    <link rel="stylesheet" href="./cdn/terminal.min.css" />
+    <style>
+      :root {
+        --page-width: 100em;
+      }
+    </style>
   </head>
-  <body>
-    <div id="react-mount"></div>
-    <!-- <canvas id="mount"></canvas> -->
+  <body class="container">
+    <div id="mount"></div>
 
     <!-- chart.js -->
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="./cdn/chart.js"></script>
+    <script src="./cdn/date_fns.js"></script>
+    <script src="./cdn/chartjs-adapter-date-fns.bundle.min.js"></script>
     <!-- react.js -->
-    <script src="https://unpkg.com/react@18/umd/react.development.js" crossorigin></script>
-    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js" crossorigin></script>
-    <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+    <script src="./cdn/react.development.js" crossorigin></script>
+    <script src="./cdn/react-dom.development.js" crossorigin></script>
+    <script src="./cdn/babel.min.js"></script>
     <!-- depot JS -->
-    <script src="http://localhost:8002/index.js"></script>
+    <script src="./cdn/slx.js"></script>
     <script src="./data.js"></script>
-    <script src="./index.js"></script>
     <script src="./components.js" type="text/babel"></script>
   </body>
 </html>
