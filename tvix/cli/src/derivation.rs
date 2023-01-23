@@ -1,11 +1,13 @@
 //! Implements `builtins.derivation`, the core of what makes Nix build packages.
-
 use data_encoding::BASE64;
+use lazy_static::lazy_static;
 use nix_compat::derivation::{Derivation, Hash};
 use nix_compat::nixbase32;
+use serde_json::json;
 use sha2::{Digest, Sha256};
 use std::cell::RefCell;
 use std::collections::{btree_map, BTreeSet};
+use std::path::PathBuf;
 use std::rc::Rc;
 use tvix_eval::builtin_macros::builtins;
 use tvix_eval::{AddContext, CoercionKind, ErrorKind, NixAttrs, NixList, Value, VM};
@@ -16,6 +18,49 @@ use crate::known_paths::{KnownPaths, PathType};
 // Constants used for strangely named fields in derivation inputs.
 const STRUCTURED_ATTRS: &str = "__structuredAttrs";
 const IGNORE_NULLS: &str = "__ignoreNulls";
+
+lazy_static! {
+    static ref TMPDIR: PathBuf = {
+        let dir = tempfile::tempdir_in("/tmp/tvix")
+            .expect("failed to create tempdir")
+            .into_path();
+        println!("tvix tempdir: {}", dir.to_string_lossy());
+        dir
+    };
+}
+
+fn dump_drv_to_store(vm: &VM, path: &str, drv: &Derivation) -> Result<(), ErrorKind> {
+    use std::io::Write;
+    use std::path::Path;
+
+    let mut file_path = TMPDIR.clone();
+    file_path.push(format!("{}.drv", drv.environment["name"]));
+    let mut file = std::fs::File::create(&file_path).expect("failed to create tmpfile");
+    write!(file, "{}", drv).expect("failed to write drv to tmpfile");
+    if Path::new(path).exists() {
+        // nothing to do, drv already exists
+        return Ok(());
+    }
+
+    let out_path = vm
+        .io()
+        .import_path(&file_path)
+        .expect("failed to import drv to store");
+
+    if out_path.to_string_lossy() != path {
+        return Err(ErrorKind::TvixBug {
+            msg: "path for derivation diverged!",
+            metadata: Some(Rc::new(json!({
+                "expected": path,
+                "cppnix": out_path.to_string_lossy(),
+                "aterm": drv.to_string(),
+                "tmpdir": TMPDIR.to_string_lossy()
+            }))),
+        });
+    }
+
+    Ok(())
+}
 
 /// Helper function for populating the `drv.outputs` field from a
 /// manually specified set of outputs, instead of the default
@@ -412,6 +457,10 @@ mod derivation_builtins {
                 derivation_path.to_absolute_path(),
             );
         }
+
+        drop(known_paths);
+
+        dump_drv_to_store(vm, &derivation_path.to_absolute_path(), &drv)?;
 
         let mut new_attrs: Vec<(String, String)> = drv
             .outputs
