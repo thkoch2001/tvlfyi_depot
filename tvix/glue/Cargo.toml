@@ -8,10 +8,14 @@ nix-compat = { path = "../nix-compat" }
 tvix-eval = { path = "../eval" }
 tvix-castore = { path = "../castore" }
 tvix-store = { path = "../store", default-features = false, features = []}
+bstr = "1.6.0"
 bytes = "1.4.0"
-tracing = "0.1.37"
-tokio = "1.28.0"
+lazy_static = "1.4"
+serde_json = "1.0"
+tempfile = "3.3"
 thiserror = "1.0.38"
+tokio = "1.28.0"
+tracing = "0.1.37"
 
 [dependencies.wu-manber]
 git = "https://github.com/tvlfyi/wu-manber.git"

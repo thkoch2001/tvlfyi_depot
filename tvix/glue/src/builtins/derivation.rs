@@ -1,10 +1,13 @@
 //! Implements `builtins.derivation`, the core of what makes Nix build packages.
 use crate::builtins::DerivationError;
 use crate::known_paths::{KnownPaths, PathKind, PathName};
+use lazy_static::lazy_static;
 use nix_compat::derivation::{Derivation, Output};
 use nix_compat::nixhash;
+use serde_json::json;
 use std::cell::RefCell;
 use std::collections::{btree_map, BTreeSet};
+use std::path::PathBuf;
 use std::rc::Rc;
 use tvix_eval::builtin_macros::builtins;
 use tvix_eval::generators::{self, emit_warning_kind, GenCo};
@@ -15,6 +18,59 @@ use tvix_eval::{
 // Constants used for strangely named fields in derivation inputs.
 const STRUCTURED_ATTRS: &str = "__structuredAttrs";
 const IGNORE_NULLS: &str = "__ignoreNulls";
+
+lazy_static! {
+    static ref TMPDIR: PathBuf = {
+        std::fs::create_dir_all("/tmp/tvix").expect("failed to create tempdir parent");
+        let dir = tempfile::tempdir_in("/tmp/tvix")
+            .expect("failed to create tempdir")
+            .into_path();
+        println!("tvix tempdir: {}", dir.to_string_lossy());
+        dir
+    };
+}
+
+async fn dump_drv_to_store(co: &GenCo, drv_path: &str, drv: &Derivation) -> Result<(), ErrorKind> {
+    use std::io::Write;
+    use std::path::Path;
+
+    // print out the name of the .drv we're emitting.
+    dbg!(&drv_path);
+
+    let mut file_path = TMPDIR.clone();
+    file_path.push(format!("{}.drv", drv.environment["name"]));
+
+    // A Derivation might produce .drv files with the same env name, but different hashes.
+    // If the same thing already existed, remove it before adding it again
+    if Path::new(&file_path).exists() {
+        std::fs::remove_file(&file_path).expect("failed to remove previous drv");
+    }
+
+    let mut file = std::fs::File::create(&file_path).expect("failed to create tmpfile");
+    file.write_all(&drv.to_aterm_bytes())
+        .expect("failed to write drv to tmpfile");
+
+    if Path::new(drv_path).exists() {
+        // nothing to do, drv already exists
+        return Ok(());
+    }
+
+    let out_path = generators::request_path_import(co, file_path).await;
+
+    if out_path.to_string_lossy() != drv_path {
+        return Err(ErrorKind::TvixBug {
+            msg: "path for derivation diverged!",
+            metadata: Some(Rc::new(json!({
+                "expected": drv_path,
+                "cppnix": out_path.to_string_lossy(),
+                "aterm": bstr::BString::from(drv.to_aterm_bytes()).to_string(),
+                "tmpdir": TMPDIR.to_string_lossy()
+            }))),
+        });
+    }
+
+    Ok(())
+}
 
 /// Helper function for populating the `drv.outputs` field from a
 /// manually specified set of outputs, instead of the default
@@ -410,6 +466,9 @@ pub(crate) mod derivation_builtins {
                 derivation_path.to_absolute_path(),
             );
         }
+
+        drop(known_paths);
+        dump_drv_to_store(&co, &derivation_path.to_absolute_path(), &drv).await?;
 
         let mut new_attrs: Vec<(String, String)> = drv
             .outputs
