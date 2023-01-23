@@ -703,7 +703,7 @@ pub(crate) async fn request_import_cache_put(co: &GenCo, path: PathBuf, value: V
 }
 
 /// Request that the VM import the given path.
-pub(crate) async fn request_path_import(co: &GenCo, path: PathBuf) -> PathBuf {
+pub async fn request_path_import(co: &GenCo, path: PathBuf) -> PathBuf {
     match co.yield_(VMRequest::PathImport(path)).await {
         VMResponse::Path(path) => path,
         msg => panic!(
