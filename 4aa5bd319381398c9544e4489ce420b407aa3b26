@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3e5ea042_c7622fc1",
+        "filename": "tvix/cli/src/derivation.rs",
+        "patchSetId": 49
+      },
+      "lineNbr": 190,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-01-23T10:16:01Z",
+      "side": 1,
+      "message": "this is not golang ;-)",
+      "revId": "4aa5bd319381398c9544e4489ce420b407aa3b26",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
