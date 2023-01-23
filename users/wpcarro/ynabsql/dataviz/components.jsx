@@ -863,7 +863,14 @@ class App extends React.Component {
                         <li><a href="#" onClick={() => this.setState({ sensitive: !this.state.sensitive })}>sensitive</a></li>
                     </ul>
                 </nav>
-                <UploadJSON onUpload={xs => this.setState({ allTnransactions: xs })} />
+                <UploadJSON onUpload={xs => this.setState({
+                    allTransactions: xs,
+                    filteredTransactions: select(this.state.query, xs, {
+                        caseSensitive: this.state.slxCaseSensitive,
+                        preferRegex: this.state.slxPreferRegex,
+                        slxDateKey: this.state.slxDateKey,
+                    }).sort(compileSort(this.state.sortExpr))
+                })} />
                 {view}
             </div>
         );
