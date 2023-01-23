@@ -3206,10 +3206,12 @@ dependencies = [
 name = "tvix-glue"
 version = "0.1.0"
 dependencies = [
+ "bstr",
  "bytes",
  "criterion",
  "lazy_static",
  "nix-compat",
+ "serde_json",
  "tempfile",
  "test-case",
  "thiserror",
