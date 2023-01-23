@@ -290,7 +290,7 @@ impl<'o> VM<'o> {
     }
 
     /// Access the I/O handle used for filesystem access in this VM.
-    pub(crate) fn io(&self) -> &dyn EvalIO {
+    pub fn io(&self) -> &dyn EvalIO {
         &*self.io_handle
     }
 

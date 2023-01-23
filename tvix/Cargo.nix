@@ -7765,6 +7765,10 @@ rec {
             packageId = "dirs";
           }
           {
+            name = "lazy_static";
+            packageId = "lazy_static";
+          }
+          {
             name = "nix-compat";
             packageId = "nix-compat";
           }
@@ -7781,12 +7785,22 @@ rec {
             packageId = "ssri";
           }
           {
+            name = "tempfile";
+            packageId = "tempfile";
+          }
+          {
             name = "thiserror";
             packageId = "thiserror";
           }
           {
             name = "tvix-eval";
             packageId = "tvix-eval";
+          }
+        ];
+        devDependencies = [
+          {
+            name = "test-case";
+            packageId = "test-case";
           }
         ];
 
