@@ -77,7 +77,7 @@ fn build_store_path(
 
 /// Build a store path for a literal text file in the store that may
 /// contain references.
-pub fn path_with_references<'a, I: IntoIterator<Item = &'a str>, C: AsRef<[u8]>>(
+pub fn path_with_references<S: AsRef<str>, I: IntoIterator<Item = S>, C: AsRef<[u8]>>(
     name: &str,
     content: C,
     references: I,
@@ -89,7 +89,7 @@ pub fn path_with_references<'a, I: IntoIterator<Item = &'a str>, C: AsRef<[u8]>>
     hasher.update("text");
     for reference in references {
         hasher.update(":");
-        hasher.update(reference);
+        hasher.update(reference.as_ref());
     }
 
     hasher.update(&format!(":sha256:{:x}:", content_hash));
