@@ -1,8 +1,9 @@
 //! Implements `builtins.derivation`, the core of what makes Nix build packages.
-
 use data_encoding::BASE64;
+use lazy_static::lazy_static;
 use std::cell::RefCell;
 use std::collections::{btree_map, BTreeSet};
+use std::path::PathBuf;
 use std::rc::Rc;
 use tvix_derivation::{Derivation, Hash};
 use tvix_eval::builtin_macros::builtins;
@@ -14,6 +15,45 @@ use crate::known_paths::{KnownPaths, PathType};
 // Constants used for strangely named fields in derivation inputs.
 const STRUCTURED_ATTRS: &'static str = "__structuredAttrs";
 const IGNORE_NULLS: &'static str = "__ignoreNulls";
+
+lazy_static! {
+    static ref TMPDIR: PathBuf = {
+        let dir = tempfile::tempdir_in("/tmp/tvix")
+            .expect("failed to create tempdir")
+            .into_path();
+        println!("tvix tempdir: {}", dir.to_string_lossy());
+        dir
+    };
+}
+
+fn dump_drv_to_store(vm: &VM, path: &str, drv: &Derivation) {
+    use std::io::Write;
+    use std::path::Path;
+
+    let mut file_path = TMPDIR.clone();
+    file_path.push(format!("{}.drv", drv.environment["name"]));
+    let mut file = std::fs::File::create(&file_path).expect("failed to create tmpfile");
+    write!(file, "{}", drv.to_string()).expect("failed to write drv to tmpfile");
+    if Path::new(path).exists() {
+        // nothing to do, drv already exists
+        return;
+    }
+
+    let out_path = vm
+        .io()
+        .import_path(&file_path)
+        .expect("failed to import drv to store");
+
+    if out_path.to_string_lossy() != path {
+        panic!(
+            "path for derivation diverged!\nexpected: {}\ncppnix: {}\nATerm: {}\ntmpdir: {}",
+            path,
+            out_path.to_string_lossy(),
+            drv.to_string(),
+            TMPDIR.to_string_lossy()
+        );
+    }
+}
 
 /// Helper function for populating the `drv.outputs` field from a
 /// manually specified set of outputs, instead of the default
@@ -383,6 +423,10 @@ mod derivation_builtins {
                 derivation_path.to_absolute_path(),
             );
         }
+
+        drop(known_paths);
+
+        dump_drv_to_store(vm, &derivation_path.to_absolute_path(), &drv);
 
         let mut new_attrs: Vec<(String, String)> = drv
             .outputs
