@@ -1232,7 +1232,7 @@ const Transactions = ({ sensitive, transactions, onSort, onClick, onViewChange, 
 
     return (
         <div>
-            <caption>Transactions</caption>
+            <legend>Transactions</legend>
             <div className="btn-group">
                 <button onClick={() => onViewChange('table')} className="btn btn-default btn-ghost">Table</button>
                 <button onClick={() => onViewChange('csv')} className="btn btn-default btn-ghost">CSV</button>
