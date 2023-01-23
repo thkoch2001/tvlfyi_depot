@@ -165,20 +165,20 @@ function transactionKey(x) {
 }
 
 function parseCSV(csv) {
-  var lines=csv.split("\n");
-  var result = [];
+  let lines=csv.split("\n");
+  let result = [];
 
   // Strip the surrounding 2x-quotes from the header.
   //
   // NOTE: If your columns contain commas in their values, you'll need
-  // to deal with those before doing the next step 
-  var headers = lines[0].split(",").map(x => x.slice(1, -1));
+  // to deal with those before doing the next step
+  let headers = lines[0].split(",").map(x => x.slice(1, -1));
 
-  for(var i = 1; i < lines.length; i += 1) {
-      var obj = {};
-      var currentline=lines[i].split(",");
+  for(let i = 1; i < lines.length; i += 1) {
+      let obj = {};
+      let currentline=lines[i].split(",");
 
-      for(var j = 0; j <  headers.length; j += 1) { 
+      for(let j = 0; j < headers.length; j += 1) {
         obj[headers[j]] = currentline[j].slice(1, -1);
       }
 
@@ -1225,7 +1225,7 @@ const Transactions = ({ sensitive, transactions, onSort, onClick, onViewChange, 
                 </tbody>
             </table>
         );
-    } 
+    }
     else if (transactionsView === 'csv') {
         view = (
             <code>{tableHeaders.join(',') + '\n' + transactions.map(x => tableHeaders.map(k => x[k]).join(',')).join("\n")}</code>
