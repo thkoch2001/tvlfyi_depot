@@ -2377,8 +2377,10 @@ dependencies = [
  "aho-corasick",
  "clap 4.0.32",
  "dirs",
+ "lazy_static",
  "rustyline",
  "smol_str",
+ "tempfile",
  "tvix-derivation",
  "tvix-eval",
 ]
