@@ -7722,6 +7722,10 @@ rec {
             packageId = "dirs";
           }
           {
+            name = "lazy_static";
+            packageId = "lazy_static";
+          }
+          {
             name = "rustyline";
             packageId = "rustyline";
           }
@@ -7732,6 +7736,10 @@ rec {
           {
             name = "ssri";
             packageId = "ssri";
+          }
+          {
+            name = "tempfile";
+            packageId = "tempfile";
           }
           {
             name = "thiserror";
