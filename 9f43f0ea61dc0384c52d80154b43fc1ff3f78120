@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "73e3e490_5da5e88a",
+        "filename": "tvix/eval/src/tests/nix_tests/eval-okay-fromTOML.nix",
+        "patchSetId": 2
+      },
+      "lineNbr": 83,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-01-24T15:06:18Z",
+      "side": 1,
+      "message": "flt4, flt5, flt7 and flt8 end up currently looking different in tvix:\n\n`49999999999999995805696` vs `5e+22` (flt4)\n`1` vs `1e+06` (?) (flt5)\n`` vs `6.626e-34` (flt7)\n`9224617.44599` vs `9.22462e+06` (flt8)",
+      "revId": "9f43f0ea61dc0384c52d80154b43fc1ff3f78120",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
