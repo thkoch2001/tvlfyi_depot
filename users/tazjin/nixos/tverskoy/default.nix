@@ -47,8 +47,8 @@ lib.fix (self: {
     zfs.enableUnstable = true;
   };
 
-  # virtualisation.virtualbox.host.enable = true;
-  # users.users.tazjin.extraGroups = [ "vboxusers" ];
+  virtualisation.virtualbox.host.enable = true;
+  users.users.tazjin.extraGroups = [ "vboxusers" ];
 
   fileSystems = {
     "/" = {
