@@ -1,5 +1,18 @@
 //! Manual mapping of some data structures in OC/OR corpora.
 
+/// Maps the *names* of OpenRussian word types (the `word_type` field
+/// in the `or_words` table) to the *set* of OpenCorpora grammemes
+/// commonly attached to lemmata of this type in OC.
+///
+/// Some word types just don't map over, and are omitted. Many words
+/// also have an empty word type.
+pub const WORD_TYPES_GRAMMEME_MAP: &'static [(&'static str, &'static [&'static str])] = &[
+    ("adjective", &["ADJF"]),
+    ("adverb", &["ADVB"]),
+    ("noun", &["NOUN"]),
+    ("verb", &["INFN"]), // or "VERB" ...
+];
+
 /// Maps the *names* of OpenRussian grammemes (the `form_type` fields
 /// in the `or_word_forms` table) to the *set* of OpenCorpora
 /// grammemes attached to them corresponding lemma in the `oc_lemmas`
