@@ -19,7 +19,7 @@ pub struct Word {
     pub bare: String,     // TODO: unknown
     pub accented: String, // TODO: unknown
     pub derived_from_word_id: Option<usize>,
-    pub rank: String,         // TODO: unknown
+    pub rank: Option<usize>,
     pub disabled: String,     // TODO: unknown
     pub audio: String,        // TODO: unknown
     pub usage_en: String,     // TODO: unknown

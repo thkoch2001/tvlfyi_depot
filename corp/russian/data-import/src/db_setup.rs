@@ -177,7 +177,7 @@ CREATE TABLE or_words (
     bare TEXT NOT NULL,
     accented TEXT,
     derived_from_word_id INTEGER,
-    rank TEXT,
+    rank INTEGER,
     word_type TEXT,
     level TEXT
 ) STRICT;
