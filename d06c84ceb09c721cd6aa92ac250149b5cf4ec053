@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4ebca1ce_14a2ab90",
+        "filename": "tvix/eval/src/value/arbitrary.rs",
+        "patchSetId": 7
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2023-01-25T13:26:33Z",
+      "side": 1,
+      "message": "I think this comment is out of date.",
+      "revId": "d06c84ceb09c721cd6aa92ac250149b5cf4ec053",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
