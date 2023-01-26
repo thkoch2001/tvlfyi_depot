@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "10cdd08b_57e0c387",
+        "filename": "tvix/cli/src/derivation.nix",
+        "patchSetId": 13
+      },
+      "lineNbr": 5,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-01-26T23:26:05Z",
+      "side": 1,
+      "message": "I\u0027d probably put this in \"known optimization potential\" (even though I hope Tvix will become a better codegen from Nix to native than us doing it manual.\n\nIn the case of fetchurl.nix, we probably don\u0027t have a choice.",
+      "revId": "24cde76628c10778d6ee8ab5425c95e96eb606f8",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "93288c8b_a7240992",
+        "filename": "tvix/cli/src/main.rs",
+        "patchSetId": 13
+      },
+      "lineNbr": 65,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-01-26T23:26:05Z",
+      "side": 1,
+      "message": "Should we also vendor in `fetchurl.nix` in Tvix directly? Setting `NIX_PATH\u003dnix\u003d… manually is a bit clunky, and Nix also defaults to something usable. I\u0027m not even sure if overriding it should be possible, or is desirable…",
+      "revId": "24cde76628c10778d6ee8ab5425c95e96eb606f8",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
