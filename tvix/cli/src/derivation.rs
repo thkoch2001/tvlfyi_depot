@@ -1,5 +1,6 @@
 //! Implements `builtins.derivation`, the core of what makes Nix build packages.
 
+use data_encoding::BASE64;
 use lazy_static::lazy_static;
 use std::cell::RefCell;
 use std::collections::{btree_map, BTreeSet};
@@ -137,7 +138,13 @@ fn populate_output_configuration(
         (Some(hash), Some(algo), hash_mode) => match drv.outputs.get_mut("out") {
             None => return Err(Error::ConflictingOutputTypes.into()),
             Some(out) => {
-                let algo = algo
+                let mut algo = algo
+                    .force(vm)?
+                    .coerce_to_string(CoercionKind::Strong, vm)?
+                    .as_str()
+                    .to_string();
+
+                let mut digest_str = hash
                     .force(vm)?
                     .coerce_to_string(CoercionKind::Strong, vm)?
                     .as_str()
@@ -153,7 +160,52 @@ fn populate_output_configuration(
                     ),
                 };
 
-                let algo = match hash_mode.as_deref() {
+                // In the case of SRI hashes, outputHash contains an SRI
+                // hash and outputHashAlgo is an empty string.
+                // It looks like Nix internally rewrites this to non-SRI, but
+                // only for the algo/digest fields in the output, NOT the environment keys.
+                // TODO: this doesn't seem to be correct yet.
+                // While an empty hash algo seems to be set for zlib.src,
+                // it doesn't seem to work for m4.src, which has sha256 populated.
+                // Maybe we need to check if the inserted hash parses as nixbase32,
+                // and if it doesn't, try parsing as SRI?
+                if algo.is_empty() {
+                    let sri_parsed = digest_str.parse::<ssri::Integrity>();
+                    // SRI strings can embed multiple hashes with different algos, but that's probably not supported
+
+                    match sri_parsed {
+                        Err(e) => return Err(Error::InvalidSRIString(e).into()),
+                        Ok(sri_parsed) => {
+                            if sri_parsed.hashes.len() != 1 {
+                                return Err(
+                                    Error::UnsupportedSRIMultiple(sri_parsed.hashes.len()).into()
+                                );
+                            }
+                            // grab the first (and only hash)
+                            let sri_parsed_hash = &sri_parsed.hashes[0];
+
+                            // ensure it's sha256
+                            if sri_parsed_hash.algorithm != ssri::Algorithm::Sha256 {
+                                return Err(Error::UnsupportedSRIAlgo(
+                                    sri_parsed_hash.algorithm.to_string(),
+                                )
+                                .into());
+                            }
+
+                            // the digest comes base64-encoded. Decode…
+                            match BASE64.decode(sri_parsed_hash.digest.as_bytes()) {
+                                Err(e) => return Err(Error::InvalidSRIDigest(e).into()),
+                                Ok(sri_digest) => {
+                                    algo = sri_parsed_hash.algorithm.to_string();
+                                    digest_str = data_encoding::HEXLOWER.encode(&sri_digest);
+                                }
+                            }
+                        }
+                    }
+                }
+
+                // mutate the algo string a bit more, depending on hashMode
+                algo = match hash_mode.as_deref() {
                     None | Some("flat") => algo,
                     Some("recursive") => format!("r:{}", algo),
                     Some(other) => {
@@ -161,15 +213,11 @@ fn populate_output_configuration(
                     }
                 };
 
+                // construct out.hash
                 out.hash = Some(Hash {
                     algo,
-
-                    digest: hash
-                        .force(vm)?
-                        .coerce_to_string(CoercionKind::Strong, vm)?
-                        .as_str()
-                        .to_string(),
-                });
+                    digest: digest_str,
+                })
             }
         },
 
