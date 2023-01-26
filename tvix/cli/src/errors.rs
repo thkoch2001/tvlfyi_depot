@@ -10,6 +10,10 @@ pub enum Error {
     ShadowedOutput(String),
     InvalidDerivation(DerivationError),
     InvalidOutputHashMode(String),
+    UnsupportedSRIAlgo(String),
+    UnsupportedSRIMultiple(usize),
+    InvalidSRIDigest(data_encoding::DecodeError),
+    InvalidSRIString(ssri::Error),
 }
 
 impl Display for Error {
@@ -38,6 +42,21 @@ impl Display for Error {
                 f,
                 "invalid output hash mode: '{mode}', only 'recursive' and 'flat` are supported"
             ),
+            Error::UnsupportedSRIAlgo(algo) => {
+                write!(f, "invalid sri algorithm: {algo}, only sha256 is supported")
+            }
+            Error::UnsupportedSRIMultiple(n) => {
+                write!(
+                    f,
+                    "invalid number of sri hashes in string ({n}), only one hash is supported"
+                )
+            }
+            Error::InvalidSRIDigest(err) => {
+                write!(f, "invalid sri digest: {}", err)
+            }
+            Error::InvalidSRIString(err) => {
+                write!(f, "failed to parse SRI string: {}", err)
+            }
         }
     }
 }
