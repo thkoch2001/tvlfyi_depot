@@ -1,5 +1,4 @@
-use crate::nixbase32::NIXBASE32;
-use data_encoding::DecodeError;
+use crate::nixbase32::{Nixbase32DecodeError, NIXBASE32};
 use std::fmt;
 use thiserror::Error;
 
@@ -19,7 +18,7 @@ pub enum ParseStorePathError {
     #[error("Dash is missing between hash and name")]
     MissingDash(),
     #[error("Hash encoding is invalid: {0}")]
-    InvalidHashEncoding(DecodeError),
+    InvalidHashEncoding(Nixbase32DecodeError),
     #[error("Invalid name: {0}")]
     InvalidName(String),
     #[error("Tried to parse an absolute path which was missing the store dir prefix.")]
