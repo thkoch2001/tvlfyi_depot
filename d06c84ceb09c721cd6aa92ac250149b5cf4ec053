@@ -16,6 +16,24 @@
       "message": "I think this comment is out of date.",
       "revId": "d06c84ceb09c721cd6aa92ac250149b5cf4ec053",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0fa1b9f0_4ac48212",
+        "filename": "tvix/eval/src/value/arbitrary.rs",
+        "patchSetId": 7
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2023-01-26T22:47:08Z",
+      "side": 1,
+      "message": "cl/7936",
+      "parentUuid": "4ebca1ce_14a2ab90",
+      "revId": "d06c84ceb09c721cd6aa92ac250149b5cf4ec053",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
