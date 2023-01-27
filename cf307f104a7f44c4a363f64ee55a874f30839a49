@@ -73,6 +73,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "3687d5a2_567c1449",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000066
+      },
+      "writtenOn": "2023-01-27T07:18:15Z",
+      "side": 1,
+      "message": "It looks like unchecked left/right shifts are still nightly-only:\n\nhttps://github.com/rust-lang/rust/issues/85122",
+      "parentUuid": "53c4a6e4_b72185f1",
+      "revId": "cf307f104a7f44c4a363f64ee55a874f30839a49",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "03b9af60_019383c2",
         "filename": "tvix/store/src/nixbase32.rs",
         "patchSetId": 8
