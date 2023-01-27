@@ -7,16 +7,15 @@ let
     "@context" = "https://schema.org";
     "@type" = "Organisation";
     url = "https://tvl.su";
-    logo = "https://static.tvl.fyi/${depot.web.static.drvHash}/logo-animated.svg";
+    logo = "https://static.tvl.fyi/latest/logo-animated.svg";
   };
-  index = depot.web.tvl.template {
-    title = "TVL (The Virus Lounge) - Software consulting";
-    content = builtins.readFile ./content.md;
-    extraFooter = "\n|\n © ООО ТВЛ";
 
-    # TODO(tazjin): The `.tvl-logo` thing can probably go in the shared CSS.
+  common = description: {
+    extraFooter = "\n|\n © ООО ТВЛ";
+    staticUrl = "https://static.tvl.su/latest";
+
     extraHead = ''
-      <meta name="description" content="TVL provides technology consulting for monorepos, Nix, and other SRE/DevOps/Software Engineering topics.">
+      <meta name="description" content="${description}">
       <script type="application/ld+json">
         ${builtins.toJSON structuredData}
       </script>
@@ -27,11 +26,34 @@ let
           margin-left: auto;
           margin-right: auto;
         }
+
+        .active-lang {
+          color: black;
+          font-weight: bold;
+        }
+
+        .inactive-lang {
+          color: inherit;
+        }
       </style>
     '';
   };
+
+  descEn = "TVL provides technology consulting for monorepos, Nix, and other SRE/DevOps/Software Engineering topics.";
+  indexEn = depot.web.tvl.template ({
+    title = "TVL (The Virus Lounge) - Software consulting";
+    content = builtins.readFile ./content-en.md;
+  } // common descEn);
+
+  descRu = "TVL предоставляет технологическое консультирование по монорепозиториям, Nix и другим темам SRE/DevOps/Software Engineering.";
+  indexRu = depot.web.tvl.template ({
+    title = "ТВЛ - Монорепозитории, SRE, Nix, программное обеспечение";
+    content = builtins.readFile ./content-ru.md;
+  } // common descRu);
 in
 pkgs.runCommand "corp-website" { } ''
   mkdir $out
-  cp ${index} $out/index.html
+  cp ${indexEn} $out/index.html
+  cp ${indexEn} $out/index-en.html
+  cp ${indexRu} $out/index-ru.html
 ''
