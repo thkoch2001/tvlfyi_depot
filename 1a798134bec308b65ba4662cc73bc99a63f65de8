@@ -16,6 +16,24 @@
       "message": "Clippy complains this whole match could become a\n\n````\n    if let (Some(hash), Some(algo), hash_mode) \u003d (hash, hash_algo, hash_mode) {\n        match drv.outputs.get_mut(\"out\") {\n```\n\nI\u0027m wondering though, how should we handle other cases, and can they even happen?\n\nSould we handle a `None` `outputHashAlgo` similar to it being an empty string? What about the `r:` prefix depending on outputHashMode? Should it apply in these cases too?\n\nLooking at cl/7756, we unconditionally seem to be running this on all derivations - if that\u0027s the case, maybe add an explaining comment to the top?\n\nAnother idea would be to do the VM forcing outside of populate_output_configuration, and then blend this and cl/7933 back together.\n\nThis would also allow us to get rid of the fake VM.",
       "revId": "1a798134bec308b65ba4662cc73bc99a63f65de8",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a1e0e6f2_4010f7eb",
+        "filename": "tvix/cli/src/derivation.rs",
+        "patchSetId": 11
+      },
+      "lineNbr": 127,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2023-01-27T00:28:28Z",
+      "side": 1,
+      "message": "\u003e Sould we handle a None outputHashAlgo similar to it being an empty string? What about the r: prefix depending on outputHashMode? Should it apply in these cases too?\n\nI think we\u0027ll find out as we eval more of nixpkgs!\n\n\u003e Looking at cl/7756, we unconditionally seem to be running this on all derivations - if that\u0027s the case, maybe add an explaining comment to the top?\n\nWhat would you add to the existing comment?\n\n\u003e Another idea would be to do the VM forcing outside of populate_output_configuration, and then blend this and cl/7933 back together.\n\nI\u0027ll try this to see how it looks, but on top of the chain as this has uses throughout the next few children and I also think it deserves an explanatory commit.",
+      "parentUuid": "23eaf25e_4b3d73e6",
+      "revId": "1a798134bec308b65ba4662cc73bc99a63f65de8",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
