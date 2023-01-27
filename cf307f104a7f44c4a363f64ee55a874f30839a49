@@ -34,6 +34,108 @@
       "parentUuid": "cb5acf0d_e4dd740a",
       "revId": "cf307f104a7f44c4a363f64ee55a874f30839a49",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6785c11a_7eebd283",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000066
+      },
+      "writtenOn": "2023-01-27T05:13:25Z",
+      "side": 1,
+      "message": "Looks good.  Somehow I am totally not surprised that Nix decided it would be a great idea to use *fractional* bytes.  For no good reason.\n\nToo bad we don\u0027t have a general-purpose\n\n```\nfn bit_chunk_iterator(input_bits:\u0026[u8], bits_per_output_chunk:u8) -\u003e Iterator\u003cu32\u003e\n```\n\n... it would factor out the hairiest parts of both `encode()` and `decode()` into a single place.  Maybe I should write one.",
+      "revId": "cf307f104a7f44c4a363f64ee55a874f30839a49",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "03b9af60_019383c2",
+        "filename": "tvix/store/src/nixbase32.rs",
+        "patchSetId": 8
+      },
+      "lineNbr": 5,
+      "author": {
+        "id": 1000066
+      },
+      "writtenOn": "2023-01-27T05:13:25Z",
+      "side": 1,
+      "message": "We should mention that `nixbase32`-encoded strings in real-life `narinfo` files can have non-integer byte lengths (e.g. 260 bits \u003d 32.5 bytes).  When I first read this I thought nix just made different choices about *how* to pad, rather than not padding at all.",
+      "revId": "cf307f104a7f44c4a363f64ee55a874f30839a49",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "39c101a9_4f446a5e",
+        "filename": "tvix/store/src/nixbase32.rs",
+        "patchSetId": 8
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1000066
+      },
+      "writtenOn": "2023-01-27T05:13:25Z",
+      "side": 1,
+      "message": "It would be nice if these had comments explaining that `b` is the bit offset within the entire (160-bit) input, `i` is the input byte index, and `j` is the bit offset within that input byte.",
+      "revId": "cf307f104a7f44c4a363f64ee55a874f30839a49",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b7bcc20a_4bbd1a0d",
+        "filename": "tvix/store/src/nixbase32.rs",
+        "patchSetId": 8
+      },
+      "lineNbr": 64,
+      "author": {
+        "id": 1000066
+      },
+      "writtenOn": "2023-01-27T05:13:25Z",
+      "side": 1,
+      "message": "Suggest replacing with\n\n```\nmatch decode_char(c) {\n```\n\nand adding\n\n```\nfn decode_char(encoded_char:\u0026u8) -\u003e Option\u003cu8\u003e {\n    Some(match encoded_char {\n        b\u00270\u0027..\u003db\u00279\u0027 \u003d\u003e encoded_char-b\u00270\u0027,\n        b\u0027a\u0027..\u003db\u0027d\u0027 \u003d\u003e encoded_char-b\u0027a\u0027+10_u8,\n        b\u0027f\u0027..\u003db\u0027n\u0027 \u003d\u003e encoded_char-b\u0027f\u0027+14_u8,\n        b\u0027p\u0027..\u003db\u0027s\u0027 \u003d\u003e encoded_char-b\u0027p\u0027+23_u8,\n        b\u0027v\u0027..\u003db\u0027z\u0027 \u003d\u003e encoded_char-b\u0027v\u0027+27_u8,\n        _ \u003d\u003e return None,\n    })\n}\n```",
+      "revId": "cf307f104a7f44c4a363f64ee55a874f30839a49",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7fc46f81_5501345f",
+        "filename": "tvix/store/src/nixbase32.rs",
+        "patchSetId": 8
+      },
+      "lineNbr": 72,
+      "author": {
+        "id": 1000066
+      },
+      "writtenOn": "2023-01-27T05:13:25Z",
+      "side": 1,
+      "message": "It might be easier to read this if `pos` were something else (`val`?).  I keep seeing this and thinking that it represents our position within the input, rather than the decoding of the current character of input.",
+      "revId": "cf307f104a7f44c4a363f64ee55a874f30839a49",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0b1e8c40_55e88817",
+        "filename": "tvix/store/src/nixbase32.rs",
+        "patchSetId": 8
+      },
+      "lineNbr": 83,
+      "author": {
+        "id": 1000066
+      },
+      "writtenOn": "2023-01-27T05:13:25Z",
+      "side": 1,
+      "message": "This might be more readable:\n\n```\n  let val \u003d (pos as u16).rotate_left(j as u32);\n  output[i] |\u003d (val \u0026 0x00ff)       as u8;\n  let carry \u003d ((val \u0026 0xff00) \u003e\u003e 8) as u8;\n```",
+      "revId": "cf307f104a7f44c4a363f64ee55a874f30839a49",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
