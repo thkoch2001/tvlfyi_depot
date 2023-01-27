@@ -87,31 +87,14 @@ fn populate_inputs<I: IntoIterator<Item = String>>(
 /// parameters, including invalid ones.
 fn populate_output_configuration(
     drv: &mut Derivation,
-    vm: &mut VM,
-    hash: Option<&Value>,      // in nix: outputHash
-    hash_algo: Option<&Value>, // in nix: outputHashAlgo
-    hash_mode: Option<&Value>, // in nix: outputHashmode
+    hash: Option<String>,      // in nix: outputHash
+    hash_algo: Option<String>, // in nix: outputHashAlgo
+    hash_mode: Option<String>, // in nix: outputHashmode
 ) -> Result<(), ErrorKind> {
     match (hash, hash_algo, hash_mode) {
-        (Some(hash), Some(algo), hash_mode) => match drv.outputs.get_mut("out") {
+        (Some(digest), Some(algo), hash_mode) => match drv.outputs.get_mut("out") {
             None => return Err(Error::ConflictingOutputTypes.into()),
             Some(out) => {
-                let algo = algo
-                    .force(vm)?
-                    .coerce_to_string(CoercionKind::Strong, vm)?
-                    .as_str()
-                    .to_string();
-
-                let hash_mode = match hash_mode {
-                    None => None,
-                    Some(mode) => Some(
-                        mode.force(vm)?
-                            .coerce_to_string(CoercionKind::Strong, vm)?
-                            .as_str()
-                            .to_string(),
-                    ),
-                };
-
                 let algo = match hash_mode.as_deref() {
                     None | Some("flat") => algo,
                     Some("recursive") => format!("r:{}", algo),
@@ -120,15 +103,7 @@ fn populate_output_configuration(
                     }
                 };
 
-                out.hash = Some(Hash {
-                    algo,
-
-                    digest: hash
-                        .force(vm)?
-                        .coerce_to_string(CoercionKind::Strong, vm)?
-                        .as_str()
-                        .to_string(),
-                });
+                out.hash = Some(Hash { algo, digest });
             }
         },
 
@@ -192,6 +167,16 @@ fn handle_derivation_parameters(
     Ok(true)
 }
 
+fn strong_coerce_to_string(vm: &mut VM, val: &Value, ctx: &str) -> Result<String, ErrorKind> {
+    Ok(val
+        .force(vm)
+        .context(ctx)?
+        .coerce_to_string(CoercionKind::Strong, vm)
+        .context(ctx)?
+        .as_str()
+        .to_string())
+}
+
 #[builtins(state = "Rc<RefCell<KnownPaths>>")]
 mod derivation_builtins {
     use super::*;
@@ -233,10 +218,22 @@ mod derivation_builtins {
         // Configure fixed-output derivations if required.
         populate_output_configuration(
             &mut drv,
-            vm,
-            input.select("outputHash"),
-            input.select("outputHashAlgo"),
-            input.select("outputHashMode"),
+            input
+                .select("outputHash")
+                .map(|v| strong_coerce_to_string(vm, v, "evaluating the `outputHash` parameter"))
+                .transpose()?,
+            input
+                .select("outputHashAlgo")
+                .map(|v| {
+                    strong_coerce_to_string(vm, v, "evaluating the `outputHashAlgo` parameter")
+                })
+                .transpose()?,
+            input
+                .select("outputHashMode")
+                .map(|v| {
+                    strong_coerce_to_string(vm, v, "evaluating the `outputHashMode` parameter")
+                })
+                .transpose()?,
         )?;
 
         for (name, value) in input.into_iter_sorted() {
