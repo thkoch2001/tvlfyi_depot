@@ -89,6 +89,42 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "1661cb08_0f77fc94",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-01-27T12:17:46Z",
+      "side": 1,
+      "message": "If there was, I\u0027d be more than happy to pull this in ;-)",
+      "parentUuid": "6785c11a_7eebd283",
+      "revId": "cf307f104a7f44c4a363f64ee55a874f30839a49",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "54e29b56_ff646161",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-01-27T12:17:46Z",
+      "side": 1,
+      "message": "Ah, that explains why I had subtle differences while trying to adapt my code to it. Thanks! So I\u0027ll instead incorporate your suggestions from above.",
+      "parentUuid": "3687d5a2_567c1449",
+      "revId": "cf307f104a7f44c4a363f64ee55a874f30839a49",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "03b9af60_019383c2",
@@ -102,6 +138,24 @@
       "writtenOn": "2023-01-27T05:13:25Z",
       "side": 1,
       "message": "We should mention that `nixbase32`-encoded strings in real-life `narinfo` files can have non-integer byte lengths (e.g. 260 bits \u003d 32.5 bytes).  When I first read this I thought nix just made different choices about *how* to pad, rather than not padding at all.",
+      "revId": "cf307f104a7f44c4a363f64ee55a874f30839a49",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "08a99856_f779c27e",
+        "filename": "tvix/store/src/nixbase32.rs",
+        "patchSetId": 8
+      },
+      "lineNbr": 5,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-01-27T12:17:46Z",
+      "side": 1,
+      "message": "I\u0027m not sure I understand this comment - 32 characters have 260 bits of information.\n\nIn general, he number of bits in a *base encoded string might not align with the number of bits you intend to encode - which from my understanding one of the reasons why there\u0027s normally padding - to make it a bit more clear.\n\nBut this is not something specific to nixbase32 - it simply doesn\u0027t use padding, but it\u0027s still unambiguous (?) how much bytes are encoded, because we can count how many groups of 5 bits can fit (?)\n\nDo you have a better proposal for the comment above?",
+      "parentUuid": "03b9af60_019383c2",
       "revId": "cf307f104a7f44c4a363f64ee55a874f30839a49",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
@@ -125,6 +179,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "968036b0_9871377e",
+        "filename": "tvix/store/src/nixbase32.rs",
+        "patchSetId": 8
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-01-27T12:17:46Z",
+      "side": 1,
+      "message": "Added some comments, PTAL.",
+      "parentUuid": "39c101a9_4f446a5e",
+      "revId": "cf307f104a7f44c4a363f64ee55a874f30839a49",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "b7bcc20a_4bbd1a0d",
         "filename": "tvix/store/src/nixbase32.rs",
         "patchSetId": 8
@@ -136,6 +208,24 @@
       "writtenOn": "2023-01-27T05:13:25Z",
       "side": 1,
       "message": "Suggest replacing with\n\n```\nmatch decode_char(c) {\n```\n\nand adding\n\n```\nfn decode_char(encoded_char:\u0026u8) -\u003e Option\u003cu8\u003e {\n    Some(match encoded_char {\n        b\u00270\u0027..\u003db\u00279\u0027 \u003d\u003e encoded_char-b\u00270\u0027,\n        b\u0027a\u0027..\u003db\u0027d\u0027 \u003d\u003e encoded_char-b\u0027a\u0027+10_u8,\n        b\u0027f\u0027..\u003db\u0027n\u0027 \u003d\u003e encoded_char-b\u0027f\u0027+14_u8,\n        b\u0027p\u0027..\u003db\u0027s\u0027 \u003d\u003e encoded_char-b\u0027p\u0027+23_u8,\n        b\u0027v\u0027..\u003db\u0027z\u0027 \u003d\u003e encoded_char-b\u0027v\u0027+27_u8,\n        _ \u003d\u003e return None,\n    })\n}\n```",
+      "revId": "cf307f104a7f44c4a363f64ee55a874f30839a49",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8df0e815_7b2b2603",
+        "filename": "tvix/store/src/nixbase32.rs",
+        "patchSetId": 8
+      },
+      "lineNbr": 64,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-01-27T12:17:46Z",
+      "side": 1,
+      "message": "Thanks! I added this function, and used the following docstring:\n\n```\n/// This maps a nixbase32-encoded character to its binary representation, which\n/// is also the index of the character in the alphabet.\n```\n\nPTAL.",
+      "parentUuid": "b7bcc20a_4bbd1a0d",
       "revId": "cf307f104a7f44c4a363f64ee55a874f30839a49",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
@@ -159,6 +249,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "bce404bb_ebe45095",
+        "filename": "tvix/store/src/nixbase32.rs",
+        "patchSetId": 8
+      },
+      "lineNbr": 72,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-01-27T12:17:46Z",
+      "side": 1,
+      "message": "I called this c_decoded. PTAL.",
+      "parentUuid": "7fc46f81_5501345f",
+      "revId": "cf307f104a7f44c4a363f64ee55a874f30839a49",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "0b1e8c40_55e88817",
         "filename": "tvix/store/src/nixbase32.rs",
         "patchSetId": 8
@@ -170,6 +278,24 @@
       "writtenOn": "2023-01-27T05:13:25Z",
       "side": 1,
       "message": "This might be more readable:\n\n```\n  let val \u003d (pos as u16).rotate_left(j as u32);\n  output[i] |\u003d (val \u0026 0x00ff)       as u8;\n  let carry \u003d ((val \u0026 0xff00) \u003e\u003e 8) as u8;\n```",
+      "revId": "cf307f104a7f44c4a363f64ee55a874f30839a49",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d0fd1503_52b1f342",
+        "filename": "tvix/store/src/nixbase32.rs",
+        "patchSetId": 8
+      },
+      "lineNbr": 83,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-01-27T12:17:46Z",
+      "side": 1,
+      "message": "Indeed, thanks! I applied this change (modulo the rename of `pos` to `c_decoded`, as written above. PTAL.",
+      "parentUuid": "0b1e8c40_55e88817",
       "revId": "cf307f104a7f44c4a363f64ee55a874f30839a49",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
