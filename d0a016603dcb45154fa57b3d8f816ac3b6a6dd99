@@ -1,0 +1,441 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e54c7372_1f952dd8",
+        "filename": "corp/website/content-ru.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 5,
+      "author": {
+        "id": 1000038
+      },
+      "writtenOn": "2023-01-27T14:18:57Z",
+      "side": 1,
+      "message": "Вирус со спайк-белками в форме лямбды, сидящий на диване",
+      "range": {
+        "startLine": 5,
+        "startChar": 10,
+        "endLine": 5,
+        "endChar": 72
+      },
+      "revId": "d0a016603dcb45154fa57b3d8f816ac3b6a6dd99",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fce89566_abd4c428",
+        "filename": "corp/website/content-ru.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1000038
+      },
+      "writtenOn": "2023-01-27T14:18:57Z",
+      "side": 1,
+      "message": "занимающаяся следующими направлениями",
+      "range": {
+        "startLine": 10,
+        "startChar": 8,
+        "endLine": 10,
+        "endChar": 38
+      },
+      "revId": "d0a016603dcb45154fa57b3d8f816ac3b6a6dd99",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "216fe944_75c659a3",
+        "filename": "corp/website/content-ru.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1000038
+      },
+      "writtenOn": "2023-01-27T14:18:57Z",
+      "side": 1,
+      "message": "Набор эффективных способов по структурированию внутренней кодовой базы в едином репозитории, унификации инструментов разработки между различными языками, а также снижения непреднамеренной сложности в разработке ПО.",
+      "range": {
+        "startLine": 12,
+        "startChar": 44,
+        "endLine": 16,
+        "endChar": 53
+      },
+      "revId": "d0a016603dcb45154fa57b3d8f816ac3b6a6dd99",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9bc04f73_72e57b14",
+        "filename": "corp/website/content-ru.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1000038
+      },
+      "writtenOn": "2023-01-27T14:18:57Z",
+      "side": 1,
+      "message": "Наш опыт работы с такими компаниями, как Google, Spotify и DeepMind, позволяет нам помочь организациям любого размера оптимизировать процессы разработки ПО, уменьшить нагрузку на разработчиков и улучшить качество кода.",
+      "range": {
+        "startLine": 18,
+        "startChar": 0,
+        "endLine": 21,
+        "endChar": 28
+      },
+      "revId": "d0a016603dcb45154fa57b3d8f816ac3b6a6dd99",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4c9ab783_3530d98b",
+        "filename": "corp/website/content-ru.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 1000038
+      },
+      "writtenOn": "2023-01-27T14:18:57Z",
+      "side": 1,
+      "message": "Мы используем собственные монорепо-решения во внутренних процессах разработки ПО. Всё это можно увидеть в нашем [публичном монорепозитории][depot].",
+      "range": {
+        "startLine": 23,
+        "startChar": 2,
+        "endLine": 25,
+        "endChar": 41
+      },
+      "revId": "d0a016603dcb45154fa57b3d8f816ac3b6a6dd99",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9063e9da_2a06ba2c",
+        "filename": "corp/website/content-ru.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1000038
+      },
+      "writtenOn": "2023-01-27T14:18:57Z",
+      "side": 1,
+      "message": "* \u003cdetails\u003e\u003csummary\u003e\u003cb\u003eNix\u003c/b\u003e. Мы считаем, что функциональные и декларативные\n  компьютерные системы являются важным и пока ещё недооцененным подходом к вычислениям, и \u003ca href\u003d\"https://nixos.org\"\u003eNix\u003c/a\u003e является наиболее перспективным решением в этом направлении.\u003c/summary\u003e",
+      "range": {
+        "startLine": 27,
+        "startChar": 0,
+        "endLine": 30,
+        "endChar": 49
+      },
+      "revId": "d0a016603dcb45154fa57b3d8f816ac3b6a6dd99",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e25dd0b8_38d53258",
+        "filename": "corp/website/content-ru.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1000038
+      },
+      "writtenOn": "2023-01-27T14:18:57Z",
+      "side": 1,
+      "message": "Nix позволяет компаниям значительно улучшить следующие области:",
+      "range": {
+        "startLine": 32,
+        "startChar": 0,
+        "endLine": 32,
+        "endChar": 66
+      },
+      "revId": "d0a016603dcb45154fa57b3d8f816ac3b6a6dd99",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "103bb3d5_26797039",
+        "filename": "corp/website/content-ru.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 1000038
+      },
+      "writtenOn": "2023-01-27T14:18:57Z",
+      "side": 1,
+      "message": "Good",
+      "range": {
+        "startLine": 34,
+        "startChar": 0,
+        "endLine": 36,
+        "endChar": 0
+      },
+      "revId": "d0a016603dcb45154fa57b3d8f816ac3b6a6dd99",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "dbaf0941_8ce1b35a",
+        "filename": "corp/website/content-ru.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1000038
+      },
+      "writtenOn": "2023-01-27T14:18:57Z",
+      "side": 1,
+      "message": "Настройка стека компании под конкретные задачи. Избегайте сложности инструментов вроде Kubernetes при масштабировании, но также избегайте изменения всей инфраструктуры по малейшей необходимости.",
+      "range": {
+        "startLine": 37,
+        "startChar": 1,
+        "endLine": 39,
+        "endChar": 67
+      },
+      "revId": "d0a016603dcb45154fa57b3d8f816ac3b6a6dd99",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fd40fae6_23b9984d",
+        "filename": "corp/website/content-ru.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 1000038
+      },
+      "writtenOn": "2023-01-27T14:18:57Z",
+      "side": 1,
+      "message": "Единый набор инструментов разработки для различных языков программирования, без сложностей, связанных с использованием Bazel и подобных.",
+      "range": {
+        "startLine": 40,
+        "startChar": 0,
+        "endLine": 44,
+        "endChar": 0
+      },
+      "revId": "d0a016603dcb45154fa57b3d8f816ac3b6a6dd99",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "de3a7fd7_664d1c09",
+        "filename": "corp/website/content-ru.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 1000038
+      },
+      "writtenOn": "2023-01-27T14:18:57Z",
+      "side": 1,
+      "message": "Nix прелагает радикально новую модель, которая может принести множество преимуществ для каждого способа использования.",
+      "range": {
+        "startLine": 45,
+        "startChar": 2,
+        "endLine": 46,
+        "endChar": 45
+      },
+      "revId": "d0a016603dcb45154fa57b3d8f816ac3b6a6dd99",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "af6fd649_46863a11",
+        "filename": "corp/website/content-ru.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 1000038
+      },
+      "writtenOn": "2023-01-27T14:18:57Z",
+      "side": 1,
+      "message": "**Разработка программного обеспечения**. Мы предлагаем широкий спектр услуг по разработке ПО. Вне зависимости от того, нуждаетесь вы в поддержке существующих проектов или хотите создать новое решение с нуля, мы можем вам помочь. Наша задача - помочь компаниям избежать ловушки излишне сложных систем, которые не соответствуют их потребностям.",
+      "range": {
+        "startLine": 49,
+        "startChar": 0,
+        "endLine": 53,
+        "endChar": 76
+      },
+      "revId": "d0a016603dcb45154fa57b3d8f816ac3b6a6dd99",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "91bd3877_76afef99",
+        "filename": "corp/website/content-ru.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 58,
+      "author": {
+        "id": 1000038
+      },
+      "writtenOn": "2023-01-27T14:18:57Z",
+      "side": 1,
+      "message": "* **Site Reliability Engineering (SRE)**. Мы можем помочь с множеством\n  инфраструктурных проблем, таких как развертывание, масштабирование,\n  мониторинг, анализ и устранение неполадок в существующих решениях. Мы\n  работаем с любыми технологическими стеками на базе Linux.",
+      "range": {
+        "startLine": 55,
+        "startChar": 0,
+        "endLine": 58,
+        "endChar": 54
+      },
+      "revId": "d0a016603dcb45154fa57b3d8f816ac3b6a6dd99",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2f53c3c8_121b1f13",
+        "filename": "corp/website/content-ru.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 68,
+      "author": {
+        "id": 1000038
+      },
+      "writtenOn": "2023-01-27T14:18:57Z",
+      "side": 1,
+      "message": "Публичный репозиторий ТВЛ, [**depot**][depot], является демонстрацией инструментов монорепо, над которыми мы работаем в течение последних нескольких лет.",
+      "range": {
+        "startLine": 66,
+        "startChar": 2,
+        "endLine": 68,
+        "endChar": 6
+      },
+      "revId": "d0a016603dcb45154fa57b3d8f816ac3b6a6dd99",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "16ffc3cc_509108c5",
+        "filename": "corp/website/content-ru.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 71,
+      "author": {
+        "id": 1000038
+      },
+      "writtenOn": "2023-01-27T14:18:57Z",
+      "side": 1,
+      "message": "В нем содержится множество проектов c открытым исходным кодом, результат работы разработчиков из разных стран, а также весь публичный код компании.",
+      "range": {
+        "startLine": 70,
+        "startChar": 0,
+        "endLine": 71,
+        "endChar": 72
+      },
+      "revId": "d0a016603dcb45154fa57b3d8f816ac3b6a6dd99",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7633b45b_e172a3b0",
+        "filename": "corp/website/content-ru.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 77,
+      "author": {
+        "id": 1000038
+      },
+      "writtenOn": "2023-01-27T14:18:57Z",
+      "side": 1,
+      "message": "Good",
+      "range": {
+        "startLine": 72,
+        "startChar": 0,
+        "endLine": 77,
+        "endChar": 12
+      },
+      "revId": "d0a016603dcb45154fa57b3d8f816ac3b6a6dd99",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c0d2c065_21346945",
+        "filename": "corp/website/content-ru.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 79,
+      "author": {
+        "id": 1000038
+      },
+      "writtenOn": "2023-01-27T14:18:57Z",
+      "side": 1,
+      "message": "компонентов?",
+      "range": {
+        "startLine": 79,
+        "startChar": 38,
+        "endLine": 79,
+        "endChar": 44
+      },
+      "revId": "d0a016603dcb45154fa57b3d8f816ac3b6a6dd99",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "460fa293_7321bcde",
+        "filename": "corp/website/content-ru.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 83,
+      "author": {
+        "id": 1000038
+      },
+      "writtenOn": "2023-01-27T14:18:57Z",
+      "side": 1,
+      "message": "* [Nixery][nixery] - это сервис, который позволяет пользователям с легкостью создавать и развёртывать образы контейнеров напрямую из их инструкций сборки софта.",
+      "range": {
+        "startLine": 81,
+        "startChar": 0,
+        "endLine": 83,
+        "endChar": 8
+      },
+      "revId": "d0a016603dcb45154fa57b3d8f816ac3b6a6dd99",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "986b8f0c_626a96b2",
+        "filename": "corp/website/content-ru.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 94,
+      "author": {
+        "id": 1000038
+      },
+      "writtenOn": "2023-01-27T14:18:57Z",
+      "side": 1,
+      "message": "TVL возникла как международное сообщество программистов для общения\nи совместной работы над проектами. Люди из разных стран вносят свой вклад в\nнаши открытые проекты по разработке программного обеспечения. Посетите [веб-сайт\nсообщества TVL][tvl], чтобы узнать больше.",
+      "range": {
+        "startLine": 91,
+        "startChar": 0,
+        "endLine": 94,
+        "endChar": 53
+      },
+      "revId": "d0a016603dcb45154fa57b3d8f816ac3b6a6dd99",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
