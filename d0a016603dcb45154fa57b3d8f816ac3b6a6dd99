@@ -799,6 +799,30 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "8a40eccd_0a996a85",
+        "filename": "corp/website/content-ru.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 83,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2023-01-27T15:46:17Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "460fa293_7321bcde",
+      "range": {
+        "startLine": 81,
+        "startChar": 0,
+        "endLine": 83,
+        "endChar": 8
+      },
+      "revId": "d0a016603dcb45154fa57b3d8f816ac3b6a6dd99",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "986b8f0c_626a96b2",
@@ -812,6 +836,30 @@
       "writtenOn": "2023-01-27T14:18:57Z",
       "side": 1,
       "message": "TVL возникла как международное сообщество программистов для общения\nи совместной работы над проектами. Люди из разных стран вносят свой вклад в\nнаши открытые проекты по разработке программного обеспечения. Посетите [веб-сайт\nсообщества TVL][tvl], чтобы узнать больше.",
+      "range": {
+        "startLine": 91,
+        "startChar": 0,
+        "endLine": 94,
+        "endChar": 53
+      },
+      "revId": "d0a016603dcb45154fa57b3d8f816ac3b6a6dd99",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "127614b7_eb56b98d",
+        "filename": "corp/website/content-ru.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 94,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2023-01-27T15:46:17Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "986b8f0c_626a96b2",
       "range": {
         "startLine": 91,
         "startChar": 0,
