@@ -16,6 +16,24 @@
       "message": "I\u0027m not sure if there\u0027s a more elegant/concise way to (unchecked) bitshifting, other than casting it to the bigger size, doing the calculation there, and shifting it back to u8. Any ideas?",
       "revId": "cf307f104a7f44c4a363f64ee55a874f30839a49",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "717a441c_620eb330",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-01-27T00:42:11Z",
+      "side": 1,
+      "message": "There\u0027s https://doc.rust-lang.org/std/primitive.u8.html#method.wrapping_shl apparently, I\u0027ll rewrite this to use that.",
+      "parentUuid": "cb5acf0d_e4dd740a",
+      "revId": "cf307f104a7f44c4a363f64ee55a874f30839a49",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
