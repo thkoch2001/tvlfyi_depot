@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7727148d_0bda3723",
+        "filename": "ops/modules/depot-inbox.nix",
+        "patchSetId": 5
+      },
+      "lineNbr": 139,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2023-01-27T16:23:48Z",
+      "side": 1,
+      "message": "I don\u0027t think this is in the right working directory yet",
+      "range": {
+        "startLine": 139,
+        "startChar": 0,
+        "endLine": 139,
+        "endChar": 26
+      },
+      "revId": "4ad02dd7d71582e79ca8fe2d1b13735390deaa71",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
