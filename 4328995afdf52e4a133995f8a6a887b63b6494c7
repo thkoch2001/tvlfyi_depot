@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c41b0f89_685b9c57",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-01-27T12:31:50Z",
+      "side": 1,
+      "message": "I like that, and would be happy to rebase cl/7933 past that. Can you get this to build?",
+      "revId": "4328995afdf52e4a133995f8a6a887b63b6494c7",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
