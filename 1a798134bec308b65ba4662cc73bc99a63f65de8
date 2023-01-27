@@ -34,6 +34,24 @@
       "parentUuid": "23eaf25e_4b3d73e6",
       "revId": "1a798134bec308b65ba4662cc73bc99a63f65de8",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f09c950f_bed59744",
+        "filename": "tvix/cli/src/derivation.rs",
+        "patchSetId": 11
+      },
+      "lineNbr": 127,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2023-01-27T00:43:04Z",
+      "side": 1,
+      "message": "Doing that refactor in cl/7939. It\u0027s a little more complex than a 3 minute change, so I\u0027ll finish that up probably tomorrow, but it doesn\u0027t block this CL.",
+      "parentUuid": "a1e0e6f2_4010f7eb",
+      "revId": "1a798134bec308b65ba4662cc73bc99a63f65de8",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
