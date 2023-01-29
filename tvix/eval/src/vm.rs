@@ -16,6 +16,7 @@ use crate::{
     upvalues::Upvalues,
     value::{Builtin, Closure, CoercionKind, Lambda, NixAttrs, NixList, Thunk, Value},
     warnings::{EvalWarning, WarningKind},
+    AddContext,
 };
 
 /// Representation of a VM continuation;
@@ -775,6 +776,28 @@ impl<'o> VM<'o> {
                             name: key.as_str().to_string(),
                         }))
                     }
+                }
+            }
+
+            OpCode::OpAttrsSelectMany(Count(count)) => {
+                let keys = self.stack.split_off(self.stack.len() - count);
+                let set = fallible!(
+                    self,
+                    self.pop().to_attrs().context(format!(
+                        "selecting {} values from an attribute set",
+                        keys.len()
+                    ))
+                );
+
+                for key in keys {
+                    let key_str = fallible!(
+                        self,
+                        key.to_str()
+                            .context(format!("evaluating a key to select from an attribute set"))
+                    );
+
+                    let value = fallible!(self, set.select_required(key_str.as_str()));
+                    self.push(value.clone());
                 }
             }
 
