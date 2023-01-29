@@ -36,6 +36,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "aaffaed0_6daa0c54",
+        "filename": "ops/terraform/deploy-nixos/module.tf",
+        "patchSetId": 1
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-01-29T18:21:57Z",
+      "side": 1,
+      "message": "There\u0027s no functional change, but this stuff ends up getting cluttered quite quickly.\n\nI think having all variables in a `variables.tf` definitely makes sense.\n\nCan you rename this file to `main.tf`, and we can leave the `variables.tf` split to the time when more variables are introduced (https://cl.tvl.fyi/c/depot/+/7950/comment/55a4b0f6_1bd448d5/)?",
+      "parentUuid": "67fb9416_081565d9",
+      "revId": "93f46f7cc9c24880974d3adabca3fb802f229a01",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "54d2046c_b34baea7",
