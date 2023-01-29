@@ -8099,6 +8099,10 @@ rec {
             name = "tracing-subscriber";
             packageId = "tracing-subscriber";
           }
+          {
+            name = "tvix-nar";
+            packageId = "tvix-nar";
+          }
         ];
         buildDependencies = [
           {
