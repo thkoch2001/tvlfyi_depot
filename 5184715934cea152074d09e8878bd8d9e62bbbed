@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a37438e0_4648c06d",
+        "filename": "tvix/store/src/nar.rs",
+        "patchSetId": 3
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-01-29T20:31:58Z",
+      "side": 1,
+      "message": "@tazjin Let me know what you think of this trait trampoline.\n\nI initially started to implement NAR rendering directly in the `calculate_nar` handler of SledPathInfoService, but this made it not very reusable, and passing in clients to the other services, and testing/mocking became very messy.\n\nAt least when invoking the calculate_nar() RPC method, we can assume that the connected Directory and BlobStores are local to the thing replying to the calculate_nar request, and everything queried is already present - so we don\u0027t need the more powerful recursive fetching methods.\n\nIt\u0027s not yet working in the following CL, but I was expecting to use this trait, or something similar in the calculate_nar rpc method implementation.",
+      "revId": "5184715934cea152074d09e8878bd8d9e62bbbed",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
