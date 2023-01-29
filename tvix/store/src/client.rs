@@ -1,5 +1,7 @@
 use crate::proto::Directory;
 
+pub trait Blob: std::io::BufRead /* + std::io::Seek */ {}
+
 pub trait StoreClient {
     fn open_blob(&self, digest: Vec<u8>) -> std::io::Result<Box<dyn std::io::BufRead>>;
 
