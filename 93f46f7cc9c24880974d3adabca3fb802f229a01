@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "531070ec_3f0357bb",
+        "filename": "ops/terraform/deploy-nixos/module.tf",
+        "patchSetId": 1
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-01-29T17:06:42Z",
+      "side": 1,
+      "message": "Can this file be split into `main.tf`, `variables.tf`, `outputs.tf`, as per https://developer.hashicorp.com/terraform/language/modules/develop/structure?\n\nI\u0027m not sure if we need the `modules/` subdirectory here, or if that could only live in a josh workspace.",
+      "revId": "93f46f7cc9c24880974d3adabca3fb802f229a01",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "54d2046c_b34baea7",
+        "filename": "ops/terraform/deploy-nixos/nixos-copy.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-01-29T17:06:42Z",
+      "side": 1,
+      "message": "I\u0027d probably even try to make more of this optional, but that can be a followup.",
+      "revId": "93f46f7cc9c24880974d3adabca3fb802f229a01",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "55a4b0f6_1bd448d5",
+        "filename": "ops/terraform/deploy-nixos/nixos-eval.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-01-29T17:06:42Z",
+      "side": 1,
+      "message": "Falling back to the repo root is one way, but I\u0027d definitely like to be able to do this explicitly, as a caller of the terraform module. I\u0027ll send a followup once that\u0027s in.",
+      "revId": "93f46f7cc9c24880974d3adabca3fb802f229a01",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
