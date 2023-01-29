@@ -94,6 +94,10 @@ pub enum OpCode {
     OpAttrs(Count),
     OpAttrsUpdate,
     OpAttrsSelect,
+    /// Select multiple values from an attribute set, assuming that
+    /// the previous `n` stack values are the keys and n+1 is the
+    /// attribute set from which to select.
+    OpAttrsSelectMany(Count),
     OpAttrsTrySelect,
     OpHasAttr,
 
