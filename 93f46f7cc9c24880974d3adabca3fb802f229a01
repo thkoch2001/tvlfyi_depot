@@ -18,6 +18,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "67fb9416_081565d9",
+        "filename": "ops/terraform/deploy-nixos/module.tf",
+        "patchSetId": 1
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2023-01-29T17:24:58Z",
+      "side": 1,
+      "message": "What\u0027s the justification for the split of these files (especially because it says \"even if empty\")? That seems like useless Hashicorp bureaucracy to me. If there\u0027s no functionality impact I\u0027d rather prefer to keep this in a simple file that you can just read from top to bottom, especially as it\u0027s this short.",
+      "parentUuid": "531070ec_3f0357bb",
+      "revId": "93f46f7cc9c24880974d3adabca3fb802f229a01",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "54d2046c_b34baea7",
