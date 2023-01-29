@@ -20,7 +20,7 @@ lazy_static! {
 /// Trying to get a non-existent PathInfo should return a not found error.
 #[tokio::test]
 async fn not_found() -> anyhow::Result<()> {
-    let service = SledPathInfoService::new(TempDir::new()?.path().to_path_buf())?;
+    let service = SledPathInfoService::new(TempDir::new()?.path().to_path_buf(), todo!())?;
 
     let resp = service
         .get(Request::new(GetPathInfoRequest {
@@ -37,7 +37,7 @@ async fn not_found() -> anyhow::Result<()> {
 /// Put a PathInfo into the store, get it back.
 #[tokio::test]
 async fn put_get() -> anyhow::Result<()> {
-    let service = SledPathInfoService::new(TempDir::new()?.path().to_path_buf())?;
+    let service = SledPathInfoService::new(TempDir::new()?.path().to_path_buf(), todo!())?;
 
     let path_info = PathInfo {
         node: Some(Node {
