@@ -37,13 +37,6 @@ optimisations, but note the most important ones here.
   `NixAttrs` value on the stack. In this case we simply push the stack
   index of the known local.
 
-* Multiple attribute selection [medium]
-
-  An instruction could be introduced that avoids repeatedly pushing an
-  attribute set to/from the stack if multiple keys are being selected
-  from it. This occurs, for example, when inheriting from an attribute
-  set or when binding function formals.
-
 * Split closure/function representation [easy]
 
   Functions have fewer fields that need to be populated at runtime and
