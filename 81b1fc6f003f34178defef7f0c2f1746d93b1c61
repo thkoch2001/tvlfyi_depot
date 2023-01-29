@@ -16,6 +16,24 @@
       "message": "With all of this out of the way, we can probably inline construct_output_hash again.\n\nThe only reason I put it in a separate function was because it was hard to mock the input parameters of this function.",
       "revId": "81b1fc6f003f34178defef7f0c2f1746d93b1c61",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "179865ea_f2c16b59",
+        "filename": "tvix/cli/src/derivation.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 176,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2023-01-29T17:37:58Z",
+      "side": 0,
+      "message": "I think it\u0027s fine to keep that separately, originally this function wasn\u0027t dealing with SRI hashes and that seems like it\u0027s own field of complexity (unrelated to figuring out which/any fields should be set in general). It\u0027s also quite a lot of code",
+      "parentUuid": "5c133a0b_3c02822b",
+      "revId": "81b1fc6f003f34178defef7f0c2f1746d93b1c61",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
