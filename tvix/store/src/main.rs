@@ -37,8 +37,11 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     let blob_service = tvix_store::sled_blob_service::SledBlobService::new("blobs.sled".into())?;
     let directory_service =
         tvix_store::sled_directory_service::SledDirectoryService::new("directories.sled".into())?;
-    let path_info_service =
-        tvix_store::sled_path_info_service::SledPathInfoService::new("pathinfo.sled".into())?;
+    let path_info_service = tvix_store::sled_path_info_service::SledPathInfoService::new(
+        "pathinfo.sled".into(),
+        // TODO: build a store client
+        todo!(),
+    )?;
 
     let mut router = server
         .add_service(BlobServiceServer::new(blob_service))
