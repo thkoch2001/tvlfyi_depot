@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cc20d974_8899743e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2023-01-29T10:48:56Z",
+      "side": 1,
+      "message": "While testing this locally we discovered that public-inbox actually has this as a feature, it\u0027s just hard to understand when it\u0027s triggered, so lets trigger it always: https://cl.tvl.fyi/c/depot/+/7946",
+      "revId": "e85f3753597afb3e3921a4d3e70ffbdffc14271e",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
