@@ -2714,6 +2714,7 @@ dependencies = [
  "tonic-reflection",
  "tracing",
  "tracing-subscriber",
+ "tvix-nar",
 ]
 
 [[package]]
