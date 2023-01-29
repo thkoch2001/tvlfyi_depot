@@ -857,45 +857,74 @@ impl Compiler<'_> {
         // Similar to `let ... in ...`, we now do multiple passes over
         // the bindings to first declare them, then populate them, and
         // then finalise any necessary recursion into the scope.
-        let mut entries: Vec<(LocalIdx, ast::PatEntry)> = vec![];
-        let mut indices: Vec<LocalIdx> = vec![];
+        //
+        // First we split the entries up into optional/required, as
+        // the required ones have a separate runtime instruction but
+        // the order can not be violated when declaring them.
+        let mut entries: Vec<ast::PatEntry> = vec![];
+        let mut optional_entries: Vec<(LocalIdx, ast::PatEntry, ast::Expr)> = vec![];
         let mut arguments = HashMap::default();
+        let mut indices: Vec<LocalIdx> = vec![];
 
         for entry in pattern.pat_entries() {
             let ident = entry.ident().unwrap();
-            let idx = self.declare_local(&ident, ident.to_string());
-            let has_default = entry.default().is_some();
-            entries.push((idx, entry));
-            indices.push(idx);
+            let mut has_default = false;
+
+            if let Some(default) = entry.default() {
+                has_default = true;
+                let idx = self.declare_local(&ident, ident.to_string());
+                indices.push(idx);
+                optional_entries.push((idx, entry, default))
+            } else {
+                entries.push(entry);
+            }
+
             arguments.insert(ident.into(), has_default);
         }
 
-        // For each of the bindings, push the set on the stack and
-        // attempt to select from it.
+        // Now declare the required entries.
+        let entries: Vec<(LocalIdx, ast::PatEntry)> = entries
+            .into_iter()
+            .map(|entry| {
+                let ident = entry.ident().unwrap();
+                let idx = self.declare_local(&ident, ident.to_string());
+                indices.push(idx);
+                (idx, entry)
+            })
+            .collect();
+
         let stack_idx = self.scope().stack_index(set_idx);
-        for (idx, entry) in entries.into_iter() {
+
+        // For the optional bindings, use the same mechanism as
+        // `compile_select_or`. These are already declared and must
+        // thus be handled first.
+        for (idx, entry, default_expr) in optional_entries {
+            // For each of these bindings, push the set on the stack
+            // and attempt to select from it.
             self.push_op(OpCode::OpGetLocal(stack_idx), pattern);
             self.emit_literal_ident(&entry.ident().unwrap());
+            self.push_op(OpCode::OpAttrsTrySelect, &entry.ident().unwrap());
 
-            // Use the same mechanism as `compile_select_or` if a
-            // default value was provided, or simply select otherwise.
-            if let Some(default_expr) = entry.default() {
-                self.push_op(OpCode::OpAttrsTrySelect, &entry.ident().unwrap());
+            let jump_to_default =
+                self.push_op(OpCode::OpJumpIfNotFound(JumpOffset(0)), &default_expr);
 
-                let jump_to_default =
-                    self.push_op(OpCode::OpJumpIfNotFound(JumpOffset(0)), &default_expr);
+            let jump_over_default = self.push_op(OpCode::OpJump(JumpOffset(0)), &default_expr);
 
-                let jump_over_default = self.push_op(OpCode::OpJump(JumpOffset(0)), &default_expr);
-
-                self.patch_jump(jump_to_default);
-                self.compile(idx, default_expr);
-                self.patch_jump(jump_over_default);
-            } else {
-                self.push_op(OpCode::OpAttrsSelect, &entry.ident().unwrap());
-            }
+            self.patch_jump(jump_to_default);
+            self.compile(idx, default_expr);
+            self.patch_jump(jump_over_default);
 
             self.scope_mut().mark_initialised(idx);
         }
+
+        // For the required bindings, push the set once and perform a
+        // multi-select on it. Declare the bindings right away.
+        self.push_op(OpCode::OpGetLocal(stack_idx), pattern);
+        for (idx, entry) in &entries {
+            self.emit_literal_ident(&entry.ident().unwrap());
+            self.scope_mut().mark_initialised(*idx);
+        }
+        self.push_op(OpCode::OpAttrsSelectMany(Count(entries.len())), pattern);
 
         for idx in indices {
             if self.scope()[idx].needs_finaliser {
