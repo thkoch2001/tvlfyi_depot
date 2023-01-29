@@ -6,7 +6,7 @@ use crate::proto::{self, NamedNode};
 
 pub trait Blob: std::io::BufRead /* + std::io::Seek */ {}
 
-pub trait StoreClient {
+pub trait StoreClient: Send + Sync {
     fn open_blob(&self, digest: Vec<u8>) -> std::io::Result<Box<dyn Blob>>;
 
     // TODO: stat_blob, put_blob?
