@@ -56,6 +56,24 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "4973bc3b_232a95f9",
+        "filename": "ops/terraform/deploy-nixos/module.tf",
+        "patchSetId": 1
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2023-01-30T07:12:04Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "aaffaed0_6daa0c54",
+      "revId": "93f46f7cc9c24880974d3adabca3fb802f229a01",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "54d2046c_b34baea7",
         "filename": "ops/terraform/deploy-nixos/nixos-copy.sh",
         "patchSetId": 1
