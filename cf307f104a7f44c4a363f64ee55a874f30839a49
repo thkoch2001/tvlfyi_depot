@@ -160,6 +160,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "a46bdd8a_a70383f8",
+        "filename": "tvix/store/src/nixbase32.rs",
+        "patchSetId": 8
+      },
+      "lineNbr": 5,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-01-30T11:46:26Z",
+      "side": 1,
+      "message": "Marking as resolved for now, feel free to followup.",
+      "parentUuid": "08a99856_f779c27e",
+      "revId": "cf307f104a7f44c4a363f64ee55a874f30839a49",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "39c101a9_4f446a5e",
@@ -191,6 +209,24 @@
       "side": 1,
       "message": "Added some comments, PTAL.",
       "parentUuid": "39c101a9_4f446a5e",
+      "revId": "cf307f104a7f44c4a363f64ee55a874f30839a49",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fb8466bf_03501781",
+        "filename": "tvix/store/src/nixbase32.rs",
+        "patchSetId": 8
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-01-30T11:46:26Z",
+      "side": 1,
+      "message": "Marking as resolved for now, feel free to followup.",
+      "parentUuid": "968036b0_9871377e",
       "revId": "cf307f104a7f44c4a363f64ee55a874f30839a49",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
@@ -230,6 +266,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "462215db_18668cc1",
+        "filename": "tvix/store/src/nixbase32.rs",
+        "patchSetId": 8
+      },
+      "lineNbr": 64,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-01-30T11:46:26Z",
+      "side": 1,
+      "message": "Marking as resolved for now, feel free to followup.",
+      "parentUuid": "8df0e815_7b2b2603",
+      "revId": "cf307f104a7f44c4a363f64ee55a874f30839a49",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "7fc46f81_5501345f",
@@ -265,6 +319,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "9d6ff251_3c6b9b1f",
+        "filename": "tvix/store/src/nixbase32.rs",
+        "patchSetId": 8
+      },
+      "lineNbr": 72,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-01-30T11:46:26Z",
+      "side": 1,
+      "message": "Marking as resolved for now, feel free to followup.",
+      "parentUuid": "bce404bb_ebe45095",
+      "revId": "cf307f104a7f44c4a363f64ee55a874f30839a49",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "0b1e8c40_55e88817",
@@ -296,6 +368,24 @@
       "side": 1,
       "message": "Indeed, thanks! I applied this change (modulo the rename of `pos` to `c_decoded`, as written above. PTAL.",
       "parentUuid": "0b1e8c40_55e88817",
+      "revId": "cf307f104a7f44c4a363f64ee55a874f30839a49",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "43aa25e2_82ff780b",
+        "filename": "tvix/store/src/nixbase32.rs",
+        "patchSetId": 8
+      },
+      "lineNbr": 83,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-01-30T11:46:26Z",
+      "side": 1,
+      "message": "Marking as resolved for now, feel free to followup.",
+      "parentUuid": "d0fd1503_52b1f342",
       "revId": "cf307f104a7f44c4a363f64ee55a874f30839a49",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
