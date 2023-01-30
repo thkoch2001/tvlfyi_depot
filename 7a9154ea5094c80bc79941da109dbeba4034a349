@@ -87,6 +87,24 @@
       "parentUuid": "91c341d1_0f260ae5",
       "revId": "7a9154ea5094c80bc79941da109dbeba4034a349",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3bc36ffa_c025f276",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-01-30T21:49:47Z",
+      "side": 1,
+      "message": "Just because this will live in //tvix doesn\u0027t mean we can\u0027t change the API anymore.\n\nI still think this makes sense to ship below //tvix/examples or so, blog posts and more docs to make it more accessible are orthogonal.",
+      "parentUuid": "f2b700c3_eaf874c6",
+      "revId": "7a9154ea5094c80bc79941da109dbeba4034a349",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
