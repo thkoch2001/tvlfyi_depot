@@ -45,6 +45,30 @@
       },
       "revId": "c76374ef70a0d2b55c3dccaf96e3562894b300a9",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "295af36d_d6feee46",
+        "filename": "tvix/store/src/proto.rs",
+        "patchSetId": 4
+      },
+      "lineNbr": 177,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-01-30T10:10:52Z",
+      "side": 1,
+      "message": "Check the corresponding TODO in nar.rs:69, where I tried to use this to avoid matching to get the `\u0026str` to call `nar_node_directory.entry(\u0026str)` three different times.\n\nI wanted something like this:\n\n```\nnar_node_directory.entry(\u0026proto_node.get_name())?;\nwalk_node(child_node, proto_node, store_client)?;\n```\n\n… without having to unpack proto_node first, just to get the name, before passing proto_node into `walk_node(child_node, proto_node, store_client)?;` to recurse.",
+      "parentUuid": "b532a665_4a9e8dd9",
+      "range": {
+        "startLine": 177,
+        "startChar": 0,
+        "endLine": 177,
+        "endChar": 35
+      },
+      "revId": "c76374ef70a0d2b55c3dccaf96e3562894b300a9",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
