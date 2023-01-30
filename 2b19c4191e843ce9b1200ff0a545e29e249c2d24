@@ -34,6 +34,24 @@
       "parentUuid": "37184a66_138990f2",
       "revId": "2b19c4191e843ce9b1200ff0a545e29e249c2d24",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "51725aa6_24975371",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-01-30T10:05:34Z",
+      "side": 1,
+      "message": "The three lists in a `Directory` nodes are already individually be sorted (that can be ensured by the Directory::validate method), and necessary so that there\u0027s only one valid representation of contents.\n\nThat code picks whatever comes next from one of the three lists. It\u0027s used to render NAR files, which is used to calculate the NAR-based path of something, and we have no choice to do so anyways.\n\nThe idea was that stores cache calculate_nar() RPC calls, because calculating the NAR stream over the same node will always yield the same NAR contents, and by this the same nar size and sha256.\n\nSo that code path is effectively only used once, when rendering NAR, and really wanting the contents too.\n\nDuring construction of Directory objects (happens when importing from a filesystem, or when uploading build results), we\u0027ll sort the filesystem directory listing lexicographiclaly before starting to walk over individual filesystem nodes, to ensure these are individually sorted.",
+      "parentUuid": "9a6440a6_7a8d1b8f",
+      "revId": "2b19c4191e843ce9b1200ff0a545e29e249c2d24",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
