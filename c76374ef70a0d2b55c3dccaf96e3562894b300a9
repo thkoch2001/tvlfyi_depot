@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9b6610ea_cf726476",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2023-01-30T07:10:12Z",
+      "side": 1,
+      "message": "consumes",
+      "range": {
+        "startLine": 9,
+        "startChar": 26,
+        "endLine": 9,
+        "endChar": 35
+      },
+      "revId": "c76374ef70a0d2b55c3dccaf96e3562894b300a9",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b532a665_4a9e8dd9",
+        "filename": "tvix/store/src/proto.rs",
+        "patchSetId": 4
+      },
+      "lineNbr": 177,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2023-01-30T07:10:12Z",
+      "side": 1,
+      "message": "how so?",
+      "range": {
+        "startLine": 177,
+        "startChar": 0,
+        "endLine": 177,
+        "endChar": 35
+      },
+      "revId": "c76374ef70a0d2b55c3dccaf96e3562894b300a9",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
