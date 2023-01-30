@@ -34,6 +34,24 @@
       "parentUuid": "5c133a0b_3c02822b",
       "revId": "81b1fc6f003f34178defef7f0c2f1746d93b1c61",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "723b48c3_f23fd6f0",
+        "filename": "tvix/cli/src/derivation.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 176,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-01-30T21:46:57Z",
+      "side": 0,
+      "message": "Well, that helper isn\u0027t only doing SRI stuff anymore, but also mutating the algo string, depending on the hashMode. This function now only has a single match unpacking.\n\nI sent cl/7961 pulling it back in, and think it\u0027s more readable - especially considering it\u0027s completing the testcases. PTAL.",
+      "parentUuid": "179865ea_f2c16b59",
+      "revId": "81b1fc6f003f34178defef7f0c2f1746d93b1c61",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
