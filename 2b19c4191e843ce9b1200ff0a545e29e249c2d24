@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "37184a66_138990f2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2023-01-30T07:05:18Z",
+      "side": 1,
+      "message": "How hot is this code path? I have performance concerns about that ad-hoc sorting. Are the three lists internally pre-sorted?",
+      "revId": "2b19c4191e843ce9b1200ff0a545e29e249c2d24",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
