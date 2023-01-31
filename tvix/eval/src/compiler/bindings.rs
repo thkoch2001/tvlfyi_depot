@@ -621,7 +621,7 @@ impl Compiler<'_> {
             if self.scope()[idx].needs_finaliser {
                 let stack_idx = self.scope().stack_index(idx);
                 let span = self.scope()[idx].span;
-                self.push_op(OpCode::OpFinalise(stack_idx), &span);
+                self.push_op_usize_operand(OpCode::OpFinalise, stack_idx.0, &span);
             }
         }
     }

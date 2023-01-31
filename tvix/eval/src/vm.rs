@@ -1050,7 +1050,8 @@ impl<'o> VM<'o> {
                 }
             }
 
-            OpCode::OpFinalise(StackIdx(idx)) => {
+            OpCode::OpFinalise => {
+                let idx = self.read_usize();
                 match &self.stack[self.frame().stack_offset + idx] {
                     Value::Closure(_) => panic!("attempted to finalise a closure"),
 
