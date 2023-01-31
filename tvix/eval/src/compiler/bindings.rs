@@ -704,7 +704,7 @@ impl Compiler<'_> {
             LocalPosition::Unknown => {
                 // Are we possibly dealing with an upvalue?
                 if let Some(idx) = self.resolve_upvalue(self.contexts.len() - 1, ident, node) {
-                    self.push_op(OpCode::OpGetUpvalue(idx), node);
+                    self.push_op_usize_operand(OpCode::OpGetUpvalue, idx.0, node);
                     return;
                 }
 
@@ -749,7 +749,7 @@ impl Compiler<'_> {
                     node,
                     UpvalueKind::Local(idx),
                 );
-                compiler.push_op(OpCode::OpGetUpvalue(upvalue_idx), node);
+                compiler.push_op_usize_operand(OpCode::OpGetUpvalue, upvalue_idx.0, node);
             }),
         };
     }

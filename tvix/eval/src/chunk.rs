@@ -311,7 +311,8 @@ impl Chunk {
             | op @ OpCode::OpList
             | op @ OpCode::OpInterpolate
             | op @ OpCode::OpGetLocal
-            | op @ OpCode::OpCloseScope => {
+            | op @ OpCode::OpCloseScope
+            | op @ OpCode::OpGetUpvalue => {
                 let operand = self.read_usize_operand(CodeIdx(*idx + 1));
                 *idx += PTR_SIZE;
 

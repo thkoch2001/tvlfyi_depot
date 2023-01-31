@@ -229,7 +229,7 @@ pub enum OpCode {
 
     /// Retrieve the upvalue at the given index from the closure or thunk
     /// currently under evaluation.
-    OpGetUpvalue(UpvalueIdx),
+    OpGetUpvalue,
 
     /// Construct a closure which has upvalues but no self-references
     OpClosure(ConstantIdx),
