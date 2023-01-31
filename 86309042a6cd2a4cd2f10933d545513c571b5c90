@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fd11f8a8_b6390742",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2023-01-31T13:13:46Z",
+      "side": 1,
+      "message": "LGTM, great. I think the other things that are clearly C++-Nix related (esp. nar) should also go in here.",
+      "revId": "86309042a6cd2a4cd2f10933d545513c571b5c90",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
