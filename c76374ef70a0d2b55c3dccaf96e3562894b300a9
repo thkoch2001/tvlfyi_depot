@@ -24,6 +24,30 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "3e83f41d_36bbdf34",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-01-31T10:29:11Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9b6610ea_cf726476",
+      "range": {
+        "startLine": 9,
+        "startChar": 26,
+        "endLine": 9,
+        "endChar": 35
+      },
+      "revId": "c76374ef70a0d2b55c3dccaf96e3562894b300a9",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "b532a665_4a9e8dd9",
@@ -85,6 +109,30 @@
       "side": 1,
       "message": "Aha, I see. Your trait is private, you need to do\n\n   /// NamedNode is implemented for [FileNode], [DirectoryNode] and [SymlinkNode],\n   /// so we can ask all three for their name easily.\n  -trait NamedNode {\n  +pub trait NamedNode {\n       fn get_name(\u0026self) -\u003e \u0026str;\n   }\n\nand then\n\n  --- a/tvix/store/src/nar.rs\n  +++ b/tvix/store/src/nar.rs\n  @@ -2,7 +2,7 @@\n   //! store, in this case to render NAR.\n   use anyhow::Result;\n   \n  -use crate::proto;\n  +use crate::proto::{self, NamedNode};\n \nand it will work",
       "parentUuid": "295af36d_d6feee46",
+      "range": {
+        "startLine": 177,
+        "startChar": 0,
+        "endLine": 177,
+        "endChar": 35
+      },
+      "revId": "c76374ef70a0d2b55c3dccaf96e3562894b300a9",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3ec0cd84_956c3e39",
+        "filename": "tvix/store/src/proto.rs",
+        "patchSetId": 4
+      },
+      "lineNbr": 177,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-01-31T10:29:11Z",
+      "side": 1,
+      "message": "Done, thanks.",
+      "parentUuid": "3e4d50b0_466c8591",
       "range": {
         "startLine": 177,
         "startChar": 0,
