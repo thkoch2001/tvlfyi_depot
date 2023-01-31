@@ -11,7 +11,7 @@ use crate::{
     io::EvalIO,
     nix_search_path::NixSearchPath,
     observer::RuntimeObserver,
-    opcode::{CodeIdx, Count, JumpOffset, OpCode, StackIdx, UpvalueIdx},
+    opcode::{CodeIdx, ConstantIdx, Count, JumpOffset, OpCode, StackIdx, UpvalueIdx},
     spans::LightSpan,
     upvalues::Upvalues,
     value::{Builtin, Closure, CoercionKind, Lambda, NixAttrs, NixList, Thunk, Value},
@@ -259,6 +259,15 @@ impl<'o> VM<'o> {
         let op = self.chunk()[self.frame().ip];
         self.frame_mut().ip += 1;
         op
+    }
+
+    /// Reads a [usize] operand from the current frame's chunk,
+    /// increments the instruction pointer beyond it, and returns the
+    /// read value.
+    fn read_usize(&mut self) -> usize {
+        let operand = self.chunk().read_usize_operand(self.frame().ip);
+        self.frame_mut().ip.0 += 8;
+        operand
     }
 
     pub fn pop(&mut self) -> Value {
@@ -674,8 +683,10 @@ impl<'o> VM<'o> {
 
     pub(crate) fn run_op(&mut self, op: OpCode) -> EvalResult<Trampoline> {
         match op {
-            OpCode::OpConstant(idx) => {
+            OpCode::OpConstant => {
+                let idx = ConstantIdx(self.read_usize());
                 let c = self.chunk()[idx].clone();
+
                 self.push(c);
             }
 

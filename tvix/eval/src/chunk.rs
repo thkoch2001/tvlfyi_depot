@@ -33,14 +33,15 @@ struct SourceSpan {
 /// a union type which is accessed through helpers on the chunk type.
 pub union Op {
     op: OpCode,
-    // TODO: data: u8,
+    data: u8,
 }
 
 impl Debug for Op {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> Result<(), std::fmt::Error> {
-        // TODO: we can not safely print an arbitrary op, but we can do some
-        // best-effort guessing in the future
-        write!(f, "[tvix_eval::Op]")
+        // SAFETY: Printing an op's u8 representation is always safe, but the
+        // actual value is of course nonsense in some cases. We can do some
+        // best-effort guessing in the future.
+        unsafe { write!(f, "Op {{ data: {} }}", self.data) }
     }
 }
 
@@ -87,6 +88,13 @@ impl Chunk {
         CodeIdx(idx)
     }
 
+    pub fn push_usize(&mut self, input: usize, span: codemap::Span) {
+        for data in input.to_le_bytes() {
+            self.code.push(Op { data });
+            self.push_span(span);
+        }
+    }
+
     /// Pop the last operation from the chunk and clean up its tracked
     /// span. Used when the compiler backtracks.
     pub fn pop_op(&mut self) {
@@ -113,6 +121,26 @@ impl Chunk {
         let idx = self.constants.len();
         self.constants.push(data);
         ConstantIdx(idx)
+    }
+
+    /// Reads a single usize operand at the specified code index.
+    pub fn read_usize_operand(&self, idx: CodeIdx) -> usize {
+        // SAFETY: It is always safe to read u8 representations of the
+        // operations, but for an invalid index the returned value will of
+        // course be nonsense. At the end of a chunk, Rust would panic for the
+        // out-of-bounds index access.
+        unsafe {
+            usize::from_le_bytes([
+                self.code[idx.0].data,
+                self.code[idx.0 + 1].data,
+                self.code[idx.0 + 2].data,
+                self.code[idx.0 + 3].data,
+                self.code[idx.0 + 4].data,
+                self.code[idx.0 + 5].data,
+                self.code[idx.0 + 6].data,
+                self.code[idx.0 + 7].data,
+            ])
+        }
     }
 
     /// Patch the jump instruction at the given index, setting its
@@ -203,26 +231,40 @@ impl Chunk {
 
     /// Write the disassembler representation of the operation at
     /// `idx` to the specified writer.
+    ///
+    /// If the operation at `idx` has operands, the index pointer will be
+    /// incremented to point *to the last byte of the last operand*.
     pub fn disassemble_op<W: Write>(
         &self,
         writer: &mut W,
+        idx: &mut usize,
         source: &SourceCode,
         width: usize,
-        idx: CodeIdx,
     ) -> Result<(), std::io::Error> {
-        write!(writer, "{:#width$x}\t ", idx.0, width = width)?;
+        write!(writer, "{:#width$x}\t ", *idx, width = width)?;
 
         // Print continuation character if the previous operation was at
         // the same line, otherwise print the line.
-        let line = source.get_line(self.get_span(idx));
-        if idx.0 > 0 && source.get_line(self.get_span(CodeIdx(idx.0 - 1))) == line {
+        let line = source.get_line(self.get_span(CodeIdx(*idx)));
+        if *idx > 0 && source.get_line(self.get_span(CodeIdx(*idx - 1))) == line {
             write!(writer, "   |\t")?;
         } else {
             write!(writer, "{:4}\t", line)?;
         }
 
-        match self[idx] {
-            OpCode::OpConstant(idx) => writeln!(writer, "OpConstant({}@{})", self[idx], idx.0),
+        // Operations with operands need to be handled here.
+        match self[CodeIdx(*idx)] {
+            // Special snowflakes
+            OpCode::OpConstant => {
+                let constant_idx = ConstantIdx(self.read_usize_operand(CodeIdx(*idx + 1)));
+                *idx += 8;
+
+                writeln!(
+                    writer,
+                    "OpConstant({}@{})",
+                    self[constant_idx], constant_idx.0
+                )
+            }
             op => writeln!(writer, "{:?}", op),
         }?;
 

@@ -234,7 +234,9 @@ impl Compiler<'_> {
         }
 
         let idx = self.chunk().push_constant(value);
-        self.push_op(OpCode::OpConstant(idx), node);
+        let span = self.span_for(node);
+        self.push_op(OpCode::OpConstant, &span);
+        self.chunk().push_usize(idx.0, span);
     }
 }
 
