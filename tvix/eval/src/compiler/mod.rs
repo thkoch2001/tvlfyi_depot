@@ -890,7 +890,7 @@ impl Compiler<'_> {
         // attempt to select from it.
         let stack_idx = self.scope().stack_index(set_idx);
         for (idx, entry) in entries.into_iter() {
-            self.push_op(OpCode::OpGetLocal(stack_idx), pattern);
+            self.push_op_usize_operand(OpCode::OpGetLocal, stack_idx.0, pattern);
             self.emit_literal_ident(&entry.ident().unwrap());
 
             // Use the same mechanism as `compile_select_or` if a
