@@ -511,7 +511,7 @@ impl Compiler<'_> {
         self.compile(slot, node.rhs().unwrap());
         self.emit_force(&node.rhs().unwrap());
 
-        self.patch_jump(end_idx);
+        self.chunk().patch_jump(end_idx);
         self.push_op(OpCode::OpAssertBool, node);
     }
 
@@ -533,7 +533,7 @@ impl Compiler<'_> {
         self.compile(slot, node.rhs().unwrap());
         self.emit_force(&node.rhs().unwrap());
 
-        self.patch_jump(end_idx);
+        self.chunk().patch_jump(end_idx);
         self.push_op(OpCode::OpAssertBool, node);
     }
 
@@ -555,7 +555,7 @@ impl Compiler<'_> {
         self.compile(slot, node.rhs().unwrap());
         self.emit_force(&node.rhs().unwrap());
 
-        self.patch_jump(end_idx);
+        self.chunk().patch_jump(end_idx);
         self.push_op(OpCode::OpAssertBool, node);
     }
 
@@ -705,13 +705,13 @@ impl Compiler<'_> {
         let final_jump = self.push_op(OpCode::OpJump(JumpOffset(0)), &path);
 
         for jump in jumps {
-            self.patch_jump(jump);
+            self.chunk().patch_jump(jump);
         }
 
         // Compile the default value expression and patch the final
         // jump to point *beyond* it.
         self.compile(slot, default);
-        self.patch_jump(final_jump);
+        self.chunk().patch_jump(final_jump);
     }
 
     /// Compile `assert` expressions using jumping instructions in the VM.
@@ -737,11 +737,11 @@ impl Compiler<'_> {
 
         let else_idx = self.push_op(OpCode::OpJump(JumpOffset(0)), node);
 
-        self.patch_jump(then_idx);
+        self.chunk().patch_jump(then_idx);
         self.push_op(OpCode::OpPop, node);
         self.push_op(OpCode::OpAssertFail, &node.condition().unwrap());
 
-        self.patch_jump(else_idx);
+        self.chunk().patch_jump(else_idx);
     }
 
     /// Compile conditional expressions using jumping instructions in the VM.
@@ -770,11 +770,11 @@ impl Compiler<'_> {
 
         let else_idx = self.push_op(OpCode::OpJump(JumpOffset(0)), node);
 
-        self.patch_jump(then_idx); // patch jump *to* else_body
+        self.chunk().patch_jump(then_idx); // patch jump *to* else_body
         self.push_op(OpCode::OpPop, node); // discard condition value
         self.compile(slot, node.else_body().unwrap());
 
-        self.patch_jump(else_idx); // patch jump *over* else body
+        self.chunk().patch_jump(else_idx); // patch jump *over* else body
     }
 
     /// Compile `with` expressions by emitting instructions that
@@ -887,9 +887,9 @@ impl Compiler<'_> {
 
                 let jump_over_default = self.push_op(OpCode::OpJump(JumpOffset(0)), &default_expr);
 
-                self.patch_jump(jump_to_default);
+                self.chunk().patch_jump(jump_to_default);
                 self.compile(idx, default_expr);
-                self.patch_jump(jump_over_default);
+                self.chunk().patch_jump(jump_over_default);
             } else {
                 self.push_op(OpCode::OpAttrsSelect, &entry.ident().unwrap());
             }
@@ -977,7 +977,7 @@ impl Compiler<'_> {
 
         // Check if tail-call optimisation is possible and perform it.
         if self.dead_scope == 0 {
-            optimise_tail_call(&mut compiled.lambda.chunk);
+            compiled.lambda.chunk.optimise_tail_call();
         }
 
         // Capturing the with stack counts as an upvalue, as it is
@@ -1105,27 +1105,6 @@ impl Compiler<'_> {
         self.emit_constant(Value::String(ident.clone().into()), ident);
     }
 
-    /// Patch the jump instruction at the given index, setting its
-    /// jump offset from the placeholder to the current code position.
-    ///
-    /// This is required because the actual target offset of jumps is
-    /// not known at the time when the jump operation itself is
-    /// emitted.
-    fn patch_jump(&mut self, idx: CodeIdx) {
-        let offset = JumpOffset(self.chunk().code.len() - 1 - idx.0);
-
-        match &mut self.chunk().code[idx.0] {
-            OpCode::OpJump(n)
-            | OpCode::OpJumpIfFalse(n)
-            | OpCode::OpJumpIfTrue(n)
-            | OpCode::OpJumpIfNotFound(n) => {
-                *n = offset;
-            }
-
-            op => panic!("attempted to patch unsupported op: {:?}", op),
-        }
-    }
-
     /// Decrease scope depth of the current function and emit
     /// instructions to clean up the stack at runtime.
     fn cleanup_scope<N: ToSpan>(&mut self, node: &N) {
@@ -1208,19 +1187,6 @@ impl Compiler<'_> {
     fn emit_error<N: ToSpan>(&mut self, node: &N, kind: ErrorKind) {
         let span = self.span_for(node);
         self.errors.push(Error::new(kind, span))
-    }
-}
-
-/// Perform tail-call optimisation if the last call within a
-/// compiled chunk is another call.
-fn optimise_tail_call(chunk: &mut Chunk) {
-    let last_op = chunk
-        .code
-        .last_mut()
-        .expect("compiler bug: chunk should never be empty");
-
-    if matches!(last_op, OpCode::OpCall) {
-        *last_op = OpCode::OpTailCall;
     }
 }
 
