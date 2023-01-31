@@ -1150,19 +1150,27 @@ impl Compiler<'_> {
                     // If the target is not yet initialised, we need to defer
                     // the local access
                     if !target.initialised {
-                        self.push_op(OpCode::DataDeferredLocal(stack_idx), &upvalue.span);
+                        self.push_op_usize_operand(
+                            OpCode::DataDeferredLocal,
+                            stack_idx.0,
+                            &upvalue.span,
+                        );
                         self.scope_mut().mark_needs_finaliser(slot);
                     } else {
                         // a self-reference
                         if slot == idx {
                             self.scope_mut().mark_must_thunk(slot);
                         }
-                        self.push_op(OpCode::DataStackIdx(stack_idx), &upvalue.span);
+                        self.push_op_usize_operand(
+                            OpCode::DataStackIdx,
+                            stack_idx.0,
+                            &upvalue.span,
+                        );
                     }
                 }
 
                 UpvalueKind::Upvalue(idx) => {
-                    self.push_op(OpCode::DataUpvalueIdx(idx), &upvalue.span);
+                    self.push_op_usize_operand(OpCode::DataUpvalueIdx, idx.0, &upvalue.span);
                 }
             };
         }

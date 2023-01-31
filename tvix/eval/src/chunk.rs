@@ -315,7 +315,10 @@ impl Chunk {
             | op @ OpCode::OpGetUpvalue
             | op @ OpCode::OpClosure
             | op @ OpCode::OpThunkClosure
-            | op @ OpCode::OpThunkSuspended => {
+            | op @ OpCode::OpThunkSuspended
+            | op @ OpCode::DataStackIdx
+            | op @ OpCode::DataDeferredLocal
+            | op @ OpCode::DataUpvalueIdx => {
                 let operand = self.read_usize_operand(CodeIdx(*idx + 1));
                 *idx += PTR_SIZE;
 
