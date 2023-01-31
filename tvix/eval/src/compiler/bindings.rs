@@ -656,7 +656,7 @@ impl Compiler<'_> {
         self.bind_values(bindings);
 
         if kind.is_attrs() {
-            self.push_op(OpCode::OpAttrs(Count(count)), node);
+            self.push_op_usize_operand(OpCode::OpAttrs, count, node);
         }
     }
 

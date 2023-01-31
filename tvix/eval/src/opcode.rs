@@ -138,11 +138,13 @@ pub enum OpCode {
     OpJumpIfNotFound,
 
     // Attribute sets
-    /// Construct an attribute set from the given number of key-value pairs on the top of the stack
+    /// Construct an attribute set from key-value pairs on the top of the stack.
+    /// The number of pairs is given as a usize operand.
     ///
-    /// Note that this takes the count of *pairs*, not the number of *stack values* - the actual
-    /// number of values popped off the stack will be twice the argument to this op
-    OpAttrs(Count),
+    /// Note that this takes the count of *pairs*, not the number of *stack
+    /// values* - the actual number of values popped off the stack will be twice
+    /// the operand to this op.
+    OpAttrs,
     OpAttrsUpdate,
     OpAttrsSelect,
     OpAttrsTrySelect,
