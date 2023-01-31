@@ -308,7 +308,8 @@ impl Chunk {
             | op @ OpCode::OpJumpIfNotFound
             | op @ OpCode::OpAttrs
             | op @ OpCode::OpPushWith
-            | op @ OpCode::OpList => {
+            | op @ OpCode::OpList
+            | op @ OpCode::OpInterpolate => {
                 let operand = self.read_usize_operand(CodeIdx(*idx + 1));
                 *idx += PTR_SIZE;
 
