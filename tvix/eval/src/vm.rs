@@ -953,7 +953,8 @@ impl<'o> VM<'o> {
                 }
             }
 
-            OpCode::OpGetLocal(StackIdx(local_idx)) => {
+            OpCode::OpGetLocal => {
+                let local_idx = self.read_usize();
                 let idx = self.frame().stack_offset + local_idx;
                 self.push(self.stack[idx].clone());
             }
