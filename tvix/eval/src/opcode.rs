@@ -169,7 +169,11 @@ pub enum OpCode {
     OpValidateClosedFormals,
 
     // `with`-handling
-    OpPushWith(StackIdx),
+    /// Push a value onto the runtime `with`-stack to enable dynamic identifier
+    /// resolution. The absolute stack index of the value is supplied as a usize
+    /// operand.
+    OpPushWith,
+
     OpPopWith,
     OpResolveWith,
 
