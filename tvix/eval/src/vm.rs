@@ -765,7 +765,10 @@ impl<'o> VM<'o> {
             OpCode::OpMore => cmp_op!(self, >),
             OpCode::OpMoreOrEq => cmp_op!(self, >=),
 
-            OpCode::OpAttrs(Count(count)) => self.run_attrset(count)?,
+            OpCode::OpAttrs => {
+                let count = self.read_usize();
+                self.run_attrset(count)?
+            }
 
             OpCode::OpAttrsUpdate => {
                 let rhs = fallible!(self, self.pop().to_attrs());
