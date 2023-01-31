@@ -3748,6 +3748,10 @@ rec {
             packageId = "sha2 0.10.6";
           }
           {
+            name = "ssri";
+            packageId = "ssri";
+          }
+          {
             name = "thiserror";
             packageId = "thiserror";
           }

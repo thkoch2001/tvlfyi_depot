@@ -11,6 +11,7 @@ data-encoding = "2.3.3"
 glob = "0.3.0"
 serde = { version = "1.0", features = ["derive"] }
 sha2 = "0.10.6"
+ssri = "7.0.0"
 thiserror = "1.0.38"
 
 [dev-dependencies]
