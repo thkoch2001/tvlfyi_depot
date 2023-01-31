@@ -995,7 +995,8 @@ impl<'o> VM<'o> {
                 self.push(value);
             }
 
-            OpCode::OpClosure(idx) => {
+            OpCode::OpClosure => {
+                let idx = ConstantIdx(self.read_usize());
                 let blueprint = match &self.chunk()[idx] {
                     Value::Blueprint(lambda) => lambda.clone(),
                     _ => panic!("compiler bug: non-blueprint in blueprint slot"),
@@ -1014,14 +1015,15 @@ impl<'o> VM<'o> {
                 ))));
             }
 
-            OpCode::OpThunkSuspended(idx) | OpCode::OpThunkClosure(idx) => {
+            OpCode::OpThunkSuspended | OpCode::OpThunkClosure => {
+                let idx = ConstantIdx(self.read_usize());
                 let blueprint = match &self.chunk()[idx] {
                     Value::Blueprint(lambda) => lambda.clone(),
                     _ => panic!("compiler bug: non-blueprint in blueprint slot"),
                 };
 
                 let upvalue_count = blueprint.upvalue_count;
-                let thunk = if matches!(op, OpCode::OpThunkClosure(_)) {
+                let thunk = if matches!(op, OpCode::OpThunkClosure) {
                     debug_assert!(
                         upvalue_count > 0,
                         "OpThunkClosure should not be called for plain lambdas"
