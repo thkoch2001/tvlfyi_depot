@@ -277,7 +277,8 @@ impl Chunk {
             | op @ OpCode::OpPushWith
             | op @ OpCode::OpList
             | op @ OpCode::OpInterpolate
-            | op @ OpCode::OpGetLocal => {
+            | op @ OpCode::OpGetLocal
+            | op @ OpCode::OpCloseScope => {
                 let operand = self.read_usize_operand(CodeIdx(*idx + 1));
                 *idx += 8;
 

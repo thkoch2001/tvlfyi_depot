@@ -11,7 +11,7 @@ use crate::{
     io::EvalIO,
     nix_search_path::NixSearchPath,
     observer::RuntimeObserver,
-    opcode::{CodeIdx, ConstantIdx, Count, OpCode, StackIdx, UpvalueIdx},
+    opcode::{CodeIdx, ConstantIdx, OpCode, StackIdx, UpvalueIdx},
     spans::LightSpan,
     upvalues::Upvalues,
     value::{Builtin, Closure, CoercionKind, Lambda, NixAttrs, NixList, Thunk, Value},
@@ -941,7 +941,8 @@ impl<'o> VM<'o> {
 
             // Remove the given number of elements from the stack,
             // but retain the top value.
-            OpCode::OpCloseScope(Count(count)) => {
+            OpCode::OpCloseScope => {
+                let count = self.read_usize();
                 // Immediately move the top value into the right
                 // position.
                 let target_idx = self.stack.len() - 1 - count;

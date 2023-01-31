@@ -215,7 +215,7 @@ pub enum OpCode {
     OpGetLocal,
 
     /// Close scopes while leaving their expression value around.
-    OpCloseScope(Count), // number of locals to pop
+    OpCloseScope, // number of locals to pop
 
     /// Return an error indicating that an `assert` failed
     OpAssertFail,
