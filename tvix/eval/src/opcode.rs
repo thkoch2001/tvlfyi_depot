@@ -212,7 +212,7 @@ pub enum OpCode {
     OpAssertBool,
 
     /// Access local identifiers with statically known positions.
-    OpGetLocal(StackIdx),
+    OpGetLocal,
 
     /// Close scopes while leaving their expression value around.
     OpCloseScope(Count), // number of locals to pop

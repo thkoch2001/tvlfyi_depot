@@ -738,7 +738,7 @@ impl Compiler<'_> {
 
             LocalPosition::Known(idx) => {
                 let stack_idx = self.scope().stack_index(idx);
-                self.push_op(OpCode::OpGetLocal(stack_idx), node);
+                self.push_op_usize_operand(OpCode::OpGetLocal, stack_idx.0, node);
             }
 
             // This identifier is referring to a value from the same scope which
