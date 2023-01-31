@@ -226,6 +226,24 @@ impl Compiler<'_> {
         self.chunk().push_op(data, span)
     }
 
+    /// Push a single instruction with a usize operand to the current bytecode
+    /// chunk.
+    fn push_op_usize_operand<T: ToSpan>(
+        &mut self,
+        data: OpCode,
+        operand: usize,
+        node: &T,
+    ) -> CodeIdx {
+        if self.dead_scope > 0 {
+            return CodeIdx(0);
+        }
+
+        let span = self.span_for(node);
+        let idx = self.chunk().push_op(data, span);
+        self.chunk().push_usize(operand, span);
+        idx
+    }
+
     /// Emit a single constant to the current bytecode chunk and track
     /// the source span from which it was compiled.
     pub(super) fn emit_constant<T: ToSpan>(&mut self, value: Value, node: &T) {
@@ -234,9 +252,7 @@ impl Compiler<'_> {
         }
 
         let idx = self.chunk().push_constant(value);
-        let span = self.span_for(node);
-        self.push_op(OpCode::OpConstant, &span);
-        self.chunk().push_usize(idx.0, span);
+        self.push_op_usize_operand(OpCode::OpConstant, idx.0, node);
     }
 }
 
