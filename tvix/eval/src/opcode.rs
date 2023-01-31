@@ -10,7 +10,7 @@ pub struct ConstantIdx(pub usize);
 
 /// Index of an instruction in the current code chunk.
 #[repr(transparent)]
-#[derive(Clone, Copy, Debug)]
+#[derive(Clone, Copy, Debug, Default)]
 pub struct CodeIdx(pub usize);
 
 impl AddAssign<usize> for CodeIdx {
@@ -117,10 +117,25 @@ pub enum OpCode {
     OpMoreOrEq,
 
     // Logical operators & generic jumps
-    OpJump(JumpOffset),
-    OpJumpIfTrue(JumpOffset),
-    OpJumpIfFalse(JumpOffset),
-    OpJumpIfNotFound(JumpOffset),
+    /// Jump forward in the bytecode specified by the number of
+    /// instructions in its usize operand.
+    OpJump,
+
+    /// Jump forward in the bytecode specified by the number of
+    /// instructions in its usize operand, *if* the value at the top
+    /// of the stack is `true`.
+    OpJumpIfTrue,
+
+    /// Jump forward in the bytecode specified by the number of
+    /// instructions in its usize operand, *if* the value at the top
+    /// of the stack is `false`.
+    OpJumpIfFalse,
+
+    /// Jump forward in the bytecode specified by the number of
+    /// instructions in its usize operand, *if* the value at the top
+    /// of the stack is the internal value representing a missing
+    /// attribute set key.
+    OpJumpIfNotFound,
 
     // Attribute sets
     /// Construct an attribute set from the given number of key-value pairs on the top of the stack
