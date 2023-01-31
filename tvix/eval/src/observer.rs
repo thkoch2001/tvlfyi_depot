@@ -94,9 +94,11 @@ impl<W: Write> DisassemblingObserver<W> {
     fn disassemble_chunk(&mut self, chunk: &Chunk) {
         // calculate width of the widest address in the chunk
         let width = format!("{:#x}", chunk.code.len() - 1).len();
+        let mut idx = 0;
 
-        for (idx, _) in chunk.code.iter().enumerate() {
-            let _ = chunk.disassemble_op(&mut self.writer, &self.source, width, CodeIdx(idx));
+        while idx < chunk.code.len() {
+            let _ = chunk.disassemble_op(&mut self.writer, &mut idx, &self.source, width);
+            idx += 1;
         }
     }
 }
