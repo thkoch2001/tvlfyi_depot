@@ -70,7 +70,6 @@ pub struct Count(pub usize);
 ///
 /// Unless otherwise specified, operations leave their result at the
 /// top of the stack.
-#[warn(variant_size_differences)]
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]
 pub enum OpCode {
     /// Push a constant onto the stack. Followed by [usize] operand
@@ -245,7 +244,7 @@ pub enum OpCode {
 
     /// Finalise initialisation of the upvalues of the value in the given stack
     /// index (which must be a Value::Thunk) after the scope is fully bound.
-    OpFinalise(StackIdx),
+    OpFinalise,
 
     // [`OpClosure`], [`OpThunkSuspended`], and [`OpThunkClosure`] have a
     // variable number of arguments to the instruction, which is
@@ -268,4 +267,18 @@ pub enum OpCode {
     DataUpvalueIdx,
     /// Populate dynamic upvalues by saving a copy of the with-stack.
     DataCaptureWith,
+}
+
+#[cfg(test)]
+mod tests {
+    use super::OpCode;
+
+    #[test]
+    fn assert_opcode_size() {
+        assert_eq!(
+            std::mem::size_of::<OpCode>(),
+            1,
+            "OpCode should not be larger than 1 byte"
+        );
+    }
 }

@@ -283,6 +283,7 @@ impl Chunk {
             | op @ OpCode::OpClosure
             | op @ OpCode::OpThunkClosure
             | op @ OpCode::OpThunkSuspended
+            | op @ OpCode::OpFinalise
             | op @ OpCode::DataStackIdx
             | op @ OpCode::DataDeferredLocal
             | op @ OpCode::DataUpvalueIdx => {
