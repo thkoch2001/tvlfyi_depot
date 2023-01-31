@@ -174,15 +174,25 @@ pub enum OpCode {
     /// operand.
     OpPushWith,
 
+    /// Pop the last runtime `with`-stack element.
     OpPopWith,
+
+    /// Dynamically resolve an identifier with the name at {1} from the runtime
+    /// `with`-stack.
     OpResolveWith,
 
     // Lists
+    /// Construct a list from the given number of values at the top of the
+    /// stack.
     OpList(Count),
+
+    /// Concatenate the lists at {2} and {1}.
     OpConcat,
 
     // Strings
+    /// Interpolate the given number of string fragments into a single string.
     OpInterpolate(Count),
+
     /// Force the Value on the stack and coerce it to a string, always using
     /// `CoercionKind::Weak`.
     OpCoerceToString,
@@ -197,6 +207,8 @@ pub enum OpCode {
     OpResolveHomePath,
 
     // Type assertion operators
+    /// Assert that the value at {1} is a boolean, and fail with a runtime error
+    /// otherwise.
     OpAssertBool,
 
     /// Access local identifiers with statically known positions.
@@ -209,15 +221,26 @@ pub enum OpCode {
     OpAssertFail,
 
     // Lambdas & closures
+    /// Call the value at {1} in a new VM callframe
     OpCall,
+
+    /// Call the value at {1} in the same VM callframe.
     OpTailCall,
+
+    /// Retrieve the upvalue at the given index from the closure or thunk
+    /// currently under evaluation.
     OpGetUpvalue(UpvalueIdx),
-    /// A Closure which has upvalues but no self-references
+
+    /// Construct a closure which has upvalues but no self-references
     OpClosure(ConstantIdx),
-    /// A Closure which has self-references (direct or via upvalues)
+
+    /// Construct a closure which has self-references (direct or via upvalues)
     OpThunkClosure(ConstantIdx),
-    /// A suspended thunk, used to ensure laziness
+
+    /// Construct a suspended thunk, used to delay a computation for laziness.
     OpThunkSuspended(ConstantIdx),
+
+    /// Force the value at {1} until it is a `Thunk::Evaluated`.
     OpForce,
 
     /// Finalise initialisation of the upvalues of the value in the given stack
