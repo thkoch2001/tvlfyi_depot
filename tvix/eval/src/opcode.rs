@@ -259,13 +259,13 @@ pub enum OpCode {
     //
     // It is illegal for a `Data*` opcode to appear anywhere else.
     /// Populate a static upvalue by copying from the stack immediately.
-    DataStackIdx(StackIdx),
+    DataStackIdx,
     /// Populate a static upvalue of a thunk by copying it the stack, but do
     /// when the thunk is finalised (by OpFinalise) rather than immediately.
-    DataDeferredLocal(StackIdx),
+    DataDeferredLocal,
     /// Populate a static upvalue by copying it from the upvalues of an
     /// enclosing scope.
-    DataUpvalueIdx(UpvalueIdx),
+    DataUpvalueIdx,
     /// Populate dynamic upvalues by saving a copy of the with-stack.
     DataCaptureWith,
 }
