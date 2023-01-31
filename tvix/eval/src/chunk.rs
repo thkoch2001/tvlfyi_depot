@@ -1,9 +1,10 @@
 use std::io::Write;
 use std::ops::{Index, IndexMut};
 
-use crate::opcode::{CodeIdx, ConstantIdx, OpCode};
+use crate::opcode::{CodeIdx, ConstantIdx, JumpOffset, OpCode};
 use crate::value::Value;
 use crate::SourceCode;
+use std::fmt::Debug;
 
 /// Represents a source location from which one or more operations
 /// were compiled.
@@ -25,14 +26,32 @@ struct SourceSpan {
     count: usize,
 }
 
-/// A chunk is a representation of a sequence of bytecode
-/// instructions, associated constants and additional metadata as
-/// emitted by the compiler.
+/// An op is a single element of the code chunk inside of some Tvix bytecode. It
+/// can be either an instruction to the runtime, or an operand to an instruction.
+///
+/// To optimise caching behaviour of chunks of bytecode, this is represented by
+/// a union type which is accessed through helpers on the chunk type.
+pub union Op {
+    op: OpCode,
+    // TODO: data: u8,
+}
+
+impl Debug for Op {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> Result<(), std::fmt::Error> {
+        // TODO: we can not safely print an arbitrary op, but we can do some
+        // best-effort guessing in the future
+        write!(f, "[tvix_eval::Op]")
+    }
+}
+
+/// A chunk is a representation of a sequence of bytecode instructions,
+/// associated constants and additional metadata as emitted by the compiler.
 #[derive(Debug, Default)]
 pub struct Chunk {
-    pub code: Vec<OpCode>,
+    pub code: Vec<Op>,
     pub constants: Vec<Value>,
     spans: Vec<SourceSpan>,
+    last_op_idx: usize,
 }
 
 impl Index<ConstantIdx> for Chunk {
@@ -47,22 +66,26 @@ impl Index<CodeIdx> for Chunk {
     type Output = OpCode;
 
     fn index(&self, index: CodeIdx) -> &Self::Output {
-        &self.code[index.0]
+        // SAFETY: with a few exceptions, a `CodeIdx` is always created by
+        // pushing an op, so it is reasonably safe to assume that this will
+        // work, but it is of course not actually statically checked.
+        unsafe { &self.code[index.0].op }
     }
 }
 
 impl IndexMut<CodeIdx> for Chunk {
     fn index_mut(&mut self, index: CodeIdx) -> &mut Self::Output {
-        &mut self.code[index.0]
+        // SAFETY: same as `Index<CodeIdx>` above.
+        unsafe { &mut self.code[index.0].op }
     }
 }
 
 impl Chunk {
-    pub fn push_op(&mut self, data: OpCode, span: codemap::Span) -> CodeIdx {
-        let idx = self.code.len();
-        self.code.push(data);
+    pub fn push_op(&mut self, op: OpCode, span: codemap::Span) -> CodeIdx {
+        self.last_op_idx = self.code.len();
+        self.code.push(Op { op });
         self.push_span(span);
-        CodeIdx(idx)
+        CodeIdx(self.last_op_idx)
     }
 
     /// Pop the last operation from the chunk and clean up its tracked
@@ -91,6 +114,61 @@ impl Chunk {
         let idx = self.constants.len();
         self.constants.push(data);
         ConstantIdx(idx)
+    }
+
+    /// Patch the jump instruction at the given index, setting its
+    /// jump offset from the placeholder to the current code position.
+    ///
+    /// This is required because the actual target offset of jumps is
+    /// not known at the time when the jump operation itself is
+    /// emitted.
+    pub(crate) fn patch_jump(&mut self, idx: CodeIdx) {
+        let offset = JumpOffset(self.code.len() - 1 - idx.0);
+
+        // SAFETY: This function is only used in the compiler, and only on known
+        // valid CodeIdx instances. Using it in other contexts is unsafe.
+        unsafe {
+            match &mut self.code[idx.0] {
+                Op {
+                    op: OpCode::OpJump(n),
+                }
+                | Op {
+                    op: OpCode::OpJumpIfFalse(n),
+                }
+                | Op {
+                    op: OpCode::OpJumpIfTrue(n),
+                }
+                | Op {
+                    op: OpCode::OpJumpIfNotFound(n),
+                } => {
+                    *n = offset;
+                }
+
+                op => panic!("attempted to patch unsupported op: {:?}", op),
+            }
+        }
+    }
+
+    /// Retrieve a copy of the last operation in the chunk.
+    pub(crate) fn last_op(&self) -> Option<OpCode> {
+        if self.last_op_idx == 0 {
+            return None;
+        }
+
+        // SAFETY: This is safe because last_op_idx is only modified
+        // when pushing an operation inside of this type, so we always
+        // know that this index points towards an op and not some data.
+        unsafe { Some(self.code[self.last_op_idx].op) }
+    }
+
+    /// Perform tail-call optimisation if the last call within a
+    /// compiled chunk is another call.
+    pub(crate) fn optimise_tail_call(&mut self) {
+        if let Some(OpCode::OpCall) = self.last_op() {
+            self.code[self.last_op_idx] = Op {
+                op: OpCode::OpTailCall,
+            }
+        }
     }
 
     // Span tracking implementation
@@ -160,6 +238,12 @@ mod tests {
     fn push_op() {
         let mut chunk = Chunk::default();
         chunk.push_op(OpCode::OpAdd, dummy_span());
-        assert_eq!(chunk.code.last().unwrap(), &OpCode::OpAdd);
+
+        unsafe {
+            assert!(matches!(
+                chunk.code.last().unwrap(),
+                Op { op: OpCode::OpAdd }
+            ));
+        }
     }
 }
