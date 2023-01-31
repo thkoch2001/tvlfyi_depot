@@ -954,8 +954,9 @@ impl<'o> VM<'o> {
                 self.push(self.stack[idx].clone());
             }
 
-            OpCode::OpPushWith(StackIdx(idx)) => {
-                self.with_stack.push(self.frame().stack_offset + idx)
+            OpCode::OpPushWith => {
+                let stack_idx = self.read_usize();
+                self.with_stack.push(self.frame().stack_offset + stack_idx)
             }
 
             OpCode::OpPopWith => {
