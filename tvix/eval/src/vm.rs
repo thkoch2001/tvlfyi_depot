@@ -1067,9 +1067,9 @@ impl<'o> VM<'o> {
 
             // Data-carrying operands should never be executed,
             // that is a critical error in the VM.
-            OpCode::DataStackIdx(_)
-            | OpCode::DataDeferredLocal(_)
-            | OpCode::DataUpvalueIdx(_)
+            OpCode::DataStackIdx
+            | OpCode::DataDeferredLocal
+            | OpCode::DataUpvalueIdx
             | OpCode::DataCaptureWith => {
                 panic!("VM bug: attempted to execute data-carrying operand")
             }
@@ -1146,7 +1146,8 @@ impl<'o> VM<'o> {
     ) -> EvalResult<()> {
         for _ in 0..count {
             match self.inc_ip() {
-                OpCode::DataStackIdx(StackIdx(stack_idx)) => {
+                OpCode::DataStackIdx => {
+                    let stack_idx = self.read_usize();
                     let idx = self.frame().stack_offset + stack_idx;
 
                     let val = match self.stack.get(idx) {
@@ -1166,13 +1167,15 @@ impl<'o> VM<'o> {
                     upvalues.deref_mut().push(val);
                 }
 
-                OpCode::DataUpvalueIdx(upv_idx) => {
+                OpCode::DataUpvalueIdx => {
+                    let upv_idx = UpvalueIdx(self.read_usize());
                     upvalues
                         .deref_mut()
                         .push(self.frame().upvalue(upv_idx).clone());
                 }
 
-                OpCode::DataDeferredLocal(idx) => {
+                OpCode::DataDeferredLocal => {
+                    let idx = StackIdx(self.read_usize());
                     upvalues.deref_mut().push(Value::DeferredUpvalue(idx));
                 }
 
