@@ -425,7 +425,7 @@ impl Compiler<'_> {
         }
 
         if parts.len() != 1 {
-            self.push_op(OpCode::OpInterpolate(Count(parts.len())), parent_node);
+            self.push_op_usize_operand(OpCode::OpInterpolate, parts.len(), parent_node);
         }
     }
 

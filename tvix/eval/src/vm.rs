@@ -847,7 +847,10 @@ impl<'o> VM<'o> {
                 self.push(Value::List(NixList::from(lhs + rhs)))
             }
 
-            OpCode::OpInterpolate(Count(count)) => self.run_interpolate(count)?,
+            OpCode::OpInterpolate => {
+                let count = self.read_usize();
+                self.run_interpolate(count)?
+            }
 
             OpCode::OpCoerceToString => {
                 // TODO: handle string context, copying to store

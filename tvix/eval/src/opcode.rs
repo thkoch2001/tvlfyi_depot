@@ -191,7 +191,7 @@ pub enum OpCode {
 
     // Strings
     /// Interpolate the given number of string fragments into a single string.
-    OpInterpolate(Count),
+    OpInterpolate,
 
     /// Force the Value on the stack and coerce it to a string, always using
     /// `CoercionKind::Weak`.
