@@ -834,7 +834,8 @@ impl<'o> VM<'o> {
                 }
             }
 
-            OpCode::OpList(Count(count)) => {
+            OpCode::OpList => {
+                let count = self.read_usize();
                 let list =
                     NixList::construct(count, self.stack.split_off(self.stack.len() - count));
                 self.push(Value::List(list));

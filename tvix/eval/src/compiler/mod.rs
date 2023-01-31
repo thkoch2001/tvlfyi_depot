@@ -608,7 +608,7 @@ impl Compiler<'_> {
             self.scope_mut().mark_initialised(item_slot);
         }
 
-        self.push_op(OpCode::OpList(Count(count)), node);
+        self.push_op_usize_operand(OpCode::OpList, count, node);
         self.scope_mut().end_scope();
     }
 

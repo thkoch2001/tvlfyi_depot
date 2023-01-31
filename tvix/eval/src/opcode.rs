@@ -184,7 +184,7 @@ pub enum OpCode {
     // Lists
     /// Construct a list from the given number of values at the top of the
     /// stack.
-    OpList(Count),
+    OpList,
 
     /// Concatenate the lists at {2} and {1}.
     OpConcat,
