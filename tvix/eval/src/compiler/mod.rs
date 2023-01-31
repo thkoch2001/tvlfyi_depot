@@ -29,7 +29,7 @@ use std::sync::Arc;
 use crate::chunk::Chunk;
 use crate::errors::{Error, ErrorKind, EvalResult};
 use crate::observer::CompilerObserver;
-use crate::opcode::{CodeIdx, Count, OpCode, UpvalueIdx};
+use crate::opcode::{CodeIdx, OpCode, UpvalueIdx};
 use crate::spans::LightSpan;
 use crate::spans::ToSpan;
 use crate::value::{Closure, Formals, Lambda, NixAttrs, Thunk, Value};
@@ -1135,7 +1135,7 @@ impl Compiler<'_> {
         }
 
         if popcount > 0 {
-            self.push_op(OpCode::OpCloseScope(Count(popcount)), node);
+            self.push_op_usize_operand(OpCode::OpCloseScope, popcount, node);
         }
     }
 
