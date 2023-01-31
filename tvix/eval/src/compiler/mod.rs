@@ -29,7 +29,7 @@ use std::sync::Arc;
 use crate::chunk::Chunk;
 use crate::errors::{Error, ErrorKind, EvalResult};
 use crate::observer::CompilerObserver;
-use crate::opcode::{CodeIdx, ConstantIdx, Count, JumpOffset, OpCode, UpvalueIdx};
+use crate::opcode::{CodeIdx, ConstantIdx, Count, OpCode, UpvalueIdx};
 use crate::spans::LightSpan;
 use crate::spans::ToSpan;
 use crate::value::{Closure, Formals, Lambda, NixAttrs, Thunk, Value};
@@ -520,7 +520,7 @@ impl Compiler<'_> {
 
         // If this value is false, jump over the right-hand side - the
         // whole expression is false.
-        let end_idx = self.push_op(OpCode::OpJumpIfFalse(JumpOffset(0)), node);
+        let end_idx = self.push_op_usize_operand(OpCode::OpJumpIfFalse, 0, node);
 
         // Otherwise, remove the previous value and leave the
         // right-hand side on the stack. Its result is now the value
@@ -546,7 +546,7 @@ impl Compiler<'_> {
 
         // Opposite of above: If this value is **true**, we can
         // short-circuit the right-hand side.
-        let end_idx = self.push_op(OpCode::OpJumpIfTrue(JumpOffset(0)), node);
+        let end_idx = self.push_op_usize_operand(OpCode::OpJumpIfTrue, 0, node);
         self.push_op(OpCode::OpPop, node);
         self.compile(slot, node.rhs().unwrap());
         self.emit_force(&node.rhs().unwrap());
@@ -568,7 +568,7 @@ impl Compiler<'_> {
         self.push_op(OpCode::OpInvert, node);
 
         // Exactly as `||` (because `a -> b` = `!a || b`).
-        let end_idx = self.push_op(OpCode::OpJumpIfTrue(JumpOffset(0)), node);
+        let end_idx = self.push_op_usize_operand(OpCode::OpJumpIfTrue, 0, node);
         self.push_op(OpCode::OpPop, node);
         self.compile(slot, node.rhs().unwrap());
         self.emit_force(&node.rhs().unwrap());
@@ -773,10 +773,10 @@ impl Compiler<'_> {
             self.emit_force(&fragment);
             self.compile_attr(slot, &fragment.clone());
             self.push_op(OpCode::OpAttrsTrySelect, &fragment);
-            jumps.push(self.push_op(OpCode::OpJumpIfNotFound(JumpOffset(0)), &fragment));
+            jumps.push(self.push_op_usize_operand(OpCode::OpJumpIfNotFound, 0, &fragment));
         }
 
-        let final_jump = self.push_op(OpCode::OpJump(JumpOffset(0)), &path);
+        let final_jump = self.push_op_usize_operand(OpCode::OpJump, 0, &path);
 
         for jump in jumps {
             self.chunk().patch_jump(jump);
@@ -804,12 +804,12 @@ impl Compiler<'_> {
         // Compile the assertion condition to leave its value on the stack.
         self.compile(slot, node.condition().unwrap());
         self.emit_force(&node.condition().unwrap());
-        let then_idx = self.push_op(OpCode::OpJumpIfFalse(JumpOffset(0)), node);
+        let then_idx = self.push_op_usize_operand(OpCode::OpJumpIfFalse, 0, node);
 
         self.push_op(OpCode::OpPop, node);
         self.compile(slot, node.body().unwrap());
 
-        let else_idx = self.push_op(OpCode::OpJump(JumpOffset(0)), node);
+        let else_idx = self.push_op_usize_operand(OpCode::OpJump, 0, node);
 
         self.chunk().patch_jump(then_idx);
         self.push_op(OpCode::OpPop, node);
@@ -834,15 +834,13 @@ impl Compiler<'_> {
         self.compile(slot, node.condition().unwrap());
         self.emit_force(&node.condition().unwrap());
 
-        let then_idx = self.push_op(
-            OpCode::OpJumpIfFalse(JumpOffset(0)),
-            &node.condition().unwrap(),
-        );
+        let then_idx =
+            self.push_op_usize_operand(OpCode::OpJumpIfFalse, 0, &node.condition().unwrap());
 
         self.push_op(OpCode::OpPop, node); // discard condition value
         self.compile(slot, node.body().unwrap());
 
-        let else_idx = self.push_op(OpCode::OpJump(JumpOffset(0)), node);
+        let else_idx = self.push_op_usize_operand(OpCode::OpJump, 0, node);
 
         self.chunk().patch_jump(then_idx); // patch jump *to* else_body
         self.push_op(OpCode::OpPop, node); // discard condition value
@@ -957,9 +955,10 @@ impl Compiler<'_> {
                 self.push_op(OpCode::OpAttrsTrySelect, &entry.ident().unwrap());
 
                 let jump_to_default =
-                    self.push_op(OpCode::OpJumpIfNotFound(JumpOffset(0)), &default_expr);
+                    self.push_op_usize_operand(OpCode::OpJumpIfNotFound, 0, &default_expr);
 
-                let jump_over_default = self.push_op(OpCode::OpJump(JumpOffset(0)), &default_expr);
+                let jump_over_default =
+                    self.push_op_usize_operand(OpCode::OpJump, 0, &default_expr);
 
                 self.chunk().patch_jump(jump_to_default);
                 self.compile(idx, default_expr);

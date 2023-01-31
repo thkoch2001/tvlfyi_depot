@@ -1,7 +1,7 @@
 use std::io::Write;
 use std::ops::{Index, IndexMut};
 
-use crate::opcode::{CodeIdx, ConstantIdx, JumpOffset, OpCode};
+use crate::opcode::{CodeIdx, ConstantIdx, OpCode};
 use crate::value::Value;
 use crate::SourceCode;
 use std::fmt::Debug;
@@ -158,32 +158,34 @@ impl Chunk {
         usize::from_le_bytes(bytes.try_into().unwrap())
     }
 
-    /// Patch the jump instruction at the given index, setting its
-    /// jump offset from the placeholder to the current code position.
+    /// Patch the jump instruction at the given index, setting its jump offset
+    /// from the placeholder to the position of the *next* instruction to be
+    /// emitted.
     ///
     /// This is required because the actual target offset of jumps is
     /// not known at the time when the jump operation itself is
     /// emitted.
     pub(crate) fn patch_jump(&mut self, idx: CodeIdx) {
-        let offset = JumpOffset(self.code.len() - 1 - idx.0);
-
         // SAFETY: This function is only used in the compiler, and only on known
         // valid CodeIdx instances. Using it in other contexts is unsafe.
         unsafe {
             match &mut self.code[idx.0] {
                 Op {
-                    op: OpCode::OpJump(n),
-                }
-                | Op {
-                    op: OpCode::OpJumpIfFalse(n),
-                }
-                | Op {
-                    op: OpCode::OpJumpIfTrue(n),
-                }
-                | Op {
-                    op: OpCode::OpJumpIfNotFound(n),
+                    op:
+                        OpCode::OpJump
+                        | OpCode::OpJumpIfFalse
+                        | OpCode::OpJumpIfTrue
+                        | OpCode::OpJumpIfNotFound,
                 } => {
-                    *n = offset;
+                    // Calculate offset between the place where the jump was
+                    // inserted, and the next op. The PTR_SIZE accounts for the
+                    // jump's operand itself, as the instruction pointer will be
+                    // behind that when the jump is executed.
+                    let offset = self.code.len() - 1 - idx.0 - PTR_SIZE;
+
+                    for (n, data) in offset.to_le_bytes().into_iter().enumerate() {
+                        self.code[idx.0 + 1 + n] = Op { data };
+                    }
                 }
 
                 op => panic!("attempted to patch unsupported op: {:?}", op),
@@ -298,6 +300,18 @@ impl Chunk {
                     self[constant_idx], constant_idx.0
                 )
             }
+
+            // Operations with a single usize operand
+            op @ OpCode::OpJump
+            | op @ OpCode::OpJumpIfFalse
+            | op @ OpCode::OpJumpIfTrue
+            | op @ OpCode::OpJumpIfNotFound => {
+                let operand = self.read_usize_operand(CodeIdx(*idx + 1));
+                *idx += PTR_SIZE;
+
+                writeln!(writer, "{:?}({})", op, operand)
+            }
+
             op => writeln!(writer, "{:?}", op),
         }?;
 
@@ -332,5 +346,23 @@ mod tests {
 
         assert_eq!(chunk[op_idx], OpCode::OpAdd);
         assert_eq!(chunk.read_usize_operand(CodeIdx(op_idx.0 + 1)), 42);
+    }
+
+    #[test]
+    fn patch_jump() {
+        let span = dummy_span();
+        let mut chunk = Chunk::default();
+        let idx = chunk.push_op(OpCode::OpJump, span);
+        chunk.push_usize(852935729, span);
+        chunk.push_op(OpCode::OpAdd, span);
+        chunk.patch_jump(idx);
+
+        unsafe {
+            assert_eq!(chunk.code[0].op, OpCode::OpJump);
+            // jump should jump over 1 operation (OpAdd), to end up on the
+            // *next* one
+            assert_eq!(chunk.read_usize_operand(CodeIdx(1)), 1);
+            assert_eq!(chunk.code[9].op, OpCode::OpAdd);
+        }
     }
 }

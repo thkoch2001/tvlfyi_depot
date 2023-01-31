@@ -11,7 +11,7 @@ use crate::{
     io::EvalIO,
     nix_search_path::NixSearchPath,
     observer::RuntimeObserver,
-    opcode::{CodeIdx, ConstantIdx, Count, JumpOffset, OpCode, StackIdx, UpvalueIdx},
+    opcode::{CodeIdx, ConstantIdx, Count, OpCode, StackIdx, UpvalueIdx},
     spans::LightSpan,
     upvalues::Upvalues,
     value::{Builtin, Closure, CoercionKind, Lambda, NixAttrs, NixList, Thunk, Value},
@@ -887,26 +887,30 @@ impl<'o> VM<'o> {
                 }
             },
 
-            OpCode::OpJump(JumpOffset(offset)) => {
+            OpCode::OpJump => {
+                let offset = self.read_usize();
                 debug_assert!(offset != 0);
                 self.frame_mut().ip += offset;
             }
 
-            OpCode::OpJumpIfTrue(JumpOffset(offset)) => {
+            OpCode::OpJumpIfTrue => {
+                let offset = self.read_usize();
                 debug_assert!(offset != 0);
                 if fallible!(self, self.peek(0).as_bool()) {
                     self.frame_mut().ip += offset;
                 }
             }
 
-            OpCode::OpJumpIfFalse(JumpOffset(offset)) => {
+            OpCode::OpJumpIfFalse => {
+                let offset = self.read_usize();
                 debug_assert!(offset != 0);
                 if !fallible!(self, self.peek(0).as_bool()) {
                     self.frame_mut().ip += offset;
                 }
             }
 
-            OpCode::OpJumpIfNotFound(JumpOffset(offset)) => {
+            OpCode::OpJumpIfNotFound => {
+                let offset = self.read_usize();
                 debug_assert!(offset != 0);
                 if matches!(self.peek(0), Value::AttrNotFound) {
                     self.pop();
