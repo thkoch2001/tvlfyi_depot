@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5cf48c5d_72fb5be8",
+        "filename": "tvix/cli/src/derivation.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 253,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-01-31T18:47:39Z",
+      "side": 1,
+      "message": "I think we don\u0027t even need to keep track that we\u0027re using a placeholder. We know the output names of a build, it\u0027s super simple to simply calculate these during all builds and do the replacing unconditionally.\n\nThis would require moving that to nix-compat though, because we probably don\u0027t want //tvix/build to import //tvix/cli ;-)\n\nWe can do the move later if you don\u0027t feel like it now, in that case just mark this comment as resolved.",
+      "revId": "c71e2fdc4a238bf1f599dbb0354c72da26c107ae",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
