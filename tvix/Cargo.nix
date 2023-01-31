@@ -7773,6 +7773,10 @@ rec {
             packageId = "rustyline";
           }
           {
+            name = "sha2";
+            packageId = "sha2 0.10.6";
+          }
+          {
             name = "smol_str";
             packageId = "smol_str";
           }

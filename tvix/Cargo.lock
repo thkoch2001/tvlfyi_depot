@@ -2628,6 +2628,7 @@ dependencies = [
  "dirs",
  "nix-compat",
  "rustyline",
+ "sha2 0.10.6",
  "smol_str",
  "ssri",
  "thiserror",
