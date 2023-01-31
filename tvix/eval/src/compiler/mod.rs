@@ -917,7 +917,7 @@ impl Compiler<'_> {
         for idx in indices {
             if self.scope()[idx].needs_finaliser {
                 let stack_idx = self.scope().stack_index(idx);
-                self.push_op(OpCode::OpFinalise(stack_idx), pattern);
+                self.push_op_usize_operand(OpCode::OpFinalise, stack_idx.0, pattern);
             }
         }
 
@@ -1057,8 +1057,9 @@ impl Compiler<'_> {
                 // finaliser.  Since no OpFinalise will be emitted later on we synthesize one here.
                 // It is needed here only to set [`Closure::is_finalised`] which is used for sanity checks.
                 #[cfg(debug_assertions)]
-                self.push_op(
-                    OpCode::OpFinalise(self.scope().stack_index(outer_slot)),
+                self.push_op_usize_operand(
+                    OpCode::OpFinalise,
+                    self.scope().stack_index(outer_slot).0,
                     &self.span_for(node),
                 );
             }
