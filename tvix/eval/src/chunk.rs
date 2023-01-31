@@ -6,6 +6,8 @@ use crate::value::Value;
 use crate::SourceCode;
 use std::fmt::Debug;
 
+const PTR_SIZE: usize = std::mem::size_of::<usize>();
+
 /// Represents a source location from which one or more operations
 /// were compiled.
 ///
@@ -33,14 +35,15 @@ struct SourceSpan {
 /// a union type which is accessed through helpers on the chunk type.
 pub union Op {
     op: OpCode,
-    // TODO: data: u8,
+    data: u8,
 }
 
 impl Debug for Op {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> Result<(), std::fmt::Error> {
-        // TODO: we can not safely print an arbitrary op, but we can do some
-        // best-effort guessing in the future
-        write!(f, "[tvix_eval::Op]")
+        // SAFETY: Printing an op's u8 representation is always safe, but the
+        // actual value is of course nonsense in some cases. We can do some
+        // best-effort guessing in the future.
+        unsafe { write!(f, "Op {{ data: {} }}", self.data) }
     }
 }
 
@@ -59,6 +62,12 @@ impl Index<ConstantIdx> for Chunk {
 
     fn index(&self, index: ConstantIdx) -> &Self::Output {
         &self.constants[index.0]
+    }
+}
+
+impl IndexMut<ConstantIdx> for Chunk {
+    fn index_mut(&mut self, index: ConstantIdx) -> &mut Self::Output {
+        &mut self.constants[index.0]
     }
 }
 
@@ -88,6 +97,13 @@ impl Chunk {
         CodeIdx(self.last_op_idx)
     }
 
+    pub fn push_usize(&mut self, input: usize, span: codemap::Span) {
+        for data in input.to_le_bytes() {
+            self.code.push(Op { data });
+            self.push_span(span);
+        }
+    }
+
     /// Pop the last operation from the chunk and clean up its tracked
     /// span. Used when the compiler backtracks.
     pub fn pop_op(&mut self) {
@@ -114,6 +130,32 @@ impl Chunk {
         let idx = self.constants.len();
         self.constants.push(data);
         ConstantIdx(idx)
+    }
+
+    /// Reads a single usize operand at the specified code index.
+    pub fn read_usize_operand(&self, idx: CodeIdx) -> usize {
+        let mut bytes: Vec<u8> = vec![0; PTR_SIZE];
+
+        // SAFETY: It is always safe to read u8 representations of the
+        // operations, but for an invalid index the returned value will of
+        // course be nonsense.
+        unsafe {
+            for (i, byte) in self.code[idx.0..idx.0 + PTR_SIZE].iter().enumerate() {
+                bytes[i] = byte.data
+            }
+        }
+
+        /* TODO: once the size of Op is 1 byte, this should morph into
+           something like:
+
+            std::mem::transmute_copy::<[Op; PTR_SIZE], usize>(
+                self.code[idx.0..idx.0 + PTR_SIZE]
+                    .try_into()
+                    .expect("BUG: invalid bytecode operand"),
+            )
+        */
+
+        usize::from_le_bytes(bytes.try_into().unwrap())
     }
 
     /// Patch the jump instruction at the given index, setting its
@@ -149,8 +191,9 @@ impl Chunk {
         }
     }
 
-    /// Retrieve a copy of the last operation in the chunk.
-    pub(crate) fn last_op(&self) -> Option<OpCode> {
+    /// Retrieve a copy of the last operation in the chunk, and its
+    /// associated data (if any).
+    pub(crate) fn last_op(&self) -> Option<(OpCode, Vec<u8>)> {
         if self.last_op_idx == 0 {
             return None;
         }
@@ -158,13 +201,32 @@ impl Chunk {
         // SAFETY: This is safe because last_op_idx is only modified
         // when pushing an operation inside of this type, so we always
         // know that this index points towards an op and not some data.
-        unsafe { Some(self.code[self.last_op_idx].op) }
+        let last_op = unsafe { self.code[self.last_op_idx].op };
+
+        // TODO: refactor this function to return `&[u8]`, once
+        // possible. The below will (loudly) tell us when it's
+        // possible.
+        #[cfg(debug_assertions)]
+        if std::mem::size_of::<OpCode>() == 1 {
+            eprintln!(
+                "TODO: size(OpCode) is now! Return slice in {}:{}",
+                file!(),
+                line!()
+            );
+        }
+
+        let last_data = self.code[self.last_op_idx + 1..]
+            .iter()
+            .map(|op| unsafe { op.data })
+            .collect::<Vec<u8>>();
+
+        Some((last_op, last_data))
     }
 
     /// Perform tail-call optimisation if the last call within a
     /// compiled chunk is another call.
     pub(crate) fn optimise_tail_call(&mut self) {
-        if let Some(OpCode::OpCall) = self.last_op() {
+        if let Some((OpCode::OpCall, _)) = self.last_op() {
             self.code[self.last_op_idx] = Op {
                 op: OpCode::OpTailCall,
             }
@@ -202,26 +264,40 @@ impl Chunk {
 
     /// Write the disassembler representation of the operation at
     /// `idx` to the specified writer.
+    ///
+    /// If the operation at `idx` has operands, the index pointer will be
+    /// incremented to point *to the last byte of the last operand*.
     pub fn disassemble_op<W: Write>(
         &self,
         writer: &mut W,
+        idx: &mut usize,
         source: &SourceCode,
         width: usize,
-        idx: CodeIdx,
     ) -> Result<(), std::io::Error> {
-        write!(writer, "{:#width$x}\t ", idx.0, width = width)?;
+        write!(writer, "{:#width$x}\t ", *idx, width = width)?;
 
         // Print continuation character if the previous operation was at
         // the same line, otherwise print the line.
-        let line = source.get_line(self.get_span(idx));
-        if idx.0 > 0 && source.get_line(self.get_span(CodeIdx(idx.0 - 1))) == line {
+        let line = source.get_line(self.get_span(CodeIdx(*idx)));
+        if *idx > 0 && source.get_line(self.get_span(CodeIdx(*idx - 1))) == line {
             write!(writer, "   |\t")?;
         } else {
             write!(writer, "{:4}\t", line)?;
         }
 
-        match self[idx] {
-            OpCode::OpConstant(idx) => writeln!(writer, "OpConstant({}@{})", self[idx], idx.0),
+        // Operations with operands need to be handled here.
+        match self[CodeIdx(*idx)] {
+            // Special snowflakes
+            OpCode::OpConstant => {
+                let constant_idx = ConstantIdx(self.read_usize_operand(CodeIdx(*idx + 1)));
+                *idx += PTR_SIZE;
+
+                writeln!(
+                    writer,
+                    "OpConstant({}@{})",
+                    self[constant_idx], constant_idx.0
+                )
+            }
             op => writeln!(writer, "{:?}", op),
         }?;
 
@@ -231,9 +307,9 @@ impl Chunk {
 
 #[cfg(test)]
 mod tests {
+    use super::*;
     use crate::test_utils::dummy_span;
 
-    use super::*;
     #[test]
     fn push_op() {
         let mut chunk = Chunk::default();
@@ -245,5 +321,16 @@ mod tests {
                 Op { op: OpCode::OpAdd }
             ));
         }
+    }
+
+    #[test]
+    fn push_operand() {
+        let span = dummy_span();
+        let mut chunk = Chunk::default();
+        let op_idx = chunk.push_op(OpCode::OpAdd, span);
+        chunk.push_usize(42, span);
+
+        assert_eq!(chunk[op_idx], OpCode::OpAdd);
+        assert_eq!(chunk.read_usize_operand(CodeIdx(op_idx.0 + 1)), 42);
     }
 }

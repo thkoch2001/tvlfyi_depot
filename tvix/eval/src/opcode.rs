@@ -57,8 +57,9 @@ pub struct Count(pub usize);
 #[warn(variant_size_differences)]
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]
 pub enum OpCode {
-    /// Push a constant onto the stack.
-    OpConstant(ConstantIdx),
+    /// Push a constant onto the stack. Followed by [usize] operand
+    /// with the constant's index in the chunk.
+    OpConstant,
 
     /// Discard a value from the stack.
     OpPop,
