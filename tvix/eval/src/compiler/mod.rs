@@ -871,7 +871,7 @@ impl Compiler<'_> {
 
         self.scope_mut().push_with();
 
-        self.push_op(OpCode::OpPushWith(with_idx), &node.namespace().unwrap());
+        self.push_op_usize_operand(OpCode::OpPushWith, with_idx.0, &node.namespace().unwrap());
 
         self.compile(slot, node.body().unwrap());
 
