@@ -989,8 +989,9 @@ impl<'o> VM<'o> {
                 self.tail_call_value(callable)?;
             }
 
-            OpCode::OpGetUpvalue(upv_idx) => {
-                let value = self.frame().upvalue(upv_idx).clone();
+            OpCode::OpGetUpvalue => {
+                let upv_idx = self.read_usize();
+                let value = self.frame().upvalue(UpvalueIdx(upv_idx)).clone();
                 self.push(value);
             }
 
