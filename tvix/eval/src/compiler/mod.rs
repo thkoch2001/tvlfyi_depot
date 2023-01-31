@@ -1023,18 +1023,18 @@ impl Compiler<'_> {
             return;
         }
 
-        // Otherwise, we need to emit the variable number of
-        // operands that allow the runtime to close over the
-        // upvalues and leave a blueprint in the constant index from
-        // which the result can be constructed.
+        // Otherwise, we need to emit the variable number of operands that allow
+        // the runtime to close over the upvalues and leave a blueprint in the
+        // constant index from which the result can be constructed.
         let blueprint_idx = self.chunk().push_constant(Value::Blueprint(lambda));
 
-        let code_idx = self.push_op(
+        let code_idx = self.push_op_usize_operand(
             if is_suspended_thunk {
-                OpCode::OpThunkSuspended(blueprint_idx)
+                OpCode::OpThunkSuspended
             } else {
-                OpCode::OpThunkClosure(blueprint_idx)
+                OpCode::OpThunkClosure
             },
+            blueprint_idx.0,
             node,
         );
 
@@ -1047,9 +1047,11 @@ impl Compiler<'_> {
 
         if !is_suspended_thunk && !self.scope()[outer_slot].needs_finaliser {
             if !self.scope()[outer_slot].must_thunk {
-                // The closure has upvalues, but is not recursive.  Therefore no thunk is required,
-                // which saves us the overhead of Rc<RefCell<>>
-                self.chunk()[code_idx] = OpCode::OpClosure(blueprint_idx);
+                // The closure has upvalues, but is not recursive. Therefore no
+                // thunk is required, which saves us the overhead of
+                // Rc<RefCell<>>. The operands are the same, so replacing the
+                // opcode is sufficient.
+                self.chunk()[code_idx] = OpCode::OpClosure
             } else {
                 // This case occurs when a closure has upvalue-references to itself but does not need a
                 // finaliser.  Since no OpFinalise will be emitted later on we synthesize one here.

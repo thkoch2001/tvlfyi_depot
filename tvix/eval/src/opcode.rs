@@ -232,13 +232,13 @@ pub enum OpCode {
     OpGetUpvalue,
 
     /// Construct a closure which has upvalues but no self-references
-    OpClosure(ConstantIdx),
+    OpClosure,
 
     /// Construct a closure which has self-references (direct or via upvalues)
-    OpThunkClosure(ConstantIdx),
+    OpThunkClosure,
 
     /// Construct a suspended thunk, used to delay a computation for laziness.
-    OpThunkSuspended(ConstantIdx),
+    OpThunkSuspended,
 
     /// Force the value at {1} until it is a `Thunk::Evaluated`.
     OpForce,
