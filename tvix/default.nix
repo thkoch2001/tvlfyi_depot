@@ -59,4 +59,10 @@ in
   };
 
   meta.ci.targets = [ "shell" ];
+
+  meta.ci.extraSteps.github = depot.tools.releases.filteredGitPush {
+    filter = ":workspace=views/tvix";
+    remote = "git@github.com:tvlfyi/tvix.git";
+    ref = "refs/heads/canon";
+  };
 }
