@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "59411e28_af54684c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2023-02-01T22:58:21Z",
+      "side": 1,
+      "message": "Marking as WIP because this commit introduces a bug which only became apparent after cl/8012. I haven\u0027t isolated a test case yet.",
+      "revId": "573b569452433a5eef66eeb3e762ac35865d4f05",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
