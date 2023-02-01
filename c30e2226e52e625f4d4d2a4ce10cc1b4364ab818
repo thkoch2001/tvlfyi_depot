@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "68b54e7d_fd150aa6",
+        "filename": "views/tvix/workspace.josh",
+        "patchSetId": 2
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2023-02-01T16:17:28Z",
+      "side": 1,
+      "message": "Why this explicit list, instead of taking all of //tvix? It seems like we\u0027d forget to update this when adding/moving around components.",
+      "range": {
+        "startLine": 6,
+        "startChar": 0,
+        "endLine": 19,
+        "endChar": 0
+      },
+      "revId": "c30e2226e52e625f4d4d2a4ce10cc1b4364ab818",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
