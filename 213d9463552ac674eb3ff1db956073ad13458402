@@ -16,6 +16,24 @@
       "message": "this is 16.",
       "revId": "213d9463552ac674eb3ff1db956073ad13458402",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f3ee8b4b_e3b6f29a",
+        "filename": "tvix/nix-compat/src/nixhash.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 55,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-02-01T09:18:17Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "924e7c47_578066df",
+      "revId": "213d9463552ac674eb3ff1db956073ad13458402",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
