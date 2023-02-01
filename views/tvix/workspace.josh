@@ -1,0 +1,22 @@
+:/third_party:[
+    ::nixpkgs/
+    ::sources/
+]
+:/tvix:[
+    ::Cargo.lock
+    ::Cargo.toml
+    ::cli/
+    ::docs/
+    ::eval/
+    ::.gitignore
+    ::LICENSE
+    ::nix_cli/
+    ::nix-compat/
+    ::proto/
+    ::README.md
+    ::serde/
+    ::store/
+]
+:/views/tvix:[
+    ::shell.nix
+]
