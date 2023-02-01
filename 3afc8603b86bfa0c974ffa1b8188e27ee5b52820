@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "57ce6e4c_153567ca",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2023-02-01T13:37:08Z",
+      "side": 1,
+      "message": "I don\u0027t see a reason to have it split in two files, but I don\u0027t care that much.",
+      "revId": "3afc8603b86bfa0c974ffa1b8188e27ee5b52820",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
