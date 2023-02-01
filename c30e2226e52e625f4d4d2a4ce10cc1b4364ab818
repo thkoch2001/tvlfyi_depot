@@ -46,6 +46,30 @@
       },
       "revId": "c30e2226e52e625f4d4d2a4ce10cc1b4364ab818",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0c1e2504_8fabd617",
+        "filename": "views/tvix/workspace.josh",
+        "patchSetId": 2
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-02-01T16:50:17Z",
+      "side": 1,
+      "message": "I juggled things around a bit. Now we have `//views/tvix/default.nix` being the shell, shadowing the `default.nix` from `//tvix`. PTAL.",
+      "parentUuid": "5c8f8568_6693ec85",
+      "range": {
+        "startLine": 6,
+        "startChar": 0,
+        "endLine": 19,
+        "endChar": 0
+      },
+      "revId": "c30e2226e52e625f4d4d2a4ce10cc1b4364ab818",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
