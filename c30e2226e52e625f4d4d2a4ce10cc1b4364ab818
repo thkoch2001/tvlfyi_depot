@@ -22,6 +22,30 @@
       },
       "revId": "c30e2226e52e625f4d4d2a4ce10cc1b4364ab818",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5c8f8568_6693ec85",
+        "filename": "views/tvix/workspace.josh",
+        "patchSetId": 2
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-02-01T16:35:07Z",
+      "side": 1,
+      "message": "The excludes things like `OWNERS`, `Cargo.nix` and `crate-hashes.json`.\n\nThese are not used in the tvix view, or actionable (we lack the tooling to update them). I\u0027d rather not have them.\n\nWe should notice we\u0027re missing something quite quickly, as `cargo build` will complain if you accidentially leave out a Cargo workspace members that\u0027s referred in `Cargo.toml`.",
+      "parentUuid": "68b54e7d_fd150aa6",
+      "range": {
+        "startLine": 6,
+        "startChar": 0,
+        "endLine": 19,
+        "endChar": 0
+      },
+      "revId": "c30e2226e52e625f4d4d2a4ce10cc1b4364ab818",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
