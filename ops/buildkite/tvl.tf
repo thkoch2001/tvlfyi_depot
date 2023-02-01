@@ -30,6 +30,13 @@ resource "buildkite_pipeline" "depot" {
   steps       = file("./steps-depot.yml")
 }
 
+resource "buildkite_pipeline" "tvix" {
+  name        = "tvix"
+  description = "Tvix, an exported subset of TVL depot"
+  repository  = "https://code.tvl.fyi/depot.git:workspace=views/tvix.git"
+  steps       = file("./steps-tvl-kit.yml")
+}
+
 resource "buildkite_pipeline" "tvl_kit" {
   name        = "tvl-kit"
   description = "TVL Kit, an exported subset of TVL depot"
