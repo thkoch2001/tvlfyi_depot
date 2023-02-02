@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c14dd5d6_4d1ee3e9",
+        "filename": "tvix/README.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-02-02T15:48:28Z",
+      "side": 1,
+      "message": "Probably put the last phrase in a new line, and add that PRs and issues in these mirrors ignored?",
+      "revId": "2d481d7f2b41f18b7eecdad27be49965eed07279",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0ae8497a_befaf8c2",
+        "filename": "tvix/README.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-02-02T15:48:28Z",
+      "side": 1,
+      "message": "It\u0027s as WIP as the rest, we can drop that specific marker.",
+      "revId": "2d481d7f2b41f18b7eecdad27be49965eed07279",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
