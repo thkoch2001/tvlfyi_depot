@@ -18,6 +18,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "05939733_f47490b0",
+        "filename": "tvix/README.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2023-02-02T16:06:20Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c14dd5d6_4d1ee3e9",
+      "revId": "2d481d7f2b41f18b7eecdad27be49965eed07279",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "0ae8497a_befaf8c2",
@@ -49,6 +67,24 @@
       "side": 1,
       "message": "I\u0027m going back and forth on this. Store doesn\u0027t have much functional code yet, but the other stuff *does*, so it\u0027s somehow more WIP, but as usual I don\u0027t care very much.",
       "parentUuid": "0ae8497a_befaf8c2",
+      "revId": "2d481d7f2b41f18b7eecdad27be49965eed07279",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ba6ab58c_bf67b3e3",
+        "filename": "tvix/README.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2023-02-02T16:06:20Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "26b7157e_05454788",
       "revId": "2d481d7f2b41f18b7eecdad27be49965eed07279",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
