@@ -16,6 +16,24 @@
       "message": "Can you add a TODO comment here?",
       "revId": "52c244abf1d100bfae971ae7996ffb8563792676",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "97ea54a3_166e4197",
+        "filename": "tvix/cli/src/nix_compat.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2023-02-02T14:24:46Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "56a656b9_ff9009ba",
+      "revId": "52c244abf1d100bfae971ae7996ffb8563792676",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
