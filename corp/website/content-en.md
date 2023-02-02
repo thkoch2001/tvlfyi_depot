@@ -6,8 +6,8 @@
 
 ----------------
 
-Welcome to the corporate face of [**TVL**][tvl]. We are a technology company
-headquartered in Moscow, working with a variety of topics:
+Welcome to the website of TVL LLC, the corporate face of the [**TVL**][tvl] Community.
+We are a technology company headquartered in Moscow, working with a variety of topics:
 
 * <details><summary><b>Monorepos</b>. Effective ways for an organisation to
   structure their internal codebase in a single repository, unify tooling across
