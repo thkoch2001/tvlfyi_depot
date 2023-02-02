@@ -33,6 +33,24 @@
       "message": "It\u0027s as WIP as the rest, we can drop that specific marker.",
       "revId": "2d481d7f2b41f18b7eecdad27be49965eed07279",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "26b7157e_05454788",
+        "filename": "tvix/README.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2023-02-02T16:06:09Z",
+      "side": 1,
+      "message": "I\u0027m going back and forth on this. Store doesn\u0027t have much functional code yet, but the other stuff *does*, so it\u0027s somehow more WIP, but as usual I don\u0027t care very much.",
+      "parentUuid": "0ae8497a_befaf8c2",
+      "revId": "2d481d7f2b41f18b7eecdad27be49965eed07279",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
