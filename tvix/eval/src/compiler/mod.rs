@@ -670,14 +670,8 @@ impl Compiler<'_> {
         // set that is lacking a key, because that thunk is never
         // evaluated). If anything is missing, just move on. We may
         // want to emit warnings here in the future.
-        if let Some((OpCode::OpConstant, idx_bytes)) = self.chunk().last_op() {
-            let idx = ConstantIdx(usize::from_le_bytes(
-                idx_bytes
-                    .try_into()
-                    .expect("BUG: compiler emitted OpConstant with invalid args"),
-            ));
-
-            let constant = &mut self.chunk()[idx];
+        if let Some((OpCode::OpConstant, Some(idx))) = self.chunk().last_op() {
+            let constant = &mut self.chunk()[ConstantIdx(idx)];
             if let Value::Attrs(attrs) = constant {
                 let mut path_iter = path.attrs();
 

@@ -134,28 +134,16 @@ impl Chunk {
 
     /// Reads a single usize operand at the specified code index.
     pub fn read_usize_operand(&self, idx: CodeIdx) -> usize {
-        let mut bytes: Vec<u8> = vec![0; PTR_SIZE];
-
         // SAFETY: It is always safe to read u8 representations of the
         // operations, but for an invalid index the returned value will of
         // course be nonsense.
         unsafe {
-            for (i, byte) in self.code[idx.0..idx.0 + PTR_SIZE].iter().enumerate() {
-                bytes[i] = byte.data
-            }
-        }
-
-        /* TODO: once the size of Op is 1 byte, this should morph into
-           something like:
-
             std::mem::transmute_copy::<[Op; PTR_SIZE], usize>(
                 self.code[idx.0..idx.0 + PTR_SIZE]
                     .try_into()
                     .expect("BUG: invalid bytecode operand"),
             )
-        */
-
-        usize::from_le_bytes(bytes.try_into().unwrap())
+        }
     }
 
     /// Patch the jump instruction at the given index, setting its jump offset
@@ -195,7 +183,7 @@ impl Chunk {
 
     /// Retrieve a copy of the last operation in the chunk, and its
     /// associated data (if any).
-    pub(crate) fn last_op(&self) -> Option<(OpCode, Vec<u8>)> {
+    pub(crate) fn last_op(&self) -> Option<(OpCode, Option<usize>)> {
         if self.last_op_idx == 0 {
             return None;
         }
@@ -205,22 +193,14 @@ impl Chunk {
         // know that this index points towards an op and not some data.
         let last_op = unsafe { self.code[self.last_op_idx].op };
 
-        // TODO: refactor this function to return `&[u8]`, once
-        // possible. The below will (loudly) tell us when it's
-        // possible.
-        #[cfg(debug_assertions)]
-        if std::mem::size_of::<OpCode>() == 1 {
-            eprintln!(
-                "TODO: size(OpCode) is now! Return slice in {}:{}",
-                file!(),
-                line!()
-            );
-        }
-
-        let last_data = self.code[self.last_op_idx + 1..]
-            .iter()
-            .map(|op| unsafe { op.data })
-            .collect::<Vec<u8>>();
+        // Only read an argument if we know that the exact size of usize in
+        // bytes is present after the op. If we ever introduce additional
+        // operand types, this will need to change.
+        let last_data = if self.code.len() == self.last_op_idx + 1 + PTR_SIZE {
+            Some(self.read_usize_operand(CodeIdx(self.last_op_idx + 1)))
+        } else {
+            None
+        };
 
         Some((last_op, last_data))
     }
