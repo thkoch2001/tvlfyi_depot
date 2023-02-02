@@ -44,6 +44,17 @@ fn tvixbolt_overview() -> Html {
             {"Tvix is still "}<i>{"extremely work-in-progress"}</i>{" and you "}
             {"should expect to be able to cause bugs and errors in this tool."}
           </p>
+          <p>
+            {"Tvixbolt is a project from "}
+            <a href="https://tvl.su">
+              {"TVL LLC"}
+            </a>
+            {". If you're looking for the TVL Community, click "}
+            <a href="https://tvl.fyi">
+              {"here"}
+            </a>
+            {"."}
+          </p>
         </>
     }
 }
