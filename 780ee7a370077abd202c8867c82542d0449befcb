@@ -18,6 +18,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "42f0ff52_b23cdfd1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-02-03T11:46:58Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "89908e8d_cc6dc9a1",
+      "revId": "780ee7a370077abd202c8867c82542d0449befcb",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "89b3ee36_f32fc49d",
@@ -31,6 +49,30 @@
       "writtenOn": "2023-02-03T11:24:22Z",
       "side": 1,
       "message": "The company is called \"TVL LLC\" in English, and \u0027ООО \"ТВЛ\"\u0027 in Russian. The languages should not be mixed like this. I don\u0027t mind adding the \"LLC\" here though to make it clear that it\u0027s the corporate entity.",
+      "range": {
+        "startLine": 9,
+        "startChar": 26,
+        "endLine": 9,
+        "endChar": 29
+      },
+      "revId": "780ee7a370077abd202c8867c82542d0449befcb",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9298cd41_317ace91",
+        "filename": "corp/website/content-en.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-02-03T11:46:58Z",
+      "side": 1,
+      "message": "I changed this to TVL LLC, PTAL.",
+      "parentUuid": "89b3ee36_f32fc49d",
       "range": {
         "startLine": 9,
         "startChar": 26,
