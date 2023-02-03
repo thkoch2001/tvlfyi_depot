@@ -16,6 +16,24 @@
       "message": "This import is conditional on the `impure` feature, you should add a `#[cfg...]` attribute instead",
       "revId": "ed40c5072803a50397265ebf5a42e9a2f9e79869",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "39067daa_1f703637",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-02-03T12:11:26Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "89ffcd42_d9de6e4f",
+      "revId": "ed40c5072803a50397265ebf5a42e9a2f9e79869",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
