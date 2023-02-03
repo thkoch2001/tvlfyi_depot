@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ab5374e2_f430435a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2023-02-03T11:22:47Z",
+      "side": 1,
+      "message": "Tvixbolt is a corp project, the footer\u0027s home link *should* go to the corp. We can of course add more prose in the description text on top that links to tvl.fyi, but I don\u0027t like this way.",
+      "revId": "c7e966e51576800f0fcb3790ee597a687a8e985e",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
