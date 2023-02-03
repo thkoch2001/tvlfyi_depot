@@ -17,7 +17,6 @@
 
 use smol_str::SmolStr;
 use std::path::{Path, PathBuf};
-use std::rc::Rc;
 
 use crate::errors::ErrorKind;
 
