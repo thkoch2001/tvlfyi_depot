@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "89ffcd42_d9de6e4f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2023-02-03T12:05:04Z",
+      "side": 1,
+      "message": "This import is conditional on the `impure` feature, you should add a `#[cfg...]` attribute instead",
+      "revId": "ed40c5072803a50397265ebf5a42e9a2f9e79869",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
