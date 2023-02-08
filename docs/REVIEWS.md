@@ -35,7 +35,7 @@ a commit hook should be installed as follows:
 
 ```
 git clone "ssh://$USER@code.tvl.fyi:29418/depot"
-scp -p -P 29418 $USER@code.tvl.fyi:hooks/commit-msg "depot/.git/hooks/"
+scp -pOP 29418 $USER@code.tvl.fyi:hooks/commit-msg "depot/.git/hooks/"
 ```
 
 If you have a previous clone of the depot via HTTP you can use `git remote
