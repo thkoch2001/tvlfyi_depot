@@ -33,6 +33,7 @@
 
     users.qyliss = {
       isNormalUser = true;
+      description = "Alyssa Ross";
       extraGroups = [ "git" ];
       openssh.authorizedKeys.keys = depot.users.qyliss.keys.all;
     };
