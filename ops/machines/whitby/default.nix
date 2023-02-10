@@ -644,5 +644,7 @@ in
     };
   };
 
+  zramSwap.enable = true;
+
   system.stateVersion = "20.03";
 }
