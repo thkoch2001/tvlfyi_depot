@@ -1,5 +1,3 @@
-pub mod client;
-
 mod blobreader;
 mod errors;
 
