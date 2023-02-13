@@ -36,7 +36,8 @@ impl<C: DirectoryService + Send + Sync + Clone + 'static>
 
         // kick off an async thread
         task::spawn(async move {
-            // keep the list of directory digests to traverse
+            // Keep the list of directory digests to traverse.
+            // As per rpc_directory.proto, we traverse in BFS order.
             let mut deq: VecDeque<Vec<u8>> = VecDeque::new();
 
             // look at the digest in the request and put it in the top of the queue.
@@ -187,7 +188,11 @@ impl<C: DirectoryService + Send + Sync + Clone + 'static>
             // to at least one child we already received.
             // This means, we thoeretically allow uploading multiple disconnected graphs,
             // and the digest of the last element in the stream becomes the root node.
-            // This is not a problem in practice? Does it make sense to enforce this too?
+            // For example, you can upload a leaf directory A, a leaf directory
+            // B, and then as last element a directory C that only refers to A,
+            // leaving B disconnected.
+            // At some point, we might want to populate a datastructure that
+            // does a reachability check.
 
             let dgst = directory.digest();
             seen_directories_sizes.insert(dgst.clone(), directory.size());
