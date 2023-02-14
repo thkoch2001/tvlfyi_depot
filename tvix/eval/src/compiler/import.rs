@@ -42,7 +42,7 @@ pub(super) fn builtins_import(globals: &Weak<GlobalsMap>, source: SourceCode) ->
                 path.push("default.nix");
             }
 
-            let current_span = vm.current_light_span();
+            let current_span = vm.reasonable_light_span();
 
             if let Some(cached) = vm.import_cache.get(&path) {
                 return Ok(cached.clone());

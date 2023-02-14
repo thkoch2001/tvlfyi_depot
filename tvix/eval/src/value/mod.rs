@@ -198,7 +198,7 @@ impl Value {
         // TODO: eventually, this will need to handle string context and importing
         // files into the Nix store depending on what context the coercion happens in
         if let Value::Thunk(t) = self {
-            t.force(vm)?;
+            t.force(todo!())?;
         }
 
         match (self, kind) {
@@ -230,9 +230,9 @@ impl Value {
                         // use a closure here to deal with the thunk borrow we need to do below
                         let call_to_string = |value: &Value, vm: &mut VM| {
                             // Leave self on the stack as an argument to the function call.
-                            vm.push(self.clone());
+                            vm.stack.push(self.clone());
                             vm.call_value(value)?;
-                            let result = vm.pop();
+                            let result = vm.stack_pop();
 
                             match result {
                                 Value::String(s) => Ok(s),
@@ -244,7 +244,7 @@ impl Value {
                         };
 
                         if let Value::Thunk(t) = f {
-                            t.force(vm)?;
+                            t.force(todo!())?;
                             let guard = t.value();
                             call_to_string(&guard, vm)
                         } else {
@@ -415,7 +415,7 @@ impl Value {
     pub fn force(&self, vm: &mut VM) -> Result<ForceResult, ErrorKind> {
         match self {
             Self::Thunk(thunk) => {
-                thunk.force(vm)?;
+                thunk.force(todo!())?;
                 Ok(ForceResult::ForcedThunk(thunk.value()))
             }
             _ => Ok(ForceResult::Immediate(self)),
@@ -458,7 +458,7 @@ impl Value {
                     return Ok(());
                 }
 
-                thunk.force(vm)?;
+                thunk.force(todo!())?;
                 let value = thunk.value().clone();
                 value.deep_force(vm, thunk_set)
             }
