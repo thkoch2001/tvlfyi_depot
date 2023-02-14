@@ -104,37 +104,6 @@ impl Thunk {
         )))))
     }
 
-    /// Force a thunk from a context that can't handle trampoline
-    /// continuations, eg outside the VM's normal execution loop.  Calling
-    /// `force_trampoline()` instead should be preferred whenever possible.
-    pub fn force(&self, vm: &mut VM) -> Result<(), ErrorKind> {
-        if self.is_forced() {
-            return Ok(());
-        }
-
-        let mut trampoline = Self::force_trampoline(vm, Value::Thunk(self.clone()))?;
-        loop {
-            match trampoline.action {
-                None => (),
-                Some(TrampolineAction::EnterFrame {
-                    lambda,
-                    upvalues,
-                    arg_count,
-                    light_span: _,
-                }) => vm.enter_frame(lambda, upvalues, arg_count)?,
-            }
-            match trampoline.continuation {
-                None => break,
-                Some(cont) => {
-                    trampoline = cont(vm)?;
-                    continue;
-                }
-            }
-        }
-        vm.pop();
-        Ok(())
-    }
-
     /// Evaluate the content of a thunk, potentially repeatedly, until a
     /// non-thunk value is returned.
     ///
@@ -145,7 +114,7 @@ impl Thunk {
         match outer {
             Value::Thunk(thunk) => thunk.force_trampoline_self(vm),
             v => {
-                vm.push(v);
+                vm.stack.push(v);
                 Ok(Trampoline::default())
             }
         }
@@ -169,7 +138,7 @@ impl Thunk {
         // value on the stack and return an empty trampoline. The VM will
         // continue running the code that landed us here.
         if self.is_forced() {
-            vm.push(self.value().clone());
+            vm.stack.push(self.value().clone());
             return Ok(Trampoline::default());
         }
 
@@ -229,7 +198,7 @@ impl Thunk {
                     // looping back around to here.
                     continuation: Some(Box::new(move |vm: &mut VM| {
                         let should_be_blackhole =
-                            self_clone.0.replace(ThunkRepr::Evaluated(vm.pop()));
+                            self_clone.0.replace(ThunkRepr::Evaluated(vm.stack_pop()));
                         debug_assert!(matches!(should_be_blackhole, ThunkRepr::Blackhole));
 
                         Thunk::force_trampoline(vm, Value::Thunk(self_clone))
@@ -249,7 +218,7 @@ impl Thunk {
             // short-circuit and replace the representation of self with it.
             ThunkRepr::Evaluated(Value::Thunk(ref inner)) if inner.is_forced() => {
                 self.0.replace(ThunkRepr::Evaluated(inner.value().clone()));
-                vm.push(inner.value().clone());
+                vm.stack.push(inner.value().clone());
                 return Ok(Trampoline::default());
             }
 
@@ -301,7 +270,7 @@ impl Thunk {
 
                             // ... and replace the inner representations.
                             continuation: Some(Box::new(move |vm: &mut VM| {
-                                let result = vm.pop();
+                                let result = vm.stack_pop();
 
                                 let self_blackhole =
                                     self_clone.0.replace(ThunkRepr::Evaluated(result.clone()));

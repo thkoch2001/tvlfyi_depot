@@ -1019,10 +1019,11 @@ impl Compiler<'_> {
         // lambda as a constant.
         let mut compiled = self.contexts.pop().unwrap();
 
-        // Check if tail-call optimisation is possible and perform it.
-        if self.dead_scope == 0 {
-            optimise_tail_call(&mut compiled.lambda.chunk);
-        }
+        // Emit an instruction to inform the VM that the chunk has ended.
+        compiled
+            .lambda
+            .chunk
+            .push_op(OpCode::OpReturn, self.span_for(node));
 
         // Capturing the with stack counts as an upvalue, as it is
         // emitted as an upvalue data instruction.
@@ -1288,19 +1289,6 @@ fn expr_static_attr_str(node: &ast::Attr) -> Option<SmolStr> {
     }
 }
 
-/// Perform tail-call optimisation if the last call within a
-/// compiled chunk is another call.
-fn optimise_tail_call(chunk: &mut Chunk) {
-    let last_op = chunk
-        .code
-        .last_mut()
-        .expect("compiler bug: chunk should never be empty");
-
-    if matches!(last_op, OpCode::OpCall) {
-        *last_op = OpCode::OpTailCall;
-    }
-}
-
 /// Create a delayed source-only builtin compilation, for a builtin
 /// which is written in Nix code.
 ///
@@ -1449,6 +1437,7 @@ pub fn compile(
     // unevaluated state (though in practice, a value *containing* a
     // thunk might be returned).
     c.emit_force(expr);
+    c.push_op(OpCode::OpReturn, &root_span);
 
     let lambda = Rc::new(c.contexts.pop().unwrap().lambda);
     c.observer.observe_compiled_toplevel(&lambda);
