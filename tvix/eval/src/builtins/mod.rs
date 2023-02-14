@@ -55,11 +55,13 @@ pub fn coerce_value_to_path(v: &Value, vm: &mut VM) -> Result<PathBuf, ErrorKind
     }
 }
 
-#[builtins]
+// #[builtins]
 mod pure_builtins {
     use std::collections::VecDeque;
 
     use super::*;
+
+    /*
 
     #[builtin("abort")]
     fn builtin_abort(_vm: &mut VM, message: Value) -> Result<Value, ErrorKind> {
@@ -224,7 +226,7 @@ mod pure_builtins {
 
     #[builtin("deepSeq")]
     fn builtin_deep_seq(vm: &mut VM, x: Value, y: Value) -> Result<Value, ErrorKind> {
-        x.deep_force(vm, &mut Default::default())?;
+        todo!("x.deep_force(vm, &mut Default::default())?");
         Ok(y)
     }
 
@@ -253,7 +255,7 @@ mod pure_builtins {
     #[builtin("elem")]
     fn builtin_elem(vm: &mut VM, x: Value, xs: Value) -> Result<Value, ErrorKind> {
         for val in xs.to_list()? {
-            if vm.nix_eq(val, x.clone(), true)? {
+            if todo!("vm.nix_eq(val, x.clone(), true)?") {
                 return Ok(true.into());
             }
         }
@@ -349,7 +351,7 @@ mod pure_builtins {
         // All thunks need to be evaluated before serialising, as the
         // data structure is fully traversed by the Serializer (which
         // does not have a `VM` available).
-        val.deep_force(vm, &mut Default::default())?;
+        todo!("val.deep_force(vm, &mut Default::default())?");
 
         let json_str = serde_json::to_string(&val)?;
         Ok(json_str.into())
@@ -382,7 +384,7 @@ mod pure_builtins {
 
         let mut insert_key = |k: Value, vm: &mut VM| -> Result<bool, ErrorKind> {
             for existing in &done_keys {
-                if existing.nix_eq(&k, vm)? {
+                if todo!("existing.nix_eq(&k, vm)?") {
                     return Ok(false);
                 }
             }
@@ -546,7 +548,7 @@ mod pure_builtins {
         #[lazy] y: Value,
     ) -> Result<Value, ErrorKind> {
         Ok(Value::Bool(matches!(
-            x.force(vm)?.nix_cmp(&*y.force(vm)?, vm)?,
+            todo!("x.force(vm)?.nix_cmp(&*y.force(vm)?, vm)?"),
             Some(Ordering::Less)
         )))
     }
@@ -928,7 +930,7 @@ mod pure_builtins {
 
     #[builtin("toXML")]
     fn builtin_to_xml(vm: &mut VM, value: Value) -> Result<Value, ErrorKind> {
-        value.deep_force(vm, &mut Default::default())?;
+        todo!("value.deep_force(vm, &mut Default::default())?");
         let mut buf: Vec<u8> = vec![];
         to_xml::value_to_xml(&mut buf, &value)?;
         Ok(String::from_utf8(buf)?.into())
@@ -973,6 +975,36 @@ mod pure_builtins {
         let value = x.force(vm)?;
         Ok(Value::String(value.type_of().into()))
     }
+
+    rewrite to:
+    */
+
+    use crate::vm::generators::{self, pin_generator, GenCo};
+    use crate::Builtin;
+    use crate::BuiltinArgument;
+    use genawaiter::rc::Gen;
+
+    async fn builtin_type_of(co: GenCo, mut values: Vec<Value>) -> Result<Value, ErrorKind> {
+        let x = generators::request_force(&co, values.pop().unwrap()).await;
+
+        // Original user code:
+        Ok(Value::String(x.type_of().into()))
+    }
+
+    pub fn builtins() -> Vec<(&'static str, Value)> {
+        vec![(
+            "typeOf",
+            Value::Builtin(Builtin::new(
+                "typeOf",
+                &[BuiltinArgument {
+                    strict: true,
+                    name: "x",
+                }],
+                None,
+                |values| Gen::new(|co| pin_generator(builtin_type_of(co, values))),
+            )),
+        )]
+    }
 }
 
 /// The set of standard pure builtins in Nix, mostly concerned with
@@ -995,10 +1027,11 @@ pub fn pure_builtins() -> Vec<(&'static str, Value)> {
     result
 }
 
-#[builtins]
+// #[builtins]
 mod placeholder_builtins {
     use super::*;
 
+    /*
     #[builtin("addErrorContext")]
     fn builtin_add_error_context(
         vm: &mut VM,
@@ -1032,8 +1065,10 @@ mod placeholder_builtins {
         ];
         Ok(Value::attrs(NixAttrs::from_iter(res.into_iter())))
     }
+
+    */
 }
 
 pub fn placeholders() -> Vec<(&'static str, Value)> {
-    placeholder_builtins::builtins()
+    Vec::new() // TODO placeholder_builtins::builtins()
 }

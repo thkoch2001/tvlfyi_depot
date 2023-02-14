@@ -114,10 +114,10 @@ fn parse_module_args(args: TokenStream) -> Option<Type> {
 ///
 /// #[builtins]
 /// mod builtins {
-///     use tvix_eval::{ErrorKind, Value, VM};
+///     use tvix_eval::{ErrorKind, Value};
 ///
 ///     #[builtin("identity")]
-///     pub fn builtin_identity(_vm: &mut VM, x: Value) -> Result<Value, ErrorKind> {
+///     pub async fn builtin_identity(x: Value) -> Result<Value, ErrorKind> {
 ///         Ok(x)
 ///     }
 ///
@@ -125,7 +125,7 @@ fn parse_module_args(args: TokenStream) -> Option<Type> {
 ///     // argument with the `#[lazy]` attribute
 ///
 ///     #[builtin("tryEval")]
-///     pub fn builtin_try_eval(vm: &mut VM, #[lazy] x: Value) -> Result<Value, ErrorKind> {
+///     pub async fn builtin_try_eval(vm: &mut VM, #[lazy] x: Value) -> Result<Value, ErrorKind> {
 ///         todo!()
 ///     }
 /// }
@@ -161,13 +161,14 @@ pub fn builtins(args: TokenStream, item: TokenStream) -> TokenStream {
                     Err(err) => return err.into_compile_error().into(),
                 };
 
-                if f.sig.inputs.len() <= 1 {
-                    return (quote_spanned!(
-                        f.sig.inputs.span() =>
-                            compile_error!("Builtin functions must take at least two arguments")
-                    ))
-                    .into();
-                }
+                // TODO: remove
+                // if f.sig.inputs.len() <= 1 {
+                //     return (quote_spanned!(
+                //         f.sig.inputs.span() =>
+                //             compile_error!("Builtin functions must take at least two arguments")
+                //     ))
+                //     .into();
+                // }
 
                 // Determine if this function is taking the state parameter.
                 let mut args_iter = f.sig.inputs.iter_mut().peekable();
@@ -184,8 +185,8 @@ pub fn builtins(args: TokenStream, item: TokenStream) -> TokenStream {
                     }
                 }
 
-                // skip state and/or VM args ..
-                let skip_num = if captures_state { 2 } else { 1 };
+                // skip state argument when processing other args ...
+                let skip_num = if captures_state { 1 } else { 0 };
 
                 let builtin_arguments = args_iter
                     .skip(skip_num)
@@ -194,7 +195,7 @@ pub fn builtins(args: TokenStream, item: TokenStream) -> TokenStream {
                         let name = match arg {
                             FnArg::Receiver(_) => {
                                 return Err(quote_spanned!(arg.span() => {
-                                    compile_error!("Unexpected receiver argument in builtin")
+                                    compile_error!("unexpected receiver argument in builtin")
                                 }))
                             }
                             FnArg::Typed(PatType { attrs, pat, .. }) => {

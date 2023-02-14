@@ -6,13 +6,13 @@ use test_generator::test_resources;
 /// test layout.
 mod one_offs;
 
-#[builtins]
+// #[builtins]
 mod mock_builtins {
     //! Builtins which are required by language tests, but should not
     //! actually exist in //tvix/eval.
     use crate::*;
 
-    #[builtin("derivation")]
+//    #[builtin("derivation")]
     fn builtin_derivation(vm: &mut VM, input: Value) -> Result<Value, ErrorKind> {
         vm.emit_warning(WarningKind::NotImplemented("builtins.derivation"));
 
@@ -52,7 +52,7 @@ fn eval_test(code_path: &str, expect_success: bool) {
     }
 
     let mut eval = crate::Evaluation::new_impure(&code, Some(code_path.into()));
-    eval.builtins.extend(mock_builtins::builtins());
+    // TODO eval.builtins.extend(mock_builtins::builtins());
 
     let result = eval.evaluate();
 

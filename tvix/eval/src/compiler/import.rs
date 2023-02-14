@@ -23,6 +23,8 @@ use crate::builtins::coerce_value_to_path;
 // TODO: need to be able to pass through a CompilationObserver, too.
 // TODO: can the `SourceCode` come from the compiler?
 pub(super) fn builtins_import(globals: &Weak<GlobalsMap>, source: SourceCode) -> Builtin {
+    /*
+
     // This (very cheap, once-per-compiler-startup) clone exists
     // solely in order to keep the borrow checker happy.  It
     // resolves the tension between the requirements of
@@ -42,7 +44,7 @@ pub(super) fn builtins_import(globals: &Weak<GlobalsMap>, source: SourceCode) ->
                 path.push("default.nix");
             }
 
-            let current_span = vm.current_light_span();
+            let current_span = vm.reasonable_light_span();
 
             if let Some(cached) = vm.import_cache.get(&path) {
                 return Ok(cached.clone());
@@ -102,4 +104,7 @@ pub(super) fn builtins_import(globals: &Weak<GlobalsMap>, source: SourceCode) ->
             Ok(res)
         },
     )
+
+    */
+    todo!()
 }
