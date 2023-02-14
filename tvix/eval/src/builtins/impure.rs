@@ -1,4 +1,5 @@
 use builtin_macros::builtins;
+use genawaiter::rc::Gen;
 use smol_str::SmolStr;
 
 use std::{
@@ -10,6 +11,7 @@ use crate::{
     errors::ErrorKind,
     io::FileType,
     value::{NixAttrs, Thunk},
+    vm::generators::{self, GenCo},
     vm::VM,
     Value,
 };
@@ -20,9 +22,11 @@ mod impure_builtins {
     use crate::builtins::coerce_value_to_path;
 
     #[builtin("getEnv")]
-    fn builtin_get_env(_: &mut VM, var: Value) -> Result<Value, ErrorKind> {
+    async fn builtin_get_env(co: GenCo, var: Value) -> Result<Value, ErrorKind> {
         Ok(env::var(var.to_str()?).unwrap_or_else(|_| "".into()).into())
     }
+
+    /*
 
     #[builtin("pathExists")]
     fn builtin_path_exists(vm: &mut VM, s: Value) -> Result<Value, ErrorKind> {
@@ -59,6 +63,8 @@ mod impure_builtins {
             .read_to_string(path)
             .map(|s| Value::String(s.into()))
     }
+
+    */
 }
 
 /// Return all impure builtins, that is all builtins which may perform I/O
@@ -66,6 +72,7 @@ mod impure_builtins {
 pub fn impure_builtins() -> Vec<(&'static str, Value)> {
     let mut result = impure_builtins::builtins();
 
+    /*
     result.push((
         "storeDir",
         Value::Thunk(Thunk::new_suspended_native(Box::new(
@@ -88,5 +95,7 @@ pub fn impure_builtins() -> Vec<(&'static str, Value)> {
         result.push(("currentTime", Value::Integer(seconds)));
     }
 
+    result
+    */
     result
 }

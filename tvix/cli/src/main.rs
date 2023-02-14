@@ -12,7 +12,7 @@ use clap::Parser;
 use known_paths::KnownPaths;
 use rustyline::{error::ReadlineError, Editor};
 use tvix_eval::observer::{DisassemblingObserver, TracingObserver};
-use tvix_eval::{Builtin, BuiltinArgument, Value, VM};
+use tvix_eval::{Builtin, Value, VM};
 
 #[derive(Parser)]
 struct Args {
@@ -177,7 +177,7 @@ fn println_result(result: &Value, raw: bool) {
     if raw {
         println!("{}", result.to_str().unwrap().as_str())
     } else {
-        println!("=> {} :: {}", result, result.type_of())
+        println!("=> {:#?} :: {}", result, result.type_of())
     }
 }
 
