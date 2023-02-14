@@ -5,7 +5,8 @@ use std::cell::RefCell;
 use std::collections::{btree_map, BTreeSet};
 use std::rc::Rc;
 use tvix_eval::builtin_macros::builtins;
-use tvix_eval::{AddContext, CoercionKind, ErrorKind, NixAttrs, NixList, Value, VM};
+use tvix_eval::generators::{self, GenCo};
+use tvix_eval::{AddContext, CoercionKind, ErrorKind, NixAttrs, NixList, Value};
 
 use crate::errors::Error;
 use crate::known_paths::{KnownPaths, PathKind, PathName};
@@ -17,13 +18,17 @@ const IGNORE_NULLS: &str = "__ignoreNulls";
 /// Helper function for populating the `drv.outputs` field from a
 /// manually specified set of outputs, instead of the default
 /// `outputs`.
-fn populate_outputs(vm: &mut VM, drv: &mut Derivation, outputs: NixList) -> Result<(), ErrorKind> {
+async fn populate_outputs(
+    co: &GenCo,
+    drv: &mut Derivation,
+    outputs: NixList,
+) -> Result<(), ErrorKind> {
     // Remove the original default `out` output.
     drv.outputs.clear();
 
     for output in outputs {
-        let output_name = output
-            .force(vm)?
+        let output_name = generators::request_force(co, output)
+            .await
             .to_str()
             .context("determining output name")?;
 
@@ -144,9 +149,9 @@ fn populate_output_configuration(
 /// Handles derivation parameters which are not just forwarded to
 /// the environment. The return value indicates whether the
 /// parameter should be included in the environment.
-fn handle_derivation_parameters(
+async fn handle_derivation_parameters(
     drv: &mut Derivation,
-    vm: &mut VM,
+    co: &GenCo,
     name: &str,
     value: &Value,
     val_str: &str,
@@ -158,11 +163,7 @@ fn handle_derivation_parameters(
         "args" => {
             let args = value.to_list()?;
             for arg in args {
-                drv.arguments.push(strong_coerce_to_string(
-                    vm,
-                    &arg,
-                    "handling command-line builder arguments",
-                )?);
+                drv.arguments.push(strong_coerce_to_string(co, arg).await?);
             }
 
             // The arguments do not appear in the environment.
@@ -176,7 +177,7 @@ fn handle_derivation_parameters(
                 .context("looking at the `outputs` parameter of the derivation")?;
 
             drv.outputs.clear();
-            populate_outputs(vm, drv, outputs)?;
+            populate_outputs(co, drv, outputs).await?;
         }
 
         "builder" => {
@@ -193,22 +194,20 @@ fn handle_derivation_parameters(
     Ok(true)
 }
 
-fn strong_coerce_to_string(vm: &mut VM, val: &Value, ctx: &str) -> Result<String, ErrorKind> {
-    Ok(val
-        .force(vm)
-        .context(ctx)?
-        .coerce_to_string(CoercionKind::Strong, vm)
-        .context(ctx)?
-        .as_str()
-        .to_string())
+async fn strong_coerce_to_string(co: &GenCo, val: Value) -> Result<String, ErrorKind> {
+    let val = generators::request_force(co, val).await;
+    let val_str = generators::request_string_coerce(co, val, CoercionKind::Strong).await;
+
+    Ok(val_str.as_str().to_string())
 }
 
 #[builtins(state = "Rc<RefCell<KnownPaths>>")]
 mod derivation_builtins {
     use super::*;
+    use tvix_eval::generators::Gen;
 
     #[builtin("placeholder")]
-    fn builtin_placeholder(_: &mut VM, input: Value) -> Result<Value, ErrorKind> {
+    async fn builtin_placeholder(co: GenCo, input: Value) -> Result<Value, ErrorKind> {
         let placeholder = hash_placeholder(
             input
                 .to_str()
@@ -224,29 +223,28 @@ mod derivation_builtins {
     /// This is considered an internal function, users usually want to
     /// use the higher-level `builtins.derivation` instead.
     #[builtin("derivationStrict")]
-    fn builtin_derivation_strict(
+    async fn builtin_derivation_strict(
         state: Rc<RefCell<KnownPaths>>,
-        vm: &mut VM,
+        co: GenCo,
         input: Value,
     ) -> Result<Value, ErrorKind> {
         let input = input.to_attrs()?;
-        let name = input
-            .select_required("name")?
-            .force(vm)?
+        let name = generators::request_force(&co, input.select_required("name")?.clone())
+            .await
             .to_str()
             .context("determining derivation name")?;
 
         // Check whether attributes should be passed as a JSON file.
         // TODO: the JSON serialisation has to happen here.
         if let Some(sa) = input.select(STRUCTURED_ATTRS) {
-            if sa.force(vm)?.as_bool()? {
+            if generators::request_force(&co, sa.clone()).await.as_bool()? {
                 return Err(ErrorKind::NotImplemented(STRUCTURED_ATTRS));
             }
         }
 
         // Check whether null attributes should be ignored or passed through.
         let ignore_nulls = match input.select(IGNORE_NULLS) {
-            Some(b) => b.force(vm)?.as_bool()?,
+            Some(b) => generators::request_force(&co, b.clone()).await.as_bool()?,
             None => false,
         };
 
@@ -254,37 +252,45 @@ mod derivation_builtins {
         drv.outputs.insert("out".to_string(), Default::default());
 
         // Configure fixed-output derivations if required.
+
+        async fn select_string(
+            co: &GenCo,
+            attrs: &NixAttrs,
+            key: &str,
+        ) -> Result<Option<String>, ErrorKind> {
+            if let Some(attr) = attrs.select(key) {
+                return Ok(Some(strong_coerce_to_string(co, attr.clone()).await?));
+            }
+
+            Ok(None)
+        }
+
         populate_output_configuration(
             &mut drv,
-            input
-                .select("outputHash")
-                .map(|v| strong_coerce_to_string(vm, v, "evaluating the `outputHash` parameter"))
-                .transpose()?,
-            input
-                .select("outputHashAlgo")
-                .map(|v| {
-                    strong_coerce_to_string(vm, v, "evaluating the `outputHashAlgo` parameter")
-                })
-                .transpose()?,
-            input
-                .select("outputHashMode")
-                .map(|v| {
-                    strong_coerce_to_string(vm, v, "evaluating the `outputHashMode` parameter")
-                })
-                .transpose()?,
+            select_string(&co, &input, "outputHash")
+                .await
+                .context("evaluating the `outputHash` parameter")?,
+            select_string(&co, &input, "outputHashAlgo")
+                .await
+                .context("evaluating the `outputHashAlgo` parameter")?,
+            select_string(&co, &input, "outputHashMode")
+                .await
+                .context("evaluating the `outputHashMode` parameter")?,
         )?;
 
         for (name, value) in input.into_iter_sorted() {
-            if ignore_nulls && matches!(*value.force(vm)?, Value::Null) {
+            let value = generators::request_force(&co, value).await;
+            if ignore_nulls && matches!(value, Value::Null) {
                 continue;
             }
 
-            let val_str = strong_coerce_to_string(vm, &value, "evaluating derivation attributes")?;
+            let val_str = strong_coerce_to_string(&co, value.clone()).await?;
 
             // handle_derivation_parameters tells us whether the
             // argument should be added to the environment; continue
             // to the next one otherwise
-            if !handle_derivation_parameters(&mut drv, vm, name.as_str(), &value, &val_str)? {
+            if !handle_derivation_parameters(&mut drv, &co, name.as_str(), &value, &val_str).await?
+            {
                 continue;
             }
 
@@ -375,9 +381,9 @@ mod derivation_builtins {
     }
 
     #[builtin("toFile")]
-    fn builtin_to_file(
+    async fn builtin_to_file(
         state: Rc<RefCell<KnownPaths>>,
-        _: &mut VM,
+        co: GenCo,
         name: Value,
         content: Value,
     ) -> Result<Value, ErrorKind> {
@@ -434,6 +440,7 @@ mod tests {
                 Box::new(tvix_eval::DummyIO),
                 &mut OBSERVER,
                 Default::default(),
+                todo!(),
             )
         }
     }
