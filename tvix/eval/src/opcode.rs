@@ -141,7 +141,6 @@ pub enum OpCode {
 
     // Lambdas & closures
     OpCall,
-    OpTailCall,
     OpGetUpvalue(UpvalueIdx),
     /// A Closure which has upvalues but no self-references
     OpClosure(ConstantIdx),
@@ -154,6 +153,14 @@ pub enum OpCode {
     /// Finalise initialisation of the upvalues of the value in the given stack
     /// index (which must be a Value::Thunk) after the scope is fully bound.
     OpFinalise(StackIdx),
+
+    /// Final instruction emitted in a chunk. Does not have an
+    /// inherent effect, but can simplify VM logic as a marker in some
+    /// cases.
+    ///
+    /// Can be thought of as "returning" the value to the parent
+    /// frame, hence the name.
+    OpReturn,
 
     // [`OpClosure`], [`OpThunkSuspended`], and [`OpThunkClosure`] have a
     // variable number of arguments to the instruction, which is
