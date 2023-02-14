@@ -1,20 +1,20 @@
-pub use tvix_eval::{Builtin, BuiltinArgument, Value, VM};
+pub use tvix_eval::{Builtin, BuiltinArgument, Value};
 use tvix_eval_builtin_macros::builtins;
 
 #[builtins]
 mod builtins {
-    use tvix_eval::{ErrorKind, Value, VM};
+    use tvix_eval::{ErrorKind, Value};
 
     /// Test docstring.
     ///
     /// It has multiple lines!
     #[builtin("identity")]
-    pub fn builtin_identity(_vm: &mut VM, x: Value) -> Result<Value, ErrorKind> {
+    pub async fn builtin_identity(x: Value) -> Result<Value, ErrorKind> {
         Ok(x)
     }
 
     #[builtin("tryEval")]
-    pub fn builtin_try_eval(_: &mut VM, #[lazy] _x: Value) -> Result<Value, ErrorKind> {
+    pub async fn builtin_try_eval(#[lazy] _x: Value) -> Result<Value, ErrorKind> {
         todo!()
     }
 }
