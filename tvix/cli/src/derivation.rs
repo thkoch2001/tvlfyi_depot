@@ -21,20 +21,20 @@ fn populate_outputs(vm: &mut VM, drv: &mut Derivation, outputs: NixList) -> Resu
     // Remove the original default `out` output.
     drv.outputs.clear();
 
-    for output in outputs {
-        let output_name = output
-            .force(vm)?
-            .to_str()
-            .context("determining output name")?;
+    // for output in outputs {
+    //     let output_name = output
+    //         .force(vm)?
+    //         .to_str()
+    //         .context("determining output name")?;
 
-        if drv
-            .outputs
-            .insert(output_name.as_str().into(), Default::default())
-            .is_some()
-        {
-            return Err(Error::DuplicateOutput(output_name.as_str().into()).into());
-        }
-    }
+    //     if drv
+    //         .outputs
+    //         .insert(output_name.as_str().into(), Default::default())
+    //         .is_some()
+    //     {
+    //         return Err(Error::DuplicateOutput(output_name.as_str().into()).into());
+    //     }
+    // }
 
     Ok(())
 }
@@ -194,19 +194,21 @@ fn handle_derivation_parameters(
 }
 
 fn strong_coerce_to_string(vm: &mut VM, val: &Value, ctx: &str) -> Result<String, ErrorKind> {
-    Ok(val
-        .force(vm)
-        .context(ctx)?
-        .coerce_to_string(CoercionKind::Strong, vm)
-        .context(ctx)?
-        .as_str()
-        .to_string())
+    // Ok(val
+    //     .force(vm)
+    //     .context(ctx)?
+    //     .coerce_to_string(CoercionKind::Strong, vm)
+    //     .context(ctx)?
+    //     .as_str()
+    //     .to_string())
+    todo!()
 }
 
-#[builtins(state = "Rc<RefCell<KnownPaths>>")]
+// #[builtins(state = "Rc<RefCell<KnownPaths>>")]
 mod derivation_builtins {
     use super::*;
 
+    /*
     #[builtin("placeholder")]
     fn builtin_placeholder(_: &mut VM, input: Value) -> Result<Value, ErrorKind> {
         let placeholder = hash_placeholder(
@@ -412,9 +414,13 @@ mod derivation_builtins {
 
         Ok(Value::String(path.into()))
     }
+    */
 }
 
-pub use derivation_builtins::builtins as derivation_builtins;
+// TODO pub use derivation_builtins::builtins as derivation_builtins;
+pub fn derivation_builtins(out: Rc<RefCell<KnownPaths>>) -> Vec<(&'static str, Value)> {
+    Vec::new()
+}
 
 #[cfg(test)]
 mod tests {
@@ -434,6 +440,7 @@ mod tests {
                 Box::new(tvix_eval::DummyIO),
                 &mut OBSERVER,
                 Default::default(),
+                todo!(),
             )
         }
     }
