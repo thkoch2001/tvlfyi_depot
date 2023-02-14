@@ -5,8 +5,10 @@ use imbl::{vector, Vector};
 
 use serde::{Deserialize, Serialize};
 
-use crate::errors::ErrorKind;
-use crate::vm::VM;
+use crate::generators;
+use crate::generators::GenCo;
+use crate::AddContext;
+use crate::ErrorKind;
 
 use super::thunk::ThunkSet;
 use super::TotalDisplay;
@@ -67,29 +69,6 @@ impl NixList {
         self.0.ptr_eq(&other.0)
     }
 
-    /// Compare `self` against `other` for equality using Nix equality semantics
-    pub fn nix_eq(&self, other: &Self, vm: &mut VM) -> Result<bool, ErrorKind> {
-        if self.ptr_eq(other) {
-            return Ok(true);
-        }
-        if self.len() != other.len() {
-            return Ok(false);
-        }
-
-        for (v1, v2) in self.iter().zip(other.iter()) {
-            if !v1.nix_eq(v2, vm)? {
-                return Ok(false);
-            }
-        }
-
-        Ok(true)
-    }
-
-    /// force each element of the list (shallowly), making it safe to call .get().value()
-    pub fn force_elements(&self, vm: &mut VM) -> Result<(), ErrorKind> {
-        self.iter().try_for_each(|v| v.force(vm).map(|_| ()))
-    }
-
     pub fn into_inner(self) -> Vector<Value> {
         self.0
     }
@@ -98,6 +77,119 @@ impl NixList {
     pub fn from_vec(vs: Vec<Value>) -> Self {
         Self(Vector::from_iter(vs.into_iter()))
     }
+
+    /// Asynchronous sorting algorithm in which the comparator can make use of
+    /// VM requests (required as `builtins.sort` uses comparators written in
+    /// Nix).
+    ///
+    /// The algorithm here is merge sort, as it provides a stable sort without
+    /// recursion. There's quite a bit of optimisation potential by
+    /// incorporating, for example, the adaptations present in the Rust standard
+    /// library's implementation of it. For now it just needs to work.
+    pub async fn sort_by(&mut self, co: &GenCo, cmp: Value) -> Result<(), ErrorKind> {
+        let n = self.len();
+        let mut len = 1;
+
+        while len < n {
+            let mut i = 0;
+            while i < n {
+                let l_1 = i;
+                let r_1 = i + len - 1;
+                let l_2 = i + len;
+                let mut r_2 = i + 2 * len - 1;
+
+                if l_2 >= n {
+                    break;
+                }
+
+                if r_2 >= n {
+                    r_2 = n - 1;
+                }
+
+                let temp = merge(co, &self.0, &cmp, l_1, r_1, l_2, r_2).await?;
+                for j in 0..(r_2 - l_1 + 1) {
+                    self.0[i + j] = temp[j].clone();
+                }
+
+                i = i + 2 * len;
+            }
+            len *= 2;
+        }
+
+        Ok(())
+    }
+}
+
+// Helper functions for list sorting.
+async fn call_comparator(co: &GenCo, cmp: &Value, a: &Value, b: &Value) -> Result<bool, ErrorKind> {
+    generators::request_force(
+        co,
+        generators::request_call_with(co, cmp.clone(), [a.clone(), b.clone()]).await,
+    )
+    .await
+    .as_bool()
+    .context("evaluating comparison function in `builtins.sort`")
+}
+
+// /// The "merge" in "merge-sort".
+// ///
+// /// Based on https://github.com/TheAlgorithms/Rust/blob/master/src/sorting/merge_sort.rs.
+// async fn merge(co: &GenCo, cmp: &Value, list: &mut [Value], mid: usize) -> Result<(), ErrorKind> {
+//     let left_half = list[..mid].to_vec();
+//     let right_half = list[mid..].to_vec();
+
+//     let mut l = 0;
+//     let mut r = 0;
+
+//     for v in list {
+//         if r == right_half.len()
+//             || (l < left_half.len()
+//                 && call_comparator(co, cmp, left_half[l].clone(), right_half[r].clone()).await?)
+//         {
+//             *v = left_half[l].clone();
+//             l += 1;
+//         } else {
+//             *v = right_half[r].clone();
+//             r += 1;
+//         }
+//     }
+
+//     Ok(())
+// }
+
+/// The "merge" in "merge-sort".
+async fn merge<'l>(
+    co: &GenCo,
+    data: &Vector<Value>,
+    cmp: &Value,
+    mut l_1: usize,
+    r_1: usize,
+    mut l_2: usize,
+    r_2: usize,
+) -> Result<Vector<Value>, ErrorKind> {
+    let mut tmp = Vector::new();
+
+    while l_1 <= r_1 && l_2 <= r_2 {
+        if call_comparator(co, cmp, &data[l_1], &data[l_2]).await? {
+            tmp.push_back(data[l_1].clone());
+            l_1 += 1;
+        } else {
+            tmp.push_back(data[l_2].clone());
+            l_2 += 1;
+        }
+    }
+
+    while l_1 <= r_1 {
+        tmp.push_back(data[l_1].clone());
+        l_1 += 1;
+    }
+
+    while l_2 <= r_2 {
+        tmp.push_back(data[l_2].clone());
+        l_2 += 1;
+    }
+
+    Ok(tmp)
 }
 
 impl IntoIterator for NixList {
