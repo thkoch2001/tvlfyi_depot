@@ -203,10 +203,11 @@ fn strong_coerce_to_string(vm: &mut VM, val: &Value, ctx: &str) -> Result<String
         .to_string())
 }
 
-#[builtins(state = "Rc<RefCell<KnownPaths>>")]
+// #[builtins(state = "Rc<RefCell<KnownPaths>>")]
 mod derivation_builtins {
     use super::*;
 
+    /*
     #[builtin("placeholder")]
     fn builtin_placeholder(_: &mut VM, input: Value) -> Result<Value, ErrorKind> {
         let placeholder = hash_placeholder(
@@ -412,9 +413,13 @@ mod derivation_builtins {
 
         Ok(Value::String(path.into()))
     }
+    */
 }
 
-pub use derivation_builtins::builtins as derivation_builtins;
+// TODO pub use derivation_builtins::builtins as derivation_builtins;
+pub fn derivation_builtins(out: Rc<RefCell<KnownPaths>>) -> Vec<(&'static str, Value)> {
+    Vec::new()
+}
 
 #[cfg(test)]
 mod tests {
