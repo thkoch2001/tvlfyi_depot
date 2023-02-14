@@ -1,5 +1,13 @@
-//! This module implements the virtual (or abstract) machine that runs
-//! Tvix bytecode.
+//! This module implements the abstract/virtual machine that runs Tvix
+//! bytecode.
+//!
+//! The operation of the VM is facilitated by the [`Frame`] type,
+//! which controls the current execution state of the VM and is
+//! processed within the VM's operating loop.
+//!
+//! A [`VM`] is used by instantiating it with an initial [`Frame`],
+//! then triggering its execution and waiting for the VM to return or
+//! yield an error.
 
 use serde_json::json;
 use std::{cmp::Ordering, collections::HashMap, ops::DerefMut, path::PathBuf, rc::Rc};
@@ -18,14 +26,366 @@ use crate::{
     warnings::{EvalWarning, WarningKind},
 };
 
-/// Representation of a VM continuation;
-/// see: https://en.wikipedia.org/wiki/Continuation-passing_style#CPS_in_Haskell
+struct CallFrame {
+    /// The lambda currently being executed.
+    lambda: Rc<Lambda>,
+
+    /// Optional captured upvalues of this frame (if a thunk or
+    /// closure if being evaluated).
+    upvalues: Rc<Upvalues>,
+
+    /// Instruction pointer to the instruction currently being
+    /// executed.
+    ip: CodeIdx,
+
+    /// Stack offset, i.e. the frames "view" into the VM's full stack.
+    stack_offset: usize,
+
+    continuation: Option<Continuation>,
+}
+
+impl CallFrame {
+    /// Retrieve an upvalue from this frame at the given index.
+    fn upvalue(&self, idx: UpvalueIdx) -> &Value {
+        &self.upvalues[idx]
+    }
+
+    /// Borrow the chunk of this frame's lambda.
+    fn chunk(&self) -> &Chunk {
+        &self.lambda.chunk
+    }
+
+    /// Increment this frame's instruction pointer and return the operation that
+    /// the pointer moved past.
+    fn inc_ip(&mut self) -> OpCode {
+        let op = self.chunk()[self.ip];
+        self.ip += 1;
+        op
+    }
+
+    /// Construct an error from the given ErrorKind and the source span of the
+    /// current instruction.
+    pub fn error(&self, kind: ErrorKind) -> Error {
+        Error::new(kind, self.chunk().get_span(self.ip - 1))
+    }
+}
+
+/// A frame represents an execution state of the VM. The VM has a stack of
+/// frames representing the nesting of execution inside of the VM, and operates
+/// on the frame at the top.
+///
+/// When a frame has been fully executed, it is removed from the VM's frame
+/// stack and expected to leave a result [`Value`] on the top of the stack.
+enum Frame {
+    /// CallFrame represents the execution of Tvix bytecode within a thunk,
+    /// function or closure.
+    CallFrame {
+        /// The call frame itself, separated out into another type to pass it
+        /// around easily.
+        call_frame: CallFrame,
+
+        /// Span from which the call frame was launched.
+        span: LightSpan,
+    },
+
+    /// Trampoline represents a special execution mode, in which the VM moves
+    /// back-and-forth between executing logic higher up on the frame stack and
+    /// instructions from the trampoline.
+    ///
+    /// When a trampoline is reached by the VM and has neither an action nor a
+    /// continuation, it is removed from the frame stack and execution passes to
+    /// its parent.
+    Trampoline {
+        /// Span from which the trampoline was launched.
+        span: LightSpan,
+
+        /// The action to perform upon return to the trampoline.
+        action: Option<TrampolineAction>,
+
+        /// The continuation to execute after the action has completed.
+        continuation: Option<Continuation>,
+    },
+}
+
+pub struct NeoVM<'o> {
+    /// VM's frame stack, representing the execution contexts the VM is working
+    /// through. Elements are usually pushed when functions are called, or
+    /// thunks are being forced.
+    frames: Vec<Frame>,
+
+    /// The VM's top-level value stack. Within this stack, each code-executing
+    /// frame holds a "view" of the stack representing the slice of the
+    /// top-level stack that is relevant to its operation. This is done to avoid
+    /// allocating a new `Vec` for each frame's stack.
+    stack: Vec<Value>,
+
+    /// Stack indices (absolute indexes into `stack`) of attribute
+    /// sets from which variables should be dynamically resolved
+    /// (`with`).
+    with_stack: Vec<usize>,
+
+    /// Runtime warnings collected during evaluation.
+    warnings: Vec<EvalWarning>,
+
+    /// Import cache, mapping absolute file paths to the value that
+    /// they compile to. Note that this reuses thunks, too!
+    // TODO: should probably be based on a file hash
+    import_cache: Box<HashMap<PathBuf, Value>>,
+
+    /// Parsed Nix search path, which is used to resolve `<...>`
+    /// references.
+    nix_search_path: NixSearchPath,
+
+    /// Implementation of I/O operations used for impure builtins and
+    /// features like `import`.
+    io_handle: Box<dyn EvalIO>,
+
+    /// Runtime observer which can print traces of runtime operations.
+    observer: &'o mut dyn RuntimeObserver,
+
+    /// Strong reference to the globals, guaranteeing that they are
+    /// kept alive for the duration of evaluation.
+    ///
+    /// This is important because recursive builtins (specifically
+    /// `import`) hold a weak reference to the builtins, while the
+    /// original strong reference is held by the compiler which does
+    /// not exist anymore at runtime.
+    #[allow(dead_code)]
+    globals: Rc<GlobalsMap>,
+}
+
+impl<'o> NeoVM<'o> {
+    pub fn new(
+        nix_search_path: NixSearchPath,
+        io_handle: Box<dyn EvalIO>,
+        observer: &'o mut dyn RuntimeObserver,
+        globals: Rc<GlobalsMap>,
+    ) -> Self {
+        // Backtrace-on-stack-overflow is some seriously weird voodoo and
+        // very unsafe.  This double-guard prevents it from accidentally
+        // being enabled on release builds.
+        #[cfg(debug_assertions)]
+        #[cfg(feature = "backtrace_overflow")]
+        unsafe {
+            backtrace_on_stack_overflow::enable();
+        };
+
+        Self {
+            nix_search_path,
+            io_handle,
+            observer,
+            globals,
+            frames: vec![],
+            stack: vec![],
+            with_stack: vec![],
+            warnings: vec![],
+            import_cache: Default::default(),
+        }
+    }
+
+    /// Run the VM's primary (outer) execution loop, continuing execution based
+    /// on the current frame at the top of the frame stack.
+    fn execute(mut self) -> EvalResult<RuntimeResult> {
+        while let Some(frame) = self.frames.pop() {
+            match frame {
+                Frame::CallFrame { call_frame, span } => todo!(),
+
+                // Handle empty trampolines by just dropping them.
+                Frame::Trampoline {
+                    action: None,
+                    continuation: None,
+                    ..
+                } => continue,
+
+                // Handle trampolines with an action. The trampoline is left in
+                // its stack slot with any potential continuation retained, so
+                // that the VM can return to it after the action.
+                Frame::Trampoline {
+                    action: Some(action),
+                    span,
+                    continuation,
+                } => {
+                    match action {
+                        TrampolineAction::EnterFrame {
+                            lambda,
+                            upvalues,
+                            light_span,
+                            arg_count,
+                        } => self.frames.push(Frame::CallFrame {
+                            span: light_span,
+                            call_frame: CallFrame {
+                                lambda,
+                                upvalues,
+                                ip: CodeIdx(0),
+                                stack_offset: self.stack.len() - arg_count,
+                                continuation: None, // TODO(tazjin): remove
+                            },
+                        }),
+                    }
+
+                    self.frames.push(Frame::Trampoline {
+                        span,
+                        continuation,
+                        action: None,
+                    });
+                }
+
+                // Handle trampolines with continuations.
+                Frame::Trampoline {
+                    span,
+                    action: None,
+                    continuation: Some(continuation),
+                } => {
+                    let trampoline =
+                        continuation(todo!("expects VM, not NeoVM, should be &mut self"))?;
+
+                    self.frames.push(Frame::Trampoline {
+                        span,
+                        action: trampoline.action,
+                        continuation: trampoline.continuation,
+                    });
+                }
+            }
+        }
+
+        // Once no more frames are present, return the stack's top value as the
+        // result.
+        Ok(RuntimeResult {
+            value: self
+                .stack
+                .pop()
+                .expect("tvix bug: runtime stack empty after execution"),
+
+            warnings: self.warnings,
+        })
+    }
+
+    /// Run the VM's inner execution loop, processing Tvix bytecode from a
+    /// chunk. This function returns if:
+    ///
+    /// 1. The code has run to the end, and has left a value on the top of the
+    ///    stack. In this case, the frame is not returned to the frame stack.
+    ///
+    /// 2. The code encounters a trampoline, in which case the frame in its
+    ///    current state is pushed back on the stack, and a trampoline is left
+    ///    on top of it for the outer loop to execute.
+    ///
+    /// 3. An error is encountered.
+    fn execute_bytecode(&mut self, span: LightSpan, frame: &mut CallFrame) -> EvalResult<()> {
+        loop {
+            let op = frame.inc_ip();
+            self.observer.observe_execute_op(frame.ip, &op, &self.stack);
+        }
+        todo!()
+    }
+
+    /// Execute a single bytecode instruction in the inner loop.
+    fn run_op(&mut self, frame: &mut CallFrame, op: OpCode) -> EvalResult<()> {
+        match op {
+            OpCode::OpConstant(idx) => {
+                let c = frame.chunk()[idx].clone();
+                self.stack.push(c);
+            }
+
+            OpCode::OpPop => {
+                self.stack.pop();
+            }
+
+            OpCode::OpAdd => {
+                let b = self.stack_pop();
+                let a = self.stack_pop();
+
+                let result = match (&a, &b) {
+                    (Value::Path(p), v) => {
+                        let mut path = p.to_string_lossy().into_owned();
+                        path.push_str(
+                            &v.coerce_to_string(CoercionKind::Weak, todo!("self"))
+                                .map_err(|ek| frame.error(ek))?,
+                        );
+                        crate::value::canon_path(PathBuf::from(path)).into()
+                    }
+                    (Value::String(s1), Value::String(s2)) => Value::String(s1.concat(s2)),
+                    (Value::String(s1), v) => Value::String(
+                        s1.concat(
+                            &v.coerce_to_string(CoercionKind::Weak, todo!("self"))
+                                .map_err(|ek| frame.error(ek))?,
+                        ),
+                    ),
+                    (v, Value::String(s2)) => Value::String(
+                        v.coerce_to_string(CoercionKind::Weak, todo!("self"))
+                            .map_err(|ek| frame.error(ek))?
+                            .concat(s2),
+                    ),
+                    _ => todo!(), //crate::arithmetic_op!(&a, &b, +),
+                };
+
+                self.stack.push(result)
+            }
+
+            OpCode::OpSub => todo!(), // arithmetic_op!(self, -),
+            OpCode::OpMul => todo!(), // arithmetic_op!(self, *),
+
+            OpCode::OpDiv => {
+                let b = self.stack_peek(0);
+
+                match b {
+                    Value::Integer(0) => return Err(frame.error(ErrorKind::DivisionByZero)),
+                    Value::Float(b) => {
+                        if *b == 0.0_f64 {
+                            return Err(frame.error(ErrorKind::DivisionByZero));
+                        }
+
+                        todo!() // arithmetic_op!(self, /)
+                    }
+                    _ => todo!(), // arithmetic_op!(self, /),
+                };
+            }
+
+            OpCode::OpInvert => {
+                let v = self.stack_pop().as_bool().map_err(|e| frame.error(e))?;
+                self.stack.push(Value::Bool(!v));
+            }
+
+            OpCode::OpNegate => match self.stack_pop() {
+                Value::Integer(i) => self.stack.push(Value::Integer(-i)),
+                Value::Float(f) => self.stack.push(Value::Float(-f)),
+                v => {
+                    return Err(frame.error(ErrorKind::TypeError {
+                        expected: "number (either int or float)",
+                        actual: v.type_of(),
+                    }));
+                }
+            },
+
+            OpCode::OpEqual => todo!(), //return self.nix_op_eq(false),
+
+            _ => todo!(),
+        }
+
+        Ok(())
+    }
+}
+
+/// Implementation of helper functions for the runtime logic above.
+impl<'o> NeoVM<'o> {
+    fn stack_pop(&mut self) -> Value {
+        self.stack.pop().expect("runtime stack empty")
+    }
+
+    fn stack_peek(&self, offset: usize) -> &Value {
+        &self.stack[self.stack.len() - 1 - offset]
+    }
+}
+
+/// Representation of a VM continuation; see:
+/// https://en.wikipedia.org/wiki/Continuation-passing_style#CPS_in_Haskell
 type Continuation = Box<dyn FnOnce(&mut VM) -> EvalResult<Trampoline>>;
 
-/// A description of how to continue evaluation of a thunk when returned to by the VM
+/// A description of how to continue evaluation of a thunk when returned to by
+/// the VM
 ///
-/// This struct is used when forcing thunks to avoid stack-based recursion, which for deeply nested
-/// evaluation can easily overflow the stack.
+/// This struct is used when forcing thunks to avoid stack-based recursion,
+/// which for deeply nested evaluation can easily overflow the stack.
 #[must_use = "this `Trampoline` may be a continuation request, which should be handled"]
 #[derive(Default)]
 pub struct Trampoline {
@@ -62,31 +422,6 @@ pub enum TrampolineAction {
         light_span: LightSpan,
         arg_count: usize,
     },
-}
-
-struct CallFrame {
-    /// The lambda currently being executed.
-    lambda: Rc<Lambda>,
-
-    /// Optional captured upvalues of this frame (if a thunk or
-    /// closure if being evaluated).
-    upvalues: Rc<Upvalues>,
-
-    /// Instruction pointer to the instruction currently being
-    /// executed.
-    ip: CodeIdx,
-
-    /// Stack offset, i.e. the frames "view" into the VM's full stack.
-    stack_offset: usize,
-
-    continuation: Option<Continuation>,
-}
-
-impl CallFrame {
-    /// Retrieve an upvalue from this frame at the given index.
-    fn upvalue(&self, idx: UpvalueIdx) -> &Value {
-        &self.upvalues[idx]
-    }
 }
 
 pub struct VM<'o> {
