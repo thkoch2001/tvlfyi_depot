@@ -5,21 +5,99 @@
 //! compiler and VM state (such as the [`crate::SourceCode`]
 //! instance, or observers).
 
+use super::GlobalsMap;
+use genawaiter::rc::Gen;
 use std::rc::Weak;
 
 use crate::{
+    builtins::coerce_value_to_path,
+    generators::pin_generator,
     observer::NoOpObserver,
-    value::{Builtin, BuiltinArgument, Thunk},
+    value::{Builtin, Thunk},
+    vm::generators::{self, GenCo},
     vm::VM,
     ErrorKind, SourceCode, Value,
 };
 
-use super::GlobalsMap;
-use crate::builtins::coerce_value_to_path;
+async fn import_impl(
+    co: GenCo,
+    globals: Weak<GlobalsMap>,
+    source: SourceCode,
+    mut args: Vec<Value>,
+) -> Result<Value, ErrorKind> {
+    let mut path = coerce_value_to_path(&co, args.pop().unwrap()).await?;
 
-/// Constructs and inserts the `import` builtin. This builtin is special in that
-/// it needs to capture the [crate::SourceCode] structure to correctly track
-/// source code locations while invoking a compiler.
+    if path.is_dir() {
+        path.push("default.nix");
+    }
+
+    if let Some(cached) = generators::request_import_cache_lookup(&co, path.clone()).await {
+        return Ok(cached);
+    }
+
+    // TODO(tazjin): make this return a string directly instead
+    let contents = generators::request_read_to_string(&co, path.clone())
+        .await
+        .to_str()?
+        .as_str()
+        .to_string();
+
+    let parsed = rnix::ast::Root::parse(&contents);
+    let errors = parsed.errors();
+    let file = source.add_file(path.to_string_lossy().to_string(), contents);
+
+    if !errors.is_empty() {
+        return Err(ErrorKind::ImportParseError {
+            path,
+            file,
+            errors: errors.to_vec(),
+        });
+    }
+
+    let result = crate::compiler::compile(
+        &parsed.tree().expr().unwrap(),
+        Some(path.clone()),
+        file,
+        // The VM must ensure that a strong reference to the globals outlives
+        // any self-references (which are weak) embedded within the globals. If
+        // the expect() below panics, it means that did not happen.
+        globals
+            .upgrade()
+            .expect("globals dropped while still in use"),
+        &mut NoOpObserver::default(),
+    )
+    .map_err(|err| ErrorKind::ImportCompilerError {
+        path: path.clone(),
+        errors: vec![err],
+    })?;
+
+    if !result.errors.is_empty() {
+        return Err(ErrorKind::ImportCompilerError {
+            path,
+            errors: result.errors,
+        });
+    }
+
+    // TODO: emit not just the warning kind, hmm
+    // for warning in result.warnings {
+    //     vm.push_warning(warning);
+    // }
+
+    // Compilation succeeded, we can construct a thunk from whatever it spat
+    // out and return that.
+    let res = Value::Thunk(Thunk::new_suspended(
+        result.lambda,
+        generators::request_span(&co).await,
+    ));
+
+    generators::request_import_cache_put(&co, path, res.clone()).await;
+
+    Ok(res)
+}
+
+/// Constructs the `import` builtin. This builtin is special in that
+/// it needs to capture the [crate::SourceCode] structure to correctly
+/// track source code locations while invoking a compiler.
 // TODO: need to be able to pass through a CompilationObserver, too.
 // TODO: can the `SourceCode` come from the compiler?
 pub(super) fn builtins_import(globals: &Weak<GlobalsMap>, source: SourceCode) -> Builtin {
@@ -28,6 +106,17 @@ pub(super) fn builtins_import(globals: &Weak<GlobalsMap>, source: SourceCode) ->
     // resolves the tension between the requirements of
     // Rc::new_cyclic() and Builtin::new()
     let globals = globals.clone();
+
+    Builtin::new(
+        "import",
+        Some("Import the given file and return the Nix value it evaluates to"),
+        1,
+        move |args| {
+            Gen::new(|co| pin_generator(import_impl(co, globals.clone(), source.clone(), args)))
+        },
+    )
+
+    /*
 
     Builtin::new(
         "import",
@@ -42,7 +131,7 @@ pub(super) fn builtins_import(globals: &Weak<GlobalsMap>, source: SourceCode) ->
                 path.push("default.nix");
             }
 
-            let current_span = vm.current_light_span();
+            let current_span = vm.reasonable_light_span();
 
             if let Some(cached) = vm.import_cache.get(&path) {
                 return Ok(cached.clone());
@@ -102,4 +191,6 @@ pub(super) fn builtins_import(globals: &Weak<GlobalsMap>, source: SourceCode) ->
             Ok(res)
         },
     )
+
+    */
 }
