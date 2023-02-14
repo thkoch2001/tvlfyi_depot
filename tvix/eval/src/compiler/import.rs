@@ -5,17 +5,95 @@
 //! compiler and VM state (such as the [`crate::SourceCode`]
 //! instance, or observers).
 
+use super::GlobalsMap;
+use genawaiter::rc::Gen;
 use std::rc::Weak;
 
 use crate::{
+    builtins::coerce_value_to_path,
     observer::NoOpObserver,
-    value::{Builtin, BuiltinArgument, Thunk},
+    value::{Builtin, Thunk},
+    vm::generators::{self, GenCo},
     vm::VM,
     ErrorKind, SourceCode, Value,
 };
 
-use super::GlobalsMap;
-use crate::builtins::coerce_value_to_path;
+async fn import_impl(
+    co: GenCo,
+    globals: Weak<GlobalsMap>,
+    source: SourceCode,
+    mut args: Vec<Value>,
+) -> Result<Value, ErrorKind> {
+    let mut path = coerce_value_to_path(&co, args.pop().unwrap()).await?;
+
+    if path.is_dir() {
+        path.push("default.nix");
+    }
+
+    if let Some(cached) = generators::request_import_cache_lookup(&co, path).await {
+        return Ok(cached);
+    }
+
+    /*
+    let current_span = vm.reasonable_light_span();
+
+
+    let contents = vm.io().read_to_string(path.clone())?;
+
+    let parsed = rnix::ast::Root::parse(&contents);
+    let errors = parsed.errors();
+
+    let file = source.add_file(path.to_string_lossy().to_string(), contents);
+
+    if !errors.is_empty() {
+        return Err(ErrorKind::ImportParseError {
+            path,
+            file,
+            errors: errors.to_vec(),
+        });
+    }
+
+    let result = crate::compiler::compile(
+        &parsed.tree().expr().unwrap(),
+        Some(path.clone()),
+        file,
+        // The VM must ensure that a strong reference to the
+        // globals outlives any self-references (which are
+        // weak) embedded within the globals.  If the
+        // expect() below panics, it means that did not
+        // happen.
+        globals
+            .upgrade()
+            .expect("globals dropped while still in use"),
+        &mut NoOpObserver::default(),
+    )
+    .map_err(|err| ErrorKind::ImportCompilerError {
+        path: path.clone(),
+        errors: vec![err],
+    })?;
+
+    if !result.errors.is_empty() {
+        return Err(ErrorKind::ImportCompilerError {
+            path,
+            errors: result.errors,
+        });
+    }
+
+    // Compilation succeeded, we can construct a thunk from whatever it spat
+    // out and return that.
+    let res = Value::Thunk(Thunk::new_suspended(result.lambda, current_span));
+
+    vm.import_cache.insert(path, res.clone());
+
+    for warning in result.warnings {
+        vm.push_warning(warning);
+    }
+
+    Ok(res)
+    */
+
+    todo!()
+}
 
 /// Constructs and inserts the `import` builtin. This builtin is special in that
 /// it needs to capture the [crate::SourceCode] structure to correctly track
@@ -23,6 +101,7 @@ use crate::builtins::coerce_value_to_path;
 // TODO: need to be able to pass through a CompilationObserver, too.
 // TODO: can the `SourceCode` come from the compiler?
 pub(super) fn builtins_import(globals: &Weak<GlobalsMap>, source: SourceCode) -> Builtin {
+    /*
     // This (very cheap, once-per-compiler-startup) clone exists
     // solely in order to keep the borrow checker happy.  It
     // resolves the tension between the requirements of
@@ -42,7 +121,7 @@ pub(super) fn builtins_import(globals: &Weak<GlobalsMap>, source: SourceCode) ->
                 path.push("default.nix");
             }
 
-            let current_span = vm.current_light_span();
+            let current_span = vm.reasonable_light_span();
 
             if let Some(cached) = vm.import_cache.get(&path) {
                 return Ok(cached.clone());
@@ -102,4 +181,7 @@ pub(super) fn builtins_import(globals: &Weak<GlobalsMap>, source: SourceCode) ->
             Ok(res)
         },
     )
+
+    */
+    todo!()
 }
