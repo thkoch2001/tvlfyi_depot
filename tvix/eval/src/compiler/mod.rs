@@ -1024,6 +1024,12 @@ impl Compiler<'_> {
             optimise_tail_call(&mut compiled.lambda.chunk);
         }
 
+        // Emit an instruction to inform the VM that the chunk has ended.
+        compiled
+            .lambda
+            .chunk
+            .push_op(OpCode::OpReturn, self.span_for(node));
+
         // Capturing the with stack counts as an upvalue, as it is
         // emitted as an upvalue data instruction.
         if compiled.captures_with_stack {
@@ -1449,6 +1455,7 @@ pub fn compile(
     // unevaluated state (though in practice, a value *containing* a
     // thunk might be returned).
     c.emit_force(expr);
+    c.push_op(OpCode::OpReturn, &root_span);
 
     let lambda = Rc::new(c.contexts.pop().unwrap().lambda);
     c.observer.observe_compiled_toplevel(&lambda);

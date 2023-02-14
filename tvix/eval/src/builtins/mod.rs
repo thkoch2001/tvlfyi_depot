@@ -224,7 +224,7 @@ mod pure_builtins {
 
     #[builtin("deepSeq")]
     fn builtin_deep_seq(vm: &mut VM, x: Value, y: Value) -> Result<Value, ErrorKind> {
-        x.deep_force(vm, &mut Default::default())?;
+        todo!("x.deep_force(vm, &mut Default::default())?");
         Ok(y)
     }
 
@@ -253,7 +253,7 @@ mod pure_builtins {
     #[builtin("elem")]
     fn builtin_elem(vm: &mut VM, x: Value, xs: Value) -> Result<Value, ErrorKind> {
         for val in xs.to_list()? {
-            if vm.nix_eq(val, x.clone(), true)? {
+            if todo!("vm.nix_eq(val, x.clone(), true)?") {
                 return Ok(true.into());
             }
         }
@@ -349,7 +349,7 @@ mod pure_builtins {
         // All thunks need to be evaluated before serialising, as the
         // data structure is fully traversed by the Serializer (which
         // does not have a `VM` available).
-        val.deep_force(vm, &mut Default::default())?;
+        todo!("val.deep_force(vm, &mut Default::default())?");
 
         let json_str = serde_json::to_string(&val)?;
         Ok(json_str.into())
@@ -382,7 +382,7 @@ mod pure_builtins {
 
         let mut insert_key = |k: Value, vm: &mut VM| -> Result<bool, ErrorKind> {
             for existing in &done_keys {
-                if existing.nix_eq(&k, vm)? {
+                if todo!("existing.nix_eq(&k, vm)?") {
                     return Ok(false);
                 }
             }
@@ -546,7 +546,7 @@ mod pure_builtins {
         #[lazy] y: Value,
     ) -> Result<Value, ErrorKind> {
         Ok(Value::Bool(matches!(
-            x.force(vm)?.nix_cmp(&*y.force(vm)?, vm)?,
+            todo!("x.force(vm)?.nix_cmp(&*y.force(vm)?, vm)?"),
             Some(Ordering::Less)
         )))
     }
@@ -928,7 +928,7 @@ mod pure_builtins {
 
     #[builtin("toXML")]
     fn builtin_to_xml(vm: &mut VM, value: Value) -> Result<Value, ErrorKind> {
-        value.deep_force(vm, &mut Default::default())?;
+        todo!("value.deep_force(vm, &mut Default::default())?");
         let mut buf: Vec<u8> = vec![];
         to_xml::value_to_xml(&mut buf, &value)?;
         Ok(String::from_utf8(buf)?.into())
