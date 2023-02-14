@@ -14,11 +14,12 @@ use crate::{
     Value,
 };
 
-#[builtins]
+// #[builtins]
 mod impure_builtins {
     use super::*;
     use crate::builtins::coerce_value_to_path;
 
+    /*
     #[builtin("getEnv")]
     fn builtin_get_env(_: &mut VM, var: Value) -> Result<Value, ErrorKind> {
         Ok(env::var(var.to_str()?).unwrap_or_else(|_| "".into()).into())
@@ -59,11 +60,14 @@ mod impure_builtins {
             .read_to_string(path)
             .map(|s| Value::String(s.into()))
     }
+
+    */
 }
 
 /// Return all impure builtins, that is all builtins which may perform I/O
 /// outside of the VM and so cannot be used in all contexts (e.g. WASM).
 pub fn impure_builtins() -> Vec<(&'static str, Value)> {
+    /*
     let mut result = impure_builtins::builtins();
 
     result.push((
@@ -89,4 +93,6 @@ pub fn impure_builtins() -> Vec<(&'static str, Value)> {
     }
 
     result
+    */
+    Vec::new()
 }
