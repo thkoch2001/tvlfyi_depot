@@ -138,8 +138,6 @@ macro_rules! gen_is {
 /// Describes what input types are allowed when coercing a `Value` to a string
 #[derive(Clone, Copy, PartialEq, Debug)]
 pub enum CoercionKind {
-    /// Force thunks, but perform no other coercions.
-    ThunksOnly,
     /// Only coerce already "stringly" types like strings and paths, but also
     /// coerce sets that have a `__toString` attribute. Equivalent to
     /// `!coerceMore` in C++ Nix.
@@ -198,7 +196,7 @@ impl Value {
         // TODO: eventually, this will need to handle string context and importing
         // files into the Nix store depending on what context the coercion happens in
         if let Value::Thunk(t) = self {
-            t.force(vm)?;
+            t.force(todo!())?;
         }
 
         match (self, kind) {
@@ -213,7 +211,7 @@ impl Value {
             // C++ Nix and Tvix is that the former's strings are arbitrary byte
             // sequences without NUL bytes, whereas Tvix only allows valid
             // Unicode. See also b/189.
-            (Value::Path(p), kind) if kind != CoercionKind::ThunksOnly => {
+            (Value::Path(p), _) => {
                 let imported = vm.io().import_path(p)?;
                 Ok(imported.to_string_lossy().into_owned().into())
             }
@@ -222,7 +220,7 @@ impl Value {
             // `__toString` attribute which holds a function that receives the
             // set itself or an `outPath` attribute which should be a string.
             // `__toString` is preferred.
-            (Value::Attrs(attrs), kind) if kind != CoercionKind::ThunksOnly => {
+            (Value::Attrs(attrs), kind) => {
                 match (attrs.select("__toString"), attrs.select("outPath")) {
                     (None, None) => Err(ErrorKind::NotCoercibleToString { from: "set", kind }),
 
@@ -230,9 +228,9 @@ impl Value {
                         // use a closure here to deal with the thunk borrow we need to do below
                         let call_to_string = |value: &Value, vm: &mut VM| {
                             // Leave self on the stack as an argument to the function call.
-                            vm.push(self.clone());
+                            vm.stack.push(self.clone());
                             vm.call_value(value)?;
-                            let result = vm.pop();
+                            let result = vm.stack_pop();
 
                             match result {
                                 Value::String(s) => Ok(s),
@@ -244,7 +242,7 @@ impl Value {
                         };
 
                         if let Value::Thunk(t) = f {
-                            t.force(vm)?;
+                            t.force(todo!())?;
                             let guard = t.value();
                             call_to_string(&guard, vm)
                         } else {
@@ -370,7 +368,7 @@ impl Value {
             (Value::Attrs(_), Value::Attrs(_))
             | (Value::List(_), Value::List(_))
             | (Value::Thunk(_), _)
-            | (_, Value::Thunk(_)) => Ok(vm.nix_eq(self.clone(), other.clone(), false)?),
+            | (_, Value::Thunk(_)) => todo!("remove this whole function?!"),
 
             // Everything else is either incomparable (e.g. internal
             // types) or false.
@@ -391,7 +389,7 @@ impl Value {
                         return Ok(Some(Ordering::Greater));
                     } else if i == l1.len() {
                         return Ok(Some(Ordering::Less));
-                    } else if !vm.nix_eq(l1[i].clone(), l2[i].clone(), true)? {
+                    } else if todo!("!vm.nix_eq(l1[i].clone(), l2[i].clone(), true)?") {
                         return l1[i].force(vm)?.nix_cmp(&*l2[i].force(vm)?, vm);
                     }
                 }
@@ -415,7 +413,7 @@ impl Value {
     pub fn force(&self, vm: &mut VM) -> Result<ForceResult, ErrorKind> {
         match self {
             Self::Thunk(thunk) => {
-                thunk.force(vm)?;
+                thunk.force(todo!())?;
                 Ok(ForceResult::ForcedThunk(thunk.value()))
             }
             _ => Ok(ForceResult::Immediate(self)),
@@ -458,7 +456,7 @@ impl Value {
                     return Ok(());
                 }
 
-                thunk.force(vm)?;
+                thunk.force(todo!())?;
                 let value = thunk.value().clone();
                 value.deep_force(vm, thunk_set)
             }
