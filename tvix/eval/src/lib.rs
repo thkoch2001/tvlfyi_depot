@@ -44,7 +44,7 @@ use std::sync::Arc;
 use crate::compiler::GlobalsMap;
 use crate::observer::{CompilerObserver, RuntimeObserver};
 use crate::value::Lambda;
-use crate::vm::run_lambda;
+use crate::vm::neo_run_lambda as run_lambda;
 
 // Re-export the public interface used by other crates.
 pub use crate::compiler::{compile, prepare_globals, CompilationOutput};
