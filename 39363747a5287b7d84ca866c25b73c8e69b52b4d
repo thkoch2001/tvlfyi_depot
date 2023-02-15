@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9d63b9f3_8a8e3c31",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 26
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-02-15T18:25:08Z",
+      "side": 1,
+      "message": "@brainrake Can you abandon this?",
+      "revId": "39363747a5287b7d84ca866c25b73c8e69b52b4d",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ead10a58_724b2693",
+        "filename": "tvix/store/protos/rpc_pathinfo.proto",
+        "patchSetId": 26
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-02-15T18:25:08Z",
+      "side": 1,
+      "message": "We went another path, and actually have the server parse the name (to be a valid NixPath). While doing so, it extracts the output_hash - so there\u0027s no need to make this a separate request type anymore.",
+      "revId": "39363747a5287b7d84ca866c25b73c8e69b52b4d",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
