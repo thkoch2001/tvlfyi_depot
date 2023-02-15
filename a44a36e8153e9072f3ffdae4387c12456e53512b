@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e77a1548_5810955d",
+        "filename": "tvix/store/src/blobservice/mod.rs",
+        "patchSetId": 5
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2023-02-15T18:43:12Z",
+      "side": 1,
+      "message": "this isn\u0027t in scope and won\u0027t resolve (same as in the parent CL)",
+      "range": {
+        "startLine": 10,
+        "startChar": 10,
+        "endLine": 10,
+        "endChar": 22
+      },
+      "revId": "a44a36e8153e9072f3ffdae4387c12456e53512b",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
