@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ed7bbc00_f890c746",
+        "filename": "users/ezemtsov/idempotent_persistent_computations.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2023-02-15T18:49:57Z",
+      "side": 1,
+      "message": "Wouldn\u0027t you want to have a \"pinnable\" random seed instead, theoretically? That\u0027s a little independent from the rest of the execution environment, but it seems like you might want to have the ability to reproduce a *specific* run, but have that be optional.\n\nNote: Not familiar with how the filter works.",
+      "range": {
+        "startLine": 44,
+        "startChar": 0,
+        "endLine": 44,
+        "endChar": 125
+      },
+      "revId": "9d1355f827853cc56f5d381635e6123f6bbd40a0",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "105b4c89_bd9501ab",
+        "filename": "users/ezemtsov/idempotent_persistent_computations.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2023-02-15T18:49:57Z",
+      "side": 1,
+      "message": "I would call this section \"repeatability\"(\u003d the ability to rerun an \"equivalent\" computation), and the one named \"purity\" either \"Reproducibility\" or \"Determinism\" instead",
+      "range": {
+        "startLine": 47,
+        "startChar": 5,
+        "endLine": 47,
+        "endChar": 16
+      },
+      "revId": "9d1355f827853cc56f5d381635e6123f6bbd40a0",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
