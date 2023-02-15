@@ -34,6 +34,24 @@
       "parentUuid": "daac95d2_7c8fbd00",
       "revId": "b35e622147a2929071a9e90007a9a3d2718997bc",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "62b3bf58_f3e00a45",
+        "filename": "tvix/store/src/blobreader.rs",
+        "patchSetId": 6
+      },
+      "lineNbr": 147,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-02-15T19:49:21Z",
+      "side": 1,
+      "message": "The latest iteration now accepts a `\u0026ChunkService` in the constructor, so we don\u0027t need `Clone` here anymore.",
+      "parentUuid": "3f6e01f4_1a162d04",
+      "revId": "b35e622147a2929071a9e90007a9a3d2718997bc",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
