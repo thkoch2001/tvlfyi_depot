@@ -24,6 +24,30 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "25027ebf_1b396e8d",
+        "filename": "tvix/store/src/chunkservice/mod.rs",
+        "patchSetId": 4
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-02-15T18:59:19Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b45d8bee_8ff51e82",
+      "range": {
+        "startLine": 9,
+        "startChar": 42,
+        "endLine": 9,
+        "endChar": 53
+      },
+      "revId": "a8875d67b6bf4f3ba648c99fd366638237e52902",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "88b2c190_c12d0e64",
@@ -37,6 +61,30 @@
       "writtenOn": "2023-02-15T18:42:43Z",
       "side": 1,
       "message": "lets put docstrings on all of them?",
+      "range": {
+        "startLine": 13,
+        "startChar": 0,
+        "endLine": 15,
+        "endChar": 0
+      },
+      "revId": "a8875d67b6bf4f3ba648c99fd366638237e52902",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f19d3dc0_f7e81b97",
+        "filename": "tvix/store/src/chunkservice/mod.rs",
+        "patchSetId": 4
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-02-15T18:59:19Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "88b2c190_c12d0e64",
       "range": {
         "startLine": 13,
         "startChar": 0,
