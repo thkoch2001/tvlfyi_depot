@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "daac95d2_7c8fbd00",
+        "filename": "tvix/store/src/blobreader.rs",
+        "patchSetId": 6
+      },
+      "lineNbr": 147,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-02-15T19:08:29Z",
+      "side": 1,
+      "message": "We should probably use a helper function to a chunk service (and not actually care about the fact it\u0027s a sled one)",
+      "revId": "b35e622147a2929071a9e90007a9a3d2718997bc",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
