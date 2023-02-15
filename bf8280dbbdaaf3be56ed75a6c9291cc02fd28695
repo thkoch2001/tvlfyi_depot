@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "89e39ad6_d12c1a4c",
+        "filename": "tvix/store/src/proto/tests/grpc_blobservice.rs",
+        "patchSetId": 5
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-02-15T19:08:26Z",
+      "side": 1,
+      "message": "This should unwrap(), and potentially not even say which underlying services it\u0027s using.",
+      "revId": "bf8280dbbdaaf3be56ed75a6c9291cc02fd28695",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
