@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e6760b82_f6e5dad0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 24
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-02-15T18:22:46Z",
+      "side": 1,
+      "message": "@brainrake can you abandon this? This mostly ended up in canon, but in other CLs.",
+      "revId": "bd05c89aa4c8f4dee36cbb64461d4fb118346f31",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
