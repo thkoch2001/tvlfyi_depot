@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b45d8bee_8ff51e82",
+        "filename": "tvix/store/src/chunkservice/mod.rs",
+        "patchSetId": 4
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2023-02-15T18:42:19Z",
+      "side": 1,
+      "message": "This isn\u0027t in scope here, so it\u0027ll fail to resolve.",
+      "range": {
+        "startLine": 9,
+        "startChar": 42,
+        "endLine": 9,
+        "endChar": 53
+      },
+      "revId": "a8875d67b6bf4f3ba648c99fd366638237e52902",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
