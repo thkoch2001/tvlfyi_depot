@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8d5137a9_fd47d073",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 10
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2023-02-16T12:37:06Z",
+      "side": 1,
+      "message": "I would\u0027ve probably stuck to a simpler implementation of read() (just keep slicing a vec, and don\u0027t fetch additional chunks right away if the current one is \"depleted\"), but lets not get hung up on that. I\u0027m not convinced the more complex implementation has any performance benefits, but we can measure it later.",
+      "revId": "a439d6a1b52051977f3a56958d3388fc5ebac56b",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
