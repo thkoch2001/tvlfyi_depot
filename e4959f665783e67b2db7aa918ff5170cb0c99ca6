@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1455c68a_d4a85c72",
+        "filename": "users/tazjin/generator-example/src/main.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 72,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2023-02-16T22:13:06Z",
+      "side": 1,
+      "message": "In real-life, the generators would produce instructions to the VM. They can:\n\n1. Request thunk forcing (many cases).\n2. Request function application (e.g. `__toString` in coerce_to_string).\n\nI\u0027m not yet sure how the communication *back* would work. Currently everywhere this happens has a `\u0026mut VM`, but I suspect that this will no longer work with borrowing rules. I\u0027ll try integrating this in cl/8104 for something simple (e.g. coerce_to_string, or nix_eq, or something like that) and discover what the interaction actually looks like.",
+      "range": {
+        "startLine": 72,
+        "startChar": 52,
+        "endLine": 72,
+        "endChar": 60
+      },
+      "revId": "e4959f665783e67b2db7aa918ff5170cb0c99ca6",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
