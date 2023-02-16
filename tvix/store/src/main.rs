@@ -23,6 +23,10 @@ struct Cli {
     #[clap(long, short = 'l')]
     listen_address: Option<String>,
 
+    /// Whether to log in JSON
+    #[clap(long)]
+    json: bool,
+
     #[clap(long)]
     log_level: Option<Level>,
 }
@@ -37,8 +41,17 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         .unwrap();
 
     let level = cli.log_level.unwrap_or(Level::INFO);
-    let subscriber = tracing_subscriber::fmt().with_max_level(level).finish();
-    tracing::subscriber::set_global_default(subscriber).ok();
+
+    if cli.json {
+        let subscriber = tracing_subscriber::fmt()
+            .with_max_level(level)
+            .json()
+            .finish();
+        tracing::subscriber::set_global_default(subscriber).ok();
+    } else {
+        let subscriber = tracing_subscriber::fmt().with_max_level(level).finish();
+        tracing::subscriber::set_global_default(subscriber).ok();
+    };
 
     let mut server = Server::builder();
 
