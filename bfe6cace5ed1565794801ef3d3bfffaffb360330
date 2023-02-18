@@ -52,6 +52,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "ffc0863c_b7b69a09",
+        "filename": "tvix/eval/docs/vm-loop.md",
+        "patchSetId": 3
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2023-02-18T11:22:28Z",
+      "side": 1,
+      "message": "Yes, correct!\n\nYou can see the (very wild) draft implementation in cl/8104\n\nThis change is extremely invasive, so I\u0027m not yet sure how to chunk it up outside of a monster-CL, but first I want to get everything to work then worry about that.",
+      "parentUuid": "23464142_37bc830e",
+      "revId": "bfe6cace5ed1565794801ef3d3bfffaffb360330",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "33df7971_d98f2007",
@@ -65,6 +83,24 @@
       "writtenOn": "2023-02-18T03:50:11Z",
       "side": 1,
       "message": "I\u0027m not totally clear on the distinction between 2 and 3... could you give a short 1-2 sentence sketch of an example of each of them?",
+      "revId": "bfe6cace5ed1565794801ef3d3bfffaffb360330",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "32288f30_0fe46c5e",
+        "filename": "tvix/eval/docs/vm-loop.md",
+        "patchSetId": 3
+      },
+      "lineNbr": 58,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2023-02-18T11:22:28Z",
+      "side": 1,
+      "message": "Sure, updated in cl/8132",
+      "parentUuid": "33df7971_d98f2007",
       "revId": "bfe6cace5ed1565794801ef3d3bfffaffb360330",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
