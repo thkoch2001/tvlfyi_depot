@@ -45,12 +45,15 @@ depot.nix.readTree.drvTargets {
     ];
   });
 
-  # Apply workaround from https://github.com/NixOS/nixpkgs/pull/211469
-  # until it hits the nixos-unstable channel
-  mullvad = super.mullvad.overrideAttrs (old: {
-    nativeBuildInputs = old.nativeBuildInputs ++ [
-      self.buildPackages.git
-    ];
+  # Too match telega in emacs-overlay or wherever
+  tdlib = super.tdlib.overrideAttrs (_: {
+    version = "1.8.11";
+    src = self.fetchFromGitHub {
+      owner = "tdlib";
+      repo = "td";
+      rev = "1543c41f3411bd6aa74713c8aba4e93fa8d952c7";
+      sha256 = "0qw3a2wh5hfad0m4ixywh5p2mvyprkw982jb7n4sqxdvwc0xfcgq";
+    };
   });
 
   home-manager = super.home-manager.overrideAttrs (_: {
@@ -98,13 +101,6 @@ depot.nix.readTree.drvTargets {
     passthru = old.passthru // {
       patches = old.patches ++ [ ./patches/notmuch-dottime.patch ];
     };
-  });
-
-  # `Call $methodName --bytes-as-base64` support for evans
-  evans = super.evans.overrideAttrs (old: {
-    patches = old.patches or [ ] ++ [
-      ./patches/evans-add-support-for-bytes-as-base64.patch
-    ];
   });
 
   # nix-serve does not work with nix 2.4

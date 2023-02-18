@@ -32,6 +32,16 @@ rec {
     AVR_CFLAGS = [
       "-isystem ${avrlibc}/avr/include"
       "-L${avrlibc}/avr/lib/avr5"
+      # GCC 12 has improved array-bounds warnings, failing the build of QMK.
+      # Newer versions of the firmware would work probably, but they heavily
+      # altered the build system, so it is non-trivial. Backporting the patch
+      # that fixes it seems difficult – the next change to the offending matrix.c
+      # after the pinned qmkSource commit is
+      # https://github.com/qmk/qmk_firmware/commit/11c308d436180974b7719ce78cdffdd83a1302c0
+      # which heavily changes the way the code works.
+      #
+      # TODO(grfn): address this properly
+      "-Wno-error=array-bounds"
     ];
 
     AVR_ASFLAGS = AVR_CFLAGS;
