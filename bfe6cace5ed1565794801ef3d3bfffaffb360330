@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "07a2ae18_0fbb37f8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000066
+      },
+      "writtenOn": "2023-02-18T03:50:11Z",
+      "side": 1,
+      "message": "I\u0027m not totally caught up yet on what\u0027s happened the last two months, but assuming the trampoline stuff still looks approximately similar to how I left it, this proposal is an excellent idea.  I think it might even be inevitable, unless Rust adds explicit tailcalls (which is not happening anytime soon).",
+      "revId": "bfe6cace5ed1565794801ef3d3bfffaffb360330",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e191bc77_656e871f",
+        "filename": "tvix/eval/docs/vm-loop.md",
+        "patchSetId": 3
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1000066
+      },
+      "writtenOn": "2023-02-18T03:50:11Z",
+      "side": 1,
+      "message": "This is quite an understatement 😊 at least as applied to the state of the code where I handed it off (I have not yet caught up on what\u0027s happened since then).\n\nI basically made a big buggy mess out of the VM loop in my trampoline CL, and the fact that it was a big buggy mess was the main reason why it hadn\u0027t reached the \"ready to review\" stage at that point.  I admit that I did not fully understand the changes I was making there.",
+      "revId": "bfe6cace5ed1565794801ef3d3bfffaffb360330",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "23464142_37bc830e",
+        "filename": "tvix/eval/docs/vm-loop.md",
+        "patchSetId": 3
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 1000066
+      },
+      "writtenOn": "2023-02-18T03:50:11Z",
+      "side": 1,
+      "message": "Just to be clear: you are proposing that a \"VM context\" is an `enum` with four variants (below), and whereas before we had a stack of callframes, after this proposal we will have a stack of VM contexts.  Have I understood correctly?",
+      "revId": "bfe6cace5ed1565794801ef3d3bfffaffb360330",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "33df7971_d98f2007",
+        "filename": "tvix/eval/docs/vm-loop.md",
+        "patchSetId": 3
+      },
+      "lineNbr": 58,
+      "author": {
+        "id": 1000066
+      },
+      "writtenOn": "2023-02-18T03:50:11Z",
+      "side": 1,
+      "message": "I\u0027m not totally clear on the distinction between 2 and 3... could you give a short 1-2 sentence sketch of an example of each of them?",
+      "revId": "bfe6cace5ed1565794801ef3d3bfffaffb360330",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
