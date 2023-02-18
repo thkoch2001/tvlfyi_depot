@@ -57,7 +57,8 @@ in
     keybase
     openssl
     yubikey-manager
-    yubikey-manager-qt
+    # TODO(grfn): lagging behind yubikey-manager and doesn't support cryptography >= 39
+    # yubikey-manager-qt
 
     # Spotify...etc
     spotify
