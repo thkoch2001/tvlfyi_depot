@@ -52,7 +52,18 @@ states of the VM:
    a chunk, then returning one level up.
 
 2. Trampolining the forcing of a thunk, equivalent to the current
-   trampolining logic.
+   trampolining logic. Each thunk to be forced becomes a trampoline
+   frame in the VM's frame stack, and after execution yields back to
+   the trampoline its internal representation is mutated to point to
+   the final value, and it is left on the value stack.
+
+3. Suspended trampolines, which are created in case of nested thunks.
+   They behave identically to normal trampolines, except that the
+   frame directly "above" them is another trampoline.
+
+   This streamlines the correct mutation of the internal
+   representation of nested thunks, and thus addresses bugs like
+   b/251.
 
 3. Waiting for the result of a trampoline, to ensure that in case of
    nested thunks all representations are correctly transformed.
@@ -63,6 +74,10 @@ states of the VM:
 It is *not* in scope for this proposal to enable parallel suspension
 of thunks. This is a separate topic which is discussed in [waiting for
 the store][wfs].
+
+Additionally each frame carries information about the span that it was
+created from, preventing any situations where no span is accessible in
+the VM for error propagation (addressing issues like b/237, b/238).
 
 ## Alternatives considered
 
