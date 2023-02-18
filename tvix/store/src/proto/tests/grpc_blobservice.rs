@@ -62,7 +62,7 @@ async fn not_found_stat() {
 
 /// Put a blob in the store, get it back. We send something small enough so it
 /// won't get split into multiple chunks.
-#[tokio::test]
+#[tokio::test(flavor = "multi_thread")]
 async fn put_read_stat() {
     let service = gen_grpc_blob_service(TempDir::new().unwrap().path());
 
@@ -124,7 +124,7 @@ async fn put_read_stat() {
 /// Assert the stat request actually returns more than one chunk, and
 /// we can read each chunk individually, as well as the whole blob via the
 /// `read()` method.
-#[tokio::test]
+#[tokio::test(flavor = "multi_thread")]
 async fn put_read_stat_large() {
     let service = gen_grpc_blob_service(TempDir::new().unwrap().path());
 
