@@ -428,6 +428,16 @@ impl Thunk {
             _ => false,
         }
     }
+
+    /// Helper function to format thunks in observer output.
+    pub(crate) fn debug_repr(&self) -> String {
+        match &*self.0.borrow() {
+            ThunkRepr::Evaluated(v) => format!("thunk(val|{})", v),
+            ThunkRepr::Blackhole => format!("thunk(blackhole)"),
+            ThunkRepr::Native(v) => format!("thunk(native)"),
+            ThunkRepr::Suspended { lambda, .. } => format!("thunk({:p})", *lambda),
+        }
+    }
 }
 
 impl TotalDisplay for Thunk {
