@@ -57,6 +57,16 @@ let
       (tree-tl.no-skip-subtree.b.c)
       "cool")
 
+    (assertEq "skip tree default.nix is read"
+      tree-tl.skip-tree.but
+      "the default.nix is still read")
+    (assertEq "skip tree a/default.nix is read"
+      (tree-tl.skip-tree.a)
+      "am I subtree yet?")
+    (assertEq "skip tree b/default.nix is skipped"
+      (tree-tl.skip-tree ? b)
+      false)
+
     (assertEq "default.nix attrset is merged with siblings"
       tree-tl.default-nix.no
       "siblings should be read")
