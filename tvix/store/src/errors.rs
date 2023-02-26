@@ -25,3 +25,13 @@ impl From<Error> for Status {
         }
     }
 }
+
+impl From<Error> for std::io::Error {
+    fn from(value: Error) -> Self {
+        match value {
+            Error::InvalidRequest(msg) => Self::new(std::io::ErrorKind::InvalidInput, msg),
+            Error::StorageLoadError(msg) => Self::new(std::io::ErrorKind::Other, msg),
+            Error::StoragePutError(msg) => Self::new(std::io::ErrorKind::Other, msg),
+        }
+    }
+}
