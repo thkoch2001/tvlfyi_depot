@@ -71,7 +71,7 @@
 (package! lsp-treemacs)
 
 ;; Rust
-(package! rustic :disable t)
+;; (package! rustic :disable t)
 ;; (package! racer :disable t)
 (package! cargo)
 
