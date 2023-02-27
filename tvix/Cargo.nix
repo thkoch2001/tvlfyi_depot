@@ -8082,8 +8082,8 @@ rec {
         edition = "2021";
         crateBin = [
           {
-            name = "tvix-store-bin";
-            path = "src/main.rs";
+            name = "tvix-store";
+            path = "src/bin/tvix-store.rs";
             requiredFeatures = [ ];
           }
         ];
