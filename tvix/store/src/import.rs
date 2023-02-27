@@ -200,8 +200,11 @@ pub fn import_path<
 
     let mut directories: HashMap<PathBuf, proto::Directory> = HashMap::default();
 
-    // TODO: make sure we traverse in sorted order, or insert to parent_directory in sorted order at least.
-    for entry in WalkDir::new(p).follow_links(false).contents_first(true) {
+    for entry in WalkDir::new(p)
+        .follow_links(false)
+        .contents_first(true)
+        .sort_by_file_name()
+    {
         let entry = entry.unwrap();
         let span = info_span!("path", "{}", entry.path().display());
         let _ = span.enter();
