@@ -513,7 +513,7 @@
         ;; :n "[ [" #'magit-section-backward
         )
 
-  (define-suffix-command magit-commit-wip ()
+  (transient-define-suffix magit-commit-wip ()
     (interactive)
     (magit-commit-create '("-m" "wip")))
 
@@ -522,11 +522,11 @@
     ["c"]
     (list "W" "Commit WIP" #'magit-commit-wip))
 
-  (define-suffix-command magit-reset-head-back ()
+  (transient-define-suffix magit-reset-head-back ()
     (interactive)
     (magit-reset-mixed "HEAD~"))
 
-  (define-suffix-command magit-reset-head-previous ()
+  (transient-define-suffix magit-reset-head-previous ()
     (interactive)
     (magit-reset-mixed "HEAD@{1}"))
 
