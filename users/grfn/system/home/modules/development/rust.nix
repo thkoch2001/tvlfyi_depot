@@ -23,6 +23,8 @@ in
     cargo-criterion
     cargo-flamegraph
     coz
+    inferno
+    hotspot
   ];
 
   programs.zsh.shellAliases = {
