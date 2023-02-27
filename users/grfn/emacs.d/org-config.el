@@ -76,6 +76,10 @@
     "* TODO %?\n%i"
     :kill-buffer t)
 
+   ("w" "Work Todo" entry
+    (file+headline ,(notes-file "work.org") "Work Tasks")
+    "* TODO %?\n%i")
+
    ("m" "Email" entry
     (file +org-default-todo-file)
     "* TODO [[%L][%:subject]] :email:\n%i")
