@@ -1,16 +1,18 @@
-# https://github.com/esrlabs/josh
+# https://github.com/josh-project/josh
 { depot, pkgs, ... }:
 
 let
+  rev = "fc857afda2c1536234e3bb1983c518a1abf63d25";
   src = pkgs.fetchFromGitHub {
-    owner = "esrlabs";
+    owner = "josh-project";
     repo = "josh";
-    rev = "effe6290559136faba5591a115e56c2b30210329";
-    hash = "sha256:0kam9rqjk96brvh15wj3h3vm2sqnr5pckz91az2ida5617d5gp9v";
+    inherit rev;
+    hash = "sha256:16ch7al7xfyjipgqh2n7grj985fv713mhi8y5bixb736vsad9q3w";
   };
 in
 depot.third_party.naersk.buildPackage {
   inherit src;
+  JOSH_VERSION = "git-${builtins.substring 0 8 rev}";
 
   buildInputs = with pkgs; [
     libgit2
@@ -20,16 +22,12 @@ depot.third_party.naersk.buildPackage {
 
   cargoBuildOptions = x: x ++ [
     "-p"
-    "josh"
+    "josh-filter"
     "-p"
     "josh-proxy"
-    "-p"
-    "josh-ui"
   ];
 
   overrideMain = x: {
-    patches = [ ./0001-josh-proxy-Always-require-authentication-when-pushin.patch ];
-
     nativeBuildInputs = (x.nativeBuildInputs or [ ]) ++ [ pkgs.makeWrapper ];
     postInstall = ''
       wrapProgram $out/bin/josh-proxy --prefix PATH : "${pkgs.git}/bin"
