@@ -25,6 +25,10 @@ let
           upstream = "https://github.com/nixos/nixpkgs.git";
           cgit.enable-commit-graph = "0"; # too slow
         };
+        "mirror/vuizvui" = {
+          description = "Nix(OS) expressions used by the OpenLab and its members";
+          upstream = "https://github.com/openlab-aux/vuizvui.git";
+        };
       };
     }
     {
