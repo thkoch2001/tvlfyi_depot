@@ -1,7 +1,11 @@
+use clap::Parser;
 use clap::Subcommand;
 use data_encoding::BASE64;
 use std::path::PathBuf;
+use tonic::{transport::Server, Result};
+use tracing::{info, Level};
 use tracing_subscriber::prelude::*;
+use tracing_subscriber::{layer::SubscriberExt, util::SubscriberInitExt};
 use tvix_store::blobservice::SledBlobService;
 use tvix_store::chunkservice::SledChunkService;
 use tvix_store::directoryservice::SledDirectoryService;
@@ -17,10 +21,6 @@ use tvix_store::proto::GRPCPathInfoServiceWrapper;
 
 #[cfg(feature = "reflection")]
 use tvix_store::proto::FILE_DESCRIPTOR_SET;
-
-use clap::Parser;
-use tonic::{transport::Server, Result};
-use tracing::{info, Level};
 
 #[derive(Parser)]
 #[command(author, version, about, long_about = None)]
@@ -57,7 +57,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     // configure log settings
     let level = cli.log_level.unwrap_or(Level::INFO);
 
-    let subscriber = tracing_subscriber::registry()
+    let tracing_subscriber_registry = tracing_subscriber::registry()
         .with(if cli.json {
             Some(
                 tracing_subscriber::fmt::Layer::new()
@@ -77,7 +77,40 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
             None
         });
 
-    tracing::subscriber::set_global_default(subscriber).expect("Unable to set global subscriber");
+    // Init the registry (when otlp is not enabled)
+    #[cfg(not(feature = "otlp"))]
+    {
+        tracing_subscriber_registry.try_init()?;
+    }
+
+    // Add the otlp layer (when otlp is enabled), then init the registry.
+    // It's necessary to do this separately, as every with() call chains the layer into the type of the registry
+    #[cfg(feature = "otlp")]
+    {
+        use opentelemetry::sdk::Resource;
+        use opentelemetry::KeyValue;
+
+        let opentelemetry_layer = {
+            let otlp_exporter = opentelemetry_otlp::new_exporter().tonic();
+            let trace_config =
+                opentelemetry::sdk::trace::config().with_resource(Resource::new(vec![
+                    KeyValue::new("service.name", "tvix.store"),
+                ]));
+
+            let tracer = opentelemetry_otlp::new_pipeline()
+                .tracing()
+                .with_exporter(otlp_exporter)
+                .with_trace_config(trace_config)
+                .install_batch(opentelemetry::runtime::Tokio)?;
+
+            // Create a tracing layer with the configured tracer
+            tracing_opentelemetry::layer().with_tracer(tracer)
+        };
+
+        tracing_subscriber_registry
+            .with(opentelemetry_layer)
+            .try_init()?;
+    }
 
     // initialize stores
     let mut blob_service = SledBlobService::new("blobs.sled".into())?;
