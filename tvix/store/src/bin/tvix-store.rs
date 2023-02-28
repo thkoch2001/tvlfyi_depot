@@ -1,7 +1,12 @@
+use clap::Parser;
 use clap::Subcommand;
 use data_encoding::BASE64;
+use opentelemetry::global;
 use std::path::PathBuf;
+use tonic::{transport::Server, Result};
+use tracing::{info, Level};
 use tracing_subscriber::prelude::*;
+use tracing_subscriber::{layer::SubscriberExt, util::SubscriberInitExt};
 use tvix_store::blobservice::SledBlobService;
 use tvix_store::chunkservice::SledChunkService;
 use tvix_store::directoryservice::SledDirectoryService;
@@ -17,10 +22,6 @@ use tvix_store::proto::GRPCPathInfoServiceWrapper;
 
 #[cfg(feature = "reflection")]
 use tvix_store::proto::FILE_DESCRIPTOR_SET;
-
-use clap::Parser;
-use tonic::{transport::Server, Result};
-use tracing::{info, Level};
 
 #[derive(Parser)]
 #[command(author, version, about, long_about = None)]
@@ -57,7 +58,22 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     // configure log settings
     let level = cli.log_level.unwrap_or(Level::INFO);
 
-    let subscriber = tracing_subscriber::registry()
+    let opentelemetry_layer = {
+        // Allows you to pass along context (i.e., trace IDs) across services
+        global::set_text_map_propagator(opentelemetry_jaeger::Propagator::new());
+        // Sets up the machinery needed to export data to Jaeger
+        // There are other OTel crates that provide pipelines for the vendors
+        // mentioned earlier.
+        global::set_text_map_propagator(opentelemetry_jaeger::Propagator::new());
+        let tracer = opentelemetry_jaeger::new_agent_pipeline()
+            .with_service_name("tvix-store")
+            .install_simple()?;
+
+        // Create a tracing layer with the configured tracer
+        tracing_opentelemetry::layer().with_tracer(tracer)
+    };
+
+    tracing_subscriber::registry()
         .with(if cli.json {
             Some(
                 tracing_subscriber::fmt::Layer::new()
@@ -75,9 +91,9 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
             )
         } else {
             None
-        });
-
-    tracing::subscriber::set_global_default(subscriber).expect("Unable to set global subscriber");
+        })
+        .with(opentelemetry_layer)
+        .try_init()?;
 
     // initialize stores
     let mut blob_service = SledBlobService::new("blobs.sled".into())?;
