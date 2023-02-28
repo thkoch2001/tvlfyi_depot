@@ -17,10 +17,10 @@
         "homepage": "",
         "owner": "sternenseemann",
         "repo": "likely-music",
-        "rev": "769e9ae049646d436c27ed21650461cdb7f9815d",
-        "sha256": "0rs3ycn0rp621zisfwlsw01l4y0h5841xnc1di0mvizxsmxhl2l9",
+        "rev": "c9bef141d846c493a045385ab8146aa28fc8ef33",
+        "sha256": "1wqgxx8wk7lrvyn9h66gga2wf7dcq7si8wq1w5gfhjnwnsrnvs6y",
         "type": "tarball",
-        "url": "https://github.com/sternenseemann/likely-music/archive/769e9ae049646d436c27ed21650461cdb7f9815d.tar.gz",
+        "url": "https://github.com/sternenseemann/likely-music/archive/c9bef141d846c493a045385ab8146aa28fc8ef33.tar.gz",
         "url_template": "https://github.com/<owner>/<repo>/archive/<rev>.tar.gz"
     }
 }
