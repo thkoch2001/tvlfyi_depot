@@ -1,3 +1,4 @@
+use clap::Parser;
 use clap::Subcommand;
 use data_encoding::BASE64;
 use nix_compat::derivation::Derivation;
@@ -6,7 +7,10 @@ use nix_compat::nixhash::HashAlgo;
 use nix_compat::nixhash::NixHash;
 use nix_compat::nixhash::NixHashWithMode;
 use std::path::PathBuf;
+use tonic::{transport::Server, Result};
+use tracing::{info, Level};
 use tracing_subscriber::prelude::*;
+use tracing_subscriber::{layer::SubscriberExt, util::SubscriberInitExt};
 use tvix_store::blobservice::SledBlobService;
 use tvix_store::chunkservice::SledChunkService;
 use tvix_store::directoryservice::SledDirectoryService;
@@ -23,10 +27,6 @@ use tvix_store::proto::GRPCPathInfoServiceWrapper;
 
 #[cfg(feature = "reflection")]
 use tvix_store::proto::FILE_DESCRIPTOR_SET;
-
-use clap::Parser;
-use tonic::{transport::Server, Result};
-use tracing::{info, Level};
 
 #[derive(Parser)]
 #[command(author, version, about, long_about = None)]
@@ -63,27 +63,50 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     // configure log settings
     let level = cli.log_level.unwrap_or(Level::INFO);
 
-    let subscriber = tracing_subscriber::registry()
-        .with(if cli.json {
-            Some(
-                tracing_subscriber::fmt::Layer::new()
-                    .with_writer(std::io::stdout.with_max_level(level))
-                    .json(),
-            )
+    // create a logging layer, and return it boxed, to prevent layer types from leaking through.
+    let logging_layer = {
+        let l = tracing_subscriber::fmt::layer().with_writer(std::io::stdout.with_max_level(level));
+        if cli.json {
+            l.json().boxed()
         } else {
-            None
-        })
-        .with(if !cli.json {
-            Some(
-                tracing_subscriber::fmt::Layer::new()
-                    .with_writer(std::io::stdout.with_max_level(level))
-                    .pretty(),
-            )
-        } else {
-            None
-        });
+            l.pretty().boxed()
+        }
+    };
 
-    tracing::subscriber::set_global_default(subscriber).expect("Unable to set global subscriber");
+    let tracing_subscriber_registry = tracing_subscriber::registry().with(logging_layer);
+
+    // Init the registry (when otlp is not enabled)
+    #[cfg(not(feature = "otlp"))]
+    {
+        tracing_subscriber_registry.try_init()?;
+    }
+
+    // Add the otlp layer (when otlp is enabled), then init the registry.
+    // It's necessary to do this separately, as every with() call chains the layer into the type of the registry
+    #[cfg(feature = "otlp")]
+    {
+        let opentelemetry_layer = {
+            let otlp_exporter = opentelemetry_otlp::new_exporter().tonic();
+            let mut metadata = tonic::metadata::MetadataMap::new();
+            metadata.insert("service.name", "tvix.store".parse()?);
+
+            let tracer = opentelemetry_otlp::new_pipeline()
+                .tracing()
+                .with_exporter(
+                    opentelemetry_otlp::new_exporter()
+                        .tonic()
+                        .with_metadata(metadata),
+                )
+                .install_batch(opentelemetry::runtime::Tokio)?;
+
+            // Create a tracing layer with the configured tracer
+            tracing_opentelemetry::layer().with_tracer(tracer)
+        };
+
+        tracing_subscriber_registry
+            .with(opentelemetry_layer)
+            .try_init()?;
+    }
 
     // initialize stores
     let mut blob_service = SledBlobService::new("blobs.sled".into())?;
