@@ -12,6 +12,10 @@ in
     nixpkgs = pkgs.path;
 
     defaultCrateOverrides = pkgs.defaultCrateOverrides // {
+      opentelemetry-proto = prev: {
+        nativeBuildInputs = protobufDep prev;
+      };
+
       prost-build = prev: {
         nativeBuildInputs = protobufDep prev;
       };
