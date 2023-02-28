@@ -25,6 +25,9 @@ tonic = "0.8.2"
 tracing = "0.1.37"
 tracing-subscriber = { version = "0.3.16", features = ["json"] }
 walkdir = "2.3.2"
+opentelemetry-jaeger = "0.17.0"
+tracing-opentelemetry = "0.18.0"
+opentelemetry = "0.18.0"
 
 [dependencies.tonic-reflection]
 optional = true
