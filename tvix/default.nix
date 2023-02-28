@@ -32,6 +32,10 @@ let
         buildInputs = prev.buildInputs or [ ] ++ iconvDarwinDep;
       };
 
+      opentelemetry-proto = prev: {
+        nativeBuildInputs = protobufDep prev;
+      };
+
       prost-build = prev: {
         nativeBuildInputs = protobufDep prev;
       };
