@@ -16,6 +16,24 @@
       "message": "The rev of the merged commit is 13e7565ab029206598881391db4ddc6dface692b.",
       "revId": "85612ade268943baa64f915198e487776dfb2f9c",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "61390238_c99fae40",
+        "filename": "third_party/josh/default.nix",
+        "patchSetId": 1
+      },
+      "lineNbr": 5,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2023-02-28T14:48:47Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "69af64e8_5a64fcbf",
+      "revId": "85612ade268943baa64f915198e487776dfb2f9c",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
