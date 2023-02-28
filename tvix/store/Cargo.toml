@@ -15,6 +15,8 @@ data-encoding = "2.3.3"
 fastcdc = "3.0.2"
 lazy_static = "1.4.0"
 nix-compat = { path = "../nix-compat" }
+opentelemetry-otlp = { version = "0.11.0", features = ["tokio"], optional = true }
+opentelemetry = { version = "0.18.0", features = ["rt-tokio"] , optional = true}
 prost = "0.11.2"
 rayon = "1.6.1"
 sha2 = "0.10.6"
@@ -24,6 +26,7 @@ tokio-stream = "0.1.11"
 tokio = { version = "1.23.0", features = ["rt-multi-thread"] }
 tonic = "0.8.2"
 tracing = "0.1.37"
+tracing-opentelemetry = "0.18.0"
 tracing-subscriber = { version = "0.3.16", features = ["json"] }
 walkdir = "2.3.2"
 tokio-util = { version = "0.7.7", features = ["io", "io-util"] }
@@ -42,5 +45,6 @@ tempfile = "3.3.0"
 tonic-mock = { git = "https://github.com/brainrake/tonic-mock", branch = "bump-dependencies" }
 
 [features]
-default = ["reflection"]
+default = ["reflection", "otlp"]
 reflection = ["tonic-reflection"]
+otlp = ["dep:opentelemetry", "dep:opentelemetry-otlp"]

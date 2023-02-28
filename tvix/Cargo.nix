@@ -1493,6 +1493,42 @@ rec {
         ];
 
       };
+      "dashmap" = rec {
+        crateName = "dashmap";
+        version = "5.4.0";
+        edition = "2018";
+        sha256 = "1p2f5kr5hy7h4w3y2abprnxsaq36r685zfx1s8v0nfw2vbgpcw4h";
+        authors = [
+          "Acrimon <joel.wejdenstal@gmail.com>"
+        ];
+        dependencies = [
+          {
+            name = "cfg-if";
+            packageId = "cfg-if";
+          }
+          {
+            name = "hashbrown";
+            packageId = "hashbrown";
+            usesDefaultFeatures = false;
+          }
+          {
+            name = "lock_api";
+            packageId = "lock_api";
+          }
+          {
+            name = "once_cell";
+            packageId = "once_cell";
+          }
+          {
+            name = "parking_lot_core";
+            packageId = "parking_lot_core 0.9.7";
+          }
+        ];
+        features = {
+          "rayon" = [ "dep:rayon" ];
+          "serde" = [ "dep:serde" ];
+        };
+      };
       "data-encoding" = rec {
         crateName = "data-encoding";
         version = "2.3.3";
@@ -2040,7 +2076,7 @@ rec {
           "std" = [ "futures-core/std" "futures-task/std" "futures-util/std" ];
           "thread-pool" = [ "std" "num_cpus" ];
         };
-        resolvedDefaultFeatures = [ "std" ];
+        resolvedDefaultFeatures = [ "default" "std" ];
       };
       "futures-io" = rec {
         crateName = "futures-io";
@@ -3765,6 +3801,348 @@ rec {
         ];
 
       };
+      "opentelemetry" = rec {
+        crateName = "opentelemetry";
+        version = "0.18.0";
+        edition = "2021";
+        sha256 = "0vh8xzzigx1n95pv3vxd09lxan40626hwjry6q56q44a53bw7mk9";
+        dependencies = [
+          {
+            name = "opentelemetry_api";
+            packageId = "opentelemetry_api";
+          }
+          {
+            name = "opentelemetry_sdk";
+            packageId = "opentelemetry_sdk";
+          }
+        ];
+        features = {
+          "default" = [ "trace" ];
+          "metrics" = [ "opentelemetry_api/metrics" "opentelemetry_sdk/metrics" ];
+          "rt-async-std" = [ "opentelemetry_sdk/rt-async-std" ];
+          "rt-tokio" = [ "opentelemetry_sdk/rt-tokio" ];
+          "rt-tokio-current-thread" = [ "opentelemetry_sdk/rt-tokio-current-thread" ];
+          "testing" = [ "opentelemetry_api/testing" "opentelemetry_sdk/testing" ];
+          "trace" = [ "opentelemetry_api/trace" "opentelemetry_sdk/trace" ];
+        };
+        resolvedDefaultFeatures = [ "default" "metrics" "rt-tokio" "trace" ];
+      };
+      "opentelemetry-otlp" = rec {
+        crateName = "opentelemetry-otlp";
+        version = "0.11.0";
+        edition = "2021";
+        sha256 = "1pmvr0i3cw8v50zhq29vvwmp1bhhqfynf43ajgy90xq8kmh2ijfi";
+        dependencies = [
+          {
+            name = "async-trait";
+            packageId = "async-trait";
+          }
+          {
+            name = "futures";
+            packageId = "futures";
+            usesDefaultFeatures = false;
+            features = [ "std" ];
+          }
+          {
+            name = "futures-util";
+            packageId = "futures-util";
+            usesDefaultFeatures = false;
+            features = [ "std" ];
+          }
+          {
+            name = "http";
+            packageId = "http";
+            optional = true;
+          }
+          {
+            name = "opentelemetry";
+            packageId = "opentelemetry";
+            usesDefaultFeatures = false;
+            features = [ "trace" ];
+          }
+          {
+            name = "opentelemetry-proto";
+            packageId = "opentelemetry-proto";
+            usesDefaultFeatures = false;
+          }
+          {
+            name = "prost";
+            packageId = "prost";
+            optional = true;
+          }
+          {
+            name = "thiserror";
+            packageId = "thiserror";
+          }
+          {
+            name = "tokio";
+            packageId = "tokio";
+            optional = true;
+            features = [ "sync" "rt" ];
+          }
+          {
+            name = "tonic";
+            packageId = "tonic";
+            optional = true;
+          }
+        ];
+        devDependencies = [
+          {
+            name = "tokio";
+            packageId = "tokio";
+            features = [ "macros" "rt-multi-thread" ];
+          }
+        ];
+        features = {
+          "default" = [ "grpc-tonic" "trace" ];
+          "grpc-sys" = [ "grpcio" "opentelemetry-proto/gen-protoc" "protobuf" ];
+          "grpc-tonic" = [ "tonic" "prost" "http" "tokio" "opentelemetry-proto/gen-tonic" "opentelemetry-proto/build-client" ];
+          "grpcio" = [ "dep:grpcio" ];
+          "http" = [ "dep:http" ];
+          "http-proto" = [ "prost" "opentelemetry-http" "opentelemetry-proto/gen-tonic" "http" "trace" ];
+          "integration-testing" = [ "tonic" "prost" "tokio/full" "trace" "opentelemetry-proto/build-server" ];
+          "metrics" = [ "opentelemetry/metrics" "opentelemetry-proto/metrics" "grpc-tonic" ];
+          "openssl" = [ "grpcio/openssl" ];
+          "openssl-vendored" = [ "grpcio/openssl-vendored" ];
+          "opentelemetry-http" = [ "dep:opentelemetry-http" ];
+          "prost" = [ "dep:prost" ];
+          "protobuf" = [ "dep:protobuf" ];
+          "reqwest" = [ "dep:reqwest" ];
+          "reqwest-blocking-client" = [ "reqwest/blocking" "opentelemetry-http/reqwest" ];
+          "reqwest-client" = [ "reqwest" "opentelemetry-http/reqwest" ];
+          "reqwest-rustls" = [ "reqwest" "reqwest/rustls-tls-native-roots" ];
+          "serde" = [ "dep:serde" ];
+          "serialize" = [ "serde" ];
+          "surf" = [ "dep:surf" ];
+          "surf-client" = [ "surf" "opentelemetry-http/surf" ];
+          "tls" = [ "tonic/tls" ];
+          "tls-roots" = [ "tls" "tonic/tls-roots" ];
+          "tokio" = [ "dep:tokio" ];
+          "tonic" = [ "dep:tonic" ];
+          "trace" = [ "opentelemetry/trace" "opentelemetry-proto/traces" ];
+        };
+        resolvedDefaultFeatures = [ "default" "grpc-tonic" "http" "prost" "tokio" "tonic" "trace" ];
+      };
+      "opentelemetry-proto" = rec {
+        crateName = "opentelemetry-proto";
+        version = "0.1.0";
+        edition = "2021";
+        sha256 = "0a3csvw9ld2y3ggl2hffkrc9wj0pr4ba1b3av26m0x2mvxb2y6nn";
+        authors = [
+          "OpenTelemetry Authors <cncf-opentelemetry-contributors@lists.cncf.io>"
+        ];
+        dependencies = [
+          {
+            name = "futures";
+            packageId = "futures";
+            usesDefaultFeatures = false;
+            features = [ "std" ];
+          }
+          {
+            name = "futures-util";
+            packageId = "futures-util";
+            usesDefaultFeatures = false;
+            features = [ "std" ];
+          }
+          {
+            name = "opentelemetry";
+            packageId = "opentelemetry";
+            usesDefaultFeatures = false;
+            features = [ "trace" "metrics" ];
+          }
+          {
+            name = "prost";
+            packageId = "prost";
+            optional = true;
+          }
+          {
+            name = "tonic";
+            packageId = "tonic";
+            optional = true;
+          }
+        ];
+        buildDependencies = [
+          {
+            name = "tonic-build";
+            packageId = "tonic-build";
+            optional = true;
+          }
+        ];
+        features = {
+          "full" = [ "gen-tonic" "gen-protoc" "traces" "logs" "metrics" "zpages" "build-server" "build-client" "with-serde" ];
+          "gen-protoc" = [ "grpcio" "protobuf" ];
+          "gen-tonic" = [ "tonic" "tonic-build" "prost" ];
+          "grpcio" = [ "dep:grpcio" ];
+          "prost" = [ "dep:prost" ];
+          "prost-build" = [ "dep:prost-build" ];
+          "protobuf" = [ "dep:protobuf" ];
+          "serde" = [ "dep:serde" ];
+          "serde_json" = [ "dep:serde_json" ];
+          "tonic" = [ "dep:tonic" ];
+          "tonic-build" = [ "dep:tonic-build" ];
+          "with-serde" = [ "protobuf/with-serde" "serde" "serde_json" ];
+          "zpages" = [ "traces" ];
+        };
+        resolvedDefaultFeatures = [ "build-client" "gen-tonic" "prost" "tonic" "tonic-build" "traces" ];
+      };
+      "opentelemetry_api" = rec {
+        crateName = "opentelemetry_api";
+        version = "0.18.0";
+        edition = "2021";
+        sha256 = "08hcfvvjnqgw2i86pks6rhmxnac9jyafx543g8y83k3s3vi9cky2";
+        dependencies = [
+          {
+            name = "fnv";
+            packageId = "fnv";
+            optional = true;
+          }
+          {
+            name = "futures-channel";
+            packageId = "futures-channel";
+          }
+          {
+            name = "futures-util";
+            packageId = "futures-util";
+            usesDefaultFeatures = false;
+            features = [ "std" "sink" ];
+          }
+          {
+            name = "indexmap";
+            packageId = "indexmap";
+          }
+          {
+            name = "js-sys";
+            packageId = "js-sys";
+            target = { target, features }: ("wasm32" == target."arch");
+          }
+          {
+            name = "once_cell";
+            packageId = "once_cell";
+          }
+          {
+            name = "pin-project-lite";
+            packageId = "pin-project-lite";
+            optional = true;
+          }
+          {
+            name = "thiserror";
+            packageId = "thiserror";
+          }
+        ];
+        features = {
+          "default" = [ "trace" ];
+          "fnv" = [ "dep:fnv" ];
+          "metrics" = [ "fnv" ];
+          "pin-project-lite" = [ "dep:pin-project-lite" ];
+          "testing" = [ "trace" ];
+          "tokio-stream" = [ "dep:tokio-stream" ];
+          "trace" = [ "pin-project-lite" ];
+        };
+        resolvedDefaultFeatures = [ "default" "fnv" "metrics" "pin-project-lite" "trace" ];
+      };
+      "opentelemetry_sdk" = rec {
+        crateName = "opentelemetry_sdk";
+        version = "0.18.0";
+        edition = "2021";
+        sha256 = "04wiq0jsdxr8r1760hq5r57az68ljcbby57jlb1626rp6d4ir90w";
+        dependencies = [
+          {
+            name = "async-trait";
+            packageId = "async-trait";
+            optional = true;
+          }
+          {
+            name = "crossbeam-channel";
+            packageId = "crossbeam-channel";
+            optional = true;
+          }
+          {
+            name = "dashmap";
+            packageId = "dashmap";
+            optional = true;
+          }
+          {
+            name = "fnv";
+            packageId = "fnv";
+            optional = true;
+          }
+          {
+            name = "futures-channel";
+            packageId = "futures-channel";
+          }
+          {
+            name = "futures-executor";
+            packageId = "futures-executor";
+          }
+          {
+            name = "futures-util";
+            packageId = "futures-util";
+            usesDefaultFeatures = false;
+            features = [ "std" "sink" "async-await-macro" ];
+          }
+          {
+            name = "once_cell";
+            packageId = "once_cell";
+          }
+          {
+            name = "opentelemetry_api";
+            packageId = "opentelemetry_api";
+          }
+          {
+            name = "percent-encoding";
+            packageId = "percent-encoding";
+            optional = true;
+          }
+          {
+            name = "rand";
+            packageId = "rand 0.8.5";
+            optional = true;
+            usesDefaultFeatures = false;
+            features = [ "std" "std_rng" ];
+          }
+          {
+            name = "thiserror";
+            packageId = "thiserror";
+          }
+          {
+            name = "tokio";
+            packageId = "tokio";
+            optional = true;
+            usesDefaultFeatures = false;
+            features = [ "rt" "time" ];
+          }
+          {
+            name = "tokio-stream";
+            packageId = "tokio-stream";
+            optional = true;
+          }
+        ];
+        features = {
+          "async-std" = [ "dep:async-std" ];
+          "async-trait" = [ "dep:async-trait" ];
+          "crossbeam-channel" = [ "dep:crossbeam-channel" ];
+          "dashmap" = [ "dep:dashmap" ];
+          "default" = [ "trace" ];
+          "fnv" = [ "dep:fnv" ];
+          "http" = [ "dep:http" ];
+          "jaeger_remote_sampler" = [ "trace" "opentelemetry-http" "http" "serde" "serde_json" "url" ];
+          "metrics" = [ "opentelemetry_api/metrics" "dashmap" "fnv" ];
+          "opentelemetry-http" = [ "dep:opentelemetry-http" ];
+          "percent-encoding" = [ "dep:percent-encoding" ];
+          "rand" = [ "dep:rand" ];
+          "rt-async-std" = [ "async-std" ];
+          "rt-tokio" = [ "tokio" "tokio-stream" ];
+          "rt-tokio-current-thread" = [ "tokio" "tokio-stream" ];
+          "serde" = [ "dep:serde" ];
+          "serde_json" = [ "dep:serde_json" ];
+          "testing" = [ "opentelemetry_api/testing" "trace" "metrics" "rt-async-std" "rt-tokio" "rt-tokio-current-thread" "tokio/macros" "tokio/rt-multi-thread" ];
+          "tokio" = [ "dep:tokio" ];
+          "tokio-stream" = [ "dep:tokio-stream" ];
+          "trace" = [ "opentelemetry_api/trace" "crossbeam-channel" "rand" "async-trait" "percent-encoding" ];
+          "url" = [ "dep:url" ];
+        };
+        resolvedDefaultFeatures = [ "async-trait" "crossbeam-channel" "dashmap" "default" "fnv" "metrics" "percent-encoding" "rand" "rt-tokio" "tokio" "tokio-stream" "trace" ];
+      };
       "os_str_bytes" = rec {
         crateName = "os_str_bytes";
         version = "6.4.1";
@@ -3827,7 +4205,7 @@ rec {
           }
           {
             name = "parking_lot_core";
-            packageId = "parking_lot_core";
+            packageId = "parking_lot_core 0.8.6";
           }
         ];
         features = {
@@ -3841,7 +4219,7 @@ rec {
         };
         resolvedDefaultFeatures = [ "default" ];
       };
-      "parking_lot_core" = rec {
+      "parking_lot_core 0.8.6" = rec {
         crateName = "parking_lot_core";
         version = "0.8.6";
         edition = "2018";
@@ -3877,6 +4255,47 @@ rec {
             packageId = "winapi";
             target = { target, features }: (target."windows" or false);
             features = [ "winnt" "ntstatus" "minwindef" "winerror" "winbase" "errhandlingapi" "handleapi" ];
+          }
+        ];
+        features = {
+          "backtrace" = [ "dep:backtrace" ];
+          "deadlock_detection" = [ "petgraph" "thread-id" "backtrace" ];
+          "petgraph" = [ "dep:petgraph" ];
+          "thread-id" = [ "dep:thread-id" ];
+        };
+      };
+      "parking_lot_core 0.9.7" = rec {
+        crateName = "parking_lot_core";
+        version = "0.9.7";
+        edition = "2018";
+        sha256 = "08cm5gg3a4jmr683x9dgih8vj66yn772kjvc8y1m0flyz6wwnsch";
+        authors = [
+          "Amanieu d'Antras <amanieu@gmail.com>"
+        ];
+        dependencies = [
+          {
+            name = "cfg-if";
+            packageId = "cfg-if";
+          }
+          {
+            name = "libc";
+            packageId = "libc";
+            target = { target, features }: (target."unix" or false);
+          }
+          {
+            name = "redox_syscall";
+            packageId = "redox_syscall";
+            target = { target, features }: ("redox" == target."os");
+          }
+          {
+            name = "smallvec";
+            packageId = "smallvec";
+          }
+          {
+            name = "windows-sys";
+            packageId = "windows-sys 0.45.0";
+            target = { target, features }: (target."windows" or false);
+            features = [ "Win32_Foundation" "Win32_System_LibraryLoader" "Win32_System_SystemServices" "Win32_System_WindowsProgramming" ];
           }
         ];
         features = {
@@ -7466,6 +7885,58 @@ rec {
         };
         resolvedDefaultFeatures = [ "log-tracer" "std" ];
       };
+      "tracing-opentelemetry" = rec {
+        crateName = "tracing-opentelemetry";
+        version = "0.18.0";
+        edition = "2018";
+        sha256 = "1pj8mnxkpp4jwkb45jipavdhpdrsa4h901nz689jf4zajmxbisr1";
+        authors = [
+          "Julian Tescher <julian@tescher.me>"
+          "Tokio Contributors <team@tokio.rs>"
+        ];
+        dependencies = [
+          {
+            name = "once_cell";
+            packageId = "once_cell";
+          }
+          {
+            name = "opentelemetry";
+            packageId = "opentelemetry";
+            usesDefaultFeatures = false;
+            features = [ "trace" ];
+          }
+          {
+            name = "tracing";
+            packageId = "tracing";
+            usesDefaultFeatures = false;
+            features = [ "std" ];
+          }
+          {
+            name = "tracing-core";
+            packageId = "tracing-core";
+          }
+          {
+            name = "tracing-log";
+            packageId = "tracing-log";
+            optional = true;
+            usesDefaultFeatures = false;
+          }
+          {
+            name = "tracing-subscriber";
+            packageId = "tracing-subscriber";
+            usesDefaultFeatures = false;
+            features = [ "registry" "std" ];
+          }
+        ];
+        features = {
+          "async-trait" = [ "dep:async-trait" ];
+          "default" = [ "tracing-log" "metrics" ];
+          "metrics" = [ "opentelemetry/metrics" ];
+          "thiserror" = [ "dep:thiserror" ];
+          "tracing-log" = [ "dep:tracing-log" ];
+        };
+        resolvedDefaultFeatures = [ "default" "metrics" "tracing-log" ];
+      };
       "tracing-serde" = rec {
         crateName = "tracing-serde";
         version = "0.1.3";
@@ -7914,6 +8385,18 @@ rec {
             packageId = "nix-compat";
           }
           {
+            name = "opentelemetry";
+            packageId = "opentelemetry";
+            optional = true;
+            features = [ "rt-tokio" ];
+          }
+          {
+            name = "opentelemetry-otlp";
+            packageId = "opentelemetry-otlp";
+            optional = true;
+            features = [ "tokio" ];
+          }
+          {
             name = "prost";
             packageId = "prost";
           }
@@ -7962,6 +8445,10 @@ rec {
             packageId = "tracing";
           }
           {
+            name = "tracing-opentelemetry";
+            packageId = "tracing-opentelemetry";
+          }
+          {
             name = "tracing-subscriber";
             packageId = "tracing-subscriber";
             features = [ "json" ];
@@ -7996,11 +8483,12 @@ rec {
           }
         ];
         features = {
-          "default" = [ "reflection" ];
+          "default" = [ "reflection" "otlp" ];
+          "otlp" = [ "dep:opentelemetry" "dep:opentelemetry-otlp" ];
           "reflection" = [ "tonic-reflection" ];
           "tonic-reflection" = [ "dep:tonic-reflection" ];
         };
-        resolvedDefaultFeatures = [ "default" "reflection" "tonic-reflection" ];
+        resolvedDefaultFeatures = [ "default" "otlp" "reflection" "tonic-reflection" ];
       };
       "typenum" = rec {
         crateName = "typenum";
@@ -9554,7 +10042,7 @@ rec {
           "Win32_UI_WindowsAndMessaging" = [ "Win32_UI" ];
           "Win32_UI_Wpf" = [ "Win32_UI" ];
         };
-        resolvedDefaultFeatures = [ "Win32" "Win32_Foundation" "Win32_NetworkManagement" "Win32_NetworkManagement_IpHelper" "Win32_Networking" "Win32_Networking_WinSock" "Win32_Security" "Win32_Storage" "Win32_Storage_FileSystem" "Win32_System" "Win32_System_Console" "Win32_System_IO" "Win32_System_Threading" "default" ];
+        resolvedDefaultFeatures = [ "Win32" "Win32_Foundation" "Win32_NetworkManagement" "Win32_NetworkManagement_IpHelper" "Win32_Networking" "Win32_Networking_WinSock" "Win32_Security" "Win32_Storage" "Win32_Storage_FileSystem" "Win32_System" "Win32_System_Console" "Win32_System_IO" "Win32_System_LibraryLoader" "Win32_System_SystemServices" "Win32_System_Threading" "Win32_System_WindowsProgramming" "default" ];
       };
       "windows-targets" = rec {
         crateName = "windows-targets";
