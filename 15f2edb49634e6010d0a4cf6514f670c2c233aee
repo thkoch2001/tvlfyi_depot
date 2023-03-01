@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "68fbc126_92cdbbee",
+        "filename": "ops/terraform/deploy-nixos/README.md",
+        "patchSetId": 3
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-03-01T14:00:23Z",
+      "side": 1,
+      "message": "I\u0027d prefer to call this attrpath. A closure can mean many different things, but this is the attribute path pointing to a closure when built.",
+      "revId": "15f2edb49634e6010d0a4cf6514f670c2c233aee",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "823fc691_23dd7053",
+        "filename": "ops/terraform/deploy-nixos/README.md",
+        "patchSetId": 3
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-03-01T14:00:23Z",
+      "side": 1,
+      "message": "target_host is probably more consistent - this can be both an ip address or a host(name).",
+      "revId": "15f2edb49634e6010d0a4cf6514f670c2c233aee",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d8a93ffc_ecaaa877",
+        "filename": "ops/terraform/deploy-nixos/README.md",
+        "patchSetId": 3
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-03-01T14:00:23Z",
+      "side": 1,
+      "message": "I\u0027d prefer `target_user_ssh_key` - this is not just some key, but the *ssh* key.",
+      "revId": "15f2edb49634e6010d0a4cf6514f670c2c233aee",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d5d60bb0_6ac6c120",
+        "filename": "ops/terraform/deploy-nixos/nixos-eval.sh",
+        "patchSetId": 3
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-03-01T14:00:23Z",
+      "side": 1,
+      "message": "We might want to add a comment about what @sh does on top. Are you also certain it treats spaces properly? Asking for the CL that\u0027s coming right after this one ;-)",
+      "revId": "15f2edb49634e6010d0a4cf6514f670c2c233aee",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
