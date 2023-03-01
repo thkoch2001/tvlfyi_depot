@@ -14,11 +14,6 @@ variable "attrpath" {
   type        = string
 }
 
-variable "target_name" {
-  description = "unique name of the target machine"
-  type        = string
-}
-
 variable "target_host" {
   description = "address (IP or hostname) at which the target is reachable"
   type        = string
@@ -43,6 +38,12 @@ variable "target_user_ssh_key" {
   description = "SSH key to use for connecting to the target"
   type        = string
   sensitive   = true
+}
+
+variable "triggers" {
+  type        = map(string)
+  description = "Triggers for deploy"
+  default     = {}
 }
 
 # Fetch the derivation hash for the NixOS system.
@@ -96,12 +97,11 @@ resource "null_resource" "nixos_deploy" {
     ]
   }
 
-  triggers = {
+  triggers = merge({
     nixos_drv   = data.external.nixos_system.result.drv
-    attrpath    = var.attrpath
+    attrpat     = var.attrpath
     target_host = var.target_host
-    target_name = var.target_name
-  }
+  }, var.triggers)
 }
 
 output "nixos_drv" {

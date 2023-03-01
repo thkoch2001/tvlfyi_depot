@@ -21,7 +21,6 @@ deploy is necessary.
 module "deploy_somehost" {
   source              = "git::https://code.tvl.fyi/depot.git:/ops/terraform/deploy-nixos.git"
   attrpath            = "ops.nixos.somehost"
-  target_name         = "somehost"
   target_host         = "somehost.tvl.su"
   target_user         = "someone"
   target_user_ssh_key = tls_private_key.somehost.private_key_pem
