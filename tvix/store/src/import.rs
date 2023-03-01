@@ -46,7 +46,9 @@ impl From<super::Error> for Error {
 // proto::node::Node, depending on the type of the entry.
 //
 // If the entry is a file, its contents are uploaded.
-// If the entry is a directory, the so-fa
+// If the entry is a directory, the Directory is uploaded as well.
+// For this to work, it relies on the caller to provide the directory object
+// with the previously returned (child) nodes.
 //
 // It assumes entries to be returned in "contents first" order, means this
 // will only be called with a directory if all children of it have been
@@ -56,7 +58,7 @@ impl From<super::Error> for Error {
 //
 // It assumes the caller adds returned nodes to the directories it assembles.
 #[instrument(skip_all, fields(entry.file_type=?&entry.file_type(),entry.path=?entry.path()))]
-fn process_entry<BS: BlobService, CS: ChunkService, DS: DirectoryService>(
+fn process_entry<BS: BlobService, CS: ChunkService + std::marker::Sync, DS: DirectoryService>(
     blob_service: &mut BS,
     chunk_service: &mut CS,
     directory_service: &mut DS,
@@ -165,7 +167,7 @@ fn process_entry<BS: BlobService, CS: ChunkService, DS: DirectoryService>(
 #[instrument(skip(blob_service, chunk_service, directory_service), fields(path=?p))]
 pub fn import_path<
     BS: BlobService,
-    CS: ChunkService,
+    CS: ChunkService + std::marker::Sync,
     DS: DirectoryService,
     P: AsRef<Path> + Debug,
 >(
