@@ -9,11 +9,6 @@
 # machine that runs `terraform apply`, then copied and activated on
 # the target machine using `nix-copy-closure`.
 
-variable "target_name" {
-  description = "unique name of the target machine"
-  type        = string
-}
-
 variable "attrpath" {
   description = "attribute set path pointing to the NixOS system closure"
   type        = string
@@ -43,6 +38,12 @@ variable "target_user_ssh_key" {
   description = "SSH key to use for connecting to the target"
   type        = string
   sensitive   = true
+}
+
+variable "triggers" {
+  type        = map(string)
+  description = "Triggers for deploy"
+  default     = {}
 }
 
 # Fetch the derivation hash for the NixOS system.
@@ -96,12 +97,11 @@ resource "null_resource" "nixos_deploy" {
     ]
   }
 
-  triggers = {
-    nixos_drv   = data.external.nixos_system.result.drv
-    closure     = var.attrpath
-    target_host = var.target_host
-    target_name = var.target_name
-  }
+  triggers = merge({
+    nixos_drv      = data.external.nixos_system.result.drv
+    closure        = var.attrpath
+    target_address = var.target_address
+  }, var.triggers)
 }
 
 output "nixos_drv" {
