@@ -45,6 +45,12 @@ variable "target_user_key" {
   sensitive   = true
 }
 
+variable "triggers" {
+  type        = map(string)
+  description = "Triggers for deploy"
+  default     = {}
+}
+
 # Fetch the derivation hash for the NixOS system.
 data "external" "nixos_system" {
   program = ["${path.module}/nixos-eval.sh"]
@@ -96,12 +102,12 @@ resource "null_resource" "nixos_deploy" {
     ]
   }
 
-  triggers = {
+  triggers = merge({
     nixos_drv      = data.external.nixos_system.result.drv
     closure        = var.closure
     target_address = var.target_address
     target_name    = var.target_name
-  }
+  }, var.triggers)
 }
 
 output "nixos_drv" {
