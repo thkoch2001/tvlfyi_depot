@@ -2872,6 +2872,7 @@ dependencies = [
  "opentelemetry-jaeger",
  "prost",
  "prost-build",
+ "rayon",
  "sha2 0.10.6",
  "sled",
  "tempfile",
