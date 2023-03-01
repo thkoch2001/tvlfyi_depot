@@ -19,6 +19,16 @@ variable "closure" {
   type        = string
 }
 
+variable "entrypoint" {
+  description = <<EOT
+    Path to a .nix file (or directory containing `default.nix` file)
+    that provides the attrset specified in `closure`.
+    If unset, asks git for the root of the repository.
+  EOT
+  type        = string
+  default     = ""
+}
+
 variable "target_address" {
   description = "address (IP or hostname) at which the target is reachable"
   type        = string
@@ -40,7 +50,8 @@ data "external" "nixos_system" {
   program = ["${path.module}/nixos-eval.sh"]
 
   query = {
-    closure = var.closure
+    closure    = var.closure
+    entrypoint = var.entrypoint
   }
 }
 
