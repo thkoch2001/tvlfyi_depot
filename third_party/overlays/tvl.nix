@@ -105,7 +105,7 @@ depot.nix.readTree.drvTargets {
 
   # nix-serve does not work with nix 2.4
   # https://github.com/edolstra/nix-serve/issues/28
-  nix-serve = super.nix-serve.override { nix = super.nix_2_3; };
+  nix-serve = super.nix-serve.override { nix = self.nix_2_3; };
 
   # Avoid builds of mkShell derivations in CI.
   mkShell = super.lib.makeOverridable (args: (super.mkShell args).overrideAttrs (_: {
