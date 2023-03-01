@@ -131,13 +131,11 @@ mod tests {
     use std::io::Cursor;
     use std::io::Read;
     use std::io::Write;
-    use tempfile::TempDir;
 
     #[test]
     /// reading from a blobmeta with zero chunks should produce zero bytes.
     fn empty_blobmeta() -> anyhow::Result<()> {
-        let tmpdir = TempDir::new()?;
-        let chunk_service = gen_chunk_service(tmpdir.path());
+        let chunk_service = gen_chunk_service();
 
         let blobmeta = proto::BlobMeta {
             chunks: vec![],
@@ -157,8 +155,7 @@ mod tests {
     #[test]
     /// trying to read something where the chunk doesn't exist should fail
     fn missing_chunk_fail() -> anyhow::Result<()> {
-        let tmpdir = TempDir::new()?;
-        let chunk_service = gen_chunk_service(tmpdir.path());
+        let chunk_service = gen_chunk_service();
 
         let blobmeta = proto::BlobMeta {
             chunks: vec![proto::blob_meta::ChunkMeta {
@@ -181,8 +178,7 @@ mod tests {
     #[test]
     /// read something containing the single (empty) chunk
     fn empty_chunk() -> anyhow::Result<()> {
-        let tmpdir = TempDir::new()?;
-        let chunk_service = gen_chunk_service(tmpdir.path());
+        let chunk_service = gen_chunk_service();
 
         // insert a single chunk
         let dgst = chunk_service.put(vec![]).expect("must succeed");
@@ -212,8 +208,7 @@ mod tests {
     /// read something which contains a single chunk
     #[test]
     fn single_chunk() -> anyhow::Result<()> {
-        let tmpdir = TempDir::new()?;
-        let chunk_service = gen_chunk_service(tmpdir.path());
+        let chunk_service = gen_chunk_service();
 
         // insert a single chunk
         let dgst = chunk_service
@@ -245,8 +240,7 @@ mod tests {
     /// read something referring to a chunk, but with wrong size
     #[test]
     fn wrong_size_fail() -> anyhow::Result<()> {
-        let tmpdir = TempDir::new()?;
-        let chunk_service = gen_chunk_service(tmpdir.path());
+        let chunk_service = gen_chunk_service();
 
         // insert chunks
         let dgst_1 = chunk_service
@@ -276,8 +270,7 @@ mod tests {
     /// read something referring to multiple chunks
     #[test]
     fn multiple_chunks() -> anyhow::Result<()> {
-        let tmpdir = TempDir::new()?;
-        let chunk_service = gen_chunk_service(tmpdir.path());
+        let chunk_service = gen_chunk_service();
 
         // insert chunks
         let dgst_1 = chunk_service
