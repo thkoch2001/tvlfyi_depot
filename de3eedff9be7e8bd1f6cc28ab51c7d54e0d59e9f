@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9835c0db_b000c8c8",
+        "filename": "views/tvix/default.nix",
+        "patchSetId": 7
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-03-01T14:50:34Z",
+      "side": 0,
+      "message": "I think views/tvix/default.nix also needs to be updated.",
+      "revId": "de3eedff9be7e8bd1f6cc28ab51c7d54e0d59e9f",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
