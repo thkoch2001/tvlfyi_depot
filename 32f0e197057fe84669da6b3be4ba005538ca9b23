@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d363bcbc_3fe05db1",
+        "filename": "tvix/store/src/bin/tvix-store.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 64,
+      "author": {
+        "id": 1000072
+      },
+      "writtenOn": "2023-03-02T16:05:24Z",
+      "side": 1,
+      "message": "Shouldn\u0027t we use OLTP exporter instead of jaeger?\n\nIdeally, Due to the vendor neutral nature of otel, I would have the following design.\n\nAPP -\u003e Otel Collector -\u003e Jaeger/Prometheus/Zipkin",
+      "revId": "32f0e197057fe84669da6b3be4ba005538ca9b23",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
