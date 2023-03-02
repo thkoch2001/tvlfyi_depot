@@ -34,6 +34,24 @@
       "parentUuid": "c6ceb2cd_69035347",
       "revId": "61ed7a2f8dc32b2c30619a73b340e9297f7b2810",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6286f2af_5dacd712",
+        "filename": "ops/terraform/deploy-nixos/main.tf",
+        "patchSetId": 4
+      },
+      "lineNbr": 75,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-03-02T21:53:04Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "b3fb8bb4_f2a4ac50",
+      "revId": "61ed7a2f8dc32b2c30619a73b340e9297f7b2810",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }

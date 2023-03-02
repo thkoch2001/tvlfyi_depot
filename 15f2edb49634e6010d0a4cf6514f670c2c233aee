@@ -139,6 +139,24 @@
       "parentUuid": "d5d60bb0_6ac6c120",
       "revId": "15f2edb49634e6010d0a4cf6514f670c2c233aee",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a3f88da2_f2e00e7d",
+        "filename": "ops/terraform/deploy-nixos/nixos-eval.sh",
+        "patchSetId": 3
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-03-02T21:53:04Z",
+      "side": 1,
+      "message": "This was mostly around spaces and quotes of various forms, and whether it properly escapes them.\n\nI tested it manually, and it seems to do the right thing:\n\n```zsh\n❯ echo \"{\\\"closure\\\": \\\"something with spaces and \\\\\\\" quotes\u0027\\\"}\" | jq -r \u0027@sh \"CLOSURE\u003d\\(.closure)\"\u0027\nCLOSURE\u003d\u0027something with spaces and \" quotes\u0027\\\u0027\u0027\u0027\n```\n\nSo can you add the comment:\n\n```\nMake sure spaces and quotes are escaped for usage in shell.\n```\n\nAnd this should probably be `eval \"$(jq -r \u0027@sh \"ATTRPATH\u003d\\(.attrpath)\"\u0027)\"`\n\n?",
+      "parentUuid": "88b74d03_41a3314f",
+      "revId": "15f2edb49634e6010d0a4cf6514f670c2c233aee",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }

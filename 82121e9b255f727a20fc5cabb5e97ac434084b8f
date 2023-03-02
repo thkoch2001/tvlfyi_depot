@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9f78bb57_9d412a82",
+        "filename": "ops/terraform/deploy-nixos/README.md",
+        "patchSetId": 5
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-03-02T21:53:04Z",
+      "side": 1,
+      "message": "this needs to be called attrpath in the example as well.",
+      "revId": "82121e9b255f727a20fc5cabb5e97ac434084b8f",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "91c0048f_d5c7bbce",
+        "filename": "ops/terraform/deploy-nixos/README.md",
+        "patchSetId": 5
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-03-02T21:53:04Z",
+      "side": 1,
+      "message": "target_host",
+      "revId": "82121e9b255f727a20fc5cabb5e97ac434084b8f",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5cbbf87b_a75b3fda",
+        "filename": "ops/terraform/deploy-nixos/main.tf",
+        "patchSetId": 5
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-03-02T21:53:04Z",
+      "side": 1,
+      "message": "attrpath \u003d var.attrpath",
+      "revId": "82121e9b255f727a20fc5cabb5e97ac434084b8f",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
