@@ -157,6 +157,24 @@
       "parentUuid": "88b74d03_41a3314f",
       "revId": "15f2edb49634e6010d0a4cf6514f670c2c233aee",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "002279a7_92cf2e8e",
+        "filename": "ops/terraform/deploy-nixos/nixos-eval.sh",
+        "patchSetId": 3
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-03-02T21:55:17Z",
+      "side": 1,
+      "message": "ah, you did add a \"jq\u0027s @sh format takes care of escaping\" comment. So please disregard the first part of the previous comment.",
+      "parentUuid": "a3f88da2_f2e00e7d",
+      "revId": "15f2edb49634e6010d0a4cf6514f670c2c233aee",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
