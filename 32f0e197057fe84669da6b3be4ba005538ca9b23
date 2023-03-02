@@ -16,6 +16,23 @@
       "message": "Shouldn\u0027t we use OLTP exporter instead of jaeger?\n\nIdeally, Due to the vendor neutral nature of otel, I would have the following design.\n\nAPP -\u003e Otel Collector -\u003e Jaeger/Prometheus/Zipkin",
       "revId": "32f0e197057fe84669da6b3be4ba005538ca9b23",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "098a218a_d8cbca2f",
+        "filename": "tvix/store/src/bin/tvix-store.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 70,
+      "author": {
+        "id": 1000072
+      },
+      "writtenOn": "2023-03-02T16:06:38Z",
+      "side": 1,
+      "message": "Maybe have the service name as `tvix.store`? This way it would be easier to search and we can extend it with `tvix.eval` and `tvix.cli`.",
+      "revId": "32f0e197057fe84669da6b3be4ba005538ca9b23",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
