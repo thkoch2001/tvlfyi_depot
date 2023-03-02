@@ -18,6 +18,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "75bfb070_7c933531",
+        "filename": "ops/terraform/deploy-nixos/README.md",
+        "patchSetId": 3
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2023-03-02T19:25:47Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "68fbc126_92cdbbee",
+      "revId": "15f2edb49634e6010d0a4cf6514f670c2c233aee",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "823fc691_23dd7053",
@@ -31,6 +49,24 @@
       "writtenOn": "2023-03-01T14:00:23Z",
       "side": 1,
       "message": "target_host is probably more consistent - this can be both an ip address or a host(name).",
+      "revId": "15f2edb49634e6010d0a4cf6514f670c2c233aee",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5c95c814_9645eb3f",
+        "filename": "ops/terraform/deploy-nixos/README.md",
+        "patchSetId": 3
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2023-03-02T19:25:47Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "823fc691_23dd7053",
       "revId": "15f2edb49634e6010d0a4cf6514f670c2c233aee",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
@@ -52,6 +88,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "b0b154c2_377528fe",
+        "filename": "ops/terraform/deploy-nixos/README.md",
+        "patchSetId": 3
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2023-03-02T19:25:47Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d8a93ffc_ecaaa877",
+      "revId": "15f2edb49634e6010d0a4cf6514f670c2c233aee",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "d5d60bb0_6ac6c120",
@@ -65,6 +119,24 @@
       "writtenOn": "2023-03-01T14:00:23Z",
       "side": 1,
       "message": "We might want to add a comment about what @sh does on top. Are you also certain it treats spaces properly? Asking for the CL that\u0027s coming right after this one ;-)",
+      "revId": "15f2edb49634e6010d0a4cf6514f670c2c233aee",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "88b74d03_41a3314f",
+        "filename": "ops/terraform/deploy-nixos/nixos-eval.sh",
+        "patchSetId": 3
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2023-03-02T19:25:47Z",
+      "side": 1,
+      "message": "It treats them _correctly_ whatever that means, but I\u0027m not sure about whatever your definition of _properly_ is here. Best to try it out!",
+      "parentUuid": "d5d60bb0_6ac6c120",
       "revId": "15f2edb49634e6010d0a4cf6514f670c2c233aee",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }

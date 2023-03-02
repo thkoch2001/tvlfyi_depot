@@ -16,6 +16,24 @@
       "message": "Do you want to add some triggers here as well, so that the closure is copied if the target_address/target_host changes?",
       "revId": "61ed7a2f8dc32b2c30619a73b340e9297f7b2810",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b3fb8bb4_f2a4ac50",
+        "filename": "ops/terraform/deploy-nixos/main.tf",
+        "patchSetId": 4
+      },
+      "lineNbr": 75,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2023-03-02T19:25:47Z",
+      "side": 1,
+      "message": "I don\u0027t have an env to test this with right now, please do that in a followup CL.",
+      "parentUuid": "c6ceb2cd_69035347",
+      "revId": "61ed7a2f8dc32b2c30619a73b340e9297f7b2810",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
