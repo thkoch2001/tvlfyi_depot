@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bf9d6e81_df512d9d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2023-03-03T10:48:05Z",
+      "side": 1,
+      "message": "I\u0027m assuming that the patchset upload is an implicit approval, and setting +2 to get CRFO.",
+      "revId": "1aff29843aa97baea7a4677a966a0a38805ce268",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
