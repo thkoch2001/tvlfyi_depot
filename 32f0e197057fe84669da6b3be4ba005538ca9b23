@@ -36,6 +36,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "f7b2ec5d_fbc80f4b",
+        "filename": "tvix/store/src/bin/tvix-store.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 64,
+      "author": {
+        "id": 1000072
+      },
+      "writtenOn": "2023-03-03T04:45:32Z",
+      "side": 1,
+      "message": "Yup, We can look into sending batch requests. \n\nI can help to setup the config for otel-collector to receive traces.",
+      "parentUuid": "1b609461_42b7636f",
+      "revId": "32f0e197057fe84669da6b3be4ba005538ca9b23",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "098a218a_d8cbca2f",
@@ -67,6 +85,24 @@
       "side": 1,
       "message": "Is there some documentation / best practices around naming of these things? E.g. why is `tvix.store` easier to search for than `tvix-store`?\n\nRelated, I couldn\u0027t get the `target` attribute (https://docs.rs/tracing/latest/tracing/attr.instrument.html#overriding-span-attributes) to appear in traces being sent (with Jaeger), which is why I now did override the `name` field instead. Was I doing something wrong / is this a limitation of `otlp_jaeger`?",
       "parentUuid": "098a218a_d8cbca2f",
+      "revId": "32f0e197057fe84669da6b3be4ba005538ca9b23",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "34c733d4_1d21ff3e",
+        "filename": "tvix/store/src/bin/tvix-store.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 70,
+      "author": {
+        "id": 1000072
+      },
+      "writtenOn": "2023-03-03T04:45:32Z",
+      "side": 1,
+      "message": "This [article] is a good read for naming things in otel. \n\nIdeally, It should send the target field. We can try with an otel-collector. The receivers should not dictate what attributes can be received and what not. \n\nIn golang, I was sending ServiceName and SpanName for the traces. \nThe span could be `DemoController.DemoService.DemoRepository.UUID`. This is just a suggestion and we can follow other schemes If preset.\n\n[article]: https://opentelemetry.io/docs/reference/specification/common/attribute-naming/",
+      "parentUuid": "1e931569_cce2d130",
       "revId": "32f0e197057fe84669da6b3be4ba005538ca9b23",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
