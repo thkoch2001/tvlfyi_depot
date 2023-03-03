@@ -7,12 +7,12 @@ use tonic::{transport::Server, Result};
 use tracing::{info, Level};
 use tracing_subscriber::prelude::*;
 use tracing_subscriber::{layer::SubscriberExt, util::SubscriberInitExt};
-use tvix_store::blobservice::SledBlobService;
-use tvix_store::chunkservice::SledChunkService;
-use tvix_store::directoryservice::SledDirectoryService;
+use tvix_store::blobservice::MemoryBlobService;
+use tvix_store::chunkservice::MemoryChunkService;
+use tvix_store::directoryservice::MemoryDirectoryService;
 use tvix_store::import::import_path;
 use tvix_store::nar::NonCachingNARCalculationService;
-use tvix_store::pathinfoservice::SledPathInfoService;
+use tvix_store::pathinfoservice::MemoryPathInfoService;
 use tvix_store::proto::blob_service_server::BlobServiceServer;
 use tvix_store::proto::directory_service_server::DirectoryServiceServer;
 use tvix_store::proto::path_info_service_server::PathInfoServiceServer;
@@ -96,10 +96,10 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         .try_init()?;
 
     // initialize stores
-    let mut blob_service = SledBlobService::new("blobs.sled".into())?;
-    let mut chunk_service = SledChunkService::new("chunks.sled".into())?;
-    let mut directory_service = SledDirectoryService::new("directories.sled".into())?;
-    let path_info_service = SledPathInfoService::new("pathinfo.sled".into())?;
+    let mut blob_service = MemoryBlobService::default();
+    let mut chunk_service = MemoryChunkService::default();
+    let mut directory_service = MemoryDirectoryService::default();
+    let path_info_service = MemoryPathInfoService::default();
 
     match cli.command {
         Commands::Daemon { listen_address } => {
