@@ -16,6 +16,24 @@
       "message": "Do you plan to link to the excalidraw here as well, or move this to some inline mermaid diagram?",
       "revId": "d9dac5d5500d48b02ae8e0d2e78fbbbd78ce5ed4",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1ac60dba_7bf98187",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2023-03-03T10:50:28Z",
+      "side": 1,
+      "message": "This particular CL is in response to an amjoseph comment, not about embedding diagrams or anything in those docs.",
+      "parentUuid": "bdf9665c_6f360c20",
+      "revId": "d9dac5d5500d48b02ae8e0d2e78fbbbd78ce5ed4",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
