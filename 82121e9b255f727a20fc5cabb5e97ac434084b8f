@@ -18,6 +18,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "3928da58_9b45778f",
+        "filename": "ops/terraform/deploy-nixos/README.md",
+        "patchSetId": 5
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-03-03T08:59:00Z",
+      "side": 1,
+      "message": "done in patchset 7.",
+      "parentUuid": "9f78bb57_9d412a82",
+      "revId": "82121e9b255f727a20fc5cabb5e97ac434084b8f",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "91c0048f_d5c7bbce",
@@ -35,6 +53,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "f1ea5911_bdbfb241",
+        "filename": "ops/terraform/deploy-nixos/README.md",
+        "patchSetId": 5
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-03-03T08:59:00Z",
+      "side": 1,
+      "message": "done in patchset 7.",
+      "parentUuid": "91c0048f_d5c7bbce",
+      "revId": "82121e9b255f727a20fc5cabb5e97ac434084b8f",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "5cbbf87b_a75b3fda",
@@ -48,6 +84,24 @@
       "writtenOn": "2023-03-02T21:53:04Z",
       "side": 1,
       "message": "attrpath \u003d var.attrpath",
+      "revId": "82121e9b255f727a20fc5cabb5e97ac434084b8f",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cc745255_3a3193ac",
+        "filename": "ops/terraform/deploy-nixos/main.tf",
+        "patchSetId": 5
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-03-03T08:59:00Z",
+      "side": 1,
+      "message": "done in patchset 7.",
+      "parentUuid": "5cbbf87b_a75b3fda",
       "revId": "82121e9b255f727a20fc5cabb5e97ac434084b8f",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }

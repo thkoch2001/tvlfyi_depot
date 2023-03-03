@@ -175,6 +175,24 @@
       "parentUuid": "a3f88da2_f2e00e7d",
       "revId": "15f2edb49634e6010d0a4cf6514f670c2c233aee",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "791b95a1_0df67539",
+        "filename": "ops/terraform/deploy-nixos/nixos-eval.sh",
+        "patchSetId": 3
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-03-03T08:59:00Z",
+      "side": 1,
+      "message": "did the second part in patchset 7.",
+      "parentUuid": "002279a7_92cf2e8e",
+      "revId": "15f2edb49634e6010d0a4cf6514f670c2c233aee",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
