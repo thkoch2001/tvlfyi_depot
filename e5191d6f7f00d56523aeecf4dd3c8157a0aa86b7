@@ -22,6 +22,30 @@
       },
       "revId": "e5191d6f7f00d56523aeecf4dd3c8157a0aa86b7",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4dd337a7_aca7399c",
+        "filename": "tvix/store/src/chunkservice/memory.rs",
+        "patchSetId": 8
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-03-04T10:06:13Z",
+      "side": 1,
+      "message": "Not really for a hashmap, but other storage backends do verify the data they \"load from disk\" is not corrupted. We probably don\u0027t need to do it here, because we can\u0027t really protect against memory corruption anyways.",
+      "parentUuid": "ec6dede7_7820381d",
+      "range": {
+        "startLine": 38,
+        "startChar": 0,
+        "endLine": 38,
+        "endChar": 77
+      },
+      "revId": "e5191d6f7f00d56523aeecf4dd3c8157a0aa86b7",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
