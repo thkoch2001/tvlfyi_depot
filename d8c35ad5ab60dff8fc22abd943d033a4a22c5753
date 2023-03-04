@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a521338d_1169564d",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1000073
+      },
+      "writtenOn": "2023-03-04T15:13:23Z",
+      "side": 1,
+      "message": "Won\u0027t this a different behavior with cppnix? Why the fact that we are not returning `null` anymore when no store directory is a good thing?",
+      "revId": "d8c35ad5ab60dff8fc22abd943d033a4a22c5753",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
