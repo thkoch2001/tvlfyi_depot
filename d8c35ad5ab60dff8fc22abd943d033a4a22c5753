@@ -16,6 +16,24 @@
       "message": "Won\u0027t this a different behavior with cppnix? Why the fact that we are not returning `null` anymore when no store directory is a good thing?",
       "revId": "d8c35ad5ab60dff8fc22abd943d033a4a22c5753",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "94297873_23d72530",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2023-03-04T15:18:14Z",
+      "side": 1,
+      "message": "We were returning `null` before because we had to return something, whereas in cppnix a situation where there is no store dir cannot occur.\n\nIt seems more reasonable to just not have the builtin available if there is no storedir. For example, why should it exist in a webassembly context just to return `null`, or in some other situation where tvix-eval is run without a store.",
+      "parentUuid": "a521338d_1169564d",
+      "revId": "d8c35ad5ab60dff8fc22abd943d033a4a22c5753",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
