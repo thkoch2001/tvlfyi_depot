@@ -1,0 +1,112 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ea4b0455_b7447e99",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000073
+      },
+      "writtenOn": "2023-03-04T15:41:03Z",
+      "side": 1,
+      "message": "A general question I am asking myself is how does error propagation works given this generator thing break the boundary between consumer \u0026 producer? When a request to put stuff in the cache is done and it fails on the other side, what happens?\n\nOther than this, it looks good to me.",
+      "revId": "8e298b171ba0ec9ace44efe9a6df55e9baa549d6",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7c89432c_ae58ef29",
+        "filename": "tvix/eval/src/vm/generators.rs",
+        "patchSetId": 5
+      },
+      "lineNbr": 82,
+      "author": {
+        "id": 1000073
+      },
+      "writtenOn": "2023-03-04T15:41:03Z",
+      "side": 1,
+      "message": "It should be maybe mentioned that the Value expected here should have been forced first, right?",
+      "revId": "8e298b171ba0ec9ace44efe9a6df55e9baa549d6",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4b7ed1e0_f05a3d34",
+        "filename": "tvix/eval/src/vm/generators.rs",
+        "patchSetId": 5
+      },
+      "lineNbr": 266,
+      "author": {
+        "id": 1000073
+      },
+      "writtenOn": "2023-03-04T15:41:03Z",
+      "side": 1,
+      "message": "Is there any way to get the caught error? (or is it planned/supposed to be somewhere else?)",
+      "revId": "8e298b171ba0ec9ace44efe9a6df55e9baa549d6",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c17bb156_7060cac0",
+        "filename": "tvix/eval/src/vm/generators.rs",
+        "patchSetId": 5
+      },
+      "lineNbr": 372,
+      "author": {
+        "id": 1000073
+      },
+      "writtenOn": "2023-03-04T15:41:03Z",
+      "side": 1,
+      "message": "Why is it needed to box these values?",
+      "revId": "8e298b171ba0ec9ace44efe9a6df55e9baa549d6",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ed1d2d20_f4353517",
+        "filename": "tvix/eval/src/vm/generators.rs",
+        "patchSetId": 5
+      },
+      "lineNbr": 375,
+      "author": {
+        "id": 1000073
+      },
+      "writtenOn": "2023-03-04T15:41:03Z",
+      "side": 1,
+      "message": "Shouldn\u0027t be there a `.expect` here?",
+      "revId": "8e298b171ba0ec9ace44efe9a6df55e9baa549d6",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2910ed24_60eb3db5",
+        "filename": "tvix/eval/src/vm/generators.rs",
+        "patchSetId": 5
+      },
+      "lineNbr": 493,
+      "author": {
+        "id": 1000073
+      },
+      "writtenOn": "2023-03-04T15:41:03Z",
+      "side": 1,
+      "message": "Can we have a docstring on this function?",
+      "range": {
+        "startLine": 493,
+        "startChar": 20,
+        "endLine": 493,
+        "endChar": 36
+      },
+      "revId": "8e298b171ba0ec9ace44efe9a6df55e9baa549d6",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
