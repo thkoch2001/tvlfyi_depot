@@ -16,6 +16,24 @@
       "message": "This doesn\u0027t seem like a storage error, this is a critical error that should probably panic.",
       "revId": "ce5f4c14d3234a3bc92bbc7d916330cbe876fcfb",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "de67a267_93add797",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-03-04T15:27:33Z",
+      "side": 1,
+      "message": "The poison error appears if another client (A) acquired a lock and panics, while we (B) wait for our lock.\n\nI think it\u0027s fine if we only let the thread with (A) panic, and assume it exits the process, if that\u0027s the right thing to do in that context.\nInnocent (B), who simply asked for some data (and doesn\u0027t necessarily know about how the \"store pipeline\" is composed, can deal with a storage error much better than having to deal with a panic. Assume B is some thread replying to a query from a remote client who asked via gRPC. If we return an error here, instead of just panicing, it might have a chance to still properly close the connection.\n\nWould you prefer if I make this a bit more explicit, and map the `PoisonError` to `crate::Error` in the implementation of the different stores, rather than doing it here? This would make it easier to treat these errors differently in other contexts.",
+      "parentUuid": "12c6c764_894855e0",
+      "revId": "ce5f4c14d3234a3bc92bbc7d916330cbe876fcfb",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
