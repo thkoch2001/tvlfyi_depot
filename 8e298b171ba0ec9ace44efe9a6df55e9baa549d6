@@ -35,6 +35,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "400e98e9_dfffaa9e",
+        "filename": "tvix/eval/src/vm/generators.rs",
+        "patchSetId": 5
+      },
+      "lineNbr": 82,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2023-03-04T16:03:36Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7c89432c_ae58ef29",
+      "revId": "8e298b171ba0ec9ace44efe9a6df55e9baa549d6",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "4b7ed1e0_f05a3d34",
@@ -48,6 +66,24 @@
       "writtenOn": "2023-03-04T15:41:03Z",
       "side": 1,
       "message": "Is there any way to get the caught error? (or is it planned/supposed to be somewhere else?)",
+      "revId": "8e298b171ba0ec9ace44efe9a6df55e9baa549d6",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b5407db8_d9b556b9",
+        "filename": "tvix/eval/src/vm/generators.rs",
+        "patchSetId": 5
+      },
+      "lineNbr": 266,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2023-03-04T16:03:36Z",
+      "side": 1,
+      "message": "That\u0027s `builtins.tryEval`, it\u0027s further down the chain.",
+      "parentUuid": "4b7ed1e0_f05a3d34",
       "revId": "8e298b171ba0ec9ace44efe9a6df55e9baa549d6",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
@@ -71,6 +107,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "bb118e49_75ed263b",
+        "filename": "tvix/eval/src/vm/generators.rs",
+        "patchSetId": 5
+      },
+      "lineNbr": 372,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2023-03-04T16:03:36Z",
+      "side": 1,
+      "message": "Significantly reduces the size of the message (Value is quite large, but a box of a tuple of values is small). In nixpkgs-eval tests this made a difference.",
+      "parentUuid": "c17bb156_7060cac0",
+      "revId": "8e298b171ba0ec9ace44efe9a6df55e9baa549d6",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "ed1d2d20_f4353517",
         "filename": "tvix/eval/src/vm/generators.rs",
         "patchSetId": 5
@@ -88,6 +142,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "d393dfac_ac86613b",
+        "filename": "tvix/eval/src/vm/generators.rs",
+        "patchSetId": 5
+      },
+      "lineNbr": 375,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2023-03-04T16:03:36Z",
+      "side": 1,
+      "message": "That error is returned to the caller, which makes for slightly nicer error messages (and ability to add context there, as equality comparisons happen in ... strange contexts, sometimes)",
+      "parentUuid": "ed1d2d20_f4353517",
+      "revId": "8e298b171ba0ec9ace44efe9a6df55e9baa549d6",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "2910ed24_60eb3db5",
         "filename": "tvix/eval/src/vm/generators.rs",
         "patchSetId": 5
@@ -99,6 +171,30 @@
       "writtenOn": "2023-03-04T15:41:03Z",
       "side": 1,
       "message": "Can we have a docstring on this function?",
+      "range": {
+        "startLine": 493,
+        "startChar": 20,
+        "endLine": 493,
+        "endChar": 36
+      },
+      "revId": "8e298b171ba0ec9ace44efe9a6df55e9baa549d6",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ae8378c6_6bc3c896",
+        "filename": "tvix/eval/src/vm/generators.rs",
+        "patchSetId": 5
+      },
+      "lineNbr": 493,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2023-03-04T16:03:36Z",
+      "side": 1,
+      "message": "I\u0027ll add one at the top, this also gets renamed somewhere along the line.",
+      "parentUuid": "2910ed24_60eb3db5",
       "range": {
         "startLine": 493,
         "startChar": 20,
