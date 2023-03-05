@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "91fb75f3_c97b5c84",
+        "filename": "tvix/store/docs/why-not-git-trees.md",
+        "patchSetId": 3
+      },
+      "lineNbr": 3,
+      "author": {
+        "id": 1000029
+      },
+      "writtenOn": "2023-03-05T16:36:08Z",
+      "side": 1,
+      "message": "nitpicky, but my brain would prefer \"experimenting with (some variations of) the git tree and object format\" over \"some (variations of)\", so the parenthetical can be cleanly elided",
+      "revId": "6d42f260b123802631b83afb01a8af71fc2d369a",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
