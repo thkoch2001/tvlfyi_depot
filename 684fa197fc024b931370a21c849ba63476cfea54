@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "507d2294_dfc44422",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000073
+      },
+      "writtenOn": "2023-03-05T13:26:53Z",
+      "side": 1,
+      "message": "I wonder what is the runtime cost of these indirections though :P",
+      "revId": "684fa197fc024b931370a21c849ba63476cfea54",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
