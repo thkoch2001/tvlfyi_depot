@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d4cc48b9_0b5feb54",
+        "filename": "tvix/eval/src/value/string.rs",
+        "patchSetId": 6
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1000073
+      },
+      "writtenOn": "2023-03-05T13:23:41Z",
+      "side": 0,
+      "message": "I\u0027m so happy about this change. :\u003e",
+      "revId": "f42052ca4eae5ee6e8395497d6a87b9bff6ef4d5",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
