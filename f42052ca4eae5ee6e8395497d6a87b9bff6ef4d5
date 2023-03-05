@@ -16,6 +16,24 @@
       "message": "I\u0027m so happy about this change. :\u003e",
       "revId": "f42052ca4eae5ee6e8395497d6a87b9bff6ef4d5",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c90d7dbf_f0e8ce39",
+        "filename": "tvix/eval/src/value/string.rs",
+        "patchSetId": 6
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-03-05T13:34:23Z",
+      "side": 0,
+      "message": "so let\u0027s resolve this ;-)",
+      "parentUuid": "d4cc48b9_0b5feb54",
+      "revId": "f42052ca4eae5ee6e8395497d6a87b9bff6ef4d5",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
