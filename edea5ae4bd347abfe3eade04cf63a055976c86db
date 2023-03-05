@@ -16,6 +16,24 @@
       "message": "Sounds good but I don\u0027t have in-depth experience on the existing machinery to guarantee that all calls are actually tail-callable. If it doesn\u0027t get enough attention, I can revisit this and learn more about the machinery.",
       "revId": "edea5ae4bd347abfe3eade04cf63a055976c86db",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7eb43a8f_f0ea7b1c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2023-03-05T10:19:32Z",
+      "side": 1,
+      "message": "Basically in the existing code this can be guaranteed to be correct because:\n\n1. OpCall is only emitted in compile_apply: https://cs.tvl.fyi/depot@bfb787a6c5dc6ccd9a25efc015770f20702c2a55/-/blob/tvix/eval/src/compiler/mod.rs?L1101\n\n2. compile_apply is always wrapped in a thunk: https://cs.tvl.fyi/depot@bfb787a6c5dc6ccd9a25efc015770f20702c2a55/-/blob/tvix/eval/src/compiler/mod.rs?L287-289\n\nThis combination guarantees that there can never be an `OpCall` that does not get transformed into an `OpTailCall` anymore.",
+      "parentUuid": "354bbc90_14ef897b",
+      "revId": "edea5ae4bd347abfe3eade04cf63a055976c86db",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
