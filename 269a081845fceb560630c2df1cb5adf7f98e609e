@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "71c533eb_490d72bf",
+        "filename": "tvix/eval/src/value/thunk.rs",
+        "patchSetId": 62
+      },
+      "lineNbr": 384,
+      "author": {
+        "id": 1000073
+      },
+      "writtenOn": "2023-03-05T13:19:55Z",
+      "side": 0,
+      "message": "this seems to be still a tvix_bug! if we call is_forced on a blackholed thunk?",
+      "revId": "269a081845fceb560630c2df1cb5adf7f98e609e",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}

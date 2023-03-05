@@ -1,0 +1,259 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2e7d7865_56dcd1d9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 62
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000073
+      },
+      "writtenOn": "2023-03-05T13:19:55Z",
+      "side": 1,
+      "message": "This is a big piece, I think I will do a second read a bit later because it takes time to understand as I don\u0027t have full context on the previous version.",
+      "revId": "df6aedae1dc1fb1b33c8139df16271c8978d5d87",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fe77e87a_857731f7",
+        "filename": "tvix/eval/src/compiler/import.rs",
+        "patchSetId": 62
+      },
+      "lineNbr": 82,
+      "author": {
+        "id": 1000073
+      },
+      "writtenOn": "2023-03-05T13:19:55Z",
+      "side": 1,
+      "message": "Why it is not enough to use the generators to emit warnings?",
+      "revId": "df6aedae1dc1fb1b33c8139df16271c8978d5d87",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b96f05f2_87f416b1",
+        "filename": "tvix/eval/src/observer.rs",
+        "patchSetId": 62
+      },
+      "lineNbr": 240,
+      "author": {
+        "id": 1000073
+      },
+      "writtenOn": "2023-03-05T13:19:55Z",
+      "side": 1,
+      "message": "nit: it seems highly redundant and could be the nice target of a simple macro",
+      "revId": "df6aedae1dc1fb1b33c8139df16271c8978d5d87",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "daeb2590_0e5d6a3c",
+        "filename": "tvix/eval/src/tests/mod.rs",
+        "patchSetId": 62
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1000073
+      },
+      "writtenOn": "2023-03-05T13:19:55Z",
+      "side": 1,
+      "message": "We have lost the VM warning here",
+      "revId": "df6aedae1dc1fb1b33c8139df16271c8978d5d87",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e1e8551a_1269acbd",
+        "filename": "tvix/eval/src/value/builtin.rs",
+        "patchSetId": 62
+      },
+      "lineNbr": 107,
+      "author": {
+        "id": 1000073
+      },
+      "writtenOn": "2023-03-05T13:19:55Z",
+      "side": 1,
+      "message": "nit: this is a exhaustive branch, `if/else` without any `return` is cleaner IMHO",
+      "revId": "df6aedae1dc1fb1b33c8139df16271c8978d5d87",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bfb0e417_11143a9f",
+        "filename": "tvix/eval/src/value/list.rs",
+        "patchSetId": 62
+      },
+      "lineNbr": 89,
+      "author": {
+        "id": 1000073
+      },
+      "writtenOn": "2023-03-05T13:19:55Z",
+      "side": 1,
+      "message": "I think you are talking about timsort, this comment miss that because of the way comparators are and the requirement of having \"reproducible results\", we need a *stable* sort right? I have to mention that merge sort is a stable sort and have O(n log n) worst case performance in time. It is also not that complicated to implement, albeit iteratively it can be a bit annoying because Rust (?).",
+      "revId": "df6aedae1dc1fb1b33c8139df16271c8978d5d87",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "483b63f0_b22a293a",
+        "filename": "tvix/eval/src/value/mod.rs",
+        "patchSetId": 62
+      },
+      "lineNbr": 258,
+      "author": {
+        "id": 1000073
+      },
+      "writtenOn": "2023-03-05T13:19:55Z",
+      "side": 1,
+      "message": "which ones? (if you can provide any example in the comment)",
+      "revId": "df6aedae1dc1fb1b33c8139df16271c8978d5d87",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "af113443_430f393a",
+        "filename": "tvix/eval/src/value/mod.rs",
+        "patchSetId": 62
+      },
+      "lineNbr": 325,
+      "author": {
+        "id": 1000073
+      },
+      "writtenOn": "2023-03-05T13:19:55Z",
+      "side": 1,
+      "message": "rather than unreachable!, it seems also a tvix_bug!(\"value has not been forced\") right?",
+      "revId": "df6aedae1dc1fb1b33c8139df16271c8978d5d87",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "606a7997_24fd8965",
+        "filename": "tvix/eval/src/vm/generators.rs",
+        "patchSetId": 62
+      },
+      "lineNbr": 424,
+      "author": {
+        "id": 1000073
+      },
+      "writtenOn": "2023-03-05T13:19:55Z",
+      "side": 1,
+      "message": "shouldn\u0027t this debug_assert happening just after any call to re-enqueuing the generator?",
+      "revId": "df6aedae1dc1fb1b33c8139df16271c8978d5d87",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "729b1310_d2fdb5da",
+        "filename": "tvix/eval/src/vm/macros.rs",
+        "patchSetId": 62
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1000073
+      },
+      "writtenOn": "2023-03-05T13:19:55Z",
+      "side": 1,
+      "message": "This file should have a little docstring at the start to explain what this is about or what is used for",
+      "revId": "df6aedae1dc1fb1b33c8139df16271c8978d5d87",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "61865ade_8230946e",
+        "filename": "tvix/eval/src/vm/mod.rs",
+        "patchSetId": 62
+      },
+      "lineNbr": 261,
+      "author": {
+        "id": 1000073
+      },
+      "writtenOn": "2023-03-05T13:19:55Z",
+      "side": 1,
+      "message": "occurred*",
+      "revId": "df6aedae1dc1fb1b33c8139df16271c8978d5d87",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f335fd04_defc89f6",
+        "filename": "tvix/eval/src/vm/mod.rs",
+        "patchSetId": 62
+      },
+      "lineNbr": 265,
+      "author": {
+        "id": 1000073
+      },
+      "writtenOn": "2023-03-05T13:19:55Z",
+      "side": 1,
+      "message": "I don\u0027t know if semantically the idea is to have frame IDs as frame indexes in the frames list or at some point opaque identifiers?",
+      "revId": "df6aedae1dc1fb1b33c8139df16271c8978d5d87",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a73d69dd_889c737d",
+        "filename": "tvix/eval/src/vm/mod.rs",
+        "patchSetId": 62
+      },
+      "lineNbr": 267,
+      "author": {
+        "id": 1000073
+      },
+      "writtenOn": "2023-03-05T13:19:55Z",
+      "side": 1,
+      "message": "Modulo some initialization stuff, handling a call frame or a generator is symmetric, is there any plan to factor this?",
+      "revId": "df6aedae1dc1fb1b33c8139df16271c8978d5d87",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d3ccce04_616f2186",
+        "filename": "tvix/eval/src/vm/mod.rs",
+        "patchSetId": 62
+      },
+      "lineNbr": 749,
+      "author": {
+        "id": 1000073
+      },
+      "writtenOn": "2023-03-05T13:19:55Z",
+      "side": 1,
+      "message": "panic! ?",
+      "revId": "df6aedae1dc1fb1b33c8139df16271c8978d5d87",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f43ab667_230f812e",
+        "filename": "tvix/eval/src/vm/mod.rs",
+        "patchSetId": 62
+      },
+      "lineNbr": 920,
+      "author": {
+        "id": 1000073
+      },
+      "writtenOn": "2023-03-05T13:19:55Z",
+      "side": 1,
+      "message": "TODO for what?",
+      "revId": "df6aedae1dc1fb1b33c8139df16271c8978d5d87",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}

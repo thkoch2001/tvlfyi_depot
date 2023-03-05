@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e6facea2_a8a22168",
+        "filename": "tvix/cli/src/derivation.rs",
+        "patchSetId": 60
+      },
+      "lineNbr": 166,
+      "author": {
+        "id": 1000073
+      },
+      "writtenOn": "2023-03-05T13:19:55Z",
+      "side": 1,
+      "message": "We seem to be losing a trace string, right? Shouldn\u0027t we get it back?",
+      "revId": "2fa82ef9310543f585c7b8bb3443ad443bc46303",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1f914506_3796cb30",
+        "filename": "tvix/cli/src/derivation.rs",
+        "patchSetId": 60
+      },
+      "lineNbr": 256,
+      "author": {
+        "id": 1000073
+      },
+      "writtenOn": "2023-03-05T13:19:55Z",
+      "side": 1,
+      "message": "nit: I would have this as some sort of inline function rather than a whole function, but premature optimization might be the good answer to my comment",
+      "revId": "2fa82ef9310543f585c7b8bb3443ad443bc46303",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b88dcc3b_4d2efa39",
+        "filename": "tvix/cli/src/derivation.rs",
+        "patchSetId": 60
+      },
+      "lineNbr": 256,
+      "author": {
+        "id": 1000073
+      },
+      "writtenOn": "2023-03-05T13:19:55Z",
+      "side": 1,
+      "message": "nit: also, seems to be a useful utility in general",
+      "revId": "2fa82ef9310543f585c7b8bb3443ad443bc46303",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
