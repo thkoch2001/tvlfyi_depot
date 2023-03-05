@@ -16,6 +16,24 @@
       "message": "I think, some trace logs from 8104 can be restored using this machinery?",
       "revId": "a99ffb2959a8abb4fb522ad111772e0e1fa84783",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ea4dab39_e0bbe7df",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000073
+      },
+      "writtenOn": "2023-03-05T13:37:00Z",
+      "side": 1,
+      "message": "(unresolved)",
+      "parentUuid": "6cedf898_69c18c7a",
+      "revId": "a99ffb2959a8abb4fb522ad111772e0e1fa84783",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
