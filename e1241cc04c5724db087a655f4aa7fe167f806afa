@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a191dd8f_c1e96d2e",
+        "filename": "tvix/eval/src/observer.rs",
+        "patchSetId": 5
+      },
+      "lineNbr": 153,
+      "author": {
+        "id": 1000073
+      },
+      "writtenOn": "2023-03-05T13:30:39Z",
+      "side": 1,
+      "message": "(this can be done later)",
+      "revId": "e1241cc04c5724db087a655f4aa7fe167f806afa",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6c0809f1_10a2c89f",
+        "filename": "tvix/eval/src/observer.rs",
+        "patchSetId": 5
+      },
+      "lineNbr": 153,
+      "author": {
+        "id": 1000073
+      },
+      "writtenOn": "2023-03-05T13:30:39Z",
+      "side": 1,
+      "message": "I\u0027d rather introduce a mechanism to have different logging levels, debugging through piping gigabytes of file is also fine I guess?",
+      "revId": "e1241cc04c5724db087a655f4aa7fe167f806afa",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
