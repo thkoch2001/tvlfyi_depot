@@ -16,6 +16,24 @@
       "message": "nitpicky, but my brain would prefer \"experimenting with (some variations of) the git tree and object format\" over \"some (variations of)\", so the parenthetical can be cleanly elided",
       "revId": "6d42f260b123802631b83afb01a8af71fc2d369a",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fb793cfc_e8157b21",
+        "filename": "tvix/store/docs/why-not-git-trees.md",
+        "patchSetId": 3
+      },
+      "lineNbr": 3,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-03-05T18:30:33Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "91fb75f3_c97b5c84",
+      "revId": "6d42f260b123802631b83afb01a8af71fc2d369a",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
