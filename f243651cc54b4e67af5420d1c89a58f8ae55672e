@@ -1,0 +1,123 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "34f918a7_c8a6ddcf",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 14
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000073
+      },
+      "writtenOn": "2023-03-05T13:56:24Z",
+      "side": 1,
+      "message": "I have some nitpicks on the usage of wrapping arith rather than saturating in this context",
+      "revId": "f243651cc54b4e67af5420d1c89a58f8ae55672e",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2120e817_58138504",
+        "filename": "tvix/store/src/blobreader.rs",
+        "patchSetId": 14
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1000073
+      },
+      "writtenOn": "2023-03-05T13:56:24Z",
+      "side": 1,
+      "message": "cursor",
+      "revId": "f243651cc54b4e67af5420d1c89a58f8ae55672e",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2de81800_6ddb0496",
+        "filename": "tvix/store/src/blobreader.rs",
+        "patchSetId": 14
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1000073
+      },
+      "writtenOn": "2023-03-05T13:56:24Z",
+      "side": 1,
+      "message": "What are the considerations from the Tvix Store wrt to `usize` differences on different platforms and potential overflows/underflows when casting/doing stuff with u64 or less?",
+      "revId": "f243651cc54b4e67af5420d1c89a58f8ae55672e",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "284a4ebf_9245c16f",
+        "filename": "tvix/store/src/blobreader.rs",
+        "patchSetId": 14
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 1000073
+      },
+      "writtenOn": "2023-03-05T13:56:24Z",
+      "side": 1,
+      "message": "nit: no return, use `else` for more idiomatic Rust?",
+      "revId": "f243651cc54b4e67af5420d1c89a58f8ae55672e",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7eab766b_25c598aa",
+        "filename": "tvix/store/src/blobreader.rs",
+        "patchSetId": 14
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 1000073
+      },
+      "writtenOn": "2023-03-05T13:56:24Z",
+      "side": 1,
+      "message": "This is not necessarily safe on bad platforms™",
+      "revId": "f243651cc54b4e67af5420d1c89a58f8ae55672e",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ae522757_fa3739c6",
+        "filename": "tvix/store/src/blobreader.rs",
+        "patchSetId": 14
+      },
+      "lineNbr": 72,
+      "author": {
+        "id": 1000073
+      },
+      "writtenOn": "2023-03-05T13:56:24Z",
+      "side": 1,
+      "message": "shouldn\u0027t this be using saturating addition to prevent overflows?",
+      "revId": "f243651cc54b4e67af5420d1c89a58f8ae55672e",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "41dc36a2_c4293ee9",
+        "filename": "tvix/store/src/blobreader.rs",
+        "patchSetId": 14
+      },
+      "lineNbr": 94,
+      "author": {
+        "id": 1000073
+      },
+      "writtenOn": "2023-03-05T13:56:24Z",
+      "side": 1,
+      "message": "can\u0027t chunk_data be very big?",
+      "revId": "f243651cc54b4e67af5420d1c89a58f8ae55672e",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
