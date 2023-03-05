@@ -118,6 +118,24 @@
       "message": "can\u0027t chunk_data be very big?",
       "revId": "f243651cc54b4e67af5420d1c89a58f8ae55672e",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "11d68dad_ae132b66",
+        "filename": "tvix/store/src/blobreader.rs",
+        "patchSetId": 14
+      },
+      "lineNbr": 94,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-03-05T15:01:19Z",
+      "side": 1,
+      "message": "chunks are meant to be small enough to be kept in memory - which is why the chunkservice interface does pass Vec\u003cu8\u003e around. but blobs can get very big.\n\nThe exact values still need to be determined, but we initialize the chunker to chunk to pieces in the range of some KB, few MB max.\n\nI need to think about which bit sizes to use here to make this safe.",
+      "parentUuid": "41dc36a2_c4293ee9",
+      "revId": "f243651cc54b4e67af5420d1c89a58f8ae55672e",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
