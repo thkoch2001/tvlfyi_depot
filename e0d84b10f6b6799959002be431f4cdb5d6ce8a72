@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "901b6029_ccbbef43",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000073
+      },
+      "writtenOn": "2023-03-05T13:45:29Z",
+      "side": 1,
+      "message": "The message seems to be outdated as the tests are passing now, right?",
+      "revId": "e0d84b10f6b6799959002be431f4cdb5d6ce8a72",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
