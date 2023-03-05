@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9342e1a5_12f15b7d",
+        "filename": "tvix/store/docs/why-not-git-trees.md",
+        "patchSetId": 2
+      },
+      "lineNbr": 4,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2023-03-05T15:33:50Z",
+      "side": 1,
+      "message": "and?",
+      "range": {
+        "startLine": 4,
+        "startChar": 8,
+        "endLine": 4,
+        "endChar": 11
+      },
+      "revId": "f8db6a79f391cb29c8e72c47586ca1a60cad35da",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
