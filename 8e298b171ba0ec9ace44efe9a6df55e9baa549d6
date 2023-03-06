@@ -88,6 +88,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "3472f5fa_c643e4fc",
+        "filename": "tvix/eval/src/vm/generators.rs",
+        "patchSetId": 5
+      },
+      "lineNbr": 266,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2023-03-06T14:02:00Z",
+      "side": 1,
+      "message": "Ah, I read your message wrong, builtins.tryEval does not show you the content of the error - no. On the Nix side you can only get whether an error occured or not, but no information about which one.",
+      "parentUuid": "b5407db8_d9b556b9",
+      "revId": "8e298b171ba0ec9ace44efe9a6df55e9baa549d6",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "c17bb156_7060cac0",
