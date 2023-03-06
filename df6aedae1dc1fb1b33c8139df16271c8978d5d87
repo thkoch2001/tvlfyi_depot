@@ -37,6 +37,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "ba476239_edf6fb48",
+        "filename": "tvix/eval/src/compiler/import.rs",
+        "patchSetId": 62
+      },
+      "lineNbr": 82,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2023-03-06T11:03:15Z",
+      "side": 1,
+      "message": "The current interface only exposes a WarningKind API, which is then surfaced at the span of the generator, but here we need to emit full warnings (as they come from import and have their own spans already).\n\nThis is pretty trivially doable, I just haven\u0027t done it yet.",
+      "parentUuid": "fe77e87a_857731f7",
+      "revId": "df6aedae1dc1fb1b33c8139df16271c8978d5d87",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "b96f05f2_87f416b1",
         "filename": "tvix/eval/src/observer.rs",
         "patchSetId": 62
@@ -99,6 +117,24 @@
       "writtenOn": "2023-03-05T13:19:55Z",
       "side": 1,
       "message": "I think you are talking about timsort, this comment miss that because of the way comparators are and the requirement of having \"reproducible results\", we need a *stable* sort right? I have to mention that merge sort is a stable sort and have O(n log n) worst case performance in time. It is also not that complicated to implement, albeit iteratively it can be a bit annoying because Rust (?).",
+      "revId": "df6aedae1dc1fb1b33c8139df16271c8978d5d87",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4208b911_90b43a8c",
+        "filename": "tvix/eval/src/value/list.rs",
+        "patchSetId": 62
+      },
+      "lineNbr": 89,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2023-03-06T11:03:15Z",
+      "side": 1,
+      "message": "I actually did try a bunch of different ways to implement merge sort, but always ran into list length determining a split point where the comparator\u0027s inability to yield \"equality\" meant that whatever ended up in one side (depending on the comparator) was going to be first.\n\nsterni suggested that it might be possible to write an implementation where we use the same comparator twice in both directions to determine equality, but I think that\u0027d be a lot more expensive because of how much overhead the comparator calls involve (a whole generator frame run)",
+      "parentUuid": "bfb0e417_11143a9f",
       "revId": "df6aedae1dc1fb1b33c8139df16271c8978d5d87",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
