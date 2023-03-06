@@ -70,6 +70,30 @@
       },
       "revId": "e5191d6f7f00d56523aeecf4dd3c8157a0aa86b7",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "64d8c947_a60cd166",
+        "filename": "tvix/store/src/chunkservice/memory.rs",
+        "patchSetId": 8
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2023-03-06T15:30:31Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "c16ba1c2_05bfde1a",
+      "range": {
+        "startLine": 38,
+        "startChar": 0,
+        "endLine": 38,
+        "endChar": 77
+      },
+      "revId": "e5191d6f7f00d56523aeecf4dd3c8157a0aa86b7",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
