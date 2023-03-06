@@ -43,6 +43,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "9fa64235_5a35730c",
+        "filename": "tvix/cli/src/derivation.rs",
+        "patchSetId": 62
+      },
+      "lineNbr": 425,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-03-06T14:31:36Z",
+      "side": 1,
+      "message": "it\u0027s making me sad. Can we at least add a TODO comment with some details next to the big commented-out block?",
+      "parentUuid": "2b57e975_95362c65",
+      "range": {
+        "startLine": 425,
+        "startChar": 0,
+        "endLine": 425,
+        "endChar": 12
+      },
+      "revId": "df6aedae1dc1fb1b33c8139df16271c8978d5d87",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "fe77e87a_857731f7",
         "filename": "tvix/eval/src/compiler/import.rs",
         "patchSetId": 62
