@@ -226,6 +226,24 @@
       "parentUuid": "41dc36a2_c4293ee9",
       "revId": "f243651cc54b4e67af5420d1c89a58f8ae55672e",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6cd1ba00_0e807cfe",
+        "filename": "tvix/store/src/blobreader.rs",
+        "patchSetId": 14
+      },
+      "lineNbr": 94,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-03-06T15:46:55Z",
+      "side": 1,
+      "message": "Done from my side - explained above and in the comments in the new revisions.",
+      "parentUuid": "11d68dad_ae132b66",
+      "revId": "f243651cc54b4e67af5420d1c89a58f8ae55672e",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
