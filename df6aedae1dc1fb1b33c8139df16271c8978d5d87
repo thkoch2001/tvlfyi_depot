@@ -18,6 +18,29 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "2b57e975_95362c65",
+        "filename": "tvix/cli/src/derivation.rs",
+        "patchSetId": 62
+      },
+      "lineNbr": 425,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2023-03-06T13:57:12Z",
+      "side": 1,
+      "message": "Note on these: We don\u0027t have test scaffolding for running these kinds of tests in generators at the moment.",
+      "range": {
+        "startLine": 425,
+        "startChar": 0,
+        "endLine": 425,
+        "endChar": 12
+      },
+      "revId": "df6aedae1dc1fb1b33c8139df16271c8978d5d87",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "fe77e87a_857731f7",
