@@ -275,6 +275,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "91a10c9b_95d12599",
+        "filename": "tvix/eval/src/value/mod.rs",
+        "patchSetId": 62
+      },
+      "lineNbr": 258,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2023-03-06T14:54:57Z",
+      "side": 1,
+      "message": "In short, we don\u0027t know yet: b/256\n\nSomebody will have to go and read all the invocations of string coercions in cppnix and figure it out :/",
+      "parentUuid": "483b63f0_b22a293a",
+      "revId": "df6aedae1dc1fb1b33c8139df16271c8978d5d87",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "af113443_430f393a",
@@ -288,6 +306,24 @@
       "writtenOn": "2023-03-05T13:19:55Z",
       "side": 1,
       "message": "rather than unreachable!, it seems also a tvix_bug!(\"value has not been forced\") right?",
+      "revId": "df6aedae1dc1fb1b33c8139df16271c8978d5d87",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ad997e9e_45eb7586",
+        "filename": "tvix/eval/src/value/mod.rs",
+        "patchSetId": 62
+      },
+      "lineNbr": 325,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2023-03-06T14:54:57Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "af113443_430f393a",
       "revId": "df6aedae1dc1fb1b33c8139df16271c8978d5d87",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
@@ -390,6 +426,24 @@
       "writtenOn": "2023-03-05T13:19:55Z",
       "side": 1,
       "message": "panic! ?",
+      "revId": "df6aedae1dc1fb1b33c8139df16271c8978d5d87",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ae8e50a1_07af9855",
+        "filename": "tvix/eval/src/vm/mod.rs",
+        "patchSetId": 62
+      },
+      "lineNbr": 749,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2023-03-06T14:54:57Z",
+      "side": 1,
+      "message": "It\u0027s actually unreachable as per the let above, so the compiler may decide to use this as an optimisation hint (or not ...)",
+      "parentUuid": "d3ccce04_616f2186",
       "revId": "df6aedae1dc1fb1b33c8139df16271c8978d5d87",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },

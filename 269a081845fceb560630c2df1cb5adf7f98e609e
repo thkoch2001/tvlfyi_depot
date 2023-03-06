@@ -16,6 +16,24 @@
       "message": "this seems to be still a tvix_bug! if we call is_forced on a blackholed thunk?",
       "revId": "269a081845fceb560630c2df1cb5adf7f98e609e",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5a12ed43_7c58ba52",
+        "filename": "tvix/eval/src/value/thunk.rs",
+        "patchSetId": 62
+      },
+      "lineNbr": 384,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2023-03-06T14:54:57Z",
+      "side": 0,
+      "message": "No, this should fail as when we enter a thunk this function is used to determine whether the thunk representation can already be replaced with the evaluated value.\n\nThe branch that emits a correct infinite recursion error occurs after this check.",
+      "parentUuid": "71c533eb_490d72bf",
+      "revId": "269a081845fceb560630c2df1cb5adf7f98e609e",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
