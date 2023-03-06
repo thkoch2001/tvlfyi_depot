@@ -50,6 +50,24 @@
       "message": "nit: also, seems to be a useful utility in general",
       "revId": "2fa82ef9310543f585c7b8bb3443ad443bc46303",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "403a09d2_4d1dca12",
+        "filename": "tvix/cli/src/derivation.rs",
+        "patchSetId": 60
+      },
+      "lineNbr": 256,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2023-03-06T11:04:35Z",
+      "side": 1,
+      "message": "async lambdas are unstable unfortunately, there\u0027s a crate that does them through a macro by generating some complex trait structure, but then I think it\u0027s more reasonable to just give a name to a function",
+      "parentUuid": "1f914506_3796cb30",
+      "revId": "2fa82ef9310543f585c7b8bb3443ad443bc46303",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
