@@ -54,6 +54,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "4f242e91_b449e219",
+        "filename": "tvix/store/src/blobreader.rs",
+        "patchSetId": 14
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-03-06T10:49:51Z",
+      "side": 1,
+      "message": "So, this function is using usize in some places and u64 in others, because `std::io::Read::take()` accepts a u64 as limit type, but `std::io::Read::read` (which this is a helper function for) can only read usize bytes.\n\nI tried to make this cleaner in some more comments, PTAL.",
+      "parentUuid": "2de81800_6ddb0496",
+      "revId": "f243651cc54b4e67af5420d1c89a58f8ae55672e",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "284a4ebf_9245c16f",
         "filename": "tvix/store/src/blobreader.rs",
         "patchSetId": 14
@@ -65,6 +83,24 @@
       "writtenOn": "2023-03-05T13:56:24Z",
       "side": 1,
       "message": "nit: no return, use `else` for more idiomatic Rust?",
+      "revId": "f243651cc54b4e67af5420d1c89a58f8ae55672e",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e27c6397_2de7cbd5",
+        "filename": "tvix/store/src/blobreader.rs",
+        "patchSetId": 14
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-03-06T10:49:51Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "284a4ebf_9245c16f",
       "revId": "f243651cc54b4e67af5420d1c89a58f8ae55672e",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
@@ -88,6 +124,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "385f3923_b0b7a1e8",
+        "filename": "tvix/store/src/blobreader.rs",
+        "patchSetId": 14
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-03-06T10:49:51Z",
+      "side": 1,
+      "message": "See the comment above. n \u003e m can\u0027t happen, and m is usize.",
+      "parentUuid": "7eab766b_25c598aa",
+      "revId": "f243651cc54b4e67af5420d1c89a58f8ae55672e",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "ae522757_fa3739c6",
         "filename": "tvix/store/src/blobreader.rs",
         "patchSetId": 14
@@ -99,6 +153,24 @@
       "writtenOn": "2023-03-05T13:56:24Z",
       "side": 1,
       "message": "shouldn\u0027t this be using saturating addition to prevent overflows?",
+      "revId": "f243651cc54b4e67af5420d1c89a58f8ae55672e",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f33ddb55_e9ad8173",
+        "filename": "tvix/store/src/blobreader.rs",
+        "patchSetId": 14
+      },
+      "lineNbr": 72,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-03-06T10:49:51Z",
+      "side": 1,
+      "message": "We only read up to buf.len() bytes, which is usize.",
+      "parentUuid": "ae522757_fa3739c6",
       "revId": "f243651cc54b4e67af5420d1c89a58f8ae55672e",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
