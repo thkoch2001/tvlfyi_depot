@@ -18,6 +18,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "37132e6c_99a0ace6",
+        "filename": "tvix/eval/src/observer.rs",
+        "patchSetId": 5
+      },
+      "lineNbr": 153,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2023-03-06T14:03:37Z",
+      "side": 1,
+      "message": "If a runtime observer is running, performance is out the window anyways 😄\n\nI\u0027d rather let the compiler decide. If it thinks it\u0027s obvious that this should be inlined, it will do it.",
+      "parentUuid": "46aee5d1_5620651e",
+      "revId": "1059d9d62aa6efc896daa0ea79e9d2a3ebaf8de1",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "ab3b5fe5_e4e4d283",
@@ -31,6 +49,24 @@
       "writtenOn": "2023-03-05T13:29:19Z",
       "side": 1,
       "message": "yay!",
+      "revId": "1059d9d62aa6efc896daa0ea79e9d2a3ebaf8de1",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d73ca348_aeb4229c",
+        "filename": "tvix/eval/src/observer.rs",
+        "patchSetId": 5
+      },
+      "lineNbr": 193,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2023-03-06T14:03:37Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "ab3b5fe5_e4e4d283",
       "revId": "1059d9d62aa6efc896daa0ea79e9d2a3ebaf8de1",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
