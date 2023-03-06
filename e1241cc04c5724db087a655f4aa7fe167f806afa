@@ -33,6 +33,24 @@
       "message": "I\u0027d rather introduce a mechanism to have different logging levels, debugging through piping gigabytes of file is also fine I guess?",
       "revId": "e1241cc04c5724db087a655f4aa7fe167f806afa",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4cf39c92_c8e93f95",
+        "filename": "tvix/eval/src/observer.rs",
+        "patchSetId": 5
+      },
+      "lineNbr": 153,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2023-03-06T21:14:39Z",
+      "side": 1,
+      "message": "In general, yeah, flokli also suggested a tracing library we might be able to plug in.\n\nThis output is also used for Tvixbolt though, and right now it\u0027s my primary debugging tool and I don\u0027t quite see the cost/benefit tradeoff being there for making something much more complex :/",
+      "parentUuid": "6c0809f1_10a2c89f",
+      "revId": "e1241cc04c5724db087a655f4aa7fe167f806afa",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
