@@ -1,0 +1,89 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3c0dc19f_e9f48186",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 20
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000073
+      },
+      "writtenOn": "2023-03-07T21:01:04Z",
+      "side": 1,
+      "message": "Small nitpicks, biggest question for me the is choice of the bounded size for the mpsc channel which can be a source of pain later on.\nAlso, error propagation wrt to receiver drops is not clear to me.\nOtherwise, LGTM.",
+      "revId": "b08f009c0fda1d3e9ec98a66e1a53404f7fc96a2",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d0ed683a_77c81862",
+        "filename": "tvix/store/src/proto/grpc_blobservice_wrapper.rs",
+        "patchSetId": 20
+      },
+      "lineNbr": 52,
+      "author": {
+        "id": 1000073
+      },
+      "writtenOn": "2023-03-07T21:01:04Z",
+      "side": 1,
+      "message": "why 5? (a comment on the rationale?)",
+      "revId": "b08f009c0fda1d3e9ec98a66e1a53404f7fc96a2",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "393ab9bf_88390801",
+        "filename": "tvix/store/src/proto/grpc_blobservice_wrapper.rs",
+        "patchSetId": 20
+      },
+      "lineNbr": 54,
+      "author": {
+        "id": 1000073
+      },
+      "writtenOn": "2023-03-07T21:01:04Z",
+      "side": 1,
+      "message": "detailed",
+      "revId": "b08f009c0fda1d3e9ec98a66e1a53404f7fc96a2",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d163a9bc_77b8d4a5",
+        "filename": "tvix/store/src/proto/grpc_blobservice_wrapper.rs",
+        "patchSetId": 20
+      },
+      "lineNbr": 67,
+      "author": {
+        "id": 1000073
+      },
+      "writtenOn": "2023-03-07T21:01:04Z",
+      "side": 1,
+      "message": "nit: could not this logic be turned into something like match self.chunk_service.get(\u0026req.digest)? { None \u003d\u003e ..., Some(data) \u003d\u003e ... } and let the error propagate itself?\n\nI would even probably factor out the \"None\" arm through macro or whatever (or if let ... else pattern) and focus only on the Some(data) logic which is the only non-trivial here",
+      "revId": "b08f009c0fda1d3e9ec98a66e1a53404f7fc96a2",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "05cb07ad_d42f74c5",
+        "filename": "tvix/store/src/proto/grpc_blobservice_wrapper.rs",
+        "patchSetId": 20
+      },
+      "lineNbr": 86,
+      "author": {
+        "id": 1000073
+      },
+      "writtenOn": "2023-03-07T21:01:04Z",
+      "side": 1,
+      "message": "is it enough to deal with the error?",
+      "revId": "b08f009c0fda1d3e9ec98a66e1a53404f7fc96a2",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
