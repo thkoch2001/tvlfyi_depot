@@ -1,0 +1,140 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f157c991_762a7281",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 25
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000073
+      },
+      "writtenOn": "2023-03-07T21:29:11Z",
+      "side": 1,
+      "message": "I am unable to wrap properly my mind around this cl due to the tree/graph thing",
+      "revId": "bf898031649c475ab82d491e95904aa85410ca30",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ee7d37b5_e3f12736",
+        "filename": "tvix/store/src/proto/grpc_directoryservice_wrapper.rs",
+        "patchSetId": 25
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1000073
+      },
+      "writtenOn": "2023-03-07T21:29:11Z",
+      "side": 1,
+      "message": "why 5? (comment for rationale)",
+      "revId": "bf898031649c475ab82d491e95904aa85410ca30",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f3e5ad3b_447d81f3",
+        "filename": "tvix/store/src/proto/grpc_directoryservice_wrapper.rs",
+        "patchSetId": 25
+      },
+      "lineNbr": 80,
+      "author": {
+        "id": 1000073
+      },
+      "writtenOn": "2023-03-07T21:29:11Z",
+      "side": 1,
+      "message": "can we log more information about the details? eg which dir or digest\nit can be a debug! or trace! if you prefer too",
+      "revId": "bf898031649c475ab82d491e95904aa85410ca30",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "070cc24d_84199124",
+        "filename": "tvix/store/src/proto/grpc_directoryservice_wrapper.rs",
+        "patchSetId": 25
+      },
+      "lineNbr": 95,
+      "author": {
+        "id": 1000073
+      },
+      "writtenOn": "2023-03-07T21:29:11Z",
+      "side": 1,
+      "message": "sad about the O(n) induced by this but no premature optimization I guess",
+      "revId": "bf898031649c475ab82d491e95904aa85410ca30",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f54dea3c_9998ab4a",
+        "filename": "tvix/store/src/proto/grpc_directoryservice_wrapper.rs",
+        "patchSetId": 25
+      },
+      "lineNbr": 103,
+      "author": {
+        "id": 1000073
+      },
+      "writtenOn": "2023-03-07T21:29:11Z",
+      "side": 1,
+      "message": "I\u0027m not sure what is the supposed interaction of this optimistic update with the consistency check above, the comment is also creating more doubts than clarification :P",
+      "revId": "bf898031649c475ab82d491e95904aa85410ca30",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fbcf3adb_dd6c738c",
+        "filename": "tvix/store/src/proto/grpc_directoryservice_wrapper.rs",
+        "patchSetId": 25
+      },
+      "lineNbr": 186,
+      "author": {
+        "id": 1000073
+      },
+      "writtenOn": "2023-03-07T21:29:11Z",
+      "side": 1,
+      "message": "didn\u0027t understand all the comment",
+      "revId": "bf898031649c475ab82d491e95904aa85410ca30",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "908f4d25_65c7a391",
+        "filename": "tvix/store/src/proto/grpc_directoryservice_wrapper.rs",
+        "patchSetId": 25
+      },
+      "lineNbr": 208,
+      "author": {
+        "id": 1000073
+      },
+      "writtenOn": "2023-03-07T21:29:11Z",
+      "side": 1,
+      "message": "why ? wouldn\u0027t work here?",
+      "revId": "bf898031649c475ab82d491e95904aa85410ca30",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0be7c8d1_316cc9ea",
+        "filename": "tvix/store/src/proto/grpc_directoryservice_wrapper.rs",
+        "patchSetId": 25
+      },
+      "lineNbr": 220,
+      "author": {
+        "id": 1000073
+      },
+      "writtenOn": "2023-03-07T21:29:11Z",
+      "side": 1,
+      "message": "terminology is confusing, is root_digest the digest of the root node of... ? or is it something related to the Merkle tree?",
+      "revId": "bf898031649c475ab82d491e95904aa85410ca30",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
