@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "65b63c27_fd43d08e",
+        "filename": "tvix/store/src/proto/tests/grpc_directoryservice.rs",
+        "patchSetId": 26
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1000073
+      },
+      "writtenOn": "2023-03-07T21:31:08Z",
+      "side": 1,
+      "message": "in fact, if this was parents or children, it would be easier to understand what are those",
+      "revId": "69716f8c671af94855b6612b49f749605c2069fc",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
