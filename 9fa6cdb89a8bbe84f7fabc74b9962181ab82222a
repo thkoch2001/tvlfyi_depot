@@ -16,6 +16,24 @@
       "message": "Waiting for https://github.com/josh-project/josh/issues/1155 before proceeding ...",
       "revId": "9fa6cdb89a8bbe84f7fabc74b9962181ab82222a",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9735aa4e_08391374",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2023-03-07T10:27:09Z",
+      "side": 1,
+      "message": "Updated to most recent upstream commit, and confirmed that (in combination with `:unsign`) this does yield the same hashes as before.",
+      "parentUuid": "342d8a9b_5035b3f7",
+      "revId": "9fa6cdb89a8bbe84f7fabc74b9962181ab82222a",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
