@@ -37,6 +37,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "5b7be8bd_848df0bb",
+        "filename": "tvix/store/src/proto/grpc_directoryservice_wrapper.rs",
+        "patchSetId": 25
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-03-07T22:12:41Z",
+      "side": 1,
+      "message": "pure dice roll, i want to give this some elasticity for small-ish closures. we might be able to make this bigger, but it needs to be benchmarked.",
+      "parentUuid": "ee7d37b5_e3f12736",
+      "revId": "bf898031649c475ab82d491e95904aa85410ca30",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "f3e5ad3b_447d81f3",
         "filename": "tvix/store/src/proto/grpc_directoryservice_wrapper.rs",
         "patchSetId": 25
@@ -48,6 +66,24 @@
       "writtenOn": "2023-03-07T21:29:11Z",
       "side": 1,
       "message": "can we log more information about the details? eg which dir or digest\nit can be a debug! or trace! if you prefer too",
+      "revId": "bf898031649c475ab82d491e95904aa85410ca30",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "51a47a4a_cf480921",
+        "filename": "tvix/store/src/proto/grpc_directoryservice_wrapper.rs",
+        "patchSetId": 25
+      },
+      "lineNbr": 80,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-03-07T22:12:41Z",
+      "side": 1,
+      "message": "We do, don\u0027t we? it should be inside the span introduced in L63, so the log line (or trace emitted ) should inherit all fields from all parents.",
+      "parentUuid": "f3e5ad3b_447d81f3",
       "revId": "bf898031649c475ab82d491e95904aa85410ca30",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
@@ -69,6 +105,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "f0c2a216_ab9339aa",
+        "filename": "tvix/store/src/proto/grpc_directoryservice_wrapper.rs",
+        "patchSetId": 25
+      },
+      "lineNbr": 95,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-03-07T22:12:41Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "070cc24d_84199124",
+      "revId": "bf898031649c475ab82d491e95904aa85410ca30",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "f54dea3c_9998ab4a",
@@ -82,6 +136,24 @@
       "writtenOn": "2023-03-07T21:29:11Z",
       "side": 1,
       "message": "I\u0027m not sure what is the supposed interaction of this optimistic update with the consistency check above, the comment is also creating more doubts than clarification :P",
+      "revId": "bf898031649c475ab82d491e95904aa85410ca30",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "901d2416_6ef2dcab",
+        "filename": "tvix/store/src/proto/grpc_directoryservice_wrapper.rs",
+        "patchSetId": 25
+      },
+      "lineNbr": 103,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-03-07T22:12:41Z",
+      "side": 1,
+      "message": "This was trying to explain that sent_directory_digests is a bit of a misleading name. We track the digest of the Ok(directory) we\u0027re \"returning\" in L108, which will be sent soon (L115), but at the point of adding it to sent_directory_dgsts it\u0027s not sent out yet. To understand the logic however, calling this sent_directory_dgsts kinda makes sense.\n\nDo you have a better proposal for the variable name or comment?",
+      "parentUuid": "f54dea3c_9998ab4a",
       "revId": "bf898031649c475ab82d491e95904aa85410ca30",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
@@ -116,6 +188,24 @@
       "writtenOn": "2023-03-07T21:29:11Z",
       "side": 1,
       "message": "why ? wouldn\u0027t work here?",
+      "revId": "bf898031649c475ab82d491e95904aa85410ca30",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "01bb038f_8cc9c79a",
+        "filename": "tvix/store/src/proto/grpc_directoryservice_wrapper.rs",
+        "patchSetId": 25
+      },
+      "lineNbr": 208,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-03-07T22:12:41Z",
+      "side": 1,
+      "message": "Ah, that might have been before i had the From trait. good point, will clean up.",
+      "parentUuid": "908f4d25_65c7a391",
       "revId": "bf898031649c475ab82d491e95904aa85410ca30",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
