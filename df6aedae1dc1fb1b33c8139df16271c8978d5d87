@@ -65,6 +65,30 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "4f41f25b_47a4314a",
+        "filename": "tvix/cli/src/derivation.rs",
+        "patchSetId": 62
+      },
+      "lineNbr": 425,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2023-03-07T11:06:18Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9fa64235_5a35730c",
+      "range": {
+        "startLine": 425,
+        "startChar": 0,
+        "endLine": 425,
+        "endChar": 12
+      },
+      "revId": "df6aedae1dc1fb1b33c8139df16271c8978d5d87",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "fe77e87a_857731f7",
@@ -258,6 +282,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c9dd1325_e746915d",
+        "filename": "tvix/eval/src/value/list.rs",
+        "patchSetId": 62
+      },
+      "lineNbr": 89,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2023-03-07T11:06:18Z",
+      "side": 1,
+      "message": "Either way, a different algorithm (if someone comes up with one), can be implemented in a subsequent CL.",
+      "parentUuid": "4208b911_90b43a8c",
+      "revId": "df6aedae1dc1fb1b33c8139df16271c8978d5d87",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "483b63f0_b22a293a",
@@ -345,6 +387,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "61dec8c4_af5ae796",
+        "filename": "tvix/eval/src/vm/generators.rs",
+        "patchSetId": 62
+      },
+      "lineNbr": 424,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2023-03-07T11:06:18Z",
+      "side": 1,
+      "message": "Hm, we might want to add it into reenqueue_generator, but then that needs to know the frame ID, too. I\u0027ll experiment on top of the chain.",
+      "parentUuid": "606a7997_24fd8965",
+      "revId": "df6aedae1dc1fb1b33c8139df16271c8978d5d87",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "729b1310_d2fdb5da",
@@ -358,6 +418,24 @@
       "writtenOn": "2023-03-05T13:19:55Z",
       "side": 1,
       "message": "This file should have a little docstring at the start to explain what this is about or what is used for",
+      "revId": "df6aedae1dc1fb1b33c8139df16271c8978d5d87",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8234403d_71de8789",
+        "filename": "tvix/eval/src/vm/macros.rs",
+        "patchSetId": 62
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2023-03-07T11:06:18Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "729b1310_d2fdb5da",
       "revId": "df6aedae1dc1fb1b33c8139df16271c8978d5d87",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
@@ -379,6 +457,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "742dbb35_f7095066",
+        "filename": "tvix/eval/src/vm/mod.rs",
+        "patchSetId": 62
+      },
+      "lineNbr": 261,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2023-03-07T11:06:18Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "61865ade_8230946e",
+      "revId": "df6aedae1dc1fb1b33c8139df16271c8978d5d87",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "f335fd04_defc89f6",
@@ -396,6 +492,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "30fbcf2a_a747657c",
+        "filename": "tvix/eval/src/vm/mod.rs",
+        "patchSetId": 62
+      },
+      "lineNbr": 265,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2023-03-07T11:06:18Z",
+      "side": 1,
+      "message": "They\u0027re basically only used in the debug tracer output, in which case they\u0027re always indexes in the frame list (as that helps you orient yourself in debug output about how deep inside a computation the VM is).",
+      "parentUuid": "f335fd04_defc89f6",
+      "revId": "df6aedae1dc1fb1b33c8139df16271c8978d5d87",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "a73d69dd_889c737d",
@@ -409,6 +523,24 @@
       "writtenOn": "2023-03-05T13:19:55Z",
       "side": 1,
       "message": "Modulo some initialization stuff, handling a call frame or a generator is symmetric, is there any plan to factor this?",
+      "revId": "df6aedae1dc1fb1b33c8139df16271c8978d5d87",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2c4be9d9_630d1321",
+        "filename": "tvix/eval/src/vm/mod.rs",
+        "patchSetId": 62
+      },
+      "lineNbr": 267,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2023-03-07T11:06:18Z",
+      "side": 1,
+      "message": "I\u0027m not sure what you mean, can you expand?",
+      "parentUuid": "a73d69dd_889c737d",
       "revId": "df6aedae1dc1fb1b33c8139df16271c8978d5d87",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
@@ -461,6 +593,24 @@
       "writtenOn": "2023-03-05T13:19:55Z",
       "side": 1,
       "message": "TODO for what?",
+      "revId": "df6aedae1dc1fb1b33c8139df16271c8978d5d87",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b580b4cf_d662dffb",
+        "filename": "tvix/eval/src/vm/mod.rs",
+        "patchSetId": 62
+      },
+      "lineNbr": 920,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2023-03-07T11:06:18Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f43ab667_230f812e",
       "revId": "df6aedae1dc1fb1b33c8139df16271c8978d5d87",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
