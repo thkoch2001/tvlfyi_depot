@@ -16,6 +16,24 @@
       "message": "The change between patchset 3 and 4, which showed a regression and caused https://github.com/josh-project/josh/pull/1159 should probably be referenced somewhere. Maybe it\u0027s sufficient to update the commit message with the up2date changelog?",
       "revId": "fd166c2f1136477e45146fe1417b9cd5b9fff10d",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "577de249_5b792848",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2023-03-07T10:31:44Z",
+      "side": 1,
+      "message": "Added it to the commit message.",
+      "parentUuid": "7f92a232_cbb4b916",
+      "revId": "fd166c2f1136477e45146fe1417b9cd5b9fff10d",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
