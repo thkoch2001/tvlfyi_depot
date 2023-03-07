@@ -1,68 +1,203 @@
 tvix-eval VM loop
 =================
 
-Date: 2023-02-14
-Author: tazjin
+This document describes the new tvix-eval VM execution loop implemented in the
+chain focusing around cl/8104.
 
 ## Background
 
-The VM loop implemented in `src/vm.rs` currently has a couple of functions:
+The VM loop implemented in Tvix prior to cl/8104 had several functions:
 
-1. Advance the instruction pointer and execute instructions, in a loop
-   (unsurprisingly).
+1. Advancing the instruction pointer for a chunk of Tvix bytecode and
+   executing instructions in a loop until a result was yielded.
 
-2. Tracking Nix call frames as functions/thunks are entered/exited.
+2. Tracking Nix call frames as functions/thunks were entered/exited.
 
-3. Catch trampoline requests returned from instruction executions, and
-   resuming of executions afterwards.
+3. Catching trampoline requests returned from instructions to force suspended
+   thunks without increasing stack size *where possible*.
 
-4. Invoking the inner trampoline loop, handling actions and
-   continuations from the trampoline.
+4. Handling trampolines through an inner trampoline loop, switching between a
+   code execution mode and execution of subsequent trampolines.
 
-The current implementation of the trampoline logic was added on to the
-existing VM, which recursed for thunk forcing. As a result, it is
-currently a little difficult to understand what exactly is going on in
-the VM loop and how the trampoline logic works.
+This implementation of the trampoline logic was added on to the existing VM,
+which previously always recursed for thunk forcing. There are some cases (for
+example values that need to be forced *inside* of the execution of a builtin)
+where trampolines could not previously be used, and the VM recursed anyways.
 
-This has also led to several bugs, for example: b/251, b/246, b/245,
-and b/238.
+As a result of this trampoline logic being added "on top" of the existing VM
+loop the code became quite difficult to understand. This led to several bugs,
+for example: b/251, b/246, b/245, and b/238.
 
-These bugs are very tricky to deal with, as we have to try and make
-the VM do things that are somewhat difficult to fit into the current
-model. We could of course keep extending the trampoline logic to
-accomodate all sorts of concepts (such as finalisers), but that seems
-difficult.
+These bugs were tricky to deal with, as we had to try and make the VM do
+things that are somewhat difficult to fit into its model. We could of course
+keep extending the trampoline logic to accommodate all sorts of concepts (such
+as finalisers), but that seems like it does not solve the root problem.
 
-There are also additional problems, such as forcing inside of builtin
-implementations, which leads to a situation where we would like to
-suspend the builtin and return control flow to the VM until the value
-is forced.
+## New VM loop
 
-## Proposal
+In cl/8104, a unified new solution is implemented with which the VM is capable
+of evaluating everything without increasing the call stack size.
 
-We rewrite parts of the VM loop to elevate trampolining and
-potentially other modes of execution to a top-level concept of the VM.
+This is done by introducing a new frame stack in the VM, on which execution
+frames are enqueued that are either:
 
-We achieve this by replacing the current concept of call frames with a
-"VM context" (naming tbd), which can represent multiple different
-states of the VM:
+1. A call frame, consisting of Tvix bytecode that evaluates compiled Nix code.
+2. A generator frame, consisting of some VM logic implemented in pure Rust
+   code that can be *suspended* when it hits a point where the VM would
+   previously need to recurse.
 
-1. Tvix code execution, equivalent to what is currently a call frame,
-   executing bytecode until the instruction pointer reaches the end of
-   a chunk, then returning one level up.
+We do this by making use of the `async` *keyword* in Rust, but notably
+*without* introducing asynchronous I/O in tvix-eval (the complexity of which
+is undesirable for us).
 
-2. Trampolining the forcing of a thunk, equivalent to the current
-   trampolining logic.
+Specifically, when writing a Rust function that uses the `async` keyword, such
+as:
 
-3. Waiting for the result of a trampoline, to ensure that in case of
-   nested thunks all representations are correctly transformed.
+```rust
+fn some_builtin(input: Value) -> Result<Value, ErrorKind> {
+  let mut out = NixList::new();
 
-4. Trampolining the execution of a builtin. This is not in scope for
-   the initial implementation, but it should be conceptually possible.
+  for element in input.to_list()? {
+    let result = do_something_that_requires_the_vm(element).await;
+    out.push(result);
+  }
 
-It is *not* in scope for this proposal to enable parallel suspension
-of thunks. This is a separate topic which is discussed in [waiting for
-the store][wfs].
+  Ok(out)
+}
+```
+
+The compiler actually generates a state-machine under-the-hood which allows
+the execution of that function to be *suspended* whenever it hits an `await`.
+
+We use the [`genawaiter`][] crate that gives us a data structure and simple
+interface for getting instances of these state machines that can be stored in
+a struct (in our case, a *generator frame*).
+
+The execution of the VM then becomes the execution of an *outer loop*, which
+is responsible for selecting the next generator frame to execute, and two
+*inner loops*, which drive the execution of a call frame or generator frame
+forward until it either yields a value or asks to be suspended in favour of
+another frame.
+
+All "communication" between frames happens solely through values left on the
+stack: Whenever a frame of either type runs to completion, it is expected to
+leave a *single* value on the stack. It follows that the whole VM, upon
+completion of the last (or initial, depending on your perspective) frame
+yields its result as the return value.
+
+The core of the VM restructuring is cl/8104, unfortunately one of the largest
+single commit changes we've had to make yet, as it touches pretty much all
+areas of tvix-eval. The introduction of the generators and the
+message/response system we built to request something from the VM, suspend a
+generator, and wait for the return is in cl/8148.
+
+The next sections describe in detail how the three different loops work.
+
+### Outer VM loop
+
+The outer VM loop is responsible for selecting the next frame to run, and
+dispatching it correctly to inner loops, as well as determining when to shut
+down the VM and return the final result.
+
+```
+                          ╭──────────────────╮
+              ╭───────────┤ match frame kind ├──────╮
+              │           ╰──────────────────╯      │
+              │                                     │
+    ┏━━━━━━━━━┷━━━━━━━━┓                ╭───────────┴───────────╮
+ ──►┃ frame_stack.pop()┃                ▼                       ▼
+    ┗━━━━━━━━━━━━━━━━━━┛         ┏━━━━━━━━━━━━┓        ┏━━━━━━━━━━━━━━━━━┓
+                 ▲               ┃ call frame ┃        ┃ generator frame ┃
+                 │               ┗━━━━━━┯━━━━━┛        ┗━━━━━━━━┯━━━━━━━━┛
+                 │[yes, cont.]          │                       │
+                 │                      ▼                       ▼
+    ┏━━━━━━━━┓   │             ╔════════════════╗      ╔═════════════════╗
+ ◄──┨ return ┃   │             ║ inner bytecode ║      ║ inner generator ║
+    ┗━━━━━━━━┛   │             ║      loop      ║      ║      loop       ║
+        ▲        │             ╚════════╤═══════╝      ╚════════╤════════╝
+        │   ╭────┴─────╮                │                       │
+        │   │ has next │                ╰───────────┬───────────╯
+   [no] ╰───┤  frame?  │                            │
+            ╰────┬─────╯                            ▼
+                 │                         ┏━━━━━━━━━━━━━━━━━┓
+                 │                         ┃ frame completed ┃
+                 ╰─────────────────────────┨  or suspended   ┃
+                                           ┗━━━━━━━━━━━━━━━━━┛
+```
+
+Initially, the VM always pops a frame from the frame stack and then inspects
+the type of frame it found. As a consequence the next frame to execute is
+always the frame at the top of the stack, and setting up a VM initially for
+code execution is done by leaving a call frame with the code to execute on the
+stack and passing control to the outer loop.
+
+Control is dispatched to either of the inner loops (depending on the type of
+frame) and the cycle continues once they return.
+
+When an inner loop returns, it has either finished its execution (and left its
+result value on the *value stack*), or its frame has requested to be
+suspended.
+
+Frames request suspension by re-enqueueing *themselves* through VM helper
+methods, and then leaving the frame they want to run *on top* of themselves in
+the frame stack before yielding control back to the outer loop.
+
+The inner control loops inform the outer loops about whether the frame has
+been *completed* or *suspended* by returning a boolean.
+
+### Inner call frame loop
+
+The inner call frame loop drives the execution of some Tvix bytecode by
+continously looking at the next instruction to execute, and dispatching to the
+instruction handler.
+
+```
+   ┏━━━━━━━━━━━━━┓
+◄──┨ return true ┃
+   ┗━━━━━━━━━━━━━┛
+          ▲
+     ╔════╧═════╗
+     ║ OpReturn ║
+     ╚══════════╝
+          ▲
+          ╰──┬────────────────────────────╮
+             │                            ▼
+             │                 ╔═════════════════════╗
+    ┏━━━━━━━━┷━━━━━┓           ║ execute instruction ║
+ ──►┃ inspect next ┃           ╚══════════╤══════════╝
+    ┃  instruction ┃                      │
+    ┗━━━━━━━━━━━━━━┛                      │
+             ▲                      ╭─────┴─────╮
+             ╰──────────────────────┤ suspends? │
+                       [no]         ╰─────┬─────╯
+                                          │
+                                          │
+   ┏━━━━━━━━━━━━━━┓                       │
+◄──┨ return false ┃───────────────────────╯
+   ┗━━━━━━━━━━━━━━┛              [yes]
+```
+
+With this refactoring, the compiler now emits a special `OpReturn` instruction
+at the end of bytecode chunks. This is a signal to the runtime that the chunk
+has completed and that its current value should be returned, without having to
+perform instruction pointer arithmetic.
+
+When `OpReturn` is encountered, the inner call frame loop returns control to
+the outer loop and informs it (by returning `true`) that the call frame has
+completed.
+
+Any other instruction may also request a suspension of the call frame (for
+example, instructions that need to force a value). In this case the inner loop
+is responsible for setting up the frame stack correctly, and returning `false`
+to inform the outer loop of the suspension
+
+### Inner generator loop
+
+TODO! https://app.excalidraw.com/l/3CqeGp7p0yV/5e5Id7aSnOP
+
+## Advantages & Disadvantages of the approach
+
+TODO!
 
 ## Alternatives considered
 
@@ -72,5 +207,4 @@ the store][wfs].
 
 2. ... ?
 
-
-[wfs]: https://docs.google.com/document/d/1Zuw9UdMy95hcqsd-KudTw5yeeUkEXrqOi0rooGB7GWA/edit
+[`genawaiter`]: https://docs.rs/genawaiter/
