@@ -565,6 +565,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "a946c1b0_627a06a7",
+        "filename": "tvix/eval/src/vm/mod.rs",
+        "patchSetId": 62
+      },
+      "lineNbr": 267,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2023-03-07T22:04:18Z",
+      "side": 1,
+      "message": "No concrete plan, but not opposed to it. Would rather touch that separately though.",
+      "parentUuid": "ed7407eb_898ab65c",
+      "revId": "df6aedae1dc1fb1b33c8139df16271c8978d5d87",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "d3ccce04_616f2186",
         "filename": "tvix/eval/src/vm/mod.rs",
         "patchSetId": 62
