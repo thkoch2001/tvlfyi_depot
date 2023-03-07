@@ -34,6 +34,24 @@
       "parentUuid": "6cedf898_69c18c7a",
       "revId": "a99ffb2959a8abb4fb522ad111772e0e1fa84783",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e2afc372_994309a9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2023-03-07T21:36:06Z",
+      "side": 1,
+      "message": "I expanded on this a little bit in the cl/8104 commit message, but fundamentally these are for slightly different purposes (runtime tracing, rather than error messages).\n\nWe can probably integrate some of this into error messages, too, but it will require a little more work.",
+      "parentUuid": "ea4dab39_e0bbe7df",
+      "revId": "a99ffb2959a8abb4fb522ad111772e0e1fa84783",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
