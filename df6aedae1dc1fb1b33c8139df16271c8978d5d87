@@ -547,6 +547,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "ed7407eb_898ab65c",
+        "filename": "tvix/eval/src/vm/mod.rs",
+        "patchSetId": 62
+      },
+      "lineNbr": 267,
+      "author": {
+        "id": 1000073
+      },
+      "writtenOn": "2023-03-07T21:51:17Z",
+      "side": 1,
+      "message": "The structure of the code handling a call frame or a generator frame is the same modulo some method which are different as far I see it. Is there any plan to factor the similar parts to make the difference \"more obvious\" to the reader?",
+      "parentUuid": "2c4be9d9_630d1321",
+      "revId": "df6aedae1dc1fb1b33c8139df16271c8978d5d87",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "d3ccce04_616f2186",
         "filename": "tvix/eval/src/vm/mod.rs",
         "patchSetId": 62
