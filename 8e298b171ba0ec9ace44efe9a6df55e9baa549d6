@@ -141,6 +141,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "68f2ca4e_63aecef0",
+        "filename": "tvix/eval/src/vm/generators.rs",
+        "patchSetId": 5
+      },
+      "lineNbr": 372,
+      "author": {
+        "id": 1000073
+      },
+      "writtenOn": "2023-03-07T21:46:27Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "bb118e49_75ed263b",
+      "revId": "8e298b171ba0ec9ace44efe9a6df55e9baa549d6",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "ed1d2d20_f4353517",
@@ -172,6 +190,24 @@
       "side": 1,
       "message": "That error is returned to the caller, which makes for slightly nicer error messages (and ability to add context there, as equality comparisons happen in ... strange contexts, sometimes)",
       "parentUuid": "ed1d2d20_f4353517",
+      "revId": "8e298b171ba0ec9ace44efe9a6df55e9baa549d6",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9a0d0163_2739fc49",
+        "filename": "tvix/eval/src/vm/generators.rs",
+        "patchSetId": 5
+      },
+      "lineNbr": 375,
+      "author": {
+        "id": 1000073
+      },
+      "writtenOn": "2023-03-07T21:46:27Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "d393dfac_ac86613b",
       "revId": "8e298b171ba0ec9ace44efe9a6df55e9baa549d6",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
