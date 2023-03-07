@@ -16,6 +16,24 @@
       "message": "why not just taking another name? :P",
       "revId": "a4e4ca67e8ea3da9c4857abada05223289117be2",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8c93bed1_fed5dcad",
+        "filename": "tvix/eval/src/builtins/mod.rs",
+        "patchSetId": 6
+      },
+      "lineNbr": 362,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2023-03-07T21:37:07Z",
+      "side": 1,
+      "message": "It\u0027s currently just a limitation of the macro, it should be `mut val` in the function parameter, but that requires a little more codegen in the macro.\n\nWe\u0027ll fix that at some point down the line, at which point we won\u0027t need to modify the bodies of the functions affected by this (other than deleting this line).",
+      "parentUuid": "d6fd8752_2fc73e49",
+      "revId": "a4e4ca67e8ea3da9c4857abada05223289117be2",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
