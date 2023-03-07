@@ -118,7 +118,7 @@ readTree.fix (self: (readDepot {
   ci.gcroot = with self.third_party.nixpkgs; makeSetupHook
     {
       name = "depot-gcroot";
-      deps = self.ci.targets;
+      depsTargetTargetPropagated = self.ci.targets;
     }
     emptyFile;
 })
