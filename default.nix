@@ -115,10 +115,9 @@ readTree.fix (self: (readDepot {
   });
 
   # Derivation that gcroots all depot targets.
-  ci.gcroot = with self.third_party.nixpkgs; makeSetupHook
-    {
-      name = "depot-gcroot";
-      depsTargetTargetPropagated = self.ci.targets;
-    }
-    emptyFile;
+  ci.gcroot = with self.third_party.nixpkgs; writeText "depot-gcroot"
+    (builtins.concatStringsSep "\n"
+      (lib.flatten
+        (map (p: map (o: p.${o}) p.outputs or []) # list all outputs of each drv
+          self.ci.targets)));
 })
