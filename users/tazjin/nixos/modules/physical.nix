@@ -19,6 +19,7 @@ in
     (with pkgs; [
       amber
       bat
+      chromium
       curl
       ddcutil
       direnv
@@ -32,7 +33,6 @@ in
       gh
       git
       gnupg
-      google-chrome
       gtk3 # for gtk-launch
       htop
       hyperfine
@@ -68,7 +68,6 @@ in
       tig
       tokei
       tree
-      ungoogled-chromium
       unzip
       vlc
       volumeicon
