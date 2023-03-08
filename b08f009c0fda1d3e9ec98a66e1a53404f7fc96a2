@@ -53,6 +53,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "0c2672c2_5432ac9f",
+        "filename": "tvix/store/src/proto/grpc_blobservice_wrapper.rs",
+        "patchSetId": 20
+      },
+      "lineNbr": 52,
+      "author": {
+        "id": 1000073
+      },
+      "writtenOn": "2023-03-08T19:24:49Z",
+      "side": 1,
+      "message": "Hm, so I think it would be good to extract these constants in some \"global location\" or to make them apparent to developers for now\nThen, I think through OTEL, we should try to trace the behavior related to the size of the queues, etc.\nUnfortunately, I have no advice regarding the actual choice of the number ; that would require a proper consideration of the whole system (so I prefer to see what happens after we finish up the chain).\nNevertheless, I am concerned about the situations where the queue size is so small that deadlocks could theorically happen because of \"network dependencies\" for example.",
+      "parentUuid": "e648b117_02791b5a",
+      "revId": "b08f009c0fda1d3e9ec98a66e1a53404f7fc96a2",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "393ab9bf_88390801",
@@ -123,6 +141,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "17049fa8_861b2849",
+        "filename": "tvix/store/src/proto/grpc_blobservice_wrapper.rs",
+        "patchSetId": 20
+      },
+      "lineNbr": 67,
+      "author": {
+        "id": 1000073
+      },
+      "writtenOn": "2023-03-08T19:24:49Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "45d43e50_766d697f",
+      "revId": "b08f009c0fda1d3e9ec98a66e1a53404f7fc96a2",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "05cb07ad_d42f74c5",
@@ -154,6 +190,24 @@
       "side": 1,
       "message": "This is when the client exits early, while asking to get streamed the contents of a chunk/blob (and in that case, the case where we don\u0027t have the blob/chunk).\n\nWe can\u0027t send anything to the receiver anymore, because they already left, and we don\u0027t need to do any cleanups on our side, other than dropping stuff that\u0027s currently in scope (which we do). What else should we do?",
       "parentUuid": "05cb07ad_d42f74c5",
+      "revId": "b08f009c0fda1d3e9ec98a66e1a53404f7fc96a2",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c608d8d0_7d601b69",
+        "filename": "tvix/store/src/proto/grpc_blobservice_wrapper.rs",
+        "patchSetId": 20
+      },
+      "lineNbr": 86,
+      "author": {
+        "id": 1000073
+      },
+      "writtenOn": "2023-03-08T19:24:49Z",
+      "side": 1,
+      "message": "Got it, sounds good. I would only advise to have counters of these behaviors.",
+      "parentUuid": "29d46e62_3aefe535",
       "revId": "b08f009c0fda1d3e9ec98a66e1a53404f7fc96a2",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
