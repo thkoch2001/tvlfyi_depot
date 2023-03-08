@@ -1,0 +1,282 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "aabd907a_2827f031",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 9
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000066
+      },
+      "writtenOn": "2023-03-08T11:58:34Z",
+      "side": 1,
+      "message": "I like this a lot.\n\nI have not read cl/8104 yet, but if the implementation lives up to the advertisement this is definitely the way to go.\n\nI have time tomorrow and intend to start reading cl/8104, but first I have to catch up on ~2 months worth of commits to tvix, so we\u0027ll see if I actually get to the CL.  I may upgrade this to a +2 after I\u0027ve seen the gory details.",
+      "revId": "b98fd5fd74481c46c91d3d309679138153b5e8c9",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2fc2661a_aebffef8",
+        "filename": "tvix/eval/docs/vm-loop.md",
+        "patchSetId": 9
+      },
+      "lineNbr": 50,
+      "author": {
+        "id": 1000066
+      },
+      "writtenOn": "2023-03-08T11:58:34Z",
+      "side": 1,
+      "message": "It is not a goal to introduce async I/O in tvix-eval.  I think we both agree about this.\n\nIs it a goal to introduce *concurrency*?  I\u0027m not sure.  But that is the big question here.\n\nNote that in order to have async I/O, you must have concurrency.  But the opposite is not true.  A toy example of concurrency without I/O would be interleaving the execution of subexpressions (for example `[ (f x) (g x) ]` interleaving the bytecodes for `f` and `g`) with context switches possible only where the frame type changes (i.e. when bytecode invokes a builtin or a builtin invokes bytecode).  This is a silly toy example just to make clear what concurrency-without-I/O means; it is not a motivation.\n\nI bring this up because the async I/O state machine is quite complex and tricky specifically because it needs to support concurrency.  Also, Rust\u0027s optimizer -- as awesome as it is -- will not be able to figure out that our `async`-keyword-using programs are not concurrent.  So we will lose a large amount of optimization opportunities as a result of this -- indirect calls where the jump target is always the same, etc.  See next comment about this.\n\nThe previous paragraph is really just my verbose way of venting about the fact that Rust doesn\u0027t have an explicit tailcall mechanism.  If it did, none of this would be necessary.  But it doesn\u0027t, and it won\u0027t get one anytime soon.  And the trampolines were an unreadable mess; I\u0027m happy to see them go.\n\nAnyways, now that my rant is over; to resolve this comment, would you please indicate if concurrency is a conscious goal here?  I suggest doing so by editing to one of the following, whichever is appropriate:\n\n1. \"*without* introducing asynchronous I/O or concurency\" or \n2. \"and making tvix-eval concurrent, but notably *without*...\"",
+      "revId": "b98fd5fd74481c46c91d3d309679138153b5e8c9",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d8689d0a_ed943796",
+        "filename": "tvix/eval/docs/vm-loop.md",
+        "patchSetId": 9
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 1000066
+      },
+      "writtenOn": "2023-03-08T11:58:34Z",
+      "side": 1,
+      "message": "I think you mean `async fn some_builtin(...`.\n\nIt\u0027s a bit confusing that the previous paragraph says \"a Rust function that uses the `async` keyword, such as \u003cfunction that doesn\u0027t use the async keyword\u003e\" 😊",
+      "revId": "b98fd5fd74481c46c91d3d309679138153b5e8c9",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6bc4379b_6ca3bccf",
+        "filename": "tvix/eval/docs/vm-loop.md",
+        "patchSetId": 9
+      },
+      "lineNbr": 84,
+      "author": {
+        "id": 1000066
+      },
+      "writtenOn": "2023-03-08T11:58:34Z",
+      "side": 1,
+      "message": "Hooray.  Let\u0027s document this convention in the code as well.  Trying to reverse engineer the stack discipline was the most unpleasant part of the half-working trampoline CL.",
+      "revId": "b98fd5fd74481c46c91d3d309679138153b5e8c9",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b1f8ac09_1499b1dd",
+        "filename": "tvix/eval/docs/vm-loop.md",
+        "patchSetId": 9
+      },
+      "lineNbr": 110,
+      "author": {
+        "id": 1000066
+      },
+      "writtenOn": "2023-03-08T11:58:34Z",
+      "side": 1,
+      "message": "\"Call frame\" is a bit ambiguous; both types call something (either bytecode or Rust code).  Would you consider \"bytecode frame\" instead?",
+      "revId": "b98fd5fd74481c46c91d3d309679138153b5e8c9",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "799fbeec_ae4e977a",
+        "filename": "tvix/eval/docs/vm-loop.md",
+        "patchSetId": 9
+      },
+      "lineNbr": 126,
+      "author": {
+        "id": 1000066
+      },
+      "writtenOn": "2023-03-08T11:58:34Z",
+      "side": 1,
+      "message": "Have you found a nice tool for drawing diagrams like this?",
+      "revId": "b98fd5fd74481c46c91d3d309679138153b5e8c9",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "964c34e7_6ca816fe",
+        "filename": "tvix/eval/docs/vm-loop.md",
+        "patchSetId": 9
+      },
+      "lineNbr": 143,
+      "author": {
+        "id": 1000066
+      },
+      "writtenOn": "2023-03-08T11:58:34Z",
+      "side": 1,
+      "message": "This is much cleaner and easier to understand than the trampoline continuation mechanism.",
+      "revId": "b98fd5fd74481c46c91d3d309679138153b5e8c9",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2a209eee_399f0457",
+        "filename": "tvix/eval/docs/vm-loop.md",
+        "patchSetId": 9
+      },
+      "lineNbr": 148,
+      "author": {
+        "id": 1000066
+      },
+      "writtenOn": "2023-03-08T11:58:34Z",
+      "side": 1,
+      "message": "Wait, in the diagram, neither of the inner loops are labeled \"call frame loop\".\n\nOne is labeled \"inner bytecode loop\" and the other is labeled \"inner generator loop\".  I think you mean the first one?",
+      "revId": "b98fd5fd74481c46c91d3d309679138153b5e8c9",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a7e8242d_d6384e17",
+        "filename": "tvix/eval/docs/vm-loop.md",
+        "patchSetId": 9
+      },
+      "lineNbr": 183,
+      "author": {
+        "id": 1000066
+      },
+      "writtenOn": "2023-03-08T11:58:34Z",
+      "side": 1,
+      "message": "Is it possible for one bytecode function to invoke another bytecode function (which is in a different chunk) without leaving the inner call frame loop?",
+      "revId": "b98fd5fd74481c46c91d3d309679138153b5e8c9",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f1c9dd2b_4f6b00df",
+        "filename": "tvix/eval/docs/vm-loop.md",
+        "patchSetId": 9
+      },
+      "lineNbr": 197,
+      "author": {
+        "id": 1000066
+      },
+      "writtenOn": "2023-03-08T11:58:34Z",
+      "side": 1,
+      "message": "This is sort of a tautology...\n\nIf you want to keep the name \"generator loop\" please state clearly something like \"the purpose of the generator loop is to execute builtins\" or something like that.",
+      "revId": "b98fd5fd74481c46c91d3d309679138153b5e8c9",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f7c93ed5_3b5e396e",
+        "filename": "tvix/eval/docs/vm-loop.md",
+        "patchSetId": 9
+      },
+      "lineNbr": 209,
+      "author": {
+        "id": 1000066
+      },
+      "writtenOn": "2023-03-08T11:58:34Z",
+      "side": 1,
+      "message": "Nitpick: the diagram would be easier to understand if you reflect the inner loop about the vertical axis.\n\nThat way it looks like \"the generator\" is off to our right and \"the bytecode loop\" (and the rest of the VM) is off to our left.  Like sitting between two people at a table and turning your attention from one of them to the other (which is basically what tvix is doing here).",
+      "revId": "b98fd5fd74481c46c91d3d309679138153b5e8c9",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d8ac993b_0346c71d",
+        "filename": "tvix/eval/docs/vm-loop.md",
+        "patchSetId": 9
+      },
+      "lineNbr": 221,
+      "author": {
+        "id": 1000066
+      },
+      "writtenOn": "2023-03-08T11:58:34Z",
+      "side": 1,
+      "message": "\u003e a message *from* the VM *to* the generator\n\nI find this really confusing and hard to keep straight.  I\u0027m not saying it\u0027s incorrect, just confusing.\n\nThe generator exists in order to execute builtins.  Is it legitimate to call this the \"builtins loop\"?  Does the generator ever do anything other than execute (native, Rust) code which is part of the implementation of some builtin?",
+      "revId": "b98fd5fd74481c46c91d3d309679138153b5e8c9",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fdd3fee1_6d818cfc",
+        "filename": "tvix/eval/docs/vm-loop.md",
+        "patchSetId": 9
+      },
+      "lineNbr": 234,
+      "author": {
+        "id": 1000066
+      },
+      "writtenOn": "2023-03-08T11:58:34Z",
+      "side": 1,
+      "message": "Can you give an example of an inline request?  I\u0027m having trouble thinking of one.  When a builtin needs to execute bytecode that would be an \"other request\" since it needs to leave the generator loop and move into the bytecode loop.",
+      "revId": "b98fd5fd74481c46c91d3d309679138153b5e8c9",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0ac68224_35f9fa5b",
+        "filename": "tvix/eval/docs/vm-loop.md",
+        "patchSetId": 9
+      },
+      "lineNbr": 234,
+      "author": {
+        "id": 1000066
+      },
+      "writtenOn": "2023-03-08T11:58:34Z",
+      "side": 1,
+      "message": "Suggest s/Requests/Generator requests/ for clarity.",
+      "revId": "b98fd5fd74481c46c91d3d309679138153b5e8c9",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c2cc2023_c7170f85",
+        "filename": "tvix/eval/docs/vm-loop.md",
+        "patchSetId": 9
+      },
+      "lineNbr": 236,
+      "author": {
+        "id": 1000066
+      },
+      "writtenOn": "2023-03-08T11:58:34Z",
+      "side": 1,
+      "message": "We need a better name than \"other requests\".",
+      "range": {
+        "startLine": 236,
+        "startChar": 36,
+        "endLine": 236,
+        "endChar": 50
+      },
+      "revId": "b98fd5fd74481c46c91d3d309679138153b5e8c9",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c92ad470_84e78f87",
+        "filename": "tvix/eval/docs/vm-loop.md",
+        "patchSetId": 9
+      },
+      "lineNbr": 306,
+      "author": {
+        "id": 1000066
+      },
+      "writtenOn": "2023-03-08T11:58:34Z",
+      "side": 1,
+      "message": "3. Convince the Rust devs that Rust needs a way to guarantee constant-stack-depth tail calls (most likely a `tailcall` keyword).\n\nObviously this isn\u0027t going to happen, but the point here is that this is really all about not overflowing the stack.  Other interpreters (Boa) written in Rust have hit this problem too.",
+      "revId": "b98fd5fd74481c46c91d3d309679138153b5e8c9",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
