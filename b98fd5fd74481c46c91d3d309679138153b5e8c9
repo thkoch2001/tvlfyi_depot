@@ -35,6 +35,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "d9d7e7ca_f47ebaae",
+        "filename": "tvix/eval/docs/vm-loop.md",
+        "patchSetId": 9
+      },
+      "lineNbr": 50,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2023-03-08T12:44:36Z",
+      "side": 1,
+      "message": "Concurrency is not *currently* a goal, and I\u0027m not actually sure that it will be. We do aspire to be able to suspend and *go do something else* (while waiting on the store), but I think that\u0027s doable without actually doing anything concurrently, and probably even with the machinery already built for this.\n\nI\u0027ll update it to the first proposed alternative.",
+      "parentUuid": "2fc2661a_aebffef8",
+      "revId": "b98fd5fd74481c46c91d3d309679138153b5e8c9",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "d8689d0a_ed943796",
@@ -48,6 +66,24 @@
       "writtenOn": "2023-03-08T11:58:34Z",
       "side": 1,
       "message": "I think you mean `async fn some_builtin(...`.\n\nIt\u0027s a bit confusing that the previous paragraph says \"a Rust function that uses the `async` keyword, such as \u003cfunction that doesn\u0027t use the async keyword\u003e\" 😊",
+      "revId": "b98fd5fd74481c46c91d3d309679138153b5e8c9",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f92719c1_bc3a459b",
+        "filename": "tvix/eval/docs/vm-loop.md",
+        "patchSetId": 9
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2023-03-08T12:44:36Z",
+      "side": 1,
+      "message": "whoops, fixed :)",
+      "parentUuid": "d8689d0a_ed943796",
       "revId": "b98fd5fd74481c46c91d3d309679138153b5e8c9",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
@@ -86,6 +122,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "72ddd245_11d49f11",
+        "filename": "tvix/eval/docs/vm-loop.md",
+        "patchSetId": 9
+      },
+      "lineNbr": 110,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2023-03-08T12:44:36Z",
+      "side": 1,
+      "message": "I would, but I\u0027d also prefer to rename that after the chain around cl/8104 is done. I\u0027ve filed b/258 to track this so we can do it afterwards as part of cleaning up.",
+      "parentUuid": "b1f8ac09_1499b1dd",
+      "revId": "b98fd5fd74481c46c91d3d309679138153b5e8c9",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "799fbeec_ae4e977a",
@@ -99,6 +153,24 @@
       "writtenOn": "2023-03-08T11:58:34Z",
       "side": 1,
       "message": "Have you found a nice tool for drawing diagrams like this?",
+      "revId": "b98fd5fd74481c46c91d3d309679138153b5e8c9",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1b098f83_0f9c48d9",
+        "filename": "tvix/eval/docs/vm-loop.md",
+        "patchSetId": 9
+      },
+      "lineNbr": 126,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2023-03-08T12:44:36Z",
+      "side": 1,
+      "message": "Well, Emacs, but it doesn\u0027t really help that much. I use artist-mode to get approximate initial spacing of the text, and then manually edit the boxes. I\u0027ve done this a lot so I\u0027m quite fast at it, using reference pages like http://xahlee.info/comp/unicode_drawing_shapes.html\n\nAs an aside, it\u0027s incredibly infuriating that none of the arrows present in Unicode match up correctly with the box drawing characters, see this horrible example: https://gist.github.com/tazjin/aea039475e2da8a890955ec20c91f22a",
+      "parentUuid": "799fbeec_ae4e977a",
       "revId": "b98fd5fd74481c46c91d3d309679138153b5e8c9",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
@@ -137,6 +209,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "be9665fe_ddb68117",
+        "filename": "tvix/eval/docs/vm-loop.md",
+        "patchSetId": 9
+      },
+      "lineNbr": 148,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2023-03-08T12:44:36Z",
+      "side": 1,
+      "message": "You\u0027re right, I\u0027ve updated all the terminology to be consistent with \"bytecode frame\" and \"inner bytecode loop\".",
+      "parentUuid": "2a209eee_399f0457",
+      "revId": "b98fd5fd74481c46c91d3d309679138153b5e8c9",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "a7e8242d_d6384e17",
@@ -150,6 +240,24 @@
       "writtenOn": "2023-03-08T11:58:34Z",
       "side": 1,
       "message": "Is it possible for one bytecode function to invoke another bytecode function (which is in a different chunk) without leaving the inner call frame loop?",
+      "revId": "b98fd5fd74481c46c91d3d309679138153b5e8c9",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "08411ccb_706ecc60",
+        "filename": "tvix/eval/docs/vm-loop.md",
+        "patchSetId": 9
+      },
+      "lineNbr": 183,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2023-03-08T12:44:36Z",
+      "side": 1,
+      "message": "No, but for a slightly different reason (see cl/8147). Since function applications are thunked, *all* function applications are actually tail calls when invoked from bytecode (the only function applications that are not are those invoked from builtins).\n\nWhat this means is that when a call is encountered, the current frame is always being left anyways (and currently actually removed in favour of the new one). We *could* keep them around for better traces in error reporting, but that hasn\u0027t been a focus yet.",
+      "parentUuid": "a7e8242d_d6384e17",
       "revId": "b98fd5fd74481c46c91d3d309679138153b5e8c9",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
@@ -173,6 +281,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "d11e0e70_1785de4c",
+        "filename": "tvix/eval/docs/vm-loop.md",
+        "patchSetId": 9
+      },
+      "lineNbr": 197,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2023-03-08T12:44:36Z",
+      "side": 1,
+      "message": "It\u0027s not just for builtins, there are several things that it does.\n\nThere is literally a loop which (somewhat simplified) does this:\n\n  loop {\n    match gen.resume_with(msg) { \n      /* ... */\n    }\n  }\n  \nIt is this loop which \"drives\" the execution of the generator. Based on what the generator returns (either \"Yielded\", which means it\u0027s requesting something from the VM and the async state machine is suspended at that point, or \"Done\", which means it has run to completion and its result goes on the stack).\n\nI\u0027ve rephrased the sentence a little bit to try and make this clearer, as I think the missing link was that behaviour described in my last paragraph.",
+      "parentUuid": "f1c9dd2b_4f6b00df",
+      "revId": "b98fd5fd74481c46c91d3d309679138153b5e8c9",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "f7c93ed5_3b5e396e",
         "filename": "tvix/eval/docs/vm-loop.md",
         "patchSetId": 9
@@ -190,6 +316,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "a6ee57bb_e676206a",
+        "filename": "tvix/eval/docs/vm-loop.md",
+        "patchSetId": 9
+      },
+      "lineNbr": 209,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2023-03-08T12:44:36Z",
+      "side": 1,
+      "message": "I need to sketch this on paper first, haven\u0027t quite understood exactly what you\u0027re visualising yet :) \n\nCurrently the left side is where \"all the rest is\", so the outer arrows \"come from\" and \"go\" there.",
+      "parentUuid": "f7c93ed5_3b5e396e",
+      "revId": "b98fd5fd74481c46c91d3d309679138153b5e8c9",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "d8ac993b_0346c71d",
         "filename": "tvix/eval/docs/vm-loop.md",
         "patchSetId": 9
@@ -201,6 +345,24 @@
       "writtenOn": "2023-03-08T11:58:34Z",
       "side": 1,
       "message": "\u003e a message *from* the VM *to* the generator\n\nI find this really confusing and hard to keep straight.  I\u0027m not saying it\u0027s incorrect, just confusing.\n\nThe generator exists in order to execute builtins.  Is it legitimate to call this the \"builtins loop\"?  Does the generator ever do anything other than execute (native, Rust) code which is part of the implementation of some builtin?",
+      "revId": "b98fd5fd74481c46c91d3d309679138153b5e8c9",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6dfbe3ce_702c00db",
+        "filename": "tvix/eval/docs/vm-loop.md",
+        "patchSetId": 9
+      },
+      "lineNbr": 221,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2023-03-08T12:44:36Z",
+      "side": 1,
+      "message": "The confusing thing here is that the *first* time a generator is invoked after being instantiated, it is called with a no-op message, which is a constraint imposed by the API of crate that we use for the generator data structures.\n\nAfter that, there is always a ping/pong playing out between the generator and the rest of the VM, in which the generator sends a \"GeneratorRequest\" (requesting something from the VM), and the VM sends it a \"GeneratorResponse\" (returning the result to the VM).\n\nThese requests/responses (linked below in the text under the respective types) are things like \"please force this value\" or \"please import this file through the IO interface\", or in general all things where we previously had a `\u0026mut VM` (which is no longer the case anywhere - VM is now a private type).\n\nGenerators do more than just the execution of builtins. For example, forcing is also a generator because there is some native Rust code (heavily based on the one you wrote for trampolines, and my rewrite of it from cl/8012) that figures out what to do with a given thunk before just entering its bytecode loop.\n\nIt would be correct to say that the generators always execute some native Rust code, which is part of the evaluation implementation. But it\u0027s not just builtins.",
+      "parentUuid": "d8ac993b_0346c71d",
       "revId": "b98fd5fd74481c46c91d3d309679138153b5e8c9",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
@@ -241,6 +403,42 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "9f9c162a_e4098f62",
+        "filename": "tvix/eval/docs/vm-loop.md",
+        "patchSetId": 9
+      },
+      "lineNbr": 234,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2023-03-08T12:44:36Z",
+      "side": 1,
+      "message": "Here are some of the inline requests we have right now:\n\n1. Stack push (used under-the-hood by a helper function to prepare the VM\u0027s stack for a function call from a generator).\n\n2. Emitting a warning during evaluation.\n\n3. Interacting with the VM\u0027s import cache (to retrieve already imported thunks when importing Nix files).\n\n4. Interacting with the EvalIO interface (I think this didn\u0027t exist last time you were around: It\u0027s the bridge between tvix-eval and things like the store, so stuff like \"does this path exist?\" or \"read this directory!\").\n\nBasically it\u0027s operations that previously required a `\u0026mut VM`, which the generator loop (which is part of the VM implementation and has access to its internals) can do.",
+      "parentUuid": "fdd3fee1_6d818cfc",
+      "revId": "b98fd5fd74481c46c91d3d309679138153b5e8c9",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "12aa643c_7a86ef3e",
+        "filename": "tvix/eval/docs/vm-loop.md",
+        "patchSetId": 9
+      },
+      "lineNbr": 234,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2023-03-08T12:44:36Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0ac68224_35f9fa5b",
+      "revId": "b98fd5fd74481c46c91d3d309679138153b5e8c9",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "c2cc2023_c7170f85",
         "filename": "tvix/eval/docs/vm-loop.md",
         "patchSetId": 9
@@ -264,6 +462,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "8e3449d5_e85be0c7",
+        "filename": "tvix/eval/docs/vm-loop.md",
+        "patchSetId": 9
+      },
+      "lineNbr": 236,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2023-03-08T12:44:36Z",
+      "side": 1,
+      "message": "Suggestions welcome! They\u0027re \"more complex\" than inline requests, so maybe something like \"complex requests\"? Those would be stuff like \"force a value\", \"call a Nix function\", \"coerce value to string\" and so on.",
+      "parentUuid": "c2cc2023_c7170f85",
+      "range": {
+        "startLine": 236,
+        "startChar": 36,
+        "endLine": 236,
+        "endChar": 50
+      },
+      "revId": "b98fd5fd74481c46c91d3d309679138153b5e8c9",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "c92ad470_84e78f87",
         "filename": "tvix/eval/docs/vm-loop.md",
         "patchSetId": 9
@@ -275,6 +497,24 @@
       "writtenOn": "2023-03-08T11:58:34Z",
       "side": 1,
       "message": "3. Convince the Rust devs that Rust needs a way to guarantee constant-stack-depth tail calls (most likely a `tailcall` keyword).\n\nObviously this isn\u0027t going to happen, but the point here is that this is really all about not overflowing the stack.  Other interpreters (Boa) written in Rust have hit this problem too.",
+      "revId": "b98fd5fd74481c46c91d3d309679138153b5e8c9",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d1169a64_58b73cd5",
+        "filename": "tvix/eval/docs/vm-loop.md",
+        "patchSetId": 9
+      },
+      "lineNbr": 306,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2023-03-08T12:44:36Z",
+      "side": 1,
+      "message": "Added it for completeness sake, though I\u0027m not convinced we can actually implement everything here through tail calls ;)",
+      "parentUuid": "c92ad470_84e78f87",
       "revId": "b98fd5fd74481c46c91d3d309679138153b5e8c9",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
