@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "20c2a5a1_3009ec35",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2023-03-08T13:15:17Z",
+      "side": 1,
+      "message": "After OOM-killing my Emacs again while trying to build this locally, I\u0027ve now verified that this outputs what we want (approximately) ... on whitby.",
+      "revId": "01d3f4bf4c5b257b7098418548a6ef94350ee0d5",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
