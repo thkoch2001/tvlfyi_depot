@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "615feadc_6fe5c31b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 9
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000073
+      },
+      "writtenOn": "2023-03-08T19:41:16Z",
+      "side": 1,
+      "message": "I\u0027m no expert on OTEL but this looks sane to me.",
+      "revId": "dc47ada68fd08385c3f39bca5619ab2faa47d07f",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
