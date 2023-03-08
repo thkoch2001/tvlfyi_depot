@@ -16,7 +16,7 @@ export NIX_SSHOPTS="\
     -o IdentityFile=$scratch/id_deploy"
 
 nix-copy-closure \
-  --to ${TARGET_USER}@${TARGET_ADDRESS} \
+  --to ${TARGET_USER}@${TARGET_HOST} \
   ${SYSTEM_DRV} \
   --gzip \
   --include-outputs \
