@@ -88,6 +88,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "fb561b33_13bc3f45",
+        "filename": "tvix/store/src/blobreader.rs",
+        "patchSetId": 14
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1000073
+      },
+      "writtenOn": "2023-03-08T20:08:11Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "4f242e91_b449e219",
+      "revId": "f243651cc54b4e67af5420d1c89a58f8ae55672e",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "284a4ebf_9245c16f",
@@ -158,6 +176,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "f005226f_3ed7db78",
+        "filename": "tvix/store/src/blobreader.rs",
+        "patchSetId": 14
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 1000073
+      },
+      "writtenOn": "2023-03-08T20:08:11Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "385f3923_b0b7a1e8",
+      "revId": "f243651cc54b4e67af5420d1c89a58f8ae55672e",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "ae522757_fa3739c6",
@@ -189,6 +225,24 @@
       "side": 1,
       "message": "We only read up to buf.len() bytes, which is usize.",
       "parentUuid": "ae522757_fa3739c6",
+      "revId": "f243651cc54b4e67af5420d1c89a58f8ae55672e",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "63939573_a8931560",
+        "filename": "tvix/store/src/blobreader.rs",
+        "patchSetId": 14
+      },
+      "lineNbr": 72,
+      "author": {
+        "id": 1000073
+      },
+      "writtenOn": "2023-03-08T20:08:11Z",
+      "side": 1,
+      "message": "Okay I\u0027m convinced",
+      "parentUuid": "f33ddb55_e9ad8173",
       "revId": "f243651cc54b4e67af5420d1c89a58f8ae55672e",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
@@ -242,6 +296,24 @@
       "side": 1,
       "message": "Done from my side - explained above and in the comments in the new revisions.",
       "parentUuid": "11d68dad_ae132b66",
+      "revId": "f243651cc54b4e67af5420d1c89a58f8ae55672e",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "85fa7a3b_2af28640",
+        "filename": "tvix/store/src/blobreader.rs",
+        "patchSetId": 14
+      },
+      "lineNbr": 94,
+      "author": {
+        "id": 1000073
+      },
+      "writtenOn": "2023-03-08T20:08:11Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "6cd1ba00_0e807cfe",
       "revId": "f243651cc54b4e67af5420d1c89a58f8ae55672e",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
