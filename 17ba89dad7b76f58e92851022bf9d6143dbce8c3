@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6d429bbf_199ccdc4",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 66
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000073
+      },
+      "writtenOn": "2023-03-08T20:13:51Z",
+      "side": 1,
+      "message": "I will do the 2nd read review before the end of the week ideally. I would appreciate having someone more expert on the codebase checking. :)",
+      "revId": "17ba89dad7b76f58e92851022bf9d6143dbce8c3",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
