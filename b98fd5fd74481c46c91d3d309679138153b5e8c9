@@ -439,6 +439,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "286b1530_12cfd6a9",
+        "filename": "tvix/eval/docs/vm-loop.md",
+        "patchSetId": 9
+      },
+      "lineNbr": 234,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2023-03-08T12:52:08Z",
+      "side": 1,
+      "message": "maybe the other ones are \"frame requests\" because they request execution of another frame (whether generator or bytecode)? Hmm",
+      "parentUuid": "9f9c162a_e4098f62",
+      "revId": "b98fd5fd74481c46c91d3d309679138153b5e8c9",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "c2cc2023_c7170f85",
         "filename": "tvix/eval/docs/vm-loop.md",
         "patchSetId": 9
