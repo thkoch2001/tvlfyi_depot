@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "380d5fa0_1e326b1b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 10
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000073
+      },
+      "writtenOn": "2023-03-08T20:00:35Z",
+      "side": 1,
+      "message": "I see some `// TODO` but I guess this will be taken care later",
+      "revId": "56ec887b0595d3c56dfeb580486995f42b8e2904",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "256d2786_2368cd60",
+        "filename": "tvix/store/src/import.rs",
+        "patchSetId": 10
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 1000073
+      },
+      "writtenOn": "2023-03-08T20:00:35Z",
+      "side": 1,
+      "message": "so-fa?",
+      "revId": "56ec887b0595d3c56dfeb580486995f42b8e2904",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8cd018d6_ce382f29",
+        "filename": "tvix/store/src/import.rs",
+        "patchSetId": 10
+      },
+      "lineNbr": 211,
+      "author": {
+        "id": 1000073
+      },
+      "writtenOn": "2023-03-08T20:00:35Z",
+      "side": 1,
+      "message": "nit: it would be nice to just have `entry.into()` here",
+      "revId": "56ec887b0595d3c56dfeb580486995f42b8e2904",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f3fc4069_10e51b95",
+        "filename": "tvix/store/src/import.rs",
+        "patchSetId": 10
+      },
+      "lineNbr": 233,
+      "author": {
+        "id": 1000073
+      },
+      "writtenOn": "2023-03-08T20:00:35Z",
+      "side": 1,
+      "message": "\u003e Returns None if the path terminates in a root or prefix, or if it’s the empty string.\n\ntherefore, I would write `// SAFETY: entry path cannot be empty string or root` and I would add more `debug_assert!` on the right side",
+      "revId": "56ec887b0595d3c56dfeb580486995f42b8e2904",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
