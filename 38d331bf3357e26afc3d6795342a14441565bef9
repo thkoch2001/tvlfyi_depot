@@ -36,6 +36,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "2fbca732_0177109a",
+        "filename": "tvix/store/src/blobwriter.rs",
+        "patchSetId": 7
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1000073
+      },
+      "writtenOn": "2023-03-08T19:32:51Z",
+      "side": 1,
+      "message": "\u003e Chunks are small, and are supposed to be passed around as Vec\u003cu8\u003e\u0027s, so their length certainly shouldn\u0027t overlow u32 ;-)\n\u003e \n\u003e We should probably document this in a more struct-global place - see also https://cl.tvl.fyi/c/depot/+/8154/comment/665cee74_c6c52d26/.\n\nI will mark this as resolved and we should move the whole discussion in the comment you mentioned",
+      "parentUuid": "9cf01d8a_153f3a07",
+      "revId": "38d331bf3357e26afc3d6795342a14441565bef9",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "62eab54d_04c11225",
@@ -84,6 +102,42 @@
       "side": 1,
       "message": "Let\u0027s use the rule of three here - we only use it in `tvix/store/src/blobwriter.rs` currently, and in `tvix/store/src/proto/grpc_blobservice_wrapper.rs` (which should probably use blobwriter too, regardless of the comment in there), which would make this the only place it is used.",
       "parentUuid": "f1c00656_26da85f8",
+      "revId": "38d331bf3357e26afc3d6795342a14441565bef9",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2c08d1e7_1825c41a",
+        "filename": "tvix/store/src/blobwriter.rs",
+        "patchSetId": 7
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 1000073
+      },
+      "writtenOn": "2023-03-08T19:32:51Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "7a50a6ae_54cadac4",
+      "revId": "38d331bf3357e26afc3d6795342a14441565bef9",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ee9c7143_146e90aa",
+        "filename": "tvix/store/src/blobwriter.rs",
+        "patchSetId": 7
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 1000073
+      },
+      "writtenOn": "2023-03-08T19:32:51Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "62eab54d_04c11225",
       "revId": "38d331bf3357e26afc3d6795342a14441565bef9",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
@@ -140,6 +194,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "89b2ba58_7a015cfe",
+        "filename": "tvix/store/src/blobwriter.rs",
+        "patchSetId": 7
+      },
+      "lineNbr": 125,
+      "author": {
+        "id": 1000073
+      },
+      "writtenOn": "2023-03-08T19:32:51Z",
+      "side": 1,
+      "message": "\u003e chunker.cut won\u0027t ever return start_pos \u003d\u003d end_pos, so it\u0027ll always move forward in buf, meaning we\u0027ll eventually come to the end.\n\nperfect\n\n\u003e \n\u003e Maybe I can add an assert!(start_pos !\u003d end_pos); after L114 and explain this in a comment above?\n\ncould be `debug_assert!` I guess too",
+      "parentUuid": "b76baae6_7291f1e8",
+      "revId": "38d331bf3357e26afc3d6795342a14441565bef9",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "665cee74_c6c52d26",
@@ -171,6 +243,24 @@
       "side": 1,
       "message": "The chunker can\u0027t yield chunks larger than `chunker_max_size`, so each individual chunk can\u0027t overflow u32. Not sure where/how to best document this?",
       "parentUuid": "665cee74_c6c52d26",
+      "revId": "38d331bf3357e26afc3d6795342a14441565bef9",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "99454265_1f7ddbe3",
+        "filename": "tvix/store/src/blobwriter.rs",
+        "patchSetId": 7
+      },
+      "lineNbr": 135,
+      "author": {
+        "id": 1000073
+      },
+      "writtenOn": "2023-03-08T19:32:51Z",
+      "side": 1,
+      "message": "a Newtype wrapper and the proper \"into\" to cast? It\u0027s a bit of bureaucracy, but communicate the proper safety?",
+      "parentUuid": "605467f3_fa5c6996",
       "revId": "38d331bf3357e26afc3d6795342a14441565bef9",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
