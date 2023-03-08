@@ -115,10 +115,6 @@ readTree.fix (self: (readDepot {
   });
 
   # Derivation that gcroots all depot targets.
-  ci.gcroot = with self.third_party.nixpkgs; makeSetupHook
-    {
-      name = "depot-gcroot";
-      depsTargetTargetPropagated = self.ci.targets;
-    }
-    emptyFile;
+  ci.gcroot = with self.third_party.nixpkgs; runCommand "depot-gcroot" {}
+    (builtins.concatStringsSep "\n" (map (p: "echo ${p} > $out") self.ci.targets));
 })
