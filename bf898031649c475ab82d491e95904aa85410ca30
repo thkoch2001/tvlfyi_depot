@@ -210,6 +210,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "ad87a79f_b13e40f1",
+        "filename": "tvix/store/src/proto/grpc_directoryservice_wrapper.rs",
+        "patchSetId": 25
+      },
+      "lineNbr": 208,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-03-08T15:49:59Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "01bb038f_8cc9c79a",
+      "revId": "bf898031649c475ab82d491e95904aa85410ca30",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "0be7c8d1_316cc9ea",
