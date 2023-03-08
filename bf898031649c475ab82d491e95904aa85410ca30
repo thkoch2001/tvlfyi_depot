@@ -53,6 +53,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "6e439ca9_5abb18fe",
+        "filename": "tvix/store/src/proto/grpc_directoryservice_wrapper.rs",
+        "patchSetId": 25
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1000073
+      },
+      "writtenOn": "2023-03-08T19:38:10Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "5b7be8bd_848df0bb",
+      "revId": "bf898031649c475ab82d491e95904aa85410ca30",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "f3e5ad3b_447d81f3",
@@ -84,6 +102,24 @@
       "side": 1,
       "message": "We do, don\u0027t we? it should be inside the span introduced in L63, so the log line (or trace emitted ) should inherit all fields from all parents.",
       "parentUuid": "f3e5ad3b_447d81f3",
+      "revId": "bf898031649c475ab82d491e95904aa85410ca30",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b29ec940_3a4edf6b",
+        "filename": "tvix/store/src/proto/grpc_directoryservice_wrapper.rs",
+        "patchSetId": 25
+      },
+      "lineNbr": 80,
+      "author": {
+        "id": 1000073
+      },
+      "writtenOn": "2023-03-08T19:38:10Z",
+      "side": 1,
+      "message": "Oh you\u0027re definitely right, my bad…",
+      "parentUuid": "51a47a4a_cf480921",
       "revId": "bf898031649c475ab82d491e95904aa85410ca30",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
@@ -154,6 +190,24 @@
       "side": 1,
       "message": "This was trying to explain that sent_directory_digests is a bit of a misleading name. We track the digest of the Ok(directory) we\u0027re \"returning\" in L108, which will be sent soon (L115), but at the point of adding it to sent_directory_dgsts it\u0027s not sent out yet. To understand the logic however, calling this sent_directory_dgsts kinda makes sense.\n\nDo you have a better proposal for the variable name or comment?",
       "parentUuid": "f54dea3c_9998ab4a",
+      "revId": "bf898031649c475ab82d491e95904aa85410ca30",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b09e18c2_2db2790c",
+        "filename": "tvix/store/src/proto/grpc_directoryservice_wrapper.rs",
+        "patchSetId": 25
+      },
+      "lineNbr": 103,
+      "author": {
+        "id": 1000073
+      },
+      "writtenOn": "2023-03-08T19:38:10Z",
+      "side": 1,
+      "message": "the description you make seems to say that it\u0027s *being* sent, so: `sending_directory_dgsts`?\nI have no strong opinion when you explain it this way, but the comment on the variable sent_directory_dgsts explicitly say this is a list of \"already sent\" directory messages and here the comment say \"not quite in fact\", saying it\u0027s being sent directory msgs is better for the \"not sending twice the same thing\" goal IMHO.",
+      "parentUuid": "901d2416_6ef2dcab",
       "revId": "bf898031649c475ab82d491e95904aa85410ca30",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
