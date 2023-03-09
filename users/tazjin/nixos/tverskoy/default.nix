@@ -15,6 +15,7 @@ in
 lib.fix (self: {
   imports = [
     (mod "open_eid.nix")
+    (usermod "chromium.nix")
     (usermod "desktop.nix")
     (usermod "fonts.nix")
     (usermod "home-config.nix")

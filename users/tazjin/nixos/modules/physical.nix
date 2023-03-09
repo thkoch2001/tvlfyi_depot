@@ -19,7 +19,6 @@ in
     (with pkgs; [
       amber
       bat
-      chromium
       curl
       ddcutil
       direnv
