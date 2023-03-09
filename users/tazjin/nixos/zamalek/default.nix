@@ -13,6 +13,7 @@ let
 in
 {
   imports = [
+    (usermod "chromium.nix")
     (usermod "desktop.nix")
     (usermod "fonts.nix")
     (usermod "hidpi.nix")
