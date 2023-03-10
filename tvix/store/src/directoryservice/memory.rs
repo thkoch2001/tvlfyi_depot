@@ -11,8 +11,8 @@ pub struct MemoryDirectoryService {
     db: Arc<RwLock<HashMap<Vec<u8>, proto::Directory>>>,
 }
 
-impl MemoryDirectoryService {
-    pub fn new() -> Self {
+impl Default for MemoryDirectoryService {
+    fn default() -> Self {
         let db = Arc::new(RwLock::new(HashMap::default()));
 
         Self { db }
