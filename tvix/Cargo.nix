@@ -1915,9 +1915,14 @@ rec {
       };
       "fastcdc" = rec {
         crateName = "fastcdc";
-        version = "3.0.0";
+        version = "3.0.1";
         edition = "2018";
-        sha256 = "1qi398l32355b9kh0qr57rin86cv2z8kga25h1yis1wab9cjcxy4";
+        workspace_member = null;
+        src = pkgs.fetchgit {
+          url = "https://github.com/nlfiedler/fastcdc-rs.git";
+          rev = "3b5ede8cad1838cd970e02abd4f7fa7735f4c480";
+          sha256 = "1s622f57jb5wj0wpblg1398vrhlk22khcycrnqsyh27b9fwayz57";
+        };
         authors = [
           "Nathan Fiedler <nathanfiedler@fastmail.fm>"
         ];
