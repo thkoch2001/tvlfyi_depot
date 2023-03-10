@@ -16,6 +16,24 @@
       "message": "this is not using the factored out function right? :P",
       "revId": "5ee4b7b7a0ff09633961611a16d136c26664c4d8",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d5a6e20e_e5ca3ef3",
+        "filename": "tvix/store/src/import.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 142,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-03-10T22:29:09Z",
+      "side": 1,
+      "message": "cl/8251",
+      "parentUuid": "fcc91d47_477ac5a1",
+      "revId": "5ee4b7b7a0ff09633961611a16d136c26664c4d8",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
