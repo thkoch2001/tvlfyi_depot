@@ -247,6 +247,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "b70b9a6a_99afd382",
+        "filename": "tvix/store/src/proto/grpc_directoryservice_wrapper.rs",
+        "patchSetId": 25
+      },
+      "lineNbr": 186,
+      "author": {
+        "id": 1000073
+      },
+      "writtenOn": "2023-03-10T10:28:39Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "7b77eca7_c97d6d09",
+      "revId": "bf898031649c475ab82d491e95904aa85410ca30",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "908f4d25_65c7a391",
@@ -331,6 +349,24 @@
       "side": 1,
       "message": "This service receives a list/stream/closure of directory messages that are connected (from the leaves to the root), and this is pointing to the digest of the last / \"most parent\" / \"root\" directory node. See also my comment at https://cl.tvl.fyi/c/depot/+/8094/comment/fbcf3adb_dd6c738c/.\n\nThe name of the field is coming from the definition of PutDirectoryResponse in https://cs.tvl.fyi/depot/-/blob/tvix/store/protos/rpc_directory.proto. If it\u0027s unintuitive, we should update it in a later commit, and update it here as well.",
       "parentUuid": "0be7c8d1_316cc9ea",
+      "revId": "bf898031649c475ab82d491e95904aa85410ca30",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9b1b7bd5_2f905464",
+        "filename": "tvix/store/src/proto/grpc_directoryservice_wrapper.rs",
+        "patchSetId": 25
+      },
+      "lineNbr": 220,
+      "author": {
+        "id": 1000073
+      },
+      "writtenOn": "2023-03-10T10:28:39Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "bb71511f_0fda7a9e",
       "revId": "bf898031649c475ab82d491e95904aa85410ca30",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
