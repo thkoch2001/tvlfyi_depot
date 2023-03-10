@@ -11,14 +11,6 @@ pub struct MemoryDirectoryService {
     db: Arc<RwLock<HashMap<Vec<u8>, proto::Directory>>>,
 }
 
-impl MemoryDirectoryService {
-    pub fn new() -> Self {
-        let db = Arc::new(RwLock::new(HashMap::default()));
-
-        Self { db }
-    }
-}
-
 impl DirectoryService for MemoryDirectoryService {
     // TODO: change api to only be by digest
     #[instrument(skip(self, by_what))]
