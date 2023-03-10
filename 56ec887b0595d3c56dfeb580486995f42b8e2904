@@ -53,6 +53,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "f0a3adf1_361ab545",
+        "filename": "tvix/store/src/import.rs",
+        "patchSetId": 10
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 1000073
+      },
+      "writtenOn": "2023-03-10T10:40:16Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6ebc83c9_cc86cae3",
+      "revId": "56ec887b0595d3c56dfeb580486995f42b8e2904",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "8cd018d6_ce382f29",
@@ -106,6 +124,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c780c301_14b6c489",
+        "filename": "tvix/store/src/import.rs",
+        "patchSetId": 10
+      },
+      "lineNbr": 211,
+      "author": {
+        "id": 1000073
+      },
+      "writtenOn": "2023-03-10T10:40:16Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "52edb87a_b9881a71",
+      "revId": "56ec887b0595d3c56dfeb580486995f42b8e2904",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "f3fc4069_10e51b95",
@@ -155,6 +191,24 @@
       "side": 1,
       "message": "In that case, the TODO should not exist and should be replaced with `// SAFETY: entry.depth() \u003e 0`",
       "parentUuid": "7a71df3f_e1e74494",
+      "revId": "56ec887b0595d3c56dfeb580486995f42b8e2904",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "75229e9b_a4618c30",
+        "filename": "tvix/store/src/import.rs",
+        "patchSetId": 10
+      },
+      "lineNbr": 233,
+      "author": {
+        "id": 1000073
+      },
+      "writtenOn": "2023-03-10T10:40:16Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "b1d7f59d_4e7f0dd0",
       "revId": "56ec887b0595d3c56dfeb580486995f42b8e2904",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
