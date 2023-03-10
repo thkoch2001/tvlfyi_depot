@@ -14,8 +14,8 @@ pub struct MemoryBlobService {
     db: Arc<RwLock<HashMap<Vec<u8>, proto::BlobMeta>>>,
 }
 
-impl MemoryBlobService {
-    pub fn new() -> Self {
+impl Default for MemoryBlobService {
+    fn default() -> Self {
         let db = Arc::new(RwLock::new(HashMap::default()));
 
         Self { db }
