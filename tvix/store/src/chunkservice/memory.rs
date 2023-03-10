@@ -14,8 +14,8 @@ pub struct MemoryChunkService {
     db: Arc<RwLock<HashMap<Vec<u8>, Vec<u8>>>>,
 }
 
-impl MemoryChunkService {
-    pub fn new() -> Self {
+impl Default for MemoryChunkService {
+    fn default() -> Self {
         let db = Arc::new(RwLock::new(HashMap::default()));
 
         Self { db }
