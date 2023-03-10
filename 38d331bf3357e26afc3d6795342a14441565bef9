@@ -159,6 +159,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "86e97235_660a3657",
+        "filename": "tvix/store/src/blobwriter.rs",
+        "patchSetId": 7
+      },
+      "lineNbr": 124,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-03-10T09:47:47Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4a3ad9fe_eb0e32f8",
+      "revId": "38d331bf3357e26afc3d6795342a14441565bef9",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "2776af22_b04299a4",
