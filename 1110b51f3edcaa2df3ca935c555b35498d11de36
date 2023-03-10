@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a3dc30a2_fcdee710",
+        "filename": "tvix/store/src/proto/grpc_directoryservice_wrapper.rs",
+        "patchSetId": 29
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-03-10T10:44:39Z",
+      "side": 1,
+      "message": "add a comment here referring to the proto, and that we traverse in BFS order.",
+      "revId": "1110b51f3edcaa2df3ca935c555b35498d11de36",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "841751f4_865782de",
+        "filename": "tvix/store/src/proto/grpc_directoryservice_wrapper.rs",
+        "patchSetId": 29
+      },
+      "lineNbr": 188,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-03-10T10:44:39Z",
+      "side": 1,
+      "message": "provide example",
+      "revId": "1110b51f3edcaa2df3ca935c555b35498d11de36",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3da9d499_a91df585",
+        "filename": "tvix/store/src/proto/grpc_directoryservice_wrapper.rs",
+        "patchSetId": 29
+      },
+      "lineNbr": 190,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-03-10T10:44:39Z",
+      "side": 1,
+      "message": "add comment about either GC\u0027ing, or doing a reachability check at the end of the stream",
+      "revId": "1110b51f3edcaa2df3ca935c555b35498d11de36",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
