@@ -14,14 +14,6 @@ pub struct MemoryBlobService {
     db: Arc<RwLock<HashMap<Vec<u8>, proto::BlobMeta>>>,
 }
 
-impl MemoryBlobService {
-    pub fn new() -> Self {
-        let db = Arc::new(RwLock::new(HashMap::default()));
-
-        Self { db }
-    }
-}
-
 impl BlobService for MemoryBlobService {
     #[instrument(skip(self, req), fields(blob.digest=BASE64.encode(&req.digest)))]
     fn stat(&self, req: &proto::StatBlobRequest) -> Result<Option<proto::BlobMeta>, Error> {
