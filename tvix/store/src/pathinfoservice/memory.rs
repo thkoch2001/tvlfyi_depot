@@ -12,8 +12,8 @@ pub struct MemoryPathInfoService {
     db: Arc<RwLock<HashMap<Vec<u8>, proto::PathInfo>>>,
 }
 
-impl MemoryPathInfoService {
-    pub fn new() -> Self {
+impl Default for MemoryPathInfoService {
+    fn default() -> Self {
         let db = Arc::new(RwLock::new(HashMap::default()));
 
         Self { db }
