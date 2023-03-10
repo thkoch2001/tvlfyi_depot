@@ -291,7 +291,7 @@ impl Component for Модель {
             <footer>
               <hr/>
               <p class="footer">
-                <a href="https://code.tvl.fyi/tree/users/tazjin/predlozhnik">{"код"}</a>
+                <a href="https://code.tvl.fyi/tree/corp/russian/predlozhnik">{"код"}</a>
                 {" | "}
                 {"сделано "}<a href="https://tvl.su">{"ООО \"ТВЛ\""}</a>
               </p>
