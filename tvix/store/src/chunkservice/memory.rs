@@ -14,14 +14,6 @@ pub struct MemoryChunkService {
     db: Arc<RwLock<HashMap<Vec<u8>, Vec<u8>>>>,
 }
 
-impl MemoryChunkService {
-    pub fn new() -> Self {
-        let db = Arc::new(RwLock::new(HashMap::default()));
-
-        Self { db }
-    }
-}
-
 impl ChunkService for MemoryChunkService {
     #[instrument(skip(self, digest), fields(chunk.digest=BASE64.encode(digest)))]
     fn has(&self, digest: &[u8]) -> Result<bool, Error> {
