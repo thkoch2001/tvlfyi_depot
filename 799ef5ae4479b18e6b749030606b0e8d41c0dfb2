@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "404f0541_69781188",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 67
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2023-03-10T11:57:54Z",
+      "side": 1,
+      "message": "I split out some of the logic into separate CLs, it\u0027s not much overall in the number of lines but might help with digesting it.",
+      "revId": "799ef5ae4479b18e6b749030606b0e8d41c0dfb2",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
