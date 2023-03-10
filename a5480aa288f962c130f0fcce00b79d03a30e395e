@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "01bef7c3_d238701e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 20
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-03-10T14:53:21Z",
+      "side": 1,
+      "message": "@aaqaishtyaq I updated this to use opentelemetry-otlp instead of jaeger directly, and updated the commit message to describe my collector setup.\n\nI then ran a ../target/release-with-debug/tvix-store import \u003csome-path\u003e, and it did indeed spit out a lot traces.\n\nHowever, most of these traces (reserve_capacity,send_data) are related to the trace collection itself, and come from code.namespace \u003d h2::proto::streams::prioritize.\n\nIs there a way to exclude these from reporting itself?\n\nI also see a bunch of messages:\n\n\u003e OpenTelemetry trace error occurred. cannot send span to the batch span processor because the channel is closed\n\nAt the end of the process lifecycle, which is undesirable. Am I doing something wrong here?",
+      "revId": "a5480aa288f962c130f0fcce00b79d03a30e395e",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
