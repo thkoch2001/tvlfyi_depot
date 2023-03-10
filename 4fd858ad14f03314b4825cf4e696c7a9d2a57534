@@ -35,6 +35,42 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "161b9577_29f0e979",
+        "filename": "tvix/store/src/blobwriter.rs",
+        "patchSetId": 7
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 1000073
+      },
+      "writtenOn": "2023-03-10T10:55:33Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "66e5203c_6e3c6773",
+      "revId": "4fd858ad14f03314b4825cf4e696c7a9d2a57534",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d78ede43_e5739d0e",
+        "filename": "tvix/store/src/blobwriter.rs",
+        "patchSetId": 7
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 1000073
+      },
+      "writtenOn": "2023-03-10T10:55:33Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "9df016f2_5cf41cd1",
+      "revId": "4fd858ad14f03314b4825cf4e696c7a9d2a57534",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "abe15e8a_4b9faf3d",
@@ -65,6 +101,42 @@
       "writtenOn": "2023-03-08T14:33:45Z",
       "side": 1,
       "message": "(can mark it as resolved here if it\u0027s resolved on the other cl)",
+      "revId": "4fd858ad14f03314b4825cf4e696c7a9d2a57534",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "78ce7bb3_72c454d2",
+        "filename": "tvix/store/src/blobwriter.rs",
+        "patchSetId": 7
+      },
+      "lineNbr": 131,
+      "author": {
+        "id": 1000073
+      },
+      "writtenOn": "2023-03-10T10:55:33Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "abe15e8a_4b9faf3d",
+      "revId": "4fd858ad14f03314b4825cf4e696c7a9d2a57534",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0fd74336_ea87e464",
+        "filename": "tvix/store/src/blobwriter.rs",
+        "patchSetId": 7
+      },
+      "lineNbr": 131,
+      "author": {
+        "id": 1000073
+      },
+      "writtenOn": "2023-03-10T10:55:33Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "03fb6295_d1a068cf",
       "revId": "4fd858ad14f03314b4825cf4e696c7a9d2a57534",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
