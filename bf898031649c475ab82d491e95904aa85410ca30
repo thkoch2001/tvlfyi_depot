@@ -231,6 +231,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "7b77eca7_c97d6d09",
+        "filename": "tvix/store/src/proto/grpc_directoryservice_wrapper.rs",
+        "patchSetId": 25
+      },
+      "lineNbr": 186,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-03-10T09:26:14Z",
+      "side": 1,
+      "message": "We don\u0027t validate the currently received directory refers to at least one child we already received - we only check it doesn\u0027t point to something we didn\u0027t see yet.\n\nSo this could abuse this to send two entirely disconnected graphs.\nI updated the comment and pushed again, let me know if this makes more sense now.",
+      "parentUuid": "fbcf3adb_dd6c738c",
+      "revId": "bf898031649c475ab82d491e95904aa85410ca30",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "908f4d25_65c7a391",
         "filename": "tvix/store/src/proto/grpc_directoryservice_wrapper.rs",
         "patchSetId": 25
@@ -295,6 +313,24 @@
       "writtenOn": "2023-03-07T21:29:11Z",
       "side": 1,
       "message": "terminology is confusing, is root_digest the digest of the root node of... ? or is it something related to the Merkle tree?",
+      "revId": "bf898031649c475ab82d491e95904aa85410ca30",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bb71511f_0fda7a9e",
+        "filename": "tvix/store/src/proto/grpc_directoryservice_wrapper.rs",
+        "patchSetId": 25
+      },
+      "lineNbr": 220,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-03-10T09:26:14Z",
+      "side": 1,
+      "message": "This service receives a list/stream/closure of directory messages that are connected (from the leaves to the root), and this is pointing to the digest of the last / \"most parent\" / \"root\" directory node. See also my comment at https://cl.tvl.fyi/c/depot/+/8094/comment/fbcf3adb_dd6c738c/.\n\nThe name of the field is coming from the definition of PutDirectoryResponse in https://cs.tvl.fyi/depot/-/blob/tvix/store/protos/rpc_directory.proto. If it\u0027s unintuitive, we should update it in a later commit, and update it here as well.",
+      "parentUuid": "0be7c8d1_316cc9ea",
       "revId": "bf898031649c475ab82d491e95904aa85410ca30",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
