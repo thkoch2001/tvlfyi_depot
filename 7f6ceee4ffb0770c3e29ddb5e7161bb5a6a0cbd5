@@ -16,6 +16,24 @@
       "message": "do we want to return it as a vec or a slice?",
       "revId": "7f6ceee4ffb0770c3e29ddb5e7161bb5a6a0cbd5",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "621e1ace_aec0a369",
+        "filename": "tvix/store/src/chunkservice/util.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 63,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-03-11T21:35:27Z",
+      "side": 1,
+      "message": "I think the lifetime will get complicated if this is not owned, no?\n\nAll consumers need a Vec\u003cu8\u003e anyways, so i think it\u0027s fine for now?",
+      "parentUuid": "1496653f_2d3dadd5",
+      "revId": "7f6ceee4ffb0770c3e29ddb5e7161bb5a6a0cbd5",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
