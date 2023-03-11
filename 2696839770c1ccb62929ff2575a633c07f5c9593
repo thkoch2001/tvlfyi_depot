@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e8bcccb7_3e12508e",
+        "filename": "tvix/eval/src/vm/generators.rs",
+        "patchSetId": 8
+      },
+      "lineNbr": 103,
+      "author": {
+        "id": 1000066
+      },
+      "writtenOn": "2023-03-11T11:57:51Z",
+      "side": 1,
+      "message": "What is the VM\u0027s \"I/O interface\"?",
+      "revId": "2696839770c1ccb62929ff2575a633c07f5c9593",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
