@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1b416d81_dd411d64",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2023-03-11T13:27:22Z",
+      "side": 1,
+      "message": "I\u0027m not in favour of this rename. Generators can request things that are fulfilled by other generators, and vice-versa, so \"native to native\" communication can occur here.\n\nI wrote some more thoughts on this on cl/8226.",
+      "revId": "9d9ed06aac5f05050d7a3692c69e92bbbb5f0397",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
