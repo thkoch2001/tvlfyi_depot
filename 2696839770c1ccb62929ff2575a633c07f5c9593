@@ -18,6 +18,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "4fa9d671_d6a24f41",
+        "filename": "tvix/eval/src/vm/generators.rs",
+        "patchSetId": 8
+      },
+      "lineNbr": 71,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2023-03-11T18:46:02Z",
+      "side": 1,
+      "message": "Ah yeah, the message used to be called NoOp, which was confusing. Missed a few places, I\u0027ll fix it up.",
+      "parentUuid": "a9c79a9c_1083cd28",
+      "revId": "2696839770c1ccb62929ff2575a633c07f5c9593",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "e8bcccb7_3e12508e",
@@ -35,6 +53,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "ee977aec_163d9a99",
+        "filename": "tvix/eval/src/vm/generators.rs",
+        "patchSetId": 8
+      },
+      "lineNbr": 103,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2023-03-11T18:46:02Z",
+      "side": 1,
+      "message": "https://cs.tvl.fyi/depot/-/blob/tvix/eval/src/io.rs\n\nThis was added in cl/7565 and is used in e.g. //tvix/cli/src/nix_compat.rs",
+      "parentUuid": "e8bcccb7_3e12508e",
+      "revId": "2696839770c1ccb62929ff2575a633c07f5c9593",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "6097f561_e821a35f",
@@ -48,6 +84,24 @@
       "writtenOn": "2023-03-11T12:07:44Z",
       "side": 1,
       "message": "What does \"reasonable\" mean?\n\nDoes this mean the span which best describes the current instruction pointer?",
+      "revId": "2696839770c1ccb62929ff2575a633c07f5c9593",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "da71e791_b05bfead",
+        "filename": "tvix/eval/src/vm/generators.rs",
+        "patchSetId": 8
+      },
+      "lineNbr": 115,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2023-03-11T18:46:02Z",
+      "side": 1,
+      "message": "Yep!",
+      "parentUuid": "6097f561_e821a35f",
       "revId": "2696839770c1ccb62929ff2575a633c07f5c9593",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
