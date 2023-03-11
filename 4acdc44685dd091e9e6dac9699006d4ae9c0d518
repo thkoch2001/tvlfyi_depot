@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "31e0bb36_d51a9763",
+        "filename": "tvix/cli/src/known_paths.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 167,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-03-11T22:33:15Z",
+      "side": 1,
+      "message": "Can\u0027t you just move the `let old \u003d` inside the `#[cfg(debug_assertions)]` scope?",
+      "revId": "4acdc44685dd091e9e6dac9699006d4ae9c0d518",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
