@@ -264,6 +264,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "eedfeb06_b9235b76",
+        "filename": "tvix/eval/docs/vm-loop.md",
+        "patchSetId": 9
+      },
+      "lineNbr": 183,
+      "author": {
+        "id": 1000066
+      },
+      "writtenOn": "2023-03-11T11:09:11Z",
+      "side": 1,
+      "message": "\u003e all function applications are actually tail calls \n\nI disagree: https://cl.tvl.fyi/c/depot/+/8147/comments/f53dd5d7_2ea6f4da",
+      "parentUuid": "08411ccb_706ecc60",
+      "revId": "b98fd5fd74481c46c91d3d309679138153b5e8c9",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "f1c9dd2b_4f6b00df",
         "filename": "tvix/eval/docs/vm-loop.md",
         "patchSetId": 9
@@ -293,6 +311,24 @@
       "side": 1,
       "message": "It\u0027s not just for builtins, there are several things that it does.\n\nThere is literally a loop which (somewhat simplified) does this:\n\n  loop {\n    match gen.resume_with(msg) { \n      /* ... */\n    }\n  }\n  \nIt is this loop which \"drives\" the execution of the generator. Based on what the generator returns (either \"Yielded\", which means it\u0027s requesting something from the VM and the async state machine is suspended at that point, or \"Done\", which means it has run to completion and its result goes on the stack).\n\nI\u0027ve rephrased the sentence a little bit to try and make this clearer, as I think the missing link was that behaviour described in my last paragraph.",
       "parentUuid": "f1c9dd2b_4f6b00df",
+      "revId": "b98fd5fd74481c46c91d3d309679138153b5e8c9",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0fff7400_6cae21b5",
+        "filename": "tvix/eval/docs/vm-loop.md",
+        "patchSetId": 9
+      },
+      "lineNbr": 197,
+      "author": {
+        "id": 1000066
+      },
+      "writtenOn": "2023-03-11T11:09:11Z",
+      "side": 1,
+      "message": "Yeah, I get that.\n\nI think the `genawaiter` crate\u0027s terminology is a really bad fit for the way tvix is using it.\n\n`genawaiter` is meant for situations where you very obviously have a producer and a consumer; the consumer pulls data out of the producer and the producer is otherwise passive and never makes any requests to the consumer.\n\nTvix is implementing true coroutines, where neither the bytecode side nor the rust side is truly \"in charge\".  Bytecode can call `builtins` (which are rust code) and rust can call bytecode (e.g. `builtins.sort` calling the comparison function that was passed to it).\n\nIf you\u0027ve found the `genawaiter` codebase meets your needs great, keep using it, but I urge you to totally abandon their terminology.  Otherwise people reading your code have to memorize \"generator means rust code\", \"resume means calling a builtin\", etc etc.  It\u0027s not like math or physics where you can skip the memorization and re-derive these things from first principles when you take the exam... the names are now arbitrary because you don\u0027t have a generator/consumer anymore, you have two coroutines.",
+      "parentUuid": "d11e0e70_1785de4c",
       "revId": "b98fd5fd74481c46c91d3d309679138153b5e8c9",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
@@ -334,6 +370,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "c25f8809_477e0bbf",
+        "filename": "tvix/eval/docs/vm-loop.md",
+        "patchSetId": 9
+      },
+      "lineNbr": 209,
+      "author": {
+        "id": 1000066
+      },
+      "writtenOn": "2023-03-11T11:09:11Z",
+      "side": 1,
+      "message": "cl/8252",
+      "parentUuid": "a6ee57bb_e676206a",
+      "revId": "b98fd5fd74481c46c91d3d309679138153b5e8c9",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "d8ac993b_0346c71d",
         "filename": "tvix/eval/docs/vm-loop.md",
         "patchSetId": 9
@@ -363,6 +417,24 @@
       "side": 1,
       "message": "The confusing thing here is that the *first* time a generator is invoked after being instantiated, it is called with a no-op message, which is a constraint imposed by the API of crate that we use for the generator data structures.\n\nAfter that, there is always a ping/pong playing out between the generator and the rest of the VM, in which the generator sends a \"GeneratorRequest\" (requesting something from the VM), and the VM sends it a \"GeneratorResponse\" (returning the result to the VM).\n\nThese requests/responses (linked below in the text under the respective types) are things like \"please force this value\" or \"please import this file through the IO interface\", or in general all things where we previously had a `\u0026mut VM` (which is no longer the case anywhere - VM is now a private type).\n\nGenerators do more than just the execution of builtins. For example, forcing is also a generator because there is some native Rust code (heavily based on the one you wrote for trampolines, and my rewrite of it from cl/8012) that figures out what to do with a given thunk before just entering its bytecode loop.\n\nIt would be correct to say that the generators always execute some native Rust code, which is part of the evaluation implementation. But it\u0027s not just builtins.",
       "parentUuid": "d8ac993b_0346c71d",
+      "revId": "b98fd5fd74481c46c91d3d309679138153b5e8c9",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "90679fa3_bb0ccb91",
+        "filename": "tvix/eval/docs/vm-loop.md",
+        "patchSetId": 9
+      },
+      "lineNbr": 221,
+      "author": {
+        "id": 1000066
+      },
+      "writtenOn": "2023-03-11T11:09:11Z",
+      "side": 1,
+      "message": "\u003e It would be correct to say that the generators always execute some native Rust code, which is part of the evaluation implementation. \n\nOkay that makes sense.\n\n\u003e \"GeneratorRequest\" (requesting something from the VM), and the VM sends it a \"GeneratorResponse\" (returning the result to the VM).\n\nI keep stumbling over this too.  GeneratorRequest is a request *from* the generator not a request *to* the generator?  Isn\u0027t that sort of the opposite of the convention?  Like how HTTPRequest is generally a request *to* the HTTP server?",
+      "parentUuid": "6dfbe3ce_702c00db",
       "revId": "b98fd5fd74481c46c91d3d309679138153b5e8c9",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
@@ -457,6 +529,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "69d3a3a9_e26e0660",
+        "filename": "tvix/eval/docs/vm-loop.md",
+        "patchSetId": 9
+      },
+      "lineNbr": 234,
+      "author": {
+        "id": 1000066
+      },
+      "writtenOn": "2023-03-11T11:09:11Z",
+      "side": 1,
+      "message": "See https://cl.tvl.fyi/c/depot/+/8226/comment/c2cc2023_c7170f85/",
+      "parentUuid": "286b1530_12cfd6a9",
+      "revId": "b98fd5fd74481c46c91d3d309679138153b5e8c9",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "c2cc2023_c7170f85",
         "filename": "tvix/eval/docs/vm-loop.md",
         "patchSetId": 9
@@ -504,6 +594,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "a89af6c5_9a78f66c",
+        "filename": "tvix/eval/docs/vm-loop.md",
+        "patchSetId": 9
+      },
+      "lineNbr": 236,
+      "author": {
+        "id": 1000066
+      },
+      "writtenOn": "2023-03-11T11:09:11Z",
+      "side": 1,
+      "message": "How about single-frame request and multi-frame request?",
+      "parentUuid": "8e3449d5_e85be0c7",
+      "range": {
+        "startLine": 236,
+        "startChar": 36,
+        "endLine": 236,
+        "endChar": 50
+      },
+      "revId": "b98fd5fd74481c46c91d3d309679138153b5e8c9",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "c92ad470_84e78f87",
         "filename": "tvix/eval/docs/vm-loop.md",
         "patchSetId": 9
@@ -533,6 +647,24 @@
       "side": 1,
       "message": "Added it for completeness sake, though I\u0027m not convinced we can actually implement everything here through tail calls ;)",
       "parentUuid": "c92ad470_84e78f87",
+      "revId": "b98fd5fd74481c46c91d3d309679138153b5e8c9",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6818b149_96fb1e11",
+        "filename": "tvix/eval/docs/vm-loop.md",
+        "patchSetId": 9
+      },
+      "lineNbr": 306,
+      "author": {
+        "id": 1000066
+      },
+      "writtenOn": "2023-03-11T11:09:11Z",
+      "side": 1,
+      "message": "Agreed.",
+      "parentUuid": "d1169a64_58b73cd5",
       "revId": "b98fd5fd74481c46c91d3d309679138153b5e8c9",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
