@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "71d8392a_0efe475c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2023-03-11T13:26:31Z",
+      "side": 1,
+      "message": "I\u0027m in favour of this rename, it seems reasonable.",
+      "revId": "c4d16bd2dd53a7008c31fd93055bdfec34d03546",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
