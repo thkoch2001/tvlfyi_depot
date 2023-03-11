@@ -3,6 +3,23 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "a9c79a9c_1083cd28",
+        "filename": "tvix/eval/src/vm/generators.rs",
+        "patchSetId": 8
+      },
+      "lineNbr": 71,
+      "author": {
+        "id": 1000066
+      },
+      "writtenOn": "2023-03-11T12:07:44Z",
+      "side": 1,
+      "message": "I think you mean `Empty` rather than `NoOp`.  This appears in a few other places too.",
+      "revId": "2696839770c1ccb62929ff2575a633c07f5c9593",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "e8bcccb7_3e12508e",
         "filename": "tvix/eval/src/vm/generators.rs",
         "patchSetId": 8
@@ -14,6 +31,23 @@
       "writtenOn": "2023-03-11T11:57:51Z",
       "side": 1,
       "message": "What is the VM\u0027s \"I/O interface\"?",
+      "revId": "2696839770c1ccb62929ff2575a633c07f5c9593",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6097f561_e821a35f",
+        "filename": "tvix/eval/src/vm/generators.rs",
+        "patchSetId": 8
+      },
+      "lineNbr": 115,
+      "author": {
+        "id": 1000066
+      },
+      "writtenOn": "2023-03-11T12:07:44Z",
+      "side": 1,
+      "message": "What does \"reasonable\" mean?\n\nDoes this mean the span which best describes the current instruction pointer?",
       "revId": "2696839770c1ccb62929ff2575a633c07f5c9593",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
