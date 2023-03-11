@@ -43,7 +43,7 @@ frames are enqueued that are either:
 
 1. A bytecode frame, consisting of Tvix bytecode that evaluates compiled Nix
    code.
-2. A generator frame, consisting of some VM logic implemented in pure Rust
+2. A native frame, consisting of some VM logic implemented in pure Rust
    code that can be *suspended* when it hits a point where the VM would
    previously need to recurse.
 
@@ -72,11 +72,11 @@ the execution of that function to be *suspended* whenever it hits an `await`.
 
 We use the [`genawaiter`][] crate that gives us a data structure and simple
 interface for getting instances of these state machines that can be stored in
-a struct (in our case, a *generator frame*).
+a struct (in our case, a *native frame*).
 
 The execution of the VM then becomes the execution of an *outer loop*, which
-is responsible for selecting the next generator frame to execute, and two
-*inner loops*, which drive the execution of a bytecode frame or generator
+is responsible for selecting the next native frame to execute, and two
+*inner loops*, which drive the execution of a bytecode frame or native
 frame forward until it either yields a value or asks to be suspended in favour
 of another frame.
 
@@ -90,7 +90,7 @@ The core of the VM restructuring is cl/8104, unfortunately one of the largest
 single commit changes we've had to make yet, as it touches pretty much all
 areas of tvix-eval. The introduction of the generators and the
 message/response system we built to request something from the VM, suspend a
-generator, and wait for the return is in cl/8148.
+native frame, and wait for the return is in cl/8148.
 
 The next sections describe in detail how the three different loops work.
 
@@ -108,12 +108,12 @@ down the VM and return the final result.
     ┏━━━━━━━━━━━━┷━━━━━┓                ╭───────────┴───────────╮
 ───►┃ frame_stack.pop()┃                ▼                       ▼
     ┗━━━━━━━━━━━━━━━━━━┛       ┏━━━━━━━━━━━━━━━━┓      ┏━━━━━━━━━━━━━━━━━┓
-                 ▲             ┃ bytecode frame ┃      ┃ generator frame ┃
+                 ▲             ┃ bytecode frame ┃      ┃  native frame   ┃
                  │             ┗━━━━━━━━┯━━━━━━━┛      ┗━━━━━━━━┯━━━━━━━━┛
                  │[yes, cont.]          │                       │
                  │                      ▼                       ▼
     ┏━━━━━━━━┓   │             ╔════════════════╗      ╔═════════════════╗
-◄───┨ return ┃   │             ║ inner bytecode ║      ║ inner generator ║
+◄───┨ return ┃   │             ║ inner bytecode ║      ║   inner native  ║
     ┗━━━━━━━━┛   │             ║      loop      ║      ║      loop       ║
         ▲        │             ╚════════╤═══════╝      ╚════════╤════════╝
         │   ╭────┴─────╮                │                       │
@@ -192,12 +192,13 @@ example, instructions that need to force a value). In this case the inner loop
 is responsible for setting up the frame stack correctly, and returning `false`
 to inform the outer loop of the suspension
 
-### Inner generator loop
+### Inner native loop
 
-The inner generator loop is responsible for driving the execution of a
-generator frame by continously calling [`Gen::resume`][] until it requests a
-suspension (as a result of which control is returned to the outer loop), or
-until the generator is done and yields a value.
+The inner native loop is responsible for driving the execution of a
+native frame by continously calling [`Gen::resume`][] until it
+requests a suspension (as a result of which control is returned to
+the outer loop), or until the native frame is done and yields a
+value.
 
 ```
    ┏━━━━━━━━━━━━━┓
@@ -206,7 +207,8 @@ until the generator is done and yields a value.
                                        │
                                [Done]  │
                     ╭──────────────────┴─────────╮
-                    │ inspect generator response │◄────────────╮
+                    │          inspect           │
+                    │  NativeToBytecode message  │◄────────────╮
                     ╰──────────────────┬─────────╯             │
                             [yielded]  │              ┏━━━━━━━━┷━━━━━━━━┓
                                        │              ┃ gen.resume(msg) ┃◄──
@@ -220,26 +222,28 @@ until the generator is done and yields a value.
    ┗━━━━━━━━━━━━━━┛                [no]
 ```
 
-On each execution of a generator frame, `resume_with` is called with a
-[`GeneratorResponse`][] (i.e. a message *from* the VM *to* the generator). For
-a newly created generator, the initial message is just `Empty`.
+On each execution of a native frame, `resume_with` is called with a
+[`BytecodeToNative`][] (i.e. a message *from* bytecode *to* native
+code). For a newly created native frame executor, the initial
+message is just `Empty`.
 
-A generator may then respond by signaling that it has finished execution
-(`Done`), in which case the inner generator loop returns control to the outer
-loop and informs it that this generator is done (by returning `true`).
+A native frame may then respond by signaling that it has finished execution
+(`Done`), in which case the inner native loop returns control to the outer
+loop and informs it that this native frame is done (by returning `true`).
 
-A generator may also respond by signaling that it needs some data from the VM.
-This is implemented through a request-response pattern, in which the generator
+A native frame may also respond by signaling that it needs some data from the VM.
+This is implemented through a request-response pattern, in which the native frame
 returns a `Yielded` message containing a [`NativeToBytecode`][]. These
 requests can be very simple ("Tell me the current store path") or more complex
 ("Call this Nix function with these values").
 
-Requests are divided into two classes: Inline generator requests (requests
-that can be responded to *without* returning control to the outer loop, i.e.
-without executing a *different* frame), and other generator requests. Based on
-the type of request, the inner generator loop will either handle it right away
-and send the response in a new `resume_with` call, or return `false` to the
-outer generator loop after setting up the frame stack.
+NativeToBytecode requests are divided into two classes: Inline
+NativeToBytecode requests (requests that can be responded to *without*
+returning control to the outer loop, i.e.  without executing a *different*
+frame), and other NativeToBytecode requests. Based on the type of request, the inner
+native loop will either handle it right away and send the response in a new
+`resume_with` call, or return `false` to the outer loop after
+setting up the frame stack.
 
 Most of this logic is implemented in cl/8148.
 
