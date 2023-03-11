@@ -37,7 +37,7 @@ pub(crate) enum GeneratorState {
 /// and enter some other frame to process the request.
 ///
 /// Responses are returned to generators via the [`BytecodeToNative`] type.
-pub enum GeneratorRequest {
+pub enum NativeToBytecode {
     /// Request that the VM forces this value. This message is first sent to the
     /// VM with the unforced value, then returned to the generator with the
     /// forced result.
@@ -117,45 +117,45 @@ pub enum GeneratorRequest {
 }
 
 /// Human-readable representation of a generator message, used by observers.
-impl Display for GeneratorRequest {
+impl Display for NativeToBytecode {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         match self {
-            GeneratorRequest::ForceValue(v) => write!(f, "force_value({})", v),
-            GeneratorRequest::DeepForceValue(v, _) => write!(f, "deep_force_value({})", v),
-            GeneratorRequest::WithValue(_) => write!(f, "with_value"),
-            GeneratorRequest::CapturedWithValue(_) => write!(f, "captured_with_value"),
-            GeneratorRequest::NixEquality(values, ptr_eq) => {
+            NativeToBytecode::ForceValue(v) => write!(f, "force_value({})", v),
+            NativeToBytecode::DeepForceValue(v, _) => write!(f, "deep_force_value({})", v),
+            NativeToBytecode::WithValue(_) => write!(f, "with_value"),
+            NativeToBytecode::CapturedWithValue(_) => write!(f, "captured_with_value"),
+            NativeToBytecode::NixEquality(values, ptr_eq) => {
                 write!(
                     f,
                     "nix_eq({}, {}, PointerEquality::{:?})",
                     values.0, values.1, ptr_eq
                 )
             }
-            GeneratorRequest::StackPush(v) => write!(f, "stack_push({})", v),
-            GeneratorRequest::StackPop => write!(f, "stack_pop"),
-            GeneratorRequest::StringCoerce(v, kind) => match kind {
+            NativeToBytecode::StackPush(v) => write!(f, "stack_push({})", v),
+            NativeToBytecode::StackPop => write!(f, "stack_pop"),
+            NativeToBytecode::StringCoerce(v, kind) => match kind {
                 CoercionKind::Weak => write!(f, "weak_string_coerce({})", v),
                 CoercionKind::Strong => write!(f, "strong_string_coerce({})", v),
             },
-            GeneratorRequest::Call(v) => write!(f, "call({})", v),
-            GeneratorRequest::EnterLambda { lambda, .. } => {
+            NativeToBytecode::Call(v) => write!(f, "call({})", v),
+            NativeToBytecode::EnterLambda { lambda, .. } => {
                 write!(f, "enter_lambda({:p})", *lambda)
             }
-            GeneratorRequest::EmitWarning(_) => write!(f, "emit_warning"),
-            GeneratorRequest::ImportCacheLookup(p) => {
+            NativeToBytecode::EmitWarning(_) => write!(f, "emit_warning"),
+            NativeToBytecode::ImportCacheLookup(p) => {
                 write!(f, "import_cache_lookup({})", p.to_string_lossy())
             }
-            GeneratorRequest::ImportCachePut(p, _) => {
+            NativeToBytecode::ImportCachePut(p, _) => {
                 write!(f, "import_cache_put({})", p.to_string_lossy())
             }
-            GeneratorRequest::PathImport(p) => write!(f, "path_import({})", p.to_string_lossy()),
-            GeneratorRequest::ReadToString(p) => {
+            NativeToBytecode::PathImport(p) => write!(f, "path_import({})", p.to_string_lossy()),
+            NativeToBytecode::ReadToString(p) => {
                 write!(f, "read_to_string({})", p.to_string_lossy())
             }
-            GeneratorRequest::PathExists(p) => write!(f, "path_exists({})", p.to_string_lossy()),
-            GeneratorRequest::ReadDir(p) => write!(f, "read_dir({})", p.to_string_lossy()),
-            GeneratorRequest::Span => write!(f, "span"),
-            GeneratorRequest::TryForce(v) => write!(f, "try_force({})", v),
+            NativeToBytecode::PathExists(p) => write!(f, "path_exists({})", p.to_string_lossy()),
+            NativeToBytecode::ReadDir(p) => write!(f, "read_dir({})", p.to_string_lossy()),
+            NativeToBytecode::Span => write!(f, "span"),
+            NativeToBytecode::TryForce(v) => write!(f, "try_force({})", v),
         }
     }
 }
@@ -197,7 +197,7 @@ impl Display for BytecodeToNative {
 }
 
 pub(crate) type Generator = Gen<
-    GeneratorRequest,
+    NativeToBytecode,
     BytecodeToNative,
     Pin<Box<dyn Future<Output = Result<Value, ErrorKind>>>>,
 >;
@@ -265,26 +265,26 @@ impl<'o> VM<'o> {
                     self.observer.observe_generator_request(&request);
 
                     match request {
-                        GeneratorRequest::StackPush(value) => {
+                        NativeToBytecode::StackPush(value) => {
                             self.stack.push(value);
                             message = BytecodeToNative::Empty;
                         }
 
-                        GeneratorRequest::StackPop => {
+                        NativeToBytecode::StackPop => {
                             message = BytecodeToNative::Value(self.stack_pop());
                         }
 
                         // Generator has requested a force, which means that
                         // this function prepares the frame stack and yields
                         // back to the outer VM loop.
-                        GeneratorRequest::ForceValue(value) => {
+                        NativeToBytecode::ForceValue(value) => {
                             self.reenqueue_generator(span.clone(), generator);
                             self.enqueue_generator(span, |co| value.force(co));
                             return Ok(false);
                         }
 
                         // Generator has requested a deep-force.
-                        GeneratorRequest::DeepForceValue(value, thunk_set) => {
+                        NativeToBytecode::DeepForceValue(value, thunk_set) => {
                             self.reenqueue_generator(span.clone(), generator);
                             self.enqueue_generator(span, |co| value.deep_force(co, thunk_set));
                             return Ok(false);
@@ -293,7 +293,7 @@ impl<'o> VM<'o> {
                         // Generator has requested a value from the with-stack.
                         // Logic is similar to `ForceValue`, except with the
                         // value being taken from that stack.
-                        GeneratorRequest::WithValue(idx) => {
+                        NativeToBytecode::WithValue(idx) => {
                             self.reenqueue_generator(span.clone(), generator);
 
                             let value = self.stack[self.with_stack[idx]].clone();
@@ -305,7 +305,7 @@ impl<'o> VM<'o> {
                         // Generator has requested a value from the *captured*
                         // with-stack. Logic is same as above, except for the
                         // value being from that stack.
-                        GeneratorRequest::CapturedWithValue(idx) => {
+                        NativeToBytecode::CapturedWithValue(idx) => {
                             self.reenqueue_generator(span.clone(), generator);
 
                             let call_frame = self.last_call_frame()
@@ -317,7 +317,7 @@ impl<'o> VM<'o> {
                             return Ok(false);
                         }
 
-                        GeneratorRequest::NixEquality(values, ptr_eq) => {
+                        NativeToBytecode::NixEquality(values, ptr_eq) => {
                             let values = *values;
                             self.reenqueue_generator(span.clone(), generator);
                             self.enqueue_generator(span, |co| {
@@ -326,19 +326,19 @@ impl<'o> VM<'o> {
                             return Ok(false);
                         }
 
-                        GeneratorRequest::StringCoerce(val, kind) => {
+                        NativeToBytecode::StringCoerce(val, kind) => {
                             self.reenqueue_generator(span.clone(), generator);
                             self.enqueue_generator(span, |co| val.coerce_to_string(co, kind));
                             return Ok(false);
                         }
 
-                        GeneratorRequest::Call(callable) => {
+                        NativeToBytecode::Call(callable) => {
                             self.reenqueue_generator(span.clone(), generator);
                             self.tail_call_value(span, None, callable)?;
                             return Ok(false);
                         }
 
-                        GeneratorRequest::EnterLambda {
+                        NativeToBytecode::EnterLambda {
                             lambda,
                             upvalues,
                             light_span,
@@ -358,12 +358,12 @@ impl<'o> VM<'o> {
                             return Ok(false);
                         }
 
-                        GeneratorRequest::EmitWarning(kind) => {
+                        NativeToBytecode::EmitWarning(kind) => {
                             self.emit_warning(kind);
                             message = BytecodeToNative::Empty;
                         }
 
-                        GeneratorRequest::ImportCacheLookup(path) => {
+                        NativeToBytecode::ImportCacheLookup(path) => {
                             if let Some(cached) = self.import_cache.get(&path) {
                                 message = BytecodeToNative::Value(cached.clone());
                             } else {
@@ -371,12 +371,12 @@ impl<'o> VM<'o> {
                             }
                         }
 
-                        GeneratorRequest::ImportCachePut(path, value) => {
+                        NativeToBytecode::ImportCachePut(path, value) => {
                             self.import_cache.insert(path, value);
                             message = BytecodeToNative::Empty;
                         }
 
-                        GeneratorRequest::PathImport(path) => {
+                        NativeToBytecode::PathImport(path) => {
                             let imported = self
                                 .io_handle
                                 .import_path(&path)
@@ -385,7 +385,7 @@ impl<'o> VM<'o> {
                             message = BytecodeToNative::Path(imported);
                         }
 
-                        GeneratorRequest::ReadToString(path) => {
+                        NativeToBytecode::ReadToString(path) => {
                             let content = self
                                 .io_handle
                                 .read_to_string(path)
@@ -394,7 +394,7 @@ impl<'o> VM<'o> {
                             message = BytecodeToNative::Value(Value::String(content.into()))
                         }
 
-                        GeneratorRequest::PathExists(path) => {
+                        NativeToBytecode::PathExists(path) => {
                             let exists = self
                                 .io_handle
                                 .path_exists(path)
@@ -404,7 +404,7 @@ impl<'o> VM<'o> {
                             message = BytecodeToNative::Value(exists);
                         }
 
-                        GeneratorRequest::ReadDir(path) => {
+                        NativeToBytecode::ReadDir(path) => {
                             let dir = self
                                 .io_handle
                                 .read_dir(path)
@@ -413,11 +413,11 @@ impl<'o> VM<'o> {
                             message = BytecodeToNative::Directory(dir);
                         }
 
-                        GeneratorRequest::Span => {
+                        NativeToBytecode::Span => {
                             message = BytecodeToNative::Span(self.reasonable_light_span());
                         }
 
-                        GeneratorRequest::TryForce(value) => {
+                        NativeToBytecode::TryForce(value) => {
                             self.try_eval_frames.push(frame_id);
                             self.reenqueue_generator(span.clone(), generator);
 
@@ -444,13 +444,13 @@ impl<'o> VM<'o> {
     }
 }
 
-pub type GenCo = Co<GeneratorRequest, BytecodeToNative>;
+pub type GenCo = Co<NativeToBytecode, BytecodeToNative>;
 
 // -- Implementation of concrete generator use-cases.
 
 /// Request that the VM place the given value on its stack.
 pub async fn request_stack_push(co: &GenCo, val: Value) {
-    match co.yield_(GeneratorRequest::StackPush(val)).await {
+    match co.yield_(NativeToBytecode::StackPush(val)).await {
         BytecodeToNative::Empty => {}
         msg => panic!(
             "Tvix bug: VM responded with incorrect generator message: {}",
@@ -462,7 +462,7 @@ pub async fn request_stack_push(co: &GenCo, val: Value) {
 /// Request that the VM pop a value from the stack and return it to the
 /// generator.
 pub async fn request_stack_pop(co: &GenCo) -> Value {
-    match co.yield_(GeneratorRequest::StackPop).await {
+    match co.yield_(NativeToBytecode::StackPop).await {
         BytecodeToNative::Value(value) => value,
         msg => panic!(
             "Tvix bug: VM responded with incorrect generator message: {}",
@@ -474,7 +474,7 @@ pub async fn request_stack_pop(co: &GenCo) -> Value {
 /// Force any value and return the evaluated result from the VM.
 pub async fn request_force(co: &GenCo, val: Value) -> Value {
     if let Value::Thunk(_) = val {
-        match co.yield_(GeneratorRequest::ForceValue(val)).await {
+        match co.yield_(NativeToBytecode::ForceValue(val)).await {
             BytecodeToNative::Value(value) => value,
             msg => panic!(
                 "Tvix bug: VM responded with incorrect generator message: {}",
@@ -490,7 +490,7 @@ pub async fn request_force(co: &GenCo, val: Value) -> Value {
 /// error occured.
 pub(crate) async fn request_try_force(co: &GenCo, val: Value) -> Option<Value> {
     if let Value::Thunk(_) = val {
-        match co.yield_(GeneratorRequest::TryForce(val)).await {
+        match co.yield_(NativeToBytecode::TryForce(val)).await {
             BytecodeToNative::Value(value) => Some(value),
             BytecodeToNative::ForceError => None,
             msg => panic!(
@@ -507,7 +507,7 @@ pub(crate) async fn request_try_force(co: &GenCo, val: Value) -> Option<Value> {
 /// on the stack.
 pub async fn request_call(co: &GenCo, val: Value) -> Value {
     let val = request_force(co, val).await;
-    match co.yield_(GeneratorRequest::Call(val)).await {
+    match co.yield_(NativeToBytecode::Call(val)).await {
         BytecodeToNative::Value(value) => value,
         msg => panic!(
             "Tvix bug: VM responded with incorrect generator message: {}",
@@ -542,7 +542,7 @@ where
 pub async fn request_string_coerce(co: &GenCo, val: Value, kind: CoercionKind) -> NixString {
     match val {
         Value::String(s) => s,
-        _ => match co.yield_(GeneratorRequest::StringCoerce(val, kind)).await {
+        _ => match co.yield_(NativeToBytecode::StringCoerce(val, kind)).await {
             BytecodeToNative::Value(value) => value
                 .to_str()
                 .expect("coerce_to_string always returns a string"),
@@ -557,7 +557,7 @@ pub async fn request_string_coerce(co: &GenCo, val: Value, kind: CoercionKind) -
 /// Deep-force any value and return the evaluated result from the VM.
 pub async fn request_deep_force(co: &GenCo, val: Value, thunk_set: SharedThunkSet) -> Value {
     match co
-        .yield_(GeneratorRequest::DeepForceValue(val, thunk_set))
+        .yield_(NativeToBytecode::DeepForceValue(val, thunk_set))
         .await
     {
         BytecodeToNative::Value(value) => value,
@@ -576,7 +576,7 @@ pub(crate) async fn check_equality(
     ptr_eq: PointerEquality,
 ) -> Result<bool, ErrorKind> {
     match co
-        .yield_(GeneratorRequest::NixEquality(Box::new((a, b)), ptr_eq))
+        .yield_(NativeToBytecode::NixEquality(Box::new((a, b)), ptr_eq))
         .await
     {
         BytecodeToNative::Value(value) => value.as_bool(),
@@ -589,7 +589,7 @@ pub(crate) async fn check_equality(
 
 /// Emit a runtime warning.
 pub(crate) async fn emit_warning(co: &GenCo, kind: WarningKind) {
-    match co.yield_(GeneratorRequest::EmitWarning(kind)).await {
+    match co.yield_(NativeToBytecode::EmitWarning(kind)).await {
         BytecodeToNative::Empty => {}
         msg => panic!(
             "Tvix bug: VM responded with incorrect generator message: {}",
@@ -605,7 +605,7 @@ pub(crate) async fn request_enter_lambda(
     upvalues: Rc<Upvalues>,
     light_span: LightSpan,
 ) -> Value {
-    let msg = GeneratorRequest::EnterLambda {
+    let msg = NativeToBytecode::EnterLambda {
         lambda,
         upvalues,
         light_span,
@@ -622,7 +622,7 @@ pub(crate) async fn request_enter_lambda(
 
 /// Request a lookup in the VM's import cache.
 pub(crate) async fn request_import_cache_lookup(co: &GenCo, path: PathBuf) -> Option<Value> {
-    match co.yield_(GeneratorRequest::ImportCacheLookup(path)).await {
+    match co.yield_(NativeToBytecode::ImportCacheLookup(path)).await {
         BytecodeToNative::Value(value) => Some(value),
         BytecodeToNative::Empty => None,
         msg => panic!(
@@ -635,7 +635,7 @@ pub(crate) async fn request_import_cache_lookup(co: &GenCo, path: PathBuf) -> Op
 /// Request that the VM populate its input cache for the given path.
 pub(crate) async fn request_import_cache_put(co: &GenCo, path: PathBuf, value: Value) {
     match co
-        .yield_(GeneratorRequest::ImportCachePut(path, value))
+        .yield_(NativeToBytecode::ImportCachePut(path, value))
         .await
     {
         BytecodeToNative::Empty => {}
@@ -648,7 +648,7 @@ pub(crate) async fn request_import_cache_put(co: &GenCo, path: PathBuf, value: V
 
 /// Request that the VM import the given path.
 pub(crate) async fn request_path_import(co: &GenCo, path: PathBuf) -> PathBuf {
-    match co.yield_(GeneratorRequest::PathImport(path)).await {
+    match co.yield_(NativeToBytecode::PathImport(path)).await {
         BytecodeToNative::Path(path) => path,
         msg => panic!(
             "Tvix bug: VM responded with incorrect generator message: {}",
@@ -658,7 +658,7 @@ pub(crate) async fn request_path_import(co: &GenCo, path: PathBuf) -> PathBuf {
 }
 
 pub(crate) async fn request_read_to_string(co: &GenCo, path: PathBuf) -> Value {
-    match co.yield_(GeneratorRequest::ReadToString(path)).await {
+    match co.yield_(NativeToBytecode::ReadToString(path)).await {
         BytecodeToNative::Value(value) => value,
         msg => panic!(
             "Tvix bug: VM responded with incorrect generator message: {}",
@@ -668,7 +668,7 @@ pub(crate) async fn request_read_to_string(co: &GenCo, path: PathBuf) -> Value {
 }
 
 pub(crate) async fn request_path_exists(co: &GenCo, path: PathBuf) -> Value {
-    match co.yield_(GeneratorRequest::PathExists(path)).await {
+    match co.yield_(NativeToBytecode::PathExists(path)).await {
         BytecodeToNative::Value(value) => value,
         msg => panic!(
             "Tvix bug: VM responded with incorrect generator message: {}",
@@ -678,7 +678,7 @@ pub(crate) async fn request_path_exists(co: &GenCo, path: PathBuf) -> Value {
 }
 
 pub(crate) async fn request_read_dir(co: &GenCo, path: PathBuf) -> Vec<(SmolStr, FileType)> {
-    match co.yield_(GeneratorRequest::ReadDir(path)).await {
+    match co.yield_(NativeToBytecode::ReadDir(path)).await {
         BytecodeToNative::Directory(dir) => dir,
         msg => panic!(
             "Tvix bug: VM responded with incorrect generator message: {}",
@@ -688,7 +688,7 @@ pub(crate) async fn request_read_dir(co: &GenCo, path: PathBuf) -> Vec<(SmolStr,
 }
 
 pub(crate) async fn request_span(co: &GenCo) -> LightSpan {
-    match co.yield_(GeneratorRequest::Span).await {
+    match co.yield_(NativeToBytecode::Span).await {
         BytecodeToNative::Span(span) => span,
         msg => panic!(
             "Tvix bug: VM responded with incorrect generator message: {}",

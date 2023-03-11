@@ -37,7 +37,7 @@ use crate::{
 
 use generators::{call_functor, Generator, GeneratorState};
 
-use self::generators::{GeneratorRequest, BytecodeToNative};
+use self::generators::{NativeToBytecode, BytecodeToNative};
 
 /// Internal helper trait for ergonomically converting from a `Result<T,
 /// ErrorKind>` to a `Result<T, Error>` using the current span of a call frame.
@@ -993,7 +993,7 @@ impl<'o> VM<'o> {
 
 /// Fetch and force a value on the with-stack from the VM.
 async fn fetch_forced_with(co: &GenCo, idx: usize) -> Value {
-    match co.yield_(GeneratorRequest::WithValue(idx)).await {
+    match co.yield_(NativeToBytecode::WithValue(idx)).await {
         BytecodeToNative::Value(value) => value,
         msg => panic!(
             "Tvix bug: VM responded with incorrect generator message: {}",
@@ -1004,7 +1004,7 @@ async fn fetch_forced_with(co: &GenCo, idx: usize) -> Value {
 
 /// Fetch and force a value on the *captured* with-stack from the VM.
 async fn fetch_captured_with(co: &GenCo, idx: usize) -> Value {
-    match co.yield_(GeneratorRequest::CapturedWithValue(idx)).await {
+    match co.yield_(NativeToBytecode::CapturedWithValue(idx)).await {
         BytecodeToNative::Value(value) => value,
         msg => panic!(
             "Tvix bug: VM responded with incorrect generator message: {}",

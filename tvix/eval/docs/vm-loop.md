@@ -230,7 +230,7 @@ loop and informs it that this generator is done (by returning `true`).
 
 A generator may also respond by signaling that it needs some data from the VM.
 This is implemented through a request-response pattern, in which the generator
-returns a `Yielded` message containing a [`GeneratorRequest`][]. These
+returns a `Yielded` message containing a [`NativeToBytecode`][]. These
 requests can be very simple ("Tell me the current store path") or more complex
 ("Call this Nix function with these values").
 
@@ -244,8 +244,8 @@ outer generator loop after setting up the frame stack.
 Most of this logic is implemented in cl/8148.
 
 [`Gen::resume`]: https://docs.rs/genawaiter/0.99.1/genawaiter/rc/struct.Gen.html#method.resume_with
-[`GeneratorRequest`]: https://cs.tvl.fyi/depot@2696839770c1ccb62929ff2575a633c07f5c9593/-/blob/tvix/eval/src/vm/generators.rs?L44
-[`GeneratorResponse`]: https://cs.tvl.fyi/depot@2696839770c1ccb62929ff2575a633c07f5c9593/-/blob/tvix/eval/src/vm/generators.rs?L169
+[`NativeToBytecode`]: https://cs.tvl.fyi/depot@2696839770c1ccb62929ff2575a633c07f5c9593/-/blob/tvix/eval/src/vm/generators.rs?L44
+[`BytecodeToNative`]: https://cs.tvl.fyi/depot@2696839770c1ccb62929ff2575a633c07f5c9593/-/blob/tvix/eval/src/vm/generators.rs?L169
 
 ## Advantages & Disadvantages of the approach
 

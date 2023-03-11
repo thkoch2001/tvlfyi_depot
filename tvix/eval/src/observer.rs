@@ -11,7 +11,7 @@ use std::rc::Rc;
 use tabwriter::TabWriter;
 
 use crate::chunk::Chunk;
-use crate::generators::GeneratorRequest;
+use crate::generators::NativeToBytecode;
 use crate::opcode::{CodeIdx, OpCode};
 use crate::value::Lambda;
 use crate::SourceCode;
@@ -58,7 +58,7 @@ pub trait RuntimeObserver {
     fn observe_suspend_generator(&mut self, _frame_at: usize, _stack: &[Value]) {}
 
     /// Called when a generator requests an action from the VM.
-    fn observe_generator_request(&mut self, _msg: &GeneratorRequest) {}
+    fn observe_generator_request(&mut self, _msg: &NativeToBytecode) {}
 
     /// Called when the runtime replaces the current call frame for a
     /// tail call.
@@ -244,7 +244,7 @@ impl<W: Write> RuntimeObserver for TracingObserver<W> {
         let _ = writeln!(&mut self.writer, "]");
     }
 
-    fn observe_generator_request(&mut self, msg: &GeneratorRequest) {
+    fn observe_generator_request(&mut self, msg: &NativeToBytecode) {
         let _ = writeln!(&mut self.writer, "=== generator requested {} ===", msg);
     }
 
