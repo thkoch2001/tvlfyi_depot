@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6d4e66e8_3d76a351",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 21
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1000066
+      },
+      "writtenOn": "2023-03-11T09:31:15Z",
+      "side": 1,
+      "message": "Could we please make the default \"don\u0027t try to connect to anything\" when `OTEL_EXPORTER_OLTP_ENDPOINT` is not set?\n\nNot a big fan of software that unexpectedly makes network connections without me asking it to, even `localhost`.  Blocking this sort of behavior is one reason I love the Nix sandbox, but of course that doesn\u0027t help with my Nix evaluator (which will hopefully someday be tvix).",
+      "range": {
+        "startLine": 37,
+        "startChar": 0,
+        "endLine": 39,
+        "endChar": 72
+      },
+      "revId": "9757463e130e1be3e40e0b4b38aa39af5f6c7225",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
