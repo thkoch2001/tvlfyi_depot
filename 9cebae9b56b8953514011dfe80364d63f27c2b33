@@ -16,6 +16,24 @@
       "message": "Unless I\u0027m completely misreading this CL, `tail_call_value()` is mis-named.  The `Closure` arm of the `match` is pushing a new frame onto the call stack!  That is absolutely not a tail call.",
       "revId": "9cebae9b56b8953514011dfe80364d63f27c2b33",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f07ca09e_e21324a2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2023-03-11T13:13:49Z",
+      "side": 1,
+      "message": "You\u0027re right about that, the naming comes from the previous setup where we had to have two different call*-functions to handle calls returning a value to the *same* chunk and resuming execution, and functions calls that apply at the end of their chunk.\n\nThere\u0027s no reason for this function to be named like this anymore, it is just `call_value`. I\u0027ll fix it at the top of the chain.",
+      "parentUuid": "f53dd5d7_2ea6f4da",
+      "revId": "9cebae9b56b8953514011dfe80364d63f27c2b33",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
