@@ -371,6 +371,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "ec89d21e_5cdb0e26",
+        "filename": "tvix/eval/docs/vm-loop.md",
+        "patchSetId": 9
+      },
+      "lineNbr": 197,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2023-03-11T20:23:16Z",
+      "side": 1,
+      "message": "What about naming them based on who produces them, so either a generator/native code or the VM?\n\nGeneratorMessage/NativeMessage - a message from a generator/native code\n\nVMMessage - a message from the VM",
+      "parentUuid": "fb4e08d1_720f7adb",
+      "revId": "b98fd5fd74481c46c91d3d309679138153b5e8c9",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "f7c93ed5_3b5e396e",
         "filename": "tvix/eval/docs/vm-loop.md",
         "patchSetId": 9
