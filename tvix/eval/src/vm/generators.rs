@@ -36,7 +36,7 @@ pub(crate) enum GeneratorState {
 /// cases, the VM will suspend the generator when receiving a message
 /// and enter some other frame to process the request.
 ///
-/// Responses are returned to generators via the [`GeneratorResponse`] type.
+/// Responses are returned to generators via the [`BytecodeToNative`] type.
 pub enum GeneratorRequest {
     /// Request that the VM forces this value. This message is first sent to the
     /// VM with the unforced value, then returned to the generator with the
@@ -161,7 +161,7 @@ impl Display for GeneratorRequest {
 }
 
 /// Responses returned to generators from the VM.
-pub enum GeneratorResponse {
+pub enum BytecodeToNative {
     /// Empty message. Passed to the generator as the first message,
     /// or when return values were optional.
     Empty,
@@ -183,22 +183,22 @@ pub enum GeneratorResponse {
     ForceError,
 }
 
-impl Display for GeneratorResponse {
+impl Display for BytecodeToNative {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         match self {
-            GeneratorResponse::Empty => write!(f, "empty"),
-            GeneratorResponse::Value(v) => write!(f, "value({})", v),
-            GeneratorResponse::Path(p) => write!(f, "path({})", p.to_string_lossy()),
-            GeneratorResponse::Directory(d) => write!(f, "dir(len = {})", d.len()),
-            GeneratorResponse::Span(_) => write!(f, "span"),
-            GeneratorResponse::ForceError => write!(f, "force_error"),
+            BytecodeToNative::Empty => write!(f, "empty"),
+            BytecodeToNative::Value(v) => write!(f, "value({})", v),
+            BytecodeToNative::Path(p) => write!(f, "path({})", p.to_string_lossy()),
+            BytecodeToNative::Directory(d) => write!(f, "dir(len = {})", d.len()),
+            BytecodeToNative::Span(_) => write!(f, "span"),
+            BytecodeToNative::ForceError => write!(f, "force_error"),
         }
     }
 }
 
 pub(crate) type Generator = Gen<
     GeneratorRequest,
-    GeneratorResponse,
+    BytecodeToNative,
     Pin<Box<dyn Future<Output = Result<Value, ErrorKind>>>>,
 >;
 
@@ -245,16 +245,16 @@ impl<'o> VM<'o> {
         frame_id: usize,
         state: GeneratorState,
         mut generator: Generator,
-        initial_message: Option<GeneratorResponse>,
+        initial_message: Option<BytecodeToNative>,
     ) -> EvalResult<bool> {
         // Determine what to send to the generator based on its state.
         let mut message = match (initial_message, state) {
             (Some(msg), _) => msg,
-            (_, GeneratorState::Running) => GeneratorResponse::Empty,
+            (_, GeneratorState::Running) => BytecodeToNative::Empty,
 
             // If control returned here, and the generator is
             // awaiting a value, send it the top of the stack.
-            (_, GeneratorState::AwaitingValue) => GeneratorResponse::Value(self.stack_pop()),
+            (_, GeneratorState::AwaitingValue) => BytecodeToNative::Value(self.stack_pop()),
         };
 
         loop {
@@ -267,11 +267,11 @@ impl<'o> VM<'o> {
                     match request {
                         GeneratorRequest::StackPush(value) => {
                             self.stack.push(value);
-                            message = GeneratorResponse::Empty;
+                            message = BytecodeToNative::Empty;
                         }
 
                         GeneratorRequest::StackPop => {
-                            message = GeneratorResponse::Value(self.stack_pop());
+                            message = BytecodeToNative::Value(self.stack_pop());
                         }
 
                         // Generator has requested a force, which means that
@@ -360,20 +360,20 @@ impl<'o> VM<'o> {
 
                         GeneratorRequest::EmitWarning(kind) => {
                             self.emit_warning(kind);
-                            message = GeneratorResponse::Empty;
+                            message = BytecodeToNative::Empty;
                         }
 
                         GeneratorRequest::ImportCacheLookup(path) => {
                             if let Some(cached) = self.import_cache.get(&path) {
-                                message = GeneratorResponse::Value(cached.clone());
+                                message = BytecodeToNative::Value(cached.clone());
                             } else {
-                                message = GeneratorResponse::Empty;
+                                message = BytecodeToNative::Empty;
                             }
                         }
 
                         GeneratorRequest::ImportCachePut(path, value) => {
                             self.import_cache.insert(path, value);
-                            message = GeneratorResponse::Empty;
+                            message = BytecodeToNative::Empty;
                         }
 
                         GeneratorRequest::PathImport(path) => {
@@ -382,7 +382,7 @@ impl<'o> VM<'o> {
                                 .import_path(&path)
                                 .map_err(|kind| Error::new(kind, span.span()))?;
 
-                            message = GeneratorResponse::Path(imported);
+                            message = BytecodeToNative::Path(imported);
                         }
 
                         GeneratorRequest::ReadToString(path) => {
@@ -391,7 +391,7 @@ impl<'o> VM<'o> {
                                 .read_to_string(path)
                                 .map_err(|kind| Error::new(kind, span.span()))?;
 
-                            message = GeneratorResponse::Value(Value::String(content.into()))
+                            message = BytecodeToNative::Value(Value::String(content.into()))
                         }
 
                         GeneratorRequest::PathExists(path) => {
@@ -401,7 +401,7 @@ impl<'o> VM<'o> {
                                 .map(Value::Bool)
                                 .map_err(|kind| Error::new(kind, span.span()))?;
 
-                            message = GeneratorResponse::Value(exists);
+                            message = BytecodeToNative::Value(exists);
                         }
 
                         GeneratorRequest::ReadDir(path) => {
@@ -410,11 +410,11 @@ impl<'o> VM<'o> {
                                 .read_dir(path)
                                 .map_err(|kind| Error::new(kind, span.span()))?;
 
-                            message = GeneratorResponse::Directory(dir);
+                            message = BytecodeToNative::Directory(dir);
                         }
 
                         GeneratorRequest::Span => {
-                            message = GeneratorResponse::Span(self.reasonable_light_span());
+                            message = BytecodeToNative::Span(self.reasonable_light_span());
                         }
 
                         GeneratorRequest::TryForce(value) => {
@@ -444,14 +444,14 @@ impl<'o> VM<'o> {
     }
 }
 
-pub type GenCo = Co<GeneratorRequest, GeneratorResponse>;
+pub type GenCo = Co<GeneratorRequest, BytecodeToNative>;
 
 // -- Implementation of concrete generator use-cases.
 
 /// Request that the VM place the given value on its stack.
 pub async fn request_stack_push(co: &GenCo, val: Value) {
     match co.yield_(GeneratorRequest::StackPush(val)).await {
-        GeneratorResponse::Empty => {}
+        BytecodeToNative::Empty => {}
         msg => panic!(
             "Tvix bug: VM responded with incorrect generator message: {}",
             msg
@@ -463,7 +463,7 @@ pub async fn request_stack_push(co: &GenCo, val: Value) {
 /// generator.
 pub async fn request_stack_pop(co: &GenCo) -> Value {
     match co.yield_(GeneratorRequest::StackPop).await {
-        GeneratorResponse::Value(value) => value,
+        BytecodeToNative::Value(value) => value,
         msg => panic!(
             "Tvix bug: VM responded with incorrect generator message: {}",
             msg
@@ -475,7 +475,7 @@ pub async fn request_stack_pop(co: &GenCo) -> Value {
 pub async fn request_force(co: &GenCo, val: Value) -> Value {
     if let Value::Thunk(_) = val {
         match co.yield_(GeneratorRequest::ForceValue(val)).await {
-            GeneratorResponse::Value(value) => value,
+            BytecodeToNative::Value(value) => value,
             msg => panic!(
                 "Tvix bug: VM responded with incorrect generator message: {}",
                 msg
@@ -491,8 +491,8 @@ pub async fn request_force(co: &GenCo, val: Value) -> Value {
 pub(crate) async fn request_try_force(co: &GenCo, val: Value) -> Option<Value> {
     if let Value::Thunk(_) = val {
         match co.yield_(GeneratorRequest::TryForce(val)).await {
-            GeneratorResponse::Value(value) => Some(value),
-            GeneratorResponse::ForceError => None,
+            BytecodeToNative::Value(value) => Some(value),
+            BytecodeToNative::ForceError => None,
             msg => panic!(
                 "Tvix bug: VM responded with incorrect generator message: {}",
                 msg
@@ -508,7 +508,7 @@ pub(crate) async fn request_try_force(co: &GenCo, val: Value) -> Option<Value> {
 pub async fn request_call(co: &GenCo, val: Value) -> Value {
     let val = request_force(co, val).await;
     match co.yield_(GeneratorRequest::Call(val)).await {
-        GeneratorResponse::Value(value) => value,
+        BytecodeToNative::Value(value) => value,
         msg => panic!(
             "Tvix bug: VM responded with incorrect generator message: {}",
             msg
@@ -543,7 +543,7 @@ pub async fn request_string_coerce(co: &GenCo, val: Value, kind: CoercionKind) -
     match val {
         Value::String(s) => s,
         _ => match co.yield_(GeneratorRequest::StringCoerce(val, kind)).await {
-            GeneratorResponse::Value(value) => value
+            BytecodeToNative::Value(value) => value
                 .to_str()
                 .expect("coerce_to_string always returns a string"),
             msg => panic!(
@@ -560,7 +560,7 @@ pub async fn request_deep_force(co: &GenCo, val: Value, thunk_set: SharedThunkSe
         .yield_(GeneratorRequest::DeepForceValue(val, thunk_set))
         .await
     {
-        GeneratorResponse::Value(value) => value,
+        BytecodeToNative::Value(value) => value,
         msg => panic!(
             "Tvix bug: VM responded with incorrect generator message: {}",
             msg
@@ -579,7 +579,7 @@ pub(crate) async fn check_equality(
         .yield_(GeneratorRequest::NixEquality(Box::new((a, b)), ptr_eq))
         .await
     {
-        GeneratorResponse::Value(value) => value.as_bool(),
+        BytecodeToNative::Value(value) => value.as_bool(),
         msg => panic!(
             "Tvix bug: VM responded with incorrect generator message: {}",
             msg
@@ -590,7 +590,7 @@ pub(crate) async fn check_equality(
 /// Emit a runtime warning.
 pub(crate) async fn emit_warning(co: &GenCo, kind: WarningKind) {
     match co.yield_(GeneratorRequest::EmitWarning(kind)).await {
-        GeneratorResponse::Empty => {}
+        BytecodeToNative::Empty => {}
         msg => panic!(
             "Tvix bug: VM responded with incorrect generator message: {}",
             msg
@@ -612,7 +612,7 @@ pub(crate) async fn request_enter_lambda(
     };
 
     match co.yield_(msg).await {
-        GeneratorResponse::Value(value) => value,
+        BytecodeToNative::Value(value) => value,
         msg => panic!(
             "Tvix bug: VM responded with incorrect generator message: {}",
             msg
@@ -623,8 +623,8 @@ pub(crate) async fn request_enter_lambda(
 /// Request a lookup in the VM's import cache.
 pub(crate) async fn request_import_cache_lookup(co: &GenCo, path: PathBuf) -> Option<Value> {
     match co.yield_(GeneratorRequest::ImportCacheLookup(path)).await {
-        GeneratorResponse::Value(value) => Some(value),
-        GeneratorResponse::Empty => None,
+        BytecodeToNative::Value(value) => Some(value),
+        BytecodeToNative::Empty => None,
         msg => panic!(
             "Tvix bug: VM responded with incorrect generator message: {}",
             msg
@@ -638,7 +638,7 @@ pub(crate) async fn request_import_cache_put(co: &GenCo, path: PathBuf, value: V
         .yield_(GeneratorRequest::ImportCachePut(path, value))
         .await
     {
-        GeneratorResponse::Empty => {}
+        BytecodeToNative::Empty => {}
         msg => panic!(
             "Tvix bug: VM responded with incorrect generator message: {}",
             msg
@@ -649,7 +649,7 @@ pub(crate) async fn request_import_cache_put(co: &GenCo, path: PathBuf, value: V
 /// Request that the VM import the given path.
 pub(crate) async fn request_path_import(co: &GenCo, path: PathBuf) -> PathBuf {
     match co.yield_(GeneratorRequest::PathImport(path)).await {
-        GeneratorResponse::Path(path) => path,
+        BytecodeToNative::Path(path) => path,
         msg => panic!(
             "Tvix bug: VM responded with incorrect generator message: {}",
             msg
@@ -659,7 +659,7 @@ pub(crate) async fn request_path_import(co: &GenCo, path: PathBuf) -> PathBuf {
 
 pub(crate) async fn request_read_to_string(co: &GenCo, path: PathBuf) -> Value {
     match co.yield_(GeneratorRequest::ReadToString(path)).await {
-        GeneratorResponse::Value(value) => value,
+        BytecodeToNative::Value(value) => value,
         msg => panic!(
             "Tvix bug: VM responded with incorrect generator message: {}",
             msg
@@ -669,7 +669,7 @@ pub(crate) async fn request_read_to_string(co: &GenCo, path: PathBuf) -> Value {
 
 pub(crate) async fn request_path_exists(co: &GenCo, path: PathBuf) -> Value {
     match co.yield_(GeneratorRequest::PathExists(path)).await {
-        GeneratorResponse::Value(value) => value,
+        BytecodeToNative::Value(value) => value,
         msg => panic!(
             "Tvix bug: VM responded with incorrect generator message: {}",
             msg
@@ -679,7 +679,7 @@ pub(crate) async fn request_path_exists(co: &GenCo, path: PathBuf) -> Value {
 
 pub(crate) async fn request_read_dir(co: &GenCo, path: PathBuf) -> Vec<(SmolStr, FileType)> {
     match co.yield_(GeneratorRequest::ReadDir(path)).await {
-        GeneratorResponse::Directory(dir) => dir,
+        BytecodeToNative::Directory(dir) => dir,
         msg => panic!(
             "Tvix bug: VM responded with incorrect generator message: {}",
             msg
@@ -689,7 +689,7 @@ pub(crate) async fn request_read_dir(co: &GenCo, path: PathBuf) -> Vec<(SmolStr,
 
 pub(crate) async fn request_span(co: &GenCo) -> LightSpan {
     match co.yield_(GeneratorRequest::Span).await {
-        GeneratorResponse::Span(span) => span,
+        BytecodeToNative::Span(span) => span,
         msg => panic!(
             "Tvix bug: VM responded with incorrect generator message: {}",
             msg
