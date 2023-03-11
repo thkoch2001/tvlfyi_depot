@@ -16,6 +16,24 @@
       "message": "This todo can be dropped?",
       "revId": "c7c4e8d3c264aaff125700995b66e135940db428",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1da6c85a_1816fb37",
+        "filename": "tvix/eval/src/vm/mod.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 385,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2023-03-11T22:41:46Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "50e7761b_d87a4ec3",
+      "revId": "c7c4e8d3c264aaff125700995b66e135940db428",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
