@@ -282,6 +282,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "a209d8b7_7fddc681",
+        "filename": "tvix/eval/docs/vm-loop.md",
+        "patchSetId": 9
+      },
+      "lineNbr": 183,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2023-03-11T13:24:12Z",
+      "side": 1,
+      "message": "What I meant would be more precisely expressed as \"all function applications are theoretically tail-calls, as they occur in the last meaningful instruction of their code chunk, as all function applications are thunked\". Replying on the other CL about the function name 😊",
+      "parentUuid": "eedfeb06_b9235b76",
+      "revId": "b98fd5fd74481c46c91d3d309679138153b5e8c9",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "f1c9dd2b_4f6b00df",
         "filename": "tvix/eval/docs/vm-loop.md",
         "patchSetId": 9
@@ -329,6 +347,24 @@
       "side": 1,
       "message": "Yeah, I get that.\n\nI think the `genawaiter` crate\u0027s terminology is a really bad fit for the way tvix is using it.\n\n`genawaiter` is meant for situations where you very obviously have a producer and a consumer; the consumer pulls data out of the producer and the producer is otherwise passive and never makes any requests to the consumer.\n\nTvix is implementing true coroutines, where neither the bytecode side nor the rust side is truly \"in charge\".  Bytecode can call `builtins` (which are rust code) and rust can call bytecode (e.g. `builtins.sort` calling the comparison function that was passed to it).\n\nIf you\u0027ve found the `genawaiter` codebase meets your needs great, keep using it, but I urge you to totally abandon their terminology.  Otherwise people reading your code have to memorize \"generator means rust code\", \"resume means calling a builtin\", etc etc.  It\u0027s not like math or physics where you can skip the memorization and re-derive these things from first principles when you take the exam... the names are now arbitrary because you don\u0027t have a generator/consumer anymore, you have two coroutines.",
       "parentUuid": "d11e0e70_1785de4c",
+      "revId": "b98fd5fd74481c46c91d3d309679138153b5e8c9",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fb4e08d1_720f7adb",
+        "filename": "tvix/eval/docs/vm-loop.md",
+        "patchSetId": 9
+      },
+      "lineNbr": 197,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2023-03-11T13:24:12Z",
+      "side": 1,
+      "message": "Hm, the requests do not go from the generators to bytecode chunks, though. They go to the VM. In a sense, the generators ... generate ... requests that are consumed by the *VM*. This also makes me hesitant about your suggested naming of the request/response function types, as it\u0027s totally possible (and in fact frequently occurs) that a generator requests something that another generator produces, in which case `NativeToBytecode` is incorrect - there\u0027s no bytecode involved.\n\nThis all fundamentally revolves around the VM in my head, so if we go down that naming route it should be something closer to `NativeToVM`, `VMToNative`, but these also sound strange to me because, well, the VM is in fact written in native Rust.",
+      "parentUuid": "0fff7400_6cae21b5",
       "revId": "b98fd5fd74481c46c91d3d309679138153b5e8c9",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
@@ -386,6 +422,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "d1dd85fb_393b750c",
+        "filename": "tvix/eval/docs/vm-loop.md",
+        "patchSetId": 9
+      },
+      "lineNbr": 209,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2023-03-11T13:24:12Z",
+      "side": 1,
+      "message": "Aha! Yeah, sure, lets do that. I\u0027ll approve your CL and we can merge it once this one is submitted.",
+      "parentUuid": "c25f8809_477e0bbf",
+      "revId": "b98fd5fd74481c46c91d3d309679138153b5e8c9",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "d8ac993b_0346c71d",
@@ -435,6 +489,24 @@
       "side": 1,
       "message": "\u003e It would be correct to say that the generators always execute some native Rust code, which is part of the evaluation implementation. \n\nOkay that makes sense.\n\n\u003e \"GeneratorRequest\" (requesting something from the VM), and the VM sends it a \"GeneratorResponse\" (returning the result to the VM).\n\nI keep stumbling over this too.  GeneratorRequest is a request *from* the generator not a request *to* the generator?  Isn\u0027t that sort of the opposite of the convention?  Like how HTTPRequest is generally a request *to* the HTTP server?",
       "parentUuid": "6dfbe3ce_702c00db",
+      "revId": "b98fd5fd74481c46c91d3d309679138153b5e8c9",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c4805c79_2f2ee5c5",
+        "filename": "tvix/eval/docs/vm-loop.md",
+        "patchSetId": 9
+      },
+      "lineNbr": 221,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2023-03-11T13:24:12Z",
+      "side": 1,
+      "message": "In some sense the VM is a \"server\" here that receives \"requests\" and returns \"responses\", whether those involve running other frames (native or bytecode), or doing something in the VM, is kind of irrelevant for the thing doing the requesting (the generators).\n\nI think following the HTTP convention would lead us to something like `VMRequest` / `VMResponse`. Hmm, I\u0027m not sure.",
+      "parentUuid": "90679fa3_bb0ccb91",
       "revId": "b98fd5fd74481c46c91d3d309679138153b5e8c9",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
@@ -545,6 +617,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "fe5d1cbb_95f1ef52",
+        "filename": "tvix/eval/docs/vm-loop.md",
+        "patchSetId": 9
+      },
+      "lineNbr": 234,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2023-03-11T13:24:12Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "69d3a3a9_e26e0660",
+      "revId": "b98fd5fd74481c46c91d3d309679138153b5e8c9",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "c2cc2023_c7170f85",
@@ -606,6 +696,30 @@
       "side": 1,
       "message": "How about single-frame request and multi-frame request?",
       "parentUuid": "8e3449d5_e85be0c7",
+      "range": {
+        "startLine": 236,
+        "startChar": 36,
+        "endLine": 236,
+        "endChar": 50
+      },
+      "revId": "b98fd5fd74481c46c91d3d309679138153b5e8c9",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bc5bf660_8ef269c6",
+        "filename": "tvix/eval/docs/vm-loop.md",
+        "patchSetId": 9
+      },
+      "lineNbr": 236,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2023-03-11T13:24:12Z",
+      "side": 1,
+      "message": "That\u0027s good. How about s/single/same, so we get same-frame request and multi-frame request?",
+      "parentUuid": "a89af6c5_9a78f66c",
       "range": {
         "startLine": 236,
         "startChar": 36,
