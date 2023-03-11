@@ -1,14 +1,13 @@
 use crate::{
     blobservice::BlobService,
-    chunkservice::{update_hasher, ChunkService},
+    chunkservice::{read_all_and_chunk, update_hasher, ChunkService},
     Error,
 };
 use data_encoding::BASE64;
-use std::io::{BufWriter, Write};
 use tokio::{sync::mpsc::channel, task};
-use tokio_stream::wrappers::ReceiverStream;
+use tokio_stream::{wrappers::ReceiverStream, StreamExt};
 use tonic::{async_trait, Request, Response, Status, Streaming};
-use tracing::{debug, error, instrument, warn};
+use tracing::{debug, instrument, warn};
 
 pub struct GRPCBlobServiceWrapper<BS: BlobService, CS: ChunkService> {
     blob_service: BS,
@@ -165,36 +164,26 @@ impl<
     ) -> Result<Response<super::PutBlobResponse>, Status> {
         let mut req_inner = request.into_inner();
 
-        // instantiate a [BlobWriter] to write all data received with a client,
-        // but wrap it in a pretty large (1MiB) [BufWriter] to prevent
-        // excessive useless chunk attempts.
-        let mut blob_writer = crate::BlobWriter::new(&self.chunk_service);
+        let data_stream = req_inner.map(|x| {
+            x.map(|x| x.data.as_slice())
+                .map_err(|e| std::io::Error::new(std::io::ErrorKind::InvalidInput, e))
+        });
+
+        let data_reader = tokio_util::io::StreamReader::new(data_stream);
+
+        let (blob_digest, blob_meta) = read_all_and_chunk(&self.chunk_service, data_reader)?;
+
+        // upload blobmeta if not there yet
+        if self
+            .blob_service
+            .stat(&super::StatBlobRequest {
+                digest: blob_digest.to_vec(),
+                include_chunks: false,
+                include_bao: false,
+            })?
+            .is_none()
         {
-            let mut blob_writer_buffered = BufWriter::with_capacity(1024 * 1024, &mut blob_writer);
-
-            // receive data from the client, and write them all to the blob_writer.
-            while let Some(blob_chunk) = req_inner.message().await? {
-                if let Err(e) = blob_writer_buffered.write_all(&blob_chunk.data) {
-                    error!(e=%e,"unable to write blob data");
-                    return Err(Status::internal("unable to write blob data"));
-                }
-            }
-            blob_writer_buffered.flush()?;
-        }
-
-        // run finalize
-        let (blob_digest, blob_meta) = blob_writer
-            .finalize()
-            .map_err(|_| Status::internal("unable to finalize blob"))?;
-
-        // check if we have the received blob in the [BlobService] already.
-        let resp = self.blob_service.stat(&super::StatBlobRequest {
-            digest: blob_digest.to_vec(),
-            ..Default::default()
-        })?;
-
-        // if not, store.
-        if resp.is_none() {
+            // upload blobmeta
             self.blob_service.put(&blob_digest, blob_meta)?;
         }
 
