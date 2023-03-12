@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b80856cb_dafb8796",
+        "filename": "tvix/store/src/proto/grpc_blobservice_wrapper.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 176,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-03-12T13:28:37Z",
+      "side": 1,
+      "message": "We do similar clones further up in this file, this is a common annoyance, nothing new specific to *this* CL.",
+      "revId": "72a0415dcb0219f7b2cfc94944e345a63abd9425",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
