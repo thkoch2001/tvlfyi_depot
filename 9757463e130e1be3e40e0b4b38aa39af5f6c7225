@@ -46,6 +46,30 @@
       },
       "revId": "9757463e130e1be3e40e0b4b38aa39af5f6c7225",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "42cad50b_f9f3b8db",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 21
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-03-12T16:40:56Z",
+      "side": 1,
+      "message": "I managed to make this a feature flag. The `tracing_subscriber::registry` was a bit annoying to deal with, as every layer added did change the type (so we couldn\u0027t just make the `tracing_subscriber_registry` mutable and add the opentelemetry layer) based on the feature flag. I solved this by pushing the otlp layer to the end, and have both branches call `.try_init()?`, with more or less layered types.\n\nI\u0027d still like to solve the sampling situation, so this doesn\u0027t push as long as you don\u0027t explicitly run something with sampling enabled (for example, a command line flag to the `import` command, or in the case of a running daemon, it dealing with an incoming request that explicitly has sampling requested).\n\n@amjoseph would you be fine with having the `otlp` feature flag in the default set, if it\u0027s configured like this?",
+      "parentUuid": "2b8297e6_fc3e3b9d",
+      "range": {
+        "startLine": 37,
+        "startChar": 0,
+        "endLine": 39,
+        "endChar": 72
+      },
+      "revId": "9757463e130e1be3e40e0b4b38aa39af5f6c7225",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
