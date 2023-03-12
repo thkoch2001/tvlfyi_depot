@@ -296,7 +296,9 @@ impl<'o> VM<'o> {
                         // back to the outer VM loop.
                         GeneratorRequest::ForceValue(value) => {
                             self.reenqueue_generator(name, span.clone(), generator);
-                            self.enqueue_generator("force", span, |co| value.force(co));
+                            self.enqueue_generator("force", span.clone(), |co| {
+                                value.force(co, span)
+                            });
                             return Ok(false);
                         }
 
@@ -316,7 +318,9 @@ impl<'o> VM<'o> {
                             self.reenqueue_generator(name, span.clone(), generator);
 
                             let value = self.stack[self.with_stack[idx]].clone();
-                            self.enqueue_generator("force", span, |co| value.force(co));
+                            self.enqueue_generator("force", span.clone(), |co| {
+                                value.force(co, span)
+                            });
 
                             return Ok(false);
                         }
@@ -331,7 +335,9 @@ impl<'o> VM<'o> {
                                 .expect("Tvix bug: generator requested captured with-value, but there is no call frame");
 
                             let value = call_frame.upvalues.with_stack().unwrap()[idx].clone();
-                            self.enqueue_generator("force", span, |co| value.force(co));
+                            self.enqueue_generator("force", span.clone(), |co| {
+                                value.force(co, span)
+                            });
 
                             return Ok(false);
                         }
@@ -445,7 +451,9 @@ impl<'o> VM<'o> {
                                 "generator should be reenqueued with the same frame ID"
                             );
 
-                            self.enqueue_generator("force", span, |co| value.force(co));
+                            self.enqueue_generator("force", span.clone(), |co| {
+                                value.force(co, span)
+                            });
                             return Ok(false);
                         }
 
