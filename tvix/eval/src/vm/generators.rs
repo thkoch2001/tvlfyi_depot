@@ -403,19 +403,15 @@ impl<'o> VM<'o> {
                         }
 
                         GeneratorRequest::PathImport(path) => {
-                            let imported = self
-                                .io_handle
-                                .import_path(&path)
-                                .map_err(|kind| Error::new(kind, span.span()))?;
+                            let imported =
+                                self.io_handle.import_path(&path).with_span(&span, self)?;
 
                             message = GeneratorResponse::Path(imported);
                         }
 
                         GeneratorRequest::ReadToString(path) => {
-                            let content = self
-                                .io_handle
-                                .read_to_string(path)
-                                .map_err(|kind| Error::new(kind, span.span()))?;
+                            let content =
+                                self.io_handle.read_to_string(path).with_span(&span, self)?;
 
                             message = GeneratorResponse::Value(Value::String(content.into()))
                         }
@@ -425,16 +421,13 @@ impl<'o> VM<'o> {
                                 .io_handle
                                 .path_exists(path)
                                 .map(Value::Bool)
-                                .map_err(|kind| Error::new(kind, span.span()))?;
+                                .with_span(&span, self)?;
 
                             message = GeneratorResponse::Value(exists);
                         }
 
                         GeneratorRequest::ReadDir(path) => {
-                            let dir = self
-                                .io_handle
-                                .read_dir(path)
-                                .map_err(|kind| Error::new(kind, span.span()))?;
+                            let dir = self.io_handle.read_dir(path).with_span(&span, self)?;
 
                             message = GeneratorResponse::Directory(dir);
                         }
@@ -469,7 +462,7 @@ impl<'o> VM<'o> {
                 // Generator has completed, and its result value should
                 // be left on the stack.
                 genawaiter::GeneratorState::Complete(result) => {
-                    let value = result.map_err(|kind| Error::new(kind, span.span()))?;
+                    let value = result.with_span(&span, self)?;
                     self.stack.push(value);
                     return Ok(true);
                 }
