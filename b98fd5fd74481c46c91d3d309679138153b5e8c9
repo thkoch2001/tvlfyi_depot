@@ -298,6 +298,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "6326410a_8fbda31a",
+        "filename": "tvix/eval/docs/vm-loop.md",
+        "patchSetId": 9
+      },
+      "lineNbr": 183,
+      "author": {
+        "id": 1000066
+      },
+      "writtenOn": "2023-03-13T14:48:12Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a209d8b7_7fddc681",
+      "revId": "b98fd5fd74481c46c91d3d309679138153b5e8c9",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "f1c9dd2b_4f6b00df",
@@ -383,6 +401,24 @@
       "side": 1,
       "message": "What about naming them based on who produces them, so either a generator/native code or the VM?\n\nGeneratorMessage/NativeMessage - a message from a generator/native code\n\nVMMessage - a message from the VM",
       "parentUuid": "fb4e08d1_720f7adb",
+      "revId": "b98fd5fd74481c46c91d3d309679138153b5e8c9",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e35f4f53_6a1abce6",
+        "filename": "tvix/eval/docs/vm-loop.md",
+        "patchSetId": 9
+      },
+      "lineNbr": 197,
+      "author": {
+        "id": 1000066
+      },
+      "writtenOn": "2023-03-13T14:48:12Z",
+      "side": 1,
+      "message": "\u003e GeneratorMessage/NativeMessage - a message from a generator/native code\n\nThat sounds great.\n\n\u003e VMMessage - a message from the VM\n\nThe `VMRequest` (request *to* the VM) / `VMResponse` (response *from* the VM) would also be great.\n\nEither one.\n\nMark this resolved when you update it.",
+      "parentUuid": "ec89d21e_5cdb0e26",
       "revId": "b98fd5fd74481c46c91d3d309679138153b5e8c9",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
@@ -525,6 +561,24 @@
       "side": 1,
       "message": "In some sense the VM is a \"server\" here that receives \"requests\" and returns \"responses\", whether those involve running other frames (native or bytecode), or doing something in the VM, is kind of irrelevant for the thing doing the requesting (the generators).\n\nI think following the HTTP convention would lead us to something like `VMRequest` / `VMResponse`. Hmm, I\u0027m not sure.",
       "parentUuid": "90679fa3_bb0ccb91",
+      "revId": "b98fd5fd74481c46c91d3d309679138153b5e8c9",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2e08fda0_d5fd6192",
+        "filename": "tvix/eval/docs/vm-loop.md",
+        "patchSetId": 9
+      },
+      "lineNbr": 221,
+      "author": {
+        "id": 1000066
+      },
+      "writtenOn": "2023-03-13T14:48:12Z",
+      "side": 1,
+      "message": "\u003e I think following the HTTP convention would lead us to something like VMRequest / VMResponse.\n\nThat would be a big improvement.",
+      "parentUuid": "c4805c79_2f2ee5c5",
       "revId": "b98fd5fd74481c46c91d3d309679138153b5e8c9",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
@@ -738,6 +792,30 @@
       "side": 1,
       "message": "That\u0027s good. How about s/single/same, so we get same-frame request and multi-frame request?",
       "parentUuid": "a89af6c5_9a78f66c",
+      "range": {
+        "startLine": 236,
+        "startChar": 36,
+        "endLine": 236,
+        "endChar": 50
+      },
+      "revId": "b98fd5fd74481c46c91d3d309679138153b5e8c9",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b28c5126_08a00945",
+        "filename": "tvix/eval/docs/vm-loop.md",
+        "patchSetId": 9
+      },
+      "lineNbr": 236,
+      "author": {
+        "id": 1000066
+      },
+      "writtenOn": "2023-03-13T14:48:12Z",
+      "side": 1,
+      "message": "Sounds great.",
+      "parentUuid": "bc5bf660_8ef269c6",
       "range": {
         "startLine": 236,
         "startChar": 36,
