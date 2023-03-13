@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6774bc05_bc831ac6",
+        "filename": "tvix/eval/src/observer.rs",
+        "patchSetId": 4
+      },
+      "lineNbr": 52,
+      "author": {
+        "id": 1000066
+      },
+      "writtenOn": "2023-03-13T14:34:11Z",
+      "side": 1,
+      "message": "Could you change this to `observe_enter_generator_frame()`?  And likewise for the other two.",
+      "revId": "13a038fc9f81a4d0a74603f35d3104d61114a418",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
