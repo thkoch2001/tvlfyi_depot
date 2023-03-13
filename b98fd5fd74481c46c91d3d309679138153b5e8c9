@@ -583,6 +583,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "2d055b6d_2ddd4569",
+        "filename": "tvix/eval/docs/vm-loop.md",
+        "patchSetId": 9
+      },
+      "lineNbr": 221,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2023-03-13T21:49:42Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "2e08fda0_d5fd6192",
+      "revId": "b98fd5fd74481c46c91d3d309679138153b5e8c9",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "fdd3fee1_6d818cfc",
@@ -816,6 +834,30 @@
       "side": 1,
       "message": "Sounds great.",
       "parentUuid": "bc5bf660_8ef269c6",
+      "range": {
+        "startLine": 236,
+        "startChar": 36,
+        "endLine": 236,
+        "endChar": 50
+      },
+      "revId": "b98fd5fd74481c46c91d3d309679138153b5e8c9",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f72aafd2_f885378b",
+        "filename": "tvix/eval/docs/vm-loop.md",
+        "patchSetId": 9
+      },
+      "lineNbr": 236,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2023-03-13T21:49:42Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b28c5126_08a00945",
       "range": {
         "startLine": 236,
         "startChar": 36,
