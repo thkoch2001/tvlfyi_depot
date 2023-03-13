@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8b79a2ee_ba544ced",
+        "filename": "tvix/eval/src/value/list.rs",
+        "patchSetId": 4
+      },
+      "lineNbr": 111,
+      "author": {
+        "id": 1000066
+      },
+      "writtenOn": "2023-03-13T14:43:10Z",
+      "side": 1,
+      "message": "I don\u0027t understand this.  Total order relations are antisymmetric: `a\u003d\u003db` iff `!(a\u003cb) \u0026\u0026 !(b\u003ca)`.  So if you have `\u003c` you also have `\u003d\u003d` and `\u003e`.",
+      "range": {
+        "startLine": 109,
+        "startChar": 4,
+        "endLine": 111,
+        "endChar": 22
+      },
+      "revId": "da57f2001211ab4bc9108e77f8f60cb2f8935ccc",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "40cc1b91_2e0fbf0c",
+        "filename": "tvix/eval/src/value/list.rs",
+        "patchSetId": 4
+      },
+      "lineNbr": 113,
+      "author": {
+        "id": 1000066
+      },
+      "writtenOn": "2023-03-13T14:43:10Z",
+      "side": 1,
+      "message": "Could you also mention the possibility of writing a sorting function in Nix source code or even directly in Tvix bytecode?  You can add a `TODO(amjoseph)` for the bytecode version, but it\u0027s much, much lower on my priority list than the `TODO`s mentioned in cl/8290.",
+      "revId": "da57f2001211ab4bc9108e77f8f60cb2f8935ccc",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
