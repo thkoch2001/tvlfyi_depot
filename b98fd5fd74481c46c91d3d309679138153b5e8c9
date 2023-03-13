@@ -425,6 +425,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "7d0df0f0_f12315f9",
+        "filename": "tvix/eval/docs/vm-loop.md",
+        "patchSetId": 9
+      },
+      "lineNbr": 197,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2023-03-13T21:50:04Z",
+      "side": 1,
+      "message": "Done in cl/8291, please approve that. I\u0027ll have to update the link to the type in this document after that is submitted.",
+      "parentUuid": "e35f4f53_6a1abce6",
+      "revId": "b98fd5fd74481c46c91d3d309679138153b5e8c9",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "f7c93ed5_3b5e396e",
         "filename": "tvix/eval/docs/vm-loop.md",
         "patchSetId": 9
