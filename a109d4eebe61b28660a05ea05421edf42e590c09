@@ -16,6 +16,24 @@
       "message": "Leaving an unresolved comment here to prevent this from being accidentally submitted. This can *not* be submitted without the rest of the generator chain, as the test would fail there.",
       "revId": "a109d4eebe61b28660a05ea05421edf42e590c09",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4c09e499_0741fbfd",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2023-03-13T20:15:07Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2e73afdc_72608de0",
+      "revId": "a109d4eebe61b28660a05ea05421edf42e590c09",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
