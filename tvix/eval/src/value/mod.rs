@@ -183,6 +183,7 @@ pub enum PointerEquality {
 }
 
 impl Value {
+    // TODO(amjoseph): de-asyncify this (when called directly by the VM)
     /// Deeply forces a value, traversing e.g. lists and attribute sets and forcing
     /// their contents, too.
     ///
@@ -240,6 +241,7 @@ impl Value {
         Ok(value)
     }
 
+    // TODO(amjoseph): de-asyncify this (when called directly by the VM)
     /// Coerce a `Value` to a string. See `CoercionKind` for a rundown of what
     /// input types are accepted under what circumstances.
     pub async fn coerce_to_string(self, co: GenCo, kind: CoercionKind) -> Result<Value, ErrorKind> {
@@ -344,6 +346,7 @@ impl Value {
         }
     }
 
+    // TODO(amjoseph): de-asyncify this (when called directly by the VM)
     /// Compare two Nix values for equality, forcing nested parts of the structure
     /// as needed.
     ///
@@ -560,6 +563,7 @@ impl Value {
         Box::pin(self.nix_cmp_ordering(other, co))
     }
 
+    // TODO(amjoseph): de-asyncify this (when called directly by the VM)
     /// Compare `self` against other using (fallible) Nix ordering semantics.
     ///
     /// Note that as this returns an `Option<Ordering>` it can not directly be
@@ -615,6 +619,7 @@ impl Value {
         }
     }
 
+    // TODO(amjoseph): de-asyncify this (when called directly by the VM)
     pub async fn force(self, co: GenCo) -> Result<Value, ErrorKind> {
         if let Value::Thunk(thunk) = self {
             return thunk.force(co).await;

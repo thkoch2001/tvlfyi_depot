@@ -991,6 +991,7 @@ impl<'o> VM<'o> {
     }
 }
 
+// TODO(amjoseph): de-asyncify this
 /// Resolve a dynamically bound identifier (through `with`) by looking
 /// for matching values in the with-stacks carried at runtime.
 async fn resolve_with(
@@ -1044,6 +1045,7 @@ async fn resolve_with(
     Err(ErrorKind::UnknownDynamicVariable(ident))
 }
 
+// TODO(amjoseph): de-asyncify this
 async fn add_values(co: GenCo, a: Value, b: Value) -> Result<Value, ErrorKind> {
     let result = match (a, b) {
         (Value::Path(p), v) => {
@@ -1073,6 +1075,7 @@ pub struct RuntimeResult {
     pub warnings: Vec<EvalWarning>,
 }
 
+// TODO(amjoseph): de-asyncify this
 /// Generator that retrieves the final value from the stack, and deep-forces it
 /// before returning.
 async fn final_deep_force(co: GenCo) -> Result<Value, ErrorKind> {
