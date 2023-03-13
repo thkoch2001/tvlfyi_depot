@@ -24,6 +24,30 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "3ecf31e0_ed55e4c5",
+        "filename": "tvix/eval/src/value/list.rs",
+        "patchSetId": 4
+      },
+      "lineNbr": 111,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2023-03-13T20:14:49Z",
+      "side": 1,
+      "message": "This is true, we could port the stdlib algorithm and use comparators in both combinations to detect equality (at the cost of making each sort step invoke *two* native frames :/).\n\nThis seems to be \"good enough\"(tm) for now, as in, sorting does not appear as a noticeable hotspot in any profiling of nixpkgs code (so far), so I think the effort is not worth it (until proven otherwise).",
+      "parentUuid": "8b79a2ee_ba544ced",
+      "range": {
+        "startLine": 109,
+        "startChar": 4,
+        "endLine": 111,
+        "endChar": 22
+      },
+      "revId": "da57f2001211ab4bc9108e77f8f60cb2f8935ccc",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "40cc1b91_2e0fbf0c",
@@ -37,6 +61,24 @@
       "writtenOn": "2023-03-13T14:43:10Z",
       "side": 1,
       "message": "Could you also mention the possibility of writing a sorting function in Nix source code or even directly in Tvix bytecode?  You can add a `TODO(amjoseph)` for the bytecode version, but it\u0027s much, much lower on my priority list than the `TODO`s mentioned in cl/8290.",
+      "revId": "da57f2001211ab4bc9108e77f8f60cb2f8935ccc",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9fd2bc48_c8d42ee5",
+        "filename": "tvix/eval/src/value/list.rs",
+        "patchSetId": 4
+      },
+      "lineNbr": 113,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2023-03-13T20:14:49Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "40cc1b91_2e0fbf0c",
       "revId": "da57f2001211ab4bc9108e77f8f60cb2f8935ccc",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
