@@ -339,21 +339,27 @@ mod derivation_builtins {
         // eval data structures.
         drv.validate(false).map_err(Error::InvalidDerivation)?;
 
-        let tmp_replacement_str =
-            drv.calculate_drv_replacement_str(|drv| known_paths.get_replacement_string(drv));
+        // Calculate the hash derivation modulo for the current derivation.
+        // This one is still intermediate (so not added to known_paths)
+        let hash_derivation_modulo_tmp =
+            drv.hash_derivation_modulo(|drv| known_paths.get_hash_derivation_modulo(drv));
 
-        drv.calculate_output_paths(&name, &tmp_replacement_str)
+        // Mutate the Derivation struct and set output paths
+        drv.calculate_output_paths(&name, &hash_derivation_modulo_tmp)
             .map_err(Error::InvalidDerivation)?;
-
-        let actual_replacement_str =
-            drv.calculate_drv_replacement_str(|drv| known_paths.get_replacement_string(drv));
 
         let derivation_path = drv
             .calculate_derivation_path(&name)
             .map_err(Error::InvalidDerivation)?;
 
-        known_paths
-            .add_replacement_string(derivation_path.to_absolute_path(), &actual_replacement_str);
+        // recompute the hash derivation modulo and add to known_paths
+        let hash_derivation_modulo_final =
+            drv.hash_derivation_modulo(|drv| known_paths.get_hash_derivation_modulo(drv));
+
+        known_paths.add_hash_derivation_modulo(
+            derivation_path.to_absolute_path(),
+            &hash_derivation_modulo_final,
+        );
 
         // mark all the new paths as known
         let output_names: Vec<String> = drv.outputs.keys().map(Clone::clone).collect();
