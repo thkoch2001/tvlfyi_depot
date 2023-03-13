@@ -35,6 +35,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "f1ff84e3_694f2296",
+        "filename": "tvix/eval/builtin-macros/src/lib.rs",
+        "patchSetId": 70
+      },
+      "lineNbr": 132,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2023-03-13T20:14:49Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3fc71be6_13f2e6fb",
+      "revId": "6d269b2ef08f5f82b8573f9a31a40cfeec2c1659",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "e3370259_42db2788",
@@ -48,6 +66,24 @@
       "writtenOn": "2023-03-13T14:30:26Z",
       "side": 1,
       "message": "I wish the comment for this function explained the transformation it does to the function\u0027s type.",
+      "revId": "6d269b2ef08f5f82b8573f9a31a40cfeec2c1659",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3a724539_3268ac70",
+        "filename": "tvix/eval/builtin-macros/src/lib.rs",
+        "patchSetId": 70
+      },
+      "lineNbr": 138,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2023-03-13T20:14:49Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e3370259_42db2788",
       "revId": "6d269b2ef08f5f82b8573f9a31a40cfeec2c1659",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
@@ -75,6 +111,30 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "fd824ae2_b8f16f68",
+        "filename": "tvix/eval/builtin-macros/src/lib.rs",
+        "patchSetId": 70
+      },
+      "lineNbr": 298,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2023-03-13T20:14:49Z",
+      "side": 1,
+      "message": "This is only used in //tvix/cli at the moment, but I\u0027m making a TODO to add a test in //tvix/eval.",
+      "parentUuid": "5c230bc3_9cc09f86",
+      "range": {
+        "startLine": 289,
+        "startChar": 16,
+        "endLine": 298,
+        "endChar": 24
+      },
+      "revId": "6d269b2ef08f5f82b8573f9a31a40cfeec2c1659",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "da179c86_3f9936fc",
@@ -88,6 +148,24 @@
       "writtenOn": "2023-03-13T14:30:26Z",
       "side": 1,
       "message": "I have a branch that simply leaves the generator on the stack instead of doing this pop-it-and-then-push-it-back dance.  I\u0027ll submit it separately.",
+      "revId": "6d269b2ef08f5f82b8573f9a31a40cfeec2c1659",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4e9a0163_6b1d9f9c",
+        "filename": "tvix/eval/src/vm/generators.rs",
+        "patchSetId": 70
+      },
+      "lineNbr": 216,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2023-03-13T20:14:49Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "da179c86_3f9936fc",
       "revId": "6d269b2ef08f5f82b8573f9a31a40cfeec2c1659",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
@@ -109,6 +187,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "b67db350_f4beba23",
+        "filename": "tvix/eval/src/vm/mod.rs",
+        "patchSetId": 70
+      },
+      "lineNbr": 886,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2023-03-13T20:14:49Z",
+      "side": 1,
+      "message": "cl/8256",
+      "parentUuid": "83f10455_0190a6ae",
+      "revId": "6d269b2ef08f5f82b8573f9a31a40cfeec2c1659",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "291f8a72_06e7bcd6",
@@ -122,6 +218,24 @@
       "writtenOn": "2023-03-13T14:30:26Z",
       "side": 1,
       "message": "Won\u0027t this fail if both `a` and `b` are unforced thunks?\n\nI wrote a test case for that and it passes, but I can\u0027t figure out why.  Where is the force happening?",
+      "revId": "6d269b2ef08f5f82b8573f9a31a40cfeec2c1659",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ac487400_8f0838a5",
+        "filename": "tvix/eval/src/vm/mod.rs",
+        "patchSetId": 70
+      },
+      "lineNbr": 1063,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2023-03-13T20:14:49Z",
+      "side": 1,
+      "message": "The force is happening in what the compiler emits for the operations that make use of this macro, see e.g. what `1 + 2` compiles to:\n\n\u003d\u003d\u003d compiled thunk @ 0x17b8e0 (5 ops) \u003d\u003d\u003d\n0x0      1  OpConstant(1@0)\n0x1      |  OpForce\n0x2      |  OpConstant(2@1)\n0x3      |  OpForce\n0x4      |  OpAdd\n\nThe OpForce of each argument forces before we even make it to OpAdd.",
+      "parentUuid": "291f8a72_06e7bcd6",
       "revId": "6d269b2ef08f5f82b8573f9a31a40cfeec2c1659",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
