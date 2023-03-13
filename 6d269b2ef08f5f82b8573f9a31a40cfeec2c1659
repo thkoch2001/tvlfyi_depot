@@ -1,0 +1,129 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9c522788_96e1f4f6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 70
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000066
+      },
+      "writtenOn": "2023-03-13T14:30:26Z",
+      "side": 1,
+      "message": "`\u0026mut VM` is dead!  Long live `GenCo`!  Or something.\n\nI shed a tear for our beloved clean simple interpreter; it was much beloved.\n\nBut seriously, `async` builtins are the only way forward until Rust gets `musttail`.\n\nMy objections to the asyncification of non-builtin stuff can be dealt with in follow-up CLs (see also cl/8288, cl/8289, cl/8290).  The current situation where everybody is working off of this ridiculously-long, ridiculously-old unmerged branch needs to end.",
+      "revId": "6d269b2ef08f5f82b8573f9a31a40cfeec2c1659",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3fc71be6_13f2e6fb",
+        "filename": "tvix/eval/builtin-macros/src/lib.rs",
+        "patchSetId": 70
+      },
+      "lineNbr": 132,
+      "author": {
+        "id": 1000066
+      },
+      "writtenOn": "2023-03-13T14:30:26Z",
+      "side": 1,
+      "message": "I think the `vm: \u0026mut VM` shouldn\u0027t be there...",
+      "revId": "6d269b2ef08f5f82b8573f9a31a40cfeec2c1659",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e3370259_42db2788",
+        "filename": "tvix/eval/builtin-macros/src/lib.rs",
+        "patchSetId": 70
+      },
+      "lineNbr": 138,
+      "author": {
+        "id": 1000066
+      },
+      "writtenOn": "2023-03-13T14:30:26Z",
+      "side": 1,
+      "message": "I wish the comment for this function explained the transformation it does to the function\u0027s type.",
+      "revId": "6d269b2ef08f5f82b8573f9a31a40cfeec2c1659",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5c230bc3_9cc09f86",
+        "filename": "tvix/eval/builtin-macros/src/lib.rs",
+        "patchSetId": 70
+      },
+      "lineNbr": 298,
+      "author": {
+        "id": 1000066
+      },
+      "writtenOn": "2023-03-13T14:30:26Z",
+      "side": 1,
+      "message": "I think this entire branch is deadcode.  I tried inserting a `panic!()` here and the tests still passed.",
+      "range": {
+        "startLine": 289,
+        "startChar": 16,
+        "endLine": 298,
+        "endChar": 24
+      },
+      "revId": "6d269b2ef08f5f82b8573f9a31a40cfeec2c1659",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "da179c86_3f9936fc",
+        "filename": "tvix/eval/src/vm/generators.rs",
+        "patchSetId": 70
+      },
+      "lineNbr": 216,
+      "author": {
+        "id": 1000066
+      },
+      "writtenOn": "2023-03-13T14:30:26Z",
+      "side": 1,
+      "message": "I have a branch that simply leaves the generator on the stack instead of doing this pop-it-and-then-push-it-back dance.  I\u0027ll submit it separately.",
+      "revId": "6d269b2ef08f5f82b8573f9a31a40cfeec2c1659",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "83f10455_0190a6ae",
+        "filename": "tvix/eval/src/vm/mod.rs",
+        "patchSetId": 70
+      },
+      "lineNbr": 886,
+      "author": {
+        "id": 1000066
+      },
+      "writtenOn": "2023-03-13T14:30:26Z",
+      "side": 1,
+      "message": "I\u0027m not sure this is really a *tail* call.  We have two stacks now (`VM::stack` and `VM::frames`) and this isn\u0027t a \"tail call\" for `VM::frames` (it increases the depth of `VM::frames` in the `Value::Closure()` branch).",
+      "revId": "6d269b2ef08f5f82b8573f9a31a40cfeec2c1659",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "291f8a72_06e7bcd6",
+        "filename": "tvix/eval/src/vm/mod.rs",
+        "patchSetId": 70
+      },
+      "lineNbr": 1063,
+      "author": {
+        "id": 1000066
+      },
+      "writtenOn": "2023-03-13T14:30:26Z",
+      "side": 1,
+      "message": "Won\u0027t this fail if both `a` and `b` are unforced thunks?\n\nI wrote a test case for that and it passes, but I can\u0027t figure out why.  Where is the force happening?",
+      "revId": "6d269b2ef08f5f82b8573f9a31a40cfeec2c1659",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
