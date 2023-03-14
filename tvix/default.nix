@@ -75,16 +75,18 @@ in
     inherit cargoDeps;
     name = "tvix-rust-docs";
     src = depot.third_party.gitignoreSource ./.;
+    PROTO_ROOT = depot.tvix.store.protos;
 
     nativeBuildInputs = with pkgs; [
       cargo
       rust-analyzer
       rustPlatform.cargoSetupHook
       rustc
+      protobuf
     ];
 
     buildPhase = ''
-      cargo doc --document-private-items -p tvix-eval -p tvix-serde -p nix-compat
+      cargo doc --document-private-items
       mv target/doc $out
     '';
   };
