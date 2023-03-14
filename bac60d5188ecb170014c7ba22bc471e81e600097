@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5dad5ef8_294f4b8d",
+        "filename": "tvix/default.nix",
+        "patchSetId": 2
+      },
+      "lineNbr": 73,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-03-14T21:21:47Z",
+      "side": 1,
+      "message": "cl/8306 fixes this for all docs, PTAL.",
+      "revId": "bac60d5188ecb170014c7ba22bc471e81e600097",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
