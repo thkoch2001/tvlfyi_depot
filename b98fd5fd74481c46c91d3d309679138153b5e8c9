@@ -441,6 +441,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "5572f1f2_93a07848",
+        "filename": "tvix/eval/docs/vm-loop.md",
+        "patchSetId": 9
+      },
+      "lineNbr": 197,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2023-03-14T09:22:30Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7d0df0f0_f12315f9",
+      "revId": "b98fd5fd74481c46c91d3d309679138153b5e8c9",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "f7c93ed5_3b5e396e",
