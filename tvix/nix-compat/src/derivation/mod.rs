@@ -1,5 +1,5 @@
 use crate::{
-    nixhash::NixHash,
+    nixhash::{HashAlgo, NixHash, NixHashWithMode},
     store_path::{self, StorePath},
 };
 use serde::{Deserialize, Serialize};
@@ -18,7 +18,7 @@ mod tests;
 
 // Public API of the crate.
 pub use errors::{DerivationError, OutputError};
-pub use output::{Hash, Output};
+pub use output::Output;
 pub use utils::path_with_references;
 
 #[derive(Clone, Debug, Default, Eq, PartialEq, Serialize, Deserialize)]
@@ -75,18 +75,17 @@ impl Derivation {
         buffer
     }
 
-    /// Returns the fixed output path and its hash
-    // (if the Derivation is fixed output),
-    /// or None if there is no fixed output.
+    /// Returns the fixed output path and its [NixHashWithMode]
+    /// (if the Derivation is fixed output), or None if there is no fixed output.
     /// This takes some shortcuts in case more than one output exists, as this
     /// can't be a valid fixed-output Derivation.
-    pub fn get_fixed_output(&self) -> Option<(&String, &Hash)> {
+    pub fn get_fixed_output(&self) -> Option<(&String, &NixHashWithMode)> {
         if self.outputs.len() != 1 {
             return None;
         }
 
         if let Some(out_output) = self.outputs.get("out") {
-            if let Some(out_output_hash) = &out_output.hash {
+            if let Some(out_output_hash) = &out_output.hash_with_mode {
                 return Some((&out_output.path, out_output_hash));
             }
             // There has to be a hash, otherwise it would not be FOD
@@ -160,8 +159,6 @@ impl Derivation {
     ///    `fixed:out:${algo}:${digest}:${fodPath}` string is hashed instead of
     ///    the A-Term.
     ///
-    /// TODO: what's the representation of ${digest}?
-    ///
     /// If the derivation is not a fixed derivation, it's up to the caller of
     /// this function to provide a lookup function to lookup these calculation
     /// results of parent derivations at `fn_get_hash_derivation_modulo` (by
@@ -175,8 +172,9 @@ impl Derivation {
             // Fixed-output derivations return a fixed hash
             Some((fixed_output_path, fixed_output_hash)) => {
                 hasher.update(format!(
-                    "fixed:out:{}:{}:{}",
-                    &fixed_output_hash.algo, &fixed_output_hash.digest, fixed_output_path,
+                    "fixed:out:{}:{}",
+                    fixed_output_hash.to_nix_hash_string(),
+                    fixed_output_path
                 ));
                 hasher.finalize()
             }
@@ -280,18 +278,26 @@ impl Derivation {
                 let s = {
                     let mut s = String::new();
                     // Fixed-output derivation.
-                    // There's two different hashing strategies in place, depending on the value of hash.algo.
+                    // There's two different hashing strategies in place,
+                    // depending on whether the hash is recursive AND sha256 or anything else.
                     // This code is _weird_ but it is what Nix is doing. See:
                     // https://github.com/NixOS/nix/blob/1385b2007804c8a0370f2a6555045a00e34b07c7/src/libstore/store-api.cc#L178-L196
-                    if fixed_output_hash.algo == "r:sha256" {
-                        s.push_str(&format!(
-                            "source:sha256:{}",
-                            fixed_output_hash.digest, // lowerhex
-                        ));
+                    if let NixHashWithMode::Recursive(recursive_hash) = fixed_output_hash {
+                        if recursive_hash.algo == HashAlgo::Sha256 {
+                            s.push_str(&format!("source:{}", recursive_hash.to_nix_hash_string()));
+                        } else {
+                            // This is similar to the FOD case, with an empty fixed_output_path.
+                            s.push_str(&format!(
+                                "output:out:{}",
+                                derivation_or_fod_hash.to_nix_hash_string(),
+                            ));
+                        }
                     } else {
-                        s.push_str("output:out:");
-                        // This is drv_replacement for FOD, with an empty fixed_output_path.
-                        s.push_str(&derivation_or_fod_hash.to_nix_hash_string());
+                        // This is similar to the FOD case, with an empty fixed_output_path.
+                        s.push_str(&format!(
+                            "output:out:{}",
+                            derivation_or_fod_hash.to_nix_hash_string(),
+                        ));
                     }
                     s.push_str(&format!(":{}:{}", store_path::STORE_DIR, name));
                     s
@@ -303,7 +309,7 @@ impl Derivation {
                     "out".to_string(),
                     Output {
                         path: abs_store_path.clone(),
-                        hash: Some(fixed_output_hash.clone()),
+                        hash_with_mode: Some(fixed_output_hash.clone()),
                     },
                 );
                 self.environment.insert("out".to_string(), abs_store_path);
