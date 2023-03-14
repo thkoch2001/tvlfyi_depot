@@ -34,11 +34,6 @@ in
         PROTO_ROOT = depot.tvix.store.protos;
         nativeBuildInputs = protobufDep prev;
       };
-
-      tvix-store-bin = prev: {
-        PROTO_ROOT = depot.tvix.store.protos;
-        nativeBuildInputs = protobufDep prev;
-      };
     };
   };
 
