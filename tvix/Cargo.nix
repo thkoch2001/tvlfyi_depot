@@ -3611,6 +3611,10 @@ rec {
             features = [ "derive" ];
           }
           {
+            name = "serde_json";
+            packageId = "serde_json";
+          }
+          {
             name = "sha2";
             packageId = "sha2 0.10.6";
           }
@@ -7626,10 +7630,6 @@ rec {
             packageId = "dirs";
           }
           {
-            name = "lazy_static";
-            packageId = "lazy_static";
-          }
-          {
             name = "nix-compat";
             packageId = "nix-compat";
           }
@@ -7638,20 +7638,12 @@ rec {
             packageId = "rustyline";
           }
           {
-            name = "serde_json";
-            packageId = "serde_json";
-          }
-          {
             name = "smol_str";
             packageId = "smol_str";
           }
           {
             name = "ssri";
             packageId = "ssri";
-          }
-          {
-            name = "tempfile";
-            packageId = "tempfile";
           }
           {
             name = "thiserror";
