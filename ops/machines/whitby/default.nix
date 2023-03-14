@@ -44,6 +44,7 @@ in
     (mod "www/status.tvl.su.nix")
     (mod "www/tazj.in.nix")
     (mod "www/todo.tvl.fyi.nix")
+    (mod "www/tvix.dev.nix")
     (mod "www/tvixbolt.tvl.su.nix")
     (mod "www/tvl.fyi.nix")
     (mod "www/tvl.su.nix")
