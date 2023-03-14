@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "14f09894_5fd443d3",
+        "filename": "tvix/nix-compat/src/nixhash.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 66,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2023-03-14T20:13:10Z",
+      "side": 1,
+      "message": "I don\u0027t understand this comment. Serde is only responsible for giving you a view of the JSON structure here, which it should do perfectly.",
+      "range": {
+        "startLine": 63,
+        "startChar": 0,
+        "endLine": 66,
+        "endChar": 0
+      },
+      "revId": "1d574b62b5e7bd3ec3934ed286a160ce728f5a2c",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
