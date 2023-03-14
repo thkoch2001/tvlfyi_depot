@@ -22,6 +22,30 @@
       },
       "revId": "1d574b62b5e7bd3ec3934ed286a160ce728f5a2c",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fa2ff19c_bf742c50",
+        "filename": "tvix/nix-compat/src/nixhash.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 66,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-03-14T20:52:33Z",
+      "side": 1,
+      "message": "I initially made a mistake while implementing Deserialize, and mistakenly used nixbase32.decode, instead of data_encoding::HEXLOWER.decode, and instead of getting presented a Decoding error, serde simply swallowed the whole hash_with_mode attribute (made it a None), which was a nightmare to find.\n\nAs soon as `hash` and `hashAlgo` fields are set in the JSON structure / serde data model, I\u0027d expect it to return an error to me if these fields have wrong values, which it didn\u0027t.\n\nThis TODO is about making sure it does.",
+      "parentUuid": "14f09894_5fd443d3",
+      "range": {
+        "startLine": 63,
+        "startChar": 0,
+        "endLine": 66,
+        "endChar": 0
+      },
+      "revId": "1d574b62b5e7bd3ec3934ed286a160ce728f5a2c",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
