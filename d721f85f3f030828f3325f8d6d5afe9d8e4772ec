@@ -52,6 +52,24 @@
       "parentUuid": "b1ca5e6a_c903fdf0",
       "revId": "d721f85f3f030828f3325f8d6d5afe9d8e4772ec",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ef372902_ec0f6ce9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-03-14T11:14:31Z",
+      "side": 1,
+      "message": "I used this \"replacement string\" terminology before this PR, when this was still using the lower hex representation of the digest, and then, when reading the Nix source again, realized it would make more sense to stay a bit closer to the way Nix names it.\n\nI did another pass, called this `derivation_or_fod_hash`, and updated the docs a bit more. PTAL.",
+      "parentUuid": "a1aaca5f_b017499d",
+      "revId": "d721f85f3f030828f3325f8d6d5afe9d8e4772ec",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
