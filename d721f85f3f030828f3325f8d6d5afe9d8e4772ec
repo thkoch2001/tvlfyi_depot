@@ -16,6 +16,24 @@
       "message": "I\u0027m not sure if we should retain the term \"modulo\" from cppnix here, this seems misnamed to me. Maybe something more straightforward like \"drv_hash_with_fod_replacements\"?",
       "revId": "d721f85f3f030828f3325f8d6d5afe9d8e4772ec",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b1ca5e6a_c903fdf0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-03-14T10:30:33Z",
+      "side": 1,
+      "message": "It does do some replacements in both cases. Modulo sure is badly named, but that\u0027s how it\u0027s called in Nix 🤷‍♂️. I was thinking to rename it derivation_modulo_{hash,digest} (have the type at the end) at least.",
+      "parentUuid": "07489085_52f9f431",
+      "revId": "d721f85f3f030828f3325f8d6d5afe9d8e4772ec",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
