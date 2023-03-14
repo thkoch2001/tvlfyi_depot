@@ -18,6 +18,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "264d837e_b2301ebc",
+        "filename": "tvix/website/landing-en.md",
+        "patchSetId": 2
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2023-03-14T21:52:41Z",
+      "side": 1,
+      "message": "I think they don\u0027t serve the same purpose. This website should surface user-facing projects, which basically are only tvix-eval and -serde right now. I think we should maintain it separately, it\u0027s very light overhead.",
+      "parentUuid": "8eb82ee9_36132f34",
+      "revId": "1f1e8f781623784de1cf9699308ec2005592212a",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "d8cd30e6_75ed6594",
@@ -31,6 +49,24 @@
       "writtenOn": "2023-03-14T20:58:26Z",
       "side": 1,
       "message": "nix-compat is an example of a missing crate, folks seem to already be using it (nixbase32 parsing).",
+      "revId": "1f1e8f781623784de1cf9699308ec2005592212a",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "56973115_cd94ccde",
+        "filename": "tvix/website/landing-en.md",
+        "patchSetId": 2
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2023-03-14T21:52:41Z",
+      "side": 1,
+      "message": "That\u0027s probably a more useful thing to list as a user-facing crate in the current state than store, I\u0027ll make a change",
+      "parentUuid": "d8cd30e6_75ed6594",
       "revId": "1f1e8f781623784de1cf9699308ec2005592212a",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
