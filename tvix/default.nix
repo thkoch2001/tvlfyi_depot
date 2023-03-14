@@ -4,6 +4,16 @@
 let
   # crate override for crates that need protobuf
   protobufDep = prev: (prev.nativeBuildInputs or [ ]) ++ [ pkgs.protobuf ];
+
+  # Cargo dependencies to be used with nixpkgs rustPlatform functions.
+  cargoDeps = pkgs.rustPlatform.importCargoLock {
+    lockFile = ./Cargo.lock;
+    outputHashes = {
+      "test-generator-0.3.0" = "08brp3qqa55hijc7xby3lam2cc84hvx1zzfqv6lj7smlczh8k32y";
+      "tonic-mock-0.1.0" = "0lwa03hpp0mxa6aa1zv5w68k61y4hccfm0q2ykyq392fwal8vb50";
+      "wu-manber-0.1.0" = "02byhfiw41mlgr1c43n2iq6jw5sbyn8l1acv5v71a07h5l18q0cy";
+    };
+  };
 in
 {
   # Load the crate2nix crate tree.
@@ -58,6 +68,27 @@ in
     ];
   };
 
+  # Build the Rust documentation for publishing on docs.tvix.dev. Currently only
+  # some crates are documented, as the crates that depend on Protobuf cause
+  # build failures.
+  rust-docs = pkgs.stdenv.mkDerivation {
+    inherit cargoDeps;
+    name = "tvix-rust-docs";
+    src = depot.third_party.gitignoreSource ./.;
+
+    nativeBuildInputs = with pkgs; [
+      cargo
+      rust-analyzer
+      rustPlatform.cargoSetupHook
+      rustc
+    ];
+
+    buildPhase = ''
+      cargo doc --document-private-items -p tvix-eval -p tvix-serde -p nix-compat
+      mv target/doc $out
+    '';
+  };
+
   export = (pkgs.runCommandLocal "export-tvix" { } ''
     echo "carrier for repo export extra-step" > $out
   '').overrideAttrs (_: {
@@ -68,5 +99,5 @@ in
     };
   });
 
-  meta.ci.targets = [ "shell" "export" ];
+  meta.ci.targets = [ "shell" "export" "rust-docs" ];
 }
