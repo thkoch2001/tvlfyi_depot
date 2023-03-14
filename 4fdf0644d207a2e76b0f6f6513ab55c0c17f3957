@@ -1,0 +1,67 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fe95226f_c1b149ec",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2023-03-14T11:48:54Z",
+      "side": 1,
+      "message": "Other than the naming, LGTM.",
+      "revId": "4fdf0644d207a2e76b0f6f6513ab55c0c17f3957",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "13b86c60_420ad9cf",
+        "filename": "tvix/cli/src/known_paths.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 74,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2023-03-14T11:48:54Z",
+      "side": 1,
+      "message": "here, too",
+      "range": {
+        "startLine": 74,
+        "startChar": 4,
+        "endLine": 74,
+        "endChar": 27
+      },
+      "revId": "4fdf0644d207a2e76b0f6f6513ab55c0c17f3957",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "988b1f28_6ed8a841",
+        "filename": "tvix/nix-compat/src/derivation/mod.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 189,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2023-03-14T11:48:54Z",
+      "side": 1,
+      "message": "here and below some mentions of the old name",
+      "range": {
+        "startLine": 189,
+        "startChar": 42,
+        "endLine": 189,
+        "endChar": 64
+      },
+      "revId": "4fdf0644d207a2e76b0f6f6513ab55c0c17f3957",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
