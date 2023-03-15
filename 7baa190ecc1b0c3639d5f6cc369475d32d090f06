@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5cbdb539_f8578c47",
+        "filename": "tvix/nix-compat/src/derivation/mod.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 168,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-03-15T12:28:07Z",
+      "side": 1,
+      "message": "Once the tests succeed - is there a more concise way to do that (other than moving it into a helper function and cheating by returning None in all other cases)",
+      "revId": "7baa190ecc1b0c3639d5f6cc369475d32d090f06",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
