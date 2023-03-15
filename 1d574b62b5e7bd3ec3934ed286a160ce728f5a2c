@@ -70,6 +70,30 @@
       },
       "revId": "1d574b62b5e7bd3ec3934ed286a160ce728f5a2c",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "46b01887_d57cd8d5",
+        "filename": "tvix/nix-compat/src/nixhash.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 66,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-03-15T20:38:05Z",
+      "side": 1,
+      "message": "This might be https://github.com/serde-rs/json/issues/644#issuecomment-606333160 - see the Rust playground at https://play.rust-lang.org/?version\u003dstable\u0026mode\u003ddebug\u0026edition\u003d2018\u0026gist\u003ddbe5c4724844ad4a652ec334b7b4b3c7 .",
+      "parentUuid": "25aa5766_86d008c3",
+      "range": {
+        "startLine": 63,
+        "startChar": 0,
+        "endLine": 66,
+        "endChar": 0
+      },
+      "revId": "1d574b62b5e7bd3ec3934ed286a160ce728f5a2c",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
