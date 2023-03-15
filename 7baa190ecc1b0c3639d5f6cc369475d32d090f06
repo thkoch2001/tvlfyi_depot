@@ -16,6 +16,24 @@
       "message": "Once the tests succeed - is there a more concise way to do that (other than moving it into a helper function and cheating by returning None in all other cases)",
       "revId": "7baa190ecc1b0c3639d5f6cc369475d32d090f06",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ba1dd366_597e8ccf",
+        "filename": "tvix/nix-compat/src/derivation/mod.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 168,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2023-03-15T12:39:23Z",
+      "side": 1,
+      "message": "If you\u0027re in a function that returns an option, you can use `?` on options. Maybe that helps?",
+      "parentUuid": "5cbdb539_f8578c47",
+      "revId": "7baa190ecc1b0c3639d5f6cc369475d32d090f06",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
