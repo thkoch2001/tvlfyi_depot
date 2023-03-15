@@ -34,6 +34,24 @@
       "parentUuid": "5cbdb539_f8578c47",
       "revId": "7baa190ecc1b0c3639d5f6cc369475d32d090f06",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2ab9ca41_103e1208",
+        "filename": "tvix/nix-compat/src/derivation/mod.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 168,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-03-15T13:52:17Z",
+      "side": 1,
+      "message": "Yeah, that\u0027ll require moving this to a helper funtion. Which is fine, I guess. I did that now, but the logic error still remains.",
+      "parentUuid": "ba1dd366_597e8ccf",
+      "revId": "7baa190ecc1b0c3639d5f6cc369475d32d090f06",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
