@@ -76,24 +76,6 @@ impl Derivation {
         buffer
     }
 
-    /// Returns the fixed output path and its [NixHashWithMode]
-    /// (if the Derivation is fixed output), or None if there is no fixed output.
-    /// This takes some shortcuts in case more than one output exists, as this
-    /// can't be a valid fixed-output Derivation.
-    pub fn get_fixed_output(&self) -> Option<(&String, &NixHashWithMode)> {
-        if self.outputs.len() != 1 {
-            return None;
-        }
-
-        if let Some(out_output) = self.outputs.get("out") {
-            if let Some(out_output_hash) = &out_output.hash_with_mode {
-                return Some((&out_output.path, out_output_hash));
-            }
-            // There has to be a hash, otherwise it would not be FOD
-        }
-        None
-    }
-
     /// Returns the drv path of a Derivation struct.
     ///
     /// The drv path is calculated like this:
@@ -168,50 +150,63 @@ impl Derivation {
     where
         F: Fn(&str) -> NixHash,
     {
-        let mut hasher = Sha256::new();
-        let digest = match self.get_fixed_output() {
-            // Fixed-output derivations return a fixed hash
-            Some((fixed_output_path, fixed_output_hash)) => {
-                hasher.update(format!(
-                    "fixed:out:{}:{}",
-                    fixed_output_hash.to_nix_hash_string(),
-                    fixed_output_path
-                ));
-                hasher.finalize()
-            }
-            // Non-Fixed-output derivations return a hash of the ATerm notation, but with all
-            // input_derivation paths replaced by a recursive call to this function.
-            // We use fn_get_derivation_or_fod_hash here, so callers can precompute this.
-            None => {
-                // This is a new map from derivation_or_fod_hash.digest (as lowerhex)
-                // to list of output names
-                let mut replaced_input_derivations: BTreeMap<String, BTreeSet<String>> =
-                    BTreeMap::new();
-
-                // For each input_derivation, look up the
-                // derivation_or_fod_hash, and replace the derivation path with it's HEXLOWER
-                // digest.
-                // This is not the [NixHash::to_nix_hash_string], but without the sha256: prefix).
-                for (drv_path, output_names) in &self.input_derivations {
-                    replaced_input_derivations.insert(
-                        data_encoding::HEXLOWER
-                            .encode(&fn_get_derivation_or_fod_hash(drv_path).digest),
-                        output_names.clone(),
-                    );
+        // Fixed-output derivations return a fixed hash
+        let fod_digest = if self.outputs.len() == 1 {
+            if let Some(out_output) = self.outputs.get("out") {
+                if let Some(out_hash) = &out_output.hash_with_mode {
+                    match out_hash {
+                        NixHashWithMode::Flat(h) | NixHashWithMode::Recursive(h) => {
+                            let mut hasher = Sha256::new();
+                            hasher.update(format!(
+                                "fixed:out:{}:{}",
+                                h.to_nix_hash_string(),
+                                out_output.path
+                            ));
+                            Some(hasher.finalize().to_vec())
+                        }
+                    }
+                } else {
+                    None
                 }
-
-                // construct a new derivation struct with these replaced input derivation strings
-                let replaced_derivation = Derivation {
-                    input_derivations: replaced_input_derivations,
-                    ..self.clone()
-                };
-
-                // write the ATerm of that to the hash function
-                hasher.update(replaced_derivation.to_aterm_string());
-
-                hasher.finalize()
+            } else {
+                None
             }
+        } else {
+            None
         };
+
+        // Non-Fixed-output derivations return a hash of the ATerm notation, but with all
+        // input_derivation paths replaced by a recursive call to this function.
+        // We use fn_get_derivation_or_fod_hash here, so callers can precompute this.
+        let digest = fod_digest.unwrap_or({
+            // This is a new map from derivation_or_fod_hash.digest (as lowerhex)
+            // to list of output names
+            let mut replaced_input_derivations: BTreeMap<String, BTreeSet<String>> =
+                BTreeMap::new();
+
+            // For each input_derivation, look up the
+            // derivation_or_fod_hash, and replace the derivation path with it's HEXLOWER
+            // digest.
+            // This is not the [NixHash::to_nix_hash_string], but without the sha256: prefix).
+            for (drv_path, output_names) in &self.input_derivations {
+                replaced_input_derivations.insert(
+                    data_encoding::HEXLOWER.encode(&fn_get_derivation_or_fod_hash(drv_path).digest),
+                    output_names.clone(),
+                );
+            }
+
+            // construct a new derivation struct with these replaced input derivation strings
+            let replaced_derivation = Derivation {
+                input_derivations: replaced_input_derivations,
+                ..self.clone()
+            };
+
+            // write the ATerm of that to the hash function
+            let mut hasher = Sha256::new();
+            hasher.update(replaced_derivation.to_aterm_string());
+
+            hasher.finalize().to_vec()
+        });
         NixHash::new(crate::nixhash::HashAlgo::Sha256, digest.to_vec())
     }
 
