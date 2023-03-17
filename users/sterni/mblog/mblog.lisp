@@ -1,5 +1,5 @@
 ;; SPDX-License-Identifier: GPL-3.0-only
-;; SPDX-FileCopyrightText: Copyright (C) 2022 by sterni
+;; SPDX-FileCopyrightText: Copyright (C) 2022-2023 by sterni
 ;; SPDX-FileCopyrightText: Copyright (C) 2006-2010 by Walter C. Pelissero
 
 (in-package :mblog)
@@ -26,12 +26,10 @@
                            :if-does-not-exist :create)
      ,@body))
 
-(defvar *copy-buffer-size* 4096)
-
 (defun redirect-stream (in out)
   "Consume input stream IN and write all its content to output stream OUT.
   The streams' element types need to match."
-  (let ((buf (make-array *copy-buffer-size* :element-type (stream-element-type in))))
+  (let ((buf (make-array config:*general-buffer-size* :element-type (stream-element-type in))))
     (loop for pos = (read-sequence buf in)
           while (> pos 0)
           do (write-sequence buf out :end pos))))

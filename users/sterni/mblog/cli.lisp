@@ -1,5 +1,5 @@
 ;; SPDX-License-Identifier: GPL-3.0-only
-;; SPDX-FileCopyrightText: Copyright (C) 2022 by sterni
+;; SPDX-FileCopyrightText: Copyright (C) 2022-2023 by sterni
 
 (in-package :cli)
 (declaim (optimize (safety 3)))
@@ -49,6 +49,7 @@
 
 (defun main ()
   "Dispatch to correct main function based on arguments and UIOP:ARGV0."
+  (config:init-from-env)
   (multiple-value-bind (flags args)
       (partition-by (lambda (x) (starts-with #\- x))
                     (uiop:command-line-arguments))
