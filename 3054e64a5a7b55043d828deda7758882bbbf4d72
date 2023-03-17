@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "825d75e7_fdee4e7f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000017
+      },
+      "writtenOn": "2023-03-17T19:05:51Z",
+      "side": 1,
+      "message": "This fixes the issue that I\u0027ve shown flokli with my string coercion example. The output paths still differ in some way but that is probably another issue.",
+      "revId": "3054e64a5a7b55043d828deda7758882bbbf4d72",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
