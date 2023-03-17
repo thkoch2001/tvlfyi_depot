@@ -2,8 +2,9 @@
 #+HTML_HEAD: <title>griffin smith</title>
 #+HTML_HEAD: <link rel="stylesheet" href="./main.css">
 
-my name is griffin ward smith (aka grfn, glittershark, gws) and i'm a software
-engineer and musician
+my name is griffin ward smith (they/them)  and i'm a software engineer and musician.
+
+you might know me from elsewhere as grfn, glittershark, or gws
 
 * code
 
