@@ -87,7 +87,6 @@ let
       direnv
       dockerfile-mode
       doom-themes
-      eglot
       elisp-slime-nav
       elixir-mode
       elm-mode
@@ -145,7 +144,11 @@ let
       which-key
       yaml-mode
       yasnippet
-    ]));
+    ]) ++
+
+    [
+      epkgs.eglot # from elpa devel
+    ]);
 
   loadPath = concatStringsSep ":" [
     ./.emacs.d/wpc
