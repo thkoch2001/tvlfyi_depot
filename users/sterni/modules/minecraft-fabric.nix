@@ -54,9 +54,9 @@ let
   fabricInstallerJar =
     fetchJar rec {
       pname = "fabric-installer";
-      version = "0.11.0";
+      version = "0.11.2";
       url = "https://maven.fabricmc.net/net/fabricmc/fabric-installer/${version}/fabric-installer-${version}.jar";
-      sha256 = "02ni9whjvd9lfadr2x7fahl4302b2z2xc6njgl86vfl29zm45fk8";
+      sha256 = "09sw013b385cw1w4n4f89bgsy1n9q90fagmy4xr5laxi3gpmpbf6";
     };
 
   # log4j workaround for Minecraft Server >= 1.12 && < 1.17
