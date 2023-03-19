@@ -80,6 +80,15 @@ let
         ];
       };
     };
+    "1.17" = fetchJar {
+      pname = "server";
+      version = "1.17";
+      url = "https://launcher.mojang.com/v1/objects/0a269b5f2c5b93b1712d0f5dc43b6182b9ab254e/server.jar";
+      sha256 = "0jqz7hpx7zvjj2n5rfrh8jmdj6ziqyp8c9nq4sr4jmkbky6hsfbv";
+      passthru.baseJvmOpts = [
+        "-Dlog4j2.formatMsgNoLookups=true"
+      ];
+    };
   };
 
   #
