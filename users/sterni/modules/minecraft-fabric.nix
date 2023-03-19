@@ -89,6 +89,15 @@ let
         "-Dlog4j2.formatMsgNoLookups=true"
       ];
     };
+    "1.17.1" = fetchJar {
+      pname = "server";
+      version = "1.17.1";
+      url = "https://launcher.mojang.com/v1/objects/a16d67e5807f57fc4e550299cf20226194497dc2/server.jar";
+      sha256 = "0pzmzagvrrapjsnd8xg4lqwynwnb5rcqk2n9h2kzba8p2fs13hp8";
+      passthru.baseJvmOpts = [
+        "-Dlog4j2.formatMsgNoLookups=true"
+      ];
+    };
   };
 
   #
