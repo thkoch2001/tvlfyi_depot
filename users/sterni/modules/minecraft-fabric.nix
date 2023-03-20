@@ -23,7 +23,7 @@
 #   * Op levels
 #
 # SPDX-License-Identifier: MIT
-# SPDX-FileCopyrightText: 2022 sterni <sternenseemann@systemli.org>
+# SPDX-FileCopyrightText: 2022-2023 sterni <sternenseemann@systemli.org>
 
 { lib, pkgs, config, depot, ... }:
 
@@ -94,6 +94,15 @@ let
       version = "1.17.1";
       url = "https://launcher.mojang.com/v1/objects/a16d67e5807f57fc4e550299cf20226194497dc2/server.jar";
       sha256 = "0pzmzagvrrapjsnd8xg4lqwynwnb5rcqk2n9h2kzba8p2fs13hp8";
+      passthru.baseJvmOpts = [
+        "-Dlog4j2.formatMsgNoLookups=true"
+      ];
+    };
+    "1.18" = fetchJar {
+      pname = "server";
+      version = "1.18";
+      url = "https://launcher.mojang.com/v1/objects/3cf24a8694aca6267883b17d934efacc5e44440d/server.jar";
+      sha256 = "0vvycjcfq96z7cl5dsrq98k9b7j7l4x0y9nflrcqmcvink7fs5w4";
       passthru.baseJvmOpts = [
         "-Dlog4j2.formatMsgNoLookups=true"
       ];
