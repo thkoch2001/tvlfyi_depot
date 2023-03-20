@@ -107,6 +107,18 @@ let
         "-Dlog4j2.formatMsgNoLookups=true"
       ];
     };
+    "1.18.1" = fetchJar {
+      pname = "server";
+      version = "1.18.1";
+      url = "https://launcher.mojang.com/v1/objects/125e5adf40c659fd3bce3e66e67a16bb49ecc1b9/server.jar";
+      sha256 = "1pyvym6xzjb1siizzj4ma7lpb05qhgxnzps8lmlbk00lv0515kgb";
+    };
+    "1.18.2" = fetchJar {
+      pname = "server";
+      version = "1.18.2";
+      url = "https://launcher.mojang.com/v1/objects/c8f83c5655308435b3dcf03c06d9fe8740a77469/server.jar";
+      sha256 = "0hx330bnadixph44sip0h5h986m11qxbdba6lbgwz4da6lg9vgjp";
+    };
   };
 
   #
@@ -245,7 +257,7 @@ let
       # the actual shutdown in the stop script without relying on $MAINPID.
       exec "${bins.flock}" "''${RUNTIME_DIRECTORY}" \
           "${bins.java}" \
-          ${lib.escapeShellArgs (serverJar.baseJvmOpts ++ instanceCfg.jvmOpts)} \
+          ${lib.escapeShellArgs (serverJar.baseJvmOpts or [ ] ++ instanceCfg.jvmOpts)} \
           -jar fabric-server-launch.jar nogui
     '';
 
