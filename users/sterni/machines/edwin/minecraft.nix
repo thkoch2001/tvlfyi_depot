@@ -2,13 +2,13 @@
 
 let
   carpet = pkgs.fetchurl {
-    url = "https://github.com/gnembon/fabric-carpet/releases/download/1.4.57/fabric-carpet-1.17.1-1.4.57+v220119.jar";
-    sha256 = "1q3mnhcrjcp0i573645lyb92ldb8n0jhpjl4ydi1fbk9wqckxzcs";
+    url = "https://github.com/gnembon/fabric-carpet/releases/download/1.4.56/fabric-carpet-1.18-1.4.56+v211130.jar";
+    sha256 = "0rvl2yb8xymla8c052j07gqkqfkz4h5pxf6aip2v9v0h8r84p9hf";
   };
 
   carpet-extra = pkgs.fetchurl {
-    url = "https://github.com/gnembon/carpet-extra/releases/download/1.4.57/carpet-extra-1.17.1-1.4.57.jar";
-    sha256 = "1bliqby1h5wm7rdfrx6z698qb9acfvm3d1sjcvlw2q55x982g7gb";
+    url = "https://github.com/gnembon/carpet-extra/releases/download/1.4.56/carpet-extra-1.18-1.4.56.jar";
+    sha256 = "16d8szz13wh5344d61sf0f3f7aj3qa35c6jrbd68krf3srpqfa4x";
   };
 
   userGroup = "minecraft";
@@ -36,6 +36,8 @@ let
     max-tick-time = 6000000; # TODO(sterni): disable watchdog via carpet
   };
 in
+
+# TODO(sterni): regular backups of carpet world
 
 {
   imports = [
@@ -65,7 +67,7 @@ in
     services.minecraft-fabric-server = {
       creative = {
         enable = true;
-        version = "1.17.1";
+        version = "1.18";
         mods = [
           carpet
           carpet-extra
@@ -91,7 +93,7 @@ in
 
       carpet = {
         enable = true;
-        version = "1.17.1";
+        version = "1.18";
         mods = [
           carpet
           carpet-extra
