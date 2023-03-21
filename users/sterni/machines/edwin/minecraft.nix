@@ -2,13 +2,13 @@
 
 let
   carpet = pkgs.fetchurl {
-    url = "https://github.com/gnembon/fabric-carpet/releases/download/1.4.69/fabric-carpet-1.18.2-1.4.69+v220331.jar";
-    sha256 = "0rg21myrcfaapc77582zxq89rrfnwibzbik3nvfmrjcdhirrn2zy";
+    url = "https://github.com/gnembon/fabric-carpet/releases/download/1.4.84/fabric-carpet-1.19.2-1.4.84+v221018.jar";
+    sha256 = "146pir1j0m5l27wc5aqpq55a0bmm154q2n1c3rk9jcv5zmw34nfs";
   };
 
   carpet-extra = pkgs.fetchurl {
-    url = "https://github.com/gnembon/carpet-extra/releases/download/1.4.72/carpet-extra-1.18.2-1.4.72.jar";
-    sha256 = "1vd5z5zw26jkfzdwj81xcmaa5rdi4gdsq8ii0533gbn5gqlmngas";
+    url = "https://github.com/gnembon/carpet-extra/releases/download/1.4.84/carpet-extra-1.19.2-1.4.84.jar";
+    sha256 = "0qz79nzgssrgzpcfbaawrzcp5yp4d407vw4nl4r0isng33wh265s";
   };
 
   userGroup = "minecraft";
@@ -34,6 +34,7 @@ let
     view-distance = 12;
     sync-chunk-writes = "false"; # the single biggest performance fix
     max-tick-time = 6000000; # TODO(sterni): disable watchdog via carpet
+    enforce-secure-profile = false;
   };
 in
 
@@ -67,7 +68,7 @@ in
     services.minecraft-fabric-server = {
       creative = {
         enable = true;
-        version = "1.18.2";
+        version = "1.19.2";
         mods = [
           carpet
           carpet-extra
@@ -93,7 +94,7 @@ in
 
       carpet = {
         enable = true;
-        version = "1.18.2";
+        version = "1.19.2";
         mods = [
           carpet
           carpet-extra
