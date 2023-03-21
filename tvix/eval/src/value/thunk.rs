@@ -209,8 +209,9 @@ impl Thunk {
         }
     }
 
-    pub fn finalise(&self, stack: &[Value]) {
-        self.upvalues_mut().resolve_deferred_upvalues(stack);
+    pub fn finalise(&self, stack: &[Value]) -> Result<(), ErrorKind> {
+        self.upvalues_mut()?.resolve_deferred_upvalues(stack);
+        Ok(())
     }
 
     pub fn is_evaluated(&self) -> bool {
@@ -257,8 +258,30 @@ impl Thunk {
         })
     }
 
-    pub fn upvalues_mut(&self) -> RefMut<'_, Upvalues> {
-        RefMut::map(self.0.borrow_mut(), |thunk| match thunk {
+    pub fn upvalues_mut(&self) -> Result<RefMut<'_, Upvalues>, ErrorKind> {
+        match &*self.0.borrow() {
+            ThunkRepr::Suspended { .. } => (),
+
+            ThunkRepr::Evaluated(Value::Closure(c)) => {
+                if Rc::strong_count(&c) > 1 {
+                    return Err(ErrorKind::TvixBug {
+                        msg: "upvalues_mut() was called on a thunk which already had multiple references to it",
+                        metadata: None,
+                    });
+                }
+            }
+
+            thunk => {
+                return Err(ErrorKind::TvixBug {
+                    msg: "upvalues() on non-suspended thunk",
+                    metadata: Some(Rc::new(format!("{thunk:?}"))),
+                })
+            }
+
+            _ => (),
+        }
+
+        Ok(RefMut::map(self.0.borrow_mut(), |thunk| match thunk {
             ThunkRepr::Suspended { upvalues, .. } => Rc::get_mut(upvalues).unwrap(),
             ThunkRepr::Evaluated(Value::Closure(c)) => Rc::get_mut(
                 &mut Rc::get_mut(c).unwrap().upvalues,
@@ -267,7 +290,7 @@ impl Thunk {
                 "upvalues_mut() was called on a thunk which already had multiple references to it",
             ),
             thunk => panic!("upvalues() on non-suspended thunk: {thunk:?}"),
-        })
+        }))
     }
 
     /// Do not use this without first reading and understanding
