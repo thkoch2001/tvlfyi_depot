@@ -462,7 +462,7 @@ impl<'o> VM<'o> {
                     } else {
                         Thunk::new_suspended(blueprint, frame.current_light_span())
                     };
-                    let upvalues = thunk.upvalues_mut();
+                    let upvalues = thunk.upvalues_mut().with_span(&frame, self)?;
                     self.stack.push(Value::Thunk(thunk.clone()));
 
                     // From this point on we internally mutate the
@@ -723,7 +723,9 @@ impl<'o> VM<'o> {
                 OpCode::OpFinalise(StackIdx(idx)) => {
                     match &self.stack[frame.stack_offset + idx] {
                         Value::Closure(_) => panic!("attempted to finalise a closure"),
-                        Value::Thunk(thunk) => thunk.finalise(&self.stack[frame.stack_offset..]),
+                        Value::Thunk(thunk) => thunk
+                            .finalise(&self.stack[frame.stack_offset..])
+                            .with_span(&frame, self)?,
 
                         // In functions with "formals" attributes, it is
                         // possible for `OpFinalise` to be called on a
