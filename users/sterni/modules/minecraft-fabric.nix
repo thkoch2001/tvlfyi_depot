@@ -119,6 +119,24 @@ let
       url = "https://launcher.mojang.com/v1/objects/c8f83c5655308435b3dcf03c06d9fe8740a77469/server.jar";
       sha256 = "0hx330bnadixph44sip0h5h986m11qxbdba6lbgwz4da6lg9vgjp";
     };
+    "1.19" = fetchJar {
+      pname = "server";
+      version = "1.19";
+      url = "https://launcher.mojang.com/v1/objects/e00c4052dac1d59a1188b2aa9d5a87113aaf1122/server.jar";
+      sha256 = "1cnjrqr2vn8gppd1y1lcdrc46fd7m1b3zl28zpbw72fgy1bd1vyy";
+    };
+    "1.19.1" = fetchJar {
+      pname = "server";
+      version = "1.19.1";
+      url = "https://piston-data.mojang.com/v1/objects/8399e1211e95faa421c1507b322dbeae86d604df/server.jar";
+      sha256 = "0jnlb5z8a7qi6p6bbwnmdl77b8kq83ryfdp58dhx8kg2hf6lbfx8";
+    };
+    "1.19.2" = fetchJar {
+      pname = "server";
+      version = "1.19.2";
+      url = "https://piston-data.mojang.com/v1/objects/f69c284232d7c7580bd89a5a4931c3581eae1378/server.jar";
+      sha256 = "15jdxh5zvsgvvk9hnv47swgjfg8fr653g6nx99q1rxpmkq32frxj";
+    };
   };
 
   #
