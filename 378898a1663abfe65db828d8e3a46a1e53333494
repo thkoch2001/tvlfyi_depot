@@ -26,6 +26,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "ea854e9c_f59e0cdd",
+        "filename": "tvix/store/src/directoryservice/grpc.rs",
+        "patchSetId": 3
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-03-23T21:27:08Z",
+      "side": 1,
+      "message": "There\u0027s a convenience function in Tokio to get a handle to the current runtime, but it panics if you\u0027re not inside a Tokio context, so i don\u0027t want to just use that (and it wouldn\u0027t solve your problem either, because you\u0027re not in a Tokio context).\n\nI also don\u0027t think spnning up a new Tokio runtime for each GRPCDirectoryService would make too much sense - multiple grpc requests happening over the same client should probably be handled by the same runtime.\n\nIf we come up with a good pattern to do this, happy to add another constructor, but let\u0027s explicitly pass in the runtime for now.",
+      "parentUuid": "758e7a6a_a6d81dd2",
+      "range": {
+        "startLine": 21,
+        "startChar": 0,
+        "endLine": 21,
+        "endChar": 45
+      },
+      "revId": "378898a1663abfe65db828d8e3a46a1e53333494",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "afcec3c6_d79e0925",
         "filename": "tvix/store/src/directoryservice/grpc.rs",
         "patchSetId": 3
@@ -37,6 +61,30 @@
       "writtenOn": "2023-03-23T20:53:11Z",
       "side": 1,
       "message": "how expensive is this?",
+      "range": {
+        "startLine": 34,
+        "startChar": 47,
+        "endLine": 34,
+        "endChar": 54
+      },
+      "revId": "378898a1663abfe65db828d8e3a46a1e53333494",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "36c49b61_3dbdc6bd",
+        "filename": "tvix/store/src/directoryservice/grpc.rs",
+        "patchSetId": 3
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-03-23T21:27:08Z",
+      "side": 1,
+      "message": "cheap, see line 13",
+      "parentUuid": "afcec3c6_d79e0925",
       "range": {
         "startLine": 34,
         "startChar": 47,
