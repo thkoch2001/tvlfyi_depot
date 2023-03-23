@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "758e7a6a_a6d81dd2",
+        "filename": "tvix/store/src/directoryservice/grpc.rs",
+        "patchSetId": 3
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2023-03-23T20:53:11Z",
+      "side": 1,
+      "message": "I think it would be nice if there was a function to spawn one with just a default handle or whatever, so that callers don\u0027t need to add tokio itself to their top-level deps. That\u0027s probably what //tvix/cli will do in the beginning.",
+      "range": {
+        "startLine": 21,
+        "startChar": 0,
+        "endLine": 21,
+        "endChar": 45
+      },
+      "revId": "378898a1663abfe65db828d8e3a46a1e53333494",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "afcec3c6_d79e0925",
+        "filename": "tvix/store/src/directoryservice/grpc.rs",
+        "patchSetId": 3
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2023-03-23T20:53:11Z",
+      "side": 1,
+      "message": "how expensive is this?",
+      "range": {
+        "startLine": 34,
+        "startChar": 47,
+        "endLine": 34,
+        "endChar": 54
+      },
+      "revId": "378898a1663abfe65db828d8e3a46a1e53333494",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
