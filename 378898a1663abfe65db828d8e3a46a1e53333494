@@ -50,6 +50,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "e4dc6f80_75b95277",
+        "filename": "tvix/store/src/directoryservice/grpc.rs",
+        "patchSetId": 3
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-03-23T21:39:25Z",
+      "side": 1,
+      "message": "I mean, we could add a pub fn new_tokio_runtime() returning such a runtime handle, and allowing this to be passed in, but what\u0027s the point?",
+      "parentUuid": "ea854e9c_f59e0cdd",
+      "range": {
+        "startLine": 21,
+        "startChar": 0,
+        "endLine": 21,
+        "endChar": 45
+      },
+      "revId": "378898a1663abfe65db828d8e3a46a1e53333494",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "afcec3c6_d79e0925",
         "filename": "tvix/store/src/directoryservice/grpc.rs",
         "patchSetId": 3
