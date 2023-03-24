@@ -117,6 +117,10 @@ in
 
   home-manager.useGlobalPkgs = true;
   home-manager.users.wpcarro = { config, lib, ... }: {
+    imports = [
+      (depot.path + "/ops/modules/hm-nmd-workaround.nix")
+    ];
+
     programs.git = {
       enable = true;
       userName = "William Carroll";

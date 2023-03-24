@@ -1,7 +1,8 @@
-{ config, lib, pkgs, ... }:
+{ config, lib, pkgs, depot, ... }:
 
 {
   imports = [
+    (depot.path + "/ops/modules/hm-nmd-workaround.nix")
     ../platforms/darwin.nix
     ../modules/common.nix
     ../modules/games.nix

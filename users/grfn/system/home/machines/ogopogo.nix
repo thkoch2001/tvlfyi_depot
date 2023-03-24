@@ -1,4 +1,4 @@
-{ pkgs, lib, config, ... }:
+{ pkgs, lib, config, depot, ... }:
 
 let
   inherit (builtins) pathExists;
@@ -7,6 +7,7 @@ in
 
 {
   imports = [
+    (depot.path + "/ops/modules/hm-nmd-workaround.nix")
     ../platforms/linux.nix
     ../modules/common.nix
     ../modules/desktop.nix
