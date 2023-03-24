@@ -2,6 +2,7 @@
 { depot, pkgs, ... }:
 
 let
+  # TODO(sterni): switch to pkgs.josh as soon as that commit is released
   rev = "fc857afda2c1536234e3bb1983c518a1abf63d25";
   src = pkgs.fetchFromGitHub {
     owner = "josh-project";
