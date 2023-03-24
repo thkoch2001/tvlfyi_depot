@@ -2,6 +2,7 @@
 
 {
   imports = [
+    ../../../../../ops/modules/hm-nmd-workaround.nix
     ../platforms/darwin.nix
     ../modules/common.nix
     ../modules/games.nix

@@ -7,6 +7,7 @@ in
 
 {
   imports = [
+    ../../../../../ops/modules/hm-nmd-workaround.nix
     ../platforms/linux.nix
     ../modules/common.nix
     ../modules/desktop.nix
