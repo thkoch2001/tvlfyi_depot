@@ -4,7 +4,10 @@
 { config, lib, ... }: # home-manager
 
 {
-  imports = [ (depot.third_party.sources.impermanence + "/home-manager.nix") ];
+  imports = [
+    (depot.path + "/ops/modules/hm-nmd-workaround.nix")
+    (depot.third_party.sources.impermanence + "/home-manager.nix")
+  ];
 
   home.persistence."/persist/tazjin/home" = {
     allowOther = true;
