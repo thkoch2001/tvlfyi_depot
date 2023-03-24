@@ -96,6 +96,30 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "3cbe2f99_0ef7764a",
+        "filename": "tvix/store/src/directoryservice/grpc.rs",
+        "patchSetId": 3
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-03-24T15:33:46Z",
+      "side": 1,
+      "message": "No, these are not per request, but can live longer. I\u0027d probably still be surprised if this would boot up a tokio runtime under the hood, which is why it\u0027s probably best to require a handle to a runtime to be passed in explicitly (as it is now).",
+      "parentUuid": "e53a751e_4117e5cc",
+      "range": {
+        "startLine": 21,
+        "startChar": 0,
+        "endLine": 21,
+        "endChar": 45
+      },
+      "revId": "378898a1663abfe65db828d8e3a46a1e53333494",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "afcec3c6_d79e0925",
