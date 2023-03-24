@@ -267,6 +267,6 @@ NixCon talk][talk] about Nixery for a review of some of this, and some demos.
 [nixery.dev]: https://nixery.dev
 [dominator trees]: https://en.wikipedia.org/wiki/Dominator_(graph_theory)
 [gonum/graph]: https://godoc.org/gonum.org/v1/gonum/graph
-[layers.go]: https://cs.tvl.fyi/depot/-/blob/tools/nixery/builder/layers.go
+[layers.go]: https://cs.tvl.fyi/depot/-/blob/tools/nixery/layers/layers.go
 [popcount]: https://cs.tvl.fyi/depot/-/tree/tools/nixery/popcount
 [talk]: https://www.youtube.com/watch?v=pOI9H4oeXqA
