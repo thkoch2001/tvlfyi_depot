@@ -16,6 +16,24 @@
       "message": "kinda a bummer; I actually use these manpages semi-regularly\n \nBetter than being horribly out of date I suppose, though.",
       "revId": "b9ba66057d43cba53614949e0c94f4f8a50055f5",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "428a2526_a6827620",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2023-03-25T12:20:33Z",
+      "side": 1,
+      "message": "Fix is already [upstream for nmd](https://git.sr.ht/~rycee/nmd/commit/f5a18594255866342ace46827c390c36875337e5), so we just have to wait for it to propagate to home-manager!",
+      "parentUuid": "6148b9cc_399cbd89",
+      "revId": "b9ba66057d43cba53614949e0c94f4f8a50055f5",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
