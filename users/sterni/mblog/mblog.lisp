@@ -68,8 +68,7 @@ a:link, a:visited {
       (:title (who:esc ,title))
       (:link :rel "stylesheet"
              :type "text/css"
-             :href ,(concatenate 'string (if root "" "../") "style.css"))
-      (:style "a:link, a:visited { color: blue; }"))
+             :href ,(concatenate 'string (if root "" "../") "style.css")))
      (:body
       (:header
        (:nav
