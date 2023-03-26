@@ -1,0 +1,2 @@
+include_rules
+: nix_actor.nim | $(SYNDICATE_PROTOCOL) ./<protocol> |> !nim_bin |>

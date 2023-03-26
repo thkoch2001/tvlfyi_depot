@@ -1,0 +1,4 @@
+version 1 .
+
+Build = <nix-build @input string @output any> .
+Serve = <serve @cap #!any> .

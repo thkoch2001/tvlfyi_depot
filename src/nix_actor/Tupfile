@@ -1,0 +1,2 @@
+include_rules
+: ../../protocol.prs |> !preserves_schema_nim |> protocol.nim | ../<protocol>
