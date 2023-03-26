@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f1c2a95c_0c2b8430",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 28
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-03-26T20:20:58Z",
+      "side": 1,
+      "message": "The build here seems to fail, because the `opentelemetry-proto` crate has the following line:\n\n#![cfg_attr(doc, feature(doc_auto_cfg))]\n\nIt might be possible to still build this with\n\n\u003e cargo +nightly doc -Z allow-features\u003ddoc_auto_cfg\n\nHowever, I\u0027m not sure",
+      "revId": "5d9a64c0974c43c138bf33397a75aef15b80df0a",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
