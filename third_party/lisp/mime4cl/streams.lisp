@@ -23,7 +23,7 @@
 
 (defclass coder-stream-mixin ()
   ((real-stream :type stream
-                :initarg :stream
+                :initarg :underlying-stream
                 :reader real-stream)
    (dont-close :initform nil
                :initarg :dont-close)))
@@ -52,7 +52,7 @@
 
 (defmethod initialize-instance :after ((stream coder-stream-mixin) &key &allow-other-keys)
   (unless (slot-boundp stream 'real-stream)
-    (error "REAL-STREAM is unbound.  Must provide a :STREAM argument.")))
+    (error "REAL-STREAM is unbound.  Must provide a :UNDERLYING-STREAM argument.")))
 
 (defmethod initialize-instance ((stream coder-output-stream-mixin) &key &allow-other-keys)
   (call-next-method)
@@ -261,7 +261,7 @@ in a stream of character."))
 (defmethod initialize-instance ((stream delimited-input-stream) &key &allow-other-keys)
   (call-next-method)
   (unless (slot-boundp stream 'real-stream)
-    (error "REAL-STREAM is unbound.  Must provide a :STREAM argument."))
+    (error "REAL-STREAM is unbound.  Must provide a :UNDERLYING-STREAM argument."))
   (with-slots (start-offset) stream
     (file-position stream start-offset)))
 
@@ -321,7 +321,7 @@ in a stream of character."))
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (defstruct file-portion
-  data					;  string or a pathname
+  data                                  ; string or a pathname
   encoding
   start
   end)
@@ -332,17 +332,17 @@ in a stream of character."))
       (pathname
        (be stream (open data)
          (make-instance 'delimited-input-stream
-                        :stream stream
+                        :underlying-stream stream
                         :start (file-portion-start file-portion)
                         :end (file-portion-end file-portion))))
       (string
        (make-instance 'delimited-input-stream
-                      :stream (make-string-input-stream data)
+                      :underlying-stream (make-string-input-stream data)
                       :start (file-portion-start file-portion)
                       :end (file-portion-end file-portion)))
       (stream
        (make-instance 'delimited-input-stream
-                      :stream data
+                      :underyling-stream data
                       :dont-close t
                       :start (file-portion-start file-portion)
                       :end (file-portion-end file-portion))))))
@@ -352,4 +352,4 @@ in a stream of character."))
                    (:quoted-printable 'quoted-printable-decoder-stream)
                    (:base64 'base64-decoder-stream)
                    (t '8bit-decoder-stream))
-                 :stream (open-file-portion file-portion)))
+                 :underlying-stream (open-file-portion file-portion)))

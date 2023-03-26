@@ -687,7 +687,7 @@ list of MIME parts."
                                                  '("message" "rfc822" ())
                                                  '("text" "plain" (("charset" . "us-ascii"))))
                               in (make-instance 'delimited-input-stream
-                                                :stream stream
+                                                :underlying-stream stream
                                                 :dont-close t
                                                 :start start
                                                 :end end)
@@ -729,7 +729,7 @@ guessed from the headers, use the *DEFAULT-TYPE*."
   (flet ((hdr (what)
            (header what headers)))
     (destructuring-bind (type subtype parms)
-        (or 
+        (or
          (aand (hdr :content-type)
                (parse-content-type it))
          *default-type*)
@@ -823,7 +823,8 @@ returns a MIME-MESSAGE object."
                       'quoted-printable-encoder-input-stream)
                      (t
                       '8bit-encoder-input-stream))
-                   :stream (make-instance 'binary-input-adapter-stream :source body))))
+                   :underlying-stream
+                   (make-instance 'binary-input-adapter-stream :source body))))
 
 (defun choose-boundary (parts &optional default)
   (labels ((match-in-parts (boundary parts)
