@@ -14,6 +14,7 @@ pub use self::utils::DirectoryTraverser;
 /// digest.
 pub trait DirectoryService {
     type DirectoriesIterator: Iterator<Item = Result<proto::Directory, Error>> + Send;
+    type DirectoryPutter: DirectoryPutter;
 
     /// Get looks up a single Directory message by its digest.
     /// In case the directory is not found, Ok(None) is returned.
@@ -27,4 +28,19 @@ pub trait DirectoryService {
     /// and we'd be able to add a default implementation for it here, but
     /// we can't have that yet.
     fn get_recursive(&self, root_directory_digest: &[u8; 32]) -> Self::DirectoriesIterator;
+
+    /// Allows persisting a closure of [proto::Directory], which is a graph of
+    /// connected Directory messages.
+    fn put_multiple_start(&self) -> Self::DirectoryPutter;
+}
+
+/// Provides a handle to put a closure of connected [proto::Directory] elements.
+///
+/// Subsequently call to [put], starting from the leaves. Once you reached the root,
+/// invoke [close] and retrieve the root digest.
+pub trait DirectoryPutter {
+    ///
+    fn put(&mut self, directory: proto::Directory) -> Result<(), Error>;
+
+    fn close(&mut self) -> Result<[u8; 32], Error>;
 }
