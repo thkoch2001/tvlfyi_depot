@@ -125,7 +125,7 @@
       (message (string-trim-right word-count))))
 
 ;; ediff
-; doesn't create new window for ediff controls which I always open accidentally
+;; doesn't create new window for ediff controls which I always open accidentally
 (setq ediff-window-setup-function 'ediff-setup-windows-plain)
 
 ;; man

@@ -3,6 +3,17 @@
 let
   inherit (pkgs.stdenv.hostPlatform) is64bit;
 
+  # Wrap chktex(1) with the flags we want because the chktex flycheck checker
+  # ignores tex-chktex-extra-flags and has no other way to set flags. I did
+  # not want to mess around with chktexrc because that seems to involve copying
+  # around a lot of rules (that would need to be updated?).
+  #
+  # Warning 8 is about correct dash length. This is really annoying because it'll
+  # light up everywhere if you use typographically correct dashes in German text.
+  chktexLessWarnings = pkgs.writeShellScript "chktex-less-warnings" ''
+    exec chktex -n8 "$@"
+  '';
+
   # emacsPgtk is defined in emacs-overlay
   emacs = (pkgs.emacsPackagesFor pkgs.emacsPgtk).withPackages (epkgs: [
     epkgs.bqn-mode
@@ -68,6 +79,10 @@ let
             ;; kicks in if TERM=dumb, meaning we can't use dash/sh mode.
             (setq shell-file-name "${pkgs.bash}/bin/bash"
                   explicit-bash-args '("-l"))
+
+            ;; chktex wrapper that disables warnings I don't want
+            (setq flycheck-tex-chktex-executable "${chktexLessWarnings}")
+            (setq tex-chktex-program "${chktexLessWarnings}")
 
             (provide 'nix-inject)
         '';
