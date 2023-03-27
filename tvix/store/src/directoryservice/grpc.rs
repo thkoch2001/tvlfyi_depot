@@ -1,8 +1,11 @@
 use std::collections::HashSet;
 
-use super::DirectoryService;
+use super::{DirectoryPutter, DirectoryService};
 use crate::proto::{self, get_directory_request::ByWhat};
+use crate::Error;
 use data_encoding::BASE64;
+use tokio::sync::mpsc::UnboundedSender;
+use tokio_stream::wrappers::UnboundedReceiverStream;
 use tonic::{transport::Channel, Status};
 use tonic::{Code, Streaming};
 use tracing::{instrument, warn};
@@ -125,6 +128,30 @@ impl DirectoryService for GRPCDirectoryService {
 
         StreamIterator::new(self.tokio_handle.clone(), &root_directory_digest, stream)
     }
+
+    type DirectoryPutter = GRPCPutter;
+
+    #[instrument(skip_all)]
+    fn put_multiple_start(&self) -> Self::DirectoryPutter
+    where
+        Self: Clone,
+    {
+        let mut grpc_client = self.grpc_client.clone();
+
+        let (tx, rx) = tokio::sync::mpsc::unbounded_channel();
+
+        let task: tokio::task::JoinHandle<Result<proto::PutDirectoryResponse, Status>> =
+            self.tokio_handle.spawn(async move {
+                let s = grpc_client
+                    .put(UnboundedReceiverStream::new(rx))
+                    .await?
+                    .into_inner();
+
+                Ok(s)
+            });
+
+        GRPCPutter::new(self.tokio_handle.clone(), tx, task)
+    }
 }
 
 pub struct StreamIterator {
@@ -208,6 +235,79 @@ impl Iterator for StreamIterator {
     }
 }
 
+/// Allows uploading multiple Directory messages in the same gRPC stream.
+pub struct GRPCPutter {
+    /// A handle into the active tokio runtime. Necessary to spawn tasks.
+    tokio_handle: tokio::runtime::Handle,
+
+    /// Data about the current request - a handle to the task, and the tx part
+    /// of the channel.
+    /// The tx part of the pipe is used to send [proto::Directory] to the ongoing request.
+    /// The task will yield a [proto::PutDirectoryResponse] once the stream is closed.
+    #[allow(clippy::type_complexity)] // lol
+    rq: Option<(
+        tokio::task::JoinHandle<Result<proto::PutDirectoryResponse, Status>>,
+        UnboundedSender<proto::Directory>,
+    )>,
+}
+
+impl GRPCPutter {
+    pub fn new(
+        tokio_handle: tokio::runtime::Handle,
+        directory_sender: UnboundedSender<proto::Directory>,
+        task: tokio::task::JoinHandle<Result<proto::PutDirectoryResponse, Status>>,
+    ) -> Self {
+        Self {
+            tokio_handle,
+            rq: Some((task, directory_sender)),
+        }
+    }
+}
+
+impl DirectoryPutter for GRPCPutter {
+    fn put(&mut self, directory: proto::Directory) -> Result<(), crate::Error> {
+        match self.rq {
+            // If we're not already closed, send the directory to directory_sender.
+            Some((_, ref directory_sender)) => {
+                if directory_sender.send(directory).is_err() {
+                    // If the channel has been prematurely closed, invoke close (so we can peek at the error code)
+                    // That error code is much more helpful, because it
+                    // contains the error message from the server.
+                    self.close()?;
+                }
+                Ok(())
+            }
+            // If self.close() was already called, we can't put again.
+            None => Err(Error::StorageError(
+                "DirectoryPutter already closed".to_string(),
+            )),
+        }
+    }
+
+    /// Closes the stream for sending, and returns the value
+    fn close(&mut self) -> Result<[u8; 32], crate::Error> {
+        // get self.rq, and replace it with None.
+        // This ensures we can only close it once.
+        match std::mem::take(&mut self.rq) {
+            None => Err(Error::StorageError("already closed".to_string())),
+            Some((task, directory_sender)) => {
+                // close directory_sender, so blocking on task will finish.
+                drop(directory_sender);
+
+                Ok(self
+                    .tokio_handle
+                    .block_on(task)?
+                    .map_err(|e| Error::StorageError(e.to_string()))?
+                    .root_digest
+                    .try_into()
+                    .map_err(|_| {
+                        Error::StorageError("invalid root digest length in response".to_string())
+                    })?)
+            }
+        }
+    }
+}
+
 #[cfg(test)]
 mod tests {
     use core::time;
@@ -219,10 +319,13 @@ mod tests {
     use tonic::transport::{Endpoint, Server, Uri};
 
     use crate::{
-        directoryservice::DirectoryService,
+        directoryservice::{DirectoryPutter, DirectoryService},
         proto,
         proto::{directory_service_server::DirectoryServiceServer, GRPCDirectoryServiceWrapper},
-        tests::{fixtures::DIRECTORY_A, utils::gen_directory_service},
+        tests::{
+            fixtures::{DIRECTORY_A, DIRECTORY_B},
+            utils::gen_directory_service,
+        },
     };
 
     #[test]
@@ -301,8 +404,50 @@ mod tests {
                     .get(&DIRECTORY_A.digest())
                     .expect("must succeed")
                     .expect("must be some")
-            )
+            );
+
+            // Putting DIRECTORY_B alone should fail, because it refers to DIRECTORY_A.
+            directory_service
+                .put(DIRECTORY_B.clone())
+                .expect_err("must fail");
+
+            // Uploading A and then B should succeed, and closing should return the digest of B.
+            let mut handle = directory_service.put_multiple_start();
+            handle.put(DIRECTORY_A.clone()).expect("must succeed");
+            handle.put(DIRECTORY_B.clone()).expect("must succeed");
+            let digest = handle.close().expect("must succeed");
+            assert_eq!(DIRECTORY_B.digest(), digest);
+
+            // Now try to retrieve the closure of DIRECTORY_B, which should return B and then A.
+            let mut directories_it = directory_service.get_recursive(&DIRECTORY_B.digest());
+            assert_eq!(
+                DIRECTORY_B.clone(),
+                directories_it
+                    .next()
+                    .expect("must be some")
+                    .expect("must succeed")
+            );
+            assert_eq!(
+                DIRECTORY_A.clone(),
+                directories_it
+                    .next()
+                    .expect("must be some")
+                    .expect("must succeed")
+            );
+
+            // Uploading B and then A should fail during close (if we're a fast client)
+            let mut handle = directory_service.put_multiple_start();
+            handle.put(DIRECTORY_B.clone()).expect("must succeed");
+            handle.put(DIRECTORY_A.clone()).expect("must succeed");
+            handle.close().expect_err("must fail");
+
+            // Uploading B and then A should fail when uploading A (if we're a slow client)
+            let mut handle = directory_service.put_multiple_start();
+            handle.put(DIRECTORY_B.clone()).expect("must succeed");
+            std::thread::sleep(time::Duration::from_millis(50));
+            handle.put(DIRECTORY_A.clone()).expect_err("must fail");
         });
+
         tester_runtime.block_on(task)?;
 
         Ok(())
