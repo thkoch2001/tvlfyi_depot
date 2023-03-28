@@ -7,6 +7,12 @@ let
     remote = "git@github.com:tvlfyi/tvix.git";
     ref = "refs/heads/canon";
   };
+
+  export-kit = depot.tools.releases.filteredGitPush {
+    filter = ":workspace=views/kit";
+    remote = "git@github.com:tvlfyi/kit.git";
+    ref = "refs/heads/canon";
+  };
 in
 pkgs.runCommandLocal "export-views" { }
   ''
@@ -14,7 +20,7 @@ pkgs.runCommandLocal "export-views" { }
   ''.overrideAttrs
   (_: {
     meta.ci.extraSteps = {
-      inherit export-tvix;
+      inherit export-tvix export-kit;
     };
   })
 
