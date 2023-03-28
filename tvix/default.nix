@@ -86,15 +86,5 @@ in
     '';
   };
 
-  export = (pkgs.runCommandLocal "export-tvix" { } ''
-    echo "carrier for repo export extra-step" > $out
-  '').overrideAttrs (_: {
-    meta.ci.extraSteps.github = depot.tools.releases.filteredGitPush {
-      filter = ":workspace=views/tvix";
-      remote = "git@github.com:tvlfyi/tvix.git";
-      ref = "refs/heads/canon";
-    };
-  });
-
-  meta.ci.targets = [ "shell" "export" "rust-docs" ];
+  meta.ci.targets = [ "shell" "rust-docs" ];
 }
