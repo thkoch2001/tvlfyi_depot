@@ -24,6 +24,10 @@
           # The :443 suffix is a workaround for https://b.tvl.fyi/issues/88.
           proxy_set_header  Host $host:443;
         }
+
+        location = /robots.txt {
+          return 200 'User-agent: *\nAllow: /';
+        }
       '';
     };
   };
