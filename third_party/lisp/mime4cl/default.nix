@@ -6,7 +6,7 @@ depot.nix.buildLisp.library {
   name = "mime4cl";
 
   deps = [
-    depot.third_party.lisp.babel
+    depot.third_party.lisp.flexi-streams
     depot.third_party.lisp.npg
     depot.third_party.lisp.trivial-gray-streams
   ];
