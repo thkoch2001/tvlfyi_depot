@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b11778c0_f59d1dd1",
+        "filename": "third_party/lisp/mime4cl/package.lisp",
+        "patchSetId": 1
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2023-03-30T15:44:24Z",
+      "side": 1,
+      "message": "XXX needs to go in different CL.",
+      "revId": "d67e080945b0873da11243b93cf7e0d7732ca79a",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
