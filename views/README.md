@@ -15,7 +15,7 @@ look like:
   - Commit your changes. This is required, as `josh-filter` operates on your
     `HEAD`, not working directory state.
   - Invoke `josh-filter` with the filter expression,
-    for example `josh-filter ':workspace=views/kit'`.
+    for example `josh-filter ':workspace=views/tvix'`.
   - Peek at the synthesized git history by looking at `FILTERED_HEAD`.
 
 Testing changes in Gerrit

@@ -9,7 +9,7 @@ let
   };
 
   export-kit = depot.tools.releases.filteredGitPush {
-    filter = ":workspace=views/kit";
+    filter = ":unsign:workspace=views/kit";
     remote = "git@github.com:tvlfyi/kit.git";
     ref = "refs/heads/canon";
   };
