@@ -8,7 +8,7 @@
   environment.variables.HIDPI_SCREEN = "true";
 
   # Ensure a larger font size in early boot stage.
-  hardware.video.hidpi.enable = true;
+  fontconfig.fonts.optimizeForVeryHighDPI = treu;
 
   # Bump DPI across the board.
   # TODO(tazjin): This should actually be set per monitor, but I
