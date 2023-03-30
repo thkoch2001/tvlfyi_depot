@@ -5,6 +5,7 @@
 
 use crate::derivation::output::Output;
 use crate::derivation::string_escape::escape_string;
+use crate::store_path::StorePath;
 use std::collections::BTreeSet;
 use std::{collections::BTreeMap, fmt, fmt::Write};
 
@@ -16,12 +17,12 @@ pub const BRACKET_CLOSE: char = ']';
 pub const COMMA: char = ',';
 pub const QUOTE: char = '"';
 
-fn write_array_elements(
+fn write_array_elements<T: AsRef<str>>(
     writer: &mut impl Write,
     quote: bool,
     open: &str,
     closing: &str,
-    elements: Vec<&str>,
+    elements: Vec<T>,
 ) -> Result<(), fmt::Error> {
     writer.write_str(open)?;
 
@@ -34,7 +35,7 @@ fn write_array_elements(
             writer.write_char(QUOTE)?;
         }
 
-        writer.write_str(element)?;
+        writer.write_str(element.as_ref())?;
 
         if quote {
             writer.write_char(QUOTE)?;
@@ -90,7 +91,7 @@ pub fn write_outputs(
 
 pub fn write_input_derivations(
     writer: &mut impl Write,
-    input_derivations: &BTreeMap<String, BTreeSet<String>>,
+    input_derivations: &BTreeMap<StorePath, BTreeSet<String>>,
 ) -> Result<(), fmt::Error> {
     writer.write_char(COMMA)?;
     writer.write_char(BRACKET_OPEN)?;
@@ -102,7 +103,7 @@ pub fn write_input_derivations(
 
         writer.write_char(PAREN_OPEN)?;
         writer.write_char(QUOTE)?;
-        writer.write_str(input_derivation_path.as_str())?;
+        writer.write_str(input_derivation_path.to_absolute_path().as_str())?;
         writer.write_char(QUOTE)?;
         writer.write_char(COMMA)?;
 
@@ -124,7 +125,7 @@ pub fn write_input_derivations(
 
 pub fn write_input_sources(
     writer: &mut impl Write,
-    input_sources: &BTreeSet<String>,
+    input_sources: &BTreeSet<StorePath>,
 ) -> Result<(), fmt::Error> {
     writer.write_char(COMMA)?;
 
@@ -133,7 +134,7 @@ pub fn write_input_sources(
         true,
         &BRACKET_OPEN.to_string(),
         &BRACKET_CLOSE.to_string(),
-        input_sources.iter().map(|s| &**s).collect(),
+        input_sources.iter().map(|s| s.to_absolute_path()).collect(),
     )?;
 
     Ok(())

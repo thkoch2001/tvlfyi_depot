@@ -130,9 +130,17 @@ fn output_paths(name: &str, drv_path: &str) {
         // ch49594n9avinrf8ip0aslidkc4lxkqv-foo.drv may lookup /nix/store/ss2p4wmxijn652haqyd7dckxwl4c7hxx-bar.drv
         if name == "foo"
             && ((drv_path == "4wvvbi4jwn0prsdxb7vs673qa5h9gr7x-foo.drv"
-                && parent_drv_path == "/nix/store/0hm2f1psjpcwg8fijsmr4wwxrx59s092-bar.drv")
+                && parent_drv_path
+                    == &StorePath::from_absolute_path(
+                        "/nix/store/0hm2f1psjpcwg8fijsmr4wwxrx59s092-bar.drv",
+                    )
+                    .expect("valid drv path"))
                 || (drv_path == "ch49594n9avinrf8ip0aslidkc4lxkqv-foo.drv"
-                    && parent_drv_path == "/nix/store/ss2p4wmxijn652haqyd7dckxwl4c7hxx-bar.drv"))
+                    && parent_drv_path
+                        == &StorePath::from_absolute_path(
+                            "/nix/store/ss2p4wmxijn652haqyd7dckxwl4c7hxx-bar.drv",
+                        )
+                        .expect("valid drv path")))
         {
             // do the lookup, by reading in the fixture of the requested
             // drv_name, and calculating its drv replacement (on the non-stripped version)
@@ -141,7 +149,7 @@ fn output_paths(name: &str, drv_path: &str) {
             let data = read_file(&format!(
                 "{}/{}.json",
                 RESOURCES_PATHS,
-                Path::new(parent_drv_path)
+                Path::new(&parent_drv_path.to_absolute_path())
                     .file_name()
                     .unwrap()
                     .to_string_lossy()
@@ -281,16 +289,20 @@ fn output_path_construction() {
     );
 
     // assemble foo input_derivations
-    foo_drv.input_derivations.insert(
-        bar_drv_path.to_absolute_path(),
-        BTreeSet::from(["out".to_string()]),
-    );
+    foo_drv
+        .input_derivations
+        .insert(bar_drv_path, BTreeSet::from(["out".to_string()]));
 
     // calculate foo output paths
     let foo_calc_result = foo_drv.calculate_output_paths(
         "foo",
         &foo_drv.derivation_or_fod_hash(|drv_path| {
-            if drv_path != "/nix/store/0hm2f1psjpcwg8fijsmr4wwxrx59s092-bar.drv" {
+            if drv_path
+                != &StorePath::from_absolute_path(
+                    "/nix/store/0hm2f1psjpcwg8fijsmr4wwxrx59s092-bar.drv",
+                )
+                .expect("valid drv path")
+            {
                 panic!("lookup called with unexpected drv_path: {}", drv_path);
             }
             bar_drv_derivation_or_fod_hash.clone()

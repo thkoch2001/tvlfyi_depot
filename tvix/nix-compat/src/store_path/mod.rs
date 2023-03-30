@@ -1,4 +1,5 @@
 use crate::nixbase32::{self, Nixbase32DecodeError};
+use serde::{Deserialize, Serialize};
 use std::fmt;
 use thiserror::Error;
 
@@ -52,7 +53,7 @@ impl From<NameError> for Error {
 /// The name is usually used to describe the pname and version of a package.
 /// Derivations paths can also be represented as store paths, they end
 /// with .drv.
-#[derive(Clone, Debug, PartialEq, Eq)]
+#[derive(Clone, Debug, Hash, PartialEq, Eq, PartialOrd, Ord)]
 pub struct StorePath {
     pub digest: [u8; DIGEST_SIZE],
     pub name: String,
@@ -119,6 +120,19 @@ impl StorePath {
         }
 
         Ok(())
+    }
+}
+
+impl Serialize for StorePath {
+    fn serialize<S: serde::Serializer>(&self, serializer: S) -> Result<S::Ok, S::Error> {
+        serializer.serialize_str(&self.to_absolute_path())
+    }
+}
+
+impl<'de> Deserialize<'de> for StorePath {
+    fn deserialize<D: serde::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
+        StorePath::from_absolute_path(&String::deserialize(deserializer)?)
+            .map_err(serde::de::Error::custom)
     }
 }
 
