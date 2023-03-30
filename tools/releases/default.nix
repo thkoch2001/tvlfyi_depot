@@ -19,8 +19,8 @@ in
       set -e
       export PATH="${makeBinPath [ pkgs.git depot.third_party.josh ]}:$PATH"
 
-      echo 'Filtering depot through :unsign ${filter}'
-      josh-filter ':unsign ${filter}'
+      echo 'Filtering depot through ${filter}'
+      josh-filter '${filter}'
 
       echo 'Fetching remote to check if a push is needed'
       git fetch '${remote}' '${ref}'
