@@ -20,7 +20,7 @@ in
       export PATH="${makeBinPath [ pkgs.git depot.third_party.josh ]}:$PATH"
 
       echo 'Filtering depot through ${filter}'
-      josh-filter '${filter}'
+      josh-filter '${filter}' --filter-prefix ':unsign'
 
       echo 'Fetching remote to check if a push is needed'
       git fetch '${remote}' '${ref}'
