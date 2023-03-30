@@ -102,8 +102,10 @@ with lib;
 
   services.openssh = {
     allowSFTP = false;
-    passwordAuthentication = false;
-    permitRootLogin = "no";
+    settings = {
+      PasswordAuthentication = false;
+      PermitRootLogin = "no";
+    };
   };
 
   services.grafana = {
