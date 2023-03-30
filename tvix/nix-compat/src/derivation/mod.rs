@@ -19,8 +19,8 @@ pub use crate::nixhash::{NixHash, NixHashWithMode};
 pub use errors::{DerivationError, OutputError};
 pub use output::Output;
 
-#[derive(Clone, Debug, Default, Eq, PartialEq, Serialize, Deserialize)]
-pub struct Derivation {
+#[derive(Clone, Debug, Eq, PartialEq, Serialize, Deserialize)]
+pub struct DerivationPoly<DrvPath> {
     #[serde(rename = "args")]
     pub arguments: Vec<String>,
 
@@ -30,17 +30,33 @@ pub struct Derivation {
     pub environment: BTreeMap<String, String>,
 
     #[serde(rename = "inputDrvs")]
-    pub input_derivations: BTreeMap<String, BTreeSet<String>>,
+    #[serde(bound(serialize = "DrvPath: _serde::Serialize"))]
+    #[serde(bound(deserialize = "DrvPath: _serde::Deserialize<'de> + Ord"))]
+    pub input_derivations: BTreeMap<DrvPath, BTreeSet<String>>,
 
     #[serde(rename = "inputSrcs")]
-    pub input_sources: BTreeSet<String>,
+    pub input_sources: BTreeSet<StorePath>,
 
     pub outputs: BTreeMap<String, Output>,
 
     pub system: String,
 }
 
-impl Derivation {
+impl<DrvHash> Default for DerivationPoly<DrvHash> {
+    fn default() -> Self {
+        DerivationPoly {
+            arguments: Default::default(),
+            builder: Default::default(),
+            environment: Default::default(),
+            input_derivations: Default::default(),
+            input_sources: Default::default(),
+            outputs: Default::default(),
+            system: Default::default(),
+        }
+    }
+}
+
+impl<DrvPath: write::WriteDrvReference> DerivationPoly<DrvPath> {
     /// write the Derivation to the given [std::fmt::Write], in ATerm format.
     ///
     /// The only errors returns are these when writing to the passed writer.
@@ -72,7 +88,18 @@ impl Derivation {
 
         buffer
     }
+}
 
+/// This is the regular type for a Nix Derivation that the vast majority of code would use.
+pub type Derivation = DerivationPoly<StorePath>;
+
+/// This is used for hashing derivations modulo differences in fixed output derivations.
+///
+/// The "modulo" part works by substiting drv paths for a different string, where two different
+/// fixed output derivations with the same output hash get the same string.
+pub type PreDerivation = DerivationPoly<String>;
+
+impl Derivation {
     /// Returns the drv path of a [Derivation] struct.
     ///
     /// The drv path is calculated by invoking [build_text_path], using
@@ -85,16 +112,20 @@ impl Derivation {
 
         // collect the list of paths from input_sources and input_derivations
         // into a (sorted, guaranteed by BTreeSet) list of references
-        let references: BTreeSet<String> = {
+        let references: BTreeSet<StorePath> = {
             let mut inputs = self.input_sources.clone();
-            let input_derivation_keys: Vec<String> =
+            let input_derivation_keys: Vec<StorePath> =
                 self.input_derivations.keys().cloned().collect();
             inputs.extend(input_derivation_keys);
             inputs
         };
 
-        build_text_path(name, self.to_aterm_string(), references)
-            .map_err(|_e| DerivationError::InvalidOutputName(name.to_string()))
+        build_text_path(
+            name,
+            self.to_aterm_string(),
+            references.iter().map(StorePath::to_absolute_path),
+        )
+        .map_err(|_e| DerivationError::InvalidOutputName(name.to_string()))
     }
 
     /// Returns the FOD digest, if the derivation is fixed-output, or None if
@@ -134,7 +165,7 @@ impl Derivation {
     /// drv path).
     pub fn derivation_or_fod_hash<F>(&self, fn_get_derivation_or_fod_hash: F) -> NixHash
     where
-        F: Fn(&str) -> NixHash,
+        F: Fn(&StorePath) -> NixHash,
     {
         // Fixed-output derivations return a fixed hash.
         // Non-Fixed-output derivations return a hash of the ATerm notation, but with all
@@ -158,9 +189,17 @@ impl Derivation {
             }
 
             // construct a new derivation struct with these replaced input derivation strings
-            let replaced_derivation = Derivation {
+            let replaced_derivation = PreDerivation {
                 input_derivations: replaced_input_derivations,
-                ..self.clone()
+                // other fields; we unfortunately need to clone them manually rather than
+                // being able to use `..` because the type change from `Derivation` to
+                // `PreDerivation`
+                arguments: self.arguments.clone(),
+                builder: self.builder.clone(),
+                environment: self.environment.clone(),
+                input_sources: self.input_sources.clone(),
+                outputs: self.outputs.clone(),
+                system: self.system.clone(),
             };
 
             // write the ATerm of that to the hash function

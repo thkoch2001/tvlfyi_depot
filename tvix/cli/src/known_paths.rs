@@ -12,7 +12,7 @@
 //! information.
 
 use crate::refscan::{ReferenceScanner, STORE_PATH_LEN};
-use nix_compat::nixhash::NixHash;
+use nix_compat::{nixhash::NixHash, store_path::StorePath};
 use std::{
     collections::{hash_map, BTreeSet, HashMap},
     ops::Index,
@@ -71,7 +71,7 @@ pub struct KnownPaths {
     /// All known derivation or FOD hashes.
     ///
     /// Keys are derivation paths, values is the NixHash.
-    derivation_or_fod_hashes: HashMap<String, NixHash>,
+    derivation_or_fod_hashes: HashMap<StorePath, NixHash>,
 }
 
 impl Index<&PathName> for KnownPaths {
@@ -157,21 +157,21 @@ impl KnownPaths {
     }
 
     /// Fetch the opaque "hash derivation modulo" for a given derivation path.
-    pub fn get_hash_derivation_modulo(&self, drv_path: &str) -> NixHash {
+    pub fn get_hash_derivation_modulo(&self, drv_path: &StorePath) -> NixHash {
         // TODO: we rely on an invariant that things *should* have
         // been calculated if we get this far.
         self.derivation_or_fod_hashes[drv_path].clone()
     }
 
-    pub fn add_hash_derivation_modulo<D: ToString>(
+    pub fn add_hash_derivation_modulo(
         &mut self,
-        drv: D,
+        drv: &StorePath,
         hash_derivation_modulo: &NixHash,
     ) {
         #[allow(unused_variables)] // assertions on this only compiled in debug builds
         let old = self
             .derivation_or_fod_hashes
-            .insert(drv.to_string(), hash_derivation_modulo.to_owned());
+            .insert(drv.clone(), hash_derivation_modulo.to_owned());
 
         #[cfg(debug_assertions)]
         {

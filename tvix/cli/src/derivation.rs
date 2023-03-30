@@ -1,6 +1,6 @@
 //! Implements `builtins.derivation`, the core of what makes Nix build packages.
 use nix_compat::derivation::Derivation;
-use nix_compat::nixhash;
+use nix_compat::{nixhash, store_path::StorePath};
 use std::cell::RefCell;
 use std::collections::{btree_map, BTreeSet};
 use std::rc::Rc;
@@ -55,11 +55,15 @@ fn populate_inputs<I: IntoIterator<Item = PathName>>(
         let reference = &known_paths[&reference];
         match &reference.kind {
             PathKind::Plain => {
-                drv.input_sources.insert(reference.path.clone());
+                drv.input_sources
+                    .insert(StorePath::from_absolute_path(&reference.path).unwrap());
             }
 
             PathKind::Output { name, derivation } => {
-                match drv.input_derivations.entry(derivation.clone()) {
+                match drv
+                    .input_derivations
+                    .entry(StorePath::from_absolute_path(&derivation).unwrap())
+                {
                     btree_map::Entry::Vacant(entry) => {
                         entry.insert(BTreeSet::from([name.clone()]));
                     }
@@ -71,7 +75,10 @@ fn populate_inputs<I: IntoIterator<Item = PathName>>(
             }
 
             PathKind::Derivation { output_names } => {
-                match drv.input_derivations.entry(reference.path.clone()) {
+                match drv
+                    .input_derivations
+                    .entry(StorePath::from_absolute_path(&reference.path).unwrap())
+                {
                     btree_map::Entry::Vacant(entry) => {
                         entry.insert(output_names.clone());
                     }
@@ -355,10 +362,7 @@ mod derivation_builtins {
         let derivation_or_fod_hash_final =
             drv.derivation_or_fod_hash(|drv| known_paths.get_hash_derivation_modulo(drv));
 
-        known_paths.add_hash_derivation_modulo(
-            derivation_path.to_absolute_path(),
-            &derivation_or_fod_hash_final,
-        );
+        known_paths.add_hash_derivation_modulo(&derivation_path, &derivation_or_fod_hash_final);
 
         // mark all the new paths as known
         let output_names: Vec<String> = drv.outputs.keys().map(Clone::clone).collect();
