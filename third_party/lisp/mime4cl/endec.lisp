@@ -687,10 +687,10 @@ sequence, a charset string indicating the original coding."
   encountered, try to decode it using babel, otherwise signal an error."
   (flet ((decode-part (part)
            (etypecase part
-             (cons (babel:octets-to-string
+             (cons (flexi-streams:octets-to-string
                     (car part)
-                    :encoding (babel-encodings:get-character-encoding
-                               (intern (string-upcase (cdr part)) 'keyword))))
+                    :external-format (flexi-streams:make-external-format
+                                      (intern (string-upcase (cdr part)) 'keyword))))
              (string part))))
     (apply #'concatenate
            (cons 'string
