@@ -18,8 +18,6 @@ pub enum DerivationError {
     #[error("unable to validate output {0}: {1}")]
     InvalidOutputDerivationPath(String, store_path::BuildStorePathError),
     // input derivation
-    #[error("unable to parse input derivation path {0}: {1}")]
-    InvalidInputDerivationPath(String, store_path::Error),
     #[error("input derivation {0} doesn't end with .drv")]
     InvalidInputDerivationPrefix(String),
     #[error("input derivation {0} output names are empty")]
