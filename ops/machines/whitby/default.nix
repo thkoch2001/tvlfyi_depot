@@ -213,8 +213,10 @@ in
   programs.mosh.enable = true;
   services.openssh = {
     enable = true;
-    passwordAuthentication = false;
-    kbdInteractiveAuthentication = false;
+    settings = {
+      PasswordAuthentication = false;
+      KbdInteractiveAuthentication = false;
+    };
   };
 
   # Configure secrets for services that need them.
