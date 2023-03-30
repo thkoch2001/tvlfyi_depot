@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b7ee9d5b_c25226d9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2023-03-30T13:57:56Z",
+      "side": 1,
+      "message": "inshallah",
+      "revId": "4a4372e8856f53dcbb5b3b827758510a9f26807f",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "269e1cdd_a1c875fe",
+        "filename": "tvix/nix-compat/src/derivation/errors.rs",
+        "patchSetId": 5
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2023-03-30T13:57:56Z",
+      "side": 1,
+      "message": "output",
+      "range": {
+        "startLine": 49,
+        "startChar": 21,
+        "endLine": 49,
+        "endChar": 26
+      },
+      "revId": "4a4372e8856f53dcbb5b3b827758510a9f26807f",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
