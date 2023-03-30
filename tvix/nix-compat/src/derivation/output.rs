@@ -5,6 +5,8 @@ use serde::{Deserialize, Serialize};
 
 #[derive(Clone, Debug, Default, Eq, PartialEq, Serialize, Deserialize)]
 pub struct Output {
+    // TODO should be `StorePath` for `Derivation`, and `()` (always empty string) for
+    // `PreDerivation`.
     pub path: String,
 
     #[serde(flatten)]
