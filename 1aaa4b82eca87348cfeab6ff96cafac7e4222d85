@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d04f9b72_37682d4e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2023-03-30T14:28:15Z",
+      "side": 1,
+      "message": "I think that\u0027s the way to go: The signatures are not that useful and we don\u0027t want them in order to match the behavior of our proxy. We can add a flag for external users as the need arises.",
+      "revId": "1aaa4b82eca87348cfeab6ff96cafac7e4222d85",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
