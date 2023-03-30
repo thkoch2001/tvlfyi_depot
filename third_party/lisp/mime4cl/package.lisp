@@ -23,9 +23,8 @@
 
 (defpackage :mime4cl
   (:nicknames :mime)
-  (:use :common-lisp :npg :mime4cl-ex-sclf :trivial-gray-streams)
-  (:import-from :babel :octets-to-string)
-  (:import-from :babel-encodings :get-character-encoding)
+  (:use :common-lisp :npg :mime4cl-ex-sclf :trivial-gray-streams :flexi-streams)
+  (:shadow :decoder :encoder) ; conflict between qbase64 and endec.lisp
   (:export #:*lazy-mime-decode*
            #:print-mime-part
            #:read-mime-message
