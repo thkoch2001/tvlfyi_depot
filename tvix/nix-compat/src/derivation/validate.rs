@@ -54,15 +54,7 @@ impl Derivation {
 
         // Validate all input_derivations
         for (input_derivation_path, output_names) in &self.input_derivations {
-            // Validate input_derivation_path
-            if let Err(e) = StorePath::from_absolute_path(input_derivation_path) {
-                return Err(DerivationError::InvalidInputDerivationPath(
-                    input_derivation_path.to_string(),
-                    e,
-                ));
-            }
-
-            if !input_derivation_path.ends_with(".drv") {
+            if !input_derivation_path.name.ends_with(".drv") {
                 return Err(DerivationError::InvalidInputDerivationPrefix(
                     input_derivation_path.to_string(),
                 ));
@@ -97,13 +89,8 @@ impl Derivation {
         }
 
         // Validate all input_sources
-        for input_source in self.input_sources.iter() {
-            if let Err(e) = StorePath::from_absolute_path(input_source) {
-                return Err(DerivationError::InvalidInputSourcesPath(
-                    input_source.to_string(),
-                    e,
-                ));
-            }
+        for _input_source in self.input_sources.iter() {
+            // Nothing to do
         }
 
         // validate platform

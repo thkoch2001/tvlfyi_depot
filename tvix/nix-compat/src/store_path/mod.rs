@@ -1,4 +1,5 @@
 use crate::nixbase32::{self, Nixbase32DecodeError};
+use serde::{Deserialize, Serialize};
 use std::{fmt, path::PathBuf};
 use thiserror::Error;
 
@@ -53,7 +54,7 @@ impl From<NameError> for Error {
 ///
 /// A [StorePath] does not encode any additional subpath "inside" the store
 /// path.
-#[derive(Clone, Debug, PartialEq, Eq)]
+#[derive(Clone, Debug, Hash, PartialEq, Eq, PartialOrd, Ord)]
 pub struct StorePath {
     pub digest: [u8; DIGEST_SIZE],
     pub name: String,
@@ -154,6 +155,19 @@ impl StorePath {
         }
 
         Ok(())
+    }
+}
+
+impl Serialize for StorePath {
+    fn serialize<S: serde::Serializer>(&self, serializer: S) -> Result<S::Ok, S::Error> {
+        serializer.serialize_str(&self.to_absolute_path())
+    }
+}
+
+impl<'de> Deserialize<'de> for StorePath {
+    fn deserialize<D: serde::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
+        StorePath::from_absolute_path(&String::deserialize(deserializer)?)
+            .map_err(serde::de::Error::custom)
     }
 }
 
