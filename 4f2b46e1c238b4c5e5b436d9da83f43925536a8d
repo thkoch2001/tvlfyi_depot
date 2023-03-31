@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "aa113469_cf89f740",
+        "filename": "tvix/nix-compat/src/store_path/utils.rs",
+        "patchSetId": 3
+      },
+      "lineNbr": 60,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-03-31T18:21:56Z",
+      "side": 0,
+      "message": "Are there still other users? wonder if it\u0027s necessary to keep that...",
+      "revId": "4f2b46e1c238b4c5e5b436d9da83f43925536a8d",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
