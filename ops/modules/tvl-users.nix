@@ -84,12 +84,12 @@
     };
   };
 
+  programs.fish.enable = true;
+
   environment.systemPackages = with pkgs; [
     alacritty.terminfo
     foot.terminfo
     rxvt-unicode-unwrapped.terminfo
-
-    # TODO(sterni): re-enable when the kitty build is fixed upstreams
-    # kitty.terminfo
+    kitty.terminfo
   ];
 }
