@@ -1,0 +1,89 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ed2a041c_2181cf62",
+        "filename": "tvix/nix-compat/src/derivation/mod.rs",
+        "patchSetId": 5
+      },
+      "lineNbr": 231,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-03-31T18:43:58Z",
+      "side": 1,
+      "message": "s/anderivation output/a derivation output/\n\nOr maybe even [Output], it\u0027s in scope and will be clickable in the rust docs.",
+      "revId": "62a156a856fc7d1b3cfa514e871754a995106216",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1507d97d_6b5082a8",
+        "filename": "tvix/nix-compat/src/nixhash/algos.rs",
+        "patchSetId": 5
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-03-31T18:43:58Z",
+      "side": 1,
+      "message": "Doesn\u0027t implementing display automatically cause ToString to be implemented?\n\nFrom https://doc.rust-lang.org/std/string/trait.ToString.html\n\n```\nA trait for converting a value to a String.\n\nThis trait is automatically implemented for any type which implements the Display trait. As such, ToString shouldn’t be implemented directly: Display should be implemented instead, and you get the ToString implementation for free.\n```",
+      "revId": "62a156a856fc7d1b3cfa514e871754a995106216",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fcec6fec_421c9025",
+        "filename": "tvix/nix-compat/src/store_path/utils.rs",
+        "patchSetId": 5
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-03-31T18:43:58Z",
+      "side": 1,
+      "message": "I\u0027d probably just call this Error, and refer to it as store_path::Error from outside.\n\nedit: ah, this is different from store_path::Error. mmh. can you make it\u0027s docstring more clear, explaining this wraps a store_path::Error?",
+      "revId": "62a156a856fc7d1b3cfa514e871754a995106216",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "eac92ec0_78d1504b",
+        "filename": "tvix/nix-compat/src/store_path/utils.rs",
+        "patchSetId": 5
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-03-31T18:43:58Z",
+      "side": 1,
+      "message": "invalid\n\nIsn\u0027t it a bit clunky to provide the user with the info about how the store path name ja invalid, if we don\u0027t have it in the format string?",
+      "revId": "62a156a856fc7d1b3cfa514e871754a995106216",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "116f7a23_dad615ec",
+        "filename": "tvix/nix-compat/src/store_path/utils.rs",
+        "patchSetId": 5
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-03-31T18:43:58Z",
+      "side": 1,
+      "message": "typo: requested\n\nAlso, i wouldn\u0027t understand how to interpret this error variant.\n\nMaybe add a docstring, explaining how it can occur, and extend the error message a bit with the cause?",
+      "revId": "62a156a856fc7d1b3cfa514e871754a995106216",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
