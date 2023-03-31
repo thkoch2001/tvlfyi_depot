@@ -73,6 +73,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "8fcd82a8_72b2ce49",
+        "filename": "tvix/nix-compat/src/nixhash/algos.rs",
+        "patchSetId": 5
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-03-31T19:27:56Z",
+      "side": 1,
+      "message": "I\u0027d hope rustc optimizes it out, if we only use the \u0026str. If we go down that rabbit hole of microoptimizations, we should really check godbolt ;-)\n\nI\u0027d prefer to keep it Display for now, to be consistent with the rest.",
+      "parentUuid": "a5d79e10_919b7657",
+      "revId": "62a156a856fc7d1b3cfa514e871754a995106216",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "fcec6fec_421c9025",
         "filename": "tvix/nix-compat/src/store_path/utils.rs",
         "patchSetId": 5
