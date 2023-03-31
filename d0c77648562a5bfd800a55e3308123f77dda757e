@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cb2acc44_69559e24",
+        "filename": "tvix/nix-compat/src/store_path/utils.rs",
+        "patchSetId": 10
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-03-31T20:26:56Z",
+      "side": 1,
+      "message": "Is text_path the canonical way to call this?",
+      "revId": "d0c77648562a5bfd800a55e3308123f77dda757e",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "60e4c9cb_aee1d4b3",
+        "filename": "tvix/nix-compat/src/store_path/utils.rs",
+        "patchSetId": 10
+      },
+      "lineNbr": 64,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-03-31T20:26:56Z",
+      "side": 1,
+      "message": "is it non-CA or CA? Function signature and docstring seem to be contradicting.\n\nAlso,you pprobably meant path, not ($)PATH...",
+      "revId": "d0c77648562a5bfd800a55e3308123f77dda757e",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1a2325b3_95ccc7b1",
+        "filename": "tvix/nix-compat/src/store_path/utils.rs",
+        "patchSetId": 10
+      },
+      "lineNbr": 113,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-03-31T20:26:56Z",
+      "side": 1,
+      "message": "... output path of a certain output of a derivation?\n\nThis docstring is too close to be confused with the drv_path for my taste.",
+      "revId": "d0c77648562a5bfd800a55e3308123f77dda757e",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
