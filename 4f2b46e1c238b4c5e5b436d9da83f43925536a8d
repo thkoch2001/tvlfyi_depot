@@ -16,6 +16,24 @@
       "message": "Are there still other users? wonder if it\u0027s necessary to keep that...",
       "revId": "4f2b46e1c238b4c5e5b436d9da83f43925536a8d",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "42bf8788_05ae627a",
+        "filename": "tvix/nix-compat/src/store_path/utils.rs",
+        "patchSetId": 3
+      },
+      "lineNbr": 60,
+      "author": {
+        "id": 1000075
+      },
+      "writtenOn": "2023-03-31T18:33:15Z",
+      "side": 0,
+      "message": "Keep the validation? I think it is probably good. All the other ones call this and then this one alone verifies the name ATM I think.",
+      "parentUuid": "aa113469_cf89f740",
+      "revId": "4f2b46e1c238b4c5e5b436d9da83f43925536a8d",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
