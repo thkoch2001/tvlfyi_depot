@@ -80,6 +80,8 @@ in
     group = "quassel";
   };
 
+  programs.fish.enable = true;
+
   users.users.tazjin = {
     isNormalUser = true;
     extraGroups = [ "wheel" ];
