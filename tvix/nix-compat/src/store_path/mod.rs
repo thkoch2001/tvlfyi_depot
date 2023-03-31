@@ -4,10 +4,7 @@ use thiserror::Error;
 
 mod utils;
 
-pub use utils::{
-    build_store_path_from_fingerprint, build_store_path_from_references, compress_hash,
-    hash_placeholder,
-};
+pub use utils::*;
 
 pub const DIGEST_SIZE: usize = 20;
 // lazy_static doesn't allow us to call NIXBASE32.encode_len(), so we ran it
