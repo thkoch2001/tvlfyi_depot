@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ea6049da_085f28c4",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000038
+      },
+      "writtenOn": "2023-03-31T11:42:46Z",
+      "side": 1,
+      "message": "Can this kind of improvements be automated somehow? 😊\n\nHaving chatGPT as a automatic reviewer looks very interesting.",
+      "revId": "86d8714caaf313fcc11e376abfb4aa95d3dd6968",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
