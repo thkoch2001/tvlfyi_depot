@@ -18,6 +18,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "161b008b_3f565e45",
+        "filename": "tvix/nix-compat/src/derivation/mod.rs",
+        "patchSetId": 5
+      },
+      "lineNbr": 231,
+      "author": {
+        "id": 1000075
+      },
+      "writtenOn": "2023-03-31T19:17:18Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ed2a041c_2181cf62",
+      "revId": "62a156a856fc7d1b3cfa514e871754a995106216",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "1507d97d_6b5082a8",
@@ -37,6 +55,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "a5d79e10_919b7657",
+        "filename": "tvix/nix-compat/src/nixhash/algos.rs",
+        "patchSetId": 5
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1000075
+      },
+      "writtenOn": "2023-03-31T19:17:18Z",
+      "side": 1,
+      "message": "Oh I was just been a weenie and wanted to show how it is a *static* string.",
+      "parentUuid": "1507d97d_6b5082a8",
+      "revId": "62a156a856fc7d1b3cfa514e871754a995106216",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "fcec6fec_421c9025",
         "filename": "tvix/nix-compat/src/store_path/utils.rs",
         "patchSetId": 5
@@ -48,6 +84,24 @@
       "writtenOn": "2023-03-31T18:43:58Z",
       "side": 1,
       "message": "I\u0027d probably just call this Error, and refer to it as store_path::Error from outside.\n\nedit: ah, this is different from store_path::Error. mmh. can you make it\u0027s docstring more clear, explaining this wraps a store_path::Error?",
+      "revId": "62a156a856fc7d1b3cfa514e871754a995106216",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d767024c_e366ebb6",
+        "filename": "tvix/nix-compat/src/store_path/utils.rs",
+        "patchSetId": 5
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1000075
+      },
+      "writtenOn": "2023-03-31T19:17:18Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "fcec6fec_421c9025",
       "revId": "62a156a856fc7d1b3cfa514e871754a995106216",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
@@ -71,6 +125,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "06c04707_92a4ac34",
+        "filename": "tvix/nix-compat/src/store_path/utils.rs",
+        "patchSetId": 5
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1000075
+      },
+      "writtenOn": "2023-03-31T19:17:18Z",
+      "side": 1,
+      "message": "Fixed, and I shuffled the types around to rule out errors that won\u0027t happen.",
+      "parentUuid": "eac92ec0_78d1504b",
+      "revId": "62a156a856fc7d1b3cfa514e871754a995106216",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "116f7a23_dad615ec",
         "filename": "tvix/nix-compat/src/store_path/utils.rs",
         "patchSetId": 5
@@ -82,6 +154,24 @@
       "writtenOn": "2023-03-31T18:43:58Z",
       "side": 1,
       "message": "typo: requested\n\nAlso, i wouldn\u0027t understand how to interpret this error variant.\n\nMaybe add a docstring, explaining how it can occur, and extend the error message a bit with the cause?",
+      "revId": "62a156a856fc7d1b3cfa514e871754a995106216",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5d976379_2e7ac5de",
+        "filename": "tvix/nix-compat/src/store_path/utils.rs",
+        "patchSetId": 5
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1000075
+      },
+      "writtenOn": "2023-03-31T19:17:18Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "116f7a23_dad615ec",
       "revId": "62a156a856fc7d1b3cfa514e871754a995106216",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }

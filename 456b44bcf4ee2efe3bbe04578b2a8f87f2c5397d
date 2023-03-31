@@ -16,6 +16,24 @@
       "message": "s/encapusulate/encapsulate/",
       "revId": "456b44bcf4ee2efe3bbe04578b2a8f87f2c5397d",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "15ff8a10_e90e3075",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 7
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000075
+      },
+      "writtenOn": "2023-03-31T19:17:18Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "3036a148_3e56e917",
+      "revId": "456b44bcf4ee2efe3bbe04578b2a8f87f2c5397d",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
