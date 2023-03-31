@@ -34,6 +34,24 @@
       "parentUuid": "aa113469_cf89f740",
       "revId": "4f2b46e1c238b4c5e5b436d9da83f43925536a8d",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "83ab7d44_392f7778",
+        "filename": "tvix/nix-compat/src/store_path/utils.rs",
+        "patchSetId": 3
+      },
+      "lineNbr": 60,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-03-31T18:44:50Z",
+      "side": 0,
+      "message": "I meant, keep the from_string method, but you\u0027re right, we probably still need to be able to parse strings that are store paths.",
+      "parentUuid": "42bf8788_05ae627a",
+      "revId": "4f2b46e1c238b4c5e5b436d9da83f43925536a8d",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
