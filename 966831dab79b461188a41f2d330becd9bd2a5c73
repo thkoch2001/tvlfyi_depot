@@ -16,6 +16,24 @@
       "message": "https://www.meziantou.net/misconceptions-about-date-and-time.htm",
       "revId": "966831dab79b461188a41f2d330becd9bd2a5c73",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2c1d39e2_5f4158e3",
+        "filename": "nix/epochToDateTime/default.nix",
+        "patchSetId": 1
+      },
+      "lineNbr": 3,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2023-03-31T16:46:04Z",
+      "side": 1,
+      "message": "What concretely do you think is relevant? We\u0027re not implementing a Julian calendar, we\u0027re not dealing with timezones etc.",
+      "parentUuid": "15f85e73_e1a41a91",
+      "revId": "966831dab79b461188a41f2d330becd9bd2a5c73",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
