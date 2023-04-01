@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7b222a9c_19f04270",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2023-04-01T10:32:34Z",
+      "side": 1,
+      "message": "LGTM but I don\u0027t want to approve such a foundational change alone.",
+      "revId": "18c228c7b60effd660b9d3d5c6666bd3fb97fe41",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
