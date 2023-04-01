@@ -262,7 +262,6 @@ lib.fix (self: {
       ripgrep
       rustup
       screen
-      scrot
       spotify
       tokei
       transmission
