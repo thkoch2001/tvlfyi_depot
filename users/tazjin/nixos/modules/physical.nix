@@ -39,6 +39,7 @@ in
       imagemagick
       jq
       lieer
+      maim
       man-pages
       moreutils
       mosh
@@ -62,7 +63,6 @@ in
       rust-analyzer
       rustup
       screen
-      scrot
       thunderbird
       tig
       tokei

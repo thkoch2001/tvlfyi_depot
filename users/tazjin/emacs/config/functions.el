@@ -241,11 +241,16 @@ the GPG agent correctly."
   (if prefix (text-scale-adjust 0)
     (set-face-attribute 'default nil :height (or to 120))))
 
-(defun scrot-select ()
+(defun screenshot-select (filename)
   "Take a screenshot based on a mouse-selection and save it to
   ~/screenshots."
-  (interactive)
-  (shell-command "scrot '$a_%Y-%m-%d_%s.png' -s -e 'mv $f ~/screenshots/'"))
+  (interactive "sScreenshot filename: ")
+  (let* ((path (f-join "~/screenshots"
+                       (format "%s-%d.png"
+                               (if (string-empty-p filename) "shot" filename)
+                               (time-convert nil 'integer)))))
+    (shell-command (format "maim --select %s" path))
+    (message "Wrote screenshot to %s" path)))
 
 (defun graph-unread-mails ()
   "Create a bar chart of unread mails based on notmuch tags.
