@@ -20,6 +20,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "5cf6ae7d_f78d8d17",
+        "filename": "tvix/nix-compat/src/store_path/utils.rs",
+        "patchSetId": 10
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 1000075
+      },
+      "writtenOn": "2023-04-01T02:07:19Z",
+      "side": 1,
+      "message": "Yes https://github.com/NixOS/nix/blob/cf76b38e27c1880479b9631844a58ce4ec9c3c38/src/libstore/store-api.hh#L274-L275",
+      "parentUuid": "cb2acc44_69559e24",
+      "revId": "d0c77648562a5bfd800a55e3308123f77dda757e",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "60e4c9cb_aee1d4b3",
         "filename": "tvix/nix-compat/src/store_path/utils.rs",
         "patchSetId": 10
@@ -37,6 +55,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "b1c861b8_abd6c0d9",
+        "filename": "tvix/nix-compat/src/store_path/utils.rs",
+        "patchSetId": 10
+      },
+      "lineNbr": 64,
+      "author": {
+        "id": 1000075
+      },
+      "writtenOn": "2023-04-01T02:07:19Z",
+      "side": 1,
+      "message": "oops, should be CA not non-CA.",
+      "parentUuid": "60e4c9cb_aee1d4b3",
+      "revId": "d0c77648562a5bfd800a55e3308123f77dda757e",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "1a2325b3_95ccc7b1",
         "filename": "tvix/nix-compat/src/store_path/utils.rs",
         "patchSetId": 10
@@ -48,6 +84,42 @@
       "writtenOn": "2023-03-31T20:26:56Z",
       "side": 1,
       "message": "... output path of a certain output of a derivation?\n\nThis docstring is too close to be confused with the drv_path for my taste.",
+      "revId": "d0c77648562a5bfd800a55e3308123f77dda757e",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c3388a26_b810d112",
+        "filename": "tvix/nix-compat/src/store_path/utils.rs",
+        "patchSetId": 10
+      },
+      "lineNbr": 113,
+      "author": {
+        "id": 1000075
+      },
+      "writtenOn": "2023-04-01T02:07:19Z",
+      "side": 1,
+      "message": "Added some stuff.",
+      "parentUuid": "1a2325b3_95ccc7b1",
+      "revId": "d0c77648562a5bfd800a55e3308123f77dda757e",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b79f907f_801073e4",
+        "filename": "tvix/nix-compat/src/store_path/utils.rs",
+        "patchSetId": 10
+      },
+      "lineNbr": 113,
+      "author": {
+        "id": 1000075
+      },
+      "writtenOn": "2023-04-01T02:07:19Z",
+      "side": 1,
+      "message": "I rewrote it, hopefully it is better now.",
+      "parentUuid": "1a2325b3_95ccc7b1",
       "revId": "d0c77648562a5bfd800a55e3308123f77dda757e",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
