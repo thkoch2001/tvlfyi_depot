@@ -34,9 +34,9 @@ impl Formals {
     }
 }
 
-/// The opcodes for a thunk or closure, plus the number of
-/// non-executable opcodes which are allowed after an OpThunkClosure or
-/// OpThunkSuspended referencing it.  At runtime `Lambda` is usually wrapped
+/// The opcodes for a thonk or closure, plus the number of
+/// non-executable opcodes which are allowed after an OpThonkClosure or
+/// OpThonkSuspended referencing it.  At runtime `Lambda` is usually wrapped
 /// in `Rc` to avoid copying the `Chunk` it holds (which can be
 /// quite large).
 ///

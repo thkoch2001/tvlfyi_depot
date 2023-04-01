@@ -30,7 +30,7 @@ use crate::{
     upvalues::Upvalues,
     value::{
         Builtin, BuiltinResult, Closure, CoercionKind, Lambda, NixAttrs, NixList, PointerEquality,
-        SharedThunkSet, Thunk, Value,
+        SharedThonkSet, Thonk, Value,
     },
     vm::generators::GenCo,
     warnings::{EvalWarning, WarningKind},
@@ -121,7 +121,7 @@ struct CallFrame {
     /// The lambda currently being executed.
     lambda: Rc<Lambda>,
 
-    /// Optional captured upvalues of this frame (if a thunk or
+    /// Optional captured upvalues of this frame (if a thonk or
     /// closure if being evaluated).
     upvalues: Rc<Upvalues>,
 
@@ -179,7 +179,7 @@ impl CallFrame {
 /// When a frame has been fully executed, it is removed from the VM's frame
 /// stack and expected to leave a result [`Value`] on the top of the stack.
 enum Frame {
-    /// CallFrame represents the execution of Tvix bytecode within a thunk,
+    /// CallFrame represents the execution of Tvix bytecode within a thonk,
     /// function or closure.
     CallFrame {
         /// The call frame itself, separated out into another type to pass it
@@ -195,7 +195,7 @@ enum Frame {
     ///
     /// A generator is essentially an asynchronous function that can
     /// be suspended while waiting for the VM to do something (e.g.
-    /// thunk forcing), and resume at the same point.
+    /// thonk forcing), and resume at the same point.
     Generator {
         /// human-readable description of the generator,
         name: &'static str,
@@ -221,7 +221,7 @@ impl Frame {
 struct VM<'o> {
     /// VM's frame stack, representing the execution contexts the VM is working
     /// through. Elements are usually pushed when functions are called, or
-    /// thunks are being forced.
+    /// thonks are being forced.
     frames: Vec<Frame>,
 
     /// The VM's top-level value stack. Within this stack, each code-executing
@@ -239,7 +239,7 @@ struct VM<'o> {
     warnings: Vec<EvalWarning>,
 
     /// Import cache, mapping absolute file paths to the value that
-    /// they compile to. Note that this reuses thunks, too!
+    /// they compile to. Note that this reuses thonks, too!
     // TODO: should probably be based on a file hash
     pub import_cache: Box<HashMap<PathBuf, Value>>,
 
@@ -359,7 +359,7 @@ impl<'o> VM<'o> {
                     };
                 }
 
-                // Handle generator frames, which can request thunk forcing
+                // Handle generator frames, which can request thonk forcing
                 // during their execution.
                 Frame::Generator {
                     name,
@@ -446,24 +446,24 @@ impl<'o> VM<'o> {
             self.observer.observe_execute_op(frame.ip, &op, &self.stack);
 
             match op {
-                OpCode::OpThunkSuspended(idx) | OpCode::OpThunkClosure(idx) => {
+                OpCode::OpThonkSuspended(idx) | OpCode::OpThonkClosure(idx) => {
                     let blueprint = match &frame.chunk()[idx] {
                         Value::Blueprint(lambda) => lambda.clone(),
                         _ => panic!("compiler bug: non-blueprint in blueprint slot"),
                     };
 
                     let upvalue_count = blueprint.upvalue_count;
-                    let thunk = if matches!(op, OpCode::OpThunkClosure(_)) {
+                    let thonk = if matches!(op, OpCode::OpThonkClosure(_)) {
                         debug_assert!(
                             upvalue_count > 0,
-                            "OpThunkClosure should not be called for plain lambdas"
+                            "OpThonkClosure should not be called for plain lambdas"
                         );
-                        Thunk::new_closure(blueprint)
+                        Thonk::new_closure(blueprint)
                     } else {
-                        Thunk::new_suspended(blueprint, frame.current_light_span())
+                        Thonk::new_suspended(blueprint, frame.current_light_span())
                     };
-                    let upvalues = thunk.upvalues_mut();
-                    self.stack.push(Value::Thunk(thunk.clone()));
+                    let upvalues = thonk.upvalues_mut();
+                    self.stack.push(Value::Thonk(thonk.clone()));
 
                     // From this point on we internally mutate the
                     // upvalues. The closure (if `is_closure`) is
@@ -474,9 +474,9 @@ impl<'o> VM<'o> {
                 }
 
                 OpCode::OpForce => {
-                    if let Some(Value::Thunk(_)) = self.stack.last() {
-                        let thunk = match self.stack_pop() {
-                            Value::Thunk(t) => t,
+                    if let Some(Value::Thonk(_)) = self.stack.last() {
+                        let thonk = match self.stack_pop() {
+                            Value::Thonk(t) => t,
                             _ => unreachable!(),
                         };
 
@@ -484,7 +484,7 @@ impl<'o> VM<'o> {
 
                         self.push_call_frame(span, frame);
                         self.enqueue_generator("force", gen_span.clone(), |co| {
-                            thunk.force(co, gen_span)
+                            thonk.force(co, gen_span)
                         });
 
                         return Ok(false);
@@ -723,7 +723,7 @@ impl<'o> VM<'o> {
                 OpCode::OpFinalise(StackIdx(idx)) => {
                     match &self.stack[frame.stack_offset + idx] {
                         Value::Closure(_) => panic!("attempted to finalise a closure"),
-                        Value::Thunk(thunk) => thunk.finalise(&self.stack[frame.stack_offset..]),
+                        Value::Thonk(thonk) => thonk.finalise(&self.stack[frame.stack_offset..]),
 
                         // In functions with "formals" attributes, it is
                         // possible for `OpFinalise` to be called on a
@@ -956,7 +956,7 @@ impl<'o> VM<'o> {
     /// Apply an argument from the stack to a builtin, and attempt to call it.
     ///
     /// All calls are tail-calls in Tvix, as every function application is a
-    /// separate thunk and OpCall is thus the last result in the thunk.
+    /// separate thonk and OpCall is thus the last result in the thonk.
     ///
     /// Due to this, once control flow exits this function, the generator will
     /// automatically be run by the VM.
@@ -990,7 +990,7 @@ impl<'o> VM<'o> {
     ) -> EvalResult<()> {
         match callable {
             Value::Builtin(builtin) => self.call_builtin(span, builtin),
-            Value::Thunk(thunk) => self.call_value(span, parent, thunk.value().clone()),
+            Value::Thonk(thonk) => self.call_value(span, parent, thonk.value().clone()),
 
             Value::Closure(closure) => {
                 let lambda = closure.lambda();
@@ -1035,7 +1035,7 @@ impl<'o> VM<'o> {
         }
     }
 
-    /// Populate the upvalue fields of a thunk or closure under construction.
+    /// Populate the upvalue fields of a thonk or closure under construction.
     fn populate_upvalues(
         &mut self,
         frame: &mut CallFrame,
@@ -1132,7 +1132,7 @@ async fn resolve_with(
     }
 
     for with_stack_idx in (0..vm_with_len).rev() {
-        // TODO(tazjin): is this branch still live with the current with-thunking?
+        // TODO(tazjin): is this branch still live with the current with-thonking?
         let with = fetch_forced_with(&co, with_stack_idx).await;
 
         match with.to_attrs()?.select(&ident) {
@@ -1188,7 +1188,7 @@ pub struct RuntimeResult {
 /// before returning.
 async fn final_deep_force(co: GenCo) -> Result<Value, ErrorKind> {
     let value = generators::request_stack_pop(&co).await;
-    Ok(generators::request_deep_force(&co, value, SharedThunkSet::default()).await)
+    Ok(generators::request_deep_force(&co, value, SharedThonkSet::default()).await)
 }
 
 pub fn run_lambda(

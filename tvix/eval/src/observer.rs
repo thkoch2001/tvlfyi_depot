@@ -32,8 +32,8 @@ pub trait CompilerObserver {
     /// called three times.
     fn observe_compiled_lambda(&mut self, _: &Rc<Lambda>) {}
 
-    /// Called when the compiler finishes compilation of a thunk.
-    fn observe_compiled_thunk(&mut self, _: &Rc<Lambda>) {}
+    /// Called when the compiler finishes compilation of a thonk.
+    fn observe_compiled_thonk(&mut self, _: &Rc<Lambda>) {}
 }
 
 /// Implemented by types that wish to observe internal happenings of
@@ -83,7 +83,7 @@ impl RuntimeObserver for NoOpObserver {}
 
 /// An observer that prints disassembled chunk information to its
 /// internal writer whenwever the compiler emits a toplevel function,
-/// closure or thunk.
+/// closure or thonk.
 pub struct DisassemblingObserver<W: Write> {
     source: SourceCode,
     writer: TabWriter<W>,
@@ -130,8 +130,8 @@ impl<W: Write> CompilerObserver for DisassemblingObserver<W> {
         let _ = self.writer.flush();
     }
 
-    fn observe_compiled_thunk(&mut self, lambda: &Rc<Lambda>) {
-        self.lambda_header("thunk", lambda);
+    fn observe_compiled_thonk(&mut self, lambda: &Rc<Lambda>) {
+        self.lambda_header("thonk", lambda);
         self.disassemble_chunk(&lambda.chunk);
         let _ = self.writer.flush();
     }
@@ -156,7 +156,7 @@ impl<W: Write> TracingObserver<W> {
             // the type of (and avoid recursing).
             Value::List(l) => write!(&mut self.writer, "list[{}] ", l.len()),
             Value::Attrs(a) => write!(&mut self.writer, "attrs[{}] ", a.len()),
-            Value::Thunk(t) if t.is_evaluated() => Ok(self.write_value(&t.value())),
+            Value::Thonk(t) if t.is_evaluated() => Ok(self.write_value(&t.value())),
 
             // For other value types, defer to the standard value printer.
             _ => write!(&mut self.writer, "{} ", val),
@@ -188,12 +188,10 @@ impl<W: Write> RuntimeObserver for TracingObserver<W> {
         lambda: &Rc<Lambda>,
         call_depth: usize,
     ) {
-        let _ = write!(&mut self.writer, "=== entering ");
-
         let _ = if arg_count == 0 {
-            write!(&mut self.writer, "thunk ")
+            write!(&mut self.writer, "=== :thonking: ")
         } else {
-            write!(&mut self.writer, "closure ")
+            write!(&mut self.writer, "=== entering closure ")
         };
 
         if let Some(name) = &lambda.name {

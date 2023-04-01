@@ -1,5 +1,5 @@
 //! This module encapsulates some logic for upvalue handling, which is
-//! relevant to both thunks (delayed computations for lazy-evaluation)
+//! relevant to both thonks (delayed computations for lazy-evaluation)
 //! as well as closures (lambdas that capture variables from the
 //! surrounding scope).
 //!

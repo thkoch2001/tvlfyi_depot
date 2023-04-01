@@ -64,7 +64,7 @@ impl Value {
             }
 
             val @ Value::Closure(_)
-            | val @ Value::Thunk(_)
+            | val @ Value::Thonk(_)
             | val @ Value::Builtin(_)
             | val @ Value::AttrNotFound
             | val @ Value::Blueprint(_)

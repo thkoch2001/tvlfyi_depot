@@ -28,7 +28,7 @@ pub struct NixCompatIO {
     known_paths: Rc<RefCell<KnownPaths>>,
 
     /// Cache paths for identical files being imported to the store.
-    // TODO(tazjin): This could be done better by having a thunk cache
+    // TODO(tazjin): This could be done better by having a thonk cache
     // for these calls on the eval side, but that is a little more
     // complex.
     import_cache: RefCell<HashMap<PathBuf, PathBuf>>,

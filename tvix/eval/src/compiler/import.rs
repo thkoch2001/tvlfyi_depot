@@ -13,7 +13,7 @@ use crate::{
     builtins::coerce_value_to_path,
     generators::pin_generator,
     observer::NoOpObserver,
-    value::{Builtin, Thunk},
+    value::{Builtin, Thonk},
     vm::generators::{self, GenCo},
     ErrorKind, SourceCode, Value,
 };
@@ -81,9 +81,9 @@ async fn import_impl(
         generators::emit_warning(&co, warning).await;
     }
 
-    // Compilation succeeded, we can construct a thunk from whatever it spat
+    // Compilation succeeded, we can construct a thonk from whatever it spat
     // out and return that.
-    let res = Value::Thunk(Thunk::new_suspended(
+    let res = Value::Thonk(Thonk::new_suspended(
         result.lambda,
         generators::request_span(&co).await,
     ));

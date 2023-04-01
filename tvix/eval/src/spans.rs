@@ -11,7 +11,7 @@ use std::rc::Rc;
 /// Helper struct to carry information required for making a span, but
 /// without actually performing the (expensive) span lookup.
 ///
-/// This is used for tracking spans across thunk boundaries, as they
+/// This is used for tracking spans across thonk boundaries, as they
 /// are frequently instantiated but spans are only used in error or
 /// warning cases.
 #[derive(Clone, Debug)]

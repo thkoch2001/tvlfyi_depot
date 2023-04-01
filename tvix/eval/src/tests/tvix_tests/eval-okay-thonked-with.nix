@@ -1,4 +1,4 @@
-# Creates a `with` across multiple thunk boundaries.
+# Creates a `with` across multiple thonk boundaries.
 
 let
   set = {

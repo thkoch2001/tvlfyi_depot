@@ -76,7 +76,7 @@ pub enum ErrorKind {
     /// Attempt to call something that is not callable.
     NotCallable(&'static str),
 
-    /// Infinite recursion encountered while forcing thunks.
+    /// Infinite recursion encountered while forcing thonks.
     InfiniteRecursion {
         first_force: Span,
         suspended_at: Option<Span>,

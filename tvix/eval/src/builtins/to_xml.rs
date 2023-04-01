@@ -50,7 +50,7 @@ fn write_typed_value<W: Write, V: ToString>(
 
 fn value_variant_to_xml<W: Write>(w: &mut EventWriter<W>, value: &Value) -> Result<(), ErrorKind> {
     match value {
-        Value::Thunk(t) => return value_variant_to_xml(w, &t.value()),
+        Value::Thonk(t) => return value_variant_to_xml(w, &t.value()),
 
         Value::Null => {
             w.write(XmlEvent::start_element("null"))?;

@@ -150,7 +150,7 @@ impl Chunk {
         match self[idx] {
             OpCode::OpConstant(idx) => {
                 let val_str = match &self[idx] {
-                    Value::Thunk(t) => t.debug_repr(),
+                    Value::Thonk(t) => t.debug_repr(),
                     Value::Closure(c) => format!("closure({:p})", c.lambda),
                     val => format!("{}", val),
                 };

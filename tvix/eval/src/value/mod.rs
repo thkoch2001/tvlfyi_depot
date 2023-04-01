@@ -18,7 +18,7 @@ mod json;
 mod list;
 mod path;
 mod string;
-mod thunk;
+mod thonk;
 
 use crate::errors::ErrorKind;
 use crate::opcode::StackIdx;
@@ -32,9 +32,9 @@ pub use function::{Closure, Lambda};
 pub use list::NixList;
 pub use path::canon_path;
 pub use string::NixString;
-pub use thunk::Thunk;
+pub use thonk::Thonk;
 
-pub use self::thunk::{SharedThunkSet, ThunkSet};
+pub use self::thonk::{SharedThonkSet, ThonkSet};
 
 use lazy_static::lazy_static;
 
@@ -62,7 +62,7 @@ pub enum Value {
     // Internal values that, while they technically exist at runtime,
     // are never returned to or created directly by users.
     #[serde(skip_deserializing)]
-    Thunk(Thunk),
+    Thonk(Thonk),
 
     // See [`compiler::compile_select_or()`] for explanation
     #[serde(skip)]
@@ -92,11 +92,11 @@ lazy_static! {
 }
 
 // Helper macros to generate the to_*/as_* macros while accounting for
-// thunks.
+// thonks.
 
 /// Generate an `as_*` method returning a reference to the expected
 /// type, or a type error. This only works for types that implement
-/// `Copy`, as returning a reference to an inner thunk value is not
+/// `Copy`, as returning a reference to an inner thonk value is not
 /// possible.
 
 /// Generate an `as_*/to_*` accessor method that returns either the
@@ -106,7 +106,7 @@ macro_rules! gen_cast {
         pub fn $name(&self) -> Result<$type, ErrorKind> {
             match self {
                 $variant => Ok($result),
-                Value::Thunk(thunk) => Self::$name(&thunk.value()),
+                Value::Thonk(thonk) => Self::$name(&thonk.value()),
                 other => Err(type_error($expected, &other)),
             }
         }
@@ -132,7 +132,7 @@ macro_rules! gen_is {
         pub fn $name(&self) -> bool {
             match self {
                 $variant => true,
-                Value::Thunk(thunk) => Self::$name(&thunk.value()),
+                Value::Thonk(thonk) => Self::$name(&thonk.value()),
                 _ => false,
             }
         }
@@ -193,12 +193,12 @@ impl Value {
     pub(super) async fn deep_force(
         self,
         co: GenCo,
-        thunk_set: SharedThunkSet,
+        thonk_set: SharedThonkSet,
     ) -> Result<Value, ErrorKind> {
-        // Get rid of any top-level thunks, and bail out of self-recursive
-        // thunks.
-        let value = if let Value::Thunk(ref t) = &self {
-            if !thunk_set.insert(t) {
+        // Get rid of any top-level thonks, and bail out of self-recursive
+        // thonks.
+        let value = if let Value::Thonk(ref t) = &self {
+            if !thonk_set.insert(t) {
                 return Ok(self);
             }
             generators::request_force(&co, self).await
@@ -219,17 +219,17 @@ impl Value {
 
             Value::List(list) => {
                 for val in list {
-                    generators::request_deep_force(&co, val.clone(), thunk_set.clone()).await;
+                    generators::request_deep_force(&co, val.clone(), thonk_set.clone()).await;
                 }
             }
 
             Value::Attrs(attrs) => {
                 for (_, val) in attrs.iter() {
-                    generators::request_deep_force(&co, val.clone(), thunk_set.clone()).await;
+                    generators::request_deep_force(&co, val.clone(), thonk_set.clone()).await;
                 }
             }
 
-            Value::Thunk(_) => panic!("Tvix bug: force_value() returned a thunk"),
+            Value::Thonk(_) => panic!("Tvix bug: force_value() returned a thonk"),
 
             Value::AttrNotFound
             | Value::Blueprint(_)
@@ -311,7 +311,7 @@ impl Value {
                 Ok(Value::String(out.into()))
             }
 
-            (Value::Thunk(_), _) => panic!("Tvix bug: force returned unforced thunk"),
+            (Value::Thonk(_), _) => panic!("Tvix bug: force returned unforced thonk"),
 
             val @ (Value::Closure(_), _)
             | val @ (Value::Builtin(_), _)
@@ -352,12 +352,12 @@ impl Value {
         ptr_eq: PointerEquality,
     ) -> Result<Value, ErrorKind> {
         let a = match self {
-            Value::Thunk(ref thunk) => {
-                // If both values are thunks, and thunk comparisons are allowed by
+            Value::Thonk(ref thonk) => {
+                // If both values are thonks, and thonk comparisons are allowed by
                 // pointer, do that and move on.
                 if ptr_eq == PointerEquality::AllowAll {
-                    if let Value::Thunk(t1) = &other {
-                        if t1.ptr_eq(thunk) {
+                    if let Value::Thonk(t1) = &other {
+                        if t1.ptr_eq(thonk) {
                             return Ok(Value::Bool(true));
                         }
                     }
@@ -370,12 +370,12 @@ impl Value {
         };
 
         let b = match other {
-            Value::Thunk(_) => generators::request_force(&co, other).await,
+            Value::Thonk(_) => generators::request_force(&co, other).await,
             _ => other,
         };
 
-        debug_assert!(!matches!(a, Value::Thunk(_)));
-        debug_assert!(!matches!(b, Value::Thunk(_)));
+        debug_assert!(!matches!(a, Value::Thonk(_)));
+        debug_assert!(!matches!(b, Value::Thonk(_)));
 
         let result = match (a, b) {
             // Trivial comparisons
@@ -514,7 +514,7 @@ impl Value {
             // Internal types. Note: These are only elaborated here
             // because it makes debugging easier. If a user ever sees
             // any of these strings, it's a bug.
-            Value::Thunk(_) => "internal[thunk]",
+            Value::Thonk(_) => "internal[thonk]",
             Value::AttrNotFound => "internal[attr_not_found]",
             Value::Blueprint(_) => "internal[blueprint]",
             Value::DeferredUpvalue(_) => "internal[deferred_upvalue]",
@@ -613,8 +613,8 @@ impl Value {
 
     // TODO(amjoseph): de-asyncify this (when called directly by the VM)
     pub async fn force(self, co: GenCo, span: LightSpan) -> Result<Value, ErrorKind> {
-        if let Value::Thunk(thunk) = self {
-            return thunk.force(co, span).await;
+        if let Value::Thonk(thonk) = self {
+            return thonk.force(co, span).await;
         }
 
         Ok(self)
@@ -650,8 +650,8 @@ impl Value {
                 out
             }
 
-            // TODO: handle suspended thunks with a different explanation instead of panicking
-            Value::Thunk(t) => t.value().explain(),
+            // TODO: handle suspended thonks with a different explanation instead of panicking
+            Value::Thonk(t) => t.value().explain(),
 
             Value::AttrNotFound
             | Value::Blueprint(_)
@@ -663,7 +663,7 @@ impl Value {
 }
 
 trait TotalDisplay {
-    fn total_fmt(&self, f: &mut std::fmt::Formatter<'_>, set: &mut ThunkSet) -> std::fmt::Result;
+    fn total_fmt(&self, f: &mut std::fmt::Formatter<'_>, set: &mut ThonkSet) -> std::fmt::Result;
 }
 
 impl Display for Value {
@@ -747,7 +747,7 @@ fn total_fmt_float<F: std::fmt::Write>(num: f64, mut f: F) -> std::fmt::Result {
 }
 
 impl TotalDisplay for Value {
-    fn total_fmt(&self, f: &mut std::fmt::Formatter<'_>, set: &mut ThunkSet) -> std::fmt::Result {
+    fn total_fmt(&self, f: &mut std::fmt::Formatter<'_>, set: &mut ThonkSet) -> std::fmt::Result {
         match self {
             Value::Null => f.write_str("null"),
             Value::Bool(true) => f.write_str("true"),
@@ -772,9 +772,9 @@ impl TotalDisplay for Value {
             Value::UnresolvedPath(_) => f.write_str("internal[unresolved_path]"),
             Value::Json(_) => f.write_str("internal[json]"),
 
-            // Delegate thunk display to the type, as it must handle
-            // the case of already evaluated or cyclic thunks.
-            Value::Thunk(t) => t.total_fmt(f, set),
+            // Delegate thonk display to the type, as it must handle
+            // the case of already evaluated or cyclic thonks.
+            Value::Thonk(t) => t.total_fmt(f, set),
         }
     }
 }

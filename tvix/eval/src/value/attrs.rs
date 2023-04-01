@@ -13,7 +13,7 @@ use serde::de::{Deserializer, Error, Visitor};
 use serde::Deserialize;
 
 use super::string::NixString;
-use super::thunk::ThunkSet;
+use super::thonk::ThonkSet;
 use super::CoercionKind;
 use super::TotalDisplay;
 use super::Value;
@@ -121,7 +121,7 @@ where
 }
 
 impl TotalDisplay for NixAttrs {
-    fn total_fmt(&self, f: &mut std::fmt::Formatter<'_>, set: &mut ThunkSet) -> std::fmt::Result {
+    fn total_fmt(&self, f: &mut std::fmt::Formatter<'_>, set: &mut ThonkSet) -> std::fmt::Result {
         f.write_str("{ ")?;
 
         match &self.0 {

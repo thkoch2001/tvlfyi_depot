@@ -14,7 +14,7 @@ use smol_str::SmolStr;
 use std::fmt::Display;
 use std::future::Future;
 
-use crate::value::{PointerEquality, SharedThunkSet};
+use crate::value::{PointerEquality, SharedThonkSet};
 use crate::warnings::{EvalWarning, WarningKind};
 use crate::FileType;
 use crate::NixString;
@@ -44,7 +44,7 @@ pub enum VMRequest {
     ForceValue(Value),
 
     /// Request that the VM deep-forces the value.
-    DeepForceValue(Value, SharedThunkSet),
+    DeepForceValue(Value, SharedThonkSet),
 
     /// Request the value at the given index from the VM's with-stack, in forced
     /// state.
@@ -78,7 +78,7 @@ pub enum VMRequest {
     Call(Value),
 
     /// Request a call frame entering the given lambda immediately. This can be
-    /// used to force thunks.
+    /// used to force thonks.
     EnterLambda {
         lambda: Rc<Lambda>,
         upvalues: Rc<Upvalues>,
@@ -93,7 +93,7 @@ pub enum VMRequest {
     EmitWarningKind(WarningKind),
 
     /// Request a lookup in the VM's import cache, which tracks the
-    /// thunks yielded by previously imported files.
+    /// thonks yielded by previously imported files.
     ImportCacheLookup(PathBuf),
 
     /// Provide the VM with an imported value for a given path, which
@@ -300,10 +300,10 @@ impl<'o> VM<'o> {
                         }
 
                         // Generator has requested a deep-force.
-                        VMRequest::DeepForceValue(value, thunk_set) => {
+                        VMRequest::DeepForceValue(value, thonk_set) => {
                             self.reenqueue_generator(name, span.clone(), generator);
                             self.enqueue_generator("deep_force", span, |co| {
-                                value.deep_force(co, thunk_set)
+                                value.deep_force(co, thonk_set)
                             });
                             return Ok(false);
                         }
@@ -504,7 +504,7 @@ pub async fn request_stack_pop(co: &GenCo) -> Value {
 
 /// Force any value and return the evaluated result from the VM.
 pub async fn request_force(co: &GenCo, val: Value) -> Value {
-    if let Value::Thunk(_) = val {
+    if let Value::Thonk(_) = val {
         match co.yield_(VMRequest::ForceValue(val)).await {
             VMResponse::Value(value) => value,
             msg => panic!(
@@ -520,7 +520,7 @@ pub async fn request_force(co: &GenCo, val: Value) -> Value {
 /// Force a value, but inform the caller (by returning `None`) if a catchable
 /// error occured.
 pub(crate) async fn request_try_force(co: &GenCo, val: Value) -> Option<Value> {
-    if let Value::Thunk(_) = val {
+    if let Value::Thonk(_) = val {
         match co.yield_(VMRequest::TryForce(val)).await {
             VMResponse::Value(value) => Some(value),
             VMResponse::ForceError => None,
@@ -586,8 +586,8 @@ pub async fn request_string_coerce(co: &GenCo, val: Value, kind: CoercionKind) -
 }
 
 /// Deep-force any value and return the evaluated result from the VM.
-pub async fn request_deep_force(co: &GenCo, val: Value, thunk_set: SharedThunkSet) -> Value {
-    match co.yield_(VMRequest::DeepForceValue(val, thunk_set)).await {
+pub async fn request_deep_force(co: &GenCo, val: Value, thonk_set: SharedThonkSet) -> Value {
+    match co.yield_(VMRequest::DeepForceValue(val, thonk_set)).await {
         VMResponse::Value(value) => value,
         msg => panic!(
             "Tvix bug: VM responded with incorrect generator message: {}",

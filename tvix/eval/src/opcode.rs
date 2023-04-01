@@ -145,13 +145,13 @@ pub enum OpCode {
     /// A Closure which has upvalues but no self-references
     OpClosure(ConstantIdx),
     /// A Closure which has self-references (direct or via upvalues)
-    OpThunkClosure(ConstantIdx),
-    /// A suspended thunk, used to ensure laziness
-    OpThunkSuspended(ConstantIdx),
+    OpThonkClosure(ConstantIdx),
+    /// A suspended thonk, used to ensure laziness
+    OpThonkSuspended(ConstantIdx),
     OpForce,
 
     /// Finalise initialisation of the upvalues of the value in the given stack
-    /// index (which must be a Value::Thunk) after the scope is fully bound.
+    /// index (which must be a Value::Thonk) after the scope is fully bound.
     OpFinalise(StackIdx),
 
     /// Final instruction emitted in a chunk. Does not have an
@@ -162,7 +162,7 @@ pub enum OpCode {
     /// frame, hence the name.
     OpReturn,
 
-    // [`OpClosure`], [`OpThunkSuspended`], and [`OpThunkClosure`] have a
+    // [`OpClosure`], [`OpThonkSuspended`], and [`OpThonkClosure`] have a
     // variable number of arguments to the instruction, which is
     // represented here by making their data part of the opcodes.
     // Each of these two opcodes has a `ConstantIdx`, which must
@@ -175,8 +175,8 @@ pub enum OpCode {
     // It is illegal for a `Data*` opcode to appear anywhere else.
     /// Populate a static upvalue by copying from the stack immediately.
     DataStackIdx(StackIdx),
-    /// Populate a static upvalue of a thunk by copying it the stack, but do
-    /// when the thunk is finalised (by OpFinalise) rather than immediately.
+    /// Populate a static upvalue of a thonk by copying it the stack, but do
+    /// when the thonk is finalised (by OpFinalise) rather than immediately.
     DataDeferredLocal(StackIdx),
     /// Populate a static upvalue by copying it from the upvalues of an
     /// enclosing scope.

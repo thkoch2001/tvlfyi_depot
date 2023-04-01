@@ -27,7 +27,7 @@ in
   # works with !=
   ([ f ] != [ f' ])
 
-  # thunks that fail to evaluated wrapped in sets/lists
+  # thonks that fail to evaluated wrapped in sets/lists
   (peq1 t t)
   (peq2 t t)
   (peq1 a a)

@@ -587,9 +587,9 @@ impl Compiler<'_> {
                     name,
                     span,
                 } => {
-                    // Create a thunk wrapping value (which may be one as well)
+                    // Create a thonk wrapping value (which may be one as well)
                     // to avoid forcing the from expr too early.
-                    self.thunk(binding.value_slot, &namespace, |c, s| {
+                    self.thonk(binding.value_slot, &namespace, |c, s| {
                         c.compile(s, namespace.clone());
                         c.emit_force(&namespace);
 
@@ -604,7 +604,7 @@ impl Compiler<'_> {
 
                 // Binding is a merged or nested attribute set, and needs to be
                 // recursively compiled as another binding.
-                Binding::Set(set) => self.thunk(binding.value_slot, &set, |c, _| {
+                Binding::Set(set) => self.thonk(binding.value_slot, &set, |c, _| {
                     c.scope_mut().begin_scope();
                     c.compile_bindings(binding.value_slot, set.kind, &set);
                     c.scope_mut().end_scope();
@@ -722,9 +722,9 @@ impl Compiler<'_> {
                 //
                 // Since it is possible for users to e.g. assign a variable to a
                 // dynamic resolution without actually using it, this operation
-                // is wrapped in an extra thunk.
+                // is wrapped in an extra thonk.
                 if self.has_dynamic_ancestor() {
-                    self.thunk(slot, node, |c, _| {
+                    self.thonk(slot, node, |c, _| {
                         c.context_mut().captures_with_stack = true;
                         c.emit_constant(Value::String(ident.into()), node);
                         c.push_op(OpCode::OpResolveWith, node);
@@ -742,8 +742,8 @@ impl Compiler<'_> {
             }
 
             // This identifier is referring to a value from the same scope which
-            // is not yet defined. This identifier access must be thunked.
-            LocalPosition::Recursive(idx) => self.thunk(slot, node, move |compiler, _| {
+            // is not yet defined. This identifier access must be thonked.
+            LocalPosition::Recursive(idx) => self.thonk(slot, node, move |compiler, _| {
                 let upvalue_idx = compiler.add_upvalue(
                     compiler.contexts.len() - 1,
                     node,
@@ -776,7 +776,7 @@ impl Compiler<'_> {
         // Determine whether the upvalue is a local in the enclosing context.
         match self.contexts[ctx_idx - 1].scope.resolve_local(name) {
             // recursive upvalues are dealt with the same way as standard known
-            // ones, as thunks and closures are guaranteed to be placed on the
+            // ones, as thonks and closures are guaranteed to be placed on the
             // stack (i.e. in the right position) *during* their runtime
             // construction
             LocalPosition::Known(idx) | LocalPosition::Recursive(idx) => {

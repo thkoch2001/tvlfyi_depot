@@ -12,8 +12,8 @@ struct NixDeserializer {
 
 impl NixDeserializer {
     fn new(value: Value) -> Self {
-        if let Value::Thunk(thunk) = value {
-            Self::new(thunk.value().clone())
+        if let Value::Thonk(thonk) = value {
+            Self::new(thonk.value().clone())
         } else {
             Self { value }
         }
@@ -88,7 +88,7 @@ impl<'de> de::Deserializer<'de> for NixDeserializer {
             // tvix-eval types that can not be deserialized through serde.
             Value::Closure(_)
             | Value::Builtin(_)
-            | Value::Thunk(_)
+            | Value::Thonk(_)
             | Value::AttrNotFound
             | Value::Blueprint(_)
             | Value::DeferredUpvalue(_)

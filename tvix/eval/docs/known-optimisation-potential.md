@@ -76,7 +76,7 @@ optimisations, but note the most important ones here.
 
 * Avoid nested `VM::run` calls [hard]
 
-  Currently when encountering Nix-native callables (thunks, closures)
+  Currently when encountering Nix-native callables (thonks, closures)
   the VM's run loop will nest and return the value of the nested call
   frame one level up. This makes the Rust call stack almost mirror the
   Nix call stack, which is usually undesirable.
@@ -90,10 +90,10 @@ optimisations, but note the most important ones here.
   `I96828ab6a628136e0bac1bf03555faa4e6b74ece`, in which the initial
   attempt at doing this was reverted.
 
-* Avoid thunks if only identifier closing is required [medium]
+* Avoid thonks if only identifier closing is required [medium]
 
   Some constructs, like `with`, mostly do not change runtime behaviour
-  if thunked. However, they are wrapped in thunks to ensure that
+  if thonked. However, they are wrapped in thonks to ensure that
   deferred identifiers are resolved correctly.
 
   This can be avoided, as we statically analyse the scope and should

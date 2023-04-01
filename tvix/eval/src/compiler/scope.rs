@@ -54,7 +54,7 @@ pub struct Local {
     pub needs_finaliser: bool,
 
     /// Does this local's upvalues contain a reference to itself?
-    pub must_thunk: bool,
+    pub must_thonk: bool,
 }
 
 impl Local {
@@ -85,12 +85,12 @@ pub enum LocalPosition {
 
     /// Local is known, but is being accessed recursively within its
     /// own initialisation. Depending on context, this is either an
-    /// error or forcing a closure/thunk.
+    /// error or forcing a closure/thonk.
     Recursive(LocalIdx),
 }
 
 /// Represents the different ways in which upvalues can be captured in
-/// closures or thunks.
+/// closures or thonks.
 #[derive(Clone, Debug, PartialEq, Eq)]
 pub enum UpvalueKind {
     /// This upvalue captures a local from the stack.
@@ -183,7 +183,7 @@ impl Index<LocalIdx> for Scope {
 
 impl Scope {
     /// Inherit scope details from a parent scope (required for
-    /// correctly nesting scopes in lambdas and thunks when special
+    /// correctly nesting scopes in lambdas and thonks when special
     /// scope features like dynamic resolution are present).
     pub fn inherit(&self) -> Self {
         Self {
@@ -244,7 +244,7 @@ impl Scope {
             name: LocalName::Phantom,
             depth: self.scope_depth,
             needs_finaliser: false,
-            must_thunk: false,
+            must_thonk: false,
             used: true,
         });
 
@@ -267,7 +267,7 @@ impl Scope {
             depth: self.scope_depth,
             initialised: false,
             needs_finaliser: false,
-            must_thunk: false,
+            must_thonk: false,
             used: false,
         });
 
@@ -296,10 +296,10 @@ impl Scope {
         self.locals[idx.0].needs_finaliser = true;
     }
 
-    /// Mark local as must be wrapped in a thunk.  This happens if
+    /// Mark local as must be wrapped in a thonk.  This happens if
     /// the local has a reference to itself in its upvalues.
-    pub fn mark_must_thunk(&mut self, idx: LocalIdx) {
-        self.locals[idx.0].must_thunk = true;
+    pub fn mark_must_thonk(&mut self, idx: LocalIdx) {
+        self.locals[idx.0].must_thonk = true;
     }
 
     /// Compute the runtime stack index for a given local by

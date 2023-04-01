@@ -32,7 +32,7 @@ use crate::observer::CompilerObserver;
 use crate::opcode::{CodeIdx, ConstantIdx, Count, JumpOffset, OpCode, UpvalueIdx};
 use crate::spans::LightSpan;
 use crate::spans::ToSpan;
-use crate::value::{Closure, Formals, Lambda, NixAttrs, Thunk, Value};
+use crate::value::{Closure, Formals, Lambda, NixAttrs, Thonk, Value};
 use crate::warnings::{EvalWarning, WarningKind};
 use crate::SourceCode;
 
@@ -251,41 +251,41 @@ impl Compiler<'_> {
             ast::Expr::UnaryOp(op) => self.compile_unary_op(slot, op),
 
             ast::Expr::BinOp(binop) => {
-                self.thunk(slot, binop, move |c, s| c.compile_binop(s, binop))
+                self.thonk(slot, binop, move |c, s| c.compile_binop(s, binop))
             }
 
             ast::Expr::HasAttr(has_attr) => self.compile_has_attr(slot, has_attr),
 
-            ast::Expr::List(list) => self.thunk(slot, list, move |c, s| c.compile_list(s, list)),
+            ast::Expr::List(list) => self.thonk(slot, list, move |c, s| c.compile_list(s, list)),
 
             ast::Expr::AttrSet(attrs) => {
-                self.thunk(slot, attrs, move |c, s| c.compile_attr_set(s, attrs))
+                self.thonk(slot, attrs, move |c, s| c.compile_attr_set(s, attrs))
             }
 
             ast::Expr::Select(select) => {
-                self.thunk(slot, select, move |c, s| c.compile_select(s, select))
+                self.thonk(slot, select, move |c, s| c.compile_select(s, select))
             }
 
             ast::Expr::Assert(assert) => {
-                self.thunk(slot, assert, move |c, s| c.compile_assert(s, assert))
+                self.thonk(slot, assert, move |c, s| c.compile_assert(s, assert))
             }
             ast::Expr::IfElse(if_else) => {
-                self.thunk(slot, if_else, move |c, s| c.compile_if_else(s, if_else))
+                self.thonk(slot, if_else, move |c, s| c.compile_if_else(s, if_else))
             }
 
             ast::Expr::LetIn(let_in) => {
-                self.thunk(slot, let_in, move |c, s| c.compile_let_in(s, let_in))
+                self.thonk(slot, let_in, move |c, s| c.compile_let_in(s, let_in))
             }
 
             ast::Expr::Ident(ident) => self.compile_ident(slot, ident),
-            ast::Expr::With(with) => self.thunk(slot, with, |c, s| c.compile_with(s, with)),
+            ast::Expr::With(with) => self.thonk(slot, with, |c, s| c.compile_with(s, with)),
             ast::Expr::Lambda(lambda) => {
-                self.compile_lambda_or_thunk(false, slot, lambda, |c, s| {
+                self.compile_lambda_or_thonk(false, slot, lambda, |c, s| {
                     c.compile_lambda(s, lambda)
                 })
             }
             ast::Expr::Apply(apply) => {
-                self.thunk(slot, apply, move |c, s| c.compile_apply(s, apply))
+                self.thonk(slot, apply, move |c, s| c.compile_apply(s, apply))
             }
 
             // Parenthesized expressions are simply unwrapped, leaving
@@ -336,7 +336,7 @@ impl Compiler<'_> {
         let path = if raw_path.starts_with('/') {
             Path::new(&raw_path).to_owned()
         } else if raw_path.starts_with('~') {
-            return self.thunk(slot, node, move |c, _| {
+            return self.thonk(slot, node, move |c, _| {
                 // We assume that home paths start with ~/ or fail to parse
                 // TODO: this should be checked using a parse-fail test.
                 debug_assert!(raw_path.len() > 2 && raw_path.starts_with("~/"));
@@ -357,8 +357,8 @@ impl Compiler<'_> {
                 );
             }
             let path = &raw_path[1..(raw_path.len() - 1)];
-            // Make a thunk to resolve the path (without using `findFile`, at least for now?)
-            return self.thunk(slot, node, move |c, _| {
+            // Make a thonk to resolve the path (without using `findFile`, at least for now?)
+            return self.thonk(slot, node, move |c, _| {
                 c.emit_constant(Value::UnresolvedPath(Box::new(path.into())), node);
                 c.push_op(OpCode::OpFindFile, node);
             });
@@ -376,7 +376,7 @@ impl Compiler<'_> {
 
     /// Helper that compiles the given string parts strictly. The caller
     /// (`compile_str`) needs to figure out if the result of compiling this
-    /// needs to be thunked or not.
+    /// needs to be thonked or not.
     fn compile_str_parts(
         &mut self,
         slot: LocalIdx,
@@ -413,13 +413,13 @@ impl Compiler<'_> {
     fn compile_str(&mut self, slot: LocalIdx, node: &ast::Str) {
         let parts = node.normalized_parts();
 
-        // We need to thunk string expressions if they are the result of
+        // We need to thonk string expressions if they are the result of
         // interpolation. A string that only consists of a single part (`"${foo}"`)
         // can't desugar to the enclosed expression (`foo`) because we need to
         // coerce the result to a string value. This would require forcing the
-        // value of the inner expression, so we need to wrap it in another thunk.
+        // value of the inner expression, so we need to wrap it in another thonk.
         if parts.len() != 1 || matches!(&parts[0], ast::InterpolPart::Interpolation(_)) {
-            self.thunk(slot, node, move |c, s| {
+            self.thonk(slot, node, move |c, s| {
                 c.compile_str_parts(s, node, parts);
             });
         } else {
@@ -635,9 +635,9 @@ impl Compiler<'_> {
     /// immediately replacing it with the actual value.
     ///
     /// We take care not to emit an error here, as that would interfere with
-    /// thunking behaviour (there can be perfectly valid Nix code that accesses
+    /// thonking behaviour (there can be perfectly valid Nix code that accesses
     /// a statically known attribute set that is lacking a key, because that
-    /// thunk is never evaluated). If anything is missing, just inform the
+    /// thonk is never evaluated). If anything is missing, just inform the
     /// caller that the optimisation did not take place and move on. We may want
     /// to emit warnings here in the future.
     fn optimise_select(&mut self, path: &ast::Attrpath) -> bool {
@@ -646,9 +646,9 @@ impl Compiler<'_> {
         // actual value.
         //
         // We take care not to emit an error here, as that would
-        // interfere with thunking behaviour (there can be perfectly
+        // interfere with thonking behaviour (there can be perfectly
         // valid Nix code that accesses a statically known attribute
-        // set that is lacking a key, because that thunk is never
+        // set that is lacking a key, because that thonk is never
         // evaluated). If anything is missing, just move on. We may
         // want to emit warnings here in the future.
         if let Some(OpCode::OpConstant(ConstantIdx(idx))) = self.chunk().code.last().cloned() {
@@ -938,12 +938,12 @@ impl Compiler<'_> {
 
                 self.patch_jump(jump_to_default);
 
-                // Thunk the default expression, but only if it is something
+                // Thonk the default expression, but only if it is something
                 // other than an identifier.
                 if let ast::Expr::Ident(_) = &default_expr {
                     self.compile(idx, default_expr);
                 } else {
-                    self.thunk(idx, &self.span_for(&default_expr), move |c, s| {
+                    self.thonk(idx, &self.span_for(&default_expr), move |c, s| {
                         c.compile(s, default_expr)
                     });
                 }
@@ -995,18 +995,18 @@ impl Compiler<'_> {
         self.context_mut().lambda.formals = formals;
     }
 
-    fn thunk<N, F>(&mut self, outer_slot: LocalIdx, node: &N, content: F)
+    fn thonk<N, F>(&mut self, outer_slot: LocalIdx, node: &N, content: F)
     where
         N: ToSpan,
         F: FnOnce(&mut Compiler, LocalIdx),
     {
-        self.compile_lambda_or_thunk(true, outer_slot, node, content)
+        self.compile_lambda_or_thonk(true, outer_slot, node, content)
     }
 
-    /// Compile an expression into a runtime cloure or thunk
-    fn compile_lambda_or_thunk<N, F>(
+    /// Compile an expression into a runtime cloure or thonk
+    fn compile_lambda_or_thonk<N, F>(
         &mut self,
-        is_suspended_thunk: bool,
+        is_suspended_thonk: bool,
         outer_slot: LocalIdx,
         node: &N,
         content: F,
@@ -1047,8 +1047,8 @@ impl Compiler<'_> {
         }
 
         let lambda = Rc::new(compiled.lambda);
-        if is_suspended_thunk {
-            self.observer.observe_compiled_thunk(&lambda);
+        if is_suspended_thonk {
+            self.observer.observe_compiled_thonk(&lambda);
         } else {
             self.observer.observe_compiled_lambda(&lambda);
         }
@@ -1056,8 +1056,8 @@ impl Compiler<'_> {
         // If no upvalues are captured, emit directly and move on.
         if lambda.upvalue_count == 0 {
             self.emit_constant(
-                if is_suspended_thunk {
-                    Value::Thunk(Thunk::new_suspended(lambda, LightSpan::new_actual(span)))
+                if is_suspended_thonk {
+                    Value::Thonk(Thonk::new_suspended(lambda, LightSpan::new_actual(span)))
                 } else {
                     Value::Closure(Rc::new(Closure::new(lambda)))
                 },
@@ -1073,10 +1073,10 @@ impl Compiler<'_> {
         let blueprint_idx = self.chunk().push_constant(Value::Blueprint(lambda));
 
         let code_idx = self.push_op(
-            if is_suspended_thunk {
-                OpCode::OpThunkSuspended(blueprint_idx)
+            if is_suspended_thonk {
+                OpCode::OpThonkSuspended(blueprint_idx)
             } else {
-                OpCode::OpThunkClosure(blueprint_idx)
+                OpCode::OpThonkClosure(blueprint_idx)
             },
             node,
         );
@@ -1088,9 +1088,9 @@ impl Compiler<'_> {
             compiled.captures_with_stack,
         );
 
-        if !is_suspended_thunk && !self.scope()[outer_slot].needs_finaliser {
-            if !self.scope()[outer_slot].must_thunk {
-                // The closure has upvalues, but is not recursive.  Therefore no thunk is required,
+        if !is_suspended_thonk && !self.scope()[outer_slot].needs_finaliser {
+            if !self.scope()[outer_slot].must_thonk {
+                // The closure has upvalues, but is not recursive.  Therefore no thonk is required,
                 // which saves us the overhead of Rc<RefCell<>>
                 self.chunk()[code_idx] = OpCode::OpClosure(blueprint_idx);
             } else {
@@ -1140,7 +1140,7 @@ impl Compiler<'_> {
                     } else {
                         // a self-reference
                         if slot == idx {
-                            self.scope_mut().mark_must_thunk(slot);
+                            self.scope_mut().mark_must_thonk(slot);
                         }
                         self.push_op(OpCode::DataStackIdx(stack_idx), &upvalue.span);
                     }
@@ -1204,7 +1204,7 @@ impl Compiler<'_> {
     }
 
     /// Open a new lambda context within which to compile a function,
-    /// closure or thunk.
+    /// closure or thonk.
     fn new_context(&mut self) {
         self.contexts.push(self.context().inherit());
     }
@@ -1332,7 +1332,7 @@ fn compile_src_builtin(
     let file = source.add_file(format!("<src-builtins/{}.nix>", name), code.to_string());
     let weak = weak.clone();
 
-    Value::Thunk(Thunk::new_suspended_native(Box::new(move || {
+    Value::Thonk(Thonk::new_suspended_native(Box::new(move || {
         let result = compile(
             &parsed.tree().expr().unwrap(),
             None,
@@ -1352,7 +1352,7 @@ fn compile_src_builtin(
             });
         }
 
-        Ok(Value::Thunk(Thunk::new_suspended(
+        Ok(Value::Thonk(Thonk::new_suspended(
             result.lambda,
             LightSpan::Actual { span: file.span },
         )))
@@ -1392,12 +1392,12 @@ pub fn prepare_globals(
         let mut globals: GlobalsMap = HashMap::new();
 
         // builtins contain themselves (`builtins.builtins`), which we
-        // can resolve by manually constructing a suspended thunk that
+        // can resolve by manually constructing a suspended thonk that
         // dereferences the same weak pointer as above.
         let weak_globals = weak.clone();
         builtins.insert(
             "builtins",
-            Value::Thunk(Thunk::new_suspended_native(Box::new(move || {
+            Value::Thonk(Thonk::new_suspended_native(Box::new(move || {
                 Ok(weak_globals
                     .upgrade()
                     .unwrap()
@@ -1452,9 +1452,9 @@ pub fn compile(
     c.compile(root_slot, expr.clone());
 
     // The final operation of any top-level Nix program must always be
-    // `OpForce`. A thunk should not be returned to the user in an
+    // `OpForce`. A thonk should not be returned to the user in an
     // unevaluated state (though in practice, a value *containing* a
-    // thunk might be returned).
+    // thonk might be returned).
     c.emit_force(expr);
     c.push_op(OpCode::OpReturn, &root_span);
 

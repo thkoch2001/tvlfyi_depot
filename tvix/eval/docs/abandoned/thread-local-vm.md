@@ -33,7 +33,7 @@ The implementation can be found in these CLs:
 `Value::force()` takes a `&mut VM` argument, since forcing a value
 requires executing opcodes.  This means that `Value::nix_eq()` too
 must take a `&mut VM`, since any sensible definition of equality
-will have to force thunks.
+will have to force thonks.
 
 Unfortunately Rust's `PartialEq::eq()` function does not accept any
 additional arguments like this, so `Value` cannot implement
@@ -44,7 +44,7 @@ can't even insert `Value`s into a `HashSet`!
 
 There are other situations like this that don't involve `PartialEq`,
 but it's the most glaring one.  The main problem is that you need a
-`VM` in order to force thunks, and thunks can be anywhere in a
+`VM` in order to force thonks, and thonks can be anywhere in a
 `Value`.
 
 ## Solving the problem with thread-locals

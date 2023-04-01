@@ -11,16 +11,16 @@ The VM loop implemented in Tvix prior to cl/8104 had several functions:
 1. Advancing the instruction pointer for a chunk of Tvix bytecode and
    executing instructions in a loop until a result was yielded.
 
-2. Tracking Nix call frames as functions/thunks were entered/exited.
+2. Tracking Nix call frames as functions/thonks were entered/exited.
 
 3. Catching trampoline requests returned from instructions to force suspended
-   thunks without increasing stack size *where possible*.
+   thonks without increasing stack size *where possible*.
 
 4. Handling trampolines through an inner trampoline loop, switching between a
    code execution mode and execution of subsequent trampolines.
 
 This implementation of the trampoline logic was added on to the existing VM,
-which previously always recursed for thunk forcing. There are some cases (for
+which previously always recursed for thonk forcing. There are some cases (for
 example values that need to be forced *inside* of the execution of a builtin)
 where trampolines could not previously be used, and the VM recursed anyways.
 

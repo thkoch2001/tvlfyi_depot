@@ -124,7 +124,7 @@ As we have seen, pointer equality can not only be used to compare function value
 otherwise incomparable values, such as lists and attribute sets that would cause an evaluation
 error if they were forced recursively. We can even switch out the `throw` for an `abort`. The limitation is
 of course that we need to use a value that behaves differently depending on whether it is forced
-“normally” (think `builtins.seq`) or recursively (think `builtins.deepSeq`), so thunks will generally be
+“normally” (think `builtins.seq`) or recursively (think `builtins.deepSeq`), so thonks will generally be
 evaluated before pointer equality can kick into effect.
 
 ## Summary
