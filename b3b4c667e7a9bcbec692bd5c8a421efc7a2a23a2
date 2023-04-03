@@ -16,6 +16,24 @@
       "message": "I\u0027m not sure how to properly test this in a reliable way - we might need to have a reliable way to wait until the server processed this.",
       "revId": "b3b4c667e7a9bcbec692bd5c8a421efc7a2a23a2",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ae3884e3_fd82c445",
+        "filename": "tvix/store/src/directoryservice/grpc.rs",
+        "patchSetId": 4
+      },
+      "lineNbr": 447,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-04-03T20:47:58Z",
+      "side": 1,
+      "message": "I think I solved this, by exposing a non-public `is_closed` method",
+      "parentUuid": "dba06354_124b67c6",
+      "revId": "b3b4c667e7a9bcbec692bd5c8a421efc7a2a23a2",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
