@@ -199,7 +199,7 @@ passes. This is potentially dangerous, use with care."
   (magit-status-setup-buffer tvl-depot-path))
 
 (eval-after-load 'sly
-  '(defun tvl-sly-from-depot (attribute)
+  '(defun tvl-sly-from-depot (attribute only-deps)
      "Start a Sly REPL configured with a Lisp matching a derivation
      from the depot.
 
@@ -207,12 +207,21 @@ passes. This is potentially dangerous, use with care."
      asynchronously. The build output is included in the error
      thrown on build failures."
 
-     (interactive "sAttribute: ")
+     ;; TODO(sterni): this function asumes that we are using SBCL
+     ;;               - for determining the resulting wrapper's location
+     ;;               - for creating the dep-only wrapper
+
+     (interactive (list (read-string "Attribute: ")
+                        (yes-or-no-p "Only include dependencies? ")))
      (lexical-let* ((outbuf (get-buffer-create (format "*depot-out/%s*" attribute)))
                     (errbuf (get-buffer-create (format "*depot-errors/%s*" attribute)))
-                    (expression (format "(import <depot> {}).%s.repl" attribute))
+                    (attr-display (if only-deps attribute (format "dependencies of %s" attribute)))
+                    (expression (if only-deps
+                                    (format "let d = import <depot> {}; in d.nix.buildLisp.sbcl.lispWith d.%s.lispDeps"
+                                            attribute)
+                                    (format "(import <depot> {}).%s.repl" attribute)))
                     (command (list "nix-build" "--no-out-link" "-I" (format "depot=%s" tvl-depot-path) "-E" expression)))
-       (message "Acquiring Lisp for <depot>.%s" attribute)
+       (message "Acquiring Lisp for <depot>.%s" attr-display)
        (make-process :name (format "depot-nix-build/%s" attribute)
                      :buffer outbuf
                      :stderr errbuf
@@ -224,10 +233,10 @@ passes. This is potentially dangerous, use with care."
                              ("finished\n"
                               (let* ((outpath (s-trim (with-current-buffer outbuf (buffer-string))))
                                      (lisp-path (s-concat outpath "/bin/sbcl")))
-                                (message "Acquired Lisp for <depot>.%s at %s" attribute lisp-path)
+                                (message "Acquired Lisp for <depot>.%s at %s" attr-display lisp-path)
                                 (sly lisp-path)))
                              (_ (with-current-buffer errbuf
-                                  (error "Failed to build '%s':\n%s" attribute (buffer-string)))))
+                                  (error "Failed to build %s:\nTried building '%s':\n%s" attr-display expression (buffer-string)))))
                          (kill-buffer outbuf)
                          (kill-buffer errbuf)))))))
 
