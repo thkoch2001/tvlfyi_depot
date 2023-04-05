@@ -137,6 +137,20 @@ let
       url = "https://piston-data.mojang.com/v1/objects/f69c284232d7c7580bd89a5a4931c3581eae1378/server.jar";
       sha256 = "15jdxh5zvsgvvk9hnv47swgjfg8fr653g6nx99q1rxpmkq32frxj";
     };
+    "1.19.3" = fetchJar {
+      pname = "server";
+      version = "1.19.3";
+      url = "https://piston-data.mojang.com/v1/objects/c9df48efed58511cdd0213c56b9013a7b5c9ac1f/server.jar";
+      sha256 = "06qykz3nq7qmfw4phs3wvq3nk28clg8s3qrs37856aai8b8kmgaf";
+    };
+    # Starting with 1.19.4 we could use --pidFile for systemd's PIDFile=, but as
+    # the service doesn't fork, there seems to be no point.
+    "1.19.4" = fetchJar {
+      pname = "server";
+      version = "1.19.4";
+      url = "https://piston-data.mojang.com/v1/objects/8f3112a1049751cc472ec13e397eade5336ca7ae/server.jar";
+      sha256 = "0lrzpqd6zjvqh9g2byicgh66n43z0hwzp863r22ifx2hll6s2955";
+    };
   };
 
   #
