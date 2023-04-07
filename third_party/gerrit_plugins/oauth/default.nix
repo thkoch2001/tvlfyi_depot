@@ -5,7 +5,7 @@ let
 in
 buildGerritBazelPlugin rec {
   name = "oauth";
-  depsOutputHash = "sha256:12y8493y8ns6c6c69g89bkrahd42mircqykldair1xrb3yg26hqp";
+  depsOutputHash = "sha256:03y11x4rbqqd2bkmjy6010dsrz15wnc091bx3q8dngfi8ncwqgyg";
   src = pkgs.fetchgit {
     url = "https://gerrit.googlesource.com/plugins/oauth";
     rev = "f9bef7476bc99f7b1dc3fe2d52ec95cd7ac571dc";
