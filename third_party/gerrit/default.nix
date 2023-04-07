@@ -43,7 +43,7 @@ pkgs.lib.makeOverridable pkgs.buildBazelPackage {
     ./0003-Add-titles-to-CLs-over-HTTP.patch
   ];
 
-  bazelTarget = "release api-skip-javadoc";
+  bazelTargets = [ "release" "api-skip-javadoc" ];
   inherit bazel;
 
   bazelFlags = [
