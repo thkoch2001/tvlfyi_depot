@@ -53,7 +53,7 @@ let
         };
         "mirror/saneterm" = {
           description = "modern line-oriented terminal emulator without support for TUIs";
-          upstream = "git://git.8pit.net/saneterm.git";
+          upstream = "https://git.8pit.net/saneterm.git";
         };
       };
     }
