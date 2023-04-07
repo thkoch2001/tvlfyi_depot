@@ -18,7 +18,7 @@
         ${overlayPluginCmd}
       '';
 
-      bazelTarget = "//plugins/${name}";
+      bazelTargets = [ "//plugins/${name}" ];
     }).overrideAttrs (super: {
       deps = super.deps.overrideAttrs (superDeps: {
         outputHash = depsOutputHash;
