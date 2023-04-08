@@ -23,7 +23,7 @@ let
         pkgs.haskellPackages.nicify-lib
         pkgs.haskellPackages.tagsoup
       ];
-
+      ghcArgs = [ "-threaded" ];
     }
     ./ReverseHaskellDeps.hs;
 
