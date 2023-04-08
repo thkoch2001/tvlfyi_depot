@@ -4,6 +4,7 @@ let
   lorri-wait-for-eval = pkgs.writers.writeHaskell "lorri-wait-for-eval"
     {
       libraries = [
+        depot.users.Profpatsch.my-prelude
         pkgs.haskellPackages.async
         pkgs.haskellPackages.aeson-better-errors
         pkgs.haskellPackages.conduit-extra
