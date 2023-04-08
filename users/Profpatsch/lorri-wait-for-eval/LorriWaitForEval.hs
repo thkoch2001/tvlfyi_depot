@@ -17,20 +17,14 @@ import Control.Concurrent.Async qualified as Async
 import Control.Monad
 import Data.Aeson.BetterErrors qualified as Json
 import Data.Bifunctor
-import Data.ByteString (ByteString)
 import Data.Conduit.Binary qualified as Conduit.Binary
 import Data.Conduit.Combinators qualified as Cond
 import Data.Conduit.Process
 import Data.Error
 import Data.Function
 import Data.Functor
-import Data.List.NonEmpty (NonEmpty ((:|)), nonEmpty)
-import Data.Text (Text)
-import Data.Text qualified as Text
-import Data.Text.Encoding qualified
-import Data.Text.Encoding.Error qualified
 import Data.Text.IO (hPutStrLn)
-import PyF
+import MyPrelude
 import System.Directory qualified as Dir
 import System.Environment qualified as Env
 import System.Exit qualified as Exit
@@ -49,7 +43,7 @@ data LorriEvent = LorriEvent
 data LorriEventType
   = Completed
   | Started
-  | Failure
+  | EvalFailure
   deriving stock (Show)
 
 main :: IO ()
@@ -92,7 +86,7 @@ main = do
                               "Failure"
                               ( do
                                   nixFile <- Json.key "nix_file" Json.asText
-                                  pure LorriEvent {nixFile, eventType = Failure}
+                                  pure LorriEvent {nixFile, eventType = EvalFailure}
                               )
                         )
                       & first Json.displayError'
@@ -120,7 +114,7 @@ main = do
                 Completed -> do
                   log [fmt|build completed|]
                   exec (inDirenvDir (takeDirectory shellNix) <$> argv)
-                Failure -> do
+                EvalFailure -> do
                   log [fmt|evaluation failed! for path {ev & nixFile}|]
                   Exit.exitWith (Exit.ExitFailure 111)
 
@@ -170,9 +164,6 @@ findShellNix curDir = do
               else go parent
   go (FilePath.normalise curDir)
 
-textToString :: Text -> String
-textToString = Text.unpack
-
 smushErrors :: Foldable t => Text -> t Error -> Error
 smushErrors msg errs =
   errs
@@ -180,9 +171,3 @@ smushErrors msg errs =
     & foldMap (\err -> "\n- " <> prettyError err)
     & newError
     & errorContext msg
-
--- | decode a Text from a ByteString that is assumed to be UTF-8,
--- replace non-UTF-8 characters with the replacment char U+FFFD.
-bytesToTextUtf8Lenient :: Data.ByteString.ByteString -> Data.Text.Text
-bytesToTextUtf8Lenient =
-  Data.Text.Encoding.decodeUtf8With Data.Text.Encoding.Error.lenientDecode
