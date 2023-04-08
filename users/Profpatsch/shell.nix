@@ -29,6 +29,7 @@ pkgs.mkShell {
       h.nonempty-containers
       h.deriving-compat
       h.unix
+      h.tagsoup
       h.attoparsec
       h.iCalendar
       h.case-insensitive
