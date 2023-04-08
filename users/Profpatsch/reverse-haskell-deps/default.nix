@@ -19,12 +19,13 @@ let
   rev-hs = pkgs.writers.writeHaskell "revers-haskell-deps-hs"
     {
       libraries = [
+        depot.users.Profpatsch.my-prelude
         pkgs.haskellPackages.nicify-lib
         pkgs.haskellPackages.tagsoup
       ];
 
     }
-    ./reverse-haskell-deps.hs;
+    ./ReverseHaskellDeps.hs;
 
 
 in
