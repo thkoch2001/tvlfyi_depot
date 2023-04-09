@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0dd001e2_2d1a4b12",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-04-09T10:41:11Z",
+      "side": 1,
+      "message": "We had a discussion about this last week - I\u0027m not sure this is worth the trouble. \n\nI see the current way to produce derivations as one historical way to do so (which we might replace some day), and we don\u0027t gain much by refactoring this to use StorePath inside.\n\nA new output path hashing method will likely come with a different implementation of builtins.derivation[Strict], which might emit something else than `nix_compat::derivation::Derivation` alltogether.",
+      "revId": "4713c96cf5bbe7282163b48b0a99a37b4ef68cd5",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
