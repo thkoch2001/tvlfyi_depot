@@ -979,7 +979,7 @@ is a string."))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(defmethod find-mime-text-part (msg)
+(defgeneric find-mime-text-part (msg)
   (:documentation
    "Return message if it is a text message or first text part.
    If no suitable text part is found, return NIL."))
