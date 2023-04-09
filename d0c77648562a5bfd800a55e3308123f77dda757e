@@ -36,6 +36,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "e5167142_b06e28d5",
+        "filename": "tvix/nix-compat/src/store_path/utils.rs",
+        "patchSetId": 10
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-04-09T10:34:13Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "5cf6ae7d_f78d8d17",
+      "revId": "d0c77648562a5bfd800a55e3308123f77dda757e",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "60e4c9cb_aee1d4b3",
@@ -67,6 +85,24 @@
       "side": 1,
       "message": "oops, should be CA not non-CA.",
       "parentUuid": "60e4c9cb_aee1d4b3",
+      "revId": "d0c77648562a5bfd800a55e3308123f77dda757e",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f4d02feb_eb63a0d3",
+        "filename": "tvix/nix-compat/src/store_path/utils.rs",
+        "patchSetId": 10
+      },
+      "lineNbr": 64,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-04-09T10:34:13Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "b1c861b8_abd6c0d9",
       "revId": "d0c77648562a5bfd800a55e3308123f77dda757e",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },

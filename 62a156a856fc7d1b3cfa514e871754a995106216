@@ -125,6 +125,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "77705681_56729ddd",
+        "filename": "tvix/nix-compat/src/nixhash/algos.rs",
+        "patchSetId": 5
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-04-09T10:34:13Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "c781bbb2_1ffe5bf8",
+      "revId": "62a156a856fc7d1b3cfa514e871754a995106216",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "fcec6fec_421c9025",
