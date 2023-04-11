@@ -13,6 +13,7 @@
     rain
     awscli2
     amazon-ecr-credential-helper
+    postgresql_14
   ];
 
   programs.zsh.shellAliases = {
