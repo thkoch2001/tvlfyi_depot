@@ -9,6 +9,7 @@
     ../modules/sound.nix
     ../modules/tvl.nix
     ../modules/development.nix
+    ../modules/wireshark.nix
     ../modules/work/kolide.nix
   ];
 
