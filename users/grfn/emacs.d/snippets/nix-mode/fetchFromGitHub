@@ -1,6 +1,6 @@
 # -*- mode: snippet -*-
 # name: fetchFromGitHub
-# uuid:
+# uuid: fetchFromGitHub
 # key: fetchFromGitHub
 # condition: t
 # --

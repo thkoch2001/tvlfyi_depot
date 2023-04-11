@@ -1,6 +1,6 @@
 # -*- mode: snippet -*-
 # name: test-module
-# uuid:
+# uuid: test-module
 # key: tmod
 # condition: t
 # --

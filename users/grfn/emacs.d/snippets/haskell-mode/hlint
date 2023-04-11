@@ -1,6 +1,6 @@
 # -*- mode: snippet -*-
 # name: hlint
-# uuid:
+# uuid: hlint
 # expand-env: ((yas-indent-line 'fixed))
 # key: hlint
 # condition: t
