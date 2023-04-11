@@ -1,6 +1,6 @@
 # -*- mode: snippet -*-
 # name: async test
-# uuid:
+# uuid: atest
 # key: atest
 # condition: t
 # --

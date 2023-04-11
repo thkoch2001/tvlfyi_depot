@@ -1,6 +1,6 @@
 # -*- mode: snippet -*-
 # name: test-group
-# uuid:
+# uuid: test-group
 # key: testGroup
 # condition: t
 # --

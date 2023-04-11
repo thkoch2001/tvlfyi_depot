@@ -1,6 +1,6 @@
 # -*- mode: snippet -*-
 # name: benchmark
-# uuid:
+# uuid: benchmark
 # key: bench
 # condition: t
 # --
