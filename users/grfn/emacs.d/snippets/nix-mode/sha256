@@ -1,6 +1,6 @@
 # -*- mode: snippet -*-
 # name: sha256
-# uuid:
+# uuid: sha256
 # key: sha256
 # condition: t
 # --
