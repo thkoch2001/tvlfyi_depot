@@ -2,6 +2,7 @@ use anyhow::{anyhow, Context, Result};
 use std::collections::HashMap;
 use std::sync::RwLock;
 use std::time::{Duration, Instant};
+use scraper::{Html, Selector};
 
 #[derive(Clone, Debug, Eq, Hash, PartialEq)]
 struct TgLink {
@@ -14,8 +15,8 @@ impl TgLink {
         format!("t.me/{}/{}", self.username, self.message_id)
     }
 
-    fn to_url(&self) -> String {
-        format!("https://t.me/{}/{}?embed=1", self.username, self.message_id)
+    fn to_url(&self, embed: bool) -> String {
+        format!("https://t.me/{}/{}{}", self.username, self.message_id, if embed { "?embed=1" } else { "" })
     }
 
     fn parse(url: &str) -> Option<Self> {
@@ -40,9 +41,9 @@ impl TgLink {
     }
 }
 
-fn fetch_embed(link: &TgLink) -> Result<String> {
+fn fetch_post(link: &TgLink, embed: bool) -> Result<String> {
     println!("fetching {}#{}", link.username, link.message_id);
-    let response = crimp::Request::get(&link.to_url())
+    let response = crimp::Request::get(&link.to_url(embed))
         .send()
         .context("failed to fetch embed data")?
         .as_string()
@@ -52,6 +53,28 @@ fn fetch_embed(link: &TgLink) -> Result<String> {
         })?;
 
     Ok(response.body)
+}
+
+// in some cases, posts can not be embedded, but telegram still
+// includes their content in metadata tags for content previews.
+//
+// we skip images in this case, as they are scaled down to thumbnail
+// size and not useful.
+fn fetch_fallback(link: &TgLink) -> Result<Option<String>> {
+    let post = fetch_post(link, false)?;
+    let doc = Html::parse_document(&post);
+    let desc_sel = Selector::parse("meta[property=\"og:description\"]").unwrap();
+    let desc_elem = match doc.select(&desc_sel).next() {
+        None => return Ok(None),
+        Some(elem) => elem,
+    };
+
+    let content = match desc_elem.value().attr("content") {
+        None => return Ok(None),
+        Some(content) => content.to_string(),
+    };
+
+    return Ok(Some(content));
 }
 
 #[derive(Debug)]
@@ -71,8 +94,6 @@ fn extract_photo_url(style: &str) -> Option<&str> {
 }
 
 fn parse_tgmessage(embed: &str) -> Result<TgMessage> {
-    use scraper::{Html, Selector};
-
     let doc = Html::parse_document(embed);
 
     let author_sel = Selector::parse("a.tgme_widget_message_owner_name").unwrap();
@@ -164,7 +185,7 @@ fn to_bbcode(link: &TgLink, msg: &TgMessage) -> String {
     out.push_str(&format!("[quote=\"{}\"]\n", msg.author));
 
     for video in 0..msg.videos.len() {
-        out.push_str(&format!("[url=\"{}\"]", link.to_url()));
+        out.push_str(&format!("[url=\"{}\"]", link.to_url(true)));
 
         // video thumbnail links are appended to the photos, hence the
         // addition here
@@ -184,7 +205,7 @@ fn to_bbcode(link: &TgLink, msg: &TgMessage) -> String {
     if msg.has_audio {
         out.push_str(&format!(
             "[i]This message has audio attached. Go [url=\"{}\"]to Telegram[/url] to listen.[/i]",
-            link.to_url(),
+            link.to_url(true),
         ));
     }
 
@@ -196,7 +217,7 @@ fn to_bbcode(link: &TgLink, msg: &TgMessage) -> String {
 
     out.push_str(&format!(
         "[sub](from [url=\"{}\"]{}[/url], via [url=\"https://tgsa.tazj.in\"]tgsa[/url])[/sub]\n",
-        link.to_url(),
+        link.to_url(true),
         link.human_friendly_url(),
     ));
 
@@ -227,8 +248,13 @@ fn fetch_with_cache(cache: &Cache, link: &TgLink) -> Result<TgPost> {
     // TODO(tazjin): per link?
     let mut writer = cache.write().unwrap();
 
-    let embed = fetch_embed(&link)?;
-    let mut msg = parse_tgmessage(&embed)?;
+    let post = fetch_post(&link, true)?;
+    let mut msg = parse_tgmessage(&post)?;
+
+    if msg.message.is_none() {
+        msg.message = fetch_fallback(&link)?;
+    }
+
     let bbcode = to_bbcode(&link, &msg);
 
     let mut media = vec![];
