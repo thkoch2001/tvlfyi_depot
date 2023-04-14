@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5f0cb452_366ec4b2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2023-04-14T07:16:45Z",
+      "side": 1,
+      "message": "As usual this kind of stuff does not simply work. Before I give in to an 8 hour network debugging battle, I\u0027ll try tailscale.",
+      "revId": "1e8da77feb2e377ad86e285dcb0e088583956964",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
