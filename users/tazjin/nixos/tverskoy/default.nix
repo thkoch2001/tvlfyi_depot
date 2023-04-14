@@ -22,7 +22,6 @@ lib.fix (self: {
     (usermod "laptop.nix")
     (usermod "persistence.nix")
     (usermod "physical.nix")
-    (usermod "zerotier.nix")
 
     (pkgs.home-manager.src + "/nixos")
   ] ++ lib.optional (builtins.pathExists ./local-config.nix) ./local-config.nix;
@@ -122,6 +121,7 @@ lib.fix (self: {
   security.rtkit.enable = true;
 
   services = {
+    tailscale.enable = true;
     printing.enable = true;
 
     # expose i2c device as /dev/i2c-amdgpu-dm and make it user-accessible
