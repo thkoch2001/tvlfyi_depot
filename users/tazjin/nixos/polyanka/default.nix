@@ -125,10 +125,11 @@ in
   programs.mosh.enable = true;
   services.openssh.enable = true;
 
-  services.zerotierone.enable = true;
-  services.zerotierone.joinNetworks = [
-    "35c192ce9bd4c8c7"
-  ];
+  services.tailscale.enable = true;
+  boot.kernel.sysctl = {
+    "net.ipv4.ip_forward" = 1;
+    "net.ipv6.conf.all.forwarding" = 1;
+  };
 
   system.stateVersion = "20.09";
 }
