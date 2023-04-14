@@ -124,11 +124,7 @@ in
   programs.mtr.enable = true;
   programs.mosh.enable = true;
   services.openssh.enable = true;
-
-  services.zerotierone.enable = true;
-  services.zerotierone.joinNetworks = [
-    "35c192ce9bd4c8c7"
-  ];
+  services.tailscale.enable = true;
 
   system.stateVersion = "20.09";
 }
