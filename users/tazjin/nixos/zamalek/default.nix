@@ -21,6 +21,7 @@ in
     (usermod "laptop.nix")
     (usermod "persistence.nix")
     (usermod "physical.nix")
+    (usermod "zerotier.nix")
 
     (pkgs.home-manager.src + "/nixos")
   ] ++ lib.optional (builtins.pathExists ./local-config.nix) ./local-config.nix;
