@@ -5,7 +5,7 @@ let
 in
 buildGerritBazelPlugin rec {
   name = "code-owners";
-  depsOutputHash = "sha256:0p9gzmn45983kpay1lzc4lb2rj2b2js839s592bvfyqhw32ji65n";
+  depsOutputHash = "sha256:07mgvd7fvg1xqlabjn644505yx98vjrmwxx1arwsykir1h82h0b2";
   src = pkgs.fetchgit {
     url = "https://gerrit.googlesource.com/plugins/code-owners";
     rev = "6fdf3ce2e52904b35e2a5824a4197155c2c6b4e4";
