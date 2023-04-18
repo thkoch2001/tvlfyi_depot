@@ -30,7 +30,7 @@ in
   '';
 
   environment.systemPackages = with pkgs; [
-    libdigidocpp # provides digidoc-tool(1)
+    libdigidocpp.bin # provides digidoc-tool(1)
     qdigidoc
     setup-browser-eid
   ];
