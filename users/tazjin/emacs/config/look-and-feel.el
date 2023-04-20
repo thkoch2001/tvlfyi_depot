@@ -22,16 +22,7 @@
   (blink-cursor-mode -1))
 
 ;; Configure Emacs fonts.
-(let ((font (if (equal "frog" (s-trim (shell-command-to-string "hostname")))
-                ;; For unclear reasons, frog refuses to render the
-                ;; regular font weight - everything ends up bold,
-                ;; which makes it hard to distinguish e.g. read/unread
-                ;; emails.
-                ;;
-                ;; Semi-bold looks a little different than on vauxhall
-                ;; and other machines, but it's alright.
-                (format "JetBrains Mono Semi Light-%d" 12)
-              (format "JetBrains Mono-%d" 12))))
+(let ((font (format "JetBrains Mono Medium-%d" 12)))
   (setq default-frame-alist `((font . ,font)))
   (set-frame-font font t t))
 
