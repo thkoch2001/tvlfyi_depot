@@ -1,0 +1,172 @@
+html! {
+<main>
+  <div class="container px-4 pt-5 my-5 text-center">
+    <div class="row">
+      <div class="col-7 ms-auto">
+        <h1 class="display-5 fw-bold text-body-emphasis">{"Russia is Hiring"}</h1>
+        <p class="lead my-4">
+          {"Are you an IT-specialist on the hunt for a job? Well, "}
+          <a href="https://archive.is/SAONj" class="text-black">{"times are tough"}</a>
+          {" in Western countries at the moment. Meanwhile tech is booming in Russia, and national support programs make life as an IT-specialist very comfortable. Why not look East?"}
+        </p>
+        <p class="lead mb-4">{"We can help you find an employer in Russia, sort out the formalities and get you started. Sign up and tell us a bit about your profile, or read on below about the benefits of life in Russia."}</p>
+
+        <div class="d-grid gap-2 d-sm-flex justify-content-sm-center">
+          <button type="button" class="btn btn-primary btn-lg px-4 gap-3">{"Sign up"}</button>
+        </div>
+      </div>
+      <div class="col-2 me-auto">
+        <img src="/rih-logo.png" height="400px" />
+      </div>
+    </div>
+  </div>
+  <div class="b-section-divider"></div>
+
+  <div class="container px-5 py-5">
+    <h2 class="pb-2 border-bottom">{"Life in Russia"}</h2>
+    <div class="row row-cols-1 row-cols-md-2 align-items-md-center g-5 py-5">
+      <div class="col d-flex flex-column align-items-start gap-2">
+        <h3 class="fw-bold">{"Moscow is very cool and good indeed"}</h3>
+        <p class="text-body-secondary">{"Paragraph of text beneath the heading to explain the heading. We'll add onto it with another sentence and probably just keep going until we run out of words."}</p>
+        <a href="#sign-up" class="btn btn-primary btn-lg">{"Primary button"}</a>
+      </div>
+      <div class="col">
+        <div class="row row-cols-1 row-cols-sm-2 g-4">
+          <div class="col d-flex flex-column gap-2">
+            <div class="feature-icon-small d-inline-flex align-items-center justify-content-center text-bg-primary bg-gradient fs-4 rounded-3">
+            </div>
+            <h4 class="fw-semibold mb-0">{"Look they have banyas"}</h4>
+            <p class="text-body-secondary">{"Paragraph of text beneath the heading to explain the heading."}</p>
+          </div>
+
+          <div class="col d-flex flex-column gap-2">
+            <div class="feature-icon-small d-inline-flex align-items-center justify-content-center text-bg-primary bg-gradient fs-4 rounded-3">
+            </div>
+            <h4 class="fw-semibold mb-0">{"Wow such cultural diversity"}</h4>
+            <p class="text-body-secondary">{"Paragraph of text beneath the heading to explain the heading."}</p>
+          </div>
+
+          <div class="col d-flex flex-column gap-2">
+            <div class="feature-icon-small d-inline-flex align-items-center justify-content-center text-bg-primary bg-gradient fs-4 rounded-3">
+            </div>
+            <h4 class="fw-semibold mb-0">{"Many nice landscapes indeed"}</h4>
+            <p class="text-body-secondary">{"Paragraph of text beneath the heading to explain the heading."}</p>
+          </div>
+
+          <div class="col d-flex flex-column gap-2">
+            <div class="feature-icon-small d-inline-flex align-items-center justify-content-center text-bg-primary bg-gradient fs-4 rounded-3">
+            </div>
+            <h4 class="fw-semibold mb-0">{"And such low taxes!"}</h4>
+            <p class="text-body-secondary">{"Paragraph of text beneath the heading to explain the heading."}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="b-section-divider"></div>
+
+  <div class="container px-4 py-5">
+    <div class="row">
+      <div class="mx-auto col-7">
+        <a id="sign-up"/>
+        <h2 class="pb-2 border-bottom">{"Finding Work in Russia"}</h2>
+        <p>
+          {"Usually landing the most interesting jobs requires you to have a well-developed network of contacts, but this is tough when you set your eyes on a new country. Luckily we at "}
+          <a class="text-black" href={VISTA_URL}>{"Vista Immigration"}</a>
+          {" have contacts with many tech companies in Russia, large and small, and can help you with this!"}</p>
+        <p>{"Tell us a bit about yourself, the technologies you'd like to work with, and your situation in regards to relocating to Russia. We will then match up your profile with companies that match your interests, and establish contact between you and a potential employer if there is a good fit. No generic recruiter spam, guaranteed - we'd rather not send you anything, than send you something irrelevant!"}</p>
+        <p>
+          {"If you get hired, our experts can assist you with legal and other support for your move. Добро пожаловать в Россию!"}
+        </p>
+      </div>
+    </div>
+
+    <div class="row my-3">
+      <div class="col-7 mx-auto">
+        <p>{"Let's get started with a few basic personal details ..."}</p>
+      </div>
+
+      <div class="mx-auto col-6 border rounded-3 shadow">
+        <form class="m-3">
+          <div class="mb-3">
+            <label for="name" class="form-label">{"What's your name?"}</label>
+            <input type="text" class="form-control" id="name" />
+          </div>
+
+          <div class="mb-3">
+            <label for="email" class="form-label">{"What's your email address?"}</label>
+            <input type="email" class="form-control" id="email" aria-describedby="emailHelp" />
+            <div id="emailHelp" class="form-text">{"No newsletters, no spam - we will only reach out if there's a match!"}</div>
+          </div>
+
+          <div class="mb-3">
+            <label id="citizenship" class="form-label">{"What citizenship do you hold?"}</label>
+            {citizenship_input(self, link)}
+            <div id="citizenshipHelp" class="form-text">{"We need to know this to estimate immigration-related bureaucracy. If you hold more than one citizenship, pick the one with which you'd want to receive a work visa."}</div>
+          </div>
+
+          <div class="mb-3">
+            <label for="personalDetails" class="form-label">{"Other relevant information:"}</label>
+            <textarea class="form-control" id="personalDetails" rows=3
+                      aria-describedby="personalDetailsHelp">
+            </textarea>
+            <div id="personalDetailsHelp" class="form-text">{"Any specific places where you'd like to live? Would you be moving with family? Any other assistance required?"}</div>
+          </div>
+
+          <hr />
+          <p>{"Now lets have a look at what you'd like to work with!"}</p>
+
+          <div class="mb-3">
+            <label for="name" class="form-label">{"What job(s) are you looking for?"}</label>
+            <input
+              type="text" class="form-control" id="name"
+              placeholder="Backend/frontend engineer, Test automation, DevOps/SRE, UI/UX ..."/>
+          </div>
+
+          <div class="mb-3">
+            <label for="technologies" class="form-label">{"Which technologies do you want to work with?"}</label>
+            <div>{render_technologies(link, &self.record.technologies)}</div>
+
+            <input type="text" class="form-control" id="name"
+                   aria-describedby="technologiesHelp"
+                   onkeypress={link.callback(add_tech)}/>
+            <div id="technologiesHelp" class="form-text">{"Press enter after each technology."}</div>
+          </div>
+
+          <div class="mb-3">
+            <label for="jobDetails" class="form-label">{"What's your work background?"}</label>
+            <textarea class="form-control" id="personalDetails" rows=3
+                      aria-describedby="personalDetailsHelp">
+            </textarea>
+            <div id="personalDetailsHelp" class="form-text">{"Tell us about your work experience, and/or leave links to your CV on your site, LinkedIn or wherever."}</div>
+          </div>
+
+          <div class="mb-3">
+            <label for="jobDetails" class="form-label">{"Other job details:"}</label>
+            <textarea class="form-control" id="personalDetails" rows=3
+                      aria-describedby="personalDetailsHelp">
+            </textarea>
+            <div id="personalDetailsHelp" class="form-text">{"Tell us a bit about what you're looking for in a job and in an employer."}</div>
+          </div>
+
+        </form>
+      </div>
+
+    </div>
+  </div>
+  <div class="b-section-divider"></div>
+
+  <footer class="mt-auto text-center">
+    <div class="py-3">
+      <p>
+        {"By "}
+        <a href={VISTA_URL} class="text-black">{"Vista Immigration"}</a>
+        {", with help from "}
+        <a href="https://tvl.su/" class="text-black">{"TVL"}</a>
+        {"."}
+      </p>
+    </div>
+  </footer>
+
+</main>
+}
