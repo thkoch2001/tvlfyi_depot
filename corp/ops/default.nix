@@ -34,4 +34,13 @@ depot.nix.readTree.drvTargets rec {
 
     yc.attr = "corp.ops.yc-cli";
   };
+
+  # Base image for Yandex VMs.
+  yandex-base-image = (depot.third_party.nixos {
+    configuration = { ... }: {
+      imports = [
+        (depot.path.origSrc + ("/corp/ops/modules/yandex-cloud.nix"))
+      ];
+    };
+  }).config.system.build.yandexCloudImage;
 }
