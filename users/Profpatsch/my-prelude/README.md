@@ -36,3 +36,7 @@ Helpers around Json parsing.
 ### `Data.Error.Tree`
 
 Collect errors (from [`Data.Error`](https://hackage.haskell.org/package/error-1.0.0.0/docs/Data-Error.html)) into a tree, then display them in a nested fashion. Super useful for e.g. collecting and displaying nested parsing errors.
+
+### `RunCommand.hs`
+
+A module wrapping the process API with some helpful defaults for executing commands and printing what is executed to stderr.

@@ -11,6 +11,7 @@ library
       Pretty
       Data.Error.Tree
       Aeson
+      RunCommand
       Test
 
     -- Modules included in this executable, other than Main.
@@ -37,6 +38,7 @@ library
      , hspec-expectations-pretty-diff
      , hscolour
      , nicify-lib
+     , typed-process
      , ansi-terminal
      , vector
     default-language: GHC2021
