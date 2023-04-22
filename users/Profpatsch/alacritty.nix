@@ -4,14 +4,11 @@ let
   bins = depot.nix.getBins pkgs.alacritty [ "alacritty" ];
 
   config =
-    depot.users.Profpatsch.importDhall.importDhall {
-      root = ./.;
-      files = [
-        "alacritty.dhall"
-      ];
-      main = "alacritty.dhall";
-      deps = [ ];
+    { alacritty-config = { font.size = 18; scolling.history = 1000000; };
+      #  This disables the dpi-sensitive scaling (cause otherwise the font will be humongous on my laptop screen)
+      alacritty-env.WINIT_X11_SCALE_FACTOR = 1;
     };
+
 
   config-file = lib.pipe config.alacritty-config [
     (lib.generators.toYAML { })
