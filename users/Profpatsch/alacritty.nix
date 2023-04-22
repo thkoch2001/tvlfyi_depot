@@ -8,7 +8,6 @@ let
       root = ./.;
       files = [
         "alacritty.dhall"
-        "solarized.dhall"
       ];
       main = "alacritty.dhall";
       deps = [ ];
