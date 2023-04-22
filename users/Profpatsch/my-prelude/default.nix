@@ -11,6 +11,7 @@ pkgs.haskellPackages.mkDerivation {
     ./Pretty.hs
     ./Data/Error/Tree.hs
     ./Aeson.hs
+    ./RunCommand.hs
     ./Test.hs
   ];
 
@@ -30,6 +31,7 @@ pkgs.haskellPackages.mkDerivation {
     pkgs.haskellPackages.hspec-expectations-pretty-diff
     pkgs.haskellPackages.hscolour
     pkgs.haskellPackages.nicify-lib
+    pkgs.haskellPackages.typed-process
     pkgs.haskellPackages.ansi-terminal
     pkgs.haskellPackages.vector
   ];
