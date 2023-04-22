@@ -5,6 +5,7 @@ module Pretty
   ( -- * Pretty printing for error messages
     Err,
     printPretty,
+    showPretty,
     -- constructors hidden
     prettyErrs,
     message,
@@ -39,6 +40,9 @@ import Text.Nicify (nicify)
 printPretty :: Show a => a -> IO ()
 printPretty a =
   a & pretty & (: []) & prettyErrs & stringToText & putStderrLn
+
+showPretty :: Show a => a -> Text
+showPretty a = a & pretty & (: []) & prettyErrs & stringToText
 
 -- | Display a list of 'Err's as a colored error message
 -- and abort the test.
