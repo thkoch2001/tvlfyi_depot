@@ -17,7 +17,7 @@
 
   system.stateVersion = "21.03";
 
-  time.timeZone = "Iceland";
+  time.timeZone = "America/New_York";
 
   boot = {
     initrd = {
