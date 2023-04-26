@@ -153,4 +153,6 @@ pkgs.lib.makeOverridable pkgs.buildBazelPackage {
       "webhooks"
     ];
   };
+
+  meta.ci.targets = [ "deps" ];
 }
