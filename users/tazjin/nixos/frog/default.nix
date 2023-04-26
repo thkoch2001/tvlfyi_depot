@@ -16,7 +16,7 @@ lib.fix (self: {
   ];
 
   boot = {
-    tmpOnTmpfs = true;
+    tmp.useTmpfs = true;
     kernelModules = [ "kvm-amd" ];
 
     loader = {
