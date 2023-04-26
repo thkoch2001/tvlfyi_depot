@@ -54,7 +54,7 @@ lib.fix (self: {
       efi.canTouchEfiVariables = true;
     };
 
-    cleanTmpDir = true;
+    tmp.cleanOnBoot = true;
   };
 
   fileSystems = {
