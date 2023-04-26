@@ -12,7 +12,7 @@ with lib;
   boot = {
     loader.systemd-boot.enable = true;
     loader.efi.canTouchEfiVariables = true;
-    cleanTmpDir = true;
+    tmp.cleanOnBoot = true;
   };
 
   networking.useDHCP = false;
