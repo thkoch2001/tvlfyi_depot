@@ -59,7 +59,7 @@ in
   };
 
   boot = {
-    tmpOnTmpfs = true;
+    tmp.useTmpfs = true;
     kernelModules = [ "kvm-amd" ];
     supportedFilesystems = [ "zfs" ];
 
