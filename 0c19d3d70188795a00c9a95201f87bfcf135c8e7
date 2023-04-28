@@ -16,6 +16,24 @@
       "message": "This comment is misleading. Actually it is possible to have them called starting with numbers, they just need to be double quoted, and nixpkgs usually doesn\u0027t do it, but it\u0027d perfectly fine accept a \"1password\" as a key.\n\nI\u0027m not objecting the change/workaround per se, but it should be documented properly.\n\nOut of interest, does this mean other package names with underscores are also not usable?",
       "revId": "0c19d3d70188795a00c9a95201f87bfcf135c8e7",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d2373d2d_5abb7ea5",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2023-04-28T14:47:26Z",
+      "side": 1,
+      "message": "The Docker protocol only bans the underscores in prefix position, so a package like `foo_bar` is fine.\n\nAs for the other note, yes, but then you also have to quote each identifier access (e.g. `pkgs.\"1password\"` etc.), and you get broken autocomplete-suggestions from the REPL. If you do the same with a `let` binding, you create inaccessible (except through the `inherit`-trick) identifiers. It seems reasonable to say that it\u0027s not really allowed.",
+      "parentUuid": "c99d9ff6_14417ab9",
+      "revId": "0c19d3d70188795a00c9a95201f87bfcf135c8e7",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
