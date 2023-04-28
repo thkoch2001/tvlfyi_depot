@@ -1,0 +1,2 @@
+NODE_LAMBDA@22..51 - Some("Docs lambda a: b:")
+NODE_LAMBDA@45..51 - Some("Docs lambda b:")
