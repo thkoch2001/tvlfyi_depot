@@ -667,14 +667,43 @@ pub(crate) async fn request_enter_lambda(
     upvalues: Rc<Upvalues>,
     light_span: LightSpan,
 ) -> Value {
+    // preserve docs of a lambda
+    let original_docs = if let Some(doc) = lambda.doc.clone() {
+        Some(doc)
+    } else {
+        None
+    };
+
     let msg = VMRequest::EnterLambda {
         lambda,
         upvalues,
         light_span,
     };
-
     match co.yield_(msg).await {
-        VMResponse::Value(value) => value,
+        VMResponse::Value(value) => match value {
+            Value::Closure(v) => {
+                // Transfer docs if a new lambda was created e.g. from a apply node
+                if original_docs.is_some() {
+                    let lambda: Rc<Lambda> = Rc::new(Lambda {
+                        // Restore the docs field
+                        doc: original_docs,
+                        // copy all other values
+                        chunk: v.lambda.chunk.clone(),
+                        formals: v.lambda.formals.clone(),
+                        name: v.lambda.name.clone(),
+                        upvalue_count: v.lambda.upvalue_count,
+                    });
+                    let closure = Rc::new(Closure {
+                        lambda: lambda,
+                        upvalues: v.upvalues.clone(),
+                    });
+                    Value::Closure(closure)
+                } else {
+                    Value::Closure(v)
+                }
+            }
+            _ => value,
+        },
         msg => panic!(
             "Tvix bug: VM responded with incorrect generator message: {}",
             msg

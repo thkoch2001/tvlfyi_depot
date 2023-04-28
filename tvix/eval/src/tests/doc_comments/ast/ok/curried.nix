@@ -1,0 +1,1 @@
+/**Docs lambda a: b:*/a: /**Docs lambda b:*/ b: a+b

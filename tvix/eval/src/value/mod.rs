@@ -641,7 +641,9 @@ impl Value {
             Value::List(list) => format!("a {}-item list", list.len()),
 
             Value::Closure(f) => {
-                if let Some(name) = &f.lambda.name {
+                if let Some(doc) = &f.lambda.doc {
+                    format!("{}", doc)
+                } else if let Some(name) = &f.lambda.name {
                     format!("the user-defined Nix function '{}'", name)
                 } else {
                     "a user-defined Nix function".to_string()

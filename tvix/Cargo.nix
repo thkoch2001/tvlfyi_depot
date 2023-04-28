@@ -1816,6 +1816,16 @@ rec {
         ];
 
       };
+      "dissimilar" = rec {
+        crateName = "dissimilar";
+        version = "1.0.6";
+        edition = "2018";
+        sha256 = "0phdkg9d9c1vmn5v74lq7rmaba2m52fkwcryd3cbw46pww5cc3i1";
+        authors = [
+          "David Tolnay <dtolnay@gmail.com>"
+        ];
+
+      };
       "either" = rec {
         crateName = "either";
         version = "1.8.1";
@@ -1923,6 +1933,26 @@ rec {
           }
         ];
         features = { };
+      };
+      "expect-test" = rec {
+        crateName = "expect-test";
+        version = "1.4.1";
+        edition = "2018";
+        sha256 = "1lzqx5hqh1g4llzqby4z1d18xmrjjx63c5l0na7ycf6mmpzfmn9h";
+        authors = [
+          "rust-analyzer developers"
+        ];
+        dependencies = [
+          {
+            name = "dissimilar";
+            packageId = "dissimilar";
+          }
+          {
+            name = "once_cell";
+            packageId = "once_cell";
+          }
+        ];
+
       };
       "fake-simd" = rec {
         crateName = "fake-simd";
@@ -8085,6 +8115,10 @@ rec {
           {
             name = "criterion";
             packageId = "criterion";
+          }
+          {
+            name = "expect-test";
+            packageId = "expect-test";
           }
           {
             name = "itertools";

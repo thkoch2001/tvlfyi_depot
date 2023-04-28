@@ -14,12 +14,14 @@
 //! mistakes early during development.
 
 mod bindings;
+pub mod comment;
 mod import;
 mod optimiser;
 mod scope;
 
 use codemap::Span;
 use rnix::ast::{self, AstToken};
+use rowan::ast::AstNode;
 use smol_str::SmolStr;
 use std::collections::HashMap;
 use std::path::{Path, PathBuf};
@@ -36,6 +38,7 @@ use crate::value::{Closure, Formals, Lambda, NixAttrs, Thunk, Value};
 use crate::warnings::{EvalWarning, WarningKind};
 use crate::SourceCode;
 
+use self::comment::get_expr_docs;
 use self::scope::{LocalIdx, LocalPosition, Scope, Upvalue, UpvalueKind};
 
 /// Represents the result of compiling a piece of Nix code. If
@@ -53,6 +56,7 @@ pub struct CompilationOutput {
 }
 
 /// Represents the lambda currently being compiled.
+#[derive(Debug)]
 struct LambdaCtx {
     lambda: Lambda,
     scope: Scope,
@@ -292,53 +296,82 @@ impl Compiler<'_> {
             ast::Expr::Path(path) => self.compile_path(slot, path),
             ast::Expr::Str(s) => self.compile_str(slot, s),
 
-            ast::Expr::UnaryOp(op) => self.thunk(slot, op, move |c, s| c.compile_unary_op(s, op)),
+            ast::Expr::UnaryOp(op) => {
+                self.thunk(slot, op, move |c, s| c.compile_unary_op(s, op), None)
+            }
 
             ast::Expr::BinOp(binop) => {
-                self.thunk(slot, binop, move |c, s| c.compile_binop(s, binop))
+                self.thunk(slot, binop, move |c, s| c.compile_binop(s, binop), None)
             }
 
-            ast::Expr::HasAttr(has_attr) => {
-                self.thunk(slot, has_attr, move |c, s| c.compile_has_attr(s, has_attr))
-            }
+            ast::Expr::HasAttr(has_attr) => self.thunk(
+                slot,
+                has_attr,
+                move |c, s| c.compile_has_attr(s, has_attr),
+                None,
+            ),
 
-            ast::Expr::List(list) => self.thunk(slot, list, move |c, s| c.compile_list(s, list)),
+            ast::Expr::List(list) => {
+                self.thunk(slot, list, move |c, s| c.compile_list(s, list), None)
+            }
 
             ast::Expr::AttrSet(attrs) => {
-                self.thunk(slot, attrs, move |c, s| c.compile_attr_set(s, attrs))
+                self.thunk(slot, attrs, move |c, s| c.compile_attr_set(s, attrs), None)
             }
 
             ast::Expr::Select(select) => {
-                self.thunk(slot, select, move |c, s| c.compile_select(s, select))
+                self.thunk(slot, select, move |c, s| c.compile_select(s, select), None)
             }
 
             ast::Expr::Assert(assert) => {
-                self.thunk(slot, assert, move |c, s| c.compile_assert(s, assert))
+                self.thunk(slot, assert, move |c, s| c.compile_assert(s, assert), None)
             }
-            ast::Expr::IfElse(if_else) => {
-                self.thunk(slot, if_else, move |c, s| c.compile_if_else(s, if_else))
-            }
+            ast::Expr::IfElse(if_else) => self.thunk(
+                slot,
+                if_else,
+                move |c, s| c.compile_if_else(s, if_else),
+                None,
+            ),
 
             ast::Expr::LetIn(let_in) => {
-                self.thunk(slot, let_in, move |c, s| c.compile_let_in(s, let_in))
+                self.thunk(slot, let_in, move |c, s| c.compile_let_in(s, let_in), None)
             }
 
             ast::Expr::Ident(ident) => self.compile_ident(slot, ident),
-            ast::Expr::With(with) => self.thunk(slot, with, |c, s| c.compile_with(s, with)),
-            ast::Expr::Lambda(lambda) => self.thunk(slot, lambda, move |c, s| {
-                c.compile_lambda_or_thunk(false, s, lambda, |c, s| c.compile_lambda(s, lambda))
-            }),
-            ast::Expr::Apply(apply) => {
-                self.thunk(slot, apply, move |c, s| c.compile_apply(s, apply))
-            }
+            ast::Expr::With(with) => self.thunk(slot, with, |c, s| c.compile_with(s, with), None),
+            //origin/canon
+            ast::Expr::Lambda(lambda) => self.thunk(
+                slot,
+                lambda,
+                move |c, s| {
+                    c.compile_lambda_or_thunk(
+                        false,
+                        s,
+                        lambda,
+                        |c, s| c.compile_lambda(s, lambda),
+                        None,
+                    )
+                },
+                Some(&expr),
+            ),
+
+            ast::Expr::Apply(apply) => self.thunk(
+                slot,
+                apply,
+                move |c, s| c.compile_apply(s, apply),
+                Some(&expr),
+            ),
 
             // Parenthesized expressions are simply unwrapped, leaving
             // their value on the stack.
             ast::Expr::Paren(paren) => self.compile(slot, paren.expr().unwrap()),
 
-            ast::Expr::LegacyLet(legacy_let) => self.thunk(slot, legacy_let, move |c, s| {
-                c.compile_legacy_let(s, legacy_let)
-            }),
+            ast::Expr::LegacyLet(legacy_let) => self.thunk(
+                slot,
+                legacy_let,
+                move |c, s| c.compile_legacy_let(s, legacy_let),
+                None,
+            ),
 
             ast::Expr::Root(_) => unreachable!("there cannot be more than one root"),
             ast::Expr::Error(_) => unreachable!("compile is only called on validated trees"),
@@ -403,10 +436,15 @@ impl Compiler<'_> {
             }
             let path = &raw_path[1..(raw_path.len() - 1)];
             // Make a thunk to resolve the path (without using `findFile`, at least for now?)
-            return self.thunk(slot, node, move |c, _| {
-                c.emit_constant(Value::UnresolvedPath(Box::new(path.into())), node);
-                c.push_op(OpCode::OpFindFile, node);
-            });
+            return self.thunk(
+                slot,
+                node,
+                move |c, _| {
+                    c.emit_constant(Value::UnresolvedPath(Box::new(path.into())), node);
+                    c.push_op(OpCode::OpFindFile, node);
+                },
+                None,
+            );
         } else {
             let mut buf = self.root_dir.clone();
             buf.push(&raw_path);
@@ -464,9 +502,14 @@ impl Compiler<'_> {
         // coerce the result to a string value. This would require forcing the
         // value of the inner expression, so we need to wrap it in another thunk.
         if parts.len() != 1 || matches!(&parts[0], ast::InterpolPart::Interpolation(_)) {
-            self.thunk(slot, node, move |c, s| {
-                c.compile_str_parts(s, node, parts);
-            });
+            self.thunk(
+                slot,
+                node,
+                move |c, s| {
+                    c.compile_str_parts(s, node, parts);
+                },
+                None,
+            );
         } else {
             self.compile_str_parts(slot, node, parts);
         }
@@ -1129,12 +1172,19 @@ impl Compiler<'_> {
         self.context_mut().lambda.formals = formals;
     }
 
-    fn thunk<N, F>(&mut self, outer_slot: LocalIdx, node: &N, content: F)
+    /// compiles a thunk
+    ///
+    /// # Arguments
+    ///
+    /// * `expr` is Some in the following cases
+    ///
+    /// - it was called from self.compile with [ast::Expr::Apply]
+    fn thunk<N, F>(&mut self, outer_slot: LocalIdx, node: &N, content: F, expr: Option<&ast::Expr>)
     where
         N: ToSpan,
         F: FnOnce(&mut Compiler, LocalIdx),
     {
-        self.compile_lambda_or_thunk(true, outer_slot, node, content)
+        self.compile_lambda_or_thunk(true, outer_slot, node, content, expr)
     }
 
     /// Mark the current thunk as redundant, i.e. possible to merge directly
@@ -1144,18 +1194,33 @@ impl Compiler<'_> {
     }
 
     /// Compile an expression into a runtime closure or thunk
+    ///
+    /// # Arguments
+    ///
+    /// * `expr` is Some in the following cases
+    ///
+    /// - it was called from compile_lambda directly
+    /// - it was called from [thunk] which itself was called with Some expr.
+    ///
     fn compile_lambda_or_thunk<N, F>(
         &mut self,
         is_suspended_thunk: bool,
         outer_slot: LocalIdx,
         node: &N,
         content: F,
+        expr: Option<&ast::Expr>,
     ) where
         N: ToSpan,
         F: FnOnce(&mut Compiler, LocalIdx),
     {
         let name = self.scope()[outer_slot].name();
         self.new_context();
+
+        // set the optional docs
+        // if available in the correct AST-places
+        if let Some(expr) = expr {
+            self.context_mut().lambda.doc = get_expr_docs(expr.syntax());
+        }
 
         // Set the (optional) name of the current slot on the lambda that is
         // being compiled.
