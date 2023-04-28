@@ -11,6 +11,7 @@ use core::pin::Pin;
 use genawaiter::rc::Co;
 pub use genawaiter::rc::Gen;
 use smol_str::SmolStr;
+use std::borrow::BorrowMut;
 use std::fmt::Display;
 use std::future::Future;
 
@@ -644,14 +645,50 @@ pub(crate) async fn request_enter_lambda(
     upvalues: Rc<Upvalues>,
     light_span: LightSpan,
 ) -> Value {
+    // preserve docs of a lambda
+    let original_docs = if let Some(doc) = lambda.doc.clone() {
+        Some(doc)
+    } else {
+        None
+    };
+
     let msg = VMRequest::EnterLambda {
         lambda,
         upvalues,
         light_span,
     };
-
     match co.yield_(msg).await {
-        VMResponse::Value(value) => value,
+        VMResponse::Value(value) => {
+            match value {
+                Value::Closure(v) => {
+                    // Transfer docs down the lambda chain
+                    // Value-flow:
+                    // Specific -> Generic
+                    // while doing so the doc string is dropped from the evaluator and needs to be transferred after vm calls.
+                    if original_docs.is_some() {
+                        /*
+                        approach with few unsafe code
+
+                        ## Other options
+
+                        - Use something else than Rc -> required huge changes to tvix, unless they share the same interface.
+                        - Implement the Copy trait on Closure and Lambda -> Break pointer eq.
+                        - Use Rc::get_mut_unchecked -> Requires unsafe + nightly.#
+
+                        This is ugly
+                        TODO: @hsjobeki, @tazjin: how can we fix this?
+                        */
+                        unsafe {
+                            let lambda = Rc::as_ptr(&v.lambda).cast_mut();
+                            (*lambda).doc = original_docs;
+                        }
+                    }
+
+                    Value::Closure(v)
+                }
+                _ => value,
+            }
+        }
         msg => panic!(
             "Tvix bug: VM responded with incorrect generator message: {}",
             msg

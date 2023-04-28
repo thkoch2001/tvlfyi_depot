@@ -14,12 +14,17 @@
 //! mistakes early during development.
 
 mod bindings;
+mod comment;
 mod import;
 mod optimiser;
 mod scope;
 
+use comment::FindDocComment;
+
 use codemap::Span;
 use rnix::ast::{self, AstToken};
+use rnix::{match_ast, SyntaxNode};
+use rowan::ast::AstNode;
 use smol_str::SmolStr;
 use std::collections::HashMap;
 use std::path::{Path, PathBuf};
@@ -53,6 +58,7 @@ pub struct CompilationOutput {
 }
 
 /// Represents the lambda currently being compiled.
+#[derive(Debug)]
 struct LambdaCtx {
     lambda: Lambda,
     scope: Scope,
@@ -251,42 +257,52 @@ impl Compiler<'_> {
             ast::Expr::UnaryOp(op) => self.compile_unary_op(slot, op),
 
             ast::Expr::BinOp(binop) => {
-                self.thunk(slot, binop, move |c, s| c.compile_binop(s, binop))
+                self.thunk(slot, binop, move |c, s| c.compile_binop(s, binop), None)
             }
 
             ast::Expr::HasAttr(has_attr) => self.compile_has_attr(slot, has_attr),
 
-            ast::Expr::List(list) => self.thunk(slot, list, move |c, s| c.compile_list(s, list)),
+            ast::Expr::List(list) => {
+                self.thunk(slot, list, move |c, s| c.compile_list(s, list), None)
+            }
 
             ast::Expr::AttrSet(attrs) => {
-                self.thunk(slot, attrs, move |c, s| c.compile_attr_set(s, attrs))
+                self.thunk(slot, attrs, move |c, s| c.compile_attr_set(s, attrs), None)
             }
 
             ast::Expr::Select(select) => {
-                self.thunk(slot, select, move |c, s| c.compile_select(s, select))
+                self.thunk(slot, select, move |c, s| c.compile_select(s, select), None)
             }
 
             ast::Expr::Assert(assert) => {
-                self.thunk(slot, assert, move |c, s| c.compile_assert(s, assert))
+                self.thunk(slot, assert, move |c, s| c.compile_assert(s, assert), None)
             }
-            ast::Expr::IfElse(if_else) => {
-                self.thunk(slot, if_else, move |c, s| c.compile_if_else(s, if_else))
-            }
+            ast::Expr::IfElse(if_else) => self.thunk(
+                slot,
+                if_else,
+                move |c, s| c.compile_if_else(s, if_else),
+                None,
+            ),
 
             ast::Expr::LetIn(let_in) => {
-                self.thunk(slot, let_in, move |c, s| c.compile_let_in(s, let_in))
+                self.thunk(slot, let_in, move |c, s| c.compile_let_in(s, let_in), None)
             }
 
             ast::Expr::Ident(ident) => self.compile_ident(slot, ident),
-            ast::Expr::With(with) => self.thunk(slot, with, |c, s| c.compile_with(s, with)),
-            ast::Expr::Lambda(lambda) => {
-                self.compile_lambda_or_thunk(false, slot, lambda, |c, s| {
-                    c.compile_lambda(s, lambda)
-                })
-            }
-            ast::Expr::Apply(apply) => {
-                self.thunk(slot, apply, move |c, s| c.compile_apply(s, apply))
-            }
+            ast::Expr::With(with) => self.thunk(slot, with, |c, s| c.compile_with(s, with), None),
+            ast::Expr::Lambda(lambda) => self.compile_lambda_or_thunk(
+                false,
+                slot,
+                lambda,
+                |c, s| c.compile_lambda(s, lambda),
+                Some(&expr),
+            ),
+            ast::Expr::Apply(apply) => self.thunk(
+                slot,
+                apply,
+                move |c, s| c.compile_apply(s, apply),
+                Some(&expr),
+            ),
 
             // Parenthesized expressions are simply unwrapped, leaving
             // their value on the stack.
@@ -336,18 +352,23 @@ impl Compiler<'_> {
         let path = if raw_path.starts_with('/') {
             Path::new(&raw_path).to_owned()
         } else if raw_path.starts_with('~') {
-            return self.thunk(slot, node, move |c, _| {
-                // We assume that home paths start with ~/ or fail to parse
-                // TODO: this should be checked using a parse-fail test.
-                debug_assert!(raw_path.len() > 2 && raw_path.starts_with("~/"));
+            return self.thunk(
+                slot,
+                node,
+                move |c, _| {
+                    // We assume that home paths start with ~/ or fail to parse
+                    // TODO: this should be checked using a parse-fail test.
+                    debug_assert!(raw_path.len() > 2 && raw_path.starts_with("~/"));
 
-                let home_relative_path = &raw_path[2..(raw_path.len())];
-                c.emit_constant(
-                    Value::UnresolvedPath(Box::new(home_relative_path.into())),
-                    node,
-                );
-                c.push_op(OpCode::OpResolveHomePath, node);
-            });
+                    let home_relative_path = &raw_path[2..(raw_path.len())];
+                    c.emit_constant(
+                        Value::UnresolvedPath(Box::new(home_relative_path.into())),
+                        node,
+                    );
+                    c.push_op(OpCode::OpResolveHomePath, node);
+                },
+                None,
+            );
         } else if raw_path.starts_with('<') {
             // TODO: decide what to do with findFile
             if raw_path.len() == 2 {
@@ -358,10 +379,15 @@ impl Compiler<'_> {
             }
             let path = &raw_path[1..(raw_path.len() - 1)];
             // Make a thunk to resolve the path (without using `findFile`, at least for now?)
-            return self.thunk(slot, node, move |c, _| {
-                c.emit_constant(Value::UnresolvedPath(Box::new(path.into())), node);
-                c.push_op(OpCode::OpFindFile, node);
-            });
+            return self.thunk(
+                slot,
+                node,
+                move |c, _| {
+                    c.emit_constant(Value::UnresolvedPath(Box::new(path.into())), node);
+                    c.push_op(OpCode::OpFindFile, node);
+                },
+                None,
+            );
         } else {
             let mut buf = self.root_dir.clone();
             buf.push(&raw_path);
@@ -419,9 +445,14 @@ impl Compiler<'_> {
         // coerce the result to a string value. This would require forcing the
         // value of the inner expression, so we need to wrap it in another thunk.
         if parts.len() != 1 || matches!(&parts[0], ast::InterpolPart::Interpolation(_)) {
-            self.thunk(slot, node, move |c, s| {
-                c.compile_str_parts(s, node, parts);
-            });
+            self.thunk(
+                slot,
+                node,
+                move |c, s| {
+                    c.compile_str_parts(s, node, parts);
+                },
+                None,
+            );
         } else {
             self.compile_str_parts(slot, node, parts);
         }
@@ -943,9 +974,12 @@ impl Compiler<'_> {
                 if let ast::Expr::Ident(_) = &default_expr {
                     self.compile(idx, default_expr);
                 } else {
-                    self.thunk(idx, &self.span_for(&default_expr), move |c, s| {
-                        c.compile(s, default_expr)
-                    });
+                    self.thunk(
+                        idx,
+                        &self.span_for(&default_expr),
+                        move |c, s| c.compile(s, default_expr),
+                        None,
+                    );
                 }
 
                 self.patch_jump(jump_over_default);
@@ -995,14 +1029,86 @@ impl Compiler<'_> {
         self.context_mut().lambda.formals = formals;
     }
 
-    fn thunk<N, F>(&mut self, outer_slot: LocalIdx, node: &N, content: F)
+    fn thunk<N, F>(&mut self, outer_slot: LocalIdx, node: &N, content: F, expr: Option<&ast::Expr>)
     where
         N: ToSpan,
         F: FnOnce(&mut Compiler, LocalIdx),
     {
-        self.compile_lambda_or_thunk(true, outer_slot, node, content)
+        self.compile_lambda_or_thunk(true, outer_slot, node, content, expr)
     }
 
+    /// Function to retrieve a doc-comment.
+    ///
+    /// Returns "None" in case no suitable comment was found.
+    ///
+    /// Doc-comments can appear in two places for any expression
+    ///
+    /// ```nix
+    /// # (1) directly before the expression (anonymous)
+    /// /** Doc */
+    /// bar: bar;
+    ///
+    /// # (2) when assigning a name.
+    /// {
+    ///   /** Doc */
+    ///   foo = bar: bar;
+    /// }
+    /// ```
+    ///
+    /// If the doc-comment is not found in place (1) the search continues at place (2)
+    /// More precisely before the NODE_ATTRPATH_VALUE (ast)
+    /// If no doc-comment was found in place (1) or (2) this function returns None.
+    // fn get_expr_docs(&mut self, expr: &ast::Expr) -> Option<ast::Comment> {
+    //     if let Some(doc) = self.get_doc_comment(expr.syntax()) {
+    //         // Found in place (1)
+    //         return Some(doc);
+    //     } else if let Some(ref parent) = expr.syntax().parent() {
+    //         return match_ast! {
+    //             match parent {
+    //                 ast::AttrpathValue(_) => self.get_doc_comment(&parent),
+    //                 _ => {
+    //                     // Yet unhandled ast-nodes
+    //                     None
+    //                 }
+
+    //             }
+    //         };
+    //     } else {
+    //         // There is no parent;
+    //         // No further places where a doc-comment could be.
+    //         return None;
+    //     }
+    // }
+
+    /// Look backwards from the given expression
+    /// Only whitespace are allowed in between an expression and the doc-comment.
+    /// Any other Node or Token stops the peek.
+    /// The caller might then decide to search in the parent or ancestor node
+    // fn get_doc_comment(&mut self, expr: &SyntaxNode) -> Option<ast::Comment> {
+    //     let mut prev = expr.prev_sibling_or_token();
+    //     loop {
+    //         match prev {
+    //             Some(rnix::NodeOrToken::Token(ref token)) => {
+    //                 match_ast! { match token {
+    //                     ast::Whitespace(_) => {
+    //                         prev = token.prev_sibling_or_token();
+    //                     },
+    //                     ast::Comment(it) => {
+    //                         if let Some(_) = it.doc_text() {
+    //                             break Some(it);
+    //                         }else{
+    //                             break None;
+    //                         }
+    //                     },
+    //                     _ => {
+    //                         break None;
+    //                     }
+    //                 }}
+    //             }
+    //             _ => break None,
+    //         };
+    //     }
+    // }
     /// Compile an expression into a runtime cloure or thunk
     fn compile_lambda_or_thunk<N, F>(
         &mut self,
@@ -1010,12 +1116,19 @@ impl Compiler<'_> {
         outer_slot: LocalIdx,
         node: &N,
         content: F,
+        expr: Option<&ast::Expr>,
     ) where
         N: ToSpan,
         F: FnOnce(&mut Compiler, LocalIdx),
     {
         let name = self.scope()[outer_slot].name();
         self.new_context();
+
+        // set the optional docs
+        // if available in the correct AST-places
+        if let Some(lambda) = expr {
+            self.context_mut().lambda.doc = self.get_expr_docs(lambda);
+        }
 
         // Set the (optional) name of the current slot on the lambda that is
         // being compiled.
