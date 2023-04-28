@@ -33,6 +33,24 @@
       "message": "Can you a comment this is meant to complement the `text()` function defined in `rnix::Comment`.",
       "revId": "cd1731ad6cbdf336b32b5336871746e372b4bc51",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "020ad211_ce49308f",
+        "filename": "tvix/eval/src/compiler/comment.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1000074
+      },
+      "writtenOn": "2023-04-28T12:12:53Z",
+      "side": 1,
+      "message": "Yes. Good hint. Otherwise might be confusing why this is called \"text\"",
+      "parentUuid": "145b708a_4ef119de",
+      "revId": "cd1731ad6cbdf336b32b5336871746e372b4bc51",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
