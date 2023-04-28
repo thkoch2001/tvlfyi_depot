@@ -5,6 +5,8 @@ use test_generator::test_resources;
 /// Module for one-off tests which do not follow the rest of the
 /// test layout.
 mod one_offs;
+mod test_comment_ast;
+mod test_comment_eval;
 
 #[builtins]
 mod mock_builtins {
