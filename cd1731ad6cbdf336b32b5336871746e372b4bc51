@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "51e96287_267aa10f",
+        "filename": "tvix/eval/src/compiler/comment.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-04-28T11:54:49Z",
+      "side": 1,
+      "message": "unwrap is a bit dirty. What about dropping the `is_doc()` function, and instead having `doc_text()` return a `Option\u003c\u0026str\u003e`?\n\nCallers who only want to conditionally do something with the doc text if there can use\n\n```\nif let Some(doc_text) \u003d ….doc_text() {\n …\n}\n```\n\nI guess most consumers actually want to do something with the doc text if it exists, or actually use an Option\u003c\u0026str\u003e on their side anyways - so having a separate `is_doc()` function to run first would actually be more work - and I guess if you want to match on the other side (`.is_none()`), rustc should optimize out most of the other code that deals with the value, because the caller doesn\u0027t care about it.",
+      "revId": "cd1731ad6cbdf336b32b5336871746e372b4bc51",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "145b708a_4ef119de",
+        "filename": "tvix/eval/src/compiler/comment.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-04-28T11:54:49Z",
+      "side": 1,
+      "message": "Can you a comment this is meant to complement the `text()` function defined in `rnix::Comment`.",
+      "revId": "cd1731ad6cbdf336b32b5336871746e372b4bc51",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
