@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f28add26_53c112d6",
+        "filename": "tvix/eval/src/compiler/mod.rs",
+        "patchSetId": 5
+      },
+      "lineNbr": 1032,
+      "author": {
+        "id": 1000074
+      },
+      "writtenOn": "2023-04-28T12:58:59Z",
+      "side": 1,
+      "message": "I added \"Option\u003c\u0026ast::Expr\u003e\" to fn thunk.\nBecause i wanted doc-comments to work for apply-nodes too.\n@tazjin Do you see any cleaner ways to get access to the ast in general ?",
+      "revId": "5160978422eeb07f6d18271d4bfc53d697afdddc",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
