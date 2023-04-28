@@ -589,13 +589,18 @@ impl Compiler<'_> {
                 } => {
                     // Create a thunk wrapping value (which may be one as well)
                     // to avoid forcing the from expr too early.
-                    self.thunk(binding.value_slot, &namespace, |c, s| {
-                        c.compile(s, namespace.clone());
-                        c.emit_force(&namespace);
+                    self.thunk(
+                        binding.value_slot,
+                        &namespace,
+                        |c, s| {
+                            c.compile(s, namespace.clone());
+                            c.emit_force(&namespace);
 
-                        c.emit_constant(Value::String(name.as_str().into()), &span);
-                        c.push_op(OpCode::OpAttrsSelect, &span);
-                    })
+                            c.emit_constant(Value::String(name.as_str().into()), &span);
+                            c.push_op(OpCode::OpAttrsSelect, &span);
+                        },
+                        None,
+                    )
                 }
 
                 // Binding is "just" a plain expression that needs to be
@@ -604,11 +609,16 @@ impl Compiler<'_> {
 
                 // Binding is a merged or nested attribute set, and needs to be
                 // recursively compiled as another binding.
-                Binding::Set(set) => self.thunk(binding.value_slot, &set, |c, _| {
-                    c.scope_mut().begin_scope();
-                    c.compile_bindings(binding.value_slot, set.kind, &set);
-                    c.scope_mut().end_scope();
-                }),
+                Binding::Set(set) => self.thunk(
+                    binding.value_slot,
+                    &set,
+                    |c, _| {
+                        c.scope_mut().begin_scope();
+                        c.compile_bindings(binding.value_slot, set.kind, &set);
+                        c.scope_mut().end_scope();
+                    },
+                    None,
+                ),
             }
 
             // Any code after this point will observe the value in the right
@@ -728,11 +738,16 @@ impl Compiler<'_> {
                 // dynamic resolution without actually using it, this operation
                 // is wrapped in an extra thunk.
                 if self.has_dynamic_ancestor() {
-                    self.thunk(slot, node, |c, _| {
-                        c.context_mut().captures_with_stack = true;
-                        c.emit_constant(Value::String(ident.into()), node);
-                        c.push_op(OpCode::OpResolveWith, node);
-                    });
+                    self.thunk(
+                        slot,
+                        node,
+                        |c, _| {
+                            c.context_mut().captures_with_stack = true;
+                            c.emit_constant(Value::String(ident.into()), node);
+                            c.push_op(OpCode::OpResolveWith, node);
+                        },
+                        None,
+                    );
                     return;
                 }
 
@@ -747,14 +762,19 @@ impl Compiler<'_> {
 
             // This identifier is referring to a value from the same scope which
             // is not yet defined. This identifier access must be thunked.
-            LocalPosition::Recursive(idx) => self.thunk(slot, node, move |compiler, _| {
-                let upvalue_idx = compiler.add_upvalue(
-                    compiler.contexts.len() - 1,
-                    node,
-                    UpvalueKind::Local(idx),
-                );
-                compiler.push_op(OpCode::OpGetUpvalue(upvalue_idx), node);
-            }),
+            LocalPosition::Recursive(idx) => self.thunk(
+                slot,
+                node,
+                move |compiler, _| {
+                    let upvalue_idx = compiler.add_upvalue(
+                        compiler.contexts.len() - 1,
+                        node,
+                        UpvalueKind::Local(idx),
+                    );
+                    compiler.push_op(OpCode::OpGetUpvalue(upvalue_idx), node);
+                },
+                None,
+            ),
         };
     }
 
