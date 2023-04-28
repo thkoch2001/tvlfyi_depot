@@ -4,9 +4,8 @@ use std::{collections::HashMap, hash::Hash, rc::Rc};
 use codemap::Span;
 use smol_str::SmolStr;
 
-use crate::{chunk::Chunk, upvalues::Upvalues};
-
 use super::NixString;
+use crate::{chunk::Chunk, upvalues::Upvalues};
 
 #[derive(Clone, Debug, PartialEq)]
 pub(crate) struct Formals {
@@ -54,6 +53,8 @@ pub struct Lambda {
     /// identifier (e.g. a value in a let-expression or an attribute
     /// set entry) it is located in).
     pub(crate) name: Option<SmolStr>,
+
+    pub(crate) doc: Option<String>,
 
     /// Number of upvalues which the code in this Lambda closes
     /// over, and which need to be initialised at
