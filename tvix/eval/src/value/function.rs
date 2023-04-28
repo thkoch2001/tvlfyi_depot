@@ -55,6 +55,8 @@ pub struct Lambda {
     /// set entry) it is located in).
     pub(crate) name: Option<SmolStr>,
 
+    pub(crate) doc: Option<SmolStr>,
+
     /// Number of upvalues which the code in this Lambda closes
     /// over, and which need to be initialised at
     /// runtime.  Information about the variables is emitted using
