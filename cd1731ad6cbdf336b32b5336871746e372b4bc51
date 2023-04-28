@@ -20,6 +20,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "d5e14af3_954ea12e",
+        "filename": "tvix/eval/src/compiler/comment.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1000074
+      },
+      "writtenOn": "2023-04-28T12:47:21Z",
+      "side": 1,
+      "message": "Reworked that into a single function returning Option\u003c\u0026str\u003e",
+      "parentUuid": "51e96287_267aa10f",
+      "revId": "cd1731ad6cbdf336b32b5336871746e372b4bc51",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "145b708a_4ef119de",
         "filename": "tvix/eval/src/compiler/comment.rs",
         "patchSetId": 1
@@ -49,6 +67,24 @@
       "side": 1,
       "message": "Yes. Good hint. Otherwise might be confusing why this is called \"text\"",
       "parentUuid": "145b708a_4ef119de",
+      "revId": "cd1731ad6cbdf336b32b5336871746e372b4bc51",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0874b9c0_22aa01b7",
+        "filename": "tvix/eval/src/compiler/comment.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1000074
+      },
+      "writtenOn": "2023-04-28T12:47:21Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "020ad211_ce49308f",
       "revId": "cd1731ad6cbdf336b32b5336871746e372b4bc51",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
