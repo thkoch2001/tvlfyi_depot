@@ -36,6 +36,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "f80e4181_1a30f79e",
+        "filename": "tvix/eval/src/compiler/comment.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1000074
+      },
+      "writtenOn": "2023-04-28T13:20:45Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d5e14af3_954ea12e",
+      "revId": "cd1731ad6cbdf336b32b5336871746e372b4bc51",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "145b708a_4ef119de",
