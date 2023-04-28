@@ -209,4 +209,9 @@
     email = "tvl@lahfa.xyz";
     password = "{ARGON2}$argon2id$v=19$m=65536,t=2,p=1$3NZTBbF5dZssAHC/ktcA/Q$AZxHGG0ycNMOkIxC/ONYbyhNxC9hb6cpWvnsNH8LWZk";
   }
+  {
+    username = "hsjobeki";
+    email = "hsjobeki@gmail.com";
+    password = "{ARGON2}$argon2id$v=19$m=65536,t=2,p=1$jez9eVa2v0BznIJMOhw+hw$wUbwCS+Bfcjjzr08saQE6NNTPWNXWWaxv+UtBCdYC2s";
+  }
 ]
