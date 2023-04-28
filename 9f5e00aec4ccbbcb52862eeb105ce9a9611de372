@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3592b443_5a098f43",
+        "filename": "tvix/eval/src/compiler/mod.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 1131,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-04-28T12:00:24Z",
+      "side": 1,
+      "message": "With the comment above, you can just do `self.context_mut().lambda.doc \u003d d.doc_text().map(SmolStr::from)`",
+      "revId": "9f5e00aec4ccbbcb52862eeb105ce9a9611de372",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a915c616_30f51c60",
+        "filename": "tvix/eval/src/value/function.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 58,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-04-28T12:00:24Z",
+      "side": 1,
+      "message": "I\u0027m not sure SmolStr is the right choice - it\u0027s meant to store *tokens* in programming languages, not comments (which are probably longer) - so most of them will be heap-allocated anyways - but that\u0027s probably a question for @tazjin.",
+      "revId": "9f5e00aec4ccbbcb52862eeb105ce9a9611de372",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
