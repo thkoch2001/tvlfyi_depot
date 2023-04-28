@@ -16,6 +16,91 @@
       "message": "I added \"Option\u003c\u0026ast::Expr\u003e\" to fn thunk.\nBecause i wanted doc-comments to work for apply-nodes too.\n@tazjin Do you see any cleaner ways to get access to the ast in general ?",
       "revId": "5160978422eeb07f6d18271d4bfc53d697afdddc",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "44c38f22_5cce0557",
+        "filename": "tvix/eval/src/compiler/mod.rs",
+        "patchSetId": 5
+      },
+      "lineNbr": 1040,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-04-28T14:15:42Z",
+      "side": 1,
+      "message": "I wonder if these two functions can be moved into another file, and some unit tests be added, that provide an AST (or quickly parse some Nix), to assert the right docstring comes out for a given expr.",
+      "revId": "5160978422eeb07f6d18271d4bfc53d697afdddc",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "09f6607f_86104080",
+        "filename": "tvix/eval/src/compiler/mod.rs",
+        "patchSetId": 5
+      },
+      "lineNbr": 1059,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-04-28T14:15:42Z",
+      "side": 1,
+      "message": "I\u0027d probably write this match a bit more linear, to make it more understandable there\u0027s \"three branches\" here:\n\n```\n// Found in place (2)\nif let Some(doc) \u003d self.get_doc_comment(lambda.syntax()) {\n  Some(doc)\n}\n// Look in place (1)\nelse if let Some(ref node) \u003d lambda.syntax().parent() {\n  match_ast! {\n    match node {\n        ast::AttrpathValue(_) \u003d\u003e self.get_doc_comment(\u0026node),\n        _ \u003d\u003e {\n            // Yet unhandled ast-nodes\n            None\n        }\n    }\n  }\n}\n// There is no parent; No further places where a doc-comment could be.\nelse {\n  None\n}\n```",
+      "revId": "5160978422eeb07f6d18271d4bfc53d697afdddc",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "63a15b5d_abe6032a",
+        "filename": "tvix/eval/src/compiler/mod.rs",
+        "patchSetId": 5
+      },
+      "lineNbr": 1096,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-04-28T14:15:42Z",
+      "side": 1,
+      "message": "```\nif it.doc_text().is_some() {\n  break Some(it);\n} else {\n  break None\n}\n```\n\nWhy do we peek and then return an Option\u003cast::Comment\u003e here (and further up in `get_lambda_docs`), instead of an `Option\u003c\u0026str\u003e`? That\u0027d avoid having to extract it again in `compile_lambda_or_thunk`. It doesn\u0027t use any of the ast bits there anymore.",
+      "revId": "5160978422eeb07f6d18271d4bfc53d697afdddc",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ee153551_ed20ccca",
+        "filename": "tvix/eval/src/compiler/mod.rs",
+        "patchSetId": 5
+      },
+      "lineNbr": 1118,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-04-28T14:15:42Z",
+      "side": 1,
+      "message": "Can you extend the docstring of this function, describing in which cases expr is Some(…), and where it\u0027s None? This is not entirely clear to me.",
+      "revId": "5160978422eeb07f6d18271d4bfc53d697afdddc",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5a238626_116e8378",
+        "filename": "tvix/eval/src/compiler/mod.rs",
+        "patchSetId": 5
+      },
+      "lineNbr": 1128,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-04-28T14:15:42Z",
+      "side": 1,
+      "message": "I\u0027d probably just shadow `expr` here, and use an `if let` for the assignment too:\n```\nif let Some(expr) \u003d expr {\n  if let Some(d) \u003d self.get_lambda_docs(expr) {\n    self.context_mut().lambda.doc \u003d d.doc_text().map(SmolStr::from);\n  }\n}\n```\n\nIs `get_lambda_docs` actually really limited to lambda? It seems this is any `ast::Expr` (we just right now decide to only pass one in in `compile_lambda_or_thunk`?)",
+      "revId": "5160978422eeb07f6d18271d4bfc53d697afdddc",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
