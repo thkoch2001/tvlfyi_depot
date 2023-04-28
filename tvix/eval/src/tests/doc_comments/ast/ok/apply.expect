@@ -1,0 +1,3 @@
+NODE_LAMBDA@23..30 - Some("foo")
+NODE_LAMBDA@26..30 - None
+NODE_APPLY@51..56 - Some("bar")
