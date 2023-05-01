@@ -419,34 +419,6 @@ each (non-boundary) line or END-PART-FUNCTION at each PART-BOUNDARY."
          do (last-part)
          do (process-line line)))))
 
-;; This awkward handling of newlines is due to RFC2046: "The CRLF
-;; preceding the boundary delimiter line is conceptually attached to
-;; the boundary so that it is possible to have a part that does not
-;; end with a CRLF (line break).  Body parts that must be considered
-;; to end with line breaks, therefore, must have two CRLFs preceding
-;; the boundary delimiter line, the first of which is part of the
-;; preceding body part, and the second of which is part of the
-;; encapsulation boundary".
-(defun split-multipart-parts (body-stream part-boundary)
-  "Read from BODY-STREAM and split MIME parts separated by
-PART-BOUNDARY.  Return a list of strings."
-  (let ((part (make-string-output-stream))
-        (parts '())
-        (beginning-of-part-p t))
-    (flet ((output-line (line)
-             (if beginning-of-part-p
-                 (setf beginning-of-part-p nil)
-                 (terpri part))
-             (write-string line part))
-           (end-part ()
-             (setf beginning-of-part-p t)
-             (push (get-output-stream-string part) parts)))
-      (do-multipart-parts body-stream part-boundary #'output-line #'end-part)
-      (close part)
-      ;; the first part is empty or contains all the junk
-      ;; to the first boundary
-      (cdr (nreverse parts)))))
-
 (defun index-multipart-parts (body-stream part-boundary)
   "Read from BODY-STREAM and return the file offset of the MIME parts
 separated by PART-BOUNDARY."
