@@ -1,18 +1,14 @@
 use crate::blobservice::BlobService;
-use crate::chunkservice::ChunkService;
 use crate::proto::blob_meta::ChunkMeta;
 use crate::proto::blob_service_server::BlobService as GRPCBlobService;
 use crate::proto::{BlobChunk, GRPCBlobServiceWrapper, ReadBlobRequest, StatBlobRequest};
 use crate::tests::fixtures::{BLOB_A, BLOB_A_DIGEST, BLOB_B, BLOB_B_DIGEST};
-use crate::tests::utils::{gen_blob_service, gen_chunk_service};
+use crate::tests::utils::gen_blob_service;
 
-fn gen_grpc_blob_service() -> GRPCBlobServiceWrapper<
-    impl BlobService + Send + Sync + Clone + 'static,
-    impl ChunkService + Send + Sync + Clone + 'static,
-> {
+fn gen_grpc_blob_service(
+) -> GRPCBlobServiceWrapper<impl BlobService + Send + Sync + Clone + 'static> {
     let blob_service = gen_blob_service();
-    let chunk_service = gen_chunk_service();
-    GRPCBlobServiceWrapper::new(blob_service, chunk_service)
+    GRPCBlobServiceWrapper::from(blob_service)
 }
 
 /// Trying to read a non-existent blob should return a not found error.
