@@ -129,6 +129,49 @@ rec {
     #   inject test dependencies into the build
 
     crates = {
+      "addr2line" = rec {
+        crateName = "addr2line";
+        version = "0.19.0";
+        edition = "2015";
+        sha256 = "15ywmr5wx22q69ffnn79qp65ir5p1x0k2q06plcpv6v74c5xcvx7";
+        dependencies = [
+          {
+            name = "gimli";
+            packageId = "gimli";
+            usesDefaultFeatures = false;
+            features = [ "read" ];
+          }
+        ];
+        features = {
+          "alloc" = [ "dep:alloc" ];
+          "compiler_builtins" = [ "dep:compiler_builtins" ];
+          "core" = [ "dep:core" ];
+          "cpp_demangle" = [ "dep:cpp_demangle" ];
+          "default" = [ "rustc-demangle" "cpp_demangle" "std-object" "fallible-iterator" "smallvec" ];
+          "fallible-iterator" = [ "dep:fallible-iterator" ];
+          "object" = [ "dep:object" ];
+          "rustc-demangle" = [ "dep:rustc-demangle" ];
+          "rustc-dep-of-std" = [ "core" "alloc" "compiler_builtins" "gimli/rustc-dep-of-std" ];
+          "smallvec" = [ "dep:smallvec" ];
+          "std" = [ "gimli/std" ];
+          "std-object" = [ "std" "object" "object/std" "object/compression" "gimli/endian-reader" ];
+        };
+      };
+      "adler" = rec {
+        crateName = "adler";
+        version = "1.0.2";
+        edition = "2015";
+        sha256 = "1zim79cvzd5yrkzl3nyfx0avijwgk9fqv3yrscdy1cc79ih02qpj";
+        authors = [
+          "Jonas Schievink <jonasschievink@gmail.com>"
+        ];
+        features = {
+          "compiler_builtins" = [ "dep:compiler_builtins" ];
+          "core" = [ "dep:core" ];
+          "default" = [ "std" ];
+          "rustc-dep-of-std" = [ "core" "compiler_builtins" ];
+        };
+      };
       "aho-corasick" = rec {
         crateName = "aho-corasick";
         version = "1.0.1";
@@ -617,6 +660,63 @@ rec {
           "__private_docs" = [ "dep:tower-http" ];
           "tracing" = [ "dep:tracing" ];
         };
+      };
+      "backtrace" = rec {
+        crateName = "backtrace";
+        version = "0.3.67";
+        edition = "2018";
+        sha256 = "1jk48laqafvbyc0mn1v0didk307qc0zji3z5jcq2lpqqdmnkfg93";
+        authors = [
+          "The Rust Project Developers"
+        ];
+        dependencies = [
+          {
+            name = "addr2line";
+            packageId = "addr2line";
+            usesDefaultFeatures = false;
+          }
+          {
+            name = "cfg-if";
+            packageId = "cfg-if";
+          }
+          {
+            name = "libc";
+            packageId = "libc";
+            usesDefaultFeatures = false;
+          }
+          {
+            name = "miniz_oxide";
+            packageId = "miniz_oxide";
+            usesDefaultFeatures = false;
+          }
+          {
+            name = "object";
+            packageId = "object";
+            usesDefaultFeatures = false;
+            features = [ "read_core" "elf" "macho" "pe" "unaligned" "archive" ];
+          }
+          {
+            name = "rustc-demangle";
+            packageId = "rustc-demangle";
+          }
+        ];
+        buildDependencies = [
+          {
+            name = "cc";
+            packageId = "cc";
+          }
+        ];
+        features = {
+          "cpp_demangle" = [ "dep:cpp_demangle" ];
+          "default" = [ "std" ];
+          "rustc-serialize" = [ "dep:rustc-serialize" ];
+          "serde" = [ "dep:serde" ];
+          "serialize-rustc" = [ "rustc-serialize" ];
+          "serialize-serde" = [ "serde" ];
+          "verify-winapi" = [ "winapi/dbghelp" "winapi/handleapi" "winapi/libloaderapi" "winapi/memoryapi" "winapi/minwindef" "winapi/processthreadsapi" "winapi/synchapi" "winapi/tlhelp32" "winapi/winbase" "winapi/winnt" ];
+          "winapi" = [ "dep:winapi" ];
+        };
+        resolvedDefaultFeatures = [ "default" "std" ];
       };
       "base64 0.10.1" = rec {
         crateName = "base64";
@@ -1934,16 +2034,6 @@ rec {
         ];
 
       };
-      "fastcdc" = rec {
-        crateName = "fastcdc";
-        version = "3.0.3";
-        edition = "2018";
-        sha256 = "0ykqz1wrzhspn41af7kfbklgqha2ry2m7csw8kdcy6k05sdhy08h";
-        authors = [
-          "Nathan Fiedler <nathanfiedler@fastmail.fm>"
-        ];
-
-      };
       "fastrand" = rec {
         crateName = "fastrand";
         version = "1.9.0";
@@ -2461,6 +2551,27 @@ rec {
         };
         resolvedDefaultFeatures = [ "std" ];
       };
+      "gimli" = rec {
+        crateName = "gimli";
+        version = "0.27.2";
+        edition = "2018";
+        sha256 = "1d5v6jjchf4872jynjsg5ni4vankm1341bas8qindygb6g9962md";
+        features = {
+          "alloc" = [ "dep:alloc" ];
+          "compiler_builtins" = [ "dep:compiler_builtins" ];
+          "core" = [ "dep:core" ];
+          "default" = [ "read" "write" "std" "fallible-iterator" "endian-reader" ];
+          "endian-reader" = [ "read" "stable_deref_trait" ];
+          "fallible-iterator" = [ "dep:fallible-iterator" ];
+          "indexmap" = [ "dep:indexmap" ];
+          "read" = [ "read-core" ];
+          "rustc-dep-of-std" = [ "core" "alloc" "compiler_builtins" ];
+          "stable_deref_trait" = [ "dep:stable_deref_trait" ];
+          "std" = [ "fallible-iterator/std" "stable_deref_trait/std" ];
+          "write" = [ "indexmap" ];
+        };
+        resolvedDefaultFeatures = [ "read" "read-core" ];
+      };
       "glob" = rec {
         crateName = "glob";
         version = "0.3.1";
@@ -2519,12 +2630,12 @@ rec {
           }
           {
             name = "tokio";
-            packageId = "tokio";
+            packageId = "tokio 1.28.0 (registry+https://github.com/rust-lang/crates.io-index)";
             features = [ "io-util" ];
           }
           {
             name = "tokio-util";
-            packageId = "tokio-util";
+            packageId = "tokio-util 0.7.8 (registry+https://github.com/rust-lang/crates.io-index)";
             features = [ "codec" ];
           }
           {
@@ -2537,7 +2648,7 @@ rec {
         devDependencies = [
           {
             name = "tokio";
-            packageId = "tokio";
+            packageId = "tokio 1.28.0 (registry+https://github.com/rust-lang/crates.io-index)";
             features = [ "rt-multi-thread" "macros" "sync" "net" ];
           }
         ];
@@ -2806,7 +2917,7 @@ rec {
           }
           {
             name = "tokio";
-            packageId = "tokio";
+            packageId = "tokio 1.28.0 (registry+https://github.com/rust-lang/crates.io-index)";
             features = [ "sync" ];
           }
           {
@@ -2833,7 +2944,7 @@ rec {
           }
           {
             name = "tokio";
-            packageId = "tokio";
+            packageId = "tokio 1.28.0 (registry+https://github.com/rust-lang/crates.io-index)";
             features = [ "fs" "macros" "io-std" "io-util" "rt" "rt-multi-thread" "sync" "time" "test-util" ];
           }
         ];
@@ -2869,7 +2980,7 @@ rec {
           }
           {
             name = "tokio";
-            packageId = "tokio";
+            packageId = "tokio 1.28.0 (registry+https://github.com/rust-lang/crates.io-index)";
           }
           {
             name = "tokio-io-timeout";
@@ -2884,7 +2995,7 @@ rec {
           }
           {
             name = "tokio";
-            packageId = "tokio";
+            packageId = "tokio 1.28.0 (registry+https://github.com/rust-lang/crates.io-index)";
             features = [ "io-std" "io-util" "macros" ];
           }
         ];
@@ -3570,6 +3681,32 @@ rec {
         ];
 
       };
+      "miniz_oxide" = rec {
+        crateName = "miniz_oxide";
+        version = "0.6.2";
+        edition = "2018";
+        sha256 = "1yp8z6yll5ypz1ldmgnv7zi0r78kbvmqmn2mii77jzmk5069axdj";
+        authors = [
+          "Frommi <daniil.liferenko@gmail.com>"
+          "oyvindln <oyvindln@users.noreply.github.com>"
+        ];
+        dependencies = [
+          {
+            name = "adler";
+            packageId = "adler";
+            usesDefaultFeatures = false;
+          }
+        ];
+        features = {
+          "alloc" = [ "dep:alloc" ];
+          "compiler_builtins" = [ "dep:compiler_builtins" ];
+          "core" = [ "dep:core" ];
+          "default" = [ "with-alloc" ];
+          "rustc-dep-of-std" = [ "core" "alloc" "compiler_builtins" "adler/rustc-dep-of-std" ];
+          "simd" = [ "simd-adler32" ];
+          "simd-adler32" = [ "dep:simd-adler32" ];
+        };
+      };
       "mio" = rec {
         crateName = "mio";
         version = "0.8.6";
@@ -3877,6 +4014,43 @@ rec {
           }
         ];
 
+      };
+      "object" = rec {
+        crateName = "object";
+        version = "0.30.3";
+        edition = "2018";
+        sha256 = "0fdl7qjsz1j9kl3j7f4656fswzrqpyj2kgaizhknmjrx7mfjd1pa";
+        dependencies = [
+          {
+            name = "memchr";
+            packageId = "memchr";
+            usesDefaultFeatures = false;
+          }
+        ];
+        features = {
+          "all" = [ "read" "write" "std" "compression" "wasm" ];
+          "alloc" = [ "dep:alloc" ];
+          "compiler_builtins" = [ "dep:compiler_builtins" ];
+          "compression" = [ "flate2" "std" ];
+          "core" = [ "dep:core" ];
+          "crc32fast" = [ "dep:crc32fast" ];
+          "default" = [ "read" "compression" ];
+          "doc" = [ "read_core" "write_std" "std" "compression" "archive" "coff" "elf" "macho" "pe" "wasm" ];
+          "flate2" = [ "dep:flate2" ];
+          "hashbrown" = [ "dep:hashbrown" ];
+          "indexmap" = [ "dep:indexmap" ];
+          "pe" = [ "coff" ];
+          "read" = [ "read_core" "archive" "coff" "elf" "macho" "pe" "unaligned" ];
+          "rustc-dep-of-std" = [ "core" "compiler_builtins" "alloc" "memchr/rustc-dep-of-std" ];
+          "std" = [ "memchr/std" ];
+          "unstable-all" = [ "all" "unstable" "xcoff" ];
+          "wasm" = [ "wasmparser" ];
+          "wasmparser" = [ "dep:wasmparser" ];
+          "write" = [ "write_std" "coff" "elf" "macho" "pe" ];
+          "write_core" = [ "crc32fast" "indexmap" "hashbrown" ];
+          "write_std" = [ "write_core" "std" "indexmap/std" "crc32fast/std" ];
+        };
+        resolvedDefaultFeatures = [ "archive" "coff" "elf" "macho" "pe" "read_core" "unaligned" ];
       };
       "once_cell" = rec {
         crateName = "once_cell";
@@ -5284,6 +5458,20 @@ rec {
           "serde1" = [ "serde" "text-size/serde" ];
         };
       };
+      "rustc-demangle" = rec {
+        crateName = "rustc-demangle";
+        version = "0.1.23";
+        edition = "2015";
+        sha256 = "0xnbk2bmyzshacjm2g1kd4zzv2y2az14bw3sjccq5qkpmsfvn9nn";
+        authors = [
+          "Alex Crichton <alex@alexcrichton.com>"
+        ];
+        features = {
+          "compiler_builtins" = [ "dep:compiler_builtins" ];
+          "core" = [ "dep:core" ];
+          "rustc-dep-of-std" = [ "core" "compiler_builtins" ];
+        };
+      };
       "rustc-hash" = rec {
         crateName = "rustc-hash";
         version = "1.1.0";
@@ -6619,15 +6807,25 @@ rec {
         ];
 
       };
-      "tokio" = rec {
+      "tokio 1.28.0 (git+https://github.com/RaitoBezarius/tokio?branch=sync-read-stream#873a17a937247c5364a8a213a2f66988bb2f3c2c)" = rec {
         crateName = "tokio";
         version = "1.28.0";
         edition = "2021";
-        sha256 = "0vqk7dkmvadzqrxwlgja04wlf4s8iymjk6yvcshs7r9lh6zqdiy3";
+        workspace_member = null;
+        src = pkgs.fetchgit {
+          url = "https://github.com/RaitoBezarius/tokio";
+          rev = "873a17a937247c5364a8a213a2f66988bb2f3c2c";
+          sha256 = "1b1c3wl504585xsavplpyxg1wkcilff2n9sma8pn78jhvdsl06ri";
+        };
         authors = [
           "Tokio Contributors <team@tokio.rs>"
         ];
         dependencies = [
+          {
+            name = "backtrace";
+            packageId = "backtrace";
+            target = { target, features }: (target."tokio_taskdump" or false);
+          }
           {
             name = "bytes";
             packageId = "bytes";
@@ -6662,7 +6860,7 @@ rec {
           }
           {
             name = "tokio-macros";
-            packageId = "tokio-macros";
+            packageId = "tokio-macros 2.1.0 (git+https://github.com/RaitoBezarius/tokio?branch=sync-read-stream#873a17a937247c5364a8a213a2f66988bb2f3c2c)";
             optional = true;
           }
           {
@@ -6716,7 +6914,101 @@ rec {
           "tracing" = [ "dep:tracing" ];
           "windows-sys" = [ "dep:windows-sys" ];
         };
-        resolvedDefaultFeatures = [ "bytes" "default" "io-std" "io-util" "libc" "macros" "mio" "net" "num_cpus" "rt" "rt-multi-thread" "socket2" "sync" "time" "tokio-macros" "windows-sys" ];
+        resolvedDefaultFeatures = [ "bytes" "default" "io-util" "libc" "macros" "mio" "net" "num_cpus" "rt" "rt-multi-thread" "socket2" "sync" "time" "tokio-macros" "windows-sys" ];
+      };
+      "tokio 1.28.0 (registry+https://github.com/rust-lang/crates.io-index)" = rec {
+        crateName = "tokio";
+        version = "1.28.0";
+        edition = "2021";
+        sha256 = "0vqk7dkmvadzqrxwlgja04wlf4s8iymjk6yvcshs7r9lh6zqdiy3";
+        authors = [
+          "Tokio Contributors <team@tokio.rs>"
+        ];
+        dependencies = [
+          {
+            name = "bytes";
+            packageId = "bytes";
+            optional = true;
+          }
+          {
+            name = "libc";
+            packageId = "libc";
+            optional = true;
+            target = { target, features }: (target."unix" or false);
+          }
+          {
+            name = "mio";
+            packageId = "mio";
+            optional = true;
+          }
+          {
+            name = "pin-project-lite";
+            packageId = "pin-project-lite";
+          }
+          {
+            name = "socket2";
+            packageId = "socket2";
+            optional = true;
+            target = { target, features }: (!(("wasm32" == target."arch") || ("wasm64" == target."arch")));
+            features = [ "all" ];
+          }
+          {
+            name = "tokio-macros";
+            packageId = "tokio-macros 2.1.0 (registry+https://github.com/rust-lang/crates.io-index)";
+            optional = true;
+          }
+          {
+            name = "windows-sys";
+            packageId = "windows-sys 0.48.0";
+            target = { target, features }: (target."docsrs" or false);
+            features = [ "Win32_Foundation" "Win32_Security_Authorization" ];
+          }
+          {
+            name = "windows-sys";
+            packageId = "windows-sys 0.48.0";
+            optional = true;
+            target = { target, features }: (target."windows" or false);
+          }
+        ];
+        buildDependencies = [
+          {
+            name = "autocfg";
+            packageId = "autocfg";
+          }
+        ];
+        devDependencies = [
+          {
+            name = "libc";
+            packageId = "libc";
+            target = { target, features }: (target."unix" or false);
+          }
+          {
+            name = "socket2";
+            packageId = "socket2";
+            target = { target, features }: (!(("wasm32" == target."arch") || ("wasm64" == target."arch")));
+          }
+        ];
+        features = {
+          "bytes" = [ "dep:bytes" ];
+          "full" = [ "fs" "io-util" "io-std" "macros" "net" "parking_lot" "process" "rt" "rt-multi-thread" "signal" "sync" "time" ];
+          "io-util" = [ "bytes" ];
+          "libc" = [ "dep:libc" ];
+          "macros" = [ "tokio-macros" ];
+          "mio" = [ "dep:mio" ];
+          "net" = [ "libc" "mio/os-poll" "mio/os-ext" "mio/net" "socket2" "windows-sys/Win32_Foundation" "windows-sys/Win32_Security" "windows-sys/Win32_Storage_FileSystem" "windows-sys/Win32_System_Pipes" "windows-sys/Win32_System_SystemServices" ];
+          "num_cpus" = [ "dep:num_cpus" ];
+          "parking_lot" = [ "dep:parking_lot" ];
+          "process" = [ "bytes" "libc" "mio/os-poll" "mio/os-ext" "mio/net" "signal-hook-registry" "windows-sys/Win32_Foundation" "windows-sys/Win32_System_Threading" "windows-sys/Win32_System_WindowsProgramming" ];
+          "rt-multi-thread" = [ "num_cpus" "rt" ];
+          "signal" = [ "libc" "mio/os-poll" "mio/net" "mio/os-ext" "signal-hook-registry" "windows-sys/Win32_Foundation" "windows-sys/Win32_System_Console" ];
+          "signal-hook-registry" = [ "dep:signal-hook-registry" ];
+          "socket2" = [ "dep:socket2" ];
+          "test-util" = [ "rt" "sync" "time" ];
+          "tokio-macros" = [ "dep:tokio-macros" ];
+          "tracing" = [ "dep:tracing" ];
+          "windows-sys" = [ "dep:windows-sys" ];
+        };
+        resolvedDefaultFeatures = [ "bytes" "default" "io-std" "io-util" "libc" "macros" "mio" "net" "rt" "socket2" "sync" "time" "tokio-macros" "windows-sys" ];
       };
       "tokio-io-timeout" = rec {
         crateName = "tokio-io-timeout";
@@ -6733,20 +7025,51 @@ rec {
           }
           {
             name = "tokio";
-            packageId = "tokio";
+            packageId = "tokio 1.28.0 (registry+https://github.com/rust-lang/crates.io-index)";
             features = [ "time" ];
           }
         ];
         devDependencies = [
           {
             name = "tokio";
-            packageId = "tokio";
+            packageId = "tokio 1.28.0 (registry+https://github.com/rust-lang/crates.io-index)";
             features = [ "full" ];
           }
         ];
 
       };
-      "tokio-macros" = rec {
+      "tokio-macros 2.1.0 (git+https://github.com/RaitoBezarius/tokio?branch=sync-read-stream#873a17a937247c5364a8a213a2f66988bb2f3c2c)" = rec {
+        crateName = "tokio-macros";
+        version = "2.1.0";
+        edition = "2018";
+        workspace_member = null;
+        src = pkgs.fetchgit {
+          url = "https://github.com/RaitoBezarius/tokio";
+          rev = "873a17a937247c5364a8a213a2f66988bb2f3c2c";
+          sha256 = "1b1c3wl504585xsavplpyxg1wkcilff2n9sma8pn78jhvdsl06ri";
+        };
+        procMacro = true;
+        authors = [
+          "Tokio Contributors <team@tokio.rs>"
+        ];
+        dependencies = [
+          {
+            name = "proc-macro2";
+            packageId = "proc-macro2 1.0.56";
+          }
+          {
+            name = "quote";
+            packageId = "quote 1.0.26";
+          }
+          {
+            name = "syn";
+            packageId = "syn 2.0.15";
+            features = [ "full" ];
+          }
+        ];
+
+      };
+      "tokio-macros 2.1.0 (registry+https://github.com/rust-lang/crates.io-index)" = rec {
         crateName = "tokio-macros";
         version = "2.1.0";
         edition = "2018";
@@ -6772,7 +7095,55 @@ rec {
         ];
 
       };
-      "tokio-stream" = rec {
+      "tokio-stream 0.1.14 (git+https://github.com/RaitoBezarius/tokio?branch=sync-read-stream#873a17a937247c5364a8a213a2f66988bb2f3c2c)" = rec {
+        crateName = "tokio-stream";
+        version = "0.1.14";
+        edition = "2021";
+        workspace_member = null;
+        src = pkgs.fetchgit {
+          url = "https://github.com/RaitoBezarius/tokio";
+          rev = "873a17a937247c5364a8a213a2f66988bb2f3c2c";
+          sha256 = "1b1c3wl504585xsavplpyxg1wkcilff2n9sma8pn78jhvdsl06ri";
+        };
+        authors = [
+          "Tokio Contributors <team@tokio.rs>"
+        ];
+        dependencies = [
+          {
+            name = "futures-core";
+            packageId = "futures-core";
+          }
+          {
+            name = "pin-project-lite";
+            packageId = "pin-project-lite";
+          }
+          {
+            name = "tokio";
+            packageId = "tokio 1.28.0 (git+https://github.com/RaitoBezarius/tokio?branch=sync-read-stream#873a17a937247c5364a8a213a2f66988bb2f3c2c)";
+            features = [ "sync" ];
+          }
+        ];
+        devDependencies = [
+          {
+            name = "tokio";
+            packageId = "tokio 1.28.0 (git+https://github.com/RaitoBezarius/tokio?branch=sync-read-stream#873a17a937247c5364a8a213a2f66988bb2f3c2c)";
+            features = [ "full" "test-util" ];
+          }
+        ];
+        features = {
+          "default" = [ "time" ];
+          "fs" = [ "tokio/fs" ];
+          "full" = [ "time" "net" "io-util" "fs" "sync" "signal" ];
+          "io-util" = [ "tokio/io-util" ];
+          "net" = [ "tokio/net" ];
+          "signal" = [ "tokio/signal" ];
+          "sync" = [ "tokio/sync" "tokio-util" ];
+          "time" = [ "tokio/time" ];
+          "tokio-util" = [ "dep:tokio-util" ];
+        };
+        resolvedDefaultFeatures = [ "default" "net" "time" ];
+      };
+      "tokio-stream 0.1.14 (registry+https://github.com/rust-lang/crates.io-index)" = rec {
         crateName = "tokio-stream";
         version = "0.1.14";
         edition = "2021";
@@ -6791,14 +7162,14 @@ rec {
           }
           {
             name = "tokio";
-            packageId = "tokio";
+            packageId = "tokio 1.28.0 (registry+https://github.com/rust-lang/crates.io-index)";
             features = [ "sync" ];
           }
         ];
         devDependencies = [
           {
             name = "tokio";
-            packageId = "tokio";
+            packageId = "tokio 1.28.0 (registry+https://github.com/rust-lang/crates.io-index)";
             features = [ "full" "test-util" ];
           }
         ];
@@ -6815,7 +7186,67 @@ rec {
         };
         resolvedDefaultFeatures = [ "default" "net" "time" ];
       };
-      "tokio-util" = rec {
+      "tokio-util 0.7.8 (git+https://github.com/RaitoBezarius/tokio?branch=sync-read-stream#873a17a937247c5364a8a213a2f66988bb2f3c2c)" = rec {
+        crateName = "tokio-util";
+        version = "0.7.8";
+        edition = "2021";
+        workspace_member = null;
+        src = pkgs.fetchgit {
+          url = "https://github.com/RaitoBezarius/tokio";
+          rev = "873a17a937247c5364a8a213a2f66988bb2f3c2c";
+          sha256 = "1b1c3wl504585xsavplpyxg1wkcilff2n9sma8pn78jhvdsl06ri";
+        };
+        authors = [
+          "Tokio Contributors <team@tokio.rs>"
+        ];
+        dependencies = [
+          {
+            name = "bytes";
+            packageId = "bytes";
+          }
+          {
+            name = "futures-core";
+            packageId = "futures-core";
+          }
+          {
+            name = "futures-sink";
+            packageId = "futures-sink";
+          }
+          {
+            name = "pin-project-lite";
+            packageId = "pin-project-lite";
+          }
+          {
+            name = "tokio";
+            packageId = "tokio 1.28.0 (git+https://github.com/RaitoBezarius/tokio?branch=sync-read-stream#873a17a937247c5364a8a213a2f66988bb2f3c2c)";
+            features = [ "sync" ];
+          }
+        ];
+        devDependencies = [
+          {
+            name = "tokio";
+            packageId = "tokio 1.28.0 (git+https://github.com/RaitoBezarius/tokio?branch=sync-read-stream#873a17a937247c5364a8a213a2f66988bb2f3c2c)";
+            features = [ "full" ];
+          }
+        ];
+        features = {
+          "__docs_rs" = [ "futures-util" ];
+          "codec" = [ "tracing" ];
+          "compat" = [ "futures-io" ];
+          "full" = [ "codec" "compat" "io-util" "time" "net" "rt" ];
+          "futures-io" = [ "dep:futures-io" ];
+          "futures-util" = [ "dep:futures-util" ];
+          "hashbrown" = [ "dep:hashbrown" ];
+          "io-util" = [ "io" "tokio/rt" "tokio/io-util" ];
+          "net" = [ "tokio/net" ];
+          "rt" = [ "tokio/rt" "tokio/sync" "futures-util" "hashbrown" ];
+          "slab" = [ "dep:slab" ];
+          "time" = [ "tokio/time" "slab" ];
+          "tracing" = [ "dep:tracing" ];
+        };
+        resolvedDefaultFeatures = [ "default" "io" "io-util" ];
+      };
+      "tokio-util 0.7.8 (registry+https://github.com/rust-lang/crates.io-index)" = rec {
         crateName = "tokio-util";
         version = "0.7.8";
         edition = "2021";
@@ -6842,7 +7273,7 @@ rec {
           }
           {
             name = "tokio";
-            packageId = "tokio";
+            packageId = "tokio 1.28.0 (registry+https://github.com/rust-lang/crates.io-index)";
             features = [ "sync" ];
           }
           {
@@ -6856,7 +7287,7 @@ rec {
         devDependencies = [
           {
             name = "tokio";
-            packageId = "tokio";
+            packageId = "tokio 1.28.0 (registry+https://github.com/rust-lang/crates.io-index)";
             features = [ "full" ];
           }
         ];
@@ -6875,7 +7306,7 @@ rec {
           "time" = [ "tokio/time" "slab" ];
           "tracing" = [ "dep:tracing" ];
         };
-        resolvedDefaultFeatures = [ "codec" "default" "io" "io-util" "tracing" ];
+        resolvedDefaultFeatures = [ "codec" "default" "tracing" ];
       };
       "toml" = rec {
         crateName = "toml";
@@ -7071,17 +7502,17 @@ rec {
           }
           {
             name = "tokio";
-            packageId = "tokio";
+            packageId = "tokio 1.28.0 (registry+https://github.com/rust-lang/crates.io-index)";
             optional = true;
             features = [ "net" ];
           }
           {
             name = "tokio-stream";
-            packageId = "tokio-stream";
+            packageId = "tokio-stream 0.1.14 (registry+https://github.com/rust-lang/crates.io-index)";
           }
           {
             name = "tokio-util";
-            packageId = "tokio-util";
+            packageId = "tokio-util 0.7.8 (registry+https://github.com/rust-lang/crates.io-index)";
             features = [ "codec" ];
           }
           {
@@ -7112,7 +7543,7 @@ rec {
         devDependencies = [
           {
             name = "tokio";
-            packageId = "tokio";
+            packageId = "tokio 1.28.0 (registry+https://github.com/rust-lang/crates.io-index)";
             features = [ "rt" "macros" ];
           }
           {
@@ -7254,12 +7685,12 @@ rec {
           }
           {
             name = "tokio";
-            packageId = "tokio";
+            packageId = "tokio 1.28.0 (registry+https://github.com/rust-lang/crates.io-index)";
             features = [ "sync" ];
           }
           {
             name = "tokio-stream";
-            packageId = "tokio-stream";
+            packageId = "tokio-stream 0.1.14 (registry+https://github.com/rust-lang/crates.io-index)";
             features = [ "net" ];
           }
           {
@@ -7326,13 +7757,13 @@ rec {
           }
           {
             name = "tokio";
-            packageId = "tokio";
+            packageId = "tokio 1.28.0 (registry+https://github.com/rust-lang/crates.io-index)";
             optional = true;
             features = [ "sync" ];
           }
           {
             name = "tokio-util";
-            packageId = "tokio-util";
+            packageId = "tokio-util 0.7.8 (registry+https://github.com/rust-lang/crates.io-index)";
             optional = true;
             usesDefaultFeatures = false;
           }
@@ -7359,7 +7790,7 @@ rec {
           }
           {
             name = "tokio";
-            packageId = "tokio";
+            packageId = "tokio 1.28.0 (registry+https://github.com/rust-lang/crates.io-index)";
             features = [ "macros" "sync" "test-util" "rt-multi-thread" ];
           }
         ];
@@ -8006,6 +8437,10 @@ rec {
             features = [ "rayon" "std" ];
           }
           {
+            name = "bytes";
+            packageId = "bytes";
+          }
+          {
             name = "clap";
             packageId = "clap 4.2.7";
             features = [ "derive" "env" ];
@@ -8019,8 +8454,8 @@ rec {
             packageId = "data-encoding";
           }
           {
-            name = "fastcdc";
-            packageId = "fastcdc";
+            name = "futures";
+            packageId = "futures";
           }
           {
             name = "lazy_static";
@@ -8053,16 +8488,17 @@ rec {
           }
           {
             name = "tokio";
-            packageId = "tokio";
-            features = [ "rt-multi-thread" "net" ];
+            packageId = "tokio 1.28.0 (git+https://github.com/RaitoBezarius/tokio?branch=sync-read-stream#873a17a937247c5364a8a213a2f66988bb2f3c2c)";
+            features = [ "rt-multi-thread" "net" "macros" ];
           }
           {
             name = "tokio-stream";
-            packageId = "tokio-stream";
+            packageId = "tokio-stream 0.1.14 (git+https://github.com/RaitoBezarius/tokio?branch=sync-read-stream#873a17a937247c5364a8a213a2f66988bb2f3c2c)";
+            features = [ "net" ];
           }
           {
             name = "tokio-util";
-            packageId = "tokio-util";
+            packageId = "tokio-util 0.7.8 (git+https://github.com/RaitoBezarius/tokio?branch=sync-read-stream#873a17a937247c5364a8a213a2f66988bb2f3c2c)";
             features = [ "io" "io-util" ];
           }
           {
