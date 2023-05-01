@@ -129,6 +129,49 @@ rec {
     #   inject test dependencies into the build
 
     crates = {
+      "addr2line" = rec {
+        crateName = "addr2line";
+        version = "0.19.0";
+        edition = "2015";
+        sha256 = "15ywmr5wx22q69ffnn79qp65ir5p1x0k2q06plcpv6v74c5xcvx7";
+        dependencies = [
+          {
+            name = "gimli";
+            packageId = "gimli";
+            usesDefaultFeatures = false;
+            features = [ "read" ];
+          }
+        ];
+        features = {
+          "alloc" = [ "dep:alloc" ];
+          "compiler_builtins" = [ "dep:compiler_builtins" ];
+          "core" = [ "dep:core" ];
+          "cpp_demangle" = [ "dep:cpp_demangle" ];
+          "default" = [ "rustc-demangle" "cpp_demangle" "std-object" "fallible-iterator" "smallvec" ];
+          "fallible-iterator" = [ "dep:fallible-iterator" ];
+          "object" = [ "dep:object" ];
+          "rustc-demangle" = [ "dep:rustc-demangle" ];
+          "rustc-dep-of-std" = [ "core" "alloc" "compiler_builtins" "gimli/rustc-dep-of-std" ];
+          "smallvec" = [ "dep:smallvec" ];
+          "std" = [ "gimli/std" ];
+          "std-object" = [ "std" "object" "object/std" "object/compression" "gimli/endian-reader" ];
+        };
+      };
+      "adler" = rec {
+        crateName = "adler";
+        version = "1.0.2";
+        edition = "2015";
+        sha256 = "1zim79cvzd5yrkzl3nyfx0avijwgk9fqv3yrscdy1cc79ih02qpj";
+        authors = [
+          "Jonas Schievink <jonasschievink@gmail.com>"
+        ];
+        features = {
+          "compiler_builtins" = [ "dep:compiler_builtins" ];
+          "core" = [ "dep:core" ];
+          "default" = [ "std" ];
+          "rustc-dep-of-std" = [ "core" "compiler_builtins" ];
+        };
+      };
       "aho-corasick" = rec {
         crateName = "aho-corasick";
         version = "0.7.20";
@@ -498,6 +541,63 @@ rec {
           }
         ];
 
+      };
+      "backtrace" = rec {
+        crateName = "backtrace";
+        version = "0.3.67";
+        edition = "2018";
+        sha256 = "1jk48laqafvbyc0mn1v0didk307qc0zji3z5jcq2lpqqdmnkfg93";
+        authors = [
+          "The Rust Project Developers"
+        ];
+        dependencies = [
+          {
+            name = "addr2line";
+            packageId = "addr2line";
+            usesDefaultFeatures = false;
+          }
+          {
+            name = "cfg-if";
+            packageId = "cfg-if";
+          }
+          {
+            name = "libc";
+            packageId = "libc";
+            usesDefaultFeatures = false;
+          }
+          {
+            name = "miniz_oxide";
+            packageId = "miniz_oxide";
+            usesDefaultFeatures = false;
+          }
+          {
+            name = "object";
+            packageId = "object";
+            usesDefaultFeatures = false;
+            features = [ "read_core" "elf" "macho" "pe" "unaligned" "archive" ];
+          }
+          {
+            name = "rustc-demangle";
+            packageId = "rustc-demangle";
+          }
+        ];
+        buildDependencies = [
+          {
+            name = "cc";
+            packageId = "cc";
+          }
+        ];
+        features = {
+          "cpp_demangle" = [ "dep:cpp_demangle" ];
+          "default" = [ "std" ];
+          "rustc-serialize" = [ "dep:rustc-serialize" ];
+          "serde" = [ "dep:serde" ];
+          "serialize-rustc" = [ "rustc-serialize" ];
+          "serialize-serde" = [ "serde" ];
+          "verify-winapi" = [ "winapi/dbghelp" "winapi/handleapi" "winapi/libloaderapi" "winapi/memoryapi" "winapi/minwindef" "winapi/processthreadsapi" "winapi/synchapi" "winapi/tlhelp32" "winapi/winbase" "winapi/winnt" ];
+          "winapi" = [ "dep:winapi" ];
+        };
+        resolvedDefaultFeatures = [ "default" "std" ];
       };
       "base64 0.10.1" = rec {
         crateName = "base64";
@@ -1908,9 +2008,9 @@ rec {
       };
       "futures" = rec {
         crateName = "futures";
-        version = "0.3.27";
+        version = "0.3.28";
         edition = "2018";
-        sha256 = "0jg5d4ga38svavjhl6ifxv54zbq3lrkkqpiw4ri7rzgmdxncj6jk";
+        sha256 = "0h7c1xvxk751c7xlnph6fh3rb77z4lig4qif7f8q79db2az2ld13";
         dependencies = [
           {
             name = "futures-channel";
@@ -1969,9 +2069,9 @@ rec {
       };
       "futures-channel" = rec {
         crateName = "futures-channel";
-        version = "0.3.27";
+        version = "0.3.28";
         edition = "2018";
-        sha256 = "1b7p7jb1bbwddqs3k4vg70jq1hdb7i1knzgdn6sfghywl2ji6iqn";
+        sha256 = "1wmm9wm5zjigxz61qkscmxp7c30zp08dy63spjz5pch9gva1hmcm";
         dependencies = [
           {
             name = "futures-core";
@@ -1996,9 +2096,9 @@ rec {
       };
       "futures-core" = rec {
         crateName = "futures-core";
-        version = "0.3.27";
+        version = "0.3.28";
         edition = "2018";
-        sha256 = "1pb9vsvh6xnv0xpzj73g6wl1357nzacyxq0x96n3sdknmb0s1mw6";
+        sha256 = "137fdxy5amg9zkpa1kqnj7bnha6b94fmddz59w973x96gqxmijjb";
         features = {
           "default" = [ "std" ];
           "portable-atomic" = [ "dep:portable-atomic" ];
@@ -2008,9 +2108,9 @@ rec {
       };
       "futures-executor" = rec {
         crateName = "futures-executor";
-        version = "0.3.27";
+        version = "0.3.28";
         edition = "2018";
-        sha256 = "10qgp9hfvwvywx7ylhij12n4yyfm3r678lk2qwswknjcyyfxv5qr";
+        sha256 = "1q468di96knnla72xdvswic1ir2qkrf5czsdigc5n4l86a1fxv6c";
         dependencies = [
           {
             name = "futures-core";
@@ -2038,9 +2138,9 @@ rec {
       };
       "futures-io" = rec {
         crateName = "futures-io";
-        version = "0.3.27";
+        version = "0.3.28";
         edition = "2018";
-        sha256 = "14cbfwn1d9qzdzys7vjpx9c85javpdx0iavllpf40fxy7kx25m49";
+        sha256 = "0r4rhkdhq1my4fahlhz59barqa511bylq813w3w4gvbidq4p9zsg";
         features = {
           "default" = [ "std" ];
         };
@@ -2048,9 +2148,9 @@ rec {
       };
       "futures-macro" = rec {
         crateName = "futures-macro";
-        version = "0.3.27";
+        version = "0.3.28";
         edition = "2018";
-        sha256 = "1dk3m7jpbj9qkxcwmqxnan1pli23hhcjqzwpp2wdh6v36zclxc9y";
+        sha256 = "0wpfsqxwqk5k569xl0jzz4zxy85x695mndf7y9jn66q6jid59jl9";
         procMacro = true;
         dependencies = [
           {
@@ -2063,7 +2163,7 @@ rec {
           }
           {
             name = "syn";
-            packageId = "syn 1.0.109";
+            packageId = "syn 2.0.10";
             features = [ "full" ];
           }
         ];
@@ -2071,9 +2171,9 @@ rec {
       };
       "futures-sink" = rec {
         crateName = "futures-sink";
-        version = "0.3.27";
+        version = "0.3.28";
         edition = "2018";
-        sha256 = "1wnjp3h90mm6qfq59fy26ayrvbncy3hrsp481alb5bzc98x0i4zc";
+        sha256 = "0vkv4frf4c6gm1ag9imjz8d0xvpnn22lkylsls0rffx147zf8fzl";
         features = {
           "default" = [ "std" ];
           "std" = [ "alloc" ];
@@ -2082,9 +2182,9 @@ rec {
       };
       "futures-task" = rec {
         crateName = "futures-task";
-        version = "0.3.27";
+        version = "0.3.28";
         edition = "2018";
-        sha256 = "0y98b6mkb3svh0zvs1axmka11bgfd8pc2f0459a1cyxk6c6m8rgx";
+        sha256 = "0ravgihyarbplj32zp60asirfnaalw2wfsa0afhnl3kcpqrd3lvn";
         features = {
           "default" = [ "std" ];
           "std" = [ "alloc" ];
@@ -2093,9 +2193,9 @@ rec {
       };
       "futures-util" = rec {
         crateName = "futures-util";
-        version = "0.3.27";
+        version = "0.3.28";
         edition = "2018";
-        sha256 = "1aw45s2adi1asd6827ya6n4i43wps4wqzv8z462yq0qm91zb3xiy";
+        sha256 = "0cwmls9369w6q6hwlbm10q0plr6hmg8w28fpqvv4rmbjnx01xc16";
         dependencies = [
           {
             name = "futures-channel";
@@ -2309,6 +2409,27 @@ rec {
         };
         resolvedDefaultFeatures = [ "std" ];
       };
+      "gimli" = rec {
+        crateName = "gimli";
+        version = "0.27.2";
+        edition = "2018";
+        sha256 = "1d5v6jjchf4872jynjsg5ni4vankm1341bas8qindygb6g9962md";
+        features = {
+          "alloc" = [ "dep:alloc" ];
+          "compiler_builtins" = [ "dep:compiler_builtins" ];
+          "core" = [ "dep:core" ];
+          "default" = [ "read" "write" "std" "fallible-iterator" "endian-reader" ];
+          "endian-reader" = [ "read" "stable_deref_trait" ];
+          "fallible-iterator" = [ "dep:fallible-iterator" ];
+          "indexmap" = [ "dep:indexmap" ];
+          "read" = [ "read-core" ];
+          "rustc-dep-of-std" = [ "core" "alloc" "compiler_builtins" ];
+          "stable_deref_trait" = [ "dep:stable_deref_trait" ];
+          "std" = [ "fallible-iterator/std" "stable_deref_trait/std" ];
+          "write" = [ "indexmap" ];
+        };
+        resolvedDefaultFeatures = [ "read" "read-core" ];
+      };
       "glob" = rec {
         crateName = "glob";
         version = "0.3.1";
@@ -2367,12 +2488,12 @@ rec {
           }
           {
             name = "tokio";
-            packageId = "tokio";
+            packageId = "tokio 1.28.0 (registry+https://github.com/rust-lang/crates.io-index)";
             features = [ "io-util" ];
           }
           {
             name = "tokio-util";
-            packageId = "tokio-util";
+            packageId = "tokio-util 0.7.7";
             features = [ "codec" ];
           }
           {
@@ -2385,7 +2506,7 @@ rec {
         devDependencies = [
           {
             name = "tokio";
-            packageId = "tokio";
+            packageId = "tokio 1.28.0 (registry+https://github.com/rust-lang/crates.io-index)";
             features = [ "rt-multi-thread" "macros" "sync" "net" ];
           }
         ];
@@ -2654,7 +2775,7 @@ rec {
           }
           {
             name = "tokio";
-            packageId = "tokio";
+            packageId = "tokio 1.28.0 (registry+https://github.com/rust-lang/crates.io-index)";
             features = [ "sync" ];
           }
           {
@@ -2681,7 +2802,7 @@ rec {
           }
           {
             name = "tokio";
-            packageId = "tokio";
+            packageId = "tokio 1.28.0 (registry+https://github.com/rust-lang/crates.io-index)";
             features = [ "fs" "macros" "io-std" "io-util" "rt" "rt-multi-thread" "sync" "time" "test-util" ];
           }
         ];
@@ -2717,7 +2838,7 @@ rec {
           }
           {
             name = "tokio";
-            packageId = "tokio";
+            packageId = "tokio 1.28.0 (registry+https://github.com/rust-lang/crates.io-index)";
           }
           {
             name = "tokio-io-timeout";
@@ -2732,7 +2853,7 @@ rec {
           }
           {
             name = "tokio";
-            packageId = "tokio";
+            packageId = "tokio 1.28.0 (registry+https://github.com/rust-lang/crates.io-index)";
             features = [ "io-std" "io-util" "macros" ];
           }
         ];
@@ -3418,6 +3539,32 @@ rec {
         ];
 
       };
+      "miniz_oxide" = rec {
+        crateName = "miniz_oxide";
+        version = "0.6.2";
+        edition = "2018";
+        sha256 = "1yp8z6yll5ypz1ldmgnv7zi0r78kbvmqmn2mii77jzmk5069axdj";
+        authors = [
+          "Frommi <daniil.liferenko@gmail.com>"
+          "oyvindln <oyvindln@users.noreply.github.com>"
+        ];
+        dependencies = [
+          {
+            name = "adler";
+            packageId = "adler";
+            usesDefaultFeatures = false;
+          }
+        ];
+        features = {
+          "alloc" = [ "dep:alloc" ];
+          "compiler_builtins" = [ "dep:compiler_builtins" ];
+          "core" = [ "dep:core" ];
+          "default" = [ "with-alloc" ];
+          "rustc-dep-of-std" = [ "core" "alloc" "compiler_builtins" "adler/rustc-dep-of-std" ];
+          "simd" = [ "simd-adler32" ];
+          "simd-adler32" = [ "dep:simd-adler32" ];
+        };
+      };
       "mio" = rec {
         crateName = "mio";
         version = "0.8.6";
@@ -3725,6 +3872,43 @@ rec {
           }
         ];
 
+      };
+      "object" = rec {
+        crateName = "object";
+        version = "0.30.3";
+        edition = "2018";
+        sha256 = "0fdl7qjsz1j9kl3j7f4656fswzrqpyj2kgaizhknmjrx7mfjd1pa";
+        dependencies = [
+          {
+            name = "memchr";
+            packageId = "memchr";
+            usesDefaultFeatures = false;
+          }
+        ];
+        features = {
+          "all" = [ "read" "write" "std" "compression" "wasm" ];
+          "alloc" = [ "dep:alloc" ];
+          "compiler_builtins" = [ "dep:compiler_builtins" ];
+          "compression" = [ "flate2" "std" ];
+          "core" = [ "dep:core" ];
+          "crc32fast" = [ "dep:crc32fast" ];
+          "default" = [ "read" "compression" ];
+          "doc" = [ "read_core" "write_std" "std" "compression" "archive" "coff" "elf" "macho" "pe" "wasm" ];
+          "flate2" = [ "dep:flate2" ];
+          "hashbrown" = [ "dep:hashbrown" ];
+          "indexmap" = [ "dep:indexmap" ];
+          "pe" = [ "coff" ];
+          "read" = [ "read_core" "archive" "coff" "elf" "macho" "pe" "unaligned" ];
+          "rustc-dep-of-std" = [ "core" "compiler_builtins" "alloc" "memchr/rustc-dep-of-std" ];
+          "std" = [ "memchr/std" ];
+          "unstable-all" = [ "all" "unstable" "xcoff" ];
+          "wasm" = [ "wasmparser" ];
+          "wasmparser" = [ "dep:wasmparser" ];
+          "write" = [ "write_std" "coff" "elf" "macho" "pe" ];
+          "write_core" = [ "crc32fast" "indexmap" "hashbrown" ];
+          "write_std" = [ "write_core" "std" "indexmap/std" "crc32fast/std" ];
+        };
+        resolvedDefaultFeatures = [ "archive" "coff" "elf" "macho" "pe" "read_core" "unaligned" ];
       };
       "once_cell" = rec {
         crateName = "once_cell";
@@ -5098,6 +5282,20 @@ rec {
           "serde1" = [ "serde" "text-size/serde" ];
         };
       };
+      "rustc-demangle" = rec {
+        crateName = "rustc-demangle";
+        version = "0.1.23";
+        edition = "2015";
+        sha256 = "0xnbk2bmyzshacjm2g1kd4zzv2y2az14bw3sjccq5qkpmsfvn9nn";
+        authors = [
+          "Alex Crichton <alex@alexcrichton.com>"
+        ];
+        features = {
+          "compiler_builtins" = [ "dep:compiler_builtins" ];
+          "core" = [ "dep:core" ];
+          "rustc-dep-of-std" = [ "core" "compiler_builtins" ];
+        };
+      };
       "rustc-hash" = rec {
         crateName = "rustc-hash";
         version = "1.1.0";
@@ -6425,15 +6623,25 @@ rec {
         ];
 
       };
-      "tokio" = rec {
+      "tokio 1.28.0 (git+https://github.com/RaitoBezarius/tokio?branch=sync-read-stream#873a17a937247c5364a8a213a2f66988bb2f3c2c)" = rec {
         crateName = "tokio";
-        version = "1.26.0";
-        edition = "2018";
-        sha256 = "0r3gnz0zh669q9jm7xh8dz7irbnxjddbbrfflp42jyn2qc0is803";
+        version = "1.28.0";
+        edition = "2021";
+        workspace_member = null;
+        src = pkgs.fetchgit {
+          url = "https://github.com/RaitoBezarius/tokio";
+          rev = "873a17a937247c5364a8a213a2f66988bb2f3c2c";
+          sha256 = "1b1c3wl504585xsavplpyxg1wkcilff2n9sma8pn78jhvdsl06ri";
+        };
         authors = [
           "Tokio Contributors <team@tokio.rs>"
         ];
         dependencies = [
+          {
+            name = "backtrace";
+            packageId = "backtrace";
+            target = { target, features }: (target."tokio_taskdump" or false);
+          }
           {
             name = "bytes";
             packageId = "bytes";
@@ -6444,11 +6652,6 @@ rec {
             packageId = "libc";
             optional = true;
             target = { target, features }: (target."unix" or false);
-          }
-          {
-            name = "memchr";
-            packageId = "memchr";
-            optional = true;
           }
           {
             name = "mio";
@@ -6473,18 +6676,18 @@ rec {
           }
           {
             name = "tokio-macros";
-            packageId = "tokio-macros";
+            packageId = "tokio-macros 2.1.0 (git+https://github.com/RaitoBezarius/tokio?branch=sync-read-stream#873a17a937247c5364a8a213a2f66988bb2f3c2c)";
             optional = true;
           }
           {
             name = "windows-sys";
-            packageId = "windows-sys 0.45.0";
+            packageId = "windows-sys 0.48.0";
             target = { target, features }: (target."docsrs" or false);
             features = [ "Win32_Foundation" "Win32_Security_Authorization" ];
           }
           {
             name = "windows-sys";
-            packageId = "windows-sys 0.45.0";
+            packageId = "windows-sys 0.48.0";
             optional = true;
             target = { target, features }: (target."windows" or false);
           }
@@ -6510,10 +6713,9 @@ rec {
         features = {
           "bytes" = [ "dep:bytes" ];
           "full" = [ "fs" "io-util" "io-std" "macros" "net" "parking_lot" "process" "rt" "rt-multi-thread" "signal" "sync" "time" ];
-          "io-util" = [ "memchr" "bytes" ];
+          "io-util" = [ "bytes" ];
           "libc" = [ "dep:libc" ];
           "macros" = [ "tokio-macros" ];
-          "memchr" = [ "dep:memchr" ];
           "mio" = [ "dep:mio" ];
           "net" = [ "libc" "mio/os-poll" "mio/os-ext" "mio/net" "socket2" "windows-sys/Win32_Foundation" "windows-sys/Win32_Security" "windows-sys/Win32_Storage_FileSystem" "windows-sys/Win32_System_Pipes" "windows-sys/Win32_System_SystemServices" ];
           "num_cpus" = [ "dep:num_cpus" ];
@@ -6528,7 +6730,101 @@ rec {
           "tracing" = [ "dep:tracing" ];
           "windows-sys" = [ "dep:windows-sys" ];
         };
-        resolvedDefaultFeatures = [ "bytes" "default" "io-std" "io-util" "libc" "macros" "memchr" "mio" "net" "num_cpus" "rt" "rt-multi-thread" "socket2" "sync" "time" "tokio-macros" "windows-sys" ];
+        resolvedDefaultFeatures = [ "bytes" "default" "io-util" "libc" "macros" "mio" "net" "num_cpus" "rt" "rt-multi-thread" "socket2" "sync" "time" "tokio-macros" "windows-sys" ];
+      };
+      "tokio 1.28.0 (registry+https://github.com/rust-lang/crates.io-index)" = rec {
+        crateName = "tokio";
+        version = "1.28.0";
+        edition = "2021";
+        sha256 = "0vqk7dkmvadzqrxwlgja04wlf4s8iymjk6yvcshs7r9lh6zqdiy3";
+        authors = [
+          "Tokio Contributors <team@tokio.rs>"
+        ];
+        dependencies = [
+          {
+            name = "bytes";
+            packageId = "bytes";
+            optional = true;
+          }
+          {
+            name = "libc";
+            packageId = "libc";
+            optional = true;
+            target = { target, features }: (target."unix" or false);
+          }
+          {
+            name = "mio";
+            packageId = "mio";
+            optional = true;
+          }
+          {
+            name = "pin-project-lite";
+            packageId = "pin-project-lite";
+          }
+          {
+            name = "socket2";
+            packageId = "socket2";
+            optional = true;
+            target = { target, features }: (!(("wasm32" == target."arch") || ("wasm64" == target."arch")));
+            features = [ "all" ];
+          }
+          {
+            name = "tokio-macros";
+            packageId = "tokio-macros 2.1.0 (registry+https://github.com/rust-lang/crates.io-index)";
+            optional = true;
+          }
+          {
+            name = "windows-sys";
+            packageId = "windows-sys 0.48.0";
+            target = { target, features }: (target."docsrs" or false);
+            features = [ "Win32_Foundation" "Win32_Security_Authorization" ];
+          }
+          {
+            name = "windows-sys";
+            packageId = "windows-sys 0.48.0";
+            optional = true;
+            target = { target, features }: (target."windows" or false);
+          }
+        ];
+        buildDependencies = [
+          {
+            name = "autocfg";
+            packageId = "autocfg";
+          }
+        ];
+        devDependencies = [
+          {
+            name = "libc";
+            packageId = "libc";
+            target = { target, features }: (target."unix" or false);
+          }
+          {
+            name = "socket2";
+            packageId = "socket2";
+            target = { target, features }: (!(("wasm32" == target."arch") || ("wasm64" == target."arch")));
+          }
+        ];
+        features = {
+          "bytes" = [ "dep:bytes" ];
+          "full" = [ "fs" "io-util" "io-std" "macros" "net" "parking_lot" "process" "rt" "rt-multi-thread" "signal" "sync" "time" ];
+          "io-util" = [ "bytes" ];
+          "libc" = [ "dep:libc" ];
+          "macros" = [ "tokio-macros" ];
+          "mio" = [ "dep:mio" ];
+          "net" = [ "libc" "mio/os-poll" "mio/os-ext" "mio/net" "socket2" "windows-sys/Win32_Foundation" "windows-sys/Win32_Security" "windows-sys/Win32_Storage_FileSystem" "windows-sys/Win32_System_Pipes" "windows-sys/Win32_System_SystemServices" ];
+          "num_cpus" = [ "dep:num_cpus" ];
+          "parking_lot" = [ "dep:parking_lot" ];
+          "process" = [ "bytes" "libc" "mio/os-poll" "mio/os-ext" "mio/net" "signal-hook-registry" "windows-sys/Win32_Foundation" "windows-sys/Win32_System_Threading" "windows-sys/Win32_System_WindowsProgramming" ];
+          "rt-multi-thread" = [ "num_cpus" "rt" ];
+          "signal" = [ "libc" "mio/os-poll" "mio/net" "mio/os-ext" "signal-hook-registry" "windows-sys/Win32_Foundation" "windows-sys/Win32_System_Console" ];
+          "signal-hook-registry" = [ "dep:signal-hook-registry" ];
+          "socket2" = [ "dep:socket2" ];
+          "test-util" = [ "rt" "sync" "time" ];
+          "tokio-macros" = [ "dep:tokio-macros" ];
+          "tracing" = [ "dep:tracing" ];
+          "windows-sys" = [ "dep:windows-sys" ];
+        };
+        resolvedDefaultFeatures = [ "bytes" "default" "io-std" "io-util" "libc" "macros" "mio" "net" "rt" "socket2" "sync" "time" "tokio-macros" "windows-sys" ];
       };
       "tokio-io-timeout" = rec {
         crateName = "tokio-io-timeout";
@@ -6545,24 +6841,29 @@ rec {
           }
           {
             name = "tokio";
-            packageId = "tokio";
+            packageId = "tokio 1.28.0 (registry+https://github.com/rust-lang/crates.io-index)";
             features = [ "time" ];
           }
         ];
         devDependencies = [
           {
             name = "tokio";
-            packageId = "tokio";
+            packageId = "tokio 1.28.0 (registry+https://github.com/rust-lang/crates.io-index)";
             features = [ "full" ];
           }
         ];
 
       };
-      "tokio-macros" = rec {
+      "tokio-macros 2.1.0 (git+https://github.com/RaitoBezarius/tokio?branch=sync-read-stream#873a17a937247c5364a8a213a2f66988bb2f3c2c)" = rec {
         crateName = "tokio-macros";
-        version = "1.8.2";
+        version = "2.1.0";
         edition = "2018";
-        sha256 = "1y3dphh8i4971wcfqxjhd662nain1i86rsf3y79mazr8vq7w0rnj";
+        workspace_member = null;
+        src = pkgs.fetchgit {
+          url = "https://github.com/RaitoBezarius/tokio";
+          rev = "873a17a937247c5364a8a213a2f66988bb2f3c2c";
+          sha256 = "1b1c3wl504585xsavplpyxg1wkcilff2n9sma8pn78jhvdsl06ri";
+        };
         procMacro = true;
         authors = [
           "Tokio Contributors <team@tokio.rs>"
@@ -6578,13 +6879,39 @@ rec {
           }
           {
             name = "syn";
-            packageId = "syn 1.0.109";
+            packageId = "syn 2.0.10";
             features = [ "full" ];
           }
         ];
 
       };
-      "tokio-stream" = rec {
+      "tokio-macros 2.1.0 (registry+https://github.com/rust-lang/crates.io-index)" = rec {
+        crateName = "tokio-macros";
+        version = "2.1.0";
+        edition = "2018";
+        sha256 = "0pk7y9dfanab886iaqwcbri39jkw33kgl7y07v0kg1pp8prdq2v3";
+        procMacro = true;
+        authors = [
+          "Tokio Contributors <team@tokio.rs>"
+        ];
+        dependencies = [
+          {
+            name = "proc-macro2";
+            packageId = "proc-macro2 1.0.54";
+          }
+          {
+            name = "quote";
+            packageId = "quote 1.0.26";
+          }
+          {
+            name = "syn";
+            packageId = "syn 2.0.10";
+            features = [ "full" ];
+          }
+        ];
+
+      };
+      "tokio-stream 0.1.12" = rec {
         crateName = "tokio-stream";
         version = "0.1.12";
         edition = "2018";
@@ -6603,14 +6930,14 @@ rec {
           }
           {
             name = "tokio";
-            packageId = "tokio";
+            packageId = "tokio 1.28.0 (registry+https://github.com/rust-lang/crates.io-index)";
             features = [ "sync" ];
           }
         ];
         devDependencies = [
           {
             name = "tokio";
-            packageId = "tokio";
+            packageId = "tokio 1.28.0 (registry+https://github.com/rust-lang/crates.io-index)";
             features = [ "full" "test-util" ];
           }
         ];
@@ -6626,7 +6953,55 @@ rec {
         };
         resolvedDefaultFeatures = [ "default" "net" "time" ];
       };
-      "tokio-util" = rec {
+      "tokio-stream 0.1.14" = rec {
+        crateName = "tokio-stream";
+        version = "0.1.14";
+        edition = "2021";
+        workspace_member = null;
+        src = pkgs.fetchgit {
+          url = "https://github.com/RaitoBezarius/tokio";
+          rev = "873a17a937247c5364a8a213a2f66988bb2f3c2c";
+          sha256 = "1b1c3wl504585xsavplpyxg1wkcilff2n9sma8pn78jhvdsl06ri";
+        };
+        authors = [
+          "Tokio Contributors <team@tokio.rs>"
+        ];
+        dependencies = [
+          {
+            name = "futures-core";
+            packageId = "futures-core";
+          }
+          {
+            name = "pin-project-lite";
+            packageId = "pin-project-lite";
+          }
+          {
+            name = "tokio";
+            packageId = "tokio 1.28.0 (git+https://github.com/RaitoBezarius/tokio?branch=sync-read-stream#873a17a937247c5364a8a213a2f66988bb2f3c2c)";
+            features = [ "sync" ];
+          }
+        ];
+        devDependencies = [
+          {
+            name = "tokio";
+            packageId = "tokio 1.28.0 (git+https://github.com/RaitoBezarius/tokio?branch=sync-read-stream#873a17a937247c5364a8a213a2f66988bb2f3c2c)";
+            features = [ "full" "test-util" ];
+          }
+        ];
+        features = {
+          "default" = [ "time" ];
+          "fs" = [ "tokio/fs" ];
+          "full" = [ "time" "net" "io-util" "fs" "sync" "signal" ];
+          "io-util" = [ "tokio/io-util" ];
+          "net" = [ "tokio/net" ];
+          "signal" = [ "tokio/signal" ];
+          "sync" = [ "tokio/sync" "tokio-util" ];
+          "time" = [ "tokio/time" ];
+          "tokio-util" = [ "dep:tokio-util" ];
+        };
+        resolvedDefaultFeatures = [ "default" "net" "time" ];
+      };
+      "tokio-util 0.7.7" = rec {
         crateName = "tokio-util";
         version = "0.7.7";
         edition = "2018";
@@ -6653,7 +7028,7 @@ rec {
           }
           {
             name = "tokio";
-            packageId = "tokio";
+            packageId = "tokio 1.28.0 (registry+https://github.com/rust-lang/crates.io-index)";
             features = [ "sync" ];
           }
           {
@@ -6667,7 +7042,7 @@ rec {
         devDependencies = [
           {
             name = "tokio";
-            packageId = "tokio";
+            packageId = "tokio 1.28.0 (registry+https://github.com/rust-lang/crates.io-index)";
             features = [ "full" ];
           }
         ];
@@ -6686,7 +7061,67 @@ rec {
           "time" = [ "tokio/time" "slab" ];
           "tracing" = [ "dep:tracing" ];
         };
-        resolvedDefaultFeatures = [ "codec" "default" "io" "io-util" "tracing" ];
+        resolvedDefaultFeatures = [ "codec" "default" "tracing" ];
+      };
+      "tokio-util 0.7.8" = rec {
+        crateName = "tokio-util";
+        version = "0.7.8";
+        edition = "2021";
+        workspace_member = null;
+        src = pkgs.fetchgit {
+          url = "https://github.com/RaitoBezarius/tokio";
+          rev = "873a17a937247c5364a8a213a2f66988bb2f3c2c";
+          sha256 = "1b1c3wl504585xsavplpyxg1wkcilff2n9sma8pn78jhvdsl06ri";
+        };
+        authors = [
+          "Tokio Contributors <team@tokio.rs>"
+        ];
+        dependencies = [
+          {
+            name = "bytes";
+            packageId = "bytes";
+          }
+          {
+            name = "futures-core";
+            packageId = "futures-core";
+          }
+          {
+            name = "futures-sink";
+            packageId = "futures-sink";
+          }
+          {
+            name = "pin-project-lite";
+            packageId = "pin-project-lite";
+          }
+          {
+            name = "tokio";
+            packageId = "tokio 1.28.0 (git+https://github.com/RaitoBezarius/tokio?branch=sync-read-stream#873a17a937247c5364a8a213a2f66988bb2f3c2c)";
+            features = [ "sync" ];
+          }
+        ];
+        devDependencies = [
+          {
+            name = "tokio";
+            packageId = "tokio 1.28.0 (git+https://github.com/RaitoBezarius/tokio?branch=sync-read-stream#873a17a937247c5364a8a213a2f66988bb2f3c2c)";
+            features = [ "full" ];
+          }
+        ];
+        features = {
+          "__docs_rs" = [ "futures-util" ];
+          "codec" = [ "tracing" ];
+          "compat" = [ "futures-io" ];
+          "full" = [ "codec" "compat" "io-util" "time" "net" "rt" ];
+          "futures-io" = [ "dep:futures-io" ];
+          "futures-util" = [ "dep:futures-util" ];
+          "hashbrown" = [ "dep:hashbrown" ];
+          "io-util" = [ "io" "tokio/rt" "tokio/io-util" ];
+          "net" = [ "tokio/net" ];
+          "rt" = [ "tokio/rt" "tokio/sync" "futures-util" "hashbrown" ];
+          "slab" = [ "dep:slab" ];
+          "time" = [ "tokio/time" "slab" ];
+          "tracing" = [ "dep:tracing" ];
+        };
+        resolvedDefaultFeatures = [ "default" "io" "io-util" ];
       };
       "toml" = rec {
         crateName = "toml";
@@ -6882,17 +7317,17 @@ rec {
           }
           {
             name = "tokio";
-            packageId = "tokio";
+            packageId = "tokio 1.28.0 (registry+https://github.com/rust-lang/crates.io-index)";
             optional = true;
             features = [ "net" ];
           }
           {
             name = "tokio-stream";
-            packageId = "tokio-stream";
+            packageId = "tokio-stream 0.1.12";
           }
           {
             name = "tokio-util";
-            packageId = "tokio-util";
+            packageId = "tokio-util 0.7.7";
             features = [ "codec" ];
           }
           {
@@ -6923,7 +7358,7 @@ rec {
         devDependencies = [
           {
             name = "tokio";
-            packageId = "tokio";
+            packageId = "tokio 1.28.0 (registry+https://github.com/rust-lang/crates.io-index)";
             features = [ "rt" "macros" ];
           }
           {
@@ -7065,12 +7500,12 @@ rec {
           }
           {
             name = "tokio";
-            packageId = "tokio";
+            packageId = "tokio 1.28.0 (registry+https://github.com/rust-lang/crates.io-index)";
             features = [ "sync" ];
           }
           {
             name = "tokio-stream";
-            packageId = "tokio-stream";
+            packageId = "tokio-stream 0.1.12";
             features = [ "net" ];
           }
           {
@@ -7137,13 +7572,13 @@ rec {
           }
           {
             name = "tokio";
-            packageId = "tokio";
+            packageId = "tokio 1.28.0 (registry+https://github.com/rust-lang/crates.io-index)";
             optional = true;
             features = [ "sync" ];
           }
           {
             name = "tokio-util";
-            packageId = "tokio-util";
+            packageId = "tokio-util 0.7.7";
             optional = true;
             usesDefaultFeatures = false;
           }
@@ -7170,7 +7605,7 @@ rec {
           }
           {
             name = "tokio";
-            packageId = "tokio";
+            packageId = "tokio 1.28.0 (registry+https://github.com/rust-lang/crates.io-index)";
             features = [ "macros" "sync" "test-util" "rt-multi-thread" ];
           }
         ];
@@ -7817,6 +8252,10 @@ rec {
             features = [ "rayon" "std" ];
           }
           {
+            name = "bytes";
+            packageId = "bytes";
+          }
+          {
             name = "clap";
             packageId = "clap 4.1.13";
             features = [ "derive" "env" ];
@@ -7830,8 +8269,12 @@ rec {
             packageId = "data-encoding";
           }
           {
-            name = "fastcdc";
-            packageId = "fastcdc";
+            name = "futures";
+            packageId = "futures";
+          }
+          {
+            name = "futures-sink";
+            packageId = "futures-sink";
           }
           {
             name = "lazy_static";
@@ -7864,16 +8307,17 @@ rec {
           }
           {
             name = "tokio";
-            packageId = "tokio";
-            features = [ "rt-multi-thread" "net" ];
+            packageId = "tokio 1.28.0 (git+https://github.com/RaitoBezarius/tokio?branch=sync-read-stream#873a17a937247c5364a8a213a2f66988bb2f3c2c)";
+            features = [ "rt-multi-thread" "net" "macros" ];
           }
           {
             name = "tokio-stream";
-            packageId = "tokio-stream";
+            packageId = "tokio-stream 0.1.14";
+            features = [ "net" ];
           }
           {
             name = "tokio-util";
-            packageId = "tokio-util";
+            packageId = "tokio-util 0.7.8";
             features = [ "io" "io-util" ];
           }
           {
@@ -7914,6 +8358,10 @@ rec {
           }
         ];
         devDependencies = [
+          {
+            name = "fastcdc";
+            packageId = "fastcdc";
+          }
           {
             name = "tempfile";
             packageId = "tempfile";
@@ -8821,62 +9269,62 @@ rec {
         dependencies = [
           {
             name = "windows_aarch64_gnullvm";
-            packageId = "windows_aarch64_gnullvm";
+            packageId = "windows_aarch64_gnullvm 0.42.2";
             target = { target, features }: (pkgs.rust.lib.toRustTarget stdenv.hostPlatform == "aarch64-pc-windows-gnullvm");
           }
           {
             name = "windows_aarch64_msvc";
-            packageId = "windows_aarch64_msvc";
+            packageId = "windows_aarch64_msvc 0.42.2";
             target = { target, features }: (pkgs.rust.lib.toRustTarget stdenv.hostPlatform == "aarch64-pc-windows-msvc");
           }
           {
             name = "windows_aarch64_msvc";
-            packageId = "windows_aarch64_msvc";
+            packageId = "windows_aarch64_msvc 0.42.2";
             target = { target, features }: (pkgs.rust.lib.toRustTarget stdenv.hostPlatform == "aarch64-uwp-windows-msvc");
           }
           {
             name = "windows_i686_gnu";
-            packageId = "windows_i686_gnu";
+            packageId = "windows_i686_gnu 0.42.2";
             target = { target, features }: (pkgs.rust.lib.toRustTarget stdenv.hostPlatform == "i686-pc-windows-gnu");
           }
           {
             name = "windows_i686_gnu";
-            packageId = "windows_i686_gnu";
+            packageId = "windows_i686_gnu 0.42.2";
             target = { target, features }: (pkgs.rust.lib.toRustTarget stdenv.hostPlatform == "i686-uwp-windows-gnu");
           }
           {
             name = "windows_i686_msvc";
-            packageId = "windows_i686_msvc";
+            packageId = "windows_i686_msvc 0.42.2";
             target = { target, features }: (pkgs.rust.lib.toRustTarget stdenv.hostPlatform == "i686-pc-windows-msvc");
           }
           {
             name = "windows_i686_msvc";
-            packageId = "windows_i686_msvc";
+            packageId = "windows_i686_msvc 0.42.2";
             target = { target, features }: (pkgs.rust.lib.toRustTarget stdenv.hostPlatform == "i686-uwp-windows-msvc");
           }
           {
             name = "windows_x86_64_gnu";
-            packageId = "windows_x86_64_gnu";
+            packageId = "windows_x86_64_gnu 0.42.2";
             target = { target, features }: (pkgs.rust.lib.toRustTarget stdenv.hostPlatform == "x86_64-pc-windows-gnu");
           }
           {
             name = "windows_x86_64_gnu";
-            packageId = "windows_x86_64_gnu";
+            packageId = "windows_x86_64_gnu 0.42.2";
             target = { target, features }: (pkgs.rust.lib.toRustTarget stdenv.hostPlatform == "x86_64-uwp-windows-gnu");
           }
           {
             name = "windows_x86_64_gnullvm";
-            packageId = "windows_x86_64_gnullvm";
+            packageId = "windows_x86_64_gnullvm 0.42.2";
             target = { target, features }: (pkgs.rust.lib.toRustTarget stdenv.hostPlatform == "x86_64-pc-windows-gnullvm");
           }
           {
             name = "windows_x86_64_msvc";
-            packageId = "windows_x86_64_msvc";
+            packageId = "windows_x86_64_msvc 0.42.2";
             target = { target, features }: (pkgs.rust.lib.toRustTarget stdenv.hostPlatform == "x86_64-pc-windows-msvc");
           }
           {
             name = "windows_x86_64_msvc";
-            packageId = "windows_x86_64_msvc";
+            packageId = "windows_x86_64_msvc 0.42.2";
             target = { target, features }: (pkgs.rust.lib.toRustTarget stdenv.hostPlatform == "x86_64-uwp-windows-msvc");
           }
         ];
@@ -9214,7 +9662,7 @@ rec {
         dependencies = [
           {
             name = "windows-targets";
-            packageId = "windows-targets";
+            packageId = "windows-targets 0.42.2";
             target = { target, features }: (!(target."windows_raw_dylib" or false));
           }
         ];
@@ -9487,9 +9935,302 @@ rec {
           "Win32_UI_WindowsAndMessaging" = [ "Win32_UI" ];
           "Win32_UI_Wpf" = [ "Win32_UI" ];
         };
-        resolvedDefaultFeatures = [ "Win32" "Win32_Foundation" "Win32_NetworkManagement" "Win32_NetworkManagement_IpHelper" "Win32_Networking" "Win32_Networking_WinSock" "Win32_Security" "Win32_Security_Authorization" "Win32_Storage" "Win32_Storage_FileSystem" "Win32_System" "Win32_System_Console" "Win32_System_IO" "Win32_System_Pipes" "Win32_System_SystemServices" "Win32_System_Threading" "Win32_System_WindowsProgramming" "default" ];
+        resolvedDefaultFeatures = [ "Win32" "Win32_Foundation" "Win32_NetworkManagement" "Win32_NetworkManagement_IpHelper" "Win32_Networking" "Win32_Networking_WinSock" "Win32_Security" "Win32_Storage" "Win32_Storage_FileSystem" "Win32_System" "Win32_System_Console" "Win32_System_IO" "Win32_System_Pipes" "Win32_System_Threading" "Win32_System_WindowsProgramming" "default" ];
       };
-      "windows-targets" = rec {
+      "windows-sys 0.48.0" = rec {
+        crateName = "windows-sys";
+        version = "0.48.0";
+        edition = "2018";
+        sha256 = "1aan23v5gs7gya1lc46hqn9mdh8yph3fhxmhxlw36pn6pqc28zb7";
+        authors = [
+          "Microsoft"
+        ];
+        dependencies = [
+          {
+            name = "windows-targets";
+            packageId = "windows-targets 0.48.0";
+          }
+        ];
+        features = {
+          "Wdk_System" = [ "Wdk" ];
+          "Wdk_System_OfflineRegistry" = [ "Wdk_System" ];
+          "Win32_Data" = [ "Win32" ];
+          "Win32_Data_HtmlHelp" = [ "Win32_Data" ];
+          "Win32_Data_RightsManagement" = [ "Win32_Data" ];
+          "Win32_Data_Xml" = [ "Win32_Data" ];
+          "Win32_Data_Xml_MsXml" = [ "Win32_Data_Xml" ];
+          "Win32_Data_Xml_XmlLite" = [ "Win32_Data_Xml" ];
+          "Win32_Devices" = [ "Win32" ];
+          "Win32_Devices_AllJoyn" = [ "Win32_Devices" ];
+          "Win32_Devices_BiometricFramework" = [ "Win32_Devices" ];
+          "Win32_Devices_Bluetooth" = [ "Win32_Devices" ];
+          "Win32_Devices_Communication" = [ "Win32_Devices" ];
+          "Win32_Devices_DeviceAccess" = [ "Win32_Devices" ];
+          "Win32_Devices_DeviceAndDriverInstallation" = [ "Win32_Devices" ];
+          "Win32_Devices_DeviceQuery" = [ "Win32_Devices" ];
+          "Win32_Devices_Display" = [ "Win32_Devices" ];
+          "Win32_Devices_Enumeration" = [ "Win32_Devices" ];
+          "Win32_Devices_Enumeration_Pnp" = [ "Win32_Devices_Enumeration" ];
+          "Win32_Devices_Fax" = [ "Win32_Devices" ];
+          "Win32_Devices_FunctionDiscovery" = [ "Win32_Devices" ];
+          "Win32_Devices_Geolocation" = [ "Win32_Devices" ];
+          "Win32_Devices_HumanInterfaceDevice" = [ "Win32_Devices" ];
+          "Win32_Devices_ImageAcquisition" = [ "Win32_Devices" ];
+          "Win32_Devices_PortableDevices" = [ "Win32_Devices" ];
+          "Win32_Devices_Properties" = [ "Win32_Devices" ];
+          "Win32_Devices_Pwm" = [ "Win32_Devices" ];
+          "Win32_Devices_Sensors" = [ "Win32_Devices" ];
+          "Win32_Devices_SerialCommunication" = [ "Win32_Devices" ];
+          "Win32_Devices_Tapi" = [ "Win32_Devices" ];
+          "Win32_Devices_Usb" = [ "Win32_Devices" ];
+          "Win32_Devices_WebServicesOnDevices" = [ "Win32_Devices" ];
+          "Win32_Foundation" = [ "Win32" ];
+          "Win32_Gaming" = [ "Win32" ];
+          "Win32_Globalization" = [ "Win32" ];
+          "Win32_Graphics" = [ "Win32" ];
+          "Win32_Graphics_Dwm" = [ "Win32_Graphics" ];
+          "Win32_Graphics_Gdi" = [ "Win32_Graphics" ];
+          "Win32_Graphics_Hlsl" = [ "Win32_Graphics" ];
+          "Win32_Graphics_OpenGL" = [ "Win32_Graphics" ];
+          "Win32_Graphics_Printing" = [ "Win32_Graphics" ];
+          "Win32_Graphics_Printing_PrintTicket" = [ "Win32_Graphics_Printing" ];
+          "Win32_Management" = [ "Win32" ];
+          "Win32_Management_MobileDeviceManagementRegistration" = [ "Win32_Management" ];
+          "Win32_Media" = [ "Win32" ];
+          "Win32_Media_Audio" = [ "Win32_Media" ];
+          "Win32_Media_Audio_Apo" = [ "Win32_Media_Audio" ];
+          "Win32_Media_Audio_DirectMusic" = [ "Win32_Media_Audio" ];
+          "Win32_Media_Audio_Endpoints" = [ "Win32_Media_Audio" ];
+          "Win32_Media_Audio_XAudio2" = [ "Win32_Media_Audio" ];
+          "Win32_Media_DeviceManager" = [ "Win32_Media" ];
+          "Win32_Media_DxMediaObjects" = [ "Win32_Media" ];
+          "Win32_Media_KernelStreaming" = [ "Win32_Media" ];
+          "Win32_Media_LibrarySharingServices" = [ "Win32_Media" ];
+          "Win32_Media_MediaPlayer" = [ "Win32_Media" ];
+          "Win32_Media_Multimedia" = [ "Win32_Media" ];
+          "Win32_Media_Speech" = [ "Win32_Media" ];
+          "Win32_Media_Streaming" = [ "Win32_Media" ];
+          "Win32_Media_WindowsMediaFormat" = [ "Win32_Media" ];
+          "Win32_NetworkManagement" = [ "Win32" ];
+          "Win32_NetworkManagement_Dhcp" = [ "Win32_NetworkManagement" ];
+          "Win32_NetworkManagement_Dns" = [ "Win32_NetworkManagement" ];
+          "Win32_NetworkManagement_InternetConnectionWizard" = [ "Win32_NetworkManagement" ];
+          "Win32_NetworkManagement_IpHelper" = [ "Win32_NetworkManagement" ];
+          "Win32_NetworkManagement_MobileBroadband" = [ "Win32_NetworkManagement" ];
+          "Win32_NetworkManagement_Multicast" = [ "Win32_NetworkManagement" ];
+          "Win32_NetworkManagement_Ndis" = [ "Win32_NetworkManagement" ];
+          "Win32_NetworkManagement_NetBios" = [ "Win32_NetworkManagement" ];
+          "Win32_NetworkManagement_NetManagement" = [ "Win32_NetworkManagement" ];
+          "Win32_NetworkManagement_NetShell" = [ "Win32_NetworkManagement" ];
+          "Win32_NetworkManagement_NetworkDiagnosticsFramework" = [ "Win32_NetworkManagement" ];
+          "Win32_NetworkManagement_NetworkPolicyServer" = [ "Win32_NetworkManagement" ];
+          "Win32_NetworkManagement_P2P" = [ "Win32_NetworkManagement" ];
+          "Win32_NetworkManagement_QoS" = [ "Win32_NetworkManagement" ];
+          "Win32_NetworkManagement_Rras" = [ "Win32_NetworkManagement" ];
+          "Win32_NetworkManagement_Snmp" = [ "Win32_NetworkManagement" ];
+          "Win32_NetworkManagement_WNet" = [ "Win32_NetworkManagement" ];
+          "Win32_NetworkManagement_WebDav" = [ "Win32_NetworkManagement" ];
+          "Win32_NetworkManagement_WiFi" = [ "Win32_NetworkManagement" ];
+          "Win32_NetworkManagement_WindowsConnectNow" = [ "Win32_NetworkManagement" ];
+          "Win32_NetworkManagement_WindowsConnectionManager" = [ "Win32_NetworkManagement" ];
+          "Win32_NetworkManagement_WindowsFilteringPlatform" = [ "Win32_NetworkManagement" ];
+          "Win32_NetworkManagement_WindowsFirewall" = [ "Win32_NetworkManagement" ];
+          "Win32_NetworkManagement_WindowsNetworkVirtualization" = [ "Win32_NetworkManagement" ];
+          "Win32_Networking" = [ "Win32" ];
+          "Win32_Networking_ActiveDirectory" = [ "Win32_Networking" ];
+          "Win32_Networking_BackgroundIntelligentTransferService" = [ "Win32_Networking" ];
+          "Win32_Networking_Clustering" = [ "Win32_Networking" ];
+          "Win32_Networking_HttpServer" = [ "Win32_Networking" ];
+          "Win32_Networking_Ldap" = [ "Win32_Networking" ];
+          "Win32_Networking_NetworkListManager" = [ "Win32_Networking" ];
+          "Win32_Networking_RemoteDifferentialCompression" = [ "Win32_Networking" ];
+          "Win32_Networking_WebSocket" = [ "Win32_Networking" ];
+          "Win32_Networking_WinHttp" = [ "Win32_Networking" ];
+          "Win32_Networking_WinInet" = [ "Win32_Networking" ];
+          "Win32_Networking_WinSock" = [ "Win32_Networking" ];
+          "Win32_Networking_WindowsWebServices" = [ "Win32_Networking" ];
+          "Win32_Security" = [ "Win32" ];
+          "Win32_Security_AppLocker" = [ "Win32_Security" ];
+          "Win32_Security_Authentication" = [ "Win32_Security" ];
+          "Win32_Security_Authentication_Identity" = [ "Win32_Security_Authentication" ];
+          "Win32_Security_Authentication_Identity_Provider" = [ "Win32_Security_Authentication_Identity" ];
+          "Win32_Security_Authorization" = [ "Win32_Security" ];
+          "Win32_Security_Authorization_UI" = [ "Win32_Security_Authorization" ];
+          "Win32_Security_ConfigurationSnapin" = [ "Win32_Security" ];
+          "Win32_Security_Credentials" = [ "Win32_Security" ];
+          "Win32_Security_Cryptography" = [ "Win32_Security" ];
+          "Win32_Security_Cryptography_Catalog" = [ "Win32_Security_Cryptography" ];
+          "Win32_Security_Cryptography_Certificates" = [ "Win32_Security_Cryptography" ];
+          "Win32_Security_Cryptography_Sip" = [ "Win32_Security_Cryptography" ];
+          "Win32_Security_Cryptography_UI" = [ "Win32_Security_Cryptography" ];
+          "Win32_Security_DiagnosticDataQuery" = [ "Win32_Security" ];
+          "Win32_Security_DirectoryServices" = [ "Win32_Security" ];
+          "Win32_Security_EnterpriseData" = [ "Win32_Security" ];
+          "Win32_Security_ExtensibleAuthenticationProtocol" = [ "Win32_Security" ];
+          "Win32_Security_Isolation" = [ "Win32_Security" ];
+          "Win32_Security_LicenseProtection" = [ "Win32_Security" ];
+          "Win32_Security_NetworkAccessProtection" = [ "Win32_Security" ];
+          "Win32_Security_Tpm" = [ "Win32_Security" ];
+          "Win32_Security_WinTrust" = [ "Win32_Security" ];
+          "Win32_Security_WinWlx" = [ "Win32_Security" ];
+          "Win32_Storage" = [ "Win32" ];
+          "Win32_Storage_Cabinets" = [ "Win32_Storage" ];
+          "Win32_Storage_CloudFilters" = [ "Win32_Storage" ];
+          "Win32_Storage_Compression" = [ "Win32_Storage" ];
+          "Win32_Storage_DataDeduplication" = [ "Win32_Storage" ];
+          "Win32_Storage_DistributedFileSystem" = [ "Win32_Storage" ];
+          "Win32_Storage_EnhancedStorage" = [ "Win32_Storage" ];
+          "Win32_Storage_FileHistory" = [ "Win32_Storage" ];
+          "Win32_Storage_FileServerResourceManager" = [ "Win32_Storage" ];
+          "Win32_Storage_FileSystem" = [ "Win32_Storage" ];
+          "Win32_Storage_Imapi" = [ "Win32_Storage" ];
+          "Win32_Storage_IndexServer" = [ "Win32_Storage" ];
+          "Win32_Storage_InstallableFileSystems" = [ "Win32_Storage" ];
+          "Win32_Storage_IscsiDisc" = [ "Win32_Storage" ];
+          "Win32_Storage_Jet" = [ "Win32_Storage" ];
+          "Win32_Storage_OfflineFiles" = [ "Win32_Storage" ];
+          "Win32_Storage_OperationRecorder" = [ "Win32_Storage" ];
+          "Win32_Storage_Packaging" = [ "Win32_Storage" ];
+          "Win32_Storage_Packaging_Appx" = [ "Win32_Storage_Packaging" ];
+          "Win32_Storage_Packaging_Opc" = [ "Win32_Storage_Packaging" ];
+          "Win32_Storage_ProjectedFileSystem" = [ "Win32_Storage" ];
+          "Win32_Storage_StructuredStorage" = [ "Win32_Storage" ];
+          "Win32_Storage_Vhd" = [ "Win32_Storage" ];
+          "Win32_Storage_VirtualDiskService" = [ "Win32_Storage" ];
+          "Win32_Storage_Vss" = [ "Win32_Storage" ];
+          "Win32_Storage_Xps" = [ "Win32_Storage" ];
+          "Win32_Storage_Xps_Printing" = [ "Win32_Storage_Xps" ];
+          "Win32_System" = [ "Win32" ];
+          "Win32_System_AddressBook" = [ "Win32_System" ];
+          "Win32_System_Antimalware" = [ "Win32_System" ];
+          "Win32_System_ApplicationInstallationAndServicing" = [ "Win32_System" ];
+          "Win32_System_ApplicationVerifier" = [ "Win32_System" ];
+          "Win32_System_AssessmentTool" = [ "Win32_System" ];
+          "Win32_System_ClrHosting" = [ "Win32_System" ];
+          "Win32_System_Com" = [ "Win32_System" ];
+          "Win32_System_Com_CallObj" = [ "Win32_System_Com" ];
+          "Win32_System_Com_ChannelCredentials" = [ "Win32_System_Com" ];
+          "Win32_System_Com_Events" = [ "Win32_System_Com" ];
+          "Win32_System_Com_Marshal" = [ "Win32_System_Com" ];
+          "Win32_System_Com_StructuredStorage" = [ "Win32_System_Com" ];
+          "Win32_System_Com_UI" = [ "Win32_System_Com" ];
+          "Win32_System_Com_Urlmon" = [ "Win32_System_Com" ];
+          "Win32_System_ComponentServices" = [ "Win32_System" ];
+          "Win32_System_Console" = [ "Win32_System" ];
+          "Win32_System_Contacts" = [ "Win32_System" ];
+          "Win32_System_CorrelationVector" = [ "Win32_System" ];
+          "Win32_System_DataExchange" = [ "Win32_System" ];
+          "Win32_System_DeploymentServices" = [ "Win32_System" ];
+          "Win32_System_DesktopSharing" = [ "Win32_System" ];
+          "Win32_System_DeveloperLicensing" = [ "Win32_System" ];
+          "Win32_System_Diagnostics" = [ "Win32_System" ];
+          "Win32_System_Diagnostics_Ceip" = [ "Win32_System_Diagnostics" ];
+          "Win32_System_Diagnostics_ClrProfiling" = [ "Win32_System_Diagnostics" ];
+          "Win32_System_Diagnostics_Debug" = [ "Win32_System_Diagnostics" ];
+          "Win32_System_Diagnostics_Debug_ActiveScript" = [ "Win32_System_Diagnostics_Debug" ];
+          "Win32_System_Diagnostics_Debug_Extensions" = [ "Win32_System_Diagnostics_Debug" ];
+          "Win32_System_Diagnostics_Etw" = [ "Win32_System_Diagnostics" ];
+          "Win32_System_Diagnostics_ProcessSnapshotting" = [ "Win32_System_Diagnostics" ];
+          "Win32_System_Diagnostics_ToolHelp" = [ "Win32_System_Diagnostics" ];
+          "Win32_System_DistributedTransactionCoordinator" = [ "Win32_System" ];
+          "Win32_System_Environment" = [ "Win32_System" ];
+          "Win32_System_ErrorReporting" = [ "Win32_System" ];
+          "Win32_System_EventCollector" = [ "Win32_System" ];
+          "Win32_System_EventLog" = [ "Win32_System" ];
+          "Win32_System_EventNotificationService" = [ "Win32_System" ];
+          "Win32_System_GroupPolicy" = [ "Win32_System" ];
+          "Win32_System_HostCompute" = [ "Win32_System" ];
+          "Win32_System_HostComputeNetwork" = [ "Win32_System" ];
+          "Win32_System_HostComputeSystem" = [ "Win32_System" ];
+          "Win32_System_Hypervisor" = [ "Win32_System" ];
+          "Win32_System_IO" = [ "Win32_System" ];
+          "Win32_System_Iis" = [ "Win32_System" ];
+          "Win32_System_Ioctl" = [ "Win32_System" ];
+          "Win32_System_JobObjects" = [ "Win32_System" ];
+          "Win32_System_Js" = [ "Win32_System" ];
+          "Win32_System_Kernel" = [ "Win32_System" ];
+          "Win32_System_LibraryLoader" = [ "Win32_System" ];
+          "Win32_System_Mailslots" = [ "Win32_System" ];
+          "Win32_System_Mapi" = [ "Win32_System" ];
+          "Win32_System_Memory" = [ "Win32_System" ];
+          "Win32_System_Memory_NonVolatile" = [ "Win32_System_Memory" ];
+          "Win32_System_MessageQueuing" = [ "Win32_System" ];
+          "Win32_System_MixedReality" = [ "Win32_System" ];
+          "Win32_System_Mmc" = [ "Win32_System" ];
+          "Win32_System_Ole" = [ "Win32_System" ];
+          "Win32_System_ParentalControls" = [ "Win32_System" ];
+          "Win32_System_PasswordManagement" = [ "Win32_System" ];
+          "Win32_System_Performance" = [ "Win32_System" ];
+          "Win32_System_Performance_HardwareCounterProfiling" = [ "Win32_System_Performance" ];
+          "Win32_System_Pipes" = [ "Win32_System" ];
+          "Win32_System_Power" = [ "Win32_System" ];
+          "Win32_System_ProcessStatus" = [ "Win32_System" ];
+          "Win32_System_RealTimeCommunications" = [ "Win32_System" ];
+          "Win32_System_Recovery" = [ "Win32_System" ];
+          "Win32_System_Registry" = [ "Win32_System" ];
+          "Win32_System_RemoteAssistance" = [ "Win32_System" ];
+          "Win32_System_RemoteDesktop" = [ "Win32_System" ];
+          "Win32_System_RemoteManagement" = [ "Win32_System" ];
+          "Win32_System_RestartManager" = [ "Win32_System" ];
+          "Win32_System_Restore" = [ "Win32_System" ];
+          "Win32_System_Rpc" = [ "Win32_System" ];
+          "Win32_System_Search" = [ "Win32_System" ];
+          "Win32_System_Search_Common" = [ "Win32_System_Search" ];
+          "Win32_System_SecurityCenter" = [ "Win32_System" ];
+          "Win32_System_ServerBackup" = [ "Win32_System" ];
+          "Win32_System_Services" = [ "Win32_System" ];
+          "Win32_System_SettingsManagementInfrastructure" = [ "Win32_System" ];
+          "Win32_System_SetupAndMigration" = [ "Win32_System" ];
+          "Win32_System_Shutdown" = [ "Win32_System" ];
+          "Win32_System_StationsAndDesktops" = [ "Win32_System" ];
+          "Win32_System_SubsystemForLinux" = [ "Win32_System" ];
+          "Win32_System_SystemInformation" = [ "Win32_System" ];
+          "Win32_System_SystemServices" = [ "Win32_System" ];
+          "Win32_System_TaskScheduler" = [ "Win32_System" ];
+          "Win32_System_Threading" = [ "Win32_System" ];
+          "Win32_System_Time" = [ "Win32_System" ];
+          "Win32_System_TpmBaseServices" = [ "Win32_System" ];
+          "Win32_System_UpdateAgent" = [ "Win32_System" ];
+          "Win32_System_UpdateAssessment" = [ "Win32_System" ];
+          "Win32_System_UserAccessLogging" = [ "Win32_System" ];
+          "Win32_System_VirtualDosMachines" = [ "Win32_System" ];
+          "Win32_System_WindowsProgramming" = [ "Win32_System" ];
+          "Win32_System_WindowsSync" = [ "Win32_System" ];
+          "Win32_System_Wmi" = [ "Win32_System" ];
+          "Win32_UI" = [ "Win32" ];
+          "Win32_UI_Accessibility" = [ "Win32_UI" ];
+          "Win32_UI_Animation" = [ "Win32_UI" ];
+          "Win32_UI_ColorSystem" = [ "Win32_UI" ];
+          "Win32_UI_Controls" = [ "Win32_UI" ];
+          "Win32_UI_Controls_Dialogs" = [ "Win32_UI_Controls" ];
+          "Win32_UI_Controls_RichEdit" = [ "Win32_UI_Controls" ];
+          "Win32_UI_HiDpi" = [ "Win32_UI" ];
+          "Win32_UI_Input" = [ "Win32_UI" ];
+          "Win32_UI_Input_Ime" = [ "Win32_UI_Input" ];
+          "Win32_UI_Input_Ink" = [ "Win32_UI_Input" ];
+          "Win32_UI_Input_KeyboardAndMouse" = [ "Win32_UI_Input" ];
+          "Win32_UI_Input_Pointer" = [ "Win32_UI_Input" ];
+          "Win32_UI_Input_Radial" = [ "Win32_UI_Input" ];
+          "Win32_UI_Input_Touch" = [ "Win32_UI_Input" ];
+          "Win32_UI_Input_XboxController" = [ "Win32_UI_Input" ];
+          "Win32_UI_InteractionContext" = [ "Win32_UI" ];
+          "Win32_UI_LegacyWindowsEnvironmentFeatures" = [ "Win32_UI" ];
+          "Win32_UI_Magnification" = [ "Win32_UI" ];
+          "Win32_UI_Notifications" = [ "Win32_UI" ];
+          "Win32_UI_Ribbon" = [ "Win32_UI" ];
+          "Win32_UI_Shell" = [ "Win32_UI" ];
+          "Win32_UI_Shell_Common" = [ "Win32_UI_Shell" ];
+          "Win32_UI_Shell_PropertiesSystem" = [ "Win32_UI_Shell" ];
+          "Win32_UI_TabletPC" = [ "Win32_UI" ];
+          "Win32_UI_TextServices" = [ "Win32_UI" ];
+          "Win32_UI_WindowsAndMessaging" = [ "Win32_UI" ];
+          "Win32_UI_Wpf" = [ "Win32_UI" ];
+          "Win32_Web" = [ "Win32" ];
+          "Win32_Web_InternetExplorer" = [ "Win32_Web" ];
+        };
+        resolvedDefaultFeatures = [ "Win32" "Win32_Foundation" "Win32_Security" "Win32_Security_Authorization" "Win32_Storage" "Win32_Storage_FileSystem" "Win32_System" "Win32_System_Pipes" "Win32_System_SystemServices" "default" ];
+      };
+      "windows-targets 0.42.2" = rec {
         crateName = "windows-targets";
         version = "0.42.2";
         edition = "2018";
@@ -9500,68 +10241,115 @@ rec {
         dependencies = [
           {
             name = "windows_aarch64_gnullvm";
-            packageId = "windows_aarch64_gnullvm";
+            packageId = "windows_aarch64_gnullvm 0.42.2";
             target = { target, features }: (pkgs.rust.lib.toRustTarget stdenv.hostPlatform == "aarch64-pc-windows-gnullvm");
           }
           {
             name = "windows_aarch64_msvc";
-            packageId = "windows_aarch64_msvc";
+            packageId = "windows_aarch64_msvc 0.42.2";
             target = { target, features }: (pkgs.rust.lib.toRustTarget stdenv.hostPlatform == "aarch64-pc-windows-msvc");
           }
           {
             name = "windows_aarch64_msvc";
-            packageId = "windows_aarch64_msvc";
+            packageId = "windows_aarch64_msvc 0.42.2";
             target = { target, features }: (pkgs.rust.lib.toRustTarget stdenv.hostPlatform == "aarch64-uwp-windows-msvc");
           }
           {
             name = "windows_i686_gnu";
-            packageId = "windows_i686_gnu";
+            packageId = "windows_i686_gnu 0.42.2";
             target = { target, features }: (pkgs.rust.lib.toRustTarget stdenv.hostPlatform == "i686-pc-windows-gnu");
           }
           {
             name = "windows_i686_gnu";
-            packageId = "windows_i686_gnu";
+            packageId = "windows_i686_gnu 0.42.2";
             target = { target, features }: (pkgs.rust.lib.toRustTarget stdenv.hostPlatform == "i686-uwp-windows-gnu");
           }
           {
             name = "windows_i686_msvc";
-            packageId = "windows_i686_msvc";
+            packageId = "windows_i686_msvc 0.42.2";
             target = { target, features }: (pkgs.rust.lib.toRustTarget stdenv.hostPlatform == "i686-pc-windows-msvc");
           }
           {
             name = "windows_i686_msvc";
-            packageId = "windows_i686_msvc";
+            packageId = "windows_i686_msvc 0.42.2";
             target = { target, features }: (pkgs.rust.lib.toRustTarget stdenv.hostPlatform == "i686-uwp-windows-msvc");
           }
           {
             name = "windows_x86_64_gnu";
-            packageId = "windows_x86_64_gnu";
+            packageId = "windows_x86_64_gnu 0.42.2";
             target = { target, features }: (pkgs.rust.lib.toRustTarget stdenv.hostPlatform == "x86_64-pc-windows-gnu");
           }
           {
             name = "windows_x86_64_gnu";
-            packageId = "windows_x86_64_gnu";
+            packageId = "windows_x86_64_gnu 0.42.2";
             target = { target, features }: (pkgs.rust.lib.toRustTarget stdenv.hostPlatform == "x86_64-uwp-windows-gnu");
           }
           {
             name = "windows_x86_64_gnullvm";
-            packageId = "windows_x86_64_gnullvm";
+            packageId = "windows_x86_64_gnullvm 0.42.2";
             target = { target, features }: (pkgs.rust.lib.toRustTarget stdenv.hostPlatform == "x86_64-pc-windows-gnullvm");
           }
           {
             name = "windows_x86_64_msvc";
-            packageId = "windows_x86_64_msvc";
+            packageId = "windows_x86_64_msvc 0.42.2";
             target = { target, features }: (pkgs.rust.lib.toRustTarget stdenv.hostPlatform == "x86_64-pc-windows-msvc");
           }
           {
             name = "windows_x86_64_msvc";
-            packageId = "windows_x86_64_msvc";
+            packageId = "windows_x86_64_msvc 0.42.2";
             target = { target, features }: (pkgs.rust.lib.toRustTarget stdenv.hostPlatform == "x86_64-uwp-windows-msvc");
           }
         ];
 
       };
-      "windows_aarch64_gnullvm" = rec {
+      "windows-targets 0.48.0" = rec {
+        crateName = "windows-targets";
+        version = "0.48.0";
+        edition = "2018";
+        sha256 = "1mfzg94w0c8h4ya9sva7rra77f3iy1712af9b6bwg03wrpqbc7kv";
+        authors = [
+          "Microsoft"
+        ];
+        dependencies = [
+          {
+            name = "windows_aarch64_gnullvm";
+            packageId = "windows_aarch64_gnullvm 0.48.0";
+            target = { target, features }: (("aarch64" == target."arch") && ("gnu" == target."env") && ("llvm" == target."abi") && (!(target."windows_raw_dylib" or false)));
+          }
+          {
+            name = "windows_aarch64_msvc";
+            packageId = "windows_aarch64_msvc 0.48.0";
+            target = { target, features }: (("aarch64" == target."arch") && ("msvc" == target."env") && (!(target."windows_raw_dylib" or false)));
+          }
+          {
+            name = "windows_i686_gnu";
+            packageId = "windows_i686_gnu 0.48.0";
+            target = { target, features }: (("x86" == target."arch") && ("gnu" == target."env") && (!(target."windows_raw_dylib" or false)));
+          }
+          {
+            name = "windows_i686_msvc";
+            packageId = "windows_i686_msvc 0.48.0";
+            target = { target, features }: (("x86" == target."arch") && ("msvc" == target."env") && (!(target."windows_raw_dylib" or false)));
+          }
+          {
+            name = "windows_x86_64_gnu";
+            packageId = "windows_x86_64_gnu 0.48.0";
+            target = { target, features }: (("x86_64" == target."arch") && ("gnu" == target."env") && (!("llvm" == target."abi")) && (!(target."windows_raw_dylib" or false)));
+          }
+          {
+            name = "windows_x86_64_gnullvm";
+            packageId = "windows_x86_64_gnullvm 0.48.0";
+            target = { target, features }: (("x86_64" == target."arch") && ("gnu" == target."env") && ("llvm" == target."abi") && (!(target."windows_raw_dylib" or false)));
+          }
+          {
+            name = "windows_x86_64_msvc";
+            packageId = "windows_x86_64_msvc 0.48.0";
+            target = { target, features }: (("x86_64" == target."arch") && ("msvc" == target."env") && (!(target."windows_raw_dylib" or false)));
+          }
+        ];
+
+      };
+      "windows_aarch64_gnullvm 0.42.2" = rec {
         crateName = "windows_aarch64_gnullvm";
         version = "0.42.2";
         edition = "2018";
@@ -9571,7 +10359,17 @@ rec {
         ];
 
       };
-      "windows_aarch64_msvc" = rec {
+      "windows_aarch64_gnullvm 0.48.0" = rec {
+        crateName = "windows_aarch64_gnullvm";
+        version = "0.48.0";
+        edition = "2018";
+        sha256 = "1g71yxi61c410pwzq05ld7si4p9hyx6lf5fkw21sinvr3cp5gbli";
+        authors = [
+          "Microsoft"
+        ];
+
+      };
+      "windows_aarch64_msvc 0.42.2" = rec {
         crateName = "windows_aarch64_msvc";
         version = "0.42.2";
         edition = "2018";
@@ -9581,7 +10379,17 @@ rec {
         ];
 
       };
-      "windows_i686_gnu" = rec {
+      "windows_aarch64_msvc 0.48.0" = rec {
+        crateName = "windows_aarch64_msvc";
+        version = "0.48.0";
+        edition = "2018";
+        sha256 = "1wvwipchhywcjaw73h998vzachf668fpqccbhrxzrz5xszh2gvxj";
+        authors = [
+          "Microsoft"
+        ];
+
+      };
+      "windows_i686_gnu 0.42.2" = rec {
         crateName = "windows_i686_gnu";
         version = "0.42.2";
         edition = "2018";
@@ -9591,7 +10399,17 @@ rec {
         ];
 
       };
-      "windows_i686_msvc" = rec {
+      "windows_i686_gnu 0.48.0" = rec {
+        crateName = "windows_i686_gnu";
+        version = "0.48.0";
+        edition = "2018";
+        sha256 = "0hd2v9kp8fss0rzl83wzhw0s5z8q1b4875m6s1phv0yvlxi1jak2";
+        authors = [
+          "Microsoft"
+        ];
+
+      };
+      "windows_i686_msvc 0.42.2" = rec {
         crateName = "windows_i686_msvc";
         version = "0.42.2";
         edition = "2018";
@@ -9601,7 +10419,17 @@ rec {
         ];
 
       };
-      "windows_x86_64_gnu" = rec {
+      "windows_i686_msvc 0.48.0" = rec {
+        crateName = "windows_i686_msvc";
+        version = "0.48.0";
+        edition = "2018";
+        sha256 = "004fkyqv3if178xx9ksqc4qqv8sz8n72mpczsr2vy8ffckiwchj5";
+        authors = [
+          "Microsoft"
+        ];
+
+      };
+      "windows_x86_64_gnu 0.42.2" = rec {
         crateName = "windows_x86_64_gnu";
         version = "0.42.2";
         edition = "2018";
@@ -9611,7 +10439,17 @@ rec {
         ];
 
       };
-      "windows_x86_64_gnullvm" = rec {
+      "windows_x86_64_gnu 0.48.0" = rec {
+        crateName = "windows_x86_64_gnu";
+        version = "0.48.0";
+        edition = "2018";
+        sha256 = "1cblz5m6a8q6ha09bz4lz233dnq5sw2hpra06k9cna3n3xk8laya";
+        authors = [
+          "Microsoft"
+        ];
+
+      };
+      "windows_x86_64_gnullvm 0.42.2" = rec {
         crateName = "windows_x86_64_gnullvm";
         version = "0.42.2";
         edition = "2018";
@@ -9621,11 +10459,31 @@ rec {
         ];
 
       };
-      "windows_x86_64_msvc" = rec {
+      "windows_x86_64_gnullvm 0.48.0" = rec {
+        crateName = "windows_x86_64_gnullvm";
+        version = "0.48.0";
+        edition = "2018";
+        sha256 = "0lxryz3ysx0145bf3i38jkr7f9nxiym8p3syklp8f20yyk0xp5kq";
+        authors = [
+          "Microsoft"
+        ];
+
+      };
+      "windows_x86_64_msvc 0.42.2" = rec {
         crateName = "windows_x86_64_msvc";
         version = "0.42.2";
         edition = "2018";
         sha256 = "1w5r0q0yzx827d10dpjza2ww0j8iajqhmb54s735hhaj66imvv4s";
+        authors = [
+          "Microsoft"
+        ];
+
+      };
+      "windows_x86_64_msvc 0.48.0" = rec {
+        crateName = "windows_x86_64_msvc";
+        version = "0.48.0";
+        edition = "2018";
+        sha256 = "12ipr1knzj2rwjygyllfi5mkd0ihnbi3r61gag5n2jgyk5bmyl8s";
         authors = [
           "Microsoft"
         ];
