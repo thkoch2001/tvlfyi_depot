@@ -30,7 +30,7 @@ depot.nix.buildLisp.library {
         (in-package :mime4cl-tests)
 
         ;; override auto discovery which doesn't work in the nix store
-        (defvar *samples-directory* (pathname "${./test/samples}"))
+        (defvar *samples-directory* (pathname "${./test/samples}/"))
       '')
       ./test/temp-file.lisp
       ./test/endec.lisp
