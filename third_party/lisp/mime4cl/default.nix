@@ -29,10 +29,8 @@ depot.nix.buildLisp.library {
       (pkgs.writeText "nix-samples.lisp" ''
         (in-package :mime4cl-tests)
 
-        ;; missing from the tarball completely
-        (defvar *samples-directory* (pathname "/this/does/not/exist"))
-        ;; override auto discovery which doesn't work in store
-        (defvar *sample1-file* (pathname "${./test/sample1.msg}"))
+        ;; override auto discovery which doesn't work in the nix store
+        (defvar *samples-directory* (pathname "${./test/samples}"))
       '')
       ./test/temp-file.lisp
       ./test/endec.lisp
