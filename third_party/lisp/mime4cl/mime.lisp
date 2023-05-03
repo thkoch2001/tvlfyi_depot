@@ -613,18 +613,18 @@ found in STREAM."
 
 (defgeneric decode-mime-body (part input-stream))
 
-(defmethod decode-mime-body ((part mime-part) (stream delimited-input-stream))
- (be base (base-stream stream)
+(defmethod decode-mime-body ((part mime-part) (stream flexi-stream))
+ (be base (flexi-stream-root-stream stream)
    (if *lazy-mime-decode*
        (setf (mime-body part)
              (make-file-portion :data (etypecase base
-                                        (my-string-input-stream
-                                         (stream-string base))
+                                        (vector-stream
+                                         (flexi-streams::vector-stream-vector base))
                                         (file-stream
                                          (pathname base)))
                                 :encoding (mime-encoding part)
-                                :start (file-position stream)
-                                :end (stream-end stream)))
+                                :start (flexi-stream-position stream)
+                                :end (flexi-stream-bound stream)))
        (call-next-method))))
 
 (defmethod decode-mime-body ((part mime-part) (stream file-stream))
@@ -635,12 +635,12 @@ found in STREAM."
                                :start (file-position stream)))
       (call-next-method)))
 
-(defmethod decode-mime-body ((part mime-part) (stream my-string-input-stream))
+(defmethod decode-mime-body ((part mime-part) (stream vector-stream))
   (if *lazy-mime-decode*
       (setf (mime-body part)
-            (make-file-portion :data (stream-string stream)
+            (make-file-portion :data (flexi-streams::vector-stream-vector stream)
                                :encoding (mime-encoding part)
-                               :start (file-position stream)))
+                               :start (flexi-streams::vector-stream-index stream)))
       (call-next-method)))
 
 (defmethod decode-mime-body ((part mime-part) stream)
@@ -658,11 +658,10 @@ list of MIME parts."
                           (be *default-type* (if (eq :digest (mime-subtype part))
                                                  '("message" "rfc822" ())
                                                  '("text" "plain" (("charset" . "us-ascii"))))
-                              in (make-instance 'delimited-input-stream
-                                                :underlying-stream stream
-                                                :dont-close t
-                                                :start start
-                                                :end end)
+                              in (make-positioned-flexi-input-stream stream
+                                                                     :position start
+                                                                     :bound end
+                                                                     :ignore-close t)
                               (read-mime-part in))))
                     offsets)))))
 
@@ -754,17 +753,21 @@ returns a MIME-MESSAGE object."
   msg)
 
 (defmethod mime-message ((msg string))
-  (with-open-stream (in (make-instance 'my-string-input-stream :string msg))
-    (read-mime-message in)))
+  (mime-message (flexi-streams:string-to-octets msg)))
 
-(defmethod mime-message ((msg stream))
-  (read-mime-message msg))
+(defmethod mime-message ((msg vector))
+  (with-input-from-sequence (in msg)
+    (mime-message in)))
 
 (defmethod mime-message ((msg pathname))
-  (let (#+sbcl(sb-impl::*default-external-format* :latin-1)
-        #+sbcl(sb-alien::*default-c-string-external-format* :latin-1))
-    (with-open-file (in msg)
-      (read-mime-message in))))
+  (with-open-file (in msg :element-type '(unsigned-byte 8))
+    (mime-message in)))
+
+(defmethod mime-message ((msg flexi-stream))
+  (read-mime-message msg))
+
+(defmethod mime-message ((msg stream))
+  (read-mime-message (make-flexi-stream msg)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
