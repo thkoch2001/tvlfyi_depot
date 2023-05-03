@@ -235,121 +235,104 @@ in a stream of character."))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(defclass delimited-input-stream (fundamental-character-input-stream coder-stream-mixin)
-  ((start-offset :initarg :start
-                 :initform 0
-                 :reader stream-start
-                 :type integer)
-   (end-offset :initarg :end
-               :initform nil
-               :reader stream-end
-               :type (or null integer))
-   (current-offset :type integer)))
+(defclass positioned-flexi-input-stream (flexi-input-stream)
+  ((ignore-close
+    :initform nil
+    :initarg :ignore-close
+    :documentation
+    "If T, calling CLOSE on the stream does nothing.
+If NIL, the underlying stream is closed."))
+  (:documentation
+   "FLEXI-INPUT-STREAM that automatically advances the underlying :STREAM to
+the location given by :POSITION. This uses FILE-POSITION internally, so it'll
+only works if the underlying stream position is tracked in bytes. Note that
+the underlying stream is still advanced, so having multiple instances of
+POSITIONED-FLEXI-INPUT-STREAM based with the same underlying stream won't work
+reliably.
+If :IGNORE-CLOSE is set, the underlying stream won't be closed if CLOSE is
+called on the POSITIONED-FLEXI-INPUT-STREAM."))
 
-(defmethod print-object ((object delimited-input-stream) stream)
-  (if *print-readably*
-      (call-next-method)
-      (with-slots (start-offset end-offset) object
-        (print-unreadable-object (object stream :type t :identity t)
-          (format stream "start=~A end=~A" start-offset end-offset)))))
-
-(defun base-stream (stream)
-  (if (typep stream 'delimited-input-stream)
-      (base-stream (real-stream stream))
-      stream))
-
-(defmethod initialize-instance ((stream delimited-input-stream) &key &allow-other-keys)
+(defmethod initialize-instance ((stream positioned-flexi-input-stream)
+                                &key &allow-other-keys)
   (call-next-method)
-  (unless (slot-boundp stream 'real-stream)
-    (error "REAL-STREAM is unbound.  Must provide a :UNDERLYING-STREAM argument."))
-  (with-slots (start-offset) stream
-    (file-position stream start-offset)))
+  ;; The :POSITION initarg is only informational for flexi-streams: It assumes
+  ;; it is were the stream it got is already at and continuously updates it
+  ;; for querying (via FLEXI-STREAM-POSITION) and bound checking.
+  ;; Since we have streams that are not positioned correctly, we need to do this
+  ;; here using FILE-POSITION. Note that assumes the underlying implementation
+  ;; uses bytes for FILE-POSITION which is not guaranteed (probably some streams
+  ;; even in SBCL don't).
+  (file-position (flexi-stream-stream stream) (flexi-stream-position stream)))
 
-(defmethod (setf stream-file-position) (newval (stream delimited-input-stream))
-  (with-slots (current-offset real-stream) stream
-    (setf current-offset newval)
-    (call-next-method)))
+(defmethod close ((stream positioned-flexi-input-stream) &key abort)
+  (declare (ignore abort))
+  (with-slots (ignore-close) stream
+    (unless ignore-close
+      (call-next-method))))
 
-(defmethod stream-file-position ((stream delimited-input-stream))
-  (slot-value stream 'current-offset))
-
-;; Calling file-position with SBCL on every read is quite expensive, since
-;; it will invoke lseek each time. This is so expensive that it's faster to
-;; /compute/ the amount the stream got advanced by.
-;; file-position's behavior however, is quite flexible and it behaves differently
-;; not only for different implementation, but also different streams in SBCL.
-;; Thus, we should ideally go back to file-position and try to reduce the amount
-;; of calls by using read-sequence.
-;; TODO(sterni): make decoders use read-sequence and drop offset tracking code
-(macrolet ((def-stream-read (name read-fun update-offset-form)
-             `(defmethod ,name ((stream delimited-input-stream))
-               (with-slots (real-stream end-offset current-offset) stream
-                 (let ((el (if (or (not end-offset)
-                                   (< current-offset end-offset))
-                               (or (,read-fun real-stream nil)
-                                   :eof)
-                               :eof)))
-                   (setf current-offset ,update-offset-form)
-                   el)))))
-
-  ;; Assume we are using an encoding where < 128 is one byte, in all other cases
-  ;; it's hard to guess how much file-position will increase
-  (def-stream-read stream-read-char read-char
-    (if (or (eq el :eof) (< (char-code el) 128))
-        (1+ current-offset)
-        (file-position real-stream)))
-
-  (def-stream-read stream-read-byte read-byte (1+ current-offset)))
+(defun make-positioned-flexi-input-stream (stream &rest args)
+  "Create a POSITIONED-FLEXI-INPUT-STREAM. Accepts the same keyword arguments as
+MAKE-FLEXI-STREAM as well as :IGNORE-CLOSE. Causes the FILE-POSITION of STREAM to
+be modified to match the :POSITION argument."
+  (apply #'make-instance
+         'positioned-flexi-input-stream
+         :stream stream
+         (mapcar (lambda (x)
+                   ;; make-flexi-stream has a discrepancy between :initarg of
+                   ;; make-instance and its &key which we mirror here.
+                   (if (eq x :external-format) :flexi-stream-external-format x))
+                 args)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(defclass my-string-input-stream (fundamental-character-input-stream coder-stream-mixin)
-  ((string :initarg :string
-           :reader stream-string)))
-
-(defmethod initialize-instance ((stream my-string-input-stream) &key &allow-other-keys)
-  (call-next-method)
-  (assert (slot-boundp stream 'string))
-  (with-slots (string real-stream) stream
-    (setf real-stream (make-string-input-stream string))))
-
-(defmethod stream-read-char ((stream my-string-input-stream))
-  (with-slots (real-stream) stream
-    (or (read-char real-stream nil)
-        :eof)))
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
+;; TODO(sterni): test correct behavior with END NIL
 (defstruct file-portion
   data                                  ; string or a pathname
   encoding
   start
   end)
 
-(defun open-file-portion (file-portion)
-  (be data (file-portion-data file-portion)
-    (etypecase data
-      (pathname
-       (be stream (open data)
-         (make-instance 'delimited-input-stream
-                        :underlying-stream stream
-                        :start (file-portion-start file-portion)
-                        :end (file-portion-end file-portion))))
-      (string
-       (make-instance 'delimited-input-stream
-                      :underlying-stream (make-string-input-stream data)
-                      :start (file-portion-start file-portion)
-                      :end (file-portion-end file-portion)))
-      (stream
-       (make-instance 'delimited-input-stream
-                      :underyling-stream data
-                      :dont-close t
-                      :start (file-portion-start file-portion)
-                      :end (file-portion-end file-portion))))))
-
 (defun open-decoded-file-portion (file-portion)
-  (make-instance (case (file-portion-encoding file-portion)
-                   (:quoted-printable 'quoted-printable-decoder-stream)
-                   (:base64 'base64-decoder-stream)
-                   (t '8bit-decoder-stream))
-                 :underlying-stream (open-file-portion file-portion)))
+  (with-slots (data encoding start end)
+      file-portion
+    (let* ((binary-stream
+             (etypecase data
+               (pathname
+                (open data :element-type '(unsigned-byte 8)))
+               ((vector (unsigned-byte 8))
+                (flexi-streams:make-in-memory-input-stream data))
+               (stream
+                ;; TODO(sterni): assert that bytes/flexi-stream
+                data)))
+           (params (ccase encoding
+                     ((:quoted-printable :base64) '(:external-format :us-ascii))
+                     (:8bit '(:element-type (unsigned-byte 8)))
+                     (:7bit '(:external-format :us-ascii))))
+           (portion-stream (apply #'make-positioned-flexi-input-stream
+                                  binary-stream
+                                  :position start
+                                  :bound end
+                                  ;; if data is a stream we can't have a
+                                  ;; FILE-PORTION without modifying it when
+                                  ;; reading etc. The least we can do, though,
+                                  ;; is forgo destroying it.
+                                  :ignore-close (typep data 'stream)
+                                  params))
+           (needs-decoder-stream (member encoding '(:quoted-printable
+                                                    :base64))))
+
+      (if needs-decoder-stream
+          (make-instance
+           (ccase encoding
+             (:quoted-printable 'quoted-printable-decoder-stream)
+             (:base64 'base64-decoder-stream))
+           :underlying-stream portion-stream)
+          portion-stream))))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(defun flexi-stream-root-stream (stream)
+  "Return the non FLEXI-STREAM stream a given chain of FLEXI-STREAMs is based on."
+  (if (typep stream 'flexi-stream)
+      (flexi-stream-root-stream (flexi-stream-stream stream))
+      stream))
