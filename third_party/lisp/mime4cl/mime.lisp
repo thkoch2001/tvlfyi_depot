@@ -793,7 +793,7 @@ returns a MIME-MESSAGE object."
                       'base64-encoder-input-stream)
                      (:quoted-printable
                       'quoted-printable-encoder-input-stream)
-                     (t
+                     (otherwise
                       '8bit-encoder-input-stream))
                    :underlying-stream
                    (make-instance 'binary-input-adapter-stream :source body))))
