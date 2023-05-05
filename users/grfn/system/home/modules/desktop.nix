@@ -10,7 +10,10 @@
   ];
 
   home.packages = with pkgs; [
-    ntfy
+    (ntfy.override {
+      # Slack support is broken as of 2023-06-15
+      withSlack = false;
+    })
   ];
 
   services.syncthing.tray.enable = true;
