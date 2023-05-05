@@ -15,7 +15,7 @@ let
   '';
 
   # emacsPgtk is defined in emacs-overlay
-  emacs = (pkgs.emacsPackagesFor pkgs.emacsPgtk).withPackages (epkgs: [
+  emacs = (pkgs.emacsPackagesFor pkgs.emacs-pgtk).withPackages (epkgs: [
     epkgs.bqn-mode
     #epkgs.elpaPackages.ada-mode
     epkgs.elpaPackages.rainbow-mode
