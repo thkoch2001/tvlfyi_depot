@@ -104,7 +104,7 @@ in
       settings.publicinbox = {
         wwwlisting = "all";
         nntpserver = [ "inbox.tvl.su" ];
-        imapserver = "inbox.tvl.su";
+        imapserver = [ "inbox.tvl.su" ];
 
         depot.obfuscate = true;
         noObfuscate = [
