@@ -52,6 +52,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "5e1857cc_451c75fc",
+        "filename": "tvix/eval/src/compiler/mod.rs",
+        "patchSetId": 5
+      },
+      "lineNbr": 1059,
+      "author": {
+        "id": 1000074
+      },
+      "writtenOn": "2023-05-05T14:47:31Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "09f6607f_86104080",
+      "revId": "5160978422eeb07f6d18271d4bfc53d697afdddc",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "63a15b5d_abe6032a",
@@ -65,6 +83,24 @@
       "writtenOn": "2023-04-28T14:15:42Z",
       "side": 1,
       "message": "```\nif it.doc_text().is_some() {\n  break Some(it);\n} else {\n  break None\n}\n```\n\nWhy do we peek and then return an Option\u003cast::Comment\u003e here (and further up in `get_lambda_docs`), instead of an `Option\u003c\u0026str\u003e`? That\u0027d avoid having to extract it again in `compile_lambda_or_thunk`. It doesn\u0027t use any of the ast bits there anymore.",
+      "revId": "5160978422eeb07f6d18271d4bfc53d697afdddc",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "dbef42f7_7a998b75",
+        "filename": "tvix/eval/src/compiler/mod.rs",
+        "patchSetId": 5
+      },
+      "lineNbr": 1096,
+      "author": {
+        "id": 1000074
+      },
+      "writtenOn": "2023-05-05T14:47:31Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "63a15b5d_abe6032a",
       "revId": "5160978422eeb07f6d18271d4bfc53d697afdddc",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
@@ -99,6 +135,24 @@
       "writtenOn": "2023-04-28T14:15:42Z",
       "side": 1,
       "message": "I\u0027d probably just shadow `expr` here, and use an `if let` for the assignment too:\n```\nif let Some(expr) \u003d expr {\n  if let Some(d) \u003d self.get_lambda_docs(expr) {\n    self.context_mut().lambda.doc \u003d d.doc_text().map(SmolStr::from);\n  }\n}\n```\n\nIs `get_lambda_docs` actually really limited to lambda? It seems this is any `ast::Expr` (we just right now decide to only pass one in in `compile_lambda_or_thunk`?)",
+      "revId": "5160978422eeb07f6d18271d4bfc53d697afdddc",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "250524ed_4c1d1e0d",
+        "filename": "tvix/eval/src/compiler/mod.rs",
+        "patchSetId": 5
+      },
+      "lineNbr": 1128,
+      "author": {
+        "id": 1000074
+      },
+      "writtenOn": "2023-05-05T14:47:31Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5a238626_116e8378",
       "revId": "5160978422eeb07f6d18271d4bfc53d697afdddc",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
