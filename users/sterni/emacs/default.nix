@@ -14,8 +14,21 @@ let
     exec chktex -n8 "$@"
   '';
 
+  emacsPgtkWithNativeCompWorkaround = pkgs.emacsPgtk.overrideAttrs (old: {
+    patches = old.patches or [ ] ++ [
+      # As described in <https://github.com/nix-community/emacs-overlay/issues/318>,
+      # emacs fails to Nix based packages mysteriously after this change. Let's
+      # revert it for now, so that emacs-overlay is not stuck indefinitely
+      (pkgs.fetchpatch {
+        name = "revert-ignore-bytecomp-change.patch";
+        url = "https://raw.githubusercontent.com/accelbread/config-flake/master/nix/packages/misc/0001-Revert-Better-compilation-of-arguments-to-ignore.patch";
+        sha256 = "0skln10hczi8bz9jzwwlv1rs1a66sa0xa09lcngr6jg5n7ih86fk";
+      })
+    ];
+  });
+
   # emacsPgtk is defined in emacs-overlay
-  emacs = (pkgs.emacsPackagesFor pkgs.emacsPgtk).withPackages (epkgs: [
+  emacs = (pkgs.emacsPackagesFor pkgs.emacs-pgtk).withPackages (epkgs: [
     epkgs.bqn-mode
     #epkgs.elpaPackages.ada-mode
     epkgs.elpaPackages.rainbow-mode

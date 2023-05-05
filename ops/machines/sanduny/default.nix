@@ -98,7 +98,6 @@ in
   # their own way of booting systems as long as config is in place.
   boot.loader.grub.device = "nodev";
   boot.loader.grub.enable = true;
-  boot.loader.grub.version = 2;
   boot.initrd.availableKernelModules = [ "xen_blkfront" ];
 
   hardware.cpu.intel.updateMicrocode = true;
