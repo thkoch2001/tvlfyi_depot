@@ -12,6 +12,7 @@
 
     rain
     awscli2
+    ssm-session-manager-plugin
     amazon-ecr-credential-helper
     postgresql_14
   ];
