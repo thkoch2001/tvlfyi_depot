@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ffa3fd1e_394601a4",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000074
+      },
+      "writtenOn": "2023-05-05T14:56:58Z",
+      "side": 1,
+      "message": "Added support for partially applied functions.\nDocumentation flows from generic to specific use-case. Where the more specific documentation will shadow the generic one.\n\nExample:\n\n```nix\n{\n  add \u003d \n    x: \n    /**Docstring 1*/\n    y: x+y;\n  \n  /**Docstring 2*/\n  addOne \u003d add 1;\n}\n```\nQuestion:\n\nWhere do we find the single correct documentation for addOne?\n\nAnswer:\n\nDocstring2 is the doc-comment written specifically for \"addOne\" \nis there is no doc-comment attached to \"add 1\" \n  then we just take the one from \"y: x+y\" \n  (which could be a more generic one)",
+      "revId": "9ab155625c0bf9d5f6bc6b323842f72fc542be35",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
