@@ -124,6 +124,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "a483a242_cd129087",
+        "filename": "tvix/eval/src/compiler/mod.rs",
+        "patchSetId": 5
+      },
+      "lineNbr": 1118,
+      "author": {
+        "id": 1000074
+      },
+      "writtenOn": "2023-05-05T15:59:41Z",
+      "side": 1,
+      "message": "It is \"some\" if it was called directly from\ncompile ast::Expr::Lambda\nor from fn thunk() \nwhich currently only works for ast::Expr::Apply (which I wanted to work)\n\nMaybe this can be extented in the future?",
+      "parentUuid": "ee153551_ed20ccca",
+      "revId": "5160978422eeb07f6d18271d4bfc53d697afdddc",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "5a238626_116e8378",
         "filename": "tvix/eval/src/compiler/mod.rs",
         "patchSetId": 5
