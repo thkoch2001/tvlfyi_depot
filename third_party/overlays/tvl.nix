@@ -41,12 +41,12 @@ depot.nix.readTree.drvTargets {
 
   # Too match telega in emacs-overlay or wherever
   tdlib = super.tdlib.overrideAttrs (_: {
-    version = "1.8.12";
+    version = "1.8.14";
     src = self.fetchFromGitHub {
       owner = "tdlib";
       repo = "td";
-      rev = "70bee089d492437ce931aa78446d89af3da182fc";
-      sha256 = "1m1mnvrk9nr3d3sq191i5y1bdgnp1hnq0c6iqybzmyswr501prz3";
+      rev = "e8ee1c51498c060c6f9b8511bf25a6c025e72adf";
+      sha256 = "0vm5j5kzvzf5gdmg2rg6hw3dyzn9dy0l256asyjipbnhk9302s0n";
     };
   });
 
@@ -77,7 +77,7 @@ depot.nix.readTree.drvTargets {
       notmuch = super.notmuch.emacs;
 
       # Build EXWM with the depot sources instead.
-      exwm = esuper.exwm.overrideAttrs (_: {
+      depotExwm = esuper.exwm.overrideAttrs (_: {
         src = depot.path.origSrc + "/third_party/exwm";
       });
 
