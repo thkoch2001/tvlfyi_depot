@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "300eb695_369316dd",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-05-08T15:48:40Z",
+      "side": 1,
+      "message": "We went ahead with inlining SyncReadStream. There\u0027s still a problem with the close not working yet, so the tests currently time out.",
+      "revId": "1f6d193c95528dd99a92141ef76478eb017bff67",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
