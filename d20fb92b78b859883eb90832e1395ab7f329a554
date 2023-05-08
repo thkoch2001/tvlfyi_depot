@@ -34,6 +34,24 @@
       "parentUuid": "fdddfb39_c4b70ff4",
       "revId": "d20fb92b78b859883eb90832e1395ab7f329a554",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c496a373_00869639",
+        "filename": "tvix/eval/src/compiler/comment.rs",
+        "patchSetId": 9
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-05-08T10:51:36Z",
+      "side": 1,
+      "message": "Can you add this in a small comment in L13?",
+      "parentUuid": "8f066b85_6cad4d66",
+      "revId": "d20fb92b78b859883eb90832e1395ab7f329a554",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
