@@ -3,6 +3,23 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "e5d912dc_5d60bcc8",
+        "filename": "tvix/store/Cargo.toml",
+        "patchSetId": 4
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-05-08T14:29:57Z",
+      "side": 1,
+      "message": "The bump seems to have caused this breakage here:\n\n```\nerror[E0277]: the trait bound `tokio::net::UnixStream: tokio::io::async_read::AsyncRead` is not satisfied\n   --\u003e store/src/directoryservice/grpc.rs:363:24\n    |\n363 |                 router.serve_with_incoming(uds_stream).await\n    |                        ^^^^^^^^^^^^^^^^^^^ the trait `tokio::io::async_read::AsyncRead` is not implemented for `tokio::net::UnixStream`\n    |\n    \u003d help: the following other types implement trait `tokio::io::async_read::AsyncRead`:\n              \u0026[u8]\n              \u0026mut T\n              Box\u003cT\u003e\n              Pin\u003cP\u003e\n              h2::codec::framed_write::FramedWrite\u003cT, B\u003e\n              hyper::server::tcp::addr_stream::AddrStream\n              hyper::upgrade::Upgraded\n              hyper_timeout::stream::TimeoutConnectorStream\u003cS\u003e\n            and 22 others\nnote: required by a bound in `Router::\u003cL\u003e::serve_with_incoming`\n   --\u003e /home/flokli/.cargo/registry/src/github.com-1ecc6299db9ec823/tonic-0.8.3/src/transport/server/mod.rs:635:13\n    |\n635 |         IO: AsyncRead + AsyncWrite + Connected + Unpin + Send + \u0027static,\n    |             ^^^^^^^^^ required by this bound in `Router::\u003cL\u003e::serve_with_incoming`\n\n```\n\nIt seems to only be a problem with unix domain sockets (which are currently only used in the tests, but we definitely want to use that to talk to a system-wide tvix store too)",
+      "revId": "96307a61c94b1957a44381d16cf8181c3948d28d",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "21f23290_536ae6a1",
         "filename": "tvix/store/src/bin/tvix-store.rs",
         "patchSetId": 4
