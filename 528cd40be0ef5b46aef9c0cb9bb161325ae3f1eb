@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e4e6fd0b_682524ed",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2023-05-09T17:18:03Z",
+      "side": 1,
+      "message": "This seemingly makes stuff much slower. Needs to be investigated before we decide how to proceed.",
+      "revId": "528cd40be0ef5b46aef9c0cb9bb161325ae3f1eb",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
