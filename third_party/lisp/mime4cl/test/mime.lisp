@@ -27,17 +27,15 @@
                          *load-pathname*
                          #P"")))
 
-(deftest mime.1
-    (loop
-       for f in (directory (make-pathname :defaults *samples-directory*
-                                          :name :wild
-                                          :type "msg"))
-       do
-         (format t "~A:~%" f)
-         (finish-output)
-         (let* ((orig (mime-message f))
-                (dup (mime-message (with-output-to-string (out) (encode-mime-part orig out)))))
-           (unless (mime= orig dup)
-             (return nil)))
-       finally (return t))
-  t)
+(loop
+ for f in (directory (make-pathname :defaults *samples-directory*
+                                    :name :wild
+                                    :type "msg"))
+ for i from 1
+ do
+ (add-test (intern (format nil "MIME.~A" i))
+           `(let* ((orig (mime-message ,f))
+                   (dup (mime-message
+                         (with-output-to-string (out) (encode-mime-part orig out)))))
+              (mime= orig dup))
+           t))

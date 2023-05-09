@@ -1,5 +1,6 @@
 #|----------------------------------------------------------------------------|
  | Copyright 1990 by the Massachusetts Institute of Technology, Cambridge MA. |
+ | Copyright 2023 by the TVL Authors                                          |
  |                                                                            |
  | Permission  to  use,  copy, modify, and distribute this software  and  its |
  | documentation for any purpose  and without fee is hereby granted, provided |
@@ -20,10 +21,10 @@
  |----------------------------------------------------------------------------|#
 
 (defpackage #:regression-test
-  (:nicknames #:rtest #-lispworks #:rt) 
+  (:nicknames #:rtest #-lispworks #:rt)
   (:use #:cl)
   (:export #:*do-tests-when-defined* #:*test* #:continue-testing
-           #:deftest #:do-test #:do-tests #:get-test #:pending-tests
+           #:deftest #:add-test #:do-test #:do-tests #:get-test #:pending-tests
            #:rem-all-tests #:rem-test)
   (:documentation "The MIT regression tester with pfdietz's modifications"))
 
@@ -86,25 +87,28 @@
 (defmacro deftest (name form &rest values)
   `(add-entry '(t ,name ,form .,values)))
 
+(defun add-test (name form &rest values)
+  (funcall #'add-entry (append (list 't name form) values)))
+
 (defun add-entry (entry)
   (setq entry (copy-list entry))
   (do ((l *entries* (cdr l))) (nil)
     (when (null (cdr l))
       (setf (cdr l) (list entry))
       (return nil))
-    (when (equal (name (cadr l)) 
+    (when (equal (name (cadr l))
                  (name entry))
       (setf (cadr l) entry)
       (report-error nil
-        "Redefining test ~:@(~S~)"
-        (name entry))
+                    "Redefining test ~:@(~S~)"
+                    (name entry))
       (return nil)))
   (when *do-tests-when-defined*
     (do-entry entry))
   (setq *test* (name entry)))
 
 (defun report-error (error? &rest args)
-  (cond (*debug* 
+  (cond (*debug*
          (apply #'format t args)
          (if error? (throw '*debug* nil)))
         (error? (apply #'error args))
@@ -184,7 +188,7 @@
       (setf (pend entry)
             (or aborted
                 (not (equalp-with-case r (vals entry)))))
-      
+
       (when (pend entry)
         (let ((*print-circle* *print-circle-on-failure*))
           (format s "~&Test ~:@(~S~) failed~
@@ -210,7 +214,7 @@
     (setf (pend entry) t))
   (if (streamp out)
       (do-entries out)
-      (with-open-file 
+      (with-open-file
           (stream out :direction :output)
         (do-entries stream))))
 
