@@ -16,6 +16,23 @@
       "message": "stray whitespace",
       "revId": "d32f7160d4acee9f18f015b4428fb5a9698bd6f2",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "19d045df_8b2563b3",
+        "filename": "tvix/eval/src/tests/test_comment_ast.rs",
+        "patchSetId": 11
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-05-10T10:29:37Z",
+      "side": 1,
+      "message": "Please refactor this to use the `test_resources` macro, and some globs similar to how it\u0027s done in `eval/src/tests/mod.rs` for consistency.",
+      "revId": "d32f7160d4acee9f18f015b4428fb5a9698bd6f2",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
