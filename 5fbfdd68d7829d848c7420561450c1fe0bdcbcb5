@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bc0a666f_4b1d3e51",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 10
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000074
+      },
+      "writtenOn": "2023-05-10T09:42:12Z",
+      "side": 1,
+      "message": "Just pushed a new commit, including many small tests.",
+      "revId": "5fbfdd68d7829d848c7420561450c1fe0bdcbcb5",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
