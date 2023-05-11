@@ -22,6 +22,30 @@
       },
       "revId": "e756a767f338ac429c08d0cad89498f161fb2a3c",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a1ea9b66_9afd9dbe",
+        "filename": "tvix/store/src/blobservice/grpc.rs",
+        "patchSetId": 20
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-05-11T18:19:06Z",
+      "side": 1,
+      "message": "Oh true, i still should provide some constructors.",
+      "parentUuid": "6ea2ba65_24bb3d36",
+      "range": {
+        "startLine": 27,
+        "startChar": 0,
+        "endLine": 27,
+        "endChar": 14
+      },
+      "revId": "e756a767f338ac429c08d0cad89498f161fb2a3c",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
