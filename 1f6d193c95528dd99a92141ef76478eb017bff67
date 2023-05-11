@@ -16,6 +16,24 @@
       "message": "We went ahead with inlining SyncReadStream. There\u0027s still a problem with the close not working yet, so the tests currently time out.",
       "revId": "1f6d193c95528dd99a92141ef76478eb017bff67",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ded578c0_29259ad9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-05-11T12:31:45Z",
+      "side": 1,
+      "message": "The AsyncRead -\u003e Read code seems to be working now, at least it passes the (limited amount of) tests that we have in tvix (through the Grpc tests).",
+      "parentUuid": "300eb695_369316dd",
+      "revId": "1f6d193c95528dd99a92141ef76478eb017bff67",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
