@@ -61,6 +61,7 @@ pub trait EvalIO {
 
 /// Implementation of [`EvalIO`] that simply uses the equivalent
 /// standard library functions, i.e. does local file-IO.
+/// TODO: should this be moved to CLI?
 #[cfg(feature = "impure")]
 pub struct StdIO;
 
