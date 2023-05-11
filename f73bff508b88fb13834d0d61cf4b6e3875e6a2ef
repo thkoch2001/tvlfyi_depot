@@ -22,6 +22,30 @@
       },
       "revId": "f73bff508b88fb13834d0d61cf4b6e3875e6a2ef",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9f4c1358_3bb395ae",
+        "filename": "tvix/eval/src/io.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 64,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2023-05-11T15:40:56Z",
+      "side": 1,
+      "message": "Oh, and you probably still want to delegate to it for non-store-paths in your EvalIO impl.",
+      "parentUuid": "817a0de2_56625915",
+      "range": {
+        "startLine": 64,
+        "startChar": 0,
+        "endLine": 64,
+        "endChar": 38
+      },
+      "revId": "f73bff508b88fb13834d0d61cf4b6e3875e6a2ef",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
