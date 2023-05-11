@@ -8042,6 +8042,10 @@ rec {
             features = [ "compression" ];
           }
           {
+            name = "smol_str";
+            packageId = "smol_str";
+          }
+          {
             name = "thiserror";
             packageId = "thiserror";
           }
@@ -8080,6 +8084,10 @@ rec {
             name = "tracing-subscriber";
             packageId = "tracing-subscriber";
             features = [ "json" ];
+          }
+          {
+            name = "tvix-eval";
+            packageId = "tvix-eval";
           }
           {
             name = "walkdir";
