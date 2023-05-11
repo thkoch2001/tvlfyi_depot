@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bacbde60_9918aadf",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 12
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2023-05-11T12:40:07Z",
+      "side": 1,
+      "message": "There\u0027s a lot of complex new structures introduced here which are not explained anywhere but at the callsites (such as the non-caching service, and all the bridging stuff). I think adding a few doc comments (maybe in a separate commit) can not hurt, as these are otherwise totally context-free files when somebody encounters them.",
+      "revId": "6e1d7d09baeb551380c003759ffc85daf4a6f25a",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
