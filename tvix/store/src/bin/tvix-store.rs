@@ -129,6 +129,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
             router.serve(listen_address).await?;
         }
         Commands::Import { paths } => {
+            // TODO: use TvixStoreIO::import_path instead
             let nar_calculation_service = NonCachingNARCalculationService::new(
                 blob_service.clone(),
                 directory_service.clone(),
