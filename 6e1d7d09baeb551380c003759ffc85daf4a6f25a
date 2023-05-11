@@ -16,6 +16,24 @@
       "message": "There\u0027s a lot of complex new structures introduced here which are not explained anywhere but at the callsites (such as the non-caching service, and all the bridging stuff). I think adding a few doc comments (maybe in a separate commit) can not hurt, as these are otherwise totally context-free files when somebody encounters them.",
       "revId": "6e1d7d09baeb551380c003759ffc85daf4a6f25a",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "24c6d383_50e19ad2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 12
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-05-11T14:27:47Z",
+      "side": 1,
+      "message": "tvix/store/src/nar/non_caching_calculation_service.rs was already there before (since cl/8096), this commit only updated the calling conventions in there to the new BlobService trait interface.\n\nThe idea was that there\u0027s multiple ways to calculate NAR files (you either cache, or you don\u0027t), and they all use the non-caching variant underneath.\n\nI was too lazy to implement a caching version initially, so I made this a trait.",
+      "parentUuid": "bacbde60_9918aadf",
+      "revId": "6e1d7d09baeb551380c003759ffc85daf4a6f25a",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
