@@ -70,6 +70,30 @@
       },
       "revId": "9757463e130e1be3e40e0b4b38aa39af5f6c7225",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f6fc8377_ad735df2",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 21
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-05-14T18:49:32Z",
+      "side": 1,
+      "message": "Marking as resolved due to lack of response.",
+      "parentUuid": "42cad50b_f9f3b8db",
+      "range": {
+        "startLine": 37,
+        "startChar": 0,
+        "endLine": 39,
+        "endChar": 72
+      },
+      "revId": "9757463e130e1be3e40e0b4b38aa39af5f6c7225",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
