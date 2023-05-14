@@ -2640,6 +2640,7 @@ dependencies = [
  "ssri",
  "thiserror",
  "tvix-eval",
+ "tvix-store",
  "wu-manber",
 ]
 
@@ -2708,6 +2709,7 @@ dependencies = [
  "prost",
  "prost-build",
  "rayon",
+ "serde_json",
  "sha2 0.10.6",
  "sled",
  "smol_str",
