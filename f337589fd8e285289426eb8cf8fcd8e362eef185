@@ -22,6 +22,30 @@
       },
       "revId": "f337589fd8e285289426eb8cf8fcd8e362eef185",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f75abdd2_205b8851",
+        "filename": "tvix/nix-compat/src/store_path/mod.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-05-14T20:07:30Z",
+      "side": 1,
+      "message": "starts with is misleading. The path starts with the store prefix, if you look at it in string representation. The struct keeps the name and digest as the only fields.",
+      "parentUuid": "a19103b0_f7f6bfe5",
+      "range": {
+        "startLine": 48,
+        "startChar": 23,
+        "endLine": 48,
+        "endChar": 28
+      },
+      "revId": "f337589fd8e285289426eb8cf8fcd8e362eef185",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
