@@ -67,6 +67,10 @@ pub struct StdIO;
 #[cfg(feature = "impure")]
 impl EvalIO for StdIO {
     fn path_exists(&mut self, path: PathBuf) -> Result<bool, ErrorKind> {
+        if path.starts_with("/__corepkgs__") {
+            return Ok(true);
+        }
+
         path.try_exists().map_err(|e| ErrorKind::IO {
             path: Some(path),
             error: Rc::new(e),
@@ -74,6 +78,16 @@ impl EvalIO for StdIO {
     }
 
     fn read_to_string(&mut self, path: PathBuf) -> Result<String, ErrorKind> {
+        // Bundled version of corepkgs/fetchurl.nix. This workaround
+        // is similar to what cppnix does for passing the path
+        // through.
+        //
+        // TODO: this comparison is bad and allocates, we should use
+        // the sane path library.
+        if path.starts_with("/__corepkgs__/fetchurl.nix") {
+            return Ok(include_str!("fetchurl.nix").to_string());
+        }
+
         std::fs::read_to_string(&path).map_err(|e| ErrorKind::IO {
             path: Some(path),
             error: Rc::new(e),
