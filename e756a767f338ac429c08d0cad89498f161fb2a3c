@@ -46,6 +46,30 @@
       },
       "revId": "e756a767f338ac429c08d0cad89498f161fb2a3c",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b5208c2b_8fb01b63",
+        "filename": "tvix/store/src/blobservice/grpc.rs",
+        "patchSetId": 20
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-05-14T18:34:20Z",
+      "side": 1,
+      "message": "I reworded the TODO.",
+      "parentUuid": "a1ea9b66_9afd9dbe",
+      "range": {
+        "startLine": 27,
+        "startChar": 0,
+        "endLine": 27,
+        "endChar": 14
+      },
+      "revId": "e756a767f338ac429c08d0cad89498f161fb2a3c",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
