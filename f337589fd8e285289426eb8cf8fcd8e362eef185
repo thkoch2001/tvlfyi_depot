@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a19103b0_f7f6bfe5",
+        "filename": "tvix/nix-compat/src/store_path/mod.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2023-05-14T18:38:28Z",
+      "side": 1,
+      "message": "ASCII? I don\u0027t know ASCCI.\n\nAlso the word \"consists\" appears twice here which sounds weird. Wasn\u0027t \"starts with\" fine?",
+      "range": {
+        "startLine": 48,
+        "startChar": 23,
+        "endLine": 48,
+        "endChar": 28
+      },
+      "revId": "f337589fd8e285289426eb8cf8fcd8e362eef185",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
