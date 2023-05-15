@@ -37,6 +37,7 @@ variable "target_user" {
 variable "target_user_ssh_key" {
   description = "SSH key to use for connecting to the target"
   type        = string
+  default     = ""
   sensitive   = true
 }
 
