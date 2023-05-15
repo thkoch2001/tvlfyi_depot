@@ -34,6 +34,24 @@
       "parentUuid": "01bef7c3_d238701e",
       "revId": "a5480aa288f962c130f0fcce00b79d03a30e395e",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "93026326_f9c3f005",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 20
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000072
+      },
+      "writtenOn": "2023-05-15T05:23:12Z",
+      "side": 1,
+      "message": "Apologies for the lack of response, The reply email was missed by me. \n\n\u003e However, most of these traces (reserve_capacity,send_data) are related to the trace collection itself, and come from code.namespace \u003d h2::proto::streams::prioritize.\n\u003e Is there a way to exclude these from reporting itself?\n\nI am not sure. I have seen the data but never tried to exclude it. \n\n\n\n\u003e OpenTelemetry trace error occurred. cannot send span to the batch span processor because the channel is closed\n\nAre you shutting down the trace provider correctly? Either we have to wait for the application to send the last remaining trace after receiving `SIGINT` or [shut it down correctly].\n\n[shut it down correctly]: https://docs.rs/opentelemetry/latest/opentelemetry/global/fn.shutdown_tracer_provider.html",
+      "parentUuid": "060afde3_a0d16dc1",
+      "revId": "a5480aa288f962c130f0fcce00b79d03a30e395e",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
