@@ -46,6 +46,30 @@
       },
       "revId": "f337589fd8e285289426eb8cf8fcd8e362eef185",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "02fc38b0_b8dabcb5",
+        "filename": "tvix/nix-compat/src/store_path/mod.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-05-15T16:34:04Z",
+      "side": 1,
+      "message": "I updated the wording a bit, now there\u0027s only one \"consists\". PTAL.",
+      "parentUuid": "f75abdd2_205b8851",
+      "range": {
+        "startLine": 48,
+        "startChar": 23,
+        "endLine": 48,
+        "endChar": 28
+      },
+      "revId": "f337589fd8e285289426eb8cf8fcd8e362eef185",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
