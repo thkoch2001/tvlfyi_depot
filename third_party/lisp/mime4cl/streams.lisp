@@ -1,7 +1,7 @@
 ;;; streams.lisp --- En/De-coding Streams
 
 ;;; Copyright (C) 2012 by Walter C. Pelissero
-;;; Copyright (C) 2021-2022 by the TVL Authors
+;;; Copyright (C) 2021-2023 by the TVL Authors
 
 ;;; Author: Walter C. Pelissero <walter@pelissero.de>
 ;;; Project: mime4cl
@@ -39,6 +39,10 @@
 (defclass coder-output-stream-mixin (fundamental-binary-output-stream coder-stream-mixin)
   ())
 
+;; TODO(sterni): temporary, ugly measure to make flexi-streams happy
+(defmethod stream-element-type ((stream coder-input-stream-mixin))
+  (declare (ignore stream))
+  '(unsigned-byte 8))
 
 (defclass quoted-printable-decoder-stream (coder-input-stream-mixin quoted-printable-decoder) ())
 (defclass base64-decoder-stream (coder-input-stream-mixin base64-decoder) ())
@@ -136,112 +140,59 @@ in a stream of character."))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(defclass input-adapter-stream ()
-  ((source :initarg :source)
-   (real-stream)
-   (input-function)))
+(defun make-custom-flexi-stream (class stream other-args)
+  (apply #'make-instance
+         class
+         :stream stream
+         (mapcar (lambda (x)
+                   ;; make-flexi-stream has a discrepancy between :initarg of
+                   ;; make-instance and its &key which we mirror here.
+                   (if (eq x :external-format) :flexi-stream-external-format x))
+                 other-args)))
 
-(defclass binary-input-adapter-stream (fundamental-binary-input-stream input-adapter-stream) ())
-
-(defclass character-input-adapter-stream (fundamental-character-input-stream input-adapter-stream) ())
-
-(defmethod stream-element-type ((stream binary-input-adapter-stream))
-  '(unsigned-byte 8))
-
-(defmethod initialize-instance ((stream input-adapter-stream) &key &allow-other-keys)
-  (call-next-method)
-  (assert (slot-boundp stream 'source)))
-
-(defmethod initialize-instance ((stream binary-input-adapter-stream) &key &allow-other-keys)
-  (call-next-method)
-  ;; REAL-STREAM slot is set only if we are going to close it later on
-  (with-slots (source real-stream input-function) stream
-    (etypecase source
-      (string
-       (setf real-stream (make-string-input-stream source)
-             input-function #'(lambda ()
-                                (awhen (read-char real-stream nil)
-                                  (char-code it)))))
-      ((vector (unsigned-byte 8))
-       (be i 0
-         (setf input-function #'(lambda ()
-                                  (when (< i (length source))
-                                    (prog1 (aref source i)
-                                      (incf i)))))))
-      (stream
-       (assert (input-stream-p source))
-       (setf input-function (if (subtypep (stream-element-type source) 'character)
-                                #'(lambda ()
-                                    (awhen (read-char source nil)
-                                      (char-code it)))
-                                #'(lambda ()
-                                    (read-byte source nil)))))
-      (pathname
-       (setf real-stream (open source :element-type '(unsigned-byte 8))
-             input-function #'(lambda ()
-                                (read-byte real-stream nil))))
-      (file-portion
-       (setf real-stream (open-decoded-file-portion source)
-             input-function #'(lambda ()
-                                (read-byte real-stream nil)))))))
-
-(defmethod initialize-instance ((stream character-input-adapter-stream) &key &allow-other-keys)
-  (call-next-method)
-  ;; REAL-STREAM slot is set only if we are going to close later on
-  (with-slots (source real-stream input-function) stream
-    (etypecase source
-      (string
-       (setf real-stream (make-string-input-stream source)
-             input-function #'(lambda ()
-                                (read-char real-stream nil))))
-      ((vector (unsigned-byte 8))
-       (be i 0
-         (setf input-function #'(lambda ()
-                                  (when (< i (length source))
-                                    (prog1 (code-char (aref source i))
-                                      (incf i)))))))
-      (stream
-       (assert (input-stream-p source))
-       (setf input-function (if (subtypep (stream-element-type source) 'character)
-                                #'(lambda ()
-                                    (read-char source nil))
-                                #'(lambda ()
-                                    (awhen (read-byte source nil)
-                                      (code-char it))))))
-      (pathname
-       (setf real-stream (open source :element-type 'character)
-             input-function #'(lambda ()
-                                (read-char real-stream nil))))
-      (file-portion
-       (setf real-stream (open-decoded-file-portion source)
-             input-function #'(lambda ()
-                                (awhen (read-byte real-stream nil)
-                                  (code-char it))))))))
-
-(defmethod close ((stream input-adapter-stream) &key abort)
-  (when (slot-boundp stream 'real-stream)
-    (with-slots (real-stream) stream
-      (close real-stream :abort abort))))
-
-(defmethod stream-read-byte ((stream binary-input-adapter-stream))
-  (with-slots (input-function) stream
-    (or (funcall input-function)
-        :eof)))
-
-(defmethod stream-read-char ((stream character-input-adapter-stream))
-  (with-slots (input-function) stream
-    (or (funcall input-function)
-        :eof)))
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-(defclass positioned-flexi-input-stream (flexi-input-stream)
+(defclass adapter-flexi-input-stream (flexi-input-stream)
   ((ignore-close
     :initform nil
     :initarg :ignore-close
     :documentation
     "If T, calling CLOSE on the stream does nothing.
 If NIL, the underlying stream is closed."))
+  (:documentation "FLEXI-STREAM that does not close the underlying stream on
+CLOSE if :IGNORE-CLOSE is T."))
+
+(defmethod close ((stream adapter-flexi-input-stream) &key abort)
+  (declare (ignore abort))
+  (with-slots (ignore-close) stream
+    (unless ignore-close
+      (call-next-method))))
+
+(defun make-input-adapter (source)
+  (etypecase source
+    ;; If it's already a stream, we need to make sure it's not closed by the adapter
+    (stream
+     (assert (input-stream-p source))
+     (if (and (typep source 'adapter-flexi-input-stream)
+              (slot-value source 'ignore-close))
+         source ; already ignores CLOSE
+         (make-adapter-flexi-input-stream source :ignore-close t)))
+    ;; TODO(sterni): is this necessary? (maybe with (not *lazy-mime-decode*)?)
+    (string
+     (make-input-adapter (string-to-octets source)))
+    ((vector (unsigned-byte 8))
+     (make-in-memory-input-stream source))
+    (pathname
+     (make-flexi-stream (open source :element-type '(unsigned-byte 8))))
+    (file-portion
+     (open-decoded-file-portion source))))
+
+(defun make-adapter-flexi-input-stream (stream &rest args)
+  "Create a ADAPTER-FLEXI-INPUT-STREAM. Accepts the same keyword arguments as
+MAKE-FLEXI-STREAM as well as :IGNORE-CLOSE. If T, the underlying stream is not
+closed."
+  (make-custom-flexi-stream 'adapter-flexi-input-stream stream args))
+
+(defclass positioned-flexi-input-stream (adapter-flexi-input-stream)
+  ()
   (:documentation
    "FLEXI-INPUT-STREAM that automatically advances the underlying :STREAM to
 the location given by :POSITION. This uses FILE-POSITION internally, so it'll
@@ -249,8 +200,7 @@ only works if the underlying stream position is tracked in bytes. Note that
 the underlying stream is still advanced, so having multiple instances of
 POSITIONED-FLEXI-INPUT-STREAM based with the same underlying stream won't work
 reliably.
-If :IGNORE-CLOSE is set, the underlying stream won't be closed if CLOSE is
-called on the POSITIONED-FLEXI-INPUT-STREAM."))
+Also supports :IGNORE-CLOSE of ADAPTER-FLEXI-INPUT-STREAM."))
 
 (defmethod initialize-instance ((stream positioned-flexi-input-stream)
                                 &key &allow-other-keys)
@@ -264,24 +214,11 @@ called on the POSITIONED-FLEXI-INPUT-STREAM."))
   ;; even in SBCL don't).
   (file-position (flexi-stream-stream stream) (flexi-stream-position stream)))
 
-(defmethod close ((stream positioned-flexi-input-stream) &key abort)
-  (declare (ignore abort))
-  (with-slots (ignore-close) stream
-    (unless ignore-close
-      (call-next-method))))
-
 (defun make-positioned-flexi-input-stream (stream &rest args)
   "Create a POSITIONED-FLEXI-INPUT-STREAM. Accepts the same keyword arguments as
 MAKE-FLEXI-STREAM as well as :IGNORE-CLOSE. Causes the FILE-POSITION of STREAM to
 be modified to match the :POSITION argument."
-  (apply #'make-instance
-         'positioned-flexi-input-stream
-         :stream stream
-         (mapcar (lambda (x)
-                   ;; make-flexi-stream has a discrepancy between :initarg of
-                   ;; make-instance and its &key which we mirror here.
-                   (if (eq x :external-format) :flexi-stream-external-format x))
-                 args)))
+  (make-custom-flexi-stream 'positioned-flexi-input-stream stream args))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 

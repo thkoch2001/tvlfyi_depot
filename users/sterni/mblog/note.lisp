@@ -101,7 +101,7 @@
       ;; notemap creates text/plain notes we need to handle properly.
       ;; Additionally we *could* check X-Mailer which notemap sets
       ((string-equal (apple-note-mime-subtype note) "plain")
-       (html-escape-stream (mime:mime-body-stream text :binary nil) out))
+       (html-escape-stream (mime:mime-body-stream text) out))
       ;; Notes.app creates text/html parts
       ((string-equal (apple-note-mime-subtype note) "html")
        (closure-html:parse
