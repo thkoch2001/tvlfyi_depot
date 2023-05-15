@@ -183,11 +183,8 @@
                :test #'string=)
        (mime= (mime-body part1) (mime-body part2))))
 
-(defun mime-body-stream (mime-part &key (binary t))
-  (make-instance (if binary
-                     'binary-input-adapter-stream
-                     'character-input-adapter-stream)
-                 :source (mime-body mime-part)))
+(defun mime-body-stream (mime-part)
+  (make-input-adapter (mime-body mime-part)))
 
 (defun mime-body-length (mime-part)
   (be body (mime-body mime-part)
@@ -207,8 +204,8 @@
             while byte
             count byte))))))
 
-(defmacro with-input-from-mime-body-stream ((stream part &key (binary t)) &body forms)
-  `(with-open-stream (,stream (mime-body-stream ,part :binary ,binary))
+(defmacro with-input-from-mime-body-stream ((stream part) &body forms)
+  `(with-open-stream (,stream (mime-body-stream ,part))
      ,@forms))
 
 (defmethod mime= ((part1 mime-bodily-part) (part2 mime-bodily-part))
@@ -799,7 +796,7 @@ returns a MIME-MESSAGE object."
                      (otherwise
                       '8bit-encoder-input-stream))
                    :underlying-stream
-                   (make-instance 'binary-input-adapter-stream :source body))))
+                   (make-input-adapter body))))
 
 (defun choose-boundary (parts &optional default)
   (labels ((match-in-parts (boundary parts)
