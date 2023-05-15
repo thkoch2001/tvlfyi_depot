@@ -118,4 +118,8 @@
     enableBashIntegration = true;
     enableZshIntegration = true;
   };
+
+  services.dropbox = {
+    enable = true;
+  };
 }
