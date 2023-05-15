@@ -24,4 +24,8 @@
   services.tailscale.enable = true;
 
   security.sudo.wheelNeedsPassword = false;
+
+  environment.systemPackages = with pkgs; [
+    cloud-utils
+  ];
 }
