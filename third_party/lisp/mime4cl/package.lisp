@@ -99,4 +99,7 @@
            ;; address.lisp
            #:parse-addresses #:mailboxes-only
            #:mailbox #:mbx-description #:mbx-user #:mbx-host #:mbx-domain #:mbx-domain-name #:mbx-address
-           #:mailbox-group #:mbxg-name #:mbxg-mailboxes))
+           #:mailbox-group #:mbxg-name #:mbxg-mailboxes
+           ;; streams.lisp
+           #:redirect-stream
+           ))
