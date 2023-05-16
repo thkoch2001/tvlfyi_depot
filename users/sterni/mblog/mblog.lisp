@@ -26,14 +26,6 @@
                            :if-does-not-exist :create)
      ,@body))
 
-(defun redirect-stream (in out)
-  "Consume input stream IN and write all its content to output stream OUT.
-  The streams' element types need to match."
-  (let ((buf (make-array config:*general-buffer-size* :element-type (stream-element-type in))))
-    (loop for pos = (read-sequence buf in)
-          while (> pos 0)
-          do (write-sequence buf out :end pos))))
-
 ;; CSS
 
 (defvar *style* "
@@ -98,7 +90,8 @@ a:link, a:visited {
         (with-overwrite-file (attachment-out attachment-dst
                               :element-type
                               (stream-element-type attachment-in))
-          (redirect-stream attachment-in attachment-out)))))
+          (redirect-stream attachment-in attachment-out
+                           :buffer-size *general-buffer-size*)))))
 
   (values))
 
