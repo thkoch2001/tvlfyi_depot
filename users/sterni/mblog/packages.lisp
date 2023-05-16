@@ -50,6 +50,7 @@
    :config)
   (:export :build-mblog)
   (:import-from :local-time :universal-to-timestamp)
+  (:import-from :mime4cl :redirect-stream)
   (:shadowing-import-from :common-lisp :list))
 
 (defpackage :cli
