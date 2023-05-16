@@ -45,7 +45,6 @@
   '(unsigned-byte 8))
 
 (defclass quoted-printable-decoder-stream (coder-input-stream-mixin quoted-printable-decoder) ())
-(defclass base64-decoder-stream (coder-input-stream-mixin base64-decoder) ())
 (defclass 8bit-decoder-stream (coder-input-stream-mixin 8bit-decoder) ())
 
 (defclass quoted-printable-encoder-stream (coder-output-stream-mixin quoted-printable-encoder) ())
@@ -262,7 +261,7 @@ be modified to match the :POSITION argument."
           (make-instance
            (ccase encoding
              (:quoted-printable 'quoted-printable-decoder-stream)
-             (:base64 'base64-decoder-stream))
+             (:base64 'qbase64:decode-stream))
            :underlying-stream portion-stream)
           portion-stream))))
 
