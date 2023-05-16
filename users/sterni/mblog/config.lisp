@@ -28,4 +28,4 @@
                     (setf ,name (funcall ,parser ,val-var-sym))))))))
 
 (define-configuration-variables
-  *general-buffer-size* 4096 #'parse-integer)
+  *general-buffer-size* (min 4096 qbase64:+max-bytes-length+) #'parse-integer)

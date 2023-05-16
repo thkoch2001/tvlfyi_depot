@@ -9,6 +9,7 @@ depot.nix.buildLisp.library {
     depot.third_party.lisp.flexi-streams
     depot.third_party.lisp.npg
     depot.third_party.lisp.trivial-gray-streams
+    depot.third_party.lisp.qbase64
   ];
 
   srcs = [
