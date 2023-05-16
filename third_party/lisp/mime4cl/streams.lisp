@@ -21,6 +21,22 @@
 
 (in-package :mime4cl)
 
+(defun flexi-stream-root-stream (stream)
+  "Return the non FLEXI-STREAM stream a given chain of FLEXI-STREAMs is based on."
+  (if (typep stream 'flexi-stream)
+      (flexi-stream-root-stream (flexi-stream-stream stream))
+      stream))
+
+(defun redirect-stream (in out &key (buffer-size 4096))
+  "Consume input stream IN and write all its content to output stream OUT.
+The streams' element types need to match."
+  (let ((buf (make-array buffer-size :element-type (stream-element-type in))))
+    (loop for pos = (read-sequence buf in)
+          while (> pos 0)
+          do (write-sequence buf out :end pos))))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
 (defclass coder-stream-mixin ()
   ((real-stream :type stream
                 :initarg :underlying-stream
@@ -264,11 +280,3 @@ be modified to match the :POSITION argument."
              (:base64 'qbase64:decode-stream))
            :underlying-stream portion-stream)
           portion-stream))))
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-(defun flexi-stream-root-stream (stream)
-  "Return the non FLEXI-STREAM stream a given chain of FLEXI-STREAMs is based on."
-  (if (typep stream 'flexi-stream)
-      (flexi-stream-root-stream (flexi-stream-stream stream))
-      stream))
