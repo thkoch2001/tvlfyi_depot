@@ -1,7 +1,7 @@
 ;;; ex-sclf.lisp --- subset of sclf used by mime4cl
 
 ;;;  Copyright (C) 2005-2010 by Walter C. Pelissero
-;;;  Copyright (C) 2022 The TVL Authors
+;;;  Copyright (C) 2022-2023 The TVL Authors
 
 ;;;  Author: sternenseemann <sternenseemann@systemli.org>
 ;;;  Project: mime4cl
@@ -33,9 +33,6 @@
 (defpackage :mime4cl-ex-sclf
   (:use :common-lisp)
   (:export
-   #:be
-   #:be*
-
    #:aif
    #:awhen
    #:aand
@@ -94,38 +91,16 @@ See also LET-GENSYMS."
 
 ;; CONTROL FLOW
 
-(defmacro be (&rest bindings-and-body)
-  "Less-parenthetic let."
-  (let ((bindings
-         (loop
-            while (and (symbolp (car bindings-and-body))
-                       (cdr bindings-and-body))
-            collect (list (pop bindings-and-body)
-                          (pop bindings-and-body)))))
-    `(let ,bindings
-       ,@bindings-and-body)))
-
-(defmacro be* (&rest bindings-and-body)
-  "Less-parenthetic let*."
-  (let ((bindings
-         (loop
-            while (and (symbolp (car bindings-and-body))
-                       (cdr bindings-and-body))
-            collect (list (pop bindings-and-body)
-                          (pop bindings-and-body)))))
-    `(let* ,bindings
-       ,@bindings-and-body)))
-
 (defmacro aif (test then &optional else)
-  `(be it ,test
-       (if it
-           ,then
-           ,else)))
+  `(let ((it ,test))
+     (if it
+         ,then
+         ,else)))
 
 (defmacro awhen (test &body then)
-  `(be it ,test
-       (when it
-         ,@then)))
+  `(let ((it ,test))
+     (when it
+       ,@then)))
 
 (defmacro aand (&rest args)
   (cond ((null args) t)
@@ -136,7 +111,7 @@ See also LET-GENSYMS."
   "Generic CASE macro.  Match VALUE to CASES as if by the normal CASE
 but use TEST as the comparison function, which defaults to EQUALP."
   (with-gensyms (val)
-    `(be ,val ,value
+    `(let ((,val ,value))
        ,(cons 'cond
               (mapcar #'(lambda (case-desc)
                           (destructuring-bind (vals &rest forms) case-desc
@@ -163,10 +138,10 @@ Accept any argument accepted by the POSITION function."
   "Split SEQUENCE at occurence of any element from BAG.
 Contiguous occurences of elements from BAG are considered atomic;
 so no empty sequence is returned."
-  (be len (length sequence)
+  (let ((len (length sequence)))
     (labels ((split-from (start)
                (unless (>= start len)
-                 (be sep (position-any bag sequence :start start :key key)
+                 (let ((sep (position-any bag sequence :start start :key key)))
                    (cond ((not sep)
                           (list (subseq sequence start)))
                          ((> sep start)
@@ -198,7 +173,7 @@ SKIP-EMPTY is true then filter out the empty substrings.  If ESCAPE is
 not nil then split at SEPARATOR only if it's not preceded by ESCAPE."
   (declare (type string string) (type character separator))
   (labels ((next-separator (beg)
-             (be pos (position separator string :start beg)
+             (let ((pos (position separator string :start beg)))
                (if (and escape
                         pos
                         (plusp pos)
@@ -235,7 +210,7 @@ nothing) between them."
           list))
 
 (defun string-starts-with (prefix string &optional (compare #'string=))
-  (be prefix-length (length prefix)
+  (let ((prefix-length (length prefix)))
     (and (>= (length string) prefix-length)
          (funcall compare prefix string :end2 prefix-length))))
 
@@ -275,7 +250,7 @@ nothing) between them."
 before FORMS.  Optionally POSITION can be set to the starting offset."
   (unless position
     (setf position (gensym)))
-  `(be ,position (file-position ,stream)
+  `(let ((,position (file-position ,stream)))
      (unwind-protect (progn ,@forms)
        (file-position ,stream ,position))))
 
@@ -288,7 +263,7 @@ ELEMENT-TYPE."
                       :if-does-not-exist (unless (eq :value if-does-not-exist)
                                            :error))
     (if in
-        (be seq (make-array (file-length in) :element-type element-type)
+        (let ((seq (make-array (file-length in) :element-type element-type)))
           (read-sequence seq in)
           seq)
         default)))
