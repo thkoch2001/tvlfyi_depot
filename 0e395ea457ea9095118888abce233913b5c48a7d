@@ -18,6 +18,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "4950fb14_8ac2a777",
+        "filename": "tvix/store/src/directoryservice/traverse.rs",
+        "patchSetId": 3
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2023-05-17T15:05:21Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "16adeb1b_fe0a28b0",
+      "revId": "0e395ea457ea9095118888abce233913b5c48a7d",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "0343f25a_542f7f44",
@@ -31,6 +49,24 @@
       "writtenOn": "2023-05-14T18:32:27Z",
       "side": 1,
       "message": "@tazjin any proposals?",
+      "revId": "0e395ea457ea9095118888abce233913b5c48a7d",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8420b479_6ebeb2c2",
+        "filename": "tvix/store/src/directoryservice/traverse.rs",
+        "patchSetId": 3
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2023-05-17T15:05:21Z",
+      "side": 1,
+      "message": "I don\u0027t have enough context of the other traversers etc., I think the naming should become more obvious once this has real callsites.",
+      "parentUuid": "0343f25a_542f7f44",
       "revId": "0e395ea457ea9095118888abce233913b5c48a7d",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
