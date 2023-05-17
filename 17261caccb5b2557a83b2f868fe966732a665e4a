@@ -47,6 +47,54 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "db7500b6_839283d4",
+        "filename": "tvix/store/src/import.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 139,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-05-17T12:40:55Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9257690d_2e117d0d",
+      "range": {
+        "startLine": 139,
+        "startChar": 28,
+        "endLine": 139,
+        "endChar": 29
+      },
+      "revId": "17261caccb5b2557a83b2f868fe966732a665e4a",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e135482e_957244aa",
+        "filename": "tvix/store/src/import.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 139,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-05-17T12:40:55Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f2de2f57_91d65f27",
+      "range": {
+        "startLine": 139,
+        "startChar": 4,
+        "endLine": 139,
+        "endChar": 11
+      },
+      "revId": "17261caccb5b2557a83b2f868fe966732a665e4a",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "92ff8a72_5e77c152",
@@ -60,6 +108,30 @@
       "writtenOn": "2023-05-17T12:26:05Z",
       "side": 1,
       "message": "duplicated sentence",
+      "range": {
+        "startLine": 147,
+        "startChar": 0,
+        "endLine": 147,
+        "endChar": 39
+      },
+      "revId": "17261caccb5b2557a83b2f868fe966732a665e4a",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4742222b_fd1d66c5",
+        "filename": "tvix/store/src/import.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 147,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-05-17T12:40:55Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "92ff8a72_5e77c152",
       "range": {
         "startLine": 147,
         "startChar": 0,
