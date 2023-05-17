@@ -138,7 +138,7 @@ in a stream of character."))
   (with-slots (encoder buffer-queue real-stream) stream
     (loop
        while (queue-empty-p buffer-queue)
-       do (be byte (read-byte real-stream nil)
+       do (let ((byte (read-byte real-stream nil)))
             (if byte
                 (encoder-write-byte encoder byte)
                 (progn
