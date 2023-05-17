@@ -1,7 +1,7 @@
 ;;;  mime4cl.lisp --- MIME primitives for Common Lisp
 
 ;;;  Copyright (C) 2005-2008, 2010 by Walter C. Pelissero
-;;;  Copyright (C) 2021 by the TVL Authors
+;;;  Copyright (C) 2021-2023 by the TVL Authors
 
 ;;;  Author: Walter C. Pelissero <walter@pelissero.de>
 ;;;  Project: mime4cl
@@ -187,7 +187,7 @@
   (make-input-adapter (mime-body mime-part)))
 
 (defun mime-body-length (mime-part)
-  (be body (mime-body mime-part)
+  (let ((body (mime-body mime-part)))
     ;; here the stream type is missing on purpose, because we may not
     ;; be able to size the length of a stream
     (etypecase body
@@ -299,12 +299,13 @@ semi-colons not within strings or comments."
 (defun parse-parameter (string)
   "Given a string like \"foo=bar\" return a pair (\"foo\" .
 \"bar\").  Return NIL if string is not parsable."
-  (be equal-position (position #\= string)
+  ;; TODO(sterni): when-let
+  (let ((equal-position (position #\= string)))
     (when equal-position
-      (be key (subseq string  0 equal-position)
+      (let ((key (subseq string  0 equal-position)))
         (if (= equal-position (1- (length string)))
             (cons key "")
-            (be value (string-trim-whitespace (subseq string (1+ equal-position)))
+            (let ((value (string-trim-whitespace (subseq string (1+ equal-position)))))
               (cons key
                     (if (and (> (length value) 1)
                              (char= #\" (elt value 0)))
@@ -313,8 +314,8 @@ semi-colons not within strings or comments."
                         ;; reader
                         (or (ignore-errors (read-from-string value))
                             (subseq value 1))
-                        (be end (or (position-if #'whitespace-p value)
-                                    (length value))
+                        (let ((end (or (position-if #'whitespace-p value)
+                                       (length value))))
                           (subseq value 0 end))))))))))
 
 (defun parse-content-type (string)
@@ -337,7 +338,7 @@ Example: (\"text\" \"plain\" ((\"charset\" . \"us-ascii\")...))."
 list.  The first element is the layout, the other elements are
 the optional parameters alist.
 Example: (\"inline\" (\"filename\" . \"doggy.jpg\"))."
-  (be parts (split-header-parts string)
+  (let ((parts (split-header-parts string)))
     (cons (car parts) (mapcan #'(lambda (parameter-string)
                                   (awhen (parse-parameter parameter-string)
                                     (list it)))
@@ -347,7 +348,7 @@ Example: (\"inline\" (\"filename\" . \"doggy.jpg\"))."
   "Parse STRING which should be a valid RFC822 message header and
 return two values: a string of the header name and a string of
 the header value."
-  (be colon (position #\: string)
+  (let ((colon (position #\: string)))
     (when colon
       (values (string-trim-whitespace (subseq string 0 colon))
               (string-trim-whitespace (subseq string (1+ colon)))))))
@@ -500,9 +501,9 @@ separated by PART-BOUNDARY."
   (encode-mime-body (mime-body part) stream))
 
 (defmethod encode-mime-body ((part mime-multipart) stream)
-  (be boundary (or (get-mime-type-parameter part :boundary)
-                   (setf (get-mime-type-parameter part :boundary)
-                         (choose-boundary (mime-parts part))))
+  (let ((boundary (or (get-mime-type-parameter part :boundary)
+                      (setf (get-mime-type-parameter part :boundary)
+                            (choose-boundary (mime-parts part))))))
     (dolist (p (mime-parts part))
       (format stream "~%--~A~%" boundary)
       (encode-mime-part p stream))
@@ -557,7 +558,7 @@ found in STREAM."
   ;; continuation line of a header we don't want to a header we want
   (loop
      with headers = '() and skip-header = nil
-     for line = (be line (read-line stream nil)
+     for line = (let ((line (read-line stream nil)))
                   ;; skip the Unix "From " header if present
                   (if (string-starts-with "From " line)
                       (read-line stream nil)
@@ -611,18 +612,18 @@ found in STREAM."
 (defgeneric decode-mime-body (part input-stream))
 
 (defmethod decode-mime-body ((part mime-part) (stream flexi-stream))
- (be base (flexi-stream-root-stream stream)
-   (if *lazy-mime-decode*
-       (setf (mime-body part)
-             (make-file-portion :data (etypecase base
-                                        (vector-stream
-                                         (flexi-streams::vector-stream-vector base))
-                                        (file-stream
-                                         (pathname base)))
-                                :encoding (mime-encoding part)
-                                :start (flexi-stream-position stream)
-                                :end (flexi-stream-bound stream)))
-       (call-next-method))))
+  (let ((base (flexi-stream-root-stream stream)))
+    (if *lazy-mime-decode*
+        (setf (mime-body part)
+              (make-file-portion :data (etypecase base
+                                         (vector-stream
+                                          (flexi-streams::vector-stream-vector base))
+                                         (file-stream
+                                          (pathname base)))
+                                 :encoding (mime-encoding part)
+                                 :start (flexi-stream-position stream)
+                                 :end (flexi-stream-bound stream)))
+        (call-next-method))))
 
 (defmethod decode-mime-body ((part mime-part) (stream file-stream))
   (if *lazy-mime-decode*
@@ -648,18 +649,18 @@ found in STREAM."
   "Decode STREAM according to PART characteristics and return a
 list of MIME parts."
   (save-file-excursion (stream)
-    (be offsets (index-multipart-parts stream (get-mime-type-parameter part :boundary))
+    (let ((offsets (index-multipart-parts stream (get-mime-type-parameter part :boundary))))
       (setf (mime-parts part)
             (mapcar #'(lambda (p)
                         (destructuring-bind (start . end) p
-                          (be *default-type* (if (eq :digest (mime-subtype part))
-                                                 '("message" "rfc822" ())
-                                                 '("text" "plain" (("charset" . "us-ascii"))))
-                              in (make-positioned-flexi-input-stream stream
-                                                                     :position start
-                                                                     :bound end
-                                                                     :ignore-close t)
-                              (read-mime-part in))))
+                          (let ((*default-type* (if (eq :digest (mime-subtype part))
+                                                    '("message" "rfc822" ())
+                                                    '("text" "plain" (("charset" . "us-ascii")))))
+                                (in (make-positioned-flexi-input-stream stream
+                                                                        :position start
+                                                                        :bound end
+                                                                        :ignore-close t)))
+                            (read-mime-part in))))
                     offsets)))))
 
 (defmethod decode-mime-body ((part mime-message) stream)
@@ -681,11 +682,11 @@ Return STRING itself if STRING is an unkown encoding."
        string))
 
 (defun header (name headers)
-  (be elt (assoc name headers :test #'string-equal)
+  (let ((elt (assoc name headers :test #'string-equal)))
     (values (cdr elt) (car elt))))
 
 (defun (setf header) (value name headers)
-  (be entry (assoc name headers :test #'string-equal)
+  (let ((entry (assoc name headers :test #'string-equal)))
     (unless entry
       (error "missing header ~A can't be set" name))
     (setf (cdr entry) value)))
@@ -723,16 +724,16 @@ guessed from the headers, use the *DEFAULT-TYPE*."
 
 (defun read-mime-part (stream)
   "Read mime part from STREAM.  Return a MIME-PART object."
-  (be headers (read-rfc822-headers stream
-                                   '(:mime-version :content-transfer-encoding :content-type
-                                     :content-disposition :content-description :content-id))
+  (let ((headers (read-rfc822-headers stream
+                                      '(:mime-version :content-transfer-encoding :content-type
+                                        :content-disposition :content-description :content-id))))
     (make-mime-part headers stream)))
 
 (defun read-mime-message (stream)
   "Main function to read a MIME message from a stream.  It
 returns a MIME-MESSAGE object."
-  (be headers (read-rfc822-headers stream)
-      *default-type* '("text" "plain" (("charset" . "us-ascii")))
+  (let ((headers (read-rfc822-headers stream))
+        (*default-type* '("text" "plain" (("charset" . "us-ascii")))))
     (flet ((hdr (what)
              (header what headers)))
       (destructuring-bind (type subtype parms)
@@ -787,7 +788,7 @@ returns a MIME-MESSAGE object."
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (defmethod make-encoded-body-stream ((part mime-bodily-part))
-  (be body (mime-body part)
+  (let ((body (mime-body part)))
     (make-instance (case (mime-encoding part)
                      (:base64
                       'base64-encoder-input-stream)
@@ -828,7 +829,7 @@ returns a MIME-MESSAGE object."
 
 ;; fall back method
 (defmethod mime-part-size ((part mime-part))
-  (be body (mime-body part)
+  (let ((body (mime-body part)))
     (typecase body
       (pathname
        (file-size body))
@@ -855,7 +856,7 @@ returns a MIME-MESSAGE object."
   (case (mime-subtype part)
     (:alternative
      ;; try to choose something simple to print or the first thing
-     (be parts (mime-parts part)
+     (let ((parts (mime-parts part)))
        (print-mime-part (or (find-if #'(lambda (part)
                                          (and (eq (class-of part) (find-class 'mime-text))
                                               (eq (mime-subtype part) :plain)))
@@ -869,7 +870,7 @@ returns a MIME-MESSAGE object."
 ;; because we don't know which one we should use.  Messages written in
 ;; anything but ASCII will likely be unreadable -wcp11/10/07.
 (defmethod print-mime-part ((part mime-text) (out stream))
-  (be body (mime-body part)
+  (let ((body (mime-body part)))
     (etypecase body
       (string
        (write-string body out))
@@ -923,8 +924,8 @@ second in MIME."))
 (defmethod find-mime-part-by-path ((part mime-multipart) path)
   (if (null path)
       part
-      (be parts (mime-parts part)
-          part-number (car path)
+      (let ((parts (mime-parts part))
+            (part-number (car path)))
         (if (<= 1 part-number (length parts))
             (find-mime-part-by-path (nth (1- (car path)) (mime-parts part)) (cdr path))
             (error "~S has just ~D subparts, but part ~D was requested (parts are enumerated base 1)."

@@ -1,7 +1,7 @@
 ;;;  address.lisp --- e-mail address parser
 
 ;;;  Copyright (C) 2007, 2008, 2009 by Walter C. Pelissero
-;;;  Copyright (C) 2022 The TVL Authors
+;;;  Copyright (C) 2022-2023 The TVL Authors
 
 ;;;  Author: Walter C. Pelissero <walter@pelissero.de>
 ;;;  Project: mime4cl
@@ -219,14 +219,14 @@
   (not (find c " ()\"[]@.<>:;,")))
 
 (defun read-atext (first-character cursor)
-  (be string (with-output-to-string (out)
-               (write-char first-character out)
-               (loop
-                  for c = (read-char (cursor-stream cursor) nil)
-                  while (and c (atom-component-p c))
-                  do (write-char c out)
-                  finally (when c
-                            (unread-char c (cursor-stream cursor)))))
+  (let ((string (with-output-to-string (out)
+                  (write-char first-character out)
+                  (loop
+                    for c = (read-char (cursor-stream cursor) nil)
+                    while (and c (atom-component-p c))
+                    do (write-char c out)
+                    finally (when c
+                              (unread-char c (cursor-stream cursor)))))))
     (make-token :type 'atext
                 :value string
                 :position (incf (cursor-position cursor)))))
@@ -236,7 +236,7 @@
            (make-token :type 'keyword
                        :value (string c)
                        :position (incf (cursor-position cursor)))))
-    (be in (cursor-stream cursor)
+    (let ((in (cursor-stream cursor)))
       (loop
          for c = (read-char in nil)
          while c
@@ -259,7 +259,7 @@
   "Return the list of tokens produced by a lexical analysis of
 STRING.  These are the tokens that would be seen by the parser."
   (with-input-from-string (stream string)
-    (be cursor (make-cursor :stream stream)
+    (let ((cursor (make-cursor :stream stream)))
       (loop
          for tokens = (read-next-tokens cursor)
          until (endp tokens)
@@ -282,19 +282,19 @@ addresses only."
 MAILBOX-GROUPs.  If STRING is unparsable return NIL.  If
 NO-GROUPS is true, return a flat list of mailboxes throwing away
 the group containers, if any."
-  (be grammar (force define-grammar)
+  (let ((grammar (force define-grammar)))
     (with-input-from-string (stream string)
-      (be* cursor (make-cursor :stream stream)
-           mailboxes (ignore-errors	; ignore parsing errors
-                       (parse grammar 'address-list cursor))
+      (let* ((cursor (make-cursor :stream stream))
+             (mailboxes (ignore-errors  ; ignore parsing errors
+                         (parse grammar 'address-list cursor))))
         (if no-groups
             (mailboxes-only mailboxes)
             mailboxes)))))
 
 (defun debug-addresses (string)
   "More or less like PARSE-ADDRESSES, but don't ignore parsing errors."
-  (be grammar (force define-grammar)
+  (let ((grammar (force define-grammar)))
     (with-input-from-string (stream string)
-      (be cursor (make-cursor :stream stream)
+      (let ((cursor (make-cursor :stream stream)))
         (parse grammar 'address-list cursor)))))
 
