@@ -1,6 +1,7 @@
 ;;;  endec.lisp --- encoder/decoder functions
 
 ;;;  Copyright (C) 2005-2008, 2010 by Walter C. Pelissero
+;;;  Copyright (C) 2023 by The TVL Authors
 
 ;;;  Author: Walter C. Pelissero <walter@pelissero.de>
 ;;;  Project: mime4cl
@@ -161,7 +162,7 @@ It should expect a character as its only argument."))
        for byte = (decoder-read-byte decoder)
        unless byte
        do (return-from decoder-read-line nil)
-       do (be c (code-char byte)
+       do (let ((c (code-char byte)))
             (cond ((char= c #\return)
                    ;; skip the newline
                    (decoder-read-byte decoder)
@@ -198,7 +199,7 @@ value."
              (save (c)
                (saveb (char-code c)))
              (push-next ()
-               (be c (funcall input-function)
+               (let ((c (funcall input-function)))
                  (declare (type (or null character) c))
                  (cond ((not c))
                        ((or (char= c #\space)
@@ -206,7 +207,7 @@ value."
                         (save c)
                         (push-next))
                        ((char= c #\=)
-                        (be c1 (funcall input-function)
+                        (let ((c1 (funcall input-function)))
                           (cond ((not c1)
                                  (save #\=))
                                 ((char= c1 #\return)
@@ -221,7 +222,7 @@ value."
                                  (push-next))
                                 (t
                                  ;; hexadecimal sequence: get the 2nd digit
-                                 (be c2 (funcall input-function)
+                                 (let ((c2 (funcall input-function)))
                                    (if c2
                                        (aif (parse-hex c1 c2)
                                             (saveb it)
@@ -271,10 +272,10 @@ binary output OUT the decoded stream of bytes."
 (defmacro make-stream-to-sequence-decoder (decoder-class input-form &key parser-errors)
   "Decode the character stream STREAM and return a sequence of bytes."
   (with-gensyms (output-sequence)
-    `(be ,output-sequence (make-array 0
-                                      :element-type '(unsigned-byte 8)
-                                      :fill-pointer 0
-                                      :adjustable t)
+    `(let ((,output-sequence (make-array 0
+                                         :element-type '(unsigned-byte 8)
+                                         :fill-pointer 0
+                                         :adjustable t)))
        (make-decoder-loop ,decoder-class ,input-form
                           (vector-push-extend byte ,output-sequence)
                           :parser-errors ,parser-errors)
@@ -377,7 +378,7 @@ characters quoted printables encoded."
 (defun encode-quoted-printable-sequence-to-stream (sequence stream &key (start 0) (end (length sequence)))
   "Encode the sequence of bytes SEQUENCE and write to STREAM a
 quoted printable sequence of characters."
-  (be i start
+  (let ((i start))
     (make-encoder-loop quoted-printable-encoder
      (when (< i end)
        (prog1 (elt sequence i)
@@ -470,7 +471,7 @@ character stream."
 (defun encode-base64-sequence-to-stream (sequence stream &key (start 0) (end (length sequence)))
   "Encode the sequence of bytes SEQUENCE and write to STREAM the
 Base64 character sequence."
-  (be i start
+  (let ((i start))
     (make-encoder-loop base64-encoder
                        (when (< i end)
                          (prog1 (elt sequence i)
@@ -500,7 +501,7 @@ return it."
                   for c = (funcall input-function)
                   when (or (not c) (char= #\= c))
                   do (return-from decoder-read-byte nil)
-                  do (be sextet (aref +base64-decode-table+ (char-code c))
+                  do (let ((sextet (aref +base64-decode-table+ (char-code c))))
                        (unless (= sextet 65) ; ignore unrecognised characters
                          (return sextet)))))
              (push6 (sextet)

@@ -63,7 +63,7 @@ file, otherwise *TMP-FILE-DEFAULTS* is used."
   "Execute BODY within a dynamic extent where STREAM is bound to
 a STREAM open on a unique temporary file name.  OPEN-TEMP-ARGS are
 passed verbatim to OPEN-TEMP-FILE."
-  `(be ,stream (open-temp-file ,@open-temp-args)
+  `(let ((,stream (open-temp-file ,@open-temp-args)))
      (unwind-protect
           (progn ,@body)
        (close ,stream)
