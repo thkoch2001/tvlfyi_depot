@@ -22,19 +22,21 @@
 
 (in-package :mime4cl)
 
+(defun redirect-stream (in out &key (buffer-size 4096))
+  "Consume input stream IN and write all its content to output stream OUT.
+The streams' element types need to match."
+  (let ((buf (make-array buffer-size :element-type (stream-element-type in))))
+    (loop for pos = (read-sequence buf in)
+          while (> pos 0)
+          do (write-sequence buf out :end pos))))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 ;; Thank you SBCL for rendering constants totally useless!
 (defparameter +base64-encode-table+
   "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=")
 
-(defparameter +base64-decode-table+
-  (let ((da (make-array 256 :element-type '(unsigned-byte 8) :initial-element 65)))
-    (dotimes (i 64)
-      (setf (aref da (char-code (char +base64-encode-table+ i))) i))
-    da))
-
-(declaim (type (simple-array (unsigned-byte 8)) +base64-decode-table+)
-         (type simple-string +base64-encode-table+))
+(declaim (type simple-string +base64-encode-table+))
 
 (defvar *base64-line-length* 76
   "Maximum length of the encoded base64 line.  NIL means it can
@@ -484,60 +486,34 @@ return it."
   (with-output-to-string (out)
     (encode-base64-sequence-to-stream sequence out :start start :end end)))
 
-(defclass base64-decoder (parsing-decoder)
-  ((bitstore :initform 0
-             :type fixnum)
-   (bytecount :initform 0 :type fixnum))
-  (:documentation
-   "Class for Base64 decoder input streams."))
-
-(defmethod decoder-read-byte ((decoder base64-decoder))
-  (declare (optimize (speed 3) (safety 0) (debug 0)))
-  (with-slots (bitstore bytecount input-function) decoder
-    (declare (type fixnum bitstore bytecount)
-             (type function input-function))
-    (labels ((in6 ()
-               (loop
-                  for c = (funcall input-function)
-                  when (or (not c) (char= #\= c))
-                  do (return-from decoder-read-byte nil)
-                  do (let ((sextet (aref +base64-decode-table+ (char-code c))))
-                       (unless (= sextet 65) ; ignore unrecognised characters
-                         (return sextet)))))
-             (push6 (sextet)
-               (declare (type fixnum sextet))
-               (setf bitstore
-                     (logior sextet (the fixnum (ash bitstore 6))))))
-      (case bytecount
-        (0
-         (setf bitstore (in6))
-         (push6 (in6))
-         (setf bytecount 1)
-         (ash bitstore -4))
-        (1
-         (push6 (in6))
-         (setf bytecount 2)
-         (logand #xFF (ash bitstore -2)))
-        (2
-         (push6 (in6))
-         (setf bytecount 0)
-         (logand #xFF bitstore))))))
-
 (defun decode-base64-stream (in out &key parser-errors)
   "Read from IN a stream of characters Base64 encoded and write
 to OUT a stream of decoded bytes."
-  (make-decoder-loop base64-decoder
-                     (read-byte in nil) (write-byte byte out)
-                     :parser-errors parser-errors))
+  ;; parser-errors are ignored for base64
+  (declare (ignore parser-errors))
+  (redirect-stream (make-instance 'qbase64:decode-stream
+                                  :underlying-stream in)
+                   out))
 
 (defun decode-base64-stream-to-sequence (stream &key parser-errors)
-  (make-stream-to-sequence-decoder base64-decoder
-                                   (read-char stream nil)
-                                   :parser-errors parser-errors))
-
-(defun decode-base64-string (string &key (start 0) (end (length string)) parser-errors)
-  (with-input-from-string (in string :start start :end end)
-    (decode-base64-stream-to-sequence in :parser-errors parser-errors)))
+  "Read Base64 characters from STREAM and return result of decoding them as a
+binary sequence."
+  ;; parser-errors are ignored for base64
+  (declare (ignore parser-errors))
+  (let* ((buffered-size 4096)
+         (dstream (make-instance 'qbase64:decode-stream
+                                 :underlying-stream stream))
+         (output-seq (make-array buffered-size
+                                 :element-type '(unsigned-byte 8)
+                                 :adjustable t)))
+    (loop for cap = (array-dimension output-seq 0)
+          for pos = (read-sequence output-seq dstream :start (or pos 0))
+          if (>= pos cap)
+            do (adjust-array output-seq (+ cap buffered-size))
+          else
+            do (progn
+                 (adjust-array output-seq pos)
+                 (return output-seq)))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
@@ -565,8 +541,8 @@ to OUT a stream of decoded bytes."
      (decode-quoted-printable-string string
                                      :parser-errors parser-errors-p))
     (:base64
-     (decode-base64-string string
-                           :parser-errors parser-errors-p))
+     ;; parser-errors-p is unused in base64
+     (qbase64:decode-string string))
     (otherwise
      (map '(vector (unsigned-byte 8)) #'char-code string))))
 
@@ -650,7 +626,7 @@ method of RFC2047 and return a sequence of bytes."
 bytes."
   (gcase (encoding string-equal)
     ("Q" (decode-quoted-printable-RFC2047-string string :start start :end end))
-    ("B" (decode-base64-string string :start start :end end))
+    ("B" (qbase64:decode-string (subseq string start end)))
     (t string)))
 
 (defun parse-RFC2047-text (text)

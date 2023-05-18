@@ -27,14 +27,6 @@
       (flexi-stream-root-stream (flexi-stream-stream stream))
       stream))
 
-(defun redirect-stream (in out &key (buffer-size 4096))
-  "Consume input stream IN and write all its content to output stream OUT.
-The streams' element types need to match."
-  (let ((buf (make-array buffer-size :element-type (stream-element-type in))))
-    (loop for pos = (read-sequence buf in)
-          while (> pos 0)
-          do (write-sequence buf out :end pos))))
-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (defclass coder-stream-mixin ()
