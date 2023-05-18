@@ -20,7 +20,7 @@ pub use errors::{DerivationError, OutputError};
 pub use output::Output;
 
 #[derive(Clone, Debug, Eq, PartialEq, Serialize, Deserialize)]
-pub struct DerivationPoly<DrvPath> {
+pub struct DerivationPoly<DrvRef> {
     #[serde(rename = "args")]
     pub arguments: Vec<String>,
 
@@ -30,9 +30,9 @@ pub struct DerivationPoly<DrvPath> {
     pub environment: BTreeMap<String, String>,
 
     #[serde(rename = "inputDrvs")]
-    #[serde(bound(serialize = "DrvPath: _serde::Serialize"))]
-    #[serde(bound(deserialize = "DrvPath: _serde::Deserialize<'de> + Ord"))]
-    pub input_derivations: BTreeMap<DrvPath, BTreeSet<String>>,
+    #[serde(bound(serialize = "DrvRef: _serde::Serialize"))]
+    #[serde(bound(deserialize = "DrvRef: _serde::Deserialize<'de> + Ord"))]
+    pub input_derivations: BTreeMap<DrvRef, BTreeSet<String>>,
 
     #[serde(rename = "inputSrcs")]
     pub input_sources: BTreeSet<StorePath>,
@@ -56,7 +56,7 @@ impl<DrvHash> Default for DerivationPoly<DrvHash> {
     }
 }
 
-impl<DrvPath: write::WriteDrvReference> DerivationPoly<DrvPath> {
+impl<DrvRef: write::WriteDrvReference> DerivationPoly<DrvRef> {
     /// write the Derivation to the given [std::fmt::Write], in ATerm format.
     ///
     /// The only errors returns are these when writing to the passed writer.

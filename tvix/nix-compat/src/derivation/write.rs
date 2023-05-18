@@ -117,9 +117,9 @@ impl WriteDrvReference for String {
     }
 }
 
-pub fn write_input_derivations<DrvPath: WriteDrvReference>(
+pub fn write_input_derivations<DrvRef: WriteDrvReference>(
     writer: &mut impl Write,
-    input_derivations: &BTreeMap<DrvPath, BTreeSet<String>>,
+    input_derivations: &BTreeMap<DrvRef, BTreeSet<String>>,
 ) -> Result<(), fmt::Error> {
     writer.write_char(COMMA)?;
     writer.write_char(BRACKET_OPEN)?;
