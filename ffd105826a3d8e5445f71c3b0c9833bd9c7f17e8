@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5da91b91_12b8b484",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 20
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-05-18T10:46:06Z",
+      "side": 1,
+      "message": "While this now works, I still want to address some of the code smell in there.",
+      "revId": "ffd105826a3d8e5445f71c3b0c9833bd9c7f17e8",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0d6a263e_3acd8464",
+        "filename": "tvix/store/src/bin/tvix-store.rs",
+        "patchSetId": 20
+      },
+      "lineNbr": 132,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-05-18T10:46:06Z",
+      "side": 1,
+      "message": "address this",
+      "revId": "ffd105826a3d8e5445f71c3b0c9833bd9c7f17e8",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e9593e43_fdcec75b",
+        "filename": "tvix/store/src/store_io.rs",
+        "patchSetId": 20
+      },
+      "lineNbr": 304,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-05-18T10:46:06Z",
+      "side": 1,
+      "message": "update reference in comment",
+      "revId": "ffd105826a3d8e5445f71c3b0c9833bd9c7f17e8",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
