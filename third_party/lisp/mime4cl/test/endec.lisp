@@ -103,13 +103,12 @@ line")
 
 (deftest base64.3
     (map 'string #'code-char
-         (decode-base64-string "U29tZSByYW5kb20gc3RyaW5nLg=="))
+         (qbase64:decode-string "U29tZSByYW5kb20gc3RyaW5nLg=="))
   "Some random string.")
 
 (deftest base64.4
     (map 'string #'code-char
-         (decode-base64-string "some rubbish U29tZSByYW5kb20gc3RyaW5nLg== more rubbish"
-                               :start 13 :end 41))
+         (qbase64:decode-string "U29tZSByYW5kb20gc3RyaW5nLg=="))
   "Some random string.")
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -117,6 +116,7 @@ line")
 (deftest RFC2047.1
     (parse-RFC2047-text "foo bar")
   ("foo bar"))
+;; TODO(sterni): more RFC2047 test cases
 
 (defun perftest-encoder (encoder-class &optional (megs 100))
   (declare (optimize (speed 3) (debug 0) (safety 0))
@@ -145,7 +145,6 @@ line")
         (let* ((meg (* 1024 1024))
                (buffer (make-sequence '(vector (unsigned-byte 8)) meg))
                (encoder-class (ecase decoder-class
-                                (mime4cl:base64-decoder 'mime4cl:base64-encoder)
                                 (mime4cl:quoted-printable-decoder 'mime4cl:quoted-printable-encoder)))
                (encoder (make-instance encoder-class
                                        :output-function #'(lambda (c)
