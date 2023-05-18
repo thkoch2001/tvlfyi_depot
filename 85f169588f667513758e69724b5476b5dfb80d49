@@ -108,6 +108,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "2e7101a6_48ac5e60",
+        "filename": "tvix/cli/src/tvix_io.rs",
+        "patchSetId": 3
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-05-18T12:23:56Z",
+      "side": 1,
+      "message": "What does tvix-compatible mean in this case? Compatible with how tvix is designed? That\u0027s a moving target.\n\nAlso, as explained in https://cl.tvl.fyi/c/depot/+/8579/comment/23130a79_693e95ac/, resolving `__corepkgs__` will make it Tvixbolt-compatible. Maybe these two things should be separate wrappers in the future.\n\nI\u0027m not saying we should do the splitting now, but I\u0027d like to at least have that idea in the comment, when we get back to this.\n\nThere\u0027s some interest from hsjobeki in evaluating nixpkgs from tvixbolt, and we don\u0027t need a real filesystem, but just the CorepkgsIO part, wrapping something that understands how to lookup paths in a given nixpkgs snapshot.",
+      "parentUuid": "1faccb24_9c83cfcc",
+      "revId": "85f169588f667513758e69724b5476b5dfb80d49",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "f56f062e_223bf382",
         "filename": "tvix/cli/src/tvix_io.rs",
         "patchSetId": 3
@@ -172,6 +190,24 @@
       "side": 1,
       "message": "\u003e (equality, rather than a prefix check)?\n\nThis only works if you do a lossy conversion, which opens up for theoretical weird edge-cases like `/__corepkgs__\u003cunprintable character\u003e/...`. I\u0027d rather keep this as is for now and switch it out later when we turn paths into the saner structure suggested by grfn.\n\n\u003e In the comment above, pls also refer to the place where this gets replaced to look like this, so it\u0027s easy to find the counterpart.\n\nDone.\n\n\u003e On that location, please also add a TODO pointing to a bug to thread through some newtype/enum, which can either be the \"fetchurl from corepkgs marker\" or a plain path.\n\nI\u0027m not convinced this is useful, we can\u0027t get around having to string-match the `nix` item on the NIX_PATH (as that is what\u0027s happening in nixpkgs), so what sort of intermediate structure we carry is really not that relevant. It\u0027s also not really a problem of the evaluator, where NIX_PATH resolution occurs, as someone might want to use the evaluator in a situation where nixpkgs is not involved and `nix` actually points to something else.",
       "parentUuid": "23130a79_693e95ac",
+      "revId": "85f169588f667513758e69724b5476b5dfb80d49",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9d63771f_c160c6ae",
+        "filename": "tvix/cli/src/tvix_io.rs",
+        "patchSetId": 3
+      },
+      "lineNbr": 61,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-05-18T12:23:56Z",
+      "side": 1,
+      "message": "\u003e when we turn paths into the saner structure suggested by grfn.\n\nWhere is this suggestion, can you link to it from there? I\u0027d guess it\u0027s https://b.tvl.fyi/issues/189, linking to https://blog.burntsushi.net/bstr/.\n\nI agree paths are very annoying to deal with, and I\u0027m pretty certain we need to accept arbitrary paths as bytes.\n\nRegarding the \"override \u003cnix\" thing:\n\nIn later versions, Nix doesn\u0027t support pointing `nix` to something else anymore,and I doubt there\u0027s a real usecase for this, but sure.",
+      "parentUuid": "6e969aa9_de63c893",
       "revId": "85f169588f667513758e69724b5476b5dfb80d49",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
