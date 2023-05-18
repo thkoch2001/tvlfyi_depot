@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b25147a9_9be2eb78",
+        "filename": "tvix/store/src/store_io.rs",
+        "patchSetId": 22
+      },
+      "lineNbr": 173,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-05-18T14:23:10Z",
+      "side": 1,
+      "message": "I\u0027m not sure, we might want to have this function logic somewhere in `nix-compat/src/store_path/utils.rs`, or `nix-compat/src/derivation`, WDYT?",
+      "revId": "8cf620f3dc100cd17ec4d7ade9eec2a0378e2154",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6f788205_8b132129",
+        "filename": "tvix/store/src/store_io.rs",
+        "patchSetId": 22
+      },
+      "lineNbr": 197,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-05-18T14:23:10Z",
+      "side": 1,
+      "message": "That\u0027s what I was referring to in https://cl.tvl.fyi/c/depot/+/8412/comments/bd650697_5ac98eb1.",
+      "revId": "8cf620f3dc100cd17ec4d7ade9eec2a0378e2154",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
