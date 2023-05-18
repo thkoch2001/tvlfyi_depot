@@ -18,6 +18,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "10f92a74_78d2028a",
+        "filename": "tvix/store/src/bin/tvix-store.rs",
+        "patchSetId": 22
+      },
+      "lineNbr": 139,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-05-18T16:57:43Z",
+      "side": 1,
+      "message": "Done, I changed import_path_with… to still do the PathInfo upload, and return the PathInfo returned after the put, which might contain additional signatures.",
+      "parentUuid": "7c4a2612_e9df0090",
+      "revId": "8cf620f3dc100cd17ec4d7ade9eec2a0378e2154",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "b25147a9_9be2eb78",
