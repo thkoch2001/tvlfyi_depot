@@ -16,6 +16,24 @@
       "message": "I thought about this again, and especially during https://cl.tvl.fyi/c/depot/+/8561.\n\n`StorePath` is in `nix_compat`, as is `Derivation`, and there\u0027s been one or two occurences where having the calculated derivation output paths being strings became annoying.\n\nWould you be up to rebase this and get CI to pass?",
       "revId": "3924b05c29404ce4b07fc0d4993d2a43ef70950e",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d9f48e1c_f806c87d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000075
+      },
+      "writtenOn": "2023-05-18T23:20:48Z",
+      "side": 1,
+      "message": "Yay! Rebased, and finally got it working locally!",
+      "parentUuid": "bd650697_5ac98eb1",
+      "revId": "3924b05c29404ce4b07fc0d4993d2a43ef70950e",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
