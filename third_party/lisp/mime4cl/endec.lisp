@@ -524,17 +524,6 @@ binary sequence."
      while c
      do (write-byte (char-code c) out)))
 
-(defun decode-stream (in out encoding &key parser-errors-p)
-  (gcase (encoding string-equal)
-    (:quoted-printable
-     (decode-quoted-printable-stream in out
-                                     :parser-errors parser-errors-p))
-    (:base64
-     (decode-base64-stream in out
-                           :parser-errors parser-errors-p))
-    (otherwise
-     (dump-stream-binary in out))))
-
 (defun decode-string (string encoding &key parser-errors-p)
   (gcase (encoding string-equal)
     (:quoted-printable
