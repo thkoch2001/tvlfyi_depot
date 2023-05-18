@@ -66,8 +66,6 @@
            #:decode-quoted-printable-string
            #:encode-quoted-printable-stream
            #:encode-quoted-printable-sequence
-           #:decode-base64-stream
-           #:decode-base64-string
            #:encode-base64-stream
            #:encode-base64-sequence
            #:parse-RFC2047-text
@@ -83,7 +81,6 @@
            #:with-input-from-mime-body-stream
            ;; endec.lisp
            #:base64-encoder
-           #:base64-decoder
            #:null-encoder
            #:null-decoder
            #:byte-encoder
