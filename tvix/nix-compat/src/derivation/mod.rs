@@ -95,9 +95,9 @@ pub type Derivation = DerivationPoly<StorePath>;
 
 /// This is used for hashing derivations modulo differences in fixed output derivations.
 ///
-/// The "modulo" part works by substiting drv paths for a different string, where two different
-/// fixed output derivations with the same output hash get the same string.
-pub type PreDerivation = DerivationPoly<String>;
+/// The "modulo" part works by substiting drv paths for a different hashes, where two different
+/// fixed output derivations with the same output hash get the same hash.
+pub type PreDerivation = DerivationPoly<NixHash>;
 
 impl Derivation {
     /// Returns the drv path of a [Derivation] struct.
@@ -174,16 +174,14 @@ impl Derivation {
         let digest = self.fod_digest().unwrap_or({
             // This is a new map from derivation_or_fod_hash.digest (as lowerhex)
             // to list of output names
-            let mut replaced_input_derivations: BTreeMap<String, BTreeSet<String>> =
+            let mut replaced_input_derivations: BTreeMap<NixHash, BTreeSet<String>> =
                 BTreeMap::new();
 
             // For each input_derivation, look up the
-            // derivation_or_fod_hash, and replace the derivation path with it's HEXLOWER
-            // digest.
-            // This is not the [NixHash::to_nix_hash_string], but without the sha256: prefix).
+            // derivation_or_fod_hash, and replace the derivation path with it.
             for (drv_path, output_names) in &self.input_derivations {
                 replaced_input_derivations.insert(
-                    data_encoding::HEXLOWER.encode(&fn_get_derivation_or_fod_hash(drv_path).digest),
+                    fn_get_derivation_or_fod_hash(drv_path),
                     output_names.clone(),
                 );
             }

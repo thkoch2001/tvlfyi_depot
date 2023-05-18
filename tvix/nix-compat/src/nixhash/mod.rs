@@ -10,7 +10,7 @@ pub use with_mode::NixHashWithMode;
 
 /// Nix allows specifying hashes in various encodings, and magically just
 /// derives the encoding.
-#[derive(Clone, Debug, Eq, PartialEq)]
+#[derive(Clone, Debug, Eq, PartialEq, Ord, PartialOrd)]
 pub struct NixHash {
     pub digest: Vec<u8>,
 

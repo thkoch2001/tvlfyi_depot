@@ -6,6 +6,7 @@
 use crate::derivation::output::Output;
 use crate::derivation::string_escape::escape_string;
 use crate::store_path::StorePath;
+use crate::nixhash::NixHash;
 use std::collections::BTreeSet;
 use std::{collections::BTreeMap, fmt, fmt::Write};
 
@@ -105,15 +106,12 @@ impl WriteDrvReference for StorePath {
 }
 
 /// This is used for a [PreDerivation]
-impl WriteDrvReference for str {
+///
+/// This is the [NixHash]'s HEXLOWER digest. This is not the
+/// [NixHash::to_nix_hash_string], but without the sha256: prefix).
+impl WriteDrvReference for NixHash {
     fn write_drv_reference(&self, writer: &mut impl Write) -> Result<(), fmt::Error> {
-        writer.write_str(self)
-    }
-}
-
-impl WriteDrvReference for String {
-    fn write_drv_reference(&self, writer: &mut impl Write) -> Result<(), fmt::Error> {
-        <str as WriteDrvReference>::write_drv_reference(self, writer)
+        writer.write_str(&data_encoding::HEXLOWER.encode(&self.digest))
     }
 }
 
