@@ -18,6 +18,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "6a96b47e_b9f14b6a",
+        "filename": "tvix/cli/src/tvix_io.rs",
+        "patchSetId": 3
+      },
+      "lineNbr": 3,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2023-05-18T11:06:42Z",
+      "side": 1,
+      "message": "It\u0027s not impossible that there\u0027s something that will need to be added here later, but I\u0027ll update this as a list of the current things it does.",
+      "parentUuid": "c814f561_336d1b17",
+      "revId": "85f169588f667513758e69724b5476b5dfb80d49",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "4d6b61d7_dd9ccd4f",
@@ -31,6 +49,24 @@
       "writtenOn": "2023-05-18T10:43:52Z",
       "side": 1,
       "message": "Explain why ;-)",
+      "revId": "85f169588f667513758e69724b5476b5dfb80d49",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4d4599ac_e9eb6a03",
+        "filename": "tvix/cli/src/tvix_io.rs",
+        "patchSetId": 3
+      },
+      "lineNbr": 5,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2023-05-18T11:06:42Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4d6b61d7_dd9ccd4f",
       "revId": "85f169588f667513758e69724b5476b5dfb80d49",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
@@ -52,6 +88,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "1faccb24_9c83cfcc",
+        "filename": "tvix/cli/src/tvix_io.rs",
+        "patchSetId": 3
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2023-05-18T11:06:42Z",
+      "side": 1,
+      "message": "No, that\u0027s not a good name. In the interface of this the internal details of which problems this solves do not matter to the user. At the call-site, you don\u0027t think \"I need refscanning for plain paths\", you think \"I need to make my IO implementation Tvix-compatible\".",
+      "parentUuid": "4df203a1_49858803",
+      "revId": "85f169588f667513758e69724b5476b5dfb80d49",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "f56f062e_223bf382",
@@ -69,6 +123,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "19fe7684_7d18cede",
+        "filename": "tvix/cli/src/tvix_io.rs",
+        "patchSetId": 3
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2023-05-18T11:06:42Z",
+      "side": 1,
+      "message": "It was `underlying` somewhere else, but there really isn\u0027t a pattern for this as long as Rust has no official delegation support.",
+      "parentUuid": "f56f062e_223bf382",
+      "revId": "85f169588f667513758e69724b5476b5dfb80d49",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "23130a79_693e95ac",
@@ -82,6 +154,24 @@
       "writtenOn": "2023-05-18T10:43:52Z",
       "side": 1,
       "message": "Shouldn\u0027t this just be something like `if path.to_string() \u003d\u003d \"/__corepkgs__/fetchurl.nix\" {` (equality, rather than a prefix check)?\n\nWe only deal with `fetchurl.nix`, nothing else.\n\nIn the comment above, pls also refer to the place where this gets replaced to look like this, so it\u0027s easy to find the counterpart.\n\nOn that location, please also add a TODO pointing to a bug to thread through some newtype/enum, which can either be the \"fetchurl from corepkgs marker\" or a plain path.\n\nI\u0027d probably go even so far and say the bug should request splitting this wrapper to two different ones, even in a pure eval context we can deal with `\u003cnix/fetchurl.nix\u003e`.",
+      "revId": "85f169588f667513758e69724b5476b5dfb80d49",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6e969aa9_de63c893",
+        "filename": "tvix/cli/src/tvix_io.rs",
+        "patchSetId": 3
+      },
+      "lineNbr": 61,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2023-05-18T11:06:42Z",
+      "side": 1,
+      "message": "\u003e (equality, rather than a prefix check)?\n\nThis only works if you do a lossy conversion, which opens up for theoretical weird edge-cases like `/__corepkgs__\u003cunprintable character\u003e/...`. I\u0027d rather keep this as is for now and switch it out later when we turn paths into the saner structure suggested by grfn.\n\n\u003e In the comment above, pls also refer to the place where this gets replaced to look like this, so it\u0027s easy to find the counterpart.\n\nDone.\n\n\u003e On that location, please also add a TODO pointing to a bug to thread through some newtype/enum, which can either be the \"fetchurl from corepkgs marker\" or a plain path.\n\nI\u0027m not convinced this is useful, we can\u0027t get around having to string-match the `nix` item on the NIX_PATH (as that is what\u0027s happening in nixpkgs), so what sort of intermediate structure we carry is really not that relevant. It\u0027s also not really a problem of the evaluator, where NIX_PATH resolution occurs, as someone might want to use the evaluator in a situation where nixpkgs is not involved and `nix` actually points to something else.",
+      "parentUuid": "23130a79_693e95ac",
       "revId": "85f169588f667513758e69724b5476b5dfb80d49",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
