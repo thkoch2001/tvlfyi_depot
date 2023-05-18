@@ -7,7 +7,6 @@ in
 
   home.packages = with pkgs; [
     rustup
-    rust-analyzer
     cargo-edit
     cargo-expand
     cargo-rr
