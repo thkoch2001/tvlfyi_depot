@@ -69,6 +69,7 @@
            #:encode-base64-stream
            #:encode-base64-sequence
            #:parse-RFC2047-text
+           #:decode-RFC2047
            #:parse-RFC822-header
            #:read-RFC822-headers
            #:time-RFC822-string

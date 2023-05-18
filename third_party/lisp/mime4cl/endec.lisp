@@ -650,7 +650,7 @@ sequence, a charset string indicating the original coding."
 
 (defun decode-RFC2047 (text)
   "Decode TEXT into a fully decoded string. Whenever a non ASCII part is
-  encountered, try to decode it using babel, otherwise signal an error."
+  encountered, try to decode it using flexi-streams, otherwise signal an error."
   (flet ((decode-part (part)
            (etypecase part
              (cons (flexi-streams:octets-to-string

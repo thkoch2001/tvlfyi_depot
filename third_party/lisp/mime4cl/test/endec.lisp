@@ -116,7 +116,26 @@ line")
 (deftest RFC2047.1
     (parse-RFC2047-text "foo bar")
   ("foo bar"))
-;; TODO(sterni): more RFC2047 test cases
+
+;; from RFC2047 section 8
+(deftest RFC2047.2
+    (decode-RFC2047 "=?US-ASCII?Q?Keith_Moore?= <moore@cs.utk.edu>")
+  "Keith Moore <moore@cs.utk.edu>")
+
+;; from RFC2047 section 8
+(deftest RFC2047.3
+    (decode-RFC2047 "=?ISO-8859-1?Q?Olle_J=E4rnefors?=")
+  "Olle Järnefors")
+
+;; from RFC2047 section 8
+(deftest RFC2047.4
+    (decode-RFC2047 "Nathaniel Borenstein <nsb@thumper.bellcore.com> (=?iso-8859-8?b?7eXs+SDv4SDp7Oj08A==?=)")
+  "Nathaniel Borenstein <nsb@thumper.bellcore.com> (םולש ןב ילטפנ)")
+
+;; from RFC2047 section 8
+(deftest RFC2047.5
+  (decode-RFC2047 "=?ISO-8859-1?Q?Keld_J=F8rn_Simonsen?= <keld@dkuug.dk>")
+  "Keld Jørn Simonsen <keld@dkuug.dk>")
 
 (defun perftest-encoder (encoder-class &optional (megs 100))
   (declare (optimize (speed 3) (debug 0) (safety 0))
