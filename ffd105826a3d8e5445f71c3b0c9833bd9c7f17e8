@@ -18,6 +18,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "b2b419d2_1011aed3",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 20
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-05-18T14:31:54Z",
+      "side": 1,
+      "message": "It looks nicer now, but error handling still is messy. Let\u0027s wait for some review.",
+      "parentUuid": "5da91b91_12b8b484",
+      "revId": "ffd105826a3d8e5445f71c3b0c9833bd9c7f17e8",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "0d6a263e_3acd8464",
