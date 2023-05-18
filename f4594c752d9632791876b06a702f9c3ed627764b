@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d9be5371_65db5dd0",
+        "filename": "tvix/store/Cargo.toml",
+        "patchSetId": 26
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1000075
+      },
+      "writtenOn": "2023-05-18T23:46:33Z",
+      "side": 1,
+      "message": "Uh oh! I don\u0027t think eval should depend on store?",
+      "revId": "f4594c752d9632791876b06a702f9c3ed627764b",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
