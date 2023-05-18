@@ -1,0 +1,89 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c814f561_336d1b17",
+        "filename": "tvix/cli/src/tvix_io.rs",
+        "patchSetId": 3
+      },
+      "lineNbr": 3,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-05-18T10:43:52Z",
+      "side": 1,
+      "message": "This is a bit of a kitchensink of various things, we should explicitly state the two things it does:\n\n - mark plain paths as known to the reference scanner\n - replace the `__corepkgs__` magic path with its contents\n\nThis should prevent further stuff to be introduced here.",
+      "revId": "85f169588f667513758e69724b5476b5dfb80d49",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4d6b61d7_dd9ccd4f",
+        "filename": "tvix/cli/src/tvix_io.rs",
+        "patchSetId": 3
+      },
+      "lineNbr": 5,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-05-18T10:43:52Z",
+      "side": 1,
+      "message": "Explain why ;-)",
+      "revId": "85f169588f667513758e69724b5476b5dfb80d49",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4df203a1_49858803",
+        "filename": "tvix/cli/src/tvix_io.rs",
+        "patchSetId": 3
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-05-18T10:43:52Z",
+      "side": 1,
+      "message": "RefscanCorepkgsIO",
+      "revId": "85f169588f667513758e69724b5476b5dfb80d49",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f56f062e_223bf382",
+        "filename": "tvix/cli/src/tvix_io.rs",
+        "patchSetId": 3
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-05-18T10:43:52Z",
+      "side": 1,
+      "message": "I think we called this `inner` in other places?",
+      "revId": "85f169588f667513758e69724b5476b5dfb80d49",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "23130a79_693e95ac",
+        "filename": "tvix/cli/src/tvix_io.rs",
+        "patchSetId": 3
+      },
+      "lineNbr": 61,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-05-18T10:43:52Z",
+      "side": 1,
+      "message": "Shouldn\u0027t this just be something like `if path.to_string() \u003d\u003d \"/__corepkgs__/fetchurl.nix\" {` (equality, rather than a prefix check)?\n\nWe only deal with `fetchurl.nix`, nothing else.\n\nIn the comment above, pls also refer to the place where this gets replaced to look like this, so it\u0027s easy to find the counterpart.\n\nOn that location, please also add a TODO pointing to a bug to thread through some newtype/enum, which can either be the \"fetchurl from corepkgs marker\" or a plain path.\n\nI\u0027d probably go even so far and say the bug should request splitting this wrapper to two different ones, even in a pure eval context we can deal with `\u003cnix/fetchurl.nix\u003e`.",
+      "revId": "85f169588f667513758e69724b5476b5dfb80d49",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
