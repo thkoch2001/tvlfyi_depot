@@ -126,6 +126,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "05b943ac_237efbc9",
+        "filename": "tvix/cli/src/tvix_io.rs",
+        "patchSetId": 3
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2023-05-18T14:23:25Z",
+      "side": 1,
+      "message": "tvix-compatible means exactly what\u0027s done here, currently, and because of that being a moving target I don\u0027t wanna give it a name that requires changing every time the behaviour is reconsidered\n\nfor tvixbolt with an in-memory FS you need exactly the behaviour implemented in this wrapper still.",
+      "parentUuid": "2e7101a6_48ac5e60",
+      "revId": "85f169588f667513758e69724b5476b5dfb80d49",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "f56f062e_223bf382",
         "filename": "tvix/cli/src/tvix_io.rs",
         "patchSetId": 3
@@ -208,6 +226,24 @@
       "side": 1,
       "message": "\u003e when we turn paths into the saner structure suggested by grfn.\n\nWhere is this suggestion, can you link to it from there? I\u0027d guess it\u0027s https://b.tvl.fyi/issues/189, linking to https://blog.burntsushi.net/bstr/.\n\nI agree paths are very annoying to deal with, and I\u0027m pretty certain we need to accept arbitrary paths as bytes.\n\nRegarding the \"override \u003cnix\" thing:\n\nIn later versions, Nix doesn\u0027t support pointing `nix` to something else anymore,and I doubt there\u0027s a real usecase for this, but sure.",
       "parentUuid": "6e969aa9_de63c893",
+      "revId": "85f169588f667513758e69724b5476b5dfb80d49",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "12200ec9_da40323d",
+        "filename": "tvix/cli/src/tvix_io.rs",
+        "patchSetId": 3
+      },
+      "lineNbr": 61,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2023-05-18T14:23:25Z",
+      "side": 1,
+      "message": "I\u0027m not sure if he opened a bug for it, check with him on IRC ideally\n\nAs for \u003cnix\u003e, my point is just that the evaluator shouldn\u0027t know about it, it should be independent from this kind of legacy stuff in Nix wherever possible.",
+      "parentUuid": "9d63771f_c160c6ae",
       "revId": "85f169588f667513758e69724b5476b5dfb80d49",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
