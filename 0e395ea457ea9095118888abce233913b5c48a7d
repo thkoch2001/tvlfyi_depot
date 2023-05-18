@@ -36,6 +36,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "40b5e1c6_c62f99d5",
+        "filename": "tvix/store/src/directoryservice/traverse.rs",
+        "patchSetId": 3
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-05-18T06:25:33Z",
+      "side": 1,
+      "message": "b/270",
+      "parentUuid": "4950fb14_8ac2a777",
+      "revId": "0e395ea457ea9095118888abce233913b5c48a7d",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "0343f25a_542f7f44",
@@ -67,6 +85,24 @@
       "side": 1,
       "message": "I don\u0027t have enough context of the other traversers etc., I think the naming should become more obvious once this has real callsites.",
       "parentUuid": "0343f25a_542f7f44",
+      "revId": "0e395ea457ea9095118888abce233913b5c48a7d",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "813ef9f3_1ea90eae",
+        "filename": "tvix/store/src/directoryservice/traverse.rs",
+        "patchSetId": 3
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-05-18T06:25:33Z",
+      "side": 1,
+      "message": "b/270",
+      "parentUuid": "8420b479_6ebeb2c2",
       "revId": "0e395ea457ea9095118888abce233913b5c48a7d",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
