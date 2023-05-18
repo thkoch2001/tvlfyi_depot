@@ -103,7 +103,7 @@ impl<BS: BlobService, DS: DirectoryService> NARRenderer<BS, DS> {
                     // if it's None, that's an error!
                     None => {
                         return Err(RenderError::DirectoryNotFound(
-                            digest.to_vec(),
+                            digest,
                             proto_directory_node.name.to_owned(),
                         ))
                     }
