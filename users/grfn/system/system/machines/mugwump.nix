@@ -266,7 +266,10 @@ with lib;
 
   services.xanthous-server.enable = true;
 
-  virtualisation.docker.enable = true;
+  virtualisation.docker = {
+    enable = true;
+    storageDriver = "btrfs";
+  };
 
   services.buildkite-agents = listToAttrs (map
     (n: rec {
