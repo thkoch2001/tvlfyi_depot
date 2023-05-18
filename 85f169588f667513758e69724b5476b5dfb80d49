@@ -142,6 +142,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "e853aaf5_48e1ff4b",
+        "filename": "tvix/cli/src/tvix_io.rs",
+        "patchSetId": 3
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-05-18T14:30:50Z",
+      "side": 1,
+      "message": "ok",
+      "parentUuid": "05b943ac_237efbc9",
+      "revId": "85f169588f667513758e69724b5476b5dfb80d49",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "f56f062e_223bf382",
@@ -244,6 +262,24 @@
       "side": 1,
       "message": "I\u0027m not sure if he opened a bug for it, check with him on IRC ideally\n\nAs for \u003cnix\u003e, my point is just that the evaluator shouldn\u0027t know about it, it should be independent from this kind of legacy stuff in Nix wherever possible.",
       "parentUuid": "9d63771f_c160c6ae",
+      "revId": "85f169588f667513758e69724b5476b5dfb80d49",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c4e15d17_6a3bbabc",
+        "filename": "tvix/cli/src/tvix_io.rs",
+        "patchSetId": 3
+      },
+      "lineNbr": 61,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-05-18T14:30:50Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "12200ec9_da40323d",
       "revId": "85f169588f667513758e69724b5476b5dfb80d49",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
