@@ -117,18 +117,14 @@ impl<BS: BlobService, DS: DirectoryService, PS: PathInfoService, NCS: NARCalcula
                 .expect("error during import_path");
 
         // Render the NAR
-        let calculate_nar_response = self
+        let (nar_size, nar_sha256) = self
             .nar_calculation_service
             .calculate_nar(&root_node)
             .expect("error during nar calculation"); // TODO: handle error
 
         // Calculate the NAR-based StorePath
         let output_path = calculate_nar_based_store_path(
-            &calculate_nar_response
-                .nar_sha256
-                .clone()
-                .try_into()
-                .unwrap(), // TODO: move CalculationService to [u8; 32]
+            &nar_sha256,
             path.file_name()
                 .expect("path must not be ..")
                 .to_str()
@@ -160,8 +156,8 @@ impl<BS: BlobService, DS: DirectoryService, PS: PathInfoService, NCS: NARCalcula
             // There's no reference scanning on path contents ingested like this.
             references: vec![],
             narinfo: Some(crate::proto::NarInfo {
-                nar_size: calculate_nar_response.nar_size,
-                nar_sha256: calculate_nar_response.nar_sha256,
+                nar_size,
+                nar_sha256: nar_sha256.to_vec(),
                 signatures: vec![],
                 reference_names: vec![],
                 // TODO: narinfo for talosctl.src contains `CA: fixed:r:sha256:1x13j5hy75221bf6kz7cpgld9vgic6bqx07w5xjs4pxnksj6lxb6`
