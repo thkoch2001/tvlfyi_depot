@@ -6,6 +6,7 @@ version = "2023.5.19"
 edition = "2021"
 homepage = "https://cs.tvl.fyi/depot/-/tree/ops/yandex-cloud-rs"
 repository = "https://code.tvl.fyi/depot.git:/ops/yandex-cloud-rs.git"
+include = [ "/src", "README.md" ]
 
 [dependencies]
 prost = "0.11"
