@@ -3,6 +3,23 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "000ca29b_8164718d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-05-19T05:23:05Z",
+      "side": 1,
+      "message": "This seems to change the hashing, see the stdenv eval test failing:\n\nTvix output: \u003d\u003e \"/nix/store/616shvq9qkr39vl3073ia7ybh5jcwn7w-stdenv-linux.drv\" :: string\nCorrect would have been \u003d\u003e \"/nix/store/9b7i54zkd41vp7ij79gnlzqy6qa7hsn4-stdenv-linux.drv\" :: string",
+      "revId": "ef2d9b452b5da4ec30cf9b798e046da4b1fa7839",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "1f896cf3_cf99d09f",
         "filename": "tvix/nix-compat/src/derivation/output.rs",
         "patchSetId": 5
