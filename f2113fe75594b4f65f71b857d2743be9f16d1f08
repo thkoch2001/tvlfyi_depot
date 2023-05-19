@@ -16,6 +16,24 @@
       "message": "What is the motivation for this? It makes some things less readable (especially the return type change), and increases the in-memory size of the error type, but I don\u0027t see what we gain from it?",
       "revId": "f2113fe75594b4f65f71b857d2743be9f16d1f08",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0adf6b7a_69b3bfa8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-05-19T09:00:54Z",
+      "side": 1,
+      "message": "This is in the same spirit, and should get the same treatment as things in https://b.tvl.fyi/issues/268.\n\nI don\u0027t want to pass around `Vec\u003cu8\u003e` of an arbitrary size, but want to be more explicit.\n\nIn another followup, we can probably have some newtype here that still keeps a Vec\u003cu8\u003e inside, but rejects wrong digest sizes.",
+      "parentUuid": "cfa0354d_4595f518",
+      "revId": "f2113fe75594b4f65f71b857d2743be9f16d1f08",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
