@@ -34,6 +34,24 @@
       "parentUuid": "d9be5371_65db5dd0",
       "revId": "f4594c752d9632791876b06a702f9c3ed627764b",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0a8c69ea_07632647",
+        "filename": "tvix/store/Cargo.toml",
+        "patchSetId": 26
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1000075
+      },
+      "writtenOn": "2023-05-19T13:19:46Z",
+      "side": 1,
+      "message": "Oops, yes I meant to say \"store depending on eval is bad\", because it should be possible to use the store with a different language, e.g. a Scheme implementation and Guix.\n\nBased on what you say, it sounds like some traits should be moved to a new crate, so neither store nor eval depends on the other, and then the CLI puts them together.",
+      "parentUuid": "846dd30e_91d3f9a1",
+      "revId": "f4594c752d9632791876b06a702f9c3ed627764b",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
