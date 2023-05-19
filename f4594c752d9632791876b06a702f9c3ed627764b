@@ -16,6 +16,24 @@
       "message": "Uh oh! I don\u0027t think eval should depend on store?",
       "revId": "f4594c752d9632791876b06a702f9c3ed627764b",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "846dd30e_91d3f9a1",
+        "filename": "tvix/store/Cargo.toml",
+        "patchSetId": 26
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-05-19T04:39:29Z",
+      "side": 1,
+      "message": "This is store depending on eval, and we do this so we can implement the EvalIO trait, and can access the types from its function signatures. If this turns out a problem, we could move the trait and error types to another separate crate.\n\nEval does not depend on store, because it only wants some impl of PathIO. The thing depending on both store and eval is cli, because it instantiates the evaluator with TvixStoreIO.",
+      "parentUuid": "d9be5371_65db5dd0",
+      "revId": "f4594c752d9632791876b06a702f9c3ed627764b",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
