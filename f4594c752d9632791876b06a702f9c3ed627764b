@@ -52,6 +52,24 @@
       "parentUuid": "846dd30e_91d3f9a1",
       "revId": "f4594c752d9632791876b06a702f9c3ed627764b",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a0e257dc_ae329ac5",
+        "filename": "tvix/store/Cargo.toml",
+        "patchSetId": 26
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-05-19T15:36:59Z",
+      "side": 1,
+      "message": "We currently did stuff most of the \"hairy bits of Nix\" \"into the CLI crate, which uses nix-compat, so we can let nix eval itself take care of parsing, pure builtins, and core language features. Impure, or even custom builtins can still be passed in, but eval doesn\u0027t need to know how they work inside.\n\nWe had to give some \"io handle\" in, so we could refer to paths etc.\n\nI agree EvalIO, and some simple error types it uses should probably live neither in store nor in eval. I\u0027m also not 100% sure about the shape of EvalIO yet.\nI already had some versioning incompatibilities about SmolStr, builtins.toFile is not implemented either, and we probably don\u0027t want `tvix_eval::errors:ErrorKind` as an error here.\n\nI\u0027d say let\u0027s revisit this at a later point, this is only loosely related to this CL.",
+      "parentUuid": "0a8c69ea_07632647",
+      "revId": "f4594c752d9632791876b06a702f9c3ed627764b",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
