@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1f896cf3_cf99d09f",
+        "filename": "tvix/nix-compat/src/derivation/output.rs",
+        "patchSetId": 5
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-05-19T04:57:43Z",
+      "side": 1,
+      "message": "I need to digest the PreDerivation a bit more.\n\nMaybe the output_paths test, supposed to showcase how to calculate output paths, should be extended with some more comments, or we document this elsewhere in some prose?",
+      "revId": "ef2d9b452b5da4ec30cf9b798e046da4b1fa7839",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1924719c_2a63426e",
+        "filename": "tvix/nix-compat/src/derivation/tests/mod.rs",
+        "patchSetId": 5
+      },
+      "lineNbr": 135,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-05-19T04:57:43Z",
+      "side": 1,
+      "message": "mmmh, this becomes a bit cluttered. could we move the construction of these two \"expected\" StorePath before the if, right after the comment?",
+      "revId": "ef2d9b452b5da4ec30cf9b798e046da4b1fa7839",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "09dd5cd7_96952804",
+        "filename": "tvix/nix-compat/src/derivation/tests/mod.rs",
+        "patchSetId": 5
+      },
+      "lineNbr": 152,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-05-19T04:57:43Z",
+      "side": 1,
+      "message": "This is just to extract the fixture name, we can just use parent_drv_path.to_string() here, which will get the file name, no?",
+      "revId": "ef2d9b452b5da4ec30cf9b798e046da4b1fa7839",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3a0c20a6_12989164",
+        "filename": "tvix/nix-compat/src/derivation/validate.rs",
+        "patchSetId": 5
+      },
+      "lineNbr": 92,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-05-19T04:57:43Z",
+      "side": 1,
+      "message": "I guess we can remove the loop entirely :-)",
+      "revId": "ef2d9b452b5da4ec30cf9b798e046da4b1fa7839",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
