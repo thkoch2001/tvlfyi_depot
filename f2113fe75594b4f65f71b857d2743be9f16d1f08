@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cfa0354d_4595f518",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2023-05-19T08:54:24Z",
+      "side": 1,
+      "message": "What is the motivation for this? It makes some things less readable (especially the return type change), and increases the in-memory size of the error type, but I don\u0027t see what we gain from it?",
+      "revId": "f2113fe75594b4f65f71b857d2743be9f16d1f08",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
