@@ -16,6 +16,24 @@
       "message": "This could now also use B3Digest here.",
       "revId": "3bffc469c6dc65d4552bc221c0860c13fcfc2493",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c95225e4_d58af20e",
+        "filename": "tvix/store/src/nar/non_caching_calculation_service.rs",
+        "patchSetId": 7
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-05-22T12:49:50Z",
+      "side": 1,
+      "message": "Ah no, it cannot, because it\u0027s sha256 here, not blake3.",
+      "parentUuid": "fd124011_a117a32b",
+      "revId": "3bffc469c6dc65d4552bc221c0860c13fcfc2493",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
