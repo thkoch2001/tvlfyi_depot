@@ -29,6 +29,7 @@ use crate::{
 /// This is to both cover cases of syntactically valid store paths, that exist
 /// on the filesystem (still managed by Nix), as well as being able to read
 /// files outside store paths.
+#[derive(Clone)]
 pub struct TvixStoreIO<
     BS: BlobService,
     DS: DirectoryService,
