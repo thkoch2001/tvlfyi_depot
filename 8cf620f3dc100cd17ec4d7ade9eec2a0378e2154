@@ -71,6 +71,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "03503bee_16b1c195",
+        "filename": "tvix/store/src/store_io.rs",
+        "patchSetId": 22
+      },
+      "lineNbr": 173,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-05-22T13:12:38Z",
+      "side": 1,
+      "message": "It looks like this is whole function can be replaced with a\n\n```\n    build_regular_ca_path(name, \u0026nar_hash_with_mode, Vec::\u003cString\u003e::new(), false).unwrap()\n```",
+      "parentUuid": "07577bad_a7cdbfd9",
+      "revId": "8cf620f3dc100cd17ec4d7ade9eec2a0378e2154",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "6f788205_8b132129",
@@ -84,6 +102,24 @@
       "writtenOn": "2023-05-18T14:23:10Z",
       "side": 1,
       "message": "That\u0027s what I was referring to in https://cl.tvl.fyi/c/depot/+/8412/comments/bd650697_5ac98eb1.",
+      "revId": "8cf620f3dc100cd17ec4d7ade9eec2a0378e2154",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3c37c674_b3cfa815",
+        "filename": "tvix/store/src/store_io.rs",
+        "patchSetId": 22
+      },
+      "lineNbr": 197,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-05-22T13:12:38Z",
+      "side": 1,
+      "message": "Mark as resolved.",
+      "parentUuid": "6f788205_8b132129",
       "revId": "8cf620f3dc100cd17ec4d7ade9eec2a0378e2154",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
