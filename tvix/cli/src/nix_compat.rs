@@ -15,6 +15,7 @@ use tvix_eval::{EvalIO, FileType, StdIO};
 
 /// Compatibility implementation of [`EvalIO`] that uses C++ Nix to
 /// write files to the Nix store.
+#[derive(Clone)]
 pub struct NixCompatIO {
     /// Most IO requests are tunneled through to [`tvix_eval::StdIO`]
     /// instead.
