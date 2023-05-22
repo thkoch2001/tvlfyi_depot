@@ -61,6 +61,7 @@ pub trait EvalIO {
 /// Implementation of [`EvalIO`] that simply uses the equivalent
 /// standard library functions, i.e. does local file-IO.
 #[cfg(feature = "impure")]
+#[derive(Clone)]
 pub struct StdIO;
 
 #[cfg(feature = "impure")]
@@ -105,6 +106,7 @@ impl EvalIO for StdIO {
 
 /// Dummy implementation of [`EvalIO`], can be used in contexts where
 /// IO is not available but code should "pretend" that it is.
+#[derive(Clone)]
 pub struct DummyIO;
 
 impl EvalIO for DummyIO {
