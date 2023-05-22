@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fd124011_a117a32b",
+        "filename": "tvix/store/src/nar/non_caching_calculation_service.rs",
+        "patchSetId": 7
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-05-22T11:49:01Z",
+      "side": 1,
+      "message": "This could now also use B3Digest here.",
+      "revId": "3bffc469c6dc65d4552bc221c0860c13fcfc2493",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
