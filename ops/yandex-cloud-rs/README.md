@@ -26,9 +26,7 @@ used:
 
 ```
 # Get rid of all generated source files
-cd src
-ls | grep -v '^lib.rs$' | xargs rm
-cd ..
+find src | grep '.rs$' | grep -v '^src/lib.rs$' | xargs rm
 
 # Get rid of all old artefacts
 cargo clean
