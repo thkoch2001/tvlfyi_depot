@@ -128,7 +128,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
                 directory_service.clone(),
             );
 
-            let mut io = TvixStoreIO::new(
+            let io = TvixStoreIO::new(
                 blob_service,
                 directory_service,
                 path_info_service,
@@ -136,9 +136,14 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
             );
 
             for path in paths {
-                let path_info = io
-                    .import_path_with_pathinfo(&path)
-                    .map_err(|e| std::io::Error::new(std::io::ErrorKind::Other, e.to_string()))?;
+                let path_move = path.clone();
+                let mut io_move = io.clone();
+                let path_info = tokio::task::spawn_blocking(move || {
+                    io_move
+                        .import_path_with_pathinfo(&path_move)
+                        .map_err(|e| std::io::Error::new(std::io::ErrorKind::Other, e.to_string()))
+                })
+                .await??;
 
                 match path_info.node.unwrap().node.unwrap() {
                     tvix_store::proto::node::Node::Directory(directory_node) => {
