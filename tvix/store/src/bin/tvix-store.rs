@@ -2,12 +2,19 @@ use clap::Subcommand;
 use data_encoding::BASE64;
 use std::path::PathBuf;
 use tracing_subscriber::prelude::*;
+use tvix_store::blobservice::GRPCBlobService;
 use tvix_store::blobservice::SledBlobService;
+use tvix_store::directoryservice::GRPCDirectoryService;
 use tvix_store::directoryservice::SledDirectoryService;
+use tvix_store::nar::GRPCNARCalculationService;
 use tvix_store::nar::NonCachingNARCalculationService;
+use tvix_store::pathinfoservice::GRPCPathInfoService;
 use tvix_store::pathinfoservice::SledPathInfoService;
+use tvix_store::proto::blob_service_client::BlobServiceClient;
 use tvix_store::proto::blob_service_server::BlobServiceServer;
+use tvix_store::proto::directory_service_client::DirectoryServiceClient;
 use tvix_store::proto::directory_service_server::DirectoryServiceServer;
+use tvix_store::proto::path_info_service_client::PathInfoServiceClient;
 use tvix_store::proto::path_info_service_server::PathInfoServiceServer;
 use tvix_store::proto::GRPCBlobServiceWrapper;
 use tvix_store::proto::GRPCDirectoryServiceWrapper;
@@ -78,13 +85,13 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 
     tracing::subscriber::set_global_default(subscriber).expect("Unable to set global subscriber");
 
-    // initialize stores
-    let blob_service = SledBlobService::new("blobs.sled".into())?;
-    let directory_service = SledDirectoryService::new("directories.sled".into())?;
-    let path_info_service = SledPathInfoService::new("pathinfo.sled".into())?;
-
     match cli.command {
         Commands::Daemon { listen_address } => {
+            // initialize stores
+            let blob_service = SledBlobService::new("blobs.sled".into())?;
+            let directory_service = SledDirectoryService::new("directories.sled".into())?;
+            let path_info_service = SledPathInfoService::new("pathinfo.sled".into())?;
+
             let listen_address = listen_address
                 .unwrap_or_else(|| "[::]:8000".to_string())
                 .parse()
@@ -123,10 +130,18 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
             router.serve(listen_address).await?;
         }
         Commands::Import { paths } => {
-            let nar_calculation_service = NonCachingNARCalculationService::new(
-                blob_service.clone(),
-                directory_service.clone(),
+            let blob_service = GRPCBlobService::from_client(
+                BlobServiceClient::connect("http://[::1]:8000").await?,
             );
+            let directory_service = GRPCDirectoryService::from_client(
+                DirectoryServiceClient::connect("http://[::1]:8000").await?,
+            );
+            let path_info_service_client =
+                PathInfoServiceClient::connect("http://[::1]:8000").await?;
+            let path_info_service =
+                GRPCPathInfoService::from_client(path_info_service_client.clone());
+            let nar_calculation_service =
+                GRPCNARCalculationService::from_client(path_info_service_client);
 
             for path in paths {
                 let path_move = path.clone();
