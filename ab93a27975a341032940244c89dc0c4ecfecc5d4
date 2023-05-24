@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "abc8f5bc_1b2fd459",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 6
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2023-05-24T09:09:27Z",
+      "side": 1,
+      "message": "you should probably link it by number, and also if I understand it correctly *that* CL *would* cause it to panic (where it not for *this* CL). Right?",
+      "range": {
+        "startLine": 11,
+        "startChar": 18,
+        "endLine": 11,
+        "endChar": 29
+      },
+      "revId": "ab93a27975a341032940244c89dc0c4ecfecc5d4",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
