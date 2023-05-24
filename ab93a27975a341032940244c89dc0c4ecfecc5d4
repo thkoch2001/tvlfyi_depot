@@ -22,6 +22,30 @@
       },
       "revId": "ab93a27975a341032940244c89dc0c4ecfecc5d4",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b82dbc08_4fc3d1ef",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 6
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-05-24T09:19:34Z",
+      "side": 1,
+      "message": "This CL won\u0027t panic, because we still use Sled. cl/8619 will use the GRPC client, which will start spawning blocking tasks (which will panic if we don\u0027t wrap the interactions inside a spawn_blocking.\n\nI updated the commit message.",
+      "parentUuid": "abc8f5bc_1b2fd459",
+      "range": {
+        "startLine": 11,
+        "startChar": 18,
+        "endLine": 11,
+        "endChar": 29
+      },
+      "revId": "ab93a27975a341032940244c89dc0c4ecfecc5d4",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
