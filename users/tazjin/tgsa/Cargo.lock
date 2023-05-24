@@ -1075,6 +1075,8 @@ dependencies = [
  "ego-tree",
  "rouille",
  "scraper",
+ "serde",
+ "serde_json",
  "url",
 ]
 

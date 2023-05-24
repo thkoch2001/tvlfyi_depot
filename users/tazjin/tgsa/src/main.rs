@@ -1,13 +1,15 @@
 use anyhow::{anyhow, Context, Result};
+use scraper::{Html, Selector};
+use serde_json::Value;
 use std::collections::HashMap;
 use std::sync::RwLock;
 use std::time::{Duration, Instant};
-use scraper::{Html, Selector};
 
 #[derive(Clone, Debug, Eq, Hash, PartialEq)]
 struct TgLink {
     username: String,
     message_id: usize,
+    translated: bool,
 }
 
 impl TgLink {
@@ -16,10 +18,15 @@ impl TgLink {
     }
 
     fn to_url(&self, embed: bool) -> String {
-        format!("https://t.me/{}/{}{}", self.username, self.message_id, if embed { "?embed=1" } else { "" })
+        format!(
+            "https://t.me/{}/{}{}",
+            self.username,
+            self.message_id,
+            if embed { "?embed=1" } else { "" }
+        )
     }
 
-    fn parse(url: &str) -> Option<Self> {
+    fn parse(url: &str, translated: bool) -> Option<Self> {
         let url = url.strip_prefix("/")?;
         let parsed = url::Url::parse(url).ok()?;
 
@@ -37,6 +44,7 @@ impl TgLink {
         Some(TgLink {
             username: parts[0].into(),
             message_id: parts[1].parse().ok()?,
+            translated,
         })
     }
 }
@@ -53,6 +61,46 @@ fn fetch_post(link: &TgLink, embed: bool) -> Result<String> {
         })?;
 
     Ok(response.body)
+}
+
+fn fetch_translation(message: &str) -> Result<String> {
+    let request = serde_json::json!({
+        "model": "gpt-3.5-turbo",
+        "messages": [
+            {"role": "user", "content": "Please translate the following message from a Telegram channel into English. If the post is already partially in English, please leave those bits intact as they are. Please respond only with the translation."},
+            {"role": "user", "content": message}
+        ]
+    });
+
+    let response: Value = crimp::Request::post("https://api.openai.com/v1/chat/completions")
+        .bearer_auth(&std::env::var("OPENAPI_KEY").context("no openapi key set")?)?
+        .json(&request)?
+        .send()
+        .context("failed to fetch translation from openai")?
+        .as_json::<Value>()?
+        .error_for_status(|resp| {
+            anyhow!(
+                "translation request failed: {} ({})",
+                resp.body,
+                resp.status
+            )
+        })?
+        .body;
+
+    // we want choices[0].message.content, and inshallah it's the right thing.
+    let translation = response
+        .get("choices")
+        .ok_or_else(|| anyhow!("missing 'choices' key"))?
+        .get(0)
+        .ok_or_else(|| anyhow!("empty 'choices' or something"))?
+        .get("message")
+        .ok_or_else(|| anyhow!("missing 'message' key"))?
+        .get("content")
+        .ok_or_else(|| anyhow!("missing 'content' key"))?
+        .as_str()
+        .ok_or_else(|| anyhow!("'content' was not a string"))?;
+
+    Ok(translation.to_string())
 }
 
 // in some cases, posts can not be embedded, but telegram still
@@ -255,6 +303,12 @@ fn fetch_with_cache(cache: &Cache, link: &TgLink) -> Result<TgPost> {
         msg.message = fetch_fallback(&link)?;
     }
 
+    if let Some(message) = &msg.message {
+        if link.translated {
+            msg.message = Some(fetch_translation(message)?);
+        }
+    }
+
     let bbcode = to_bbcode(&link, &msg);
 
     let mut media = vec![];
@@ -292,6 +346,7 @@ fn handle_img_redirect(cache: &Cache, img_path: &str) -> Result<rouille::Respons
     let link = TgLink {
         username: img_parts[0].into(),
         message_id: img_parts[1].parse().context("failed to parse message_id")?,
+        translated: false,
     };
 
     let img_idx: usize = img_parts[2].parse().context("failed to parse img_idx")?;
@@ -320,12 +375,20 @@ fn main() {
     let cache: Cache = RwLock::new(HashMap::new());
 
     rouille::start_server("0.0.0.0:8472", move |request| {
+        let mut raw_url = request.raw_url();
+        let mut translate = false;
+
         let response = loop {
-            if request.raw_url().starts_with("/img/") {
-                break handle_img_redirect(&cache, &request.raw_url()[5..]);
+            if raw_url.starts_with("/img/") {
+                break handle_img_redirect(&cache, &raw_url[5..]);
             }
 
-            break match TgLink::parse(request.raw_url()) {
+            if raw_url.starts_with("/translate/") {
+                translate = true;
+                raw_url = &raw_url[10..];
+            }
+
+            break match TgLink::parse(raw_url, translate) {
                 None => Ok(rouille::Response::text(
                     r#"tgsa
 ----
@@ -345,7 +408,16 @@ yes, that looks stupid, but it works
 if you see this message and think you did the above correctly, you
 didn't. try again. idiot.
 
-pm me on the forums if this makes you mad or something.
+it can also translate posts from russian, ukrainian or whatever other
+dumb language you speak into english, by adding `/translate/`, for
+example:
+
+  https://tgsa.tazj.in/translate/https://t.me/strelkovii/4329
+
+expect this to be slow though. that's the price to pay for translating
+shitty slang.
+
+pm me on the forums if any of this makes you mad or something.
 "#,
                 )),
                 Some(link) => handle_tg_link(&cache, &link),
