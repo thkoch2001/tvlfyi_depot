@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d1d28355_5ffd6a90",
+        "filename": "tvix/store/src/store_io.rs",
+        "patchSetId": 37
+      },
+      "lineNbr": 208,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2023-05-24T09:05:52Z",
+      "side": 1,
+      "message": "Hmm. This kind of case is where IFD happens, but we need to do that one layer up (if there\u0027s a context for this then the build needs to be forced at these points).",
+      "range": {
+        "startLine": 205,
+        "startChar": 0,
+        "endLine": 208,
+        "endChar": 0
+      },
+      "revId": "6327bac642f5f4639ee782bdfb0261b1a8e0df4c",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
