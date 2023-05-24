@@ -16,6 +16,24 @@
       "message": "Seems like a bit of a hack to me, as long as EvalIO is not bound by `Clone` (which it probably shouldn\u0027t be) this is like an implicit API requirement which seems wrong to me.\n\nIt might be better to do things like `impl\u003cIO: EvalIO\u003e EvalIO for Rc\u003cIO\u003e` and so on, so that you can use the standard library things to add the features you require at that point.",
       "revId": "4b94665523b8044c9013cbd35295d32a57cd9b96",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d2c64fc2_0813c8cd",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-05-24T09:45:07Z",
+      "side": 1,
+      "message": "I\u0027m not sure I understand the comment.\n\nThe store clients are meant to be thin and all clone-able, so it\u0027s easy to use them in different places. In case we store actual data in it (the Memory*Service variants), that\u0027s behind an `Arc\u003cRwLock\u003c_\u003e\u003e`.\n\nIt feels logical we\u0027re also able to do the same with wrappers around these clients.\n\nWe probably need to do a similar `Arc\u003cRwLock\u003c_\u003e\u003e` dance for the `import_cache` and `known_paths`, so different clients all update the same internal state.",
+      "parentUuid": "9238ce39_afdd6512",
+      "revId": "4b94665523b8044c9013cbd35295d32a57cd9b96",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
