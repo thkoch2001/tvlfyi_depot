@@ -6,6 +6,7 @@
     wantedBy = [ "multi-user.target" ];
 
     serviceConfig = {
+      EnvironmentFile = "/root/tgsa-env"; # TODO(tazjin): automate this
       DynamicUser = true;
       Restart = "always";
       ExecStart = "${depot.users.tazjin.tgsa}/bin/tgsa";
