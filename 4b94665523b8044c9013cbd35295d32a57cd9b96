@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9238ce39_afdd6512",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2023-05-24T09:08:07Z",
+      "side": 1,
+      "message": "Seems like a bit of a hack to me, as long as EvalIO is not bound by `Clone` (which it probably shouldn\u0027t be) this is like an implicit API requirement which seems wrong to me.\n\nIt might be better to do things like `impl\u003cIO: EvalIO\u003e EvalIO for Rc\u003cIO\u003e` and so on, so that you can use the standard library things to add the features you require at that point.",
+      "revId": "4b94665523b8044c9013cbd35295d32a57cd9b96",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
