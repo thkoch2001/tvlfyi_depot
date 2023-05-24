@@ -305,6 +305,7 @@ fn fetch_with_cache(cache: &Cache, link: &TgLink) -> Result<TgPost> {
 
     if let Some(message) = &msg.message {
         if link.translated {
+            println!("translating {}#{}", link.username, link.message_id);
             msg.message = Some(fetch_translation(message)?);
         }
     }
