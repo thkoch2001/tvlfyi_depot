@@ -34,6 +34,24 @@
       "parentUuid": "9238ce39_afdd6512",
       "revId": "4b94665523b8044c9013cbd35295d32a57cd9b96",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8d18eb21_b8bb7db7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-05-25T05:03:54Z",
+      "side": 1,
+      "message": "I was able to work around this in cl/8618 by creating a new instance of TvixStoreIO, rather than deriving Clone everywhere, but I still feel like we should have finish this discussion.",
+      "parentUuid": "d2c64fc2_0813c8cd",
+      "revId": "4b94665523b8044c9013cbd35295d32a57cd9b96",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
