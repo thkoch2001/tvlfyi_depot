@@ -6,7 +6,8 @@ use std::path::Path;
 use std::path::PathBuf;
 use std::sync::Arc;
 use tracing_subscriber::prelude::*;
-use tvix_store::blobservice::GRPCBlobService;
+use tvix_store::blobservice;
+use tvix_store::blobservice::BlobService;
 use tvix_store::blobservice::SledBlobService;
 use tvix_store::directoryservice::GRPCDirectoryService;
 use tvix_store::directoryservice::SledDirectoryService;
@@ -14,7 +15,6 @@ use tvix_store::nar::GRPCNARCalculationService;
 use tvix_store::nar::NonCachingNARCalculationService;
 use tvix_store::pathinfoservice::GRPCPathInfoService;
 use tvix_store::pathinfoservice::SledPathInfoService;
-use tvix_store::proto::blob_service_client::BlobServiceClient;
 use tvix_store::proto::blob_service_server::BlobServiceServer;
 use tvix_store::proto::directory_service_client::DirectoryServiceClient;
 use tvix_store::proto::directory_service_server::DirectoryServiceServer;
@@ -58,6 +58,9 @@ enum Commands {
     Import {
         #[clap(value_name = "PATH")]
         paths: Vec<PathBuf>,
+
+        #[arg(long)]
+        blob_store_addr: String,
     },
 }
 
@@ -105,14 +108,14 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
             let mut server = Server::builder();
 
             let nar_calculation_service = NonCachingNARCalculationService::new(
-                blob_service.clone(),
+                Box::new(blob_service.clone()),
                 directory_service.clone(),
             );
 
             #[allow(unused_mut)]
             let mut router = server
                 .add_service(BlobServiceServer::new(GRPCBlobServiceWrapper::from(
-                    blob_service,
+                    Box::new(blob_service) as Box<dyn BlobService>,
                 )))
                 .add_service(DirectoryServiceServer::new(
                     GRPCDirectoryServiceWrapper::from(directory_service),
@@ -134,10 +137,11 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 
             router.serve(listen_address).await?;
         }
-        Commands::Import { paths } => {
-            let blob_service = GRPCBlobService::from_client(
-                BlobServiceClient::connect("http://[::1]:8000").await?,
-            );
+        Commands::Import {
+            paths,
+            blob_store_addr,
+        } => {
+            let blob_service = blobservice::from_uri(&blob_store_addr).await?;
             let directory_service = GRPCDirectoryService::from_client(
                 DirectoryServiceClient::connect("http://[::1]:8000").await?,
             );

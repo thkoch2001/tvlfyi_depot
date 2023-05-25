@@ -2014,6 +2014,22 @@ rec {
         };
         resolvedDefaultFeatures = [ "default" "std" ];
       };
+      "form_urlencoded" = rec {
+        crateName = "form_urlencoded";
+        version = "1.1.0";
+        edition = "2018";
+        sha256 = "1y3bwavygjzv7b0yqsjqk33yi6wz25b7q2aaq9h54vqmc7qq9hx9";
+        authors = [
+          "The rust-url developers"
+        ];
+        dependencies = [
+          {
+            name = "percent-encoding";
+            packageId = "percent-encoding";
+          }
+        ];
+
+      };
       "fs2" = rec {
         crateName = "fs2";
         version = "0.4.3";
@@ -2876,6 +2892,26 @@ rec {
             name = "tokio";
             packageId = "tokio";
             features = [ "io-std" "io-util" "macros" ];
+          }
+        ];
+
+      };
+      "idna" = rec {
+        crateName = "idna";
+        version = "0.3.0";
+        edition = "2018";
+        sha256 = "1rh9f9jls0jy3g8rh2bfpjhvvhh4q80348jc4jr2s844133xykg1";
+        authors = [
+          "The rust-url developers"
+        ];
+        dependencies = [
+          {
+            name = "unicode-bidi";
+            packageId = "unicode-bidi";
+          }
+          {
+            name = "unicode-normalization";
+            packageId = "unicode-normalization";
           }
         ];
 
@@ -6609,6 +6645,43 @@ rec {
         ];
 
       };
+      "tinyvec" = rec {
+        crateName = "tinyvec";
+        version = "1.6.0";
+        edition = "2018";
+        sha256 = "0l6bl2h62a5m44jdnpn7lmj14rd44via8180i7121fvm73mmrk47";
+        authors = [
+          "Lokathor <zefria@gmail.com>"
+        ];
+        dependencies = [
+          {
+            name = "tinyvec_macros";
+            packageId = "tinyvec_macros";
+            optional = true;
+          }
+        ];
+        features = {
+          "alloc" = [ "tinyvec_macros" ];
+          "arbitrary" = [ "dep:arbitrary" ];
+          "real_blackbox" = [ "criterion/real_blackbox" ];
+          "rustc_1_55" = [ "rustc_1_40" ];
+          "rustc_1_57" = [ "rustc_1_55" ];
+          "serde" = [ "dep:serde" ];
+          "std" = [ "alloc" ];
+          "tinyvec_macros" = [ "dep:tinyvec_macros" ];
+        };
+        resolvedDefaultFeatures = [ "alloc" "default" "tinyvec_macros" ];
+      };
+      "tinyvec_macros" = rec {
+        crateName = "tinyvec_macros";
+        version = "0.1.1";
+        edition = "2018";
+        sha256 = "081gag86208sc3y6sdkshgw3vysm5d34p431dzw0bshz66ncng0z";
+        authors = [
+          "Soveu <marx.tomasz@gmail.com>"
+        ];
+
+      };
       "tokio" = rec {
         crateName = "tokio";
         version = "1.28.0";
@@ -8098,6 +8171,10 @@ rec {
             packageId = "tvix-eval";
           }
           {
+            name = "url";
+            packageId = "url";
+          }
+          {
             name = "walkdir";
             packageId = "walkdir";
           }
@@ -8155,6 +8232,25 @@ rec {
         sha256 = "154smf048k84prsdgh09nkm2n0w0336v84jd4zikyn6v6jrqbspa";
 
       };
+      "unicode-bidi" = rec {
+        crateName = "unicode-bidi";
+        version = "0.3.13";
+        edition = "2018";
+        sha256 = "0q0l7rdkiq54pan7a4ama39dgynaf1mnjj1nddrq1w1zayjqp24j";
+        libName = "unicode_bidi";
+        authors = [
+          "The Servo Project Developers"
+        ];
+        features = {
+          "default" = [ "std" "hardcoded-data" ];
+          "flame" = [ "dep:flame" ];
+          "flame_it" = [ "flame" "flamer" ];
+          "flamer" = [ "dep:flamer" ];
+          "serde" = [ "dep:serde" ];
+          "with_serde" = [ "serde" ];
+        };
+        resolvedDefaultFeatures = [ "default" "hardcoded-data" "std" ];
+      };
       "unicode-ident" = rec {
         crateName = "unicode-ident";
         version = "1.0.8";
@@ -8164,6 +8260,27 @@ rec {
           "David Tolnay <dtolnay@gmail.com>"
         ];
 
+      };
+      "unicode-normalization" = rec {
+        crateName = "unicode-normalization";
+        version = "0.1.22";
+        edition = "2018";
+        sha256 = "08d95g7b1irc578b2iyhzv4xhsa4pfvwsqxcl9lbcpabzkq16msw";
+        authors = [
+          "kwantam <kwantam@gmail.com>"
+          "Manish Goregaokar <manishsmail@gmail.com>"
+        ];
+        dependencies = [
+          {
+            name = "tinyvec";
+            packageId = "tinyvec";
+            features = [ "alloc" ];
+          }
+        ];
+        features = {
+          "default" = [ "std" ];
+        };
+        resolvedDefaultFeatures = [ "default" "std" ];
       };
       "unicode-segmentation" = rec {
         crateName = "unicode-segmentation";
@@ -8203,6 +8320,33 @@ rec {
           "kwantam <kwantam@gmail.com>"
         ];
         features = { };
+        resolvedDefaultFeatures = [ "default" ];
+      };
+      "url" = rec {
+        crateName = "url";
+        version = "2.3.1";
+        edition = "2018";
+        sha256 = "0hs67jw257y0a7mj2p9wi0n61x8fc2vgwxg37y62nxkmmscwfs0d";
+        authors = [
+          "The rust-url developers"
+        ];
+        dependencies = [
+          {
+            name = "form_urlencoded";
+            packageId = "form_urlencoded";
+          }
+          {
+            name = "idna";
+            packageId = "idna";
+          }
+          {
+            name = "percent-encoding";
+            packageId = "percent-encoding";
+          }
+        ];
+        features = {
+          "serde" = [ "dep:serde" ];
+        };
         resolvedDefaultFeatures = [ "default" ];
       };
       "utf8parse" = rec {
