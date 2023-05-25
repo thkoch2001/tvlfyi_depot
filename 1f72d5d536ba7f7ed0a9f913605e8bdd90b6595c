@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8b1d23c5_8a0a77c3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2023-05-25T10:53:34Z",
+      "side": 1,
+      "message": "How does this actually behave? Does Tokio have a thread pool? Is the thread pool dynamically sized? Is there a chance this suddenly spawns 1000 OS threads on which tokio distributes the blocking tasks?",
+      "revId": "1f72d5d536ba7f7ed0a9f913605e8bdd90b6595c",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
