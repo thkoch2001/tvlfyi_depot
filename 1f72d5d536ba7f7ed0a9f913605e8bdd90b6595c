@@ -16,6 +16,24 @@
       "message": "How does this actually behave? Does Tokio have a thread pool? Is the thread pool dynamically sized? Is there a chance this suddenly spawns 1000 OS threads on which tokio distributes the blocking tasks?",
       "revId": "1f72d5d536ba7f7ed0a9f913605e8bdd90b6595c",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cb74a73b_8b671c32",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-05-25T12:35:47Z",
+      "side": 1,
+      "message": "This depends on the executor you use: https://docs.rs/tokio/latest/tokio/runtime/index.html#runtime-configurations\n\nWe currently use `#[tokio::main]` in tvix-store cli entrypoint. It\u0027s using the multi-threaded runtime, which by default will start a worker thread for each CPU core available. This only applies to \"non-blocking\" tasks, the ones spawned with `spawn_blocking` are in a separate thread pool, so they don\u0027t starve the nonblocking ones.\n\nBecause all our {Blob,Directory,PathInfo}Store traits currently are non-async, we have a fair amount of spawn_blocking in there (at least for the grpc clients).\n\nThe default limit for blocking threads is 512. The idea is that these tend to stay around longer, and just using the number of CPU cores might be too little.\nHowever I agree at least for a CLI application, not a server, 512 might be a bit too high.\n\nHowever, right now, it\u0027ll only spawn 512 threads if you specify 512 store paths to import at the same time as individual CLI arguments, so I don\u0027t think this will be a problem.\n\nIn the long term, we might want to make these traits (and `tvix_store::import::import_path`) fully async, so everything inside importing can be nonblocking, and we don\u0027t spawn any blocking tasks in there.\n\nThis doesn\u0027t imply the EvalIO trait itself needs to become async, we can still use spawn_blocking inside EvalIO.",
+      "parentUuid": "8b1d23c5_8a0a77c3",
+      "revId": "1f72d5d536ba7f7ed0a9f913605e8bdd90b6595c",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
