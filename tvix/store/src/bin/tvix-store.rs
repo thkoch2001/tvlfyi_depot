@@ -6,6 +6,8 @@ use std::path::Path;
 use std::path::PathBuf;
 use std::sync::Arc;
 use tracing_subscriber::prelude::*;
+use tvix_store::blobservice;
+use tvix_store::blobservice::DynBlobService;
 use tvix_store::blobservice::GRPCBlobService;
 use tvix_store::blobservice::SledBlobService;
 use tvix_store::directoryservice::GRPCDirectoryService;
@@ -24,6 +26,7 @@ use tvix_store::proto::path_info_service_server::PathInfoServiceServer;
 use tvix_store::proto::GRPCBlobServiceWrapper;
 use tvix_store::proto::GRPCDirectoryServiceWrapper;
 use tvix_store::proto::GRPCPathInfoServiceWrapper;
+use tvix_store::Error;
 use tvix_store::TvixStoreIO;
 
 #[cfg(feature = "reflection")]
@@ -58,6 +61,9 @@ enum Commands {
     Import {
         #[clap(value_name = "PATH")]
         paths: Vec<PathBuf>,
+
+        #[arg(long)]
+        blob_store_addr: String,
     },
 }
 
@@ -134,10 +140,11 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 
             router.serve(listen_address).await?;
         }
-        Commands::Import { paths } => {
-            let blob_service = GRPCBlobService::from_client(
-                BlobServiceClient::connect("http://[::1]:8000").await?,
-            );
+        Commands::Import {
+            paths,
+            blob_store_addr,
+        } => {
+            let blob_service = blobservice::from_uri(&blob_store_addr).await?;
             let directory_service = GRPCDirectoryService::from_client(
                 DirectoryServiceClient::connect("http://[::1]:8000").await?,
             );

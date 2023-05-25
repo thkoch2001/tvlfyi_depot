@@ -5,6 +5,9 @@ use crate::{B3Digest, Error};
 mod grpc;
 mod memory;
 mod sled;
+mod uri;
+
+pub use self::uri::from_uri;
 
 pub use self::grpc::GRPCBlobService;
 pub use self::memory::MemoryBlobService;
@@ -14,6 +17,7 @@ pub use self::sled::SledBlobService;
 /// It provides functions to check whether a given blob exists,
 /// a way to get a [io::Read] to a blob, and a method to initiate writing a new
 /// Blob, which returns a [BlobWriter], that can be used
+#[dynamize::dynamize]
 pub trait BlobService {
     type BlobReader: io::Read + Send + std::marker::Unpin;
     type BlobWriter: BlobWriter + Send;
