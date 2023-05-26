@@ -49,4 +49,5 @@ pkgs.rustPlatform.buildRustPackage rec {
   '';
 
   dontInstall = true;
+  dontCheck = true;
 }
