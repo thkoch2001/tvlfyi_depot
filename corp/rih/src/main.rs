@@ -5,6 +5,7 @@ use gloo::storage::{LocalStorage, Storage};
 use rand::seq::IteratorRandom;
 use rand::thread_rng;
 use serde::{Deserialize, Serialize};
+use static_markdown::markdown;
 use std::collections::BTreeSet;
 use wasm_bindgen::closure::Closure;
 use wasm_bindgen::JsCast;
