@@ -55,13 +55,6 @@ resource "yandex_storage_bucket" "tf_state" {
   bucket     = "su-tvl-terraform-state"
 }
 
-resource "yandex_dns_zone" "russiaishiring_com" {
-  name      = "russiaishiring-com"
-  zone      = "russiaishiring.com."
-  public    = true
-  folder_id = local.rih_folder_id
-}
-
 # Secret management configuration
 
 resource "yandex_kms_symmetric_key" "tvl_credentials_key" {
