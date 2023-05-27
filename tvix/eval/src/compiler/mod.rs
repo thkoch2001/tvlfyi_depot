@@ -431,15 +431,17 @@ impl Compiler<'_> {
     }
 
     fn compile_unary_op(&mut self, slot: LocalIdx, op: &ast::UnaryOp) {
-        self.compile(slot, op.expr().unwrap());
-        self.emit_force(op);
+        self.thunk(slot, op, move |c, s| {
+            c.compile(s, op.expr().unwrap());
+            c.emit_force(op);
 
-        let opcode = match op.operator().unwrap() {
-            ast::UnaryOpKind::Invert => OpCode::OpInvert,
-            ast::UnaryOpKind::Negate => OpCode::OpNegate,
-        };
+            let opcode = match op.operator().unwrap() {
+                ast::UnaryOpKind::Invert => OpCode::OpInvert,
+                ast::UnaryOpKind::Negate => OpCode::OpNegate,
+            };
 
-        self.push_op(opcode, op);
+            c.push_op(opcode, op);
+        });
     }
 
     fn compile_binop(&mut self, slot: LocalIdx, op: &ast::BinOp) {
