@@ -1,6 +1,8 @@
 use fuzzy_matcher::skim::SkimMatcherV2;
 use fuzzy_matcher::FuzzyMatcher;
 use gloo::console;
+use gloo::history::BrowserHistory;
+use gloo::history::History;
 use gloo::storage::{LocalStorage, Storage};
 use rand::seq::IteratorRandom;
 use rand::thread_rng;
@@ -12,6 +14,7 @@ use wasm_bindgen::JsCast;
 use web_sys::{HtmlInputElement, HtmlTextAreaElement, KeyboardEvent};
 use yew::html::Scope;
 use yew::prelude::*;
+use yew_router::prelude::*;
 
 /// This code ends up being compiled for the native and for the
 /// webassembly architectures during the build & test process.
@@ -59,6 +62,17 @@ impl CountryCodeAccess for rust_iso3166::CountryCode {
 
 const VISTA_URL: &'static str = "https://vista-immigration.ru/";
 
+#[derive(Debug, Clone, Copy, PartialEq, Routable)]
+enum Route {
+    #[at("/")]
+    Home,
+    #[at("/privacy-policy")]
+    PrivacyPolicy,
+    #[not_found]
+    #[at("/404")]
+    NotFound,
+}
+
 /// Represents a single record as filled in by a user. This is the
 /// primary data structure we want to populate and persist somewhere.
 #[derive(Default, Debug, Deserialize, Serialize)]
@@ -86,6 +100,9 @@ struct App {
 
     // Current query in the citizenship field.
     citizenship_query: String,
+
+    // History handler.
+    history: BrowserHistory,
 }
 
 #[derive(Clone, Debug)]
@@ -360,8 +377,16 @@ impl Component for App {
 
     fn view(&self, ctx: &Context<Self>) -> Html {
         let link = ctx.link();
+        let location = self.history.location();
+        let route = Route::recognize(location.path()).unwrap_or(Route::NotFound);
 
-        include!("home.html")
+        match route {
+            Route::Home => include!("home.html"),
+            Route::PrivacyPolicy => html! {
+                <main>{include!("privacy-policy.md")}</main>
+            },
+            Route::NotFound => todo!(),
+        }
     }
 }
 
