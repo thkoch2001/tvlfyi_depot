@@ -10,6 +10,7 @@ executable mailbox-org
     build-depends:
         base >=4.15 && <5,
         my-prelude,
+        pa-label,
         exec-helpers,
         netencode,
         text,
