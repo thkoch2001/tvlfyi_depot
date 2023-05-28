@@ -1,12 +1,4 @@
-{-# LANGUAGE DataKinds #-}
-{-# LANGUAGE DerivingStrategies #-}
-{-# LANGUAGE LambdaCase #-}
-{-# LANGUAGE OverloadedRecordDot #-}
-{-# LANGUAGE OverloadedStrings #-}
 {-# LANGUAGE QuasiQuotes #-}
-{-# LANGUAGE RecordWildCards #-}
-{-# LANGUAGE TypeApplications #-}
-{-# OPTIONS_GHC -Wall #-}
 {-# OPTIONS_GHC -Wno-orphans #-}
 
 module Main where
@@ -20,7 +12,6 @@ import Data.ByteString.Lazy qualified as Lazy
 import Data.Functor.Compose
 import Data.Int (Int64)
 import Data.List qualified as List
-import Data.Maybe (fromMaybe)
 import Data.Text qualified as Text
 import Data.Text.IO qualified as Text
 import Database.SQLite.Simple (NamedParam ((:=)))
@@ -102,7 +93,7 @@ getById = handler $ \(req, env) -> do
              "size"
              Int
          )
-        (env & envData)
+        (env.envData)
         [Sqlite.sql|
         SELECT
           mimetype,
@@ -172,7 +163,7 @@ insertById = handler $ \(req, env) -> do
       name <- getNameFromWordlist env
       let fullname = name <> extension
 
-      let conn = env & envData
+      let conn = env.envData
       Sqlite.withTransaction conn $ do
         Sqlite.executeNamed
           conn
@@ -218,7 +209,7 @@ getNameFromWordlist env =
   do
     let numberOfWords = 3 :: Int
     Sqlite.queryNamed @(Sqlite.Only Text)
-      (env & envWordlist)
+      (env.envWordlist)
       [Sqlite.sql|SELECT word FROM wordlist ORDER BY RANDOM() LIMIT :words|]
       [":words" Sqlite.:= numberOfWords]
     <&> map Sqlite.fromOnly

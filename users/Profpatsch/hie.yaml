@@ -8,4 +8,5 @@ cradle:
       component: "lib:htmx-experiment"
     - path: "./htmx-experiment/Main.hs"
       component: "htmx-experiment:exe:htmx-experiment"
-
+    - path: "./cas-serve/CasServe.hs"
+      component: "cas-serve:exe:cas-serve"

@@ -1,3 +1,4 @@
 packages:
   ./my-prelude/my-prelude.cabal
   ./htmx-experiment/htmx-experiment.cabal
+  ./cas-serve/cas-serve.cabal
