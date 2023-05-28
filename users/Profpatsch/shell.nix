@@ -12,14 +12,21 @@ pkgs.mkShell {
     (pkgs.haskellPackages.ghcWithHoogle (h: [
       h.async
       h.aeson-better-errors
+      h.blaze-html
       h.conduit-extra
       h.error
+      h.monad-logger
+      h.pa-field-parser
+      h.pa-label
+      h.ihp-hsx
       h.PyF
       h.unliftio
       h.wai
+      h.wai-extra
       h.warp
       h.profunctors
       h.semigroupoids
+      h.servant-multipart
       h.validation-selective
       h.free
       h.cryptonite-conduit
@@ -40,7 +47,6 @@ pkgs.mkShell {
       depot.users.Profpatsch.netencode.netencode-hs
       depot.users.Profpatsch.arglib.netencode.haskell
       depot.users.Profpatsch.execline.exec-helpers-hs
-
     ]))
 
     pkgs.rustup
