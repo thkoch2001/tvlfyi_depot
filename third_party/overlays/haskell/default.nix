@@ -29,6 +29,11 @@ in
       # TODO: this is to fix a bug in dhall-nix
       dhall = dhall-source "dhall" hsSuper.dhall;
       dhall-nix = dhall-source "dhall-nix" hsSuper.dhall-nix;
+
+      pa-prelude = hsSelf.callPackage ./extra-pkgs/pa-prelude-0.1.0.0.nix { };
+      pa-error-tree = hsSelf.callPackage ./extra-pkgs/pa-error-tree-0.1.0.0.nix { };
+      pa-field-parser = hsSelf.callPackage ./extra-pkgs/pa-field-parser-0.1.0.1.nix { };
+      pa-label = hsSelf.callPackage ./extra-pkgs/pa-label-0.1.0.1.nix { };
     };
   };
 
