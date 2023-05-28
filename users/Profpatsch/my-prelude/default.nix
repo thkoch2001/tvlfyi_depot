@@ -7,7 +7,6 @@ pkgs.haskellPackages.mkDerivation {
   src = depot.users.Profpatsch.exactSource ./. [
     ./my-prelude.cabal
     ./MyPrelude.hs
-    ./Label.hs
     ./Pretty.hs
     ./Data/Error/Tree.hs
     ./Aeson.hs
@@ -18,6 +17,7 @@ pkgs.haskellPackages.mkDerivation {
   isLibrary = true;
 
   libraryHaskellDepends = [
+    pkgs.haskellPackages.pa-label
     pkgs.haskellPackages.aeson
     pkgs.haskellPackages.aeson-better-errors
     pkgs.haskellPackages.PyF
