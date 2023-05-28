@@ -1,4 +1,4 @@
-cabal-version:      2.4
+cabal-version:      3.0
 name:               mailbox-org
 version:            0.1.0.0
 author:             Profpatsch
@@ -10,7 +10,9 @@ executable mailbox-org
     build-depends:
         base >=4.15 && <5,
         my-prelude,
+        pa-prelude,
         pa-label,
+        pa-error-tree,
         exec-helpers,
         netencode,
         text,

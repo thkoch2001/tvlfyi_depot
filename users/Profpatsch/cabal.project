@@ -1,3 +1,8 @@
 packages:
   ./my-prelude/my-prelude.cabal
+  ./netencode/netencode.cabal
+  ./arglib/arglib-netencode.cabal
+  ./execline/exec-helpers.cabal
   ./htmx-experiment/htmx-experiment.cabal
+  ./cas-serve/cas-serve.cabal
+  ./jbovlaste-sqlite/jbovlaste-sqlite.cabal

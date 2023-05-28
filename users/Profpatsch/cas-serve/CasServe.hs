@@ -1,16 +1,9 @@
-{-# LANGUAGE DataKinds #-}
-{-# LANGUAGE DerivingStrategies #-}
-{-# LANGUAGE LambdaCase #-}
-{-# LANGUAGE OverloadedRecordDot #-}
-{-# LANGUAGE OverloadedStrings #-}
 {-# LANGUAGE QuasiQuotes #-}
-{-# LANGUAGE RecordWildCards #-}
-{-# LANGUAGE TypeApplications #-}
-{-# OPTIONS_GHC -Wall #-}
 {-# OPTIONS_GHC -Wno-orphans #-}
 
 module Main where
 
+import ArglibNetencode (arglibNetencode)
 import Control.Applicative
 import Control.Monad.Reader
 import Crypto.Hash qualified as Crypto
@@ -20,7 +13,6 @@ import Data.ByteString.Lazy qualified as Lazy
 import Data.Functor.Compose
 import Data.Int (Int64)
 import Data.List qualified as List
-import Data.Maybe (fromMaybe)
 import Data.Text qualified as Text
 import Data.Text.IO qualified as Text
 import Database.SQLite.Simple (NamedParam ((:=)))
@@ -28,11 +20,28 @@ import Database.SQLite.Simple qualified as Sqlite
 import Database.SQLite.Simple.FromField qualified as Sqlite
 import Database.SQLite.Simple.QQ qualified as Sqlite
 import Label
-import MyPrelude
+import Netencode.Parse qualified as Net
 import Network.HTTP.Types qualified as Http
 import Network.Wai qualified as Wai
 import Network.Wai.Handler.Warp qualified as Warp
+import PossehlAnalyticsPrelude
 import System.IO (stderr)
+
+parseArglib = do
+  let env = label @"arglibEnvvar" "CAS_SERVE_ARGS"
+  let asApi =
+        Net.asRecord >>> do
+          address <- label @"bindToAddress" <$> (Net.key "bindToAddress" >>> Net.asText)
+          port <- label @"port" <$> (Net.key "port" >>> Net.asText)
+          pure (T2 address port)
+  arglibNetencode "cas-serve" (Just env)
+    <&> Net.runParse
+      [fmt|Cannot parse arguments in "{env.arglibEnvvar}"|]
+      ( Net.asRecord >>> do
+          publicApi <- label @"publicApi" <$> (Net.key "publicApi" >>> asApi)
+          privateApi <- label @"privateApi" <$> (Net.key "privateApi" >>> asApi)
+          pure $ T2 publicApi privateApi
+      )
 
 main :: IO ()
 main = do
@@ -64,8 +73,7 @@ api env req respond = do
             Wai.responseLBS
               Http.status200
               headers
-              ( body & toLazyBytes
-              )
+              (body & toLazyBytes)
 
 data Env = Env
   { envWordlist :: Sqlite.Connection,
@@ -102,7 +110,7 @@ getById = handler $ \(req, env) -> do
              "size"
              Int
          )
-        (env & envData)
+        (env.envData)
         [Sqlite.sql|
         SELECT
           mimetype,
@@ -172,7 +180,7 @@ insertById = handler $ \(req, env) -> do
       name <- getNameFromWordlist env
       let fullname = name <> extension
 
-      let conn = env & envData
+      let conn = env.envData
       Sqlite.withTransaction conn $ do
         Sqlite.executeNamed
           conn
@@ -218,7 +226,7 @@ getNameFromWordlist env =
   do
     let numberOfWords = 3 :: Int
     Sqlite.queryNamed @(Sqlite.Only Text)
-      (env & envWordlist)
+      (env.envWordlist)
       [Sqlite.sql|SELECT word FROM wordlist ORDER BY RANDOM() LIMIT :words|]
       [":words" Sqlite.:= numberOfWords]
     <&> map Sqlite.fromOnly
