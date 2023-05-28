@@ -32,6 +32,7 @@ in
 
       tvix-store = prev: {
         PROTO_ROOT = depot.tvix.store.protos;
+        buildInputs = prev.buildInputs or [ ] ++ [ pkgs.fuse ];
         nativeBuildInputs = protobufDep prev;
       };
     };
@@ -56,6 +57,8 @@ in
       pkgs.cargo
       pkgs.clippy
       pkgs.evans
+      pkgs.fuse
+      pkgs.pkg-config
       pkgs.rust-analyzer
       pkgs.rustc
       pkgs.rustfmt
