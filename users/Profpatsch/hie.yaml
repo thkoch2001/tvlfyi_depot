@@ -1,0 +1,11 @@
+cradle:
+  cabal:
+    - path: "./my-prelude"
+      component: "lib:my-prelude"
+    - path: "./htmx-experiment/src"
+      component: "lib:htmx-experiment"
+    - path: "./htmx-experiment/src"
+      component: "lib:htmx-experiment"
+    - path: "./htmx-experiment/Main.hs"
+      component: "htmx-experiment:exe:htmx-experiment"
+
