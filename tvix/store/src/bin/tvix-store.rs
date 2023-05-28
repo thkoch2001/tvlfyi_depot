@@ -4,17 +4,24 @@ use std::io;
 use std::path::PathBuf;
 use std::sync::Arc;
 use tracing_subscriber::prelude::*;
+use tvix_store::blobservice::GRPCBlobService;
 use tvix_store::blobservice::SledBlobService;
+use tvix_store::directoryservice::GRPCDirectoryService;
 use tvix_store::directoryservice::SledDirectoryService;
 use tvix_store::nar::NonCachingNARCalculationService;
+use tvix_store::pathinfoservice::GRPCPathInfoService;
 use tvix_store::pathinfoservice::SledPathInfoService;
+use tvix_store::proto::blob_service_client::BlobServiceClient;
 use tvix_store::proto::blob_service_server::BlobServiceServer;
+use tvix_store::proto::directory_service_client::DirectoryServiceClient;
 use tvix_store::proto::directory_service_server::DirectoryServiceServer;
+use tvix_store::proto::path_info_service_client::PathInfoServiceClient;
 use tvix_store::proto::path_info_service_server::PathInfoServiceServer;
 use tvix_store::proto::GRPCBlobServiceWrapper;
 use tvix_store::proto::GRPCDirectoryServiceWrapper;
 use tvix_store::proto::GRPCPathInfoServiceWrapper;
 use tvix_store::TvixStoreIO;
+use tvix_store::FUSE;
 
 #[cfg(feature = "reflection")]
 use tvix_store::proto::FILE_DESCRIPTOR_SET;
@@ -48,6 +55,12 @@ enum Commands {
     Import {
         #[clap(value_name = "PATH")]
         paths: Vec<PathBuf>,
+    },
+    /// Mounts a tvix-store at the given mountpoint
+    #[cfg(feature = "fuse")]
+    Mount {
+        #[clap(value_name = "PATH")]
+        dest: PathBuf,
     },
 }
 
@@ -174,6 +187,25 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
                     }
                 }
             }
+        }
+        #[cfg(feature = "fuse")]
+        Commands::Mount { dest } => {
+            let blob_service = GRPCBlobService::from_client(
+                BlobServiceClient::connect("http://[::1]:8000").await?,
+            );
+            let directory_service = GRPCDirectoryService::from_client(
+                DirectoryServiceClient::connect("http://[::1]:8000").await?,
+            );
+            let path_info_service_client =
+                PathInfoServiceClient::connect("http://[::1]:8000").await?;
+            let path_info_service =
+                GRPCPathInfoService::from_client(path_info_service_client.clone());
+
+            tokio::task::spawn_blocking(move || {
+                let f = FUSE::new(path_info_service, directory_service, blob_service);
+                fuser::mount2(f, &dest, &[])
+            })
+            .await??
         }
     };
     Ok(())
