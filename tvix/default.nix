@@ -22,6 +22,11 @@ in
     nixpkgs = pkgs.path;
 
     defaultCrateOverrides = pkgs.defaultCrateOverrides // {
+      fuser = prev: {
+        buildInputs = prev.buildInputs or [ ] ++ [ pkgs.fuse ];
+        nativeBuildInputs = prev.nativeBuildInputs or [ ] ++ [ pkgs.pkg-config ];
+      };
+
       prost-build = prev: {
         nativeBuildInputs = protobufDep prev;
       };
@@ -56,6 +61,8 @@ in
       pkgs.cargo
       pkgs.clippy
       pkgs.evans
+      pkgs.fuse
+      pkgs.pkg-config
       pkgs.rust-analyzer
       pkgs.rustc
       pkgs.rustfmt
