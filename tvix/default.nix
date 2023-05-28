@@ -22,6 +22,11 @@ in
     nixpkgs = pkgs.path;
 
     defaultCrateOverrides = pkgs.defaultCrateOverrides // {
+      fuser = prev: {
+        buildInputs = prev.buildInputs or [ ] ++ [ pkgs.fuse ];
+        nativeBuildInputs = prev.nativeBuildInputs or [ ] ++ [ pkgs.pkg-config ];
+      };
+
       prost-build = prev: {
         nativeBuildInputs = protobufDep prev;
       };
@@ -56,6 +61,8 @@ in
       pkgs.cargo
       pkgs.clippy
       pkgs.evans
+      pkgs.fuse
+      pkgs.pkg-config
       pkgs.rust-analyzer
       pkgs.rustc
       pkgs.rustfmt
@@ -72,12 +79,16 @@ in
     src = depot.third_party.gitignoreSource ./.;
     PROTO_ROOT = depot.tvix.store.protos;
 
+    buildInputs = [
+      pkgs.fuse
+    ];
     nativeBuildInputs = with pkgs; [
       cargo
-      rust-analyzer
-      rustPlatform.cargoSetupHook
-      rustc
+      pkg-config
       protobuf
+      rust-analyzer
+      rustc
+      rustPlatform.cargoSetupHook
     ];
 
     buildPhase = ''
