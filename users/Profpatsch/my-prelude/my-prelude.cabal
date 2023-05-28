@@ -7,7 +7,6 @@ maintainer:         mail@profpatsch.de
 library
     exposed-modules:
       MyPrelude
-      Label
       Pretty
       Data.Error.Tree
       Aeson
@@ -21,6 +20,7 @@ library
     -- other-extensions:
     build-depends:
        base >=4.15 && <5
+     , pa-label
      , aeson
      , aeson-better-errors
      , PyF
