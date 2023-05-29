@@ -31,6 +31,15 @@ resource "yandex_storage_bucket" "rih_storage_bucket" {
   secret_key = yandex_iam_service_account_static_access_key.rih_sa_static_key.secret_key
   bucket     = "russiaishiring.com"
   folder_id  = local.rih_folder_id
+  acl        = "public-read"
+
+  https {
+    certificate_id = yandex_cm_certificate.russiaishiring_com.id
+  }
+
+  website {
+    index_document = "index.html"
+  }
 }
 
 resource "yandex_cm_certificate" "russiaishiring_com" {
@@ -49,4 +58,12 @@ resource "yandex_dns_recordset" "acme_russiaishiring_com" {
   type    = yandex_cm_certificate.russiaishiring_com.challenges[0].dns_type
   data    = [yandex_cm_certificate.russiaishiring_com.challenges[0].dns_value]
   ttl     = 60
+}
+
+resource "yandex_dns_recordset" "aname_russiaishiring_com" {
+  zone_id = yandex_dns_zone.russiaishiring_com.id
+  name    = "russiaishiring.com."
+  type    = "ANAME"
+  data    = ["russiaishiring.com.website.yandexcloud.net"]
+  ttl     = 600
 }
