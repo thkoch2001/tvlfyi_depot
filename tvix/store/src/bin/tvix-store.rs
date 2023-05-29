@@ -9,9 +9,6 @@ use tracing_subscriber::prelude::*;
 use tvix_store::blobservice;
 use tvix_store::directoryservice;
 use tvix_store::pathinfoservice;
-use tvix_store::pathinfoservice::GRPCPathInfoService;
-use tvix_store::pathinfoservice::PathInfoService;
-use tvix_store::pathinfoservice::SledPathInfoService;
 use tvix_store::proto::blob_service_server::BlobServiceServer;
 use tvix_store::proto::directory_service_server::DirectoryServiceServer;
 use tvix_store::proto::node::Node;
@@ -190,7 +187,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
             let io = Arc::new(TvixStoreIO::new(
                 blob_service,
                 directory_service,
-                Arc::new(path_info_service),
+                path_info_service,
             ));
 
             let tasks = paths
@@ -227,7 +224,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
             .await?;
 
             tokio::task::spawn_blocking(move || {
-                let f = FUSE::new(blob_service, directory_service, Arc::new(path_info_service));
+                let f = FUSE::new(blob_service, directory_service, path_info_service);
                 fuser::mount2(f, &dest, &[])
             })
             .await??
