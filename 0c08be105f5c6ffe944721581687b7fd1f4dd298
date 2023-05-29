@@ -16,6 +16,24 @@
       "message": "Does anything actually change here (or anywhere) with/without cl/8662?",
       "revId": "0c08be105f5c6ffe944721581687b7fd1f4dd298",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2ddf3b09_3d0a15e1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2023-05-29T15:49:34Z",
+      "side": 1,
+      "message": "The thunked_lambda_in_list test fails.",
+      "parentUuid": "b3410b6a_88a25071",
+      "revId": "0c08be105f5c6ffe944721581687b7fd1f4dd298",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
