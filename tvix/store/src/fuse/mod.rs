@@ -381,6 +381,24 @@ impl<BS: BlobService, DS: DirectoryService, PS: PathInfoService> fuser::Filesyst
             }
         }
     }
+
+    #[tracing::instrument(skip_all, fields(rq.inode = ino))]
+    fn readlink(&mut self, _req: &Request<'_>, ino: u64, reply: fuser::ReplyData) {
+        if ino == fuser::FUSE_ROOT_ID {
+            reply.error(libc::ENOSYS);
+            return;
+        }
+
+        // lookup the inode
+        let node = self.inodes.get(&ino).unwrap();
+
+        match node {
+            Node::Directory(_) | Node::File(_) => {
+                reply.error(libc::ENOSYS);
+            }
+            Node::Symlink(symlink_node) => reply.data(symlink_node.target.as_bytes()),
+        }
+    }
 }
 
 fn reply_with_entry(reply: fuser::ReplyEntry, file_attr: Result<Option<&FileAttr>, crate::Error>) {
