@@ -16,6 +16,40 @@
       "message": "@tazjin you mentioned that this feature could live behind a feature flag until it is stable.\nAlso there might be runtime penalties that need to be tested before adding this.",
       "revId": "3314843293414de0436e597e9f6fd010e8829364",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c36d41ed_1aad10d6",
+        "filename": "tvix/eval/src/tests/doc_comments/eval/apply_conflict.nix",
+        "patchSetId": 17
+      },
+      "lineNbr": 5,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-05-29T14:14:36Z",
+      "side": 1,
+      "message": "stray whitespace (3 times in this file)",
+      "revId": "3314843293414de0436e597e9f6fd010e8829364",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d13343f5_146f02e0",
+        "filename": "tvix/eval/src/tests/doc_comments/eval/dynamic_name_static_get.nix",
+        "patchSetId": 17
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-05-29T14:14:36Z",
+      "side": 1,
+      "message": "stray whitespace",
+      "revId": "3314843293414de0436e597e9f6fd010e8829364",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
