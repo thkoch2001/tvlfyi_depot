@@ -1,4 +1,4 @@
-cabal-version:      2.4
+cabal-version:      3.0
 name:               cas-serve
 version:            0.1.0.0
 author:             Profpatsch
@@ -58,14 +58,17 @@ executable cas-serve
 
     build-depends:
         base >=4.15 && <5,
+        pa-prelude,
         pa-label,
+        arglib-netencode,
+        netencode,
         text,
         sqlite-simple,
         http-types,
+        ihp-hsx,
         wai,
         warp,
         mtl,
-        my-prelude,
         bytestring,
         memory,
         cryptonite,

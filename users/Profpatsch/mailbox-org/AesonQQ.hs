@@ -4,7 +4,7 @@ module AesonQQ where
 
 import Data.Aeson qualified as Json
 import Data.Either qualified as Either
-import MyPrelude
+import PossehlAnalyticsPrelude
 import PyF qualified
 import PyF.Internal.QQ qualified as PyFConf
 

@@ -21,6 +21,7 @@ pkgs.mkShell {
       h.ihp-hsx
       h.PyF
       h.unliftio
+      h.xml-conduit
       h.wai
       h.wai-extra
       h.warp
@@ -42,11 +43,8 @@ pkgs.mkShell {
       h.case-insensitive
       h.hscolour
       h.nicify-lib
+      h.hspec
       h.hspec-expectations-pretty-diff
-      depot.users.Profpatsch.my-prelude
-      depot.users.Profpatsch.netencode.netencode-hs
-      depot.users.Profpatsch.arglib.netencode.haskell
-      depot.users.Profpatsch.execline.exec-helpers-hs
     ]))
 
     pkgs.rustup

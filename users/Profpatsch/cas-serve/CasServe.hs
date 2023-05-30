@@ -3,6 +3,7 @@
 
 module Main where
 
+import ArglibNetencode (arglibNetencode)
 import Control.Applicative
 import Control.Monad.Reader
 import Crypto.Hash qualified as Crypto
@@ -19,11 +20,28 @@ import Database.SQLite.Simple qualified as Sqlite
 import Database.SQLite.Simple.FromField qualified as Sqlite
 import Database.SQLite.Simple.QQ qualified as Sqlite
 import Label
-import MyPrelude
+import Netencode.Parse qualified as Net
 import Network.HTTP.Types qualified as Http
 import Network.Wai qualified as Wai
 import Network.Wai.Handler.Warp qualified as Warp
+import PossehlAnalyticsPrelude
 import System.IO (stderr)
+
+parseArglib = do
+  let env = label @"arglibEnvvar" "CAS_SERVE_ARGS"
+  let asApi =
+        Net.asRecord >>> do
+          address <- label @"bindToAddress" <$> (Net.key "bindToAddress" >>> Net.asText)
+          port <- label @"port" <$> (Net.key "port" >>> Net.asText)
+          pure (T2 address port)
+  arglibNetencode "cas-serve" (Just env)
+    <&> Net.runParse
+      [fmt|Cannot parse arguments in "{env.arglibEnvvar}"|]
+      ( Net.asRecord >>> do
+          publicApi <- label @"publicApi" <$> (Net.key "publicApi" >>> asApi)
+          privateApi <- label @"privateApi" <$> (Net.key "privateApi" >>> asApi)
+          pure $ T2 publicApi privateApi
+      )
 
 main :: IO ()
 main = do
@@ -55,8 +73,7 @@ api env req respond = do
             Wai.responseLBS
               Http.status200
               headers
-              ( body & toLazyBytes
-              )
+              (body & toLazyBytes)
 
 data Env = Env
   { envWordlist :: Sqlite.Connection,
