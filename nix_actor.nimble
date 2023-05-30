@@ -1,13 +1,9 @@
-# Package
+version = "20230530"
+author = "Emery Hemingway"
+description = "Syndicated Nix Actor"
+license = "Unlicense"
+srcDir = "src"
+bin = @["nix_actor"]
+backend = "cpp"
 
-version = "20230326"
-author        = "Emery Hemingway"
-description   = "Syndicated Nix Actor"
-license       = "Unlicense"
-srcDir        = "src"
-bin           = @["nix_actor"]
-
-
-# Dependencies
-
-requires "nim >= 1.6.10", "syndicate >= 20230326"
+requires "nim >= 1.6.10", "syndicate >= 20230530"

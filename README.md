@@ -6,26 +6,28 @@ An actor for interacting with the [Nix](https://nixos.org/) daemon via the [Synd
 
 ## Example configuration
 ```
-; create and publish a dedicated dataspace
-let ?nixspace = dataspace
-<nixspace $nixspace>
+? <nixspace ?nixspace> $nixspace [
 
-$nixspace [
-  ; request a build of nixpkgs#hello
-  ? <nix-build "nixpkgs#hello" ?output> [
-    $log ! <log "-" { hello: $output }>
+  ? <realise "/nix/store/sv1yikjpf7q8b9w4xszb2ipg0cgcq1xv-imv-4.4.0.drv" ?outputs> [ ]
+
+  ? <eval "3 * 4" {} _> []
+  ? <eval "builtins.getEnv \"PATH\"" {impure: ""} _> []
+
+  ? ?any [
+    $log ! <log "-" { nix: $any }>
   ]
-]
 
-; start nix_actor as a daemon
-<require-service <daemon nix_actor>>
-<daemon nix_actor {
-  argv: "/run/current-system/sw/bin/nix_actor"
-  protocol: application/syndicate
-}>
-
-; hand-off a capablity to the Nix dataspace to the actor
-? <service-object <daemon nix_actor> ?actor> [
-  $actor <serve $nixspace>
+  $config [
+    <require-service <daemon nix_actor>>
+    ? <service-object <daemon nix_actor> ?cap> [
+      $cap {
+        dataspace: $nixspace
+      }
+    ]
+    <daemon nix_actor {
+      argv: "/usr/local/nix_actor"
+      protocol: application/syndicate
+    }>
+  ]
 ]
 ```

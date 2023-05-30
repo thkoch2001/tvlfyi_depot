@@ -1,17 +1,23 @@
 
 import
-  std/typetraits, preserves
+  preserves, std/tables
 
 type
-  Serve* {.preservesRecord: "serve".} = object
-    `cap`* {.preservesEmbedded.}: Preserve[void]
+  Eval* {.preservesRecord: "eval".} = object
+    `expr`*: string
+    `options`*: Table[Symbol, Preserve[void]]
+    `result`*: Preserve[void]
+
+  Realise* {.preservesRecord: "realise".} = object
+    `drv`*: string
+    `outputs`*: seq[string]
 
   Build* {.preservesRecord: "nix-build".} = object
     `input`*: string
     `output`*: Preserve[void]
 
-proc `$`*(x: Serve | Build): string =
+proc `$`*(x: Eval | Realise | Build): string =
   `$`(toPreserve(x))
 
-proc encode*(x: Serve | Build): seq[byte] =
+proc encode*(x: Eval | Realise | Build): seq[byte] =
   encode(toPreserve(x))
