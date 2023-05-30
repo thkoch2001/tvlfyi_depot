@@ -1,15 +1,6 @@
 {-# LANGUAGE AllowAmbiguousTypes #-}
-{-# LANGUAGE DeriveFunctor #-}
-{-# LANGUAGE DerivingStrategies #-}
-{-# LANGUAGE GHC2021 #-}
-{-# LANGUAGE GeneralizedNewtypeDeriving #-}
-{-# LANGUAGE LambdaCase #-}
-{-# LANGUAGE OverloadedStrings #-}
 {-# LANGUAGE QuasiQuotes #-}
-{-# LANGUAGE RecordWildCards #-}
-{-# LANGUAGE ScopedTypeVariables #-}
 {-# LANGUAGE TemplateHaskell #-}
-{-# LANGUAGE TypeApplications #-}
 
 module Netencode where
 
@@ -20,15 +11,12 @@ import Data.ByteString qualified as ByteString
 import Data.ByteString.Builder (Builder)
 import Data.ByteString.Builder qualified as Builder
 import Data.ByteString.Lazy qualified as ByteString.Lazy
-import Data.Coerce (coerce)
 import Data.Fix (Fix (Fix))
 import Data.Fix qualified as Fix
 import Data.Functor.Classes (Eq1 (liftEq))
 import Data.Int (Int16, Int32, Int64, Int8)
-import Data.List.NonEmpty (nonEmpty)
 import Data.Map.NonEmpty (NEMap)
 import Data.Map.NonEmpty qualified as NEMap
-import Data.Maybe (fromMaybe)
 import Data.Semigroup qualified as Semi
 import Data.String (IsString)
 import Data.Word (Word16, Word32, Word64)
@@ -36,7 +24,7 @@ import GHC.Exts (fromString)
 import Hedgehog qualified as Hedge
 import Hedgehog.Gen qualified as Gen
 import Hedgehog.Range qualified as Range
-import MyPrelude
+import PossehlAnalyticsPrelude
 import Text.Show.Deriving
 import Prelude hiding (sum)
 
@@ -74,7 +62,7 @@ instance Eq1 TF where
   liftEq _ (I6 i64) (I6 i64') = i64 == i64'
   liftEq _ (Text t) (Text t') = t == t'
   liftEq _ (Bytes b) (Bytes b') = b == b'
-  liftEq eq (Sum t) (Sum t') = eq (t & tagVal) (t' & tagVal)
+  liftEq eq (Sum t) (Sum t') = eq (t.tagVal) (t'.tagVal)
   liftEq eq (Record m) (Record m') = liftEq eq m m'
   liftEq eq (List xs) (List xs') = liftEq eq xs xs'
   liftEq _ _ _ = False
@@ -292,7 +280,7 @@ netencodeParserF inner = do
           Just tags ->
             pure $
               tags
-                <&> (\t -> (t & tagTag, t & tagVal))
+                <&> (\t -> (t.tagTag, t.tagVal))
                 -- later keys are preferred if they are duplicates, according to the standard
                 & NEMap.fromList
       _ <- Atto.Char.char '}' Atto.<?> "record did not end with }"

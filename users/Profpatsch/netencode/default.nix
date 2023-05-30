@@ -28,7 +28,9 @@ let
       pkgs.haskellPackages.data-fix
       pkgs.haskellPackages.bytestring
       pkgs.haskellPackages.attoparsec
-      depot.users.Profpatsch.my-prelude
+      pkgs.haskellPackages.pa-prelude
+      pkgs.haskellPackages.pa-label
+      pkgs.haskellPackages.pa-error-tree
     ];
 
     isLibrary = true;
