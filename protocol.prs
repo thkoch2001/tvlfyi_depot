@@ -1,7 +1,14 @@
 version 1 .
 
+
 Build = <nix-build @input string @output any> .
 
 Realise = <realise @drv string @outputs [string ...]> .
 
+Instantiate = <instantiate @expr string @options Dict @result any> .
+
 Eval = <eval @expr string @options {symbol: any ...:...} @result any> .
+
+Narinfo = <narinfo @path string @info Dict> .
+
+Dict = {symbol: any ...:...} .
