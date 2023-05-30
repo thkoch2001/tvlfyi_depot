@@ -2,6 +2,12 @@ cradle:
   cabal:
     - path: "./my-prelude"
       component: "lib:my-prelude"
+    - path: "./netencode"
+      component: "lib:netencode"
+    - path: "./arglib"
+      component: "lib:arglib-netencode"
+    - path: "./execline"
+      component: "lib:exec-helpers"
     - path: "./htmx-experiment/src"
       component: "lib:htmx-experiment"
     - path: "./htmx-experiment/src"
@@ -10,3 +16,5 @@ cradle:
       component: "htmx-experiment:exe:htmx-experiment"
     - path: "./cas-serve/CasServe.hs"
       component: "cas-serve:exe:cas-serve"
+    - path: "./jbovlaste-sqlite/JbovlasteSqlite.hs"
+      component: "jbovlaste-sqlite:exe:jbovlaste-sqlite"
