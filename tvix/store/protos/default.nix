@@ -9,4 +9,4 @@ let
   protoFileNames = filter (hasSuffix ".proto") (attrNames (readDir ./.));
   protoFiles = map (f: ./. + ("/" + f)) protoFileNames;
 in
-depot.nix.sparseTree depot.path.origSrc protoFiles
+depot.nix.sparseTree ./. protoFiles
