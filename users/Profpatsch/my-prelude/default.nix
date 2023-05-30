@@ -8,7 +8,6 @@ pkgs.haskellPackages.mkDerivation {
     ./my-prelude.cabal
     ./MyPrelude.hs
     ./Pretty.hs
-    ./Data/Error/Tree.hs
     ./Aeson.hs
     ./RunCommand.hs
     ./Test.hs
@@ -18,6 +17,7 @@ pkgs.haskellPackages.mkDerivation {
 
   libraryHaskellDepends = [
     pkgs.haskellPackages.pa-label
+    pkgs.haskellPackages.pa-error-tree
     pkgs.haskellPackages.aeson
     pkgs.haskellPackages.aeson-better-errors
     pkgs.haskellPackages.PyF

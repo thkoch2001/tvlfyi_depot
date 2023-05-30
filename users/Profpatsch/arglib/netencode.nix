@@ -57,7 +57,9 @@ let
     ];
 
     libraryHaskellDepends = [
-      depot.users.Profpatsch.my-prelude
+      pkgs.haskellPackages.pa-prelude
+      pkgs.haskellPackages.pa-label
+      pkgs.haskellPackages.pa-error-tree
       depot.users.Profpatsch.netencode.netencode-hs
       depot.users.Profpatsch.execline.exec-helpers-hs
     ];

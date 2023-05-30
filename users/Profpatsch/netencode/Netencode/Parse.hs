@@ -1,14 +1,4 @@
-{-# LANGUAGE ApplicativeDo #-}
-{-# LANGUAGE DataKinds #-}
-{-# LANGUAGE DerivingVia #-}
-{-# LANGUAGE GHC2021 #-}
-{-# LANGUAGE LambdaCase #-}
-{-# LANGUAGE OverloadedRecordDot #-}
-{-# LANGUAGE OverloadedStrings #-}
 {-# LANGUAGE QuasiQuotes #-}
-{-# LANGUAGE RecordWildCards #-}
-{-# LANGUAGE NoFieldSelectors #-}
-{-# OPTIONS_GHC -Wall #-}
 
 module Netencode.Parse where
 
@@ -23,8 +13,9 @@ import Data.Map.NonEmpty qualified as NEMap
 import Data.Semigroupoid qualified as Semigroupiod
 import Data.Semigroupoid qualified as Semigroupoid
 import Data.Text qualified as Text
-import MyPrelude
+import Label
 import Netencode qualified
+import PossehlAnalyticsPrelude
 import Prelude hiding (log)
 
 newtype Parse from to
