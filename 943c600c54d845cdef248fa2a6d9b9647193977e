@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0b30a3ae_23ccacda",
+        "filename": "tvix/store/protos/default.nix",
+        "patchSetId": 1
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-05-30T15:10:09Z",
+      "side": 1,
+      "message": "This doesn\u0027t work, because protoc can\u0027t find the path to the protos (as they\u0027re in the store path root, whereas the current version in canon kinda keeps that structure.",
+      "revId": "943c600c54d845cdef248fa2a6d9b9647193977e",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
