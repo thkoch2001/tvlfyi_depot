@@ -6,6 +6,7 @@
 {-# LANGUAGE LambdaCase #-}
 {-# LANGUAGE OverloadedRecordDot #-}
 {-# LANGUAGE OverloadedStrings #-}
+{-# LANGUAGE PackageImports #-}
 {-# LANGUAGE QuasiQuotes #-}
 {-# LANGUAGE RecordWildCards #-}
 {-# LANGUAGE NoFieldSelectors #-}
@@ -24,7 +25,7 @@ import Data.Aeson.KeyMap qualified as KeyMap
 import Data.ByteString qualified as ByteString
 import Data.ByteString.Lazy qualified as Lazy
 import Data.Char qualified as Char
-import Data.Error.Tree
+import "pa-error-tree" Data.Error.Tree
 import Data.Functor.Compose
 import Data.List qualified as List
 import Data.Map.Strict qualified as Map
@@ -32,11 +33,11 @@ import Data.Text qualified as Text
 import ExecHelpers
 import GHC.Records (HasField (..))
 import Label
-import MyPrelude
 import Netencode qualified
 import Netencode.Parse qualified as NetParse
 import Network.HTTP.Conduit qualified as Client
 import Network.HTTP.Simple qualified as Client
+import PossehlAnalyticsPrelude
 import Pretty
 import System.Directory qualified as File
 import System.Environment qualified as Env
