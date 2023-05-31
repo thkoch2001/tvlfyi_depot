@@ -83,41 +83,11 @@ html! {
 
     <div class="row my-3">
       <div class="col-7 mx-auto">
-        <p>{"Let's get started with a few basic personal details ..."}</p>
+        <p>{"Let's get started with you telling us a bit about what kind of job you would like!"}</p>
       </div>
 
       <div class="mx-auto col-6 border rounded-3 shadow">
         <form class="m-3">
-          <div class="mb-3">
-            <label for="name" class="form-label">{"What's your name?"}</label>
-            <input type="text" class="form-control" id="name"
-                   oninput={link.callback(|event| input_message(event, Msg::SetName))} />
-          </div>
-
-          <div class="mb-3">
-            <label for="email" class="form-label">{"What's your email address?"}</label>
-            <input type="email" class="form-control" id="email" aria-describedby="emailHelp"
-                   oninput={link.callback(|event| input_message(event, Msg::SetEmail))}/>
-            <div id="emailHelp" class="form-text">{"No newsletters, no spam - we will only reach out if there's a match!"}</div>
-          </div>
-
-          <div class="mb-3">
-            <label id="citizenship" class="form-label">{"What citizenship do you hold?"}</label>
-            {citizenship_input(self, link)}
-            <div id="citizenshipHelp" class="form-text">{"We need to know this to estimate immigration-related bureaucracy. If you hold more than one citizenship, pick the one with which you'd want to receive a work visa."}</div>
-          </div>
-
-          <div class="mb-3">
-            <label for="personalDetails" class="form-label">{"Other relevant information:"}</label>
-            <textarea class="form-control" id="personalDetails" rows=3
-                      aria-describedby="personalDetailsHelp"
-                      oninput={link.callback(|event| textarea_message(event, Msg::SetPersonalDetails))} >
-            </textarea>
-            <div id="personalDetailsHelp" class="form-text">{"Any specific places where you'd like to live? Would you be moving with family? Any other assistance required?"}</div>
-          </div>
-
-          <hr />
-          <p>{"Now lets have a look at what you'd like to work with!"}</p>
 
           <div class="mb-3">
             <label for="job" class="form-label">{"What job(s) are you looking for?"}</label>
@@ -155,6 +125,39 @@ html! {
             <div id="jobDetailsHelp" class="form-text">{"Tell us a bit about what you're looking for in a job and in an employer."}</div>
           </div>
 
+          <hr/>
+          <p>{"Now we also need some personal details about you:"}</p>
+
+          <div class="mb-3">
+            <label for="name" class="form-label">{"What's your name?"}</label>
+            <input type="text" class="form-control" id="name"
+                   oninput={link.callback(|event| input_message(event, Msg::SetName))} />
+          </div>
+
+          <div class="mb-3">
+            <label for="email" class="form-label">{"What's your email address?"}</label>
+            <input type="email" class="form-control" id="email" aria-describedby="emailHelp"
+                   oninput={link.callback(|event| input_message(event, Msg::SetEmail))}/>
+            <div id="emailHelp" class="form-text">{"No newsletters, no spam - we will only reach out if there's a match!"}</div>
+          </div>
+
+          <div class="mb-3">
+            <label id="citizenship" class="form-label">{"What citizenship do you hold?"}</label>
+            {citizenship_input(self, link)}
+            <div id="citizenshipHelp" class="form-text">{"We need to know this to estimate immigration-related bureaucracy. If you hold more than one citizenship, pick the one with which you'd want to receive a work visa."}</div>
+          </div>
+
+          <div class="mb-3">
+            <label for="personalDetails" class="form-label">{"Other relevant information:"}</label>
+            <textarea class="form-control" id="personalDetails" rows=3
+                      aria-describedby="personalDetailsHelp"
+                      oninput={link.callback(|event| textarea_message(event, Msg::SetPersonalDetails))} >
+            </textarea>
+            <div id="personalDetailsHelp" class="form-text">{"Any specific places where you'd like to live? Would you be moving with family? Any other assistance required?"}</div>
+          </div>
+
+          <button type="submit" class="btn btn-primary" disabled=true>{"Submit"}</button>
+          <p class="pt-2"><i>{"This page is still under construction! Please reach out at contact@ if you have any questions."}</i></p>
         </form>
       </div>
 
