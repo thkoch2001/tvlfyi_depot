@@ -45,7 +45,6 @@ let
     let
       withLeading = p: if builtins.substring 0 1 p == "/" then p else "/" + p;
       fullPath =
-        /**/
         if builtins.isPath path then path
         else if builtins.isString path then (root + withLeading path)
         else builtins.throw "Unsupported path type ${builtins.typeOf path}";
