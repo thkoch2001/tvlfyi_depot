@@ -513,7 +513,6 @@ let
 
       # See https://ccl.clozure.com/docs/ccl.html#building-definitions
       faslExt =
-        /**/
         if targetPlatform.isPower && targetPlatform.is32bit then "pfsl"
         else if targetPlatform.isPower && targetPlatform.is64bit then "p64fsl"
         else if targetPlatform.isx86_64 && targetPlatform.isLinux then "lx64fsl"

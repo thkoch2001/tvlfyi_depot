@@ -87,7 +87,6 @@ let
         ({ out ? "", argIndex ? 0 }: token: {
           argIndex = argIndex + (if specifierWithArg token then 1 else 0);
           out =
-            /**/
             if token == "%s" then out + builtins.elemAt args argIndex
             else if token == "%%" then out + "%"
             else if isSpecifier token then throw "Unsupported format specifier ${token}"
