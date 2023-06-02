@@ -18,6 +18,23 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "ba264b42_f892466c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-06-02T13:07:43Z",
+      "side": 1,
+      "message": "Considering people now rely on this - Can we open a bug in nix to properly document this, and maybe have it added to their test suite?",
+      "revId": "1882133cdb0d20b7c11a1a23e9995c5a54572a17",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "2877ee87_d8a63e26",
