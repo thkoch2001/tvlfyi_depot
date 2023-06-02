@@ -98,7 +98,6 @@ struct Record {
     work_background: String,
 }
 
-#[derive(Default)]
 struct App {
     // The record being populated.
     record: Record,
@@ -111,6 +110,13 @@ struct App {
 
     // History handler.
     history: BrowserHistory,
+
+    // Captcha token, if the captcha has been solved.
+    captcha_token: Option<String>,
+
+    // Captcha callback closure which needs to be kept alive for the
+    // lifecycle of the app.
+    captcha_callback: Closure<dyn FnMut(String)>,
 }
 
 #[derive(Clone, Debug)]
@@ -130,6 +136,7 @@ enum Msg {
     SetPosition(String),
     SetJobDetails(String),
     SetWorkBackground(String),
+    CaptchaSolved(String),
 }
 
 /// Callback handler for adding a technology.
@@ -293,14 +300,20 @@ impl Component for App {
     type Message = Msg;
     type Properties = ();
 
-    fn create(_ctx: &Context<Self>) -> Self {
-        let mut new = Self::default();
-
-        if let Ok(record) = LocalStorage::get("record") {
-            new.record = record;
+    fn create(ctx: &Context<Self>) -> Self {
+        App {
+            record: LocalStorage::get("record").unwrap_or_default(),
+            citizenship_focus: false,
+            citizenship_query: String::default(),
+            history: BrowserHistory::default(),
+            captcha_token: None,
+            captcha_callback: {
+                let link = ctx.link().clone();
+                Closure::wrap(Box::new(move |val| {
+                    link.send_message(Msg::CaptchaSolved(val));
+                }))
+            },
         }
-
-        new
     }
 
     fn update(&mut self, _ctx: &Context<Self>, msg: Self::Message) -> bool {
@@ -369,6 +382,11 @@ impl Component for App {
                 self.record.work_background = background;
                 (true, false)
             }
+
+            Msg::CaptchaSolved(token) => {
+                self.captcha_token = Some(token);
+                (false, true)
+            }
         };
 
         if state_change {
@@ -399,8 +417,13 @@ impl Component for App {
 
     fn rendered(&mut self, _: &Context<Self>, first_render: bool) {
         if first_render {
-            let func = js_sys::Function::new_with_args("key", "captchaOnload(key)");
-            let _ = func.call1(&JsValue::NULL, &JsValue::from_str(CAPTCHA_KEY));
+            let func =
+                js_sys::Function::new_with_args("key, callback", "captchaOnload(key, callback)");
+            let _ = func.call2(
+                &JsValue::NULL,
+                &JsValue::from_str(CAPTCHA_KEY),
+                &self.captcha_callback.as_ref().unchecked_ref(),
+            );
         }
     }
 }

@@ -1,12 +1,13 @@
 html! {
 <main>
   <script>
-    {r#"function captchaOnload(sitekey) {
+    {r#"function captchaOnload(sitekey, callback) {
       if (window.smartCaptcha) {
         const container = document.getElementById('captcha-container');
         const widgetId = window.smartCaptcha.render(container, {
             sitekey: sitekey,
             hl: 'en',
+            callback: callback,
         });
       }
     }"#}
