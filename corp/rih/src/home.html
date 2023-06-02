@@ -1,5 +1,17 @@
 html! {
 <main>
+  <script>
+    {r#"function captchaOnload(sitekey) {
+      if (window.smartCaptcha) {
+        const container = document.getElementById('captcha-container');
+        const widgetId = window.smartCaptcha.render(container, {
+            sitekey: sitekey,
+            hl: 'en',
+        });
+      }
+    }"#}
+  </script>
+
   <div class="container px-4 pt-5 my-5 text-center">
     <div class="row">
       <div class="col-7 ms-auto">
@@ -155,6 +167,8 @@ html! {
             </textarea>
             <div id="personalDetailsHelp" class="form-text">{"Any specific places where you'd like to live? Would you be moving with family? Any other assistance required?"}</div>
           </div>
+
+          <div id="captcha-container" class="smart-captcha mb-3" style="height: 100px" />
 
           <button type="submit" class="btn btn-primary" disabled=true>{"Submit"}</button>
           <p class="pt-2"><i>{"This page is still under construction! Please reach out at contact@ if you have any questions."}</i></p>

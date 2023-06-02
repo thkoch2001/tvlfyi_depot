@@ -1,8 +1,7 @@
 use fuzzy_matcher::skim::SkimMatcherV2;
 use fuzzy_matcher::FuzzyMatcher;
 use gloo::console;
-use gloo::history::BrowserHistory;
-use gloo::history::History;
+use gloo::history::{BrowserHistory, History};
 use gloo::storage::{LocalStorage, Storage};
 use rand::seq::IteratorRandom;
 use rand::thread_rng;
@@ -10,11 +9,20 @@ use serde::{Deserialize, Serialize};
 use static_markdown::markdown;
 use std::collections::BTreeSet;
 use wasm_bindgen::closure::Closure;
-use wasm_bindgen::JsCast;
+use wasm_bindgen::{JsCast, JsValue};
 use web_sys::{HtmlInputElement, HtmlTextAreaElement, KeyboardEvent};
 use yew::html::Scope;
 use yew::prelude::*;
 use yew_router::prelude::*;
+
+/// Form submission is protected with a captcha. The development
+/// version of the captcha does not do domain checking and works on
+/// `localhost` as well.
+#[cfg(debug_assertions)]
+const CAPTCHA_KEY: &'static str = "ysc1_K7iOi3FSmsyO8pZGu8Im2iQClCtPsVx7jSRyhyCV435a732c";
+
+#[cfg(not(debug_assertions))]
+const CAPTCHA_KEY: &'static str = "ysc1_a3LVlaDRDMwU8CLSZ0WKENTI2exyOxz5J2c6x28P5339d410";
 
 /// This code ends up being compiled for the native and for the
 /// webassembly architectures during the build & test process.
@@ -386,6 +394,13 @@ impl Component for App {
                 <main>{include!("privacy-policy.md")}</main>
             },
             Route::NotFound => todo!(),
+        }
+    }
+
+    fn rendered(&mut self, _: &Context<Self>, first_render: bool) {
+        if first_render {
+            let func = js_sys::Function::new_with_args("key", "captchaOnload(key)");
+            let _ = func.call1(&JsValue::NULL, &JsValue::from_str(CAPTCHA_KEY));
         }
     }
 }
