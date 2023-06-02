@@ -2,7 +2,9 @@ use fuzzy_matcher::skim::SkimMatcherV2;
 use fuzzy_matcher::FuzzyMatcher;
 use gloo::console;
 use gloo::history::{BrowserHistory, History};
+use gloo::net::http;
 use gloo::storage::{LocalStorage, Storage};
+use gloo::utils::format::JsValueSerdeExt;
 use rand::seq::IteratorRandom;
 use rand::thread_rng;
 use serde::{Deserialize, Serialize};
@@ -23,6 +25,13 @@ const CAPTCHA_KEY: &'static str = "ysc1_K7iOi3FSmsyO8pZGu8Im2iQClCtPsVx7jSRyhyCV
 
 #[cfg(not(debug_assertions))]
 const CAPTCHA_KEY: &'static str = "ysc1_a3LVlaDRDMwU8CLSZ0WKENTI2exyOxz5J2c6x28P5339d410";
+
+// Form data is submitted to different endpoints in dev/prod.
+#[cfg(debug_assertions)]
+const SUBMIT_URL: &'static str = "http://localhost:9090/submit";
+
+#[cfg(not(debug_assertions))]
+const SUBMIT_URL: &'static str = "https://api.russiaishiring.com/submit";
 
 /// This code ends up being compiled for the native and for the
 /// webassembly architectures during the build & test process.
@@ -83,7 +92,7 @@ enum Route {
 
 /// Represents a single record as filled in by a user. This is the
 /// primary data structure we want to populate and persist somewhere.
-#[derive(Default, Debug, Deserialize, Serialize)]
+#[derive(Clone, Default, Debug, Deserialize, Serialize)]
 struct Record {
     // Personal information
     name: String,
@@ -127,6 +136,9 @@ struct App {
     // Captcha callback closure which needs to be kept alive for the
     // lifecycle of the app.
     captcha_callback: Closure<dyn FnMut(String)>,
+
+    // Has data been submitted already by this user?
+    submitted: bool,
 }
 
 #[derive(Clone, Debug)]
@@ -146,7 +158,9 @@ enum Msg {
     SetPosition(String),
     SetJobDetails(String),
     SetWorkBackground(String),
+
     CaptchaSolved(String),
+    Submit,
 }
 
 /// Callback handler for adding a technology.
@@ -306,6 +320,42 @@ fn render_technologies(link: &Scope<App>, technologies: &BTreeSet<String>) -> Ht
     }
 }
 
+/// Submit the collected data to the backend service.
+async fn submit_data(captcha_token: &str, record: &Record) -> bool {
+    let response = http::Request::get(SUBMIT_URL)
+        .method(http::Method::POST)
+        .json(&serde_json::json!({
+            "captcha_token": captcha_token,
+            "record": record,
+        }))
+        .expect("serialising a serde_json::Value can not fail")
+        .send()
+        .await
+        .unwrap();
+
+    // currently there is nothing we can actually do with the response
+    // here, but we should add some way to communicate back some
+    // server errors etc., even if the whole thing should be as
+    // forgiving as possible.
+    response.ok()
+}
+
+/// Handle the submit event, if all data was successfully collected.
+fn handle_submit(app: &App, link: Scope<App>) -> Msg {
+    let token = app.captcha_token.as_ref().unwrap().clone();
+    let record = app.record.clone();
+
+    wasm_bindgen_futures::spawn_local(async move {
+        if !submit_data(&token, &record).await {
+            console::warn!("failed to submit data for some reason");
+        } else {
+            console::log!("submitted data successfully");
+        }
+    });
+
+    Msg::NoOp
+}
+
 impl Component for App {
     type Message = Msg;
     type Properties = ();
@@ -323,10 +373,11 @@ impl Component for App {
                     link.send_message(Msg::CaptchaSolved(val));
                 }))
             },
+            submitted: false,
         }
     }
 
-    fn update(&mut self, _ctx: &Context<Self>, msg: Self::Message) -> bool {
+    fn update(&mut self, ctx: &Context<Self>, msg: Self::Message) -> bool {
         console::log!("handling ", format!("{:?}", msg));
         let (state_change, view_change) = match msg {
             Msg::NoOp => (false, false),
@@ -396,6 +447,17 @@ impl Component for App {
             Msg::CaptchaSolved(token) => {
                 self.captcha_token = Some(token);
                 (false, true)
+            }
+
+            Msg::Submit => {
+                if self.record.is_complete() && self.captcha_token.is_some() {
+                    self.submitted = true;
+                    handle_submit(self, ctx.link().clone());
+                    (false, true)
+                } else {
+                    console::warn!("submitted data, but form or captcha was not ready");
+                    (false, false)
+                }
             }
         };
 

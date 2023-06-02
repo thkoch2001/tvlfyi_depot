@@ -1093,6 +1093,7 @@ dependencies = [
  "serde_urlencoded",
  "static_markdown",
  "wasm-bindgen",
+ "wasm-bindgen-futures",
  "web-sys",
  "yew",
  "yew-router",
