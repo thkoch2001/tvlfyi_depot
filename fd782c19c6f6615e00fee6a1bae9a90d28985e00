@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cfc4a357_49804ca6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2023-06-02T13:14:08Z",
+      "side": 1,
+      "message": "Why not ast-grep from nixpkgs?",
+      "revId": "fd782c19c6f6615e00fee6a1bae9a90d28985e00",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
