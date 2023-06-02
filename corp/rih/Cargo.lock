@@ -1085,6 +1085,7 @@ dependencies = [
  "fuzzy-matcher",
  "getrandom",
  "gloo",
+ "js-sys",
  "rand",
  "rust_iso3166",
  "serde",
