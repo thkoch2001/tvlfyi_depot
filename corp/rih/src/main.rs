@@ -98,6 +98,16 @@ struct Record {
     work_background: String,
 }
 
+impl Record {
+    fn is_complete(&self) -> bool {
+        !self.name.is_empty()
+            && !self.email.is_empty()
+            && !self.citizenship.is_empty()
+            && !self.position.is_empty()
+            && !self.technologies.is_empty()
+    }
+}
+
 struct App {
     // The record being populated.
     record: Record,

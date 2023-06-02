@@ -171,7 +171,10 @@ html! {
 
           <div id="captcha-container" class="smart-captcha mb-3" style="height: 100px" />
 
-          <button type="submit" class="btn btn-primary" disabled=true>{"Submit"}</button>
+          <button type="submit" class="btn btn-primary"
+                  disabled={!(self.record.is_complete() && self.captcha_token.is_some())}>
+            {"Submit"}
+          </button>
           <p class="pt-2"><i>{"This page is still under construction! Please reach out at contact@ if you have any questions."}</i></p>
         </form>
       </div>
