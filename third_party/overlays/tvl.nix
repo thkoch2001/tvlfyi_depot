@@ -125,4 +125,46 @@ depot.nix.readTree.drvTargets {
       outputHash = "sha256:03yny9ikqzfpi2mr27r82g54an2s8k9lqi2i4fqalg7g0s2cr2yd";
     });
   });
+
+  # Helper function to create an ast-grep config file with tree-sitter
+  # grammars for sg.
+  #
+  # Needs to be called with an attribute set mapping file extensions
+  # to grammars (e.g. from nixpkgs.tree-sitter-grammars).
+  # Unfortunately the file extension metadata does not exist in
+  # nixpkgs, so it is required here. For example:
+  #
+  # ast-grep.configWithLanguages (with pkgs.tree-sitter-grammars; {
+  #   "nix" = tree-sitter-nix;
+  #   "lisp" = tree-sitter-commonlisp;
+  #   "el" = tree-sitter-elisp;
+  # })
+  #
+  # All derivation names should match the `tree-sitter-$lang-grammar`
+  # package name, with `$lang` being used as the grammar name in
+  # ast-grep. The config file must be passed to ast-grep in one of the
+  # supported ways.
+  ast-grep = super.ast-grep.overrideAttrs (_: {
+    passthru.configWithLanguages = tsmappings:
+      let
+        languages = builtins.listToAttrs (map
+          (extension: {
+            # parse the `tree-sitter-$lang-grammar` name:
+            name =
+              let parsed = builtins.match "^tree-sitter-(.*)-grammar" tsmappings.${extension}.pname;
+              in if builtins.isNull parsed
+              then throw "tree-sitter-grammar for ${extension} has incorrect package name"
+              else builtins.head parsed;
+            value = {
+              extensions = [ extension ];
+              libraryPath = "${tsmappings.${extension}}/parser";
+            };
+          })
+          (builtins.attrNames tsmappings));
+      in
+      self.writeText "sgconfig.yml" (builtins.toJSON {
+        ruleDirs = [ ];
+        customLanguages = languages;
+      });
+  });
 }
