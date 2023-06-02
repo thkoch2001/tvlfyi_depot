@@ -99,6 +99,7 @@ html! {
         <p>{"Let's get started with you telling us a bit about what kind of job you would like!"}</p>
       </div>
 
+      if !self.submitted {
       <div class="mx-auto col-6 border rounded-3 shadow">
         <form class="m-3">
 
@@ -172,12 +173,18 @@ html! {
           <div id="captcha-container" class="smart-captcha mb-3" style="height: 100px" />
 
           <button type="submit" class="btn btn-primary"
-                  disabled={!(self.record.is_complete() && self.captcha_token.is_some())}>
+                  disabled={!(self.record.is_complete() && self.captcha_token.is_some())}
+                  onclick={link.callback(|_| Msg::Submit)}>
             {"Submit"}
           </button>
           <p class="pt-2"><i>{"This page is still under construction! Please reach out at contact@ if you have any questions."}</i></p>
         </form>
       </div>
+      } else {
+      <div class="mx-auto col-6 border rounded-3 shadow">
+        <p>{"Thank you for submitting your data! We will reach out to confirm your email address, and further if any matches are found. You can contact us at contact@russiaishiring.com with any questions you might have."}</p>
+      </div>
+      }
 
     </div>
   </div>
