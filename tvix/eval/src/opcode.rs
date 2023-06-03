@@ -155,6 +155,15 @@ pub enum OpCode {
     /// index (which must be a Value::Thunk) after the scope is fully bound.
     OpFinalise(StackIdx),
 
+    // In theory we can express this with other instructions (i.e. conditional
+    // jumps). However, it is nice to have a separate value type for this to
+    // make the VM crash clearly on miscompilations—which requires a custom
+    // instruction. Then we may as well make it possible to achieve what we
+    // want in a single instruction.
+    /// Finalise first stack value only if value at the second stack idx is
+    /// `Value::FinaliserSentinel(true)`.
+    OpFinaliseIfSentinel(StackIdx, StackIdx),
+
     /// Final instruction emitted in a chunk. Does not have an
     /// inherent effect, but can simplify VM logic as a marker in some
     /// cases.

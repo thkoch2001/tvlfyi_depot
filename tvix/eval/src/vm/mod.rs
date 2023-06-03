@@ -733,20 +733,32 @@ impl<'o> VM<'o> {
                     return Ok(false);
                 }
 
-                OpCode::OpFinalise(StackIdx(idx)) => {
+                OpCode::OpFinalise(StackIdx(idx))
+                | OpCode::OpFinaliseIfSentinel(StackIdx(idx), _) => {
+                    // If the sentinel says not to finalise, do nothing. This is
+                    // necessary when evaluating formals that don't always need
+                    // to be finalised.
+                    if let OpCode::OpFinaliseIfSentinel(_, StackIdx(sentinel_idx)) = op {
+                        match &self.stack[frame.stack_offset + sentinel_idx] {
+                            Value::FinaliserSentinel(finalise) => {
+                                if !finalise {
+                                    continue;
+                                }
+                            }
+                            val => panic!(
+                                "Tvix bug: expected finaliser sentinel at {}, but found {}",
+                                sentinel_idx,
+                                val.type_of()
+                            ),
+                        }
+                    }
+
                     match &self.stack[frame.stack_offset + idx] {
                         Value::Closure(_) => panic!("attempted to finalise a closure"),
                         Value::Thunk(thunk) => thunk.finalise(&self.stack[frame.stack_offset..]),
-
-                        // In functions with "formals" attributes, it is
-                        // possible for `OpFinalise` to be called on a
-                        // non-capturing value, in which case it is a no-op.
-                        //
-                        // TODO: detect this in some phase and skip the finalise; fail here
-                        _ => { /* TODO: panic here again to catch bugs */ }
+                        _ => panic!("attempted to finalise a non-thunk"),
                     }
                 }
-
                 OpCode::OpCoerceToString => {
                     let value = self.stack_pop();
                     let gen_span = frame.current_light_span();
