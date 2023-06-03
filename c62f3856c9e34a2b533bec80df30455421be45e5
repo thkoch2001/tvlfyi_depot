@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "424dbf64_d96c0844",
+        "filename": "tvix/eval/src/vm/generators.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 653,
+      "author": {
+        "id": 1000076
+      },
+      "writtenOn": "2023-06-03T11:05:36Z",
+      "side": 1,
+      "message": "I\u0027m not at all sure if this should really become public, but it was the most obvious path forwards here.",
+      "revId": "c62f3856c9e34a2b533bec80df30455421be45e5",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
