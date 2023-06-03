@@ -920,21 +920,24 @@ impl Compiler<'_> {
         // Similar to `let ... in ...`, we now do multiple passes over
         // the bindings to first declare them, then populate them, and
         // then finalise any necessary recursion into the scope.
-        let mut entries: Vec<(LocalIdx, ast::PatEntry)> = vec![];
+        let mut entries: Vec<(LocalIdx, Option<LocalIdx>, ast::PatEntry)> = vec![];
         let mut arguments = HashMap::default();
 
         for entry in pattern.pat_entries() {
             let ident = entry.ident().unwrap();
             let idx = self.declare_local(&ident, ident.to_string());
-            let has_default = entry.default().is_some();
-            entries.push((idx, entry));
-            arguments.insert(ident.into(), has_default);
+            let sentinel_idx = entry.default().map(|default_expr| {
+                let span = self.span_for(&default_expr);
+                self.scope_mut().declare_phantom(span, false)
+            });
+            arguments.insert(ident.into(), entry.default().is_some());
+            entries.push((idx, sentinel_idx, entry));
         }
 
         // For each of the bindings, push the set on the stack and
         // attempt to select from it.
         let stack_idx = self.scope().stack_index(set_idx);
-        for (idx, entry) in (&entries).into_iter() {
+        for (idx, sentinel_idx, entry) in (&entries).into_iter() {
             self.push_op(OpCode::OpGetLocal(stack_idx), pattern);
             self.emit_literal_ident(&entry.ident().unwrap());
 
@@ -946,12 +949,16 @@ impl Compiler<'_> {
                 let jump_to_default =
                     self.push_op(OpCode::OpJumpIfNotFound(JumpOffset(0)), &default_expr);
 
+                self.emit_constant(Value::FinaliserSentinel(false), &default_expr);
+
                 let jump_over_default = self.push_op(OpCode::OpJump(JumpOffset(0)), &default_expr);
 
                 self.patch_jump(jump_to_default);
 
                 // Does not need to thunked since compile() already does so when necessary
-                self.compile(*idx, default_expr);
+                self.compile(*idx, default_expr.clone());
+
+                self.emit_constant(Value::FinaliserSentinel(true), &default_expr);
 
                 self.patch_jump(jump_over_default);
             } else {
@@ -959,12 +966,19 @@ impl Compiler<'_> {
             }
 
             self.scope_mut().mark_initialised(*idx);
+            if let Some(sidx) = *sentinel_idx {
+                self.scope_mut().mark_initialised(sidx);
+            }
         }
 
-        for (idx, _) in (&entries).into_iter() {
+        for (idx, sentinel_idx, _) in (&entries).into_iter() {
             if self.scope()[*idx].needs_finaliser {
+                let sentinel_stack_idx = self.scope().stack_index((*sentinel_idx).unwrap());
                 let stack_idx = self.scope().stack_index(*idx);
-                self.push_op(OpCode::OpFinalise(stack_idx), pattern);
+                self.push_op(
+                    OpCode::OpFinaliseIfSentinel(stack_idx, sentinel_stack_idx),
+                    pattern,
+                );
             }
         }
 
