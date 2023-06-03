@@ -78,6 +78,9 @@ pub enum Value {
     UnresolvedPath(Box<PathBuf>),
     #[serde(skip)]
     Json(serde_json::Value),
+
+    #[serde(skip)]
+    FinaliserSentinel(bool),
 }
 
 lazy_static! {
@@ -235,7 +238,8 @@ impl Value {
             | Value::Blueprint(_)
             | Value::DeferredUpvalue(_)
             | Value::UnresolvedPath(_)
-            | Value::Json(_) => panic!(
+            | Value::Json(_)
+            | Value::FinaliserSentinel(_) => panic!(
                 "Tvix bug: internal value left on stack: {}",
                 value.type_of()
             ),
@@ -328,7 +332,8 @@ impl Value {
             | (Value::Blueprint(_), _)
             | (Value::DeferredUpvalue(_), _)
             | (Value::UnresolvedPath(_), _)
-            | (Value::Json(_), _) => {
+            | (Value::Json(_), _)
+            | (Value::FinaliserSentinel(_), _) => {
                 panic!("tvix bug: .coerce_to_string() called on internal value")
             }
         }
@@ -520,6 +525,7 @@ impl Value {
             Value::DeferredUpvalue(_) => "internal[deferred_upvalue]",
             Value::UnresolvedPath(_) => "internal[unresolved_path]",
             Value::Json(_) => "internal[json]",
+            Value::FinaliserSentinel(_) => "internal[finaliser_sentinel]",
         }
     }
 
@@ -658,7 +664,8 @@ impl Value {
             | Value::Blueprint(_)
             | Value::DeferredUpvalue(_)
             | Value::UnresolvedPath(_)
-            | Value::Json(_) => "an internal Tvix evaluator value".into(),
+            | Value::Json(_)
+            | Value::FinaliserSentinel(_) => "an internal Tvix evaluator value".into(),
         }
     }
 }
@@ -772,6 +779,7 @@ impl TotalDisplay for Value {
             Value::DeferredUpvalue(_) => f.write_str("internal[deferred_upvalue]"),
             Value::UnresolvedPath(_) => f.write_str("internal[unresolved_path]"),
             Value::Json(_) => f.write_str("internal[json]"),
+            Value::FinaliserSentinel(_) => f.write_str("internal[finaliser_sentinel]"),
 
             // Delegate thunk display to the type, as it must handle
             // the case of already evaluated or cyclic thunks.
