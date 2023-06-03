@@ -16,6 +16,24 @@
       "message": "I want to move the from_uri introduction to a second CL, to make this one easier to digest.",
       "revId": "e3b08f37cc55449f0899db8af1d545cd9afd6fb5",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3489dcd2_7da24b19",
+        "filename": "tvix/store/src/bin/tvix-store.rs",
+        "patchSetId": 6
+      },
+      "lineNbr": 144,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-06-03T17:30:17Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0ba2bd99_a9948051",
+      "revId": "e3b08f37cc55449f0899db8af1d545cd9afd6fb5",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
