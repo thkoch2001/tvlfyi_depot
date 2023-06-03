@@ -737,13 +737,7 @@ impl<'o> VM<'o> {
                     match &self.stack[frame.stack_offset + idx] {
                         Value::Closure(_) => panic!("attempted to finalise a closure"),
                         Value::Thunk(thunk) => thunk.finalise(&self.stack[frame.stack_offset..]),
-
-                        // In functions with "formals" attributes, it is
-                        // possible for `OpFinalise` to be called on a
-                        // non-capturing value, in which case it is a no-op.
-                        //
-                        // TODO: detect this in some phase and skip the finalise; fail here
-                        _ => { /* TODO: panic here again to catch bugs */ }
+                        _ => panic!("attempted to finalise a non-thunk"),
                     }
                 }
 
