@@ -109,8 +109,10 @@ themselves**.
 
 ## Registration
 
-If you would like to have an account on the Gerrit instance, follow these
-instructions:
+You may log into Gerrit using a GitHub, StackOverflow or GitLab.com account.
+
+If you would like to have a TVL-specific account on the Gerrit
+instance, follow these instructions:
 
 1. Be a member of `#tvl` on [hackint][].
 2. Clone the depot locally (via `git clone "https://cl.tvl.fyi/depot"`).
