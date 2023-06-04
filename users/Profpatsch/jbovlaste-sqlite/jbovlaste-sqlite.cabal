@@ -63,6 +63,8 @@ executable jbovlaste-sqlite
         pa-error-tree,
         my-prelude,
         containers,
+        selective,
+        semigroupoids,
         bytestring,
         arglib-netencode,
         netencode,
