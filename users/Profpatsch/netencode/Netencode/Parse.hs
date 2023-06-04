@@ -32,6 +32,15 @@ newtype Parse from to
             ((,) [Text])
         )
 
+instance Semigroupoid Parse where
+  o p2 p1 = Parse $ \from -> case runParse' p1 from of
+    Failure err -> Failure err
+    Success to1 -> runParse' p2 to1
+
+instance Category Parse where
+  (.) = Semigroupoid.o
+  id = Parse $ \t -> Success t
+
 runParse :: Error -> Parse from to -> from -> Either ErrorTree to
 runParse errMsg parser t =
   (["$"], t)
@@ -42,15 +51,6 @@ runParse errMsg parser t =
 
 runParse' :: Parse from to -> ([Text], from) -> Validation (NonEmpty ErrorTree) ([Text], to)
 runParse' (Parse f) from = f from
-
-instance Semigroupoid Parse where
-  o p2 p1 = Parse $ \from -> case runParse' p1 from of
-    Failure err -> Failure err
-    Success to1 -> runParse' p2 to1
-
-instance Category Parse where
-  (.) = Semigroupoid.o
-  id = Parse $ \t -> Success t
 
 parseEither :: (([Text], from) -> Either ErrorTree ([Text], to)) -> Parse from to
 parseEither f = Parse $ \from -> f from & eitherToListValidation

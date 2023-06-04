@@ -1,7 +1,7 @@
 { depot, pkgs, lib, ... }:
 
 let
-#   bins = depot.nix.getBins pkgs.sqlite ["sqlite3"];
+  #   bins = depot.nix.getBins pkgs.sqlite ["sqlite3"];
 
   jbovlaste-sqlite = pkgs.haskellPackages.mkDerivation {
     pname = "jbovlaste-sqlite";
@@ -13,13 +13,13 @@ let
     ];
 
     libraryHaskellDepends = [
-        pkgs.haskellPackages.pa-prelude
-        pkgs.haskellPackages.pa-label
-        pkgs.haskellPackages.pa-error-tree
-        pkgs.haskellPackages.sqlite-simple
-        pkgs.haskellPackages.xml-conduit
-        depot.users.Profpatsch.arglib.netencode.haskell
-        depot.users.Profpatsch.netencode.netencode-hs
+      pkgs.haskellPackages.pa-prelude
+      pkgs.haskellPackages.pa-label
+      pkgs.haskellPackages.pa-error-tree
+      pkgs.haskellPackages.sqlite-simple
+      pkgs.haskellPackages.xml-conduit
+      depot.users.Profpatsch.arglib.netencode.haskell
+      depot.users.Profpatsch.netencode.netencode-hs
 
     ];
 
