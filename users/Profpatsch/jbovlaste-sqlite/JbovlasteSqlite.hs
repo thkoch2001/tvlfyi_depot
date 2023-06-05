@@ -1,13 +1,18 @@
 {-# LANGUAGE QuasiQuotes #-}
+{-# OPTIONS_GHC -Wno-orphans #-}
 
 module Main where
 
+import Conduit ((.|))
+import Conduit qualified as Cond
 import Control.Category qualified
 import Control.Category qualified as Cat
+import Control.Foldl qualified as Fold
 import Control.Selective (Selective)
 import Data.ByteString.Internal qualified as Bytes
 import Data.Error.Tree
 import Data.Functor.Compose
+import Data.Int (Int64)
 import Data.List qualified as List
 import Data.Map.Strict qualified as Map
 import Data.Maybe (catMaybes)
@@ -16,15 +21,17 @@ import Data.Semigroup.Traversable
 import Data.Semigroupoid qualified as Semigroupoid
 import Data.Text qualified as Text
 import Data.Text.IO qualified as Text
+import Database.SQLite.Simple qualified as Sqlite
+import Database.SQLite.Simple.FromField qualified as Sqlite
+import Database.SQLite.Simple.QQ qualified as Sqlite
 import FieldParser (FieldParser)
 import FieldParser qualified as Field
 import Label
 import PossehlAnalyticsPrelude
-import Pretty
 import Text.XML (def)
 import Text.XML qualified as Xml
 import Validation (partitionValidations)
-import Prelude hiding (maybe)
+import Prelude hiding (init, maybe)
 import Prelude qualified
 
 main :: IO ()
@@ -36,6 +43,16 @@ main = do
     & prettyErrorTree
     & Text.putStrLn
 
+test :: IO ()
+test = do
+  withEnv $ \env -> do
+    migrate env
+    f <- file
+    parseJbovlasteXml f
+      & \case
+        Left errs -> Text.putStrLn $ prettyErrorTree errs
+        Right valsi -> insertValsi env valsi
+
 filterDown :: Xml.Element -> Xml.Element
 filterDown el =
   el
@@ -43,7 +60,8 @@ filterDown el =
     & downTo (T2 (label @"maxdepth" 5) (label @"maxlistitems" 30))
 
 data Valsi = Valsi
-  { definition :: Text,
+  { word :: Text,
+    definition :: Text,
     definitionId :: Natural,
     typ :: Text,
     selmaho :: Maybe Text,
@@ -53,84 +71,179 @@ data Valsi = Valsi
   }
   deriving stock (Show)
 
-test :: IO ()
-test = do
-  f <- file
-  parseJbovlasteXml f
-    & \case
-      Left errs -> Text.putStrLn $ prettyErrorTree errs
-      Right el -> do
-        el & traverse_ printPretty
+insertValsi :: Env -> [Valsi] -> IO ()
+insertValsi env vs = do
+  Sqlite.withTransaction env.envData $
+    do
+      valsiIds <-
+        Cond.yieldMany vs
+          .| Cond.mapMC
+            ( \v ->
+                Sqlite.queryNamed
+                  @(Sqlite.Only Int64)
+                  env.envData
+                  [Sqlite.sql|
+                     INSERT INTO valsi
+                       (word , definition , type , selmaho , notes )
+                       VALUES
+                       (:word, :definition, :type, :selmaho, :notes)
+                       RETURNING (id)
+                   |]
+                  [ ":word" Sqlite.:= v.word,
+                    ":definition" Sqlite.:= v.definition,
+                    ":type" Sqlite.:= v.typ,
+                    ":selmaho" Sqlite.:= v.selmaho,
+                    ":notes" Sqlite.:= v.notes
+                  ]
+                  >>= \case
+                    [one] -> pure one
+                    _ -> error "more or less than one result"
+            )
+          .| Cond.sinkList
+          & Cond.runConduit
+      for_ (zip valsiIds vs) $ \(Sqlite.Only vId, v) -> do
+        for_ v.glosswords $ \g -> do
+          Sqlite.executeNamed
+            env.envData
+            [Sqlite.sql|
+                      INSERT INTO glosswords
+                        (valsi_id , word , sense )
+                        VALUES
+                        (:valsi_id, :word, :sense)
+                    |]
+            [ ":valsi_id" Sqlite.:= vId,
+              ":word" Sqlite.:= g.word,
+              ":sense" Sqlite.:= g.sense
+            ]
+      for_ (zip valsiIds vs) $ \(Sqlite.Only vId, v) -> do
+        for_ v.keywords $ \g -> do
+          Sqlite.executeNamed
+            env.envData
+            [Sqlite.sql|
+                      INSERT INTO keywords
+                        (valsi_id , word , place , sense )
+                        VALUES
+                        (:valsi_id, :word, :place, :sense)
+                    |]
+            [ ":valsi_id" Sqlite.:= vId,
+              ":word" Sqlite.:= g.word,
+              ":place" Sqlite.:= (g.place & fromIntegral @Natural @Int),
+              ":sense" Sqlite.:= g.sense
+            ]
+
+migrate :: HasField "envData" p Sqlite.Connection => p -> IO ()
+migrate env = do
+  let x q = Sqlite.execute env.envData q ()
+  x
+    [Sqlite.sql|
+      CREATE TABLE IF NOT EXISTS valsi (
+        id integer PRIMARY KEY,
+        word text NOT NULL,
+        definition text NOT NULL,
+        type text NOT NULL,
+        selmaho text NULL,
+        notes text NULL
+      )
+     |]
+  x
+    [Sqlite.sql|
+      CREATE TABLE IF NOT EXISTS glosswords (
+        id integer PRIMARY KEY,
+        valsi_id integer NOT NULL,
+        word text NOT NULL,
+        sense text NULL,
+        FOREIGN KEY(valsi_id) REFERENCES valsi(id)
+      )
+    |]
+  x
+    [Sqlite.sql|
+      CREATE TABLE IF NOT EXISTS keywords (
+        id integer PRIMARY KEY,
+        valsi_id integer NOT NULL,
+        word text NOT NULL,
+        place integer NOT NULL,
+        sense text NULL,
+        FOREIGN KEY(valsi_id) REFERENCES valsi(id)
+      )
+    |]
+
+data Env = Env
+  { envData :: Sqlite.Connection
+  }
+
+withEnv :: (Env -> IO a) -> IO a
+withEnv inner = do
+  withSqlite "./jbovlaste.sqlite" $ \envData -> inner Env {..}
+
+withSqlite :: String -> (Sqlite.Connection -> IO a) -> IO a
+withSqlite fileName inner = Sqlite.withConnection fileName $ \conn -> do
+  -- Sqlite.setTrace conn (Just (\msg -> Text.hPutStrLn IO.stderr [fmt|{fileName}: {msg}|]))
+  Sqlite.execute conn [Sqlite.sql|PRAGMA foreign_keys = ON|] ()
+  inner conn
 
 parseJbovlasteXml :: HasField "documentRoot" r Xml.Element => r -> Either ErrorTree [Valsi]
 parseJbovlasteXml xml =
   xml.documentRoot
     & runParse
-      "uh oh"
-      ( ( element "dictionary" <&> (.elementNodes) <&> mapMaybe nodeElementMay
-        )
-          >>> ( ( find
-                    ( element "direction"
-                        >>> ( ( do
-                                  (attribute "from" >>> exactly showToText "lojban")
-                                  *> (attribute "to" >>> exactly showToText "English")
-                                  *> Cat.id
-                              )
-                            )
-                    )
-                    >>> dimap
-                      (\x -> x.elementNodes <&> nodeElementMay)
-                      (catMaybes)
-                      ( multiple
-                          (\idx _ -> [fmt|{idx}|])
-                          ( maybe $
-                              (element "valsi")
-                                >>> do
-                                  let subNodes =
-                                        ( Cat.id
-                                            <&> (.elementNodes)
-                                            <&> mapMaybe nodeElementMay
-                                        )
-
-                                  let subElementContent elName =
-                                        subNodes
-                                          >>> ( (find (element elName))
-                                                  <&> (.elementNodes)
-                                              )
-                                          >>> exactlyOne
-                                          >>> content
-                                  let optionalSubElementContent elName =
-                                        subNodes
-                                          >>> ((findAll (element elName) >>> zeroOrOne))
-                                          >>> (maybe (lmap (.elementNodes) exactlyOne >>> content))
-
-                                  typ <- attribute "type"
-                                  selmaho <- optionalSubElementContent "selmaho"
-                                  definition <- subElementContent "definition"
-                                  definitionId <- subElementContent "definitionid" >>> fieldParser Field.decimalNatural
-                                  notes <- optionalSubElementContent "notes"
-                                  glosswords <-
-                                    (subNodes >>> findAll (element "glossword"))
-                                      >>> ( multiple (\idx _ -> [fmt|{idx}|]) $ do
-                                              word <- label @"word" <$> (attribute "word")
-                                              sense <- label @"sense" <$> (attributeMay "sense")
-                                              pure $ T2 word sense
-                                          )
-                                  keywords <-
-                                    (subNodes >>> findAll (element "keyword"))
-                                      >>> ( multiple (\idx _ -> [fmt|{idx}|]) $ do
-                                              word <- label @"word" <$> (attribute "word")
-                                              place <- label @"place" <$> (attribute "place" >>> fieldParser Field.decimalNatural)
-                                              sense <- label @"sense" <$> (attributeMay "sense")
-                                              pure $ T3 word place sense
-                                          )
-
-                                  pure $ Valsi {..}
-                          )
-                      )
+      "cannot parse jbovlaste.xml"
+      parser
+  where
+    parser =
+      (element "dictionary" <&> (.elementNodes) <&> mapMaybe nodeElementMay)
+        >>> ( find
+                ( element "direction"
+                    >>> do
+                      (attribute "from" >>> exactly showToText "lojban")
+                      *> (attribute "to" >>> exactly showToText "English")
+                      *> Cat.id
                 )
-              )
-      )
+                <&> (\x -> x.elementNodes <&> nodeElementMay)
+            )
+        >>> (multiple (maybe valsi) <&> catMaybes)
+    valsi =
+      element "valsi"
+        >>> do
+          let subNodes =
+                ( Cat.id
+                    <&> (.elementNodes)
+                    <&> mapMaybe nodeElementMay
+                )
+
+          let subElementContent elName =
+                subNodes
+                  >>> ( (find (element elName))
+                          <&> (.elementNodes)
+                      )
+                  >>> exactlyOne
+                  >>> content
+          let optionalSubElementContent elName =
+                subNodes
+                  >>> ((findAll (element elName) >>> zeroOrOne))
+                  >>> (maybe (lmap (.elementNodes) exactlyOne >>> content))
+
+          word <- attribute "word"
+          typ <- attribute "type"
+          selmaho <- optionalSubElementContent "selmaho"
+          definition <- subElementContent "definition"
+          definitionId <- subElementContent "definitionid" >>> fieldParser Field.decimalNatural
+          notes <- optionalSubElementContent "notes"
+          glosswords <-
+            (subNodes >>> findAll (element "glossword"))
+              >>> ( multiple $ do
+                      word' <- label @"word" <$> (attribute "word")
+                      sense <- label @"sense" <$> (attributeMay "sense")
+                      pure $ T2 word' sense
+                  )
+          keywords <-
+            (subNodes >>> findAll (element "keyword"))
+              >>> ( multiple $ do
+                      word' <- label @"word" <$> (attribute "word")
+                      place <- label @"place" <$> (attribute "place" >>> fieldParser Field.decimalNatural)
+                      sense <- label @"sense" <$> (attributeMay "sense")
+                      pure $ T3 word' place sense
+                  )
+
+          pure $ Valsi {..}
 
 file :: IO Xml.Document
 file = Xml.readFile def "./jbovlaste-en.xml"
@@ -225,10 +338,6 @@ nodeElementMay = \case
   Xml.NodeElement el -> Just el
   _ -> Nothing
 
-newtype Context = Context (Maybe [Text])
-  deriving stock (Show)
-  deriving (Semigroup, Monoid) via (First [Text])
-
 newtype Parse from to = Parse ((Context, from) -> Validation (NonEmpty ErrorTree) (Context, to))
   deriving
     (Functor, Applicative, Selective)
@@ -239,6 +348,10 @@ newtype Parse from to = Parse ((Context, from) -> Validation (NonEmpty ErrorTree
             )
             ((,) Context)
         )
+
+newtype Context = Context (Maybe [Text])
+  deriving stock (Show)
+  deriving (Semigroup, Monoid) via (First [Text])
 
 instance Semigroupoid Parse where
   o p2 p1 = Parse $ \from -> case runParse' p1 from of
@@ -307,14 +420,14 @@ exactly errDisplay from = Parse $ \(ctx, from') ->
     then Success (ctx, from')
     else Failure $ singleton [fmt|Field has to be exactly {errDisplay from}, was: {errDisplay from'} at {showContext ctx}|]
 
-multiple :: (Natural -> a1 -> Error) -> Parse a1 a2 -> Parse [a1] [a2]
-multiple errorFn inner = dimap nonEmpty (Prelude.maybe [] toList) (maybe $ multipleNE errorFn inner)
+multiple :: Parse a1 a2 -> Parse [a1] [a2]
+multiple inner = dimap nonEmpty (Prelude.maybe [] toList) (maybe $ multipleNE inner)
 
-multipleNE :: (Natural -> from -> Error) -> Parse from to -> Parse (NonEmpty from) (NonEmpty to)
-multipleNE errorFn inner = Parse $ \(ctx, from) ->
+multipleNE :: Parse from to -> Parse (NonEmpty from) (NonEmpty to)
+multipleNE inner = Parse $ \(ctx, from) ->
   from
     & zipIndex
-    & traverse (\(idx, f) -> runParse' inner (ctx, f) & first (singleton . nestedMultiError (errorFn idx f)))
+    & traverse (\(idx, f) -> runParse' inner (ctx, f) & first (singleton . nestedMultiError [fmt|{idx}|]))
     -- we assume that, since the same parser is used everywhere, the context will be the same as well (TODO: correct?)
     & second (\((ctx', y) :| ys) -> (ctx', y :| (snd <$> ys)))
 
@@ -380,3 +493,31 @@ zipNonEmpty (x :| xs) (y :| ys) = (x, y) :| zip xs ys
 
 zipIndex :: NonEmpty b -> NonEmpty (Natural, b)
 zipIndex = zipNonEmpty (1 :| [2 :: Natural ..])
+
+instance
+  ( Sqlite.FromField t1,
+    Sqlite.FromField t2,
+    Sqlite.FromField t3
+  ) =>
+  Sqlite.FromRow (T3 l1 t1 l2 t2 l3 t3)
+  where
+  fromRow = do
+    T3
+      <$> (label @l1 <$> Sqlite.field)
+      <*> (label @l2 <$> Sqlite.field)
+      <*> (label @l3 <$> Sqlite.field)
+
+foldRows ::
+  forall row params b.
+  (Sqlite.FromRow row, Sqlite.ToRow params) =>
+  Sqlite.Connection ->
+  Sqlite.Query ->
+  params ->
+  Fold.Fold row b ->
+  IO b
+foldRows conn qry params = Fold.purely f
+  where
+    f :: forall x. (x -> row -> x) -> x -> (x -> b) -> IO b
+    f acc init extract = do
+      x <- Sqlite.fold conn qry params init (\a r -> pure $ acc a r)
+      pure $ extract x
