@@ -1,6 +1,5 @@
 version 1 .
 
-
 Build = <nix-build @input string @output any> .
 
 Realise = <realise @drv string @outputs [string ...]> .
@@ -12,3 +11,26 @@ Eval = <eval @expr string @options {symbol: any ...:...} @result any> .
 Narinfo = <narinfo @path string @info Dict> .
 
 Dict = {symbol: any ...:...} .
+
+FieldInt = int .
+FieldString = string .
+Field = int / string .
+Fields = [Field ...] .
+
+ActionStart = <start @id int @level int @type int @text string @fields Fields @parent int> .
+ActionStop = <stop @id int> .
+ActionResult = <result @id int @type int @fields Fields> .
+
+; TODO: why not make target a singleton?
+Missing = <missing @targets #{string} @willBuild #{string} @willSubstitute #{string} @unknown #{string} @downloadSize int @narSize int> .
+
+PathInfo = <path-info
+  @path string
+  @deriver string
+  @narHash string
+  @references #{string}
+  @registrationTime int
+  @narSize int
+  @ultimate bool
+  @sigs #{string}
+  @ca string> .

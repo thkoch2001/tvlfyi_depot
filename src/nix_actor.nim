@@ -1,12 +1,12 @@
 # SPDX-FileCopyrightText: ☭ Emery Hemingway
 # SPDX-License-Identifier: Unlicense
 
-import std/[asyncdispatch, httpclient, json, osproc, parseutils, strutils, tables]
+import std/[asyncdispatch, httpclient, json, os, osproc, parseutils, strutils, tables]
 import preserves, preserves/jsonhooks
 import syndicate
 from syndicate/protocols/dataspace import Observe
 import ./nix_actor/protocol
-import ./nix_actor/[main, store]
+import ./nix_actor/[main, sockets]
 
 type
   Value = Preserve[void]
@@ -39,7 +39,6 @@ proc narinfo(turn: var Turn; ds: Ref; path: string) =
     client = newAsyncHttpClient()
     url = "https://cache.nixos.org/" & path & ".narinfo"
     futGet = get(client, url)
-  stderr.writeLine "fetching ", url
   addCallback(futGet, turn) do (turn: var Turn):
     let resp = read(futGet)
     if code(resp) != Http200:
@@ -108,13 +107,21 @@ proc bootNixFacet(ds: Ref; turn: var Turn): Facet =
     during(turn, ds, ?Observe(pattern: !Narinfo) ?? {0: grabLit()}) do (path: string):
       narinfo(turn, ds, path)
 
-type Args {.preservesDictionary.} = object
-  dataspace: Ref
+type
+  RefArgs {.preservesDictionary.} = object
+    dataspace: Ref
+  SocketArgs {.preservesDictionary.} = object
+    `listen-socket`: string
 
 proc bootNixActor(root: Ref; turn: var Turn) =
   connectStdio(root, turn)
-  during(turn, root, ?Args) do (ds: Ref):
+  during(turn, root, ?RefArgs) do (ds: Ref):
     discard bootNixFacet(ds, turn)
+  during(turn, root, ?SocketArgs) do (path: string):
+    removeFile(path)
+    asyncCheck(turn, emulateSocket(path))
+  do:
+    removeFile(path)
 
 initNix() # Nix lib isn't actually being used but it's nice to know that it links.
 runActor("main", bootNixActor)
