@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "beb90ed5_a11376b2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2023-06-05T22:22:01Z",
+      "side": 1,
+      "message": "This change breaks the X server completely. Yeah, I don\u0027t understand it either. It\u0027s probably just a broken artifact in the build or whatever.",
+      "revId": "78cf80df9bc979eb739c7c236b3b4b699254b498",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
