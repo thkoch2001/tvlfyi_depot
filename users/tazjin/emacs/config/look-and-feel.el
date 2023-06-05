@@ -22,7 +22,7 @@
   (blink-cursor-mode -1))
 
 ;; Configure Emacs fonts.
-(let ((font (format "JetBrains Mono Medium-%d" 12)))
+(let ((font (format "JetBrains Mono-%d" 12)))
   (setq default-frame-alist `((font . ,font)))
   (set-frame-font font t t))
 
