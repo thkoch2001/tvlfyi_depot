@@ -20,6 +20,7 @@ pkgs.mkShell {
       h.pa-label
       h.ihp-hsx
       h.PyF
+      h.foldl
       h.unliftio
       h.xml-conduit
       h.wai
