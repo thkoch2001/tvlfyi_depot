@@ -67,3 +67,39 @@ resource "yandex_dns_recordset" "aname_russiaishiring_com" {
   data    = ["russiaishiring.com.website.yandexcloud.net"]
   ttl     = 600
 }
+
+resource "yandex_container_registry" "rih_registry" {
+  name      = "rih-registry"
+  folder_id = local.rih_folder_id
+}
+
+resource "yandex_iam_service_account" "rih_backend" {
+  name      = "rih-backend"
+  folder_id = local.rih_folder_id
+}
+
+resource "yandex_resourcemanager_folder_iam_member" "rih_backend_storage_editor" {
+  folder_id = local.rih_folder_id
+  role      = "storage.editor"
+  member    = "serviceAccount:${yandex_iam_service_account.rih_backend.id}"
+}
+
+resource "yandex_resourcemanager_folder_iam_member" "rih_backend_image_pull" {
+  folder_id = local.rih_folder_id
+  role      = "container-registry.images.puller"
+  member    = "serviceAccount:${yandex_iam_service_account.rih_backend.id}"
+}
+
+resource "yandex_serverless_container" "rih_backend" {
+  name               = "rih-backend"
+  folder_id          = local.rih_folder_id
+  memory             = 128
+  execution_timeout  = "10s"
+  cores              = 1
+  core_fraction      = 100
+  service_account_id = yandex_iam_service_account.rih_backend.id
+
+  image {
+    url = "cr.yandex/crpkcq65tn6bhq6puq2o/rih-backend:a4sdm3gn9l41xv3lyr5642mpd9m0fdhg"
+  }
+}
