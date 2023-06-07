@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "46e2befd_42b77b49",
+        "filename": "tvix/eval/src/opcode.rs",
+        "patchSetId": 5
+      },
+      "lineNbr": 165,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2023-06-07T15:22:53Z",
+      "side": 1,
+      "message": "This variant might increase the size of `OpCode`, which is _very_ expensive (it\u0027s the most impactful perf knob we can currently tweak directly). Might be worth checking a size_of before/after to ensure that this isn\u0027t the case, and maybe falling back to existing instructions if it is.",
+      "range": {
+        "startLine": 165,
+        "startChar": 0,
+        "endLine": 165,
+        "endChar": 45
+      },
+      "revId": "b15c16f905d731a51e15353384711ac0c554bbd5",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "80e3c850_e67094bd",
+        "filename": "tvix/eval/src/vm/mod.rs",
+        "patchSetId": 5
+      },
+      "lineNbr": 742,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2023-06-07T15:22:53Z",
+      "side": 1,
+      "message": "Probably better to make this two separate arms instead of merging them, as we\u0027re checking against the type of the op twice otherwise (and OpFinalise probably still occurs relatively more often than OpFinaliseIfSentinel)",
+      "range": {
+        "startLine": 737,
+        "startChar": 0,
+        "endLine": 742,
+        "endChar": 0
+      },
+      "revId": "b15c16f905d731a51e15353384711ac0c554bbd5",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
