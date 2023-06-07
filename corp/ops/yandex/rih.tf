@@ -103,3 +103,67 @@ resource "yandex_serverless_container" "rih_backend" {
     url = "cr.yandex/crpkcq65tn6bhq6puq2o/rih-backend:a4sdm3gn9l41xv3lyr5642mpd9m0fdhg"
   }
 }
+
+resource "yandex_api_gateway" "rih_gateway" {
+  name      = "rih-gateway"
+  folder_id = local.rih_folder_id
+
+  custom_domains {
+    fqdn           = "api.russiaishiring.com"
+    certificate_id = yandex_cm_certificate.api_russiaishiring_com.id
+  }
+
+  depends_on = [
+    yandex_cm_certificate.api_russiaishiring_com,
+    yandex_dns_recordset.acme_api_russiaishiring_com,
+  ]
+
+  spec = <<-EOT
+    openapi: "3.0.0"
+    info:
+      version: 1.0.0
+      title: RIH API
+    paths:
+      /{proxy+}:
+        x-yc-apigateway-any-method:
+          x-yc-apigateway-integration:
+            type: serverless_containers
+            container_id: ${yandex_serverless_container.rih_backend.id}
+            service_account_id: ${yandex_iam_service_account.rih_backend.id}
+          parameters:
+          - explode: false
+            in: path
+            name: proxy
+            required: false
+            schema:
+              default: '-'
+              type: string
+            style: simple
+  EOT
+}
+
+resource "yandex_cm_certificate" "api_russiaishiring_com" {
+  folder_id = local.rih_folder_id
+  name      = "api-russiaishiring-com"
+  domains   = ["api.russiaishiring.com"]
+
+  managed {
+    challenge_type = "DNS_CNAME"
+  }
+}
+
+resource "yandex_dns_recordset" "acme_api_russiaishiring_com" {
+  zone_id = yandex_dns_zone.russiaishiring_com.id
+  name    = yandex_cm_certificate.api_russiaishiring_com.challenges[0].dns_name
+  type    = yandex_cm_certificate.api_russiaishiring_com.challenges[0].dns_type
+  data    = [yandex_cm_certificate.api_russiaishiring_com.challenges[0].dns_value]
+  ttl     = 60
+}
+
+resource "yandex_dns_recordset" "cname_api_russiaishiring_com" {
+  zone_id = yandex_dns_zone.russiaishiring_com.id
+  name    = "api.russiaishiring.com."
+  type    = "CNAME"
+  data    = [yandex_api_gateway.rih_gateway.domain]
+  ttl     = 600
+}
