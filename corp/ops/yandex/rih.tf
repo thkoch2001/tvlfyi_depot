@@ -94,7 +94,7 @@ resource "yandex_serverless_container" "rih_backend" {
   service_account_id = yandex_iam_service_account.rih_backend.id
 
   image {
-    url = "cr.yandex/crpkcq65tn6bhq6puq2o/rih-backend:9cwnx8jvwjw2ckpqg970p4y7cf74z28j"
+    url = "cr.yandex/crpkcq65tn6bhq6puq2o/rih-backend:dhgw6c4afancx1a3gac6day0bdgd9qhf"
   }
 
   secrets {
@@ -195,6 +195,15 @@ resource "yandex_kms_symmetric_key" "backend_data_key" {
   lifecycle {
     prevent_destroy = true
   }
+}
+
+resource "yandex_kms_symmetric_key_iam_binding" "rih_encryption_access" {
+  symmetric_key_id = yandex_kms_symmetric_key.backend_data_key.id
+  role             = "kms.keys.encrypter"
+
+  members = [
+    "serviceAccount:${yandex_iam_service_account.rih_backend.id}"
+  ]
 }
 
 resource "yandex_storage_bucket" "rih_backend_data" {
