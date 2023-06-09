@@ -17,7 +17,7 @@ resource "yandex_iam_service_account" "rih_storage_sa" {
 
 resource "yandex_resourcemanager_folder_iam_member" "rih_sa_storage_editor" {
   folder_id = local.rih_folder_id
-  role      = "storage.editor"
+  role      = "storage.admin"
   member    = "serviceAccount:${yandex_iam_service_account.rih_storage_sa.id}"
 }
 
@@ -76,12 +76,6 @@ resource "yandex_container_registry" "rih_registry" {
 resource "yandex_iam_service_account" "rih_backend" {
   name      = "rih-backend"
   folder_id = local.rih_folder_id
-}
-
-resource "yandex_resourcemanager_folder_iam_member" "rih_backend_storage_editor" {
-  folder_id = local.rih_folder_id
-  role      = "storage.editor"
-  member    = "serviceAccount:${yandex_iam_service_account.rih_backend.id}"
 }
 
 resource "yandex_resourcemanager_folder_iam_member" "rih_backend_image_pull" {
@@ -167,3 +161,79 @@ resource "yandex_dns_recordset" "cname_api_russiaishiring_com" {
   data    = [yandex_api_gateway.rih_gateway.domain]
   ttl     = 600
 }
+
+# Bucket setup for data receival bucket
+#
+# The bucket is set up and controlled by the default storage account,
+# but a separate key is set up for the rih-backend IAM account which
+# can only access the information in this bucket.
+
+resource "yandex_kms_symmetric_key" "backend_data_key" {
+  name              = "rih-backend-data-key"
+  default_algorithm = "AES_128"
+  rotation_period   = "4380h" # ~6 months
+
+  lifecycle {
+    prevent_destroy = true
+  }
+}
+
+resource "yandex_storage_bucket" "rih_backend_data" {
+  access_key = yandex_iam_service_account_static_access_key.rih_sa_static_key.access_key
+  secret_key = yandex_iam_service_account_static_access_key.rih_sa_static_key.secret_key
+  bucket     = "rih-backend-data"
+  folder_id  = local.rih_folder_id
+  acl        = "private"
+
+  versioning {
+    enabled = true
+  }
+
+  server_side_encryption_configuration {
+    rule {
+      apply_server_side_encryption_by_default {
+        kms_master_key_id = yandex_kms_symmetric_key.backend_data_key.id
+        sse_algorithm     = "aws:kms"
+      }
+    }
+  }
+
+  lifecycle {
+    prevent_destroy = true
+  }
+}
+
+resource "yandex_iam_service_account_static_access_key" "rih_backend_static_key" {
+  service_account_id = yandex_iam_service_account.rih_backend.id
+  description        = "RIH backend bucket access key"
+}
+
+resource "yandex_lockbox_secret" "rih_backend_storage_key" {
+  name      = "rih-backend-storage-key"
+  folder_id = local.rih_folder_id
+}
+
+resource "yandex_lockbox_secret_version" "rih_backend_storage_secret" {
+  secret_id = yandex_lockbox_secret.rih_backend_storage_key.id
+
+  entries {
+    key        = "access_key"
+    text_value = yandex_iam_service_account_static_access_key.rih_backend_static_key.access_key
+  }
+
+  entries {
+    key        = "secret_key"
+    text_value = yandex_iam_service_account_static_access_key.rih_backend_static_key.secret_key
+  }
+}
+
+# TODO(tazjin): needs provider update
+#
+# resource "yandex_lockbox_secret_iam_binding" "viewer" {
+#   secret_id = yandex_lockbox_secret.rih_backend_storage_key.id
+#   role = "viewer"
+
+#   members = [
+#     "serviceAccount:${yandex_iam_service_account.rih_backend.id}"
+#   ]
+# }
