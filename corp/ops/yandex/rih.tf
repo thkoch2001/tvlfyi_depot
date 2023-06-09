@@ -131,6 +131,11 @@ resource "yandex_api_gateway" "rih_gateway" {
     info:
       version: 1.0.0
       title: RIH API
+    x-yc-apigateway:
+      cors:
+        origin: 'https://russiaishiring.com'
+        methods: '*'
+        allowedHeaders: '*'
     paths:
       /{proxy+}:
         x-yc-apigateway-any-method:
