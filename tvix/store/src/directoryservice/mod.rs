@@ -1,10 +1,13 @@
 use crate::{proto, B3Digest, Error};
+
+mod from_addr;
 mod grpc;
 mod memory;
 mod sled;
 mod traverse;
 mod utils;
 
+pub use self::from_addr::from_addr;
 pub use self::grpc::GRPCDirectoryService;
 pub use self::memory::MemoryDirectoryService;
 pub use self::sled::SledDirectoryService;
