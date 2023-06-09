@@ -13,5 +13,6 @@ pub fn gen_directory_service() -> impl DirectoryService + Send + Sync + Clone + 
 }
 
 pub fn gen_pathinfo_service() -> impl PathInfoService {
+    // TODO: ask for blob and directory services
     MemoryPathInfoService::default()
 }

@@ -73,4 +73,8 @@ impl PathInfoService for SledPathInfoService {
             },
         }
     }
+
+    fn calculate_nar(&self, root_node: &proto::node::Node) -> Result<(u64, [u8; 32]), Error> {
+        todo!()
+    }
 }

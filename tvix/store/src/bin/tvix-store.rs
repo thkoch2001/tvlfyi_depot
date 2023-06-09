@@ -94,7 +94,6 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
             // initialize stores
             let blob_service = SledBlobService::new("blobs.sled".into())?;
             let boxed_blob_service: Box<dyn BlobService> = Box::new(blob_service.clone());
-            let boxed_blob_service2: Box<dyn BlobService> = Box::new(blob_service);
             let directory_service = SledDirectoryService::new("directories.sled".into())?;
             let path_info_service = SledPathInfoService::new("pathinfo.sled".into())?;
 
@@ -113,11 +112,9 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
                 .add_service(DirectoryServiceServer::new(
                     GRPCDirectoryServiceWrapper::from(directory_service.clone()),
                 ))
-                .add_service(PathInfoServiceServer::new(GRPCPathInfoServiceWrapper::new(
-                    path_info_service,
-                    boxed_blob_service2,
-                    directory_service,
-                )));
+                .add_service(PathInfoServiceServer::new(
+                    GRPCPathInfoServiceWrapper::from(path_info_service),
+                ));
 
             #[cfg(feature = "reflection")]
             {
