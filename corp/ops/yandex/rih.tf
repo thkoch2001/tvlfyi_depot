@@ -96,6 +96,20 @@ resource "yandex_serverless_container" "rih_backend" {
   image {
     url = "cr.yandex/crpkcq65tn6bhq6puq2o/rih-backend:a4sdm3gn9l41xv3lyr5642mpd9m0fdhg"
   }
+
+  secrets {
+    id                   = yandex_lockbox_secret.rih_backend_storage_key.id
+    version_id           = yandex_lockbox_secret_version.rih_backend_storage_secret.id
+    key                  = "access_key"
+    environment_variable = "AWS_ACCESS_KEY_ID"
+  }
+
+  secrets {
+    id                   = yandex_lockbox_secret.rih_backend_storage_key.id
+    version_id           = yandex_lockbox_secret_version.rih_backend_storage_secret.id
+    key                  = "secret_key"
+    environment_variable = "AWS_SECRET_ACCESS_KEY"
+  }
 }
 
 resource "yandex_api_gateway" "rih_gateway" {
