@@ -10,6 +10,7 @@ use rand::thread_rng;
 use serde::{Deserialize, Serialize};
 use static_markdown::markdown;
 use std::collections::BTreeSet;
+use uuid::Uuid;
 use wasm_bindgen::closure::Closure;
 use wasm_bindgen::{JsCast, JsValue};
 use web_sys::{HtmlInputElement, HtmlTextAreaElement, KeyboardEvent};
@@ -94,6 +95,9 @@ enum Route {
 /// primary data structure we want to populate and persist somewhere.
 #[derive(Clone, Default, Debug, Deserialize, Serialize)]
 struct Record {
+    // Record-specific metadata
+    uuid: Uuid,
+
     // Personal information
     name: String,
     email: String,
@@ -362,7 +366,11 @@ impl Component for App {
 
     fn create(ctx: &Context<Self>) -> Self {
         App {
-            record: LocalStorage::get("record").unwrap_or_default(),
+            record: LocalStorage::get("record").unwrap_or_else(|_| {
+                let mut new_record = Record::default();
+                new_record.uuid = Uuid::new_v4();
+                new_record
+            }),
             citizenship_focus: false,
             citizenship_query: String::default(),
             history: BrowserHistory::default(),
