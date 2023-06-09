@@ -21,7 +21,7 @@ fn single_symlink() {
         }),
         // don't put anything in the stores, as we don't actually do any requests.
         &gen_blob_service(),
-        gen_directory_service(),
+        &gen_directory_service(),
     )
     .expect("must succeed");
 
@@ -43,7 +43,7 @@ fn single_file_missing_blob() {
         }),
         // the blobservice is empty intentionally, to provoke the error.
         &gen_blob_service(),
-        gen_directory_service(),
+        &gen_directory_service(),
     )
     .expect_err("must fail");
 
@@ -83,7 +83,7 @@ fn single_file_wrong_blob_size() {
                 executable: false,
             }),
             &blob_service,
-            gen_directory_service(),
+            &gen_directory_service(),
         )
         .expect_err("must fail");
 
@@ -108,7 +108,7 @@ fn single_file_wrong_blob_size() {
                 executable: false,
             }),
             &blob_service,
-            gen_directory_service(),
+            &gen_directory_service(),
         )
         .expect_err("must fail");
 
@@ -145,7 +145,7 @@ fn single_file() {
             executable: false,
         }),
         &blob_service,
-        gen_directory_service(),
+        &gen_directory_service(),
     )
     .expect("must succeed");
 
@@ -182,7 +182,7 @@ fn test_complicated() {
             size: DIRECTORY_COMPLICATED.size(),
         }),
         &blob_service,
-        directory_service.clone(),
+        &directory_service,
     )
     .expect("must succeed");
 
@@ -196,7 +196,7 @@ fn test_complicated() {
             size: DIRECTORY_COMPLICATED.size(),
         }),
         &blob_service,
-        directory_service,
+        &directory_service,
     )
     .expect("must succeed");
 

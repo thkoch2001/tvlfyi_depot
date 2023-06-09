@@ -46,8 +46,6 @@ impl GRPCDirectoryService {
 }
 
 impl DirectoryService for GRPCDirectoryService {
-    type DirectoriesIterator = StreamIterator;
-
     fn get(&self, digest: &B3Digest) -> Result<Option<crate::proto::Directory>, crate::Error> {
         // Get a new handle to the gRPC client, and copy the digest.
         let mut grpc_client = self.grpc_client.clone();
@@ -113,7 +111,10 @@ impl DirectoryService for GRPCDirectoryService {
     }
 
     #[instrument(skip_all, fields(directory.digest = %root_directory_digest))]
-    fn get_recursive(&self, root_directory_digest: &B3Digest) -> Self::DirectoriesIterator {
+    fn get_recursive(
+        &self,
+        root_directory_digest: &B3Digest,
+    ) -> Box<dyn Iterator<Item = Result<proto::Directory, Error>> + Send> {
         let mut grpc_client = self.grpc_client.clone();
 
         let root_directory_digest_as_vec = root_directory_digest.to_vec();
@@ -132,17 +133,15 @@ impl DirectoryService for GRPCDirectoryService {
 
         let stream = self.tokio_handle.block_on(task).unwrap().unwrap();
 
-        StreamIterator::new(
+        Box::new(StreamIterator::new(
             self.tokio_handle.clone(),
             root_directory_digest.clone(),
             stream,
-        )
+        ))
     }
 
-    type DirectoryPutter = GRPCPutter;
-
     #[instrument(skip_all)]
-    fn put_multiple_start(&self) -> Self::DirectoryPutter
+    fn put_multiple_start(&self) -> Box<(dyn DirectoryPutter + 'static)>
     where
         Self: Clone,
     {
@@ -160,7 +159,7 @@ impl DirectoryService for GRPCDirectoryService {
                 Ok(s)
             });
 
-        GRPCPutter::new(self.tokio_handle.clone(), tx, task)
+        Box::new(GRPCPutter::new(self.tokio_handle.clone(), tx, task))
     }
 }
 
