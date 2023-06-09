@@ -46,8 +46,11 @@ set-url` to update the origin URL and install the hook in the same way as above.
 The developer workflow on Gerrit is quite different from what GitHub-users are
 used to.
 
-The depot does not have branches (other than Gerrit's internal metadata refs)
-and all development happens at `HEAD`.
+Instead of pushing changes to remote branches, all changes have to be pushed to
+`refs/for/cannon`. For each commit that is pushed there, a change request is
+created automatically.
+
+Changes should usually be based on the remote `HEAD` (the `canon` branch).
 
 Every time you create a new commit the change hook will insert a unique
 `Change-Id` tag into the commit message. Once you are satisfied with the state
@@ -74,7 +77,7 @@ git push origin
 git push origin HEAD:refs/for/canon%wip
 ```
 
-TIP: Every individual commit will become a separate change. We do not merge
+TIP: Every individual commit will become a separate change. We do not squash
 related commits, but instead submit them one by one. Be aware that if you are
 expecting a different behaviour and attempt something like an unsquashed subtree
 merge, you will produce a *lot* of CLs. This is strongly discouraged.
