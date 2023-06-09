@@ -110,6 +110,13 @@ resource "yandex_serverless_container" "rih_backend" {
     key                  = "secret_key"
     environment_variable = "AWS_SECRET_ACCESS_KEY"
   }
+
+  secrets {
+    id                   = data.yandex_lockbox_secret.rih_captcha_prod_key.id
+    version_id           = data.yandex_lockbox_secret.rih_captcha_prod_key.current_version[0].id
+    key                  = "key"
+    environment_variable = "YANDEX_SMARTCAPTCHA_KEY"
+  }
 }
 
 resource "yandex_api_gateway" "rih_gateway" {
@@ -253,6 +260,11 @@ resource "yandex_lockbox_secret_version" "rih_backend_storage_secret" {
     key        = "secret_key"
     text_value = yandex_iam_service_account_static_access_key.rih_backend_static_key.secret_key
   }
+}
+
+# TODO(tazjin): automate if tf-yandex gains support for captcha resources
+data "yandex_lockbox_secret" "rih_captcha_prod_key" {
+  secret_id = "e6qloc8913tnracefb8f"
 }
 
 # TODO(tazjin): needs provider update
