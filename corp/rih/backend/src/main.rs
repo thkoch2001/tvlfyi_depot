@@ -43,6 +43,40 @@ impl Record {
     }
 }
 
+fn validate_captcha(token: &str) -> Result<()> {
+    // TODO(tazjin): pass `ip` parameter
+    let url = "https://smartcaptcha.yandexcloud.net/validate";
+    let backend_key =
+        env::var("YANDEX_SMARTCAPTCHA_KEY").context("captcha verification key not provided")?;
+
+    #[derive(Deserialize)]
+    struct CaptchaResponse {
+        status: String,
+        message: String,
+    }
+
+    let response: CaptchaResponse = attohttpc::get(url)
+        .param("secret", backend_key)
+        .param("token", token)
+        .send()
+        .context("failed to send captcha verification request")?
+        .error_for_status()
+        .context("captcha verification request failed")?
+        .json()
+        .context("failed to deserialize captcha verification response")?;
+
+    if response.status != "ok" {
+        warn!(
+            "invalid captcha: {} ({})",
+            response.message, response.status
+        );
+    }
+
+    info!("captcha token was valid");
+
+    Ok(())
+}
+
 fn persist_record(ip: &SocketAddr, record: &Record) -> Result<()> {
     let bucket_name = "rih-backend-data";
     let credentials =
@@ -87,6 +121,8 @@ fn persist_record(ip: &SocketAddr, record: &Record) -> Result<()> {
 fn handle_submit(req: &Request) -> Result<Response> {
     let submitted: FrontendReq =
         rouille::input::json::json_input(req).context("failed to deserialise frontend request")?;
+
+    validate_captcha(&submitted.captcha_token)?;
 
     if !submitted.record.validate() {
         bail!("invalid record: {:?}", submitted.record);
