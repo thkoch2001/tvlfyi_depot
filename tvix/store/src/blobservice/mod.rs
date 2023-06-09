@@ -2,10 +2,12 @@ use std::io;
 
 use crate::{B3Digest, Error};
 
+mod from_addr;
 mod grpc;
 mod memory;
 mod sled;
 
+pub use self::from_addr::from_addr;
 pub use self::grpc::GRPCBlobService;
 pub use self::memory::MemoryBlobService;
 pub use self::sled::SledBlobService;
