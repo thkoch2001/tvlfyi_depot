@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "24475f35_e3367822",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-06-09T15:47:56Z",
+      "side": 1,
+      "message": "@tazjin can you set the owner to linus here, so he can submit a new version of the CL?",
+      "revId": "c35664ae9a797ac0b147b6d6630f72e9321c6dd2",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
