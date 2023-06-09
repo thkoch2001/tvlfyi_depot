@@ -7,6 +7,13 @@ use std::net::SocketAddr;
 use std::time::{SystemTime, UNIX_EPOCH};
 use uuid::Uuid;
 
+/// Represents the request sent by the frontend application.
+#[derive(Debug, Deserialize)]
+struct FrontendReq {
+    captcha_token: String,
+    record: Record,
+}
+
 /// Represents a single record as filled in by a user. This is the
 /// primary data structure we want to populate and persist somewhere.
 #[derive(Debug, Deserialize, Serialize)]
@@ -57,13 +64,13 @@ fn persist_record(ip: &SocketAddr, record: &Record) -> Result<()> {
 }
 
 fn handle_submit(req: &Request) -> Result<Response> {
-    let record: Record = rouille::input::json::json_input(req)?;
+    let submitted: FrontendReq = rouille::input::json::json_input(req)?;
 
-    if !record.validate() {
-        bail!("invalid record: {:?}", record);
+    if !submitted.record.validate() {
+        bail!("invalid record: {:?}", submitted.record);
     }
 
-    persist_record(req.remote_addr(), &record)?;
+    persist_record(req.remote_addr(), &submitted.record)?;
 
     Ok(Response::text("success"))
 }
