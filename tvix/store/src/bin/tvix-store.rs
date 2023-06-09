@@ -7,13 +7,10 @@ use std::path::PathBuf;
 use std::sync::Arc;
 use tracing_subscriber::prelude::*;
 use tvix_store::blobservice;
-use tvix_store::directoryservice::DirectoryService;
-use tvix_store::directoryservice::GRPCDirectoryService;
-use tvix_store::directoryservice::SledDirectoryService;
+use tvix_store::directoryservice;
 use tvix_store::pathinfoservice::GRPCPathInfoService;
 use tvix_store::pathinfoservice::SledPathInfoService;
 use tvix_store::proto::blob_service_server::BlobServiceServer;
-use tvix_store::proto::directory_service_client::DirectoryServiceClient;
 use tvix_store::proto::directory_service_server::DirectoryServiceServer;
 use tvix_store::proto::node::Node;
 use tvix_store::proto::path_info_service_client::PathInfoServiceClient;
@@ -53,6 +50,9 @@ enum Commands {
 
         #[arg(long, default_value = "sled://blobs.sled")]
         blob_service_addr: String,
+
+        #[arg(long, default_value = "sled://directories.sled")]
+        directory_service_addr: String,
     },
     /// Imports a list of paths into the store (not using the daemon)
     Import {
@@ -61,6 +61,9 @@ enum Commands {
 
         #[arg(long, default_value = "grpc+http://[::1]:8000")]
         blob_service_addr: String,
+
+        #[arg(long, default_value = "grpc+http://[::1]:8000")]
+        directory_service_addr: String,
     },
 }
 
@@ -97,11 +100,11 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         Commands::Daemon {
             listen_address,
             blob_service_addr,
+            directory_service_addr,
         } => {
             // initialize stores
             let blob_service = blobservice::from_addr(&blob_service_addr).await?;
-            let directory_service: Arc<dyn DirectoryService> =
-                Arc::new(SledDirectoryService::new("directories.sled".into())?);
+            let directory_service = directoryservice::from_addr(&directory_service_addr).await?;
             let path_info_service = SledPathInfoService::new(
                 "pathinfo.sled".into(),
                 blob_service.clone(),
@@ -142,12 +145,10 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         Commands::Import {
             paths,
             blob_service_addr,
+            directory_service_addr,
         } => {
             let blob_service = blobservice::from_addr(&blob_service_addr).await?;
-
-            let directory_service = Arc::new(GRPCDirectoryService::from_client(
-                DirectoryServiceClient::connect("http://[::1]:8000").await?,
-            ));
+            let directory_service = directoryservice::from_addr(&directory_service_addr).await?;
             let path_info_service_client =
                 PathInfoServiceClient::connect("http://[::1]:8000").await?;
             let path_info_service =
