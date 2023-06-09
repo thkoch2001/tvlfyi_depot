@@ -94,7 +94,7 @@ resource "yandex_serverless_container" "rih_backend" {
   service_account_id = yandex_iam_service_account.rih_backend.id
 
   image {
-    url = "cr.yandex/crpkcq65tn6bhq6puq2o/rih-backend:dhgw6c4afancx1a3gac6day0bdgd9qhf"
+    url = "cr.yandex/crpkcq65tn6bhq6puq2o/rih-backend:q8kfd6kwc7p4wphzw1pj916y9m6icl9q"
   }
 
   secrets {
