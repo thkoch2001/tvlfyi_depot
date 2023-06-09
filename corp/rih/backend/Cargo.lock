@@ -671,6 +671,7 @@ name = "rih-backend"
 version = "0.1.0"
 dependencies = [
  "anyhow",
+ "attohttpc",
  "log",
  "rouille",
  "rust-s3",
