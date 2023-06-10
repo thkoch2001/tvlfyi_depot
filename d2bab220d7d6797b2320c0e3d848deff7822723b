@@ -16,6 +16,24 @@
       "message": "This connects to a tvix-store daemon, spun up by the `tvix-store daemon` command.\n\nUntil cl/8619 is in, you need to first run the import command, then spin up the daemon, then start the mount command.\n\ncl/8647 and followups will make this a bit more configurable at runtime, but that\u0027s still blocked.",
       "revId": "d2bab220d7d6797b2320c0e3d848deff7822723b",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fc5c6ae8_cebfc798",
+        "filename": "tvix/store/src/bin/tvix-store.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 194,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-06-10T15:20:03Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "24eeae31_147178b3",
+      "revId": "d2bab220d7d6797b2320c0e3d848deff7822723b",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
