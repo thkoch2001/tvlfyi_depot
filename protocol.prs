@@ -22,8 +22,9 @@ ActionStop = <stop @id int> .
 ActionResult = <result @id int @type int @fields Fields> .
 
 ; TODO: why not make target a singleton?
-Missing = <missing @targets #{string} @willBuild #{string} @willSubstitute #{string} @unknown #{string} @downloadSize int @narSize int> .
+Missing = <missing @targets [string ...] @willBuild #{string} @willSubstitute #{string} @unknown #{string} @downloadSize int @narSize int> .
 
+; TODO keep a few critical fields and move the rest into a dictionary
 PathInfo = <path-info
   @path string
   @deriver string

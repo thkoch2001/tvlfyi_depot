@@ -13,7 +13,7 @@ type
     `outputs`*: seq[string]
 
   Missing* {.preservesRecord: "missing".} = object
-    `targets`*: HashSet[string]
+    `targets`*: seq[string]
     `willBuild`*: HashSet[string]
     `willSubstitute`*: HashSet[string]
     `unknown`*: HashSet[string]

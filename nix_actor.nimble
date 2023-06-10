@@ -1,4 +1,4 @@
-version = "20230607"
+version = "20230610"
 author = "Emery Hemingway"
 description = "Syndicated Nix Actor"
 license = "Unlicense"

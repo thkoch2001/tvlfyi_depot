@@ -1,7 +1,7 @@
 # SPDX-FileCopyrightText: ☭ Emery Hemingway
 # SPDX-License-Identifier: Unlicense
 
-import std/[asyncdispatch, httpclient, json, os, osproc, parseutils, strutils, tables]
+import std/[asyncdispatch, httpclient, json, osproc, parseutils, strutils, tables]
 import preserves, preserves/jsonhooks
 import syndicate
 from syndicate/protocols/dataspace import Observe
@@ -76,7 +76,7 @@ proc eval(eval: Eval): Value =
     var js = parseJson(execOutput)
     result = js.toPreserve
 
-proc bootNixFacet(ds: Ref; turn: var Turn): Facet =
+proc bootNixFacet(turn: var Turn; ds: Ref): Facet =
   # let store = openStore()
   result = inFacet(turn) do (turn: var Turn):
 
@@ -110,18 +110,22 @@ proc bootNixFacet(ds: Ref; turn: var Turn): Facet =
 type
   RefArgs {.preservesDictionary.} = object
     dataspace: Ref
-  SocketArgs {.preservesDictionary.} = object
+  ClientSideArgs {.preservesDictionary.} = object
     `listen-socket`: string
+  DaemonSideArgs {.preservesDictionary.} = object
+    `daemon-socket`: string
 
 proc bootNixActor(root: Ref; turn: var Turn) =
   connectStdio(root, turn)
+
   during(turn, root, ?RefArgs) do (ds: Ref):
-    discard bootNixFacet(ds, turn)
-  during(turn, root, ?SocketArgs) do (path: string):
-    removeFile(path)
-    asyncCheck(turn, emulateSocket(path))
-  do:
-    removeFile(path)
+    discard bootNixFacet(turn, ds)
+
+    during(turn, root, ?ClientSideArgs) do (socketPath: string):
+      bootClientSide(turn.facet, ds, socketPath)
+
+    during(turn, root, ?DaemonSideArgs) do (socketPath: string):
+      bootDaemonSide(turn, ds, socketPath)
 
 initNix() # Nix lib isn't actually being used but it's nice to know that it links.
 runActor("main", bootNixActor)
