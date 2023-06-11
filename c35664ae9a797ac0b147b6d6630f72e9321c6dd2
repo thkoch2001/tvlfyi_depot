@@ -16,6 +16,24 @@
       "message": "@tazjin can you set the owner to linus here, so he can submit a new version of the CL?",
       "revId": "c35664ae9a797ac0b147b6d6630f72e9321c6dd2",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "285610f5_493147eb",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2023-06-11T17:03:04Z",
+      "side": 1,
+      "message": "No, that is not possible in Gerrit.",
+      "parentUuid": "24475f35_e3367822",
+      "revId": "c35664ae9a797ac0b147b6d6630f72e9321c6dd2",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
