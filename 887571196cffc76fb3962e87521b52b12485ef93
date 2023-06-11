@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "650c06d1_b1846821",
+        "filename": "tvix/store/docs/api.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 153,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-06-11T18:50:24Z",
+      "side": 1,
+      "message": "s/an/a/",
+      "revId": "887571196cffc76fb3962e87521b52b12485ef93",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1de2fec9_8d613f00",
+        "filename": "tvix/store/docs/api.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 197,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-06-11T18:50:24Z",
+      "side": 1,
+      "message": "It might make sense to pick another example. It might confuse people, because all-packages.nix kinda defines the root attrset path. What about `maintainers/maintainer-list.nix`?",
+      "revId": "887571196cffc76fb3962e87521b52b12485ef93",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
