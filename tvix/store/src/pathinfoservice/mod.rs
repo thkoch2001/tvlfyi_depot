@@ -1,9 +1,11 @@
+mod from_addr;
 mod grpc;
 mod memory;
 mod sled;
 
 use crate::{proto, Error};
 
+pub use self::from_addr::from_addr;
 pub use self::grpc::GRPCPathInfoService;
 pub use self::memory::MemoryPathInfoService;
 pub use self::sled::SledPathInfoService;
