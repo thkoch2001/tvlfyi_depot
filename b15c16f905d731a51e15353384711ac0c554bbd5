@@ -26,6 +26,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "003d793c_33b4cbb4",
+        "filename": "tvix/eval/src/opcode.rs",
+        "patchSetId": 5
+      },
+      "lineNbr": 165,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2023-06-11T16:22:06Z",
+      "side": 1,
+      "message": "Indeed, it increases the size from 16 to 24. I will find another solution. It does seem wise to stick to the sentinel value though, i.e. having something similar to `OpJumpIfNotFound` so we crash on miscompilations.",
+      "parentUuid": "46e2befd_42b77b49",
+      "range": {
+        "startLine": 165,
+        "startChar": 0,
+        "endLine": 165,
+        "endChar": 45
+      },
+      "revId": "b15c16f905d731a51e15353384711ac0c554bbd5",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "80e3c850_e67094bd",
         "filename": "tvix/eval/src/vm/mod.rs",
         "patchSetId": 5
