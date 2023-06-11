@@ -16,6 +16,24 @@
       "message": "We could think about using `pkgs.callPackage` here. Then only depot would be needed to passed explicitly. Or we have a fake calling function that mimicks readTree.",
       "revId": "882e3d540de46af33f21c751cfb9e7cb983a1c14",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7b31f5f1_c28b46af",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2023-06-11T17:02:32Z",
+      "side": 1,
+      "message": "I think we might be able to actually make it actually use readTree, I\u0027ll open an issue.",
+      "parentUuid": "386abd99_1f55f783",
+      "revId": "882e3d540de46af33f21c751cfb9e7cb983a1c14",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
