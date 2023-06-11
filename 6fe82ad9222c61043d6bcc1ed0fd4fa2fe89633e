@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3652fecf_85d53748",
+        "filename": "tvix/store/src/fuse/file_attr.rs",
+        "patchSetId": 9
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-06-11T17:20:49Z",
+      "side": 1,
+      "message": "It does.\n\nTo leave some additional data, https://docs.python.org/3/library/functions.html#open mentions its using the block size reported by the filesystem, which \"will typically be 4096 or 8192 bytes long\", so we should have a BufRead of 8192 bytes at least.",
+      "revId": "6fe82ad9222c61043d6bcc1ed0fd4fa2fe89633e",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
