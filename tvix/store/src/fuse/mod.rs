@@ -21,10 +21,10 @@ use tracing::{debug, info_span, instrument, warn};
 
 type DirectoryListing = BTreeMap<OsString, (u64, fuser::FileType)>;
 
-pub struct FUSE<PS: PathInfoService> {
+pub struct FUSE {
     blob_service: Arc<dyn BlobService>,
     directory_service: Arc<dyn DirectoryService>,
-    path_info_service: PS,
+    path_info_service: Arc<dyn PathInfoService>,
 
     /// This maps a given StorePath to the inode we allocated for the root inode.
     store_paths: HashMap<StorePath, u64>,
@@ -38,11 +38,11 @@ pub struct FUSE<PS: PathInfoService> {
     next_inode: u64,
 }
 
-impl<PS: PathInfoService> FUSE<PS> {
+impl FUSE {
     pub fn new(
         blob_service: Arc<dyn BlobService>,
         directory_service: Arc<dyn DirectoryService>,
-        path_info_service: PS,
+        path_info_service: Arc<dyn PathInfoService>,
     ) -> Self {
         Self {
             blob_service,
@@ -116,7 +116,7 @@ impl<PS: PathInfoService> FUSE<PS> {
     }
 }
 
-impl<PS: PathInfoService> fuser::Filesystem for FUSE<PS> {
+impl fuser::Filesystem for FUSE {
     #[tracing::instrument(skip_all, fields(rq.inode = ino))]
     fn getattr(&mut self, _req: &Request, ino: u64, reply: ReplyAttr) {
         debug!("getattr");
