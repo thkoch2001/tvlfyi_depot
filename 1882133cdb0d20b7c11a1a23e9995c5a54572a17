@@ -37,6 +37,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "c42079d7_5cf2ccbf",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000076
+      },
+      "writtenOn": "2023-06-11T20:52:37Z",
+      "side": 1,
+      "message": "(imho) changing nixpkgs to fulfill that criterion doesn\u0027t make much sense -- part of what\u0027s so great about the Nix ecosystem overall is being able to go so far back in time, and it would be a bit of a disappointment if tvix could only evaluate nixpkgs from 2023 and later. Changing Nix doesn\u0027t make sense for the same reason.",
+      "parentUuid": "40ff028e_de22844e",
+      "revId": "1882133cdb0d20b7c11a1a23e9995c5a54572a17",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "2877ee87_d8a63e26",
         "filename": "tvix/eval/src/builtins/mod.rs",
         "patchSetId": 1
@@ -48,6 +66,24 @@
       "writtenOn": "2023-06-02T12:59:23Z",
       "side": 1,
       "message": "I would propose to instead do:\n\n```\nlet end \u003d if len \u003c 0 {\n  x.as_str().len() as usize\n} else {\n  cmp::min(beg + (len as usize), x.as_str().len())\n};",
+      "revId": "1882133cdb0d20b7c11a1a23e9995c5a54572a17",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "76047782_65003379",
+        "filename": "tvix/eval/src/builtins/mod.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 877,
+      "author": {
+        "id": 1000076
+      },
+      "writtenOn": "2023-06-11T20:52:37Z",
+      "side": 1,
+      "message": "Ack\n\nhttps://cl.tvl.fyi/c/depot/+/8746\\",
+      "parentUuid": "2877ee87_d8a63e26",
       "revId": "1882133cdb0d20b7c11a1a23e9995c5a54572a17",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
