@@ -8,21 +8,32 @@ type
     `options`*: Table[Symbol, Preserve[void]]
     `result`*: Preserve[void]
 
+  AttrSet* = Table[Symbol, Preserve[void]]
   Realise* {.preservesRecord: "realise".} = object
     `drv`*: string
-    `outputs`*: seq[string]
+    `outputs`*: StringSeq
+
+  LegacyPathAttrs* {.preservesDictionary.} = object
+    `ca`*: string
+    `deriver`*: string
+    `narHash`*: string
+    `narSize`*: BiggestInt
+    `references`*: StringSeq
+    `registrationTime`*: BiggestInt
+    `sigs`*: StringSet
+    `ultimate`*: bool
 
   Missing* {.preservesRecord: "missing".} = object
-    `targets`*: seq[string]
-    `willBuild`*: HashSet[string]
-    `willSubstitute`*: HashSet[string]
-    `unknown`*: HashSet[string]
+    `targets`*: StringSeq
+    `willBuild`*: StringSet
+    `willSubstitute`*: StringSet
+    `unknown`*: StringSet
     `downloadSize`*: BiggestInt
     `narSize`*: BiggestInt
 
   Narinfo* {.preservesRecord: "narinfo".} = object
     `path`*: string
-    `info`*: Dict
+    `info`*: AttrSet
 
   FieldKind* {.pure.} = enum
     `int`, `string`
@@ -35,18 +46,30 @@ type
         `string`*: string
 
   
-  PathInfo* {.preservesRecord: "path-info".} = object
-    `path`*: string
-    `deriver`*: string
-    `narHash`*: string
-    `references`*: HashSet[string]
-    `registrationTime`*: BiggestInt
-    `narSize`*: BiggestInt
-    `ultimate`*: bool
-    `sigs`*: HashSet[string]
+  StringSet* = HashSet[string]
+  AddToStoreAttrs* {.preservesDictionary.} = object
     `ca`*: string
+    `ca-method`*: Symbol
+    `deriver`*: string
+    `eris`*: seq[byte]
+    `name`*: string
+    `narHash`*: string
+    `narSize`*: BiggestInt
+    `references`*: StringSeq
+    `registrationTime`*: BiggestInt
+    `sigs`*: StringSet
+    `ultimate`*: bool
 
-  Dict* = Table[Symbol, Preserve[void]]
+  AddToStoreClientAttrs* {.preservesDictionary.} = object
+    `ca-method`*: Symbol
+    `eris`*: seq[byte]
+    `name`*: string
+    `references`*: StringSeq
+
+  PathInfo* {.preservesRecord: "path".} = object
+    `path`*: string
+    `attrs`*: AttrSet
+
   Build* {.preservesRecord: "nix-build".} = object
     `input`*: string
     `output`*: Preserve[void]
@@ -60,13 +83,12 @@ type
     `fields`*: Fields
     `parent`*: BiggestInt
 
-  FieldString* = string
   Instantiate* {.preservesRecord: "instantiate".} = object
     `expr`*: string
-    `options`*: Dict
+    `options`*: AttrSet
     `result`*: Preserve[void]
 
-  FieldInt* = BiggestInt
+  StringSeq* = seq[string]
   ActionStop* {.preservesRecord: "stop".} = object
     `id`*: BiggestInt
 
@@ -75,24 +97,32 @@ type
     `type`*: BiggestInt
     `fields`*: Fields
 
-proc `$`*(x: Eval | Realise | Missing | Narinfo | Field | PathInfo | Dict |
+proc `$`*(x: Eval | AttrSet | Realise | LegacyPathAttrs | Missing | Narinfo |
+    Field |
+    StringSet |
+    AddToStoreAttrs |
+    AddToStoreClientAttrs |
+    PathInfo |
     Build |
     Fields |
     ActionStart |
-    FieldString |
     Instantiate |
-    FieldInt |
+    StringSeq |
     ActionStop |
     ActionResult): string =
   `$`(toPreserve(x))
 
-proc encode*(x: Eval | Realise | Missing | Narinfo | Field | PathInfo | Dict |
+proc encode*(x: Eval | AttrSet | Realise | LegacyPathAttrs | Missing | Narinfo |
+    Field |
+    StringSet |
+    AddToStoreAttrs |
+    AddToStoreClientAttrs |
+    PathInfo |
     Build |
     Fields |
     ActionStart |
-    FieldString |
     Instantiate |
-    FieldInt |
+    StringSeq |
     ActionStop |
     ActionResult): seq[byte] =
   encode(toPreserve(x))

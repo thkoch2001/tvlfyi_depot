@@ -1,18 +1,20 @@
 # SPDX-FileCopyrightText: ☭ Emery Hemingway
 # SPDX-License-Identifier: Unlicense
 
-import std/[asyncdispatch, httpclient, json, osproc, parseutils, strutils, tables]
+import std/[json, osproc, parseutils, strutils, tables]
+import eris/memory_stores
 import preserves, preserves/jsonhooks
 import syndicate
 from syndicate/protocols/dataspace import Observe
 import ./nix_actor/protocol
-import ./nix_actor/[main, sockets]
+import ./nix_actor/[clients, daemons]
+
 
 type
   Value = Preserve[void]
   Observe = dataspace.Observe[Ref]
 
-proc parseArgs(args: var seq[string]; opts: Dict) =
+proc parseArgs(args: var seq[string]; opts: AttrSet) =
   for sym, val in opts:
     add(args, "--" & $sym)
     if not val.isString "":
@@ -20,7 +22,8 @@ proc parseArgs(args: var seq[string]; opts: Dict) =
       if fromPreserve(js, val): add(args, $js)
       else: stderr.writeLine "invalid option --", sym, " ", val
 
-proc parseNarinfo(info: var Dict; text: string) =
+#[
+proc parseNarinfo(info: var AttrSet; text: string) =
   var
     key, val: string
     off: int
@@ -50,6 +53,7 @@ proc narinfo(turn: var Turn; ds: Ref; path: string) =
         var narinfo = Narinfo(path: path)
         parseNarinfo(narinfo.info, read(futBody))
         discard publish(turn, ds, narinfo)
+]# # I never link to openssl if I can avoid it.
 
 proc build(spec: string): Build =
   var execOutput = execProcess("nix", args = ["build", "--json", "--no-link", spec], options = {poUsePath})
@@ -104,8 +108,10 @@ proc bootNixFacet(turn: var Turn; ds: Ref): Facet =
         ass.result = eval(ass)
         discard publish(turn, ds, ass)
 
+    #[
     during(turn, ds, ?Observe(pattern: !Narinfo) ?? {0: grabLit()}) do (path: string):
       narinfo(turn, ds, path)
+      ]#
 
 type
   RefArgs {.preservesDictionary.} = object
@@ -115,17 +121,15 @@ type
   DaemonSideArgs {.preservesDictionary.} = object
     `daemon-socket`: string
 
-proc bootNixActor(root: Ref; turn: var Turn) =
+runActor("main") do (root: Ref; turn: var Turn):
+  let store = newMemoryStore()
   connectStdio(root, turn)
 
   during(turn, root, ?RefArgs) do (ds: Ref):
     discard bootNixFacet(turn, ds)
 
     during(turn, root, ?ClientSideArgs) do (socketPath: string):
-      bootClientSide(turn.facet, ds, socketPath)
+      bootClientSide(turn, ds, store, socketPath)
 
     during(turn, root, ?DaemonSideArgs) do (socketPath: string):
-      bootDaemonSide(turn, ds, socketPath)
-
-initNix() # Nix lib isn't actually being used but it's nice to know that it links.
-runActor("main", bootNixActor)
+      bootDaemonSide(turn, ds, store, socketPath)

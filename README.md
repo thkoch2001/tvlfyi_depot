@@ -34,8 +34,7 @@ A demo script for the [Syndicate server](https://git.syndicate-lang.org/syndicat
     } }>
   ]
 
-  ? <path-info "/nix/store/jhgh02lyizd1kyl71brvc01ygsmgi40a-tzdata-2023c"
-      ?deriver ?narHash _ _ ?narSize _ ?sigs _> [
+  ? <path-info "/nix/store/jhgh02lyizd1kyl71brvc01ygsmgi40a-tzdata-2023c" ?deriver ?narHash _ _ ?narSize _ ?sigs _> [
     $log ! <log "-" { tzdata-2023c: {
       deriver: $deriver
       narHash: $narHash

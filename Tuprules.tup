@@ -1,4 +1,5 @@
+include ../eris-nim/depends.tup
+NIM_FLAGS += --path:$(TUP_CWD)/../eris-nim/src
+
 include ../syndicate-nim/depends.tup
 NIM_FLAGS += --path:$(TUP_CWD)/../syndicate-nim/src
-
-NIM_FLAGS += --backend:cpp
