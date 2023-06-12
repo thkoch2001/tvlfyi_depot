@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "816d922b_46926626",
+        "filename": "tvix/store/src/proto/grpc_blobservice_wrapper.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 124,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-06-12T12:17:02Z",
+      "side": 1,
+      "message": "Leftover, should be removed.",
+      "revId": "4fc9eb901816f49289085edeade65417a5074a7b",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
