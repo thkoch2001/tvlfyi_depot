@@ -18,6 +18,11 @@ pub use self::sled::SledBlobService;
 /// Blob, which will return something implmenting io::Write, and providing a
 /// close funtion, to finalize a blob and get its digest.
 pub trait BlobService: Send + Sync {
+    /// Create a new instance by passing in a connection URL.
+    fn from_url(url: &url::Url) -> Result<Self, Error>
+    where
+        Self: Sized;
+
     /// Check if the service has the blob, by its content hash.
     fn has(&self, digest: &B3Digest) -> Result<bool, Error>;
 
