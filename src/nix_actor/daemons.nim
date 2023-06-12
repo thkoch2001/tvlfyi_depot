@@ -94,7 +94,7 @@ proc connectDaemon(daemon: Session; socketPath: string) {.async.} =
 
 proc queryMissing(daemon: Session; targets: StringSeq): Future[Missing] {.async.} =
   var miss = Missing(targets: targets)
-  await send(daemon, wopQueryMissing)
+  await send(daemon, Word wopQueryMissing)
   await send(daemon, miss.targets)
   await recvWork(daemon)
   miss.willBuild = await recvStringSet(daemon)
@@ -106,7 +106,7 @@ proc queryMissing(daemon: Session; targets: StringSeq): Future[Missing] {.async.
 
 proc queryPathInfo(daemon: Session; path: string): Future[LegacyPathAttrs] {.async.} =
   var info: LegacyPathAttrs
-  await send(daemon, wopQueryPathInfo)
+  await send(daemon, Word wopQueryPathInfo)
   await send(daemon, path)
   await recvWork(daemon)
   let valid = await recvWord(daemon)
@@ -140,7 +140,7 @@ proc addToStore(daemon: Session; store: ErisStore; request: AddToStoreClientAttr
   let
     erisCap = parseCap(request.eris)
     stream = newErisStream(store, erisCap)
-  await send(daemon, wopAddToStore)
+  await send(daemon, Word wopAddToStore)
   await send(daemon, request.name)
   await send(daemon, string request.`ca-method`)
   await send(daemon, request.references)

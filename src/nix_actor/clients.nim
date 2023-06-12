@@ -62,7 +62,9 @@ proc serveClient(facet: Facet; ds: Ref; store: ErisStore; client: Session) {.asy
     await send(client, "0.0.0")
     await sendWorkEnd(client)
   while not client.socket.isClosed:
-    let wop = await recvWord(client.socket)
+    let
+      w = await recvWord(client.socket)
+      wop = WorkerOperation(w)
     case wop
 
     of wopAddToStore:
@@ -147,7 +149,7 @@ proc serveClient(facet: Facet; ds: Ref; store: ErisStore; client: Session) {.asy
       # all options from the client are ingored
 
     else:
-      let msg = "unhandled worker op " & $wop.int
+      let msg = "unhandled worker op " & $wop
       await sendNext(client, msg)
       await sendWorkEnd(client)
       close(client.socket)
