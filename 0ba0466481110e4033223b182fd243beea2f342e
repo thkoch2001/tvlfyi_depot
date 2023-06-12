@@ -34,6 +34,24 @@
       "parentUuid": "8a6f2209_4a9a1083",
       "revId": "0ba0466481110e4033223b182fd243beea2f342e",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "43d64a7e_7c43e242",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-06-12T11:02:29Z",
+      "side": 1,
+      "message": "What I still wanted to check is if we can add some generalization in most library code that doesn\u0027t require an Arc\u003cdyn …\u003e on its own, for example in `src/nar/renderer.rs`.",
+      "parentUuid": "ebec818f_bd49d1af",
+      "revId": "0ba0466481110e4033223b182fd243beea2f342e",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
