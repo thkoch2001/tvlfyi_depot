@@ -22,6 +22,30 @@
       },
       "revId": "c85e144ae1d5c67ad4cefcb925fe180d07006365",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "56d579c5_a7b318fb",
+        "filename": "tvix/store/src/directoryservice/from_addr.rs",
+        "patchSetId": 6
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-06-12T13:55:24Z",
+      "side": 1,
+      "message": "There\u0027s the URL parsing itself (which a one-liner and handled by an external library), and then per scheme there\u0027s different initialization logic peeking at the rest of the URL.\n\nThere\u0027s no additional parsing to be done, and I\u0027m not quite sure some \"intermediate config struct\" would make things easier to read.\n\nWhat we could do is move the logic accepting a Url into a constructor in each implementation, which should reduce the amount of code left here.",
+      "parentUuid": "ffa95e1d_44b9eb68",
+      "range": {
+        "startLine": 23,
+        "startChar": 0,
+        "endLine": 23,
+        "endChar": 86
+      },
+      "revId": "c85e144ae1d5c67ad4cefcb925fe180d07006365",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
