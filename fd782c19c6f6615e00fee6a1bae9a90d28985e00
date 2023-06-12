@@ -52,6 +52,24 @@
       "parentUuid": "cfc4a357_49804ca6",
       "revId": "fd782c19c6f6615e00fee6a1bae9a90d28985e00",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e79a1748_a537fd6b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2023-06-12T12:41:03Z",
+      "side": 1,
+      "message": "Moved the config generator into an overlay for now, once it matures a bit I\u0027ll put that in nixpkgs. cl/8691",
+      "parentUuid": "8d6e6cec_d7a2755f",
+      "revId": "fd782c19c6f6615e00fee6a1bae9a90d28985e00",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
