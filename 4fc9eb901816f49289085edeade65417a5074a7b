@@ -16,6 +16,24 @@
       "message": "Leftover, should be removed.",
       "revId": "4fc9eb901816f49289085edeade65417a5074a7b",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d31d7cb7_20b186f2",
+        "filename": "tvix/store/src/proto/grpc_blobservice_wrapper.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 124,
+      "author": {
+        "id": 1000073
+      },
+      "writtenOn": "2023-06-12T12:18:43Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "816d922b_46926626",
+      "revId": "4fc9eb901816f49289085edeade65417a5074a7b",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
