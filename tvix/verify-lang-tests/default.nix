@@ -59,6 +59,8 @@ let
     "eval-okay-getattrpos-functionargs.nix" = [ nix ];
     # groupBy appeared (long) after 2.3
     "eval-okay-builtins-groupby-thunk.nix" = [ nix ];
+    # import is no longer considered a curried primop in Nix > 2.3
+    "eval-okay-import-display.nix" = [ nix ];
   };
 
   runCppNixLangTests = cpp-nix:
