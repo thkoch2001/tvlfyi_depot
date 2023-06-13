@@ -48,6 +48,30 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "0deca42c_f97214d6",
+        "filename": "tvix/eval/src/opcode.rs",
+        "patchSetId": 5
+      },
+      "lineNbr": 165,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2023-06-13T17:21:24Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "003d793c_33b4cbb4",
+      "range": {
+        "startLine": 165,
+        "startChar": 0,
+        "endLine": 165,
+        "endChar": 45
+      },
+      "revId": "b15c16f905d731a51e15353384711ac0c554bbd5",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "80e3c850_e67094bd",
@@ -61,6 +85,30 @@
       "writtenOn": "2023-06-07T15:22:53Z",
       "side": 1,
       "message": "Probably better to make this two separate arms instead of merging them, as we\u0027re checking against the type of the op twice otherwise (and OpFinalise probably still occurs relatively more often than OpFinaliseIfSentinel)",
+      "range": {
+        "startLine": 737,
+        "startChar": 0,
+        "endLine": 742,
+        "endChar": 0
+      },
+      "revId": "b15c16f905d731a51e15353384711ac0c554bbd5",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3715ee08_5e567649",
+        "filename": "tvix/eval/src/vm/mod.rs",
+        "patchSetId": 5
+      },
+      "lineNbr": 742,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2023-06-13T17:21:24Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "80e3c850_e67094bd",
       "range": {
         "startLine": 737,
         "startChar": 0,
