@@ -80,8 +80,9 @@ impl<T: TokenProvider> Interceptor for AuthInterceptor<T> {
         &mut self,
         mut request: tonic::Request<()>,
     ) -> Result<tonic::Request<()>, tonic::Status> {
-        let token: MetadataValue<Ascii> =
-            self.token_provider.get_token().try_into().map_err(|_| {
+        let token: MetadataValue<Ascii> = format!("Bearer {}", self.token_provider.get_token())
+            .try_into()
+            .map_err(|_| {
                 tonic::Status::invalid_argument("authorization token contained invalid characters")
             })?;
 
