@@ -1,5 +1,5 @@
 TIP: WatchGuard has
-[responded](https://www.reddit.com/r/netsec/comments/5tg0f9/reverseengineering_watchguard_mobile_vpn/dds6knx/)
+[responded](https://web.archive.org/web/20230326041952/https://www.reddit.com/r/netsec/comments/5tg0f9/reverseengineering_watchguard_mobile_vpn/dds6knx/)
 to this post on Reddit. If you haven\'t read the post yet I\'d recommend
 doing that first before reading the response to have the proper context.
 
