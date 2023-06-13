@@ -52,18 +52,18 @@ pub mod tonic_exports {
 /// tokens for Yandex Cloud.
 pub trait TokenProvider {
     /// Fetch a currently valid authentication token for Yandex Cloud.
-    fn get_token<'a>(&'a mut self) -> &'a str;
+    fn get_token<'a>(&'a mut self) -> Result<&'a str, tonic::Status>;
 }
 
 impl TokenProvider for String {
-    fn get_token<'a>(&'a mut self) -> &'a str {
-        self.as_str()
+    fn get_token<'a>(&'a mut self) -> Result<&'a str, tonic::Status> {
+        Ok(self.as_str())
     }
 }
 
 impl TokenProvider for &'static str {
-    fn get_token(&mut self) -> &'static str {
-        *self
+    fn get_token(&mut self) -> Result<&'static str, tonic::Status> {
+        Ok(*self)
     }
 }
 
@@ -89,7 +89,7 @@ impl<T: TokenProvider> Interceptor for AuthInterceptor<T> {
         &mut self,
         mut request: tonic::Request<()>,
     ) -> Result<tonic::Request<()>, tonic::Status> {
-        let token: MetadataValue<Ascii> = format!("Bearer {}", self.token_provider.get_token())
+        let token: MetadataValue<Ascii> = format!("Bearer {}", self.token_provider.get_token()?)
             .try_into()
             .map_err(|_| {
                 tonic::Status::invalid_argument("authorization token contained invalid characters")
