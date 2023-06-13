@@ -23,7 +23,7 @@ var nixVersion* {.importc: "nix::nixVersion", header: "globals.hh".}: StdString
 proc isDerivation*(path: StorePath): bool {.importcpp.}
 
 type
-  Store {.importcpp: "nix::ref<nix::Store>", header: "store-api.hh".} = object
+  Store* {.importcpp: "nix::ref<nix::Store>", header: "store-api.hh".} = object
     discard
 
 proc ensurePath*(store: Store; path: StorePath) {.importcpp.}

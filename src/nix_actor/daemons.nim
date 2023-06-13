@@ -1,7 +1,7 @@
 # SPDX-FileCopyrightText: ☭ Emery Hemingway
 # SPDX-License-Identifier: Unlicense
 
-import std/[asyncdispatch, asyncnet, sets, streams, strutils]
+import std/[asyncdispatch, asyncnet, sets, strutils]
 from std/algorithm import sort
 
 import eris
@@ -9,18 +9,9 @@ import preserves, syndicate
 from syndicate/protocols/dataspace import Observe
 import ./protocol, ./sockets
 
-type Value = Preserve[void]
-
-proc merge(items: varargs[Value]): Value =
-  # TODO: just a hack, not a proper imlementation
-  # https://preserves.dev/preserves.html#appendix-merging-values
-  result = initDictionary()
-  for e in items:
-    for (key, val) in e.pairs:
-      result[key] = val
-  cannonicalize(result)
-
-type Observe = dataspace.Observe[Ref]
+type
+  Value = Preserve[void]
+  Observe = dataspace.Observe[Ref]
 
 proc recvError(daemon: Session): Future[string] {.async.} =
   discard #[typ]# await recvString(daemon)
@@ -137,9 +128,7 @@ proc recvLegacyPathAttrs(daemon: Session): Future[AddToStoreAttrs] {.async.} =
   return info
 
 proc addToStore(daemon: Session; store: ErisStore; request: AddToStoreClientAttrs): Future[(string, AddToStoreAttrs)] {.async.} =
-  let
-    erisCap = parseCap(request.eris)
-    stream = newErisStream(store, erisCap)
+  let erisCap = parseCap(request.eris)
   await send(daemon, Word wopAddToStore)
   await send(daemon, request.name)
   await send(daemon, string request.`ca-method`)

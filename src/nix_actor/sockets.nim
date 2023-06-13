@@ -33,6 +33,7 @@ const
   STDERR_RESULT* = 0x52534C54
 
 type WorkerOperation* = enum
+  wopInvalid = 0,
   wopIsValidPath = 1,
   wopHasSubstitutes = 3,
   wopQueryPathHash = 4, # obsolete
