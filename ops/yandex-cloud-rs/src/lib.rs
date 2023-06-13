@@ -39,6 +39,15 @@
 use tonic::metadata::{Ascii, MetadataValue};
 use tonic::service::Interceptor;
 
+/// Publicly re-export some types from tonic which users might need
+/// for implementing traits, or for naming concrete client types.
+pub mod tonic_exports {
+    pub use tonic::service::interceptor::InterceptedService;
+    pub use tonic::transport::Channel;
+    pub use tonic::transport::Endpoint;
+    pub use tonic::Status;
+}
+
 /// Helper trait for types or closures that can provide authentication
 /// tokens for Yandex Cloud.
 pub trait TokenProvider {
