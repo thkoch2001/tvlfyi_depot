@@ -19,3 +19,6 @@ features = [ "tls", "tls-roots", "gzip" ]
 [build-dependencies]
 tonic-build = "0.9"
 walkdir = "2.3.3"
+
+[dev-dependencies]
+tokio = "1.28" # check when updating tonic

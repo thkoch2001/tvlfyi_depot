@@ -1361,6 +1361,7 @@ version = "2023.6.13"
 dependencies = [
  "prost",
  "prost-types",
+ "tokio",
  "tonic",
  "tonic-build",
  "walkdir",
