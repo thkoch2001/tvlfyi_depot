@@ -2,7 +2,7 @@
 name = "yandex-cloud"
 description = "Generated gRPC clients for the Yandex Cloud API"
 license = "MIT"
-version = "2023.5.23"
+version = "2023.6.13"
 edition = "2021"
 homepage = "https://cs.tvl.fyi/depot/-/tree/ops/yandex-cloud-rs"
 repository = "https://code.tvl.fyi/depot.git:/ops/yandex-cloud-rs.git"
