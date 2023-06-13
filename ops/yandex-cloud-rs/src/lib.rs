@@ -33,8 +33,11 @@
 //! [`AuthInterceptor`] provided by this crate can be used for that
 //! purpose.
 //!
+//! Full usage examples are [available here][examples].
+//!
 //! [endpoints]: https://cloud.yandex.com/en/docs/api-design-guide/concepts/endpoints
 //! [interceptors]: https://docs.rs/tonic/latest/tonic/service/trait.Interceptor.html
+//! [examples]: https://code.tvl.fyi/tree/ops/yandex-cloud-rs/examples
 
 use tonic::metadata::{Ascii, MetadataValue};
 use tonic::service::Interceptor;
