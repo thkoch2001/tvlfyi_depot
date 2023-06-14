@@ -97,6 +97,8 @@ lib.fix (self: {
 
     opengl = {
       enable = true;
+      driSupport32Bit = true;
+
       extraPackages = with pkgs; [
         vaapiVdpau
         libvdpau-va-gl
@@ -165,6 +167,8 @@ lib.fix (self: {
   # December 2022, and it's really into killing my X session as soon
   # as I do anything stressful to the machine
   systemd.services.systemd-oomd.enable = lib.mkForce false;
+
+  environment.systemPackages = [ pkgs.vulkan-tools ];
 
   system.stateVersion = "20.09";
 })
