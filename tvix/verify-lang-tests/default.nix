@@ -36,6 +36,8 @@ let
           ]
       ) [ "nix_tests" "nix_tests/notyetpassing" "tvix_tests" "tvix_tests/notyetpassing" ];
 
+  latestIsNix214 = lib.versionAtLeast nix_latest.version "2.14";
+
   skippedLangTests = {
     # TODO(sterni): set up NIX_PATH in sandbox
     "eval-okay-search-path.nix" = true;
@@ -59,6 +61,16 @@ let
     "eval-okay-getattrpos-functionargs.nix" = [ nix ];
     # groupBy appeared (long) after 2.3
     "eval-okay-builtins-groupby-thunk.nix" = [ nix ];
+    # builtins.replaceStrings becomes lazier in Nix 2.14
+    "eval-okay-replacestrings.nix" = [ nix (assert !latestIsNix214; nix_latest) ];
+    # builtins.readFileType is added in Nix 2.14
+    "eval-okay-readFileType.nix" = [ nix (assert !latestIsNix214; nix_latest) ];
+    # builtins.fromTOML gains support for timestamps in Nix 2.14
+    "eval-okay-fromTOML-timestamps.nix" = [ nix (assert !latestIsNix214; nix_latest) ];
+
+    # TODO(sterni): support diffing working directory and home relative paths
+    # like C++ Nix test suite (using string replacement).
+    "eval-okay-path-antiquotation.nix" = true;
   };
 
   runCppNixLangTests = cpp-nix:
