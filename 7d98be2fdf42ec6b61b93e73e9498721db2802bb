@@ -18,6 +18,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "33f37bc6_878041bb",
+        "filename": "web/pwcrypt/index.html",
+        "patchSetId": 2
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2023-06-14T20:53:32Z",
+      "side": 1,
+      "message": "cl/8779",
+      "parentUuid": "fac375a7_7223f6d4",
+      "revId": "7d98be2fdf42ec6b61b93e73e9498721db2802bb",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "8bbcdaaf_6baa9936",
@@ -58,6 +76,48 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "18814426_df8525b0",
+        "filename": "web/pwcrypt/src/main.html",
+        "patchSetId": 2
+      },
+      "lineNbr": 4,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2023-06-14T20:53:32Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8bbcdaaf_6baa9936",
+      "revId": "7d98be2fdf42ec6b61b93e73e9498721db2802bb",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fbcf37f6_209fb2f3",
+        "filename": "web/pwcrypt/src/main.html",
+        "patchSetId": 2
+      },
+      "lineNbr": 4,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2023-06-14T20:53:32Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "74273661_12678247",
+      "range": {
+        "startLine": 4,
+        "startChar": 101,
+        "endLine": 4,
+        "endChar": 118
+      },
+      "revId": "7d98be2fdf42ec6b61b93e73e9498721db2802bb",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "017efbb4_1dd0aa8d",
@@ -71,6 +131,24 @@
       "writtenOn": "2023-06-14T16:15:07Z",
       "side": 1,
       "message": "With our target audience it\u0027s probably wise to have a \u003cnoscript\u003e message attached to this.",
+      "revId": "7d98be2fdf42ec6b61b93e73e9498721db2802bb",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "96fed713_db816e1c",
+        "filename": "web/pwcrypt/src/main.html",
+        "patchSetId": 2
+      },
+      "lineNbr": 5,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2023-06-14T20:53:32Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "017efbb4_1dd0aa8d",
       "revId": "7d98be2fdf42ec6b61b93e73e9498721db2802bb",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
@@ -92,6 +170,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "fa4cc662_488a7b2a",
+        "filename": "web/pwcrypt/src/main.html",
+        "patchSetId": 2
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2023-06-14T20:53:32Z",
+      "side": 1,
+      "message": "It\u0027s intentionally not done, because the hashing is _very_ slow in the browser (order of multiple seconds). It would make typing a total mess as it freezes the tab.\n\nWe could probably delegate it to a web worker or something, but that sounds a lot more complex for now, but it\u0027s a future improvement (tm) if anyone is bored enough :)",
+      "parentUuid": "0032a32a_973ae1f8",
+      "revId": "7d98be2fdf42ec6b61b93e73e9498721db2802bb",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "4ffb901c_d11a00b8",
@@ -105,6 +201,24 @@
       "writtenOn": "2023-06-14T16:15:07Z",
       "side": 1,
       "message": "I find it a bit unclear what to do here, maybe do it step by step? Something along the lines of\n\n1. Add to //ops/users/default.nix (preserve alphabetical order) and commit\n2. Submit commit either via gerrit (link relevant docs) or git send-email (link https://git-send-email.io/) to depot@tvl.su",
+      "revId": "7d98be2fdf42ec6b61b93e73e9498721db2802bb",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "da22faf7_ca6529c2",
+        "filename": "web/pwcrypt/src/main.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 86,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2023-06-14T20:53:32Z",
+      "side": 1,
+      "message": "I want to rewrite the registration docs a bit when this is done and streamline it. The registration docs will probably move into this page, and be linked from the current doc instead of inlined there. That\u0027s a followup though.",
+      "parentUuid": "4ffb901c_d11a00b8",
       "revId": "7d98be2fdf42ec6b61b93e73e9498721db2802bb",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
@@ -126,6 +240,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "795636a9_e0818a38",
+        "filename": "web/pwcrypt/src/main.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 87,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2023-06-14T20:53:32Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "cec1a67c_d5da996f",
+      "revId": "7d98be2fdf42ec6b61b93e73e9498721db2802bb",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "a3a4f236_b2d6132f",
@@ -139,6 +271,30 @@
       "writtenOn": "2023-06-14T16:15:07Z",
       "side": 1,
       "message": "`\u003ca href\u003d\"mailto:…\"\u003e`?",
+      "range": {
+        "startLine": 88,
+        "startChar": 56,
+        "endLine": 88,
+        "endChar": 68
+      },
+      "revId": "7d98be2fdf42ec6b61b93e73e9498721db2802bb",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "83fe9408_2e5fc274",
+        "filename": "web/pwcrypt/src/main.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 88,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2023-06-14T20:53:32Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a3a4f236_b2d6132f",
       "range": {
         "startLine": 88,
         "startChar": 56,
