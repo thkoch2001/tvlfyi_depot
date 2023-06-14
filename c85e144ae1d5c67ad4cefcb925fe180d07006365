@@ -70,6 +70,30 @@
       },
       "revId": "c85e144ae1d5c67ad4cefcb925fe180d07006365",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3d618975_d553f685",
+        "filename": "tvix/store/src/directoryservice/from_addr.rs",
+        "patchSetId": 6
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2023-06-14T20:23:40Z",
+      "side": 1,
+      "message": "\u003ctazjin\u003e flokli: my take is, as long as the URLs are ~reasonably stable, the exact way it works in the background doesn\u0027t matter that much right now",
+      "parentUuid": "1beec045_beae4153",
+      "range": {
+        "startLine": 23,
+        "startChar": 0,
+        "endLine": 23,
+        "endChar": 86
+      },
+      "revId": "c85e144ae1d5c67ad4cefcb925fe180d07006365",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
