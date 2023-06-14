@@ -1451,9 +1451,9 @@ checksum = "1a515f5799fe4961cb532f983ce2b23082366b898e52ffbce459c86f67c8378a"
 
 [[package]]
 name = "yandex-cloud"
-version = "2023.5.23"
+version = "2023.6.13"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "4700ffa9a32b893a0c0c20a7d818b256ce2fbc37e354930051c476fc11488dda"
+checksum = "f131927e2f67d891994c1562f90885e49756b7ba1031b0845b2b8da5b6425c04"
 dependencies = [
  "prost",
  "prost-types",
@@ -1469,6 +1469,5 @@ dependencies = [
  "anyhow",
  "crimp",
  "tokio",
- "tonic",
  "yandex-cloud",
 ]
