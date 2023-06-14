@@ -1,0 +1,152 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fac375a7_7223f6d4",
+        "filename": "web/pwcrypt/index.html",
+        "patchSetId": 2
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2023-06-14T16:15:07Z",
+      "side": 1,
+      "message": "static.tvl.fyi?",
+      "revId": "7d98be2fdf42ec6b61b93e73e9498721db2802bb",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8bbcdaaf_6baa9936",
+        "filename": "web/pwcrypt/src/main.html",
+        "patchSetId": 2
+      },
+      "lineNbr": 4,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2023-06-14T16:15:07Z",
+      "side": 1,
+      "message": "Linking the registration docs here probably also doesn\u0027t hurt…",
+      "revId": "7d98be2fdf42ec6b61b93e73e9498721db2802bb",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "74273661_12678247",
+        "filename": "web/pwcrypt/src/main.html",
+        "patchSetId": 2
+      },
+      "lineNbr": 4,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2023-06-14T16:15:07Z",
+      "side": 1,
+      "message": "I think it\u0027s less awkward with separating spaces or plan “and”.",
+      "range": {
+        "startLine": 4,
+        "startChar": 101,
+        "endLine": 4,
+        "endChar": 118
+      },
+      "revId": "7d98be2fdf42ec6b61b93e73e9498721db2802bb",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "017efbb4_1dd0aa8d",
+        "filename": "web/pwcrypt/src/main.html",
+        "patchSetId": 2
+      },
+      "lineNbr": 5,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2023-06-14T16:15:07Z",
+      "side": 1,
+      "message": "With our target audience it\u0027s probably wise to have a \u003cnoscript\u003e message attached to this.",
+      "revId": "7d98be2fdf42ec6b61b93e73e9498721db2802bb",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0032a32a_973ae1f8",
+        "filename": "web/pwcrypt/src/main.html",
+        "patchSetId": 2
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2023-06-14T16:15:07Z",
+      "side": 1,
+      "message": "Would be cool to have the live update like tvixbolt, unless it\u0027s a big hassle.",
+      "revId": "7d98be2fdf42ec6b61b93e73e9498721db2802bb",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4ffb901c_d11a00b8",
+        "filename": "web/pwcrypt/src/main.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 86,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2023-06-14T16:15:07Z",
+      "side": 1,
+      "message": "I find it a bit unclear what to do here, maybe do it step by step? Something along the lines of\n\n1. Add to //ops/users/default.nix (preserve alphabetical order) and commit\n2. Submit commit either via gerrit (link relevant docs) or git send-email (link https://git-send-email.io/) to depot@tvl.su",
+      "revId": "7d98be2fdf42ec6b61b93e73e9498721db2802bb",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cec1a67c_d5da996f",
+        "filename": "web/pwcrypt/src/main.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 87,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2023-06-14T16:15:07Z",
+      "side": 1,
+      "message": "Linking here via atward would be nice.",
+      "revId": "7d98be2fdf42ec6b61b93e73e9498721db2802bb",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a3a4f236_b2d6132f",
+        "filename": "web/pwcrypt/src/main.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 88,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2023-06-14T16:15:07Z",
+      "side": 1,
+      "message": "`\u003ca href\u003d\"mailto:…\"\u003e`?",
+      "range": {
+        "startLine": 88,
+        "startChar": 56,
+        "endLine": 88,
+        "endChar": 68
+      },
+      "revId": "7d98be2fdf42ec6b61b93e73e9498721db2802bb",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
