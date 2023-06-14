@@ -3,9 +3,7 @@ use crimp::Request;
 use std::env;
 use std::net::Ipv4Addr;
 use tokio::runtime;
-use tonic::codegen::InterceptedService;
-use tonic::transport::channel::Channel;
-use tonic::transport::Endpoint;
+use yandex_cloud::tonic_exports::{Channel, Endpoint, InterceptedService};
 use yandex_cloud::yandex::cloud::dns::v1 as dns;
 use yandex_cloud::yandex::cloud::dns::v1::dns_zone_service_client::DnsZoneServiceClient;
 use yandex_cloud::{AuthInterceptor, TokenProvider};
@@ -115,7 +113,8 @@ async fn compare_update_record<T: TokenProvider>(
 }
 
 fn main() -> Result<()> {
-    let token = format!("Bearer {}", env::var("YANDEX_CLOUD_TOKEN")?);
+    let token =
+        env::var("YANDEX_CLOUD_TOKEN").context("Yandex Cloud authentication token unset")?;
     let target_zone_id =
         env::var("TARGET_ZONE").unwrap_or_else(|_| "dnsd0tif5mokfu0mg8i5".to_string());
     let target_record = env::var("TARGET_RECORD").unwrap_or_else(|_| "khtrsk".to_string());
