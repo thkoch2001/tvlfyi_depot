@@ -57,7 +57,35 @@ resource "yandex_dns_recordset" "acme_russiaishiring_com" {
   name    = yandex_cm_certificate.russiaishiring_com.challenges[0].dns_name
   type    = yandex_cm_certificate.russiaishiring_com.challenges[0].dns_type
   data    = [yandex_cm_certificate.russiaishiring_com.challenges[0].dns_value]
-  ttl     = 60
+  ttl     = 3600
+}
+
+resource "yandex_dns_recordset" "yandex_txt_russiaishiring_com" {
+  zone_id = yandex_dns_zone.russiaishiring_com.id
+  name    = "@"
+  type    = "TXT"
+  ttl     = 21600
+
+  data = [
+    "\"yandex-verification: b42768b04ab10b58\"",
+    "\"v=spf1 redirect=_spf.yandex.net\""
+  ]
+}
+
+resource "yandex_dns_recordset" "yandex_mx_russiaishiring_com" {
+  zone_id = yandex_dns_zone.russiaishiring_com.id
+  name    = "@"
+  type    = "MX"
+  data    = ["10 mx.yandex.net."]
+  ttl     = 21600
+}
+
+resource "yandex_dns_recordset" "yandex_dkim_russiaishiring_com" {
+  zone_id = yandex_dns_zone.russiaishiring_com.id
+  name    = "mail._domainkey"
+  type    = "TXT"
+  data    = ["\"v=DKIM1; k=rsa; t=s; p=MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQDgRfKnq+PZS3RFcHUnsKAvnBs2HCH5zSFjiZZ8/oyaC4va6I506/88HkZbME2xxfivpFmkKc6eBBpSzg6TVws0R3hAmb02u3qUQpX29+lEossq9j2fYvYBBZDf557ioxfQrE0+bIpsqV7+LXIsybq61+egbH+MKbxhda6fr4oPqwIDAQAB\""]
+  ttl     = 21600
 }
 
 resource "yandex_dns_recordset" "aname_russiaishiring_com" {
@@ -65,7 +93,7 @@ resource "yandex_dns_recordset" "aname_russiaishiring_com" {
   name    = "russiaishiring.com."
   type    = "ANAME"
   data    = ["russiaishiring.com.website.yandexcloud.net"]
-  ttl     = 600
+  ttl     = 3600
 }
 
 resource "yandex_container_registry" "rih_registry" {
