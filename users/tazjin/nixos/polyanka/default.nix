@@ -91,7 +91,7 @@ in
   security.sudo.wheelNeedsPassword = false;
 
   services.depot.quassel = {
-    enable = true;
+    enable = false;
     acmeHost = "polyanka.tazj.in";
     bindAddresses = [
       "0.0.0.0"
