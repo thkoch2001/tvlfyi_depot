@@ -7,4 +7,5 @@ in depot.nix.readTree.drvTargets {
   tverskoySystem = systemFor depot.users.tazjin.nixos.tverskoy;
   polyankaSystem = (depot.ops.nixos.nixosFor depot.users.tazjin.nixos.polyanka).system;
   zamalekSystem = systemFor depot.users.tazjin.nixos.zamalek;
+  koptevoSystem = systemFor depot.users.tazjin.nixos.koptevo;
 }
