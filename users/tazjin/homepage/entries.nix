@@ -1,3 +1,9 @@
+let
+  note = date: description: {
+    class = "note";
+    inherit description date;
+  };
+in
 [
   {
     class = "misc";
@@ -5,8 +11,7 @@
     url = "https://t.me/tazlog";
     date = 1643321164;
     description = ''
-      My new channel on Telegram, for occasional updates smaller (and
-      more frequent) than what ends up being posted here.
+      My Telegram channel with occasional random life updates and musings.
     '';
   }
   {
@@ -15,8 +20,7 @@
     url = "https://changelog.com/shipit/37";
     date = 1641819600;
     description = ''
-      Episode #37 of Ship It!, a podcast about systems, featuring me.
-      We talk about TVL, Nix, monorepos and related things.
+      Podcast episode about TVL, Nix, monorepos and all sorts of related things.
     '';
   }
   {
@@ -24,9 +28,7 @@
     title = "Tvix";
     url = "https://tvl.fyi/blog/rewriting-nix";
     date = 1638381387;
-    description = ''
-      TVL is rewriting Nix with funding from NLNet.
-    '';
+    description = "TVL is rewriting Nix with funding from NLNet.";
   }
   {
     class = "misc";
@@ -34,8 +36,7 @@
     url = "https://www.youtube.com/watch?v=P-2P3MSZrBM";
     date = 1594594800;
     description = ''
-      A fascinating, mind-bending interview by Lex Fridman with Joscha
-      Bach about the Nature of the Universe.
+      Mind-bending discussion with philosopher Joscha Bach.
     '';
   }
   {
@@ -43,7 +44,7 @@
     title = "The Virus Lounge";
     url = "https://tvl.fyi";
     date = 1587435629;
-    description = "A community around Nix, monorepos, build tooling and the like!";
+    description = "A community around Nix, monorepos, build tooling and more!";
   }
   {
     class = "project";
@@ -71,7 +72,7 @@
     title = "dottime";
     url = "https://dotti.me/";
     date = 1560898800;
-    description = "A universal convention for conveying time (by edef <3)";
+    description = "A universal convention for conveying time";
   }
   {
     class = "project";
@@ -86,18 +87,63 @@
     url = "https://principiadiscordia.com/book/1.php";
     date = 1495494000;
     description = ''
-      The Principia is a short book I read as a child, and didn't
-      understand until much later. It shaped much of my world view.
+      A short book about everything that everyone should read.
     '';
   }
   {
     class = "misc";
-    title = "This Week in Virology";
-    url = "http://www.microbe.tv/twiv/";
-    date = 1585517557;
-    description = ''
-      Podcast with high-quality information about virology,
-      epidemiology and so on. Highly relevant to COVID19.
-    '';
+    title = "Nix — не только пакетный менеджер";
+    date = 1663923600;
+    url = "https://www.youtube.com/watch?v=0Lhahzs-Wos";
+    description = "Двухчасовой (!) разговор с введением в Nix, NixOS и так далее";
   }
+  {
+    class = "project";
+    title = "yandex-cloud-rs";
+    date = 1650877200;
+    url = "https://docs.rs/yandex-cloud";
+    description = "Простой SDK на Rust для работы с API Yandex Cloud.";
+  }
+  {
+    class = "project";
+    title = "nix-1p";
+    date = 1564650000;
+    url = "https://code.tvl.fyi/about/nix/nix-1p";
+    description = "A (more or less) one-page introduction to the Nix language.";
+  }
+  {
+    class = "misc";
+    title = "Ставим NixOS!";
+    date = 1678784400;
+    url = "https://progmsk.timepad.ru/event/2358560/";
+    description = "Встреча в undef.space для помощи в начале работы с Nix/NixOS";
+  }
+  {
+    class = "misc";
+    title = "Tvix - September '22";
+    date = 1662973200;
+    url = "https://tvl.fyi/blog/tvix-status-september-22";
+    description = "Tvix update blog post over on TVL";
+  }
+  {
+    class = "project";
+    title = "Tvixbolt";
+    date = 1667293200;
+    url = "https://tvixbolt.tvl.su/";
+    description = "In-browser language evaluator for Nix, based on Tvix";
+  }
+  {
+    class = "project";
+    title = "ООО ТВЛ";
+    date = 1609491600;
+    url = "https://tvl.su/ru/";
+    description = "Официальный сайт моей компании по IT-консалтингу.";
+  }
+
+  # Notes.
+  (note 1676106000 "If you have a Huawei device that sometimes struggles on public Wi-Fi networks, try enabling MAC-address randomisation. Huawei devices often get pushed onto management networks!")
+  (note 1686868637 "I moved some of my pages (including this one) to a machine in my flat in Moscow. If you end up having access trouble because your ISP blocks Russian resources, please let me know.")
+  (note 1686868636 "Protip: Use the Reddit blackout to click the 'Logout' button, and never come back.")
+  (note 1486550941 "↓ I no longer recommend people to use this. Generate your configuration from a language like Nix instead.")
+  (note 1576800001 "↓ No longer just my projects, it's all of TVL! Go check it out.")
 ]
