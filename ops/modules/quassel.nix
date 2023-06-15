@@ -55,7 +55,7 @@ in
         "--port=${toString cfg.port}"
         "--configdir=/var/lib/quassel"
         "--require-ssl"
-        "--ssl-cert=/var/lib/acme/${cfg.acmeHost}/full.pem"
+        "--ssl-cert=$CREDENTIALS_DIRECTORY/quassel.pem"
         "--loglevel=${cfg.logLevel}"
       ];
 
@@ -64,6 +64,10 @@ in
         User = "quassel";
         Group = "quassel";
         StateDirectory = "quassel";
+
+        # Avoid trouble with the ACME file permissions by using the
+        # systemd credentials feature.
+        LoadCredential = "quassel.pem:/var/lib/acme/${cfg.acmeHost}/full.pem";
       };
     };
 
