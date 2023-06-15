@@ -57,6 +57,7 @@ in
     domain = "tazj.in";
     useDHCP = true;
     firewall.enable = true;
+    firewall.allowedTCPPorts = [ 22 80 443 ];
 
     wireless.enable = true;
     wireless.networks."How do I computer fast?" = {
@@ -67,18 +68,20 @@ in
   time.timeZone = "UTC";
 
   security.acme.acceptTerms = true;
-  security.acme.defaults.email = "acme@tazj.in";
+  security.acme.defaults.email = lib.mkForce "acme@tazj.in";
 
   programs.fish.enable = true;
 
   users.users.tazjin = {
     isNormalUser = true;
-    extraGroups = [ "wheel" "docker" ];
+    extraGroups = [ "wheel" "docker" "systemd-journal" ];
     shell = pkgs.fish;
     openssh.authorizedKeys.keys = depot.users.tazjin.keys.all;
   };
 
   security.sudo.wheelNeedsPassword = false;
+
+  services.openssh.enable = true;
 
   services.depot.quassel = {
     enable = true;
@@ -112,6 +115,6 @@ in
 
   programs.mtr.enable = true;
   programs.mosh.enable = true;
-  services.openssh.enable = true;
+
   system.stateVersion = "23.05";
 }
