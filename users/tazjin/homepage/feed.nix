@@ -4,7 +4,7 @@
 with depot.nix.yants;
 
 let
-  inherit (builtins) map readFile;
+  inherit (builtins) filter map readFile;
   inherit (lib) max singleton;
   inherit (pkgs) writeText;
   inherit (depot.web) blog atom-feed;
@@ -23,7 +23,7 @@ let
   });
 
   allEntries = (with depot.users.tazjin.blog; map (blog.toFeedEntry config) posts)
-    ++ (map pageEntryToEntry pageEntries);
+    ++ (map pageEntryToEntry (filter (e: e.class != "note") pageEntries));
 
   feed = {
     id = "https://tazj.in/";

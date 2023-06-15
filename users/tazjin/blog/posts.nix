@@ -46,6 +46,7 @@
     date = 1423995834;
     content = ./posts/sick-in-sweden.md;
     oldKey = "1423995834";
+    listed = false;
   }
   {
     key = "nsa-zettabytes";

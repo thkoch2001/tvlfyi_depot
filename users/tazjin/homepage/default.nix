@@ -15,13 +15,18 @@ let
   inherit (pkgs) writeFile runCommand;
 
   # The different types of entries on the homepage.
-  entryClass = enum "entryClass" [ "blog" "project" "misc" ];
+  entryClass = enum "entryClass" [
+    "blog"
+    "project"
+    "note"
+    "misc"
+  ];
 
   # The definition of a single entry.
   entry = struct "entry" {
     class = entryClass;
-    title = string;
-    url = string;
+    title = option string;
+    url = option string;
     date = int; # epoch
     description = option string;
   };
@@ -33,28 +38,42 @@ let
     title = post.title;
     url = "/blog/${post.key}";
     date = post.date;
+    description = post.description or "Blog post from ${formatDate post.date}";
   });
 
   formatDate = defun [ int string ] (date: readFile (runCommand "date" { } ''
-    date --date='@${toString date}' '+%Y-%m-%d' > $out
+    date --date='@${toString date}' '+%Y-%m-%d' | tr -d '\n' > $out
   ''));
 
-  formatEntryDate = defun [ entry string ] (entry: entryClass.match entry.class {
-    blog = "Blog post from ${formatDate entry.date}";
-    project = "Project from ${formatDate entry.date}";
-    misc = "Posted on ${formatDate entry.date}";
-  });
+  entryUrl = defun [ entry string ] (entry:
+    if entry.class == "note"
+    then "#${toString entry.date}"
+    else entry.url
+  );
+
+  hasDescription = defun [ entry bool ] (entry:
+    ((entry ? description) && (entry.description != null))
+  );
+
+  entryTitle = defun [ entry string ] (entry:
+    let
+      optionalColon = lib.optionalString (hasDescription entry) ":";
+      titleText =
+        if (!(entry ? title) && (entry.class == "note"))
+        then "[${formatDate entry.date}]"
+        else lib.optionalString (entry ? title) ((escape entry.title) + optionalColon);
+    in
+    lib.optionalString (titleText != "")
+      ''<span class="entry-title ${entry.class}">${titleText}</span>''
+  );
 
   entryToDiv = defun [ entry string ] (entry: ''
-    <a href="${entry.url}" class="entry ${entry.class}">
-      <div>
-        <p class="entry-title">${escape entry.title}</p>
-        ${
-          lib.optionalString ((entry ? description) && (entry.description != null))
-          "<p class=\"entry-description\">${escape entry.description}</p>"
-        }
-        <p class="entry-date">${formatEntryDate entry}</p>
-      </div>
+    <a href="${entryUrl entry}" id="${toString entry.date}" class="entry">
+      ${entryTitle entry}
+      ${
+        lib.optionalString (hasDescription entry)
+        "<span class=\"entry-description\">${escape entry.description}</span>"
+      }
     </a>
   '');
 
