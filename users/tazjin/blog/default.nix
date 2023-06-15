@@ -8,6 +8,7 @@ let
   config = {
     name = "tazjin's blog";
     baseUrl = "https://tazj.in/blog";
+    staticUrl = "https://tazj.in/static/";
 
     footer = ''
       <p class="footer">
