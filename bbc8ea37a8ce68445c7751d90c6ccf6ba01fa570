@@ -22,6 +22,30 @@
       },
       "revId": "bbc8ea37a8ce68445c7751d90c6ccf6ba01fa570",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "91ffc196_6bc9c65f",
+        "filename": "tvix/store/src/blobservice/tests.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-06-15T06:49:56Z",
+      "side": 1,
+      "message": "I want to have some more test cases here (uploading a bigger blob, doing the has check before reading or not), and I don\u0027t want to have to remember to copy the `#[test_case(gen_memory_*_service(); \"*\")]` to all the different places.\n\nWe either need another macro to emit these, or use a testing framework that allows a cartesian product over all possible inputs.",
+      "parentUuid": "856d09cb_713ecf34",
+      "range": {
+        "startLine": 11,
+        "startChar": 0,
+        "endLine": 13,
+        "endChar": 0
+      },
+      "revId": "bbc8ea37a8ce68445c7751d90c6ccf6ba01fa570",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
