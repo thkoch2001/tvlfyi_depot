@@ -11,6 +11,8 @@ in
   imports = [
     (mod "quassel.nix")
     (mod "www/base.nix")
+    (mod "www/tazj.in.nix")
+    (usermod "predlozhnik.nix")
   ];
 
   boot = {
