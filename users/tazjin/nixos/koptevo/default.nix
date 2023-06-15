@@ -11,8 +11,6 @@ in
   imports = [
     (mod "quassel.nix")
     (mod "www/base.nix")
-    # (usermod "tgsa.nix")
-    # (usermod "predlozhnik.nix")
   ];
 
   boot = {
@@ -98,6 +96,17 @@ in
     diskThreshold = 2; # GiB # TODO
     maxFreed = 8; # GiB
     preserveGenerations = "14d";
+  };
+
+  services.nginx.virtualHosts."koptevo.tazj.in" = {
+    addSSL = true;
+    enableACME = true;
+
+    extraConfig = ''
+      location = / {
+        return 302 https://at.tvl.fyi/?q=%2F%2Fusers%2Ftazjin%2Fnixos%2Fkoptevo%2Fdefault.nix;
+      }
+    '';
   };
 
   # List packages installed in system profile. To search, run:
