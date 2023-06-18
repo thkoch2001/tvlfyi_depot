@@ -6,11 +6,15 @@
     wantedBy = [ "multi-user.target" ];
 
     serviceConfig = {
-      EnvironmentFile = "/root/tgsa-env"; # TODO(tazjin): automate this
       DynamicUser = true;
       Restart = "always";
-      ExecStart = "${depot.users.tazjin.tgsa}/bin/tgsa";
+      LoadCredential = "tgsa-yandex.json:/run/agenix/tgsa-yandex";
     };
+
+    script = ''
+      export YANDEX_KEY_FILE="''${CREDENTIALS_DIRECTORY}/tgsa-yandex.json"
+      ${depot.users.tazjin.tgsa}/bin/tgsa
+    '';
   };
 
   services.nginx.virtualHosts."tgsa" = {
