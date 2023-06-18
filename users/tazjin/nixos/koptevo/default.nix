@@ -13,6 +13,8 @@ in
     (mod "www/base.nix")
     (mod "www/tazj.in.nix")
     (usermod "predlozhnik.nix")
+    (usermod "tgsa.nix")
+    (depot.third_party.agenix.src + "/modules/age.nix")
   ];
 
   boot = {
@@ -78,6 +80,14 @@ in
     shell = pkgs.fish;
     openssh.authorizedKeys.keys = depot.users.tazjin.keys.all;
   };
+
+  age.secrets =
+    let
+      secretFile = name: depot.users.tazjin.secrets."${name}.age";
+    in
+    {
+      tgsa-yandex.file = secretFile "tgsa-yandex";
+    };
 
   security.sudo.wheelNeedsPassword = false;
 
