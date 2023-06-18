@@ -1,9 +1,10 @@
 use anyhow::{anyhow, Context, Result};
 use scraper::{Html, Selector};
-use serde_json::Value;
 use std::collections::HashMap;
 use std::sync::RwLock;
 use std::time::{Duration, Instant};
+
+mod translate;
 
 #[derive(Clone, Debug, Eq, Hash, PartialEq)]
 struct TgLink {
@@ -61,46 +62,6 @@ fn fetch_post(link: &TgLink, embed: bool) -> Result<String> {
         })?;
 
     Ok(response.body)
-}
-
-fn fetch_translation(message: &str) -> Result<String> {
-    let request = serde_json::json!({
-        "model": "gpt-3.5-turbo",
-        "messages": [
-            {"role": "user", "content": "Please translate the following message from a Telegram channel into English. If the post is already partially in English, please leave those bits intact as they are. Please respond only with the translation."},
-            {"role": "user", "content": message}
-        ]
-    });
-
-    let response: Value = crimp::Request::post("https://api.openai.com/v1/chat/completions")
-        .bearer_auth(&std::env::var("OPENAPI_KEY").context("no openapi key set")?)?
-        .json(&request)?
-        .send()
-        .context("failed to fetch translation from openai")?
-        .as_json::<Value>()?
-        .error_for_status(|resp| {
-            anyhow!(
-                "translation request failed: {} ({})",
-                resp.body,
-                resp.status
-            )
-        })?
-        .body;
-
-    // we want choices[0].message.content, and inshallah it's the right thing.
-    let translation = response
-        .get("choices")
-        .ok_or_else(|| anyhow!("missing 'choices' key"))?
-        .get(0)
-        .ok_or_else(|| anyhow!("empty 'choices' or something"))?
-        .get("message")
-        .ok_or_else(|| anyhow!("missing 'message' key"))?
-        .get("content")
-        .ok_or_else(|| anyhow!("missing 'content' key"))?
-        .as_str()
-        .ok_or_else(|| anyhow!("'content' was not a string"))?;
-
-    Ok(translation.to_string())
 }
 
 // in some cases, posts can not be embedded, but telegram still
@@ -306,7 +267,7 @@ fn fetch_with_cache(cache: &Cache, link: &TgLink) -> Result<TgPost> {
     if let Some(message) = &msg.message {
         if link.translated {
             println!("translating {}#{}", link.username, link.message_id);
-            msg.message = Some(fetch_translation(message)?);
+            msg.message = Some(translate::fetch_translation(message)?);
         }
     }
 
@@ -410,7 +371,7 @@ if you see this message and think you did the above correctly, you
 didn't. try again. idiot.
 
 it can also translate posts from russian, ukrainian or whatever other
-dumb language you speak into english, by adding `/translate/`, for
+dumb language you speak into english by adding `/translate/`, for
 example:
 
   https://tgsa.tazj.in/translate/https://t.me/strelkovii/4329
