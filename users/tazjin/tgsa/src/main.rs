@@ -28,7 +28,7 @@ impl TgLink {
     }
 
     fn parse(url: &str, translated: bool) -> Option<Self> {
-        let url = url.strip_prefix("/")?;
+        let url = url.strip_prefix('/')?;
         let parsed = url::Url::parse(url).ok()?;
 
         if parsed.host()? != url::Host::Domain("t.me") {
@@ -83,7 +83,7 @@ fn fetch_fallback(link: &TgLink) -> Result<Option<String>> {
         Some(content) => content.to_string(),
     };
 
-    return Ok(Some(content));
+    Ok(Some(content))
 }
 
 #[derive(Debug)]
@@ -127,8 +127,8 @@ fn parse_tgmessage(embed: &str) -> Result<TgMessage> {
         for edge in &mut msg_elem.traverse() {
             if let Edge::Open(node) = edge {
                 match node.value() {
-                    Node::Text(ref text) => out.push_str(&*text),
-                    Node::Element(elem) if elem.name() == "br" => out.push_str("\n"),
+                    Node::Text(ref text) => out.push_str(text),
+                    Node::Element(elem) if elem.name() == "br" => out.push('\n'),
                     _ => {}
                 }
             }
@@ -246,7 +246,7 @@ struct TgPost {
 type Cache = RwLock<HashMap<TgLink, TgPost>>;
 
 fn fetch_with_cache(cache: &Cache, link: &TgLink) -> Result<TgPost> {
-    if let Some(entry) = cache.read().unwrap().get(&link) {
+    if let Some(entry) = cache.read().unwrap().get(link) {
         if Instant::now() - entry.at < CACHE_EXPIRY {
             println!("serving {}#{} from cache", link.username, link.message_id);
             return Ok(entry.clone());
@@ -257,11 +257,11 @@ fn fetch_with_cache(cache: &Cache, link: &TgLink) -> Result<TgPost> {
     // TODO(tazjin): per link?
     let mut writer = cache.write().unwrap();
 
-    let post = fetch_post(&link, true)?;
+    let post = fetch_post(link, true)?;
     let mut msg = parse_tgmessage(&post)?;
 
     if msg.message.is_none() {
-        msg.message = fetch_fallback(&link)?;
+        msg.message = fetch_fallback(link)?;
     }
 
     if let Some(message) = &msg.message {
@@ -271,7 +271,7 @@ fn fetch_with_cache(cache: &Cache, link: &TgLink) -> Result<TgPost> {
         }
     }
 
-    let bbcode = to_bbcode(&link, &msg);
+    let bbcode = to_bbcode(link, &msg);
 
     let mut media = vec![];
     media.append(&mut msg.photos);
@@ -298,7 +298,7 @@ fn handle_img_redirect(cache: &Cache, img_path: &str) -> Result<rouille::Respons
     // |          post ID
     // username
 
-    let img_parts: Vec<&str> = img_path.split("/").collect();
+    let img_parts: Vec<&str> = img_path.split('/').collect();
 
     if img_parts.len() != 3 {
         println!("invalid image link: {}", img_path);
