@@ -16,6 +16,7 @@ import Data.Map.Strict qualified as Map
 import Data.Pool (Pool)
 import Data.Pool qualified as Pool
 import Data.Text qualified as Text
+import Data.Text.IO qualified as Text
 import Database.PostgreSQL.Simple qualified as Postgres
 import Database.PostgreSQL.Simple.Types qualified as Postgres
 import Database.Postgres.Temp qualified as TmpPg
@@ -24,12 +25,14 @@ import Json qualified
 import Json.Enc (Enc)
 import Json.Enc qualified as Enc
 import Label
+import Network.HTTP.Conduit qualified as Http
 import Network.HTTP.Simple qualified as Http
 import Network.HTTP.Types
 import PossehlAnalyticsPrelude
 import Postgres.Decoder qualified as Dec
 import Postgres.MonadPostgres
 import Pretty
+import RunCommand
 import System.Directory qualified as Dir
 import System.Directory qualified as Xdg
 import System.FilePath ((</>))
@@ -128,6 +131,32 @@ doTransmissionRequest dat req = do
           Right a -> pure a
           Left err -> appThrowTree err
     _ -> liftIO $ unwrapIOError $ Left [fmt|Non-200 response: {showPretty resp}|]
+
+redactedSearch advanced = redactedApiRequest (T2 (label @"action" "browse") (label @"actionArgs" ((advanced <&> second Just))))
+
+test =
+  runAppWith $
+    redactedSearch
+      [ ("artistname", "michael jackson"),
+        ("year", "1982"),
+        ("format", "MP3"),
+        ("releasetype", "album"),
+        ("order_by", "year")
+      ]
+      <&> (fmap $ fromMaybe undefined)
+      <&> (Http.getResponseBody)
+      <&> showPrettyJson
+      >>= liftIO . Text.putStrLn
+
+redactedApiRequest dat = do
+  authKey <- runCommandExpect0 "pass" ["internet/redacted/api-keys/whatcd-resolver"]
+  let req =
+        [fmt|https://redacted.ch/ajax.php|]
+          & Http.setRequestMethod "GET"
+          & Http.setQueryString (("action", Just dat.action) : dat.actionArgs)
+          & Http.setRequestHeader "Authorization" [authKey]
+  Http.httpBS req
+    <&> fmap (Json.decodeStrict' @Json.Value)
 
 runAppWith :: AppT IO a -> IO (Either TmpPg.StartError a)
 runAppWith appT = withDb $ \db -> do
