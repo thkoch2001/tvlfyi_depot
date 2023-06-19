@@ -36,6 +36,7 @@ in
       pa-label = hsSelf.callPackage ./extra-pkgs/pa-label-0.1.0.1.nix { };
       pa-pretty = hsSelf.callPackage ./extra-pkgs/pa-pretty-0.1.1.0.nix { };
       pa-json = hsSelf.callPackage ./extra-pkgs/pa-json-0.2.0.0.nix { };
+      pa-run-command = hsSelf.callPackage ./extra-pkgs/pa-run-command-0.1.0.0.nix { };
     };
   };
 

@@ -20,6 +20,7 @@ pkgs.mkShell {
       h.pa-label
       h.pa-json
       h.pa-pretty
+      h.pa-run-command
       h.ihp-hsx
       h.PyF
       h.foldl
