@@ -6,3 +6,4 @@ packages:
   ./htmx-experiment/htmx-experiment.cabal
   ./cas-serve/cas-serve.cabal
   ./jbovlaste-sqlite/jbovlaste-sqlite.cabal
+  ./whatcd-resolver/whatcd-resolver.cabal
