@@ -71,6 +71,7 @@ library
         pa-label,
         pa-json,
         pa-field-parser,
+        pa-run-command,
         containers,
         pa-pretty,
         tmp-postgres,
