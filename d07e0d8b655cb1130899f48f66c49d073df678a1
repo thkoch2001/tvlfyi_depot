@@ -91,6 +91,29 @@
       },
       "revId": "d07e0d8b655cb1130899f48f66c49d073df678a1",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d2cfd6ae_e85aeb3f",
+        "filename": "tvix/store/src/fuse/mod.rs",
+        "patchSetId": 31
+      },
+      "lineNbr": 355,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2023-06-19T22:37:03Z",
+      "side": 1,
+      "message": "does that mean opening files doesn\u0027t work at all yet, or is it implemented somehow internally on the other primitives?",
+      "range": {
+        "startLine": 355,
+        "startChar": 0,
+        "endLine": 355,
+        "endChar": 37
+      },
+      "revId": "d07e0d8b655cb1130899f48f66c49d073df678a1",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
