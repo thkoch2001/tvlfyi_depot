@@ -1,0 +1,96 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c101842f_59448e14",
+        "filename": "tvix/store/src/fuse/inodes.rs",
+        "patchSetId": 31
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2023-06-19T22:03:09Z",
+      "side": 1,
+      "message": "These kinds of complex modules should have a comment at the top explaining what they do, and what the main items are a reader should look at.",
+      "range": {
+        "startLine": 1,
+        "startChar": 0,
+        "endLine": 1,
+        "endChar": 43
+      },
+      "revId": "d07e0d8b655cb1130899f48f66c49d073df678a1",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "da9fad1d_6d9fa04f",
+        "filename": "tvix/store/src/fuse/inodes.rs",
+        "patchSetId": 31
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2023-06-19T22:03:09Z",
+      "side": 1,
+      "message": "The variants of this have vastly different sizes, which in this case seems like an indicator we might be doing something wrong, but I\u0027m not sure what yet. Can symlinks point outside of the store at all?",
+      "range": {
+        "startLine": 16,
+        "startChar": 9,
+        "endLine": 16,
+        "endChar": 18
+      },
+      "revId": "d07e0d8b655cb1130899f48f66c49d073df678a1",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2c185194_921f2707",
+        "filename": "tvix/store/src/fuse/inodes.rs",
+        "patchSetId": 31
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2023-06-19T22:03:09Z",
+      "side": 1,
+      "message": "leftover?",
+      "range": {
+        "startLine": 21,
+        "startChar": 0,
+        "endLine": 21,
+        "endChar": 72
+      },
+      "revId": "d07e0d8b655cb1130899f48f66c49d073df678a1",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9412e44e_d85147e7",
+        "filename": "tvix/store/src/fuse/inodes.rs",
+        "patchSetId": 31
+      },
+      "lineNbr": 82,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2023-06-19T22:03:09Z",
+      "side": 1,
+      "message": "My gut feeling is that doing this as a mutation-based structure is not the right approach; I think we probably want to design a mapping scheme between our (hash based?) addressing scheme and the inode address space or something like that.\n\nHave you explored some options here already?",
+      "range": {
+        "startLine": 82,
+        "startChar": 0,
+        "endLine": 82,
+        "endChar": 25
+      },
+      "revId": "d07e0d8b655cb1130899f48f66c49d073df678a1",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
