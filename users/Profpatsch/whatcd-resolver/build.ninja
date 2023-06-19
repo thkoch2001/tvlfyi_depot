@@ -1,0 +1,29 @@
+builddir = .ninja
+
+rule cabal-run
+  command = cabal run $target
+
+rule cabal-repl
+  command = cabal repl $target
+
+rule cabal-test
+  command = cabal test $target
+
+rule hpack-file
+  description = hpack $in
+  command = $
+    hpack --force $in $
+    && touch $out
+
+build repl : cabal-repl | cabal-preconditions
+  target = whatcd-resolver-server
+  pool = console
+
+build run : cabal-run | cabal-preconditions
+  target = whatcd-resolver-server
+  pool = console
+
+
+build cabal-preconditions : phony whatcd-resolver-server.cabal
+
+build whatcd-resolver-server.cabal : hpack-file package.yaml

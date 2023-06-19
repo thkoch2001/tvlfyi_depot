@@ -18,6 +18,8 @@ pkgs.mkShell {
       h.monad-logger
       h.pa-field-parser
       h.pa-label
+      h.pa-json
+      h.pa-pretty
       h.ihp-hsx
       h.PyF
       h.foldl
@@ -46,13 +48,23 @@ pkgs.mkShell {
       h.nicify-lib
       h.hspec
       h.hspec-expectations-pretty-diff
+      h.tmp-postgres
+      h.postgresql-simple
+      h.resource-pool
     ]))
 
     pkgs.rustup
     pkgs.pkg-config
     pkgs.fuse
+    pkgs.postgresql
   ];
 
+  WHATCD_RESOLVER_TOOLS = pkgs.linkFarm "whatcd-resolver-tools" [
+    {
+      name = "pg_format";
+      path = "${pkgs.pgformatter}/bin/pg_format";
+    }
+  ];
 
   RUSTC_WRAPPER =
     let

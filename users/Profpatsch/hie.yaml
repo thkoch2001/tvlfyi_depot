@@ -18,3 +18,5 @@ cradle:
       component: "cas-serve:exe:cas-serve"
     - path: "./jbovlaste-sqlite/JbovlasteSqlite.hs"
       component: "jbovlaste-sqlite:exe:jbovlaste-sqlite"
+    - path: "./whatcd-resolver/src"
+      component: "lib:whatcd-resolver"
