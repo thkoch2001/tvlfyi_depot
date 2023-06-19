@@ -34,6 +34,8 @@ in
       pa-error-tree = hsSelf.callPackage ./extra-pkgs/pa-error-tree-0.1.0.0.nix { };
       pa-field-parser = hsSelf.callPackage ./extra-pkgs/pa-field-parser-0.1.0.1.nix { };
       pa-label = hsSelf.callPackage ./extra-pkgs/pa-label-0.1.0.1.nix { };
+      pa-pretty = hsSelf.callPackage ./extra-pkgs/pa-pretty-0.1.1.0.nix { };
+      pa-json = hsSelf.callPackage ./extra-pkgs/pa-json-0.2.0.0.nix { };
     };
   };
 
