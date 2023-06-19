@@ -26,6 +26,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "dfbcecfc_f7162a4c",
+        "filename": "tvix/store/src/fuse/inodes.rs",
+        "patchSetId": 31
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-06-19T22:55:10Z",
+      "side": 1,
+      "message": "I added a module comment for inodes.rs, and moved `InodeTracker` in its own file, which already has a docstring on the struct. PTAL.",
+      "parentUuid": "c101842f_59448e14",
+      "range": {
+        "startLine": 1,
+        "startChar": 0,
+        "endLine": 1,
+        "endChar": 43
+      },
+      "revId": "d07e0d8b655cb1130899f48f66c49d073df678a1",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "da9fad1d_6d9fa04f",
         "filename": "tvix/store/src/fuse/inodes.rs",
         "patchSetId": 31
@@ -37,6 +61,30 @@
       "writtenOn": "2023-06-19T22:03:09Z",
       "side": 1,
       "message": "The variants of this have vastly different sizes, which in this case seems like an indicator we might be doing something wrong, but I\u0027m not sure what yet. Can symlinks point outside of the store at all?",
+      "range": {
+        "startLine": 16,
+        "startChar": 9,
+        "endLine": 16,
+        "endChar": 18
+      },
+      "revId": "d07e0d8b655cb1130899f48f66c49d073df678a1",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e551ef86_5c82515d",
+        "filename": "tvix/store/src/fuse/inodes.rs",
+        "patchSetId": 31
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-06-19T22:55:10Z",
+      "side": 1,
+      "message": "Yes, symlink targets can even be arbitrary bytes (except null bytes). I kept it Strings here, until https://b.tvl.fyi/issues/267.",
+      "parentUuid": "da9fad1d_6d9fa04f",
       "range": {
         "startLine": 16,
         "startChar": 9,
@@ -60,6 +108,30 @@
       "writtenOn": "2023-06-19T22:03:09Z",
       "side": 1,
       "message": "leftover?",
+      "range": {
+        "startLine": 21,
+        "startChar": 0,
+        "endLine": 21,
+        "endChar": 72
+      },
+      "revId": "d07e0d8b655cb1130899f48f66c49d073df678a1",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "456912fa_112c8be8",
+        "filename": "tvix/store/src/fuse/inodes.rs",
+        "patchSetId": 31
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-06-19T22:55:10Z",
+      "side": 1,
+      "message": "Yes, it\u0027s a leftover, it\u0027s gone now.\n\nI initially had a BTreeMap, but that would require keeping a second copy of names around. I opted to just linearly walk through it.\n\nWe only need to do the `find` during a `lookup`, and considering the `Vec\u003c(u64, proto::node::Node)\u003e` is sorted by names anyways, it\u0027d be easier to do our own binary search in there if this turns out to be considerable performance overhead.",
+      "parentUuid": "2c185194_921f2707",
       "range": {
         "startLine": 21,
         "startChar": 0,
@@ -95,6 +167,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "2ae85895_20641168",
+        "filename": "tvix/store/src/fuse/inodes.rs",
+        "patchSetId": 31
+      },
+      "lineNbr": 82,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-06-19T22:55:10Z",
+      "side": 1,
+      "message": "The inode address space is only 64 bits. While we could define some hashing scheme for the three different nodes, I didn\u0027t feel comfortable discarding everything other than the first 64bits - and once you have an inode, to actually look most things up we need the full blake3 digest anyways.\n\nSo in the end we don\u0027t gain anything compared to just using an incrementing counter.",
+      "parentUuid": "9412e44e_d85147e7",
+      "range": {
+        "startLine": 82,
+        "startChar": 0,
+        "endLine": 82,
+        "endChar": 25
+      },
+      "revId": "d07e0d8b655cb1130899f48f66c49d073df678a1",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "d2cfd6ae_e85aeb3f",
         "filename": "tvix/store/src/fuse/mod.rs",
         "patchSetId": 31
@@ -106,6 +202,30 @@
       "writtenOn": "2023-06-19T22:37:03Z",
       "side": 1,
       "message": "does that mean opening files doesn\u0027t work at all yet, or is it implemented somehow internally on the other primitives?",
+      "range": {
+        "startLine": 355,
+        "startChar": 0,
+        "endLine": 355,
+        "endChar": 37
+      },
+      "revId": "d07e0d8b655cb1130899f48f66c49d073df678a1",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "37b13a22_4d886bd7",
+        "filename": "tvix/store/src/fuse/mod.rs",
+        "patchSetId": 31
+      },
+      "lineNbr": 355,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-06-19T22:55:10Z",
+      "side": 1,
+      "message": "Opening files works, as shown in the unit tests. https://docs.rs/fuser/latest/fuser/trait.Filesystem.html#method.open even mentions we don\u0027t need to do anything with open (\"stateless file IO\").\n\nThis currently simply means that we do all opening / seeking in the read implementation (and look at the `offset` in there).\n\nMaking this more efficient, by handing out file handles is on my todo list, but ideally we also implement Seek and thread it through all blobservices, which is more work and certainly out of scope for this initial PR.",
+      "parentUuid": "d2cfd6ae_e85aeb3f",
       "range": {
         "startLine": 355,
         "startChar": 0,
