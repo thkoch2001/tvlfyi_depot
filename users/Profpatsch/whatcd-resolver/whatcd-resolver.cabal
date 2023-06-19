@@ -1,0 +1,90 @@
+cabal-version:      3.0
+name:               whatcd-resolver
+version:            0.1.0.0
+author:             Profpatsch
+maintainer:         mail@profpatsch.de
+
+common common-options
+  ghc-options:
+      -Wall
+      -Wno-type-defaults
+      -Wunused-packages
+      -Wredundant-constraints
+      -fwarn-missing-deriving-strategies
+
+  -- See https://downloads.haskell.org/ghc/latest/docs/users_guide/exts.html
+  -- for a description of all these extensions
+  default-extensions:
+      -- Infer Applicative instead of Monad where possible
+    ApplicativeDo
+
+    -- Allow literal strings to be Text
+    OverloadedStrings
+
+    -- Syntactic sugar improvements
+    LambdaCase
+    MultiWayIf
+
+    -- Makes the (deprecated) usage of * instead of Data.Kind.Type an error
+    NoStarIsType
+
+    -- Convenient and crucial to deal with ambiguous field names, commonly
+    -- known as RecordDotSyntax
+    OverloadedRecordDot
+
+    -- does not export record fields as functions, use OverloadedRecordDot to access instead
+    NoFieldSelectors
+
+    -- Record punning
+    RecordWildCards
+
+    -- Improved Deriving
+    DerivingStrategies
+    DerivingVia
+
+    -- Type-level strings
+    DataKinds
+
+    -- to enable the `type` keyword in import lists (ormolu uses this automatically)
+    ExplicitNamespaces
+
+  default-language: GHC2021
+
+
+library
+    import: common-options
+
+    hs-source-dirs: src
+
+    exposed-modules:
+       WhatcdResolver
+       Postgres.Decoder
+       Postgres.MonadPostgres
+       Tool
+       ValidationParseT
+
+    build-depends:
+        base >=4.15 && <5,
+        text,
+        pa-prelude,
+        pa-error-tree,
+        pa-label,
+        pa-json,
+        pa-field-parser,
+        containers,
+        pa-pretty,
+        tmp-postgres,
+        directory,
+        filepath,
+        aeson,
+        aeson-better-errors,
+        postgresql-simple,
+        resource-pool,
+        http-conduit,
+        http-types,
+        mtl,
+        transformers,
+        unliftio,
+        monad-logger,
+        unix,
+
