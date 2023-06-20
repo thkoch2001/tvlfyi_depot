@@ -20,6 +20,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "a63b14eb_c1f7da46",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2023-06-20T12:21:02Z",
+      "side": 1,
+      "message": "1. Possibility to host \"internal\" services if we want to.\n2. Very easy administration of exit-nodes for VPN use, i.e. it can act as a VPN network for TVL members who need an endpoint in a specific place for something (we\u0027re quite distributed so that can be useful, the original idea was because I needed a UK endpoint and sanduny is in the UK)",
+      "parentUuid": "5fe082a7_41360914",
+      "revId": "25d1208d5580440e26331dd6afee6ea60cb161d5",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "0dcfedb9_f73eb37b",
         "filename": "ops/modules/tvl-headscale.nix",
         "patchSetId": 1
@@ -31,6 +49,24 @@
       "writtenOn": "2023-06-20T12:15:09Z",
       "side": 1,
       "message": "no Strict-Transport-Security?",
+      "revId": "25d1208d5580440e26331dd6afee6ea60cb161d5",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "af65d967_f7f3e198",
+        "filename": "ops/modules/tvl-headscale.nix",
+        "patchSetId": 1
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2023-06-20T12:21:02Z",
+      "side": 1,
+      "message": "I think base already adds that, but set it anyways.",
+      "parentUuid": "0dcfedb9_f73eb37b",
       "revId": "25d1208d5580440e26331dd6afee6ea60cb161d5",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
