@@ -393,7 +393,9 @@ impl<'o> VM<'o> {
                         }
 
                         VMRequest::ImportCacheLookup(path) => {
-                            if let Some(cached) = self.import_cache.get(&path) {
+                            if let Some(cached) =
+                                self.import_cache.get(&path).with_span(&span, self)?
+                            {
                                 message = VMResponse::Value(cached.clone());
                             } else {
                                 message = VMResponse::Empty;
@@ -401,7 +403,9 @@ impl<'o> VM<'o> {
                         }
 
                         VMRequest::ImportCachePut(path, value) => {
-                            self.import_cache.insert(path, value);
+                            self.import_cache
+                                .insert(path, value)
+                                .with_span(&span, self)?;
                             message = VMResponse::Empty;
                         }
 
