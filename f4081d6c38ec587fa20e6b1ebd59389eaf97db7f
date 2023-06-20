@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a6684ce0_d72469d1",
+        "filename": "tvix/store/src/fuse/mod.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 399,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-06-20T06:17:05Z",
+      "side": 1,
+      "message": "this will overflow after 2**64 operations. which is a lot, but we should probably still start finding a \"free number\" from the front if this happens. i wonder if this logic already exists in some crate?\n\nOr should we just not worry about it at all, because we could still do 5849424173 operations per second for 100 years without this ever surfacing?",
+      "revId": "f4081d6c38ec587fa20e6b1ebd59389eaf97db7f",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
