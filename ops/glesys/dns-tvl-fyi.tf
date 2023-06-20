@@ -62,6 +62,13 @@ resource "glesys_dnsdomain_record" "tvl_fyi_whitby_services" {
   for_each = toset(local.whitby_services)
 }
 
+resource "glesys_dnsdomain_record" "tvl_fyi_net_CNAME" {
+  domain = glesys_dnsdomain.tvl_fyi.id
+  type   = "CNAME"
+  data   = "sanduny.tvl.su."
+  host   = "net"
+}
+
 # Google Domains mail forwarding configuration (no sending)
 resource "glesys_dnsdomain_record" "tvl_fyi_MX_5" {
   domain = glesys_dnsdomain.tvl_fyi.id
