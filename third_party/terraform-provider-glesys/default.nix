@@ -4,14 +4,15 @@
 { pkgs, ... }:
 
 pkgs.terraform-providers.mkProvider rec {
-  version = "0.3.2";
+  version = "0.9.0";
+  spdx = "MPL-2.0";
 
   owner = "glesys";
   repo = "terraform-provider-glesys";
   rev = "v${version}";
-  hash = "sha256:1hlqa4f9d44hq614ff8ivg8a6fwg48jwz11zsrlghjzky82cfraq";
+  hash = "sha256:0n2wb1gl0agc9agqlmhg4mh9kyfhw4zvrryyl8wfxlp1hkr0wz9y";
 
-  vendorHash = "sha256:0g5g69absf0vmin0ff0anrxcgfq0bzx4iz3qci90p9xkvyph4nlw";
+  vendorHash = "sha256:13wdx7q5rsyjrm6cn030m5hgcvx0m17dhr16wmbfv71pmsszfdjm";
 
   # This provider is not officially published in the TF registry, so
   # we're giving it a fake source here.
