@@ -48,6 +48,30 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "0ba62cb6_60fb6068",
+        "filename": "tvix/store/src/fuse/inodes.rs",
+        "patchSetId": 31
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2023-06-20T09:55:38Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "dfbcecfc_f7162a4c",
+      "range": {
+        "startLine": 1,
+        "startChar": 0,
+        "endLine": 1,
+        "endChar": 43
+      },
+      "revId": "d07e0d8b655cb1130899f48f66c49d073df678a1",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "da9fad1d_6d9fa04f",
@@ -85,6 +109,30 @@
       "side": 1,
       "message": "Yes, symlink targets can even be arbitrary bytes (except null bytes). I kept it Strings here, until https://b.tvl.fyi/issues/267.",
       "parentUuid": "da9fad1d_6d9fa04f",
+      "range": {
+        "startLine": 16,
+        "startChar": 9,
+        "endLine": 16,
+        "endChar": 18
+      },
+      "revId": "d07e0d8b655cb1130899f48f66c49d073df678a1",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "59b9b522_bd331369",
+        "filename": "tvix/store/src/fuse/inodes.rs",
+        "patchSetId": 31
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2023-06-20T09:55:38Z",
+      "side": 1,
+      "message": "It might be a good idea to move the symlink tracking out of here (i.e. use another layer of indexing) if this is a very frequently used data structure, as it\u0027s literally several times larger than it otherwise would be because of that. Will probably need some measuring though.",
+      "parentUuid": "e551ef86_5c82515d",
       "range": {
         "startLine": 16,
         "startChar": 9,
@@ -179,6 +227,30 @@
       "side": 1,
       "message": "The inode address space is only 64 bits. While we could define some hashing scheme for the three different nodes, I didn\u0027t feel comfortable discarding everything other than the first 64bits - and once you have an inode, to actually look most things up we need the full blake3 digest anyways.\n\nSo in the end we don\u0027t gain anything compared to just using an incrementing counter.",
       "parentUuid": "9412e44e_d85147e7",
+      "range": {
+        "startLine": 82,
+        "startChar": 0,
+        "endLine": 82,
+        "endChar": 25
+      },
+      "revId": "d07e0d8b655cb1130899f48f66c49d073df678a1",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c18792fa_ede4edef",
+        "filename": "tvix/store/src/fuse/inodes.rs",
+        "patchSetId": 31
+      },
+      "lineNbr": 82,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2023-06-20T09:55:38Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "2ae85895_20641168",
       "range": {
         "startLine": 82,
         "startChar": 0,
@@ -298,6 +370,30 @@
       "side": 1,
       "message": "cl/8834",
       "parentUuid": "2f2bc496_2c8d8435",
+      "range": {
+        "startLine": 355,
+        "startChar": 0,
+        "endLine": 355,
+        "endChar": 37
+      },
+      "revId": "d07e0d8b655cb1130899f48f66c49d073df678a1",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "033771b0_ec2bd416",
+        "filename": "tvix/store/src/fuse/mod.rs",
+        "patchSetId": 31
+      },
+      "lineNbr": 355,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2023-06-20T09:55:38Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "d1922e56_d11e9bf6",
       "range": {
         "startLine": 355,
         "startChar": 0,
