@@ -624,6 +624,12 @@ in
     };
   };
 
+  # Join TVL Tailscale network at net.tvl.fyi
+  services.tailscale = {
+    enable = true;
+    useRoutingFeatures = "server"; # for exit-node usage
+  };
+
   # Allow Keycloak access to the LDAP module by forcing in the JVM
   # configuration
   systemd.services.keycloak.environment.PREPEND_JAVA_OPTS =

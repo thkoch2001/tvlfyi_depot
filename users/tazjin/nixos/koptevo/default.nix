@@ -101,6 +101,11 @@ in
     ];
   };
 
+  services.tailscale = {
+    enable = true;
+    useRoutingFeatures = "server"; # for exit-node usage
+  };
+
   # Automatically collect garbage from the Nix store.
   services.depot.automatic-gc = {
     enable = true;
