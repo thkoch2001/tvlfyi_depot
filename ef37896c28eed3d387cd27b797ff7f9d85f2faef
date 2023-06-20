@@ -16,6 +16,24 @@
       "message": "Could we just skip this problem by instead caching by hash of the file?",
       "revId": "ef37896c28eed3d387cd27b797ff7f9d85f2faef",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8f737f12_66dde2e7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2023-06-20T16:38:12Z",
+      "side": 1,
+      "message": "Then we would cache an import in situations when C++ Nix doesn\u0027t (which is probably not a big problem?).\n\nI\u0027d still vote to postpone this, since it\u0027d be helpful to decide this based on benchmarks: I wonder how nixpkgs evaluation is impacted by computing the hash of big files like hackage-packages.nix and node-packages.nix (multiple times even).",
+      "parentUuid": "136d4f6f_2fbb1344",
+      "revId": "ef37896c28eed3d387cd27b797ff7f9d85f2faef",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
