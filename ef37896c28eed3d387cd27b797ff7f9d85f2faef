@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "136d4f6f_2fbb1344",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2023-06-20T16:35:20Z",
+      "side": 1,
+      "message": "Could we just skip this problem by instead caching by hash of the file?",
+      "revId": "ef37896c28eed3d387cd27b797ff7f9d85f2faef",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
