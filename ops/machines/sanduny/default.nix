@@ -20,6 +20,7 @@ in
     (mod "journaldriver.nix")
     (mod "known-hosts.nix")
     (mod "tvl-cache.nix")
+    (mod "tvl-headscale.nix")
     (mod "tvl-users.nix")
     (mod "www/inbox.tvl.su.nix")
     (mod "www/self-redirect.nix")
@@ -70,6 +71,13 @@ in
 
   services.openssh.enable = true;
   services.fail2ban.enable = true;
+
+  # Run tailscale for the TVL net.tvl.fyi network.
+  # tailscale up --login-server https://net.tvl.fyi --accept-dns=false --advertise-exit-node
+  services.tailscale = {
+    enable = true;
+    useRoutingFeatures = "server"; # for exit-node usage
+  };
 
   # Automatically collect garbage from the Nix store.
   services.depot.automatic-gc = {
