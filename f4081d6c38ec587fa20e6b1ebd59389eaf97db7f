@@ -34,6 +34,24 @@
       "parentUuid": "a6684ce0_d72469d1",
       "revId": "f4081d6c38ec587fa20e6b1ebd59389eaf97db7f",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0caebf5f_15e5d5e1",
+        "filename": "tvix/store/src/fuse/mod.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 399,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-06-20T10:22:16Z",
+      "side": 1,
+      "message": "I quickly checked https://github.com/hanwen/go-fuse/network/dependents and found https://github.com/rclone/rclone/blob/master/cmd/cmount/fs.go#L59, which tries to find an empty spot at the beginning, and https://github.com/chiyutianyi/gitfs/blob/main/pkg/fs/fs.go#L56, which increments a counter. Both are probably valid, if you prefer, we can put all readers in a Vec\u003cOption\u003c...\u003e\u003e, and replace the holes with repurposed file handles.",
+      "parentUuid": "a15833ce_8594683e",
+      "revId": "f4081d6c38ec587fa20e6b1ebd59389eaf97db7f",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
