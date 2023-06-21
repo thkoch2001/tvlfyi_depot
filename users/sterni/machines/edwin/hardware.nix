@@ -5,7 +5,6 @@
     boot = {
       loader.grub = {
         enable = true;
-        version = 2;
         # TODO(sterni): use /dev/disk/by-id ?
         devices = [
           "/dev/sda"
