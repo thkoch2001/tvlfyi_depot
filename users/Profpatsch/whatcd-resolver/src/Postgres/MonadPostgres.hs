@@ -3,6 +3,7 @@
 {-# LANGUAGE QuasiQuotes #-}
 {-# LANGUAGE TypeFamilyDependencies #-}
 {-# LANGUAGE UndecidableInstances #-}
+{-# OPTIONS_GHC -Wno-orphans #-}
 
 module Postgres.MonadPostgres where
 
@@ -18,6 +19,10 @@ import Data.Typeable (Typeable)
 import Database.PostgreSQL.Simple (Connection, FormatError, FromRow, Query, QueryError, ResultError, SqlError, ToRow)
 import Database.PostgreSQL.Simple qualified as PG
 import Database.PostgreSQL.Simple.FromRow qualified as PG
+import Database.PostgreSQL.Simple.ToField (ToField)
+import Database.PostgreSQL.Simple.ToRow (ToRow (toRow))
+import Database.PostgreSQL.Simple.Types (fromQuery)
+import GHC.Records (HasField (..))
 import Label
 import PossehlAnalyticsPrelude
 import Postgres.Decoder
@@ -33,9 +38,14 @@ import UnliftIO.Process qualified as Process
 -- and will behave the same unless othewise documented.
 class Monad m => MonadPostgres (m :: Type -> Type) where
   -- | Execute an INSERT, UPDATE, or other SQL query that is not expected to return results.
-
+  --
   -- Returns the number of rows affected.
   execute :: (ToRow params, Typeable params) => Query -> params -> Transaction m (Label "numberOfRowsAffected" Natural)
+
+  -- | Execute an INSERT, UPDATE, or other SQL query that is not expected to return results. Does not perform parameter substitution.
+  --
+  -- Returns the number of rows affected.
+  execute_ :: Query -> Transaction m (Label "numberOfRowsAffected" Natural)
 
   -- | Execute a multi-row INSERT, UPDATE, or other SQL query that is not expected to return results.
   --
@@ -45,7 +55,7 @@ class Monad m => MonadPostgres (m :: Type -> Type) where
   -- | Execute INSERT ... RETURNING, UPDATE ... RETURNING, or other SQL query that accepts multi-row input and is expected to return results. Note that it is possible to write query conn "INSERT ... RETURNING ..." ... in cases where you are only inserting a single row, and do not need functionality analogous to 'executeMany'.
   --
   -- If the list of parameters is empty, this function will simply return [] without issuing the query to the backend. If this is not desired, consider using the 'PG.Values' constructor instead.
-  executeManyReturning :: (ToRow q, FromRow r) => Query -> [q] -> Transaction m [r]
+  executeManyReturningWith :: (ToRow q) => Query -> [q] -> Decoder r -> Transaction m [r]
 
   -- | Run a query, passing parameters and result row parser.
   queryWith :: (PG.ToRow params, Typeable params, Typeable r) => PG.Query -> params -> Decoder r -> Transaction m [r]
@@ -145,27 +155,6 @@ ensureSingleRow = \case
             List.length more
         }
 
--- | A better `query`
---
--- Parameters are passed first,
--- then a Proxy which you should annotate with the return type of the query.
--- This way it’s right before the @SELECT@,
--- meaning it’s easy to see whether the two correspond.
---
--- TODO: maybe replace the query function in the class with this?
-queryBetter ::
-  ( MonadPostgres m,
-    ToRow params,
-    FromRow res,
-    Typeable params,
-    Typeable res
-  ) =>
-  params ->
-  Proxy res ->
-  Query ->
-  Transaction m [res]
-queryBetter params Proxy q = query q params
-
 newtype Transaction m a = Transaction {unTransaction :: (ReaderT Connection m a)}
   deriving newtype
     ( Functor,
@@ -251,11 +240,11 @@ toNumberOfRowsAffected functionName i64 =
     & liftIO
     <&> label @"numberOfRowsAffected"
 
-pgExecuteManyReturning :: (ToRow params, FromRow r, MonadUnliftIO m, MonadLogger m, MonadTools m) => Query -> [params] -> Transaction m [r]
-pgExecuteManyReturning qry params =
+pgExecuteManyReturningWith :: (ToRow params, MonadUnliftIO m, MonadLogger m, MonadTools m) => Query -> [params] -> Decoder r -> Transaction m [r]
+pgExecuteManyReturningWith qry params (Decoder fromRow) =
   do
     conn <- Transaction ask
-    PG.returning conn qry params
+    PG.returningWith fromRow conn qry params
       & handlePGException "executeManyReturning" qry (Right params)
 
 pgFold ::
@@ -324,6 +313,10 @@ data SingleRowError = SingleRowError
 instance Exception SingleRowError where
   displayException (SingleRowError {..}) = [fmt|Single row expected from SQL query result, {numberOfRowsReturned} rows were returned instead."|]
 
+pgFormatQueryNoParams' :: (MonadIO m, MonadLogger m, MonadTools m) => Query -> Transaction m Text
+pgFormatQueryNoParams' q =
+  lift $ pgFormatQueryByteString q.fromQuery
+
 pgFormatQuery' :: (MonadIO m, ToRow params, MonadLogger m, MonadTools m) => Query -> params -> Transaction m Text
 pgFormatQuery' q p =
   pgFormatQuery q p
@@ -375,3 +368,9 @@ pgFormatQueryByteString queryBytes = do
           )
         logDebug [fmt|pg_format stdout: stderr|]
         pure (queryBytes & bytesToTextUtf8Lenient)
+
+instance (ToField t1, ToField t2) => ToRow (T2 l1 t1 l2 t2) where
+  toRow t2 = toRow (getField @l1 t2, getField @l2 t2)
+
+instance (ToField t1, ToField t2, ToField t3) => ToRow (T3 l1 t1 l2 t2 l3 t3) where
+  toRow t3 = toRow (getField @l1 t3, getField @l2 t3, getField @l3 t3)
