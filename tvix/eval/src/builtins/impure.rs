@@ -11,7 +11,7 @@ use crate::{
     io::FileType,
     value::NixAttrs,
     vm::generators::{self, GenCo},
-    NixString, Value,
+    Builtin, NixString, Value,
 };
 
 #[builtins]

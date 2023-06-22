@@ -15,8 +15,8 @@
 pub mod builtins;
 mod chunk;
 mod compiler;
-mod errors;
-mod io;
+pub mod errors;
+pub mod io;
 pub mod observer;
 mod opcode;
 mod pretty_ast;
@@ -24,8 +24,8 @@ mod source;
 mod spans;
 mod systems;
 mod upvalues;
-mod value;
-mod vm;
+pub mod value;
+pub mod vm;
 mod warnings;
 
 mod nix_search_path;
