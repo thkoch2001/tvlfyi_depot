@@ -70,6 +70,24 @@
       "parentUuid": "0caebf5f_15e5d5e1",
       "revId": "f4081d6c38ec587fa20e6b1ebd59389eaf97db7f",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b929ba31_3f5e0e52",
+        "filename": "tvix/store/src/fuse/mod.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 399,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-06-22T13:40:40Z",
+      "side": 1,
+      "message": "Left a TODO.",
+      "parentUuid": "fe17abfb_e51e9499",
+      "revId": "f4081d6c38ec587fa20e6b1ebd59389eaf97db7f",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
