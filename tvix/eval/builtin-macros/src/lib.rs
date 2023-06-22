@@ -295,7 +295,7 @@ pub fn builtins(args: TokenStream, item: TokenStream) -> TokenStream {
                 if captures_state {
                     builtins.push(quote_spanned! { builtin_attr.span() => {
                         let inner_state = state.clone();
-                        crate::Builtin::new(
+                        tvix_eval::Builtin::new(
                             #name,
                             #docstring,
                             #arg_count,
@@ -304,7 +304,7 @@ pub fn builtins(args: TokenStream, item: TokenStream) -> TokenStream {
                     }});
                 } else {
                     builtins.push(quote_spanned! { builtin_attr.span() => {
-                        crate::Builtin::new(
+                        tvix_eval::Builtin::new(
                             #name,
                             #docstring,
                             #arg_count,

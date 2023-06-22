@@ -15,7 +15,7 @@
 pub mod builtins;
 mod chunk;
 mod compiler;
-mod errors;
+pub mod errors;
 mod io;
 pub mod observer;
 mod opcode;
