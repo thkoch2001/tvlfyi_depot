@@ -49,7 +49,7 @@ lib.fix (self: {
 
   virtualisation.virtualbox.host.enable = true;
   virtualisation.docker.enable = true;
-  users.users.tazjin.extraGroups = [ "docker" "vboxusers" ];
+  users.users.tazjin.extraGroups = [ "docker" "vboxusers" "adbusers" ];
 
   fileSystems = {
     "/" = {
@@ -162,6 +162,9 @@ lib.fix (self: {
       OnUnitActiveSec = "180";
     };
   };
+
+  # android stuff for hacking on Awful.apk
+  programs.adb.enable = true;
 
   # systemd-oomd seems to have been enabled by default around ~
   # December 2022, and it's really into killing my X session as soon
