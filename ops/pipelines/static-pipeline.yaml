@@ -35,6 +35,11 @@ steps:
   #
   # Revision numbers are defined as the number of commits in the
   # lineage of HEAD, following only the first parent of merges.
+  #
+  # Note that git does not fetch these refs by default, instead
+  # you'll have to modify your git config using
+  # `git config --add remote.origin.fetch '+refs/r/*:refs/r/*'`.
+  # The refs are available after the next `git fetch`.
   - label: ":git:"
     branches: "refs/heads/canon"
     command: |
