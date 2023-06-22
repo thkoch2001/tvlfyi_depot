@@ -16,6 +16,24 @@
       "message": "Can you include some example code on how this should be used from an external consume, for example extending tvix/serde/examples with a custom builtin?",
       "revId": "8f2074077f6372356a8ce563d30e379cab944147",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f149129c_8c4fc5cb",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-06-22T16:04:44Z",
+      "side": 1,
+      "message": "Unresolved",
+      "parentUuid": "52d1125e_eb0cdcf1",
+      "revId": "8f2074077f6372356a8ce563d30e379cab944147",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
