@@ -12,6 +12,7 @@ in
     (mod "quassel.nix")
     (mod "www/base.nix")
     (mod "www/tazj.in.nix")
+    (usermod "monica.nix")
     (usermod "predlozhnik.nix")
     (usermod "tgsa.nix")
     (depot.third_party.agenix.src + "/modules/age.nix")

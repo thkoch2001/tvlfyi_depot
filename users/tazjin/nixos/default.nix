@@ -6,5 +6,6 @@ in depot.nix.readTree.drvTargets {
   frogSystem = systemFor depot.users.tazjin.nixos.frog;
   tverskoySystem = systemFor depot.users.tazjin.nixos.tverskoy;
   zamalekSystem = systemFor depot.users.tazjin.nixos.zamalek;
+  koptevoRaw = depot.ops.nixos.nixosFor depot.users.tazjin.nixos.koptevo;
   koptevoSystem = systemFor depot.users.tazjin.nixos.koptevo;
 }
