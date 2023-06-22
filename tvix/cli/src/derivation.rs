@@ -6,7 +6,9 @@ use std::collections::{btree_map, BTreeSet};
 use std::rc::Rc;
 use tvix_eval::builtin_macros::builtins;
 use tvix_eval::generators::{self, emit_warning_kind, GenCo};
-use tvix_eval::{AddContext, CoercionKind, ErrorKind, NixAttrs, NixList, Value, WarningKind};
+use tvix_eval::{
+    AddContext, Builtin, CoercionKind, ErrorKind, NixAttrs, NixList, Value, WarningKind,
+};
 
 use crate::errors::Error;
 use crate::known_paths::{KnownPaths, PathKind, PathName};
