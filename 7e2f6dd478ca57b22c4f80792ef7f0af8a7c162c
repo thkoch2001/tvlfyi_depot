@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1ef8ad38_64c0c81b",
+        "filename": "tvix/eval/src/tests/mod.rs",
+        "patchSetId": 8
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2023-06-22T20:05:11Z",
+      "side": 1,
+      "message": "This is quite curious. Pretty sure that the crate was previously available by name, but it may have changed in an edition upgrade on the Rust side.",
+      "range": {
+        "startLine": 13,
+        "startChar": 0,
+        "endLine": 13,
+        "endChar": 27
+      },
+      "revId": "7e2f6dd478ca57b22c4f80792ef7f0af8a7c162c",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "801c1199_19c59016",
+        "filename": "tvix/serde/Cargo.toml",
+        "patchSetId": 8
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2023-06-22T20:05:11Z",
+      "side": 1,
+      "message": "Hmm, this might be something we want to re-export from tvix_eval actually (since it\u0027s properly third-party for us). Have to think about it.",
+      "range": {
+        "startLine": 11,
+        "startChar": 0,
+        "endLine": 11,
+        "endChar": 61
+      },
+      "revId": "7e2f6dd478ca57b22c4f80792ef7f0af8a7c162c",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
