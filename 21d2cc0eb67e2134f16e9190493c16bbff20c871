@@ -16,6 +16,24 @@
       "message": "this line is already in tvl-headscale.nix, and similar lines are not in other machine configs.\n\nfor consistency reasons I\u0027d probably only put it all in tvl-headscale.nix.",
       "revId": "21d2cc0eb67e2134f16e9190493c16bbff20c871",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "04faadb5_7e37304a",
+        "filename": "ops/machines/sanduny/default.nix",
+        "patchSetId": 2
+      },
+      "lineNbr": 77,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2023-06-22T13:23:08Z",
+      "side": 1,
+      "message": "No, this is the client setup block, not the server setup block. It does not belong in the headscale config file. \n\nThis is also in whitby and koptevo machine configs. Since only two settings are set, I don\u0027t think extracting it into a separate module makes sense.",
+      "parentUuid": "e18502e4_f526d229",
+      "revId": "21d2cc0eb67e2134f16e9190493c16bbff20c871",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
