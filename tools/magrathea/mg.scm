@@ -22,6 +22,7 @@
 (define usage #<<USAGE
 usage: mg <command> [<target>]
        mg run [<target>] [-- <arguments>]
+       mg revision [<git object> ...]
 
 target:
   a target specification with meaning inside of the repository. can
@@ -37,11 +38,12 @@ target:
     :baz              - relative virtual target
 
 commands:
-  build - build a target
-  shell - enter a shell with the target's build dependencies
-  path  - print source folder for the target
-  repl  - start a nix repl in the repository root
-  run   - build a target and execute its output
+  build    - build a target
+  shell    - enter a shell with the target's build dependencies
+  path     - print source folder for the target
+  repl     - start a nix repl in the repository root
+  revision - show revision number of git objects in the repository
+  run      - build a target and execute its output
 
 file all feedback on b.tvl.fyi
 USAGE
@@ -353,6 +355,30 @@ if you meant to pass these arguments to nix, please separate them with
          [() (mg-error "path command needs a target")]
          [other (mg-error (format "unknown arguments: ~a" other))]))
 
+;; TODO(sterni): git-for-each-ref(1) iterates over all refs for each object we provide it,
+;;               we could provide --points-at multiple times for greater efficiency, but
+;;               it then doesn't preserve the order.
+(define (git-object-revision obj)
+  (let ((stdout
+         (call-with-input-pipe
+          (string-append "git for-each-ref --format='%(refname:short)' --points-at='" obj "' refs/r/")
+          (lambda (p) (read-chomping p)))))
+    (if (equal? stdout "") #f stdout)))
+
+(define (revision args)
+  (let* ((objects (match args
+                   [() '("HEAD")]
+                   [_ args]))
+         (revisions (map
+                     (lambda (obj)
+                       (let ((r (git-object-revision obj)))
+                         (if (not r)
+                             (mg-error (format "Git Object ~A has not matching revision" obj))
+                             r)))
+                         objects)))
+    (map print revisions)
+    (values)))
+
 (define (main args)
   (match args
          [() (print usage)]
@@ -361,6 +387,7 @@ if you meant to pass these arguments to nix, please separate them with
          [("path" . _) (path (cdr args))]
          [("repl" . _) (repl (cdr args))]
          [("run" . _) (run (cdr args))]
+         [("revision" . _) (revision (cdr args))]
          [other (begin (print "unknown command: mg " args)
                        (print usage))]))
 
