@@ -7,6 +7,7 @@ depot.nix.lazy-deps {
   age.attr = "third_party.nixpkgs.age";
   depotfmt.attr = "tools.depotfmt";
   fetch-depot-inbox.attr = "tools.fetch-depot-inbox";
+  git-r.attr = "tools.git-r";
   gerrit-update.attr = "tools.gerrit-update";
   gerrit.attr = "tools.gerrit-cli";
   hash-password.attr = "tools.hash-password";
