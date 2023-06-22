@@ -56,6 +56,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "89e3444c_8608d9e5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-06-22T13:16:45Z",
+      "side": 1,
+      "message": "I\u0027d personally always favor having stuff publicly reachable behind SSO login, rather than using source IPs as a security mechanism. No matter what IP(v4 at least) ranges you pick, they\u0027ll most likely conflict with some ranges others have, and \"being connected to that network is a hazzle\".\n\nSo please consider this as some overlay network across machines, but not a \"internal network\" that i need to join to access some services.",
+      "parentUuid": "d2f352d2_c1cac0c0",
+      "revId": "25d1208d5580440e26331dd6afee6ea60cb161d5",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "0dcfedb9_f73eb37b",
         "filename": "ops/modules/tvl-headscale.nix",
         "patchSetId": 1
