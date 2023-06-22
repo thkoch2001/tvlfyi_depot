@@ -18,6 +18,7 @@ use crate::warnings::WarningKind;
 use crate::{
     errors::ErrorKind,
     value::{CoercionKind, NixAttrs, NixList, NixString, SharedThunkSet, Thunk, Value},
+    Builtin,
 };
 
 use self::versions::{VersionPart, VersionPartsIter};
