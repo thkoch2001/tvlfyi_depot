@@ -23,8 +23,6 @@
       kernelModules = [ ];
     };
 
-    kernelPackages = pkgs.linuxPackages_5_15;
-
     kernelModules = [ "kvm-amd" ];
     blacklistedKernelModules = [ ];
     extraModulePackages = [ ];
