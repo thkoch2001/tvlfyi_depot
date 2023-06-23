@@ -1,25 +1,33 @@
 #ifndef CGIT_H
 #define CGIT_H
 
-
-#include <git-compat-util.h>
 #include <stdbool.h>
 
+#include <git-compat-util.h>
+
+#include <archive.h>
 #include <cache.h>
-#include <grep.h>
-#include <object.h>
-#include <object-store.h>
-#include <tree.h>
 #include <commit.h>
-#include <tag.h>
-#include <diff.h>
 #include <diffcore.h>
-#include <strvec.h>
+#include <diff.h>
+#include <environment.h>
+#include <graph.h>
+#include <grep.h>
+#include <hex.h>
+#include <log-tree.h>
+#include <notes.h>
+#include <object.h>
+#include <object-name.h>
+#include <object-store.h>
 #include <refs.h>
 #include <revision.h>
-#include <log-tree.h>
-#include <archive.h>
+#include <setup.h>
 #include <string-list.h>
+#include <strvec.h>
+#include <tag.h>
+#include <tree.h>
+#include <utf8.h>
+#include <wrapper.h>
 #include <xdiff-interface.h>
 #include <xdiff/xdiff.h>
 #include <utf8.h>

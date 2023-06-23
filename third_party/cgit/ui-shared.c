@@ -898,7 +898,7 @@ void cgit_add_clone_urls(void (*fn)(const char *))
 static int print_this_commit_option(void)
 {
 	struct object_id oid;
-	if (!ctx.qry.head || get_oid(ctx.qry.head, &oid))
+	if (!ctx.qry.head || repo_get_oid(the_repository, ctx.qry.head, &oid))
 		return 1;
 	html_option(oid_to_hex(&oid), "this commit", ctx.qry.head);
 	return 0;
@@ -1167,11 +1167,11 @@ void cgit_compose_snapshot_prefix(struct strbuf *filename, const char *base,
 	 * name starts with {v,V}[0-9] and the prettify mapping is injective,
 	 * i.e. each stripped tag can be inverted without ambiguities.
 	 */
-	if (get_oid(fmt("refs/tags/%s", ref), &oid) == 0 &&
+	if (repo_get_oid(the_repository, fmt("refs/tags/%s", ref), &oid) == 0 &&
 	    (ref[0] == 'v' || ref[0] == 'V') && isdigit(ref[1]) &&
-	    ((get_oid(fmt("refs/tags/%s", ref + 1), &oid) == 0) +
-	     (get_oid(fmt("refs/tags/v%s", ref + 1), &oid) == 0) +
-	     (get_oid(fmt("refs/tags/V%s", ref + 1), &oid) == 0) == 1))
+	    ((repo_get_oid(the_repository, fmt("refs/tags/%s", ref + 1), &oid) == 0) +
+	     (repo_get_oid(the_repository, fmt("refs/tags/v%s", ref + 1), &oid) == 0) +
+	     (repo_get_oid(the_repository, fmt("refs/tags/V%s", ref + 1), &oid) == 0) == 1))
 		ref++;
 
 	strbuf_addf(filename, "%s-%s", base, ref);
