@@ -3,7 +3,7 @@
 { lib, pkgs, ... }:
 
 pkgs.makeOverridable
-  ({ emacs ? pkgs.emacsUnstable }:
+  ({ emacs ? pkgs.emacs-unstable }:
   let
     emacsWithPackages = (pkgs.emacsPackagesFor emacs).emacsWithPackages;
 
