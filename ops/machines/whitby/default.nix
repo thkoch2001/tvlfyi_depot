@@ -105,7 +105,6 @@ in
 
     loader.grub = {
       enable = true;
-      version = 2;
       efiSupport = true;
       efiInstallAsRemovable = true;
       device = "/dev/disk/by-id/nvme-SAMSUNG_MZQLB1T9HAJR-00007_S439NA0N201620";
