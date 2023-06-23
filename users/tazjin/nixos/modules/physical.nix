@@ -24,7 +24,7 @@ in
       direnv
       dnsutils
       electrum
-      emacsUnstable # emacsclient
+      emacs-unstable # emacsclient
       exa
       fd
       file
