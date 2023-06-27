@@ -30,7 +30,6 @@
   home.file.".docker/config.json".text = builtins.toJSON {
     credHelpers = {
       "305232526136.dkr.ecr.us-east-2.amazonaws.com" = "ecr-login";
-      "public.ecr.aws" = "ecr-login";
     };
   };
 
