@@ -34,6 +34,24 @@
       "parentUuid": "7b9c2ff1_f9140b2d",
       "revId": "a17e271d1acd618892b8468767618d4c736bf5b9",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fea6be24_cd7df8eb",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-06-27T15:59:35Z",
+      "side": 1,
+      "message": "So far mg was mostly another CLI to bring bazel-like commands and target syntax for worktrees with readTree, which could at some point end up in tvix/Nix directly \n\nI feel like suddenly poking around in the git history should be another tool.",
+      "parentUuid": "f5413562_e5c6ecde",
+      "revId": "a17e271d1acd618892b8468767618d4c736bf5b9",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
