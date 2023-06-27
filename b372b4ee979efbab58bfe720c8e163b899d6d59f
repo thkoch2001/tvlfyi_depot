@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "abe25766_9c395b58",
+        "filename": "tvix/docs/value-pointer-equality.md",
+        "patchSetId": 2
+      },
+      "lineNbr": 50,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-06-27T06:52:45Z",
+      "side": 1,
+      "message": "2023-…? At least the commits you\u0027re linking to are from this year…",
+      "revId": "b372b4ee979efbab58bfe720c8e163b899d6d59f",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
