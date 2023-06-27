@@ -86,4 +86,16 @@
     vSync = true;
   };
   hardware.opengl.driSupport32Bit = true;
+
+  services.postgresql = {
+    enable = true;
+    enableTCPIP = true;
+    authentication = "host all all 0.0.0.0/0 md5";
+    dataDir = "/data/postgresql";
+    package = pkgs.postgresql_15;
+    port = 5431;
+    settings = {
+      wal_level = "logical";
+    };
+  };
 }
