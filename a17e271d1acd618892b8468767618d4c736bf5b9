@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7b9c2ff1_f9140b2d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-06-27T04:44:57Z",
+      "side": 1,
+      "message": "This feels more like something that should be elsewhere than in mg. mg isn\u0027t really Gerrit specific.\n\nmg works entirely without a .git repository, as long as MG_ROOT is set.",
+      "revId": "a17e271d1acd618892b8468767618d4c736bf5b9",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
