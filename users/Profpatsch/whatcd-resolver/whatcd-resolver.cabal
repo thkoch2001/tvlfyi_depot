@@ -88,4 +88,8 @@ library
         unliftio,
         monad-logger,
         unix,
+        warp,
+        wai,
+        ihp-hsx,
+        blaze-html,
 
