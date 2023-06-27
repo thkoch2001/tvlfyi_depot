@@ -17,6 +17,8 @@ with lib;
 
   networking.useDHCP = false;
   networking.networkmanager.enable = true;
+  systemd.services.NetworkManager-wait-online.enable = lib.mkForce false;
+  systemd.services.systemd-networkd-wait-online.enable = lib.mkForce false;
 
   i18n = {
     defaultLocale = "en_US.UTF-8";
