@@ -16,6 +16,24 @@
       "message": "This feels more like something that should be elsewhere than in mg. mg isn\u0027t really Gerrit specific.\n\nmg works entirely without a .git repository, as long as MG_ROOT is set.",
       "revId": "a17e271d1acd618892b8468767618d4c736bf5b9",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f5413562_e5c6ecde",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2023-06-27T14:36:03Z",
+      "side": 1,
+      "message": "Well “monorepos that are modeled after the tvl depot” and it is not really gerrit specific, we have a custom setup for it that doesn\u0027t really depend on the review tool.\n\nWe could, I guess recompute the r number from the revcount to make it totally independent of repo setup (e.g. you need to configure git explicitly to fetch the r/ refs).",
+      "parentUuid": "7b9c2ff1_f9140b2d",
+      "revId": "a17e271d1acd618892b8468767618d4c736bf5b9",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
