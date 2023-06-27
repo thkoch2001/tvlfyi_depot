@@ -164,8 +164,6 @@ with lib;
     quiet = true;
   };
 
-  systemd.services.ddclient.serviceConfig.DynamicUser = lib.mkForce false;
-
   security.acme.certs."metrics.gws.fyi" = {
     dnsProvider = "cloudflare";
     credentialsFile = config.age.secretsDir + "/cloudflare";
