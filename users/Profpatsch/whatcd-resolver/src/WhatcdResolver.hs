@@ -4,7 +4,6 @@
 
 module WhatcdResolver where
 
-import Control.Concurrent (threadDelay)
 import Control.Monad.Logger qualified as Logger
 import Control.Monad.Logger.CallStack
 import Control.Monad.Reader
@@ -25,6 +24,7 @@ import Database.PostgreSQL.Simple.Types qualified as Postgres
 import Database.Postgres.Temp qualified as TmpPg
 import FieldParser qualified as Field
 import GHC.Records (HasField (..))
+import IHP.HSX.QQ (hsx)
 import Json qualified
 import Json.Enc (Enc)
 import Json.Enc qualified as Enc
@@ -32,6 +32,9 @@ import Label
 import Network.HTTP.Conduit qualified as Http
 import Network.HTTP.Simple qualified as Http
 import Network.HTTP.Types
+import Network.HTTP.Types qualified as Http
+import Network.Wai qualified as Wai
+import Network.Wai.Handler.Warp qualified as Warp
 import PossehlAnalyticsPrelude
 import Postgres.Decoder qualified as Dec
 import Postgres.MonadPostgres
@@ -41,7 +44,94 @@ import System.Directory qualified as Dir
 import System.Directory qualified as Xdg
 import System.FilePath ((</>))
 import System.IO qualified as IO
+import Text.Blaze.Html (Html, (!))
+import Text.Blaze.Html.Renderer.Utf8 qualified as Html
+import Text.Blaze.Html5 qualified as Html
+import Text.Blaze.Html5.Attributes qualified as Attr
 import UnliftIO
+
+htmlUi :: App ()
+htmlUi = do
+  withRunInIO $ \runInIO -> Warp.run 8080 $ \req resp -> do
+    let h = resp . Wai.responseLBS Http.ok200 []
+    case req & Wai.pathInfo of
+      [] -> h =<< runInIO mainHtml
+      ["snips", "song"] -> h snipsSong
+      _ -> h =<< runInIO mainHtml
+  where
+    tableData =
+      ( [ "Group ID",
+          "Torrent ID",
+          "Artist",
+          "Name",
+          "Weight",
+          "Torrent"
+        ],
+        \t ->
+          [ Enc.int t.groupId,
+            Enc.int t.torrentId,
+            Enc.text t.torrentGroupJson.artist,
+            Enc.text t.torrentGroupJson.groupName,
+            Enc.int t.seedingWeight,
+            Enc.value t.torrentJson
+          ]
+      )
+
+    mkTable :: ([Text], t -> [Enc]) -> [t] -> Html
+    mkTable f ts =
+      do
+        let headers = Html.thead (fst f <&> Html.toHtml @Text <&> Html.th & mconcat)
+        let keys = fst f <&> Text.toLower <&> Text.replace " " "_"
+        let json = Enc.list (\t -> Enc.object (zip keys (t & snd f))) ts
+        let tableDataScript =
+              Html.script
+                ! Attr.type_ "application/json"
+                ! Attr.id "table-data"
+                $ (json & Enc.encToBytesUtf8 & bytesToTextUtf8Unsafe & Html.text)
+        [hsx|
+        {tableDataScript}
+        <table id="table" class="table">
+          {headers}
+          <tbody>
+          </tbody>
+        </table>
+        <script>
+          var tableData = JSON.parse($("#table-data").text());
+          $("table").dynatable({
+            dataset: {
+              records: tableData
+            }
+          } )
+        </script>
+      |]
+    mainHtml = runTransaction $ do
+      bestTorrents <- getBestTorrents
+      pure $
+        Html.renderHtml $
+          Html.docTypeHtml
+            [hsx|
+      <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.0/jquery.min.js" integrity="sha512-3gJwYpMe3QewGELv8k/BX9vcqhryRdzRMxVfq6ngyWXwo03GFEzjsUm8Q7RZcHPHksttq7/GFoxjCVUjkjvPdw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/Dynatable/0.3.1/jquery.dynatable.min.js" integrity="sha512-KJdW8vGZWsRYrhMlZ6d8dR/fbLBK/aPOI0xDTEnGysk8TiFffc0S6TLSeSg7Lzk84GhBu9wI+qQatBrnTAeEYQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+        <script src="https://unpkg.com/htmx.org@1.9.2" integrity="sha384-L6OqL9pRWyyFU3+/bjdSri+iIphTN/bvYyM37tICVyOJkWZLpP2vGn6VUEXgzg6h" crossorigin="anonymous"></script>
+        <script>
+          $.dynatableSetup({
+            table: {
+              defaultColumnIdStyle: 'underscore'
+            }
+          });
+        </script>
+      </head>
+      <body>
+        {mkTable tableData bestTorrents}
+      </body>
+    |]
+    snipsSong = todo
 
 data TransmissionRequest = TransmissionRequest
   { method :: Text,
@@ -50,13 +140,15 @@ data TransmissionRequest = TransmissionRequest
   }
   deriving stock (Show)
 
+testTransmission req = runAppWith $ doTransmissionRequest (T2 (label @"host" "localhost") (label @"port" "9091")) req >>= liftIO . printPretty
+
 requestListAllTorrents :: TransmissionRequest
 requestListAllTorrents =
   TransmissionRequest
     { method = "torrent-get",
       arguments =
         Map.fromList
-          [ ("fields", Enc.list Enc.text ["id", "name"])
+          [ ("fields", Enc.list Enc.text ["id", "name", "files", "fileStats"])
           ],
       tag = Nothing
     }
@@ -149,94 +241,199 @@ redactedSearch advanced =
         (label @"actionArgs" ((advanced <&> second Just)))
     )
 
-test :: IO (Either TmpPg.StartError a)
-test =
+test :: Bool -> IO (Either TmpPg.StartError ())
+test doSearch =
   runAppWith $ do
     _ <- runTransaction migrate
-    transaction <- bla
-    runTransaction transaction
-    fix
-      ( \io -> do
-          logInfo "delay"
-          liftIO $ threadDelay 10_000_000
-          io
-      )
+    when doSearch $ do
+      transaction <- bla
+      _ <- runTransaction transaction
+      pure ()
+    htmlUi
 
-bla :: (MonadThrow m, MonadIO m, MonadLogger m, MonadPostgres m) => m (Transaction m [Label "numberOfRowsAffected" Natural])
-bla =
-  redactedSearch
-    [ ("searchstr", "cherish"),
-      ("artistname", "kirinji"),
-      -- ("year", "1982"),
-      -- ("format", "MP3"),
-      -- ("releasetype", "album"),
-      ("order_by", "year")
-    ]
-    ( do
-        status <- Json.key "status" Json.asText
-        when (status /= "success") $ do
-          Json.throwCustomError [fmt|Status was not "success", but {status}|]
-        Json.key "response" $ do
-          Json.key "results" $
-            sequence
-              <$> ( Json.eachInArray $ do
-                      groupId <- Json.key "groupId" (Json.asIntegral @_ @Int)
-                      groupName <- Json.key "groupName" Json.asText
-                      fullJsonResult <- Json.asValue
-                      let insertTourGroup = do
-                            _ <-
-                              execute
-                                [fmt|
+-- fix
+--   ( \io -> do
+--       logInfo "delay"
+--       liftIO $ threadDelay 10_000_000
+--       io
+--   )
+
+bla :: (MonadThrow m, MonadIO m, MonadLogger m, MonadPostgres m) => m (Transaction m ())
+bla = do
+  t1 <-
+    realbla
+      [ ("searchstr", "cherish"),
+        ("artistname", "kirinji"),
+        -- ("year", "1982"),
+        -- ("format", "MP3"),
+        -- ("releasetype", "album"),
+        ("order_by", "year")
+      ]
+  t2 <-
+    realbla
+      [ ("searchstr", "thriller"),
+        ("artistname", "michael jackson"),
+        -- ("year", "1982"),
+        -- ("format", "MP3"),
+        -- ("releasetype", "album"),
+        ("order_by", "year")
+      ]
+  pure (t1 >> t2)
+  where
+    realbla x =
+      redactedSearch
+        x
+        ( do
+            status <- Json.key "status" Json.asText
+            when (status /= "success") $ do
+              Json.throwCustomError [fmt|Status was not "success", but {status}|]
+            Json.key "response" $ do
+              Json.key "results" $
+                sequence_
+                  <$> ( Json.eachInArray $ do
+                          groupId <- Json.key "groupId" (Json.asIntegral @_ @Int)
+                          groupName <- Json.key "groupName" Json.asText
+                          fullJsonResult <-
+                            Json.asObject
+                              -- remove torrents cause they are inserted separately below
+                              <&> KeyMap.filterWithKey (\k _ -> k /= "torrents")
+                              <&> Json.Object
+                          let insertTourGroup = do
+                                _ <-
+                                  execute
+                                    [fmt|
                                   DELETE FROM redacted.torrent_groups
                                   WHERE group_id = ?::integer
                               |]
-                                (Only groupId)
-                            executeManyReturningWith
-                              [fmt|
+                                    (Only groupId)
+                                executeManyReturningWith
+                                  [fmt|
                                 INSERT INTO redacted.torrent_groups (
                                   group_id, group_name, full_json_result
                                 ) VALUES
                                 ( ?, ? , ? )
                                 RETURNING (id)
                               |]
-                              [ ( groupId,
-                                  groupName,
-                                  fullJsonResult
-                                )
-                              ]
-                              (label @"tourGroupIdPg" <$> Dec.fromField @Int)
-                              >>= ensureSingleRow
-                      insertTorrents <- Json.key "torrents" $ do
-                        torrents <- Json.eachInArray $ do
-                          torrentId <- Json.keyLabel @"torrentId" "torrentId" (Json.asIntegral @_ @Int)
-                          fullJsonResultT <- label @"fullJsonResult" <$> Json.asValue
-                          pure $ T2 torrentId fullJsonResultT
-                        pure $ \dat -> do
-                          _ <-
-                            execute
-                              [sql|
-                                  DELETE FROM redacted.torrents
+                                  [ ( groupId,
+                                      groupName,
+                                      fullJsonResult
+                                    )
+                                  ]
+                                  (label @"tourGroupIdPg" <$> Dec.fromField @Int)
+                                  >>= ensureSingleRow
+                          insertTorrents <- Json.key "torrents" $ do
+                            torrents <- Json.eachInArray $ do
+                              torrentId <- Json.keyLabel @"torrentId" "torrentId" (Json.asIntegral @_ @Int)
+                              fullJsonResultT <- label @"fullJsonResult" <$> Json.asValue
+                              pure $ T2 torrentId fullJsonResultT
+                            pure $ \dat -> do
+                              _ <-
+                                execute
+                                  [sql|
+                                  DELETE FROM redacted.torrents_json
                                   WHERE torrent_id = ANY (?::integer[])
                             |]
-                              (Only $ torrents & unzipT2 & (.torrentId) & PGArray)
-                          execute
-                            [sql|
-                                  INSERT INTO redacted.torrents
+                                  (Only $ torrents & unzipT2 & (.torrentId) & PGArray)
+                              execute
+                                [sql|
+                                  INSERT INTO redacted.torrents_json
                                         (torrent_id, torrent_group, full_json_result)
                                   SELECT inputs.torrent_id, static.torrent_group, inputs.full_json_result FROM
                                   (SELECT * FROM UNNEST(?::integer[], ?::jsonb[])) AS inputs(torrent_id, full_json_result)
                                   CROSS JOIN (VALUES(?::integer)) as static(torrent_group)
                             |]
-                            ( torrents
-                                & unzipT2
-                                & \t ->
-                                  ( t.torrentId & PGArray,
-                                    t.fullJsonResult & PGArray,
-                                    dat.tourGroupIdPg
-                                  )
-                            )
-                      pure (insertTourGroup >>= insertTorrents)
-                  )
+                                ( torrents
+                                    & unzipT2
+                                    & \t ->
+                                      ( t.torrentId & PGArray,
+                                        t.fullJsonResult & PGArray,
+                                        dat.tourGroupIdPg
+                                      )
+                                )
+                              pure ()
+                          pure (insertTourGroup >>= insertTorrents)
+                      )
+        )
+
+migrate :: MonadPostgres m => Transaction m (Label "numberOfRowsAffected" Natural)
+migrate = do
+  execute_
+    [sql|
+    CREATE SCHEMA IF NOT EXISTS redacted;
+
+    CREATE TABLE IF NOT EXISTS redacted.torrent_groups (
+      id SERIAL PRIMARY KEY,
+      group_id INTEGER,
+      group_name TEXT,
+      full_json_result JSONB,
+      UNIQUE(group_id)
+    );
+
+    CREATE TABLE IF NOT EXISTS redacted.torrents_json (
+      id SERIAL PRIMARY KEY,
+      torrent_id INTEGER,
+      torrent_group SERIAL NOT NULL REFERENCES redacted.torrent_groups(id) ON DELETE CASCADE,
+      full_json_result JSONB,
+      UNIQUE(torrent_id)
+    );
+
+    -- inflect out values of the full json
+
+    CREATE OR REPLACE VIEW redacted.torrents AS
+    SELECT
+      t.id,
+      t.torrent_id,
+      t.torrent_group,
+      -- the seeding weight is used to find the best torrent in a group.
+      ( (full_json_result->'seeders')::integer*3
+      + (full_json_result->'snatches')::integer)
+      AS seeding_weight,
+      t.full_json_result
+    FROM redacted.torrents_json t;
+
+    CREATE INDEX IF NOT EXISTS torrents_json_seeding ON redacted.torrents_json(((full_json_result->'seeding')::integer));
+    CREATE INDEX IF NOT EXISTS torrents_json_snatches ON redacted.torrents_json(((full_json_result->'snatches')::integer));
+  |]
+
+data TorrentData = TorrentData
+  { groupId :: Int,
+    torrentId :: Int,
+    seedingWeight :: Int,
+    torrentJson :: Json.Value,
+    torrentGroupJson :: T2 "artist" Text "groupName" Text
+  }
+
+-- | Find the best torrent for each torrent group (based on the seeding_weight)
+getBestTorrents :: MonadPostgres m => Transaction m [TorrentData]
+getBestTorrents = do
+  queryWith
+    [sql|
+      SELECT * FROM (
+        SELECT DISTINCT ON (group_id)
+          tg.group_id,
+          t.torrent_id,
+          seeding_weight,
+          t.full_json_result AS torrent_json,
+          tg.full_json_result AS torrent_group_json
+        FROM redacted.torrents t
+        JOIN redacted.torrent_groups tg ON tg.id = t.torrent_group
+        ORDER BY group_id, seeding_weight DESC
+      ) as _
+      ORDER BY seeding_weight DESC
+    |]
+    ()
+    ( do
+        groupId <- Dec.fromField @Int
+        torrentId <- Dec.fromField @Int
+        seedingWeight <- Dec.fromField @Int
+        torrentJson <- Dec.json Json.asValue
+        torrentGroupJson <-
+          ( Dec.json $ do
+              artist <- Json.keyLabel @"artist" "artist" Json.asText
+              groupName <- Json.keyLabel @"groupName" "groupName" Json.asText
+              pure $ T2 artist groupName
+            )
+        pure $ TorrentData {..}
     )
 
 hush :: Either a1 a2 -> Maybe a2
@@ -258,30 +455,6 @@ unzipT3 xs = xs <&> toTup & unzip3 & fromTup
     toTup (T3 a b c) = (getField @a a, getField @b b, getField @c c)
     fromTup :: (a, b, c) -> T3 l1 a l2 b l3 c
     fromTup (t1, t2, t3) = T3 (label @l1 t1) (label @l2 t2) (label @l3 t3)
-
-migrate :: MonadPostgres m => Transaction m (Label "numberOfRowsAffected" Natural)
-migrate = do
-  execute_
-    [sql|
-    CREATE SCHEMA IF NOT EXISTS redacted;
-
-    CREATE TABLE IF NOT EXISTS redacted.torrent_groups (
-      id SERIAL PRIMARY KEY,
-      group_id INTEGER,
-      group_name TEXT,
-      full_json_result JSONB,
-      UNIQUE(group_id)
-    );
-
-    CREATE TABLE IF NOT EXISTS redacted.torrents (
-      id SERIAL PRIMARY KEY,
-      torrent_id INTEGER,
-      torrent_group SERIAL NOT NULL REFERENCES redacted.torrent_groups(id),
-      full_json_result JSONB,
-      UNIQUE(torrent_id)
-    );
-
-  |]
 
 redactedApiRequest ::
   ( MonadThrow m,
