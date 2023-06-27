@@ -81,7 +81,7 @@ with lib;
     enable = true;
     package = pkgs.gitFull;
     userEmail = "root@gws.fyi";
-    userName = "Griffin Smith";
+    userName = "Aspen Smith";
     ignores = [
       "*.sw*"
       ".classpath"
