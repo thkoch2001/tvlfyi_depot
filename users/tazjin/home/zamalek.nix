@@ -6,5 +6,6 @@
 {
   imports = [
     depot.users.tazjin.home.shared
+    depot.users.tazjin.home.persistence
   ];
 }
