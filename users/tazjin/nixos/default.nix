@@ -8,4 +8,5 @@ in depot.nix.readTree.drvTargets {
   zamalekSystem = systemFor depot.users.tazjin.nixos.zamalek;
   koptevoRaw = depot.ops.nixos.nixosFor depot.users.tazjin.nixos.koptevo;
   koptevoSystem = systemFor depot.users.tazjin.nixos.koptevo;
+  khamovnikSystem = systemFor depot.users.tazjin.nixos.khamovnik;
 }
