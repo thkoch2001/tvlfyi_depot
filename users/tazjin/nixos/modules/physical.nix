@@ -77,10 +77,7 @@ in
     ]);
 
   # Run services & configure programs for all machines.
-  services = {
-    mullvad-vpn.enable = true;
-    fwupd.enable = true;
-  };
+  services.fwupd.enable = true;
 
   # Disable the broken NetworkManager-wait-online.service
   systemd.services.NetworkManager-wait-online.enable = lib.mkForce false;
