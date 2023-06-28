@@ -21,7 +21,7 @@ let
     };
 
     work = {
-      address = "griffin@readyset.io";
+      address = "aspen@readyset.io";
       passEntry = "readyset/msmtp";
     };
 
@@ -69,7 +69,7 @@ in
   accounts.email.maildirBasePath = "mail";
   accounts.email.accounts = mapAttrs
     (_: params@{ passEntry, ... }: {
-      realName = "Griffin Smith";
+      realName = "Aspen Smith";
       passwordCommand = "pass ${passEntry}";
 
       flavor = "gmail.com";
