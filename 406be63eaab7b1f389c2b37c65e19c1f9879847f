@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "00df68fa_6d307df0",
+        "filename": "third_party/overlays/tvl.nix",
+        "patchSetId": 3
+      },
+      "lineNbr": 154,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2023-06-28T22:50:52Z",
+      "side": 1,
+      "message": "No `$`?",
+      "range": {
+        "startLine": 154,
+        "startChar": 68,
+        "endLine": 154,
+        "endChar": 69
+      },
+      "revId": "406be63eaab7b1f389c2b37c65e19c1f9879847f",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c27adc30_2d9c4272",
+        "filename": "third_party/overlays/tvl.nix",
+        "patchSetId": 3
+      },
+      "lineNbr": 159,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2023-06-28T22:50:52Z",
+      "side": 1,
+      "message": "Can\u0027t a grammar have multiple extensions? Does it maybe expose it via passthru?",
+      "revId": "406be63eaab7b1f389c2b37c65e19c1f9879847f",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
