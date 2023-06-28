@@ -39,6 +39,24 @@
       "message": "Can\u0027t a grammar have multiple extensions? Does it maybe expose it via passthru?",
       "revId": "406be63eaab7b1f389c2b37c65e19c1f9879847f",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fa8e0a74_ecc6f8b6",
+        "filename": "third_party/overlays/tvl.nix",
+        "patchSetId": 3
+      },
+      "lineNbr": 159,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2023-06-28T22:52:15Z",
+      "side": 1,
+      "message": "Ah right, the comment explains it. I guess in principle the mappings would need to be merged by derivation to make the list?",
+      "parentUuid": "c27adc30_2d9c4272",
+      "revId": "406be63eaab7b1f389c2b37c65e19c1f9879847f",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
