@@ -18,7 +18,7 @@ import Data.Map.Strict qualified as Map
 import Data.Pool (Pool)
 import Data.Pool qualified as Pool
 import Data.Text qualified as Text
-import Database.PostgreSQL.Simple (Only (..))
+import Database.PostgreSQL.Simple (Binary (Binary), Only (..))
 import Database.PostgreSQL.Simple qualified as Postgres
 import Database.PostgreSQL.Simple.SqlQQ (sql)
 import Database.PostgreSQL.Simple.Types (PGArray (PGArray))
@@ -56,36 +56,53 @@ import UnliftIO
 htmlUi :: App ()
 htmlUi = do
   let debug = True
-  withRunInIO $ \runInIO -> Warp.run 8080 $ \req resp -> do
-    let renderHtml = if debug then toLazyBytes . textToBytesUtf8 . stringToText . Html.Pretty.renderHtml else Html.renderHtml
-    let h act = do
-          res <- runInIO act
-          resp . Wai.responseLBS Http.ok200 [("Content-Type", "text/html")] . renderHtml $ res
+  withRunInIO $ \runInIO -> Warp.run 8080 $ \req respond -> do
+    let catchAppException act =
+          try act >>= \case
+            Right a -> pure a
+            Left (AppException err) -> do
+              runInIO (logError err)
+              respond (Wai.responseLBS Http.status500 [] "")
 
-    let mp parser =
-          Multipart.parseMultipartOrThrow
-            appThrowTree
-            parser
-            req
+    catchAppException $ do
+      let renderHtml = if debug then toLazyBytes . textToBytesUtf8 . stringToText . Html.Pretty.renderHtml else Html.renderHtml
+      let h act = do
+            res <- runInIO act
+            respond . Wai.responseLBS Http.ok200 [("Content-Type", "text/html")] . renderHtml $ res
 
-    case req & Wai.pathInfo & Text.intercalate "/" of
-      "" -> h mainHtml
-      "snips/redacted/search" -> do
-        h $ do
+      let mp parser =
+            Multipart.parseMultipartOrThrow
+              appThrowTree
+              parser
+              req
+
+      case req & Wai.pathInfo & Text.intercalate "/" of
+        "" -> h mainHtml
+        "snips/redacted/search" -> do
+          h $ do
+            dat <-
+              mp
+                ( do
+                    label @"searchstr" <$> Multipart.field "redacted-search" Cat.id
+                )
+            snipsRedactedSearch dat
+        "snips/redacted/torrentDataJson" -> h $ do
           dat <-
             mp
               ( do
-                  label @"searchstr" <$> Multipart.field "redacted-search" Cat.id
+                  label @"torrentId" <$> Multipart.field "torrent-id" ((Field.utf8 >>> Field.signedDecimal >>> Field.bounded @Int "int"))
               )
-          snipsRedactedSearch dat
-      "snips/redacted/torrentDataJson" -> h $ do
-        dat <-
-          mp
-            ( do
-                label @"id" <$> Multipart.field "torrent-id" ((Field.utf8 >>> Field.signedDecimal >>> Field.bounded @Int "int"))
-            )
-        mkVal <$> (runTransaction $ getTorrentById dat)
-      _ -> h mainHtml
+          mkVal <$> (runTransaction $ getTorrentById dat)
+        "snips/redacted/getTorrentFile" -> h $ do
+          dat <-
+            mp
+              ( do
+                  label @"torrentId" <$> Multipart.field "torrent-id" ((Field.utf8 >>> Field.signedDecimal >>> Field.bounded @Int "int"))
+              )
+          runTransaction $ do
+            redactedGetTorrentFileAndInsert dat
+            pure [hsx|Got!|]
+        _ -> h mainHtml
   where
     mainHtml = runTransaction $ do
       bestTorrentsTable <- getBestTorrentsTable
@@ -141,17 +158,22 @@ snipsRedactedSearch dat = do
 getBestTorrentsTable :: (MonadPostgres m) => Transaction m Html
 getBestTorrentsTable = do
   best :: [TorrentData] <- getBestTorrents
+  let localTorrent b = case b.torrentStatus of
+        NoTorrentFileYet -> [hsx|<button hx-post="snips/redacted/getTorrentFile" hx-swap="outerHTML" hx-vals={Enc.encToBytesUtf8 $ Enc.object [("torrent-id", Enc.int b.torrentId)]}>Get Torrent</button>|]
+        InTransmission -> [hsx|Started.|]
+        NotInTransmissionYet -> [hsx|Not started.|]
   let bestRows =
         best
           & foldMap
             ( \b -> do
                 [hsx|
                   <tr>
+                  <td>{localTorrent b}</td>
                   <td>{Html.toHtml @Int b.groupId}</td>
                   <td>{Html.toHtml @Text b.torrentGroupJson.artist}</td>
                   <td>{Html.toHtml @Text b.torrentGroupJson.groupName}</td>
                   <td>{Html.toHtml @Int b.seedingWeight}</td>
-                  <td><details hx-trigger="toggle once" hx-post="snips/redacted/torrentDataJson" hx-vals={Enc.encToBytesUtf8 $ Enc.object [("torrent-id", Enc.int b.torrentIdDb)]}></details></td>
+                  <td><details hx-trigger="toggle once" hx-post="snips/redacted/torrentDataJson" hx-vals={Enc.encToBytesUtf8 $ Enc.object [("torrent-id", Enc.int b.torrentId)]}></details></td>
                   </tr>
                 |]
             )
@@ -160,6 +182,7 @@ getBestTorrentsTable = do
         <table class="table">
           <thead>
             <tr>
+              <th>Local</th>
               <th>Group ID</th>
               <th>Artist</th>
               <th>Name</th>
@@ -178,8 +201,8 @@ getTransmissionTorrentsTable ::
   (MonadIO m, MonadTransmission m, MonadThrow m) =>
   m Html
 getTransmissionTorrentsTable = do
-  let fields = ["id", "name", "files", "fileStats"]
-  resp <- doTransmissionRequest transmissionConnectionConfig (requestListAllTorrents fields)
+  let fields = ["hashString", "name", "activity", "percentDone", "percentComplete", "eta"]
+  resp <- doTransmissionRequest transmissionConnectionConfig (transmissionRequestListAllTorrents fields)
   case resp.result of
     TransmissionResponseFailure err -> appThrowTree (nestedError "Transmission RPC error" $ singleError $ newError err)
     TransmissionResponseSuccess ->
@@ -195,9 +218,10 @@ getTransmissionTorrentsTable = do
             pure $
               toTable
                 ( a
+                    & List.sortOn (\m -> m & Map.lookup "percentDone" & fromMaybe (Json.Number 0))
                     <&> Map.toList
                     -- TODO
-                    & List.take 3
+                    & List.take 100
                 )
 
 zipNonEmpty :: NonEmpty a -> NonEmpty b -> NonEmpty (a, b)
@@ -255,8 +279,8 @@ testTransmission req = runAppWith $ doTransmissionRequest transmissionConnection
 transmissionConnectionConfig :: T2 "host" Text "port" Text
 transmissionConnectionConfig = (T2 (label @"host" "localhost") (label @"port" "9091"))
 
-requestListAllTorrents :: [Text] -> TransmissionRequest
-requestListAllTorrents fields =
+transmissionRequestListAllTorrents :: [Text] -> TransmissionRequest
+transmissionRequestListAllTorrents fields =
   TransmissionRequest
     { method = "torrent-get",
       arguments =
@@ -265,6 +289,33 @@ requestListAllTorrents fields =
           ],
       tag = Nothing
     }
+
+transmissionRequestListOnlyTorrents ::
+  ( HasField "ids" r1 [r2],
+    HasField "fields" r1 [Text],
+    HasField "torrentSha" r2 Text
+  ) =>
+  r1 ->
+  TransmissionRequest
+transmissionRequestListOnlyTorrents dat =
+  TransmissionRequest
+    { method = "torrent-get",
+      arguments =
+        Map.fromList
+          [ ("ids", Enc.list (\i -> Enc.text i.torrentSha) dat.ids),
+            ("fields", Enc.list Enc.text dat.fields)
+          ],
+      tag = Nothing
+    }
+
+-- transmissionRequestAddTorrent dat =
+--   TransmissionRequest {
+--     method = "torrent-add",
+--     arguments =
+--       Map.fromList [
+--         ("metainfo", Enc.text $)
+--       ]
+--   }
 
 data TransmissionResponse = TransmissionResponse
   { result :: TransmissionResponseStatus,
@@ -348,10 +399,25 @@ redactedSearch ::
   Json.Parse ErrorTree a ->
   m a
 redactedSearch advanced =
-  redactedApiRequest
+  redactedApiRequestJson
     ( T2
         (label @"action" "browse")
         (label @"actionArgs" ((advanced <&> second Just)))
+    )
+
+redactedGetTorrentFile ::
+  ( MonadLogger m,
+    MonadIO m,
+    MonadThrow m,
+    HasField "torrentId" dat Int
+  ) =>
+  dat ->
+  m ByteString
+redactedGetTorrentFile dat =
+  redactedApiRequest
+    ( T2
+        (label @"action" "download")
+        (label @"actionArgs" [("id", Just (dat.torrentId & showToText @Int & textToBytesUtf8))])
     )
 
 test :: Bool -> IO (Either TmpPg.StartError ())
@@ -485,6 +551,37 @@ redactedSearchAndInsert x =
                   )
     )
 
+redactedGetTorrentFileAndInsert ::
+  ( HasField "torrentId" r Int,
+    MonadPostgres m,
+    MonadThrow m,
+    MonadIO m,
+    MonadLogger m
+  ) =>
+  r ->
+  Transaction m ()
+redactedGetTorrentFileAndInsert dat = do
+  bytes <- redactedGetTorrentFile dat
+  execute
+    [sql|
+    UPDATE redacted.torrents_json
+    SET torrent_file = ?::bytea
+    WHERE torrent_id = ?::integer
+  |]
+    ( (Binary bytes :: Binary ByteString),
+      dat.torrentId
+    )
+    >>= assertOneUpdated "redactedGetTorrentFileAndInsert"
+
+assertOneUpdated ::
+  (HasField "numberOfRowsAffected" r Natural, MonadThrow m) =>
+  Text ->
+  r ->
+  m ()
+assertOneUpdated name x = case x.numberOfRowsAffected of
+  1 -> pure ()
+  n -> appThrowTree ([fmt|{name :: Text}: Expected to update exactly one row, but updated {n :: Natural} row(s)|])
+
 migrate :: MonadPostgres m => Transaction m (Label "numberOfRowsAffected" Natural)
 migrate = do
   execute_
@@ -507,6 +604,11 @@ migrate = do
       UNIQUE(torrent_id)
     );
 
+    ALTER TABLE redacted.torrents_json
+    ADD COLUMN IF NOT EXISTS torrent_file bytea NULL;
+    ALTER TABLE redacted.torrents_json
+    ADD COLUMN IF NOT EXISTS transmission_torrent_hash text NULL;
+
     -- inflect out values of the full json
 
     CREATE OR REPLACE VIEW redacted.torrents AS
@@ -518,7 +620,9 @@ migrate = do
       ( (full_json_result->'seeders')::integer*3
       + (full_json_result->'snatches')::integer)
       AS seeding_weight,
-      t.full_json_result
+      t.full_json_result,
+      t.torrent_file,
+      t.transmission_torrent_hash
     FROM redacted.torrents_json t;
 
     CREATE INDEX IF NOT EXISTS torrents_json_seeding ON redacted.torrents_json(((full_json_result->'seeding')::integer));
@@ -528,20 +632,25 @@ migrate = do
 data TorrentData = TorrentData
   { groupId :: Int,
     torrentId :: Int,
-    torrentIdDb :: Int,
     seedingWeight :: Int,
     torrentJson :: Json.Value,
-    torrentGroupJson :: T2 "artist" Text "groupName" Text
+    torrentGroupJson :: T2 "artist" Text "groupName" Text,
+    torrentStatus :: TorrentStatus
   }
 
-getTorrentById :: (MonadPostgres m, HasField "id" r Int, MonadThrow m) => r -> Transaction m Json.Value
+data TorrentStatus
+  = NoTorrentFileYet
+  | NotInTransmissionYet
+  | InTransmission
+
+getTorrentById :: (MonadPostgres m, HasField "torrentId" r Int, MonadThrow m) => r -> Transaction m Json.Value
 getTorrentById dat = do
   queryWith
     [sql|
     SELECT full_json_result FROM redacted.torrents
-    WHERE id = ?::integer
+    WHERE torrent_id = ?::integer
   |]
-    (getLabel @"id" dat)
+    (getLabel @"torrentId" dat)
     (Dec.json Json.asValue)
     >>= ensureSingleRow
 
@@ -553,11 +662,12 @@ getBestTorrents = do
       SELECT * FROM (
         SELECT DISTINCT ON (group_id)
           tg.group_id,
-          t.id,
           t.torrent_id,
           seeding_weight,
           t.full_json_result AS torrent_json,
-          tg.full_json_result AS torrent_group_json
+          tg.full_json_result AS torrent_group_json,
+          t.torrent_file IS NOT NULL,
+          t.transmission_torrent_hash
         FROM redacted.torrents t
         JOIN redacted.torrent_groups tg ON tg.id = t.torrent_group
         ORDER BY group_id, seeding_weight DESC
@@ -567,7 +677,6 @@ getBestTorrents = do
     ()
     ( do
         groupId <- Dec.fromField @Int
-        torrentIdDb <- Dec.fromField @Int
         torrentId <- Dec.fromField @Int
         seedingWeight <- Dec.fromField @Int
         torrentJson <- Dec.json Json.asValue
@@ -577,7 +686,18 @@ getBestTorrents = do
               groupName <- Json.keyLabel @"groupName" "groupName" Json.asText
               pure $ T2 artist groupName
             )
-        pure $ TorrentData {..}
+        hasTorrentFile <- Dec.fromField @Bool
+        transmissionTorrentHash <-
+          Dec.fromField @(Maybe Text)
+        pure $
+          TorrentData
+            { torrentStatus =
+                if
+                    | not hasTorrentFile -> NoTorrentFileYet
+                    | Nothing <- transmissionTorrentHash -> NotInTransmissionYet
+                    | Just _hash <- transmissionTorrentHash -> InTransmission,
+              ..
+            }
     )
 
 hush :: Either a1 a2 -> Maybe a2
@@ -608,9 +728,8 @@ redactedApiRequest ::
     HasField "actionArgs" p [(ByteString, Maybe ByteString)]
   ) =>
   p ->
-  Json.Parse ErrorTree a ->
-  m a
-redactedApiRequest dat parse = do
+  m ByteString
+redactedApiRequest dat = do
   authKey <- runCommandExpect0 "pass" ["internet/redacted/api-keys/whatcd-resolver"]
   let req =
         [fmt|https://redacted.ch/ajax.php|]
@@ -623,6 +742,19 @@ redactedApiRequest dat parse = do
           200 -> Right $ resp & Http.responseBody
           _ -> Left [fmt|Redacted returned an non-200 error code: {resp & showPretty}|]
       )
+
+redactedApiRequestJson ::
+  ( MonadThrow m,
+    MonadIO m,
+    MonadLogger m,
+    HasField "action" p ByteString,
+    HasField "actionArgs" p [(ByteString, Maybe ByteString)]
+  ) =>
+  p ->
+  Json.Parse ErrorTree a ->
+  m a
+redactedApiRequestJson dat parse = do
+  redactedApiRequest dat
     >>= ( Json.parseStrict parse
             >>> first (Json.parseErrorTree "could not parse redacted response")
             >>> assertM id
