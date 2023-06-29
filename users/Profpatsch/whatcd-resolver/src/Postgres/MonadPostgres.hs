@@ -369,6 +369,9 @@ pgFormatQueryByteString queryBytes = do
         logDebug [fmt|pg_format stdout: stderr|]
         pure (queryBytes & bytesToTextUtf8Lenient)
 
+instance (ToField t1) => ToRow (Label l1 t1) where
+  toRow t2 = toRow $ PG.Only $ getField @l1 t2
+
 instance (ToField t1, ToField t2) => ToRow (T2 l1 t1 l2 t2) where
   toRow t2 = toRow (getField @l1 t2, getField @l2 t2)
 
