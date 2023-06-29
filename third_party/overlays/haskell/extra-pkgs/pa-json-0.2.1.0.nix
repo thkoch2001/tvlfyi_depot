@@ -3,6 +3,7 @@
 , aeson-better-errors
 , aeson-pretty
 , base
+, base64-bytestring
 , bytestring
 , containers
 , hspec-core
@@ -18,13 +19,14 @@
 }:
 mkDerivation {
   pname = "pa-json";
-  version = "0.2.0.0";
-  sha256 = "b57ef3888b8ea3230925675eccd6affbc3d296fc8762f5937435af4bdbd276e4";
+  version = "0.2.1.0";
+  sha256 = "d0c274fa38c05d38e9c2c15ee9dd4ff3ac369650dbc918c973863457110646c8";
   libraryHaskellDepends = [
     aeson
     aeson-better-errors
     aeson-pretty
     base
+    base64-bytestring
     bytestring
     containers
     hspec-core
