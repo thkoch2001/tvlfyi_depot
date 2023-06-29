@@ -1,5 +1,6 @@
 module ValidationParseT where
 
+import Control.Selective (Selective)
 import Data.Functor.Compose (Compose (..))
 import PossehlAnalyticsPrelude
 
@@ -8,7 +9,7 @@ import PossehlAnalyticsPrelude
 -- Use with DerivingVia. Grep codebase for examples.
 newtype ValidationParseT env m a = ValidationParseT {unValidationParseT :: env -> m (Validation (NonEmpty Error) a)}
   deriving
-    (Functor, Applicative)
+    (Functor, Applicative, Selective)
     via ( Compose
             ((->) env)
             (Compose m (Validation (NonEmpty Error)))
