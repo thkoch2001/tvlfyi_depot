@@ -65,7 +65,10 @@ htmlUi = do
               respond (Wai.responseLBS Http.status500 [] "")
 
     catchAppException $ do
-      let renderHtml = if debug then toLazyBytes . textToBytesUtf8 . stringToText . Html.Pretty.renderHtml else Html.renderHtml
+      let renderHtml =
+            if debug
+              then Html.Pretty.renderHtml >>> stringToText >>> textToBytesUtf8 >>> toLazyBytes
+              else Html.renderHtml
       let h act = do
             res <- runInIO act
             respond . Wai.responseLBS Http.ok200 [("Content-Type", "text/html")] . renderHtml $ res
@@ -75,6 +78,12 @@ htmlUi = do
               appThrowTree
               parser
               req
+
+      let torrentIdMp =
+            mp
+              ( do
+                  label @"torrentId" <$> Multipart.field "torrent-id" ((Field.utf8 >>> Field.signedDecimal >>> Field.bounded @Int "int"))
+              )
 
       case req & Wai.pathInfo & Text.intercalate "/" of
         "" -> h mainHtml
@@ -87,23 +96,40 @@ htmlUi = do
                 )
             snipsRedactedSearch dat
         "snips/redacted/torrentDataJson" -> h $ do
-          dat <-
-            mp
-              ( do
-                  label @"torrentId" <$> Multipart.field "torrent-id" ((Field.utf8 >>> Field.signedDecimal >>> Field.bounded @Int "int"))
-              )
+          dat <- torrentIdMp
           mkVal <$> (runTransaction $ getTorrentById dat)
         "snips/redacted/getTorrentFile" -> h $ do
-          dat <-
-            mp
-              ( do
-                  label @"torrentId" <$> Multipart.field "torrent-id" ((Field.utf8 >>> Field.signedDecimal >>> Field.bounded @Int "int"))
-              )
+          dat <- torrentIdMp
           runTransaction $ do
-            redactedGetTorrentFileAndInsert dat
-            pure [hsx|Got!|]
+            inserted <- redactedGetTorrentFileAndInsert dat
+            running <-
+              lift @Transaction $
+                doTransmissionRequest' (transmissionRequestAddTorrent inserted)
+            pure $
+              everySecond
+                "snips/transmission/getTorrentState"
+                (Enc.object [("torrent-hash", Enc.text running.torrentHash)])
+                "Starting"
+        "snips/transmission/getTorrentState" -> h $ do
+          dat <- mp $ label @"torrentHash" <$> Multipart.field "torrent-hash" Field.utf8
+          status <-
+            doTransmissionRequest'
+              ( transmissionRequestListOnlyTorrents
+                  ( T2
+                      (label @"ids" [label @"torrentHash" dat.torrentHash])
+                      (label @"fields" ["hashString"])
+                  )
+                  (Json.keyLabel @"torrentHash" "hashString" Json.asText)
+              )
+              <&> List.find (\torrent -> torrent.torrentHash == dat.torrentHash)
+          pure $
+            case status of
+              Nothing -> [hsx|ERROR unknown|]
+              Just _torrent -> [hsx|Running|]
         _ -> h mainHtml
   where
+    everySecond :: Text -> Enc -> Html -> Html
+    everySecond call extraData innerHtml = [hsx|<div hx-trigger="every 1s" hx-swap="outerHTML" hx-post={call} hx-vals={Enc.encToBytesUtf8 extraData}>{innerHtml}</div>|]
     mainHtml = runTransaction $ do
       bestTorrentsTable <- getBestTorrentsTable
       transmissionTorrentsTable <- lift @Transaction getTransmissionTorrentsTable
@@ -198,35 +224,25 @@ getBestTorrentsTable = do
       |]
 
 getTransmissionTorrentsTable ::
-  (MonadIO m, MonadTransmission m, MonadThrow m) =>
+  (MonadIO m, MonadTransmission m, MonadThrow m, MonadLogger m) =>
   m Html
 getTransmissionTorrentsTable = do
   let fields = ["hashString", "name", "activity", "percentDone", "percentComplete", "eta"]
-  resp <- doTransmissionRequest transmissionConnectionConfig (transmissionRequestListAllTorrents fields)
-  case resp.result of
-    TransmissionResponseFailure err -> appThrowTree (nestedError "Transmission RPC error" $ singleError $ newError err)
-    TransmissionResponseSuccess ->
-      resp.arguments
-        & Map.lookup "torrents"
-        & annotate [fmt|Missing field "torrents"|]
-        & orAppThrowTree
-        <&> Json.parseValue (Json.eachInArray (Json.asObject <&> KeyMap.toMapText))
-        <&> first (Json.parseErrorTree "Cannot parse transmission torrents")
-        >>= \case
-          Left err -> appThrowTree err
-          Right a ->
-            pure $
-              toTable
-                ( a
-                    & List.sortOn (\m -> m & Map.lookup "percentDone" & fromMaybe (Json.Number 0))
-                    <&> Map.toList
-                    -- TODO
-                    & List.take 100
-                )
 
-zipNonEmpty :: NonEmpty a -> NonEmpty b -> NonEmpty (a, b)
-zipNonEmpty (a :| as) (b :| bs) = (a, b) :| zip as bs
+  doTransmissionRequest'
+    ( transmissionRequestListAllTorrents fields $ do
+        Json.asObject <&> KeyMap.toMapText
+    )
+    <&> \resp ->
+      toTable
+        ( resp
+            & List.sortOn (\m -> m & Map.lookup "percentDone" & fromMaybe (Json.Number 0))
+            <&> Map.toList
+            -- TODO
+            & List.take 100
+        )
 
+-- | Render an arbitrary json value to HTML in a more-or-less reasonable fashion.
 mkVal :: Json.Value -> Html
 mkVal = \case
   Json.Number n -> Html.toHtml @Text $ showToText n
@@ -245,6 +261,7 @@ mkVal = \case
       & foldMap (\(k, v) -> Html.dt (Html.toHtml @Text k) <> Html.dd (mkVal v))
       & Html.dl
 
+-- | Render a table-like structure of json values as an HTML table.
 toTable :: [[(Text, Json.Value)]] -> Html
 toTable xs =
   case xs & nonEmpty of
@@ -273,53 +290,73 @@ data TransmissionRequest = TransmissionRequest
   }
   deriving stock (Show)
 
-testTransmission :: TransmissionRequest -> IO (Either TmpPg.StartError ())
+testTransmission :: Show out => (TransmissionRequest, Json.Parse Error out) -> IO (Either TmpPg.StartError ())
 testTransmission req = runAppWith $ doTransmissionRequest transmissionConnectionConfig req >>= liftIO . printPretty
 
 transmissionConnectionConfig :: T2 "host" Text "port" Text
 transmissionConnectionConfig = (T2 (label @"host" "localhost") (label @"port" "9091"))
 
-transmissionRequestListAllTorrents :: [Text] -> TransmissionRequest
-transmissionRequestListAllTorrents fields =
-  TransmissionRequest
-    { method = "torrent-get",
-      arguments =
-        Map.fromList
-          [ ("fields", Enc.list Enc.text fields)
-          ],
-      tag = Nothing
-    }
+transmissionRequestListAllTorrents :: Monad m => [Text] -> Json.ParseT e m out -> (TransmissionRequest, Json.ParseT e m [out])
+transmissionRequestListAllTorrents fields parseTorrent =
+  ( TransmissionRequest
+      { method = "torrent-get",
+        arguments =
+          Map.fromList
+            [ ("fields", Enc.list Enc.text fields)
+            ],
+        tag = Nothing
+      },
+    Json.key "torrents" $ Json.eachInArray parseTorrent
+  )
 
 transmissionRequestListOnlyTorrents ::
-  ( HasField "ids" r1 [r2],
+  ( HasField "ids" r1 [(Label "torrentHash" Text)],
     HasField "fields" r1 [Text],
-    HasField "torrentSha" r2 Text
+    Monad m
   ) =>
   r1 ->
-  TransmissionRequest
-transmissionRequestListOnlyTorrents dat =
-  TransmissionRequest
-    { method = "torrent-get",
-      arguments =
-        Map.fromList
-          [ ("ids", Enc.list (\i -> Enc.text i.torrentSha) dat.ids),
-            ("fields", Enc.list Enc.text dat.fields)
-          ],
-      tag = Nothing
-    }
+  Json.ParseT e m out ->
+  (TransmissionRequest, Json.ParseT e m [out])
+transmissionRequestListOnlyTorrents dat parseTorrent =
+  ( TransmissionRequest
+      { method = "torrent-get",
+        arguments =
+          Map.fromList
+            [ ("ids", Enc.list (\i -> Enc.text i.torrentHash) dat.ids),
+              ("fields", Enc.list Enc.text dat.fields)
+            ],
+        tag = Nothing
+      },
+    Json.key "torrents" $ Json.eachInArray parseTorrent
+  )
 
--- transmissionRequestAddTorrent dat =
---   TransmissionRequest {
---     method = "torrent-add",
---     arguments =
---       Map.fromList [
---         ("metainfo", Enc.text $)
---       ]
---   }
+transmissionRequestAddTorrent ::
+  (HasField "torrentFile" r ByteString, Monad m) =>
+  r ->
+  ( TransmissionRequest,
+    Json.ParseT err m (T2 "torrentHash" Text "torrentName" Text)
+  )
+transmissionRequestAddTorrent dat =
+  ( TransmissionRequest
+      { method = "torrent-add",
+        arguments =
+          Map.fromList
+            [ ("metainfo", Enc.base64Bytes dat.torrentFile),
+              ("paused", Enc.bool True)
+            ],
+        tag = Nothing
+      },
+    do
+      let p method = Json.key method $ do
+            hash <- Json.keyLabel @"torrentHash" "hashString" Json.asText
+            name <- Json.keyLabel @"torrentName" "name" Json.asText
+            pure $ T2 hash name
+      p "torrent-duplicate" Json.<|> p "torrent-added"
+  )
 
-data TransmissionResponse = TransmissionResponse
+data TransmissionResponse output = TransmissionResponse
   { result :: TransmissionResponseStatus,
-    arguments :: Map Text Json.Value,
+    arguments :: Maybe output,
     tag :: Maybe Int
   }
   deriving stock (Show)
@@ -329,30 +366,53 @@ data TransmissionResponseStatus
   | TransmissionResponseFailure Text
   deriving stock (Show)
 
+doTransmissionRequest' ::
+  ( MonadIO m,
+    MonadTransmission m,
+    MonadThrow m,
+    MonadLogger m
+  ) =>
+  (TransmissionRequest, Json.Parse Error output) ->
+  m output
+doTransmissionRequest' req = do
+  resp <-
+    doTransmissionRequest
+      transmissionConnectionConfig
+      req
+  case resp.result of
+    TransmissionResponseFailure err -> appThrowTree (nestedError "Transmission RPC error" $ singleError $ newError err)
+    TransmissionResponseSuccess -> case resp.arguments of
+      Nothing -> appThrowTree "Transmission RPC error: No `arguments` field in response"
+      Just out -> pure out
+
+-- | Contact the transmission RPC, and do the CSRF protection dance.
+--
+-- Spec: https://github.com/transmission/transmission/blob/main/docs/rpc-spec.md
 doTransmissionRequest ::
   ( MonadIO m,
     MonadTransmission m,
     HasField "host" t1 Text,
     HasField "port" t1 Text,
-    MonadThrow m
+    MonadThrow m,
+    MonadLogger m
   ) =>
   t1 ->
-  TransmissionRequest ->
-  m TransmissionResponse
-doTransmissionRequest dat req = do
+  (TransmissionRequest, Json.Parse Error output) ->
+  m (TransmissionResponse output)
+doTransmissionRequest dat (req, parser) = do
   sessionId <- getTransmissionId
+  let body =
+        Enc.object
+          ( [ ("method", req.method & Enc.text),
+              ("arguments", Enc.map id req.arguments)
+            ]
+              <> (req.tag & maybe [] (\t -> [("tag", t & Enc.int)]))
+          )
+  logDebug [fmt|transmission request: {showPrettyJsonEncoding body.unEnc}|]
   let httpReq =
         [fmt|http://{dat.host}:{dat.port}/transmission/rpc|]
           & Http.setRequestMethod "POST"
-          & Http.setRequestBodyLBS
-            ( Enc.encToBytesUtf8Lazy $
-                Enc.object
-                  ( [ ("method", req.method & Enc.text),
-                      ("arguments", Enc.map id req.arguments)
-                    ]
-                      <> (req.tag & maybe [] (\t -> [("tag", t & Enc.int)]))
-                  )
-            )
+          & Http.setRequestBodyLBS (Enc.encToBytesUtf8Lazy body)
           & (sessionId & maybe id (Http.setRequestHeader "X-Transmission-Session-Id" . (: [])))
   resp <- Http.httpBS httpReq
   -- Implement the CSRF protection thingy
@@ -367,7 +427,7 @@ doTransmissionRequest dat req = do
           & liftIO
           <&> NonEmpty.head
       setTransmissionId tid
-      doTransmissionRequest dat req
+      doTransmissionRequest dat (req, parser)
     200 ->
       resp
         & Http.getResponseBody
@@ -378,9 +438,7 @@ doTransmissionRequest dat req = do
                   "success" -> TransmissionResponseSuccess
                   err -> TransmissionResponseFailure err
               arguments <-
-                Json.keyMay "arguments" Json.asObject
-                  <&> fromMaybe mempty
-                  <&> KeyMap.toMapText
+                Json.keyMay "arguments" parser
               tag <-
                 Json.keyMay
                   "tag"
@@ -390,7 +448,11 @@ doTransmissionRequest dat req = do
         & first (Json.parseErrorTree "Cannot parse transmission RPC response")
         & \case
           Right a -> pure a
-          Left err -> appThrowTree err
+          Left err -> do
+            case Json.eitherDecodeStrict' @Json.Value (resp & Http.getResponseBody) of
+              Left _err -> pure ()
+              Right val -> logInfo [fmt|failing transmission response: {showPrettyJson val}|]
+            appThrowTree err
     _ -> liftIO $ unwrapIOError $ Left [fmt|Non-200 response: {showPretty resp}|]
 
 redactedSearch ::
@@ -559,7 +621,7 @@ redactedGetTorrentFileAndInsert ::
     MonadLogger m
   ) =>
   r ->
-  Transaction m ()
+  Transaction m (Label "torrentFile" ByteString)
 redactedGetTorrentFileAndInsert dat = do
   bytes <- redactedGetTorrentFile dat
   execute
@@ -572,6 +634,7 @@ redactedGetTorrentFileAndInsert dat = do
       dat.torrentId
     )
     >>= assertOneUpdated "redactedGetTorrentFileAndInsert"
+    >>= \() -> pure (label @"torrentFile" bytes)
 
 assertOneUpdated ::
   (HasField "numberOfRowsAffected" r Natural, MonadThrow m) =>
@@ -720,6 +783,7 @@ unzipT3 xs = xs <&> toTup & unzip3 & fromTup
     fromTup :: (a, b, c) -> T3 l1 a l2 b l3 c
     fromTup (t1, t2, t3) = T3 (label @l1 t1) (label @l2 t2) (label @l3 t3)
 
+-- | Do a request to the redacted API. If you know what that is, you know how to find the API docs.
 redactedApiRequest ::
   ( MonadThrow m,
     MonadIO m,
