@@ -90,6 +90,10 @@ library
         unix,
         warp,
         wai,
+        wai-extra,
         ihp-hsx,
         blaze-html,
+        bytestring,
+        dlist,
+        selective
 

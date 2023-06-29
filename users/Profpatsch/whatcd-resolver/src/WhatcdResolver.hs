@@ -4,6 +4,7 @@
 
 module WhatcdResolver where
 
+import Control.Category qualified as Cat
 import Control.Monad.Logger qualified as Logger
 import Control.Monad.Logger.CallStack
 import Control.Monad.Reader
@@ -29,6 +30,7 @@ import Json qualified
 import Json.Enc (Enc)
 import Json.Enc qualified as Enc
 import Label
+import Multipart2 qualified as Multipart
 import Network.HTTP.Conduit qualified as Http
 import Network.HTTP.Simple qualified as Http
 import Network.HTTP.Types
@@ -53,11 +55,34 @@ import UnliftIO
 htmlUi :: App ()
 htmlUi = do
   withRunInIO $ \runInIO -> Warp.run 8080 $ \req resp -> do
-    let h = resp . Wai.responseLBS Http.ok200 []
-    case req & Wai.pathInfo of
-      [] -> h =<< runInIO mainHtml
-      ["snips", "song"] -> h snipsSong
-      _ -> h =<< runInIO mainHtml
+    let h act = do
+          res <- runInIO act
+          resp . Wai.responseLBS Http.ok200 [("Content-Type", "text/html")] . Html.renderHtml $ res
+    let mp parser =
+          Multipart.parseMultipartOrThrow
+            appThrowTree
+            parser
+            req
+
+    case req & Wai.pathInfo & Text.intercalate "/" of
+      "" -> h mainHtml
+      "snips/song" -> h snipsSong
+      "snips/redacted/search" -> do
+        h $ do
+          dat <-
+            mp
+              ( do
+                  label @"searchstr" <$> Multipart.field "redacted-search" Cat.id
+              )
+          snipsRedactedSearch dat
+      "snips/redacted/torrentDataJson" -> h $ do
+        dat <-
+          mp
+            ( do
+                label @"id" <$> Multipart.field "torrent-id" ((Field.utf8 >>> Field.signedDecimal >>> Field.bounded @Int "int"))
+            )
+        mkVal <$> (runTransaction $ getTorrentById dat)
+      _ -> h mainHtml
   where
     tableData =
       ( [ "Group ID",
@@ -78,17 +103,16 @@ htmlUi = do
       )
 
     mkTable :: ([Text], t -> [Enc]) -> [t] -> Html
-    mkTable f ts =
-      do
-        let headers = Html.thead (fst f <&> Html.toHtml @Text <&> Html.th & mconcat)
-        let keys = fst f <&> Text.toLower <&> Text.replace " " "_"
-        let json = Enc.list (\t -> Enc.object (zip keys (t & snd f))) ts
-        let tableDataScript =
-              Html.script
-                ! Attr.type_ "application/json"
-                ! Attr.id "table-data"
-                $ (json & Enc.encToBytesUtf8 & bytesToTextUtf8Unsafe & Html.text)
-        [hsx|
+    mkTable f ts = do
+      let headers = Html.thead (fst f <&> Html.toHtml @Text <&> Html.th & mconcat)
+      let keys = fst f <&> Text.toLower <&> Text.replace " " "_"
+      let json = Enc.list (\t -> Enc.object (zip keys (t & snd f))) ts
+      let tableDataScript =
+            Html.script
+              ! Attr.type_ "application/json"
+              ! Attr.id "table-data"
+              $ (json & Enc.encToBytesUtf8 & bytesToTextUtf8Unsafe & Html.text)
+      [hsx|
         {tableDataScript}
         <table id="table" class="table">
           {headers}
@@ -104,16 +128,15 @@ htmlUi = do
           } )
         </script>
       |]
+
     mainHtml = runTransaction $ do
       bestTorrents <- getBestTorrents
       pure $
-        Html.renderHtml $
-          Html.docTypeHtml
-            [hsx|
+        Html.docTypeHtml
+          [hsx|
       <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.0/jquery.min.js" integrity="sha512-3gJwYpMe3QewGELv8k/BX9vcqhryRdzRMxVfq6ngyWXwo03GFEzjsUm8Q7RZcHPHksttq7/GFoxjCVUjkjvPdw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz" crossorigin="anonymous"></script>
@@ -128,10 +151,106 @@ htmlUi = do
         </script>
       </head>
       <body>
+        <form
+          hx-post="/snips/redacted/search"
+          hx-target="#redacted-search-results">
+          <label for="redacted-search">Redacted Search</label>
+          <input
+            id="redacted-search"
+            type="text"
+            name="redacted-search" />
+          <button type="submit">Search</button>
+        </form>
+        <div id="redacted-search-results"></div>
         {mkTable tableData bestTorrents}
       </body>
     |]
     snipsSong = todo
+
+snipsRedactedSearch ::
+  ( MonadLogger m,
+    MonadIO m,
+    MonadThrow m,
+    MonadPostgres m,
+    HasField "searchstr" r ByteString
+  ) =>
+  r ->
+  m Html
+snipsRedactedSearch dat = do
+  t <-
+    redactedSearchAndInsert
+      [ ("searchstr", dat.searchstr)
+      ]
+  best :: [TorrentData] <- runTransaction $ do
+    t
+    getBestTorrents
+  let bestRows =
+        best
+          & foldMap
+            ( \b -> do
+                [hsx|
+                  <tr>
+                  <td>{Html.toHtml @Int b.groupId}</td>
+                  <td>{Html.toHtml @Text b.torrentGroupJson.artist}</td>
+                  <td>{Html.toHtml @Text b.torrentGroupJson.groupName}</td>
+                  <td>{Html.toHtml @Int b.seedingWeight}</td>
+                  <td><details hx-post="snips/redacted/torrentDataJson" hx-vals={Enc.encToBytesUtf8 $ Enc.object [("torrent-id", Enc.int b.torrentIdDb)]}></details></td>
+                  </tr>
+                |]
+            )
+  pure $
+    [hsx|
+        <table class="table">
+          <thead>
+            <th>Group ID</th>
+            <th>Artist</th>
+            <th>Name</th>
+            <th>Weight</th>
+            <th>Torrent</th>
+            <th>Torrent Group</th>
+          </thead>
+          <tbody>
+            {bestRows}
+          </tbody>
+        </table>
+      |]
+
+mkVal :: Json.Value -> Html
+mkVal = \case
+  Json.Number n -> Html.toHtml @Text $ showToText n
+  Json.String s -> Html.toHtml @Text s
+  Json.Bool True -> [hsx|<em>true</em>|]
+  Json.Bool False -> [hsx|<em>false</em>|]
+  Json.Null -> [hsx|<em>null</em>|]
+  Json.Array arr ->
+    arr
+      & foldMap (\el -> Html.ul $ mkVal el)
+      & Html.ol
+  Json.Object obj ->
+    obj
+      & KeyMap.toMapText
+      & Map.toList
+      & foldMap (\(k, v) -> Html.dt (Html.toHtml @Text k <> Html.dd (mkVal v)))
+      & Html.dl
+
+toTable :: [[(Text, Json.Value)]] -> Html
+toTable xs =
+  case xs & nonEmpty of
+    Nothing ->
+      [hsx|<p>No results.</p>|]
+    Just xs' -> do
+      let headers = xs' & NonEmpty.head <&> fst <&> (\h -> [hsx|<th>{h}</th>|]) & mconcat
+      let vals = xs' <&> fmap (mkVal . snd)
+      [hsx|
+              <table class="table">
+                <thead>
+                  {headers}
+                </thead>
+                <tbody>
+                  {vals}
+                </tbody>
+              </table>
+          |]
 
 data TransmissionRequest = TransmissionRequest
   { method :: Text,
@@ -140,6 +259,7 @@ data TransmissionRequest = TransmissionRequest
   }
   deriving stock (Show)
 
+testTransmission :: TransmissionRequest -> IO (Either TmpPg.StartError ())
 testTransmission req = runAppWith $ doTransmissionRequest (T2 (label @"host" "localhost") (label @"port" "9091")) req >>= liftIO . printPretty
 
 requestListAllTorrents :: TransmissionRequest
@@ -261,7 +381,7 @@ test doSearch =
 bla :: (MonadThrow m, MonadIO m, MonadLogger m, MonadPostgres m) => m (Transaction m ())
 bla = do
   t1 <-
-    realbla
+    redactedSearchAndInsert
       [ ("searchstr", "cherish"),
         ("artistname", "kirinji"),
         -- ("year", "1982"),
@@ -269,8 +389,17 @@ bla = do
         -- ("releasetype", "album"),
         ("order_by", "year")
       ]
+  t3 <-
+    redactedSearchAndInsert
+      [ ("searchstr", "mouss et hakim"),
+        ("artistname", "mouss et hakim"),
+        -- ("year", "1982"),
+        -- ("format", "MP3"),
+        -- ("releasetype", "album"),
+        ("order_by", "year")
+      ]
   t2 <-
-    realbla
+    redactedSearchAndInsert
       [ ("searchstr", "thriller"),
         ("artistname", "michael jackson"),
         -- ("year", "1982"),
@@ -278,82 +407,91 @@ bla = do
         -- ("releasetype", "album"),
         ("order_by", "year")
       ]
-  pure (t1 >> t2)
-  where
-    realbla x =
-      redactedSearch
-        x
-        ( do
-            status <- Json.key "status" Json.asText
-            when (status /= "success") $ do
-              Json.throwCustomError [fmt|Status was not "success", but {status}|]
-            Json.key "response" $ do
-              Json.key "results" $
-                sequence_
-                  <$> ( Json.eachInArray $ do
-                          groupId <- Json.key "groupId" (Json.asIntegral @_ @Int)
-                          groupName <- Json.key "groupName" Json.asText
-                          fullJsonResult <-
-                            Json.asObject
-                              -- remove torrents cause they are inserted separately below
-                              <&> KeyMap.filterWithKey (\k _ -> k /= "torrents")
-                              <&> Json.Object
-                          let insertTourGroup = do
-                                _ <-
-                                  execute
-                                    [fmt|
+  pure (t1 >> t2 >> t3)
+
+redactedSearchAndInsert ::
+  ( MonadLogger m1,
+    MonadIO m1,
+    MonadThrow m1,
+    MonadPostgres m2,
+    MonadThrow m2
+  ) =>
+  [(ByteString, ByteString)] ->
+  m1 (Transaction m2 ())
+redactedSearchAndInsert x =
+  redactedSearch
+    x
+    ( do
+        status <- Json.key "status" Json.asText
+        when (status /= "success") $ do
+          Json.throwCustomError [fmt|Status was not "success", but {status}|]
+        Json.key "response" $ do
+          Json.key "results" $
+            sequence_
+              <$> ( Json.eachInArray $ do
+                      groupId <- Json.key "groupId" (Json.asIntegral @_ @Int)
+                      groupName <- Json.key "groupName" Json.asText
+                      fullJsonResult <-
+                        Json.asObject
+                          -- remove torrents cause they are inserted separately below
+                          <&> KeyMap.filterWithKey (\k _ -> k /= "torrents")
+                          <&> Json.Object
+                      let insertTourGroup = do
+                            _ <-
+                              execute
+                                [fmt|
                                   DELETE FROM redacted.torrent_groups
                                   WHERE group_id = ?::integer
                               |]
-                                    (Only groupId)
-                                executeManyReturningWith
-                                  [fmt|
+                                (Only groupId)
+                            executeManyReturningWith
+                              [fmt|
                                 INSERT INTO redacted.torrent_groups (
                                   group_id, group_name, full_json_result
                                 ) VALUES
                                 ( ?, ? , ? )
                                 RETURNING (id)
                               |]
-                                  [ ( groupId,
-                                      groupName,
-                                      fullJsonResult
-                                    )
-                                  ]
-                                  (label @"tourGroupIdPg" <$> Dec.fromField @Int)
-                                  >>= ensureSingleRow
-                          insertTorrents <- Json.key "torrents" $ do
-                            torrents <- Json.eachInArray $ do
-                              torrentId <- Json.keyLabel @"torrentId" "torrentId" (Json.asIntegral @_ @Int)
-                              fullJsonResultT <- label @"fullJsonResult" <$> Json.asValue
-                              pure $ T2 torrentId fullJsonResultT
-                            pure $ \dat -> do
-                              _ <-
-                                execute
-                                  [sql|
+                              [ ( groupId,
+                                  groupName,
+                                  fullJsonResult
+                                )
+                              ]
+                              (label @"tourGroupIdPg" <$> Dec.fromField @Int)
+                              >>= ensureSingleRow
+                      insertTorrents <- Json.key "torrents" $ do
+                        torrents <- Json.eachInArray $ do
+                          torrentId <- Json.keyLabel @"torrentId" "torrentId" (Json.asIntegral @_ @Int)
+                          fullJsonResultT <- label @"fullJsonResult" <$> Json.asValue
+                          pure $ T2 torrentId fullJsonResultT
+                        pure $ \dat -> do
+                          _ <-
+                            execute
+                              [sql|
                                   DELETE FROM redacted.torrents_json
                                   WHERE torrent_id = ANY (?::integer[])
                             |]
-                                  (Only $ torrents & unzipT2 & (.torrentId) & PGArray)
-                              execute
-                                [sql|
+                              (Only $ torrents & unzipT2 & (.torrentId) & PGArray)
+                          execute
+                            [sql|
                                   INSERT INTO redacted.torrents_json
                                         (torrent_id, torrent_group, full_json_result)
                                   SELECT inputs.torrent_id, static.torrent_group, inputs.full_json_result FROM
                                   (SELECT * FROM UNNEST(?::integer[], ?::jsonb[])) AS inputs(torrent_id, full_json_result)
                                   CROSS JOIN (VALUES(?::integer)) as static(torrent_group)
                             |]
-                                ( torrents
-                                    & unzipT2
-                                    & \t ->
-                                      ( t.torrentId & PGArray,
-                                        t.fullJsonResult & PGArray,
-                                        dat.tourGroupIdPg
-                                      )
-                                )
-                              pure ()
-                          pure (insertTourGroup >>= insertTorrents)
-                      )
-        )
+                            ( torrents
+                                & unzipT2
+                                & \t ->
+                                  ( t.torrentId & PGArray,
+                                    t.fullJsonResult & PGArray,
+                                    dat.tourGroupIdPg
+                                  )
+                            )
+                          pure ()
+                      pure (insertTourGroup >>= insertTorrents)
+                  )
+    )
 
 migrate :: MonadPostgres m => Transaction m (Label "numberOfRowsAffected" Natural)
 migrate = do
@@ -398,10 +536,22 @@ migrate = do
 data TorrentData = TorrentData
   { groupId :: Int,
     torrentId :: Int,
+    torrentIdDb :: Int,
     seedingWeight :: Int,
     torrentJson :: Json.Value,
     torrentGroupJson :: T2 "artist" Text "groupName" Text
   }
+
+getTorrentById :: (MonadPostgres m, HasField "id" r Int, MonadThrow m) => r -> Transaction m Json.Value
+getTorrentById dat = do
+  queryWith
+    [sql|
+    SELECT full_json_result FROM redacted.torrents
+    WHERE id = ?::integer
+  |]
+    (getLabel @"id" dat)
+    (Dec.json Json.asValue)
+    >>= ensureSingleRow
 
 -- | Find the best torrent for each torrent group (based on the seeding_weight)
 getBestTorrents :: MonadPostgres m => Transaction m [TorrentData]
@@ -411,6 +561,7 @@ getBestTorrents = do
       SELECT * FROM (
         SELECT DISTINCT ON (group_id)
           tg.group_id,
+          t.id,
           t.torrent_id,
           seeding_weight,
           t.full_json_result AS torrent_json,
@@ -424,6 +575,7 @@ getBestTorrents = do
     ()
     ( do
         groupId <- Dec.fromField @Int
+        torrentIdDb <- Dec.fromField @Int
         torrentId <- Dec.fromField @Int
         seedingWeight <- Dec.fromField @Int
         torrentJson <- Dec.json Json.asValue
