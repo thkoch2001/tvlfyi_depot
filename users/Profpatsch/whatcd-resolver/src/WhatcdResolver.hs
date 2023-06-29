@@ -12,6 +12,7 @@ import Data.Aeson qualified as Json
 import Data.Aeson.BetterErrors qualified as Json
 import Data.Aeson.KeyMap qualified as KeyMap
 import Data.Error.Tree
+import Data.List qualified as List
 import Data.List.NonEmpty qualified as NonEmpty
 import Data.Map.Strict qualified as Map
 import Data.Pool (Pool)
@@ -47,16 +48,20 @@ import System.Directory qualified as Xdg
 import System.FilePath ((</>))
 import System.IO qualified as IO
 import Text.Blaze.Html (Html)
+import Text.Blaze.Html.Renderer.Pretty qualified as Html.Pretty
 import Text.Blaze.Html.Renderer.Utf8 qualified as Html
 import Text.Blaze.Html5 qualified as Html
 import UnliftIO
 
 htmlUi :: App ()
 htmlUi = do
+  let debug = True
   withRunInIO $ \runInIO -> Warp.run 8080 $ \req resp -> do
+    let renderHtml = if debug then toLazyBytes . textToBytesUtf8 . stringToText . Html.Pretty.renderHtml else Html.renderHtml
     let h act = do
           res <- runInIO act
-          resp . Wai.responseLBS Http.ok200 [("Content-Type", "text/html")] . Html.renderHtml $ res
+          resp . Wai.responseLBS Http.ok200 [("Content-Type", "text/html")] . renderHtml $ res
+
     let mp parser =
           Multipart.parseMultipartOrThrow
             appThrowTree
@@ -65,7 +70,6 @@ htmlUi = do
 
     case req & Wai.pathInfo & Text.intercalate "/" of
       "" -> h mainHtml
-      "snips/song" -> h snipsSong
       "snips/redacted/search" -> do
         h $ do
           dat <-
@@ -85,6 +89,7 @@ htmlUi = do
   where
     mainHtml = runTransaction $ do
       bestTorrentsTable <- getBestTorrentsTable
+      transmissionTorrentsTable <- lift @Transaction getTransmissionTorrentsTable
       pure $
         Html.docTypeHtml
           [hsx|
@@ -109,9 +114,11 @@ htmlUi = do
         <div id="redacted-search-results">
           {bestTorrentsTable}
         </div>
+        <div id="transmission-torrents">
+          {transmissionTorrentsTable}
+        </div>
       </body>
     |]
-    snipsSong = todo
 
 snipsRedactedSearch ::
   ( MonadLogger m,
@@ -152,18 +159,49 @@ getBestTorrentsTable = do
     [hsx|
         <table class="table">
           <thead>
-            <th>Group ID</th>
-            <th>Artist</th>
-            <th>Name</th>
-            <th>Weight</th>
-            <th>Torrent</th>
-            <th>Torrent Group</th>
+            <tr>
+              <th>Group ID</th>
+              <th>Artist</th>
+              <th>Name</th>
+              <th>Weight</th>
+              <th>Torrent</th>
+              <th>Torrent Group</th>
+            </tr>
           </thead>
           <tbody>
             {bestRows}
           </tbody>
         </table>
       |]
+
+getTransmissionTorrentsTable ::
+  (MonadIO m, MonadTransmission m, MonadThrow m) =>
+  m Html
+getTransmissionTorrentsTable = do
+  let fields = ["id", "name", "files", "fileStats"]
+  resp <- doTransmissionRequest transmissionConnectionConfig (requestListAllTorrents fields)
+  case resp.result of
+    TransmissionResponseFailure err -> appThrowTree (nestedError "Transmission RPC error" $ singleError $ newError err)
+    TransmissionResponseSuccess ->
+      resp.arguments
+        & Map.lookup "torrents"
+        & annotate [fmt|Missing field "torrents"|]
+        & orAppThrowTree
+        <&> Json.parseValue (Json.eachInArray (Json.asObject <&> KeyMap.toMapText))
+        <&> first (Json.parseErrorTree "Cannot parse transmission torrents")
+        >>= \case
+          Left err -> appThrowTree err
+          Right a ->
+            pure $
+              toTable
+                ( a
+                    <&> Map.toList
+                    -- TODO
+                    & List.take 3
+                )
+
+zipNonEmpty :: NonEmpty a -> NonEmpty b -> NonEmpty (a, b)
+zipNonEmpty (a :| as) (b :| bs) = (a, b) :| zip as bs
 
 mkVal :: Json.Value -> Html
 mkVal = \case
@@ -174,13 +212,13 @@ mkVal = \case
   Json.Null -> [hsx|<em>null</em>|]
   Json.Array arr ->
     arr
-      & foldMap (\el -> Html.ul $ mkVal el)
+      & foldMap (\el -> Html.li $ mkVal el)
       & Html.ol
   Json.Object obj ->
     obj
       & KeyMap.toMapText
       & Map.toList
-      & foldMap (\(k, v) -> Html.dt (Html.toHtml @Text k <> Html.dd (mkVal v)))
+      & foldMap (\(k, v) -> Html.dt (Html.toHtml @Text k) <> Html.dd (mkVal v))
       & Html.dl
 
 toTable :: [[(Text, Json.Value)]] -> Html
@@ -190,11 +228,13 @@ toTable xs =
       [hsx|<p>No results.</p>|]
     Just xs' -> do
       let headers = xs' & NonEmpty.head <&> fst <&> (\h -> [hsx|<th>{h}</th>|]) & mconcat
-      let vals = xs' <&> fmap (mkVal . snd)
+      let vals = xs' & foldMap (Html.tr . foldMap (Html.td . mkVal . snd))
       [hsx|
               <table class="table">
                 <thead>
+                  <tr>
                   {headers}
+                  </tr>
                 </thead>
                 <tbody>
                   {vals}
@@ -210,15 +250,18 @@ data TransmissionRequest = TransmissionRequest
   deriving stock (Show)
 
 testTransmission :: TransmissionRequest -> IO (Either TmpPg.StartError ())
-testTransmission req = runAppWith $ doTransmissionRequest (T2 (label @"host" "localhost") (label @"port" "9091")) req >>= liftIO . printPretty
+testTransmission req = runAppWith $ doTransmissionRequest transmissionConnectionConfig req >>= liftIO . printPretty
 
-requestListAllTorrents :: TransmissionRequest
-requestListAllTorrents =
+transmissionConnectionConfig :: T2 "host" Text "port" Text
+transmissionConnectionConfig = (T2 (label @"host" "localhost") (label @"port" "9091"))
+
+requestListAllTorrents :: [Text] -> TransmissionRequest
+requestListAllTorrents fields =
   TransmissionRequest
     { method = "torrent-get",
       arguments =
         Map.fromList
-          [ ("fields", Enc.list Enc.text ["id", "name", "files", "fileStats"])
+          [ ("fields", Enc.list Enc.text fields)
           ],
       tag = Nothing
     }
@@ -651,6 +694,11 @@ data AppException = AppException Text
 
 appThrowTree :: MonadThrow m => ErrorTree -> m a
 appThrowTree exc = throwM $ AppException $ prettyErrorTree exc
+
+orAppThrowTree :: MonadThrow m => Either ErrorTree a -> m a
+orAppThrowTree = \case
+  Left err -> appThrowTree err
+  Right a -> pure a
 
 instance MonadIO m => MonadLogger (AppT m) where
   monadLoggerLog loc src lvl msg = liftIO $ Logger.defaultOutput IO.stderr loc src lvl (Logger.toLogStr msg)
