@@ -62,6 +62,7 @@ library
        Postgres.MonadPostgres
        Tool
        ValidationParseT
+       Multipart2
 
     build-depends:
         base >=4.15 && <5,
@@ -90,6 +91,10 @@ library
         unix,
         warp,
         wai,
+        wai-extra,
         ihp-hsx,
         blaze-html,
+        bytestring,
+        dlist,
+        selective
 
