@@ -46,10 +46,9 @@ import System.Directory qualified as Dir
 import System.Directory qualified as Xdg
 import System.FilePath ((</>))
 import System.IO qualified as IO
-import Text.Blaze.Html (Html, (!))
+import Text.Blaze.Html (Html)
 import Text.Blaze.Html.Renderer.Utf8 qualified as Html
 import Text.Blaze.Html5 qualified as Html
-import Text.Blaze.Html5.Attributes qualified as Attr
 import UnliftIO
 
 htmlUi :: App ()
@@ -84,71 +83,17 @@ htmlUi = do
         mkVal <$> (runTransaction $ getTorrentById dat)
       _ -> h mainHtml
   where
-    tableData =
-      ( [ "Group ID",
-          "Torrent ID",
-          "Artist",
-          "Name",
-          "Weight",
-          "Torrent"
-        ],
-        \t ->
-          [ Enc.int t.groupId,
-            Enc.int t.torrentId,
-            Enc.text t.torrentGroupJson.artist,
-            Enc.text t.torrentGroupJson.groupName,
-            Enc.int t.seedingWeight,
-            Enc.value t.torrentJson
-          ]
-      )
-
-    mkTable :: ([Text], t -> [Enc]) -> [t] -> Html
-    mkTable f ts = do
-      let headers = Html.thead (fst f <&> Html.toHtml @Text <&> Html.th & mconcat)
-      let keys = fst f <&> Text.toLower <&> Text.replace " " "_"
-      let json = Enc.list (\t -> Enc.object (zip keys (t & snd f))) ts
-      let tableDataScript =
-            Html.script
-              ! Attr.type_ "application/json"
-              ! Attr.id "table-data"
-              $ (json & Enc.encToBytesUtf8 & bytesToTextUtf8Unsafe & Html.text)
-      [hsx|
-        {tableDataScript}
-        <table id="table" class="table">
-          {headers}
-          <tbody>
-          </tbody>
-        </table>
-        <script>
-          var tableData = JSON.parse($("#table-data").text());
-          $("table").dynatable({
-            dataset: {
-              records: tableData
-            }
-          } )
-        </script>
-      |]
-
     mainHtml = runTransaction $ do
-      bestTorrents <- getBestTorrents
+      bestTorrentsTable <- getBestTorrentsTable
       pure $
         Html.docTypeHtml
           [hsx|
       <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.0/jquery.min.js" integrity="sha512-3gJwYpMe3QewGELv8k/BX9vcqhryRdzRMxVfq6ngyWXwo03GFEzjsUm8Q7RZcHPHksttq7/GFoxjCVUjkjvPdw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz" crossorigin="anonymous"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/Dynatable/0.3.1/jquery.dynatable.min.js" integrity="sha512-KJdW8vGZWsRYrhMlZ6d8dR/fbLBK/aPOI0xDTEnGysk8TiFffc0S6TLSeSg7Lzk84GhBu9wI+qQatBrnTAeEYQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz" crossorigin="anonymous"></script>
         <script src="https://unpkg.com/htmx.org@1.9.2" integrity="sha384-L6OqL9pRWyyFU3+/bjdSri+iIphTN/bvYyM37tICVyOJkWZLpP2vGn6VUEXgzg6h" crossorigin="anonymous"></script>
-        <script>
-          $.dynatableSetup({
-            table: {
-              defaultColumnIdStyle: 'underscore'
-            }
-          });
-        </script>
       </head>
       <body>
         <form
@@ -161,8 +106,9 @@ htmlUi = do
             name="redacted-search" />
           <button type="submit">Search</button>
         </form>
-        <div id="redacted-search-results"></div>
-        {mkTable tableData bestTorrents}
+        <div id="redacted-search-results">
+          {bestTorrentsTable}
+        </div>
       </body>
     |]
     snipsSong = todo
@@ -170,9 +116,9 @@ htmlUi = do
 snipsRedactedSearch ::
   ( MonadLogger m,
     MonadIO m,
-    MonadThrow m,
     MonadPostgres m,
-    HasField "searchstr" r ByteString
+    HasField "searchstr" r ByteString,
+    MonadThrow m
   ) =>
   r ->
   m Html
@@ -181,9 +127,13 @@ snipsRedactedSearch dat = do
     redactedSearchAndInsert
       [ ("searchstr", dat.searchstr)
       ]
-  best :: [TorrentData] <- runTransaction $ do
+  runTransaction $ do
     t
-    getBestTorrents
+    getBestTorrentsTable
+
+getBestTorrentsTable :: (MonadPostgres m) => Transaction m Html
+getBestTorrentsTable = do
+  best :: [TorrentData] <- getBestTorrents
   let bestRows =
         best
           & foldMap
@@ -194,7 +144,7 @@ snipsRedactedSearch dat = do
                   <td>{Html.toHtml @Text b.torrentGroupJson.artist}</td>
                   <td>{Html.toHtml @Text b.torrentGroupJson.groupName}</td>
                   <td>{Html.toHtml @Int b.seedingWeight}</td>
-                  <td><details hx-post="snips/redacted/torrentDataJson" hx-vals={Enc.encToBytesUtf8 $ Enc.object [("torrent-id", Enc.int b.torrentIdDb)]}></details></td>
+                  <td><details hx-trigger="toggle once" hx-post="snips/redacted/torrentDataJson" hx-vals={Enc.encToBytesUtf8 $ Enc.object [("torrent-id", Enc.int b.torrentIdDb)]}></details></td>
                   </tr>
                 |]
             )
@@ -410,14 +360,13 @@ bla = do
   pure (t1 >> t2 >> t3)
 
 redactedSearchAndInsert ::
-  ( MonadLogger m1,
-    MonadIO m1,
-    MonadThrow m1,
-    MonadPostgres m2,
-    MonadThrow m2
+  ( MonadLogger m,
+    MonadIO m,
+    MonadPostgres m,
+    MonadThrow m
   ) =>
   [(ByteString, ByteString)] ->
-  m1 (Transaction m2 ())
+  m (Transaction m ())
 redactedSearchAndInsert x =
   redactedSearch
     x
