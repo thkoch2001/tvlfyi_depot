@@ -16,6 +16,24 @@
       "message": "This will also fail when seeking past the end of self.r - so should probably be a proper check, and we need test cases for this too.",
       "revId": "9c7b636199cf6efe6601dd7fb27092d392d9b084",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9452e58c_9108f58a",
+        "filename": "tvix/store/src/blobservice/dumb_seeker.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 83,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2023-06-30T15:44:15Z",
+      "side": 1,
+      "message": "make it an actual assert for now (not debug_), so we can fail with a useful message?",
+      "parentUuid": "4e85c94a_d6a2d293",
+      "revId": "9c7b636199cf6efe6601dd7fb27092d392d9b084",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
