@@ -105,6 +105,29 @@ htmlUi = do
             running <-
               lift @Transaction $
                 doTransmissionRequest' (transmissionRequestAddTorrent inserted)
+            updateTransmissionTorrentHashById
+              ( T2
+                  (getLabel @"torrentHash" running)
+                  (getLabel @"torrentId" dat)
+              )
+            pure $
+              everySecond
+                "snips/transmission/getTorrentState"
+                (Enc.object [("torrent-hash", Enc.text running.torrentHash)])
+                "Starting"
+        -- TODO: this is bad duplication??
+        "snips/redacted/startTorrentFile" -> h $ do
+          dat <- torrentIdMp
+          runTransaction $ do
+            file <- getTorrentFileById dat
+            running <-
+              lift @Transaction $
+                doTransmissionRequest' (transmissionRequestAddTorrent file)
+            updateTransmissionTorrentHashById
+              ( T2
+                  (getLabel @"torrentHash" running)
+                  (getLabel @"torrentId" dat)
+              )
             pure $
               everySecond
                 "snips/transmission/getTorrentState"
@@ -122,6 +145,7 @@ htmlUi = do
                   (Json.keyLabel @"torrentHash" "hashString" Json.asText)
               )
               <&> List.find (\torrent -> torrent.torrentHash == dat.torrentHash)
+
           pure $
             case status of
               Nothing -> [hsx|ERROR unknown|]
@@ -130,8 +154,34 @@ htmlUi = do
   where
     everySecond :: Text -> Enc -> Html -> Html
     everySecond call extraData innerHtml = [hsx|<div hx-trigger="every 1s" hx-swap="outerHTML" hx-post={call} hx-vals={Enc.encToBytesUtf8 extraData}>{innerHtml}</div>|]
+
     mainHtml = runTransaction $ do
-      bestTorrentsTable <- getBestTorrentsTable
+      bestStale :: [TorrentData] <- getBestTorrents
+      actual <-
+        getAndUpdateTransmissionTorrentsStatus
+          ( bestStale
+              & mapMaybe
+                ( \td -> case td.torrentStatus of
+                    InTransmission h -> Just h
+                    _ -> Nothing
+                )
+              <&> (,())
+              & Map.fromList
+          )
+      let fresh =
+            bestStale
+              --  we have to update the status of every torrent that’s not in tranmission anymore
+              -- TODO I feel like it’s easier (& more correct?) to just do the database request again …
+              <&> ( \td -> case td.torrentStatus of
+                      InTransmission hash ->
+                        case actual & Map.lookup hash of
+                          -- TODO this is also pretty dumb, cause it assumes that we have the torrent file if it was in transmission before,
+                          -- which is an internal factum that is established in getBestTorrents (and might change later)
+                          Nothing -> td {torrentStatus = NotInTransmissionYet}
+                          Just () -> td
+                      _ -> td
+                  )
+      bestTorrentsTable <- getBestTorrentsTable fresh
       transmissionTorrentsTable <- lift @Transaction getTransmissionTorrentsTable
       pure $
         Html.docTypeHtml
@@ -179,15 +229,15 @@ snipsRedactedSearch dat = do
       ]
   runTransaction $ do
     t
-    getBestTorrentsTable
+    best :: [TorrentData] <- getBestTorrents
+    getBestTorrentsTable best
 
-getBestTorrentsTable :: (MonadPostgres m) => Transaction m Html
-getBestTorrentsTable = do
-  best :: [TorrentData] <- getBestTorrents
+getBestTorrentsTable :: (MonadPostgres m) => [TorrentData] -> Transaction m Html
+getBestTorrentsTable best = do
   let localTorrent b = case b.torrentStatus of
         NoTorrentFileYet -> [hsx|<button hx-post="snips/redacted/getTorrentFile" hx-swap="outerHTML" hx-vals={Enc.encToBytesUtf8 $ Enc.object [("torrent-id", Enc.int b.torrentId)]}>Get Torrent</button>|]
-        InTransmission -> [hsx|Started.|]
-        NotInTransmissionYet -> [hsx|Not started.|]
+        InTransmission _hash -> [hsx|Started.|]
+        NotInTransmissionYet -> [hsx|<button hx-post="snips/redacted/startTorrentFile" hx-swap="outerHTML" hx-vals={Enc.encToBytesUtf8 $ Enc.object [("torrent-id", Enc.int b.torrentId)]}>Start Torrent</button>|]
   let bestRows =
         best
           & foldMap
@@ -223,12 +273,52 @@ getBestTorrentsTable = do
         </table>
       |]
 
+-- | Fetch the current status from transmission, and remove the tranmission hash from our database
+-- iff it does not exist in transmission anymore
+getAndUpdateTransmissionTorrentsStatus ::
+  (MonadIO m, MonadTransmission m, MonadThrow m, MonadLogger m, MonadPostgres m) =>
+  Map (Label "torrentHash" Text) () ->
+  Transaction m (Map (Label "torrentHash" Text) ())
+getAndUpdateTransmissionTorrentsStatus knownTorrents = do
+  let fields = ["hashString"]
+  logInfo [fmt|known: {showPretty knownTorrents}|]
+  actualTorrents <-
+    lift @Transaction $
+      doTransmissionRequest'
+        ( transmissionRequestListOnlyTorrents
+            ( T2
+                (label @"fields" fields)
+                (label @"ids" (Map.keys knownTorrents))
+            )
+            $ do
+              torrentHash <- Json.keyLabel @"torrentHash" "hashString" Json.asText
+              pure (torrentHash, ())
+        )
+        <&> Map.fromList
+  logInfo [fmt|actual: {showPretty actualTorrents}|]
+  let toDelete = Map.difference knownTorrents actualTorrents
+  logInfo [fmt|toDelete: {showPretty toDelete}|]
+  execute
+    [fmt|
+    UPDATE redacted.torrents_json
+    SET transmission_torrent_hash = NULL
+    WHERE transmission_torrent_hash = ANY (?::text[])
+  |]
+    $ Only (toDelete & Map.keys <&> (.torrentHash) & PGArray :: PGArray Text)
+  pure actualTorrents
+
 getTransmissionTorrentsTable ::
   (MonadIO m, MonadTransmission m, MonadThrow m, MonadLogger m) =>
   m Html
 getTransmissionTorrentsTable = do
-  let fields = ["hashString", "name", "activity", "percentDone", "percentComplete", "eta"]
-
+  let fields =
+        [ "hashString",
+          "name",
+          "percentDone",
+          "percentComplete",
+          "downloadDir",
+          "files"
+        ]
   doTransmissionRequest'
     ( transmissionRequestListAllTorrents fields $ do
         Json.asObject <&> KeyMap.toMapText
@@ -636,6 +726,45 @@ redactedGetTorrentFileAndInsert dat = do
     >>= assertOneUpdated "redactedGetTorrentFileAndInsert"
     >>= \() -> pure (label @"torrentFile" bytes)
 
+getTorrentFileById ::
+  ( MonadPostgres m,
+    HasField "torrentId" r Int,
+    MonadThrow m
+  ) =>
+  r ->
+  Transaction m (Label "torrentFile" ByteString)
+getTorrentFileById dat = do
+  queryWith
+    [sql|
+    SELECT torrent_file
+    FROM redacted.torrents
+    WHERE torrent_id = ?::integer
+  |]
+    (Only $ (dat.torrentId :: Int))
+    (label @"torrentFile" <$> decBytea)
+    >>= ensureSingleRow
+
+updateTransmissionTorrentHashById ::
+  ( MonadPostgres m,
+    HasField "torrentId" r Int,
+    HasField "torrentHash" r Text
+  ) =>
+  r ->
+  Transaction m (Label "numberOfRowsAffected" Natural)
+updateTransmissionTorrentHashById dat = do
+  execute
+    [sql|
+    UPDATE redacted.torrents_json
+    SET transmission_torrent_hash = ?::text
+    WHERE torrent_id = ?::integer
+    |]
+    ( dat.torrentHash :: Text,
+      dat.torrentId :: Int
+    )
+
+decBytea :: Dec.Decoder ByteString
+decBytea = Dec.fromField @(Binary ByteString) <&> (.fromBinary)
+
 assertOneUpdated ::
   (HasField "numberOfRowsAffected" r Natural, MonadThrow m) =>
   Text ->
@@ -704,7 +833,7 @@ data TorrentData = TorrentData
 data TorrentStatus
   = NoTorrentFileYet
   | NotInTransmissionYet
-  | InTransmission
+  | InTransmission (Label "torrentHash" Text)
 
 getTorrentById :: (MonadPostgres m, HasField "torrentId" r Int, MonadThrow m) => r -> Transaction m Json.Value
 getTorrentById dat = do
@@ -758,7 +887,7 @@ getBestTorrents = do
                 if
                     | not hasTorrentFile -> NoTorrentFileYet
                     | Nothing <- transmissionTorrentHash -> NotInTransmissionYet
-                    | Just _hash <- transmissionTorrentHash -> InTransmission,
+                    | Just hash <- transmissionTorrentHash -> InTransmission (label @"torrentHash" hash),
               ..
             }
     )
