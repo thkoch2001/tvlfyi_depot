@@ -34,6 +34,24 @@
       "parentUuid": "4e85c94a_d6a2d293",
       "revId": "9c7b636199cf6efe6601dd7fb27092d392d9b084",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4ee7c8bd_217fcbe9",
+        "filename": "tvix/store/src/blobservice/dumb_seeker.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 83,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-06-30T16:12:28Z",
+      "side": 1,
+      "message": "I don\u0027t want to panic the implementation providing the blobstore, if we think about invalid range requests. I guess this should return an IO error of some sort.",
+      "parentUuid": "9452e58c_9108f58a",
+      "revId": "9c7b636199cf6efe6601dd7fb27092d392d9b084",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
