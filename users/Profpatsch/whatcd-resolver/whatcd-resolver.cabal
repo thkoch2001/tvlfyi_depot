@@ -96,5 +96,6 @@ library
         blaze-html,
         bytestring,
         dlist,
+        scientific,
         selective
 
