@@ -19,7 +19,6 @@ in
     (mod "known-hosts.nix")
     (mod "monorepo-gerrit.nix")
     (mod "nixery.nix")
-    (mod "oauth2_proxy.nix")
     (mod "owothia.nix")
     (mod "panettone.nix")
     (mod "paroxysm.nix")
@@ -230,7 +229,6 @@ in
       irccat.file = secretFile "irccat";
       keycloak-db.file = secretFile "keycloak-db";
       nix-cache-priv.file = secretFile "nix-cache-priv";
-      oauth2_proxy.file = secretFile "oauth2_proxy";
       owothia.file = secretFile "owothia";
       panettone.file = secretFile "panettone";
       smtprelay.file = secretFile "smtprelay";
@@ -435,9 +433,6 @@ in
 
     # Run autosubmit bot for Gerrit
     gerrit-queue.enable = true;
-
-    # Run oauth2_proxy for internal service auth
-    oauth2_proxy.enable = true;
   };
 
   services.postgresql = {
