@@ -3,12 +3,12 @@
 
 let
   # TODO(sterni): switch to pkgs.josh as soon as that commit is released
-  rev = "fc857afda2c1536234e3bb1983c518a1abf63d25";
+  rev = "c0a170a756dd5e63268673086218c0ce7bf18bdc";
   src = pkgs.fetchFromGitHub {
     owner = "josh-project";
     repo = "josh";
     inherit rev;
-    hash = "sha256:16ch7al7xfyjipgqh2n7grj985fv713mhi8y5bixb736vsad9q3w";
+    hash = "sha256:0rsf65fq9xm3qj77ig3s4wmmgm50jhvwrknr839hipjj5lj4x1hp";
   };
 in
 depot.third_party.naersk.buildPackage {
