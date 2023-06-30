@@ -3,6 +3,14 @@
 { depot, pkgs, ... }: # readTree
 { config, lib, ... }: # home-manager
 
+
+let
+  # URL handler to open `tg://` URLs in telega.el
+  telega-launcher = pkgs.writeShellScriptBin "telega-launcher" ''
+    echo "Opening ''${1} in telega.el ..."
+    ${pkgs.emacs-unstable}/bin/emacsclient -e "(telega-browse-url \"''${1}\")"
+  '';
+in
 {
   home.activation.screenshots = lib.hm.dag.entryAnywhere ''
     $DRY_RUN_CMD mkdir -p $HOME/screenshots
@@ -30,6 +38,27 @@
     enable = true;
     inactiveInterval = 10; # minutes
     lockCmd = "${depot.users.tazjin.screenLock}/bin/tazjin-screen-lock";
+  };
+
+  home.packages = [ telega-launcher ];
+
+  xdg.desktopEntries.telega-launcher = {
+    name = "Telega Launcher";
+    exec = "${telega-launcher}/bin/telega-launcher";
+    terminal = false;
+    mimeType = [ "x-scheme-handler/tg" ];
+  };
+
+  xdg.mimeApps = {
+    enable = true;
+    defaultApplications = {
+      "x-scheme-handler/tg" = [ "telega-launcher.desktop" ];
+      "text/html" = [ "chromium-browser.desktop" ];
+      "x-scheme-handler/http" = [ "chromium-browser.desktop" ];
+      "x-scheme-handler/https" = [ "chromium-browser.desktop" ];
+      "x-scheme-handler/about" = [ "chromium-browser.desktop" ];
+      "x-scheme-handler/unknown" = [ "chromium-browser.desktop" ];
+    };
   };
 
   services.picom = {
