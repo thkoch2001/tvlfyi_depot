@@ -348,6 +348,22 @@ in-progress."
   (shell-command "xrandr --output DisplayPort-0 --auto --primary --left-of DisplayPort-1")
   (shell-command "xrandr --output DisplayPort-1 --auto --right-of DisplayPort-0 --rotate left"))
 
+(defun randr-khamovnik-layout-office ()
+  "Use the left and right screen on khamovnik, in the office."
+  (interactive)
+  (set-randr-config `(("eDP-1" 1 2)
+                      ("DP-2" 3 4 5 6 7 8 9 0)))
+
+  (shell-command "xrandr --output DP-2 --auto --primary --right-of eDP-1"))
+
+(defun randr-khamovnik-layout-single ()
+  "Use only the internal screen."
+  (interactive)
+  (set-randr-config '(("eDP-1" (number-sequence 0 9))))
+  (shell-command "xrandr --output eDP-1 --auto --primary")
+  (shell-command "xrandr --output DP-2 --off")
+  (exwm-randr-refresh))
+
 (pcase (s-trim (shell-command-to-string "hostname"))
   ("tverskoy"
    (exwm-input-set-key (kbd "s-m s") #'randr-tverskoy-layout-single)
@@ -355,7 +371,11 @@ in-progress."
 
   ("frog"
    (exwm-input-set-key (kbd "s-m b") #'randr-frog-layout-both)
-   (exwm-input-set-key (kbd "s-m r") #'randr-frog-layout-right-only)))
+   (exwm-input-set-key (kbd "s-m r") #'randr-frog-layout-right-only))
+
+  ("khamovnik"
+   (exwm-input-set-key (kbd "s-m 2") #'randr-khamovnik-layout-office)
+   (exwm-input-set-key (kbd "s-m s") #'randr-khamovnik-layout-single)))
 
 ;; Notmuch shortcuts as EXWM globals
 ;; (g m => gmail)
