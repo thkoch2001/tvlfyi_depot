@@ -17,6 +17,7 @@ import Data.List.NonEmpty qualified as NonEmpty
 import Data.Map.Strict qualified as Map
 import Data.Pool (Pool)
 import Data.Pool qualified as Pool
+import Data.Scientific (Scientific)
 import Data.Text qualified as Text
 import Database.PostgreSQL.Simple (Binary (Binary), Only (..))
 import Database.PostgreSQL.Simple qualified as Postgres
@@ -24,6 +25,7 @@ import Database.PostgreSQL.Simple.SqlQQ (sql)
 import Database.PostgreSQL.Simple.Types (PGArray (PGArray))
 import Database.PostgreSQL.Simple.Types qualified as Postgres
 import Database.Postgres.Temp qualified as TmpPg
+import FieldParser (FieldParser' (..))
 import FieldParser qualified as Field
 import GHC.Records (HasField (..))
 import IHP.HSX.QQ (hsx)
@@ -156,32 +158,7 @@ htmlUi = do
     everySecond call extraData innerHtml = [hsx|<div hx-trigger="every 1s" hx-swap="outerHTML" hx-post={call} hx-vals={Enc.encToBytesUtf8 extraData}>{innerHtml}</div>|]
 
     mainHtml = runTransaction $ do
-      bestStale :: [TorrentData] <- getBestTorrents
-      actual <-
-        getAndUpdateTransmissionTorrentsStatus
-          ( bestStale
-              & mapMaybe
-                ( \td -> case td.torrentStatus of
-                    InTransmission h -> Just h
-                    _ -> Nothing
-                )
-              <&> (,())
-              & Map.fromList
-          )
-      let fresh =
-            bestStale
-              --  we have to update the status of every torrent that’s not in tranmission anymore
-              -- TODO I feel like it’s easier (& more correct?) to just do the database request again …
-              <&> ( \td -> case td.torrentStatus of
-                      InTransmission hash ->
-                        case actual & Map.lookup hash of
-                          -- TODO this is also pretty dumb, cause it assumes that we have the torrent file if it was in transmission before,
-                          -- which is an internal factum that is established in getBestTorrents (and might change later)
-                          Nothing -> td {torrentStatus = NotInTransmissionYet}
-                          Just () -> td
-                      _ -> td
-                  )
-      bestTorrentsTable <- getBestTorrentsTable fresh
+      bestTorrentsTable <- getBestTorrentsTable
       transmissionTorrentsTable <- lift @Transaction getTransmissionTorrentsTable
       pure $
         Html.docTypeHtml
@@ -218,7 +195,8 @@ snipsRedactedSearch ::
     MonadIO m,
     MonadPostgres m,
     HasField "searchstr" r ByteString,
-    MonadThrow m
+    MonadThrow m,
+    MonadTransmission m
   ) =>
   r ->
   m Html
@@ -229,17 +207,42 @@ snipsRedactedSearch dat = do
       ]
   runTransaction $ do
     t
-    best :: [TorrentData] <- getBestTorrents
-    getBestTorrentsTable best
+    getBestTorrentsTable
 
-getBestTorrentsTable :: (MonadPostgres m) => [TorrentData] -> Transaction m Html
-getBestTorrentsTable best = do
+getBestTorrentsTable :: (MonadIO m, MonadTransmission m, MonadThrow m, MonadLogger m, MonadPostgres m) => Transaction m Html
+getBestTorrentsTable = do
+  bestStale :: [TorrentData ()] <- getBestTorrents
+  actual <-
+    getAndUpdateTransmissionTorrentsStatus
+      ( bestStale
+          & mapMaybe
+            ( \td -> case td.torrentStatus of
+                InTransmission h -> Just h
+                _ -> Nothing
+            )
+          <&> (\t -> (getLabel @"torrentHash" t, t.transmissionInfo))
+          & Map.fromList
+      )
+  let fresh =
+        bestStale
+          --  we have to update the status of every torrent that’s not in tranmission anymore
+          -- TODO I feel like it’s easier (& more correct?) to just do the database request again …
+          <&> ( \td -> case td.torrentStatus of
+                  InTransmission info ->
+                    case actual & Map.lookup (getLabel @"torrentHash" info) of
+                      -- TODO this is also pretty dumb, cause it assumes that we have the torrent file if it was in transmission before,
+                      -- which is an internal factum that is established in getBestTorrents (and might change later)
+                      Nothing -> td {torrentStatus = NotInTransmissionYet}
+                      Just transmissionInfo -> td {torrentStatus = InTransmission (T2 (getLabel @"torrentHash" info) (label @"transmissionInfo" transmissionInfo))}
+                  NotInTransmissionYet -> td {torrentStatus = NotInTransmissionYet}
+                  NoTorrentFileYet -> td {torrentStatus = NotInTransmissionYet}
+              )
   let localTorrent b = case b.torrentStatus of
-        NoTorrentFileYet -> [hsx|<button hx-post="snips/redacted/getTorrentFile" hx-swap="outerHTML" hx-vals={Enc.encToBytesUtf8 $ Enc.object [("torrent-id", Enc.int b.torrentId)]}>Get Torrent</button>|]
-        InTransmission _hash -> [hsx|Started.|]
+        NoTorrentFileYet -> [hsx|<button hx-post="snips/redacted/getTorrentFile" hx-swap="outerHTML" hx-vals={Enc.encToBytesUtf8 $ Enc.object [("torrent-id", Enc.int b.torrentId)]}>Upload Torrent</button>|]
+        InTransmission info -> [hsx|{info.transmissionInfo.percentDone.unPercentage}% done|]
         NotInTransmissionYet -> [hsx|<button hx-post="snips/redacted/startTorrentFile" hx-swap="outerHTML" hx-vals={Enc.encToBytesUtf8 $ Enc.object [("torrent-id", Enc.int b.torrentId)]}>Start Torrent</button>|]
   let bestRows =
-        best
+        fresh
           & foldMap
             ( \b -> do
                 [hsx|
@@ -273,15 +276,29 @@ getBestTorrentsTable best = do
         </table>
       |]
 
+-- | A value between (inclusive) 0% and (inclusive) 100%. Precise to 1% steps.
+newtype Percentage = Percentage {unPercentage :: Int}
+  deriving stock (Show)
+
+-- | Parse a scientific into a Percentage
+scientificPercentage :: FieldParser' Error Scientific Percentage
+scientificPercentage =
+  Field.boundedScientificRealFloat @Float
+    >>> ( FieldParser $ \f ->
+            if
+                | f < 0 -> Left "percentage cannot be negative"
+                | f > 1 -> Left "percentage cannot be over 100%"
+                | otherwise -> Right $ Percentage $ ceiling (f * 100)
+        )
+
 -- | Fetch the current status from transmission, and remove the tranmission hash from our database
 -- iff it does not exist in transmission anymore
 getAndUpdateTransmissionTorrentsStatus ::
   (MonadIO m, MonadTransmission m, MonadThrow m, MonadLogger m, MonadPostgres m) =>
   Map (Label "torrentHash" Text) () ->
-  Transaction m (Map (Label "torrentHash" Text) ())
+  (Transaction m (Map (Label "torrentHash" Text) (Label "percentDone" Percentage)))
 getAndUpdateTransmissionTorrentsStatus knownTorrents = do
-  let fields = ["hashString"]
-  logInfo [fmt|known: {showPretty knownTorrents}|]
+  let fields = ["hashString", "percentDone"]
   actualTorrents <-
     lift @Transaction $
       doTransmissionRequest'
@@ -292,12 +309,11 @@ getAndUpdateTransmissionTorrentsStatus knownTorrents = do
             )
             $ do
               torrentHash <- Json.keyLabel @"torrentHash" "hashString" Json.asText
-              pure (torrentHash, ())
+              percentDone <- Json.keyLabel @"percentDone" "percentDone" (Field.jsonParser $ Field.jsonNumber >>> scientificPercentage)
+              pure (torrentHash, percentDone)
         )
         <&> Map.fromList
-  logInfo [fmt|actual: {showPretty actualTorrents}|]
   let toDelete = Map.difference knownTorrents actualTorrents
-  logInfo [fmt|toDelete: {showPretty toDelete}|]
   execute
     [fmt|
     UPDATE redacted.torrents_json
@@ -821,19 +837,19 @@ migrate = do
     CREATE INDEX IF NOT EXISTS torrents_json_snatches ON redacted.torrents_json(((full_json_result->'snatches')::integer));
   |]
 
-data TorrentData = TorrentData
+data TorrentData transmissionInfo = TorrentData
   { groupId :: Int,
     torrentId :: Int,
     seedingWeight :: Int,
     torrentJson :: Json.Value,
     torrentGroupJson :: T2 "artist" Text "groupName" Text,
-    torrentStatus :: TorrentStatus
+    torrentStatus :: TorrentStatus transmissionInfo
   }
 
-data TorrentStatus
+data TorrentStatus transmissionInfo
   = NoTorrentFileYet
   | NotInTransmissionYet
-  | InTransmission (Label "torrentHash" Text)
+  | InTransmission (T2 "torrentHash" Text "transmissionInfo" transmissionInfo)
 
 getTorrentById :: (MonadPostgres m, HasField "torrentId" r Int, MonadThrow m) => r -> Transaction m Json.Value
 getTorrentById dat = do
@@ -847,7 +863,7 @@ getTorrentById dat = do
     >>= ensureSingleRow
 
 -- | Find the best torrent for each torrent group (based on the seeding_weight)
-getBestTorrents :: MonadPostgres m => Transaction m [TorrentData]
+getBestTorrents :: MonadPostgres m => Transaction m [TorrentData ()]
 getBestTorrents = do
   queryWith
     [sql|
@@ -887,7 +903,9 @@ getBestTorrents = do
                 if
                     | not hasTorrentFile -> NoTorrentFileYet
                     | Nothing <- transmissionTorrentHash -> NotInTransmissionYet
-                    | Just hash <- transmissionTorrentHash -> InTransmission (label @"torrentHash" hash),
+                    | Just hash <- transmissionTorrentHash ->
+                        InTransmission $
+                          T2 (label @"torrentHash" hash) (label @"transmissionInfo" ()),
               ..
             }
     )
