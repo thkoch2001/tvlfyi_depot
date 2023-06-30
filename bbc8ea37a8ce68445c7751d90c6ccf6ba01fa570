@@ -46,6 +46,30 @@
       },
       "revId": "bbc8ea37a8ce68445c7751d90c6ccf6ba01fa570",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "157db6d9_edb6a499",
+        "filename": "tvix/store/src/blobservice/tests.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-06-30T12:17:02Z",
+      "side": 1,
+      "message": "Let\u0027s keep the TODO and improve this in a followup CL.",
+      "parentUuid": "91ffc196_6bc9c65f",
+      "range": {
+        "startLine": 11,
+        "startChar": 0,
+        "endLine": 13,
+        "endChar": 0
+      },
+      "revId": "bbc8ea37a8ce68445c7751d90c6ccf6ba01fa570",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
