@@ -56,6 +56,8 @@ let
       # staging-next cycle: https://github.com/NixOS/nixpkgs/issues/226673
       mysql80
       ;
+
+      stableLibgit2 = stableNixpkgs.libgit2;
   };
 
   # Overlay to expose the nixpkgs commits we are using to other Nix code.

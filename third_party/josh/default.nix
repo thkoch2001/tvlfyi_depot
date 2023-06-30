@@ -16,7 +16,7 @@ depot.third_party.naersk.buildPackage {
   JOSH_VERSION = "git-${builtins.substring 0 8 rev}";
 
   buildInputs = with pkgs; [
-    libgit2
+    stableLibgit2
     openssl
     pkg-config
   ];
