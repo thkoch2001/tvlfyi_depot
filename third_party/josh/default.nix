@@ -46,4 +46,16 @@ naersk.buildPackage {
       wrapProgram $out/bin/josh-proxy --prefix PATH : "${pkgs.git}/bin"
     '';
   };
+
+  meta.ci.extraSteps = {
+    # debug step to see if josh works now
+    filteredPushTest = {
+      label = ":thinking: does josh work now? :thinking:";
+      alwaysRun = true;
+      command = pkgs.writeShellScript "josh-filter-test" ''
+        set -xe
+        ${depot.third_party.josh}/bin/josh-filter ':/nix/nix-1p'
+      '';
+    };
+  };
 }
