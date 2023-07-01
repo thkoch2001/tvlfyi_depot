@@ -70,27 +70,6 @@ resource "keycloak_saml_user_attribute_protocol_mapper" "buildkite_name" {
   saml_attribute_name_format = "Unspecified"
 }
 
-resource "keycloak_openid_client" "oauth2_proxy" {
-  realm_id              = keycloak_realm.tvl.id
-  client_id             = "oauth2-proxy"
-  name                  = "TVL OAuth2 Proxy"
-  enabled               = true
-  access_type           = "CONFIDENTIAL"
-  standard_flow_enabled = true
-
-  valid_redirect_uris = [
-    "https://login.tvl.fyi/oauth2/callback",
-    "http://localhost:4774/oauth2/callback",
-  ]
-}
-
-resource "keycloak_openid_audience_protocol_mapper" "oauth2_proxy_audience" {
-  realm_id                 = keycloak_realm.tvl.id
-  client_id                = keycloak_openid_client.oauth2_proxy.id
-  name                     = "oauth2-proxy-audience"
-  included_custom_audience = keycloak_openid_client.oauth2_proxy.client_id
-}
-
 resource "keycloak_openid_client" "panettone" {
   realm_id              = keycloak_realm.tvl.id
   client_id             = "panettone"
