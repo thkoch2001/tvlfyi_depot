@@ -87,6 +87,24 @@
       "parentUuid": "d0166c76_bf2ac545",
       "revId": "a17e271d1acd618892b8468767618d4c736bf5b9",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ad405b43_adabed42",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-07-01T10:04:51Z",
+      "side": 1,
+      "message": "Yes, I like this way more. thanks!",
+      "parentUuid": "4dba8659_9ea9b701",
+      "revId": "a17e271d1acd618892b8468767618d4c736bf5b9",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
