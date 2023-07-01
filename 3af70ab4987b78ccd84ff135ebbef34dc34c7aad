@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "51308635_40f0cd84",
+        "filename": "ops/pipelines/static-pipeline.yaml",
+        "patchSetId": 5
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-07-01T21:49:03Z",
+      "side": 1,
+      "message": "… and `git fetch` once.",
+      "revId": "3af70ab4987b78ccd84ff135ebbef34dc34c7aad",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a6762b53_1f4ce250",
+        "filename": "tools/git-r.nix",
+        "patchSetId": 5
+      },
+      "lineNbr": 5,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-07-01T21:49:03Z",
+      "side": 1,
+      "message": "I ran `git r 12b979e41b6b639f058ba3634639a69840be4597` or `git r HEAD~1` or `git r`, and received an empty output.\n\nMaybe the setup instructions, even with the `git fetch` from my other comment are not sufficient?\n\nIn any case, if the output is empty, could we print something to stderr, maybe usage()? Most likely the user is using it wrong ;-)",
+      "revId": "3af70ab4987b78ccd84ff135ebbef34dc34c7aad",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ab2e92e0_2b1a1d3a",
+        "filename": "tools/git-r.nix",
+        "patchSetId": 5
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-07-01T21:49:03Z",
+      "side": 1,
+      "message": "… add `git fetch origin` here.",
+      "revId": "3af70ab4987b78ccd84ff135ebbef34dc34c7aad",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
