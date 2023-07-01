@@ -44,7 +44,6 @@ in
   "keycloak-db.age" = whitbyDefault;
   "nix-cache-priv.age" = whitbyDefault;
   "nix-cache-pub.age" = whitbyDefault;
-  "oauth2_proxy.age" = whitbyDefault;
   "owothia.age" = whitbyDefault;
   "panettone.age" = whitbyDefault;
   "smtprelay.age" = whitbyDefault;
