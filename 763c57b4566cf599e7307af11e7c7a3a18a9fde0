@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2b067296_98b04d83",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-07-01T22:40:32Z",
+      "side": 1,
+      "message": "I\u0027m not aware who would be using this, and it relies on a correct client_id and redirect uri (which we probably don\u0027t configure in keycloak) - so cl/8913 and cl/8914 remove the rest.",
+      "revId": "763c57b4566cf599e7307af11e7c7a3a18a9fde0",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
