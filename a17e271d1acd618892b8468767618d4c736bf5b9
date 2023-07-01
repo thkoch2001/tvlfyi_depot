@@ -69,6 +69,24 @@
       "message": "I think this should effectively shell out to `git rev-list --count --first-parent HEAD` instead (which is pretty much instant, and doesn\u0027t require the rev fetching setup - which almost nobody has).\n\nIt should probably check that the commit is mainlined first (e.g. `git merge-base --is-ancestor HEAD origin/canon`).",
       "revId": "a17e271d1acd618892b8468767618d4c736bf5b9",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4dba8659_9ea9b701",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2023-07-01T09:49:17Z",
+      "side": 1,
+      "message": "I\u0027ve made a git subcommand instead which I think should be a decent alternative.",
+      "parentUuid": "d0166c76_bf2ac545",
+      "revId": "a17e271d1acd618892b8468767618d4c736bf5b9",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
