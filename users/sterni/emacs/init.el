@@ -337,6 +337,16 @@
   (set-face-background 'languagetool-issue-default "yellow")
   (set-face-background 'languagetool-issue-misspelling "red"))
 
+(use-package deft
+  :config
+  ;; This is based on (car deft-extensions), but unfortunately the variable is
+  ;; not re-bound in the hook defined by defcustom, so it is always "txt".
+  (setq deft-default-extension "org")
+  (evil-define-key 'normal 'global (kbd "<leader>mn") 'deft)
+  :custom
+  deft-directory (expand-file-name "~/files/sync/org/notes")
+  deft-extensions '("org" "md" "txt" "tex"))
+
 (unless (server-running-p)
   (server-start))
 
