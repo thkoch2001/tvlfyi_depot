@@ -16,6 +16,24 @@
       "message": "`x.preBuild or \"\" + \u0027\u0027`",
       "revId": "b7cd112daa48c684287ffa6e170d0c12dc54587f",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "58ad0505_e85b05c9",
+        "filename": "third_party/josh/default.nix",
+        "patchSetId": 8
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2023-07-02T16:22:44Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ddec42c7_303585c6",
+      "revId": "b7cd112daa48c684287ffa6e170d0c12dc54587f",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
