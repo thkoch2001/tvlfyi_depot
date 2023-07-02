@@ -16,6 +16,23 @@
       "message": "Okay!",
       "revId": "54af0ddf2b0687573dff25e180f8c5df9e4822fc",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "43ccdb8c_525ab30f",
+        "filename": "nix/mapAttrsMaybe/default.nix",
+        "patchSetId": 166
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2023-07-02T09:06:12Z",
+      "side": 1,
+      "message": "I dislike that `null` can not be set as a value.",
+      "revId": "54af0ddf2b0687573dff25e180f8c5df9e4822fc",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
