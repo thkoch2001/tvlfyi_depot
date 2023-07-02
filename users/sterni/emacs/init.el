@@ -337,6 +337,13 @@
   (set-face-background 'languagetool-issue-default "yellow")
   (set-face-background 'languagetool-issue-misspelling "red"))
 
+(use-package deft
+  :config
+  (setq deft-extensions '("org" "md" "txt" "tex")
+        deft-default-extension "org"
+        deft-directory (expand-file-name "~/files/sync/org/notes"))
+  (evil-define-key 'normal 'global (kbd "<leader>mn") 'deft))
+
 (unless (server-running-p)
   (server-start))
 
