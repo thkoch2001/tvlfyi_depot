@@ -4,7 +4,6 @@ use gloo::console;
 use gloo::history::{BrowserHistory, History};
 use gloo::net::http;
 use gloo::storage::{LocalStorage, Storage};
-use gloo::utils::format::JsValueSerdeExt;
 use rand::seq::IteratorRandom;
 use rand::thread_rng;
 use serde::{Deserialize, Serialize};
@@ -345,7 +344,7 @@ async fn submit_data(captcha_token: &str, record: &Record) -> bool {
 }
 
 /// Handle the submit event, if all data was successfully collected.
-fn handle_submit(app: &App, link: Scope<App>) -> Msg {
+fn handle_submit(app: &App, _link: Scope<App>) -> Msg {
     let token = app.captcha_token.as_ref().unwrap().clone();
     let record = app.record.clone();
 
