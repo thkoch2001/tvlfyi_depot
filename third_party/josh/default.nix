@@ -28,6 +28,7 @@ naersk.buildPackage {
     pkg-config
   ];
 
+  dontStrip = true;
   cargoBuildOptions = x: x ++ [
     "-p"
     "josh-filter"
@@ -36,6 +37,10 @@ naersk.buildPackage {
   ];
 
   overrideMain = x: {
+    preBuild = x.preBuild or "" + ''
+      echo 'debug = true' >> Cargo.toml
+    '';
+
     nativeBuildInputs = (x.nativeBuildInputs or [ ]) ++ [ pkgs.makeWrapper ];
     postInstall = ''
       wrapProgram $out/bin/josh-proxy --prefix PATH : "${pkgs.git}/bin"
