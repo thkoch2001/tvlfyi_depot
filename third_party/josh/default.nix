@@ -10,8 +10,14 @@ let
     inherit rev;
     hash = "sha256:0rsf65fq9xm3qj77ig3s4wmmgm50jhvwrknr839hipjj5lj4x1hp";
   };
+
+  naersk = pkgs.callPackage depot.third_party.sources.naersk {
+    rustc = pkgs.stableRustc;
+    cargo = pkgs.stableCargo;
+  };
 in
-depot.third_party.naersk.buildPackage {
+#depot.third_party.naersk.buildPackage {
+naersk.buildPackage {
   inherit src;
   JOSH_VERSION = "git-${builtins.substring 0 8 rev}";
 

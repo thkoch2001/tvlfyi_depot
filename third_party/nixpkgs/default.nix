@@ -56,6 +56,9 @@ let
       # staging-next cycle: https://github.com/NixOS/nixpkgs/issues/226673
       mysql80
       ;
+
+      stableRustc = stableNixpkgs.rustc;
+      stableCargo = stableNixpkgs.cargo;
   };
 
   # Overlay to expose the nixpkgs commits we are using to other Nix code.
