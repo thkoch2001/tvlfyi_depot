@@ -23,6 +23,7 @@ let
     epkgs.elpaPackages.which-key
     epkgs.melpaPackages.adoc-mode
     epkgs.melpaPackages.cmake-mode
+    epkgs.melpaPackages.deft
     epkgs.melpaPackages.direnv
     epkgs.melpaPackages.dockerfile-mode
     epkgs.melpaPackages.editorconfig
