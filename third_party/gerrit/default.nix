@@ -69,6 +69,8 @@ pkgs.lib.makeOverridable pkgs.buildBazelPackage {
       rm -rf $bazelOut/external/{local_config_cc,\@local_config_cc.marker}
       rm -rf $bazelOut/external/{local_*,\@local_*.marker}
 
+      rm -rf $bazelOut/external/yarn_cache/v6/.tmp/*
+
       # Clear markers
       find $bazelOut/external -name '@*\.marker' -exec sh -c 'echo > {}' \;
 
