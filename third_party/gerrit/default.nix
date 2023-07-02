@@ -55,7 +55,7 @@ pkgs.lib.makeOverridable pkgs.buildBazelPackage {
   fetchConfigured = true;
 
   fetchAttrs = {
-    sha256 = "sha256:1bvcijcc083cbkzlc243bklnghnpj1knfnnbvvfhbmpmasm1svyn";
+    sha256 = "sha256:1bvcijcc083cbkzlc243bklnghnpj1knfnnbvvfhbmpmasm2svyn";
     preBuild = ''
       rm .bazelversion
     '';
@@ -68,6 +68,8 @@ pkgs.lib.makeOverridable pkgs.buildBazelPackage {
       rm -rf $bazelOut/external/{embedded_jdk,\@embedded_jdk.marker}
       rm -rf $bazelOut/external/{local_config_cc,\@local_config_cc.marker}
       rm -rf $bazelOut/external/{local_*,\@local_*.marker}
+
+      rm -rf $bazelOut/external/yarn_cache/v6/.tmp/*
 
       # Clear markers
       find $bazelOut/external -name '@*\.marker' -exec sh -c 'echo > {}' \;
