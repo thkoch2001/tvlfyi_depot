@@ -21,6 +21,11 @@ depot.third_party.naersk.buildPackage {
     pkg-config
   ];
 
+  patches = [
+    ./enable-debug.diff
+  ];
+
+  dontStrip = true;
   cargoBuildOptions = x: x ++ [
     "-p"
     "josh-filter"

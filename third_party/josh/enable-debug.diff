@@ -1,0 +1,22 @@
+From 506538bbdd76f69b05ccce1cb8ec87ff6d91c55d Mon Sep 17 00:00:00 2001
+From: Vincent Ambo <mail@tazj.in>
+Date: Sun, 2 Jul 2023 11:42:41 +0300
+Subject: [PATCH] enable debug information in release builds
+
+---
+ Cargo.toml | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/Cargo.toml b/Cargo.toml
+index b65c252..3937a1a 100644
+--- a/Cargo.toml
++++ b/Cargo.toml
+@@ -15,4 +15,4 @@ members = [
+ lto = true
+ opt-level = 3
+ codegen-units = 1
+-
++debug = true
+-- 
+2.41.0
+
