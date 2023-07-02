@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ddec42c7_303585c6",
+        "filename": "third_party/josh/default.nix",
+        "patchSetId": 8
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2023-07-02T13:51:24Z",
+      "side": 1,
+      "message": "`x.preBuild or \"\" + \u0027\u0027`",
+      "revId": "b7cd112daa48c684287ffa6e170d0c12dc54587f",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
