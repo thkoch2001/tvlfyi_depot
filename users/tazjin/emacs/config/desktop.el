@@ -354,7 +354,8 @@ in-progress."
   (set-randr-config `(("eDP-1" 1 2)
                       ("DP-2" 3 4 5 6 7 8 9 0)))
 
-  (shell-command "xrandr --output DP-2 --auto --primary --right-of eDP-1"))
+  (shell-command "xrandr --output DP-2 --auto --primary --right-of eDP-1")
+  (exwm-randr-refresh))
 
 (defun randr-khamovnik-layout-single ()
   "Use only the internal screen."
