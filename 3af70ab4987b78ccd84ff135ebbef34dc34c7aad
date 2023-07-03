@@ -53,6 +53,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "ce18c5ea_9a95dc40",
+        "filename": "tools/git-r.nix",
+        "patchSetId": 5
+      },
+      "lineNbr": 5,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2023-07-03T11:08:49Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7c53672b_60b623b1",
+      "revId": "3af70ab4987b78ccd84ff135ebbef34dc34c7aad",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "ab2e92e0_2b1a1d3a",
