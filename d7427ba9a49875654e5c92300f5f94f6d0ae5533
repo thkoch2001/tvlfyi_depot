@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6bc894bf_2b6af479",
+        "filename": "third_party/josh/default.nix",
+        "patchSetId": 1
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2023-07-03T14:28:05Z",
+      "side": 1,
+      "message": "pname and add version \u003d JOSH_VERSION maybe?",
+      "range": {
+        "startLine": 22,
+        "startChar": 2,
+        "endLine": 22,
+        "endChar": 6
+      },
+      "revId": "d7427ba9a49875654e5c92300f5f94f6d0ae5533",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
