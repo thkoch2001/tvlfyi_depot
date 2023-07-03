@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ed49e4b4_88440be3",
+        "filename": "nix/buildGo/default.nix",
+        "patchSetId": 1
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-07-03T09:11:13Z",
+      "side": 1,
+      "message": "Do you have an example using this new code path, that we could drop here?",
+      "revId": "b9417947e0f8e1e6722322b177571ef03b4ed425",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
