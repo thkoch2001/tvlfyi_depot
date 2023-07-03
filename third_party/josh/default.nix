@@ -19,6 +19,7 @@ let
   };
 in
 naersk.buildPackage {
+  name = "josh";
   inherit src;
   JOSH_VERSION = "git-${builtins.substring 0 8 rev}";
 
