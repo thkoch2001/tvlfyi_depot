@@ -33,6 +33,24 @@
       "message": "this should be rebased and pushed through CI again.",
       "revId": "1156e255e6c3187d04ee13897bd5534b85fd8314",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6332b3e6_82e55922",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000046
+      },
+      "writtenOn": "2023-07-03T09:04:51Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4679448f_1d21803a",
+      "revId": "1156e255e6c3187d04ee13897bd5534b85fd8314",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
