@@ -17,10 +17,12 @@ let
     rustc = rust169;
     cargo = rust169;
   };
+  version = "git-${builtins.substring 0 8 rev}";
 in
 naersk.buildPackage {
-  inherit src;
-  JOSH_VERSION = "git-${builtins.substring 0 8 rev}";
+  pname = "josh";
+  inherit src version;
+  JOSH_VERSION = version;
 
   buildInputs = with pkgs; [
     libgit2
