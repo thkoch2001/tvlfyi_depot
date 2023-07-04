@@ -127,6 +127,14 @@ in
     '';
   };
 
+  # try out marcusr's convos IRC client
+  services.convos = {
+    enable = true;
+    listenAddress = "127.0.0.1";
+    listenPort = 2687; # cnvs
+    reverseProxy = true;
+  };
+
   # List packages installed in system profile. To search, run:
   # $ nix search wget
   environment.systemPackages = with pkgs; [
