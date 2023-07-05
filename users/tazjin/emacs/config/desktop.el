@@ -69,29 +69,14 @@
   human-accessible titles."
 
   (pcase (list (or exwm-class-name "unknown") (or exwm-title "unknown"))
-    ;; In Cider windows, rename the class and keep the workspace/file
-    ;; as the title.
-    (`("Google-chrome" ,(and (pred (lambda (title) (s-ends-with? " - Cider" title))) title))
-     (format "Cider<%s>" (s-chop-suffix " - Cider" title)))
-    (`("Google-chrome" ,(and (pred (lambda (title) (s-ends-with? " - Cider V" title))) title))
-     (format "Cider V<%s>" (s-chop-suffix " - Cider V" title)))
+    ;; Yandex.Music -> `Я.Music<... stuff ...>'
+    (`("Chromium-browser" ,(and (pred (lambda (title) (s-starts-with? "Yandex.Music - " title))) title))
+     (format "Я.Music<%s>" (s-chop-prefix "Yandex.Music - " title)))
 
-    ;; Attempt to detect IRCCloud windows via their title, which is a
-    ;; combination of the channel name and network.
-    ;;
-    ;; This is what would often be referred to as a "hack". The regexp
-    ;; will not work if a network connection buffer is selected in
-    ;; IRCCloud, but since the title contains no other indication that
-    ;; we're dealing with an IRCCloud window
-    (`("Google-chrome"
-       ,(and (pred (lambda (title)
-                     (s-matches? "^[\*\+]\s#[a-zA-Z0-9/\-]+\s\|\s[a-zA-Z\.]+$" title)))
-             title))
-     (format "IRCCloud<%s>" title))
+    ;; For other Chromium windows, make the title shorter.
+    (`("Chromium-browser" ,title)
+     (format "Chromium<%s>" (s-truncate 42 (s-chop-suffix " - Chromium" title))))
 
-    ;; For other Chrome windows, make the title shorter.
-    (`("Google-chrome" ,title)
-     (format "Chrome<%s>" (s-truncate 42 (s-chop-suffix " - Google Chrome" title))))
 
     ;; Gnome-terminal -> Term
     (`("Gnome-terminal" ,title)
