@@ -118,12 +118,12 @@
  org-todo-keywords '((sequence "TODO(t)" "ACTIVE(a)" "|" "DONE(d)" "RUNNING(r)")
                      (sequence "NEXT(n)" "WAITING(w)" "LATER(l)" "|" "CANCELLED(c)"))
  org-agenda-custom-commands
- `(("S" "Sprint Tasks" tags-todo "sprint")
-   ("i" "Inbox" tags "inbox")
+ `(("i" "Inbox" tags "inbox")
    ("r" "Running jobs" todo "RUNNING")
    ("w" "@Work" tags-todo "@work")
    ("n" . "Next...")
-   ("np" "Next Sprint" tags-todo "next_sprint|sprint_planning")
+   ("nw" "Next @Work" tags-todo "@work&next")
+   ("nt" "Next tooling" tags-todo "tooling")
 
    ("p" . "Project...")
    ,@(grfn/org-projects->agenda-commands (grfn/org-projects)))
