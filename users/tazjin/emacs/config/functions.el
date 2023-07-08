@@ -301,10 +301,11 @@ the GPG agent correctly."
 (defun find-cargo-project (dir)
   "Attempt to find the current project in `project-find-functions'
 by looking for a `Cargo.toml' file."
-  (unless (equal "/" dir)
-    (if (f-exists-p (f-join dir "Cargo.toml"))
-        (cons 'transient dir)
-      (find-cargo-project (f-parent dir)))))
+  (when dir
+    (unless (equal "/" dir)
+      (if (f-exists-p (f-join dir "Cargo.toml"))
+          (cons 'transient dir)
+        (find-cargo-project (f-parent dir))))))
 
 (add-to-list 'project-find-functions #'find-cargo-project)
 
