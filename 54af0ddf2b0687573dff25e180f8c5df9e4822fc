@@ -51,6 +51,24 @@
       "parentUuid": "43ccdb8c_525ab30f",
       "revId": "54af0ddf2b0687573dff25e180f8c5df9e4822fc",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fdf5d000_61e69f1a",
+        "filename": "nix/mapAttrsMaybe/default.nix",
+        "patchSetId": 166
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 1000066
+      },
+      "writtenOn": "2023-07-08T07:24:56Z",
+      "side": 1,
+      "message": "I find myself wanting this function quite often.  But I also agree with sterni that using `null` here is really awkward.  What if the attrset already contains `null`s?  Then `mapAttrsMaybe (_: lib.id)` isn\u0027t the identity function.  Icky.\n\nAlternatives:\n\n1. `mapAttrsMaybe :: (k -\u003e v -\u003e [v]) -\u003e Attrs k v -\u003e Attrs k v` where you return `[]` to say \"drop it\" and a one-element list to say \"leave this\".\n  - This is expensive in cppnix (GC churn) but not in Tvix since it\u0027s just a reference count increment/decrement.\n  - Also `NixList` can (should) optimize the representation of the empty list and a one-element list whose value is of a finite-sized type (int, float, bool, null) the same way `NixAttr` already optimizes the representation of `NameValuePair`\n\n\n2. `mapAttrsMaybe :: (v -\u003e k -\u003e v -\u003e v) -\u003e Attrs k v -\u003e Attrs k v` where returning the extra argument is how you say \"drop it\" -- i.e. `mapAttrsMaybe (x: _: _: x)` applied to anything is `{}`.  The question is what marker value does `mapAttrsMaybe` pass to the functional?\n  - In Haskell we could use a rank-2 type to prevent the functional from keeping a copy of the marker value or inspecting it in any relevant way.\n  - We could abuse function equality here since it is effectively Nix\u0027s `gensym()`, but that feels pretty gross.  Or maybe just abuse function equality until some time in the future when `builtins.gensym` is ratified.",
+      "parentUuid": "01502b10_8b634175",
+      "revId": "54af0ddf2b0687573dff25e180f8c5df9e4822fc",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
