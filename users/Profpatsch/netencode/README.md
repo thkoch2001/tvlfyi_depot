@@ -85,7 +85,7 @@ Similar to text, records start with the length of their *whole encoded content*,
 * A record with one empty field, `foo`: `{9:<3:foo|u,}`
 * A record with two fields, `foo` and `x`: `{21:<3:foo|u,<1:x|t3:baz,}`
 * The same record: `{21:<1:x|t3:baz,<3:foo|u,}`
-* The same record (later occurences of fields are ignored): `{28:<1:x|t3:baz,<3:foo|u,<1:x|u,}`
+* The same record (earlier occurences of fields are ignored): `{<1:x|u,28:<1:x|t3:baz,<3:foo|u,}`
 
 ### sums (tagged unions)
 
