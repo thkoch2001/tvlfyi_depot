@@ -70,6 +70,24 @@
       "parentUuid": "4ee7c8bd_217fcbe9",
       "revId": "9c7b636199cf6efe6601dd7fb27092d392d9b084",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c970d6c8_d841d569",
+        "filename": "tvix/store/src/blobservice/dumb_seeker.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 83,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-07-11T10:06:17Z",
+      "side": 1,
+      "message": "I added explicit error handling in this revision, PTAL.",
+      "parentUuid": "ec1c04d6_6a981880",
+      "revId": "9c7b636199cf6efe6601dd7fb27092d392d9b084",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }

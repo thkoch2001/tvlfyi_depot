@@ -16,6 +16,24 @@
       "message": "Todo: add tests",
       "revId": "2c526f454e83858c163e69c2073a9cd13ec692f8",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d9b91a12_a770c786",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-07-11T10:06:17Z",
+      "side": 1,
+      "message": "A bunch of tests have been added, and backwards seeking is known to be broken for gRPC-backed stores until the protocol there is improved to do verified streaming.",
+      "parentUuid": "2f075896_c9a7a91e",
+      "revId": "2c526f454e83858c163e69c2073a9cd13ec692f8",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
