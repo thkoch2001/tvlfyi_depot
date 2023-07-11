@@ -16,6 +16,24 @@
       "message": "Todo: add seek on the file test",
       "revId": "ff287868c28eab02c83102ed548d910c7a2b0869",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "76c62108_50461620",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-07-11T10:06:58Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "30d479d0_4e14b22c",
+      "revId": "ff287868c28eab02c83102ed548d910c7a2b0869",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
