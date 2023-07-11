@@ -16,6 +16,24 @@
       "message": "Not sure if we need to mention that it needs to be one expression per line there?",
       "revId": "612f2026aa0eebd31d41044feac7296420eaddc9",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2d0f2d79_205aa19f",
+        "filename": "nix/nix-1p/README.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2023-07-11T16:06:21Z",
+      "side": 1,
+      "message": "I think they\u0027ll figure it out very quickly. It\u0027s more important to point them at the existence of the REPL in the first place.",
+      "parentUuid": "6a7d54c3_70169820",
+      "revId": "612f2026aa0eebd31d41044feac7296420eaddc9",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
