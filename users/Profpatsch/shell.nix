@@ -38,6 +38,8 @@ pkgs.mkShell {
       h.sqlite-simple
       h.hedgehog
       h.http-conduit
+      h.http-conduit
+      h.wai-conduit
       h.nonempty-containers
       h.deriving-compat
       h.unix
