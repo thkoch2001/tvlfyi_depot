@@ -7,3 +7,4 @@ packages:
   ./cas-serve/cas-serve.cabal
   ./jbovlaste-sqlite/jbovlaste-sqlite.cabal
   ./whatcd-resolver/whatcd-resolver.cabal
+  ./httzip/httzip.cabal
