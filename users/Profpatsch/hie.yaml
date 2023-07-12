@@ -20,3 +20,5 @@ cradle:
       component: "jbovlaste-sqlite:exe:jbovlaste-sqlite"
     - path: "./whatcd-resolver/src"
       component: "lib:whatcd-resolver"
+    - path: "./httzip/Httzip.hs"
+      component: "httzip:exe:httzip"
