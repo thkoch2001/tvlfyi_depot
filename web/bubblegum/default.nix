@@ -10,23 +10,28 @@ let
     nint
     ;
 
-  minimalDepot = sparseTree depot.path.origSrc [
-    # general depot things
-    "default.nix"
-    "nix/readTree"
-    # nixpkgs for lib and packages
-    "third_party/nixpkgs"
-    "third_party/overlays"
-    # bubblegum and its dependencies
-    "web/bubblegum"
-    "nix/runExecline"
-    "nix/utils"
-    "nix/sparseTree"
-    # tvix docs for svg demo
-    "tvix/docs"
-    # for blog.nix
-    "users/sterni/nix"
-  ];
+  minimalDepot = sparseTree {
+    root = depot.path.origSrc;
+    name = "minimal-depot";
+
+    paths = [
+      # general depot things
+      "default.nix"
+      "nix/readTree"
+      # nixpkgs for lib and packages
+      "third_party/nixpkgs"
+      "third_party/overlays"
+      # bubblegum and its dependencies
+      "web/bubblegum"
+      "nix/runExecline"
+      "nix/utils"
+      "nix/sparseTree"
+      # tvix docs for svg demo
+      "tvix/docs"
+      # for blog.nix
+      "users/sterni/nix"
+    ];
+  };
 
   statusCodes = {
     # 1xx

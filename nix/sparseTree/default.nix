@@ -2,22 +2,33 @@
 # and directories if they are listed in a supplied list:
 #
 # # A very minimal depot
-# sparseTree ./depot [
-#   ./default.nix
-#   ./depot/nix/readTree/default.nix
-#   ./third_party/nixpkgs
-#   ./third_party/overlays
-# ]
+# sparseTree {
+#   root = ./depot;
+#   paths = [
+#     ./default.nix
+#     ./depot/nix/readTree/default.nix
+#     ./third_party/nixpkgs
+#     ./third_party/overlays
+#   ];
+# }
 { pkgs, lib, ... }:
 
-# root path to use as a reference point
-root:
-# list of paths below `root` that should be
-# included in the resulting directory
-#
-# If path, need to refer to the actual file / directory to be included.
-# If a string, it is treated as a string relative to the root.
-paths:
+{
+  # root path to use as a reference point
+  root
+, # list of paths below `root` that should be
+  # included in the resulting directory
+  #
+  # If path, need to refer to the actual file / directory to be included.
+  # If a string, it is treated as a string relative to the root.
+  paths
+, # (optional) name to use for the derivation
+  #
+  # This should always be set when using roots that do not have
+  # controlled names, such as when passing the top-level of a git
+  # repository (e.g. `depot.path.origSrc`).
+  name ? builtins.baseNameOf root
+}:
 
 let
   rootLength = builtins.stringLength (toString root);
@@ -63,7 +74,7 @@ in
 
 # TODO(sterni): teach readTree to also read symlinked directories,
   # so we ln -sT instead of cp -aT.
-pkgs.runCommand "sparse-${builtins.baseNameOf root}" { } (
+pkgs.runCommand "sparse-${name}" { } (
   lib.concatMapStrings
     ({ src, dst }: ''
       mkdir -p "$(dirname "$out${dst}")"
