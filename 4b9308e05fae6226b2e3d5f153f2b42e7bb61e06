@@ -16,6 +16,24 @@
       "message": "Not sure if it makes sense to have versioned filenames here, the other `extra-pkgs` are deliberately pinned forever (or at least until we fix xanthous).\n\nYour call.",
       "revId": "4b9308e05fae6226b2e3d5f153f2b42e7bb61e06",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "975f44b0_ae3fc792",
+        "filename": "third_party/overlays/haskell/default.nix",
+        "patchSetId": 6
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2023-07-13T20:50:47Z",
+      "side": 1,
+      "message": "yeah, I’m gonna remove the version numbers next time I touch them, it’s annoying to deal with :)",
+      "parentUuid": "aab49479_ed9b56d7",
+      "revId": "4b9308e05fae6226b2e3d5f153f2b42e7bb61e06",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
