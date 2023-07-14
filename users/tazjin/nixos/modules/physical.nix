@@ -17,6 +17,7 @@ in
 
     # programs from nixpkgs
     (with pkgs; [
+      (aspellWithDicts (d: [ d.ru ]))
       amber
       bat
       curl
