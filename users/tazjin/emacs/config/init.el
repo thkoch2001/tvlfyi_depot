@@ -228,7 +228,8 @@
 (use-package telega
   :bind (:map global-map ("s-t" . telega))
   :config (telega-mode-line-mode 1)
-  :custom (telega-emoji-use-images nil))
+  :custom (telega-emoji-use-images nil)
+  :hook (telega-chat-mode . company-mode))
 
 (use-package terraform-mode)
 (use-package toml-mode)
