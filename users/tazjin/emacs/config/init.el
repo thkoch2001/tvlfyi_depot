@@ -277,7 +277,7 @@
 ;; The way this will work for now is that Emacs will *write*
 ;; configuration to the file tracked in my repository, while not
 ;; actually *reading* it from there (unless Emacs is rebuilt).
-(setq custom-file (expand-file-name "~/depot/tools/emacs/config/custom.el"))
+(setq custom-file (f-join depot-path "users" "tazjin" "emacs" "config" "custom.el"))
 (load-library "custom")
 
 (defvar home-dir (expand-file-name "~"))
