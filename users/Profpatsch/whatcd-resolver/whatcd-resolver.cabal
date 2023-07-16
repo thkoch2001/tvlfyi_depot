@@ -58,44 +58,37 @@ library
 
     exposed-modules:
        WhatcdResolver
-       Postgres.Decoder
-       Postgres.MonadPostgres
-       Tool
-       ValidationParseT
        Multipart2
 
     build-depends:
         base >=4.15 && <5,
         text,
+        my-prelude,
         pa-prelude,
         pa-error-tree,
         pa-label,
         pa-json,
         pa-field-parser,
-        pa-run-command,
-        containers,
-        pa-pretty,
-        tmp-postgres,
-        directory,
-        filepath,
-        aeson,
         aeson-better-errors,
-        postgresql-simple,
-        resource-pool,
-        http-conduit,
-        http-types,
-        mtl,
-        transformers,
-        unliftio,
-        monad-logger,
-        unix,
-        warp,
-        wai,
-        wai-extra,
-        ihp-hsx,
+        aeson,
         blaze-html,
         bytestring,
+        containers,
+        directory,
         dlist,
+        filepath,
+        http-conduit,
+        http-types,
+        ihp-hsx,
+        monad-logger,
+        mtl,
+        resource-pool,
+        postgresql-simple,
         scientific,
-        selective
+        selective,
+        tmp-postgres,
+        unliftio,
+        wai-extra,
+        wai,
+        warp,
 

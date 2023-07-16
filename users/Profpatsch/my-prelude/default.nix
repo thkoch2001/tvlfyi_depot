@@ -6,34 +6,43 @@ pkgs.haskellPackages.mkDerivation {
 
   src = depot.users.Profpatsch.exactSource ./. [
     ./my-prelude.cabal
-    ./MyPrelude.hs
-    ./Pretty.hs
-    ./Aeson.hs
-    ./RunCommand.hs
-    ./Test.hs
+    ./src/Aeson.hs
+    ./src/MyPrelude.hs
+    ./src/Pretty.hs
+    ./src/RunCommand.hs
+    ./src/Test.hs
+    ./src/Tool.hs
+    ./src/ValidationParseT.hs
+    ./src/Postgres/Decoder.hs
+    ./src/Postgres/MonadPostgres.hs
   ];
 
   isLibrary = true;
 
   libraryHaskellDepends = [
+    pkgs.haskellPackages.pa-prelude
     pkgs.haskellPackages.pa-label
     pkgs.haskellPackages.pa-error-tree
-    pkgs.haskellPackages.aeson
+    pkgs.haskellPackages.pa-json
     pkgs.haskellPackages.aeson-better-errors
-    pkgs.haskellPackages.PyF
-    pkgs.haskellPackages.errors
-    pkgs.haskellPackages.profunctors
-    pkgs.haskellPackages.semigroupoids
-    pkgs.haskellPackages.these
-    pkgs.haskellPackages.validation-selective
+    pkgs.haskellPackages.ansi-terminal
     pkgs.haskellPackages.error
+    pkgs.haskellPackages.hscolour
     pkgs.haskellPackages.hspec
     pkgs.haskellPackages.hspec-expectations-pretty-diff
-    pkgs.haskellPackages.hscolour
+    pkgs.haskellPackages.monad-logger
     pkgs.haskellPackages.nicify-lib
+    pkgs.haskellPackages.postgresql-simple
+    pkgs.haskellPackages.profunctors
+    pkgs.haskellPackages.PyF
+    pkgs.haskellPackages.semigroupoids
+    pkgs.haskellPackages.these
     pkgs.haskellPackages.typed-process
-    pkgs.haskellPackages.ansi-terminal
+    pkgs.haskellPackages.unliftio
+    pkgs.haskellPackages.validation-selective
     pkgs.haskellPackages.vector
+
+
   ];
 
   license = lib.licenses.mit;
