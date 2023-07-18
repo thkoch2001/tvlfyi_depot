@@ -22,6 +22,30 @@
       },
       "revId": "3859b0d84edd327e93c10ce8a8a935c9e94d32b6",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "315867af_abc89f02",
+        "filename": "nix/buildkite/default.nix",
+        "patchSetId": 1
+      },
+      "lineNbr": 87,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-07-18T16:45:13Z",
+      "side": 1,
+      "message": "Replaced with\n\n```\n} // lib.optionalAttrs (target ? meta.timeout) {\n```",
+      "parentUuid": "c49bffe4_96540095",
+      "range": {
+        "startLine": 87,
+        "startChar": 28,
+        "endLine": 87,
+        "endChar": 65
+      },
+      "revId": "3859b0d84edd327e93c10ce8a8a935c9e94d32b6",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
