@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c49bffe4_96540095",
+        "filename": "nix/buildkite/default.nix",
+        "patchSetId": 1
+      },
+      "lineNbr": 87,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2023-07-18T16:38:38Z",
+      "side": 1,
+      "message": "this guards against someone setting the timeout to `null` explicitly? does that happen? seems like a type error to me",
+      "range": {
+        "startLine": 87,
+        "startChar": 28,
+        "endLine": 87,
+        "endChar": 65
+      },
+      "revId": "3859b0d84edd327e93c10ce8a8a935c9e94d32b6",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
