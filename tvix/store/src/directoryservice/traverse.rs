@@ -1,6 +1,6 @@
 use super::DirectoryService;
 use crate::{proto::NamedNode, B3Digest, Error};
-use std::sync::Arc;
+use std::{os::unix::ffi::OsStringExt, sync::Arc};
 use tracing::{instrument, warn};
 
 /// This traverses from a (root) node to the given (sub)path, returning the Node
@@ -59,7 +59,8 @@ pub fn traverse_to(
                             // FUTUREWORK: as the nodes() iterator returns in a sorted fashion, we
                             // could stop as soon as e.name is larger than the search string.
                             let child_node = directory.nodes().find(|n| {
-                                n.get_name() == first_component.as_os_str().to_str().unwrap()
+                                n.get_name()
+                                    == first_component.as_os_str().to_os_string().into_vec()
                             });
 
                             match child_node {
@@ -105,7 +106,7 @@ mod tests {
         // construct the node for DIRECTORY_COMPLICATED
         let node_directory_complicated =
             crate::proto::node::Node::Directory(crate::proto::DirectoryNode {
-                name: "doesntmatter".to_string(),
+                name: "doesntmatter".into(),
                 digest: DIRECTORY_COMPLICATED.digest().to_vec(),
                 size: DIRECTORY_COMPLICATED.size(),
             });
