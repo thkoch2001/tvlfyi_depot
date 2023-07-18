@@ -42,7 +42,7 @@ fn validate_no_node(
 
 #[test_case(
     proto::DirectoryNode {
-        name: DUMMY_NAME.to_string(),
+        name: DUMMY_NAME.into(),
         digest: DUMMY_DIGEST.to_vec(),
         size: 0,
     },
@@ -51,7 +51,7 @@ fn validate_no_node(
 )]
 #[test_case(
     proto::DirectoryNode {
-        name: DUMMY_NAME.to_string(),
+        name: DUMMY_NAME.into(),
         digest: vec![],
         size: 0,
     },
@@ -60,12 +60,12 @@ fn validate_no_node(
 )]
 #[test_case(
     proto::DirectoryNode {
-        name: "invalid".to_string(),
+        name: "invalid".into(),
         digest: DUMMY_DIGEST.to_vec(),
         size: 0,
     },
     Err(ValidatePathInfoError::InvalidNodeName(
-        "invalid".to_string(),
+        "invalid".into(),
         store_path::Error::InvalidLength
     ));
     "invalid node name"
@@ -86,7 +86,7 @@ fn validate_directory(
 
 #[test_case(
     proto::FileNode {
-        name: DUMMY_NAME.to_string(),
+        name: DUMMY_NAME.into(),
         digest: DUMMY_DIGEST.to_vec(),
         size: 0,
         executable: false,
@@ -96,7 +96,7 @@ fn validate_directory(
 )]
 #[test_case(
     proto::FileNode {
-        name: DUMMY_NAME.to_string(),
+        name: DUMMY_NAME.into(),
         digest: vec![],
         ..Default::default()
     },
@@ -105,12 +105,12 @@ fn validate_directory(
 )]
 #[test_case(
     proto::FileNode {
-        name: "invalid".to_string(),
+        name: "invalid".into(),
         digest: DUMMY_DIGEST.to_vec(),
         ..Default::default()
     },
     Err(ValidatePathInfoError::InvalidNodeName(
-        "invalid".to_string(),
+        "invalid".into(),
         store_path::Error::InvalidLength
     ));
     "invalid node name"
@@ -128,7 +128,7 @@ fn validate_file(t_file_node: proto::FileNode, t_result: Result<StorePath, Valid
 
 #[test_case(
     proto::SymlinkNode {
-        name: DUMMY_NAME.to_string(),
+        name: DUMMY_NAME.into(),
         ..Default::default()
     },
     Ok(StorePath::from_string(DUMMY_NAME).expect("must succeed"));
@@ -136,11 +136,11 @@ fn validate_file(t_file_node: proto::FileNode, t_result: Result<StorePath, Valid
 )]
 #[test_case(
     proto::SymlinkNode {
-        name: "invalid".to_string(),
+        name: "invalid".into(),
         ..Default::default()
     },
     Err(ValidatePathInfoError::InvalidNodeName(
-        "invalid".to_string(),
+        "invalid".into(),
         store_path::Error::InvalidLength
     ));
     "invalid node name"
@@ -165,7 +165,7 @@ fn validate_references() {
     let path_info = PathInfo {
         node: Some(Node {
             node: Some(proto::node::Node::Directory(proto::DirectoryNode {
-                name: DUMMY_NAME.to_string(),
+                name: DUMMY_NAME.into(),
                 digest: DUMMY_DIGEST.to_vec(),
                 size: 0,
             })),
