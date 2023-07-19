@@ -7992,6 +7992,10 @@ rec {
         libName = "tvix_eval";
         dependencies = [
           {
+            name = "bytes";
+            packageId = "bytes";
+          }
+          {
             name = "codemap";
             packageId = "codemap";
           }

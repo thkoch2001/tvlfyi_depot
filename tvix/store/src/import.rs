@@ -80,19 +80,22 @@ fn process_entry(
             .map_err(|e| Error::UploadDirectoryError(entry.path().to_path_buf(), e))?;
 
         return Ok(proto::node::Node::Directory(proto::DirectoryNode {
-            name: entry.file_name().as_bytes().to_vec(),
-            digest: directory_digest.to_vec(),
+            name: entry.file_name().as_bytes().clone().into(),
+            digest: directory_digest.into(),
             size: directory_size,
         }));
     }
 
     if file_type.is_symlink() {
-        let target = std::fs::read_link(&entry_path)
-            .map_err(|e| Error::UnableToStat(entry_path.clone(), e))?;
+        let target: bytes::Bytes = std::fs::read_link(&entry_path)
+            .map_err(|e| Error::UnableToStat(entry_path.clone(), e))?
+            .as_os_str()
+            .as_bytes()
+            .into();
 
         return Ok(proto::node::Node::Symlink(proto::SymlinkNode {
-            name: entry.file_name().as_bytes().to_vec(),
-            target: target.as_os_str().as_bytes().to_vec(),
+            name: entry.file_name().as_bytes().clone().into(),
+            target,
         }));
     }
 
@@ -113,8 +116,8 @@ fn process_entry(
         let digest = writer.close()?;
 
         return Ok(proto::node::Node::File(proto::FileNode {
-            name: entry.file_name().as_bytes().to_vec(),
-            digest: digest.to_vec(),
+            name: entry.file_name().as_bytes().into(),
+            digest: digest.into(),
             size: metadata.len() as u32,
             // If it's executable by the user, it'll become executable.
             // This matches nix's dump() function behaviour.
@@ -145,13 +148,8 @@ pub fn ingest_path<P: AsRef<Path> + Debug>(
         let target = std::fs::read_link(p.as_ref())
             .map_err(|e| Error::UnableToStat(p.as_ref().to_path_buf(), e))?;
         return Ok(proto::node::Node::Symlink(proto::SymlinkNode {
-            name: p
-                .as_ref()
-                .file_name()
-                .unwrap_or_default()
-                .as_bytes()
-                .to_vec(),
-            target: target.as_os_str().as_bytes().to_vec(),
+            name: p.as_ref().file_name().unwrap_or_default().as_bytes().into(),
+            target: target.as_os_str().as_bytes().into(),
         }));
     }
 

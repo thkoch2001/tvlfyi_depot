@@ -67,7 +67,7 @@ async fn put_read_stat() {
     // expose it yet.
     let _resp = service
         .stat(tonic::Request::new(StatBlobRequest {
-            digest: BLOB_A_DIGEST.to_vec(),
+            digest: BLOB_A_DIGEST.into(),
             ..Default::default()
         }))
         .await
