@@ -39,6 +39,10 @@ depot.nix.readTree.drvTargets {
   nix = self.nix_2_3;
   nix_latest = super.nix;
 
+  nixos-option = super.nixos-option.overrideDerivation (old: {
+    patches = old.patches ++ [./patches/nixos-option.patch];
+  });
+
   # Too match telega in emacs-overlay or wherever
   tdlib = super.tdlib.overrideAttrs (_: {
     version = "1.8.14";
