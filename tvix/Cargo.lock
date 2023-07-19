@@ -2714,6 +2714,7 @@ dependencies = [
 name = "tvix-eval"
 version = "0.1.0"
 dependencies = [
+ "bytes",
  "codemap",
  "codemap-diagnostic",
  "criterion",
