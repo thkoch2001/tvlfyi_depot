@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "067956fc_f0935d97",
+        "filename": "third_party/overlays/tvl.nix",
+        "patchSetId": 2
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2023-07-19T22:12:15Z",
+      "side": 1,
+      "message": "You can probably achieve this with fetchpatch via stripLen and revert.",
+      "revId": "ba6068cee781981d09a2c6aface352f04ea5f9eb",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
