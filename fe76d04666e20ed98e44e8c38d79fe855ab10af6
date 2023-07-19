@@ -1,6 +1,23 @@
 {
   "comments": [
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "70296695_a1af66c7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-07-19T15:27:39Z",
+      "side": 1,
+      "message": "I moved all occurences using OsStringExt to OsStrExt so we can keep things references for a bit longer.",
+      "revId": "fe76d04666e20ed98e44e8c38d79fe855ab10af6",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "e0e2d0f9_79ebd594",
@@ -18,6 +35,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "5dd15172_6980ec53",
+        "filename": "tvix/store/src/directoryservice/traverse.rs",
+        "patchSetId": 5
+      },
+      "lineNbr": 63,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-07-19T15:27:39Z",
+      "side": 1,
+      "message": "Uses `.find(|n| n.get_name() \u003d\u003d first_component.as_os_str().as_bytes())` from there now.",
+      "parentUuid": "e0e2d0f9_79ebd594",
+      "revId": "fe76d04666e20ed98e44e8c38d79fe855ab10af6",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "348392e5_d50dde92",
@@ -31,6 +66,24 @@
       "writtenOn": "2023-07-18T20:56:25Z",
       "side": 1,
       "message": "OsStrExt",
+      "revId": "fe76d04666e20ed98e44e8c38d79fe855ab10af6",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6b478335_eb9cb8a0",
+        "filename": "tvix/store/src/import.rs",
+        "patchSetId": 5
+      },
+      "lineNbr": 4,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-07-19T15:27:39Z",
+      "side": 1,
+      "message": "Done, this is now using `as_bytes().to_vec()`, instead of doing the dance to an OsString first.",
+      "parentUuid": "348392e5_d50dde92",
       "revId": "fe76d04666e20ed98e44e8c38d79fe855ab10af6",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
