@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2a386d86_cdca5839",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 6
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2023-07-20T10:25:28Z",
+      "side": 1,
+      "message": "I think this is a refactor",
+      "range": {
+        "startLine": 7,
+        "startChar": 0,
+        "endLine": 7,
+        "endChar": 4
+      },
+      "revId": "38f6264f7b258d5a8f2f9ef18ac29ec63d0d4217",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d9adcfd4_e73b05a3",
+        "filename": "tvix/store/src/proto/mod.rs",
+        "patchSetId": 6
+      },
+      "lineNbr": 79,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2023-07-20T10:25:28Z",
+      "side": 1,
+      "message": "this deref looks suspicious, why is it needed?\n\nhttps://doc.rust-lang.org/std/primitive.slice.html#method.contains",
+      "range": {
+        "startLine": 79,
+        "startChar": 12,
+        "endLine": 79,
+        "endChar": 13
+      },
+      "revId": "38f6264f7b258d5a8f2f9ef18ac29ec63d0d4217",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
