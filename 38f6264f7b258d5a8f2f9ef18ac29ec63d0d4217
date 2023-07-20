@@ -69,6 +69,30 @@
       },
       "revId": "38f6264f7b258d5a8f2f9ef18ac29ec63d0d4217",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0e6c22ea_e402cac9",
+        "filename": "tvix/store/src/proto/mod.rs",
+        "patchSetId": 6
+      },
+      "lineNbr": 79,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-07-20T11:47:58Z",
+      "side": 1,
+      "message": "You\u0027re right, it\u0027s not needed. Removed.",
+      "parentUuid": "d9adcfd4_e73b05a3",
+      "range": {
+        "startLine": 79,
+        "startChar": 12,
+        "endLine": 79,
+        "endChar": 13
+      },
+      "revId": "38f6264f7b258d5a8f2f9ef18ac29ec63d0d4217",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
