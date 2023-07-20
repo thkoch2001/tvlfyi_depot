@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e502c84b_943231c6",
+        "filename": "tvix/nix-compat/src/store_path/mod.rs",
+        "patchSetId": 5
+      },
+      "lineNbr": 84,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2023-07-20T10:27:46Z",
+      "side": 1,
+      "message": "maybe this should implement https://doc.rust-lang.org/std/str/trait.FromStr.html",
+      "range": {
+        "startLine": 84,
+        "startChar": 0,
+        "endLine": 84,
+        "endChar": 61
+      },
+      "revId": "b18beda38b68503beb10ba3a4ea0e64f46ba923d",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "30e2f900_04560597",
+        "filename": "tvix/nix-compat/src/store_path/mod.rs",
+        "patchSetId": 5
+      },
+      "lineNbr": 116,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2023-07-20T10:27:46Z",
+      "side": 1,
+      "message": "I think this kind of thing reads better as `.as_os_str().to_owned()`, to make the intent clearer",
+      "range": {
+        "startLine": 116,
+        "startChar": 40,
+        "endLine": 116,
+        "endChar": 64
+      },
+      "revId": "b18beda38b68503beb10ba3a4ea0e64f46ba923d",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e5d22a02_93335a3f",
+        "filename": "tvix/nix-compat/src/store_path/mod.rs",
+        "patchSetId": 5
+      },
+      "lineNbr": 151,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2023-07-20T10:27:46Z",
+      "side": 1,
+      "message": "is this shown to users somehow? maybe the error should explicitly mention which character is not okay? can be a separate CL",
+      "range": {
+        "startLine": 151,
+        "startChar": 38,
+        "endLine": 151,
+        "endChar": 48
+      },
+      "revId": "b18beda38b68503beb10ba3a4ea0e64f46ba923d",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
