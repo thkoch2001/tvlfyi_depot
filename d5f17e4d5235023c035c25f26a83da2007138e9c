@@ -16,6 +16,24 @@
       "message": "We might want to explicitly select fields, and might also want to change B3Digest to internally use Bytes.",
       "revId": "d5f17e4d5235023c035c25f26a83da2007138e9c",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0aca6f73_7a772d8c",
+        "filename": "tvix/store/build.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-07-20T14:18:48Z",
+      "side": 1,
+      "message": "B3Digest is switched to bytes::Bytes in cl/8978, and I\u0027m not too sure about explicitly selecting fields anymore.",
+      "parentUuid": "c4e8c06b_88b375d8",
+      "revId": "d5f17e4d5235023c035c25f26a83da2007138e9c",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
