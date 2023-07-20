@@ -24,6 +24,30 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "67da5767_2c26b1b2",
+        "filename": "tvix/nix-compat/src/store_path/mod.rs",
+        "patchSetId": 5
+      },
+      "lineNbr": 84,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-07-20T11:41:19Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e502c84b_943231c6",
+      "range": {
+        "startLine": 84,
+        "startChar": 0,
+        "endLine": 84,
+        "endChar": 61
+      },
+      "revId": "b18beda38b68503beb10ba3a4ea0e64f46ba923d",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "30e2f900_04560597",
@@ -47,6 +71,30 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "d448ef45_a8b5b505",
+        "filename": "tvix/nix-compat/src/store_path/mod.rs",
+        "patchSetId": 5
+      },
+      "lineNbr": 116,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-07-20T11:41:19Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "30e2f900_04560597",
+      "range": {
+        "startLine": 116,
+        "startChar": 40,
+        "endLine": 116,
+        "endChar": 64
+      },
+      "revId": "b18beda38b68503beb10ba3a4ea0e64f46ba923d",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "e5d22a02_93335a3f",
@@ -60,6 +108,30 @@
       "writtenOn": "2023-07-20T10:27:46Z",
       "side": 1,
       "message": "is this shown to users somehow? maybe the error should explicitly mention which character is not okay? can be a separate CL",
+      "range": {
+        "startLine": 151,
+        "startChar": 38,
+        "endLine": 151,
+        "endChar": 48
+      },
+      "revId": "b18beda38b68503beb10ba3a4ea0e64f46ba923d",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "34bf27bb_ab3735f3",
+        "filename": "tvix/nix-compat/src/store_path/mod.rs",
+        "patchSetId": 5
+      },
+      "lineNbr": 151,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-07-20T11:41:19Z",
+      "side": 1,
+      "message": "We can probably leave this to a separate CL, keep both the string and the first character we had a problem with.\n\ncl/8979.",
+      "parentUuid": "e5d22a02_93335a3f",
       "range": {
         "startLine": 151,
         "startChar": 38,
