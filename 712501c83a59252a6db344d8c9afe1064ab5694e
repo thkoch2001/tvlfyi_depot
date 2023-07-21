@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8a6c3201_8c0ee8a2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000073
+      },
+      "writtenOn": "2023-07-21T18:02:51Z",
+      "side": 1,
+      "message": "Modulo trait impl for easier .into()",
+      "revId": "712501c83a59252a6db344d8c9afe1064ab5694e",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4465a5a4_2693d4ed",
+        "filename": "tvix/store/src/directoryservice/grpc.rs",
+        "patchSetId": 7
+      },
+      "lineNbr": 170,
+      "author": {
+        "id": 1000073
+      },
+      "writtenOn": "2023-07-21T18:02:51Z",
+      "side": 1,
+      "message": "you should probably have Into\u003cByWhat\u003e for B3Digest?",
+      "revId": "712501c83a59252a6db344d8c9afe1064ab5694e",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
