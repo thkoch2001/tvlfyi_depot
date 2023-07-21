@@ -33,6 +33,24 @@
       "message": "you should probably have Into\u003cByWhat\u003e for B3Digest?",
       "revId": "712501c83a59252a6db344d8c9afe1064ab5694e",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "16307887_0f0b6be7",
+        "filename": "tvix/store/src/directoryservice/grpc.rs",
+        "patchSetId": 7
+      },
+      "lineNbr": 170,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-07-21T18:51:12Z",
+      "side": 1,
+      "message": "Uuh, I\u0027d like this request type to be specific. We might end up having other request types, and just because we\u0027re holding a blake3 digest here, doesn\u0027t necessarily mean it\u0027s this specific request type.",
+      "parentUuid": "4465a5a4_2693d4ed",
+      "revId": "712501c83a59252a6db344d8c9afe1064ab5694e",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
