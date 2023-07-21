@@ -69,6 +69,24 @@
       "parentUuid": "428ecde6_d1fef4f8",
       "revId": "88960e5be0d6f3417c74f63694d55b0556ab2962",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "545eed2d_2b8e2586",
+        "filename": "tvix/store/src/blobservice/grpc.rs",
+        "patchSetId": 4
+      },
+      "lineNbr": 149,
+      "author": {
+        "id": 1000073
+      },
+      "writtenOn": "2023-07-21T19:01:34Z",
+      "side": 1,
+      "message": "\u003e I\u0027d say it depends if `x.data` is shared or not\n\u003e if it\u0027s not, there is, you just discard and build a Vec\u003cu8\u003e out of it by getting the raw ptrs\n\nWe discussed it offline and concluded to put a TODO for now.",
+      "parentUuid": "ec3f24f7_e7e68cb8",
+      "revId": "88960e5be0d6f3417c74f63694d55b0556ab2962",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
