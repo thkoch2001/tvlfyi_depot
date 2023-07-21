@@ -33,6 +33,24 @@
       "message": "why unwrap here? you should bubble the error properly otherwise validation will explode",
       "revId": "67b2007fc0446894e9eddef4701a375ec0e6b68c",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0cf8b6d1_be1d1150",
+        "filename": "tvix/nix-compat/src/store_path/mod.rs",
+        "patchSetId": 7
+      },
+      "lineNbr": 157,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-07-21T17:56:54Z",
+      "side": 1,
+      "message": "how would it fail? we ruled out all cases where this could produce invalid UTF-8, by restricting it further in the loop above.",
+      "parentUuid": "b66aac6d_5f25f76a",
+      "revId": "67b2007fc0446894e9eddef4701a375ec0e6b68c",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
