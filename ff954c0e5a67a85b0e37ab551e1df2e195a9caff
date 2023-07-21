@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6fbee8c6_2f3b8cb6",
+        "filename": "tvix/store/src/fuse/mod.rs",
+        "patchSetId": 4
+      },
+      "lineNbr": 464,
+      "author": {
+        "id": 1000073
+      },
+      "writtenOn": "2023-07-21T18:08:34Z",
+      "side": 1,
+      "message": "nit: just put reply.data on the same line as the ok",
+      "revId": "ff954c0e5a67a85b0e37ab551e1df2e195a9caff",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
