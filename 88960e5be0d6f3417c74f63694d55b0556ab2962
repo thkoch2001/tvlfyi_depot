@@ -87,6 +87,24 @@
       "parentUuid": "ec3f24f7_e7e68cb8",
       "revId": "88960e5be0d6f3417c74f63694d55b0556ab2962",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c4e1ec6a_1deb0a92",
+        "filename": "tvix/store/src/blobservice/grpc.rs",
+        "patchSetId": 4
+      },
+      "lineNbr": 149,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-07-21T19:05:20Z",
+      "side": 1,
+      "message": "https://b.tvl.fyi/issues/289",
+      "parentUuid": "ec3f24f7_e7e68cb8",
+      "revId": "88960e5be0d6f3417c74f63694d55b0556ab2962",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
