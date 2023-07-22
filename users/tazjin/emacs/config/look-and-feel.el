@@ -35,6 +35,35 @@
   (when (bottom-right-window-p)
     (telephone-line-raw mode-line-misc-info t)))
 
+;; Implements a mode-line warning if there are any logged in TTY
+;; sessions apart from the graphical one.
+;;
+;; The status is only updated once every 30 seconds, as it requires
+;; shelling out to some commands (for now).
+(defun list-tty-sessions ()
+  "List all logged in tty sessions, except tty7 (graphical)"
+  (let ((command "who | awk '{print $2}' | grep -v tty7"))
+    (-filter (lambda (s) (not (string-empty-p s)))
+             (s-lines
+              (s-trim (shell-command-to-string command))))))
+
+(defvar cached-tty-sessions (cons (time-convert nil 'integer) (list-tty-sessions))
+   "Cached TTY session value to avoid running the command too often.")
+
+(defun get-cached-tty-sessions ()
+  (let ((time ))
+    (when (< 30
+             (- (time-convert nil 'integer)
+                (car cached-tty-sessions)))
+      (setq cached-tty-sessions
+            (cons (time-convert nil 'integer) (list-tty-sessions)))))
+
+  (cdr cached-tty-sessions))
+
+(telephone-line-defsegment telephone-line-warn-tty-session ()
+  (when-let (sessions (get-cached-tty-sessions))
+    (format "W: [%s]!!" (s-join "," sessions))))
+
 (defun telephone-line-setup ()
   (telephone-line-defsegment telephone-line-last-window-segment ()
     (telephone-misc-if-last-window))
@@ -51,7 +80,8 @@
                '(highlight . (special-highlight . special-highlight)))
 
   (setq telephone-line-lhs
-        '((nil . (telephone-line-position-segment))
+        '((highlight . (telephone-line-warn-tty-session))
+          (nil . (telephone-line-position-segment))
           (accent . (telephone-line-buffer-segment))))
 
   (setq telephone-line-rhs
