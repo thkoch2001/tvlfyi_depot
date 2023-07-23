@@ -41,6 +41,7 @@
     QT_IM_MODULE = "xim";
     CLUTTER_IM_MODULE = "xim";
     EDITOR = "emacsclient";
+    _JAVA_AWT_WM_NONREPARENTING = "1";
   };
 
   # Do not restart the display manager automatically
