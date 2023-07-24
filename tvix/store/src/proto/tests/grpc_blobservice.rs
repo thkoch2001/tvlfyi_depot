@@ -1,8 +1,11 @@
+use futures_util::StreamExt;
+
 use crate::proto::blob_service_server::BlobService as GRPCBlobService;
 use crate::proto::{BlobChunk, GRPCBlobServiceWrapper, ReadBlobRequest, StatBlobRequest};
 use crate::tests::fixtures::{BLOB_A, BLOB_A_DIGEST};
 use crate::tests::utils::gen_blob_service;
-use tokio_stream::StreamExt;
+use futures_util::stream::Iter;
+use futures_util::stream::Stream;
 
 fn gen_grpc_blob_service() -> GRPCBlobServiceWrapper {
     let blob_service = gen_blob_service();
@@ -46,6 +49,30 @@ async fn not_found_stat() {
     assert_eq!(resp.code(), tonic::Code::NotFound);
 }
 
+struct Foo {
+    inner: Box<dyn futures::Stream<Item = BlobChunk>>,
+}
+
+impl futures::Stream for Foo {
+    type Item = BlobChunk;
+
+    fn poll_next(
+        self: std::pin::Pin<&mut Self>,
+        cx: &mut std::task::Context<'_>,
+    ) -> std::task::Poll<Option<Self::Item>> {
+        // self.inner.poll
+        std::pin::Pin::into_inner(self.inner).poll_next()
+    }
+}
+
+impl tonic::IntoStreamingRequest for Foo {
+    type Stream = Foo;
+    type Message = BlobChunk;
+
+    fn into_streaming_request(self) -> tonic::Request<Self> {
+        tonic::Request::new(self)
+    }
+}
 /// Put a blob in the store, get it back.
 #[tokio::test]
 async fn put_read_stat() {
@@ -53,7 +80,7 @@ async fn put_read_stat() {
 
     // Send blob A.
     let put_resp = service
-        .put(tonic_mock::streaming_request(vec![BlobChunk {
+        .put(futures_util::stream::iter(vec![BlobChunk {
             data: BLOB_A.clone().into(),
         }]))
         .await

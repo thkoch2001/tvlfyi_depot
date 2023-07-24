@@ -19,13 +19,14 @@ tvix-eval = { path = "../eval" }
 thiserror = "1.0.38"
 tokio-stream = "0.1.14"
 tokio = { version = "1.28.0", features = ["rt-multi-thread", "net"] }
-tonic = "0.8.2"
+tonic = "0.9.2"
 tracing = "0.1.37"
 tracing-subscriber = { version = "0.3.16", features = ["json"] }
 walkdir = "2.3.2"
 tokio-util = { version = "0.7.8", features = ["io", "io-util"] }
 tower = "0.4.13"
 futures = "0.3.28"
+futures-util = {version = "0.3.28", features = ["sink", "compat", "io"]}
 bytes = "1.4.0"
 smol_str = "0.2.0"
 serde_json = "1.0"
@@ -37,7 +38,7 @@ version = "0.12.0"
 
 [dependencies.tonic-reflection]
 optional = true
-version = "0.5.0"
+version = "0.9.2"
 
 [dependencies.libc]
 optional = true
@@ -45,12 +46,11 @@ version = "0.2.144"
 
 [build-dependencies]
 prost-build = "0.11.2"
-tonic-build = "0.8.2"
+tonic-build = "0.9.2"
 
 [dev-dependencies]
 test-case = "2.2.2"
 tempfile = "3.3.0"
-tonic-mock = { git = "https://github.com/brainrake/tonic-mock", branch = "bump-dependencies" }
 
 [features]
 default = ["fuse", "reflection"]
