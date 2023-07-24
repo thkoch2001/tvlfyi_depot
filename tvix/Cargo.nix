@@ -315,56 +315,6 @@ rec {
           "serde" = [ "dep:serde" ];
         };
       };
-      "async-stream" = rec {
-        crateName = "async-stream";
-        version = "0.3.5";
-        edition = "2018";
-        sha256 = "0l8sjq1rylkb1ak0pdyjn83b3k6x36j22myngl4sqqgg7whdsmnd";
-        authors = [
-          "Carl Lerche <me@carllerche.com>"
-        ];
-        dependencies = [
-          {
-            name = "async-stream-impl";
-            packageId = "async-stream-impl";
-          }
-          {
-            name = "futures-core";
-            packageId = "futures-core";
-          }
-          {
-            name = "pin-project-lite";
-            packageId = "pin-project-lite";
-          }
-        ];
-
-      };
-      "async-stream-impl" = rec {
-        crateName = "async-stream-impl";
-        version = "0.3.5";
-        edition = "2018";
-        sha256 = "14q179j4y8p2z1d0ic6aqgy9fhwz8p9cai1ia8kpw4bw7q12mrhn";
-        procMacro = true;
-        authors = [
-          "Carl Lerche <me@carllerche.com>"
-        ];
-        dependencies = [
-          {
-            name = "proc-macro2";
-            packageId = "proc-macro2 1.0.56";
-          }
-          {
-            name = "quote";
-            packageId = "quote 1.0.26";
-          }
-          {
-            name = "syn";
-            packageId = "syn 2.0.15";
-            features = [ "full" "visit-mut" ];
-          }
-        ];
-
-      };
       "async-trait" = rec {
         crateName = "async-trait";
         version = "0.1.68";
@@ -446,7 +396,7 @@ rec {
           }
           {
             name = "bitflags";
-            packageId = "bitflags";
+            packageId = "bitflags 1.3.2";
           }
           {
             name = "bytes";
@@ -635,11 +585,11 @@ rec {
         ];
 
       };
-      "base64 0.13.1" = rec {
+      "base64 0.21.2" = rec {
         crateName = "base64";
-        version = "0.13.1";
-        edition = "2018";
-        sha256 = "1s494mqmzjb766fy1kqlccgfg2sdcjb6hzbvzqv2jw65fdi5h6wy";
+        version = "0.21.2";
+        edition = "2021";
+        sha256 = "0gfffgp4jmk517hymckk5jn393dqvw78312papf047y2qpv7hhb0";
         authors = [
           "Alice Maz <alice@alicemaz.com>"
           "Marshall Pierce <marshall@mpierce.org>"
@@ -686,7 +636,7 @@ rec {
         };
         resolvedDefaultFeatures = [ "std" ];
       };
-      "bitflags" = rec {
+      "bitflags 1.3.2" = rec {
         crateName = "bitflags";
         version = "1.3.2";
         edition = "2018";
@@ -700,6 +650,23 @@ rec {
           "rustc-dep-of-std" = [ "core" "compiler_builtins" ];
         };
         resolvedDefaultFeatures = [ "default" ];
+      };
+      "bitflags 2.3.3" = rec {
+        crateName = "bitflags";
+        version = "2.3.3";
+        edition = "2021";
+        sha256 = "0hifjw3191g3w5cwqqvbx8knrr3zchdwfc3rs6mn11p5si9yf2v3";
+        authors = [
+          "The Rust Project Developers"
+        ];
+        features = {
+          "arbitrary" = [ "dep:arbitrary" ];
+          "bytemuck" = [ "dep:bytemuck" ];
+          "compiler_builtins" = [ "dep:compiler_builtins" ];
+          "core" = [ "dep:core" ];
+          "rustc-dep-of-std" = [ "core" "compiler_builtins" ];
+          "serde" = [ "dep:serde" ];
+        };
       };
       "bitmaps" = rec {
         crateName = "bitmaps";
@@ -999,7 +966,7 @@ rec {
         dependencies = [
           {
             name = "bitflags";
-            packageId = "bitflags";
+            packageId = "bitflags 1.3.2";
           }
           {
             name = "clap_lex";
@@ -1104,7 +1071,7 @@ rec {
           }
           {
             name = "bitflags";
-            packageId = "bitflags";
+            packageId = "bitflags 1.3.2";
           }
           {
             name = "clap_lex";
@@ -2145,7 +2112,20 @@ rec {
         };
         resolvedDefaultFeatures = [ "default" "libfuse" "pkg-config" ];
       };
-      "futures" = rec {
+      "futures 0.1.31" = rec {
+        crateName = "futures";
+        version = "0.1.31";
+        edition = "2015";
+        sha256 = "0y46qbmhi37dqkch8dlfq5aninqpzqgrr98awkb3rn4fxww1lirs";
+        authors = [
+          "Alex Crichton <alex@alexcrichton.com>"
+        ];
+        features = {
+          "default" = [ "use_std" "with-deprecated" ];
+        };
+        resolvedDefaultFeatures = [ "default" "use_std" "with-deprecated" ];
+      };
+      "futures 0.3.28" = rec {
         crateName = "futures";
         version = "0.3.28";
         edition = "2018";
@@ -2337,6 +2317,12 @@ rec {
         sha256 = "0cwmls9369w6q6hwlbm10q0plr6hmg8w28fpqvv4rmbjnx01xc16";
         dependencies = [
           {
+            name = "futures";
+            packageId = "futures 0.1.31";
+            rename = "futures_01";
+            optional = true;
+          }
+          {
             name = "futures-channel";
             packageId = "futures-channel";
             optional = true;
@@ -2413,7 +2399,7 @@ rec {
           "unstable" = [ "futures-core/unstable" "futures-task/unstable" ];
           "write-all-vectored" = [ "io" ];
         };
-        resolvedDefaultFeatures = [ "alloc" "async-await" "async-await-macro" "channel" "futures-channel" "futures-io" "futures-macro" "futures-sink" "io" "memchr" "sink" "slab" "std" ];
+        resolvedDefaultFeatures = [ "alloc" "async-await" "async-await-macro" "channel" "compat" "default" "futures-channel" "futures-io" "futures-macro" "futures-sink" "futures_01" "io" "memchr" "sink" "slab" "std" ];
       };
       "fxhash" = rec {
         crateName = "fxhash";
@@ -2806,6 +2792,13 @@ rec {
           }
         ];
 
+      };
+      "http-range-header" = rec {
+        crateName = "http-range-header";
+        version = "0.3.1";
+        edition = "2018";
+        sha256 = "13vm511vq3bhschkw2xi9nhxzkw53m55gn9vxg7qigfxc29spl5d";
+        features = { };
       };
       "httparse" = rec {
         crateName = "httparse";
@@ -3768,7 +3761,7 @@ rec {
         dependencies = [
           {
             name = "bitflags";
-            packageId = "bitflags";
+            packageId = "bitflags 1.3.2";
           }
           {
             name = "cfg-if";
@@ -4590,7 +4583,7 @@ rec {
           }
           {
             name = "bitflags";
-            packageId = "bitflags";
+            packageId = "bitflags 1.3.2";
           }
           {
             name = "byteorder";
@@ -5237,7 +5230,7 @@ rec {
         dependencies = [
           {
             name = "bitflags";
-            packageId = "bitflags";
+            packageId = "bitflags 1.3.2";
           }
         ];
 
@@ -5254,7 +5247,7 @@ rec {
         dependencies = [
           {
             name = "bitflags";
-            packageId = "bitflags";
+            packageId = "bitflags 1.3.2";
           }
         ];
         features = {
@@ -5461,7 +5454,7 @@ rec {
         dependencies = [
           {
             name = "bitflags";
-            packageId = "bitflags";
+            packageId = "bitflags 1.3.2";
           }
           {
             name = "errno";
@@ -5627,7 +5620,7 @@ rec {
         dependencies = [
           {
             name = "bitflags";
-            packageId = "bitflags";
+            packageId = "bitflags 1.3.2";
           }
           {
             name = "cfg-if";
@@ -7175,17 +7168,13 @@ rec {
       };
       "tonic" = rec {
         crateName = "tonic";
-        version = "0.8.3";
-        edition = "2018";
-        sha256 = "1yymp2xi1p60g81p5jfaybcawpfkb01vqvzqn4cyz6wj7fnry8cg";
+        version = "0.9.2";
+        edition = "2021";
+        sha256 = "0nlx35lvah5hdcp6lg1d6dlprq0zz8ijj6f727szfcv479m6d0ih";
         authors = [
           "Lucio Franco <luciofranco14@gmail.com>"
         ];
         dependencies = [
-          {
-            name = "async-stream";
-            packageId = "async-stream";
-          }
           {
             name = "async-trait";
             packageId = "async-trait";
@@ -7199,7 +7188,7 @@ rec {
           }
           {
             name = "base64";
-            packageId = "base64 0.13.1";
+            packageId = "base64 0.21.2";
           }
           {
             name = "bytes";
@@ -7250,28 +7239,19 @@ rec {
           {
             name = "prost";
             packageId = "prost";
-            rename = "prost1";
             optional = true;
-          }
-          {
-            name = "prost-derive";
-            packageId = "prost-derive";
-            optional = true;
+            usesDefaultFeatures = false;
+            features = [ "std" ];
           }
           {
             name = "tokio";
             packageId = "tokio";
             optional = true;
-            features = [ "net" ];
+            features = [ "net" "time" "macros" ];
           }
           {
             name = "tokio-stream";
             packageId = "tokio-stream";
-          }
-          {
-            name = "tokio-util";
-            packageId = "tokio-util";
-            features = [ "codec" ];
           }
           {
             name = "tower";
@@ -7292,11 +7272,6 @@ rec {
             name = "tracing";
             packageId = "tracing";
           }
-          {
-            name = "tracing-futures";
-            packageId = "tracing-futures";
-            optional = true;
-          }
         ];
         devDependencies = [
           {
@@ -7311,39 +7286,24 @@ rec {
           }
         ];
         features = {
-          "async-trait" = [ "dep:async-trait" ];
-          "axum" = [ "dep:axum" ];
-          "channel" = [ "h2" "hyper" "tokio" "tower" "tracing-futures" "tokio/macros" "tokio/time" "hyper-timeout" ];
-          "codegen" = [ "async-trait" ];
+          "channel" = [ "dep:h2" "dep:hyper" "dep:tokio" "dep:tower" "dep:hyper-timeout" ];
+          "codegen" = [ "dep:async-trait" ];
           "default" = [ "transport" "codegen" "prost" ];
-          "flate2" = [ "dep:flate2" ];
-          "gzip" = [ "flate2" ];
-          "h2" = [ "dep:h2" ];
-          "hyper" = [ "dep:hyper" ];
-          "hyper-timeout" = [ "dep:hyper-timeout" ];
-          "prost" = [ "prost1" "prost-derive" ];
-          "prost-derive" = [ "dep:prost-derive" ];
-          "prost1" = [ "dep:prost1" ];
-          "rustls-native-certs" = [ "dep:rustls-native-certs" ];
-          "rustls-pemfile" = [ "dep:rustls-pemfile" ];
-          "tls" = [ "rustls-pemfile" "transport" "tokio-rustls" ];
-          "tls-roots" = [ "tls-roots-common" "rustls-native-certs" ];
+          "gzip" = [ "dep:flate2" ];
+          "prost" = [ "dep:prost" ];
+          "tls" = [ "dep:rustls-pemfile" "transport" "dep:tokio-rustls" "dep:async-stream" ];
+          "tls-roots" = [ "tls-roots-common" "dep:rustls-native-certs" ];
           "tls-roots-common" = [ "tls" ];
-          "tls-webpki-roots" = [ "tls-roots-common" "webpki-roots" ];
-          "tokio" = [ "dep:tokio" ];
-          "tokio-rustls" = [ "dep:tokio-rustls" ];
-          "tower" = [ "dep:tower" ];
-          "tracing-futures" = [ "dep:tracing-futures" ];
-          "transport" = [ "axum" "channel" ];
-          "webpki-roots" = [ "dep:webpki-roots" ];
+          "tls-webpki-roots" = [ "tls-roots-common" "dep:webpki-roots" ];
+          "transport" = [ "dep:axum" "channel" ];
         };
-        resolvedDefaultFeatures = [ "async-trait" "axum" "channel" "codegen" "default" "h2" "hyper" "hyper-timeout" "prost" "prost-derive" "prost1" "tokio" "tower" "tracing-futures" "transport" ];
+        resolvedDefaultFeatures = [ "channel" "codegen" "default" "prost" "transport" ];
       };
       "tonic-build" = rec {
         crateName = "tonic-build";
-        version = "0.8.4";
-        edition = "2018";
-        sha256 = "1i781mfzcbzfk6fnf7qp95q6r0b05ixvmynw4z0agq7pq2wykxav";
+        version = "0.9.2";
+        edition = "2021";
+        sha256 = "01sbpz52sancgvv5jp1gqz46mz6nzck3m022zrqbnf66qbjamzd6";
         authors = [
           "Lucio Franco <luciofranco14@gmail.com>"
         ];
@@ -7378,61 +7338,16 @@ rec {
         };
         resolvedDefaultFeatures = [ "default" "prost" "prost-build" "transport" ];
       };
-      "tonic-mock" = rec {
-        crateName = "tonic-mock";
-        version = "0.1.0";
-        edition = "2018";
-        workspace_member = null;
-        src = pkgs.fetchgit {
-          url = "https://github.com/brainrake/tonic-mock";
-          rev = "ec1a15510875de99d709d684190db5d9beab175e";
-          sha256 = "0lwa03hpp0mxa6aa1zv5w68k61y4hccfm0q2ykyq392fwal8vb50";
-        };
-        authors = [
-          "Tyr Chen <tyr.chen@gmail.com>"
-        ];
-        dependencies = [
-          {
-            name = "bytes";
-            packageId = "bytes";
-          }
-          {
-            name = "futures";
-            packageId = "futures";
-          }
-          {
-            name = "http";
-            packageId = "http";
-          }
-          {
-            name = "http-body";
-            packageId = "http-body";
-          }
-          {
-            name = "prost";
-            packageId = "prost";
-          }
-          {
-            name = "tonic";
-            packageId = "tonic";
-          }
-        ];
-
-      };
       "tonic-reflection" = rec {
         crateName = "tonic-reflection";
-        version = "0.5.0";
-        edition = "2018";
-        sha256 = "05i6c1fcbwkkj0p2r63vb5iac60b22a5rif3zx5li8a0slqgfm84";
+        version = "0.9.2";
+        edition = "2021";
+        sha256 = "1iv290kg0bmi04ikqqhsl4hk8m9p8lq88b0zmjz1y11j404xfhq5";
         authors = [
           "James Nugent <james@jen20.com>"
           "Samani G. Gikandi <samani@gojulas.com>"
         ];
         dependencies = [
-          {
-            name = "bytes";
-            packageId = "bytes";
-          }
           {
             name = "prost";
             packageId = "prost";
@@ -7444,7 +7359,7 @@ rec {
           {
             name = "tokio";
             packageId = "tokio";
-            features = [ "sync" ];
+            features = [ "sync" "rt" ];
           }
           {
             name = "tokio-stream";
@@ -7454,14 +7369,80 @@ rec {
           {
             name = "tonic";
             packageId = "tonic";
+            usesDefaultFeatures = false;
             features = [ "codegen" "prost" ];
           }
         ];
-        buildDependencies = [
+        devDependencies = [
           {
-            name = "tonic-build";
-            packageId = "tonic-build";
-            features = [ "transport" "prost" ];
+            name = "tonic";
+            packageId = "tonic";
+            usesDefaultFeatures = false;
+            features = [ "transport" ];
+          }
+        ];
+
+      };
+      "tonic-web" = rec {
+        crateName = "tonic-web";
+        version = "0.9.2";
+        edition = "2021";
+        sha256 = "0iszls1kvm57ynpr2zbfqrj7cddwylp6w5s61bzd2mi2hk20xc11";
+        authors = [
+          "Juan Alvarez <alce@me.com>"
+        ];
+        dependencies = [
+          {
+            name = "base64";
+            packageId = "base64 0.21.2";
+          }
+          {
+            name = "bytes";
+            packageId = "bytes";
+          }
+          {
+            name = "futures-core";
+            packageId = "futures-core";
+          }
+          {
+            name = "http";
+            packageId = "http";
+          }
+          {
+            name = "http-body";
+            packageId = "http-body";
+          }
+          {
+            name = "hyper";
+            packageId = "hyper";
+            usesDefaultFeatures = false;
+            features = [ "stream" ];
+          }
+          {
+            name = "pin-project";
+            packageId = "pin-project";
+          }
+          {
+            name = "tonic";
+            packageId = "tonic";
+            usesDefaultFeatures = false;
+          }
+          {
+            name = "tower-http";
+            packageId = "tower-http";
+            features = [ "cors" ];
+          }
+          {
+            name = "tower-layer";
+            packageId = "tower-layer";
+          }
+          {
+            name = "tower-service";
+            packageId = "tower-service";
+          }
+          {
+            name = "tracing";
+            packageId = "tracing";
           }
         ];
 
@@ -7586,6 +7567,100 @@ rec {
           "util" = [ "__common" "futures-util" "pin-project" ];
         };
         resolvedDefaultFeatures = [ "__common" "balance" "buffer" "default" "discover" "futures-core" "futures-util" "indexmap" "limit" "load" "log" "make" "pin-project" "pin-project-lite" "rand" "ready-cache" "slab" "timeout" "tokio" "tokio-util" "tracing" "util" ];
+      };
+      "tower-http" = rec {
+        crateName = "tower-http";
+        version = "0.4.3";
+        edition = "2018";
+        sha256 = "10ksnhpwfbq0c837hgp28ig8nnz2gx1mqs8w865jm3ds78l71bjm";
+        authors = [
+          "Tower Maintainers <team@tower-rs.com>"
+        ];
+        dependencies = [
+          {
+            name = "bitflags";
+            packageId = "bitflags 2.3.3";
+          }
+          {
+            name = "bytes";
+            packageId = "bytes";
+          }
+          {
+            name = "futures-core";
+            packageId = "futures-core";
+          }
+          {
+            name = "futures-util";
+            packageId = "futures-util";
+            usesDefaultFeatures = false;
+          }
+          {
+            name = "http";
+            packageId = "http";
+          }
+          {
+            name = "http-body";
+            packageId = "http-body";
+          }
+          {
+            name = "http-range-header";
+            packageId = "http-range-header";
+          }
+          {
+            name = "pin-project-lite";
+            packageId = "pin-project-lite";
+          }
+          {
+            name = "tower-layer";
+            packageId = "tower-layer";
+          }
+          {
+            name = "tower-service";
+            packageId = "tower-service";
+          }
+        ];
+        devDependencies = [
+          {
+            name = "bytes";
+            packageId = "bytes";
+          }
+        ];
+        features = {
+          "async-compression" = [ "dep:async-compression" ];
+          "auth" = [ "base64" "validate-request" ];
+          "base64" = [ "dep:base64" ];
+          "catch-panic" = [ "tracing" "futures-util/std" ];
+          "compression-br" = [ "async-compression/brotli" "tokio-util" "tokio" ];
+          "compression-deflate" = [ "async-compression/zlib" "tokio-util" "tokio" ];
+          "compression-full" = [ "compression-br" "compression-deflate" "compression-gzip" "compression-zstd" ];
+          "compression-gzip" = [ "async-compression/gzip" "tokio-util" "tokio" ];
+          "compression-zstd" = [ "async-compression/zstd" "tokio-util" "tokio" ];
+          "decompression-br" = [ "async-compression/brotli" "tokio-util" "tokio" ];
+          "decompression-deflate" = [ "async-compression/zlib" "tokio-util" "tokio" ];
+          "decompression-full" = [ "decompression-br" "decompression-deflate" "decompression-gzip" "decompression-zstd" ];
+          "decompression-gzip" = [ "async-compression/gzip" "tokio-util" "tokio" ];
+          "decompression-zstd" = [ "async-compression/zstd" "tokio-util" "tokio" ];
+          "follow-redirect" = [ "iri-string" "tower/util" ];
+          "fs" = [ "tokio/fs" "tokio-util/io" "tokio/io-util" "mime_guess" "mime" "percent-encoding" "httpdate" "set-status" "futures-util/alloc" "tracing" ];
+          "full" = [ "add-extension" "auth" "catch-panic" "compression-full" "cors" "decompression-full" "follow-redirect" "fs" "limit" "map-request-body" "map-response-body" "metrics" "normalize-path" "propagate-header" "redirect" "request-id" "sensitive-headers" "set-header" "set-status" "timeout" "trace" "util" "validate-request" ];
+          "httpdate" = [ "dep:httpdate" ];
+          "iri-string" = [ "dep:iri-string" ];
+          "metrics" = [ "tokio/time" ];
+          "mime" = [ "dep:mime" ];
+          "mime_guess" = [ "dep:mime_guess" ];
+          "percent-encoding" = [ "dep:percent-encoding" ];
+          "request-id" = [ "uuid" ];
+          "timeout" = [ "tokio/time" ];
+          "tokio" = [ "dep:tokio" ];
+          "tokio-util" = [ "dep:tokio-util" ];
+          "tower" = [ "dep:tower" ];
+          "trace" = [ "tracing" ];
+          "tracing" = [ "dep:tracing" ];
+          "util" = [ "tower" ];
+          "uuid" = [ "dep:uuid" ];
+          "validate-request" = [ "mime" ];
+        };
+        resolvedDefaultFeatures = [ "cors" "default" ];
       };
       "tower-layer" = rec {
         crateName = "tower-layer";
@@ -7716,42 +7791,6 @@ rec {
           "valuable" = [ "dep:valuable" ];
         };
         resolvedDefaultFeatures = [ "default" "once_cell" "std" "valuable" ];
-      };
-      "tracing-futures" = rec {
-        crateName = "tracing-futures";
-        version = "0.2.5";
-        edition = "2018";
-        sha256 = "1wimg0iwa2ldq7xv98lvivvf3q9ykfminig8r1bs0ig22np9bl4p";
-        authors = [
-          "Eliza Weisman <eliza@buoyant.io>"
-          "Tokio Contributors <team@tokio.rs>"
-        ];
-        dependencies = [
-          {
-            name = "pin-project";
-            packageId = "pin-project";
-            optional = true;
-          }
-          {
-            name = "tracing";
-            packageId = "tracing";
-            usesDefaultFeatures = false;
-          }
-        ];
-        features = {
-          "default" = [ "std-future" "std" ];
-          "futures" = [ "dep:futures" ];
-          "futures-01" = [ "futures_01" "std" ];
-          "futures-03" = [ "std-future" "futures" "futures-task" "std" ];
-          "futures-task" = [ "dep:futures-task" ];
-          "futures_01" = [ "dep:futures_01" ];
-          "pin-project" = [ "dep:pin-project" ];
-          "std" = [ "tracing/std" ];
-          "std-future" = [ "pin-project" ];
-          "tokio" = [ "dep:tokio" ];
-          "tokio-executor" = [ "dep:tokio-executor" ];
-        };
-        resolvedDefaultFeatures = [ "default" "pin-project" "std" "std-future" ];
       };
       "tracing-log" = rec {
         crateName = "tracing-log";
@@ -8230,7 +8269,12 @@ rec {
           }
           {
             name = "futures";
-            packageId = "futures";
+            packageId = "futures 0.3.28";
+          }
+          {
+            name = "futures-util";
+            packageId = "futures-util";
+            features = [ "sink" "compat" "io" ];
           }
           {
             name = "lazy_static";
@@ -8298,6 +8342,10 @@ rec {
             optional = true;
           }
           {
+            name = "tonic-web";
+            packageId = "tonic-web";
+          }
+          {
             name = "tower";
             packageId = "tower";
           }
@@ -8341,10 +8389,6 @@ rec {
           {
             name = "test-case";
             packageId = "test-case";
-          }
-          {
-            name = "tonic-mock";
-            packageId = "tonic-mock";
           }
         ];
         features = {

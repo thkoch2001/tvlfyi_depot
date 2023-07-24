@@ -141,7 +141,9 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
                 .parse()
                 .unwrap();
 
-            let mut server = Server::builder();
+            let mut server = Server::builder()
+                .accept_http1(true)
+                .layer(tonic_web::GrpcWebLayer::new());
 
             #[allow(unused_mut)]
             let mut router = server
