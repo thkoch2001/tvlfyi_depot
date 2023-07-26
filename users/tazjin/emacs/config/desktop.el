@@ -342,6 +342,15 @@ in-progress."
   (shell-command "xrandr --output DP-2 --mode 2560x1440 --primary --right-of eDP-1")
   (exwm-randr-refresh))
 
+(defun randr-khamovnik-layout-home ()
+  "Use the left and right screen on khamovnik, at home."
+  (interactive)
+  (set-randr-config `(("HDMI-1" 1 2 3 4 5 6 7 8)
+                      ("eDP-1" 9 0)))
+
+  (shell-command "xrandr --output HDMI-1 --auto --primary --left-of eDP-1")
+  (exwm-randr-refresh))
+
 (defun randr-khamovnik-layout-single ()
   "Use only the internal screen."
   (interactive)
