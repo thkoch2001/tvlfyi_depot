@@ -12,7 +12,7 @@ import ./nix_actor/protocol
 
 type
   Value = Preserve[void]
-  Observe = dataspace.Observe[Ref]
+  Observe = dataspace.Observe[Cap]
 
 proc toPreserve(val: libexpr.ValueObj | libExpr.ValuePtr; state: EvalState; E = void): Preserve[E] {.gcsafe.} =
   ## Convert a Nix value to a Preserves value.
@@ -75,7 +75,7 @@ proc parseNarinfo(info: var AttrSet; text: string) =
       else:
         info[Symbol key] = val.toPreserve
 
-proc narinfo(turn: var Turn; ds: Ref; path: string) =
+proc narinfo(turn: var Turn; ds: Cap; path: string) =
   let
     client = newAsyncHttpClient()
     url = "https://cache.nixos.org/" & path & ".narinfo"
@@ -109,7 +109,7 @@ proc instantiate(instantiate: Instantiate): Value =
   var execOutput = strip execProcess(cmd, args = args, options = {poUsePath})
   execOutput.toPreserve
 
-proc bootNixFacet(turn: var Turn; ds: Ref): Facet =
+proc bootNixFacet(turn: var Turn; ds: Cap): Facet =
   # let store = openStore()
   result = inFacet(turn) do (turn: var Turn):
 
@@ -135,8 +135,8 @@ proc bootNixFacet(turn: var Turn; ds: Ref): Facet =
       ]#
 
 type
-  RefArgs {.preservesDictionary.} = object
-    dataspace: Ref
+  CapArgs {.preservesDictionary.} = object
+    dataspace: Cap
   ClientSideArgs {.preservesDictionary.} = object
     `listen-socket`: string
   DaemonSideArgs {.preservesDictionary.} = object
@@ -145,22 +145,30 @@ type
 main.initNix()
 libexpr.initGC()
 
-runActor("main") do (root: Ref; turn: var Turn):
+runActor("main") do (root: Cap; turn: var Turn):
   let
     erisStore = newMemoryStore()
     nixStore = openStore()
     nixState = newEvalState(nixStore)
   connectStdio(root, turn)
 
-  during(turn, root, ?RefArgs) do (ds: Ref):
+  during(turn, root, ?CapArgs) do (ds: Cap):
+    discard publish(turn, ds,
+      initRecord("nixVersion", toPreserve($nixVersion.c_str)))
+
     discard bootNixFacet(turn, ds)
 
     during(turn, ds, ?Observe(pattern: !Eval) ?? {0: grabLit(), 1: grabDict()}) do (e: string, o: Assertion):
       var ass = Eval(expr: e)
       doAssert fromPreserve(ass.options, unpackLiterals(o))
         # unused options
-      ass.result = eval(nixState, ass.expr)
-      discard publish(turn, ds, ass)
+      try:
+        ass.result = eval(nixState, ass.expr)
+        discard publish(turn, ds, ass)
+      except CatchableError as err:
+        stderr.writeLine "failed to evaluate ", ass.expr, ": ", err.msg
+      except StdException as err:
+        stderr.writeLine "failed to evaluate ", ass.expr, ": ", err.what
 
     during(turn, root, ?ClientSideArgs) do (socketPath: string):
       bootClientSide(turn, ds, erisStore, socketPath)

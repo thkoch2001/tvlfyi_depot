@@ -11,7 +11,7 @@ import ./protocol, ./sockets
 
 type
   Value = Preserve[void]
-  Observe = dataspace.Observe[Ref]
+  Observe = dataspace.Observe[Cap]
 
 proc recvError(daemon: Session): Future[string] {.async.} =
   discard #[typ]# await recvString(daemon)
@@ -153,9 +153,9 @@ proc callDaemon(turn: var Turn; path: string; action: proc (daemon: Session; tur
     action(daemon, turn)
   return daemon
 
-proc bootDaemonSide*(turn: var Turn; ds: Ref; store: ErisStore; socketPath: string) =
+proc bootDaemonSide*(turn: var Turn; ds: Cap; store: ErisStore; socketPath: string) =
 
-  during(turn, ds, ?Observe(pattern: !Missing) ?? {0: grab()}) do (a: Preserve[Ref]):
+  during(turn, ds, ?Observe(pattern: !Missing) ?? {0: grab()}) do (a: Preserve[Cap]):
       # cannot use `grabLit` here because an array is a compound
       # TODO: unpack to a `Pattern`
     let daemon = callDaemon(turn, socketPath) do (daemon: Session; turn: var Turn):

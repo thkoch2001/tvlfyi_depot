@@ -43,7 +43,7 @@ proc completeAddToStore(client: Session; path: string; info: LegacyPathAttrs) {.
   await send(client, path)
   await send(client, info)
 
-proc serveClient(facet: Facet; ds: Ref; store: ErisStore; client: Session) {.async.} =
+proc serveClient(facet: Facet; ds: Cap; store: ErisStore; client: Session) {.async.} =
   block:
     let clientMagic = await recvWord(client)
     if clientMagic != WORKER_MAGIC_1:
@@ -77,10 +77,10 @@ proc serveClient(facet: Facet; ds: Ref; store: ErisStore; client: Session) {.asy
       let cap = await ingestChunks(client, store)
       await sendNext(client, $cap & " " & name)
       let attrsPat = inject(?AddToStoreAttrs, {
-          "name".toSymbol(Ref): ?name,
-          "ca-method".toSymbol(Ref): ?caMethod.toSymbol,
-          "references".toSymbol(Ref): ?storeRefs,
-          "eris".toSymbol(Ref): ?cap.bytes,
+          "name".toSymbol(Cap): ?name,
+          "ca-method".toSymbol(Cap): ?caMethod.toSymbol,
+          "references".toSymbol(Cap): ?storeRefs,
+          "eris".toSymbol(Cap): ?cap.bytes,
         })
         # bind AddToStoreAttrs and override with some literal values
       let pat = PathInfo ? { 0: grab(), 1: attrsPat }
@@ -154,7 +154,7 @@ proc serveClient(facet: Facet; ds: Ref; store: ErisStore; client: Session) {.asy
       await sendWorkEnd(client)
       close(client.socket)
 
-proc serveClientSide(facet: Facet; ds: Ref; store: ErisStore; listener: AsyncSocket) {.async.} =
+proc serveClientSide(facet: Facet; ds: Cap; store: ErisStore; listener: AsyncSocket) {.async.} =
   while not listener.isClosed:
     let
       client = await accept(listener)
@@ -163,7 +163,7 @@ proc serveClientSide(facet: Facet; ds: Ref; store: ErisStore; listener: AsyncSoc
       if not client.isClosed:
         close(client)
 
-proc bootClientSide*(turn: var Turn; ds: Ref; store: ErisStore; socketPath: string) =
+proc bootClientSide*(turn: var Turn; ds: Cap; store: ErisStore; socketPath: string) =
   let listener = newUnixSocket()
   onStop(turn.facet) do (turn: var Turn):
     close(listener)
