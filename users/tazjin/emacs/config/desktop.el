@@ -357,6 +357,7 @@ in-progress."
   (set-randr-config '(("eDP-1" (number-sequence 0 9))))
   (shell-command "xrandr --output eDP-1 --auto --primary")
   (shell-command "xrandr --output DP-2 --off")
+  (shell-command "xrandr --output HDMI-1 --off")
   (exwm-randr-refresh))
 
 (pcase (s-trim (shell-command-to-string "hostname"))
