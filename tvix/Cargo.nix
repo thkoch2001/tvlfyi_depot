@@ -10251,9 +10251,9 @@ rec {
         edition = "2015";
         workspace_member = null;
         src = pkgs.fetchgit {
-          url = "https://github.com/tvlfyi/wu-manber.git";
-          rev = "e77628cafcf45d41b9e455be86a6b1b9f46b2092";
-          sha256 = "02byhfiw41mlgr1c43n2iq6jw5sbyn8l1acv5v71a07h5l18q0cy";
+          url = "https://github.com/flokli/wu-manber.git";
+          rev = "26a00d1bd6669928cdc2995bb85f1594096b6c21";
+          sha256 = "0ki0r6aimymml93q557v0ia0vm15y4s1bipswa8899wadvfhq5yl";
         };
         authors = [
           "Joe Neeman <joeneeman@gmail.com>"

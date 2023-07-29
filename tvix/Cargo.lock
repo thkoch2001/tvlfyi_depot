@@ -3185,7 +3185,7 @@ checksum = "1a515f5799fe4961cb532f983ce2b23082366b898e52ffbce459c86f67c8378a"
 [[package]]
 name = "wu-manber"
 version = "0.1.0"
-source = "git+https://github.com/tvlfyi/wu-manber.git#e77628cafcf45d41b9e455be86a6b1b9f46b2092"
+source = "git+https://github.com/flokli/wu-manber.git?branch=bytes#26a00d1bd6669928cdc2995bb85f1594096b6c21"
 
 [[package]]
 name = "xml-rs"
