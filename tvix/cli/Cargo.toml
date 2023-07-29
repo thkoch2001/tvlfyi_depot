@@ -21,4 +21,5 @@ thiserror = "1.0.38"
 bytes = "1.4.0"
 
 [dependencies.wu-manber]
-git = "https://github.com/tvlfyi/wu-manber.git"
+git = "https://github.com/flokli/wu-manber.git"
+branch = "bytes"
