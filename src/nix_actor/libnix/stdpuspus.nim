@@ -1,6 +1,15 @@
 # SPDX-FileCopyrightText: ☭ Emery Hemingway
 # SPDX-License-Identifier: Unlicense
 
+type StdException* {.importcpp: "std::exception", header: "<exception>".} = object
+
+proc what*(ex: StdException): cstring {.importcpp: "((char *)#.what())", nodecl.}
+
+
+type StdString* {.importcpp: "std::string", header: "<string>".} = object
+
+proc c_str*(s: StdString): cstring {.importcpp.}
+
 type StringView* {.importcpp: "std::string_view", header: "<string>".} = object
 
 proc toStringView*(s: pointer; count: int): StringView {.

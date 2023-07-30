@@ -51,6 +51,8 @@ type
 
 proc kind*(val: Value): ValueKind {.importcpp: "#.type()".}
 
+proc showType*(val: Value): StdString {.importcpp.}
+
 proc shallowString*(val: Value): string =
   if val.kind != nString:
     raise newException(FieldDefect, "Value not an attribute set")

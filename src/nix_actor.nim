@@ -1,24 +1,25 @@
 # SPDX-FileCopyrightText: ☭ Emery Hemingway
 # SPDX-License-Identifier: Unlicense
 
-import std/[json, os, osproc, parseutils, strutils, tables]
+import std/[json, os, osproc, strutils, tables]
 import eris/memory_stores
 import preserves, preserves/jsonhooks
 import syndicate
 from syndicate/protocols/dataspace import Observe
 import ./nix_actor/[clients, daemons]
-import ./nix_actor/libnix/[libexpr, main, store]
+import ./nix_actor/libnix/[libexpr, main, stdpuspus, store]
 import ./nix_actor/protocol
+
+var nixVersion {.importcpp: "nix::nixVersion", header: "globals.hh".}: StdString
 
 type
   Value = Preserve[void]
   Observe = dataspace.Observe[Cap]
 
-proc toPreserve(val: libexpr.ValueObj | libExpr.ValuePtr; state: EvalState; E = void): Preserve[E] {.gcsafe.} =
+proc toPreserve(state: EvalState; val: libexpr.ValueObj | libExpr.ValuePtr; E = void): Preserve[E] {.gcsafe.} =
   ## Convert a Nix value to a Preserves value.
+  # See nix::printValueAsJSON
   case val.kind
-  of nThunk:
-    result = initRecord[E]("thunk")
   of nInt:
     result = val.integer.toPreserve(E)
   of nFloat:
@@ -33,16 +34,16 @@ proc toPreserve(val: libexpr.ValueObj | libExpr.ValuePtr; state: EvalState; E = 
     result = initRecord[E]("null")
   of nAttrs:
     result = initDictionary(E)
-    for key, val in val.pairs:
-      result[symbolString(state, key).toSymbol(E)] = val.toPreserve(state, E)
+    for sym, attr in val.pairs:
+      let key = symbolString(state, sym).toSymbol(E)
+        # Nix string to Nim string to Preserves symbol
+      result[key] = state.toPreserve(attr, E)
   of nList:
     result = initSequence(0, E)
     for e in val.items:
-      result.sequence.add(e.toPreserve(state, E))
-  of nFunction:
-    result = initRecord[E]("func")
-  of nExternal:
-    result = initRecord[E]("external")
+      result.sequence.add(state.toPreserve(e, E))
+  else:
+    raise newException(ValueError, "cannot preserve " & $val.kind)
 
 proc eval(state: EvalState; code: string): Value =
   ## Evaluate Nix `code` to a Preserves value.
@@ -50,7 +51,7 @@ proc eval(state: EvalState; code: string): Value =
   let expr = state.parseExprFromString(code, getCurrentDir())
   state.eval(expr, nixVal)
   state.forceValueDeep(nixVal)
-  nixVal.toPreserve(state, void)
+  state.toPreserve(nixVal, void)
 
 proc parseArgs(args: var seq[string]; opts: AttrSet) =
   for sym, val in opts:
