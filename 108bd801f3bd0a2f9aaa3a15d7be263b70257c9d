@@ -16,6 +16,24 @@
       "message": "check_serialization",
       "revId": "108bd801f3bd0a2f9aaa3a15d7be263b70257c9d",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3689129d_70cd5f4b",
+        "filename": "tvix/nix-compat/src/derivation/tests/mod.rs",
+        "patchSetId": 3
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-07-31T21:33:01Z",
+      "side": 0,
+      "message": "Done in followup CL.",
+      "parentUuid": "5f248780_515d4011",
+      "revId": "108bd801f3bd0a2f9aaa3a15d7be263b70257c9d",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
