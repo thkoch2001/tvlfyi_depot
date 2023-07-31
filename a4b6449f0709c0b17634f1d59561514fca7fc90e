@@ -1,0 +1,106 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b5e664f3_d5e9164f",
+        "filename": "tvix/nix-compat/Cargo.toml",
+        "patchSetId": 3
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1000073
+      },
+      "writtenOn": "2023-07-31T21:18:50Z",
+      "side": 1,
+      "message": "cut down on `std` ?",
+      "revId": "a4b6449f0709c0b17634f1d59561514fca7fc90e",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8f349236_89d84502",
+        "filename": "tvix/nix-compat/src/derivation/mod.rs",
+        "patchSetId": 3
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 1000073
+      },
+      "writtenOn": "2023-07-31T21:18:50Z",
+      "side": 1,
+      "message": "local `use write::*;` seems OK here",
+      "revId": "a4b6449f0709c0b17634f1d59561514fca7fc90e",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7de9c10a_c49091a7",
+        "filename": "tvix/nix-compat/src/derivation/write.rs",
+        "patchSetId": 3
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 1000073
+      },
+      "writtenOn": "2023-07-31T21:18:50Z",
+      "side": 1,
+      "message": "`writer.write(buf)` ?",
+      "revId": "a4b6449f0709c0b17634f1d59561514fca7fc90e",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9ded6145_6e3a299d",
+        "filename": "tvix/nix-compat/src/derivation/write.rs",
+        "patchSetId": 3
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1000073
+      },
+      "writtenOn": "2023-07-31T21:18:50Z",
+      "side": 1,
+      "message": "`elements: \u0026[\u0026BString]`",
+      "revId": "a4b6449f0709c0b17634f1d59561514fca7fc90e",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1a1c05c4_a9efb15a",
+        "filename": "tvix/nix-compat/src/derivation/write.rs",
+        "patchSetId": 3
+      },
+      "lineNbr": 160,
+      "author": {
+        "id": 1000073
+      },
+      "writtenOn": "2023-07-31T21:18:50Z",
+      "side": 1,
+      "message": "`.map(BString::from)`\nhttps://docs.rs/bstr/latest/bstr/struct.BString.html#impl-From%3CString%3E-for-BString",
+      "revId": "a4b6449f0709c0b17634f1d59561514fca7fc90e",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "40657c4e_47d180bc",
+        "filename": "tvix/nix-compat/src/derivation/write.rs",
+        "patchSetId": 3
+      },
+      "lineNbr": 201,
+      "author": {
+        "id": 1000073
+      },
+      "writtenOn": "2023-07-31T21:18:50Z",
+      "side": 1,
+      "message": "`into_iter`",
+      "revId": "a4b6449f0709c0b17634f1d59561514fca7fc90e",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}

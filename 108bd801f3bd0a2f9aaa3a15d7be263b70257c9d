@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5f248780_515d4011",
+        "filename": "tvix/nix-compat/src/derivation/tests/mod.rs",
+        "patchSetId": 3
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1000073
+      },
+      "writtenOn": "2023-07-31T21:18:50Z",
+      "side": 0,
+      "message": "check_serialization",
+      "revId": "108bd801f3bd0a2f9aaa3a15d7be263b70257c9d",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}

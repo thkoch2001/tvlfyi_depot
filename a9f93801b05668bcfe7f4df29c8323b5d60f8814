@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2229784f_b6838427",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 10
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000073
+      },
+      "writtenOn": "2023-07-31T21:18:50Z",
+      "side": 1,
+      "message": "we have gone on the review in realtime, so most of items are solved in further CLs",
+      "revId": "a9f93801b05668bcfe7f4df29c8323b5d60f8814",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
