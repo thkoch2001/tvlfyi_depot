@@ -106,6 +106,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "8cc30f3e_2ab8b424",
+        "filename": "tvix/nix-compat/src/derivation/write.rs",
+        "patchSetId": 3
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 1000073
+      },
+      "writtenOn": "2023-07-31T21:37:45Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7de9c10a_c49091a7",
+      "revId": "a4b6449f0709c0b17634f1d59561514fca7fc90e",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "9ded6145_6e3a299d",
@@ -136,6 +154,24 @@
       "writtenOn": "2023-07-31T21:33:01Z",
       "side": 1,
       "message": "Subsequent CLs changed this to\n\n```rust\nfn write_array_elements\u003cS: AsRef\u003c[u8]\u003e\u003e(\n    writer: \u0026mut impl Write,\n    elements: \u0026[S],\n) -\u003e Result\u003c(), io::Error\u003e {\n```",
+      "parentUuid": "9ded6145_6e3a299d",
+      "revId": "a4b6449f0709c0b17634f1d59561514fca7fc90e",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4d9f7ec0_4edb902a",
+        "filename": "tvix/nix-compat/src/derivation/write.rs",
+        "patchSetId": 3
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1000073
+      },
+      "writtenOn": "2023-07-31T21:37:45Z",
+      "side": 1,
+      "message": "Done",
       "parentUuid": "9ded6145_6e3a299d",
       "revId": "a4b6449f0709c0b17634f1d59561514fca7fc90e",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
@@ -176,6 +212,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "1c1dfbb9_0a280384",
+        "filename": "tvix/nix-compat/src/derivation/write.rs",
+        "patchSetId": 3
+      },
+      "lineNbr": 160,
+      "author": {
+        "id": 1000073
+      },
+      "writtenOn": "2023-07-31T21:37:45Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1a1c05c4_a9efb15a",
+      "revId": "a4b6449f0709c0b17634f1d59561514fca7fc90e",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "40657c4e_47d180bc",
@@ -204,6 +258,24 @@
         "id": 1000036
       },
       "writtenOn": "2023-07-31T21:33:01Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "40657c4e_47d180bc",
+      "revId": "a4b6449f0709c0b17634f1d59561514fca7fc90e",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "846c3503_48fe99d5",
+        "filename": "tvix/nix-compat/src/derivation/write.rs",
+        "patchSetId": 3
+      },
+      "lineNbr": 201,
+      "author": {
+        "id": 1000073
+      },
+      "writtenOn": "2023-07-31T21:37:45Z",
       "side": 1,
       "message": "Done",
       "parentUuid": "40657c4e_47d180bc",
