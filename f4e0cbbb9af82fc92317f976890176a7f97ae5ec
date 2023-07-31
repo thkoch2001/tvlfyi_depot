@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "48027d1a_0595d091",
+        "filename": "tvix/nix-compat/src/derivation/write.rs",
+        "patchSetId": 4
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 1000073
+      },
+      "writtenOn": "2023-07-31T21:19:27Z",
+      "side": 1,
+      "message": "`writer.write_all(s)` ?",
+      "revId": "f4e0cbbb9af82fc92317f976890176a7f97ae5ec",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
