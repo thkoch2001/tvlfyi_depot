@@ -53,6 +53,7 @@ pkgs.makeOverridable
       ivy-prescient
       jq-mode
       kotlin-mode
+      kubernetes
       lsp-mode
       magit
       markdown-toc
