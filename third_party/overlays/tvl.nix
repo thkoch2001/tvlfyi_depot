@@ -39,6 +39,14 @@ depot.nix.readTree.drvTargets {
   nix = self.nix_2_3;
   nix_latest = super.nix;
 
+  # nixos-option now unfortunately depends on (at the time of writing) Nix 2.15
+  # instead of Nix 2.3 as before. The intention seems to be to keep it in sync
+  # with the latest Nix and it uses unstable interfaces of Nix (the libraries).
+  # TODO(sterni): can we link it statically and avoid a second Nix store path?
+  nixos-option = super.nixos-option.override {
+    nix = self.nix_latest;
+  };
+
   # Too match telega in emacs-overlay or wherever
   tdlib = super.tdlib.overrideAttrs (_: {
     version = "1.8.14";
