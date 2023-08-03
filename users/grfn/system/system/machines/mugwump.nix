@@ -9,6 +9,7 @@ with lib;
     (depot.path.origSrc + "/ops/modules/prometheus-fail2ban-exporter.nix")
     (depot.path.origSrc + "/users/grfn/xanthous/server/module.nix")
     (depot.third_party.agenix.src + "/modules/age.nix")
+    depot.third_party.ddclient.module
   ];
 
   networking.hostName = "mugwump";
@@ -153,7 +154,8 @@ with lib;
     };
   };
 
-  services.ddclient = {
+  services.deprecated-ddclient = {
+    package = depot.third_party.ddclient;
     enable = true;
     domains = [ "home.gws.fyi" ];
     interval = "1d";
