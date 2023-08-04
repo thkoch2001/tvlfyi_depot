@@ -351,10 +351,14 @@ by looking for a `Cargo.toml' file."
                     (if-let ((pr (project-current)))
                         (project-root pr)))))
 
-(defun zoxide-open-magit ()
-  "Query Zoxide for paths and open magit in the result."
+(defun zoxide-open-project ()
+  "Query Zoxide for paths, and open the result as appropriate (magit or dired)."
   (interactive)
-  (zoxide-open-with nil #'magit-status-setup-buffer))
+  (zoxide-open-with
+   nil
+   (lambda (path)
+     (condition-case err (magit-status-setup-buffer path)
+       (magit-outside-git-repo (dired path))))))
 
 (defun toggle-nix-test-and-exp ()
   "Switch between the .nix and .exp file in a Tvix/Nix test."
