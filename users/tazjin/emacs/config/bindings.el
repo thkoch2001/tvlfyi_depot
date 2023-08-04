@@ -49,8 +49,8 @@
 ;; Open the depot
 (global-set-key (kbd "s-s d") #'tvl-depot-status)
 
-;; Open any repo through zoxide
-(global-set-key (kbd "s-s r") #'zoxide-open-magit)
+;; Open any project through zoxide
+(global-set-key (kbd "s-s r") #'zoxide-open-project)
 
 ;; Add subthread collapsing to notmuch-show.
 ;;
