@@ -10,7 +10,7 @@ let
   inherit (depot.users.sterni.nix)
     char
     string
-    int
+    num
     fun
     ;
 
@@ -18,10 +18,10 @@ let
 
   testAllCharConversion = it "tests conversion of all chars" [
     (assertEq "char.chr converts to char.allChars"
-      (builtins.genList (fun.rl char.chr (int.add 1)) 255)
+      (builtins.genList (fun.rl char.chr (num.add 1)) 255)
       charList)
     (assertEq "char.ord converts from char.allChars"
-      (builtins.genList (int.add 1) 255)
+      (builtins.genList (num.add 1) 255)
       (builtins.map char.ord charList))
   ];
 

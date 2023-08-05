@@ -15,9 +15,6 @@ let
     ;
 
   testBounds = it "checks minBound and maxBound" [
-    # this is gonna blow up in my face because
-    # integer overflow is undefined behavior in
-    # C++, so most likely anything could happen?
     (assertEq "maxBound is the maxBound" true
       (int.maxBound + 1 < int.maxBound))
     (assertEq "minBound is the minBound" true
@@ -321,7 +318,6 @@ let
   testBasic = it "checks basic int operations" [
     (assertEq "122 is even" (int.even 122 && !(int.odd 122)) true)
     (assertEq "123 is odd" (int.odd 123 && !(int.even 123)) true)
-    (assertEq "abs -4959" (int.abs (-4959)) 4959)
   ];
 
   expNumbers = [
@@ -374,7 +370,7 @@ let
   checkShiftLMulExp = n:
     assertEq "${toString n} >> 6 == ${toString n} * 2 ^ 6"
       (int.bitShiftL n 5)
-      (int.mul n (int.exp 2 5));
+      (n * (int.exp 2 5));
 
   testBit = it "checks bitwise operations" (lib.flatten [
     (builtins.map checkShift shifts)
