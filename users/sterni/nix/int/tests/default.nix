@@ -365,7 +365,7 @@ let
   checkShiftRDivExp = n:
     assertEq "${toString n} >> 5 == ${toString n} / 2 ^ 5"
       (int.bitShiftR n 5)
-      (int.div n (int.exp 2 5));
+      (n / (int.exp 2 5));
 
   checkShiftLMulExp = n:
     assertEq "${toString n} >> 6 == ${toString n} * 2 ^ 6"
@@ -406,40 +406,40 @@ let
   ]);
 
   divisions = [
-    { a = 2; b = 1; c = 2; mod = 0; }
-    { a = 2; b = 2; c = 1; mod = 0; }
-    { a = 20; b = 10; c = 2; mod = 0; }
-    { a = 12; b = 5; c = 2; mod = 2; }
-    { a = 23; b = 4; c = 5; mod = 3; }
+    { a = 2; b = 1; c = 2; rem = 0; }
+    { a = 2; b = 2; c = 1; rem = 0; }
+    { a = 20; b = 10; c = 2; rem = 0; }
+    { a = 12; b = 5; c = 2; rem = 2; }
+    { a = 23; b = 4; c = 5; rem = 3; }
   ];
 
-  checkDiv = n: { a, b, c, mod }: [
-    (assertEq "${n}: div result" (int.div a b) c)
-    (assertEq "${n}: mod result" (int.mod a b) mod)
-    (assertEq "${n}: divMod law" ((int.div a b) * b + (int.mod a b)) a)
+  checkQuot = n: { a, b, c, rem }: [
+    (assertEq "${n}: quot result" (int.quot a b) c)
+    (assertEq "${n}: rem result" (int.rem a b) rem)
+    (assertEq "${n}: quotRem law" ((int.quot a b) * b + (int.rem a b)) a)
   ];
 
-  testDivMod = it "checks integer division and modulo"
+  testQuotRem = it "checks integer quotient and remainder"
     (lib.flatten [
-      (builtins.map (checkDiv "+a / +b") divisions)
+      (builtins.map (checkQuot "+a / +b") divisions)
       (builtins.map
-        (fun.rl (checkDiv "-a / +b") (x: x // {
+        (fun.rl (checkQuot "-a / +b") (x: x // {
           a = -x.a;
           c = -x.c;
-          mod = -x.mod;
+          rem = -x.rem;
         }))
         divisions)
       (builtins.map
-        (fun.rl (checkDiv "+a / -b") (x: x // {
+        (fun.rl (checkQuot "+a / -b") (x: x // {
           b = -x.b;
           c = -x.c;
         }))
         divisions)
       (builtins.map
-        (fun.rl (checkDiv "-a / -b") (x: x // {
+        (fun.rl (checkQuot "-a / -b") (x: x // {
           a = -x.a;
           b = -x.b;
-          mod = -x.mod;
+          rem = -x.rem;
         }))
         divisions)
     ]);
@@ -451,5 +451,5 @@ runTestsuite "nix.int" [
   testBasic
   testExp
   testBit
-  testDivMod
+  testQuotRem
 ]
