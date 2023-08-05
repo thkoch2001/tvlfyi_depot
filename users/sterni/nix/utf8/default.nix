@@ -6,6 +6,7 @@ let
     char
     flow
     fun
+    num
     int
     string
     util
@@ -46,17 +47,17 @@ let
     # byte position as an index starting with 0
     pos:
     let
-      defaultRange = int.inRange 128 191;
+      defaultRange = num.inRange 128 191;
 
       secondBytePredicate = flow.switch first [
-        [ (int.inRange 194 223) defaultRange ] # C2..DF
-        [ 224 (int.inRange 160 191) ] # E0
-        [ (int.inRange 225 236) defaultRange ] # E1..EC
-        [ 237 (int.inRange 128 159) ] # ED
-        [ (int.inRange 238 239) defaultRange ] # EE..EF
-        [ 240 (int.inRange 144 191) ] # F0
-        [ (int.inRange 241 243) defaultRange ] # F1..F3
-        [ 244 (int.inRange 128 143) ] # F4
+        [ (num.inRange 194 223) defaultRange ] # C2..DF
+        [ 224 (num.inRange 160 191) ] # E0
+        [ (num.inRange 225 236) defaultRange ] # E1..EC
+        [ 237 (num.inRange 128 159) ] # ED
+        [ (num.inRange 238 239) defaultRange ] # EE..EF
+        [ 240 (num.inRange 144 191) ] # F0
+        [ (num.inRange 241 243) defaultRange ] # F1..F3
+        [ 244 (num.inRange 128 143) ] # F4
         [ (fun.const true) null ]
       ];
 
@@ -225,10 +226,10 @@ let
       # Note that this doesn't check if the Unicode codepoint is allowed,
       # but rather allows all theoretically UTF-8-encodeable ones.
       count = flow.switch cp [
-        [ (int.inRange 0 127) 1 ] # 00000000 0xxxxxxx
-        [ (int.inRange 128 2047) 2 ] # 00000yyy yyxxxxxx
-        [ (int.inRange 2048 65535) 3 ] # zzzzyyyy yyxxxxxx
-        [ (int.inRange 65536 1114111) 4 ] # 000uuuuu zzzzyyyy yyxxxxxx,
+        [ (num.inRange 0 127) 1 ] # 00000000 0xxxxxxx
+        [ (num.inRange 128 2047) 2 ] # 00000yyy yyxxxxxx
+        [ (num.inRange 2048 65535) 3 ] # zzzzyyyy yyxxxxxx
+        [ (num.inRange 65536 1114111) 4 ] # 000uuuuu zzzzyyyy yyxxxxxx,
         # capped at U+10FFFF
 
         [ (fun.const true) (builtins.throw invalidCodepointMsg) ]
