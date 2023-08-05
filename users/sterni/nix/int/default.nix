@@ -23,7 +23,7 @@ let
   bitShiftR = bit: count:
     if count == 0
     then bit
-    else div (bitShiftR bit (count - 1)) 2;
+    else (bitShiftR bit (count - 1)) / 2;
 
   bitShiftL = bit: count:
     if count == 0
@@ -85,8 +85,13 @@ let
   odd = x: bitAnd x 1 == 1;
   even = x: bitAnd x 1 == 0;
 
-  inherit (builtins) div;
-  mod = a: b: let res = a / b; in a - (res * b);
+  quot' = builtins.div; # no typecheck
+  rem = a: b:
+    assert builtins.isInt a && builtins.isInt b;
+    let res = quot' a b; in a - (res * b);
+  quot = a: b:
+    assert builtins.isInt a && builtins.isInt b;
+    quot' a b;
 
 in
 {
@@ -96,8 +101,8 @@ in
     exp
     odd
     even
-    div
-    mod
+    quot
+    rem
     bitShiftR
     bitShiftL
     bitOr
