@@ -2,31 +2,22 @@
 
 let
 
-  # TODO(sterni): implement nix.float and figure out which of these
-  #               functions can be split out into a common nix.num
-  #               library.
-
   inherit (depot.users.sterni.nix)
     string
+    num
     ;
 
   inherit (builtins)
     bitOr
     bitAnd
     bitXor
-    mul
-    div
-    add
-    sub
     ;
-
-  abs = i: if i < 0 then -i else i;
 
   exp = base: pow:
     if pow > 0
     then base * (exp base (pow - 1))
     else if pow < 0
-    then 1.0 / exp base (abs pow)
+    then 1.0 / exp base (num.abs pow)
     else 1;
 
   bitShiftR = bit: count:
@@ -52,7 +43,7 @@ let
     in
     if int == 0
     then "0"
-    else "${sign}${go (abs int)}";
+    else "${sign}${go (num.abs int)}";
 
   fromHexMap = builtins.listToAttrs
     (lib.imap0 (i: c: { name = c; value = i; })
@@ -94,26 +85,17 @@ let
   odd = x: bitAnd x 1 == 1;
   even = x: bitAnd x 1 == 0;
 
-  # div and mod behave like quot and rem in Haskell,
-  # i. e. they truncate towards 0
+  inherit (builtins) div;
   mod = a: b: let res = a / b; in a - (res * b);
-
-  inRange = a: b: x: x >= a && x <= b;
-
-  sum = builtins.foldl' (a: b: a + b) 0;
 
 in
 {
   inherit
     maxBound
     minBound
-    abs
     exp
     odd
     even
-    add
-    sub
-    mul
     div
     mod
     bitShiftR
@@ -123,7 +105,5 @@ in
     bitXor
     toHex
     fromHex
-    inRange
-    sum
     ;
 }
