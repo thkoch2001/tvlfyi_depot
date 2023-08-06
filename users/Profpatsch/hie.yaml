@@ -2,6 +2,8 @@ cradle:
   cabal:
     - path: "./my-prelude"
       component: "lib:my-prelude"
+    - path: "./my-webstuff"
+      component: "lib:my-webstuff"
     - path: "./netencode"
       component: "lib:netencode"
     - path: "./arglib"
