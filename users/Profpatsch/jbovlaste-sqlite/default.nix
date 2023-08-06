@@ -20,8 +20,6 @@ let
       pkgs.haskellPackages.foldl
       pkgs.haskellPackages.sqlite-simple
       pkgs.haskellPackages.xml-conduit
-      depot.users.Profpatsch.arglib.netencode.haskell
-      depot.users.Profpatsch.netencode.netencode-hs
 
     ];
 

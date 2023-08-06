@@ -1,6 +1,5 @@
 {-# LANGUAGE ApplicativeDo #-}
 {-# LANGUAGE DataKinds #-}
-{-# LANGUAGE DerivingStrategies #-}
 {-# LANGUAGE DerivingVia #-}
 {-# LANGUAGE GHC2021 #-}
 {-# LANGUAGE LambdaCase #-}
@@ -31,7 +30,6 @@ import Data.List qualified as List
 import Data.Map.Strict qualified as Map
 import Data.Text qualified as Text
 import ExecHelpers
-import GHC.Records (HasField (..))
 import Label
 import Netencode qualified
 import Netencode.Parse qualified as NetParse
@@ -117,9 +115,7 @@ listFilterConfig session = do
     >>= printPretty
 
 applyFilterRule ::
-  ( HasField "folderId" dat Text,
-    HasField "rulename" dat Text
-  ) =>
+  (HasField "folderId" dat Text) =>
   dat ->
   Session ->
   IO ()
@@ -209,48 +205,47 @@ applyFilters session = do
             <&> mapFromListOn (\dat -> getLabel @"rulename" dat.parsed)
       )
       ([] :: [()])
-  let goal = Map.fromList [(label @"rulename" "another", 32), (label @"rulename" "xyz", 23)]
+  let goal = Map.fromList [(label @"rulename" "another", 32 :: Integer), (label @"rulename" "xyz", 23)]
   let actions = declarativeUpdate goal filters
   log [fmt|To * create: {actions.toCreate & Map.keys & show}, * update: {actions.toUpdate & Map.keys & show}, * delete: {actions.toDelete & Map.keys & show}|]
-  where
-    -- filters
-    --   & Map.elems
-    --   & traverse_
-    --     ( updateIfDifferent
-    --         session
-    --         ( \el ->
-    --             pure $
-    --               el.original.mailfilter
-    --                 & KeyMap.insert "active" (Json.Bool False)
-    --         )
-    --         (pure ())
-    --     )
 
-    mapFromListOn :: Ord k => (a -> k) -> [a] -> Map k a
-    mapFromListOn on xs = xs <&> (\x -> (on x, x)) & Map.fromList
-    updateIfDifferent ::
-      forall label parsed.
-      ( HasField "id_" parsed Json.Value,
-        HasField "rulename" parsed Text
-      ) =>
-      Session ->
-      (Dat label Json.Object parsed -> IO Json.Object) ->
-      Json.Parse Error () ->
-      Dat label Json.Object parsed ->
-      IO ()
-    updateIfDifferent session switcheroo parser dat = do
-      new <- switcheroo dat
-      if new /= getField @label dat.original
-        then do
-          log [fmt|Updating filter "{dat.parsed.rulename}" (id {dat.parsed.id_ & show @Json.Value})|]
-          mailfilter
-            session
-            "update"
-            mempty
-            parser
-            new
-        else do
-          log [fmt|Skipping updating filter "{dat.parsed.rulename}" (id {dat.parsed.id_ & show @Json.Value}) because nothing changed.|]
+-- where
+-- filters
+--   & Map.elems
+--   & traverse_
+--     ( updateIfDifferent
+--         session
+--         ( \el ->
+--             pure $
+--               el.original.mailfilter
+--                 & KeyMap.insert "active" (Json.Bool False)
+--         )
+--         (pure ())
+--     )
+
+-- updateIfDifferent ::
+--   forall label parsed.
+--   ( HasField "id_" parsed Json.Value,
+--     HasField "rulename" parsed Text
+--   ) =>
+--   Session ->
+--   (Dat label Json.Object parsed -> IO Json.Object) ->
+--   Json.Parse Error () ->
+--   Dat label Json.Object parsed ->
+--   IO ()
+-- updateIfDifferent session switcheroo parser dat = do
+--   new <- switcheroo dat
+--   if new /= getField @label dat.original
+--     then do
+--       log [fmt|Updating filter "{dat.parsed.rulename}" (id {dat.parsed.id_ & show @Json.Value})|]
+--       mailfilter
+--         session
+--         "update"
+--         mempty
+--         parser
+--         new
+--     else do
+--       log [fmt|Skipping updating filter "{dat.parsed.rulename}" (id {dat.parsed.id_ & show @Json.Value}) because nothing changed.|]
 
 -- | https://oxpedia.org/wiki/index.php?title=HTTP_API_MailFilter
 mailfilter ::

@@ -7,7 +7,7 @@ let
 
     src = depot.users.Profpatsch.exactSource ./. [
       ./mailbox-org.cabal
-      ./AesonQQ.hs
+      ./src/AesonQQ.hs
       ./MailboxOrg.hs
     ];
 
