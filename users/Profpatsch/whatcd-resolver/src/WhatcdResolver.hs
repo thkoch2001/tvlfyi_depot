@@ -44,7 +44,7 @@ import PossehlAnalyticsPrelude
 import Postgres.Decoder qualified as Dec
 import Postgres.MonadPostgres
 import Pretty
-import RunCommand
+import RunCommand (runCommandExpect0)
 import System.Directory qualified as Dir
 import System.Directory qualified as Xdg
 import System.FilePath ((</>))
@@ -514,7 +514,7 @@ doTransmissionRequest dat (req, parser) = do
             ]
               <> (req.tag & maybe [] (\t -> [("tag", t & Enc.int)]))
           )
-  logDebug [fmt|transmission request: {showPrettyJsonEncoding body.unEnc}|]
+  logDebug [fmt|transmission request: {Pretty.showPrettyJsonEncoding body.unEnc}|]
   let httpReq =
         [fmt|http://{dat.host}:{dat.port}/transmission/rpc|]
           & Http.setRequestMethod "POST"
