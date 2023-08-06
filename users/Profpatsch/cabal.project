@@ -4,7 +4,9 @@ packages:
   ./arglib/arglib-netencode.cabal
   ./execline/exec-helpers.cabal
   ./htmx-experiment/htmx-experiment.cabal
+  ./mailbox-org/mailbox-org.cabal
   ./cas-serve/cas-serve.cabal
   ./jbovlaste-sqlite/jbovlaste-sqlite.cabal
   ./whatcd-resolver/whatcd-resolver.cabal
+  ./ircmail/ircmail.cabal
   ./httzip/httzip.cabal

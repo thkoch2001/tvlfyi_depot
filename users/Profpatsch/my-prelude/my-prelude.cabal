@@ -56,9 +56,7 @@ library
     hs-source-dirs: src
     exposed-modules:
       MyPrelude
-      Pretty
       Aeson
-      RunCommand
       Test
       Postgres.Decoder
       Postgres.MonadPostgres
@@ -76,20 +74,18 @@ library
      , pa-label
      , pa-error-tree
      , pa-json
+     , pa-pretty
      , aeson
      , aeson-better-errors
-     , ansi-terminal
      , bytestring
      , containers
      , error
      , exceptions
      , filepath
-     , hscolour
      , hspec
      , hspec-expectations-pretty-diff
      , monad-logger
      , mtl
-     , nicify-lib
      , postgresql-simple
      , profunctors
      , PyF
@@ -97,7 +93,6 @@ library
      , selective
      , text
      , these
-     , typed-process
      , unix
      , unliftio
      , validation-selective
