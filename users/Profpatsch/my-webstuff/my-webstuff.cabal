@@ -1,6 +1,6 @@
 cabal-version:      3.0
-name:               whatcd-resolver
-version:            0.1.0.0
+name:               my-webstuff
+version:            0.0.1.0
 author:             Profpatsch
 maintainer:         mail@profpatsch.de
 
@@ -53,44 +53,20 @@ common common-options
 
 library
     import: common-options
-
     hs-source-dirs: src
-
     exposed-modules:
-       WhatcdResolver
+      Multipart2
 
     build-depends:
-        base >=4.15 && <5,
-        text,
-        my-prelude,
-        my-webstuff,
-        pa-prelude,
-        pa-error-tree,
-        pa-label,
-        pa-json,
-        pa-field-parser,
-        pa-pretty,
-        pa-run-command,
-        aeson-better-errors,
-        aeson,
-        blaze-html,
-        bytestring,
-        containers,
-        directory,
-        dlist,
-        filepath,
-        http-conduit,
-        http-types,
-        ihp-hsx,
-        monad-logger,
-        mtl,
-        resource-pool,
-        postgresql-simple,
-        scientific,
-        selective,
-        tmp-postgres,
-        unliftio,
-        wai-extra,
-        wai,
-        warp,
-
+       base >=4.15 && <5
+     , my-prelude
+     , pa-prelude
+     , pa-label
+     , pa-error-tree
+     , pa-field-parser
+     , bytestring
+     , monad-logger
+     , dlist
+     , selective
+     , wai
+     , wai-extra

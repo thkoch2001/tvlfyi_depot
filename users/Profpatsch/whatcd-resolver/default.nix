@@ -9,12 +9,12 @@ let
 
     src = depot.users.Profpatsch.exactSource ./. [
       ./whatcd-resolver.cabal
-      ./src/Multipart2.hs
       ./src/WhatcdResolver.hs
     ];
 
     libraryHaskellDepends = [
       depot.users.Profpatsch.my-prelude
+      depot.users.Profpatsch.my-webstuff
       pkgs.haskellPackages.pa-prelude
       pkgs.haskellPackages.pa-label
       pkgs.haskellPackages.pa-json

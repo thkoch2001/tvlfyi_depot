@@ -1,5 +1,6 @@
 packages:
   ./my-prelude/my-prelude.cabal
+  ./my-webstuff/my-webstuff.cabal
   ./netencode/netencode.cabal
   ./arglib/arglib-netencode.cabal
   ./execline/exec-helpers.cabal
