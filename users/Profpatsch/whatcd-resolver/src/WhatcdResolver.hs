@@ -825,8 +825,16 @@ migrate = do
       t.torrent_id,
       t.torrent_group,
       -- the seeding weight is used to find the best torrent in a group.
-      ( (full_json_result->'seeders')::integer*3
-      + (full_json_result->'snatches')::integer)
+      ( ((full_json_result->'seeders')::integer*3
+        + (full_json_result->'snatches')::integer
+        )
+      -- prefer remasters by multiplying them with 3
+      * (CASE
+          WHEN full_json_result->>'remasterTitle' ILIKE '%remaster%'
+          THEN 3
+          ELSE 1
+         END)
+      )
       AS seeding_weight,
       t.full_json_result,
       t.torrent_file,
