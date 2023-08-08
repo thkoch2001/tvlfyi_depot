@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "857686c4_cc31e74d",
+        "filename": "users/grfn/system/system/machines/mugwump.nix",
+        "patchSetId": 5
+      },
+      "lineNbr": 157,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-08-08T16:36:42Z",
+      "side": 1,
+      "message": "Maybe we should add a comment either here, in the commit msg or in the vendored code mentioning inadyn might be a good alternative (it\u0027s just updating a cloudflare record after all), once https://github.com/NixOS/nixpkgs/issues/242330 is sorted out.",
+      "revId": "3e714ba3cf57220ee91bb1f96711260a09d3c985",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
