@@ -1,8 +1,9 @@
 ;;; term-switcher.el --- Easily switch between open vterms
 ;;
-;; Copyright (C) 2019 Google Inc.
+;; Copyright (C) 2019-2020 Google Inc.
+;; Copyright (C) 2021-2023 The TVL Authors
 ;;
-;; Author: Vincent Ambo <tazjin@google.com>
+;; Author: Vincent Ambo <tazjin@tvl.su>
 ;; Version: 1.1
 ;; Package-Requires: (dash ivy s vterm)
 ;;
@@ -30,7 +31,11 @@
   "Switch to the buffer with BUFFER-NAME or create a new vterm
   buffer."
   (if (equal "New vterm" buffer-name)
-      (vterm)
+      ;; Don't open semi-broken vterms over tramp.
+      (if (file-remote-p default-directory)
+          (let ((default-directory "~"))
+            (vterm))
+        (vterm))
     (if-let ((buffer (get-buffer buffer-name)))
         (switch-to-buffer buffer)
       (error "Could not find vterm buffer: %s" buffer-name))))
