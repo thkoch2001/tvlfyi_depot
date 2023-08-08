@@ -45,4 +45,7 @@
 ;; Show time in 24h format
 (setq display-time-24hr-format t)
 
+;; Use python-mode for Starlark files.
+(add-to-list 'auto-mode-alist '("\\.star\\'" . python-mode))
+
 (provide 'settings)
