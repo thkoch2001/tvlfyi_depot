@@ -116,6 +116,10 @@ depot.nix.readTree.drvTargets {
     };
   }));
 
+  # nixpkgs-review added ZSH completions upstream, which collide with
+  # nix-zsh-completions.
+  nixpkgs-review = self.lib.hiPrio super.nixpkgs-review;
+
   # Pin a newer version of crate2nix from git, which is not officially
   # released but supports `dep:`
   crate2nix = super.crate2nix.overrideAttrs (old: rec {
