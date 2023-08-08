@@ -57,10 +57,12 @@ library
     exposed-modules:
       MyPrelude
       Aeson
+      AtLeast
       Test
       Postgres.Decoder
       Postgres.MonadPostgres
       ValidationParseT
+      Seconds
       Tool
 
     -- Modules included in this executable, other than Main.
@@ -75,10 +77,15 @@ library
      , pa-error-tree
      , pa-json
      , pa-pretty
+     , pa-field-parser
      , aeson
      , aeson-better-errors
      , bytestring
      , containers
+     , resource-pool
+     , resourcet
+     , scientific
+     , time
      , error
      , exceptions
      , filepath

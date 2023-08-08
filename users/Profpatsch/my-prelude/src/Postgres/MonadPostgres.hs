@@ -1,36 +1,44 @@
-{-# LANGUAGE AllowAmbiguousTypes #-}
-{-# LANGUAGE FunctionalDependencies #-}
+{-# LANGUAGE DeriveAnyClass #-}
 {-# LANGUAGE QuasiQuotes #-}
-{-# LANGUAGE TypeFamilyDependencies #-}
-{-# LANGUAGE UndecidableInstances #-}
+{-# LANGUAGE TemplateHaskell #-}
 {-# OPTIONS_GHC -Wno-orphans #-}
 
 module Postgres.MonadPostgres where
 
+import AtLeast (AtLeast)
 import Control.Exception
 import Control.Monad.Except
-import Control.Monad.Logger.CallStack
+import Control.Monad.Logger (MonadLogger, logDebug, logWarn)
 import Control.Monad.Reader (MonadReader (ask), ReaderT (..))
+import Control.Monad.Trans.Resource
+import Data.Aeson (FromJSON)
 import Data.Error.Tree
 import Data.Int (Int64)
 import Data.Kind (Type)
 import Data.List qualified as List
+import Data.Pool (Pool)
+import Data.Pool qualified as Pool
+import Data.Text qualified as Text
 import Data.Typeable (Typeable)
 import Database.PostgreSQL.Simple (Connection, FormatError, FromRow, Query, QueryError, ResultError, SqlError, ToRow)
 import Database.PostgreSQL.Simple qualified as PG
+import Database.PostgreSQL.Simple qualified as Postgres
 import Database.PostgreSQL.Simple.FromRow qualified as PG
 import Database.PostgreSQL.Simple.ToField (ToField)
 import Database.PostgreSQL.Simple.ToRow (ToRow (toRow))
-import Database.PostgreSQL.Simple.Types (fromQuery)
+import Database.PostgreSQL.Simple.Types (Query (..))
 import GHC.Records (HasField (..))
 import Label
 import PossehlAnalyticsPrelude
 import Postgres.Decoder
+import Postgres.Decoder qualified as Dec
 import Pretty (showPretty)
+import Seconds
 import System.Exit (ExitCode (..))
 import Tool
 import UnliftIO (MonadUnliftIO (withRunInIO))
 import UnliftIO.Process qualified as Process
+import UnliftIO.Resource qualified as Resource
 
 -- | Postgres queries/commands that can be executed within a running transaction.
 --
@@ -38,12 +46,12 @@ import UnliftIO.Process qualified as Process
 -- and will behave the same unless othewise documented.
 class Monad m => MonadPostgres (m :: Type -> Type) where
   -- | Execute an INSERT, UPDATE, or other SQL query that is not expected to return results.
-  --
+
   -- Returns the number of rows affected.
   execute :: (ToRow params, Typeable params) => Query -> params -> Transaction m (Label "numberOfRowsAffected" Natural)
 
-  -- | Execute an INSERT, UPDATE, or other SQL query that is not expected to return results. Does not perform parameter substitution.
-  --
+  -- | Execute an INSERT, UPDATE, or other SQL query that is not expected to return results. Does not take parameters.
+
   -- Returns the number of rows affected.
   execute_ :: Query -> Transaction m (Label "numberOfRowsAffected" Natural)
 
@@ -155,6 +163,27 @@ ensureSingleRow = \case
             List.length more
         }
 
+-- | A better `query`
+--
+-- Parameters are passed first,
+-- then a Proxy which you should annotate with the return type of the query.
+-- This way it’s right before the @SELECT@,
+-- meaning it’s easy to see whether the two correspond.
+--
+-- TODO: maybe replace the query function in the class with this?
+queryBetter ::
+  ( MonadPostgres m,
+    ToRow params,
+    FromRow res,
+    Typeable params,
+    Typeable res
+  ) =>
+  params ->
+  Proxy res ->
+  Query ->
+  Transaction m [res]
+queryBetter params Proxy q = query q params
+
 newtype Transaction m a = Transaction {unTransaction :: (ReaderT Connection m a)}
   deriving newtype
     ( Functor,
@@ -170,19 +199,72 @@ newtype Transaction m a = Transaction {unTransaction :: (ReaderT Connection m a)
 runTransaction' :: Connection -> Transaction m a -> m a
 runTransaction' conn transaction = runReaderT transaction.unTransaction conn
 
+-- | [Resource Pool](http://hackage.haskell.org/package/resource-pool-0.2.3.2/docs/Data-Pool.html) configuration.
+data PoolingInfo = PoolingInfo
+  { -- | Minimal amount of resources that are
+    --   always available.
+    numberOfStripes :: AtLeast 1 Int,
+    -- | Time after which extra resources
+    --   (above minimum) can stay in the pool
+    --   without being used.
+    unusedResourceOpenTime :: Seconds,
+    -- | Max number of resources that can be
+    --   in the Pool at any time
+    maxOpenResourcesPerStripe :: AtLeast 1 Int
+  }
+  deriving stock (Generic, Eq, Show)
+  deriving anyclass (FromJSON)
+
+initMonadPostgres ::
+  (Text -> IO ()) ->
+  -- | Info describing the connection to the Postgres DB
+  Postgres.ConnectInfo ->
+  -- | Configuration info for pooling attributes
+  PoolingInfo ->
+  -- | Created Postgres connection pool
+  ResourceT IO (Pool Postgres.Connection)
+initMonadPostgres logInfoFn connectInfo poolingInfo = do
+  (_releaseKey, connPool) <-
+    Resource.allocate
+      (logInfoFn "Creating Postgres Connection Pool" >> createPGConnPool)
+      (\pool -> logInfoFn "Destroying Postgres Connection Pool" >> destroyPGConnPool pool)
+  pure connPool
+  where
+    -- \| Create a Postgres connection pool
+    createPGConnPool ::
+      IO (Pool Postgres.Connection)
+    createPGConnPool =
+      Pool.createPool
+        poolCreateResource
+        poolfreeResource
+        poolingInfo.numberOfStripes.unAtLeast
+        (poolingInfo.unusedResourceOpenTime & secondsToNominalDiffTime)
+        (poolingInfo.maxOpenResourcesPerStripe.unAtLeast)
+      where
+        poolCreateResource = Postgres.connect connectInfo
+        poolfreeResource = Postgres.close
+
+    -- \| Destroy a Postgres connection pool
+    destroyPGConnPool ::
+      -- \| Pool to be destroyed
+      (Pool Postgres.Connection) ->
+      IO ()
+    destroyPGConnPool p = Pool.destroyAllResources p
+
 -- | Catch any Postgres exception that gets thrown,
 -- print the query that was run and the query parameters,
 -- then rethrow inside an 'Error'.
 handlePGException ::
-  forall a params m.
-  (ToRow params, MonadUnliftIO m, MonadLogger m, MonadTools m) =>
+  forall a params tools m.
+  (ToRow params, MonadUnliftIO m, MonadLogger m, HasField "pgFormat" tools Tool) =>
+  tools ->
   Text ->
   Query ->
   -- | Depending on whether we used `format` or `formatMany`.
   Either params [params] ->
   IO a ->
   Transaction m a
-handlePGException queryType query' params io = do
+handlePGException tools queryType query' params io = do
   withRunInIO $ \unliftIO ->
     io
       `catches` [ Handler $ unliftIO . logQueryException @SqlError,
@@ -197,8 +279,8 @@ handlePGException queryType query' params io = do
     logQueryException :: Exception e => e -> Transaction m a
     logQueryException exc = do
       formattedQuery <- case params of
-        Left one -> pgFormatQuery' query' one
-        Right many -> pgFormatQueryMany' query' many
+        Left one -> pgFormatQuery' tools query' one
+        Right many -> pgFormatQueryMany' tools query' many
       throwErr
         ( singleError [fmt|Query Type: {queryType}|]
             :| [ nestedError "Exception" (exc & showPretty & newError & singleError),
@@ -208,27 +290,75 @@ handlePGException queryType query' params io = do
     logFormatException :: FormatError -> Transaction m a
     logFormatException fe = throwErr (fe & showPretty & newError & singleError & singleton)
 
-pgExecute :: (ToRow params, MonadUnliftIO m, MonadLogger m, MonadTools m) => Query -> params -> Transaction m (Label "numberOfRowsAffected" Natural)
-pgExecute qry params = do
+-- | Perform a Postgres action within a transaction
+withPGTransaction ::
+  -- | Postgres connection pool to be used for the action
+  (Pool Postgres.Connection) ->
+  -- | DB-action to be performed
+  (Postgres.Connection -> IO a) ->
+  -- | Result of the DB-action
+  IO a
+withPGTransaction connPool f =
+  Pool.withResource
+    connPool
+    (\conn -> Postgres.withTransaction conn (f conn))
+
+runPGTransactionImpl :: MonadUnliftIO m => m (Pool Postgres.Connection) -> Transaction m a -> m a
+{-# INLINE runPGTransactionImpl #-}
+runPGTransactionImpl zoom (Transaction transaction) = do
+  pool <- zoom
+  withRunInIO $ \unliftIO ->
+    withPGTransaction pool $ \conn -> do
+      unliftIO $ runReaderT transaction conn
+
+executeImpl ::
+  (ToRow params, MonadUnliftIO m, MonadLogger m, HasField "pgFormat" tools Tool) =>
+  m tools ->
+  m DebugLogDatabaseQueries ->
+  Query ->
+  params ->
+  Transaction m (Label "numberOfRowsAffected" Natural)
+{-# INLINE executeImpl #-}
+executeImpl zoomTools zoomDebugLogDatabaseQueries qry params = do
+  tools <- lift @Transaction zoomTools
+  logDatabaseQueries <- lift @Transaction zoomDebugLogDatabaseQueries
+  logQueryIfEnabled tools logDatabaseQueries qry (HasSingleParam params)
   conn <- Transaction ask
   PG.execute conn qry params
-    & handlePGException "execute" qry (Left params)
-    >>= toNumberOfRowsAffected "pgExecute"
+    & handlePGException tools "execute" qry (Left params)
+    >>= toNumberOfRowsAffected "executeImpl"
 
-pgExecute_ :: (MonadUnliftIO m, MonadLogger m, MonadTools m) => Query -> Transaction m (Label "numberOfRowsAffected" Natural)
-pgExecute_ qry = do
+executeImpl_ ::
+  (MonadUnliftIO m, MonadLogger m, HasField "pgFormat" tools Tool) =>
+  m tools ->
+  m DebugLogDatabaseQueries ->
+  Query ->
+  Transaction m (Label "numberOfRowsAffected" Natural)
+{-# INLINE executeImpl_ #-}
+executeImpl_ zoomTools zoomDebugLogDatabaseQueries qry = do
+  tools <- lift @Transaction zoomTools
+  logDatabaseQueries <- lift @Transaction zoomDebugLogDatabaseQueries
+  logQueryIfEnabled @() tools logDatabaseQueries qry HasNoParams
   conn <- Transaction ask
   PG.execute_ conn qry
-    & handlePGException "execute_" qry (Left ())
-    >>= toNumberOfRowsAffected "pgExecute_"
+    & handlePGException tools "execute_" qry (Left ())
+    >>= toNumberOfRowsAffected "executeImpl_"
 
-pgExecuteMany :: (ToRow params, MonadUnliftIO m, MonadLogger m, MonadTools m) => Query -> [params] -> Transaction m (Label "numberOfRowsAffected" Natural)
-pgExecuteMany qry params =
-  do
-    conn <- Transaction ask
-    PG.executeMany conn qry params
-      & handlePGException "executeMany" qry (Right params)
-      >>= toNumberOfRowsAffected "pgExecuteMany"
+executeManyImpl ::
+  (ToRow params, MonadUnliftIO m, MonadLogger m, HasField "pgFormat" tools Tool) =>
+  m tools ->
+  m DebugLogDatabaseQueries ->
+  Query ->
+  [params] ->
+  Transaction m (Label "numberOfRowsAffected" Natural)
+executeManyImpl zoomTools zoomDebugLogDatabaseQueries qry params = do
+  tools <- lift @Transaction zoomTools
+  logDatabaseQueries <- lift @Transaction zoomDebugLogDatabaseQueries
+  logQueryIfEnabled tools logDatabaseQueries qry (HasMultiParams params)
+  conn <- Transaction ask
+  PG.executeMany conn qry params
+    & handlePGException tools "executeMany" qry (Right params)
+    >>= toNumberOfRowsAffected "executeManyImpl"
 
 toNumberOfRowsAffected :: MonadIO m => Text -> Int64 -> m (Label "numberOfRowsAffected" Natural)
 toNumberOfRowsAffected functionName i64 =
@@ -240,23 +370,35 @@ toNumberOfRowsAffected functionName i64 =
     & liftIO
     <&> label @"numberOfRowsAffected"
 
-pgExecuteManyReturningWith :: (ToRow params, MonadUnliftIO m, MonadLogger m, MonadTools m) => Query -> [params] -> Decoder r -> Transaction m [r]
-pgExecuteManyReturningWith qry params (Decoder fromRow) =
-  do
-    conn <- Transaction ask
-    PG.returningWith fromRow conn qry params
-      & handlePGException "executeManyReturning" qry (Right params)
+executeManyReturningWithImpl ::
+  (ToRow params, MonadUnliftIO m, MonadLogger m, HasField "pgFormat" tools Tool) =>
+  m tools ->
+  m DebugLogDatabaseQueries ->
+  Query ->
+  [params] ->
+  Decoder r ->
+  Transaction m [r]
+{-# INLINE executeManyReturningWithImpl #-}
+executeManyReturningWithImpl zoomTools zoomDebugLogDatabaseQueries qry params (Decoder fromRow) = do
+  tools <- lift @Transaction zoomTools
+  logDatabaseQueries <- lift @Transaction zoomDebugLogDatabaseQueries
+  logQueryIfEnabled tools logDatabaseQueries qry (HasMultiParams params)
+  conn <- Transaction ask
+  PG.returningWith fromRow conn qry params
+    & handlePGException tools "executeManyReturning" qry (Right params)
 
-pgFold ::
-  (FromRow row, ToRow params, MonadUnliftIO m, MonadLogger m, MonadTools m) =>
+foldRowsImpl ::
+  (FromRow row, ToRow params, MonadUnliftIO m, MonadLogger m, HasField "pgFormat" tools Tool) =>
+  m tools ->
   Query ->
   params ->
   a ->
   (a -> row -> Transaction m a) ->
   Transaction m a
-pgFold qry params accumulator f = do
+{-# INLINE foldRowsImpl #-}
+foldRowsImpl zoomTools qry params accumulator f = do
   conn <- Transaction ask
-
+  tools <- lift @Transaction zoomTools
   withRunInIO
     ( \runInIO ->
         do
@@ -266,9 +408,17 @@ pgFold qry params accumulator f = do
             params
             accumulator
             (\acc row -> runInIO $ f acc row)
-            & handlePGException "fold" qry (Left params)
+            & handlePGException tools "fold" qry (Left params)
             & runInIO
     )
+
+pgFormatQueryNoParams' ::
+  (MonadIO m, MonadLogger m, HasField "pgFormat" tools Tool) =>
+  tools ->
+  Query ->
+  Transaction m Text
+pgFormatQueryNoParams' tools q =
+  lift $ pgFormatQueryByteString tools q.fromQuery
 
 pgFormatQuery :: (ToRow params, MonadIO m) => Query -> params -> Transaction m ByteString
 pgFormatQuery qry params = Transaction $ do
@@ -280,29 +430,42 @@ pgFormatQueryMany qry params = Transaction $ do
   conn <- ask
   liftIO $ PG.formatMany conn qry params
 
-pgQueryWith :: (ToRow params, MonadUnliftIO m, MonadLogger m, MonadTools m) => Query -> params -> Decoder r -> Transaction m [r]
-pgQueryWith qry params (Decoder fromRow) = do
+queryWithImpl ::
+  (ToRow params, MonadUnliftIO m, MonadLogger m, HasField "pgFormat" tools Tool) =>
+  m tools ->
+  m DebugLogDatabaseQueries ->
+  Query ->
+  params ->
+  Decoder r ->
+  Transaction m [r]
+{-# INLINE queryWithImpl #-}
+queryWithImpl zoomTools zoomDebugLogDatabaseQueries qry params (Decoder fromRow) = do
+  tools <- lift @Transaction zoomTools
+  logDatabaseQueries <- lift @Transaction zoomDebugLogDatabaseQueries
+  logQueryIfEnabled tools logDatabaseQueries qry (HasSingleParam params)
   conn <- Transaction ask
   PG.queryWith fromRow conn qry params
-    & handlePGException "query" qry (Left params)
+    & handlePGException tools "query" qry (Left params)
 
-pgQueryWith_ :: (MonadUnliftIO m, MonadLogger m, MonadTools m) => Query -> Decoder r -> Transaction m [r]
-pgQueryWith_ qry (Decoder fromRow) = do
+queryWithImpl_ :: (MonadUnliftIO m, MonadLogger m, HasField "pgFormat" tools Tool) => m tools -> Query -> Decoder r -> Transaction m [r]
+{-# INLINE queryWithImpl_ #-}
+queryWithImpl_ zoomTools qry (Decoder fromRow) = do
+  tools <- lift @Transaction zoomTools
   conn <- Transaction ask
   liftIO (PG.queryWith_ fromRow conn qry)
-    & handlePGException "query" qry (Left ())
+    & handlePGException tools "query" qry (Left ())
 
-pgQuery :: (ToRow params, FromRow r, MonadUnliftIO m, MonadLogger m, MonadTools m) => Query -> params -> Transaction m [r]
-pgQuery qry params = do
+pgQuery :: (ToRow params, FromRow r, MonadUnliftIO m, MonadLogger m, HasField "pgFormat" tools Tool) => tools -> Query -> params -> Transaction m [r]
+pgQuery tools qry params = do
   conn <- Transaction ask
   PG.query conn qry params
-    & handlePGException "query" qry (Left params)
+    & handlePGException tools "query" qry (Left params)
 
-pgQuery_ :: (FromRow r, MonadUnliftIO m, MonadLogger m, MonadTools m) => Query -> Transaction m [r]
-pgQuery_ qry = do
+pgQuery_ :: (FromRow r, MonadUnliftIO m, MonadLogger m, HasField "pgFormat" tools Tool) => tools -> Query -> Transaction m [r]
+pgQuery_ tools qry = do
   conn <- Transaction ask
   PG.query_ conn qry
-    & handlePGException "query_" qry (Left ())
+    & handlePGException tools "query_" qry (Left ())
 
 data SingleRowError = SingleRowError
   { -- | How many columns were actually returned by the query
@@ -313,41 +476,23 @@ data SingleRowError = SingleRowError
 instance Exception SingleRowError where
   displayException (SingleRowError {..}) = [fmt|Single row expected from SQL query result, {numberOfRowsReturned} rows were returned instead."|]
 
-pgFormatQueryNoParams' :: (MonadIO m, MonadLogger m, MonadTools m) => Query -> Transaction m Text
-pgFormatQueryNoParams' q =
-  lift $ pgFormatQueryByteString q.fromQuery
-
-pgFormatQuery' :: (MonadIO m, ToRow params, MonadLogger m, MonadTools m) => Query -> params -> Transaction m Text
-pgFormatQuery' q p =
+pgFormatQuery' :: (MonadIO m, ToRow params, MonadLogger m, HasField "pgFormat" tools Tool) => tools -> Query -> params -> Transaction m Text
+pgFormatQuery' tools q p =
   pgFormatQuery q p
-    >>= lift . pgFormatQueryByteString
+    >>= lift . pgFormatQueryByteString tools
 
-pgFormatQueryMany' :: (MonadIO m, ToRow params, MonadLogger m, MonadTools m) => Query -> [params] -> Transaction m Text
-pgFormatQueryMany' q p =
+pgFormatQueryMany' :: (MonadIO m, ToRow params, MonadLogger m, HasField "pgFormat" tools Tool) => tools -> Query -> [params] -> Transaction m Text
+pgFormatQueryMany' tools q p =
   pgFormatQueryMany q p
-    >>= lift . pgFormatQueryByteString
+    >>= lift . pgFormatQueryByteString tools
 
--- | Tools required at runtime
-data Tools = Tools
-  { pgFormat :: Tool
-  }
-  deriving stock (Show)
+-- | Read the executable name "pg_format"
+postgresToolsParser :: ToolParserT IO (Label "pgFormat" Tool)
+postgresToolsParser = label @"pgFormat" <$> readTool "pg_format"
 
-class Monad m => MonadTools m where
-  getTools :: m Tools
-
-initMonadTools :: Label "envvar" Text -> IO Tools
-initMonadTools var =
-  Tool.readTools (label @"toolsEnvVar" var.envvar) toolParser
-  where
-    toolParser = do
-      pgFormat <- readTool "pg_format"
-      pure $ Tools {..}
-
-pgFormatQueryByteString :: (MonadIO m, MonadLogger m, MonadTools m) => ByteString -> m Text
-pgFormatQueryByteString queryBytes = do
+pgFormatQueryByteString :: (MonadIO m, MonadLogger m, HasField "pgFormat" tools Tool) => tools -> ByteString -> m Text
+pgFormatQueryByteString tools queryBytes = do
   do
-    tools <- getTools
     (exitCode, stdout, stderr) <-
       Process.readProcessWithExitCode
         tools.pgFormat.toolPath
@@ -356,8 +501,8 @@ pgFormatQueryByteString queryBytes = do
     case exitCode of
       ExitSuccess -> pure (stdout & stringToText)
       ExitFailure status -> do
-        logWarn [fmt|pg_format failed with status {status} while formatting the query, using original query string. Is there a syntax error?|]
-        logDebug
+        $logWarn [fmt|pg_format failed with status {status} while formatting the query, using original query string. Is there a syntax error?|]
+        $logDebug
           ( prettyErrorTree
               ( nestedMultiError
                   "pg_format output"
@@ -366,8 +511,78 @@ pgFormatQueryByteString queryBytes = do
                   )
               )
           )
-        logDebug [fmt|pg_format stdout: stderr|]
+        $logDebug [fmt|pg_format stdout: stderr|]
         pure (queryBytes & bytesToTextUtf8Lenient)
+
+data DebugLogDatabaseQueries
+  = -- | Do not log the database queries
+    DontLogDatabaseQueries
+  | -- | Log the database queries as debug output;
+    LogDatabaseQueries
+  | -- | Log the database queries as debug output and additionally the EXPLAIN output (from the query analyzer, not the actual values after execution cause that’s a bit harder to do)
+    LogDatabaseQueriesAndExplain
+  deriving stock (Show, Enum, Bounded)
+
+data HasQueryParams param
+  = HasNoParams
+  | HasSingleParam param
+  | HasMultiParams [param]
+
+-- | Log the postgres query depending on the given setting
+logQueryIfEnabled ::
+  ( ToRow params,
+    MonadUnliftIO m,
+    MonadLogger m,
+    HasField "pgFormat" tools Tool
+  ) =>
+  tools ->
+  DebugLogDatabaseQueries ->
+  Query ->
+  HasQueryParams params ->
+  Transaction m ()
+logQueryIfEnabled tools logDatabaseQueries qry params = do
+  -- In case we have query logging enabled, we want to do that
+  let formattedQuery = case params of
+        HasNoParams -> pgFormatQueryNoParams' tools qry
+        HasSingleParam p -> pgFormatQuery' tools qry p
+        HasMultiParams ps -> pgFormatQueryMany' tools qry ps
+  let doLog errs =
+        errs
+          & nestedMultiError "Postgres query"
+          & prettyErrorTree
+          & $logDebug
+          & lift
+  let addQuery = do
+        formattedQuery
+          <&> newError
+          <&> singleError
+  let addExplain = do
+        q <- formattedQuery
+        queryWithImpl_
+          (pure tools)
+          ( "EXPLAIN "
+              <> (
+                   -- TODO: this is not nice, but the only way to get the `executeMany` form to work with this
+                   -- because we need the query with all elements already interpolated.
+                   Query (q & textToBytesUtf8)
+                 )
+          )
+          (Dec.fromField @Text)
+          <&> Text.intercalate "\n"
+          <&> newError
+          <&> singleError
+
+  case logDatabaseQueries of
+    DontLogDatabaseQueries -> pure ()
+    LogDatabaseQueries -> do
+      aq <- addQuery
+      doLog (aq :| [])
+    LogDatabaseQueriesAndExplain -> do
+      aq <- addQuery
+      -- XXX: stuff like `CREATE SCHEMA` cannot be EXPLAINed, so we should catch exceptions here
+      -- and just ignore anything that errors (if it errors because of a problem with the query, it would have been caught by the query itself.
+      ex <- addExplain
+      doLog (nestedError "Query" aq :| [nestedError "Explain" ex])
 
 instance (ToField t1) => ToRow (Label l1 t1) where
   toRow t2 = toRow $ PG.Only $ getField @l1 t2
