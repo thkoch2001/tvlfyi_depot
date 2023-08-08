@@ -7,8 +7,10 @@ pkgs.haskellPackages.mkDerivation {
   src = depot.users.Profpatsch.exactSource ./. [
     ./my-prelude.cabal
     ./src/Aeson.hs
+    ./src/AtLeast.hs
     ./src/MyPrelude.hs
     ./src/Test.hs
+    ./src/Seconds.hs
     ./src/Tool.hs
     ./src/ValidationParseT.hs
     ./src/Postgres/Decoder.hs
@@ -23,7 +25,9 @@ pkgs.haskellPackages.mkDerivation {
     pkgs.haskellPackages.pa-error-tree
     pkgs.haskellPackages.pa-json
     pkgs.haskellPackages.pa-pretty
+    pkgs.haskellPackages.pa-field-parser
     pkgs.haskellPackages.aeson-better-errors
+    pkgs.haskellPackages.resource-pool
     pkgs.haskellPackages.error
     pkgs.haskellPackages.hspec
     pkgs.haskellPackages.hspec-expectations-pretty-diff

@@ -23,7 +23,6 @@ import Database.PostgreSQL.Simple (Binary (Binary), Only (..))
 import Database.PostgreSQL.Simple qualified as Postgres
 import Database.PostgreSQL.Simple.SqlQQ (sql)
 import Database.PostgreSQL.Simple.Types (PGArray (PGArray))
-import Database.PostgreSQL.Simple.Types qualified as Postgres
 import Database.Postgres.Temp qualified as TmpPg
 import FieldParser (FieldParser' (..))
 import FieldParser qualified as Field
@@ -53,6 +52,7 @@ import Text.Blaze.Html (Html)
 import Text.Blaze.Html.Renderer.Pretty qualified as Html.Pretty
 import Text.Blaze.Html.Renderer.Utf8 qualified as Html
 import Text.Blaze.Html5 qualified as Html
+import Tool (Tool, readTool, readTools)
 import UnliftIO
 
 htmlUi :: App ()
@@ -757,7 +757,7 @@ getTorrentFileById dat = do
     WHERE torrent_id = ?::integer
   |]
     (Only $ (dat.torrentId :: Int))
-    (label @"torrentFile" <$> decBytea)
+    (label @"torrentFile" <$> Dec.bytea)
     >>= ensureSingleRow
 
 updateTransmissionTorrentHashById ::
@@ -777,9 +777,6 @@ updateTransmissionTorrentHashById dat = do
     ( dat.torrentHash :: Text,
       dat.torrentId :: Int
     )
-
-decBytea :: Dec.Decoder ByteString
-decBytea = Dec.fromField @(Binary ByteString) <&> (.fromBinary)
 
 assertOneUpdated ::
   (HasField "numberOfRowsAffected" r Natural, MonadThrow m) =>
@@ -986,7 +983,7 @@ assertM f v = case f v of
 
 runAppWith :: AppT IO a -> IO (Either TmpPg.StartError a)
 runAppWith appT = withDb $ \db -> do
-  tools <- initMonadTools (label @"envvar" "WHATCD_RESOLVER_TOOLS")
+  pgFormat <- readTools (label @"toolsEnvVar" "WHATCD_RESOLVER_TOOLS") (readTool "pg_format")
   let config = label @"logDatabaseQueries" LogDatabaseQueries
   pgConnPool <-
     Pool.createPool
@@ -1028,8 +1025,8 @@ withDb act = do
     act db
 
 data Context = Context
-  { config :: Label "logDatabaseQueries" DatabaseLogging,
-    tools :: Tools,
+  { config :: Label "logDatabaseQueries" DebugLogDatabaseQueries,
+    pgFormat :: Tool,
     pgConnPool :: Pool Postgres.Connection,
     transmissionSessionId :: MVar ByteString
   }
@@ -1054,9 +1051,6 @@ orAppThrowTree = \case
 instance MonadIO m => MonadLogger (AppT m) where
   monadLoggerLog loc src lvl msg = liftIO $ Logger.defaultOutput IO.stderr loc src lvl (Logger.toLogStr msg)
 
-instance Monad m => MonadTools (AppT m) where
-  getTools = AppT $ asks (.tools)
-
 class MonadTransmission m where
   getTransmissionId :: m (Maybe ByteString)
   setTransmissionId :: ByteString -> m ()
@@ -1068,32 +1062,13 @@ instance (MonadIO m) => MonadTransmission (AppT m) where
     putMVar var t
 
 instance (MonadThrow m, MonadUnliftIO m) => MonadPostgres (AppT m) where
-  execute qry params = do
-    conf <- lift $ AppT (asks (.config))
-    logQueryIfEnabled conf qry (HasSingleParam params)
-    pgExecute qry params
-  execute_ qry = do
-    conf <- lift $ AppT (asks (.config))
-    logQueryIfEnabled @(Only Text) conf qry HasNoParams
-    pgExecute_ qry
-  executeMany qry params = do
-    conf <- lift $ AppT (asks (.config))
-    logQueryIfEnabled conf qry (HasMultiParams params)
-    pgExecuteMany qry params
-  executeManyReturningWith qry params dec = do
-    conf <- lift $ AppT (asks (.config))
-    logQueryIfEnabled conf qry (HasMultiParams params)
-    pgExecuteManyReturningWith qry params dec
-
-  queryWith qry params decoder = do
-    conf <- lift $ AppT (asks (.config))
-    logQueryIfEnabled conf qry (HasSingleParam params)
-    pgQueryWith qry params decoder
-
-  -- TODO: log these queries as well with `logQueryIfEnabled`, but test out whether it works with query_ and foldRows first.
-  queryWith_ = pgQueryWith_
-  foldRows = pgFold
-
+  execute = executeImpl (AppT ask) (AppT $ asks (.config.logDatabaseQueries))
+  execute_ = executeImpl_ (AppT ask) (AppT $ asks (.config.logDatabaseQueries))
+  executeMany = executeManyImpl (AppT ask) (AppT $ asks (.config.logDatabaseQueries))
+  executeManyReturningWith = executeManyReturningWithImpl (AppT ask) (AppT $ asks (.config.logDatabaseQueries))
+  queryWith = queryWithImpl (AppT ask) (AppT $ asks (.config.logDatabaseQueries))
+  queryWith_ = queryWithImpl_ (AppT ask)
+  foldRows = foldRowsImpl (AppT ask)
   runTransaction = runPGTransaction
 
 runPGTransaction :: MonadUnliftIO m => Transaction (AppT m) a -> AppT m a
@@ -1103,83 +1078,7 @@ runPGTransaction (Transaction transaction) = do
     withPGTransaction pool $ \conn -> do
       unliftIO $ runReaderT transaction conn
 
--- | Perform a Postgres action within a transaction
-withPGTransaction ::
-  -- | Postgres connection pool to be used for the action
-  Pool Postgres.Connection ->
-  -- | DB-action to be performed
-  (Postgres.Connection -> IO a) ->
-  -- | Result of the DB-action
-  IO a
-withPGTransaction connPool f =
-  Pool.withResource
-    connPool
-    (\conn -> Postgres.withTransaction conn (f conn))
-
 data HasQueryParams param
   = HasNoParams
   | HasSingleParam param
   | HasMultiParams [param]
-
--- | Log the postgres query depending on the setting of @config.debugInfo.logDatabaseQueries@.
-logQueryIfEnabled ::
-  forall params config m.
-  ( Postgres.ToRow params,
-    MonadUnliftIO m,
-    MonadLogger m,
-    MonadTools m,
-    HasField "logDatabaseQueries" config DatabaseLogging
-  ) =>
-  config ->
-  Postgres.Query ->
-  HasQueryParams params ->
-  Transaction m ()
-logQueryIfEnabled config qry params = do
-  -- In case we have query logging enabled, we want to do that
-  let formattedQuery = case params of
-        HasNoParams -> pgFormatQueryNoParams' qry
-        HasSingleParam p -> pgFormatQuery' qry p
-        HasMultiParams ps -> pgFormatQueryMany' qry ps
-
-  let doLog errs =
-        errs
-          & nestedMultiError "Postgres query"
-          & prettyErrorTree
-          & logDebug
-          & lift
-  let addQuery = do
-        formattedQuery
-          <&> newError
-          <&> singleError
-  let addExplain = do
-        q <- formattedQuery
-        pgQueryWith_
-          ( "EXPLAIN "
-              <> (
-                   -- TODO: this is not nice, but the only way to get the `executeMany` form to work with this
-                   -- because we need the query with all elements already interpolated.
-                   Postgres.Query (q & textToBytesUtf8)
-                 )
-          )
-          (Dec.fromField @Text)
-          <&> Text.intercalate "\n"
-          <&> newError
-          <&> singleError
-
-  case config.logDatabaseQueries of
-    DontLogDatabaseQueries -> pure ()
-    LogDatabaseQueries -> do
-      aq <- addQuery
-      doLog (aq :| [])
-    LogDatabaseQueriesAndExplain -> do
-      aq <- addQuery
-      -- XXX: stuff like `CREATE SCHEMA` cannot be EXPLAINed, so we should catch exceptions here
-      -- and just ignore anything that errors (if it errors because of a problem with the query, it would have been caught by the query itself.
-      ex <- addExplain
-      doLog (nestedError "Query" aq :| [nestedError "Explain" ex])
-
-data DatabaseLogging
-  = DontLogDatabaseQueries
-  | LogDatabaseQueries
-  | LogDatabaseQueriesAndExplain
-  deriving stock (Show)
