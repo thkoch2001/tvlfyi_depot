@@ -36,8 +36,10 @@ in
     # Nix things
     nixfmt
     nix-prefetch-github
-    nixpkgs-review
     cachix
+
+    # TODO(aspen): remove `hiPrio` once the ZSH completions don't conflict with HM anymore
+    (lib.hiPrio nixpkgs-review)
 
     # ReadySet stuff
     nodejs

@@ -45,7 +45,6 @@
     # Nix things
     nixfmt
     nix-prefetch-github
-    nixpkgs-review
     cachix
     (writeShellScriptBin "rebuild-mugwump" ''
       set -eo pipefail
@@ -75,6 +74,9 @@
       nix build -f . users.grfn.system.home.$(hostname)Home -o /tmp/home
       /tmp/home/activate
     '')
+
+    # TODO(aspen): remove `hiPrio` once the ZSH completions don't conflict with HM anymore
+    (lib.hiPrio nixpkgs-review)
   ];
 
   programs.ssh = {
