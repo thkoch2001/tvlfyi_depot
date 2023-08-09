@@ -14,8 +14,7 @@ let
     exec chktex -n8 "$@"
   '';
 
-  # emacsPgtk is defined in emacs-overlay
-  emacs = (pkgs.emacsPackagesFor pkgs.emacs-pgtk).withPackages (epkgs: [
+  emacs = (pkgs.emacsPackagesFor pkgs.emacs29-pgtk).withPackages (epkgs: [
     epkgs.bqn-mode
     #epkgs.elpaPackages.ada-mode
     epkgs.elpaPackages.rainbow-mode
