@@ -3,6 +3,7 @@
 //! Nix language strings never need to be modified on the language
 //! level, allowing us to shave off some memory overhead and only
 //! paying the cost when creating new strings.
+use gc::{Finalize, Trace};
 use rnix::ast;
 use std::ffi::OsStr;
 use std::hash::Hash;
@@ -14,8 +15,13 @@ use serde::de::{Deserializer, Visitor};
 use serde::{Deserialize, Serialize};
 
 #[repr(transparent)]
-#[derive(Clone, Debug, Serialize)]
+#[derive(Clone, Debug, Finalize, Serialize)]
 pub struct NixString(Box<str>);
+
+unsafe impl Trace for NixString {
+    // NixString contains no gcroots.
+    gc::unsafe_empty_trace!();
+}
 
 impl PartialEq for NixString {
     fn eq(&self, other: &Self) -> bool {
