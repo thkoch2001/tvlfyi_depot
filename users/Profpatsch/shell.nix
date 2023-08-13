@@ -54,6 +54,7 @@ pkgs.mkShell {
       h.tmp-postgres
       h.postgresql-simple
       h.resource-pool
+      h.xmonad-contrib
     ]))
 
     pkgs.rustup
