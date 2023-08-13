@@ -6,6 +6,7 @@
 use crate::vm::generators::Generator;
 
 use super::Value;
+use gc::{Finalize, Trace};
 
 use std::{
     fmt::{Debug, Display},
@@ -22,7 +23,7 @@ use std::{
 pub trait BuiltinGen: Fn(Vec<Value>) -> Generator {}
 impl<F: Fn(Vec<Value>) -> Generator> BuiltinGen for F {}
 
-#[derive(Clone)]
+#[derive(Clone, Finalize)]
 pub struct BuiltinRepr {
     name: &'static str,
     /// Optional documentation for the builtin.
@@ -33,6 +34,20 @@ pub struct BuiltinRepr {
 
     /// Partially applied function arguments.
     partials: Vec<Value>,
+}
+
+/// Manual implementation is required because `BuiltinRepr` *must not*
+/// implement drop.
+///
+/// This implementation should be carefully validated whenever the
+/// definition above is changed, as `BuiltinRepr` is a fairly
+/// complicated type. All fields which directly contain a `Value`
+/// *must* be marked.
+unsafe impl Trace for BuiltinRepr {
+    gc::custom_trace!(this, {
+        // Only `partials` contains values.
+        mark(&this.partials);
+    });
 }
 
 pub enum BuiltinResult {
@@ -56,8 +71,15 @@ pub enum BuiltinResult {
 /// Partially applied builtins act similar to closures in that they
 /// "capture" the partially applied arguments, and are treated
 /// specially when printing their representation etc.
-#[derive(Clone)]
+#[derive(Clone, Finalize)]
 pub struct Builtin(Box<BuiltinRepr>);
+
+/// Same as for `BuiltinRepr`, manual implementation to avoid `Drop`.
+unsafe impl Trace for Builtin {
+    gc::custom_trace!(this, {
+        mark(&this.0);
+    });
+}
 
 impl From<BuiltinRepr> for Builtin {
     fn from(value: BuiltinRepr) -> Self {
