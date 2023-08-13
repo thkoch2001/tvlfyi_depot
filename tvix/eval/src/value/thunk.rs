@@ -19,7 +19,7 @@
 //! memoisable slot.
 
 use std::{
-    cell::{Ref, RefCell, RefMut},
+    cell::{Ref, RefCell},
     collections::HashSet,
     fmt::Debug,
     rc::Rc,
@@ -60,7 +60,7 @@ enum ThunkRepr {
     /// execution.
     Suspended {
         lambda: Rc<Lambda>,
-        upvalues: Rc<Upvalues>,
+        upvalues: Upvalues,
         light_span: LightSpan,
     },
 
@@ -93,7 +93,7 @@ unsafe impl Trace for ThunkRepr {
                 lambda, upvalues, ..
             } => {
                 mark(lambda.as_ref());
-                mark(upvalues.as_ref());
+                mark(upvalues);
             }
             Self::Native(_) => { /* nothing to trace in native code */ }
             Self::Blackhole { .. } => { /* nothing to trace in blackhole */ }
@@ -131,16 +131,13 @@ unsafe impl Trace for Thunk {
 impl Thunk {
     pub fn new_closure(lambda: Rc<Lambda>) -> Self {
         Thunk(Rc::new(RefCell::new(ThunkRepr::Evaluated(Value::Closure(
-            Rc::new(Closure {
-                upvalues: Rc::new(Upvalues::with_capacity(lambda.upvalue_count)),
-                lambda: lambda.clone(),
-            }),
+            Rc::new(Closure::new(lambda.clone())),
         )))))
     }
 
     pub fn new_suspended(lambda: Rc<Lambda>, light_span: LightSpan) -> Self {
         Thunk(Rc::new(RefCell::new(ThunkRepr::Suspended {
-            upvalues: Rc::new(Upvalues::with_capacity(lambda.upvalue_count)),
+            upvalues: Upvalues::with_capacity(lambda.upvalue_count),
             lambda: lambda.clone(),
             light_span,
         })))
@@ -176,7 +173,7 @@ impl Thunk {
         lambda.chunk.push_op(OpCode::OpReturn, span);
 
         Thunk(Rc::new(RefCell::new(ThunkRepr::Suspended {
-            upvalues: Rc::new(Upvalues::with_capacity(0)),
+            upvalues: Upvalues::with_capacity(0),
             lambda: Rc::new(lambda),
             light_span,
         })))
@@ -268,7 +265,7 @@ impl Thunk {
     }
 
     pub fn finalise(&self, stack: &[Value]) {
-        self.upvalues_mut().resolve_deferred_upvalues(stack);
+        self.upvalues().resolve_deferred_upvalues(stack);
     }
 
     pub fn is_evaluated(&self) -> bool {
@@ -309,22 +306,9 @@ impl Thunk {
 
     pub fn upvalues(&self) -> Ref<'_, Upvalues> {
         Ref::map(self.0.borrow(), |thunk| match thunk {
-            ThunkRepr::Suspended { upvalues, .. } => upvalues.as_ref(),
+            ThunkRepr::Suspended { upvalues, .. } => upvalues,
             ThunkRepr::Evaluated(Value::Closure(c)) => &c.upvalues,
             _ => panic!("upvalues() on non-suspended thunk"),
-        })
-    }
-
-    pub fn upvalues_mut(&self) -> RefMut<'_, Upvalues> {
-        RefMut::map(self.0.borrow_mut(), |thunk| match thunk {
-            ThunkRepr::Suspended { upvalues, .. } => Rc::get_mut(upvalues).unwrap(),
-            ThunkRepr::Evaluated(Value::Closure(c)) => Rc::get_mut(
-                &mut Rc::get_mut(c).unwrap().upvalues,
-            )
-            .expect(
-                "upvalues_mut() was called on a thunk which already had multiple references to it",
-            ),
-            thunk => panic!("upvalues() on non-suspended thunk: {thunk:?}"),
         })
     }
 

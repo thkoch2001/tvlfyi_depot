@@ -13,8 +13,9 @@ pub mod generators;
 mod macros;
 
 use codemap::Span;
+use gc::GcCellRef;
 use serde_json::json;
-use std::{cmp::Ordering, collections::HashMap, ops::DerefMut, path::PathBuf, rc::Rc};
+use std::{cmp::Ordering, collections::HashMap, path::PathBuf, rc::Rc};
 
 use crate::{
     arithmetic_op,
@@ -123,7 +124,7 @@ struct CallFrame {
 
     /// Optional captured upvalues of this frame (if a thunk or
     /// closure if being evaluated).
-    upvalues: Rc<Upvalues>,
+    upvalues: Upvalues,
 
     /// Instruction pointer to the instruction currently being
     /// executed.
@@ -135,8 +136,8 @@ struct CallFrame {
 
 impl CallFrame {
     /// Retrieve an upvalue from this frame at the given index.
-    fn upvalue(&self, idx: UpvalueIdx) -> &Value {
-        &self.upvalues[idx]
+    fn upvalue(&self, idx: UpvalueIdx) -> GcCellRef<Value> {
+        self.upvalues.get(idx)
     }
 
     /// Borrow the chunk of this frame's lambda.
@@ -498,7 +499,8 @@ impl<'o> VM<'o> {
                     } else {
                         Thunk::new_suspended(blueprint, frame.current_light_span())
                     };
-                    let upvalues = thunk.upvalues_mut();
+
+                    let upvalues = thunk.upvalues();
                     self.stack.push(Value::Thunk(thunk.clone()));
 
                     // From this point on we internally mutate the
@@ -506,7 +508,7 @@ impl<'o> VM<'o> {
                     // already in its stack slot, which means that it
                     // can capture itself as an upvalue for
                     // self-recursion.
-                    self.populate_upvalues(&mut frame, upvalue_count, upvalues)?;
+                    self.populate_upvalues(&mut frame, upvalue_count, &upvalues)?;
                 }
 
                 OpCode::OpForce => {
@@ -580,8 +582,7 @@ impl<'o> VM<'o> {
                     self.populate_upvalues(&mut frame, upvalue_count, &mut upvalues)?;
                     self.stack
                         .push(Value::Closure(Rc::new(Closure::new_with_upvalues(
-                            Rc::new(upvalues),
-                            blueprint,
+                            upvalues, blueprint,
                         ))));
                 }
 
@@ -1093,7 +1094,7 @@ impl<'o> VM<'o> {
         &mut self,
         frame: &mut CallFrame,
         count: usize,
-        mut upvalues: impl DerefMut<Target = Upvalues>,
+        upvalues: &Upvalues,
     ) -> EvalResult<()> {
         for _ in 0..count {
             match frame.inc_ip() {
@@ -1117,15 +1118,15 @@ impl<'o> VM<'o> {
                         }
                     };
 
-                    upvalues.deref_mut().push(val);
+                    upvalues.push(val);
                 }
 
                 OpCode::DataUpvalueIdx(upv_idx) => {
-                    upvalues.deref_mut().push(frame.upvalue(upv_idx).clone());
+                    upvalues.push(frame.upvalue(upv_idx).clone());
                 }
 
                 OpCode::DataDeferredLocal(idx) => {
-                    upvalues.deref_mut().push(Value::DeferredUpvalue(idx));
+                    upvalues.push(Value::DeferredUpvalue(idx));
                 }
 
                 OpCode::DataCaptureWith => {
@@ -1134,7 +1135,6 @@ impl<'o> VM<'o> {
                     let mut captured_with_stack = frame
                         .upvalues
                         .with_stack()
-                        .map(Clone::clone)
                         // ... or make an empty one if there isn't one already.
                         .unwrap_or_else(|| Vec::with_capacity(self.with_stack.len()));
 
@@ -1142,7 +1142,7 @@ impl<'o> VM<'o> {
                         captured_with_stack.push(self.stack[*idx].clone());
                     }
 
-                    upvalues.deref_mut().set_with_stack(captured_with_stack);
+                    upvalues.set_with_stack(captured_with_stack);
                 }
 
                 _ => panic!("compiler error: missing closure operand"),
@@ -1278,7 +1278,7 @@ pub fn run_lambda(
         span: root_span.into(),
         call_frame: CallFrame {
             lambda,
-            upvalues: Rc::new(Upvalues::with_capacity(0)),
+            upvalues: Upvalues::with_capacity(0),
             ip: CodeIdx(0),
             stack_offset: 0,
         },

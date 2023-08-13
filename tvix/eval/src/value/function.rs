@@ -91,7 +91,7 @@ impl Lambda {
 #[derive(/* do not add Clone here */ Debug, Finalize)]
 pub struct Closure {
     pub lambda: Rc<Lambda>,
-    pub upvalues: Rc<Upvalues>,
+    pub upvalues: Upvalues,
 }
 
 /// Manual implementation to traverse `Rc`.
@@ -99,20 +99,20 @@ pub struct Closure {
 unsafe impl Trace for Closure {
     gc::custom_trace!(this, {
         mark(&*this.lambda);
-        mark(&*this.upvalues);
+        mark(&this.upvalues);
     });
 }
 
 impl Closure {
     pub fn new(lambda: Rc<Lambda>) -> Self {
-        Self::new_with_upvalues(
-            Rc::new(Upvalues::with_capacity(lambda.upvalue_count)),
-            lambda,
-        )
+        Self::new_with_upvalues(Upvalues::with_capacity(lambda.upvalue_count), lambda)
     }
 
-    pub fn new_with_upvalues(upvalues: Rc<Upvalues>, lambda: Rc<Lambda>) -> Self {
-        Closure { upvalues, lambda }
+    pub fn new_with_upvalues(upvalues: Upvalues, lambda: Rc<Lambda>) -> Self {
+        Closure {
+            lambda,
+            upvalues: upvalues,
+        }
     }
 
     pub fn chunk(&self) -> &Chunk {
@@ -123,7 +123,7 @@ impl Closure {
         self.lambda.clone()
     }
 
-    pub fn upvalues(&self) -> Rc<Upvalues> {
+    pub fn upvalues(&self) -> Upvalues {
         self.upvalues.clone()
     }
 }

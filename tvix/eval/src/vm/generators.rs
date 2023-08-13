@@ -80,7 +80,7 @@ pub enum VMRequest {
     /// used to force thunks.
     EnterLambda {
         lambda: Rc<Lambda>,
-        upvalues: Rc<Upvalues>,
+        upvalues: Upvalues,
         light_span: LightSpan,
     },
 
@@ -663,7 +663,7 @@ pub async fn emit_warning_kind(co: &GenCo, kind: WarningKind) {
 pub(crate) async fn request_enter_lambda(
     co: &GenCo,
     lambda: Rc<Lambda>,
-    upvalues: Rc<Upvalues>,
+    upvalues: Upvalues,
     light_span: LightSpan,
 ) -> Value {
     let msg = VMRequest::EnterLambda {
