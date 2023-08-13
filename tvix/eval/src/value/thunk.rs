@@ -25,6 +25,8 @@ use std::{
     rc::Rc,
 };
 
+use gc::{Finalize, Trace};
+
 use crate::{
     errors::ErrorKind,
     opcode::OpCode,
@@ -52,7 +54,7 @@ impl Debug for SuspendedNative {
 /// Upvalues must be finalised before leaving the initial state
 /// (Suspended or RecursiveClosure).  The [`value()`] function may
 /// not be called until the thunk is in the final state (Evaluated).
-#[derive(Debug)]
+#[derive(Debug, Finalize)]
 enum ThunkRepr {
     /// Thunk is closed over some values, suspended and awaiting
     /// execution.
@@ -83,6 +85,23 @@ enum ThunkRepr {
     Evaluated(Value),
 }
 
+/// Manual implementation to avoid generated `Drop` trait.
+unsafe impl Trace for ThunkRepr {
+    gc::custom_trace!(this, {
+        match &this {
+            Self::Suspended {
+                lambda, upvalues, ..
+            } => {
+                mark(lambda.as_ref());
+                mark(upvalues.as_ref());
+            }
+            Self::Native(_) => { /* nothing to trace in native code */ }
+            Self::Blackhole { .. } => { /* nothing to trace in blackhole */ }
+            Self::Evaluated(value) => mark(value),
+        }
+    });
+}
+
 impl ThunkRepr {
     fn debug_repr(&self) -> String {
         match self {
@@ -98,8 +117,16 @@ impl ThunkRepr {
 /// evaluation due to self-reference or lazy semantics (or both).
 /// Every reference cycle involving `Value`s will contain at least
 /// one `Thunk`.
-#[derive(Clone, Debug)]
+#[derive(Clone, Debug, Finalize)]
 pub struct Thunk(Rc<RefCell<ThunkRepr>>);
+
+/// Manual implementation to deal with the Rc<RefCell<..>> construct.
+// TODO(tazjin): probably move to derive-macro once this is Gc<..>.
+unsafe impl Trace for Thunk {
+    gc::custom_trace!(this, {
+        mark(&*this.0.borrow());
+    });
+}
 
 impl Thunk {
     pub fn new_closure(lambda: Rc<Lambda>) -> Self {
