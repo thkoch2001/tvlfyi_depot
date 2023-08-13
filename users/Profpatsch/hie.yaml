@@ -28,3 +28,7 @@ cradle:
       component: "lib:ircmail"
     - path: "./httzip/Httzip.hs"
       component: "httzip:exe:httzip"
+    - path: "./declib/Declib.hs"
+      component: "declib:exe:declib"
+    - path: "./my-xmonad/Xmonad.hs"
+      component: "my-xmonad:exe:xmonad"
