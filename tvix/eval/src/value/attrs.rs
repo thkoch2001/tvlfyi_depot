@@ -7,6 +7,7 @@
 //! some peculiarities that are encapsulated within this module.
 use std::iter::FromIterator;
 
+use gc::{Finalize, Trace};
 use imbl::{ordmap, OrdMap};
 use lazy_static::lazy_static;
 use serde::de::{Deserializer, Error, Visitor};
@@ -30,7 +31,7 @@ lazy_static! {
 #[cfg(test)]
 mod tests;
 
-#[derive(Clone, Debug, Deserialize)]
+#[derive(Clone, Debug, Deserialize, Finalize)]
 pub(super) enum AttrsRep {
     Empty,
 
@@ -43,6 +44,25 @@ pub(super) enum AttrsRep {
         name: Value,
         value: Value,
     },
+}
+
+/// Manual implementation for `AttrsRep` as the macro will not work
+/// due to the contained third-party type (`imbl::OrdMap`).
+unsafe impl Trace for AttrsRep {
+    gc::custom_trace!(this, {
+        match this {
+            Self::Empty => {}
+            Self::KV { name, value } => {
+                mark(name);
+                mark(value);
+            }
+            Self::Im(map) => {
+                for (_, value) in map {
+                    mark(value);
+                }
+            }
+        }
+    });
 }
 
 impl Default for AttrsRep {
@@ -98,8 +118,16 @@ impl AttrsRep {
 }
 
 #[repr(transparent)]
-#[derive(Clone, Debug, Default)]
+#[derive(Clone, Debug, Default, Finalize)]
 pub struct NixAttrs(pub(super) AttrsRep);
+
+/// Manual trait implementation to avoid the auto-generated empty
+/// `Drop` impl of the `gc` crate.
+unsafe impl Trace for NixAttrs {
+    gc::custom_trace!(this, {
+        mark(&this.0);
+    });
+}
 
 impl From<OrdMap<NixString, Value>> for NixAttrs {
     fn from(map: OrdMap<NixString, Value>) -> Self {
