@@ -2,8 +2,8 @@
 use std::ops::Index;
 use std::rc::Rc;
 
+use gc::{Finalize, Trace};
 use imbl::{vector, Vector};
-
 use serde::Deserialize;
 
 use crate::generators;
@@ -16,8 +16,18 @@ use super::TotalDisplay;
 use super::Value;
 
 #[repr(transparent)]
-#[derive(Clone, Debug, Deserialize)]
+#[derive(Clone, Debug, Deserialize, Finalize)]
 pub struct NixList(Rc<Vector<Value>>);
+
+/// Manual implementation to work with the contained `imbl::Vector`
+/// type, for which the derive-macro can not be used.
+unsafe impl Trace for NixList {
+    gc::custom_trace!(this, {
+        for value in this.0.iter() {
+            mark(value);
+        }
+    });
+}
 
 impl TotalDisplay for NixList {
     fn total_fmt(&self, f: &mut std::fmt::Formatter<'_>, set: &mut ThunkSet) -> std::fmt::Result {
