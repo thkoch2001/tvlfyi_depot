@@ -84,18 +84,34 @@ pub enum Value {
     FinaliseRequest(bool),
 }
 
+/// Manual implementation to avoid the generated `Drop`, and to deal
+/// with the relative complexity of the type without having to
+/// sprinkle annotations everywhere.
 unsafe impl Trace for Value {
-    // This implementation is invalid and, if used with `Gc`, can
-    // cause - at best - memory leaks and even panics.
-    //
-    // This implementation only exists while we're implementing the
-    // `Trace` type on other types, as almost everything contains
-    // `Value`, and we need a way to untie the knot.
-    //
-    // This implementation should not end up committed to `canon`
-    // unless together with the chain of commits that removes it
-    // again!
-    gc::unsafe_empty_trace!();
+    gc::custom_trace!(this, {
+        match &this {
+            Value::Attrs(attrs) => mark(attrs),
+            Value::List(list) => mark(list),
+            Value::Closure(closure) => mark(closure.as_ref()),
+            Value::Builtin(builtin) => mark(builtin),
+            Value::Thunk(thunk) => mark(thunk),
+            Value::Blueprint(lambda) => mark(lambda.as_ref()),
+
+            // Variants which do not contain other value variants, and
+            // do not need to be traced.
+            Value::Null
+            | Value::Bool(_)
+            | Value::Integer(_)
+            | Value::Float(_)
+            | Value::String(_)
+            | Value::Path(_)
+            | Value::AttrNotFound
+            | Value::DeferredUpvalue(_)
+            | Value::UnresolvedPath(_)
+            | Value::Json(_)
+            | Value::FinaliseRequest(_) => {}
+        }
+    });
 }
 
 lazy_static! {
