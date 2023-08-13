@@ -6,6 +6,7 @@ use std::num::{NonZeroI32, NonZeroUsize};
 use std::path::PathBuf;
 use std::rc::Rc;
 
+use gc::{Finalize, Trace};
 use lexical_core::format::CXX_LITERAL;
 use serde::Deserialize;
 
@@ -39,7 +40,7 @@ pub use self::thunk::{SharedThunkSet, ThunkSet};
 use lazy_static::lazy_static;
 
 #[warn(variant_size_differences)]
-#[derive(Clone, Debug, Deserialize)]
+#[derive(Clone, Debug, Deserialize, Finalize)]
 #[serde(untagged)]
 pub enum Value {
     Null,
@@ -81,6 +82,20 @@ pub enum Value {
 
     #[serde(skip)]
     FinaliseRequest(bool),
+}
+
+unsafe impl Trace for Value {
+    // This implementation is invalid and, if used with `Gc`, can
+    // cause - at best - memory leaks and even panics.
+    //
+    // This implementation only exists while we're implementing the
+    // `Trace` type on other types, as almost everything contains
+    // `Value`, and we need a way to untie the knot.
+    //
+    // This implementation should not end up committed to `canon`
+    // unless together with the chain of commits that removes it
+    // again!
+    gc::unsafe_empty_trace!();
 }
 
 lazy_static! {
