@@ -7,6 +7,7 @@
 //! in order to resolve each free variable in the scope to a value.
 //! "Upvalue" is a term taken from Lua.
 
+use gc::{Finalize, Trace};
 use std::ops::Index;
 
 use crate::{opcode::UpvalueIdx, Value};
@@ -24,7 +25,7 @@ use crate::{opcode::UpvalueIdx, Value};
 ///   `let`, `name:` or `{name}:`
 /// - Dynamic identifiers, which are not bound in any enclosing
 ///   scope
-#[derive(Clone, Debug)]
+#[derive(Clone, Debug, Finalize, Trace)]
 pub struct Upvalues {
     /// The upvalues of static identifiers.  Each static identifier
     /// is assigned an integer identifier at compile time, which is
