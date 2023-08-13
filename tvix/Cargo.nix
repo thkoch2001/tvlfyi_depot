@@ -2469,6 +2469,59 @@ rec {
         ];
 
       };
+      "gc" = rec {
+        crateName = "gc";
+        version = "0.5.0";
+        edition = "2018";
+        sha256 = "1hy8gdyi3pfj0vg83vxvi1q76gd6s4i9bcglcpkyvjjqgmwh6fpp";
+        authors = [
+          "Manish Goregaokar <manishsmail@gmail.com>"
+          "Nika Layzell <nika@thelayzells.com>"
+        ];
+        dependencies = [
+          {
+            name = "gc_derive";
+            packageId = "gc_derive";
+            optional = true;
+          }
+        ];
+        features = {
+          "derive" = [ "gc_derive" ];
+          "gc_derive" = [ "dep:gc_derive" ];
+          "serde" = [ "dep:serde" ];
+        };
+        resolvedDefaultFeatures = [ "derive" "gc_derive" ];
+      };
+      "gc_derive" = rec {
+        crateName = "gc_derive";
+        version = "0.5.0";
+        edition = "2018";
+        sha256 = "07pnbg2bkqr8b3apwzy11gy395ham38vlr08yq32i2v5d46iwvzv";
+        procMacro = true;
+        authors = [
+          "Manish Goregaokar <manishsmail@gmail.com>"
+          "Nika Layzell <nika@thelayzells.com>"
+        ];
+        dependencies = [
+          {
+            name = "proc-macro2";
+            packageId = "proc-macro2 1.0.56";
+          }
+          {
+            name = "quote";
+            packageId = "quote 1.0.26";
+          }
+          {
+            name = "syn";
+            packageId = "syn 1.0.109";
+          }
+          {
+            name = "synstructure";
+            packageId = "synstructure";
+          }
+        ];
+
+      };
       "genawaiter" = rec {
         crateName = "genawaiter";
         version = "0.99.1";
@@ -4588,7 +4641,7 @@ rec {
         dependencies = [
           {
             name = "unicode-xid";
-            packageId = "unicode-xid";
+            packageId = "unicode-xid 0.1.0";
           }
         ];
         features = {
@@ -6429,7 +6482,7 @@ rec {
           }
           {
             name = "unicode-xid";
-            packageId = "unicode-xid";
+            packageId = "unicode-xid 0.1.0";
           }
         ];
         features = {
@@ -6520,6 +6573,42 @@ rec {
           "futures" = [ "futures-core" ];
           "futures-core" = [ "dep:futures-core" ];
         };
+      };
+      "synstructure" = rec {
+        crateName = "synstructure";
+        version = "0.12.6";
+        edition = "2018";
+        sha256 = "03r1lydbf3japnlpc4wka7y90pmz1i0danaj3f9a7b431akdlszk";
+        authors = [
+          "Nika Layzell <nika@thelayzells.com>"
+        ];
+        dependencies = [
+          {
+            name = "proc-macro2";
+            packageId = "proc-macro2 1.0.56";
+            usesDefaultFeatures = false;
+          }
+          {
+            name = "quote";
+            packageId = "quote 1.0.26";
+            usesDefaultFeatures = false;
+          }
+          {
+            name = "syn";
+            packageId = "syn 1.0.109";
+            usesDefaultFeatures = false;
+            features = [ "derive" "parsing" "printing" "clone-impls" "visit" "extra-traits" ];
+          }
+          {
+            name = "unicode-xid";
+            packageId = "unicode-xid 0.2.4";
+          }
+        ];
+        features = {
+          "default" = [ "proc-macro" ];
+          "proc-macro" = [ "proc-macro2/proc-macro" "syn/proc-macro" "quote/proc-macro" ];
+        };
+        resolvedDefaultFeatures = [ "default" "proc-macro" ];
       };
       "tabwriter" = rec {
         crateName = "tabwriter";
@@ -8094,6 +8183,11 @@ rec {
             packageId = "dirs";
           }
           {
+            name = "gc";
+            packageId = "gc";
+            features = [ "derive" ];
+          }
+          {
             name = "genawaiter";
             packageId = "genawaiter";
             usesDefaultFeatures = false;
@@ -8537,7 +8631,7 @@ rec {
         };
         resolvedDefaultFeatures = [ "default" ];
       };
-      "unicode-xid" = rec {
+      "unicode-xid 0.1.0" = rec {
         crateName = "unicode-xid";
         version = "0.1.0";
         edition = "2015";
@@ -8545,6 +8639,19 @@ rec {
         authors = [
           "erick.tryzelaar <erick.tryzelaar@gmail.com>"
           "kwantam <kwantam@gmail.com>"
+        ];
+        features = { };
+        resolvedDefaultFeatures = [ "default" ];
+      };
+      "unicode-xid 0.2.4" = rec {
+        crateName = "unicode-xid";
+        version = "0.2.4";
+        edition = "2015";
+        sha256 = "131dfzf7d8fsr1ivch34x42c2d1ik5ig3g78brxncnn0r1sdyqpr";
+        authors = [
+          "erick.tryzelaar <erick.tryzelaar@gmail.com>"
+          "kwantam <kwantam@gmail.com>"
+          "Manish Goregaokar <manishsmail@gmail.com>"
         ];
         features = { };
         resolvedDefaultFeatures = [ "default" ];

@@ -875,6 +875,27 @@ dependencies = [
 ]
 
 [[package]]
+name = "gc"
+version = "0.5.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "f73a03797d58caede765f4b19522d1a63d737088bbef81de06d2dd117d7bc8c3"
+dependencies = [
+ "gc_derive",
+]
+
+[[package]]
+name = "gc_derive"
+version = "0.5.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "fb6f1e0d69658b2806f60864bad1a80a9634fc0bc17f7ed55828e3b9c45bf61e"
+dependencies = [
+ "proc-macro2 1.0.56",
+ "quote 1.0.26",
+ "syn 1.0.109",
+ "synstructure",
+]
+
+[[package]]
 name = "genawaiter"
 version = "0.99.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1627,7 +1648,7 @@ version = "0.4.30"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "cf3d2011ab5c909338f7887f4fc896d35932e29146c12c8d01da6b22a80ba759"
 dependencies = [
- "unicode-xid",
+ "unicode-xid 0.1.0",
 ]
 
 [[package]]
@@ -2237,7 +2258,7 @@ checksum = "9ca4b3b69a77cbe1ffc9e198781b7acb0c7365a883670e8f1c1bc66fba79a5c5"
 dependencies = [
  "proc-macro2 0.4.30",
  "quote 0.6.13",
- "unicode-xid",
+ "unicode-xid 0.1.0",
 ]
 
 [[package]]
@@ -2267,6 +2288,18 @@ name = "sync_wrapper"
 version = "0.1.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "2047c6ded9c721764247e62cd3b03c09ffc529b2ba5b10ec482ae507a4a70160"
+
+[[package]]
+name = "synstructure"
+version = "0.12.6"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "f36bdaa60a83aca3921b5259d5400cbf5e90fc51931376a9bd4a0eb79aa7210f"
+dependencies = [
+ "proc-macro2 1.0.56",
+ "quote 1.0.26",
+ "syn 1.0.109",
+ "unicode-xid 0.2.4",
+]
 
 [[package]]
 name = "tabwriter"
@@ -2738,6 +2771,7 @@ dependencies = [
  "codemap-diagnostic",
  "criterion",
  "dirs",
+ "gc",
  "genawaiter",
  "imbl",
  "itertools",
@@ -2869,6 +2903,12 @@ name = "unicode-xid"
 version = "0.1.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "fc72304796d0818e357ead4e000d19c9c174ab23dc11093ac919054d20a6a7fc"
+
+[[package]]
+name = "unicode-xid"
+version = "0.2.4"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "f962df74c8c05a667b5ee8bcf162993134c104e96440b663c8daa176dc772d8c"
 
 [[package]]
 name = "url"
