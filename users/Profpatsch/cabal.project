@@ -11,3 +11,5 @@ packages:
   ./whatcd-resolver/whatcd-resolver.cabal
   ./ircmail/ircmail.cabal
   ./httzip/httzip.cabal
+  ./declib/declib.cabal
+  ./my-xmonad/my-xmonad.cabal
