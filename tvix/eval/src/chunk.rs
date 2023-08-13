@@ -1,3 +1,4 @@
+use gc::{Finalize, Trace};
 use std::io::Write;
 use std::ops::{Index, IndexMut};
 
@@ -28,11 +29,19 @@ struct SourceSpan {
 /// A chunk is a representation of a sequence of bytecode
 /// instructions, associated constants and additional metadata as
 /// emitted by the compiler.
-#[derive(Debug, Default)]
+#[derive(Debug, Default, Finalize)]
 pub struct Chunk {
     pub code: Vec<OpCode>,
     pub constants: Vec<Value>,
     spans: Vec<SourceSpan>,
+}
+
+/// Manual implementation to avoid the generated `Drop`.
+unsafe impl Trace for Chunk {
+    gc::custom_trace!(this, {
+        // Only constants contain other values.
+        mark(&this.constants);
+    });
 }
 
 impl Index<ConstantIdx> for Chunk {

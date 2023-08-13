@@ -2,6 +2,7 @@
 use std::{collections::HashMap, hash::Hash, rc::Rc};
 
 use codemap::Span;
+use gc::{Finalize, Trace};
 use smol_str::SmolStr;
 
 use crate::{chunk::Chunk, upvalues::Upvalues};
@@ -46,7 +47,7 @@ impl Formals {
 /// does not `derive(Clone)` in order to prevent this from being
 /// done accidentally.
 ///
-#[derive(/* do not add Clone here */ Debug, Default)]
+#[derive(/* do not add Clone here */ Debug, Default, Finalize)]
 pub struct Lambda {
     pub(crate) chunk: Chunk,
 
@@ -60,7 +61,18 @@ pub struct Lambda {
     /// runtime.  Information about the variables is emitted using
     /// data-carrying opcodes (see [`OpCode::DataStackIdx`]).
     pub(crate) upvalue_count: usize,
+
     pub(crate) formals: Option<Formals>,
+}
+
+/// Manual implementation to avoid the generated `Drop`.
+unsafe impl Trace for Lambda {
+    gc::custom_trace!(this, {
+        // Chunk contains constants, which must be marked.
+        mark(&this.chunk);
+
+        // Nothing else contains `Value`.
+    });
 }
 
 impl Lambda {
@@ -76,10 +88,19 @@ impl Lambda {
 /// does not `derive(Clone)` in order to prevent this from being
 /// done accidentally.
 ///
-#[derive(/* do not add Clone here */ Debug)]
+#[derive(/* do not add Clone here */ Debug, Finalize)]
 pub struct Closure {
     pub lambda: Rc<Lambda>,
     pub upvalues: Rc<Upvalues>,
+}
+
+/// Manual implementation to traverse `Rc`.
+// TODO(tazjin): Remove once these are `gc::Gc`, probably move to derive.
+unsafe impl Trace for Closure {
+    gc::custom_trace!(this, {
+        mark(&*this.lambda);
+        mark(&*this.upvalues);
+    });
 }
 
 impl Closure {
