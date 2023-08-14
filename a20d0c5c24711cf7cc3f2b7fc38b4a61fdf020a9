@@ -22,6 +22,121 @@
       },
       "revId": "a20d0c5c24711cf7cc3f2b7fc38b4a61fdf020a9",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "751a969c_805acd57",
+        "filename": "tvix/docs/differences-drv-paths.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2023-08-14T21:00:07Z",
+      "side": 1,
+      "message": "\"tracking input references, in order to build the right dependencies in advance\" or something like that is better. It sounds strange to say \"tracking string contexts\" (which we don\u0027t have) followed by something different.",
+      "range": {
+        "startLine": 14,
+        "startChar": 65,
+        "endLine": 15,
+        "endChar": 8
+      },
+      "revId": "a20d0c5c24711cf7cc3f2b7fc38b4a61fdf020a9",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e2bc79f7_771d5615",
+        "filename": "tvix/docs/differences-drv-paths.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2023-08-14T21:00:07Z",
+      "side": 1,
+      "message": "two spaces",
+      "range": {
+        "startLine": 25,
+        "startChar": 47,
+        "endLine": 25,
+        "endChar": 49
+      },
+      "revId": "a20d0c5c24711cf7cc3f2b7fc38b4a61fdf020a9",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "60e07244_0982421f",
+        "filename": "tvix/docs/differences-drv-paths.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2023-08-14T21:00:07Z",
+      "side": 1,
+      "message": "two spaces?? editor out of control?))",
+      "range": {
+        "startLine": 27,
+        "startChar": 68,
+        "endLine": 27,
+        "endChar": 70
+      },
+      "revId": "a20d0c5c24711cf7cc3f2b7fc38b4a61fdf020a9",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0256e41a_bb79051f",
+        "filename": "tvix/docs/differences-drv-paths.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2023-08-14T21:00:07Z",
+      "side": 1,
+      "message": "again",
+      "range": {
+        "startLine": 31,
+        "startChar": 69,
+        "endLine": 31,
+        "endChar": 71
+      },
+      "revId": "a20d0c5c24711cf7cc3f2b7fc38b4a61fdf020a9",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d2fb3ac0_7b8c15a4",
+        "filename": "tvix/docs/differences-drv-paths.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2023-08-14T21:00:07Z",
+      "side": 1,
+      "message": "meow",
+      "range": {
+        "startLine": 32,
+        "startChar": 65,
+        "endLine": 32,
+        "endChar": 67
+      },
+      "revId": "a20d0c5c24711cf7cc3f2b7fc38b4a61fdf020a9",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
