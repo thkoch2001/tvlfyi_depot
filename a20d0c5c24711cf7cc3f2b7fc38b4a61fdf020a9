@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5883814a_dcd8dda2",
+        "filename": "tvix/docs/differences-drv-paths.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2023-08-14T20:57:15Z",
+      "side": 1,
+      "message": "What is this syntax? What\u0027s consuming it?",
+      "range": {
+        "startLine": 1,
+        "startChar": 0,
+        "endLine": 10,
+        "endChar": 3
+      },
+      "revId": "a20d0c5c24711cf7cc3f2b7fc38b4a61fdf020a9",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
