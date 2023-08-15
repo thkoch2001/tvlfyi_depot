@@ -1,5 +1,7 @@
 ;;; -*- lexical-binding: t; -*-
 
+(defvar native-comp-deferred-compilation-deny-list nil)
+
 (doom! :completion
        company           ; the ultimate code completion backend
        (ivy +fuzzy
