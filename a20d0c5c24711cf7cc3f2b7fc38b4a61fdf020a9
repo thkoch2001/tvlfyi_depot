@@ -24,6 +24,30 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "497de373_518accc5",
+        "filename": "tvix/docs/differences-drv-paths.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-08-15T10:53:02Z",
+      "side": 1,
+      "message": "This is yaml frontmatter, which is consumed by pandoc - try running `make html` in this directory.\n\nWe have the same blurb at tvix/docs/language-spec.md and tvix/docs/components.md.",
+      "parentUuid": "5883814a_dcd8dda2",
+      "range": {
+        "startLine": 1,
+        "startChar": 0,
+        "endLine": 10,
+        "endChar": 3
+      },
+      "revId": "a20d0c5c24711cf7cc3f2b7fc38b4a61fdf020a9",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "751a969c_805acd57",
@@ -37,6 +61,30 @@
       "writtenOn": "2023-08-14T21:00:07Z",
       "side": 1,
       "message": "\"tracking input references, in order to build the right dependencies in advance\" or something like that is better. It sounds strange to say \"tracking string contexts\" (which we don\u0027t have) followed by something different.",
+      "range": {
+        "startLine": 14,
+        "startChar": 65,
+        "endLine": 15,
+        "endChar": 8
+      },
+      "revId": "a20d0c5c24711cf7cc3f2b7fc38b4a61fdf020a9",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c82da34f_8bc07d6c",
+        "filename": "tvix/docs/differences-drv-paths.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-08-15T10:53:02Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "751a969c_805acd57",
       "range": {
         "startLine": 14,
         "startChar": 65,
@@ -70,6 +118,30 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "6a2fbb7d_09720cce",
+        "filename": "tvix/docs/differences-drv-paths.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-08-15T10:53:02Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e2bc79f7_771d5615",
+      "range": {
+        "startLine": 25,
+        "startChar": 47,
+        "endLine": 25,
+        "endChar": 49
+      },
+      "revId": "a20d0c5c24711cf7cc3f2b7fc38b4a61fdf020a9",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "60e07244_0982421f",
@@ -83,6 +155,30 @@
       "writtenOn": "2023-08-14T21:00:07Z",
       "side": 1,
       "message": "two spaces?? editor out of control?))",
+      "range": {
+        "startLine": 27,
+        "startChar": 68,
+        "endLine": 27,
+        "endChar": 70
+      },
+      "revId": "a20d0c5c24711cf7cc3f2b7fc38b4a61fdf020a9",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "261bb0b5_fd31753d",
+        "filename": "tvix/docs/differences-drv-paths.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-08-15T10:53:02Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "60e07244_0982421f",
       "range": {
         "startLine": 27,
         "startChar": 68,
@@ -116,6 +212,30 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "1c6ebc0c_4fecb2e0",
+        "filename": "tvix/docs/differences-drv-paths.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-08-15T10:53:02Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0256e41a_bb79051f",
+      "range": {
+        "startLine": 31,
+        "startChar": 69,
+        "endLine": 31,
+        "endChar": 71
+      },
+      "revId": "a20d0c5c24711cf7cc3f2b7fc38b4a61fdf020a9",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "d2fb3ac0_7b8c15a4",
@@ -129,6 +249,30 @@
       "writtenOn": "2023-08-14T21:00:07Z",
       "side": 1,
       "message": "meow",
+      "range": {
+        "startLine": 32,
+        "startChar": 65,
+        "endLine": 32,
+        "endChar": 67
+      },
+      "revId": "a20d0c5c24711cf7cc3f2b7fc38b4a61fdf020a9",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b9841788_69bf60bb",
+        "filename": "tvix/docs/differences-drv-paths.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-08-15T10:53:02Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d2fb3ac0_7b8c15a4",
       "range": {
         "startLine": 32,
         "startChar": 65,
