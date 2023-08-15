@@ -65,7 +65,7 @@ in
 
       programs.emacs = {
         enable = true;
-        package = pkgs.emacs-unstable;
+        package = pkgs.emacs;
         extraPackages = (epkgs:
           (with epkgs; [
             tvlPackages.dottime
