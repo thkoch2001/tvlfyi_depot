@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "11298c3c_6c38c2cc",
+        "filename": "tvix/docs/differences-drv-paths.md",
+        "patchSetId": 3
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 1000073
+      },
+      "writtenOn": "2023-08-17T18:39:06Z",
+      "side": 1,
+      "message": "Explain what cppnix is doing instead",
+      "revId": "589bce2d00ef85a15f924a51d557066acecc429d",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
