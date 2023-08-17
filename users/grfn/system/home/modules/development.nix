@@ -118,6 +118,7 @@ with lib;
 
   home.file.".psqlrc".text = ''
     \set QUIET 1
+
     \timing
     \set ON_ERROR_ROLLBACK interactive
     \set VERBOSITY verbose
@@ -127,6 +128,12 @@ with lib;
     \set HISTFILE ~/.psql_history- :DBNAME
     \set HISTCONTROL ignoredups
     \pset null [null]
+
+    \pset linestyle 'unicode'
+    \pset unicode_border_linestyle single
+    \pset unicode_column_linestyle single
+    \pset unicode_header_linestyle double
+
     \unset QUIET
   '';
 
