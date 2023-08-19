@@ -70,9 +70,7 @@ in
     ];
   };
 
-  # Build the Rust documentation for publishing on docs.tvix.dev. Currently only
-  # some crates are documented, as the crates that depend on Protobuf cause
-  # build failures.
+  # Build the Rust documentation for publishing on docs.tvix.dev.
   rust-docs = pkgs.stdenv.mkDerivation {
     inherit cargoDeps;
     name = "tvix-rust-docs";
