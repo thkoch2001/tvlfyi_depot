@@ -131,8 +131,28 @@ in
     '';
   };
 
-  meta.ci.targets = [
-    "shell"
-    "rust-docs"
-  ];
+  # Run cargo clippy. We run it with -Dwarnings, so warnings cause a nonzero
+  # exit code.
+  clippy = pkgs.stdenv.mkDerivation {
+    inherit cargoDeps;
+    name = "tvix-clippy";
+    src = depot.third_party.gitignoreSource ./.;
+    PROTO_ROOT = depot.tvix.store.protos;
+
+    buildInputs = [
+      pkgs.fuse
+    ];
+    nativeBuildInputs = with pkgs; [
+      cargo
+      clippy
+      pkg-config
+      protobuf
+      rustc
+      rustPlatform.cargoSetupHook
+    ];
+
+    buildPhase = "cargo clippy -- -Dwarnings | tee $out";
+  };
+
+  meta.ci.targets = [ "clippy" "shell" "rust-docs" ];
 }
