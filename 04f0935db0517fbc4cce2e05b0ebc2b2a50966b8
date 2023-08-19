@@ -1,0 +1,89 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e9a1eb3d_0e8458aa",
+        "filename": "tvix/nix-compat/src/derivation/output.rs",
+        "patchSetId": 5
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-08-19T19:38:26Z",
+      "side": 1,
+      "message": "s/and/but/",
+      "revId": "04f0935db0517fbc4cce2e05b0ebc2b2a50966b8",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ba28ab8f_b4393407",
+        "filename": "tvix/nix-compat/src/derivation/output.rs",
+        "patchSetId": 5
+      },
+      "lineNbr": 70,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-08-19T19:38:26Z",
+      "side": 1,
+      "message": "`s/JSON was not well-formatted/must parse/`, mostly to align with the style of other tests in here.",
+      "revId": "04f0935db0517fbc4cce2e05b0ebc2b2a50966b8",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6fc9c386_9b84c863",
+        "filename": "tvix/nix-compat/src/derivation/output.rs",
+        "patchSetId": 5
+      },
+      "lineNbr": 85,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-08-19T19:38:26Z",
+      "side": 1,
+      "message": "`s/JSON was not well-formatted/must parse/`, mostly to align with the style of other tests in here.",
+      "revId": "04f0935db0517fbc4cce2e05b0ebc2b2a50966b8",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6a589bcb_badfc2c9",
+        "filename": "tvix/nix-compat/src/nixhash/algos.rs",
+        "patchSetId": 5
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-08-19T19:38:26Z",
+      "side": 1,
+      "message": "s/synced./kept in sync./",
+      "revId": "04f0935db0517fbc4cce2e05b0ebc2b2a50966b8",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d491e924_234e83aa",
+        "filename": "tvix/nix-compat/src/nixhash/with_mode.rs",
+        "patchSetId": 5
+      },
+      "lineNbr": 54,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-08-19T19:38:26Z",
+      "side": 1,
+      "message": "The listing with one element is a bit confusing, and will probably get out of date as soon as we add anything else.\n\nI\u0027d just write \"because we have external consumers, like the Derivation parser, who would like…\".",
+      "revId": "04f0935db0517fbc4cce2e05b0ebc2b2a50966b8",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
