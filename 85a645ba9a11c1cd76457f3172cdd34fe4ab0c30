@@ -1,0 +1,140 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5c5e31b4_5ede5372",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-08-19T17:18:20Z",
+      "side": 1,
+      "message": "The commit message is too long, fails the conformant commit message check.",
+      "revId": "85a645ba9a11c1cd76457f3172cdd34fe4ab0c30",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8c921aae_44860431",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-08-19T17:18:20Z",
+      "side": 1,
+      "message": "Is this more a \"Therefore\", instead of \"Furthermore\"?",
+      "revId": "85a645ba9a11c1cd76457f3172cdd34fe4ab0c30",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6cd3b55e_5c76b968",
+        "filename": "tvix/nix-compat/src/derivation/output.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 97,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-08-19T17:18:20Z",
+      "side": 1,
+      "message": "this is also not hex - I\u0027d probably just make this a bunch of zeroes and leave the info it\u0027s invalid length to a docstring of the test function.",
+      "revId": "85a645ba9a11c1cd76457f3172cdd34fe4ab0c30",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e2cd1e19_a3fccd0a",
+        "filename": "tvix/nix-compat/src/nixhash/with_mode.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 52,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-08-19T17:18:20Z",
+      "side": 1,
+      "message": "Let\u0027s list the external consumers explicitly, it\u0027s the Derivation parser.",
+      "revId": "85a645ba9a11c1cd76457f3172cdd34fe4ab0c30",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "868f72f1_65c88b93",
+        "filename": "tvix/nix-compat/src/nixhash/with_mode.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 96,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-08-19T17:18:20Z",
+      "side": 1,
+      "message": "…, but hashAlgo present?",
+      "revId": "85a645ba9a11c1cd76457f3172cdd34fe4ab0c30",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "428aab13_2e4736e3",
+        "filename": "tvix/nix-compat/src/nixhash/with_mode.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 109,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-08-19T17:18:20Z",
+      "side": 1,
+      "message": "We have the list of algos in the enum, no?",
+      "revId": "85a645ba9a11c1cd76457f3172cdd34fe4ab0c30",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9e34231b_62dd6d3d",
+        "filename": "tvix/nix-compat/src/nixhash/with_mode.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 118,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-08-19T17:18:20Z",
+      "side": 1,
+      "message": "🐈, see above",
+      "revId": "85a645ba9a11c1cd76457f3172cdd34fe4ab0c30",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3643290f_852f0026",
+        "filename": "tvix/nix-compat/src/nixhash/with_mode.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 131,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-08-19T17:18:20Z",
+      "side": 1,
+      "message": "…, but hash present?",
+      "revId": "85a645ba9a11c1cd76457f3172cdd34fe4ab0c30",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
