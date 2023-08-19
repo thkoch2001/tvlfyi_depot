@@ -5,17 +5,6 @@ let
   # crate override for crates that need protobuf
   protobufDep = prev: (prev.nativeBuildInputs or [ ]) ++ [ pkgs.protobuf ];
 
-  # Cargo dependencies to be used with nixpkgs rustPlatform functions.
-  cargoDeps = pkgs.rustPlatform.importCargoLock {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "test-generator-0.3.0" = "08brp3qqa55hijc7xby3lam2cc84hvx1zzfqv6lj7smlczh8k32y";
-      "tonic-mock-0.1.0" = "0lwa03hpp0mxa6aa1zv5w68k61y4hccfm0q2ykyq392fwal8vb50";
-      "wu-manber-0.1.0" = "1zhk83lbq99xzyjwphv2qrb8f8qgfqwa5bbbvyzm0z0bljsjv0pd";
-    };
-  };
-in
-{
   # Load the crate2nix crate tree.
   crates = import ./Cargo.nix {
     inherit pkgs;
@@ -41,6 +30,19 @@ in
       };
     };
   };
+
+  # Cargo dependencies to be used with nixpkgs rustPlatform functions.
+  cargoDeps = pkgs.rustPlatform.importCargoLock {
+    lockFile = ./Cargo.lock;
+    outputHashes = {
+      "test-generator-0.3.0" = crates.internal.crates.test-generator.src.outputHash;
+      "tonic-mock-0.1.0" = crates.internal.crates.tonic-mock.src.outputHash;
+      "wu-manber-0.1.0" = crates.internal.crates.wu-manber.src.outputHash;
+    };
+  };
+in
+{
+  inherit crates;
 
   # Run crate2nix generate in the current working directory, then
   # format the generated file with depotfmt.
