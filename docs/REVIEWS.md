@@ -138,9 +138,21 @@ instance, follow these instructions:
 5. Submit the commit via email (see below).
 
 ## Submitting changes via email
+Please keep in mind this process is more complicated and requires more work from
+both sides:
 
-You can submit a patch via email to `depot@tvl.su` and it will be
-added to Gerrit by a contributor.
+ - Someone needs to relay potential comments from Gerrit to you, you won't get
+   emails from Gerrit.
+ - Updating new revisions needs to be done by the person sending it to Gerrit on
+   your behalf.
+ - You can't change the author of a CL later, if you decide to create an account
+   later on. The CL needs to be abandoned and re-created.
+
+We provide local accounts and do SSO with various third-parties, so getting the
+account should usually be low-friction.
+
+If you still decide differently, you can submit a patch via email to
+`depot@tvl.su` and it will be added to Gerrit by a contributor.
 
 Create an appropriate commit locally and send it us using either of these options:
 
