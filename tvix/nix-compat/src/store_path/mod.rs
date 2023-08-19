@@ -151,6 +151,11 @@ impl StorePath {
 /// Checks a given &[u8] to match the restrictions for store path names, and
 /// returns the name as string if successful.
 pub(crate) fn validate_name(s: &[u8]) -> Result<String, Error> {
+    // Empty names are not allowed.
+    if s.is_empty() {
+        return Err(Error::InvalidLength);
+    }
+
     for (i, c) in s.iter().enumerate() {
         if c.is_ascii_alphanumeric()
             || *c == b'-'
