@@ -19,8 +19,13 @@ pub struct NixHash {
 
 impl NixHash {
     /// Constructs a new [NixHash] by specifying [HashAlgo] and digest.
-    pub fn new(algo: HashAlgo, digest: Vec<u8>) -> Self {
-        Self { algo, digest }
+    /// It can return an error if the passed digest doesn't match what's
+    // expected for the passed algo.
+    pub fn from_algo_and_digest(algo: HashAlgo, digest: Vec<u8>) -> Result<Self, Error> {
+        if digest.len() != hash_algo_length(&algo) {
+            return Err(Error::InvalidEncodedDigestLength(digest.len(), algo));
+        }
+        Ok(Self { algo, digest })
     }
 
     /// Formats a [NixHash] in the Nix default hash format,
