@@ -86,7 +86,6 @@ in
       cargo
       pkg-config
       protobuf
-      rust-analyzer
       rustc
       rustPlatform.cargoSetupHook
     ];
