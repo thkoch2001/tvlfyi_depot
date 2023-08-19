@@ -105,7 +105,7 @@ impl NixHashWithMode {
         if let Some(v) = map.get("hashAlgo") {
             if let Some(s) = v.as_str() {
                 match s.strip_prefix("r:") {
-                    Some(rest) => Ok(Some(Self::Recursive(NixHash::new(
+                    Some(rest) => Ok(Some(Self::Recursive(NixHash::from_algo_and_digest(
                         HashAlgo::try_from(rest).map_err(|e| {
                             serde::de::Error::invalid_value(
                                 Unexpected::Other(&e.to_string()),
@@ -113,8 +113,14 @@ impl NixHashWithMode {
                             )
                         })?,
                         digest,
-                    )))),
-                    None => Ok(Some(Self::Flat(NixHash::new(
+                    ).map_err(|e| {
+                                    serde::de::Error::custom(format!(
+                                        "unable to construct nixhash: {}",
+                                        e
+                                    ))
+                            
+                        })?))),
+                    None => Ok(Some(Self::Flat(NixHash::from_algo_and_digest(
                         HashAlgo::try_from(s).map_err(|e| {
                             serde::de::Error::invalid_value(
                                 Unexpected::Other(&e.to_string()),
@@ -122,7 +128,13 @@ impl NixHashWithMode {
                             )
                         })?,
                         digest,
-                    )))),
+                    ).map_err(|e| {
+                                    serde::de::Error::custom(format!(
+                                        "unable to construct nixhash: {}",
+                                        e
+                                    ))
+                            
+                        })?))),
                 }
             } else {
                 Err(serde::de::Error::invalid_type(
