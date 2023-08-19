@@ -16,6 +16,24 @@
       "message": "Explain what cppnix is doing instead",
       "revId": "589bce2d00ef85a15f924a51d557066acecc429d",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9a91f11f_e4664d4d",
+        "filename": "tvix/docs/differences-drv-paths.md",
+        "patchSetId": 3
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-08-19T14:15:00Z",
+      "side": 1,
+      "message": "Done. I also added a paragraph explaining why this doesn\u0027t cause a change in calculated *output paths*, and why we don\u0027t consider this a priority for now.\n\nPTAL.",
+      "parentUuid": "11298c3c_6c38c2cc",
+      "revId": "589bce2d00ef85a15f924a51d557066acecc429d",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
