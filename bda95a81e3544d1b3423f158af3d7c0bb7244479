@@ -16,6 +16,24 @@
       "message": "There also needs to be a check that the first character is not a period:\n\n```\nnix-repl\u003e derivation { name \u003d \"\"; builder \u003d \"/bin/sh\"; args \u003d []; system \u003d builtins.currentSystem; }  \nerror: The path name \u0027.drv\u0027 is invalid: it is illegal to start the name with a period. Path names are alphanumeric and can include the symbols +-._?\u003d and must not begin with a period. Note: If \u0027.drv\u0027 is a source file and you cannot rename it on disk, builtins.path { name \u003d ... } can be used to give it an alternative name.\n```",
       "revId": "bda95a81e3544d1b3423f158af3d7c0bb7244479",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "070cf09d_9b42efdb",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000073
+      },
+      "writtenOn": "2023-08-20T18:14:41Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "880b153d_3d284e63",
+      "revId": "bda95a81e3544d1b3423f158af3d7c0bb7244479",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
