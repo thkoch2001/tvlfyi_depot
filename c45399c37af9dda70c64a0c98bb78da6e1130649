@@ -16,6 +16,24 @@
       "message": "This should probably also be a module-level function, rather than part of the impl, like all the other from_* functions in here.",
       "revId": "c45399c37af9dda70c64a0c98bb78da6e1130649",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "156fa3bd_87a91253",
+        "filename": "tvix/nix-compat/src/nixhash/mod.rs",
+        "patchSetId": 5
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1000073
+      },
+      "writtenOn": "2023-08-20T18:02:52Z",
+      "side": 1,
+      "message": "OK, I will go further: this should be `impl TryFrom\u003c(HashAlgo, Vec\u003cu8\u003e)\u003e for NixHash` should be the right thing to do and we don\u0027t need any \"public function\" IMHO.",
+      "parentUuid": "40ed0754_88e5c6ac",
+      "revId": "c45399c37af9dda70c64a0c98bb78da6e1130649",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
