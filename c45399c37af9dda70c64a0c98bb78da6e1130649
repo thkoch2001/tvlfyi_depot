@@ -52,6 +52,24 @@
       "parentUuid": "156fa3bd_87a91253",
       "revId": "c45399c37af9dda70c64a0c98bb78da6e1130649",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "45b73c6e_9fc555a2",
+        "filename": "tvix/nix-compat/src/nixhash/mod.rs",
+        "patchSetId": 5
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-08-20T21:19:11Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "47ebd652_fa6c2bfa",
+      "revId": "c45399c37af9dda70c64a0c98bb78da6e1130649",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
