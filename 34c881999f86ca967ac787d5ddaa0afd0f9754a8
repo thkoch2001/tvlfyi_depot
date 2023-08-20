@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "209adaed_4531a0d4",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 6
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1000073
+      },
+      "writtenOn": "2023-08-20T22:12:59Z",
+      "side": 1,
+      "message": "typo: lenght → length",
+      "revId": "34c881999f86ca967ac787d5ddaa0afd0f9754a8",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fd08b54e_f5ca0f38",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000073
+      },
+      "writtenOn": "2023-08-20T22:12:59Z",
+      "side": 1,
+      "message": "I wonder if we should not make the constructor of `NixHash`, `pub(crate)`, but heh.",
+      "revId": "34c881999f86ca967ac787d5ddaa0afd0f9754a8",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
