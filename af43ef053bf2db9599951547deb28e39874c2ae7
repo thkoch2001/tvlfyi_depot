@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7d340ae3_b191f043",
+        "filename": "tvix/default.nix",
+        "patchSetId": 7
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1000073
+      },
+      "writtenOn": "2023-08-20T22:10:40Z",
+      "side": 1,
+      "message": "**nit**: To remove further footguns, let\u0027s write it as:\n\n```\noutputHashes \u003d mapAttrs\u0027 (n: v: nameValuePair v.fullName crates.internal.crates.${n}.src.outputHash) (...)\n```\n?\n\nThis way, you won\u0027t get confused on the name, which will definitely happen given that the value line is too long IMHO.",
+      "revId": "af43ef053bf2db9599951547deb28e39874c2ae7",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
