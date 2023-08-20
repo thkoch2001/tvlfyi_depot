@@ -16,6 +16,24 @@
       "message": "**nit**: To remove further footguns, let\u0027s write it as:\n\n```\noutputHashes \u003d mapAttrs\u0027 (n: v: nameValuePair v.fullName crates.internal.crates.${n}.src.outputHash) (...)\n```\n?\n\nThis way, you won\u0027t get confused on the name, which will definitely happen given that the value line is too long IMHO.",
       "revId": "af43ef053bf2db9599951547deb28e39874c2ae7",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a8850a4b_28356e72",
+        "filename": "tvix/default.nix",
+        "patchSetId": 7
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-08-20T22:39:31Z",
+      "side": 1,
+      "message": "I went with a slightly different approach, consuming a list of strings (crate names), and constructing the attrset with crate name and version as keys, and hashes as value. PTAL.",
+      "parentUuid": "7d340ae3_b191f043",
+      "revId": "af43ef053bf2db9599951547deb28e39874c2ae7",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
