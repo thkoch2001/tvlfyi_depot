@@ -18,10 +18,20 @@ let
   basePkg = pkgs.haskell.packages.ghc8107.callPackage ./pkg.nix { };
 in
 
-pkgs.haskell.lib.overrideCabal basePkg (default: {
+(pkgs.haskell.lib.overrideCabal basePkg (default: {
   inherit src;
   version = "canon";
   configureFlags = [
     "--ghc-option=-Wall --ghc-option=-Werror"
   ] ++ (default.configureFlags or [ ]);
-})
+})) // {
+  # Temporarily disabling builds of xanthous because of a channel bump
+  # that breaks the Haskell ecosystem.
+  #
+  # WIP CLs that fix Xanthous are here:
+  # - https://cl.tvl.fyi/c/depot/+/9186/
+  # - https://cl.tvl.fyi/c/depot/+/9205/
+  #
+  # After these are merged, the build should be reenabled.
+  meta.ci.skip = true;
+}
