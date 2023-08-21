@@ -64,7 +64,7 @@
 
     users.flokli = {
       isNormalUser = true;
-      extraGroups = [ "git" ];
+      extraGroups = [ "git" "wheel" ];
       openssh.authorizedKeys.keys = depot.users.flokli.keys.all;
     };
 
