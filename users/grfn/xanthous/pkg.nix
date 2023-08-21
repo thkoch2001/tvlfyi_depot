@@ -346,4 +346,14 @@ mkDerivation {
   homepage = "https://github.com/glittershark/xanthous#readme";
   description = "A WIP TUI RPG";
   license = lib.licenses.gpl3Only;
+
+  # Temporarily disabling builds of xanthous because of a channel bump
+  # that breaks the Haskell ecosystem.
+  #
+  # WIP CLs that fix Xanthous are here:
+  # - https://cl.tvl.fyi/c/depot/+/9186/
+  # - https://cl.tvl.fyi/c/depot/+/9205/
+  #
+  # After these are merged, the build should be reenabled.
+  broken = true;
 }

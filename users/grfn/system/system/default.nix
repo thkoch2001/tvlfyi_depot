@@ -36,7 +36,10 @@ rec {
   # iso = import ./iso.nix args;
 
   meta.ci.targets = [
-    "mugwumpSystem"
+    # Disabled temporarily while Xanthous can not be built. Please see
+    # default.nix of xanthous itself for more information.
+    # "mugwumpSystem"
+
     "roswellSystem"
     "ogopogoSystem"
     "yerenSystem"
