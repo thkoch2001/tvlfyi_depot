@@ -71,8 +71,8 @@ let
   # To determine build targets, we walk through the depot tree and
   # fetch attributes that were imported by readTree and are buildable.
   #
-  # Any build target that contains `meta.ci.skip = true` will be skipped.
-
+  # Any build target that contains `meta.ci.skip = true` or is marked
+  # broken will be skipped.
   # Is this tree node eligible for build inclusion?
   eligible = node: (node ? outPath) && !(node.meta.ci.skip or (node.meta.broken or false));
 
@@ -103,16 +103,26 @@ readTree.fix (self: (readDepot {
     filter = self.third_party.nixpkgs.lib.cleanSourceFilter;
   };
 
+  # Additionally targets can be excluded from CI by adding them to the
+  # list below.
+  ci.excluded = [
+    # xanthous and related targets are disabled until cl/9186 is submitted
+    self.users.grfn.xanthous
+    self.users.grfn.system.system.mugwumpSystem
+  ];
+
   # List of all buildable targets, for CI purposes.
   #
   # Note: To prevent infinite recursion, this *must* be a nested
   # attribute set (which does not have a __readTree attribute).
-  ci.targets = readTree.gather eligible (self // {
-    # remove the pipelines themselves from the set over which to
-    # generate pipelines because that also leads to infinite
-    # recursion.
-    ops = self.ops // { pipelines = null; };
-  });
+  ci.targets = readTree.gather
+    (t: (eligible t) && (!builtins.elem t self.ci.excluded))
+    (self // {
+      # remove the pipelines themselves from the set over which to
+      # generate pipelines because that also leads to infinite
+      # recursion.
+      ops = self.ops // { pipelines = null; };
+    });
 
   # Derivation that gcroots all depot targets.
   ci.gcroot = with self.third_party.nixpkgs; writeText "depot-gcroot"
