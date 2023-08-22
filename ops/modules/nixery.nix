@@ -5,7 +5,8 @@
 let
   cfg = config.services.depot.nixery;
   description = "Nixery - container images on-demand";
-  storagePath = "/var/lib/nixery/${pkgs.nixpkgsCommits.unstable}";
+  nixpkgsSrc = depot.third_party.sources.nixpkgs-stable;
+  storagePath = "/var/lib/nixery/${nixpkgsSrc.rev}";
 in
 {
   options.services.depot.nixery = {
@@ -33,7 +34,7 @@ in
 
       environment = {
         PORT = toString cfg.port;
-        NIXERY_PKGS_PATH = pkgs.path;
+        NIXERY_PKGS_PATH = nixpkgsSrc.outPath;
         NIXERY_STORAGE_BACKEND = "filesystem";
         NIX_TIMEOUT = "60"; # seconds
         STORAGE_PATH = storagePath;
