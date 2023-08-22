@@ -16,6 +16,24 @@
       "message": "The commented out code can be deleted completely. They are test cases for behaviour of Nix 2.16 we imported from the C++ Nix test suite. At the time no released Nix version nor tvix (to this day) passed them. Nix 2.16 is the first version that passes them.",
       "revId": "23331a365c6f72cd3e524732eb02b704e44d6cab",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "623dbc52_30568c9e",
+        "filename": "tvix/verify-lang-tests/default.nix",
+        "patchSetId": 2
+      },
+      "lineNbr": 68,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2023-08-22T09:55:55Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a1ea574b_71ed41dd",
+      "revId": "23331a365c6f72cd3e524732eb02b704e44d6cab",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
