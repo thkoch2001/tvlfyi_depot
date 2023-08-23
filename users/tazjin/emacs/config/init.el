@@ -80,9 +80,7 @@
 
 (use-package ivy
   :config
-  (ivy-mode 1)
-  (setq enable-recursive-minibuffers t)
-  (setq ivy-use-virtual-buffers t))
+  (ivy-mode 1))
 
 (use-package ivy-prescient
   :after (ivy prescient)
