@@ -1,0 +1,98 @@
+\documentclass[12pt]{beamer}
+
+\usepackage[utf8]{inputenc}
+\usepackage[main=russian,english]{babel}
+\usepackage{fontspec}
+\usepackage{listings}
+
+\setmainfont{JetBrains Mono}
+\setsansfont{JetBrains Mono}
+
+\usetheme{metropolis}
+\newenvironment{code}{\ttfamily}{\par}
+\title{tvix-eval \\ компилятор и рантайм для Nix, на Rust}
+
+\titlegraphic{\vspace{4.8cm}\flushright\includegraphics[width=6cm,keepaspectratio=true]{tvix-logo.png}}
+
+\date{2023-09-07}
+\author{Винсент Амбо}
+\institute{TVL}
+
+\begin{document}
+  %% Slide 0 (title):
+  \begin{frame}
+    \begin{center}
+      \titlepage
+    \end{center}
+  \end{frame}
+
+  %% Slide 1:
+  \section{Что такое Nix?}
+
+  %% Slide 2:
+  \begin{frame}{Особенности языка Nix}
+    \begin{itemize}
+    \item Язык ленив. Просчитывать все сразу не получается.
+    \item Язык развивался органично.
+    \item Большинство кода на Nix - в одном месте: \begin{code}nixpkgs\end{code}.
+    \end{itemize}
+  \end{frame}
+
+  %% Slide 3:
+  \begin{frame}{Текущая имплементация: C++ Nix}
+    \lstinputlisting[
+      language=c++,
+      basicstyle={\scriptsize}
+    ]{cppnix-example-lexer.cpp}
+  \end{frame}
+
+  %% Slide 4:
+  \begin{frame}{Текущая имплементация: C++ Nix}
+    \lstinputlisting[
+      language=c++,
+      basicstyle={\scriptsize}
+    ]{cppnix-example-smuggling.cpp}
+  \end{frame}
+
+  %% Slide 5:
+  \section{``Давайте, перепишем Nix!''}
+
+  %% Slide 6:
+  \section*{Спасибо, jD91mZM2!\\\normalsize{автор ``rnix-parser'', 2002-2021}}
+
+  %% Slide 7:
+  \begin{frame}{tvix-eval, - (язык) Nix, на Rust}
+    \begin{itemize}
+    \item написано с существующим парсером
+    \item bytecode-интерпретатор, вместо tree-walk
+    \item должен работать не только для остальных частей tvix
+    \end{itemize}
+  \end{frame}
+
+  %% дальше:
+  %% * показать байткод, обяъзнить, что компилятор траверзирует AST и генерирует его
+  %% * показать Value, обяъзнить что это такое
+  %% * рассказать чуть-чуть про Rc/Gc
+  %% * показать VM, обяъзнить как он работает, фокус на dispatch loop
+  %% * вернемся к laziness: как мы это сделали?
+  %% * обяъзнить проблемы с thunking + forcing + stack
+  %% * показать, обяъзнить генераторы
+  %% * показать наше решение и наши чарты
+  %% * рассказать про WASM, показать tvixbolt
+  %% * показать где все можно найти, что нам надо дальше, закончить!
+  %% * Спасибо, всё, вопросы?
+
+  \begin{frame}{Спасибо!}
+    Ссылки:
+    \begin{itemize}
+    \item tvix.dev
+    \item tvl.fyi
+    \item tvixbolt.tvl.su
+    \end{itemize}
+
+    \vspace{3cm}
+    \begin{center}
+      t.me/tazjin | tazjin@tvl.su
+    \end{center}
+  \end{frame}
+\end{document}
