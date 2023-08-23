@@ -1,0 +1,161 @@
+\documentclass[12pt]{beamer}
+
+\usepackage[utf8]{inputenc}
+\usepackage[main=russian,english]{babel}
+\usepackage{fontspec}
+\usepackage{listings}
+
+\setmainfont{JetBrains Mono}
+\setsansfont{JetBrains Mono}
+
+\usetheme{metropolis}
+\newenvironment{code}{\ttfamily}{\par}
+\title{tvix-eval \\ компилятор и рантайм для Nix, на Rust}
+
+\titlegraphic{\vspace{4.8cm}\flushright\includegraphics[width=6cm,keepaspectratio=true]{tvix-logo.png}}
+
+\date{2023-09-07}
+\author{Винсент Амбо}
+\institute{TVL}
+
+\begin{document}
+  %% Slide 0 (title):
+  \begin{frame}
+    \begin{center}
+      \titlepage
+    \end{center}
+  \end{frame}
+
+  %% Slide 1:
+  \begin{frame}{\textbf{Т}he \textbf{V}irus \textbf{L}ounge}
+    \begin{itemize}
+    \item Онлайн-комьюнити, занимающий тулингом для монорепо
+    \item особенный фокус на Nix
+    \item Nix не только для сборки пакетов
+    \item Хотелось решение, чтобы использовать Nix везде
+    \end{itemize}
+  \end{frame}
+
+  %% Slide 2:
+  \begin{frame}{Особенности языка Nix}
+    \begin{itemize}
+    \item Ленивы язык. Просчитывать все сразу не получается.
+    \item Язык развивался органично.
+    \item Большинство кода на Nix - в одном месте: \begin{code}nixpkgs\end{code}
+    \end{itemize}
+  \end{frame}
+
+  %% Slide 3:
+  \begin{frame}{Текущая имплементация: C++ Nix}
+    \lstinputlisting[
+      language=c++,
+      basicstyle={\scriptsize}
+    ]{cppnix-example-lexer.cpp}
+  \end{frame}
+
+  %% Slide 4:
+  \begin{frame}{Текущая имплементация: C++ Nix}
+    \lstinputlisting[
+      language=c++,
+      basicstyle={\scriptsize}
+    ]{cppnix-example-smuggling.cpp}
+  \end{frame}
+
+  %% Slide 5:
+  \section{``Давайте, перепишем Nix!''}
+
+  %% Slide 6:
+  \section*{Спасибо, jD91mZM2!\\\normalsize{автор ``rnix-parser'', 2002-2021}}
+
+  %% Slide 7:
+  \begin{frame}{tvix-eval, - (язык) Nix, на Rust}
+    \begin{itemize}
+    \item написано с существующим парсером
+    \item bytecode-интерпретатор, вместо tree-walk
+    \item должен работать не только для остальных частей tvix
+    \end{itemize}
+  \end{frame}
+
+  %% Slide 8:
+  \begin{frame}{tvix-eval, основные части}
+    \begin{enumerate}
+    \item собственный байткод и компилятор
+    \end{enumerate}
+  \end{frame}
+
+  %% показать opcode.rs, быстро показать compiler/mod.rs
+
+  %% Slide 9:
+  \begin{frame}{tvix-eval, основные части}
+    \begin{enumerate}
+    \item собственный байткод и компилятор
+    \item представление значении языка в рантайме
+    \end{enumerate}
+  \end{frame}
+
+  %% показать Value
+
+  %% Slide 10:
+  \begin{frame}{tvix-eval, основные части}
+    \begin{enumerate}
+    \item собственный байткод и компилятор
+    \item представление значении языка в рантайме
+    \item ... и сам рантайм!
+    \end{enumerate}
+  \end{frame}
+
+  %% показать VM
+
+  \section{``Подожди, написать рантайм же не так просто?''}
+
+  %% объяснить проблему со стэком, и решение, показать диаграм
+
+  \section{``А откуда знаешь, что это все правильно работает?''}
+
+  %% показать как тесты работают
+  %% объяснить дебагинг, Твиксболт и тд
+
+  %% Slide 10:
+  \begin{frame}{tvix-eval, в браузере}
+    \begin{itemize}
+    \item удивительно легко делать
+    \item но есть сложности в \begin{code}std::\end{code}
+      % показать пример
+    \end{itemize}
+  \end{frame}
+
+  %% Slide 11:
+  \begin{frame}{А что дальше?}
+    В tvix-eval есть еще кое-какие интересные проблемы. Может ты
+    будешь их решить?
+  \end{frame}
+
+  %% дальше:
+  %% * показать байткод, обяъзнить, что компилятор траверзирует AST и генерирует его
+  %% * показать Value, обяъзнить что это такое
+  %% * вернемся к laziness: как мы это сделали?
+  %% * показать VM, обяъзнить как он работает, фокус на dispatch loop
+  %% * рассказать чуть-чуть про Rc/Gc
+  %% * обяъзнить проблемы с thunking + forcing + stack
+  %% * показать, обяъзнить генераторы
+  %% * показать наше решение и наши чарты
+  %% * рассказать про WASM, показать tvixbolt
+  %% * показать где все можно найти, что нам надо дальше, закончить!
+  %% * Спасибо, всё, вопросы?
+
+  \begin{frame}{Спасибо!}
+    Ссылки:
+    \begin{itemize}
+    \item tvix.dev
+    \item tvl.fyi
+    \item tvixbolt.tvl.su
+    \end{itemize}
+
+    % TODO: QR code or something for these links
+
+    \vspace{3cm}
+    \begin{center}
+      t.me/tazjin | tazjin@tvl.su
+    \end{center}
+  \end{frame}
+\end{document}
