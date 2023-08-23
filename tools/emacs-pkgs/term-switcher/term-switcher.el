@@ -27,18 +27,15 @@
   :type '(string)
   :group 'term-switcher)
 
-(defun ts/open-or-create-vterm (buffer-name)
-  "Switch to the buffer with BUFFER-NAME or create a new vterm
-  buffer."
-  (if (equal "New vterm" buffer-name)
-      ;; Don't open semi-broken vterms over tramp.
-      (if (file-remote-p default-directory)
-          (let ((default-directory "~"))
-            (vterm))
-        (vterm))
-    (if-let ((buffer (get-buffer buffer-name)))
-        (switch-to-buffer buffer)
-      (error "Could not find vterm buffer: %s" buffer-name))))
+(defun ts/open-or-create-vterm (buffer)
+  "Switch to the terminal in BUFFER, or create a new one if buffer is nil."
+  (if buffer
+      (switch-to-buffer buffer)
+    ;; Don't open semi-broken vterms over tramp.
+    (if (file-remote-p default-directory)
+        (let ((default-directory "~"))
+          (vterm))
+      (vterm))))
 
 (defun ts/is-vterm-buffer (buffer)
   "Determine whether BUFFER runs a vterm."
@@ -48,15 +45,16 @@
   "Switch to an existing vterm buffer or create a new one."
 
   (interactive)
-  (let ((terms (-map #'buffer-name
+  (let ((terms (-map (lambda (b) (cons (buffer-name b) b))
                      (-filter #'ts/is-vterm-buffer (buffer-list)))))
     (if terms
         (ivy-read "Switch to vterm: "
-                  (cons "New vterm" terms)
+                  (cons "New vterm" (-map #'car terms))
                   :caller 'ts/switch-to-terminal
                   :preselect (s-concat "^" term-switcher-buffer-prefix)
                   :require-match t
-                  :action #'ts/open-or-create-vterm)
+                  :action (lambda (match)
+                            (ts/open-or-create-vterm (cdr (assoc match terms)))))
       (vterm))))
 
 (provide 'term-switcher)
