@@ -371,4 +371,23 @@ by looking for a `Cargo.toml' file."
                     (error "Not a .nix/.exp file!")))))
     (find-file other)))
 
+(defun reliably-switch-buffer ()
+  "Reliably and interactively switch buffers, without ending up in a
+situation where the buffer was renamed during selection and an
+empty new buffer is created.
+
+This is done by, in contrast to functions like
+`ivy-switch-buffer', retaining a list of the buffer objects and
+their associated names."
+
+  (interactive)
+  (let* ((buffers (seq-map (lambda (b) (cons (buffer-name b) b))
+                           (seq-filter (lambda (b) (not (string-prefix-p " " (buffer-name b))))
+                                       (buffer-list))))
+         (name (completing-read "Switch to buffer: " (seq-map #'car buffers)))
+         (selected (or (cdr (assoc name buffers))
+                       ;; Allow users to manually select invisible buffers ...
+                       (get-buffer name))))
+    (switch-to-buffer (or selected name) nil 't)))
+
 (provide 'functions)
