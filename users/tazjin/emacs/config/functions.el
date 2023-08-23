@@ -114,7 +114,9 @@ the GPG agent correctly."
                    nil ;; predicate
                    t   ;; require-match
                    ))
-         (password (auth-source-pass-get 'secret entry)))
+         (password (or (let ((epa-suppress-error-buffer t))
+                         (auth-source-pass-get 'secret entry))
+                       (error "failed to decrypt '%s', wrong password?" entry))))
     (password-store-clear)
     (kill-new password)
     (setq password-store-kill-ring-pointer kill-ring-yank-pointer)
