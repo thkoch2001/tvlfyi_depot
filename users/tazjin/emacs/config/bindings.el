@@ -1,3 +1,6 @@
+;; Switch buffers reliably in the face of spurious renames.
+(global-set-key (kbd "C-x b") #'reliably-switch-buffer)
+
 ;; Font size
 (define-key global-map (kbd "C-=") 'increase-default-text-scale) ;; '=' because there lies '+'
 (define-key global-map (kbd "C--") 'decrease-default-text-scale)
