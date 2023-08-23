@@ -5,16 +5,16 @@
 ;;
 ;; Author: Vincent Ambo <tazjin@tvl.su>
 ;; Version: 1.1
-;; Package-Requires: (dash ivy s vterm)
+;; Package-Requires: (ivy s vterm)
 ;;
 ;;; Commentary:
 ;;
 ;; This package adds a function that lets users quickly switch between
 ;; different open vterms via ivy.
 
-(require 'dash)
 (require 'ivy)
 (require 's)
+(require 'seq)
 (require 'vterm)
 
 (defgroup term-switcher nil
@@ -45,11 +45,11 @@
   "Switch to an existing vterm buffer or create a new one."
 
   (interactive)
-  (let ((terms (-map (lambda (b) (cons (buffer-name b) b))
-                     (-filter #'ts/is-vterm-buffer (buffer-list)))))
+  (let ((terms (seq-map (lambda (b) (cons (buffer-name b) b))
+                        (seq-filter #'ts/is-vterm-buffer (buffer-list)))))
     (if terms
         (ivy-read "Switch to vterm: "
-                  (cons "New vterm" (-map #'car terms))
+                  (cons "New vterm" (seq-map #'car terms))
                   :caller 'ts/switch-to-terminal
                   :preselect (s-concat "^" term-switcher-buffer-prefix)
                   :require-match t
