@@ -1,4 +1,4 @@
 let
-  flake = builtins.getFlake "syndicate";
+  flake = builtins.getFlake "/home/emery/src/syndicate-flake";
   pkgs = import <nixpkgs> { overlays = [ flake.overlays.default ]; };
-in pkgs.nix_actor
+in pkgs.nim2Packages.nix_actor

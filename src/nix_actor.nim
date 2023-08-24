@@ -143,36 +143,42 @@ type
   DaemonSideArgs {.preservesDictionary.} = object
     `daemon-socket`: string
 
-main.initNix()
-libexpr.initGC()
+proc runNixActor(nixState: EvalState) =
+  let erisStore = newMemoryStore()
+  runActor("nix_actor") do (root: Cap; turn: var Turn):
+    connectStdio(root, turn)
 
-runActor("main") do (root: Cap; turn: var Turn):
-  let
-    erisStore = newMemoryStore()
-    nixStore = openStore()
-    nixState = newEvalState(nixStore)
-  connectStdio(root, turn)
+    let pat = ?CapArgs
+    during(turn, root, pat) do (ds: Cap):
 
-  during(turn, root, ?CapArgs) do (ds: Cap):
-    discard publish(turn, ds,
-      initRecord("nixVersion", toPreserve($nixVersion.c_str)))
+      discard publish(turn, ds,
+        initRecord("nixVersion", toPreserve($nixVersion.c_str)))
 
-    discard bootNixFacet(turn, ds)
+      discard bootNixFacet(turn, ds)
 
-    during(turn, ds, ?Observe(pattern: !Eval) ?? {0: grabLit(), 1: grabDict()}) do (e: string, o: Assertion):
-      var ass = Eval(expr: e)
-      doAssert fromPreserve(ass.options, unpackLiterals(o))
-        # unused options
-      try:
-        ass.result = eval(nixState, ass.expr)
-        discard publish(turn, ds, ass)
-      except CatchableError as err:
-        stderr.writeLine "failed to evaluate ", ass.expr, ": ", err.msg
-      except StdException as err:
-        stderr.writeLine "failed to evaluate ", ass.expr, ": ", err.what
+      let pat = ?Observe(pattern: !Eval) ?? {0: grabLit(), 1: grabDict()}
+      during(turn, ds, pat) do (e: string, o: Assertion):
+        var ass = Eval(expr: e)
+        doAssert fromPreserve(ass.options, unpackLiterals(o))
+          # unused options
+        try:
+          ass.result = eval(nixState, ass.expr)
+          discard publish(turn, ds, ass)
+        except CatchableError as err:
+          stderr.writeLine "failed to evaluate ", ass.expr, ": ", err.msg
+        except StdException as err:
+          stderr.writeLine "failed to evaluate ", ass.expr, ": ", err.what
 
-    during(turn, root, ?ClientSideArgs) do (socketPath: string):
-      bootClientSide(turn, ds, erisStore, socketPath)
+      during(turn, root, ?ClientSideArgs) do (socketPath: string):
+        bootClientSide(turn, ds, erisStore, socketPath)
 
-    during(turn, root, ?DaemonSideArgs) do (socketPath: string):
-      bootDaemonSide(turn, ds, erisStore, socketPath)
+      during(turn, root, ?DaemonSideArgs) do (socketPath: string):
+        bootDaemonSide(turn, ds, erisStore, socketPath)
+
+proc main =
+  initNix()
+  initGC()
+  let nixStore = openStore()
+  runNixActor(newEvalState(nixStore))
+
+main()

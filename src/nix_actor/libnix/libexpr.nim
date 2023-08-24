@@ -83,11 +83,11 @@ type
   ExprObj {.importcpp: "nix::Expr", header: "nixexpr.hh".} = object
     discard
   Expr* = ptr ExprObj
-  EvalState* {.importcpp: "nix::ref<nix::EvalState>", header: "eval.hh".} = object
+  EvalState* {.importcpp: "std::shared_ptr<nix::EvalState>", header: "eval.hh".} = object
     discard
 
 proc newEvalState*(store: Store): EvalState {.
-  importcpp: "nix::newEvalState(@)", header: "seepuspus.hh".}
+  importcpp: "nix::newEvalState(@)", header: "seepuspus.hh", constructor.}
 
 proc parseExprFromString*(state: EvalState; s, basePath: cstring): Expr {.
   importcpp: "#->parseExprFromString(@)".}

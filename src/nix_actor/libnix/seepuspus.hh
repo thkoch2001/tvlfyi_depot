@@ -3,7 +3,7 @@
 
 namespace nix {
 
-  ref<EvalState> newEvalState(ref<Store> store)
+  std::shared_ptr<nix::EvalState> newEvalState(ref<Store> store)
   {
     auto searchPath = Strings();
     auto evalState =
@@ -15,7 +15,7 @@ namespace nix {
           searchPath, store, store)
       #endif
         ;
-    return ref<EvalState>(evalState);
+    return evalState;
   }
 
 }
