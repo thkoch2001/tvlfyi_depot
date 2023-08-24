@@ -1,8 +1,9 @@
 use crate::store_path::{
     self, build_output_path, build_regular_ca_path, build_text_path, StorePath,
 };
-use bstr::BString;
+use bstr::{BString, Utf8Error};
 use serde::{Deserialize, Serialize};
+use serde_with::{serde_as, DeserializeAs, SerializeAs};
 use sha2::{Digest, Sha256};
 use std::collections::{BTreeMap, BTreeSet};
 use std::io;
@@ -21,6 +22,39 @@ pub use crate::nixhash::{NixHash, NixHashWithMode};
 pub use errors::{DerivationError, OutputError};
 pub use output::Output;
 
+/// This is a special wrapper type
+/// for BString that are supposed to represent
+/// a UTF-8 only representation.
+struct BStringUtf8;
+
+/// Serialization as a UTF-8 only BString.
+impl SerializeAs<BString> for BStringUtf8 {
+    fn serialize_as<S>(source: &BString, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        // If this is not UTF-8, let's explode with the UTF8 error provided
+        // as a custom serialization error.
+        let s: &str = source
+            .try_into()
+            .map_err(|err: Utf8Error| serde::ser::Error::custom(err.to_string()))?;
+        s.serialize(serializer)
+    }
+}
+
+/// Deserialization as a UTF-8 only BString.
+impl<'de> DeserializeAs<'de, BString> for BStringUtf8 {
+    fn deserialize_as<D>(deserializer: D) -> Result<BString, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        // We are pretty much guaranteed this should be UTF-8
+        // If it's not, we will explode at deserialization.
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[serde_as]
 #[derive(Clone, Debug, Default, Eq, PartialEq, Serialize, Deserialize)]
 pub struct Derivation {
     #[serde(rename = "args")]
@@ -28,6 +62,14 @@ pub struct Derivation {
 
     pub builder: String,
 
+    // We serialize the environment as a BTreeMap which
+    // values are necessarily UTF-8.
+    // If we do happen to have invalid UTF-8 things
+    // in the value, we will throw errors at (de)serialization
+    // boundaries.
+    // TODO(Raito): do we want to go further? e.g. perform lossy
+    // transformations by replacing by Unicode replacement characters.
+    #[serde_as(as = "BTreeMap<_, BStringUtf8>")]
     #[serde(rename = "env")]
     pub environment: BTreeMap<String, BString>,
 
