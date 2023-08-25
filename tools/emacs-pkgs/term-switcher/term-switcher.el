@@ -27,15 +27,18 @@
   :type '(string)
   :group 'term-switcher)
 
+(defun ts/create-vterm ()
+  "Launch vterm, but don't open semi-broken vterms over TRAMP."
+  (if (file-remote-p default-directory)
+      (let ((default-directory "~"))
+        (vterm))
+    (vterm)))
+
 (defun ts/open-or-create-vterm (buffer)
   "Switch to the terminal in BUFFER, or create a new one if buffer is nil."
   (if buffer
       (switch-to-buffer buffer)
-    ;; Don't open semi-broken vterms over tramp.
-    (if (file-remote-p default-directory)
-        (let ((default-directory "~"))
-          (vterm))
-      (vterm))))
+    (ts/create-vterm)))
 
 (defun ts/is-vterm-buffer (buffer)
   "Determine whether BUFFER runs a vterm."
@@ -55,6 +58,6 @@
                   :require-match t
                   :action (lambda (match)
                             (ts/open-or-create-vterm (cdr (assoc match terms)))))
-      (vterm))))
+      (ts/create-vterm))))
 
 (provide 'term-switcher)
