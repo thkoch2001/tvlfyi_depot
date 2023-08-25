@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "57688d68_d20cd37b",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-08-25T11:22:37Z",
+      "side": 1,
+      "message": "Is there a way to only do this in the JSON case? In the case of CBOR, we could probably keep it bytes.",
+      "revId": "92ed4ab4aaa9dbe1cd85f81f77f05a0d83d4838d",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
