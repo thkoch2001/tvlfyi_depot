@@ -18,7 +18,6 @@
 ;; Start eshell or switch to it if it's active.
 (global-set-key (kbd "C-x m") 'eshell)
 
-(global-set-key (kbd "C-x C-p") 'browse-repositories)
 (global-set-key (kbd "M-g M-g") 'goto-line-with-feedback)
 
 ;; Miscellaneous editing commands
@@ -26,7 +25,7 @@
 (global-set-key (kbd "C-c a") 'align-regexp)
 (global-set-key (kbd "C-c m") 'mc/mark-dwim)
 
-;; Browse URLs (very useful for Gitlab's SSH output!)
+;; Browse URLs (very useful for Gerrit's push output, etc!)
 (global-set-key (kbd "C-c b p") 'browse-url-at-point)
 (global-set-key (kbd "C-c b b") 'browse-url)
 
@@ -45,9 +44,6 @@
 
 ;; Insert TODO comments
 (global-set-key (kbd "C-c t") 'insert-todo-comment)
-
-;; Make sharing music easier
-(global-set-key (kbd "s-s w") #'songwhip-lookup-url)
 
 ;; Open the depot
 (global-set-key (kbd "s-s d") #'tvl-depot-status)

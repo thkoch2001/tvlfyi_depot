@@ -4,6 +4,7 @@
 (add-hook 'prog-mode-hook 'hl-line-mode)
 
 ;; Use auto-complete as completion at point
+;; TODO(tazjin): what is this?
 (defun set-auto-complete-as-completion-at-point-function ()
   (setq completion-at-point-functions '(auto-complete)))
 
@@ -30,8 +31,5 @@
 
 ;; Transparently open compressed files
 (auto-compression-mode t)
-
-;; Configure go-mode for Go2 Alpha
-(add-to-list 'auto-mode-alist '("\\.go2$" . go-mode))
 
 (provide 'modes)

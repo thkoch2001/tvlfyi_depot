@@ -2,10 +2,6 @@
 (require 'dash)
 (require 'map)
 
-(defun load-file-if-exists (filename)
-  (if (file-exists-p filename)
-      (load filename)))
-
 (defun goto-line-with-feedback ()
   "Show line numbers temporarily, while prompting for the line number input"
   (interactive)
@@ -29,11 +25,6 @@
   (if (or arg (not buffer-file-name))
       (find-file (concat "/sudo:root@localhost:" (read-file-name "File: ")))
     (find-alternate-file (concat "/sudo:root@localhost:" buffer-file-name))))
-
-;; Open the NixOS man page
-(defun nixos-man ()
-  (interactive)
-  (man "configuration.nix"))
 
 ;; Get the nix store path for a given derivation.
 ;; If the derivation has not been built before, this will trigger a build.
@@ -126,13 +117,6 @@ the GPG agent correctly."
           (run-at-time (password-store-timeout)
                        nil 'password-store-clear))))
 
-(defun browse-repositories ()
-  "Select a git repository and open its associated magit buffer."
-
-  (interactive)
-  (magit-status
-   (completing-read "Repository: " (magit-list-repos))))
-
 (defun bottom-right-window-p ()
   "Determines whether the last (i.e. bottom-right) window of the
   active frame is showing the buffer in which this function is
@@ -179,27 +163,6 @@ the GPG agent correctly."
                             mc/mark-more-hydra/mc/mmlte--up
                             mc/mark-more-hydra/mmlte--up
                             mc/mark-more-hydra/nil))
-
-(defun memespace-region ()
-  "Make a meme out of it."
-
-  (interactive)
-  (let* ((start (region-beginning))
-         (end (region-end))
-         (memed
-          (message
-           (s-trim-right
-            (apply #'string
-                   (-flatten
-                    (nreverse
-                     (-reduce-from (lambda (acc x)
-                                     (cons (cons x (-repeat (+ 1 (length acc)) 32)) acc))
-                                   '()
-                                   (string-to-list (buffer-substring-no-properties start end))))))))))
-
-    (save-excursion (delete-region start end)
-                    (goto-char start)
-                    (insert memed))))
 
 (defun insert-todo-comment (prefix todo)
   "Insert a comment at point with something for me to do."
@@ -317,33 +280,6 @@ by looking for a `Cargo.toml' file."
   (magit-find-file--internal "{worktree}"
                              (magit-read-file-from-rev "HEAD" "Find file")
                              #'pop-to-buffer-same-window))
-
-(defun songwhip--handle-result (status &optional cbargs)
-  ;; TODO(tazjin): Inspect status, which looks different in practice
-  ;; than the manual claims.
-  (if-let* ((response (json-parse-string
-                       (buffer-substring url-http-end-of-headers (point-max))))
-            (sw-path (ht-get* response "data" "path"))
-            (link (format "https://songwhip.com/%s" sw-path))
-            (select-enable-clipboard t))
-      (progn
-        (kill-new link)
-        (message "Copied Songwhip link (%s)" link))
-    (warn "Something went wrong while retrieving Songwhip link!")
-    ;; For debug purposes, the buffer is persisted in this case.
-    (setq songwhip--debug-buffer (current-buffer))))
-
-(defun songwhip-lookup-url (url)
-  "Look up URL on Songwhip and copy the resulting link to the clipboard."
-  (interactive "sEnter source URL: ")
-  (let ((songwhip-url "https://songwhip.com/api/")
-        (url-request-method "POST")
-        (url-request-extra-headers '(("Content-Type" . "application/json")))
-        (url-request-data
-         (json-serialize `((country . "GB")
-                           (url . ,url)))))
-    (url-retrieve "https://songwhip.com/api/" #'songwhip--handle-result nil t t)
-    (message "Requesting Songwhip URL ... please hold the line.")))
 
 (defun rg-in-project (&optional prefix)
   "Interactively call ripgrep in the current project, or fall
