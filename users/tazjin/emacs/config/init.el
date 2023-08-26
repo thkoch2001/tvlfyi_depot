@@ -10,23 +10,9 @@
 (require 'use-package)
 (require 'seq)
 
-;; TODO(tazjin): Figure out what's up with vc.
-;;
-;; Leaving vc enabled breaks all find-file operations with messages
-;; about .git folders being absent, but in random places.
-(require 'vc)
-(setq vc-handled-backends nil)
-
 (package-initialize)
 
 ;; Initialise all packages installed via Nix.
-;;
-;; TODO: Generate this section in Nix for all packages that do not
-;; require special configuration.
-
-;;
-;; Packages providing generic functionality.
-;;
 
 (use-package ace-window
   :bind (("C-x o" . ace-window))
@@ -58,20 +44,6 @@
   :custom
   (eglot-autoshutdown t)
   (eglot-send-changes-idle-time 0.3))
-
-(use-package elfeed
-  :config
-  (setq elfeed-feeds
-        '("https://lobste.rs/rss"
-          "https://www.anti-spiegel.ru/feed/"
-          "https://www.reddit.com/r/lockdownskepticism/.rss"
-          "https://www.reddit.com/r/rust/.rss"
-          "https://news.ycombinator.com/rss"
-          ("https://xkcd.com/atom.xml" media)
-
-          ;; vlogcreations
-          ("https://www.youtube.com/feeds/videos.xml?channel_id=UCR0VLWitB2xM4q7tjkoJUPw" media)
-          )))
 
 (use-package ht)
 
@@ -142,11 +114,9 @@
 (use-package restclient)
 
 (use-package vterm
-  :config (progn
-            (setq vterm-shell "fish")
-            (setq vterm-exit-functions
-                  (lambda (&rest _) (kill-buffer (current-buffer))))
-            (setq vterm-kill-buffer-on-exit t)))
+  :custom
+  (vterm-shell "fish")
+  (vterm-kill-buffer-on-exit t))
 
 ;; vterm removed the ability to set a custom title generator function
 ;; via the public API, so this overrides its private title generation
