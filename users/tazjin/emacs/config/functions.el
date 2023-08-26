@@ -281,14 +281,6 @@ by looking for a `Cargo.toml' file."
                              (magit-read-file-from-rev "HEAD" "Find file")
                              #'pop-to-buffer-same-window))
 
-(defun rg-in-project (&optional prefix)
-  "Interactively call ripgrep in the current project, or fall
-  back to ripgrep default behaviour if prefix is set."
-  (interactive "P")
-  (counsel-rg nil (unless prefix
-                    (if-let ((pr (project-current)))
-                        (project-root pr)))))
-
 (defun zoxide-open-project ()
   "Query Zoxide for paths, and open the result as appropriate (magit or dired)."
   (interactive)

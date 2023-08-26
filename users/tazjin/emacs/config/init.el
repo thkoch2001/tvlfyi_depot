@@ -33,9 +33,10 @@
   :hook ((prog-mode . company-mode))
   :config (setq company-tooltip-align-annotations t))
 
-(use-package counsel
-  :after (ivy)
-  :config (counsel-mode 1))
+(use-package consult
+  :bind
+  ("C-c r g" . consult-ripgrep)
+  ("C-s" . consult-line))
 
 (use-package dash)
 (use-package gruber-darker-theme)
@@ -49,18 +50,6 @@
 
 (use-package hydra)
 (use-package idle-highlight-mode :hook ((prog-mode . idle-highlight-mode)))
-
-(use-package ivy
-  :config
-  (ivy-mode 1))
-
-(use-package ivy-prescient
-  :after (ivy prescient)
-  :config
-  (ivy-prescient-mode)
-  ;; Fixes an issue with how regexes are passed to ripgrep from counsel,
-  ;; see raxod502/prescient.el#43
-  (setf (alist-get 'counsel-rg ivy-re-builders-alist) #'ivy--regex-plus))
 
 (use-package multiple-cursors)
 
@@ -79,17 +68,14 @@
   (pinentry-start))
 
 (use-package prescient
-  :after (ivy counsel)
-  :config (prescient-persist-mode))
+  :config
+  (prescient-persist-mode)
+  (setq completion-styles '(basic prescient)))
 
 (use-package rainbow-delimiters :hook (prog-mode . rainbow-delimiters-mode))
 (use-package rainbow-mode)
 (use-package s)
 (use-package string-edit-at-point)
-
-(use-package swiper
-  :after (counsel ivy)
-  :bind (("C-s" . swiper)))
 
 (use-package telephone-line) ;; configuration happens outside of use-package
 (use-package term-switcher)
@@ -204,6 +190,10 @@
 (use-package toml-mode)
 
 (use-package tvl)
+
+(use-package vertico
+  :config
+  (vertico-mode))
 
 (use-package web-mode)
 (use-package yaml-mode)
