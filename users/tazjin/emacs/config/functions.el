@@ -306,14 +306,26 @@ by looking for a `Cargo.toml' file."
 situation where the buffer was renamed during selection and an
 empty new buffer is created.
 
-This is done by, in contrast to functions like
-`ivy-switch-buffer', retaining a list of the buffer objects and
-their associated names."
+This is done by, in contrast to most buffer-switching functions,
+retaining a list of the buffer *objects* and their associated
+names, instead of only their names (which might change)."
 
   (interactive)
   (let* ((buffers (seq-map (lambda (b) (cons (buffer-name b) b))
                            (seq-filter (lambda (b) (not (string-prefix-p " " (buffer-name b))))
                                        (buffer-list))))
+
+         ;; Annotate buffers that display remote files. I frequently
+         ;; want to see it, because I might have identically named
+         ;; files open locally and remotely at the same time, and it
+         ;; helps with differentiating them.
+         (completion-extra-properties
+          '(:annotation-function
+            (lambda (name)
+              (if-let* ((file (buffer-file-name (cdr (assoc name buffers))))
+                        (remote (file-remote-p file)))
+                  (format " [%s]" remote)))))
+
          (name (completing-read "Switch to buffer: " (seq-map #'car buffers)))
          (selected (or (cdr (assoc name buffers))
                        ;; Allow users to manually select invisible buffers ...
