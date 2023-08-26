@@ -220,7 +220,7 @@ in-progress."
 (exwm-input-set-key (kbd "C-c j") #'exwm-jump-to-buffer)
 
 ;; Launch applications / any command with completion (dmenu style!)
-(exwm-input-set-key (kbd "s-d") #'counsel-linux-app)
+;; (exwm-input-set-key (kbd "s-d") #'counsel-linux-app) ;; TODO(tazjin): completing-read version
 (exwm-input-set-key (kbd "s-x") #'run-external-command)
 (exwm-input-set-key (kbd "s-p") #'password-store-lookup)
 
@@ -376,7 +376,6 @@ in-progress."
 ;; Notmuch shortcuts as EXWM globals
 ;; (g m => gmail)
 (exwm-input-set-key (kbd "s-g m") #'notmuch)
-(exwm-input-set-key (kbd "s-g M") #'counsel-notmuch)
 
 (exwm-randr-enable)
 

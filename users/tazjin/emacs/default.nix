@@ -29,8 +29,7 @@ pkgs.makeOverridable
       clojure-mode
       cmake-mode
       company
-      counsel
-      counsel-notmuch
+      consult
       d-mode
       deft
       direnv
@@ -48,8 +47,6 @@ pkgs.makeOverridable
       ht
       hydra
       idle-highlight-mode
-      ivy
-      ivy-prescient
       jq-mode
       kotlin-mode
       kubernetes
@@ -76,7 +73,6 @@ pkgs.makeOverridable
       rust-mode
       sly
       string-edit-at-point
-      swiper
       telephone-line
       terraform-mode
       toml-mode
@@ -84,6 +80,7 @@ pkgs.makeOverridable
       undo-tree
       use-package
       uuidgen
+      vertico
       vterm
       web-mode
       websocket
