@@ -220,7 +220,7 @@ in-progress."
 (exwm-input-set-key (kbd "C-c j") #'exwm-jump-to-buffer)
 
 ;; Launch applications / any command with completion (dmenu style!)
-;; (exwm-input-set-key (kbd "s-d") #'counsel-linux-app) ;; TODO(tazjin): completing-read version
+(exwm-input-set-key (kbd "s-d") #'run-xdg-app)
 (exwm-input-set-key (kbd "s-x") #'run-external-command)
 (exwm-input-set-key (kbd "s-p") #'password-store-lookup)
 
