@@ -10,6 +10,7 @@ fn main() {
                     "{}",
                     json!({
                         "name": app.name().as_str(),
+                        "display_name": app.display_name().as_str(),
                         "commandline": cmd,
                     })
                 );

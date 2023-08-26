@@ -332,4 +332,21 @@ names, instead of only their names (which might change)."
                        (get-buffer name))))
     (switch-to-buffer (or selected name) nil 't)))
 
+(defun run-xdg-app ()
+  "Use `//users/tazjin/gio-list-apps' to retrieve a list of
+installed (and visible) XDG apps, and let users launch them."
+  (interactive)
+  (let* ((apps-json (s-lines (s-trim (shell-command-to-string "gio-list-apps"))))
+         (apps (seq-map (lambda (app)
+                          (let ((parsed (json-parse-string app :object-type 'alist)))
+                            (cons (cdr (assoc 'name parsed))
+                                  (cdr (assoc 'commandline parsed)))))
+                        apps-json))
+
+         ;; Display the command that will be run as an annotation
+         (completion-extra-properties
+          '(:annotation-function (lambda (app) (format " [%s]" (cdr (assoc app apps)))))))
+
+    (run-external-command--handler (cdr (assoc (completing-read "App: " apps nil t) apps)))))
+
 (provide 'functions)

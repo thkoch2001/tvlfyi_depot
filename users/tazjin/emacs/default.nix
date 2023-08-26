@@ -1,6 +1,6 @@
 # This file builds an Emacs pre-configured with the packages I need
 # and my personal Emacs configuration.
-{ lib, pkgs, ... }:
+{ depot, lib, pkgs, ... }:
 
 pkgs.makeOverridable
   ({ emacs ? pkgs.emacs-unstable }:
@@ -13,6 +13,7 @@ pkgs.makeOverridable
 
     # $PATH for binaries that need to be available to Emacs
     emacsBinPath = lib.makeBinPath [
+      depot.users.tazjin.gio-list-apps
       (currentTelega pkgs.emacsPackages)
       pkgs.libwebp # for dwebp, required by telega
     ];
