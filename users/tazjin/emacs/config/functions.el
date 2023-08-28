@@ -349,4 +349,9 @@ installed (and visible) XDG apps, and let users launch them."
 
     (run-external-command--handler (cdr (assoc (completing-read "App: " apps nil t) apps)))))
 
+(defun advice-remove-all (sym)
+  "Remove all advices from symbol SYM."
+  (interactive "aFunction symbol: ")
+  (advice-mapc (lambda (advice _props) (advice-remove sym advice)) sym))
+
 (provide 'functions)
