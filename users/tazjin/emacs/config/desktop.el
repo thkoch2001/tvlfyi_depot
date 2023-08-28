@@ -77,14 +77,6 @@
     (`("Chromium-browser" ,title)
      (format "Chromium<%s>" (s-truncate 42 (s-chop-suffix " - Chromium" title))))
 
-
-    ;; Gnome-terminal -> Term
-    (`("Gnome-terminal" ,title)
-     ;; fish-shell buffers contain some unnecessary whitespace and
-     ;; such before the current working directory. This can be
-     ;; stripped since most of my terminals are fish shells anyways.
-     (format "Term<%s>" (s-trim-left (s-chop-prefix "fish" title))))
-
     ;; Quassel buffers
     ;;
     ;; These have a title format that looks like:
