@@ -11,6 +11,7 @@
 (require 'exwm-systemtray)
 (require 'exwm-xim )
 (require 'f)
+(require 'ring)
 (require 's)
 
 (defcustom tazjin--screen-lock-command "tazjin-screen-lock"
@@ -136,47 +137,31 @@
 
 ;; Implement MRU functionality for EXWM workspaces, making it possible
 ;; to jump to the previous/next workspace very easily.
-(defvar *recent-workspaces* nil
-  "List of the most recently used EXWM workspaces.")
+(defvar *recent-workspaces-ring* (make-ring 5)
+  "Ring of recently used EXWM workspaces.")
 
-(defvar *workspace-jumping-to* nil
-  "What offset in the workspace history are we jumping to?")
-
-(defvar *workspace-history-position* 0
-  "Where in the workspace history are we right now?")
+(defvar *workspace-ring-is-rotating* nil
+  "Variable used to track whether the workspace ring is rotating,
+and suppress insertions into the ring in that case.")
 
 (defun update-recent-workspaces ()
-  "Hook to run on every workspace switch which will prepend the new
-workspace to the MRU list, unless we are already on that
-workspace. Does not affect the MRU list if a jump is
-in-progress."
+  "Hook run on EXWM workspace switches, adding new workspaces to the
+ring."
 
-  (if *workspace-jumping-to*
-      (setq *workspace-history-position* *workspace-jumping-to*
-            *workspace-jumping-to* nil)
-
-    ;; reset the history position to the front on a normal jump
-    (setq *workspace-history-position* 0)
-
-    (unless (eq exwm-workspace-current-index (car *recent-workspaces*))
-      (setq *recent-workspaces* (cons exwm-workspace-current-index
-                                      (-take 9 *recent-workspaces*))))))
+  (unless *workspace-ring-is-rotating*
+    (ring-remove+insert+extend *recent-workspaces-ring* exwm-workspace-current-index)))
 
 (add-to-list 'exwm-workspace-switch-hook #'update-recent-workspaces)
 
 (defun switch-to-previous-workspace ()
-  "Switch to the previous workspace in the MRU workspace list."
+  "Switch to the previous workspace in the workspace ring."
   (interactive)
 
-  (let* (;; the previous workspace is one position further down in the
-         ;; workspace history
-         (position (+ *workspace-history-position* 1))
-         (target-idx (elt *recent-workspaces* position)))
-    (if (not target-idx)
-        (message "No previous workspace in history!")
-
-      (setq *workspace-jumping-to* position)
-      (exwm-workspace-switch target-idx))))
+  (when-let ((*workspace-ring-is-rotating* t)
+             (previous (condition-case err (ring-next *recent-workspaces-ring*
+                                                      exwm-workspace-current-index)
+                         ('error (message "No previous workspace in history!") nil))))
+    (exwm-workspace-switch previous)))
 
 (exwm-input-set-key (kbd "s-b") #'switch-to-previous-workspace)
 
@@ -184,15 +169,11 @@ in-progress."
   "Switch to the next workspace in the MRU workspace list."
   (interactive)
 
-  (if (= *workspace-history-position* 0)
-      (message "No next workspace in history!")
-    (let* (;; The next workspace is one position further up in the
-           ;; history. This always exists unless someone messed with
-           ;; it.
-           (position (- *workspace-history-position* 1))
-           (target-idx (elt *recent-workspaces* position)))
-      (setq *workspace-jumping-to* position)
-      (exwm-workspace-switch target-idx))))
+  (when-let ((*workspace-ring-is-rotating* t)
+             (next (condition-case err (ring-previous *recent-workspaces-ring*
+                                                      exwm-workspace-current-index)
+                     ('error (message "No next workspace in history!") nil))))
+    (exwm-workspace-switch next)))
 
 (exwm-input-set-key (kbd "s-f") #'switch-to-next-workspace)
 
