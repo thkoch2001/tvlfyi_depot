@@ -35,7 +35,6 @@ pkgs.makeOverridable
       deft
       direnv
       dockerfile-mode
-      eglot
       elixir-mode
       elm-mode
       erlang
@@ -77,7 +76,6 @@ pkgs.makeOverridable
       telephone-line
       terraform-mode
       toml-mode
-      transient
       undo-tree
       use-package
       uuidgen
