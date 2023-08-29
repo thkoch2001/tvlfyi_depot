@@ -7,7 +7,7 @@ config:
 let
   mod = name: depot.path.origSrc + ("/ops/modules/" + name);
   usermod = name: depot.path.origSrc + ("/users/tazjin/nixos/modules/" + name);
-  private = /arc/junk/tazjin/nixos/yandex.nix;
+  private = /arc/junk/tazjin;
 
   zdevice = device: {
     inherit device;
@@ -23,7 +23,10 @@ in
     (usermod "laptop.nix")
     (usermod "physical.nix")
     (pkgs.home-manager.src + "/nixos")
-  ] ++ lib.optional (builtins.pathExists private) private;
+  ] ++ (if (builtins.pathExists private) then [
+    (private + "/nixos/yandex.nix")
+    (private + "/emacs/module.nix")
+  ] else [ ]);
 
   # from hardware-configuration.nix
   boot = {
