@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bb05fe35_16ca5dd6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-08-29T13:19:29Z",
+      "side": 1,
+      "message": "I\u0027m more and more convinced the serde data model should stay something byte-ish, and if we want to \"display\" it as JSON, we can just try to do the conversion, then use the `json!` macro to \"print\" it out.\n\nWe should restrict our data model artificially, just because serde_json does format bytes-that-are-pretty-fine-strings in an unreadable fashion.",
+      "revId": "7087d63df01b5ce1abb01c3b9e8712e1a53e6cf0",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
