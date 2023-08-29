@@ -154,21 +154,6 @@ pkgs.makeOverridable
           # `local.el` which provides local system configuration.
           withLocalConfig = confDir: self confDir f;
 
-          # Build a derivation that uses the specified local Emacs (i.e.
-          # built outside of Nix) instead
-          withLocalEmacs = emacsBin: pkgs.writeShellScriptBin "tazjins-emacs" ''
-            export PATH="${emacsBinPath}:$PATH"
-            export EMACSLOADPATH="${(tazjinsEmacs f).deps}/share/emacs/site-lisp:"
-            exec ${emacsBin} \
-              --debug-init \
-              --no-site-file \
-              --no-site-lisp \
-              --no-init-file \
-              --directory ${./config} \
-              ${if l != null then "--directory ${l}" else ""} \
-              --eval "(require 'init)" $@
-          '';
-
           # Expose telega/tdlib version check as a target that is built in
           # CI.
           #
