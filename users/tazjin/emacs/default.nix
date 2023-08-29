@@ -13,7 +13,6 @@ pkgs.makeOverridable
 
     # $PATH for binaries that need to be available to Emacs
     emacsBinPath = lib.makeBinPath [
-      depot.users.tazjin.gio-list-apps
       (currentTelega pkgs.emacsPackages)
       pkgs.libwebp # for dwebp, required by telega
     ];
@@ -100,6 +99,9 @@ pkgs.makeOverridable
       tvlPackages.rcirc
       tvlPackages.term-switcher
       tvlPackages.tvl
+
+      # Dynamic/native modules
+      depot.users.tazjin.gio-list-apps
     ])));
 
     # Tired of telega.el runtime breakages through tdlib
@@ -138,6 +140,12 @@ pkgs.makeOverridable
     '').overrideAttrs
       (_: {
         passthru = {
+          # Expose original Emacs used for my configuration.
+          inherit emacs;
+
+          # Expose the pure emacs with all packages.
+          emacsWithPackages = tazjinsEmacs f;
+
           # Call overrideEmacs with a function (pkgs -> pkgs) to modify the
           # packages that should be included in this Emacs distribution.
           overrideEmacs = f': self l f';
