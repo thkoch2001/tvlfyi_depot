@@ -1,5 +1,5 @@
 # EXWM and other desktop configuration.
-{ depot, lib, pkgs, ... }:
+{ config, depot, lib, pkgs, ... }:
 
 {
   services = {
@@ -29,7 +29,7 @@
 
       windowManager.session = lib.singleton {
         name = "exwm";
-        start = "${depot.users.tazjin.emacs}/bin/tazjins-emacs";
+        start = "${config.tazjin.emacs}/bin/tazjins-emacs";
       };
     };
   };
