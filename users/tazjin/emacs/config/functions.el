@@ -336,12 +336,7 @@ names, instead of only their names (which might change)."
   "Use `//users/tazjin/gio-list-apps' to retrieve a list of
 installed (and visible) XDG apps, and let users launch them."
   (interactive)
-  (let* ((apps-json (s-lines (s-trim (shell-command-to-string "gio-list-apps"))))
-         (apps (seq-map (lambda (app)
-                          (let ((parsed (json-parse-string app :object-type 'alist)))
-                            (cons (cdr (assoc 'name parsed))
-                                  (cdr (assoc 'commandline parsed)))))
-                        apps-json))
+  (let* ((apps (taz-list-xdg-apps))
 
          ;; Display the command that will be run as an annotation
          (completion-extra-properties
