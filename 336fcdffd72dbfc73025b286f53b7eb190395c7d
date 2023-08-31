@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "03082087_bf2d0630",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2023-08-31T15:49:16Z",
+      "side": 1,
+      "message": "Would be nice to bug them into uploading 1.1.0 to hackage…",
+      "revId": "336fcdffd72dbfc73025b286f53b7eb190395c7d",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d6665494_866dded7",
+        "filename": "third_party/overlays/haskell/default.nix",
+        "patchSetId": 2
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2023-08-31T15:49:16Z",
+      "side": 1,
+      "message": "Can we use the tag?",
+      "revId": "336fcdffd72dbfc73025b286f53b7eb190395c7d",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
