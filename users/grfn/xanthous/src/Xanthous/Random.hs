@@ -27,19 +27,10 @@ import           Data.Random.Distribution
 import           Data.Random.Distribution.Uniform
 import           Data.Random.Distribution.Uniform.Exclusive
 import           Data.Random.Sample
-import qualified Data.Random.Source as DRS
 import           Data.Interval ( Interval, lowerBound', Extended (Finite)
                                , upperBound', Boundary (Closed), lowerBound, upperBound
                                )
 --------------------------------------------------------------------------------
-
-instance {-# INCOHERENT #-} (Monad m, MonadRandom m) => DRS.MonadRandom m where
-  getRandomWord8 = getRandom
-  getRandomWord16 = getRandom
-  getRandomWord32 = getRandom
-  getRandomWord64 = getRandom
-  getRandomDouble = getRandom
-  getRandomNByteInteger n = getRandomR (0, 256 ^ n)
 
 class Choose a where
   type RandomResult a

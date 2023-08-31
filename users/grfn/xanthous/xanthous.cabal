@@ -167,7 +167,6 @@ library
     , random
     , random-extras
     , random-fu
-    , random-source
     , raw-strings-qq
     , reflection
     , semigroupoids
@@ -268,7 +267,6 @@ executable xanthous
     , random
     , random-extras
     , random-fu
-    , random-source
     , raw-strings-qq
     , reflection
     , semigroupoids
@@ -398,7 +396,6 @@ test-suite test
     , random
     , random-extras
     , random-fu
-    , random-source
     , raw-strings-qq
     , reflection
     , semigroupoids
@@ -508,7 +505,6 @@ benchmark benchmark
     , random
     , random-extras
     , random-fu
-    , random-source
     , raw-strings-qq
     , reflection
     , semigroupoids
