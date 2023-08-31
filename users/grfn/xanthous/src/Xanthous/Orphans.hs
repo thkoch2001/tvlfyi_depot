@@ -245,7 +245,7 @@ instance CoArbitrary a => CoArbitrary (MaybeDefault a) where
   coarbitrary KeepCurrent = variant @Int 2
   coarbitrary (SetTo x) = variant @Int 3 . coarbitrary x
 
-instance (Eq a, Show a, Read a, Function a) => Function (MaybeDefault a) where
+instance (Show a, Read a) => Function (MaybeDefault a) where
   function = functionShow
 
 deriving via (EqEqProp Attr) instance EqProp Attr

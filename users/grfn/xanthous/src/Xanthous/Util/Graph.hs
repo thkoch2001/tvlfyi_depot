@@ -11,7 +11,7 @@ import           Data.Set (isSubsetOf)
 --------------------------------------------------------------------------------
 
 mstSubGraph
-  :: forall gr node edge. (DynGraph gr, Real edge, Show edge)
+  :: forall gr node edge. (DynGraph gr, Real edge)
   => gr node edge -> gr node edge
 mstSubGraph graph = insEdges mstEdges . insNodes (labNodes graph) $ Graph.empty
   where

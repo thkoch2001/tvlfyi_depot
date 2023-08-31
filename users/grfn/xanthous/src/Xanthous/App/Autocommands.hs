@@ -31,14 +31,14 @@ autoStep (AutoMove dir) = do
     Nothing -> do
       characterPosition .= newPos
       stepGameBy =<< uses (character . speed) (|*| (1 :: Tiles))
-      describeEntitiesAt newPos
+      runRandom $ describeEntitiesAt newPos
       cancelIfDanger
     Just _ -> cancelAutocommand
 
 autoStep AutoRest = do
   done <- uses character isFullyHealed
   if done
-    then say_ ["autocommands", "doneResting"] >> cancelAutocommand
+    then runRandom $ say_ ["autocommands", "doneResting"] >> cancelAutocommand
     else stepGame >> cancelIfDanger
 
 -- | Cancel the autocommand if the character is in danger
@@ -46,7 +46,7 @@ cancelIfDanger :: AppM ()
 cancelIfDanger = do
   maybeVisibleEnemies <- nonEmpty <$> enemiesInSight
   for_ maybeVisibleEnemies $ \visibleEnemies -> do
-    say ["autocommands", "enemyInSight"]
+    runRandom $ say ["autocommands", "enemyInSight"]
       $ object [ "firstEntity" A..= NE.head visibleEnemies ]
     cancelAutocommand
   where

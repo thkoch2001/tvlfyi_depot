@@ -75,6 +75,7 @@ module Xanthous.Game.State
   , DebugState(..)
   , debugState
   , allRevealed
+  , runRandom
   ) where
 --------------------------------------------------------------------------------
 import           Xanthous.Prelude
@@ -111,6 +112,7 @@ import           Xanthous.Orphans ()
 import           Xanthous.Game.Prompt
 import           Xanthous.Game.Env
 import           Xanthous.Game.Memo (MemoState)
+import Control.Monad.Random (RandT, runRandT)
 --------------------------------------------------------------------------------
 
 data MessageHistory
@@ -197,7 +199,7 @@ instance Function (GamePromptState m) where
 
 --------------------------------------------------------------------------------
 
-newtype AppT m a
+newtype AppT (m :: Type -> Type) a
   = AppT { unAppT :: ReaderT GameEnv (StateT GameState m) a }
   deriving ( Functor
            , Applicative
@@ -213,6 +215,14 @@ newtype AppT m a
        via (ReaderT GameEnv `ComposeT` StateT GameState)
 
 type AppM = AppT (EventM ResourceName)
+
+runRandom :: Monad m => RandT StdGen (AppT m) a -> AppT m a
+runRandom randT = do
+  gameState <- get
+  let g = _randomGen gameState
+  (a, g') <- runRandT randT g
+  put $ gameState { _randomGen = g' }
+  pure a
 
 --------------------------------------------------------------------------------
 
@@ -415,7 +425,7 @@ instance
   ( KnownBool blocksVision
   , KnownSymbol description
   , KnownSymbol entityChar
-  , Show entity, Eq entity, Ord entity, NFData entity
+  , Show entity, Ord entity, NFData entity
   , ToJSON entity, FromJSON entity
   , Draw entity, Brain entity
   )
@@ -544,7 +554,7 @@ instance Eq GameState where
 
 --------------------------------------------------------------------------------
 
-runAppT :: Monad m => AppT m a -> GameEnv -> GameState -> m (a, GameState)
+runAppT :: AppT m a -> GameEnv -> GameState -> m (a, GameState)
 runAppT appt env initialState
   = flip runStateT initialState
   . flip runReaderT env
