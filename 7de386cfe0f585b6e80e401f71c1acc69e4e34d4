@@ -24,6 +24,30 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "106a83d5_d1fb84f0",
+        "filename": "users/tazjin/presentations/tvix-eval-2023/presentation.tex",
+        "patchSetId": 5
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2023-08-31T11:49:02Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "093211ba_3488ef8e",
+      "range": {
+        "startLine": 32,
+        "startChar": 28,
+        "endLine": 32,
+        "endChar": 38
+      },
+      "revId": "7de386cfe0f585b6e80e401f71c1acc69e4e34d4",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "ef8a8dc0_23f2eb3c",
@@ -47,6 +71,30 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "db995df4_6cd198e2",
+        "filename": "users/tazjin/presentations/tvix-eval-2023/presentation.tex",
+        "patchSetId": 5
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2023-08-31T11:49:02Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ef8a8dc0_23f2eb3c",
+      "range": {
+        "startLine": 33,
+        "startChar": 10,
+        "endLine": 33,
+        "endChar": 19
+      },
+      "revId": "7de386cfe0f585b6e80e401f71c1acc69e4e34d4",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "5e6c1aee_f5978381",
@@ -60,6 +108,30 @@
       "writtenOn": "2023-08-31T11:32:42Z",
       "side": 1,
       "message": "Прилагательные заканчиваются на букву Й, поэтому ленивый язык. Вместо \"просчитывать\" для перевода evaluate в русском используют слово \"вычислять\".\nЧасто для краткости вместо \"не получается\" используют наречие \"нельзя\".\n\nЛенивый язык. Нельзя вычислить всё сразу.",
+      "range": {
+        "startLine": 42,
+        "startChar": 10,
+        "endLine": 42,
+        "endChar": 60
+      },
+      "revId": "7de386cfe0f585b6e80e401f71c1acc69e4e34d4",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f7547b5b_84c375ea",
+        "filename": "users/tazjin/presentations/tvix-eval-2023/presentation.tex",
+        "patchSetId": 5
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2023-08-31T11:49:02Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5e6c1aee_f5978381",
       "range": {
         "startLine": 42,
         "startChar": 10,
@@ -95,6 +167,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "32ab0d2e_39704c4d",
+        "filename": "users/tazjin/presentations/tvix-eval-2023/presentation.tex",
+        "patchSetId": 5
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2023-08-31T11:49:02Z",
+      "side": 1,
+      "message": "А какой dash нам на самом деле нужен? Вообще понятие не имею, в чем там семантическая разница))",
+      "parentUuid": "2b976ad1_a49ea0f2",
+      "range": {
+        "startLine": 44,
+        "startChar": 34,
+        "endLine": 44,
+        "endChar": 35
+      },
+      "revId": "7de386cfe0f585b6e80e401f71c1acc69e4e34d4",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "b3b719e5_798a93e3",
         "filename": "users/tazjin/presentations/tvix-eval-2023/presentation.tex",
         "patchSetId": 5
@@ -106,6 +202,30 @@
       "writtenOn": "2023-08-31T11:32:42Z",
       "side": 1,
       "message": "Здесь запятая не нужна.\n\nДавайте перепишем Nix!",
+      "range": {
+        "startLine": 65,
+        "startChar": 20,
+        "endLine": 65,
+        "endChar": 21
+      },
+      "revId": "7de386cfe0f585b6e80e401f71c1acc69e4e34d4",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "48b97a13_7ea5d882",
+        "filename": "users/tazjin/presentations/tvix-eval-2023/presentation.tex",
+        "patchSetId": 5
+      },
+      "lineNbr": 65,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2023-08-31T11:49:02Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b3b719e5_798a93e3",
       "range": {
         "startLine": 65,
         "startChar": 20,
@@ -139,6 +259,30 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "8a7ba824_761f88cf",
+        "filename": "users/tazjin/presentations/tvix-eval-2023/presentation.tex",
+        "patchSetId": 5
+      },
+      "lineNbr": 92,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2023-08-31T11:49:02Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a4180721_d3a7e2ba",
+      "range": {
+        "startLine": 92,
+        "startChar": 10,
+        "endLine": 92,
+        "endChar": 49
+      },
+      "revId": "7de386cfe0f585b6e80e401f71c1acc69e4e34d4",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "8c492cc4_f4d35df2",
@@ -152,6 +296,30 @@
       "writtenOn": "2023-08-31T11:32:42Z",
       "side": 1,
       "message": "Первая запятая лишняя. \"Показать диаграмму\" (по-русски пишется с двумя мм, как и телеграмма, например). Ну и здесь родительный падеж.\n\nобъяснить проблему со стеком и решение, показать диаграмму",
+      "range": {
+        "startLine": 111,
+        "startChar": 5,
+        "endLine": 111,
+        "endChar": 62
+      },
+      "revId": "7de386cfe0f585b6e80e401f71c1acc69e4e34d4",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c18ddec2_3643b718",
+        "filename": "users/tazjin/presentations/tvix-eval-2023/presentation.tex",
+        "patchSetId": 5
+      },
+      "lineNbr": 111,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2023-08-31T11:49:02Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8c492cc4_f4d35df2",
       "range": {
         "startLine": 111,
         "startChar": 5,
@@ -185,6 +353,30 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "f974d98f_af30a9b8",
+        "filename": "users/tazjin/presentations/tvix-eval-2023/presentation.tex",
+        "patchSetId": 5
+      },
+      "lineNbr": 130,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2023-08-31T11:49:02Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a9799d3b_bb641e48",
+      "range": {
+        "startLine": 129,
+        "startChar": 56,
+        "endLine": 130,
+        "endChar": 21
+      },
+      "revId": "7de386cfe0f585b6e80e401f71c1acc69e4e34d4",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "998485fa_257a077a",
@@ -208,6 +400,30 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "438c6094_c53cf768",
+        "filename": "users/tazjin/presentations/tvix-eval-2023/presentation.tex",
+        "patchSetId": 5
+      },
+      "lineNbr": 134,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2023-08-31T11:49:02Z",
+      "side": 1,
+      "message": "Эту часть на самом деле хотел удалть, все эти комментары уже либо на слайдах, либо просто на другом месте в документе.",
+      "parentUuid": "998485fa_257a077a",
+      "range": {
+        "startLine": 134,
+        "startChar": 25,
+        "endLine": 134,
+        "endChar": 84
+      },
+      "revId": "7de386cfe0f585b6e80e401f71c1acc69e4e34d4",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "7e27b1d6_3447668f",
@@ -221,6 +437,30 @@
       "writtenOn": "2023-08-31T11:32:42Z",
       "side": 1,
       "message": "Тоже \"объяснить\".",
+      "range": {
+        "startLine": 135,
+        "startChar": 23,
+        "endLine": 135,
+        "endChar": 32
+      },
+      "revId": "7de386cfe0f585b6e80e401f71c1acc69e4e34d4",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "568bd811_85fb1a6f",
+        "filename": "users/tazjin/presentations/tvix-eval-2023/presentation.tex",
+        "patchSetId": 5
+      },
+      "lineNbr": 135,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2023-08-31T11:49:02Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "7e27b1d6_3447668f",
       "range": {
         "startLine": 135,
         "startChar": 23,
