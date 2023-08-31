@@ -47,7 +47,6 @@
 , random
 , random-extras
 , random-fu
-, random-source
 , Rasterific
 , raw-strings-qq
 , reflection
@@ -122,7 +121,6 @@ mkDerivation {
     random
     random-extras
     random-fu
-    random-source
     Rasterific
     raw-strings-qq
     reflection
@@ -188,7 +186,6 @@ mkDerivation {
     random
     random-extras
     random-fu
-    random-source
     Rasterific
     raw-strings-qq
     reflection
@@ -254,7 +251,6 @@ mkDerivation {
     random
     random-extras
     random-fu
-    random-source
     Rasterific
     raw-strings-qq
     reflection
@@ -323,7 +319,6 @@ mkDerivation {
     random
     random-extras
     random-fu
-    random-source
     Rasterific
     raw-strings-qq
     reflection

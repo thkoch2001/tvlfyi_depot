@@ -42,13 +42,13 @@ import           Xanthous.Entities.Common (inRightHand, asWieldedItem, wielded)
 import           Xanthous.Game.State (SomeEntity(SomeEntity))
 --------------------------------------------------------------------------------
 
-chooseCharacterPosition :: MonadRandom m => Cells -> m Position
+chooseCharacterPosition :: (Monad m, RandomGen g) => Cells -> RandT g m Position
 chooseCharacterPosition = randomPosition
 
-randomItems :: MonadRandom m => Cells -> m (EntityMap Item)
+randomItems :: (Monad m, RandomGen g) => Cells -> RandT g m (EntityMap Item)
 randomItems = randomEntities (fmap Identity . Item.newWithType) (0.0004, 0.001)
 
-placeDownStaircase :: MonadRandom m => Cells -> m (EntityMap Staircase)
+placeDownStaircase :: (Monad m, RandomGen g) => Cells -> RandT g  m (EntityMap Staircase)
 placeDownStaircase cells = do
   pos <- randomPosition cells
   pure $ _EntityMap # [(pos, DownStaircase)]
@@ -84,10 +84,10 @@ randomDoors cells = do
       and [tl, t, tr, b] && (and . fmap not) [l, r]
 
 randomCreatures
-  :: MonadRandom m
+  :: (Monad m, RandomGen g)
   => Word -- ^ Level number, starting at 0
   -> Cells
-  -> m (EntityMap Creature)
+  -> RandT g m (EntityMap Creature)
 randomCreatures levelNumber
   = randomEntities maybeNewCreature (0.0007, 0.002)
   where
@@ -97,7 +97,7 @@ randomCreatures levelNumber
       | otherwise
       = pure Nothing
 
-newCreatureWithType :: MonadRandom m => CreatureType -> m Creature
+newCreatureWithType :: (Monad m, RandomGen g) => CreatureType -> RandT g m Creature
 newCreatureWithType _creatureType = do
   let _hitpoints = _creatureType ^. maxHitpoints
       _hippocampus = initialHippocampus
@@ -124,10 +124,10 @@ newCreatureWithType _creatureType = do
         else pure []
 
 
-tutorialMessage :: MonadRandom m
+tutorialMessage :: (Monad m, RandomGen g)
   => Cells
   -> Position -- ^ CharacterPosition
-  -> m (EntityMap GroundMessage)
+  -> RandT g m (EntityMap GroundMessage)
 tutorialMessage cells characterPosition = do
   let distance = 2
   pos <- fmap (fromMaybe (error "No valid positions for tutorial message?"))
@@ -144,11 +144,11 @@ tutorialMessage cells characterPosition = do
             (circle (pos ^. _Position) dist)
 
 randomEntities
-  :: forall entity raw m t. (MonadRandom m, RawType raw, Functor t, Foldable t)
-  => (raw -> m (t entity))
+  :: forall entity raw g m t. (Monad m, RawType raw, Functor t, Foldable t, RandomGen g)
+  => (raw -> RandT g m (t entity))
   -> (Float, Float)
   -> Cells
-  -> m (EntityMap entity)
+  -> RandT g m (EntityMap entity)
 randomEntities newWithType sizeRange cells =
   case fromNullable $ rawsWithType @raw of
     Nothing -> pure mempty
@@ -163,7 +163,7 @@ randomEntities newWithType sizeRange cells =
         pure $ (pos, ) <$> entities
       pure $ _EntityMap # (entities >>= toList)
 
-randomPosition :: MonadRandom m => Cells -> m Position
+randomPosition :: (Monad m, RandomGen g) => Cells -> RandT g m Position
 randomPosition = fmap positionFromV2 . choose . impureNonNull . cellCandidates
 
 -- cellCandidates :: Cells -> Cells
@@ -177,6 +177,6 @@ cellCandidates
   -- cells ends up with true = wall, we want true = can put an item here
   . amap not
 
-entityFromRaw :: MonadRandom m => EntityRaw -> m SomeEntity
+entityFromRaw :: (MonadRandom m, RandomGen g) => EntityRaw -> RandT g m SomeEntity
 entityFromRaw (Creature ct) = SomeEntity <$> newCreatureWithType ct
 entityFromRaw (Item it) = SomeEntity <$> Item.newWithType it

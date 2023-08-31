@@ -43,19 +43,19 @@ continue = lift . Brick.continue =<< get
 
 --------------------------------------------------------------------------------
 
-say :: (MonadRandom m, ToJSON params, MonadState GameState m)
-    => [Text] -> params -> m ()
-say msgPath = writeMessage <=< Messages.message msgPath
+say :: ( ToJSON params, MonadState GameState m, RandomGen g)
+    =>[Text] -> params -> RandT g m ()
+say msgPath = (lift . writeMessage) <=< Messages.message msgPath
 
-say_ :: (MonadRandom m, MonadState GameState m) => [Text] -> m ()
+say_ :: ( MonadState GameState m, RandomGen g) =>[Text] -> RandT g m ()
 say_ msgPath = say msgPath $ object []
 
-message :: (MonadRandom m, ToJSON params, MonadState GameState m)
-        => Message -> params -> m ()
+message :: ( ToJSON params, MonadState GameState m, RandomGen g)
+        =>Message -> params -> RandT g m ()
 message msg = writeMessage <=< Messages.render msg
 
-message_ :: (MonadRandom m, MonadState GameState m)
-         => Message ->  m ()
+message_ :: ( MonadState GameState m, RandomGen g)
+         =>Message -> RandT g m ()
 message_ msg = message msg $ object []
 
 writeMessage :: MonadState GameState m => Text -> m ()

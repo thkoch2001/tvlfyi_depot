@@ -91,7 +91,7 @@ generate params dims gen
 
 --------------------------------------------------------------------------------
 
-generate' :: RandomGen g => Params -> Dimensions -> CellM g s (MCells s)
+generate' :: forall g s. RandomGen g => Params -> Dimensions -> CellM g s (MCells s)
 generate' params dims = do
   cells <- initializeEmpty dims
   rooms <- genRooms params dims
@@ -109,8 +109,9 @@ generate' params dims = do
       corridorGraph = Graph.insEdges reintroEdges mst
 
   corridors <- traverse
-              ( uncurry corridorBetween
-              . over both (fromJust . Graph.lab corridorGraph)
+              (\edge -> do
+                    let (room1, room2) = over both (fromJust . Graph.lab corridorGraph) edge
+                    corridorBetween room1 room2
               ) $ Graph.edges corridorGraph
 
   for_ (join corridors) $ \pt -> lift $ writeArray cells pt True
@@ -161,7 +162,7 @@ fillRoom cells room =
        for_ [posy .. posy + dimy] $ \y ->
          lift $ writeArray cells (V2 x y) True
 
-corridorBetween :: MonadRandom m => Room -> Room -> m [V2 Word]
+corridorBetween ::  RandomGen g => Room -> Room -> CellM g s [V2 Word]
 corridorBetween originRoom destinationRoom
   = straightLine <$> origin <*> destination
   where

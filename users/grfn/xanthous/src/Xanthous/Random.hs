@@ -20,30 +20,23 @@ import           Xanthous.Prelude
 --------------------------------------------------------------------------------
 import           Data.List.NonEmpty (NonEmpty(..))
 import           Control.Monad.Random.Class (MonadRandom(getRandomR, getRandom))
-import           Control.Monad.Random (Rand, evalRand, mkStdGen, StdGen)
+import           Control.Monad.Random (Rand, evalRand, mkStdGen, StdGen, RandT, liftRandT)
 import           Data.Functor.Compose
 import           Data.Random.Shuffle.Weighted
 import           Data.Random.Distribution
 import           Data.Random.Distribution.Uniform
 import           Data.Random.Distribution.Uniform.Exclusive
 import           Data.Random.Sample
-import qualified Data.Random.Source as DRS
 import           Data.Interval ( Interval, lowerBound', Extended (Finite)
                                , upperBound', Boundary (Closed), lowerBound, upperBound
                                )
+import Data.Random (RandomGen, runRVarT, RVar)
+import System.Random.Stateful (runStateGenT)
 --------------------------------------------------------------------------------
-
-instance {-# INCOHERENT #-} (Monad m, MonadRandom m) => DRS.MonadRandom m where
-  getRandomWord8 = getRandom
-  getRandomWord16 = getRandom
-  getRandomWord32 = getRandom
-  getRandomWord64 = getRandom
-  getRandomDouble = getRandom
-  getRandomNByteInteger n = getRandomR (0, 256 ^ n)
 
 class Choose a where
   type RandomResult a
-  choose :: MonadRandom m => a -> m (RandomResult a)
+  choose :: (Monad m, RandomGen g) => a -> RandT g m (RandomResult a)
 
 newtype ChooseElement a = ChooseElement a
 
@@ -91,16 +84,22 @@ evenlyWeighted = Weighted . itoList
 weightedBy :: Functor t => (a -> w) -> t a -> Weighted w t a
 weightedBy weighting xs = Weighted $ (weighting &&& id) <$> xs
 
+sampleRandT :: (Distribution d t, RandomGen g, Applicative m) => d t -> RandT g m t
+sampleRandT dt = liftRandT $ \g -> pure $ samplePure dt g
+
+sampleRandTRVar :: (Monad m, RandomGen g) => RVar t -> RandT g m t
+sampleRandTRVar rv = liftRandT $ \g -> runStateGenT g (runRVarT rv)
+
 instance (Num w, Ord w, Distribution Uniform w, Excludable w)
        => Choose (Weighted w [] a) where
   type RandomResult (Weighted w [] a) = Maybe a
-  choose (Weighted ws) = sample $ headMay <$> weightedSample 1 ws
+  choose (Weighted ws) = sampleRandTRVar $ headMay <$> weightedSample 1 ws
 
 instance (Num w, Ord w, Distribution Uniform w, Excludable w)
        => Choose (Weighted w NonEmpty a) where
   type RandomResult (Weighted w NonEmpty a) = a
   choose (Weighted ws) =
-    sample
+    sampleRandTRVar
     $ fromMaybe (error "unreachable") . headMay
     <$> weightedSample 1 (toList ws)
 
@@ -111,30 +110,30 @@ subRand sub = evalRand sub . mkStdGen <$> getRandom
 --
 -- eg, chance 0.5 will return 'True' half the time
 chance
-  :: (Num w, Ord w, Distribution Uniform w, Excludable w, MonadRandom m)
+  :: (Num w, Ord w, Distribution Uniform w, Excludable w, RandomGen g, Monad m)
   => w
-  -> m Bool
+  -> RandT g m Bool
 chance n = choose $ weightedBy (bool 1 (n * 2)) bools
 
 -- | Choose a random subset of *about* @w@ of the elements of the given
 -- 'Witherable' structure
 chooseSubset :: ( Num w, Ord w, Distribution Uniform w, Excludable w
                , Witherable t
-               , MonadRandom m
-               ) => w -> t a -> m (t a)
+               , Monad m, RandomGen g
+               ) => w -> t a -> RandT g m (t a)
 chooseSubset = filterA . const . chance
 
 -- | Choose a random @n@ in the given interval
 chooseRange
-  :: ( MonadRandom m
+  :: ( Monad m
     , Distribution Uniform n
     , Enum n
     , Bounded n
-    , Ord n
+    , Ord n, RandomGen g
     )
   => Interval n
-  -> m (Maybe n)
-chooseRange int = traverse sample distribution
+  -> RandT g m (Maybe n)
+chooseRange int = traverse sampleRandT distribution
   where
     (lower, lowerBoundary) = lowerBound' int
     lowerR = case lower of
@@ -159,19 +158,18 @@ instance ( Distribution Uniform n
          )
          => Choose (Interval n) where
   type RandomResult (Interval n) = n
-  choose = fmap (fromMaybe $ error "Invalid interval") . chooseRange
+  choose dt = fromMaybe (error "Invalid interval") <$> chooseRange dt
 
 newtype FiniteInterval a
-  = FiniteInterval { unwrapFiniteInterval :: (Interval a) }
+  = FiniteInterval { unwrapFiniteInterval :: Interval a }
 
 instance ( Distribution Uniform n
-         , Ord n
          )
          => Choose (FiniteInterval n) where
   type RandomResult (FiniteInterval n) = n
   -- TODO broken with open/closed right now
   choose
-    = sample
+    = sampleRandT
     . uncurry Uniform
     . over both getFinite
     . (lowerBound &&& upperBound)

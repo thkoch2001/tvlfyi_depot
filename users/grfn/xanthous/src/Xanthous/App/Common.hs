@@ -17,7 +17,7 @@ import           Xanthous.Prelude
 import           Data.Aeson (object)
 import qualified Data.Aeson as A
 import           Control.Monad.State (MonadState)
-import           Control.Monad.Random (MonadRandom)
+import           Control.Monad.Random (MonadRandom, RandT, RandomGen)
 --------------------------------------------------------------------------------
 import           Xanthous.Data (Position, positioned)
 import           Xanthous.Data.EntityMap (EntityMap)
@@ -31,8 +31,8 @@ import           Xanthous.Util.Inflection (toSentence)
 --------------------------------------------------------------------------------
 
 entitiesAtPositionWithType
-  :: forall a. (Entity a, Typeable a)
-  => Position
+  :: forall a. ( Typeable a)
+  =>Position
   -> EntityMap SomeEntity
   -> [(EntityMap.EntityID, a)]
 entitiesAtPositionWithType pos em =
@@ -42,7 +42,7 @@ entitiesAtPositionWithType pos em =
       Just e  -> [(eid, e)]
       Nothing -> []
 
-describeEntitiesAt :: (MonadState GameState m, MonadRandom m) => Position -> m ()
+describeEntitiesAt :: (MonadState GameState m, RandomGen g) => Position -> RandT g m ()
 describeEntitiesAt pos =
   use ( entities
       . EntityMap.atPosition pos
@@ -53,14 +53,13 @@ describeEntitiesAt pos =
 
 describeEntities
   :: ( Entity entity
-    , MonadRandom m
     , MonadState GameState m
     , MonoFoldable (f Text)
     , Functor f
-    , Element (f Text) ~ Text
+    , Element (f Text) ~ Text, RandomGen g
     )
   => f entity
-  -> m ()
+  -> RandT g m ()
 describeEntities ents =
   let descriptions = description <$> ents
   in say ["entities", "description"]
