@@ -31,7 +31,6 @@ pkgs.mkShell {
       h.warp
       h.profunctors
       h.semigroupoids
-      h.servant-multipart
       h.validation-selective
       h.free
       h.cryptonite-conduit

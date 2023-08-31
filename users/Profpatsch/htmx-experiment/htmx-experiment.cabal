@@ -54,7 +54,6 @@ library
     import: common-options
     exposed-modules:
       HtmxExperiment,
-      Multipart,
       ServerErrors,
       ValidationParseT
     hs-source-dirs: ./src
@@ -65,7 +64,6 @@ library
         blaze-html,
         blaze-markup,
         bytestring,
-        conduit,
         dlist,
         http-types,
         ihp-hsx,
@@ -74,13 +72,10 @@ library
         pa-field-parser,
         pa-label,
         pa-prelude,
-        profunctors,
+        my-webstuff,
         selective,
-        servant-multipart-api,
-        servant-multipart,
         text,
         unliftio,
-        wai-extra,
         wai,
         warp
 
