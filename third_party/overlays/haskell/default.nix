@@ -21,6 +21,20 @@ let
       }
       (haskellLib.overrideCabal { patches = [ ]; } pkg);
 
+  hgeometry-source = subdir: pkg:
+    haskellLib.overrideSrc
+      {
+        src = "${super.fetchFromGitHub {
+          owner = "noinia";
+          repo = "hgeometry";
+          # https://github.com/noinia/hgeometry/pull/220
+          rev = "f8cdbc02c6878d4883ce95ed229d9cb09ffe296f";
+          sha256 = "sha256-7XsmUetYu3iCS7eNImHPU0Po3YKE/sGxBHEPT5N6nwU=";
+        }}/${subdir}";
+      }
+      (haskellLib.overrideCabal { patches = [ ]; } pkg);
+
+
 
 in
 {
@@ -40,6 +54,27 @@ in
         haskellLib.doJailbreak
       ];
 
+      vector-circular = haskellLib.doJailbreak hsSuper.vector-circular;
+
+      hgeometry = lib.pipe hsSuper.hgeometry [
+        (hgeometry-source "hgeometry")
+        (haskellLib.addBuildDepends [hsSelf.singletons])
+        # some quickcheck tests fail https://github.com/noinia/hgeometry/issues/223
+        haskellLib.dontCheck
+      ];
+      hgeometry-combinatorial = hgeometry-source "hgeometry-combinatorial" hsSuper.hgeometry-combinatorial;
+      random-extras = lib.pipe hsSuper.random-extras [
+        (haskellLib.overrideSrc {
+          src = self.fetchFromGitHub {
+            owner = "aristidb";
+            repo = "random-extras";
+            rev = "b05f7fad403794c225391d2d48e9c8467d2df8e1";
+            sha256 = "sha256-Z7eskuv/V5jY5ndpxNhs7WlZZg59Mm80vXfMxF4Dllg=";
+          };
+        })
+      ];
+      random-source = null;
+
       # TODO: this is to fix a bug in dhall-nix
       dhall = dhall-source "dhall" hsSuper.dhall;
       dhall-nix = dhall-source "dhall-nix" hsSuper.dhall-nix;
@@ -51,20 +86,6 @@ in
       pa-pretty = hsSelf.callPackage ./extra-pkgs/pa-pretty-0.1.1.0.nix { };
       pa-json = hsSelf.callPackage ./extra-pkgs/pa-json-0.2.1.0.nix { };
       pa-run-command = hsSelf.callPackage ./extra-pkgs/pa-run-command-0.1.0.0.nix { };
-    };
-  };
-
-  haskell = lib.recursiveUpdate super.haskell {
-    packages.ghc8107 = super.haskell.packages.ghc8107.override {
-      overrides = hsSelf: hsSuper: {
-        # TODO(sterni): TODO(grfn): patch xanthous to work with random-fu 0.3.*,
-        # so we can use GHC 9.0.2 and benefit from upstream binary cache.
-        random-fu = hsSelf.callPackage ./extra-pkgs/random-fu-0.2.nix { };
-        rvar = hsSelf.callPackage ./extra-pkgs/rvar-0.2.nix { };
-
-        # TODO(grfn): port to brick 1.4 (EventM gains an additional type argument in 1.0)
-        brick = hsSelf.callPackage ./extra-pkgs/brick-0.73.nix { };
-      };
     };
   };
 }

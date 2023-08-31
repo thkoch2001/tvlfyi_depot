@@ -22,7 +22,7 @@ import qualified Algorithms.Geometry.DelaunayTriangulation.Naive
               as Geometry
 import qualified Algorithms.Geometry.DelaunayTriangulation.Types as Geometry
 import           Control.Monad.State (execState, State)
-import qualified Data.Geometry.Point as Geometry
+import qualified Geometry.Point as Geometry
 import           Data.Ext ((:+)(..))
 import           Data.List (unfoldr)
 import           Data.List.NonEmpty (NonEmpty((:|)))
