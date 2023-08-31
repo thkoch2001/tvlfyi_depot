@@ -120,7 +120,7 @@ prompt
   -> AppM ()
 prompt msgPath params cancellable cb = do
   let pt = singPromptType @pt
-  msg <- Messages.message msgPath params
+  msg <- runRandom $ Messages.message msgPath params
   mp :: Maybe (Prompt AppM) <- case pt of
     SPointOnMap -> do
       charPos <- use characterPosition
@@ -149,7 +149,7 @@ stringPromptWithDefault
   -> (PromptResult 'StringPrompt -> AppM ()) -- ^ Prompt promise handler
   -> AppM ()
 stringPromptWithDefault msgPath params cancellable def cb = do
-  msg <- Messages.message msgPath params
+  msg <- runRandom $ Messages.message msgPath params
   let p = mkStringPromptWithDefault cancellable def cb
   promptState .= WaitingPrompt msg p
 
@@ -182,7 +182,7 @@ menu :: forall (a :: Type) (params :: Type).
      -> (PromptResult ('Menu a) -> AppM ()) -- ^ Menu promise handler
      -> AppM ()
 menu msgPath params cancellable items' cb = do
-  msg <- Messages.message msgPath params
+  msg <- runRandom $ Messages.message msgPath params
   let p = mkMenu cancellable items' cb
   promptState .= WaitingPrompt msg p
 
@@ -201,7 +201,7 @@ firePrompt_
   -> (PromptResult 'Fire -> AppM ()) -- ^ Promise handler
   -> AppM ()
 firePrompt_ msgPath cancellable range cb = do
-  msg <- Messages.message msgPath $ object []
+  msg <- runRandom $ Messages.message msgPath $ object []
   initialPos <- maybe (use characterPosition) pure =<< nearestEnemyPosition
   let p = mkFirePrompt cancellable initialPos range cb
   promptState .= WaitingPrompt msg p

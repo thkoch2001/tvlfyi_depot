@@ -17,7 +17,6 @@ module Xanthous.Messages
 --------------------------------------------------------------------------------
 import Xanthous.Prelude hiding (lookup)
 --------------------------------------------------------------------------------
-import           Control.Monad.Random.Class (MonadRandom)
 import           Data.Aeson (FromJSON, ToJSON, toJSON, object)
 import qualified Data.Aeson as JSON
 import           Data.Aeson.Generic.DerivingVia
@@ -30,6 +29,7 @@ import qualified Data.Yaml as Yaml
 --------------------------------------------------------------------------------
 import           Xanthous.Random
 import           Xanthous.Orphans ()
+import Control.Monad.Random (RandomGen, RandT)
 --------------------------------------------------------------------------------
 
 data Message = Single Template | Choice (NonEmpty Template)
@@ -46,7 +46,7 @@ instance Arbitrary Message where
               ]
   shrink = genericShrink
 
-resolve :: MonadRandom m => Message -> m Template
+resolve :: (Monad m, RandomGen g) => Message -> RandT g m Template
 resolve (Single t) = pure t
 resolve (Choice ts) = choose ts
 
@@ -87,13 +87,13 @@ messages
   = either (error . Yaml.prettyPrintParseException) id
   $ Yaml.decodeEither' rawMessages
 
-render :: (MonadRandom m, ToJSON params) => Message -> params -> m Text
+render :: (Monad m, ToJSON params, RandomGen g) => Message -> params -> RandT g m Text
 render msg params = do
   tpl <- resolve msg
   pure . toStrict . renderMustache tpl $ toJSON params
 
 -- | Render a message with an empty set of params
-render_ :: (MonadRandom m) => Message -> m Text
+render_ :: (Monad m, RandomGen g) => Message -> RandT g m Text
 render_ msg = render msg $ object []
 
 lookup :: [Text] -> Message
@@ -103,12 +103,12 @@ lookup path = fromMaybe notFound $ messages ^? ix path
           $ compileMustacheText "template" "Message not found"
           ^?! _Right
 
-message :: (MonadRandom m, ToJSON params) => [Text] -> params -> m Text
+message :: (Monad m, ToJSON params, RandomGen g) => [Text] -> params -> RandT g m Text
 message path params = maybe notFound (`render` params) $ messages ^? ix path
   where
     notFound = pure "Message not found"
 
-message_ :: (MonadRandom m) => [Text] -> m Text
+message_ :: (Monad m, RandomGen g) => [Text] -> RandT g m Text
 message_ path = maybe notFound (`render` JSON.object []) $ messages ^? ix path
   where
     notFound = pure "Message not found"

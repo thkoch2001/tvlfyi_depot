@@ -14,6 +14,7 @@ import           Control.Monad.Random (RandomGen, runRandT)
 import           Data.Array.ST
 import           Data.Array.Unboxed
 import qualified Options.Applicative as Opt
+import qualified Data.List as List
 --------------------------------------------------------------------------------
 import           Xanthous.Util (between)
 import           Xanthous.Util.Optparse
@@ -95,7 +96,7 @@ generate' params dims = do
   when (steps' > 0)
    $ for_ [0 .. pred steps'] . const $ stepAutomata cells dims params
   -- Remove all but the largest contiguous region of unfilled space
-  (_: smallerRegions) <- lift $ regions @UArray . amap not <$> freeze cells
+  smallerRegions <- lift $ List.tail . regions @UArray . amap not <$> freeze cells
   lift $ fillAllM (fold smallerRegions) cells
   lift $ fillOuterEdgesM cells
   pure cells

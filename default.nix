@@ -105,11 +105,7 @@ readTree.fix (self: (readDepot {
 
   # Additionally targets can be excluded from CI by adding them to the
   # list below.
-  ci.excluded = [
-    # xanthous and related targets are disabled until cl/9186 is submitted
-    self.users.grfn.xanthous
-    self.users.grfn.system.system.mugwumpSystem
-  ];
+  ci.excluded = [ ];
 
   # List of all buildable targets, for CI purposes.
   #

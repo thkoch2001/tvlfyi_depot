@@ -5,8 +5,8 @@ module Xanthous.Generators.Level.Village
 --------------------------------------------------------------------------------
 import           Xanthous.Prelude hiding (any, failing, toList)
 --------------------------------------------------------------------------------
-import           Control.Monad.Random (MonadRandom)
-import           Control.Monad.State (execStateT, MonadState, modify)
+import           Control.Monad.Random (MonadRandom, RandT, RandomGen)
+import           Control.Monad.State (execStateT, modify)
 import           Control.Monad.Trans.Maybe
 import           Control.Parallel.Strategies
 import           Data.Array.IArray
@@ -21,17 +21,18 @@ import           Xanthous.Game.State (SomeEntity(..))
 import           Xanthous.Random
 --------------------------------------------------------------------------------
 
-fromCave :: MonadRandom m
+fromCave :: (MonadRandom m, RandomGen g)
          => Cells -- ^ The positions of all the walls
-         -> m (EntityMap SomeEntity)
-fromCave wallPositions = execStateT (fromCave' wallPositions) mempty
+         -> RandT g m (EntityMap SomeEntity)
+fromCave wallPositions = fromCave' wallPositions mempty
 
-fromCave' :: forall m. (MonadRandom m, MonadState (EntityMap SomeEntity) m)
+fromCave' :: forall m g. (Monad m, RandomGen g)
           => Cells
-          -> m ()
-fromCave' wallPositions = failing (pure ()) $ do
+          -> EntityMap SomeEntity
+          -> RandT g m (EntityMap SomeEntity)
+fromCave' wallPositions emptyEntityMap = failing (pure emptyEntityMap) $ do
   Just villageRegion <-
-    choose
+    lift . choose
     . (`using` parTraversable rdeepseq)
     . weightedBy (\reg -> let circSize = length $ circumference reg
                          in if circSize == 50
@@ -41,11 +42,11 @@ fromCave' wallPositions = failing (pure ()) $ do
 
   let circ = setFromList . circumference $ villageRegion
 
-  centerPoints <- chooseSubset (0.1 :: Double) $ toList circ
+  centerPoints <- lift . chooseSubset (0.1 :: Double) $ toList circ
 
   roomTiles <- foldM
-              (flip $ const $ stepOut circ)
-              (map pure centerPoints)
+              (\v2s _ -> mapMaybeT lift $ stepOut circ v2s)
+              (map (:[]) centerPoints)
               [0 :: Int ..2]
 
   let roomWalls = circumference . setFromList @(Set _) <$> roomTiles
@@ -53,7 +54,7 @@ fromCave' wallPositions = failing (pure ()) $ do
 
   doorPositions <- fmap join . for roomWalls $ \room ->
     let candidates = filter (`notMember` circ) room
-    in fmap toList . choose $ ChooseElement candidates
+    in fmap toList . lift . choose $ ChooseElement candidates
 
   let entryways =
         filter (\pt ->
@@ -64,12 +65,13 @@ fromCave' wallPositions = failing (pure ()) $ do
                               <*> (`notElem` allWalls)) ncs)
                   $ toList villageRegion
 
-  Just entryway <- choose $ ChooseElement entryways
+  Just entryway <- lift . choose $ ChooseElement entryways
 
-  for_ (filter ((&&) <$> (`notElem` doorPositions) <*> (/= entryway)) allWalls)
-    $ insertEntity Wall
-  for_ (filter (/= entryway) doorPositions) $ insertEntity unlockedDoor
-  insertEntity unlockedDoor entryway
+  flip execStateT emptyEntityMap $ do
+    for_ (filter ((&&) <$> (`notElem` doorPositions) <*> (/= entryway)) allWalls)
+      $ insertEntity Wall
+    for_ (filter (/= entryway) doorPositions) $ insertEntity unlockedDoor
+    insertEntity unlockedDoor entryway
 
 
   where

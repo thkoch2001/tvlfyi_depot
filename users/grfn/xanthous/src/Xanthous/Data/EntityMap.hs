@@ -4,7 +4,6 @@
 {-# LANGUAGE TupleSections      #-}
 {-# LANGUAGE TemplateHaskell    #-}
 {-# LANGUAGE StandaloneDeriving #-}
-{-# LANGUAGE DeriveFunctor      #-}
 --------------------------------------------------------------------------------
 module Xanthous.Data.EntityMap
   ( EntityMap
@@ -64,7 +63,6 @@ data EntityMap a where
     } -> EntityMap a
   deriving stock (Functor, Foldable, Traversable, Generic)
   deriving anyclass (NFData, CoArbitrary, Function)
-deriving via (EqEqProp (EntityMap a)) instance (Eq a, Ord a) => EqProp (EntityMap a)
 makeLenses ''EntityMap
 
 instance ToJSON a => ToJSON (EntityMap a) where
@@ -78,10 +76,11 @@ byIDInvariantError :: forall a. a
 byIDInvariantError = error $ "Invariant violation: All EntityIDs in byPosition "
   <> "must point to entityIDs in byID"
 
-instance (Ord a, Eq a) => Eq (EntityMap a) where
+instance (Ord a) => Eq (EntityMap a) where
   -- em₁ == em₂ = em₁ ^. _EntityMap == em₂ ^. _EntityMap
   (==) = (==) `on` view (_EntityMap . to sort)
 
+deriving via (EqEqProp (EntityMap a)) instance (Ord a) => EqProp (EntityMap a)
 deriving stock instance (Ord a) => Ord (EntityMap a)
 
 instance Show a => Show (EntityMap a) where
@@ -185,7 +184,7 @@ insertAtReturningID pos e em =
 insertAt :: forall a. Position -> a -> EntityMap a -> EntityMap a
 insertAt pos e = snd . insertAtReturningID pos e
 
-atPosition :: forall a. (Ord a, Show a) => Position -> Lens' (EntityMap a) (VectorBag a)
+atPosition :: forall a. (Ord a) => Position -> Lens' (EntityMap a) (VectorBag a)
 atPosition pos = lens getter setter
   where
     getter em =
@@ -265,7 +264,7 @@ lookup eid = fmap (view positioned) . lookupWithPosition eid
 -- positionedEntities :: IndexedTraversal EntityID (EntityMap a) (EntityMap b) (Positioned a) (Positioned b)
 -- positionedEntities = byID . itraversed
 
-neighbors :: (Ord a, Show a) => Position -> EntityMap a -> Neighbors (VectorBag a)
+neighbors :: (Ord a) => Position -> EntityMap a -> Neighbors (VectorBag a)
 neighbors pos em = (\p -> view (atPosition p) em) <$> neighborPositions pos
 
 -- | Traversal to the position of the entity with the given ID

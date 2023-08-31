@@ -48,7 +48,7 @@ randInitialize dims aliveChance = do
       lift $ writeArray res (V2 i j) val
   pure res
 
-initializeEmpty :: RandomGen g => Dimensions -> CellM g s (MCells s)
+initializeEmpty :: Dimensions -> CellM g s (MCells s)
 initializeEmpty dims =
   lift $ newArray (0, V2 (dims ^. width) (dims ^. height)) False
 
@@ -151,7 +151,6 @@ floodFill :: forall a i.
             , Ix i
             , Enum i
             , Bounded i
-            , Eq i
             )
           => a (V2 i) Bool -- ^ array
           -> (V2 i)        -- ^ position
@@ -189,7 +188,6 @@ regions :: forall a i.
           , Ix i
           , Enum i
           , Bounded i
-          , Eq i
           )
         => a (V2 i) Bool
         -> [Set (V2 i)]

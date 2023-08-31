@@ -8,7 +8,7 @@ import qualified Brick.BChan
 import qualified Graphics.Vty as Vty
 import qualified Options.Applicative as Opt
 import           System.Random
-import           Control.Monad.Random (getRandom)
+import           Control.Monad.Random (getRandom, evalRandTIO)
 import           Control.Exception (finally)
 import           System.Exit (die)
 --------------------------------------------------------------------------------
@@ -159,7 +159,7 @@ runGenerate input dims mSeed = do
   putStr "region lengths: "
   print $ length <$> rs
   putStr "character position: "
-  print =<< chooseCharacterPosition res
+  print =<< evalRandTIO (chooseCharacterPosition res)
   putStrLn $ showCells res
 
 runCommand :: Command -> IO ()
