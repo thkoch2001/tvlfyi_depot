@@ -9,9 +9,8 @@ import Control.Exception qualified as Exc
 import Control.Monad.Logger
 import Control.Selective (Selective (select))
 import Control.Selective qualified as Selective
-import Data.ByteString.Lazy qualified as Lazy
+import Data.ByteString qualified as Bytes
 import Data.DList (DList)
-import Data.Error.Tree
 import Data.Functor.Compose
 import Data.List qualified as List
 import Data.Maybe (maybeToList)
@@ -22,16 +21,13 @@ import FieldParser hiding (nonEmpty)
 import GHC.TypeLits (KnownSymbol, symbolVal)
 import IHP.HSX.QQ (hsx)
 import Label
-import Multipart (FormValidation (FormValidation), FormValidationResult, MultipartParseT, failFormValidation)
-import Multipart qualified
+import Multipart2 (FormValidation (FormValidation), FormValidationResult, MultipartParseT, failFormValidation)
+import Multipart2 qualified as Multipart
 import Network.HTTP.Types qualified as Http
 import Network.Wai qualified as Wai
 import Network.Wai.Handler.Warp qualified as Warp
-import Network.Wai.Parse qualified as Wai.Extra
-import Network.Wai.Parse qualified as Wai.Parse
 import PossehlAnalyticsPrelude
-import Servant.Multipart qualified as Multipart
-import ServerErrors (ServerError (..), orUserErrorTree)
+import ServerErrors (ServerError (..), throwUserErrorTree)
 import Text.Blaze.Html5 (Html, docTypeHtml)
 import Text.Blaze.Renderer.Utf8 (renderMarkup)
 import UnliftIO (MonadUnliftIO (withRunInIO))
@@ -212,60 +208,11 @@ main = runStderrLoggingT @IO $ do
 
 parsePostBody ::
   (MonadIO m, MonadThrow m, MonadLogger m) =>
-  MultipartParseT Multipart.Mem m b ->
+  MultipartParseT backend m b ->
   Wai.Request ->
   m b
 parsePostBody parser req =
-  req
-    & Wai.Extra.parseRequestBodyEx
-      Wai.Extra.defaultParseRequestBodyOptions
-      Wai.Extra.lbsBackEnd
-    & liftIO
-    <&> parseAllAsText
-    <&> first (errorTree "Cannot parse multipart form data into UTF-8 text")
-    >>= orUserErrorTree "Failed parsing post body"
-    >>= Multipart.parseMultipart parser
-  where
-    parseAllAsText ::
-      ([(ByteString, ByteString)], [(ByteString, Wai.Parse.FileInfo Lazy.ByteString)]) ->
-      Either (NonEmpty Error) (Multipart.MultipartData Multipart.Mem)
-    -- our multipart parser expects every form field to be valid Text, so we parse from Utf-8
-    parseAllAsText (inputsBytes, filesBytes) = validationToEither $ do
-      let asText what b =
-            b
-              & bytesToTextUtf8
-              & first (errorContext [fmt|"{what & bytesToTextUtf8Lenient}" is not unicode|])
-              & eitherToListValidation
-
-      inputs <-
-        inputsBytes
-          & traverse
-            ( \(k, v) -> do
-                k' <- k & asText [fmt|input name {k}|]
-                v' <- v & asText [fmt|value of input key {k}|]
-                pure
-                  Multipart.Input
-                    { iName = k',
-                      iValue = v'
-                    }
-            )
-
-      files <-
-        filesBytes
-          & traverse
-            ( \(k, f) -> do
-                let fdPayload = f.fileContent
-                k' <- k & asText [fmt|file input name {k}|]
-                fdFileName <- f.fileName & asText [fmt|file input file name {f.fileName}|]
-                fdFileCType <- f.fileContentType & asText [fmt|file input content type {f.fileContentType}|]
-                pure
-                  Multipart.FileData
-                    { fdInputName = k',
-                      ..
-                    }
-            )
-
-      pure $ Multipart.MultipartData {inputs, files}
+  Multipart.parseMultipartOrThrow throwUserErrorTree parser req
 
 -- migrate :: IO (Label "numberOfRowsAffected" Natural)
 -- migrate =
@@ -296,7 +243,7 @@ data FormField = FormField
   { label_ :: Html,
     required :: Bool,
     id_ :: Text,
-    name :: Text,
+    name :: ByteString,
     type_ :: Text,
     placeholder :: Maybe Text
   }
@@ -390,12 +337,12 @@ registerFormValidate ::
   MultipartParseT
     w
     m
-    (FormValidation (T2 "email" Text "password" Text))
+    (FormValidation (T2 "email" ByteString "password" ByteString))
 registerFormValidate = do
-  let emailFP = FieldParser $ \t ->
+  let emailFP = FieldParser $ \b ->
         if
-            | Text.elem '@' t -> Right t
-            | otherwise -> Left [fmt|This is not an email address: "{t}"|]
+            | Bytes.elem (charToWordUnsafe '@') b -> Right b
+            | otherwise -> Left [fmt|This is not an email address: "{b & bytesToTextUtf8Unsafe}"|]
 
   getCompose @(MultipartParseT _ _) @FormValidation $ do
     email <- Compose $ Multipart.fieldLabel' @"email" "email" emailFP
