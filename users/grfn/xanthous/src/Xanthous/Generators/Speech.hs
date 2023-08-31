@@ -31,12 +31,12 @@ module Xanthous.Generators.Speech
 import           Xanthous.Prelude hiding (replicateM)
 import           Data.Interval (Interval, (<=..<=))
 import qualified Data.Interval as Interval
-import           Control.Monad.Random.Class (MonadRandom)
 import           Xanthous.Random (chooseRange, choose, ChooseElement (..), Weighted (Weighted))
 import           Control.Monad (replicateM)
 import           Test.QuickCheck (Arbitrary, CoArbitrary, Function)
 import           Test.QuickCheck.Instances.Text ()
 import           Data.List.NonEmpty (NonEmpty)
+import Control.Monad.Random (RandT, RandomGen)
 --------------------------------------------------------------------------------
 
 newtype Phoneme = Phoneme Text
@@ -67,7 +67,7 @@ data Phonotactics = Phonotactics
 makeLenses ''Phonotactics
 
 -- | Randomly generate a syllable with the given 'Phonotactics'
-syllable :: MonadRandom m => Phonotactics -> m Text
+syllable :: (Monad m, RandomGen g) => Phonotactics -> RandT g m Text
 syllable phonotactics = do
   let genPart num choices = do
         n <- fromIntegral . fromMaybe 0 <$> chooseRange (phonotactics ^. num)
@@ -94,7 +94,7 @@ data Language = Language
   deriving anyclass (NFData)
 makeLenses ''Language
 
-word :: MonadRandom m => Language -> m Text
+word :: (Monad m, RandomGen g) => Language -> RandT g m Text
 word lang = do
   numSyllables <- choose $ lang ^. syllablesPerWord
   mconcat <$> replicateM numSyllables (syllable $ lang ^. phonotactics)

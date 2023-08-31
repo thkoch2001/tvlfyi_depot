@@ -135,10 +135,7 @@ positionIsCharacterVisible p = (p `elem`) <$> characterVisiblePositions
 entitiesCollision
   :: ( Functor f
     , forall xx. MonoFoldable (f xx)
-    , Element (f SomeEntity) ~ SomeEntity
     , Element (f (Maybe Collision)) ~ Maybe Collision
-    , Show (f (Maybe Collision))
-    , Show (f SomeEntity)
     )
   => f SomeEntity
   -> Maybe Collision

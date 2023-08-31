@@ -22,7 +22,7 @@ import qualified Algorithms.Geometry.DelaunayTriangulation.Naive
               as Geometry
 import qualified Algorithms.Geometry.DelaunayTriangulation.Types as Geometry
 import           Control.Monad.State (execState, State)
-import qualified Data.Geometry.Point as Geometry
+import qualified Geometry.Point as Geometry
 import           Data.Ext ((:+)(..))
 import           Data.List (unfoldr)
 import           Data.List.NonEmpty (NonEmpty((:|)))
@@ -87,8 +87,8 @@ runFillState circumference s
 
 -- | Generate a *filled* circle centered at the given point and with the given
 -- radius by filling a circle generated with 'circle'
-filledCircle :: (Num i, Integral i, Ix i)
-             => V2 i -- ^ center
+filledCircle :: (Integral i, Ix i)
+             =>V2 i -- ^ center
              -> i    -- ^ radius
              -> [V2 i]
 filledCircle center radius =
@@ -154,7 +154,7 @@ delaunay
 
 --------------------------------------------------------------------------------
 
-renderBooleanGraphics :: forall i. (Num i, Ord i, Enum i) => [V2 i] -> String
+renderBooleanGraphics :: forall i. (Ord i, Enum i) =>[V2 i] -> String
 renderBooleanGraphics [] = ""
 renderBooleanGraphics (pt : pts') = intercalate "\n" rows
   where
@@ -165,7 +165,7 @@ renderBooleanGraphics (pt : pts') = intercalate "\n" rows
     ptSet :: Set (V2 i)
     ptSet = setFromList $ toList pts
 
-showBooleanGraphics :: forall i. (Num i, Ord i, Enum i) => [V2 i] -> IO ()
+showBooleanGraphics :: forall i. ( Ord i, Enum i) =>[V2 i] -> IO ()
 showBooleanGraphics = putStrLn . pack . renderBooleanGraphics
 
 minmaxes :: forall i. (Ord i) => NonEmpty (V2 i) -> (V2 i, V2 i)

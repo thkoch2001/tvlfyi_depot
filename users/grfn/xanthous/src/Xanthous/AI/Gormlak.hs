@@ -59,13 +59,12 @@ type IsCreature entity =
 --------------------------------------------------------------------------------
 
 stepGormlak
-  :: forall entity m.
-    ( MonadState GameState m, MonadRandom m
-    , IsCreature entity
+  :: forall entity g m.
+    ( MonadState GameState m, IsCreature entity, RandomGen g
     )
   => Ticks
   -> Positioned entity
-  -> m (Positioned entity)
+  -> RandT g m (Positioned entity)
 stepGormlak ticks pe@(Positioned pos creature) = do
   canSeeCharacter <- uses entities $ canSee (entityIs @Character) pos vision
 
@@ -152,10 +151,10 @@ stepGormlak ticks pe@(Positioned pos creature) = do
 -- included, otherwise if it's within earshot the character will just hear the
 -- sound
 creatureSaysText
-  :: (MonadState GameState m, MonadRandom m, IsCreature entity)
+  :: (MonadState GameState m, IsCreature entity, RandomGen g)
   => Positioned entity
   -> Text
-  -> m ()
+  -> RandT g m ()
 creatureSaysText ent txt = do
   let entPos = ent ^. position . _Position . to (fmap fromIntegral)
   charPos <- use $ characterPosition . _Position . to (fmap fromIntegral)
@@ -176,6 +175,7 @@ newtype GormlakBrain entity = GormlakBrain { _unGormlakBrain :: entity }
 instance (IsCreature entity) => Brain (GormlakBrain entity) where
   step ticks
     = fmap (fmap GormlakBrain)
+    . runRandom
     . stepGormlak ticks
     . fmap _unGormlakBrain
   entityCanMove = const True

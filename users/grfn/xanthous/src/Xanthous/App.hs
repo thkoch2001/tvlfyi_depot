@@ -1,7 +1,6 @@
 {-# LANGUAGE UndecidableInstances #-}
 {-# LANGUAGE RecordWildCards      #-}
 --------------------------------------------------------------------------------
-{-# OPTIONS_GHC -Wno-deferred-type-errors #-}
 module Xanthous.App
   ( makeApp
   , RunType(..)
@@ -105,8 +104,8 @@ startEvent = do
     Nothing -> prompt_ @'StringPrompt ["character", "namePrompt"] Uncancellable
       $ \(StringResult s) -> do
         character . characterName ?= s
-        say ["welcome"] =<< use character
-    Just n -> say ["welcome"] $ object [ "characterName" A..= n ]
+        runRandom $ say ["welcome"] =<< use character
+    Just n -> runRandom $ say ["welcome"] $ object [ "characterName" A..= n ]
 
 initLevel :: AppM ()
 initLevel = do
@@ -144,7 +143,7 @@ handleCommand (Move dir) = do
     Nothing -> do
       characterPosition .= newPos
       stepGameBy =<< uses (character . speed) (|*| Tiles 1)
-      describeEntitiesAt newPos
+      runRandom $ describeEntitiesAt newPos
     Just Combat -> attackAt newPos
     Just Stop -> pure ()
   continue
@@ -152,7 +151,7 @@ handleCommand (Move dir) = do
 handleCommand PickUp = do
   pos <- use characterPosition
   uses entities (entitiesAtPositionWithType @Item pos) >>= \case
-    [] -> say_ ["pickUp", "nothingToPickUp"]
+    [] -> runRandom $ say_ ["pickUp", "nothingToPickUp"]
     [item] -> pickUpItem item
     items' ->
       menu_ ["pickUp", "menu"] Cancellable (entityMenu_ items')
@@ -162,15 +161,15 @@ handleCommand PickUp = do
     pickUpItem (itemID, item) = do
       character %= Character.pickUpItem item
       entities . at itemID .= Nothing
-      say ["pickUp", "pickUp"] $ object [ "item" A..= item ]
+      runRandom $ say ["pickUp", "pickUp"] $ object [ "item" A..= item ]
       stepGameBy 100 -- TODO
 
 handleCommand Drop = do
   takeItemFromInventory_ ["drop", "menu"] Cancellable id
-    (say_ ["drop", "nothing"])
+    (runRandom $ say_ ["drop", "nothing"])
     $ \(MenuResult item) -> do
       entitiesAtCharacter %= (SomeEntity item <|)
-      say ["drop", "dropped"] $ object [ "item" A..= item ]
+      runRandom $ say ["drop", "dropped"] $ object [ "item" A..= item ]
   continue
 
 handleCommand PreviousMessage = do
@@ -182,13 +181,13 @@ handleCommand Open = do
     $ \(DirectionResult dir) -> do
       pos <- move dir <$> use characterPosition
       doors <- uses entities $ entitiesAtPositionWithType @Door pos
-      if | null doors -> say_ ["open", "nothingToOpen"]
-         | any (view $ _2 . locked) doors -> say_ ["open", "locked"]
-         | all (view $ _2 . open) doors   -> say_ ["open", "alreadyOpen"]
+      if | null doors -> runRandom $ say_ ["open", "nothingToOpen"]
+         | any (view $ _2 . locked) doors -> runRandom $ say_ ["open", "locked"]
+         | all (view $ _2 . open) doors   -> runRandom $ say_ ["open", "alreadyOpen"]
          | otherwise -> do
              for_ doors $ \(eid, _) ->
                entities . ix eid . positioned . _SomeEntity . open .= True
-             say_ ["open", "success"]
+             runRandom $ say_ ["open", "success"]
       pure ()
   stepGame -- TODO
   continue
@@ -204,10 +203,10 @@ handleCommand Close = do
               . over _2 (view positioned)
               )
         . EntityMap.atPositionWithIDs pos
-      if | null doors -> say_ ["close", "nothingToClose"]
-         | all (view $ _2 . closed) doors -> say_ ["close", "alreadyClosed"]
+      if | null doors -> runRandom $ say_ ["close", "nothingToClose"]
+         | all (view $ _2 . closed) doors -> runRandom $ say_ ["close", "alreadyClosed"]
          | any (view blocksObject . entityAttributes . snd) nonDoors ->
-           say ["close", "blocked"]
+           runRandom $ say ["close", "blocked"]
            $ object [ "entityDescriptions"
                       A..= ( toSentence
                            . map description
@@ -225,7 +224,7 @@ handleCommand Close = do
                entities . ix eid . positioned . _SomeEntity . closed .= True
              for_ nonDoors $ \(eid, _) ->
                entities . ix eid . position %= move dir
-             say_ ["close", "success"]
+             runRandom $ say_ ["close", "success"]
       pure ()
   stepGame -- TODO
   continue
@@ -233,8 +232,8 @@ handleCommand Close = do
 handleCommand Look = do
   prompt_ @'PointOnMap ["look", "prompt"] Cancellable
     $ \(PointOnMapResult pos) -> revealedEntitiesAtPosition pos >>= \case
-        Empty -> say_ ["look", "nothing"]
-        ents -> describeEntities ents
+        Empty -> runRandom $ say_ ["look", "nothing"]
+        ents -> runRandom $ describeEntities ents
   continue
 
 handleCommand Wait = stepGame >> continue
@@ -243,7 +242,7 @@ handleCommand Eat = do
   uses (character . inventory . backpack)
        (V.mapMaybe (\item -> (item,) <$> item ^. Item.itemType . edible))
     >>= \case
-      Empty -> say_ ["eat", "noFood"]
+      Empty -> runRandom $ say_ ["eat", "noFood"]
       food ->
         let foodMenuItem idx (item, edibleItem)
               = ( item ^. Item.itemType . char . char
@@ -257,7 +256,7 @@ handleCommand Eat = do
                       $ edibleItem ^. eatMessage
             character . characterHitpoints' +=
               edibleItem ^. hitpointsHealed . to fromIntegral
-            message msg $ object ["item" A..= item]
+            runRandom $ message msg $ object ["item" A..= item]
             stepGame -- TODO
   continue
 
@@ -268,9 +267,9 @@ handleCommand Read = do
       pos <- uses characterPosition $ move dir
       uses entities
         (fmap snd . entitiesAtPositionWithType @GroundMessage pos) >>= \case
-          Empty -> say_ ["read", "nothing"]
+          Empty -> runRandom $ say_ ["read", "nothing"]
           GroundMessage msg :< Empty ->
-            say ["read", "result"] $ object ["message" A..= msg]
+            runRandom $ say ["read", "result"] $ object ["message" A..= msg]
           msgs ->
             let readAndContinue Empty = pure ()
                 readAndContinue (msg :< msgs') =
@@ -288,7 +287,7 @@ handleCommand ShowInventory = showPanel InventoryPanel >> continue
 
 handleCommand DescribeInventory = do
   selectItemFromInventory_ ["inventory", "describe", "select"] Cancellable id
-    (say_ ["inventory", "describe", "nothing"])
+    (runRandom $ say_ ["inventory", "describe", "nothing"])
     $ \(MenuResult (invPos, item)) -> showPanel . ItemDescriptionPanel
         $ Item.fullDescription item
         <> "\n\n" <> describeInventoryPosition invPos
@@ -304,14 +303,14 @@ handleCommand Wield = do
       prevItems <- character . inventory . wielded %%= wieldInHand hand item
       character . inventory . backpack
         <>= fromList (map (view wieldedItem) prevItems)
-      say ["wield", "wielded"] $ object [ "item" A..= item
+      runRandom $ say ["wield", "wielded"] $ object [ "item" A..= item
                                         , "hand" A..= describeHand hand
                                         ]
   continue
   where
     selectItem =
       selectItemFromInventory_ ["wield", "menu"] Cancellable asWieldedItem
-        (say_ ["wield", "nothing"])
+        (runRandom $ say_ ["wield", "nothing"])
     selectHand hs = menu_ ["wield", "hand"] Cancellable $ handsMenu hs
     itemsInHand (Hands i _) LeftHand       = toList i
     itemsInHand (DoubleHanded _) LeftHand  = []
@@ -339,13 +338,13 @@ handleCommand Wield = do
 
 handleCommand Fire = do
   selectItemFromInventory_ ["fire", "menu"] Cancellable id
-    (say_ ["fire", "nothing"])
+    (runRandom $ say_ ["fire", "nothing"])
     $ \(MenuResult (invPos, item)) ->
       let wt = weight item
           dist = throwDistance wt
           dam = bluntThrowDamage wt
       in if dist < fromScalar 1
-         then say_ ["fire", "zeroRange"]
+         then runRandom $ say_ ["fire", "zeroRange"]
          else firePrompt_ ["fire", "target"] Cancellable dist $
           \(FireResult targetPos) -> do
               charPos <- use characterPosition
@@ -357,11 +356,11 @@ handleCommand Fire = do
                     let msgPath = ["fire", "fired"] <> [if dam == 0
                                                         then "noDamage"
                                                         else "someDamage"]
-                    in say msgPath $ object [ "item" A..= item
+                    in runRandom $ say msgPath $ object [ "item" A..= item
                                             , "creature" A..= creature'
                                             ]
                 Nothing ->
-                  say ["fire", "fired", "noTarget"] $ object [ "item" A..= item ]
+                  runRandom $ say ["fire", "fired", "noTarget"] $ object [ "item" A..= item ]
               character . inventory %= removeItemFromPosition invPos item
               entities . EntityMap.atPosition targetPos %= (SomeEntity item <|)
               stepGame -- TODO(grfn): should this be based on distance?
@@ -376,7 +375,7 @@ handleCommand Fire = do
 
 handleCommand Save =
   view (config . disableSaving) >>= \case
-    True -> say_ ["save", "disabled"] >> continue
+    True -> runRandom (say_ ["save", "disabled"]) >> continue
     False -> do
       -- TODO default save locations / config file?
       use savefile >>= \case
@@ -416,8 +415,8 @@ handleCommand GoUp = do
       characterPosition .= charPos
     Nothing ->
       -- TODO in nethack, this leaves the game. Maybe something similar here?
-      say_ ["cant", "goUp"]
-  else say_ ["cant", "goUp"]
+      runRandom $ say_ ["cant", "goUp"]
+  else runRandom $ say_ ["cant", "goUp"]
 
   continue
 
@@ -434,7 +433,7 @@ handleCommand GoDown = do
     levels .= levs'
     entities . at cEID .= pCharacter
     characterPosition .= extract levs' ^. upStaircasePosition
-  else say_ ["cant", "goDown"]
+  else runRandom $ say_ ["cant", "goDown"]
 
   continue
 
@@ -443,7 +442,7 @@ handleCommand (StartAutoMove dir) = do
   continue
 
 handleCommand Rest = do
-  say_ ["autocommands", "resting"]
+  runRandom $ say_ ["autocommands", "resting"]
   runAutocommand AutoRest
   continue
 
@@ -451,14 +450,14 @@ handleCommand Rest = do
 
 handleCommand ToggleRevealAll = do
   val <- debugState . allRevealed <%= not
-  say ["debug", "toggleRevealAll"] $ object [ "revealAll" A..= val ]
+  runRandom $ say ["debug", "toggleRevealAll"] $ object [ "revealAll" A..= val ]
   continue
 
 --------------------------------------------------------------------------------
 attackAt :: Position -> AppM ()
 attackAt pos =
   uses entities (entitiesAtPositionWithType @Creature pos) >>= \case
-    Empty               -> say_ ["combat", "nothingToAttack"]
+    Empty               -> runRandom $ say_ ["combat", "nothingToAttack"]
     (creature :< Empty) -> attackCreature creature
     creatures ->
       menu_ ["combat", "menu"] Cancellable (entityMenu_ creatures)
@@ -467,8 +466,8 @@ attackAt pos =
   attackCreature creature = do
     charDamage <- uses character characterDamage
     creature' <- damageCreature creature charDamage
-    unless (Creature.isDead creature') $ writeAttackMessage creature'
-    whenM (uses character $ isNothing . weapon) handleFists
+    unless (Creature.isDead creature') $ runRandom $ writeAttackMessage creature'
+    whenM (uses character $ isNothing . weapon) (runRandom handleFists)
     stepGame
   weapon chr = chr ^? inventory . wielded . wieldedItems . wieldableItem
   writeAttackMessage creature = do
@@ -502,7 +501,7 @@ damageCreature (creatureID, creature) dam = do
       msgParams = object ["creature" A..= creature']
   if Creature.isDead creature'
     then do
-      say ["combat", "killed"] msgParams
+      runRandom $ say ["combat", "killed"] msgParams
       floorItems <- useListOf
                    $ entities
                    . ix creatureID
@@ -631,12 +630,12 @@ genLevel
   -> AppM Level
 genLevel num = do
   let dims = Dimensions 80 80
-  generator <- choose $ CaveAutomata :| [Dungeon]
+  generator <- runRandom $ choose $ CaveAutomata :| [Dungeon]
   let
     doGen = case generator of
       CaveAutomata -> generateLevel SCaveAutomata CaveAutomata.defaultParams
       Dungeon -> generateLevel SDungeon Dungeon.defaultParams
-  level <- doGen dims num
+  level <- runRandom $ doGen dims num
   pure $!! level
 
 levelToGameLevel :: Level -> GameLevel

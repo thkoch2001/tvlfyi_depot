@@ -130,7 +130,7 @@ stepKnuckles ticks = execStateT . whenM (uses knuckleDamage (> 0)) $ do
     dam <- knuckleDamage <<.= 0
     knuckleCalluses %= min 5 . (+ dam)
     ticksSinceDamaged .= 0
-    lift $ say_ ["character", "body", "knuckles", "calluses"]
+    lift $ runRandom $ say_ ["character", "body", "knuckles", "calluses"]
 
 
 -- | Status of the character's body

@@ -64,8 +64,7 @@ deriving stock instance
 
 instance
   forall m k v.
-  ( Arbitrary (m k v)
-  , Arbitrary (m k (NestedMapVal m k v))
+  ( Arbitrary (m k (NestedMapVal m k v))
   , Arbitrary k
   , Arbitrary v
   , IsMap (m k (NestedMapVal m k v))

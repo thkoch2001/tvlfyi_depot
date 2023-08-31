@@ -128,12 +128,12 @@ data Level = Level
 makeLenses ''Level
 
 generateLevel
-  :: MonadRandom m
+  :: (MonadRandom m, RandomGen g)
   => SGenerator gen
   -> Params gen
   -> Dimensions
   -> Word -- ^ Level number, starting at 0
-  -> m Level
+  -> RandT g m Level
 generateLevel gen ps dims num = do
   rand <- mkStdGen <$> getRandom
   let cells = generate gen ps dims rand
@@ -164,9 +164,9 @@ levelToEntityMap level
   <> (level ^. levelExtra)
 
 generateVillage
-  :: MonadRandom m
+  :: (MonadRandom m, RandomGen g)
   => Cells -- ^ Wall positions
   -> SGenerator gen
-  -> m (EntityMap SomeEntity)
+  -> RandT g m (EntityMap SomeEntity)
 generateVillage wallPositions SCaveAutomata = Village.fromCave wallPositions
 generateVillage _ _ = pure mempty
