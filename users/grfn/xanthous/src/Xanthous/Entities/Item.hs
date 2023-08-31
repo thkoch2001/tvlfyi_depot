@@ -17,7 +17,7 @@ import           Xanthous.Prelude
 import           Test.QuickCheck (Arbitrary, CoArbitrary, Function)
 import           Data.Aeson (ToJSON, FromJSON)
 import           Data.Aeson.Generic.DerivingVia
-import           Control.Monad.Random (MonadRandom)
+import           Control.Monad.Random (RandomGen, RandT)
 --------------------------------------------------------------------------------
 import           Xanthous.Entities.RawTypes (ItemType)
 import qualified Xanthous.Entities.RawTypes as Raw
@@ -49,7 +49,7 @@ instance Entity Item where
   entityChar = view $ itemType . Raw.char
   entityCollision = const Nothing
 
-newWithType :: MonadRandom m => ItemType -> m Item
+newWithType ::  (Monad m, RandomGen g) => ItemType -> RandT g m Item
 newWithType _itemType = do
   _density <- choose . FiniteInterval $ _itemType ^. Raw.density
   _volume  <- choose . FiniteInterval $ _itemType ^. Raw.volume

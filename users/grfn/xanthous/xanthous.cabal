@@ -1,10 +1,10 @@
 cabal-version: 1.12
 
--- This file has been generated from package.yaml by hpack version 0.35.0.
+-- This file has been generated from package.yaml by hpack version 0.35.2.
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: b3bf8e65d621856081832c9d3c8e8ad38799e23a7f5084dc4f972daa654a0ff3
+-- hash: a5031b78f503231df4a8567135f555d9bfa0d702c1d91fda8477704324eb9e79
 
 name:           xanthous
 version:        0.1.0.0
@@ -119,7 +119,7 @@ library
       TypeFamilies
       TypeOperators
       ViewPatterns
-  ghc-options: -Wall -fconstraint-solver-iterations=6
+  ghc-options: -Wall -fconstraint-solver-iterations=10
   build-depends:
       JuicyPixels
     , MonadRandom
@@ -167,7 +167,6 @@ library
     , random
     , random-extras
     , random-fu
-    , random-source
     , raw-strings-qq
     , reflection
     , semigroupoids
@@ -220,7 +219,7 @@ executable xanthous
       TypeFamilies
       TypeOperators
       ViewPatterns
-  ghc-options: -Wall -fconstraint-solver-iterations=6 -threaded -rtsopts -with-rtsopts=-N -O2
+  ghc-options: -Wall -fconstraint-solver-iterations=10 -threaded -rtsopts -with-rtsopts=-N -O2
   build-depends:
       JuicyPixels
     , MonadRandom
@@ -268,7 +267,6 @@ executable xanthous
     , random
     , random-extras
     , random-fu
-    , random-source
     , raw-strings-qq
     , reflection
     , semigroupoids
@@ -349,7 +347,7 @@ test-suite test
       TypeFamilies
       TypeOperators
       ViewPatterns
-  ghc-options: -Wall -fconstraint-solver-iterations=6 -threaded -rtsopts -with-rtsopts=-N -O0
+  ghc-options: -Wall -fconstraint-solver-iterations=10 -threaded -rtsopts -with-rtsopts=-N -O0
   build-depends:
       JuicyPixels
     , MonadRandom
@@ -398,7 +396,6 @@ test-suite test
     , random
     , random-extras
     , random-fu
-    , random-source
     , raw-strings-qq
     , reflection
     , semigroupoids
@@ -460,7 +457,7 @@ benchmark benchmark
       TypeFamilies
       TypeOperators
       ViewPatterns
-  ghc-options: -Wall -fconstraint-solver-iterations=6 -threaded -rtsopts -with-rtsopts=-N
+  ghc-options: -Wall -fconstraint-solver-iterations=10 -threaded -rtsopts -with-rtsopts=-N
   build-depends:
       JuicyPixels
     , MonadRandom
@@ -508,7 +505,6 @@ benchmark benchmark
     , random
     , random-extras
     , random-fu
-    , random-source
     , raw-strings-qq
     , reflection
     , semigroupoids
