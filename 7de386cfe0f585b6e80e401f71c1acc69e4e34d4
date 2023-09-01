@@ -213,6 +213,30 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "ae366f8d_8f2a38dc",
+        "filename": "users/tazjin/presentations/tvix-eval-2023/presentation.tex",
+        "patchSetId": 5
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2023-09-01T13:44:44Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "98b83761_5ee97c6b",
+      "range": {
+        "startLine": 44,
+        "startChar": 34,
+        "endLine": 44,
+        "endChar": 35
+      },
+      "revId": "7de386cfe0f585b6e80e401f71c1acc69e4e34d4",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "b3b719e5_798a93e3",
