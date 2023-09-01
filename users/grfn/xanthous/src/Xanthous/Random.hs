@@ -19,8 +19,7 @@ module Xanthous.Random
 import           Xanthous.Prelude
 --------------------------------------------------------------------------------
 import           Data.List.NonEmpty (NonEmpty(..))
-import           Control.Monad.Random.Class (MonadRandom(getRandomR, getRandom))
-import           Control.Monad.Random (Rand, evalRand, mkStdGen, StdGen, RandT, liftRandT)
+import           Control.Monad.Random (Rand, evalRand, mkStdGen, StdGen, RandT, liftRandT, Random)
 import           Data.Functor.Compose
 import           Data.Random.Shuffle.Weighted
 import           Data.Random.Distribution
@@ -30,13 +29,18 @@ import           Data.Random.Sample
 import           Data.Interval ( Interval, lowerBound', Extended (Finite)
                                , upperBound', Boundary (Closed), lowerBound, upperBound
                                )
-import Data.Random (RandomGen, runRVarT, RVar)
-import System.Random.Stateful (runStateGenT)
+import Data.Random (RandomGen, RVar)
 --------------------------------------------------------------------------------
+
+class Monad m => MyRandom (m :: Type -> Type) where
+  getRandomR :: Random a => (a, a) -> m a
+  getRandom :: Random a => m a
+  runRVar :: RVar a -> m a
+  getRandomDistribution :: Distribution d t => d t -> m t
 
 class Choose a where
   type RandomResult a
-  choose :: (Monad m, RandomGen g) => a -> RandT g m (RandomResult a)
+  choose :: MyRandom m => a -> m (RandomResult a)
 
 newtype ChooseElement a = ChooseElement a
 
@@ -87,53 +91,50 @@ weightedBy weighting xs = Weighted $ (weighting &&& id) <$> xs
 sampleRandT :: (Distribution d t, RandomGen g, Applicative m) => d t -> RandT g m t
 sampleRandT dt = liftRandT $ \g -> pure $ samplePure dt g
 
-sampleRandTRVar :: (Monad m, RandomGen g) => RVar t -> RandT g m t
-sampleRandTRVar rv = liftRandT $ \g -> runStateGenT g (runRVarT rv)
-
 instance (Num w, Ord w, Distribution Uniform w, Excludable w)
        => Choose (Weighted w [] a) where
   type RandomResult (Weighted w [] a) = Maybe a
-  choose (Weighted ws) = sampleRandTRVar $ headMay <$> weightedSample 1 ws
+  choose (Weighted ws) = runRVar $ headMay <$> weightedSample 1 ws
 
 instance (Num w, Ord w, Distribution Uniform w, Excludable w)
        => Choose (Weighted w NonEmpty a) where
   type RandomResult (Weighted w NonEmpty a) = a
   choose (Weighted ws) =
-    sampleRandTRVar
+    runRVar
     $ fromMaybe (error "unreachable") . headMay
     <$> weightedSample 1 (toList ws)
 
-subRand :: MonadRandom m => Rand StdGen a -> m a
+subRand :: MyRandom m => Rand StdGen a -> m a
 subRand sub = evalRand sub . mkStdGen <$> getRandom
 
 -- | Has a @n@ chance of returning 'True'
 --
 -- eg, chance 0.5 will return 'True' half the time
 chance
-  :: (Num w, Ord w, Distribution Uniform w, Excludable w, RandomGen g, Monad m)
+  :: (Num w, Ord w, Distribution Uniform w, Excludable w, Monad m, MyRandom m)
   => w
-  -> RandT g m Bool
+  -> m Bool
 chance n = choose $ weightedBy (bool 1 (n * 2)) bools
 
 -- | Choose a random subset of *about* @w@ of the elements of the given
 -- 'Witherable' structure
 chooseSubset :: ( Num w, Ord w, Distribution Uniform w, Excludable w
                , Witherable t
-               , Monad m, RandomGen g
-               ) => w -> t a -> RandT g m (t a)
+               , MyRandom m
+               ) => w -> t a -> m (t a)
 chooseSubset = filterA . const . chance
 
 -- | Choose a random @n@ in the given interval
 chooseRange
-  :: ( Monad m
+  :: ( MyRandom m
     , Distribution Uniform n
     , Enum n
     , Bounded n
-    , Ord n, RandomGen g
+    , Ord n
     )
   => Interval n
-  -> RandT g m (Maybe n)
-chooseRange int = traverse sampleRandT distribution
+  -> m (Maybe n)
+chooseRange int = traverse getRandomDistribution distribution
   where
     (lower, lowerBoundary) = lowerBound' int
     lowerR = case lower of
@@ -169,7 +170,7 @@ instance ( Distribution Uniform n
   type RandomResult (FiniteInterval n) = n
   -- TODO broken with open/closed right now
   choose
-    = sampleRandT
+    = getRandomDistribution
     . uncurry Uniform
     . over both getFinite
     . (lowerBound &&& upperBound)
