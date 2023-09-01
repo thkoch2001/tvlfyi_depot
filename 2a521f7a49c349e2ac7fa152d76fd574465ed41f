@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7550df6c_d69f93c2",
+        "filename": "users/grfn/xanthous/src/Xanthous/Random.hs",
+        "patchSetId": 5
+      },
+      "lineNbr": 91,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2023-09-01T15:40:30Z",
+      "side": 1,
+      "message": "this part took an unreasonable amount of time to figure out lol",
+      "revId": "2a521f7a49c349e2ac7fa152d76fd574465ed41f",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
