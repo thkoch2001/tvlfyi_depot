@@ -87,6 +87,24 @@
       "parentUuid": "d6665494_866dded7",
       "revId": "336fcdffd72dbfc73025b286f53b7eb190395c7d",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "35d97b55_a4b16625",
+        "filename": "third_party/overlays/haskell/default.nix",
+        "patchSetId": 2
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2023-09-01T11:21:36Z",
+      "side": 1,
+      "message": "I\u0027m in favour of keeping the hash, and maybe adding a comment saying \"tag XY as of $date\", but the comment is optional.",
+      "parentUuid": "8df9ebfc_17c2cba2",
+      "revId": "336fcdffd72dbfc73025b286f53b7eb190395c7d",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
