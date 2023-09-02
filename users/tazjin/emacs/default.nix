@@ -46,6 +46,7 @@ pkgs.makeOverridable
       ht
       hydra
       idle-highlight-mode
+      inspector
       jq-mode
       kotlin-mode
       kubernetes
@@ -66,7 +67,6 @@ pkgs.makeOverridable
       protobuf-mode
       rainbow-delimiters
       rainbow-mode
-      refine
       request
       restclient
       rust-mode
