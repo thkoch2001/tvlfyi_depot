@@ -1,7 +1,7 @@
 { depot, pkgs, ... }:
 
 let
-  inherit (pkgs) fontconfig texlive stdenv imagemagick;
+  inherit (pkgs) fontconfig texlive stdenv imagemagick runCommand qrencode;
 
   tex = texlive.combine {
     inherit (texlive)
@@ -22,6 +22,15 @@ let
       translator;
   };
 
+  linksQrCode = runCommand "qrcode.png" { } ''
+    ${qrencode}/bin/qrencode -o code.png -s 8 \
+      --background=fafafa \
+      --foreground=000000 \
+      'https://tazj.in/blog/tvix-eval-talk-2023'
+
+    # latex has trouble with the PDF produced by qrencode
+    ${imagemagick}/bin/convert code.png $out
+  '';
 in
 stdenv.mkDerivation {
   name = "progmsk-tvix-eval";
@@ -40,6 +49,7 @@ stdenv.mkDerivation {
 
     # webp images can't be included directly, need to convert to PNG
     convert ${depot.tvix.website}/tvix-logo.webp tvix-logo.png
+    cp ${linksQrCode} qrcode.png
 
     # As usual, TeX needs to be run twice ...
     ${tex}/bin/xelatex presentation.tex
