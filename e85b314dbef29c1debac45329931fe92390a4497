@@ -1,0 +1,89 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "609a27f2_74819741",
+        "filename": "tvix/cli/src/tvix_store_io.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-09-02T19:51:30Z",
+      "side": 1,
+      "message": "comment style",
+      "revId": "e85b314dbef29c1debac45329931fe92390a4497",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3f0d47bb_349bc403",
+        "filename": "tvix/cli/src/tvix_store_io.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 91,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-09-02T19:51:30Z",
+      "side": 1,
+      "message": "just PathInfo",
+      "revId": "e85b314dbef29c1debac45329931fe92390a4497",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e2f309ca_760d0585",
+        "filename": "tvix/cli/src/tvix_store_io.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 184,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-09-02T19:51:30Z",
+      "side": 1,
+      "message": "Unrelated, but missing a format!() here",
+      "revId": "e85b314dbef29c1debac45329931fe92390a4497",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "01edf67f_8bd23714",
+        "filename": "tvix/cli/src/tvix_store_io.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 283,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-09-02T19:51:30Z",
+      "side": 1,
+      "message": "Node",
+      "revId": "e85b314dbef29c1debac45329931fe92390a4497",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fa0491b0_c4b6c49b",
+        "filename": "tvix/cli/src/tvix_store_io.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 290,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-09-02T19:51:30Z",
+      "side": 1,
+      "message": "Node",
+      "revId": "e85b314dbef29c1debac45329931fe92390a4497",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
