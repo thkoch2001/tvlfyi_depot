@@ -1,6 +1,13 @@
 # This file defines all the blog posts.
 [
   {
+    key = "tvix-eval-talk-2023";
+    title = "[доклад] tvix-eval, имплементация языка Nix на Rust";
+    date = 1693665109;
+    content = ./posts/tvix-eval-talk-2023.md;
+    listed = false; # publish after the talk recording is available
+  }
+  {
     key = "emacs-is-underrated";
     title = "Emacs is the most underrated tool";
     date = 1581286656;
