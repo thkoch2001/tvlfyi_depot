@@ -2,6 +2,8 @@ use clap::Subcommand;
 use data_encoding::BASE64;
 use futures::future::try_join_all;
 use nix_compat::store_path;
+use signal_hook::consts::signal::*;
+use signal_hook::iterator::Signals;
 use std::io;
 use std::path::Path;
 use std::path::PathBuf;
@@ -267,16 +269,56 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
                 directory_service.clone(),
             )?;
 
-            tokio::task::spawn_blocking(move || {
-                let f = FUSE::new(
-                    blob_service,
-                    directory_service,
-                    path_info_service,
-                    list_root,
-                );
-                fuser::mount2(f, &dest, &[])
-            })
-            .await??
+            let session_task: tokio::task::JoinHandle<io::Result<_>> =
+                tokio::task::spawn_blocking(move || {
+                    let f = FUSE::new(
+                        blob_service,
+                        directory_service,
+                        path_info_service,
+                        list_root,
+                    );
+
+                    fuser::Session::new(f, &dest, &[])
+                });
+
+            let mut fuse_session = session_task.await??;
+            let mut fuse_unmounter = fuse_session.unmount_callable();
+
+            // prepare the signal handler
+            let mut signals = Signals::new([SIGTERM, SIGINT, SIGQUIT])?;
+            let signals_handle = signals.handle();
+
+            let signal_handler_task: tokio::task::JoinHandle<io::Result<()>> =
+                tokio::task::spawn_blocking(move || {
+                    for signal in signals.forever() {
+                        match signal as libc::c_int {
+                            SIGTERM | SIGINT | SIGQUIT => {
+                                info!("interrupt received, unmounting…");
+                                fuse_unmounter.unmount().unwrap(); // this doesn't fail
+                                break;
+                            }
+                            _ => unreachable!(),
+                        }
+                    }
+                    Ok(())
+                });
+
+            // Start the fuse filesystem and wait for its completion, which
+            // happens when it's unmounted externally, or via the signal handler
+            // task.
+            let fuse_task: tokio::task::JoinHandle<io::Result<()>> =
+                tokio::task::spawn_blocking(move || {
+                    info!("mounting tvix-store on {:?}", fuse_session.mountpoint());
+                    let res = fuse_session.run();
+                    info!("unmount occured, terminating…");
+
+                    // Terminate the signal handler
+                    signals_handle.close();
+
+                    res
+                });
+
+            try_join_all([signal_handler_task, fuse_task]).await?;
         }
     };
     Ok(())

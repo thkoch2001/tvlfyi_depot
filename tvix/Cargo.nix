@@ -6092,6 +6092,51 @@ rec {
           "loom" = [ "dep:loom" ];
         };
       };
+      "signal-hook" = rec {
+        crateName = "signal-hook";
+        version = "0.3.17";
+        edition = "2018";
+        sha256 = "0098nsah04spqf3n8niirmfym4wsdgjl57c78kmzijlq8xymh8c6";
+        authors = [
+          "Michal 'vorner' Vaner <vorner@vorner.cz>"
+          "Thomas Himmelstoss <thimm@posteo.de>"
+        ];
+        dependencies = [
+          {
+            name = "libc";
+            packageId = "libc";
+          }
+          {
+            name = "signal-hook-registry";
+            packageId = "signal-hook-registry";
+          }
+        ];
+        features = {
+          "cc" = [ "dep:cc" ];
+          "default" = [ "channel" "iterator" ];
+          "extended-siginfo" = [ "channel" "iterator" "extended-siginfo-raw" ];
+          "extended-siginfo-raw" = [ "cc" ];
+          "iterator" = [ "channel" ];
+        };
+        resolvedDefaultFeatures = [ "channel" "default" "iterator" ];
+      };
+      "signal-hook-registry" = rec {
+        crateName = "signal-hook-registry";
+        version = "1.4.1";
+        edition = "2015";
+        sha256 = "18crkkw5k82bvcx088xlf5g4n3772m24qhzgfan80nda7d3rn8nq";
+        authors = [
+          "Michal 'vorner' Vaner <vorner@vorner.cz>"
+          "Masaki Hara <ackie.h.gmai@gmail.com>"
+        ];
+        dependencies = [
+          {
+            name = "libc";
+            packageId = "libc";
+          }
+        ];
+
+      };
       "slab" = rec {
         crateName = "slab";
         version = "0.4.8";
@@ -8346,6 +8391,10 @@ rec {
           {
             name = "sha2";
             packageId = "sha2 0.10.6";
+          }
+          {
+            name = "signal-hook";
+            packageId = "signal-hook";
           }
           {
             name = "sled";
