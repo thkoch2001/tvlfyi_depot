@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6762ca2a_2a523ca1",
+        "filename": "users/tazjin/blog/posts/tvix-eval-talk-2023.md",
+        "patchSetId": 2
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-09-03T12:37:11Z",
+      "side": 1,
+      "message": "stray whitespace",
+      "revId": "428b65584524e03a2f7cf24ed992f143373b3bd3",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
