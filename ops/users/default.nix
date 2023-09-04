@@ -214,4 +214,9 @@
     email = "hsjobeki@gmail.com";
     password = "{ARGON2}$argon2id$v=19$m=65536,t=2,p=1$jez9eVa2v0BznIJMOhw+hw$wUbwCS+Bfcjjzr08saQE6NNTPWNXWWaxv+UtBCdYC2s";
   }
+  {
+    username = "pwcryptest";
+    email = "pwcryptest@tvl.fyi";
+    password = "{ARGON2}$argon2id$v=19$m=19456,t=2,p=1$x9eWmA1L+XsQyn6BCp89PQ$xhBZcyXSRl2C4bV3ANuyelxcJyEPrZTC4J1wjo9Qz7Q";
+  }
 ]
