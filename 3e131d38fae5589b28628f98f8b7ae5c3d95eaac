@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b1b97654_988ba0f7",
+        "filename": "tvix/cli/src/tvix_io.rs",
+        "patchSetId": 6
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2023-09-04T15:52:31Z",
+      "side": 1,
+      "message": "Hmm, I\u0027m not sure yet. The more I think about it the more arguments in both directions I come up with.",
+      "range": {
+        "startLine": 18,
+        "startChar": 0,
+        "endLine": 18,
+        "endChar": 46
+      },
+      "revId": "3e131d38fae5589b28628f98f8b7ae5c3d95eaac",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}

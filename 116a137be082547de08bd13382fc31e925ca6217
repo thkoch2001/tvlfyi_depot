@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ac6b778b_cde62fbf",
+        "filename": "tvix/store/Cargo.toml",
+        "patchSetId": 6
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2023-09-04T15:52:31Z",
+      "side": 0,
+      "message": "alhamduillah",
+      "revId": "116a137be082547de08bd13382fc31e925ca6217",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
