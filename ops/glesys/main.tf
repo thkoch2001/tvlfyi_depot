@@ -80,6 +80,7 @@ locals {
     "cs",
     "deploys",
     "images",
+    "signup",
     "static",
     "status",
     "todo",
