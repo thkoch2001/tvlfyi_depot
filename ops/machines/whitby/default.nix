@@ -39,6 +39,7 @@ in
     (mod "www/images.tvl.fyi.nix")
     (mod "www/nixery.dev.nix")
     (mod "www/self-redirect.nix")
+    (mod "www/signup.tvl.fyi.nix")
     (mod "www/static.tvl.fyi.nix")
     (mod "www/status.tvl.su.nix")
     (mod "www/todo.tvl.fyi.nix")
