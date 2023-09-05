@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d74050d4_adb7d3f6",
+        "filename": "tvix/store/src/bin/tvix-store.rs",
+        "patchSetId": 6
+      },
+      "lineNbr": 94,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2023-09-05T20:39:32Z",
+      "side": 1,
+      "message": "This documentation string should explain what the tradeoffs are, I think, as this is user-facing (ish). It\u0027s not clear to me why you would want to disable this.",
+      "range": {
+        "startLine": 94,
+        "startChar": 0,
+        "endLine": 94,
+        "endChar": 68
+      },
+      "revId": "c5f3a783c193d7444b60a08109efa9aa0e284a46",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
