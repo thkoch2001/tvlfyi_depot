@@ -22,6 +22,30 @@
       },
       "revId": "28ee9d85e56c1adbe7bd1ad5114adfd1d31202fd",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0f900d59_de3bd507",
+        "filename": "tvix/store/src/pathinfoservice/mod.rs",
+        "patchSetId": 5
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-09-05T14:23:21Z",
+      "side": 1,
+      "message": "Every Item is a `Result\u003cPathInfo, Error\u003e`.\n\nI\u0027d assume it\u0027d return some error in the first returned element.\n\nWe could probably create a distinct error for this too, but currently the error types are a bit messed up.\n\nI\u0027d propose defining this a bit more once we have an example of a service refusing to provide listing - There\u0027s an open TODO for that in the gRPC server wrapper.",
+      "parentUuid": "0e5bd8f3_f2b8ea77",
+      "range": {
+        "startLine": 44,
+        "startChar": 0,
+        "endLine": 44,
+        "endChar": 55
+      },
+      "revId": "28ee9d85e56c1adbe7bd1ad5114adfd1d31202fd",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
