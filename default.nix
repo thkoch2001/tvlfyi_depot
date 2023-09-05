@@ -74,7 +74,7 @@ let
   # Any build target that contains `meta.ci.skip = true` will be skipped.
 
   # Is this tree node eligible for build inclusion?
-  eligible = node: (node ? outPath) && !(node.meta.ci.skip or false);
+  eligible = node: (node ? outPath) && !(node.meta.ci.skip or (node.meta.broken or false));
 
 in
 readTree.fix (self: (readDepot {
