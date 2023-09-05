@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e95a7eb0_08b85859",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-09-05T14:44:08Z",
+      "side": 1,
+      "message": "I still think we should fix our SSO logins rather than providing additional helpers for our manual account creation process, but alas :-D",
+      "revId": "79f8d7c40a4024557909f3ce692f79835397ff53",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
