@@ -39,14 +39,10 @@ depot.nix.readTree.drvTargets {
   nix = self.nix_2_3;
   nix_latest = super.nix;
 
-  # nixos-option does not build anymore, neither with our Nix 2.3, nor
-  # with upstream's latest `nix` attribute.
-  #
-  # We have no critical dependency on it, so until it is fixed, it's gone.
-  nixos-option = self.writeShellScriptBin "nixos-option" ''
-    echo "nixos-option does not currently build in depot, see b/295" >/dev/stderr
-    exit 1
-  '';
+  # nixos-option only builds against Nix 2.15
+  nixos-option = super.nixos-option.override {
+    nix = super.nixVersions.nix_2_15;
+  };
 
   # Too match telega in emacs-overlay or wherever
   tdlib = super.tdlib.overrideAttrs (_: {
