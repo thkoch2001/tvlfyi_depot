@@ -105,6 +105,24 @@
       "parentUuid": "8df9ebfc_17c2cba2",
       "revId": "336fcdffd72dbfc73025b286f53b7eb190395c7d",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "039a8de0_15aecf78",
+        "filename": "third_party/overlays/haskell/default.nix",
+        "patchSetId": 2
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2023-09-05T22:12:08Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "35d97b55_a4b16625",
+      "revId": "336fcdffd72dbfc73025b286f53b7eb190395c7d",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
