@@ -46,6 +46,30 @@
       },
       "revId": "c5f3a783c193d7444b60a08109efa9aa0e284a46",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "426d1956_d2d25f36",
+        "filename": "tvix/store/src/bin/tvix-store.rs",
+        "patchSetId": 6
+      },
+      "lineNbr": 94,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-09-05T21:04:30Z",
+      "side": 1,
+      "message": "Maybe we can flip the default in the future to allow listing, maybe we add a function to only allow certain store paths, I\u0027d probably leave this for later.",
+      "parentUuid": "5988a4be_1ac1dac5",
+      "range": {
+        "startLine": 94,
+        "startChar": 0,
+        "endLine": 94,
+        "endChar": 68
+      },
+      "revId": "c5f3a783c193d7444b60a08109efa9aa0e284a46",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
