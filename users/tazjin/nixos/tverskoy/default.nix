@@ -47,7 +47,6 @@ lib.fix (self: {
     zfs.enableUnstable = true;
   };
 
-  virtualisation.virtualbox.host.enable = true;
   virtualisation.docker.enable = true;
   users.users.tazjin.extraGroups = [ "docker" "vboxusers" "adbusers" ];
 
