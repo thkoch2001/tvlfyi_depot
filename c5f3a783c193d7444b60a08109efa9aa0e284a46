@@ -22,6 +22,30 @@
       },
       "revId": "c5f3a783c193d7444b60a08109efa9aa0e284a46",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5988a4be_1ac1dac5",
+        "filename": "tvix/store/src/bin/tvix-store.rs",
+        "patchSetId": 6
+      },
+      "lineNbr": 94,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-09-05T21:02:03Z",
+      "side": 1,
+      "message": "I added \"This is useful if your PathInfoService doesn\u0027t provide an (exhaustive) listing\", but would like to further flesh this out as we go.",
+      "parentUuid": "d74050d4_adb7d3f6",
+      "range": {
+        "startLine": 94,
+        "startChar": 0,
+        "endLine": 94,
+        "endChar": 68
+      },
+      "revId": "c5f3a783c193d7444b60a08109efa9aa0e284a46",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
