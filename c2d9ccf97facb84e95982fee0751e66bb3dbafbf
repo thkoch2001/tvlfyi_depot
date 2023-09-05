@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2cfb6430_497e6759",
+        "filename": "tvix/store/src/bin/tvix-store.rs",
+        "patchSetId": 5
+      },
+      "lineNbr": 294,
+      "author": {
+        "id": 1000066
+      },
+      "writtenOn": "2023-09-05T06:49:27Z",
+      "side": 1,
+      "message": "I think you want to use `feature\u003d\"signal\"` on the tokio crate and this method:\n\nhttps://docs.rs/tokio/latest/tokio/signal/unix/struct.SignalKind.html#method.interrupt\n\nIt integrates better with async (no need to `spawn_blocking`) and you won\u0027t need to add the `signal-hook` dependency.\n\nHere\u0027s an example that\u0027s very similar to what you want to do:\n\nhttps://docs.rs/tokio/latest/tokio/signal/index.html#examples\n\nI used this to implement a terminal handling library (`SIGWINCH` and `SIGTERM`) without any OS-level threads (`tokio::runtime::Builder::new_current_thread()`)",
+      "range": {
+        "startLine": 287,
+        "startChar": 0,
+        "endLine": 294,
+        "endChar": 1
+      },
+      "revId": "c2d9ccf97facb84e95982fee0751e66bb3dbafbf",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
