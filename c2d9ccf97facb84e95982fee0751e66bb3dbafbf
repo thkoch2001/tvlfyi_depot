@@ -22,6 +22,30 @@
       },
       "revId": "c2d9ccf97facb84e95982fee0751e66bb3dbafbf",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "00c54f09_cf19be60",
+        "filename": "tvix/store/src/bin/tvix-store.rs",
+        "patchSetId": 5
+      },
+      "lineNbr": 294,
+      "author": {
+        "id": 1000066
+      },
+      "writtenOn": "2023-09-05T06:50:38Z",
+      "side": 1,
+      "message": "and can highly recommend it.",
+      "parentUuid": "2cfb6430_497e6759",
+      "range": {
+        "startLine": 287,
+        "startChar": 0,
+        "endLine": 294,
+        "endChar": 1
+      },
+      "revId": "c2d9ccf97facb84e95982fee0751e66bb3dbafbf",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
