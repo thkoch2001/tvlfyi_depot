@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "614af3ca_04042029",
+        "filename": "tvix/store/src/bin/tvix-store.rs",
+        "patchSetId": 7
+      },
+      "lineNbr": 285,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2023-09-05T14:00:01Z",
+      "side": 1,
+      "message": "We don\u0027t want to at least log this if it fails?",
+      "range": {
+        "startLine": 285,
+        "startChar": 0,
+        "endLine": 285,
+        "endChar": 50
+      },
+      "revId": "c70da8a8f9c263ba214f251f029cb417201f3b22",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
