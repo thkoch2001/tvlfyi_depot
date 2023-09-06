@@ -16,6 +16,24 @@
       "message": "Unrelated, separate CL?",
       "revId": "0c9198108581c01acee76dba93d964914116a445",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "74e7cf69_ece7db67",
+        "filename": "users/tazjin/nixos/tverskoy/default.nix",
+        "patchSetId": 4
+      },
+      "lineNbr": 50,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-09-06T08:15:10Z",
+      "side": 0,
+      "message": "Ah well, hidden in the commit msg. Whatever.",
+      "parentUuid": "3dca42d5_d2d78820",
+      "revId": "0c9198108581c01acee76dba93d964914116a445",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
