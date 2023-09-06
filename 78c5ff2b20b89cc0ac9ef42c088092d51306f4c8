@@ -16,6 +16,24 @@
       "message": "where is this change?",
       "revId": "78c5ff2b20b89cc0ac9ef42c088092d51306f4c8",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "30ec343a_701cd254",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 15
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2023-09-06T13:23:53Z",
+      "side": 1,
+      "message": "WIP CLs that fix Xanthous are here:\n\n- https://cl.tvl.fyi/c/depot/+/9186/\n- https://cl.tvl.fyi/c/depot/+/9205/",
+      "parentUuid": "e1cf9df2_9879eced",
+      "revId": "78c5ff2b20b89cc0ac9ef42c088092d51306f4c8",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
