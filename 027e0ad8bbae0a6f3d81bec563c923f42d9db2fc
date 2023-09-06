@@ -34,6 +34,24 @@
       "parentUuid": "ed92d459_5992ba9a",
       "revId": "027e0ad8bbae0a6f3d81bec563c923f42d9db2fc",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1998a63b_667d2407",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 9
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2023-09-06T16:35:49Z",
+      "side": 1,
+      "message": "Ultimately it\u0027s aspen\u0027s decision whether to merge this intermediate fix (which will probably slow xanthous down), or go straight to the full solution at the end.\n\nPersonally I\u0027m too far away from Haskell at this point to have an opinion",
+      "parentUuid": "dd08399c_922a2962",
+      "revId": "027e0ad8bbae0a6f3d81bec563c923f42d9db2fc",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
