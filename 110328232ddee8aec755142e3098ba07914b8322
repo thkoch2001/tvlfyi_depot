@@ -57,6 +57,30 @@
       },
       "revId": "110328232ddee8aec755142e3098ba07914b8322",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9e8d4bef_2bd8bc00",
+        "filename": "default.nix",
+        "patchSetId": 16
+      },
+      "lineNbr": 112,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2023-09-06T13:54:46Z",
+      "side": 1,
+      "message": "That\u0027s the idea of b/296. My honest take is we have to limit how much blockage we accept from `//users`, especially during times of relatively low activity.\n\nOf course sterni and I usually do simple fixes when bumping channels, but with something as complex as this migration (which has been on the horizon for a long time) we need to move forward at some point.\n\nIn many other monorepo setups the solution is instead to not require a \"green trunk\", but I\u0027m not a fan of that. This new mechanism can also be extended to actually do an inverse assertion (i.e. *assert* that the build fails, fail the build if it unexpectedly succeeds) so that we don\u0027t forget to re-enable stuff.",
+      "parentUuid": "5527010b_07f3c858",
+      "range": {
+        "startLine": 106,
+        "startChar": 2,
+        "endLine": 112,
+        "endChar": 4
+      },
+      "revId": "110328232ddee8aec755142e3098ba07914b8322",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
