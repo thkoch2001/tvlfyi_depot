@@ -18,6 +18,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "a2e13dfd_3ce79635",
+        "filename": "default.nix",
+        "patchSetId": 16
+      },
+      "lineNbr": 75,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2023-09-06T13:50:59Z",
+      "side": 1,
+      "message": "Yep, but when I noticed it was already submitted.",
+      "parentUuid": "ce8afa9d_da92b5b4",
+      "revId": "110328232ddee8aec755142e3098ba07914b8322",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "5527010b_07f3c858",
