@@ -16,6 +16,24 @@
       "message": "wouldn\u0027t it make sense to do this, potentially making this less noisy to review?",
       "revId": "027e0ad8bbae0a6f3d81bec563c923f42d9db2fc",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "dd08399c_922a2962",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 9
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2023-09-06T13:51:32Z",
+      "side": 1,
+      "message": "cl/9205",
+      "parentUuid": "ed92d459_5992ba9a",
+      "revId": "027e0ad8bbae0a6f3d81bec563c923f42d9db2fc",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
