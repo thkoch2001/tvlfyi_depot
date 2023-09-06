@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ce8afa9d_da92b5b4",
+        "filename": "default.nix",
+        "patchSetId": 16
+      },
+      "lineNbr": 75,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2023-09-06T13:49:16Z",
+      "side": 1,
+      "message": "should this comment be in the previous change?",
+      "revId": "110328232ddee8aec755142e3098ba07914b8322",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5527010b_07f3c858",
+        "filename": "default.nix",
+        "patchSetId": 16
+      },
+      "lineNbr": 112,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2023-09-06T13:49:16Z",
+      "side": 1,
+      "message": "hmm this is odd. why not do this on the targets themselves?\n\nThis way, I\u0027m not the owner of these changes so I don\u0027t have to review them",
+      "range": {
+        "startLine": 106,
+        "startChar": 2,
+        "endLine": 112,
+        "endChar": 4
+      },
+      "revId": "110328232ddee8aec755142e3098ba07914b8322",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
