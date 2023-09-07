@@ -8,7 +8,8 @@
 * [TVL](https://tvl.fyi), наше онлайн-сообщество
 * [Tvixbolt](https://tvixbolt.tvl.su/), наш "godbolt" для tvix
 * [MMTk](https://www.mmtk.io/), Rust-библиотека с компонентами для garbage-collection
-* [Интервью](https://www.youtube.com/live/0Lhahzs-Wos?si=BlFDVBUPsIpHg0p5), Nix -- не только пакетный менеджер 
+* [Интервью / доклад](https://www.youtube.com/live/0Lhahzs-Wos?si=BlFDVBUPsIpHg0p5), Nix -- не только пакетный менеджер
+* [NixCon 2023](https://2023.nixcon.org/)
 
 [rustmsk]: https://t.me/ruRust_msk
 [progmsk]: https://prog.msk.ru/
