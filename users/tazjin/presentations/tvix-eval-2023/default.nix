@@ -47,8 +47,7 @@ stdenv.mkDerivation {
     mkdir home
     export HOME=$PWD/home
 
-    # webp images can't be included directly, need to convert to PNG
-    convert ${depot.tvix.website}/tvix-logo.webp tvix-logo.png
+    cp ${depot.tvix.logo}/logo.png tvix-logo.png
     cp ${linksQrCode} qrcode.png
 
     # As usual, TeX needs to be run twice ...
