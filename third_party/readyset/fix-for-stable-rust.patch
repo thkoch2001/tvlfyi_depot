@@ -1,0 +1,37 @@
+diff --git a/readyset-adapter/src/lib.rs b/readyset-adapter/src/lib.rs
+index 57143ce1b8..7b5b6c02b9 100644
+--- a/readyset-adapter/src/lib.rs
++++ b/readyset-adapter/src/lib.rs
+@@ -1,4 +1,4 @@
+-#![feature(box_syntax, box_patterns)]
++#![feature(box_patterns)]
+ #![feature(drain_filter)]
+ #![feature(async_closure)]
+ #![feature(never_type)]
+diff --git a/readyset-client/src/lib.rs b/readyset-client/src/lib.rs
+index 07a6f2cb71..e9bcb789f5 100644
+--- a/readyset-client/src/lib.rs
++++ b/readyset-client/src/lib.rs
+@@ -145,7 +145,7 @@
+     bound_as_ref,
+     box_into_inner,
+     is_sorted,
+-    once_cell
++    impl_trait_in_assoc_type
+ )]
+ #![deny(macro_use_extern_crate)]
+ #![deny(unused_extern_crates)]
+diff --git a/readyset-server/src/lib.rs b/readyset-server/src/lib.rs
+index a402019fb5..4164eccc99 100644
+--- a/readyset-server/src/lib.rs
++++ b/readyset-server/src/lib.rs
+@@ -391,7 +391,8 @@
+     stmt_expr_attributes,
+     try_find,
+     type_alias_impl_trait,
+-    hash_drain_filter
++    hash_drain_filter,
++    impl_trait_in_assoc_type
+ )]
+ #![deny(unused_extern_crates)]
+ #![deny(macro_use_extern_crate)]
