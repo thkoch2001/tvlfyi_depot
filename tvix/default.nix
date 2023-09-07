@@ -58,6 +58,16 @@ in
     ${depot.tools.depotfmt}/bin/depotfmt Cargo.nix
   '';
 
+  # Provide the Tvix logo in both .webp and .png format.
+  logo = pkgs.runCommand "logo"
+    {
+      nativeBuildInputs = [ pkgs.imagemagick ];
+    } ''
+    mkdir -p $out
+    cp ${./logo.webp} $out/logo.webp
+    convert $out/logo.webp $out/logo.png
+  '';
+
   # Provide a shell for the combined dependencies of all Tvix Rust
   # projects. Note that as this is manually maintained it may be
   # lacking something, but it is required for some people's workflows.
