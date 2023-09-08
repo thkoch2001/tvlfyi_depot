@@ -16,6 +16,24 @@
       "message": "depotfmt",
       "revId": "91f0f754022ed788b2405dd448a79474804affad",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "613a0eed_31df6a7c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2023-09-08T21:27:19Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "71983fcd_3c490cdc",
+      "revId": "91f0f754022ed788b2405dd448a79474804affad",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
