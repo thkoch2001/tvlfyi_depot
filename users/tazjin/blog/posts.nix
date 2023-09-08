@@ -5,7 +5,7 @@
     title = "[доклад] tvix-eval, имплементация языка Nix на Rust";
     date = 1694102400;
     content = ./posts/tvix-eval-talk-2023.md;
-    listed = false; # publish after the talk recording is available
+    tagfilter = false;
   }
   {
     key = "emacs-is-underrated";
