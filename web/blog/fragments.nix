@@ -84,7 +84,7 @@ let
     }
 
     # Write the actual post through cheddar's about-filter mechanism
-    cat ${renderMarkdown post.content} >> $out
+    cat ${renderMarkdown { path = post.content; tagfilter = post.tagfilter or true; }} >> $out
     echo '</article>' >> $out
 
     cat ${writeText "footer.html" (fullFooter footer)} >> $out
