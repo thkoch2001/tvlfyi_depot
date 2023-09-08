@@ -233,6 +233,7 @@ fn format_callout_paragraph(callout: Callout) -> NodeValue {
 pub fn format_markdown_with_shortlinks<R: BufRead, W: Write>(
     reader: &mut R,
     writer: &mut W,
+    tagfilter: bool,
     shortlinks: &[Shortlink],
 ) {
     let document = {
@@ -244,7 +245,13 @@ pub fn format_markdown_with_shortlinks<R: BufRead, W: Write>(
     };
 
     let arena = Arena::new();
-    let root = parse_document(&arena, &linkify_shortlinks(document, shortlinks), &MD_OPTS);
+
+    let mut opts = MD_OPTS.clone();
+    if !tagfilter {
+        opts.extension.tagfilter = false;
+    }
+
+    let root = parse_document(&arena, &linkify_shortlinks(document, shortlinks), &opts);
 
     // This node must exist with a lifetime greater than that of the parsed AST
     // in case that callouts are encountered (otherwise insertion into the tree
@@ -280,11 +287,11 @@ pub fn format_markdown_with_shortlinks<R: BufRead, W: Write>(
         }
     });
 
-    format_html(root, &MD_OPTS, writer).expect("Markdown rendering failed");
+    format_html(root, &opts, writer).expect("Markdown rendering failed");
 }
 
-pub fn format_markdown<R: BufRead, W: Write>(reader: &mut R, writer: &mut W) {
-    format_markdown_with_shortlinks(reader, writer, &TVL_LINKS)
+pub fn format_markdown<R: BufRead, W: Write>(reader: &mut R, writer: &mut W, tagfilter: bool) {
+    format_markdown_with_shortlinks(reader, writer, tagfilter, &TVL_LINKS)
 }
 
 fn find_syntax_for_file(filename: &str) -> &'static SyntaxReference {

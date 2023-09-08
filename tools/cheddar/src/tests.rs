@@ -6,7 +6,7 @@ use std::io::BufReader;
 fn expect_markdown(input: &str, expected: &str) {
     let mut input_buf = BufReader::new(input.trim().as_bytes());
     let mut out_buf: Vec<u8> = vec![];
-    format_markdown(&mut input_buf, &mut out_buf);
+    format_markdown(&mut input_buf, &mut out_buf, true);
 
     let out_string = String::from_utf8(out_buf).expect("output should be UTF8");
     assert_eq!(out_string.trim(), expected.trim());
