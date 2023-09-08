@@ -24,6 +24,10 @@ let
     # Path to the Markdown file containing the post content.
     content = path;
 
+    # Whether dangerous HTML tags should be filtered in this post. Can
+    # be disabled to, for example, embed videos in a post.
+    tagfilter = option bool;
+
     # Optional name of the author to display.
     author = option string;
 
