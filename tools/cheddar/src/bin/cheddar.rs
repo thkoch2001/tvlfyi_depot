@@ -48,7 +48,7 @@ fn markdown_endpoint(request: &rouille::Request) -> rouille::Response {
 
     for text in texts.values_mut() {
         let mut buf: Vec<u8> = Vec::new();
-        format_markdown(&mut text.as_bytes(), &mut buf);
+        format_markdown(&mut text.as_bytes(), &mut buf, true);
         *text = String::from_utf8_lossy(&buf).to_string();
     }
 
@@ -90,6 +90,12 @@ fn main() {
                 .takes_value(false),
         )
         .arg(
+            Arg::with_name("no-tagfilter")
+                .help("Disable HTML tag filter")
+                .long("no-tagfilter")
+                .takes_value(false),
+        )
+        .arg(
             Arg::with_name("sourcegraph-server")
                 .help("Run as a Sourcegraph compatible web-server")
                 .long("sourcegraph-server")
@@ -122,7 +128,11 @@ fn main() {
     let mut out_handle = stdout.lock();
 
     if matches.is_present("about-filter") && filename.ends_with(".md") {
-        format_markdown(&mut in_handle, &mut out_handle);
+        format_markdown(
+            &mut in_handle,
+            &mut out_handle,
+            !matches.is_present("no-tagfilter"),
+        );
     } else {
         format_code(
             &THEMES.themes["InspiredGitHub"],
