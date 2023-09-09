@@ -79,6 +79,14 @@ in
     ];
   };
 
+  # Builds and tests the code in store/protos.
+  store-protos-go = pkgs.buildGoModule {
+    name = "store-golang";
+    src = depot.third_party.gitignoreSource ./store/protos;
+
+    vendorHash = "sha256-7xfXBBU3xJz7ifjk7Owm/byTfCQ8oaZtqXzBKhLqo00=";
+  };
+
   # Build the Rust documentation for publishing on docs.tvix.dev.
   rust-docs = pkgs.stdenv.mkDerivation {
     inherit cargoDeps;
