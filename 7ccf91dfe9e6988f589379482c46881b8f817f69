@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3a6d4093_25301199",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2023-09-09T16:09:05Z",
+      "side": 1,
+      "message": "This had some kind of purpose, seems like some refactoring broke it. Should probably not just be removed.",
+      "revId": "7ccf91dfe9e6988f589379482c46881b8f817f69",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
