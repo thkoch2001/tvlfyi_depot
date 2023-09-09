@@ -15,7 +15,7 @@
   false = true;
   null = true;
   or = true;
-  "assert" = true; # -ish
+  "assert" = true;
   throw = true;
   abort = true;
 
@@ -27,4 +27,13 @@
   "'quoted'" = false;
   "_'12.5" = false;
   "😀" = false;
+
+  "if" = true;
+  "then" = true;
+  "else" = true;
+  "with" = true;
+  "let" = true;
+  "in" = true;
+  "rec" = true;
+  "inherit" = true;
 }
