@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "330ca867_0988e810",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2023-09-09T09:33:15Z",
+      "side": 1,
+      "message": "Can you add an `identity-*.nix` test as well? Allow such a thing is the motivation for this change in C++ Nix it seems.",
+      "revId": "555b7a3ad54edfa7e2ff98c7bd41b44dcb31dbf2",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9a9298a3_107abd96",
+        "filename": "tvix/eval/src/tests/tvix_tests/eval-okay-identifier-formatting.nix",
+        "patchSetId": 1
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2023-09-09T09:33:15Z",
+      "side": 1,
+      "message": "For consistency these would be `false` as well as the `assert` one, but it doesn\u0027t really matter. (false is can be printed unquoted, true needs quoting.)",
+      "revId": "555b7a3ad54edfa7e2ff98c7bd41b44dcb31dbf2",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
