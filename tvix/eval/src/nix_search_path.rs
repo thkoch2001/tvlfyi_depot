@@ -3,7 +3,7 @@ use std::convert::Infallible;
 use std::path::{Path, PathBuf};
 use std::str::FromStr;
 
-use crate::errors::ErrorKind;
+use crate::errors::{Catchable, ErrorKind};
 use crate::EvalIO;
 
 #[derive(Debug, Clone, PartialEq, Eq)]
@@ -134,10 +134,10 @@ impl NixSearchPath {
                 return Ok(p);
             }
         }
-        Err(ErrorKind::NixPathResolution(format!(
+        Err(ErrorKind::Catchable(Catchable::NixPathResolution(format!(
             "path '{}' was not found in the Nix search path",
             path.display()
-        )))
+        ))))
     }
 }
 
@@ -211,7 +211,7 @@ mod tests {
             let mut io = StdIO {};
             let err = nix_search_path.resolve(&mut io, "nope").unwrap_err();
             assert!(
-                matches!(err, ErrorKind::NixPathResolution(..)),
+                matches!(err, ErrorKind::Catchable(Catchable::NixPathResolution(..))),
                 "err = {err:?}"
             );
         }

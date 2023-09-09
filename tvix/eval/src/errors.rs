@@ -16,12 +16,19 @@ use crate::spans::ToSpan;
 use crate::value::{CoercionKind, NixString};
 use crate::{SourceCode, Value};
 
+/// "Catchable" errors -- those which can be detected by `builtins.tryEval`.
+#[derive(Clone, Debug)]
+pub enum Catchable {
+    Throw(String),
+    AssertionFailed,
+    /// Resolving a user-supplied angle brackets path literal failed in some way.
+    NixPathResolution(String),
+}
+
 #[derive(Clone, Debug)]
 pub enum ErrorKind {
     /// These are user-generated errors through builtins.
-    Throw(String),
     Abort(String),
-    AssertionFailed,
 
     DivisionByZero,
 
@@ -54,9 +61,6 @@ pub enum ErrorKind {
         lhs: &'static str,
         rhs: &'static str,
     },
-
-    /// Resolving a user-supplied angle brackets path literal failed in some way.
-    NixPathResolution(String),
 
     /// Resolving a user-supplied relative or home-relative path literal failed in some way.
     RelativePathResolution(String),
@@ -176,6 +180,14 @@ pub enum ErrorKind {
         context: String,
         underlying: Box<ErrorKind>,
     },
+
+    Catchable(Catchable),
+}
+
+impl From<Catchable> for ErrorKind {
+    fn from(c: Catchable) -> ErrorKind {
+        ErrorKind::Catchable(c)
+    }
 }
 
 impl error::Error for Error {
@@ -235,7 +247,7 @@ impl ErrorKind {
     /// Returns `true` if this error can be caught by `builtins.tryEval`
     pub fn is_catchable(&self) -> bool {
         match self {
-            Self::Throw(_) | Self::AssertionFailed | Self::NixPathResolution(_) => true,
+            Self::Catchable(_) => true,
             Self::NativeError { err, .. } | Self::BytecodeError(err) => err.kind.is_catchable(),
             _ => false,
         }
@@ -285,9 +297,9 @@ impl Error {
 impl Display for ErrorKind {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         match &self {
-            ErrorKind::Throw(msg) => write!(f, "error thrown: {}", msg),
+            ErrorKind::Catchable(Catchable::Throw(msg)) => write!(f, "error thrown: {}", msg),
             ErrorKind::Abort(msg) => write!(f, "evaluation aborted: {}", msg),
-            ErrorKind::AssertionFailed => write!(f, "assertion failed"),
+            ErrorKind::Catchable(Catchable::AssertionFailed) => write!(f, "assertion failed"),
 
             ErrorKind::DivisionByZero => write!(f, "division by zero"),
 
@@ -324,7 +336,8 @@ impl Display for ErrorKind {
                 write!(f, "can not compare a {} with a {}", lhs, rhs)
             }
 
-            ErrorKind::NixPathResolution(err) | ErrorKind::RelativePathResolution(err) => {
+            ErrorKind::Catchable(Catchable::NixPathResolution(err))
+            | ErrorKind::RelativePathResolution(err) => {
                 write!(f, "could not resolve path: {}", err)
             }
 
@@ -724,16 +737,15 @@ impl Error {
         let label = match &self.kind {
             ErrorKind::DuplicateAttrsKey { .. } => "in this attribute set",
             ErrorKind::InvalidAttributeName(_) => "in this attribute set",
-            ErrorKind::NixPathResolution(_) | ErrorKind::RelativePathResolution(_) => {
-                "in this path literal"
-            }
+            ErrorKind::Catchable(Catchable::NixPathResolution(_))
+            | ErrorKind::RelativePathResolution(_) => "in this path literal",
             ErrorKind::UnexpectedArgument { .. } => "in this function call",
 
             // The spans for some errors don't have any more descriptive stuff
             // in them, or we don't utilise it yet.
-            ErrorKind::Throw(_)
+            ErrorKind::Catchable(Catchable::Throw(_))
             | ErrorKind::Abort(_)
-            | ErrorKind::AssertionFailed
+            | ErrorKind::Catchable(Catchable::AssertionFailed)
             | ErrorKind::AttributeNotFound { .. }
             | ErrorKind::IndexOutOfBounds { .. }
             | ErrorKind::TailEmptyList
@@ -774,14 +786,14 @@ impl Error {
     /// used to refer users to documentation.
     fn code(&self) -> &'static str {
         match self.kind {
-            ErrorKind::Throw(_) => "E001",
+            ErrorKind::Catchable(Catchable::Throw(_)) => "E001",
             ErrorKind::Abort(_) => "E002",
-            ErrorKind::AssertionFailed => "E003",
+            ErrorKind::Catchable(Catchable::AssertionFailed) => "E003",
             ErrorKind::InvalidAttributeName { .. } => "E004",
             ErrorKind::AttributeNotFound { .. } => "E005",
             ErrorKind::TypeError { .. } => "E006",
             ErrorKind::Incomparable { .. } => "E007",
-            ErrorKind::NixPathResolution(_) => "E008",
+            ErrorKind::Catchable(Catchable::NixPathResolution(_)) => "E008",
             ErrorKind::DynamicKeyInScope(_) => "E009",
             ErrorKind::UnknownStaticVariable => "E010",
             ErrorKind::UnknownDynamicVariable(_) => "E011",
