@@ -135,10 +135,12 @@ impl NixSearchPath {
                 return Ok(Value::Path(Box::new(p)));
             }
         }
-        Ok(Value::Catchable(CatchableErrorKind::NixPathResolution(format!(
-            "path '{}' was not found in the Nix search path",
-            path.display()
-        ))))
+        Ok(Value::Catchable(CatchableErrorKind::NixPathResolution(
+            format!(
+                "path '{}' was not found in the Nix search path",
+                path.display()
+            ),
+        )))
     }
 }
 
@@ -215,7 +217,10 @@ mod tests {
             let mut io = StdIO {};
             let err = nix_search_path.resolve(&mut io, "nope").unwrap();
             assert!(
-                matches!(err, Value::Catchable(CatchableErrorKind::NixPathResolution(..))),
+                matches!(
+                    err,
+                    Value::Catchable(CatchableErrorKind::NixPathResolution(..))
+                ),
                 "err = {err:?}"
             );
         }

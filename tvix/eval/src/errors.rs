@@ -304,9 +304,13 @@ impl Error {
 impl Display for ErrorKind {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         match &self {
-            ErrorKind::CatchableErrorKind(CatchableErrorKind::Throw(msg)) => write!(f, "error thrown: {}", msg),
+            ErrorKind::CatchableErrorKind(CatchableErrorKind::Throw(msg)) => {
+                write!(f, "error thrown: {}", msg)
+            }
             ErrorKind::Abort(msg) => write!(f, "evaluation aborted: {}", msg),
-            ErrorKind::CatchableErrorKind(CatchableErrorKind::AssertionFailed) => write!(f, "assertion failed"),
+            ErrorKind::CatchableErrorKind(CatchableErrorKind::AssertionFailed) => {
+                write!(f, "assertion failed")
+            }
 
             ErrorKind::DivisionByZero => write!(f, "division by zero"),
 
