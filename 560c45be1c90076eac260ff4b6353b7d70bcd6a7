@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c5e9ef45_aafb3b43",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000066
+      },
+      "writtenOn": "2023-09-09T03:55:33Z",
+      "side": 1,
+      "message": "Maybe squash this into cl/9279 to get CI to pass?",
+      "revId": "560c45be1c90076eac260ff4b6353b7d70bcd6a7",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
