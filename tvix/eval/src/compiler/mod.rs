@@ -27,7 +27,7 @@ use std::rc::{Rc, Weak};
 use std::sync::Arc;
 
 use crate::chunk::Chunk;
-use crate::errors::{Catchable, Error, ErrorKind, EvalResult};
+use crate::errors::{CatchableErrorKind, Error, ErrorKind, EvalResult};
 use crate::observer::CompilerObserver;
 use crate::opcode::{CodeIdx, ConstantIdx, Count, JumpOffset, OpCode, UpvalueIdx};
 use crate::spans::LightSpan;
@@ -396,11 +396,11 @@ impl Compiler<'_> {
         } else if raw_path.starts_with('<') {
             // TODO: decide what to do with findFile
             if raw_path.len() == 2 {
-                return self.emit_error(
-                    node,
-                    ErrorKind::Catchable(Catchable::NixPathResolution(
+                return self.emit_constant(
+                    Value::Catchable(CatchableErrorKind::NixPathResolution(
                         "Empty <> path not allowed".into(),
                     )),
+                    node,
                 );
             }
             let path = &raw_path[1..(raw_path.len() - 1)];

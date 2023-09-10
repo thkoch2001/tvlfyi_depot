@@ -21,7 +21,7 @@ use crate::{
     chunk::Chunk,
     cmp_op,
     compiler::GlobalsMap,
-    errors::{Catchable, Error, ErrorKind, EvalResult},
+    errors::{CatchableErrorKind, Error, ErrorKind, EvalResult},
     io::EvalIO,
     nix_search_path::NixSearchPath,
     observer::RuntimeObserver,
@@ -83,13 +83,6 @@ impl<T, S: GetSpan> WithSpan<T, S> for Result<T, ErrorKind> {
             Ok(something) => Ok(something),
             Err(kind) => {
                 let mut error = Error::new(kind, top_span.get_span());
-
-                // Short-circuit the wrapping if we're dealing with tryEval, in
-                // which case the error is hidden and does not need to be
-                // exhaustive.
-                if !vm.try_eval_frames.is_empty() && error.kind.is_catchable() {
-                    return Err(error);
-                }
 
                 // Wrap the top-level error in chaining errors for each element
                 // of the frame stack.
@@ -377,21 +370,7 @@ impl<'o> VM<'o> {
                             .observer
                             .observe_suspend_call_frame(frame_id, &self.stack),
 
-                        Err(err) => {
-                            if let Some(catching_frame_idx) = self.try_eval_frames.pop() {
-                                if err.kind.is_catchable() {
-                                    self.observer.observe_exit_call_frame(frame_id, &self.stack);
-                                    catchable_error_occurred = true;
-
-                                    // truncate the frame stack back to the
-                                    // frame that can catch this error
-                                    self.frames.truncate(/* len = */ catching_frame_idx + 1);
-                                    continue;
-                                }
-                            }
-
-                            return Err(err);
-                        }
+                        Err(err) => return Err(err),
                     };
                 }
 
@@ -423,25 +402,7 @@ impl<'o> VM<'o> {
                                 .observe_suspend_generator(frame_id, name, &self.stack)
                         }
 
-                        Err(err) => {
-                            if let Some(catching_frame_idx) = self.try_eval_frames.pop() {
-                                if err.kind.is_catchable() {
-                                    self.observer.observe_exit_generator(
-                                        frame_id,
-                                        name,
-                                        &self.stack,
-                                    );
-                                    catchable_error_occurred = true;
-
-                                    // truncate the frame stack back to the
-                                    // frame that can catch this error
-                                    self.frames.truncate(/* len = */ catching_frame_idx + 1);
-                                    continue;
-                                }
-                            }
-
-                            return Err(err);
-                        }
+                        Err(err) => return Err(err),
                     };
                 }
             }
@@ -449,14 +410,23 @@ impl<'o> VM<'o> {
 
         // Once no more frames are present, return the stack's top value as the
         // result.
-        Ok(RuntimeResult {
-            value: self
-                .stack
-                .pop()
-                .expect("tvix bug: runtime stack empty after execution"),
-
-            warnings: self.warnings,
-        })
+        let value = self
+            .stack
+            .pop()
+            .expect("tvix bug: runtime stack empty after execution");
+        match value {
+            Value::Catchable(c) => {
+                Err(Error {
+                    kind: ErrorKind::CatchableErrorKind(c),
+                    span: self.reasonable_span.span(),
+                    contexts: vec![], // FIXME
+                })
+            }
+            _ => Ok(RuntimeResult {
+                value: value,
+                warnings: self.warnings,
+            }),
+        }
     }
 
     /// Run the VM's inner execution loop, processing Tvix bytecode from a
@@ -889,7 +859,7 @@ impl<'o> VM<'o> {
                             .nix_search_path
                             .resolve(&mut *self.io_handle, *path)
                             .with_span(&frame, self)?;
-                        self.stack.push(resolved.into());
+                        self.stack.push(resolved);
                     }
 
                     _ => panic!("tvix compiler bug: OpFindFile called on non-UnresolvedPath"),
@@ -925,7 +895,8 @@ impl<'o> VM<'o> {
                 }
 
                 OpCode::OpAssertFail => {
-                    frame.error(self, ErrorKind::Catchable(Catchable::AssertionFailed))?;
+                    self.stack
+                        .push(Value::Catchable(CatchableErrorKind::AssertionFailed));
                 }
 
                 // Data-carrying operands should never be executed,
@@ -1211,18 +1182,26 @@ async fn add_values(co: GenCo, a: Value, b: Value) -> Result<Value, ErrorKind> {
     let result = match (a, b) {
         (Value::Path(p), v) => {
             let mut path = p.to_string_lossy().into_owned();
-            let vs = generators::request_string_coerce(&co, v, CoercionKind::Weak).await;
-            path.push_str(vs.as_str());
-            crate::value::canon_path(PathBuf::from(path)).into()
+            match generators::request_string_coerce(&co, v, CoercionKind::Weak).await {
+                Ok(vs) => {
+                    path.push_str(vs.as_str());
+                    crate::value::canon_path(PathBuf::from(path)).into()
+                }
+                Err(c) => Value::Catchable(c),
+            }
         }
         (Value::String(s1), Value::String(s2)) => Value::String(s1.concat(&s2)),
         (Value::String(s1), v) => Value::String(
-            s1.concat(&generators::request_string_coerce(&co, v, CoercionKind::Weak).await),
+            match generators::request_string_coerce(&co, v, CoercionKind::Weak).await {
+                Ok(s2) => s1.concat(&s2),
+                Err(c) => return Ok(Value::Catchable(c)),
+            },
         ),
         (v, Value::String(s2)) => Value::String(
-            generators::request_string_coerce(&co, v, CoercionKind::Weak)
-                .await
-                .concat(&s2),
+            match generators::request_string_coerce(&co, v, CoercionKind::Weak).await {
+                Ok(s1) => s1.concat(&s2),
+                Err(c) => return Ok(Value::Catchable(c)),
+            },
         ),
         (a, b) => arithmetic_op!(&a, &b, +)?,
     };

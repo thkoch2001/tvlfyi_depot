@@ -20,7 +20,7 @@ mod path;
 mod string;
 mod thunk;
 
-use crate::errors::ErrorKind;
+use crate::errors::{CatchableErrorKind, ErrorKind};
 use crate::opcode::StackIdx;
 use crate::spans::LightSpan;
 use crate::vm::generators::{self, GenCo};
@@ -81,6 +81,15 @@ pub enum Value {
 
     #[serde(skip)]
     FinaliseRequest(bool),
+
+    #[serde(skip)]
+    Catchable(CatchableErrorKind),
+}
+
+impl From<CatchableErrorKind> for Value {
+    fn from(c: CatchableErrorKind) -> Value {
+        Value::Catchable(c)
+    }
 }
 
 lazy_static! {
@@ -222,17 +231,27 @@ impl Value {
 
             Value::List(list) => {
                 for val in list {
-                    generators::request_deep_force(&co, val.clone(), thunk_set.clone()).await;
+                    if let c @ Value::Catchable(_) =
+                        generators::request_deep_force(&co, val.clone(), thunk_set.clone()).await
+                    {
+                        return Ok(c);
+                    }
                 }
             }
 
             Value::Attrs(attrs) => {
                 for (_, val) in attrs.iter() {
-                    generators::request_deep_force(&co, val.clone(), thunk_set.clone()).await;
+                    if let c @ Value::Catchable(_) =
+                        generators::request_deep_force(&co, val.clone(), thunk_set.clone()).await
+                    {
+                        return Ok(c);
+                    }
                 }
             }
 
             Value::Thunk(_) => panic!("Tvix bug: force_value() returned a thunk"),
+
+            Value::Catchable(_) => return Ok(value),
 
             Value::AttrNotFound
             | Value::Blueprint(_)
@@ -279,8 +298,12 @@ impl Value {
                 }
 
                 if let Some(out_path) = attrs.select("outPath") {
-                    let s = generators::request_string_coerce(&co, out_path.clone(), kind).await;
-                    return Ok(Value::String(s));
+                    return match generators::request_string_coerce(&co, out_path.clone(), kind)
+                        .await
+                    {
+                        Ok(s) => Ok(Value::String(s)),
+                        Err(c) => Ok(Value::Catchable(c)),
+                    };
                 }
 
                 Err(ErrorKind::NotCoercibleToString { from: "set", kind })
@@ -308,8 +331,10 @@ impl Value {
                         out.push(' ');
                     }
 
-                    let s = generators::request_string_coerce(&co, elem, kind).await;
-                    out.push_str(s.as_str());
+                    match generators::request_string_coerce(&co, elem, kind).await {
+                        Ok(s) => out.push_str(s.as_str()),
+                        Err(c) => return Ok(Value::Catchable(c)),
+                    }
                 }
 
                 Ok(Value::String(out.into()))
@@ -327,6 +352,8 @@ impl Value {
                 from: val.0.type_of(),
                 kind,
             }),
+
+            (c @ Value::Catchable(_), _) => return Ok(c),
 
             (Value::AttrNotFound, _)
             | (Value::Blueprint(_), _)
@@ -384,6 +411,8 @@ impl Value {
 
         let result = match (a, b) {
             // Trivial comparisons
+            (c @ Value::Catchable(_), _) => return Ok(c),
+            (_, c @ Value::Catchable(_)) => return Ok(c),
             (Value::Null, Value::Null) => true,
             (Value::Bool(b1), Value::Bool(b2)) => b1 == b2,
             (Value::String(s1), Value::String(s2)) => s1 == s2,
@@ -526,6 +555,7 @@ impl Value {
             Value::UnresolvedPath(_) => "internal[unresolved_path]",
             Value::Json(_) => "internal[json]",
             Value::FinaliseRequest(_) => "internal[finaliser_sentinel]",
+            Value::Catchable(_) => "internal[catchable]",
         }
     }
 
@@ -533,6 +563,7 @@ impl Value {
     gen_cast!(as_int, i64, "int", Value::Integer(x), *x);
     gen_cast!(as_float, f64, "float", Value::Float(x), *x);
     gen_cast!(to_str, NixString, "string", Value::String(s), s.clone());
+    gen_cast!(to_path, Box<PathBuf>, "path", Value::Path(p), p.clone());
     gen_cast!(to_attrs, Box<NixAttrs>, "set", Value::Attrs(a), a.clone());
     gen_cast!(to_list, NixList, "list", Value::List(l), l.clone());
     gen_cast!(
@@ -660,6 +691,8 @@ impl Value {
             // TODO: handle suspended thunks with a different explanation instead of panicking
             Value::Thunk(t) => t.value().explain(),
 
+            Value::Catchable(_) => "a catchable failure".into(),
+
             Value::AttrNotFound
             | Value::Blueprint(_)
             | Value::DeferredUpvalue(_)
@@ -785,6 +818,7 @@ impl TotalDisplay for Value {
             // Delegate thunk display to the type, as it must handle
             // the case of already evaluated or cyclic thunks.
             Value::Thunk(t) => t.total_fmt(f, set),
+            Value::Catchable(_) => panic!("total_fmt() called on a CatchableErrorKind"),
         }
     }
 }

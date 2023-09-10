@@ -63,6 +63,8 @@ impl Value {
                 Json::Object(out)
             }
 
+            Value::Catchable(c) => return Err(ErrorKind::CatchableErrorKind(c)),
+
             val @ Value::Closure(_)
             | val @ Value::Thunk(_)
             | val @ Value::Builtin(_)
