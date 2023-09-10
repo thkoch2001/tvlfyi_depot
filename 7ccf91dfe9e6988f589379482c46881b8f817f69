@@ -52,6 +52,24 @@
       "parentUuid": "6310b8f6_ff7e855e",
       "revId": "7ccf91dfe9e6988f589379482c46881b8f817f69",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e2cb881a_b8ddd644",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2023-09-10T13:13:31Z",
+      "side": 1,
+      "message": "Aha, got it. We should probably add some structured data here again though.",
+      "parentUuid": "6310b8f6_ff7e855e",
+      "revId": "7ccf91dfe9e6988f589379482c46881b8f817f69",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
