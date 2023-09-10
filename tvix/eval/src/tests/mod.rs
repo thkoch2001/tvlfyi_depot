@@ -57,19 +57,20 @@ fn eval_test(code_path: &str, expect_success: bool) {
     eval.builtins.extend(mock_builtins::builtins());
 
     let result = eval.evaluate();
-
-    if expect_success && !result.errors.is_empty() {
+    let failed = !result.errors.is_empty();
+    if expect_success && failed {
         panic!(
             "{code_path}: evaluation of eval-okay test should succeed, but failed with {:?}",
             result.errors,
         );
     }
 
-    if !expect_success && !result.errors.is_empty() {
+    if !expect_success && failed {
         return;
     }
 
-    let result_str = result.value.unwrap().to_string();
+    let value = result.value.unwrap();
+    let result_str = value.to_string();
 
     if let Ok(exp) = std::fs::read_to_string(exp_path) {
         if expect_success {

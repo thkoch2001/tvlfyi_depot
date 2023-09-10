@@ -134,6 +134,8 @@ fn value_variant_to_xml<W: Write>(w: &mut EventWriter<W>, value: &Value) -> Resu
                 metadata: Some(Rc::new(value.clone())),
             })
         }
+
+        Value::Catchable(c) => return Err(ErrorKind::CatchableErrorKind(c.clone())),
     }?;
 
     Ok(())
