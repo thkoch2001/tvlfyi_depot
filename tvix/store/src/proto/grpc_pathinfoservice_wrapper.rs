@@ -29,23 +29,31 @@ impl proto::path_info_service_server::PathInfoService for GRPCPathInfoServiceWra
         &self,
         request: Request<proto::GetPathInfoRequest>,
     ) -> Result<Response<proto::PathInfo>> {
-        match request.into_inner().by_what {
-            None => Err(Status::unimplemented("by_what needs to be specified")),
+        let output_digest = match request.into_inner().by_what {
+            None => return Err(Status::unimplemented("by_what needs to be specified")),
             Some(proto::get_path_info_request::ByWhat::ByOutputHash(output_digest)) => {
-                let digest: [u8; 20] = output_digest
-                    .to_vec()
-                    .try_into()
-                    .map_err(|_e| Status::invalid_argument("invalid output digest length"))?;
-                match self.path_info_service.get(digest) {
-                    Ok(None) => Err(Status::not_found("PathInfo not found")),
-                    Ok(Some(path_info)) => Ok(Response::new(path_info)),
-                    Err(e) => {
-                        warn!("failed to retrieve PathInfo: {}", e);
-                        Err(e.into())
-                    }
-                }
+                output_digest
             }
-        }
+        };
+
+        let digest: [u8; 20] = output_digest
+            .to_vec()
+            .try_into()
+            .map_err(|_e| Status::invalid_argument("invalid output digest length"))?;
+
+        let path_info_service = self.path_info_service.clone();
+        let result = task::spawn_blocking(move || match path_info_service.get(digest) {
+            Ok(None) => Err(Status::not_found("PathInfo not found")),
+            Ok(Some(path_info)) => Ok(path_info),
+            Err(e) => {
+                warn!("failed to retrieve PathInfo: {}", e);
+                Err(e.into())
+            }
+        })
+        .await
+        .map_err(|_e| Status::internal("failed to wait for task"))??;
+
+        Ok(Response::new(result))
     }
 
     #[instrument(skip(self))]
@@ -54,13 +62,18 @@ impl proto::path_info_service_server::PathInfoService for GRPCPathInfoServiceWra
 
         // Store the PathInfo in the client. Clients MUST validate the data
         // they receive, so we don't validate additionally here.
-        match self.path_info_service.put(path_info) {
-            Ok(path_info_new) => Ok(Response::new(path_info_new)),
+        let path_info_service = self.path_info_service.clone();
+        let result = task::spawn_blocking(move || match path_info_service.put(path_info) {
+            Ok(path_info_new) => Ok(path_info_new),
             Err(e) => {
                 warn!("failed to insert PathInfo: {}", e);
-                Err(e.into())
+                Err::<_, Status>(e.into())
             }
-        }
+        })
+        .await
+        .map_err(|_e| Status::internal("failed to wait for task"))??;
+
+        Ok(Response::new(result))
     }
 
     #[instrument(skip(self))]
@@ -68,20 +81,26 @@ impl proto::path_info_service_server::PathInfoService for GRPCPathInfoServiceWra
         &self,
         request: Request<proto::Node>,
     ) -> Result<Response<proto::CalculateNarResponse>> {
-        match request.into_inner().node {
-            None => Err(Status::invalid_argument("no root node sent")),
-            Some(root_node) => {
-                let (nar_size, nar_sha256) = self
-                    .path_info_service
-                    .calculate_nar(&root_node)
-                    .expect("error during nar calculation"); // TODO: handle error
+        let root_node = match request.into_inner().node {
+            None => return Err(Status::invalid_argument("no root node sent")),
+            Some(root_node) => root_node,
+        };
 
-                Ok(Response::new(proto::CalculateNarResponse {
-                    nar_size,
-                    nar_sha256: nar_sha256.to_vec().into(),
-                }))
-            }
-        }
+        let path_info_service = self.path_info_service.clone();
+        let (nar_size, nar_sha256) = task::spawn_blocking(
+            move || {
+                path_info_service
+                    .calculate_nar(&root_node)
+                    .expect("error during nar calculation")
+            }, // TODO: handle error
+        )
+        .await
+        .map_err(|_e| Status::internal("failed to wait for task"))?;
+
+        Ok(Response::new(proto::CalculateNarResponse {
+            nar_size,
+            nar_sha256: nar_sha256.to_vec().into(),
+        }))
     }
 
     #[instrument(skip(self))]
@@ -92,11 +111,10 @@ impl proto::path_info_service_server::PathInfoService for GRPCPathInfoServiceWra
         let (tx, rx) = tokio::sync::mpsc::channel(5);
 
         let path_info_service = self.path_info_service.clone();
-
-        let _task = task::spawn(async move {
+        let _task = task::spawn_blocking(move || {
             for e in path_info_service.list() {
                 let res = e.map_err(|e| Status::internal(e.to_string()));
-                if tx.send(res).await.is_err() {
+                if tx.blocking_send(res).is_err() {
                     debug!("receiver dropped");
                     break;
                 }

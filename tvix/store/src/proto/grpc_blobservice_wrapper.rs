@@ -103,11 +103,16 @@ impl super::blob_service_server::BlobService for GRPCBlobServiceWrapper {
             return Err(Status::internal("not implemented"));
         }
 
-        match self.blob_service.has(&req_digest) {
-            Ok(true) => Ok(Response::new(super::BlobMeta::default())),
+        let blob_service = self.blob_service.clone();
+        let result = task::spawn_blocking(move || match blob_service.has(&req_digest) {
+            Ok(true) => Ok(super::BlobMeta::default()),
             Ok(false) => Err(Status::not_found(format!("blob {} not found", &req_digest))),
             Err(e) => Err(e.into()),
-        }
+        })
+        .await
+        .map_err(|_e| Status::internal("failed to wait for task"))??;
+
+        Ok(Response::new(result))
     }
 
     #[instrument(skip(self))]
@@ -122,7 +127,8 @@ impl super::blob_service_server::BlobService for GRPCBlobServiceWrapper {
             .try_into()
             .map_err(|_e| Status::invalid_argument("invalid digest length"))?;
 
-        match self.blob_service.open_read(&req_digest) {
+        let blob_service = self.blob_service.clone();
+        let result = task::spawn_blocking(move || match blob_service.open_read(&req_digest) {
             Ok(Some(reader)) => {
                 let async_reader: SyncReadIntoAsyncRead<
                     _,
@@ -139,11 +145,15 @@ impl super::blob_service_server::BlobService for GRPCBlobServiceWrapper {
                 }
 
                 let chunks_stream = ReaderStream::new(async_reader).map(stream_mapper);
-                Ok(Response::new(Box::pin(chunks_stream)))
+                Ok(Box::pin(chunks_stream))
             }
             Ok(None) => Err(Status::not_found(format!("blob {} not found", &req_digest))),
             Err(e) => Err(e.into()),
-        }
+        })
+        .await
+        .map_err(|_e| Status::internal("failed to wait for task"))??;
+
+        Ok(Response::new(result))
     }
 
     #[instrument(skip(self))]
@@ -160,10 +170,11 @@ impl super::blob_service_server::BlobService for GRPCBlobServiceWrapper {
 
         let data_reader = tokio_util::io::StreamReader::new(data_stream);
 
-        // prepare a writer, which we'll use in the blocking task below.
-        let mut writer = self.blob_service.open_write();
-
+        let blob_service = self.blob_service.clone();
         let result = task::spawn_blocking(move || -> Result<super::PutBlobResponse, Status> {
+            // prepare a writer, which we'll use in the blocking task below.
+            let mut writer = blob_service.open_write();
+
             // construct a sync reader to the data
             let mut reader = tokio_util::io::SyncIoBridge::new(data_reader);
 
