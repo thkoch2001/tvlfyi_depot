@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b6defcb8_b9ddca53",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2023-09-10T19:10:10Z",
+      "side": 1,
+      "message": "If this seems reasonable, at least as a short time fix, I can make similar changes for the path info and directory services.",
+      "revId": "7fac2400e6ceffa2091534f5c6ecf477aee1c4a8",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
