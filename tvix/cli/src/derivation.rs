@@ -192,7 +192,7 @@ async fn strong_coerce_to_string(co: &GenCo, val: Value) -> Result<String, Error
     let val = generators::request_force(co, val).await;
     let val_str = generators::request_string_coerce(co, val, CoercionKind::Strong).await;
 
-    Ok(val_str.as_str().to_string())
+    Ok(val_str.expect("this should not be possible; builtin_derivation_strict() should have deep-forced already").as_str().to_string())
 }
 
 #[builtins(state = "Rc<RefCell<KnownPaths>>")]
@@ -223,6 +223,15 @@ mod derivation_builtins {
         co: GenCo,
         input: Value,
     ) -> Result<Value, ErrorKind> {
+        // We deep-force here for convenience, since many of the
+        // functions in this file return a String, which is
+        // incapable of representing catchable exceptions.  Since
+        // derivationStrict is strict this is not a problem.
+        let input = generators::request_deep_force(&co, input, Default::default()).await;
+        if let v @ Value::Catchable(_) = input {
+            return Ok(v);
+        }
+
         let input = input.to_attrs()?;
         let name = generators::request_force(&co, input.select_required("name")?.clone())
             .await
