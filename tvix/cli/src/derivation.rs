@@ -192,7 +192,7 @@ async fn strong_coerce_to_string(co: &GenCo, val: Value) -> Result<String, Error
     let val = generators::request_force(co, val).await;
     let val_str = generators::request_string_coerce(co, val, CoercionKind::Strong).await;
 
-    Ok(val_str.as_str().to_string())
+    Ok(val_str?.as_str().to_string())
 }
 
 #[builtins(state = "Rc<RefCell<KnownPaths>>")]
