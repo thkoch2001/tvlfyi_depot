@@ -17,7 +17,7 @@ use crate::vm::generators::{self, GenCo};
 use crate::warnings::WarningKind;
 use crate::{
     self as tvix_eval,
-    errors::{Catchable, ErrorKind},
+    errors::{CatchableErrorKind, ErrorKind},
     value::{CoercionKind, NixAttrs, NixList, NixString, SharedThunkSet, Thunk, Value},
 };
 
@@ -46,7 +46,7 @@ pub async fn coerce_value_to_path(co: &GenCo, v: Value) -> Result<PathBuf, Error
         return Ok(*p);
     }
 
-    let vs = generators::request_string_coerce(co, value, CoercionKind::Weak).await;
+    let vs = generators::request_string_coerce(co, value, CoercionKind::Weak).await?;
     let path = PathBuf::from(vs.as_str());
     if path.is_absolute() {
         Ok(path)
@@ -218,8 +218,10 @@ mod pure_builtins {
             if i != 0 {
                 res.push_str(&separator);
             }
-            let s = generators::request_string_coerce(&co, val, CoercionKind::Weak).await;
-            res.push_str(s.as_str());
+            match generators::request_string_coerce(&co, val, CoercionKind::Weak).await {
+                Ok(s) => res.push_str(s.as_str()),
+                Err(c) => return Ok(Value::Catchable(c)),
+            }
         }
         Ok(res.into())
     }
@@ -313,6 +315,9 @@ mod pure_builtins {
             // and our tests for foldl'.
             nul = generators::request_call_with(&co, op.clone(), [nul, val]).await;
             nul = generators::request_force(&co, nul).await;
+            if let c @ Value::Catchable(_) = nul {
+                return Ok(c);
+            }
         }
 
         Ok(nul)
@@ -893,7 +898,7 @@ mod pure_builtins {
 
     #[builtin("throw")]
     async fn builtin_throw(co: GenCo, message: Value) -> Result<Value, ErrorKind> {
-        Err(ErrorKind::Catchable(Catchable::Throw(
+        Ok(Value::Catchable(CatchableErrorKind::Throw(
             message.to_str()?.to_string(),
         )))
     }
@@ -936,7 +941,10 @@ mod pure_builtins {
     #[builtin("tryEval")]
     async fn builtin_try_eval(co: GenCo, #[lazy] e: Value) -> Result<Value, ErrorKind> {
         let res = match generators::request_try_force(&co, e).await {
-            Some(value) => [("value", value), ("success", true.into())],
+            Some(value) => match value {
+                Value::Catchable(_) => [("value", false.into()), ("success", false.into())],
+                _ => [("value", value), ("success", true.into())],
+            },
             None => [("value", false.into()), ("success", false.into())],
         };
 
