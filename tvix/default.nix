@@ -4,13 +4,30 @@
 let
   # crate override for crates that need protobuf
   protobufDep = prev: (prev.nativeBuildInputs or [ ]) ++ [ pkgs.protobuf ];
+  iconvDarwinDep = lib.optionals pkgs.stdenv.isDarwin [ pkgs.libiconv ];
 
   # Load the crate2nix crate tree.
   crates = import ./Cargo.nix {
     inherit pkgs;
     nixpkgs = pkgs.path;
 
+    # Hack to fix Darwin build
+    # See https://github.com/NixOS/nixpkgs/issues/218712
+    buildRustCrateForPkgs = pkgs:
+      if pkgs.stdenv.isDarwin then
+        let
+          buildRustCrate = pkgs.buildRustCrate;
+          buildRustCrate_ = args: buildRustCrate args // { dontStrip = true; };
+          override = o: args: buildRustCrate.override o (args // { dontStrip = true; });
+        in
+        pkgs.makeOverridable override { }
+      else pkgs.buildRustCrate;
+
     defaultCrateOverrides = pkgs.defaultCrateOverrides // {
+      zstd-sys = prev: {
+        nativeBuildInputs = prev.nativeBuildInputs or [ ] ++ iconvDarwinDep;
+      };
+
       fuser = prev: {
         buildInputs = prev.buildInputs or [ ] ++ [ pkgs.fuse ];
         nativeBuildInputs = prev.nativeBuildInputs or [ ] ++ [ pkgs.pkg-config ];
@@ -86,7 +103,7 @@ in
       pkgs.rustc
       pkgs.rustfmt
       pkgs.protobuf
-    ];
+    ] ++ iconvDarwinDep;
   };
 
   # Builds and tests the code in store/protos.
@@ -113,7 +130,7 @@ in
       protobuf
       rustc
       rustPlatform.cargoSetupHook
-    ];
+    ] ++ iconvDarwinDep;
 
     buildPhase = ''
       cargo doc --document-private-items
