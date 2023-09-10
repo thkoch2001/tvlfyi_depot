@@ -20,6 +20,12 @@
             alias ${depot.tvix.docs.svg}/component-flow.svg;
         }
 
+        location = /tvix/store/protos {
+            if ($args ~* "/?go-get=1") {
+              alias ${pkgs.writeText "go-import-metadata.html" ''<html><meta name="go-import" content="code.tvl.fyi/tvix/store/protos git https://code.tvl.fyi/depot.git:/tvix/store/protos.git"></html>''};
+            }
+        }
+
         # Git operations on depot.git hit josh
         location /depot.git {
             proxy_pass http://localhost:${toString config.services.depot.josh.port};
