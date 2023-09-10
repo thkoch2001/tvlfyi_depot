@@ -1,5 +1,7 @@
 use std::io;
 
+use tokio::task::block_in_place;
+
 use super::BlobReader;
 
 /// This implements [io::Seek] for and [io::Read] by simply skipping over some
@@ -18,7 +20,7 @@ impl<R: io::Read> DumbSeeker<R> {
 
 impl<R: io::Read> io::Read for DumbSeeker<R> {
     fn read(&mut self, buf: &mut [u8]) -> io::Result<usize> {
-        let bytes_read = self.r.read(buf)?;
+        let bytes_read = block_in_place(|| self.r.read(buf))?;
 
         self.pos += bytes_read as u64;
 

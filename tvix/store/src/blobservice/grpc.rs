@@ -2,7 +2,10 @@ use super::{dumb_seeker::DumbSeeker, BlobReader, BlobService, BlobWriter};
 use crate::{proto, B3Digest};
 use futures::sink::{SinkExt, SinkMapErr};
 use std::{collections::VecDeque, io};
-use tokio::{net::UnixStream, task::JoinHandle};
+use tokio::{
+    net::UnixStream,
+    task::{block_in_place, JoinHandle},
+};
 use tokio_stream::{wrappers::ReceiverStream, StreamExt};
 use tokio_util::{
     io::{CopyToBytes, SinkWriter, SyncIoBridge},
@@ -104,7 +107,7 @@ impl BlobService for GRPCBlobService {
                 .into_inner())
         });
 
-        match self.tokio_handle.block_on(task)? {
+        match block_in_place(|| self.tokio_handle.block_on(task))? {
             Ok(_blob_meta) => Ok(true),
             Err(e) if e.code() == Code::NotFound => Ok(false),
             Err(e) => Err(crate::Error::StorageError(e.to_string())),
@@ -138,7 +141,7 @@ impl BlobService for GRPCBlobService {
         // massage this to a stream of bytes,
         // then create an [AsyncRead], which we'll turn into a [io::Read],
         // that's returned from the function.
-        match self.tokio_handle.block_on(task)? {
+        match block_in_place(|| self.tokio_handle.block_on(task))? {
             Ok(stream) => {
                 // map the stream of proto::BlobChunk to bytes.
                 let data_stream = stream.map(|x| {
@@ -245,7 +248,7 @@ impl BlobWriter for GRPCBlobWriter {
             // block on the RPC call to return.
             // This ensures all chunks are sent out, and have been received by the
             // backend.
-            match self.tokio_handle.block_on(task)? {
+            match block_in_place(|| self.tokio_handle.block_on(task))? {
                 Ok(resp) => {
                     // return the digest from the response, and store it in self.digest for subsequent closes.
                     let digest: B3Digest = resp.digest.try_into().map_err(|_| {
