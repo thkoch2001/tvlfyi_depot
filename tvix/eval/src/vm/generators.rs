@@ -592,13 +592,18 @@ where
     callable
 }
 
-pub async fn request_string_coerce(co: &GenCo, val: Value, kind: CoercionKind) -> NixString {
+pub async fn request_string_coerce(
+    co: &GenCo,
+    val: Value,
+    kind: CoercionKind,
+) -> Result<NixString, CatchableErrorKind> {
     match val {
-        Value::String(s) => s,
+        Value::String(s) => Ok(s),
         _ => match co.yield_(VMRequest::StringCoerce(val, kind)).await {
-            VMResponse::Value(value) => value
+            VMResponse::Value(Value::Catchable(c)) => Err(c),
+            VMResponse::Value(value) => Ok(value
                 .to_str()
-                .expect("coerce_to_string always returns a string"),
+                .expect("coerce_to_string always returns a string")),
             msg => panic!(
                 "Tvix bug: VM responded with incorrect generator message: {}",
                 msg

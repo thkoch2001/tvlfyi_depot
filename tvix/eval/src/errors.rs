@@ -181,6 +181,24 @@ pub enum ErrorKind {
         underlying: Box<ErrorKind>,
     },
 
+    // TODO(amjoseph): remove this.  It should never be used and is
+    // dangerous.
+    //
+    // Bug https://b.tvl.fyi/issues/281 is the result of catchables
+    // being turned into Err.  Anytime we return an
+    // ErrorKind::CatchableErrorKind to Thunk::force(), we resurrect that
+    // bug.  The way to keep it permanently fixed is to eliminate
+    // this variant.  The way to eliminate this variant is to rename
+    // ErrorKind to UncatchableErrorKind, and then introduce a new
+    // PossiblyCatchableErrorKindErrorKind (with two variants, one for
+    // UncatchableErrorKind and one for CatchableErrorKind) for the small
+    // number of places in the code where we need
+    // Rust's `?` syntax to propagate both catchable and uncatchable
+    // errors.  List of such places:
+    // - to_xml()
+    // - to_json()
+    // - NixSearchPath::resolve()
+    // - request_string_coerce()
     CatchableErrorKind(CatchableErrorKind),
 }
 
@@ -239,17 +257,6 @@ impl From<io::Error> for ErrorKind {
         ErrorKind::IO {
             path: None,
             error: Rc::new(e),
-        }
-    }
-}
-
-impl ErrorKind {
-    /// Returns `true` if this error can be caught by `builtins.tryEval`
-    pub fn is_catchable(&self) -> bool {
-        match self {
-            Self::CatchableErrorKind(_) => true,
-            Self::NativeError { err, .. } | Self::BytecodeError(err) => err.kind.is_catchable(),
-            _ => false,
         }
     }
 }

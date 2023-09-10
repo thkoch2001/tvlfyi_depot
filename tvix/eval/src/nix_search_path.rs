@@ -4,6 +4,7 @@ use std::path::{Path, PathBuf};
 use std::str::FromStr;
 
 use crate::errors::{CatchableErrorKind, ErrorKind};
+use crate::value::Value;
 use crate::EvalIO;
 
 #[derive(Debug, Clone, PartialEq, Eq)]
@@ -124,22 +125,22 @@ pub struct NixSearchPath {
 impl NixSearchPath {
     /// Attempt to resolve the given `path` within this [`NixSearchPath`] using the
     /// path resolution rules for `<...>`-style paths
-    pub fn resolve<P>(&self, io: &mut dyn EvalIO, path: P) -> Result<PathBuf, ErrorKind>
+    pub fn resolve<P>(&self, io: &mut dyn EvalIO, path: P) -> Result<Value, ErrorKind>
     where
         P: AsRef<Path>,
     {
         let path = path.as_ref();
         for entry in &self.entries {
             if let Some(p) = entry.resolve(io, path)? {
-                return Ok(p);
+                return Ok(Value::Path(Box::new(p)));
             }
         }
-        Err(ErrorKind::CatchableErrorKind(
-            CatchableErrorKind::NixPathResolution(format!(
+        Ok(Value::Catchable(CatchableErrorKind::NixPathResolution(
+            format!(
                 "path '{}' was not found in the Nix search path",
                 path.display()
-            )),
-        ))
+            ),
+        )))
     }
 }
 
@@ -204,18 +205,21 @@ mod tests {
             let nix_search_path = NixSearchPath::from_str("./.").unwrap();
             let mut io = StdIO {};
             let res = nix_search_path.resolve(&mut io, "src").unwrap();
-            assert_eq!(res, current_dir().unwrap().join("src").clean());
+            assert_eq!(
+                res.to_path().unwrap(),
+                Box::new(current_dir().unwrap().join("src").clean())
+            );
         }
 
         #[test]
         fn failed_resolution() {
             let nix_search_path = NixSearchPath::from_str("./.").unwrap();
             let mut io = StdIO {};
-            let err = nix_search_path.resolve(&mut io, "nope").unwrap_err();
+            let err = nix_search_path.resolve(&mut io, "nope").unwrap();
             assert!(
                 matches!(
                     err,
-                    ErrorKind::CatchableErrorKind(CatchableErrorKind::NixPathResolution(..))
+                    Value::Catchable(CatchableErrorKind::NixPathResolution(..))
                 ),
                 "err = {err:?}"
             );
@@ -226,7 +230,7 @@ mod tests {
             let nix_search_path = NixSearchPath::from_str("./.:/").unwrap();
             let mut io = StdIO {};
             let res = nix_search_path.resolve(&mut io, "etc").unwrap();
-            assert_eq!(res, Path::new("/etc"));
+            assert_eq!(res.to_path().unwrap(), Box::new(Path::new("/etc").into()));
         }
 
         #[test]
@@ -234,7 +238,10 @@ mod tests {
             let nix_search_path = NixSearchPath::from_str("/:tvix=.").unwrap();
             let mut io = StdIO {};
             let res = nix_search_path.resolve(&mut io, "tvix/src").unwrap();
-            assert_eq!(res, current_dir().unwrap().join("src").clean());
+            assert_eq!(
+                res.to_path().unwrap(),
+                Box::new(current_dir().unwrap().join("src").clean())
+            );
         }
 
         #[test]
@@ -242,7 +249,10 @@ mod tests {
             let nix_search_path = NixSearchPath::from_str("/:tvix=.").unwrap();
             let mut io = StdIO {};
             let res = nix_search_path.resolve(&mut io, "tvix").unwrap();
-            assert_eq!(res, current_dir().unwrap().clean());
+            assert_eq!(
+                res.to_path().unwrap(),
+                Box::new(current_dir().unwrap().clean())
+            );
         }
     }
 }
