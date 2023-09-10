@@ -36,45 +36,43 @@ impl proto::directory_service_server::DirectoryService for GRPCDirectoryServiceW
 
         let _task = {
             // look at the digest in the request and put it in the top of the queue.
-            match &req_inner.by_what {
+            let digest = match &req_inner.by_what {
                 None => return Err(Status::invalid_argument("by_what needs to be specified")),
-                Some(proto::get_directory_request::ByWhat::Digest(ref digest)) => {
-                    let digest: B3Digest = digest
-                        .clone()
-                        .try_into()
-                        .map_err(|_e| Status::invalid_argument("invalid digest length"))?;
+                Some(proto::get_directory_request::ByWhat::Digest(ref digest)) => digest,
+            };
 
-                    task::spawn(async move {
-                        if !req_inner.recursive {
-                            let e: Result<proto::Directory, Status> =
-                                match directory_service.get(&digest) {
-                                    Ok(Some(directory)) => Ok(directory),
-                                    Ok(None) => Err(Status::not_found(format!(
-                                        "directory {} not found",
-                                        digest
-                                    ))),
-                                    Err(e) => Err(e.into()),
-                                };
+            let digest: B3Digest = digest
+                .clone()
+                .try_into()
+                .map_err(|_e| Status::invalid_argument("invalid digest length"))?;
 
-                            if tx.send(e).await.is_err() {
-                                debug!("receiver dropped");
-                            }
-                        } else {
-                            // If recursive was requested, traverse via get_recursive.
-                            let directories_it = directory_service.get_recursive(&digest);
-
-                            for e in directories_it {
-                                // map err in res from Error to Status
-                                let res = e.map_err(|e| Status::internal(e.to_string()));
-                                if tx.send(res).await.is_err() {
-                                    debug!("receiver dropped");
-                                    break;
-                                }
-                            }
+            task::spawn_blocking(move || {
+                if !req_inner.recursive {
+                    let e: Result<proto::Directory, Status> = match directory_service.get(&digest) {
+                        Ok(Some(directory)) => Ok(directory),
+                        Ok(None) => {
+                            Err(Status::not_found(format!("directory {} not found", digest)))
                         }
-                    });
+                        Err(e) => Err(e.into()),
+                    };
+
+                    if tx.blocking_send(e).is_err() {
+                        debug!("receiver dropped");
+                    }
+                } else {
+                    // If recursive was requested, traverse via get_recursive.
+                    let directories_it = directory_service.get_recursive(&digest);
+
+                    for e in directories_it {
+                        // map err in res from Error to Status
+                        let res = e.map_err(|e| Status::internal(e.to_string()));
+                        if tx.blocking_send(res).is_err() {
+                            debug!("receiver dropped");
+                            break;
+                        }
+                    }
                 }
-            }
+            });
         };
 
         let receiver_stream = ReceiverStream::new(rx);
@@ -157,18 +155,22 @@ impl proto::directory_service_server::DirectoryService for GRPCDirectoryServiceW
 
             // check if the directory already exists in the database. We can skip
             // inserting if it's already there, as that'd be a no-op.
-            match self.directory_service.get(&dgst) {
+            let directory_service = self.directory_service.clone();
+            task::spawn_blocking(move || match directory_service.get(&dgst) {
                 Err(e) => {
                     warn!("error checking if directory already exists: {}", e);
-                    return Err(e.into());
+                    Err::<_, Status>(e.into())
                 }
                 // skip if already exists
-                Ok(Some(_)) => {}
+                Ok(Some(_)) => Ok(()),
                 // insert if it doesn't already exist
                 Ok(None) => {
-                    self.directory_service.put(directory)?;
+                    directory_service.put(directory)?;
+                    Ok(())
                 }
-            }
+            })
+            .await
+            .map_err(|_e| Status::internal("failed to wait for task"))??;
         }
 
         // We're done receiving. peek at last_directory_digest and either return the digest,
