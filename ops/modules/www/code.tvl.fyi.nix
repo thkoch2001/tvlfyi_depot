@@ -1,4 +1,4 @@
-{ depot, config, ... }:
+{ depot, pkgs, config, ... }:
 
 {
   imports = [
@@ -18,6 +18,16 @@
         # TODO(tazjin): Implement a way of serving this dynamically
         location = /about/tvix/docs/component-flow.svg {
             alias ${depot.tvix.docs.svg}/component-flow.svg;
+        }
+
+        location = /go-get/tvix/store/protos {
+            alias ${pkgs.writeText "go-import-metadata.html" ''<html><meta name="go-import" content="code.tvl.fyi/tvix/store/protos git https://code.tvl.fyi/depot.git:/tvix/store/protos.git"></html>''};
+        }
+
+        location = /tvix/store/protos {
+            if ($args ~* "/?go-get=1") {
+                return 302 /go-get/tvix/store/protos;
+            }
         }
 
         # Git operations on depot.git hit josh
