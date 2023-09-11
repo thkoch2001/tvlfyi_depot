@@ -38,6 +38,7 @@ in
         electrum
         config.tazjin.emacs.emacs # emacsclient
         exa
+        expect
         fd
         file
         gdb
