@@ -25,6 +25,7 @@ pkgs.makeOverridable
       tree-sitter-c
       tree-sitter-cmake
       tree-sitter-cpp
+      tree-sitter-dockerfile
       tree-sitter-go
       tree-sitter-java
       tree-sitter-json
@@ -44,18 +45,14 @@ pkgs.makeOverridable
       browse-kill-ring
       cargo
       clojure-mode
-      cmake-mode
       company
       consult
-      d-mode
       deft
       direnv
-      dockerfile-mode
       elixir-mode
       elm-mode
       erlang
       exwm
-      flymake
       go-mode
       google-c-style
       gruber-darker-theme
@@ -67,11 +64,8 @@ pkgs.makeOverridable
       jq-mode
       kotlin-mode
       kubernetes
-      lsp-mode
       magit
       markdown-toc
-      meson-mode
-      multi-term
       multiple-cursors
       nginx-mode
       nix-mode
@@ -79,7 +73,6 @@ pkgs.makeOverridable
       paredit
       password-store
       pinentry
-      polymode
       prescient
       protobuf-mode
       rainbow-delimiters
@@ -91,9 +84,7 @@ pkgs.makeOverridable
       string-edit-at-point
       telephone-line
       terraform-mode
-      toml-mode
       undo-tree
-      use-package
       uuidgen
       vertico
       vterm
@@ -101,7 +92,6 @@ pkgs.makeOverridable
       websocket
       which-key
       xelb
-      yaml-mode
       yasnippet
       zetteldeft
       zoxide

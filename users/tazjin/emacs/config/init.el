@@ -123,7 +123,7 @@
          (cargo-process-mode . visual-line-mode))
   :bind (:map cargo-mode-map ("C-c C-c C-l" . ignore)))
 
-(use-package dockerfile-mode)
+(use-package dockerfile-ts-mode)
 
 (use-package erlang
   :hook ((erlang-mode . (lambda ()
@@ -153,8 +153,6 @@
 (use-package kotlin-mode
   :hook ((kotlin-mode . (lambda ()
                           (setq indent-line-function #'indent-relative)))))
-
-(use-package lsp-mode)
 
 (use-package markdown-mode
   :config
@@ -187,7 +185,7 @@
   :hook (telega-chat-mode . company-mode))
 
 (use-package terraform-mode)
-(use-package toml-mode)
+(use-package toml-ts-mode)
 
 (use-package tvl)
 
@@ -196,7 +194,7 @@
   (vertico-mode))
 
 (use-package web-mode)
-(use-package yaml-mode)
+(use-package yaml-ts-mode)
 (use-package zoxide)
 
 (use-package passively

@@ -49,7 +49,7 @@
 (add-to-list 'auto-mode-alist '("\\.star\\'" . python-mode))
 
 ;; Use cmake-mode for relevant files.
-(add-to-list 'auto-mode-alist '("ya\\.make\\'" . cmake-mode))
+(add-to-list 'auto-mode-alist '("ya\\.make\\'" . cmake-ts-mode))
 
 ;; Use tree-sitter modes for various languages.
 (setq major-mode-remap-alist
