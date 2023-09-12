@@ -121,18 +121,7 @@ instance, follow these instructions:
 2. Clone the depot locally (via `git clone "https://cl.tvl.fyi/depot"`).
 3. Create a user entry in our LDAP server in [ops/users][ops-users].
 
-   We recommend using ARGON2 password hashes, which can be created
-   with the `slappasswd` tool if OpenLDAP was compiled with ARGON2
-   support.
-
-   For convenience, we provide a wrapper script for this that you can
-   build with `nix-build -A tools.hash-password` in a depot checkout.
-   Alternatively, if you have `direnv` installed, you can add the
-   depot to your allowlist and just run `hash-password` which should
-   be added to your `$PATH` by `direnv`.
-
-   You can probably create ARGON2 hashes with other tools, but that is
-   your job to figure out.
+   The entry can be generated using [//web/pwcrypt](https://signup.tvl.fyi/).
 4. Create a commit adding yourself (see e.g.
    [CL/2671](https://cl.tvl.fyi/c/depot/+/2671))
 5. Submit the commit via email (see below).
