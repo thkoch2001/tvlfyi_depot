@@ -1,5 +1,7 @@
 # Utility for invoking slappasswd with the correct options for
 # creating an ARGON2 password hash.
+#
+# Users should generally use https://signup.tvl.fyi instead.
 { pkgs, ... }:
 
 let
