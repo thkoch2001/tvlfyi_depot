@@ -214,4 +214,9 @@
     email = "hsjobeki@gmail.com";
     password = "{ARGON2}$argon2id$v=19$m=65536,t=2,p=1$jez9eVa2v0BznIJMOhw+hw$wUbwCS+Bfcjjzr08saQE6NNTPWNXWWaxv+UtBCdYC2s";
   }
+  {
+    username = "totikom";
+    email = "eugene.lomov@protonmail.com";
+    password = "{ARGON2}$argon2id$v=19$m=19456,t=2,p=1$r/EsEGkqCcv8ccjQ84pX7Q$ebpWno7LI1RXkWKBjnkDHZM1gPuPj1LSMoFUsX0j6AU";
+  }
 ]
