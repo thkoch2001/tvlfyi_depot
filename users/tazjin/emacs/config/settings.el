@@ -48,4 +48,21 @@
 ;; Use python-mode for Starlark files.
 (add-to-list 'auto-mode-alist '("\\.star\\'" . python-mode))
 
+;; Use cmake-mode for relevant files.
+(add-to-list 'auto-mode-alist '("ya\\.make\\'" . cmake-mode))
+
+;; Use tree-sitter modes for various languages.
+(setq major-mode-remap-alist
+      '((bash-mode . bash-ts-mode)
+        (c++-mode . c++-ts-mode)
+        (c-mode . c-ts-mode)
+        (c-or-c++-mode . c-or-c++-ts-mode)
+        (json-mode . json-ts-mode)
+        (python-mode . python-ts-mode)
+        (rust-mode . rust-ts-mode)
+        (toml-mode . toml-ts-mode)
+        (yaml-mode . yaml-ts-mode)
+        (go-mode . go-ts-mode)
+        (cmake-mode . cmake-ts-mode)))
+
 (provide 'settings)
