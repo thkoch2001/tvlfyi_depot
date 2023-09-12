@@ -89,6 +89,23 @@ pkgs.makeOverridable
       zetteldeft
       zoxide
 
+      # tree-sitter grammars for various ts-modes
+      (treesit-grammars.with-grammars (g: with g; [
+        tree-sitter-bash
+        tree-sitter-c
+        tree-sitter-cmake
+        tree-sitter-cpp
+        tree-sitter-go
+        tree-sitter-java
+        tree-sitter-json
+        tree-sitter-latex
+        tree-sitter-nix
+        tree-sitter-python
+        tree-sitter-rust
+        tree-sitter-toml
+        tree-sitter-yaml
+      ]))
+
       # Wonky stuff
       (currentTelega epkgs)
 
