@@ -19,6 +19,23 @@ pkgs.makeOverridable
 
     identity = x: x;
 
+    # tree-sitter grammars for various ts-modes
+    customTreesitGrammars = emacs.pkgs.treesit-grammars.with-grammars (g: with g; [
+      tree-sitter-bash
+      tree-sitter-c
+      tree-sitter-cmake
+      tree-sitter-cpp
+      tree-sitter-go
+      tree-sitter-java
+      tree-sitter-json
+      tree-sitter-latex
+      tree-sitter-nix
+      tree-sitter-python
+      tree-sitter-rust
+      tree-sitter-toml
+      tree-sitter-yaml
+    ]);
+
     tazjinsEmacs = pkgfun: (emacsWithPackages (epkgs: pkgfun (with epkgs; [
       ace-link
       ace-window
@@ -89,25 +106,9 @@ pkgs.makeOverridable
       zetteldeft
       zoxide
 
-      # tree-sitter grammars for various ts-modes
-      (treesit-grammars.with-grammars (g: with g; [
-        tree-sitter-bash
-        tree-sitter-c
-        tree-sitter-cmake
-        tree-sitter-cpp
-        tree-sitter-go
-        tree-sitter-java
-        tree-sitter-json
-        tree-sitter-latex
-        tree-sitter-nix
-        tree-sitter-python
-        tree-sitter-rust
-        tree-sitter-toml
-        tree-sitter-yaml
-      ]))
-
       # Wonky stuff
       (currentTelega epkgs)
+      customTreesitGrammars # TODO(tazjin): how is this *supposed* to work?!
 
       # Custom depot packages (either ours, or overridden ones)
       tvlPackages.dottime
@@ -153,6 +154,7 @@ pkgs.makeOverridable
         --no-site-lisp \
         --no-init-file \
         --directory ${./config} ${if l != null then "--directory ${l}" else ""} \
+        --eval "(add-to-list 'treesit-extra-load-path \"${customTreesitGrammars}/lib\")" \
         --eval "(require 'init)" $@
     '').overrideAttrs
       (_: {
