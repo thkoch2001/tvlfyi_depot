@@ -4,8 +4,8 @@ let
   protoSrc = pkgs.fetchFromGitHub {
     owner = "yandex-cloud";
     repo = "cloudapi";
-    rev = "dcff396bf4bcdd724207f3b38add3a968d5e9125";
-    sha256 = "0yi4wwqff33bja3nn90izn5r0ar97igpamkbk2kadsavpwp3dry2";
+    rev = "b4383be5ebe360bd946e49c8eaf647a73e9c44c0";
+    sha256 = "0z4jyw2cylvyrq5ja8pcaqnlf6lf6ximj85hgjag6ckawayk1rzx";
   };
 in
 pkgs.rustPlatform.buildRustPackage rec {
