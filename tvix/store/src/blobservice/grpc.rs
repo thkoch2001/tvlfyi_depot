@@ -286,21 +286,151 @@ impl io::Write for GRPCBlobWriter {
 
 #[cfg(test)]
 mod tests {
+    use std::any::Any;
+    use std::mem::ManuallyDrop;
     use std::sync::Arc;
     use std::thread;
 
+    use rstest::*;
     use tempfile::TempDir;
     use tokio::net::UnixListener;
+    use tokio::select;
+    use tokio::sync::mpsc::channel;
+    use tokio::sync::mpsc::Sender;
     use tokio::task;
     use tokio::time;
     use tokio_stream::wrappers::UnixListenerStream;
 
     use crate::blobservice::MemoryBlobService;
+    use crate::blobservice::SledBlobService;
     use crate::proto::GRPCBlobServiceWrapper;
     use crate::tests::fixtures;
 
     use super::BlobService;
     use super::GRPCBlobService;
+
+    struct TestBlobService {
+        client: GRPCBlobService,
+
+        // These are owned by the test client so resources can be cleaned up once the test is
+        // complete.
+        _tmpdir: TempDir,
+        // Once this is dropped, the spawned gRPC server will be shutdown.
+        _close_tx: Sender<()>,
+        // Some variants need a place to store some things that need to be dropped when this struct
+        // is.
+        _extra: Option<Box<dyn Any>>,
+    }
+
+    impl TestBlobService {
+        async fn new<T: BlobService + 'static>(
+            backing: T,
+            extra: Option<Box<dyn Any>>,
+        ) -> TestBlobService {
+            use std::sync::Arc;
+
+            use tempfile::TempDir;
+            use tokio::net::UnixListener;
+            use tokio::time;
+            use tokio_stream::wrappers::UnixListenerStream;
+
+            use crate::proto::GRPCBlobServiceWrapper;
+
+            let tmpdir = TempDir::new().unwrap();
+            let path = tmpdir.path().join("daemon");
+
+            // prepare a client
+            let client = {
+                let mut url =
+                    url::Url::parse("grpc+unix:///path/to/somewhere").expect("must parse");
+                url.set_path(path.to_str().unwrap());
+                GRPCBlobService::from_url(&url).expect("must succeed")
+            };
+
+            let path_copy = path.clone();
+
+            let (close_tx, mut close_rx) = channel(1);
+
+            // Spin up a server, in a thread far away, which spawns its own tokio runtime,
+            // and blocks on the task.
+            std::thread::spawn(move || {
+                // Create the runtime
+                let rt = tokio::runtime::Runtime::new().unwrap();
+                // Get a handle from this runtime
+                let handle = rt.handle();
+
+                let task = handle.spawn(async {
+                    let uds = UnixListener::bind(path_copy).unwrap();
+                    let uds_stream = UnixListenerStream::new(uds);
+
+                    // spin up a new server
+                    let mut server = tonic::transport::Server::builder();
+                    let router = server.add_service(
+                        crate::proto::blob_service_server::BlobServiceServer::new(
+                            GRPCBlobServiceWrapper::from(Arc::new(backing) as Arc<dyn BlobService>),
+                        ),
+                    );
+                    router
+                        .serve_with_incoming_shutdown(uds_stream, async move {
+                            close_rx.recv().await;
+                        })
+                        .await
+                });
+
+                handle.block_on(task)
+            });
+
+            // wait for the socket to be created
+            {
+                let mut socket_created = false;
+                for _try in 1..20 {
+                    if path.exists() {
+                        socket_created = true;
+                        break;
+                    }
+                    tokio::time::sleep(time::Duration::from_millis(20)).await;
+                }
+
+                assert!(
+                    socket_created,
+                    "expected socket path to eventually get created, but never happened"
+                );
+            }
+
+            TestBlobService {
+                client,
+                _tmpdir: tmpdir,
+                _close_tx: close_tx,
+                _extra: extra,
+            }
+        }
+
+        async fn with_memory() -> TestBlobService {
+            use crate::blobservice::MemoryBlobService;
+
+            Self::new(MemoryBlobService::default(), None).await
+        }
+
+        async fn with_sled() -> TestBlobService {
+            Self::new(
+                SledBlobService::new_temporary().expect("must make sled client"),
+                None,
+            )
+            .await
+        }
+
+        async fn with_grpc() -> TestBlobService {
+            let service = Self::with_memory().await;
+
+            Self::new(
+                GRPCBlobService::from_client(service.client.grpc_client),
+                // If these are dropped, the server will close, so these need to drop after we're
+                // done with the test.
+                Some(Box::new((service._close_tx, service._tmpdir))),
+            )
+            .await
+        }
+    }
 
     /// This uses the wrong scheme
     #[test]
@@ -358,65 +488,18 @@ mod tests {
     }
 
     /// This uses the correct scheme for a unix socket, and provides a server on the other side.
+    #[rstest]
+    #[case(TestBlobService::with_memory())]
+    #[case(TestBlobService::with_sled())]
+    #[case(TestBlobService::with_grpc())]
+    #[awt]
     #[tokio::test]
-    async fn test_valid_unix_path_ping_pong() {
-        let tmpdir = TempDir::new().unwrap();
-        let path = tmpdir.path().join("daemon");
-
-        // let mut join_set = JoinSet::new();
-
-        // prepare a client
-        let client = {
-            let mut url = url::Url::parse("grpc+unix:///path/to/somewhere").expect("must parse");
-            url.set_path(path.to_str().unwrap());
-            GRPCBlobService::from_url(&url).expect("must succeed")
-        };
-
-        let path_copy = path.clone();
-
-        // Spin up a server, in a thread far away, which spawns its own tokio runtime,
-        // and blocks on the task.
-        thread::spawn(move || {
-            // Create the runtime
-            let rt = tokio::runtime::Runtime::new().unwrap();
-            // Get a handle from this runtime
-            let handle = rt.handle();
-
-            let task = handle.spawn(async {
-                let uds = UnixListener::bind(path_copy).unwrap();
-                let uds_stream = UnixListenerStream::new(uds);
-
-                // spin up a new server
-                let mut server = tonic::transport::Server::builder();
-                let router =
-                    server.add_service(crate::proto::blob_service_server::BlobServiceServer::new(
-                        GRPCBlobServiceWrapper::from(
-                            Arc::new(MemoryBlobService::default()) as Arc<dyn BlobService>
-                        ),
-                    ));
-                router.serve_with_incoming(uds_stream).await
-            });
-
-            handle.block_on(task)
-        });
-
-        // wait for the socket to be created
-        {
-            let mut socket_created = false;
-            for _try in 1..20 {
-                if path.exists() {
-                    socket_created = true;
-                    break;
-                }
-                tokio::time::sleep(time::Duration::from_millis(20)).await;
-            }
-
-            assert!(
-                socket_created,
-                "expected socket path to eventually get created, but never happened"
-            );
-        }
-
+    async fn test_valid_unix_path_ping_pong(
+        #[case]
+        #[future]
+        service: TestBlobService,
+    ) {
+        let client = service.client;
         let has = task::spawn_blocking(move || {
             client
                 .has(&fixtures::BLOB_A_DIGEST)
