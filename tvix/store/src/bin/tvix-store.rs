@@ -5,6 +5,7 @@ use nix_compat::store_path;
 use std::io;
 use std::path::Path;
 use std::path::PathBuf;
+use tokio::task::JoinHandle;
 use tracing_subscriber::prelude::*;
 use tvix_store::blobservice;
 use tvix_store::directoryservice;
@@ -197,13 +198,14 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
                     let directory_service = directory_service.clone();
                     let path_info_service = path_info_service.clone();
 
-                    let task = tokio::task::spawn_blocking(move || -> io::Result<()> {
+                    let task: JoinHandle<io::Result<()>> = tokio::task::spawn(async move {
                         // Ingest the path into blob and directory service.
                         let root_node = import::ingest_path(
                             blob_service.clone(),
                             directory_service.clone(),
                             &path,
                         )
+                        .await
                         .expect("failed to ingest path");
 
                         // Ask the PathInfoService for the NAR size and sha256

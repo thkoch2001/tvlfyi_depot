@@ -1,37 +1,79 @@
+use super::BlobReader;
+use pin_project_lite::pin_project;
 use std::io;
-
+use std::task::Poll;
+use tokio::io::AsyncRead;
 use tracing::{debug, instrument};
 
-use super::BlobReader;
-
-/// This implements [io::Seek] for and [io::Read] by simply skipping over some
-/// bytes, keeping track of the position.
-/// It fails whenever you try to seek backwards.
-pub struct DumbSeeker<R: io::Read> {
-    r: R,
-    pos: u64,
+pin_project! {
+    /// This implements [tokio::io::AsyncSeek] for and [tokio::io::AsyncRead] by
+    /// simply skipping over some bytes, keeping track of the position.
+    /// It fails whenever you try to seek backwards.
+    pub struct DumbSeeker<R: tokio::io::AsyncRead> {
+        #[pin]
+        r: tokio::io::BufReader<R>,
+        pos: u64,
+        bytes_to_skip: u64,
+    }
 }
 
-impl<R: io::Read> DumbSeeker<R> {
+impl<R: tokio::io::AsyncRead> DumbSeeker<R> {
     pub fn new(r: R) -> Self {
-        DumbSeeker { r, pos: 0 }
+        DumbSeeker {
+            r: tokio::io::BufReader::new(r),
+            pos: 0,
+            bytes_to_skip: 0,
+        }
     }
 }
 
-impl<R: io::Read> io::Read for DumbSeeker<R> {
-    fn read(&mut self, buf: &mut [u8]) -> io::Result<usize> {
-        let bytes_read = self.r.read(buf)?;
+impl<R: tokio::io::AsyncRead> tokio::io::AsyncRead for DumbSeeker<R> {
+    fn poll_read(
+        self: std::pin::Pin<&mut Self>,
+        cx: &mut std::task::Context<'_>,
+        buf: &mut tokio::io::ReadBuf<'_>,
+    ) -> Poll<std::io::Result<()>> {
+        // The amount of data read can be determined by the increase
+        // in the length of the slice returned by `ReadBuf::filled`.
+        let filled_before = buf.filled().len();
+        let this = self.project();
+        let pos: &mut u64 = this.pos;
 
-        self.pos += bytes_read as u64;
+        match this.r.poll_read(cx, buf) {
+            Poll::Ready(a) => {
+                let bytes_read = buf.filled().len() - filled_before;
+                *pos += bytes_read as u64;
 
-        Ok(bytes_read)
+                Poll::Ready(a)
+            }
+            Poll::Pending => Poll::Pending,
+        }
     }
 }
 
-impl<R: io::Read> io::Seek for DumbSeeker<R> {
+impl<R: tokio::io::AsyncRead> tokio::io::AsyncBufRead for DumbSeeker<R> {
+    fn poll_fill_buf(
+        self: std::pin::Pin<&mut Self>,
+        cx: &mut std::task::Context<'_>,
+    ) -> Poll<io::Result<&[u8]>> {
+        self.project().r.poll_fill_buf(cx)
+    }
+
+    fn consume(self: std::pin::Pin<&mut Self>, amt: usize) {
+        let this = self.project();
+        this.r.consume(amt);
+        let pos: &mut u64 = this.pos;
+        *pos += amt as u64;
+    }
+}
+
+impl<R: tokio::io::AsyncRead> tokio::io::AsyncSeek for DumbSeeker<R> {
     #[instrument(skip(self))]
-    fn seek(&mut self, pos: io::SeekFrom) -> io::Result<u64> {
-        let absolute_offset: u64 = match pos {
+    fn start_seek(
+        self: std::pin::Pin<&mut Self>,
+        position: std::io::SeekFrom,
+    ) -> std::io::Result<()> {
+        let absolute_offset: u64 = match position {
             io::SeekFrom::Start(start_offset) => {
                 if start_offset < self.pos {
                     return Err(io::Error::new(
@@ -72,39 +114,61 @@ impl<R: io::Read> io::Seek for DumbSeeker<R> {
         );
 
         // calculate bytes to skip
-        let bytes_to_skip: u64 = absolute_offset - self.pos;
+        self.project().bytes_to_skip = &mut (absolute_offset - self.pos);
 
-        // discard these bytes. We can't use take() as it requires ownership of
-        // self.r, but we only have &mut self.
+        Ok(())
+    }
+
+    #[instrument(skip(self))]
+    fn poll_complete(
+        mut self: std::pin::Pin<&mut Self>,
+        cx: &mut std::task::Context<'_>,
+    ) -> Poll<std::io::Result<u64>> {
+        if self.bytes_to_skip == 0 {
+            // return the new position (from the start of the stream)
+            return Poll::Ready(Ok(self.pos));
+        }
+
+        // discard some bytes, until pos is where we want it to be.
+        // We create a buffer that we'll discard later on.
         let mut buf = [0; 1024];
-        let mut bytes_skipped: u64 = 0;
-        while bytes_skipped < bytes_to_skip {
-            let len = std::cmp::min(bytes_to_skip - bytes_skipped, buf.len() as u64);
-            match self.r.read(&mut buf[..len as usize]) {
-                Ok(0) => break,
-                Ok(n) => bytes_skipped += n as u64,
-                Err(ref e) if e.kind() == std::io::ErrorKind::Interrupted => {}
-                Err(e) => return Err(e),
+
+        // calculate the length we want to skip at most, which is either a max
+        // buffer size, or the number of remaining bytes to read, whatever is
+        // smaller.
+        let bytes_to_skip = std::cmp::min(self.bytes_to_skip as usize, buf.len() as usize);
+
+        let mut read_buf = tokio::io::ReadBuf::new(&mut buf[..bytes_to_skip]);
+
+        match self.as_mut().poll_read(cx, &mut read_buf) {
+            Poll::Ready(_a) => {
+                let bytes_read = read_buf.filled().len() as u64;
+
+                if bytes_read == 0 {
+                    return Poll::Ready(Err(io::Error::new(
+                        io::ErrorKind::UnexpectedEof,
+                        format!(
+                        "tried to skip {} bytes, but only was able to skip {} until reaching EOF",
+                            bytes_to_skip, bytes_read
+                    ),
+                    )));
+                }
+
+                // calculate bytes to skip
+                let mut bytes_to_skip = self.bytes_to_skip - bytes_read;
+                let pos = self.pos;
+
+                self.project().bytes_to_skip = &mut bytes_to_skip;
+
+                if bytes_to_skip == 0 {
+                    Poll::Ready(Ok(pos))
+                } else {
+                    Poll::Pending
+                }
             }
+            Poll::Pending => Poll::Pending,
         }
-
-        // This will fail when seeking past the end of self.r
-        if bytes_to_skip != bytes_skipped {
-            return Err(std::io::Error::new(
-                std::io::ErrorKind::UnexpectedEof,
-                format!(
-                    "tried to skip {} bytes, but only was able to skip {} until reaching EOF",
-                    bytes_to_skip, bytes_skipped
-                ),
-            ));
-        }
-
-        self.pos = absolute_offset;
-
-        // return the new position from the start of the stream
-        Ok(absolute_offset)
     }
 }
 
-/// A Cursor<Vec<u8>> can be used as a BlobReader.
-impl<R: io::Read + Send + 'static> BlobReader for DumbSeeker<R> {}
+impl<R: tokio::io::AsyncRead + Send + Unpin + 'static> BlobReader for DumbSeeker<R> {}
