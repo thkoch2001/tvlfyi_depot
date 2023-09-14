@@ -46,6 +46,30 @@
       },
       "revId": "aca3629d9e2efad5eb8c48c996ed79633b92ebfc",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cef29a45_f288ff9e",
+        "filename": "tvix/eval/src/tests/tvix_tests/eval-okay-identifier-formatting.nix",
+        "patchSetId": 2
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1000066
+      },
+      "writtenOn": "2023-09-14T23:56:51Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c8f3eec9_9463d67b",
+      "range": {
+        "startLine": 18,
+        "startChar": 13,
+        "endLine": 18,
+        "endChar": 17
+      },
+      "revId": "aca3629d9e2efad5eb8c48c996ed79633b92ebfc",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
