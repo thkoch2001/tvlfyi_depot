@@ -95,6 +95,13 @@ depot.nix.readTree.drvTargets {
     })
   );
 
+  # exa has been removed from nixpkgs, removing from depot in cl/9330,
+  # delete this afterwards.
+  exa = self.writeShellScriptBin "exa" ''
+    echo "'exa' has been removed from nixpkgs; please either remove it"
+    echo "from your configuration, or switch to 'eza'."
+  '';
+
   # dottime support for notmuch
   notmuch = super.notmuch.overrideAttrs (old: {
     passthru = old.passthru // {
