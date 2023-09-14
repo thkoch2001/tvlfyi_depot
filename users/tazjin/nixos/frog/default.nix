@@ -228,7 +228,6 @@ lib.fix (self: {
       direnv
       dnsutils
       emacs28 # mostly for emacsclient
-      exa
       fd
       file
       gdb
