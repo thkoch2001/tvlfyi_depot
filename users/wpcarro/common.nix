@@ -49,7 +49,6 @@ in
     direnv
     diskus
     emacs
-    exa
     fd
     fzf
     git
