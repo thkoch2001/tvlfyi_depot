@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9a61bb33_c6bed215",
+        "filename": "tvix/store/src/bin/tvix-store.rs",
+        "patchSetId": 7
+      },
+      "lineNbr": 252,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2023-09-15T18:40:13Z",
+      "side": 1,
+      "message": "Panic has moved here, this one needs `spawn_blocking` too",
+      "revId": "81dbd7659f43e795bb0a4758e5fb3fc306b8c5f1",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
