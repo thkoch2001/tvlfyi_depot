@@ -636,7 +636,9 @@ bla = do
       ]
   pure (t1 >> t2 >> t3)
 
+-- | Do the search, return a transaction that inserts all results from all pages of the search.
 redactedSearchAndInsert ::
+  forall m.
   ( MonadLogger m,
     MonadIO m,
     MonadPostgres m,
@@ -644,80 +646,102 @@ redactedSearchAndInsert ::
   ) =>
   [(ByteString, ByteString)] ->
   m (Transaction m ())
-redactedSearchAndInsert x =
-  redactedSearch
-    x
-    ( do
-        status <- Json.key "status" Json.asText
-        when (status /= "success") $ do
-          Json.throwCustomError [fmt|Status was not "success", but {status}|]
-        Json.key "response" $ do
-          Json.key "results" $
-            sequence_
-              <$> ( Json.eachInArray $ do
-                      groupId <- Json.key "groupId" (Json.asIntegral @_ @Int)
-                      groupName <- Json.key "groupName" Json.asText
-                      fullJsonResult <-
-                        Json.asObject
-                          -- remove torrents cause they are inserted separately below
-                          <&> KeyMap.filterWithKey (\k _ -> k /= "torrents")
-                          <&> Json.Object
-                      let insertTourGroup = do
-                            _ <-
-                              execute
-                                [fmt|
+redactedSearchAndInsert extraArguments = do
+  -- The first search returns the amount of pages, so we use that to query all results piece by piece.
+  firstPage <- go Nothing
+  let otherPagesNum = [(2 :: Natural) .. (firstPage.pages - 1)]
+  otherPages <- traverse go (Just <$> otherPagesNum)
+  pure $ (firstPage : otherPages) & traverse_ (.transaction)
+  where
+    go :: Maybe Natural -> m (T2 "pages" Natural "transaction" (Transaction m ()))
+    go mpage =
+      redactedSearch
+        ( extraArguments
+            -- pass the page (for every search but the first one)
+            <> ifExists (mpage <&> (\page -> [("page", (page :: Natural) & showToText & textToBytesUtf8)]))
+        )
+        ( do
+            status <- Json.key "status" Json.asText
+            when (status /= "success") $ do
+              Json.throwCustomError [fmt|Status was not "success", but {status}|]
+            Json.key "response" $ do
+              pages <- Json.key "pages" (Field.jsonParser (Field.mapError singleError $ Field.jsonNumber >>> Field.boundedScientificIntegral @Int "not an Integer" >>> Field.integralToNatural))
+              Json.key "results" $ do
+                transaction <-
+                  sequence_
+                    <$> ( Json.eachInArray $ do
+                            groupId <- Json.key "groupId" (Json.asIntegral @_ @Int)
+                            groupName <- Json.key "groupName" Json.asText
+                            fullJsonResult <-
+                              Json.asObject
+                                -- remove torrents cause they are inserted separately below
+                                <&> KeyMap.filterWithKey (\k _ -> k /= "torrents")
+                                <&> Json.Object
+                            let insertTourGroup = do
+                                  _ <-
+                                    execute
+                                      [fmt|
                                   DELETE FROM redacted.torrent_groups
                                   WHERE group_id = ?::integer
                               |]
-                                (Only groupId)
-                            executeManyReturningWith
-                              [fmt|
+                                      (Only groupId)
+                                  executeManyReturningWith
+                                    [fmt|
                                 INSERT INTO redacted.torrent_groups (
                                   group_id, group_name, full_json_result
                                 ) VALUES
                                 ( ?, ? , ? )
+                                ON CONFLICT (group_id) DO UPDATE SET
+                                  group_id = excluded.group_id,
+                                  group_name = excluded.group_name,
+                                  full_json_result = excluded.full_json_result
                                 RETURNING (id)
                               |]
-                              [ ( groupId,
-                                  groupName,
-                                  fullJsonResult
-                                )
-                              ]
-                              (label @"tourGroupIdPg" <$> Dec.fromField @Int)
-                              >>= ensureSingleRow
-                      insertTorrents <- Json.key "torrents" $ do
-                        torrents <- Json.eachInArray $ do
-                          torrentId <- Json.keyLabel @"torrentId" "torrentId" (Json.asIntegral @_ @Int)
-                          fullJsonResultT <- label @"fullJsonResult" <$> Json.asValue
-                          pure $ T2 torrentId fullJsonResultT
-                        pure $ \dat -> do
-                          _ <-
-                            execute
-                              [sql|
+                                    [ ( groupId,
+                                        groupName,
+                                        fullJsonResult
+                                      )
+                                    ]
+                                    (label @"tourGroupIdPg" <$> Dec.fromField @Int)
+                                    >>= ensureSingleRow
+                            insertTorrents <- Json.key "torrents" $ do
+                              torrents <- Json.eachInArray $ do
+                                torrentId <- Json.keyLabel @"torrentId" "torrentId" (Json.asIntegral @_ @Int)
+                                fullJsonResultT <- label @"fullJsonResult" <$> Json.asValue
+                                pure $ T2 torrentId fullJsonResultT
+                              pure $ \dat -> do
+                                _ <-
+                                  execute
+                                    [sql|
                                   DELETE FROM redacted.torrents_json
                                   WHERE torrent_id = ANY (?::integer[])
                             |]
-                              (Only $ torrents & unzipT2 & (.torrentId) & PGArray)
-                          execute
-                            [sql|
+                                    (Only $ torrents & unzipT2 & (.torrentId) & PGArray)
+                                execute
+                                  [sql|
                                   INSERT INTO redacted.torrents_json
                                         (torrent_id, torrent_group, full_json_result)
                                   SELECT inputs.torrent_id, static.torrent_group, inputs.full_json_result FROM
                                   (SELECT * FROM UNNEST(?::integer[], ?::jsonb[])) AS inputs(torrent_id, full_json_result)
                                   CROSS JOIN (VALUES(?::integer)) as static(torrent_group)
                             |]
-                            ( torrents
-                                & unzipT2
-                                & \t ->
-                                  ( t.torrentId & PGArray,
-                                    t.fullJsonResult & PGArray,
-                                    dat.tourGroupIdPg
+                                  ( torrents
+                                      & unzipT2
+                                      & \t ->
+                                        ( t.torrentId & PGArray,
+                                          t.fullJsonResult & PGArray,
+                                          dat.tourGroupIdPg
+                                        )
                                   )
-                            )
-                          pure ()
-                      pure (insertTourGroup >>= insertTorrents)
+                                pure ()
+                            pure (insertTourGroup >>= insertTorrents)
+                        )
+                pure
+                  ( T2
+                      (label @"pages" pages)
+                      (label @"transaction" transaction)
                   )
-    )
+        )
 
 redactedGetTorrentFileAndInsert ::
   ( HasField "torrentId" r Int,
