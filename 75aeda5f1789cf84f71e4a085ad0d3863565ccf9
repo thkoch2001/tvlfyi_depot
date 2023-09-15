@@ -126,6 +126,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "c3185e86_a5b861af",
+        "filename": "tvix/store/src/bin/tvix-store.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 213,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-09-15T12:05:10Z",
+      "side": 1,
+      "message": "...and some regression tests for the binary, this has happened too often;-)",
+      "parentUuid": "6672f8a1_0d06c352",
+      "revId": "75aeda5f1789cf84f71e4a085ad0d3863565ccf9",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "571dd609_67b84ba9",
         "filename": "tvix/store/src/blobservice/dumb_seeker.rs",
         "patchSetId": 1
