@@ -1,0 +1,123 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f96afd8a_e6e4ea6b",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 8
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1000073
+      },
+      "writtenOn": "2023-09-15T20:11:00Z",
+      "side": 1,
+      "message": "Not totally true, we discovered they had it internally but they didn\u0027t want to expose it from the crate it was.\nThe problem is that just this is hell.",
+      "revId": "0f234aac3afd912eca9fb109d090470a517368e1",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3edfcffa_bac691a8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000073
+      },
+      "writtenOn": "2023-09-15T20:11:00Z",
+      "side": 1,
+      "message": "Looks good to me modulo testing.",
+      "revId": "0f234aac3afd912eca9fb109d090470a517368e1",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2d1bffcd_ea2f0092",
+        "filename": "tvix/store/src/blobservice/dumb_seeker.rs",
+        "patchSetId": 8
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1000073
+      },
+      "writtenOn": "2023-09-15T20:11:00Z",
+      "side": 1,
+      "message": "Explain why we are pinning only `r` and not `pos`, `bytes_to_skip` even though this is safe.",
+      "revId": "0f234aac3afd912eca9fb109d090470a517368e1",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "776e46b0_4604b6de",
+        "filename": "tvix/store/src/blobservice/dumb_seeker.rs",
+        "patchSetId": 8
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1000073
+      },
+      "writtenOn": "2023-09-15T20:11:00Z",
+      "side": 1,
+      "message": "I prefer `NaiveSeeker` than the pejorative term \"dumb\".",
+      "revId": "0f234aac3afd912eca9fb109d090470a517368e1",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "faa6577f_846ae6c4",
+        "filename": "tvix/store/src/blobservice/grpc.rs",
+        "patchSetId": 8
+      },
+      "lineNbr": 393,
+      "author": {
+        "id": 1000073
+      },
+      "writtenOn": "2023-09-15T20:11:00Z",
+      "side": 1,
+      "message": "this is absolutely random, isn\u0027t it?\nplease invest in proper exp backoff or add a TODO to do it \"urgently\"\n\neven if this is for a test, you should avoid this because if your testing machine is under high load, some stuff may happen and you won\u0027t be happy\n\noverall, you should define a global target timeout for the test",
+      "revId": "0f234aac3afd912eca9fb109d090470a517368e1",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "dc604328_e6372d65",
+        "filename": "tvix/store/src/blobservice/memory.rs",
+        "patchSetId": 8
+      },
+      "lineNbr": 111,
+      "author": {
+        "id": 1000073
+      },
+      "writtenOn": "2023-09-15T20:11:00Z",
+      "side": 1,
+      "message": "let\u0027s explain why we don\u0027t need to poll shutdown, even if it\u0027s obvious to us",
+      "revId": "0f234aac3afd912eca9fb109d090470a517368e1",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9547ad99_2e27bab9",
+        "filename": "tvix/store/src/blobservice/sled.rs",
+        "patchSetId": 8
+      },
+      "lineNbr": 140,
+      "author": {
+        "id": 1000073
+      },
+      "writtenOn": "2023-09-15T20:11:00Z",
+      "side": 1,
+      "message": "explain why this is obvious that we don\u0027t need to poll for shutdowns",
+      "revId": "0f234aac3afd912eca9fb109d090470a517368e1",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
