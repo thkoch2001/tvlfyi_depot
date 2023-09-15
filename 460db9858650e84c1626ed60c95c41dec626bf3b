@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b8745a81_2eea0325",
+        "filename": "tvix/eval/src/chunk.rs",
+        "patchSetId": 4
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1000066
+      },
+      "writtenOn": "2023-09-15T01:51:01Z",
+      "side": 1,
+      "message": "I\u0027m really starting to think we would be better off patching upstream\u0027s crate to eliminate this obnoxious behavior, so we can use the macros, which are going to be way less error prone.\n\ncrate2nix lets you patch crates with `overrideAttrs` btw.  unlike `buildRustCrap`.",
+      "range": {
+        "startLine": 39,
+        "startChar": 0,
+        "endLine": 39,
+        "endChar": 56
+      },
+      "revId": "460db9858650e84c1626ed60c95c41dec626bf3b",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
