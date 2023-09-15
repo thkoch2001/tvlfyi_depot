@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "56b5acfb_63fc0954",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000066
+      },
+      "writtenOn": "2023-09-15T01:34:54Z",
+      "side": 1,
+      "message": "Did you consider using a cycle collector instead of a general GC?\n\nCycle collectors are like `Rc\u003cT\u003e`, except that whenever the reference count is decremented to a nonzero value, the cycle collector adds a weak reference to the `Rc\u003cT\u003e` to its \"needs cycle collection\" list.  This avoids having to maintain a \"gc roots\" set, which in Rust is something that is fundamentally unsafe and doesn\u0027t interact well with interior mutability.",
+      "revId": "fa3f58746a0fdfea2b603137fa62fb37c759ab4a",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
