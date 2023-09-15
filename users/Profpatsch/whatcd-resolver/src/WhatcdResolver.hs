@@ -58,7 +58,7 @@ import UnliftIO
 htmlUi :: App ()
 htmlUi = do
   let debug = True
-  withRunInIO $ \runInIO -> Warp.run 8080 $ \req respond -> do
+  withRunInIO $ \runInIO -> Warp.run 9092 $ \req respond -> do
     let catchAppException act =
           try act >>= \case
             Right a -> pure a
@@ -121,7 +121,11 @@ htmlUi = do
         "snips/redacted/startTorrentFile" -> h $ do
           dat <- torrentIdMp
           runTransaction $ do
-            file <- getTorrentFileById dat
+            file <-
+              getTorrentFileById dat
+                <&> annotate [fmt|No torrent file for torrentId "{dat.torrentId}"|]
+                >>= orAppThrowTree
+
             running <-
               lift @Transaction $
                 doTransmissionRequest' (transmissionRequestAddTorrent file)
@@ -203,7 +207,8 @@ snipsRedactedSearch ::
 snipsRedactedSearch dat = do
   t <-
     redactedSearchAndInsert
-      [ ("searchstr", dat.searchstr)
+      [ ("searchstr", dat.searchstr),
+        ("releasetype", "album")
       ]
   runTransaction $ do
     t
@@ -235,7 +240,7 @@ getBestTorrentsTable = do
                       Nothing -> td {torrentStatus = NotInTransmissionYet}
                       Just transmissionInfo -> td {torrentStatus = InTransmission (T2 (getLabel @"torrentHash" info) (label @"transmissionInfo" transmissionInfo))}
                   NotInTransmissionYet -> td {torrentStatus = NotInTransmissionYet}
-                  NoTorrentFileYet -> td {torrentStatus = NotInTransmissionYet}
+                  NoTorrentFileYet -> td {torrentStatus = NoTorrentFileYet}
               )
   let localTorrent b = case b.torrentStatus of
         NoTorrentFileYet -> [hsx|<button hx-post="snips/redacted/getTorrentFile" hx-swap="outerHTML" hx-vals={Enc.encToBytesUtf8 $ Enc.object [("torrent-id", Enc.int b.torrentId)]}>Upload Torrent</button>|]
@@ -396,13 +401,13 @@ data TransmissionRequest = TransmissionRequest
   }
   deriving stock (Show)
 
-testTransmission :: Show out => (TransmissionRequest, Json.Parse Error out) -> IO (Either TmpPg.StartError ())
+testTransmission :: (Show out) => (TransmissionRequest, Json.Parse Error out) -> IO (Either TmpPg.StartError ())
 testTransmission req = runAppWith $ doTransmissionRequest transmissionConnectionConfig req >>= liftIO . printPretty
 
 transmissionConnectionConfig :: T2 "host" Text "port" Text
 transmissionConnectionConfig = (T2 (label @"host" "localhost") (label @"port" "9091"))
 
-transmissionRequestListAllTorrents :: Monad m => [Text] -> Json.ParseT e m out -> (TransmissionRequest, Json.ParseT e m [out])
+transmissionRequestListAllTorrents :: (Monad m) => [Text] -> Json.ParseT e m out -> (TransmissionRequest, Json.ParseT e m [out])
 transmissionRequestListAllTorrents fields parseTorrent =
   ( TransmissionRequest
       { method = "torrent-get",
@@ -448,7 +453,7 @@ transmissionRequestAddTorrent dat =
         arguments =
           Map.fromList
             [ ("metainfo", Enc.base64Bytes dat.torrentFile),
-              ("paused", Enc.bool True)
+              ("paused", Enc.bool False)
             ],
         tag = Nothing
       },
@@ -585,7 +590,14 @@ redactedGetTorrentFile dat =
   redactedApiRequest
     ( T2
         (label @"action" "download")
-        (label @"actionArgs" [("id", Just (dat.torrentId & showToText @Int & textToBytesUtf8))])
+        ( label @"actionArgs"
+            [ ("id", Just (dat.torrentId & showToText @Int & textToBytesUtf8))
+            -- try using tokens as long as we have them (TODO: what if there’s no tokens left?
+            -- ANSWER: it breaks:
+            -- responseBody = "{\"status\":\"failure\",\"error\":\"You do not have any freeleech tokens left. Please use the regular DL link.\"}",
+            -- ("usetoken", Just "1")
+            ]
+        )
     )
 
 test :: Bool -> IO (Either TmpPg.StartError ())
@@ -772,7 +784,7 @@ getTorrentFileById ::
     MonadThrow m
   ) =>
   r ->
-  Transaction m (Label "torrentFile" ByteString)
+  Transaction m (Maybe (Label "torrentFile" ByteString))
 getTorrentFileById dat = do
   queryWith
     [sql|
@@ -781,7 +793,7 @@ getTorrentFileById dat = do
     WHERE torrent_id = ?::integer
   |]
     (Only $ (dat.torrentId :: Int))
-    (label @"torrentFile" <$> Dec.bytea)
+    (fmap @Maybe (label @"torrentFile") <$> Dec.byteaMay)
     >>= ensureSingleRow
 
 updateTransmissionTorrentHashById ::
@@ -811,7 +823,7 @@ assertOneUpdated name x = case x.numberOfRowsAffected of
   1 -> pure ()
   n -> appThrowTree ([fmt|{name :: Text}: Expected to update exactly one row, but updated {n :: Natural} row(s)|])
 
-migrate :: MonadPostgres m => Transaction m (Label "numberOfRowsAffected" Natural)
+migrate :: (MonadPostgres m) => Transaction m (Label "numberOfRowsAffected" Natural)
 migrate = do
   execute_
     [sql|
@@ -892,7 +904,7 @@ getTorrentById dat = do
     >>= ensureSingleRow
 
 -- | Find the best torrent for each torrent group (based on the seeding_weight)
-getBestTorrents :: MonadPostgres m => Transaction m [TorrentData ()]
+getBestTorrents :: (MonadPostgres m) => Transaction m [TorrentData ()]
 getBestTorrents = do
   queryWith
     [sql|
@@ -1000,7 +1012,7 @@ redactedApiRequestJson dat parse = do
             >>> assertM id
         )
 
-assertM :: MonadThrow f => (t -> Either ErrorTree a) -> t -> f a
+assertM :: (MonadThrow f) => (t -> Either ErrorTree a) -> t -> f a
 assertM f v = case f v of
   Right a -> pure a
   Left err -> appThrowTree err
@@ -1040,7 +1052,7 @@ withDb act = do
         mempty
           { TmpPg.dataDirectory = TmpPg.Permanent (databaseDir),
             TmpPg.socketDirectory = TmpPg.Permanent socketDir,
-            TmpPg.port = pure $ Just 5432,
+            TmpPg.port = pure $ Just 5431,
             TmpPg.initDbConfig
           }
   TmpPg.withConfig cfg $ \db -> do
@@ -1064,15 +1076,15 @@ data AppException = AppException Text
   deriving stock (Show)
   deriving anyclass (Exception)
 
-appThrowTree :: MonadThrow m => ErrorTree -> m a
+appThrowTree :: (MonadThrow m) => ErrorTree -> m a
 appThrowTree exc = throwM $ AppException $ prettyErrorTree exc
 
-orAppThrowTree :: MonadThrow m => Either ErrorTree a -> m a
+orAppThrowTree :: (MonadThrow m) => Either ErrorTree a -> m a
 orAppThrowTree = \case
   Left err -> appThrowTree err
   Right a -> pure a
 
-instance MonadIO m => MonadLogger (AppT m) where
+instance (MonadIO m) => MonadLogger (AppT m) where
   monadLoggerLog loc src lvl msg = liftIO $ Logger.defaultOutput IO.stderr loc src lvl (Logger.toLogStr msg)
 
 class MonadTransmission m where
@@ -1095,7 +1107,7 @@ instance (MonadThrow m, MonadUnliftIO m) => MonadPostgres (AppT m) where
   foldRows = foldRowsImpl (AppT ask)
   runTransaction = runPGTransaction
 
-runPGTransaction :: MonadUnliftIO m => Transaction (AppT m) a -> AppT m a
+runPGTransaction :: (MonadUnliftIO m) => Transaction (AppT m) a -> AppT m a
 runPGTransaction (Transaction transaction) = do
   pool <- AppT ask <&> (.pgConnPool)
   withRunInIO $ \unliftIO ->
