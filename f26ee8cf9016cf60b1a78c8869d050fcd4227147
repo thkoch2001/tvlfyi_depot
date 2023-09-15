@@ -52,6 +52,24 @@
       "parentUuid": "4922b349_c377b7fd",
       "revId": "f26ee8cf9016cf60b1a78c8869d050fcd4227147",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "57f9fa4d_d2893449",
+        "filename": "tvix/store/default.nix",
+        "patchSetId": 3
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-09-15T14:31:07Z",
+      "side": 1,
+      "message": "We currently don\u0027t support listening on linux sockets, only connecting to them :-)\n\nI fixed the issue in https://cl.tvl.fyi/c/depot/+/9329/7, but propose we add this specific integration test as part of b/307.",
+      "parentUuid": "e4cf7e74_7a22e3f1",
+      "revId": "f26ee8cf9016cf60b1a78c8869d050fcd4227147",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
