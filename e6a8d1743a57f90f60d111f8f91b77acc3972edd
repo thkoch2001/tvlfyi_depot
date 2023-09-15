@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b19c9588_bdad7b8d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000066
+      },
+      "writtenOn": "2023-09-15T01:38:52Z",
+      "side": 1,
+      "message": "A thought:\n\nWe only need GC to help us when we have cycles.  Is it safe to say that every cycle will contain a `Value::Thunk`?\n\nI used `Rc::new_cyclic` in `prepare_globals()`, but that one particular cycle is okay to leak.\n\nWhat I\u0027m getting at here is that we might be able to get away with just tracing `Thunk`-cycles somehow.",
+      "revId": "e6a8d1743a57f90f60d111f8f91b77acc3972edd",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
