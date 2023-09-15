@@ -22,7 +22,7 @@ use std::{
     cell::{Ref, RefCell, RefMut},
     collections::HashSet,
     fmt::Debug,
-    rc::Rc,
+    rc::{Rc, Weak},
 };
 
 use crate::{
@@ -101,7 +101,21 @@ impl ThunkRepr {
 #[derive(Clone, Debug)]
 pub struct Thunk(Rc<RefCell<ThunkRepr>>);
 
+/// A weak reference to a thunk.
+#[derive(Clone, Debug)]
+pub struct WeakThunk(Weak<RefCell<ThunkRepr>>);
+
+impl WeakThunk {
+    pub fn upgrade(self) -> Option<Thunk> {
+        self.0.upgrade().map(|x| Thunk(x))
+    }
+}
+
 impl Thunk {
+    pub fn downgrade(self) -> WeakThunk {
+        WeakThunk(Rc::downgrade(&self.0))
+    }
+
     pub fn new_closure(lambda: Rc<Lambda>) -> Self {
         Thunk(Rc::new(RefCell::new(ThunkRepr::Evaluated(Value::Closure(
             Rc::new(Closure {

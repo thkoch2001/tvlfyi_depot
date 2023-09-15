@@ -69,6 +69,7 @@ impl Value {
             | val @ Value::AttrNotFound
             | val @ Value::Blueprint(_)
             | val @ Value::DeferredUpvalue(_)
+            | val @ Value::DeferredUpvalueWeak(_)
             | val @ Value::UnresolvedPath(_)
             | val @ Value::Json(_)
             | val @ Value::FinaliseRequest(_) => {

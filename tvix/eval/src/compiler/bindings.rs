@@ -751,7 +751,7 @@ impl Compiler<'_> {
                 let upvalue_idx = compiler.add_upvalue(
                     compiler.contexts.len() - 1,
                     node,
-                    UpvalueKind::Local(idx),
+                    UpvalueKind::Local(idx, true),
                 );
                 compiler.push_op(OpCode::OpGetUpvalue(upvalue_idx), node);
             }),
@@ -783,8 +783,11 @@ impl Compiler<'_> {
             // ones, as thunks and closures are guaranteed to be placed on the
             // stack (i.e. in the right position) *during* their runtime
             // construction
-            LocalPosition::Known(idx) | LocalPosition::Recursive(idx) => {
-                return Some(self.add_upvalue(ctx_idx, node, UpvalueKind::Local(idx)))
+            LocalPosition::Known(idx) => {
+                return Some(self.add_upvalue(ctx_idx, node, UpvalueKind::Local(idx, false)));
+            }
+            LocalPosition::Recursive(idx) => {
+                return Some(self.add_upvalue(ctx_idx, node, UpvalueKind::Local(idx, true)));
             }
 
             LocalPosition::Unknown => { /* continue below */ }
@@ -807,11 +810,13 @@ impl Compiler<'_> {
     ) -> UpvalueIdx {
         // If there is already an upvalue closing over the specified index,
         // retrieve that instead.
-        for (idx, existing) in self.contexts[ctx_idx].scope.upvalues.iter().enumerate() {
-            if existing.kind == kind {
-                return UpvalueIdx(idx);
-            }
-        }
+        /*
+                for (idx, existing) in self.contexts[ctx_idx].scope.upvalues.iter().enumerate() {
+                    if existing.kind == kind {
+                        return UpvalueIdx(idx);
+                    }
+                }
+        */
 
         let span = self.span_for(node);
         self.contexts[ctx_idx]

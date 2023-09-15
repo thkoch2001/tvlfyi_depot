@@ -126,6 +126,7 @@ fn value_variant_to_xml<W: Write>(w: &mut EventWriter<W>, value: &Value) -> Resu
         Value::AttrNotFound
         | Value::Blueprint(_)
         | Value::DeferredUpvalue(_)
+        | Value::DeferredUpvalueWeak(_)
         | Value::UnresolvedPath(_)
         | Value::Json(_)
         | Value::FinaliseRequest(_) => {

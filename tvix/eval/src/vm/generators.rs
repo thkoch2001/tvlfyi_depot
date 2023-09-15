@@ -372,7 +372,7 @@ impl<'o> VM<'o> {
                                 span: light_span,
                                 call_frame: CallFrame {
                                     lambda,
-                                    upvalues,
+                                    upvalues: (*upvalues).clone(),
                                     ip: CodeIdx(0),
                                     stack_offset: self.stack.len(),
                                 },

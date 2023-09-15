@@ -271,6 +271,10 @@ pub enum OpCode {
     /// Populate a static upvalue of a thunk by copying it the stack, but do
     /// when the thunk is finalised (by OpFinalise) rather than immediately.
     DataDeferredLocal(StackIdx),
+    /// Like DataDeferredLocal, but the upvalue will be a weak
+    /// reference; this is used to eliminate uncollectable Rc<Value>
+    /// cycles for recursive (but not mutually-recursive) bindings.
+    DataDeferredLocalWeak(StackIdx),
     /// Populate a static upvalue by copying it from the upvalues of an
     /// enclosing scope.
     DataUpvalueIdx(UpvalueIdx),

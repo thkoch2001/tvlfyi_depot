@@ -93,8 +93,9 @@ pub enum LocalPosition {
 /// closures or thunks.
 #[derive(Clone, Debug, PartialEq, Eq)]
 pub enum UpvalueKind {
-    /// This upvalue captures a local from the stack.
-    Local(LocalIdx),
+    /// This upvalue captures a local from the stack.  The bool is
+    /// true if this is a recursive reference.
+    Local(LocalIdx, bool),
 
     /// This upvalue captures an enclosing upvalue.
     Upvalue(UpvalueIdx),

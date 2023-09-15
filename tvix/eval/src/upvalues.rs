@@ -7,9 +7,15 @@
 //! in order to resolve each free variable in the scope to a value.
 //! "Upvalue" is a term taken from Lua.
 
-use std::ops::Index;
-
+use crate::value::WeakThunk;
 use crate::{opcode::UpvalueIdx, Value};
+
+#[derive(Clone, Debug)]
+enum Upvalue {
+    Strong(Value),
+    Weak(WeakThunk),
+    Used,
+}
 
 /// Structure for carrying upvalues of an UpvalueCarrier.  The
 /// implementation of this struct encapsulates the logic for
@@ -29,7 +35,7 @@ pub struct Upvalues {
     /// The upvalues of static identifiers.  Each static identifier
     /// is assigned an integer identifier at compile time, which is
     /// an index into this Vec.
-    static_upvalues: Vec<Value>,
+    static_upvalues: Vec<Upvalue>,
 
     /// The upvalues of dynamic identifiers, if any exist.  This
     /// consists of the value passed to each enclosing `with val;`,
@@ -47,7 +53,7 @@ impl Upvalues {
 
     /// Push an upvalue at the end of the upvalue list.
     pub fn push(&mut self, value: Value) {
-        self.static_upvalues.push(value);
+        self.static_upvalues.push(Upvalue::Strong(value));
     }
 
     /// Set the captured with stack.
@@ -70,17 +76,38 @@ impl Upvalues {
     /// mutating them in the internal upvalue slots.
     pub fn resolve_deferred_upvalues(&mut self, stack: &[Value]) {
         for upvalue in self.static_upvalues.iter_mut() {
-            if let Value::DeferredUpvalue(update_from_idx) = upvalue {
-                *upvalue = stack[update_from_idx.0].clone();
+            match upvalue {
+                Upvalue::Strong(Value::DeferredUpvalue(update_from_idx)) => {
+                    *upvalue = Upvalue::Strong(stack[update_from_idx.0].clone());
+                }
+                Upvalue::Strong(Value::DeferredUpvalueWeak(update_from_idx)) => {
+                    match &stack[update_from_idx.0] {
+                        Value::Thunk(t) => {
+                            *upvalue = Upvalue::Weak(t.clone().downgrade());
+                        }
+                        v => {
+                            panic!("unexpected {v:?}");
+                        }
+                    };
+                }
+                _ => {}
             }
         }
     }
 }
 
-impl Index<UpvalueIdx> for Upvalues {
-    type Output = Value;
-
-    fn index(&self, index: UpvalueIdx) -> &Self::Output {
-        &self.static_upvalues[index.0]
+impl Upvalues {
+    pub fn get_cloned(&mut self, index: UpvalueIdx) -> Value {
+        let ret = std::mem::replace(&mut self.static_upvalues[index.0], Upvalue::Used);
+        match ret {
+            Upvalue::Strong(v) => v,
+            Upvalue::Weak(weak_thunk) => Value::Thunk(
+                weak_thunk
+                    .clone()
+                    .upgrade()
+                    .expect("weak reference vanished! tvix bug!"),
+            ),
+            Upvalue::Used => panic!("already used that upvalue!"),
+        }
     }
 }

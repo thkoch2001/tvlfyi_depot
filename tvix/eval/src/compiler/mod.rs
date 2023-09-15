@@ -1276,21 +1276,29 @@ impl Compiler<'_> {
     ) {
         for upvalue in upvalues {
             match upvalue.kind {
-                UpvalueKind::Local(idx) => {
+                UpvalueKind::Local(idx, recursive) => {
                     let target = &self.scope()[idx];
                     let stack_idx = self.scope().stack_index(idx);
 
                     // If the target is not yet initialised, we need to defer
                     // the local access
                     if !target.initialised {
-                        self.push_op(OpCode::DataDeferredLocal(stack_idx), &upvalue.span);
+                        if slot == idx {
+                            // a self-reference
+                            self.push_op(OpCode::DataDeferredLocalWeak(stack_idx), &upvalue.span);
+                        } else {
+                            self.push_op(OpCode::DataDeferredLocal(stack_idx), &upvalue.span);
+                        }
                         self.scope_mut().mark_needs_finaliser(slot);
                     } else {
                         // a self-reference
                         if slot == idx {
                             self.scope_mut().mark_must_thunk(slot);
+                            self.push_op(OpCode::DataDeferredLocalWeak(stack_idx), &upvalue.span);
+                        } else {
+                            assert!(!recursive);
+                            self.push_op(OpCode::DataStackIdx(stack_idx), &upvalue.span);
                         }
-                        self.push_op(OpCode::DataStackIdx(stack_idx), &upvalue.span);
                     }
                 }
 

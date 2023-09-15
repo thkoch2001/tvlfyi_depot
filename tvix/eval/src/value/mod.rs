@@ -32,7 +32,7 @@ pub use function::{Closure, Lambda};
 pub use list::NixList;
 pub use path::canon_path;
 pub use string::NixString;
-pub use thunk::Thunk;
+pub use thunk::{Thunk, WeakThunk};
 
 pub use self::thunk::{SharedThunkSet, ThunkSet};
 
@@ -74,6 +74,8 @@ pub enum Value {
 
     #[serde(skip)]
     DeferredUpvalue(StackIdx),
+    #[serde(skip)]
+    DeferredUpvalueWeak(StackIdx),
     #[serde(skip)]
     UnresolvedPath(Box<PathBuf>),
     #[serde(skip)]
@@ -237,6 +239,7 @@ impl Value {
             Value::AttrNotFound
             | Value::Blueprint(_)
             | Value::DeferredUpvalue(_)
+            | Value::DeferredUpvalueWeak(_)
             | Value::UnresolvedPath(_)
             | Value::Json(_)
             | Value::FinaliseRequest(_) => panic!(
@@ -331,6 +334,7 @@ impl Value {
             (Value::AttrNotFound, _)
             | (Value::Blueprint(_), _)
             | (Value::DeferredUpvalue(_), _)
+            | (Value::DeferredUpvalueWeak(_), _)
             | (Value::UnresolvedPath(_), _)
             | (Value::Json(_), _)
             | (Value::FinaliseRequest(_), _) => {
@@ -523,6 +527,7 @@ impl Value {
             Value::AttrNotFound => "internal[attr_not_found]",
             Value::Blueprint(_) => "internal[blueprint]",
             Value::DeferredUpvalue(_) => "internal[deferred_upvalue]",
+            Value::DeferredUpvalueWeak(_) => "internal[deferred_upvalue_weak]",
             Value::UnresolvedPath(_) => "internal[unresolved_path]",
             Value::Json(_) => "internal[json]",
             Value::FinaliseRequest(_) => "internal[finaliser_sentinel]",
@@ -663,6 +668,7 @@ impl Value {
             Value::AttrNotFound
             | Value::Blueprint(_)
             | Value::DeferredUpvalue(_)
+            | Value::DeferredUpvalueWeak(_)
             | Value::UnresolvedPath(_)
             | Value::Json(_)
             | Value::FinaliseRequest(_) => "an internal Tvix evaluator value".into(),
@@ -778,6 +784,7 @@ impl TotalDisplay for Value {
             Value::AttrNotFound => f.write_str("internal[not found]"),
             Value::Blueprint(_) => f.write_str("internal[blueprint]"),
             Value::DeferredUpvalue(_) => f.write_str("internal[deferred_upvalue]"),
+            Value::DeferredUpvalueWeak(_) => f.write_str("internal[deferred_upvalue_weak]"),
             Value::UnresolvedPath(_) => f.write_str("internal[unresolved_path]"),
             Value::Json(_) => f.write_str("internal[json]"),
             Value::FinaliseRequest(_) => f.write_str("internal[finaliser_sentinel]"),

@@ -123,7 +123,7 @@ struct CallFrame {
 
     /// Optional captured upvalues of this frame (if a thunk or
     /// closure if being evaluated).
-    upvalues: Rc<Upvalues>,
+    upvalues: Upvalues,
 
     /// Instruction pointer to the instruction currently being
     /// executed.
@@ -135,8 +135,8 @@ struct CallFrame {
 
 impl CallFrame {
     /// Retrieve an upvalue from this frame at the given index.
-    fn upvalue(&self, idx: UpvalueIdx) -> &Value {
-        &self.upvalues[idx]
+    fn upvalue(&mut self, idx: UpvalueIdx) -> Value {
+        self.upvalues.get_cloned(idx)
     }
 
     /// Borrow the chunk of this frame's lambda.
@@ -506,7 +506,13 @@ impl<'o> VM<'o> {
                     // already in its stack slot, which means that it
                     // can capture itself as an upvalue for
                     // self-recursion.
-                    self.populate_upvalues(&mut frame, upvalue_count, upvalues)?;
+                    let idx_self = self.stack.len() - 1 - frame.stack_offset;
+                    self.populate_upvalues(
+                        &mut frame,
+                        upvalue_count,
+                        upvalues,
+                        Some(StackIdx(idx_self)),
+                    )?;
                 }
 
                 OpCode::OpForce => {
@@ -528,7 +534,7 @@ impl<'o> VM<'o> {
                 }
 
                 OpCode::OpGetUpvalue(upv_idx) => {
-                    let value = frame.upvalue(upv_idx).clone();
+                    let value = frame.upvalue(upv_idx);
                     self.stack.push(value);
                 }
 
@@ -577,7 +583,7 @@ impl<'o> VM<'o> {
                     );
 
                     let mut upvalues = Upvalues::with_capacity(blueprint.upvalue_count);
-                    self.populate_upvalues(&mut frame, upvalue_count, &mut upvalues)?;
+                    self.populate_upvalues(&mut frame, upvalue_count, &mut upvalues, None)?;
                     self.stack
                         .push(Value::Closure(Rc::new(Closure::new_with_upvalues(
                             Rc::new(upvalues),
@@ -932,6 +938,7 @@ impl<'o> VM<'o> {
                 // that is a critical error in the VM/compiler.
                 OpCode::DataStackIdx(_)
                 | OpCode::DataDeferredLocal(_)
+                | OpCode::DataDeferredLocalWeak(_)
                 | OpCode::DataUpvalueIdx(_)
                 | OpCode::DataCaptureWith => {
                     panic!("Tvix bug: attempted to execute data-carrying operand")
@@ -1062,11 +1069,13 @@ impl<'o> VM<'o> {
                     self.push_call_frame(parent_span, parent_frame);
                 }
 
+                let upvalues = (*closure.upvalues()).clone();
+                drop(closure);
                 self.push_call_frame(
                     span,
                     CallFrame {
                         lambda,
-                        upvalues: closure.upvalues(),
+                        upvalues,
                         ip: CodeIdx(0),
                         stack_offset,
                     },
@@ -1094,6 +1103,7 @@ impl<'o> VM<'o> {
         frame: &mut CallFrame,
         count: usize,
         mut upvalues: impl DerefMut<Target = Upvalues>,
+        selfidx: Option<StackIdx>,
     ) -> EvalResult<()> {
         for _ in 0..count {
             match frame.inc_ip() {
@@ -1121,11 +1131,19 @@ impl<'o> VM<'o> {
                 }
 
                 OpCode::DataUpvalueIdx(upv_idx) => {
-                    upvalues.deref_mut().push(frame.upvalue(upv_idx).clone());
+                    upvalues.deref_mut().push(frame.upvalue(upv_idx));
                 }
 
                 OpCode::DataDeferredLocal(idx) => {
-                    upvalues.deref_mut().push(Value::DeferredUpvalue(idx));
+                    if Some(idx) == selfidx {
+                        upvalues.deref_mut().push(Value::DeferredUpvalueWeak(idx));
+                    } else {
+                        upvalues.deref_mut().push(Value::DeferredUpvalue(idx));
+                    }
+                }
+
+                OpCode::DataDeferredLocalWeak(idx) => {
+                    upvalues.deref_mut().push(Value::DeferredUpvalueWeak(idx));
                 }
 
                 OpCode::DataCaptureWith => {
@@ -1278,7 +1296,7 @@ pub fn run_lambda(
         span: root_span.into(),
         call_frame: CallFrame {
             lambda,
-            upvalues: Rc::new(Upvalues::with_capacity(0)),
+            upvalues: Upvalues::with_capacity(0),
             ip: CodeIdx(0),
             stack_offset: 0,
         },
