@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "db387391_a0d6f853",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000066
+      },
+      "writtenOn": "2023-09-15T02:03:23Z",
+      "side": 1,
+      "message": "\u003e There seem to be odd problems with tracing in structs that contain `Rc\u003cT\u003e`\n\nYeah I noticed that you call `mark()` on `.as_ref()` of the `Rc\u003cClosure\u003e` in `Value::Closure()`... I was surprised that the mark phase doesn\u0027t want to know that something is wrapped in an `Rc\u003cT\u003e`.",
+      "revId": "b4f15f6deff8ee8bb7cdab4bcbefff5de925d38c",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
