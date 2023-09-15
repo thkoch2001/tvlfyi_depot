@@ -72,6 +72,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "e176a309_aa5e776a",
+        "filename": "tvix/store/src/blobservice/dumb_seeker.rs",
+        "patchSetId": 8
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1000073
+      },
+      "writtenOn": "2023-09-15T21:09:17Z",
+      "side": 1,
+      "message": "Let\u0027s explain it.\n\n`NaiveSeeker` itself is pinned somewhere and not allowed to move, though\nits fields could potentially be pinned or unpinned according to https://doc.rust-lang.org/std/pin/#pinning-is-not-structural-for-field\n\nIn this situation, we want to ensure that neither `pos` neither `bytes_to_skip` are pinned, and we will want to ensure we never write `pin!(pos)` or similar to ensure this invariant to be true.\n\nFor `r`, it is more complicated, we definitely may be pinning it in some instances, so let\u0027s mark it as pinned all the time.\n\nAnyway, we need to use it as pinned, so it all works well for us.",
+      "parentUuid": "2d1bffcd_ea2f0092",
+      "revId": "0f234aac3afd912eca9fb109d090470a517368e1",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "776e46b0_4604b6de",
         "filename": "tvix/store/src/blobservice/dumb_seeker.rs",
         "patchSetId": 8
