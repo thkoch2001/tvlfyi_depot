@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1d41246b_e8e4a099",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 10
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2023-09-15T21:06:45Z",
+      "side": 1,
+      "message": "Tested import/fuse locally, works for me",
+      "revId": "8a62f05cfaefa7158284ab2f2f51c6adc77b9a01",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
