@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "967f8b23_729b4a7e",
+        "filename": "tvix/store/default.nix",
+        "patchSetId": 3
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2023-09-15T13:08:09Z",
+      "side": 1,
+      "message": "I\u0027m getting another panic with cl/9329 when importing but this time on the daemon side. Maybe we should spawn up the daemon backed by memory and then tvix-store import talks to the daemon? Just to get a little more coverage.\n\n```\nthread \u0027tokio-runtime-worker\u0027 panicked at \u0027Cannot start a runtime from within a runtime. This happens because a function (like `block_on`) attempted to block the current thread while the thread is being used to drive asynchronous tasks.\u0027, store/src/nar/renderer.rs:80:18\nstack backtrace:\n   0: rust_begin_unwind\n   1: core::panicking::panic_fmt\n   2: tokio::runtime::context::runtime::enter_runtime\n             at /home/cbrewster/.cargo/registry/src/index.crates.io-6f17d22bba15001f/tokio-1.32.0/src/runtime/context/runtime.rs:68:5\n   3: tokio::runtime::handle::Handle::block_on\n             at /home/cbrewster/.cargo/registry/src/index.crates.io-6f17d22bba15001f/tokio-1.32.0/src/runtime/handle.rs:309:9\n   4: tvix_store::nar::renderer::walk_node\n             at ./src/nar/renderer.rs:79:37\n   5: tvix_store::nar::renderer::walk_node\n             at ./src/nar/renderer.rs:133:25\n   6: tvix_store::nar::renderer::write_nar\n             at ./src/nar/renderer.rs:42:5\n   7: tvix_store::nar::renderer::calculate_size_and_sha256\n             at ./src/nar/renderer.rs:24:5\n   8: \u003ctvix_store::pathinfoservice::sled::SledPathInfoService as tvix_store::pathinfoservice::PathInfoService\u003e::calculate_nar\n             at ./src/pathinfoservice/sled.rs:132:9\n   9: \u003ctvix_store::proto::grpc_pathinfoservice_wrapper::GRPCPathInfoServiceWrapper as tvix_store::proto::path_info_service_server::PathInfoService\u003e::calculate_nar::{{closure}}::{{closure}}\n             at ./src/proto/grpc_pathinfoservice_wrapper.rs:74:46\n```",
+      "revId": "f26ee8cf9016cf60b1a78c8869d050fcd4227147",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
