@@ -20,6 +20,24 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "12ef7b5c_969a1e62",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 8
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-09-15T21:00:44Z",
+      "side": 1,
+      "message": "I added something around these lines, but skipped the hell part.",
+      "parentUuid": "f96afd8a_e6e4ea6b",
+      "revId": "0f234aac3afd912eca9fb109d090470a517368e1",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "3edfcffa_bac691a8",
         "filename": "/PATCHSET_LEVEL",
         "patchSetId": 8
@@ -69,6 +87,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "3f10e387_a070de30",
+        "filename": "tvix/store/src/blobservice/dumb_seeker.rs",
+        "patchSetId": 8
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-09-15T21:00:44Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "776e46b0_4604b6de",
+      "revId": "0f234aac3afd912eca9fb109d090470a517368e1",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "faa6577f_846ae6c4",
@@ -82,6 +118,24 @@
       "writtenOn": "2023-09-15T20:11:00Z",
       "side": 1,
       "message": "this is absolutely random, isn\u0027t it?\nplease invest in proper exp backoff or add a TODO to do it \"urgently\"\n\neven if this is for a test, you should avoid this because if your testing machine is under high load, some stuff may happen and you won\u0027t be happy\n\noverall, you should define a global target timeout for the test",
+      "revId": "0f234aac3afd912eca9fb109d090470a517368e1",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7ae2a0b0_f1eaa340",
+        "filename": "tvix/store/src/blobservice/grpc.rs",
+        "patchSetId": 8
+      },
+      "lineNbr": 393,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-09-15T21:00:44Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "faa6577f_846ae6c4",
       "revId": "0f234aac3afd912eca9fb109d090470a517368e1",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
@@ -103,6 +157,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "54b4c8bd_dacc1278",
+        "filename": "tvix/store/src/blobservice/memory.rs",
+        "patchSetId": 8
+      },
+      "lineNbr": 111,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-09-15T21:00:44Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "dc604328_e6372d65",
+      "revId": "0f234aac3afd912eca9fb109d090470a517368e1",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "9547ad99_2e27bab9",
@@ -116,6 +188,24 @@
       "writtenOn": "2023-09-15T20:11:00Z",
       "side": 1,
       "message": "explain why this is obvious that we don\u0027t need to poll for shutdowns",
+      "revId": "0f234aac3afd912eca9fb109d090470a517368e1",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fb1c2581_dca7eb92",
+        "filename": "tvix/store/src/blobservice/sled.rs",
+        "patchSetId": 8
+      },
+      "lineNbr": 140,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-09-15T21:00:44Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9547ad99_2e27bab9",
       "revId": "0f234aac3afd912eca9fb109d090470a517368e1",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
