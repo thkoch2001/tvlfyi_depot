@@ -18,6 +18,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "057fe8b8_ff42d789",
+        "filename": "tvix/store/src/bin/tvix-store.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 250,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-09-15T20:49:21Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7d1ffff1_997db70e",
+      "revId": "0f66cb778e93b4b7b799ebd357b4efdec6b20123",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "a64e23f8_5aa3d5b2",
@@ -31,6 +49,24 @@
       "writtenOn": "2023-09-15T20:12:02Z",
       "side": 1,
       "message": "`\u0026node_name` ?\nlet\u0027s be consistent",
+      "revId": "0f66cb778e93b4b7b799ebd357b4efdec6b20123",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4d4cc75b_83957ecb",
+        "filename": "tvix/store/src/bin/tvix-store.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 254,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-09-15T20:49:21Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a64e23f8_5aa3d5b2",
       "revId": "0f66cb778e93b4b7b799ebd357b4efdec6b20123",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
