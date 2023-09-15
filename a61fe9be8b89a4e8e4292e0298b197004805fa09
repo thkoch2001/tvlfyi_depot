@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "28ba169d_e6ac6ef6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000066
+      },
+      "writtenOn": "2023-09-15T01:45:47Z",
+      "side": 1,
+      "message": "\u003e the macros can not be used because they generate an empty `Drop` implementation. They do this because they *don\u0027t* want people to have `Drop` implementations that do something and are trying to enforce that statically,\n\nWow that seems like a rather poor decision by the `gc` crate.  I am surprised you can\u0027t turn that behavior off somehow.",
+      "revId": "a61fe9be8b89a4e8e4292e0298b197004805fa09",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
