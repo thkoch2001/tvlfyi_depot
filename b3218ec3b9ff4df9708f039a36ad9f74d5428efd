@@ -16,6 +16,23 @@
       "message": "Could we wrap the GC stuff with a `#[cfg(tvix_gc)]`?\n\nI know that\u0027s going to get noisy, but:\n\n1. I think there will always be situations where it\u0027s just faster to not GC.  If you have lots of memory then anything less than all-of-nixos will run faster without any GC at all.\n\n2. GC bugs are pretty damn nightmarish.  Being able to compile-out the GC in order to quickly determine whether or not it is causing a bug is really valuable.\n\n3. It sounds like we need a GC fairly urgently, but we\u0027re not 100% sure if this crate is the right one to use.  If we keep the current choice separated by a `#[cfg]` it\u0027s easier to change that decision later on (or even have two alternative GC implementations for a brief period of time).\n\nAnyways this LGTM if we put a `#[cfg(tvix_gc)]` around it.",
       "revId": "b3218ec3b9ff4df9708f039a36ad9f74d5428efd",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b7ada198_a49cdcf5",
+        "filename": "tvix/eval/src/value/mod.rs",
+        "patchSetId": 4
+      },
+      "lineNbr": 87,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-09-15T05:55:25Z",
+      "side": 1,
+      "message": "I\u0027d probably keep this fully qualified. trace is also used for our logging/tracing Framework, and gc::Trace is only four more characters.",
+      "revId": "b3218ec3b9ff4df9708f039a36ad9f74d5428efd",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
