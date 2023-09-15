@@ -174,6 +174,24 @@
       "message": "Unrelated to this cl, but any reason to include this in the trait? I usually try to keep \"constructors\" out of traits since different implementations might be constructed differently. (async vs sync depending on the impl is a potential example of this)",
       "revId": "75aeda5f1789cf84f71e4a085ad0d3863565ccf9",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "68d891a9_bb3394b6",
+        "filename": "tvix/store/src/blobservice/mod.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-09-15T12:07:45Z",
+      "side": 1,
+      "message": "The idea was to make different store protocols pluggable by their URI, but something needs to collect them all together anyways. Happy to shuffle things around though, let\u0027s do it in a followup?",
+      "parentUuid": "3938c4f6_b21ea984",
+      "revId": "75aeda5f1789cf84f71e4a085ad0d3863565ccf9",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
