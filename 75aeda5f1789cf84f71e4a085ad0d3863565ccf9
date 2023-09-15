@@ -142,6 +142,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "39d2ed39_1745804c",
+        "filename": "tvix/store/src/bin/tvix-store.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 213,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-09-15T12:57:26Z",
+      "side": 1,
+      "message": "Fixed in a later revision, integration test added to cl/9338.",
+      "parentUuid": "c3185e86_a5b861af",
+      "revId": "75aeda5f1789cf84f71e4a085ad0d3863565ccf9",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "571dd609_67b84ba9",
@@ -155,6 +173,24 @@
       "writtenOn": "2023-09-15T11:26:41Z",
       "side": 1,
       "message": "I didn\u0027t know this was supported, I usually see this like:\n```\n*self.project().bytes_to_skip \u003d bytes_to_skip;\n```",
+      "revId": "75aeda5f1789cf84f71e4a085ad0d3863565ccf9",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "10585c8d_33b2ac82",
+        "filename": "tvix/store/src/blobservice/dumb_seeker.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 161,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-09-15T12:57:26Z",
+      "side": 1,
+      "message": "Yes, this looks a lit less convoluted. I also updated a similar instance of this in L117.",
+      "parentUuid": "571dd609_67b84ba9",
       "revId": "75aeda5f1789cf84f71e4a085ad0d3863565ccf9",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
