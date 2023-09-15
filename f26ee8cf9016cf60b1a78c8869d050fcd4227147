@@ -34,6 +34,24 @@
       "parentUuid": "967f8b23_729b4a7e",
       "revId": "f26ee8cf9016cf60b1a78c8869d050fcd4227147",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e4cf7e74_7a22e3f1",
+        "filename": "tvix/store/default.nix",
+        "patchSetId": 3
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-09-15T14:01:35Z",
+      "side": 1,
+      "message": "*run outside the nix sandbox*",
+      "parentUuid": "4922b349_c377b7fd",
+      "revId": "f26ee8cf9016cf60b1a78c8869d050fcd4227147",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
