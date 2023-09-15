@@ -20,6 +20,29 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "83acf89e_5e88b4f9",
+        "filename": "tvix/eval/src/builtins/mod.rs",
+        "patchSetId": 11
+      },
+      "lineNbr": 232,
+      "author": {
+        "id": 1000066
+      },
+      "writtenOn": "2023-09-15T00:55:37Z",
+      "side": 1,
+      "message": "This \"idiom\" occurs pretty often.  It might be worth defining a macro for it.  That would give us back the `?`-syntax capabilities that are lost by the switch to using `Result\u003cResult\u003cT,_\u003e,_\u003e`.",
+      "range": {
+        "startLine": 228,
+        "startChar": 1,
+        "endLine": 232,
+        "endChar": 0
+      },
+      "revId": "9542b28262eb4d12ea28e207dca1542c68f58ae5",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "d40365aa_7ad6dc59",
         "filename": "tvix/eval/src/errors.rs",
         "patchSetId": 11
