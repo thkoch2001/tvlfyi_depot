@@ -108,6 +108,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "6672f8a1_0d06c352",
+        "filename": "tvix/store/src/bin/tvix-store.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 213,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-09-15T11:31:40Z",
+      "side": 1,
+      "message": "Yes, I need to do the same there as I did in the tvix-cli binary. new revision incoming a bit later today.",
+      "parentUuid": "339f0720_524f0104",
+      "revId": "75aeda5f1789cf84f71e4a085ad0d3863565ccf9",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "571dd609_67b84ba9",
         "filename": "tvix/store/src/blobservice/dumb_seeker.rs",
         "patchSetId": 1
