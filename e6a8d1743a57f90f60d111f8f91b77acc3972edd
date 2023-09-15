@@ -16,6 +16,29 @@
       "message": "A thought:\n\nWe only need GC to help us when we have cycles.  Is it safe to say that every cycle will contain a `Value::Thunk`?\n\nI used `Rc::new_cyclic` in `prepare_globals()`, but that one particular cycle is okay to leak.\n\nWhat I\u0027m getting at here is that we might be able to get away with just tracing `Thunk`-cycles somehow.",
       "revId": "e6a8d1743a57f90f60d111f8f91b77acc3972edd",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4b16d792_b919079b",
+        "filename": "tvix/eval/src/value/thunk.rs",
+        "patchSetId": 4
+      },
+      "lineNbr": 98,
+      "author": {
+        "id": 1000066
+      },
+      "writtenOn": "2023-09-15T01:59:05Z",
+      "side": 1,
+      "message": "I don\u0027t think this is right... a `SuspendedNative` is basically a Rust closure, which could capture references to `Value`s.  In fact, `prepare_global()` actually does this!  It captures a (weak) reference to the `GlobalsMap`, whose values are `Value`s.\n\nI think we are going to need to expose a trait for suspended native functions, and have it be a subtrait of `Trace`.  A `ThunkRepr::Native` isn\u0027t \"just a Rust function\" anymore; now it is \"a Rust function that knows how to `Trace` any `Value` references it has captured\".",
+      "range": {
+        "startLine": 98,
+        "startChar": 1,
+        "endLine": 98,
+        "endChar": 72
+      },
+      "revId": "e6a8d1743a57f90f60d111f8f91b77acc3972edd",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
