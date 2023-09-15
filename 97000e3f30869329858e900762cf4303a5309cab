@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "afd55082_19f3159d",
+        "filename": "tvix/eval/src/value/builtin.rs",
+        "patchSetId": 4
+      },
+      "lineNbr": 51,
+      "author": {
+        "id": 1000066
+      },
+      "writtenOn": "2023-09-15T01:48:30Z",
+      "side": 1,
+      "message": "The builtins themselves are never collectable.\n\nThe concern here is the \"partially applied builtin\" struct, which is something I\u0027ve never liked.  Couldn\u0027t we just eliminate this, have only `BuiltinGen`, and have partially-applied builtins produce a thunk instead?",
+      "range": {
+        "startLine": 39,
+        "startChar": 0,
+        "endLine": 51,
+        "endChar": 1
+      },
+      "revId": "97000e3f30869329858e900762cf4303a5309cab",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
