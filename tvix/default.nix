@@ -28,11 +28,6 @@ let
         nativeBuildInputs = prev.nativeBuildInputs or [ ] ++ iconvDarwinDep;
       };
 
-      fuser = prev: {
-        buildInputs = prev.buildInputs or [ ] ++ [ pkgs.fuse ];
-        nativeBuildInputs = prev.nativeBuildInputs or [ ] ++ [ pkgs.pkg-config ];
-      };
-
       prost-build = prev: {
         nativeBuildInputs = protobufDep prev;
       };
@@ -59,6 +54,7 @@ let
         (crateName:
           (lib.nameValuePair "${crateName}-${crates.internal.crates.${crateName}.version}" crates.internal.crates.${crateName}.src.outputHash)
         ) [
+        "fuse-backend-rs"
         "test-generator"
         "tonic-mock"
         "wu-manber"
