@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "47b9785e_a04de88e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-09-16T14:58:35Z",
+      "side": 1,
+      "message": "Since cl/9290 it\u0027s now possible to refer to the store protos as a separate go module, so I updated the go.mod to reflect that, and then looped it into CI. As can be seen, the tests need to be refactored too, to pass :-) Will do that in the next few hours.",
+      "revId": "d4227b5fb7268a1fbe4b90d6f9c1c6e5457d6226",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
