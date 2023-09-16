@@ -38,6 +38,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "9718c824_e70fc1f4",
+        "filename": "tvix/nar-bridge/pkg/server/nar_get.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2023-09-16T23:40:13Z",
+      "side": 1,
+      "message": "Looks like there is a trailing `}` after `.nar` that shouldn\u0027t be there. Made me scratch my head for a little bit :)",
+      "parentUuid": "6983cb30_0b9e3db7",
+      "revId": "562ef0523f7b9549bcf18c3c3959ee161d3aa68a",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "fb230f36_4dd0d0b8",
         "filename": "tvix/nar-bridge/pkg/server/nar_put.go",
         "patchSetId": 1
