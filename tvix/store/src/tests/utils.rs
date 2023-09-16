@@ -6,17 +6,17 @@ use crate::{
     pathinfoservice::{MemoryPathInfoService, PathInfoService},
 };
 
-pub fn gen_blob_service() -> Arc<dyn BlobService> {
+pub fn gen_blob_service() -> Arc<dyn BlobService + Send + Sync + 'static> {
     Arc::new(MemoryBlobService::default())
 }
 
-pub fn gen_directory_service() -> Arc<dyn DirectoryService> {
+pub fn gen_directory_service() -> Arc<dyn DirectoryService + Send + Sync + 'static> {
     Arc::new(MemoryDirectoryService::default())
 }
 
 pub fn gen_pathinfo_service(
-    blob_service: Arc<dyn BlobService>,
-    directory_service: Arc<dyn DirectoryService>,
-) -> Arc<dyn PathInfoService> {
+    blob_service: Arc<dyn BlobService + Send + Sync + 'static>,
+    directory_service: Arc<dyn DirectoryService + Send + Sync + 'static>,
+) -> Arc<dyn PathInfoService + Send + Sync + 'static> {
     Arc::new(MemoryPathInfoService::new(blob_service, directory_service))
 }
