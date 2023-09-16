@@ -41,6 +41,29 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "4c0638a5_03854923",
+        "filename": "tvix/eval/src/errors.rs",
+        "patchSetId": 11
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2023-09-16T14:02:22Z",
+      "side": 1,
+      "message": "If I understand this correctly, that is for cases where we *want* the catchable error to propagate to ErrorKind?\n\nWith the instance `impl From\u003cCatchableErrorKind\u003e for ErrorKind`, that should just work if you use a double question mark, no?",
+      "range": {
+        "startLine": 35,
+        "startChar": 0,
+        "endLine": 38,
+        "endChar": 0
+      },
+      "revId": "9542b28262eb4d12ea28e207dca1542c68f58ae5",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "d40365aa_7ad6dc59",
