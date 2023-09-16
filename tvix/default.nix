@@ -28,11 +28,6 @@ let
         nativeBuildInputs = prev.nativeBuildInputs or [ ] ++ iconvDarwinDep;
       };
 
-      fuser = prev: {
-        buildInputs = prev.buildInputs or [ ] ++ [ pkgs.fuse ];
-        nativeBuildInputs = prev.nativeBuildInputs or [ ] ++ [ pkgs.pkg-config ];
-      };
-
       prost-build = prev: {
         nativeBuildInputs = protobufDep prev;
       };
