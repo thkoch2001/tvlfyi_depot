@@ -90,6 +90,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "a139fcc1_0d335b1e",
+        "filename": "tvix/store/src/blobservice/dumb_seeker.rs",
+        "patchSetId": 8
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1000073
+      },
+      "writtenOn": "2023-09-16T14:59:21Z",
+      "side": 1,
+      "message": "Another attempt:\n\n`NaiveSeeker` is itself pinned by callers, and we do not need to concern ourselves regarding that.\n\nThough, its fields as per https://doc.rust-lang.org/std/pin/#pinning-is-not-structural-for-field can be pinned or unpinned.\n\nSo we need to go over each field and choose our policy carefully.\n\nThe obvious cases are the bookkeeping integers we keep in the structure, those are private and not shared to anyone, we never build a `Pin\u003c\u0026mut X\u003e` out of them at any point, therefore, we can safely never mark them as pinned. Of course, it is expected that no developer here attempt to `pin!(pos)` to pin them because it makes no sense. If they have to become pinned, they should be marked `#[pin]` and we need to discuss it.\n\nSo the bookkeeping integers are in the right state with respect to their pinning status. The projection should offer direct access.\n\nOn the `r` field, i.e. a `BufReader\u003cR\u003e`, given that https://docs.rs/tokio/latest/tokio/io/struct.BufReader.html#impl-Unpin-for-BufReader%3CR%3E is available, even a `Pin\u003c\u0026mut BufReader\u003cR\u003e\u003e` can be safely moved.\n\nThe only care we should have regards the internal reader itself, i.e. the `R` instance, see that Tokio decided to `#[pin]` it too: https://docs.rs/tokio/latest/src/tokio/io/util/buf_reader.rs.html#29\n\nIn general, there\u0027s no `Unpin` instance for `R: tokio::io::AsyncRead` (see https://docs.rs/tokio/latest/tokio/io/trait.AsyncRead.html).\n\nTherefore, we could keep it unpinned and pin it in every call site whenever we need to call `poll_*` which can be confusing to the non-expert developer and we have a fair share amount of situations where the `BufReader` instance is naked, i.e. in its `\u0026mut BufReader\u003cR\u003e` form, this is annoying because it could lead to expose the naked `R` internal instance somehow and would produce a risk of making it move unexpectedly.\n\nWe choose the path of the least resistance as we have no reason to have access to the raw `BufReader\u003cR\u003e` instance, we just `#[pin]` it too and enjoy its `poll_*` safe APIs and push the unpinning concerns to the internal implementations themselves, which studied the question longer than us.",
+      "parentUuid": "e176a309_aa5e776a",
+      "revId": "0f234aac3afd912eca9fb109d090470a517368e1",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "776e46b0_4604b6de",
         "filename": "tvix/store/src/blobservice/dumb_seeker.rs",
         "patchSetId": 8
