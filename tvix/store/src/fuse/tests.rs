@@ -12,7 +12,7 @@ use crate::pathinfoservice::PathInfoService;
 use crate::proto::{DirectoryNode, FileNode, PathInfo};
 use crate::tests::fixtures;
 use crate::tests::utils::{gen_blob_service, gen_directory_service, gen_pathinfo_service};
-use crate::{proto, FUSE};
+use crate::{proto, FuseDaemon, FUSE};
 
 const BLOB_A_NAME: &str = "00000000000000000000000000000000-test";
 const BLOB_B_NAME: &str = "55555555555555555555555555555555-test";
@@ -39,14 +39,14 @@ fn do_mount<P: AsRef<Path>>(
     path_info_service: Arc<dyn PathInfoService>,
     mountpoint: P,
     list_root: bool,
-) -> io::Result<fuser::BackgroundSession> {
+) -> io::Result<FuseDaemon> {
     let fs = FUSE::new(
         blob_service,
         directory_service,
         path_info_service,
         list_root,
     );
-    fuser::spawn_mount2(fs, mountpoint, &[])
+    FuseDaemon::new(fs, mountpoint.as_ref(), 4)
 }
 
 async fn populate_blob_a(
@@ -262,7 +262,7 @@ async fn mount() {
     let tmpdir = TempDir::new().unwrap();
 
     let (blob_service, directory_service, path_info_service) = gen_svcs();
-    let fuser_session = do_mount(
+    let _fuse_daemon = do_mount(
         blob_service,
         directory_service,
         path_info_service,
@@ -270,8 +270,6 @@ async fn mount() {
         false,
     )
     .expect("must succeed");
-
-    fuser_session.join()
 }
 
 /// Ensure listing the root isn't allowed
@@ -285,7 +283,7 @@ async fn root() {
     let tmpdir = TempDir::new().unwrap();
 
     let (blob_service, directory_service, path_info_service) = gen_svcs();
-    let fuser_session = do_mount(
+    let _fuse_daemon = do_mount(
         blob_service,
         directory_service,
         path_info_service,
@@ -301,8 +299,6 @@ async fn root() {
         let err = it.next().expect("must be some").expect_err("must be err");
         assert_eq!(std::io::ErrorKind::PermissionDenied, err.kind());
     }
-
-    fuser_session.join()
 }
 
 /// Ensure listing the root is allowed if configured explicitly
@@ -318,7 +314,7 @@ async fn root_with_listing() {
     let (blob_service, directory_service, path_info_service) = gen_svcs();
     populate_blob_a(&blob_service, &directory_service, &path_info_service).await;
 
-    let fuser_session = do_mount(
+    let _fuse_daemon = do_mount(
         blob_service,
         directory_service,
         path_info_service,
@@ -338,8 +334,6 @@ async fn root_with_listing() {
         assert!(metadata.permissions().readonly());
         assert_eq!(fixtures::BLOB_A.len() as u64, metadata.len());
     }
-
-    fuser_session.join()
 }
 
 /// Ensure we can stat a file at the root
@@ -355,7 +349,7 @@ async fn stat_file_at_root() {
     let (blob_service, directory_service, path_info_service) = gen_svcs();
     populate_blob_a(&blob_service, &directory_service, &path_info_service).await;
 
-    let fuser_session = do_mount(
+    let _fuse_daemon = do_mount(
         blob_service,
         directory_service,
         path_info_service,
@@ -372,8 +366,6 @@ async fn stat_file_at_root() {
     assert!(metadata.is_file());
     assert!(metadata.permissions().readonly());
     assert_eq!(fixtures::BLOB_A.len() as u64, metadata.len());
-
-    fuser_session.join()
 }
 
 /// Ensure we can read a file at the root
@@ -389,7 +381,7 @@ async fn read_file_at_root() {
     let (blob_service, directory_service, path_info_service) = gen_svcs();
     populate_blob_a(&blob_service, &directory_service, &path_info_service).await;
 
-    let fuser_session = do_mount(
+    let _fuse_daemon = do_mount(
         blob_service,
         directory_service,
         path_info_service,
@@ -406,8 +398,6 @@ async fn read_file_at_root() {
     // ensure size and contents match
     assert_eq!(fixtures::BLOB_A.len(), data.len());
     assert_eq!(fixtures::BLOB_A.to_vec(), data);
-
-    fuser_session.join()
 }
 
 /// Ensure we can read a large file at the root
@@ -423,7 +413,7 @@ async fn read_large_file_at_root() {
     let (blob_service, directory_service, path_info_service) = gen_svcs();
     populate_blob_b(&blob_service, &directory_service, &path_info_service).await;
 
-    let fuser_session = do_mount(
+    let _fuse_daemon = do_mount(
         blob_service,
         directory_service,
         path_info_service,
@@ -448,8 +438,6 @@ async fn read_large_file_at_root() {
     // ensure size and contents match
     assert_eq!(fixtures::BLOB_B.len(), data.len());
     assert_eq!(fixtures::BLOB_B.to_vec(), data);
-
-    fuser_session.join()
 }
 
 /// Read the target of a symlink
@@ -465,7 +453,7 @@ async fn symlink_readlink() {
     let (blob_service, directory_service, path_info_service) = gen_svcs();
     populate_symlink(&blob_service, &directory_service, &path_info_service);
 
-    let fuser_session = do_mount(
+    let _fuse_daemon = do_mount(
         blob_service,
         directory_service,
         path_info_service,
@@ -491,8 +479,6 @@ async fn symlink_readlink() {
     // reading from the symlink (which follows) will fail, because the target doesn't exist.
     let e = fs::read(p).expect_err("must fail");
     assert_eq!(std::io::ErrorKind::NotFound, e.kind());
-
-    fuser_session.join()
 }
 
 /// Read and stat a regular file through a symlink pointing to it.
@@ -509,7 +495,7 @@ async fn read_stat_through_symlink() {
     populate_blob_a(&blob_service, &directory_service, &path_info_service).await;
     populate_symlink(&blob_service, &directory_service, &path_info_service);
 
-    let fuser_session = do_mount(
+    let _fuse_daemon = do_mount(
         blob_service,
         directory_service,
         path_info_service,
@@ -534,8 +520,6 @@ async fn read_stat_through_symlink() {
         std::fs::read(p_blob).expect("must succeed"),
         std::fs::read(p_symlink).expect("must succeed"),
     );
-
-    fuser_session.join()
 }
 
 /// Read a directory in the root, and validate some attributes.
@@ -551,7 +535,7 @@ async fn read_stat_directory() {
     let (blob_service, directory_service, path_info_service) = gen_svcs();
     populate_directory_with_keep(&blob_service, &directory_service, &path_info_service).await;
 
-    let fuser_session = do_mount(
+    let _fuse_daemon = do_mount(
         blob_service,
         directory_service,
         path_info_service,
@@ -566,8 +550,6 @@ async fn read_stat_directory() {
     let metadata = fs::metadata(p).expect("must succeed");
     assert!(metadata.is_dir());
     assert!(metadata.permissions().readonly());
-
-    fuser_session.join()
 }
 
 #[tokio::test(flavor = "multi_thread", worker_threads = 2)]
@@ -583,7 +565,7 @@ async fn read_blob_inside_dir() {
     let (blob_service, directory_service, path_info_service) = gen_svcs();
     populate_directory_with_keep(&blob_service, &directory_service, &path_info_service).await;
 
-    let fuser_session = do_mount(
+    let _fuse_daemon = do_mount(
         blob_service,
         directory_service,
         path_info_service,
@@ -602,8 +584,6 @@ async fn read_blob_inside_dir() {
     // read from it
     let data = fs::read(&p).expect("must succeed");
     assert_eq!(fixtures::EMPTY_BLOB_CONTENTS.to_vec(), data);
-
-    fuser_session.join()
 }
 
 #[tokio::test(flavor = "multi_thread", worker_threads = 2)]
@@ -620,7 +600,7 @@ async fn read_blob_deep_inside_dir() {
     let (blob_service, directory_service, path_info_service) = gen_svcs();
     populate_directory_complicated(&blob_service, &directory_service, &path_info_service).await;
 
-    let fuser_session = do_mount(
+    let _fuse_daemon = do_mount(
         blob_service,
         directory_service,
         path_info_service,
@@ -643,8 +623,6 @@ async fn read_blob_deep_inside_dir() {
     // read from it
     let data = fs::read(&p).expect("must succeed");
     assert_eq!(fixtures::EMPTY_BLOB_CONTENTS.to_vec(), data);
-
-    fuser_session.join()
 }
 
 /// Ensure readdir works.
@@ -660,7 +638,7 @@ async fn readdir() {
     let (blob_service, directory_service, path_info_service) = gen_svcs();
     populate_directory_complicated(&blob_service, &directory_service, &path_info_service).await;
 
-    let fuser_session = do_mount(
+    let _fuse_daemon = do_mount(
         blob_service,
         directory_service,
         path_info_service,
@@ -699,8 +677,6 @@ async fn readdir() {
         assert_eq!("keep", e.file_name());
         assert!(e.file_type().expect("must succeed").is_dir());
     }
-
-    fuser_session.join()
 }
 
 #[tokio::test]
@@ -716,7 +692,7 @@ async fn readdir_deep() {
     let (blob_service, directory_service, path_info_service) = gen_svcs();
     populate_directory_complicated(&blob_service, &directory_service, &path_info_service).await;
 
-    let fuser_session = do_mount(
+    let _fuse_daemon = do_mount(
         blob_service,
         directory_service,
         path_info_service,
@@ -742,8 +718,6 @@ async fn readdir_deep() {
         assert!(e.file_type().expect("must succeed").is_file());
         assert_eq!(0, e.metadata().expect("must succeed").len());
     }
-
-    fuser_session.join()
 }
 
 /// Check attributes match how they show up in /nix/store normally.
@@ -761,7 +735,7 @@ async fn check_attributes() {
     populate_directory_with_keep(&blob_service, &directory_service, &path_info_service).await;
     populate_symlink(&blob_service, &directory_service, &path_info_service);
 
-    let fuser_session = do_mount(
+    let _fuse_daemon = do_mount(
         blob_service,
         directory_service,
         path_info_service,
@@ -803,8 +777,6 @@ async fn check_attributes() {
         assert_eq!(0, metadata.ctime());
         // crtime seems MacOS only
     }
-
-    fuser_session.join()
 }
 
 #[tokio::test]
@@ -822,7 +794,7 @@ async fn compare_inodes_directories() {
     populate_directory_with_keep(&blob_service, &directory_service, &path_info_service).await;
     populate_directory_complicated(&blob_service, &directory_service, &path_info_service).await;
 
-    let fuser_session = do_mount(
+    let _fuse_daemon = do_mount(
         blob_service,
         directory_service,
         path_info_service,
@@ -839,8 +811,6 @@ async fn compare_inodes_directories() {
         fs::metadata(p_dir_with_keep).expect("must succeed").ino(),
         fs::metadata(p_sibling_dir).expect("must succeed").ino()
     );
-
-    fuser_session.join()
 }
 
 /// Ensure we allocate the same inodes for the same directory contents.
@@ -857,7 +827,7 @@ async fn compare_inodes_files() {
     let (blob_service, directory_service, path_info_service) = gen_svcs();
     populate_directory_complicated(&blob_service, &directory_service, &path_info_service).await;
 
-    let fuser_session = do_mount(
+    let _fuse_daemon = do_mount(
         blob_service,
         directory_service,
         path_info_service,
@@ -878,8 +848,6 @@ async fn compare_inodes_files() {
         fs::metadata(p_keep1).expect("must succeed").ino(),
         fs::metadata(p_keep2).expect("must succeed").ino()
     );
-
-    fuser_session.join()
 }
 
 /// Ensure we allocate the same inode for symlinks pointing to the same targets.
@@ -897,7 +865,7 @@ async fn compare_inodes_symlinks() {
     populate_directory_complicated(&blob_service, &directory_service, &path_info_service).await;
     populate_symlink2(&blob_service, &directory_service, &path_info_service);
 
-    let fuser_session = do_mount(
+    let _fuse_daemon = do_mount(
         blob_service,
         directory_service,
         path_info_service,
@@ -914,8 +882,6 @@ async fn compare_inodes_symlinks() {
         fs::symlink_metadata(p1).expect("must succeed").ino(),
         fs::symlink_metadata(p2).expect("must succeed").ino()
     );
-
-    fuser_session.join()
 }
 
 /// Check we match paths exactly.
@@ -931,7 +897,7 @@ async fn read_wrong_paths_in_root() {
     let (blob_service, directory_service, path_info_service) = gen_svcs();
     populate_blob_a(&blob_service, &directory_service, &path_info_service).await;
 
-    let fuser_session = do_mount(
+    let _fuse_daemon = do_mount(
         blob_service,
         directory_service,
         path_info_service,
@@ -963,8 +929,6 @@ async fn read_wrong_paths_in_root() {
         .path()
         .join("00000000000000000000000000000000-tes")
         .exists());
-
-    fuser_session.join()
 }
 
 /// Make sure writes are not allowed
@@ -980,7 +944,7 @@ async fn disallow_writes() {
 
     let (blob_service, directory_service, path_info_service) = gen_svcs();
 
-    let fuser_session = do_mount(
+    let _fuse_daemon = do_mount(
         blob_service,
         directory_service,
         path_info_service,
@@ -992,9 +956,7 @@ async fn disallow_writes() {
     let p = tmpdir.path().join(BLOB_A_NAME);
     let e = std::fs::File::create(p).expect_err("must fail");
 
-    assert_eq!(std::io::ErrorKind::Unsupported, e.kind());
-
-    fuser_session.join()
+    assert_eq!(Some(libc::EROFS), e.raw_os_error());
 }
 
 #[tokio::test]
@@ -1009,7 +971,7 @@ async fn missing_directory() {
     let (blob_service, directory_service, path_info_service) = gen_svcs();
     populate_pathinfo_without_directory(&blob_service, &directory_service, &path_info_service);
 
-    let fuser_session = do_mount(
+    let _fuse_daemon = do_mount(
         blob_service,
         directory_service,
         path_info_service,
@@ -1036,8 +998,6 @@ async fn missing_directory() {
         // helpful, so we don't look at the error more closely than that..
         fs::metadata(p.join(".keep")).expect_err("must fail");
     }
-
-    fuser_session.join()
 }
 
 #[tokio::test(flavor = "multi_thread", worker_threads = 2)]
@@ -1052,7 +1012,7 @@ async fn missing_blob() {
     let (blob_service, directory_service, path_info_service) = gen_svcs();
     populate_blob_a_without_blob(&blob_service, &directory_service, &path_info_service);
 
-    let fuser_session = do_mount(
+    let _fuse_daemon = do_mount(
         blob_service,
         directory_service,
         path_info_service,
@@ -1072,6 +1032,4 @@ async fn missing_blob() {
         // helpful, so we don't look at the error more closely than that..
         fs::read(p).expect_err("must fail");
     }
-
-    fuser_session.join()
 }
