@@ -18,13 +18,14 @@ use crate::{
 };
 use fuser::{FileAttr, ReplyAttr, Request};
 use nix_compat::store_path::StorePath;
-use std::io;
-use std::os::unix::ffi::OsStrExt;
-use std::str::FromStr;
-use std::sync::Arc;
+use parking_lot::{deadlock, RwLock};
+use std::sync::{atomic::Ordering, Arc};
 use std::{collections::HashMap, time::Duration};
+use std::{ffi::OsStr, io};
+use std::{os::unix::ffi::OsStrExt, thread};
+use std::{str::FromStr, sync::atomic::AtomicU64};
 use tokio::io::{AsyncBufReadExt, AsyncSeekExt};
-use tracing::{debug, info_span, warn};
+use tracing::{debug, error, info_span, warn};
 
 use self::inode_tracker::InodeTracker;
 
@@ -71,15 +72,15 @@ pub struct FUSE {
     list_root: bool,
 
     /// This maps a given StorePath to the inode we allocated for the root inode.
-    store_paths: HashMap<StorePath, u64>,
+    store_paths: RwLock<HashMap<StorePath, u64>>,
 
     /// This keeps track of inodes and data alongside them.
-    inode_tracker: InodeTracker,
+    inode_tracker: RwLock<InodeTracker>,
 
     /// This holds all open file handles
-    file_handles: HashMap<u64, Box<dyn BlobReader>>,
+    file_handles: RwLock<HashMap<u64, tokio::sync::Mutex<Box<dyn BlobReader>>>>,
 
-    next_file_handle: u64,
+    next_file_handle: AtomicU64,
 
     tokio_handle: tokio::runtime::Handle,
 }
@@ -91,6 +92,22 @@ impl FUSE {
         path_info_service: Arc<dyn PathInfoService>,
         list_root: bool,
     ) -> Self {
+        thread::spawn(move || loop {
+            thread::sleep(Duration::from_secs(10));
+            let deadlocks = deadlock::check_deadlock();
+            if deadlocks.is_empty() {
+                continue;
+            }
+
+            println!("{} deadlocks detected", deadlocks.len());
+            for (i, threads) in deadlocks.iter().enumerate() {
+                println!("Deadlock #{}", i);
+                for t in threads {
+                    println!("Thread Id {:#?}", t.thread_id());
+                    println!("{:#?}", t.backtrace());
+                }
+            }
+        });
         Self {
             blob_service,
             directory_service,
@@ -98,11 +115,11 @@ impl FUSE {
 
             list_root,
 
-            store_paths: HashMap::default(),
-            inode_tracker: Default::default(),
+            store_paths: RwLock::new(HashMap::default()),
+            inode_tracker: RwLock::new(Default::default()),
 
-            file_handles: Default::default(),
-            next_file_handle: 1,
+            file_handles: RwLock::new(Default::default()),
+            next_file_handle: AtomicU64::new(1),
             tokio_handle: tokio::runtime::Handle::current(),
         }
     }
@@ -114,7 +131,7 @@ impl FUSE {
     /// or otherwise fetch from [self.path_info_service], and then insert into
     /// [self.inode_tracker].
     fn name_in_root_to_ino_and_data(
-        &mut self,
+        &self,
         name: &std::ffi::OsStr,
     ) -> Result<Option<(u64, Arc<InodeData>)>, Error> {
         // parse the name into a [StorePath].
@@ -134,14 +151,15 @@ impl FUSE {
             return Ok(None);
         };
 
-        if let Some(ino) = self.store_paths.get(&store_path) {
+        let mut store_paths = self.store_paths.write();
+        if let Some(ino) = store_paths.get(&store_path) {
             // If we already have that store path, lookup the inode from
             // self.store_paths and then get the data from [self.inode_tracker],
             // which in the case of a [InodeData::Directory] will be fully
             // populated.
             Ok(Some((
                 *ino,
-                self.inode_tracker.get(*ino).expect("must exist"),
+                self.inode_tracker.read().get(*ino).expect("must exist"),
             )))
         } else {
             // If we don't have it, look it up in PathInfoService.
@@ -162,10 +180,14 @@ impl FUSE {
                     // FUTUREWORK: change put to return the data after
                     // inserting, so we don't need to lookup a second
                     // time?
-                    let ino = self.inode_tracker.put((&root_node).into());
-                    self.store_paths.insert(store_path, ino);
+                    let (ino, inode) = {
+                        let mut inode_tracker = self.inode_tracker.write();
+                        let ino = inode_tracker.put((&root_node).into());
+                        (ino, inode_tracker.get(ino).unwrap())
+                    };
+                    store_paths.insert(store_path, ino);
 
-                    Ok(Some((ino, self.inode_tracker.get(ino).unwrap())))
+                    Ok(Some((ino, inode)))
                 }
             }
         }
@@ -204,7 +226,7 @@ impl fuser::Filesystem for FUSE {
             return;
         }
 
-        match self.inode_tracker.get(ino) {
+        match self.inode_tracker.read().get(ino) {
             None => reply.error(libc::ENOENT),
             Some(node) => {
                 debug!(node = ?node, "found node");
@@ -251,7 +273,8 @@ impl fuser::Filesystem for FUSE {
             // Now it for sure is populated, so we search for that name in the
             // list of children and return the FileAttrs.
 
-            let parent_data = self.inode_tracker.get(parent_ino).unwrap();
+            let mut inode_tracker = self.inode_tracker.write();
+            let parent_data = inode_tracker.get(parent_ino).unwrap();
             let parent_data = match *parent_data {
                 InodeData::Regular(..) | InodeData::Symlink(_) => {
                     // if the parent inode was not a directory, this doesn't make sense
@@ -265,8 +288,8 @@ impl fuser::Filesystem for FUSE {
                             // FUTUREWORK: change put to return the data after
                             // inserting, so we don't need to lookup a second
                             // time?
-                            let ino = self.inode_tracker.put(new_data);
-                            self.inode_tracker.get(ino).unwrap()
+                            let ino = inode_tracker.put(new_data);
+                            inode_tracker.get(ino).unwrap()
                         }
                         Err(_e) => {
                             reply.error(libc::EIO);
@@ -295,7 +318,7 @@ impl fuser::Filesystem for FUSE {
             {
                 // lookup the child [InodeData] in [self.inode_tracker].
                 // We know the inodes for children have already been allocated.
-                let child_inode_data = self.inode_tracker.get(*child_ino).unwrap();
+                let child_inode_data = inode_tracker.get(*child_ino).unwrap();
 
                 // Reply with the file attributes for the child.
                 // For child directories, we still have all data we need to reply.
@@ -344,13 +367,14 @@ impl fuser::Filesystem for FUSE {
                     let root_node = path_info.node.unwrap().node.unwrap();
                     let store_path = StorePath::from_bytes(root_node.get_name()).unwrap();
 
-                    let ino = match self.store_paths.get(&store_path) {
+                    let mut store_paths = self.store_paths.write();
+                    let ino = match store_paths.get(&store_path) {
                         Some(ino) => *ino,
                         None => {
                             // insert the (sparse) inode data and register in
                             // self.store_paths.
-                            let ino = self.inode_tracker.put((&root_node).into());
-                            self.store_paths.insert(store_path.clone(), ino);
+                            let ino = self.inode_tracker.write().put((&root_node).into());
+                            store_paths.insert(store_path.clone(), ino);
                             ino
                         }
                     };
@@ -373,7 +397,8 @@ impl fuser::Filesystem for FUSE {
         }
 
         // lookup the inode data.
-        let dir_inode_data = self.inode_tracker.get(ino).unwrap();
+        let mut inode_tracker = self.inode_tracker.write();
+        let dir_inode_data = inode_tracker.get(ino).unwrap();
         let dir_inode_data = match *dir_inode_data {
             InodeData::Regular(..) | InodeData::Symlink(..) => {
                 warn!("Not a directory");
@@ -387,8 +412,8 @@ impl fuser::Filesystem for FUSE {
                         // FUTUREWORK: change put to return the data after
                         // inserting, so we don't need to lookup a second
                         // time?
-                        let ino = self.inode_tracker.put(new_data);
-                        self.inode_tracker.get(ino).unwrap()
+                        let ino = inode_tracker.put(new_data.clone());
+                        inode_tracker.get(ino).unwrap()
                     }
                     Err(_e) => {
                         reply.error(libc::EIO);
@@ -427,16 +452,13 @@ impl fuser::Filesystem for FUSE {
 
     #[tracing::instrument(skip_all, fields(rq.inode = ino))]
     fn open(&mut self, _req: &Request<'_>, ino: u64, _flags: i32, reply: fuser::ReplyOpen) {
-        // get a new file handle
-        let fh = self.next_file_handle;
-
         if ino == fuser::FUSE_ROOT_ID {
             reply.error(libc::ENOSYS);
             return;
         }
 
         // lookup the inode
-        match *self.inode_tracker.get(ino).unwrap() {
+        match *self.inode_tracker.read().get(ino).unwrap() {
             // read is invalid on non-files.
             InodeData::Directory(..) | InodeData::Symlink(_) => {
                 warn!("is directory");
@@ -465,15 +487,18 @@ impl fuser::Filesystem for FUSE {
                         reply.error(libc::EIO);
                     }
                     Ok(Some(blob_reader)) => {
-                        debug!("add file handle {}", fh);
-                        self.file_handles.insert(fh, blob_reader);
-                        reply.opened(fh, 0);
-
+                        // get a new file handle
                         // TODO: this will overflow after 2**64 operations,
                         // which is fine for now.
                         // See https://cl.tvl.fyi/c/depot/+/8834/comment/a6684ce0_d72469d1
                         // for the discussion on alternatives.
-                        self.next_file_handle += 1;
+                        let fh = self.next_file_handle.fetch_add(1, Ordering::SeqCst);
+
+                        debug!("add file handle {}", fh);
+                        self.file_handles
+                            .write()
+                            .insert(fh, tokio::sync::Mutex::new(blob_reader));
+                        reply.opened(fh, 0);
                     }
                 }
             }
@@ -492,7 +517,7 @@ impl fuser::Filesystem for FUSE {
         reply: fuser::ReplyEmpty,
     ) {
         // remove and get ownership on the blob reader
-        match self.file_handles.remove(&fh) {
+        match self.file_handles.write().remove(&fh) {
             // drop it, which will close it.
             Some(blob_reader) => drop(blob_reader),
             None => {
@@ -521,7 +546,7 @@ impl fuser::Filesystem for FUSE {
         // We need to take out the blob reader from self.file_handles, so we can
         // interact with it in the separate task.
         // On success, we pass it back out of the task, so we can put it back in self.file_handles.
-        let mut blob_reader = match self.file_handles.remove(&fh) {
+        let blob_reader = match self.file_handles.write().remove(&fh) {
             Some(blob_reader) => blob_reader,
             None => {
                 warn!("file handle {} unknown", fh);
@@ -531,8 +556,11 @@ impl fuser::Filesystem for FUSE {
         };
 
         let task = self.tokio_handle.spawn(async move {
+            let mut blob_reader_guard = blob_reader.lock().await;
             // seek to the offset specified, which is relative to the start of the file.
-            let resp = blob_reader.seek(io::SeekFrom::Start(offset as u64)).await;
+            let resp = blob_reader_guard
+                .seek(io::SeekFrom::Start(offset as u64))
+                .await;
 
             match resp {
                 Ok(pos) => {
@@ -550,7 +578,7 @@ impl fuser::Filesystem for FUSE {
             let mut buf: Vec<u8> = Vec::with_capacity(size as usize);
 
             while (buf.len() as u64) < size as u64 {
-                match blob_reader.fill_buf().await {
+                match blob_reader_guard.fill_buf().await {
                     Ok(int_buf) => {
                         // copy things from the internal buffer into buf to fill it till up until size
 
@@ -566,11 +594,12 @@ impl fuser::Filesystem for FUSE {
                         // copy these bytes into our buffer
                         buf.extend_from_slice(&int_buf[..len_to_copy]);
                         // and consume them in the buffered reader.
-                        blob_reader.consume(len_to_copy);
+                        blob_reader_guard.consume(len_to_copy);
                     }
                     Err(e) => return Err(e.raw_os_error().unwrap()),
                 }
             }
+            drop(blob_reader_guard);
             Ok((buf, blob_reader))
         });
 
@@ -580,7 +609,7 @@ impl fuser::Filesystem for FUSE {
             Err(e) => reply.error(e),
             Ok((buf, blob_reader)) => {
                 reply.data(&buf);
-                self.file_handles.insert(fh, blob_reader);
+                self.file_handles.write().insert(fh, blob_reader);
             }
         }
     }
@@ -593,7 +622,7 @@ impl fuser::Filesystem for FUSE {
         }
 
         // lookup the inode
-        match *self.inode_tracker.get(ino).unwrap() {
+        match *self.inode_tracker.read().get(ino).unwrap() {
             InodeData::Directory(..) | InodeData::Regular(..) => {
                 reply.error(libc::EINVAL);
             }
@@ -604,4 +633,490 @@ impl fuser::Filesystem for FUSE {
 
 fn reply_with_entry(reply: fuser::ReplyEntry, file_attr: &FileAttr) {
     reply.entry(&Duration::MAX, file_attr, 1 /* TODO: generation */);
+}
+
+impl fuse_backend_rs::api::filesystem::FileSystem for FUSE {
+    type Inode = u64;
+    type Handle = u64;
+
+    fn init(
+        &self,
+        _capable: fuse_backend_rs::api::filesystem::FsOptions,
+    ) -> io::Result<fuse_backend_rs::api::filesystem::FsOptions> {
+        use fuse_backend_rs::api::filesystem::FsOptions;
+        Ok(FsOptions::empty())
+    }
+
+    #[tracing::instrument(skip_all, fields(rq.inode = inode))]
+    fn getattr(
+        &self,
+        _ctx: &fuse_backend_rs::api::filesystem::Context,
+        inode: Self::Inode,
+        _handle: Option<Self::Handle>,
+    ) -> io::Result<(libc::stat64, Duration)> {
+        if inode == fuse_backend_rs::api::filesystem::ROOT_ID {
+            return Ok((file_attr::ROOT_FILE_ATTR_LIBC, Duration::MAX));
+        }
+
+        match self.inode_tracker.read().get(inode) {
+            None => return Err(io::Error::from_raw_os_error(libc::ENOENT)),
+            Some(node) => {
+                debug!(node = ?node, "found node");
+                Ok((file_attr::gen_file_attr_libc(&node, inode), Duration::MAX))
+            }
+        }
+    }
+
+    #[tracing::instrument(skip_all, fields(rq.parent_inode = parent, rq.name = ?name))]
+    fn lookup(
+        &self,
+        _ctx: &fuse_backend_rs::api::filesystem::Context,
+        parent: Self::Inode,
+        name: &std::ffi::CStr,
+    ) -> io::Result<fuse_backend_rs::api::filesystem::Entry> {
+        debug!("lookup");
+
+        // TODO: Switch internal tracking to OsStr.
+        let name = OsStr::from_bytes(name.to_bytes());
+
+        // This goes from a parent inode to a node.
+        // - If the parent is [fuser::FUSE_ROOT_ID], we need to check
+        //   [self.store_paths] (fetching from PathInfoService if needed)
+        // - Otherwise, lookup the parent in [self.inode_tracker] (which must be
+        //   a [InodeData::Directory]), and find the child with that name.
+        if parent == fuse_backend_rs::api::filesystem::ROOT_ID {
+            return match self.name_in_root_to_ino_and_data(name) {
+                Err(e) => {
+                    warn!("{}", e);
+                    Err(io::Error::from_raw_os_error(libc::ENOENT))
+                }
+                Ok(None) => Err(io::Error::from_raw_os_error(libc::ENOENT)),
+                Ok(Some((ino, inode_data))) => {
+                    debug!(inode_data=?&inode_data, ino=ino, "Some");
+                    Ok(fuse_backend_rs::api::filesystem::Entry {
+                        inode: ino,
+                        attr: file_attr::gen_file_attr_libc(&inode_data, ino),
+                        attr_timeout: Duration::MAX,
+                        entry_timeout: Duration::MAX,
+                        ..Default::default()
+                    })
+                }
+            };
+        }
+
+        // This is the "lookup for "a" inside inode 42.
+        // We already know that inode 42 must be a directory.
+        // It might not be populated yet, so if it isn't, we do (by
+        // fetching from [self.directory_service]), and save the result in
+        // [self.inode_tracker].
+        // Now it for sure is populated, so we search for that name in the
+        // list of children and return the FileAttrs.
+
+        let mut inode_tracker = self.inode_tracker.write();
+        let parent_data = inode_tracker.get(parent).unwrap();
+        let parent_data = match *parent_data {
+            InodeData::Regular(..) | InodeData::Symlink(_) => {
+                // if the parent inode was not a directory, this doesn't make sense
+                return Err(io::Error::from_raw_os_error(libc::ENOTDIR));
+            }
+            InodeData::Directory(DirectoryInodeData::Sparse(ref parent_digest, _)) => {
+                match self.fetch_directory_inode_data(parent_digest) {
+                    Ok(new_data) => {
+                        // update data in [self.inode_tracker] with populated variant.
+                        // FUTUREWORK: change put to return the data after
+                        // inserting, so we don't need to lookup a second
+                        // time?
+                        let ino = inode_tracker.put(new_data);
+                        inode_tracker.get(ino).unwrap()
+                    }
+                    Err(_e) => {
+                        return Err(io::Error::from_raw_os_error(libc::EIO));
+                    }
+                }
+            }
+            InodeData::Directory(DirectoryInodeData::Populated(..)) => parent_data,
+        };
+
+        // now parent_data can only be a [InodeData::Directory(DirectoryInodeData::Populated(..))].
+        let (parent_digest, children) = if let InodeData::Directory(
+            DirectoryInodeData::Populated(ref parent_digest, ref children),
+        ) = *parent_data
+        {
+            (parent_digest, children)
+        } else {
+            panic!("unexpected type")
+        };
+        let span = info_span!("lookup", directory.digest = %parent_digest);
+        let _enter = span.enter();
+
+        // in the children, find the one with the desired name.
+        if let Some((child_ino, _)) = children.iter().find(|e| e.1.get_name() == name.as_bytes()) {
+            // lookup the child [InodeData] in [self.inode_tracker].
+            // We know the inodes for children have already been allocated.
+            let child_inode_data = inode_tracker.get(*child_ino).unwrap();
+
+            // Reply with the file attributes for the child.
+            // For child directories, we still have all data we need to reply.
+            Ok(fuse_backend_rs::api::filesystem::Entry {
+                inode: *child_ino,
+                attr: file_attr::gen_file_attr_libc(&child_inode_data, *child_ino),
+                attr_timeout: Duration::MAX,
+                entry_timeout: Duration::MAX,
+                ..Default::default()
+            })
+        } else {
+            // Child not found, return ENOENT.
+            Err(io::Error::from_raw_os_error(libc::ENOENT))
+        }
+    }
+
+    // TODO: readdirplus?
+
+    #[tracing::instrument(skip_all, fields(rq.inode = inode, rq.offset = offset))]
+    fn readdir(
+        &self,
+        _ctx: &fuse_backend_rs::api::filesystem::Context,
+        inode: Self::Inode,
+        _handle: Self::Handle,
+        _size: u32,
+        offset: u64,
+        add_entry: &mut dyn FnMut(fuse_backend_rs::api::filesystem::DirEntry) -> io::Result<usize>,
+    ) -> io::Result<()> {
+        debug!("readdir");
+
+        if inode == fuse_backend_rs::api::filesystem::ROOT_ID {
+            if !self.list_root {
+                return Err(io::Error::from_raw_os_error(libc::EPERM)); // same error code as ipfs/kubo
+            } else {
+                for (i, path_info) in self
+                    .path_info_service
+                    .list()
+                    .skip(offset as usize)
+                    .enumerate()
+                {
+                    let path_info = match path_info {
+                        Err(e) => {
+                            warn!("failed to retrieve pathinfo: {}", e);
+                            return Err(io::Error::from_raw_os_error(libc::EPERM));
+                        }
+                        Ok(path_info) => path_info,
+                    };
+
+                    // We know the root node exists and the store_path can be parsed because clients MUST validate.
+                    let root_node = path_info.node.unwrap().node.unwrap();
+                    let store_path = StorePath::from_bytes(root_node.get_name()).unwrap();
+
+                    let mut store_paths = self.store_paths.write();
+                    let ino = match store_paths.get(&store_path) {
+                        Some(ino) => *ino,
+                        None => {
+                            // insert the (sparse) inode data and register in
+                            // self.store_paths.
+                            let ino = self.inode_tracker.write().put((&root_node).into());
+                            store_paths.insert(store_path.clone(), ino);
+                            ino
+                        }
+                    };
+
+                    let ty = match root_node {
+                        Node::Directory(_) => libc::S_IFDIR,
+                        Node::File(_) => libc::S_IFREG,
+                        Node::Symlink(_) => libc::S_IFLNK,
+                    };
+
+                    let written = add_entry(fuse_backend_rs::api::filesystem::DirEntry {
+                        ino,
+                        offset: offset + i as u64,
+                        type_: ty,
+                        name: store_path.to_string().as_bytes(),
+                    })?;
+                    // If the buffer is full, add_entry will return `Ok(0)`.
+                    if written == 0 {
+                        break;
+                    }
+                }
+                return Ok(());
+            }
+        }
+
+        // lookup the inode data.
+        let mut inode_tracker = self.inode_tracker.write();
+        let dir_inode_data = inode_tracker.get(inode).unwrap();
+        let dir_inode_data = match *dir_inode_data {
+            InodeData::Regular(..) | InodeData::Symlink(..) => {
+                warn!("Not a directory");
+                return Err(io::Error::from_raw_os_error(libc::ENOTDIR));
+            }
+            InodeData::Directory(DirectoryInodeData::Sparse(ref directory_digest, _)) => {
+                match self.fetch_directory_inode_data(directory_digest) {
+                    Ok(new_data) => {
+                        // update data in [self.inode_tracker] with populated variant.
+                        // FUTUREWORK: change put to return the data after
+                        // inserting, so we don't need to lookup a second
+                        // time?
+                        let ino = inode_tracker.put(new_data.clone());
+                        inode_tracker.get(ino).unwrap()
+                    }
+                    Err(_e) => {
+                        return Err(io::Error::from_raw_os_error(libc::EIO));
+                    }
+                }
+            }
+            InodeData::Directory(DirectoryInodeData::Populated(..)) => dir_inode_data,
+        };
+
+        // now parent_data can only be InodeData::Directory(DirectoryInodeData::Populated(..))
+        if let InodeData::Directory(DirectoryInodeData::Populated(ref _digest, ref children)) =
+            *dir_inode_data
+        {
+            for (i, (ino, child_node)) in children.iter().skip(offset as usize).enumerate() {
+                // the second parameter will become the "offset" parameter on the next call.
+                let written = add_entry(fuse_backend_rs::api::filesystem::DirEntry {
+                    ino: *ino,
+                    offset: offset + i as u64 + 1,
+                    type_: match child_node {
+                        Node::Directory(_) => libc::S_IFDIR,
+                        Node::File(_) => libc::S_IFREG,
+                        Node::Symlink(_) => libc::S_IFLNK,
+                    },
+                    name: child_node.get_name(),
+                })?;
+                // If the buffer is full, add_entry will return `Ok(0)`.
+                if written == 0 {
+                    break;
+                }
+            }
+        } else {
+            panic!("unexpected type")
+        }
+
+        Ok(())
+    }
+
+    #[tracing::instrument(skip_all, fields(rq.inode = inode))]
+    fn open(
+        &self,
+        _ctx: &fuse_backend_rs::api::filesystem::Context,
+        inode: Self::Inode,
+        _flags: u32,
+        _fuse_flags: u32,
+    ) -> io::Result<(
+        Option<Self::Handle>,
+        fuse_backend_rs::api::filesystem::OpenOptions,
+    )> {
+        if inode == fuse_backend_rs::api::filesystem::ROOT_ID {
+            return Err(io::Error::from_raw_os_error(libc::ENOSYS));
+        }
+
+        // lookup the inode
+        match *self.inode_tracker.read().get(inode).unwrap() {
+            // read is invalid on non-files.
+            InodeData::Directory(..) | InodeData::Symlink(_) => {
+                warn!("is directory");
+                return Err(io::Error::from_raw_os_error(libc::EISDIR));
+            }
+            InodeData::Regular(ref blob_digest, _blob_size, _) => {
+                let span = info_span!("read", blob.digest = %blob_digest);
+                let _enter = span.enter();
+
+                let blob_service = self.blob_service.clone();
+                let blob_digest = blob_digest.clone();
+
+                let task = self
+                    .tokio_handle
+                    .spawn(async move { blob_service.open_read(&blob_digest).await });
+
+                let blob_reader = self.tokio_handle.block_on(task).unwrap();
+
+                match blob_reader {
+                    Ok(None) => {
+                        warn!("blob not found");
+                        return Err(io::Error::from_raw_os_error(libc::EIO));
+                    }
+                    Err(e) => {
+                        warn!(e=?e, "error opening blob");
+                        return Err(io::Error::from_raw_os_error(libc::EIO));
+                    }
+                    Ok(Some(blob_reader)) => {
+                        // get a new file handle
+                        // TODO: this will overflow after 2**64 operations,
+                        // which is fine for now.
+                        // See https://cl.tvl.fyi/c/depot/+/8834/comment/a6684ce0_d72469d1
+                        // for the discussion on alternatives.
+                        let fh = self.next_file_handle.fetch_add(1, Ordering::SeqCst);
+
+                        debug!("add file handle {}", fh);
+                        self.file_handles
+                            .write()
+                            .insert(fh, tokio::sync::Mutex::new(blob_reader));
+
+                        Ok((
+                            Some(fh),
+                            fuse_backend_rs::api::filesystem::OpenOptions::empty(),
+                        ))
+                    }
+                }
+            }
+        }
+    }
+
+    #[tracing::instrument(skip_all, fields(rq.inode = inode, fh = handle))]
+    fn release(
+        &self,
+        _ctx: &fuse_backend_rs::api::filesystem::Context,
+        inode: Self::Inode,
+        _flags: u32,
+        handle: Self::Handle,
+        _flush: bool,
+        _flock_release: bool,
+        _lock_owner: Option<u64>,
+    ) -> io::Result<()> {
+        // remove and get ownership on the blob reader
+        match self.file_handles.write().remove(&handle) {
+            // drop it, which will close it.
+            Some(blob_reader) => drop(blob_reader),
+            None => {
+                // These might already be dropped if a read error occured.
+                debug!("file_handle {} not found", handle);
+            }
+        }
+
+        Ok(())
+    }
+
+    #[tracing::instrument(skip_all, fields(rq.inode = inode, rq.offset = offset, rq.size = size))]
+    fn read(
+        &self,
+        _ctx: &fuse_backend_rs::api::filesystem::Context,
+        inode: Self::Inode,
+        handle: Self::Handle,
+        w: &mut dyn fuse_backend_rs::api::filesystem::ZeroCopyWriter,
+        size: u32,
+        offset: u64,
+        _lock_owner: Option<u64>,
+        _flags: u32,
+    ) -> io::Result<usize> {
+        debug!("read");
+
+        // TODO: Allow concurrent writes or at least finer-grained locking.
+        let mut file_handles = self.file_handles.write();
+
+        // We need to take out the blob reader from self.file_handles, so we can
+        // interact with it in the separate task.
+        // On success, we pass it back out of the task, so we can put it back in self.file_handles.
+        let blob_reader = match file_handles.remove(&handle) {
+            Some(blob_reader) => blob_reader,
+            None => {
+                warn!("file handle {} unknown", handle);
+                return Err(io::Error::from_raw_os_error(libc::EIO));
+            }
+        };
+
+        let task = self.tokio_handle.spawn(async move {
+            let mut blob_reader_guard = blob_reader.lock().await;
+            // seek to the offset specified, which is relative to the start of the file.
+            let resp = blob_reader_guard
+                .seek(io::SeekFrom::Start(offset as u64))
+                .await;
+
+            match resp {
+                Ok(pos) => {
+                    debug_assert_eq!(offset as u64, pos);
+                }
+                Err(e) => {
+                    warn!("failed to seek to offset {}: {}", offset, e);
+                    return Err(io::Error::from_raw_os_error(libc::EIO));
+                }
+            }
+
+            // As written in the fuser docs, read should send exactly the number
+            // of bytes requested except on EOF or error.
+
+            let mut buf: Vec<u8> = Vec::with_capacity(size as usize);
+
+            while (buf.len() as u64) < size as u64 {
+                let int_buf = blob_reader_guard.fill_buf().await?;
+                // copy things from the internal buffer into buf to fill it till up until size
+
+                // an empty buffer signals we reached EOF.
+                if int_buf.is_empty() {
+                    break;
+                }
+
+                // calculate how many bytes we can read from int_buf.
+                // It's either all of int_buf, or the number of bytes missing in buf to reach size.
+                let len_to_copy = std::cmp::min(int_buf.len(), size as usize - buf.len());
+
+                // copy these bytes into our buffer
+                buf.extend_from_slice(&int_buf[..len_to_copy]);
+                // and consume them in the buffered reader.
+                blob_reader_guard.consume(len_to_copy);
+            }
+            drop(blob_reader_guard);
+            Ok((buf, blob_reader))
+        });
+
+        let (buf, blob_reader) = self.tokio_handle.block_on(task).unwrap()?;
+
+        file_handles.insert(handle, blob_reader);
+        w.write(&buf)
+    }
+
+    #[tracing::instrument(skip_all, fields(rq.inode = inode))]
+    fn readlink(
+        &self,
+        _ctx: &fuse_backend_rs::api::filesystem::Context,
+        inode: Self::Inode,
+    ) -> io::Result<Vec<u8>> {
+        if inode == fuse_backend_rs::api::filesystem::ROOT_ID {
+            return Err(io::Error::from_raw_os_error(libc::ENOSYS));
+        }
+
+        // lookup the inode
+        match *self.inode_tracker.read().get(inode).unwrap() {
+            InodeData::Directory(..) | InodeData::Regular(..) => {
+                Err(io::Error::from_raw_os_error(libc::EINVAL))
+            }
+            InodeData::Symlink(ref target) => Ok(target.to_vec()),
+        }
+    }
+}
+
+pub struct FuseServer {
+    // TODO: Make a `new`
+    pub server: Arc<fuse_backend_rs::api::server::Server<Arc<FUSE>>>,
+    pub channel: fuse_backend_rs::transport::FuseChannel,
+}
+
+impl FuseServer {
+    pub fn start(&mut self) -> io::Result<()> {
+        loop {
+            if let Some((reader, writer)) = self
+                .channel
+                .get_request()
+                .map_err(|_| io::Error::from_raw_os_error(libc::EINVAL))?
+            {
+                if let Err(e) = self
+                    .server
+                    .handle_message(reader, writer.into(), None, None)
+                {
+                    match e {
+                        // This indicates the session has been shut down.
+                        fuse_backend_rs::Error::EncodeMessage(e)
+                            if e.raw_os_error() == Some(libc::EBADFD) =>
+                        {
+                            break;
+                        }
+                        error => {
+                            error!(?error, "failed to handle fuse request");
+                            continue;
+                        }
+                    }
+                }
+            } else {
+                break;
+            }
+        }
+        Ok(())
+    }
 }

@@ -1,12 +1,16 @@
 use clap::Subcommand;
 use data_encoding::BASE64;
+use fuse_backend_rs::transport::FuseSession;
 use futures::future::try_join_all;
 use nix_compat::store_path;
 use nix_compat::store_path::StorePath;
 use std::io;
 use std::path::Path;
 use std::path::PathBuf;
+use std::sync::Arc;
+use std::thread;
 use tokio::task::JoinHandle;
+use tracing::warn;
 use tracing_subscriber::prelude::*;
 use tvix_store::blobservice;
 use tvix_store::directoryservice;
@@ -22,7 +26,7 @@ use tvix_store::proto::GRPCPathInfoServiceWrapper;
 use tvix_store::proto::NamedNode;
 use tvix_store::proto::NarInfo;
 use tvix_store::proto::PathInfo;
-use tvix_store::FUSE;
+use tvix_store::{FuseServer, FUSE};
 
 #[cfg(feature = "reflection")]
 use tvix_store::proto::FILE_DESCRIPTOR_SET;
@@ -93,6 +97,31 @@ enum Commands {
 
         #[arg(long, env, default_value = "grpc+http://[::1]:8000")]
         path_info_service_addr: String,
+
+        /// Whether to list elements at the root of the mount point.
+        /// This is useful if your PathInfoService doesn't provide an
+        /// (exhaustive) listing.
+        #[clap(long, short, action)]
+        list_root: bool,
+    },
+    /// Mounts a tvix-store at the given mountpoint, using fuse-backend-rs
+    #[cfg(feature = "fuse")]
+    Mount2 {
+        #[clap(value_name = "PATH")]
+        dest: PathBuf,
+
+        #[arg(long, env, default_value = "grpc+http://[::1]:8000")]
+        blob_service_addr: String,
+
+        #[arg(long, env, default_value = "grpc+http://[::1]:8000")]
+        directory_service_addr: String,
+
+        #[arg(long, env, default_value = "grpc+http://[::1]:8000")]
+        path_info_service_addr: String,
+
+        // TODO: Get thread count for default
+        #[arg(long, env, default_value_t = 4)]
+        threads: usize,
 
         /// Whether to list elements at the root of the mount point.
         /// This is useful if your PathInfoService doesn't provide an
@@ -318,6 +347,72 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
                 fuse_session.run()?;
                 info!("unmount occured, terminating…");
                 Ok(())
+            })
+            .await??;
+        }
+        #[cfg(feature = "fuse")]
+        Commands::Mount2 {
+            dest,
+            blob_service_addr,
+            directory_service_addr,
+            path_info_service_addr,
+            list_root,
+            threads,
+        } => {
+            let blob_service = blobservice::from_addr(&blob_service_addr)?;
+            let directory_service = directoryservice::from_addr(&directory_service_addr)?;
+            let path_info_service = pathinfoservice::from_addr(
+                &path_info_service_addr,
+                blob_service.clone(),
+                directory_service.clone(),
+            )?;
+
+            let mut fuse_session = tokio::task::spawn_blocking(move || {
+                let f = FUSE::new(
+                    blob_service,
+                    directory_service,
+                    path_info_service,
+                    list_root,
+                );
+                let server = Arc::new(fuse_backend_rs::api::server::Server::new(Arc::new(f)));
+
+                let mut session = FuseSession::new(&dest, "tvix-store", "", false)
+                    .map_err(|e| io::Error::new(io::ErrorKind::Other, e.to_string()))?;
+
+                info!("mounting tvix-store on {:?}", &dest);
+                session
+                    .mount()
+                    .map_err(|e| io::Error::new(io::ErrorKind::Other, e.to_string()))?;
+                for _ in 0..threads {
+                    let mut server = FuseServer {
+                        server: server.clone(),
+                        channel: session
+                            .new_channel()
+                            .map_err(|e| io::Error::new(io::ErrorKind::Other, e.to_string()))?,
+                    };
+                    let _thread = thread::Builder::new()
+                        .name("fuse_server".to_string())
+                        .spawn(move || {
+                            info!("new fuse thread");
+                            let _ = server.start();
+                            warn!("fuse service thread exits");
+                        })?;
+                }
+
+                Ok::<_, io::Error>(session)
+            })
+            .await??;
+
+            // grab a handle to unmount the file system, and register a signal
+            // handler.
+            tokio::spawn(async move {
+                tokio::signal::ctrl_c().await.unwrap();
+                info!("interrupt received, unmounting…");
+                fuse_session
+                    .umount()
+                    .map_err(|e| io::Error::new(io::ErrorKind::Other, e.to_string()))?;
+                info!("unmount occured, terminating…");
+                Ok::<_, io::Error>(())
             })
             .await??;
         }
