@@ -143,6 +143,23 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "21de931b_5b672f4b",
+        "filename": "tvix/store/src/blobservice/dumb_seeker.rs",
+        "patchSetId": 8
+      },
+      "lineNbr": 166,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2023-09-17T12:50:18Z",
+      "side": 1,
+      "message": "I was having some trouble where `seek` that requires multiple reads would get stuck. I added some logging and `poll_complete` was polled once but never polled again.\n\nI think the [docs](https://doc.rust-lang.org/stable/std/task/enum.Poll.html#variant.Pending) about `Poll::Pending` are relevant:\n\n\u003e When a function returns Pending, the function must also ensure that the current task is scheduled to be awoken when progress can be made.\n\nWhat happens here is we return `Poll::Pending` but we don\u0027t do anything to ensure that this task is woken up again.\n\nI did some testing and one solution to this is to put the `poll_read` in a loop, and in this case trigger another `poll_read` instead of returning `Poll::Pending`. Likely the call to `poll_read` will end up returning `Poll::Pending`, but this time the I/O operation will be registered with the waker so the future will get polled again and things will work as expected",
+      "revId": "0f234aac3afd912eca9fb109d090470a517368e1",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "faa6577f_846ae6c4",
         "filename": "tvix/store/src/blobservice/grpc.rs",
         "patchSetId": 8
