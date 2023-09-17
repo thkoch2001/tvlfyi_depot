@@ -18,6 +18,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "b1acddac_978bbf0c",
+        "filename": "tvix/nar-bridge/pkg/server/blob_upload.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-09-17T20:04:26Z",
+      "side": 1,
+      "message": "Ugh, I previously had another approach here (using capacity and length), but then dropped that. You\u0027re right, moved it outside the loop now.",
+      "parentUuid": "79fa4a0b_7d6f1df3",
+      "revId": "8c5a565497cf40e68f0d1e3c7c13488546a2da38",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "25d630f2_b4688f07",
@@ -31,6 +49,24 @@
       "writtenOn": "2023-09-17T19:36:50Z",
       "side": 1,
       "message": "I think we need to do `chunk[..n]` or something in case of read shorter than the buffer size",
+      "revId": "8c5a565497cf40e68f0d1e3c7c13488546a2da38",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d3da8bd3_e9b79292",
+        "filename": "tvix/nar-bridge/pkg/server/blob_upload.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-09-17T20:04:26Z",
+      "side": 1,
+      "message": "Yes, fixed.",
+      "parentUuid": "25d630f2_b4688f07",
       "revId": "8c5a565497cf40e68f0d1e3c7c13488546a2da38",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
