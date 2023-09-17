@@ -1,7 +1,8 @@
 use super::BlobReader;
 use pin_project_lite::pin_project;
-use std::io;
+use std::pin::Pin;
 use std::task::Poll;
+use std::{io, pin::pin};
 use tokio::io::AsyncRead;
 use tracing::{debug, instrument};
 
@@ -75,6 +76,7 @@ impl<R: tokio::io::AsyncRead> NaiveSeeker<R> {
 }
 
 impl<R: tokio::io::AsyncRead> tokio::io::AsyncRead for NaiveSeeker<R> {
+    #[instrument(skip_all, ret)]
     fn poll_read(
         self: std::pin::Pin<&mut Self>,
         cx: &mut std::task::Context<'_>,
@@ -90,6 +92,7 @@ impl<R: tokio::io::AsyncRead> tokio::io::AsyncRead for NaiveSeeker<R> {
             Poll::Ready(a) => {
                 let bytes_read = buf.filled().len() - filled_before;
                 *pos += bytes_read as u64;
+                debug!(bytes_read, self.pos = this.pos, "poll_read");
 
                 Poll::Ready(a)
             }
@@ -115,7 +118,7 @@ impl<R: tokio::io::AsyncRead> tokio::io::AsyncBufRead for NaiveSeeker<R> {
 }
 
 impl<R: tokio::io::AsyncRead> tokio::io::AsyncSeek for NaiveSeeker<R> {
-    #[instrument(skip(self))]
+    #[instrument(ret, skip(self))]
     fn start_seek(
         self: std::pin::Pin<&mut Self>,
         position: std::io::SeekFrom,
@@ -150,7 +153,7 @@ impl<R: tokio::io::AsyncRead> tokio::io::AsyncSeek for NaiveSeeker<R> {
             }
         };
 
-        debug!(absolute_offset=?absolute_offset, "seek");
+        debug!(?absolute_offset, self.pos, "seek");
 
         // we already know absolute_offset is larger than self.pos
         debug_assert!(
@@ -166,7 +169,7 @@ impl<R: tokio::io::AsyncRead> tokio::io::AsyncSeek for NaiveSeeker<R> {
         Ok(())
     }
 
-    #[instrument(skip(self))]
+    #[instrument(ret, skip(self))]
     fn poll_complete(
         mut self: std::pin::Pin<&mut Self>,
         cx: &mut std::task::Context<'_>,
@@ -178,7 +181,7 @@ impl<R: tokio::io::AsyncRead> tokio::io::AsyncSeek for NaiveSeeker<R> {
 
         // discard some bytes, until pos is where we want it to be.
         // We create a buffer that we'll discard later on.
-        let mut buf = [0; 1024];
+        let mut buf = [0; 1024 * 1024];
 
         // Loop until we've reached the desired seek position. This is done by issuing repeated
         // `poll_read` calls. If the data is not available yet, we will yield back to the executor

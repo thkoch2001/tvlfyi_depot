@@ -12,7 +12,7 @@ pub mod virtiofs;
 mod tests;
 
 use crate::{
-    blobservice::{BlobReader, BlobService},
+    blobservice::BlobService,
     directoryservice::DirectoryService,
     pathinfoservice::PathInfoService,
     proto::{node::Node, NamedNode},
@@ -27,6 +27,7 @@ use std::{
     str::FromStr,
     sync::atomic::AtomicU64,
     sync::{atomic::Ordering, Arc},
+    thread,
     time::Duration,
 };
 use tokio::io::{AsyncBufReadExt, AsyncSeekExt};
@@ -87,7 +88,7 @@ pub struct TvixStoreFs {
     inode_tracker: RwLock<InodeTracker>,
 
     /// This holds all open file handles
-    file_handles: RwLock<HashMap<u64, Arc<tokio::sync::Mutex<Box<dyn BlobReader>>>>>,
+    file_handles: RwLock<HashMap<u64, B3Digest>>,
 
     next_file_handle: AtomicU64,
 
@@ -101,6 +102,21 @@ impl TvixStoreFs {
         path_info_service: Arc<dyn PathInfoService>,
         list_root: bool,
     ) -> Self {
+        thread::spawn(move || loop {
+            thread::sleep(Duration::from_secs(10));
+            let deadlocks = parking_lot::deadlock::check_deadlock();
+            if deadlocks.is_empty() {
+                continue;
+            }
+            println!("{} deadlocks detected", deadlocks.len());
+            for (i, threads) in deadlocks.iter().enumerate() {
+                println!("Deadlock #{}", i);
+                for t in threads {
+                    println!("Thread Id {:#?}", t.thread_id());
+                    println!("{:#?}", t.backtrace());
+                }
+            }
+        });
         Self {
             blob_service,
             directory_service,
@@ -246,7 +262,7 @@ impl FileSystem for TvixStoreFs {
         }
     }
 
-    #[tracing::instrument(skip_all, fields(rq.parent_inode = parent, rq.name = ?name))]
+    #[tracing::instrument(skip_all, ret, fields(rq.parent_inode = parent, rq.name = ?name))]
     fn lookup(
         &self,
         _ctx: &Context,
@@ -469,7 +485,7 @@ impl FileSystem for TvixStoreFs {
         Ok(())
     }
 
-    #[tracing::instrument(skip_all, fields(rq.inode = inode))]
+    #[tracing::instrument(skip_all, ret, fields(rq.inode = inode))]
     fn open(
         &self,
         _ctx: &Context,
@@ -495,43 +511,20 @@ impl FileSystem for TvixStoreFs {
                 let span = info_span!("read", blob.digest = %blob_digest);
                 let _enter = span.enter();
 
-                let blob_service = self.blob_service.clone();
-                let blob_digest = blob_digest.clone();
+                // get a new file handle
+                // TODO: this will overflow after 2**64 operations,
+                // which is fine for now.
+                // See https://cl.tvl.fyi/c/depot/+/8834/comment/a6684ce0_d72469d1
+                // for the discussion on alternatives.
+                let fh = self.next_file_handle.fetch_add(1, Ordering::SeqCst);
 
-                let task = self
-                    .tokio_handle
-                    .spawn(async move { blob_service.open_read(&blob_digest).await });
+                debug!("add file handle {}", fh);
+                self.file_handles.write().insert(fh, blob_digest.clone());
 
-                let blob_reader = self.tokio_handle.block_on(task).unwrap();
-
-                match blob_reader {
-                    Ok(None) => {
-                        warn!("blob not found");
-                        return Err(io::Error::from_raw_os_error(libc::EIO));
-                    }
-                    Err(e) => {
-                        warn!(e=?e, "error opening blob");
-                        return Err(io::Error::from_raw_os_error(libc::EIO));
-                    }
-                    Ok(Some(blob_reader)) => {
-                        // get a new file handle
-                        // TODO: this will overflow after 2**64 operations,
-                        // which is fine for now.
-                        // See https://cl.tvl.fyi/c/depot/+/8834/comment/a6684ce0_d72469d1
-                        // for the discussion on alternatives.
-                        let fh = self.next_file_handle.fetch_add(1, Ordering::SeqCst);
-
-                        debug!("add file handle {}", fh);
-                        self.file_handles
-                            .write()
-                            .insert(fh, Arc::new(tokio::sync::Mutex::new(blob_reader)));
-
-                        Ok((
-                            Some(fh),
-                            fuse_backend_rs::api::filesystem::OpenOptions::empty(),
-                        ))
-                    }
-                }
+                Ok((
+                    Some(fh),
+                    fuse_backend_rs::api::filesystem::OpenOptions::empty(),
+                ))
             }
         }
     }
@@ -560,7 +553,7 @@ impl FileSystem for TvixStoreFs {
         Ok(())
     }
 
-    #[tracing::instrument(skip_all, fields(rq.inode = inode, rq.offset = offset, rq.size = size))]
+    #[tracing::instrument(skip_all, ret, fields(rq.inode = inode, rq.offset = offset, rq.size = size))]
     fn read(
         &self,
         _ctx: &Context,
@@ -577,19 +570,24 @@ impl FileSystem for TvixStoreFs {
         // We need to take out the blob reader from self.file_handles, so we can
         // interact with it in the separate task.
         // On success, we pass it back out of the task, so we can put it back in self.file_handles.
-        let blob_reader = match self.file_handles.read().get(&handle) {
-            Some(blob_reader) => blob_reader.clone(),
+        let blob_digest = match self.file_handles.read().get(&handle) {
+            Some(digest) => digest.clone(),
             None => {
                 warn!("file handle {} unknown", handle);
                 return Err(io::Error::from_raw_os_error(libc::EIO));
             }
         };
 
+        let blob_service = self.blob_service.clone();
         let task = self.tokio_handle.spawn(async move {
-            let mut blob_reader = blob_reader.lock().await;
+            let mut blob_reader = blob_service
+                .open_read(&blob_digest)
+                .await?
+                .ok_or(io::Error::from_raw_os_error(libc::EIO))?;
 
             // seek to the offset specified, which is relative to the start of the file.
             let resp = blob_reader.seek(io::SeekFrom::Start(offset as u64)).await;
+            debug!("we done seeked");
 
             match resp {
                 Ok(pos) => {
@@ -624,7 +622,6 @@ impl FileSystem for TvixStoreFs {
                 // and consume them in the buffered reader.
                 blob_reader.consume(len_to_copy);
             }
-
             Ok(buf)
         });
 

@@ -11,6 +11,7 @@ import (
 
 	storev1pb "code.tvl.fyi/tvix/store/protos"
 	"github.com/nix-community/go-nix/pkg/nar"
+	log "github.com/sirupsen/logrus"
 	"lukechampine.com/blake3"
 )
 
@@ -73,6 +74,8 @@ func (r *Reader) Import(
 		toPop := stack[len(stack)-1]
 		stack = stack[:len(stack)-1]
 
+		log.Infof("Popping... %q", toPop.path)
+
 		// if there's still a parent left on the stack, refer to it from there.
 		if len(stack) > 0 {
 			dgst, err := toPop.directory.Digest()
@@ -87,6 +90,22 @@ func (r *Reader) Import(
 				Size:   toPop.directory.Size(),
 			})
 		}
+
+		log.Infof("LISTING %q", toPop.path)
+		for _, ent := range toPop.directory.Directories {
+			log.Infof("\td %q", string(ent.Name))
+		}
+		for _, ent := range toPop.directory.Files {
+			log.Infof("\tf %q", string(ent.Name))
+		}
+		for _, ent := range toPop.directory.Symlinks {
+			log.Infof("\ts %q", string(ent.Name))
+		}
+
+		if err := toPop.directory.Validate(); err != nil {
+			return fmt.Errorf("validating directory: %w", err)
+		}
+
 		// call the directoryCb
 		if err := directoryCb(toPop.directory); err != nil {
 			return fmt.Errorf("failed calling directoryCb: %w", err)
@@ -200,8 +219,10 @@ func (r *Reader) Import(
 				if err != nil {
 					return nil, fmt.Errorf("unable to pop from stack: %w", err)
 				}
+				break
 			}
 
+			log.Infof("\tpath: %q type: %v", string(hdr.Path), hdr.Type)
 			if hdr.Type == nar.TypeSymlink {
 				symlinkNode := &storev1pb.SymlinkNode{
 					Name:   []byte(getBasename(hdr.Path)),

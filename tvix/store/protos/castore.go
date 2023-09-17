@@ -73,7 +73,7 @@ func (d *Directory) Validate() error {
 			*lastName = name
 			return nil
 		} else {
-			return fmt.Errorf("%v is not in sorted order", name)
+			return fmt.Errorf("%q is not in sorted order", string(name))
 		}
 	}
 
@@ -106,7 +106,7 @@ func (d *Directory) Validate() error {
 
 		// ensure names are sorted
 		if err := insertIfGt(&lastDirectoryName, directoryName); err != nil {
-			return err
+			return fmt.Errorf("directories unsorted: %w", err)
 		}
 
 		// add to seenNames
@@ -132,7 +132,7 @@ func (d *Directory) Validate() error {
 
 		// ensure names are sorted
 		if err := insertIfGt(&lastFileName, fileName); err != nil {
-			return err
+			return fmt.Errorf("files unsorted: %w", err)
 		}
 
 		// add to seenNames
@@ -151,7 +151,7 @@ func (d *Directory) Validate() error {
 
 		// ensure names are sorted
 		if err := insertIfGt(&lastSymlinkName, symlinkName); err != nil {
-			return err
+			return fmt.Errorf("files symlinks: %w", err)
 		}
 
 		// add to seenNames

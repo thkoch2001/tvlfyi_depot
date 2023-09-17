@@ -32,4 +32,6 @@ require (
 	gopkg.in/yaml.v3 v3.0.1 // indirect
 )
 
+replace code.tvl.fyi/tvix/store/protos => ../store/protos/
+
 go 1.19

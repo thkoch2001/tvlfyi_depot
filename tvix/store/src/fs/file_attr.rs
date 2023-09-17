@@ -36,8 +36,14 @@ pub fn gen_file_attr(inode_data: &InodeData, inode: u64) -> Attr {
             }
         },
         mode: match inode_data {
+<<<<<<< HEAD
             InodeData::Regular(_, _, false) => libc::S_IFREG | 0o444, // no-executable files
             InodeData::Regular(_, _, true) => libc::S_IFREG | 0o555,  // executable files
+=======
+            InodeData::Regular(_, _, execute) => {
+                libc::S_IFREG | if *execute { 0o555 } else { 0o444 }
+            }
+>>>>>>> 509b29f62 (WIP)
             InodeData::Symlink(_) => libc::S_IFLNK | 0o444,
             InodeData::Directory(_) => libc::S_IFDIR | 0o555,
         },

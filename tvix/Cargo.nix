@@ -4507,7 +4507,7 @@ rec {
           "owning_ref" = [ "lock_api/owning_ref" ];
           "serde" = [ "lock_api/serde" ];
         };
-        resolvedDefaultFeatures = [ "default" ];
+        resolvedDefaultFeatures = [ "deadlock_detection" "default" ];
       };
       "parking_lot_core 0.8.6" = rec {
         crateName = "parking_lot_core";
@@ -4564,6 +4564,11 @@ rec {
         ];
         dependencies = [
           {
+            name = "backtrace";
+            packageId = "backtrace";
+            optional = true;
+          }
+          {
             name = "cfg-if";
             packageId = "cfg-if";
           }
@@ -4573,6 +4578,11 @@ rec {
             target = { target, features }: (target."unix" or false);
           }
           {
+            name = "petgraph";
+            packageId = "petgraph";
+            optional = true;
+          }
+          {
             name = "redox_syscall";
             packageId = "redox_syscall 0.3.5";
             target = { target, features }: ("redox" == target."os");
@@ -4580,6 +4590,11 @@ rec {
           {
             name = "smallvec";
             packageId = "smallvec";
+          }
+          {
+            name = "thread-id";
+            packageId = "thread-id";
+            optional = true;
           }
           {
             name = "windows-targets";
@@ -4593,6 +4608,7 @@ rec {
           "petgraph" = [ "dep:petgraph" ];
           "thread-id" = [ "dep:thread-id" ];
         };
+        resolvedDefaultFeatures = [ "backtrace" "deadlock_detection" "petgraph" "thread-id" ];
       };
       "path-clean" = rec {
         crateName = "path-clean";
@@ -4648,6 +4664,7 @@ rec {
           "serde_derive" = [ "dep:serde_derive" ];
           "unstable" = [ "generate" ];
         };
+        resolvedDefaultFeatures = [ "default" "graphmap" "matrix_graph" "stable_graph" ];
       };
       "pin-project" = rec {
         crateName = "pin-project";
@@ -7230,6 +7247,34 @@ rec {
         ];
 
       };
+      "thread-id" = rec {
+        crateName = "thread-id";
+        version = "4.2.0";
+        edition = "2015";
+        sha256 = "0sb6fpdnpyf9p6szn4wi0db5lzrgr58lmqqd3a3w9kb16mblyivr";
+        authors = [
+          "Ruud van Asseldonk <dev@veniogames.com>"
+        ];
+        dependencies = [
+          {
+            name = "libc";
+            packageId = "libc";
+            target = { target, features }: (target."unix" or false);
+          }
+          {
+            name = "redox_syscall";
+            packageId = "redox_syscall 0.2.16";
+            target = { target, features }: ("redox" == target."os");
+          }
+          {
+            name = "winapi";
+            packageId = "winapi";
+            target = { target, features }: (target."windows" or false);
+            features = [ "processthreadsapi" ];
+          }
+        ];
+
+      };
       "thread_local" = rec {
         crateName = "thread_local";
         version = "1.1.7";
@@ -8766,6 +8811,7 @@ rec {
           {
             name = "parking_lot";
             packageId = "parking_lot 0.12.1";
+            features = [ "deadlock_detection" ];
           }
           {
             name = "pin-project-lite";
