@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8f504577_71ebd18f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-09-17T12:11:39Z",
+      "side": 1,
+      "message": "With this, I am able to \n\n```\nnix copy --to http://localhost:9001?compression\u003dnone /nix/store/9q94bq2q4qj4m9mif0hlqf8kmabw5ijd-hello-2.12.1\n```",
+      "revId": "f2eb68e10b04df3af84bd50eda99b9aa44a2217b",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
