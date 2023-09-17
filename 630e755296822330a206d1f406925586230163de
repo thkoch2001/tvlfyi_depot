@@ -16,6 +16,24 @@
       "message": "Is it possible to scope this just to the protos? (I\u0027m assuming those are the ones in violation of this rule)",
       "revId": "630e755296822330a206d1f406925586230163de",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "811cbd23_961bc952",
+        "filename": "tvix/store/src/proto/mod.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-09-17T12:07:02Z",
+      "side": 1,
+      "message": "sadly only on module level - see the example in https://github.com/tokio-rs/prost/issues/661#issuecomment-1156606409.\n\nAs we want validate() and co on the `impl Directory`, we can\u0027t, at least not without considerable wrapping.",
+      "parentUuid": "5de21e3d_d7257d47",
+      "revId": "630e755296822330a206d1f406925586230163de",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
