@@ -55,6 +55,16 @@ import Text.Blaze.Html5 qualified as Html
 import Tool (Tool, readTool, readTools)
 import UnliftIO
 
+main :: IO ()
+main =
+  runAppWith
+    ( do
+        _ <- runTransaction migrate
+        htmlUi
+    )
+    <&> first showToError
+    >>= expectIOError "could not start whatcd-resolver"
+
 htmlUi :: App ()
 htmlUi = do
   let debug = True
@@ -600,16 +610,6 @@ redactedGetTorrentFile dat =
         )
     )
 
-test :: Bool -> IO (Either TmpPg.StartError ())
-test doSearch =
-  runAppWith $ do
-    _ <- runTransaction migrate
-    when doSearch $ do
-      transaction <- bla
-      _ <- runTransaction transaction
-      pure ()
-    htmlUi
-
 -- fix
 --   ( \io -> do
 --       logInfo "delay"
@@ -617,8 +617,8 @@ test doSearch =
 --       io
 --   )
 
-bla :: (MonadThrow m, MonadIO m, MonadLogger m, MonadPostgres m) => m (Transaction m ())
-bla = do
+exampleSearch :: (MonadThrow m, MonadIO m, MonadLogger m, MonadPostgres m) => m (Transaction m ())
+exampleSearch = do
   t1 <-
     redactedSearchAndInsert
       [ ("searchstr", "cherish"),
