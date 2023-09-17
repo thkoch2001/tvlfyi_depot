@@ -160,6 +160,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "4eb2479b_2640a719",
+        "filename": "tvix/store/src/blobservice/dumb_seeker.rs",
+        "patchSetId": 8
+      },
+      "lineNbr": 166,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2023-09-17T12:58:36Z",
+      "side": 1,
+      "message": "Here\u0027s a test case to demonstrate the issue:\n```\n    #[tokio::test]\n    async fn seek() {\n        let buf \u003d vec![0u8; 4096];\n        let reader \u003d Cursor::new(\u0026buf);\n        let mut seeker \u003d NaiveSeeker::new(reader);\n        seeker.seek(SeekFrom::Start(4000)).await.unwrap();\n    }\n```\n\nThis seek will require multiple `poll_reads` since we use a 1024 byte internal buffer when doing the seek.\n\nAs-is this test will hang indefinitely.",
+      "parentUuid": "21de931b_5b672f4b",
+      "revId": "0f234aac3afd912eca9fb109d090470a517368e1",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "faa6577f_846ae6c4",
         "filename": "tvix/store/src/blobservice/grpc.rs",
         "patchSetId": 8
