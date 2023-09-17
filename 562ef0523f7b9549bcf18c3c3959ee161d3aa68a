@@ -54,6 +54,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "56329f9e_3f2eb683",
+        "filename": "tvix/nar-bridge/pkg/server/nar_get.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-09-17T11:45:34Z",
+      "side": 1,
+      "message": "This should be correct - our router has this odd {symbbol:regex} notation to parse parts of the URL and add it to the context.",
+      "parentUuid": "9718c824_e70fc1f4",
+      "revId": "562ef0523f7b9549bcf18c3c3959ee161d3aa68a",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "fb230f36_4dd0d0b8",
