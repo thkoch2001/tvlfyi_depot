@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "79fa4a0b_7d6f1df3",
+        "filename": "tvix/nar-bridge/pkg/server/blob_upload.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2023-09-17T19:36:50Z",
+      "side": 1,
+      "message": "You could move this outside the loop so we can reuse the same buffer for each chunk",
+      "revId": "8c5a565497cf40e68f0d1e3c7c13488546a2da38",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "25d630f2_b4688f07",
+        "filename": "tvix/nar-bridge/pkg/server/blob_upload.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2023-09-17T19:36:50Z",
+      "side": 1,
+      "message": "I think we need to do `chunk[..n]` or something in case of read shorter than the buffer size",
+      "revId": "8c5a565497cf40e68f0d1e3c7c13488546a2da38",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
