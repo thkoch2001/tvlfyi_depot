@@ -1,7 +1,7 @@
 use super::BlobReader;
 use pin_project_lite::pin_project;
+use std::io;
 use std::task::Poll;
-use std::{io, pin::pin};
 use tokio::io::AsyncRead;
 use tracing::{debug, instrument};
 
@@ -133,20 +133,20 @@ impl<R: tokio::io::AsyncRead> tokio::io::AsyncSeek for NaiveSeeker<R> {
         // We create a buffer that we'll discard later on.
         let mut buf = [0; 1024];
 
-        // calculate the length we want to skip at most, which is either a max
-        // buffer size, or the number of remaining bytes to read, whatever is
-        // smaller.
-        let bytes_to_skip = std::cmp::min(self.bytes_to_skip as usize, buf.len());
-
-        let mut read_buf = tokio::io::ReadBuf::new(&mut buf[..bytes_to_skip]);
-
+        // Loop until we've reached the desired seek position. This is done by issuing repeated
+        // `poll_read` calls. If the data is not available yet, we will yield back to the executor
+        // and wait to be polled again.
         loop {
-            read_buf.clear();
+            // calculate the length we want to skip at most, which is either a max
+            // buffer size, or the number of remaining bytes to read, whatever is
+            // smaller.
+            let bytes_to_skip = std::cmp::min(self.bytes_to_skip as usize, buf.len());
+
+            let mut read_buf = tokio::io::ReadBuf::new(&mut buf[..bytes_to_skip]);
+
             match self.as_mut().poll_read(cx, &mut read_buf) {
                 Poll::Ready(_a) => {
-                    eprintln!("ready");
                     let bytes_read = read_buf.filled().len() as u64;
-                    eprintln!("bytes_read: {}", bytes_read);
 
                     if bytes_read == 0 {
                         return Poll::Ready(Err(io::Error::new(
@@ -160,13 +160,11 @@ impl<R: tokio::io::AsyncRead> tokio::io::AsyncSeek for NaiveSeeker<R> {
 
                     // calculate bytes to skip
                     let bytes_to_skip = self.bytes_to_skip - bytes_read;
-                    let pos = self.pos;
-                    eprintln!("bytes_to_skip: {}, pos: {}", bytes_to_skip, pos);
 
-                    *pin!(self.bytes_to_skip) = bytes_to_skip;
+                    *self.as_mut().project().bytes_to_skip = bytes_to_skip;
 
                     if bytes_to_skip == 0 {
-                        return Poll::Ready(Ok(pos));
+                        return Poll::Ready(Ok(self.pos));
                     }
                 }
                 Poll::Pending => return Poll::Pending,
@@ -181,7 +179,7 @@ impl<R: tokio::io::AsyncRead + Send + Unpin + 'static> BlobReader for NaiveSeeke
 mod tests {
     use super::NaiveSeeker;
     use std::io::{Cursor, SeekFrom};
-    use tokio::io::AsyncSeekExt;
+    use tokio::io::{AsyncReadExt, AsyncSeekExt};
 
     /// This seek requires multiple `poll_read` as we use a 1024 bytes internal
     /// buffer when doing the seek.
@@ -192,5 +190,33 @@ mod tests {
         let reader = Cursor::new(&buf);
         let mut seeker = NaiveSeeker::new(reader);
         seeker.seek(SeekFrom::Start(4000)).await.unwrap();
+    }
+
+    #[tokio::test]
+    async fn seek_read() {
+        let mut buf = vec![0u8; 2048];
+        buf.extend_from_slice(&[1u8; 2048]);
+        buf.extend_from_slice(&[2u8; 2048]);
+
+        let reader = Cursor::new(&buf);
+        let mut seeker = NaiveSeeker::new(reader);
+
+        let mut read_buf = vec![0u8; 1024];
+        seeker.read_exact(&mut read_buf).await.expect("must read");
+        assert_eq!(read_buf.as_slice(), &[0u8; 1024]);
+
+        seeker
+            .seek(SeekFrom::Current(1024))
+            .await
+            .expect("must seek");
+        seeker.read_exact(&mut read_buf).await.expect("must read");
+        assert_eq!(read_buf.as_slice(), &[1u8; 1024]);
+
+        seeker
+            .seek(SeekFrom::Start(2 * 2048))
+            .await
+            .expect("must seek");
+        seeker.read_exact(&mut read_buf).await.expect("must read");
+        assert_eq!(read_buf.as_slice(), &[2u8; 1024]);
     }
 }
