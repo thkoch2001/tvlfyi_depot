@@ -55,6 +55,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "517084f6_3cfedca8",
+        "filename": "tvix/store/src/blobservice/grpc.rs",
+        "patchSetId": 10
+      },
+      "lineNbr": 276,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-09-17T15:01:40Z",
+      "side": 1,
+      "message": "Did you do any digging up of tonic docs so far?",
+      "parentUuid": "0636b4e2_1c55676b",
+      "revId": "8a62f05cfaefa7158284ab2f2f51c6adc77b9a01",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "ddcd1f07_b26512e5",
         "filename": "tvix/store/src/blobservice/memory.rs",
         "patchSetId": 10
@@ -84,6 +102,24 @@
       "side": 1,
       "message": "Memory is trivial: interaction with memory is synchronous and instant, so you never poll a shutdown.",
       "parentUuid": "ddcd1f07_b26512e5",
+      "revId": "8a62f05cfaefa7158284ab2f2f51c6adc77b9a01",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7bce1932_5febde6b",
+        "filename": "tvix/store/src/blobservice/memory.rs",
+        "patchSetId": 10
+      },
+      "lineNbr": 112,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-09-17T15:01:40Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5e8beb55_88a3e5aa",
       "revId": "8a62f05cfaefa7158284ab2f2f51c6adc77b9a01",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
@@ -119,6 +155,24 @@
       "side": 1,
       "message": "AFAIK, sled is also trivial: interaction with file handles is synchronous and instant in this scenario, we are not using an async API for sled, are we?\nAnd I am not so sure there\u0027s async close? Close is always sync?",
       "parentUuid": "85d02294_64d3e665",
+      "revId": "8a62f05cfaefa7158284ab2f2f51c6adc77b9a01",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bfbfcf90_8eb7d5bf",
+        "filename": "tvix/store/src/blobservice/sled.rs",
+        "patchSetId": 10
+      },
+      "lineNbr": 141,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-09-17T15:01:40Z",
+      "side": 1,
+      "message": "Right now, a blob in sled is just a large value in a KV, and BlobWriter keeps a Vec\u003cu8\u003e until you call BlobWriter::close.",
+      "parentUuid": "66e9cff9_d4b593d0",
       "revId": "8a62f05cfaefa7158284ab2f2f51c6adc77b9a01",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
