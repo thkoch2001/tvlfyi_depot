@@ -9,6 +9,7 @@ let
 
     src = depot.users.Profpatsch.exactSource ./. [
       ./whatcd-resolver.cabal
+      ./Main.hs
       ./src/WhatcdResolver.hs
     ];
 
@@ -43,5 +44,26 @@ let
     license = lib.licenses.mit;
   };
 
+  bins = depot.nix.getBins whatcd-resolver [ "whatcd-resolver" ];
+
 in
-whatcd-resolver
+
+depot.nix.writeExecline "whatcd-resolver-wrapped" { } [
+  "importas"
+  "-i"
+  "PATH"
+  "PATH"
+  "export"
+  "PATH"
+  "${pkgs.postgresql}/bin:$${PATH}"
+  "export"
+  "WHATCD_RESOLVER_TOOLS"
+  (pkgs.linkFarm "whatcd-resolver-tools" [
+    {
+      name = "pg_format";
+      path = "${pkgs.pgformatter}/bin/pg_format";
+    }
+  ])
+  bins.whatcd-resolver
+]
+

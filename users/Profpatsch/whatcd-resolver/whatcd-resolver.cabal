@@ -94,3 +94,11 @@ library
         wai,
         warp,
 
+executable whatcd-resolver
+    import: common-options
+
+    main-is: Main.hs
+
+    build-depends:
+        base >=4.15 && <5,
+        whatcd-resolver
