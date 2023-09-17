@@ -37,6 +37,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "0636b4e2_1c55676b",
+        "filename": "tvix/store/src/blobservice/grpc.rs",
+        "patchSetId": 10
+      },
+      "lineNbr": 276,
+      "author": {
+        "id": 1000073
+      },
+      "writtenOn": "2023-09-17T13:19:54Z",
+      "side": 1,
+      "message": "This is the only one that is hard per se.",
+      "parentUuid": "72c64e41_5881f42b",
+      "revId": "8a62f05cfaefa7158284ab2f2f51c6adc77b9a01",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "ddcd1f07_b26512e5",
         "filename": "tvix/store/src/blobservice/memory.rs",
         "patchSetId": 10
@@ -54,6 +72,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "5e8beb55_88a3e5aa",
+        "filename": "tvix/store/src/blobservice/memory.rs",
+        "patchSetId": 10
+      },
+      "lineNbr": 112,
+      "author": {
+        "id": 1000073
+      },
+      "writtenOn": "2023-09-17T13:19:54Z",
+      "side": 1,
+      "message": "Memory is trivial: interaction with memory is synchronous and instant, so you never poll a shutdown.",
+      "parentUuid": "ddcd1f07_b26512e5",
+      "revId": "8a62f05cfaefa7158284ab2f2f51c6adc77b9a01",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "85d02294_64d3e665",
         "filename": "tvix/store/src/blobservice/sled.rs",
         "patchSetId": 10
@@ -65,6 +101,24 @@
       "writtenOn": "2023-09-15T21:27:01Z",
       "side": 1,
       "message": "I think we need to think more about this.",
+      "revId": "8a62f05cfaefa7158284ab2f2f51c6adc77b9a01",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "66e9cff9_d4b593d0",
+        "filename": "tvix/store/src/blobservice/sled.rs",
+        "patchSetId": 10
+      },
+      "lineNbr": 141,
+      "author": {
+        "id": 1000073
+      },
+      "writtenOn": "2023-09-17T13:19:54Z",
+      "side": 1,
+      "message": "AFAIK, sled is also trivial: interaction with file handles is synchronous and instant in this scenario, we are not using an async API for sled, are we?\nAnd I am not so sure there\u0027s async close? Close is always sync?",
+      "parentUuid": "85d02294_64d3e665",
       "revId": "8a62f05cfaefa7158284ab2f2f51c6adc77b9a01",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
