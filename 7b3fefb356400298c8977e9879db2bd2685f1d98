@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9f8bc439_e4fdc15c",
+        "filename": "tvix/store/src/fuse/mod.rs",
+        "patchSetId": 7
+      },
+      "lineNbr": 89,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2023-09-17T13:29:48Z",
+      "side": 1,
+      "message": "The extra Mutex is quite annoying here, I added it so `FUSE` is `Sync` which is required for `fuse-backend-rs` since it spawns multiple threads.\n\nI tried doing `Box\u003cdyn BlobReader + Send Sync\u003e` but the `NaiveSeeker` contains some `tonic`/proto types which are not `Sync`.\n\nOpen to ideas",
+      "revId": "7b3fefb356400298c8977e9879db2bd2685f1d98",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
