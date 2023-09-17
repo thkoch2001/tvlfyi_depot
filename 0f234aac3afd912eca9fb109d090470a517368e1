@@ -196,6 +196,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "cacd6c9d_578049ab",
+        "filename": "tvix/store/src/blobservice/dumb_seeker.rs",
+        "patchSetId": 8
+      },
+      "lineNbr": 166,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-09-17T15:03:39Z",
+      "side": 1,
+      "message": "I included that test, so we see if it times out indefinitely. Thanks!\n\nRight now the code you sent me earlier does crash, looks like because it doesn\u0027t stop skipping where it should be. I need to take another look at this later.",
+      "parentUuid": "a5739bcd_5234a3da",
+      "revId": "0f234aac3afd912eca9fb109d090470a517368e1",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "faa6577f_846ae6c4",
         "filename": "tvix/store/src/blobservice/grpc.rs",
         "patchSetId": 8
