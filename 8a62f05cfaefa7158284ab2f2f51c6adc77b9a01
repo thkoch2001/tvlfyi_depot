@@ -71,6 +71,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "53d75fdb_0e8bce44",
+        "filename": "tvix/store/src/blobservice/grpc.rs",
+        "patchSetId": 10
+      },
+      "lineNbr": 276,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-09-18T10:23:47Z",
+      "side": 1,
+      "message": "Discussed this with @raitobezarius. This might cause individual channels inside a gRPC connection to not be shut down properly, but we both agreed to keep this for a future todo and logged a comment.",
+      "parentUuid": "517084f6_3cfedca8",
+      "revId": "8a62f05cfaefa7158284ab2f2f51c6adc77b9a01",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "ddcd1f07_b26512e5",
