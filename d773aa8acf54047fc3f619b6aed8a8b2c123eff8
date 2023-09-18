@@ -16,6 +16,24 @@
       "message": "Do we need this?",
       "revId": "d773aa8acf54047fc3f619b6aed8a8b2c123eff8",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ec821991_9199b1fe",
+        "filename": "tvix/nar-bridge/cmd/nar_bridge/main.go",
+        "patchSetId": 3
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-09-18T13:54:28Z",
+      "side": 1,
+      "message": "Close() is bad, we should use Shutdown() instead. I\u0027ll push a followup CL that uses shutdown.",
+      "parentUuid": "1f31c466_01d70e34",
+      "revId": "d773aa8acf54047fc3f619b6aed8a8b2c123eff8",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
