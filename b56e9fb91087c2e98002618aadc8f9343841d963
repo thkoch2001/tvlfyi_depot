@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "52ba44cd_1edbf8c0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-09-18T11:51:20Z",
+      "side": 1,
+      "message": "Is there any other observable issue other than different .drv hashes?\n\nWe documented that in cl/9080, output paths are the same, and I\u0027m still not sure if we actually need to put in more work to properly track this.\n\nAlso note that things like https://github.com/NixOS/nix/issues/4347 exist, where Nix decided to \"shortcut\" to \"simpler FODs\" (though in other cases) - so I\u0027d argue using a \"simpler build recipe\" is actually more desirable.",
+      "revId": "b56e9fb91087c2e98002618aadc8f9343841d963",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
