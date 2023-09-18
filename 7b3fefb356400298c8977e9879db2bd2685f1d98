@@ -34,6 +34,24 @@
       "parentUuid": "9f8bc439_e4fdc15c",
       "revId": "7b3fefb356400298c8977e9879db2bd2685f1d98",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "51856966_0db9e5a4",
+        "filename": "tvix/store/src/fuse/mod.rs",
+        "patchSetId": 7
+      },
+      "lineNbr": 89,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2023-09-18T13:58:35Z",
+      "side": 1,
+      "message": "After some mulling, I think this sort of makes sense to do the lock here, a `BlobReader` right now is definitely not thread-safe. I think this will be a non-issue once we have the new reader which issues `read_at`-type RPCs, which will then be safe for concurrent use.\n\nOne way we could make the critical sections smaller without much effort is to wrap the `Mutex` in an `Arc`. That way all we need to do when reading is to get the `file_handle` out `file_handles` (read lock), clone the `Arc` and then let go of `file_handles`. Then we use the `Mutex` to prevent concurrent reads on the same file handle/`BlobReader`.",
+      "parentUuid": "2460ac5a_fa4ef611",
+      "revId": "7b3fefb356400298c8977e9879db2bd2685f1d98",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }

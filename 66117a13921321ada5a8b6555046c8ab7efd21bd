@@ -20,6 +20,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "0c122b28_8d3b1b79",
+        "filename": "tvix/store/Cargo.toml",
+        "patchSetId": 8
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2023-09-18T13:58:35Z",
+      "side": 1,
+      "message": "Sounds good, I typically prefer parking_lot over std, so if you\u0027re okay with it as well I can switch the in-mem impl.",
+      "parentUuid": "cd720787_f5615416",
+      "revId": "66117a13921321ada5a8b6555046c8ab7efd21bd",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "139e50fc_fbd7b3bf",
         "filename": "tvix/store/src/fuse/tests.rs",
         "patchSetId": 8
@@ -31,6 +49,24 @@
       "writtenOn": "2023-09-18T11:15:14Z",
       "side": 1,
       "message": "The tests all seem to fail for me (when invoking `cargo test` on my machine). They\u0027re skipped in CI because we don\u0027t have /dev/fuse in the sandbox.\n\nExample:\n\n```\n---- fuse::tests::root stdout ----\nthread \u0027fuse::tests::root\u0027 panicked at \u0027must succeed: Custom { kind: Other, error: \"fuse session failure: Unexpected exit code when running fusermount: Some(1)\" }\u0027, store/src/fuse/tests.rs:327:6\n```\n\nI ran the `tvix-store mount` command locally, and it\u0027s happening due to this:\n\n```\n❯ target/release-with-debug/tvix-store mount -l /tmp/tvix\n  2023-09-18T11:09:36.668087Z  INFO tvix_store: mounting tvix-store on \"/tmp/tvix\"\n    at store/src/bin/tvix-store.rs:311\n\nfusermount3: option allow_other only allowed if \u0027user_allow_other\u0027 is set in /etc/fuse.conf\nError: Custom { kind: Other, error: \"fuse session failure: Unexpected exit code when running fusermount: Some(1)\" }\n```\n\nBeing able to mount as non-root without any additional system-wide config seems desirable.\n\nI did some quick digging, seems fuse-backend-rs hardcodes this in https://github.com/cloud-hypervisor/fuse-backend-rs/blob/1e5b2acbc0492cc79006261109b7880bfe0fedb9/src/transport/fusedev/linux_session.rs#L384\n\nMaybe we can make this configurable upstream?",
+      "revId": "66117a13921321ada5a8b6555046c8ab7efd21bd",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1da634ef_2223ebc1",
+        "filename": "tvix/store/src/fuse/tests.rs",
+        "patchSetId": 8
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2023-09-18T13:58:35Z",
+      "side": 1,
+      "message": "I\u0027ll go upstream and see if they\u0027d take a patch to make this configurable.",
+      "parentUuid": "139e50fc_fbd7b3bf",
       "revId": "66117a13921321ada5a8b6555046c8ab7efd21bd",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
