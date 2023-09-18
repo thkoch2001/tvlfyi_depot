@@ -99,7 +99,7 @@ func renderNar(
 		pathInfo,
 		func(directoryDigest []byte) (*storev1pb.Directory, error) {
 			// TODO: debug level
-			log.WithField("directory", base64.StdEncoding.EncodeToString(directoryDigest)).Info("Get directory")
+			log.WithField("directory", base64.StdEncoding.EncodeToString(directoryDigest)).Debug("Get directory")
 			directoryRefStr := hex.EncodeToString(directoryDigest)
 			directory, found := directories[directoryRefStr]
 			if !found {
@@ -113,8 +113,7 @@ func renderNar(
 			return directory, nil
 		},
 		func(blobDigest []byte) (io.ReadCloser, error) {
-			// TODO: debug level
-			log.WithField("blob", base64.StdEncoding.EncodeToString(blobDigest)).Info("Get blob")
+			log.WithField("blob", base64.StdEncoding.EncodeToString(blobDigest)).Debug("Get blob")
 			resp, err := blobServiceClient.Read(ctx, &storev1pb.ReadBlobRequest{
 				Digest: blobDigest,
 			})
