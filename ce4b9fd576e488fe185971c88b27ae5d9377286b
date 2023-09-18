@@ -33,6 +33,24 @@
       "message": "I really don\u0027t like this. The problem is we need to test the gRPC implementation of the BlobService. So we spin up something like this:\n\n```\n(1 [test client]) -\u003e (2 [gRPC server] -\u003e [gRPC client]) -\u003e (3 [gRPC server] -\u003e [MemoryBlobService])\n```\n\nThe problem is we need to ensure the `MemoryBlobService`+gRPC server (3) are kept alive for the duration of the test, but we can\u0027t encode the ownership properly because Rust doesn\u0027t know that (2) depends on (3) since their relationship is through a unix socket.\n\nOpen to ideas, going to ponder this a little more",
       "revId": "ce4b9fd576e488fe185971c88b27ae5d9377286b",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cf4b3b84_d085de62",
+        "filename": "tvix/store/src/blobservice/grpc.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 322,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-09-18T12:22:27Z",
+      "side": 1,
+      "message": "Individual test case shouldn\u0027t need to worry about this, so keeping it in some struct variable that keeps it alive until the end seems okay to me.\n\nWe hoever should list the gRPC server/client variant as an example to make the comment a bit less abstract.",
+      "parentUuid": "382d82cd_cbf7a75a",
+      "revId": "ce4b9fd576e488fe185971c88b27ae5d9377286b",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }

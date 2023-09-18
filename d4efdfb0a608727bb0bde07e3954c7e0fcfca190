@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "daae7b35_dc35d0d0",
+        "filename": "tvix/store/src/blobservice/grpc.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 397,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-09-18T12:22:27Z",
+      "side": 1,
+      "message": "This feels a bit similar to https://cl.tvl.fyi/c/depot/+/9329/comment/3938c4f6_b21ea984.\n\nCan we factor out the constructor stuff into some helper we use both in L479…481 and wherever we \u0027normally\u0027 construct blobstores?",
+      "revId": "d4efdfb0a608727bb0bde07e3954c7e0fcfca190",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
