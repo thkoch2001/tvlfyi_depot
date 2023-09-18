@@ -66,6 +66,30 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "c1f80793_f4d46fd9",
+        "filename": "tvix/eval/src/errors.rs",
+        "patchSetId": 11
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 1000066
+      },
+      "writtenOn": "2023-09-18T23:18:25Z",
+      "side": 1,
+      "message": "\u003e With the instance `impl From\u003cCatchableErrorKind\u003e for ErrorKind`\n\nThat instance does not exist, for the reasons explained in the first line of the block-comment above.\n\n`ErrorKind` is the type of *uncatchable* errors.  Maybe I should rename it.\n\nHaving `ErrorKind` be the type of *all* errors has two problems: the redundant representation problem (explained above) and the fact that it makes it much too easy to accidentally turn a catchable error into an uncatchable error.",
+      "parentUuid": "4c0638a5_03854923",
+      "range": {
+        "startLine": 35,
+        "startChar": 0,
+        "endLine": 38,
+        "endChar": 0
+      },
+      "revId": "9542b28262eb4d12ea28e207dca1542c68f58ae5",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "d40365aa_7ad6dc59",
         "filename": "tvix/eval/src/errors.rs",
         "patchSetId": 11
