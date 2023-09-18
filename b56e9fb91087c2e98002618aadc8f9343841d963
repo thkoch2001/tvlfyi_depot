@@ -16,6 +16,24 @@
       "message": "Is there any other observable issue other than different .drv hashes?\n\nWe documented that in cl/9080, output paths are the same, and I\u0027m still not sure if we actually need to put in more work to properly track this.\n\nAlso note that things like https://github.com/NixOS/nix/issues/4347 exist, where Nix decided to \"shortcut\" to \"simpler FODs\" (though in other cases) - so I\u0027d argue using a \"simpler build recipe\" is actually more desirable.",
       "revId": "b56e9fb91087c2e98002618aadc8f9343841d963",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "594648b4_d39b2b7b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000066
+      },
+      "writtenOn": "2023-09-18T23:20:16Z",
+      "side": 1,
+      "message": "Yes, it affects `.outPath` hashes of packages downstream of the affected FOD.\n\nBasically, try this CL, and if it panics you know that the code *before* this CL would have returned an incorrect value instead.  Of course the best solution would be to fix the bug, but in the meantime I think that panicing at the point of error is better than silently returning incorrect results.\n\nTo fix the underlying bug we will need to change the data structures: `path` can\u0027t be just a `HashMap\u003cPathName, PathKind\u003e`; the values of the `HashMap` will somehow need to be a collection of `PathKind`s.\n\n\u003e Also note that things like https://github.com/NixOS/nix/issues/4347 exist,\n\nYou mentioned that PR on IRC, but I think you misunderstand what it does.  Read the code that goes with it -- notice how all of the important changes are wrapped in \"if `ca-derivations` then\" blocks.  The PR comment doesn\u0027t explain this, so it\u0027s easy to misread what it does unless you look at the code.\n\nAnyways, that PR has absolutely no effect unless you\u0027re using `ca-derivations`, which tvix doesn\u0027t support yet.",
+      "parentUuid": "52ba44cd_1edbf8c0",
+      "revId": "b56e9fb91087c2e98002618aadc8f9343841d963",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
