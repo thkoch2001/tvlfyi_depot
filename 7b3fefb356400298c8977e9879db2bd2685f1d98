@@ -16,6 +16,24 @@
       "message": "The extra Mutex is quite annoying here, I added it so `FUSE` is `Sync` which is required for `fuse-backend-rs` since it spawns multiple threads.\n\nI tried doing `Box\u003cdyn BlobReader + Send Sync\u003e` but the `NaiveSeeker` contains some `tonic`/proto types which are not `Sync`.\n\nOpen to ideas",
       "revId": "7b3fefb356400298c8977e9879db2bd2685f1d98",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2460ac5a_fa4ef611",
+        "filename": "tvix/store/src/fuse/mod.rs",
+        "patchSetId": 7
+      },
+      "lineNbr": 89,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-09-18T11:15:14Z",
+      "side": 1,
+      "message": "Can we push this problem further down, make all `BlobReader` `Sync` and wrap the inner reader(s) in a Mutex? Not sure it\u0027d make much of a difference.\n\nIn any case, ensuring the hashmap is usable in a more concurrent fashion, or making sure we keep these exclusive locks as short as possible probably is gonna make more of a difference.",
+      "parentUuid": "9f8bc439_e4fdc15c",
+      "revId": "7b3fefb356400298c8977e9879db2bd2685f1d98",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
