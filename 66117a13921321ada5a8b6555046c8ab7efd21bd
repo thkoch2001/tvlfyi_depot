@@ -38,6 +38,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "b55def0a_b77eff81",
+        "filename": "tvix/store/Cargo.toml",
+        "patchSetId": 8
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-09-18T14:03:58Z",
+      "side": 1,
+      "message": "SGTM!",
+      "parentUuid": "0c122b28_8d3b1b79",
+      "revId": "66117a13921321ada5a8b6555046c8ab7efd21bd",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "139e50fc_fbd7b3bf",
         "filename": "tvix/store/src/fuse/tests.rs",
         "patchSetId": 8
@@ -67,6 +85,24 @@
       "side": 1,
       "message": "I\u0027ll go upstream and see if they\u0027d take a patch to make this configurable.",
       "parentUuid": "139e50fc_fbd7b3bf",
+      "revId": "66117a13921321ada5a8b6555046c8ab7efd21bd",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "862d1077_5f9f0c42",
+        "filename": "tvix/store/src/fuse/tests.rs",
+        "patchSetId": 8
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-09-18T14:03:58Z",
+      "side": 1,
+      "message": "❤️",
+      "parentUuid": "1da634ef_2223ebc1",
       "revId": "66117a13921321ada5a8b6555046c8ab7efd21bd",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
