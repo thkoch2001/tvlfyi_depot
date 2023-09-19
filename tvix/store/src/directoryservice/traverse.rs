@@ -1,6 +1,7 @@
 use super::DirectoryService;
-use crate::{proto::NamedNode, Error};
+use crate::{proto::NamedNode, B3Digest, Error};
 use std::{os::unix::ffi::OsStrExt, sync::Arc};
+use tokio::task::spawn_blocking;
 use tracing::{instrument, warn};
 
 /// This traverses from a (root) node to the given (sub)path, returning the Node
@@ -10,8 +11,25 @@ use tracing::{instrument, warn};
 /// Or do we consider this to be a non-issue due to store composition and local caching?
 /// TODO: the name of this function (and mod) is a bit bad, because it doesn't
 /// clearly distinguish it from the BFS traversers.
+///
+/// # Panics
+/// This will panic if called outside the context of a Tokio runtime.
 #[instrument(skip(directory_service))]
-pub fn traverse_to(
+pub async fn traverse_to(
+    directory_service: Arc<dyn DirectoryService>,
+    node: crate::proto::node::Node,
+    path: &std::path::Path,
+) -> Result<Option<crate::proto::node::Node>, Error> {
+    let tokio_handle = tokio::runtime::Handle::current();
+    let path = path.to_owned();
+
+    spawn_blocking(move || traverse_to_impl(tokio_handle, directory_service, node, &path))
+        .await
+        .unwrap()
+}
+
+fn traverse_to_impl(
+    tokio_handle: tokio::runtime::Handle,
     directory_service: Arc<dyn DirectoryService>,
     node: crate::proto::node::Node,
     path: &std::path::Path,
@@ -40,13 +58,17 @@ pub fn traverse_to(
                     Ok(None)
                 }
                 crate::proto::node::Node::Directory(directory_node) => {
-                    let digest = directory_node
+                    let digest: B3Digest = directory_node
                         .digest
                         .try_into()
                         .map_err(|_e| Error::StorageError("invalid digest length".to_string()))?;
 
                     // fetch the linked node from the directory_service
-                    match directory_service.get(&digest)? {
+                    let directory_service_clone = directory_service.clone();
+                    let digest_clone = digest.clone();
+                    let task = tokio_handle
+                        .spawn(async move { directory_service_clone.get(&digest_clone).await });
+                    match tokio_handle.block_on(task).unwrap()? {
                         // If we didn't get the directory node that's linked, that's a store inconsistency, bail out!
                         None => {
                             warn!("directory {} does not exist", digest);
@@ -70,7 +92,12 @@ pub fn traverse_to(
                                 // child node found, recurse with it and the rest of the path.
                                 Some(child_node) => {
                                     let rest_path: std::path::PathBuf = it.collect();
-                                    traverse_to(directory_service, child_node, &rest_path)
+                                    traverse_to_impl(
+                                        tokio_handle,
+                                        directory_service,
+                                        child_node,
+                                        &rest_path,
+                                    )
                                 }
                             }
                         }
@@ -92,16 +119,18 @@ mod tests {
 
     use super::traverse_to;
 
-    #[test]
-    fn test_traverse_to() {
+    #[tokio::test]
+    async fn test_traverse_to() {
         let directory_service = gen_directory_service();
 
         let mut handle = directory_service.put_multiple_start();
         handle
             .put(DIRECTORY_WITH_KEEP.clone())
+            .await
             .expect("must succeed");
         handle
             .put(DIRECTORY_COMPLICATED.clone())
+            .await
             .expect("must succeed");
 
         // construct the node for DIRECTORY_COMPLICATED
@@ -128,6 +157,7 @@ mod tests {
                 node_directory_complicated.clone(),
                 &PathBuf::from(""),
             )
+            .await
             .expect("must succeed");
 
             assert_eq!(Some(node_directory_complicated.clone()), resp);
@@ -140,6 +170,7 @@ mod tests {
                 node_directory_complicated.clone(),
                 &PathBuf::from("keep"),
             )
+            .await
             .expect("must succeed");
 
             assert_eq!(Some(node_directory_with_keep), resp);
@@ -152,6 +183,7 @@ mod tests {
                 node_directory_complicated.clone(),
                 &PathBuf::from("keep/.keep"),
             )
+            .await
             .expect("must succeed");
 
             assert_eq!(Some(node_file_keep.clone()), resp);
@@ -164,6 +196,7 @@ mod tests {
                 node_directory_complicated.clone(),
                 &PathBuf::from("/keep/.keep"),
             )
+            .await
             .expect("must succeed");
 
             assert_eq!(Some(node_file_keep), resp);
@@ -176,6 +209,7 @@ mod tests {
                 node_directory_complicated.clone(),
                 &PathBuf::from("void"),
             )
+            .await
             .expect("must succeed");
 
             assert_eq!(None, resp);
@@ -188,6 +222,7 @@ mod tests {
                 node_directory_complicated.clone(),
                 &PathBuf::from("//v/oid"),
             )
+            .await
             .expect("must succeed");
 
             assert_eq!(None, resp);
@@ -201,6 +236,7 @@ mod tests {
                 node_directory_complicated.clone(),
                 &PathBuf::from("keep/.keep/foo"),
             )
+            .await
             .expect("must succeed");
 
             assert_eq!(None, resp);
@@ -213,6 +249,7 @@ mod tests {
                 node_directory_complicated.clone(),
                 &PathBuf::from("/"),
             )
+            .await
             .expect("must succeed");
 
             assert_eq!(Some(node_directory_complicated), resp);
