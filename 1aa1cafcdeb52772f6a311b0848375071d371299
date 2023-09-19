@@ -34,6 +34,24 @@
       "parentUuid": "5f745066_cc29c0ab",
       "revId": "1aa1cafcdeb52772f6a311b0848375071d371299",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cabd6f49_efe277c7",
+        "filename": "tvix/store/src/fuse/mod.rs",
+        "patchSetId": 10
+      },
+      "lineNbr": 180,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2023-09-19T19:14:36Z",
+      "side": 1,
+      "message": "Going with your suggestion for now: limit the write lock to this section and checking if someone else beat us to updating the inode tracker/store path map.",
+      "parentUuid": "2c87624f_59aebde0",
+      "revId": "1aa1cafcdeb52772f6a311b0848375071d371299",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
