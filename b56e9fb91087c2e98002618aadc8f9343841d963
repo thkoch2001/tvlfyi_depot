@@ -52,6 +52,24 @@
       "parentUuid": "594648b4_d39b2b7b",
       "revId": "b56e9fb91087c2e98002618aadc8f9343841d963",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "82999064_f6468eb0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-09-19T08:46:44Z",
+      "side": 1,
+      "message": "A different version is an instance of a different \"name\", as would be a different pname. They both end up in the \"name\".",
+      "parentUuid": "beee85d2_b6245114",
+      "revId": "b56e9fb91087c2e98002618aadc8f9343841d963",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
