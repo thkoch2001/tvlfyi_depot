@@ -105,6 +105,24 @@
       "parentUuid": "1da634ef_2223ebc1",
       "revId": "66117a13921321ada5a8b6555046c8ab7efd21bd",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8378c5b6_ee1ee692",
+        "filename": "tvix/store/src/fuse/tests.rs",
+        "patchSetId": 8
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2023-09-19T16:41:20Z",
+      "side": 1,
+      "message": "Upstream pull request: https://github.com/cloud-hypervisor/fuse-backend-rs/pull/153",
+      "parentUuid": "862d1077_5f9f0c42",
+      "revId": "66117a13921321ada5a8b6555046c8ab7efd21bd",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
