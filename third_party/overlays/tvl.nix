@@ -39,12 +39,7 @@ depot.nix.readTree.drvTargets {
   nix = self.nix_2_3;
   nix_latest = super.nix;
 
-  # nixos-option only builds against Nix 2.15
-  nixos-option = super.nixos-option.override {
-    nix = self.nixVersions.nix_2_15;
-  };
-
-  # Too match telega in emacs-overlay or wherever
+  # To match telega in emacs-overlay or wherever
   tdlib = super.tdlib.overrideAttrs (_: {
     version = "1.8.16";
     src = self.fetchFromGitHub {
@@ -112,10 +107,6 @@ depot.nix.readTree.drvTargets {
       meta.ci.skip = true;
     };
   }));
-
-  # nixpkgs-review added ZSH completions upstream, which collide with
-  # nix-zsh-completions.
-  nixpkgs-review = self.lib.hiPrio super.nixpkgs-review;
 
   # Pin a newer version of crate2nix from git, which is not officially
   # released but supports `dep:`
