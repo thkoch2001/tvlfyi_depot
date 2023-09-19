@@ -1472,12 +1472,20 @@ rec {
         authors = [
           "SOFe <sofe2038@gmail.com>"
         ];
+        dependencies = [
+          {
+            name = "futures-io-preview";
+            packageId = "futures-io-preview";
+            optional = true;
+          }
+        ];
         features = {
           "futures" = [ "futures-io-preview" ];
           "futures-io-preview" = [ "dep:futures-io-preview" ];
           "tokio" = [ "tokio-io" ];
           "tokio-io" = [ "dep:tokio-io" ];
         };
+        resolvedDefaultFeatures = [ "futures" "futures-io-preview" ];
       };
       "countme" = rec {
         crateName = "countme";
@@ -2502,6 +2510,20 @@ rec {
           "default" = [ "std" ];
         };
         resolvedDefaultFeatures = [ "std" ];
+      };
+      "futures-io-preview" = rec {
+        crateName = "futures-io-preview";
+        version = "0.3.0-alpha.19";
+        edition = "2018";
+        sha256 = "1npb04xbn2gw5rjllz88cb88fql44xxfkgcidjjj26fva3j4m4gl";
+        libName = "futures_io";
+        authors = [
+          "Alex Crichton <alex@alexcrichton.com>"
+        ];
+        features = {
+          "default" = [ "std" ];
+        };
+        resolvedDefaultFeatures = [ "default" "std" ];
       };
       "futures-macro" = rec {
         crateName = "futures-macro";
@@ -7496,7 +7518,7 @@ rec {
           "time" = [ "tokio/time" ];
           "tokio-util" = [ "dep:tokio-util" ];
         };
-        resolvedDefaultFeatures = [ "default" "net" "time" ];
+        resolvedDefaultFeatures = [ "default" "fs" "net" "time" ];
       };
       "tokio-util" = rec {
         crateName = "tokio-util";
@@ -8704,6 +8726,10 @@ rec {
             packageId = "anyhow";
           }
           {
+            name = "async-stream";
+            packageId = "async-stream";
+          }
+          {
             name = "blake3";
             packageId = "blake3";
             features = [ "rayon" "std" ];
@@ -8724,6 +8750,7 @@ rec {
           {
             name = "count-write";
             packageId = "count-write";
+            features = [ "futures" ];
           }
           {
             name = "data-encoding";
@@ -8796,6 +8823,7 @@ rec {
           {
             name = "tokio-stream";
             packageId = "tokio-stream";
+            features = [ "fs" ];
           }
           {
             name = "tokio-util";
