@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1194d69f_b6377682",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2023-09-19T20:20:51Z",
+      "side": 1,
+      "message": "I\u0027d like to add a integration test for this that spins up a qemu or cloud-hypervisor VM, but we\u0027ll need to support backwards seeking as that is required for making the microvm bootable.",
+      "revId": "724ac5a7dbd1313d2706ed6d0c6b1490cc50bd8d",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
