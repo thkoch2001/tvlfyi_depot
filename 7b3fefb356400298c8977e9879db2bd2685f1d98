@@ -70,6 +70,24 @@
       "parentUuid": "51856966_0db9e5a4",
       "revId": "7b3fefb356400298c8977e9879db2bd2685f1d98",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e9f9b4fe_910f9376",
+        "filename": "tvix/store/src/fuse/mod.rs",
+        "patchSetId": 7
+      },
+      "lineNbr": 89,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2023-09-19T17:15:12Z",
+      "side": 1,
+      "message": "Decided to go the `Arc\u003cMutex\u003c..\u003e\u003e` route, that way we can do concurrent reads of different file handles.\n\nDefinitely room to improve on the concurrency front, but we can do those as followups.",
+      "parentUuid": "34618092_aae7b3ff",
+      "revId": "7b3fefb356400298c8977e9879db2bd2685f1d98",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }

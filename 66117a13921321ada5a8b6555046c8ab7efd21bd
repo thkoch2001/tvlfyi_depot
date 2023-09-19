@@ -54,6 +54,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "325365ac_98d3a3c1",
+        "filename": "tvix/store/Cargo.toml",
+        "patchSetId": 8
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2023-09-19T17:15:12Z",
+      "side": 1,
+      "message": "I\u0027ll probably do this as a followup to keep this cl from growing any more, if that is alright.",
+      "parentUuid": "b55def0a_b77eff81",
+      "revId": "66117a13921321ada5a8b6555046c8ab7efd21bd",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "139e50fc_fbd7b3bf",
@@ -121,6 +139,24 @@
       "side": 1,
       "message": "Upstream pull request: https://github.com/cloud-hypervisor/fuse-backend-rs/pull/153",
       "parentUuid": "862d1077_5f9f0c42",
+      "revId": "66117a13921321ada5a8b6555046c8ab7efd21bd",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "156cd996_e087ca97",
+        "filename": "tvix/store/src/fuse/tests.rs",
+        "patchSetId": 8
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2023-09-19T17:15:12Z",
+      "side": 1,
+      "message": "Going to point this at my branch for now so we don\u0027t block landing this. We can switch back to upstream once its merged in.",
+      "parentUuid": "8378c5b6_ee1ee692",
       "revId": "66117a13921321ada5a8b6555046c8ab7efd21bd",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
