@@ -1,5 +1,5 @@
 use super::DirectoryService;
-use crate::{proto::NamedNode, Error};
+use crate::{proto::NamedNode, B3Digest, Error};
 use std::{os::unix::ffi::OsStrExt, sync::Arc};
 use tracing::{instrument, warn};
 
@@ -12,6 +12,7 @@ use tracing::{instrument, warn};
 /// clearly distinguish it from the BFS traversers.
 #[instrument(skip(directory_service))]
 pub fn traverse_to(
+    tokio_handle: tokio::runtime::Handle,
     directory_service: Arc<dyn DirectoryService>,
     node: crate::proto::node::Node,
     path: &std::path::Path,
@@ -40,13 +41,17 @@ pub fn traverse_to(
                     Ok(None)
                 }
                 crate::proto::node::Node::Directory(directory_node) => {
-                    let digest = directory_node
+                    let digest: B3Digest = directory_node
                         .digest
                         .try_into()
                         .map_err(|_e| Error::StorageError("invalid digest length".to_string()))?;
 
                     // fetch the linked node from the directory_service
-                    match directory_service.get(&digest)? {
+                    let directory_service_clone = directory_service.clone();
+                    let digest_clone = digest.clone();
+                    let task = tokio_handle
+                        .spawn(async move { directory_service_clone.get(&digest_clone).await });
+                    match tokio_handle.block_on(task).unwrap()? {
                         // If we didn't get the directory node that's linked, that's a store inconsistency, bail out!
                         None => {
                             warn!("directory {} does not exist", digest);
@@ -70,7 +75,12 @@ pub fn traverse_to(
                                 // child node found, recurse with it and the rest of the path.
                                 Some(child_node) => {
                                     let rest_path: std::path::PathBuf = it.collect();
-                                    traverse_to(directory_service, child_node, &rest_path)
+                                    traverse_to(
+                                        tokio_handle,
+                                        directory_service,
+                                        child_node,
+                                        &rest_path,
+                                    )
                                 }
                             }
                         }
@@ -96,12 +106,13 @@ mod tests {
     fn test_traverse_to() {
         let directory_service = gen_directory_service();
 
+        let rt = tokio::runtime::Runtime::new().unwrap();
+        let tokio_handle = rt.handle();
+
         let mut handle = directory_service.put_multiple_start();
-        handle
-            .put(DIRECTORY_WITH_KEEP.clone())
+        rt.block_on(handle.put(DIRECTORY_WITH_KEEP.clone()))
             .expect("must succeed");
-        handle
-            .put(DIRECTORY_COMPLICATED.clone())
+        rt.block_on(handle.put(DIRECTORY_COMPLICATED.clone()))
             .expect("must succeed");
 
         // construct the node for DIRECTORY_COMPLICATED
@@ -124,6 +135,7 @@ mod tests {
         // traversal to an empty subpath should return the root node.
         {
             let resp = traverse_to(
+                tokio_handle.clone(),
                 directory_service.clone(),
                 node_directory_complicated.clone(),
                 &PathBuf::from(""),
@@ -136,6 +148,7 @@ mod tests {
         // traversal to `keep` should return the node for DIRECTORY_WITH_KEEP
         {
             let resp = traverse_to(
+                tokio_handle.clone(),
                 directory_service.clone(),
                 node_directory_complicated.clone(),
                 &PathBuf::from("keep"),
@@ -148,6 +161,7 @@ mod tests {
         // traversal to `keep/.keep` should return the node for the .keep file
         {
             let resp = traverse_to(
+                tokio_handle.clone(),
                 directory_service.clone(),
                 node_directory_complicated.clone(),
                 &PathBuf::from("keep/.keep"),
@@ -160,6 +174,7 @@ mod tests {
         // traversal to `keep/.keep` should return the node for the .keep file
         {
             let resp = traverse_to(
+                tokio_handle.clone(),
                 directory_service.clone(),
                 node_directory_complicated.clone(),
                 &PathBuf::from("/keep/.keep"),
@@ -172,6 +187,7 @@ mod tests {
         // traversal to `void` should return None (doesn't exist)
         {
             let resp = traverse_to(
+                tokio_handle.clone(),
                 directory_service.clone(),
                 node_directory_complicated.clone(),
                 &PathBuf::from("void"),
@@ -184,6 +200,7 @@ mod tests {
         // traversal to `void` should return None (doesn't exist)
         {
             let resp = traverse_to(
+                tokio_handle.clone(),
                 directory_service.clone(),
                 node_directory_complicated.clone(),
                 &PathBuf::from("//v/oid"),
@@ -197,6 +214,7 @@ mod tests {
         // reached, as keep/.keep already is a file)
         {
             let resp = traverse_to(
+                tokio_handle.clone(),
                 directory_service.clone(),
                 node_directory_complicated.clone(),
                 &PathBuf::from("keep/.keep/foo"),
@@ -209,6 +227,7 @@ mod tests {
         // traversal to a subpath of '/' should return the root node.
         {
             let resp = traverse_to(
+                tokio_handle.clone(),
                 directory_service.clone(),
                 node_directory_complicated.clone(),
                 &PathBuf::from("/"),
