@@ -16,6 +16,24 @@
       "message": "can we only try to get a write-able version here, rather than for the whole function? (and maybe check another time noone else populated that StorePath in the meantime).\n\nDue to PathinfoSevice not being asyncified yet we don\u0027t quite see if, but we fetch a Pathinfo in L158, which can take a significant amount of time, during which everything else accessing self.store_paths will have to wait.",
       "revId": "1aa1cafcdeb52772f6a311b0848375071d371299",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2c87624f_59aebde0",
+        "filename": "tvix/store/src/fuse/mod.rs",
+        "patchSetId": 10
+      },
+      "lineNbr": 180,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2023-09-19T18:59:19Z",
+      "side": 1,
+      "message": "Good point. Sounds like we need some sort of mechanism to coalesce concurrent lookups for the same store paths. Maybe we throw in another `Mutex` in the `StorePath` values. That way we can use the inner `Mutex` to prevent concurrent lookups of the same store path while allowing other store paths to be accessed?",
+      "parentUuid": "5f745066_cc29c0ab",
+      "revId": "1aa1cafcdeb52772f6a311b0848375071d371299",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
