@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "99d249ed_6742e82d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2023-09-19T20:38:22Z",
+      "side": 1,
+      "message": "CRFO-approved after discussing with @wpcarro on Telegram.",
+      "revId": "a434f18bbe0f35251af0156e7de3173c3e70ca71",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
