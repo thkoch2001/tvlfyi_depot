@@ -34,6 +34,24 @@
       "parentUuid": "52ba44cd_1edbf8c0",
       "revId": "b56e9fb91087c2e98002618aadc8f9343841d963",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "beee85d2_b6245114",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-09-19T08:44:28Z",
+      "side": 1,
+      "message": "\u003e Yes, it affects .outPath hashes of packages downstream of the affected FOD.\n\nHow? For output path calculation, FODs are replaced with some hashDevivationModulo string (https://cs.tvl.fyi/depot@6c586bc2a7a49755b4b2566c034bc1affc92011d/-/blob/tvix/nix-compat/src/derivation/mod.rs?L151), so this should only differ if the name differs (and we do already consider this different with the current design?)\n\n\u003e You mentioned that PR on IRC, but I think you misunderstand what it does. Read the code that goes with it -- notice how all of the important changes are wrapped in \"if ca-derivations then\" blocks. The PR comment doesn\u0027t explain this, so it\u0027s easy to misread what it does unless you look at the code.\n\nI read the code, and I understand it\u0027s only used in the ca-derivations case. My point was mostly that even Nix started to short-circuit in some FODs, because the output path doesn\u0027t change.\n\nMaybe it\u0027s better to talk about this in sync, to make sure we both talk about the same thing?",
+      "parentUuid": "594648b4_d39b2b7b",
+      "revId": "b56e9fb91087c2e98002618aadc8f9343841d963",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
