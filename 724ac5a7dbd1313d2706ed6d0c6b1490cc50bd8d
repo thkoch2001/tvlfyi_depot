@@ -34,6 +34,24 @@
       "parentUuid": "1194d69f_b6377682",
       "revId": "724ac5a7dbd1313d2706ed6d0c6b1490cc50bd8d",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "35f38994_7790d9c6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2023-09-20T12:49:09Z",
+      "side": 1,
+      "message": "Yeah I\u0027m okay with waiting until we solve it more generally rather than adding hacks, I can always keep those in my own branch just for demo purposes.\n\nI\u0027m not sure exactly which thing broke, something that runs in NixOS stage 2. We could probably replace systemd init for a small binary from Nix that prints \"hello world\" and shuts down. That would at a minimum make sure virtiofs is setup properly and works at a very basic level.",
+      "parentUuid": "b9b2394c_64e7252f",
+      "revId": "724ac5a7dbd1313d2706ed6d0c6b1490cc50bd8d",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
