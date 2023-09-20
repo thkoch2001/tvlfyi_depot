@@ -16,6 +16,24 @@
       "message": "s/pevent/prevent/\n\n… make sure we drop the read lock immediately after reading, to prevent deadlocks.",
       "revId": "dc7ea641fde9a87f9701324edc833483ce37500a",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "83895090_082d0b54",
+        "filename": "tvix/store/src/fuse/mod.rs",
+        "patchSetId": 12
+      },
+      "lineNbr": 147,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2023-09-20T11:57:21Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7c9d2b15_d60d1ba8",
+      "revId": "dc7ea641fde9a87f9701324edc833483ce37500a",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
