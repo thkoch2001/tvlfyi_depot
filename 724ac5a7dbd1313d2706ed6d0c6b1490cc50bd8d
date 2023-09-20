@@ -16,6 +16,24 @@
       "message": "I\u0027d like to add a integration test for this that spins up a qemu or cloud-hypervisor VM, but we\u0027ll need to support backwards seeking as that is required for making the microvm bootable.",
       "revId": "724ac5a7dbd1313d2706ed6d0c6b1490cc50bd8d",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b9b2394c_64e7252f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-09-20T10:26:37Z",
+      "side": 1,
+      "message": "I mean, we could probably keep the digest we were requesting around, and trigger a new request in case a backwards seek is requested, but it\u0027s hard to see how much this would complicate things.\n\nAlso, this is kinda interleaved with the verified streaming scenario/protocol too.\n\nDoes this break normal linux VMs too, if they just execute some binaries from there?",
+      "parentUuid": "1194d69f_b6377682",
+      "revId": "724ac5a7dbd1313d2706ed6d0c6b1490cc50bd8d",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
