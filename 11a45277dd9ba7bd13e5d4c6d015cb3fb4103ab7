@@ -90,6 +90,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "71fca9fb_2a117897",
+        "filename": "tvix/store/src/directoryservice/traverse.rs",
+        "patchSetId": 3
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2023-09-21T14:28:27Z",
+      "side": 1,
+      "message": "Hmm, maybe this was better before. So here\u0027s the problem we\u0027re facing:\n- `tokio::runtime::Handle::current()` must be called in an async context (or it panics)\n- `tokio_handle.block_on()` must be called in a sync context (or it panics)\n\nThis means we need some coordination when crossing the boundary. For async-\u003esync we need to get the handle the in the async context and then pass the handle to the work inside `spawn_blocking`.\n\nFor sync-\u003easync boundary (like tvix_store_io), we already have a tokio handle that we created at initialization time, and we use that same handle to spawn async work.\n\nSo for `write_nar`, most of its callers are async. So we should provide the async function that does the `Handle::current()` -\u003e `spawn_blocking` -\u003e `tokio_handle.block_on` stuff internally. It looks and works like a regular async fn to the caller.\n\nFor `traverse_to`, the only caller is `tvix_store_io` which is sync and already has its own tokio_handle. In this case I think it makes sense to leave `traverse_to` as sync and expect the called to pass in their tokio handle. If we make it async (like the current patchset), `tvix_store_io` needs to do a `tokio::spawn` to call the function which seems like an extra step that\u0027s not needed.",
+      "parentUuid": "f3b463e5_83067df2",
+      "revId": "11a45277dd9ba7bd13e5d4c6d015cb3fb4103ab7",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "739b7d9d_0c216cf4",
         "filename": "tvix/store/src/fs/mod.rs",
         "patchSetId": 3
