@@ -88,10 +88,8 @@ pub async fn traverse_to(
 mod tests {
     use std::path::PathBuf;
 
-    use crate::tests::{
-        fixtures::{DIRECTORY_COMPLICATED, DIRECTORY_WITH_KEEP},
-        utils::gen_directory_service,
-    };
+    use crate::fixtures::{DIRECTORY_COMPLICATED, DIRECTORY_WITH_KEEP};
+    use crate::utils::gen_directory_service;
 
     use super::traverse_to;
 
