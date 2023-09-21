@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cf3c9990_e33c73c8",
+        "filename": "tvix/store/src/pathinfoservice/grpc.rs",
+        "patchSetId": 3
+      },
+      "lineNbr": 186,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-09-21T10:14:17Z",
+      "side": 0,
+      "message": "Very happy to see this being gone :-)",
+      "revId": "7e737fde34260daa477794d63b0b3344b4a1d81b",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}

@@ -1,0 +1,123 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7f71821d_4008b582",
+        "filename": "tvix/store/src/directoryservice/mod.rs",
+        "patchSetId": 3
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-09-21T10:14:17Z",
+      "side": 1,
+      "message": "Can probably drop that newline and have it sort the imports.",
+      "revId": "11a45277dd9ba7bd13e5d4c6d015cb3fb4103ab7",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b08b111a_fa27a518",
+        "filename": "tvix/store/src/directoryservice/mod.rs",
+        "patchSetId": 3
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-09-21T10:14:17Z",
+      "side": 1,
+      "message": "Agree - or removing that contrstuctor to elsewhere entirely, as discussed in DM (out of scope for this CL though)",
+      "revId": "11a45277dd9ba7bd13e5d4c6d015cb3fb4103ab7",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "21a3651b_906d1321",
+        "filename": "tvix/store/src/directoryservice/traverse.rs",
+        "patchSetId": 3
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-09-21T10:14:17Z",
+      "side": 1,
+      "message": "Can we require this to just be in some runtime context where `tokio::runtime::Handle::current()` works (and add this requirement to the docstring), similar to how we do in `write_nar`? As you can see a bit further down in the testing code, this gets quite verbose.",
+      "revId": "11a45277dd9ba7bd13e5d4c6d015cb3fb4103ab7",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "739b7d9d_0c216cf4",
+        "filename": "tvix/store/src/fs/mod.rs",
+        "patchSetId": 3
+      },
+      "lineNbr": 452,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-09-21T10:14:17Z",
+      "side": 1,
+      "message": "Do we even need to block_on here? We already dropped rx, so the only thing this task is still gonna do is break out of the loop.\n\nI\u0027d probably drop that line, the `let task` above, and add a comment above the `.spawn` call explaining this will run in the background immediately.",
+      "revId": "11a45277dd9ba7bd13e5d4c6d015cb3fb4103ab7",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "83442835_44db55f4",
+        "filename": "tvix/store/src/fs/tests.rs",
+        "patchSetId": 3
+      },
+      "lineNbr": 6,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-09-21T10:14:17Z",
+      "side": 1,
+      "message": "This is more out of curiosity - did this fail when we tried to keep using sync io here?",
+      "revId": "11a45277dd9ba7bd13e5d4c6d015cb3fb4103ab7",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "498e02b3_75d66ead",
+        "filename": "tvix/store/src/nar/renderer.rs",
+        "patchSetId": 3
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-09-21T10:14:17Z",
+      "side": 1,
+      "message": "Add a line here explaining this needs to be called inside the context of a tokio runtime.",
+      "revId": "11a45277dd9ba7bd13e5d4c6d015cb3fb4103ab7",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c0280ba7_2419a76c",
+        "filename": "tvix/store/src/pathinfoservice/mod.rs",
+        "patchSetId": 3
+      },
+      "lineNbr": 51,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-09-21T10:14:17Z",
+      "side": 1,
+      "message": "Why does this (now) return a Pin\u003cBox\u003c…\u003e\u003e? Can you add a comment?",
+      "revId": "11a45277dd9ba7bd13e5d4c6d015cb3fb4103ab7",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
