@@ -36,8 +36,13 @@ let
         nativeBuildInputs = protobufDep prev;
       };
 
+      tvix-castore = prev: {
+        PROTO_ROOT = depot.tvix.proto;
+        nativeBuildInputs = protobufDep prev;
+      };
+
       tvix-store = prev: {
-        PROTO_ROOT = depot.tvix.store.protos;
+        PROTO_ROOT = depot.tvix.proto;
         nativeBuildInputs = protobufDep prev;
       };
     };
@@ -103,20 +108,26 @@ in
     ] ++ iconvDarwinDep;
   };
 
-  # Builds and tests the code in store/protos.
-  store-protos-go = pkgs.buildGoModule {
-    name = "store-golang";
-    src = depot.third_party.gitignoreSource ./store/protos;
+  # Builds and tests the code in castore/protos.
+  # castore-protos-go = pkgs.buildGoModule {
+  #   name = "castore-golang";
+  #   src = depot.third_party.gitignoreSource ./store/protos;
+  #   vendorHash = "sha256-00000000000000000000000000000000000000000000";
+  # };
 
-    vendorHash = "sha256-7xfXBBU3xJz7ifjk7Owm/byTfCQ8oaZtqXzBKhLqo00=";
-  };
+  # Builds and tests the code in store/protos.
+  # store-protos-go = pkgs.buildGoModule {
+  #   name = "store-golang";
+  #   src = depot.third_party.gitignoreSource ./store/protos;
+  #   vendorHash = "sha256-00000000000000000000000000000000000000000000";
+  # };
 
   # Build the Rust documentation for publishing on docs.tvix.dev.
   rust-docs = pkgs.stdenv.mkDerivation {
     inherit cargoDeps;
     name = "tvix-rust-docs";
     src = depot.third_party.gitignoreSource ./.;
-    PROTO_ROOT = depot.tvix.store.protos;
+    PROTO_ROOT = depot.tvix.proto;
 
     buildInputs = [
       pkgs.fuse
@@ -135,5 +146,10 @@ in
     '';
   };
 
-  meta.ci.targets = [ "store-protos-go" "shell" "rust-docs" ];
+  meta.ci.targets = [
+    # "castore-protos-go"
+    # "store-protos-go"
+    "shell"
+    "rust-docs"
+  ];
 }
