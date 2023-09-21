@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5491c9f1_1c5208a5",
+        "filename": "tvix/cli/src/tvix_store_io.rs",
+        "patchSetId": 6
+      },
+      "lineNbr": 313,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-09-21T17:47:39Z",
+      "side": 1,
+      "message": "This is not blocking anymore. While calculate_size_and_sha256 internally spawns a blocking task, import_path_with_pathinfo doesn\u0027t block anymore.",
+      "revId": "bbcbf496c80b6d97dca4177419fa9abd71194eec",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
