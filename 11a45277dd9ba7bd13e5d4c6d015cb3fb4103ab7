@@ -194,6 +194,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "4ef13db1_419916fb",
+        "filename": "tvix/store/src/fs/tests.rs",
+        "patchSetId": 3
+      },
+      "lineNbr": 6,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-09-21T14:30:45Z",
+      "side": 1,
+      "message": "hmmh, it could have been an instance of some tests not running on a multithreaded executor. had to do this in some places.\n\nusing async FS is fine however, was just curious.",
+      "parentUuid": "32c1dc5e_b8308b1e",
+      "revId": "11a45277dd9ba7bd13e5d4c6d015cb3fb4103ab7",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "498e02b3_75d66ead",
