@@ -16,6 +16,24 @@
       "message": "This is not blocking anymore. While calculate_size_and_sha256 internally spawns a blocking task, import_path_with_pathinfo doesn\u0027t block anymore.",
       "revId": "bbcbf496c80b6d97dca4177419fa9abd71194eec",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "23972f31_4daa0218",
+        "filename": "tvix/cli/src/tvix_store_io.rs",
+        "patchSetId": 6
+      },
+      "lineNbr": 313,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2023-09-21T17:52:29Z",
+      "side": 1,
+      "message": "Fixed",
+      "parentUuid": "5491c9f1_1c5208a5",
+      "revId": "bbcbf496c80b6d97dca4177419fa9abd71194eec",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
