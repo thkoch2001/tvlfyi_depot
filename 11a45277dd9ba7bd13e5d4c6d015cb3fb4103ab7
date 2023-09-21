@@ -106,6 +106,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "87409502_f0a23ae9",
+        "filename": "tvix/store/src/directoryservice/traverse.rs",
+        "patchSetId": 3
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-09-21T14:29:41Z",
+      "side": 1,
+      "message": "yeah, I think I like this more. thanks!",
+      "parentUuid": "f3b463e5_83067df2",
+      "revId": "11a45277dd9ba7bd13e5d4c6d015cb3fb4103ab7",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "739b7d9d_0c216cf4",
