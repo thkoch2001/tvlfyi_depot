@@ -7,7 +7,7 @@
 // 	protoc        (unknown)
 // source: tvix/store/protos/castore.proto
 
-package storev1
+package castorev1
 
 import (
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
