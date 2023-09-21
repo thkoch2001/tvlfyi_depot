@@ -1,5 +1,5 @@
 [package]
-name = "tvix-store"
+name = "tvix-castore"
 version = "0.1.0"
 edition = "2021"
 
@@ -18,7 +18,7 @@ rayon = "1.6.1"
 sha2 = "0.10.6"
 sled = { version = "0.34.7", features = ["compression"] }
 thiserror = "1.0.38"
-tokio-stream = { version = "0.1.14", features = ["fs"] }
+tokio-stream = { version = "0.1.14", features = ["fs", "net"] }
 tokio = { version = "1.28.0", features = ["fs", "net", "rt-multi-thread", "signal"] }
 tonic = "0.8.2"
 tracing = "0.1.37"
@@ -33,21 +33,10 @@ serde_json = "1.0"
 url = "2.4.0"
 pin-project-lite = "0.2.13"
 const-zero = "0.1.1"
-tvix-castore = { path = "../castore" }
-
-[dependencies.fuse-backend-rs]
-optional = true
-# TODO: Switch back to upstream version once https://github.com/cloud-hypervisor/fuse-backend-rs/pull/153 lands.
-git = "https://github.com/cbrewster/fuse-backend-rs.git"
-branch = "optional-allow_other"
 
 [dependencies.tonic-reflection]
 optional = true
 version = "0.5.0"
-
-[dependencies.libc]
-optional = true
-version = "0.2.144"
 
 [build-dependencies]
 prost-build = "0.11.2"
@@ -59,7 +48,4 @@ tempfile = "3.3.0"
 tonic-mock = { git = "https://github.com/brainrake/tonic-mock", branch = "bump-dependencies" }
 
 [features]
-default = ["fuse", "reflection"]
-fs = ["dep:libc", "dep:fuse-backend-rs"]
-fuse = ["fs"]
 reflection = ["tonic-reflection"]
