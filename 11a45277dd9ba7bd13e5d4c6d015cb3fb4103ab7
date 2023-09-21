@@ -124,6 +124,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "e9150fc4_16316482",
+        "filename": "tvix/store/src/directoryservice/traverse.rs",
+        "patchSetId": 3
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2023-09-21T15:29:30Z",
+      "side": 1,
+      "message": "From the DMs, we decided to keep this async since it turns out we can write it fully in terms of async if we get rid of the recursion.",
+      "parentUuid": "87409502_f0a23ae9",
+      "revId": "11a45277dd9ba7bd13e5d4c6d015cb3fb4103ab7",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "739b7d9d_0c216cf4",
