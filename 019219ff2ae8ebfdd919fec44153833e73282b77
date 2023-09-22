@@ -36,6 +36,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "08881534_e145c773",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-09-22T12:27:39Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "517d78fa_b37d93ca",
+      "revId": "019219ff2ae8ebfdd919fec44153833e73282b77",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "1440794c_bba8704b",
@@ -67,6 +85,24 @@
       "side": 1,
       "message": "This will get reenabled on the next, to-be-written CL - see commit message. We unfortunately can\u0027t update the go tooling atomically.",
       "parentUuid": "1440794c_bba8704b",
+      "revId": "019219ff2ae8ebfdd919fec44153833e73282b77",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fcd79304_35b7bb15",
+        "filename": "tvix/default.nix",
+        "patchSetId": 7
+      },
+      "lineNbr": 110,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-09-22T12:27:39Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4d42d06c_04a11c1e",
       "revId": "019219ff2ae8ebfdd919fec44153833e73282b77",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
