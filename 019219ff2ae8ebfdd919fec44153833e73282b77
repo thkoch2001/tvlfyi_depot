@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8196bbf5_9d8ec34a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2023-09-22T02:06:50Z",
+      "side": 1,
+      "message": "Why move the fixtures out of `test` cfg? Seems like they\u0027d only be needed in that context right?",
+      "revId": "019219ff2ae8ebfdd919fec44153833e73282b77",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1440794c_bba8704b",
+        "filename": "tvix/default.nix",
+        "patchSetId": 7
+      },
+      "lineNbr": 110,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2023-09-22T02:06:50Z",
+      "side": 1,
+      "message": "Can we remove the commented out stuff in here?",
+      "revId": "019219ff2ae8ebfdd919fec44153833e73282b77",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
