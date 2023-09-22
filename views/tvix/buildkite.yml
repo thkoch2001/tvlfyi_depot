@@ -6,4 +6,4 @@
 steps:
   - label: ":crab: cargo build"
     command: |
-      nix-shell --run "cargo build && cargo test"
+      RUST_BACKTRACE=1 nix-shell --run "cargo build && cargo test"
