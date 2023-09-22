@@ -39,7 +39,7 @@ depot.nix.readTree.drvTargets rec {
   yandex-base-image = (depot.third_party.nixos {
     configuration = { ... }: {
       imports = [
-        (depot.path.origSrc + ("/corp/ops/modules/yandex-cloud.nix"))
+        (depot.path.origSrc + ("/ops/modules/yandex-cloud.nix"))
       ];
     };
   }).config.system.build.yandexCloudImage;
