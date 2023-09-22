@@ -91,6 +91,7 @@ in
     packages = [
       pkgs.buf-language-server
       pkgs.cargo
+      pkgs.cargo-machete
       pkgs.clippy
       pkgs.evans
       pkgs.fuse
