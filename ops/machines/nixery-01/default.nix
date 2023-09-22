@@ -1,0 +1,23 @@
+# nixery.dev backing host in ru-central1-b
+{ depot, lib, pkgs, ... }: # readTree options
+{ config, ... }: # passed by module system
+
+let
+  mod = name: depot.path.origSrc + ("/ops/modules/" + name);
+in
+{
+  imports = [
+    (mod "known-hosts.nix")
+    (mod "nixery.nix")
+    (mod "tvl-users.nix")
+    (mod "www/nixery.dev.nix")
+    (mod "yandex-cloud.nix")
+
+    (depot.third_party.agenix.src + "/modules/age.nix")
+  ];
+
+  networking = {
+    hostName = "nixery-01";
+    domain = "nixery.dev";
+  };
+}
