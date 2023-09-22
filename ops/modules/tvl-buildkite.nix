@@ -43,6 +43,9 @@ in
           tokenPath = config.age.secretsDir + "/buildkite-agent-token";
           privateSshKeyPath = config.age.secretsDir + "/buildkite-private-key";
           hooks.post-command = "${buildkiteHooks}/bin/post-command";
+          hooks.environment = ''
+            export PATH=$PATH:/run/wrappers/bin/
+          '';
 
           runtimePackages = with pkgs; [
             bash
