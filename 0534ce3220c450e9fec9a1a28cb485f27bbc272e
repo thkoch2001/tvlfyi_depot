@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ea18e444_f0cec095",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2023-09-22T22:23:41Z",
+      "side": 1,
+      "message": "without knowing the wider context of the BuildKit setup, this looks fine to me as a stop-gap until we make fuse-backend-rs work like fuser did",
+      "revId": "0534ce3220c450e9fec9a1a28cb485f27bbc272e",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
