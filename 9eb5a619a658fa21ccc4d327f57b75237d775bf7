@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f26e6d40_768a0327",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-09-22T12:59:32Z",
+      "side": 1,
+      "message": "@tazjin what\u0027s your opinion on this, would you be fine shipping this for the time being?\n\nSome context in https://b.tvl.fyi/issues/309.",
+      "revId": "9eb5a619a658fa21ccc4d327f57b75237d775bf7",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
