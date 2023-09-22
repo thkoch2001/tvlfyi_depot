@@ -28,6 +28,12 @@
             alias ${pkgs.writeText "go-import-metadata.html" ''<html><meta name="go-import" content="code.tvl.fyi/tvix/store/protos git https://code.tvl.fyi/depot.git:/tvix/store/protos.git"></html>''};
         }
 
+        location = /tvix/castore/protos {
+            if ($args ~* "/?go-get=1") {
+                return 302 /go-get/tvix/castore/protos;
+            }
+        }
+
         location = /tvix/store/protos {
             if ($args ~* "/?go-get=1") {
                 return 302 /go-get/tvix/store/protos;
