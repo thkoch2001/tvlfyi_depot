@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3a3130cc_0d71910a",
+        "filename": "ops/glesys/dns-nixery-dev.tf",
+        "patchSetId": 1
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-09-22T17:41:19Z",
+      "side": 1,
+      "message": "Do you want to undeploy nixery from whitby? You won\u0027t be able to get a new LE cert there…",
+      "revId": "f4fd944f8680f2d7d823c63fe3dad5aca36beb1d",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
