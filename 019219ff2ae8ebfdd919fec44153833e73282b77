@@ -54,6 +54,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "86693606_226248e5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2023-09-22T12:28:07Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "517d78fa_b37d93ca",
+      "revId": "019219ff2ae8ebfdd919fec44153833e73282b77",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "1440794c_bba8704b",
@@ -100,6 +118,24 @@
         "id": 1000036
       },
       "writtenOn": "2023-09-22T12:27:39Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4d42d06c_04a11c1e",
+      "revId": "019219ff2ae8ebfdd919fec44153833e73282b77",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f57d27ec_96bbc3ee",
+        "filename": "tvix/default.nix",
+        "patchSetId": 7
+      },
+      "lineNbr": 110,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2023-09-22T12:28:07Z",
       "side": 1,
       "message": "Done",
       "parentUuid": "4d42d06c_04a11c1e",
