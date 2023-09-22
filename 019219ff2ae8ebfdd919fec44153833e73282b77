@@ -20,6 +20,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "517d78fa_b37d93ca",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-09-22T06:05:08Z",
+      "side": 1,
+      "message": "They\u0027re only needed for tests, but also needed for tests in the tvix-store crate. As explained in the commit message, It wasn\u0027t possible to import the fixtures module from tvix-store tests.",
+      "parentUuid": "8196bbf5_9d8ec34a",
+      "revId": "019219ff2ae8ebfdd919fec44153833e73282b77",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "1440794c_bba8704b",
         "filename": "tvix/default.nix",
         "patchSetId": 7
@@ -31,6 +49,24 @@
       "writtenOn": "2023-09-22T02:06:50Z",
       "side": 1,
       "message": "Can we remove the commented out stuff in here?",
+      "revId": "019219ff2ae8ebfdd919fec44153833e73282b77",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4d42d06c_04a11c1e",
+        "filename": "tvix/default.nix",
+        "patchSetId": 7
+      },
+      "lineNbr": 110,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-09-22T06:05:08Z",
+      "side": 1,
+      "message": "This will get reenabled on the next, to-be-written CL - see commit message. We unfortunately can\u0027t update the go tooling atomically.",
+      "parentUuid": "1440794c_bba8704b",
       "revId": "019219ff2ae8ebfdd919fec44153833e73282b77",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
