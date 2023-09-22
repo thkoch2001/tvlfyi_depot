@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5b76fac7_5d0a5967",
+        "filename": "tvix/store/README.md",
+        "patchSetId": 9
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-09-22T10:21:38Z",
+      "side": 1,
+      "message": "I think the docs/ folder could get another overhaul, but that\u0027s probably out of scope for this CL.",
+      "revId": "4e543f2dc3a0239ec8397cc016ed8fbcf74fe016",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
