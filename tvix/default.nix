@@ -109,18 +109,18 @@ in
   };
 
   # Builds and tests the code in castore/protos.
-  # castore-protos-go = pkgs.buildGoModule {
-  #   name = "castore-golang";
-  #   src = depot.third_party.gitignoreSource ./store/protos;
-  #   vendorHash = "sha256-00000000000000000000000000000000000000000000";
-  # };
+  castore-protos-go = pkgs.buildGoModule {
+    name = "castore-golang";
+    src = depot.third_party.gitignoreSource ./store/protos;
+    vendorHash = "sha256-zRbMwhZvcDop8qDd0OrHeDJ+lVPKxwjKmlFbj8Ypy9g=";
+  };
 
   # Builds and tests the code in store/protos.
-  # store-protos-go = pkgs.buildGoModule {
-  #   name = "store-golang";
-  #   src = depot.third_party.gitignoreSource ./store/protos;
-  #   vendorHash = "sha256-00000000000000000000000000000000000000000000";
-  # };
+  store-protos-go = pkgs.buildGoModule {
+    name = "store-golang";
+    src = depot.third_party.gitignoreSource ./store/protos;
+    vendorHash = "sha256-zRbMwhZvcDop8qDd0OrHeDJ+lVPKxwjKmlFbj8Ypy9g=";
+  };
 
   # Build the Rust documentation for publishing on docs.tvix.dev.
   rust-docs = pkgs.stdenv.mkDerivation {
@@ -147,8 +147,8 @@ in
   };
 
   meta.ci.targets = [
-    # "castore-protos-go"
-    # "store-protos-go"
+    "castore-protos-go"
+    "store-protos-go"
     "shell"
     "rust-docs"
   ];
