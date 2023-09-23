@@ -161,11 +161,6 @@ pub(crate) fn validate_name(s: &[u8]) -> Result<String, Error> {
         return Err(Error::InvalidLength());
     }
 
-    // First character cannot be a period
-    if s[0] == b'.' {
-        return Err(Error::InvalidName(s.to_vec(), 0));
-    }
-
     for (i, c) in s.iter().enumerate() {
         if c.is_ascii_alphanumeric()
             || *c == b'-'
@@ -224,6 +219,15 @@ mod tests {
         assert_eq!(nixpath.digest, expected_digest);
 
         assert_eq!(example_nix_path_str, nixpath.to_string())
+    }
+
+    /// This is the store path produced after `nix-store --add`'ing an
+    /// empty `.gitignore` file.
+    #[test]
+    fn starts_with_dot() {
+        let nix_path_str = "fli4bwscgna7lpm7v5xgnjxrxh0yc7ra-.gitignore";
+        let nixpath = StorePath::from_bytes(nix_path_str.as_bytes()).expect("must succeed");
+        assert_eq!(".gitignore", nixpath.name);
     }
 
     #[test]
