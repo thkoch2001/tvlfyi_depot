@@ -18,6 +18,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "a4fa962a_1170ba91",
+        "filename": "tvix/store/src/bin/tvix-store.rs",
+        "patchSetId": 11
+      },
+      "lineNbr": 119,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2023-09-23T22:09:23Z",
+      "side": 1,
+      "message": "done",
+      "parentUuid": "803a4129_6e9ccde5",
+      "revId": "7b779191782e355ae371dd1e29400318a207e8b9",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "1fb1e8bd_526ed0d3",
@@ -31,6 +49,24 @@
       "writtenOn": "2023-09-23T14:37:02Z",
       "side": 1,
       "message": "It seems right now we have to restart the server whenever the VM exists. It\u0027s unclear yet if this means we currently only have one client at the same time.",
+      "revId": "7b779191782e355ae371dd1e29400318a207e8b9",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cfddb294_a925ef87",
+        "filename": "tvix/store/src/bin/tvix-store.rs",
+        "patchSetId": 11
+      },
+      "lineNbr": 356,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2023-09-23T22:09:23Z",
+      "side": 1,
+      "message": "Looks like this is a limitation of the upstream. I\u0027ll explore either fixing it up there or do more work on our side to make it so it continues to accept new connections.\n\nWill do as a followup since it doesn\u0027t seem immediately trivial to fix.",
+      "parentUuid": "1fb1e8bd_526ed0d3",
       "revId": "7b779191782e355ae371dd1e29400318a207e8b9",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
