@@ -16,6 +16,23 @@
       "message": "This causes it to be called `virtio-fs`. I\u0027d personally prefer the subcommand to just be called `virtiofs`, maybe there\u0027s an option to explicitly give it that name, while keeping `VirtioFs` here.",
       "revId": "7b779191782e355ae371dd1e29400318a207e8b9",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1fb1e8bd_526ed0d3",
+        "filename": "tvix/store/src/bin/tvix-store.rs",
+        "patchSetId": 11
+      },
+      "lineNbr": 356,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-09-23T14:37:02Z",
+      "side": 1,
+      "message": "It seems right now we have to restart the server whenever the VM exists. It\u0027s unclear yet if this means we currently only have one client at the same time.",
+      "revId": "7b779191782e355ae371dd1e29400318a207e8b9",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
