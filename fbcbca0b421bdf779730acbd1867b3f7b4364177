@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "91ade3eb_c09a6623",
+        "filename": "tvix/tests/default.nix",
+        "patchSetId": 1
+      },
+      "lineNbr": 54,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2023-09-23T22:10:15Z",
+      "side": 1,
+      "message": "This needs to be virtiofs now since I changed the command on the commit below",
+      "revId": "fbcbca0b421bdf779730acbd1867b3f7b4364177",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
