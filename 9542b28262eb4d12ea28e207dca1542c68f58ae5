@@ -20,6 +20,23 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "6bfab41d_99787553",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 11
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2023-09-23T11:50:59Z",
+      "side": 1,
+      "message": "I read this and it makes sense, and I don\u0027t immediately have any ideas for a better solution, though this is a little bit ugly in some areas (like the nested results).\n\nI think it should be possible to come up with a saner propagation mechanism, but it\u0027s not blocking at this point because we have the compiler to help us out in fixing it later 😎",
+      "revId": "9542b28262eb4d12ea28e207dca1542c68f58ae5",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "83acf89e_5e88b4f9",
         "filename": "tvix/eval/src/builtins/mod.rs",
         "patchSetId": 11
