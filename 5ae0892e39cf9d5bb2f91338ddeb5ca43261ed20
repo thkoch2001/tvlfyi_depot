@@ -16,6 +16,24 @@
       "message": "This has to be updated to talk about the name component of the store path instead the store path name.",
       "revId": "5ae0892e39cf9d5bb2f91338ddeb5ca43261ed20",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "69a6a857_959922a7",
+        "filename": "tvix/nix-compat/src/store_path/mod.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 156,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-09-23T12:45:46Z",
+      "side": 1,
+      "message": "I updated it to point to [StorePath::name], which is where these values end up in.",
+      "parentUuid": "e379a9e6_74195a08",
+      "revId": "5ae0892e39cf9d5bb2f91338ddeb5ca43261ed20",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
