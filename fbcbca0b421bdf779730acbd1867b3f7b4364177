@@ -1,6 +1,23 @@
 {
   "comments": [
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "7ee9b4dd_db898dbe",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-09-24T10:47:17Z",
+      "side": 1,
+      "message": "I reworked this to use cloud-hypervisor, and a minimal u-root based initrd and kernel with virtiofs support baked in, rather the Fedora Image.",
+      "revId": "fbcbca0b421bdf779730acbd1867b3f7b4364177",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "91ade3eb_c09a6623",
@@ -14,6 +31,24 @@
       "writtenOn": "2023-09-23T22:10:15Z",
       "side": 1,
       "message": "This needs to be virtiofs now since I changed the command on the commit below",
+      "revId": "fbcbca0b421bdf779730acbd1867b3f7b4364177",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6828c67c_071a931f",
+        "filename": "tvix/tests/default.nix",
+        "patchSetId": 1
+      },
+      "lineNbr": 54,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-09-24T10:47:17Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "91ade3eb_c09a6623",
       "revId": "fbcbca0b421bdf779730acbd1867b3f7b4364177",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
