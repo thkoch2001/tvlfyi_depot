@@ -21,7 +21,7 @@ proc `[]=`*[T](attrs: var AttrSet; key: string; val: T) =
 const
   WORKER_MAGIC_1* = 0x6E697863
   WORKER_MAGIC_2* = 0x6478696F
-  PROTOCOL_VERSION* = 0x100 or 35
+  PROTOCOL_VERSION* = 0x100 or 34
 
   STDERR_NEXT* = 0x6F6C6d67
   STDERR_READ* = 0x64617461
