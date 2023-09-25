@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "98276ce6_8bbfc75d",
+        "filename": "tvix/tests/tvix-init.go",
+        "patchSetId": 3
+      },
+      "lineNbr": 55,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2023-09-25T02:08:45Z",
+      "side": 1,
+      "message": "nice!",
+      "revId": "f8bb4aff88389154c9e1e9b84139977dceadaa3c",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "34e61c45_b1bd1ed4",
+        "filename": "tvix/tests/tvix-init.go",
+        "patchSetId": 3
+      },
+      "lineNbr": 65,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2023-09-25T02:08:45Z",
+      "side": 1,
+      "message": "Should we use 0755 instead of 0777?",
+      "revId": "f8bb4aff88389154c9e1e9b84139977dceadaa3c",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
