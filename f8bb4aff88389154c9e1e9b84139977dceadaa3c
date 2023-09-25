@@ -33,6 +33,24 @@
       "message": "Should we use 0755 instead of 0777?",
       "revId": "f8bb4aff88389154c9e1e9b84139977dceadaa3c",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f6d2eaaa_0c4c0abf",
+        "filename": "tvix/tests/tvix-init.go",
+        "patchSetId": 3
+      },
+      "lineNbr": 65,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-09-25T10:10:53Z",
+      "side": 1,
+      "message": "This is only /etc inside the initrd itself, so it doesn\u0027t really matter. The `init\u003d` codepath will switch_root to `/fs`, and the `/etc` created in there by NixOS has the right permissions.\n\nIn fact, u-root already brings an /etc in its initrd image with 0755, so we can just skip this part entirely, which is what I did now.",
+      "parentUuid": "34e61c45_b1bd1ed4",
+      "revId": "f8bb4aff88389154c9e1e9b84139977dceadaa3c",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
