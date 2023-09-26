@@ -8321,6 +8321,7 @@ rec {
           {
             name = "tvix-store";
             packageId = "tvix-store";
+            usesDefaultFeatures = false;
           }
           {
             name = "wu-manber";
