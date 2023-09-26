@@ -25,14 +25,20 @@ pkgs.makeOverridable
       tree-sitter-c
       tree-sitter-cmake
       tree-sitter-cpp
+      tree-sitter-css
       tree-sitter-dockerfile
       tree-sitter-go
+      tree-sitter-gomod
+      tree-sitter-hcl
+      tree-sitter-html
       tree-sitter-java
       tree-sitter-json
       tree-sitter-latex
+      tree-sitter-make
       tree-sitter-nix
       tree-sitter-python
       tree-sitter-rust
+      tree-sitter-sql
       tree-sitter-toml
       tree-sitter-yaml
     ]);
