@@ -16,6 +16,24 @@
       "message": "https://github.com/nix-community/crate2nix/pull/265#event-7935252675 suggests this should be in crate2nix, just not in our pin of it (0.11.0-rc.1).\n\nMaybe we can bump our src in `third_party/overlays/tvl.nix` and try again?",
       "revId": "993c505cdbef35a7e5ae2fc896af6e6ad79317ea",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2c374b6d_f64a8913",
+        "filename": "tvix/store/Cargo.toml",
+        "patchSetId": 13
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-09-26T07:35:52Z",
+      "side": 1,
+      "message": "Done in https://cl.tvl.fyi/9470",
+      "parentUuid": "a273bc13_53d99bb9",
+      "revId": "993c505cdbef35a7e5ae2fc896af6e6ad79317ea",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
