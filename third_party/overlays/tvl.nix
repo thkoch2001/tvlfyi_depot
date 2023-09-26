@@ -1,6 +1,6 @@
 # This overlay is used to make TVL-specific modifications in the
 # nixpkgs tree, where required.
-{ depot, localSystem, ... }:
+{ lib, depot, localSystem, ... }:
 
 self: super:
 let
@@ -109,20 +109,20 @@ depot.nix.readTree.drvTargets {
   }));
 
   # Pin a newer version of crate2nix from git, which is not officially
-  # released but supports `dep:`
+  # released but supports `dep:` and conditional features
   crate2nix = super.crate2nix.overrideAttrs (old: rec {
-    version = "0.11.0-rc.1";
+    version = "unstable-2023-09-26";
 
     src = self.fetchFromGitHub {
-      owner = "kolloch";
+      owner = "nix-community";
       repo = "crate2nix";
-      rev = "v0.11.0-rc.1";
-      hash = "sha256:02yvn61w16sgkdxa019l5y9i2ybyk8h4516718gmarqxx5ws2kz8";
+      rev = "8a33aec8795dcc98afbb0cd1030bb1c939ede211";
+      hash = "sha256-eFT2SUxTopxEvW0rcxSjQU6nbrQLI2FbyaVgtV8oiTk=";
     };
 
     cargoDeps = old.cargoDeps.overrideAttrs (_: {
       inherit src;
-      outputHash = "sha256:03yny9ikqzfpi2mr27r82g54an2s8k9lqi2i4fqalg7g0s2cr2yd";
+      outputHash = "sha256-elEIWHxyY3iccprIcbQA6GWFiq/n5kozpGfw/OmoSIg=";
     });
   });
 }
