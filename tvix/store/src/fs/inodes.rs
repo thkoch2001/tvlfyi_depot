@@ -1,5 +1,8 @@
 //! This module contains all the data structures used to track information
 //! about inodes, which present tvix-store nodes in a filesystem.
+use std::path::PathBuf;
+
+use crate::proto as storepb;
 use tvix_castore::proto as castorepb;
 use tvix_castore::B3Digest;
 
@@ -7,7 +10,8 @@ use tvix_castore::B3Digest;
 pub enum InodeData {
     Regular(B3Digest, u32, bool),  // digest, size, executable
     Symlink(bytes::Bytes),         // target
-    Directory(DirectoryInodeData), // either [DirectoryInodeData:Sparse] or [DirectoryInodeData:Populated]
+    Directory(DirectoryInodeData), // either [DirectoryInodeData::Sparse] or [DirectoryInodeData::Populated]
+    LookupDirectory(PathBuf),      // Virtual directories populated by the lookup service
 }
 
 /// This encodes the two different states of [InodeData::Directory].

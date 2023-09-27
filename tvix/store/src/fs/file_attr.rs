@@ -34,12 +34,15 @@ pub fn gen_file_attr(inode_data: &InodeData, inode: u64) -> Attr {
             InodeData::Directory(DirectoryInodeData::Populated(_, ref children)) => {
                 children.len() as u64
             }
+            // FIXME: Report proper size, if possible.
+            InodeData::LookupDirectory(_) => 0,
         },
         mode: match inode_data {
             InodeData::Regular(_, _, false) => libc::S_IFREG | 0o444, // no-executable files
             InodeData::Regular(_, _, true) => libc::S_IFREG | 0o555,  // executable files
             InodeData::Symlink(_) => libc::S_IFLNK | 0o444,
             InodeData::Directory(_) => libc::S_IFDIR | 0o555,
+            InodeData::LookupDirectory(_) => libc::S_IFDIR | 0o555,
         },
         ..Default::default()
     }

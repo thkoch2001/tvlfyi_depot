@@ -25,6 +25,7 @@ fn main() -> Result<()> {
             &[
                 "tvix/store/protos/pathinfo.proto",
                 "tvix/store/protos/rpc_pathinfo.proto",
+                "tvix/store/protos/rpc_lookup.proto",
             ],
             // If we are in running `cargo build` manually, using `../..` works fine,
             // but in case we run inside a nix build, we need to instead point PROTO_ROOT

@@ -1,3 +1,4 @@
+use std::path::PathBuf;
 use std::{collections::HashMap, sync::Arc};
 
 use super::inodes::{DirectoryInodeData, InodeData};
@@ -19,6 +20,9 @@ pub struct InodeTracker {
     // Note the corresponding directory may not be present in data yet.
     directory_digest_to_inode: HashMap<B3Digest, u64>,
 
+    // lookup table for lookup service paths
+    path_to_ino: HashMap<PathBuf, u64>,
+
     // the next inode to allocate
     next_inode: u64,
 }
@@ -31,6 +35,7 @@ impl Default for InodeTracker {
             blob_digest_to_inode: Default::default(),
             symlink_target_to_inode: Default::default(),
             directory_digest_to_inode: Default::default(),
+            path_to_ino: Default::default(),
 
             next_inode: 2,
         }
@@ -68,6 +73,10 @@ impl InodeTracker {
                     None => self.insert_and_increment(data),
                 }
             }
+            InodeData::LookupDirectory(ref path) => match self.path_to_ino.get(path) {
+                Some(found_ino) => *found_ino,
+                None => self.insert_and_increment(data),
+            },
             InodeData::Directory(DirectoryInodeData::Sparse(ref digest, _size)) => {
                 // check the lookup table if the B3Digest is known.
                 match self.directory_digest_to_inode.get(digest) {
@@ -90,7 +99,9 @@ impl InodeTracker {
 
                     // We know the data must exist, as we found it in [directory_digest_to_inode].
                     let needs_update = match **self.data.get(&dir_ino).unwrap() {
-                        InodeData::Regular(..) | InodeData::Symlink(_) => {
+                        InodeData::Regular(..)
+                        | InodeData::Symlink(_)
+                        | InodeData::LookupDirectory(..) => {
                             panic!("unexpected type at inode {}", dir_ino);
                         }
                         // already populated, nothing to do
@@ -173,6 +184,9 @@ impl InodeTracker {
             InodeData::Symlink(ref target) => {
                 self.symlink_target_to_inode.insert(target.clone(), ino);
             }
+            InodeData::LookupDirectory(ref base_dir) => {
+                self.path_to_ino.insert(base_dir.to_path_buf(), ino);
+            }
             InodeData::Directory(DirectoryInodeData::Sparse(ref digest, _size)) => {
                 self.directory_digest_to_inode.insert(digest.clone(), ino);
             }
@@ -230,7 +244,9 @@ mod tests {
             InodeData::Regular(ref digest, _, _) => {
                 assert_eq!(&fixtures::BLOB_A_DIGEST.clone(), digest);
             }
-            InodeData::Symlink(_) | InodeData::Directory(..) => panic!("wrong type"),
+            InodeData::Symlink(_) | InodeData::Directory(..) | InodeData::LookupDirectory(..) => {
+                panic!("wrong type")
+            }
         }
 
         // another put should return the same ino
@@ -262,7 +278,9 @@ mod tests {
             InodeData::Symlink(ref target) => {
                 assert_eq!(b"target".to_vec(), *target);
             }
-            InodeData::Regular(..) | InodeData::Directory(..) => panic!("wrong type"),
+            InodeData::Regular(..) | InodeData::Directory(..) | InodeData::LookupDirectory(..) => {
+                panic!("wrong type")
+            }
         }
 
         // another put should return the same ino
@@ -318,10 +336,14 @@ mod tests {
                         assert_eq!(0, size);
                         assert!(!executable);
                     }
-                    InodeData::Symlink(_) | InodeData::Directory(..) => panic!("wrong type"),
+                    InodeData::Symlink(_)
+                    | InodeData::Directory(..)
+                    | InodeData::LookupDirectory(..) => panic!("wrong type"),
                 }
             }
-            InodeData::Symlink(_) | InodeData::Regular(..) => panic!("wrong type"),
+            InodeData::Symlink(_) | InodeData::Regular(..) | InodeData::LookupDirectory(..) => {
+                panic!("wrong type")
+            }
         }
     }
 
@@ -399,7 +421,9 @@ mod tests {
                     *child_ino
                 }
             }
-            InodeData::Regular(..) | InodeData::Symlink(_) => panic!("wrong type"),
+            InodeData::Regular(..) | InodeData::Symlink(_) | InodeData::LookupDirectory(..) => {
+                panic!("wrong type")
+            }
         };
 
         // get of the inode for child_ino
@@ -415,7 +439,8 @@ mod tests {
             }
             InodeData::Directory(DirectoryInodeData::Populated(..))
             | InodeData::Regular(..)
-            | InodeData::Symlink(_) => {
+            | InodeData::Symlink(_)
+            | InodeData::LookupDirectory(..) => {
                 panic!("wrong type")
             }
         }
@@ -449,7 +474,8 @@ mod tests {
             }
             InodeData::Directory(DirectoryInodeData::Sparse(..))
             | InodeData::Regular(..)
-            | InodeData::Symlink(_) => panic!("wrong type"),
+            | InodeData::Symlink(_)
+            | InodeData::LookupDirectory(..) => panic!("wrong type"),
         }
     }
 }

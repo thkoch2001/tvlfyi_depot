@@ -18,6 +18,7 @@ use tvix_castore::proto::GRPCBlobServiceWrapper;
 use tvix_castore::proto::GRPCDirectoryServiceWrapper;
 use tvix_castore::proto::NamedNode;
 use tvix_store::listener::ListenerStream;
+use tvix_store::lookupservice;
 use tvix_store::pathinfoservice;
 use tvix_store::proto::path_info_service_server::PathInfoServiceServer;
 use tvix_store::proto::GRPCPathInfoServiceWrapper;
@@ -331,14 +332,12 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
                 blob_service.clone(),
                 directory_service.clone(),
             )?;
+            let lookup_service =
+                lookupservice::pathinfo::PathInfoLookupService::new(path_info_service);
 
             let mut fuse_daemon = tokio::task::spawn_blocking(move || {
-                let f = TvixStoreFs::new(
-                    blob_service,
-                    directory_service,
-                    path_info_service,
-                    list_root,
-                );
+                let f =
+                    TvixStoreFs::new(blob_service, directory_service, lookup_service, list_root);
                 info!("mounting tvix-store on {:?}", &dest);
 
                 FuseDaemon::new(f, &dest, threads)
@@ -371,14 +370,12 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
                 blob_service.clone(),
                 directory_service.clone(),
             )?;
+            let lookup_service =
+                lookupservice::pathinfo::PathInfoLookupService::new(path_info_service);
 
             tokio::task::spawn_blocking(move || {
-                let fs = TvixStoreFs::new(
-                    blob_service,
-                    directory_service,
-                    path_info_service,
-                    list_root,
-                );
+                let fs =
+                    TvixStoreFs::new(blob_service, directory_service, lookup_service, list_root);
                 info!("starting tvix-store virtiofs daemon on {:?}", &socket);
 
                 start_virtiofs_daemon(fs, socket)
