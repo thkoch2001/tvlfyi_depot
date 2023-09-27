@@ -181,7 +181,9 @@
   :bind (:map global-map ("s-t" . telega)
          :map telega-chat-button-map ("a" . ignore))
   :config (telega-mode-line-mode 1)
-  :custom (telega-emoji-use-images nil)
+  :custom
+  (telega-emoji-use-images nil)
+  (telega-completing-read-function #'completing-read)
   :hook (telega-chat-mode . company-mode))
 
 (use-package terraform-mode)
