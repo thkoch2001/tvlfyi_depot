@@ -1,0 +1,17 @@
+[package]
+name = "store-viz"
+version = "0.1.0"
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+anyhow = "1.0.68"
+bstr = "1.6.2"
+clap = { version = "4.0", features = ["derive", "env"] }
+futures-util = "0.3.28"
+nix-compat = { path = "../nix-compat" }
+petgraph = "0.6.4"
+tokio = { version = "1.28.0" }
+tvix-castore = { path = "../castore" }
+tvix-store = { path = "../store" }
