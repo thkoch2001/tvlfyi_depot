@@ -27,6 +27,7 @@ members = [
   "nix-compat",
   "serde",
   "store",
+  "store-viz",
 ]
 
 # Add a profile to all targets that enables release optimisations, but
