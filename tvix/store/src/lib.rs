@@ -2,6 +2,7 @@
 pub mod fs;
 
 pub mod listener;
+pub mod lookupservice;
 pub mod nar;
 pub mod pathinfoservice;
 pub mod proto;

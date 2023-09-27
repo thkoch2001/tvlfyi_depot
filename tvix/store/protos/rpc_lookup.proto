@@ -1,0 +1,38 @@
+// SPDX-License-Identifier: MIT
+// Copyright © 2023 The Tvix Authors
+syntax = "proto3";
+
+package tvix.store.v1;
+
+import "tvix/castore/protos/castore.proto";
+
+option go_package = "code.tvl.fyi/tvix/store/protos;storev1";
+
+service LookupService {
+    rpc Lookup(LookupRequest) returns (LookupResponse);
+    rpc List(ListRequest) returns (stream Entry);
+}
+
+message LookupNode {
+    oneof {
+        tvix.castore.v1.Node canode = 1;
+        google.protobuf.Empty directory = 2;
+    }
+}
+
+message LookupRequest {
+    bytes path = 1;
+}
+
+message LookupResponse {
+    LookupNode node = 1;
+}
+
+message ListRequest {
+    bytes path = 1;
+}
+
+message Entry {
+    bytes name = 1;
+    LookupNode node = 2;
+}
