@@ -178,7 +178,9 @@
   (setq common-lisp-hyperspec-root "file:///home/tazjin/docs/lisp/"))
 
 (use-package telega
-  :bind (:map global-map ("s-t" . telega)
+  :bind (:map global-map ("s-t" . (lambda (p) (interactive "P")
+                                    (if p (call-interactively #'telega-chat-with)
+                                      (telega))))
          :map telega-chat-button-map ("a" . ignore))
   :config (telega-mode-line-mode 1)
   :custom
