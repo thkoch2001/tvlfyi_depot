@@ -1,6 +1,7 @@
 {-# LANGUAGE DeriveAnyClass #-}
 {-# LANGUAGE DuplicateRecordFields #-}
 {-# LANGUAGE QuasiQuotes #-}
+{-# LANGUAGE ScopedTypeVariables #-}
 
 module WhatcdResolver where
 
@@ -681,7 +682,7 @@ redactedSearchAndInsert extraArguments = do
   pure $
     (firstPage : otherPages)
       & concatMap (.tourGroups)
-      & traverse_ insertTourGroupAndTorrentsNaive
+      & insertTourGroupsAndTorrents
   where
     go mpage =
       redactedSearch
@@ -722,27 +723,48 @@ redactedSearchAndInsert extraArguments = do
                       tourGroups
                   )
         )
-    insertTourGroupAndTorrentsNaive ::
-      T2
-        "tourGroup"
-        (T3 "groupId" Int "groupName" Text "fullJsonResult" Json.Value)
-        "torrents"
-        [T2 "torrentId" Int "fullJsonResult" Json.Value] ->
+    insertTourGroupsAndTorrents ::
+      [ T2
+          "tourGroup"
+          (T3 "groupId" Int "groupName" Text "fullJsonResult" Json.Value)
+          "torrents"
+          [T2 "torrentId" Int "fullJsonResult" Json.Value]
+      ] ->
       Transaction m ()
-    insertTourGroupAndTorrentsNaive dat = do
-      insertTourGroup dat.tourGroup
-        >>= ( \tg ->
-                insertTorrents
-                  (T2 (dat & getLabel @"torrents") (tg & getLabel @"tourGroupIdPg"))
+    insertTourGroupsAndTorrents dat = do
+      let tourGroups = dat <&> (.tourGroup)
+      let torrents = dat <&> (.torrents)
+      insertTourGroups tourGroups
+        >>= ( \res ->
+                insertTorrents $
+                  zipT2 $
+                    T2
+                      (label @"torrentGroupIdPg" $ res <&> (.tourGroupIdPg))
+                      (label @"torrents" torrents)
             )
-    insertTourGroup dat = do
+    insertTourGroups ::
+      [ T3
+          "groupId"
+          Int
+          "groupName"
+          Text
+          "fullJsonResult"
+          Json.Value
+      ] ->
+      Transaction m [Label "tourGroupIdPg" Int]
+    insertTourGroups dats = do
+      let groupNames =
+            [ [fmt|{dat.groupId}: {dat.groupName}|]
+              | dat <- dats
+            ]
+      logInfo [fmt|Inserting tour groups for {showPretty groupNames}|]
       _ <-
         execute
           [fmt|
                   DELETE FROM redacted.torrent_groups
-                  WHERE group_id = ?::integer
+                  WHERE group_id = ANY (?::integer[])
               |]
-          (Only dat.groupId)
+          (Only $ (dats <&> (.groupId) & PGArray :: PGArray Int))
       executeManyReturningWith
         [fmt|
               INSERT INTO redacted.torrent_groups (
@@ -755,39 +777,66 @@ redactedSearchAndInsert extraArguments = do
                 full_json_result = excluded.full_json_result
               RETURNING (id)
             |]
-        [ ( dat.groupId,
-            dat.groupName,
-            dat.fullJsonResult
-          )
-        ]
+        ( dats <&> \dat ->
+            ( dat.groupId,
+              dat.groupName,
+              dat.fullJsonResult
+            )
+        )
         (label @"tourGroupIdPg" <$> Dec.fromField @Int)
-        >>= ensureSingleRow
 
-    insertTorrents dat = do
+    insertTorrents ::
+      [ T2
+          "torrentGroupIdPg"
+          Int
+          "torrents"
+          [T2 "torrentId" Int "fullJsonResult" Json.Value]
+      ] ->
+      Transaction m ()
+    insertTorrents dats = do
       _ <-
         execute
           [sql|
-                DELETE FROM redacted.torrents_json
-                WHERE torrent_id = ANY (?::integer[])
-              |]
-          (Only $ dat.torrents & unzipT2 & (.torrentId) & PGArray)
+            DELETE FROM redacted.torrents_json
+            WHERE torrent_id = ANY (?::integer[])
+          |]
+          ( Only $
+              PGArray
+                [ torrent.torrentId
+                  | dat <- dats,
+                    torrent <- dat.torrents
+                ]
+          )
+
       execute
         [sql|
-                INSERT INTO redacted.torrents_json
-                      (torrent_id, torrent_group, full_json_result)
-                SELECT inputs.torrent_id, static.torrent_group, inputs.full_json_result FROM
-                (SELECT * FROM UNNEST(?::integer[], ?::jsonb[])) AS inputs(torrent_id, full_json_result)
-                CROSS JOIN (VALUES(?::integer)) as static(torrent_group)
-            |]
-        ( dat.torrents
-            & unzipT2
-            & \t ->
-              ( t.torrentId & PGArray,
-                t.fullJsonResult & PGArray,
-                dat.tourGroupIdPg
-              )
+          INSERT INTO redacted.torrents_json
+            ( torrent_group
+            , torrent_id
+            , full_json_result)
+          SELECT *
+          FROM UNNEST(
+              ?::integer[]
+            , ?::integer[]
+            , ?::jsonb[]
+          ) AS inputs(
+              torrent_group
+            , torrent_id
+            , full_json_result)
+          |]
+        ( [ ( dat.torrentGroupIdPg :: Int,
+              group.torrentId :: Int,
+              group.fullJsonResult :: Json.Value
+            )
+            | dat <- dats,
+              group <- dat.torrents
+          ]
+            & unzip3PGArray
         )
       pure ()
+
+unzip3PGArray :: [(a1, a2, a3)] -> (PGArray a1, PGArray a2, PGArray a3)
+unzip3PGArray xs = xs & unzip3 & \(a, b, c) -> (PGArray a, PGArray b, PGArray c)
 
 redactedGetTorrentFileAndInsert ::
   ( HasField "torrentId" r Int,
@@ -988,6 +1037,19 @@ getBestTorrents = do
 hush :: Either a1 a2 -> Maybe a2
 hush (Left _) = Nothing
 hush (Right a) = Just a
+
+zipT2 ::
+  forall l1 l2 t1 t2.
+  ( HasField l1 (T2 l1 [t1] l2 [t2]) [t1],
+    HasField l2 (T2 l1 [t1] l2 [t2]) [t2]
+  ) =>
+  T2 l1 [t1] l2 [t2] ->
+  [T2 l1 t1 l2 t2]
+zipT2 xs =
+  zipWith
+    (\t1 t2 -> T2 (label @l1 t1) (label @l2 t2))
+    (getField @l1 xs)
+    (getField @l2 xs)
 
 unzipT2 :: forall l1 t1 l2 t2. [T2 l1 t1 l2 t2] -> T2 l1 [t1] l2 [t2]
 unzipT2 xs = xs <&> toTup & unzip & fromTup
