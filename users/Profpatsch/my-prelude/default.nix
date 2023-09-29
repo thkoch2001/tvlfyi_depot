@@ -29,6 +29,7 @@ pkgs.haskellPackages.mkDerivation {
     pkgs.haskellPackages.aeson-better-errors
     pkgs.haskellPackages.resource-pool
     pkgs.haskellPackages.error
+    pkgs.haskellPackages.hs-opentelemetry-api
     pkgs.haskellPackages.hspec
     pkgs.haskellPackages.hspec-expectations-pretty-diff
     pkgs.haskellPackages.monad-logger
