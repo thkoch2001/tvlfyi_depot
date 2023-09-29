@@ -79,6 +79,7 @@ library
         directory,
         dlist,
         filepath,
+        hs-opentelemetry-sdk,
         http-conduit,
         http-types,
         ihp-hsx,
