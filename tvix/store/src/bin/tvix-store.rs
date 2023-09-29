@@ -139,11 +139,15 @@ enum Commands {
     },
 }
 
-#[cfg(feature = "fuse")]
+#[cfg(all(feature = "fuse", not(target_os = "macos")))]
 fn default_threads() -> usize {
     std::thread::available_parallelism()
         .map(|threads| threads.into())
         .unwrap_or(4)
+}
+#[cfg(all(feature = "fuse", target_os = "macos"))]
+fn default_threads() -> usize {
+    1
 }
 
 #[tokio::main]
