@@ -41,7 +41,6 @@ import Network.HTTP.Types qualified as Http
 import Network.Wai qualified as Wai
 import Network.Wai.Handler.Warp qualified as Warp
 import OpenTelemetry.Trace qualified as Otel hiding (getTracer, inSpan)
-import OpenTelemetry.Trace qualified as OtelTrace
 import OpenTelemetry.Trace.Monad qualified as Otel
 import PossehlAnalyticsPrelude
 import Postgres.Decoder qualified as Dec
@@ -918,7 +917,7 @@ migrate ::
     Otel.MonadTracer m
   ) =>
   Transaction m (Label "numberOfRowsAffected" Natural)
-migrate = inSpanT "Database Migration" $ do
+migrate = inSpan "Database Migration" $ do
   execute_
     [sql|
     CREATE SCHEMA IF NOT EXISTS redacted;
@@ -1047,18 +1046,6 @@ getBestTorrents = do
 
 inSpan :: (MonadUnliftIO m, Otel.MonadTracer m) => Text -> m a -> m a
 inSpan name = Otel.inSpan name Otel.defaultSpanArguments
-
-inSpanT :: (Otel.MonadTracer m, MonadUnliftIO m) => Text -> Transaction m b -> Transaction m b
-inSpanT name transaction = do
-  tracer <- lift @Transaction $ Otel.getTracer
-  -- I don’t want to implement MonadTracer for Transaction,
-  -- so I’m unlifting it via IO, that should work :P
-  withRunInIO $ \runInIO -> do
-    OtelTrace.inSpan
-      tracer
-      name
-      Otel.defaultSpanArguments
-      (runInIO transaction)
 
 hush :: Either a1 a2 -> Maybe a2
 hush (Left _) = Nothing

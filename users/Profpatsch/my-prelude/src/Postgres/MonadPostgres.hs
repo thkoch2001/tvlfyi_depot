@@ -29,6 +29,8 @@ import Database.PostgreSQL.Simple.ToRow (ToRow (toRow))
 import Database.PostgreSQL.Simple.Types (Query (..))
 import GHC.Records (HasField (..))
 import Label
+import OpenTelemetry.Trace.Core qualified as Otel hiding (inSpan, inSpan')
+import OpenTelemetry.Trace.Monad qualified as Otel
 import PossehlAnalyticsPrelude
 import Postgres.Decoder
 import Postgres.Decoder qualified as Dec
@@ -39,12 +41,13 @@ import Tool
 import UnliftIO (MonadUnliftIO (withRunInIO))
 import UnliftIO.Process qualified as Process
 import UnliftIO.Resource qualified as Resource
+import Prelude hiding (span)
 
 -- | Postgres queries/commands that can be executed within a running transaction.
 --
 -- These are implemented with the @postgresql-simple@ primitives of the same name
 -- and will behave the same unless othewise documented.
-class Monad m => MonadPostgres (m :: Type -> Type) where
+class (Monad m) => MonadPostgres (m :: Type -> Type) where
   -- | Execute an INSERT, UPDATE, or other SQL query that is not expected to return results.
 
   -- Returns the number of rows affected.
@@ -149,7 +152,7 @@ querySingleRowMaybe qry params = do
     -- that a database function can error out, should probably handled by the instances.
     more -> throwM $ SingleRowError {numberOfRowsReturned = (List.length more)}
 
-ensureSingleRow :: MonadThrow m => [a] -> m a
+ensureSingleRow :: (MonadThrow m) => [a] -> m a
 ensureSingleRow = \case
   -- TODO: Should we MonadThrow this here? It’s really an implementation detail of MonadPostgres
   -- that a database function can error out, should probably handled by the instances.
@@ -172,7 +175,8 @@ newtype Transaction m a = Transaction {unTransaction :: (ReaderT Connection m a)
       MonadLogger,
       MonadIO,
       MonadUnliftIO,
-      MonadTrans
+      MonadTrans,
+      Otel.MonadTracer
     )
 
 runTransaction' :: Connection -> Transaction m a -> m a
@@ -255,7 +259,7 @@ handlePGException tools queryType query' params io = do
     -- TODO: use throwInternalError here (after pulling it into the MonadPostgres class)
     throwAsError = unwrapIOError . Left . newError
     throwErr err = liftIO $ throwAsError $ prettyErrorTree $ nestedMultiError "A Postgres query failed" err
-    logQueryException :: Exception e => e -> Transaction m a
+    logQueryException :: (Exception e) => e -> Transaction m a
     logQueryException exc = do
       formattedQuery <- case params of
         Left one -> pgFormatQuery' tools query' one
@@ -282,7 +286,7 @@ withPGTransaction connPool f =
     connPool
     (\conn -> Postgres.withTransaction conn (f conn))
 
-runPGTransactionImpl :: MonadUnliftIO m => m (Pool Postgres.Connection) -> Transaction m a -> m a
+runPGTransactionImpl :: (MonadUnliftIO m) => m (Pool Postgres.Connection) -> Transaction m a -> m a
 {-# INLINE runPGTransactionImpl #-}
 runPGTransactionImpl zoom (Transaction transaction) = do
   pool <- zoom
@@ -291,55 +295,58 @@ runPGTransactionImpl zoom (Transaction transaction) = do
       unliftIO $ runReaderT transaction conn
 
 executeImpl ::
-  (ToRow params, MonadUnliftIO m, MonadLogger m, HasField "pgFormat" tools Tool) =>
+  (ToRow params, MonadUnliftIO m, MonadLogger m, HasField "pgFormat" tools Tool, Otel.MonadTracer m) =>
   m tools ->
   m DebugLogDatabaseQueries ->
   Query ->
   params ->
   Transaction m (Label "numberOfRowsAffected" Natural)
 {-# INLINE executeImpl #-}
-executeImpl zoomTools zoomDebugLogDatabaseQueries qry params = do
-  tools <- lift @Transaction zoomTools
-  logDatabaseQueries <- lift @Transaction zoomDebugLogDatabaseQueries
-  logQueryIfEnabled tools logDatabaseQueries qry (HasSingleParam params)
-  conn <- Transaction ask
-  PG.execute conn qry params
-    & handlePGException tools "execute" qry (Left params)
-    >>= toNumberOfRowsAffected "executeImpl"
+executeImpl zoomTools zoomDebugLogDatabaseQueries qry params =
+  Otel.inSpan' "Postgres Query (execute)" Otel.defaultSpanArguments $ \span -> do
+    tools <- lift @Transaction zoomTools
+    logDatabaseQueries <- lift @Transaction zoomDebugLogDatabaseQueries
+    traceQueryIfEnabled tools span logDatabaseQueries qry (HasSingleParam params)
+    conn <- Transaction ask
+    PG.execute conn qry params
+      & handlePGException tools "execute" qry (Left params)
+      >>= toNumberOfRowsAffected "executeImpl"
 
 executeImpl_ ::
-  (MonadUnliftIO m, MonadLogger m, HasField "pgFormat" tools Tool) =>
+  (MonadUnliftIO m, MonadLogger m, HasField "pgFormat" tools Tool, Otel.MonadTracer m) =>
   m tools ->
   m DebugLogDatabaseQueries ->
   Query ->
   Transaction m (Label "numberOfRowsAffected" Natural)
 {-# INLINE executeImpl_ #-}
-executeImpl_ zoomTools zoomDebugLogDatabaseQueries qry = do
-  tools <- lift @Transaction zoomTools
-  logDatabaseQueries <- lift @Transaction zoomDebugLogDatabaseQueries
-  logQueryIfEnabled @() tools logDatabaseQueries qry HasNoParams
-  conn <- Transaction ask
-  PG.execute_ conn qry
-    & handlePGException tools "execute_" qry (Left ())
-    >>= toNumberOfRowsAffected "executeImpl_"
+executeImpl_ zoomTools zoomDebugLogDatabaseQueries qry =
+  Otel.inSpan' "Postgres Query (execute)" Otel.defaultSpanArguments $ \span -> do
+    tools <- lift @Transaction zoomTools
+    logDatabaseQueries <- lift @Transaction zoomDebugLogDatabaseQueries
+    traceQueryIfEnabled @() tools span logDatabaseQueries qry HasNoParams
+    conn <- Transaction ask
+    PG.execute_ conn qry
+      & handlePGException tools "execute_" qry (Left ())
+      >>= toNumberOfRowsAffected "executeImpl_"
 
 executeManyImpl ::
-  (ToRow params, MonadUnliftIO m, MonadLogger m, HasField "pgFormat" tools Tool) =>
+  (ToRow params, MonadUnliftIO m, MonadLogger m, HasField "pgFormat" tools Tool, Otel.MonadTracer m) =>
   m tools ->
   m DebugLogDatabaseQueries ->
   Query ->
   [params] ->
   Transaction m (Label "numberOfRowsAffected" Natural)
-executeManyImpl zoomTools zoomDebugLogDatabaseQueries qry params = do
-  tools <- lift @Transaction zoomTools
-  logDatabaseQueries <- lift @Transaction zoomDebugLogDatabaseQueries
-  logQueryIfEnabled tools logDatabaseQueries qry (HasMultiParams params)
-  conn <- Transaction ask
-  PG.executeMany conn qry params
-    & handlePGException tools "executeMany" qry (Right params)
-    >>= toNumberOfRowsAffected "executeManyImpl"
+executeManyImpl zoomTools zoomDebugLogDatabaseQueries qry params =
+  Otel.inSpan' "Postgres Query (execute)" Otel.defaultSpanArguments $ \span -> do
+    tools <- lift @Transaction zoomTools
+    logDatabaseQueries <- lift @Transaction zoomDebugLogDatabaseQueries
+    traceQueryIfEnabled tools span logDatabaseQueries qry (HasMultiParams params)
+    conn <- Transaction ask
+    PG.executeMany conn qry params
+      & handlePGException tools "executeMany" qry (Right params)
+      >>= toNumberOfRowsAffected "executeManyImpl"
 
-toNumberOfRowsAffected :: MonadIO m => Text -> Int64 -> m (Label "numberOfRowsAffected" Natural)
+toNumberOfRowsAffected :: (MonadIO m) => Text -> Int64 -> m (Label "numberOfRowsAffected" Natural)
 toNumberOfRowsAffected functionName i64 =
   i64
     & intToNatural
@@ -350,7 +357,7 @@ toNumberOfRowsAffected functionName i64 =
     <&> label @"numberOfRowsAffected"
 
 executeManyReturningWithImpl ::
-  (ToRow params, MonadUnliftIO m, MonadLogger m, HasField "pgFormat" tools Tool) =>
+  (ToRow params, MonadUnliftIO m, MonadLogger m, HasField "pgFormat" tools Tool, Otel.MonadTracer m) =>
   m tools ->
   m DebugLogDatabaseQueries ->
   Query ->
@@ -359,12 +366,13 @@ executeManyReturningWithImpl ::
   Transaction m [r]
 {-# INLINE executeManyReturningWithImpl #-}
 executeManyReturningWithImpl zoomTools zoomDebugLogDatabaseQueries qry params (Decoder fromRow) = do
-  tools <- lift @Transaction zoomTools
-  logDatabaseQueries <- lift @Transaction zoomDebugLogDatabaseQueries
-  logQueryIfEnabled tools logDatabaseQueries qry (HasMultiParams params)
-  conn <- Transaction ask
-  PG.returningWith fromRow conn qry params
-    & handlePGException tools "executeManyReturning" qry (Right params)
+  Otel.inSpan' "Postgres Query (execute)" Otel.defaultSpanArguments $ \span -> do
+    tools <- lift @Transaction zoomTools
+    logDatabaseQueries <- lift @Transaction zoomDebugLogDatabaseQueries
+    traceQueryIfEnabled tools span logDatabaseQueries qry (HasMultiParams params)
+    conn <- Transaction ask
+    PG.returningWith fromRow conn qry params
+      & handlePGException tools "executeManyReturning" qry (Right params)
 
 foldRowsImpl ::
   (FromRow row, ToRow params, MonadUnliftIO m, MonadLogger m, HasField "pgFormat" tools Tool) =>
@@ -410,7 +418,7 @@ pgFormatQueryMany qry params = Transaction $ do
   liftIO $ PG.formatMany conn qry params
 
 queryWithImpl ::
-  (ToRow params, MonadUnliftIO m, MonadLogger m, HasField "pgFormat" tools Tool) =>
+  (ToRow params, MonadUnliftIO m, MonadLogger m, HasField "pgFormat" tools Tool, Otel.MonadTracer m) =>
   m tools ->
   m DebugLogDatabaseQueries ->
   Query ->
@@ -419,12 +427,13 @@ queryWithImpl ::
   Transaction m [r]
 {-# INLINE queryWithImpl #-}
 queryWithImpl zoomTools zoomDebugLogDatabaseQueries qry params (Decoder fromRow) = do
-  tools <- lift @Transaction zoomTools
-  logDatabaseQueries <- lift @Transaction zoomDebugLogDatabaseQueries
-  logQueryIfEnabled tools logDatabaseQueries qry (HasSingleParam params)
-  conn <- Transaction ask
-  PG.queryWith fromRow conn qry params
-    & handlePGException tools "query" qry (Left params)
+  Otel.inSpan' "Postgres Query (execute)" Otel.defaultSpanArguments $ \span -> do
+    tools <- lift @Transaction zoomTools
+    logDatabaseQueries <- lift @Transaction zoomDebugLogDatabaseQueries
+    traceQueryIfEnabled tools span logDatabaseQueries qry (HasSingleParam params)
+    conn <- Transaction ask
+    PG.queryWith fromRow conn qry params
+      & handlePGException tools "query" qry (Left params)
 
 queryWithImpl_ :: (MonadUnliftIO m, MonadLogger m, HasField "pgFormat" tools Tool) => m tools -> Query -> Decoder r -> Transaction m [r]
 {-# INLINE queryWithImpl_ #-}
@@ -508,60 +517,61 @@ data HasQueryParams param
   | HasMultiParams [param]
 
 -- | Log the postgres query depending on the given setting
-logQueryIfEnabled ::
+traceQueryIfEnabled ::
   ( ToRow params,
     MonadUnliftIO m,
     MonadLogger m,
-    HasField "pgFormat" tools Tool
+    HasField "pgFormat" tools Tool,
+    Otel.MonadTracer m
   ) =>
   tools ->
+  Otel.Span ->
   DebugLogDatabaseQueries ->
   Query ->
   HasQueryParams params ->
   Transaction m ()
-logQueryIfEnabled tools logDatabaseQueries qry params = do
+traceQueryIfEnabled tools span logDatabaseQueries qry params = do
   -- In case we have query logging enabled, we want to do that
   let formattedQuery = case params of
         HasNoParams -> pgFormatQueryNoParams' tools qry
         HasSingleParam p -> pgFormatQuery' tools qry p
         HasMultiParams ps -> pgFormatQueryMany' tools qry ps
   let doLog errs =
-        errs
-          & nestedMultiError "Postgres query"
-          & prettyErrorTree
-          & $logDebug
-          & lift
-  let addQuery = do
-        formattedQuery
-          <&> newError
-          <&> singleError
-  let addExplain = do
+        Otel.addAttributes
+          span
+          $ ( ("postgres.query", Otel.toAttribute @Text errs.query)
+                : ( errs.explain
+                      & foldMap
+                        ( \ex ->
+                            [("postgres.explain", Otel.toAttribute @Text ex)]
+                        )
+                  )
+            )
+  let doExplain = do
         q <- formattedQuery
-        queryWithImpl_
-          (pure tools)
-          ( "EXPLAIN "
-              <> (
-                   -- TODO: this is not nice, but the only way to get the `executeMany` form to work with this
-                   -- because we need the query with all elements already interpolated.
-                   Query (q & textToBytesUtf8)
-                 )
-          )
-          (Dec.fromField @Text)
-          <&> Text.intercalate "\n"
-          <&> newError
-          <&> singleError
-
+        Otel.inSpan "Postgres EXPLAIN Query" Otel.defaultSpanArguments $ do
+          queryWithImpl_
+            (pure tools)
+            ( "EXPLAIN "
+                <> (
+                     -- TODO: this is not nice, but the only way to get the `executeMany` form to work with this
+                     -- because we need the query with all elements already interpolated.
+                     Query (q & textToBytesUtf8)
+                   )
+            )
+            (Dec.fromField @Text)
+            <&> Text.intercalate "\n"
   case logDatabaseQueries of
     DontLogDatabaseQueries -> pure ()
     LogDatabaseQueries -> do
-      aq <- addQuery
-      doLog (aq :| [])
+      q <- formattedQuery
+      doLog (T2 (label @"query" q) (label @"explain" Nothing))
     LogDatabaseQueriesAndExplain -> do
-      aq <- addQuery
+      q <- formattedQuery
       -- XXX: stuff like `CREATE SCHEMA` cannot be EXPLAINed, so we should catch exceptions here
       -- and just ignore anything that errors (if it errors because of a problem with the query, it would have been caught by the query itself.
-      ex <- addExplain
-      doLog (nestedError "Query" aq :| [nestedError "Explain" ex])
+      ex <- doExplain
+      doLog (T2 (label @"query" q) (label @"explain" (Just ex)))
 
 instance (ToField t1) => ToRow (Label l1 t1) where
   toRow t2 = toRow $ PG.Only $ getField @l1 t2
