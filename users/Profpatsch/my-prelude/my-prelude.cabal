@@ -91,6 +91,7 @@ library
      , filepath
      , hspec
      , hspec-expectations-pretty-diff
+     , hs-opentelemetry-api
      , monad-logger
      , mtl
      , postgresql-simple
