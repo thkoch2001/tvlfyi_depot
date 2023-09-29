@@ -40,6 +40,9 @@ import Network.HTTP.Types
 import Network.HTTP.Types qualified as Http
 import Network.Wai qualified as Wai
 import Network.Wai.Handler.Warp qualified as Warp
+import OpenTelemetry.Trace qualified as Otel hiding (getTracer, inSpan)
+import OpenTelemetry.Trace qualified as OtelTrace
+import OpenTelemetry.Trace.Monad qualified as Otel
 import PossehlAnalyticsPrelude
 import Postgres.Decoder qualified as Dec
 import Postgres.MonadPostgres
@@ -47,6 +50,7 @@ import Pretty
 import RunCommand (runCommandExpect0)
 import System.Directory qualified as Dir
 import System.Directory qualified as Xdg
+import System.Environment qualified as Env
 import System.FilePath ((</>))
 import System.IO qualified as IO
 import Text.Blaze.Html (Html)
@@ -60,8 +64,10 @@ main :: IO ()
 main =
   runAppWith
     ( do
-        _ <- runTransaction migrate
-        htmlUi
+        -- todo: trace that to the init functions as well
+        Otel.inSpan "whatcd-resolver main function" Otel.defaultSpanArguments $ do
+          _ <- runTransaction migrate
+          htmlUi
     )
     <&> first showToError
     >>= expectIOError "could not start whatcd-resolver"
@@ -906,8 +912,13 @@ assertOneUpdated name x = case x.numberOfRowsAffected of
   1 -> pure ()
   n -> appThrowTree ([fmt|{name :: Text}: Expected to update exactly one row, but updated {n :: Natural} row(s)|])
 
-migrate :: (MonadPostgres m) => Transaction m (Label "numberOfRowsAffected" Natural)
-migrate = do
+migrate ::
+  ( MonadPostgres m,
+    MonadUnliftIO m,
+    Otel.MonadTracer m
+  ) =>
+  Transaction m (Label "numberOfRowsAffected" Natural)
+migrate = inSpanT "Database Migration" $ do
   execute_
     [sql|
     CREATE SCHEMA IF NOT EXISTS redacted;
@@ -1034,6 +1045,21 @@ getBestTorrents = do
             }
     )
 
+inSpan :: (MonadUnliftIO m, Otel.MonadTracer m) => Text -> m a -> m a
+inSpan name = Otel.inSpan name Otel.defaultSpanArguments
+
+inSpanT :: (Otel.MonadTracer m, MonadUnliftIO m) => Text -> Transaction m b -> Transaction m b
+inSpanT name transaction = do
+  tracer <- lift @Transaction $ Otel.getTracer
+  -- I don’t want to implement MonadTracer for Transaction,
+  -- so I’m unlifting it via IO, that should work :P
+  withRunInIO $ \runInIO -> do
+    OtelTrace.inSpan
+      tracer
+      name
+      Otel.defaultSpanArguments
+      (runInIO transaction)
+
 hush :: Either a1 a2 -> Maybe a2
 hush (Left _) = Nothing
 hush (Right a) = Just a
@@ -1114,7 +1140,7 @@ assertM f v = case f v of
   Left err -> appThrowTree err
 
 runAppWith :: AppT IO a -> IO (Either TmpPg.StartError a)
-runAppWith appT = withDb $ \db -> do
+runAppWith appT = withTracer $ \tracer -> withDb $ \db -> do
   pgFormat <- readTools (label @"toolsEnvVar" "WHATCD_RESOLVER_TOOLS") (readTool "pg_format")
   let config = label @"logDatabaseQueries" LogDatabaseQueries
   pgConnPool <-
@@ -1130,6 +1156,23 @@ runAppWith appT = withDb $ \db -> do
         logInfo [fmt|Connected to database at {db & TmpPg.toDataDirectory} on socket {db & TmpPg.toConnectionString}|]
         appT
   runReaderT newAppT.unAppT Context {..}
+
+withTracer :: (Otel.Tracer -> IO c) -> IO c
+withTracer f = do
+  setDefaultEnv "OTEL_SERVICE_NAME" "whatcd-resolver"
+  bracket
+    -- Install the SDK, pulling configuration from the environment
+    Otel.initializeGlobalTracerProvider
+    -- Ensure that any spans that haven't been exported yet are flushed
+    Otel.shutdownTracerProvider
+    -- Get a tracer so you can create spans
+    (\tracerProvider -> f $ Otel.makeTracer tracerProvider "whatcd-resolver" Otel.tracerOptions)
+
+setDefaultEnv :: String -> String -> IO ()
+setDefaultEnv envName defaultValue = do
+  Env.lookupEnv envName >>= \case
+    Just _env -> pure ()
+    Nothing -> Env.setEnv envName defaultValue
 
 withDb :: (TmpPg.DB -> IO a) -> IO (Either TmpPg.StartError a)
 withDb act = do
@@ -1158,6 +1201,7 @@ withDb act = do
 
 data Context = Context
   { config :: Label "logDatabaseQueries" DebugLogDatabaseQueries,
+    tracer :: Otel.Tracer,
     pgFormat :: Tool,
     pgConnPool :: Pool Postgres.Connection,
     transmissionSessionId :: MVar ByteString
@@ -1182,6 +1226,9 @@ orAppThrowTree = \case
 
 instance (MonadIO m) => MonadLogger (AppT m) where
   monadLoggerLog loc src lvl msg = liftIO $ Logger.defaultOutput IO.stderr loc src lvl (Logger.toLogStr msg)
+
+instance (Monad m) => Otel.MonadTracer (AppT m) where
+  getTracer = AppT $ asks (.tracer)
 
 class MonadTransmission m where
   getTransmissionId :: m (Maybe ByteString)
