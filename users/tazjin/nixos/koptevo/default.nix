@@ -112,8 +112,8 @@ in
   services.depot.automatic-gc = {
     enable = true;
     interval = "daily";
-    diskThreshold = 2; # GiB # TODO
-    maxFreed = 8; # GiB
+    diskThreshold = 15; # GiB
+    maxFreed = 10; # GiB
     preserveGenerations = "14d";
   };
 
@@ -126,6 +126,32 @@ in
         return 302 https://at.tvl.fyi/?q=%2F%2Fusers%2Ftazjin%2Fnixos%2Fkoptevo%2Fdefault.nix;
       }
     '';
+  };
+
+  # I don't use the podcast feature, but I *have to* supply podcasts
+  # to gonic ...
+  systemd.tmpfiles.rules = [
+    "d /tmp/fake-podcasts 0555 nobody nobody -"
+  ];
+
+  services.gonic = {
+    enable = true;
+    settings = {
+      listen-addr = "0.0.0.0:4747";
+      scan-interval = 5;
+      scan-at-start-enabled = true;
+      podcast-path = [ "/tmp/fake-podcasts" ];
+      music-path = [ "/var/lib/geesefs/tazjins-files/music" ];
+    };
+  };
+
+  services.nginx.virtualHosts."music.tazj.in" = {
+    addSSL = true;
+    enableACME = true;
+
+    locations."/" = {
+      proxyPass = "http://127.0.0.1:4747";
+    };
   };
 
   # List packages installed in system profile. To search, run:
