@@ -21,6 +21,7 @@ in
       # programs from the depot
       (with depot; [
         users.tazjin.screenLock
+        users.tazjin.chase-geese
         config.tazjin.emacs
         third_party.agenix.cli
         third_party.josh
