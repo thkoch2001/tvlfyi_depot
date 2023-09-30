@@ -12,4 +12,5 @@ in
 {
   "tgsa-yandex.age".publicKeys = allKeys;
   "monica-appkey.age".publicKeys = allKeys;
+  "geesefs-tazjins-files.age".publicKeys = allKeys;
 }
