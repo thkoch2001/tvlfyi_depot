@@ -12,10 +12,11 @@ in
     (mod "quassel.nix")
     (mod "www/base.nix")
     (mod "www/tazj.in.nix")
+    (usermod "airsonic.nix")
+    (usermod "geesefs.nix")
     (usermod "monica.nix")
     (usermod "predlozhnik.nix")
     (usermod "tgsa.nix")
-    (usermod "geesefs.nix")
     (depot.third_party.agenix.src + "/modules/age.nix")
   ];
 
