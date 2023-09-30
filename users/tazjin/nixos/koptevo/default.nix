@@ -15,6 +15,7 @@ in
     (usermod "monica.nix")
     (usermod "predlozhnik.nix")
     (usermod "tgsa.nix")
+    (usermod "geesefs.nix")
     (depot.third_party.agenix.src + "/modules/age.nix")
   ];
 
