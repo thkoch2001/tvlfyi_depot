@@ -146,6 +146,12 @@ in
     };
   };
 
+  # hack to work around the strict sandboxing of the gonic module
+  # breaking DNS resolutino
+  systemd.services.gonic.serviceConfig.BindReadOnlyPaths = [
+    "-/etc/resolv.conf"
+  ];
+
   services.nginx.virtualHosts."music.tazj.in" = {
     addSSL = true;
     enableACME = true;
