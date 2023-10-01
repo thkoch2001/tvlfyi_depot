@@ -19,6 +19,7 @@
       Restart = "always";
       LoadCredential = "geesefs-tazjins-files:/run/agenix/geesefs-tazjins-files";
       StateDirectory = "geesefs";
+      ExecStartPre = "/run/wrappers/bin/umount -a -t fuse.geesefs";
     };
 
     script = ''

@@ -170,6 +170,7 @@ in
 
   programs.mtr.enable = true;
   programs.mosh.enable = true;
+  zramSwap.enable = true;
 
   system.stateVersion = "23.05";
 }
