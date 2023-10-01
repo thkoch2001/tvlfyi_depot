@@ -46,6 +46,7 @@ digraph tvl {
     sterni [href="https://sterni.lv/"];
     tazjin [href="https://tazj.in/"];
     wpcarro [href="https://wpcarro.dev/"];
+    raitobezarius [href="https://ryan.lahfa.xyz/"];
     yuuko;
   }
 
@@ -133,6 +134,7 @@ digraph tvl {
     kn -> flokli;
     sterni -> Profpatsch;
     yuuko -> ncl;
+    raitobezarius -> flokli;
   }
 
   // secondary edges (how are they connected otherwise?)
@@ -142,6 +144,7 @@ digraph tvl {
     // ircv3
     eta -> ircv3;
     firefly -> ircv3;
+    raitobezarius -> ircv3;
 
     // µccc
     leah2 -> muccc;
@@ -163,6 +166,7 @@ digraph tvl {
     spacekookie -> afra;
     qyliss -> afra;
     ezemtsov -> nix;
+    raitobezarius -> nix;
   }
 
   // baby
