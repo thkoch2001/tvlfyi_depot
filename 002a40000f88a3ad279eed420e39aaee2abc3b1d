@@ -16,6 +16,24 @@
       "message": "commit message needs updating, though.",
       "revId": "002a40000f88a3ad279eed420e39aaee2abc3b1d",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cd40df5f_7ddec541",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000073
+      },
+      "writtenOn": "2023-10-02T11:19:39Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "88f544d7_aa2d5d2b",
+      "revId": "002a40000f88a3ad279eed420e39aaee2abc3b1d",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
