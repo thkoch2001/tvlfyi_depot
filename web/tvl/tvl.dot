@@ -9,6 +9,8 @@ digraph tvl {
   // people
   subgraph {
     Irenes [href="https://www.pluralpride.com/"];
+    K900 [href="https://0upti.me/"];
+    Profpatsch [href="http://profpatsch.de/"];
     adisbladis [href="http://nixos.expert/"];
     amjoseph;
     andi [label="andi-" href="https://andreas.rammhold.de/"];
@@ -35,11 +37,9 @@ digraph tvl {
     leah2 [href="https://leahneukirchen.org/"];
     lukegb [href="https://lukegb.com/"];
     marcusr [href="http://marcus.nordaaker.com/"];
-    mdjnsn;
     ncl;
     nikky [href="http://nikky.moe/"];
     nyanotech [href="https://twitter.com/nyanotech"];
-    Profpatsch [href="http://profpatsch.de/"];
     qyliss [href="https://alyssa.is"];
     seven [href="https://open.spotify.com/user/so7"];
     spacekookie [href="https://spacekookie.de/"];
@@ -100,6 +100,7 @@ digraph tvl {
     // via tvix
     j4m3s -> tvix;
     amjoseph -> tvix;
+    K900 -> tvix;
 
     // via edef
     benjojo -> edef;
@@ -118,7 +119,6 @@ digraph tvl {
     lukegb -> google;
     wpcarro -> google;
     fzakaria -> google;
-    mdjnsn -> google;
 
     // random primary
     grfn -> wpcarro;
