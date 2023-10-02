@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "624c2dcc_93e4d15b",
+        "filename": "tvix/store/src/bin/tvix-store.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 148,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-10-02T12:41:59Z",
+      "side": 1,
+      "message": "can you add a comment describing the why for this? also, could this be a sign for an an upstream bug? we should probably open an issue with our observations upstream and link to it from here in a comment.",
+      "revId": "388587ace91b319a6bf6361a5220e96cc2d058eb",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
