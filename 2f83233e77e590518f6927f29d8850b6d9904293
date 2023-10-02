@@ -36,6 +36,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "4c4855b0_d2db34c1",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-10-02T15:45:58Z",
+      "side": 1,
+      "message": "Erf, yes, you\u0027re right. Thanks :-D",
+      "parentUuid": "d98c7de7_e08426cc",
+      "revId": "2f83233e77e590518f6927f29d8850b6d9904293",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "42d69a02_429346d5",
@@ -67,6 +85,24 @@
       "side": 1,
       "message": "That PR is not needed for this CL but if we want to support fuse-t we need it. I have tested fuse-t and got it working with just that PR, this CL and an extra feature flag.",
       "parentUuid": "42d69a02_429346d5",
+      "revId": "2f83233e77e590518f6927f29d8850b6d9904293",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2302a9b0_9dbe312a",
+        "filename": "tvix/Cargo.lock",
+        "patchSetId": 2
+      },
+      "lineNbr": 776,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-10-02T15:45:58Z",
+      "side": 1,
+      "message": "Nice, thanks for the context. Then this is obviously fine to keep in a followup CL.",
+      "parentUuid": "dfa381d0_1fc66a15",
       "revId": "2f83233e77e590518f6927f29d8850b6d9904293",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
