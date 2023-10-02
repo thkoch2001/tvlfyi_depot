@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "42d69a02_429346d5",
+        "filename": "tvix/Cargo.lock",
+        "patchSetId": 2
+      },
+      "lineNbr": 776,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-10-02T14:05:33Z",
+      "side": 1,
+      "message": "How does https://github.com/cloud-hypervisor/fuse-backend-rs/pull/158 relate to this? Is it needed as well, or not?",
+      "revId": "2f83233e77e590518f6927f29d8850b6d9904293",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
