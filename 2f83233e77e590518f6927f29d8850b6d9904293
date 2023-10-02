@@ -20,6 +20,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "d98c7de7_e08426cc",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1000082
+      },
+      "writtenOn": "2023-10-02T14:21:23Z",
+      "side": 1,
+      "message": "You want me to add it as a link? The commit message starts with \"This partially fixes b/312 and gets FUSE to work again on MacOS.\" and I thought that was enough reference to b/312.",
+      "parentUuid": "5488661c_8a9f92fb",
+      "revId": "2f83233e77e590518f6927f29d8850b6d9904293",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "42d69a02_429346d5",
         "filename": "tvix/Cargo.lock",
         "patchSetId": 2
@@ -31,6 +49,24 @@
       "writtenOn": "2023-10-02T14:05:33Z",
       "side": 1,
       "message": "How does https://github.com/cloud-hypervisor/fuse-backend-rs/pull/158 relate to this? Is it needed as well, or not?",
+      "revId": "2f83233e77e590518f6927f29d8850b6d9904293",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "dfa381d0_1fc66a15",
+        "filename": "tvix/Cargo.lock",
+        "patchSetId": 2
+      },
+      "lineNbr": 776,
+      "author": {
+        "id": 1000082
+      },
+      "writtenOn": "2023-10-02T14:21:23Z",
+      "side": 1,
+      "message": "That PR is not needed for this CL but if we want to support fuse-t we need it. I have tested fuse-t and got it working with just that PR, this CL and an extra feature flag.",
+      "parentUuid": "42d69a02_429346d5",
       "revId": "2f83233e77e590518f6927f29d8850b6d9904293",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
