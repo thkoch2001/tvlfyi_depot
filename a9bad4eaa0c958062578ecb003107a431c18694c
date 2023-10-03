@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5256ba78_cd472210",
+        "filename": "tvix/nar-bridge/pkg/pathinfosvc/server.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 299,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-10-03T16:27:12Z",
+      "side": 1,
+      "message": "At least Deriver should probably be added as an optional field to the PathInfo message.",
+      "revId": "a9bad4eaa0c958062578ecb003107a431c18694c",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
