@@ -29,7 +29,8 @@ in
     # Remodel the system clipboard as a list instead of a point.
     clipmenu.enable = true;
 
-    locate.enable = true;
+    # TODO(wpcarro): broken in nixpkgs as of 2023-10-04
+    locate.enable = false;
 
     depot.automatic-gc = {
       enable = true;

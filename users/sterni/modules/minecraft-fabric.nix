@@ -447,8 +447,8 @@ in
     assertions = [
       {
         assertion = builtins.all (instance: !instance.enable) (builtins.attrValues cfg)
-          || config.nixpkgs.config.allowUnfreeRedistributable or false
-          || config.nixpkgs.config.allowUnfree or false;
+          || pkgs.config.allowUnfreeRedistributable or false
+          || pkgs.config.allowUnfree or false;
         message = lib.concatStringsSep " " [
           "You need to allow unfree software for minecraft,"
           "as you'll implicitly agree to Mojang's EULA."

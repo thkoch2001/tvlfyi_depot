@@ -112,8 +112,6 @@ in
   hardware.bluetooth.enable = true;
   users.users.tazjin.extraGroups = [ "tss" ];
 
-  nixpkgs.config.allowUnfree = true;
-
   environment.systemPackages = with pkgs; [
     tdesktop
   ];
