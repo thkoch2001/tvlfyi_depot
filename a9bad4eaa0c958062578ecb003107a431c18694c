@@ -20,6 +20,24 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "9ba527c9_2f772c4f",
+        "filename": "tvix/nar-bridge/pkg/pathinfosvc/server.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 86,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-10-04T07:48:30Z",
+      "side": 1,
+      "message": "At least cache.nixos.org des send a 404. querying the binary cache directly (nix-cache.s3.amazonaws.com) does indeed return a 403.\n\nI added a comment and included it in the condition to match against.",
+      "parentUuid": "48cfa7b7_8c8716ce",
+      "revId": "a9bad4eaa0c958062578ecb003107a431c18694c",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "5256ba78_cd472210",
         "filename": "tvix/nar-bridge/pkg/pathinfosvc/server.go",
         "patchSetId": 1
