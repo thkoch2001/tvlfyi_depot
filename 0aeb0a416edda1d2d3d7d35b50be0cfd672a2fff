@@ -37,6 +37,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "8dccb550_28081e1a",
+        "filename": "tvix/nar-bridge/pkg/pathinfosvc/server.go",
+        "patchSetId": 3
+      },
+      "lineNbr": 72,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-10-04T21:02:42Z",
+      "side": 1,
+      "message": "Right, in this specific instance we definitely want to ingest. Will update.",
+      "parentUuid": "ad609c3c_6b76fa76",
+      "revId": "0aeb0a416edda1d2d3d7d35b50be0cfd672a2fff",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "0a8d2187_190e6db7",
         "filename": "tvix/nar-bridge/pkg/pathinfosvc/server.go",
         "patchSetId": 3
@@ -48,6 +66,24 @@
       "writtenOn": "2023-10-04T19:54:23Z",
       "side": 1,
       "message": "Need a `resp.Body.Close()` I think, even though we don\u0027t expect or care about the body here.",
+      "revId": "0aeb0a416edda1d2d3d7d35b50be0cfd672a2fff",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0acb5a08_93e3a8a6",
+        "filename": "tvix/nar-bridge/pkg/pathinfosvc/server.go",
+        "patchSetId": 3
+      },
+      "lineNbr": 84,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-10-04T21:02:42Z",
+      "side": 1,
+      "message": "Yes, true. Will update.",
+      "parentUuid": "0a8d2187_190e6db7",
       "revId": "0aeb0a416edda1d2d3d7d35b50be0cfd672a2fff",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
@@ -65,6 +101,24 @@
       "writtenOn": "2023-10-04T19:54:23Z",
       "side": 1,
       "message": "`TODO: Security` :D",
+      "revId": "0aeb0a416edda1d2d3d7d35b50be0cfd672a2fff",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3f3943bc_fc1944a3",
+        "filename": "tvix/nar-bridge/pkg/pathinfosvc/server.go",
+        "patchSetId": 3
+      },
+      "lineNbr": 140,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-10-04T21:02:42Z",
+      "side": 1,
+      "message": "Depends on your security model, but yes! This is an easy addition for a followup CL.",
+      "parentUuid": "ca960558_eacad9ec",
       "revId": "0aeb0a416edda1d2d3d7d35b50be0cfd672a2fff",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
