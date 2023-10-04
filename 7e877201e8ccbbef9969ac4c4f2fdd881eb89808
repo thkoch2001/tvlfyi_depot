@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ebbd4c15_1f0afeff",
+        "filename": "tvix/nar-bridge/pkg/importer/importer.go",
+        "patchSetId": 3
+      },
+      "lineNbr": 207,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2023-10-04T19:32:19Z",
+      "side": 1,
+      "message": "Oh nice this resolves my comment on cl/9528.",
+      "revId": "7e877201e8ccbbef9969ac4c4f2fdd881eb89808",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
