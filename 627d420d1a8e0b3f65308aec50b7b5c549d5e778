@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4d651b59_b99ff495",
+        "filename": "tvix/nix-compat/src/store_path/mod.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 166,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-10-04T17:06:22Z",
+      "side": 1,
+      "message": "add a comment at the end of the line we only disallow dots at the beginning.",
+      "revId": "627d420d1a8e0b3f65308aec50b7b5c549d5e778",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9c982dd3_f7c079a2",
+        "filename": "tvix/nix-compat/src/store_path/mod.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 225,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-10-04T17:06:22Z",
+      "side": 1,
+      "message": "we should update the comment, probably linking to the upstream nix bug here too.",
+      "revId": "627d420d1a8e0b3f65308aec50b7b5c549d5e778",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
