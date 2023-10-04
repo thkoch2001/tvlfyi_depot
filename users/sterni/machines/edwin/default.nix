@@ -20,7 +20,6 @@
   config = {
     time.timeZone = "Europe/Berlin";
 
-    nixpkgs.config.allowUnfreeRedistributable = true;
     nix = {
       package = pkgs.nix_2_3;
       settings = {
