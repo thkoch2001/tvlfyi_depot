@@ -163,9 +163,9 @@ pub(crate) fn validate_name(s: &[u8]) -> Result<String, Error> {
 
     for (i, c) in s.iter().enumerate() {
         if c.is_ascii_alphanumeric()
+            || (*c == b'.' && i != 0)
             || *c == b'-'
             || *c == b'_'
-            || *c == b'.'
             || *c == b'+'
             || *c == b'?'
             || *c == b'='
@@ -225,9 +225,8 @@ mod tests {
     /// empty `.gitignore` file.
     #[test]
     fn starts_with_dot() {
-        let nix_path_str = "fli4bwscgna7lpm7v5xgnjxrxh0yc7ra-.gitignore";
-        let nixpath = StorePath::from_bytes(nix_path_str.as_bytes()).expect("must succeed");
-        assert_eq!(".gitignore", nixpath.name);
+        StorePath::from_bytes(b"fli4bwscgna7lpm7v5xgnjxrxh0yc7ra-.gitignore")
+            .expect_err("must fail");
     }
 
     #[test]
