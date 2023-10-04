@@ -58,7 +58,6 @@
     freeMemThreshold = 5;
   };
 
-  nixpkgs.config.allowUnfree = true;
   hardware.enableAllFirmware = true;
 
   hardware.pulseaudio.extraConfig = ''
