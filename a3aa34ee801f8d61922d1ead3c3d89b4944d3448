@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8d738d72_a6caf16f",
+        "filename": "tvix/nar-bridge/pkg/importer/importer.go",
+        "patchSetId": 3
+      },
+      "lineNbr": 206,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2023-10-04T19:29:52Z",
+      "side": 1,
+      "message": "Do we need the hasher here if the callback is supposed to be doing the digest calculation?\n\nLook like we do need a way to count bytes read, but can probably use a cheaper wrapper that just counts bytes.",
+      "revId": "a3aa34ee801f8d61922d1ead3c3d89b4944d3448",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "271752a4_4973270c",
+        "filename": "tvix/nar-bridge/pkg/importer/importer.go",
+        "patchSetId": 3
+      },
+      "lineNbr": 216,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2023-10-04T19:29:52Z",
+      "side": 1,
+      "message": "Why panic instead of return an error?",
+      "revId": "a3aa34ee801f8d61922d1ead3c3d89b4944d3448",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
