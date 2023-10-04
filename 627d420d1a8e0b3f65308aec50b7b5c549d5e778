@@ -18,6 +18,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "20d82b13_6b27029b",
+        "filename": "tvix/nix-compat/src/store_path/mod.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 166,
+      "author": {
+        "id": 1000005
+      },
+      "writtenOn": "2023-10-04T17:13:27Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4d651b59_b99ff495",
+      "revId": "627d420d1a8e0b3f65308aec50b7b5c549d5e778",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "9c982dd3_f7c079a2",
@@ -31,6 +49,24 @@
       "writtenOn": "2023-10-04T17:06:22Z",
       "side": 1,
       "message": "we should update the comment, probably linking to the upstream nix bug here too.",
+      "revId": "627d420d1a8e0b3f65308aec50b7b5c549d5e778",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6969abd5_5292138d",
+        "filename": "tvix/nix-compat/src/store_path/mod.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 225,
+      "author": {
+        "id": 1000005
+      },
+      "writtenOn": "2023-10-04T17:13:27Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9c982dd3_f7c079a2",
       "revId": "627d420d1a8e0b3f65308aec50b7b5c549d5e778",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
