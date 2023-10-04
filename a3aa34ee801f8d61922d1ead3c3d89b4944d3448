@@ -36,6 +36,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "4a0b3670_b988f343",
+        "filename": "tvix/nar-bridge/pkg/importer/importer.go",
+        "patchSetId": 3
+      },
+      "lineNbr": 206,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2023-10-04T21:01:57Z",
+      "side": 1,
+      "message": "Looks like this is already fixed in cl/9529",
+      "parentUuid": "8d738d72_a6caf16f",
+      "revId": "a3aa34ee801f8d61922d1ead3c3d89b4944d3448",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "271752a4_4973270c",
@@ -67,6 +85,24 @@
       "side": 1,
       "message": "there\u0027s no way a blob callback can return the digest of contents without reading through them, this is always a coding error. consider it like an assert! in rust.\n\nif this is not the case, something is terribly wrong, so bail out loudly.",
       "parentUuid": "271752a4_4973270c",
+      "revId": "a3aa34ee801f8d61922d1ead3c3d89b4944d3448",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "67f9cbb3_4dbb712d",
+        "filename": "tvix/nar-bridge/pkg/importer/importer.go",
+        "patchSetId": 3
+      },
+      "lineNbr": 216,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2023-10-04T21:01:57Z",
+      "side": 1,
+      "message": "Fair enough!",
+      "parentUuid": "36db1098_ce47780a",
       "revId": "a3aa34ee801f8d61922d1ead3c3d89b4944d3448",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
