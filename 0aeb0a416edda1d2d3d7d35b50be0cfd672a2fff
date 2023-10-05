@@ -18,6 +18,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "42898787_423294f0",
+        "filename": "tvix/nar-bridge/cmd/nar-bridge-pathinfo/main.go",
+        "patchSetId": 3
+      },
+      "lineNbr": 54,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-10-05T06:06:43Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "996863e6_0db7df46",
+      "revId": "0aeb0a416edda1d2d3d7d35b50be0cfd672a2fff",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "ad609c3c_6b76fa76",
@@ -53,6 +71,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "665999c1_0ec261df",
+        "filename": "tvix/nar-bridge/pkg/pathinfosvc/server.go",
+        "patchSetId": 3
+      },
+      "lineNbr": 72,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-10-05T06:06:43Z",
+      "side": 1,
+      "message": "Updated.",
+      "parentUuid": "8dccb550_28081e1a",
+      "revId": "0aeb0a416edda1d2d3d7d35b50be0cfd672a2fff",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "0a8d2187_190e6db7",
@@ -84,6 +120,24 @@
       "side": 1,
       "message": "Yes, true. Will update.",
       "parentUuid": "0a8d2187_190e6db7",
+      "revId": "0aeb0a416edda1d2d3d7d35b50be0cfd672a2fff",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0d5bbfe1_5f9b8e67",
+        "filename": "tvix/nar-bridge/pkg/pathinfosvc/server.go",
+        "patchSetId": 3
+      },
+      "lineNbr": 84,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-10-05T06:06:43Z",
+      "side": 1,
+      "message": "This became redundant, because we don\u0027t do the HEAD anymore, and the GET does defer closing the body already.\n\nI also moved the part reading from the response body into its own scope, to ensure we close the http request as early as possible.",
+      "parentUuid": "0acb5a08_93e3a8a6",
       "revId": "0aeb0a416edda1d2d3d7d35b50be0cfd672a2fff",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
