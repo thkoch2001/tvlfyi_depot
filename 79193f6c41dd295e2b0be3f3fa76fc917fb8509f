@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "dfabb97f_903aca5a",
+        "filename": "tvix/store/src/proto/tests/pathinfo.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 219,
+      "author": {
+        "id": 1000005
+      },
+      "writtenOn": "2023-10-05T09:45:39Z",
+      "side": 1,
+      "message": "This can just be vec![0xff; 20]",
+      "revId": "79193f6c41dd295e2b0be3f3fa76fc917fb8509f",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
