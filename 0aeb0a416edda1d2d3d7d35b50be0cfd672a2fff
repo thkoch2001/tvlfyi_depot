@@ -144,6 +144,24 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "b1f1acbe_f5d5ecd8",
+        "filename": "tvix/nar-bridge/pkg/pathinfosvc/server.go",
+        "patchSetId": 3
+      },
+      "lineNbr": 84,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2023-10-05T14:20:30Z",
+      "side": 1,
+      "message": "Defers are only called when functions return, so extra scopes don’t do anything. (one of my big annoyances with Go)",
+      "parentUuid": "0d5bbfe1_5f9b8e67",
+      "revId": "0aeb0a416edda1d2d3d7d35b50be0cfd672a2fff",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "ca960558_eacad9ec",
         "filename": "tvix/nar-bridge/pkg/pathinfosvc/server.go",
         "patchSetId": 3
