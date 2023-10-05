@@ -112,14 +112,14 @@ in
   castore-protos-go = pkgs.buildGoModule {
     name = "castore-golang";
     src = depot.third_party.gitignoreSource ./store/protos;
-    vendorHash = "sha256-zRbMwhZvcDop8qDd0OrHeDJ+lVPKxwjKmlFbj8Ypy9g=";
+    vendorHash = "sha256-o7moXRxhKxCpsds96sSsHHafKJf2AWhFMu/YdSu+FM4=";
   };
 
   # Builds and tests the code in store/protos.
   store-protos-go = pkgs.buildGoModule {
     name = "store-golang";
     src = depot.third_party.gitignoreSource ./store/protos;
-    vendorHash = "sha256-zRbMwhZvcDop8qDd0OrHeDJ+lVPKxwjKmlFbj8Ypy9g=";
+    vendorHash = "sha256-o7moXRxhKxCpsds96sSsHHafKJf2AWhFMu/YdSu+FM4=";
   };
 
   # Build the Rust documentation for publishing on docs.tvix.dev.
