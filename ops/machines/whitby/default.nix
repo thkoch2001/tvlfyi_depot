@@ -36,7 +36,6 @@ in
     (mod "www/code.tvl.fyi.nix")
     (mod "www/cs.tvl.fyi.nix")
     (mod "www/deploys.tvl.fyi.nix")
-    (mod "www/images.tvl.fyi.nix")
     (mod "www/nixery.dev.nix")
     (mod "www/self-redirect.nix")
     (mod "www/signup.tvl.fyi.nix")
