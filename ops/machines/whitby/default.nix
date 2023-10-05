@@ -18,7 +18,6 @@ in
     (mod "journaldriver.nix")
     (mod "known-hosts.nix")
     (mod "monorepo-gerrit.nix")
-    (mod "nixery.nix")
     (mod "owothia.nix")
     (mod "panettone.nix")
     (mod "paroxysm.nix")
@@ -37,7 +36,6 @@ in
     (mod "www/cs.tvl.fyi.nix")
     (mod "www/deploys.tvl.fyi.nix")
     (mod "www/images.tvl.fyi.nix")
-    (mod "www/nixery.dev.nix")
     (mod "www/self-redirect.nix")
     (mod "www/signup.tvl.fyi.nix")
     (mod "www/static.tvl.fyi.nix")
@@ -409,9 +407,6 @@ in
 
     # Run atward, the search engine redirection thing.
     atward.enable = true;
-
-    # Run a Nixery instance
-    nixery.enable = true;
 
     # Run cgit & josh to serve git
     cgit = {
