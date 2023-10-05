@@ -160,6 +160,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "7e07b9eb_4749d6cb",
+        "filename": "tvix/nar-bridge/pkg/pathinfosvc/server.go",
+        "patchSetId": 3
+      },
+      "lineNbr": 84,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-10-05T14:29:47Z",
+      "side": 1,
+      "message": "Oh, so let me change this to an explicit Close then.",
+      "parentUuid": "b1f1acbe_f5d5ecd8",
+      "revId": "0aeb0a416edda1d2d3d7d35b50be0cfd672a2fff",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "ca960558_eacad9ec",
