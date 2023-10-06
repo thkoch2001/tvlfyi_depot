@@ -70,6 +70,24 @@
       "parentUuid": "beee85d2_b6245114",
       "revId": "b56e9fb91087c2e98002618aadc8f9343841d963",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ed14a2c3_41e258af",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-10-06T09:37:49Z",
+      "side": 1,
+      "message": "It seems perldevel got removed in 9f815be60520665e139fb8575a64218fc7994ecc, so I checked out 9f815be60520665e139fb8575a64218fc7994ecc~1, and it\u0027s not a FOD, but a flat file:\n\n❯ nix-build -A perldevel.src\n/nix/store/68iaivqj1m34j679hwnxx0hvimqd2m96-perl-5.38.0.tar.gz\n❯ nix-build -A perl538.src\n/nix/store/68iaivqj1m34j679hwnxx0hvimqd2m96-perl-5.38.0.tar.gz\n\nThis also seems to be the case on the release-23.05 branch, so I don\u0027t know how to reproduce this.",
+      "parentUuid": "82999064_f6468eb0",
+      "revId": "b56e9fb91087c2e98002618aadc8f9343841d963",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
