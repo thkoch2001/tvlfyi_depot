@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9e52ef02_71249930",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-10-06T09:14:19Z",
+      "side": 1,
+      "message": "this is another instance of the CodeOwners requirement getting cleaned whenever clbot rebases. @tazjin, you probably need to re-rebase this on your own to get it submittable.",
+      "revId": "4416645410a37e4c6d646471a2c1a1dd55166c8f",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
