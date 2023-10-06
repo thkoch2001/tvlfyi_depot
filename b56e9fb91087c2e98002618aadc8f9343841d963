@@ -88,6 +88,24 @@
       "parentUuid": "82999064_f6468eb0",
       "revId": "b56e9fb91087c2e98002618aadc8f9343841d963",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ce7f9417_6ce50318",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-10-06T09:40:48Z",
+      "side": 1,
+      "message": "I wasn\u0027t really able to figure out how to reproduce it, so I created another example, allowing to play with FODs of different names and/or different build recipes:\n\n\n\n```\nlet\n  pkgs \u003d …;\n  mkFod \u003d name: extraBuild: pkgs.stdenv.mkDerivation {\n    inherit name;\n    # src \u003d ./default.nix;\n    dontUnpack \u003d true;\n\n    buildPhase \u003d \u0027\u0027\n      mkdir -p $out\n      touch $out/.keep\n    \u0027\u0027 + extraBuild;\n\n    outputHashMode \u003d \"recursive\";\n    outputHashAlgo \u003d \"sha256\";\n    outputHash \u003d \"sha256-Q3QXOoy+iN4VK2CflvRulYvPZXYgF0dO7FoF7CvWFTA\u003d\";\n  };\nin {\n  fod-foo \u003d (mkFod \"foo\" \"\");\n  fod-foo2 \u003d (mkFod \"foo\" \"sleep 1\");\n  fod-bar \u003d (mkFod \"bar\" \"\");\n}\n```\n❯ nix-instantiate nix -A fod-foo\n/nix/store/8gx9j990sk4vy2a403g7cdj9qj1i04hb-foo.drv\n❯ nix-build -A fod-foo\n/nix/store/17wgs52s7kcamcyin4ja58njkf91ipq8-foo\n\n❯ nix-instantiate nix -A fod-foo2\n/nix/store/w55xzn5p67674nxhb2i0a6shrj07iasc-foo.drv\n❯ nix-build -A fod-foo2\n/nix/store/17wgs52s7kcamcyin4ja58njkf91ipq8-foo\n\n❯ nix-instantiate nix -A fod-bar\n/nix/store/jivx5zg9zkqk8gmpvxbg76qphmgjp9db-bar.drv\n❯ nix-build -A fod-bar\n/nix/store/xdr584252fnmr951y58030mdl94j3pqf-bar\n\nSo yes, both the output hash *and* the name (and only these two) is what affects the output path of a FOD. See https://docs.tvix.dev/rust/src/nix_compat/store_path/utils.rs.html#125-134, where exactly these two are function parameters.\n\nI need to read known_paths and surroundings again to see if/how we need to handle this.",
+      "parentUuid": "ed14a2c3_41e258af",
+      "revId": "b56e9fb91087c2e98002618aadc8f9343841d963",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
