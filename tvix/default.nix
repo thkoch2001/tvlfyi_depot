@@ -94,22 +94,9 @@ in
   # lacking something, but it is required for some people's workflows.
   #
   # This shell can be entered with e.g. `mg shell //tvix:shell`.
-  shell = pkgs.mkShell {
-    name = "tvix-rust-dev-env";
-    packages = [
-      pkgs.buf-language-server
-      pkgs.cargo
-      pkgs.cargo-machete
-      pkgs.clippy
-      pkgs.evans
-      pkgs.fuse
-      pkgs.pkg-config
-      pkgs.rust-analyzer
-      pkgs.rustc
-      pkgs.rustfmt
-      pkgs.protobuf
-    ] ++ iconvDarwinDep;
-  };
+  # This is a separate file, so it can be used individually in the tvix josh
+  # workspace too.
+  shell = (import ./shell.nix { inherit pkgs; });
 
   # Builds and tests the code in castore/protos.
   castore-protos-go = pkgs.buildGoModule {
