@@ -16,6 +16,24 @@
       "message": "```\n# virtiofs feature currently fails to build on Darwin.\n# we however can ship it for non-darwin.\n```",
       "revId": "793c650e4e8972736831fbcb189b6b885b0f77de",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "75691f79_9901bf1a",
+        "filename": "tvix/store/default.nix",
+        "patchSetId": 1
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2023-10-07T02:27:06Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e305daa5_e851e68a",
+      "revId": "793c650e4e8972736831fbcb189b6b885b0f77de",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
