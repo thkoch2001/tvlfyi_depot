@@ -5,6 +5,8 @@ let
   # crate override for crates that need protobuf
   protobufDep = prev: (prev.nativeBuildInputs or [ ]) ++ [ pkgs.protobuf ];
   iconvDarwinDep = lib.optionals pkgs.stdenv.isDarwin [ pkgs.libiconv ];
+  # fuse-backend-rs uses DiskArbitration framework to handle mount/unmount on Darwin
+  diskArbitrationDep = lib.optionals pkgs.stdenv.isDarwin [ pkgs.buildPackages.darwin.apple_sdk.frameworks.DiskArbitration ];
 
   # Load the crate2nix crate tree.
   crates = import ./Cargo.nix {
@@ -44,6 +46,7 @@ let
       tvix-store = prev: {
         PROTO_ROOT = depot.tvix.proto;
         nativeBuildInputs = protobufDep prev;
+        buildInputs = prev.buildInputs or [ ] ++ diskArbitrationDep;
       };
     };
   };
