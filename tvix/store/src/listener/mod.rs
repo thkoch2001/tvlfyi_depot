@@ -9,7 +9,7 @@ use futures::Stream;
 use pin_project_lite::pin_project;
 use tokio::io::{AsyncRead, AsyncWrite};
 use tokio_listener::{Listener, ListenerAddress};
-use tonic::transport::server::Connected;
+use tonic::transport::server::{Connected, TcpConnectInfo, UdsConnectInfo};
 
 /// A wrapper around a [Listener] which implements the [Stream] trait.
 /// Mainly used to bridge [tokio_listener] with [tonic].
@@ -72,11 +72,27 @@ impl DerefMut for Connection {
     }
 }
 
+#[derive(Clone)]
+enum ListenerConnectInfo {
+    TCP(TcpConnectInfo),
+    Unix(UdsConnectInfo),
+    Stdio,
+    Other,
+}
+
 impl Connected for Connection {
-    type ConnectInfo = ();
+    type ConnectInfo = ListenerConnectInfo;
 
     fn connect_info(&self) -> Self::ConnectInfo {
-        ()
+        if let Ok(tcp_stream) = self.try_into_tcp() {
+            ListenerConnectInfo::TCP(tcp_stream.connect_info())
+        } else if let Ok(unix_stream) = self.try_into_unix() {
+            ListenerConnectInfo::Unix(unix_stream.connect_info())
+        } else if let Ok(_) = self.try_into_stdio() {
+            ListenerConnectInfo::Stdio
+        } else {
+            ListenerConnectInfo::Other
+        }
     }
 }
 
