@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c2cf7437_cf1f595b",
+        "filename": "tvix/castore/src/proto/tests/grpc_directoryservice.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 76,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2023-10-07T22:08:14Z",
+      "side": 1,
+      "message": "nit: could use a `tokio_stream::once`: https://docs.rs/tokio-stream/latest/tokio_stream/fn.once.html",
+      "revId": "368683626481e2683ea37f22818ec2f5a0e452fb",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "97b39786_1bfe458a",
+        "filename": "tvix/castore/src/proto/tests/grpc_directoryservice.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 122,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2023-10-07T22:08:14Z",
+      "side": 1,
+      "message": "similarly there\u0027s `tokio_stream::iter`: https://docs.rs/tokio-stream/latest/tokio_stream/fn.iter.html",
+      "revId": "368683626481e2683ea37f22818ec2f5a0e452fb",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
