@@ -309,9 +309,10 @@ async fn import_path_with_pathinfo(
     path: &std::path::Path,
 ) -> Result<PathInfo, io::Error> {
     // Call [import::ingest_path], which will walk over the given path and return a root_node.
-    let root_node = import::ingest_path(blob_service.clone(), directory_service.clone(), path)
-        .await
-        .expect("error during import_path");
+    let root_node =
+        import::ingest_path_from_filesystem(blob_service.clone(), directory_service.clone(), path)
+            .await
+            .expect("error during import_path");
 
     // Render the NAR.
     let (nar_size, nar_sha256) =
