@@ -264,7 +264,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 
                     let task: JoinHandle<io::Result<()>> = tokio::task::spawn(async move {
                         // Ingest the path into blob and directory service.
-                        let root_node = import::ingest_path(
+                        let root_node = import::ingest_path_from_filesystem(
                             blob_service.clone(),
                             directory_service.clone(),
                             &path,
