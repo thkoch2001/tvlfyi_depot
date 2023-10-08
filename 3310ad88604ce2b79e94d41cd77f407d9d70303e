@@ -16,6 +16,24 @@
       "message": "Should we switch these tests to a `DuplexStream` too so we don\u0027t need to wait around for the socket?",
       "revId": "3310ad88604ce2b79e94d41cd77f407d9d70303e",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8d59ae59_b4ad5d79",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-10-08T22:29:54Z",
+      "side": 1,
+      "message": "These explicitly test that unix domain sockets, and the `grpc+unix://` syntax works, so no ;-)",
+      "parentUuid": "10562858_90b12cdd",
+      "revId": "3310ad88604ce2b79e94d41cd77f407d9d70303e",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
