@@ -18,6 +18,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "6373f050_6fdbe943",
+        "filename": "tvix/castore/src/proto/tests/grpc_directoryservice.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 76,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-10-08T07:39:34Z",
+      "side": 1,
+      "message": "Good point!",
+      "parentUuid": "c2cf7437_cf1f595b",
+      "revId": "368683626481e2683ea37f22818ec2f5a0e452fb",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "97b39786_1bfe458a",
@@ -31,6 +49,24 @@
       "writtenOn": "2023-10-07T22:08:14Z",
       "side": 1,
       "message": "similarly there\u0027s `tokio_stream::iter`: https://docs.rs/tokio-stream/latest/tokio_stream/fn.iter.html",
+      "revId": "368683626481e2683ea37f22818ec2f5a0e452fb",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ae1d3d01_f760d29e",
+        "filename": "tvix/castore/src/proto/tests/grpc_directoryservice.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 122,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-10-08T07:39:34Z",
+      "side": 1,
+      "message": "Yes, this actually is more concise if the logic to produce these is not too complicated. Thanks!",
+      "parentUuid": "97b39786_1bfe458a",
       "revId": "368683626481e2683ea37f22818ec2f5a0e452fb",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
