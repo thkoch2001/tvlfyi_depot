@@ -16,6 +16,24 @@
       "message": "Is there an upstream issue for this?",
       "revId": "ef702bdbfc6677d633c7d6d41162a4c291fb2a77",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "79ccc919_741ce890",
+        "filename": "users/wpcarro/common.nix",
+        "patchSetId": 5
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2023-10-08T16:37:33Z",
+      "side": 1,
+      "message": "I don\u0027t know. This might already be fixed in a newer commit. Only wpcarro uses it and he\u0027s inactive, so I haven\u0027t put in any more effort.",
+      "parentUuid": "27c2734d_1d6a4398",
+      "revId": "ef702bdbfc6677d633c7d6d41162a4c291fb2a77",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
