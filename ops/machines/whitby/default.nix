@@ -46,6 +46,9 @@ in
     (mod "www/tvl.su.nix")
     (mod "www/wigglydonke.rs.nix")
 
+    # experimental!
+    (mod "www/grep.tvl.fyi.nix")
+
     (depot.third_party.agenix.src + "/modules/age.nix")
   ];
 
