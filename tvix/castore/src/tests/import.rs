@@ -1,5 +1,5 @@
 use crate::fixtures::*;
-use crate::import::ingest_path;
+use crate::import::ingest_path_from_filesystem;
 use crate::proto;
 use crate::utils::{gen_blob_service, gen_directory_service};
 use tempfile::TempDir;
@@ -19,7 +19,7 @@ async fn symlink() {
     )
     .unwrap();
 
-    let root_node = ingest_path(
+    let root_node = ingest_path_from_filesystem(
         gen_blob_service(),
         gen_directory_service(),
         tmpdir.path().join("doesntmatter"),
@@ -44,7 +44,7 @@ async fn single_file() {
 
     let blob_service = gen_blob_service();
 
-    let root_node = ingest_path(
+    let root_node = ingest_path_from_filesystem(
         blob_service.clone(),
         gen_directory_service(),
         tmpdir.path().join("root"),
@@ -83,7 +83,7 @@ async fn complicated() {
     let blob_service = gen_blob_service();
     let directory_service = gen_directory_service();
 
-    let root_node = ingest_path(
+    let root_node = ingest_path_from_filesystem(
         blob_service.clone(),
         directory_service.clone(),
         tmpdir.path(),
