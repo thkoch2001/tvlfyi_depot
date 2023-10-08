@@ -66,7 +66,6 @@ in
     systemd.services."serial-getty@ttyS0".enable = true;
 
     services.openssh.enable = true;
-    services.cloud-init.enable = true;
 
     system.build.yandexCloudImage = import (pkgs.path + "/nixos/lib/make-disk-image.nix") {
       inherit lib config pkgs;
