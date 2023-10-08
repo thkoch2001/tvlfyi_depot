@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "10562858_90b12cdd",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2023-10-08T18:42:03Z",
+      "side": 1,
+      "message": "Should we switch these tests to a `DuplexStream` too so we don\u0027t need to wait around for the socket?",
+      "revId": "3310ad88604ce2b79e94d41cd77f407d9d70303e",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
