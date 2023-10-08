@@ -13,6 +13,7 @@ import Control.Monad.Reader (MonadReader (ask), ReaderT (..))
 import Control.Monad.Trans.Resource
 import Data.Aeson (FromJSON)
 import Data.Error.Tree
+import Data.HashMap.Strict qualified as HashMap
 import Data.Int (Int64)
 import Data.Kind (Type)
 import Data.List qualified as List
@@ -539,6 +540,7 @@ traceQueryIfEnabled tools span logDatabaseQueries qry params = do
   let doLog errs =
         Otel.addAttributes
           span
+          $ HashMap.fromList
           $ ( ("postgres.query", Otel.toAttribute @Text errs.query)
                 : ( errs.explain
                       & foldMap

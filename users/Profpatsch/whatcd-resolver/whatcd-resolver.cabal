@@ -76,6 +76,7 @@ library
         blaze-html,
         bytestring,
         containers,
+        unordered-containers,
         directory,
         dlist,
         filepath,
