@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7e16f8a9_ae3e0895",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-10-08T10:33:09Z",
+      "side": 1,
+      "message": "I don\u0027t know how to test this yet.\n\n`curl -H \u0027content-type: application/grpc-web\u0027 http://localhost:8000/tvix.store.v1/PathInfoService/List -v`\n\ngives me a `405 Method Not Allowed`, and\n\n`evans --web --host localhost --port 8000 -r repl` complains with thie:\n\n```\nevans: failed to run REPL mode: failed to instantiate a new spec: failed to instantiate the spec: failed to list packages by gRPC reflection: failed to list services from reflection enabled gRPC server: failed to create a new client stream: failed to create a new transport stream: failed to dial to \u0027ws://localhost:8000/grpc.reflection.v1alpha.ServerReflection/ServerReflectionInfo\u0027: websocket: bad handshake\n```\n\nso maybe there\u0027s different (and incompatible) ways to do gRPC web?",
+      "revId": "e24e2a4213ae1e000517000d83a27286ab8c65aa",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
