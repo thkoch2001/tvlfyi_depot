@@ -92,4 +92,9 @@
     rxvt-unicode-unwrapped.terminfo
     kitty.terminfo
   ];
+
+  security.sudo.extraRules = lib.singleton {
+    groups = [ "wheel" ];
+    commands = [{ command = "ALL"; options = [ "NOPASSWD" ]; }];
+  };
 }
