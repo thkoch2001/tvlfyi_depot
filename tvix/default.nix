@@ -64,7 +64,6 @@ let
         ) [
         "fuse-backend-rs"
         "test-generator"
-        "tonic-mock"
         "wu-manber"
       ]);
   };
