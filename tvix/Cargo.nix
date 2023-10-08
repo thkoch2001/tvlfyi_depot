@@ -541,7 +541,7 @@ rec {
           }
           {
             name = "bitflags";
-            packageId = "bitflags";
+            packageId = "bitflags 1.3.2";
           }
           {
             name = "bytes";
@@ -825,7 +825,7 @@ rec {
         };
         resolvedDefaultFeatures = [ "std" ];
       };
-      "bitflags" = rec {
+      "bitflags 1.3.2" = rec {
         crateName = "bitflags";
         version = "1.3.2";
         edition = "2018";
@@ -839,6 +839,23 @@ rec {
           "rustc-dep-of-std" = [ "core" "compiler_builtins" ];
         };
         resolvedDefaultFeatures = [ "default" ];
+      };
+      "bitflags 2.4.0" = rec {
+        crateName = "bitflags";
+        version = "2.4.0";
+        edition = "2021";
+        sha256 = "0dc6xa7flfl59makmhixjcrslwlvdxxwrgxbr8p7bkvz53k2ls5l";
+        authors = [
+          "The Rust Project Developers"
+        ];
+        features = {
+          "arbitrary" = [ "dep:arbitrary" ];
+          "bytemuck" = [ "dep:bytemuck" ];
+          "compiler_builtins" = [ "dep:compiler_builtins" ];
+          "core" = [ "dep:core" ];
+          "rustc-dep-of-std" = [ "core" "compiler_builtins" ];
+          "serde" = [ "dep:serde" ];
+        };
       };
       "bitmaps" = rec {
         crateName = "bitmaps";
@@ -1143,7 +1160,7 @@ rec {
         dependencies = [
           {
             name = "bitflags";
-            packageId = "bitflags";
+            packageId = "bitflags 1.3.2";
           }
           {
             name = "clap_lex";
@@ -1248,7 +1265,7 @@ rec {
           }
           {
             name = "bitflags";
-            packageId = "bitflags";
+            packageId = "bitflags 1.3.2";
           }
           {
             name = "clap_lex";
@@ -2225,7 +2242,7 @@ rec {
           }
           {
             name = "bitflags";
-            packageId = "bitflags";
+            packageId = "bitflags 1.3.2";
           }
           {
             name = "caps";
@@ -2959,6 +2976,13 @@ rec {
           }
         ];
 
+      };
+      "http-range-header" = rec {
+        crateName = "http-range-header";
+        version = "0.3.1";
+        edition = "2018";
+        sha256 = "13vm511vq3bhschkw2xi9nhxzkw53m55gn9vxg7qigfxc29spl5d";
+        features = { };
       };
       "httparse" = rec {
         crateName = "httparse";
@@ -3977,7 +4001,7 @@ rec {
         dependencies = [
           {
             name = "bitflags";
-            packageId = "bitflags";
+            packageId = "bitflags 1.3.2";
           }
           {
             name = "cfg-if";
@@ -4023,7 +4047,7 @@ rec {
         dependencies = [
           {
             name = "bitflags";
-            packageId = "bitflags";
+            packageId = "bitflags 1.3.2";
           }
           {
             name = "cfg-if";
@@ -4071,7 +4095,7 @@ rec {
         dependencies = [
           {
             name = "bitflags";
-            packageId = "bitflags";
+            packageId = "bitflags 1.3.2";
           }
           {
             name = "cfg-if";
@@ -4953,7 +4977,7 @@ rec {
           }
           {
             name = "bitflags";
-            packageId = "bitflags";
+            packageId = "bitflags 1.3.2";
           }
           {
             name = "byteorder";
@@ -5496,7 +5520,7 @@ rec {
         dependencies = [
           {
             name = "bitflags";
-            packageId = "bitflags";
+            packageId = "bitflags 1.3.2";
           }
         ];
 
@@ -5513,7 +5537,7 @@ rec {
         dependencies = [
           {
             name = "bitflags";
-            packageId = "bitflags";
+            packageId = "bitflags 1.3.2";
           }
         ];
         features = {
@@ -5756,7 +5780,7 @@ rec {
         dependencies = [
           {
             name = "bitflags";
-            packageId = "bitflags";
+            packageId = "bitflags 1.3.2";
           }
           {
             name = "errno";
@@ -5922,7 +5946,7 @@ rec {
         dependencies = [
           {
             name = "bitflags";
-            packageId = "bitflags";
+            packageId = "bitflags 1.3.2";
           }
           {
             name = "cfg-if";
@@ -7685,6 +7709,70 @@ rec {
         ];
 
       };
+      "tonic-web" = rec {
+        crateName = "tonic-web";
+        version = "0.10.2";
+        edition = "2021";
+        sha256 = "1kicx8xg2a9rjiml26hl4vamxk7xrvjz8fgjp7f6lzi4gfiv5p8g";
+        authors = [
+          "Juan Alvarez <alce@me.com>"
+        ];
+        dependencies = [
+          {
+            name = "base64";
+            packageId = "base64";
+          }
+          {
+            name = "bytes";
+            packageId = "bytes";
+          }
+          {
+            name = "http";
+            packageId = "http";
+          }
+          {
+            name = "http-body";
+            packageId = "http-body";
+          }
+          {
+            name = "hyper";
+            packageId = "hyper";
+            usesDefaultFeatures = false;
+            features = [ "stream" ];
+          }
+          {
+            name = "pin-project";
+            packageId = "pin-project";
+          }
+          {
+            name = "tokio-stream";
+            packageId = "tokio-stream";
+          }
+          {
+            name = "tonic";
+            packageId = "tonic";
+            usesDefaultFeatures = false;
+          }
+          {
+            name = "tower-http";
+            packageId = "tower-http";
+            features = [ "cors" ];
+          }
+          {
+            name = "tower-layer";
+            packageId = "tower-layer";
+          }
+          {
+            name = "tower-service";
+            packageId = "tower-service";
+          }
+          {
+            name = "tracing";
+            packageId = "tracing";
+          }
+        ];
+
+      };
       "tower" = rec {
         crateName = "tower";
         version = "0.4.13";
@@ -7805,6 +7893,100 @@ rec {
           "util" = [ "__common" "futures-util" "pin-project" ];
         };
         resolvedDefaultFeatures = [ "__common" "balance" "buffer" "default" "discover" "futures-core" "futures-util" "indexmap" "limit" "load" "log" "make" "pin-project" "pin-project-lite" "rand" "ready-cache" "slab" "timeout" "tokio" "tokio-util" "tracing" "util" ];
+      };
+      "tower-http" = rec {
+        crateName = "tower-http";
+        version = "0.4.4";
+        edition = "2018";
+        sha256 = "0h0i2flrw25zwxv72sifq4v5mwcb030spksy7r2a4xl2d4fvpib1";
+        authors = [
+          "Tower Maintainers <team@tower-rs.com>"
+        ];
+        dependencies = [
+          {
+            name = "bitflags";
+            packageId = "bitflags 2.4.0";
+          }
+          {
+            name = "bytes";
+            packageId = "bytes";
+          }
+          {
+            name = "futures-core";
+            packageId = "futures-core";
+          }
+          {
+            name = "futures-util";
+            packageId = "futures-util";
+            usesDefaultFeatures = false;
+          }
+          {
+            name = "http";
+            packageId = "http";
+          }
+          {
+            name = "http-body";
+            packageId = "http-body";
+          }
+          {
+            name = "http-range-header";
+            packageId = "http-range-header";
+          }
+          {
+            name = "pin-project-lite";
+            packageId = "pin-project-lite";
+          }
+          {
+            name = "tower-layer";
+            packageId = "tower-layer";
+          }
+          {
+            name = "tower-service";
+            packageId = "tower-service";
+          }
+        ];
+        devDependencies = [
+          {
+            name = "bytes";
+            packageId = "bytes";
+          }
+        ];
+        features = {
+          "async-compression" = [ "dep:async-compression" ];
+          "auth" = [ "base64" "validate-request" ];
+          "base64" = [ "dep:base64" ];
+          "catch-panic" = [ "tracing" "futures-util/std" ];
+          "compression-br" = [ "async-compression/brotli" "tokio-util" "tokio" ];
+          "compression-deflate" = [ "async-compression/zlib" "tokio-util" "tokio" ];
+          "compression-full" = [ "compression-br" "compression-deflate" "compression-gzip" "compression-zstd" ];
+          "compression-gzip" = [ "async-compression/gzip" "tokio-util" "tokio" ];
+          "compression-zstd" = [ "async-compression/zstd" "tokio-util" "tokio" ];
+          "decompression-br" = [ "async-compression/brotli" "tokio-util" "tokio" ];
+          "decompression-deflate" = [ "async-compression/zlib" "tokio-util" "tokio" ];
+          "decompression-full" = [ "decompression-br" "decompression-deflate" "decompression-gzip" "decompression-zstd" ];
+          "decompression-gzip" = [ "async-compression/gzip" "tokio-util" "tokio" ];
+          "decompression-zstd" = [ "async-compression/zstd" "tokio-util" "tokio" ];
+          "follow-redirect" = [ "iri-string" "tower/util" ];
+          "fs" = [ "tokio/fs" "tokio-util/io" "tokio/io-util" "mime_guess" "mime" "percent-encoding" "httpdate" "set-status" "futures-util/alloc" "tracing" ];
+          "full" = [ "add-extension" "auth" "catch-panic" "compression-full" "cors" "decompression-full" "follow-redirect" "fs" "limit" "map-request-body" "map-response-body" "metrics" "normalize-path" "propagate-header" "redirect" "request-id" "sensitive-headers" "set-header" "set-status" "timeout" "trace" "util" "validate-request" ];
+          "httpdate" = [ "dep:httpdate" ];
+          "iri-string" = [ "dep:iri-string" ];
+          "metrics" = [ "tokio/time" ];
+          "mime" = [ "dep:mime" ];
+          "mime_guess" = [ "dep:mime_guess" ];
+          "percent-encoding" = [ "dep:percent-encoding" ];
+          "request-id" = [ "uuid" ];
+          "timeout" = [ "tokio/time" ];
+          "tokio" = [ "dep:tokio" ];
+          "tokio-util" = [ "dep:tokio-util" ];
+          "tower" = [ "dep:tower" ];
+          "trace" = [ "tracing" ];
+          "tracing" = [ "dep:tracing" ];
+          "util" = [ "tower" ];
+          "uuid" = [ "dep:uuid" ];
+          "validate-request" = [ "mime" ];
+        };
+        resolvedDefaultFeatures = [ "cors" "default" ];
       };
       "tower-layer" = rec {
         crateName = "tower-layer";
@@ -8530,6 +8712,10 @@ rec {
             packageId = "bytes";
           }
           {
+            name = "cfg-if";
+            packageId = "cfg-if";
+          }
+          {
             name = "clap";
             packageId = "clap 4.2.7";
             features = [ "derive" "env" ];
@@ -8619,6 +8805,11 @@ rec {
             optional = true;
           }
           {
+            name = "tonic-web";
+            packageId = "tonic-web";
+            optional = true;
+          }
+          {
             name = "tower";
             packageId = "tower";
           }
@@ -8699,13 +8890,14 @@ rec {
           }
         ];
         features = {
-          "default" = [ "fuse" "tonic-reflection" ];
+          "default" = [ "fuse" "tonic-reflection" "tonic-web" ];
           "fs" = [ "dep:libc" "dep:fuse-backend-rs" ];
           "fuse" = [ "fs" ];
           "tonic-reflection" = [ "dep:tonic-reflection" "tvix-castore/tonic-reflection" ];
+          "tonic-web" = [ "dep:tonic-web" ];
           "virtiofs" = [ "fs" "dep:vhost" "dep:vhost-user-backend" "dep:virtio-queue" "dep:vm-memory" "dep:vmm-sys-util" "dep:virtio-bindings" "fuse-backend-rs?/vhost-user-fs" "fuse-backend-rs?/virtiofs" ];
         };
-        resolvedDefaultFeatures = [ "default" "fs" "fuse" "tonic-reflection" "virtiofs" ];
+        resolvedDefaultFeatures = [ "default" "fs" "fuse" "tonic-reflection" "tonic-web" "virtiofs" ];
       };
       "typenum" = rec {
         crateName = "typenum";
@@ -8892,7 +9084,7 @@ rec {
         dependencies = [
           {
             name = "bitflags";
-            packageId = "bitflags";
+            packageId = "bitflags 1.3.2";
           }
           {
             name = "libc";
@@ -9073,7 +9265,7 @@ rec {
         dependencies = [
           {
             name = "bitflags";
-            packageId = "bitflags";
+            packageId = "bitflags 1.3.2";
             target = { target, features }: (("linux" == target."os") || ("android" == target."os"));
           }
           {
