@@ -125,4 +125,12 @@ depot.nix.readTree.drvTargets {
       outputHash = "sha256-elEIWHxyY3iccprIcbQA6GWFiq/n5kozpGfw/OmoSIg=";
     });
   });
+
+  evans = super.evans.overrideAttrs (old: {
+    patches = old.patches or [ ] ++ [
+      # add support for unix domain sockets
+      # https://github.com/ktr0731/evans/pull/680
+      ./patches/evans-add-support-for-unix-domain-sockets.patch
+    ];
+  });
 }

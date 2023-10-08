@@ -1,0 +1,39 @@
+From 55d7e7af7c56f678eb817059417241bb61ee5181 Mon Sep 17 00:00:00 2001
+From: Florian Klink <flokli@flokli.de>
+Date: Sun, 8 Oct 2023 11:00:27 +0200
+Subject: [PATCH] add support for unix domain sockets
+
+grpc.NewClient already supports connecting to unix domain sockets, and
+accepts a string anyways.
+
+As a quick fix, detect the `address` starting with `unix://` and don't
+add the port.
+
+In the long term, we might want to deprecate `host` and `port` cmdline
+args in favor of a single `address` arg.
+---
+ mode/common.go | 8 +++++++-
+ 1 file changed, 7 insertions(+), 1 deletion(-)
+
+diff --git a/mode/common.go b/mode/common.go
+index dfc7839..55f1e36 100644
+--- a/mode/common.go
++++ b/mode/common.go
+@@ -13,7 +13,13 @@ import (
+ )
+ 
+ func newGRPCClient(cfg *config.Config) (grpc.Client, error) {
+-	addr := fmt.Sprintf("%s:%s", cfg.Server.Host, cfg.Server.Port)
++	addr := cfg.Server.Host
++
++	// as long as the address doesn't start with unix, also add the port.
++	if !strings.HasPrefix(cfg.Server.Host, "unix://") {
++		addr = fmt.Sprintf("%s:%s", cfg.Server.Host, cfg.Server.Port)
++	}
++
+ 	if cfg.Request.Web {
+ 		//TODO: remove second arg
+ 		return grpc.NewWebClient(addr, cfg.Server.Reflection, false, "", "", "", grpc.Headers(cfg.Request.Header)), nil
+-- 
+2.42.0
+
