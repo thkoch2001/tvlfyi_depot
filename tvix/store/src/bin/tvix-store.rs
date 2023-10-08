@@ -203,7 +203,18 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
                 .parse()
                 .unwrap();
 
-            let mut server = Server::builder();
+            let mut server = {
+                cfg_if::cfg_if! {
+                    if #[cfg(feature = "tonic-web")] {
+                        let server = Server::builder();
+                        server
+                            .accept_http1(true)
+                            .layer(tonic_web::GrpcWebLayer::new())
+                    } else {
+                        Server::builder()
+                    }
+                }
+            };
 
             #[allow(unused_mut)]
             let mut router = server
