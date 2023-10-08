@@ -31,6 +31,7 @@ tvix-castore = { path = "../castore" }
 url = "2.4.0"
 walkdir = "2.4.0"
 tokio-listener = { version = "0.2.1" }
+cfg-if = "1.0.0"
 
 [dependencies.fuse-backend-rs]
 optional = true
@@ -66,6 +67,10 @@ version = "0.2.1"
 optional = true
 version = "0.10.2"
 
+[dependencies.tonic-web]
+optional = true
+version = "0.10.2"
+
 [dependencies.libc]
 optional = true
 version = "0.2.144"
@@ -80,7 +85,7 @@ tempfile = "3.3.0"
 tokio-retry = "0.3.0"
 
 [features]
-default = ["fuse", "tonic-reflection"]
+default = ["fuse", "tonic-reflection", "tonic-web"]
 fs = ["dep:libc", "dep:fuse-backend-rs"]
 virtiofs = [
   "fs",
@@ -95,3 +100,4 @@ virtiofs = [
 ]
 fuse = ["fs"]
 tonic-reflection = ["dep:tonic-reflection", "tvix-castore/tonic-reflection"]
+tonic-web = ["dep:tonic-web"]
