@@ -82,6 +82,7 @@ library
      , aeson-better-errors
      , bytestring
      , containers
+     , unordered-containers
      , resource-pool
      , resourcet
      , scientific
