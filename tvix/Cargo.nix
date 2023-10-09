@@ -2550,7 +2550,7 @@ rec {
           "unstable" = [ "futures-core/unstable" "futures-task/unstable" ];
           "write-all-vectored" = [ "io" ];
         };
-        resolvedDefaultFeatures = [ "alloc" "async-await" "async-await-macro" "channel" "futures-channel" "futures-io" "futures-macro" "futures-sink" "io" "memchr" "sink" "slab" "std" ];
+        resolvedDefaultFeatures = [ "alloc" "async-await" "async-await-macro" "channel" "default" "futures-channel" "futures-io" "futures-macro" "futures-sink" "io" "memchr" "sink" "slab" "std" ];
       };
       "fxhash" = rec {
         crateName = "fxhash";
@@ -4129,6 +4129,12 @@ rec {
             packageId = "data-encoding";
           }
           {
+            name = "futures-util";
+            packageId = "futures-util";
+            optional = true;
+            features = [ "io" ];
+          }
+          {
             name = "serde";
             packageId = "serde";
             features = [ "derive" ];
@@ -4160,7 +4166,11 @@ rec {
             packageId = "test-generator";
           }
         ];
-
+        features = {
+          "async" = [ "futures-util" ];
+          "futures-util" = [ "dep:futures-util" ];
+        };
+        resolvedDefaultFeatures = [ "async" "futures-util" ];
       };
       "nom8" = rec {
         crateName = "nom8";
