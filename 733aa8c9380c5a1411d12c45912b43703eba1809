@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "65246566_23b61e73",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-10-09T22:07:31Z",
+      "side": 1,
+      "message": "That\u0027s cl/9106, but we have some more clippy errors in eval that\u0027d need to be fixed first.",
+      "revId": "733aa8c9380c5a1411d12c45912b43703eba1809",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
