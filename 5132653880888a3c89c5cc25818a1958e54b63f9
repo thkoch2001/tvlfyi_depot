@@ -1,0 +1,106 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "26facfe4_6a8b4f70",
+        "filename": "tvix/castore/src/import.rs",
+        "patchSetId": 4
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-10-09T15:47:04Z",
+      "side": 1,
+      "message": "Can you drop the error types that are not used anymore?",
+      "revId": "5132653880888a3c89c5cc25818a1958e54b63f9",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d3532690_e1fed918",
+        "filename": "tvix/castore/src/import.rs",
+        "patchSetId": 4
+      },
+      "lineNbr": 192,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-10-09T15:47:04Z",
+      "side": 1,
+      "message": "There\u0027s not really one Tvix store, and this only interacts with blob and directory service.",
+      "revId": "5132653880888a3c89c5cc25818a1958e54b63f9",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a84c7f44_4d4413e8",
+        "filename": "tvix/castore/src/import.rs",
+        "patchSetId": 4
+      },
+      "lineNbr": 198,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-10-09T15:47:04Z",
+      "side": 1,
+      "message": "the stream should contain all contents of the directory before sending the directory itself",
+      "revId": "5132653880888a3c89c5cc25818a1958e54b63f9",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "92b7c98e_0abcd5ee",
+        "filename": "tvix/castore/src/import.rs",
+        "patchSetId": 4
+      },
+      "lineNbr": 200,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-10-09T15:47:04Z",
+      "side": 1,
+      "message": "the whole stream should only",
+      "revId": "5132653880888a3c89c5cc25818a1958e54b63f9",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "81a39a10_c7d09118",
+        "filename": "tvix/castore/src/import.rs",
+        "patchSetId": 4
+      },
+      "lineNbr": 222,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-10-09T15:47:04Z",
+      "side": 1,
+      "message": "Drop this TODO line, this was dropped in cl/9573.",
+      "revId": "5132653880888a3c89c5cc25818a1958e54b63f9",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a5d31450_499ea1f0",
+        "filename": "tvix/castore/src/import.rs",
+        "patchSetId": 4
+      },
+      "lineNbr": 227,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-10-09T15:47:04Z",
+      "side": 1,
+      "message": "cc @raitobezarius",
+      "revId": "5132653880888a3c89c5cc25818a1958e54b63f9",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
