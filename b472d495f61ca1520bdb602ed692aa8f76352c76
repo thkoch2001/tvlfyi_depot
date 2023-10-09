@@ -33,6 +33,24 @@
       "message": "love IPv6, it\u0027s such a chaos monkey system",
       "revId": "b472d495f61ca1520bdb602ed692aa8f76352c76",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f1b708b9_689560a9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-10-09T14:43:07Z",
+      "side": 1,
+      "message": "In this case, it\u0027s josh itself being the problem here, it should not hardcode IPv4 addresses ;-) I\u0027ll open a PR upstream.",
+      "parentUuid": "32d449c8_b0b96168",
+      "revId": "b472d495f61ca1520bdb602ed692aa8f76352c76",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ],
   "submitRequirementResults": []
