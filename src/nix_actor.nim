@@ -4,7 +4,7 @@
 import std/[json, os, osproc, strutils, tables]
 import eris/memory_stores
 import preserves, preserves/jsonhooks
-import syndicate
+import syndicate, syndicate/relays
 from syndicate/protocols/dataspace import Observe
 import ./nix_actor/[clients, daemons]
 import ./nix_actor/libnix/[libexpr, main, stdpuspus, store]
