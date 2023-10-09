@@ -3,6 +3,23 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "a659d0f8_13b18379",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000005
+      },
+      "writtenOn": "2023-10-09T23:05:34Z",
+      "side": 1,
+      "message": "Note that I\u0027m not sure this actually makes the renderer *better*, and that is the only user of this code. It adds more cruft to the NAR writer, and we might want a sync version *as well*, which would duplicate a bunch of code, or add even more complexity trying to unify them. I\u0027m not sure what the performance impact of this change is either; I\u0027m genuinely unsure about a lot of things here.\n\nConsider this a draft CL, not a shall-merge.",
+      "revId": "9eb2f72b3287cc0e47b248c6f704ac53b9a742ce",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "4dc48e2e_daa6a729",
         "filename": "tvix/nix-compat/Cargo.toml",
         "patchSetId": 2
@@ -20,6 +37,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "d291f94e_c57c8a75",
+        "filename": "tvix/nix-compat/Cargo.toml",
+        "patchSetId": 2
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1000005
+      },
+      "writtenOn": "2023-10-09T23:05:34Z",
+      "side": 1,
+      "message": "This only pulls the traits, I think? io::Write isn\u0027t available under no_std *either*",
+      "parentUuid": "4dc48e2e_daa6a729",
+      "revId": "9eb2f72b3287cc0e47b248c6f704ac53b9a742ce",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "96fc5a96_745b5396",
         "filename": "tvix/nix-compat/src/nar/writer/mod.rs",
         "patchSetId": 2
@@ -31,6 +66,24 @@
       "writtenOn": "2023-10-09T22:20:03Z",
       "side": 1,
       "message": "There\u0027s also `futures_io` and https://github.com/tokio-rs/tokio/pull/2117, which could be a less heavy dependency, but it\u0027s also std-only, and not having Async[Buf]ReadExt probably makes this more annoying to write.",
+      "revId": "9eb2f72b3287cc0e47b248c6f704ac53b9a742ce",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3107db39_04e79b58",
+        "filename": "tvix/nix-compat/src/nar/writer/mod.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 1000005
+      },
+      "writtenOn": "2023-10-09T23:05:34Z",
+      "side": 1,
+      "message": "See the first patchset for that version.",
+      "parentUuid": "96fc5a96_745b5396",
       "revId": "9eb2f72b3287cc0e47b248c6f704ac53b9a742ce",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
