@@ -28,6 +28,16 @@
             alias ${pkgs.writeText "go-import-metadata.html" ''<html><meta name="go-import" content="code.tvl.fyi/tvix/store/protos git https://code.tvl.fyi/depot.git:/tvix/store/protos.git"></html>''};
         }
 
+        location = /go-get/tvix/nar-bridge {
+            alias ${pkgs.writeText "go-import-metadata.html" ''<html><meta name="go-import" content="code.tvl.fyi/tvix/nar-bridge git https://code.tvl.fyi/depot.git:/tvix/nar-bridge.git"></html>''};
+        }
+
+        location = /tvix/nar-bridge {
+            if ($args ~* "/?go-get=1") {
+                return 302 /go-get/tvix/nar-bridge;
+            }
+        }
+
         location = /tvix/castore/protos {
             if ($args ~* "/?go-get=1") {
                 return 302 /go-get/tvix/castore/protos;
