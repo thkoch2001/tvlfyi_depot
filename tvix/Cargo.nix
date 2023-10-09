@@ -381,6 +381,35 @@ rec {
           "serde" = [ "dep:serde" ];
         };
       };
+      "async-recursion" = rec {
+        crateName = "async-recursion";
+        version = "1.0.5";
+        edition = "2018";
+        sha256 = "1l2vlgyaa9a2dd0y1vbqyppzsvpdr1y4rar4gn1qi68pl5dmmmaz";
+        procMacro = true;
+        authors = [
+          "Robert Usher <266585+dcchut@users.noreply.github.com>"
+        ];
+        dependencies = [
+          {
+            name = "proc-macro2";
+            packageId = "proc-macro2 1.0.67";
+            usesDefaultFeatures = false;
+          }
+          {
+            name = "quote";
+            packageId = "quote 1.0.26";
+            usesDefaultFeatures = false;
+          }
+          {
+            name = "syn";
+            packageId = "syn 2.0.16";
+            usesDefaultFeatures = false;
+            features = [ "full" "parsing" "printing" "proc-macro" "clone-impls" ];
+          }
+        ];
+
+      };
       "async-stream" = rec {
         crateName = "async-stream";
         version = "0.3.5";
@@ -2420,7 +2449,7 @@ rec {
         features = {
           "default" = [ "std" ];
         };
-        resolvedDefaultFeatures = [ "std" ];
+        resolvedDefaultFeatures = [ "default" "std" ];
       };
       "futures-macro" = rec {
         crateName = "futures-macro";
@@ -7285,6 +7314,11 @@ rec {
             packageId = "futures-core";
           }
           {
+            name = "futures-io";
+            packageId = "futures-io";
+            optional = true;
+          }
+          {
             name = "futures-sink";
             packageId = "futures-sink";
           }
@@ -7327,7 +7361,7 @@ rec {
           "time" = [ "tokio/time" "slab" ];
           "tracing" = [ "dep:tracing" ];
         };
-        resolvedDefaultFeatures = [ "codec" "default" "io" "io-util" "tracing" ];
+        resolvedDefaultFeatures = [ "codec" "compat" "default" "futures-io" "io" "io-util" "tracing" ];
       };
       "toml" = rec {
         crateName = "toml";
@@ -8469,6 +8503,10 @@ rec {
             packageId = "anyhow";
           }
           {
+            name = "async-recursion";
+            packageId = "async-recursion";
+          }
+          {
             name = "async-stream";
             packageId = "async-stream";
           }
@@ -8515,6 +8553,7 @@ rec {
           {
             name = "nix-compat";
             packageId = "nix-compat";
+            features = [ "async" ];
           }
           {
             name = "parking_lot";
@@ -8558,7 +8597,7 @@ rec {
           {
             name = "tokio-util";
             packageId = "tokio-util";
-            features = [ "io" "io-util" ];
+            features = [ "io" "io-util" "compat" ];
           }
           {
             name = "tonic";
