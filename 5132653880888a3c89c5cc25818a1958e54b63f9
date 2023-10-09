@@ -18,6 +18,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "b5cb14d1_ae30e814",
+        "filename": "tvix/castore/src/import.rs",
+        "patchSetId": 4
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1000076
+      },
+      "writtenOn": "2023-10-09T17:21:33Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "26facfe4_6a8b4f70",
+      "revId": "5132653880888a3c89c5cc25818a1958e54b63f9",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "d3532690_e1fed918",
@@ -31,6 +49,24 @@
       "writtenOn": "2023-10-09T15:47:04Z",
       "side": 1,
       "message": "There\u0027s not really one Tvix store, and this only interacts with blob and directory service.",
+      "revId": "5132653880888a3c89c5cc25818a1958e54b63f9",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "94896549_dbef669c",
+        "filename": "tvix/castore/src/import.rs",
+        "patchSetId": 4
+      },
+      "lineNbr": 192,
+      "author": {
+        "id": 1000076
+      },
+      "writtenOn": "2023-10-09T17:21:33Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d3532690_e1fed918",
       "revId": "5132653880888a3c89c5cc25818a1958e54b63f9",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
@@ -52,6 +88,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "65d0c549_290883f9",
+        "filename": "tvix/castore/src/import.rs",
+        "patchSetId": 4
+      },
+      "lineNbr": 198,
+      "author": {
+        "id": 1000076
+      },
+      "writtenOn": "2023-10-09T17:21:33Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a84c7f44_4d4413e8",
+      "revId": "5132653880888a3c89c5cc25818a1958e54b63f9",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "92b7c98e_0abcd5ee",
@@ -69,6 +123,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "455d14d2_e3ed65d8",
+        "filename": "tvix/castore/src/import.rs",
+        "patchSetId": 4
+      },
+      "lineNbr": 200,
+      "author": {
+        "id": 1000076
+      },
+      "writtenOn": "2023-10-09T17:21:33Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "92b7c98e_0abcd5ee",
+      "revId": "5132653880888a3c89c5cc25818a1958e54b63f9",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "81a39a10_c7d09118",
@@ -82,6 +154,24 @@
       "writtenOn": "2023-10-09T15:47:04Z",
       "side": 1,
       "message": "Drop this TODO line, this was dropped in cl/9573.",
+      "revId": "5132653880888a3c89c5cc25818a1958e54b63f9",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c141c6c6_beb9c7f0",
+        "filename": "tvix/castore/src/import.rs",
+        "patchSetId": 4
+      },
+      "lineNbr": 222,
+      "author": {
+        "id": 1000076
+      },
+      "writtenOn": "2023-10-09T17:21:33Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "81a39a10_c7d09118",
       "revId": "5132653880888a3c89c5cc25818a1958e54b63f9",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
