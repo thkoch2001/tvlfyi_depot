@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2afaf086_c8e517ca",
+        "filename": "tvix/nar-bridge/pkg/importer/util.go",
+        "patchSetId": 4
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-10-09T21:09:37Z",
+      "side": 1,
+      "message": "In fact, let\u0027s move this to castore/protos.",
+      "revId": "2223c7b5ca1bf8b0da2ba2fb9149f0ad56b58a0f",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
