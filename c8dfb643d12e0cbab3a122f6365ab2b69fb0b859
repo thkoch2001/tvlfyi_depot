@@ -16,6 +16,24 @@
       "message": "Might be better to return a `*castorev1pb.Node` since protobufs are usually always passed around by pointer. They aren\u0027t allowed to be shallow copied because they contain non-pointer mutexes internally",
       "revId": "c8dfb643d12e0cbab3a122f6365ab2b69fb0b859",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d6a5f0ef_d3daaa1e",
+        "filename": "tvix/nar-bridge/pkg/importer/util.go",
+        "patchSetId": 2
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-10-09T21:07:04Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "70e269d2_d6da1447",
+      "revId": "c8dfb643d12e0cbab3a122f6365ab2b69fb0b859",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
