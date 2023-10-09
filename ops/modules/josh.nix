@@ -26,7 +26,7 @@ in
         DynamicUser = true;
         StateDirectory = "josh";
         Restart = "always";
-        ExecStart = "${depot.third_party.josh}/bin/josh-proxy --no-background --local /var/lib/josh --port ${toString cfg.port} --remote https://cl.tvl.fyi/ --require-auth";
+        ExecStart = "${depot.third_party.josh}/bin/josh-proxy --no-background --local /var/lib/josh --port ${toString cfg.port} --remote https://cl.tvl.fyi/a --require-auth";
       };
     };
   };
