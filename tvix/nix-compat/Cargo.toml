@@ -5,9 +5,13 @@ edition = "2021"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
+[features]
+async = ["futures-util"]
+
 [dependencies]
 bstr = { version = "1.6.0", features = ["alloc", "unicode", "serde"] }
 data-encoding = "2.3.3"
+futures-util = { version = "0.3.28", features = ["io"], optional = true }
 serde = { version = "1.0", features = ["derive"] }
 serde_json = "1.0"
 sha2 = "0.10.6"
