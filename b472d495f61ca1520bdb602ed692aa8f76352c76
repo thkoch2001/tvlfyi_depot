@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "113007be_65adc1c2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-10-09T14:40:32Z",
+      "side": 1,
+      "message": "Tested by pushing the last revision of this CL to josh itself:\n\n```\n❯ git push josh HEAD:refs/for/canon\nEnumerating objects: 21, done.\nCounting objects: 100% (21/21), done.\nDelta compression using up to 12 threads\nCompressing objects: 100% (11/11), done.\nWriting objects: 100% (12/12), 1.54 KiB | 1.54 MiB/s, done.\nTotal 12 (delta 9), reused 0 (delta 0), pack-reused 0\nremote: josh-proxy\nremote: response from upstream:\nremote: remote: Processing changes: refs: 1, updated: 1, done            \nremote: remote: warning: b472d49: no files changed, message updated        \nremote: remote: \nremote: remote: SUCCESS        \nremote: remote: \nremote: remote:   https://cl.tvl.fyi/c/depot/+/9591 fix(ops/code.tvl.fyi): fix josh-proxy cmdline args        \nremote: remote: \nremote: To https://cl.tvl.fyi/a/depot.git\nremote:  * [new reference]       JOSH_PUSH -\u003e refs/for/canon\nremote: \nremote: \nTo https://code.tvl.fyi/depot.git\n * [new reference]           HEAD -\u003e refs/for/canon\n```",
+      "revId": "b472d495f61ca1520bdb602ed692aa8f76352c76",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
