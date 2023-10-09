@@ -51,6 +51,24 @@
       "parentUuid": "32d449c8_b0b96168",
       "revId": "b472d495f61ca1520bdb602ed692aa8f76352c76",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b2cbf60e_cdd7c04d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-10-09T14:52:13Z",
+      "side": 1,
+      "message": "https://github.com/josh-project/josh/pull/1285",
+      "parentUuid": "f1b708b9_689560a9",
+      "revId": "b472d495f61ca1520bdb602ed692aa8f76352c76",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ],
   "submitRequirementResults": []
