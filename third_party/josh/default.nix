@@ -3,19 +3,17 @@
 
 let
   # TODO(sterni): switch to pkgs.josh as soon as that commit is released
-  rev = "c0a170a756dd5e63268673086218c0ce7bf18bdc";
+  rev = "1586eab06284ce668779c87f00a1fb5fa9763be0";
   src = pkgs.fetchFromGitHub {
     owner = "josh-project";
     repo = "josh";
     inherit rev;
-    hash = "sha256:0rsf65fq9xm3qj77ig3s4wmmgm50jhvwrknr839hipjj5lj4x1hp";
+    hash = "sha256-94QrHcVHiEMCpBZJ5sghwtVNLNm4gdG8X85OetoGRD0=";
   };
 
 
-  rust169 = depot.third_party.nixpkgs.rust-bin.stable."1.69.0".default;
   naersk = pkgs.callPackage depot.third_party.sources.naersk {
-    rustc = rust169;
-    cargo = rust169;
+    inherit (pkgs) rustc cargo;
   };
   version = "git-${builtins.substring 0 8 rev}";
 in
