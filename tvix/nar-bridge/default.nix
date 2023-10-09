@@ -6,5 +6,5 @@ pkgs.buildGoModule {
   name = "nar-bridge";
   src = depot.third_party.gitignoreSource ./.;
 
-  vendorHash = "sha256-3Ywc6rrt56U5K5mF5muXPMscD38zS5NIiVPpcYcmIYQ=";
+  vendorHash = "sha256-UxKTfy1NNtZhor8Hj9LZja72vqW7OYDRn8/cUETPzoU=";
 }
