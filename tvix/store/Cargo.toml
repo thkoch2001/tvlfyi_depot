@@ -21,7 +21,7 @@ sha2 = "0.10.6"
 sled = { version = "0.34.7", features = ["compression"] }
 thiserror = "1.0.38"
 tokio-stream = { version = "0.1.14", features = ["fs"] }
-tokio-util = { version = "0.7.9", features = ["io", "io-util"] }
+tokio-util = { version = "0.7.9", features = ["io", "io-util", "compat"] }
 tokio = { version = "1.32.0", features = ["fs", "macros", "net", "rt", "rt-multi-thread", "signal"] }
 tonic = "0.10.2"
 tower = "0.4.13"
@@ -31,6 +31,7 @@ tvix-castore = { path = "../castore" }
 url = "2.4.0"
 walkdir = "2.4.0"
 tokio-listener = { version = "0.2.1" }
+async-recursion = "1.0.5"
 
 [dependencies.fuse-backend-rs]
 optional = true

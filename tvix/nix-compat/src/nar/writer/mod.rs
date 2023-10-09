@@ -28,21 +28,24 @@
 //! # Ok::<(), std::io::Error>(())
 //! ```
 
-use std::io::{
-    self, BufRead,
-    ErrorKind::{InvalidInput, UnexpectedEof},
-    Write,
+use futures_util::{AsyncBufRead, AsyncBufReadExt, AsyncWrite, AsyncWriteExt};
+use std::{
+    io::{
+        self,
+        ErrorKind::{InvalidInput, UnexpectedEof},
+    },
+    pin::Pin,
 };
 
 mod wire;
 
-/// Convenience type alias for types implementing [`Write`].
-pub type Writer<'a> = dyn Write + Send + 'a;
+/// Convenience type alias for types implementing [`AsyncWrite`].
+pub type Writer<'a> = dyn AsyncWrite + Unpin + Send + 'a;
 
 /// Create a new NAR, writing the output to the specified writer.
-pub fn open<'a, 'w: 'a>(writer: &'a mut Writer<'w>) -> io::Result<Node<'a, 'w>> {
+pub async fn open<'a, 'w: 'a>(writer: &'a mut Writer<'w>) -> io::Result<Node<'a, 'w>> {
     let mut node = Node { writer };
-    node.write(&wire::TOK_NAR)?;
+    node.write(&wire::TOK_NAR).await?;
     Ok(node)
 }
 
@@ -55,19 +58,19 @@ pub struct Node<'a, 'w: 'a> {
 }
 
 impl<'a, 'w> Node<'a, 'w> {
-    fn write(&mut self, data: &[u8]) -> io::Result<()> {
-        self.writer.write_all(data)
+    async fn write(&mut self, data: &[u8]) -> io::Result<()> {
+        self.writer.write_all(data).await
     }
 
-    fn pad(&mut self, n: u64) -> io::Result<()> {
+    async fn pad(&mut self, n: u64) -> io::Result<()> {
         match (n & 7) as usize {
             0 => Ok(()),
-            n => self.write(&[0; 8][n..]),
+            n => self.write(&[0; 8][n..]).await,
         }
     }
 
     /// Make this node a symlink.
-    pub fn symlink(mut self, target: &[u8]) -> io::Result<()> {
+    pub async fn symlink(mut self, target: &[u8]) -> io::Result<()> {
         debug_assert!(
             target.len() <= wire::MAX_TARGET_LEN,
             "target.len() > {}",
@@ -79,50 +82,56 @@ impl<'a, 'w> Node<'a, 'w> {
         );
         debug_assert!(!target.is_empty(), "empty target");
 
-        self.write(&wire::TOK_SYM)?;
-        self.write(&target.len().to_le_bytes())?;
-        self.write(target)?;
-        self.pad(target.len() as u64)?;
-        self.write(&wire::TOK_PAR)?;
+        self.write(&wire::TOK_SYM).await?;
+        self.write(&target.len().to_le_bytes()).await?;
+        self.write(target).await?;
+        self.pad(target.len() as u64).await?;
+        self.write(&wire::TOK_PAR).await?;
         Ok(())
     }
 
     /// Make this node a single file.
-    pub fn file(mut self, executable: bool, size: u64, reader: &mut dyn BufRead) -> io::Result<()> {
+    pub async fn file(
+        mut self,
+        executable: bool,
+        size: u64,
+        reader: &mut (dyn AsyncBufRead + Unpin + Send),
+    ) -> io::Result<()> {
         self.write(if executable {
             &wire::TOK_EXE
         } else {
             &wire::TOK_REG
-        })?;
+        })
+        .await?;
 
-        self.write(&size.to_le_bytes())?;
+        self.write(&size.to_le_bytes()).await?;
 
         let mut need = size;
         while need != 0 {
-            let data = reader.fill_buf()?;
+            let data = reader.fill_buf().await?;
 
             if data.is_empty() {
                 return Err(UnexpectedEof.into());
             }
 
             let n = need.min(data.len() as u64) as usize;
-            self.write(&data[..n])?;
+            self.write(&data[..n]).await?;
 
             need -= n as u64;
-            reader.consume(n);
+            Pin::new(&mut *reader).consume(n);
         }
 
         // bail if there's still data left in the passed reader.
         // This uses the same code as [BufRead::has_data_left] (unstable).
-        if reader.fill_buf().map(|b| !b.is_empty())? {
+        if reader.fill_buf().await.map(|b| !b.is_empty())? {
             return Err(io::Error::new(
                 InvalidInput,
                 "reader contained more data than specified size",
             ));
         }
 
-        self.pad(size)?;
-        self.write(&wire::TOK_PAR)?;
+        self.pad(size).await?;
+        self.write(&wire::TOK_PAR).await?;
 
         Ok(())
     }
@@ -132,8 +141,8 @@ impl<'a, 'w> Node<'a, 'w> {
     ///
     /// It is the caller's responsibility to invoke [`Directory::close`],
     /// or invalid archives will be produced silently.
-    pub fn directory(mut self) -> io::Result<Directory<'a, 'w>> {
-        self.write(&wire::TOK_DIR)?;
+    pub async fn directory(mut self) -> io::Result<Directory<'a, 'w>> {
+        self.write(&wire::TOK_DIR).await?;
         Ok(Directory::new(self))
     }
 }
@@ -170,7 +179,7 @@ impl<'a, 'w> Directory<'a, 'w> {
     /// It is the caller's responsibility to ensure that directory entries are
     /// written in order of ascending name. If this is not ensured, this method
     /// may panic or silently produce invalid archives.
-    pub fn entry(&mut self, name: &[u8]) -> io::Result<Node<'_, 'w>> {
+    pub async fn entry(&mut self, name: &[u8]) -> io::Result<Node<'_, 'w>> {
         debug_assert!(
             name.len() <= wire::MAX_NAME_LEN,
             "name.len() > {}",
@@ -197,15 +206,15 @@ impl<'a, 'w> Directory<'a, 'w> {
                     _prev_name.clear();
                     _prev_name.extend_from_slice(name);
                 }
-                self.node.write(&wire::TOK_PAR)?;
+                self.node.write(&wire::TOK_PAR).await?;
             }
         }
 
-        self.node.write(&wire::TOK_ENT)?;
-        self.node.write(&name.len().to_le_bytes())?;
-        self.node.write(name)?;
-        self.node.pad(name.len() as u64)?;
-        self.node.write(&wire::TOK_NOD)?;
+        self.node.write(&wire::TOK_ENT).await?;
+        self.node.write(&name.len().to_le_bytes()).await?;
+        self.node.write(name).await?;
+        self.node.pad(name.len() as u64).await?;
+        self.node.write(&wire::TOK_NOD).await?;
 
         Ok(Node {
             writer: &mut *self.node.writer,
@@ -216,12 +225,12 @@ impl<'a, 'w> Directory<'a, 'w> {
     ///
     /// **Important:** This *must* be called when all entries have been written
     /// in a directory, otherwise the resulting NAR file will be invalid.
-    pub fn close(mut self) -> io::Result<()> {
+    pub async fn close(mut self) -> io::Result<()> {
         if self.prev_name.is_some() {
-            self.node.write(&wire::TOK_PAR)?;
+            self.node.write(&wire::TOK_PAR).await?;
         }
 
-        self.node.write(&wire::TOK_PAR)?;
+        self.node.write(&wire::TOK_PAR).await?;
         Ok(())
     }
 }
