@@ -86,6 +86,24 @@
       "parentUuid": "96fc5a96_745b5396",
       "revId": "9eb2f72b3287cc0e47b248c6f704ac53b9a742ce",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "994994bb_671e5008",
+        "filename": "tvix/nix-compat/src/nar/writer/mod.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 1000005
+      },
+      "writtenOn": "2023-10-10T10:09:05Z",
+      "side": 1,
+      "message": "The specific reason that I rewrote against tokio is that the futures crate and tokio each have their own, incompatible I/O traits. The extension traits exist for futures_io alike, but they live in futures_util.",
+      "parentUuid": "3107db39_04e79b58",
+      "revId": "9eb2f72b3287cc0e47b248c6f704ac53b9a742ce",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
