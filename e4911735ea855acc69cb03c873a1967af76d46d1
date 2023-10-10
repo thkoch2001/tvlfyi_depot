@@ -16,6 +16,23 @@
       "message": "This still needs some tests, but we could cover that in a followup.",
       "revId": "e4911735ea855acc69cb03c873a1967af76d46d1",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a79cd651_7473b07b",
+        "filename": "tvix/castore/src/proto/mod.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 143,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-10-10T09:03:36Z",
+      "side": 1,
+      "message": "should we check this in all cases? wonder if it\u0027ll ever get triggered in small unit tests, where debug assertions are enabled...",
+      "revId": "e4911735ea855acc69cb03c873a1967af76d46d1",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
