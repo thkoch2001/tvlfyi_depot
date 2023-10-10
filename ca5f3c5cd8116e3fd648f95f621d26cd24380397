@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3a836ab8_631517f0",
+        "filename": "tvix/nix-compat/src/nar/writer/async.rs",
+        "patchSetId": 4
+      },
+      "lineNbr": 6,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-10-10T14:43:32Z",
+      "side": 1,
+      "message": "This still documents the sync case still.",
+      "revId": "ca5f3c5cd8116e3fd648f95f621d26cd24380397",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
