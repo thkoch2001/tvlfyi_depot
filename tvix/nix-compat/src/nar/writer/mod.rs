@@ -73,11 +73,8 @@ impl<'a, 'w> Node<'a, 'w> {
             "target.len() > {}",
             wire::MAX_TARGET_LEN
         );
-        debug_assert!(
-            !target.contains(&b'\0'),
-            "invalid target characters: {target:?}"
-        );
-        debug_assert!(!target.is_empty(), "empty target");
+        debug_assert!(!target.is_empty(), "target is empty");
+        debug_assert!(!target.contains(&0), "target contains null byte");
 
         self.write(&wire::TOK_SYM)?;
         self.write(&target.len().to_le_bytes())?;
@@ -176,12 +173,11 @@ impl<'a, 'w> Directory<'a, 'w> {
             "name.len() > {}",
             wire::MAX_NAME_LEN
         );
-        debug_assert!(name != b"", "name may not be empty");
-        debug_assert!(name != b".", "invalid name: {name:?}");
-        debug_assert!(name != b"..", "invalid name: {name:?}");
-
-        debug_assert!(!name.contains(&b'/'), "invalid name characters: {name:?}");
-        debug_assert!(!name.contains(&b'\0'), "invalid name characters: {name:?}");
+        debug_assert!(!name.is_empty(), "name is empty");
+        debug_assert!(!name.contains(&0), "name contains null byte");
+        debug_assert!(!name.contains(&b'/'), "name contains {:?}", '/');
+        debug_assert!(name != b".", "name == {:?}", ".");
+        debug_assert!(name != b"..", "name == {:?}", "..");
 
         match self.prev_name {
             None => {
