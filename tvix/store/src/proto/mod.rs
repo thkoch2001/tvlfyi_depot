@@ -1,7 +1,7 @@
 #![allow(clippy::derive_partial_eq_without_eq, non_snake_case)]
 use data_encoding::BASE64;
 // https://github.com/hyperium/tonic/issues/1056
-use nix_compat::store_path::{self, StorePath};
+use nix_compat::store_path;
 use thiserror::Error;
 use tvix_castore::{
     proto::{self as castorepb, NamedNode},
@@ -47,7 +47,7 @@ pub enum ValidatePathInfoError {
     #[error("Inconsistent Number of References: {0} (references) vs {1} (narinfo)")]
     InconsistentNumberOfReferences(usize, usize),
 
-    /// A string in narinfo.reference_names does not parse to a StorePath.
+    /// A string in narinfo.reference_names does not parse to a [store_path::StorePath].
     #[error("Invalid reference_name at position {0}: {1}")]
     InvalidNarinfoReferenceName(usize, String),
 
@@ -59,17 +59,21 @@ pub enum ValidatePathInfoError {
         [u8; store_path::DIGEST_SIZE],
         [u8; store_path::DIGEST_SIZE],
     ),
+
+    /// The deriver field is invalid.
+    #[error("deriver field is invalid: {0}")]
+    InvalidDeriverField(store_path::Error),
 }
 
 /// Parses a root node name.
 ///
-/// On success, this returns the parsed [StorePath].
+/// On success, this returns the parsed [store_path::StorePath].
 /// On error, it returns an error generated from the supplied constructor.
 fn parse_node_name_root<E>(
     name: &[u8],
     err: fn(Vec<u8>, store_path::Error) -> E,
-) -> Result<StorePath, E> {
-    match StorePath::from_bytes(name) {
+) -> Result<store_path::StorePath, E> {
+    match store_path::StorePath::from_bytes(name) {
         Ok(np) => Ok(np),
         Err(e) => Err(err(name.to_vec(), e)),
     }
@@ -77,9 +81,9 @@ fn parse_node_name_root<E>(
 
 impl PathInfo {
     /// validate performs some checks on the PathInfo struct,
-    /// Returning either a [StorePath] of the root node, or a
+    /// Returning either a [store_path::StorePath] of the root node, or a
     /// [ValidatePathInfoError].
-    pub fn validate(&self) -> Result<StorePath, ValidatePathInfoError> {
+    pub fn validate(&self) -> Result<store_path::StorePath, ValidatePathInfoError> {
         // ensure the references have the right number of bytes.
         for (i, reference) in self.references.iter().enumerate() {
             if reference.len() != store_path::DIGEST_SIZE {
@@ -103,13 +107,15 @@ impl PathInfo {
             // parse references in reference_names.
             for (i, reference_name_str) in narinfo.reference_names.iter().enumerate() {
                 // ensure thy parse as (non-absolute) store path
-                let reference_names_store_path =
-                    StorePath::from_bytes(reference_name_str.as_bytes()).map_err(|_| {
-                        ValidatePathInfoError::InvalidNarinfoReferenceName(
-                            i,
-                            reference_name_str.to_owned(),
-                        )
-                    })?;
+                let reference_names_store_path = store_path::StorePath::from_bytes(
+                    reference_name_str.as_bytes(),
+                )
+                .map_err(|_| {
+                    ValidatePathInfoError::InvalidNarinfoReferenceName(
+                        i,
+                        reference_name_str.to_owned(),
+                    )
+                })?;
 
                 // ensure their digest matches the one at self.references[i].
                 {
@@ -129,7 +135,7 @@ impl PathInfo {
             }
         }
 
-        // Ensure there is a (root) node present, and it properly parses to a [StorePath].
+        // Ensure there is a (root) node present, and it properly parses to a [store_path::StorePath].
         let root_nix_path = match &self.node {
             None => {
                 return Err(ValidatePathInfoError::NoNodePresent());
@@ -166,6 +172,16 @@ impl PathInfo {
                 }
             },
         };
+
+        // If the Deriver field is populated, ensure it parses to a
+        // [store_path::StorePath].
+        // We can't check for it to *not* end with .drv, as the .drv files produced by
+        // recursive Nix end with multiple .drv suffixes, and only one is popped when
+        // converting to this field.
+        if let Some(deriver) = &self.deriver {
+            store_path::StorePath::from_name_and_digest(deriver.name.clone(), &deriver.digest)
+                .map_err(ValidatePathInfoError::InvalidDeriverField)?;
+        }
 
         // return the root nix path
         Ok(root_nix_path)
