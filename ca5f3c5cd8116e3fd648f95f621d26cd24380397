@@ -16,6 +16,24 @@
       "message": "This still documents the sync case still.",
       "revId": "ca5f3c5cd8116e3fd648f95f621d26cd24380397",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fbff91a7_61d35105",
+        "filename": "tvix/nix-compat/src/nar/writer/async.rs",
+        "patchSetId": 4
+      },
+      "lineNbr": 6,
+      "author": {
+        "id": 1000005
+      },
+      "writtenOn": "2023-10-10T15:01:14Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3a836ab8_631517f0",
+      "revId": "ca5f3c5cd8116e3fd648f95f621d26cd24380397",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
