@@ -16,6 +16,24 @@
       "message": "Is that actually unreachable? I think we should probably return an error here.",
       "revId": "7dd9ba3f9fae6deaefc97e0370e5b05cc7ebfb8c",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6ce22e84_0b55e449",
+        "filename": "tvix/store/protos/export.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 108,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-10-10T20:22:28Z",
+      "side": 1,
+      "message": "I hardly doubt we\u0027d ever do, but if we added a fourth type as a possible node type to the proto files, and have another process produce such a message, it would fail to parse in golang with the current codebase, so the panic is unreachable.\nRust currently gives you an enum here instead, with three types.\n\nOf course, if you\u0027d update the `.pb.go` files and recompile the go binary, it would fall into this else branch and panic.\n\nI guess it\u0027s fair to leave it up to the maintainers to update all consumers matching on different node types to this fourth change while bumping dependencies.",
+      "parentUuid": "4ef005aa_6cb70de9",
+      "revId": "7dd9ba3f9fae6deaefc97e0370e5b05cc7ebfb8c",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
