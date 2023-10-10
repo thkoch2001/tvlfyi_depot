@@ -61,6 +61,32 @@ func TestValidate(t *testing.T) {
 		assert.Equal(t, "00000000000000000000000000000000-dummy", storePath.String())
 	})
 
+	t.Run("happy deriver", func(t *testing.T) {
+		pi := genPathInfoSymlink()
+
+		// add the Deriver Field.
+		pi.Deriver = &storev1pb.StorePath{
+			Digest: exampleStorePathDigest,
+			Name:   "foo",
+		}
+
+		_, err := pi.Validate()
+		assert.NoError(t, err, "must validate")
+	})
+
+	t.Run("invalid deriver", func(t *testing.T) {
+		pi := genPathInfoSymlink()
+
+		// add the Deriver Field, with a broken digest
+		pi.Deriver = &storev1pb.StorePath{
+			Digest: []byte{},
+			Name:   "foo2",
+		}
+
+		_, err := pi.Validate()
+		assert.Error(t, err, "must not validate")
+	})
+
 	t.Run("invalid reference digest", func(t *testing.T) {
 		pi := genPathInfoSymlink()
 
