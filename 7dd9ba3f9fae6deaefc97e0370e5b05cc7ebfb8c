@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4ef005aa_6cb70de9",
+        "filename": "tvix/store/protos/export.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 108,
+      "author": {
+        "id": 1000005
+      },
+      "writtenOn": "2023-10-10T20:08:59Z",
+      "side": 1,
+      "message": "Is that actually unreachable? I think we should probably return an error here.",
+      "revId": "7dd9ba3f9fae6deaefc97e0370e5b05cc7ebfb8c",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
