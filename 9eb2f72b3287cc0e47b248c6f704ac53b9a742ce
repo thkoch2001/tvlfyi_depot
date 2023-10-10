@@ -18,6 +18,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "80fd0f5d_688dca56",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000005
+      },
+      "writtenOn": "2023-10-10T17:13:25Z",
+      "side": 1,
+      "message": "On reflection, I\u0027m quite happy with how this series of changes is shaping up.",
+      "parentUuid": "a659d0f8_13b18379",
+      "revId": "9eb2f72b3287cc0e47b248c6f704ac53b9a742ce",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "4dc48e2e_daa6a729",
