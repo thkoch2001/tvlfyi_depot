@@ -58,6 +58,24 @@ fn size() {
         };
         assert_eq!(d.size(), 1);
     }
+    {
+        let d = Directory {
+            directories: vec![
+                DirectoryNode {
+                    name: "one".into(),
+                    digest: DUMMY_DIGEST.to_vec().into(),
+                    size: u32::MAX / 2,
+                },
+                DirectoryNode {
+                    name: "two".into(),
+                    digest: DUMMY_DIGEST.to_vec().into(),
+                    size: u32::MAX / 2,
+                },
+            ],
+            ..Default::default()
+        };
+        assert_eq!(d.size_checked(), None);
+    }
 }
 
 #[test]
