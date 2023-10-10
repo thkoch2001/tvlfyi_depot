@@ -33,6 +33,24 @@
       "message": "should we check this in all cases? wonder if it\u0027ll ever get triggered in small unit tests, where debug assertions are enabled...",
       "revId": "e4911735ea855acc69cb03c873a1967af76d46d1",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6c97f99d_d1d9e16e",
+        "filename": "tvix/castore/src/proto/mod.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 143,
+      "author": {
+        "id": 1000005
+      },
+      "writtenOn": "2023-10-10T10:23:05Z",
+      "side": 1,
+      "message": "This change primarily changes what happens in release mode, to saturating instead of silently wrapping. Overflowing addition already panics in debug mode, although we may want to use cfg(debug) or [cfg(overflow_checks)](https://github.com/rust-lang/rust/issues/111466) when it stabilises.",
+      "parentUuid": "a79cd651_7473b07b",
+      "revId": "e4911735ea855acc69cb03c873a1967af76d46d1",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
