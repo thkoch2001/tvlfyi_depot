@@ -108,7 +108,7 @@ in
   store-protos-go = pkgs.buildGoModule {
     name = "store-golang";
     src = depot.third_party.gitignoreSource ./store/protos;
-    vendorHash = "sha256-619ICDpXuDRHRL5XtPlbUoik8yrTDSxoQiVrhsK7UlQ=";
+    vendorHash = "sha256-qPtEQTd1Vol8vhE10AdwTleTLfYS7xaOir3Ti4MJ+Vc=";
   };
 
   # Build the Rust documentation for publishing on docs.tvix.dev.
