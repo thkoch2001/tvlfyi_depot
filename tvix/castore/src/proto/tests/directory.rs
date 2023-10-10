@@ -61,6 +61,67 @@ fn size() {
 }
 
 #[test]
+#[should_panic = "Directory::size exceeds u32::MAX"]
+fn size_unchecked() {
+    let d = Directory {
+        directories: vec![DirectoryNode {
+            name: "foo".into(),
+            digest: DUMMY_DIGEST.to_vec().into(),
+            size: u32::MAX,
+        }],
+        ..Default::default()
+    };
+
+    d.size();
+}
+
+#[test]
+fn size_checked() {
+    // We don't test the overflow cases that rely purely on immediate
+    // child count, since that would take an absurd amount of memory.
+    {
+        let d = Directory {
+            directories: vec![DirectoryNode {
+                name: "foo".into(),
+                digest: DUMMY_DIGEST.to_vec().into(),
+                size: u32::MAX - 1,
+            }],
+            ..Default::default()
+        };
+        assert_eq!(d.size_checked(), Some(u32::MAX));
+    }
+    {
+        let d = Directory {
+            directories: vec![DirectoryNode {
+                name: "foo".into(),
+                digest: DUMMY_DIGEST.to_vec().into(),
+                size: u32::MAX,
+            }],
+            ..Default::default()
+        };
+        assert_eq!(d.size_checked(), None);
+    }
+    {
+        let d = Directory {
+            directories: vec![
+                DirectoryNode {
+                    name: "foo".into(),
+                    digest: DUMMY_DIGEST.to_vec().into(),
+                    size: u32::MAX / 2,
+                },
+                DirectoryNode {
+                    name: "foo".into(),
+                    digest: DUMMY_DIGEST.to_vec().into(),
+                    size: u32::MAX / 2,
+                },
+            ],
+            ..Default::default()
+        };
+        assert_eq!(d.size_checked(), None);
+    }
+}
+
+#[test]
 fn digest() {
     let d = Directory::default();
 
@@ -283,5 +344,22 @@ fn validate_sorting() {
         };
 
         d.validate().expect("validate shouldn't error");
+    }
+}
+
+#[test]
+fn validate_overflow() {
+    let d = Directory {
+        directories: vec![DirectoryNode {
+            name: "foo".into(),
+            digest: DUMMY_DIGEST.to_vec().into(),
+            size: u32::MAX,
+        }],
+        ..Default::default()
+    };
+
+    match d.validate().expect_err("must fail") {
+        ValidateDirectoryError::SizeOverflow => {}
+        _ => panic!("unexpected error"),
     }
 }
