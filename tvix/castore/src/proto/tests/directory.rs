@@ -61,6 +61,22 @@ fn size() {
 }
 
 #[test]
+#[cfg_attr(release, ignore)]
+#[should_panic]
+fn size_unchecked() {
+    let d = Directory {
+        directories: vec![DirectoryNode {
+            name: "foo".into(),
+            digest: DUMMY_DIGEST.to_vec().into(),
+            size: u32::MAX,
+        }],
+        ..Default::default()
+    };
+
+    d.size();
+}
+
+#[test]
 fn digest() {
     let d = Directory::default();
 
