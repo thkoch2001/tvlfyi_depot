@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1f2e5a0e_b6377ff6",
+        "filename": "tvix/cli/src/tvix_store_io.rs",
+        "patchSetId": 5
+      },
+      "lineNbr": 273,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-10-10T06:39:01Z",
+      "side": 1,
+      "message": "…called from here.",
+      "revId": "7b71b58ace927cf595c3c056c28b10359b76c18f",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8faa1fda_fadd6d6a",
+        "filename": "tvix/cli/src/tvix_store_io.rs",
+        "patchSetId": 5
+      },
+      "lineNbr": 304,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-10-10T06:39:01Z",
+      "side": 1,
+      "message": "Nothing for this CL, but this currently does not go through `std_io` (but I think it probably should), and then we\u0027ll have some interesting questions on whether `std_io` is currently the right abstraction.",
+      "revId": "7b71b58ace927cf595c3c056c28b10359b76c18f",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
