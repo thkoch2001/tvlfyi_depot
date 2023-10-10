@@ -120,6 +120,11 @@ depot.nix.readTree.drvTargets {
       hash = "sha256-eFT2SUxTopxEvW0rcxSjQU6nbrQLI2FbyaVgtV8oiTk=";
     };
 
+    patches = old.patches ++ [
+      # run tests in debug mode, not release mode
+      ./patches/crate2nix-tests-debug.patch
+    ];
+
     cargoDeps = old.cargoDeps.overrideAttrs (_: {
       inherit src;
       outputHash = "sha256-elEIWHxyY3iccprIcbQA6GWFiq/n5kozpGfw/OmoSIg=";
