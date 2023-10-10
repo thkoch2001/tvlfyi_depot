@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cf3f0705_b8398a52",
+        "filename": "tvix/store/src/nar/renderer.rs",
+        "patchSetId": 7
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-10-10T17:09:41Z",
+      "side": 1,
+      "message": "Please extend the comment with a comment why we need this (CountWriter and Sha256)",
+      "revId": "ab66fecf15592f752cdc8a3a4f95c340878af7ed",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
