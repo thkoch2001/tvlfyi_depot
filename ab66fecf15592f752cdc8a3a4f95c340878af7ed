@@ -16,6 +16,24 @@
       "message": "Please extend the comment with a comment why we need this (CountWriter and Sha256)",
       "revId": "ab66fecf15592f752cdc8a3a4f95c340878af7ed",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d3d90b9d_dd7e5705",
+        "filename": "tvix/store/src/nar/renderer.rs",
+        "patchSetId": 7
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 1000005
+      },
+      "writtenOn": "2023-10-10T17:14:56Z",
+      "side": 1,
+      "message": "I\u0027ve added a comment at the call site, does that seem sufficient? I\u0027d rather keep it there instead.",
+      "parentUuid": "cf3f0705_b8398a52",
+      "revId": "ab66fecf15592f752cdc8a3a4f95c340878af7ed",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
