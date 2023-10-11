@@ -1,4 +1,39 @@
 {
-  "comments": [],
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "03b9b96e_bbb337fd",
+        "filename": "tvix/nar-bridge/pkg/http/nar_put.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 104,
+      "author": {
+        "id": 1000076
+      },
+      "writtenOn": "2023-10-11T11:42:47Z",
+      "side": 1,
+      "message": "The meaning of 0x12 is very unobvious here, can we get a constant somewhere for that?",
+      "revId": "671cae6616676a3ee47311137423a7d5f3ca693e",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "987b3b7f_c7b5e47b",
+        "filename": "tvix/nar-bridge/pkg/http/narinfo_get.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 56,
+      "author": {
+        "id": 1000076
+      },
+      "writtenOn": "2023-10-11T11:42:47Z",
+      "side": 1,
+      "message": "\\- and contain a NARInfo field\n\nI also wonder if these comments are useful at all, it feels like they\u0027re just repeating what the code already says",
+      "revId": "671cae6616676a3ee47311137423a7d5f3ca693e",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ],
   "submitRequirementResults": []
 }
