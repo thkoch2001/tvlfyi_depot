@@ -42,6 +42,10 @@ pub enum ValidatePathInfoError {
     #[error("Invalid Digest length: expected {}, got {}", B3_LEN, .0)]
     InvalidNodeDigestLen(usize),
 
+    /// The digest in narinfo.nar_sha256 has an invalid len.
+    #[error("Invalid narinfo.nar_sha256 length: expected {}, got {}", 32, .0)]
+    InvalidNarSha256DigestLen(usize),
+
     /// The number of references in the narinfo.reference_names field does not match
     /// the number of references in the .references field.
     #[error("Inconsistent Number of References: {0} (references) vs {1} (narinfo)")]
