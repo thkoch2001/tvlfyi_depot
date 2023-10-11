@@ -18,6 +18,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "18c4f154_8347d4f4",
+        "filename": "tvix/nar-bridge/pkg/http/nar_put.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 104,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-10-11T12:01:23Z",
+      "side": 1,
+      "message": "cl/9653",
+      "parentUuid": "03b9b96e_bbb337fd",
+      "revId": "671cae6616676a3ee47311137423a7d5f3ca693e",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "987b3b7f_c7b5e47b",
@@ -31,6 +49,24 @@
       "writtenOn": "2023-10-11T11:42:47Z",
       "side": 1,
       "message": "\\- and contain a NARInfo field\n\nI also wonder if these comments are useful at all, it feels like they\u0027re just repeating what the code already says",
+      "revId": "671cae6616676a3ee47311137423a7d5f3ca693e",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d5701274_1f3b129e",
+        "filename": "tvix/nar-bridge/pkg/http/narinfo_get.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 56,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-10-11T12:01:23Z",
+      "side": 1,
+      "message": "This comment and the one below indeed is redundant. Sent a followup in cl/9654.",
+      "parentUuid": "987b3b7f_c7b5e47b",
       "revId": "671cae6616676a3ee47311137423a7d5f3ca693e",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
