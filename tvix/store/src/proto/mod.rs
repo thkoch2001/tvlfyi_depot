@@ -94,9 +94,16 @@ impl PathInfo {
             }
         }
 
-        // If there is a narinfo field populated, ensure the number of references there
-        // matches PathInfo.references count.
+        // If there is a narinfo field populated…
         if let Some(narinfo) = &self.narinfo {
+            // ensure the nar_sha256 digest has the correct length.
+            if narinfo.nar_sha256.len() != 32 {
+                return Err(ValidatePathInfoError::InvalidNarSha256DigestLen(
+                    narinfo.nar_sha256.len(),
+                ));
+            }
+
+            // ensure the number of references there matches PathInfo.references count.
             if narinfo.reference_names.len() != self.references.len() {
                 return Err(ValidatePathInfoError::InconsistentNumberOfReferences(
                     self.references.len(),
