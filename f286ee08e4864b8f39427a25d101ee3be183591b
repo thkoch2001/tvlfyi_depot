@@ -16,6 +16,24 @@
       "message": "maybe clarify that this is about the digest length, rather than the NAR hashing to it",
       "revId": "f286ee08e4864b8f39427a25d101ee3be183591b",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2796b4d5_2fd0c6a0",
+        "filename": "tvix/store/src/proto/tests/pathinfo.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 168,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-10-11T15:21:12Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4cb983ac_9b8901bb",
+      "revId": "f286ee08e4864b8f39427a25d101ee3be183591b",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
