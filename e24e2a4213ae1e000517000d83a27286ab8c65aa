@@ -34,6 +34,24 @@
       "parentUuid": "7e16f8a9_ae3e0895",
       "revId": "e24e2a4213ae1e000517000d83a27286ab8c65aa",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a89e0f12_72c40b2b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-10-12T13:24:49Z",
+      "side": 1,
+      "message": "Hmmh, the `List` request is an empty message, because there\u0027s no \"filter criteria\". \n\nNot sure if the error message your\u0027re seeing is over-eager error checking.\n\nI tried the `Get` method, producing a `GetPathInfoRequest` protobuf message and sending it over like this:\n\n```rust\nlet store_path \u003d store_path::StorePath::from_bytes(\n    \"z6hzxgy21zimj58xhy06f2f49qgy06gg-hello-2.12.1\".as_bytes(),\n)\n.expect(\"must parse\");\n\nlet rq \u003d GetPathInfoRequest {\n     by_what: Some(ByOutputHash(store_path.digest.to_vec().into())),\n};\n\neprintln!(\"{}\", BASE64.encode(\u0026rq.encode_to_vec()));\n```\n\nI then sent it over via `application/grpc-web-text`, which wants b64-encoded proto messages.\n\n```\n❯ curl --http2-prior-knowledge  -H \u0027content-type: application/grpc-web-text\u0027 -H \u0027accept: application/grpc-web-text\u0027 -d \u0027ChTvGeAfTsQJZ4CHHRVZ4w/Cv/6h+Q\u003d\u003d\u0027 http://localhost:8000/tvix.store.v1.PathInfoService/Get -v\n*   Trying [::1]:8000...\n* Connected to localhost (::1) port 8000\n* [HTTP/2] [1] OPENED stream for http://localhost:8000/tvix.store.v1.PathInfoService/Get\n* [HTTP/2] [1] [:method: POST]\n* [HTTP/2] [1] [:scheme: http]\n* [HTTP/2] [1] [:authority: localhost:8000]\n* [HTTP/2] [1] [:path: /tvix.store.v1.PathInfoService/Get]\n* [HTTP/2] [1] [user-agent: curl/8.3.0]\n* [HTTP/2] [1] [content-type: application/grpc-web-text]\n* [HTTP/2] [1] [accept: application/grpc-web-text]\n* [HTTP/2] [1] [content-length: 32]\n\u003e POST /tvix.store.v1.PathInfoService/Get HTTP/2\n\u003e Host: localhost:8000\n\u003e User-Agent: curl/8.3.0\n\u003e content-type: application/grpc-web-text\n\u003e accept: application/grpc-web-text\n\u003e Content-Length: 32\n\u003e \n\u003c HTTP/2 200 \n\u003c content-type: application/grpc-web-text+proto\n\u003c grpc-status: 13\n\u003c grpc-message: protocol%20error:%20received%20message%20with%20invalid%20compression%20flag:%2010%20(valid%20flags%20are%200%20and%201),%20while%20sending%20request\n\u003c content-length: 0\n\u003c date: Wed, 11 Oct 2023 19:37:16 GMT\n\u003c \n* Connection #0 to host localhost left intact\n```\n\nI peeked a bit closer at https://github.com/grpc/grpc/blob/master/doc/PROTOCOL-HTTP2.md, and spotted the `Length-Prefixed-Message` there. I tried to prepend a null byte and various u32 big endian message-length fields, but got complaints about invalid bytes at various offsets. \n\nI am a bit unsure if we\u0027re doing anything wrong, or how to do it right, and if it\u0027s a tonic-web bug or not, but overall it seems there\u0027s very little client support with introspection.\n\nIt might probably make sense to park this until we\u0027re generating some specific gRPC client bindings capable of doing gRPC web, and check it with that.\n\nAnother alternative would be to not do this alltogether, and leave it to another component to do the proxying.",
+      "parentUuid": "85c5c7a8_e2918319",
+      "revId": "e24e2a4213ae1e000517000d83a27286ab8c65aa",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
