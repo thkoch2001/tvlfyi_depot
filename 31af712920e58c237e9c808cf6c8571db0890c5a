@@ -16,6 +16,24 @@
       "message": "I don\u0027t think we need the {}",
       "revId": "31af712920e58c237e9c808cf6c8571db0890c5a",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1e2da681_c5cc00bc",
+        "filename": "tvix/store/src/fs/mod.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 636,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-10-12T19:48:33Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9332a8cf_d9ef92b1",
+      "revId": "31af712920e58c237e9c808cf6c8571db0890c5a",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
