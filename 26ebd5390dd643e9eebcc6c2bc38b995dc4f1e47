@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "eafcfa20_41932a72",
+        "filename": "tvix/store/src/proto/mod.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 168,
+      "author": {
+        "id": 1000005
+      },
+      "writtenOn": "2023-10-12T19:47:34Z",
+      "side": 1,
+      "message": "This isn\u0027t really about this CL, but we should probably validate the symlink target.",
+      "revId": "26ebd5390dd643e9eebcc6c2bc38b995dc4f1e47",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
