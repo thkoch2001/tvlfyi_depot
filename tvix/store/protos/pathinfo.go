@@ -57,45 +57,30 @@ func (p *PathInfo) Validate() (*storepath.StorePath, error) {
 		return nil, fmt.Errorf("root node must be set")
 	}
 
-	// for all three node types, ensure the name properly parses to a store path,
-	// and in case it refers to a digest, ensure it has the right length.
+	if err := rootNode.Validate(); err != nil {
+		return nil, fmt.Errorf("root node failed validation: %w", err)
+	}
+
+	// for all three node types, ensure the name properly parses to a store path.
+	// This is a stricter check as the ones already performed in the rootNode.Validate() call.
+	var rootNodeName []byte
 
 	if node := rootNode.GetDirectory(); node != nil {
-		if len(node.Digest) != 32 {
-			return nil, fmt.Errorf("invalid digest size for %s, expected %d, got %d", node.Name, 32, len(node.Digest))
-		}
-
-		storePath, err := storepath.FromString(string(node.GetName()))
-
-		if err != nil {
-			return nil, fmt.Errorf("unable to parse %s as StorePath: %w", node.Name, err)
-		}
-
-		return storePath, nil
-
+		rootNodeName = node.GetName()
 	} else if node := rootNode.GetFile(); node != nil {
-		if len(node.Digest) != 32 {
-			return nil, fmt.Errorf("invalid digest size for %s, expected %d, got %d", node.Name, 32, len(node.Digest))
-		}
-
-		storePath, err := storepath.FromString(string(node.GetName()))
-		if err != nil {
-			return nil, fmt.Errorf("unable to parse %s as StorePath: %w", node.Name, err)
-		}
-
-		return storePath, nil
-
+		rootNodeName = node.GetName()
 	} else if node := rootNode.GetSymlink(); node != nil {
-		storePath, err := storepath.FromString(string(node.GetName()))
-
-		if err != nil {
-			return nil, fmt.Errorf("unable to parse %s as StorePath: %w", node.Name, err)
-		}
-
-		return storePath, nil
-
+		rootNodeName = node.GetName()
 	} else {
 		// this would only happen if we introduced a new type
 		panic("unreachable")
 	}
+
+	storePath, err := storepath.FromString(string(rootNodeName))
+
+	if err != nil {
+		return nil, fmt.Errorf("unable to parse %s as StorePath: %w", rootNodeName, err)
+	}
+
+	return storePath, nil
 }
