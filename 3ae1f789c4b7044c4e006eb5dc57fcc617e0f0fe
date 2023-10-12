@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a0447779_5494c25b",
+        "filename": "tvix/store/src/fs/file_attr.rs",
+        "patchSetId": 3
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1000082
+      },
+      "writtenOn": "2023-10-12T19:56:42Z",
+      "side": 1,
+      "message": "This breaks the build on MacOS",
+      "revId": "3ae1f789c4b7044c4e006eb5dc57fcc617e0f0fe",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "42544851_14d87c6f",
+        "filename": "tvix/store/src/fs/file_attr.rs",
+        "patchSetId": 3
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 1000082
+      },
+      "writtenOn": "2023-10-12T19:56:42Z",
+      "side": 1,
+      "message": "These changes also break the build on MacOS.\nThe compiler suggests: (libc::S_IFDIR | 0o555).into()",
+      "revId": "3ae1f789c4b7044c4e006eb5dc57fcc617e0f0fe",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ca9efdd0_c64122c4",
+        "filename": "tvix/store/src/fs/mod.rs",
+        "patchSetId": 3
+      },
+      "lineNbr": 496,
+      "author": {
+        "id": 1000082
+      },
+      "writtenOn": "2023-10-12T19:56:42Z",
+      "side": 1,
+      "message": "These also break MacOS build.\nHere the compiler suggests: libc::S_IFLNK.into()",
+      "revId": "3ae1f789c4b7044c4e006eb5dc57fcc617e0f0fe",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
