@@ -16,6 +16,24 @@
       "message": "This isn\u0027t really about this CL, but we should probably validate the symlink target.",
       "revId": "26ebd5390dd643e9eebcc6c2bc38b995dc4f1e47",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "76064611_a0494be7",
+        "filename": "tvix/store/src/proto/mod.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 168,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-10-12T20:40:01Z",
+      "side": 1,
+      "message": "cl/9715",
+      "parentUuid": "eafcfa20_41932a72",
+      "revId": "26ebd5390dd643e9eebcc6c2bc38b995dc4f1e47",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
