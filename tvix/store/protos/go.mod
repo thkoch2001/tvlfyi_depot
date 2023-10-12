@@ -2,6 +2,8 @@ module code.tvl.fyi/tvix/store/protos
 
 go 1.19
 
+replace code.tvl.fyi/tvix/castore/protos => ../../castore/protos
+
 require (
 	code.tvl.fyi/tvix/castore/protos v0.0.0-20230922125121-72355662d742
 	github.com/google/go-cmp v0.5.6
