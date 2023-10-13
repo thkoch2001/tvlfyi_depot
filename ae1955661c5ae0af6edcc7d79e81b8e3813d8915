@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1b4d8d81_70fbb252",
+        "filename": "tvix/nix-compat/src/store_path/mod.rs",
+        "patchSetId": 5
+      },
+      "lineNbr": 195,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2023-10-13T14:41:43Z",
+      "side": 1,
+      "message": "Isn\u0027t digest here a fixed size array already? Seems like this would always be false. `[u8; DIGEST_SIZE]`",
+      "revId": "ae1955661c5ae0af6edcc7d79e81b8e3813d8915",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c762c051_5706fbdd",
+        "filename": "tvix/store/protos/pathinfo.go",
+        "patchSetId": 5
+      },
+      "lineNbr": 100,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2023-10-13T14:41:43Z",
+      "side": 1,
+      "message": "This sounds fun...",
+      "revId": "ae1955661c5ae0af6edcc7d79e81b8e3813d8915",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
