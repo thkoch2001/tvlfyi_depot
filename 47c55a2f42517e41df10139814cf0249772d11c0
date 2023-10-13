@@ -16,6 +16,24 @@
       "message": "This could happen if a \"bad\" proto is sent as well since fields are always optional.",
       "revId": "47c55a2f42517e41df10139814cf0249772d11c0",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "996876c4_2a6eeb42",
+        "filename": "tvix/castore/protos/castore.go",
+        "patchSetId": 2
+      },
+      "lineNbr": 109,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-10-13T19:50:10Z",
+      "side": 1,
+      "message": "IIRC, the `oneof {}` part of a proto is just client-side interpretation of the field, and and not sent over the wire, which means if neither of fields with tag 1, 2 or 3 are sent, the whole Node would just be null?",
+      "parentUuid": "432631f8_32c61d01",
+      "revId": "47c55a2f42517e41df10139814cf0249772d11c0",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
