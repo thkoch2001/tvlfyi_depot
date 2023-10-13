@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d8b0c7a7_e66e7100",
+        "filename": "tvix/store/protos/go.mod",
+        "patchSetId": 1
+      },
+      "lineNbr": 5,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-10-13T06:06:40Z",
+      "side": 1,
+      "message": "This needs to be replaced with a go.mod update once cl/9716 landed.",
+      "revId": "8299307d60d91977cc54232374e483304fbfee87",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
