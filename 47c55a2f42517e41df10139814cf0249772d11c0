@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "432631f8_32c61d01",
+        "filename": "tvix/castore/protos/castore.go",
+        "patchSetId": 2
+      },
+      "lineNbr": 109,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2023-10-13T14:48:36Z",
+      "side": 1,
+      "message": "This could happen if a \"bad\" proto is sent as well since fields are always optional.",
+      "revId": "47c55a2f42517e41df10139814cf0249772d11c0",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
