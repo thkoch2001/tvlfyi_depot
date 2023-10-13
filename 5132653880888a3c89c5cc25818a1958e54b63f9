@@ -191,6 +191,24 @@
       "message": "cc @raitobezarius",
       "revId": "5132653880888a3c89c5cc25818a1958e54b63f9",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c24837c1_804733c6",
+        "filename": "tvix/castore/src/import.rs",
+        "patchSetId": 4
+      },
+      "lineNbr": 227,
+      "author": {
+        "id": 1000076
+      },
+      "writtenOn": "2023-10-13T08:51:09Z",
+      "side": 1,
+      "message": "I\u0027m fairly sure this is correct, we can fix it later if it isn\u0027t",
+      "parentUuid": "a5d31450_499ea1f0",
+      "revId": "5132653880888a3c89c5cc25818a1958e54b63f9",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
