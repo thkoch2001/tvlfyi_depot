@@ -81,6 +81,7 @@ library
         dlist,
         filepath,
         hs-opentelemetry-sdk,
+        hs-opentelemetry-api,
         http-conduit,
         http-types,
         ihp-hsx,
