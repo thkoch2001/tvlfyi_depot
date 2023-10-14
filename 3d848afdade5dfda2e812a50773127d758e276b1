@@ -3,6 +3,23 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "8ebd9fa9_23c8c79e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2023-10-14T17:52:40Z",
+      "side": 1,
+      "message": "Much nicer!",
+      "revId": "3d848afdade5dfda2e812a50773127d758e276b1",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "b3b3025c_53a8eeb6",
         "filename": "tvix/nix-compat/src/derivation/mod.rs",
         "patchSetId": 1
