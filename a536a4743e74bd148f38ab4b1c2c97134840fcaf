@@ -1,0 +1,101 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6658fae1_c5a047c7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000058
+      },
+      "writtenOn": "2023-10-14T19:47:55Z",
+      "side": 1,
+      "message": "good stuff!",
+      "revId": "a536a4743e74bd148f38ab4b1c2c97134840fcaf",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "90e83a35_5dc99afe",
+        "filename": "tvix/castore/src/import.rs",
+        "patchSetId": 7
+      },
+      "lineNbr": 79,
+      "author": {
+        "id": 1000058
+      },
+      "writtenOn": "2023-10-14T19:47:55Z",
+      "side": 1,
+      "message": "should Entry be lowercase?",
+      "range": {
+        "startLine": 79,
+        "startChar": 17,
+        "endLine": 79,
+        "endChar": 27
+      },
+      "revId": "a536a4743e74bd148f38ab4b1c2c97134840fcaf",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f9954490_ad44cd18",
+        "filename": "tvix/castore/src/import.rs",
+        "patchSetId": 7
+      },
+      "lineNbr": 93,
+      "author": {
+        "id": 1000058
+      },
+      "writtenOn": "2023-10-14T19:47:55Z",
+      "side": 1,
+      "message": "could be implicit return?",
+      "revId": "a536a4743e74bd148f38ab4b1c2c97134840fcaf",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c7419998_e6414a67",
+        "filename": "tvix/castore/src/import.rs",
+        "patchSetId": 7
+      },
+      "lineNbr": 100,
+      "author": {
+        "id": 1000058
+      },
+      "writtenOn": "2023-10-14T19:47:55Z",
+      "side": 1,
+      "message": "\"",
+      "revId": "a536a4743e74bd148f38ab4b1c2c97134840fcaf",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fd516cfb_cf56e09c",
+        "filename": "tvix/castore/src/import.rs",
+        "patchSetId": 7
+      },
+      "lineNbr": 157,
+      "author": {
+        "id": 1000058
+      },
+      "writtenOn": "2023-10-14T19:47:55Z",
+      "side": 1,
+      "message": "this means that if there is a device or unix socket, it will panic? It could return an error instead maybe.",
+      "range": {
+        "startLine": 157,
+        "startChar": 12,
+        "endLine": 157,
+        "endChar": 16
+      },
+      "revId": "a536a4743e74bd148f38ab4b1c2c97134840fcaf",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
