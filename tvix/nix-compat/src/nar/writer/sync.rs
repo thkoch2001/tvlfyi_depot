@@ -29,7 +29,6 @@
 //! ```
 
 use super::wire;
-use bstr::ByteSlice;
 use std::io::{
     self, BufRead,
     ErrorKind::{InvalidInput, UnexpectedEof},
