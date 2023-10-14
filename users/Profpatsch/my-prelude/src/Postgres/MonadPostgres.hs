@@ -194,7 +194,7 @@ data PoolingInfo = PoolingInfo
     unusedResourceOpenTime :: Seconds,
     -- | Max number of resources that can be
     --   in the Pool at any time
-    maxOpenResourcesPerStripe :: AtLeast 1 Int
+    maxOpenResourcesAcrossAllStripes :: AtLeast 1 Int
   }
   deriving stock (Generic, Eq, Show)
   deriving anyclass (FromJSON)
@@ -218,12 +218,14 @@ initMonadPostgres logInfoFn connectInfo poolingInfo = do
     createPGConnPool ::
       IO (Pool Postgres.Connection)
     createPGConnPool =
-      Pool.createPool
-        poolCreateResource
-        poolfreeResource
-        poolingInfo.numberOfStripes.unAtLeast
-        (poolingInfo.unusedResourceOpenTime & secondsToNominalDiffTime)
-        (poolingInfo.maxOpenResourcesPerStripe.unAtLeast)
+      Pool.newPool $
+        Pool.defaultPoolConfig
+          {- resource init action -} poolCreateResource
+          {- resource destruction -} poolfreeResource
+          ( poolingInfo.unusedResourceOpenTime.unSeconds
+              & fromIntegral @Natural @Double
+          )
+          (poolingInfo.maxOpenResourcesAcrossAllStripes.unAtLeast)
       where
         poolCreateResource = Postgres.connect connectInfo
         poolfreeResource = Postgres.close

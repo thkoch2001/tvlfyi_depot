@@ -29,6 +29,7 @@ import Database.Postgres.Temp qualified as TmpPg
 import FieldParser (FieldParser' (..))
 import FieldParser qualified as Field
 import GHC.Records (HasField (..))
+import GHC.Stack qualified
 import IHP.HSX.QQ (hsx)
 import Json qualified
 import Json.Enc (Enc)
@@ -41,7 +42,9 @@ import Network.HTTP.Types
 import Network.HTTP.Types qualified as Http
 import Network.Wai qualified as Wai
 import Network.Wai.Handler.Warp qualified as Warp
-import OpenTelemetry.Trace qualified as Otel hiding (getTracer, inSpan)
+import Network.Wai.Parse qualified as Wai
+import OpenTelemetry.Trace qualified as Otel hiding (getTracer, inSpan, inSpan')
+import OpenTelemetry.Trace.Core qualified as Otel hiding (inSpan, inSpan')
 import OpenTelemetry.Trace.Monad qualified as Otel
 import PossehlAnalyticsPrelude
 import Postgres.Decoder qualified as Dec
@@ -59,6 +62,7 @@ import Text.Blaze.Html.Renderer.Utf8 qualified as Html
 import Text.Blaze.Html5 qualified as Html
 import Tool (Tool, readTool, readTools)
 import UnliftIO
+import Prelude hiding (span)
 
 main :: IO ()
 main =
@@ -88,37 +92,51 @@ htmlUi = do
             if debug
               then Html.Pretty.renderHtml >>> stringToText >>> textToBytesUtf8 >>> toLazyBytes
               else Html.renderHtml
-      let h act = do
-            res <- runInIO act
-            respond . Wai.responseLBS Http.ok200 [("Content-Type", "text/html")] . renderHtml $ res
+      let h route act =
+            runInIO $
+              Otel.inSpan'
+                [fmt|Route {route }|]
+                ( Otel.defaultSpanArguments
+                    { Otel.attributes =
+                        HashMap.fromList
+                          [ ("server.path", Otel.toAttribute @Text route)
+                          ]
+                    }
+                )
+                ( \span -> withRunInIO $ \runInIO' -> do
+                    res <- runInIO' $ act span
+                    respond . Wai.responseLBS Http.ok200 [("Content-Type", "text/html")] . renderHtml $ res
+                )
 
-      let mp parser =
+      let mp span parser =
             Multipart.parseMultipartOrThrow
-              appThrowTree
+              (appThrowTree span)
               parser
               req
 
-      let torrentIdMp =
+      let torrentIdMp span =
             mp
+              span
               ( do
                   label @"torrentId" <$> Multipart.field "torrent-id" ((Field.utf8 >>> Field.signedDecimal >>> Field.bounded @Int "int"))
               )
 
       case req & Wai.pathInfo & Text.intercalate "/" of
-        "" -> h mainHtml
+        "" -> h "/" (\_span -> mainHtml)
         "snips/redacted/search" -> do
-          h $ do
+          h "/snips/redacted/search" $ \span -> do
             dat <-
               mp
+                span
                 ( do
                     label @"searchstr" <$> Multipart.field "redacted-search" Cat.id
                 )
             snipsRedactedSearch dat
-        "snips/redacted/torrentDataJson" -> h $ do
-          dat <- torrentIdMp
+        "snips/redacted/torrentDataJson" -> h "/snips/redacted/torrentDataJson" $ \span -> do
+          dat <- torrentIdMp span
           mkVal <$> (runTransaction $ getTorrentById dat)
-        "snips/redacted/getTorrentFile" -> h $ do
-          dat <- torrentIdMp
+        "snips/redacted/getTorrentFile" -> h "/snips/redacted/getTorrentFile" $ \span -> do
+          dat <- torrentIdMp span
           runTransaction $ do
             inserted <- redactedGetTorrentFileAndInsert dat
             running <-
@@ -135,13 +153,13 @@ htmlUi = do
                 (Enc.object [("torrent-hash", Enc.text running.torrentHash)])
                 "Starting"
         -- TODO: this is bad duplication??
-        "snips/redacted/startTorrentFile" -> h $ do
-          dat <- torrentIdMp
+        "snips/redacted/startTorrentFile" -> h "/snips/redacted/startTorrentFile" $ \span -> do
+          dat <- torrentIdMp span
           runTransaction $ do
             file <-
               getTorrentFileById dat
                 <&> annotate [fmt|No torrent file for torrentId "{dat.torrentId}"|]
-                >>= orAppThrowTree
+                >>= orAppThrowTree span
 
             running <-
               lift @Transaction $
@@ -156,8 +174,8 @@ htmlUi = do
                 "snips/transmission/getTorrentState"
                 (Enc.object [("torrent-hash", Enc.text running.torrentHash)])
                 "Starting"
-        "snips/transmission/getTorrentState" -> h $ do
-          dat <- mp $ label @"torrentHash" <$> Multipart.field "torrent-hash" Field.utf8
+        "snips/transmission/getTorrentState" -> h "/snips/transmission/getTorrentState" $ \span -> do
+          dat <- mp span $ label @"torrentHash" <$> Multipart.field "torrent-hash" Field.utf8
           status <-
             doTransmissionRequest'
               ( transmissionRequestListOnlyTorrents
@@ -173,7 +191,7 @@ htmlUi = do
             case status of
               Nothing -> [hsx|ERROR unknown|]
               Just _torrent -> [hsx|Running|]
-        _ -> h mainHtml
+        otherRoute -> h [fmt|/{otherRoute}|] (\_span -> mainHtml)
   where
     everySecond :: Text -> Enc -> Html -> Html
     everySecond call extraData innerHtml = [hsx|<div hx-trigger="every 1s" hx-swap="outerHTML" hx-post={call} hx-vals={Enc.encToBytesUtf8 extraData}>{innerHtml}</div>|]
@@ -213,11 +231,12 @@ htmlUi = do
 
 snipsRedactedSearch ::
   ( MonadLogger m,
-    MonadIO m,
     MonadPostgres m,
     HasField "searchstr" r ByteString,
     MonadThrow m,
-    MonadTransmission m
+    MonadTransmission m,
+    Otel.MonadTracer m,
+    MonadUnliftIO m
   ) =>
   r ->
   m Html
@@ -232,11 +251,12 @@ snipsRedactedSearch dat = do
     getBestTorrentsTable
 
 getBestTorrentsTable ::
-  ( MonadIO m,
-    MonadTransmission m,
+  ( MonadTransmission m,
     MonadThrow m,
     MonadLogger m,
-    MonadPostgres m
+    MonadPostgres m,
+    Otel.MonadTracer m,
+    MonadUnliftIO m
   ) =>
   Transaction m Html
 getBestTorrentsTable = do
@@ -323,11 +343,12 @@ scientificPercentage =
 -- | Fetch the current status from transmission, and remove the tranmission hash from our database
 -- iff it does not exist in transmission anymore
 getAndUpdateTransmissionTorrentsStatus ::
-  ( MonadIO m,
-    MonadTransmission m,
+  ( MonadTransmission m,
     MonadThrow m,
     MonadLogger m,
-    MonadPostgres m
+    MonadPostgres m,
+    Otel.MonadTracer m,
+    MonadUnliftIO m
   ) =>
   Map (Label "torrentHash" Text) () ->
   (Transaction m (Map (Label "torrentHash" Text) (Label "percentDone" Percentage)))
@@ -358,8 +379,7 @@ getAndUpdateTransmissionTorrentsStatus knownTorrents = do
   pure actualTorrents
 
 getTransmissionTorrentsTable ::
-  (MonadIO m, MonadTransmission m, MonadThrow m, MonadLogger m) =>
-  m Html
+  (MonadTransmission m, MonadThrow m, MonadLogger m, Otel.MonadTracer m, MonadUnliftIO m) => m Html
 getTransmissionTorrentsTable = do
   let fields =
         [ "hashString",
@@ -431,7 +451,12 @@ data TransmissionRequest = TransmissionRequest
   deriving stock (Show)
 
 testTransmission :: (Show out) => (TransmissionRequest, Json.Parse Error out) -> IO (Either TmpPg.StartError ())
-testTransmission req = runAppWith $ doTransmissionRequest transmissionConnectionConfig req >>= liftIO . printPretty
+testTransmission req = runAppWith $ inSpan' "Test Transmission" $ \span ->
+  doTransmissionRequest
+    span
+    transmissionConnectionConfig
+    req
+    >>= liftIO . printPretty
 
 transmissionConnectionConfig :: T2 "host" Text "port" Text
 transmissionConnectionConfig = (T2 (label @"host" "localhost") (label @"port" "9091"))
@@ -507,52 +532,66 @@ data TransmissionResponseStatus
   deriving stock (Show)
 
 doTransmissionRequest' ::
-  ( MonadIO m,
-    MonadTransmission m,
+  ( MonadTransmission m,
     MonadThrow m,
-    MonadLogger m
+    MonadLogger m,
+    Otel.MonadTracer m,
+    MonadUnliftIO m
   ) =>
   (TransmissionRequest, Json.Parse Error output) ->
   m output
-doTransmissionRequest' req = do
+doTransmissionRequest' req = inSpan' "Transmission Request" $ \span -> do
   resp <-
     doTransmissionRequest
+      span
       transmissionConnectionConfig
       req
   case resp.result of
-    TransmissionResponseFailure err -> appThrowTree (nestedError "Transmission RPC error" $ singleError $ newError err)
+    TransmissionResponseFailure err -> appThrowTree span (nestedError "Transmission RPC error" $ singleError $ newError err)
     TransmissionResponseSuccess -> case resp.arguments of
-      Nothing -> appThrowTree "Transmission RPC error: No `arguments` field in response"
+      Nothing -> appThrowTree span "Transmission RPC error: No `arguments` field in response"
       Just out -> pure out
 
 -- | Contact the transmission RPC, and do the CSRF protection dance.
 --
 -- Spec: https://github.com/transmission/transmission/blob/main/docs/rpc-spec.md
 doTransmissionRequest ::
-  ( MonadIO m,
-    MonadTransmission m,
+  ( MonadTransmission m,
     HasField "host" t1 Text,
     HasField "port" t1 Text,
     MonadThrow m,
-    MonadLogger m
+    MonadLogger m,
+    Otel.MonadTracer m,
+    MonadUnliftIO m
   ) =>
+  Otel.Span ->
   t1 ->
   (TransmissionRequest, Json.Parse Error output) ->
   m (TransmissionResponse output)
-doTransmissionRequest dat (req, parser) = do
+doTransmissionRequest span dat (req, parser) = do
   sessionId <- getTransmissionId
-  let body =
-        Enc.object
-          ( [ ("method", req.method & Enc.text),
-              ("arguments", Enc.map id req.arguments)
-            ]
-              <> (req.tag & maybe [] (\t -> [("tag", t & Enc.int)]))
-          )
-  logDebug [fmt|transmission request: {Pretty.showPrettyJsonEncoding body.unEnc}|]
+  let textArg t = (Enc.text t, Otel.toAttribute @Text t)
+  let encArg enc = (enc, Otel.toAttribute @Text $ enc & Enc.encToTextPretty)
+  let intArg i = (Enc.int i, Otel.toAttribute @Int i)
+
+  let body :: [(Text, (Enc, Otel.Attribute))] =
+        ( [ ("method", req.method & textArg),
+            ("arguments", encArg $ Enc.map id req.arguments)
+          ]
+            <> (req.tag & foldMap (\t -> [("tag", t & intArg)]))
+        )
+  Otel.addAttributes
+    span
+    ( HashMap.fromList $
+        body
+          <&> bimap
+            (\k -> [fmt|transmission.{k}|])
+            (\(_, attr) -> attr)
+    )
   let httpReq =
         [fmt|http://{dat.host}:{dat.port}/transmission/rpc|]
           & Http.setRequestMethod "POST"
-          & Http.setRequestBodyLBS (Enc.encToBytesUtf8Lazy body)
+          & Http.setRequestBodyLBS (Enc.encToBytesUtf8Lazy (body <&> second fst & Enc.object))
           & (sessionId & maybe id (Http.setRequestHeader "X-Transmission-Session-Id" . (: [])))
   resp <- Http.httpBS httpReq
   -- Implement the CSRF protection thingy
@@ -567,7 +606,7 @@ doTransmissionRequest dat (req, parser) = do
           & liftIO
           <&> NonEmpty.head
       setTransmissionId tid
-      doTransmissionRequest dat (req, parser)
+      doTransmissionRequest span dat (req, parser)
     200 ->
       resp
         & Http.getResponseBody
@@ -592,42 +631,47 @@ doTransmissionRequest dat (req, parser) = do
             case Json.eitherDecodeStrict' @Json.Value (resp & Http.getResponseBody) of
               Left _err -> pure ()
               Right val -> logInfo [fmt|failing transmission response: {showPrettyJson val}|]
-            appThrowTree err
+            appThrowTree span err
     _ -> liftIO $ unwrapIOError $ Left [fmt|Non-200 response: {showPretty resp}|]
 
 redactedSearch ::
-  (MonadLogger m, MonadIO m, MonadThrow m) =>
+  (MonadLogger m, MonadThrow m, Otel.MonadTracer m, MonadUnliftIO m) =>
   [(ByteString, ByteString)] ->
   Json.Parse ErrorTree a ->
   m a
-redactedSearch advanced =
+redactedSearch advanced parser = inSpan' "Redacted API Search" $ \span ->
   redactedApiRequestJson
+    span
     ( T2
         (label @"action" "browse")
         (label @"actionArgs" ((advanced <&> second Just)))
     )
+    parser
 
 redactedGetTorrentFile ::
   ( MonadLogger m,
-    MonadIO m,
     MonadThrow m,
-    HasField "torrentId" dat Int
+    HasField "torrentId" dat Int,
+    MonadUnliftIO m,
+    Otel.MonadTracer m
   ) =>
   dat ->
   m ByteString
-redactedGetTorrentFile dat =
-  redactedApiRequest
-    ( T2
-        (label @"action" "download")
-        ( label @"actionArgs"
-            [ ("id", Just (dat.torrentId & showToText @Int & textToBytesUtf8))
-            -- try using tokens as long as we have them (TODO: what if there’s no tokens left?
-            -- ANSWER: it breaks:
-            -- responseBody = "{\"status\":\"failure\",\"error\":\"You do not have any freeleech tokens left. Please use the regular DL link.\"}",
-            -- ("usetoken", Just "1")
-            ]
-        )
-    )
+redactedGetTorrentFile dat = inSpan' "Redacted Get Torrent File" $ \span -> do
+  req <-
+    mkRedactedApiRequest
+      ( T2
+          (label @"action" "download")
+          ( label @"actionArgs"
+              [ ("id", Just (dat.torrentId & showToText @Int & textToBytesUtf8))
+              -- try using tokens as long as we have them (TODO: what if there’s no tokens left?
+              -- ANSWER: it breaks:
+              -- responseBody = "{\"status\":\"failure\",\"error\":\"You do not have any freeleech tokens left. Please use the regular DL link.\"}",
+              -- ("usetoken", Just "1")
+              ]
+          )
+      )
+  httpTorrent span req
 
 -- fix
 --   ( \io -> do
@@ -636,7 +680,7 @@ redactedGetTorrentFile dat =
 --       io
 --   )
 
-exampleSearch :: (MonadThrow m, MonadIO m, MonadLogger m, MonadPostgres m) => m (Transaction m ())
+exampleSearch :: (MonadThrow m, MonadLogger m, MonadPostgres m, Otel.MonadTracer m, MonadUnliftIO m) => m (Transaction m ())
 exampleSearch = do
   t1 <-
     redactedSearchAndInsert
@@ -671,9 +715,10 @@ exampleSearch = do
 redactedSearchAndInsert ::
   forall m.
   ( MonadLogger m,
-    MonadIO m,
     MonadPostgres m,
-    MonadThrow m
+    MonadThrow m,
+    Otel.MonadTracer m,
+    MonadUnliftIO m
   ) =>
   [(ByteString, ByteString)] ->
   m (Transaction m ())
@@ -701,7 +746,10 @@ redactedSearchAndInsert extraArguments = do
             when (status /= "success") $ do
               Json.throwCustomError [fmt|Status was not "success", but {status}|]
             Json.key "response" $ do
-              pages <- Json.key "pages" (Field.jsonParser (Field.mapError singleError $ Field.jsonNumber >>> Field.boundedScientificIntegral @Int "not an Integer" >>> Field.integralToNatural))
+              pages <-
+                Json.keyMay "pages" (Field.jsonParser (Field.mapError singleError $ Field.jsonNumber >>> Field.boundedScientificIntegral @Int "not an Integer" >>> Field.integralToNatural))
+                  -- in case the field is missing, let’s assume there is only one page
+                  <&> fromMaybe 1
               Json.key "results" $ do
                 tourGroups <-
                   label @"tourGroups"
@@ -848,12 +896,13 @@ redactedGetTorrentFileAndInsert ::
   ( HasField "torrentId" r Int,
     MonadPostgres m,
     MonadThrow m,
-    MonadIO m,
-    MonadLogger m
+    MonadLogger m,
+    Otel.MonadTracer m,
+    MonadUnliftIO m
   ) =>
   r ->
   Transaction m (Label "torrentFile" ByteString)
-redactedGetTorrentFileAndInsert dat = do
+redactedGetTorrentFileAndInsert dat = inSpan' "Redacted Get Torrent File and Insert" $ \span -> do
   bytes <- redactedGetTorrentFile dat
   execute
     [sql|
@@ -864,7 +913,7 @@ redactedGetTorrentFileAndInsert dat = do
     ( (Binary bytes :: Binary ByteString),
       dat.torrentId
     )
-    >>= assertOneUpdated "redactedGetTorrentFileAndInsert"
+    >>= assertOneUpdated span "redactedGetTorrentFileAndInsert"
     >>= \() -> pure (label @"torrentFile" bytes)
 
 getTorrentFileById ::
@@ -904,13 +953,14 @@ updateTransmissionTorrentHashById dat = do
     )
 
 assertOneUpdated ::
-  (HasField "numberOfRowsAffected" r Natural, MonadThrow m) =>
+  (HasField "numberOfRowsAffected" r Natural, MonadThrow m, MonadIO m) =>
+  Otel.Span ->
   Text ->
   r ->
   m ()
-assertOneUpdated name x = case x.numberOfRowsAffected of
+assertOneUpdated span name x = case x.numberOfRowsAffected of
   1 -> pure ()
-  n -> appThrowTree ([fmt|{name :: Text}: Expected to update exactly one row, but updated {n :: Natural} row(s)|])
+  n -> appThrowTree span ([fmt|{name :: Text}: Expected to update exactly one row, but updated {n :: Natural} row(s)|])
 
 migrate ::
   ( MonadPostgres m,
@@ -1048,6 +1098,9 @@ getBestTorrents = do
 inSpan :: (MonadUnliftIO m, Otel.MonadTracer m) => Text -> m a -> m a
 inSpan name = Otel.inSpan name Otel.defaultSpanArguments
 
+inSpan' :: (MonadUnliftIO m, Otel.MonadTracer m) => Text -> (Otel.Span -> m a) -> m a
+inSpan' name = Otel.inSpan' name Otel.defaultSpanArguments
+
 hush :: Either a1 a2 -> Maybe a2
 hush (Left _) = Nothing
 hush (Right a) = Just a
@@ -1082,7 +1135,7 @@ unzipT3 xs = xs <&> toTup & unzip3 & fromTup
     fromTup (t1, t2, t3) = T3 (label @l1 t1) (label @l2 t2) (label @l3 t3)
 
 -- | Do a request to the redacted API. If you know what that is, you know how to find the API docs.
-redactedApiRequest ::
+mkRedactedApiRequest ::
   ( MonadThrow m,
     MonadIO m,
     MonadLogger m,
@@ -1090,19 +1143,84 @@ redactedApiRequest ::
     HasField "actionArgs" p [(ByteString, Maybe ByteString)]
   ) =>
   p ->
-  m ByteString
-redactedApiRequest dat = do
+  m Http.Request
+mkRedactedApiRequest dat = do
   authKey <- runCommandExpect0 "pass" ["internet/redacted/api-keys/whatcd-resolver"]
-  let req =
-        [fmt|https://redacted.ch/ajax.php|]
-          & Http.setRequestMethod "GET"
-          & Http.setQueryString (("action", Just dat.action) : dat.actionArgs)
-          & Http.setRequestHeader "Authorization" [authKey]
+  pure $
+    [fmt|https://redacted.ch/ajax.php|]
+      & Http.setRequestMethod "GET"
+      & Http.setQueryString (("action", Just dat.action) : dat.actionArgs)
+      & Http.setRequestHeader "Authorization" [authKey]
+
+httpTorrent ::
+  ( MonadIO m,
+    MonadThrow m
+  ) =>
+  Otel.Span ->
+  Http.Request ->
+  m ByteString
+httpTorrent span req =
   Http.httpBS req
     >>= assertM
-      ( \resp -> case resp & Http.responseStatus & (.statusCode) of
-          200 -> Right $ resp & Http.responseBody
-          _ -> Left [fmt|Redacted returned an non-200 error code: {resp & showPretty}|]
+      span
+      ( \resp -> do
+          let statusCode = resp & Http.responseStatus & (.statusCode)
+              contentType =
+                resp
+                  & Http.responseHeaders
+                  & List.lookup "content-type"
+                  <&> Wai.parseContentType
+                  <&> (\(ct, _mimeAttributes) -> ct)
+          if
+              | statusCode == 200,
+                Just "application/x-bittorrent" <- contentType ->
+                  Right $ (resp & Http.responseBody)
+              | statusCode == 200,
+                Just otherType <- contentType ->
+                  Left [fmt|Redacted returned a non-torrent body, with content-type "{otherType}"|]
+              | statusCode == 200,
+                Nothing <- contentType ->
+                  Left [fmt|Redacted returned a body with unspecified content type|]
+              | code <- statusCode -> Left [fmt|Redacted returned an non-200 error code, code {code}: {resp & showPretty}|]
+      )
+
+httpJson ::
+  ( MonadIO m,
+    MonadThrow m
+  ) =>
+  Otel.Span ->
+  Json.Parse ErrorTree b ->
+  Http.Request ->
+  m b
+httpJson span parser req =
+  Http.httpBS req
+    >>= assertM
+      span
+      ( \resp -> do
+          let statusCode = resp & Http.responseStatus & (.statusCode)
+              contentType =
+                resp
+                  & Http.responseHeaders
+                  & List.lookup "content-type"
+                  <&> Wai.parseContentType
+                  <&> (\(ct, _mimeAttributes) -> ct)
+          if
+              | statusCode == 200,
+                Just "application/json" <- contentType ->
+                  Right $ (resp & Http.responseBody)
+              | statusCode == 200,
+                Just otherType <- contentType ->
+                  Left [fmt|Redacted returned a non-json body, with content-type "{otherType}"|]
+              | statusCode == 200,
+                Nothing <- contentType ->
+                  Left [fmt|Redacted returned a body with unspecified content type|]
+              | code <- statusCode -> Left [fmt|Redacted returned an non-200 error code, code {code}: {resp & showPretty}|]
+      )
+    >>= assertM
+      span
+      ( \body ->
+          Json.parseStrict parser body
+            & first (Json.parseErrorTree "could not parse redacted response")
       )
 
 redactedApiRequestJson ::
@@ -1112,32 +1230,31 @@ redactedApiRequestJson ::
     HasField "action" p ByteString,
     HasField "actionArgs" p [(ByteString, Maybe ByteString)]
   ) =>
+  Otel.Span ->
   p ->
   Json.Parse ErrorTree a ->
   m a
-redactedApiRequestJson dat parse = do
-  redactedApiRequest dat
-    >>= ( Json.parseStrict parse
-            >>> first (Json.parseErrorTree "could not parse redacted response")
-            >>> assertM id
-        )
+redactedApiRequestJson span dat parser =
+  do
+    mkRedactedApiRequest dat
+    >>= httpJson span parser
 
-assertM :: (MonadThrow f) => (t -> Either ErrorTree a) -> t -> f a
-assertM f v = case f v of
+assertM :: (MonadThrow f, MonadIO f) => Otel.Span -> (t -> Either ErrorTree a) -> t -> f a
+assertM span f v = case f v of
   Right a -> pure a
-  Left err -> appThrowTree err
+  Left err -> appThrowTree span err
 
 runAppWith :: AppT IO a -> IO (Either TmpPg.StartError a)
 runAppWith appT = withTracer $ \tracer -> withDb $ \db -> do
   pgFormat <- readTools (label @"toolsEnvVar" "WHATCD_RESOLVER_TOOLS") (readTool "pg_format")
   let config = label @"logDatabaseQueries" LogDatabaseQueries
   pgConnPool <-
-    Pool.createPool
-      (Postgres.connectPostgreSQL (db & TmpPg.toConnectionString))
-      Postgres.close
-      {- number of stripes -} 5
-      {- unusedResourceOpenTime -} 10
-      {- max resources per stripe -} 10
+    Pool.newPool $
+      Pool.defaultPoolConfig
+        {- resource init action -} (Postgres.connectPostgreSQL (db & TmpPg.toConnectionString))
+        {- resource destruction -} Postgres.close
+        {- unusedResourceOpenTime -} 10
+        {- max resources across all stripes -} 20
   transmissionSessionId <- newEmptyMVar
   let newAppT = do
         logInfo [fmt|Running with config: {showPretty config}|]
@@ -1204,12 +1321,48 @@ data AppException = AppException Text
   deriving stock (Show)
   deriving anyclass (Exception)
 
-appThrowTree :: (MonadThrow m) => ErrorTree -> m a
-appThrowTree exc = throwM $ AppException $ prettyErrorTree exc
+-- | A specialized variant of @addEvent@ that records attributes conforming to
+-- the OpenTelemetry specification's
+-- <https://github.com/open-telemetry/opentelemetry-specification/blob/49c2f56f3c0468ceb2b69518bcadadd96e0a5a8b/specification/trace/semantic_conventions/exceptions.md semantic conventions>
+--
+-- @since 0.0.1.0
+recordException ::
+  ( MonadIO m,
+    HasField "message" r Text,
+    HasField "type_" r Text
+  ) =>
+  Otel.Span ->
+  r ->
+  m ()
+recordException span dat = liftIO $ do
+  callStack <- GHC.Stack.whoCreated dat.message
+  newEventTimestamp <- Just <$> Otel.getTimestamp
+  Otel.addEvent span $
+    Otel.NewEvent
+      { newEventName = "exception",
+        newEventAttributes =
+          HashMap.fromList
+            [ ("exception.type", Otel.toAttribute @Text dat.type_),
+              ("exception.message", Otel.toAttribute @Text dat.message),
+              ("exception.stacktrace", Otel.toAttribute @Text $ Text.unlines $ map stringToText callStack)
+            ],
+        ..
+      }
 
-orAppThrowTree :: (MonadThrow m) => Either ErrorTree a -> m a
-orAppThrowTree = \case
-  Left err -> appThrowTree err
+appThrowTree :: (MonadThrow m, MonadIO m) => Otel.Span -> ErrorTree -> m a
+appThrowTree span exc = do
+  let msg = prettyErrorTree exc
+  recordException
+    span
+    ( T2
+        (label @"type_" "AppException")
+        (label @"message" msg)
+    )
+  throwM $ AppException msg
+
+orAppThrowTree :: (MonadThrow m, MonadIO m) => Otel.Span -> Either ErrorTree a -> m a
+orAppThrowTree span = \case
+  Left err -> appThrowTree span err
   Right a -> pure a
 
 instance (MonadIO m) => MonadLogger (AppT m) where
