@@ -20,6 +20,24 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "4f541e53_21fc086a",
+        "filename": "tvix/nix-compat/src/store_path/mod.rs",
+        "patchSetId": 5
+      },
+      "lineNbr": 195,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-10-14T12:51:23Z",
+      "side": 1,
+      "message": "Oh, this is correct. Updated.",
+      "parentUuid": "1b4d8d81_70fbb252",
+      "revId": "ae1955661c5ae0af6edcc7d79e81b8e3813d8915",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "c762c051_5706fbdd",
         "filename": "tvix/store/protos/pathinfo.go",
         "patchSetId": 5
