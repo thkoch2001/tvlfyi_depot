@@ -7483,7 +7483,12 @@ rec {
         crateName = "tokio-listener";
         version = "0.2.1";
         edition = "2021";
-        sha256 = "1yx7vsiwqg0lzdwyavwwnnpkvnmlgsjivvwsqbz7k9jj00lmx1q5";
+        workspace_member = null;
+        src = pkgs.fetchgit {
+          url = "https://github.com/cbrewster/tokio-listener";
+          rev = "e7457b25e9e201f26eb51c851708c2162e4d0717";
+          sha256 = "0xckhz1n5vvpdmcmvgvyziwrbrgbycss4gsp4z687s41s1fznf6d";
+        };
         dependencies = [
           {
             name = "document-features";
@@ -7523,6 +7528,11 @@ rec {
             features = [ "net" "io-std" "time" "sync" ];
           }
           {
+            name = "tonic";
+            packageId = "tonic";
+            optional = true;
+          }
+          {
             name = "tracing";
             packageId = "tracing";
           }
@@ -7538,6 +7548,10 @@ rec {
             packageId = "tokio";
             features = [ "macros" "rt" "io-util" ];
           }
+          {
+            name = "tonic";
+            packageId = "tonic";
+          }
         ];
         features = {
           "clap" = [ "dep:clap" ];
@@ -7549,10 +7563,12 @@ rec {
           "serde_with" = [ "dep:serde_with" ];
           "socket2" = [ "dep:socket2" ];
           "socket_options" = [ "socket2" ];
+          "tonic" = [ "dep:tonic" ];
+          "tonic010" = [ "tonic" ];
           "unix_path_tools" = [ "nix" ];
           "user_facing_default" = [ "inetd" "unix" "unix_path_tools" "sd_listen" "socket_options" ];
         };
-        resolvedDefaultFeatures = [ "default" "hyper" "hyper014" "inetd" "nix" "sd_listen" "socket2" "socket_options" "unix" "unix_path_tools" "user_facing_default" ];
+        resolvedDefaultFeatures = [ "default" "hyper" "hyper014" "inetd" "nix" "sd_listen" "socket2" "socket_options" "tonic" "tonic010" "unix" "unix_path_tools" "user_facing_default" ];
       };
       "tokio-macros" = rec {
         crateName = "tokio-macros";
@@ -9003,6 +9019,7 @@ rec {
           {
             name = "tokio-listener";
             packageId = "tokio-listener";
+            features = [ "tonic010" ];
           }
           {
             name = "tokio-stream";

@@ -64,6 +64,7 @@ let
         ) [
         "fuse-backend-rs"
         "test-generator"
+        "tokio-listener"
         "wu-manber"
       ]);
   };
