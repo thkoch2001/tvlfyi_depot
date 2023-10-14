@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1e497d31_04e1bcf7",
+        "filename": "tvix/castore/src/import.rs",
+        "patchSetId": 7
+      },
+      "lineNbr": 63,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-10-14T19:39:25Z",
+      "side": 0,
+      "message": "can we restore some of the fields?",
+      "revId": "b1ab8075cd70b66b98622f5dc1b1d04cb60c7f79",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
