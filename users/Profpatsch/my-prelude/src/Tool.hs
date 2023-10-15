@@ -31,12 +31,12 @@ readTools env toolParser =
       Exit.die [fmt|Please set {env.toolsEnvVar} to a directory with all tools we need (see `Tools` in the code).|]
     Just toolsDir ->
       (Posix.fileExist toolsDir & ifTrueOrErr () [fmt|{env.toolsEnvVar} directory does not exist: {toolsDir}|])
-        & thenValidate
+        & thenValidateM
           ( \() ->
               (Posix.getFileStatus toolsDir <&> Posix.isDirectory)
                 & ifTrueOrErr () [fmt|{env.toolsEnvVar} does not point to a directory: {toolsDir}|]
           )
-        & thenValidate
+        & thenValidateM
           (\() -> toolParser.unToolParser toolsDir)
         <&> first (errorTree [fmt|Could not find all tools in {env.toolsEnvVar}|])
         >>= \case
@@ -61,14 +61,14 @@ readTool exeName = ToolParserT $ \toolDir -> do
   let exec = True
   Posix.fileExist toolPath
     & ifTrueOrErr () [fmt|Tool does not exist: {toolPath}|]
-    & thenValidate
+    & thenValidateM
       ( \() ->
           Posix.fileAccess toolPath read' write exec
             & ifTrueOrErr (Tool {..}) [fmt|Tool is not readable/executable: {toolPath}|]
       )
 
 -- | helper
-ifTrueOrErr :: Functor f => a -> Text -> f Bool -> f (Validation (NonEmpty Error) a)
+ifTrueOrErr :: (Functor f) => a -> Text -> f Bool -> f (Validation (NonEmpty Error) a)
 ifTrueOrErr true err io =
   io <&> \case
     True -> Success true
