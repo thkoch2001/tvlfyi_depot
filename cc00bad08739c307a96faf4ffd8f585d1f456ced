@@ -18,6 +18,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "6787e576_f239925f",
+        "filename": "tvix/nix-compat/src/nixhash/with_mode.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-10-15T08:05:09Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b2d6bcf7_0698b555",
+      "revId": "cc00bad08739c307a96faf4ffd8f585d1f456ced",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "9e9f31d3_97a9f8aa",
@@ -31,6 +49,24 @@
       "writtenOn": "2023-10-15T02:24:03Z",
       "side": 1,
       "message": "`algo_and_mode` is already a `\u0026str`, why is `as_ref()` needed?",
+      "revId": "cc00bad08739c307a96faf4ffd8f585d1f456ced",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d3d906c9_6b702ead",
+        "filename": "tvix/nix-compat/src/nixhash/with_mode.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-10-15T08:05:09Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "9e9f31d3_97a9f8aa",
       "revId": "cc00bad08739c307a96faf4ffd8f585d1f456ced",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
