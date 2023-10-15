@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "04f22ee8_b260d294",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2023-10-15T05:50:41Z",
+      "side": 1,
+      "message": "I\u0027m sending this out for review as an FYI but this is obviously Very Bad, but this basically shows how to plumb things together to talk to tvix-store using gRPC Web.\n\nLet me know if you\u0027d like me to actually polish this a bit.\n\nThe main thing I had to do was actually add a CORS layer, since the assumption is that the server serving the HTML file is not going to be the same as the one that serves the gRPC API, so we need CORS.",
+      "revId": "aaa9091df6028dedbb384236be0973947bf01430",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
