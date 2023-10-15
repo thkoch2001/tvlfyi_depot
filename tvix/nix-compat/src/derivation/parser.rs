@@ -123,38 +123,65 @@ fn parse_outputs(i: &[u8]) -> NomResult<&[u8], BTreeMap<String, Output>> {
     }
 }
 
-fn parse_input_derivations(i: &[u8]) -> NomResult<&[u8], BTreeMap<String, Vec<String>>> {
-    parse_kv::<Vec<String>, _>(aterm::parse_str_list)(i)
+// fn parse_input_derivations(i: &[u8]) -> NomResult<&[u8], BTreeMap<String, Vec<String>>> {
+fn parse_input_derivations(i: &[u8]) -> NomResult<&[u8], BTreeMap<String, BTreeSet<String>>> {
+    // parse_kv::<Vec<String>, _>(aterm::parse_str_list)(i)
+    parse_kv::<BTreeSet<String>, _>(map_res(aterm::parse_str_list, |outputs: Vec<String>| {
+        let mut output_names = BTreeSet::new();
+        for output_name in outputs.into_iter() {
+            if output_names.insert(output_name.clone()) {
+                return Err(nom::Err::Failure(NomError {
+                    input: i,
+                    code: ErrorKind::DuplicateInputDerivationOutputName(output_name),
+                }));
+            }
+        }
+        Ok(output_names)
+    }))(i)
 }
 
 pub fn parse_derivation(i: &[u8]) -> NomResult<&[u8], Derivation> {
-    use nom::Parser;
+    // use nom::Parser;
     preceded(
         tag(write::DERIVATION_PREFIX),
-        delimited(
-            // inside parens
-            nomchar('('),
-            // tuple requires all errors to be of the same type, so we need to be a
-            // bit verbose here wrapping generic IResult into [NomATermResult].
-            tuple((
-                // parse outputs
-                terminated(parse_outputs, nomchar(',')),
-                // // parse input derivations
-                terminated(parse_input_derivations, nomchar(',')),
-                // // parse input sources
-                |i| terminated(aterm::parse_str_list, nomchar(','))(i).map_err(into_nomerror),
-                // // parse system
-                |i| terminated(aterm::parse_string_field, nomchar(','))(i).map_err(into_nomerror),
-                // // parse builder
-                |i| terminated(aterm::parse_string_field, nomchar(','))(i).map_err(into_nomerror),
-                // // parse arguments
-                |i| terminated(aterm::parse_str_list, nomchar(','))(i).map_err(into_nomerror),
-                // parse environment
-                parse_kv::<BString, _>(aterm::parse_bstr_field),
-            )),
-            nomchar(')'),
-        )
-        .map(
+        map_res(
+            |i| {
+                delimited(
+                    // inside parens
+                    nomchar('('),
+                    // tuple requires all errors to be of the same type, so we need to be a
+                    // bit verbose here wrapping generic IResult into [NomATermResult].
+                    tuple((
+                        // parse outputs
+                        terminated(parse_outputs, nomchar(',')),
+                        // // parse input derivations
+                        terminated(parse_input_derivations, nomchar(',')),
+                        // // parse input sources
+                        |i| {
+                            terminated(aterm::parse_str_list, nomchar(','))(i)
+                                .map_err(into_nomerror)
+                        },
+                        // // parse system
+                        |i| {
+                            terminated(aterm::parse_string_field, nomchar(','))(i)
+                                .map_err(into_nomerror)
+                        },
+                        // // parse builder
+                        |i| {
+                            terminated(aterm::parse_string_field, nomchar(','))(i)
+                                .map_err(into_nomerror)
+                        },
+                        // // parse arguments
+                        |i| {
+                            terminated(aterm::parse_str_list, nomchar(','))(i)
+                                .map_err(into_nomerror)
+                        },
+                        // parse environment
+                        parse_kv::<BString, _>(aterm::parse_bstr_field),
+                    )),
+                    nomchar(')'),
+                )(i)
+            },
             |(
                 outputs,
                 input_derivations,
@@ -166,25 +193,41 @@ pub fn parse_derivation(i: &[u8]) -> NomResult<&[u8], Derivation> {
             )| {
                 // All values in input_derivations need to be converted from
                 // Vec<String> to BTreeSet<String>
-                let mut input_derivations_new: BTreeMap<_, BTreeSet<_>> = BTreeMap::new();
-                for (k, v) in input_derivations.into_iter() {
-                    let values_new: BTreeSet<_> = BTreeSet::from_iter(v.into_iter());
-                    input_derivations_new.insert(k, values_new);
-                    // TODO: actually check they're not duplicate in the parser side!
-                }
+                // let mut input_derivations_new: BTreeMap<_, BTreeSet<_>> = BTreeMap::new();
+                // for (k, v) in input_derivations.into_iter() {
+                //     let mut output_names = BTreeSet::new();
+                //     for output_name in v.into_iter() {
+                //         if output_names.insert(output_name.clone()) {
+                //             return Err(nom::Err::Failure(NomError {
+                //                 input: i,
+                //                 code: ErrorKind::DuplicateInputDerivationOutputName(k, output_name),
+                //             }));
+                //         }
+                //     }
+                //     input_derivations_new.insert(k, output_names);
+                // }
 
                 // Input sources need to be converted from Vec<_> to BTreeSet<_>
-                let input_sources_new: BTreeSet<_> = BTreeSet::from_iter(input_sources);
+                let mut input_sources_new: BTreeSet<_> = BTreeSet::new();
+                for input_source in input_sources.into_iter() {
+                    if input_sources_new.insert(input_source.clone()) {
+                        return Err(nom::Err::Failure(NomError {
+                            input: i,
+                            code: ErrorKind::DuplicateInputSource(input_source),
+                        }));
+                    }
+                }
 
-                Derivation {
+                Ok(Derivation {
                     arguments,
                     builder,
                     environment,
-                    input_derivations: input_derivations_new,
+                    // input_derivations: input_derivations_new,
+                    input_derivations,
                     input_sources: input_sources_new,
                     outputs,
                     system,
-                }
+                })
             },
         ),
     )(i)
