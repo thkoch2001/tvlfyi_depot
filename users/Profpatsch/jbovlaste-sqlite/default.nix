@@ -17,6 +17,7 @@ let
       pkgs.haskellPackages.pa-label
       pkgs.haskellPackages.pa-error-tree
       pkgs.haskellPackages.pa-field-parser
+      depot.users.Profpatsch.my-prelude
       pkgs.haskellPackages.foldl
       pkgs.haskellPackages.sqlite-simple
       pkgs.haskellPackages.xml-conduit

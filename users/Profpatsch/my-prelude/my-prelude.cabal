@@ -62,6 +62,7 @@ library
       Postgres.Decoder
       Postgres.MonadPostgres
       ValidationParseT
+      Parse
       Seconds
       Tool
 
