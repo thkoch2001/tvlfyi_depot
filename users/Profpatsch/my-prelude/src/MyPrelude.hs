@@ -213,7 +213,7 @@ import Validation
   )
 
 -- | Forward-applying 'contramap', like '&'/'$' and '<&>'/'<$>' but for '>$<'.
-(>&<) :: Contravariant f => f b -> (a -> b) -> f a
+(>&<) :: (Contravariant f) => f b -> (a -> b) -> f a
 (>&<) = flip contramap
 
 infixl 5 >&<
@@ -226,7 +226,7 @@ infixl 5 >&<
 -- for functions : (a -> b) -> (b -> c) -> (a -> c)
 -- for Folds: Fold a b -> Fold b c -> Fold a c
 -- @@
-(&>>) :: Semigroupoid s => s a b -> s b c -> s a c
+(&>>) :: (Semigroupoid s) => s a b -> s b c -> s a c
 (&>>) = flip Data.Semigroupoid.o
 
 -- like >>>
@@ -334,7 +334,7 @@ annotate err = \case
   Just a -> Right a
 
 -- | Map the same function over both sides of a Bifunctor (e.g. a tuple).
-both :: Bifunctor bi => (a -> b) -> bi a a -> bi b b
+both :: (Bifunctor bi) => (a -> b) -> bi a a -> bi b b
 both f = bimap f f
 
 -- | Find the first element for which pred returns `Just a`, and return the `a`.
@@ -348,7 +348,7 @@ both f = bimap f f
 -- Nothing
 -- >>> findMaybe (Text.Read.readMaybe @Int) ["foo", "34.40", "34", "abc"]
 -- Just 34
-findMaybe :: Foldable t => (a -> Maybe b) -> t a -> Maybe b
+findMaybe :: (Foldable t) => (a -> Maybe b) -> t a -> Maybe b
 findMaybe mPred list =
   let pred' x = Maybe.isJust $ mPred x
    in case Foldable.find pred' list of
@@ -455,13 +455,13 @@ traverseFold1 f xs = fold1 <$> traverse f xs
 --
 -- Uses the same trick as https://hackage.haskell.org/package/protolude-0.3.0/docs/src/Protolude.Error.html#error
 {-# WARNING todo "'todo' (undefined code) remains in code" #-}
-todo :: forall (r :: RuntimeRep). forall (a :: TYPE r). HasCallStack => a
+todo :: forall (r :: RuntimeRep). forall (a :: TYPE r). (HasCallStack) => a
 todo = raise# (errorCallWithCallStackException "This code was not yet implemented: TODO" ?callStack)
 
 -- | Convert an integer to a 'Natural' if possible
 --
 -- Named the same as the function from "GHC.Natural", but does not crash.
-intToNatural :: Integral a => a -> Maybe Natural
+intToNatural :: (Integral a) => a -> Maybe Natural
 intToNatural i =
   if i < 0
     then Nothing
@@ -560,7 +560,7 @@ inverseMap f =
 
 -- Sum {getSum = 6}
 
-ifTrue :: Monoid m => Bool -> m -> m
+ifTrue :: (Monoid m) => Bool -> m -> m
 ifTrue pred' m = if pred' then m else mempty
 
 -- | If the given @Maybe@ is @Just@, return the @m@, else return mempty.
@@ -570,18 +570,12 @@ ifTrue pred' m = if pred' then m else mempty
 -- >>> import Data.Monoid (Sum(..))
 --
 -- >>> :{ mconcat [
---   ifExists (Just [1]),
---   [2, 3, 4],
---   ifExists Nothing,
--- ]
--- :}
--- [1,2,3,4]
+-- unknown command '{'
 --
 -- Or any other Monoid:
 --
--- >>> mconcat [ Sum 1, ifExists (Just (Sum 2)), Sum 3 ]
-
+-- >>> mconcat [ Sum 1, ifExists Sum (Just 2), Sum 3 ]
 -- Sum {getSum = 6}
 
-ifExists :: Monoid m => Maybe m -> m
-ifExists = fold
+ifExists :: (Monoid m) => (a -> m) -> Maybe a -> m
+ifExists = foldMap
