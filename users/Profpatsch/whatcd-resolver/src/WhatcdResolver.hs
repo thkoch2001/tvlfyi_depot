@@ -452,7 +452,7 @@ renderJsonld = \case
       <dd><a href={obj.id_}>{obj.id_}</a></dd>
       <dt>Fields</dt>
       <dd>
-        {obj.previewFields & toDefinitionList renderJsonld}
+        {obj.previewFields & toDefinitionList schemaType renderJsonld}
         <div>
           <button
             hx-get={snippetHref obj.id_}
@@ -471,11 +471,11 @@ renderJsonld = \case
 
       schemaTypes xs =
         xs
-          <&> ( \t ->
-                  let href :: Text = [fmt|https://schema.org/{t}|] in [hsx|<a href={href} target="_blank">{t}</a>|]
-              )
+          <&> schemaType
           & List.intersperse ", "
           & mconcat
+      schemaType t =
+        let href :: Text = [fmt|https://schema.org/{t}|] in [hsx|<a href={href} target="_blank">{t}</a>|]
   JsonldArray arr ->
     toOrderedList renderJsonld arr
   JsonldField f -> mkVal f
@@ -569,7 +569,7 @@ mkVal = \case
   Json.Object obj ->
     obj
       & KeyMap.toMapText
-      & toDefinitionList mkVal
+      & toDefinitionList (Html.toHtml @Text) mkVal
 
 toOrderedList :: (Foldable t1) => (t2 -> Html) -> t1 t2 -> Html
 toOrderedList mkValFn arr =
@@ -584,11 +584,11 @@ toUnorderedList mkValFn arr =
     & Html.ul
 
 -- | Render a definition list from a Map
-toDefinitionList :: (t -> Html) -> Map Text t -> Html
-toDefinitionList mkValFn obj =
+toDefinitionList :: (Text -> Html) -> (t -> Html) -> Map Text t -> Html
+toDefinitionList mkKeyFn mkValFn obj =
   obj
     & Map.toList
-    & foldMap (\(k, v) -> Html.dt (Html.toHtml @Text k) <> Html.dd (mkValFn v))
+    & foldMap (\(k, v) -> Html.dt (mkKeyFn k) <> Html.dd (mkValFn v))
     & Html.dl
 
 -- | Render a table-like structure of json values as an HTML table.
