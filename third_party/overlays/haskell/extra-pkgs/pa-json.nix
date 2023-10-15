@@ -6,10 +6,9 @@
 , base64-bytestring
 , bytestring
 , containers
-, hspec-core
-, hspec-expectations
 , lib
 , pa-error-tree
+, pa-field-parser
 , pa-label
 , pa-prelude
 , scientific
@@ -19,8 +18,8 @@
 }:
 mkDerivation {
   pname = "pa-json";
-  version = "0.2.1.0";
-  sha256 = "d0c274fa38c05d38e9c2c15ee9dd4ff3ac369650dbc918c973863457110646c8";
+  version = "0.3.0.0";
+  sha256 = "45e79765e57e21400f3f3b1e86094473fac61d298618d7e34f6cad4988d8923b";
   libraryHaskellDepends = [
     aeson
     aeson-better-errors
@@ -29,9 +28,8 @@ mkDerivation {
     base64-bytestring
     bytestring
     containers
-    hspec-core
-    hspec-expectations
     pa-error-tree
+    pa-field-parser
     pa-label
     pa-prelude
     scientific

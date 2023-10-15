@@ -19,7 +19,6 @@ import Data.List.NonEmpty qualified as NonEmpty
 import Data.Map.Strict qualified as Map
 import Data.Pool (Pool)
 import Data.Pool qualified as Pool
-import Data.Scientific (Scientific)
 import Data.Text qualified as Text
 import Database.PostgreSQL.Simple (Binary (Binary), Only (..))
 import Database.PostgreSQL.Simple qualified as Postgres
@@ -364,7 +363,7 @@ getAndUpdateTransmissionTorrentsStatus knownTorrents = do
             )
             $ do
               torrentHash <- Json.keyLabel @"torrentHash" "hashString" Json.asText
-              percentDone <- Json.keyLabel @"percentDone" "percentDone" (Field.jsonParser $ Field.jsonNumber >>> scientificPercentage)
+              percentDone <- Json.keyLabel @"percentDone" "percentDone" (Field.toJsonParser $ Field.jsonNumber >>> scientificPercentage)
               pure (torrentHash, percentDone)
         )
         <&> Map.fromList
@@ -621,7 +620,7 @@ doTransmissionRequest span dat (req, parser) = do
               tag <-
                 Json.keyMay
                   "tag"
-                  (Field.jsonParser (Field.jsonNumber >>> Field.boundedScientificIntegral "tag too long"))
+                  (Field.toJsonParser (Field.jsonNumber >>> Field.boundedScientificIntegral "tag too long"))
               pure TransmissionResponse {..}
           )
         & first (Json.parseErrorTree "Cannot parse transmission RPC response")
@@ -747,7 +746,7 @@ redactedSearchAndInsert extraArguments = do
               Json.throwCustomError [fmt|Status was not "success", but {status}|]
             Json.key "response" $ do
               pages <-
-                Json.keyMay "pages" (Field.jsonParser (Field.mapError singleError $ Field.jsonNumber >>> Field.boundedScientificIntegral @Int "not an Integer" >>> Field.integralToNatural))
+                Json.keyMay "pages" (Field.toJsonParser (Field.mapError singleError $ Field.jsonNumber >>> Field.boundedScientificIntegral @Int "not an Integer" >>> Field.integralToNatural))
                   -- in case the field is missing, let’s assume there is only one page
                   <&> fromMaybe 1
               Json.key "results" $ do

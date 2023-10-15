@@ -10,12 +10,14 @@
 , pa-prelude
 , scientific
 , semigroupoids
+, template-haskell
 , text
+, time
 }:
 mkDerivation {
   pname = "pa-field-parser";
-  version = "0.1.0.1";
-  sha256 = "e7fd0369898b6993e6e2aaab43e7cc84d173dc2d21eadca1884d2e7a780ad71f";
+  version = "0.3.0.0";
+  sha256 = "528c2b6bf5ad6454861b059c7eb6924f4c32bcb5b8faa4c2389d9ddfd92fcd57";
   libraryHaskellDepends = [
     aeson
     aeson-better-errors
@@ -27,7 +29,9 @@ mkDerivation {
     pa-prelude
     scientific
     semigroupoids
+    template-haskell
     text
+    time
   ];
   homepage = "https://github.com/possehl-analytics/pa-hackage";
   description = "“Vertical” parsing of values";
