@@ -67,6 +67,16 @@ showContext (Context context) = context & fromMaybe [] & List.reverse & Text.int
 addContext :: Text -> Context -> Context
 addContext x (Context mxs) = Context (Just $ x : (mxs & fromMaybe []))
 
+mkParsePushContext :: Text -> ((Context, from) -> Either ErrorTree to) -> Parse from to
+mkParsePushContext toPush f = Parse $ \(ctx, from) -> case f (ctx, from) of
+  Right to -> Success (addContext toPush ctx, to)
+  Left err -> Failure $ singleton err
+
+mkParseNoContext :: (from -> Either ErrorTree to) -> Parse from to
+mkParseNoContext f = Parse $ \(ctx, from) -> case f from of
+  Right to -> Success (ctx, to)
+  Left err -> Failure $ singleton err
+
 -- | Accept only exactly the given value
 exactly :: (Eq from) => (from -> Text) -> from -> Parse from from
 exactly errDisplay from = Parse $ \(ctx, from') ->
