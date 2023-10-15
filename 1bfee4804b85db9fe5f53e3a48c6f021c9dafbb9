@@ -106,6 +106,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "6d7a71db_cbefcfe7",
+        "filename": "tvix/nix-compat/src/derivation/parser.rs",
+        "patchSetId": 5
+      },
+      "lineNbr": 173,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-10-15T16:36:55Z",
+      "side": 1,
+      "message": "Let\u0027s keep this a separate CL.",
+      "parentUuid": "69931637_b1aac397",
+      "revId": "1bfee4804b85db9fe5f53e3a48c6f021c9dafbb9",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "a8cc5b8b_f0d77fca",
@@ -137,6 +155,24 @@
       "side": 1,
       "message": "currently living in cl/9738, will be squashed with this once sorted out.",
       "parentUuid": "a8cc5b8b_f0d77fca",
+      "revId": "1bfee4804b85db9fe5f53e3a48c6f021c9dafbb9",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "48b7ec39_d0f67aec",
+        "filename": "tvix/nix-compat/src/derivation/parser.rs",
+        "patchSetId": 5
+      },
+      "lineNbr": 177,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-10-15T16:36:55Z",
+      "side": 1,
+      "message": "Let\u0027s keep this a separate CL.",
+      "parentUuid": "26d8a06f_7785ea63",
       "revId": "1bfee4804b85db9fe5f53e3a48c6f021c9dafbb9",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
