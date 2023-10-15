@@ -6,12 +6,16 @@
 module WhatcdResolver where
 
 import Control.Category qualified as Cat
+import Control.Monad.Catch.Pure (runCatch)
+import Control.Monad.Error (catchError)
+import Control.Monad.Except (runExcept)
 import Control.Monad.Logger qualified as Logger
 import Control.Monad.Logger.CallStack
 import Control.Monad.Reader
 import Data.Aeson qualified as Json
 import Data.Aeson.BetterErrors qualified as Json
 import Data.Aeson.KeyMap qualified as KeyMap
+import Data.ByteString.Builder qualified as Builder
 import Data.Error.Tree
 import Data.HashMap.Strict qualified as HashMap
 import Data.List qualified as List
@@ -19,13 +23,15 @@ import Data.List.NonEmpty qualified as NonEmpty
 import Data.Map.Strict qualified as Map
 import Data.Pool (Pool)
 import Data.Pool qualified as Pool
+import Data.Set (Set)
+import Data.Set qualified as Set
 import Data.Text qualified as Text
 import Database.PostgreSQL.Simple (Binary (Binary), Only (..))
 import Database.PostgreSQL.Simple qualified as Postgres
 import Database.PostgreSQL.Simple.SqlQQ (sql)
 import Database.PostgreSQL.Simple.Types (PGArray (PGArray))
 import Database.Postgres.Temp qualified as TmpPg
-import FieldParser (FieldParser' (..))
+import FieldParser (FieldParser, FieldParser' (..))
 import FieldParser qualified as Field
 import GHC.Records (HasField (..))
 import GHC.Stack qualified
@@ -35,16 +41,21 @@ import Json.Enc (Enc)
 import Json.Enc qualified as Enc
 import Label
 import Multipart2 qualified as Multipart
+import Network.HTTP.Client.Conduit qualified as Http
 import Network.HTTP.Conduit qualified as Http
 import Network.HTTP.Simple qualified as Http
 import Network.HTTP.Types
 import Network.HTTP.Types qualified as Http
+import Network.HTTP.Types.URI qualified as Url
+import Network.URI qualified
 import Network.Wai qualified as Wai
 import Network.Wai.Handler.Warp qualified as Warp
 import Network.Wai.Parse qualified as Wai
 import OpenTelemetry.Trace qualified as Otel hiding (getTracer, inSpan, inSpan')
 import OpenTelemetry.Trace.Core qualified as Otel hiding (inSpan, inSpan')
 import OpenTelemetry.Trace.Monad qualified as Otel
+import Parse (Parse)
+import Parse qualified
 import PossehlAnalyticsPrelude
 import Postgres.Decoder qualified as Dec
 import Postgres.MonadPostgres
@@ -119,9 +130,12 @@ htmlUi = do
               ( do
                   label @"torrentId" <$> Multipart.field "torrent-id" ((Field.utf8 >>> Field.signedDecimal >>> Field.bounded @Int "int"))
               )
+      let parseQueryArgs span parser =
+            Parse.runParse "Unable to find the right request query arguments" (lmap Wai.queryString parser) req
+              & assertM span id
 
       case req & Wai.pathInfo & Text.intercalate "/" of
-        "" -> h "/" (\_span -> mainHtml)
+        "" -> h "/" mainHtml
         "snips/redacted/search" -> do
           h "/snips/redacted/search" $ \span -> do
             dat <-
@@ -190,14 +204,27 @@ htmlUi = do
             case status of
               Nothing -> [hsx|ERROR unknown|]
               Just _torrent -> [hsx|Running|]
-        otherRoute -> h [fmt|/{otherRoute}|] (\_span -> mainHtml)
+        "snips/jsonld/render" ->
+          h "/snips/jsonld/render" $ \span -> do
+            qry <-
+              parseQueryArgs
+                span
+                ( label @"target"
+                    <$> ( singleQueryArgument "target" Field.utf8
+                            >>> textToHttpClientRequest
+                        )
+                )
+            jsonld <- httpGetJsonLd span (qry.target)
+            pure $ renderJsonld jsonld
+        otherRoute -> h [fmt|/{otherRoute}|] mainHtml
   where
     everySecond :: Text -> Enc -> Html -> Html
     everySecond call extraData innerHtml = [hsx|<div hx-trigger="every 1s" hx-swap="outerHTML" hx-post={call} hx-vals={Enc.encToBytesUtf8 extraData}>{innerHtml}</div>|]
 
-    mainHtml = runTransaction $ do
+    mainHtml span = runTransaction $ do
+      jsonld <- httpGetJsonLd span "https://musicbrainz.org/work/92000fd4-d304-406d-aeb4-6bdbeed318ec" <&> renderJsonld
       bestTorrentsTable <- getBestTorrentsTable
-      transmissionTorrentsTable <- lift @Transaction getTransmissionTorrentsTable
+      -- transmissionTorrentsTable <- lift @Transaction getTransmissionTorrentsTable
       pure $
         Html.docTypeHtml
           [hsx|
@@ -207,8 +234,16 @@ htmlUi = do
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz" crossorigin="anonymous"></script>
         <script src="https://unpkg.com/htmx.org@1.9.2" integrity="sha384-L6OqL9pRWyyFU3+/bjdSri+iIphTN/bvYyM37tICVyOJkWZLpP2vGn6VUEXgzg6h" crossorigin="anonymous"></script>
+        <style>
+          dl {
+            margin: 1em;
+            padding: 0.5em 1em;
+            border: thin solid;
+          }
+        </style>
       </head>
       <body>
+        {jsonld}
         <form
           hx-post="/snips/redacted/search"
           hx-target="#redacted-search-results">
@@ -217,16 +252,65 @@ htmlUi = do
             id="redacted-search"
             type="text"
             name="redacted-search" />
-          <button type="submit">Search</button>
+          <button type="submit" hx-disabled-elt="this">Search</button>
+          <div class="htmx-indicator">Search running!</div>
         </form>
         <div id="redacted-search-results">
           {bestTorrentsTable}
         </div>
-        <div id="transmission-torrents">
-          {transmissionTorrentsTable}
-        </div>
       </body>
     |]
+
+singleQueryArgument :: Text -> FieldParser ByteString to -> Parse Http.Query to
+singleQueryArgument field inner =
+  Parse.mkParsePushContext
+    field
+    ( \(ctx, qry) -> case qry
+        & mapMaybe
+          ( \(k, v) ->
+              if k == (field & textToBytesUtf8)
+                then Just v
+                else Nothing
+          ) of
+        [] -> Left [fmt|No such query argument "{field}", at {ctx & Parse.showContext}|]
+        [Nothing] -> Left [fmt|Expected one query argument with a value, but "{field}" was a query flag|]
+        [Just one] -> Right one
+        more -> Left [fmt|More than one value for query argument "{field}": {show more}, at {ctx & Parse.showContext}|]
+    )
+    >>> Parse.fieldParser inner
+
+-- | Make sure we can parse the given Text into a Request via a URI.
+--
+-- This tries to work around the horrible, horrible interface in Http.Client.
+textToHttpClientRequest :: Parse Text Http.Request
+textToHttpClientRequest =
+  Parse.fieldParser
+    ( FieldParser $ \text ->
+        text
+          & textToString
+          & Network.URI.parseURI
+          & annotate [fmt|Cannot parse this as a URL: "{text}"|]
+    )
+    >>> ( Parse.mkParseNoContext
+            ( \url ->
+                (url & Http.requestFromURI)
+                  & runCatch
+                  & first (checkException @Http.HttpException)
+                  & \case
+                    Left (Right (Http.InvalidUrlException urlText reason)) ->
+                      Left [fmt|Unable to set the url "{urlText}" as request URL, reason: {reason}|]
+                    Left (Right exc@(Http.HttpExceptionRequest _ _)) ->
+                      Left [fmt|Weird! Should not get a HttpExceptionRequest when parsing an URL (bad library design), was {exc & displayException}|]
+                    Left (Left someExc) ->
+                      Left [fmt|Weird! Should not get anyhting but a HttpException when parsing an URL (bad library design), was {someExc & displayException}|]
+                    Right req -> pure req
+            )
+        )
+
+checkException :: (Exception b) => SomeException -> Either SomeException b
+checkException some = case fromException some of
+  Nothing -> Left some
+  Just e -> Right e
 
 snipsRedactedSearch ::
   ( MonadLogger m,
@@ -324,6 +408,78 @@ getBestTorrentsTable = do
         </table>
       |]
 
+data Jsonld
+  = JsonldObject JsonldObject
+  | JsonldArray [Jsonld]
+  | JsonldField Json.Value
+  deriving stock (Show, Eq)
+
+data JsonldObject = JsonldObject'
+  { type_ :: Set Text,
+    id_ :: Text,
+    previewFields :: Map Text Jsonld
+  }
+  deriving stock (Show, Eq)
+
+jsonldParser :: (Monad m) => Json.ParseT err m Jsonld
+jsonldParser =
+  Json.asValue >>= \cur -> do
+    if
+        | Json.Object _ <- cur -> do
+            typeMay <- Json.keyMay "@type" $ (Json.asArraySet Json.asText Json.<|> (Set.singleton <$> Json.asText))
+            idMay <- Json.keyMay "@id" $ Json.asText
+            if
+                | Just type_ <- typeMay,
+                  Just id_ <- idMay -> do
+                    previewFields <-
+                      Json.asObjectMap jsonldParser
+                        <&> Map.delete "@type"
+                        <&> Map.delete "@id"
+                    pure $ JsonldObject $ JsonldObject' {..}
+                | otherwise -> pure $ JsonldField cur
+        | Json.Array _ <- cur -> do
+            JsonldArray <$> Json.eachInArray jsonldParser
+        | otherwise -> pure $ JsonldField cur
+
+renderJsonld :: Jsonld -> Html
+renderJsonld = \case
+  JsonldObject obj ->
+    [hsx|
+    <dl>
+      <dt>Type</dt>
+      <dd>{obj.type_ & toList & schemaTypes}</dd>
+      <dt>Url</dt>
+      <dd><a href={obj.id_}>{obj.id_}</a></dd>
+      <dt>Fields</dt>
+      <dd>
+        {obj.previewFields & toDefinitionList renderJsonld}
+        <div>
+          <button
+            hx-get={snippetHref obj.id_}
+            hx-target="closest dl"
+            hx-swap="outerHTML"
+          >more fields …</button>
+        </div>
+      </dd>
+    </dl>
+  |]
+    where
+      snippetHref target =
+        Builder.toLazyByteString $
+          "/snips/jsonld/render"
+            <> Url.renderQueryBuilder True [("target", Just (textToBytesUtf8 target))]
+
+      schemaTypes xs =
+        xs
+          <&> ( \t ->
+                  let href :: Text = [fmt|https://schema.org/{t}|] in [hsx|<a href={href} target="_blank">{t}</a>|]
+              )
+          & List.intersperse ", "
+          & mconcat
+  JsonldArray arr ->
+    toOrderedList renderJsonld arr
+  JsonldField f -> mkVal f
+
 -- | A value between (inclusive) 0% and (inclusive) 100%. Precise to 1% steps.
 newtype Percentage = Percentage {unPercentage :: Int}
   deriving stock (Show)
@@ -409,16 +565,31 @@ mkVal = \case
   Json.Bool True -> [hsx|<em>true</em>|]
   Json.Bool False -> [hsx|<em>false</em>|]
   Json.Null -> [hsx|<em>null</em>|]
-  Json.Array arr ->
-    arr
-      & foldMap (\el -> Html.li $ mkVal el)
-      & Html.ol
+  Json.Array arr -> toOrderedList mkVal arr
   Json.Object obj ->
     obj
       & KeyMap.toMapText
-      & Map.toList
-      & foldMap (\(k, v) -> Html.dt (Html.toHtml @Text k) <> Html.dd (mkVal v))
-      & Html.dl
+      & toDefinitionList mkVal
+
+toOrderedList :: (Foldable t1) => (t2 -> Html) -> t1 t2 -> Html
+toOrderedList mkValFn arr =
+  arr
+    & foldMap (\el -> Html.li $ mkValFn el)
+    & Html.ol
+
+toUnorderedList :: (Foldable t1) => (t2 -> Html) -> t1 t2 -> Html
+toUnorderedList mkValFn arr =
+  arr
+    & foldMap (\el -> Html.li $ mkValFn el)
+    & Html.ul
+
+-- | Render a definition list from a Map
+toDefinitionList :: (t -> Html) -> Map Text t -> Html
+toDefinitionList mkValFn obj =
+  obj
+    & Map.toList
+    & foldMap (\(k, v) -> Html.dt (Html.toHtml @Text k) <> Html.dd (mkValFn v))
+    & Html.dl
 
 -- | Render a table-like structure of json values as an HTML table.
 toTable :: [[(Text, Json.Value)]] -> Html
@@ -1151,6 +1322,17 @@ mkRedactedApiRequest dat = do
       & Http.setQueryString (("action", Just dat.action) : dat.actionArgs)
       & Http.setRequestHeader "Authorization" [authKey]
 
+httpGetJsonLd :: (MonadIO m, MonadThrow m) => Otel.Span -> Http.Request -> m Jsonld
+httpGetJsonLd span req = do
+  httpJson
+    (mkOptional (label @"contentType" "application/ld+json"))
+    span
+    jsonldParser
+    ( req
+        & Http.setRequestMethod "GET"
+        & Http.setRequestHeader "Accept" ["application/ld+json"]
+    )
+
 httpTorrent ::
   ( MonadIO m,
     MonadThrow m
@@ -1183,15 +1365,30 @@ httpTorrent span req =
               | code <- statusCode -> Left [fmt|Redacted returned an non-200 error code, code {code}: {resp & showPretty}|]
       )
 
+newtype Optional a = OptionalInternal (Maybe a)
+
+mkOptional :: a -> Optional a
+mkOptional defaultValue = OptionalInternal $ Just defaultValue
+
+defaults :: Optional a
+defaults = OptionalInternal Nothing
+
+instance HasField "withDefault" (Optional a) (a -> a) where
+  getField (OptionalInternal m) defaultValue = case m of
+    Nothing -> defaultValue
+    Just a -> a
+
 httpJson ::
   ( MonadIO m,
     MonadThrow m
   ) =>
+  (Optional (Label "contentType" ByteString)) ->
   Otel.Span ->
   Json.Parse ErrorTree b ->
   Http.Request ->
   m b
-httpJson span parser req =
+httpJson opts span parser req = do
+  let opts' = opts.withDefault (label @"contentType" "application/json")
   Http.httpBS req
     >>= assertM
       span
@@ -1205,15 +1402,16 @@ httpJson span parser req =
                   <&> (\(ct, _mimeAttributes) -> ct)
           if
               | statusCode == 200,
-                Just "application/json" <- contentType ->
+                Just ct <- contentType,
+                ct == opts'.contentType ->
                   Right $ (resp & Http.responseBody)
               | statusCode == 200,
                 Just otherType <- contentType ->
-                  Left [fmt|Redacted returned a non-json body, with content-type "{otherType}"|]
+                  Left [fmt|Server returned a non-json body, with content-type "{otherType}"|]
               | statusCode == 200,
                 Nothing <- contentType ->
-                  Left [fmt|Redacted returned a body with unspecified content type|]
-              | code <- statusCode -> Left [fmt|Redacted returned an non-200 error code, code {code}: {resp & showPretty}|]
+                  Left [fmt|Server returned a body with unspecified content type|]
+              | code <- statusCode -> Left [fmt|Server returned an non-200 error code, code {code}: {resp & showPretty}|]
       )
     >>= assertM
       span
@@ -1236,7 +1434,7 @@ redactedApiRequestJson ::
 redactedApiRequestJson span dat parser =
   do
     mkRedactedApiRequest dat
-    >>= httpJson span parser
+    >>= httpJson defaults span parser
 
 assertM :: (MonadThrow f, MonadIO f) => Otel.Span -> (t -> Either ErrorTree a) -> t -> f a
 assertM span f v = case f v of
