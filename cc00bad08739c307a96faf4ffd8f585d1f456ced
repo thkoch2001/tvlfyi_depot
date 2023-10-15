@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b2d6bcf7_0698b555",
+        "filename": "tvix/nix-compat/src/nixhash/with_mode.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2023-10-15T02:24:03Z",
+      "side": 1,
+      "message": "Missing a `/` for the doc comment",
+      "revId": "cc00bad08739c307a96faf4ffd8f585d1f456ced",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9e9f31d3_97a9f8aa",
+        "filename": "tvix/nix-compat/src/nixhash/with_mode.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2023-10-15T02:24:03Z",
+      "side": 1,
+      "message": "`algo_and_mode` is already a `\u0026str`, why is `as_ref()` needed?",
+      "revId": "cc00bad08739c307a96faf4ffd8f585d1f456ced",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
