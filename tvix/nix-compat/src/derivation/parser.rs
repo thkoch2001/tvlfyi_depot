@@ -123,8 +123,41 @@ fn parse_outputs(i: &[u8]) -> NomResult<&[u8], BTreeMap<String, Output>> {
     }
 }
 
-fn parse_input_derivations(i: &[u8]) -> NomResult<&[u8], BTreeMap<String, Vec<String>>> {
-    parse_kv::<Vec<String>, _>(aterm::parse_str_list)(i)
+fn parse_input_derivations(i: &[u8]) -> NomResult<&[u8], BTreeMap<String, BTreeSet<String>>> {
+    let (i, input_derivations_list) = parse_kv::<Vec<String>, _>(aterm::parse_str_list)(i)?;
+
+    let mut input_derivations: BTreeMap<String, BTreeSet<String>> = BTreeMap::new();
+
+    for (input_derivation, output_names) in input_derivations_list {
+        let mut new_output_names = BTreeSet::new();
+        for output_name in output_names.into_iter() {
+            if !new_output_names.insert(output_name.clone()) {
+                return Err(nom::Err::Failure(NomError {
+                    input: i,
+                    code: ErrorKind::DuplicateInputDerivationOutputName(output_name.to_string()),
+                }));
+            }
+        }
+        input_derivations.insert(input_derivation, new_output_names);
+    }
+
+    Ok((i, input_derivations))
+}
+
+fn parse_input_sources(i: &[u8]) -> NomResult<&[u8], BTreeSet<String>> {
+    let (i, input_sources_lst) = aterm::parse_str_list(i).map_err(into_nomerror)?;
+
+    let mut input_sources: BTreeSet<_> = BTreeSet::new();
+    for input_source in input_sources_lst.into_iter() {
+        if !input_sources.insert(input_source.clone()) {
+            return Err(nom::Err::Failure(NomError {
+                input: i,
+                code: ErrorKind::DuplicateInputSource(input_source),
+            }));
+        }
+    }
+
+    Ok((i, input_sources))
 }
 
 pub fn parse_derivation(i: &[u8]) -> NomResult<&[u8], Derivation> {
@@ -142,7 +175,7 @@ pub fn parse_derivation(i: &[u8]) -> NomResult<&[u8], Derivation> {
                 // // parse input derivations
                 terminated(parse_input_derivations, nomchar(',')),
                 // // parse input sources
-                |i| terminated(aterm::parse_str_list, nomchar(','))(i).map_err(into_nomerror),
+                terminated(parse_input_sources, nomchar(',')),
                 // // parse system
                 |i| terminated(aterm::parse_string_field, nomchar(','))(i).map_err(into_nomerror),
                 // // parse builder
@@ -164,24 +197,12 @@ pub fn parse_derivation(i: &[u8]) -> NomResult<&[u8], Derivation> {
                 arguments,
                 environment,
             )| {
-                // All values in input_derivations need to be converted from
-                // Vec<String> to BTreeSet<String>
-                let mut input_derivations_new: BTreeMap<_, BTreeSet<_>> = BTreeMap::new();
-                for (k, v) in input_derivations.into_iter() {
-                    let values_new: BTreeSet<_> = BTreeSet::from_iter(v.into_iter());
-                    input_derivations_new.insert(k, values_new);
-                    // TODO: actually check they're not duplicate in the parser side!
-                }
-
-                // Input sources need to be converted from Vec<_> to BTreeSet<_>
-                let input_sources_new: BTreeSet<_> = BTreeSet::from_iter(input_sources);
-
                 Derivation {
                     arguments,
                     builder,
                     environment,
-                    input_derivations: input_derivations_new,
-                    input_sources: input_sources_new,
+                    input_derivations,
+                    input_sources,
                     outputs,
                     system,
                 }

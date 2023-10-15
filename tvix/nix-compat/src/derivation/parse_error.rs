@@ -11,6 +11,10 @@ pub enum ErrorKind {
     // duplicate key in map
     DuplicateMapKey(String),
 
+    DuplicateInputDerivationOutputName(String),
+
+    DuplicateInputSource(String),
+
     // Digest parsing error
     NixHashError(nixhash::Error),
 
