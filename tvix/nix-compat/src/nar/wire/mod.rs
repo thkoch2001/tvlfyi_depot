@@ -44,3 +44,20 @@ fn tokens() {
         assert_eq!(tok, token(xs));
     }
 }
+
+pub use tag::Tag;
+mod tag;
+
+tag::make! {
+    pub enum Node[16] {
+        Sym = TOK_SYM,
+        Reg = TOK_REG,
+        Exe = TOK_EXE,
+        Dir = TOK_DIR,
+    }
+
+    pub enum Entry[0] {
+        None = TOK_PAR,
+        Some = TOK_ENT,
+    }
+}
