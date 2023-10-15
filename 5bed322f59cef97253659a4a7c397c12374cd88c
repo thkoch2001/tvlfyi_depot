@@ -16,6 +16,24 @@
       "message": "Is this related to this change? I don\u0027t see any new references to `lazy_static`",
       "revId": "5bed322f59cef97253659a4a7c397c12374cd88c",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7c2063ff_017917b2",
+        "filename": "tvix/nix-compat/Cargo.toml",
+        "patchSetId": 2
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-10-15T08:05:09Z",
+      "side": 1,
+      "message": "This should have gone into cl/9728, fixed.",
+      "parentUuid": "947b05bc_12a29a9a",
+      "revId": "5bed322f59cef97253659a4a7c397c12374cd88c",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
