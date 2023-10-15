@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<script src="protobundle.js"></script>
+<pre id="log"></pre>
+<script>
+(function() {
+  const log$ = document.querySelector('#log');
+  const log = (ln) => {
+    const now = new Date();
+    log$.innerText += `[${now.toLocaleTimeString('en-GB')}] ${ln}\n`;
+  };
+
+  const client = new proto.tvix.store.v1.PathInfoServiceClient('http://localhost:8000');
+  const req = new proto.tvix.store.v1.ListPathInfoRequest();
+  log(`{request}:\n ${JSON.stringify(req.toObject())}`);
+  const stream = client.list(req);
+  stream.on('data', (response) => {
+    console.log('data', response);
+    log(`{data}:\n ${JSON.stringify(response.toObject())}`);
+  });
+  stream.on('status', (status) => {
+    console.log('status', status);
+    log(`{status}: ${JSON.stringify(status)})`);
+  });
+  stream.on('end', (end) => {
+    console.log('end!');
+    log(`{end}`);
+  });
+})()
+</script>

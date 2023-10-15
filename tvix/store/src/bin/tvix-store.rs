@@ -153,6 +153,11 @@ fn default_threads() -> usize {
     1
 }
 
+const DEFAULT_EXPOSED_HEADERS: [&str; 3] =
+    ["grpc-status", "grpc-message", "grpc-status-details-bin"];
+const DEFAULT_ALLOW_HEADERS: [&str; 4] =
+    ["x-grpc-web", "content-type", "x-user-agent", "grpc-timeout"];
+
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
     let cli = Cli::parse();
@@ -209,6 +214,24 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
                         let server = Server::builder();
                         server
                             .accept_http1(true)
+                            .layer(tower_http::cors::CorsLayer::new()
+                                   .allow_origin(tower_http::cors::AllowOrigin::mirror_request())
+                                   .allow_credentials(true)
+                                   .max_age(std::time::Duration::from_secs(24*60*60))
+                                   .expose_headers(
+                                      DEFAULT_EXPOSED_HEADERS
+                                          .iter()
+                                          .cloned()
+                                          .map(http::header::HeaderName::from_static)
+                                          .collect::<Vec<http::header::HeaderName>>(),
+                                   )
+                                   .allow_headers(
+                                      DEFAULT_ALLOW_HEADERS
+                                          .iter()
+                                          .cloned()
+                                          .map(http::header::HeaderName::from_static)
+                                          .collect::<Vec<http::header::HeaderName>>(),
+                                   ))
                             .layer(tonic_web::GrpcWebLayer::new())
                     } else {
                         Server::builder()
