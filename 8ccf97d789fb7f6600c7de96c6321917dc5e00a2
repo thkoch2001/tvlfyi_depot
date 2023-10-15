@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1624603b_1d70c377",
+        "filename": "tvix/nix-compat/src/derivation/parser.rs",
+        "patchSetId": 5
+      },
+      "lineNbr": 173,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-10-15T16:37:14Z",
+      "side": 0,
+      "message": "TODO: add regression tests for the two duplicates",
+      "revId": "8ccf97d789fb7f6600c7de96c6321917dc5e00a2",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
