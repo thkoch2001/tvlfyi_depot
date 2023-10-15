@@ -209,6 +209,24 @@
       "parentUuid": "a5d31450_499ea1f0",
       "revId": "5132653880888a3c89c5cc25818a1958e54b63f9",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1227a6ac_549bc114",
+        "filename": "tvix/castore/src/import.rs",
+        "patchSetId": 4
+      },
+      "lineNbr": 227,
+      "author": {
+        "id": 1000073
+      },
+      "writtenOn": "2023-10-15T11:07:46Z",
+      "side": 1,
+      "message": "Hm… Sounds good. As long as `contents` is not naked somewhere else (i.e. unpinned), there\u0027s no problem. The good thing is that `contents` is not a reference, it\u0027s a move. As long as the implementation of the stream does",
+      "parentUuid": "a5d31450_499ea1f0",
+      "revId": "5132653880888a3c89c5cc25818a1958e54b63f9",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
