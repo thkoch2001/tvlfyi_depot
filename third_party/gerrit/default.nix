@@ -23,7 +23,7 @@ let
     runScript = "/bin/bazel-run";
   };
   bazel = bazelTop // { override = x: bazelTop; };
-  version = "3.7.0-rc4";
+  version = "3.8.2";
 in
 pkgs.lib.makeOverridable pkgs.buildBazelPackage {
   pname = "gerrit";
@@ -31,9 +31,9 @@ pkgs.lib.makeOverridable pkgs.buildBazelPackage {
 
   src = pkgs.fetchgit {
     url = "https://gerrit.googlesource.com/gerrit";
-    rev = "3e445c7833c4acf49f1171fe4c82ceb32e93c780";
+    rev = "67500d39b5bceee8f3ae8b9d605f01428aacb740";
     branchName = "v${version}";
-    sha256 = "sha256:002aw2bfifyla66v8khyiq4m9qj6ahs6r1dzb5kjk8xqpf6c6q9p";
+    sha256 = "sha256:06bmzbcb9717s4b016kcbn8nr9pgaz04i8bnzg7ybkbdwpl8vxvl";
     fetchSubmodules = true;
   };
 
@@ -55,7 +55,7 @@ pkgs.lib.makeOverridable pkgs.buildBazelPackage {
   fetchConfigured = true;
 
   fetchAttrs = {
-    sha256 = "sha256:1a31bkl723dyd906h0m54j2mnvgs82j3xr85ca07g35vncmh3lm2";
+    sha256 = "sha256:1syy44n1nvrlypa8jv83yzf0miwmsn8bvh97js6v5ygllx04mvf1";
     preBuild = ''
       rm .bazelversion
     '';
