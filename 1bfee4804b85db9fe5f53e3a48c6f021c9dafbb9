@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d51cc8c3_f0507b43",
+        "filename": "tvix/nix-compat/src/derivation/mod.rs",
+        "patchSetId": 5
+      },
+      "lineNbr": 93,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-10-15T09:29:39Z",
+      "side": 1,
+      "message": "it passes",
+      "revId": "1bfee4804b85db9fe5f53e3a48c6f021c9dafbb9",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b3fb920e_305cbfeb",
+        "filename": "tvix/nix-compat/src/derivation/parse_error.rs",
+        "patchSetId": 5
+      },
+      "lineNbr": 3,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-10-15T09:29:39Z",
+      "side": 1,
+      "message": "Not so sure about that anymore. Derivation doesn\u0027t allow you to express these errors, these can only happen when parsing ATerm, so it should probably stay separate.",
+      "revId": "1bfee4804b85db9fe5f53e3a48c6f021c9dafbb9",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "776d9799_00b39176",
+        "filename": "tvix/nix-compat/src/derivation/parser.rs",
+        "patchSetId": 5
+      },
+      "lineNbr": 173,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-10-15T09:29:39Z",
+      "side": 1,
+      "message": "We shouldn\u0027t swallow duplicates here.",
+      "revId": "1bfee4804b85db9fe5f53e3a48c6f021c9dafbb9",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a8cc5b8b_f0d77fca",
+        "filename": "tvix/nix-compat/src/derivation/parser.rs",
+        "patchSetId": 5
+      },
+      "lineNbr": 177,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-10-15T09:29:39Z",
+      "side": 1,
+      "message": "We shouldn\u0027t swallow duplicates here.",
+      "revId": "1bfee4804b85db9fe5f53e3a48c6f021c9dafbb9",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
