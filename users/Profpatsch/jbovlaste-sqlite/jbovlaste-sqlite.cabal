@@ -62,6 +62,7 @@ executable jbovlaste-sqlite
         pa-label,
         pa-error-tree,
         pa-field-parser,
+        my-prelude,
         containers,
         selective,
         semigroupoids,
