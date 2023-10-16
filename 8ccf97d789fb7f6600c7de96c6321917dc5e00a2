@@ -16,6 +16,24 @@
       "message": "TODO: add regression tests for the two duplicates",
       "revId": "8ccf97d789fb7f6600c7de96c6321917dc5e00a2",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0e834593_1bfdde1a",
+        "filename": "tvix/nix-compat/src/derivation/parser.rs",
+        "patchSetId": 5
+      },
+      "lineNbr": 173,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-10-16T10:46:28Z",
+      "side": 0,
+      "message": "Done",
+      "parentUuid": "1624603b_1d70c377",
+      "revId": "8ccf97d789fb7f6600c7de96c6321917dc5e00a2",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
