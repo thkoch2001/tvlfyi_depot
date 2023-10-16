@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ba9787ba_81861f6b",
+        "filename": "tvix/nix-compat/src/derivation/parser.rs",
+        "patchSetId": 8
+      },
+      "lineNbr": 133,
+      "author": {
+        "id": 1000073
+      },
+      "writtenOn": "2023-10-16T11:50:56Z",
+      "side": 1,
+      "message": "so here\u0027s the thing, do you use `output_name` somewhere else? It seems like to me no, so you should move it and consume it in the insertion process, this idea holds true also for the rest of parsing.\nThe problem I suppose is that you are iterating over the iterable and you cannot really easily move stuff.\n\nThe trick here is to use `std::mem::take` I believe: https://doc.rust-lang.org/std/mem/fn.take.html",
+      "revId": "bba16539c7b427695f1708e1d8c3f7c0daf0bb01",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
