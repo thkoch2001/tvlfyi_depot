@@ -4,9 +4,7 @@
 let
   # crate override for crates that need protobuf
   protobufDep = prev: (prev.nativeBuildInputs or [ ]) ++ [ pkgs.protobuf ];
-  iconvDarwinDep = lib.optionals pkgs.stdenv.isDarwin [ pkgs.libiconv ];
-  # fuse-backend-rs uses DiskArbitration framework to handle mount/unmount on Darwin
-  diskArbitrationDep = lib.optionals pkgs.stdenv.isDarwin [ pkgs.buildPackages.darwin.apple_sdk.frameworks.DiskArbitration ];
+  iconvDarwinDep = lib.optional pkgs.stdenv.isDarwin pkgs.libiconv;
 
   # Load the crate2nix crate tree.
   crates = import ./Cargo.nix {
@@ -27,7 +25,8 @@ let
 
     defaultCrateOverrides = pkgs.defaultCrateOverrides // {
       zstd-sys = prev: {
-        nativeBuildInputs = prev.nativeBuildInputs or [ ] ++ iconvDarwinDep;
+        nativeBuildInputs = prev.nativeBuildInputs or [ ];
+        buildInputs = prev.buildInputs or [ ] ++ iconvDarwinDep;
       };
 
       prost-build = prev: {
@@ -46,7 +45,9 @@ let
       tvix-store = prev: {
         PROTO_ROOT = depot.tvix.proto;
         nativeBuildInputs = protobufDep prev;
-        buildInputs = prev.buildInputs or [ ] ++ diskArbitrationDep;
+        # fuse-backend-rs uses DiskArbitration framework to handle mount/unmount on Darwin
+        buildInputs = prev.buildInputs or [ ]
+          ++ lib.optional pkgs.stdenv.isDarwin pkgs.buildPackages.darwin.apple_sdk.frameworks.DiskArbitration;
       };
     };
   };
@@ -118,15 +119,16 @@ in
     src = depot.third_party.gitignoreSource ./.;
     PROTO_ROOT = depot.tvix.proto;
 
-    buildInputs = [
-      pkgs.fuse
-    ];
     nativeBuildInputs = with pkgs; [
       cargo
       pkg-config
       protobuf
       rustc
       rustPlatform.cargoSetupHook
+    ];
+
+    buildInputs = [
+      pkgs.fuse
     ] ++ iconvDarwinDep;
 
     buildPhase = ''
