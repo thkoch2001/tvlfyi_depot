@@ -78,7 +78,7 @@ let
 
 in
 readTree.fix (self: (readDepot {
-  inherit localSystem;
+  inherit localSystem crossSystem;
   depot = self;
 
   # Pass third_party as 'pkgs' (for compatibility with external
