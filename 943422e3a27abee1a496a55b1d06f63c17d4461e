@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7af5c9cd_3429f072",
+        "filename": "third_party/nixpkgs/default.nix",
+        "patchSetId": 1
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-10-16T14:38:01Z",
+      "side": 1,
+      "message": "This currently produces an infinite recursion in llama, but @tvl@lahfa.xyz offered taking a look at it.",
+      "revId": "943422e3a27abee1a496a55b1d06f63c17d4461e",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
