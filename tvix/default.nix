@@ -3,7 +3,7 @@
 
 let
   # crate override for crates that need protobuf
-  protobufDep = prev: (prev.nativeBuildInputs or [ ]) ++ [ pkgs.protobuf ];
+  protobufDep = prev: (prev.nativeBuildInputs or [ ]) ++ [ pkgs.buildPackages.protobuf ];
   iconvDarwinDep = lib.optionals pkgs.stdenv.isDarwin [ pkgs.libiconv ];
   # fuse-backend-rs uses DiskArbitration framework to handle mount/unmount on Darwin
   diskArbitrationDep = lib.optionals pkgs.stdenv.isDarwin [ pkgs.buildPackages.darwin.apple_sdk.frameworks.DiskArbitration ];
