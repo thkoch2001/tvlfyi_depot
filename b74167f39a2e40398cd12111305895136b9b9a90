@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b6a1c9e5_6a5238b6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2023-10-16T15:08:28Z",
+      "side": 1,
+      "message": "Cargo build on macOS in `tvix` worked for me.",
+      "revId": "b74167f39a2e40398cd12111305895136b9b9a90",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
