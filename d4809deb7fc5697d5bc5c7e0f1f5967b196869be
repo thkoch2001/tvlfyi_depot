@@ -18,6 +18,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "f5f400ba_6e0b0ff2",
+        "filename": "tvix/nix-compat/src/derivation/parse_error.rs",
+        "patchSetId": 9
+      },
+      "lineNbr": 66,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-10-16T12:09:53Z",
+      "side": 1,
+      "message": "I opened b/325, marked as resolved here, this doesn\u0027t block this from going in.",
+      "parentUuid": "2f1e2abe_cb718bf2",
+      "revId": "d4809deb7fc5697d5bc5c7e0f1f5967b196869be",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "7773fefa_252f53b4",
@@ -31,6 +49,24 @@
       "writtenOn": "2023-10-16T11:44:52Z",
       "side": 1,
       "message": "maybe use properly thiserror to show the internal error string repr?",
+      "revId": "d4809deb7fc5697d5bc5c7e0f1f5967b196869be",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "10441b46_501d708a",
+        "filename": "tvix/nix-compat/src/derivation/parser.rs",
+        "patchSetId": 9
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-10-16T12:09:53Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7773fefa_252f53b4",
       "revId": "d4809deb7fc5697d5bc5c7e0f1f5967b196869be",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
@@ -52,6 +88,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "5b09559e_873ef081",
+        "filename": "tvix/nix-compat/src/derivation/parser.rs",
+        "patchSetId": 9
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-10-16T12:09:53Z",
+      "side": 1,
+      "message": "I added Error::Incomplete to our error.",
+      "parentUuid": "80ee8d36_567942f5",
+      "revId": "d4809deb7fc5697d5bc5c7e0f1f5967b196869be",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "50efeb4e_c7c8266d",
@@ -69,6 +123,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "7e522b2e_cb0b7dce",
+        "filename": "tvix/nix-compat/src/derivation/parser.rs",
+        "patchSetId": 9
+      },
+      "lineNbr": 169,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-10-16T12:09:53Z",
+      "side": 1,
+      "message": "Done (in cl/9738)",
+      "parentUuid": "50efeb4e_c7c8266d",
+      "revId": "d4809deb7fc5697d5bc5c7e0f1f5967b196869be",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "8a2a97f2_050f52d4",
@@ -82,6 +154,24 @@
       "writtenOn": "2023-10-16T11:44:52Z",
       "side": 1,
       "message": "?",
+      "revId": "d4809deb7fc5697d5bc5c7e0f1f5967b196869be",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "693326ee_283d5bbb",
+        "filename": "tvix/nix-compat/src/derivation/parser.rs",
+        "patchSetId": 9
+      },
+      "lineNbr": 217,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-10-16T12:09:53Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8a2a97f2_050f52d4",
       "revId": "d4809deb7fc5697d5bc5c7e0f1f5967b196869be",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
