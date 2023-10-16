@@ -16,6 +16,24 @@
       "message": "why not inline it then?",
       "revId": "30429b2bf3b55843768bebf0fa1770c62ed49de2",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "00f43041_4058c798",
+        "filename": "tvix/cli/src/tvix_store_io.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 67,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-10-16T11:11:10Z",
+      "side": 1,
+      "message": "If I use store_path.digest inside the async fn, it escapes the main method body.",
+      "parentUuid": "01201cc5_f6e28ae8",
+      "revId": "30429b2bf3b55843768bebf0fa1770c62ed49de2",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
