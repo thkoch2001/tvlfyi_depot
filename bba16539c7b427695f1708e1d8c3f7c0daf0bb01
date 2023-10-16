@@ -16,6 +16,24 @@
       "message": "so here\u0027s the thing, do you use `output_name` somewhere else? It seems like to me no, so you should move it and consume it in the insertion process, this idea holds true also for the rest of parsing.\nThe problem I suppose is that you are iterating over the iterable and you cannot really easily move stuff.\n\nThe trick here is to use `std::mem::take` I believe: https://doc.rust-lang.org/std/mem/fn.take.html",
       "revId": "bba16539c7b427695f1708e1d8c3f7c0daf0bb01",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "60ffc5bb_25770aed",
+        "filename": "tvix/nix-compat/src/derivation/parser.rs",
+        "patchSetId": 8
+      },
+      "lineNbr": 133,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-10-16T12:22:41Z",
+      "side": 1,
+      "message": "No, the problem is here that we insert a k and v and observe whether there was already something at that k, then emit an error with the duplicate key (so we still need it then).\n\nIf we manually check if we contain the key, and then either emit the error or do the insert, we avoid having to clone alltogether. I put a CL at the end of that chain that does that for all occurences.",
+      "parentUuid": "ba9787ba_81861f6b",
+      "revId": "bba16539c7b427695f1708e1d8c3f7c0daf0bb01",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
