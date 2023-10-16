@@ -3,7 +3,7 @@
 
 let
   # crate override for crates that need protobuf
-  protobufDep = prev: (prev.nativeBuildInputs or [ ]) ++ [ pkgs.protobuf ];
+  protobufDep = prev: (prev.nativeBuildInputs or [ ]) ++ [ pkgs.buildPackages.protobuf ];
   iconvDarwinDep = lib.optional pkgs.stdenv.isDarwin pkgs.libiconv;
 
   # On Darwin, some crates producing binaries need to be able to link against security.
