@@ -1,0 +1,89 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2f1e2abe_cb718bf2",
+        "filename": "tvix/nix-compat/src/derivation/parse_error.rs",
+        "patchSetId": 9
+      },
+      "lineNbr": 66,
+      "author": {
+        "id": 1000073
+      },
+      "writtenOn": "2023-10-16T11:44:52Z",
+      "side": 1,
+      "message": "TODO: probably, we should make some blank Into impl in Nom using the Into trait itself to map error types in a nice way, but for upstream.",
+      "revId": "d4809deb7fc5697d5bc5c7e0f1f5967b196869be",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7773fefa_252f53b4",
+        "filename": "tvix/nix-compat/src/derivation/parser.rs",
+        "patchSetId": 9
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1000073
+      },
+      "writtenOn": "2023-10-16T11:44:52Z",
+      "side": 1,
+      "message": "maybe use properly thiserror to show the internal error string repr?",
+      "revId": "d4809deb7fc5697d5bc5c7e0f1f5967b196869be",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "80ee8d36_567942f5",
+        "filename": "tvix/nix-compat/src/derivation/parser.rs",
+        "patchSetId": 9
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 1000073
+      },
+      "writtenOn": "2023-10-16T11:44:52Z",
+      "side": 1,
+      "message": "should not be `todo!`",
+      "revId": "d4809deb7fc5697d5bc5c7e0f1f5967b196869be",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "50efeb4e_c7c8266d",
+        "filename": "tvix/nix-compat/src/derivation/parser.rs",
+        "patchSetId": 9
+      },
+      "lineNbr": 169,
+      "author": {
+        "id": 1000073
+      },
+      "writtenOn": "2023-10-16T11:44:52Z",
+      "side": 1,
+      "message": "Let\u0027s mention this is a hashmap of store path as keys and set of outputs (e.g. `out`, `dev`, etc.) as values.",
+      "revId": "d4809deb7fc5697d5bc5c7e0f1f5967b196869be",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8a2a97f2_050f52d4",
+        "filename": "tvix/nix-compat/src/derivation/parser.rs",
+        "patchSetId": 9
+      },
+      "lineNbr": 217,
+      "author": {
+        "id": 1000073
+      },
+      "writtenOn": "2023-10-16T11:44:52Z",
+      "side": 1,
+      "message": "?",
+      "revId": "d4809deb7fc5697d5bc5c7e0f1f5967b196869be",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
