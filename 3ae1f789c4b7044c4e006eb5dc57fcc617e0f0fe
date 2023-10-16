@@ -54,6 +54,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "9107452f_2c2c6b71",
+        "filename": "tvix/store/src/fs/file_attr.rs",
+        "patchSetId": 3
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-10-16T10:35:13Z",
+      "side": 1,
+      "message": "Made this a file-wide allow with a comment, turned out configuring it here was too annoying.",
+      "parentUuid": "62f54978_fd5a77e5",
+      "revId": "3ae1f789c4b7044c4e006eb5dc57fcc617e0f0fe",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "42544851_14d87c6f",
@@ -89,6 +107,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "8cfa2d70_ad8d69d3",
+        "filename": "tvix/store/src/fs/file_attr.rs",
+        "patchSetId": 3
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-10-16T10:35:13Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "20ac9f05_35ad9848",
+      "revId": "3ae1f789c4b7044c4e006eb5dc57fcc617e0f0fe",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "ca9efdd0_c64122c4",
@@ -120,6 +156,24 @@
       "side": 1,
       "message": "We can probably add some clippy annotations here instead.",
       "parentUuid": "ca9efdd0_c64122c4",
+      "revId": "3ae1f789c4b7044c4e006eb5dc57fcc617e0f0fe",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5d3fd270_e073fc3c",
+        "filename": "tvix/store/src/fs/mod.rs",
+        "patchSetId": 3
+      },
+      "lineNbr": 496,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-10-16T10:35:13Z",
+      "side": 1,
+      "message": "Added clippy annotations.",
+      "parentUuid": "8a971363_11cad723",
       "revId": "3ae1f789c4b7044c4e006eb5dc57fcc617e0f0fe",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
