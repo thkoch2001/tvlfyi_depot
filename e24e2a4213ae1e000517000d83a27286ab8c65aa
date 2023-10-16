@@ -52,6 +52,24 @@
       "parentUuid": "85c5c7a8_e2918319",
       "revId": "e24e2a4213ae1e000517000d83a27286ab8c65aa",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bf142129_430b3f8c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2023-10-16T00:44:03Z",
+      "side": 1,
+      "message": "To join the dots here, I tested this by generating bindings with the \"official\" Google JS protobuf implementation (https://cl.tvl.fyi/c/depot/+/9736), and it seems to work OK, with a slight modification to add the CORS layer that we need.",
+      "parentUuid": "a89e0f12_72c40b2b",
+      "revId": "e24e2a4213ae1e000517000d83a27286ab8c65aa",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
