@@ -48,6 +48,10 @@ fn tokens() {
 pub use tag::Tag;
 mod tag;
 
+// Node tokens differ in the 16th byte,
+// Entry tokens in the 0th byte.
+// TODO: make this doc comments on the enums themselves?
+
 tag::make! {
     pub enum Node[16] {
         Sym = TOK_SYM,
