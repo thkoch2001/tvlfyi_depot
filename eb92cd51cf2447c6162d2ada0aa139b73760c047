@@ -16,6 +16,24 @@
       "message": "confusing way to do things, can we extract this into a `fn build_server` and have two implementations based on the feature?\n\nalso this way, do we even need the `cfg_if` crate?",
       "revId": "eb92cd51cf2447c6162d2ada0aa139b73760c047",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "baac5932_33cbee49",
+        "filename": "tvix/store/src/bin/tvix-store.rs",
+        "patchSetId": 9
+      },
+      "lineNbr": 208,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-10-16T11:05:13Z",
+      "side": 1,
+      "message": "It\u0027s two different types, and it got very annoying. If you want, you can open a followup CL :-)",
+      "parentUuid": "9f9cb60c_54720c21",
+      "revId": "eb92cd51cf2447c6162d2ada0aa139b73760c047",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
