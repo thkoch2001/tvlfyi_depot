@@ -35,6 +35,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "8d6d4272_3af1f451",
+        "filename": "tvix/nix-compat/src/nar/reader/mod.rs",
+        "patchSetId": 7
+      },
+      "lineNbr": 122,
+      "author": {
+        "id": 1000005
+      },
+      "writtenOn": "2023-10-17T15:00:08Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c370e048_a00e0338",
+      "revId": "e21b4cb441c3f4f454238f8f0e80022bb3018a0c",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "916c5a15_a00eb9e1",
@@ -54,6 +72,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "d72564d7_dd723561",
+        "filename": "tvix/nix-compat/src/nar/reader/read.rs",
+        "patchSetId": 7
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1000005
+      },
+      "writtenOn": "2023-10-17T15:00:08Z",
+      "side": 1,
+      "message": "That\u0027s as much part of the wire format as any of the other stuff in here, it doesn\u0027t seem unique in that respect.",
+      "parentUuid": "916c5a15_a00eb9e1",
+      "revId": "e21b4cb441c3f4f454238f8f0e80022bb3018a0c",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "0f6ef1e2_269c9a29",
         "filename": "tvix/nix-compat/src/nar/reader/read.rs",
         "patchSetId": 7
@@ -65,6 +101,24 @@
       "writtenOn": "2023-10-17T10:05:23Z",
       "side": 1,
       "message": "there\u0027s no reason buf_len fits into usize in general,\nlet\u0027s document it can overflow or let\u0027s predict that alignment\nwill be bigger than the usize",
+      "revId": "e21b4cb441c3f4f454238f8f0e80022bb3018a0c",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ea53f6f5_251b921e",
+        "filename": "tvix/nix-compat/src/nar/reader/read.rs",
+        "patchSetId": 7
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1000005
+      },
+      "writtenOn": "2023-10-17T15:00:08Z",
+      "side": 1,
+      "message": "It\u0027s bound by max_len, which is either of two ~small constants. We can *at most* fit isize::MAX into memory anyhow.",
+      "parentUuid": "0f6ef1e2_269c9a29",
       "revId": "e21b4cb441c3f4f454238f8f0e80022bb3018a0c",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
