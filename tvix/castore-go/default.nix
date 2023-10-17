@@ -1,5 +1,10 @@
 { depot, pkgs, ... }:
 
+let
+  regenerate = pkgs.writeShellScriptBin "regenerate" ''
+    (cd $(git rev-parse --show-toplevel)/tvix/castore-go && rm *.pb.go && cp ${depot.tvix.castore.protos.go-bindings}/*.pb.go . && chmod +w *.pb.go)
+  '';
+in
 (pkgs.buildGoModule {
   name = "castore-go";
   src = depot.third_party.gitignoreSource ./.;
@@ -13,7 +18,7 @@
         ${depot.tvix.castore-go-generate}
         if [[ -n "$(git status --porcelain -unormal)" ]]; then
             echo "-----------------------------"
-            echo ".pb.go files need to be updated, run //tvix:castore-go-generate"
+            echo ".pb.go files need to be updated, mg run //tvix/castore-go/regenerate"
             echo "-----------------------------"
             git status -unormal
             exit 1
@@ -22,4 +27,5 @@
       alwaysRun = true;
     };
   };
+  passthru.regenerate = regenerate;
 })

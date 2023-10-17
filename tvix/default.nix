@@ -106,16 +106,6 @@ in
   # workspace too.
   shell = (import ./shell.nix { inherit pkgs; });
 
-  # Update `.pb.go` files in tvix/castore-go with the generated ones.
-  castore-go-generate = pkgs.writeShellScriptBin "castore-go-protogen" ''
-    (cd $(git rev-parse --show-toplevel)/tvix/castore-go && rm *.pb.go && cp ${depot.tvix.castore.protos.go-bindings}/*.pb.go . && chmod +w *.pb.go)
-  '';
-
-  # Update `.pb.go` files in tvix/store-go with the generated ones.
-  store-go-generate = pkgs.writeShellScriptBin "store-go-protogen" ''
-    (cd $(git rev-parse --show-toplevel)/tvix/store-go && rm *.pb.go && cp ${depot.tvix.store.protos.go-bindings}/*.pb.go . && chmod +w *.pb.go)
-  '';
-
   # Build the Rust documentation for publishing on docs.tvix.dev.
   rust-docs = pkgs.stdenv.mkDerivation {
     inherit cargoDeps;
