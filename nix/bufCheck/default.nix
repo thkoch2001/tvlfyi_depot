@@ -7,7 +7,6 @@ pkgs.writeShellScriptBin "ci-buf-check" ''
   (cd $(git rev-parse --show-toplevel) && buf lint .)
 
   # Run buf generate, and bail out if generated files are changed.
-  (cd $(git rev-parse --show-toplevel) && buf generate --path tvix/castore/protos)
   (cd $(git rev-parse --show-toplevel) && buf generate --path tvix/store/protos)
   # Check if any files have changed
   if [[ -n "$(git status --porcelain -unormal)" ]]; then
