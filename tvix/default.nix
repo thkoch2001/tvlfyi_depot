@@ -111,12 +111,10 @@ in
     (cd $(git rev-parse --show-toplevel)/tvix/castore-go && rm *.pb.go && cp ${depot.tvix.castore.protos.go-bindings}/*.pb.go . && chmod +w *.pb.go)
   '';
 
-  # Builds and tests the code in store/protos.
-  store-protos-go = pkgs.buildGoModule {
-    name = "store-golang";
-    src = depot.third_party.gitignoreSource ./store/protos;
-    vendorHash = "sha256-WAYaIT3h3Cdvo1RB8T7DuoxeKvXfkq8vo/vdkhJQDs0=";
-  };
+  # Update `.pb.go` files in tvix/store-go with the generated ones.
+  store-go-generate = pkgs.writeShellScriptBin "store-go-protogen" ''
+    (cd $(git rev-parse --show-toplevel)/tvix/store-go && rm *.pb.go && cp ${depot.tvix.store.protos.go-bindings}/*.pb.go . && chmod +w *.pb.go)
+  '';
 
   # Build the Rust documentation for publishing on docs.tvix.dev.
   rust-docs = pkgs.stdenv.mkDerivation {
@@ -144,7 +142,6 @@ in
   };
 
   meta.ci.targets = [
-    "store-protos-go"
     "shell"
     "rust-docs"
   ];
