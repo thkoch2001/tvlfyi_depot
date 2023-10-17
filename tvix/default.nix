@@ -113,6 +113,11 @@ in
     vendorHash = "sha256-ZNtSSW+oCxMsBtURSrea9/GyUHDagtGefM+Ii+VkgCA=";
   };
 
+  # Update `.pb.go` files in tvix/castore-go with the generated ones.
+  castore-go-generate = pkgs.writeShellScriptBin "castore-go-protogen" ''
+    (cd $(git rev-parse --show-toplevel)/tvix/castore-go && rm *.pb.go && cp ${depot.tvix.castore.protos.go-bindings}/*.pb.go . && chmod +w *.pb.go)
+  '';
+
   # Builds and tests the code in store/protos.
   store-protos-go = pkgs.buildGoModule {
     name = "store-golang";
