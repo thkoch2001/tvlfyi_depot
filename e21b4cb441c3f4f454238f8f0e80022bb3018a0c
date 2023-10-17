@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b3eca0f3_a849dba7",
+        "filename": "tvix/nix-compat/src/nar/reader/mod.rs",
+        "patchSetId": 7
+      },
+      "lineNbr": 59,
+      "author": {
+        "id": 1000073
+      },
+      "writtenOn": "2023-10-17T10:05:23Z",
+      "side": 1,
+      "message": "let\u0027s document the padding expectations and boundaries to make it easy for a\nnewcomer to load context on this",
+      "revId": "e21b4cb441c3f4f454238f8f0e80022bb3018a0c",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c370e048_a00e0338",
+        "filename": "tvix/nix-compat/src/nar/reader/mod.rs",
+        "patchSetId": 7
+      },
+      "lineNbr": 122,
+      "author": {
+        "id": 1000073
+      },
+      "writtenOn": "2023-10-17T10:05:23Z",
+      "side": 1,
+      "message": "let\u0027s document why do we keep this (to verify monotonic invariants on path names)",
+      "revId": "e21b4cb441c3f4f454238f8f0e80022bb3018a0c",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "916c5a15_a00eb9e1",
+        "filename": "tvix/nix-compat/src/nar/reader/read.rs",
+        "patchSetId": 7
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1000073
+      },
+      "writtenOn": "2023-10-17T10:05:23Z",
+      "side": 1,
+      "message": "let\u0027s document the LE assumption here",
+      "revId": "e21b4cb441c3f4f454238f8f0e80022bb3018a0c",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0f6ef1e2_269c9a29",
+        "filename": "tvix/nix-compat/src/nar/reader/read.rs",
+        "patchSetId": 7
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1000073
+      },
+      "writtenOn": "2023-10-17T10:05:23Z",
+      "side": 1,
+      "message": "there\u0027s no reason buf_len fits into usize in general,\nlet\u0027s document it can overflow or let\u0027s predict that alignment\nwill be bigger than the usize",
+      "revId": "e21b4cb441c3f4f454238f8f0e80022bb3018a0c",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
