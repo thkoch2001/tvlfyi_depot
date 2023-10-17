@@ -18,6 +18,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "a671247c_408111e1",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2023-10-17T19:30:58Z",
+      "side": 1,
+      "message": "I think a breaking change now is okay, since you probably know all the people relying on this today. I agree having it named something different from where it is actually located in the repo will be a little confusing. Now is the best time to change it if we want to.",
+      "parentUuid": "fc5d155c_1bd38e3a",
+      "revId": "3390ab99937151ac74daffb77c7cbbc92135d96f",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "067580ce_e526ae03",
