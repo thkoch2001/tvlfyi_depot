@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f6c423c5_2e8cd02f",
+        "filename": "tvix/grpcweb/default.nix",
+        "patchSetId": 2
+      },
+      "lineNbr": 3,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-10-17T21:04:29Z",
+      "side": 1,
+      "message": "Is there a way we can move the javascript client binding generation into a Nix build inside `tvix/store/protos/default.nix`, considering the golang stuff is now also nicely nixified?\n\nIf we realize it\u0027s not trivial to refer to this during the build of some client, or it\u0027d be advantageous to have it on disk for LSP/editor support etc, or extend the objects somewhere (like in //tvix/castore-go, //tvix/store-go), we can still find ways to dump the results to disk, and ensure it\u0027s the same as produced by the build in CI, like we do there.",
+      "revId": "d75a1f12806ecf4ec4c9978f45d2984390fa71e5",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
