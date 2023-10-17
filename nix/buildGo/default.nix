@@ -24,8 +24,8 @@ let
 
   inherit (pkgs) lib runCommand fetchFromGitHub protobuf symlinkJoin;
 
-  # TODO: Adapt to Go 1.19 changes
-  go = pkgs.go_1_18;
+  # TODO: Adapt to Go 1.20 changes
+  go = pkgs.go_1_19;
 
   # Helpers for low-level Go compiler invocations
   spaceOut = lib.concatStringsSep " ";
@@ -79,8 +79,8 @@ let
       # This is required for several popular packages (e.g. x/sys).
       ifAsm = do: lib.optionalString (sfiles != [ ]) do;
       asmBuild = ifAsm ''
-        ${go}/bin/go tool asm -trimpath $PWD -I $PWD -I ${go}/share/go/pkg/include -D GOOS_linux -D GOARCH_amd64 -gensymabis -o ./symabis ${spaceOut sfiles}
-        ${go}/bin/go tool asm -trimpath $PWD -I $PWD -I ${go}/share/go/pkg/include -D GOOS_linux -D GOARCH_amd64 -o ./asm.o ${spaceOut sfiles}
+        ${go}/bin/go tool asm -p -trimpath $PWD -I $PWD -I ${go}/share/go/pkg/include -D GOOS_linux -D GOARCH_amd64 -gensymabis -o ./symabis ${spaceOut sfiles}
+        ${go}/bin/go tool asm -p -trimpath $PWD -I $PWD -I ${go}/share/go/pkg/include -D GOOS_linux -D GOARCH_amd64 -o ./asm.o ${spaceOut sfiles}
       '';
       asmLink = ifAsm "-symabis ./symabis -asmhdr $out/go_asm.h";
       asmPack = ifAsm ''
