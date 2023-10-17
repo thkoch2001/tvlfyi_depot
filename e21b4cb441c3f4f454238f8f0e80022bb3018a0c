@@ -90,6 +90,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "0cf1a00e_765b6226",
+        "filename": "tvix/nix-compat/src/nar/reader/read.rs",
+        "patchSetId": 7
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1000073
+      },
+      "writtenOn": "2023-10-17T15:10:53Z",
+      "side": 1,
+      "message": "Right, I just think adding something like:\n\n```\n/// This reads a u64 with a LE endianess assumption.\n```\n\nwould make it awesome",
+      "parentUuid": "d72564d7_dd723561",
+      "revId": "e21b4cb441c3f4f454238f8f0e80022bb3018a0c",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "0f6ef1e2_269c9a29",
         "filename": "tvix/nix-compat/src/nar/reader/read.rs",
         "patchSetId": 7
@@ -119,6 +137,24 @@
       "side": 1,
       "message": "It\u0027s bound by max_len, which is either of two ~small constants. We can *at most* fit isize::MAX into memory anyhow.",
       "parentUuid": "0f6ef1e2_269c9a29",
+      "revId": "e21b4cb441c3f4f454238f8f0e80022bb3018a0c",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9fa0fba9_d71c142c",
+        "filename": "tvix/nix-compat/src/nar/reader/read.rs",
+        "patchSetId": 7
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1000073
+      },
+      "writtenOn": "2023-10-17T15:10:53Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "ea53f6f5_251b921e",
       "revId": "e21b4cb441c3f4f454238f8f0e80022bb3018a0c",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
