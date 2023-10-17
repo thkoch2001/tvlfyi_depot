@@ -21,7 +21,7 @@
         }
 
         location = /go-get/tvix/castore/protos {
-            alias ${pkgs.writeText "go-import-metadata.html" ''<html><meta name="go-import" content="code.tvl.fyi/tvix/castore/protos git https://code.tvl.fyi/depot.git:/tvix/castore/protos.git"></html>''};
+            alias ${pkgs.writeText "go-import-metadata.html" ''<html><meta name="go-import" content="code.tvl.fyi/tvix/castore/protos git https://code.tvl.fyi/depot.git:/tvix/castore-go.git"></html>''};
         }
 
         location = /go-get/tvix/store/protos {
