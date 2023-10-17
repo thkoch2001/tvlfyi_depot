@@ -16,6 +16,40 @@
       "message": "@edef@edef.eu",
       "revId": "f7ebdf68d6ee150d2e7ac73a28774f47ee5bc9a9",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4524d5d4_cedd4574",
+        "filename": "tvix/nix-compat/src/nar/wire/tag.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 5,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-10-17T09:54:36Z",
+      "side": 1,
+      "message": "enumeration",
+      "revId": "f7ebdf68d6ee150d2e7ac73a28774f47ee5bc9a9",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "143d2c61_05bf0e84",
+        "filename": "tvix/nix-compat/src/nar/wire/tag.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 104,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-10-17T09:54:36Z",
+      "side": 1,
+      "message": "drop this line.",
+      "revId": "f7ebdf68d6ee150d2e7ac73a28774f47ee5bc9a9",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
