@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "36e7359e_1d039ad8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2023-10-17T02:39:49Z",
+      "side": 1,
+      "message": "I had a test for this, but I couldn\u0027t get it to fail every time, only intermittently. It ingested docs 100+ times (in parallel) and used some injected latency via `tower_fault`. Since I couldn\u0027t get it to consistently catch this issue, I decided not to add the test, but happy to add it back if that sounds valuable.",
+      "revId": "e08aefe36f90bd4f6f6f1390da0a2ad33df60140",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
