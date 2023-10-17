@@ -1,20 +1,9 @@
-# Check protobuf syntax and breaking.
+# Check protobuf breaking. Lints already happen in individual targets.
 #
 { depot, pkgs, ... }:
 
 pkgs.writeShellScriptBin "ci-buf-check" ''
-  export PATH="$PATH:${pkgs.lib.makeBinPath [ pkgs.buf pkgs.protoc-gen-go pkgs.protoc-gen-go-grpc ]}"
-  (cd $(git rev-parse --show-toplevel) && buf lint .)
-
-  # Check if any files have changed
-  if [[ -n "$(git status --porcelain -unormal)" ]]; then
-      echo "-----------------------------"
-      echo ".pb.go files need to be updated"
-      echo "-----------------------------"
-      git status -unormal
-      exit 1
-  fi
-
+  export PATH="$PATH:${pkgs.lib.makeBinPath [ pkgs.buf ]}"
   # Report-only
   (cd $(git rev-parse --show-toplevel) && (buf breaking . --against "./.git#ref=HEAD~1" || true))
 ''
