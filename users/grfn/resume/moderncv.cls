@@ -219,6 +219,7 @@
 % defines one's name
 % usage: \name{<firstname>}{<lastname>}
 \newcommand*{\name}[2]{\def\@firstname{#1}\def\@lastname{#2}}
+\newcommand*{\pronouns}[1]{\def\@pronouns{#1}}
 % defines one's title (optional)
 % usage: \title{<title>}
 \renewcommand*{\title}[1]{\def\@title{#1}}
@@ -284,7 +285,7 @@
 % usage: \moderncvstyle{<style variant name>}
 \newcommand*{\moderncvstyle}[1]{
   \RequirePackage{moderncvstyle#1}}
-  
+
 % loads a color scheme
 % usage: \moderncvcolor{<color scheme name>}
 \newcommand*{\moderncvcolor}[1]{
