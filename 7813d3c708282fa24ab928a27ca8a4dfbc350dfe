@@ -16,6 +16,24 @@
       "message": "This is a bit awkward. The `directory_putter` errors out if you call close on it without having put any directories. In the case of ingesting a single file or symlink we won\u0027t have put any dirs, so we don\u0027t close in that case.\n\nThe close also returns the digest of the last directory that was put, but we don\u0027t rely on that here.\n\nWithout having too much context, maybe the putter shouldn\u0027t return a digest and closing a putter without having put anything is not an error. Then we rely on the caller to keep track of digests and the root node like we already do here.",
       "revId": "7813d3c708282fa24ab928a27ca8a4dfbc350dfe",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "73365c3d_7eb5ff31",
+        "filename": "tvix/castore/src/import.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 193,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-10-17T06:59:30Z",
+      "side": 1,
+      "message": "We probably shouldn\u0027t be creating the DirectoryPutter in first place, if there\u0027s no directories to put, but that\u0027s currently not possible, as the current interface of process_entry forces us to provide some.\n\nThat\u0027s probably something to keep in mind while working on further followups to cl/9606, but fine for now.",
+      "parentUuid": "d2911aa2_2c6a338b",
+      "revId": "7813d3c708282fa24ab928a27ca8a4dfbc350dfe",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
