@@ -1,6 +1,23 @@
 {
   "comments": [
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "79f35d03_488d50b7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2023-10-17T22:13:55Z",
+      "side": 1,
+      "message": ":gear",
+      "revId": "d75a1f12806ecf4ec4c9978f45d2984390fa71e5",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "f6c423c5_2e8cd02f",
@@ -14,6 +31,24 @@
       "writtenOn": "2023-10-17T21:04:29Z",
       "side": 1,
       "message": "Is there a way we can move the javascript client binding generation into a Nix build inside `tvix/store/protos/default.nix`, considering the golang stuff is now also nicely nixified?\n\nIf we realize it\u0027s not trivial to refer to this during the build of some client, or it\u0027d be advantageous to have it on disk for LSP/editor support etc, or extend the objects somewhere (like in //tvix/castore-go, //tvix/store-go), we can still find ways to dump the results to disk, and ensure it\u0027s the same as produced by the build in CI, like we do there.",
+      "revId": "d75a1f12806ecf4ec4c9978f45d2984390fa71e5",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4a7c419f_38ba0775",
+        "filename": "tvix/grpcweb/default.nix",
+        "patchSetId": 2
+      },
+      "lineNbr": 3,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2023-10-17T22:13:55Z",
+      "side": 1,
+      "message": "This really depends on the direction you want to go: if you\u0027re more inclined to write Rust+WASM code then it might be better to go in the direction of https://github.com/devashishdxt/tonic-web-wasm-client (or similar).\n\nIf we want to pursue JS then I\u0027d want to rework it a bit (and probably get the protoc-gen-js bits \"upstreamed\" into nixpkgs) -- probably to drop this into TypeScript using the somewhat-experiment gRPC-Web TS support.\n\nThis was really a PoC before I spent more time on it, hence me mailing it in the WIP state ;)",
+      "parentUuid": "f6c423c5_2e8cd02f",
       "revId": "d75a1f12806ecf4ec4c9978f45d2984390fa71e5",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
