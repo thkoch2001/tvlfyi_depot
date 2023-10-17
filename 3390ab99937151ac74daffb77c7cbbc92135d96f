@@ -38,6 +38,24 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "353dd8a1_b6319976",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-10-17T19:51:18Z",
+      "side": 1,
+      "message": "Ok, I\u0027ll do it in a followup CL. Moving things would clear +2\u0027s again, and this alone is already an improvement.",
+      "parentUuid": "a671247c_408111e1",
+      "revId": "3390ab99937151ac74daffb77c7cbbc92135d96f",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "067580ce_e526ae03",
         "filename": "/PATCHSET_LEVEL",
         "patchSetId": 4
