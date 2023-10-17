@@ -20,8 +20,8 @@
             alias ${depot.tvix.docs.svg}/component-flow.svg;
         }
 
-        location = /go-get/tvix/castore/protos {
-            alias ${pkgs.writeText "go-import-metadata.html" ''<html><meta name="go-import" content="code.tvl.fyi/tvix/castore/protos git https://code.tvl.fyi/depot.git:/tvix/castore-go.git"></html>''};
+        location = /go-get/tvix/castore-go {
+            alias ${pkgs.writeText "go-import-metadata.html" ''<html><meta name="go-import" content="code.tvl.fyi/tvix/castore-go git https://code.tvl.fyi/depot.git:/tvix/castore-go.git"></html>''};
         }
 
         location = /go-get/tvix/store/protos {
@@ -38,9 +38,9 @@
             }
         }
 
-        location = /tvix/castore/protos {
+        location = /tvix/castore-go {
             if ($args ~* "/?go-get=1") {
-                return 302 /go-get/tvix/castore/protos;
+                return 302 /go-get/tvix/castore-go;
             }
         }
 
