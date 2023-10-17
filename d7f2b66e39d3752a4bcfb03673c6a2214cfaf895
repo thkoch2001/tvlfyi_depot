@@ -16,6 +16,24 @@
       "message": "Until merged, you can test this by using the josh `@` syntax:\n\n```\ngit clone https://code.tvl.fyi/depot.git@refs/changes/87/9787/3:/tvix/castore-go.git\n```",
       "revId": "d7f2b66e39d3752a4bcfb03673c6a2214cfaf895",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "75a31824_a980d338",
+        "filename": "ops/modules/www/code.tvl.fyi.nix",
+        "patchSetId": 3
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-10-17T18:44:19Z",
+      "side": 1,
+      "message": "Resvolved.",
+      "parentUuid": "dbc7696b_c1b4be4f",
+      "revId": "d7f2b66e39d3752a4bcfb03673c6a2214cfaf895",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
