@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7b2f7380_4e902649",
+        "filename": "tvix/nix-compat/src/nar/wire/mod.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-10-17T09:24:10Z",
+      "side": 1,
+      "message": "@edef@edef.eu",
+      "revId": "f7ebdf68d6ee150d2e7ac73a28774f47ee5bc9a9",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
