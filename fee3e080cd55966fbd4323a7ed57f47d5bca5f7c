@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "51cb78cd_c0be7838",
+        "filename": "tvix/nix-compat/src/nar/reader/mod.rs",
+        "patchSetId": 9
+      },
+      "lineNbr": 128,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-10-18T00:23:06Z",
+      "side": 1,
+      "message": "dot at the end.",
+      "revId": "fee3e080cd55966fbd4323a7ed57f47d5bca5f7c",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "371c068a_aa762ab6",
+        "filename": "tvix/nix-compat/src/nar/reader/mod.rs",
+        "patchSetId": 9
+      },
+      "lineNbr": 148,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-10-18T00:23:06Z",
+      "side": 1,
+      "message": "I\u0027m not a fan of \"stream\", it might be confused with streams from cl/9606.\n\nDo you have another name proposal?",
+      "revId": "fee3e080cd55966fbd4323a7ed57f47d5bca5f7c",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "33ad51c3_34a21872",
+        "filename": "tvix/nix-compat/src/nar/reader/mod.rs",
+        "patchSetId": 9
+      },
+      "lineNbr": 204,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-10-18T00:23:06Z",
+      "side": 1,
+      "message": "dot at the end.",
+      "revId": "fee3e080cd55966fbd4323a7ed57f47d5bca5f7c",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
