@@ -18,6 +18,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "6179a8a9_3f1e9e9a",
+        "filename": "tvix/nix-compat/src/nar/reader/mod.rs",
+        "patchSetId": 7
+      },
+      "lineNbr": 59,
+      "author": {
+        "id": 1000005
+      },
+      "writtenOn": "2023-10-18T00:13:32Z",
+      "side": 1,
+      "message": "Done, mostly in the (new) parent CL, which adds a lot of documentation to nar::wire. I\u0027ve added some pointers to that in this module as well.",
+      "parentUuid": "b3eca0f3_a849dba7",
+      "revId": "e21b4cb441c3f4f454238f8f0e80022bb3018a0c",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "c370e048_a00e0338",
@@ -102,6 +120,24 @@
       "side": 1,
       "message": "Right, I just think adding something like:\n\n```\n/// This reads a u64 with a LE endianess assumption.\n```\n\nwould make it awesome",
       "parentUuid": "d72564d7_dd723561",
+      "revId": "e21b4cb441c3f4f454238f8f0e80022bb3018a0c",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "66d7f283_214a80e7",
+        "filename": "tvix/nix-compat/src/nar/reader/read.rs",
+        "patchSetId": 7
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1000005
+      },
+      "writtenOn": "2023-10-18T00:13:32Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0cf1a00e_765b6226",
       "revId": "e21b4cb441c3f4f454238f8f0e80022bb3018a0c",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
