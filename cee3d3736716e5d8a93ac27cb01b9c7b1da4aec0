@@ -33,6 +33,24 @@
       "message": "Nit: \"*For example*, the zero-length […]\"",
       "revId": "cee3d3736716e5d8a93ac27cb01b9c7b1da4aec0",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "58c67d08_db0121af",
+        "filename": "tvix/nix-compat/src/nar/writer/wire.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1000005
+      },
+      "writtenOn": "2023-10-18T10:48:26Z",
+      "side": 1,
+      "message": "It\u0027s a consequence of the encoding rules described, hence \"therefore\".",
+      "parentUuid": "3ade1b71_c8a9933b",
+      "revId": "cee3d3736716e5d8a93ac27cb01b9c7b1da4aec0",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
