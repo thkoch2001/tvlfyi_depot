@@ -69,6 +69,24 @@
       "parentUuid": "01502b10_8b634175",
       "revId": "54af0ddf2b0687573dff25e180f8c5df9e4822fc",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bbe2f083_d6e7d81a",
+        "filename": "nix/mapAttrsMaybe/default.nix",
+        "patchSetId": 166
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2023-10-18T14:01:58Z",
+      "side": 1,
+      "message": "I can see how 2 would work with RankNTypes, but the API is horrid :P\n\nI’d rather make a `mapAttrsMaybe\u0027` which takes another argument, the filter predicate, and have `mapAttrsMaybe \u003d mapAttrsMaybe\u0027 (v: v !\u003d null)`.",
+      "parentUuid": "fdf5d000_61e69f1a",
+      "revId": "54af0ddf2b0687573dff25e180f8c5df9e4822fc",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
