@@ -16,6 +16,24 @@
       "message": "This is something that probably should be a disclaimer in the readers and writers (or in `mod.rs` in general), but not for `wire.rs`.",
       "revId": "31b26e07de5981d343591579d3289249a4a7089a",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "89e72ed0_da98464d",
+        "filename": "tvix/nix-compat/src/nar/writer/wire.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 51,
+      "author": {
+        "id": 1000005
+      },
+      "writtenOn": "2023-10-18T00:39:17Z",
+      "side": 1,
+      "message": "Clarified after IRL discussion: it was not obvious that the consumers here are nar::reader and nar::writer, rather than the end user. The text now points that out explicitly.",
+      "parentUuid": "24befe42_bf24844b",
+      "revId": "31b26e07de5981d343591579d3289249a4a7089a",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
