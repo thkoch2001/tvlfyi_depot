@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "070f123b_21fe7f77",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000073
+      },
+      "writtenOn": "2023-10-18T10:04:58Z",
+      "side": 1,
+      "message": "Awesome!",
+      "revId": "cee3d3736716e5d8a93ac27cb01b9c7b1da4aec0",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3ade1b71_c8a9933b",
+        "filename": "tvix/nix-compat/src/nar/writer/wire.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1000073
+      },
+      "writtenOn": "2023-10-18T10:04:58Z",
+      "side": 1,
+      "message": "Nit: \"*For example*, the zero-length […]\"",
+      "revId": "cee3d3736716e5d8a93ac27cb01b9c7b1da4aec0",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
