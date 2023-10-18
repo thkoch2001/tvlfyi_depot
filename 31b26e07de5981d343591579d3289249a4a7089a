@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "24befe42_bf24844b",
+        "filename": "tvix/nix-compat/src/nar/writer/wire.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 51,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-10-18T00:18:06Z",
+      "side": 1,
+      "message": "This is something that probably should be a disclaimer in the readers and writers (or in `mod.rs` in general), but not for `wire.rs`.",
+      "revId": "31b26e07de5981d343591579d3289249a4a7089a",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
