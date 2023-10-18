@@ -3,8 +3,8 @@
 //!
 //! [ATerm]: http://program-transformation.org/Tools/ATermFormat.html
 
-use crate::aterm::escape_bytes;
 use crate::derivation::output::Output;
+use crate::{aterm::escape_bytes, nixhash::CAHash};
 use bstr::BString;
 use std::{
     collections::{BTreeMap, BTreeSet},
@@ -79,16 +79,21 @@ pub fn write_outputs(
 
         let mut elements: Vec<&str> = vec![output_name, &output.path];
 
-        let (mode_and_algo, digest) = match &output.hash_with_mode {
-            Some(crate::nixhash::NixHashWithMode::Flat(h)) => (
+        // TODO: move this formatting code elsewhere!
+        let (mode_and_algo, digest) = match &output.ca_hash {
+            Some(CAHash::Flat(h)) => (
                 h.algo().to_string(),
                 data_encoding::HEXLOWER.encode(h.digest_as_bytes()),
             ),
-            Some(crate::nixhash::NixHashWithMode::Recursive(h)) => (
+            Some(CAHash::Nar(h)) => (
                 format!("r:{}", h.algo()),
                 data_encoding::HEXLOWER.encode(h.digest_as_bytes()),
             ),
             None => ("".to_string(), "".to_string()),
+            _ => {
+                // Unreachable, as [Derivation::validate] already rejects
+                panic!("invalid hash digest")
+            }
         };
 
         elements.push(&mode_and_algo);

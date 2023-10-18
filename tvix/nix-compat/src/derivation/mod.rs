@@ -1,6 +1,4 @@
-use crate::store_path::{
-    self, build_output_path, build_regular_ca_path, build_text_path, StorePath,
-};
+use crate::store_path::{self, build_ca_path, build_output_path, build_text_path, StorePath};
 use bstr::BString;
 use serde::{Deserialize, Serialize};
 use sha2::{Digest, Sha256};
@@ -18,7 +16,7 @@ mod write;
 mod tests;
 
 // Public API of the crate.
-pub use crate::nixhash::{NixHash, NixHashWithMode};
+pub use crate::nixhash::{CAHash, NixHash};
 pub use errors::{DerivationError, OutputError};
 pub use output::Output;
 
@@ -122,20 +120,27 @@ impl Derivation {
 
     /// Returns the FOD digest, if the derivation is fixed-output, or None if
     /// it's not.
+    /// TODO: this is kinda the thing from [build_ca_path] with a [CAHash::Flat],
+    /// what's fed to `build_store_path_from_fingerprint_parts` (except the
+    /// out_output.path being an empty string)
     fn fod_digest(&self) -> Option<[u8; 32]> {
         if self.outputs.len() != 1 {
             return None;
         }
 
         let out_output = self.outputs.get("out")?;
+
+        let hash_str = match &out_output.ca_hash.as_ref()? {
+            CAHash::Flat(digest) => digest.to_nix_hash_string(),
+            CAHash::Nar(digest) => format!("r:{}", digest.to_nix_hash_string()),
+            // guaranteed by the validate() function to only be [CAHash::Flat] or [CAHash::Nar]
+            _ => unreachable!(),
+        };
+
         Some(
-            Sha256::new_with_prefix(format!(
-                "fixed:out:{}:{}",
-                out_output.hash_with_mode.clone()?.to_nix_hash_string(),
-                out_output.path
-            ))
-            .finalize()
-            .into(),
+            Sha256::new_with_prefix(format!("fixed:out:{}:{}", hash_str, out_output.path))
+                .finalize()
+                .into(),
         )
     }
 
@@ -229,10 +234,10 @@ impl Derivation {
 
             // For fixed output derivation we use the per-output info, otherwise we use the
             // derivation hash.
-            let abs_store_path = if let Some(ref hwm) = output.hash_with_mode {
-                build_regular_ca_path(&path_name, hwm, Vec::<String>::new(), false).map_err(
-                    |e| DerivationError::InvalidOutputDerivationPath(output_name.to_string(), e),
-                )?
+            let abs_store_path = if let Some(ref hwm) = output.ca_hash {
+                build_ca_path(&path_name, hwm, Vec::<String>::new(), false).map_err(|e| {
+                    DerivationError::InvalidOutputDerivationPath(output_name.to_string(), e)
+                })?
             } else {
                 build_output_path(derivation_or_fod_hash, output_name, &path_name).map_err(|e| {
                     DerivationError::InvalidOutputDerivationPath(
