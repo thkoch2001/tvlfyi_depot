@@ -27,10 +27,23 @@ pkgs.mkShell {
     pkgs.rustc
     pkgs.rustfmt
     pkgs.protobuf
+
+    # drvviz
+    pkgs.alsa-lib
+    pkgs.libglvnd
+    pkgs.libGL
+    pkgs.xorg.libX11
+    pkgs.xorg.libXi
+    pkgs.xorg.libXcursor
+    pkgs.xorg.libXrandr
   ] ++ pkgs.lib.optionals pkgs.stdenv.isDarwin [
     # We need these two dependencies in the ambient environment to be able to
     # `cargo build` on MacOS.
     pkgs.libiconv
     pkgs.buildPackages.darwin.apple_sdk.frameworks.Security
   ];
+
+  shellHook = ''
+    export LD_LIBRARY_PATH=${pkgs.lib.makeLibraryPath [pkgs.libglvnd pkgs.libGL pkgs.xorg.libX11 pkgs.xorg.libXi pkgs.xorg.libXcursor pkgs.xorg.libXrandr]}
+  '';
 }
