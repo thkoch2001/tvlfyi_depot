@@ -33,9 +33,14 @@ prost-build = "0.12.1"
 tonic-build = "0.10.2"
 
 [dev-dependencies]
-test-case = "2.2.2"
+criterion = { version = "0.4", features = ["async_tokio", "html_reports"] }
 tempfile = "3.3.0"
+test-case = "2.2.2"
 tokio-retry = "0.3.0"
+
+[[bench]]
+name = "ingestion"
+harness = false
 
 [features]
 default = []
