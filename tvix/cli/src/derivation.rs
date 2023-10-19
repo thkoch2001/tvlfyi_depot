@@ -467,9 +467,14 @@ pub use derivation_builtins::builtins as derivation_builtins;
 
 #[cfg(test)]
 mod tests {
-    use crate::known_paths::KnownPaths;
+    use crate::{known_paths::KnownPaths, tvix_io, tvix_store_io::TvixStoreIO};
     use nix_compat::store_path::hash_placeholder;
-    use std::{cell::RefCell, rc::Rc};
+    use std::{cell::RefCell, rc::Rc, sync::Arc};
+    use tvix_castore::{
+        blobservice::MemoryBlobService,
+        directoryservice::{DirectoryService, MemoryDirectoryService},
+    };
+    use tvix_store::pathinfoservice::{MemoryPathInfoService, PathInfoService};
 
     #[test]
     fn derivation() {
@@ -519,6 +524,58 @@ mod tests {
         assert!(
             !eval.evaluate().errors.is_empty(),
             "expect evaluation to fail"
+        );
+    }
+
+    #[test]
+    fn derivation_hello() {
+        let mut eval = tvix_eval::Evaluation::new_impure(
+            r#"(import /home/someone/Sources/nixpkgs { }).hello.outPath"#,
+            None,
+        );
+
+        let known_paths: Rc<RefCell<KnownPaths>> = Default::default();
+
+        eval.builtins
+            .extend(crate::derivation::derivation_builtins(known_paths.clone()));
+
+        let blob_service = Arc::new(MemoryBlobService::default());
+        let directory_service = Arc::new(MemoryDirectoryService::default());
+        let tokio_runtime = tokio::runtime::Runtime::new().unwrap();
+        eval.io_handle = Box::new(tvix_io::TvixIO::new(
+            known_paths.clone(),
+            TvixStoreIO::new(
+                blob_service.clone(),
+                directory_service.clone(),
+                Arc::new(MemoryPathInfoService::new(blob_service, directory_service)),
+                tokio_runtime.handle().clone(),
+            ),
+        ));
+
+        // Add the actual `builtins.derivation` from compiled Nix code
+        // TODO: properly compose this
+        eval.src_builtins
+            .push(("derivation", include_str!("derivation.nix")));
+
+        // bundle fetchurl.nix (used in nixpkgs) by resolving <nix> to
+        // `/__corepkgs__`, which has special handling in [`nix_compat`].
+        eval.nix_path = Some("nix=/__corepkgs__".to_string());
+
+        let source_map = eval.source_map();
+        let result = eval.evaluate();
+
+        println!("result.errors:");
+        for e in &result.errors {
+            e.fancy_format_stderr(&source_map);
+            // println!("{:?}", e);
+        }
+        assert!(result.errors.is_empty(), "expect successful eval");
+
+        let value = result.value.unwrap();
+        let value_str = value.to_str().unwrap();
+        assert_eq!(
+            value_str.as_bytes(),
+            "/nix/store/z6hzxgy21zimj58xhy06f2f49qgy06gg-hello-2.12.1".as_bytes()
         );
     }
 
