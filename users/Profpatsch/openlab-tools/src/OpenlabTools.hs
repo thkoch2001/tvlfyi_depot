@@ -19,6 +19,7 @@ import Data.Time.Clock (addUTCTime)
 import Debug.Trace
 import GHC.Records (HasField (..))
 import GHC.Stack qualified
+import IHP.HSX.QQ (hsx)
 import Json qualified
 import Label
 import Network.HTTP.Client.Conduit qualified as Http
@@ -35,9 +36,82 @@ import PossehlAnalyticsPrelude
 import Pretty
 import System.Environment qualified as Env
 import System.IO qualified as IO
+import Text.Blaze.Html.Renderer.Pretty qualified as Html.Pretty
+import Text.Blaze.Html.Renderer.Utf8 qualified as Html
+import Text.Blaze.Html5 qualified as Html
 import Text.HTML.TagSoup qualified as Soup
 import UnliftIO
 import Prelude hiding (span, until)
+
+mainPage :: Html.Html
+mainPage =
+  Html.docTypeHtml
+    [hsx|
+          <head>
+            <title>Openlab Augsburg Tools</title>
+            <meta charset="utf-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1">
+          </head>
+
+          <body>
+            <p>Welcome to the OpenLab Augsburg tools thingy. The idea is to provide some services that can be embedded into our other pages.</p>
+
+            <h2>What’s there</h2>
+            <ul>
+              <li>
+                A <a href="snips/table-opening-hours-last-week">table displaying the opening hours last week</a>, courtesy of <a href="https://mapall.space/heatmap/show.php?id=OpenLab+Augsburg">mapall.space</a>.
+              </li>
+            </ul>
+
+
+            <h2>Show me the code/how to contribute</h2>
+
+            <p>The source code can be found <a href="https://code.tvl.fyi/tree/users/Profpatsch/openlab-tools">in my user dir in the tvl repo</a>.</p>
+
+            <p>To build the server, clone the repository from <a href="https://code.tvl.fyi/depot.git">https://code.tvl.fyi/depot.git</a>.
+            Then <code>cd</code> into <code>users/Profpatsch</code>, run <code>nix-shell</code>.
+            </p>
+
+            <p>You can now run the server with <code>cabal repl openlab-tools/`</code> by executing the <code>main</code> function inside the GHC repl. It starts on port <code>9099</code>.
+            <br>
+            To try out changes to the code, stop the server with <kbd><kbd>Ctrl</kbd>+<kbd>z</kbd></kbd> and type <code>:reload</code>, then <code>main</code> again.
+            <br>
+            Finally, from within <code>users/Profpatsch</code> you can start a working development environment by installing <var>vscode</var> or <var>vscodium</var> and the <var>Haskell</var> extension. Then run <code>code .</code> from within the directory.
+            </p>
+
+          </body>
+        |]
+
+debug :: Bool
+debug = False
+
+runApp :: IO ()
+runApp = withTracer $ \tracer -> do
+  cache <- newCache ""
+  let renderHtml =
+        if debug
+          then Html.Pretty.renderHtml >>> stringToText >>> textToBytesUtf8 >>> toLazyBytes
+          else Html.renderHtml
+
+  let appT = withRunInIO $ \runInIO -> Warp.run 9099 $ \req respond -> do
+        let catchAppException act =
+              try act >>= \case
+                Right a -> pure a
+                Left (AppException err) -> do
+                  runInIO (logError err)
+                  respond (Wai.responseLBS Http.status500 [] "")
+
+        catchAppException $ do
+          case req & Wai.pathInfo & Text.intercalate "/" of
+            "" -> do
+              respond $ Wai.responseLBS Http.status200 [] (renderHtml mainPage)
+            "snips/table-opening-hours-last-week" -> do
+              new <- runInIO $ updateCacheIfNewer cache heatmap
+
+              respond $ Wai.responseLBS Http.status200 [] (new & toLazyBytes)
+            _ -> do respond $ Wai.responseLBS Http.status404 [] "nothing here (yet)"
+
+  runReaderT appT.unAppT Context {..}
 
 heatmap :: AppT IO ByteString
 heatmap = do
@@ -178,10 +252,12 @@ data Cache a = Cache
     result :: a
   }
 
+newCache :: a -> IO (IORef (Cache a))
 newCache result = do
   until <- getCurrentTime
   newIORef Cache {..}
 
+updateCache :: IORef (Cache a) -> a -> IO ()
 updateCache cache result = do
   until <- getCurrentTime <&> ((5 * 60) `addUTCTime`)
   _ <- writeIORef cache Cache {..}
@@ -197,16 +273,6 @@ updateCacheIfNewer cache act = withRunInIO $ \runInIO -> do
       updateCache cache res
       pure res
     else pure old.result
-
-runApp :: IO ()
-runApp = withTracer $ \tracer -> do
-  cache <- newCache ""
-  let appT = withRunInIO $ \runInIO -> Warp.run 9099 $ \req respond -> do
-        new <- runInIO $ updateCacheIfNewer cache heatmap
-
-        respond $ Wai.responseLBS Http.status200 [] (new & toLazyBytes)
-
-  runReaderT appT.unAppT Context {..}
 
 -- pgFormat <- readTools (label @"toolsEnvVar" "OPENLAB_TOOLS_TOOLS") (readTool "pg_format")
 -- let config = label @"logDatabaseQueries" LogDatabaseQueries

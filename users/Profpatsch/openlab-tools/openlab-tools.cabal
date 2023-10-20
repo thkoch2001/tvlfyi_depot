@@ -83,6 +83,7 @@ library
         hs-opentelemetry-api,
         http-conduit,
         http-types,
+        ihp-hsx,
         monad-logger,
         mtl,
         network-uri,
