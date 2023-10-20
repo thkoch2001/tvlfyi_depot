@@ -251,8 +251,8 @@ assertM span f v = case f v of
   Left err -> appThrowTree span err
 
 data Cache a = Cache
-  { until :: UTCTime,
-    result :: a
+  { until :: !UTCTime,
+    result :: !a
   }
 
 newCache :: a -> IO (IORef (Cache a))
@@ -262,10 +262,10 @@ newCache result = do
 
 updateCache :: (NFData a) => IORef (Cache a) -> a -> IO ()
 updateCache cache result' = do
-  -- make sure we don’t hold onto the world by deepseq-ing
-  let result = deepseq result' result'
+  -- make sure we don’t hold onto the world by deepseq-ing and evaluating to WHNF
+  let !result = deepseq result' result'
   until <- getCurrentTime <&> ((5 * 60) `addUTCTime`)
-  _ <- writeIORef cache Cache {..}
+  _ <- writeIORef cache $! Cache {..}
   pure ()
 
 updateCacheIfNewer :: (MonadUnliftIO m, NFData b) => IORef (Cache b) -> m b -> m b
