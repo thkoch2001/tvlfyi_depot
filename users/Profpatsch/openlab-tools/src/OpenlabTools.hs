@@ -106,53 +106,60 @@ runApp = withTracer $ \tracer -> do
           then Html.Pretty.renderHtml >>> stringToText >>> textToBytesUtf8 >>> toLazyBytes
           else Html.renderHtml
 
-  let appT = withRunInIO $ \runInIO -> Warp.run 9099 $ \req respond -> do
-        let catchAppException act =
-              try act >>= \case
-                Right a -> pure a
-                Left (AppException err) -> do
-                  runInIO (logError err)
-                  respond (Wai.responseLBS Http.status500 [] "")
+  let runApplication ::
+        (MonadUnliftIO m, MonadLogger m) =>
+        ( Wai.Request ->
+          (Wai.Response -> m Wai.ResponseReceived) ->
+          m Wai.ResponseReceived
+        ) ->
+        m ()
+      runApplication app = do
+        withRunInIO $ \runInIO -> Warp.run 9099 $ \req respond -> do
+          let catchAppException act =
+                try act >>= \case
+                  Right a -> pure a
+                  Left (AppException err) -> do
+                    runInIO (logError err)
+                    respond (Wai.responseLBS Http.status500 [] "")
+          liftIO $ catchAppException (runInIO $ app req (\resp -> liftIO $ respond resp))
 
+  let appT :: AppT IO () = do
         let h extra res = Wai.responseLBS Http.ok200 (("Content-Type", "text/html") : extra) res
-        catchAppException $
-          runInIO $
-            runHandlers
-              [ Handler
-                  { path = "",
-                    body =
-                      Body
-                        (pure ())
-                        (\((), _) -> pure $ h [] (renderHtml mainPage))
-                  },
-                Handler
-                  { path = "snips/table-opening-hours-last-week",
-                    body =
-                      Body
-                        ((label @"ifModifiedSince" <$> parseIfModifiedSince))
-                        ( \(req', cache) -> liftIO $ do
-                            now <- getCurrentTime <&> mkSecondTime
-                            new <- runInIO $ updateCacheIfNewer now cache heatmap
-                            let cacheToHeaders =
-                                  [ ("Last-Modified", new.lastModified & formatHeaderTime),
-                                    ("Expires", new.until & formatHeaderTime),
-                                    ( "Cache-Control",
-                                      let maxAge = new.until `diffSecondTime` now
-                                       in [fmt|max-age={maxAge & floor @NominalDiffTime @Int  & show}, immutable|]
-                                    )
-                                  ]
-                            if
-                                -- If the last cache update is newer or equal to the requested version, we can tell the browser it’s fine
-                                | Just modifiedSince <- req'.ifModifiedSince,
-                                  modifiedSince >= new.lastModified ->
-                                    pure $ Wai.responseLBS Http.status304 cacheToHeaders ""
-                                | otherwise ->
-                                    pure $ h cacheToHeaders (new.result & toLazyBytes)
-                        )
-                  }
-              ]
-              req
-              (\resp -> liftIO $ respond resp)
+        runHandlers
+          runApplication
+          [ Handler
+              { path = "",
+                body =
+                  Body
+                    (pure ())
+                    (\((), _) -> pure $ h [] (renderHtml mainPage))
+              },
+            Handler
+              { path = "snips/table-opening-hours-last-week",
+                body =
+                  Body
+                    ((label @"ifModifiedSince" <$> parseIfModifiedSince))
+                    ( \(req', cache) -> do
+                        now <- liftIO getCurrentTime <&> mkSecondTime
+                        new <- updateCacheIfNewer now cache heatmap
+                        let cacheToHeaders =
+                              [ ("Last-Modified", new.lastModified & formatHeaderTime),
+                                ("Expires", new.until & formatHeaderTime),
+                                ( "Cache-Control",
+                                  let maxAge = new.until `diffSecondTime` now
+                                   in [fmt|max-age={maxAge & floor @NominalDiffTime @Int  & show}, immutable|]
+                                )
+                              ]
+                        if
+                            -- If the last cache update is newer or equal to the requested version, we can tell the browser it’s fine
+                            | Just modifiedSince <- req'.ifModifiedSince,
+                              modifiedSince >= new.lastModified ->
+                                pure $ Wai.responseLBS Http.status304 cacheToHeaders ""
+                            | otherwise ->
+                                pure $ h cacheToHeaders (new.result & toLazyBytes)
+                    )
+              }
+          ]
 
   runReaderT (appT :: AppT IO ()).unAppT Context {..}
   where
@@ -195,55 +202,6 @@ parseRequest :: (MonadThrow f, MonadIO f) => Otel.Span -> Parse from a -> from -
 parseRequest span parser req =
   Parse.runParse "Unable to parse the HTTP request" parser req
     & assertM span id
-
-data Handler m = Handler
-  { path :: Text,
-    body :: Body m
-  }
-
-data Body m
-  = forall a.
-    Body
-      (Parse Wai.Request a)
-      ((a, TVar (Cache ByteString)) -> m Wai.Response)
-
-runHandlers ::
-  (Otel.MonadTracer m, MonadUnliftIO m, MonadThrow m) =>
-  [Handler m] ->
-  Wai.Request ->
-  (Wai.Response -> m Wai.ResponseReceived) ->
-  m Wai.ResponseReceived
-runHandlers handlers req respond = do
-  withCaches ::
-    [ T2
-        "handler"
-        (Handler m)
-        "cache"
-        (TVar (Cache ByteString))
-    ] <-
-    handlers
-      & traverse
-        ( \h -> do
-            cache <- liftIO $ newCache "nothing yet"
-            pure $ T2 (label @"handler" h) (label @"cache" cache)
-        )
-  let mHandler =
-        withCaches
-          & List.find
-            ( \h ->
-                (h.handler.path)
-                  == (req & Wai.pathInfo & Text.intercalate "/")
-            )
-  case mHandler of
-    Nothing -> respond $ Wai.responseLBS Http.status404 [] "nothing here (yet)"
-    Just handler -> do
-      inSpan' "TODO" $ \span -> do
-        let h :: Handler m = handler.handler
-        case h.body of
-          Body parse runHandler -> do
-            req' <- req & parseRequest span parse
-            resp <- runHandler (req', handler.cache)
-            respond resp
 
 heatmap :: AppT IO ByteString
 heatmap = do
@@ -295,6 +253,59 @@ main =
 --       _ <- runTransaction migrate
 --       htmlUi
 -- )
+
+data Handler m = Handler
+  { path :: Text,
+    body :: Body m
+  }
+
+data Body m
+  = forall a.
+    Body
+      (Parse Wai.Request a)
+      ((a, TVar (Cache ByteString)) -> m Wai.Response)
+
+runHandlers ::
+  (Otel.MonadTracer m, MonadUnliftIO m, MonadThrow m) =>
+  -- ( (Wai.Request -> (Wai.Response -> m Wai.ResponseReceived) -> m Wai.ResponseReceived) ->
+  --   m ()
+  -- ) ->
+  ( (Wai.Request -> (Wai.Response -> m a) -> m a) ->
+    m ()
+  ) ->
+  [Handler m] ->
+  m ()
+runHandlers runApplication handlers = do
+  withCaches ::
+    [ T2
+        "handler"
+        (Handler m)
+        "cache"
+        (TVar (Cache ByteString))
+    ] <-
+    handlers
+      & traverse
+        ( \h -> do
+            cache <- liftIO $ newCache h.path "nothing yet"
+            pure $ T2 (label @"handler" h) (label @"cache" cache)
+        )
+  runApplication $ \req respond -> do
+    let mHandler =
+          withCaches
+            & List.find
+              ( \h ->
+                  (h.handler.path)
+                    == (req & Wai.pathInfo & Text.intercalate "/")
+              )
+    case mHandler of
+      Nothing -> respond $ Wai.responseLBS Http.status404 [] "nothing here (yet)"
+      Just handler -> do
+        inSpan' "TODO" $ \span -> do
+          case handler.handler.body of
+            Body parse runHandler -> do
+              req' <- req & parseRequest span parse
+              resp <- runHandler (req', handler.cache)
+              respond resp
 
 inSpan :: (MonadUnliftIO m, Otel.MonadTracer m) => Text -> m a -> m a
 inSpan name = Otel.inSpan name Otel.defaultSpanArguments
@@ -403,14 +414,16 @@ diffSecondTime :: SecondTime -> SecondTime -> NominalDiffTime
 diffSecondTime (SecondTime a) (SecondTime b) = diffUTCTime a b
 
 data Cache a = Cache
-  { until :: !SecondTime,
+  { name :: !Text,
+    until :: !SecondTime,
     lastModified :: !SecondTime,
     result :: !a
   }
+  deriving (Show)
 
-newCache :: a -> IO (TVar (Cache a))
-newCache result = do
-  until <- getCurrentTime <&> mkSecondTime
+newCache :: Text -> a -> IO (TVar (Cache a))
+newCache name result = do
+  let until = mkSecondTime $ Time.UTCTime {utctDay = Time.ModifiedJulianDay 1, utctDayTime = 1}
   let lastModified = until
   newTVarIO $ Cache {..}
 
@@ -421,6 +434,7 @@ updateCache now cache result' = do
   let until = mkSecondTime $ (5 * 60) `addUTCTime` now.unSecondTime
   !toWrite <- do
     old <- readTVar cache
+    let name = old.name
     -- only update the lastModified time iff the content changed (this is helpful for HTTP caching with If-Modified-Since)
     if old.result == result
       then do
@@ -436,7 +450,7 @@ updateCache now cache result' = do
 updateCacheIfNewer :: (MonadUnliftIO m, NFData b, Eq b) => SecondTime -> TVar (Cache b) -> m b -> m (Cache b)
 updateCacheIfNewer now cache act = withRunInIO $ \runInIO -> do
   old <- readTVarIO cache
-  if old.until <= now
+  if old.until < now
     then do
       res <- runInIO act
       atomically $ updateCache now cache res
