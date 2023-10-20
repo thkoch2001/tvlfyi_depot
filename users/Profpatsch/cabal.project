@@ -9,6 +9,7 @@ packages:
   ./cas-serve/cas-serve.cabal
   ./jbovlaste-sqlite/jbovlaste-sqlite.cabal
   ./whatcd-resolver/whatcd-resolver.cabal
+  ./openlab-tools/openlab-tools.cabal
   ./ircmail/ircmail.cabal
   ./httzip/httzip.cabal
   ./declib/declib.cabal

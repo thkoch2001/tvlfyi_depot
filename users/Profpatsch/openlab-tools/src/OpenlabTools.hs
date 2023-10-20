@@ -5,19 +5,25 @@
 
 module OpenlabTools where
 
+import Control.Concurrent.STM hiding (atomically, readTVarIO)
 import Control.DeepSeq (NFData, deepseq)
 import Control.Monad.Logger qualified as Logger
 import Control.Monad.Logger.CallStack
 import Control.Monad.Reader
 import Data.Aeson.BetterErrors qualified as Json
+import Data.CaseInsensitive qualified as CaseInsensitive
 import Data.Error.Tree
 import Data.HashMap.Strict qualified as HashMap
 import Data.List qualified as List
 import Data.Maybe (listToMaybe)
 import Data.Text qualified as Text
-import Data.Time (UTCTime, getCurrentTime)
+import Data.Time (NominalDiffTime, UTCTime (utctDayTime), diffUTCTime, getCurrentTime)
+import Data.Time qualified as Time
 import Data.Time.Clock (addUTCTime)
+import Data.Time.Format qualified as Time.Format
 import Debug.Trace
+import FieldParser (FieldParser' (..))
+import FieldParser qualified as Field
 import GHC.Records (HasField (..))
 import GHC.Stack qualified
 import IHP.HSX.QQ (hsx)
@@ -33,6 +39,8 @@ import Network.Wai.Parse qualified as Wai
 import OpenTelemetry.Trace qualified as Otel hiding (getTracer, inSpan, inSpan')
 import OpenTelemetry.Trace.Core qualified as Otel hiding (inSpan, inSpan')
 import OpenTelemetry.Trace.Monad qualified as Otel
+import Parse (Parse)
+import Parse qualified
 import PossehlAnalyticsPrelude
 import Pretty
 import System.Environment qualified as Env
@@ -41,7 +49,7 @@ import Text.Blaze.Html.Renderer.Pretty qualified as Html.Pretty
 import Text.Blaze.Html.Renderer.Utf8 qualified as Html
 import Text.Blaze.Html5 qualified as Html
 import Text.HTML.TagSoup qualified as Soup
-import UnliftIO
+import UnliftIO hiding (newTVarIO)
 import Prelude hiding (span, until)
 
 mapallSpaceOla :: Text
@@ -108,22 +116,76 @@ runApp = withTracer $ \tracer -> do
                   respond (Wai.responseLBS Http.status500 [] "")
 
         catchAppException $ do
-          let h res = respond . Wai.responseLBS Http.ok200 [("Content-Type", "text/html")] $ res
+          let h extra res = respond $ Wai.responseLBS Http.ok200 (("Content-Type", "text/html") : extra) res
           case req & Wai.pathInfo & Text.intercalate "/" of
-            "" -> h (renderHtml mainPage)
+            "" -> h [] (renderHtml mainPage)
             "snips/table-opening-hours-last-week" -> do
-              new <- runInIO $ updateCacheIfNewer cache heatmap
-              h (new & toLazyBytes)
+              ifModifiedSince <- runInIO $ inSpan' "parse request lol" $ \span ->
+                req & parseRequest span parseIfModifiedSince
+              now <- getCurrentTime <&> mkSecondTime
+              new <- runInIO $ updateCacheIfNewer now cache heatmap
+              let cacheToHeaders =
+                    [ ("Last-Modified", new.lastModified & formatHeaderTime),
+                      ("Expires", new.until & formatHeaderTime),
+                      ( "Cache-Control",
+                        let maxAge = new.until `diffSecondTime` now
+                         in [fmt|max-age={maxAge & floor @NominalDiffTime @Int  & show}, immutable|]
+                      )
+                    ]
+              if
+                  -- If the last cache update is newer or equal to the requested version, we can tell the browser it’s fine
+                  | Just modifiedSince <- ifModifiedSince,
+                    modifiedSince >= new.lastModified ->
+                      respond $ Wai.responseLBS Http.status304 cacheToHeaders ""
+                  | otherwise ->
+                      h cacheToHeaders (new.result & toLazyBytes)
             _ -> do respond $ Wai.responseLBS Http.status404 [] "nothing here (yet)"
 
   runReaderT appT.unAppT Context {..}
+  where
+    -- "https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Last-Modified#syntax"
+    headerFormat = "%a, %d %b %0Y %T GMT"
+    formatHeaderTime (SecondTime t) =
+      t
+        & Time.Format.formatTime
+          @UTCTime
+          Time.Format.defaultTimeLocale
+          headerFormat
+        & stringToText
+        & textToBytesUtf8
+    parseHeaderTime =
+      Field.utf8
+        >>> ( FieldParser $ \t ->
+                t
+                  & textToString
+                  & Time.Format.parseTimeM
+                    @Maybe
+                    @UTCTime
+                    {-no leading whitespace -} False
+                    Time.Format.defaultTimeLocale
+                    headerFormat
+                  & annotate [fmt|Cannot parse header timestamp "{t}"|]
+            )
+    parseIfModifiedSince :: Parse Wai.Request (Maybe SecondTime)
+    parseIfModifiedSince =
+      lmap
+        ( (.requestHeaders)
+            >>> findMaybe
+              ( \(h, v) ->
+                  if "If-Modified-Since" == CaseInsensitive.mk h then Just v else Nothing
+              )
+        )
+        (Parse.maybe $ Parse.fieldParser parseHeaderTime)
+        & rmap (fmap mkSecondTime)
+    parseRequest span parser req =
+      Parse.runParse "Unable to parse the HTTP request" parser req
+        & assertM span id
 
 heatmap :: AppT IO ByteString
 heatmap = do
   Http.httpBS [fmt|GET {mapallSpaceOla}|]
     <&> (.responseBody)
     <&> Soup.parseTags
-    <&> traceShowId
     <&> Soup.canonicalizeTags
     <&> findHeatmap
     <&> fromMaybe (htmlToTags [hsx|<p>Uh oh! could not fetch the table from <a href={mapallSpaceOla}>{mapallSpaceOla}</a></p>|])
@@ -174,7 +236,8 @@ inSpan :: (MonadUnliftIO m, Otel.MonadTracer m) => Text -> m a -> m a
 inSpan name = Otel.inSpan name Otel.defaultSpanArguments
 
 inSpan' :: (MonadUnliftIO m, Otel.MonadTracer m) => Text -> (Otel.Span -> m a) -> m a
-inSpan' name = Otel.inSpan' name Otel.defaultSpanArguments
+-- inSpan' name =  Otel.inSpan' name Otel.defaultSpanArguments
+inSpan' _name act = act (error "todo telemetry disabled")
 
 zipT2 ::
   forall l1 l2 t1 t2.
@@ -265,35 +328,47 @@ assertM span f v = case f v of
   Right a -> pure a
   Left err -> appThrowTree span err
 
+-- | UTC time that is only specific to the second
+newtype SecondTime = SecondTime {unSecondTime :: UTCTime}
+  deriving newtype (Show, Eq, Ord)
+
+mkSecondTime :: UTCTime -> SecondTime
+mkSecondTime utcTime = SecondTime utcTime {utctDayTime = Time.secondsToDiffTime $ floor utcTime.utctDayTime}
+
+diffSecondTime :: SecondTime -> SecondTime -> NominalDiffTime
+diffSecondTime (SecondTime a) (SecondTime b) = diffUTCTime a b
+
 data Cache a = Cache
-  { until :: !UTCTime,
+  { until :: !SecondTime,
+    lastModified :: !SecondTime,
     result :: !a
   }
 
-newCache :: a -> IO (IORef (Cache a))
+newCache :: a -> IO (TVar (Cache a))
 newCache result = do
-  until <- getCurrentTime
-  newIORef Cache {..}
+  until <- getCurrentTime <&> mkSecondTime
+  let lastModified = until
+  newTVarIO $ Cache {..}
 
-updateCache :: (NFData a) => IORef (Cache a) -> a -> IO ()
-updateCache cache result' = do
+updateCache :: (NFData a) => SecondTime -> TVar (Cache a) -> a -> STM (Cache a)
+updateCache now cache result' = do
   -- make sure we don’t hold onto the world by deepseq-ing and evaluating to WHNF
   let !result = deepseq result' result'
-  until <- getCurrentTime <&> ((5 * 60) `addUTCTime`)
-  _ <- writeIORef cache $! Cache {..}
-  pure ()
+  let until = mkSecondTime $ (5 * 60) `addUTCTime` now.unSecondTime
+  let lastModified = now
+  let !updated = Cache {..}
+  _ <- writeTVar cache $! updated
+  pure updated
 
-updateCacheIfNewer :: (MonadUnliftIO m, NFData b) => IORef (Cache b) -> m b -> m b
-updateCacheIfNewer cache act = withRunInIO $ \runInIO -> do
-  old <- readIORef cache
-  now <- getCurrentTime
+-- | Run the given action iff the cache is stale, otherwise just return the item from the cache.
+updateCacheIfNewer :: (MonadUnliftIO m, NFData b) => SecondTime -> TVar (Cache b) -> m b -> m (Cache b)
+updateCacheIfNewer now cache act = withRunInIO $ \runInIO -> do
+  old <- readTVarIO cache
   if old.until < now
     then do
       res <- runInIO act
-      updateCache cache res
-
-      pure res
-    else pure old.result
+      atomically $ updateCache now cache res
+    else pure old
 
 -- pgFormat <- readTools (label @"toolsEnvVar" "OPENLAB_TOOLS_TOOLS") (readTool "pg_format")
 -- let config = label @"logDatabaseQueries" LogDatabaseQueries
@@ -370,12 +445,12 @@ recordException span dat = liftIO $ do
 appThrowTree :: (MonadThrow m, MonadIO m) => Otel.Span -> ErrorTree -> m a
 appThrowTree span exc = do
   let msg = prettyErrorTree exc
-  recordException
-    span
-    ( T2
-        (label @"type_" "AppException")
-        (label @"message" msg)
-    )
+  -- recordException
+  --   span
+  --   ( T2
+  --       (label @"type_" "AppException")
+  --       (label @"message" msg)
+  --   )
   throwM $ AppException msg
 
 orAppThrowTree :: (MonadThrow m, MonadIO m) => Otel.Span -> Either ErrorTree a -> m a
