@@ -79,6 +79,8 @@ mainPage =
             Finally, from within <code>users/Profpatsch</code> you can start a working development environment by installing <var>vscode</var> or <var>vscodium</var> and the <var>Haskell</var> extension. Then run <code>code .</code> from within the directory.
             </p>
 
+            <p>Once you have a patch, <a href="https://matrix.to/#/@profpatsch:augsburg.one">contact me on Matrix</a> or DM me at <code>irc/libera</code>, nick <code>Profpatsch</code>.
+            </p>
           </body>
         |]
 
