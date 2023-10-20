@@ -35,7 +35,7 @@ in
       wantedBy = [ "multi-user.target" ];
 
       serviceConfig = {
-        ExecStart = "${depot.third_party.gerrit-queue}/bin/gerrit-queue";
+        ExecStart = "${pkgs.gerrit-queue}/bin/gerrit-queue";
         DynamicUser = true;
         Restart = "always";
         EnvironmentFile = cfg.secretsFile;
