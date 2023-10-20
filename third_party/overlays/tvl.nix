@@ -138,4 +138,23 @@ depot.nix.readTree.drvTargets {
       ./patches/evans-add-support-for-unix-domain-sockets.patch
     ];
   });
+
+  # Package gerrit-queue, which is not in nixpkgs yet
+  gerrit-queue = super.buildGoModule {
+    pname = "gerrit-queue";
+    version = "unstable-2023-10-20";
+    vendorHash = "sha256-+Ig4D46NphzpWKXO23Haea9EqVtpda8v9zLPJkbe3bQ=";
+    src = super.fetchFromGitHub {
+      owner = "flokli";
+      repo = "gerrit-queue";
+      rev = "0186dbde15c9b11dc17b422feb74c842f6fa605a";
+      hash = "sha256-zXB5vre/Vr7UOyeMnf2RCtMKm+v5RENH7kGPr/2o7mI=";
+    };
+
+    meta = with lib; {
+      description = "Gerrit submit bot";
+      homepage = "https://github.com/tweag/gerrit-queue";
+      license = licenses.asl20;
+    };
+  };
 }
