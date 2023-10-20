@@ -350,18 +350,26 @@ newCache result = do
   let lastModified = until
   newTVarIO $ Cache {..}
 
-updateCache :: (NFData a) => SecondTime -> TVar (Cache a) -> a -> STM (Cache a)
+updateCache :: (NFData a, Eq a) => SecondTime -> TVar (Cache a) -> a -> STM (Cache a)
 updateCache now cache result' = do
   -- make sure we don’t hold onto the world by deepseq-ing and evaluating to WHNF
   let !result = deepseq result' result'
   let until = mkSecondTime $ (5 * 60) `addUTCTime` now.unSecondTime
-  let lastModified = now
-  let !updated = Cache {..}
-  _ <- writeTVar cache $! updated
-  pure updated
+  !toWrite <- do
+    old <- readTVar cache
+    -- only update the lastModified time iff the content changed (this is helpful for HTTP caching with If-Modified-Since)
+    if old.result == result
+      then do
+        let lastModified = old.lastModified
+        pure $ Cache {..}
+      else do
+        let lastModified = now
+        pure $ Cache {..}
+  _ <- writeTVar cache $! toWrite
+  pure toWrite
 
 -- | Run the given action iff the cache is stale, otherwise just return the item from the cache.
-updateCacheIfNewer :: (MonadUnliftIO m, NFData b) => SecondTime -> TVar (Cache b) -> m b -> m (Cache b)
+updateCacheIfNewer :: (MonadUnliftIO m, NFData b, Eq b) => SecondTime -> TVar (Cache b) -> m b -> m (Cache b)
 updateCacheIfNewer now cache act = withRunInIO $ \runInIO -> do
   old <- readTVarIO cache
   if old.until < now
