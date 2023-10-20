@@ -28,6 +28,7 @@ let
       pkgs.haskellPackages.hs-opentelemetry-sdk
       pkgs.haskellPackages.http-conduit
       pkgs.haskellPackages.http-types
+      pkgs.haskellPackages.ihp-hsx
       pkgs.haskellPackages.monad-logger
       pkgs.haskellPackages.selective
       pkgs.haskellPackages.unliftio
