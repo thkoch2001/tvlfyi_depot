@@ -44,6 +44,9 @@ import Text.HTML.TagSoup qualified as Soup
 import UnliftIO
 import Prelude hiding (span, until)
 
+mapallSpaceOla :: Text
+mapallSpaceOla = "https://mapall.space/heatmap/show.php?id=OpenLab+Augsburg"
+
 mainPage :: Html.Html
 mainPage =
   Html.docTypeHtml
@@ -60,7 +63,7 @@ mainPage =
             <h2>What’s there</h2>
             <ul>
               <li>
-                A <a href="snips/table-opening-hours-last-week">table displaying the opening hours last week</a>, courtesy of <a href="https://mapall.space/heatmap/show.php?id=OpenLab+Augsburg">mapall.space</a>.
+                A <a href="snips/table-opening-hours-last-week">table displaying the opening hours last week</a>, courtesy of <a href={mapallSpaceOla}>mapall.space</a>.
               </li>
             </ul>
 
@@ -105,25 +108,26 @@ runApp = withTracer $ \tracer -> do
                   respond (Wai.responseLBS Http.status500 [] "")
 
         catchAppException $ do
+          let h res = respond . Wai.responseLBS Http.ok200 [("Content-Type", "text/html")] $ res
           case req & Wai.pathInfo & Text.intercalate "/" of
-            "" -> do
-              respond $ Wai.responseLBS Http.status200 [] (renderHtml mainPage)
+            "" -> h (renderHtml mainPage)
             "snips/table-opening-hours-last-week" -> do
               new <- runInIO $ updateCacheIfNewer cache heatmap
-
-              respond $ Wai.responseLBS Http.status200 [] (new & toLazyBytes)
+              h (new & toLazyBytes)
             _ -> do respond $ Wai.responseLBS Http.status404 [] "nothing here (yet)"
 
   runReaderT appT.unAppT Context {..}
 
 heatmap :: AppT IO ByteString
 heatmap = do
-  Http.httpBS [fmt|GET https://mapall.space/heatmap/show.php?id=OpenLab+Augsburg|]
+  Http.httpBS [fmt|GET {mapallSpaceOla}|]
     <&> (.responseBody)
     <&> Soup.parseTags
+    <&> traceShowId
     <&> Soup.canonicalizeTags
     <&> findHeatmap
-    <&> fromMaybe ""
+    <&> fromMaybe (htmlToTags [hsx|<p>Uh oh! could not fetch the table from <a href={mapallSpaceOla}>{mapallSpaceOla}</a></p>|])
+    <&> Soup.renderTags
   where
     firstSection f t = t & Soup.sections f & listToMaybe
     match :: Soup.Tag ByteString -> Soup.Tag ByteString -> Bool
@@ -133,16 +137,27 @@ heatmap = do
         & firstSection (match (Soup.TagOpen ("") [("class", "heatmap")]))
         >>= firstSection (match (Soup.TagOpen "table" []))
         <&> getTable
-        <&> Soup.renderTags
+        <&> (<> htmlToTags [hsx|<figcaption>source: <a href={mapallSpaceOla} target="_blank">mapall.space</a></figcaption>|])
+        <&> wrapTagStream (T2 (label @"el" "figure") (label @"attrs" []))
 
     -- get the table from opening tag to closing tag (allowing nested tables)
     getTable = go 0
       where
         go _ [] = []
         go d (el : els)
-          | match (Soup.TagOpen "table" []) el = el : go (traceShowId $ d + 1) els
+          | match (Soup.TagOpen "table" []) el = el : go (d + 1) els
           | match (Soup.TagClose "table") el = if d <= 1 then [el] else el : go (traceShowId $ d - 1) els
           | otherwise = el : go d els
+
+    htmlToTags :: Html.Html -> [Soup.Tag ByteString]
+    htmlToTags h = h & Html.renderHtml & toStrictBytes & Soup.parseTags
+
+    -- TODO: this is dog-slow because of the whole list recreation!
+    wrapTagStream ::
+      T2 "el" ByteString "attrs" [Soup.Attribute ByteString] ->
+      [Soup.Tag ByteString] ->
+      [Soup.Tag ByteString]
+    wrapTagStream tag inner = (Soup.TagOpen (tag.el) tag.attrs : inner) <> [Soup.TagClose tag.el]
 
 main :: IO ()
 main =
