@@ -76,6 +76,7 @@ library
         blaze-html,
         bytestring,
         containers,
+        deepseq,
         unordered-containers,
         exceptions,
         filepath,
