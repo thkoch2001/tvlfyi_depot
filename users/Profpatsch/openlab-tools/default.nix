@@ -26,6 +26,7 @@ let
       pkgs.haskellPackages.aeson-better-errors
       pkgs.haskellPackages.blaze-html
       pkgs.haskellPackages.deepseq
+      pkgs.haskellPackages.case-insensitive
       pkgs.haskellPackages.hs-opentelemetry-sdk
       pkgs.haskellPackages.http-conduit
       pkgs.haskellPackages.http-types

@@ -95,7 +95,9 @@ library
         wai,
         warp,
         tagsoup,
-        time
+        time,
+        stm,
+        case-insensitive
 
 executable openlab-tools
     import: common-options
