@@ -5,6 +5,7 @@
 
 module OpenlabTools where
 
+import Control.DeepSeq (NFData, deepseq)
 import Control.Monad.Logger qualified as Logger
 import Control.Monad.Logger.CallStack
 import Control.Monad.Reader
@@ -259,13 +260,15 @@ newCache result = do
   until <- getCurrentTime
   newIORef Cache {..}
 
-updateCache :: IORef (Cache a) -> a -> IO ()
-updateCache cache result = do
+updateCache :: (NFData a) => IORef (Cache a) -> a -> IO ()
+updateCache cache result' = do
+  -- make sure we don’t hold onto the world by deepseq-ing
+  let result = deepseq result' result'
   until <- getCurrentTime <&> ((5 * 60) `addUTCTime`)
   _ <- writeIORef cache Cache {..}
   pure ()
 
-updateCacheIfNewer :: (MonadUnliftIO m) => IORef (Cache b) -> m b -> m b
+updateCacheIfNewer :: (MonadUnliftIO m, NFData b) => IORef (Cache b) -> m b -> m b
 updateCacheIfNewer cache act = withRunInIO $ \runInIO -> do
   old <- readIORef cache
   now <- getCurrentTime
@@ -273,6 +276,7 @@ updateCacheIfNewer cache act = withRunInIO $ \runInIO -> do
     then do
       res <- runInIO act
       updateCache cache res
+
       pure res
     else pure old.result
 

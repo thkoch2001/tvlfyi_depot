@@ -25,6 +25,7 @@ let
       pkgs.haskellPackages.pa-run-command
       pkgs.haskellPackages.aeson-better-errors
       pkgs.haskellPackages.blaze-html
+      pkgs.haskellPackages.deepseq
       pkgs.haskellPackages.hs-opentelemetry-sdk
       pkgs.haskellPackages.http-conduit
       pkgs.haskellPackages.http-types
