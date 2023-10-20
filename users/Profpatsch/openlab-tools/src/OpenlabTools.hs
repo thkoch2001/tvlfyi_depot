@@ -49,7 +49,7 @@ import Text.Blaze.Html.Renderer.Pretty qualified as Html.Pretty
 import Text.Blaze.Html.Renderer.Utf8 qualified as Html
 import Text.Blaze.Html5 qualified as Html
 import Text.HTML.TagSoup qualified as Soup
-import UnliftIO hiding (newTVarIO)
+import UnliftIO hiding (Handler, newTVarIO)
 import Prelude hiding (span, until)
 
 mapallSpaceOla :: Text
@@ -101,7 +101,6 @@ debug = False
 
 runApp :: IO ()
 runApp = withTracer $ \tracer -> do
-  cache <- newCache ""
   let renderHtml =
         if debug
           then Html.Pretty.renderHtml >>> stringToText >>> textToBytesUtf8 >>> toLazyBytes
@@ -115,33 +114,47 @@ runApp = withTracer $ \tracer -> do
                   runInIO (logError err)
                   respond (Wai.responseLBS Http.status500 [] "")
 
-        catchAppException $ do
-          let h extra res = respond $ Wai.responseLBS Http.ok200 (("Content-Type", "text/html") : extra) res
-          case req & Wai.pathInfo & Text.intercalate "/" of
-            "" -> h [] (renderHtml mainPage)
-            "snips/table-opening-hours-last-week" -> do
-              ifModifiedSince <- runInIO $ inSpan' "parse request lol" $ \span ->
-                req & parseRequest span parseIfModifiedSince
-              now <- getCurrentTime <&> mkSecondTime
-              new <- runInIO $ updateCacheIfNewer now cache heatmap
-              let cacheToHeaders =
-                    [ ("Last-Modified", new.lastModified & formatHeaderTime),
-                      ("Expires", new.until & formatHeaderTime),
-                      ( "Cache-Control",
-                        let maxAge = new.until `diffSecondTime` now
-                         in [fmt|max-age={maxAge & floor @NominalDiffTime @Int  & show}, immutable|]
-                      )
-                    ]
-              if
-                  -- If the last cache update is newer or equal to the requested version, we can tell the browser it’s fine
-                  | Just modifiedSince <- ifModifiedSince,
-                    modifiedSince >= new.lastModified ->
-                      respond $ Wai.responseLBS Http.status304 cacheToHeaders ""
-                  | otherwise ->
-                      h cacheToHeaders (new.result & toLazyBytes)
-            _ -> do respond $ Wai.responseLBS Http.status404 [] "nothing here (yet)"
+        let h extra res = Wai.responseLBS Http.ok200 (("Content-Type", "text/html") : extra) res
+        catchAppException $
+          runInIO $
+            runHandlers
+              [ Handler
+                  { path = "",
+                    body =
+                      Body
+                        (pure ())
+                        (\((), _) -> pure $ h [] (renderHtml mainPage))
+                  },
+                Handler
+                  { path = "snips/table-opening-hours-last-week",
+                    body =
+                      Body
+                        ((label @"ifModifiedSince" <$> parseIfModifiedSince))
+                        ( \(req', cache) -> liftIO $ do
+                            now <- getCurrentTime <&> mkSecondTime
+                            new <- runInIO $ updateCacheIfNewer now cache heatmap
+                            let cacheToHeaders =
+                                  [ ("Last-Modified", new.lastModified & formatHeaderTime),
+                                    ("Expires", new.until & formatHeaderTime),
+                                    ( "Cache-Control",
+                                      let maxAge = new.until `diffSecondTime` now
+                                       in [fmt|max-age={maxAge & floor @NominalDiffTime @Int  & show}, immutable|]
+                                    )
+                                  ]
+                            if
+                                -- If the last cache update is newer or equal to the requested version, we can tell the browser it’s fine
+                                | Just modifiedSince <- req'.ifModifiedSince,
+                                  modifiedSince >= new.lastModified ->
+                                    pure $ Wai.responseLBS Http.status304 cacheToHeaders ""
+                                | otherwise ->
+                                    pure $ h cacheToHeaders (new.result & toLazyBytes)
+                        )
+                  }
+              ]
+              req
+              (\resp -> liftIO $ respond resp)
 
-  runReaderT appT.unAppT Context {..}
+  runReaderT (appT :: AppT IO ()).unAppT Context {..}
   where
     -- "https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Last-Modified#syntax"
     headerFormat = "%a, %d %b %0Y %T GMT"
@@ -177,9 +190,60 @@ runApp = withTracer $ \tracer -> do
         )
         (Parse.maybe $ Parse.fieldParser parseHeaderTime)
         & rmap (fmap mkSecondTime)
-    parseRequest span parser req =
-      Parse.runParse "Unable to parse the HTTP request" parser req
-        & assertM span id
+
+parseRequest :: (MonadThrow f, MonadIO f) => Otel.Span -> Parse from a -> from -> f a
+parseRequest span parser req =
+  Parse.runParse "Unable to parse the HTTP request" parser req
+    & assertM span id
+
+data Handler m = Handler
+  { path :: Text,
+    body :: Body m
+  }
+
+data Body m
+  = forall a.
+    Body
+      (Parse Wai.Request a)
+      ((a, TVar (Cache ByteString)) -> m Wai.Response)
+
+runHandlers ::
+  (Otel.MonadTracer m, MonadUnliftIO m, MonadThrow m) =>
+  [Handler m] ->
+  Wai.Request ->
+  (Wai.Response -> m Wai.ResponseReceived) ->
+  m Wai.ResponseReceived
+runHandlers handlers req respond = do
+  withCaches ::
+    [ T2
+        "handler"
+        (Handler m)
+        "cache"
+        (TVar (Cache ByteString))
+    ] <-
+    handlers
+      & traverse
+        ( \h -> do
+            cache <- liftIO $ newCache "nothing yet"
+            pure $ T2 (label @"handler" h) (label @"cache" cache)
+        )
+  let mHandler =
+        withCaches
+          & List.find
+            ( \h ->
+                (h.handler.path)
+                  == (req & Wai.pathInfo & Text.intercalate "/")
+            )
+  case mHandler of
+    Nothing -> respond $ Wai.responseLBS Http.status404 [] "nothing here (yet)"
+    Just handler -> do
+      inSpan' "TODO" $ \span -> do
+        let h :: Handler m = handler.handler
+        case h.body of
+          Body parse runHandler -> do
+            req' <- req & parseRequest span parse
+            resp <- runHandler (req', handler.cache)
+            respond resp
 
 heatmap :: AppT IO ByteString
 heatmap = do
@@ -372,7 +436,7 @@ updateCache now cache result' = do
 updateCacheIfNewer :: (MonadUnliftIO m, NFData b, Eq b) => SecondTime -> TVar (Cache b) -> m b -> m (Cache b)
 updateCacheIfNewer now cache act = withRunInIO $ \runInIO -> do
   old <- readTVarIO cache
-  if old.until < now
+  if old.until <= now
     then do
       res <- runInIO act
       atomically $ updateCache now cache res
