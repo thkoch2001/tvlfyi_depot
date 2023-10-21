@@ -16,6 +16,52 @@
       "message": "@edef, you mentioned you know what\u0027s needed to fix this?",
       "revId": "ef6e782f2044274cade086787f1cecf9fcfc5d0a",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "71ff318d_52faf895",
+        "filename": "nix/buildGo/default.nix",
+        "patchSetId": 1
+      },
+      "lineNbr": 62,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2023-10-21T03:07:25Z",
+      "side": 1,
+      "message": "this needs -p main",
+      "range": {
+        "startLine": 62,
+        "startChar": 75,
+        "endLine": 62,
+        "endChar": 76
+      },
+      "revId": "ef6e782f2044274cade086787f1cecf9fcfc5d0a",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "dff9a6a8_6950e60c",
+        "filename": "nix/buildGo/default.nix",
+        "patchSetId": 1
+      },
+      "lineNbr": 82,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2023-10-21T03:07:25Z",
+      "side": 1,
+      "message": "IIRC this is supposed to be -p ${path}",
+      "range": {
+        "startLine": 82,
+        "startChar": 30,
+        "endLine": 82,
+        "endChar": 32
+      },
+      "revId": "ef6e782f2044274cade086787f1cecf9fcfc5d0a",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
