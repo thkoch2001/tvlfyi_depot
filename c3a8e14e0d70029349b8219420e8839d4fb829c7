@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d4bec639_d6255b99",
+        "filename": "tvix/cli/src/derivation.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 532,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-10-22T17:02:27Z",
+      "side": 1,
+      "message": "I intend to tackle this in a followup, at least if it\u0027s not a regression introduced in this chain (which I *think* it\u0027s not)",
+      "revId": "c3a8e14e0d70029349b8219420e8839d4fb829c7",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
