@@ -19,9 +19,9 @@ use super::from_algo_and_digest;
 ///  - "digest". The digest itself.
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub enum CAHash {
-    Flat(NixHash),       // "fixed flat"
-    Nar(NixHash),        // "fixed recursive"
-    Text(Box<[u8; 32]>), // "text", only supports sha256
+    Flat(NixHash),       // "fixed flat". may not contain references
+    Nar(NixHash), // "fixed recursive". may only contain references if sha256, may contain self refs
+    Text(Box<[u8; 32]>), // "text", only supports sha256. may not contain self references.
 }
 
 impl CAHash {
