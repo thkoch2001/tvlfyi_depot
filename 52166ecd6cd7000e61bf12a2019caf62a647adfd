@@ -53,6 +53,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "d59db600_81461e87",
+        "filename": "tvix/nix-compat/src/derivation/mod.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 277,
+      "author": {
+        "id": 1000073
+      },
+      "writtenOn": "2023-10-23T14:38:46Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "de086c98_fa5d4831",
+      "revId": "52166ecd6cd7000e61bf12a2019caf62a647adfd",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "b647f95a_68eeb250",
@@ -123,6 +141,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "727dc69b_844af644",
+        "filename": "tvix/nix-compat/src/derivation/parser.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 1000073
+      },
+      "writtenOn": "2023-10-23T14:38:46Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "4dc20405_17c254df",
+      "revId": "52166ecd6cd7000e61bf12a2019caf62a647adfd",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "73facfc7_026ae4e2",
@@ -154,6 +190,24 @@
       "side": 1,
       "message": "`*digest.clone()` seems to work. We need to put the digest in an owned box. PTAL.",
       "parentUuid": "73facfc7_026ae4e2",
+      "revId": "52166ecd6cd7000e61bf12a2019caf62a647adfd",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e0b37f0f_92f79434",
+        "filename": "tvix/nix-compat/src/nixhash/ca_hash.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1000073
+      },
+      "writtenOn": "2023-10-23T14:38:46Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "33d5f665_3247e6e6",
       "revId": "52166ecd6cd7000e61bf12a2019caf62a647adfd",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
