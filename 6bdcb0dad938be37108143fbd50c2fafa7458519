@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d023974d_a2593a23",
+        "filename": "tvix/nix-compat/src/derivation/mod.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 125,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-10-23T05:36:40Z",
+      "side": 1,
+      "message": "I\u0027d like to leave this for a followup.",
+      "revId": "6bdcb0dad938be37108143fbd50c2fafa7458519",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
