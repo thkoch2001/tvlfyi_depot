@@ -37,6 +37,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "de086c98_fa5d4831",
+        "filename": "tvix/nix-compat/src/derivation/mod.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 277,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-10-23T12:14:29Z",
+      "side": 1,
+      "message": "This concept only makes sense in derivation contexts, and some kinds (like text) don\u0027t exist there.\n\n`Derivation::validate` does prevent you from using such a `ca_hash` inside a `Derivation` struct.",
+      "parentUuid": "97ac1526_aff5546d",
+      "revId": "52166ecd6cd7000e61bf12a2019caf62a647adfd",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "b647f95a_68eeb250",
         "filename": "tvix/nix-compat/src/derivation/output.rs",
         "patchSetId": 2
@@ -65,6 +83,24 @@
       "writtenOn": "2023-10-23T12:00:02Z",
       "side": 1,
       "message": "wonder why it should not be part of `CAHash` itself too",
+      "revId": "52166ecd6cd7000e61bf12a2019caf62a647adfd",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4dc20405_17c254df",
+        "filename": "tvix/nix-compat/src/derivation/parser.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-10-23T12:14:29Z",
+      "side": 1,
+      "message": "This can only be used to produce a subset of `CAHash`, the ones valid in a `Derivation` struct.",
+      "parentUuid": "dfd6c21a_d8613274",
       "revId": "52166ecd6cd7000e61bf12a2019caf62a647adfd",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
