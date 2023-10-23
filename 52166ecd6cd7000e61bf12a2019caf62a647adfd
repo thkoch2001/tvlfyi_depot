@@ -1,0 +1,89 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d9480b5f_9e2ac19e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000073
+      },
+      "writtenOn": "2023-10-23T12:00:02Z",
+      "side": 1,
+      "message": "Looks mostly good to me.",
+      "revId": "52166ecd6cd7000e61bf12a2019caf62a647adfd",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "97ac1526_aff5546d",
+        "filename": "tvix/nix-compat/src/derivation/mod.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 277,
+      "author": {
+        "id": 1000073
+      },
+      "writtenOn": "2023-10-23T12:00:02Z",
+      "side": 1,
+      "message": "shouldn\u0027t this part of the `CAHash` structure?\nalso, why panic instead of proper Error type, you may panic in the call site via `expect` just fine?",
+      "revId": "52166ecd6cd7000e61bf12a2019caf62a647adfd",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b647f95a_68eeb250",
+        "filename": "tvix/nix-compat/src/derivation/output.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 1000073
+      },
+      "writtenOn": "2023-10-23T12:00:02Z",
+      "side": 1,
+      "message": "why not… return? :P",
+      "revId": "52166ecd6cd7000e61bf12a2019caf62a647adfd",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "dfd6c21a_d8613274",
+        "filename": "tvix/nix-compat/src/derivation/parser.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 1000073
+      },
+      "writtenOn": "2023-10-23T12:00:02Z",
+      "side": 1,
+      "message": "wonder why it should not be part of `CAHash` itself too",
+      "revId": "52166ecd6cd7000e61bf12a2019caf62a647adfd",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "73facfc7_026ae4e2",
+        "filename": "tvix/nix-compat/src/nixhash/ca_hash.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1000073
+      },
+      "writtenOn": "2023-10-23T12:00:02Z",
+      "side": 1,
+      "message": "as_ref \\circ to_owned looks weird to me, I wonder if to_owned wouldn\u0027t work directly",
+      "revId": "52166ecd6cd7000e61bf12a2019caf62a647adfd",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
