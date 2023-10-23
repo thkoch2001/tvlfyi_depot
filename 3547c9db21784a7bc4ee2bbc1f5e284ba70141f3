@@ -16,6 +16,24 @@
       "message": "why later is not now? :p",
       "revId": "3547c9db21784a7bc4ee2bbc1f5e284ba70141f3",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a70ad98c_dfd50749",
+        "filename": "tvix/cli/src/derivation.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 557,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-10-23T14:50:54Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "11c6477d_a92e5a2e",
+      "revId": "3547c9db21784a7bc4ee2bbc1f5e284ba70141f3",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
