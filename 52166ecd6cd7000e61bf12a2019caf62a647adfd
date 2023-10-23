@@ -70,6 +70,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "795b62d8_a052219e",
+        "filename": "tvix/nix-compat/src/derivation/output.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-10-23T13:50:58Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b647f95a_68eeb250",
+      "revId": "52166ecd6cd7000e61bf12a2019caf62a647adfd",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "dfd6c21a_d8613274",
@@ -118,6 +136,24 @@
       "writtenOn": "2023-10-23T12:00:02Z",
       "side": 1,
       "message": "as_ref \\circ to_owned looks weird to me, I wonder if to_owned wouldn\u0027t work directly",
+      "revId": "52166ecd6cd7000e61bf12a2019caf62a647adfd",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "33d5f665_3247e6e6",
+        "filename": "tvix/nix-compat/src/nixhash/ca_hash.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-10-23T13:50:58Z",
+      "side": 1,
+      "message": "`*digest.clone()` seems to work. We need to put the digest in an owned box. PTAL.",
+      "parentUuid": "73facfc7_026ae4e2",
       "revId": "52166ecd6cd7000e61bf12a2019caf62a647adfd",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
