@@ -58,7 +58,6 @@ with lib;
     lldb
     hyperfine
     clang-tools_11
-    rr
 
     clj2nix
     clojure
@@ -68,13 +67,14 @@ with lib;
     pg-dump-upsert
 
     nodePackages.prettier
-
-    linuxPackages.perf
   ] ++ optionals (stdenv.isLinux) [
     # TODO(grfn): replace with stable again once the current julia debacle
     # is resolved upstream, see https://github.com/NixOS/nixpkgs/pull/121114
     julia_16-bin
     valgrind
+
+    linuxPackages.perf
+    rr
   ];
 
   programs.git = {

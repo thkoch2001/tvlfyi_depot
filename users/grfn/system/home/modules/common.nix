@@ -6,7 +6,7 @@
 {
   imports = [
     ../modules/shell.nix
-    ../modules/development.nix
+    # ../modules/development.nix
     ../modules/emacs.nix
     ../modules/vim.nix
     ../modules/tarsnap.nix
@@ -117,9 +117,5 @@
     enable = true;
     enableBashIntegration = true;
     enableZshIntegration = true;
-  };
-
-  services.dropbox = {
-    enable = true;
   };
 }

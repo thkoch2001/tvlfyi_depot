@@ -81,4 +81,8 @@ in
   '';
 
   services.lorri.enable = true;
+
+  services.dropbox = {
+    enable = true;
+  };
 }

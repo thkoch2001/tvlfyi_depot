@@ -3,13 +3,15 @@
 let
   inherit (config.lib) depot;
 in
+
+with lib;
+
 {
 
   home.packages = with pkgs; [
     rustup
     cargo-edit
     cargo-expand
-    cargo-rr
     cargo-udeps
     cargo-bloat
     sccache
@@ -24,6 +26,8 @@ in
     coz
     inferno
     hotspot
+  ] ++ optionals (stdenv.isLinux) [
+    cargo-rr
   ];
 
   programs.zsh.shellAliases = {

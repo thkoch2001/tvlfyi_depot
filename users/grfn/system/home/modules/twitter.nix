@@ -1,6 +1,10 @@
 { pkgs, lib, ... }:
 
 {
+  imports = [
+    ./lib/zshFunctions.nix
+  ];
+
   home.packages = with pkgs; [
     t
   ];
