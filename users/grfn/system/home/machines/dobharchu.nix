@@ -4,7 +4,7 @@
   imports = [
     ../platforms/darwin.nix
     ../modules/common.nix
-    ../modules/games.nix
+    # ../modules/games.nix
   ];
 
   home.packages = with pkgs; [
@@ -14,4 +14,7 @@
     pass
     pinentry_mac
   ];
+
+  programs.home-manager.enable = true;
+  home.stateVersion = "21.11";
 }
