@@ -41,6 +41,30 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "2f93c2df_ce8e2ce6",
+        "filename": "nix/buildGo/default.nix",
+        "patchSetId": 1
+      },
+      "lineNbr": 62,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-10-24T19:08:41Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "71ff318d_52faf895",
+      "range": {
+        "startLine": 62,
+        "startChar": 75,
+        "endLine": 62,
+        "endChar": 76
+      },
+      "revId": "ef6e782f2044274cade086787f1cecf9fcfc5d0a",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "dff9a6a8_6950e60c",
@@ -54,6 +78,30 @@
       "writtenOn": "2023-10-21T03:07:25Z",
       "side": 1,
       "message": "IIRC this is supposed to be -p ${path}",
+      "range": {
+        "startLine": 82,
+        "startChar": 30,
+        "endLine": 82,
+        "endChar": 32
+      },
+      "revId": "ef6e782f2044274cade086787f1cecf9fcfc5d0a",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "502b7b01_9b230b3b",
+        "filename": "nix/buildGo/default.nix",
+        "patchSetId": 1
+      },
+      "lineNbr": 82,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-10-24T19:08:41Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "dff9a6a8_6950e60c",
       "range": {
         "startLine": 82,
         "startChar": 30,
