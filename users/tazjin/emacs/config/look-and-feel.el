@@ -45,7 +45,8 @@
   (let ((command "who | awk '{print $2}' | grep -v tty7"))
     (-filter (lambda (s) (not (string-empty-p s)))
              (s-lines
-              (s-trim (shell-command-to-string command))))))
+              (s-trim (let ((default-directory "/"))
+                        (shell-command-to-string command)))))))
 
 (defvar cached-tty-sessions (cons (time-convert nil 'integer) (list-tty-sessions))
    "Cached TTY session value to avoid running the command too often.")
