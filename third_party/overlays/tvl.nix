@@ -127,7 +127,7 @@ depot.nix.readTree.drvTargets {
 
     cargoDeps = old.cargoDeps.overrideAttrs (_: {
       inherit src;
-      outputHash = "sha256-elEIWHxyY3iccprIcbQA6GWFiq/n5kozpGfw/OmoSIg=";
+      outputHash = "1ny4z06dy6zc3373x1a8pbzzv3jb52mpwn2g1nkr67pmfdq2b0q7";
     });
   });
 
