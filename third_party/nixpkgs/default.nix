@@ -48,8 +48,11 @@ let
   # Overlay for packages that should come from the stable channel
   # instead (e.g. because something is broken in unstable).
   # Use `stableNixpkgs` from above.
-  stableOverlay = _unstableSelf: _unstableSuper: {
-    # nothing is currently broken on unstable. yay!
+  stableOverlay = _unstableSelf: unstableSuper: {
+    # py3status is broken on nixpkgs-unstable (2023-10-29)
+    python3Packages = unstableSuper.python3Packages // {
+      py3status = stableNixpkgs.python3Packages.py3status;
+    };
   };
 
   # Overlay to expose the nixpkgs commits we are using to other Nix code.
