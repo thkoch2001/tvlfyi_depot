@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "29c0137e_b8c0d2b3",
+        "filename": "tvix/nix-compat/src/store_path/mod.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 157,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-10-27T13:29:30Z",
+      "side": 1,
+      "message": "This should have a docstring, mentioning it\u0027s the more annoying but less copy version of [StorePath].",
+      "revId": "6a18e53325e7ddaf36976bc22da2bc296f29bdfe",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
