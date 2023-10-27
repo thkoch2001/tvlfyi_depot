@@ -16,6 +16,24 @@
       "message": "We should add a little comment explaining what\u0027s in NAME_CHARS once populated.",
       "revId": "43dbd4a553875d03b1aa5871618a68ae14d751eb",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "481703c8_de96a1d7",
+        "filename": "tvix/nix-compat/src/store_path/mod.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 178,
+      "author": {
+        "id": 1000005
+      },
+      "writtenOn": "2023-10-27T13:41:55Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0ca8dd8a_df90c512",
+      "revId": "43dbd4a553875d03b1aa5871618a68ae14d751eb",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
