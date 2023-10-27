@@ -1,0 +1,191 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "12c6475e_537a7305",
+        "filename": "tvix/nix-compat/src/narinfo.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-10-27T08:21:15Z",
+      "side": 1,
+      "message": "This needs a module-level docstring explaining the concept of narinfo, similarly as to how we explain NAR and The nix A-Terms (or the NarInfo struct).",
+      "revId": "0473c8b26e83b0538ee474367743a435d5085462",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "26f91f2a_98ea8232",
+        "filename": "tvix/nix-compat/src/narinfo.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-10-27T08:21:15Z",
+      "side": 1,
+      "message": "In addition to mentioning what\u0027s authenticated and what\u0027s not, each field should have a docstring. You can peek a bit in the nix-store proto definitions.",
+      "revId": "0473c8b26e83b0538ee474367743a435d5085462",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cff70f01_2c519157",
+        "filename": "tvix/nix-compat/src/narinfo.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-10-27T08:21:15Z",
+      "side": 1,
+      "message": "This should probably return errors in case parsing fails, stating the reason as to why it fails.\n\nIt can be done as a followup, or is there a specific reason this would be much slower if we would do it like this (in the successful parsing case)",
+      "revId": "0473c8b26e83b0538ee474367743a435d5085462",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3fdd1ddd_cbc140ae",
+        "filename": "tvix/nix-compat/src/narinfo.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 265,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-10-27T08:21:15Z",
+      "side": 1,
+      "message": "This is very similar to the StorePath we already have in nix-compat (except that one holds a String, rather than a `\u0026str`. I\u0027d much prefer to refactor that one to cow strings than introducing a new type here, especially considering it\u0027s public.",
+      "revId": "0473c8b26e83b0538ee474367743a435d5085462",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9ca1da46_9122454d",
+        "filename": "tvix/nix-compat/src/narinfo.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 310,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-10-27T08:21:15Z",
+      "side": 1,
+      "message": "Same as above, parsing should be an error, not just an `Option\u003cSelf\u003e`.",
+      "revId": "0473c8b26e83b0538ee474367743a435d5085462",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "75814ebb_5e70d06d",
+        "filename": "tvix/nix-compat/src/narinfo.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 343,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-10-27T08:21:15Z",
+      "side": 1,
+      "message": "Very similar to `nix-compat::nix_compat::CAHash`",
+      "revId": "0473c8b26e83b0538ee474367743a435d5085462",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a31d450f_172f5427",
+        "filename": "tvix/nix-compat/src/narinfo.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 350,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-10-27T08:21:15Z",
+      "side": 1,
+      "message": "There\u0027s currently no `parse` function in `nix-compat::nix_compat::CAHash`, as it wasn\u0027t necessary yet.",
+      "revId": "0473c8b26e83b0538ee474367743a435d5085462",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b64ca5d9_7b9c6822",
+        "filename": "tvix/nix-compat/src/narinfo.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 367,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-10-27T08:21:15Z",
+      "side": 1,
+      "message": "This should be a parsing error.",
+      "revId": "0473c8b26e83b0538ee474367743a435d5085462",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8b2e9068_7b753874",
+        "filename": "tvix/nix-compat/src/narinfo.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 389,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-10-27T08:21:15Z",
+      "side": 1,
+      "message": "Very similar to `nix-compat::nix_compat::NixHash`.",
+      "revId": "0473c8b26e83b0538ee474367743a435d5085462",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ab176ef3_31805b28",
+        "filename": "tvix/nix-compat/src/narinfo.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 397,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-10-27T08:21:15Z",
+      "side": 1,
+      "message": "`nix_compat::nixhash::from_nix_str`",
+      "revId": "0473c8b26e83b0538ee474367743a435d5085462",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fe3d6c93_bf789dab",
+        "filename": "tvix/nix-compat/src/narinfo.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 413,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-10-27T08:21:15Z",
+      "side": 1,
+      "message": "That\u0027s `NixHash::to_nix_hash_string`, I explicitly decided against implementing using `Display` for the nix-specific way of formatting this, to avoid confusion with others (more standardized) ways of formatting.",
+      "revId": "0473c8b26e83b0538ee474367743a435d5085462",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
