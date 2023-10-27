@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "eca15dd5_0e6be832",
+        "filename": "tvix/nix-compat/src/nixbase32.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 185,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-10-27T07:51:05Z",
+      "side": 1,
+      "message": "Can you add a #[test] decode_fixed here, for a successful input and one producing InvalidLength?",
+      "revId": "ba75114560c3027b58bda127e6a264df069e0dfc",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
