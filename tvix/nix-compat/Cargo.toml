@@ -25,6 +25,8 @@ lazy_static = "1.4.0"
 serde_json = "1.0"
 test-case = "2.2.2"
 criterion = { version = "0.4", features = ["html_reports"] }
+pretty_assertions = "1.4.0"
+zstd = "^0.9.0"
 
 [dev-dependencies.test-generator]
 # This fork of test-generator adds support for cargo workspaces, see
