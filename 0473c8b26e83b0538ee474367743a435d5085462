@@ -139,6 +139,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "314e8cd3_267046b4",
+        "filename": "tvix/nix-compat/src/narinfo.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 343,
+      "author": {
+        "id": 1000005
+      },
+      "writtenOn": "2023-10-27T11:15:09Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "99e35227_7c433da9",
+      "revId": "0473c8b26e83b0538ee474367743a435d5085462",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "a31d450f_172f5427",
@@ -208,6 +226,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "8beb42d8_92d8194a",
+        "filename": "tvix/nix-compat/src/narinfo.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 389,
+      "author": {
+        "id": 1000005
+      },
+      "writtenOn": "2023-10-27T11:15:09Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b04c4ed0_3223527d",
+      "revId": "0473c8b26e83b0538ee474367743a435d5085462",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "ab176ef3_31805b28",
@@ -238,6 +274,24 @@
       "writtenOn": "2023-10-27T08:21:15Z",
       "side": 1,
       "message": "That\u0027s `NixHash::to_nix_hash_string`, I explicitly decided against implementing using `Display` for the nix-specific way of formatting this, to avoid confusion with others (more standardized) ways of formatting.",
+      "revId": "0473c8b26e83b0538ee474367743a435d5085462",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5e913029_9a2389f1",
+        "filename": "tvix/nix-compat/src/narinfo.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 413,
+      "author": {
+        "id": 1000005
+      },
+      "writtenOn": "2023-10-27T11:15:09Z",
+      "side": 1,
+      "message": "to_nix_hash_string does hex, this does base32.",
+      "parentUuid": "fe3d6c93_bf789dab",
       "revId": "0473c8b26e83b0538ee474367743a435d5085462",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
