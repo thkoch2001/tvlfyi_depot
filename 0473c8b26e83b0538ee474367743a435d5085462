@@ -192,6 +192,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "a1281e13_898d66c3",
+        "filename": "tvix/nix-compat/src/narinfo.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 350,
+      "author": {
+        "id": 1000005
+      },
+      "writtenOn": "2023-10-27T13:45:21Z",
+      "side": 1,
+      "message": "Converted to parse_ca, which returns CAHash.",
+      "parentUuid": "a31d450f_172f5427",
+      "revId": "0473c8b26e83b0538ee474367743a435d5085462",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "b64ca5d9_7b9c6822",
@@ -275,6 +293,24 @@
       "writtenOn": "2023-10-27T08:21:15Z",
       "side": 1,
       "message": "`nix_compat::nixhash::from_nix_str`",
+      "revId": "0473c8b26e83b0538ee474367743a435d5085462",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "659078f5_ca9c4ad8",
+        "filename": "tvix/nix-compat/src/narinfo.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 397,
+      "author": {
+        "id": 1000005
+      },
+      "writtenOn": "2023-10-27T13:45:21Z",
+      "side": 1,
+      "message": "That doesn\u0027t parse exclusively base32 Nix hashes, but instead dispatches on encoding size.",
+      "parentUuid": "ab176ef3_31805b28",
       "revId": "0473c8b26e83b0538ee474367743a435d5085462",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
