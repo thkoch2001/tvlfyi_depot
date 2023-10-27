@@ -18,6 +18,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "cd5dc262_298cba84",
+        "filename": "tvix/nix-compat/src/narinfo.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1000005
+      },
+      "writtenOn": "2023-10-27T16:03:07Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "12c6475e_537a7305",
+      "revId": "0473c8b26e83b0538ee474367743a435d5085462",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "26f91f2a_98ea8232",
@@ -35,6 +53,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "347db8a8_70904dbd",
+        "filename": "tvix/nix-compat/src/narinfo.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1000005
+      },
+      "writtenOn": "2023-10-27T16:03:07Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "26f91f2a_98ea8232",
+      "revId": "0473c8b26e83b0538ee474367743a435d5085462",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "cff70f01_2c519157",
@@ -48,6 +84,24 @@
       "writtenOn": "2023-10-27T08:21:15Z",
       "side": 1,
       "message": "This should probably return errors in case parsing fails, stating the reason as to why it fails.\n\nIt can be done as a followup, or is there a specific reason this would be much slower if we would do it like this (in the successful parsing case)",
+      "revId": "0473c8b26e83b0538ee474367743a435d5085462",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b117a0b0_c74eb027",
+        "filename": "tvix/nix-compat/src/narinfo.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1000005
+      },
+      "writtenOn": "2023-10-27T16:03:07Z",
+      "side": 1,
+      "message": "ACK. Followup soon.",
+      "parentUuid": "cff70f01_2c519157",
       "revId": "0473c8b26e83b0538ee474367743a435d5085462",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
@@ -118,6 +172,24 @@
       "writtenOn": "2023-10-27T08:21:15Z",
       "side": 1,
       "message": "Same as above, parsing should be an error, not just an `Option\u003cSelf\u003e`.",
+      "revId": "0473c8b26e83b0538ee474367743a435d5085462",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4be77fc8_adc4369e",
+        "filename": "tvix/nix-compat/src/narinfo.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 310,
+      "author": {
+        "id": 1000005
+      },
+      "writtenOn": "2023-10-27T16:03:07Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "9ca1da46_9122454d",
       "revId": "0473c8b26e83b0538ee474367743a435d5085462",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
@@ -223,6 +295,24 @@
       "writtenOn": "2023-10-27T08:21:15Z",
       "side": 1,
       "message": "This should be a parsing error.",
+      "revId": "0473c8b26e83b0538ee474367743a435d5085462",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "406e2fad_6b0c5828",
+        "filename": "tvix/nix-compat/src/narinfo.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 367,
+      "author": {
+        "id": 1000005
+      },
+      "writtenOn": "2023-10-27T16:03:07Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "b64ca5d9_7b9c6822",
       "revId": "0473c8b26e83b0538ee474367743a435d5085462",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
