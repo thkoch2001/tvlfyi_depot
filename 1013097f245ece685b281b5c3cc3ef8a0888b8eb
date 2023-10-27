@@ -16,6 +16,24 @@
       "message": "this should probably still have some comment to explain what we\u0027re doing with all this shifting business",
       "revId": "1013097f245ece685b281b5c3cc3ef8a0888b8eb",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "74692ebf_c92509fa",
+        "filename": "tvix/nix-compat/src/nixbase32.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1000005
+      },
+      "writtenOn": "2023-10-27T23:39:02Z",
+      "side": 1,
+      "message": "technically the previous comment was just to explain the weird workarounds\nthe other comments seem sufficient to explain what the indexes and shifts are",
+      "parentUuid": "85f30e48_2b89e8a4",
+      "revId": "1013097f245ece685b281b5c3cc3ef8a0888b8eb",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
