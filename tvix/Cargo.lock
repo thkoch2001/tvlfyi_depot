@@ -2881,6 +2881,7 @@ dependencies = [
  "bytes",
  "data-encoding",
  "futures",
+ "hex-literal",
  "lazy_static",
  "pin-project-lite",
  "prost",

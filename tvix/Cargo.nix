@@ -8692,6 +8692,10 @@ rec {
         ];
         devDependencies = [
           {
+            name = "hex-literal";
+            packageId = "hex-literal";
+          }
+          {
             name = "tempfile";
             packageId = "tempfile";
           }
