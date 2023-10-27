@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "85f30e48_2b89e8a4",
+        "filename": "tvix/nix-compat/src/nixbase32.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-10-27T17:10:27Z",
+      "side": 1,
+      "message": "this should probably still have some comment to explain what we\u0027re doing with all this shifting business",
+      "revId": "1013097f245ece685b281b5c3cc3ef8a0888b8eb",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
