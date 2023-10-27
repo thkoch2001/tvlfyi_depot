@@ -87,6 +87,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c1502732_4b01005b",
+        "filename": "tvix/nix-compat/src/narinfo.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 265,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-10-27T13:30:16Z",
+      "side": 1,
+      "message": "This has been refactored in the meantime, there\u0027s now a `StorePathRef` in nix-compat.",
+      "parentUuid": "2638130c_840ad49b",
+      "revId": "0473c8b26e83b0538ee474367743a435d5085462",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "9ca1da46_9122454d",
