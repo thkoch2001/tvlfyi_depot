@@ -16,6 +16,24 @@
       "message": "This currently produces an infinite recursion in llama, but @tvl@lahfa.xyz offered taking a look at it.",
       "revId": "943422e3a27abee1a496a55b1d06f63c17d4461e",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4bd0c83b_936c7326",
+        "filename": "third_party/nixpkgs/default.nix",
+        "patchSetId": 1
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-10-28T15:02:32Z",
+      "side": 1,
+      "message": "Fixed, thanks @tvl@lahfa.xyz!",
+      "parentUuid": "7af5c9cd_3429f072",
+      "revId": "943422e3a27abee1a496a55b1d06f63c17d4461e",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
