@@ -16,6 +16,24 @@
       "message": "Please see https://cl.tvl.fyi/c/depot/+/9808 rather than changing this here.",
       "revId": "d07f2d3983703b07661be57ada8d11d516d746dd",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c0969d0a_0f085172",
+        "filename": "third_party/gerrit-queue/frontend/frontend.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-10-29T12:46:09Z",
+      "side": 1,
+      "message": "Note this also adds support for the \"rebase on behalf of uploader\" feature.",
+      "parentUuid": "5d5723cd_a090a7fe",
+      "revId": "d07f2d3983703b07661be57ada8d11d516d746dd",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
