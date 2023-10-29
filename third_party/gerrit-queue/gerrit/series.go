@@ -8,7 +8,7 @@ import (
 
 // AssembleSeries consumes a list of `Changeset`, and groups them together to series
 //
-// We initially put every Changeset in its own Serie
+// # We initially put every Changeset in its own Serie
 //
 // As we have no control over the order of the passed changesets,
 // we maintain a lookup table, mapLeafToSerie,

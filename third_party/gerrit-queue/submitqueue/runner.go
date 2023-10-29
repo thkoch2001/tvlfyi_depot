@@ -32,8 +32,9 @@ func NewRunner(logger *log.Logger, gerrit *gerrit.Client) *Runner {
 
 // isAutoSubmittable determines if something could be autosubmitted, potentially requiring a rebase
 // for this, it needs to:
-//  * have the "Autosubmit" label set to +1
-//  * have gerrit's 'submittable' field set to true
+//   - have the "Autosubmit" label set to +1
+//   - have gerrit's 'submittable' field set to true
+//
 // it doesn't check if the series is rebased on HEAD
 func (r *Runner) isAutoSubmittable(s *gerrit.Serie) bool {
 	for _, c := range s.ChangeSets {

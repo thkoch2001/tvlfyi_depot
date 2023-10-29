@@ -19,8 +19,8 @@ import (
 //go:embed templates
 var templates embed.FS
 
-//loadTemplate loads a list of templates, relative to the templates root, and a
-//FuncMap, and returns a template object
+// loadTemplate loads a list of templates, relative to the templates root, and a
+// FuncMap, and returns a template object
 func loadTemplate(templateNames []string, funcMap template.FuncMap) (*template.Template, error) {
 	if len(templateNames) == 0 {
 		return nil, fmt.Errorf("templateNames can't be empty")
