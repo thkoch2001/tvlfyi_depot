@@ -1,12 +1,10 @@
-{ depot, pkgs, lib, ... }:
+{ depot, pkgs, ... }:
 
 {
-  imports =
-    [
-      # Include the results of the hardware scan.
-      # ./hardware-configuration.nix
-      (depot.path.origSrc + "/users/flokli/nixos/archeology/hardware-configuration.nix")
-    ];
+  imports = [
+    # Include the results of the hardware scan.
+    ./hardware-configuration.nix
+  ];
 
   # Use the TVL binary cache
   tvl.cache.enable = true;

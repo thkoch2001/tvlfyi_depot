@@ -8,7 +8,7 @@ let
 
 in
 {
-  archeologySystem = (depot.ops.nixos.nixosFor ({ modulesPath, ... }: {
+  archeologySystem = (depot.ops.nixos.nixosFor ({ ... }: {
     imports = [
       ./archeology/configuration.nix
     ];
