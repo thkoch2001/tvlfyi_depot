@@ -25,11 +25,16 @@ depot.nix.readTree.drvTargets rec {
     ];
   })).config.system.build.toplevel;
 
+  deploy-archeology = (deployScript "archeology" archeologySystem);
+  deploy-archeology-ec2 = (deployScript "archeology-ec2" archeologyEc2System);
+
   shell = pkgs.mkShell {
     name = "flokli-nixos-shell";
     packages = [
-      (deployScript "archeology" archeologySystem)
-      (deployScript "archeology-ec2" archeologyEc2System)
+      (depot.nix.lazy-deps {
+        deploy-archeology.attr = "users.flokli.nixos.deploy-archeology";
+        deploy-archeology-ec2.attr = "users.flokli.nixos.deploy-archeology-ec2";
+      })
     ];
   };
 }
