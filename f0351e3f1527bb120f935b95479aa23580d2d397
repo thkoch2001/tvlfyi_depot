@@ -69,6 +69,24 @@
       "parentUuid": "5eb31e82_6d347064",
       "revId": "f0351e3f1527bb120f935b95479aa23580d2d397",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b7067aea_aac62edf",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-10-30T09:08:11Z",
+      "side": 1,
+      "message": "I also cherrypicked the other two commits to upstream in https://github.com/flokli/gerrit-queue/commit/6df48a97730958974c52ddf22e4d593f1489a33d and https://github.com/flokli/gerrit-queue/commit/9674902b66bce3751b7ed3bf1cefb529a6b4c2e6, so this whole separate worktree wasn\u0027t very useful.",
+      "parentUuid": "ecf994f8_5c1cc3b5",
+      "revId": "f0351e3f1527bb120f935b95479aa23580d2d397",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ],
   "submitRequirementResults": []
