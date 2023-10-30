@@ -18,5 +18,12 @@
   ];
 
   # Get a bunch of text editors and CLI tools.
-  environment.systemPackages = [ pkgs.helix pkgs.kakoune pkgs.tmux ];
+  environment.systemPackages = [
+    pkgs.awscli
+    pkgs.helix
+    pkgs.htop
+    pkgs.kakoune
+    pkgs.kitty.terminfo
+    pkgs.tmux
+  ];
 }
