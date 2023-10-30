@@ -34,6 +34,24 @@
       "parentUuid": "5d5723cd_a090a7fe",
       "revId": "d07f2d3983703b07661be57ada8d11d516d746dd",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "73ed2997_a6c24b13",
+        "filename": "third_party/gerrit-queue/frontend/frontend.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2023-10-30T05:12:31Z",
+      "side": 1,
+      "message": "These are automated changes (through depotfmt). They\u0027ll stop being relevant once the other CL is submitted.",
+      "parentUuid": "c0969d0a_0f085172",
+      "revId": "d07f2d3983703b07661be57ada8d11d516d746dd",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
