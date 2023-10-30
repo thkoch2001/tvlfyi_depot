@@ -1,9 +1,6 @@
 { depot, pkgs, lib, ... }:
 
 let
-  inherit (depot.users.flokli.nixos)
-    archeology;
-
   systemFor = sys: (depot.ops.nixos.nixosFor sys).system;
 
   # assumes `name` is configured appropriately in your .ssh/config
@@ -22,10 +19,17 @@ rec {
     ];
   })).config.system.build.toplevel;
 
+  archeologyEc2System = (depot.ops.nixos.nixosFor ({ ... }: {
+    imports = [
+      ./archeology-ec2/configuration.nix
+    ];
+  })).config.system.build.toplevel;
+
   shell = pkgs.mkShell {
     name = "flokli-nixos-shell";
     packages = [
       (deployScript "archeology" archeologySystem)
+      (deployScript "archeology-ec2" archeologyEc2System)
     ];
   };
 }
