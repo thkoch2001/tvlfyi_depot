@@ -28,13 +28,13 @@ depot.nix.readTree.drvTargets rec {
   deploy-archeology = (deployScript "archeology" archeologySystem);
   deploy-archeology-ec2 = (deployScript "archeology-ec2" archeologyEc2System);
 
+  deps = (depot.nix.lazy-deps {
+    deploy-archeology.attr = "users.flokli.nixos.deploy-archeology";
+    deploy-archeology-ec2.attr = "users.flokli.nixos.deploy-archeology-ec2";
+  });
+
   shell = pkgs.mkShell {
     name = "flokli-nixos-shell";
-    packages = [
-      (depot.nix.lazy-deps {
-        deploy-archeology.attr = "users.flokli.nixos.deploy-archeology";
-        deploy-archeology-ec2.attr = "users.flokli.nixos.deploy-archeology-ec2";
-      })
-    ];
+    packages = [ deps ];
   };
 }
