@@ -34,6 +34,23 @@
       "parentUuid": "8727b81b_78ac02d4",
       "revId": "f0351e3f1527bb120f935b95479aa23580d2d397",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5eb31e82_6d347064",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2023-10-30T06:26:37Z",
+      "side": 1,
+      "message": "We have these commits:\n\n- https://code.tvl.fyi/commit/third_party/gerrit-queue?id\u003d6e4decf19b2b221030df0e3614c579ff3896b25a\n- https://code.tvl.fyi/commit/third_party/gerrit-queue?id\u003d0fa937551e6fa1021dbad4d523e0743fe25a24df\n- https://code.tvl.fyi/commit/third_party/gerrit-queue?id\u003dafa2d08fe7ba4bf62d32735c505047f40747a60f\n\nThe third one (using the Autosubmit label) is the only required one.",
+      "revId": "f0351e3f1527bb120f935b95479aa23580d2d397",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
