@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5586dce7_0b40662d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-10-30T10:35:13Z",
+      "side": 1,
+      "message": "I updated the commit message, this already fixes Go builds. Rust is another issue to sort out after this CL.\n\n```\n❯ file /nix/store/qgisicry4jmq079m9axqmdlajwxf18dv-nar-bridge-aarch64-unknown-linux-gnu/bin/nar-bridge-http\n/nix/store/qgisicry4jmq079m9axqmdlajwxf18dv-nar-bridge-aarch64-unknown-linux-gnu/bin/nar-bridge-http: ELF 64-bit LSB executable, ARM aarch64, version 1 (SYSV), dynamically linked, interpreter /nix/store/3wms3517c2v59y1z5911vz1fj3vkm9cb-glibc-aarch64-unknown-linux-gnu-2.37-8/lib/ld-linux-aarch64.so.1, Go BuildID\u003dUuUL7kfL2VrO9-85cieQ/bjREk2o4UiGxqGtQeALN/pEB9qBScPpybZmMZmUHd/ECqhecU7dO2sOibBgLN6, not stripped\n```",
+      "revId": "ab194bdc885d9d113e414085044702c9ed27aae1",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
