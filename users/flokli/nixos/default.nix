@@ -12,7 +12,7 @@ let
   '';
 
 in
-rec {
+depot.nix.readTree.drvTargets rec {
   archeologySystem = (depot.ops.nixos.nixosFor ({ ... }: {
     imports = [
       ./archeology/configuration.nix
