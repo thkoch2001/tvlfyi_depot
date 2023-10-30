@@ -52,6 +52,24 @@
       "parentUuid": "c0969d0a_0f085172",
       "revId": "d07f2d3983703b07661be57ada8d11d516d746dd",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "12ee1d29_029944c3",
+        "filename": "third_party/gerrit-queue/frontend/frontend.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-10-30T09:09:31Z",
+      "side": 1,
+      "message": "Yes, but they\u0027ll conflict, and in general there\u0027s no point to diverge further from upstream.\n\nhttps://cl.tvl.fyi/c/depot/+/9808 is submitted, so please rebase this CL (you essentially can just drop that change now, because the files are gone and depotfmt won\u0027t try to format them anymore).",
+      "parentUuid": "73ed2997_a6c24b13",
+      "revId": "d07f2d3983703b07661be57ada8d11d516d746dd",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
