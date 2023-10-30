@@ -6,7 +6,7 @@ let
   # assumes `name` is configured appropriately in your .ssh/config
   deployScript = name: sys: pkgs.writeShellScriptBin "deploy-${name}" ''
     set -eo pipefail
-    nix copy --no-check-sigs --to ssh-ng://${name} ${sys}
+    nix-copy-closure --to ssh-ng://${name} --gzip --use-substitutes ${sys}
     ssh ${name} nix-env --profile /nix/var/nix/profiles/system --set ${sys}
     ssh ${name} ${sys}/bin/switch-to-configuration switch
   '';
