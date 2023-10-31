@@ -1,0 +1,33 @@
+From b37dff98b7df177313f2823a77c19828398f1505 Mon Sep 17 00:00:00 2001
+From: Florian Klink <flokli@flokli.de>
+Date: Tue, 31 Oct 2023 14:18:06 +0200
+Subject: [PATCH] skip running tests when cross-compiling
+
+---
+ crate2nix/templates/nix/crate2nix/default.nix | 10 ++++++----
+ 1 file changed, 6 insertions(+), 4 deletions(-)
+
+diff --git a/crate2nix/templates/nix/crate2nix/default.nix b/crate2nix/templates/nix/crate2nix/default.nix
+index 2b8050c..e4fc2e9 100644
+--- a/templates/nix/crate2nix/default.nix
++++ b/templates/nix/crate2nix/default.nix
+@@ -165,10 +165,12 @@ rec {
+         passthru = (crate.passthru or { }) // {
+           inherit test;
+         };
+-      } ''
+-      echo tested by ${test}
+-      ${lib.concatMapStringsSep "\n" (output: "ln -s ${crate.${output}} ${"$"}${output}") crate.outputs}
+-    '';
++      }
++      (lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
++        echo tested by ${test}
++      '' + ''
++        ${lib.concatMapStringsSep "\n" (output: "ln -s ${crate.${output}} ${"$"}${output}") crate.outputs}
++      '');
+ 
+   /* A restricted overridable version of builtRustCratesWithFeatures. */
+   buildRustCrateWithFeatures =
+-- 
+2.42.0
+

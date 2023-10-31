@@ -108,12 +108,15 @@ depot.nix.readTree.drvTargets {
     };
   }));
 
-  # Apply a patch to run tests in debug, not release mode.
   crate2nix = super.crate2nix.overrideAttrs (old: rec {
     patches = old.patches ++ [
       # run tests in debug mode, not release mode
       # https://github.com/nix-community/crate2nix/pull/301
       ./patches/crate2nix-tests-debug.patch
+
+      # https://github.com/nix-community/crate2nix/pull/309
+      ./patches/crate2nix-take-lndir-from-buildPackages.patch
+      ./patches/crate2nix-skip-running-tests-when-cross-compiling.patch
     ];
   });
 
