@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "04b74c71_3880473e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-10-31T13:26:28Z",
+      "side": 1,
+      "message": "CI fails due to this:\n\n```\n    services.postgresql.package \u003d let\n        mkThrow \u003d ver: throw \"postgresql_${ver} was removed, please upgrade your postgresql version.\";\n        base \u003d if versionAtLeast config.system.stateVersion \"23.11\" then pkgs.postgresql_15\n            else if versionAtLeast config.system.stateVersion \"22.05\" then pkgs.postgresql_14\n            else if versionAtLeast config.system.stateVersion \"21.11\" then pkgs.postgresql_13\n            else if versionAtLeast config.system.stateVersion \"20.03\" then pkgs.postgresql_11\n            else if versionAtLeast config.system.stateVersion \"17.09\" then mkThrow \"9_6\"\n            else mkThrow \"9_5\";\n```\n\n… and some systems apparently being on that stateVersion, and not explicitly setting their postgresql package to something newer - in combination with postgresql_11 being removed.\n\nTime to set this explicitly, and migrate all state, I guess - but that\u0027s a bit above my head for now.",
+      "revId": "2f21ad664a9ad613121743509b51dd8192ff01bf",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
