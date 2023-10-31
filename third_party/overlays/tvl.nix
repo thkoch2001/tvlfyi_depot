@@ -108,27 +108,13 @@ depot.nix.readTree.drvTargets {
     };
   }));
 
-  # Pin a newer version of crate2nix from git, which is not officially
-  # released but supports `dep:` and conditional features
+  # Apply a patch to run tests in debug, not release mode.
   crate2nix = super.crate2nix.overrideAttrs (old: rec {
-    version = "unstable-2023-09-26";
-
-    src = self.fetchFromGitHub {
-      owner = "nix-community";
-      repo = "crate2nix";
-      rev = "8a33aec8795dcc98afbb0cd1030bb1c939ede211";
-      hash = "sha256-eFT2SUxTopxEvW0rcxSjQU6nbrQLI2FbyaVgtV8oiTk=";
-    };
-
     patches = old.patches ++ [
       # run tests in debug mode, not release mode
+      # https://github.com/nix-community/crate2nix/pull/301
       ./patches/crate2nix-tests-debug.patch
     ];
-
-    cargoDeps = old.cargoDeps.overrideAttrs (_: {
-      inherit src;
-      outputHash = "1ny4z06dy6zc3373x1a8pbzzv3jb52mpwn2g1nkr67pmfdq2b0q7";
-    });
   });
 
   evans = super.evans.overrideAttrs (old: {
