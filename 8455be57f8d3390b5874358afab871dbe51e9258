@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5a9161a5_613bd79b",
+        "filename": "tvix/Cargo.nix",
+        "patchSetId": 1
+      },
+      "lineNbr": 11446,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-10-31T13:19:19Z",
+      "side": 1,
+      "message": "This needs to go as a patch into crate2nix upstream, it\u0027ll get overwritten here every time.\n\nSuperseded by https://cl.tvl.fyi/c/depot/+/9890, which does that.",
+      "revId": "8455be57f8d3390b5874358afab871dbe51e9258",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
