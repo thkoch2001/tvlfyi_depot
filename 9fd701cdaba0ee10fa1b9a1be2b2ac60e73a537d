@@ -1,0 +1,84 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "dc44bb38_315e0cae",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-11-01T15:08:23Z",
+      "side": 1,
+      "message": "use the repository\n\nOr is it more like the version shipped in the nixpkgs shipped with tvl-kit, if we\u0027re talking about tvl-kit?\n\nThat can still be anything, if a nixpkgs is passed in, (which it likely is), and in that case, you don\u0027t have a unified experience either.",
+      "range": {
+        "startLine": 9,
+        "startChar": 21,
+        "endLine": 9,
+        "endChar": 24
+      },
+      "revId": "9fd701cdaba0ee10fa1b9a1be2b2ac60e73a537d",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "69d03662_234772b6",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-11-01T15:08:23Z",
+      "side": 1,
+      "message": "pursuit",
+      "range": {
+        "startLine": 10,
+        "startChar": 12,
+        "endLine": 10,
+        "endChar": 19
+      },
+      "revId": "9fd701cdaba0ee10fa1b9a1be2b2ac60e73a537d",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "84a09441_3fb51902",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-11-01T15:08:23Z",
+      "side": 1,
+      "message": "Can you isolate this example and add it to https://pad.lassul.us/-WyxSazPSsCMHWmffbETfA ?",
+      "revId": "9fd701cdaba0ee10fa1b9a1be2b2ac60e73a537d",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c54c5a45_72fdc8b0",
+        "filename": "tools/magrathea/default.nix",
+        "patchSetId": 3
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-11-01T15:08:23Z",
+      "side": 1,
+      "message": "I\u0027m not a fan of this. At least git is something you bring with yourself (you already checked-out the repo after all).\n\nNix could potentially work, though I\u0027m a bit worried about incompatibilities between different Nix versions on daemons vs clients (already seen these)",
+      "revId": "9fd701cdaba0ee10fa1b9a1be2b2ac60e73a537d",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
