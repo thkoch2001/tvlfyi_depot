@@ -5,6 +5,7 @@
 
 use builtin_macros::builtins;
 use genawaiter::rc::Gen;
+use imbl::OrdMap;
 use regex::Regex;
 use std::cmp::{self, Ordering};
 use std::collections::VecDeque;
@@ -484,16 +485,66 @@ mod pure_builtins {
 
     #[builtin("intersectAttrs")]
     async fn builtin_intersect_attrs(co: GenCo, x: Value, y: Value) -> Result<Value, ErrorKind> {
-        let attrs1 = x.to_attrs()?;
-        let attrs2 = y.to_attrs()?;
-        let res = attrs2.iter().filter_map(|(k, v)| {
-            if attrs1.contains(k) {
-                Some((k.clone(), v.clone()))
-            } else {
-                None
+        let left_set = x.to_attrs()?;
+        if left_set.is_empty() {
+            return Ok(Value::attrs(NixAttrs::empty()));
+        }
+        let mut left_keys = left_set.keys();
+
+        let right_set = y.to_attrs()?;
+        if right_set.is_empty() {
+            return Ok(Value::attrs(NixAttrs::empty()));
+        }
+        let mut right_keys = right_set.keys();
+
+        let mut out: OrdMap<NixString, Value> = OrdMap::new();
+
+        // Both iterators have at least one entry
+        let mut left = left_keys.next().unwrap();
+        let mut right = right_keys.next().unwrap();
+
+        loop {
+            if left == right {
+                // We know that the key exists in the set, and can
+                // skip the check instructions.
+                unsafe {
+                    out.insert(
+                        right.clone(),
+                        right_set.select(right).unwrap_unchecked().clone(),
+                    );
+                }
+
+                left = match left_keys.next() {
+                    Some(x) => x,
+                    None => break,
+                };
+
+                right = match right_keys.next() {
+                    Some(x) => x,
+                    None => break,
+                };
+
+                continue;
             }
-        });
-        Ok(Value::attrs(NixAttrs::from_iter(res)))
+
+            if left < right {
+                left = match left_keys.next() {
+                    Some(x) => x,
+                    None => break,
+                };
+                continue;
+            }
+
+            if right < left {
+                right = match right_keys.next() {
+                    Some(x) => x,
+                    None => break,
+                };
+                continue;
+            }
+        }
+
+        Ok(Value::attrs(out.into()))
     }
 
     #[builtin("isAttrs")]
