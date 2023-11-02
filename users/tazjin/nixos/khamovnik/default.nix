@@ -109,6 +109,9 @@ in
     pulse.enable = true;
   };
 
+  # Try to work around Intel CPU throttling bugs
+  services.throttled.enable = true;
+
   hardware.bluetooth.enable = true;
   users.users.tazjin.extraGroups = [ "tss" ];
 
