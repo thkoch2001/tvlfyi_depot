@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "49ead830_005618a7",
+        "filename": "tvix/eval/src/value/mod.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 508,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-11-02T20:38:58Z",
+      "side": 1,
+      "message": "likewise, we should have a comment here (or at the clone) describing why we do it that way.",
+      "revId": "6c083a6d87c46ae0d648e1750f436dae6734eb0a",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
