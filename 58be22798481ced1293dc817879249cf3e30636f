@@ -22,6 +22,30 @@
       },
       "revId": "58be22798481ced1293dc817879249cf3e30636f",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "72e54489_d36855cf",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-11-02T20:35:25Z",
+      "side": 1,
+      "message": "Let me come up with a better example",
+      "parentUuid": "17480bc8_e3a15ac2",
+      "range": {
+        "startLine": 8,
+        "startChar": 0,
+        "endLine": 10,
+        "endChar": 8
+      },
+      "revId": "58be22798481ced1293dc817879249cf3e30636f",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
