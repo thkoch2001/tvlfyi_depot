@@ -16,6 +16,24 @@
       "message": "Are attrsets always sorted in our case? Should probably describe that shortly.",
       "revId": "d894d2c43d0cda49eeebf5cd32a60ce2df9b6d0b",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a49cb609_a29fd774",
+        "filename": "tvix/eval/src/value/attrs.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 303,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2023-11-02T20:41:47Z",
+      "side": 1,
+      "message": "Attrsets are always sorted in Nix, this is described in various parts of our code and so on. It\u0027s not something new introduced by this commit, we just have marker functions for places where the sorted stuff is used to make it easier to decide later on how pervasive the use of those things actually is.",
+      "parentUuid": "f601b51f_618051e4",
+      "revId": "d894d2c43d0cda49eeebf5cd32a60ce2df9b6d0b",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
