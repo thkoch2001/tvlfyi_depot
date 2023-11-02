@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1a7de3e3_384abd97",
+        "filename": "tvix/eval/src/builtins/mod.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 486,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-11-02T20:36:49Z",
+      "side": 1,
+      "message": "We should probably have a comment giving a short overview about what the algorithm is doing, why it\u0027s a bit less intuitive, and that this is heavily used in nixpkgs. Making it easier for someone reading the code to reason about why this differs.",
+      "revId": "09d0bb022fdcb4710947ca81ff912de0b0070c84",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
