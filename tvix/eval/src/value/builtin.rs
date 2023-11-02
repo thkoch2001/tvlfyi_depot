@@ -3,7 +3,7 @@
 //!
 //! Builtins are directly backed by Rust code operating on Nix values.
 
-use crate::vm::generators::Generator;
+use crate::vm::generators::{GenShelf, Generator};
 
 use super::Value;
 
@@ -19,8 +19,8 @@ use std::{
 ///
 /// Implementors should use the builtins-macros to create these functions
 /// instead of handling the argument-passing logic manually.
-pub trait BuiltinGen: Fn(Vec<Value>) -> Generator {}
-impl<F: Fn(Vec<Value>) -> Generator> BuiltinGen for F {}
+pub trait BuiltinGen: Fn(&'static mut GenShelf, Vec<Value>) -> Generator {}
+impl<F: Fn(&'static mut GenShelf, Vec<Value>) -> Generator> BuiltinGen for F {}
 
 #[derive(Clone)]
 pub struct BuiltinRepr {
@@ -104,9 +104,9 @@ impl Builtin {
 
     /// Attempt to call a builtin, which will produce a generator if it is fully
     /// applied or return the builtin if it is partially applied.
-    pub fn call(self) -> BuiltinResult {
+    pub fn call(self, shelf: &'static mut GenShelf) -> BuiltinResult {
         if self.0.partials.len() == self.0.arg_count {
-            BuiltinResult::Called(self.0.name, (self.0.func)(self.0.partials))
+            BuiltinResult::Called(self.0.name, (self.0.func)(shelf, self.0.partials))
         } else {
             BuiltinResult::Partial(self)
         }

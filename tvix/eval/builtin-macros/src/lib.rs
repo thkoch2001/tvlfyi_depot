@@ -297,7 +297,7 @@ pub fn builtins(args: TokenStream, item: TokenStream) -> TokenStream {
                             #name,
                             #docstring,
                             #arg_count,
-                            move |values| Gen::new(|co| tvix_eval::generators::pin_generator(#fn_name(inner_state.clone(), co, values))),
+                            move |shelf, values| unsafe {Gen::new(shelf, |co| tvix_eval::generators::pin_generator(#fn_name(inner_state.clone(), co, values)))},
                         )
                     }});
                 } else {
@@ -306,7 +306,7 @@ pub fn builtins(args: TokenStream, item: TokenStream) -> TokenStream {
                             #name,
                             #docstring,
                             #arg_count,
-                            |values| Gen::new(|co| tvix_eval::generators::pin_generator(#fn_name(co, values))),
+                            |shelf, values| unsafe {Gen::new(shelf, |co| tvix_eval::generators::pin_generator(#fn_name(co, values)))},
                         )
                     }});
                 }

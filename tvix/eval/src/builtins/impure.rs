@@ -1,5 +1,5 @@
 use builtin_macros::builtins;
-use genawaiter::rc::Gen;
+use genawaiter::stack::Gen;
 
 use std::{
     env,
