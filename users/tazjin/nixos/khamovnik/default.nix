@@ -117,6 +117,9 @@ in
 
   environment.systemPackages = with pkgs; [
     tdesktop
+    linuxPackages.perf
+    hotspot
+    protobuf
   ];
 
   system.stateVersion = "23.05"; # Did you read the comment?
