@@ -8,8 +8,11 @@
 //! We implement generators using the [`genawaiter`] crate.
 
 use core::pin::Pin;
-use genawaiter::rc::Co;
-pub use genawaiter::rc::Gen;
+use genawaiter::stack::Co;
+pub use genawaiter::stack::Gen;
+use genawaiter::stack::Shelf;
+// use genawaiter::rc::Co;
+// pub use genawaiter::rc::Gen;
 use std::fmt::Display;
 use std::future::Future;
 
@@ -205,7 +208,10 @@ impl Display for VMResponse {
 }
 
 pub(crate) type Generator =
-    Gen<VMRequest, VMResponse, Pin<Box<dyn Future<Output = Result<Value, ErrorKind>>>>>;
+    Gen<'static, VMRequest, VMResponse, Pin<Box<dyn Future<Output = Result<Value, ErrorKind>>>>>;
+
+pub(crate) type GenShelf =
+    Shelf<VMRequest, VMResponse, Pin<Box<dyn Future<Output = Result<Value, ErrorKind>>>>>;
 
 /// Helper function to provide type annotations which are otherwise difficult to
 /// infer.
@@ -233,12 +239,18 @@ impl<'o> VM<'o> {
         F: Future<Output = Result<Value, ErrorKind>> + 'static,
         G: FnOnce(GenCo) -> F,
     {
+        let shelf = self.shelf_ptr();
         self.frames.push(Frame::Generator {
             name,
             span,
             state: GeneratorState::Running,
-            generator: Gen::new(|co| pin_generator(gen(co))),
+            generator: unsafe {
+                // SAFETY: if we correctly account shelf_slot, this is
+                // safe, if we don't, it's not.
+                Gen::new(shelf, |co| pin_generator(gen(co)))
+            },
         });
+        self.shelf_slot += 1;
     }
 
     /// Run a generator frame until it yields to the outer control loop, or runs
@@ -485,6 +497,7 @@ impl<'o> VM<'o> {
                 genawaiter::GeneratorState::Complete(result) => {
                     let value = result.with_span(&span, self)?;
                     self.stack.push(value);
+                    self.shelf_slot -= 1;
                     return Ok(true);
                 }
             }
@@ -492,7 +505,7 @@ impl<'o> VM<'o> {
     }
 }
 
-pub type GenCo = Co<VMRequest, VMResponse>;
+pub type GenCo = Co<'static, VMRequest, VMResponse>;
 
 // -- Implementation of concrete generator use-cases.
 

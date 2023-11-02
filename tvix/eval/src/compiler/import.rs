@@ -6,7 +6,7 @@
 //! instance, or observers).
 
 use super::GlobalsMap;
-use genawaiter::rc::Gen;
+use genawaiter::stack::Gen;
 use std::rc::Weak;
 
 use crate::{
@@ -110,8 +110,10 @@ pub(super) fn builtins_import(globals: &Weak<GlobalsMap>, source: SourceCode) ->
         "import",
         Some("Import the given file and return the Nix value it evaluates to"),
         1,
-        move |args| {
-            Gen::new(|co| pin_generator(import_impl(co, globals.clone(), source.clone(), args)))
+        move |shelf, args| unsafe {
+            Gen::new(shelf, |co| {
+                pin_generator(import_impl(co, globals.clone(), source.clone(), args))
+            })
         },
     )
 }

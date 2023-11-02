@@ -14,7 +14,7 @@ mod mock_builtins {
     use crate as tvix_eval;
     use crate::generators::GenCo;
     use crate::*;
-    use genawaiter::rc::Gen;
+    use genawaiter::stack::Gen;
 
     #[builtin("derivation")]
     async fn builtin_derivation(co: GenCo, input: Value) -> Result<Value, ErrorKind> {
