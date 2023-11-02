@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f601b51f_618051e4",
+        "filename": "tvix/eval/src/value/attrs.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 303,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-11-02T20:39:04Z",
+      "side": 1,
+      "message": "Are attrsets always sorted in our case? Should probably describe that shortly.",
+      "revId": "d894d2c43d0cda49eeebf5cd32a60ce2df9b6d0b",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
