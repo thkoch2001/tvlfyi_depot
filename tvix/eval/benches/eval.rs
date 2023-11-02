@@ -5,6 +5,15 @@ fn interpret(code: &str) {
     tvix_eval::Evaluation::new(code, None).evaluate();
 }
 
+fn eval_intersect_attrs(c: &mut Criterion) {
+    c.bench_function("intersect attrs", |b| {
+        b.iter(|| {
+            interpret(include_str!("../src/tests/nix_tests/eval-okay-intersectAttrs.nix"));
+            black_box(())
+        })
+    });
+}
+
 fn eval_literals(c: &mut Criterion) {
     c.bench_function("int", |b| {
         b.iter(|| {
@@ -32,5 +41,5 @@ fn eval_merge_attrs(c: &mut Criterion) {
     });
 }
 
-criterion_group!(benches, eval_literals, eval_merge_attrs);
+criterion_group!(benches, eval_intersect_attrs, eval_literals, eval_merge_attrs);
 criterion_main!(benches);
