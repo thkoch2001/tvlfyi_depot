@@ -26,6 +26,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "348cef69_fce2acbb",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1000038
+      },
+      "writtenOn": "2023-11-02T12:15:42Z",
+      "side": 1,
+      "message": "It depends on how tvl-kit is instantiated in the parent repository. Since `pkgs` attribute is optional, it can be either parent repository pinned nix version (as I have in the Resoptima repository) or it can be the one coming with tvl-kit (as I have in another project repo).\n\nWhile it can be anything between repositories, it still is will be unified for all users of one specific tvl-kit instance, which is what I\u0027m aiming here for. Otherwise it\u0027s random per user, and cannot be controlled globally without lazy-dispatch.\n\nThe fact that consistency of magrathea depends on lazy-dispatch is wrong. The tool that\u0027s using some dependencies under the hood shouldn\u0027t provide users random results based on their personal environment.",
+      "parentUuid": "dc44bb38_315e0cae",
+      "range": {
+        "startLine": 9,
+        "startChar": 21,
+        "endLine": 9,
+        "endChar": 24
+      },
+      "revId": "9fd701cdaba0ee10fa1b9a1be2b2ac60e73a537d",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "69d03662_234772b6",
         "filename": "/COMMIT_MSG",
         "patchSetId": 3
@@ -49,6 +73,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "bbced1c3_5c4d4287",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1000038
+      },
+      "writtenOn": "2023-11-02T12:15:42Z",
+      "side": 1,
+      "message": "Thanks 😊",
+      "parentUuid": "69d03662_234772b6",
+      "range": {
+        "startLine": 10,
+        "startChar": 12,
+        "endLine": 10,
+        "endChar": 19
+      },
+      "revId": "9fd701cdaba0ee10fa1b9a1be2b2ac60e73a537d",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "84a09441_3fb51902",
         "filename": "/COMMIT_MSG",
         "patchSetId": 3
@@ -60,6 +108,24 @@
       "writtenOn": "2023-11-01T15:08:23Z",
       "side": 1,
       "message": "Can you isolate this example and add it to https://pad.lassul.us/-WyxSazPSsCMHWmffbETfA ?",
+      "revId": "9fd701cdaba0ee10fa1b9a1be2b2ac60e73a537d",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0105c99f_930d3b16",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1000038
+      },
+      "writtenOn": "2023-11-02T12:15:42Z",
+      "side": 1,
+      "message": "Will do as soon as I have time",
+      "parentUuid": "84a09441_3fb51902",
       "revId": "9fd701cdaba0ee10fa1b9a1be2b2ac60e73a537d",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
