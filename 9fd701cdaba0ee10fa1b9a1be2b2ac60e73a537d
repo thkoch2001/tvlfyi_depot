@@ -72,6 +72,30 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "9fb8b774_30bccf6b",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2023-11-02T14:09:31Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "24be1c17_767ef036",
+      "range": {
+        "startLine": 9,
+        "startChar": 21,
+        "endLine": 9,
+        "endChar": 24
+      },
+      "revId": "9fd701cdaba0ee10fa1b9a1be2b2ac60e73a537d",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "69d03662_234772b6",
@@ -119,6 +143,30 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "7749bf1e_d92efcce",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2023-11-02T14:09:31Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "bbced1c3_5c4d4287",
+      "range": {
+        "startLine": 10,
+        "startChar": 12,
+        "endLine": 10,
+        "endChar": 19
+      },
+      "revId": "9fd701cdaba0ee10fa1b9a1be2b2ac60e73a537d",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "84a09441_3fb51902",
@@ -154,6 +202,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "fd5a8707_73610a56",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2023-11-02T14:09:31Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "0105c99f_930d3b16",
+      "revId": "9fd701cdaba0ee10fa1b9a1be2b2ac60e73a537d",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "c54c5a45_72fdc8b0",
@@ -185,6 +251,24 @@
       "side": 1,
       "message": "Removed pinned git from the PATH",
       "parentUuid": "c54c5a45_72fdc8b0",
+      "revId": "9fd701cdaba0ee10fa1b9a1be2b2ac60e73a537d",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7d97147d_4081730e",
+        "filename": "tools/magrathea/default.nix",
+        "patchSetId": 3
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2023-11-02T14:09:31Z",
+      "side": 1,
+      "message": "It makes sense that magrathea uses the Nix version of whatever repo instantiates it.",
+      "parentUuid": "6a8b4508_84d909e0",
       "revId": "9fd701cdaba0ee10fa1b9a1be2b2ac60e73a537d",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
