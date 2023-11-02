@@ -46,7 +46,7 @@ let
       };
 
       tvix-cli = prev: {
-        buildInputs = prev.buildInputs or [ ] ++ securityDarwinDep;
+        buildInputs = prev.buildInputs or [ ] ++ securityDarwinDep ++ [ pkgs.jemalloc ];
       };
 
       tvix-store = prev: {
