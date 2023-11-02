@@ -11,6 +11,7 @@ use std::sync::Arc;
 use std::{fs, path::PathBuf};
 
 use clap::Parser;
+use jemallocator::Jemalloc;
 use known_paths::KnownPaths;
 use rustyline::{error::ReadlineError, Editor};
 use tvix_castore::blobservice::MemoryBlobService;
@@ -19,6 +20,9 @@ use tvix_eval::observer::{DisassemblingObserver, TracingObserver};
 use tvix_eval::Value;
 use tvix_store::pathinfoservice::MemoryPathInfoService;
 use tvix_store_io::TvixStoreIO;
+
+#[global_allocator]
+static GLOBAL: Jemalloc = Jemalloc;
 
 #[derive(Parser)]
 struct Args {

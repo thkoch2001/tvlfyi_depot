@@ -19,6 +19,7 @@ rustyline = "10.0.0"
 thiserror = "1.0.38"
 tracing = "0.1.37"
 tokio = "1.28.0"
+jemallocator = "0.5.4"
 
 [dependencies.wu-manber]
 git = "https://github.com/tvlfyi/wu-manber.git"

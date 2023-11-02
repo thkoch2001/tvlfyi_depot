@@ -3422,6 +3422,71 @@ rec {
           "no-panic" = [ "dep:no-panic" ];
         };
       };
+      "jemalloc-sys" = rec {
+        crateName = "jemalloc-sys";
+        version = "0.5.4+5.3.0-patched";
+        edition = "2018";
+        sha256 = "1wpbpwhfs6wd484cdfpl0zdf441ann9wj0fypy67i8ffw531jv5c";
+        authors = [
+          "Alex Crichton <alex@alexcrichton.com>"
+          "Gonzalo Brito Gadeschi <gonzalobg88@gmail.com>"
+          "The TiKV Project Developers"
+        ];
+        dependencies = [
+          {
+            name = "libc";
+            packageId = "libc";
+            usesDefaultFeatures = false;
+          }
+        ];
+        buildDependencies = [
+          {
+            name = "cc";
+            packageId = "cc";
+          }
+        ];
+        features = {
+          "background_threads" = [ "background_threads_runtime_support" ];
+          "default" = [ "background_threads_runtime_support" ];
+        };
+        resolvedDefaultFeatures = [ "background_threads_runtime_support" ];
+      };
+      "jemallocator" = rec {
+        crateName = "jemallocator";
+        version = "0.5.4";
+        edition = "2018";
+        sha256 = "1g6k9ly6wxj53bp8lz9lg9nj4s662k6612jydw71aqwfkx53gpm0";
+        authors = [
+          "Alex Crichton <alex@alexcrichton.com>"
+          "Gonzalo Brito Gadeschi <gonzalobg88@gmail.com>"
+          "Simon Sapin <simon.sapin@exyr.org>"
+          "Steven Fackler <sfackler@gmail.com>"
+          "The TiKV Project Developers"
+        ];
+        dependencies = [
+          {
+            name = "jemalloc-sys";
+            packageId = "jemalloc-sys";
+            usesDefaultFeatures = false;
+          }
+          {
+            name = "libc";
+            packageId = "libc";
+            usesDefaultFeatures = false;
+          }
+        ];
+        features = {
+          "background_threads" = [ "jemalloc-sys/background_threads" ];
+          "background_threads_runtime_support" = [ "jemalloc-sys/background_threads_runtime_support" ];
+          "debug" = [ "jemalloc-sys/debug" ];
+          "default" = [ "background_threads_runtime_support" ];
+          "disable_initial_exec_tls" = [ "jemalloc-sys/disable_initial_exec_tls" ];
+          "profiling" = [ "jemalloc-sys/profiling" ];
+          "stats" = [ "jemalloc-sys/stats" ];
+          "unprefixed_malloc_on_supported_platforms" = [ "jemalloc-sys/unprefixed_malloc_on_supported_platforms" ];
+        };
+        resolvedDefaultFeatures = [ "background_threads_runtime_support" "default" ];
+      };
       "jobserver" = rec {
         crateName = "jobserver";
         version = "0.1.26";
@@ -8701,6 +8766,10 @@ rec {
           {
             name = "dirs";
             packageId = "dirs";
+          }
+          {
+            name = "jemallocator";
+            packageId = "jemallocator";
           }
           {
             name = "nix-compat";
