@@ -42,7 +42,6 @@ in
         fd
         file
         gdb
-        gh
         git
         gnupg
         gtk3 # for gtk-launch
@@ -57,7 +56,6 @@ in
         moreutils
         mosh
         msmtp
-        mullvad-vpn
         networkmanagerapplet
         nix-prefetch-github
         nmap
@@ -73,10 +71,8 @@ in
         quasselClient
         rink
         ripgrep
-        rust-analyzer
         rustup
         screen
-        thunderbird
         tig
         tokei
         tree
