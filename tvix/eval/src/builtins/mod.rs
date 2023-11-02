@@ -5,7 +5,7 @@
 
 use bstr::{ByteSlice, ByteVec};
 use builtin_macros::builtins;
-use genawaiter::rc::Gen;
+use genawaiter::stack::Gen;
 use imbl::OrdMap;
 use regex::Regex;
 use std::cmp::{self, Ordering};

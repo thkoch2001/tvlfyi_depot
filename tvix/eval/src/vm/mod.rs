@@ -16,6 +16,7 @@ use bstr::{BString, ByteSlice, ByteVec};
 use codemap::Span;
 use rustc_hash::FxHashMap;
 use serde_json::json;
+use std::mem::MaybeUninit;
 use std::{cmp::Ordering, ops::DerefMut, path::PathBuf, rc::Rc};
 
 use crate::{
@@ -34,7 +35,7 @@ use crate::{
         Builtin, BuiltinResult, Closure, CoercionKind, Lambda, NixAttrs, NixContext, NixList,
         PointerEquality, Thunk, Value,
     },
-    vm::generators::GenCo,
+    vm::generators::{GenCo, GenShelf},
     warnings::{EvalWarning, WarningKind},
     NixString, SourceCode,
 };
@@ -275,6 +276,12 @@ struct VM<'o, IO> {
     /// thunks are being forced.
     frames: Vec<Frame>,
 
+    /// Shelves in which generators are stored.
+    shelves: [GenShelf; 512],
+
+    /// Index of the top free shelf.
+    shelf_slot: usize,
+
     /// The VM's top-level value stack. Within this stack, each code-executing
     /// frame holds a "view" of the stack representing the slice of the
     /// top-level stack that is relevant to its operation. This is done to avoid
@@ -368,6 +375,14 @@ where
             reasonable_span,
             source,
             frames: vec![],
+            shelves: unsafe {
+                // SAFETY: genawaiter::stack::Shelf is a MaybeUninit,
+                // which is safe to leave unitialised. Under correct
+                // usage, the creation of generators on this shelf
+                // will initialise the slot.
+                MaybeUninit::uninit().assume_init()
+            },
+            shelf_slot: 0,
             stack: vec![],
             with_stack: vec![],
             warnings: vec![],
@@ -1058,6 +1073,15 @@ where
         Ok(())
     }
 
+    pub fn shelf_ptr(&mut self) -> &'static mut GenShelf {
+        unsafe {
+            // SAFETY: This is wildly unsafe.
+            ((&mut self.shelves[self.shelf_slot]) as *mut GenShelf)
+                .as_mut::<'static>()
+                .unwrap()
+        }
+    }
+
     /// Apply an argument from the stack to a builtin, and attempt to call it.
     ///
     /// All calls are tail-calls in Tvix, as every function application is a
@@ -1071,17 +1095,20 @@ where
 
         builtin.apply_arg(self.stack_pop());
 
-        match builtin.call() {
+        match builtin.call(self.shelf_ptr()) {
             // Partially applied builtin is just pushed back on the stack.
             BuiltinResult::Partial(partial) => self.stack.push(Value::Builtin(partial)),
 
             // Builtin is fully applied and the generator needs to be run by the VM.
-            BuiltinResult::Called(name, generator) => self.frames.push(Frame::Generator {
-                generator,
-                span,
-                name,
-                state: GeneratorState::Running,
-            }),
+            BuiltinResult::Called(name, generator) => {
+                self.shelf_slot += 1;
+                self.frames.push(Frame::Generator {
+                    generator,
+                    span,
+                    name,
+                    state: GeneratorState::Running,
+                })
+            }
         }
 
         Ok(())
