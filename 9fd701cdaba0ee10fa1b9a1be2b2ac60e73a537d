@@ -50,6 +50,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "24be1c17_767ef036",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1000038
+      },
+      "writtenOn": "2023-11-02T12:18:47Z",
+      "side": 1,
+      "message": "Pushed an update to the commit message to clarify this.",
+      "parentUuid": "348cef69_fce2acbb",
+      "range": {
+        "startLine": 9,
+        "startChar": 21,
+        "endLine": 9,
+        "endChar": 24
+      },
+      "revId": "9fd701cdaba0ee10fa1b9a1be2b2ac60e73a537d",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "69d03662_234772b6",
         "filename": "/COMMIT_MSG",
         "patchSetId": 3
