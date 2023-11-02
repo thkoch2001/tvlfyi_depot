@@ -145,6 +145,24 @@
       "message": "I\u0027m not a fan of this. At least git is something you bring with yourself (you already checked-out the repo after all).\n\nNix could potentially work, though I\u0027m a bit worried about incompatibilities between different Nix versions on daemons vs clients (already seen these)",
       "revId": "9fd701cdaba0ee10fa1b9a1be2b2ac60e73a537d",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6a8b4508_84d909e0",
+        "filename": "tools/magrathea/default.nix",
+        "patchSetId": 3
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1000038
+      },
+      "writtenOn": "2023-11-02T12:16:01Z",
+      "side": 1,
+      "message": "Removed pinned git from the PATH",
+      "parentUuid": "c54c5a45_72fdc8b0",
+      "revId": "9fd701cdaba0ee10fa1b9a1be2b2ac60e73a537d",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
