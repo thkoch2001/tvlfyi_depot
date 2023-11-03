@@ -34,6 +34,24 @@
       "parentUuid": "49ead830_005618a7",
       "revId": "6c083a6d87c46ae0d648e1750f436dae6734eb0a",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "adabff9b_ede204b6",
+        "filename": "tvix/eval/src/value/mod.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 508,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-11-03T07:22:31Z",
+      "side": 1,
+      "message": "The previous iteration did do the clone all the time, because it was hidden in into_iter. Adding a small comment here, mentioning we don\u0027t use into_iter, but iter[_sorted], to defer the cloning to later should only help when reading that code later, not hurt.",
+      "parentUuid": "0f9d62af_c3287153",
+      "revId": "6c083a6d87c46ae0d648e1750f436dae6734eb0a",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
