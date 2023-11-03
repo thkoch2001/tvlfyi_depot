@@ -4,19 +4,20 @@
 
 self: super:
 let
-  # Rollback Nix to a stable version (2.3) with backports for
-  # build-user problems applied.
+  # Rollback Nix to a stable version (2.3) with some backports applied.
+  # We currently track a commit on the 2.3-maintenance that didn't make it into
+  # a release yet - tracked in https://github.com/NixOS/nix/issues/9244.
   nixSrc =
     let
-      # branch 2.3-backport-await-users
-      rev = "46a91f2abaee85135cbb447c13957d3c5e9091a9";
+      # branch 2.3-maintenance
+      rev = "f76990444c17716506080e5445e430a9c5c880f9";
     in
     self.fetchFromGitHub
       {
-        owner = "tvlfyi";
+        owner = "NixOS";
         repo = "nix";
         inherit rev;
-        hash = "sha256:0rwyrh471c5y64axyd8vzzzmzlscg97fsrjbgbm1a93wnzxcvnvk";
+        hash = "sha256-EK0pgHDekJFqr0oMj+8ANIjq96WPjICe2s0m4xkUdH4=";
       } // { revCount = 0; shortRev = builtins.substring 0 7 rev; };
 
   nixTarball = (scopedImport
