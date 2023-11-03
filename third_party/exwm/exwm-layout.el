@@ -207,7 +207,8 @@ See variable `exwm-layout-auto-iconify'."
                                            xcb:ConfigWindow:StackMode)
                        :border-width 0
                        :stack-mode xcb:StackMode:Above))
-    (cl-pushnew xcb:Atom:_NET_WM_STATE_FULLSCREEN exwm--ewmh-state)
+    ;; commented out to work around https://github.com/ch11ng/exwm/issues/759
+    ;; (cl-pushnew xcb:Atom:_NET_WM_STATE_FULLSCREEN exwm--ewmh-state)
     (exwm-layout--set-ewmh-state exwm--id)
     (xcb:flush exwm--connection)
     (set-window-dedicated-p (get-buffer-window) t)
