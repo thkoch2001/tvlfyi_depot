@@ -16,6 +16,24 @@
       "message": "Only when keys match, the key [...] are actually allocated.",
       "revId": "052fb0f1c3d73b474898eb27e27f743a2f74e887",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a237c302_ce1b72d5",
+        "filename": "tvix/eval/src/builtins/mod.rs",
+        "patchSetId": 3
+      },
+      "lineNbr": 512,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2023-11-03T06:57:58Z",
+      "side": 1,
+      "message": "Not sure what you\u0027re saying, the sentence as I wrote it is correct and - to me - reads better than your version with the pause.",
+      "parentUuid": "a3b0b4ba_861d807f",
+      "revId": "052fb0f1c3d73b474898eb27e27f743a2f74e887",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
