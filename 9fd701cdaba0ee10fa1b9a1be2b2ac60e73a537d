@@ -271,6 +271,24 @@
       "parentUuid": "6a8b4508_84d909e0",
       "revId": "9fd701cdaba0ee10fa1b9a1be2b2ac60e73a537d",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b8e11de9_4ea2b2da",
+        "filename": "tools/magrathea/default.nix",
+        "patchSetId": 3
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1000038
+      },
+      "writtenOn": "2023-11-03T13:54:33Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "7d97147d_4081730e",
+      "revId": "9fd701cdaba0ee10fa1b9a1be2b2ac60e73a537d",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
