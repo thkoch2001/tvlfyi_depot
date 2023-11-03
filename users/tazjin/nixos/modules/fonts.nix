@@ -4,7 +4,7 @@
 
 {
   fonts = {
-    fonts = with pkgs; [
+    packages = with pkgs; [
       corefonts
       dejavu_fonts
       jetbrains-mono
