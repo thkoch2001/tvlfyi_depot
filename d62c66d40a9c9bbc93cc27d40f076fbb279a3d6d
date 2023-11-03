@@ -1,4 +1,22 @@
 {
-  "comments": [],
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "84133fde_96fdf4bc",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000066
+      },
+      "writtenOn": "2023-11-03T08:18:25Z",
+      "side": 1,
+      "message": "Nifty!\n\nThis tool does a very impressive job of auto-layouting dot diagrams.  Sad however that it doesn\u0027t appear to be runnable locally 😭",
+      "revId": "d62c66d40a9c9bbc93cc27d40f076fbb279a3d6d",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ],
   "submitRequirementResults": []
 }
