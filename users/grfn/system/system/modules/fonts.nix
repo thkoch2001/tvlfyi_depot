@@ -1,7 +1,7 @@
 { config, lib, pkgs, ... }:
 {
   fonts = {
-    fonts = with pkgs; [
+    packages = with pkgs; [
       nerdfonts
       noto-fonts-emoji
       twitter-color-emoji
