@@ -70,6 +70,24 @@
       "parentUuid": "adabff9b_ede204b6",
       "revId": "6c083a6d87c46ae0d648e1750f436dae6734eb0a",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cb43910d_7542ad22",
+        "filename": "tvix/eval/src/value/mod.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 508,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2023-11-03T09:18:27Z",
+      "side": 1,
+      "message": "Opened b/329 for this.",
+      "parentUuid": "b68f9963_5e35c9ac",
+      "revId": "6c083a6d87c46ae0d648e1750f436dae6734eb0a",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
