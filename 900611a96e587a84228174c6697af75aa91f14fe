@@ -16,6 +16,24 @@
       "message": "I\u0027m approving it but mostly because I don\u0027t use the shell and don\u0027t care, but if it fixes someone\u0027s problems, great.\n\nThe problem with the shell is that it drags in a huge amount of random stuff (gigabytes!), which I don\u0027t want/need. Like what even is cargo machete and evans? What is buf-language-server? No clue, but also I don\u0027t have to use it, so whatever ;)",
       "revId": "900611a96e587a84228174c6697af75aa91f14fe",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e96e70f8_88b684be",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-11-03T09:11:59Z",
+      "side": 1,
+      "message": "You probably have the same Nix 2.3 as depot has anyways, so that\u0027s no increase for you.\n\nAs for the other dependencies, they are documented in the CLs introducing them, and/or a google search away :-P",
+      "parentUuid": "71ec0f8a_523e15fd",
+      "revId": "900611a96e587a84228174c6697af75aa91f14fe",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
