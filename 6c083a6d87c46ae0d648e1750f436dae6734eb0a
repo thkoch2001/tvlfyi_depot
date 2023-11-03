@@ -52,6 +52,24 @@
       "parentUuid": "0f9d62af_c3287153",
       "revId": "6c083a6d87c46ae0d648e1750f436dae6734eb0a",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b68f9963_5e35c9ac",
+        "filename": "tvix/eval/src/value/mod.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 508,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2023-11-03T09:15:36Z",
+      "side": 1,
+      "message": "I think we actually have a naming bug here (well, not in this file), the cloning iterator should probably be `to_iter` not `into_iter`: https://rust-lang.github.io/api-guidelines/naming.html#ad-hoc-conversions-follow-as_-to_-into_-conventions-c-conv\n\nThe iterators over the persistent data structures are odd anyways, as they have weird allocation behaviour.\n\nThis call site, in my opinion, does not need documentation for doing the correct thing - the previous version is what stood out.",
+      "parentUuid": "adabff9b_ede204b6",
+      "revId": "6c083a6d87c46ae0d648e1750f436dae6734eb0a",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
