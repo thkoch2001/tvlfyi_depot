@@ -16,6 +16,24 @@
       "message": "Nifty!\n\nThis tool does a very impressive job of auto-layouting dot diagrams.  Sad however that it doesn\u0027t appear to be runnable locally 😭",
       "revId": "d62c66d40a9c9bbc93cc27d40f076fbb279a3d6d",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e2754388_628f1693",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2023-11-04T21:12:27Z",
+      "side": 1,
+      "message": "It\u0027s not dot graphs, it\u0027s a separate language, and I think we can run the tool locally. I\u0027ll give it a shot.",
+      "parentUuid": "84133fde_96fdf4bc",
+      "revId": "d62c66d40a9c9bbc93cc27d40f076fbb279a3d6d",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ],
   "submitRequirementResults": []
