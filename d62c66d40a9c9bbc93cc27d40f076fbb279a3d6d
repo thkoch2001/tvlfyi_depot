@@ -34,6 +34,24 @@
       "parentUuid": "84133fde_96fdf4bc",
       "revId": "d62c66d40a9c9bbc93cc27d40f076fbb279a3d6d",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5d8a05db_67a84c30",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2023-11-04T21:16:06Z",
+      "side": 1,
+      "message": "Works!\n\nnix-shell -p d2 --command \u0027d2 tvix-eval-value.d2\u0027",
+      "parentUuid": "e2754388_628f1693",
+      "revId": "d62c66d40a9c9bbc93cc27d40f076fbb279a3d6d",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ],
   "submitRequirementResults": []
