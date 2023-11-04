@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2cf037b2_e0c4c4a2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-11-04T11:46:01Z",
+      "side": 1,
+      "message": "This should probably also have a default.nix, so CI builds it.",
+      "revId": "3b527a088cffb85f588b7c9914643821e58d867f",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d792a2ef_9b42b6c2",
+        "filename": "tvix/tools/turbofetch/.gitignore",
+        "patchSetId": 2
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-11-04T11:46:01Z",
+      "side": 1,
+      "message": "isn\u0027t there already a gitignore for this further up?",
+      "revId": "3b527a088cffb85f588b7c9914643821e58d867f",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2eb52a64_9713d142",
+        "filename": "tvix/tools/turbofetch/Cargo.lock",
+        "patchSetId": 2
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-11-04T11:46:01Z",
+      "side": 1,
+      "message": "please add this to the tvix/Cargo.toml workspace, and do the crate2nix generate step as documented in the readme there.",
+      "revId": "3b527a088cffb85f588b7c9914643821e58d867f",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
