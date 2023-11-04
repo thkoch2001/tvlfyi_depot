@@ -28,6 +28,7 @@ members = [
   "nix-compat",
   "serde",
   "store",
+  "tools/turbofetch"
 ]
 
 # Add a profile to all targets that enables release optimisations, but
