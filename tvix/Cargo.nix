@@ -5014,9 +5014,9 @@ rec {
       };
       "proptest" = rec {
         crateName = "proptest";
-        version = "1.1.0";
+        version = "1.2.0";
         edition = "2018";
-        sha256 = "0w5s3wwchd3i6m15lsbsk3r3y25d1gwn13m6a185ks8w06cbiw99";
+        sha256 = "0rgsvf90v7wa9fhvlwzamv2gacp2ywjwn5yccjhsndmzk1mw0daf";
         authors = [
           "Jason Lingle"
         ];
@@ -5045,11 +5045,6 @@ rec {
             packageId = "num-traits";
             usesDefaultFeatures = false;
             features = [ "libm" ];
-          }
-          {
-            name = "quick-error";
-            packageId = "quick-error 2.0.1";
-            optional = true;
           }
           {
             name = "rand";
@@ -5094,15 +5089,14 @@ rec {
           "fork" = [ "std" "rusty-fork" "tempfile" ];
           "hardware-rng" = [ "x86" ];
           "lazy_static" = [ "dep:lazy_static" ];
-          "quick-error" = [ "dep:quick-error" ];
           "regex-syntax" = [ "dep:regex-syntax" ];
           "rusty-fork" = [ "dep:rusty-fork" ];
-          "std" = [ "rand/std" "byteorder/std" "lazy_static" "quick-error" "regex-syntax" "num-traits/std" ];
+          "std" = [ "rand/std" "byteorder/std" "lazy_static" "regex-syntax" "num-traits/std" ];
           "tempfile" = [ "dep:tempfile" ];
           "timeout" = [ "fork" "rusty-fork/timeout" ];
           "x86" = [ "dep:x86" ];
         };
-        resolvedDefaultFeatures = [ "alloc" "bit-set" "break-dead-code" "default" "fork" "lazy_static" "quick-error" "regex-syntax" "rusty-fork" "std" "tempfile" "timeout" ];
+        resolvedDefaultFeatures = [ "alloc" "bit-set" "break-dead-code" "default" "fork" "lazy_static" "regex-syntax" "rusty-fork" "std" "tempfile" "timeout" ];
       };
       "prost" = rec {
         crateName = "prost";
@@ -5285,22 +5279,11 @@ rec {
         };
         resolvedDefaultFeatures = [ "default" "std" ];
       };
-      "quick-error 1.2.3" = rec {
+      "quick-error" = rec {
         crateName = "quick-error";
         version = "1.2.3";
         edition = "2015";
         sha256 = "1q6za3v78hsspisc197bg3g7rpc989qycy8ypr8ap8igv10ikl51";
-        authors = [
-          "Paul Colomiets <paul@colomiets.name>"
-          "Colin Kiegel <kiegel@gmx.de>"
-        ];
-
-      };
-      "quick-error 2.0.1" = rec {
-        crateName = "quick-error";
-        version = "2.0.1";
-        edition = "2018";
-        sha256 = "18z6r2rcjvvf8cn92xjhm2qc3jpd1ljvcbf12zv0k9p565gmb4x9";
         authors = [
           "Paul Colomiets <paul@colomiets.name>"
           "Colin Kiegel <kiegel@gmx.de>"
@@ -6151,7 +6134,7 @@ rec {
           }
           {
             name = "quick-error";
-            packageId = "quick-error 1.2.3";
+            packageId = "quick-error";
           }
           {
             name = "tempfile";
