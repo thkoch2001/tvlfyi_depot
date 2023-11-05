@@ -16,6 +16,24 @@
       "message": "Testing for b/319:\n\ncl/\\\\ddddd",
       "revId": "a3c38bb27d686491bb3597a451f264b206347168",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ed69d540_2a9ed510",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2023-11-05T09:25:45Z",
+      "side": 1,
+      "message": "cl/\\\\\\ddddd",
+      "parentUuid": "462e11e4_94f238d5",
+      "revId": "a3c38bb27d686491bb3597a451f264b206347168",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
