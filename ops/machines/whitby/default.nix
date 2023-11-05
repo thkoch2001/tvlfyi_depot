@@ -435,7 +435,7 @@ in
   services.postgresql = {
     enable = true;
     enableTCPIP = true;
-    package = pkgs.postgresql_14;
+    package = pkgs.postgresql_15;
 
     authentication = lib.mkForce ''
       local all all trust
