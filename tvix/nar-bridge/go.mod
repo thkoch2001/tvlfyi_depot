@@ -1,7 +1,7 @@
 module code.tvl.fyi/tvix/nar-bridge
 
 require (
-	code.tvl.fyi/tvix/castore-go v0.0.0-20231017202545-96df348c772c
+	code.tvl.fyi/tvix/castore-go v0.0.0-20231105151352-990d6ba2175e
 	code.tvl.fyi/tvix/store-go v0.0.0-20231017203636-e5c25599293a
 	github.com/alecthomas/kong v0.7.1
 	github.com/go-chi/chi v1.5.4
@@ -12,7 +12,7 @@ require (
 	github.com/sirupsen/logrus v1.9.0
 	github.com/stretchr/testify v1.8.1
 	github.com/ulikunitz/xz v0.5.11
-	google.golang.org/grpc v1.58.2
+	google.golang.org/grpc v1.59.0
 	google.golang.org/protobuf v1.31.0
 	lukechampine.com/blake3 v1.2.1
 )
@@ -28,9 +28,9 @@ require (
 	github.com/spaolacci/murmur3 v1.1.0 // indirect
 	golang.org/x/crypto v0.14.0 // indirect
 	golang.org/x/net v0.17.0 // indirect
-	golang.org/x/sys v0.13.0 // indirect
-	golang.org/x/text v0.13.0 // indirect
-	google.golang.org/genproto/googleapis/rpc v0.0.0-20231009173412-8bfb1ae86b6c // indirect
+	golang.org/x/sys v0.14.0 // indirect
+	golang.org/x/text v0.14.0 // indirect
+	google.golang.org/genproto/googleapis/rpc v0.0.0-20231030173426-d783a09b4405 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
 )
 
