@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "303fb6b5_15eb030b",
+        "filename": "third_party/protoc-gen-js/default.nix",
+        "patchSetId": 2
+      },
+      "lineNbr": 5,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2023-11-05T16:37:31Z",
+      "side": 1,
+      "message": "Pretty sure you could just put the closure here instead of splitting it in two files, but I don\u0027t care *that* much.",
+      "range": {
+        "startLine": 3,
+        "startChar": 17,
+        "endLine": 5,
+        "endChar": 1
+      },
+      "revId": "cda1076fec655ae978098f0b875948b79a491815",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
