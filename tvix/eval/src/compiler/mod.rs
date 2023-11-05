@@ -1004,7 +1004,7 @@ impl Compiler<'_> {
         // For each of the bindings, push the set on the stack and
         // attempt to select from it.
         let stack_idx = self.scope().stack_index(set_idx);
-        for tracked_formal in (&entries).into_iter() {
+        for tracked_formal in entries.iter() {
             self.push_op(OpCode::OpGetLocal(stack_idx), pattern);
             self.emit_literal_ident(&tracked_formal.pattern_entry().ident().unwrap());
 
@@ -1067,7 +1067,7 @@ impl Compiler<'_> {
             }
         }
 
-        for tracked_formal in (&entries).into_iter() {
+        for tracked_formal in entries.iter() {
             if self.scope()[tracked_formal.local_idx()].needs_finaliser {
                 let stack_idx = self.scope().stack_index(tracked_formal.local_idx());
                 match tracked_formal {
