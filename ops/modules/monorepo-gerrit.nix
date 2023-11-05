@@ -87,14 +87,14 @@ in
 
       # Auto-link panettone bug links
       commentlink.panettone = {
-        match = "b/(\\\\d+)";
-        html = "<a href=\"https://b.tvl.fyi/issues/$1\">b/$1</a>";
+        match = "b/(\\d+)";
+        link = "https://b.tvl.fyi/issues/$1";
       };
 
       # Auto-link other CLs
       commentlink.gerrit = {
-        match = "cl/(\\\\d+)";
-        html = "<a href=\"https://cl.tvl.fyi/$1\">cl/$1</a>";
+        match = "cl/(\\d+)";
+        link = "https://cl.tvl.fyi/$1";
       };
 
       # Configures integration with Keycloak, which then integrates with a
