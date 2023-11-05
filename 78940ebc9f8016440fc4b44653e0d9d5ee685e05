@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cf776c57_8fac3b9d",
+        "filename": "tvix/store/src/fs/mod.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 96,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-11-05T20:26:43Z",
+      "side": 1,
+      "message": "This indeed *is* ugly, but yeah…",
+      "revId": "78940ebc9f8016440fc4b44653e0d9d5ee685e05",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
