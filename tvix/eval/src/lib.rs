@@ -17,6 +17,7 @@ mod chunk;
 mod compiler;
 mod errors;
 mod io;
+mod mmtk;
 pub mod observer;
 mod opcode;
 mod pretty_ast;
