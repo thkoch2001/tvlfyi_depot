@@ -1,7 +1,7 @@
 { depot, pkgs, ... }:
 
 let
-  regenerate = pkgs.writeShellScriptBin "regenerate" ''
+  regenerate = pkgs.writeShellScript "regenerate" ''
     (cd $(git rev-parse --show-toplevel)/tvix/castore-go && rm *.pb.go && cp ${depot.tvix.castore.protos.go-bindings}/*.pb.go . && chmod +w *.pb.go)
   '';
 in
