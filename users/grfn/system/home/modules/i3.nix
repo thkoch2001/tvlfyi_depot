@@ -149,6 +149,9 @@ in
                   # Passwords
                   "${mod}+p" = "exec rofi-pass -font '${decorationFont}'";
 
+                  # Edit current buffer
+                  "${mod}+v" = "exec edit-input";
+
                   # Media
                   "XF86AudioPlay" = "exec playerctl -p spotify play-pause";
                   "XF86AudioNext" = "exec playerctl -p spotify next";
