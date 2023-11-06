@@ -147,4 +147,11 @@ depot.nix.readTree.drvTargets {
       license = licenses.asl20;
     };
   };
+
+  clickhouse = super.clickhouse.overrideAttrs ({ patches ? [] }: {
+    patches = patches ++ [
+      # https://github.com/ClickHouse/ClickHouse/pull/56118
+      ./patches/clickhouse-support-reading-arrow-LargeListArray.patch
+    ];
+  });
 }
