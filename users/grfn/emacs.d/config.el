@@ -228,12 +228,13 @@
 (use-package! org-tracker
   :hook (org-mode . org-tracker-mode)
   :config
-  (setq org-tracker-state-alist '(("INBOX" . "Inbox")
+  (setq org-tracker-state-alist '(("INBOX" . "Triage")
                                   ("BACKLOG" . "Backlog")
-                                  ("TODO" . "Selected for Development")
+                                  ("TODO" . "Todo")
                                   ("ACTIVE" . "In Progress")
                                   ("PR" . "Code Review")
-                                  ("DONE" . "Done"))
+                                  ("DONE" . "Done")
+                                  ("CANCELLED" . "Canceled"))
         org-tracker-username "griffin@readyset.io"
         org-tracker-claim-ticket-on-status-update '("ACTIVE" "PR" "DONE")
         org-tracker-create-stories-with-labels 'existing)
@@ -467,21 +468,21 @@
 
 (setq projectile-create-missing-test-files 't)
 
-(setq grfn/jira-refs-re
+(setq grfn/tracker-refs-re
       (rx line-start
           (or "Refs" "Fixes")
           ": "
-          "ENG-" (one-or-more digit)
+          (one-or-more graph)
           line-end))
 
-(defun grfn/add-jira-reference-to-commit-message ()
+(defun grfn/add-tracker-reference-to-commit-message ()
   (interactive)
-  (when-let* ((jira-id (grfn/org-clocked-in-jira-ticket-id)))
+  (when-let* ((ticket-id (grfn/org-clocked-in-ticket-id)))
     (save-excursion
       (save-match-data
         (goto-char (point-min))
         ;; Don't add one if we've already got one
-        (unless (search-forward-regexp grfn/jira-refs-re nil t)
+        (unless (search-forward-regexp grfn/tracker-refs-re nil t)
           (or
            (and
             (search-forward-regexp (rx line-start "Change-Id:") nil t)
@@ -489,14 +490,14 @@
            (and
             (search-forward-regexp (rx line-start "# Please enter") nil t)
             (forward-line -2)))
-          (insert (format "\nRefs: %s" jira-id)))))))
+          (insert (format "\nRefs: %s" ticket-id)))))))
 
-(defun grfn/switch-jira-refs-fixes ()
+(defun grfn/switch-tracker-refs-fixes ()
   (interactive)
   (save-excursion
     (save-match-data
-      (if (not (search-forward-regexp grfn/jira-refs-re nil t))
-          (message "Could not find reference to JIRA ticket")
+      (if (not (search-forward-regexp grfn/tracker-refs-re nil t))
+          (message "Could not find reference to ticket")
         (goto-char (point-at-bol))
         (save-restriction
           (narrow-to-region (point-at-bol)
@@ -581,9 +582,9 @@
 
   )
 
-(add-hook 'git-commit-setup-hook #'grfn/add-jira-reference-to-commit-message)
+(add-hook 'git-commit-setup-hook #'grfn/add-tracker-reference-to-commit-message)
 (map! (:map git-commit-mode-map
-       "C-c C-f" #'grfn/switch-jira-refs-fixes))
+       "C-c C-f" #'grfn/switch-tracker-refs-fixes))
 
 ;; (defun grfn/split-window-more-sensibly (&optional window)
 ;;   (let ((window (or window (selected-window))))
@@ -1119,3 +1120,5 @@
 (set-popup-rule!
   "^\\*gud-"
   :quit nil)
+
+(setq elcord-editor-icon "emacs_icon")

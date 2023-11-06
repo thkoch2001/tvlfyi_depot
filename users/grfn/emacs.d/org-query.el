@@ -115,11 +115,22 @@
  (grfn/org-current-clocked-in-task-message)
  )
 
-(defun grfn/org-clocked-in-jira-ticket-id ()
+(cl-defgeneric grfn/org-tracker-ticket-id-label (backend elt)
+  (org-tracker-backend/extract-issue-id backend elt))
+(cl-defmethod grfn/org-tracker-ticket-id-label
+  ((backend org-tracker-linear-backend) elt)
+  (when-let* ((link (plist-get elt :LINEAR-KEY)))
+    (string-match
+     (rx "[[" (one-or-more anything) "]"
+         "[" (group (one-or-more anything)) "]]")
+     link)
+    (match-string 1 link)))
+
+(defun grfn/org-clocked-in-ticket-id ()
   (grfn/at-org-clocked-in-item
-   (when (org-tracker-current-backend t)
-     (org-tracker-backend/extract-issue-id
-      (org-tracker-current-backend)
+   (when-let* ((backend (org-tracker-current-backend t)))
+     (grfn/org-tracker-ticket-id-label
+      backend
       (cadr (org-element-at-point))))))
 
 (comment
@@ -128,4 +139,5 @@
    (org-tracker-current-backend)
    (cadr (org-element-at-point))))
 
+ (grfn/org-clocked-in-ticket-id)
  )
