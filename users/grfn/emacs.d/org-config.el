@@ -76,10 +76,6 @@
     "* TODO %?\n%i"
     :kill-buffer t)
 
-   ("w" "Work Todo" entry
-    (file+headline ,(notes-file "work.org") "Work Tasks")
-    "* TODO %?\n%i")
-
    ("m" "Email" entry
     (file +org-default-todo-file)
     "* TODO [[%L][%:subject]] :email:\n%i")
@@ -106,12 +102,11 @@
    ("pw" "Windtunnel" entry
     (file+headline ,(notes-file "windtunnel.org") "Tasks")
     "* TODO %i%?\nContext: %a\nIn task: %K")
-
-   ("d" "Data recording")
    )
 
  org-capture-templates-contexts
- `(("px" ((in-file . "/home/grfn/code/depot/users/grfn/xanthous/.*"))))
+ `(("px" ((in-file . "/home/grfn/code/depot/users/grfn/xanthous/.*")))
+   ("e" ((in-mode . "notmuch-show-mode"))))
 
  org-deadline-warning-days 1
  org-agenda-skip-scheduled-if-deadline-is-shown 'todo
