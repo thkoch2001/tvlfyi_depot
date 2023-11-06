@@ -156,6 +156,30 @@
       },
       "revId": "a536a4743e74bd148f38ab4b1c2c97134840fcaf",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3481ee9d_18fce28f",
+        "filename": "tvix/castore/src/import.rs",
+        "patchSetId": 7
+      },
+      "lineNbr": 157,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-11-06T12:35:03Z",
+      "side": 1,
+      "message": "I\u0027d return a `std::io::Error::new(std::io::ErrorKind::InvalidData, format!(\"encountered invalid entry at {}\", entry.path()))` or something like this.",
+      "parentUuid": "fd516cfb_cf56e09c",
+      "range": {
+        "startLine": 157,
+        "startChar": 12,
+        "endLine": 157,
+        "endChar": 16
+      },
+      "revId": "a536a4743e74bd148f38ab4b1c2c97134840fcaf",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
