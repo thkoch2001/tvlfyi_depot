@@ -1,10 +1,8 @@
 #+OPTIONS: title:nil toc:nil num:nil
-#+HTML_HEAD: <title>griffin smith</title>
+#+HTML_HEAD: <title>aspen smith</title>
 #+HTML_HEAD: <link rel="stylesheet" href="./main.css">
 
-my name is griffin ward smith (they/them)  and i'm a software engineer and musician.
-
-you might know me from elsewhere as grfn, glittershark, or gws
+my name is aspen smith and i'm a software engineer and musician.
 
 * code
 
@@ -15,8 +13,8 @@ you might know me from elsewhere as grfn, glittershark, or gws
 
 i work on database internals at [[https://readyset.io/][readyset]], an incrementally maintained, partially
 stateful materialized view maintenance system for sql that's wire-compatible
-with postgresql and mysql, based on [[https://github.com/mit-pdos/noria][noria]]. readyset is hiring - if you're
-interested, send me an email
+with postgresql and mysql, based on [[https://github.com/mit-pdos/noria][noria]]. readyset is currently looking for
+early users - if you're interested, check out the ~README~ or send me an email
 
 * projects
 
