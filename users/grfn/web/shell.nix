@@ -3,7 +3,7 @@ mkShell {
   buildInputs = [
     awscli
     gnumake
-    letsencrypt
     tarsnap
+    certbot
   ];
 }
