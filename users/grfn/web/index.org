@@ -11,10 +11,14 @@ my name is aspen smith and i'm a software engineer and musician.
 
 * work
 
-i work on database internals at [[https://readyset.io/][readyset]], an incrementally maintained, partially
-stateful materialized view maintenance system for sql that's wire-compatible
-with postgresql and mysql, based on [[https://github.com/mit-pdos/noria][noria]]. readyset is currently looking for
-early users - if you're interested, check out the ~README~ or send me an email
+i am currently looking for a job! ideally i'd like to do something involving
+compilers or database query planners, or other low-level systems work. i'm
+pretty language-agnostic generally, but i'm quite fond of rust and prefer not to
+work in go. if you're interested, send me an [[mailto:web@gws.fyi][email]].
+
+most recently, i worked on database internals at [[https://readyset.io/][readyset]], an incrementally
+maintained, partially stateful materialized view maintenance system for sql
+that's wire-compatible with postgresql and mysql, based on [[https://github.com/mit-pdos/noria][noria]].
 
 * projects
 
