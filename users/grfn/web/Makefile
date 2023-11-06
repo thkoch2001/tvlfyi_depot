@@ -1,7 +1,7 @@
 .PHONY: deploy
 
 deploy:
-	@$(shell nix-build `git rev-parse --show-toplevel` -A 'users.grfn."gws.fyi"')
+	@$(shell nix-build `git rev-parse --show-toplevel` -A 'users.grfn.web')
 
 renew:
 	@echo Renewing...
