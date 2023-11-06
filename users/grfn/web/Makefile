@@ -1,7 +1,13 @@
-.PHONY: deploy
+.PHONY: deploy purge_cf do_deploy renew backup open
 
-deploy:
-	@$(shell nix-build `git rev-parse --show-toplevel` -A 'users.grfn.web')
+deploy: do_deploy purge_cf
+
+purge_cf:
+	@$(shell nix-build `git rev-parse --show-toplevel` -A 'users.grfn.web.purge-cf')/bin/purge-cf.sh
+
+do_deploy:
+	@$(shell nix-build `git rev-parse --show-toplevel` -A 'users.grfn.web')/bin/deploy.sh
+
 
 renew:
 	@echo Renewing...
