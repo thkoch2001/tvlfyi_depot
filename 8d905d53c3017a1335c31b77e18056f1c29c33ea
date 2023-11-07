@@ -33,6 +33,24 @@
       "message": "Related to https://cl.tvl.fyi/c/depot/+/9978/comment/c76243cf_244473d3/, this should (?) be the only place where a sparse Directory is turned into a populated one, so we might be able to just move the whole \"child inode allocation\" code from the inode_tracker to here, and make this a bit more ergonomic.",
       "revId": "8d905d53c3017a1335c31b77e18056f1c29c33ea",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6a1179e6_294e3e9a",
+        "filename": "tvix/store/src/fs/mod.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 180,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-11-07T14:48:32Z",
+      "side": 1,
+      "message": "just a note, not blocking the CL",
+      "parentUuid": "2eb8f7c2_9db88259",
+      "revId": "8d905d53c3017a1335c31b77e18056f1c29c33ea",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
