@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c76243cf_244473d3",
+        "filename": "tvix/store/src/fs/mod.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 313,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2023-11-07T14:40:03Z",
+      "side": 1,
+      "message": "We should probably obtain the lock once here. We can get a write lock then do the update followed by the read.\n\nAlso wondering if we can remove the need for the read on L314 and clone the children before we update the entry in the inode tracker.",
+      "revId": "7cf53b644c69cb03154b58cf7f3f4a2bf1bf2319",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
