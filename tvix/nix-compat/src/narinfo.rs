@@ -17,7 +17,8 @@
 //!    * compression algorithm used for the NAR
 //!    * hash and size of the compressed NAR
 
-use data_encoding::BASE64;
+use bitflags::bitflags;
+use data_encoding::{BASE64, HEXLOWER};
 use std::{
     fmt::{self, Display},
     mem,
@@ -62,6 +63,16 @@ pub struct NarInfo<'a> {
     pub file_size: Option<u64>,
 }
 
+bitflags! {
+    /// Format quirks, encountered in the cache.nixos.org dataset
+    /// TODO(edef): be conscious of these when roundtripping
+    pub struct Quirks: u8 {
+        const COMPRESSION_DEFAULT = 1 << 0;
+        const REFERENCES_OUT_OF_ORDER = 1 << 1;
+        const NAR_HASH_HEX = 1 << 2;
+    }
+}
+
 impl<'a> NarInfo<'a> {
     pub fn parse(input: &'a str) -> Result<Self, Error> {
         let mut store_path = None;
@@ -76,6 +87,7 @@ impl<'a> NarInfo<'a> {
         let mut deriver = None;
         let mut signatures = vec![];
         let mut ca = None;
+        let mut quirks = Quirks::empty();
 
         for line in input.lines() {
             let (tag, val) = line
@@ -143,8 +155,25 @@ impl<'a> NarInfo<'a> {
                         .strip_prefix("sha256:")
                         .ok_or_else(|| Error::MissingPrefixForHash(tag.to_string()))?;
 
-                    let val = nixbase32::decode_fixed::<32>(val)
-                        .map_err(|e| Error::UnableToDecodeHash(tag.to_string(), e))?;
+                    let val = if val.len() != HEXLOWER.encode_len(32) {
+                        nixbase32::decode_fixed::<32>(val)
+                    } else {
+                        quirks |= Quirks::NAR_HASH_HEX;
+
+                        let val = val.as_bytes();
+                        let mut buf = [0u8; 32];
+
+                        match HEXLOWER.decode_mut(val, &mut buf) {
+                            // HACK: this isn't actually a nixbase32 decode error… but it goes in the round hole
+                            // hex has no padding, no opportunity for trailing bits, and we already checked the length
+                            Err(e) => Err(nixbase32::Nixbase32DecodeError::CharacterNotInAlphabet(
+                                val[e.error.position],
+                            )),
+                            Ok(_) => Ok(buf),
+                        }
+                    };
+
+                    let val = val.map_err(|e| Error::UnableToDecodeHash(tag.to_string(), e))?;
 
                     if nar_hash.replace(val).is_some() {
                         return Err(Error::DuplicateField(tag.to_string()));
@@ -165,13 +194,13 @@ impl<'a> NarInfo<'a> {
                         val.split(' ')
                             .enumerate()
                             .map(|(i, s)| {
-                                if mem::replace(&mut prev, s) < s {
-                                    StorePathRef::from_bytes(s.as_bytes())
-                                        .map_err(|err| Error::InvalidReference(i, err))
-                                } else {
-                                    // references are out of order
-                                    Err(Error::OutOfOrderReference(i))
+                                // TODO(edef): track *duplicates* if this occurs
+                                if mem::replace(&mut prev, s) >= s {
+                                    quirks |= Quirks::REFERENCES_OUT_OF_ORDER;
                                 }
+
+                                StorePathRef::from_bytes(s.as_bytes())
+                                    .map_err(|err| Error::InvalidReference(i, err))
                             })
                             .collect::<Result<_, _>>()?
                     } else {
@@ -217,9 +246,7 @@ impl<'a> NarInfo<'a> {
                         return Err(Error::DuplicateField(tag.to_string()));
                     }
                 }
-                _ => {
-                    // unknown field, ignore
-                }
+                field => return Err(Error::UnknownField(field.to_owned())),
             }
         }
 
@@ -233,7 +260,14 @@ impl<'a> NarInfo<'a> {
             system,
             deriver,
             url: url.ok_or(Error::MissingField("URL"))?,
-            compression,
+            compression: match compression {
+                Some("none") => None,
+                None => {
+                    quirks |= Quirks::COMPRESSION_DEFAULT;
+                    Some("bzip2")
+                }
+                _ => compression,
+            },
             file_hash,
             file_size,
         })
@@ -351,9 +385,8 @@ pub fn parse_ca(s: &str) -> Option<CAHash> {
             Some(CAHash::Text(digest))
         }
         "fixed" => {
-            if let Some(digest) = s.strip_prefix("r:sha256:") {
-                let digest = nixbase32::decode_fixed(digest).ok()?;
-                Some(CAHash::Nar(NixHash::Sha256(digest)))
+            if let Some(s) = s.strip_prefix("r:") {
+                parse_hash(s).map(CAHash::Nar)
             } else {
                 parse_hash(s).map(CAHash::Flat)
             }
@@ -416,6 +449,9 @@ impl Display for fmt_hash<'_> {
 pub enum Error {
     #[error("duplicate field: {0}")]
     DuplicateField(String),
+
+    #[error("unknown field: {0}")]
+    UnknownField(String),
 
     #[error("missing field: {0}")]
     MissingField(&'static str),
