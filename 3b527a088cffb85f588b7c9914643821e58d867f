@@ -36,6 +36,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "4c8b3ef4_d104f2b2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000005
+      },
+      "writtenOn": "2023-11-07T13:08:37Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7b867f64_3220440d",
+      "revId": "3b527a088cffb85f588b7c9914643821e58d867f",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "d792a2ef_9b42b6c2",
@@ -53,6 +71,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "b5d497a4_749b4e85",
+        "filename": "tvix/tools/turbofetch/.gitignore",
+        "patchSetId": 2
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1000005
+      },
+      "writtenOn": "2023-11-07T13:08:37Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d792a2ef_9b42b6c2",
+      "revId": "3b527a088cffb85f588b7c9914643821e58d867f",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "2eb52a64_9713d142",
@@ -66,6 +102,24 @@
       "writtenOn": "2023-11-04T11:46:01Z",
       "side": 1,
       "message": "please add this to the tvix/Cargo.toml workspace, and do the crate2nix generate step as documented in the readme there.",
+      "revId": "3b527a088cffb85f588b7c9914643821e58d867f",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "97193b6b_d738ecf4",
+        "filename": "tvix/tools/turbofetch/Cargo.lock",
+        "patchSetId": 2
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1000005
+      },
+      "writtenOn": "2023-11-07T13:08:37Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2eb52a64_9713d142",
       "revId": "3b527a088cffb85f588b7c9914643821e58d867f",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
