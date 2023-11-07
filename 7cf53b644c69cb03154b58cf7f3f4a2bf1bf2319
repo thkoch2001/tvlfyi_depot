@@ -16,6 +16,24 @@
       "message": "We should probably obtain the lock once here. We can get a write lock then do the update followed by the read.\n\nAlso wondering if we can remove the need for the read on L314 and clone the children before we update the entry in the inode tracker.",
       "revId": "7cf53b644c69cb03154b58cf7f3f4a2bf1bf2319",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ea500453_09777541",
+        "filename": "tvix/store/src/fs/mod.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 313,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-11-07T14:45:04Z",
+      "side": 1,
+      "message": "Unfortunately not, because inode allocation for children, when turning this from a sparse to a populated directory is up to inode_tracker, so we have to round-trip (see the comment right above).\n\nI immediately drop the write lock so other read requests can already be processed, I don\u0027t want to wait on a second btree traversal, but release the write lock ASAP.\n\nI want to avoid the second traversal, and started some work on changing the inode_tracker put interface to return the modified data as an additional parameter, but the ergonomics are not nice. We should probably move things around a bit, but I\u0027d leave that for a followup CL.",
+      "parentUuid": "c76243cf_244473d3",
+      "revId": "7cf53b644c69cb03154b58cf7f3f4a2bf1bf2319",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
