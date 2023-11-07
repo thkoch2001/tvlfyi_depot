@@ -4203,6 +4203,10 @@ rec {
           else ./nix-compat;
         dependencies = [
           {
+            name = "bitflags";
+            packageId = "bitflags 2.4.1";
+          }
+          {
             name = "bstr";
             packageId = "bstr";
             features = [ "alloc" "unicode" "serde" ];
