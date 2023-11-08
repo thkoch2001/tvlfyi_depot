@@ -1,0 +1,157 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "714b472c_1ea13bb0",
+        "filename": "tvix/tools/narinfo2parquet/Cargo.toml",
+        "patchSetId": 4
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-11-08T12:07:48Z",
+      "side": 1,
+      "message": "We should still integrate this with readTree, so it\u0027s actually built in CI.",
+      "revId": "68bb5cb46be675128e2a3420297635ab7517e520",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0c7b5199_b2aaff0f",
+        "filename": "tvix/tools/narinfo2parquet/src/main.rs",
+        "patchSetId": 4
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-11-08T12:07:48Z",
+      "side": 1,
+      "message": "Please add a doc comment describing what this is doing, which args/files it expects in the environment it runs in, and what it does.",
+      "revId": "68bb5cb46be675128e2a3420297635ab7517e520",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "02f6d4c2_e474f6f4",
+        "filename": "tvix/tools/narinfo2parquet/src/main.rs",
+        "patchSetId": 4
+      },
+      "lineNbr": 92,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-11-08T12:07:48Z",
+      "side": 1,
+      "message": "This could probably have a comment, describing the usage (create, push individual \u0026NarInfo to it, invoke finish to get back a DataFrame.",
+      "revId": "68bb5cb46be675128e2a3420297635ab7517e520",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "aca98e46_dcf29df8",
+        "filename": "tvix/tools/narinfo2parquet/src/main.rs",
+        "patchSetId": 4
+      },
+      "lineNbr": 105,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-11-08T12:07:48Z",
+      "side": 1,
+      "message": "very concerning this is actually the case.",
+      "revId": "68bb5cb46be675128e2a3420297635ab7517e520",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "64db267d_cbd2eb16",
+        "filename": "tvix/tools/narinfo2parquet/src/main.rs",
+        "patchSetId": 4
+      },
+      "lineNbr": 110,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-11-08T12:07:48Z",
+      "side": 1,
+      "message": "derive Default?",
+      "revId": "68bb5cb46be675128e2a3420297635ab7517e520",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "64910cde_61a675e3",
+        "filename": "tvix/tools/narinfo2parquet/src/main.rs",
+        "patchSetId": 4
+      },
+      "lineNbr": 152,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-11-08T12:07:48Z",
+      "side": 1,
+      "message": "Can we add a comment above, explaining we decompose CAHash into individual algo and hash fields?\n\nAnd maybe we should actually add a `CaHash::algo(\u0026self) -\u003e \u0026\u0027static str` to nix-compat, and then use that and `CAHash::digest(\u0026self)`, rather than manually destructuring here.",
+      "revId": "68bb5cb46be675128e2a3420297635ab7517e520",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1054dde2_76cc85b4",
+        "filename": "tvix/tools/narinfo2parquet/src/main.rs",
+        "patchSetId": 4
+      },
+      "lineNbr": 216,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-11-08T12:07:48Z",
+      "side": 1,
+      "message": "This should have a comment describing the format of the dataframe, so someone invoking it gets a bit more hints. There\u0027s too many inferred types to make this easy to understand.",
+      "revId": "68bb5cb46be675128e2a3420297635ab7517e520",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "53ca398b_13d55433",
+        "filename": "tvix/tools/narinfo2parquet/src/main.rs",
+        "patchSetId": 4
+      },
+      "lineNbr": 230,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-11-08T12:07:48Z",
+      "side": 1,
+      "message": "quirk_references_are_out_of_order",
+      "revId": "68bb5cb46be675128e2a3420297635ab7517e520",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4a3d70d3_d92c59f2",
+        "filename": "tvix/tools/narinfo2parquet/src/main.rs",
+        "patchSetId": 4
+      },
+      "lineNbr": 231,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-11-08T12:07:48Z",
+      "side": 1,
+      "message": "quirk_nar_hash_is_hex ?",
+      "revId": "68bb5cb46be675128e2a3420297635ab7517e520",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
