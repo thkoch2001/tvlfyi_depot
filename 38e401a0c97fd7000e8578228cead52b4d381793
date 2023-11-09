@@ -35,6 +35,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "89591f7f_5479805f",
+        "filename": "tvix/tools/turbofetch/src/buffer.rs",
+        "patchSetId": 5
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1000005
+      },
+      "writtenOn": "2023-11-09T11:07:21Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "68501e75_f8a8562a",
+      "revId": "38e401a0c97fd7000e8578228cead52b4d381793",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "6d70a8ff_e689956a",
@@ -48,6 +66,24 @@
       "writtenOn": "2023-11-08T11:53:42Z",
       "side": 1,
       "message": "doc-comment",
+      "revId": "38e401a0c97fd7000e8578228cead52b4d381793",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3b1b58c2_16701cdd",
+        "filename": "tvix/tools/turbofetch/src/lib.rs",
+        "patchSetId": 5
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000005
+      },
+      "writtenOn": "2023-11-09T11:07:21Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6d70a8ff_e689956a",
       "revId": "38e401a0c97fd7000e8578228cead52b4d381793",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
@@ -69,6 +105,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "9f1a798f_3f50ec3c",
+        "filename": "tvix/tools/turbofetch/src/lib.rs",
+        "patchSetId": 5
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1000005
+      },
+      "writtenOn": "2023-11-09T11:07:21Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f032bf8c_31a12c0b",
+      "revId": "38e401a0c97fd7000e8578228cead52b4d381793",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "24d8b8e3_682b6af1",
@@ -82,6 +136,24 @@
       "writtenOn": "2023-11-08T11:53:42Z",
       "side": 1,
       "message": "This parses (parts of) the response headers, and consumes the response data into the buffer passed in.",
+      "revId": "38e401a0c97fd7000e8578228cead52b4d381793",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ffd3eb75_fa3fbc77",
+        "filename": "tvix/tools/turbofetch/src/lib.rs",
+        "patchSetId": 5
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1000005
+      },
+      "writtenOn": "2023-11-09T11:07:21Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "24d8b8e3_682b6af1",
       "revId": "38e401a0c97fd7000e8578228cead52b4d381793",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
@@ -139,6 +211,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "7c7bd39f_742a3a6d",
+        "filename": "tvix/tools/turbofetch/src/main.rs",
+        "patchSetId": 5
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1000005
+      },
+      "writtenOn": "2023-11-09T11:07:21Z",
+      "side": 1,
+      "message": "no, because we write files for *ranges*. we want a complete range for every file",
+      "parentUuid": "b7c902d1_f54ec743",
+      "revId": "38e401a0c97fd7000e8578228cead52b4d381793",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "1cc28bbc_3939d3ef",
         "filename": "tvix/tools/turbofetch/src/main.rs",
         "patchSetId": 5
@@ -173,6 +263,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "f223c5c5_0739a7b7",
+        "filename": "tvix/tools/turbofetch/src/main.rs",
+        "patchSetId": 5
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 1000005
+      },
+      "writtenOn": "2023-11-09T11:07:21Z",
+      "side": 1,
+      "message": "This is pretty S3-specific, and it\u0027ll only get more so when we follow up with auth and retries.\nFor example, the 100-sized chunks specifically match S3\u0027s limits.",
+      "parentUuid": "abd1dcf1_fd5449a5",
+      "revId": "38e401a0c97fd7000e8578228cead52b4d381793",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "303bd102_6e396783",
         "filename": "tvix/tools/turbofetch/src/main.rs",
         "patchSetId": 5
@@ -201,6 +309,24 @@
       "writtenOn": "2023-11-08T11:53:42Z",
       "side": 1,
       "message": "Needs SAFETY comment. Also, considering this is only used /once/ (before the fan-out), it\u0027s probably fine for this to be a bit slower (but safe).",
+      "revId": "38e401a0c97fd7000e8578228cead52b4d381793",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9e223706_5e4897b8",
+        "filename": "tvix/tools/turbofetch/src/main.rs",
+        "patchSetId": 5
+      },
+      "lineNbr": 94,
+      "author": {
+        "id": 1000005
+      },
+      "writtenOn": "2023-11-09T11:07:21Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8f737363_c566d242",
       "revId": "38e401a0c97fd7000e8578228cead52b4d381793",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
