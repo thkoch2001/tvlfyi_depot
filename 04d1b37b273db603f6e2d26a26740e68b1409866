@@ -1,0 +1,89 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fd11beab_635ce764",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-11-10T15:40:16Z",
+      "side": 1,
+      "message": "Let\u0027s rename this, it\u0027s only adding quirks to nix-compat.",
+      "revId": "04d1b37b273db603f6e2d26a26740e68b1409866",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3b43a029_0060d9e4",
+        "filename": "tvix/nix-compat/src/narinfo.rs",
+        "patchSetId": 3
+      },
+      "lineNbr": 68,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-11-10T15:40:16Z",
+      "side": 1,
+      "message": "TODO. We should also add some test - probably can just be vendoring in one or two of these .narinfo files from cache.nixos.org that we found.",
+      "revId": "04d1b37b273db603f6e2d26a26740e68b1409866",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cb3bef95_dcfba328",
+        "filename": "tvix/nix-compat/src/narinfo.rs",
+        "patchSetId": 3
+      },
+      "lineNbr": 170,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-11-10T15:40:16Z",
+      "side": 1,
+      "message": "hmmmh, can we move things around a bit here?",
+      "revId": "04d1b37b273db603f6e2d26a26740e68b1409866",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "dc910972_59506618",
+        "filename": "tvix/nix-compat/src/narinfo.rs",
+        "patchSetId": 3
+      },
+      "lineNbr": 200,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-11-10T15:40:16Z",
+      "side": 1,
+      "message": "TODO",
+      "revId": "04d1b37b273db603f6e2d26a26740e68b1409866",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5ab1225b_85c976a4",
+        "filename": "tvix/nix-compat/src/narinfo.rs",
+        "patchSetId": 3
+      },
+      "lineNbr": 253,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-11-10T15:40:16Z",
+      "side": 1,
+      "message": "we had these? oof",
+      "revId": "04d1b37b273db603f6e2d26a26740e68b1409866",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
