@@ -211,6 +211,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "d5b31c51_b352cf2e",
+        "filename": "tvix/tools/narinfo2parquet/src/main.rs",
+        "patchSetId": 4
+      },
+      "lineNbr": 152,
+      "author": {
+        "id": 1000005
+      },
+      "writtenOn": "2023-11-10T19:24:44Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "64910cde_61a675e3",
+      "revId": "68bb5cb46be675128e2a3420297635ab7517e520",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "1054dde2_76cc85b4",
