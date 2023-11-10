@@ -18,6 +18,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "990b0a21_db59ad8b",
+        "filename": "tvix/tools/turbofetch/src/buffer.rs",
+        "patchSetId": 5
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1000005
+      },
+      "writtenOn": "2023-11-10T15:13:04Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7193d962_b8424ff3",
+      "revId": "38e401a0c97fd7000e8578228cead52b4d381793",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "68501e75_f8a8562a",
@@ -175,6 +193,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "fd44d3eb_5087d5bc",
+        "filename": "tvix/tools/turbofetch/src/main.rs",
+        "patchSetId": 5
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 1000005
+      },
+      "writtenOn": "2023-11-10T15:13:04Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "526b3ff4_eb9bb2e4",
+      "revId": "38e401a0c97fd7000e8578228cead52b4d381793",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "5e13e293_7c7a7996",
@@ -188,6 +224,24 @@
       "writtenOn": "2023-11-08T11:53:42Z",
       "side": 1,
       "message": "where\u0027s that list of files to retrieve coming from / parsed?",
+      "revId": "38e401a0c97fd7000e8578228cead52b4d381793",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "37193fd8_c9f47b36",
+        "filename": "tvix/tools/turbofetch/src/main.rs",
+        "patchSetId": 5
+      },
+      "lineNbr": 3,
+      "author": {
+        "id": 1000005
+      },
+      "writtenOn": "2023-11-10T15:13:04Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5e13e293_7c7a7996",
       "revId": "38e401a0c97fd7000e8578228cead52b4d381793",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
@@ -227,6 +281,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "0b707b95_08f80040",
+        "filename": "tvix/tools/turbofetch/src/main.rs",
+        "patchSetId": 5
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1000005
+      },
+      "writtenOn": "2023-11-10T15:13:04Z",
+      "side": 1,
+      "message": "saving this for a followup, marking resolved for this round.",
+      "parentUuid": "7c7bd39f_742a3a6d",
+      "revId": "38e401a0c97fd7000e8578228cead52b4d381793",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "1cc28bbc_3939d3ef",
@@ -240,6 +312,24 @@
       "writtenOn": "2023-11-08T11:53:42Z",
       "side": 1,
       "message": "Please also document what this function does (on a high-level), not just the shape of the inputs and outputs.",
+      "revId": "38e401a0c97fd7000e8578228cead52b4d381793",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "19248021_ab00bfab",
+        "filename": "tvix/tools/turbofetch/src/main.rs",
+        "patchSetId": 5
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1000005
+      },
+      "writtenOn": "2023-11-10T15:13:04Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1cc28bbc_3939d3ef",
       "revId": "38e401a0c97fd7000e8578228cead52b4d381793",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
@@ -279,6 +369,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "7ecb30a4_28ee49be",
+        "filename": "tvix/tools/turbofetch/src/main.rs",
+        "patchSetId": 5
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 1000005
+      },
+      "writtenOn": "2023-11-10T15:13:04Z",
+      "side": 1,
+      "message": "marking resolved (i should have done so on the previous round)",
+      "parentUuid": "f223c5c5_0739a7b7",
+      "revId": "38e401a0c97fd7000e8578228cead52b4d381793",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "303bd102_6e396783",
@@ -292,6 +400,24 @@
       "writtenOn": "2023-11-08T11:53:42Z",
       "side": 1,
       "message": "This needs a comment explaining what it does (and I\u0027d probably make the key a function arg that\u0027s passed in from the outside).",
+      "revId": "38e401a0c97fd7000e8578228cead52b4d381793",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a91284e0_a327e75d",
+        "filename": "tvix/tools/turbofetch/src/main.rs",
+        "patchSetId": 5
+      },
+      "lineNbr": 65,
+      "author": {
+        "id": 1000005
+      },
+      "writtenOn": "2023-11-10T15:13:04Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "303bd102_6e396783",
       "revId": "38e401a0c97fd7000e8578228cead52b4d381793",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
@@ -348,6 +474,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "04f13bb6_4e1deb59",
+        "filename": "tvix/tools/turbofetch/src/main.rs",
+        "patchSetId": 5
+      },
+      "lineNbr": 111,
+      "author": {
+        "id": 1000005
+      },
+      "writtenOn": "2023-11-10T15:13:04Z",
+      "side": 1,
+      "message": "saving this for a followup, marking resolved for this round.",
+      "parentUuid": "1c3a4248_ac2edfba",
+      "revId": "38e401a0c97fd7000e8578228cead52b4d381793",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "d0c06005_309b7e3a",
@@ -365,6 +509,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "640cf95d_ef6b83d5",
+        "filename": "tvix/tools/turbofetch/src/main.rs",
+        "patchSetId": 5
+      },
+      "lineNbr": 133,
+      "author": {
+        "id": 1000005
+      },
+      "writtenOn": "2023-11-10T15:13:04Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d0c06005_309b7e3a",
+      "revId": "38e401a0c97fd7000e8578228cead52b4d381793",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "ab5b817e_ff03a0c3",
@@ -378,6 +540,24 @@
       "writtenOn": "2023-11-08T11:53:42Z",
       "side": 1,
       "message": "Can we factor out the lambda-specific parsing of request parameters into one function, and call a inner function that receives bucket/start/end, or Params directly? Then probably the remaining outside plumbing is small enough to just be kept inline in the lambda-specific `async fn main`.",
+      "revId": "38e401a0c97fd7000e8578228cead52b4d381793",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f04e9321_4f8ddd8f",
+        "filename": "tvix/tools/turbofetch/src/main.rs",
+        "patchSetId": 5
+      },
+      "lineNbr": 147,
+      "author": {
+        "id": 1000005
+      },
+      "writtenOn": "2023-11-10T15:13:04Z",
+      "side": 1,
+      "message": "saving this for a followup, marking resolved for this round.",
+      "parentUuid": "ab5b817e_ff03a0c3",
       "revId": "38e401a0c97fd7000e8578228cead52b4d381793",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
