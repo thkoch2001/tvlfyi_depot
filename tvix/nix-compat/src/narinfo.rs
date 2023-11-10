@@ -34,6 +34,7 @@ pub struct NarInfo<'a> {
     pub unknown_fields: bool,
     pub compression_default: bool,
     pub nar_hash_hex: bool,
+    pub references_out_of_order: bool,
     // core (authenticated, but unverified here)
     /// Store path described by this [NarInfo]
     pub store_path: StorePathRef<'a>,
@@ -74,6 +75,7 @@ impl<'a> NarInfo<'a> {
         let mut unknown_fields = false;
         let mut compression_default = false;
         let mut nar_hash_hex = false;
+        let mut references_out_of_order = false;
 
         let mut store_path = None;
         let mut url = None;
@@ -193,13 +195,13 @@ impl<'a> NarInfo<'a> {
                         val.split(' ')
                             .enumerate()
                             .map(|(i, s)| {
-                                if mem::replace(&mut prev, s) < s {
-                                    StorePathRef::from_bytes(s.as_bytes())
-                                        .map_err(|err| Error::InvalidReference(i, err))
-                                } else {
-                                    // references are out of order
-                                    Err(Error::OutOfOrderReference(i))
+                                // TODO(edef): track *duplicates* if this occurs
+                                if mem::replace(&mut prev, s) >= s {
+                                    references_out_of_order = true;
                                 }
+
+                                StorePathRef::from_bytes(s.as_bytes())
+                                    .map_err(|err| Error::InvalidReference(i, err))
                             })
                             .collect::<Result<_, _>>()?
                     } else {
@@ -254,6 +256,7 @@ impl<'a> NarInfo<'a> {
         Ok(NarInfo {
             unknown_fields,
             nar_hash_hex,
+            references_out_of_order,
             store_path: store_path.ok_or(Error::MissingField("StorePath"))?,
             nar_hash: nar_hash.ok_or(Error::MissingField("NarHash"))?,
             nar_size: nar_size.ok_or(Error::MissingField("NarSize"))?,
@@ -471,9 +474,6 @@ pub enum Error {
 
     #[error("unable to parse #{0} reference: {1}")]
     InvalidReference(usize, crate::store_path::Error),
-
-    #[error("reference at {0} is out of order")]
-    OutOfOrderReference(usize),
 
     #[error("invalid Deriver store path: {0}")]
     InvalidDeriverStorePath(crate::store_path::Error),
