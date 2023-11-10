@@ -18,6 +18,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "2a45d7cc_cd6437d7",
+        "filename": "tvix/tools/narinfo2parquet/Cargo.toml",
+        "patchSetId": 4
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-11-10T18:58:50Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "714b472c_1ea13bb0",
+      "revId": "68bb5cb46be675128e2a3420297635ab7517e520",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "0c7b5199_b2aaff0f",
