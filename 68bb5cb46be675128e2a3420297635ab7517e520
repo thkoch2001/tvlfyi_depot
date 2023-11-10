@@ -71,6 +71,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "7b585336_cd050222",
+        "filename": "tvix/tools/narinfo2parquet/src/main.rs",
+        "patchSetId": 4
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1000005
+      },
+      "writtenOn": "2023-11-10T19:24:25Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0c7b5199_b2aaff0f",
+      "revId": "68bb5cb46be675128e2a3420297635ab7517e520",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "02f6d4c2_e474f6f4",
@@ -84,6 +102,24 @@
       "writtenOn": "2023-11-08T12:07:48Z",
       "side": 1,
       "message": "This could probably have a comment, describing the usage (create, push individual \u0026NarInfo to it, invoke finish to get back a DataFrame.",
+      "revId": "68bb5cb46be675128e2a3420297635ab7517e520",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b948bb0e_c03ffbff",
+        "filename": "tvix/tools/narinfo2parquet/src/main.rs",
+        "patchSetId": 4
+      },
+      "lineNbr": 92,
+      "author": {
+        "id": 1000005
+      },
+      "writtenOn": "2023-11-10T19:24:25Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "02f6d4c2_e474f6f4",
       "revId": "68bb5cb46be675128e2a3420297635ab7517e520",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
@@ -188,6 +224,24 @@
       "writtenOn": "2023-11-08T12:07:48Z",
       "side": 1,
       "message": "This should have a comment describing the format of the dataframe, so someone invoking it gets a bit more hints. There\u0027s too many inferred types to make this easy to understand.",
+      "revId": "68bb5cb46be675128e2a3420297635ab7517e520",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "49d52d3e_c3b66957",
+        "filename": "tvix/tools/narinfo2parquet/src/main.rs",
+        "patchSetId": 4
+      },
+      "lineNbr": 216,
+      "author": {
+        "id": 1000005
+      },
+      "writtenOn": "2023-11-10T19:24:25Z",
+      "side": 1,
+      "message": "The exact format is still in flux, but we can at least document that.",
+      "parentUuid": "1054dde2_76cc85b4",
       "revId": "68bb5cb46be675128e2a3420297635ab7517e520",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
