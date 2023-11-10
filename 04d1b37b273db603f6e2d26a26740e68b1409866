@@ -55,6 +55,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "b835a182_6676d172",
+        "filename": "tvix/nix-compat/src/narinfo.rs",
+        "patchSetId": 3
+      },
+      "lineNbr": 68,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-11-10T17:33:10Z",
+      "side": 1,
+      "message": "We have tests, but no roundtripping yet.",
+      "parentUuid": "3b43a029_0060d9e4",
+      "revId": "04d1b37b273db603f6e2d26a26740e68b1409866",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "cb3bef95_dcfba328",
         "filename": "tvix/nix-compat/src/narinfo.rs",
         "patchSetId": 3
