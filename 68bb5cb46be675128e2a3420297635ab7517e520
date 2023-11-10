@@ -36,6 +36,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "33192ba8_b3e51aeb",
+        "filename": "tvix/tools/narinfo2parquet/Cargo.toml",
+        "patchSetId": 4
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000005
+      },
+      "writtenOn": "2023-11-10T19:05:26Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "714b472c_1ea13bb0",
+      "revId": "68bb5cb46be675128e2a3420297635ab7517e520",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "0c7b5199_b2aaff0f",
@@ -122,6 +140,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "88c9ec95_1509848e",
+        "filename": "tvix/tools/narinfo2parquet/src/main.rs",
+        "patchSetId": 4
+      },
+      "lineNbr": 110,
+      "author": {
+        "id": 1000005
+      },
+      "writtenOn": "2023-11-10T19:05:26Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "64db267d_cbd2eb16",
+      "revId": "68bb5cb46be675128e2a3420297635ab7517e520",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "64910cde_61a675e3",
@@ -173,6 +209,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "f5da777c_559ba85b",
+        "filename": "tvix/tools/narinfo2parquet/src/main.rs",
+        "patchSetId": 4
+      },
+      "lineNbr": 230,
+      "author": {
+        "id": 1000005
+      },
+      "writtenOn": "2023-11-10T19:05:26Z",
+      "side": 1,
+      "message": "Intentionally matches the nix_compat NarInfo flags exactly.",
+      "parentUuid": "53ca398b_13d55433",
+      "revId": "68bb5cb46be675128e2a3420297635ab7517e520",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "4a3d70d3_d92c59f2",
@@ -186,6 +240,24 @@
       "writtenOn": "2023-11-08T12:07:48Z",
       "side": 1,
       "message": "quirk_nar_hash_is_hex ?",
+      "revId": "68bb5cb46be675128e2a3420297635ab7517e520",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "38294549_4446e4b8",
+        "filename": "tvix/tools/narinfo2parquet/src/main.rs",
+        "patchSetId": 4
+      },
+      "lineNbr": 231,
+      "author": {
+        "id": 1000005
+      },
+      "writtenOn": "2023-11-10T19:05:26Z",
+      "side": 1,
+      "message": "Intentionally matches the nix_compat NarInfo flags exactly.",
+      "parentUuid": "4a3d70d3_d92c59f2",
       "revId": "68bb5cb46be675128e2a3420297635ab7517e520",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
