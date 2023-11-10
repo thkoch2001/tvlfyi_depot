@@ -18,6 +18,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "ed71e345_dd35bc7c",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000005
+      },
+      "writtenOn": "2023-11-10T16:22:48Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fd11beab_635ce764",
+      "revId": "04d1b37b273db603f6e2d26a26740e68b1409866",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "3b43a029_0060d9e4",
@@ -82,6 +100,24 @@
       "writtenOn": "2023-11-10T15:40:16Z",
       "side": 1,
       "message": "we had these? oof",
+      "revId": "04d1b37b273db603f6e2d26a26740e68b1409866",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a3fd1a95_d4738255",
+        "filename": "tvix/nix-compat/src/narinfo.rs",
+        "patchSetId": 3
+      },
+      "lineNbr": 253,
+      "author": {
+        "id": 1000005
+      },
+      "writtenOn": "2023-11-10T16:22:48Z",
+      "side": 1,
+      "message": "We did not, but we can\u0027t tell without keeping track of them.",
+      "parentUuid": "5ab1225b_85c976a4",
       "revId": "04d1b37b273db603f6e2d26a26740e68b1409866",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
