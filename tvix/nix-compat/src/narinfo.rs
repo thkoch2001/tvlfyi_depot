@@ -17,6 +17,7 @@
 //!    * compression algorithm used for the NAR
 //!    * hash and size of the compressed NAR
 
+use bitflags::bitflags;
 use data_encoding::{BASE64, HEXLOWER};
 use std::{
     fmt::{self, Display},
@@ -31,10 +32,7 @@ use crate::{
 
 #[derive(Debug)]
 pub struct NarInfo<'a> {
-    pub unknown_fields: bool,
-    pub compression_default: bool,
-    pub nar_hash_hex: bool,
-    pub references_out_of_order: bool,
+    pub flags: Flags,
     // core (authenticated, but unverified here)
     /// Store path described by this [NarInfo]
     pub store_path: StorePathRef<'a>,
@@ -70,13 +68,21 @@ pub struct NarInfo<'a> {
     pub file_size: Option<u64>,
 }
 
+bitflags! {
+    /// TODO(edef): be conscious of these when roundtripping
+    #[derive(Debug, Copy, Clone)]
+    pub struct Flags: u8 {
+        const UNKNOWN_FIELD = 1 << 0;
+        const COMPRESSION_DEFAULT = 1 << 1;
+        // Format quirks encountered in the cache.nixos.org dataset
+        const REFERENCES_OUT_OF_ORDER = 1 << 2;
+        const NAR_HASH_HEX = 1 << 3;
+    }
+}
+
 impl<'a> NarInfo<'a> {
     pub fn parse(input: &'a str) -> Result<Self, Error> {
-        let mut unknown_fields = false;
-        let mut compression_default = false;
-        let mut nar_hash_hex = false;
-        let mut references_out_of_order = false;
-
+        let mut flags = Flags::empty();
         let mut store_path = None;
         let mut url = None;
         let mut compression = None;
@@ -159,7 +165,7 @@ impl<'a> NarInfo<'a> {
                     let val = if val.len() != HEXLOWER.encode_len(32) {
                         nixbase32::decode_fixed::<32>(val)
                     } else {
-                        nar_hash_hex = true;
+                        flags |= Flags::NAR_HASH_HEX;
 
                         let val = val.as_bytes();
                         let mut buf = [0u8; 32];
@@ -197,7 +203,7 @@ impl<'a> NarInfo<'a> {
                             .map(|(i, s)| {
                                 // TODO(edef): track *duplicates* if this occurs
                                 if mem::replace(&mut prev, s) >= s {
-                                    references_out_of_order = true;
+                                    flags |= Flags::REFERENCES_OUT_OF_ORDER;
                                 }
 
                                 StorePathRef::from_bytes(s.as_bytes())
@@ -248,15 +254,12 @@ impl<'a> NarInfo<'a> {
                     }
                 }
                 _ => {
-                    unknown_fields = true;
+                    flags |= Flags::UNKNOWN_FIELD;
                 }
             }
         }
 
         Ok(NarInfo {
-            unknown_fields,
-            nar_hash_hex,
-            references_out_of_order,
             store_path: store_path.ok_or(Error::MissingField("StorePath"))?,
             nar_hash: nar_hash.ok_or(Error::MissingField("NarHash"))?,
             nar_size: nar_size.ok_or(Error::MissingField("NarSize"))?,
@@ -269,14 +272,14 @@ impl<'a> NarInfo<'a> {
             compression: match compression {
                 Some("none") => None,
                 None => {
-                    compression_default = true;
+                    flags |= Flags::COMPRESSION_DEFAULT;
                     Some("bzip2")
                 }
                 _ => compression,
             },
-            compression_default,
             file_hash,
             file_size,
+            flags,
         })
     }
 }
