@@ -32,6 +32,7 @@ use crate::{
 #[derive(Debug)]
 pub struct NarInfo<'a> {
     pub unknown_fields: bool,
+    pub compression_default: bool,
     // core (authenticated, but unverified here)
     /// Store path described by this [NarInfo]
     pub store_path: StorePathRef<'a>,
@@ -55,7 +56,11 @@ pub struct NarInfo<'a> {
     /// Relative URL of the compressed NAR file
     pub url: &'a str,
     /// Compression method of the NAR file
-    /// TODO(edef): default this to bzip2, and have None mean "none" (uncompressed)
+    /// `None` means `Compression: none`.
+    ///
+    /// Nix interprets a missing `Compression` field as `Some("bzip2")`,
+    /// so we do as well. We haven't found any examples of this in the
+    /// wild, not even in the cache.nixos.org dataset.
     pub compression: Option<&'a str>,
     /// SHA-256 digest of the file at `url`
     pub file_hash: Option<[u8; 32]>,
@@ -66,6 +71,7 @@ pub struct NarInfo<'a> {
 impl<'a> NarInfo<'a> {
     pub fn parse(input: &'a str) -> Result<Self, Error> {
         let mut unknown_fields = false;
+        let mut compression_default = false;
 
         let mut store_path = None;
         let mut url = None;
@@ -237,7 +243,15 @@ impl<'a> NarInfo<'a> {
             system,
             deriver,
             url: url.ok_or(Error::MissingField("URL"))?,
-            compression,
+            compression: match compression {
+                Some("none") => None,
+                None => {
+                    compression_default = true;
+                    Some("bzip2")
+                }
+                _ => compression,
+            },
+            compression_default,
             file_hash,
             file_size,
         })
