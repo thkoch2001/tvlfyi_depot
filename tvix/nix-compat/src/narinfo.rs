@@ -351,9 +351,8 @@ pub fn parse_ca(s: &str) -> Option<CAHash> {
             Some(CAHash::Text(digest))
         }
         "fixed" => {
-            if let Some(digest) = s.strip_prefix("r:sha256:") {
-                let digest = nixbase32::decode_fixed(digest).ok()?;
-                Some(CAHash::Nar(NixHash::Sha256(digest)))
+            if let Some(s) = s.strip_prefix("r:") {
+                parse_hash(s).map(CAHash::Nar)
             } else {
                 parse_hash(s).map(CAHash::Flat)
             }
