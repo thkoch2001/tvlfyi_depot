@@ -17,7 +17,7 @@
 //!    * compression algorithm used for the NAR
 //!    * hash and size of the compressed NAR
 
-use data_encoding::BASE64;
+use data_encoding::{BASE64, HEXLOWER};
 use std::{
     fmt::{self, Display},
     mem,
@@ -33,6 +33,7 @@ use crate::{
 pub struct NarInfo<'a> {
     pub unknown_fields: bool,
     pub compression_default: bool,
+    pub nar_hash_hex: bool,
     // core (authenticated, but unverified here)
     /// Store path described by this [NarInfo]
     pub store_path: StorePathRef<'a>,
@@ -72,6 +73,7 @@ impl<'a> NarInfo<'a> {
     pub fn parse(input: &'a str) -> Result<Self, Error> {
         let mut unknown_fields = false;
         let mut compression_default = false;
+        let mut nar_hash_hex = false;
 
         let mut store_path = None;
         let mut url = None;
@@ -152,8 +154,25 @@ impl<'a> NarInfo<'a> {
                         .strip_prefix("sha256:")
                         .ok_or_else(|| Error::MissingPrefixForHash(tag.to_string()))?;
 
-                    let val = nixbase32::decode_fixed::<32>(val)
-                        .map_err(|e| Error::UnableToDecodeHash(tag.to_string(), e))?;
+                    let val = if val.len() != HEXLOWER.encode_len(32) {
+                        nixbase32::decode_fixed::<32>(val)
+                    } else {
+                        nar_hash_hex = true;
+
+                        let val = val.as_bytes();
+                        let mut buf = [0u8; 32];
+
+                        match HEXLOWER.decode_mut(val, &mut buf) {
+                            // HACK: this isn't actually a nixbase32 decode error… but it goes in the round hole
+                            // hex has no padding, no opportunity for trailing bits, and we already checked the length
+                            Err(e) => Err(nixbase32::Nixbase32DecodeError::CharacterNotInAlphabet(
+                                val[e.error.position],
+                            )),
+                            Ok(_) => Ok(buf),
+                        }
+                    };
+
+                    let val = val.map_err(|e| Error::UnableToDecodeHash(tag.to_string(), e))?;
 
                     if nar_hash.replace(val).is_some() {
                         return Err(Error::DuplicateField(tag.to_string()));
@@ -234,6 +253,7 @@ impl<'a> NarInfo<'a> {
 
         Ok(NarInfo {
             unknown_fields,
+            nar_hash_hex,
             store_path: store_path.ok_or(Error::MissingField("StorePath"))?,
             nar_hash: nar_hash.ok_or(Error::MissingField("NarHash"))?,
             nar_size: nar_size.ok_or(Error::MissingField("NarSize"))?,
