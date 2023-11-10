@@ -88,6 +88,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "143fc060_b8f0a8e0",
+        "filename": "tvix/nix-compat/src/narinfo.rs",
+        "patchSetId": 3
+      },
+      "lineNbr": 170,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-11-10T18:59:57Z",
+      "side": 1,
+      "message": "cl/9995",
+      "parentUuid": "cb3bef95_dcfba328",
+      "revId": "04d1b37b273db603f6e2d26a26740e68b1409866",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "dc910972_59506618",
