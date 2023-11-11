@@ -13,7 +13,8 @@ fn main() -> ExitCode {
     let output_file = &args[2];
 
     let mut cmd = Command::new("clickhouse-local");
-    cmd.arg("-q")
+    cmd.arg("--progress")
+        .arg("-q")
         .arg(format!(r#"SELECT
         key,
         toInt64(nullif(http_status, '-')) AS http_status,
