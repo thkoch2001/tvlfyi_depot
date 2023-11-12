@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1dc1078c_1d31196f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2023-11-12T17:33:38Z",
+      "side": 1,
+      "message": "This uncovered another Nix 2.3 compat break in nixpkgs: https://github.com/NixOS/nixpkgs/pull/267083",
+      "revId": "30f570a5c2bbf62a2a0a83689d267e4651b929e9",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
