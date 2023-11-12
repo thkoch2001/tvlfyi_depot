@@ -9,6 +9,12 @@
   # Start clickhose as a system service.
   services.clickhouse.enable = true;
 
+  # for ClickHouse
+  # We're keeping this here rather than in the NixOS module, because I suspect
+  # this opens up timing side channels. This is a single-user, single-purpose
+  # machine, so that isn't a concern here.
+  boot.kernel.sysctl."kernel.task_delayacct" = 1;
+
   # Enable SSH and let edef and flokli in
   services.openssh.enable = true;
 
