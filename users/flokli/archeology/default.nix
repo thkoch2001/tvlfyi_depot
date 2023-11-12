@@ -33,6 +33,19 @@ depot.nix.readTree.drvTargets {
 
   shell = pkgs.mkShell {
     name = "archeology-shell";
-    packages = with pkgs; [ clickhouse rust-analyzer rustc rustfmt ];
+    packages = with pkgs; [ awscli2 clickhoseLocalFixedAWS rust-analyzer rustc rustfmt ];
+
+    AWS_PROFILE = "sso";
+    AWS_CONFIG_FILE = pkgs.writeText "aws-config" ''
+      [sso-session my-sso]
+      sso_region = eu-north-1
+      sso_start_url = https://nixos.awsapps.com/start
+      sso_registration_scopes = sso:account:access
+
+      [profile "sso"]
+      sso_session = my-sso
+      sso_account_id = 080433136561
+      sso_role_name = archeologist
+    '';
   };
 }
