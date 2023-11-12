@@ -1,6 +1,12 @@
 # This file defines all the blog posts.
 [
   {
+    key = "reliably-switch-buffers";
+    title = "Зачем reliably-switch-buffers?";
+    content = ./posts/reliably-switch-buffers.md;
+    date = 1692882000;
+  }
+  {
     key = "tvix-eval-talk-2023";
     title = "[доклад] tvix-eval, имплементация языка Nix на Rust";
     date = 1694102400;
