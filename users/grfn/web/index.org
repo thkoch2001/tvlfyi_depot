@@ -43,4 +43,4 @@ that's wire-compatible with postgresql and mysql, based on [[https://github.com/
 - [[https://bsky.app/profile/gws.fyi][bluesky]]
 - https://keybase.io/glittershark
 - grfn on IRC (hackint or libera.chat)
-- [[http://keys.gnupg.net/pks/lookup?op=get&search=0x44EF5B5E861C09A7][gpg key: 0F11A989879E8BBBFDC1E23644EF5B5E861C09A7]]
+- [[https://gws.fyi/pubkey.gpg][gpg key: 0F11A989879E8BBBFDC1E23644EF5B5E861C09A7]]
