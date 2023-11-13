@@ -26,6 +26,7 @@ let
       cp -r ${site.recipes} $out/recipes
       cp ${resume} $out/resume.pdf
       cp ${keys} $out/keys
+      cp ${./pubkey.gpg} $out/pubkey.gpg
     '';
 
   purge-cf = writeShellApplication {
