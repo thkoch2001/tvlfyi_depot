@@ -3,6 +3,52 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "ef04efdc_bf92a30c",
+        "filename": "users/grfn/resume/resume.tex",
+        "patchSetId": 9
+      },
+      "lineNbr": 66,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2023-11-13T19:29:58Z",
+      "side": 1,
+      "message": "put the implementer first, and then follow up with \"and of course also as a user\".",
+      "range": {
+        "startLine": 66,
+        "startChar": 56,
+        "endLine": 66,
+        "endChar": 70
+      },
+      "revId": "cadf04488a1d65b9b0fbccf9001a65caedc6ba3b",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a44d4c09_e48f6907",
+        "filename": "users/grfn/resume/resume.tex",
+        "patchSetId": 9
+      },
+      "lineNbr": 76,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2023-11-13T19:29:58Z",
+      "side": 1,
+      "message": "why not the other way around ))",
+      "range": {
+        "startLine": 76,
+        "startChar": 0,
+        "endLine": 76,
+        "endChar": 31
+      },
+      "revId": "cadf04488a1d65b9b0fbccf9001a65caedc6ba3b",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "7ed5bdf6_53976667",
         "filename": "users/grfn/resume/resume.tex",
         "patchSetId": 9
@@ -20,6 +66,29 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "c2c1730e_2fbe7e72",
+        "filename": "users/grfn/resume/resume.tex",
+        "patchSetId": 9
+      },
+      "lineNbr": 115,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2023-11-13T19:29:58Z",
+      "side": 1,
+      "message": "Can you extract one thing here and make it a little more concrete? Otherwise it reads like \"in the course of this work I read a bunch of stuff\"",
+      "range": {
+        "startLine": 112,
+        "startChar": 0,
+        "endLine": 115,
+        "endChar": 0
+      },
+      "revId": "cadf04488a1d65b9b0fbccf9001a65caedc6ba3b",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "d1c3c9bb_5ac97932",
         "filename": "users/grfn/resume/resume.tex",
         "patchSetId": 9
@@ -31,6 +100,29 @@
       "writtenOn": "2023-11-13T19:13:28Z",
       "side": 1,
       "message": "again, buggy Research Project -\u003e production.",
+      "revId": "cadf04488a1d65b9b0fbccf9001a65caedc6ba3b",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "019b0cc0_43317f34",
+        "filename": "users/grfn/resume/resume.tex",
+        "patchSetId": 9
+      },
+      "lineNbr": 135,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2023-11-13T19:29:58Z",
+      "side": 1,
+      "message": "is this a subtle diss against someone?)",
+      "range": {
+        "startLine": 135,
+        "startChar": 39,
+        "endLine": 135,
+        "endChar": 45
+      },
       "revId": "cadf04488a1d65b9b0fbccf9001a65caedc6ba3b",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
@@ -65,6 +157,24 @@
       "writtenOn": "2023-11-13T19:26:45Z",
       "side": 1,
       "message": "we did, this was tvix-0",
+      "parentUuid": "bde4c097_0b609255",
+      "revId": "cadf04488a1d65b9b0fbccf9001a65caedc6ba3b",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "07a6629d_4ed88009",
+        "filename": "users/grfn/resume/resume.tex",
+        "patchSetId": 9
+      },
+      "lineNbr": 235,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2023-11-13T19:29:58Z",
+      "side": 1,
+      "message": "Yes, we did. We kept the name for the Rust one. It might be less confusing to refer to it as \"the first incarnation of Nix\" or something, especially as Tvix itself can also be listed here (as a contributor): https://github.com/tvlfyi/tvix/graphs/contributors (link here just for the contributor analysis)\n\nBy the way, the link should go to a specific commit probably, as it has been removed from canon for quite some time.",
       "parentUuid": "bde4c097_0b609255",
       "revId": "cadf04488a1d65b9b0fbccf9001a65caedc6ba3b",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"

@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "dcde2f8b_6c3ecdbb",
+        "filename": "users/grfn/resume/resume.tex",
+        "patchSetId": 9
+      },
+      "lineNbr": 3,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2023-11-13T19:29:58Z",
+      "side": 0,
+      "message": "good one",
+      "range": {
+        "startLine": 3,
+        "startChar": 0,
+        "endLine": 3,
+        "endChar": 63
+      },
+      "revId": "f758e9e9e0ad772d9eb7381e34fddb6300cd3c73",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1c8b8f8e_d782b7b6",
+        "filename": "users/grfn/resume/resume.tex",
+        "patchSetId": 9
+      },
+      "lineNbr": 93,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2023-11-13T19:29:58Z",
+      "side": 0,
+      "message": "they grow up so fast 🥹",
+      "range": {
+        "startLine": 93,
+        "startChar": 0,
+        "endLine": 93,
+        "endChar": 18
+      },
+      "revId": "f758e9e9e0ad772d9eb7381e34fddb6300cd3c73",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
