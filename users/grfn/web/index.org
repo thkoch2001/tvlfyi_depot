@@ -42,5 +42,6 @@ that's wire-compatible with postgresql and mysql, based on [[https://github.com/
 - [[https://twitter.com/glittershark1][twitter]]
 - [[https://bsky.app/profile/gws.fyi][bluesky]]
 - https://keybase.io/glittershark
-- grfn on IRC (hackint or libera.chat)
+- aspen on IRC (hackint or libera.chat)
 - [[https://gws.fyi/pubkey.gpg][gpg key: 0F11A989879E8BBBFDC1E23644EF5B5E861C09A7]]
+- signal / telegram / discord available upon request
