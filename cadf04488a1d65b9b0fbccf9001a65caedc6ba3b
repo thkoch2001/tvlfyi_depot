@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7ed5bdf6_53976667",
+        "filename": "users/grfn/resume/resume.tex",
+        "patchSetId": 9
+      },
+      "lineNbr": 110,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-11-13T19:13:28Z",
+      "side": 1,
+      "message": "This reads very similar to the first item. maybe combine them?",
+      "revId": "cadf04488a1d65b9b0fbccf9001a65caedc6ba3b",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d1c3c9bb_5ac97932",
+        "filename": "users/grfn/resume/resume.tex",
+        "patchSetId": 9
+      },
+      "lineNbr": 123,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-11-13T19:13:28Z",
+      "side": 1,
+      "message": "again, buggy Research Project -\u003e production.",
+      "revId": "cadf04488a1d65b9b0fbccf9001a65caedc6ba3b",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bde4c097_0b609255",
+        "filename": "users/grfn/resume/resume.tex",
+        "patchSetId": 9
+      },
+      "lineNbr": 235,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-11-13T19:13:28Z",
+      "side": 1,
+      "message": "did we ever call this Tvix? I assumed that\u0027s gonna create a bit of confusion with what\u0027s in //tvix now...",
+      "revId": "cadf04488a1d65b9b0fbccf9001a65caedc6ba3b",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
