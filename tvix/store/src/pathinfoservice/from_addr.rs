@@ -68,7 +68,7 @@ pub fn from_addr(
         // - In the case of unix sockets, there must be a path, but may not be a host.
         // - In the case of non-unix sockets, there must be a host, but no path.
         // Constructing the channel is handled by tvix_castore::channel::from_url.
-        let client = PathInfoServiceClient::new(tvix_castore::channel::from_url(&url)?);
+        let client = PathInfoServiceClient::new(tvix_castore::tonic::channel_from_url(&url)?);
         Arc::new(GRPCPathInfoService::from_client(client))
     } else {
         Err(Error::StorageError(format!(
