@@ -50,6 +50,24 @@
       "message": "did we ever call this Tvix? I assumed that\u0027s gonna create a bit of confusion with what\u0027s in //tvix now...",
       "revId": "cadf04488a1d65b9b0fbccf9001a65caedc6ba3b",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "71b2bca8_97ad925f",
+        "filename": "users/grfn/resume/resume.tex",
+        "patchSetId": 9
+      },
+      "lineNbr": 235,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2023-11-13T19:26:45Z",
+      "side": 1,
+      "message": "we did, this was tvix-0",
+      "parentUuid": "bde4c097_0b609255",
+      "revId": "cadf04488a1d65b9b0fbccf9001a65caedc6ba3b",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
