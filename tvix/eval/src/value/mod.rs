@@ -307,12 +307,11 @@ impl Value {
                 }
 
                 if let Some(out_path) = attrs.select("outPath") {
-                    return match generators::request_string_coerce(&co, out_path.clone(), kind)
-                        .await
-                    {
-                        Ok(s) => Ok(Value::String(s)),
-                        Err(c) => Ok(Value::Catchable(c)),
-                    };
+                    return Ok(
+                        generators::request_string_coerce(&co, out_path.clone(), kind)
+                            .await
+                            .into(),
+                    );
                 }
 
                 Err(ErrorKind::NotCoercibleToString { from: "set", kind })
