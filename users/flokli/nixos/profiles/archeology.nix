@@ -27,6 +27,7 @@
   environment.systemPackages = [
     pkgs.awscli
     pkgs.duckdb
+    pkgs.parquet-tools
     pkgs.helix
     pkgs.htop
     pkgs.kakoune
