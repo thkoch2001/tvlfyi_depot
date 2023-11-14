@@ -26,6 +26,7 @@
   # Get a bunch of text editors and CLI tools.
   environment.systemPackages = [
     pkgs.awscli
+    pkgs.duckdb
     pkgs.helix
     pkgs.htop
     pkgs.kakoune
