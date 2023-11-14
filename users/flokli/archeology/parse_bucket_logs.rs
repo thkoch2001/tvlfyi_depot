@@ -31,7 +31,8 @@ fn main() -> ExitCode {
     )
     ORDER BY timestamp ASC
     SETTINGS
-        format_regexp = '(\\S+) (\\S+) \\[(.*)\\] (\\S+) (\\S+) (\\S+) (\\S+) (\\S+) ((?:\\S+ \\S+ \\S+)|\\S+) (\\S+) (\\S+) (\\S+) (\\S+) (\\S+) (\\S+) (\\S+) (\\S+) (\\S+) (\\S+) (\\S+) (\\S+) (\\S+) (\\S+) (\\S+) (\\S+) (\\S+).*',
+        format_regexp_skip_unmatched = 1,
+        format_regexp = '(\\S+) (\\S+) \\[(.*)\\] (\\S+) (\\S+) (\\S+) (\\S+) (\\S+) ((?:\\S+ \\S+ \\S+)|\\S+) (\\S+) (\\S+) (\\S+) (\\S+) (\\S+) (\\S+) (\\S+) ("\\S+") (\\S+) (\\S+) (\\S+) (\\S+) (\\S+) (\\S+) (\\S+) (\\S+) (\\S+).*',
         output_format_parquet_compression_method = 'zstd'
     INTO OUTFILE '{}' FORMAT Parquet"#, input_files, output_file));
 
