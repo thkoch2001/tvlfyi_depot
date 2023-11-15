@@ -49,7 +49,6 @@ pin_project! {
 }
 
 impl<R: AsyncRead, W: AsyncWrite> RWMerger<R, W> {
-    #[allow(dead_code)]
     pub fn new(r: R, w: W) -> Self {
         Self { r, w }
     }
