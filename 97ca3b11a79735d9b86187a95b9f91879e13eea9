@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "24c08a57_7bb0d5a2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000005
+      },
+      "writtenOn": "2023-11-15T21:53:51Z",
+      "side": 1,
+      "message": "It\u0027s not clear to me that we should be building a process manager into tvix. It encourages adding more things to our process tree, and more ambient state that we pass along to other programs.\n\nEven if not intentionally used, the fact that it can spawn arbitrary processes becomes part of any tvix user\u0027s security considerations.\n\nI would much prefer to leave socket activation to the system service manager (eg, systemd), which is where that piece of responsibility belongs.\n\n(copy of my bugtracker comment https://b.tvl.fyi/issues/308#comment-554)",
+      "revId": "97ca3b11a79735d9b86187a95b9f91879e13eea9",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
