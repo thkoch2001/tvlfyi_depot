@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "30549bbc_fd2ec140",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 6
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1000066
+      },
+      "writtenOn": "2023-11-15T23:07:27Z",
+      "side": 1,
+      "message": "This doesn\u0027t exist because it causes deadlocks.\n\nIf the AsyncRead and AsyncWrite didn\u0027t come from a single thing that initially implemented AsyncRead+AsyncWrite (see ReadHalf::unsplit()) then you can have a case where reading from the reader causes writes to the writer, and any mutex involved will deadlock.",
+      "range": {
+        "startLine": 9,
+        "startChar": 0,
+        "endLine": 11,
+        "endChar": 13
+      },
+      "revId": "de11a9e758676f0ad275722b9ec1b1740afb256f",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
