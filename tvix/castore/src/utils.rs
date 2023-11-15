@@ -3,9 +3,10 @@
 //! Only used for testing purposes, but across crates.
 //! Should be removed once we have a better concept of a "Service registry".
 
+use futures::{AsyncRead, AsyncWrite};
 use pin_project_lite::pin_project;
 use std::sync::Arc;
-use tokio::io::DuplexStream;
+use tokio::io::{DuplexStream, ReadBuf};
 use tonic::transport::{Channel, Endpoint, Server, Uri};
 
 use crate::{
@@ -33,6 +34,68 @@ pin_project! {
     pub struct DuplexStreamWrapper {
             #[pin]
         inner: DuplexStream
+    }
+}
+
+pin_project! {
+    /// A wrapper exposing [AsyncRead + AsyncWrite] for two separate
+    /// struct elements exposing [AsyncRead] and [AsyncWrite] individually.
+    pub(crate) struct RWMerger<R: AsyncRead, W: AsyncWrite> {
+        #[pin]
+        r: R,
+        #[pin]
+        w: W,
+    }
+}
+
+impl<R: AsyncRead, W: AsyncWrite> RWMerger<R, W> {
+    pub fn new(r: R, w: W) -> Self {
+        Self { r, w }
+    }
+}
+
+/// AsyncRead reads from the reader
+impl<R: AsyncRead, W: AsyncWrite> tokio::io::AsyncRead for RWMerger<R, W> {
+    fn poll_read(
+        self: std::pin::Pin<&mut Self>,
+        cx: &mut std::task::Context<'_>,
+        buf: &mut ReadBuf<'_>,
+    ) -> std::task::Poll<std::io::Result<()>> {
+        let resp = self.project().r.poll_read(cx, buf.initialize_unfilled());
+
+        match resp {
+            std::task::Poll::Ready(Err(e)) => std::task::Poll::Ready(Err(e)),
+            std::task::Poll::Ready(Ok(bytes_read)) => {
+                buf.advance(bytes_read);
+                std::task::Poll::Ready(Ok(()))
+            }
+            std::task::Poll::Pending => std::task::Poll::Pending,
+        }
+    }
+}
+
+/// AsyncWrite writes to the writer
+impl<R: AsyncRead, W: AsyncWrite> tokio::io::AsyncWrite for RWMerger<R, W> {
+    fn poll_write(
+        self: std::pin::Pin<&mut Self>,
+        cx: &mut std::task::Context<'_>,
+        buf: &[u8],
+    ) -> std::task::Poll<std::io::Result<usize>> {
+        self.project().w.poll_write(cx, buf)
+    }
+
+    fn poll_flush(
+        self: std::pin::Pin<&mut Self>,
+        cx: &mut std::task::Context<'_>,
+    ) -> std::task::Poll<std::io::Result<()>> {
+        self.project().w.poll_flush(cx)
+    }
+
+    fn poll_shutdown(
+        self: std::pin::Pin<&mut Self>,
+        cx: &mut std::task::Context<'_>,
+    ) -> std::task::Poll<Result<(), std::io::Error>> {
+        self.project().w.poll_close(cx)
     }
 }
 
