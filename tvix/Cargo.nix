@@ -391,6 +391,228 @@ rec {
           "serde" = [ "dep:serde" ];
         };
       };
+      "async-channel" = rec {
+        crateName = "async-channel";
+        version = "2.1.0";
+        edition = "2018";
+        sha256 = "17hc7iv8ag204pz99dic1d6qg2891b1s4zhi5xydddqmk6ypay6k";
+        authors = [
+          "Stjepan Glavina <stjepang@gmail.com>"
+        ];
+        dependencies = [
+          {
+            name = "concurrent-queue";
+            packageId = "concurrent-queue";
+            usesDefaultFeatures = false;
+          }
+          {
+            name = "event-listener";
+            packageId = "event-listener 3.1.0";
+            usesDefaultFeatures = false;
+          }
+          {
+            name = "event-listener-strategy";
+            packageId = "event-listener-strategy";
+            usesDefaultFeatures = false;
+          }
+          {
+            name = "futures-core";
+            packageId = "futures-core";
+            usesDefaultFeatures = false;
+          }
+          {
+            name = "pin-project-lite";
+            packageId = "pin-project-lite";
+          }
+        ];
+        features = {
+          "default" = [ "std" ];
+          "std" = [ "concurrent-queue/std" "event-listener/std" "event-listener-strategy/std" ];
+        };
+        resolvedDefaultFeatures = [ "default" "std" ];
+      };
+      "async-io" = rec {
+        crateName = "async-io";
+        version = "2.2.0";
+        edition = "2021";
+        sha256 = "15q9ysdaz69pi3r6swms4xzii6xral2dda2d3fzjkly22mbrvva1";
+        authors = [
+          "Stjepan Glavina <stjepang@gmail.com>"
+        ];
+        dependencies = [
+          {
+            name = "async-lock";
+            packageId = "async-lock 3.1.0";
+          }
+          {
+            name = "cfg-if";
+            packageId = "cfg-if";
+          }
+          {
+            name = "concurrent-queue";
+            packageId = "concurrent-queue";
+          }
+          {
+            name = "futures-io";
+            packageId = "futures-io";
+            usesDefaultFeatures = false;
+            features = [ "std" ];
+          }
+          {
+            name = "futures-lite";
+            packageId = "futures-lite";
+            usesDefaultFeatures = false;
+          }
+          {
+            name = "parking";
+            packageId = "parking";
+          }
+          {
+            name = "polling";
+            packageId = "polling";
+          }
+          {
+            name = "rustix";
+            packageId = "rustix 0.38.21";
+            usesDefaultFeatures = false;
+            features = [ "fs" "net" "std" ];
+          }
+          {
+            name = "slab";
+            packageId = "slab";
+          }
+          {
+            name = "tracing";
+            packageId = "tracing";
+            usesDefaultFeatures = false;
+          }
+          {
+            name = "waker-fn";
+            packageId = "waker-fn";
+          }
+          {
+            name = "windows-sys";
+            packageId = "windows-sys 0.48.0";
+            target = { target, features }: (target."windows" or false);
+            features = [ "Win32_Foundation" ];
+          }
+        ];
+
+      };
+      "async-lock 2.8.0" = rec {
+        crateName = "async-lock";
+        version = "2.8.0";
+        edition = "2018";
+        sha256 = "0asq5xdzgp3d5m82y5rg7a0k9q0g95jy6mgc7ivl334x7qlp4wi8";
+        authors = [
+          "Stjepan Glavina <stjepang@gmail.com>"
+        ];
+        dependencies = [
+          {
+            name = "event-listener";
+            packageId = "event-listener 2.5.3";
+          }
+        ];
+
+      };
+      "async-lock 3.1.0" = rec {
+        crateName = "async-lock";
+        version = "3.1.0";
+        edition = "2018";
+        sha256 = "1mzi9hanvss9n9f8bw33cyz43fn6igs76v42mchy4im7m0mapcny";
+        authors = [
+          "Stjepan Glavina <stjepang@gmail.com>"
+        ];
+        dependencies = [
+          {
+            name = "event-listener";
+            packageId = "event-listener 3.1.0";
+            usesDefaultFeatures = false;
+          }
+          {
+            name = "event-listener-strategy";
+            packageId = "event-listener-strategy";
+            usesDefaultFeatures = false;
+          }
+          {
+            name = "pin-project-lite";
+            packageId = "pin-project-lite";
+          }
+        ];
+        features = {
+          "default" = [ "std" ];
+          "std" = [ "event-listener/std" "event-listener-strategy/std" ];
+        };
+        resolvedDefaultFeatures = [ "default" "std" ];
+      };
+      "async-process" = rec {
+        crateName = "async-process";
+        version = "2.0.0";
+        edition = "2021";
+        sha256 = "1c03gzz69ynw5lx51bk4by272gdzj5435jrq1s8vplmsq4ddjb29";
+        authors = [
+          "Stjepan Glavina <stjepang@gmail.com>"
+        ];
+        dependencies = [
+          {
+            name = "async-channel";
+            packageId = "async-channel";
+            target = { target, features }: (target."windows" or false);
+          }
+          {
+            name = "async-io";
+            packageId = "async-io";
+            target = { target, features }: (target."unix" or false);
+          }
+          {
+            name = "async-lock";
+            packageId = "async-lock 3.1.0";
+          }
+          {
+            name = "async-signal";
+            packageId = "async-signal";
+            target = { target, features }: (target."unix" or false);
+          }
+          {
+            name = "blocking";
+            packageId = "blocking";
+            target = { target, features }: (target."windows" or false);
+          }
+          {
+            name = "cfg-if";
+            packageId = "cfg-if";
+          }
+          {
+            name = "event-listener";
+            packageId = "event-listener 3.1.0";
+          }
+          {
+            name = "futures-lite";
+            packageId = "futures-lite";
+          }
+          {
+            name = "rustix";
+            packageId = "rustix 0.38.21";
+            usesDefaultFeatures = false;
+            target = { target, features }: (target."unix" or false);
+            features = [ "std" "fs" ];
+          }
+          {
+            name = "windows-sys";
+            packageId = "windows-sys 0.48.0";
+            usesDefaultFeatures = false;
+            target = { target, features }: (target."windows" or false);
+            features = [ "Win32_Foundation" "Win32_System_Threading" ];
+          }
+        ];
+        devDependencies = [
+          {
+            name = "async-io";
+            packageId = "async-io";
+          }
+        ];
+
+      };
       "async-recursion" = rec {
         crateName = "async-recursion";
         version = "1.0.5";
@@ -416,6 +638,76 @@ rec {
             packageId = "syn 2.0.16";
             usesDefaultFeatures = false;
             features = [ "full" "parsing" "printing" "proc-macro" "clone-impls" ];
+          }
+        ];
+
+      };
+      "async-signal" = rec {
+        crateName = "async-signal";
+        version = "0.2.5";
+        edition = "2018";
+        sha256 = "1i9466hiqghhmljjnn83a8vnxi8z013xga03f59c89d2cl7xjiwy";
+        authors = [
+          "John Nunley <dev@notgull.net>"
+        ];
+        dependencies = [
+          {
+            name = "async-io";
+            packageId = "async-io";
+            target = { target, features }: (target."unix" or false);
+          }
+          {
+            name = "async-lock";
+            packageId = "async-lock 2.8.0";
+            target = { target, features }: (target."windows" or false);
+          }
+          {
+            name = "atomic-waker";
+            packageId = "atomic-waker";
+            target = { target, features }: (target."windows" or false);
+          }
+          {
+            name = "cfg-if";
+            packageId = "cfg-if";
+          }
+          {
+            name = "futures-core";
+            packageId = "futures-core";
+          }
+          {
+            name = "futures-io";
+            packageId = "futures-io";
+            target = { target, features }: (target."unix" or false);
+          }
+          {
+            name = "rustix";
+            packageId = "rustix 0.38.21";
+            usesDefaultFeatures = false;
+            target = { target, features }: (target."unix" or false);
+            features = [ "process" "std" ];
+          }
+          {
+            name = "signal-hook-registry";
+            packageId = "signal-hook-registry";
+            target = { target, features }: (target."unix" or false);
+          }
+          {
+            name = "slab";
+            packageId = "slab";
+            target = { target, features }: (target."windows" or false);
+          }
+          {
+            name = "windows-sys";
+            packageId = "windows-sys 0.48.0";
+            usesDefaultFeatures = false;
+            target = { target, features }: (target."windows" or false);
+            features = [ "Win32_Foundation" "Win32_System_Console" ];
+          }
+        ];
+        devDependencies = [
+          {
+            name = "async-io";
+            packageId = "async-io";
           }
         ];
 
@@ -470,6 +762,20 @@ rec {
         ];
 
       };
+      "async-task" = rec {
+        crateName = "async-task";
+        version = "4.5.0";
+        edition = "2018";
+        sha256 = "18cwajn58vialbs494cj57l23vbrhaficjfbkh9027j2jzdjrsxl";
+        authors = [
+          "Stjepan Glavina <stjepang@gmail.com>"
+        ];
+        features = {
+          "default" = [ "std" ];
+          "portable-atomic" = [ "dep:portable-atomic" ];
+        };
+        resolvedDefaultFeatures = [ "default" "std" ];
+      };
       "async-trait" = rec {
         crateName = "async-trait";
         version = "0.1.68";
@@ -495,6 +801,19 @@ rec {
           }
         ];
 
+      };
+      "atomic-waker" = rec {
+        crateName = "atomic-waker";
+        version = "1.1.2";
+        edition = "2018";
+        sha256 = "1h5av1lw56m0jf0fd3bchxq8a30xv0b4wv8s4zkp4s0i7mfvs18m";
+        authors = [
+          "Stjepan Glavina <stjepang@gmail.com>"
+          "Contributors to futures-rs"
+        ];
+        features = {
+          "portable-atomic" = [ "dep:portable-atomic" ];
+        };
       };
       "atty" = rec {
         crateName = "atty";
@@ -866,6 +1185,7 @@ rec {
           "rustc-dep-of-std" = [ "core" "compiler_builtins" ];
           "serde" = [ "dep:serde" ];
         };
+        resolvedDefaultFeatures = [ "std" ];
       };
       "bitmaps" = rec {
         crateName = "bitmaps";
@@ -946,6 +1266,61 @@ rec {
           {
             name = "generic-array";
             packageId = "generic-array";
+          }
+        ];
+
+      };
+      "blocking" = rec {
+        crateName = "blocking";
+        version = "1.5.1";
+        edition = "2018";
+        sha256 = "064i3d6b8ln34fgdw49nmx9m36bwi3r3nv8c9xhcrpf4ilz92dva";
+        authors = [
+          "Stjepan Glavina <stjepang@gmail.com>"
+        ];
+        dependencies = [
+          {
+            name = "async-channel";
+            packageId = "async-channel";
+          }
+          {
+            name = "async-lock";
+            packageId = "async-lock 3.1.0";
+            target = { target, features }: (!(builtins.elem "wasm" target."family"));
+          }
+          {
+            name = "async-task";
+            packageId = "async-task";
+          }
+          {
+            name = "fastrand";
+            packageId = "fastrand 2.0.1";
+          }
+          {
+            name = "futures-io";
+            packageId = "futures-io";
+            usesDefaultFeatures = false;
+            features = [ "std" ];
+          }
+          {
+            name = "futures-lite";
+            packageId = "futures-lite";
+            usesDefaultFeatures = false;
+          }
+          {
+            name = "piper";
+            packageId = "piper";
+          }
+          {
+            name = "tracing";
+            packageId = "tracing";
+            usesDefaultFeatures = false;
+          }
+        ];
+        devDependencies = [
+          {
+            name = "futures-lite";
+            packageId = "futures-lite";
           }
         ];
 
@@ -1427,6 +1802,30 @@ rec {
         edition = "2021";
         sha256 = "1ix7w85kwvyybwi2jdkl3yva2r2bvdcc3ka2grjfzfgrapqimgxc";
 
+      };
+      "concurrent-queue" = rec {
+        crateName = "concurrent-queue";
+        version = "2.3.0";
+        edition = "2018";
+        sha256 = "006lfgl3hn38pxgkafsrymkxalmvhlb8m5dh9583c4jglnaacmzh";
+        authors = [
+          "Stjepan Glavina <stjepang@gmail.com>"
+          "Taiki Endo <te316e89@gmail.com>"
+          "John Nunley <jtnunley01@gmail.com>"
+        ];
+        dependencies = [
+          {
+            name = "crossbeam-utils";
+            packageId = "crossbeam-utils";
+            usesDefaultFeatures = false;
+          }
+        ];
+        features = {
+          "default" = [ "std" ];
+          "loom" = [ "dep:loom" ];
+          "portable-atomic" = [ "dep:portable-atomic" ];
+        };
+        resolvedDefaultFeatures = [ "default" "std" ];
       };
       "constant_time_eq" = rec {
         crateName = "constant_time_eq";
@@ -2064,6 +2463,7 @@ rec {
         features = {
           "default" = [ "std" ];
         };
+        resolvedDefaultFeatures = [ "std" ];
       };
       "errno-dragonfly" = rec {
         crateName = "errno-dragonfly";
@@ -2109,7 +2509,77 @@ rec {
         ];
         features = { };
       };
-      "fastrand" = rec {
+      "event-listener 2.5.3" = rec {
+        crateName = "event-listener";
+        version = "2.5.3";
+        edition = "2018";
+        sha256 = "1q4w3pndc518crld6zsqvvpy9lkzwahp2zgza9kbzmmqh9gif1h2";
+        authors = [
+          "Stjepan Glavina <stjepang@gmail.com>"
+        ];
+
+      };
+      "event-listener 3.1.0" = rec {
+        crateName = "event-listener";
+        version = "3.1.0";
+        edition = "2021";
+        sha256 = "1hihkg6ihvb6p9yi7nq11di8mhd5y0iqv81ij6h0rf0fvsy7ff6r";
+        authors = [
+          "Stjepan Glavina <stjepang@gmail.com>"
+        ];
+        dependencies = [
+          {
+            name = "concurrent-queue";
+            packageId = "concurrent-queue";
+            usesDefaultFeatures = false;
+          }
+          {
+            name = "parking";
+            packageId = "parking";
+            optional = true;
+            target = { target, features }: (!(builtins.elem "wasm" target."family"));
+          }
+          {
+            name = "pin-project-lite";
+            packageId = "pin-project-lite";
+          }
+        ];
+        features = {
+          "default" = [ "std" ];
+          "parking" = [ "dep:parking" ];
+          "portable-atomic" = [ "portable-atomic-util" "portable_atomic_crate" ];
+          "portable-atomic-util" = [ "dep:portable-atomic-util" ];
+          "portable_atomic_crate" = [ "dep:portable_atomic_crate" ];
+          "std" = [ "concurrent-queue/std" "parking" ];
+        };
+        resolvedDefaultFeatures = [ "default" "parking" "std" ];
+      };
+      "event-listener-strategy" = rec {
+        crateName = "event-listener-strategy";
+        version = "0.3.0";
+        edition = "2018";
+        sha256 = "0q0iv6l95g0qh40nqp2qjm8mrsxiwahkyixra7akdnj52cpqasyr";
+        authors = [
+          "John Nunley <dev@notgull.net>"
+        ];
+        dependencies = [
+          {
+            name = "event-listener";
+            packageId = "event-listener 3.1.0";
+            usesDefaultFeatures = false;
+          }
+          {
+            name = "pin-project-lite";
+            packageId = "pin-project-lite";
+          }
+        ];
+        features = {
+          "default" = [ "std" ];
+          "std" = [ "event-listener/std" ];
+        };
+        resolvedDefaultFeatures = [ "std" ];
+      };
+      "fastrand 1.9.0" = rec {
         crateName = "fastrand";
         version = "1.9.0";
         edition = "2018";
@@ -2134,6 +2604,22 @@ rec {
         ];
 
       };
+      "fastrand 2.0.1" = rec {
+        crateName = "fastrand";
+        version = "2.0.1";
+        edition = "2018";
+        sha256 = "19flpv5zbzpf0rk4x77z4zf25in0brg8l7m304d3yrf47qvwxjr5";
+        authors = [
+          "Stjepan Glavina <stjepang@gmail.com>"
+        ];
+        features = {
+          "default" = [ "std" ];
+          "getrandom" = [ "dep:getrandom" ];
+          "js" = [ "std" "getrandom" ];
+          "std" = [ "alloc" ];
+        };
+        resolvedDefaultFeatures = [ "alloc" "default" "std" ];
+      };
       "fd-lock" = rec {
         crateName = "fd-lock";
         version = "3.0.12";
@@ -2149,7 +2635,7 @@ rec {
           }
           {
             name = "rustix";
-            packageId = "rustix";
+            packageId = "rustix 0.37.19";
             target = { target, features }: (target."unix" or false);
             features = [ "fs" ];
           }
@@ -2481,6 +2967,58 @@ rec {
           "default" = [ "std" ];
         };
         resolvedDefaultFeatures = [ "default" "std" ];
+      };
+      "futures-lite" = rec {
+        crateName = "futures-lite";
+        version = "2.0.1";
+        edition = "2018";
+        sha256 = "1fsyxilaa6six70gqsn70fnwa4l9khykz543pmy1gddca4k1r0yk";
+        authors = [
+          "Stjepan Glavina <stjepang@gmail.com>"
+          "Contributors to futures-rs"
+        ];
+        dependencies = [
+          {
+            name = "fastrand";
+            packageId = "fastrand 2.0.1";
+            optional = true;
+            usesDefaultFeatures = false;
+          }
+          {
+            name = "futures-core";
+            packageId = "futures-core";
+            usesDefaultFeatures = false;
+          }
+          {
+            name = "futures-io";
+            packageId = "futures-io";
+            optional = true;
+          }
+          {
+            name = "memchr";
+            packageId = "memchr";
+            optional = true;
+          }
+          {
+            name = "parking";
+            packageId = "parking";
+            optional = true;
+          }
+          {
+            name = "pin-project-lite";
+            packageId = "pin-project-lite";
+          }
+        ];
+        features = {
+          "default" = [ "race" "std" ];
+          "fastrand" = [ "dep:fastrand" ];
+          "futures-io" = [ "dep:futures-io" ];
+          "memchr" = [ "dep:memchr" ];
+          "parking" = [ "dep:parking" ];
+          "race" = [ "fastrand" ];
+          "std" = [ "alloc" "fastrand/std" "futures-io" "parking" "memchr" ];
+        };
+        resolvedDefaultFeatures = [ "alloc" "default" "fastrand" "futures-io" "memchr" "parking" "race" "std" ];
       };
       "futures-macro" = rec {
         crateName = "futures-macro";
@@ -3403,7 +3941,7 @@ rec {
           }
           {
             name = "rustix";
-            packageId = "rustix";
+            packageId = "rustix 0.37.19";
             target = { target, features }: (!((target."windows" or false) || ("hermit" == target."os") || ("unknown" == target."os")));
             features = [ "termios" ];
           }
@@ -3755,7 +4293,7 @@ rec {
         };
         resolvedDefaultFeatures = [ "default" ];
       };
-      "linux-raw-sys" = rec {
+      "linux-raw-sys 0.3.7" = rec {
         crateName = "linux-raw-sys";
         version = "0.3.7";
         edition = "2018";
@@ -3770,6 +4308,22 @@ rec {
           "rustc-dep-of-std" = [ "core" "compiler_builtins" "no_std" ];
         };
         resolvedDefaultFeatures = [ "errno" "general" "ioctl" "no_std" ];
+      };
+      "linux-raw-sys 0.4.11" = rec {
+        crateName = "linux-raw-sys";
+        version = "0.4.11";
+        edition = "2021";
+        sha256 = "0adqqaya81s7k5r323g65pw6q85pxd1x4prz9whh5i4abysqi54n";
+        authors = [
+          "Dan Gohman <dev@sunfishcode.online>"
+        ];
+        features = {
+          "compiler_builtins" = [ "dep:compiler_builtins" ];
+          "core" = [ "dep:core" ];
+          "default" = [ "std" "general" "errno" ];
+          "rustc-dep-of-std" = [ "core" "compiler_builtins" "no_std" ];
+        };
+        resolvedDefaultFeatures = [ "elf" "errno" "general" "if_ether" "ioctl" "net" "netlink" "no_std" "prctl" ];
       };
       "litrs" = rec {
         crateName = "litrs";
@@ -4522,6 +5076,19 @@ rec {
         ];
 
       };
+      "parking" = rec {
+        crateName = "parking";
+        version = "2.2.0";
+        edition = "2018";
+        sha256 = "1blwbkq6im1hfxp5wlbr475mw98rsyc0bbr2d5n16m38z253p0dv";
+        authors = [
+          "Stjepan Glavina <stjepang@gmail.com>"
+          "The Rust Project Developers"
+        ];
+        features = {
+          "loom" = [ "dep:loom" ];
+        };
+      };
       "parking_lot 0.11.2" = rec {
         crateName = "parking_lot";
         version = "0.11.2";
@@ -4775,6 +5342,41 @@ rec {
         ];
 
       };
+      "piper" = rec {
+        crateName = "piper";
+        version = "0.2.1";
+        edition = "2018";
+        sha256 = "1m45fkdq7q5l9mv3b0ra10qwm0kb67rjp2q8y91958gbqjqk33b6";
+        authors = [
+          "Stjepan Glavina <stjepang@gmail.com>"
+          "John Nunley <dev@notgull.net>"
+        ];
+        dependencies = [
+          {
+            name = "atomic-waker";
+            packageId = "atomic-waker";
+          }
+          {
+            name = "fastrand";
+            packageId = "fastrand 2.0.1";
+            usesDefaultFeatures = false;
+          }
+          {
+            name = "futures-io";
+            packageId = "futures-io";
+            optional = true;
+          }
+        ];
+        features = {
+          "default" = [ "std" ];
+          "futures-io" = [ "dep:futures-io" ];
+          "portable-atomic" = [ "atomic-waker/portable-atomic" "portable_atomic_crate" "portable-atomic-util" ];
+          "portable-atomic-util" = [ "dep:portable-atomic-util" ];
+          "portable_atomic_crate" = [ "dep:portable_atomic_crate" ];
+          "std" = [ "fastrand/std" "futures-io" ];
+        };
+        resolvedDefaultFeatures = [ "default" "futures-io" "std" ];
+      };
       "plotters" = rec {
         crateName = "plotters";
         version = "0.3.4";
@@ -4861,6 +5463,51 @@ rec {
           "bitmap_encoder" = [ "image" ];
           "image" = [ "dep:image" ];
         };
+      };
+      "polling" = rec {
+        crateName = "polling";
+        version = "3.3.0";
+        edition = "2021";
+        sha256 = "0cg5jf0xf5gkch1d9kg8w55rnnjssxcm9b9amk1ghdhgyvqnlfz5";
+        authors = [
+          "Stjepan Glavina <stjepang@gmail.com>"
+          "John Nunley <dev@notgull.net>"
+        ];
+        dependencies = [
+          {
+            name = "cfg-if";
+            packageId = "cfg-if";
+          }
+          {
+            name = "concurrent-queue";
+            packageId = "concurrent-queue";
+            target = { target, features }: (target."windows" or false);
+          }
+          {
+            name = "pin-project-lite";
+            packageId = "pin-project-lite";
+            target = { target, features }: (target."windows" or false);
+          }
+          {
+            name = "rustix";
+            packageId = "rustix 0.38.21";
+            usesDefaultFeatures = false;
+            target = { target, features }: ((target."unix" or false) || ("fuchsia" == target."os") || ("vxworks" == target."os"));
+            features = [ "event" "fs" "pipe" "process" "std" "time" ];
+          }
+          {
+            name = "tracing";
+            packageId = "tracing";
+            usesDefaultFeatures = false;
+          }
+          {
+            name = "windows-sys";
+            packageId = "windows-sys 0.48.0";
+            target = { target, features }: (target."windows" or false);
+            features = [ "Win32_Foundation" "Win32_Networking_WinSock" "Win32_Security" "Win32_Storage_FileSystem" "Win32_System_IO" "Win32_System_LibraryLoader" "Win32_System_Threading" "Win32_System_WindowsProgramming" ];
+          }
+        ];
+
       };
       "ppv-lite86" = rec {
         crateName = "ppv-lite86";
@@ -5894,7 +6541,7 @@ rec {
         };
         resolvedDefaultFeatures = [ "default" "std" ];
       };
-      "rustix" = rec {
+      "rustix 0.37.19" = rec {
         crateName = "rustix";
         version = "0.37.19";
         edition = "2018";
@@ -5952,14 +6599,14 @@ rec {
           }
           {
             name = "linux-raw-sys";
-            packageId = "linux-raw-sys";
+            packageId = "linux-raw-sys 0.3.7";
             usesDefaultFeatures = false;
             target = { target, features }: ((("android" == target."os") || ("linux" == target."os")) && ((target."rustix_use_libc" or false) || (target."miri" or false) || (!(("linux" == target."os") && (("x86" == target."arch") || (("x86_64" == target."arch") && ("64" == target."pointer_width")) || (("little" == target."endian") && (("arm" == target."arch") || (("aarch64" == target."arch") && ("64" == target."pointer_width")) || ("powerpc64" == target."arch") || ("riscv64" == target."arch") || ("mips" == target."arch") || ("mips64" == target."arch"))))))));
             features = [ "general" "ioctl" "no_std" ];
           }
           {
             name = "linux-raw-sys";
-            packageId = "linux-raw-sys";
+            packageId = "linux-raw-sys 0.3.7";
             usesDefaultFeatures = false;
             target = { target, features }: ((!(target."rustix_use_libc" or false)) && (!(target."miri" or false)) && ("linux" == target."os") && (("x86" == target."arch") || (("x86_64" == target."arch") && ("64" == target."pointer_width")) || (("little" == target."endian") && (("arm" == target."arch") || (("aarch64" == target."arch") && ("64" == target."pointer_width")) || ("powerpc64" == target."arch") || ("riscv64" == target."arch") || ("mips" == target."arch") || ("mips64" == target."arch")))));
             features = [ "general" "errno" "ioctl" "no_std" ];
@@ -6014,6 +6661,115 @@ rec {
           "use-libc-auxv" = [ "libc" ];
         };
         resolvedDefaultFeatures = [ "default" "fs" "io-lifetimes" "libc" "std" "termios" "use-libc-auxv" ];
+      };
+      "rustix 0.38.21" = rec {
+        crateName = "rustix";
+        version = "0.38.21";
+        edition = "2021";
+        sha256 = "18q2mx7gnnl1238psb1r0avdw00l8y0jxkxgimyhmmg50q2nnhib";
+        authors = [
+          "Dan Gohman <dev@sunfishcode.online>"
+          "Jakub Konka <kubkon@jakubkonka.com>"
+        ];
+        dependencies = [
+          {
+            name = "bitflags";
+            packageId = "bitflags 2.4.1";
+            usesDefaultFeatures = false;
+          }
+          {
+            name = "errno";
+            packageId = "errno";
+            rename = "libc_errno";
+            optional = true;
+            usesDefaultFeatures = false;
+            target = { target, features }: ((!(target."rustix_use_libc" or false)) && (!(target."miri" or false)) && ("linux" == target."os") && ("little" == target."endian") && (("arm" == target."arch") || (("aarch64" == target."arch") && ("64" == target."pointer_width")) || ("riscv64" == target."arch") || ((target."rustix_use_experimental_asm" or false) && ("powerpc64" == target."arch")) || ((target."rustix_use_experimental_asm" or false) && ("mips" == target."arch")) || ((target."rustix_use_experimental_asm" or false) && ("mips32r6" == target."arch")) || ((target."rustix_use_experimental_asm" or false) && ("mips64" == target."arch")) || ((target."rustix_use_experimental_asm" or false) && ("mips64r6" == target."arch")) || ("x86" == target."arch") || (("x86_64" == target."arch") && ("64" == target."pointer_width"))));
+          }
+          {
+            name = "errno";
+            packageId = "errno";
+            rename = "libc_errno";
+            usesDefaultFeatures = false;
+            target = { target, features }: ((!(target."windows" or false)) && ((target."rustix_use_libc" or false) || (target."miri" or false) || (!(("linux" == target."os") && ("little" == target."endian") && (("arm" == target."arch") || (("aarch64" == target."arch") && ("64" == target."pointer_width")) || ("riscv64" == target."arch") || ((target."rustix_use_experimental_asm" or false) && ("powerpc64" == target."arch")) || ((target."rustix_use_experimental_asm" or false) && ("mips" == target."arch")) || ((target."rustix_use_experimental_asm" or false) && ("mips32r6" == target."arch")) || ((target."rustix_use_experimental_asm" or false) && ("mips64" == target."arch")) || ((target."rustix_use_experimental_asm" or false) && ("mips64r6" == target."arch")) || ("x86" == target."arch") || (("x86_64" == target."arch") && ("64" == target."pointer_width")))))));
+          }
+          {
+            name = "errno";
+            packageId = "errno";
+            rename = "libc_errno";
+            usesDefaultFeatures = false;
+            target = { target, features }: (target."windows" or false);
+          }
+          {
+            name = "libc";
+            packageId = "libc";
+            optional = true;
+            usesDefaultFeatures = false;
+            target = { target, features }: ((!(target."rustix_use_libc" or false)) && (!(target."miri" or false)) && ("linux" == target."os") && ("little" == target."endian") && (("arm" == target."arch") || (("aarch64" == target."arch") && ("64" == target."pointer_width")) || ("riscv64" == target."arch") || ((target."rustix_use_experimental_asm" or false) && ("powerpc64" == target."arch")) || ((target."rustix_use_experimental_asm" or false) && ("mips" == target."arch")) || ((target."rustix_use_experimental_asm" or false) && ("mips32r6" == target."arch")) || ((target."rustix_use_experimental_asm" or false) && ("mips64" == target."arch")) || ((target."rustix_use_experimental_asm" or false) && ("mips64r6" == target."arch")) || ("x86" == target."arch") || (("x86_64" == target."arch") && ("64" == target."pointer_width"))));
+            features = [ "extra_traits" ];
+          }
+          {
+            name = "libc";
+            packageId = "libc";
+            usesDefaultFeatures = false;
+            target = { target, features }: ((!(target."windows" or false)) && ((target."rustix_use_libc" or false) || (target."miri" or false) || (!(("linux" == target."os") && ("little" == target."endian") && (("arm" == target."arch") || (("aarch64" == target."arch") && ("64" == target."pointer_width")) || ("riscv64" == target."arch") || ((target."rustix_use_experimental_asm" or false) && ("powerpc64" == target."arch")) || ((target."rustix_use_experimental_asm" or false) && ("mips" == target."arch")) || ((target."rustix_use_experimental_asm" or false) && ("mips32r6" == target."arch")) || ((target."rustix_use_experimental_asm" or false) && ("mips64" == target."arch")) || ((target."rustix_use_experimental_asm" or false) && ("mips64r6" == target."arch")) || ("x86" == target."arch") || (("x86_64" == target."arch") && ("64" == target."pointer_width")))))));
+            features = [ "extra_traits" ];
+          }
+          {
+            name = "linux-raw-sys";
+            packageId = "linux-raw-sys 0.4.11";
+            usesDefaultFeatures = false;
+            target = { target, features }: ((("android" == target."os") || ("linux" == target."os")) && ((target."rustix_use_libc" or false) || (target."miri" or false) || (!(("linux" == target."os") && ("little" == target."endian") && (("arm" == target."arch") || (("aarch64" == target."arch") && ("64" == target."pointer_width")) || ("riscv64" == target."arch") || ((target."rustix_use_experimental_asm" or false) && ("powerpc64" == target."arch")) || ((target."rustix_use_experimental_asm" or false) && ("mips" == target."arch")) || ((target."rustix_use_experimental_asm" or false) && ("mips32r6" == target."arch")) || ((target."rustix_use_experimental_asm" or false) && ("mips64" == target."arch")) || ((target."rustix_use_experimental_asm" or false) && ("mips64r6" == target."arch")) || ("x86" == target."arch") || (("x86_64" == target."arch") && ("64" == target."pointer_width")))))));
+            features = [ "general" "ioctl" "no_std" ];
+          }
+          {
+            name = "linux-raw-sys";
+            packageId = "linux-raw-sys 0.4.11";
+            usesDefaultFeatures = false;
+            target = { target, features }: ((!(target."rustix_use_libc" or false)) && (!(target."miri" or false)) && ("linux" == target."os") && ("little" == target."endian") && (("arm" == target."arch") || (("aarch64" == target."arch") && ("64" == target."pointer_width")) || ("riscv64" == target."arch") || ((target."rustix_use_experimental_asm" or false) && ("powerpc64" == target."arch")) || ((target."rustix_use_experimental_asm" or false) && ("mips" == target."arch")) || ((target."rustix_use_experimental_asm" or false) && ("mips32r6" == target."arch")) || ((target."rustix_use_experimental_asm" or false) && ("mips64" == target."arch")) || ((target."rustix_use_experimental_asm" or false) && ("mips64r6" == target."arch")) || ("x86" == target."arch") || (("x86_64" == target."arch") && ("64" == target."pointer_width"))));
+            features = [ "general" "errno" "ioctl" "no_std" "elf" ];
+          }
+          {
+            name = "windows-sys";
+            packageId = "windows-sys 0.48.0";
+            target = { target, features }: (target."windows" or false);
+            features = [ "Win32_Foundation" "Win32_Networking_WinSock" "Win32_NetworkManagement_IpHelper" "Win32_System_Threading" ];
+          }
+        ];
+        devDependencies = [
+          {
+            name = "errno";
+            packageId = "errno";
+            rename = "libc_errno";
+            usesDefaultFeatures = false;
+          }
+          {
+            name = "libc";
+            packageId = "libc";
+          }
+        ];
+        features = {
+          "all-apis" = [ "event" "fs" "io_uring" "mm" "mount" "net" "param" "pipe" "process" "procfs" "pty" "rand" "runtime" "shm" "stdio" "system" "termios" "thread" "time" ];
+          "default" = [ "std" "use-libc-auxv" ];
+          "io_uring" = [ "event" "fs" "net" "linux-raw-sys/io_uring" ];
+          "itoa" = [ "dep:itoa" ];
+          "libc" = [ "dep:libc" ];
+          "libc_errno" = [ "dep:libc_errno" ];
+          "linux_latest" = [ "linux_4_11" ];
+          "net" = [ "linux-raw-sys/net" "linux-raw-sys/netlink" "linux-raw-sys/if_ether" ];
+          "once_cell" = [ "dep:once_cell" ];
+          "param" = [ "fs" ];
+          "process" = [ "linux-raw-sys/prctl" ];
+          "procfs" = [ "once_cell" "itoa" "fs" ];
+          "pty" = [ "itoa" "fs" ];
+          "runtime" = [ "linux-raw-sys/prctl" ];
+          "rustc-dep-of-std" = [ "dep:core" "dep:alloc" "dep:compiler_builtins" "linux-raw-sys/rustc-dep-of-std" "bitflags/rustc-dep-of-std" "compiler_builtins?/rustc-dep-of-std" ];
+          "shm" = [ "fs" ];
+          "std" = [ "bitflags/std" "alloc" "libc?/std" "libc_errno?/std" ];
+          "system" = [ "linux-raw-sys/system" ];
+          "thread" = [ "linux-raw-sys/prctl" ];
+          "use-libc" = [ "libc_errno" "libc" ];
+        };
+        resolvedDefaultFeatures = [ "alloc" "event" "fs" "net" "pipe" "process" "std" "time" ];
       };
       "rustls" = rec {
         crateName = "rustls";
@@ -7071,7 +7827,7 @@ rec {
           }
           {
             name = "fastrand";
-            packageId = "fastrand";
+            packageId = "fastrand 1.9.0";
           }
           {
             name = "redox_syscall";
@@ -7080,7 +7836,7 @@ rec {
           }
           {
             name = "rustix";
-            packageId = "rustix";
+            packageId = "rustix 0.37.19";
             target = { target, features }: ((target."unix" or false) || ("wasi" == target."os"));
             features = [ "fs" ];
           }
@@ -8559,6 +9315,10 @@ rec {
           else ./castore;
         dependencies = [
           {
+            name = "async-process";
+            packageId = "async-process";
+          }
+          {
             name = "async-stream";
             packageId = "async-stream";
           }
@@ -9637,6 +10397,16 @@ rec {
             packageId = "libc";
             target = { target, features }: (target."unix" or false);
           }
+        ];
+
+      };
+      "waker-fn" = rec {
+        crateName = "waker-fn";
+        version = "1.1.1";
+        edition = "2018";
+        sha256 = "142n74wlmpwcazfb5v7vhnzj3lb3r97qy8mzpjdpg345aizm3i7k";
+        authors = [
+          "Stjepan Glavina <stjepang@gmail.com>"
         ];
 
       };
@@ -10968,7 +11738,7 @@ rec {
           "Win32_Web" = [ "Win32" ];
           "Win32_Web_InternetExplorer" = [ "Win32_Web" ];
         };
-        resolvedDefaultFeatures = [ "Win32" "Win32_Foundation" "Win32_NetworkManagement" "Win32_NetworkManagement_IpHelper" "Win32_Networking" "Win32_Networking_WinSock" "Win32_Security" "Win32_Security_Authentication" "Win32_Security_Authentication_Identity" "Win32_Security_Credentials" "Win32_Security_Cryptography" "Win32_Storage" "Win32_Storage_FileSystem" "Win32_System" "Win32_System_Console" "Win32_System_Diagnostics" "Win32_System_Diagnostics_Debug" "Win32_System_IO" "Win32_System_Memory" "Win32_System_Pipes" "Win32_System_SystemServices" "Win32_System_Threading" "Win32_System_WindowsProgramming" "default" ];
+        resolvedDefaultFeatures = [ "Win32" "Win32_Foundation" "Win32_NetworkManagement" "Win32_NetworkManagement_IpHelper" "Win32_Networking" "Win32_Networking_WinSock" "Win32_Security" "Win32_Security_Authentication" "Win32_Security_Authentication_Identity" "Win32_Security_Credentials" "Win32_Security_Cryptography" "Win32_Storage" "Win32_Storage_FileSystem" "Win32_System" "Win32_System_Console" "Win32_System_Diagnostics" "Win32_System_Diagnostics_Debug" "Win32_System_IO" "Win32_System_LibraryLoader" "Win32_System_Memory" "Win32_System_Pipes" "Win32_System_SystemServices" "Win32_System_Threading" "Win32_System_WindowsProgramming" "default" ];
       };
       "windows-targets 0.42.2" = rec {
         crateName = "windows-targets";
