@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ac98d700_8dc293c4",
+        "filename": "tvix/castore/src/tonic.rs",
+        "patchSetId": 6
+      },
+      "lineNbr": 70,
+      "author": {
+        "id": 1000066
+      },
+      "writtenOn": "2023-11-15T23:11:54Z",
+      "side": 1,
+      "message": "Can you just change the API to use separate `AsyncRead` and `AsyncWrite` instead of a single `AsyncRead+AsyncWrite`?\n\nOtherwise you\u0027re going to have to create a unix socket.\n\nWith stdin/stdout, both the parent and child see *two* file descriptors, and they are the *same* two file descriptors on each side (parent/child).\n\nWith unix domain sockets there are two *different* file descriptors, but each side (client and server) sees only *one* file descriptor, and can both read and write to it.",
+      "range": {
+        "startLine": 67,
+        "startChar": 12,
+        "endLine": 70,
+        "endChar": 29
+      },
+      "revId": "3245dc56a7badde431caec04a522f6e00ff1f64d",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
