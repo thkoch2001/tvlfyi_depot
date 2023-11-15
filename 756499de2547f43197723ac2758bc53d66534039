@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "210be310_880712a1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-11-15T21:48:15Z",
+      "side": 1,
+      "message": "There\u0027s apparently https://github.com/vi/readwrite, but pulling in another crate just for this is a bit silly. I updated the commit message.",
+      "revId": "756499de2547f43197723ac2758bc53d66534039",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
