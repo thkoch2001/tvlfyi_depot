@@ -1,5 +1,8 @@
+use async_process::Stdio;
 use tokio::net::UnixStream;
 use tonic::transport::{Channel, Endpoint};
+
+use crate::utils::RWMerger;
 
 fn url_wants_wait_connect(url: &url::Url) -> bool {
     url.query_pairs()
@@ -13,6 +16,11 @@ fn url_wants_wait_connect(url: &url::Url) -> bool {
 ///  - `grpc+http://[::1]:8000`, connecting over unencrypted HTTP/2 (h2c)
 ///  - `grpc+https://[::1]:8000`, connecting over encrypted HTTP/2
 ///  - `grpc+unix:/path/to/socket`, connecting to a unix domain socket
+///  - `grpc+inetd:path/to/binary`, invoking the binary and taking to it over
+///    stdin/stdout.
+///    It's also possible to specify just the name of a binary,
+///    which then needs to be present in `$PATH`, or a path relative to the
+///    current working directory.
 ///
 /// All URLs support adding `wait-connect=1` as a URL parameter, in which case
 /// the connection is established lazily.
@@ -20,12 +28,49 @@ pub async fn channel_from_url(url: &url::Url) -> Result<Channel, self::Error> {
     match url.scheme() {
         "grpc+unix" => {
             if url.host_str().is_some() {
-                return Err(Error::HostSetForUnixSocket());
+                return Err(Error::HostDisallowedForScheme("grpc+unix"));
             }
 
             let connector = tower::service_fn({
                 let url = url.clone();
                 move |_: tonic::transport::Uri| UnixStream::connect(url.path().to_string().clone())
+            });
+
+            // the URL doesn't matter
+            let endpoint = Endpoint::from_static("http://[::]:50051");
+            if url_wants_wait_connect(url) {
+                Ok(endpoint.connect_with_connector(connector).await?)
+            } else {
+                Ok(endpoint.connect_with_connector_lazy(connector))
+            }
+        }
+        "grpc+inetd" => {
+            if url.host_str().is_some() {
+                return Err(Error::HostDisallowedForScheme("grpc+inetd"));
+            }
+
+            let connector = tower::service_fn({
+                let url = url.clone();
+                move |_| {
+                    let child_handle_resp = async_process::Command::new(url.path())
+                        .env_clear() // prevent *_SERVICE_ADDR getting propagated to children
+                        // TODO: should we propagate PATH?
+                        .args(["daemon", "-l", "inetd"]) // TODO: figure out how to encode args or have env var calling convention
+                        .stdout(Stdio::piped())
+                        .stdin(Stdio::piped())
+                        .spawn();
+
+                    async move {
+                        child_handle_resp.map(|mut child_handle| {
+                            // Provide an [AsyncRead + AsyncWrite], talking to the child
+                            // process' stdout and stdin respectively.
+                            RWMerger::new(
+                                child_handle.stdout.take().unwrap(),
+                                child_handle.stdin.take().unwrap(),
+                            )
+                        })
+                    }
+                }
             });
 
             // the URL doesn't matter
@@ -68,8 +113,8 @@ pub enum Error {
     #[error("grpc+ prefix is missing from URL")]
     MissingGRPCPrefix(),
 
-    #[error("host may not be set for unix domain sockets")]
-    HostSetForUnixSocket(),
+    #[error("host may not be set for this scheme")]
+    HostDisallowedForScheme(&'static str),
 
     #[error("path may not be set")]
     PathMayNotBeSet(),
@@ -110,6 +155,14 @@ mod tests {
     #[test_case("grpc+http://localhost?wait-connect=0", true; "grpc valid host wait-connect=0")]
     /// Connecting with wait-connect set to 1 fails, as the host doesn't exist.
     #[test_case("grpc+http://nonexist.invalid?wait-connect=1", false; "grpc valid host wait-connect=1")]
+    /// Connecting with wait-connect set to 0 and a non-existent binary succeeds, because we're lazy.
+    #[test_case("grpc+inetd:doesnotexist?wait-connect=0", true; "grpc inetd invalidcmd wait-connect=0")]
+    /// Connecting with wait-connect set to 1 and a non-existent binary fails.
+    #[test_case("grpc+inetd:doesnotexist?wait-connect=1", false; "grpc inetd invalidcmd wait-connect=1 fails")]
+    /// Connecting with wait-connect set to 0 and a non-existent binary (absolute path) succeeds, because we're lazy.
+    #[test_case("grpc+inetd:/does/not/exist?wait-connect=0", true; "grpc inetd invalidcmd abspath wait-connect=0")]
+    /// Connecting with wait-connect set to 0 and a non-existent binary (relative path) succeeds, because we're lazy.
+    #[test_case("grpc+inetd:does/not/exist?wait-connect=0", true; "grpc inetd invalidcmd relativepath wait-connect=0")]
     #[tokio::test]
     async fn test_from_addr_tokio(uri_str: &str, is_ok: bool) {
         let url = Url::parse(uri_str).expect("must parse");
