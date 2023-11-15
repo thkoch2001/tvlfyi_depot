@@ -1,5 +1,8 @@
+use async_process::Stdio;
 use tokio::net::UnixStream;
 use tonic::transport::{Channel, Endpoint};
+
+use crate::utils::RWMerger;
 
 fn url_wants_wait_connect(url: &url::Url) -> bool {
     url.query_pairs()
@@ -13,6 +16,9 @@ fn url_wants_wait_connect(url: &url::Url) -> bool {
 ///  - `grpc+http://[::1]:8000`, connecting over unencrypted HTTP/2 (h2c)
 ///  - `grpc+https://[::1]:8000`, connecting over encrypted HTTP/2
 ///  - `grpc+unix:/path/to/socket`, connecting to a unix domain socket
+///  - `grpc+inetd:path/to/binary`, invoking the binary and taking to it over
+///    stdin/stdout. It's also possible to just specify the name of a binary,
+///    which then needs to be present in `$PATH`.
 ///
 /// All URLs support adding `wait-connect=1` as a URL parameter, in which case
 /// the connection is established lazily.
@@ -20,7 +26,7 @@ pub async fn channel_from_url(url: &url::Url) -> Result<Channel, self::Error> {
     match url.scheme() {
         "grpc+unix" => {
             if url.host_str().is_some() {
-                return Err(Error::HostSetForUnixSocket());
+                return Err(Error::HostDisallowedForScheme("grpc+unix"));
             }
 
             let connector = tower::service_fn({
@@ -28,15 +34,49 @@ pub async fn channel_from_url(url: &url::Url) -> Result<Channel, self::Error> {
                 move |_: tonic::transport::Uri| UnixStream::connect(url.path().to_string().clone())
             });
 
-            let channel = if url_wants_wait_connect(url) {
-                Endpoint::from_static("http://[::]:50051")
-                    .connect_with_connector(connector)
-                    .await?
+            // the URL doesn't matter
+            let endpoint = Endpoint::from_static("http://[::]:50051");
+            if url_wants_wait_connect(url) {
+                Ok(endpoint.connect_with_connector(connector).await?)
             } else {
-                Endpoint::from_static("http://[::]:50051").connect_with_connector_lazy(connector)
-            };
+                Ok(endpoint.connect_with_connector_lazy(connector))
+            }
+        }
+        "grpc+inetd" => {
+            if url.host_str().is_some() {
+                return Err(Error::HostDisallowedForScheme("grpc+inetd"));
+            }
 
-            Ok(channel)
+            let connector = tower::service_fn({
+                let url = url.clone();
+                move |_| {
+                    let mut child_handle = async_process::Command::new(url.path())
+                        .env_clear() // prevent *_SERVICE_ADDR getting propagated to children
+                        // TODO: should we propagate PATH?
+                        .args(&["daemon", "-l", "inetd"]) // TODO: figure out how to encode args or have env var calling convention
+                        .stdout(Stdio::piped())
+                        .stdin(Stdio::piped())
+                        .spawn()
+                        .expect("unable to spawn");
+
+                    // Provide an [AsyncRead + AsyncWrite], talking to the child
+                    // process' stdout and stdin respectively.
+                    let process_child_io = RWMerger::new(
+                        child_handle.stdout.take().unwrap(),
+                        child_handle.stdin.take().unwrap(),
+                    );
+
+                    async move { Ok::<_, std::io::Error>(process_child_io) }
+                }
+            });
+
+            // the URL doesn't matter
+            let endpoint = Endpoint::from_static("http://[::]:50051");
+            if url_wants_wait_connect(url) {
+                Ok(endpoint.connect_with_connector(connector).await?)
+            } else {
+                Ok(endpoint.connect_with_connector_lazy(connector))
+            }
         }
         _ => {
             // ensure path is empty, not supported with gRPC.
@@ -55,13 +95,11 @@ pub async fn channel_from_url(url: &url::Url) -> Result<Channel, self::Error> {
             // Use the regular tonic transport::Endpoint logic, but unprefixed_url_str,
             // as tonic doesn't know about grpc+http[s].
             let endpoint = Endpoint::try_from(unprefixed_url_str)?;
-            let channel = if url_wants_wait_connect(url) {
-                endpoint.connect().await?
+            if url_wants_wait_connect(url) {
+                Ok(endpoint.connect().await?)
             } else {
-                endpoint.connect_lazy()
-            };
-
-            Ok(channel)
+                Ok(endpoint.connect_lazy())
+            }
         }
     }
 }
@@ -72,8 +110,8 @@ pub enum Error {
     #[error("grpc+ prefix is missing from URL")]
     MissingGRPCPrefix(),
 
-    #[error("host may not be set for unix domain sockets")]
-    HostSetForUnixSocket(),
+    #[error("host may not be set for this scheme")]
+    HostDisallowedForScheme(&'static str),
 
     #[error("path may not be set")]
     PathMayNotBeSet(),
