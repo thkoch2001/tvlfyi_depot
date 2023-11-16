@@ -58,7 +58,7 @@ pkgs.makeOverridable
       elixir-mode
       elm-mode
       erlang
-      exwm
+      depotExwm
       go-mode
       google-c-style
       gruber-darker-theme

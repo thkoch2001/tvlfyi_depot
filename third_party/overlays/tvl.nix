@@ -78,9 +78,7 @@ depot.nix.readTree.drvTargets {
       notmuch = super.notmuch.emacs;
 
       # Build EXWM with the depot sources instead.
-      depotExwm = esuper.exwm.overrideAttrs (_: {
-        src = depot.path.origSrc + "/third_party/exwm";
-      });
+      depotExwm = eself.callPackage depot.third_party.exwm.override { };
 
       # Workaround for magit checking the git version at load time
       magit = esuper.magit.overrideAttrs (_: {
