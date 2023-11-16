@@ -22,6 +22,30 @@
       },
       "revId": "3245dc56a7badde431caec04a522f6e00ff1f64d",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cd7ec5e8_649d74b2",
+        "filename": "tvix/castore/src/tonic.rs",
+        "patchSetId": 6
+      },
+      "lineNbr": 70,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-11-16T21:07:52Z",
+      "side": 1,
+      "message": "The connector thing in tonic at least wants something implementing AsyncRead and AsyncWrite at the same time, I think (?). But looking at https://cl.tvl.fyi/c/depot/+/10043/comments/24c08a57_7bb0d5a2, it\u0027s maybe better to just abandon this, use unix sockets and socket activation where desired.",
+      "parentUuid": "ac98d700_8dc293c4",
+      "range": {
+        "startLine": 67,
+        "startChar": 12,
+        "endLine": 70,
+        "endChar": 29
+      },
+      "revId": "3245dc56a7badde431caec04a522f6e00ff1f64d",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
