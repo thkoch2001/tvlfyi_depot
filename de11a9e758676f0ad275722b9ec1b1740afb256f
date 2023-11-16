@@ -22,6 +22,30 @@
       },
       "revId": "de11a9e758676f0ad275722b9ec1b1740afb256f",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b2db511a_97bc9d9e",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 6
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-11-16T07:56:10Z",
+      "side": 1,
+      "message": "Is there any record of this somewhere? I agree with the conversation on IRC, maybe we should open an issue upstream about documenting this *somewhere* where people can find it while looking for the actual piece of code.",
+      "parentUuid": "30549bbc_fd2ec140",
+      "range": {
+        "startLine": 9,
+        "startChar": 0,
+        "endLine": 11,
+        "endChar": 13
+      },
+      "revId": "de11a9e758676f0ad275722b9ec1b1740afb256f",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
