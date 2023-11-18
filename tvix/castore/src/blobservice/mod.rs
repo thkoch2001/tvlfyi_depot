@@ -8,6 +8,7 @@ mod grpc;
 mod memory;
 mod naive_seeker;
 mod sled;
+mod simplefs;
 
 #[cfg(test)]
 mod tests;
@@ -16,6 +17,7 @@ pub use self::from_addr::from_addr;
 pub use self::grpc::GRPCBlobService;
 pub use self::memory::MemoryBlobService;
 pub use self::sled::SledBlobService;
+pub use self::simplefs::SimpleFilesystemBlobService;
 
 /// The base trait all BlobService services need to implement.
 /// It provides functions to check whether a given blob exists,
@@ -54,3 +56,4 @@ pub trait BlobReader:
 
 /// A [`io::Cursor<Vec<u8>>`] can be used as a BlobReader.
 impl BlobReader for io::Cursor<Vec<u8>> {}
+impl BlobReader for tokio::io::BufReader<tokio::fs::File> {}

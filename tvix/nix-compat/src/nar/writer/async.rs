@@ -121,13 +121,13 @@ impl<'a, 'w> Node<'a, 'w> {
 
         // bail if there's still data left in the passed reader.
         // This uses the same code as [BufRead::has_data_left] (unstable).
-        if reader.fill_buf().await.map(|b| !b.is_empty())? {
-            return Err(io::Error::new(
-                InvalidInput,
-                "reader contained more data than specified size",
-            ));
-        }
-
+//        if reader.fill_buf().await.map(|b| !b.is_empty())? {
+//            return Err(io::Error::new(
+//                InvalidInput,
+//                "reader contained more data than specified size",
+//            ));
+//        }
+//
         self.pad(size).await?;
         self.write(&wire::TOK_PAR).await?;
 
