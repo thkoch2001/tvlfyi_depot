@@ -1,5 +1,6 @@
 use std::io;
 use std::pin::pin;
+use std::sync::Arc;
 
 use test_case::test_case;
 use tokio::io::AsyncReadExt;
@@ -10,6 +11,29 @@ use super::BlobService;
 use super::MemoryBlobService;
 use super::SledBlobService;
 use crate::fixtures;
+
+#[cfg(test)]
+use rstest_reuse;
+
+use rstest::rstest;
+
+#[rstest::fixture]
+async fn gen_blobservice(#[default("memory://")] url: &'static str
+) -> Arc<dyn BlobService> {
+    crate::blobservice::from_addr(url).await.unwrap()
+}
+
+#[rstest]
+// #[case("memory://")]
+// #[case("sled://")]
+#[awt]
+#[tokio::test_case]
+async fn has_nonexistent_false_rstest(gen_blobservice: Arc<dyn BlobService>) {
+    assert!(!blob_service
+        .has(&fixtures::BLOB_A_DIGEST)
+        .await
+        .expect("must not fail"));
+}
 
 // TODO: avoid having to define all different services we test against for all functions.
 // maybe something like rstest can be used?

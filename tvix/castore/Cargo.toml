@@ -37,6 +37,8 @@ test-case = "2.2.2"
 tempfile = "3.3.0"
 tokio-retry = "0.3.0"
 hex-literal = "0.4.1"
+rstest_reuse = "0.6.0"
+rstest = { version = "0.18.2", features = ["attributes"] }
 
 [features]
 default = []
