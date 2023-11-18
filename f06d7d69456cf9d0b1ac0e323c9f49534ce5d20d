@@ -48,6 +48,30 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "131fde52_5c6a8def",
+        "filename": "tvix/castore/src/blobservice/simplefs.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 130,
+      "author": {
+        "id": 1000073
+      },
+      "writtenOn": "2023-11-18T23:09:27Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "bbd1d458_7abdab23",
+      "range": {
+        "startLine": 130,
+        "startChar": 138,
+        "endLine": 130,
+        "endChar": 139
+      },
+      "revId": "f06d7d69456cf9d0b1ac0e323c9f49534ce5d20d",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "9f024950_922ae361",
