@@ -51,9 +51,9 @@ not pretty.
 tvix-castore uses BLAKE3 as a digest function, which internally uses a fixed
 chunksize of 1024 bytes.
 
-BLAKE3 is a tree hash where all left nodes fully populated, contrary to
-conventional serial hash functions. To be able to validate the hash of a node,
-one only needs the hash of the (2) children, if any.
+Like most hash functions, BLAKE3 can be used to create a Merkle
+tree.  To be able to validate the hash of a node, one only needs the
+hash of the (2) children, if any.
 
 This means one only needs to the root digest to validate a construction, and
 lower levels of the tree can be omitted.
@@ -118,4 +118,4 @@ the *physical chunk digest*.
 
 ---
 
-[blake3]: https://github.com/BLAKE3-team/BLAKE3
+[blake3]: https://raw.githubusercontent.com/BLAKE3-team/BLAKE3-specs/master/blake3.pdf
