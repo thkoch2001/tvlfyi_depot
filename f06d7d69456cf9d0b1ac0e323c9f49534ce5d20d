@@ -3,6 +3,29 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "a01c5a77_b445b999",
+        "filename": "tvix/castore/src/blobservice/simplefs.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 130,
+      "author": {
+        "id": 1000005
+      },
+      "writtenOn": "2023-11-18T20:59:58Z",
+      "side": 1,
+      "message": "nit: whitespace\n(does your editor not trim trailing spaces and/or run rustfmt?)",
+      "range": {
+        "startLine": 130,
+        "startChar": 138,
+        "endLine": 130,
+        "endChar": 139
+      },
+      "revId": "f06d7d69456cf9d0b1ac0e323c9f49534ce5d20d",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "9f024950_922ae361",
         "filename": "tvix/nix-compat/src/nar/writer/async.rs",
         "patchSetId": 1
@@ -14,6 +37,24 @@
       "writtenOn": "2023-11-18T19:48:48Z",
       "side": 1,
       "message": "@edef@edef.eu I\u0027m curious about your opinion here, if I don\u0027t comment it, my simple filesystem cannot work because it\u0027s buffered, do you have any suggestion?",
+      "revId": "f06d7d69456cf9d0b1ac0e323c9f49534ce5d20d",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a4932e09_e6a98fdb",
+        "filename": "tvix/nix-compat/src/nar/writer/async.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 124,
+      "author": {
+        "id": 1000005
+      },
+      "writtenOn": "2023-11-18T20:59:58Z",
+      "side": 1,
+      "message": "fill_buf should never return a buffer of greater length than what a regular read can return. If it does, that is a bug in your reader.\n\nTo be more specific, these two (and their async equivalents), should produce identical contents in the success case:\n```\nlet mut contents \u003d vec![];\nloop {\n    let buf \u003d reader.fill_buf().unwrap();    \n    contents.extend_from_slice(buf);\n    \n    if buf.is_empty() {\n        break;\n    }\n    \n    let n \u003d buf.len();\n    reader.consume(n);\n}\n```\n\n```\nlet mut contents \u003d vec![];\nloop {\n    let mut buf \u003d [0u8; 1024];\n    let n \u003d reader.read(\u0026mut buf).unwrap();\n    \n    if n \u003d\u003d 0 {\n        break;\n    }\n    \n    contents.extend_from_slice(\u0026buf[..n]);\n}\n```\n\nAssuming that is the case, and your buffering does thus indeed behave correctly wrt the buffered vs unbuffered cases, the remaining case is that the reader is longer than specified, in which case this check is catching exactly what it ought to. If you want a shorter reader, you can call `.take(len)` to take a prefix of its contents.",
+      "parentUuid": "9f024950_922ae361",
       "revId": "f06d7d69456cf9d0b1ac0e323c9f49534ce5d20d",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
