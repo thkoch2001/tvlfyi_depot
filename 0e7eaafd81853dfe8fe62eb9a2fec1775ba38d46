@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6c1ce35b_af8e4e27",
+        "filename": "tvix/store/src/pathinfoservice/nix_http.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 72,
+      "author": {
+        "id": 1000073
+      },
+      "writtenOn": "2023-11-18T19:31:51Z",
+      "side": 1,
+      "message": "Less than `info!`",
+      "revId": "0e7eaafd81853dfe8fe62eb9a2fec1775ba38d46",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "11b1ca76_6325dc99",
+        "filename": "tvix/store/src/pathinfoservice/nix_http.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 123,
+      "author": {
+        "id": 1000073
+      },
+      "writtenOn": "2023-11-18T19:31:51Z",
+      "side": 1,
+      "message": "Should be less than `info!` probably",
+      "revId": "0e7eaafd81853dfe8fe62eb9a2fec1775ba38d46",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "91eff8d1_c98c6dc8",
+        "filename": "tvix/store/src/pathinfoservice/nix_http.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 188,
+      "author": {
+        "id": 1000073
+      },
+      "writtenOn": "2023-11-18T19:31:51Z",
+      "side": 1,
+      "message": "Less than `info!`",
+      "revId": "0e7eaafd81853dfe8fe62eb9a2fec1775ba38d46",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
