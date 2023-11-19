@@ -118,6 +118,9 @@ depot.nix.readTree.drvTargets {
       # https://github.com/nix-community/crate2nix/pull/309
       ./patches/crate2nix-take-lndir-from-buildPackages.patch
       ./patches/crate2nix-skip-running-tests-when-cross-compiling.patch
+
+      # https://github.com/nix-community/crate2nix/pull/307
+      ./patches/crate2nix-fix-resolve-missing-target-features-to-null.patch
     ];
   });
 
