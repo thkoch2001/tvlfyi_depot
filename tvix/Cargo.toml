@@ -47,3 +47,6 @@ futures-macro = { git = "https://github.com/edef1c/futures-rs", rev = "23e25061f
 futures-sink = { git = "https://github.com/edef1c/futures-rs", rev = "23e25061f2261794d6d611675a6372c96b70fa85" }
 futures-task = { git = "https://github.com/edef1c/futures-rs", rev = "23e25061f2261794d6d611675a6372c96b70fa85" }
 futures-util = { git = "https://github.com/edef1c/futures-rs", rev = "23e25061f2261794d6d611675a6372c96b70fa85" }
+
+# compatibility with newer zstd
+sled = { git = "https://github.com/edef1c/sled", rev = "ad6474c37735de410fb807f472c9665c2bcb8134" }

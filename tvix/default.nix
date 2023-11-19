@@ -83,6 +83,8 @@ let
         "futures-sink"
         "futures-task"
         "futures-util"
+
+        "sled"
       ]);
   };
 in
