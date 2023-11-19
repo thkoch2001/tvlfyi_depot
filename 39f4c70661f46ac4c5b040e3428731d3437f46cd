@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3b4edf92_669c3029",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000005
+      },
+      "writtenOn": "2023-11-19T09:10:51Z",
+      "side": 1,
+      "message": "This suggests that *we\u0027re* building a Merkle tree on top. BLAKE3 *is* the Merkle tree scheme built on top of its (internal) chunk hash function.",
+      "revId": "39f4c70661f46ac4c5b040e3428731d3437f46cd",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
