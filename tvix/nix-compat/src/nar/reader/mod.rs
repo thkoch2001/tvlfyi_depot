@@ -7,7 +7,7 @@
 use std::io::{
     self, BufRead,
     ErrorKind::{InvalidData, UnexpectedEof},
-    Read,
+    Read, Write,
 };
 
 // Required reading for understanding this module.
@@ -109,24 +109,36 @@ impl<'a, 'r> FileReader<'a, 'r> {
     pub fn len(&self) -> u64 {
         self.len
     }
-}
 
-impl Read for FileReader<'_, '_> {
-    fn read(&mut self, mut buf: &mut [u8]) -> io::Result<usize> {
-        if buf.is_empty() || self.is_empty() {
-            return Ok(0);
+    /// Equivalent to [BufRead::fill_buf]
+    ///
+    /// We can't directly implement [BufRead], because [FileReader::consume] needs
+    /// to perform fallible I/O.
+    pub fn fill_buf(&mut self) -> io::Result<&[u8]> {
+        if self.is_empty() {
+            return Ok(&[]);
+        }
+
+        let mut buf = self.reader.fill_buf()?;
+
+        if buf.is_empty() {
+            return Err(UnexpectedEof.into());
         }
 
         if buf.len() as u64 > self.len {
-            buf = &mut buf[..self.len as usize];
+            buf = &buf[..self.len as usize];
         }
 
-        let n = self.reader.read(buf)?;
-        self.len -= n as u64;
+        Ok(buf)
+    }
 
-        if n == 0 {
-            return Err(UnexpectedEof.into());
-        }
+    /// Analogous to [BufRead::consume], differing only in that it needs
+    /// to perform I/O in order to read padding and terminators.
+    pub fn consume(&mut self, n: usize) -> io::Result<()> {
+        self.len = self
+            .len
+            .checked_sub(n as u64)
+            .expect("consumed bytes past EOF");
 
         // If we've reached semantic EOF, consume and verify the padding and terminating TOK_PAR.
         // Files are padded to 64 bits (8 bytes), just like any other byte string in the wire format.
@@ -144,6 +156,39 @@ impl Read for FileReader<'_, '_> {
 
             read::token(self.reader, &wire::TOK_PAR)?;
         }
+
+        Ok(())
+    }
+
+    /// Copy the (remaining) contents of the file into `dst`.
+    pub fn copy(&mut self, mut dst: impl Write) -> io::Result<()> {
+        while !self.is_empty() {
+            let buf = self.fill_buf()?;
+            let n = dst.write(buf)?;
+            self.consume(n)?;
+        }
+
+        Ok(())
+    }
+}
+
+impl Read for FileReader<'_, '_> {
+    fn read(&mut self, mut buf: &mut [u8]) -> io::Result<usize> {
+        if buf.is_empty() || self.is_empty() {
+            return Ok(0);
+        }
+
+        if buf.len() as u64 > self.len {
+            buf = &mut buf[..self.len as usize];
+        }
+
+        let n = self.reader.read(buf)?;
+
+        if n == 0 {
+            return Err(UnexpectedEof.into());
+        }
+
+        self.consume(n)?;
 
         Ok(n)
     }
