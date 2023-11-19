@@ -408,12 +408,12 @@ rec {
           }
           {
             name = "quote";
-            packageId = "quote 1.0.26";
+            packageId = "quote 1.0.33";
             usesDefaultFeatures = false;
           }
           {
             name = "syn";
-            packageId = "syn 2.0.16";
+            packageId = "syn 2.0.39";
             usesDefaultFeatures = false;
             features = [ "full" "parsing" "printing" "proc-macro" "clone-impls" ];
           }
@@ -460,11 +460,11 @@ rec {
           }
           {
             name = "quote";
-            packageId = "quote 1.0.26";
+            packageId = "quote 1.0.33";
           }
           {
             name = "syn";
-            packageId = "syn 2.0.16";
+            packageId = "syn 2.0.39";
             features = [ "full" "visit-mut" ];
           }
         ];
@@ -486,11 +486,11 @@ rec {
           }
           {
             name = "quote";
-            packageId = "quote 1.0.26";
+            packageId = "quote 1.0.33";
           }
           {
             name = "syn";
-            packageId = "syn 2.0.16";
+            packageId = "syn 2.0.39";
             features = [ "full" "visit-mut" ];
           }
         ];
@@ -797,6 +797,19 @@ rec {
           "default" = [ "std" ];
         };
         resolvedDefaultFeatures = [ "default" "std" ];
+      };
+      "base64ct" = rec {
+        crateName = "base64ct";
+        version = "1.6.0";
+        edition = "2021";
+        sha256 = "0nvdba4jb8aikv60az40x2w1y96sjdq8z3yp09rwzmkhiwv1lg4c";
+        authors = [
+          "RustCrypto Developers"
+        ];
+        features = {
+          "std" = [ "alloc" ];
+        };
+        resolvedDefaultFeatures = [ "alloc" ];
       };
       "bit-set" = rec {
         crateName = "bit-set";
@@ -1319,11 +1332,11 @@ rec {
           }
           {
             name = "quote";
-            packageId = "quote 1.0.26";
+            packageId = "quote 1.0.33";
           }
           {
             name = "syn";
-            packageId = "syn 2.0.16";
+            packageId = "syn 2.0.39";
             features = [ "full" ];
           }
         ];
@@ -1427,6 +1440,18 @@ rec {
         edition = "2021";
         sha256 = "1ix7w85kwvyybwi2jdkl3yva2r2bvdcc3ka2grjfzfgrapqimgxc";
 
+      };
+      "const-oid" = rec {
+        crateName = "const-oid";
+        version = "0.9.5";
+        edition = "2021";
+        sha256 = "0vxb4d25mgk8y0phay7j078limx2553716ixsr1x5605k31j5h98";
+        authors = [
+          "RustCrypto Developers"
+        ];
+        features = {
+          "arbitrary" = [ "dep:arbitrary" ];
+        };
       };
       "constant_time_eq" = rec {
         crateName = "constant_time_eq";
@@ -1823,6 +1848,100 @@ rec {
         };
         resolvedDefaultFeatures = [ "std" ];
       };
+      "curve25519-dalek" = rec {
+        crateName = "curve25519-dalek";
+        version = "4.1.1";
+        edition = "2021";
+        sha256 = "0p7ns5917k6369gajrsbfj24llc5zfm635yh3abla7sb5rm8r6z8";
+        authors = [
+          "Isis Lovecruft <isis@patternsinthevoid.net>"
+          "Henry de Valence <hdevalence@hdevalence.ca>"
+        ];
+        dependencies = [
+          {
+            name = "cfg-if";
+            packageId = "cfg-if";
+          }
+          {
+            name = "cpufeatures";
+            packageId = "cpufeatures";
+            target = { target, features }: ("x86_64" == target."arch");
+          }
+          {
+            name = "curve25519-dalek-derive";
+            packageId = "curve25519-dalek-derive";
+            target = { target, features }: ((!("fiat" == target."curve25519_dalek_backend")) && (!("serial" == target."curve25519_dalek_backend")) && ("x86_64" == target."arch"));
+          }
+          {
+            name = "digest";
+            packageId = "digest";
+            optional = true;
+            usesDefaultFeatures = false;
+          }
+          {
+            name = "fiat-crypto";
+            packageId = "fiat-crypto";
+            usesDefaultFeatures = false;
+            target = { target, features }: ("fiat" == target."curve25519_dalek_backend");
+          }
+          {
+            name = "subtle";
+            packageId = "subtle";
+            usesDefaultFeatures = false;
+          }
+          {
+            name = "zeroize";
+            packageId = "zeroize";
+            optional = true;
+            usesDefaultFeatures = false;
+          }
+        ];
+        buildDependencies = [
+          {
+            name = "platforms";
+            packageId = "platforms";
+          }
+          {
+            name = "rustc_version";
+            packageId = "rustc_version";
+          }
+        ];
+        features = {
+          "alloc" = [ "zeroize?/alloc" ];
+          "default" = [ "alloc" "precomputed-tables" "zeroize" ];
+          "digest" = [ "dep:digest" ];
+          "ff" = [ "dep:ff" ];
+          "group" = [ "dep:group" "rand_core" ];
+          "group-bits" = [ "group" "ff/bits" ];
+          "rand_core" = [ "dep:rand_core" ];
+          "serde" = [ "dep:serde" ];
+          "zeroize" = [ "dep:zeroize" ];
+        };
+        resolvedDefaultFeatures = [ "alloc" "digest" "precomputed-tables" "zeroize" ];
+      };
+      "curve25519-dalek-derive" = rec {
+        crateName = "curve25519-dalek-derive";
+        version = "0.1.1";
+        edition = "2021";
+        sha256 = "1cry71xxrr0mcy5my3fb502cwfxy6822k4pm19cwrilrg7hq4s7l";
+        procMacro = true;
+        dependencies = [
+          {
+            name = "proc-macro2";
+            packageId = "proc-macro2 1.0.67";
+          }
+          {
+            name = "quote";
+            packageId = "quote 1.0.33";
+          }
+          {
+            name = "syn";
+            packageId = "syn 2.0.39";
+            features = [ "full" ];
+          }
+        ];
+
+      };
       "data-encoding" = rec {
         crateName = "data-encoding";
         version = "2.3.3";
@@ -1836,6 +1955,41 @@ rec {
           "std" = [ "alloc" ];
         };
         resolvedDefaultFeatures = [ "alloc" "default" "std" ];
+      };
+      "der" = rec {
+        crateName = "der";
+        version = "0.7.8";
+        edition = "2021";
+        sha256 = "070bwiyr80800h31c5zd96ckkgagfjgnrrdmz3dzg2lccsd3dypz";
+        authors = [
+          "RustCrypto Developers"
+        ];
+        dependencies = [
+          {
+            name = "const-oid";
+            packageId = "const-oid";
+            optional = true;
+          }
+          {
+            name = "zeroize";
+            packageId = "zeroize";
+            optional = true;
+            usesDefaultFeatures = false;
+          }
+        ];
+        features = {
+          "alloc" = [ "zeroize?/alloc" ];
+          "arbitrary" = [ "dep:arbitrary" "const-oid?/arbitrary" "std" ];
+          "bytes" = [ "dep:bytes" "alloc" ];
+          "derive" = [ "dep:der_derive" ];
+          "flagset" = [ "dep:flagset" ];
+          "oid" = [ "dep:const-oid" ];
+          "pem" = [ "dep:pem-rfc7468" "alloc" "zeroize" ];
+          "std" = [ "alloc" ];
+          "time" = [ "dep:time" ];
+          "zeroize" = [ "dep:zeroize" ];
+        };
+        resolvedDefaultFeatures = [ "alloc" "oid" "std" "zeroize" ];
       };
       "diff" = rec {
         crateName = "diff";
@@ -2000,6 +2154,115 @@ rec {
         ];
         features = { };
         resolvedDefaultFeatures = [ "default" ];
+      };
+      "ed25519" = rec {
+        crateName = "ed25519";
+        version = "2.2.3";
+        edition = "2021";
+        sha256 = "0lydzdf26zbn82g7xfczcac9d7mzm3qgx934ijjrd5hjpjx32m8i";
+        authors = [
+          "RustCrypto Developers"
+        ];
+        dependencies = [
+          {
+            name = "pkcs8";
+            packageId = "pkcs8";
+            optional = true;
+          }
+          {
+            name = "signature";
+            packageId = "signature";
+            usesDefaultFeatures = false;
+          }
+        ];
+        features = {
+          "alloc" = [ "pkcs8?/alloc" ];
+          "default" = [ "std" ];
+          "pem" = [ "alloc" "pkcs8/pem" ];
+          "pkcs8" = [ "dep:pkcs8" ];
+          "serde" = [ "dep:serde" ];
+          "serde_bytes" = [ "serde" "dep:serde_bytes" ];
+          "std" = [ "pkcs8?/std" "signature/std" ];
+          "zeroize" = [ "dep:zeroize" ];
+        };
+        resolvedDefaultFeatures = [ "alloc" "default" "std" ];
+      };
+      "ed25519-dalek" = rec {
+        crateName = "ed25519-dalek";
+        version = "2.1.0";
+        edition = "2021";
+        sha256 = "1h13qm789m9gdjl6jazss80hqi8ll37m0afwcnw23zcbqjp8wqhz";
+        authors = [
+          "isis lovecruft <isis@patternsinthevoid.net>"
+          "Tony Arcieri <bascule@gmail.com>"
+          "Michael Rosenberg <michael@mrosenberg.pub>"
+        ];
+        dependencies = [
+          {
+            name = "curve25519-dalek";
+            packageId = "curve25519-dalek";
+            usesDefaultFeatures = false;
+            features = [ "digest" ];
+          }
+          {
+            name = "ed25519";
+            packageId = "ed25519";
+            usesDefaultFeatures = false;
+          }
+          {
+            name = "serde";
+            packageId = "serde";
+            optional = true;
+            usesDefaultFeatures = false;
+          }
+          {
+            name = "sha2";
+            packageId = "sha2";
+            usesDefaultFeatures = false;
+          }
+          {
+            name = "subtle";
+            packageId = "subtle";
+            usesDefaultFeatures = false;
+          }
+          {
+            name = "zeroize";
+            packageId = "zeroize";
+            optional = true;
+            usesDefaultFeatures = false;
+          }
+        ];
+        devDependencies = [
+          {
+            name = "curve25519-dalek";
+            packageId = "curve25519-dalek";
+            usesDefaultFeatures = false;
+            features = [ "digest" "rand_core" ];
+          }
+          {
+            name = "serde";
+            packageId = "serde";
+            features = [ "derive" ];
+          }
+        ];
+        features = {
+          "alloc" = [ "curve25519-dalek/alloc" "ed25519/alloc" "serde?/alloc" "zeroize/alloc" ];
+          "asm" = [ "sha2/asm" ];
+          "batch" = [ "alloc" "merlin" "rand_core" ];
+          "default" = [ "fast" "std" "zeroize" ];
+          "digest" = [ "signature/digest" ];
+          "fast" = [ "curve25519-dalek/precomputed-tables" ];
+          "legacy_compatibility" = [ "curve25519-dalek/legacy_compatibility" ];
+          "merlin" = [ "dep:merlin" ];
+          "pem" = [ "alloc" "ed25519/pem" "pkcs8" ];
+          "pkcs8" = [ "ed25519/pkcs8" ];
+          "rand_core" = [ "dep:rand_core" ];
+          "serde" = [ "dep:serde" "ed25519/serde" ];
+          "signature" = [ "dep:signature" ];
+          "std" = [ "alloc" "ed25519/std" "serde?/std" "sha2/std" ];
+          "zeroize" = [ "dep:zeroize" "curve25519-dalek/zeroize" ];
+        };
+        resolvedDefaultFeatures = [ "alloc" "default" "fast" "std" "zeroize" ];
       };
       "either" = rec {
         crateName = "either";
@@ -2184,6 +2447,18 @@ rec {
           }
         ];
 
+      };
+      "fiat-crypto" = rec {
+        crateName = "fiat-crypto";
+        version = "0.2.5";
+        edition = "2018";
+        sha256 = "1dxn0g50pv0ppal779vi7k40fr55pbhkyv4in7i13pgl4sn3wmr7";
+        authors = [
+          "Fiat Crypto library authors <jgross@mit.edu>"
+        ];
+        features = {
+          "default" = [ "std" ];
+        };
       };
       "fixedbitset" = rec {
         crateName = "fixedbitset";
@@ -2543,11 +2818,11 @@ rec {
           }
           {
             name = "quote";
-            packageId = "quote 1.0.26";
+            packageId = "quote 1.0.33";
           }
           {
             name = "syn";
-            packageId = "syn 2.0.16";
+            packageId = "syn 2.0.39";
             features = [ "full" ];
           }
         ];
@@ -4399,6 +4674,14 @@ rec {
             packageId = "data-encoding";
           }
           {
+            name = "ed25519";
+            packageId = "ed25519";
+          }
+          {
+            name = "ed25519-dalek";
+            packageId = "ed25519-dalek";
+          }
+          {
             name = "futures-util";
             packageId = "futures-util";
             optional = true;
@@ -4924,11 +5207,11 @@ rec {
           }
           {
             name = "quote";
-            packageId = "quote 1.0.26";
+            packageId = "quote 1.0.33";
           }
           {
             name = "syn";
-            packageId = "syn 2.0.16";
+            packageId = "syn 2.0.39";
             features = [ "full" "visit-mut" ];
           }
         ];
@@ -4951,6 +5234,40 @@ rec {
         ];
 
       };
+      "pkcs8" = rec {
+        crateName = "pkcs8";
+        version = "0.10.2";
+        edition = "2021";
+        sha256 = "1dx7w21gvn07azszgqd3ryjhyphsrjrmq5mmz1fbxkj5g0vv4l7r";
+        authors = [
+          "RustCrypto Developers"
+        ];
+        dependencies = [
+          {
+            name = "der";
+            packageId = "der";
+            features = [ "oid" ];
+          }
+          {
+            name = "spki";
+            packageId = "spki";
+          }
+        ];
+        features = {
+          "3des" = [ "encryption" "pkcs5/3des" ];
+          "alloc" = [ "der/alloc" "der/zeroize" "spki/alloc" ];
+          "des-insecure" = [ "encryption" "pkcs5/des-insecure" ];
+          "encryption" = [ "alloc" "pkcs5/alloc" "pkcs5/pbes2" "rand_core" ];
+          "getrandom" = [ "rand_core/getrandom" ];
+          "pem" = [ "alloc" "der/pem" "spki/pem" ];
+          "pkcs5" = [ "dep:pkcs5" ];
+          "rand_core" = [ "dep:rand_core" ];
+          "sha1-insecure" = [ "encryption" "pkcs5/sha1-insecure" ];
+          "std" = [ "alloc" "der/std" "spki/std" ];
+          "subtle" = [ "dep:subtle" ];
+        };
+        resolvedDefaultFeatures = [ "alloc" "std" ];
+      };
       "pkg-config" = rec {
         crateName = "pkg-config";
         version = "0.3.27";
@@ -4960,6 +5277,21 @@ rec {
           "Alex Crichton <alex@alexcrichton.com>"
         ];
 
+      };
+      "platforms" = rec {
+        crateName = "platforms";
+        version = "3.2.0";
+        edition = "2018";
+        sha256 = "1c6bzwn877aqdbbmyqsl753ycbciwvbdh4lpzijb8vrfb4zsprhl";
+        authors = [
+          "Tony Arcieri <bascule@gmail.com>"
+          "Sergey \"Shnatsel\" Davidoff <shnatsel@gmail.com>"
+        ];
+        features = {
+          "default" = [ "std" ];
+          "serde" = [ "dep:serde" ];
+        };
+        resolvedDefaultFeatures = [ "default" "std" ];
       };
       "plotters" = rec {
         crateName = "plotters";
@@ -5102,7 +5434,7 @@ rec {
           }
           {
             name = "syn";
-            packageId = "syn 2.0.16";
+            packageId = "syn 2.0.39";
             usesDefaultFeatures = false;
             features = [ "full" ];
           }
@@ -5110,7 +5442,7 @@ rec {
         devDependencies = [
           {
             name = "syn";
-            packageId = "syn 2.0.16";
+            packageId = "syn 2.0.39";
             usesDefaultFeatures = false;
             features = [ "parsing" ];
           }
@@ -5138,7 +5470,7 @@ rec {
           }
           {
             name = "quote";
-            packageId = "quote 1.0.26";
+            packageId = "quote 1.0.33";
           }
           {
             name = "syn";
@@ -5176,7 +5508,7 @@ rec {
           }
           {
             name = "quote";
-            packageId = "quote 1.0.26";
+            packageId = "quote 1.0.33";
           }
         ];
         buildDependencies = [
@@ -5407,7 +5739,7 @@ rec {
           }
           {
             name = "syn";
-            packageId = "syn 2.0.16";
+            packageId = "syn 2.0.39";
             optional = true;
             features = [ "full" ];
           }
@@ -5459,11 +5791,11 @@ rec {
           }
           {
             name = "quote";
-            packageId = "quote 1.0.26";
+            packageId = "quote 1.0.33";
           }
           {
             name = "syn";
-            packageId = "syn 2.0.16";
+            packageId = "syn 2.0.39";
             features = [ "extra-traits" ];
           }
         ];
@@ -5525,11 +5857,11 @@ rec {
         };
         resolvedDefaultFeatures = [ "default" "proc-macro" ];
       };
-      "quote 1.0.26" = rec {
+      "quote 1.0.33" = rec {
         crateName = "quote";
-        version = "1.0.26";
+        version = "1.0.33";
         edition = "2018";
-        sha256 = "1z521piwggwzs0rj4wjx4ma6af1g6f1h5dkp382y5akqyx5sy924";
+        sha256 = "1biw54hbbr12wdwjac55z1m2x2rylciw83qnjn564a3096jgqrsj";
         authors = [
           "David Tolnay <dtolnay@gmail.com>"
         ];
@@ -6349,6 +6681,23 @@ rec {
         };
         resolvedDefaultFeatures = [ "default" "std" ];
       };
+      "rustc_version" = rec {
+        crateName = "rustc_version";
+        version = "0.4.0";
+        edition = "2018";
+        sha256 = "0rpk9rcdk405xhbmgclsh4pai0svn49x35aggl4nhbkd4a2zb85z";
+        authors = [
+          "Dirkjan Ochtman <dirkjan@ochtman.nl>"
+          "Marvin Löbel <loebel.marvin@gmail.com>"
+        ];
+        dependencies = [
+          {
+            name = "semver";
+            packageId = "semver";
+          }
+        ];
+
+      };
       "rustix" = rec {
         crateName = "rustix";
         version = "0.37.19";
@@ -6879,6 +7228,20 @@ rec {
         };
         resolvedDefaultFeatures = [ "OSX_10_9" ];
       };
+      "semver" = rec {
+        crateName = "semver";
+        version = "1.0.20";
+        edition = "2018";
+        sha256 = "140hmbfa743hbmah1zjf07s8apavhvn04204qjigjiz5w6iscvw3";
+        authors = [
+          "David Tolnay <dtolnay@gmail.com>"
+        ];
+        features = {
+          "default" = [ "std" ];
+          "serde" = [ "dep:serde" ];
+        };
+        resolvedDefaultFeatures = [ "default" "std" ];
+      };
       "serde" = rec {
         crateName = "serde";
         version = "1.0.162";
@@ -6925,11 +7288,11 @@ rec {
           }
           {
             name = "quote";
-            packageId = "quote 1.0.26";
+            packageId = "quote 1.0.33";
           }
           {
             name = "syn";
-            packageId = "syn 2.0.16";
+            packageId = "syn 2.0.39";
           }
         ];
         features = { };
@@ -7094,6 +7457,30 @@ rec {
           }
         ];
 
+      };
+      "signature" = rec {
+        crateName = "signature";
+        version = "2.2.0";
+        edition = "2021";
+        sha256 = "1pi9hd5vqfr3q3k49k37z06p7gs5si0in32qia4mmr1dancr6m3p";
+        authors = [
+          "RustCrypto Developers"
+        ];
+        dependencies = [
+          {
+            name = "rand_core";
+            packageId = "rand_core";
+            optional = true;
+            usesDefaultFeatures = false;
+          }
+        ];
+        features = {
+          "derive" = [ "dep:derive" ];
+          "digest" = [ "dep:digest" ];
+          "rand_core" = [ "dep:rand_core" ];
+          "std" = [ "alloc" "rand_core?/std" ];
+        };
+        resolvedDefaultFeatures = [ "alloc" "std" ];
       };
       "slab" = rec {
         crateName = "slab";
@@ -7289,6 +7676,38 @@ rec {
         ];
 
       };
+      "spki" = rec {
+        crateName = "spki";
+        version = "0.7.2";
+        edition = "2021";
+        sha256 = "0jhq00sv4w3psdi6li3vjjmspc6z2d9b1wc1srbljircy1p9j7lx";
+        authors = [
+          "RustCrypto Developers"
+        ];
+        dependencies = [
+          {
+            name = "base64ct";
+            packageId = "base64ct";
+            optional = true;
+            usesDefaultFeatures = false;
+          }
+          {
+            name = "der";
+            packageId = "der";
+            features = [ "oid" ];
+          }
+        ];
+        features = {
+          "alloc" = [ "base64ct?/alloc" "der/alloc" ];
+          "arbitrary" = [ "std" "dep:arbitrary" "der/arbitrary" ];
+          "base64" = [ "dep:base64ct" ];
+          "fingerprint" = [ "sha2" ];
+          "pem" = [ "alloc" "der/pem" ];
+          "sha2" = [ "dep:sha2" ];
+          "std" = [ "der/std" "alloc" ];
+        };
+        resolvedDefaultFeatures = [ "alloc" "std" ];
+      };
       "static_assertions" = rec {
         crateName = "static_assertions";
         version = "1.1.0";
@@ -7336,7 +7755,7 @@ rec {
           }
           {
             name = "quote";
-            packageId = "quote 1.0.26";
+            packageId = "quote 1.0.33";
           }
           {
             name = "structmeta-derive";
@@ -7372,7 +7791,7 @@ rec {
           }
           {
             name = "quote";
-            packageId = "quote 1.0.26";
+            packageId = "quote 1.0.33";
           }
           {
             name = "syn";
@@ -7450,7 +7869,7 @@ rec {
           }
           {
             name = "quote";
-            packageId = "quote 1.0.26";
+            packageId = "quote 1.0.33";
             optional = true;
             usesDefaultFeatures = false;
           }
@@ -7468,11 +7887,11 @@ rec {
         };
         resolvedDefaultFeatures = [ "clone-impls" "default" "derive" "extra-traits" "full" "parsing" "printing" "proc-macro" "quote" "visit" "visit-mut" ];
       };
-      "syn 2.0.16" = rec {
+      "syn 2.0.39" = rec {
         crateName = "syn";
-        version = "2.0.16";
+        version = "2.0.39";
         edition = "2021";
-        sha256 = "00fg96sqsswq7nwc8yxxhj3dyf96zrksxh0rxjnqxnzznpa73xm6";
+        sha256 = "0ymyhxnk1yi4pzf72qk3lrdm9lgjwcrcwci0hhz5vx7wya88prr3";
         authors = [
           "David Tolnay <dtolnay@gmail.com>"
         ];
@@ -7484,7 +7903,7 @@ rec {
           }
           {
             name = "quote";
-            packageId = "quote 1.0.26";
+            packageId = "quote 1.0.33";
             optional = true;
             usesDefaultFeatures = false;
           }
@@ -7685,7 +8104,7 @@ rec {
           }
           {
             name = "quote";
-            packageId = "quote 1.0.26";
+            packageId = "quote 1.0.33";
           }
           {
             name = "syn";
@@ -7746,7 +8165,7 @@ rec {
           }
           {
             name = "quote";
-            packageId = "quote 1.0.26";
+            packageId = "quote 1.0.33";
           }
           {
             name = "structmeta";
@@ -7822,11 +8241,11 @@ rec {
           }
           {
             name = "quote";
-            packageId = "quote 1.0.26";
+            packageId = "quote 1.0.33";
           }
           {
             name = "syn";
-            packageId = "syn 2.0.16";
+            packageId = "syn 2.0.39";
           }
         ];
 
@@ -8143,11 +8562,11 @@ rec {
           }
           {
             name = "quote";
-            packageId = "quote 1.0.26";
+            packageId = "quote 1.0.33";
           }
           {
             name = "syn";
-            packageId = "syn 2.0.16";
+            packageId = "syn 2.0.39";
             features = [ "full" ];
           }
         ];
@@ -8603,11 +9022,11 @@ rec {
           }
           {
             name = "quote";
-            packageId = "quote 1.0.26";
+            packageId = "quote 1.0.33";
           }
           {
             name = "syn";
-            packageId = "syn 2.0.16";
+            packageId = "syn 2.0.39";
           }
         ];
         features = {
@@ -8873,11 +9292,11 @@ rec {
           }
           {
             name = "quote";
-            packageId = "quote 1.0.26";
+            packageId = "quote 1.0.33";
           }
           {
             name = "syn";
-            packageId = "syn 2.0.16";
+            packageId = "syn 2.0.39";
             usesDefaultFeatures = false;
             features = [ "full" "parsing" "printing" "visit-mut" "clone-impls" "extra-traits" "proc-macro" ];
           }
@@ -9443,7 +9862,7 @@ rec {
           }
           {
             name = "quote";
-            packageId = "quote 1.0.26";
+            packageId = "quote 1.0.33";
           }
           {
             name = "syn";
@@ -10292,7 +10711,7 @@ rec {
           }
           {
             name = "quote";
-            packageId = "quote 1.0.26";
+            packageId = "quote 1.0.33";
           }
           {
             name = "syn";
@@ -10354,7 +10773,7 @@ rec {
         dependencies = [
           {
             name = "quote";
-            packageId = "quote 1.0.26";
+            packageId = "quote 1.0.33";
           }
           {
             name = "wasm-bindgen-macro-support";
@@ -10382,7 +10801,7 @@ rec {
           }
           {
             name = "quote";
-            packageId = "quote 1.0.26";
+            packageId = "quote 1.0.33";
           }
           {
             name = "syn";
@@ -11930,6 +12349,23 @@ rec {
           "Sergio Benitez <sb@sergio.bz>"
         ];
 
+      };
+      "zeroize" = rec {
+        crateName = "zeroize";
+        version = "1.7.0";
+        edition = "2021";
+        sha256 = "0bfvby7k9pdp6623p98yz2irqnamcyzpn7zh20nqmdn68b0lwnsj";
+        authors = [
+          "The RustCrypto Project Developers"
+        ];
+        features = {
+          "default" = [ "alloc" ];
+          "derive" = [ "zeroize_derive" ];
+          "serde" = [ "dep:serde" ];
+          "std" = [ "alloc" ];
+          "zeroize_derive" = [ "dep:zeroize_derive" ];
+        };
+        resolvedDefaultFeatures = [ "alloc" ];
       };
       "zstd" = rec {
         crateName = "zstd";
