@@ -74,6 +74,15 @@ let
         "fuse-backend-rs"
         "test-generator"
         "wu-manber"
+
+        "futures-channel"
+        "futures-core"
+        "futures-executor"
+        "futures-io"
+        "futures-macro"
+        "futures-sink"
+        "futures-task"
+        "futures-util"
       ]);
   };
 in
