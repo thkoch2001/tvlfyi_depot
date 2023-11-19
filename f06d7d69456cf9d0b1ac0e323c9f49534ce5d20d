@@ -123,6 +123,24 @@
       "parentUuid": "a4932e09_e6a98fdb",
       "revId": "f06d7d69456cf9d0b1ac0e323c9f49534ce5d20d",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0d187809_fabb36d5",
+        "filename": "tvix/nix-compat/src/nar/writer/async.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 124,
+      "author": {
+        "id": 1000005
+      },
+      "writtenOn": "2023-11-19T05:33:47Z",
+      "side": 1,
+      "message": "https://cl.tvl.fyi/c/depot/+/10086 patches this, so just rebase onto that.",
+      "parentUuid": "3530447c_1cdb012d",
+      "revId": "f06d7d69456cf9d0b1ac0e323c9f49534ce5d20d",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
