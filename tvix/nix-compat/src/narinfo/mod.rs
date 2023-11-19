@@ -26,7 +26,10 @@ use std::{
 
 use crate::{nixbase32, nixhash::CAHash, store_path::StorePathRef};
 
+mod fingerprint;
 mod signature;
+
+pub use fingerprint::fingerprint;
 
 pub use signature::{Signature, SignatureError};
 
@@ -277,6 +280,17 @@ impl<'a> NarInfo<'a> {
             file_size,
             flags,
         })
+    }
+
+    /// Computes the fingerprint string for certain fields in this [NarInfo].
+    /// This fingerprint is signed in [self.signatures].
+    pub fn fingerprint(&self) -> String {
+        fingerprint(
+            &self.store_path,
+            &self.nar_hash,
+            self.nar_size,
+            self.references.iter(),
+        )
     }
 }
 
