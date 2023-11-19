@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bedd88cf_b1767193",
+        "filename": "tvix/eval/src/value/thunk.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 101,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2023-11-19T09:34:54Z",
+      "side": 1,
+      "message": "function name is out of date here",
+      "range": {
+        "startLine": 101,
+        "startChar": 51,
+        "endLine": 101,
+        "endChar": 63
+      },
+      "revId": "de434b53bf89ab0d3626e423fb2c900632e45351",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
