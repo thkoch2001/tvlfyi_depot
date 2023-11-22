@@ -34,6 +34,24 @@
       "parentUuid": "cf5e78f2_c5870434",
       "revId": "8905fd0774a3e77a597030a02dc73c2fb46a3ff0",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "22418276_95d58100",
+        "filename": "tvix/nix-compat/src/nixhash/ca_hash.rs",
+        "patchSetId": 7
+      },
+      "lineNbr": 62,
+      "author": {
+        "id": 1000073
+      },
+      "writtenOn": "2023-11-22T17:50:59Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "1f3ce88e_4c11be21",
+      "revId": "8905fd0774a3e77a597030a02dc73c2fb46a3ff0",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
