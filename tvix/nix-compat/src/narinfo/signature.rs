@@ -9,6 +9,10 @@ pub struct Signature<'a> {
 }
 
 impl<'a> Signature<'a> {
+    pub fn new(name: &'a str, bytes: [u8; 64]) -> Self {
+        Self { name, bytes }
+    }
+
     pub fn parse(input: &'a str) -> Result<Signature<'a>, SignatureError> {
         let (name, bytes64) = input
             .split_once(':')
