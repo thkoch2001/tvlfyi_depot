@@ -34,6 +34,24 @@
       "parentUuid": "6938ef46_00b69181",
       "revId": "47fc833970cf2ccdfcbc80495dd12b02915ace8f",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ccf7a1bd_0b7a9140",
+        "filename": "tvix/store/src/proto/mod.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 208,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-11-22T20:06:13Z",
+      "side": 1,
+      "message": "The only way you can get these into the system is through a PathInfoService trait, and the comment there say we must validate them before passing along.\n\nWe should probably add this comment to\n\nIt\u0027s the same with",
+      "parentUuid": "fc45d4e9_236573d8",
+      "revId": "47fc833970cf2ccdfcbc80495dd12b02915ace8f",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
