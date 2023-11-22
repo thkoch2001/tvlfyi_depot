@@ -176,6 +176,40 @@ impl PathInfo {
     }
 }
 
+impl TryFrom<&nar_info::Ca> for nix_compat::nixhash::CAHash {
+    type Error = std::array::TryFromSliceError;
+
+    fn try_from(value: &nar_info::Ca) -> Result<Self, Self::Error> {
+        Ok(match value.r#type {
+            typ if typ == nar_info::ca::Hash::FlatMd5 as i32 => {
+                Self::Flat(NixHash::Md5(value.digest[..].try_into()?))
+            }
+            typ if typ == nar_info::ca::Hash::FlatSha1 as i32 => {
+                Self::Flat(NixHash::Sha1(value.digest[..].try_into()?))
+            }
+            typ if typ == nar_info::ca::Hash::FlatSha256 as i32 => {
+                Self::Flat(NixHash::Sha256(value.digest[..].try_into()?))
+            }
+            typ if typ == nar_info::ca::Hash::FlatSha512 as i32 => {
+                Self::Flat(NixHash::Sha512(Box::new(value.digest[..].try_into()?)))
+            }
+            typ if typ == nar_info::ca::Hash::NarMd5 as i32 => {
+                Self::Nar(NixHash::Md5(value.digest[..].try_into()?))
+            }
+            typ if typ == nar_info::ca::Hash::NarSha1 as i32 => {
+                Self::Nar(NixHash::Sha1(value.digest[..].try_into()?))
+            }
+            typ if typ == nar_info::ca::Hash::NarSha256 as i32 => {
+                Self::Nar(NixHash::Sha256(value.digest[..].try_into()?))
+            }
+            typ if typ == nar_info::ca::Hash::NarSha512 as i32 => {
+                Self::Nar(NixHash::Sha512(Box::new(value.digest[..].try_into()?)))
+            }
+            _ => unreachable!(), // at least until we add more types and forget to add here
+        })
+    }
+}
+
 impl From<&nix_compat::nixhash::CAHash> for nar_info::Ca {
     fn from(value: &nix_compat::nixhash::CAHash) -> Self {
         nar_info::Ca {
