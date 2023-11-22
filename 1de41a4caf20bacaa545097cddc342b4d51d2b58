@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ce5d6ab3_415274c9",
+        "filename": "tvix/nix-compat/src/store_path/mod.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 183,
+      "author": {
+        "id": 1000005
+      },
+      "writtenOn": "2023-11-22T20:04:38Z",
+      "side": 1,
+      "message": "Result\u003cSelf, Error\u003e",
+      "range": {
+        "startLine": 183,
+        "startChar": 65,
+        "endLine": 183,
+        "endChar": 96
+      },
+      "revId": "1de41a4caf20bacaa545097cddc342b4d51d2b58",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
