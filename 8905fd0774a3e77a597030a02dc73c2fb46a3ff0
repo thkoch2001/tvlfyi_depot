@@ -16,6 +16,24 @@
       "message": "`to_nixbase32_string` or is there a specific Nix\u0027s nixbase32?",
       "revId": "8905fd0774a3e77a597030a02dc73c2fb46a3ff0",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1f3ce88e_4c11be21",
+        "filename": "tvix/nix-compat/src/nixhash/ca_hash.rs",
+        "patchSetId": 7
+      },
+      "lineNbr": 62,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-11-22T17:50:19Z",
+      "side": 1,
+      "message": "This is mostly to keep symmetry with the other {from}_nix_{encoding}_str[ing] methods.",
+      "parentUuid": "cf5e78f2_c5870434",
+      "revId": "8905fd0774a3e77a597030a02dc73c2fb46a3ff0",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
