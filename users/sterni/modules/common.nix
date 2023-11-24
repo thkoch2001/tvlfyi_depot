@@ -46,7 +46,7 @@ in
 
     services = {
       journald.extraConfig = ''
-        SystemMaxUse=1024M
+        SystemMaxUse=10G
       '';
 
       openssh.enable = true;
