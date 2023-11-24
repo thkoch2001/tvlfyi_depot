@@ -69,11 +69,6 @@
   (telephone-line-defsegment telephone-line-last-window-segment ()
     (telephone-misc-if-last-window))
 
-  ;; Display the current EXWM workspace index in the mode-line
-  (telephone-line-defsegment telephone-line-exwm-workspace-index ()
-    (when (bottom-right-window-p)
-      (format "[%s]" exwm-workspace-current-index)))
-
   ;; Define a highlight font for ~ important ~ information in the last
   ;; window.
   (defface special-highlight '((t (:foreground "white" :background "#5f627f"))) "")
@@ -87,8 +82,7 @@
 
   (setq telephone-line-rhs
         '((accent . (telephone-line-major-mode-segment))
-          (nil . (telephone-line-last-window-segment
-                  telephone-line-exwm-workspace-index))
+          (nil . (telephone-line-last-window-segment))
 
           ;; TODO(tazjin): lets not do this particular thing while I
           ;; don't actually run notmuch, there are too many things
