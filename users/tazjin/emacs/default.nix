@@ -93,6 +93,7 @@ pkgs.makeOverridable
       undo-tree
       uuidgen
       vertico
+      vertico-posframe
       vterm
       web-mode
       websocket

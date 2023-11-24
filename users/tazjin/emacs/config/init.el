@@ -197,6 +197,10 @@
   :config
   (vertico-mode))
 
+(use-package vertico-posframe
+  :config
+  (vertico-posframe-mode 1))
+
 (use-package web-mode)
 (use-package yaml-ts-mode)
 (use-package zoxide)
