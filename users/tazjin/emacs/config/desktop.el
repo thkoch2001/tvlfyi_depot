@@ -105,15 +105,34 @@
   (add-hook 'exwm-update-title-hook titlef))
 
 (fringe-mode 3)
+
+;; tab-bar related config
+(setq tab-bar-show 1)
+(setq tab-bar-tab-hints t)
+(setq tab-bar-new-tab-choice
+      (lambda () (get-buffer-create "*scratch*")))
+
+(tab-bar-mode 1)
+
 (exwm-enable)
+
+;; Tab-management shortcuts
+
+(dotimes (i 8)
+  (exwm-input-set-key (kbd (format "s-%d" i)) #'tab-bar-select-tab))
+(exwm-input-set-key (kbd "s-9") #'tab-last)
+(exwm-input-set-key (kbd "s-f") #'tab-next)
+(exwm-input-set-key (kbd "s-b") #'tab-recent)
+(exwm-input-set-key (kbd "s-w") #'tab-close)
+(exwm-input-set-key (kbd "s-n") #'tab-new)
 
 ;; Launch applications / any command with completion (dmenu style!)
 (exwm-input-set-key (kbd "s-d") #'run-xdg-app)
 (exwm-input-set-key (kbd "s-x") #'run-external-command)
 (exwm-input-set-key (kbd "s-p") #'password-store-lookup)
 
-;; Add X11 terminal selector to a key
-(exwm-input-set-key (kbd "C-x t") #'ts/switch-to-terminal)
+;; Add vterm selector to a key
+(exwm-input-set-key (kbd "s-v") #'ts/switch-to-terminal)
 
 ;; Toggle between line-mode / char-mode
 (exwm-input-set-key (kbd "C-c C-t C-t") #'exwm-input-toggle-keyboard)
