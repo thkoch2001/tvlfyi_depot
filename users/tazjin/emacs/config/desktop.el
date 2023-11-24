@@ -98,9 +98,6 @@
     (`(,class ,title) (format "%s<%s>" class (s-truncate 12 title)))))
 
 ;; EXWM launch configuration
-;;
-;; This used to use use-package, but when something breaks use-package
-;; it doesn't exactly make debugging any easier.
 
 (let ((titlef (lambda ()
                 (exwm-workspace-rename-buffer (create-window-name)))))
@@ -109,88 +106,6 @@
 
 (fringe-mode 3)
 (exwm-enable)
-
-;; Create 10 EXWM workspaces
-(setq exwm-workspace-number 10)
-
-;; 's-N': Switch to certain workspace, but switch back to the previous
-;; one when tapping twice (emulates i3's `back_and_forth' feature)
-(defvar *exwm-workspace-from-to* '(-1 . -1))
-(defun exwm-workspace-switch-back-and-forth (target-idx)
-  ;; If the current workspace is the one we last jumped to, and we are
-  ;; asked to jump to it again, set the target back to the previous
-  ;; one.
-  (when (and (eq exwm-workspace-current-index (cdr *exwm-workspace-from-to*))
-             (eq target-idx exwm-workspace-current-index))
-    (setq target-idx (car *exwm-workspace-from-to*)))
-
-  (setq *exwm-workspace-from-to*
-        (cons exwm-workspace-current-index target-idx))
-
-  (exwm-workspace-switch-create target-idx))
-
-(dotimes (i 10)
-  (exwm-input-set-key (kbd (format "s-%d" i))
-                      `(lambda ()
-                         (interactive)
-                         (exwm-workspace-switch-back-and-forth ,i))))
-
-;; Implement MRU functionality for EXWM workspaces, making it possible
-;; to jump to the previous/next workspace very easily.
-(defvar *recent-workspaces-ring* (make-ring 5)
-  "Ring of recently used EXWM workspaces.")
-
-(defvar *workspace-ring-is-rotating* nil
-  "Variable used to track whether the workspace ring is rotating,
-and suppress insertions into the ring in that case.")
-
-(defun update-recent-workspaces ()
-  "Hook run on EXWM workspace switches, adding new workspaces to the
-ring."
-
-  (unless *workspace-ring-is-rotating*
-    (ring-remove+insert+extend *recent-workspaces-ring* exwm-workspace-current-index)))
-
-(add-to-list 'exwm-workspace-switch-hook #'update-recent-workspaces)
-
-(defun switch-to-previous-workspace ()
-  "Switch to the previous workspace in the workspace ring."
-  (interactive)
-
-  (when-let ((*workspace-ring-is-rotating* t)
-             (previous (condition-case err (ring-next *recent-workspaces-ring*
-                                                      exwm-workspace-current-index)
-                         ('error (message "No previous workspace in history!") nil))))
-    (exwm-workspace-switch previous)))
-
-(exwm-input-set-key (kbd "s-b") #'switch-to-previous-workspace)
-
-(defun switch-to-next-workspace ()
-  "Switch to the next workspace in the MRU workspace list."
-  (interactive)
-
-  (when-let ((*workspace-ring-is-rotating* t)
-             (next (condition-case err (ring-previous *recent-workspaces-ring*
-                                                      exwm-workspace-current-index)
-                     ('error (message "No next workspace in history!") nil))))
-    (exwm-workspace-switch next)))
-
-(exwm-input-set-key (kbd "s-f") #'switch-to-next-workspace)
-
-;; Provide a binding for jumping to a buffer on a workspace.
-(defun exwm-jump-to-buffer ()
-  "Jump to a workspace on which the target buffer is displayed."
-  (interactive)
-  (let ((exwm-layout-show-all-buffers nil)
-        (initial exwm-workspace-current-index))
-    (call-interactively #'exwm-workspace-switch-to-buffer)
-    ;; After jumping, update the back-and-forth list like on a direct
-    ;; index jump.
-    (when (not (eq initial exwm-workspace-current-index))
-      (setq *exwm-workspace-from-to*
-            (cons initial exwm-workspace-current-index)))))
-
-(exwm-input-set-key (kbd "C-c j") #'exwm-jump-to-buffer)
 
 ;; Launch applications / any command with completion (dmenu style!)
 (exwm-input-set-key (kbd "s-d") #'run-xdg-app)
@@ -225,10 +140,6 @@ ring."
 (bind-xkb "no" "k n")
 (bind-xkb "ru" "k r")
 (bind-xkb "se" "k s")
-
-;; These are commented out because Emacs no longer starts (??) if
-;; they're set at launch.
-;;
 (bind-xkb "us" "л г")
 (bind-xkb "de" "л в")
 (bind-xkb "no" "л т")
@@ -253,104 +164,9 @@ ring."
 
 ;; Configure xrandr (multi-monitor setup).
 
-(defun set-randr-config (screens)
-  (setq exwm-randr-workspace-monitor-plist
-        (-flatten (-map (lambda (screen)
-                          (-map (lambda (screen-id) (list screen-id (car screen))) (cdr screen)))
-                        screens))))
-
-;; Layouts for Tverskoy (X13 AMD laptop)
-(defun randr-tverskoy-layout-single ()
-  "Laptop screen only!"
-  (interactive)
-  (set-randr-config '(("eDP" (number-sequence 0 9))))
-  (shell-command "xrandr --output eDP --auto --primary")
-  (shell-command "xrandr --output HDMI-A-0 --off")
-  (exwm-randr-refresh))
-
-(defun randr-tverskoy-split-workspace ()
-  "Split the workspace across two screens, assuming external to the left."
-  (interactive)
-  (set-randr-config
-   '(("HDMI-A-0" 1 2 3 4 5 6 7 8)
-     ("eDP" 9 0)))
-
-  (shell-command "xrandr --output HDMI-A-0 --left-of eDP --auto")
-  (exwm-randr-refresh))
-
-(defun randr-tverskoy-tv ()
-  "Split off a workspace to the TV over HDMI."
-  (interactive)
-  (set-randr-config
-   '(("eDP" 1 2 3 4 5 6 7 8 9)
-     ("HDMI-A-0" 0)))
-
-  (shell-command "xrandr --output HDMI-A-0 --left-of eDP --mode 1920x1080")
-  (exwm-randr-refresh))
-
-;; Layouts for frog (desktop)
-
-(defun randr-frog-layout-right-only ()
-  "Use only the right screen on frog."
-  (interactive)
-  (set-randr-config `(("DisplayPort-0" ,(number-sequence 0 9))))
-  (shell-command "xrandr --output DisplayPort-0 --off")
-  (shell-command "xrandr --output DisplayPort-1 --auto --primary"))
-
-(defun randr-frog-layout-both ()
-  "Use the left and right screen on frog."
-  (interactive)
-  (set-randr-config `(("DisplayPort-0" 1 2 3 4 5)
-                      ("DisplayPort-1" 6 7 8 9 0)))
-
-  (shell-command "xrandr --output DisplayPort-0 --auto --primary --left-of DisplayPort-1")
-  (shell-command "xrandr --output DisplayPort-1 --auto --right-of DisplayPort-0 --rotate left"))
-
-(defun randr-khamovnik-layout-office ()
-  "Use the left and right screen on khamovnik, in the office."
-  (interactive)
-  (set-randr-config `(("eDP-1" 1 2)
-                      ("DP-2" 3 4 5 6 7 8 9 0)))
-
-  (shell-command "xrandr --output DP-2 --mode 2560x1440 --primary --right-of eDP-1")
-  (exwm-randr-refresh))
-
-(defun randr-khamovnik-layout-home ()
-  "Use the left and right screen on khamovnik, at home."
-  (interactive)
-  (set-randr-config `(("HDMI-1" 1 2 3 4 5 6 7 8)
-                      ("eDP-1" 9 0)))
-
-  (shell-command "xrandr --output HDMI-1 --auto --primary --left-of eDP-1")
-  (exwm-randr-refresh))
-
-(defun randr-khamovnik-layout-single ()
-  "Use only the internal screen."
-  (interactive)
-  (set-randr-config '(("eDP-1" (number-sequence 0 9))))
-  (shell-command "xrandr --output eDP-1 --auto --primary")
-  (shell-command "xrandr --output DP-2 --off")
-  (shell-command "xrandr --output HDMI-1 --off")
-  (exwm-randr-refresh))
-
-(pcase (s-trim (shell-command-to-string "hostname"))
-  ("tverskoy"
-   (exwm-input-set-key (kbd "s-m s") #'randr-tverskoy-layout-single)
-   (exwm-input-set-key (kbd "s-m 2") #'randr-tverskoy-split-workspace))
-
-  ("frog"
-   (exwm-input-set-key (kbd "s-m b") #'randr-frog-layout-both)
-   (exwm-input-set-key (kbd "s-m r") #'randr-frog-layout-right-only))
-
-  ("khamovnik"
-   (exwm-input-set-key (kbd "s-m 2") #'randr-khamovnik-layout-office)
-   (exwm-input-set-key (kbd "s-m s") #'randr-khamovnik-layout-single)))
-
 ;; Notmuch shortcuts as EXWM globals
 ;; (g m => gmail)
 (exwm-input-set-key (kbd "s-g m") #'notmuch)
-
-(exwm-randr-enable)
 
 ;; Let buffers move seamlessly between workspaces by making them
 ;; accessible in selectors on all frames.
