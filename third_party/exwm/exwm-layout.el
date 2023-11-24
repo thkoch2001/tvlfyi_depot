@@ -146,8 +146,8 @@ See variable `exwm-layout-auto-iconify'."
       (exwm--set-geometry id x y width height)
       (xcb:+request exwm--connection (make-instance 'xcb:MapWindow :window id))
       (exwm-layout--set-state id xcb:icccm:WM_STATE:NormalState)
-      (setq exwm--ewmh-state
-            (delq xcb:Atom:_NET_WM_STATE_HIDDEN exwm--ewmh-state))
+      ;; (setq exwm--ewmh-state
+      ;;       (delq xcb:Atom:_NET_WM_STATE_HIDDEN exwm--ewmh-state))
       (exwm-layout--set-ewmh-state id)
       (exwm-layout--auto-iconify)))
   (xcb:flush exwm--connection))
@@ -182,7 +182,7 @@ See variable `exwm-layout-auto-iconify'."
                          :window id :value-mask xcb:CW:EventMask
                          :event-mask (exwm--get-client-event-mask)))
       (exwm-layout--set-state id xcb:icccm:WM_STATE:IconicState)
-      (cl-pushnew xcb:Atom:_NET_WM_STATE_HIDDEN exwm--ewmh-state)
+      ;; (cl-pushnew xcb:Atom:_NET_WM_STATE_HIDDEN exwm--ewmh-state)
       (exwm-layout--set-ewmh-state id)
       (exwm-layout--auto-iconify)
       (xcb:flush exwm--connection))))
