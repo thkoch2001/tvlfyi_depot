@@ -18,6 +18,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "4ed020af_33230b6f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000066
+      },
+      "writtenOn": "2023-11-25T03:03:29Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4bd7050f_ed798f55",
+      "revId": "50fdb8e2aafc46d8a16f131e0972f5b8332e4ede",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "ad7ce3a3_6fecc277",
@@ -31,6 +49,30 @@
       "writtenOn": "2023-11-19T09:39:21Z",
       "side": 1,
       "message": "or: do this after moving to mmtk, so that value clones are cheap (gc\u0027d) pointer copies",
+      "range": {
+        "startLine": 82,
+        "startChar": 0,
+        "endLine": 84,
+        "endChar": 0
+      },
+      "revId": "50fdb8e2aafc46d8a16f131e0972f5b8332e4ede",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2ae66c08_629d9902",
+        "filename": "tvix/eval/src/value/thunk.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 84,
+      "author": {
+        "id": 1000066
+      },
+      "writtenOn": "2023-11-25T03:03:29Z",
+      "side": 1,
+      "message": "Well, surely mmtk has its own Rc-like wrapper.\n\nI tried looking for the name of this trait/struct in the mmtk crate documentation but got lost in the maze.  Quite a complex piece of machinery.",
+      "parentUuid": "ad7ce3a3_6fecc277",
       "range": {
         "startLine": 82,
         "startChar": 0,
