@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e0ebc1e8_11ca8b93",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-11-25T13:23:32Z",
+      "side": 1,
+      "message": "How long did the debugging take, and do you think you\u0027ll get time to fix the bug in the near future, or is there a way to help you with that?\n\nI\u0027m fine having this debug commit on a path to rule out the bug, but we should also put in the resources to fix it.",
+      "revId": "c7bac83b7bc1a6646f80b542dcce7909c941ae1d",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
