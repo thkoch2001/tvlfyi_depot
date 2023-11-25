@@ -260,12 +260,24 @@ given monitor and assigns a workspace to it."
   "Interactively choose a monitor to disable."
   (interactive)
 
-  (let* ((active (seq-map #'car (cadr (exwm-randr--get-monitors))))
+  (let* ((all (exwm-randr--get-monitors))
+         (active (seq-map #'car (cadr all)))
          (monitor (if (> (seq-length active) 1)
                       (completing-read "Disable which monitor? " active nil t)
                     (error "Only one monitor is active!")))
-         (xrandr-cmd (format "xrandr --output %s --off" monitor)))
-    (shell-command xrandr-cmd)
+
+         ;; If this monitor was primary, pick another active one instead.
+         (remaining (seq-filter (lambda (s) (not (equal s monitor))) active))
+         (new-primary
+          (when (equal monitor (car all))
+            (pcase (seq-length remaining)
+              (1 (car remaining))
+              (_ (completing-read "New primary? " remaining nil t))))))
+
+    (when new-primary
+      (shell-command (format "xrandr --output %s --primary" new-primary)))
+
+    (shell-command (format "xrandr --output %s --off" monitor))
     (exwm-assign-workspaces)))
 
 (exwm-input-set-key (kbd "s-m e") #'exwm-enable-monitor)
