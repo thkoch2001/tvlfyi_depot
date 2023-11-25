@@ -429,7 +429,8 @@ in
     };
 
     # Run autosubmit bot for Gerrit
-    gerrit-queue.enable = true;
+    # b/333: disabled for now because of bugs
+    gerrit-queue.enable = false;
   };
 
   services.postgresql = {
