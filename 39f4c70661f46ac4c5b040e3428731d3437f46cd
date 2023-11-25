@@ -16,6 +16,24 @@
       "message": "This suggests that *we\u0027re* building a Merkle tree on top. BLAKE3 *is* the Merkle tree scheme built on top of its (internal) chunk hash function.",
       "revId": "39f4c70661f46ac4c5b040e3428731d3437f46cd",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cd7551d7_49356ea7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000066
+      },
+      "writtenOn": "2023-11-25T02:46:38Z",
+      "side": 1,
+      "message": "Very well, I\u0027ve noted that the Merkleization parameters come from the same document as the block hash, just like BLAKE2 and Skein.",
+      "parentUuid": "3b4edf92_669c3029",
+      "revId": "39f4c70661f46ac4c5b040e3428731d3437f46cd",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
