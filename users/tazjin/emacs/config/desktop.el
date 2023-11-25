@@ -346,6 +346,58 @@ ring."
    (exwm-input-set-key (kbd "s-m 2") #'randr-khamovnik-layout-office)
    (exwm-input-set-key (kbd "s-m s") #'randr-khamovnik-layout-single)))
 
+(defun list-available-monitors ()
+  "List connected, but unused monitors."
+  (let* ((all-connected
+          (seq-map (lambda (line) (car (s-split " " line)))
+                   (s-lines (s-trim (shell-command-to-string "xrandr | grep connected | grep -v disconnected")))))
+         (all-active (seq-map #'car (cadr (exwm-randr--get-monitors)))))
+    (seq-filter (lambda (s) (not (seq-contains-p all-active s)))
+                all-connected)))
+
+(defun exwm-enable-monitor ()
+  "Interactively construct an EXWM invocation that enable the
+given monitor and assigns a workspace to it."
+  (interactive)
+
+  (let* ((monitors (list-available-monitors))
+         (primary (car (exwm-randr--get-monitors)))
+         (monitor (pcase (seq-length monitors)
+                    (0 (error "No available monitors."))
+                    (1 (car monitors))
+                    (_
+                     (completing-read "Which monitor? " (list-available-monitors) nil t))))
+
+         (configurations `(("secondary (left)" . ,(format "--left-of %s" primary))
+                           ("secondary (right)" . ,(format "--right-of %s" primary))
+                           ("primary (left)" . ,(format "--left-of %s --primary" primary))
+                           ("primary (right)" . ,(format "--right-of %s --primary" primary))
+                           ("mirror" . ,(format "--same-as %s" primary))))
+
+         (where (completing-read (format "%s should be " monitor)
+                                 (seq-map #'car configurations)
+                                 nil t))
+         (xrandr-pos (cdr (assoc where configurations)))
+         (xrandr-cmd (format "xrandr --output %s --auto %s" monitor xrandr-pos)))
+    (message "Invoking '%s'" xrandr-cmd)
+    (shell-command xrandr-cmd)
+    (exwm-assign-workspaces)))
+
+(defun exwm-disable-monitor ()
+  "Interactively choose a monitor to disable."
+  (interactive)
+
+  (let* ((active (seq-map #'car (cadr (exwm-randr--get-monitors))))
+         (monitor (if (> (seq-length active) 1)
+                      (completing-read "Disable which monitor? " active nil t)
+                    (error "Only one monitor is active!")))
+         (xrandr-cmd (format "xrandr --output %s --off" monitor)))
+    (shell-command xrandr-cmd)
+    (exwm-assign-workspaces)))
+
+(exwm-input-set-key (kbd "s-m e") #'exwm-enable-monitor)
+(exwm-input-set-key (kbd "s-m d") #'exwm-disable-monitor)
+
 ;; Notmuch shortcuts as EXWM globals
 ;; (g m => gmail)
 (exwm-input-set-key (kbd "s-g m") #'notmuch)
