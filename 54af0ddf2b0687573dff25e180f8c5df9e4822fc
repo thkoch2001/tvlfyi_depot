@@ -87,6 +87,24 @@
       "parentUuid": "fdf5d000_61e69f1a",
       "revId": "54af0ddf2b0687573dff25e180f8c5df9e4822fc",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2232404c_dc17ca0e",
+        "filename": "nix/mapAttrsMaybe/default.nix",
+        "patchSetId": 166
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 1000066
+      },
+      "writtenOn": "2023-11-25T02:31:50Z",
+      "side": 1,
+      "message": "I like this idea.  Maybe even split it into `filterAttrs` (which takes a predicate) and then `mapAttrsMaybe` is just `mapAttrs` composed with `filterAttrs`.\n\nAn interesting question: which do you do first, the mapping or the filtering?\n\nI suggest map-first, because this way if the user *knows* that a certain value (like `null`) will never be returned from the map functional they can use it as a \"drop this\" sentinel value.  This way you don\u0027t have to split the logic across the two functions (map and filter) -- you can just write one `if..then..else` instead of two separate ones.\n\nWhat do you think about submitting this to `\u003cnixpkgs/lib\u003e`?\n\nI would like to add an optimization to tvix to have it recognize `mapAttrsMaybe` and implement it without creating the intermediate list or attrset.  The easiest way to make the optimization predictable is to pick one specific implementation and guarantee that that particular parse tree will be optimized.  So it would be ideal if it were in `\u003cnixpkgs/lib\u003e` to discourage people from re-implementing it in a way that won\u0027t be recognized.",
+      "parentUuid": "bbe2f083_d6e7d81a",
+      "revId": "54af0ddf2b0687573dff25e180f8c5df9e4822fc",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
