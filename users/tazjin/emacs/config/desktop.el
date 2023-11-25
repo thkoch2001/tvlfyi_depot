@@ -280,8 +280,22 @@ given monitor and assigns a workspace to it."
     (shell-command (format "xrandr --output %s --off" monitor))
     (exwm-assign-workspaces)))
 
+(defun exwm-switch-monitor ()
+  "Switch focus to another monitor by name."
+  (interactive)
+
+  ;; TODO: Filter out currently active? How to determine it?
+  (let* ((target (completing-read "Switch to monitor: "
+                                  (seq-map #'car (cadr (exwm-randr--get-monitors)))
+                                  nil t))
+         (target-workspace
+          (cl-loop for (workspace screen) on exwm-randr-workspace-monitor-plist by #'cddr
+                   when (equal screen target) return workspace)))
+    (exwm-workspace-switch target-workspace)))
+
 (exwm-input-set-key (kbd "s-m e") #'exwm-enable-monitor)
 (exwm-input-set-key (kbd "s-m d") #'exwm-disable-monitor)
+(exwm-input-set-key (kbd "s-m o") #'exwm-switch-monitor)
 
 ;; Notmuch shortcuts as EXWM globals
 ;; (g m => gmail)
