@@ -4,7 +4,6 @@
 ;; window-management (EXWM) as well as additional system-wide
 ;; commands.
 
-(require 'dash)
 (require 'exwm)
 (require 'exwm-config)
 (require 'exwm-randr)
@@ -13,6 +12,7 @@
 (require 'f)
 (require 'ring)
 (require 's)
+(require 'seq)
 
 (defcustom tazjin--screen-lock-command "tazjin-screen-lock"
   "Command to execute for locking the screen."
@@ -115,6 +115,7 @@
 (tab-bar-mode 1)
 
 (exwm-enable)
+(exwm-randr-enable)
 
 ;; Tab-management shortcuts
 
@@ -182,7 +183,41 @@
 ;; enable display of X11 system tray within Emacs
 (exwm-systemtray-enable)
 
-;; Configure xrandr (multi-monitor setup).
+;; Multi-monitor configuration.
+;;
+;; With tab-bar-mode, each monitor only displays at most one
+;; workspace. Workspaces are only created, never deleted, meaning that
+;; the number of workspaces will be equivalent to the maximum number
+;; of displays that were connected during a session.
+;;
+;; The first workspace is special: It is kept on the primary monitor.
+
+(defun exwm-assign-workspaces ()
+  "Assigns workspaces to the currently existing monitors, putting
+the first one on the primary display and allocating the others
+dynamically if needed in no particular order."
+  (interactive)
+  (let* ((randr-monitors (exwm-randr--get-monitors))
+         (primary (car randr-monitors))
+         (all-monitors (seq-map #'car (cadr randr-monitors)))
+         (sorted-primary-first (seq-sort (lambda (a b)
+                                           (or (equal a primary)
+                                               (< a b)))
+                                         all-monitors))
+         ;; assign workspace numbers to each monitor ...
+         (workspace-assignments
+          (flatten-list (seq-map-indexed (lambda (monitor idx)
+                                           (list idx monitor))
+                                         sorted-primary-first))))
+    ;; ensure that the required workspaces exist
+    (exwm-workspace-switch-create (- (seq-length all-monitors) 1))
+
+    ;; update randr config
+    (setq exwm-randr-workspace-monitor-plist workspace-assignments)
+    (exwm-randr-refresh)
+
+    ;; leave focus on primary workspace
+    (exwm-workspace-switch 0)))
 
 ;; Notmuch shortcuts as EXWM globals
 ;; (g m => gmail)
