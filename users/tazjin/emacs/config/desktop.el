@@ -119,8 +119,22 @@
 
 ;; Tab-management shortcuts
 
+(defun tab-bar-select-or-return ()
+  "This function behaves like `tab-bar-select-tab', except it calls
+`tab-recent' if asked to jump to the current tab. This simulates
+the back&forth behaviour of i3."
+  (interactive)
+  (let* ((key (event-basic-type last-command-event))
+         (tab (if (and (characterp key) (>= key ?1) (<= key ?9))
+                  (- key ?0)
+                0))
+         (current (1+ (tab-bar--current-tab-index))))
+    (if (eq tab current)
+        (tab-recent)
+      (tab-bar-select-tab tab))))
+
 (dotimes (i 8)
-  (exwm-input-set-key (kbd (format "s-%d" (+ 1 i))) #'tab-bar-select-tab))
+  (exwm-input-set-key (kbd (format "s-%d" (+ 1 i))) #'tab-bar-select-or-return))
 
 (exwm-input-set-key (kbd "s-9") #'tab-last)
 (exwm-input-set-key (kbd "s-f") #'tab-next)
