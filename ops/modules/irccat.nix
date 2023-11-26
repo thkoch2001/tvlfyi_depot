@@ -33,7 +33,7 @@ in
     enable = lib.mkEnableOption description;
 
     config = lib.mkOption {
-      type = lib.types.attrs; # varying value types
+      type = lib.types.attrsOf lib.types.anything; # varying value types
       description = "Configuration structure (unchecked!)";
     };
 
