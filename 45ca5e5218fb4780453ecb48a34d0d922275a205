@@ -1,0 +1,67 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b9e1141e_f91b6364",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2023-11-27T14:04:26Z",
+      "side": 1,
+      "message": "Some of the background information given in the commit message is necessary to understand some of the details, so it\u0027d be nice to have them in a comment as well.",
+      "revId": "45ca5e5218fb4780453ecb48a34d0d922275a205",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e581fdf0_157e38ab",
+        "filename": "ops/gerrit-autosubmit/default.nix",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2023-11-27T14:04:26Z",
+      "side": 1,
+      "message": "nativeBuildInputs \u003d [\n  pkgs.buildPackages.pkg-config\n]",
+      "range": {
+        "startLine": 7,
+        "startChar": 4,
+        "endLine": 7,
+        "endChar": 14
+      },
+      "revId": "45ca5e5218fb4780453ecb48a34d0d922275a205",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "92e1cb23_407b81b0",
+        "filename": "ops/gerrit-autosubmit/src/main.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2023-11-27T14:04:26Z",
+      "side": 1,
+      "message": "Wouldn\u0027t using a file be nicer w.r.t. systemd?",
+      "range": {
+        "startLine": 28,
+        "startChar": 36,
+        "endLine": 28,
+        "endChar": 51
+      },
+      "revId": "45ca5e5218fb4780453ecb48a34d0d922275a205",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
