@@ -34,6 +34,24 @@
       "parentUuid": "727ae95c_b0dc1ef9",
       "revId": "37c3c11f63156ebe39c2039f1eaa1247f3115d53",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f1e4303e_9b93edcf",
+        "filename": "ops/modules/gerrit-autosubmit.nix",
+        "patchSetId": 2
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2023-11-27T15:54:42Z",
+      "side": 1,
+      "message": "It\u0027ll just get restarted,",
+      "parentUuid": "60f10fe7_5b0b7060",
+      "revId": "37c3c11f63156ebe39c2039f1eaa1247f3115d53",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
