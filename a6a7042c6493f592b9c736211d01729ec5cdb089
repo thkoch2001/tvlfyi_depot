@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5d767ef5_8683c8ae",
+        "filename": "ops/gerrit-autosubmit/src/main.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-11-27T21:21:39Z",
+      "side": 1,
+      "message": "I personally prefer clap in Derive - it gives nicer help, rather than trying to execute and run from one panic to another.",
+      "revId": "a6a7042c6493f592b9c736211d01729ec5cdb089",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3aa4753b_1dc66ce7",
+        "filename": "ops/gerrit-autosubmit/src/main.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-11-27T21:21:39Z",
+      "side": 1,
+      "message": "Can this be GERRIT_PASSWORD_FILE? That\u0027ll allow keeping all of the config visible, and the password to not live in the env.",
+      "revId": "a6a7042c6493f592b9c736211d01729ec5cdb089",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e451e910_bb0aa344",
+        "filename": "ops/gerrit-autosubmit/src/main.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 98,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-11-27T21:21:39Z",
+      "side": 1,
+      "message": "changes",
+      "revId": "a6a7042c6493f592b9c736211d01729ec5cdb089",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
