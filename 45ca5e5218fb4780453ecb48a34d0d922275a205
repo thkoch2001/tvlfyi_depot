@@ -3,6 +3,23 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "1617c2a0_74869e21",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2023-11-27T14:06:54Z",
+      "side": 1,
+      "message": "This does mean that it can (also) break canon, though.",
+      "revId": "45ca5e5218fb4780453ecb48a34d0d922275a205",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "b9e1141e_f91b6364",
         "filename": "/PATCHSET_LEVEL",
         "patchSetId": 1
