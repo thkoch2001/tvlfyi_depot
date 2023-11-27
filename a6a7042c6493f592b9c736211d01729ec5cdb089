@@ -18,6 +18,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "6a0c231a_0b531baa",
+        "filename": "ops/gerrit-autosubmit/src/main.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2023-11-27T21:40:00Z",
+      "side": 1,
+      "message": "I don\u0027t want to drag in an absolutely humongous library just to fetch a few envvars. I think this is a sufficiently simple program that it doesn\u0027t need complicated configuration handling.",
+      "parentUuid": "5d767ef5_8683c8ae",
+      "revId": "a6a7042c6493f592b9c736211d01729ec5cdb089",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "3aa4753b_1dc66ce7",
@@ -37,6 +55,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "04a7c10e_4910ef77",
+        "filename": "ops/gerrit-autosubmit/src/main.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2023-11-27T21:40:00Z",
+      "side": 1,
+      "message": "I decided to copy the configuration structure of gerrit-queue, so that the secrets and module we have don\u0027t need to change much. I\u0027d rather keep it that way until this is submitted and whitby is canonicalised, the config locations and envvar naming etc. is not hard to change later.",
+      "parentUuid": "3aa4753b_1dc66ce7",
+      "revId": "a6a7042c6493f592b9c736211d01729ec5cdb089",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "e451e910_bb0aa344",
         "filename": "ops/gerrit-autosubmit/src/main.rs",
         "patchSetId": 2
@@ -48,6 +84,24 @@
       "writtenOn": "2023-11-27T21:21:39Z",
       "side": 1,
       "message": "changes",
+      "revId": "a6a7042c6493f592b9c736211d01729ec5cdb089",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6c1a8d70_38ce2e2f",
+        "filename": "ops/gerrit-autosubmit/src/main.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 98,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2023-11-27T21:40:00Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e451e910_bb0aa344",
       "revId": "a6a7042c6493f592b9c736211d01729ec5cdb089",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
