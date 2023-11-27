@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "727ae95c_b0dc1ef9",
+        "filename": "ops/modules/gerrit-autosubmit.nix",
+        "patchSetId": 2
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2023-11-27T14:08:27Z",
+      "side": 1,
+      "message": "I guess we want after network.target or something like that?",
+      "revId": "37c3c11f63156ebe39c2039f1eaa1247f3115d53",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
