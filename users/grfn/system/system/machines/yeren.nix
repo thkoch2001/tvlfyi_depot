@@ -10,7 +10,6 @@
     ../modules/sound.nix
     ../modules/tvl.nix
     ../modules/development.nix
-    ../modules/work/kolide.nix
   ];
 
   networking.hostName = "yeren";
