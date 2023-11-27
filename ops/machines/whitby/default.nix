@@ -12,7 +12,7 @@ in
     (mod "atward.nix")
     (mod "cgit.nix")
     (mod "clbot.nix")
-    (mod "gerrit-queue.nix")
+    (mod "gerrit-autosubmit.nix")
     (mod "irccat.nix")
     (mod "josh.nix")
     (mod "journaldriver.nix")
@@ -224,7 +224,7 @@ in
     in
     {
       clbot.file = secretFile "clbot";
-      gerrit-queue.file = secretFile "gerrit-queue";
+      gerrit-autosubmit.file = secretFile "gerrit-autosubmit";
       grafana.file = secretFile "grafana";
       irccat.file = secretFile "irccat";
       keycloak-db.file = secretFile "keycloak-db";
@@ -429,8 +429,7 @@ in
     };
 
     # Run autosubmit bot for Gerrit
-    # b/333: disabled for now because of bugs
-    gerrit-queue.enable = false;
+    gerrit-autosubmit.enable = true;
   };
 
   services.postgresql = {
