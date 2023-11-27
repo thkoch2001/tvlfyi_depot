@@ -36,7 +36,7 @@ in
   "clbot.age" = whitbyDefault;
   "depot-inbox-imap.age" = sandunyDefault;
   "depot-replica-key.age" = whitbyDefault;
-  "gerrit-queue.age" = whitbyDefault;
+  "gerrit-autosubmit.age" = whitbyDefault;
   "gerrit-secrets.age" = whitbyDefault;
   "grafana.age" = whitbyDefault;
   "irccat.age" = whitbyDefault;
