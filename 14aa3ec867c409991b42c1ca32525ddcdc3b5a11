@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e6732c03_54a93a7f",
+        "filename": "tvix/nix-compat/src/narinfo/public_keys.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2023-11-28T15:14:35Z",
+      "side": 1,
+      "message": "structures",
+      "range": {
+        "startLine": 1,
+        "startChar": 29,
+        "endLine": 1,
+        "endChar": 39
+      },
+      "revId": "14aa3ec867c409991b42c1ca32525ddcdc3b5a11",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
