@@ -109,6 +109,12 @@
 ;; tab-bar related config
 (setq tab-bar-show 1)
 (setq tab-bar-tab-hints t)
+
+(setq tab-bar-format
+      '(tab-bar-format-history
+        tab-bar-format-tabs tab-bar-separator
+        tab-bar-format-align-right tab-bar-format-global))
+
 (setq tab-bar-new-tab-choice
       (lambda () (get-buffer-create "*scratch*")))
 

@@ -24,16 +24,6 @@
   (set-frame-font font t t))
 
 ;; Configure telephone-line
-(defun telephone-misc-if-last-window ()
-  "Renders the mode-line-misc-info string for display in the
-  mode-line if the currently active window is the last one in the
-  frame.
-
-  The idea is to not display information like the current time,
-  load, battery levels on all buffers."
-
-  (when (bottom-right-window-p)
-    (telephone-line-raw mode-line-misc-info t)))
 
 ;; Implements a mode-line warning if there are any logged in TTY
 ;; sessions apart from the graphical one.
@@ -66,31 +56,13 @@
     (format "W: [%s]!!" (s-join "," sessions))))
 
 (defun telephone-line-setup ()
-  (telephone-line-defsegment telephone-line-last-window-segment ()
-    (telephone-misc-if-last-window))
-
-  ;; Define a highlight font for ~ important ~ information in the last
-  ;; window.
-  (defface special-highlight '((t (:foreground "white" :background "#5f627f"))) "")
-  (add-to-list 'telephone-line-faces
-               '(highlight . (special-highlight . special-highlight)))
-
   (setq telephone-line-lhs
         '((highlight . (telephone-line-warn-tty-session))
           (nil . (telephone-line-position-segment))
           (accent . (telephone-line-buffer-segment))))
 
   (setq telephone-line-rhs
-        '((accent . (telephone-line-major-mode-segment))
-          (nil . (telephone-line-last-window-segment))
-
-          ;; TODO(tazjin): lets not do this particular thing while I
-          ;; don't actually run notmuch, there are too many things
-          ;; that have a dependency on the modeline drawing correctly
-          ;; (including randr operations!)
-          ;;
-          ;; (highlight . (telephone-line-notmuch-counts))
-          ))
+        '((accent . (telephone-line-major-mode-segment))))
 
   (setq telephone-line-primary-left-separator 'telephone-line-tan-left
         telephone-line-primary-right-separator 'telephone-line-tan-right
