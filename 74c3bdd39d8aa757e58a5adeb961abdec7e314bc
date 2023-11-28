@@ -22,6 +22,30 @@
       },
       "revId": "74c3bdd39d8aa757e58a5adeb961abdec7e314bc",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fb44c533_160d24f1",
+        "filename": "tvix/store/src/pathinfoservice/nix_http.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 194,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-11-28T16:01:17Z",
+      "side": 1,
+      "message": "This is causing an erroneous reponse to a client, but it\u0027s not that went wrong /on this machine/. It encountered inconsistent data on the other side.\n\nI like to annotate some structured data, in this case actual nar_size (or nar_hash) in the error message logged to the console, but some of the structured fields might be more sensitive than others and should not be contained in returned error messages.\n\nError handling is a bit of a mess, I\u0027ve been starting to move some of these errors to io::Error, but it probably makes sense to have a followup discussion about the error system.",
+      "parentUuid": "ab80d2fa_adfb784e",
+      "range": {
+        "startLine": 189,
+        "startChar": 0,
+        "endLine": 194,
+        "endChar": 0
+      },
+      "revId": "74c3bdd39d8aa757e58a5adeb961abdec7e314bc",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
