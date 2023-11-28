@@ -119,16 +119,6 @@ the GPG agent correctly."
           (run-at-time (password-store-timeout)
                        nil 'password-store-clear))))
 
-(defun bottom-right-window-p ()
-  "Determines whether the last (i.e. bottom-right) window of the
-  active frame is showing the buffer in which this function is
-  executed."
-  (let* ((frame (selected-frame))
-         (right-windows (window-at-side-list frame 'right))
-         (bottom-windows (window-at-side-list frame 'bottom))
-         (last-window (car (seq-intersection right-windows bottom-windows))))
-    (eq (current-buffer) (window-buffer last-window))))
-
 (defhydra mc/mark-more-hydra (:color pink)
   ("<up>" mc/mmlte--up "Mark previous like this")
   ("<down>" mc/mmlte--down "Mark next like this")
