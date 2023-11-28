@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ab80d2fa_adfb784e",
+        "filename": "tvix/store/src/pathinfoservice/nix_http.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 194,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2023-11-28T15:04:23Z",
+      "side": 1,
+      "message": "2 questions:\n\n- Are they warnings, or are they errors?\n- Can we log these somewhere more centrally instead of duplicating this noisily?",
+      "range": {
+        "startLine": 189,
+        "startChar": 0,
+        "endLine": 194,
+        "endChar": 0
+      },
+      "revId": "74c3bdd39d8aa757e58a5adeb961abdec7e314bc",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
