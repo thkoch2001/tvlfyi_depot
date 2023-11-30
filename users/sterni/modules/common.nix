@@ -65,6 +65,7 @@ in
       pkgs.htop
       pkgs.foot.terminfo
       pkgs.vim
+      pkgs.smartmontools
     ];
 
     security.acme = {
