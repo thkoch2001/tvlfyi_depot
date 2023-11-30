@@ -468,11 +468,11 @@ in
       (name: instanceCfg:
         {
           name = "minecraft-fabric-${name}";
-          inherit (instanceCfg) enable;
           value = {
             description = "Minecraft server ${name} with the fabric mod loader";
             wantedBy = [ "multi-user.target" ];
             after = [ "network.target" ];
+            inherit (instanceCfg) enable;
 
             serviceConfig = {
               Type = "simple";
