@@ -23,7 +23,7 @@
   (setq default-frame-alist `((font . ,font)))
   (set-frame-font font t t))
 
-;; Configure telephone-line
+;; Configure the modeline
 
 ;; Implements a mode-line warning if there are any logged in TTY
 ;; sessions apart from the graphical one.
@@ -41,6 +41,8 @@
 (defvar cached-tty-sessions (cons (time-convert nil 'integer) (list-tty-sessions))
    "Cached TTY session value to avoid running the command too often.")
 
+;; TODO(tazjin): add this to the modeline
+
 (defun get-cached-tty-sessions ()
   (let ((time ))
     (when (< 30
@@ -50,26 +52,6 @@
             (cons (time-convert nil 'integer) (list-tty-sessions)))))
 
   (cdr cached-tty-sessions))
-
-(telephone-line-defsegment telephone-line-warn-tty-session ()
-  (when-let (sessions (get-cached-tty-sessions))
-    (format "W: [%s]!!" (s-join "," sessions))))
-
-(defun telephone-line-setup ()
-  (setq telephone-line-lhs
-        '((highlight . (telephone-line-warn-tty-session))
-          (nil . (telephone-line-position-segment))
-          (accent . (telephone-line-buffer-segment))))
-
-  (setq telephone-line-rhs
-        '((accent . (telephone-line-major-mode-segment))))
-
-  (setq telephone-line-primary-left-separator 'telephone-line-tan-left
-        telephone-line-primary-right-separator 'telephone-line-tan-right
-        telephone-line-secondary-left-separator 'telephone-line-tan-hollow-left
-        telephone-line-secondary-right-separator 'telephone-line-tan-hollow-right)
-
-  (telephone-line-mode 1))
 
 ;; Auto refresh buffers
 (global-auto-revert-mode 1)
