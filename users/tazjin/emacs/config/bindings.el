@@ -6,9 +6,6 @@
 (define-key global-map (kbd "C--") 'decrease-default-text-scale)
 (define-key global-map (kbd "C-x C-0") 'set-default-text-scale)
 
-;; What does <tab> do? Well, it depends ...
-(define-key prog-mode-map (kbd "<tab>") #'company-indent-or-complete-common)
-
 ;; imenu instead of insert-file
 (global-set-key (kbd "C-x i") 'imenu)
 
