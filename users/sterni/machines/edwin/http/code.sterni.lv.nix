@@ -228,7 +228,7 @@ in
             name = unitName name;
             value = {
               description = "mirror git repository ${name}";
-              after = [ "network.target" ];
+              after = [ "network-online.target" ];
               script =
                 let
                   path = repoPath name repo;
