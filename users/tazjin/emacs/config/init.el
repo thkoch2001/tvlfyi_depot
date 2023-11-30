@@ -29,10 +29,6 @@
 
 (use-package browse-kill-ring)
 
-(use-package company
-  :hook ((prog-mode . company-mode))
-  :config (setq company-tooltip-align-annotations t))
-
 (use-package consult
   :bind
   ("C-c r g" . consult-ripgrep)
@@ -141,9 +137,7 @@
 
 (use-package ielm
   :hook ((inferior-emacs-lisp-mode . (lambda ()
-                                       (paredit-mode)
-                                       (rainbow-delimiters-mode-enable)
-                                       (company-mode)))))
+                                       (rainbow-delimiters-mode-enable)))))
 
 (use-package jq-mode
   :config (add-to-list 'auto-mode-alist '("\\.jq\\'" . jq-mode)))
@@ -170,8 +164,7 @@
 (use-package sly
   :hook ((sly-mrepl-mode . (lambda ()
                              (paredit-mode)
-                             (rainbow-delimiters-mode-enable)
-                             (company-mode))))
+                             (rainbow-delimiters-mode-enable))))
   :config
   (setq common-lisp-hyperspec-root "file:///home/tazjin/docs/lisp/"))
 
@@ -183,8 +176,7 @@
   :config (telega-mode-line-mode 1)
   :custom
   (telega-emoji-use-images nil)
-  (telega-completing-read-function #'completing-read)
-  :hook (telega-chat-mode . company-mode))
+  (telega-completing-read-function #'completing-read))
 
 (use-package terraform-mode)
 (use-package toml-ts-mode)
