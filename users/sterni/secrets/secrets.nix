@@ -3,13 +3,14 @@ let
     "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIJk+KvgvI2oJTppMASNUfMcMkA2G5ZNt+HnWDzaXKLlo"
   ];
 
-  edwin = [
-    "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIB+OZ8f++cnvd4E2kFyn9jEoVpxi7LfjRvyQwzE8a5Ll"
+  ingeborg = [
+    "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIB+OZ8f++cnvd4E2kFyn9jEoVpxi7LfjRvyQwzE8a5Ll" # edwin (legacy)
+    "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIAHQn/j6NCYucpM7qIEIslVJxiFeUEKa0hi+HobTz/12"
   ];
 in
 
 {
-  "warteraum-salt.age".publicKeys = nonremote ++ edwin;
-  "warteraum-tokens.age".publicKeys = nonremote ++ edwin;
-  "minecraft-rcon.age".publicKeys = nonremote ++ edwin;
+  "warteraum-salt.age".publicKeys = nonremote ++ ingeborg;
+  "warteraum-tokens.age".publicKeys = nonremote ++ ingeborg;
+  "minecraft-rcon.age".publicKeys = nonremote ++ ingeborg;
 }
