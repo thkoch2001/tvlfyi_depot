@@ -12,6 +12,7 @@
     # (More or less) pluggable service configuration
     (depot.path.origSrc + "/ops/modules/btrfs-auto-scrub.nix")
     ./monitoring.nix
+    ./minecraft.nix
   ];
 
   config = {

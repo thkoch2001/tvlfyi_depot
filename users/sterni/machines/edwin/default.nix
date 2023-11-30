@@ -11,7 +11,6 @@
     ./network.nix
     # These modules configure services, websites etc.
     (depot.path.origSrc + "/ops/modules/btrfs-auto-scrub.nix")
-    ./minecraft.nix
     ./gopher.nix
     ./http/sterni.lv.nix
     ./http/code.sterni.lv.nix
