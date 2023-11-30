@@ -37,6 +37,7 @@ in
         direnv
         dnsutils
         electrum
+        firefox
         config.tazjin.emacs.emacs # emacsclient
         expect
         fd
