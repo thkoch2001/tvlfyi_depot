@@ -10,9 +10,13 @@ let
     (lib.filterAttrs (_: type: type == "directory") (builtins.readDir ./.));
 
   # TODO(sterni): share code with rebuild-system
-  localDeployScriptFor = { system, ... }:
+  localDeployScriptFor = { system, config, ... }:
     pkgs.writeShellScript "local-deploy-${system.name}" ''
       set -eu
+      if [[ "$(hostname)" != "${config.networking.hostName}" ]]; then
+        echo "$0: unexpected hostname: $(hostname). Are you deploying on the right machine?"
+        exit 1
+      fi
       nix-env -p /nix/var/nix/profiles/system --set "${system}"
       "${system}/bin/switch-to-configuration" switch
     '';
