@@ -1,4 +1,9 @@
 #!/usr/bin/env bash
+
+# SPDX-FileCopyrightText: 2023 The TVL Authors
+#
+# SPDX-License-Identifier: MIT
+
 #
 # Copies a NixOS system to a target host, using the provided key,
 # or whatever ambient key is configured if the key is not set.

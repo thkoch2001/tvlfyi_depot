@@ -1,3 +1,9 @@
+<!--
+SPDX-FileCopyrightText: 2023 The TVL Authors
+
+SPDX-License-Identifier: MIT
+-->
+
 deploy-nixos
 ============
 
