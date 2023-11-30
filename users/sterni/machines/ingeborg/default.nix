@@ -2,6 +2,8 @@
 
 {
   imports = [
+    # Third party modules
+    "${depot.third_party.agenix.src}/modules/age.nix"
     # Basic settings
     ../../modules/common.nix
     # These modules touch things related to booting (filesystems, initrd network…)
