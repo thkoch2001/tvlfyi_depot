@@ -88,7 +88,6 @@ pkgs.makeOverridable
       rust-mode
       sly
       string-edit-at-point
-      telephone-line
       terraform-mode
       undo-tree
       uuidgen

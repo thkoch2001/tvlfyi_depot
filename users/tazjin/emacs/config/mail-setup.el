@@ -49,7 +49,7 @@
 ;; handle that gracefully.
 (define-key notmuch-message-mode-map (kbd "C-x C-s") #'ignore)
 
-;; Define a telephone-line segment for displaying the count of unread,
+;; Define a mode-line segment for displaying the count of unread,
 ;; important mails in the last window's mode-line:
 (defvar *last-notmuch-count-redraw* 0)
 (defvar *current-notmuch-count* nil)
@@ -74,10 +74,6 @@
              (not (equal *current-notmuch-count* "I: 0; D: 0")))
     *current-notmuch-count*))
 
-(telephone-line-defsegment telephone-line-notmuch-counts ()
-  "This segment displays the count of unread notmuch messages in
-  the last window's mode-line (if unread messages are present)."
-
-  (update-display-notmuch-counts))
+;; TODO(tazjin): re-add this segment to the modeline
 
 (provide 'mail-setup)
