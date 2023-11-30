@@ -76,8 +76,6 @@
 (use-package rainbow-mode)
 (use-package s)
 (use-package string-edit-at-point)
-
-(use-package telephone-line) ;; configuration happens outside of use-package
 (use-package term-switcher)
 
 (use-package undo-tree
@@ -256,7 +254,6 @@
                  modes
                  bindings
                  eshell-setup))
-(telephone-line-setup)
 (ace-window-display-mode)
 
 ;; If a local configuration library exists, it should be loaded.
