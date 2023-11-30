@@ -67,7 +67,7 @@ in
 
     services.minecraft-fabric-server = {
       creative = {
-        enable = true;
+        enable = false; # not actively used
         version = "1.19.4";
         mods = [
           carpet
