@@ -1,3 +1,7 @@
+# SPDX-FileCopyrightText: 2023 The TVL Authors
+#
+# SPDX-License-Identifier: MIT
+
 # This module deploys a NixOS host by building a system closure
 # located at the specified attribute in the current repository.
 #

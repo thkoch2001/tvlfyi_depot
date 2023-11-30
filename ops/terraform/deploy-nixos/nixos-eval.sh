@@ -1,4 +1,9 @@
 #!/usr/bin/env bash
+
+# SPDX-FileCopyrightText: 2023 The TVL Authors
+#
+# SPDX-License-Identifier: MIT
+
 #
 # Builds a NixOS system configuration at the given attribute path.
 set -ueo pipefail
