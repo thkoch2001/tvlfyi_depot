@@ -51,7 +51,6 @@ pkgs.makeOverridable
       browse-kill-ring
       cargo
       clojure-mode
-      company
       consult
       deft
       direnv
