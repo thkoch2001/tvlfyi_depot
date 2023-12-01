@@ -100,6 +100,10 @@ pkgs.makeOverridable
       zetteldeft
       zoxide
 
+      # experimental (not otherwise embedded in config yet)
+      orderless
+      corfu
+
       # Wonky stuff
       (currentTelega epkgs)
       customTreesitGrammars # TODO(tazjin): how is this *supposed* to work?!
