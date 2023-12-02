@@ -15,12 +15,12 @@
           (goto-line target)))
     (setq-local display-line-numbers nil)))
 
-;; These come from the emacs starter kit
-
 (defun esk-add-watchwords ()
   (font-lock-add-keywords
    nil '(("\\<\\(FIX\\(ME\\)?\\|TODO\\|DEBUG\\|HACK\\|REFACTOR\\|NOCOMMIT\\)"
           1 font-lock-warning-face t))))
+
+(add-hook 'prog-mode-hook 'esk-add-watchwords)
 
 (defun esk-sudo-edit (&optional arg)
   (interactive "p")

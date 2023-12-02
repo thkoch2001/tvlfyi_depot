@@ -243,7 +243,6 @@
                  look-and-feel
                  functions
                  settings
-                 modes
                  bindings
                  eshell-setup))
 (ace-window-display-mode)
