@@ -65,4 +65,25 @@
         (go-mode . go-ts-mode)
         (cmake-mode . cmake-ts-mode)))
 
+;; Visually highlight current line in programming buffers
+(add-hook 'prog-mode-hook 'hl-line-mode)
+
+;; Enable rainbow-delimiters for all things programming
+(add-hook 'prog-mode-hook 'rainbow-delimiters-mode)
+
+;; Always highlight matching brackets
+(show-paren-mode 1)
+
+;; Always auto-close parantheses and other pairs
+(electric-pair-mode)
+
+;; Keep track of recent files
+(recentf-mode)
+
+;; Easily navigate sillycased words
+(global-subword-mode 1)
+
+;; Transparently open compressed files
+(auto-compression-mode t)
+
 (provide 'settings)
