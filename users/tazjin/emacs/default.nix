@@ -103,6 +103,7 @@ pkgs.makeOverridable
       # experimental (not otherwise embedded in config yet)
       orderless
       corfu
+      eat
 
       # Wonky stuff
       (currentTelega epkgs)
