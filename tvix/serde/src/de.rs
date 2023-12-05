@@ -209,7 +209,7 @@ impl<'de> de::Deserializer<'de> for NixDeserializer {
         V: de::Visitor<'de>,
     {
         if let Value::String(s) = &self.value {
-            let chars = s.as_str().chars().collect::<Vec<_>>();
+            let chars = s.chars().collect::<Vec<_>>();
             if chars.len() == 1 {
                 return visitor.visit_char(chars[0]);
             }
@@ -223,7 +223,7 @@ impl<'de> de::Deserializer<'de> for NixDeserializer {
         V: de::Visitor<'de>,
     {
         if let Value::String(s) = &self.value {
-            return visitor.visit_str(s.as_str());
+            return visitor.visit_str(s.to_str()?);
         }
 
         Err(unexpected("string", &self.value))
@@ -234,7 +234,7 @@ impl<'de> de::Deserializer<'de> for NixDeserializer {
         V: de::Visitor<'de>,
     {
         if let Value::String(s) = &self.value {
-            return visitor.visit_str(s.as_str());
+            return visitor.visit_str(s.to_str()?);
         }
 
         Err(unexpected("string", &self.value))
