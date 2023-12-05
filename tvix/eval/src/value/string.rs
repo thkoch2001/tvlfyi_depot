@@ -8,71 +8,42 @@ use std::ffi::OsStr;
 use std::hash::Hash;
 use std::ops::Deref;
 use std::path::Path;
-use std::str::{self, Utf8Error};
 use std::{borrow::Cow, fmt::Display, str::Chars};
 
 use serde::de::{Deserializer, Visitor};
 use serde::{Deserialize, Serialize};
 
 #[repr(transparent)]
-#[derive(Clone, Debug, Serialize)]
-pub struct NixString(Box<str>);
+#[derive(Clone, Debug, Serialize, PartialEq, Eq, PartialOrd, Ord, Hash)]
+pub struct NixString(Box<[u8]>);
 
-impl PartialEq for NixString {
-    fn eq(&self, other: &Self) -> bool {
-        self.as_str() == other.as_str()
-    }
-}
-
-impl Eq for NixString {}
-
-impl PartialOrd for NixString {
-    fn partial_cmp(&self, other: &Self) -> Option<std::cmp::Ordering> {
-        Some(self.cmp(other))
-    }
-}
-
-impl Ord for NixString {
-    fn cmp(&self, other: &Self) -> std::cmp::Ordering {
-        self.as_str().cmp(other.as_str())
-    }
-}
-
-impl TryFrom<&[u8]> for NixString {
-    type Error = Utf8Error;
-
-    fn try_from(value: &[u8]) -> Result<Self, Self::Error> {
-        Ok(Self(Box::from(str::from_utf8(value)?)))
+impl From<&[u8]> for NixString {
+    fn from(value: &[u8]) -> Self {
+        Self(Box::from(value))
     }
 }
 
 impl From<&str> for NixString {
     fn from(s: &str) -> Self {
-        NixString(Box::from(s))
+        Self::from(s.as_bytes())
     }
 }
 
 impl From<String> for NixString {
     fn from(s: String) -> Self {
-        NixString(s.into_boxed_str())
+        Self(s.into_bytes().into_boxed_slice())
     }
 }
 
 impl From<Box<str>> for NixString {
     fn from(s: Box<str>) -> Self {
-        Self(s)
+        Self(s.into_boxed_bytes())
     }
 }
 
 impl From<ast::Ident> for NixString {
     fn from(ident: ast::Ident) -> Self {
         ident.ident_token().unwrap().text().into()
-    }
-}
-
-impl Hash for NixString {
-    fn hash<H: std::hash::Hasher>(&self, state: &mut H) {
-        self.as_str().hash(state)
     }
 }
 
@@ -127,7 +98,7 @@ mod arbitrary {
 }
 
 impl NixString {
-    pub fn as_str(&self) -> &str {
+    pub fn as_bytes(&self) -> &[u8] {
         &self.0
     }
 
@@ -138,7 +109,7 @@ impl NixString {
     /// set keys, as those are only escaped in the presence of special
     /// characters.
     pub fn ident_str(&self) -> Cow<str> {
-        let escaped = nix_escape_string(self.as_str());
+        let escaped = nix_escape_string(self.as_bytes());
 
         match escaped {
             // A borrowed string is unchanged and can be returned as
@@ -267,10 +238,10 @@ impl AsRef<Path> for NixString {
 }
 
 impl Deref for NixString {
-    type Target = str;
+    type Target = [u8];
 
     fn deref(&self) -> &Self::Target {
-        self.as_str()
+        self.as_bytes()
     }
 }
 
