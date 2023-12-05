@@ -90,7 +90,7 @@ let
   src = depot.third_party.gitignoreSource ./.;
 
 in
-{
+rec {
   inherit crates;
 
   # Run crate2nix generate in the current working directory, then
@@ -99,6 +99,19 @@ in
     ${pkgs.crate2nix}/bin/crate2nix generate --all-features
     ${depot.tools.depotfmt}/bin/depotfmt Cargo.nix
   '';
+
+  # Run crate2nix generate, ensure the output doesn't differ afterwards
+  # (and doesn't fail)
+  crate2nix-check = pkgs.stdenv.mkDerivation {
+    inherit src;
+    name = "tvix-crate2nix-check";
+    nativeBuildInputs = [ crate2nixGenerate ];
+    buildPhase = ''
+      crate2nix-generate
+      diff -qr . ${src}
+      touch $out
+    '';
+  };
 
   # Provide the Tvix logo in both .webp and .png format.
   logo = pkgs.runCommand "logo"
@@ -167,6 +180,7 @@ in
 
   meta.ci.targets = [
     "clippy"
+    "crate2nix-check"
     "shell"
     "rust-docs"
   ];
