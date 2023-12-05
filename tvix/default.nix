@@ -1,7 +1,15 @@
 # Nix helpers for projects under //tvix
-{ pkgs, lib, depot, ... }:
+{ pkgs
+, lib ? pkgs.lib
+, depot ? null
+, tvix ? depot.tvix
+, ...
+}:
 
 let
+  PROTO_ROOT = tvix.proto;
+  cleanSource = if depot == null then lib.cleanSource else depot.third_party.gitignoreSource;
+
   # crate override for crates that need protobuf
   protobufDep = prev: (prev.nativeBuildInputs or [ ]) ++ [ pkgs.buildPackages.protobuf ];
   iconvDarwinDep = lib.optional pkgs.stdenv.isDarwin pkgs.libiconv;
@@ -41,7 +49,7 @@ let
       };
 
       tvix-castore = prev: {
-        PROTO_ROOT = depot.tvix.proto;
+        inherit PROTO_ROOT;
         nativeBuildInputs = protobufDep prev;
       };
 
@@ -50,7 +58,7 @@ let
       };
 
       tvix-store = prev: {
-        PROTO_ROOT = depot.tvix.proto;
+        inherit PROTO_ROOT;
         nativeBuildInputs = protobufDep prev;
         # fuse-backend-rs uses DiskArbitration framework to handle mount/unmount on Darwin
         buildInputs = prev.buildInputs or [ ]
@@ -87,12 +95,13 @@ let
   };
 
   # The cleaned sources.
-  src = depot.third_party.gitignoreSource ./.;
+  src = cleanSource ./.;
 
   # Run crate2nix generate in the current working directory, then
   # format the generated file with depotfmt.
   crate2nix-generate = pkgs.writeShellScriptBin "crate2nix-generate" ''
     ${pkgs.crate2nix}/bin/crate2nix generate --all-features
+  '' + lib.optionalString (depot != null) ''
     ${depot.tools.depotfmt}/bin/depotfmt Cargo.nix
   '';
 
@@ -174,7 +183,7 @@ in
   rust-docs = pkgs.stdenv.mkDerivation {
     inherit cargoDeps src;
     name = "tvix-rust-docs";
-    PROTO_ROOT = depot.tvix.proto;
+    inherit PROTO_ROOT;
 
     nativeBuildInputs = with pkgs; [
       cargo
@@ -199,7 +208,7 @@ in
   clippy = pkgs.stdenv.mkDerivation {
     inherit cargoDeps src;
     name = "tvix-clippy";
-    PROTO_ROOT = depot.tvix.proto;
+    inherit PROTO_ROOT;
 
     buildInputs = [
       pkgs.fuse
