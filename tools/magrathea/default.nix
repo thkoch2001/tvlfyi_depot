@@ -1,7 +1,9 @@
 # magrathea helps you build planets
 #
 # it is a tool for working with monorepos in the style of tvl's depot
-{ pkgs, ... }:
+{ pkgs ? import <nixpkgs> { }
+, ...
+}:
 
 let
   inherit (pkgs)
@@ -36,4 +38,9 @@ stdenv.mkDerivation {
   fixupPhase = ''
     wrapProgram $out/bin/mg --prefix PATH ${lib.makeBinPath [ nix ]}
   '';
+
+  meta = {
+    # nix run -E '<depot>' tools.magrathea
+    mainProgram = "mg";
+  };
 }
