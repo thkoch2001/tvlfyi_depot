@@ -10403,6 +10403,11 @@ rec {
         libName = "tvix_eval";
         dependencies = [
           {
+            name = "bstr";
+            packageId = "bstr";
+            features = [ "serde" ];
+          }
+          {
             name = "bytes";
             packageId = "bytes";
           }
@@ -13888,4 +13893,3 @@ rec {
     #
   };
 }
-
