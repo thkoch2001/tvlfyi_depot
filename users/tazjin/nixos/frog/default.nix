@@ -64,7 +64,6 @@ lib.fix (self: {
   nix.settings = {
     max-jobs = 48;
     substituters = [ "ssh://nix-ssh@whitby.tvl.fyi" ];
-    trusted-public-keys = [ "cache.tvl.fyi:fd+9d1ceCPvDX/xVhcfv8nAa6njEhAGAEe+oGJDEeoc=" ];
   };
 
   networking = {
