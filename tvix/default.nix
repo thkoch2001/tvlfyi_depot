@@ -116,7 +116,7 @@ rec {
     nativeBuildInputs = [ crate2nixGenerate ];
     buildPhase = ''
       crate2nix-generate
-      diff -qr . ${src}
+      diff -ur . ${src}
       touch $out
     '';
   };
