@@ -12,6 +12,7 @@
 pub mod generators;
 mod macros;
 
+use bstr::{BString, ByteVec};
 use codemap::Span;
 use serde_json::json;
 use std::{cmp::Ordering, collections::HashMap, ops::DerefMut, path::PathBuf, rc::Rc};
@@ -550,14 +551,14 @@ where
                         let key = key.to_str().with_span(&frame, self)?;
                         let attrs = attrs.to_attrs().with_span(&frame, self)?;
 
-                        match attrs.select(key.as_str()) {
+                        match attrs.select(&key) {
                             Some(value) => self.stack.push(value.clone()),
 
                             None => {
                                 return frame.error(
                                     self,
                                     ErrorKind::AttributeNotFound {
-                                        name: key.as_str().to_string(),
+                                        name: key.into_string_lossy()
                                     },
                                 );
                             }
@@ -598,7 +599,7 @@ where
                 OpCode::OpAttrsTrySelect => {
                     let key = self.stack_pop().to_str().with_span(&frame, self)?;
                     let value = match self.stack_pop() {
-                        Value::Attrs(attrs) => match attrs.select(key.as_str()) {
+                        Value::Attrs(attrs) => match attrs.select(&key) {
                             Some(value) => value.clone(),
                             None => Value::AttrNotFound,
                         },
@@ -705,7 +706,7 @@ where
                     self(key, attrs) => {
                         let key = key.to_str().with_span(&frame, self)?;
                         let result = match attrs {
-                            Value::Attrs(attrs) => attrs.contains(key.as_str()),
+                            Value::Attrs(attrs) => attrs.contains(&key),
 
                             // Nix allows use of `?` on non-set types, but
                             // always returns false in those cases.
@@ -740,12 +741,7 @@ where
                         .unwrap_or(0);
 
                     self.enqueue_generator("resolve_with", op_span, |co| {
-                        resolve_with(
-                            co,
-                            ident.as_str().to_owned(),
-                            with_stack_len,
-                            closed_with_stack_len,
-                        )
+                        resolve_with(co, ident.to_owned(), with_stack_len, closed_with_stack_len)
                     });
 
                     return Ok(false);
@@ -966,7 +962,7 @@ where
     /// fragments of the stack, evaluating them to strings, and pushing
     /// the concatenated result string back on the stack.
     fn run_interpolate(&mut self, frame: &CallFrame, count: usize) -> EvalResult<()> {
-        let mut out = String::new();
+        let mut out = vec![];
         // Interpolation propagates the context and union them.
         let mut context: NixContext = NixContext::new();
 
@@ -980,7 +976,7 @@ where
                 return Ok(());
             }
             let mut nix_string = val.to_contextful_str().with_span(frame, self)?;
-            out.push_str(nix_string.as_str());
+            out.push_str(nix_string.as_bstr());
             if let Some(nix_string_ctx) = nix_string.context_mut() {
                 context = context.join(nix_string_ctx);
             }
@@ -1160,7 +1156,7 @@ where
 /// for matching values in the with-stacks carried at runtime.
 async fn resolve_with(
     co: GenCo,
-    ident: String,
+    ident: BString,
     vm_with_len: usize,
     upvalue_with_len: usize,
 ) -> Result<Value, ErrorKind> {
@@ -1194,7 +1190,7 @@ async fn resolve_with(
             return Ok(with);
         }
 
-        match with.to_attrs()?.select(&ident) {
+        match with.to_attrs()?.select(ident) {
             None => continue,
             Some(val) => return Ok(val.clone()),
         }

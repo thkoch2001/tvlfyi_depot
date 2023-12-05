@@ -6,6 +6,7 @@ use std::num::{NonZeroI32, NonZeroUsize};
 use std::path::PathBuf;
 use std::rc::Rc;
 
+use bstr::{ByteSlice, B};
 use lexical_core::format::CXX_LITERAL;
 use serde::Deserialize;
 
@@ -326,10 +327,7 @@ impl Value {
             let value = if let Some(v) = vals.pop() {
                 v.force(co, span.clone()).await?
             } else {
-                return Ok(Value::String(NixString::new_context_from(
-                    context,
-                    result.as_str(),
-                )));
+                return Ok(Value::String(NixString::new_context_from(context, result)));
             };
             let coerced = match (value, kind) {
                 // coercions that are always done

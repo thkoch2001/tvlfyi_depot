@@ -3,6 +3,7 @@
 //! See //tvix/eval/docs/builtins.md for a some context on the
 //! available builtins in Nix.
 
+use bstr::ByteVec;
 use builtin_macros::builtins;
 use genawaiter::rc::Gen;
 use imbl::OrdMap;
@@ -63,7 +64,7 @@ pub async fn coerce_value_to_path(
     .await
     {
         Ok(vs) => {
-            let path = PathBuf::from(vs.as_str());
+            let path = vs.into_path_buf()?;
             if path.is_absolute() {
                 Ok(Ok(path))
             } else {
@@ -76,6 +77,7 @@ pub async fn coerce_value_to_path(
 
 #[builtins]
 mod pure_builtins {
+    use bstr::{BString, ByteSlice};
     use imbl::Vector;
     use itertools::Itertools;
 
@@ -237,7 +239,7 @@ mod pure_builtins {
         for item in list.into_iter() {
             let set = generators::request_force(&co, item).await.to_attrs()?;
 
-            if let Some(value) = set.select(key.as_str()) {
+            if let Some(value) = set.select(&key) {
                 output.push(value.clone());
             }
         }
@@ -253,9 +255,9 @@ mod pure_builtins {
     #[builtin("compareVersions")]
     async fn builtin_compare_versions(co: GenCo, x: Value, y: Value) -> Result<Value, ErrorKind> {
         let s1 = x.to_str()?;
-        let s1 = VersionPartsIter::new_for_cmp(s1.as_str());
+        let s1 = VersionPartsIter::new_for_cmp((&s1).into());
         let s2 = y.to_str()?;
-        let s2 = VersionPartsIter::new_for_cmp(s2.as_str());
+        let s2 = VersionPartsIter::new_for_cmp((&s2).into());
 
         match s1.cmp(s2) {
             std::cmp::Ordering::Less => Ok(Value::Integer(-1)),
@@ -320,7 +322,7 @@ mod pure_builtins {
             context = context.join(sep_context);
         }
         let list = list.to_list()?;
-        let mut res = String::new();
+        let mut res = BString::default();
         for (i, val) in list.into_iter().enumerate() {
             if i != 0 {
                 res.push_str(&separator);
@@ -336,7 +338,7 @@ mod pure_builtins {
             .await
             {
                 Ok(mut s) => {
-                    res.push_str(s.as_str());
+                    res.push_str(s);
                     if let Some(ref mut other_context) = s.context_mut() {
                         // It is safe to consume the other context here
                         // because the `list` and `separator` are originally
@@ -516,7 +518,7 @@ mod pure_builtins {
 
         let json_str = json.to_str()?;
 
-        serde_json::from_str(&json_str).map_err(|err| err.into())
+        serde_json::from_slice(&json_str).map_err(|err| err.into())
     }
 
     #[builtin("toJSON")]
@@ -534,7 +536,7 @@ mod pure_builtins {
     async fn builtin_from_toml(co: GenCo, toml: Value) -> Result<Value, ErrorKind> {
         let toml_str = toml.to_str()?;
 
-        toml::from_str(&toml_str).map_err(|err| err.into())
+        toml::from_str(toml_str.to_str()?).map_err(|err| err.into())
     }
 
     #[builtin("filterSource")]
@@ -629,7 +631,7 @@ mod pure_builtins {
         let k = key.to_str()?;
         let xs = set.to_attrs()?;
 
-        match xs.select(k.as_str()) {
+        match xs.select(&k) {
             Some(x) => Ok(x.clone()),
             None => Err(ErrorKind::AttributeNotFound {
                 name: k.to_string(),
@@ -677,7 +679,7 @@ mod pure_builtins {
         let k = key.to_str()?;
         let xs = set.to_attrs()?;
 
-        Ok(Value::Bool(xs.contains(k.as_str())))
+        Ok(Value::Bool(xs.contains(&k)))
     }
 
     #[builtin("hasContext")]
@@ -1103,7 +1105,7 @@ mod pure_builtins {
         // This replicates cppnix's (mis?)handling of codepoints
         // above U+007f following 0x2d ('-')
         let s = s.to_str()?;
-        let slice: &[u8] = s.as_str().as_ref();
+        let slice: &[u8] = s.as_ref();
         let (name, dash_and_version) = slice.split_at(
             slice
                 .windows(2)
@@ -1216,7 +1218,7 @@ mod pure_builtins {
 
         let mut string = s.to_contextful_str()?;
 
-        let mut res = String::new();
+        let mut res = BString::default();
 
         let mut i: usize = 0;
         let mut empty_string_replace = false;
@@ -1245,27 +1247,27 @@ mod pure_builtins {
                 // We already applied a from->to with an empty from
                 // transformation.
                 // Let's skip it so that we don't loop infinitely
-                if empty_string_replace && from.as_str().is_empty() {
+                if empty_string_replace && from.is_empty() {
                     continue;
                 }
 
                 // if we match the `from` string, let's replace
-                if &string[i..i + from.len()] == from.as_str() {
-                    res += &to;
+                if &string[i..i + from.len()] == &*from {
+                    res.push_str(to);
                     i += from.len();
                     if let Some(to_ctx) = to.context_mut() {
                         context = context.join(to_ctx);
                     }
 
                     // remember if we applied the empty from->to
-                    empty_string_replace = from.as_str().is_empty();
+                    empty_string_replace = from.is_empty();
 
                     continue 'outer;
                 }
             }
 
             // If we don't match any `from`, we simply add a character
-            res += &string[i..i + 1];
+            res.push_str(&string[i..i + 1]);
             i += 1;
 
             // Since we didn't apply anything transformation,
@@ -1316,7 +1318,7 @@ mod pure_builtins {
         let s = str.to_contextful_str()?;
         let text = s.as_str();
         let re = regex.to_str()?;
-        let re: Regex = Regex::new(re.as_str()).unwrap();
+        let re: Regex = Regex::new(re.to_str()?).unwrap();
         let mut capture_locations = re.capture_locations();
         let num_captures = capture_locations.len();
         let mut ret = imbl::Vector::new();
@@ -1377,7 +1379,7 @@ mod pure_builtins {
             return Ok(s);
         }
         let s = s.to_str()?;
-        let s = VersionPartsIter::new(s.as_str());
+        let s = VersionPartsIter::new((&s).into());
 
         let parts = s
             .map(|s| {
@@ -1455,9 +1457,9 @@ mod pure_builtins {
         }
 
         let end = if len < 0 {
-            x.as_str().len()
+            x.len()
         } else {
-            cmp::min(beg + (len as usize), x.as_str().len())
+            cmp::min(beg + (len as usize), x.len())
         };
 
         Ok(Value::String(NixString::new_inherit_context_from(
