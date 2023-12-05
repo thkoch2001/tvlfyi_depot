@@ -6,6 +6,7 @@ use std::num::{NonZeroI32, NonZeroUsize};
 use std::path::PathBuf;
 use std::rc::Rc;
 
+use bstr::{ByteSlice, B};
 use lexical_core::format::CXX_LITERAL;
 use serde::Deserialize;
 
@@ -341,7 +342,7 @@ impl Value {
                     }
 
                     match generators::request_string_coerce(&co, elem, kind).await {
-                        Ok(s) => out.push_str(s.as_str()),
+                        Ok(s) => out.push_str(&s.to_str_lossy()),
                         Err(c) => return Ok(Value::Catchable(c)),
                     }
                 }
@@ -476,7 +477,7 @@ impl Value {
                         let s2 = generators::request_force(&co, v2.clone()).await.to_str();
 
                         if let (Ok(s1), Ok(s2)) = (s1, s2) {
-                            if s1.as_str() == "derivation" && s2.as_str() == "derivation" {
+                            if s1 == B("derivation") && s2 == B("derivation") {
                                 // TODO(tazjin): are the outPaths really required,
                                 // or should it fall through?
                                 let out1 = a1

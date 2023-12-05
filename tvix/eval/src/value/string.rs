@@ -3,63 +3,66 @@
 //! Nix language strings never need to be modified on the language
 //! level, allowing us to shave off some memory overhead and only
 //! paying the cost when creating new strings.
+use bstr::{BStr, BString, ByteSlice, ByteVec, Chars};
 use rnix::ast;
+use std::borrow::Cow;
 use std::ffi::OsStr;
+use std::fmt::Display;
 use std::hash::Hash;
 use std::ops::Deref;
 use std::path::Path;
-use std::str::{self, Utf8Error};
-use std::{borrow::Cow, fmt::Display, str::Chars};
 
 use serde::de::{Deserializer, Visitor};
 use serde::{Deserialize, Serialize};
 
 #[repr(transparent)]
-#[derive(Clone, Debug, Serialize)]
-pub struct NixString(Box<str>);
+#[derive(Clone, Debug, Serialize, PartialEq, Eq, PartialOrd, Ord, Hash)]
+pub struct NixString(BString);
 
-impl PartialEq for NixString {
-    fn eq(&self, other: &Self) -> bool {
-        self.as_str() == other.as_str()
+impl PartialEq<&[u8]> for NixString {
+    fn eq(&self, other: &&[u8]) -> bool {
+        **self == **other
     }
 }
 
-impl Eq for NixString {}
-
-impl PartialOrd for NixString {
-    fn partial_cmp(&self, other: &Self) -> Option<std::cmp::Ordering> {
-        Some(self.cmp(other))
+impl From<&BStr> for NixString {
+    fn from(value: &BStr) -> Self {
+        Self(value.to_owned())
     }
 }
 
-impl Ord for NixString {
-    fn cmp(&self, other: &Self) -> std::cmp::Ordering {
-        self.as_str().cmp(other.as_str())
+impl From<&[u8]> for NixString {
+    fn from(value: &[u8]) -> Self {
+        Self(value.into())
     }
 }
 
-impl TryFrom<&[u8]> for NixString {
-    type Error = Utf8Error;
-
-    fn try_from(value: &[u8]) -> Result<Self, Self::Error> {
-        Ok(Self(Box::from(str::from_utf8(value)?)))
+impl From<Vec<u8>> for NixString {
+    fn from(value: Vec<u8>) -> Self {
+        Self(value.into())
     }
 }
 
 impl From<&str> for NixString {
     fn from(s: &str) -> Self {
-        NixString(Box::from(s))
+        Self::from(s.as_bytes())
     }
 }
 
 impl From<String> for NixString {
     fn from(s: String) -> Self {
-        NixString(s.into_boxed_str())
+        Self(s.into())
     }
 }
 
 impl From<Box<str>> for NixString {
     fn from(s: Box<str>) -> Self {
+        Self(s.into_boxed_bytes().into_vec().into())
+    }
+}
+
+impl From<BString> for NixString {
+    fn from(s: BString) -> Self {
         Self(s)
     }
 }
@@ -70,9 +73,15 @@ impl From<ast::Ident> for NixString {
     }
 }
 
-impl Hash for NixString {
-    fn hash<H: std::hash::Hasher>(&self, state: &mut H) {
-        self.as_str().hash(state)
+impl<'a> From<&'a NixString> for &'a BStr {
+    fn from(s: &'a NixString) -> Self {
+        BStr::new(&*s.0)
+    }
+}
+
+impl AsRef<[u8]> for NixString {
+    fn as_ref(&self) -> &[u8] {
+        &**self.0
     }
 }
 
@@ -127,7 +136,11 @@ mod arbitrary {
 }
 
 impl NixString {
-    pub fn as_str(&self) -> &str {
+    pub fn as_bstr(&self) -> &BStr {
+        BStr::new(self.as_bytes())
+    }
+
+    pub fn as_bytes(&self) -> &[u8] {
         &self.0
     }
 
@@ -138,7 +151,7 @@ impl NixString {
     /// set keys, as those are only escaped in the presence of special
     /// characters.
     pub fn ident_str(&self) -> Cow<str> {
-        let escaped = nix_escape_string(self.as_str());
+        let escaped = nix_escape_string(&self.to_str_lossy());
 
         match escaped {
             // A borrowed string is unchanged and can be returned as
@@ -158,9 +171,9 @@ impl NixString {
     }
 
     pub fn concat(&self, other: &Self) -> Self {
-        let mut s = self.as_str().to_owned();
-        s.push_str(other.as_str());
-        NixString(s.into_boxed_str())
+        let mut s = self.0.clone();
+        s.extend(other.0.bytes());
+        Self(s)
     }
 
     pub fn chars(&self) -> Chars<'_> {
@@ -243,34 +256,16 @@ fn nix_escape_string(input: &str) -> Cow<str> {
 impl Display for NixString {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         f.write_str("\"")?;
-        f.write_str(&nix_escape_string(self.as_str()))?;
+        f.write_str(&nix_escape_string(&self.to_str_lossy()))?;
         f.write_str("\"")
     }
 }
 
-impl AsRef<str> for NixString {
-    fn as_ref(&self) -> &str {
-        self.as_str()
-    }
-}
-
-impl AsRef<OsStr> for NixString {
-    fn as_ref(&self) -> &OsStr {
-        self.as_str().as_ref()
-    }
-}
-
-impl AsRef<Path> for NixString {
-    fn as_ref(&self) -> &Path {
-        self.as_str().as_ref()
-    }
-}
-
 impl Deref for NixString {
-    type Target = str;
+    type Target = Vec<u8>;
 
     fn deref(&self) -> &Self::Target {
-        self.as_str()
+        &*self.0
     }
 }
 

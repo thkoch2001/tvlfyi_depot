@@ -3,6 +3,7 @@
 //! See //tvix/eval/docs/builtins.md for a some context on the
 //! available builtins in Nix.
 
+use bstr::ByteVec;
 use builtin_macros::builtins;
 use genawaiter::rc::Gen;
 use imbl::OrdMap;
@@ -52,7 +53,7 @@ pub async fn coerce_value_to_path(
 
     match generators::request_string_coerce(co, value, CoercionKind::Weak).await {
         Ok(vs) => {
-            let path = PathBuf::from(vs.as_str());
+            let path = vs.into_path_buf()?;
             if path.is_absolute() {
                 Ok(Ok(path))
             } else {
@@ -65,6 +66,8 @@ pub async fn coerce_value_to_path(
 
 #[builtins]
 mod pure_builtins {
+    use bstr::{BString, ByteSlice};
+
     use crate::value::PointerEquality;
 
     use super::*;
@@ -162,7 +165,7 @@ mod pure_builtins {
         for item in list.into_iter() {
             let set = generators::request_force(&co, item).await.to_attrs()?;
 
-            if let Some(value) = set.select(key.as_str()) {
+            if let Some(value) = set.select(&key) {
                 output.push(value.clone());
             }
         }
@@ -178,9 +181,9 @@ mod pure_builtins {
     #[builtin("compareVersions")]
     async fn builtin_compare_versions(co: GenCo, x: Value, y: Value) -> Result<Value, ErrorKind> {
         let s1 = x.to_str()?;
-        let s1 = VersionPartsIter::new_for_cmp(s1.as_str());
+        let s1 = VersionPartsIter::new_for_cmp((&s1).into());
         let s2 = y.to_str()?;
-        let s2 = VersionPartsIter::new_for_cmp(s2.as_str());
+        let s2 = VersionPartsIter::new_for_cmp((&s2).into());
 
         match s1.cmp(s2) {
             std::cmp::Ordering::Less => Ok(Value::Integer(-1)),
@@ -221,13 +224,13 @@ mod pure_builtins {
     ) -> Result<Value, ErrorKind> {
         let separator = separator.to_str()?;
         let list = list.to_list()?;
-        let mut res = String::new();
+        let mut res = BString::default();
         for (i, val) in list.into_iter().enumerate() {
             if i != 0 {
                 res.push_str(&separator);
             }
             match generators::request_string_coerce(&co, val, CoercionKind::Weak).await {
-                Ok(s) => res.push_str(s.as_str()),
+                Ok(s) => res.push_str(s),
                 Err(c) => return Ok(Value::Catchable(c)),
             }
         }
@@ -348,7 +351,7 @@ mod pure_builtins {
     async fn builtin_from_json(co: GenCo, json: Value) -> Result<Value, ErrorKind> {
         let json_str = json.to_str()?;
 
-        serde_json::from_str(&json_str).map_err(|err| err.into())
+        serde_json::from_slice(&json_str).map_err(|err| err.into())
     }
 
     #[builtin("toJSON")]
@@ -366,7 +369,7 @@ mod pure_builtins {
     async fn builtin_from_toml(co: GenCo, toml: Value) -> Result<Value, ErrorKind> {
         let toml_str = toml.to_str()?;
 
-        toml::from_str(&toml_str).map_err(|err| err.into())
+        toml::from_str(toml_str.to_str()?).map_err(|err| err.into())
     }
 
     #[builtin("genericClosure")]
@@ -438,7 +441,7 @@ mod pure_builtins {
         let k = key.to_str()?;
         let xs = set.to_attrs()?;
 
-        match xs.select(k.as_str()) {
+        match xs.select(&k) {
             Some(x) => Ok(x.clone()),
             None => Err(ErrorKind::AttributeNotFound {
                 name: k.to_string(),
@@ -470,7 +473,7 @@ mod pure_builtins {
         let k = key.to_str()?;
         let xs = set.to_attrs()?;
 
-        Ok(Value::Bool(xs.contains(k.as_str())))
+        Ok(Value::Bool(xs.contains(&k)))
     }
 
     #[builtin("head")]
@@ -673,8 +676,8 @@ mod pure_builtins {
     async fn builtin_match(co: GenCo, regex: Value, str: Value) -> Result<Value, ErrorKind> {
         let s = str.to_str()?;
         let re = regex.to_str()?;
-        let re: Regex = Regex::new(&format!("^{}$", re.as_str())).unwrap();
-        match re.captures(&s) {
+        let re: Regex = Regex::new(&format!("^{}$", re)).unwrap();
+        match re.captures(&s.to_str()?) {
             Some(caps) => Ok(Value::List(
                 caps.iter()
                     .skip(1)
@@ -696,7 +699,7 @@ mod pure_builtins {
         // This replicates cppnix's (mis?)handling of codepoints
         // above U+007f following 0x2d ('-')
         let s = s.to_str()?;
-        let slice: &[u8] = s.as_str().as_ref();
+        let slice: &[u8] = s.as_ref();
         let (name, dash_and_version) = slice.split_at(
             slice
                 .windows(2)
@@ -781,7 +784,7 @@ mod pure_builtins {
 
         let string = s.to_str()?;
 
-        let mut res = String::new();
+        let mut res = BString::default();
 
         let mut i: usize = 0;
         let mut empty_string_replace = false;
@@ -805,24 +808,24 @@ mod pure_builtins {
                 // We already applied a from->to with an empty from
                 // transformation.
                 // Let's skip it so that we don't loop infinitely
-                if empty_string_replace && from.as_str().is_empty() {
+                if empty_string_replace && from.is_empty() {
                     continue;
                 }
 
                 // if we match the `from` string, let's replace
-                if &string[i..i + from.len()] == from.as_str() {
-                    res += &to;
+                if &string[i..i + from.len()] == &*from {
+                    res.push_str(to);
                     i += from.len();
 
                     // remember if we applied the empty from->to
-                    empty_string_replace = from.as_str().is_empty();
+                    empty_string_replace = from.is_empty();
 
                     continue 'outer;
                 }
             }
 
             // If we don't match any `from`, we simply add a character
-            res += &string[i..i + 1];
+            res.push_str(&string[i..i + 1]);
             i += 1;
 
             // Since we didn't apply anything transformation,
@@ -836,8 +839,8 @@ mod pure_builtins {
             let from = elem.0.to_str()?;
             let to = elem.1.to_str()?;
 
-            if from.as_str().is_empty() {
-                res += &to;
+            if from.is_empty() {
+                res.push_str(&to);
                 break;
             }
         }
@@ -854,9 +857,9 @@ mod pure_builtins {
     #[builtin("split")]
     async fn builtin_split(co: GenCo, regex: Value, str: Value) -> Result<Value, ErrorKind> {
         let s = str.to_str()?;
-        let text = s.as_str();
+        let text = s.to_str()?;
         let re = regex.to_str()?;
-        let re: Regex = Regex::new(re.as_str()).unwrap();
+        let re: Regex = Regex::new(re.to_str()?).unwrap();
         let mut capture_locations = re.capture_locations();
         let num_captures = capture_locations.len();
         let mut ret = imbl::Vector::new();
@@ -897,7 +900,7 @@ mod pure_builtins {
     #[builtin("splitVersion")]
     async fn builtin_split_version(co: GenCo, s: Value) -> Result<Value, ErrorKind> {
         let s = s.to_str()?;
-        let s = VersionPartsIter::new(s.as_str());
+        let s = VersionPartsIter::new((&s).into());
 
         let parts = s
             .map(|s| {
@@ -914,7 +917,7 @@ mod pure_builtins {
     async fn builtin_string_length(co: GenCo, #[lazy] s: Value) -> Result<Value, ErrorKind> {
         // also forces the value
         let s = s.coerce_to_string(co, CoercionKind::Weak).await?;
-        Ok(Value::Integer(s.to_str()?.as_str().len() as i64))
+        Ok(Value::Integer(s.to_str()?.len() as i64))
     }
 
     #[builtin("sub")]
@@ -941,17 +944,17 @@ mod pure_builtins {
         // Nix doesn't assert that the length argument is
         // non-negative when the starting index is GTE the
         // string's length.
-        if beg >= x.as_str().len() {
+        if beg >= x.len() {
             return Ok(Value::String("".into()));
         }
 
         let end = if len < 0 {
-            x.as_str().len()
+            x.len()
         } else {
-            cmp::min(beg + (len as usize), x.as_str().len())
+            cmp::min(beg + (len as usize), x.len())
         };
 
-        Ok(Value::String(x.as_bytes()[beg..end].try_into()?))
+        Ok(Value::String(x.as_bytes()[beg..end].into()))
     }
 
     #[builtin("tail")]
