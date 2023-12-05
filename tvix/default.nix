@@ -98,7 +98,7 @@ let
   '';
 
 in
- {
+{
   inherit crates crate2nixGenerate;
 
   # Run crate2nix generate, ensure the output doesn't differ afterwards
@@ -109,7 +109,7 @@ in
     nativeBuildInputs = [ crate2nixGenerate ];
     buildPhase = ''
       crate2nix-generate
-      diff -qr . ${src}
+      diff -ur . ${src}
       touch $out
     '';
   };
