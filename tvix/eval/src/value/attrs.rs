@@ -7,6 +7,7 @@
 //! some peculiarities that are encapsulated within this module.
 use std::iter::FromIterator;
 
+use bstr::{BStr, B};
 use imbl::{ordmap, OrdMap};
 use lazy_static::lazy_static;
 use serde::de::{Deserializer, Error, Visitor};
@@ -69,13 +70,13 @@ impl AttrsRep {
         }
     }
 
-    fn select(&self, key: &str) -> Option<&Value> {
+    fn select(&self, key: &BStr) -> Option<&Value> {
         match self {
             AttrsRep::Empty => None,
 
-            AttrsRep::KV { name, value } => match key {
-                "name" => Some(name),
-                "value" => Some(value),
+            AttrsRep::KV { name, value } => match &**key {
+                b"name" => Some(name),
+                b"value" => Some(value),
                 _ => None,
             },
 
@@ -83,7 +84,7 @@ impl AttrsRep {
         }
     }
 
-    fn contains(&self, key: &str) -> bool {
+    fn contains(&self, key: &BStr) -> bool {
         match self {
             AttrsRep::Empty => false,
             AttrsRep::KV { .. } => key == "name" || key == "value",
@@ -266,18 +267,20 @@ impl NixAttrs {
     }
 
     /// Select a value from an attribute set by key.
-    pub fn select(&self, key: &str) -> Option<&Value> {
+    pub fn select(&self, key: &BStr) -> Option<&Value> {
         self.0.select(key)
     }
 
     /// Select a required value from an attribute set by key, return
     /// an `AttributeNotFound` error if it is missing.
-    pub fn select_required(&self, key: &str) -> Result<&Value, ErrorKind> {
+    pub fn select_required(&self, key: &BStr) -> Result<&Value, ErrorKind> {
         self.select(key)
-            .ok_or_else(|| ErrorKind::AttributeNotFound { name: key.into() })
+            .ok_or_else(|| ErrorKind::AttributeNotFound {
+                name: key.to_string(),
+            })
     }
 
-    pub fn contains(&self, key: &str) -> bool {
+    pub fn contains(&self, key: &BStr) -> bool {
         self.0.contains(key)
     }
 
@@ -374,7 +377,7 @@ impl NixAttrs {
     /// Attempt to coerce an attribute set with a `__toString`
     /// attribute to a string.
     pub(crate) async fn try_to_string(&self, co: &GenCo, kind: CoercionKind) -> Option<NixString> {
-        if let Some(to_string) = self.select("__toString") {
+        if let Some(to_string) = self.select(BStr::new("__toString")) {
             let callable = generators::request_force(co, to_string.clone()).await;
 
             // Leave the attribute set on the stack as an argument
@@ -449,7 +452,7 @@ fn attempt_optimise_kv(slice: &mut [Value]) -> Option<NixAttrs> {
 fn set_attr(attrs: &mut NixAttrs, key: NixString, value: Value) -> Result<(), ErrorKind> {
     match attrs.0.map_mut().entry(key) {
         imbl::ordmap::Entry::Occupied(entry) => Err(ErrorKind::DuplicateAttrsKey {
-            key: entry.key().as_str().to_string(),
+            key: entry.key().to_string(),
         }),
 
         imbl::ordmap::Entry::Vacant(entry) => {
