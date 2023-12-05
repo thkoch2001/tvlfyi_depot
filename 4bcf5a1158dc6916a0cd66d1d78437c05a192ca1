@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b331557f_0a88f651",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-12-05T17:20:49Z",
+      "side": 1,
+      "message": "We don\u0027t need docker to build images, we could also enter the nix-shell in //tvix/shell.nix and invoke cargo bench from there.",
+      "revId": "4bcf5a1158dc6916a0cd66d1d78437c05a192ca1",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7125bb4d_aa40179c",
+        "filename": "tvix/scripts/bench.sh",
+        "patchSetId": 2
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-12-05T17:20:49Z",
+      "side": 1,
+      "message": "please add a comment that this does not run inside CI or anything, but on the \"windtunnel runner\", which is where windtunnel-cli is available too.\n\nlong-term I\u0027d personally prefer to see windtunnel-cli packaged up one way or another, and part of a Buildkite extraStep, but we can start simple.",
+      "revId": "4bcf5a1158dc6916a0cd66d1d78437c05a192ca1",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
