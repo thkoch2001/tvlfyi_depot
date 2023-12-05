@@ -85,6 +85,10 @@ let
         "futures-util"
       ]);
   };
+
+  # The cleaned sources.
+  src = depot.third_party.gitignoreSource ./.;
+
 in
 {
   inherit crates;
@@ -117,9 +121,8 @@ in
 
   # Build the Rust documentation for publishing on docs.tvix.dev.
   rust-docs = pkgs.stdenv.mkDerivation {
-    inherit cargoDeps;
+    inherit cargoDeps src;
     name = "tvix-rust-docs";
-    src = depot.third_party.gitignoreSource ./.;
     PROTO_ROOT = depot.tvix.proto;
 
     nativeBuildInputs = with pkgs; [
@@ -143,9 +146,8 @@ in
   # Run cargo clippy. We run it with -Dwarnings, so warnings cause a nonzero
   # exit code.
   clippy = pkgs.stdenv.mkDerivation {
-    inherit cargoDeps;
+    inherit cargoDeps src;
     name = "tvix-clippy";
-    src = depot.third_party.gitignoreSource ./.;
     PROTO_ROOT = depot.tvix.proto;
 
     buildInputs = [
