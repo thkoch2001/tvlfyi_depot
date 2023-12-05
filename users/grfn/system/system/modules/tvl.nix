@@ -23,9 +23,6 @@
         "https://cache.nixos.org"
         "ssh://nix-ssh@whitby.tvl.fyi"
       ];
-      trusted-public-keys = [
-        "cache.tvl.fyi:fd+9d1ceCPvDX/xVhcfv8nAa6njEhAGAEe+oGJDEeoc="
-      ];
     };
   };
 
