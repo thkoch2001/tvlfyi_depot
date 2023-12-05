@@ -456,11 +456,7 @@ to a missing value in the attribute set(s) included via `with`."#,
             }
 
             ErrorKind::UnexpectedArgument { arg, .. } => {
-                write!(
-                    f,
-                    "Unexpected argument `{}` supplied to function",
-                    arg.as_str()
-                )
+                write!(f, "Unexpected argument `{arg}` supplied to function",)
             }
 
             ErrorKind::Xml(error) => write!(f, "failed to serialise to XML: {error}"),
