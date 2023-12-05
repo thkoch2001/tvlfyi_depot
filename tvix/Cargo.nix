@@ -1000,9 +1000,9 @@ rec {
       };
       "bstr" = rec {
         crateName = "bstr";
-        version = "1.6.0";
+        version = "1.8.0";
         edition = "2021";
-        sha256 = "01bvsr3x9n75klbwxym0zf939vzim0plsmy786p0zzzvrj6i9637";
+        sha256 = "0313sqdf0a40vhpnrlkf54zhr76rmlyxzhx00sq8822shfl36bsl";
         authors = [
           "Andrew Gallant <jamslam@gmail.com>"
         ];
@@ -1027,7 +1027,7 @@ rec {
           }
         ];
         features = {
-          "alloc" = [ "serde?/alloc" ];
+          "alloc" = [ "memchr/alloc" "serde?/alloc" ];
           "default" = [ "std" "unicode" ];
           "serde" = [ "dep:serde" ];
           "std" = [ "alloc" "memchr/std" "serde?/std" ];
@@ -4274,9 +4274,9 @@ rec {
       };
       "memchr" = rec {
         crateName = "memchr";
-        version = "2.5.0";
-        edition = "2018";
-        sha256 = "0vanfk5mzs1g1syqnj03q8n0syggnhn55dq535h2wxr7rwpfbzrd";
+        version = "2.6.4";
+        edition = "2021";
+        sha256 = "0rq1ka8790ns41j147npvxcqcl2anxyngsdimy85ag2api0fwrgn";
         authors = [
           "Andrew Gallant <jamslam@gmail.com>"
           "bluss"
@@ -4285,11 +4285,12 @@ rec {
           "compiler_builtins" = [ "dep:compiler_builtins" ];
           "core" = [ "dep:core" ];
           "default" = [ "std" ];
-          "libc" = [ "dep:libc" ];
+          "logging" = [ "dep:log" ];
           "rustc-dep-of-std" = [ "core" "compiler_builtins" ];
+          "std" = [ "alloc" ];
           "use_std" = [ "std" ];
         };
-        resolvedDefaultFeatures = [ "default" "std" ];
+        resolvedDefaultFeatures = [ "alloc" "default" "std" ];
       };
       "memoffset 0.6.5" = rec {
         crateName = "memoffset";
@@ -6146,9 +6147,9 @@ rec {
       };
       "regex-automata" = rec {
         crateName = "regex-automata";
-        version = "0.3.4";
+        version = "0.4.3";
         edition = "2021";
-        sha256 = "156jmvsbzd9arih42ninzkfgv7g93g6i2fdxc5gki53m1ccxddmp";
+        sha256 = "0gs8q9yhd3kcg4pr00ag4viqxnh5l7jpyb9fsfr8hzh451w4r02z";
         authors = [
           "The Rust Project Developers"
           "Andrew Gallant <jamslam@gmail.com>"
@@ -6161,7 +6162,7 @@ rec {
           "hybrid" = [ "alloc" "nfa-thompson" ];
           "internal-instrument" = [ "internal-instrument-pikevm" ];
           "internal-instrument-pikevm" = [ "logging" "std" ];
-          "logging" = [ "dep:log" "aho-corasick?/logging" ];
+          "logging" = [ "dep:log" "aho-corasick?/logging" "memchr?/logging" ];
           "meta" = [ "syntax" "nfa-pikevm" ];
           "nfa" = [ "nfa-thompson" "nfa-pikevm" "nfa-backtrack" ];
           "nfa-backtrack" = [ "nfa-thompson" ];
@@ -9799,6 +9800,11 @@ rec {
           else ./eval;
         libName = "tvix_eval";
         dependencies = [
+          {
+            name = "bstr";
+            packageId = "bstr";
+            features = [ "serde" ];
+          }
           {
             name = "bytes";
             packageId = "bytes";

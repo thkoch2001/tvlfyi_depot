@@ -178,6 +178,9 @@ pub enum ErrorKind {
         formals_span: Span,
     },
 
+    /// Invalid UTF-8 was encoutered somewhere
+    Utf8(bstr::Utf8Error),
+
     /// Errors while serialising to XML.
     Xml(Rc<XmlError>),
 
@@ -239,6 +242,12 @@ impl From<Utf8Error> for ErrorKind {
 impl From<FromUtf8Error> for ErrorKind {
     fn from(_: FromUtf8Error) -> Self {
         Self::NotImplemented("FromUtf8Error not handled: https://b.tvl.fyi/issues/189")
+    }
+}
+
+impl From<bstr::Utf8Error> for ErrorKind {
+    fn from(err: bstr::Utf8Error) -> Self {
+        Self::Utf8(err)
     }
 }
 
@@ -454,11 +463,11 @@ to a missing value in the attribute set(s) included via `with`."#,
             }
 
             ErrorKind::UnexpectedArgument { arg, .. } => {
-                write!(
-                    f,
-                    "Unexpected argument `{}` supplied to function",
-                    arg.as_str()
-                )
+                write!(f, "Unexpected argument `{arg}` supplied to function",)
+            }
+
+            ErrorKind::Utf8(err) => {
+                write!(f, "UTF8 Error: {err}")
             }
 
             ErrorKind::Xml(error) => write!(f, "failed to serialise to XML: {error}"),
@@ -767,6 +776,7 @@ impl Error {
             | ErrorKind::NotSerialisableToJson(_)
             | ErrorKind::FromTomlError(_)
             | ErrorKind::Xml(_)
+            | ErrorKind::Utf8(_)
             | ErrorKind::TvixError(_)
             | ErrorKind::TvixBug { .. }
             | ErrorKind::NotImplemented(_)
@@ -810,6 +820,7 @@ impl Error {
             ErrorKind::Xml(_) => "E034",
             ErrorKind::FromTomlError(_) => "E035",
             ErrorKind::NotSerialisableToJson(_) => "E036",
+            ErrorKind::Utf8(_) => "E037",
 
             // Special error code for errors from other Tvix
             // components. We may want to introduce a code namespacing

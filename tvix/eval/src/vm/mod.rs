@@ -12,6 +12,7 @@
 pub mod generators;
 mod macros;
 
+use bstr::{ByteSlice, ByteVec};
 use codemap::Span;
 use serde_json::json;
 use std::{cmp::Ordering, collections::HashMap, ops::DerefMut, path::PathBuf, rc::Rc};
@@ -548,9 +549,18 @@ impl<'o> VM<'o> {
                         let key = key.to_str().with_span(&frame, self)?;
                         let attrs = attrs.to_attrs().with_span(&frame, self)?;
 
+<<<<<<< HEAD
                         match attrs.select(key.as_str()) {
                             Some(value) => self.stack.push(value.clone()),
+||||||| parent of d48495028 (fix(tvix): Represent strings as byte arrays)
+                    match attrs.select(key.as_str()) {
+                        Some(value) => self.stack.push(value.clone()),
+=======
+                    match attrs.select(key.as_bstr()) {
+                        Some(value) => self.stack.push(value.clone()),
+>>>>>>> d48495028 (fix(tvix): Represent strings as byte arrays)
 
+<<<<<<< HEAD
                             None => {
                                 return frame.error(
                                     self,
@@ -559,6 +569,23 @@ impl<'o> VM<'o> {
                                     },
                                 );
                             }
+||||||| parent of d48495028 (fix(tvix): Represent strings as byte arrays)
+                        None => {
+                            return frame.error(
+                                self,
+                                ErrorKind::AttributeNotFound {
+                                    name: key.as_str().to_string(),
+                                },
+                            );
+=======
+                        None => {
+                            return frame.error(
+                                self,
+                                ErrorKind::AttributeNotFound {
+                                    name: key.to_string(),
+                                },
+                            );
+>>>>>>> d48495028 (fix(tvix): Represent strings as byte arrays)
                         }
                     }
                 }
@@ -596,7 +623,7 @@ impl<'o> VM<'o> {
                 OpCode::OpAttrsTrySelect => {
                     let key = self.stack_pop().to_str().with_span(&frame, self)?;
                     let value = match self.stack_pop() {
-                        Value::Attrs(attrs) => match attrs.select(key.as_str()) {
+                        Value::Attrs(attrs) => match attrs.select(key.as_bstr()) {
                             Some(value) => value.clone(),
                             None => Value::AttrNotFound,
                         },
@@ -707,6 +734,7 @@ impl<'o> VM<'o> {
                 }
 
                 OpCode::OpHasAttr => {
+<<<<<<< HEAD
                     let key = self.stack_pop();
                     let attrs = self.stack_pop();
                     if key.is_catchable() {
@@ -717,6 +745,15 @@ impl<'o> VM<'o> {
                         let key = key.to_str().with_span(&frame, self)?;
                         let result = match attrs {
                             Value::Attrs(attrs) => attrs.contains(key.as_str()),
+||||||| parent of d48495028 (fix(tvix): Represent strings as byte arrays)
+                    let key = self.stack_pop().to_str().with_span(&frame, self)?;
+                    let result = match self.stack_pop() {
+                        Value::Attrs(attrs) => attrs.contains(key.as_str()),
+=======
+                    let key = self.stack_pop().to_str().with_span(&frame, self)?;
+                    let result = match self.stack_pop() {
+                        Value::Attrs(attrs) => attrs.contains(key.as_bstr()),
+>>>>>>> d48495028 (fix(tvix): Represent strings as byte arrays)
 
                             // Nix allows use of `?` on non-set types, but
                             // always returns false in those cases.
@@ -759,7 +796,9 @@ impl<'o> VM<'o> {
                     self.enqueue_generator("resolve_with", op_span, |co| {
                         resolve_with(
                             co,
-                            ident.as_str().to_owned(),
+                            ident
+                                .into_string()
+                                .expect("Non-utf8 identifiers are not allowed"),
                             with_stack_len,
                             closed_with_stack_len,
                         )
@@ -985,10 +1024,10 @@ impl<'o> VM<'o> {
     /// fragments of the stack, evaluating them to strings, and pushing
     /// the concatenated result string back on the stack.
     fn run_interpolate(&mut self, frame: &CallFrame, count: usize) -> EvalResult<()> {
-        let mut out = String::new();
+        let mut out = Vec::new();
 
         for _ in 0..count {
-            out.push_str(self.stack_pop().to_str().with_span(frame, self)?.as_str());
+            out.extend_from_slice(self.stack_pop().to_str().with_span(frame, self)?.as_slice());
         }
 
         self.stack.push(Value::String(out.into()));
@@ -1189,7 +1228,7 @@ async fn resolve_with(
         // TODO(tazjin): is this branch still live with the current with-thunking?
         let with = fetch_forced_with(&co, with_stack_idx).await;
 
-        match with.to_attrs()?.select(&ident) {
+        match with.to_attrs()?.select(ident.as_str()) {
             None => continue,
             Some(val) => return Ok(val.clone()),
         }
@@ -1198,7 +1237,7 @@ async fn resolve_with(
     for upvalue_with_idx in (0..upvalue_with_len).rev() {
         let with = fetch_captured_with(&co, upvalue_with_idx).await;
 
-        match with.to_attrs()?.select(&ident) {
+        match with.to_attrs()?.select(ident.as_str()) {
             None => continue,
             Some(val) => return Ok(val.clone()),
         }
@@ -1231,7 +1270,7 @@ async fn add_values(co: GenCo, a: Value, b: Value) -> Result<Value, ErrorKind> {
             .await
             {
                 Ok(vs) => {
-                    path.push_str(vs.as_str());
+                    path.push_str(&vs.to_str_lossy());
                     crate::value::canon_path(PathBuf::from(path)).into()
                 }
                 Err(c) => Value::Catchable(c),

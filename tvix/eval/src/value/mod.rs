@@ -6,6 +6,7 @@ use std::num::{NonZeroI32, NonZeroUsize};
 use std::path::PathBuf;
 use std::rc::Rc;
 
+use bstr::{ByteSlice, B};
 use lexical_core::format::CXX_LITERAL;
 use serde::Deserialize;
 
@@ -265,9 +266,69 @@ impl Value {
                 | Value::Closure(_)
                 | Value::Builtin(_) => continue,
 
+<<<<<<< HEAD
                 Value::List(list) => {
                     for val in list.into_iter().rev() {
                         vals.push(val);
+||||||| parent of d48495028 (fix(tvix): Represent strings as byte arrays)
+                Err(ErrorKind::NotCoercibleToString { from: "set", kind })
+            }
+
+            // strong coercions
+            (Value::Null, CoercionKind::Strong) | (Value::Bool(false), CoercionKind::Strong) => {
+                Ok("".into())
+            }
+            (Value::Bool(true), CoercionKind::Strong) => Ok("1".into()),
+
+            (Value::Integer(i), CoercionKind::Strong) => Ok(format!("{i}").into()),
+            (Value::Float(f), CoercionKind::Strong) => {
+                // contrary to normal Display, coercing a float to a string will
+                // result in unconditional 6 decimal places
+                Ok(format!("{:.6}", f).into())
+            }
+
+            // Lists are coerced by coercing their elements and interspersing spaces
+            (Value::List(list), CoercionKind::Strong) => {
+                let mut out = String::new();
+
+                for (idx, elem) in list.into_iter().enumerate() {
+                    if idx > 0 {
+                        out.push(' ');
+                    }
+
+                    match generators::request_string_coerce(&co, elem, kind).await {
+                        Ok(s) => out.push_str(s.as_str()),
+                        Err(c) => return Ok(Value::Catchable(c)),
+=======
+                Err(ErrorKind::NotCoercibleToString { from: "set", kind })
+            }
+
+            // strong coercions
+            (Value::Null, CoercionKind::Strong) | (Value::Bool(false), CoercionKind::Strong) => {
+                Ok("".into())
+            }
+            (Value::Bool(true), CoercionKind::Strong) => Ok("1".into()),
+
+            (Value::Integer(i), CoercionKind::Strong) => Ok(format!("{i}").into()),
+            (Value::Float(f), CoercionKind::Strong) => {
+                // contrary to normal Display, coercing a float to a string will
+                // result in unconditional 6 decimal places
+                Ok(format!("{:.6}", f).into())
+            }
+
+            // Lists are coerced by coercing their elements and interspersing spaces
+            (Value::List(list), CoercionKind::Strong) => {
+                let mut out = String::new();
+
+                for (idx, elem) in list.into_iter().enumerate() {
+                    if idx > 0 {
+                        out.push(' ');
+                    }
+
+                    match generators::request_string_coerce(&co, elem, kind).await {
+                        Ok(s) => out.push_str(&s.to_str_lossy()),
+                        Err(c) => return Ok(Value::Catchable(c)),
+>>>>>>> d48495028 (fix(tvix): Represent strings as byte arrays)
                     }
                     continue;
                 }
