@@ -40,7 +40,7 @@ async fn import_impl(
 
     // TODO(tazjin): make this return a string directly instead
     let contents: Value = generators::request_read_to_string(&co, path.clone()).await;
-    let contents = contents.to_str()?.as_str().to_string();
+    let contents = contents.to_str()?.to_string();
 
     let parsed = rnix::ast::Root::parse(&contents);
     let errors = parsed.errors();
