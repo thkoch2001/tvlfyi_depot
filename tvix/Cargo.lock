@@ -3320,6 +3320,7 @@ dependencies = [
 name = "tvix-eval"
 version = "0.1.0"
 dependencies = [
+ "bstr",
  "bytes",
  "codemap",
  "codemap-diagnostic",
@@ -3389,6 +3390,7 @@ dependencies = [
 name = "tvix-serde"
 version = "0.1.0"
 dependencies = [
+ "bstr",
  "serde",
  "tvix-eval",
 ]
