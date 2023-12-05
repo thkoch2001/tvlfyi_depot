@@ -770,7 +770,7 @@ pub(crate) async fn request_to_json(co: &GenCo, value: Value) -> serde_json::Val
 pub(crate) async fn call_functor(co: GenCo, value: Value) -> Result<Value, ErrorKind> {
     let attrs = value.to_attrs()?;
 
-    match attrs.select("__functor") {
+    match attrs.select("__functor".into()) {
         None => Err(ErrorKind::NotCallable("set without `__functor_` attribute")),
         Some(functor) => {
             // The functor receives the set itself as its first argument and
