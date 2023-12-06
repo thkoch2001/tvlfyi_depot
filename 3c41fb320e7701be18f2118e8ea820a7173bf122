@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "667cf4da_3133613d",
+        "filename": "tvix/Cargo.nix",
+        "patchSetId": 3
+      },
+      "lineNbr": 511,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-12-06T10:37:12Z",
+      "side": 0,
+      "message": "did you re-generate Cargo.nix without cl/10082?",
+      "revId": "3c41fb320e7701be18f2118e8ea820a7173bf122",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
