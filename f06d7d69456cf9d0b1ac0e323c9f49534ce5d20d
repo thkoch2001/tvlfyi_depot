@@ -141,6 +141,24 @@
       "parentUuid": "3530447c_1cdb012d",
       "revId": "f06d7d69456cf9d0b1ac0e323c9f49534ce5d20d",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6f5fcddc_0a1b30eb",
+        "filename": "tvix/nix-compat/src/nar/writer/async.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 124,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-12-06T11:16:58Z",
+      "side": 1,
+      "message": "cl/10086 has landed. @tvl@lahfa.xyz, can you rebase?",
+      "parentUuid": "0d187809_fabb36d5",
+      "revId": "f06d7d69456cf9d0b1ac0e323c9f49534ce5d20d",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
