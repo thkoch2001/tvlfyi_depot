@@ -72,4 +72,17 @@ depot.nix.readTree.drvTargets {
     "*\${2}*"
     "$@"
   ];
+
+  bell = depot.nix.writeExecline "bell" { } [
+    "if"
+    [
+      "pactl"
+      "upload-sample"
+      "${pkgs.sound-theme-freedesktop}/share/sounds/freedesktop/stereo/complete.oga"
+      "bell-window-system"
+    ]
+    "pactl"
+    "play-sample"
+    "bell-window-system"
+  ];
 }
