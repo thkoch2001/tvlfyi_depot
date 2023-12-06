@@ -16,7 +16,7 @@ pkgs.buildGoModule rec {
 
   subPackages = [ "." ];
   buildInputs = [ pkgs.fuse ];
-  vendorSha256 = "00w4jvcpgwh01ddhmlqcnyf4w9gh9bv1g12y9imbhba9cgmg20z5";
+  vendorSha256 = "sha256-5QPx6mNJLbhqTF6EF/ZK8CVOnLcM0wpbCwDyd9mWhAM=";
 
   meta = with pkgs.lib; {
     license = licenses.asl20;
