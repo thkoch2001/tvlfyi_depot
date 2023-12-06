@@ -4,8 +4,15 @@
 
 self: super:
 depot.nix.readTree.drvTargets {
+  nix_2_3 = (super.nix_2_3.override {
+    # flaky tests, long painful build, see https://github.com/NixOS/nixpkgs/pull/266443
+    withAWS = false;
+  });
   nix = self.nix_2_3;
-  nix_latest = super.nix;
+  nix_latest = super.nix.override ({
+    # flaky tests, long painful build, see https://github.com/NixOS/nixpkgs/pull/266443
+    withAWS = false;
+  });
 
   # To match telega in emacs-overlay or wherever
   tdlib = super.tdlib.overrideAttrs (_: {
@@ -74,7 +81,9 @@ depot.nix.readTree.drvTargets {
     };
   }));
 
-  crate2nix = super.crate2nix.overrideAttrs (old: rec {
+  crate2nix = (super.crate2nix
+    .override (_: { nix = self.nix_latest; }))
+    .overrideAttrs (old: rec {
     patches = old.patches ++ [
       # run tests in debug mode, not release mode
       # https://github.com/nix-community/crate2nix/pull/301
