@@ -1,7 +1,7 @@
 { depot, pkgs, ... }:
 
 # TVL tool rust crate dependencies, where tools like carnix are not used.
-# Intended for manual updates, which keeps us honest with what we pull into our closure.
+# Intended for manual updates, which makes sure we never actually update.
 
 let
   buildRustCrate =
@@ -279,7 +279,6 @@ rec {
   pkg-config = buildRustCrate {
     pname = "pkg-config";
     version = "0.3.19";
-    crateName = "pkg_config";
     sha256 = "1kd047p8jv6mhmfzddjvfa2nwkfrb3l1wml6lfm51n1cr06cc9lz";
   };
 
@@ -363,7 +362,6 @@ rec {
   unicode-normalization = buildRustCrate {
     pname = "unicode-normalization";
     version = "0.1.17";
-    crateName = "unicode_normalization";
     sha256 = "0w4s0avzlf7pzcclhhih93aap613398sshm6jrxcwq0f9lhis11c";
     dependencies = [
       tinyvec
@@ -373,7 +371,6 @@ rec {
   unicode-bidi = buildRustCrate {
     pname = "unicode-bidi";
     version = "0.3.5";
-    crateName = "unicode_bidi";
     sha256 = "193jzlxj1dfcms2381lyd45zh4ywlicj9lzcfpid1zbkmfarymkz";
     dependencies = [
       matches
