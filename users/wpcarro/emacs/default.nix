@@ -86,7 +86,8 @@ let
       diminish
       direnv
       dockerfile-mode
-      doom-themes
+      # TODO(wpcarro): broken since channel bump cl/10204
+      # doom-themes
       elisp-slime-nav
       elixir-mode
       elm-mode
@@ -261,5 +262,6 @@ in
     touch $out
   '';
 
-  meta.ci.targets = [ "check" ];
+  # TODO(wpcarro): commented out because of doom-themes breakage; cl/10204
+  # meta.ci.targets = [ "check" ];
 }
