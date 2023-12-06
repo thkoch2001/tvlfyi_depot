@@ -3,40 +3,7 @@
 { lib, depot, localSystem, ... }:
 
 self: super:
-let
-  # Rollback Nix to a stable version (2.3) with some backports applied.
-  # We currently track a commit on the 2.3-maintenance that didn't make it into
-  # a release yet - tracked in https://github.com/NixOS/nix/issues/9244.
-  nixSrc =
-    let
-      # branch 2.3-maintenance
-      rev = "f76990444c17716506080e5445e430a9c5c880f9";
-    in
-    self.fetchFromGitHub
-      {
-        owner = "NixOS";
-        repo = "nix";
-        inherit rev;
-        hash = "sha256-EK0pgHDekJFqr0oMj+8ANIjq96WPjICe2s0m4xkUdH4=";
-      } // { revCount = 0; shortRev = builtins.substring 0 7 rev; };
-
-  nixTarball = (scopedImport
-    {
-      # The tarball job always uses currentSystem which we need to purify
-      builtins = builtins // { currentSystem = localSystem; };
-    }
-    "${nixSrc}/release.nix"
-    {
-      nix = nixSrc;
-      nixpkgs = self.path;
-      systems = [ ];
-    }
-  ).tarball;
-in
 depot.nix.readTree.drvTargets {
-  nix_2_3 = super.nix_2_3.overrideAttrs (_: {
-    src = "${nixTarball}/tarballs/nix-${nixTarball.version}.tar.xz";
-  });
   nix = self.nix_2_3;
   nix_latest = super.nix;
 

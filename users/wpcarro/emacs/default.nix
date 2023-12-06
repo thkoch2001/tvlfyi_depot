@@ -86,7 +86,8 @@ let
       diminish
       direnv
       dockerfile-mode
-      doom-themes
+      # TODO(wpcarro): broken since channel bump cl/10204
+      # doom-themes
       elisp-slime-nav
       elixir-mode
       elm-mode
