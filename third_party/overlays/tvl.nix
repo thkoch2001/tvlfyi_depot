@@ -36,9 +36,14 @@ in
 depot.nix.readTree.drvTargets {
   nix_2_3 = super.nix_2_3.overrideAttrs (_: {
     src = "${nixTarball}/tarballs/nix-${nixTarball.version}.tar.xz";
+    # flaky tests, long painful build, see https://github.com/NixOS/nixpkgs/pull/266443
+    withAWS = false;
   });
   nix = self.nix_2_3;
-  nix_latest = super.nix;
+  nix_latest = super.nix.overrideAttrs (_: {
+    # flaky tests, long painful build, see https://github.com/NixOS/nixpkgs/pull/266443
+    withAWS = false;
+  });
 
   # To match telega in emacs-overlay or wherever
   tdlib = super.tdlib.overrideAttrs (_: {
