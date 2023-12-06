@@ -39,11 +39,15 @@ depot.nix.readTree.drvTargets {
     withAWS = false;
   }).overrideAttrs (_: {
     src = "${nixTarball}/tarballs/nix-${nixTarball.version}.tar.xz";
+    enableParallelChecking = false; # https://github.com/NixOS/nixpkgs/pull/272438
   });
   nix = self.nix_2_3;
-  nix_latest = super.nix.override ({
+  nix_latest = (super.nix.override ({
     # flaky tests, long painful build, see https://github.com/NixOS/nixpkgs/pull/266443
     withAWS = false;
+  }))
+  .overrideAttrs(_: {
+    enableParallelChecking = false; # https://github.com/NixOS/nixpkgs/pull/272438
   });
 
   # To match telega in emacs-overlay or wherever
