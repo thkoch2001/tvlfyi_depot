@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8c95743e_8e9ca606",
+        "filename": "third_party/rust-crates/default.nix",
+        "patchSetId": 5
+      },
+      "lineNbr": 4,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-12-06T12:35:05Z",
+      "side": 1,
+      "message": "This comment still doesn\u0027t explain what this is. If it\u0027s only used by Profpatsch, it probably should be moved into users/. We mostly use crate2nix, or naersk, having a third_party/rust-crates is very confusing.",
+      "revId": "2fd727465cb12cba50c5a19df35b2e014175c3a1",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
