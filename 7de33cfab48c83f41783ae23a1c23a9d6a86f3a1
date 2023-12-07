@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0e64d458_fe5581ec",
+        "filename": "tvix/default.nix",
+        "patchSetId": 9
+      },
+      "lineNbr": 108,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-12-07T14:36:34Z",
+      "side": 1,
+      "message": "I think it\u0027s only happening if that FOD with the hash of the cargo.nix is not in the store, so we only run it once per change, no?",
+      "revId": "7de33cfab48c83f41783ae23a1c23a9d6a86f3a1",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
