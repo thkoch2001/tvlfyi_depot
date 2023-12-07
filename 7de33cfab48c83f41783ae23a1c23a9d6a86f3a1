@@ -16,6 +16,24 @@
       "message": "I think it\u0027s only happening if that FOD with the hash of the cargo.nix is not in the store, so we only run it once per change, no?",
       "revId": "7de33cfab48c83f41783ae23a1c23a9d6a86f3a1",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b71fe8b8_d008e003",
+        "filename": "tvix/default.nix",
+        "patchSetId": 9
+      },
+      "lineNbr": 108,
+      "author": {
+        "id": 1000066
+      },
+      "writtenOn": "2023-12-07T18:40:03Z",
+      "side": 1,
+      "message": "By \"every time crate2nix-check is run\" I mean \"every time the crate2nix-check derivation is built\".  If the derivation inputs (which are the hash of Cargo.lock and Cargo.nix) haven\u0027t changed the derivation won\u0027t be rebuilt.\n\nI\u0027ve changed \"run\" to \"built\" to make this clear.",
+      "parentUuid": "0e64d458_fe5581ec",
+      "revId": "7de33cfab48c83f41783ae23a1c23a9d6a86f3a1",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
