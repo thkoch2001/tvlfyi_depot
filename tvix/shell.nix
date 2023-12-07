@@ -28,6 +28,7 @@ pkgs.mkShell {
     pkgs.rustc
     pkgs.rustfmt
     pkgs.protobuf
+    pkgs.crate2nix
   ] ++ pkgs.lib.optionals pkgs.stdenv.isDarwin [
     # We need these two dependencies in the ambient environment to be able to
     # `cargo build` on MacOS.
