@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "791f0bf8_e81dc5c5",
+        "filename": "tvix/default.nix",
+        "patchSetId": 4
+      },
+      "lineNbr": 4,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-12-07T22:07:23Z",
+      "side": 1,
+      "message": "Where is this supposed to come from?",
+      "revId": "0a0d35d256f9e5607d9b311a3bbbb238379696bf",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
