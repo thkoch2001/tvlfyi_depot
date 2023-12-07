@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b5276c46_7beae59e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000066
+      },
+      "writtenOn": "2023-12-07T18:48:07Z",
+      "side": 1,
+      "message": "I rebased this and re-ran `crate2nix-generate`.",
+      "revId": "869c7b8154e43422e287e6c2d64b1e7f525fe6cd",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a03f690d_e4877401",
+        "filename": "tvix/eval/src/value/string.rs",
+        "patchSetId": 3
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1000066
+      },
+      "writtenOn": "2023-12-07T18:48:07Z",
+      "side": 1,
+      "message": "i hink e ost a haracter ere",
+      "range": {
+        "startLine": 1,
+        "startChar": 16,
+        "endLine": 1,
+        "endChar": 25
+      },
+      "revId": "869c7b8154e43422e287e6c2d64b1e7f525fe6cd",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
