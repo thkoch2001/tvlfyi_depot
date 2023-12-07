@@ -112,8 +112,8 @@ let
       # Determine whether any part of this tree should be skipped.
       #
       # Adding a `.skip-subtree` file will still allow the import of
-      # the current node's "default.nix" file, but stop recursion
-      # there.
+      # the current node's "readtree.nix" or "default.nix" files, but
+      # stop recursion there.
       #
       # Adding a `.skip-tree` file will completely ignore the folder
       # in which this file is located.
@@ -125,7 +125,15 @@ let
       self =
         if rootDir
         then { __readTree = [ ]; }
-        else importFile args scopedArgs initPath parts argsFilter;
+        else
+          let
+            readtree-dot-nix = initPath + "/readtree.nix";
+            selfPath =
+              if builtins.pathExists readtree-dot-nix
+              then readtree-dot-nix
+              else initPath;
+          in
+          importFile args scopedArgs selfPath parts argsFilter;
 
       # Import subdirectories of the current one, unless any skip
       # instructions exist.
@@ -173,10 +181,10 @@ let
           })
         nixFiles;
 
-      nodeValue = if dir ? "default.nix" then self else { };
+      nodeValue = if dir ? "default.nix" || dir ? "readtree.nix" then self else { };
 
       allChildren = listToAttrs (
-        if dir ? "default.nix"
+        if dir ? "default.nix" || dir ? "readtree.nix"
         then children
         else nixChildren ++ children
       );

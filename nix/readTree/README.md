@@ -52,6 +52,12 @@ true;` attribute merged into it.
 `readTree` will follow any subdirectories of a tree and import all Nix files,
 with some exceptions:
 
+* If a folder contains a `readtree.nix` file, that file will be used
+  instead of `default.nix` in all the steps below.  This allows to
+  have a subproject which is josh-exported from the monorepo with
+  its own `default.nix`.  Any logic which does not require access to
+  the monorepo can be placed in `default.nix` and accessed using
+  `import ./.` from `readtree.nix`.
 * If a folder contains a `default.nix` file, no *sibling* Nix files will be
   imported - however children are traversed as normal.
 * If a folder contains a `default.nix` it is loaded and, if it
