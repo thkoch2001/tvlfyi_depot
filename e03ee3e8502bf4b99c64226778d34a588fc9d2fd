@@ -16,6 +16,24 @@
       "message": "\"readtree\" is kind of an internal name, not a user-facing name. If somebody was dealing with a readTree-based repo for the first time, and saw a bunch of \"readtree.nix\" files, it wouldn\u0027t explain very much.\n\nI still have a goal of moving Nix closer to Bazel in terms of how the interface looks. Maybe `build.nix` (analogous to Bazel\u0027s BUILD files) would be a better name?\n\nEvgeny, do you have thoughts on this?",
       "revId": "e03ee3e8502bf4b99c64226778d34a588fc9d2fd",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5b44016e_33bae183",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000066
+      },
+      "writtenOn": "2023-12-08T10:56:22Z",
+      "side": 1,
+      "message": "`depot.nix`?\n\nThat is maximally unlikely to collide with a name that we would want to appear in an un-depot-ized josh view.",
+      "parentUuid": "f98d0267_88af4f4d",
+      "revId": "e03ee3e8502bf4b99c64226778d34a588fc9d2fd",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
