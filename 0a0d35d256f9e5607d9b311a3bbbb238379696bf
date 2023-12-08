@@ -16,6 +16,24 @@
       "message": "Where is this supposed to come from?",
       "revId": "0a0d35d256f9e5607d9b311a3bbbb238379696bf",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6c704ce5_8cc0ae5b",
+        "filename": "tvix/default.nix",
+        "patchSetId": 4
+      },
+      "lineNbr": 4,
+      "author": {
+        "id": 1000066
+      },
+      "writtenOn": "2023-12-08T08:58:18Z",
+      "side": 1,
+      "message": "See `tvix/readtree.nix`, which passes `depot.tvix.proto` as this parameter.\n\nFor the building-outside-of-depot scenario I will probably add a default value for this argument, and use `\u003cnixpkgs/lib\u003e`\u0027s closest approximation of depot\u0027s `sparseFileSet`.  But that is for a future CL; I\u0027m trying to do this one piece at a time instead of a massive CL.",
+      "parentUuid": "791f0bf8_e81dc5c5",
+      "revId": "0a0d35d256f9e5607d9b311a3bbbb238379696bf",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
