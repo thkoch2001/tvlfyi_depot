@@ -1,6 +1,23 @@
 {
   "comments": [
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "6c8409e8_e3733a3f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-12-08T10:09:26Z",
+      "side": 1,
+      "message": "I\u0027m not convinced yet this approach is leading somewhere. It\u0027s introducing a lot of complexity, while the outcome still is unclear.\n\nI understand you want to break this into small CLs, and I agree with this deserving individual commits, but I\u0027d need to see the outcome to grok if this entire endeavor makes sense.\n\nThis individual CL on its own is no improvement, and raises more questions than it answers, so I\u0027d prefer this to be not merged until we can see the rest of it.",
+      "revId": "0a0d35d256f9e5607d9b311a3bbbb238379696bf",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "791f0bf8_e81dc5c5",
