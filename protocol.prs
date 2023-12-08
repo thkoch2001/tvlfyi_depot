@@ -10,7 +10,7 @@ Realise = <realise @drv string @outputs StringSeq> .
 
 Instantiate = <instantiate @expr string @options AttrSet @result any> .
 
-Eval = <eval @expr string @options {symbol: any ...:...} @result any> .
+Eval = <eval @expr string @path string @result any> .
 
 Narinfo = <narinfo @path string @info AttrSet> .
 

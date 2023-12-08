@@ -155,14 +155,11 @@ proc callDaemon(turn: var Turn; path: string; action: proc (daemon: Session; tur
 
 proc bootDaemonSide*(turn: var Turn; ds: Cap; store: ErisStore; socketPath: string) =
 
-  during(turn, ds, ?Observe(pattern: !Missing) ?? {0: grab()}) do (a: Preserve[Cap]):
+  during(turn, ds, ?Observe(pattern: !Missing) ?? {0: grab()}) do (targets: Literal[StringSeq]):
       # cannot use `grabLit` here because an array is a compound
       # TODO: unpack to a `Pattern`
     let daemon = callDaemon(turn, socketPath) do (daemon: Session; turn: var Turn):
-      var targets: StringSeq
-      doAssert targets.fromPreserve(unpackLiterals(a))
-        # unpack <arr [<lit " …">]>
-      let missFut = queryMissing(daemon, targets)
+      let missFut = queryMissing(daemon, targets.value)
       addCallback(missFut, turn) do (turn: var Turn):
         close(daemon)
         var miss = read(missFut)
@@ -180,15 +177,12 @@ proc bootDaemonSide*(turn: var Turn; ds: Cap; store: ErisStore; socketPath: stri
   do:
     close(daemon)
 
-  during(turn, ds, ?Observe(pattern: !PathInfo) ?? {1: grabDict()}) do (pat: Value):
-    var daemon: Session
-    var request: AddToStoreClientAttrs
-    if request.fromPreserve(unpackLiterals pat):
-      daemon = callDaemon(turn, socketPath) do (daemon: Session; turn: var Turn):
-        let fut = addToStore(daemon, store, request)
-        addCallback(fut, turn) do (turn: var Turn):
-          close(daemon)
-          var (path, info) = read(fut)
-          discard publish(turn, ds, initRecord("path", path.toPreserve, info.toPreserve))
+  during(turn, ds, ?Observe(pattern: !PathInfo) ?? {1: grabDict()}) do (request: Literal[AddToStoreClientAttrs]):
+    let daemon = callDaemon(turn, socketPath) do (daemon: Session; turn: var Turn):
+      let fut = addToStore(daemon, store, request.value)
+      addCallback(fut, turn) do (turn: var Turn):
+        close(daemon)
+        var (path, info) = read(fut)
+        discard publish(turn, ds, initRecord("path", path.toPreserve, info.toPreserve))
   do:
     close(daemon)

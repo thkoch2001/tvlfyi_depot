@@ -5,7 +5,7 @@ import
 type
   Eval* {.preservesRecord: "eval".} = object
     `expr`*: string
-    `options`*: Table[Symbol, Preserve[void]]
+    `path`*: string
     `result`*: Preserve[void]
 
   AttrSet* = Table[Symbol, Preserve[void]]

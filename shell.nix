@@ -3,14 +3,15 @@
 let
   nix' = pkgs.nix.overrideAttrs (final: prev: {
     src = pkgs.fetchFromGitHub {
-      owner = "NixOS";
+      owner = "tweag";
       repo = "nix";
-      rev = "2.13.3";
-      hash = "sha256-jUc2ccTR8f6MGY2pUKgujm+lxSPNGm/ZAP+toX+nMNc=";
+      rev = "nix-c-bindings";
+      hash = "sha256-xOyU79lsz0THOj1LccfsDS45089n2DhlkWxaJFeKriY=";
     };
   });
-in pkgs.nim2Packages.buildNimPackage {
+in pkgs.buildNimPackage {
   name = "dummy";
   nativeBuildInputs = [ pkgs.pkg-config ];
   buildInputs = [ pkgs.boost nix' ];
+  lockFile = ./lock.json;
 }
