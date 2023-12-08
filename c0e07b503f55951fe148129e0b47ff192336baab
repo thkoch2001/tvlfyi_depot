@@ -22,6 +22,30 @@
       },
       "revId": "c0e07b503f55951fe148129e0b47ff192336baab",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "15b51f90_f2bfbc8e",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1000066
+      },
+      "writtenOn": "2023-12-08T10:35:06Z",
+      "side": 1,
+      "message": "I have updated the commit message to clarify this.",
+      "parentUuid": "5da7b652_ba2fbfeb",
+      "range": {
+        "startLine": 10,
+        "startChar": 48,
+        "endLine": 10,
+        "endChar": 58
+      },
+      "revId": "c0e07b503f55951fe148129e0b47ff192336baab",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
