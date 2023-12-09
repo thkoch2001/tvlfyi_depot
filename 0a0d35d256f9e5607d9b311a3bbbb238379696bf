@@ -36,6 +36,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "4f2ba785_586e2b8d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2023-12-09T11:59:58Z",
+      "side": 1,
+      "message": "Why do you want the josh views to be on par with the proper depot experience? I think realizing that goal is kind of a big ask, since it requires maintenance from people who do not rely on it, since most if not all active contributors have a full checkout.\n\nI would say it could be a nice goal at some point, e.g. when casual contributions to tvix become more frequent (I think the primary hurdle there is not the lack of a `default.nix`, anyways). This, however, has some fundamental challenges of course, since we do have a monorepo and want to benefit from it…",
+      "parentUuid": "f34fba5c_82e80f11",
+      "revId": "0a0d35d256f9e5607d9b311a3bbbb238379696bf",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "791f0bf8_e81dc5c5",
