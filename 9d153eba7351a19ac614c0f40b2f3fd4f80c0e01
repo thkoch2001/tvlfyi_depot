@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6f132b39_be40cc9b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-12-09T09:24:57Z",
+      "side": 1,
+      "message": "I\u0027m not too convinced tvix/nix_cli is the approach we should go in the future. I\u0027ll rip it out in a followup CL.",
+      "revId": "9d153eba7351a19ac614c0f40b2f3fd4f80c0e01",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
