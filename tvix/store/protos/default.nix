@@ -25,6 +25,7 @@
     buildPhase = ''
       export HOME=$TMPDIR
       buf lint
+      buf format -d --exit-code
       buf generate
 
       mkdir -p $out
