@@ -20,6 +20,10 @@
             alias ${depot.tvix.docs.svg}/component-flow.svg;
         }
 
+        location = /go-get/tvix/build-go {
+            alias ${pkgs.writeText "go-import-metadata.html" ''<html><meta name="go-import" content="code.tvl.fyi/tvix/build-go git https://code.tvl.fyi/depot.git:/tvix/build-go.git"></html>''};
+        }
+
         location = /go-get/tvix/castore-go {
             alias ${pkgs.writeText "go-import-metadata.html" ''<html><meta name="go-import" content="code.tvl.fyi/tvix/castore-go git https://code.tvl.fyi/depot.git:/tvix/castore-go.git"></html>''};
         }
@@ -32,9 +36,9 @@
             alias ${pkgs.writeText "go-import-metadata.html" ''<html><meta name="go-import" content="code.tvl.fyi/tvix/nar-bridge git https://code.tvl.fyi/depot.git:/tvix/nar-bridge.git"></html>''};
         }
 
-        location = /tvix/nar-bridge {
+        location = /tvix/build-go {
             if ($args ~* "/?go-get=1") {
-                return 302 /go-get/tvix/nar-bridge;
+                return 302 /go-get/tvix/build-go;
             }
         }
 
@@ -47,6 +51,12 @@
         location = /tvix/store-go {
             if ($args ~* "/?go-get=1") {
                 return 302 /go-get/tvix/store-go;
+            }
+        }
+
+        location = /tvix/nar-bridge {
+            if ($args ~* "/?go-get=1") {
+                return 302 /go-get/tvix/nar-bridge;
             }
         }
 
