@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "18babc49_333bd26e",
+        "filename": "tvix/castore/protos/default.nix",
+        "patchSetId": 1
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-12-09T13:55:38Z",
+      "side": 1,
+      "message": "Also see cl/10239, which moves this to a separate target.",
+      "revId": "e320727bbfe379d5e5d65f1ab7eb48725d4af198",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
