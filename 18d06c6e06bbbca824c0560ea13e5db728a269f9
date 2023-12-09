@@ -108,6 +108,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "6efa87af_6bac8d4e",
+        "filename": "tvix/build/protos/LICENSE",
+        "patchSetId": 4
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-12-09T20:42:21Z",
+      "side": 1,
+      "message": "There is already a GPL-3 license in //tvix itself, there\u0027s only a MIT License in //tvix/build/protos.\n\nHow would duplicating it in there change things?",
+      "parentUuid": "03ef0689_9291cb54",
+      "range": {
+        "startLine": 1,
+        "startChar": 0,
+        "endLine": 1,
+        "endChar": 28
+      },
+      "revId": "18d06c6e06bbbca824c0560ea13e5db728a269f9",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "118686e0_337c00df",
         "filename": "tvix/build/protos/build.proto",
         "patchSetId": 4
@@ -227,6 +251,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "1382fa1c_b63ce3bd",
+        "filename": "tvix/build/protos/build.proto",
+        "patchSetId": 4
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-12-09T20:42:21Z",
+      "side": 1,
+      "message": "Everything in tvix is still experimental, there\u0027s no backwards-compat promises. Landing this as-is won\u0027t cement us into this approach.\n\nThe nix daemon protocol will take a while to materialize, I don\u0027t want to block this whole chain until we have a full E2E example with the old daemon protocol.\n\nIn the past, I did already re-architect stuff if something didn\u0027t work out, I\u0027m happy to do this again if need be.",
+      "parentUuid": "5350be38_346bba06",
+      "range": {
+        "startLine": 18,
+        "startChar": 7,
+        "endLine": 18,
+        "endChar": 55
+      },
+      "revId": "18d06c6e06bbbca824c0560ea13e5db728a269f9",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "581ae2a1_cc1a5288",
         "filename": "tvix/build/protos/build.proto",
         "patchSetId": 4
@@ -286,6 +334,30 @@
       "side": 1,
       "message": "I would replace the highlighted text with \"This requires that for every input-addressed input, the builder has access to either the input\u0027s deriver or else a trusted source for the built input.\"",
       "parentUuid": "9f566ffa_1ddfbf7c",
+      "range": {
+        "startLine": 30,
+        "startChar": 0,
+        "endLine": 31,
+        "endChar": 75
+      },
+      "revId": "18d06c6e06bbbca824c0560ea13e5db728a269f9",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8fc09c17_a190f1cb",
+        "filename": "tvix/build/protos/build.proto",
+        "patchSetId": 4
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-12-09T20:42:21Z",
+      "side": 1,
+      "message": "No, the builder doesn\u0027t have to have access to the inputs deriver or a trusted source for the build input. Everything in BuildRequest (and `inputs` specifically) is sufficient to realize everything needed to do the build.\n\nWe need someone to bring us the data, sure, but because all of this is content-addressed, we don\u0027t need to trust anyone, we can detect if they send us wrong data.",
+      "parentUuid": "bfadf849_0fad51a0",
       "range": {
         "startLine": 30,
         "startChar": 0,
