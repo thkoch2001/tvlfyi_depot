@@ -76,6 +76,8 @@ let
     benchmark-cross-hello = (mkNixpkgsBenchmark "pkgsCross.aarch64-multiplatform.hello.outPath");
     benchmark-firefox = (mkNixpkgsBenchmark "firefox.outPath");
     benchmark-cross-firefox = (mkNixpkgsBenchmark "pkgsCross.aarch64-multiplatform.firefox.outPath");
+    # Example used for benchmarking LightSpan::Delayed in commit bf286a54bc2ac5eeb78c3d5c5ae66e9af24d74d4
+    benchmark-nixpkgs-attrnames = (mkExprBenchmark { expr = "builtins.length (builtins.attrNames (import ${pkgs.path} {}))"; description = "nixpkgs-attrnames"; });
   };
 in
 {
