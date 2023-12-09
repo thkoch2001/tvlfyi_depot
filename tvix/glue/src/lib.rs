@@ -1,3 +1,4 @@
+pub mod tvix_build;
 pub mod builtins;
 pub mod known_paths;
 pub mod refscan;
