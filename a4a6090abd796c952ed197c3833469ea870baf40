@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "aeba0212_f1b56a7c",
+        "filename": "users/grfn/resume/resume.tex",
+        "patchSetId": 10
+      },
+      "lineNbr": 114,
+      "author": {
+        "id": 1000066
+      },
+      "writtenOn": "2023-12-09T08:47:17Z",
+      "side": 1,
+      "message": "I thought Noria was a person and you were talking about their dissertation.  Yeah I am dum.  Maybe a link or else\n\n```\n\\cite{\n@inproceedings {222635,\nauthor \u003d {Jon Gjengset and Malte Schwarzkopf and Jonathan Behrens and Lara Timb{\\\u0027o} Ara{\\\u0027u}jo and Martin Ek and Eddie Kohler and M. Frans Kaashoek and Robert Morris},\ntitle \u003d {Noria: dynamic, partially-stateful data-flow for high-performance web applications},\nbooktitle \u003d {13th USENIX Symposium on Operating Systems Design and Implementation (OSDI 18)},\nyear \u003d {2018},\nisbn \u003d {978-1-939133-08-3},\naddress \u003d {Carlsbad, CA},\npages \u003d {213--231},\nurl \u003d {https://www.usenix.org/conference/osdi18/presentation/gjengset},\npublisher \u003d {USENIX Association},\nmonth \u003d oct\n}\n}\n```",
+      "range": {
+        "startLine": 114,
+        "startChar": 23,
+        "endLine": 114,
+        "endChar": 39
+      },
+      "revId": "a4a6090abd796c952ed197c3833469ea870baf40",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
