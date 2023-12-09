@@ -18,11 +18,47 @@ let
       echo "Output was correct."
     '';
   };
+
+  benchmark-gnutime-format-string =
+    attrpath:
+    "Nixpkgs-Benchmark: " +
+    (builtins.toJSON {
+      inherit attrpath;
+      peak-kbytes = "%M";
+      system-seconds = "%S";
+      user-seconds = "%U";
+    });
+
+  # You can run the benchmark with a simple `nix run`, like:
+  #
+  #  nix run -f . tvix.cli.meta.ci.extraSteps.benchmark-nixpkgs-cross-hello-outpath
+  #
+  # TODO(amjoseph): store these results someplace more durable, like git trailers
+  #
+  mkNixpkgsBenchmark = attrpath: tvix-cli:
+    let name = "tvix-cli-benchmark-${builtins.replaceStrings [".drv"] ["-drv"] attrpath}"; in
+    (pkgs.writeShellScriptBin name ''
+      ${lib.escapeShellArgs [
+        "${pkgs.time}/bin/time"
+        "--format" "${benchmark-gnutime-format-string attrpath}"
+        "${tvix-cli}/bin/tvix"
+        "--no-warnings"
+        "-E" "(import ${pkgs.path} {}).${attrpath}"
+      ]}
+    '').overrideAttrs (finalAttrs: previousAttrs: {
+      passthru = (previousAttrs.passthru or { }) // {
+        ci = {
+          label = ":nix: benchmark nixpkgs.${attrpath} in tvix";
+          needsOutput = true;
+          command = "${finalAttrs.finalPackage}/bin/${finalAttrs.meta.mainProgram}";
+        };
+      };
+    });
 in
 
 (depot.tvix.crates.workspaceMembers.tvix-cli.build.override {
   runTests = true;
-}).overrideAttrs (_: {
+}).overrideAttrs (finalAttrs: previousAttrs: {
   meta = {
     ci.extraSteps = {
       eval-nixpkgs-stdenv-drvpath = (mkNixpkgsEvalCheck "stdenv.drvPath" pkgs.stdenv.drvPath);
@@ -30,6 +66,8 @@ in
       eval-nixpkgs-hello-outpath = (mkNixpkgsEvalCheck "hello.outPath" pkgs.hello.outPath);
       eval-nixpkgs-cross-stdenv-outpath = (mkNixpkgsEvalCheck "pkgsCross.aarch64-multiplatform.stdenv.outPath" pkgs.pkgsCross.aarch64-multiplatform.stdenv.outPath);
       eval-nixpkgs-cross-hello-outpath = (mkNixpkgsEvalCheck "pkgsCross.aarch64-multiplatform.hello.outPath" pkgs.pkgsCross.aarch64-multiplatform.hello.outPath);
+      benchmark-nixpkgs-hello-outpath = (mkNixpkgsBenchmark "hello.outPath" finalAttrs.finalPackage);
+      benchmark-nixpkgs-cross-hello-outpath = (mkNixpkgsBenchmark "pkgsCross.aarch64-multiplatform.hello.outPath" finalAttrs.finalPackage);
     };
   };
 })
