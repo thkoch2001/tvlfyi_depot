@@ -607,11 +607,7 @@ impl Value {
     ///
     /// The function is intended to be used from within other generator
     /// functions or `gen!` blocks.
-    pub async fn nix_cmp_ordering(
-        self,
-        other: Self,
-        co: GenCo,
-    ) -> Result<Option<Ordering>, ErrorKind> {
+    pub async fn nix_cmp_ordering(self, other: Self, co: GenCo) -> Result<Ordering, ErrorKind> {
         Self::nix_cmp_ordering_(self, other, co).await
     }
 
@@ -619,19 +615,21 @@ impl Value {
         mut myself: Self,
         mut other: Self,
         co: GenCo,
-    ) -> Result<Option<Ordering>, ErrorKind> {
+    ) -> Result<Ordering, ErrorKind> {
         'outer: loop {
             match (myself, other) {
                 // same types
-                (Value::Integer(i1), Value::Integer(i2)) => return Ok(i1.partial_cmp(&i2)),
-                (Value::Float(f1), Value::Float(f2)) => return Ok(f1.partial_cmp(&f2)),
-                (Value::String(s1), Value::String(s2)) => return Ok(s1.partial_cmp(&s2)),
+                // Nix does not support NaN or "negative infinity",
+                // so its floats are in fact totally ordered.
+                (Value::Integer(i1), Value::Integer(i2)) => return Ok(i1.cmp(&i2)),
+                (Value::Float(f1), Value::Float(f2)) => return Ok(f1.total_cmp(&f2)),
+                (Value::String(s1), Value::String(s2)) => return Ok(s1.cmp(&s2)),
                 (Value::List(l1), Value::List(l2)) => {
                     for i in 0.. {
                         if i == l2.len() {
-                            return Ok(Some(Ordering::Greater));
+                            return Ok(Ordering::Greater);
                         } else if i == l1.len() {
-                            return Ok(Some(Ordering::Less));
+                            return Ok(Ordering::Less);
                         } else if !generators::check_equality(
                             &co,
                             l1[i].clone(),
@@ -651,8 +649,8 @@ impl Value {
                 }
 
                 // different types
-                (Value::Integer(i1), Value::Float(f2)) => return Ok((i1 as f64).partial_cmp(&f2)),
-                (Value::Float(f1), Value::Integer(i2)) => return Ok(f1.partial_cmp(&(i2 as f64))),
+                (Value::Integer(i1), Value::Float(f2)) => return Ok((i1 as f64).total_cmp(&f2)),
+                (Value::Float(f1), Value::Integer(i2)) => return Ok(f1.total_cmp(&(i2 as f64))),
 
                 // unsupported types
                 (lhs, rhs) => {
