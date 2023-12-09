@@ -107,6 +107,54 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "1561d892_c7d8dd77",
+        "filename": "tvix/build/protos/build.proto",
+        "patchSetId": 4
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-12-09T18:56:42Z",
+      "side": 1,
+      "message": "I actually forgot to add the non-impure environment variables (from https://github.com/adisbladis/go-nix/commit/603df5db86ab97ba29f6f94d74f4e51642c56834#diff-60d42249bb53df5d3ffd44f507aee87a57c2cff5a20f6b1d8403a76d0ce609b0R45-R61) to cl/10236.\n\nIt\u0027s now in https://cl.tvl.fyi/c/depot/+/10236/8 - does it make more sense now? With that in mind, how would you write this section?\n\nWhat I meant to say is that the builder doesn\u0027t need to know the meaning of any of these environment variables, it\u0027s just flattened out in the BuildRequest, and done by derivation_to_build_request when translating from a Derivation to a BuildRequest.",
+      "parentUuid": "118686e0_337c00df",
+      "range": {
+        "startLine": 18,
+        "startChar": 7,
+        "endLine": 18,
+        "endChar": 55
+      },
+      "revId": "18d06c6e06bbbca824c0560ea13e5db728a269f9",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9dc6703c_e435d91a",
+        "filename": "tvix/build/protos/build.proto",
+        "patchSetId": 4
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-12-09T18:56:42Z",
+      "side": 1,
+      "message": "Comment removed by: tazjin; Reason: Accidental double submit of comment",
+      "parentUuid": "118686e0_337c00df",
+      "range": {
+        "startLine": 18,
+        "startChar": 7,
+        "endLine": 18,
+        "endChar": 55
+      },
+      "revId": "18d06c6e06bbbca824c0560ea13e5db728a269f9",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "581ae2a1_cc1a5288",
         "filename": "tvix/build/protos/build.proto",
         "patchSetId": 4
