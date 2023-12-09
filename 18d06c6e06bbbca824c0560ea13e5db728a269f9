@@ -18,6 +18,23 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "118020b7_f6643dcb",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000066
+      },
+      "writtenOn": "2023-12-09T17:42:38Z",
+      "side": 1,
+      "message": "If this depends on tvix-castore it needs to be called tvix-cabuild.",
+      "revId": "18d06c6e06bbbca824c0560ea13e5db728a269f9",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "d624e2d3_8603d2b1",
