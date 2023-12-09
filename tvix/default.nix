@@ -213,7 +213,7 @@ in
       rustPlatform.cargoSetupHook
     ];
 
-    buildPhase = "cargo clippy -- -Dwarnings | tee $out";
+    buildPhase = "cargo clippy --tests --all-features -- -Dwarnings | tee $out";
   };
 
   meta.ci.targets = [
