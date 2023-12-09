@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4951dee1_e20fd693",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2023-12-09T12:24:13Z",
+      "side": 1,
+      "message": "There are some whitespace errors in the proto. Is there a proto formatter we can add to depotfmt?",
+      "revId": "5b67668237e126718f307a2b21770ba074da69f2",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
