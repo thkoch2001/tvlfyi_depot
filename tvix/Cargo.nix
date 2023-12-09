@@ -9470,6 +9470,10 @@ rec {
           else ./build;
         dependencies = [
           {
+            name = "bytes";
+            packageId = "bytes";
+          }
+          {
             name = "prost";
             packageId = "prost";
           }
@@ -9919,6 +9923,11 @@ rec {
             packageId = "tracing";
           }
           {
+            name = "tvix-build";
+            packageId = "tvix-build";
+            usesDefaultFeatures = false;
+          }
+          {
             name = "tvix-castore";
             packageId = "tvix-castore";
           }
@@ -9937,6 +9946,10 @@ rec {
           }
         ];
         devDependencies = [
+          {
+            name = "lazy_static";
+            packageId = "lazy_static";
+          }
           {
             name = "test-case";
             packageId = "test-case";
