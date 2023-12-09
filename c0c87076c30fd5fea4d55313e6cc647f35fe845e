@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "635d439a_71062751",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000066
+      },
+      "writtenOn": "2023-12-09T17:39:47Z",
+      "side": 1,
+      "message": "So tvix-store can\u0027t speak the standard daemon protocol like nix-store can?",
+      "revId": "c0c87076c30fd5fea4d55313e6cc647f35fe845e",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
