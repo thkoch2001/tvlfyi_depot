@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a0160bfa_a232b0be",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-12-09T09:24:32Z",
+      "side": 1,
+      "message": "I can reproduce the same hash too. Oh my, I love golang FOD hash bumping :-/",
+      "revId": "6905bc0bc484c3d9b142007feb9e59d0523bfa3e",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
