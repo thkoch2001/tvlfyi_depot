@@ -32,6 +32,7 @@ mod integration_tests {
 
     #[derive(Debug)]
     enum NixOutput {
+        #[nowarn(dead_code)]
         Err {
             status: i32,
             stdout: String,
