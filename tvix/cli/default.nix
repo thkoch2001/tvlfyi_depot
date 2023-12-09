@@ -86,6 +86,13 @@ in
 
       # Example used for benchmarking LightSpan::Delayed in commit bf286a54bc2ac5eeb78c3d5c5ae66e9af24d74d4
       benchmark-nixpkgs-attrnames = (mkExprBenchmark { expr = "builtins.length (builtins.attrNames (import ${pkgs.path} {}))"; description = "nixpkgs-attrnames"; });
+
+      # This is an *extremely* large eval -- gigantic, in fact.  So
+      # large that it should wash out any sampling noise, without
+      # having to run multiple iterations (which would have the
+      # cold-cache problem and would artificially exaggerate
+      # startup/shutdown time).
+      benchmark-cross-rocmPackages = (mkNixpkgsBenchmark "pkgsCross.aarch64-multiplatform.rocmPackages_5.hipblas.outPath");
     };
   };
 })
