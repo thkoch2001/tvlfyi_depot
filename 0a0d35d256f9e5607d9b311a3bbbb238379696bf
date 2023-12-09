@@ -54,6 +54,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "f6e2d722_07929be9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-12-09T22:47:29Z",
+      "side": 1,
+      "message": "The write path from the tvix josh view is unusable, right now people can\u0027t contribute back from just the josh view checkout at all due to non-bijective filters - see https://b.tvl.fyi/issues/320 and the linked issue.\n\nI still think for every contributor, the full depot checkout should be the right medium, CI works there and it\u0027s exercised during every CL.\n\nLooping the CI-to-be-seen-when-checking-out-the-josh-view into regular CI seems to be quite an effort too.",
+      "parentUuid": "4f2ba785_586e2b8d",
+      "revId": "0a0d35d256f9e5607d9b311a3bbbb238379696bf",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "791f0bf8_e81dc5c5",
