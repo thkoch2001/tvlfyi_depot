@@ -1,0 +1,136 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b0ed6624_122ffe0e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000066
+      },
+      "writtenOn": "2023-12-09T17:37:02Z",
+      "side": 1,
+      "message": "This seems really repetitive; can\u0027t we just have two things\n\n1. A derivation\n2. A list of impure environment variables?",
+      "revId": "18d06c6e06bbbca824c0560ea13e5db728a269f9",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d624e2d3_8603d2b1",
+        "filename": "tvix/build/protos/LICENSE",
+        "patchSetId": 4
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1000066
+      },
+      "writtenOn": "2023-12-09T17:37:02Z",
+      "side": 1,
+      "message": "Please change this to GPLv3",
+      "range": {
+        "startLine": 1,
+        "startChar": 0,
+        "endLine": 1,
+        "endChar": 28
+      },
+      "revId": "18d06c6e06bbbca824c0560ea13e5db728a269f9",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "118686e0_337c00df",
+        "filename": "tvix/build/protos/build.proto",
+        "patchSetId": 4
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1000066
+      },
+      "writtenOn": "2023-12-09T17:37:02Z",
+      "side": 1,
+      "message": "Please change this to \"how e.g. *impure* environment variables in the build are set\".  I found this sentence very confusing until I read the next paragraph.",
+      "range": {
+        "startLine": 18,
+        "startChar": 7,
+        "endLine": 18,
+        "endChar": 55
+      },
+      "revId": "18d06c6e06bbbca824c0560ea13e5db728a269f9",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "581ae2a1_cc1a5288",
+        "filename": "tvix/build/protos/build.proto",
+        "patchSetId": 4
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1000066
+      },
+      "writtenOn": "2023-12-09T17:37:02Z",
+      "side": 1,
+      "message": "I\u0027m having a hard time understanding this.  Yes, the daemon protocol has opcodes for uploading input addressed store paths, but you don\u0027t have to use them if you\u0027re willing to upload the entire derivation tree.",
+      "range": {
+        "startLine": 30,
+        "startChar": 0,
+        "endLine": 31,
+        "endChar": 75
+      },
+      "revId": "18d06c6e06bbbca824c0560ea13e5db728a269f9",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f61a59f9_04852913",
+        "filename": "tvix/build/protos/build.proto",
+        "patchSetId": 4
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1000066
+      },
+      "writtenOn": "2023-12-09T17:37:02Z",
+      "side": 1,
+      "message": "So tvix-build cannot be used with just an ordinary store?\n\nYou mean it has a hard requirement on tvix-castore?  Hrm.  Not sure about that.",
+      "range": {
+        "startLine": 32,
+        "startChar": 0,
+        "endLine": 32,
+        "endChar": 66
+      },
+      "revId": "18d06c6e06bbbca824c0560ea13e5db728a269f9",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "506cdc22_d07ddd72",
+        "filename": "tvix/build/protos/build.proto",
+        "patchSetId": 4
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 1000066
+      },
+      "writtenOn": "2023-12-09T17:37:02Z",
+      "side": 1,
+      "message": "This seems really repetitive; can\u0027t we just have two things\n\n1. A derivation\n2. A list of impure environment variables?",
+      "range": {
+        "startLine": 45,
+        "startChar": 0,
+        "endLine": 45,
+        "endChar": 22
+      },
+      "revId": "18d06c6e06bbbca824c0560ea13e5db728a269f9",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
