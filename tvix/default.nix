@@ -41,12 +41,12 @@ let
       };
 
       tvix-build = prev: {
-        PROTO_ROOT = depot.tvix.proto;
+        PROTO_ROOT = depot.tvix.build.protos.protos;
         nativeBuildInputs = protobufDep prev;
       };
 
       tvix-castore = prev: {
-        PROTO_ROOT = depot.tvix.proto;
+        PROTO_ROOT = depot.tvix.castore.protos.protos;
         nativeBuildInputs = protobufDep prev;
       };
 
@@ -55,7 +55,7 @@ let
       };
 
       tvix-store = prev: {
-        PROTO_ROOT = depot.tvix.proto;
+        PROTO_ROOT = depot.tvix.store.protos.protos;
         nativeBuildInputs = protobufDep prev;
         # fuse-backend-rs uses DiskArbitration framework to handle mount/unmount on Darwin
         buildInputs = prev.buildInputs or [ ]
@@ -101,9 +101,20 @@ let
     ${depot.tools.depotfmt}/bin/depotfmt Cargo.nix
   '';
 
+  # Target containing *all* tvix proto files.
+  # Useful for workspace-wide cargo invocations (doc, clippy)
+  protos = pkgs.symlinkJoin {
+    name = "tvix-all-protos";
+    paths = [
+      depot.tvix.build.protos.protos
+      depot.tvix.castore.protos.protos
+      depot.tvix.store.protos.protos
+    ];
+  };
+
 in
 {
-  inherit crates crate2nix-generate;
+  inherit crates crate2nix-generate protos;
 
   # Run crate2nix generate, ensure the output doesn't differ afterwards
   # (and doesn't fail).
@@ -179,7 +190,7 @@ in
   rust-docs = pkgs.stdenv.mkDerivation {
     inherit cargoDeps src;
     name = "tvix-rust-docs";
-    PROTO_ROOT = depot.tvix.proto;
+    PROTO_ROOT = protos;
 
     nativeBuildInputs = with pkgs; [
       cargo
@@ -204,7 +215,7 @@ in
   clippy = pkgs.stdenv.mkDerivation {
     inherit cargoDeps src;
     name = "tvix-clippy";
-    PROTO_ROOT = depot.tvix.proto;
+    PROTO_ROOT = protos;
 
     buildInputs = [
       pkgs.fuse
