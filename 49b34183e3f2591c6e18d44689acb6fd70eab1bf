@@ -16,6 +16,24 @@
       "message": "We probably should add a comment this is *not* self.nix, so nix_latest contains what nixpkgs normally exposes at the \"nix\" attr. I got quite confused while reviewing this.",
       "revId": "49b34183e3f2591c6e18d44689acb6fd70eab1bf",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ad483fb4_e5ddf5bc",
+        "filename": "third_party/overlays/tvl.nix",
+        "patchSetId": 3
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 1000066
+      },
+      "writtenOn": "2023-12-09T03:31:06Z",
+      "side": 0,
+      "message": "It *is* `self.nix`.  That\u0027s how overlays work.",
+      "parentUuid": "9a41c9da_43c45f2c",
+      "revId": "49b34183e3f2591c6e18d44689acb6fd70eab1bf",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
