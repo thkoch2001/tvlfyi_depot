@@ -1,5 +1,8 @@
 use criterion::{black_box, criterion_group, criterion_main, Criterion};
+use criterion_perf_events::Perf;
 use lazy_static::lazy_static;
+use perfcnt::linux::HardwareEventType as Hardware;
+use perfcnt::linux::PerfCounterBuilderLinux as Builder;
 use std::{cell::RefCell, env, rc::Rc, sync::Arc, time::Duration};
 use tvix_castore::{
     blobservice::{BlobService, MemoryBlobService},
@@ -48,11 +51,10 @@ fn interpret(code: &str) {
     ));
 
     let result = eval.evaluate();
-
     assert!(result.errors.is_empty());
 }
 
-fn eval_nixpkgs(c: &mut Criterion) {
+fn bench(c: &mut Criterion<Perf>) {
     c.bench_function("hello outpath", |b| {
         b.iter(|| {
             interpret(black_box("(import <nixpkgs> {}).hello.outPath"));
@@ -62,7 +64,7 @@ fn eval_nixpkgs(c: &mut Criterion) {
 
 criterion_group!(
     name = benches;
-    config = Criterion::default().measurement_time(Duration::from_secs(30)).sample_size(10);
-    targets = eval_nixpkgs
+    config = Criterion::default().with_measurement(Perf::new(Builder::from_hardware_event(Hardware::CacheMisses))).with_measurement(Perf::new(Builder::from_hardware_event(Hardware::Instructions))).measurement_time(Duration::from_secs(30)).sample_size(10);
+    targets = bench
 );
 criterion_main!(benches);
