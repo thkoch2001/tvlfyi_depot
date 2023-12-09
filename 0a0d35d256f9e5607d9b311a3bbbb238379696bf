@@ -18,6 +18,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "f34fba5c_82e80f11",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000066
+      },
+      "writtenOn": "2023-12-09T03:41:55Z",
+      "side": 1,
+      "message": "\u003e the outcome still is unclear\n\ncl/10213 removes the `::exclude[default.nix]` josh filter.  The outcome is now clear: our josh views aren\u0027t crippled anymore.\n\n\u003e I\u0027m not convinced yet this approach is leading somewhere.\n\nThen propose an alternative CL which accomplishes the same objective.",
+      "parentUuid": "6c8409e8_e3733a3f",
+      "revId": "0a0d35d256f9e5607d9b311a3bbbb238379696bf",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "791f0bf8_e81dc5c5",
