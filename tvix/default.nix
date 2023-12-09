@@ -40,6 +40,11 @@ let
         nativeBuildInputs = protobufDep prev;
       };
 
+      tvix-build = prev: {
+        PROTO_ROOT = depot.tvix.proto;
+        nativeBuildInputs = protobufDep prev;
+      };
+
       tvix-castore = prev: {
         PROTO_ROOT = depot.tvix.proto;
         nativeBuildInputs = protobufDep prev;
