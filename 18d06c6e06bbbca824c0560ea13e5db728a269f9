@@ -203,6 +203,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "5350be38_346bba06",
+        "filename": "tvix/build/protos/build.proto",
+        "patchSetId": 4
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1000066
+      },
+      "writtenOn": "2023-12-09T19:58:04Z",
+      "side": 1,
+      "message": "Okay the \"derivation plus impure environment variables, but flattened\".\n\nBut how would you go backwards from a BuildRequest to a Derivation?\n\nThis is a good example of the kind of trouble we might run into if we defer implementing the daemon protocol for too long.  I don\u0027t think you can go backwards from a BuildRequest to a Derivation, so we have to be careful not to turn Derivations into BuildRequests until we\u0027re totally certain we won\u0027t be using the daemon protocol.\n\nSo it makes me a bit nervous to be committing to stuff like this without an implementation of the \"daemon protocol translator\".  I guess I\u0027d be a lot more comfortable if the daemon protocol translator were implemented simultaneously with this.",
+      "parentUuid": "01e37628_b12e45bb",
+      "range": {
+        "startLine": 18,
+        "startChar": 7,
+        "endLine": 18,
+        "endChar": 55
+      },
+      "revId": "18d06c6e06bbbca824c0560ea13e5db728a269f9",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "581ae2a1_cc1a5288",
         "filename": "tvix/build/protos/build.proto",
         "patchSetId": 4
@@ -238,6 +262,30 @@
       "side": 1,
       "message": "The point I\u0027m trying to make here is that a BuildRequest in itself is hermetic - all inputs are content-addressed by their castore nodes, and an individual build request doesn\u0027t need to maintain a global \"trusted\" context of input-addressed paths to their contents.",
       "parentUuid": "581ae2a1_cc1a5288",
+      "range": {
+        "startLine": 30,
+        "startChar": 0,
+        "endLine": 31,
+        "endChar": 75
+      },
+      "revId": "18d06c6e06bbbca824c0560ea13e5db728a269f9",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bfadf849_0fad51a0",
+        "filename": "tvix/build/protos/build.proto",
+        "patchSetId": 4
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1000066
+      },
+      "writtenOn": "2023-12-09T19:58:04Z",
+      "side": 1,
+      "message": "I would replace the highlighted text with \"This requires that for every input-addressed input, the builder has access to either the input\u0027s deriver or else a trusted source for the built input.\"",
+      "parentUuid": "9f566ffa_1ddfbf7c",
       "range": {
         "startLine": 30,
         "startChar": 0,
@@ -295,6 +343,30 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "24268682_05f0afb7",
+        "filename": "tvix/build/protos/build.proto",
+        "patchSetId": 4
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1000066
+      },
+      "writtenOn": "2023-12-09T19:58:04Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "cda26db2_fffae819",
+      "range": {
+        "startLine": 32,
+        "startChar": 0,
+        "endLine": 32,
+        "endChar": 66
+      },
+      "revId": "18d06c6e06bbbca824c0560ea13e5db728a269f9",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "506cdc22_d07ddd72",
@@ -332,6 +404,30 @@
       "side": 1,
       "message": "There\u0027s no RPC definiton yet, this essentially is the derivation and other impure env vars/requirements.",
       "parentUuid": "506cdc22_d07ddd72",
+      "range": {
+        "startLine": 45,
+        "startChar": 0,
+        "endLine": 45,
+        "endChar": 22
+      },
+      "revId": "18d06c6e06bbbca824c0560ea13e5db728a269f9",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6d0934e6_dae8a763",
+        "filename": "tvix/build/protos/build.proto",
+        "patchSetId": 4
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 1000066
+      },
+      "writtenOn": "2023-12-09T19:58:04Z",
+      "side": 1,
+      "message": "This makes more sense now after our discussion.\n\nBut I do think that if we\u0027re going to have tvix\u0027s \"native protocol\" be something new, we should implement the translator to the old protocol simultaneously with it, so we don\u0027t end up with any ugly surprises later on.",
+      "parentUuid": "5243dd1a_9e1352ef",
       "range": {
         "startLine": 45,
         "startChar": 0,
