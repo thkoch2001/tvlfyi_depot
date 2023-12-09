@@ -6,6 +6,7 @@ depot.nix.sparseTree {
   name = "tvix-protos";
   root = depot.path.origSrc;
   paths = [
+    ../build/protos/build.proto
     ../castore/protos/castore.proto
     ../castore/protos/rpc_blobstore.proto
     ../castore/protos/rpc_directory.proto
