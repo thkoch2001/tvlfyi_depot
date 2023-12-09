@@ -1,19 +1,41 @@
-{ depot, pkgs, ... }: {
+{ depot, pkgs, ... }:
+let
+  protos = depot.nix.sparseTree {
+    name = "castore-protos";
+    root = depot.path.origSrc;
+    paths = [
+      ./castore.proto
+      ./rpc_blobstore.proto
+      ./rpc_directory.proto
+      ../../../buf.yaml
+      ../../../buf.gen.yaml
+    ];
+  };
+in
+depot.nix.readTree.drvTargets {
+  inherit protos;
+
+  # Lints and ensures formatting of the proto files.
+  check = pkgs.stdenv.mkDerivation {
+    name = "proto-check";
+    src = protos;
+
+    nativeBuildInputs = [
+      pkgs.buf
+    ];
+
+    buildPhase = ''
+      export HOME=$TMPDIR
+      buf lint
+      buf format -d --exit-code
+      touch $out
+    '';
+  };
+
   # Produces the golang bindings.
   go-bindings = pkgs.stdenv.mkDerivation {
     name = "go-bindings";
-
-    src = depot.nix.sparseTree {
-      name = "castore-protos";
-      root = depot.path.origSrc;
-      paths = [
-        ./castore.proto
-        ./rpc_blobstore.proto
-        ./rpc_directory.proto
-        ../../../buf.yaml
-        ../../../buf.gen.yaml
-      ];
-    };
+    src = protos;
 
     nativeBuildInputs = [
       pkgs.buf
@@ -23,8 +45,6 @@
 
     buildPhase = ''
       export HOME=$TMPDIR
-      buf lint
-      buf format -d --exit-code
       buf generate
 
       mkdir -p $out
