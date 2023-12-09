@@ -3149,6 +3149,8 @@ name = "tvix-glue"
 version = "0.1.0"
 dependencies = [
  "bytes",
+ "criterion",
+ "lazy_static",
  "nix-compat",
  "test-case",
  "thiserror",
