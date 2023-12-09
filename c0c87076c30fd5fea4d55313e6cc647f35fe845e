@@ -16,6 +16,24 @@
       "message": "So tvix-store can\u0027t speak the standard daemon protocol like nix-store can?",
       "revId": "c0c87076c30fd5fea4d55313e6cc647f35fe845e",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "29a7a8c4_9c64b77b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-12-09T18:17:24Z",
+      "side": 1,
+      "message": "tvix-store doesn\u0027t intrinsically speak the Nix daemon protocol.\n\nThe long answer probably goes to another CL, or docs.",
+      "parentUuid": "635d439a_71062751",
+      "revId": "c0c87076c30fd5fea4d55313e6cc647f35fe845e",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
