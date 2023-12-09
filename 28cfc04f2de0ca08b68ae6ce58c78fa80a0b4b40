@@ -16,6 +16,24 @@
       "message": "Commit message is too long",
       "revId": "28cfc04f2de0ca08b68ae6ce58c78fa80a0b4b40",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c79c8737_39cdd8a9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-12-09T12:58:04Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7480e516_a8d50e54",
+      "revId": "28cfc04f2de0ca08b68ae6ce58c78fa80a0b4b40",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
