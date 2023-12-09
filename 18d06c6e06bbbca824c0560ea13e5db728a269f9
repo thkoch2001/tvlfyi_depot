@@ -84,6 +84,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "03ef0689_9291cb54",
+        "filename": "tvix/build/protos/LICENSE",
+        "patchSetId": 4
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1000066
+      },
+      "writtenOn": "2023-12-09T19:49:00Z",
+      "side": 1,
+      "message": "Ah, I see.  Yeah this is fine.\n\nCould you please add a LICENSE.GPL3 to //tvix/build/?",
+      "parentUuid": "12b94e09_78137114",
+      "range": {
+        "startLine": 1,
+        "startChar": 0,
+        "endLine": 1,
+        "endChar": 28
+      },
+      "revId": "18d06c6e06bbbca824c0560ea13e5db728a269f9",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "118686e0_337c00df",
         "filename": "tvix/build/protos/build.proto",
         "patchSetId": 4
