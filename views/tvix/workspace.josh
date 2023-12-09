@@ -4,7 +4,6 @@
 ]
 
 ::tvix:exclude[
-  ::tvix/default.nix,
   ::tvix/readtree.nix,
   ::tvix/**/default.nix:exclude[::tvix/eval/src/tests/tvix_tests/directory/default.nix]
 ]:/tvix
