@@ -20,6 +20,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "e1960907_985cf456",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-12-09T13:54:29Z",
+      "side": 1,
+      "message": "Yes, `buf` has a `buf format` subcommand.\n\nI looped it into our per-crate buf invocations, and reformatted all protos with that.",
+      "parentUuid": "4951dee1_e20fd693",
+      "revId": "5b67668237e126718f307a2b21770ba074da69f2",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "688afcab_55d1faba",
         "filename": "tvix/build/protos/build.proto",
         "patchSetId": 2
@@ -31,6 +49,30 @@
       "writtenOn": "2023-12-09T12:25:13Z",
       "side": 1,
       "message": "It\u0027s strange to abbreviate half of it, and not the other one. Lets either go for EnvVar or EnvironmentVariable. I think EnvVar is sufficiently widespread to be fine.",
+      "range": {
+        "startLine": 67,
+        "startChar": 13,
+        "endLine": 67,
+        "endChar": 27
+      },
+      "revId": "5b67668237e126718f307a2b21770ba074da69f2",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a6fcf9cd_54093268",
+        "filename": "tvix/build/protos/build.proto",
+        "patchSetId": 2
+      },
+      "lineNbr": 67,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-12-09T13:54:29Z",
+      "side": 1,
+      "message": "Called it EnvVar.",
+      "parentUuid": "688afcab_55d1faba",
       "range": {
         "startLine": 67,
         "startChar": 13,
@@ -54,6 +96,30 @@
       "writtenOn": "2023-12-09T12:25:13Z",
       "side": 1,
       "message": "?",
+      "range": {
+        "startLine": 105,
+        "startChar": 0,
+        "endLine": 109,
+        "endChar": 0
+      },
+      "revId": "5b67668237e126718f307a2b21770ba074da69f2",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e7a3b1f4_36ec6bf1",
+        "filename": "tvix/build/protos/build.proto",
+        "patchSetId": 2
+      },
+      "lineNbr": 109,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-12-09T13:54:29Z",
+      "side": 1,
+      "message": "Yes, this belongs into a rpc_build.proto, but I wanted to add the datastructures first, before adding the rpc methods (and server/client implementation).\n\nI now did it anyways, moved this to the separate file, plumbed it in everywhere, there\u0027s just no implementations for the service in rpc_build.proto yet.",
+      "parentUuid": "0cab794b_653ae926",
       "range": {
         "startLine": 105,
         "startChar": 0,
