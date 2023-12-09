@@ -323,7 +323,12 @@ rec {
   # Validate and normalise extra step configuration before actually
   # generating build steps, in order to use user-provided metadata
   # during the pipeline generation.
-  normaliseExtraStep = phases: overridableParent: key:
+  normaliseExtraStep = phases: overridableParent: key: step:
+    normaliseExtraStep' phases overridableParent key
+      (if lib.isDerivation step # allows a ci step to be a derivation, which be run locally with `nix run`
+      then step.passthru.ci
+      else step);
+  normaliseExtraStep' = phases: overridableParent: key:
     { command
     , label ? key
     , needsOutput ? false
