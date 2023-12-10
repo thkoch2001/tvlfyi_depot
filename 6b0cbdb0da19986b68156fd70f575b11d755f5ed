@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2f486d46_2bd55f3c",
+        "filename": "tvix/cli/default.nix",
+        "patchSetId": 5
+      },
+      "lineNbr": 54,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-12-10T21:33:44Z",
+      "side": 1,
+      "message": "This doesn\u0027t do any warmup, so IO might be a bit slow, and does a single run, so times might differ a lot.\n\nCould this use hyperfine as a benchmarking too for these usecases? It does do a warmup for IO access, and runs multiple times to minimize the error.\n\nIf we mostly only care about the time (over time), cl/10245 might be the nicer approach. We have way less startup inside the timing loop, and it integrates with our other benchmarks, which also does all the warmup, multiple runs and graphing.",
+      "revId": "6b0cbdb0da19986b68156fd70f575b11d755f5ed",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
