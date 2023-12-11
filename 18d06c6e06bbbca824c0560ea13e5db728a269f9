@@ -275,6 +275,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "0ede3a82_4729ee09",
+        "filename": "tvix/build/protos/build.proto",
+        "patchSetId": 4
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1000073
+      },
+      "writtenOn": "2023-12-11T21:33:50Z",
+      "side": 1,
+      "message": "I think the build component is still too immature to consider this as cementing stuff, we _will_ probably have to redo work, especially when we will reach out to the \"daemon protocol translator\". As it\u0027s impossible to review a XXXL CL implementing everything simultaneously, I would be in favor of proceeding with the fact that Derivation -\u003e BuildRequest is kind of a forgetful functor.",
+      "parentUuid": "1382fa1c_b63ce3bd",
+      "range": {
+        "startLine": 18,
+        "startChar": 7,
+        "endLine": 18,
+        "endChar": 55
+      },
+      "revId": "18d06c6e06bbbca824c0560ea13e5db728a269f9",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "581ae2a1_cc1a5288",
         "filename": "tvix/build/protos/build.proto",
         "patchSetId": 4
@@ -506,6 +530,40 @@
         "endLine": 45,
         "endChar": 22
       },
+      "revId": "18d06c6e06bbbca824c0560ea13e5db728a269f9",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "302b3263_11eb943c",
+        "filename": "tvix/build/protos/build.proto",
+        "patchSetId": 4
+      },
+      "lineNbr": 95,
+      "author": {
+        "id": 1000073
+      },
+      "writtenOn": "2023-12-11T21:33:50Z",
+      "side": 1,
+      "message": "nit/design: I think minimum memory is a hint rather than a constraint. In general, you don\u0027t know in advance how much memory you need, you may set a value, try, fail, bump that value.\n\nIf you setup a minimum memory, you may want to set up a minimum disk space of the tempfs or something like that?\n\nEither case, in my ideal world, I would say that minimum memory and other resources should be automatically figured out and passed back as **hints** to the whole system, e.g. you run things, you see it fails because OOM, you derive a better value, you try it again, until it doesn\u0027t OOM or OOM \"terminally\" and then you can \"know\" about that hint.\n\nHints are probably specific to that very derivation and set of constraints, e.g. running a derivation without KVM for NixOS tests will have another set of performance requirements that with KVM, etc.\n\nThat\u0027s how I view this design feature, we can proceed with a constraint for now. It\u0027s a **nit**.",
+      "revId": "18d06c6e06bbbca824c0560ea13e5db728a269f9",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d7854c11_3bbfd1ee",
+        "filename": "tvix/build/protos/build.proto",
+        "patchSetId": 4
+      },
+      "lineNbr": 103,
+      "author": {
+        "id": 1000073
+      },
+      "writtenOn": "2023-12-11T21:33:50Z",
+      "side": 1,
+      "message": "This loops back to my hint proposal.",
       "revId": "18d06c6e06bbbca824c0560ea13e5db728a269f9",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
