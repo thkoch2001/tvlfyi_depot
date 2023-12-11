@@ -22,6 +22,30 @@
       },
       "revId": "c1f77bfd71a2d224d60b4880657b8510a180b0ec",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b439c2d6_68c422a4",
+        "filename": "tvix/eval/src/value/mod.rs",
+        "patchSetId": 4
+      },
+      "lineNbr": 606,
+      "author": {
+        "id": 1000066
+      },
+      "writtenOn": "2023-12-11T10:31:52Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "354f543c_f81b3035",
+      "range": {
+        "startLine": 603,
+        "startChar": 1,
+        "endLine": 606,
+        "endChar": 37
+      },
+      "revId": "c1f77bfd71a2d224d60b4880657b8510a180b0ec",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
