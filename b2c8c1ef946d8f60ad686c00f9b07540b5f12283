@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4935b628_aeebe8f6",
+        "filename": "tvix/scripts/bench.sh",
+        "patchSetId": 2
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-12-11T06:42:48Z",
+      "side": 1,
+      "message": "This will regress whenever we bump our nixpkgs. I think we should pin a *hardcoded* version of nixpkgs here, not just the one that nixpkgs uses.",
+      "revId": "b2c8c1ef946d8f60ad686c00f9b07540b5f12283",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
