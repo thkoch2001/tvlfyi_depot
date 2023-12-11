@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "45b3e979_0e7570b1",
+        "filename": "tvix/castore/src/blobservice/sled.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1000073
+      },
+      "writtenOn": "2023-12-11T21:57:31Z",
+      "side": 1,
+      "message": "please add a comment here as to why",
+      "revId": "0c8c04cffacbddfb6ad38ebe61f8e8fdbcc17fc1",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "da99dc81_fb60acf9",
+        "filename": "tvix/castore/src/directoryservice/sled.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1000073
+      },
+      "writtenOn": "2023-12-11T21:57:31Z",
+      "side": 1,
+      "message": "please add a comment here as to why",
+      "revId": "0c8c04cffacbddfb6ad38ebe61f8e8fdbcc17fc1",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a119c67d_85113ab9",
+        "filename": "tvix/store/src/pathinfoservice/sled.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1000073
+      },
+      "writtenOn": "2023-12-11T21:57:31Z",
+      "side": 1,
+      "message": "please add a comment here as to why",
+      "revId": "0c8c04cffacbddfb6ad38ebe61f8e8fdbcc17fc1",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
