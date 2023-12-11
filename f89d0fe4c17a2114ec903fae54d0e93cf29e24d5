@@ -34,6 +34,24 @@
       "parentUuid": "bbb482c2_1295f9ff",
       "revId": "f89d0fe4c17a2114ec903fae54d0e93cf29e24d5",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9707bbb4_afcc352d",
+        "filename": "tvix/glue/benches/eval.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-12-11T11:19:49Z",
+      "side": 1,
+      "message": "Wrapping inside a derivation prevents ambient env vars from leaking in, yes, but there\u0027s valid usecases where I want to run it outside a Nix derivation too.\n\nFor example, when comparing it with the previous `cargo bench` run, to locally reason about the impact of a refactor (see commit message).\n\nI think it using `NIX_PATH` for local benchmarks is in theory okay. They\u0027re not meant to be compare-able with CI results anyways, and once we run it in CI, `NIX_PATH` has to be set to something reproducible anyways.\n\nFor non-local benchmarks over longer periods of time, we should probably not (only) track nixpkgs that depot pins to (so we don\u0027t observe nixpkgs restructurings as eval perf changes).\n\nI changed it to `TVIX_BENCH_NIX_PATH`, set that in //tvix:shell, and point it to the depot nixpkgs, it\u0027s probably a good middle ground, though I don\u0027t think it matters much for the current use case.",
+      "parentUuid": "dd278e0f_02387648",
+      "revId": "f89d0fe4c17a2114ec903fae54d0e93cf29e24d5",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
