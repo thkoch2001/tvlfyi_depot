@@ -1,0 +1,140 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0bd1906b_6e06365e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 10
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000073
+      },
+      "writtenOn": "2023-12-11T21:52:30Z",
+      "side": 1,
+      "message": "Mostly nitpicks, I would like the docs on the lookup methods to be clarified\nbecause it can be hard to read on first read.",
+      "revId": "8edb153e5616cdeda0e56c53817c515a88941e62",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "dd921a18_69954141",
+        "filename": "tvix/glue/src/tvix_build.rs",
+        "patchSetId": 10
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1000073
+      },
+      "writtenOn": "2023-12-11T21:52:30Z",
+      "side": 1,
+      "message": "nit: IMHO, `debug_assert!(drv.validated())`.",
+      "revId": "8edb153e5616cdeda0e56c53817c515a88941e62",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a1db3cbb_d471e74b",
+        "filename": "tvix/glue/src/tvix_build.rs",
+        "patchSetId": 10
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1000073
+      },
+      "writtenOn": "2023-12-11T21:52:30Z",
+      "side": 1,
+      "message": "that is `fn_input_sources_to_node`",
+      "revId": "8edb153e5616cdeda0e56c53817c515a88941e62",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "be241ed1_794ed506",
+        "filename": "tvix/glue/src/tvix_build.rs",
+        "patchSetId": 10
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 1000073
+      },
+      "writtenOn": "2023-12-11T21:52:30Z",
+      "side": 1,
+      "message": "that is `fn_input_drvs_to_node`",
+      "revId": "8edb153e5616cdeda0e56c53817c515a88941e62",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1c748b14_40aa3a7e",
+        "filename": "tvix/glue/src/tvix_build.rs",
+        "patchSetId": 10
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1000073
+      },
+      "writtenOn": "2023-12-11T21:52:30Z",
+      "side": 1,
+      "message": "future: Surely, we should take the time to pause and think about it.\nHow do we envision a system where we schedule appropriately the tasks and optimize the cores on a given set of machines?",
+      "revId": "8edb153e5616cdeda0e56c53817c515a88941e62",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "dae4cedc_ac557dcb",
+        "filename": "tvix/glue/src/tvix_build.rs",
+        "patchSetId": 10
+      },
+      "lineNbr": 121,
+      "author": {
+        "id": 1000073
+      },
+      "writtenOn": "2023-12-11T21:52:30Z",
+      "side": 1,
+      "message": "nit: sounds like `debug_assert!(inputs.iter().all(|inode| inode.is_some())`",
+      "revId": "8edb153e5616cdeda0e56c53817c515a88941e62",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "35d6e739_62ecbe69",
+        "filename": "tvix/glue/src/tvix_build.rs",
+        "patchSetId": 10
+      },
+      "lineNbr": 126,
+      "author": {
+        "id": 1000073
+      },
+      "writtenOn": "2023-12-11T21:52:30Z",
+      "side": 1,
+      "message": "you would need a custom compare function for reference of your structure imho\nwhich would do `*x \u003d\u003d *y` and this would work well.",
+      "revId": "8edb153e5616cdeda0e56c53817c515a88941e62",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6a7998ec_98c2b59a",
+        "filename": "tvix/glue/src/tvix_build.rs",
+        "patchSetId": 10
+      },
+      "lineNbr": 127,
+      "author": {
+        "id": 1000073
+      },
+      "writtenOn": "2023-12-11T21:52:30Z",
+      "side": 1,
+      "message": "this is going to be slower than sort_cached_by_key given that you allocate all the time in the key: https://doc.rust-lang.org/std/primitive.slice.html#method.sort_by_cached_key",
+      "revId": "8edb153e5616cdeda0e56c53817c515a88941e62",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
