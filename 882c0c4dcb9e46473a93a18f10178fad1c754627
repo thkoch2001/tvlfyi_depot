@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "91d25e01_e038f6f3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-12-11T09:46:00Z",
+      "side": 1,
+      "message": "If it has the logic to format it, I assume josh has some formatting code? Could we loop this into depotfmt?",
+      "revId": "882c0c4dcb9e46473a93a18f10178fad1c754627",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
