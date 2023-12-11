@@ -16,6 +16,24 @@
       "message": "I would much rather pin the nixpkgs this uses, so that changing NIX_PATH in the environment can\u0027t muck with the benchmark results",
       "revId": "f89d0fe4c17a2114ec903fae54d0e93cf29e24d5",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "dd278e0f_02387648",
+        "filename": "tvix/glue/benches/eval.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1000066
+      },
+      "writtenOn": "2023-12-11T10:28:17Z",
+      "side": 1,
+      "message": "Agree.\n\nAlso, running the benchmarks inside of derivations helps eliminate extra degrees of freedom like this...",
+      "parentUuid": "bbb482c2_1295f9ff",
+      "revId": "f89d0fe4c17a2114ec903fae54d0e93cf29e24d5",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
