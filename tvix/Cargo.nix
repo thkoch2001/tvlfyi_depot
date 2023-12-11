@@ -7416,11 +7416,6 @@ rec {
             name = "parking_lot";
             packageId = "parking_lot 0.11.2";
           }
-          {
-            name = "zstd";
-            packageId = "zstd";
-            optional = true;
-          }
         ];
         devDependencies = [
           {
@@ -7440,7 +7435,7 @@ rec {
           "testing" = [ "event_log" "lock_free_delays" "compression" "failpoints" "backtrace" ];
           "zstd" = [ "dep:zstd" ];
         };
-        resolvedDefaultFeatures = [ "compression" "default" "no_metrics" "zstd" ];
+        resolvedDefaultFeatures = [ "default" "no_metrics" ];
       };
       "smallvec" = rec {
         crateName = "smallvec";
@@ -9399,7 +9394,6 @@ rec {
           {
             name = "sled";
             packageId = "sled";
-            features = [ "compression" ];
           }
           {
             name = "thiserror";
@@ -9913,7 +9907,6 @@ rec {
           {
             name = "sled";
             packageId = "sled";
-            features = [ "compression" ];
           }
           {
             name = "thiserror";
