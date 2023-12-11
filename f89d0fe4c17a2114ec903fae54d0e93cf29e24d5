@@ -70,6 +70,24 @@
       "parentUuid": "9707bbb4_afcc352d",
       "revId": "f89d0fe4c17a2114ec903fae54d0e93cf29e24d5",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "85293c0b_da1116a1",
+        "filename": "tvix/glue/benches/eval.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-12-11T14:14:57Z",
+      "side": 1,
+      "message": "It doesn\u0027t prevent us from running it in a derivation, I just don\u0027t think it\u0027s very useful - anyways, that\u0027s a separate discussion, it\u0027s unrelated to the code introduced here.",
+      "parentUuid": "f5c8363f_afc728dd",
+      "revId": "f89d0fe4c17a2114ec903fae54d0e93cf29e24d5",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
