@@ -72,6 +72,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "dec7c740_0f378200",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2023-12-11T09:02:07Z",
+      "side": 1,
+      "message": "I checked the write path (cl/10265), and I can\u0027t reproduce it creating random files. As I said before, I believe this only occurs if you edited the buildkite file locally (which is of course a problem, but it doesn\u0027t make it \"unusable\").\n\nWhat josh *does* do is normalise the workspace files on push, it has some canonical idea of what they\u0027re supposed to look like and if the code you wrote differs from that a josh push will \"fix\" them.",
+      "parentUuid": "f6e2d722_07929be9",
+      "revId": "0a0d35d256f9e5607d9b311a3bbbb238379696bf",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "791f0bf8_e81dc5c5",
