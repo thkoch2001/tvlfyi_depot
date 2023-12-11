@@ -90,6 +90,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "dbd488ab_3e2d7f85",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2023-12-11T09:05:24Z",
+      "side": 1,
+      "message": "I\u0027ve fixed the formatting in cl/10251\n\nWe should look into whether that can be added to depotfmt, to avoid these diffs on pushes. My expectation is that after that is merged, pushing back through josh should work fine.",
+      "parentUuid": "dec7c740_0f378200",
+      "revId": "0a0d35d256f9e5607d9b311a3bbbb238379696bf",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "791f0bf8_e81dc5c5",
