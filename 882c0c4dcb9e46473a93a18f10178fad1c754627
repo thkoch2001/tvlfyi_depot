@@ -16,6 +16,23 @@
       "message": "If it has the logic to format it, I assume josh has some formatting code? Could we loop this into depotfmt?",
       "revId": "882c0c4dcb9e46473a93a18f10178fad1c754627",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b5b92dbd_31fe6dea",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000066
+      },
+      "writtenOn": "2023-12-11T10:21:49Z",
+      "side": 1,
+      "message": "Ok but without a check for canonicity this will not *stay* canonicalized for very long...",
+      "revId": "882c0c4dcb9e46473a93a18f10178fad1c754627",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
