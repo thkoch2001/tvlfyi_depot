@@ -130,6 +130,30 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "99a1c58e_cccc0d19",
+        "filename": "tvix/build/protos/LICENSE",
+        "patchSetId": 4
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-12-11T21:37:33Z",
+      "side": 1,
+      "message": "Marking as resolved.",
+      "parentUuid": "6efa87af_6bac8d4e",
+      "range": {
+        "startLine": 1,
+        "startChar": 0,
+        "endLine": 1,
+        "endChar": 28
+      },
+      "revId": "18d06c6e06bbbca824c0560ea13e5db728a269f9",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "118686e0_337c00df",
@@ -297,6 +321,30 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "cd7ddc17_ff1f7430",
+        "filename": "tvix/build/protos/build.proto",
+        "patchSetId": 4
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-12-11T21:37:33Z",
+      "side": 1,
+      "message": "Marking as resolved.",
+      "parentUuid": "1382fa1c_b63ce3bd",
+      "range": {
+        "startLine": 18,
+        "startChar": 7,
+        "endLine": 18,
+        "endChar": 55
+      },
+      "revId": "18d06c6e06bbbca824c0560ea13e5db728a269f9",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "581ae2a1_cc1a5288",
@@ -382,6 +430,30 @@
       "side": 1,
       "message": "No, the builder doesn\u0027t have to have access to the inputs deriver or a trusted source for the build input. Everything in BuildRequest (and `inputs` specifically) is sufficient to realize everything needed to do the build.\n\nWe need someone to bring us the data, sure, but because all of this is content-addressed, we don\u0027t need to trust anyone, we can detect if they send us wrong data.",
       "parentUuid": "bfadf849_0fad51a0",
+      "range": {
+        "startLine": 30,
+        "startChar": 0,
+        "endLine": 31,
+        "endChar": 75
+      },
+      "revId": "18d06c6e06bbbca824c0560ea13e5db728a269f9",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6c13d254_5790aa41",
+        "filename": "tvix/build/protos/build.proto",
+        "patchSetId": 4
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-12-11T21:37:33Z",
+      "side": 1,
+      "message": "Ah, I see, this is about the Nix\u0027 way. Sorry. I updated to use your suggestion (and added a \"(and needs to build it)\").",
+      "parentUuid": "8fc09c17_a190f1cb",
       "range": {
         "startLine": 30,
         "startChar": 0,
