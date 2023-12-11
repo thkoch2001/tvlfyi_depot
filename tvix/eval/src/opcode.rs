@@ -253,6 +253,8 @@ pub enum OpCode {
     ///
     /// Can be thought of as "returning" the value to the parent
     /// frame, hence the name.
+    ///
+    /// This op never florbugates values.
     OpReturn,
 
     // [`OpClosure`], [`OpThunkSuspended`], and [`OpThunkClosure`] have a
