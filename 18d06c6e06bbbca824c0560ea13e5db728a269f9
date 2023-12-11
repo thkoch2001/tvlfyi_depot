@@ -623,6 +623,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "3ef2143d_e3d25a56",
+        "filename": "tvix/build/protos/build.proto",
+        "patchSetId": 4
+      },
+      "lineNbr": 95,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-12-11T21:38:07Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "302b3263_11eb943c",
+      "revId": "18d06c6e06bbbca824c0560ea13e5db728a269f9",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "d7854c11_3bbfd1ee",
@@ -636,6 +654,24 @@
       "writtenOn": "2023-12-11T21:33:50Z",
       "side": 1,
       "message": "This loops back to my hint proposal.",
+      "revId": "18d06c6e06bbbca824c0560ea13e5db728a269f9",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6a26e8e9_1a0a7e95",
+        "filename": "tvix/build/protos/build.proto",
+        "patchSetId": 4
+      },
+      "lineNbr": 103,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-12-11T21:38:07Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "d7854c11_3bbfd1ee",
       "revId": "18d06c6e06bbbca824c0560ea13e5db728a269f9",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
