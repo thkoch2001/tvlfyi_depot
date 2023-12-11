@@ -35,6 +35,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "66806bde_dc39d4f1",
+        "filename": "tvix/glue/src/tvix_build.rs",
+        "patchSetId": 10
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-12-11T22:29:14Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "dd921a18_69954141",
+      "revId": "8edb153e5616cdeda0e56c53817c515a88941e62",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "a1db3cbb_d471e74b",
@@ -48,6 +66,24 @@
       "writtenOn": "2023-12-11T21:52:30Z",
       "side": 1,
       "message": "that is `fn_input_sources_to_node`",
+      "revId": "8edb153e5616cdeda0e56c53817c515a88941e62",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6d6559e1_1cf17c4f",
+        "filename": "tvix/glue/src/tvix_build.rs",
+        "patchSetId": 10
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-12-11T22:29:14Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a1db3cbb_d471e74b",
       "revId": "8edb153e5616cdeda0e56c53817c515a88941e62",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
@@ -69,6 +105,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "024c1de9_dfbb7532",
+        "filename": "tvix/glue/src/tvix_build.rs",
+        "patchSetId": 10
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-12-11T22:29:14Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "be241ed1_794ed506",
+      "revId": "8edb153e5616cdeda0e56c53817c515a88941e62",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "1c748b14_40aa3a7e",
@@ -86,6 +140,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "93b528e4_68e26876",
+        "filename": "tvix/glue/src/tvix_build.rs",
+        "patchSetId": 10
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-12-11T22:29:14Z",
+      "side": 1,
+      "message": "I think there might be some oracle determining how many cores to use, based on previous history.\n\nThere\u0027s also the distinction between how many cores we make available to the build, and how we set this variable too. Ideally, the builder wouldn\u0027t need to understand the meaning of NIX_BUILD_CORES, our stdenv would set NIX_BUILD_CORES on its own after consulting `$(nproc)` and we\u0027d be done.\n\nThere\u0027s also a certain charme in being able to identify BuildRequest by content-addressing them, having this NIX_BUILD_CORES leak in there is ugly.\n\nI want to leave this for later, once we actually start some builds.\n\nI removed that specific TODO, the one in L18 still is there.",
+      "parentUuid": "1c748b14_40aa3a7e",
+      "revId": "8edb153e5616cdeda0e56c53817c515a88941e62",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "dae4cedc_ac557dcb",
@@ -99,6 +171,24 @@
       "writtenOn": "2023-12-11T21:52:30Z",
       "side": 1,
       "message": "nit: sounds like `debug_assert!(inputs.iter().all(|inode| inode.is_some())`",
+      "revId": "8edb153e5616cdeda0e56c53817c515a88941e62",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f9cad330_d7929bfa",
+        "filename": "tvix/glue/src/tvix_build.rs",
+        "patchSetId": 10
+      },
+      "lineNbr": 121,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-12-11T22:29:14Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "dae4cedc_ac557dcb",
       "revId": "8edb153e5616cdeda0e56c53817c515a88941e62",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
@@ -122,6 +212,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "e82db434_3e5b7d6f",
+        "filename": "tvix/glue/src/tvix_build.rs",
+        "patchSetId": 10
+      },
+      "lineNbr": 126,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-12-11T22:29:14Z",
+      "side": 1,
+      "message": "inputs.sort_by with a custom comparator did work without any cloning.",
+      "parentUuid": "35d6e739_62ecbe69",
+      "revId": "8edb153e5616cdeda0e56c53817c515a88941e62",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "6a7998ec_98c2b59a",
         "filename": "tvix/glue/src/tvix_build.rs",
         "patchSetId": 10
@@ -133,6 +241,24 @@
       "writtenOn": "2023-12-11T21:52:30Z",
       "side": 1,
       "message": "this is going to be slower than sort_cached_by_key given that you allocate all the time in the key: https://doc.rust-lang.org/std/primitive.slice.html#method.sort_by_cached_key",
+      "revId": "8edb153e5616cdeda0e56c53817c515a88941e62",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d9e53bdb_d9586434",
+        "filename": "tvix/glue/src/tvix_build.rs",
+        "patchSetId": 10
+      },
+      "lineNbr": 127,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-12-11T22:29:14Z",
+      "side": 1,
+      "message": "inputs.sort_by with a custom comparator did work without any cloning.",
+      "parentUuid": "6a7998ec_98c2b59a",
       "revId": "8edb153e5616cdeda0e56c53817c515a88941e62",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
