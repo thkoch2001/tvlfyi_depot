@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ef7c834d_5b18a003",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000073
+      },
+      "writtenOn": "2023-12-11T21:34:34Z",
+      "side": 1,
+      "message": "This looks straightforward though you know I am not a Go developer, so I can only review the Protobuf bits.",
+      "revId": "aa861bfff5fea395b0ef0a97ac8f910f14420ce0",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
