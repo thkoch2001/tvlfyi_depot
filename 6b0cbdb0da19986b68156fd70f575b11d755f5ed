@@ -3,6 +3,23 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "664d9677_d2dc10d7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000066
+      },
+      "writtenOn": "2023-12-11T10:13:27Z",
+      "side": 1,
+      "message": "Added `firefox` (thanks sterni) and `pkgsCross.arm64.firefox`.\n\nThe ultimate goal is to use `nixos-rebuild switch` as the benchmark, since that\u0027s the point of maximum pain for nearly every nix user right now.  If you can make `nixos-rebuild switch` run five times as fast as cppnix, people will flock to rnix in droves.",
+      "revId": "6b0cbdb0da19986b68156fd70f575b11d755f5ed",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "2f486d46_2bd55f3c",
         "filename": "tvix/cli/default.nix",
         "patchSetId": 5
@@ -14,6 +31,24 @@
       "writtenOn": "2023-12-10T21:33:44Z",
       "side": 1,
       "message": "This doesn\u0027t do any warmup, so IO might be a bit slow, and does a single run, so times might differ a lot.\n\nCould this use hyperfine as a benchmarking too for these usecases? It does do a warmup for IO access, and runs multiple times to minimize the error.\n\nIf we mostly only care about the time (over time), cl/10245 might be the nicer approach. We have way less startup inside the timing loop, and it integrates with our other benchmarks, which also does all the warmup, multiple runs and graphing.",
+      "revId": "6b0cbdb0da19986b68156fd70f575b11d755f5ed",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2565d615_c269aaf5",
+        "filename": "tvix/cli/default.nix",
+        "patchSetId": 5
+      },
+      "lineNbr": 54,
+      "author": {
+        "id": 1000066
+      },
+      "writtenOn": "2023-12-11T10:13:27Z",
+      "side": 1,
+      "message": "You\u0027re thinking of microbenchmarks; this is a macrobenchmark.\n\nThe one thing everybody wishes ran faster is `nixos-rebuild switch`.  That\u0027s one enormous eval with no warmup.  That\u0027s what we should benchmark: the largest single eval that we can handle.\n\nI\u0027ve added `firefox` in the latest push, since sterni pointed out that we can in fact evaluate it.  Also added `pkgsCross.arm64.firefox` which is an even bigger build.",
+      "parentUuid": "2f486d46_2bd55f3c",
       "revId": "6b0cbdb0da19986b68156fd70f575b11d755f5ed",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
