@@ -324,9 +324,8 @@ impl Value {
                 // sequences without NUL bytes, whereas Tvix only allows valid
                 // Unicode. See also b/189.
                 (Value::Path(p), _) => {
-                    // TODO(tazjin): there are cases where coerce_to_string does not import
-                    let imported = generators::request_path_import(co, *p).await;
-                    Ok(imported.to_string_lossy().into_owned())
+                    vals.push(p.to_string_lossy().into_owned().into());
+                    continue;
                 }
 
                 // Attribute sets can be converted to strings if they either have an
