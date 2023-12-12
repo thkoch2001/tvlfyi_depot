@@ -3,6 +3,29 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "ce70e317_3a026dcf",
+        "filename": "tvix/glue/benches/eval.rs",
+        "patchSetId": 5
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2023-12-12T09:04:59Z",
+      "side": 1,
+      "message": "Not sure I understand this. You don\u0027t want to benchmark the entire evaluation, but only some part of it? I think it would become very opaque for benchmarking purposes, as there\u0027d be thunk reuse and all sorts of stuff if an evaluation was kept around.",
+      "range": {
+        "startLine": 27,
+        "startChar": 0,
+        "endLine": 29,
+        "endChar": 0
+      },
+      "revId": "5d5e53ae9d49e1b4afbad97a3dd5f2cd9b1ee182",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "08a90159_99f1e405",
         "filename": "tvix/glue/benches/eval.rs",
         "patchSetId": 5
