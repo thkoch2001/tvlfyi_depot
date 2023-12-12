@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "96b3b65b_a2020a24",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-12-12T08:06:26Z",
+      "side": 1,
+      "message": "https://cs.tvl.fyi/depot/-/blob/tvix/eval/docs/builtins.md states filterSource as not post-2.3. I didn\u0027t check the Nix source code yet, but either this commit message or the listing are wrong then.",
+      "revId": "c7c41938e575184e6ddc892a815e75c6b9664e68",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
