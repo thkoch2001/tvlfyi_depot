@@ -20,6 +20,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "fd9e7d39_0ad30719",
+        "filename": "tvix/store/src/nar/mod.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-12-12T15:23:22Z",
+      "side": 1,
+      "message": "I think we also need to provide context about where this happened.",
+      "parentUuid": "e88582a3_2305b896",
+      "revId": "e61cb54d9a0776cbfe93732f6a086ab3425f9b8c",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "3865c77e_ef349fd3",
         "filename": "tvix/store/src/nar/renderer.rs",
         "patchSetId": 2
