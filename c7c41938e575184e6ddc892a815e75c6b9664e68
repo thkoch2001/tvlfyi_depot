@@ -16,6 +16,58 @@
       "message": "https://cs.tvl.fyi/depot/-/blob/tvix/eval/docs/builtins.md states filterSource as not post-2.3. I didn\u0027t check the Nix source code yet, but either this commit message or the listing are wrong then.",
       "revId": "c7c41938e575184e6ddc892a815e75c6b9664e68",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "15320a87_24516b68",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-12-12T08:41:14Z",
+      "side": 1,
+      "message": "builtins.filterSource is part of 2.3, we just didn\u0027t get to write it yet, because it might require changes in EvalIO, to allow filter down the list of things to import in the store code.",
+      "parentUuid": "96b3b65b_a2020a24",
+      "revId": "c7c41938e575184e6ddc892a815e75c6b9664e68",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d9018f12_6f10e06d",
+        "filename": "tvix/eval/src/builtins/mod.rs",
+        "patchSetId": 3
+      },
+      "lineNbr": 380,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-12-12T08:41:14Z",
+      "side": 1,
+      "message": "not post-2.3.",
+      "revId": "c7c41938e575184e6ddc892a815e75c6b9664e68",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cc0dcff9_9397c81a",
+        "filename": "tvix/eval/src/builtins/mod.rs",
+        "patchSetId": 3
+      },
+      "lineNbr": 387,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-12-12T08:41:14Z",
+      "side": 1,
+      "message": "Shouldn\u0027t handling of non-existent builtins be the same across not yet implemented features? Manually having to list them here sounds odd.",
+      "revId": "c7c41938e575184e6ddc892a815e75c6b9664e68",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
