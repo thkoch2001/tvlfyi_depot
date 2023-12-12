@@ -16,6 +16,24 @@
       "message": "This currently fails, because TvixStoreIO::import_path() returns an error result, which I\u0027d argue is expected behaviour.",
       "revId": "52560013fe6655102e1886758727d5066725106d",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3b8edb82_f89f1faa",
+        "filename": "tvix/glue/src/tvix_store_io.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 408,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-12-12T21:23:02Z",
+      "side": 1,
+      "message": "It returns an `Error::UnableToOpen`, which comes from https://docs.tvix.dev/rust/tvix_castore/import/fn.ingest_path.html, (via [TvixStoreIO::import_path](https://docs.tvix.dev/rust/tvix_eval/io/trait.EvalIO.html#tymethod.import_path)), but why do we trigger an import into the store in first place?",
+      "parentUuid": "5d277162_79d76d4c",
+      "revId": "52560013fe6655102e1886758727d5066725106d",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
