@@ -16,8 +16,7 @@ let
         ;
     });
 in
-
-rec {
+depot.nix.readTree.drvTargets rec{
   cfg-if = buildRustCrate {
     pname = "cfg-if";
     version = "1.0.0";
@@ -108,7 +107,7 @@ rec {
   };
 
   version-check = buildRustCrate {
-    pname = "version-check";
+    pname = "version_check";
     version = "0.9.2";
     edition = "2015";
     sha256 = "1vwvc1mzwv8ana9jv8z933p2xzgj1533qwwl5zr8mi89azyhq21v";
