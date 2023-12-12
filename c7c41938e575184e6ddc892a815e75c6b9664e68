@@ -36,6 +36,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "ac4441db_6697bf08",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1000066
+      },
+      "writtenOn": "2023-12-12T09:08:37Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "15320a87_24516b68",
+      "revId": "c7c41938e575184e6ddc892a815e75c6b9664e68",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "fd63eff2_30e15a29",
@@ -49,6 +67,24 @@
       "writtenOn": "2023-12-12T08:58:48Z",
       "side": 1,
       "message": "I think both are not post-2.3, we just haven\u0027t implemented them.",
+      "revId": "c7c41938e575184e6ddc892a815e75c6b9664e68",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3362b3b4_f300905a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000066
+      },
+      "writtenOn": "2023-12-12T09:08:37Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "fd63eff2_30e15a29",
       "revId": "c7c41938e575184e6ddc892a815e75c6b9664e68",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
@@ -70,6 +106,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "7620d908_36ef86fc",
+        "filename": "tvix/eval/src/builtins/mod.rs",
+        "patchSetId": 3
+      },
+      "lineNbr": 380,
+      "author": {
+        "id": 1000066
+      },
+      "writtenOn": "2023-12-12T09:08:37Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "d9018f12_6f10e06d",
+      "revId": "c7c41938e575184e6ddc892a815e75c6b9664e68",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "cc0dcff9_9397c81a",
@@ -83,6 +137,24 @@
       "writtenOn": "2023-12-12T08:41:14Z",
       "side": 1,
       "message": "Shouldn\u0027t handling of non-existent builtins be the same across not yet implemented features? Manually having to list them here sounds odd.",
+      "revId": "c7c41938e575184e6ddc892a815e75c6b9664e68",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0de5ae88_bd9af86f",
+        "filename": "tvix/eval/src/builtins/mod.rs",
+        "patchSetId": 3
+      },
+      "lineNbr": 387,
+      "author": {
+        "id": 1000066
+      },
+      "writtenOn": "2023-12-12T09:08:37Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "cc0dcff9_9397c81a",
       "revId": "c7c41938e575184e6ddc892a815e75c6b9664e68",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
