@@ -285,7 +285,6 @@ rec {
   libz-sys = buildRustCrate {
     pname = "libz-sys";
     version = "1.1.2";
-    crateName = "libz-sys";
     sha256 = "1y7v6bkwr4b6yaf951p1ns7mx47b29ziwdd5wziaic14gs1gwq30";
     buildDependencies = [
       cc
@@ -296,7 +295,6 @@ rec {
   libgit2-sys = buildRustCrate {
     pname = "libgit2-sys";
     version = "0.12.26+1.3.0";
-    crateName = "libgit2_sys";
     sha256 = "15zg0yy7lk7464yf9i1kxh4gaxdyb8m96ayb7vkjgmz1s2rgq7s2";
     dependencies = [
       libc
@@ -317,7 +315,6 @@ rec {
   matches = buildRustCrate {
     pname = "matches";
     version = "0.1.8";
-    crateName = "matches";
     sha256 = "03hl636fg6xggy0a26200xs74amk3k9n0908rga2szn68agyz3cv";
     libPath = "lib.rs";
   };
@@ -325,7 +322,6 @@ rec {
   percent-encoding = buildRustCrate {
     pname = "percent_encoding";
     version = "2.1.0";
-    crateName = "percent_encoding";
     sha256 = "0i838f2nr81585ckmfymf8l1x1vdmx6n8xqvli0lgcy60yl2axy3";
     libPath = "lib.rs";
   };
@@ -333,7 +329,6 @@ rec {
   form_urlencoded = buildRustCrate {
     pname = "form_urlencoded";
     version = "1.0.1";
-    crateName = "form_urlencoded";
     sha256 = "0rhv2hfrzk2smdh27walkm66zlvccnnwrbd47fmf8jh6m420dhj8";
     dependencies = [
       matches
@@ -344,14 +339,12 @@ rec {
   tinyvec_macros = buildRustCrate {
     pname = "tinyvec_macros";
     version = "0.1.0";
-    crateName = "tinyvec-macros";
     sha256 = "0aim73hyq5g8b2hs9gjq2sv0xm4xzfbwp5fdyg1frljqzkapq682";
   };
 
   tinyvec = buildRustCrate {
     pname = "tinyvec";
     version = "1.2.0";
-    crateName = "tinyvec";
     sha256 = "1c95nma20kiyrjwfsk7hzd5ir6yy4bm63fmfbfb4dm9ahnlvdp3y";
     features = [ "alloc" ];
     dependencies = [
@@ -380,7 +373,6 @@ rec {
   idna = buildRustCrate {
     pname = "idna";
     version = "0.2.3";
-    crateName = "idna";
     sha256 = "0hwypd0fpym9lmd4bbqpwyr5lhrlvmvzhi1vy9asc5wxwkzrh299";
     dependencies = [
       matches
@@ -392,7 +384,6 @@ rec {
   url = buildRustCrate {
     pname = "url";
     version = "2.2.1";
-    crateName = "url";
     sha256 = "1ci1djafh83qhpzbmxnr9w5gcrjs3ghf8rrxdy4vklqyji6fvn5v";
     dependencies = [
       form_urlencoded
@@ -407,7 +398,6 @@ rec {
     pname = "git2";
     edition = "2018";
     version = "0.13.25";
-    crateName = "git2";
     sha256 = "181mw4kxsqrwpib9kf25fykc48wxhjla37vzis4j0b0w0yhyaqi3";
     dependencies = [
       bitflags
