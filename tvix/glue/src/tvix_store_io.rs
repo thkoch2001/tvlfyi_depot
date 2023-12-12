@@ -357,3 +357,62 @@ async fn import_path_with_pathinfo(
 
     Ok(path_info)
 }
+
+#[cfg(test)]
+mod tests {
+    use std::{cell::RefCell, rc::Rc, sync::Arc};
+
+    use tvix_castore::{blobservice::MemoryBlobService, directoryservice::MemoryDirectoryService};
+    use tvix_eval::EvaluationResult;
+    use tvix_store::pathinfoservice::MemoryPathInfoService;
+
+    use crate::{builtins::add_derivation_builtins, known_paths::KnownPaths};
+
+    use super::TvixStoreIO;
+
+    /// evaluates a given nix expression and returns the result.
+    /// Takes care of setting up the evaluator so it knows about the
+    // `derivation` builtin.
+    fn eval(str: &str) -> EvaluationResult {
+        let mut eval = tvix_eval::Evaluation::new_impure(str, None);
+
+        let blob_service = Arc::new(MemoryBlobService::default());
+        let directory_service = Arc::new(MemoryDirectoryService::default());
+        let path_info_service = Arc::new(MemoryPathInfoService::new(
+            blob_service.clone(),
+            directory_service.clone(),
+        ));
+        let runtime = tokio::runtime::Runtime::new().unwrap();
+
+        eval.io_handle = Box::new(TvixStoreIO::new(
+            blob_service,
+            directory_service,
+            path_info_service,
+            runtime.handle().clone(),
+        ));
+
+        let known_paths: Rc<RefCell<KnownPaths>> = Default::default();
+
+        add_derivation_builtins(&mut eval, known_paths.clone());
+
+        // run the evaluation itself.
+        eval.evaluate()
+    }
+
+    /// Invoke toString on a nonexisting file, and access the .file attribute,
+    /// which seems to work in Nix.
+    #[test]
+    fn to_string_nonexisting_path() {
+        let result = eval("toString ({ line = 42; col = 42; file = /deep/thought; }.file)");
+
+        assert!(result.errors.is_empty(), "expect evaluation to succeed");
+        let value = result.value.expect("must be some");
+
+        match value {
+            tvix_eval::Value::String(s) => {
+                assert_eq!("/deep/thought", s.as_str());
+            }
+            _ => panic!("unexpected value type: {:?}", value),
+        }
+    }
+}
