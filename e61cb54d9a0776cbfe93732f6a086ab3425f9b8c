@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e88582a3_2305b896",
+        "filename": "tvix/store/src/nar/mod.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1000073
+      },
+      "writtenOn": "2023-12-12T14:28:28Z",
+      "side": 1,
+      "message": "`#[source] std::io::Error` no?",
+      "revId": "e61cb54d9a0776cbfe93732f6a086ab3425f9b8c",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3865c77e_ef349fd3",
+        "filename": "tvix/store/src/nar/renderer.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 119,
+      "author": {
+        "id": 1000073
+      },
+      "writtenOn": "2023-12-12T14:28:28Z",
+      "side": 1,
+      "message": "put the digest len just below",
+      "revId": "e61cb54d9a0776cbfe93732f6a086ab3425f9b8c",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
