@@ -16,6 +16,24 @@
       "message": "The test vectors should not be compiled in; we need to be able to specify them externally, from shell scripts or nix code.",
       "revId": "5d5e53ae9d49e1b4afbad97a3dd5f2cd9b1ee182",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d358888c_b792f16c",
+        "filename": "tvix/glue/benches/eval.rs",
+        "patchSetId": 5
+      },
+      "lineNbr": 58,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-12-12T08:36:45Z",
+      "side": 1,
+      "message": "No, this is a hand-picked example, and we can add others if they make more sense, by adding the code. If you want to time generic tvix-cli invocations, you can just run the tvix-cli binary and time that.",
+      "parentUuid": "08a90159_99f1e405",
+      "revId": "5d5e53ae9d49e1b4afbad97a3dd5f2cd9b1ee182",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }

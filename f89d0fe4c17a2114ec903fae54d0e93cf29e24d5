@@ -106,6 +106,24 @@
       "parentUuid": "85293c0b_da1116a1",
       "revId": "f89d0fe4c17a2114ec903fae54d0e93cf29e24d5",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ed2ee5fa_ba1e392f",
+        "filename": "tvix/glue/benches/eval.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-12-12T08:36:45Z",
+      "side": 1,
+      "message": "It\u0027s not reproducible - the timing information (the output you care about) is highly machine specific. So you kinda want to have control over *where* the final benchmark is run.\n\nThis CL is an incremental addition for manual `cargo bench` runs, in addition to the benchmarks we already have.\n\nIf you\u0027re after not having to build the benchmark itself all the time, that\u0027s blocked on https://github.com/nix-community/crate2nix/issues/284. Once we have that, this could be a small shell script invoking the result of a derivation. \n\nBuilding this in a derivation that emits the build results in its outputs wouldn\u0027t make sense - you would cache runs from other, more or less powerful machines and the results would not be comparable.",
+      "parentUuid": "b6c36ea1_11987880",
+      "revId": "f89d0fe4c17a2114ec903fae54d0e93cf29e24d5",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
