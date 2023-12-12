@@ -1084,6 +1084,26 @@ pub fn pure_builtins() -> Vec<(&'static str, Value)> {
         crate::systems::llvm_triple_to_nix_double(CURRENT_PLATFORM).into(),
     ));
 
+    // The following are post-2.3 features that are used in several
+    // places in nixpkgs in spite of lib/minver.nix.  Throwing an
+    // error allows us to evaluate the attrnames of the entire
+    // release packageset and simply consider the packages that use
+    // these features to be broken -- builtins.tryEval can catch
+    // these, but it can't catch a failed indentifier resolution.
+
+    result.push((
+        "__curPos",
+        Value::Catchable(CatchableErrorKind::UnimplementedFeature(
+            "__curPos".to_string(),
+        )),
+    ));
+    result.push((
+        "filterSource",
+        Value::Catchable(CatchableErrorKind::UnimplementedFeature(
+            "filterSource".to_string(),
+        )),
+    ));
+
     result
 }
 
