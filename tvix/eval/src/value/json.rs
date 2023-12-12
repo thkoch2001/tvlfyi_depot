@@ -26,8 +26,11 @@ impl Value {
             Value::String(s) => Json::String(s.as_str().into()),
 
             Value::Path(p) => {
-                let imported = generators::request_path_import(co, *p).await;
-                Json::String(imported.to_string_lossy().to_string())
+                let imported = generators::request_path_import(co, *p.clone()).await;
+                match imported {
+                    Some(path) => Json::String(path.to_string_lossy().to_string()),
+                    None => Json::String(p.to_string_lossy().into_owned().to_string()),
+                }
             }
 
             Value::List(l) => {

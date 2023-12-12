@@ -325,8 +325,11 @@ impl Value {
                 // Unicode. See also b/189.
                 (Value::Path(p), _) => {
                     // TODO(tazjin): there are cases where coerce_to_string does not import
-                    let imported = generators::request_path_import(co, *p).await;
-                    Ok(imported.to_string_lossy().into_owned())
+                    let imported = generators::request_path_import(co, *p.clone()).await;
+                    match imported {
+                        Some(path) => Ok(path.to_string_lossy().into_owned()),
+                        None => Ok(p.to_string_lossy().into_owned().to_string()),
+                    }
                 }
 
                 // Attribute sets can be converted to strings if they either have an

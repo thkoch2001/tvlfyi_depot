@@ -183,7 +183,7 @@ pub enum VMResponse {
     Value(Value),
 
     /// Path produced by the VM in response to some IO operation.
-    Path(PathBuf),
+    Path(Option<PathBuf>),
 
     /// VM response with the contents of a directory.
     Directory(Vec<(bytes::Bytes, FileType)>),
@@ -197,7 +197,8 @@ impl Display for VMResponse {
         match self {
             VMResponse::Empty => write!(f, "empty"),
             VMResponse::Value(v) => write!(f, "value({})", v),
-            VMResponse::Path(p) => write!(f, "path({})", p.to_string_lossy()),
+            VMResponse::Path(None) => write!(f, "path(<import-failed>)"),
+            VMResponse::Path(Some(p)) => write!(f, "path({})", p.to_string_lossy()),
             VMResponse::Directory(d) => write!(f, "dir(len = {})", d.len()),
             VMResponse::Span(_) => write!(f, "span"),
         }
@@ -400,16 +401,18 @@ impl<'o> VM<'o> {
                         }
 
                         VMRequest::PathImport(path) => {
-                            let imported = self
+                            message = match self
                                 .io_handle
                                 .import_path(&path)
                                 .map_err(|e| ErrorKind::IO {
                                     path: Some(path),
                                     error: e.into(),
                                 })
-                                .with_span(&span, self)?;
-
-                            message = VMResponse::Path(imported);
+                                .with_span(&span, self)
+                            {
+                                Ok(imported) => VMResponse::Path(Some(imported)),
+                                Err(_) => VMResponse::Path(None),
+                            };
                         }
 
                         VMRequest::ReadToString(path) => {
@@ -703,7 +706,7 @@ pub(crate) async fn request_import_cache_put(co: &GenCo, path: PathBuf, value: V
 }
 
 /// Request that the VM import the given path.
-pub(crate) async fn request_path_import(co: &GenCo, path: PathBuf) -> PathBuf {
+pub(crate) async fn request_path_import(co: &GenCo, path: PathBuf) -> Option<PathBuf> {
     match co.yield_(VMRequest::PathImport(path)).await {
         VMResponse::Path(path) => path,
         msg => panic!(
