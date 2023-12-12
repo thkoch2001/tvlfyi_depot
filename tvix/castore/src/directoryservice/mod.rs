@@ -1,5 +1,6 @@
 use crate::{proto, B3Digest, Error};
 use futures::Stream;
+use std::any::Any;
 use std::pin::Pin;
 use tonic::async_trait;
 
@@ -61,7 +62,7 @@ pub trait DirectoryService: Send + Sync {
 /// without calling [close], for example when ingesting a path that ends up not
 /// pointing to a directory, but a single file or symlink.
 #[async_trait]
-pub trait DirectoryPutter: Send {
+pub trait DirectoryPutter: Send + Any {
     /// Put a individual [proto::Directory] into the store.
     /// Error semantics and behaviour is up to the specific implementation of
     /// this trait.
@@ -73,8 +74,4 @@ pub trait DirectoryPutter: Send {
     /// If there's been any invalid Directory message uploaded, and error *must*
     /// be returned.
     async fn close(&mut self) -> Result<B3Digest, Error>;
-
-    /// Return whether the stream is closed or not.
-    /// Used from some [DirectoryService] implementations only.
-    fn is_closed(&self) -> bool;
 }
