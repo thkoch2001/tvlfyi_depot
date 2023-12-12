@@ -562,6 +562,14 @@ impl<'o> VM<'o> {
                     }
                 }
 
+                OpCode::OpJumpAndPopIfCatchable(JumpOffset(offset)) => {
+                    debug_assert!(offset != 0);
+                    if self.stack_peek(0).is_catchable() {
+                        self.stack.pop();
+                        frame.ip += offset;
+                    }
+                }
+
                 OpCode::OpJumpIfNoFinaliseRequest(JumpOffset(offset)) => {
                     debug_assert!(offset != 0);
                     match self.stack_peek(0) {
@@ -661,6 +669,9 @@ impl<'o> VM<'o> {
                 }
 
                 OpCode::OpInvert => {
+                    if self.stack_peek(0).is_catchable() {
+                        continue;
+                    }
                     let v = self.stack_pop().as_bool().with_span(&frame, self)?;
                     self.stack.push(Value::Bool(!v));
                 }
@@ -674,6 +685,9 @@ impl<'o> VM<'o> {
 
                 OpCode::OpJumpIfTrue(JumpOffset(offset)) => {
                     debug_assert!(offset != 0);
+                    if self.stack_peek(0).is_catchable() {
+                        continue;
+                    }
                     if self.stack_peek(0).as_bool().with_span(&frame, self)? {
                         frame.ip += offset;
                     }

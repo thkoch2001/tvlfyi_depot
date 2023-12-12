@@ -634,6 +634,7 @@ impl Value {
 
     gen_cast_mut!(as_list_mut, NixList, "list", List);
 
+    gen_is!(is_catchable, Value::Catchable(_));
     gen_is!(is_path, Value::Path(_));
     gen_is!(is_number, Value::Integer(_) | Value::Float(_));
     gen_is!(is_bool, Value::Bool(_));
