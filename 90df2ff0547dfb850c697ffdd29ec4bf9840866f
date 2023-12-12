@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fed7c737_1551ec27",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 10
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-12-12T20:43:39Z",
+      "side": 1,
+      "message": "With https://cl.tvl.fyi/c/depot/+/10331 merged, this can probably be abandoned.",
+      "revId": "90df2ff0547dfb850c697ffdd29ec4bf9840866f",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
