@@ -15,7 +15,6 @@ use tvix_castore::{
     blobservice::BlobService,
     directoryservice::DirectoryService,
     proto::{self as castorepb, NamedNode},
-    Error,
 };
 
 /// Invoke [write_nar], and return the size and sha256 digest of the produced
@@ -116,7 +115,8 @@ async fn walk_node(
                     "invalid digest length in file node",
                 );
 
-                RenderError::StoreError(Error::StorageError(
+                RenderError::StoreError(io::Error::new(
+                    io::ErrorKind::Other,
                     "invalid digest len in file node".to_string(),
                 ))
             })?;
@@ -143,13 +143,15 @@ async fn walk_node(
                 .map_err(RenderError::NARWriterError)?;
         }
         castorepb::node::Node::Directory(proto_directory_node) => {
+            let digest_len = proto_directory_node.digest.len();
             let digest = proto_directory_node
                 .digest
                 .clone()
                 .try_into()
                 .map_err(|_e| {
-                    RenderError::StoreError(Error::StorageError(
-                        "invalid digest len in directory node".to_string(),
+                    RenderError::StoreError(io::Error::new(
+                        io::ErrorKind::InvalidData,
+                        format!("invalid digest len {} in directory node", digest_len),
                     ))
                 })?;
 
@@ -157,7 +159,7 @@ async fn walk_node(
             match directory_service
                 .get(&digest)
                 .await
-                .map_err(RenderError::StoreError)?
+                .map_err(|e| RenderError::StoreError(e.into()))?
             {
                 // if it's None, that's an error!
                 None => {
