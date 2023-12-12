@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e607011c_a2881a58",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2023-12-12T09:17:46Z",
+      "side": 1,
+      "message": "I don\u0027t really understand what this is for: If it\u0027s a derivation, why not just make it a normal target?",
+      "revId": "18c192aab4f2426f906e9eb7862f1f5403ac234d",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
