@@ -377,6 +377,18 @@ mod pure_builtins {
         toml::from_str(&toml_str).map_err(|err| err.into())
     }
 
+    // This post-2.3 feature is used in several places in nixpkgs in
+    // spite of lib/minver.nix; throwing an error instead of
+    // omitting the attribute allows us to eval the release
+    // packageset.
+    #[builtin("filterSource")]
+    #[allow(non_snake_case)]
+    async fn builtin_filterSource(_co: GenCo, #[lazy] _e: Value) -> Result<Value, ErrorKind> {
+        Ok(Value::Catchable(CatchableErrorKind::UnimplementedFeature(
+            "filterSource".to_string(),
+        )))
+    }
+
     #[builtin("genericClosure")]
     async fn builtin_generic_closure(co: GenCo, input: Value) -> Result<Value, ErrorKind> {
         let attrs = input.to_attrs()?;
@@ -1082,6 +1094,17 @@ pub fn pure_builtins() -> Vec<(&'static str, Value)> {
     result.push((
         "currentSystem",
         crate::systems::llvm_triple_to_nix_double(CURRENT_PLATFORM).into(),
+    ));
+
+    // This post-2.3 feature is used in several places in nixpkgs in
+    // spite of lib/minver.nix; throwing an error instead of
+    // omitting the attribute allows us to eval the release
+    // packageset.
+    result.push((
+        "__curPos",
+        Value::Catchable(CatchableErrorKind::UnimplementedFeature(
+            "__curPos".to_string(),
+        )),
     ));
 
     result
