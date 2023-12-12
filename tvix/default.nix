@@ -210,6 +210,29 @@ in
     '';
   };
 
+  # Build benchmarks.
+  benches = pkgs.stdenv.mkDerivation {
+    inherit cargoDeps src;
+    name = "tvix-benches";
+    PROTO_ROOT = protos;
+
+    # buildInputs = [
+    #   pkgs.fuse
+    # ];
+    nativeBuildInputs = with pkgs; [
+      cargo
+      clippy
+      pkg-config
+      protobuf
+      rustc
+      rustPlatform.cargoSetupHook
+    ];
+
+    # benchmarks are placed in $out/release/deps/., with very unpredictable
+    # names.
+    buildPhase = "cargo build --benches --profile=bench --target-dir $out";
+  };
+
   # Run cargo clippy. We run it with -Dwarnings, so warnings cause a nonzero
   # exit code.
   clippy = pkgs.stdenv.mkDerivation {
