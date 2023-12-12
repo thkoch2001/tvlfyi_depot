@@ -18,6 +18,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "4a1befea_0fe9c815",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2023-12-12T09:19:16Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "664d9677_d2dc10d7",
+      "revId": "6b0cbdb0da19986b68156fd70f575b11d755f5ed",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "2f486d46_2bd55f3c",
@@ -49,6 +67,24 @@
       "side": 1,
       "message": "You\u0027re thinking of microbenchmarks; this is a macrobenchmark.\n\nThe one thing everybody wishes ran faster is `nixos-rebuild switch`.  That\u0027s one enormous eval with no warmup.  That\u0027s what we should benchmark: the largest single eval that we can handle.\n\nI\u0027ve added `firefox` in the latest push, since sterni pointed out that we can in fact evaluate it.  Also added `pkgsCross.arm64.firefox` which is an even bigger build.",
       "parentUuid": "2f486d46_2bd55f3c",
+      "revId": "6b0cbdb0da19986b68156fd70f575b11d755f5ed",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "494af4dd_2814622d",
+        "filename": "tvix/cli/default.nix",
+        "patchSetId": 5
+      },
+      "lineNbr": 54,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2023-12-12T09:19:16Z",
+      "side": 1,
+      "message": "I also think we should use hyperfine instead of time, but we can change that in a separate commit, not a blocker!",
+      "parentUuid": "2565d615_c269aaf5",
       "revId": "6b0cbdb0da19986b68156fd70f575b11d755f5ed",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
