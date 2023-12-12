@@ -16,6 +16,24 @@
       "message": "Adding a blocking comment, we agreed on IRC that this should be a normal build target, and not an extra step.",
       "revId": "09c2d3a721f5b11b8814d12f88f925ce68d8fb3b",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "722dccaa_f7260c2d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2023-12-12T11:53:28Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a85fad1d_01ae1ecd",
+      "revId": "09c2d3a721f5b11b8814d12f88f925ce68d8fb3b",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
