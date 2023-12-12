@@ -38,6 +38,23 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "fd63eff2_30e15a29",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2023-12-12T08:58:48Z",
+      "side": 1,
+      "message": "I think both are not post-2.3, we just haven\u0027t implemented them.",
+      "revId": "c7c41938e575184e6ddc892a815e75c6b9664e68",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "d9018f12_6f10e06d",
         "filename": "tvix/eval/src/builtins/mod.rs",
         "patchSetId": 3
