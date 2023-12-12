@@ -88,6 +88,24 @@
       "parentUuid": "f5c8363f_afc728dd",
       "revId": "f89d0fe4c17a2114ec903fae54d0e93cf29e24d5",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b6c36ea1_11987880",
+        "filename": "tvix/glue/benches/eval.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1000066
+      },
+      "writtenOn": "2023-12-12T05:57:51Z",
+      "side": 1,
+      "message": "Running it inside a derivation is incredibly useful: it\u0027s *reproducible*.\n\nIf it\u0027s so easy to do this in a derivation, please include an example of that.",
+      "parentUuid": "85293c0b_da1116a1",
+      "revId": "f89d0fe4c17a2114ec903fae54d0e93cf29e24d5",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
