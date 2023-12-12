@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fa0e593a_0d54bfad",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-12-12T07:22:10Z",
+      "side": 1,
+      "message": "you can put it in glue, which ships the EvalIO implementation. There\u0027s some tests for builtins.derivation too and you should be able to reuse most of that skeleton.",
+      "revId": "b079cb4185151b5085cbf5995e12ca39c3b59114",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
