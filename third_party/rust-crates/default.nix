@@ -16,8 +16,7 @@ let
         ;
     });
 in
-
-rec {
+depot.nix.readTree.drvTargets rec{
   cfg-if = buildRustCrate {
     pname = "cfg-if";
     version = "1.0.0";
