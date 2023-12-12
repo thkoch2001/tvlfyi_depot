@@ -16,6 +16,24 @@
       "message": "It depends on the io_handle that\u0027s being used. The one that eval uses (the dummy one) doesn\u0027t expose the panick\u0027ing behaviour, because it doesn\u0027t do any IO at all.",
       "revId": "d0a9407bae612d81be4314874564de1ad2ba9a88",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "45267e90_2f38e1ac",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 9
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-12-12T21:02:12Z",
+      "side": 1,
+      "message": "https://cl.tvl.fyi/c/depot/+/10342 moves this to a unit test (that currently fails, because TvixStoreIO::import_path() returns an error result.",
+      "parentUuid": "a98babac_f988a228",
+      "revId": "d0a9407bae612d81be4314874564de1ad2ba9a88",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
