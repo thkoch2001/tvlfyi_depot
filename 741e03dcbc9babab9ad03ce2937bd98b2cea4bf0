@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2f0216d9_a219f79a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2023-12-12T17:16:16Z",
+      "side": 1,
+      "message": "I addressed the incorrect comments about what is/isn\u0027t 2.3, and am going ahead with merging this. We can move it around to somewhere else if required (or, better yet, actually implement these things!)",
+      "revId": "741e03dcbc9babab9ad03ce2937bd98b2cea4bf0",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
