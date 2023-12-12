@@ -43,6 +43,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "b6808414_af06b42b",
+        "filename": "tvix/glue/benches/eval.rs",
+        "patchSetId": 5
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-12-12T09:16:21Z",
+      "side": 1,
+      "message": "I\u0027d like to do all the *configuration* and auxillary component setup (what NIX_PATH is configured, what builtins should be available, what\u0027s doing io_handle) before passing in the code to evaluate, and ideally do as little of this static setup inside the timing loop itself.\n\nWe currently need to pass the code to evaluate very early on, so all code \"configuring the evaluator before it runs\" is a bit unergonomic. b/262 tracks a builder pattern and I felt it makes sense to call it out here.",
+      "parentUuid": "ce70e317_3a026dcf",
+      "range": {
+        "startLine": 27,
+        "startChar": 0,
+        "endLine": 29,
+        "endChar": 0
+      },
+      "revId": "5d5e53ae9d49e1b4afbad97a3dd5f2cd9b1ee182",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "08a90159_99f1e405",
         "filename": "tvix/glue/benches/eval.rs",
         "patchSetId": 5
