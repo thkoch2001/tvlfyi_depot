@@ -774,7 +774,7 @@ impl<'o> VM<'o> {
                     _ => panic!("attempted to finalise a non-thunk"),
                 },
 
-                OpCode::OpCoerceToString => {
+                OpCode::OpCoerceToString(kind) => {
                     let value = self.stack_pop();
                     let gen_span = frame.current_light_span();
                     self.push_call_frame(span, frame);
