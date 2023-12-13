@@ -48,14 +48,15 @@ impl Value {
                 // serialise to the string-coerced version of the result of
                 // calling that.
                 if attrs.select("__toString").is_some() {
-                    let span = generators::request_span(co).await;
-                    match Value::Attrs(attrs)
-                        .coerce_to_string_(co, CoercionKind::Weak, span)
-                        .await?
+                    match generators::request_string_coerce(
+                        co,
+                        Value::Attrs(attrs),
+                        CoercionKind::Weak,
+                    )
+                    .await
                     {
-                        Value::Catchable(cek) => return Ok(Err(cek)),
-                        Value::String(s) => return Ok(Ok(Json::String(s.as_str().to_owned()))),
-                        _ => panic!("Value::coerce_to_string_() returned a non-string!"),
+                        Err(cek) => return Ok(Err(cek)),
+                        Ok(s) => return Ok(Ok(Json::String(s.as_str().to_owned()))),
                     }
                 }
 
