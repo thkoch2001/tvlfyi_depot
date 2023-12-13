@@ -1,3 +1,4 @@
+#![allow(clippy::match_like_matches_macro)]
 //! This module implements the backing representation of runtime
 //! values in the Nix language.
 use std::cmp::Ordering;
