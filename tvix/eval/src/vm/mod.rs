@@ -597,17 +597,21 @@ impl<'o> VM<'o> {
                 }
 
                 OpCode::OpAttrsTrySelect => {
-                    let key = self.stack_pop().to_str().with_span(&frame, self)?;
-                    let value = match self.stack_pop() {
-                        Value::Attrs(attrs) => match attrs.select(key.as_str()) {
-                            Some(value) => value.clone(),
-                            None => Value::AttrNotFound,
-                        },
-
-                        _ => Value::AttrNotFound,
-                    };
-
-                    self.stack.push(value);
+                    let key = self.stack_pop();
+                    let value = self.stack_pop();
+                    if key.is_catchable() {
+                        self.stack.push(key);
+                    } else {
+                        let key = key.to_str().with_span(&frame, self)?;
+                        let value = match value {
+                            Value::Attrs(attrs) => match attrs.select(key.as_str()) {
+                                Some(value) => value.clone(),
+                                None => Value::AttrNotFound,
+                            },
+                            _ => Value::AttrNotFound,
+                        };
+                        self.stack.push(value);
+                    }
                 }
 
                 OpCode::OpGetLocal(StackIdx(local_idx)) => {
