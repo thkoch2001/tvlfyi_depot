@@ -145,7 +145,12 @@ impl Display for VMRequest {
             VMRequest::StackPush(v) => write!(f, "stack_push({})", v.type_of()),
             VMRequest::StackPop => write!(f, "stack_pop"),
             VMRequest::StringCoerce(v, kind) => match kind {
-                CoercionKind::Weak => write!(f, "weak_string_coerce({})", v.type_of()),
+                CoercionKind::Weak { import_paths: true } => {
+                    write!(f, "weak_importing_string_coerce({})", v.type_of())
+                }
+                CoercionKind::Weak {
+                    import_paths: false,
+                } => write!(f, "weak_non_importing_string_coerce({})", v.type_of()),
                 CoercionKind::Strong => write!(f, "strong_string_coerce({})", v.type_of()),
             },
             VMRequest::Call(v) => write!(f, "call({})", v),
