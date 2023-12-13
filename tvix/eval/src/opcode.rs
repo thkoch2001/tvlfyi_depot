@@ -1,7 +1,7 @@
 //! This module implements the instruction set running on the abstract
 //! machine implemented by tvix.
 
-use std::ops::{AddAssign, Sub};
+use std::ops::{AddAssign, Sub, SubAssign};
 
 /// Index of a constant in the current code chunk.
 #[repr(transparent)]
@@ -16,6 +16,12 @@ pub struct CodeIdx(pub usize);
 impl AddAssign<usize> for CodeIdx {
     fn add_assign(&mut self, rhs: usize) {
         *self = CodeIdx(self.0 + rhs)
+    }
+}
+
+impl SubAssign<usize> for CodeIdx {
+    fn sub_assign(&mut self, rhs: usize) {
+        *self = CodeIdx(self.0 - rhs)
     }
 }
 
@@ -247,6 +253,11 @@ pub enum OpCode {
 
     /// Force the value at {1} until it is a `Thunk::Evaluated`.
     OpForce,
+
+    /// Mutate the interior ThunkRepr of the Value::Thunk at
+    /// ConstantIdx to be a ThunkRepr::Evaluated containing a copy
+    /// of the topmost stack value.  The value is left on the stack.
+    OpUpdateThunk(ConstantIdx),
 
     /// Finalise initialisation of the upvalues of the value in the given stack
     /// index (which must be a Value::Thunk) after the scope is fully bound.
