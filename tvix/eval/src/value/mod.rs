@@ -161,7 +161,7 @@ macro_rules! gen_is {
 }
 
 /// Describes what input types are allowed when coercing a `Value` to a string
-#[derive(Clone, Copy, PartialEq, Debug)]
+#[derive(Clone, Copy, PartialEq, Debug, Eq)]
 pub enum CoercionKind {
     /// Only coerce already "stringly" types like strings and paths, but also
     /// coerce sets that have a `__toString` attribute. Equivalent to
