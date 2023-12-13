@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "be8257f6_916baa3b",
+        "filename": "tvix/glue/src/tvix_store_io.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 410,
+      "author": {
+        "id": 1000073
+      },
+      "writtenOn": "2023-12-13T13:30:14Z",
+      "side": 1,
+      "message": "nit: we will probably need macro environments to write proper Nix and meta interpolation.",
+      "revId": "db31211f09ad230779bc820ad32e09da9c0f69d8",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
