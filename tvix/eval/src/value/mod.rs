@@ -20,9 +20,12 @@ mod path;
 mod string;
 mod thunk;
 
+use crate::chunk::Chunk;
 use crate::errors::{CatchableErrorKind, ErrorKind};
+use crate::opcode::OpCode;
 use crate::opcode::StackIdx;
 use crate::spans::LightSpan;
+use crate::upvalues::Upvalues;
 use crate::vm::generators::{self, GenCo};
 use crate::AddContext;
 pub use attrs::NixAttrs;
@@ -782,6 +785,22 @@ impl Value {
             | Value::UnresolvedPath(_)
             | Value::Json(_)
             | Value::FinaliseRequest(_) => "an internal Tvix evaluator value".into(),
+        }
+    }
+
+    pub(crate) fn new_trivial_closure(description: String, opcodes: Vec<OpCode>) -> Value {
+        Value::Closure(Rc::new(Closure {
+            upvalues: Upvalues::with_capacity(0).into(),
+            lambda: Rc::new(Self::new_trivial_lambda(description, opcodes)),
+        }))
+    }
+
+    pub(crate) fn new_trivial_lambda(description: String, opcodes: Vec<OpCode>) -> Lambda {
+        Lambda {
+            name: None,
+            upvalue_count: 0,
+            formals: None,
+            chunk: Chunk::trivial_chunk(description, opcodes),
         }
     }
 }
