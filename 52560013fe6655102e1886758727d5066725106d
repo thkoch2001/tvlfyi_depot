@@ -34,6 +34,24 @@
       "parentUuid": "5d277162_79d76d4c",
       "revId": "52560013fe6655102e1886758727d5066725106d",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "030fb6f7_ecdff057",
+        "filename": "tvix/glue/src/tvix_store_io.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 408,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-12-13T09:55:29Z",
+      "side": 1,
+      "message": "We\u0027re importing into the store, even though we shouldn\u0027t.\n\nSo tvix-eval shouldn\u0027t call import_path here.",
+      "parentUuid": "3b8edb82_f89f1faa",
+      "revId": "52560013fe6655102e1886758727d5066725106d",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
