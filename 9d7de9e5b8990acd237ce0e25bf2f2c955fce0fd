@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f1cd4a57_cf3ad0cf",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 11
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-12-13T10:20:41Z",
+      "side": 1,
+      "message": "Its not panicking anymore, it returns an error. please update the commit message.",
+      "revId": "9d7de9e5b8990acd237ce0e25bf2f2c955fce0fd",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3e8f5ca3_36d99b00",
+        "filename": "tvix/eval/src/value/json.rs",
+        "patchSetId": 11
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-12-13T10:20:41Z",
+      "side": 1,
+      "message": "please add a comment inline too",
+      "revId": "9d7de9e5b8990acd237ce0e25bf2f2c955fce0fd",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e5d69b55_33f5765d",
+        "filename": "tvix/eval/src/value/mod.rs",
+        "patchSetId": 11
+      },
+      "lineNbr": 329,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-12-13T10:20:41Z",
+      "side": 1,
+      "message": "please add a comment inline too",
+      "revId": "9d7de9e5b8990acd237ce0e25bf2f2c955fce0fd",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
