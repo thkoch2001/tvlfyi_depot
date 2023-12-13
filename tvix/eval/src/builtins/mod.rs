@@ -41,6 +41,8 @@ pub const CURRENT_PLATFORM: &str = env!("TVIX_CURRENT_SYSTEM");
 /// builtin. This coercion can _never_ be performed in a Nix program
 /// without using builtins (i.e. the trick `path: /. + path` to
 /// convert from a string to a path wouldn't hit this code).
+///
+/// This operation doesn't import a Nix path value into the store.
 pub async fn coerce_value_to_path(
     co: &GenCo,
     v: Value,
@@ -50,7 +52,15 @@ pub async fn coerce_value_to_path(
         return Ok(Ok(*p));
     }
 
-    match generators::request_string_coerce(co, value, CoercionKind::Weak).await {
+    match generators::request_string_coerce(
+        co,
+        value,
+        CoercionKind::Weak {
+            import_paths: false,
+        },
+    )
+    .await
+    {
         Ok(vs) => {
             let path = PathBuf::from(vs.as_str());
             if path.is_absolute() {
@@ -71,6 +81,7 @@ mod pure_builtins {
 
     #[builtin("abort")]
     async fn builtin_abort(co: GenCo, message: Value) -> Result<Value, ErrorKind> {
+        // TODO(sterni): coerces to string
         Err(ErrorKind::Abort(message.to_str()?.to_string()))
     }
 
@@ -133,7 +144,15 @@ mod pure_builtins {
 
     #[builtin("baseNameOf")]
     async fn builtin_base_name_of(co: GenCo, s: Value) -> Result<Value, ErrorKind> {
-        let s = s.coerce_to_string(co, CoercionKind::Weak).await?.to_str()?;
+        let s = s
+            .coerce_to_string(
+                co,
+                CoercionKind::Weak {
+                    import_paths: false,
+                },
+            )
+            .await?
+            .to_str()?;
         let result: String = s.rsplit_once('/').map(|(_, x)| x).unwrap_or(&s).into();
         Ok(result.into())
     }
@@ -226,7 +245,13 @@ mod pure_builtins {
             if i != 0 {
                 res.push_str(&separator);
             }
-            match generators::request_string_coerce(&co, val, CoercionKind::Weak).await {
+            match generators::request_string_coerce(
+                &co,
+                val,
+                CoercionKind::Weak { import_paths: true },
+            )
+            .await
+            {
                 Ok(s) => res.push_str(s.as_str()),
                 Err(c) => return Ok(Value::Catchable(c)),
             }
@@ -248,7 +273,15 @@ mod pure_builtins {
     #[builtin("dirOf")]
     async fn builtin_dir_of(co: GenCo, s: Value) -> Result<Value, ErrorKind> {
         let is_path = s.is_path();
-        let str = s.coerce_to_string(co, CoercionKind::Weak).await?.to_str()?;
+        let str = s
+            .coerce_to_string(
+                co,
+                CoercionKind::Weak {
+                    import_paths: false,
+                },
+            )
+            .await?
+            .to_str()?;
         let result = str
             .rsplit_once('/')
             .map(|(x, _)| match x {
@@ -913,7 +946,9 @@ mod pure_builtins {
     #[builtin("stringLength")]
     async fn builtin_string_length(co: GenCo, #[lazy] s: Value) -> Result<Value, ErrorKind> {
         // also forces the value
-        let s = s.coerce_to_string(co, CoercionKind::Weak).await?;
+        let s = s
+            .coerce_to_string(co, CoercionKind::Weak { import_paths: true })
+            .await?;
         Ok(Value::Integer(s.to_str()?.as_str().len() as i64))
     }
 
@@ -931,7 +966,10 @@ mod pure_builtins {
     ) -> Result<Value, ErrorKind> {
         let beg = start.as_int()?;
         let len = len.as_int()?;
-        let x = s.coerce_to_string(co, CoercionKind::Weak).await?.to_str()?;
+        let x = s
+            .coerce_to_string(co, CoercionKind::Weak { import_paths: true })
+            .await?
+            .to_str()?;
 
         if beg < 0 {
             return Err(ErrorKind::IndexOutOfBounds { index: beg });
@@ -968,6 +1006,7 @@ mod pure_builtins {
 
     #[builtin("throw")]
     async fn builtin_throw(co: GenCo, message: Value) -> Result<Value, ErrorKind> {
+        // TODO(sterni): coerces to string
         Ok(Value::Catchable(CatchableErrorKind::Throw(
             message.to_str()?.to_string(),
         )))
@@ -1008,7 +1047,14 @@ mod pure_builtins {
             Err(cek) => Ok(Value::Catchable(cek)),
             Ok(path) => {
                 let path: Value = crate::value::canon_path(path).into();
-                Ok(path.coerce_to_string(co, CoercionKind::Weak).await?)
+                Ok(path
+                    .coerce_to_string(
+                        co,
+                        CoercionKind::Weak {
+                            import_paths: false,
+                        },
+                    )
+                    .await?)
             }
         }
     }

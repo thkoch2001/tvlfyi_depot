@@ -745,7 +745,7 @@ impl<'o> VM<'o> {
                     self.push_call_frame(span, frame);
 
                     self.enqueue_generator("coerce_to_string", gen_span, |co| {
-                        value.coerce_to_string(co, CoercionKind::Weak)
+                        value.coerce_to_string(co, CoercionKind::Weak { import_paths: true })
                     });
 
                     return Ok(false);
@@ -1165,7 +1165,21 @@ async fn add_values(co: GenCo, a: Value, b: Value) -> Result<Value, ErrorKind> {
     let result = match (a, b) {
         (Value::Path(p), v) => {
             let mut path = p.to_string_lossy().into_owned();
-            match generators::request_string_coerce(&co, v, CoercionKind::Weak).await {
+            match generators::request_string_coerce(
+                &co,
+                v,
+                CoercionKind::Weak {
+                    // Concatenating a Path with something else results in a
+                    // Path, so we don't need to import any paths (paths
+                    // imported by Nix always exist as a string, unless
+                    // converted by the user). In C++ Nix they even may not
+                    // contain any string context, the resulting error of such a
+                    // case can not be replicated by us.
+                    import_paths: false,
+                },
+            )
+            .await
+            {
                 Ok(vs) => {
                     path.push_str(vs.as_str());
                     crate::value::canon_path(PathBuf::from(path)).into()
@@ -1175,15 +1189,36 @@ async fn add_values(co: GenCo, a: Value, b: Value) -> Result<Value, ErrorKind> {
         }
         (Value::String(s1), Value::String(s2)) => Value::String(s1.concat(&s2)),
         (Value::String(s1), v) => Value::String(
-            match generators::request_string_coerce(&co, v, CoercionKind::Weak).await {
+            match generators::request_string_coerce(
+                &co,
+                v,
+                // Behaves equivalent to string interpolation
+                CoercionKind::Weak { import_paths: true },
+            )
+            .await
+            {
                 Ok(s2) => s1.concat(&s2),
                 Err(c) => return Ok(Value::Catchable(c)),
             },
         ),
         (a @ Value::Integer(_), b) | (a @ Value::Float(_), b) => arithmetic_op!(&a, &b, +)?,
         (a, b) => {
-            let r1 = generators::request_string_coerce(&co, a, CoercionKind::Weak).await;
-            let r2 = generators::request_string_coerce(&co, b, CoercionKind::Weak).await;
+            let r1 = generators::request_string_coerce(
+                &co,
+                a,
+                CoercionKind::Weak {
+                    import_paths: false,
+                },
+            )
+            .await;
+            let r2 = generators::request_string_coerce(
+                &co,
+                b,
+                CoercionKind::Weak {
+                    import_paths: false,
+                },
+            )
+            .await;
             match (r1, r2) {
                 (Ok(s1), Ok(s2)) => Value::String(s1.concat(&s2)),
                 (Err(c), _) => return Ok(Value::Catchable(c)),

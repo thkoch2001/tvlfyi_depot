@@ -166,10 +166,18 @@ pub enum CoercionKind {
     /// Only coerce already "stringly" types like strings and paths, but also
     /// coerce sets that have a `__toString` attribute. Equivalent to
     /// `!coerceMore` in C++ Nix.
-    Weak,
+    ///
+    /// If `import_paths` is `true`, paths are imported into the store and their
+    /// store path is the result of the coercion (equivalent to `copyToStore` in
+    /// C++ Nix).
+    Weak { import_paths: bool },
     /// Coerce all value types included by `Weak`, but also coerce `null`,
     /// booleans, integers, floats and lists of coercible types. Equivalent to
     /// `coerceMore` in C++ Nix.
+    ///
+    /// There is no `import_paths` option for strong coercion, since this
+    /// doesn't happen in C++ Nix to my (sterni's) knowledge. If such a case is
+    /// discovered, this type would need to be changed.
     Strong,
 }
 
@@ -291,11 +299,11 @@ impl Value {
             // C++ Nix and Tvix is that the former's strings are arbitrary byte
             // sequences without NUL bytes, whereas Tvix only allows valid
             // Unicode. See also b/189.
-            (Value::Path(p), _) => {
-                // TODO(tazjin): there are cases where coerce_to_string does not import
+            (Value::Path(p), CoercionKind::Weak { import_paths: true }) => {
                 let imported = generators::request_path_import(&co, *p).await;
                 Ok(imported.to_string_lossy().into_owned().into())
             }
+            (Value::Path(p), _) => Ok(p.to_string_lossy().into_owned().into()),
 
             // Attribute sets can be converted to strings if they either have an
             // `__toString` attribute which holds a function that receives the
