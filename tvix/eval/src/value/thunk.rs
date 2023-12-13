@@ -205,14 +205,9 @@ impl Thunk {
         }
     }
 
-    pub async fn force(myself: Thunk, co: GenCo, span: LightSpan) -> Result<Value, ErrorKind> {
-        Self::force_(myself, &co, span).await
-    }
-    pub async fn force_(
-        mut myself: Thunk,
-        co: &GenCo,
-        span: LightSpan,
-    ) -> Result<Value, ErrorKind> {
+    // TODO(amjoseph): remove this once all the calls that use it
+    // are migrated over to Thunk::force_noasync()
+    pub async fn force(mut myself: Thunk, co: &GenCo, span: LightSpan) -> Result<Value, ErrorKind> {
         // This vector of "thunks which point to the thunk-being-forced", to
         // be updated along with it, is necessary in order to write this
         // function in iterative (and later, mutual-tail-call) form.
@@ -310,6 +305,114 @@ impl Thunk {
         }
     }
 
+    pub(crate) fn force_noasync(
+        vm: &mut crate::vm::VM,
+        mut myself: Thunk,
+        span: LightSpan,
+    ) -> Result<Option<Value>, ErrorKind> {
+        // This vector of "thunks which point to the thunk-being-forced", to
+        // be updated along with it, is necessary in order to write this
+        // function in iterative (and later, mutual-tail-call) form.
+        let mut also_update: Vec<Rc<RefCell<ThunkRepr>>> = vec![];
+
+        loop {
+            // If the current thunk is already fully evaluated, return its evaluated
+            // value. The VM will continue running the code that landed us here.
+            if myself.is_forced() {
+                let val = myself.unwrap_or_clone();
+                for other_thunk in also_update.into_iter() {
+                    other_thunk.replace(ThunkRepr::Evaluated(val.clone()));
+                }
+                return Ok(Some(val));
+            }
+
+            // Begin evaluation of this thunk by marking it as a blackhole, meaning
+            // that any other forcing frame encountering this thunk before its
+            // evaluation is completed detected an evaluation cycle.
+            let inner = myself.0.replace(myself.prepare_blackhole(span.clone()));
+
+            match inner {
+                // If there was already a blackhole in the thunk, this is an
+                // evaluation cycle.
+                ThunkRepr::Blackhole {
+                    forced_at,
+                    suspended_at,
+                    content_span,
+                } => {
+                    return Err(ErrorKind::InfiniteRecursion {
+                        first_force: forced_at.span(),
+                        suspended_at: suspended_at.map(|s| s.span()),
+                        content_span,
+                    })
+                }
+
+                // If there is a native function stored in the thunk, evaluate it
+                // and replace this thunk's representation with the result.
+                ThunkRepr::Native(native) => {
+                    let value = native.0()?;
+                    myself.0.replace(ThunkRepr::Evaluated(value));
+                    continue;
+                }
+
+                // When encountering a suspended thunk, request that the VM enters
+                // it and produces the result.
+                ThunkRepr::Suspended {
+                    lambda,
+                    upvalues,
+                    light_span,
+                } => {
+                    let mut updaterlambda = Lambda::default();
+                    updaterlambda
+                        .chunk
+                        .push_op(OpCode::OpForce, light_span.span()); // force the value returned by the suspension
+                    let idx = OpCode::OpUpdateThunk(
+                        updaterlambda.chunk().push_constant(Value::Thunk(myself)),
+                    );
+                    updaterlambda.chunk.push_op(idx, light_span.span());
+                    for other_thunk in also_update.into_iter() {
+                        let idx = OpCode::OpUpdateThunk(
+                            updaterlambda
+                                .chunk()
+                                .push_constant(Value::Thunk(Thunk(other_thunk))),
+                        );
+                        updaterlambda.chunk.push_op(idx, light_span.span());
+                    }
+                    updaterlambda.chunk.push_op(OpCode::OpReturn, span.span());
+
+                    vm.stack.push(Value::Closure(
+                        Closure {
+                            lambda: Rc::new(updaterlambda),
+                            upvalues: Rc::new(Upvalues::with_capacity(0)),
+                        }
+                        .into(),
+                    ));
+                    vm.stack
+                        .push(Value::Closure(Closure { lambda, upvalues }.into()));
+                    return Ok(None);
+                }
+
+                // nested thunks -- try to flatten before forcing
+                ThunkRepr::Evaluated(Value::Thunk(inner_thunk)) => {
+                    match Rc::try_unwrap(inner_thunk.0) {
+                        Ok(refcell) => {
+                            // we are the only reference to the inner thunk,
+                            // so steal it
+                            myself.0.replace(refcell.into_inner());
+                            continue;
+                        }
+                        Err(rc) => {
+                            let inner_thunk = Thunk(rc);
+                            also_update.push(myself.0.clone());
+                            myself = inner_thunk;
+                            continue;
+                        }
+                    }
+                }
+                ThunkRepr::Evaluated(_) => continue,
+            }
+        }
+    }
+
     pub fn finalise(&self, stack: &[Value]) {
         self.upvalues_mut().resolve_deferred_upvalues(stack);
     }
@@ -328,6 +431,10 @@ impl Thunk {
     /// Returns true if forcing this thunk will not change it.
     pub fn is_forced(&self) -> bool {
         self.0.borrow().is_forced()
+    }
+
+    pub(crate) fn set_evaluated(&mut self, value: Value) {
+        self.0.replace(ThunkRepr::Evaluated(value));
     }
 
     /// Returns a reference to the inner evaluated value of a thunk.
