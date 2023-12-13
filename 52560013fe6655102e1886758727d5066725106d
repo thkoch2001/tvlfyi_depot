@@ -52,6 +52,24 @@
       "parentUuid": "3b8edb82_f89f1faa",
       "revId": "52560013fe6655102e1886758727d5066725106d",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ea931860_558b958c",
+        "filename": "tvix/glue/src/tvix_store_io.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 408,
+      "author": {
+        "id": 1000073
+      },
+      "writtenOn": "2023-12-13T13:32:02Z",
+      "side": 1,
+      "message": "So this is a laziness bug, right?",
+      "parentUuid": "030fb6f7_ecdff057",
+      "revId": "52560013fe6655102e1886758727d5066725106d",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
