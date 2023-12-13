@@ -352,10 +352,17 @@ impl<'o> VM<'o> {
                         }
 
                         VMRequest::StringCoerce(val, kind) => {
+                            self.stack.push(val);
                             self.reenqueue_generator(name, span.clone(), generator);
-                            self.enqueue_generator("coerce_to_string", span.clone(), |co| {
-                                val.coerce_to_string(co, kind, span)
-                            });
+                            self.call_value(
+                                span,
+                                None,
+                                // TODO(amjoseph): cache this instead of rebuilding it on every call
+                                Value::new_trivial_closure(
+                                    "<internal OpCode::CoerceToString>".to_string(),
+                                    vec![OpCode::OpCoerceToString(kind), OpCode::OpReturn],
+                                ),
+                            )?;
                             return Ok(false);
                         }
 
@@ -605,7 +612,7 @@ pub async fn request_string_coerce(
             VMResponse::Value(Value::Catchable(c)) => Err(c),
             VMResponse::Value(value) => Ok(value
                 .to_str()
-                .expect("coerce_to_string always returns a string")),
+                .expect("OpCoerceToString always returns a string")),
             msg => panic!(
                 "Tvix bug: VM responded with incorrect generator message: {}",
                 msg
