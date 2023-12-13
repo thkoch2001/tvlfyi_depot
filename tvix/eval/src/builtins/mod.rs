@@ -133,7 +133,6 @@ mod pure_builtins {
 
     #[builtin("baseNameOf")]
     async fn builtin_base_name_of(co: GenCo, s: Value) -> Result<Value, ErrorKind> {
-        let span = generators::request_span(&co).await;
         let s = match s {
             val @ Value::Catchable(_) => return Ok(val),
             // it is important that builtins.baseNameOf does not
@@ -142,10 +141,10 @@ mod pure_builtins {
             // ./config.nix` will return a hash-prefixed value like
             // "hpmyf3vlqg5aadri97xglcvvjbk8xw3g-config.nix"
             Value::Path(p) => NixString::from(p.to_string_lossy().to_string()),
-            _ => s
-                .coerce_to_string(co, CoercionKind::Weak, span)
-                .await?
-                .to_str()?,
+            _ => match generators::request_string_coerce(&co, s, CoercionKind::Weak).await {
+                Ok(s) => s,
+                Err(cek) => return Ok(Value::Catchable(cek)),
+            },
         };
         let result: String = s.rsplit_once('/').map(|(_, x)| x).unwrap_or(&s).into();
         Ok(result.into())
@@ -261,11 +260,10 @@ mod pure_builtins {
     #[builtin("dirOf")]
     async fn builtin_dir_of(co: GenCo, s: Value) -> Result<Value, ErrorKind> {
         let is_path = s.is_path();
-        let span = generators::request_span(&co).await;
-        let str = s
-            .coerce_to_string(co, CoercionKind::Weak, span)
-            .await?
-            .to_str()?;
+        let str = match generators::request_string_coerce(&co, s, CoercionKind::Weak).await {
+            Ok(s) => s,
+            Err(cek) => return Ok(Value::Catchable(cek)),
+        };
         let result = str
             .rsplit_once('/')
             .map(|(x, _)| match x {
@@ -993,9 +991,11 @@ mod pure_builtins {
     #[builtin("stringLength")]
     async fn builtin_string_length(co: GenCo, #[lazy] s: Value) -> Result<Value, ErrorKind> {
         // also forces the value
-        let span = generators::request_span(&co).await;
-        let s = s.coerce_to_string(co, CoercionKind::Weak, span).await?;
-        Ok(Value::Integer(s.to_str()?.as_str().len() as i64))
+        let s = match generators::request_string_coerce(&co, s, CoercionKind::Weak).await {
+            Ok(s) => s,
+            Err(cek) => return Ok(Value::Catchable(cek)),
+        };
+        Ok(Value::Integer(s.as_str().len() as i64))
     }
 
     #[builtin("sub")]
@@ -1012,12 +1012,10 @@ mod pure_builtins {
     ) -> Result<Value, ErrorKind> {
         let beg = start.as_int()?;
         let len = len.as_int()?;
-        let span = generators::request_span(&co).await;
-        let x = s.coerce_to_string(co, CoercionKind::Weak, span).await?;
-        if x.is_catchable() {
-            return Ok(x);
-        }
-        let x = x.to_str()?;
+        let x = match generators::request_string_coerce(&co, s, CoercionKind::Weak).await {
+            Ok(s) => s,
+            Err(cek) => return Ok(Value::Catchable(cek)),
+        };
 
         if beg < 0 {
             return Err(ErrorKind::IndexOutOfBounds { index: beg });
@@ -1061,9 +1059,11 @@ mod pure_builtins {
 
     #[builtin("toString")]
     async fn builtin_to_string(co: GenCo, #[lazy] x: Value) -> Result<Value, ErrorKind> {
-        // coerce_to_string forces for us
-        let span = generators::request_span(&co).await;
-        x.coerce_to_string(co, CoercionKind::Strong, span).await
+        // request_string_coerce forces for us
+        match generators::request_string_coerce(&co, x, CoercionKind::Strong).await {
+            Err(cek) => Ok(Value::Catchable(cek)),
+            Ok(s) => Ok(s.into()),
+        }
     }
 
     #[builtin("toXML")]
@@ -1095,8 +1095,10 @@ mod pure_builtins {
             Err(cek) => Ok(Value::Catchable(cek)),
             Ok(path) => {
                 let path: Value = crate::value::canon_path(path).into();
-                let span = generators::request_span(&co).await;
-                Ok(path.coerce_to_string(co, CoercionKind::Weak, span).await?)
+                match generators::request_string_coerce(&co, path, CoercionKind::Weak).await {
+                    Ok(s) => Ok(s.into()),
+                    Err(cek) => Ok(Value::Catchable(cek)),
+                }
             }
         }
     }
