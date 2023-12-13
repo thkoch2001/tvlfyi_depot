@@ -209,6 +209,20 @@ pub enum PointerEquality {
 }
 
 impl Value {
+    pub fn is_thunk(&self) -> bool {
+        match self {
+            Value::Thunk(_) => true,
+            _ => false,
+        }
+    }
+
+    pub fn is_unforced_thunk(&self) -> bool {
+        match self {
+            Value::Thunk(t) => !t.is_forced(),
+            _ => false,
+        }
+    }
+
     /// Deeply forces a value, traversing e.g. lists and attribute sets and forcing
     /// their contents, too.
     ///
@@ -245,7 +259,7 @@ impl Value {
                 if !thunk_set.insert(t) {
                     continue;
                 }
-                Thunk::force_(t.clone(), &co, span.clone()).await?
+                Thunk::force(t.clone(), &co, span.clone()).await?
             } else {
                 v
             };
@@ -454,7 +468,7 @@ impl Value {
                         }
                     };
 
-                    Thunk::force_(thunk, co, span.clone()).await?
+                    Thunk::force(thunk, co, span.clone()).await?
                 }
 
                 _ => a,
@@ -730,7 +744,7 @@ impl Value {
     pub async fn force(self, co: &GenCo, span: LightSpan) -> Result<Value, ErrorKind> {
         if let Value::Thunk(thunk) = self {
             // TODO(amjoseph): use #[tailcall::mutual]
-            return Thunk::force_(thunk, co, span).await;
+            return Thunk::force(thunk, co, span).await;
         }
         Ok(self)
     }
@@ -739,7 +753,7 @@ impl Value {
     pub async fn force_owned_genco(self, co: GenCo, span: LightSpan) -> Result<Value, ErrorKind> {
         if let Value::Thunk(thunk) = self {
             // TODO(amjoseph): use #[tailcall::mutual]
-            return Thunk::force_(thunk, &co, span).await;
+            return Thunk::force(thunk, &co, span).await;
         }
         Ok(self)
     }
