@@ -187,6 +187,21 @@ impl Chunk {
         self.constants.extend(other.constants);
         self.spans.extend(other.spans);
     }
+
+    /// Helper function which creates a callable Lambda value for
+    /// trivial (usually single-opcode) sequences which are invoked
+    /// internally by the VM.  These sequences allow us to move
+    /// recursions from the Rust stack to the VM stack, thereby
+    /// preventing stack overflows.
+    pub fn trivial_chunk(description: String, opcodes: Vec<OpCode>) -> Chunk {
+        let mut chunk = Chunk::default();
+        let mut codemap = codemap::CodeMap::new();
+        let file = codemap.add_file(description.clone(), description.clone());
+        for opcode in opcodes {
+            chunk.push_op(opcode, file.span);
+        }
+        chunk
+    }
 }
 
 #[cfg(test)]
