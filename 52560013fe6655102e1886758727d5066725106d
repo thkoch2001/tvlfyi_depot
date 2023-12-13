@@ -70,6 +70,24 @@
       "parentUuid": "030fb6f7_ecdff057",
       "revId": "52560013fe6655102e1886758727d5066725106d",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ca8c8ff1_77dd5bb5",
+        "filename": "tvix/glue/src/tvix_store_io.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 408,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-12-13T13:50:41Z",
+      "side": 1,
+      "message": "We should not import this into the store (which would fail, because the path doesn\u0027t exist), but leave the path untouched.\n\nI updated the commit message to showcase this.\nWe can cherry-pick this below the fix that @sternenseemann@systemli.org is working on.",
+      "parentUuid": "ea931860_558b958c",
+      "revId": "52560013fe6655102e1886758727d5066725106d",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
