@@ -295,22 +295,11 @@ impl Value {
         kind: CoercionKind,
         span: LightSpan,
     ) -> Result<Value, ErrorKind> {
-        self.coerce_to_string_(&co, kind, span).await
-    }
-
-    /// Coerce a `Value` to a string. See `CoercionKind` for a rundown of what
-    /// input types are accepted under what circumstances.
-    pub async fn coerce_to_string_(
-        self,
-        co: &GenCo,
-        kind: CoercionKind,
-        span: LightSpan,
-    ) -> Result<Value, ErrorKind> {
         let mut result = String::new();
         let mut vals = vec![self];
         loop {
             let value = if let Some(v) = vals.pop() {
-                v.force(co, span.clone()).await?
+                v.force(&co, span.clone()).await?
             } else {
                 return Ok(Value::String(result.into()));
             };
@@ -325,7 +314,7 @@ impl Value {
                 // Unicode. See also b/189.
                 (Value::Path(p), _) => {
                     // TODO(tazjin): there are cases where coerce_to_string does not import
-                    let imported = generators::request_path_import(co, *p.clone()).await;
+                    let imported = generators::request_path_import(&co, *p.clone()).await;
                     match imported {
                         Some(path) => Ok(path.to_string_lossy().into_owned()),
                         None => Ok(p.to_string_lossy().into_owned().to_string()),
@@ -338,14 +327,14 @@ impl Value {
                 // `__toString` is preferred.
                 (Value::Attrs(attrs), kind) => {
                     if let Some(to_string) = attrs.select("__toString") {
-                        let callable = to_string.clone().force(co, span.clone()).await?;
+                        let callable = to_string.clone().force(&co, span.clone()).await?;
 
                         // Leave the attribute set on the stack as an argument
                         // to the function call.
-                        generators::request_stack_push(co, Value::Attrs(attrs.clone())).await;
+                        generators::request_stack_push(&co, Value::Attrs(attrs.clone())).await;
 
                         // Call the callable ...
-                        let result = generators::request_call(co, callable).await;
+                        let result = generators::request_call(&co, callable).await;
 
                         // Recurse on the result, as attribute set coercion
                         // actually works recursively, e.g. you can even return
