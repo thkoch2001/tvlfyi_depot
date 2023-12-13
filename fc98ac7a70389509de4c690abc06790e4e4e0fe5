@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "be87e5b4_17e4022a",
+        "filename": "tvix/glue/src/tvix_store_io.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 404,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-12-13T09:45:17Z",
+      "side": 1,
+      "message": "Importing with relative paths requires using something like https://docs.rs/sealed_test/latest/sealed_test/, that\u0027s left for a followup.",
+      "revId": "fc98ac7a70389509de4c690abc06790e4e4e0fe5",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
