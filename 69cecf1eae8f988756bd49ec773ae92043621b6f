@@ -1,0 +1,141 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d7ed89ab_367bbd34",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 5
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-12-14T17:28:07Z",
+      "side": 1,
+      "message": "commit message is too long",
+      "revId": "69cecf1eae8f988756bd49ec773ae92043621b6f",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bd38b4f6_84010a37",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 5
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-12-14T17:28:07Z",
+      "side": 1,
+      "message": "\"need\". The Nix sandbox actually behaves the same way.",
+      "range": {
+        "startLine": 9,
+        "startChar": 27,
+        "endLine": 9,
+        "endChar": 31
+      },
+      "revId": "69cecf1eae8f988756bd49ec773ae92043621b6f",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b3540363_4fb7a110",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 5
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-12-14T17:28:07Z",
+      "side": 1,
+      "message": "We\u0027d need to seed an in-memory PathInfoService",
+      "range": {
+        "startLine": 11,
+        "startChar": 52,
+        "endLine": 13,
+        "endChar": 30
+      },
+      "revId": "69cecf1eae8f988756bd49ec773ae92043621b6f",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d5805ae8_b7d03882",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 5
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-12-14T17:28:07Z",
+      "side": 1,
+      "message": "tvix-castore",
+      "revId": "69cecf1eae8f988756bd49ec773ae92043621b6f",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c6240157_6eb4bbe5",
+        "filename": "tvix/store/src/fs/root_nodes.rs",
+        "patchSetId": 5
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-12-14T17:28:07Z",
+      "side": 1,
+      "message": "s#for the filesystem#in tvix-castore by given a lookup key (usually the basename), and optionally allow a listing.",
+      "range": {
+        "startLine": 10,
+        "startChar": 52,
+        "endLine": 10,
+        "endChar": 70
+      },
+      "revId": "69cecf1eae8f988756bd49ec773ae92043621b6f",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5ccd37dd_cccb6e36",
+        "filename": "tvix/store/src/fs/root_nodes.rs",
+        "patchSetId": 5
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-12-14T17:28:07Z",
+      "side": 1,
+      "message": "I\u0027d move these docs to the impl for PathInfoService.",
+      "revId": "69cecf1eae8f988756bd49ec773ae92043621b6f",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4366246d_6c47be36",
+        "filename": "tvix/store/src/fs/root_nodes.rs",
+        "patchSetId": 5
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-12-14T17:28:07Z",
+      "side": 1,
+      "message": "… an error can be returned in case listing is not allowed.",
+      "revId": "69cecf1eae8f988756bd49ec773ae92043621b6f",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
