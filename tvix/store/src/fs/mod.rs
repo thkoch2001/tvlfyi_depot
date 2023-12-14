@@ -1,6 +1,7 @@
 mod file_attr;
 mod inode_tracker;
 mod inodes;
+pub mod lookup;
 
 #[cfg(feature = "fuse")]
 pub mod fuse;
@@ -10,8 +11,6 @@ pub mod virtiofs;
 
 #[cfg(test)]
 mod tests;
-
-use crate::pathinfoservice::PathInfoService;
 
 use fuse_backend_rs::abi::fuse_abi::stat64;
 use fuse_backend_rs::api::filesystem::{Context, FileSystem, FsOptions, ROOT_ID};
@@ -38,6 +37,7 @@ use tvix_castore::{
     B3Digest,
 };
 
+use self::lookup::Lookup;
 use self::{
     file_attr::{gen_file_attr, ROOT_FILE_ATTR},
     inode_tracker::InodeTracker,
@@ -78,10 +78,10 @@ use self::{
 /// Due to the above being valid across the whole store, and considering the
 /// merkle structure is a DAG, not a tree, this also means we can't do "bucketed
 /// allocation", aka reserve Directory.size inodes for each PathInfo.
-pub struct TvixStoreFs {
+pub struct TvixStoreFs<L> {
     blob_service: Arc<dyn BlobService>,
     directory_service: Arc<dyn DirectoryService>,
-    path_info_service: Arc<dyn PathInfoService>,
+    root_node_lookup: L,
 
     /// Whether to (try) listing elements in the root.
     list_root: bool,
@@ -101,17 +101,20 @@ pub struct TvixStoreFs {
     tokio_handle: tokio::runtime::Handle,
 }
 
-impl TvixStoreFs {
+impl<L> TvixStoreFs<L>
+where
+    L: Lookup + Clone + 'static,
+{
     pub fn new(
         blob_service: Arc<dyn BlobService>,
         directory_service: Arc<dyn DirectoryService>,
-        path_info_service: Arc<dyn PathInfoService>,
+        root_node_lookup: L,
         list_root: bool,
     ) -> Self {
         Self {
             blob_service,
             directory_service,
-            path_info_service,
+            root_node_lookup,
 
             list_root,
 
@@ -233,19 +236,16 @@ impl TvixStoreFs {
 
         // We don't have it yet, look it up in [self.path_info_service].
         match self.tokio_handle.block_on({
-            let path_info_service = self.path_info_service.clone();
+            let root_node_lookup = self.root_node_lookup.clone();
             let digest = *store_path.digest();
-            async move { path_info_service.get(digest).await }
+            async move { root_node_lookup.get(digest).await }
         }) {
             // if there was an error looking up the path_info, propagate up an IO error.
             Err(_e) => Err(io::Error::from_raw_os_error(libc::EIO)),
             // the pathinfo doesn't exist, so the file doesn't exist.
             Ok(None) => Err(io::Error::from_raw_os_error(libc::ENOENT)),
             // The pathinfo does exist
-            Ok(Some(path_info)) => {
-                // There must be a root node (ensured by the validation happening inside clients)
-                let root_node = path_info.node.unwrap().node.unwrap();
-
+            Ok(Some(root_node)) => {
                 // The name must match what's passed in the lookup, otherwise this is also a ENOENT.
                 if root_node.get_name() != store_path.to_string().as_bytes() {
                     debug!(root_node.name=?root_node.get_name(), store_path.name=%store_path.to_string(), "store path mismatch");
@@ -278,7 +278,10 @@ impl TvixStoreFs {
     }
 }
 
-impl FileSystem for TvixStoreFs {
+impl<L> FileSystem for TvixStoreFs<L>
+where
+    L: Lookup + Clone + 'static,
+{
     type Handle = u64;
     type Inode = u64;
 
@@ -380,15 +383,15 @@ impl FileSystem for TvixStoreFs {
             if !self.list_root {
                 return Err(io::Error::from_raw_os_error(libc::EPERM)); // same error code as ipfs/kubo
             } else {
-                let path_info_service = self.path_info_service.clone();
+                let root_node_lookup = self.root_node_lookup.clone();
                 let (tx, mut rx) = mpsc::channel(16);
 
                 // This task will run in the background immediately and will exit
                 // after the stream ends or if we no longer want any more entries.
                 self.tokio_handle.spawn(async move {
-                    let mut stream = path_info_service.list().skip(offset as usize).enumerate();
-                    while let Some(path_info) = stream.next().await {
-                        if tx.send(path_info).await.is_err() {
+                    let mut stream = root_node_lookup.list().skip(offset as usize).enumerate();
+                    while let Some(node) = stream.next().await {
+                        if tx.send(node).await.is_err() {
                             // If we get a send error, it means the sync code
                             // doesn't want any more entries.
                             break;
@@ -396,19 +399,16 @@ impl FileSystem for TvixStoreFs {
                     }
                 });
 
-                while let Some((i, path_info)) = rx.blocking_recv() {
-                    let path_info = match path_info {
+                while let Some((i, root_node)) = rx.blocking_recv() {
+                    let root_node = match root_node {
                         Err(e) => {
                             warn!("failed to retrieve pathinfo: {}", e);
                             return Err(io::Error::from_raw_os_error(libc::EPERM));
                         }
-                        Ok(path_info) => path_info,
+                        Ok(root_node) => root_node,
                     };
 
-                    // We know the root node exists and the store_path can be parsed because clients MUST validate.
-                    let root_node = path_info.node.unwrap().node.unwrap();
                     let store_path = StorePath::from_bytes(root_node.get_name()).unwrap();
-
                     // obtain the inode, or allocate a new one.
                     let ino = self
                         .get_inode_for_store_path(&store_path)
