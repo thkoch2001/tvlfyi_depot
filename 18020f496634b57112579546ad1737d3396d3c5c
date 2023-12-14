@@ -20,6 +20,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "e42cc4ba_1754c18f",
+        "filename": "tvix/store/src/fs/lookup.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2023-12-14T17:03:07Z",
+      "side": 1,
+      "message": "Renamed this to `RootNodes`, does that sound okay? NodeByName sounded to specific since this also offers a list method.",
+      "parentUuid": "140259ee_af986611",
+      "revId": "18020f496634b57112579546ad1737d3396d3c5c",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "c20c0ab2_18cd2df4",
         "filename": "tvix/store/src/fs/lookup.rs",
         "patchSetId": 1
@@ -31,6 +49,24 @@
       "writtenOn": "2023-12-14T16:25:32Z",
       "side": 1,
       "message": "should look up from a \u0026[u8] basename to a node",
+      "revId": "18020f496634b57112579546ad1737d3396d3c5c",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7c16c11f_e57c994d",
+        "filename": "tvix/store/src/fs/lookup.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2023-12-14T17:03:07Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c20c0ab2_18cd2df4",
       "revId": "18020f496634b57112579546ad1737d3396d3c5c",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
@@ -52,6 +88,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "6fa7af46_033b97b3",
+        "filename": "tvix/store/src/fs/lookup.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2023-12-14T17:03:07Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "cad7c8ae_79a5e179",
+      "revId": "18020f496634b57112579546ad1737d3396d3c5c",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "1656275b_18a3a28d",
@@ -69,6 +123,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "e0083bd7_5d698150",
+        "filename": "tvix/store/src/fs/lookup.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2023-12-14T17:03:07Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1656275b_18a3a28d",
+      "revId": "18020f496634b57112579546ad1737d3396d3c5c",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "5f126f8d_354d3053",
@@ -82,6 +154,24 @@
       "writtenOn": "2023-12-14T16:25:32Z",
       "side": 1,
       "message": "This comment needs updating",
+      "revId": "18020f496634b57112579546ad1737d3396d3c5c",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "410e058d_5ba7ea71",
+        "filename": "tvix/store/src/fs/mod.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2023-12-14T17:03:07Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5f126f8d_354d3053",
       "revId": "18020f496634b57112579546ad1737d3396d3c5c",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
