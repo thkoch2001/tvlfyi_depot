@@ -13,9 +13,15 @@ popd
 
 echo "Running tvix macrobenchmarks..."
 pushd "$(dirname "$(dirname "$0")")"
+
+depot_nixpkgs_path="$(nix eval --raw '("${((import ../third_party/sources {}).nixpkgs)}")')"
+pinned_nixpkgs_path="$(nix eval --raw '(import ./scripts/pinned-nixpkgs.nix)')"
+
 cargo build --release --bin tvix
 hyperfine --export-json ./results.json \
-    -n 'eval-nixpkgs-hello' "target/release/tvix -E '(import ../../nixpkgs {}).hello.outPath'" \
-    -n 'eval-nixpkgs-cross-hello' "target/release/tvix -E '(import ../../nixpkgs {}).pkgsCross.aarch64-multiplatform.hello.outPath'"
+    -n 'tvix-eval-depot-nixpkgs-hello' "target/release/tvix -E '(import ${depot_nixpkgs_path} {}).hello.outPath'" \
+    -n 'tvix-eval-depot-nixpkgs-cross-hello' "target/release/tvix -E '(import ${depot_nixpkgs_path} {}).pkgsCross.aarch64-multiplatform.hello.outPath'" \
+    -n 'tvix-eval-pinned-nixpkgs-hello' "target/release/tvix -E '(import ${pinned_nixpkgs_path} {}).hello.outPath'" \
+    -n 'tvix-eval-pinned-nixpkgs-cross-hello' "target/release/tvix -E '(import ${pinned_nixpkgs_path} {}).pkgsCross.aarch64-multiplatform.hello.outPath'" \
 windtunnel-cli report -f hyperfine-json ./results.json
 popd
