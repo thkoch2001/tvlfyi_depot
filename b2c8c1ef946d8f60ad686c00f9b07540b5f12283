@@ -16,6 +16,24 @@
       "message": "This will regress whenever we bump our nixpkgs. I think we should pin a *hardcoded* version of nixpkgs here, not just the one that nixpkgs uses.",
       "revId": "b2c8c1ef946d8f60ad686c00f9b07540b5f12283",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2c37336a_984f8e76",
+        "filename": "tvix/scripts/bench.sh",
+        "patchSetId": 2
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2023-12-14T19:24:46Z",
+      "side": 1,
+      "message": "https://cl.tvl.fyi/c/depot/+/10364",
+      "parentUuid": "4935b628_aeebe8f6",
+      "revId": "b2c8c1ef946d8f60ad686c00f9b07540b5f12283",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
