@@ -1,0 +1,89 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "140259ee_af986611",
+        "filename": "tvix/store/src/fs/lookup.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-12-14T16:25:32Z",
+      "side": 1,
+      "message": "NodeBy[Base]Name? Also, needs a docstring explaining this is used by TvixStoreFS to work for all things implementing that trait, not just `PathInfoService`s.",
+      "revId": "18020f496634b57112579546ad1737d3396d3c5c",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c20c0ab2_18cd2df4",
+        "filename": "tvix/store/src/fs/lookup.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-12-14T16:25:32Z",
+      "side": 1,
+      "message": "should look up from a \u0026[u8] basename to a node",
+      "revId": "18020f496634b57112579546ad1737d3396d3c5c",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cad7c8ae_79a5e179",
+        "filename": "tvix/store/src/fs/lookup.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-12-14T16:25:32Z",
+      "side": 1,
+      "message": "expect(\"missing root node\")",
+      "revId": "18020f496634b57112579546ad1737d3396d3c5c",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1656275b_18a3a28d",
+        "filename": "tvix/store/src/fs/lookup.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-12-14T16:25:32Z",
+      "side": 1,
+      "message": "expect(\"missing root node\")",
+      "revId": "18020f496634b57112579546ad1737d3396d3c5c",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5f126f8d_354d3053",
+        "filename": "tvix/store/src/fs/mod.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-12-14T16:25:32Z",
+      "side": 1,
+      "message": "This comment needs updating",
+      "revId": "18020f496634b57112579546ad1737d3396d3c5c",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
