@@ -18,6 +18,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "2d2bfc52_972b58aa",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 5
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2023-12-14T19:29:57Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d7ed89ab_367bbd34",
+      "revId": "69cecf1eae8f988756bd49ec773ae92043621b6f",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "bd38b4f6_84010a37",
@@ -31,6 +49,30 @@
       "writtenOn": "2023-12-14T17:28:07Z",
       "side": 1,
       "message": "\"need\". The Nix sandbox actually behaves the same way.",
+      "range": {
+        "startLine": 9,
+        "startChar": 27,
+        "endLine": 9,
+        "endChar": 31
+      },
+      "revId": "69cecf1eae8f988756bd49ec773ae92043621b6f",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "12249d30_797f9a39",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 5
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2023-12-14T19:29:57Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "bd38b4f6_84010a37",
       "range": {
         "startLine": 9,
         "startChar": 27,
@@ -64,6 +106,30 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "14b58a19_224a6c40",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 5
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2023-12-14T19:29:57Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b3540363_4fb7a110",
+      "range": {
+        "startLine": 11,
+        "startChar": 52,
+        "endLine": 13,
+        "endChar": 30
+      },
+      "revId": "69cecf1eae8f988756bd49ec773ae92043621b6f",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "d5805ae8_b7d03882",
@@ -77,6 +143,24 @@
       "writtenOn": "2023-12-14T17:28:07Z",
       "side": 1,
       "message": "tvix-castore",
+      "revId": "69cecf1eae8f988756bd49ec773ae92043621b6f",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bc771a6d_d4aa76f9",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 5
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2023-12-14T19:29:57Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d5805ae8_b7d03882",
       "revId": "69cecf1eae8f988756bd49ec773ae92043621b6f",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
@@ -104,6 +188,30 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "98ae03ba_6e8aed54",
+        "filename": "tvix/store/src/fs/root_nodes.rs",
+        "patchSetId": 5
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2023-12-14T19:29:57Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c6240157_6eb4bbe5",
+      "range": {
+        "startLine": 10,
+        "startChar": 52,
+        "endLine": 10,
+        "endChar": 70
+      },
+      "revId": "69cecf1eae8f988756bd49ec773ae92043621b6f",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "5ccd37dd_cccb6e36",
@@ -121,6 +229,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c26e2fc6_d8c41635",
+        "filename": "tvix/store/src/fs/root_nodes.rs",
+        "patchSetId": 5
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2023-12-14T19:29:57Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5ccd37dd_cccb6e36",
+      "revId": "69cecf1eae8f988756bd49ec773ae92043621b6f",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "4366246d_6c47be36",
@@ -134,6 +260,24 @@
       "writtenOn": "2023-12-14T17:28:07Z",
       "side": 1,
       "message": "… an error can be returned in case listing is not allowed.",
+      "revId": "69cecf1eae8f988756bd49ec773ae92043621b6f",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9e96b1cb_26d180e1",
+        "filename": "tvix/store/src/fs/root_nodes.rs",
+        "patchSetId": 5
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2023-12-14T19:29:57Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4366246d_6c47be36",
       "revId": "69cecf1eae8f988756bd49ec773ae92043621b6f",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
