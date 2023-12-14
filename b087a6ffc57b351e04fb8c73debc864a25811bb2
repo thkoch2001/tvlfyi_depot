@@ -22,6 +22,30 @@
       },
       "revId": "b087a6ffc57b351e04fb8c73debc864a25811bb2",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "596e001b_6e43d2da",
+        "filename": "tools/magrathea/default.nix",
+        "patchSetId": 3
+      },
+      "lineNbr": 4,
+      "author": {
+        "id": 1000066
+      },
+      "writtenOn": "2023-12-14T09:05:18Z",
+      "side": 1,
+      "message": "yeah but then it will always use whatever nixpkgs depot uses -- not just as a default, but with no way to override.",
+      "parentUuid": "e123823b_82c47c79",
+      "range": {
+        "startLine": 4,
+        "startChar": 16,
+        "endLine": 4,
+        "endChar": 25
+      },
+      "revId": "b087a6ffc57b351e04fb8c73debc864a25811bb2",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
