@@ -691,6 +691,7 @@ pub async fn emit_warning_kind(co: &GenCo, kind: WarningKind) {
 }
 
 /// Request that the VM enter the given lambda.
+#[allow(dead_code)]
 pub(crate) async fn request_enter_lambda(
     co: &GenCo,
     lambda: Rc<Lambda>,

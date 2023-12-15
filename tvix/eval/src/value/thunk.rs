@@ -32,7 +32,6 @@ use crate::{
     spans::LightSpan,
     upvalues::Upvalues,
     value::{Closure, ForcingDepth},
-    vm::generators::{self, GenCo},
     Value,
 };
 
@@ -243,14 +242,12 @@ impl Thunk {
         }
     }
 
-    pub async fn force(myself: Thunk, co: GenCo, span: LightSpan) -> Result<Value, ErrorKind> {
-        Self::force_(myself, &co, span).await
-    }
-    pub async fn force_(
+    /// Note: not async!
+    pub(crate) fn force(
+        vm: &mut crate::vm::VM,
         mut myself: Thunk,
-        co: &GenCo,
         span: LightSpan,
-    ) -> Result<Value, ErrorKind> {
+    ) -> Result<Option<Value>, ErrorKind> {
         // It is possible to have a long chain of thunks, like
         //
         //   ThunkRepr::Evaluated(Value::Thunk(ThunkRepr::Evaluated(...)))
@@ -287,7 +284,7 @@ impl Thunk {
                 if let Some(last_blackhole) = last_blackhole {
                     Thunk(last_blackhole).update_blackhole_chain(val.clone(), depth);
                 }
-                return Ok(val);
+                return Ok(Some(val));
             }
 
             // Begin evaluation of this thunk by marking it as a blackhole, meaning
@@ -330,15 +327,10 @@ impl Thunk {
                     upvalues,
                     light_span,
                 } => {
-                    // TODO(amjoseph): use #[tailcall::mutual] here.  This can
-                    // be turned into a tailcall to vm::execute_bytecode() by
-                    // passing `head_of_chain_of_thunks` to it.
-                    let value =
-                        generators::request_enter_lambda(co, lambda, upvalues, light_span).await;
-                    myself
-                        .0
-                        .replace(ThunkRepr::Evaluated(value, ForcingDepth::Shallowly));
-                    continue;
+                    vm.stack.push(Value::Thunk(myself));
+                    vm.stack
+                        .push(Value::Closure(Closure { lambda, upvalues }.into()));
+                    return Ok(None);
                 }
 
                 // nested thunks -- try to flatten before forcing

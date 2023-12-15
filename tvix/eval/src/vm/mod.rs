@@ -12,6 +12,7 @@
 pub mod generators;
 mod macros;
 
+use crate::value::ForcingDepth;
 use codemap::Span;
 use serde_json::json;
 use std::{cmp::Ordering, collections::HashMap, ops::DerefMut, path::PathBuf, rc::Rc};
@@ -212,7 +213,7 @@ impl Frame {
 }
 
 #[derive(Default)]
-struct ImportCache(HashMap<PathBuf, Value>);
+pub(crate) struct ImportCache(HashMap<PathBuf, Value>);
 
 /// The `ImportCache` holds the `Value` resulting from `import`ing a certain
 /// file, so that the same file doesn't need to be re-evaluated multiple times.
@@ -247,7 +248,7 @@ impl ImportCache {
     }
 }
 
-struct VM<'o> {
+pub(crate) struct VM<'o> {
     /// VM's frame stack, representing the execution contexts the VM is working
     /// through. Elements are usually pushed when functions are called, or
     /// thunks are being forced.
@@ -461,6 +462,23 @@ impl<'o> VM<'o> {
                     self.populate_upvalues(&mut frame, upvalue_count, upvalues)?;
                 }
 
+                OpCode::OpUpdateBlackholeChain(depth) => {
+                    let value = self.stack_pop();
+                    let thunk = self.stack_pop();
+                    match thunk {
+                        Value::Thunk(thunk) => thunk.update_blackhole_chain(value.clone(), depth),
+                        _ => {
+                            if !value.is_catchable() {
+                                panic!(
+                                    "OpUpdateBlackholeChain found a non-thunk on the stack! {:?}",
+                                    thunk
+                                )
+                            }
+                        }
+                    }
+                    self.stack.push(value);
+                }
+
                 OpCode::OpForce => {
                     if let Some(Value::Thunk(_)) = self.stack.last() {
                         let thunk = match self.stack_pop() {
@@ -470,12 +488,63 @@ impl<'o> VM<'o> {
 
                         let gen_span = frame.current_light_span();
 
-                        self.push_call_frame(span, frame);
-                        self.enqueue_generator("force", gen_span.clone(), |co| {
-                            Thunk::force(thunk, co, gen_span)
-                        });
+                        match Thunk::force(self, thunk, gen_span.clone())
+                            .map_err(|kind| Error::new(kind, gen_span.clone().span()))?
+                        {
+                            Some(v) => {
+                                assert!(!v.is_thunk());
+                                self.stack.push(v);
+                            }
+                            None => {
+                                // TODO(amjoseph): it is unfortunate that tvix
+                                // has an infinitely-extensible call stack
+                                // (unlike Linux userspace) and yet does not
+                                // have non-tail calls.  We should fix this.  It
+                                // would avoid the following "dance":
+                                //
+                                let mut updaterlambda = Lambda::default();
+                                updaterlambda
+                                    .chunk
+                                    .push_op(OpCode::OpForce, gen_span.span()); // force the value returned by the suspension
+                                updaterlambda.chunk.push_op(
+                                    OpCode::OpUpdateBlackholeChain(ForcingDepth::Shallowly),
+                                    gen_span.span(),
+                                );
+                                updaterlambda.chunk.push_op(OpCode::OpReturn, span.span());
 
-                        return Ok(false);
+                                let callable = self
+                                    .stack
+                                    .pop()
+                                    .expect("Thunk::force left the stack empty!");
+                                frame.ip -= 1; // re-invoke OpForce after the callee returns
+                                self.push_call_frame(span.clone(), frame);
+
+                                self.push_call_frame(
+                                    span.clone(),
+                                    CallFrame {
+                                        lambda: Rc::new(updaterlambda),
+                                        upvalues: Rc::new(Upvalues::with_capacity(0)),
+                                        ip: CodeIdx(0),
+                                        stack_offset: self.stack.len(),
+                                    },
+                                );
+                                let closure = match callable {
+                                    Value::Closure(closure) => closure,
+                                    _ => unreachable!(),
+                                };
+                                self.push_call_frame(
+                                    span.clone(),
+                                    CallFrame {
+                                        lambda: closure.lambda.clone(),
+                                        upvalues: closure.upvalues.clone(),
+                                        ip: CodeIdx(0),
+                                        stack_offset: self.stack.len(),
+                                    },
+                                );
+
+                                return Ok(true);
+                            }
+                        }
                     }
                 }
 
@@ -496,6 +565,7 @@ impl<'o> VM<'o> {
 
                 OpCode::OpCall => {
                     let callable = self.stack_pop();
+                    assert!(!callable.is_unforced_thunk());
                     self.call_value(frame.current_light_span(), Some((span, frame)), callable)?;
 
                     // exit this loop and let the outer loop enter the new call
