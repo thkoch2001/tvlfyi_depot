@@ -6,7 +6,7 @@ use imbl::{vector, Vector};
 
 use serde::Deserialize;
 
-use super::thunk::ThunkSet;
+use super::thunk::ThunkFormatter;
 use super::TotalDisplay;
 use super::Value;
 
@@ -15,7 +15,11 @@ use super::Value;
 pub struct NixList(Rc<Vector<Value>>);
 
 impl TotalDisplay for NixList {
-    fn total_fmt(&self, f: &mut std::fmt::Formatter<'_>, set: &mut ThunkSet) -> std::fmt::Result {
+    fn total_fmt(
+        &self,
+        f: &mut std::fmt::Formatter<'_>,
+        set: &mut ThunkFormatter,
+    ) -> std::fmt::Result {
         f.write_str("[ ")?;
 
         for v in self {

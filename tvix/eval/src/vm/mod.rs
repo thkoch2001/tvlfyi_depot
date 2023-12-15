@@ -436,7 +436,7 @@ where
     /// correct order, especially when re-enqueuing a frame to execute.
     ///
     /// The return value indicates whether the bytecode has been executed to
-    /// completion, or whether it has been suspended in favour of a generator.
+    /// completion (true), or whether it has been suspended in favour of a generator (false).
     fn execute_bytecode(&mut self, span: Span, mut frame: CallFrame) -> EvalResult<bool> {
         loop {
             let op = frame.inc_ip();
