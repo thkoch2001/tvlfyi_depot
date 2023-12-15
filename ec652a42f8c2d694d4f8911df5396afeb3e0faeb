@@ -52,6 +52,24 @@
       "parentUuid": "6937dab9_21451387",
       "revId": "ec652a42f8c2d694d4f8911df5396afeb3e0faeb",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0c513220_aaf2d1ca",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000066
+      },
+      "writtenOn": "2023-12-15T22:42:09Z",
+      "side": 1,
+      "message": "Ah crap:\n\n```\nnix eval --expr \u0027\n  let\n    # thunk the whole apply (works)\n    #apply \u003d f: x: f x;\n\n    # thunk the argument (works)\n    apply \u003d f: x: let y \u003d (rec { inherit x; }.x); in (builtins.seq f (f y));\n    \n    # thunk nothing (wrong)\n    #apply \u003d f: x: (builtins.seq f (builtins.seq x (f x)));\n    \n    left \u003d x: y: x;\n  in\n    apply (apply left null) ({}.fred)\n\u0027\n```\n\nSo although we don\u0027t need to thunk the *application* itself, we do need to thunk the *argument*.",
+      "parentUuid": "e77d8a40_d3138663",
+      "revId": "ec652a42f8c2d694d4f8911df5396afeb3e0faeb",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
