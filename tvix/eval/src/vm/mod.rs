@@ -486,6 +486,9 @@ impl<'o> VM<'o> {
 
                 // Discard the current frame.
                 OpCode::OpReturn => {
+                    // TODO(amjoseph): I think this should assert `==` rather
+                    // than `<=` but it fails with the stricter condition.
+                    assert!(self.stack.len() - 1 <= frame.stack_offset);
                     return Ok(true);
                 }
 
@@ -1072,15 +1075,15 @@ impl<'o> VM<'o> {
 
             // Attribute sets with a __functor attribute are callable.
             val @ Value::Attrs(_) => {
-                if let Some((parent_span, parent_frame)) = parent {
-                    self.push_call_frame(parent_span, parent_frame);
-                }
-
                 self.enqueue_generator("__functor call", span, |co| call_functor(co, val));
                 Ok(())
             }
 
             val @ Value::Catchable(_) => {
+                // the argument that we tried to apply a catchable to
+                self.stack.pop();
+                // applying a `throw` to anything is still a `throw`, so we just
+                // push it back on the stack.
                 self.stack.push(val);
                 Ok(())
             }
