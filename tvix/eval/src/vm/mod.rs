@@ -212,7 +212,7 @@ impl Frame {
 }
 
 #[derive(Default)]
-struct ImportCache(HashMap<PathBuf, Value>);
+pub(crate) struct ImportCache(HashMap<PathBuf, Value>);
 
 /// The `ImportCache` holds the `Value` resulting from `import`ing a certain
 /// file, so that the same file doesn't need to be re-evaluated multiple times.
@@ -247,7 +247,7 @@ impl ImportCache {
     }
 }
 
-struct VM<'o> {
+pub(crate) struct VM<'o> {
     /// VM's frame stack, representing the execution contexts the VM is working
     /// through. Elements are usually pushed when functions are called, or
     /// thunks are being forced.
@@ -461,6 +461,18 @@ impl<'o> VM<'o> {
                     self.populate_upvalues(&mut frame, upvalue_count, upvalues)?;
                 }
 
+                OpCode::OpUpdateThunk(idx) => {
+                    let value = self.stack_peek(0);
+                    let thunk = frame.chunk()[idx].clone();
+                    match thunk {
+                        Value::Thunk(thunk) => thunk.update_blackhole_chain(
+                            value.clone(),
+                            crate::value::ForcingDepth::Shallowly,
+                        ),
+                        _ => panic!("OpUpdateThunks found a non-thunk on the stack! {:?}", thunk),
+                    }
+                }
+
                 OpCode::OpForce => {
                     if let Some(Value::Thunk(_)) = self.stack.last() {
                         let thunk = match self.stack_pop() {
@@ -470,12 +482,59 @@ impl<'o> VM<'o> {
 
                         let gen_span = frame.current_light_span();
 
-                        self.push_call_frame(span, frame);
-                        self.enqueue_generator("force", gen_span.clone(), |co| {
-                            Thunk::force(thunk, co, gen_span)
-                        });
+                        match Thunk::force_noasync(self, thunk, gen_span.clone())
+                            .map_err(|kind| Error::new(kind, gen_span.clone().span()))?
+                        {
+                            Some(v) => {
+                                assert!(!v.is_thunk());
+                                self.stack.push(v);
+                            }
+                            None => {
+                                let callable = self
+                                    .stack
+                                    .pop()
+                                    .expect("Thunk::force_noasync left the stack empty!");
+                                let updater = self
+                                    .stack
+                                    .pop()
+                                    .expect("Thunk::force_noasync did not leave an updater!");
+                                frame.ip -= 1; // re-invoke OpForce after the callee returns
+                                self.push_call_frame(span.clone(), frame);
 
-                        return Ok(false);
+                                // FIXME: it is absurd that tvix has an
+                                // infinitely-extensible call stack and yet does
+                                // *not* have non-tail calls.  So we do this
+                                // crazy dance.
+                                let updater = match updater {
+                                    Value::Closure(updater) => updater,
+                                    _ => unreachable!(),
+                                };
+                                self.push_call_frame(
+                                    span.clone(),
+                                    CallFrame {
+                                        lambda: updater.lambda.clone(),
+                                        upvalues: updater.upvalues.clone(),
+                                        ip: CodeIdx(0),
+                                        stack_offset: self.stack.len(),
+                                    },
+                                );
+                                let closure = match callable {
+                                    Value::Closure(closure) => closure,
+                                    _ => unreachable!(),
+                                };
+                                self.push_call_frame(
+                                    span.clone(),
+                                    CallFrame {
+                                        lambda: closure.lambda.clone(),
+                                        upvalues: closure.upvalues.clone(),
+                                        ip: CodeIdx(0),
+                                        stack_offset: self.stack.len(),
+                                    },
+                                );
+
+                                return Ok(true);
+                            }
+                        }
                     }
                 }
 
@@ -496,6 +555,7 @@ impl<'o> VM<'o> {
 
                 OpCode::OpCall => {
                     let callable = self.stack_pop();
+                    assert!(!callable.is_unforced_thunk());
                     self.call_value(frame.current_light_span(), Some((span, frame)), callable)?;
 
                     // exit this loop and let the outer loop enter the new call
