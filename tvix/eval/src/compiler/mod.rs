@@ -330,7 +330,7 @@ impl Compiler<'_> {
                 c.compile_lambda_or_thunk(false, s, lambda, |c, s| c.compile_lambda(s, lambda))
             }),
             ast::Expr::Apply(apply) => {
-                self.thunk(slot, apply, move |c, s| c.compile_apply(s, apply))
+                self.compile_apply(slot, apply);
             }
 
             // Parenthesized expressions are simply unwrapped, leaving
@@ -1286,15 +1286,29 @@ impl Compiler<'_> {
         }
     }
 
-    fn compile_apply(&mut self, slot: LocalIdx, node: &ast::Apply) {
+    fn compile_apply(&mut self, _slot: LocalIdx, node: &ast::Apply) {
         // To call a function, we leave its arguments on the stack,
         // followed by the function expression itself, and then emit a
         // call instruction. This way, the stack is perfectly laid out
         // to enter the function call straight away.
-        self.compile(slot, node.argument().unwrap());
-        self.compile(slot, node.lambda().unwrap());
+        self.scope_mut().begin_scope();
+
+        let span = self.span_for(node);
+
+        let arg_slot = self.scope_mut().declare_phantom(span, true);
+        self.compile(arg_slot, node.argument().unwrap());
+        let arg_idx = self.scope().stack_index(arg_slot);
+
+        let lambda_slot = self.scope_mut().declare_phantom(span, true);
+        self.compile(lambda_slot, node.lambda().unwrap());
+        let lambda_idx = self.scope().stack_index(lambda_slot);
+
+        self.push_op(OpCode::OpGetLocal(arg_idx), &span);
+        self.push_op(OpCode::OpGetLocal(lambda_idx), &span);
         self.emit_force(&node.lambda().unwrap());
         self.push_op(OpCode::OpCall, node);
+
+        self.cleanup_scope(node);
     }
 
     /// Emit the data instructions that the runtime needs to correctly
