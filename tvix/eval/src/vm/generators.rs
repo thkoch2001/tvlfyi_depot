@@ -361,7 +361,7 @@ impl<'o> VM<'o> {
 
                         VMRequest::Call(callable) => {
                             self.reenqueue_generator(name, span.clone(), generator);
-                            self.call_value(span, None, callable)?;
+                            self.call_value(span, callable)?;
                             return Ok(false);
                         }
 
