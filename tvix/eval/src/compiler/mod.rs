@@ -330,7 +330,8 @@ impl Compiler<'_> {
                 c.compile_lambda_or_thunk(false, s, lambda, |c, s| c.compile_lambda(s, lambda))
             }),
             ast::Expr::Apply(apply) => {
-                self.thunk(slot, apply, move |c, s| c.compile_apply(s, apply))
+                self.thunk(slot, apply, move |c, s| c.compile_apply(s, apply));
+                self.push_op(OpCode::OpForce, apply);
             }
 
             // Parenthesized expressions are simply unwrapped, leaving
