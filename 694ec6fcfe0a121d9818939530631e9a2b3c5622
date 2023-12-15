@@ -16,6 +16,24 @@
       "message": "Total size of ThunkRepr stays the same, right?",
       "revId": "694ec6fcfe0a121d9818939530631e9a2b3c5622",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "24b50536_eddfc01b",
+        "filename": "tvix/eval/src/value/thunk.rs",
+        "patchSetId": 7
+      },
+      "lineNbr": 86,
+      "author": {
+        "id": 1000066
+      },
+      "writtenOn": "2023-12-15T21:52:21Z",
+      "side": 1,
+      "message": "It adds one bit in theory.  In practice since the existing type isn\u0027t a multiple-of-8-bits it shouldn\u0027t add any.  But ultimately it\u0027s up to the Rust compiler.",
+      "parentUuid": "b8bfc737_91286c04",
+      "revId": "694ec6fcfe0a121d9818939530631e9a2b3c5622",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
