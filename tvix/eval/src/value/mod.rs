@@ -7,7 +7,6 @@ use std::num::{NonZeroI32, NonZeroUsize};
 use std::path::PathBuf;
 use std::rc::Rc;
 
-use crate::value::thunk::ForcingDepth;
 use lexical_core::format::CXX_LITERAL;
 use serde::Deserialize;
 
@@ -163,6 +162,17 @@ macro_rules! gen_is {
             }
         }
     };
+}
+
+/// Indicates how deeply a thunk has been forced.
+#[derive(Clone, Copy, Debug)]
+pub enum ForcingDepth {
+    /// The thunk has *already* been shallowly forced.
+    Shallowly,
+
+    /// The thunk has *already* been shallowly forced, and is either
+    /// deeply forced *or in the process of being deeply forced*.
+    Deeply,
 }
 
 /// Describes what input types are allowed when coercing a `Value` to a string
