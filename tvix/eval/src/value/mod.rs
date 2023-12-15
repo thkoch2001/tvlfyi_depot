@@ -7,7 +7,6 @@ use std::num::{NonZeroI32, NonZeroUsize};
 use std::path::PathBuf;
 use std::rc::Rc;
 
-use crate::value::thunk::ForcingDepth;
 use lexical_core::format::CXX_LITERAL;
 use serde::Deserialize;
 
@@ -165,6 +164,17 @@ macro_rules! gen_is {
     };
 }
 
+/// Indicates how deeply a thunk has been forced.
+#[derive(Clone, Copy, Debug)]
+pub enum ForcingDepth {
+    /// The thunk has *already* been shallowly forced.
+    Shallowly,
+
+    /// The thunk has *already* been shallowly forced, and is either
+    /// deeply forced *or in the process of being deeply forced*.
+    Deeply,
+}
+
 /// Describes what input types are allowed when coercing a `Value` to a string
 #[derive(Clone, Copy, PartialEq, Eq, Debug)]
 pub struct CoercionKind {
@@ -218,6 +228,20 @@ pub enum PointerEquality {
 }
 
 impl Value {
+    pub fn is_thunk(&self) -> bool {
+        match self {
+            Value::Thunk(_) => true,
+            _ => false,
+        }
+    }
+
+    pub fn is_unforced_thunk(&self) -> bool {
+        match self {
+            Value::Thunk(t) => !t.is_forced(),
+            _ => false,
+        }
+    }
+
     /// Deeply forces a value, traversing e.g. lists and attribute sets and forcing
     /// their contents, too.
     ///
@@ -252,7 +276,7 @@ impl Value {
                 if let Some(ForcingDepth::Deeply) = t.get_forcing_depth() {
                     continue;
                 }
-                let v = Thunk::force_(t.clone(), &co, span.clone()).await?;
+                let v = Thunk::force(t.clone(), &co, span.clone()).await?;
                 t.set_forcing_depth_deeply(span.clone());
                 v
             } else {
@@ -472,7 +496,7 @@ impl Value {
                         }
                     };
 
-                    Thunk::force_(thunk, co, span.clone()).await?
+                    Thunk::force(thunk, co, span.clone()).await?
                 }
 
                 _ => a,
@@ -754,7 +778,16 @@ impl Value {
     pub async fn force(self, co: &GenCo, span: LightSpan) -> Result<Value, ErrorKind> {
         if let Value::Thunk(thunk) = self {
             // TODO(amjoseph): use #[tailcall::mutual]
-            return Thunk::force_(thunk, co, span).await;
+            return Thunk::force(thunk, co, span).await;
+        }
+        Ok(self)
+    }
+
+    // need two flavors, because async
+    pub async fn force_owned_genco(self, co: GenCo, span: LightSpan) -> Result<Value, ErrorKind> {
+        if let Value::Thunk(thunk) = self {
+            // TODO(amjoseph): use #[tailcall::mutual]
+            return Thunk::force(thunk, &co, span).await;
         }
         Ok(self)
     }
