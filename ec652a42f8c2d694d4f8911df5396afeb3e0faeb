@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d6aaff61_af9c9f48",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2023-12-15T16:39:06Z",
+      "side": 1,
+      "message": "The problem is that function applications _are_ thunks and this is observable, e.g.:\n\n    tvix -E \u0027[ (throw \"lol\") ]\u0027\n    \nThe best we could do is have a more efficient thunk representation for applications, but no more.\n    \nside note this is a bizarre new problem it introduces as well:\n\n   tvix -E \u0027let left \u003d x: y: x; in left null (throw \"lol\")\u0027",
+      "revId": "ec652a42f8c2d694d4f8911df5396afeb3e0faeb",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
