@@ -769,15 +769,6 @@ impl Value {
         Ok(self)
     }
 
-    // need two flavors, because async
-    pub async fn force_owned_genco(self, co: GenCo, span: LightSpan) -> Result<Value, ErrorKind> {
-        if let Value::Thunk(thunk) = self {
-            // TODO(amjoseph): use #[tailcall::mutual]
-            return Thunk::force_(thunk, &co, span).await;
-        }
-        Ok(self)
-    }
-
     /// Explain a value in a human-readable way, e.g. by presenting
     /// the docstrings of functions if present.
     pub fn explain(&self) -> String {
