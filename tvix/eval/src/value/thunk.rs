@@ -30,7 +30,7 @@ use crate::{
     opcode::OpCode,
     spans::LightSpan,
     upvalues::Upvalues,
-    value::Closure,
+    value::{Closure, ForcingDepth},
     vm::generators::{self, GenCo},
     Value,
 };
@@ -92,17 +92,6 @@ enum ThunkRepr {
     // expensive clone()s in Thunk::force().
     /// Fully evaluated thunk.
     Evaluated(Value, ForcingDepth),
-}
-
-/// Indicates how deeply a thunk has been forced.
-#[derive(Clone, Copy, Debug)]
-pub enum ForcingDepth {
-    /// The thunk has *already* been shallowly forced.
-    Shallowly,
-
-    /// The thunk has *already* been shallowly forced, and is either
-    /// deeply forced *or in the process of being deeply forced*.
-    Deeply,
 }
 
 impl ThunkRepr {
@@ -253,14 +242,9 @@ impl Thunk {
         }
     }
 
-    pub async fn force(myself: Thunk, co: GenCo, span: LightSpan) -> Result<Value, ErrorKind> {
-        Self::force_(myself, &co, span).await
-    }
-    pub async fn force_(
-        mut myself: Thunk,
-        co: &GenCo,
-        span: LightSpan,
-    ) -> Result<Value, ErrorKind> {
+    // TODO(amjoseph): remove this once all the calls that use it
+    // are migrated over to Thunk::force_noasync()
+    pub async fn force(mut myself: Thunk, co: &GenCo, span: LightSpan) -> Result<Value, ErrorKind> {
         // It is possible to have a long chain of thunks, like
         //
         //   ThunkRepr::Evaluated(Value::Thunk(ThunkRepr::Evaluated(...)))
@@ -291,19 +275,10 @@ impl Thunk {
             // value. The VM will continue running the code that landed us here.
             if let Some(depth) = myself.get_forcing_depth() {
                 let val = myself.unwrap_or_clone();
-                loop {
-                    match last_blackhole {
-                        None => return Ok(val),
-                        Some(repr) => {
-                            // TODO: clone the thunkrepr, not the value
-                            last_blackhole =
-                                match repr.replace(ThunkRepr::Evaluated(val.clone(), depth)) {
-                                    ThunkRepr::Blackhole { prev_ptr, .. } => prev_ptr,
-                                    _ => unreachable!(),
-                                };
-                        }
-                    }
+                if let Some(last_blackhole) = last_blackhole {
+                    Thunk(last_blackhole).update_blackhole_chain(val.clone(), depth);
                 }
+                return Ok(val);
             }
 
             // Begin evaluation of this thunk by marking it as a blackhole, meaning
@@ -388,6 +363,139 @@ impl Thunk {
         }
     }
 
+    pub(crate) fn force_noasync(
+        vm: &mut crate::vm::VM,
+        mut myself: Thunk,
+        span: LightSpan,
+    ) -> Result<Option<Value>, ErrorKind> {
+        // It is possible to have a long chain of thunks, like
+        //
+        //   ThunkRepr::Evaluated(Value::Thunk(ThunkRepr::Evaluated(...)))
+        //
+        // When forcing a long chain of thunks like this we will
+        // walk down to the end of the chain, force the final thunk,
+        // and update it.  However if we don't update all the thunks
+        // along the chain, two problems occur:
+        //
+        // 1. The amount of work needed to force the first thunk in
+        //    the chain is O(chain_length) instead of O(1)
+        //
+        // 2. VM code that assumes !value.force().is_thunk() will fail.
+        //
+        // Therefore, after forcing the thunk at the end of the
+        // chain, we need to walk backwards and update *all* the
+        // thunks.  We maintain a linked list out of the
+        // ThunkRepr::Blackhole values, and walk that linked list
+        // once we have finished forcing to a ground value.
+        //
+        // The value `last_blackhole` below holds the most-recent
+        // blackhole.
+        //
+        let mut last_blackhole: Option<Rc<RefCell<ThunkRepr>>> = None;
+
+        loop {
+            // If the current thunk is already fully evaluated, return its evaluated
+            // value. The VM will continue running the code that landed us here.
+            if let Some(depth) = myself.get_forcing_depth() {
+                let val = myself.unwrap_or_clone();
+                if let Some(last_blackhole) = last_blackhole {
+                    Thunk(last_blackhole).update_blackhole_chain(val.clone(), depth);
+                }
+                return Ok(Some(val));
+            }
+
+            // Begin evaluation of this thunk by marking it as a blackhole, meaning
+            // that any other forcing frame encountering this thunk before its
+            // evaluation is completed detected an evaluation cycle.
+            let repr = myself
+                .0
+                .replace(myself.prepare_blackhole(span.clone(), last_blackhole.clone()));
+
+            match repr {
+                // If there was already a blackhole in the thunk, this is an
+                // evaluation cycle.
+                ThunkRepr::Blackhole {
+                    forced_at,
+                    suspended_at,
+                    content_span,
+                    prev_ptr,
+                } => {
+                    return Err(ErrorKind::InfiniteRecursion {
+                        first_force: forced_at.span(),
+                        suspended_at: suspended_at.map(|s| s.span()),
+                        content_span,
+                    })
+                }
+
+                // If there is a native function stored in the thunk, evaluate it
+                // and replace this thunk's representation with the result.
+                ThunkRepr::Native(native) => {
+                    let value = native.0()?;
+                    myself
+                        .0
+                        .replace(ThunkRepr::Evaluated(value, ForcingDepth::Shallowly));
+                    continue;
+                }
+
+                // When encountering a suspended thunk, request that the VM enters
+                // it and produces the result.
+                ThunkRepr::Suspended {
+                    lambda,
+                    upvalues,
+                    light_span,
+                } => {
+                    let mut updaterlambda = Lambda::default();
+                    updaterlambda
+                        .chunk
+                        .push_op(OpCode::OpForce, light_span.span()); // force the value returned by the suspension
+                    let idx = OpCode::OpUpdateThunk(
+                        updaterlambda.chunk().push_constant(Value::Thunk(myself)),
+                    );
+                    updaterlambda.chunk.push_op(idx, light_span.span());
+                    updaterlambda.chunk.push_op(OpCode::OpReturn, span.span());
+                    vm.stack.push(Value::Closure(
+                        Closure {
+                            lambda: Rc::new(updaterlambda),
+                            upvalues: Rc::new(Upvalues::with_capacity(0)),
+                        }
+                        .into(),
+                    ));
+                    vm.stack
+                        .push(Value::Closure(Closure { lambda, upvalues }.into()));
+                    return Ok(None);
+                }
+
+                // nested thunks -- try to flatten before forcing
+                ThunkRepr::Evaluated(Value::Thunk(inner_thunk), _) => {
+                    match Rc::try_unwrap(inner_thunk.0) {
+                        Ok(refcell) => {
+                            // we are the only reference to the inner thunk,
+                            // so steal it
+                            myself.0.replace(refcell.into_inner());
+                            continue;
+                        }
+                        Err(rc) => {
+                            let inner_thunk = Thunk(rc);
+                            if let Some(depth) = inner_thunk.get_forcing_depth() {
+                                // The inner thunk is already forced.
+                                myself.0.replace(ThunkRepr::Evaluated(
+                                    inner_thunk.value().clone(),
+                                    depth,
+                                ));
+                                continue;
+                            }
+                            last_blackhole = Some(myself.0.clone());
+                            myself = inner_thunk;
+                            continue;
+                        }
+                    }
+                }
+
+                ThunkRepr::Evaluated(val, _) => continue,
+            }
+        }
+    }
+
     pub fn finalise(&self, stack: &[Value]) {
         self.upvalues_mut().resolve_deferred_upvalues(stack);
     }
@@ -406,6 +514,22 @@ impl Thunk {
     /// Returns true if forcing this thunk will not change it.
     pub fn is_forced(&self) -> bool {
         self.0.borrow().is_forced()
+    }
+
+    pub(crate) fn update_blackhole_chain(self, val: Value, depth: ForcingDepth) {
+        let mut last = Some(self.0);
+        loop {
+            match last {
+                None => return (),
+                Some(repr) => {
+                    // TODO: clone the thunkrepr, not the value
+                    last = match repr.replace(ThunkRepr::Evaluated(val.clone(), depth)) {
+                        ThunkRepr::Blackhole { prev_ptr, .. } => prev_ptr,
+                        _ => unreachable!(),
+                    };
+                }
+            }
+        }
     }
 
     /// Returns a reference to the inner evaluated value of a thunk.
