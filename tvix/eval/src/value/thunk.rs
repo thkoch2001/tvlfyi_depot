@@ -82,13 +82,24 @@ enum ThunkRepr {
     // TODO(amjoseph): consider changing `Value` to `Rc<Value>` to avoid
     // expensive clone()s in Thunk::force().
     /// Fully evaluated thunk.
-    Evaluated(Value),
+    Evaluated(Value, ForcingDepth),
+}
+
+/// Indicates how deeply a thunk has been forced.
+#[derive(Clone, Copy, Debug)]
+pub enum ForcingDepth {
+    /// The thunk has *already* been shallowly forced.
+    Shallowly,
+
+    /// The thunk has *already* been shallowly forced, and is either
+    /// deeply forced *or in the process of being deeply forced*.
+    Deeply,
 }
 
 impl ThunkRepr {
     fn debug_repr(&self) -> String {
         match self {
-            ThunkRepr::Evaluated(v) => format!("thunk(val|{})", v),
+            ThunkRepr::Evaluated(v, _) => format!("thunk(val|{})", v),
             ThunkRepr::Blackhole { .. } => "thunk(blackhole)".to_string(),
             ThunkRepr::Native(_) => "thunk(native)".to_string(),
             ThunkRepr::Suspended { lambda, .. } => format!("thunk({:p})", *lambda),
@@ -99,7 +110,7 @@ impl ThunkRepr {
     /// if the thunk is not fully-evaluated.
     fn expect(self) -> Value {
         match self {
-            ThunkRepr::Evaluated(value) => value,
+            ThunkRepr::Evaluated(value, _) => value,
             ThunkRepr::Blackhole { .. } => panic!("Thunk::expect() called on a black-holed thunk"),
             ThunkRepr::Suspended { .. } | ThunkRepr::Native(_) => {
                 panic!("Thunk::expect() called on a suspended thunk")
@@ -109,7 +120,7 @@ impl ThunkRepr {
 
     fn expect_ref(&self) -> &Value {
         match self {
-            ThunkRepr::Evaluated(value) => value,
+            ThunkRepr::Evaluated(value, _) => value,
             ThunkRepr::Blackhole { .. } => panic!("Thunk::expect() called on a black-holed thunk"),
             ThunkRepr::Suspended { .. } | ThunkRepr::Native(_) => {
                 panic!("Thunk::expect() called on a suspended thunk")
@@ -119,9 +130,17 @@ impl ThunkRepr {
 
     pub fn is_forced(&self) -> bool {
         match self {
-            ThunkRepr::Evaluated(Value::Thunk(_)) => false,
-            ThunkRepr::Evaluated(_) => true,
+            ThunkRepr::Evaluated(Value::Thunk(_), _) => false,
+            ThunkRepr::Evaluated(_, _) => true,
             _ => false,
+        }
+    }
+
+    pub fn get_forcing_depth(&self) -> Option<ForcingDepth> {
+        match self {
+            ThunkRepr::Evaluated(Value::Thunk(_), _) => None,
+            ThunkRepr::Evaluated(_, depth) => Some(*depth),
+            _ => None,
         }
     }
 }
@@ -134,13 +153,27 @@ impl ThunkRepr {
 pub struct Thunk(Rc<RefCell<ThunkRepr>>);
 
 impl Thunk {
+    pub fn get_forcing_depth(&self) -> Option<ForcingDepth> {
+        self.0.borrow().get_forcing_depth()
+    }
+
+    /// You must only call this if you are currently in the process
+    /// of performing a deep-force.
+    pub fn set_forcing_depth_deeply(&self, span: LightSpan) {
+        let inner = self.0.replace(self.prepare_blackhole(span));
+        let value = inner.expect();
+        self.0
+            .replace(ThunkRepr::Evaluated(value, ForcingDepth::Deeply));
+    }
+
     pub fn new_closure(lambda: Rc<Lambda>) -> Self {
-        Thunk(Rc::new(RefCell::new(ThunkRepr::Evaluated(Value::Closure(
-            Rc::new(Closure {
+        Thunk(Rc::new(RefCell::new(ThunkRepr::Evaluated(
+            Value::Closure(Rc::new(Closure {
                 upvalues: Rc::new(Upvalues::with_capacity(lambda.upvalue_count)),
                 lambda: lambda.clone(),
-            }),
-        )))))
+            })),
+            ForcingDepth::Deeply,
+        ))))
     }
 
     pub fn new_suspended(lambda: Rc<Lambda>, light_span: LightSpan) -> Self {
@@ -221,10 +254,10 @@ impl Thunk {
         loop {
             // If the current thunk is already fully evaluated, return its evaluated
             // value. The VM will continue running the code that landed us here.
-            if myself.is_forced() {
+            if let Some(depth) = myself.get_forcing_depth() {
                 let val = myself.unwrap_or_clone();
                 for other_thunk in also_update.into_iter() {
-                    other_thunk.replace(ThunkRepr::Evaluated(val.clone()));
+                    other_thunk.replace(ThunkRepr::Evaluated(val.clone(), depth));
                 }
                 return Ok(val);
             }
@@ -253,7 +286,9 @@ impl Thunk {
                 // and replace this thunk's representation with the result.
                 ThunkRepr::Native(native) => {
                     let value = native.0()?;
-                    myself.0.replace(ThunkRepr::Evaluated(value));
+                    myself
+                        .0
+                        .replace(ThunkRepr::Evaluated(value, ForcingDepth::Shallowly));
                     continue;
                 }
 
@@ -269,12 +304,14 @@ impl Thunk {
                     // passing `also_update` to it.
                     let value =
                         generators::request_enter_lambda(co, lambda, upvalues, light_span).await;
-                    myself.0.replace(ThunkRepr::Evaluated(value));
+                    myself
+                        .0
+                        .replace(ThunkRepr::Evaluated(value, ForcingDepth::Shallowly));
                     continue;
                 }
 
                 // nested thunks -- try to flatten before forcing
-                ThunkRepr::Evaluated(Value::Thunk(inner_thunk)) => {
+                ThunkRepr::Evaluated(Value::Thunk(inner_thunk), _) => {
                     match Rc::try_unwrap(inner_thunk.0) {
                         Ok(refcell) => {
                             // we are the only reference to the inner thunk,
@@ -284,16 +321,17 @@ impl Thunk {
                         }
                         Err(rc) => {
                             let inner_thunk = Thunk(rc);
-                            if inner_thunk.is_forced() {
+                            if let Some(depth) = inner_thunk.get_forcing_depth() {
                                 // tail call to force the inner thunk; note that
                                 // this means the outer thunk remains unforced
                                 // even after calling force() on it; however the
                                 // next time it is forced we will be one
                                 // thunk-forcing closer to it being
                                 // fully-evaluated.
-                                myself
-                                    .0
-                                    .replace(ThunkRepr::Evaluated(inner_thunk.value().clone()));
+                                myself.0.replace(ThunkRepr::Evaluated(
+                                    inner_thunk.value().clone(),
+                                    depth,
+                                ));
                                 continue;
                             }
                             also_update.push(myself.0.clone());
@@ -303,7 +341,7 @@ impl Thunk {
                     }
                 }
 
-                ThunkRepr::Evaluated(val) => {
+                ThunkRepr::Evaluated(val, _) => {
                     return Ok(val);
                 }
             }
@@ -315,7 +353,7 @@ impl Thunk {
     }
 
     pub fn is_evaluated(&self) -> bool {
-        matches!(*self.0.borrow(), ThunkRepr::Evaluated(_))
+        matches!(*self.0.borrow(), ThunkRepr::Evaluated(_, _))
     }
 
     pub fn is_suspended(&self) -> bool {
@@ -338,7 +376,7 @@ impl Thunk {
     // API too much.
     pub fn value(&self) -> Ref<Value> {
         Ref::map(self.0.borrow(), |thunk| match thunk {
-            ThunkRepr::Evaluated(value) => value,
+            ThunkRepr::Evaluated(value, _) => value,
             ThunkRepr::Blackhole { .. } => panic!("Thunk::value called on a black-holed thunk"),
             ThunkRepr::Suspended { .. } | ThunkRepr::Native(_) => {
                 panic!("Thunk::value called on a suspended thunk")
@@ -360,7 +398,7 @@ impl Thunk {
     pub fn upvalues(&self) -> Ref<'_, Upvalues> {
         Ref::map(self.0.borrow(), |thunk| match thunk {
             ThunkRepr::Suspended { upvalues, .. } => upvalues.as_ref(),
-            ThunkRepr::Evaluated(Value::Closure(c)) => &c.upvalues,
+            ThunkRepr::Evaluated(Value::Closure(c), _) => &c.upvalues,
             _ => panic!("upvalues() on non-suspended thunk"),
         })
     }
@@ -368,7 +406,7 @@ impl Thunk {
     pub fn upvalues_mut(&self) -> RefMut<'_, Upvalues> {
         RefMut::map(self.0.borrow_mut(), |thunk| match thunk {
             ThunkRepr::Suspended { upvalues, .. } => Rc::get_mut(upvalues).unwrap(),
-            ThunkRepr::Evaluated(Value::Closure(c)) => Rc::get_mut(
+            ThunkRepr::Evaluated(Value::Closure(c), _) => Rc::get_mut(
                 &mut Rc::get_mut(c).unwrap().upvalues,
             )
             .expect(
@@ -385,8 +423,8 @@ impl Thunk {
             return true;
         }
         match &*self.0.borrow() {
-            ThunkRepr::Evaluated(Value::Closure(c1)) => match &*other.0.borrow() {
-                ThunkRepr::Evaluated(Value::Closure(c2)) => Rc::ptr_eq(c1, c2),
+            ThunkRepr::Evaluated(Value::Closure(c1), _) => match &*other.0.borrow() {
+                ThunkRepr::Evaluated(Value::Closure(c2), _) => Rc::ptr_eq(c1, c2),
                 _ => false,
             },
             _ => false,
@@ -400,13 +438,17 @@ impl Thunk {
 }
 
 impl TotalDisplay for Thunk {
-    fn total_fmt(&self, f: &mut std::fmt::Formatter<'_>, set: &mut ThunkSet) -> std::fmt::Result {
+    fn total_fmt(
+        &self,
+        f: &mut std::fmt::Formatter<'_>,
+        set: &mut ThunkFormatter,
+    ) -> std::fmt::Result {
         if !set.insert(self) {
             return f.write_str("<CYCLE>");
         }
 
         match &*self.0.borrow() {
-            ThunkRepr::Evaluated(v) => v.total_fmt(f, set),
+            ThunkRepr::Evaluated(v, _) => v.total_fmt(f, set),
             ThunkRepr::Suspended { .. } | ThunkRepr::Native(_) => f.write_str("<CODE>"),
             other => write!(f, "internal[{}]", other.debug_repr()),
         }
@@ -422,9 +464,9 @@ impl TotalDisplay for Thunk {
 /// The inner `HashSet` is not available on the outside, as it would be
 /// potentially unsafe to interact with the pointers in the set.
 #[derive(Default)]
-pub struct ThunkSet(HashSet<*const ThunkRepr>);
+pub struct ThunkFormatter(HashSet<*const ThunkRepr>);
 
-impl ThunkSet {
+impl ThunkFormatter {
     /// Check whether the given thunk has already been seen. Will mark the thunk
     /// as seen otherwise.
     pub fn insert(&mut self, thunk: &Thunk) -> bool {
