@@ -16,6 +16,24 @@
       "message": "The problem is that function applications _are_ thunks and this is observable, e.g.:\n\n    tvix -E \u0027[ (throw \"lol\") ]\u0027\n    \nThe best we could do is have a more efficient thunk representation for applications, but no more.\n    \nside note this is a bizarre new problem it introduces as well:\n\n   tvix -E \u0027let left \u003d x: y: x; in left null (throw \"lol\")\u0027",
       "revId": "ec652a42f8c2d694d4f8911df5396afeb3e0faeb",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6937dab9_21451387",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000066
+      },
+      "writtenOn": "2023-12-15T21:36:56Z",
+      "side": 1,
+      "message": "That\u0027s cheating, it\u0027s taking advantage of the fact that `Thunk::display()` can detect whether or not a thunk is forced.\n\nThe nix language itself has no \"is this thunk forced test\".\n\nLet me explain it another way: find an example where `nix eval --strict` would behave differently.  If you pass `--strict` then you don\u0027t get to use the `Thunk::display()` cheat-code, which is external to the language.\n\n```\nlet left \u003d x: y: x; in left null (throw \"lol\")\n```\n\nThat\u0027s not a problem either.\n\nHere\u0027s how that should behave with unthunked App nodes:\n\n```\n    let left \u003d x: y: x; in left null (throw \"lol\")\n-\u003e  let left \u003d x: y: x; in left null Catchable\n-\u003e  (x: y: x) null Catchable\n-\u003e  (y: null) Catchable\n-\u003e  null\n```\n\nNothing ever applies a primitive to the Catchable, which is why it never bails\nout.",
+      "parentUuid": "d6aaff61_af9c9f48",
+      "revId": "ec652a42f8c2d694d4f8911df5396afeb3e0faeb",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
