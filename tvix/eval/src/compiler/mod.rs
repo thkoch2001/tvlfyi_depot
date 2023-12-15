@@ -336,6 +336,35 @@ impl Compiler<'_, '_> {
                 c.compile_lambda_or_thunk(false, s, lambda, |c, s| c.compile_lambda(s, lambda))
             }),
             ast::Expr::Apply(apply) => {
+                // Tvix compiles every ast::Expr::Apply into a thunk containing
+                // the actual application.  It is not possible to omit the
+                // thunk; the following example demonstrates it:
+                //
+                //  let
+                //    #apply = f: x: f x;
+                //    #apply = f: x: (builtins.seq f (f x));
+                //    apply = f: x: (builtins.seq f (builtins.seq x (f x)));
+                //    diverge = self: self self;
+                //  in
+                //    apply (apply (x: y: x) null) (diverge diverge)
+                //
+                // The second `apply` is strict in the function but not in the
+                // argument; it matches cppnix's behavior.  The third example is
+                // strict in both the function and argument; it behaves
+                // differently from cppnix: it overflows the stack.
+                //
+                // Therefore we must either thunk the whole ast::Expr::Apply, or
+                // else thunk the argument.  We cannot thunk nothing.  For now
+                // we choose the former option.
+                //
+                // The reference implementation of the Nix interpreter also
+                // thunks every application node, except when the argument is
+                // an identifier or a literal.  @sterni has written some notes
+                // about this:
+                // https://cl.tvl.fyi/c/depot/+/10373/comment/944e74d8_11f39ffb
+                // and has noted that "only thunking the argument would
+                // require non-tail-calls which we don't have".
+                //
                 self.thunk(slot, apply, move |c, s| c.compile_apply(s, apply))
             }
 
