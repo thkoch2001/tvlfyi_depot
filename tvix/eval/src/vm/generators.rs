@@ -250,6 +250,24 @@ impl<'o> VM<'o> {
         });
     }
 
+    fn run_opcode(
+        &mut self,
+        name: &'static str,
+        description: &'static str,
+        opcodes: Vec<OpCode>,
+        generator: Generator,
+        span: LightSpan,
+    ) -> EvalResult<bool> {
+        self.reenqueue_generator(name, span.clone(), generator);
+        self.call_value(
+            span,
+            None,
+            // TODO(amjoseph): cache this instead of rebuilding it on every call
+            Value::new_trivial_closure(description.to_string(), opcodes),
+        )?;
+        Ok(false)
+    }
+
     /// Run a generator frame until it yields to the outer control loop, or runs
     /// to completion.
     ///
@@ -295,11 +313,14 @@ impl<'o> VM<'o> {
                         // this function prepares the frame stack and yields
                         // back to the outer VM loop.
                         VMRequest::ForceValue(value) => {
-                            self.reenqueue_generator(name, span.clone(), generator);
-                            self.enqueue_generator("force", span.clone(), |co| {
-                                value.force_owned_genco(co, span)
-                            });
-                            return Ok(false);
+                            self.stack.push(value);
+                            return self.run_opcode(
+                                name,
+                                "<internal OpCode::CoerceToString>",
+                                vec![OpCode::OpForce, OpCode::OpReturn],
+                                generator,
+                                span,
+                            );
                         }
 
                         // Generator has requested a deep-force.
@@ -315,31 +336,33 @@ impl<'o> VM<'o> {
                         // Logic is similar to `ForceValue`, except with the
                         // value being taken from that stack.
                         VMRequest::WithValue(idx) => {
-                            self.reenqueue_generator(name, span.clone(), generator);
-
                             let value = self.stack[self.with_stack[idx]].clone();
-                            self.enqueue_generator("force", span.clone(), |co| {
-                                value.force_owned_genco(co, span)
-                            });
-
-                            return Ok(false);
+                            self.stack.push(value);
+                            return self.run_opcode(
+                                name,
+                                "<internal OpCode::CoerceToString>",
+                                vec![OpCode::OpForce, OpCode::OpReturn],
+                                generator,
+                                span,
+                            );
                         }
 
                         // Generator has requested a value from the *captured*
                         // with-stack. Logic is same as above, except for the
                         // value being from that stack.
                         VMRequest::CapturedWithValue(idx) => {
-                            self.reenqueue_generator(name, span.clone(), generator);
-
                             let call_frame = self.last_call_frame()
                                 .expect("Tvix bug: generator requested captured with-value, but there is no call frame");
 
                             let value = call_frame.upvalues.with_stack().unwrap()[idx].clone();
-                            self.enqueue_generator("force", span.clone(), |co| {
-                                value.force_owned_genco(co, span)
-                            });
-
-                            return Ok(false);
+                            self.stack.push(value);
+                            return self.run_opcode(
+                                name,
+                                "<internal OpCode::CoerceToString>",
+                                vec![OpCode::OpForce, OpCode::OpReturn],
+                                generator,
+                                span,
+                            );
                         }
 
                         VMRequest::NixEquality(values, ptr_eq) => {
@@ -353,17 +376,13 @@ impl<'o> VM<'o> {
 
                         VMRequest::StringCoerce(val, kind) => {
                             self.stack.push(val);
-                            self.reenqueue_generator(name, span.clone(), generator);
-                            self.call_value(
+                            return self.run_opcode(
+                                name,
+                                "<internal OpCode::CoerceToString>",
+                                vec![OpCode::OpCoerceToString(kind), OpCode::OpReturn],
+                                generator,
                                 span,
-                                None,
-                                // TODO(amjoseph): cache this instead of rebuilding it on every call
-                                Value::new_trivial_closure(
-                                    "<internal OpCode::CoerceToString>".to_string(),
-                                    vec![OpCode::OpCoerceToString(kind), OpCode::OpReturn],
-                                ),
-                            )?;
-                            return Ok(false);
+                            );
                         }
 
                         VMRequest::Call(callable) => {
@@ -473,17 +492,14 @@ impl<'o> VM<'o> {
 
                         VMRequest::TryForce(value) => {
                             self.try_eval_frames.push(frame_id);
-                            self.reenqueue_generator(name, span.clone(), generator);
-
-                            debug_assert!(
-                                self.frames.len() == frame_id + 1,
-                                "generator should be reenqueued with the same frame ID"
+                            self.stack.push(value);
+                            return self.run_opcode(
+                                name,
+                                "<internal OpCode::CoerceToString>",
+                                vec![OpCode::OpForce, OpCode::OpReturn],
+                                generator,
+                                span,
                             );
-
-                            self.enqueue_generator("force", span.clone(), |co| {
-                                value.force_owned_genco(co, span)
-                            });
-                            return Ok(false);
                         }
 
                         VMRequest::ToJson(value) => {
