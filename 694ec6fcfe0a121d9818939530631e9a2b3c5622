@@ -34,6 +34,24 @@
       "parentUuid": "b8bfc737_91286c04",
       "revId": "694ec6fcfe0a121d9818939530631e9a2b3c5622",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b6a561ad_dc323387",
+        "filename": "tvix/eval/src/value/thunk.rs",
+        "patchSetId": 7
+      },
+      "lineNbr": 86,
+      "author": {
+        "id": 1000066
+      },
+      "writtenOn": "2023-12-15T21:54:13Z",
+      "side": 1,
+      "message": "Actually since the `Blackhole` variant carries three different `Span` objects that one is *by far* the largest variant.  So this adds no additional size; `Evaluated` still isn\u0027t the largest variant.",
+      "parentUuid": "24b50536_eddfc01b",
+      "revId": "694ec6fcfe0a121d9818939530631e9a2b3c5622",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
