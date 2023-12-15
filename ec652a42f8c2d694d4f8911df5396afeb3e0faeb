@@ -34,6 +34,24 @@
       "parentUuid": "d6aaff61_af9c9f48",
       "revId": "ec652a42f8c2d694d4f8911df5396afeb3e0faeb",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e77d8a40_d3138663",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000066
+      },
+      "writtenOn": "2023-12-15T22:28:41Z",
+      "side": 1,
+      "message": "Urgh, the counterexample is still a problem if you `abort` instead of using `throw`:\n\n```\nlet left \u003d x: y: x; in left null (abort \"lol\")\n```\n\nBut I think `abort` is the only remaining obstacle.  Can probably be fixed by thunking `builtins.abort` (only) or something.",
+      "parentUuid": "6937dab9_21451387",
+      "revId": "ec652a42f8c2d694d4f8911df5396afeb3e0faeb",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
