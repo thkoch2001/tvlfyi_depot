@@ -32,7 +32,6 @@ use crate::{
     spans::LightSpan,
     upvalues::Upvalues,
     value::{Closure, ForcingDepth},
-    vm::generators::{self, GenCo},
     Value,
 };
 
@@ -243,14 +242,11 @@ impl Thunk {
         }
     }
 
-    pub async fn force(myself: Thunk, co: GenCo, span: LightSpan) -> Result<Value, ErrorKind> {
-        Self::force_(myself, &co, span).await
-    }
-    pub async fn force_(
+    pub(crate) fn force(
+        vm: &mut crate::vm::VM,
         mut myself: Thunk,
-        co: &GenCo,
         span: LightSpan,
-    ) -> Result<Value, ErrorKind> {
+    ) -> Result<Option<Value>, ErrorKind> {
         // It is possible to have a long chain of thunks, like
         //
         //   ThunkRepr::Evaluated(Value::Thunk(ThunkRepr::Evaluated(...)))
@@ -261,10 +257,7 @@ impl Thunk {
         // along the chain, two problems occur:
         //
         // 1. The amount of work needed to force the first thunk in
-        //    the chain is O(chain_length^2) instead of
-        //    O(chain_length) because you'll need to force() it
-        //    chain_length times (each force() would update only the
-        //    last unforced thunk).
+        //    the chain is O(chain_length) instead of O(1)
         //
         // 2. VM code that assumes !value.force().is_thunk() will fail.
         //
@@ -287,7 +280,7 @@ impl Thunk {
                 if let Some(last_blackhole) = last_blackhole {
                     Thunk(last_blackhole).update_blackhole_chain(val.clone(), depth);
                 }
-                return Ok(val);
+                return Ok(Some(val));
             }
 
             // Begin evaluation of this thunk by marking it as a blackhole, meaning
@@ -330,15 +323,26 @@ impl Thunk {
                     upvalues,
                     light_span,
                 } => {
-                    // TODO(amjoseph): use #[tailcall::mutual] here.  This can
-                    // be turned into a tailcall to vm::execute_bytecode() by
-                    // passing `head_of_chain_of_thunks` to it.
-                    let value =
-                        generators::request_enter_lambda(co, lambda, upvalues, light_span).await;
-                    myself
-                        .0
-                        .replace(ThunkRepr::Evaluated(value, ForcingDepth::Shallowly));
-                    continue;
+                    let mut updaterlambda = Lambda::default();
+                    updaterlambda
+                        .chunk
+                        .push_op(OpCode::OpForce, light_span.span()); // force the value returned by the suspension
+                    let idx = OpCode::OpUpdateBlackholeChain(
+                        updaterlambda.chunk().push_constant(Value::Thunk(myself)),
+                        ForcingDepth::Shallowly,
+                    );
+                    updaterlambda.chunk.push_op(idx, light_span.span());
+                    updaterlambda.chunk.push_op(OpCode::OpReturn, span.span());
+                    vm.stack.push(Value::Closure(
+                        Closure {
+                            lambda: Rc::new(updaterlambda),
+                            upvalues: Rc::new(Upvalues::with_capacity(0)),
+                        }
+                        .into(),
+                    ));
+                    vm.stack
+                        .push(Value::Closure(Closure { lambda, upvalues }.into()));
+                    return Ok(None);
                 }
 
                 // nested thunks -- try to flatten before forcing

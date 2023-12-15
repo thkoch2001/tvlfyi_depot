@@ -1,7 +1,8 @@
 //! This module implements the instruction set running on the abstract
 //! machine implemented by tvix.
 
-use std::ops::{AddAssign, Sub};
+use crate::value::ForcingDepth;
+use std::ops::{AddAssign, Sub, SubAssign};
 
 /// Index of a constant in the current code chunk.
 #[repr(transparent)]
@@ -16,6 +17,12 @@ pub struct CodeIdx(pub usize);
 impl AddAssign<usize> for CodeIdx {
     fn add_assign(&mut self, rhs: usize) {
         *self = CodeIdx(self.0 + rhs)
+    }
+}
+
+impl SubAssign<usize> for CodeIdx {
+    fn sub_assign(&mut self, rhs: usize) {
+        *self = CodeIdx(self.0 - rhs)
     }
 }
 
@@ -247,6 +254,12 @@ pub enum OpCode {
 
     /// Force the value at {1} until it is a `Thunk::Evaluated`.
     OpForce,
+
+    /// The value at ConstantIdx should be a
+    /// Value::Thunk(Thunk(ThunkRepr::Blackhole)); change it and the
+    /// rest of its Blackhole-chain to
+    /// ThunkRepr::Evaluated(stack.peek(), depth).
+    OpUpdateBlackholeChain(ConstantIdx, ForcingDepth),
 
     /// Finalise initialisation of the upvalues of the value in the given stack
     /// index (which must be a Value::Thunk) after the scope is fully bound.
