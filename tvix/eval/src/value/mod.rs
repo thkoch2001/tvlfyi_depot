@@ -165,7 +165,7 @@ macro_rules! gen_is {
 }
 
 /// Indicates how deeply a thunk has been forced.
-#[derive(Clone, Copy, Debug)]
+#[derive(Clone, Copy, Debug, PartialEq, Eq)]
 pub enum ForcingDepth {
     /// The thunk has *already* been shallowly forced.
     Shallowly,
@@ -228,6 +228,20 @@ pub enum PointerEquality {
 }
 
 impl Value {
+    pub fn is_thunk(&self) -> bool {
+        match self {
+            Value::Thunk(_) => true,
+            _ => false,
+        }
+    }
+
+    pub fn is_unforced_thunk(&self) -> bool {
+        match self {
+            Value::Thunk(t) => !t.is_forced(),
+            _ => false,
+        }
+    }
+
     /// Deeply forces a value, traversing e.g. lists and attribute sets and forcing
     /// their contents, too.
     ///
@@ -262,7 +276,8 @@ impl Value {
                 if let Some(ForcingDepth::Deeply) = t.get_forcing_depth() {
                     continue;
                 }
-                let v = Thunk::force_(t.clone(), &co, span.clone()).await?;
+                // TODO: de-asyncify this function, then invoke OpForce directly
+                let v = generators::request_force(&co, Value::Thunk(t.clone())).await;
                 t.set_forcing_depth_deeply(span.clone());
                 v
             } else {
@@ -340,7 +355,7 @@ impl Value {
                         import_paths: true, ..
                     },
                 ) => {
-                    // TODO(tazjin): there are cases where coerce_to_string does not import
+                    // TODO: de-asyncify this function, then invoke OpForce directly
                     let imported = generators::request_path_import(&co, *p.clone()).await;
                     Ok(imported.to_string_lossy().into_owned())
                 }
@@ -482,7 +497,8 @@ impl Value {
                         }
                     };
 
-                    Thunk::force_(thunk, co, span.clone()).await?
+                    // TODO: de-asyncify this function, then invoke OpForce directly
+                    generators::request_force(co, Value::Thunk(thunk)).await
                 }
 
                 _ => a,
@@ -761,10 +777,10 @@ impl Value {
     }
 
     // TODO(amjoseph): de-asyncify this (when called directly by the VM)
-    pub async fn force(self, co: &GenCo, span: LightSpan) -> Result<Value, ErrorKind> {
+    async fn force(self, co: &GenCo, _span: LightSpan) -> Result<Value, ErrorKind> {
         if let Value::Thunk(thunk) = self {
             // TODO(amjoseph): use #[tailcall::mutual]
-            return Thunk::force_(thunk, co, span).await;
+            return Ok(generators::request_force(co, Value::Thunk(thunk)).await);
         }
         Ok(self)
     }
