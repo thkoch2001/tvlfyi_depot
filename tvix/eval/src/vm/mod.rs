@@ -499,9 +499,11 @@ impl<'o> VM<'o> {
 
                 OpCode::OpCall => {
                     let callable = self.stack_pop();
-                    self.call_value(frame.current_light_span(), Some((span, frame)), callable)?;
-
-                    // exit this loop and let the outer loop enter the new call
+                    // Reenqueue the parent frame. Not throwing it away leads to more
+                    // useful error traces.
+                    let span = frame.current_light_span();
+                    self.push_call_frame(span.clone(), frame);
+                    self.call_value(span, callable)?;
                     return Ok(true);
                 }
 
@@ -1011,11 +1013,12 @@ impl<'o> VM<'o> {
 
     /// Apply an argument from the stack to a builtin, and attempt to call it.
     ///
-    /// All calls are tail-calls in Tvix, as every function application is a
-    /// separate thunk and OpCall is thus the last result in the thunk.
+    /// call_builtin() is executed only within OpCall, which preemptively
+    /// re-pushes the current frame to the frame stack, and then exits to the
+    /// frame-loop after the OpCall has completed.
     ///
-    /// Due to this, once control flow exits this function, the generator will
-    /// automatically be run by the VM.
+    /// Due to this, if we push a generator frame, then once control flow exits
+    /// this function, the generator will automatically be run by the VM.
     fn call_builtin(&mut self, span: LightSpan, mut builtin: Builtin) -> EvalResult<()> {
         let builtin_name = builtin.name();
         self.observer.observe_enter_builtin(builtin_name);
@@ -1041,12 +1044,11 @@ impl<'o> VM<'o> {
     fn call_value(
         &mut self,
         span: LightSpan,
-        parent: Option<(LightSpan, CallFrame)>,
         callable: Value,
     ) -> EvalResult<()> {
         match callable {
             Value::Builtin(builtin) => self.call_builtin(span, builtin),
-            Value::Thunk(thunk) => self.call_value(span, parent, thunk.value().clone()),
+            Value::Thunk(thunk) => self.call_value(span, thunk.value().clone()),
 
             Value::Closure(closure) => {
                 let lambda = closure.lambda();
@@ -1057,13 +1059,6 @@ impl<'o> VM<'o> {
                 // take only a single argument and are curried), the offset is
                 // `stack_len - 1`.
                 let stack_offset = self.stack.len() - 1;
-
-                // Reenqueue the parent frame, which should only have
-                // `OpReturn` left. Not throwing it away leads to more
-                // useful error traces.
-                if let Some((parent_span, parent_frame)) = parent {
-                    self.push_call_frame(parent_span, parent_frame);
-                }
 
                 self.push_call_frame(
                     span,
@@ -1080,10 +1075,6 @@ impl<'o> VM<'o> {
 
             // Attribute sets with a __functor attribute are callable.
             val @ Value::Attrs(_) => {
-                if let Some((parent_span, parent_frame)) = parent {
-                    self.push_call_frame(parent_span, parent_frame);
-                }
-
                 self.enqueue_generator("__functor call", span, |co| call_functor(co, val));
                 Ok(())
             }
