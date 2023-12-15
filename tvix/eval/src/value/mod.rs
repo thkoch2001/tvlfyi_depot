@@ -38,7 +38,7 @@ pub use path::canon_path;
 pub use string::NixString;
 pub use thunk::Thunk;
 
-pub use self::thunk::ThunkSet;
+pub use self::thunk::ThunkFormatter;
 
 use lazy_static::lazy_static;
 
@@ -164,6 +164,17 @@ macro_rules! gen_is {
     };
 }
 
+/// Indicates how deeply a thunk has been forced.
+#[derive(Clone, Copy, Debug)]
+pub enum ForcingDepth {
+    /// The thunk has *already* been shallowly forced.
+    Shallowly,
+
+    /// The thunk has *already* been shallowly forced, and is either
+    /// deeply forced *or in the process of being deeply forced*.
+    Deeply,
+}
+
 /// Describes what input types are allowed when coercing a `Value` to a string
 #[derive(Clone, Copy, PartialEq, Eq, Debug)]
 pub struct CoercionKind {
@@ -238,8 +249,6 @@ impl Value {
         // This is a stack of values which still remain to be forced.
         let mut vals = vec![myself];
 
-        let mut thunk_set: ThunkSet = Default::default();
-
         loop {
             let v = if let Some(v) = vals.pop() {
                 v
@@ -250,10 +259,12 @@ impl Value {
             // Get rid of any top-level thunks, and bail out of self-recursive
             // thunks.
             let value = if let Value::Thunk(t) = &v {
-                if !thunk_set.insert(t) {
+                if let Some(ForcingDepth::Deeply) = t.get_forcing_depth() {
                     continue;
                 }
-                Thunk::force_(t.clone(), &co, span.clone()).await?
+                let v = Thunk::force_(t.clone(), &co, span.clone()).await?;
+                t.set_forcing_depth_deeply(span.clone());
+                v
             } else {
                 v
             };
@@ -667,6 +678,12 @@ impl Value {
         Value::Closure(c),
         c.clone()
     );
+    pub fn as_thunk_mut(&mut self) -> Result<&mut Thunk, ErrorKind> {
+        match self {
+            Value::Thunk(t) => Ok(t),
+            other => Err(type_error("thunk", other)),
+        }
+    }
 
     gen_cast_mut!(as_list_mut, NixList, "list", List);
 
@@ -838,7 +855,11 @@ impl Value {
 }
 
 trait TotalDisplay {
-    fn total_fmt(&self, f: &mut std::fmt::Formatter<'_>, set: &mut ThunkSet) -> std::fmt::Result;
+    fn total_fmt(
+        &self,
+        f: &mut std::fmt::Formatter<'_>,
+        set: &mut ThunkFormatter,
+    ) -> std::fmt::Result;
 }
 
 impl Display for Value {
@@ -921,7 +942,11 @@ fn total_fmt_float<F: std::fmt::Write>(num: f64, mut f: F) -> std::fmt::Result {
 }
 
 impl TotalDisplay for Value {
-    fn total_fmt(&self, f: &mut std::fmt::Formatter<'_>, set: &mut ThunkSet) -> std::fmt::Result {
+    fn total_fmt(
+        &self,
+        f: &mut std::fmt::Formatter<'_>,
+        set: &mut ThunkFormatter,
+    ) -> std::fmt::Result {
         match self {
             Value::Null => f.write_str("null"),
             Value::Bool(true) => f.write_str("true"),
