@@ -151,7 +151,7 @@ mod tests {
             let mut server = tonic::transport::Server::builder();
             let router = server.add_service(
                 crate::proto::path_info_service_server::PathInfoServiceServer::new(
-                    GRPCPathInfoServiceWrapper::from(Arc::new(MemoryPathInfoService::new(
+                    GRPCPathInfoServiceWrapper::new(Arc::new(MemoryPathInfoService::new(
                         gen_blob_service(),
                         gen_directory_service(),
                     ))
