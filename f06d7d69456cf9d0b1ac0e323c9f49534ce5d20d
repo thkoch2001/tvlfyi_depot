@@ -159,6 +159,24 @@
       "parentUuid": "0d187809_fabb36d5",
       "revId": "f06d7d69456cf9d0b1ac0e323c9f49534ce5d20d",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2d618b54_f9e7d455",
+        "filename": "tvix/nix-compat/src/nar/writer/async.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 124,
+      "author": {
+        "id": 1000073
+      },
+      "writtenOn": "2023-12-16T22:00:42Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6f5fcddc_0a1b30eb",
+      "revId": "f06d7d69456cf9d0b1ac0e323c9f49534ce5d20d",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
