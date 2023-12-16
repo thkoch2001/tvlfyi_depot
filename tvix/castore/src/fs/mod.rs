@@ -12,6 +12,13 @@ pub mod virtiofs;
 #[cfg(test)]
 mod tests;
 
+use crate::proto as castorepb;
+use crate::{
+    blobservice::{BlobReader, BlobService},
+    directoryservice::DirectoryService,
+    proto::{node::Node, NamedNode},
+    B3Digest,
+};
 use fuse_backend_rs::abi::fuse_abi::stat64;
 use fuse_backend_rs::api::filesystem::{Context, FileSystem, FsOptions, ROOT_ID};
 use futures::StreamExt;
@@ -29,15 +36,8 @@ use tokio::{
     sync::mpsc,
 };
 use tracing::{debug, info_span, instrument, warn};
-use tvix_castore::proto as castorepb;
-use tvix_castore::{
-    blobservice::{BlobReader, BlobService},
-    directoryservice::DirectoryService,
-    proto::{node::Node, NamedNode},
-    B3Digest,
-};
 
-use self::root_nodes::RootNodes;
+pub use self::root_nodes::RootNodes;
 use self::{
     file_attr::{gen_file_attr, ROOT_FILE_ATTR},
     inode_tracker::InodeTracker,

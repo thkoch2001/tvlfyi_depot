@@ -18,6 +18,13 @@ pub use self::memory::MemoryPathInfoService;
 pub use self::nix_http::NixHTTPPathInfoService;
 pub use self::sled::SledPathInfoService;
 
+#[cfg(any(feature = "fuse", feature = "virtiofs"))]
+use futures::StreamExt;
+#[cfg(any(feature = "fuse", feature = "virtiofs"))]
+use std::ops::Deref;
+#[cfg(any(feature = "fuse", feature = "virtiofs"))]
+use tvix_castore::fs::RootNodes;
+
 /// The base trait all PathInfo services need to implement.
 #[async_trait]
 pub trait PathInfoService: Send + Sync {
@@ -44,4 +51,44 @@ pub trait PathInfoService: Send + Sync {
     /// Rust doesn't support this as a generic in traits yet. This is the same thing that
     /// [async_trait] generates, but for streams instead of futures.
     fn list(&self) -> Pin<Box<dyn Stream<Item = Result<PathInfo, Error>> + Send>>;
+}
+
+/// Implements root node lookup for any [PathInfoService]. This represents a flat
+/// directory structure like /nix/store where each entry in the root filesystem
+/// directory corresponds to a CA node.
+#[cfg(any(feature = "fuse", feature = "virtiofs"))]
+#[async_trait]
+impl<T> RootNodes for T
+where
+    T: Deref<Target = dyn PathInfoService> + Send + Sync,
+{
+    async fn get_by_basename(&self, name: &[u8]) -> Result<Option<castorepb::node::Node>, Error> {
+        let Ok(store_path) = nix_compat::store_path::StorePath::from_bytes(name) else {
+            return Ok(None);
+        };
+
+        Ok(self
+            .deref()
+            .get(*store_path.digest())
+            .await?
+            .map(|path_info| {
+                path_info
+                    .node
+                    .expect("missing root node")
+                    .node
+                    .expect("empty node")
+            }))
+    }
+
+    fn list(&self) -> Pin<Box<dyn Stream<Item = Result<castorepb::node::Node, Error>> + Send>> {
+        Box::pin(self.deref().list().map(|result| {
+            result.map(|path_info| {
+                path_info
+                    .node
+                    .expect("missing root node")
+                    .node
+                    .expect("empty node")
+            })
+        }))
+    }
 }

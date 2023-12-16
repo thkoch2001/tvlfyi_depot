@@ -13,6 +13,7 @@ use tokio_listener::UserOptions;
 use tracing_subscriber::prelude::*;
 use tvix_castore::blobservice;
 use tvix_castore::directoryservice;
+use tvix_castore::fs::TvixStoreFs;
 use tvix_castore::import;
 use tvix_castore::proto::blob_service_server::BlobServiceServer;
 use tvix_castore::proto::directory_service_server::DirectoryServiceServer;
@@ -28,13 +29,13 @@ use tvix_store::proto::NarInfo;
 use tvix_store::proto::PathInfo;
 
 #[cfg(feature = "fs")]
-use tvix_store::fs::TvixStoreFs;
+use tvix_castore::fs::TvixStoreFs;
 
 #[cfg(feature = "fuse")]
-use tvix_store::fs::fuse::FuseDaemon;
+use tvix_castore::fs::fuse::FuseDaemon;
 
 #[cfg(feature = "virtiofs")]
-use tvix_store::fs::virtiofs::start_virtiofs_daemon;
+use tvix_castore::fs::virtiofs::start_virtiofs_daemon;
 
 #[cfg(feature = "tonic-reflection")]
 use tvix_castore::proto::FILE_DESCRIPTOR_SET as CASTORE_FILE_DESCRIPTOR_SET;
