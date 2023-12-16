@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e1ee0b10_6013e71c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000073
+      },
+      "writtenOn": "2023-12-16T21:46:00Z",
+      "side": 1,
+      "message": "Can you motivate why this is an interesting refactor in your commit message?",
+      "revId": "6db16bda60b3af80098322f311960fa9cf8df20e",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
