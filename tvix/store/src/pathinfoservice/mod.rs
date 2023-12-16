@@ -4,6 +4,9 @@ mod memory;
 mod nix_http;
 mod sled;
 
+#[cfg(any(feature = "fuse", feature = "virtiofs"))]
+mod fs;
+
 use futures::Stream;
 use std::pin::Pin;
 use tonic::async_trait;
@@ -13,6 +16,7 @@ use tvix_castore::Error;
 use crate::proto::PathInfo;
 
 pub use self::from_addr::from_addr;
+pub use self::fs::make_fs;
 pub use self::grpc::GRPCPathInfoService;
 pub use self::memory::MemoryPathInfoService;
 pub use self::nix_http::NixHTTPPathInfoService;
