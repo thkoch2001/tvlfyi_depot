@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9dba61b0_f55801a8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000073
+      },
+      "writtenOn": "2023-12-16T22:25:09Z",
+      "side": 1,
+      "message": "I\u0027d dare to say that `is_closed` should come back under the name `is_fused` or something, it seems relevant to know if a DirectoryPutter is fused, i.e. won\u0027t take any more directory elements.",
+      "revId": "8ee50282b27a3a7d6f0d0dddfc8a32ad7ebd21c1",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
