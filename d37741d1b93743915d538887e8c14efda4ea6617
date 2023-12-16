@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "87ea10b3_51d9cf25",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 14
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-12-16T21:59:10Z",
+      "side": 1,
+      "message": "Together with cl/10361, this shouldn\u0027t be a problem anymore. Can be abandoned?",
+      "revId": "d37741d1b93743915d538887e8c14efda4ea6617",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
