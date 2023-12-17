@@ -16,6 +16,24 @@
       "message": "It also creates a blobs/ directory;-)",
       "revId": "08b531516614cf0acd8f67af2ea26f3627adfc64",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4411fd27_4d3d3c37",
+        "filename": "tvix/castore/src/blobservice/simplefs.rs",
+        "patchSetId": 12
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1000073
+      },
+      "writtenOn": "2023-12-17T14:29:42Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1e5e68ef_ced4c6cc",
+      "revId": "08b531516614cf0acd8f67af2ea26f3627adfc64",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
