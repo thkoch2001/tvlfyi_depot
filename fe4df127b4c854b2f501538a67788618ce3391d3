@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7fb7ba90_d78346a8",
+        "filename": "tvix/eval/src/builtins/mod.rs",
+        "patchSetId": 9
+      },
+      "lineNbr": 1201,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2023-12-17T22:57:02Z",
+      "side": 1,
+      "message": "Should be propagated, right?\n\n    builtins.genericClosure { startSet \u003d [ { key \u003d \"lol\"; } ]; operator \u003d (_:[  { key \u003d throw \"lol\"; } ]); }\n    \nYou can trigger the panic using.",
+      "revId": "fe4df127b4c854b2f501538a67788618ce3391d3",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e54a14e7_79c5a81e",
+        "filename": "tvix/eval/src/value/mod.rs",
+        "patchSetId": 9
+      },
+      "lineNbr": 544,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2023-12-17T22:57:02Z",
+      "side": 1,
+      "message": "unrelated change?",
+      "revId": "fe4df127b4c854b2f501538a67788618ce3391d3",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
