@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1e5e68ef_ced4c6cc",
+        "filename": "tvix/castore/src/blobservice/simplefs.rs",
+        "patchSetId": 12
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-12-17T14:26:33Z",
+      "side": 1,
+      "message": "It also creates a blobs/ directory;-)",
+      "revId": "08b531516614cf0acd8f67af2ea26f3627adfc64",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
