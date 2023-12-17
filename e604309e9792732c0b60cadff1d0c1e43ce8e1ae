@@ -16,6 +16,24 @@
       "message": "path, not mountpoint. nothing is preventing you from putting this in /home/flokli/blobs, it doesn\u0027t need to be w mountpoint directly.",
       "revId": "e604309e9792732c0b60cadff1d0c1e43ce8e1ae",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a5fb4f53_47e83c70",
+        "filename": "tvix/castore/src/blobservice/simplefs.rs",
+        "patchSetId": 11
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1000073
+      },
+      "writtenOn": "2023-12-17T14:24:59Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ec93ec15_019de8b9",
+      "revId": "e604309e9792732c0b60cadff1d0c1e43ce8e1ae",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
