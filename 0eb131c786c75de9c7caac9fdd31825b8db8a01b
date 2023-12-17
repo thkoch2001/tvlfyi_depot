@@ -16,6 +16,24 @@
       "message": "This needs a docstring describing what this does, and going a bit into detail about the on-disk structure (receiving blobs in `./tmp/…`, moving them to B3DIGEST[:2]/B3DIGEST[2:].\n\nMaybe we should also move the blobs to a `blobs/` subdir (so tmp doesn\u0027t stick out with all these hashes).\n\nAnd I\u0027d also like to see a disclaimer stating that this is subject to change and doesn\u0027t give any guarantees on the on-disk format.",
       "revId": "0eb131c786c75de9c7caac9fdd31825b8db8a01b",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b46722cd_e8c86e0c",
+        "filename": "tvix/castore/src/blobservice/simplefs.rs",
+        "patchSetId": 6
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1000073
+      },
+      "writtenOn": "2023-12-17T00:26:49Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6eda06fd_266595b4",
+      "revId": "0eb131c786c75de9c7caac9fdd31825b8db8a01b",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }

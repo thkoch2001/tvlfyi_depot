@@ -18,6 +18,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "4e21ce5e_a8553b48",
+        "filename": "tvix/castore/src/blobservice/simplefs.rs",
+        "patchSetId": 8
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 1000073
+      },
+      "writtenOn": "2023-12-17T00:26:49Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f985c250_66914157",
+      "revId": "a0b736ce5ab4d4657bd10a7811c1916ff63a2b86",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "5878a82c_ad78dfc1",
@@ -31,6 +49,24 @@
       "writtenOn": "2023-12-17T00:00:47Z",
       "side": 1,
       "message": "you already have err in the instrument macro, it\u0027ll already get logged together with the digest.",
+      "revId": "a0b736ce5ab4d4657bd10a7811c1916ff63a2b86",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "303f638a_bf18b23b",
+        "filename": "tvix/castore/src/blobservice/simplefs.rs",
+        "patchSetId": 8
+      },
+      "lineNbr": 59,
+      "author": {
+        "id": 1000073
+      },
+      "writtenOn": "2023-12-17T00:26:49Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5878a82c_ad78dfc1",
       "revId": "a0b736ce5ab4d4657bd10a7811c1916ff63a2b86",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
