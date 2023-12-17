@@ -63,7 +63,7 @@ impl BlobService for SimpleFilesystemBlobService {
                 Ok(Some(reader))
             }
             Err(e) if e.kind() == std::io::ErrorKind::NotFound => Ok(None),
-            Err(e) => Err(e)
+            Err(e) => Err(e),
         };
 
         Ok(reader?)
