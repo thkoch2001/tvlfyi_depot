@@ -16,6 +16,23 @@
       "message": "Together with cl/10361, this shouldn\u0027t be a problem anymore. Can be abandoned?",
       "revId": "d37741d1b93743915d538887e8c14efda4ea6617",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "caacec3a_07128473",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 14
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2023-12-18T17:47:45Z",
+      "side": 1,
+      "message": "Obsoleted by cl/10361.",
+      "revId": "d37741d1b93743915d538887e8c14efda4ea6617",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
