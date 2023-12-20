@@ -17,6 +17,11 @@
     password = "{ARGON2}$argon2id$v=19$m=65536,t=2,p=1$8lefg7+8UPAEh9Ott8zH0A$7YuLRraTC1IgxTNTxFJF03AWmqBS3GX2+vfD4XVTrb0";
   }
   {
+    username = "aspen";
+    email = "root@gws.fyi";
+    password = "{ARGON2}$argon2id$v=19$m=65536,t=2,p=1$5NEYPJ19nDITK5sGr4bzhQ$Xzpzth6y4w+HGvioHiYgzqFiwMDx0B7HAh+PVbkRuuk";
+  }
+  {
     username = "cschilling";
     email = "christian.schilling.de@gmail.com";
     password = "{ARGON2}$argon2id$v=19$m=65536,t=2,p=1$9VN3IS6ViW5FFbVKWOZI6Q$gZxuYAYk0Opq4E5i8cbcNjfznCQNc+RiP7Xv1CUnrQU";
@@ -60,11 +65,6 @@
     username = "ghuntley";
     email = "ghuntley@ghuntley.com";
     password = "{ARGON2}$argon2id$v=19$m=65536,t=2,p=1$ciCuQHeA7csqrFUv7+asgw$7GUC5fLJWWVoHP8DvpA+C1u4+iFdV2E311kwTFwGzaQ";
-  }
-  {
-    username = "grfn";
-    email = "grfn@gws.fyi";
-    password = "{ARGON2}$argon2id$v=19$m=65536,t=2,p=1$5NEYPJ19nDITK5sGr4bzhQ$Xzpzth6y4w+HGvioHiYgzqFiwMDx0B7HAh+PVbkRuuk";
   }
   {
     username = "htbf";
