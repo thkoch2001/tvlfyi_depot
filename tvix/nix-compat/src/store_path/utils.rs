@@ -114,7 +114,8 @@ pub fn build_ca_path<'a, S: AsRef<str>, I: IntoIterator<Item = S>>(
         .map_err(BuildStorePathError::InvalidStorePath)
 }
 
-/// For given NAR sha256 digest and name, return the new [StorePath] this would have.
+/// For given NAR sha256 digest and name, return the new [StorePathRef] this
+/// would have.
 pub fn build_nar_based_store_path<'a>(
     nar_sha256_digest: &[u8; 32],
     name: &'a str,
