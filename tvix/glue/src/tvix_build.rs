@@ -148,6 +148,10 @@ where
         environment_vars,
         inputs,
         constraints,
+        working_dir: "build".into(),
+        scratch_paths: vec!["build".into()],
+        store_dir: nix_compat::store_path::STORE_DIR.into(),
+        network_access: derivation.outputs.len() == 1 && derivation.outputs["out"].is_fixed(),
     }
 }
 
@@ -205,24 +209,24 @@ mod test {
 
         let mut expected_environment_vars = vec![
             EnvVar {
-                key: "bar".to_string(),
-                value: Bytes::from("/nix/store/mp57d33657rf34lzvlbpfa1gjfv5gmpg-bar"),
+                key: "bar".into(),
+                value: "/nix/store/mp57d33657rf34lzvlbpfa1gjfv5gmpg-bar".into(),
             },
             EnvVar {
-                key: "builder".to_string(),
-                value: Bytes::from(":"),
+                key: "builder".into(),
+                value: ":".into(),
             },
             EnvVar {
-                key: "name".to_string(),
-                value: Bytes::from("foo"),
+                key: "name".into(),
+                value: "foo".into(),
             },
             EnvVar {
-                key: "out".to_string(),
-                value: Bytes::from("/nix/store/fhaj6gmwns62s6ypkcldbaj2ybvkhx3p-foo"),
+                key: "out".into(),
+                value: "/nix/store/fhaj6gmwns62s6ypkcldbaj2ybvkhx3p-foo".into(),
             },
             EnvVar {
-                key: "system".to_string(),
-                value: Bytes::from(":"),
+                key: "system".into(),
+                value: ":".into(),
             },
         ];
 
@@ -244,6 +248,77 @@ mod test {
                     min_memory: 0,
                     available_ro_paths: vec![],
                 }),
+                working_dir: "build".to_string(),
+                scratch_paths: vec!["build".to_string()],
+                store_dir: nix_compat::store_path::STORE_DIR.to_string(),
+                network_access: false
+            },
+            build_request
+        );
+    }
+
+    #[test]
+    fn test_fod_to_build_request() {
+        let aterm_bytes = include_bytes!("tests/0hm2f1psjpcwg8fijsmr4wwxrx59s092-bar.drv");
+
+        let derivation = Derivation::from_aterm_bytes(aterm_bytes).expect("must parse");
+
+        let build_request =
+            derivation_to_build_request(&derivation, |_| unreachable!(), |_, _| unreachable!());
+
+        let mut expected_environment_vars = vec![
+            EnvVar {
+                key: "builder".into(),
+                value: ":".into(),
+            },
+            EnvVar {
+                key: "name".into(),
+                value: "bar".into(),
+            },
+            EnvVar {
+                key: "out".into(),
+                value: "/nix/store/4q0pg5zpfmznxscq3avycvf9xdvx50n3-bar".into(),
+            },
+            EnvVar {
+                key: "outputHash".into(),
+                value: "08813cbee9903c62be4c5027726a418a300da4500b2d369d3af9286f4815ceba".into(),
+            },
+            EnvVar {
+                key: "outputHashAlgo".into(),
+                value: "sha256".into(),
+            },
+            EnvVar {
+                key: "outputHashMode".into(),
+                value: "recursive".into(),
+            },
+            EnvVar {
+                key: "system".into(),
+                value: ":".into(),
+            },
+        ];
+
+        expected_environment_vars.extend(NIX_ENVIRONMENT_VARS.iter().map(|(k, v)| EnvVar {
+            key: k.to_string(),
+            value: Bytes::from_static(v.as_bytes()),
+        }));
+
+        expected_environment_vars.sort_unstable_by_key(|e| e.key.to_owned());
+
+        assert_eq!(
+            BuildRequest {
+                command_args: vec![":".to_string()],
+                outputs: vec!["4q0pg5zpfmznxscq3avycvf9xdvx50n3-bar".to_string()],
+                environment_vars: expected_environment_vars,
+                inputs: vec![],
+                constraints: Some(BuildConstraints {
+                    system: derivation.system.clone(),
+                    min_memory: 0,
+                    available_ro_paths: vec![],
+                }),
+                working_dir: "build".to_string(),
+                scratch_paths: vec!["build".to_string()],
+                store_dir: nix_compat::store_path::STORE_DIR.to_string(),
+                network_access: true
             },
             build_request
         );
