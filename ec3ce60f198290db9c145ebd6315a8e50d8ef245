@@ -16,6 +16,29 @@
       "message": "I reverted cl/9364 and surprisingly this doesn\u0027t panic (and succeeds), so unsure what exactly is broken and cl/9364 was preventing.",
       "revId": "ec3ce60f198290db9c145ebd6315a8e50d8ef245",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "34d00058_877f5dbc",
+        "filename": "tvix/glue/src/builtins/mod.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 169,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2023-12-24T23:34:02Z",
+      "side": 1,
+      "message": "I don\u0027t think the out*Path* should be the same here? This expr returns `false` in C++ Nix.",
+      "range": {
+        "startLine": 169,
+        "startChar": 164,
+        "endLine": 169,
+        "endChar": 171
+      },
+      "revId": "ec3ce60f198290db9c145ebd6315a8e50d8ef245",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
