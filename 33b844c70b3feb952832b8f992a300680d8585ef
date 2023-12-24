@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fc2c2cec_9a0c496b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 9
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2023-12-24T14:52:40Z",
+      "side": 1,
+      "message": "I think the op should be kept small, to keep the memory footprint of OpCode as small as possible. To my knowledge we won\u0027t need to coerce in a different manner anywhere else.\n\nMaybe we can even remove OpCoerceToString altogether and inline the thing into run_interpolate…",
+      "revId": "33b844c70b3feb952832b8f992a300680d8585ef",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
