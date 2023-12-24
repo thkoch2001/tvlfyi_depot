@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f68d5c1f_468d9dce",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 9
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2023-12-24T14:37:10Z",
+      "side": 1,
+      "message": "Can you enlighten me why that is desireable? I have no clue, frankly, but it seems to me that for now the refactors have a tendency to make the code even less legible…",
+      "revId": "9e251be240dbec75dc17b84577c3f656bf781c6d",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
