@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1731d561_1fd8a0b9",
+        "filename": "tvix/build/protos/build.proto",
+        "patchSetId": 1
+      },
+      "lineNbr": 97,
+      "author": {
+        "id": 1000073
+      },
+      "writtenOn": "2023-12-24T15:46:58Z",
+      "side": 1,
+      "message": "isn\u0027t this a build constraint?\nnit: BTW, I\u0027d see something more fine grained on the network access later on",
+      "revId": "855d7bdf79cb942a1dcbd2b2188eb3511f2b68f6",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
