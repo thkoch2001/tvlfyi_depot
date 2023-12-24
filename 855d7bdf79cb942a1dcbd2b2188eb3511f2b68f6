@@ -16,6 +16,23 @@
       "message": "isn\u0027t this a build constraint?\nnit: BTW, I\u0027d see something more fine grained on the network access later on",
       "revId": "855d7bdf79cb942a1dcbd2b2188eb3511f2b68f6",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e96f6577_a3006d8e",
+        "filename": "tvix/glue/src/tvix_build.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 154,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2023-12-24T15:50:03Z",
+      "side": 1,
+      "message": "Is it impossible to create a fixed output derivation with a differently named output (or multiple outputs)?",
+      "revId": "855d7bdf79cb942a1dcbd2b2188eb3511f2b68f6",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
