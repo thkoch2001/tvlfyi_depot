@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d02d731d_4d30695b",
+        "filename": "tvix/eval/src/builtins/mod.rs",
+        "patchSetId": 9
+      },
+      "lineNbr": 875,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2023-12-24T14:46:01Z",
+      "side": 1,
+      "message": "don\u0027t we need to check the individual keys as well?",
+      "revId": "66354f8ee4c6dc2e480c535da8f50020a60599fe",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
