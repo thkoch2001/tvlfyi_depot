@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c649c38d_4fb75b19",
+        "filename": "tvix/eval/src/vm/mod.rs",
+        "patchSetId": 12
+      },
+      "lineNbr": 602,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2023-12-24T14:39:36Z",
+      "side": 1,
+      "message": "The order seems to be value -\u003e key -\u003e alternative, so we need to check value for catchability first, then key and finally the alternative.",
+      "revId": "466b814c8796b330353ef5384671753df7aaa4f3",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
