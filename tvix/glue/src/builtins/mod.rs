@@ -142,6 +142,42 @@ mod tests {
         );
     }
 
+    /// Construct two FODs with the same name, and same known output (but
+    /// slightly different recipe), ensure they have the same output hash.
+    #[test]
+    fn test_fod_outpath() {
+        let code = r#"
+          (builtins.derivation { name = "foo"; builder = "/bin/sh"; system = "x86_64-linux"; outputHash = "sha256-Q3QXOoy+iN4VK2CflvRulYvPZXYgF0dO7FoF7CvWFTA="; }).outPath ==
+          (builtins.derivation { name = "foo"; builder = "/bin/aa"; system = "x86_64-linux"; outputHash = "sha256-Q3QXOoy+iN4VK2CflvRulYvPZXYgF0dO7FoF7CvWFTA="; }).outPath
+        "#;
+
+        let value = eval(code).value.expect("must succeed");
+        match value {
+            tvix_eval::Value::Bool(v) => {
+                assert!(v);
+            }
+            _ => panic!("unexpected value type: {:?}", value),
+        }
+    }
+
+    /// Construct two FODs with different name, but same output (otherwise same recipe).
+    /// Ensure they have a differend output path.
+    #[test]
+    fn test_fod_outpath_different_name() {
+        let code = r#"
+          (builtins.derivation { name = "foo"; builder = "/bin/sh"; system = "x86_64-linux"; outputHash = "sha256-Q3QXOoy+iN4VK2CflvRulYvPZXYgF0dO7FoF7CvWFTA="; }).outPath !=
+          (builtins.derivation { name = "bar"; builder = "/bin/sh"; system = "x86_64-linux"; outputHash = "sha256-Q3QXOoy+iN4VK2CflvRulYvPZXYgF0dO7FoF7CvWFTA="; }).outPath
+        "#;
+
+        let value = eval(code).value.expect("must succeed");
+        match value {
+            tvix_eval::Value::Bool(v) => {
+                assert!(v);
+            }
+            _ => panic!("unexpected value type: {:?}", value),
+        }
+    }
+
     #[test]
     fn builtins_placeholder_hashes() {
         assert_eq!(
