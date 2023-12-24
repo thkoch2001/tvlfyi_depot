@@ -35,13 +35,6 @@ depot.nix.readTree.drvTargets {
     llvmPackages = self.llvmPackages_11;
   };
 
-  # stdenv which uses clang, lld and libc++; full is a slight exaggeration,
-  # we for example don't use LLVM's libunwind
-  fullLlvm11Stdenv = self.overrideCC self.stdenv
-    (self.llvmPackages_11.libcxxStdenv.cc.override {
-      inherit (self.llvmPackages_11) bintools;
-    });
-
   # Add our Emacs packages to the fixpoint
   emacsPackagesFor = emacs: (
     (super.emacsPackagesFor emacs).overrideScope' (eself: esuper: {
