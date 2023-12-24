@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "957392ee_70854962",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2023-12-24T14:32:36Z",
+      "side": 1,
+      "message": "I think this got made less verbose by a different refactor anyways. Can this be abandoned?",
+      "revId": "be93bc24757ac67d9723b7ad72ed221aa7f163db",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
