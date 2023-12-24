@@ -33,6 +33,24 @@
       "message": "unrelated change?",
       "revId": "fe4df127b4c854b2f501538a67788618ce3391d3",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ea743bf9_2c98601a",
+        "filename": "tvix/eval/src/value/mod.rs",
+        "patchSetId": 9
+      },
+      "lineNbr": 544,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2023-12-24T14:47:15Z",
+      "side": 1,
+      "message": "Nope.",
+      "parentUuid": "e54a14e7_79c5a81e",
+      "revId": "fe4df127b4c854b2f501538a67788618ce3391d3",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
