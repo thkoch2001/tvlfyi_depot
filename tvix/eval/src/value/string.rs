@@ -16,7 +16,10 @@ use serde::{Deserialize, Serialize};
 
 #[repr(transparent)]
 #[derive(Clone, Debug, Serialize)]
-pub struct NixString(Box<str>);
+pub struct NixContext(Vec<Box<str>>);
+
+#[derive(Clone, Debug, Serialize)]
+pub struct NixString(Box<str>, Option<NixContext>);
 
 impl PartialEq for NixString {
     fn eq(&self, other: &Self) -> bool {
@@ -42,25 +45,25 @@ impl TryFrom<&[u8]> for NixString {
     type Error = Utf8Error;
 
     fn try_from(value: &[u8]) -> Result<Self, Self::Error> {
-        Ok(Self(Box::from(str::from_utf8(value)?)))
+        Ok(Self(Box::from(str::from_utf8(value)?), None))
     }
 }
 
 impl From<&str> for NixString {
     fn from(s: &str) -> Self {
-        NixString(Box::from(s))
+        NixString(Box::from(s), None)
     }
 }
 
 impl From<String> for NixString {
     fn from(s: String) -> Self {
-        NixString(s.into_boxed_str())
+        NixString(s.into_boxed_str(), None)
     }
 }
 
 impl From<Box<str>> for NixString {
     fn from(s: Box<str>) -> Self {
-        Self(s)
+        Self(s, None)
     }
 }
 
@@ -127,6 +130,10 @@ mod arbitrary {
 }
 
 impl NixString {
+    pub fn inherit_context(other: &NixString, new_contents: &str) -> Self {
+        Self(Box::from(new_contents), other.1.clone())
+    }
+
     pub fn as_str(&self) -> &str {
         &self.0
     }
@@ -160,7 +167,32 @@ impl NixString {
     pub fn concat(&self, other: &Self) -> Self {
         let mut s = self.as_str().to_owned();
         s.push_str(other.as_str());
-        NixString(s.into_boxed_str())
+        NixString(
+            s.into_boxed_str(),
+            self.1.as_ref().map(|context| {
+                NixContext(if let Some(other_context) = &other.1 {
+                    context
+                        .0
+                        .iter()
+                        .cloned()
+                        .chain(other_context.0.iter().cloned())
+                        .collect::<Vec<_>>()
+                } else {
+                    context.0.clone()
+                })
+            }),
+        )
+    }
+
+    /// Returns whether this Nix string possess a context or not.
+    pub fn has_context(&self) -> bool {
+        return self.1.is_some();
+    }
+
+    /// This clears the context of that string, losing
+    /// all the dependency tracking information.
+    pub fn clear_context(&mut self) {
+        self.1 = None;
     }
 
     pub fn chars(&self) -> Chars<'_> {
