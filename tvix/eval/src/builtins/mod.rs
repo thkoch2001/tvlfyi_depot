@@ -160,7 +160,8 @@ mod pure_builtins {
                 .await?
                 .to_str()?,
         };
-        let result: String = s.rsplit_once('/').map(|(_, x)| x).unwrap_or(&s).into();
+        let result: NixString =
+            NixString::inherit_context(&s, s.rsplit_once('/').map(|(_, x)| x).unwrap_or(&s).into());
         Ok(result.into())
     }
 
