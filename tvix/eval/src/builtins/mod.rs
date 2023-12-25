@@ -76,7 +76,10 @@ pub async fn coerce_value_to_path(
 
 #[builtins]
 mod pure_builtins {
-    use crate::value::PointerEquality;
+    use crate::{
+        value::{NixContextElement, PointerEquality},
+        NixContext,
+    };
 
     use super::*;
 
