@@ -63,6 +63,30 @@
       },
       "revId": "ec3ce60f198290db9c145ebd6315a8e50d8ef245",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "40a1ae06_79884d1d",
+        "filename": "tvix/glue/src/builtins/mod.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 169,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-12-25T15:21:43Z",
+      "side": 1,
+      "message": "I pushed the new version with the updated docstring and negation already inside Nix code.",
+      "parentUuid": "571dbc5d_f69ade18",
+      "range": {
+        "startLine": 169,
+        "startChar": 164,
+        "endLine": 169,
+        "endChar": 171
+      },
+      "revId": "ec3ce60f198290db9c145ebd6315a8e50d8ef245",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
