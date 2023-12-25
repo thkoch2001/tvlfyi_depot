@@ -16,6 +16,23 @@
       "message": "Diff LGTM, I will test this locally to see if it fixes and does not cause more issues so far.",
       "revId": "4a90dbeeec6d461cbc397f265e284d3206d474e5",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bcf315bf_bf8f2b47",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000073
+      },
+      "writtenOn": "2023-12-25T15:05:54Z",
+      "side": 1,
+      "message": "Tested locally while evaluating firefox.outPath, it fixes my issue and does not introduce more issues.",
+      "revId": "4a90dbeeec6d461cbc397f265e284d3206d474e5",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
