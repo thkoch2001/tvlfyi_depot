@@ -1228,11 +1228,13 @@ mod placeholder_builtins {
 
     #[builtin("unsafeDiscardStringContext")]
     async fn builtin_unsafe_discard_string_context(
-        _: GenCo,
-        #[lazy] s: Value,
+        co: GenCo,
+        s: Value,
     ) -> Result<Value, ErrorKind> {
-        // Tvix does not manually track contexts, and this is a no-op for us.
-        Ok(s)
+        // TODO: Coerce to a string.
+        let mut v = s.to_contextful_str()?;
+        v.clear_context();
+        Ok(Value::String(v))
     }
 
     #[builtin("addErrorContext")]
