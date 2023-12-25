@@ -20,6 +20,41 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "9217e950_e65ad50f",
+        "filename": "tvix/build/protos/build.proto",
+        "patchSetId": 1
+      },
+      "lineNbr": 97,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-12-25T15:31:15Z",
+      "side": 1,
+      "message": "Maybe, the constraints stuff still is a bit fuzzy, and nothing there is set in stone.\n\nI can move it to there for now.",
+      "parentUuid": "1731d561_1fd8a0b9",
+      "revId": "855d7bdf79cb942a1dcbd2b2188eb3511f2b68f6",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1d17c731_cc837f55",
+        "filename": "tvix/build/protos/build.proto",
+        "patchSetId": 1
+      },
+      "lineNbr": 118,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-12-25T15:31:15Z",
+      "side": 1,
+      "message": "I think `/bin/sh` is also something that Nix implicitly assumes to be in there, so maybe it should be part of this list?",
+      "revId": "855d7bdf79cb942a1dcbd2b2188eb3511f2b68f6",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "e96f6577_a3006d8e",
         "filename": "tvix/glue/src/tvix_build.rs",
         "patchSetId": 1
