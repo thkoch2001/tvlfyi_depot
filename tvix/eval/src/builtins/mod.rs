@@ -3,6 +3,7 @@
 //! See //tvix/eval/docs/builtins.md for a some context on the
 //! available builtins in Nix.
 
+use crate::NixContext;
 use builtin_macros::builtins;
 use genawaiter::rc::Gen;
 use imbl::OrdMap;
@@ -249,7 +250,11 @@ mod pure_builtins {
         separator: Value,
         list: Value,
     ) -> Result<Value, ErrorKind> {
-        let separator = separator.to_str()?;
+        let mut separator = separator.to_contextful_str()?;
+        let mut context = NixContext::new();
+        if let Some(sep_context) = separator.context_mut() {
+            context = context.join(sep_context);
+        }
         let list = list.to_list()?;
         let mut res = String::new();
         for (i, val) in list.into_iter().enumerate() {
@@ -266,11 +271,22 @@ mod pure_builtins {
             )
             .await
             {
-                Ok(s) => res.push_str(s.as_str()),
+                Ok(mut s) => {
+                    res.push_str(s.as_str());
+                    if let Some(ref mut other_context) = s.context_mut() {
+                        // It is safe to consume the other context here
+                        // because the `list` and `separator` are originally
+                        // moved, here.
+                        // We are not going to use them again
+                        // because the result here is a string.
+                        context = context.join(other_context);
+                    }
+                }
                 Err(c) => return Ok(Value::Catchable(c)),
             }
         }
-        Ok(res.into())
+        // FIXME: pass immediately the string res.
+        Ok(NixString::new_context_from(context, &res).into())
     }
 
     #[builtin("deepSeq")]
@@ -1077,10 +1093,7 @@ mod pure_builtins {
         // non-negative when the starting index is GTE the
         // string's length.
         if beg >= x.as_str().len() {
-            return Ok(Value::String(NixString::new_inherit_context_from(
-                &x,
-                "".into(),
-            )));
+            return Ok(Value::String(NixString::new_inherit_context_from(&x, "")));
         }
 
         let end = if len < 0 {
@@ -1091,7 +1104,7 @@ mod pure_builtins {
 
         Ok(Value::String(NixString::new_inherit_context_from(
             &x,
-            std::str::from_utf8(&x.as_bytes()[beg..end])?,
+            &x[beg..end],
         )))
     }
 
