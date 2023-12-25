@@ -31,7 +31,7 @@ pub(crate) use function::Formals;
 pub use function::{Closure, Lambda};
 pub use list::NixList;
 pub use path::canon_path;
-pub use string::NixString;
+pub use string::{NixContext, NixString};
 pub use thunk::Thunk;
 
 pub use self::thunk::ThunkSet;
@@ -315,15 +315,24 @@ impl Value {
     ) -> Result<Value, ErrorKind> {
         let mut result = String::new();
         let mut vals = vec![self];
+        // FIXME(raitobezarius): is this context handling acceptable?
+        // should we introduce reject_context, nullify_context as coercion kinds?
+        let mut context: Option<NixContext> = None;
+
         loop {
             let value = if let Some(v) = vals.pop() {
                 v.force(co, span.clone()).await?
             } else {
-                return Ok(Value::String(result.into()));
+                return Ok(Value::String((result, context).into()));
             };
             let coerced = match (value, kind) {
                 // coercions that are always done
-                (Value::String(s), _) => Ok(s.as_str().to_owned()),
+                (Value::String(s), _) => {
+                    if let Some(ctx) = s.context() {
+                        context = Some(ctx.clone());
+                    }
+                    Ok(s.as_str().to_owned())
+                }
 
                 // TODO(sterni): Think about proper encoding handling here. This needs
                 // general consideration anyways, since one current discrepancy between
