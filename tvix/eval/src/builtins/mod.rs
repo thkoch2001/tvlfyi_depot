@@ -247,7 +247,8 @@ mod pure_builtins {
         separator: Value,
         list: Value,
     ) -> Result<Value, ErrorKind> {
-        let separator = separator.to_str()?;
+        let separator = separator.to_contextful_str()?;
+        let mut context: Option<_> = separator.context().cloned();
         let list = list.to_list()?;
         let mut res = String::new();
         for (i, val) in list.into_iter().enumerate() {
@@ -264,11 +265,25 @@ mod pure_builtins {
             )
             .await
             {
-                Ok(s) => res.push_str(s.as_str()),
+                Ok(mut s) => {
+                    res.push_str(s.as_str());
+                    if let Some(ref mut context) = context {
+                        if let Some(ref mut other_context) = s.context_mut() {
+                            // It is safe to consume the other context here
+                            // because the `list` and `separator` are originally
+                            // moved, here.
+                            // We are not going to use them again
+                            // because the result here is a string.
+                            context.merge(other_context);
+                        }
+                    } else {
+                        context = s.context().cloned();
+                    }
+                }
                 Err(c) => return Ok(Value::Catchable(c)),
             }
         }
-        Ok(res.into())
+        Ok((res, context).into())
     }
 
     #[builtin("deepSeq")]
