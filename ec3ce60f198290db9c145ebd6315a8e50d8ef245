@@ -39,6 +39,30 @@
       },
       "revId": "ec3ce60f198290db9c145ebd6315a8e50d8ef245",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "571dbc5d_f69ade18",
+        "filename": "tvix/glue/src/builtins/mod.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 169,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-12-25T06:59:51Z",
+      "side": 1,
+      "message": "The docstring is wrong. I updated it in a local version, and also moved the assertion to be not equal to the nix expression itself.\n\nNethertheless, tvix seems to behave as expected (with the panic cl removed), so I\u0027m still missing a reproducer for the bug we\u0027re trying to prevent there.",
+      "parentUuid": "34d00058_877f5dbc",
+      "range": {
+        "startLine": 169,
+        "startChar": 164,
+        "endLine": 169,
+        "endChar": 171
+      },
+      "revId": "ec3ce60f198290db9c145ebd6315a8e50d8ef245",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
