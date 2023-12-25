@@ -315,15 +315,28 @@ impl Value {
     ) -> Result<Value, ErrorKind> {
         let mut result = String::new();
         let mut vals = vec![self];
+        // FIXME(raitobezarius): is this context handling acceptable?
+        // should we introduce reject_context, nullify_context as coercion kinds?
+        let mut context: NixContext = NixContext::new();
+
         loop {
             let value = if let Some(v) = vals.pop() {
                 v.force(co, span.clone()).await?
             } else {
-                return Ok(Value::String(result.into()));
+                if context.len() == 0 {
+                    return Ok(Value::String((result, None).into()));
+                } else {
+                    return Ok(Value::String((result, Some(context)).into()));
+                }
             };
             let coerced = match (value, kind) {
                 // coercions that are always done
-                (Value::String(s), _) => Ok(s.as_str().to_owned()),
+                (Value::String(mut s), _) => {
+                    if let Some(ctx) = s.context_mut() {
+                        context.merge(ctx);
+                    }
+                    Ok(s.as_str().to_owned())
+                }
 
                 // TODO(sterni): Think about proper encoding handling here. This needs
                 // general consideration anyways, since one current discrepancy between
