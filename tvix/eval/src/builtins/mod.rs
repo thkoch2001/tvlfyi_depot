@@ -309,7 +309,10 @@ mod pure_builtins {
         if is_path {
             Ok(Value::Path(Box::new(result.into())))
         } else {
-            Ok(result.into())
+            Ok(Value::String(NixString::inherit_context(
+                &str,
+                result.into(),
+            )))
         }
     }
 
