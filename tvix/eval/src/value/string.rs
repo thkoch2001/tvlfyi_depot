@@ -322,7 +322,6 @@ impl NixString {
         Self::new_context_from(context, &s.into_boxed_str())
     }
 
-
     pub(crate) fn context_mut(&mut self) -> Option<&mut NixContext> {
         return self.1.as_mut();
     }
