@@ -38,11 +38,10 @@ let
   };
 in
 
-# TODO(sterni): regular backups of carpet world
-
 {
   imports = [
     ../../modules/minecraft-fabric.nix
+    ../../modules/backup-minecraft-fabric.nix
   ];
 
   config = {
@@ -63,6 +62,11 @@ in
 
     age.secrets = {
       minecraft-rcon.file = depot.users.sterni.secrets."minecraft-rcon.age";
+    };
+
+    services.backup-minecraft-fabric-servers = {
+      enable = true;
+      repository = "/srv/backup/from-local/minecraft";
     };
 
     services.minecraft-fabric-server = {
