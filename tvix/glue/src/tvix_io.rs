@@ -44,7 +44,7 @@ impl<T: EvalIO> EvalIO for TvixIO<T> {
         let imported_path = self.actual.import_path(path)?;
         self.known_paths
             .borrow_mut()
-            .plain(imported_path.to_string_lossy());
+            .plain("import", imported_path.to_string_lossy());
 
         Ok(imported_path)
     }

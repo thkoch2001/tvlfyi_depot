@@ -12,19 +12,25 @@
 //! information.
 
 use crate::refscan::{ReferenceScanner, STORE_PATH_LEN};
-use nix_compat::nixhash::NixHash;
+use nix_compat::nixhash::{CAHash, NixHash};
 use std::{
     collections::{hash_map, BTreeSet, HashMap},
     ops::Index,
 };
+use tracing::warn;
 
-#[derive(Debug, PartialEq)]
+#[derive(Debug, PartialEq, Clone)]
 pub enum PathKind {
     /// A literal derivation (`.drv`-file), and the *names* of its outputs.
     Derivation { output_names: BTreeSet<String> },
 
-    /// An output of a derivation, its name, and the path of its derivation.
-    Output { name: String, derivation: String },
+    /// An output of a derivation, its name, the path of its derivation
+    /// and its CA hash if available.
+    Output {
+        name: String,
+        derivation: String,
+        ca_hash: Option<CAHash>,
+    },
 
     /// A plain store path (e.g. source files copied to the store).
     Plain,
@@ -48,6 +54,32 @@ impl KnownPath {
 #[derive(Clone, Debug, Default, PartialEq, PartialOrd, Ord, Eq, Hash)]
 pub struct PathName(String);
 
+/// Internal struct to prevent accidental misuse of a random string
+/// as a derivation name.
+#[repr(transparent)]
+#[derive(Clone, Debug, Default, PartialEq, PartialOrd, Ord, Eq, Hash)]
+pub struct DrvName(String);
+
+impl std::fmt::Display for PathName {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        write!(f, "{}", self.0)
+    }
+}
+
+impl std::fmt::Display for DrvName {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        write!(f, "{}", self.0)
+    }
+}
+
+/// It is possible to have multiple FODs referring to different derivations.
+/// For example, a `src` attribute could use the same FOD but a different `version` string
+/// and therefore a different `name` string.
+/// To avoid conflating those two known paths, we key over the 2-uple (derivation name, truncated
+/// path name).
+/// See cl/9364 for more information.
+type KnownPathKey = (DrvName, PathName);
+
 impl From<&str> for PathName {
     fn from(s: &str) -> Self {
         PathName(s[..STORE_PATH_LEN].to_string())
@@ -66,7 +98,8 @@ impl AsRef<[u8]> for PathName {
 pub struct KnownPaths {
     /// All known paths, keyed by a truncated version of their store
     /// path used for reference scanning.
-    paths: HashMap<PathName, KnownPath>,
+    paths: HashMap<KnownPathKey, KnownPath>,
+    multipaths: HashMap<PathName, Vec<KnownPath>>,
 
     /// All known derivation or FOD hashes.
     ///
@@ -75,16 +108,21 @@ pub struct KnownPaths {
 }
 
 impl Index<&PathName> for KnownPaths {
-    type Output = KnownPath;
+    type Output = Vec<KnownPath>;
 
     fn index(&self, index: &PathName) -> &Self::Output {
-        &self.paths[index]
+        &self.multipaths[index]
     }
 }
 
 impl KnownPaths {
-    fn insert_path(&mut self, path: String, path_kind: PathKind) {
-        match self.paths.entry(path.as_str().into()) {
+    #[allow(dead_code)]
+    fn strict_insert_path(&mut self, drv_name: String, path: String, path_kind: PathKind) {
+        let truncated_path: PathName = path.as_str().into();
+        match self
+            .paths
+            .entry((DrvName(drv_name.clone()), truncated_path))
+        {
             hash_map::Entry::Vacant(entry) => {
                 entry.insert(KnownPath::new(path, path_kind));
             }
@@ -99,10 +137,12 @@ impl KnownPaths {
                         PathKind::Output {
                             name: name1,
                             derivation: drv1,
+                            ca_hash: ca_hash1,
                         },
                         PathKind::Output {
                             name: ref name2,
                             derivation: ref drv2,
+                            ca_hash: ref ca_hash2,
                         },
                     ) => {
                         #[cfg(debug_assertions)]
@@ -113,11 +153,16 @@ impl KnownPaths {
                                     path, name1, name2
                                 );
                             }
-                            if &drv1 != drv2 {
+                            if &drv1 != drv2 && ca_hash1 != *ca_hash2 {
                                 panic!(
-                                    "inserted path {} with two different derivations: {} and {}",
-                                    path, drv1, drv2
+                                    "inserted path {} with two different derivations: {} and {} under the single derivation name {} but with different CA hashes: {:?} and {:?}",
+                                    path, drv1, drv2, drv_name, ca_hash1, ca_hash2
                                 );
+                            } else if &drv1 != drv2 {
+                                println!(
+                                    "inserted path {} with two different derivations but same CAhash ({:?}): {} and {} under the single derivation name {}",
+                                    path, ca_hash1, drv1, drv2, drv_name);
+                                println!("{}", std::backtrace::Backtrace::force_capture());
                             }
                         }
                     }
@@ -132,22 +177,35 @@ impl KnownPaths {
                     }
 
                     _ => panic!(
-                        "path '{}' inserted twice with different types",
+                        "path '{}' ({}) inserted twice with different types",
+                        entry.key().1,
                         entry.key().0
                     ),
                 };
             }
         };
     }
+    fn insert_path(&mut self, drv_name: String, path: String, path_kind: PathKind) {
+        let truncated_path: PathName = path.as_str().into();
+        self.multipaths
+            .entry(truncated_path.clone())
+            .and_modify(|paths| {
+                paths.push(KnownPath::new(path.clone(), path_kind.clone()));
+            })
+            .or_insert_with(|| vec![KnownPath::new(path.clone(), path_kind.clone())]);
+
+        self.strict_insert_path(drv_name, path, path_kind);
+    }
 
     /// Mark a plain path as known.
-    pub fn plain<S: ToString>(&mut self, path: S) {
-        self.insert_path(path.to_string(), PathKind::Plain);
+    pub fn plain<N: ToString, S: ToString>(&mut self, name: N, path: S) {
+        self.insert_path(name.to_string(), path.to_string(), PathKind::Plain);
     }
 
     /// Mark a derivation as known.
-    pub fn drv<P: ToString, O: ToString>(&mut self, path: P, outputs: &[O]) {
+    pub fn drv<N: ToString, P: ToString, O: ToString>(&mut self, name: N, path: P, outputs: &[O]) {
         self.insert_path(
+            name.to_string(),
             path.to_string(),
             PathKind::Derivation {
                 output_names: outputs.iter().map(ToString::to_string).collect(),
@@ -156,17 +214,21 @@ impl KnownPaths {
     }
 
     /// Mark a derivation output path as known.
-    pub fn output<P: ToString, N: ToString, D: ToString>(
+    pub fn output<DN: ToString, P: ToString, N: ToString, D: ToString>(
         &mut self,
+        drv_name: DN,
         output_path: P,
+        output_cahash: &Option<CAHash>,
         name: N,
         drv_path: D,
     ) {
         self.insert_path(
+            drv_name.to_string(),
             output_path.to_string(),
             PathKind::Output {
                 name: name.to_string(),
                 derivation: drv_path.to_string(),
+                ca_hash: output_cahash.clone(),
             },
         );
     }
@@ -179,7 +241,7 @@ impl KnownPaths {
 
     /// Create a reference scanner from the current set of known paths.
     pub fn reference_scanner(&self) -> ReferenceScanner<PathName> {
-        let candidates = self.paths.keys().map(Clone::clone).collect();
+        let candidates = self.paths.keys().map(|(_, key)| key.clone()).collect();
         ReferenceScanner::new(candidates)
     }
 

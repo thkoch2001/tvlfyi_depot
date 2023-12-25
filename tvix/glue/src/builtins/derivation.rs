@@ -109,23 +109,24 @@ fn populate_inputs<I: IntoIterator<Item = PathName>>(
     references: I,
 ) {
     for reference in references.into_iter() {
-        let reference = &known_paths[&reference];
+        let subreferences = &known_paths[&reference];
+        let reference = subreferences.last().unwrap();
         match &reference.kind {
             PathKind::Plain => {
                 drv.input_sources.insert(reference.path.clone());
             }
 
-            PathKind::Output { name, derivation } => {
-                match drv.input_derivations.entry(derivation.clone()) {
-                    btree_map::Entry::Vacant(entry) => {
-                        entry.insert(BTreeSet::from([name.clone()]));
-                    }
-
-                    btree_map::Entry::Occupied(mut entry) => {
-                        entry.get_mut().insert(name.clone());
-                    }
+            PathKind::Output {
+                name, derivation, ..
+            } => match drv.input_derivations.entry(derivation.clone()) {
+                btree_map::Entry::Vacant(entry) => {
+                    entry.insert(BTreeSet::from([name.clone()]));
                 }
-            }
+
+                btree_map::Entry::Occupied(mut entry) => {
+                    entry.get_mut().insert(name.clone());
+                }
+            },
 
             PathKind::Derivation { output_names } => {
                 match drv.input_derivations.entry(reference.path.clone()) {
@@ -468,18 +469,24 @@ pub(crate) mod derivation_builtins {
 
         // mark all the new paths as known
         let output_names: Vec<String> = drv.outputs.keys().map(Clone::clone).collect();
-        known_paths.drv(derivation_path.to_absolute_path(), &output_names);
+        known_paths.drv(
+            name.clone(),
+            derivation_path.to_absolute_path(),
+            &output_names,
+        );
 
         for (output_name, output) in &drv.outputs {
             known_paths.output(
+                name.clone(),
                 &output.path,
+                &output.ca_hash,
                 output_name,
                 derivation_path.to_absolute_path(),
             );
         }
 
         drop(known_paths);
-        dump_drv_to_store(&co, &derivation_path.to_absolute_path(), &drv).await?;
+        //dump_drv_to_store(&co, &derivation_path.to_absolute_path(), &drv).await?;
 
         let mut new_attrs: Vec<(String, String)> = drv
             .outputs
@@ -515,7 +522,7 @@ pub(crate) mod derivation_builtins {
             refscan
                 .finalise()
                 .into_iter()
-                .map(|path| paths[&path].path.to_string())
+                .map(|path| paths[&path].last().unwrap().path.to_string())
                 .collect::<Vec<_>>()
         };
 
@@ -530,7 +537,7 @@ pub(crate) mod derivation_builtins {
             .map_err(DerivationError::InvalidDerivation)?
             .to_absolute_path();
 
-        state.borrow_mut().plain(&path);
+        state.borrow_mut().plain(name, &path);
 
         // TODO: actually persist the file in the store at that path ...
 
