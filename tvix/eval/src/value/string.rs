@@ -14,9 +14,54 @@ use std::{borrow::Cow, fmt::Display, str::Chars};
 use serde::de::{Deserializer, Visitor};
 use serde::{Deserialize, Serialize};
 
+#[derive(Clone, Debug, Serialize)]
+pub enum NixContextElement {
+    /// A plain store path (e.g. source files copied to the store)
+    Plain(String),
+
+    /// Single output of a derivation, represented by its name and its derivation path.
+    Single { name: String, derivation: String },
+
+    /// A self reference derivation context path
+    /// for `.drvPath` only
+    /// FIXME(raitobezarius): I don't know if the `only` part is true or not.
+    SelfReference,
+}
 #[repr(transparent)]
 #[derive(Clone, Debug, Serialize)]
-pub struct NixString(Box<str>);
+pub struct NixContext(Vec<NixContextElement>);
+
+impl From<NixContextElement> for NixContext {
+    fn from(value: NixContextElement) -> Self {
+        Self(vec![value])
+    }
+}
+
+impl NixContext {
+    pub fn new() -> Self {
+        Self(Vec::new())
+    }
+
+    pub fn len(&self) -> usize {
+        self.0.len()
+    }
+
+    pub fn learn(&mut self, other: &NixString) {
+        if let Some(ctx) = other.context() {
+            self.merge(&mut ctx.clone());
+        }
+    }
+
+    /// Takes from the other context the paths
+    /// and merges them locally.
+    pub fn merge(&mut self, other: &mut NixContext) {
+        self.0.append(&mut other.0);
+    }
+}
+
+// FIXME: when serializing, ignore the context?
+#[derive(Clone, Debug, Serialize)]
+pub struct NixString(Box<str>, Option<NixContext>);
 
 impl PartialEq for NixString {
     fn eq(&self, other: &Self) -> bool {
@@ -42,25 +87,31 @@ impl TryFrom<&[u8]> for NixString {
     type Error = Utf8Error;
 
     fn try_from(value: &[u8]) -> Result<Self, Self::Error> {
-        Ok(Self(Box::from(str::from_utf8(value)?)))
+        Ok(Self(Box::from(str::from_utf8(value)?), None))
     }
 }
 
 impl From<&str> for NixString {
     fn from(s: &str) -> Self {
-        NixString(Box::from(s))
+        NixString(Box::from(s), None)
     }
 }
 
 impl From<String> for NixString {
     fn from(s: String) -> Self {
-        NixString(s.into_boxed_str())
+        NixString(s.into_boxed_str(), None)
+    }
+}
+
+impl From<(String, Option<NixContext>)> for NixString {
+    fn from(s: (String, Option<NixContext>)) -> Self {
+        NixString(s.0.into_boxed_str(), s.1)
     }
 }
 
 impl From<Box<str>> for NixString {
     fn from(s: Box<str>) -> Self {
-        Self(s)
+        Self(s, None)
     }
 }
 
@@ -127,6 +178,10 @@ mod arbitrary {
 }
 
 impl NixString {
+    pub fn inherit_context(other: &NixString, new_contents: &str) -> Self {
+        Self(Box::from(new_contents), other.1.clone())
+    }
+
     pub fn as_str(&self) -> &str {
         &self.0
     }
@@ -159,8 +214,41 @@ impl NixString {
 
     pub fn concat(&self, other: &Self) -> Self {
         let mut s = self.as_str().to_owned();
+        let mut context = NixContext::new();
         s.push_str(other.as_str());
-        NixString(s.into_boxed_str())
+
+        if let Some(ref ctx) = self.1 {
+            context.merge(&mut ctx.clone());
+        }
+
+        if let Some(ref ctx) = other.1 {
+            context.merge(&mut ctx.clone());
+        }
+
+        if context.len() == 0 {
+            NixString(s.into_boxed_str(), None)
+        } else {
+            NixString(s.into_boxed_str(), Some(context))
+        }
+    }
+
+    pub fn context(&self) -> Option<&NixContext> {
+        return self.1.as_ref();
+    }
+
+    pub fn context_mut(&mut self) -> Option<&mut NixContext> {
+        return self.1.as_mut();
+    }
+
+    /// Returns whether this Nix string possess a context or not.
+    pub fn has_context(&self) -> bool {
+        return self.1.is_some();
+    }
+
+    /// This clears the context of that string, losing
+    /// all the dependency tracking information.
+    pub fn clear_context(&mut self) {
+        self.1 = None;
     }
 
     pub fn chars(&self) -> Chars<'_> {
