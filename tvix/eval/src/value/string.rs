@@ -36,8 +36,7 @@ pub enum NixContextElement {
 /// strings. There's some simple algebra of context strings and how they propagate w.r.t. primitive
 /// operations, e.g. concatenation, interpolation and other string operations.
 #[repr(transparent)]
-#[derive(Clone, Debug, Serialize)]
-#[derive(Default)]
+#[derive(Clone, Debug, Serialize, Default)]
 pub struct NixContext(HashSet<NixContextElement>);
 
 impl From<NixContextElement> for NixContext {
@@ -45,8 +44,6 @@ impl From<NixContextElement> for NixContext {
         Self([value].into())
     }
 }
-
-
 
 impl NixContext {
     /// Creates an empty context that can be populated
@@ -323,10 +320,6 @@ impl NixString {
                 acc_ctx.join(&mut new_ctx.clone())
             });
         Self::new_context_from(context, &s.into_boxed_str())
-    }
-
-    pub(crate) fn context(&self) -> Option<&NixContext> {
-        return self.1.as_ref();
     }
 
     pub(crate) fn context_mut(&mut self) -> Option<&mut NixContext> {
