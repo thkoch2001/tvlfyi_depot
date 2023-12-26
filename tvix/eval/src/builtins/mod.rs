@@ -3,7 +3,6 @@
 //! See //tvix/eval/docs/builtins.md for a some context on the
 //! available builtins in Nix.
 
-use crate::NixContext;
 use builtin_macros::builtins;
 use genawaiter::rc::Gen;
 use imbl::OrdMap;
@@ -22,8 +21,6 @@ use crate::{
     errors::{CatchableErrorKind, ErrorKind},
     value::{CoercionKind, NixAttrs, NixList, NixString, Thunk, Value},
 };
-
-use crate::NixContextElement;
 
 use self::versions::{VersionPart, VersionPartsIter};
 
@@ -79,7 +76,7 @@ pub async fn coerce_value_to_path(
 
 #[builtins]
 mod pure_builtins {
-    use crate::value::PointerEquality;
+    use crate::{value::PointerEquality, NixContext, NixContextElement};
 
     use super::*;
 
@@ -831,14 +828,19 @@ mod pure_builtins {
 
     #[builtin("match")]
     async fn builtin_match(co: GenCo, regex: Value, str: Value) -> Result<Value, ErrorKind> {
-        let s = str.to_str()?;
+        let s = str.to_contextful_str()?;
         let re = regex.to_str()?;
         let re: Regex = Regex::new(&format!("^{}$", re.as_str())).unwrap();
         match re.captures(&s) {
             Some(caps) => Ok(Value::List(
                 caps.iter()
                     .skip(1)
-                    .map(|grp| grp.map(|g| Value::from(g.as_str())).unwrap_or(Value::Null))
+                    .map(|grp| {
+                        grp.map(|g| {
+                            Value::String(NixString::new_inherit_context_from(&s, g.as_str()))
+                        })
+                        .unwrap_or(Value::Null)
+                    })
                     .collect::<imbl::Vector<Value>>()
                     .into(),
             )),
