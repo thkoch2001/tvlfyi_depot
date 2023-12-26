@@ -35,6 +35,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "006be589_e3b2d763",
+        "filename": "tvix/eval/src/value/string.rs",
+        "patchSetId": 9
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1000073
+      },
+      "writtenOn": "2023-12-26T20:41:34Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "bfe8e1c4_843ffdee",
+      "revId": "298875393813b4271c39b17be5c64df1a7685dd5",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "284ea0f6_a141d3af",
@@ -48,6 +66,24 @@
       "writtenOn": "2023-12-26T09:25:38Z",
       "side": 1,
       "message": "join?",
+      "revId": "298875393813b4271c39b17be5c64df1a7685dd5",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "76ce288a_a758394a",
+        "filename": "tvix/eval/src/value/string.rs",
+        "patchSetId": 9
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 1000073
+      },
+      "writtenOn": "2023-12-26T20:41:34Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "284ea0f6_a141d3af",
       "revId": "298875393813b4271c39b17be5c64df1a7685dd5",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
@@ -69,6 +105,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "9a4d1954_18786b39",
+        "filename": "tvix/eval/src/value/string.rs",
+        "patchSetId": 9
+      },
+      "lineNbr": 106,
+      "author": {
+        "id": 1000073
+      },
+      "writtenOn": "2023-12-26T20:41:34Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1886204a_6ba5dfa3",
+      "revId": "298875393813b4271c39b17be5c64df1a7685dd5",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "352388ba_4c5a9f58",
@@ -82,6 +136,24 @@
       "writtenOn": "2023-12-26T09:09:50Z",
       "side": 1,
       "message": "Needs a docstring.\n\nThe name is also a bit confusing, it constructs a new string, using the context from another NixString.\n\nMaybe something like:\n\n```\n/// Construct a new NixString from a [\u0026str], inheriting the context from another\n/// NixString. \npub fn new_inherit_context_from(v: \u0026str, other: \u0026NixString) -\u003e Self {\n```",
+      "revId": "298875393813b4271c39b17be5c64df1a7685dd5",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "131affc4_916304ad",
+        "filename": "tvix/eval/src/value/string.rs",
+        "patchSetId": 9
+      },
+      "lineNbr": 181,
+      "author": {
+        "id": 1000073
+      },
+      "writtenOn": "2023-12-26T20:41:34Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "352388ba_4c5a9f58",
       "revId": "298875393813b4271c39b17be5c64df1a7685dd5",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
@@ -103,6 +175,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "0eb7e2ab_9443b1b4",
+        "filename": "tvix/eval/src/value/string.rs",
+        "patchSetId": 9
+      },
+      "lineNbr": 228,
+      "author": {
+        "id": 1000073
+      },
+      "writtenOn": "2023-12-26T20:41:34Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d8fc2091_2899bd36",
+      "revId": "298875393813b4271c39b17be5c64df1a7685dd5",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "5af42ab3_286da0a3",
@@ -120,6 +210,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "a009e958_5a60b542",
+        "filename": "tvix/eval/src/value/string.rs",
+        "patchSetId": 9
+      },
+      "lineNbr": 235,
+      "author": {
+        "id": 1000073
+      },
+      "writtenOn": "2023-12-26T20:41:34Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5af42ab3_286da0a3",
+      "revId": "298875393813b4271c39b17be5c64df1a7685dd5",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "b34cf074_b05d1e98",
@@ -133,6 +241,30 @@
       "writtenOn": "2023-12-26T09:09:50Z",
       "side": 1,
       "message": "s/the//",
+      "range": {
+        "startLine": 249,
+        "startChar": 12,
+        "endLine": 249,
+        "endChar": 15
+      },
+      "revId": "298875393813b4271c39b17be5c64df1a7685dd5",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b7547a6d_1affac7e",
+        "filename": "tvix/eval/src/value/string.rs",
+        "patchSetId": 9
+      },
+      "lineNbr": 249,
+      "author": {
+        "id": 1000073
+      },
+      "writtenOn": "2023-12-26T20:41:34Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b34cf074_b05d1e98",
       "range": {
         "startLine": 249,
         "startChar": 12,
