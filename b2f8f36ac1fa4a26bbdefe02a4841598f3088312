@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "db7f53fd_8fb2e32b",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-12-26T09:31:37Z",
+      "side": 1,
+      "message": "You ended up considering we didn\u0027t end up continuing this path, probably rebase it out of chain?",
+      "revId": "b2f8f36ac1fa4a26bbdefe02a4841598f3088312",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
