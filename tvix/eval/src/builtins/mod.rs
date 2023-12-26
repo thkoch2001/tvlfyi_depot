@@ -3,7 +3,6 @@
 //! See //tvix/eval/docs/builtins.md for a some context on the
 //! available builtins in Nix.
 
-use crate::NixContext;
 use builtin_macros::builtins;
 use genawaiter::rc::Gen;
 use imbl::OrdMap;
@@ -22,8 +21,6 @@ use crate::{
     errors::{CatchableErrorKind, ErrorKind},
     value::{CoercionKind, NixAttrs, NixList, NixString, Thunk, Value},
 };
-
-use crate::NixContextElement;
 
 use self::versions::{VersionPart, VersionPartsIter};
 
@@ -79,7 +76,7 @@ pub async fn coerce_value_to_path(
 
 #[builtins]
 mod pure_builtins {
-    use crate::value::PointerEquality;
+    use crate::{value::PointerEquality, NixContext, NixContextElement};
 
     use super::*;
 
@@ -847,7 +844,7 @@ mod pure_builtins {
         if s.is_catchable() {
             return Ok(s);
         }
-        let s = s.to_str()?;
+        let s = s.to_contextful_str()?;
         let re = regex;
         if re.is_catchable() {
             return Ok(re);
@@ -858,7 +855,12 @@ mod pure_builtins {
             Some(caps) => Ok(Value::List(
                 caps.iter()
                     .skip(1)
-                    .map(|grp| grp.map(|g| Value::from(g.as_str())).unwrap_or(Value::Null))
+                    .map(|grp| {
+                        grp.map(|g| {
+                            Value::String(NixString::new_inherit_context_from(&s, g.as_str()))
+                        })
+                        .unwrap_or(Value::Null)
+                    })
                     .collect::<imbl::Vector<Value>>()
                     .into(),
             )),
