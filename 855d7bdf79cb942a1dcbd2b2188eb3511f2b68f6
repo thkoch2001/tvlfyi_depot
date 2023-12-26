@@ -89,6 +89,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "0cb54724_ed6bcc55",
+        "filename": "tvix/build/protos/build.proto",
+        "patchSetId": 1
+      },
+      "lineNbr": 118,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-12-26T10:16:43Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1ca0cd6d_65a8dd11",
+      "revId": "855d7bdf79cb942a1dcbd2b2188eb3511f2b68f6",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "e96f6577_a3006d8e",
