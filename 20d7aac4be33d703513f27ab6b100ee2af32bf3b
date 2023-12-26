@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "799605e7_9063306d",
+        "filename": "tvix/glue/src/builtins/derivation.rs",
+        "patchSetId": 4
+      },
+      "lineNbr": 466,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-12-26T09:21:06Z",
+      "side": 1,
+      "message": "leftover from debug cl?",
+      "revId": "20d7aac4be33d703513f27ab6b100ee2af32bf3b",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "99f23e71_23d9b9d5",
+        "filename": "tvix/glue/src/known_paths.rs",
+        "patchSetId": 4
+      },
+      "lineNbr": 100,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-12-26T09:21:06Z",
+      "side": 1,
+      "message": "repr transparent, this now only contains a list of derivation paths to hash derivation modulo, which are queried when calculating output paths, no?\n\nMaybe also rename this struct (and file name) to make this more clear.",
+      "revId": "20d7aac4be33d703513f27ab6b100ee2af32bf3b",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
