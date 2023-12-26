@@ -573,6 +573,49 @@ mod pure_builtins {
         Ok(Value::Bool(v.has_context()))
     }
 
+    #[builtin("getContext")]
+    #[allow(non_snake_case)]
+    async fn builtin_getContext(co: GenCo, e: Value) -> Result<Value, ErrorKind> {
+        // also forces the value
+        let span = generators::request_span(&co).await;
+        let v = e
+            .coerce_to_string(
+                co,
+                CoercionKind {
+                    strong: true,
+                    import_paths: true,
+                },
+                span,
+            )
+            .await?;
+        let s = v.to_contextful_str()?;
+        if let Some(context) = s.context() {
+            let elements: Vec<(String, Value)> = context
+                .iter()
+                .map(|ctx_element| match ctx_element {
+                    NixContextElement::Plain(spath) => (
+                        spath.clone(),
+                        Value::attrs(NixAttrs::from_iter([("path", true)])),
+                    ),
+                    NixContextElement::Single { name, derivation } => (
+                        derivation.clone(),
+                        Value::attrs(NixAttrs::from_iter([(
+                            "outputs",
+                            Value::List(NixList::construct(1, vec![name.clone().into()])),
+                        )])),
+                    ),
+                    NixContextElement::SelfReference => (
+                        s.as_str().to_string(),
+                        Value::attrs(NixAttrs::from_iter([("allOutputs", true)])),
+                    ),
+                })
+                .collect();
+            Ok(Value::attrs(NixAttrs::from_iter(elements)))
+        } else {
+            Ok(Value::attrs(NixAttrs::empty()))
+        }
+    }
+
     #[builtin("hashString")]
     #[allow(non_snake_case)]
     async fn builtin_hashString(
