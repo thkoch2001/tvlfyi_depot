@@ -346,6 +346,9 @@ impl Value {
                     },
                 ) => {
                     let imported = generators::request_path_import(co, *p).await;
+                    context = Some(
+                        NixContextElement::Plain(imported.to_string_lossy().to_string()).into(),
+                    );
                     Ok(imported.to_string_lossy().into_owned())
                 }
                 (
