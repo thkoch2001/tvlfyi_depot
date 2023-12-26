@@ -12,7 +12,8 @@ use std::rc::Rc;
 use tvix_eval::builtin_macros::builtins;
 use tvix_eval::generators::{self, emit_warning_kind, GenCo};
 use tvix_eval::{
-    AddContext, CatchableErrorKind, CoercionKind, ErrorKind, NixAttrs, NixList, Value, WarningKind,
+    AddContext, CatchableErrorKind, CoercionKind, ErrorKind, NixAttrs, NixContext, NixList, Value,
+    WarningKind,
 };
 
 // Constants used for strangely named fields in derivation inputs.
@@ -102,42 +103,32 @@ async fn populate_outputs(
 }
 
 /// Populate the inputs of a derivation from the build references
-/// found when scanning the derivation's parameters.
-fn populate_inputs<I: IntoIterator<Item = PathName>>(
-    drv: &mut Derivation,
-    known_paths: &KnownPaths,
-    references: I,
-) {
-    for reference in references.into_iter() {
-        let subreferences = &known_paths[&reference];
-        let reference = subreferences.last().unwrap();
-        match &reference.kind {
-            PathKind::Plain => {
-                drv.input_sources.insert(reference.path.clone());
+/// found when scanning the derivation's parameters and extracting their contexts.
+fn populate_inputs(drv: &mut Derivation, full_context: NixContext) {
+    for element in full_context.iter() {
+        match element {
+            NixContextElement::Plain(source) => {
+                drv.input_sources.insert(source.clone());
             }
 
-            PathKind::Output {
-                name, derivation, ..
-            } => match drv.input_derivations.entry(derivation.clone()) {
-                btree_map::Entry::Vacant(entry) => {
-                    entry.insert(BTreeSet::from([name.clone()]));
-                }
-
-                btree_map::Entry::Occupied(mut entry) => {
-                    entry.get_mut().insert(name.clone());
-                }
-            },
-
-            PathKind::Derivation { output_names } => {
-                match drv.input_derivations.entry(reference.path.clone()) {
+            NixContextElement::Single { name, derivation } => {
+                match drv.input_derivations.entry(derivation.clone()) {
                     btree_map::Entry::Vacant(entry) => {
-                        entry.insert(output_names.clone());
+                        entry.insert(BTreeSet::from([name.clone()]));
                     }
 
                     btree_map::Entry::Occupied(mut entry) => {
-                        entry.get_mut().extend(output_names.clone().into_iter());
+                        entry.get_mut().insert(name.clone());
                     }
                 }
+            }
+
+            NixContextElement::Derivation(_drv_path) => {
+                // This is a hard one, it means that
+                // we are depending on a drvPath of ourselves
+                // *or* another derivation's drvPath.
+                // What to do here?
+                panic!("please do not depend on drvPath, I have 2 hours of sleep in blood");
             }
         }
     }
@@ -427,13 +418,6 @@ pub(crate) mod derivation_builtins {
             handle_fixed_output(&mut drv, output_hash, output_hash_algo, output_hash_mode)?;
         }
 
-        // Scan references in the input context to detect any build-references.
-        let references: Vec<PathName> = input_context
-            .to_owned_references()
-            .into_iter()
-            .map(|s| s.into())
-            .collect();
-
         // Each output name needs to exist in the environment, at this
         // point initialised as an empty string because that is the
         // way of Golang ;)
@@ -447,8 +431,8 @@ pub(crate) mod derivation_builtins {
             }
         }
 
+        populate_inputs(&mut drv, input_context);
         let mut known_paths = state.borrow_mut();
-        populate_inputs(&mut drv, &known_paths, references);
 
         // At this point, derivation fields are fully populated from
         // eval data structures.
@@ -476,24 +460,6 @@ pub(crate) mod derivation_builtins {
             derivation_path.to_absolute_path(),
             &derivation_or_fod_hash_final,
         );
-
-        // mark all the new paths as known
-        let output_names: Vec<String> = drv.outputs.keys().map(Clone::clone).collect();
-        known_paths.drv(
-            name.clone(),
-            derivation_path.to_absolute_path(),
-            &output_names,
-        );
-
-        for (output_name, output) in &drv.outputs {
-            known_paths.output(
-                name.clone(),
-                &output.path,
-                &output.ca_hash,
-                output_name,
-                derivation_path.to_absolute_path(),
-            );
-        }
 
         drop(known_paths);
         //dump_drv_to_store(&co, &derivation_path.to_absolute_path(), &drv).await?;
@@ -534,12 +500,7 @@ pub(crate) mod derivation_builtins {
     }
 
     #[builtin("toFile")]
-    async fn builtin_to_file(
-        state: Rc<RefCell<KnownPaths>>,
-        co: GenCo,
-        name: Value,
-        content: Value,
-    ) -> Result<Value, ErrorKind> {
+    async fn builtin_to_file(co: GenCo, name: Value, content: Value) -> Result<Value, ErrorKind> {
         let name = name
             .to_str()
             .context("evaluating the `name` parameter of builtins.toFile")?;
@@ -563,8 +524,6 @@ pub(crate) mod derivation_builtins {
             .to_absolute_path();
 
         let context: NixContext = NixContextElement::Plain(path.clone()).into();
-        state.borrow_mut().plain(name, &path);
-
         // TODO: actually persist the file in the store at that path ...
 
         Ok(Value::String((path, Some(context)).into()))

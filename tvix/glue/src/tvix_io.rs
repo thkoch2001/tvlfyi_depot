@@ -42,10 +42,6 @@ impl<T: EvalIO> EvalIO for TvixIO<T> {
 
     fn import_path(&self, path: &Path) -> io::Result<PathBuf> {
         let imported_path = self.actual.import_path(path)?;
-        self.known_paths
-            .borrow_mut()
-            .plain("import", imported_path.to_string_lossy());
-
         Ok(imported_path)
     }
 
