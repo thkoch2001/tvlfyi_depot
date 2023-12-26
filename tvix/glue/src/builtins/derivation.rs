@@ -277,6 +277,7 @@ pub(crate) mod derivation_builtins {
     use nix_compat::store_path::hash_placeholder;
     use tvix_eval::generators::Gen;
     use tvix_eval::NixContext;
+    use tvix_eval::NixContextElement;
     use tvix_eval::NixString;
 
     #[builtin("placeholder")]
@@ -498,13 +499,35 @@ pub(crate) mod derivation_builtins {
         drop(known_paths);
         //dump_drv_to_store(&co, &derivation_path.to_absolute_path(), &drv).await?;
 
-        let mut new_attrs: Vec<(String, String)> = drv
+        let mut new_attrs: Vec<(String, NixString)> = drv
             .outputs
             .into_iter()
-            .map(|(name, output)| (name, output.path))
+            .map(|(name, output)| {
+                (
+                    name.clone(),
+                    (
+                        output.path,
+                        Some(
+                            NixContextElement::Single {
+                                name,
+                                derivation: derivation_path.to_absolute_path().into(),
+                            }
+                            .into(),
+                        ),
+                    )
+                        .into(),
+                )
+            })
             .collect();
 
-        new_attrs.push(("drvPath".to_string(), derivation_path.to_absolute_path()));
+        new_attrs.push((
+            "drvPath".to_string(),
+            (
+                derivation_path.to_absolute_path(),
+                Some(NixContextElement::SelfReference.into()),
+            )
+                .into(),
+        ));
 
         Ok(Value::Attrs(Box::new(NixAttrs::from_iter(
             new_attrs.into_iter(),
@@ -540,11 +563,12 @@ pub(crate) mod derivation_builtins {
             .map_err(DerivationError::InvalidDerivation)?
             .to_absolute_path();
 
+        let context: NixContext = NixContextElement::Plain(path.clone()).into();
         state.borrow_mut().plain(name, &path);
 
         // TODO: actually persist the file in the store at that path ...
 
-        Ok(Value::String(path.into()))
+        Ok(Value::String((path, Some(context)).into()))
     }
 }
 
