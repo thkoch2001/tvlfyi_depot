@@ -86,6 +86,24 @@
       "parentUuid": "e96f6577_a3006d8e",
       "revId": "855d7bdf79cb942a1dcbd2b2188eb3511f2b68f6",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3e39494d_381e8a97",
+        "filename": "tvix/glue/src/tvix_build.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 154,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-12-26T09:32:04Z",
+      "side": 1,
+      "message": "I made this a .get(\"out\").expect(\"invalid derivation\") to make the panic a bit more useful.",
+      "parentUuid": "057d78e0_ce38bbe4",
+      "revId": "855d7bdf79cb942a1dcbd2b2188eb3511f2b68f6",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
