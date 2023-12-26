@@ -1240,6 +1240,7 @@ async fn add_values(co: GenCo, a: Value, b: Value) -> Result<Value, ErrorKind> {
                     // contain any string context, the resulting error of such a
                     // case can not be replicated by us.
                     import_paths: false,
+                    // FIXME(raitobezarius): reject_context: true?
                 },
             )
             .await
