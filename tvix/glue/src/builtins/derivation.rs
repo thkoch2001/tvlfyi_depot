@@ -276,6 +276,8 @@ pub(crate) mod derivation_builtins {
     use super::*;
     use nix_compat::store_path::hash_placeholder;
     use tvix_eval::generators::Gen;
+    use tvix_eval::NixContext;
+    use tvix_eval::NixString;
 
     #[builtin("placeholder")]
     async fn builtin_placeholder(co: GenCo, input: Value) -> Result<Value, ErrorKind> {
@@ -343,15 +345,31 @@ pub(crate) mod derivation_builtins {
             Ok(Ok(None))
         }
 
+        let mut input_context = NixContext::new();
+
         for (name, value) in input.clone().into_iter_sorted() {
             let value = generators::request_force(&co, value).await;
             if ignore_nulls && matches!(value, Value::Null) {
                 continue;
             }
 
-            match strong_importing_coerce_to_string(&co, value.clone()).await? {
+            match generators::request_string_coerce(
+                &co,
+                value.clone(),
+                CoercionKind {
+                    strong: true,
+                    import_paths: true,
+                },
+            )
+            .await
+            {
                 Err(cek) => return Ok(Value::Catchable(cek)),
                 Ok(val_str) => {
+                    // Learn about this derivation references
+                    input_context.mimic(&val_str);
+                    input_context.learn(&val_str);
+
+                    let val_str = val_str.as_str().to_string();
                     // handle_derivation_parameters tells us whether the
                     // argument should be added to the environment; continue
                     // to the next one otherwise
@@ -409,20 +427,12 @@ pub(crate) mod derivation_builtins {
             handle_fixed_output(&mut drv, output_hash, output_hash_algo, output_hash_mode)?;
         }
 
-        // Scan references in relevant attributes to detect any build-references.
-        let references = {
-            let state = state.borrow();
-            if state.is_empty() {
-                // skip reference scanning, create an empty result
-                Default::default()
-            } else {
-                let mut refscan = state.reference_scanner();
-                drv.arguments.iter().for_each(|s| refscan.scan(s));
-                drv.environment.values().for_each(|s| refscan.scan(s));
-                refscan.scan(&drv.builder);
-                refscan.finalise()
-            }
-        };
+        // Scan references in the input context to detect any build-references.
+        let references: Vec<PathName> = input_context
+            .to_owned_references()
+            .into_iter()
+            .map(|s| s.into())
+            .collect();
 
         // Each output name needs to exist in the environment, at this
         // point initialised as an empty string because that is the
