@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "54aa592e_2dca18f0",
+        "filename": "tvix/eval/src/builtins/mod.rs",
+        "patchSetId": 10
+      },
+      "lineNbr": 254,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-12-26T09:15:18Z",
+      "side": 1,
+      "message": "I\u0027m a bit confused we need to manually interact with the string contexts here. Can\u0027t we just use a regular NixString concatenation helper function take care of it?",
+      "revId": "6959fa8c09a3f791625eac773b88be1d0343345e",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
