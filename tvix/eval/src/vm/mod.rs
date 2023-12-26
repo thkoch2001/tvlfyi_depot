@@ -29,8 +29,8 @@ use crate::{
     spans::LightSpan,
     upvalues::Upvalues,
     value::{
-        Builtin, BuiltinResult, Closure, CoercionKind, Lambda, NixAttrs, NixList, PointerEquality,
-        Thunk, Value,
+        Builtin, BuiltinResult, Closure, CoercionKind, Lambda, NixAttrs, NixContext, NixList,
+        PointerEquality, Thunk, Value,
     },
     vm::generators::GenCo,
     warnings::{EvalWarning, WarningKind},
@@ -986,12 +986,25 @@ impl<'o> VM<'o> {
     /// the concatenated result string back on the stack.
     fn run_interpolate(&mut self, frame: &CallFrame, count: usize) -> EvalResult<()> {
         let mut out = String::new();
+        // Interpolation propagates the context and union them.
+        let mut context: Option<NixContext> = None;
 
         for _ in 0..count {
-            out.push_str(self.stack_pop().to_str().with_span(frame, self)?.as_str());
+            let mut nix_string = self
+                .stack_pop()
+                .to_contextful_str()
+                .with_span(frame, self)?;
+            out.push_str(nix_string.as_str());
+            if let Some(ref mut ctx) = context {
+                if let Some(other_ctx) = nix_string.context_mut() {
+                    ctx.merge(other_ctx);
+                }
+            } else {
+                context = nix_string.context().cloned();
+            }
         }
 
-        self.stack.push(Value::String(out.into()));
+        self.stack.push(Value::String((out, context).into()));
         Ok(())
     }
 
