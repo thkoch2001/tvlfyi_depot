@@ -570,6 +570,34 @@ mod pure_builtins {
         Ok(Value::Bool(v.has_context()))
     }
 
+    #[builtin("getContext")]
+    #[allow(non_snake_case)]
+    async fn builtin_getContext(co: GenCo, e: Value) -> Result<Value, ErrorKind> {
+        // also forces the value
+        let span = generators::request_span(&co).await;
+        let v = e
+            .coerce_to_string(
+                co,
+                CoercionKind {
+                    strong: true,
+                    import_paths: true,
+                },
+                span,
+            )
+            .await?;
+        let s = v.to_contextful_str()?;
+        if let Some(context) = s.context() {
+            let elements: Vec<(String, Value)> = context
+                .to_owned_references()
+                .into_iter()
+                .map(|s| (s, Value::attrs(NixAttrs::empty())))
+                .collect();
+            Ok(Value::attrs(NixAttrs::from_iter(elements)))
+        } else {
+            Ok(Value::attrs(NixAttrs::empty()))
+        }
+    }
+
     #[builtin("hashString")]
     #[allow(non_snake_case)]
     async fn builtin_hashString(
