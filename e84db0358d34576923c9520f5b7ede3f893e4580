@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "93f46280_d4b42170",
+        "filename": "tvix/eval/src/value/mod.rs",
+        "patchSetId": 8
+      },
+      "lineNbr": 805,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-12-26T09:10:41Z",
+      "side": 1,
+      "message": "Maybe add a FUTUREWORK to expose the context information itself too?",
+      "revId": "e84db0358d34576923c9520f5b7ede3f893e4580",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
