@@ -832,14 +832,18 @@ mod pure_builtins {
 
     #[builtin("match")]
     async fn builtin_match(co: GenCo, regex: Value, str: Value) -> Result<Value, ErrorKind> {
-        let s = str.to_str()?;
+        let s = str.to_contextful_str()?;
+        let ctx = s.context();
         let re = regex.to_str()?;
         let re: Regex = Regex::new(&format!("^{}$", re.as_str())).unwrap();
         match re.captures(&s) {
             Some(caps) => Ok(Value::List(
                 caps.iter()
                     .skip(1)
-                    .map(|grp| grp.map(|g| Value::from(g.as_str())).unwrap_or(Value::Null))
+                    .map(|grp| {
+                        grp.map(|g| Value::String((g.as_str().to_string(), ctx.cloned()).into()))
+                            .unwrap_or(Value::Null)
+                    })
                     .collect::<imbl::Vector<Value>>()
                     .into(),
             )),
