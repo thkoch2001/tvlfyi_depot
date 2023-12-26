@@ -36,6 +36,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "69874827_765c1ab9",
+        "filename": "tvix/build/protos/build.proto",
+        "patchSetId": 1
+      },
+      "lineNbr": 97,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-12-26T10:16:34Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9217e950_e65ad50f",
+      "revId": "855d7bdf79cb942a1dcbd2b2188eb3511f2b68f6",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "1d17c731_cc837f55",
@@ -49,6 +67,24 @@
       "writtenOn": "2023-12-25T15:31:15Z",
       "side": 1,
       "message": "I think `/bin/sh` is also something that Nix implicitly assumes to be in there, so maybe it should be part of this list?",
+      "revId": "855d7bdf79cb942a1dcbd2b2188eb3511f2b68f6",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1ca0cd6d_65a8dd11",
+        "filename": "tvix/build/protos/build.proto",
+        "patchSetId": 1
+      },
+      "lineNbr": 118,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-12-26T10:16:34Z",
+      "side": 1,
+      "message": "It\u0027s more fine-grained than that. The /bin/sh in there needs to be statically linked, or all dynamic library dependencies need to be mounted in too (which would need to be distinct from store_dir).\n\nI made it a custom `provide_bin_sh` boolean inside constraints, and it\u0027s up to the builder to provide it - however it may look like.",
+      "parentUuid": "1d17c731_cc837f55",
       "revId": "855d7bdf79cb942a1dcbd2b2188eb3511f2b68f6",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
