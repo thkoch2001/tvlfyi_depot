@@ -512,19 +512,12 @@ pub(crate) mod derivation_builtins {
             .to_str()
             .context("evaluating the `name` parameter of builtins.toFile")?;
         let content = content
-            .to_str()
+            .to_contextful_str()
             .context("evaluating the `content` parameter of builtins.toFile")?;
 
-        let mut refscan = state.borrow().reference_scanner();
-        refscan.scan(content.as_str());
-        let refs = {
-            let paths = state.borrow();
-            refscan
-                .finalise()
-                .into_iter()
-                .map(|path| paths[&path].last().unwrap().path.to_string())
-                .collect::<Vec<_>>()
-        };
+        let refs = content
+            .context()
+            .map_or(Vec::new(), |ctx| ctx.clone().to_owned_references());
 
         // TODO: fail on derivation references (only "plain" is allowed here)
 
