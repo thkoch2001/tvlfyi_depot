@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d3ff8279_b80bc183",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-12-26T09:31:20Z",
+      "side": 1,
+      "message": "I don\u0027t understand this commit message.",
+      "revId": "0e2c38e67d1d34931eac40885547d0c032158a38",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ffcf8fa0_f4dee961",
+        "filename": "tvix/eval/src/value/mod.rs",
+        "patchSetId": 3
+      },
+      "lineNbr": 356,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-12-26T09:31:20Z",
+      "side": 1,
+      "message": "This code needs a comment.",
+      "revId": "0e2c38e67d1d34931eac40885547d0c032158a38",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
