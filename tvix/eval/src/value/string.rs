@@ -51,6 +51,21 @@ impl NixContext {
     pub fn merge(&mut self, other: &mut NixContext) {
         self.0.append(&mut other.0);
     }
+
+    pub fn iter(&self) -> std::slice::Iter<'_, NixContextElement> {
+        self.0.iter()
+    }
+
+    pub fn to_owned_references(self) -> Vec<String> {
+        self.0
+            .into_iter()
+            .filter_map(|ctx| match ctx {
+                NixContextElement::SelfReference => None,
+                NixContextElement::Plain(s) => Some(s),
+                NixContextElement::Single { derivation, .. } => Some(derivation),
+            })
+            .collect()
+    }
 }
 
 // FIXME: when serializing, ignore the context?
