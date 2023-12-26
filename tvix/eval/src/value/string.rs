@@ -57,6 +57,24 @@ impl NixContext {
     pub fn merge(&mut self, other: &mut NixContext) {
         self.0.append(&mut other.0);
     }
+
+    /// Iterates over any element of the context.
+    pub fn iter(&self) -> impl Iterator<Item = &NixContextElement> {
+        self.0.iter()
+    }
+
+    /// Produces a list of owned references to this current context,
+    /// no matter its type.
+    pub fn to_owned_references(self) -> Vec<String> {
+        self.0
+            .into_iter()
+            .filter_map(|ctx| match ctx {
+                NixContextElement::Derivation(drv_path) => Some(drv_path),
+                NixContextElement::Plain(s) => Some(s),
+                NixContextElement::Single { derivation, .. } => Some(derivation),
+            })
+            .collect()
+    }
 }
 
 // FIXME: when serializing, ignore the context?
