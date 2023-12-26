@@ -86,6 +86,12 @@ impl From<&str> for PathName {
     }
 }
 
+impl From<String> for PathName {
+    fn from(s: String) -> Self {
+        s.as_str().into()
+    }
+}
+
 /// This instance is required to pass PathName instances as needles to
 /// the reference scanner.
 impl AsRef<[u8]> for PathName {
