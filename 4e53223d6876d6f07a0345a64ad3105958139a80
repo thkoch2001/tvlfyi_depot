@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "13bfc509_7d0ffe25",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 10
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-12-26T09:31:28Z",
+      "side": 1,
+      "message": "Please update tvix/eval/docs/builtins.md as you go.",
+      "revId": "4e53223d6876d6f07a0345a64ad3105958139a80",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
