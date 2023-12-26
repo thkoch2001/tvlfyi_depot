@@ -24,6 +24,13 @@ impl NixContext {
     pub fn merge(&mut self, other: &mut NixContext) {
         self.0.append(&mut other.0);
     }
+
+    /// Takes all the references as owned strings.
+    /// FIXME: implement filtering based on plain or derivations.
+    /// Right now, we just mix everything by forgetting.
+    pub fn to_owned_references(&self) -> Vec<String> {
+        self.0.iter().cloned().map(|s| s.into()).collect::<Vec<_>>()
+    }
 }
 
 #[derive(Clone, Debug, Serialize)]
