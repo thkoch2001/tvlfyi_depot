@@ -16,6 +16,114 @@
       "message": "This (and the custom string serialization in cl/10437) should go to nix-compat.",
       "revId": "298875393813b4271c39b17be5c64df1a7685dd5",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bfe8e1c4_843ffdee",
+        "filename": "tvix/eval/src/value/string.rs",
+        "patchSetId": 9
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-12-26T09:09:50Z",
+      "side": 1,
+      "message": "Do you know now? Or should this be a TODO?",
+      "revId": "298875393813b4271c39b17be5c64df1a7685dd5",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1886204a_6ba5dfa3",
+        "filename": "tvix/eval/src/value/string.rs",
+        "patchSetId": 9
+      },
+      "lineNbr": 106,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-12-26T09:09:50Z",
+      "side": 1,
+      "message": "This would become public interface - do we need it, or are the other context-specific functions sufficient?",
+      "revId": "298875393813b4271c39b17be5c64df1a7685dd5",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "352388ba_4c5a9f58",
+        "filename": "tvix/eval/src/value/string.rs",
+        "patchSetId": 9
+      },
+      "lineNbr": 181,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-12-26T09:09:50Z",
+      "side": 1,
+      "message": "Needs a docstring.\n\nThe name is also a bit confusing, it constructs a new string, using the context from another NixString.\n\nMaybe something like:\n\n```\n/// Construct a new NixString from a [\u0026str], inheriting the context from another\n/// NixString. \npub fn new_inherit_context_from(v: \u0026str, other: \u0026NixString) -\u003e Self {\n```",
+      "revId": "298875393813b4271c39b17be5c64df1a7685dd5",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d8fc2091_2899bd36",
+        "filename": "tvix/eval/src/value/string.rs",
+        "patchSetId": 9
+      },
+      "lineNbr": 228,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-12-26T09:09:50Z",
+      "side": 1,
+      "message": "Mmmh, our data model can also represent a Some(NixContext{…}) with an empty vec, which is a bit of a smell.\n\nIs there a way to delay the vec![] creation until we actually insert something in, or otherwise make these two cases not representable?\n\nAt the very least, we should have debug asserts to prevent a NixContext with an empty vec.",
+      "revId": "298875393813b4271c39b17be5c64df1a7685dd5",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5af42ab3_286da0a3",
+        "filename": "tvix/eval/src/value/string.rs",
+        "patchSetId": 9
+      },
+      "lineNbr": 235,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-12-26T09:09:50Z",
+      "side": 1,
+      "message": "I feel a bit uneasy about exposing `context` and `context_mut` more than pub(crate).\n\nWe can probably expose the \"context string serialization\" from cl/10437 `pub`, but I\u0027d be careful about exposing the raw `NixContext` struct. This feels like a tvix-eval implementation detail.",
+      "revId": "298875393813b4271c39b17be5c64df1a7685dd5",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b34cf074_b05d1e98",
+        "filename": "tvix/eval/src/value/string.rs",
+        "patchSetId": 9
+      },
+      "lineNbr": 249,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-12-26T09:09:50Z",
+      "side": 1,
+      "message": "s/the//",
+      "range": {
+        "startLine": 249,
+        "startChar": 12,
+        "endLine": 249,
+        "endChar": 15
+      },
+      "revId": "298875393813b4271c39b17be5c64df1a7685dd5",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
