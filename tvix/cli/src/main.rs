@@ -78,15 +78,12 @@ fn interpret(code: &str, path: Option<PathBuf>, args: &Args, explain: bool) -> b
     configure_nix_path(&mut eval, &args.nix_search_path);
 
     let tokio_runtime = tokio::runtime::Runtime::new().unwrap();
-    eval.io_handle = Box::new(tvix_glue::tvix_io::TvixIO::new(
-        known_paths.clone(),
-        TvixStoreIO::new(
-            blob_service,
-            directory_service,
-            path_info_service,
-            tokio_runtime.handle().clone(),
-        ),
-    ));
+    eval.io_handle = Box::new(tvix_glue::tvix_io::TvixIO::new(TvixStoreIO::new(
+        blob_service,
+        directory_service,
+        path_info_service,
+        tokio_runtime.handle().clone(),
+    )));
 
     let source_map = eval.source_map();
     let result = {
