@@ -16,7 +16,7 @@ depot.nix.readTree.drvTargets {
 
   # To match telega in emacs-overlay or wherever
   tdlib = super.tdlib.overrideAttrs (_: {
-    version = "1.8.21";
+    version = "1.8.22";
     src = self.fetchFromGitHub {
       owner = "tdlib";
       repo = "td";
@@ -79,13 +79,6 @@ depot.nix.readTree.drvTargets {
       # run tests in debug mode, not release mode
       # https://github.com/nix-community/crate2nix/pull/301
       ./patches/crate2nix-tests-debug.patch
-
-      # https://github.com/nix-community/crate2nix/pull/309
-      ./patches/crate2nix-take-lndir-from-buildPackages.patch
-      ./patches/crate2nix-skip-running-tests-when-cross-compiling.patch
-
-      # https://github.com/nix-community/crate2nix/pull/307
-      ./patches/crate2nix-fix-resolve-missing-target-features-to-null.patch
     ];
   });
 
