@@ -1,0 +1,222 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3aafe1ab_5dafac2b",
+        "filename": "tvix/eval/docs/build-references.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 99,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-12-27T15:29:06Z",
+      "side": 1,
+      "message": "👀",
+      "revId": "948e0f1b904a60f01f813d27fc5b07db37540007",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f85e3aee_95f28e65",
+        "filename": "tvix/eval/docs/build-references.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 100,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-12-27T15:29:06Z",
+      "side": 1,
+      "message": "Most",
+      "range": {
+        "startLine": 100,
+        "startChar": 0,
+        "endLine": 100,
+        "endChar": 8
+      },
+      "revId": "948e0f1b904a60f01f813d27fc5b07db37540007",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fb63cdb2_7c9ccb08",
+        "filename": "tvix/eval/docs/build-references.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 116,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-12-27T15:29:06Z",
+      "side": 1,
+      "message": "did not track",
+      "range": {
+        "startLine": 116,
+        "startChar": 18,
+        "endLine": 116,
+        "endChar": 34
+      },
+      "revId": "948e0f1b904a60f01f813d27fc5b07db37540007",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b36e1b41_34a70783",
+        "filename": "tvix/eval/docs/build-references.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 116,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-12-27T15:29:06Z",
+      "side": 1,
+      "message": "whitespace, also please reflow to the column width used in this file.",
+      "range": {
+        "startLine": 116,
+        "startChar": 135,
+        "endLine": 116,
+        "endChar": 136
+      },
+      "revId": "948e0f1b904a60f01f813d27fc5b07db37540007",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "08a7aebb_b4e92720",
+        "filename": "tvix/eval/docs/build-references.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 118,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-12-27T15:29:06Z",
+      "side": 1,
+      "message": "tracks",
+      "range": {
+        "startLine": 118,
+        "startChar": 5,
+        "endLine": 118,
+        "endChar": 10
+      },
+      "revId": "948e0f1b904a60f01f813d27fc5b07db37540007",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "31c9dc8c_ee867c16",
+        "filename": "tvix/eval/docs/build-references.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 119,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-12-27T15:29:06Z",
+      "side": 1,
+      "message": "while keeping the exact internal structure of that data private.",
+      "range": {
+        "startLine": 119,
+        "startChar": 6,
+        "endLine": 119,
+        "endChar": 52
+      },
+      "revId": "948e0f1b904a60f01f813d27fc5b07db37540007",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "76036860_8c9aa9ab",
+        "filename": "tvix/eval/docs/build-references.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 187,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-12-27T15:29:06Z",
+      "side": 1,
+      "message": "these",
+      "range": {
+        "startLine": 187,
+        "startChar": 76,
+        "endLine": 187,
+        "endChar": 80
+      },
+      "revId": "948e0f1b904a60f01f813d27fc5b07db37540007",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "dabe08c0_6d85edb7",
+        "filename": "tvix/eval/docs/build-references.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 191,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-12-27T15:29:06Z",
+      "side": 1,
+      "message": "disallowedReferences",
+      "range": {
+        "startLine": 191,
+        "startChar": 30,
+        "endLine": 191,
+        "endChar": 50
+      },
+      "revId": "948e0f1b904a60f01f813d27fc5b07db37540007",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "055ada46_9228da7a",
+        "filename": "tvix/eval/docs/build-references.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 193,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-12-27T15:29:06Z",
+      "side": 1,
+      "message": "to preserve output path calculation for Nix expressions written so far.",
+      "range": {
+        "startLine": 193,
+        "startChar": 133,
+        "endLine": 193,
+        "endChar": 195
+      },
+      "revId": "948e0f1b904a60f01f813d27fc5b07db37540007",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "581b4220_29080a52",
+        "filename": "tvix/eval/docs/build-references.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 216,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-12-27T15:29:06Z",
+      "side": 1,
+      "message": "whitespace",
+      "revId": "948e0f1b904a60f01f813d27fc5b07db37540007",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
