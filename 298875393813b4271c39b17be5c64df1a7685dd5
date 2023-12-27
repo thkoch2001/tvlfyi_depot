@@ -38,6 +38,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "a5bcd5f5_6f04148f",
+        "filename": "tvix/eval/src/value/string.rs",
+        "patchSetId": 9
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-12-27T11:20:18Z",
+      "side": 1,
+      "message": "I\u0027m sure there\u0027s a middle ground, but for now let\u0027s put the whole context calculation stuff into a separate file/mod, inside tvix-eval, no need to block on that.",
+      "parentUuid": "696c4b66_a43cde5e",
+      "revId": "298875393813b4271c39b17be5c64df1a7685dd5",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "bfe8e1c4_843ffdee",
         "filename": "tvix/eval/src/value/string.rs",
         "patchSetId": 9
