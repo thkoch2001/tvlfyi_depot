@@ -52,19 +52,8 @@ where
     command_args.push(derivation.builder.clone());
     command_args.extend_from_slice(&derivation.arguments);
 
-    // produce output_paths, which is the basename of each output (sorted)
-    // since Derivation is validated, we know output paths can be parsed.
-    // TODO: b/264 will remove the need to parse them here
-    let mut outputs: Vec<String> = derivation
-        .outputs
-        .values()
-        .map(|output| {
-            let output_storepath = StorePathRef::from_absolute_path(output.path.as_bytes())
-                .expect("invalid output storepath");
-
-            output_storepath.to_string()
-        })
-        .collect();
+    // produce output_paths, which is the absolute path of each output (sorted)
+    let mut outputs: Vec<String> = derivation.outputs.values();
 
     // Sort the outputs. We can use sort_unstable, as these are unique strings.
     outputs.sort_unstable();
@@ -154,10 +143,10 @@ where
         outputs,
         environment_vars,
         inputs,
+        inputs_dir: nix_compat::store_path::STORE_DIR.into(),
         constraints,
         working_dir: "build".into(),
         scratch_paths: vec!["build".into()],
-        store_dir: nix_compat::store_path::STORE_DIR.into(),
     }
 }
 
@@ -245,10 +234,11 @@ mod test {
 
         assert_eq!(
             BuildRequest {
-                command_args: vec![":".to_string()],
-                outputs: vec!["fhaj6gmwns62s6ypkcldbaj2ybvkhx3p-foo".to_string()],
+                command_args: vec![":".into()],
+                outputs: vec!["/nix/store/fhaj6gmwns62s6ypkcldbaj2ybvkhx3p-foo".into()],
                 environment_vars: expected_environment_vars,
                 inputs: vec![INPUT_NODE_FOO.clone()],
+                inputs_dir: nix_compat::store_path::STORE_DIR.into(),
                 constraints: Some(BuildConstraints {
                     system: derivation.system.clone(),
                     min_memory: 0,
@@ -256,9 +246,8 @@ mod test {
                     available_ro_paths: vec![],
                     provide_bin_sh: true,
                 }),
-                working_dir: "build".to_string(),
-                scratch_paths: vec!["build".to_string()],
-                store_dir: nix_compat::store_path::STORE_DIR.to_string(),
+                working_dir: "build".into(),
+                scratch_paths: vec!["build".into()],
             },
             build_request
         );
@@ -314,9 +303,10 @@ mod test {
         assert_eq!(
             BuildRequest {
                 command_args: vec![":".to_string()],
-                outputs: vec!["4q0pg5zpfmznxscq3avycvf9xdvx50n3-bar".to_string()],
+                outputs: vec!["/nix/store/4q0pg5zpfmznxscq3avycvf9xdvx50n3-bar".into()],
                 environment_vars: expected_environment_vars,
                 inputs: vec![],
+                inputs_dir: nix_compat::store_path::STORE_DIR.into(),
                 constraints: Some(BuildConstraints {
                     system: derivation.system.clone(),
                     min_memory: 0,
@@ -324,9 +314,8 @@ mod test {
                     available_ro_paths: vec![],
                     provide_bin_sh: true,
                 }),
-                working_dir: "build".to_string(),
-                scratch_paths: vec!["build".to_string()],
-                store_dir: nix_compat::store_path::STORE_DIR.to_string(),
+                working_dir: "build".into(),
+                scratch_paths: vec!["build".into()],
             },
             build_request
         );
