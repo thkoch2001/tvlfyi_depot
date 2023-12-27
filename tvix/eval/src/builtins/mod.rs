@@ -1077,7 +1077,10 @@ mod pure_builtins {
         // non-negative when the starting index is GTE the
         // string's length.
         if beg >= x.as_str().len() {
-            return Ok(Value::String("".into()));
+            return Ok(Value::String(NixString::new_inherit_context_from(
+                &x,
+                "".into(),
+            )));
         }
 
         let end = if len < 0 {
@@ -1086,7 +1089,10 @@ mod pure_builtins {
             cmp::min(beg + (len as usize), x.as_str().len())
         };
 
-        Ok(Value::String(x.as_bytes()[beg..end].try_into()?))
+        Ok(Value::String(NixString::new_inherit_context_from(
+            &x,
+            std::str::from_utf8(&x.as_bytes()[beg..end])?,
+        )))
     }
 
     #[builtin("tail")]
