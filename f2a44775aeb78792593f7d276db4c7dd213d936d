@@ -20,6 +20,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "bb9cd5f5_c9b975b2",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 7
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000073
+      },
+      "writtenOn": "2023-12-27T20:48:36Z",
+      "side": 1,
+      "message": "yep",
+      "parentUuid": "4ef29f44_5f234f2c",
+      "revId": "f2a44775aeb78792593f7d276db4c7dd213d936d",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "9c85c6b9_5a55ada2",
         "filename": "tvix/eval/src/builtins/mod.rs",
         "patchSetId": 7
@@ -31,6 +49,24 @@
       "writtenOn": "2023-12-26T06:58:47Z",
       "side": 1,
       "message": "This should probably go to nix-compat.",
+      "revId": "f2a44775aeb78792593f7d276db4c7dd213d936d",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "189182a3_ee18e608",
+        "filename": "tvix/eval/src/builtins/mod.rs",
+        "patchSetId": 7
+      },
+      "lineNbr": 596,
+      "author": {
+        "id": 1000073
+      },
+      "writtenOn": "2023-12-27T20:48:36Z",
+      "side": 1,
+      "message": "well, apparently not?",
+      "parentUuid": "9c85c6b9_5a55ada2",
       "revId": "f2a44775aeb78792593f7d276db4c7dd213d936d",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
