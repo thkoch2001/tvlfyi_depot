@@ -36,6 +36,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "edbc8977_2f35363a",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 7
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000073
+      },
+      "writtenOn": "2023-12-27T21:45:35Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "bb9cd5f5_c9b975b2",
+      "revId": "f2a44775aeb78792593f7d276db4c7dd213d936d",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "9c85c6b9_5a55ada2",
@@ -67,6 +85,24 @@
       "side": 1,
       "message": "well, apparently not?",
       "parentUuid": "9c85c6b9_5a55ada2",
+      "revId": "f2a44775aeb78792593f7d276db4c7dd213d936d",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "658417fa_cd304d25",
+        "filename": "tvix/eval/src/builtins/mod.rs",
+        "patchSetId": 7
+      },
+      "lineNbr": 596,
+      "author": {
+        "id": 1000073
+      },
+      "writtenOn": "2023-12-27T21:45:35Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "189182a3_ee18e608",
       "revId": "f2a44775aeb78792593f7d276db4c7dd213d936d",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
