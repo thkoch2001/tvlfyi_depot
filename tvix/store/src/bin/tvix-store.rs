@@ -322,9 +322,9 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
                             // from there (it might contain additional signatures).
                             let path_info = path_info_service.put(path_info).await?;
 
-                            let node = path_info.node.unwrap().node.unwrap();
+                            let node = path_info.node.as_ref().unwrap().node.as_ref().unwrap();
 
-                            log_node(&node, &path);
+                            log_node(node, &path);
 
                             println!(
                                 "{}",

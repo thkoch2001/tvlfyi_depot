@@ -279,7 +279,14 @@ impl EvalIO for TvixStoreIO {
         Ok({
             let mut path = PathBuf::from(nix_compat::store_path::STORE_DIR_WITH_SLASH);
 
-            let root_node_name = path_info.node.unwrap().node.unwrap().get_name().to_vec();
+            let root_node_name = path_info
+                .node
+                .unwrap()
+                .node
+                .as_ref()
+                .unwrap()
+                .get_name()
+                .to_vec();
 
             // This must be a string, otherwise it would have failed validation.
             let root_node_name = String::from_utf8(root_node_name).unwrap();

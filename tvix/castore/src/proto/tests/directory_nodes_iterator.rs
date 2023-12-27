@@ -68,7 +68,7 @@ fn iterator() {
     let mut node_names: Vec<String> = vec![];
 
     for node in d.nodes() {
-        node_names.push(String::from_utf8(node.get_name().to_vec()).unwrap());
+        node_names.push(String::from_utf8((&node).get_name().to_vec()).unwrap());
     }
 
     assert_eq!(

@@ -174,7 +174,7 @@ async fn walk_node(
                     // and then invoke walk_node on that entry.
                     for proto_node in proto_directory.nodes() {
                         let child_node = nar_node_directory
-                            .entry(proto_node.get_name())
+                            .entry((&proto_node).get_name())
                             .await
                             .map_err(RenderError::NARWriterError)?;
                         walk_node(

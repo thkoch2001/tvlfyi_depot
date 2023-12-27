@@ -93,7 +93,7 @@ impl NamedNode for &SymlinkNode {
     }
 }
 
-impl NamedNode for node::Node {
+impl NamedNode for &node::Node {
     fn get_name(&self) -> &[u8] {
         match self {
             node::Node::File(node_file) => &node_file.name,
