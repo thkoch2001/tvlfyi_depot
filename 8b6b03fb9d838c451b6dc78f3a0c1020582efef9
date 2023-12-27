@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9f084915_f055bbd3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2023-12-27T09:48:27Z",
+      "side": 1,
+      "message": "Blocked currently by GTK2 pinentry being removed from nixpkgs, but still being the default in home-manager.\n\nSee also:\n\n- https://github.com/NixOS/nixpkgs/pull/270266\n- https://github.com/NixOS/nixpkgs/pull/276143\n- https://github.com/nix-community/home-manager/pull/4805",
+      "revId": "8b6b03fb9d838c451b6dc78f3a0c1020582efef9",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
