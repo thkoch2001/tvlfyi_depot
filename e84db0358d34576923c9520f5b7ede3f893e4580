@@ -16,6 +16,24 @@
       "message": "Maybe add a FUTUREWORK to expose the context information itself too?",
       "revId": "e84db0358d34576923c9520f5b7ede3f893e4580",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cef3eb6d_28ba9abf",
+        "filename": "tvix/eval/src/value/mod.rs",
+        "patchSetId": 8
+      },
+      "lineNbr": 805,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-12-27T17:22:32Z",
+      "side": 1,
+      "message": "Thinking about this, it\u0027d probably get too noisy, so let\u0027s resolve this.",
+      "parentUuid": "93f46280_d4b42170",
+      "revId": "e84db0358d34576923c9520f5b7ede3f893e4580",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
