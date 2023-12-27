@@ -20,6 +20,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "696c4b66_a43cde5e",
+        "filename": "tvix/eval/src/value/string.rs",
+        "patchSetId": 9
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2023-12-27T09:30:53Z",
+      "side": 1,
+      "message": "No, eval must not depend on nix-compat.",
+      "parentUuid": "cc05d083_d7d8de96",
+      "revId": "298875393813b4271c39b17be5c64df1a7685dd5",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "bfe8e1c4_843ffdee",
         "filename": "tvix/eval/src/value/string.rs",
         "patchSetId": 9
