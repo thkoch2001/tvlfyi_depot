@@ -34,6 +34,24 @@
       "parentUuid": "db7f53fd_8fb2e32b",
       "revId": "b2f8f36ac1fa4a26bbdefe02a4841598f3088312",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "548c7d9a_faf93cd7",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-12-28T09:05:17Z",
+      "side": 1,
+      "message": "can be abandoned, already rebased out of chain.",
+      "parentUuid": "c4802e81_9920ba43",
+      "revId": "b2f8f36ac1fa4a26bbdefe02a4841598f3088312",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
