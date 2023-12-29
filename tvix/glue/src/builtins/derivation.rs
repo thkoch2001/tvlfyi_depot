@@ -404,6 +404,10 @@ pub(crate) mod derivation_builtins {
             &derivation_or_fod_hash_final,
         );
 
+        let mut v = vec![];
+        drv.serialize(&mut v).unwrap();
+        generators::request_text_import(&co, derivation_path.to_string(), v).await;
+
         let mut new_attrs: Vec<(String, NixString)> = drv
             .outputs
             .into_iter()
