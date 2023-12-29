@@ -34,6 +34,24 @@
       "parentUuid": "cbda8101_065911c5",
       "revId": "c39ee04ab78a683c0e1e66d18e2b173b6d68af64",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "39c686e3_05d45cfe",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000005
+      },
+      "writtenOn": "2023-12-29T22:11:50Z",
+      "side": 1,
+      "message": "I\u0027m fine rolling with this and punting the stricter/fancier stuff a little down the line, just wanted to make sure we had a rationale for making this loose.",
+      "parentUuid": "5f753f0c_0b16b90f",
+      "revId": "c39ee04ab78a683c0e1e66d18e2b173b6d68af64",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
