@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cbda8101_065911c5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000005
+      },
+      "writtenOn": "2023-12-29T14:46:16Z",
+      "side": 1,
+      "message": "I\u0027m not so sure about this change. In practice, we\u0027ll want to enforce that the output paths are within the FUSE store; are we using that for the entire rootfs?",
+      "revId": "c39ee04ab78a683c0e1e66d18e2b173b6d68af64",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
