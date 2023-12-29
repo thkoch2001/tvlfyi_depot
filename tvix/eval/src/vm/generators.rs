@@ -102,6 +102,9 @@ pub enum VMRequest {
     /// Request that the VM imports the given path through its I/O interface.
     PathImport(PathBuf),
 
+    /// Request that the VM records the derivation in the path info service.
+    RecordDerivation(String, Vec<u8>),
+
     /// Request that the VM reads the given path to a string.
     ReadToString(PathBuf),
 
@@ -170,6 +173,7 @@ impl Display for VMRequest {
                 write!(f, "import_cache_put({})", p.to_string_lossy())
             }
             VMRequest::PathImport(p) => write!(f, "path_import({})", p.to_string_lossy()),
+            VMRequest::RecordDerivation(n, d) => write!(f, "record_derivation({})", n),
             VMRequest::ReadToString(p) => {
                 write!(f, "read_to_string({})", p.to_string_lossy())
             }
@@ -419,6 +423,18 @@ impl<'o> VM<'o> {
                                 .with_span(&span, self)?;
 
                             message = VMResponse::Path(imported);
+                        }
+
+                        VMRequest::RecordDerivation(name, drv) => {
+                            self.io_handle
+                                .import_text(name.clone(), drv)
+                                .map_err(|e| ErrorKind::IO {
+                                    path: Some(name.into()),
+                                    error: e.into(),
+                                })
+                                .with_span(&span, self)?;
+
+                            message = VMResponse::Empty;
                         }
 
                         VMRequest::ReadToString(path) => {
@@ -718,6 +734,16 @@ pub(crate) async fn request_path_import(co: &GenCo, path: PathBuf) -> PathBuf {
         VMResponse::Path(path) => path,
         msg => panic!(
             "Tvix bug: VM responded with incorrect generator message: {}",
+            msg
+        ),
+    }
+}
+
+pub async fn request_text_import(co: &GenCo, path: String, contents: Vec<u8>) {
+    match co.yield_(VMRequest::RecordDerivation(path, contents)).await {
+        VMResponse::Empty => {}
+        msg => panic!(
+            "Tvix bug: VM response with incorrect generator message: {}",
             msg
         ),
     }
