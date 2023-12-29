@@ -18,6 +18,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "5f528283_6ab4289b",
+        "filename": "tvix/eval/src/vm/mod.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 490,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2023-12-29T21:21:12Z",
+      "side": 1,
+      "message": "We\u0027ll investigate in b/360.",
+      "parentUuid": "17437da8_62758815",
+      "revId": "6cab0bfed74533251e81dccb2ef5c0aa29dbe2da",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "b5d4e8c8_b0e72774",
@@ -31,6 +49,30 @@
       "writtenOn": "2023-12-17T16:06:37Z",
       "side": 1,
       "message": "debug_assert",
+      "range": {
+        "startLine": 491,
+        "startChar": 20,
+        "endLine": 491,
+        "endChar": 26
+      },
+      "revId": "6cab0bfed74533251e81dccb2ef5c0aa29dbe2da",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "583baebe_727c53b7",
+        "filename": "tvix/eval/src/vm/mod.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 491,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2023-12-29T21:21:12Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b5d4e8c8_b0e72774",
       "range": {
         "startLine": 491,
         "startChar": 20,
