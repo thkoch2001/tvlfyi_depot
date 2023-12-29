@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a3fced5f_2f5f084f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000005
+      },
+      "writtenOn": "2023-12-29T14:42:41Z",
+      "side": 1,
+      "message": "I\u0027m not actually sure why we\u0027re impl-ing this with `\u0026T` as `Self`, given that the sole method takes `\u0026self`.",
+      "revId": "25ef493672b03e14de7692292669cddd3bf41414",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
