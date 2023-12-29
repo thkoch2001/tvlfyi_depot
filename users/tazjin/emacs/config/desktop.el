@@ -120,6 +120,7 @@
 
 (tab-bar-mode 1)
 
+(setq x-no-window-manager t) ;; TODO(tazjin): figure out when to remove this
 (exwm-enable)
 (exwm-randr-enable)
 
