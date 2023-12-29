@@ -292,6 +292,41 @@ impl EvalIO for TvixStoreIO {
         })
     }
 
+    #[instrument(skip(self), ret, err)]
+    fn import_text(&self, path: String, contents: Vec<u8>) -> io::Result<()> {
+        let blob_service = self.blob_service.clone();
+        let path_info_service = self.path_info_service.clone();
+
+        let task = self.tokio_handle.spawn(async move {
+            let mut writer = blob_service.open_write().await;
+            tokio::io::copy(&mut contents.as_slice(), &mut writer).await?;
+            let response = writer.close().await?;
+
+            let root_node = tvix_castore::proto::Node {
+                node: Some(tvix_castore::proto::node::Node::File(
+                    tvix_castore::proto::FileNode {
+                        name: path.into(),
+                        digest: response.into(),
+                        size: contents.len() as u64,
+                        executable: false,
+                    },
+                )),
+            };
+
+            let path_info = PathInfo {
+                node: Some(root_node),
+                ..Default::default()
+            };
+
+            path_info_service.put(path_info).await?;
+
+            Ok::<(), io::Error>(())
+        });
+
+        self.tokio_handle.block_on(task)??;
+        Ok(())
+    }
+
     #[instrument(skip(self), ret)]
     fn store_dir(&self) -> Option<String> {
         Some("/nix/store".to_string())
