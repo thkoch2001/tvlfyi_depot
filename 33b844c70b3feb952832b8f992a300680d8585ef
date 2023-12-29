@@ -16,6 +16,24 @@
       "message": "I think the op should be kept small, to keep the memory footprint of OpCode as small as possible. To my knowledge we won\u0027t need to coerce in a different manner anywhere else.\n\nMaybe we can even remove OpCoerceToString altogether and inline the thing into run_interpolate…",
       "revId": "33b844c70b3feb952832b8f992a300680d8585ef",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c9dc1a1a_43aa9ea0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 9
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2023-12-29T21:33:17Z",
+      "side": 1,
+      "message": "This change should not change hte size of OpCode if the compiler is reasonably clever, as the size of CoercionKind is less than the size of the integer arguments to remaining ops.\n\nIn general, yes, it would be desirable to separate out the data from the ops, but not before we have it completely covered to the brim in tests and nixpkgs is evaling correctly ;)",
+      "parentUuid": "fc2c2cec_9a0c496b",
+      "revId": "33b844c70b3feb952832b8f992a300680d8585ef",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
