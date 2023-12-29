@@ -34,6 +34,10 @@ impl<T: EvalIO> EvalIO for TvixIO<T> {
         Ok(imported_path)
     }
 
+    fn import_text(&self, path: String, contents: Vec<u8>) -> io::Result<()> {
+        self.actual.import_text(path, contents)
+    }
+
     fn path_exists(&self, path: &Path) -> io::Result<bool> {
         if path.starts_with("/__corepkgs__") {
             return Ok(true);
