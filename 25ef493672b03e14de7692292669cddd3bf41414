@@ -16,6 +16,24 @@
       "message": "I\u0027m not actually sure why we\u0027re impl-ing this with `\u0026T` as `Self`, given that the sole method takes `\u0026self`.",
       "revId": "25ef493672b03e14de7692292669cddd3bf41414",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1b515e73_6fe83862",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000005
+      },
+      "writtenOn": "2023-12-29T14:44:08Z",
+      "side": 1,
+      "message": "Specifically, I\u0027d prefer we move all the impls to be on the owned types. If we want forwarding impls as well, that\u0027s fine, but I *think* we shouldn\u0027t need any.",
+      "parentUuid": "a3fced5f_2f5f084f",
+      "revId": "25ef493672b03e14de7692292669cddd3bf41414",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
