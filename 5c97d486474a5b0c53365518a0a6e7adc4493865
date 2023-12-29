@@ -16,6 +16,24 @@
       "message": "This now doesn\u0027t need to be cloned.",
       "revId": "5c97d486474a5b0c53365518a0a6e7adc4493865",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "47491e06_9929a3aa",
+        "filename": "tvix/glue/benches/eval.rs",
+        "patchSetId": 16
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1000073
+      },
+      "writtenOn": "2023-12-29T16:03:28Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0949d3ae_560e9289",
+      "revId": "5c97d486474a5b0c53365518a0a6e7adc4493865",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
