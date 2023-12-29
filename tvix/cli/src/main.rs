@@ -1,18 +1,17 @@
 use std::cell::RefCell;
 use std::rc::Rc;
-use std::sync::Arc;
 use std::{fs, path::PathBuf};
 use tvix_glue::known_paths::KnownPaths;
 use tvix_glue::{builtins::add_derivation_builtins, configure_nix_path};
 
 use clap::Parser;
 use rustyline::{error::ReadlineError, Editor};
-use tvix_castore::blobservice::MemoryBlobService;
-use tvix_castore::directoryservice::MemoryDirectoryService;
+use tvix_castore::blobservice;
+use tvix_castore::directoryservice;
 use tvix_eval::observer::{DisassemblingObserver, TracingObserver};
 use tvix_eval::Value;
 use tvix_glue::tvix_store_io::TvixStoreIO;
-use tvix_store::pathinfoservice::MemoryPathInfoService;
+use tvix_store::pathinfoservice;
 
 #[derive(Parser)]
 struct Args {
@@ -56,6 +55,15 @@ struct Args {
     /// return value.
     #[clap(long)]
     strict: bool,
+
+    #[arg(long, env, default_value = "memory://")]
+    blob_service_addr: String,
+
+    #[arg(long, env, default_value = "memory://")]
+    directory_service_addr: String,
+
+    #[arg(long, env, default_value = "memory://")]
+    path_info_service_addr: String,
 }
 
 /// Interprets the given code snippet, printing out warnings, errors
@@ -66,24 +74,43 @@ fn interpret(code: &str, path: Option<PathBuf>, args: &Args, explain: bool) -> b
 
     eval.strict = args.strict;
 
-    let blob_service = Arc::new(MemoryBlobService::default());
-    let directory_service = Arc::new(MemoryDirectoryService::default());
-    let path_info_service = Arc::new(MemoryPathInfoService::new(
-        blob_service.clone(),
-        directory_service.clone(),
-    ));
+    let tokio_runtime = tokio::runtime::Runtime::new().unwrap();
+
+    let (blob_service, directory_service, path_info_service) = tokio_runtime
+        .block_on(tokio::spawn({
+            let blob_service_addr = args.blob_service_addr.clone();
+            let directory_service_addr = args.directory_service_addr.clone();
+            let path_info_service_addr = args.path_info_service_addr.clone();
+            async move {
+                let blob_service = blobservice::from_addr(&blob_service_addr).await?;
+                let directory_service =
+                    directoryservice::from_addr(&directory_service_addr).await?;
+                let path_info_service = pathinfoservice::from_addr(
+                    &path_info_service_addr,
+                    blob_service.clone(),
+                    directory_service.clone(),
+                )
+                .await?;
+
+                Ok::<_, std::io::Error>((blob_service, directory_service, path_info_service))
+            }
+        }))
+        .unwrap()
+        .expect("failed to setup stores");
+
+    // Arc the PathInfoService, as we clone it .
+    // let path_info_service: Arc<dyn PathInfoService> = path_info_service.into();
 
     let known_paths: Rc<RefCell<KnownPaths>> = Default::default();
     add_derivation_builtins(&mut eval, known_paths.clone());
     configure_nix_path(&mut eval, &args.nix_search_path);
 
-    let tokio_runtime = tokio::runtime::Runtime::new().unwrap();
     eval.io_handle = Box::new(tvix_glue::tvix_io::TvixIO::new(
         known_paths.clone(),
         TvixStoreIO::new(
             blob_service,
             directory_service,
-            path_info_service,
+            path_info_service.into(), // we need an Arc<_> here.
             tokio_runtime.handle().clone(),
         ),
     ));
