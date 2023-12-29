@@ -16,6 +16,24 @@
       "message": "TODO",
       "revId": "6e2c4a7e936ce41467fa9fefa79632fe6d242688",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c676665f_27069106",
+        "filename": "tvix/eval/src/builtins/mod.rs",
+        "patchSetId": 11
+      },
+      "lineNbr": 1235,
+      "author": {
+        "id": 1000073
+      },
+      "writtenOn": "2023-12-29T16:36:14Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8edcb02c_8d0d905c",
+      "revId": "6e2c4a7e936ce41467fa9fefa79632fe6d242688",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
