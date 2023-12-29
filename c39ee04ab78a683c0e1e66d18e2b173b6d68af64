@@ -16,6 +16,24 @@
       "message": "I\u0027m not so sure about this change. In practice, we\u0027ll want to enforce that the output paths are within the FUSE store; are we using that for the entire rootfs?",
       "revId": "c39ee04ab78a683c0e1e66d18e2b173b6d68af64",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5f753f0c_0b16b90f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-12-29T15:46:55Z",
+      "side": 1,
+      "message": "Output paths being in the same directory as inputs is a nix-specific thing, we shouldn\u0027t limit the BuildRequest structure to this.\n\nThis is mostly writing out some of the nix-specific implicit assumptions more explicitly, to keep the builder more generically useful for other builds (that may not be Nix builds at all).\n\nThe `derivation_to_build_request` function in tvix-glue only emits `BuildRequest` messages that have output paths within `store_dir` / `inputs_dir`, so as long as your input is a `Derivation`, you can\u0027t construct something else.\n\nSame applies to `inputs_dir` being write-able (by adding it to `scratch_dirs`) - we encode the nix-specific behaviour by marking nix/store as scratch. This matches behaviour of Nix - you can perfectly fine touch /nix/store/foo inside a build (but it won\u0027t exist there post-build).\n\nRegarding the FUSE question:\n\nWhether or not reads happen through FUSE/virtiofs (if in VM), or whether inputs are just \"extracted into the build\" is up to the specific builder implementation.\nThere\u0027s nothing in the BuildRequest mandating something like this.\n\nAs for individual implementations: the OCI version I\u0027ve been cooking creates a OCI bundle with some root/ skeleton and an inputs/ directory (and a scratch dir), and configures bind-mounts for each individual nodes from inputs/… into the build.\n\nWrites to other store paths are directed to the scratch space (that\u0027s mounted underneath). This is one way to do it; overlayfs would be another.\n\nWrites don\u0027t end up in inputs/, whether it\u0027s a FUSE or manually extracted. Outputs are collected and ingested post-build.\n\nAnother implementation could potentially set things up differently, have more configuration, some handling for writes, and start ingesting during write, but that again would be an implementation detail.",
+      "parentUuid": "cbda8101_065911c5",
+      "revId": "c39ee04ab78a683c0e1e66d18e2b173b6d68af64",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
