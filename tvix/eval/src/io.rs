@@ -76,6 +76,8 @@ pub trait EvalIO {
     /// * `builtins.toJSON` on a path literal, also expected to return a path
     fn import_path(&self, path: &Path) -> io::Result<PathBuf>;
 
+    fn import_text(&self, path: String, contents: Vec<u8>) -> io::Result<()>;
+
     /// Returns the root of the store directory, if such a thing
     /// exists in the evaluation context.
     ///
@@ -131,6 +133,13 @@ impl EvalIO for StdIO {
     fn import_path(&self, path: &Path) -> io::Result<PathBuf> {
         Ok(path.to_path_buf())
     }
+
+    fn import_text(&self, _: String, _: Vec<u8>) -> io::Result<()> {
+        Err(io::Error::new(
+            io::ErrorKind::Unsupported,
+            "Write is not possible in StdIO",
+        ))
+    }
 }
 
 /// Dummy implementation of [`EvalIO`], can be used in contexts where
@@ -160,6 +169,13 @@ impl EvalIO for DummyIO {
     }
 
     fn import_path(&self, _: &Path) -> io::Result<PathBuf> {
+        Err(io::Error::new(
+            io::ErrorKind::Unsupported,
+            "I/O methods are not implemented in DummyIO",
+        ))
+    }
+
+    fn import_text(&self, _: String, _: Vec<u8>) -> io::Result<()> {
         Err(io::Error::new(
             io::ErrorKind::Unsupported,
             "I/O methods are not implemented in DummyIO",
