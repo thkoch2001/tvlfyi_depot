@@ -5,7 +5,8 @@
 pkgs.makeOverridable
   ({ emacs ? pkgs.emacs29 }:
   let
-    emacsWithPackages = (pkgs.emacsPackagesFor emacs).emacsWithPackages;
+    emacsPackages = (pkgs.emacsPackagesFor emacs);
+    emacsWithPackages = emacsPackages.emacsWithPackages;
 
     # If switching telega versions, use this variable because it will
     # keep the version check, binary path and so on in sync.
@@ -162,6 +163,7 @@ pkgs.makeOverridable
           inherit emacs;
 
           # Expose the pure emacs with all packages.
+          inherit emacsPackages;
           emacsWithPackages = tazjinsEmacs f;
 
           # Call overrideEmacs with a function (pkgs -> pkgs) to modify the
