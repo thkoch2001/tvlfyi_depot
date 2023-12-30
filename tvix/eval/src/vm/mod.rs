@@ -968,13 +968,18 @@ impl<'o> VM<'o> {
 
     /// Emit a warning with the given WarningKind and the source span
     /// of the current instruction.
-    pub fn emit_warning(&mut self, _kind: WarningKind) {
+    pub fn emit_warning(&mut self, kind: WarningKind) {
         // TODO: put LightSpan in warning, calculate only *after* eval
         // TODO: what to do with the spans?
-        // self.push_warning(EvalWarning {
-        //     kind,
-        //     span: self.current_span(),
-        // });
+        // FIXME(raitobezarius): I wrote this very simple thing but I don't know what
+        // was the intent mentioned by the 2 TODOs above, e.g. putting a LightSpan and calculating
+        // only after evaluation or "what to do with the spans?".
+        // I used it `get_span` which seems to refer to the current call frame span,
+        // this might be the wrong span?
+        self.push_warning(EvalWarning {
+            kind,
+            span: self.get_span(),
+        });
     }
 
     /// Interpolate string fragments by popping the specified number of
