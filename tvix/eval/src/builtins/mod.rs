@@ -807,6 +807,14 @@ mod pure_builtins {
 
     #[builtin("map")]
     async fn builtin_map(co: GenCo, f: Value, list: Value) -> Result<Value, ErrorKind> {
+        if list.is_catchable() {
+            return Ok(list);
+        }
+
+        if f.is_catchable() {
+            return Ok(f);
+        }
+
         let mut out = imbl::Vector::<Value>::new();
 
         // the best span we can get…
