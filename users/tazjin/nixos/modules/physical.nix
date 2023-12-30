@@ -92,6 +92,10 @@ in
     # Disable the broken NetworkManager-wait-online.service
     systemd.services.NetworkManager-wait-online.enable = lib.mkForce false;
 
+    # Disable the thing that prints annoying warnings when trying to
+    # run manually patchelfed binaries
+    environment.stub-ld.enable = false;
+
     programs = {
       fish.enable = true;
       mosh.enable = true;
