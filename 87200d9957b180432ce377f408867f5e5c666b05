@@ -16,6 +16,23 @@
       "message": "As recommended by flokli, here\u0027s a very simple implementation of the emit warning.",
       "revId": "87200d9957b180432ce377f408867f5e5c666b05",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "83290631_13b6aa3e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2023-12-30T23:04:29Z",
+      "side": 1,
+      "message": "I don\u0027t have enough knowledge about the whole LightSpan situation, but considering this now stops swallowing warnings this LGTM.",
+      "revId": "87200d9957b180432ce377f408867f5e5c666b05",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
