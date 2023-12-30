@@ -212,7 +212,6 @@ in
               timerConfig = {
                 # Fire every 6h and distribute the workload over next 6h randomly
                 OnCalendar = "*-*-* 00/6:00:00";
-                AccuracySec = "6h";
                 RandomizedDelaySec = "6h";
                 Persistent = true;
               };

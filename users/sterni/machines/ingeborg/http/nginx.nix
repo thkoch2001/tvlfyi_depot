@@ -24,5 +24,7 @@
         charset utf-8;
       '';
     };
+
+    networking.firewall.allowedTCPPorts = [ 80 443 ];
   };
 }
