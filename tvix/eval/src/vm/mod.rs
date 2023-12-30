@@ -812,17 +812,24 @@ impl<'o> VM<'o> {
                 }
 
                 OpCode::OpAdd => {
-                    let b = self.stack_pop();
-                    let a = self.stack_pop();
+                    match (self.stack_pop(), self.stack_pop()) {
+                        (Value::Catchable(cek), _) | (_, Value::Catchable(cek)) => {
+                            self.stack.push(Value::Catchable(cek));
+                        }
 
-                    let gen_span = frame.current_light_span();
-                    self.push_call_frame(span, frame);
+                        (b, a) => {
+                            let gen_span = frame.current_light_span();
+                            self.push_call_frame(span, frame);
 
-                    // OpAdd can add not just numbers, but also string-like
-                    // things, which requires more VM logic. This operation is
-                    // evaluated in a generator frame.
-                    self.enqueue_generator("add_values", gen_span, |co| add_values(co, a, b));
-                    return Ok(false);
+                            // OpAdd can add not just numbers, but also string-like
+                            // things, which requires more VM logic. This operation is
+                            // evaluated in a generator frame.
+                            self.enqueue_generator("add_values", gen_span, |co| {
+                                add_values(co, a, b)
+                            });
+                            return Ok(false);
+                        }
+                    }
                 }
 
                 OpCode::OpSub => {
