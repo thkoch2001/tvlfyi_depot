@@ -507,6 +507,10 @@ mod pure_builtins {
         generator: Value,
         length: Value,
     ) -> Result<Value, ErrorKind> {
+        if length.is_catchable() {
+            return Ok(length);
+        }
+
         let mut out = imbl::Vector::<Value>::new();
         let len = length.as_int()?;
         // the best span we can get…
