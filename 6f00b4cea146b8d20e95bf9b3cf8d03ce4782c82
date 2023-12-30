@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "30df75ba_b035046c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000073
+      },
+      "writtenOn": "2023-12-30T22:26:25Z",
+      "side": 1,
+      "message": "As we figured out with @flokli, the test fails because `emit_warning` is not wired up to push any warnings at all.",
+      "revId": "6f00b4cea146b8d20e95bf9b3cf8d03ce4782c82",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
