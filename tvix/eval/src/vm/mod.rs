@@ -646,7 +646,7 @@ impl<'o> VM<'o> {
                 // exactly.
                 OpCode::OpAssertBool => {
                     let val = self.stack_peek(0);
-                    if !val.is_bool() {
+                    if !val.is_catchable() && !val.is_bool() {
                         return frame.error(
                             self,
                             ErrorKind::TypeError {
