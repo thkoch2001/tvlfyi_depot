@@ -16,12 +16,12 @@ depot.nix.readTree.drvTargets {
 
   # To match telega in emacs-overlay or wherever
   tdlib = super.tdlib.overrideAttrs (_: {
-    version = "1.8.22";
+    version = "1.8.23";
     src = self.fetchFromGitHub {
       owner = "tdlib";
       repo = "td";
-      rev = "3870c29b158b75ca5e48e0eebd6b5c3a7994a000";
-      sha256 = "12c59pyghyyamzln8bzhs65alv8ysw3ny6sccvwasr84yyif0b1h";
+      rev = "27c3eaeb4964bd5f18d8488e354abde1a4383e49";
+      sha256 = "14f65dfmg2p5hyvi3lffvvazwcd3i3jrrw3c2pwrc5yfgxk3662g";
     };
   });
 
