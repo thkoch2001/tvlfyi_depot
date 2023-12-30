@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "68e58785_dc713c16",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000073
+      },
+      "writtenOn": "2023-12-30T22:17:07Z",
+      "side": 1,
+      "message": "From an incremental evaluation perspective, this makes sense to me, it also makes the evaluator data, trivially, sendable to another thread and enable consumers to massage how they want to share the code and what not.",
+      "revId": "80b19ada1e68720ab882788fe61f5e035956da7e",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
