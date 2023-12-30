@@ -286,7 +286,7 @@ fn eval(model: &Model) -> Output {
         return out;
     }
 
-    let mut eval = tvix_eval::Evaluation::new(&model.code, Some("/nixbolt".into()));
+    let mut eval = tvix_eval::Evaluation::default();
     let source = eval.source_map();
 
     let result = {
@@ -298,7 +298,7 @@ fn eval(model: &Model) -> Output {
             eval.runtime_observer = Some(&mut runtime_observer);
         }
 
-        eval.evaluate()
+        eval.evaluate(&model.code, Some("/nixbolt".into()))
     };
 
     if model.display_ast {
