@@ -940,6 +940,14 @@ mod pure_builtins {
         attrs: Value,
         keys: Value,
     ) -> Result<Value, ErrorKind> {
+        if attrs.is_catchable() {
+            return Ok(attrs);
+        }
+
+        if keys.is_catchable() {
+            return Ok(keys);
+        }
+
         let attrs = attrs.to_attrs()?;
         let keys = keys
             .to_list()?
