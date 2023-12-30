@@ -646,7 +646,7 @@ impl<'o> VM<'o> {
                 // exactly.
                 OpCode::OpAssertBool => {
                     let val = self.stack_peek(0);
-                    if !val.is_bool() {
+                    if !val.is_catchable() && !val.is_bool() {
                         return frame.error(
                             self,
                             ErrorKind::TypeError {
@@ -732,17 +732,17 @@ impl<'o> VM<'o> {
                 }
 
                 OpCode::OpConcat => {
-                    let rhs = self
-                        .stack_pop()
-                        .to_list()
-                        .with_span(&frame, self)?
-                        .into_inner();
-                    let lhs = self
-                        .stack_pop()
-                        .to_list()
-                        .with_span(&frame, self)?
-                        .into_inner();
-                    self.stack.push(Value::List(NixList::from(lhs + rhs)))
+                    // right hand side, left hand side
+                    match (self.stack_pop(), self.stack_pop()) {
+                        (Value::Catchable(cek), _) | (_, Value::Catchable(cek)) => {
+                            self.stack.push(Value::Catchable(cek));
+                        }
+                        (rhs, lhs) => {
+                            let rhs = rhs.to_list().with_span(&frame, self)?.into_inner();
+                            let lhs = lhs.to_list().with_span(&frame, self)?.into_inner();
+                            self.stack.push(Value::List(NixList::from(lhs + rhs)))
+                        }
+                    }
                 }
 
                 OpCode::OpResolveWith => {
@@ -812,17 +812,24 @@ impl<'o> VM<'o> {
                 }
 
                 OpCode::OpAdd => {
-                    let b = self.stack_pop();
-                    let a = self.stack_pop();
+                    match (self.stack_pop(), self.stack_pop()) {
+                        (Value::Catchable(cek), _) | (_, Value::Catchable(cek)) => {
+                            self.stack.push(Value::Catchable(cek));
+                        }
 
-                    let gen_span = frame.current_light_span();
-                    self.push_call_frame(span, frame);
+                        (b, a) => {
+                            let gen_span = frame.current_light_span();
+                            self.push_call_frame(span, frame);
 
-                    // OpAdd can add not just numbers, but also string-like
-                    // things, which requires more VM logic. This operation is
-                    // evaluated in a generator frame.
-                    self.enqueue_generator("add_values", gen_span, |co| add_values(co, a, b));
-                    return Ok(false);
+                            // OpAdd can add not just numbers, but also string-like
+                            // things, which requires more VM logic. This operation is
+                            // evaluated in a generator frame.
+                            self.enqueue_generator("add_values", gen_span, |co| {
+                                add_values(co, a, b)
+                            });
+                            return Ok(false);
+                        }
+                    }
                 }
 
                 OpCode::OpSub => {
