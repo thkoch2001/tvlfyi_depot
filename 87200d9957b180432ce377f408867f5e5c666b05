@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cb4fb618_151c4883",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000073
+      },
+      "writtenOn": "2023-12-30T23:01:23Z",
+      "side": 1,
+      "message": "As recommended by flokli, here\u0027s a very simple implementation of the emit warning.",
+      "revId": "87200d9957b180432ce377f408867f5e5c666b05",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
