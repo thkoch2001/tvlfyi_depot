@@ -732,17 +732,17 @@ impl<'o> VM<'o> {
                 }
 
                 OpCode::OpConcat => {
-                    let rhs = self
-                        .stack_pop()
-                        .to_list()
-                        .with_span(&frame, self)?
-                        .into_inner();
-                    let lhs = self
-                        .stack_pop()
-                        .to_list()
-                        .with_span(&frame, self)?
-                        .into_inner();
-                    self.stack.push(Value::List(NixList::from(lhs + rhs)))
+                    // right hand side, left hand side
+                    match (self.stack_pop(), self.stack_pop()) {
+                        (Value::Catchable(cek), _) | (_, Value::Catchable(cek)) => {
+                            self.stack.push(Value::Catchable(cek));
+                        }
+                        (rhs, lhs) => {
+                            let rhs = rhs.to_list().with_span(&frame, self)?.into_inner();
+                            let lhs = lhs.to_list().with_span(&frame, self)?.into_inner();
+                            self.stack.push(Value::List(NixList::from(lhs + rhs)))
+                        }
+                    }
                 }
 
                 OpCode::OpResolveWith => {
