@@ -94,6 +94,14 @@ mod pure_builtins {
 
     #[builtin("all")]
     async fn builtin_all(co: GenCo, pred: Value, list: Value) -> Result<Value, ErrorKind> {
+        if list.is_catchable() {
+            return Ok(list);
+        }
+
+        if pred.is_catchable() {
+            return Ok(pred);
+        }
+
         for value in list.to_list()?.into_iter() {
             let pred_result = generators::request_call_with(&co, pred.clone(), [value]).await;
             let pred_result = generators::request_force(&co, pred_result).await;
