@@ -145,6 +145,10 @@ mod pure_builtins {
 
     #[builtin("attrValues")]
     async fn builtin_attr_values(co: GenCo, set: Value) -> Result<Value, ErrorKind> {
+        if set.is_catchable() {
+            return Ok(set);
+        }
+
         let xs = set.to_attrs()?;
         let mut output = Vec::with_capacity(xs.len());
 
