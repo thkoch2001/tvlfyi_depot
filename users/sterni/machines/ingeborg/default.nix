@@ -13,6 +13,16 @@
     (depot.path.origSrc + "/ops/modules/btrfs-auto-scrub.nix")
     ./monitoring.nix
     ./minecraft.nix
+    ./http/sterni.lv.nix
+    ./http/code.sterni.lv.nix
+    ./http/flipdot.openlab-augsburg.de.nix
+
+    # Inactive:
+    # ./http/likely-music.sterni.lv.nix
+    # ./gopher.nix
+
+    # TODO(sterni): fail2ban
+    # TODO(sterni): automatic backups for full recovery
   ];
 
   config = {
