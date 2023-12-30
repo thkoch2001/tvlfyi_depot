@@ -23,6 +23,7 @@ use crate::{
     compiler::GlobalsMap,
     errors::{CatchableErrorKind, Error, ErrorKind, EvalResult},
     io::EvalIO,
+    lifted_pop,
     nix_search_path::NixSearchPath,
     observer::RuntimeObserver,
     opcode::{CodeIdx, Count, JumpOffset, OpCode, StackIdx, UpvalueIdx},
@@ -540,14 +541,8 @@ impl<'o> VM<'o> {
                         ))));
                 }
 
-                OpCode::OpAttrsSelect => {
-                    let key = self.stack_pop();
-                    let attrs = self.stack_pop();
-                    if key.is_catchable() {
-                        self.stack.push(key);
-                    } else if attrs.is_catchable() {
-                        self.stack.push(attrs);
-                    } else {
+                OpCode::OpAttrsSelect => lifted_pop! {
+                    self(key, attrs) => {
                         let key = key.to_str().with_span(&frame, self)?;
                         let attrs = attrs.to_attrs().with_span(&frame, self)?;
 
@@ -564,7 +559,7 @@ impl<'o> VM<'o> {
                             }
                         }
                     }
-                }
+                },
 
                 OpCode::OpJumpIfFalse(JumpOffset(offset)) => {
                     debug_assert!(offset != 0);
@@ -628,16 +623,16 @@ impl<'o> VM<'o> {
                     frame.ip += offset;
                 }
 
-                OpCode::OpEqual => {
-                    let b = self.stack_pop();
-                    let a = self.stack_pop();
-                    let gen_span = frame.current_light_span();
-                    self.push_call_frame(span, frame);
-                    self.enqueue_generator("nix_eq", gen_span.clone(), |co| {
-                        a.nix_eq_owned_genco(b, co, PointerEquality::ForbidAll, gen_span)
-                    });
-                    return Ok(false);
-                }
+                OpCode::OpEqual => lifted_pop! {
+                    self(b, a) => {
+                        let gen_span = frame.current_light_span();
+                        self.push_call_frame(span, frame);
+                        self.enqueue_generator("nix_eq", gen_span.clone(), |co| {
+                            a.nix_eq_owned_genco(b, co, PointerEquality::ForbidAll, gen_span)
+                        });
+                        return Ok(false);
+                    }
+                },
 
                 // These assertion operations error out if the stack
                 // top is not of the expected type. This is necessary
@@ -645,7 +640,8 @@ impl<'o> VM<'o> {
                 // exactly.
                 OpCode::OpAssertBool => {
                     let val = self.stack_peek(0);
-                    if !val.is_bool() {
+                    // TODO(edef): propagate this into is_bool, since bottom values *are* values of any type
+                    if !val.is_catchable() && !val.is_bool() {
                         return frame.error(
                             self,
                             ErrorKind::TypeError {
@@ -658,7 +654,8 @@ impl<'o> VM<'o> {
 
                 OpCode::OpAssertAttrs => {
                     let val = self.stack_peek(0);
-                    if !val.is_attrs() {
+                    // TODO(edef): propagate this into is_attrs, since bottom values *are* values of any type
+                    if !val.is_catchable() && !val.is_attrs() {
                         return frame.error(
                             self,
                             ErrorKind::TypeError {
@@ -671,29 +668,20 @@ impl<'o> VM<'o> {
 
                 OpCode::OpAttrs(Count(count)) => self.run_attrset(&frame, count)?,
 
-                OpCode::OpAttrsUpdate => {
-                    let rhs = self.stack_pop();
-                    let lhs = self.stack_pop();
-                    if lhs.is_catchable() {
-                        self.stack.push(lhs);
-                    } else if rhs.is_catchable() {
-                        self.stack.push(rhs);
-                    } else {
+                OpCode::OpAttrsUpdate => lifted_pop! {
+                    self(rhs, lhs) => {
                         let rhs = rhs.to_attrs().with_span(&frame, self)?;
                         let lhs = lhs.to_attrs().with_span(&frame, self)?;
                         self.stack.push(Value::attrs(lhs.update(*rhs)))
                     }
-                }
+                },
 
-                OpCode::OpInvert => {
-                    let v = self.stack_pop();
-                    if v.is_catchable() {
-                        self.stack.push(v);
-                    } else {
+                OpCode::OpInvert => lifted_pop! {
+                    self(v) => {
                         let v = v.as_bool().with_span(&frame, self)?;
                         self.stack.push(Value::Bool(!v));
                     }
-                }
+                },
 
                 OpCode::OpList(Count(count)) => {
                     let list =
@@ -709,14 +697,8 @@ impl<'o> VM<'o> {
                     }
                 }
 
-                OpCode::OpHasAttr => {
-                    let key = self.stack_pop();
-                    let attrs = self.stack_pop();
-                    if key.is_catchable() {
-                        self.stack.push(key);
-                    } else if attrs.is_catchable() {
-                        self.stack.push(attrs);
-                    } else {
+                OpCode::OpHasAttr => lifted_pop! {
+                    self(key, attrs) => {
                         let key = key.to_str().with_span(&frame, self)?;
                         let result = match attrs {
                             Value::Attrs(attrs) => attrs.contains(key.as_str()),
@@ -728,21 +710,15 @@ impl<'o> VM<'o> {
 
                         self.stack.push(Value::Bool(result));
                     }
-                }
+                },
 
-                OpCode::OpConcat => {
-                    let rhs = self
-                        .stack_pop()
-                        .to_list()
-                        .with_span(&frame, self)?
-                        .into_inner();
-                    let lhs = self
-                        .stack_pop()
-                        .to_list()
-                        .with_span(&frame, self)?
-                        .into_inner();
-                    self.stack.push(Value::List(NixList::from(lhs + rhs)))
-                }
+                OpCode::OpConcat => lifted_pop! {
+                    self(rhs, lhs) => {
+                        let rhs = rhs.to_list().with_span(&frame, self)?.into_inner();
+                        let lhs = lhs.to_list().with_span(&frame, self)?.into_inner();
+                        self.stack.push(Value::List(NixList::from(lhs + rhs)))
+                    }
+                },
 
                 OpCode::OpResolveWith => {
                     let ident = self.stack_pop().to_str().with_span(&frame, self)?;
@@ -810,53 +786,52 @@ impl<'o> VM<'o> {
                     }
                 }
 
-                OpCode::OpAdd => {
-                    let b = self.stack_pop();
-                    let a = self.stack_pop();
+                OpCode::OpAdd => lifted_pop! {
+                    self(b, a) => {
+                        let gen_span = frame.current_light_span();
+                        self.push_call_frame(span, frame);
 
-                    let gen_span = frame.current_light_span();
-                    self.push_call_frame(span, frame);
+                        // OpAdd can add not just numbers, but also string-like
+                        // things, which requires more VM logic. This operation is
+                        // evaluated in a generator frame.
+                        self.enqueue_generator("add_values", gen_span, |co| add_values(co, a, b));
+                        return Ok(false);
+                    }
+                },
 
-                    // OpAdd can add not just numbers, but also string-like
-                    // things, which requires more VM logic. This operation is
-                    // evaluated in a generator frame.
-                    self.enqueue_generator("add_values", gen_span, |co| add_values(co, a, b));
-                    return Ok(false);
-                }
+                OpCode::OpSub => lifted_pop! {
+                    self(b, a) => {
+                        let result = arithmetic_op!(&a, &b, -).with_span(&frame, self)?;
+                        self.stack.push(result);
+                    }
+                },
 
-                OpCode::OpSub => {
-                    let b = self.stack_pop();
-                    let a = self.stack_pop();
-                    let result = arithmetic_op!(&a, &b, -).with_span(&frame, self)?;
-                    self.stack.push(result);
-                }
+                OpCode::OpMul => lifted_pop! {
+                    self(b, a) => {
+                        let result = arithmetic_op!(&a, &b, *).with_span(&frame, self)?;
+                        self.stack.push(result);
+                    }
+                },
 
-                OpCode::OpMul => {
-                    let b = self.stack_pop();
-                    let a = self.stack_pop();
-                    let result = arithmetic_op!(&a, &b, *).with_span(&frame, self)?;
-                    self.stack.push(result);
-                }
+                OpCode::OpDiv => lifted_pop! {
+                    self(b, a) => {
+                        match b {
+                            Value::Integer(0) => return frame.error(self, ErrorKind::DivisionByZero),
+                            Value::Float(b) if b == 0.0_f64 => {
+                                return frame.error(self, ErrorKind::DivisionByZero)
+                            }
+                            _ => {}
+                        };
 
-                OpCode::OpDiv => {
-                    let b = self.stack_pop();
-
-                    match b {
-                        Value::Integer(0) => return frame.error(self, ErrorKind::DivisionByZero),
-                        Value::Float(b) if b == 0.0_f64 => {
-                            return frame.error(self, ErrorKind::DivisionByZero)
-                        }
-                        _ => {}
-                    };
-
-                    let a = self.stack_pop();
-                    let result = arithmetic_op!(&a, &b, /).with_span(&frame, self)?;
-                    self.stack.push(result);
-                }
+                        let result = arithmetic_op!(&a, &b, /).with_span(&frame, self)?;
+                        self.stack.push(result);
+                    }
+                },
 
                 OpCode::OpNegate => match self.stack_pop() {
                     Value::Integer(i) => self.stack.push(Value::Integer(-i)),
                     Value::Float(f) => self.stack.push(Value::Float(-f)),
+                    Value::Catchable(cex) => self.stack.push(Value::Catchable(cex)),
                     v => {
                         return frame.error(
                             self,
