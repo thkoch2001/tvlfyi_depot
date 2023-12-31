@@ -11,7 +11,7 @@ serde_urlencoded = "*" # pinned by yew
 rnix = "0.11.0"
 
 # needs to be in sync with nixpkgs
-wasm-bindgen = "= 0.2.89"
+wasm-bindgen = "= 0.2.88"
 
 [dependencies.tvix-eval]
 path = "../../tvix/eval"
