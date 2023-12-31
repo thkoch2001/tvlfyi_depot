@@ -292,7 +292,10 @@ impl EvalIO for TvixStoreIO {
 
 #[cfg(test)]
 mod tests {
-    use std::{cell::RefCell, path::Path, rc::Rc, sync::Arc};
+    use std::{
+        path::Path,
+        sync::{Arc, RwLock},
+    };
 
     use tempfile::TempDir;
     use tvix_castore::{blobservice::MemoryBlobService, directoryservice::MemoryDirectoryService};
@@ -324,7 +327,7 @@ mod tests {
             runtime.handle().clone(),
         ));
 
-        let known_paths: Rc<RefCell<KnownPaths>> = Default::default();
+        let known_paths: Arc<RwLock<KnownPaths>> = Default::default();
 
         add_derivation_builtins(&mut eval, known_paths.clone());
 

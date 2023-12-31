@@ -1,5 +1,4 @@
-use std::cell::RefCell;
-use std::rc::Rc;
+use std::sync::{Arc, RwLock};
 use std::{fs, path::PathBuf};
 use tvix_glue::known_paths::KnownPaths;
 use tvix_glue::{builtins::add_derivation_builtins, configure_nix_path};
@@ -88,7 +87,7 @@ fn interpret(code: &str, path: Option<PathBuf>, args: &Args, explain: bool) -> b
         })
         .expect("unable to setup {blob|directory|pathinfo}service before interpreter setup");
 
-    let known_paths: Rc<RefCell<KnownPaths>> = Default::default();
+    let known_paths: Arc<RwLock<KnownPaths>> = Default::default();
     add_derivation_builtins(&mut eval, known_paths.clone());
     configure_nix_path(&mut eval, &args.nix_search_path);
     eval.io_handle = Box::new(tvix_glue::tvix_io::TvixIO::new(

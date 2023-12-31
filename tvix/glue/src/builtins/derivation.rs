@@ -3,9 +3,9 @@ use crate::builtins::DerivationError;
 use crate::known_paths::{KnownPaths, PathKind, PathName};
 use nix_compat::derivation::{Derivation, Output};
 use nix_compat::nixhash;
-use std::cell::RefCell;
 use std::collections::{btree_map, BTreeSet};
-use std::rc::Rc;
+use std::io;
+use std::sync::{Arc, RwLock};
 use tvix_eval::builtin_macros::builtins;
 use tvix_eval::generators::{self, emit_warning_kind, GenCo};
 use tvix_eval::{
@@ -214,7 +214,7 @@ async fn strong_importing_coerce_to_string(
     }
 }
 
-#[builtins(state = "Rc<RefCell<KnownPaths>>")]
+#[builtins(state = "Arc<RwLock<KnownPaths>>")]
 pub(crate) mod derivation_builtins {
     use super::*;
     use nix_compat::store_path::hash_placeholder;
@@ -238,7 +238,7 @@ pub(crate) mod derivation_builtins {
     /// use the higher-level `builtins.derivation` instead.
     #[builtin("derivationStrict")]
     async fn builtin_derivation_strict(
-        state: Rc<RefCell<KnownPaths>>,
+        state: Arc<RwLock<KnownPaths>>,
         co: GenCo,
         input: Value,
     ) -> Result<Value, ErrorKind> {
@@ -354,7 +354,7 @@ pub(crate) mod derivation_builtins {
 
         // Scan references in relevant attributes to detect any build-references.
         let references = {
-            let state = state.borrow();
+            let state = state.read().map_err(|_| io::Error::other("poisoned"))?;
             if state.is_empty() {
                 // skip reference scanning, create an empty result
                 Default::default()
@@ -380,7 +380,7 @@ pub(crate) mod derivation_builtins {
             }
         }
 
-        let mut known_paths = state.borrow_mut();
+        let mut known_paths = state.write().map_err(|_| io::Error::other("poisoned"))?;
         populate_inputs(&mut drv, &known_paths, references);
 
         // At this point, derivation fields are fully populated from
@@ -437,7 +437,7 @@ pub(crate) mod derivation_builtins {
 
     #[builtin("toFile")]
     async fn builtin_to_file(
-        state: Rc<RefCell<KnownPaths>>,
+        state: Arc<RwLock<KnownPaths>>,
         co: GenCo,
         name: Value,
         content: Value,
@@ -449,10 +449,13 @@ pub(crate) mod derivation_builtins {
             .to_str()
             .context("evaluating the `content` parameter of builtins.toFile")?;
 
-        let mut refscan = state.borrow().reference_scanner();
+        let mut refscan = state
+            .read()
+            .map_err(|_| io::Error::other("poisoned"))?
+            .reference_scanner();
         refscan.scan(content.as_str());
         let refs = {
-            let paths = state.borrow();
+            let paths = state.read().map_err(|_| io::Error::other("poisoned"))?;
             refscan
                 .finalise()
                 .into_iter()
@@ -471,7 +474,10 @@ pub(crate) mod derivation_builtins {
             .map_err(DerivationError::InvalidDerivation)?
             .to_absolute_path();
 
-        state.borrow_mut().plain(&path);
+        state
+            .write()
+            .map_err(|_| io::Error::other("poisoned"))?
+            .plain(&path);
 
         // TODO: actually persist the file in the store at that path ...
 

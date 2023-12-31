@@ -1,5 +1,5 @@
 //! Contains builtins that deal with the store or builder.
-use std::{cell::RefCell, rc::Rc};
+use std::sync::{Arc, RwLock};
 
 use crate::known_paths::KnownPaths;
 
@@ -16,7 +16,7 @@ pub use derivation_error::Error as DerivationError;
 /// `known_paths`.
 pub fn add_derivation_builtins(
     eval: &mut tvix_eval::Evaluation,
-    known_paths: Rc<RefCell<KnownPaths>>,
+    known_paths: Arc<RwLock<KnownPaths>>,
 ) {
     eval.builtins
         .extend(derivation::derivation_builtins::builtins(known_paths));
@@ -31,7 +31,7 @@ mod tests {
     use super::add_derivation_builtins;
     use crate::known_paths::KnownPaths;
     use nix_compat::store_path::hash_placeholder;
-    use std::{cell::RefCell, rc::Rc};
+    use std::sync::{Arc, RwLock};
     use test_case::test_case;
     use tvix_eval::EvaluationResult;
 
@@ -41,7 +41,7 @@ mod tests {
     fn eval(str: &str) -> EvaluationResult {
         let mut eval = tvix_eval::Evaluation::new_impure();
 
-        let known_paths: Rc<RefCell<KnownPaths>> = Default::default();
+        let known_paths: Arc<RwLock<KnownPaths>> = Default::default();
 
         add_derivation_builtins(&mut eval, known_paths.clone());
 
