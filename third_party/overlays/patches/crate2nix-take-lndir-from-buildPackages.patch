@@ -1,0 +1,26 @@
+From ea4ec75c6cae0c0aba21c3cf4616dfceb64bff7a Mon Sep 17 00:00:00 2001
+From: Florian Klink <flokli@flokli.de>
+Date: Tue, 31 Oct 2023 14:16:22 +0200
+Subject: [PATCH 1/2] take lndir from buildPackages
+
+This needs to be executed on the building host.
+---
+ crate2nix/templates/nix/crate2nix/default.nix | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/crate2nix/templates/nix/crate2nix/default.nix b/crate2nix/templates/nix/crate2nix/default.nix
+index 1b859fb..2b8050c 100644
+--- a/templates/nix/crate2nix/default.nix
++++ b/templates/nix/crate2nix/default.nix
+@@ -135,7 +135,7 @@ rec {
+           # recreate a file hierarchy as when running tests with cargo
+ 
+           # the source for test data
+-          ${pkgs.xorg.lndir}/bin/lndir ${crate.src}
++          ${pkgs.buildPackages.xorg.lndir}/bin/lndir ${crate.src}
+ 
+           # build outputs
+           testRoot=target/debug
+-- 
+2.42.0
+

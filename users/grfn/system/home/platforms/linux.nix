@@ -74,8 +74,6 @@ in
 
   services.gpg-agent = {
     enable = true;
-    # previous default has been removed from nixpkgs
-    pinentryFlavor = "qt";
   };
 
   programs.zsh.initExtra = ''
