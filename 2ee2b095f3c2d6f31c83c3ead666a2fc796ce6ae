@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7e924165_bc1710a8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000073
+      },
+      "writtenOn": "2023-12-31T18:00:16Z",
+      "side": 1,
+      "message": "LGTM",
+      "revId": "2ee2b095f3c2d6f31c83c3ead666a2fc796ce6ae",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9fc949fd_764a408d",
+        "filename": "tvix/cli/src/main.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 99,
+      "author": {
+        "id": 1000073
+      },
+      "writtenOn": "2023-12-31T18:00:16Z",
+      "side": 1,
+      "message": "please use expect with a message here.",
+      "revId": "2ee2b095f3c2d6f31c83c3ead666a2fc796ce6ae",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fa915b9c_8ef89da2",
+        "filename": "tvix/cli/src/main.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 115,
+      "author": {
+        "id": 1000073
+      },
+      "writtenOn": "2023-12-31T18:00:16Z",
+      "side": 1,
+      "message": "be more precise in which services and phase of the setup (before what)",
+      "revId": "2ee2b095f3c2d6f31c83c3ead666a2fc796ce6ae",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
