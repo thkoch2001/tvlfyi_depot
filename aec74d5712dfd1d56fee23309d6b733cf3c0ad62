@@ -16,6 +16,24 @@
       "message": "Please link to the nixpkgs PR/issue in the commit messsage.",
       "revId": "aec74d5712dfd1d56fee23309d6b733cf3c0ad62",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "73de3409_ba54e482",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2023-12-31T20:40:35Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "a6a49401_a3b30404",
+      "revId": "aec74d5712dfd1d56fee23309d6b733cf3c0ad62",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
