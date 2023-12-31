@@ -67,33 +67,6 @@ struct Args {
     path_info_service_addr: String,
 }
 
-/// Construct the three store handles from their addrs.
-async fn construct_services(
-    blob_service_addr: impl AsRef<str>,
-    directory_service_addr: impl AsRef<str>,
-    path_info_service_addr: impl AsRef<str>,
-) -> std::io::Result<(
-    Arc<dyn BlobService>,
-    Arc<dyn DirectoryService>,
-    Box<dyn PathInfoService>,
-)> {
-    let blob_service: Arc<dyn BlobService> = blobservice::from_addr(blob_service_addr.as_ref())
-        .await?
-        .into();
-    let directory_service: Arc<dyn DirectoryService> =
-        directoryservice::from_addr(directory_service_addr.as_ref())
-            .await?
-            .into();
-    let path_info_service = pathinfoservice::from_addr(
-        path_info_service_addr.as_ref(),
-        blob_service.clone(),
-        directory_service.clone(),
-    )
-    .await?;
-
-    Ok((blob_service, directory_service, path_info_service))
-}
-
 /// Interprets the given code snippet, printing out warnings, errors
 /// and the result itself. The return value indicates whether
 /// evaluation succeeded.
@@ -109,7 +82,7 @@ fn interpret(code: &str, path: Option<PathBuf>, args: &Args, explain: bool) -> b
             let directory_service_addr = args.directory_service_addr.clone();
             let path_info_service_addr = args.path_info_service_addr.clone();
             async move {
-                construct_services(
+                tvix_store::utils::construct_services(
                     blob_service_addr,
                     directory_service_addr,
                     path_info_service_addr,
