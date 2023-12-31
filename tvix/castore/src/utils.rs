@@ -16,12 +16,12 @@ use crate::{
     },
 };
 
-pub fn gen_blob_service() -> Arc<dyn BlobService> {
-    Arc::new(MemoryBlobService::default())
+pub fn gen_blob_service() -> Box<dyn BlobService> {
+    Box::<MemoryBlobService>::default()
 }
 
-pub fn gen_directory_service() -> Arc<dyn DirectoryService> {
-    Arc::new(MemoryDirectoryService::default())
+pub fn gen_directory_service() -> Box<dyn DirectoryService> {
+    Box::<MemoryDirectoryService>::default()
 }
 
 /// This will spawn the a gRPC server with a DirectoryService client, connect a
@@ -35,7 +35,7 @@ pub(crate) async fn gen_directorysvc_grpc_client() -> DirectoryServiceClient<Cha
         // spin up a new DirectoryService
         let mut server = Server::builder();
         let router = server.add_service(DirectoryServiceServer::new(
-            GRPCDirectoryServiceWrapper::from(gen_directory_service()),
+            GRPCDirectoryServiceWrapper::from(Arc::from(gen_directory_service())),
         ));
 
         router
@@ -68,7 +68,7 @@ pub(crate) async fn gen_blobsvc_grpc_client() -> BlobServiceClient<Channel> {
         // spin up a new DirectoryService
         let mut server = Server::builder();
         let router = server.add_service(BlobServiceServer::new(GRPCBlobServiceWrapper::from(
-            gen_blob_service(),
+            Arc::from(gen_blob_service()),
         )));
 
         router

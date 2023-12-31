@@ -86,6 +86,7 @@ where
 #[cfg(test)]
 mod tests {
     use std::path::PathBuf;
+    use std::sync::Arc;
 
     use crate::directoryservice::DirectoryService;
     use crate::fixtures::{DIRECTORY_COMPLICATED, DIRECTORY_WITH_KEEP};
@@ -95,7 +96,7 @@ mod tests {
 
     #[tokio::test]
     async fn test_descend_to() {
-        let directory_service = gen_directory_service();
+        let directory_service: Arc<dyn DirectoryService> = gen_directory_service().into();
 
         let mut handle = directory_service.put_multiple_start();
         handle

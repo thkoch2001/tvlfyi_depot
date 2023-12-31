@@ -213,8 +213,11 @@ fn process_dir_reader(
 mod test {
     use crate::nar::read_nar;
     use std::io::Cursor;
+    use std::sync::Arc;
 
     use tokio_stream::StreamExt;
+    use tvix_castore::blobservice::BlobService;
+    use tvix_castore::directoryservice::DirectoryService;
     use tvix_castore::fixtures::{
         DIRECTORY_COMPLICATED, DIRECTORY_WITH_KEEP, EMPTY_BLOB_DIGEST, HELLOWORLD_BLOB_CONTENTS,
         HELLOWORLD_BLOB_DIGEST,
@@ -234,8 +237,8 @@ mod test {
             .spawn_blocking(|| {
                 read_nar(
                     &mut Cursor::new(&NAR_CONTENTS_SYMLINK.clone()),
-                    gen_blob_service(),
-                    gen_directory_service(),
+                    gen_blob_service().into(),
+                    gen_directory_service().into(),
                 )
             })
             .await
@@ -253,7 +256,7 @@ mod test {
 
     #[tokio::test]
     async fn single_file() {
-        let blob_service = gen_blob_service();
+        let blob_service: Arc<dyn BlobService> = gen_blob_service().into();
 
         let handle = tokio::runtime::Handle::current();
 
@@ -264,7 +267,7 @@ mod test {
                     read_nar(
                         &mut Cursor::new(&NAR_CONTENTS_HELLOWORLD.clone()),
                         blob_service,
-                        gen_directory_service(),
+                        gen_directory_service().into(),
                     )
                 }
             })
@@ -288,8 +291,8 @@ mod test {
 
     #[tokio::test]
     async fn complicated() {
-        let blob_service = gen_blob_service();
-        let directory_service = gen_directory_service();
+        let blob_service: Arc<dyn BlobService> = gen_blob_service().into();
+        let directory_service: Arc<dyn DirectoryService> = gen_directory_service().into();
 
         let handle = tokio::runtime::Handle::current();
 
