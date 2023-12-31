@@ -319,7 +319,7 @@ depot.nix.readTree.drvTargets rec{
   };
 
   percent-encoding = buildRustCrate {
-    pname = "percent-encoding";
+    pname = "percent_encoding";
     version = "2.1.0";
     sha256 = "0i838f2nr81585ckmfymf8l1x1vdmx6n8xqvli0lgcy60yl2axy3";
     libPath = "lib.rs";
