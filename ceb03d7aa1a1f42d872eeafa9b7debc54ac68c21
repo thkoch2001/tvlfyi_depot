@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6a54a6d3_d4a81e2f",
+        "filename": "tvix/eval/src/value/mod.rs",
+        "patchSetId": 22
+      },
+      "lineNbr": 321,
+      "author": {
+        "id": 1000073
+      },
+      "writtenOn": "2024-01-01T14:38:06Z",
+      "side": 1,
+      "message": "@sternenseemann@systemli.org I would like your opinion on that, as I discovered in https://cl.tvl.fyi/c/depot/+/10444/22 there was indeed a special case to coercion.",
+      "revId": "ceb03d7aa1a1f42d872eeafa9b7debc54ac68c21",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
