@@ -87,7 +87,6 @@ where
 mod tests {
     use std::path::PathBuf;
 
-    use crate::directoryservice::DirectoryService;
     use crate::fixtures::{DIRECTORY_COMPLICATED, DIRECTORY_WITH_KEEP};
     use crate::utils::gen_directory_service;
 
