@@ -394,5 +394,12 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
             .await??;
         }
     };
+    #[cfg(feature = "otlp")]
+    {
+        opentelemetry::global::shutdown_tracer_provider();
+
+        // HACK: seems to be not sufficient, wait for all spans to be sent out
+        tokio::time::sleep(tokio::time::Duration::from_secs(10)).await;
+    }
     Ok(())
 }
