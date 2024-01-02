@@ -56,6 +56,30 @@
       },
       "revId": "87200d9957b180432ce377f408867f5e5c666b05",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "526904b3_3c18ee9a",
+        "filename": "tvix/eval/src/vm/mod.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 981,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-01-02T22:02:54Z",
+      "side": 1,
+      "message": "I dropped the initial comment.",
+      "parentUuid": "006f0b33_3e0fd937",
+      "range": {
+        "startLine": 981,
+        "startChar": 0,
+        "endLine": 981,
+        "endChar": 34
+      },
+      "revId": "87200d9957b180432ce377f408867f5e5c666b05",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
