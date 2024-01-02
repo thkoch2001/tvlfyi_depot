@@ -8,6 +8,7 @@ rec {
   marcus = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIJkNQJBXekuSzZJ8+gxT+V1+eXTm3hYsfigllr/ARXkf wpcarro@gmail.com";
   nathan = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIP2NjuP722VUgpSu5bVUPTfdVNPO8fSW0Jlas8L4up13 bill@nathan";
   tarasco = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIOh+wG4f7tI0IwGyF2sLi5mPlh3JKE7KqV2ab0tlcL36 wpcarro@tarasco";
+  mbp2 = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIALkHpigF1QOhv0AnwuG8tIXv8z/7k2CUH8p8zIVilVZ wpcarro@ip-10-4-15-38.us-gov-west-1.compute.internal";
 
   all = [
     ava
@@ -16,5 +17,6 @@ rec {
     marcus
     nathan
     tarasco
+    mbp2
   ];
 }

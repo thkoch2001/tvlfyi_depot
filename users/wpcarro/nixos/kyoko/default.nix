@@ -88,6 +88,7 @@ in
     iphone
     nathan
     tarasco
+    mbp2
   ];
   users.users.wpcarro = {
     initialPassword = "password";
