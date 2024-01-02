@@ -33,6 +33,29 @@
       "message": "I don\u0027t have enough knowledge about the whole LightSpan situation, but considering this now stops swallowing warnings this LGTM.",
       "revId": "87200d9957b180432ce377f408867f5e5c666b05",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "006f0b33_3e0fd937",
+        "filename": "tvix/eval/src/vm/mod.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 981,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2024-01-02T18:52:31Z",
+      "side": 1,
+      "message": "the context here is that historically get_span is a super-expensive function call; although in cl/8385 it became significantly faster. I think the original comment can be removed.",
+      "range": {
+        "startLine": 981,
+        "startChar": 0,
+        "endLine": 981,
+        "endChar": 34
+      },
+      "revId": "87200d9957b180432ce377f408867f5e5c666b05",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
