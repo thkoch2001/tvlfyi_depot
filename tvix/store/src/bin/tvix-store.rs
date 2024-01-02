@@ -317,6 +317,9 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
                 .collect::<Vec<_>>();
 
             try_join_all(tasks).await?;
+
+            // HACK: wait for all spans to be sent out
+            tokio::time::sleep(tokio::time::Duration::from_secs(10)).await;
         }
         #[cfg(feature = "fuse")]
         Commands::Mount {
