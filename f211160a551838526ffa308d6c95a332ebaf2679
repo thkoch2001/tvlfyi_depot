@@ -22,6 +22,30 @@
       },
       "revId": "f211160a551838526ffa308d6c95a332ebaf2679",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e681ffcf_f8dd72d0",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 31
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1000073
+      },
+      "writtenOn": "2024-01-03T17:20:31Z",
+      "side": 1,
+      "message": "\u003e It does not do what? Can we get a test for this?\n\nThis is now fixed, it didn\u0027t propagate the context in C++ Nix, we are doing the same in the latest patchset.",
+      "parentUuid": "9bae7d6b_11de0661",
+      "range": {
+        "startLine": 9,
+        "startChar": 0,
+        "endLine": 9,
+        "endChar": 46
+      },
+      "revId": "f211160a551838526ffa308d6c95a332ebaf2679",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
