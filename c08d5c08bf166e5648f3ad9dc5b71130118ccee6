@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c9ef2f35_99e82398",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 30
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2024-01-03T16:46:42Z",
+      "side": 1,
+      "message": "I\u0027d like if these were covered in (individual) tests, because this stateful stuff is quite stressful to think about. Can be done in followup commits.",
+      "revId": "c08d5c08bf166e5648f3ad9dc5b71130118ccee6",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
