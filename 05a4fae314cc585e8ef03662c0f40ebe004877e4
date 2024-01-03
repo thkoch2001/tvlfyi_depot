@@ -22,6 +22,30 @@
       },
       "revId": "05a4fae314cc585e8ef03662c0f40ebe004877e4",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "eaf92380_0081e94a",
+        "filename": "tvix/eval/src/builtins/mod.rs",
+        "patchSetId": 33
+      },
+      "lineNbr": 283,
+      "author": {
+        "id": 1000073
+      },
+      "writtenOn": "2024-01-03T16:57:51Z",
+      "side": 1,
+      "message": "We are emptying the context of that value and joining it in the ambiant context we are producing, it is theoretically possible to break a value if you get a mutable reference to it, by consuming its context.\n\nIn practice, from my understanding, we mostly receive `Value` and never `\u0026Value`, `\u0026mut Value` and I guess we are destroying that value afterward?\n\nIn a world where we have generational garbage collector, things can be quite different. In practice, what we will get before is persistent sharing of the contexts via a tree and this will never be a question even with sharing.",
+      "parentUuid": "384584db_825d0460",
+      "range": {
+        "startLine": 280,
+        "startChar": 0,
+        "endLine": 283,
+        "endChar": 0
+      },
+      "revId": "05a4fae314cc585e8ef03662c0f40ebe004877e4",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
