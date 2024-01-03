@@ -46,6 +46,30 @@
       },
       "revId": "8e4eb4889db2d004dd4e57c6090b76db6cc45bb2",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f486b886_53916274",
+        "filename": "tvix/eval/src/builtins/mod.rs",
+        "patchSetId": 31
+      },
+      "lineNbr": 86,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2024-01-03T17:02:05Z",
+      "side": 1,
+      "message": "Hmm, I would expect that to mean that the word `context` shouldn\u0027t appear anywhere in the body of `abort` (as it\u0027s not relevant here).\n\nDoes a normal to_str not work anymore on contextful strings? What about the other way around?",
+      "parentUuid": "483f82c4_7688471f",
+      "range": {
+        "startLine": 86,
+        "startChar": 0,
+        "endLine": 86,
+        "endChar": 93
+      },
+      "revId": "8e4eb4889db2d004dd4e57c6090b76db6cc45bb2",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
