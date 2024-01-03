@@ -20,6 +20,7 @@
 
 use anyhow::{Context, Result};
 use std::collections::{BTreeMap, HashMap, HashSet};
+use std::{thread, time};
 
 mod gerrit {
     use anyhow::{anyhow, Context, Result};
@@ -59,7 +60,7 @@ mod gerrit {
         pub enabled: bool,
     }
 
-    const GERRIT_RESPONSE_PREFIX: &'static str = ")]}'";
+    const GERRIT_RESPONSE_PREFIX: &str = ")]}'";
 
     pub fn get<T: serde::de::DeserializeOwned>(cfg: &Config, endpoint: &str) -> Result<T> {
         let response = crimp::Request::get(&format!("{}/a{}", cfg.gerrit_url, endpoint))
@@ -73,7 +74,7 @@ mod gerrit {
     }
 
     pub fn submit(cfg: &Config, change_id: &str) -> Result<()> {
-        let response = crimp::Request::post(&format!(
+        crimp::Request::post(&format!(
             "{}/a/changes/{}/submit",
             cfg.gerrit_url, change_id
         ))
@@ -173,7 +174,7 @@ fn autosubmit(cfg: &gerrit::Config) -> Result<bool> {
             change_id, count
         );
 
-        gerrit::submit(cfg, change_id);
+        gerrit::submit(cfg, change_id).context("while submitting")?;
 
         Ok(true)
     } else {
@@ -187,7 +188,7 @@ fn main() -> Result<()> {
 
     loop {
         if !autosubmit(&cfg)? {
-            std::thread::sleep_ms(30000);
+            thread::sleep(time::Duration::from_secs(30));
         }
     }
 }
