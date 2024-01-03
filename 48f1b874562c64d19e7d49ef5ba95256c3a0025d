@@ -16,6 +16,24 @@
       "message": "if you do\n\n```\n- if resources.get(\"service.name\".into()) \u003d\u003d Some(\"unknown_service\".into()) {\n+ if resources.get(\"service.name\".into()).map(|v| v \u003d\u003d \"unknown_service\").unwrap_or(true) {\n```\n\ninstead, then you clarify the fallback intent without having to explain that it will always be set. If you\u0027re certain it will always be Some, then you might as well unwrap instead.",
       "revId": "48f1b874562c64d19e7d49ef5ba95256c3a0025d",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c05f862e_b4fa47b6",
+        "filename": "tvix/store/src/bin/tvix-store.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 198,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-01-03T12:17:42Z",
+      "side": 1,
+      "message": "I think I\u0027m okay with unwrapping. I added some more comments, and explicitly linked to the upstream issue https://github.com/open-telemetry/opentelemetry-rust/issues/1298 about the annoying default behaviour. PTAL.",
+      "parentUuid": "25da16b7_3d39d1ea",
+      "revId": "48f1b874562c64d19e7d49ef5ba95256c3a0025d",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
