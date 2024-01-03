@@ -3,7 +3,7 @@
 
 # Benchmark script that runs inside the Windtunnel build agent
 
-set -euo pipefail
+set -exuo pipefail
 
 echo "Running benchmarks for tvix..."
 pushd "$(dirname "$(dirname "$0")")"
