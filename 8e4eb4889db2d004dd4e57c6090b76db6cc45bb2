@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "008fe422_b04b27ca",
+        "filename": "tvix/eval/src/builtins/mod.rs",
+        "patchSetId": 31
+      },
+      "lineNbr": 86,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2024-01-03T16:47:32Z",
+      "side": 1,
+      "message": "Wouldn\u0027t that mean you need a context*less* string here? I find this comment confusing",
+      "range": {
+        "startLine": 86,
+        "startChar": 0,
+        "endLine": 86,
+        "endChar": 93
+      },
+      "revId": "8e4eb4889db2d004dd4e57c6090b76db6cc45bb2",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
