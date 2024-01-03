@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "384584db_825d0460",
+        "filename": "tvix/eval/src/builtins/mod.rs",
+        "patchSetId": 33
+      },
+      "lineNbr": 283,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2024-01-03T16:55:39Z",
+      "side": 1,
+      "message": "Wait, why are there questions around safety here?\n\nIs it possible to \"break\" an existing value somehow if you get a reference to it?",
+      "range": {
+        "startLine": 280,
+        "startChar": 0,
+        "endLine": 283,
+        "endChar": 0
+      },
+      "revId": "05a4fae314cc585e8ef03662c0f40ebe004877e4",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
