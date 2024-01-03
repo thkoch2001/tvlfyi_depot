@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e0dec861_edbfaaff",
+        "filename": "tvix/eval/src/builtins/mod.rs",
+        "patchSetId": 21
+      },
+      "lineNbr": 1100,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2024-01-03T16:51:35Z",
+      "side": 1,
+      "message": "This is kind of suspicious, it\u0027s also something I\u0027d like a test for.",
+      "range": {
+        "startLine": 1100,
+        "startChar": 0,
+        "endLine": 1100,
+        "endChar": 82
+      },
+      "revId": "d9afe536bfb822679eee7383be49db3114144966",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
