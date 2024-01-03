@@ -20,6 +20,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "06243ebb_57dffde0",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-01-03T13:50:08Z",
+      "side": 1,
+      "message": "The string context chain fixes the panicing stuff properly, but this test no matter makes sense to have.\n\n@tvl@lahfa.xyz this needs to be rebased on top of the string context chain, can you do that?",
+      "parentUuid": "bc93a592_f493d3e1",
+      "revId": "ec3ce60f198290db9c145ebd6315a8e50d8ef245",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "34d00058_877f5dbc",
         "filename": "tvix/glue/src/builtins/mod.rs",
         "patchSetId": 1
