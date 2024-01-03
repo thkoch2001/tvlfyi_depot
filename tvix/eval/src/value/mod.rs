@@ -686,7 +686,7 @@ impl Value {
 
     /// Cast the current value into a **context-less** string.
     /// If you wanted to cast it into a potentially contextful string,
-    /// you have to explicitly use `to_contextful_str`.
+    /// you have to explicitly use [`to_contextful_str`].
     /// Contextful strings are special, they should not be obtained
     /// everytime you want a string.
     pub fn to_str(&self) -> Result<NixString, ErrorKind> {
@@ -697,6 +697,12 @@ impl Value {
         }
     }
 
+    /// Cast the current value into a **context-ful** string.
+    /// If you wanted to cast it into a contextless strings, i.e.
+    /// one with **no context** attached whatsover, you should use [`to_str`].
+    ///
+    /// Contextless strings are usually what you want to use in Nix most of the time
+    /// when you are not manipulating derivations coerced to strings or store paths.
     gen_cast!(
         to_contextful_str,
         NixString,
