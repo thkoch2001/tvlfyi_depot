@@ -70,6 +70,30 @@
       },
       "revId": "8e4eb4889db2d004dd4e57c6090b76db6cc45bb2",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "619d60da_6842cc96",
+        "filename": "tvix/eval/src/builtins/mod.rs",
+        "patchSetId": 31
+      },
+      "lineNbr": 86,
+      "author": {
+        "id": 1000073
+      },
+      "writtenOn": "2024-01-03T17:03:14Z",
+      "side": 1,
+      "message": "The exception is to accept contextful strings, the usual case is to accept contextless strings.\n\nThat\u0027s why `to_str` only cast contextless, and you have to opt-in contextful strings so you are aware of what you are doing.",
+      "parentUuid": "f486b886_53916274",
+      "range": {
+        "startLine": 86,
+        "startChar": 0,
+        "endLine": 86,
+        "endChar": 93
+      },
+      "revId": "8e4eb4889db2d004dd4e57c6090b76db6cc45bb2",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
