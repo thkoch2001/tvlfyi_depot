@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ed4721d7_5e15d6f9",
+        "filename": "tvix/eval/src/builtins/mod.rs",
+        "patchSetId": 29
+      },
+      "lineNbr": 216,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-01-04T12:58:01Z",
+      "side": 1,
+      "message": "What about builtins like these? How does their catchable behaviour look like?\n\nI feel like we should probably add a bunch of tests regarding this to our test suite…",
+      "revId": "1e8ee191e3897ddb7da56708424b1187d14edc22",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
