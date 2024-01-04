@@ -2,16 +2,22 @@ use clap::Parser;
 use clap::Subcommand;
 
 use futures::future::try_join_all;
+use opentelemetry::trace::Span;
 use std::path::PathBuf;
 use std::sync::Arc;
 use tokio_listener::Listener;
 use tokio_listener::SystemOptions;
 use tokio_listener::UserOptions;
 use tonic::transport::Server;
+use tonic::Request;
+use tower::ServiceBuilder;
+use tower_http::trace::TraceLayer;
 use tracing::info;
+use tracing::info_span;
 use tracing::Level;
 use tracing_subscriber::fmt::writer::MakeWriterExt;
 use tracing_subscriber::{layer::SubscriberExt, util::SubscriberInitExt};
+use tvix_store::tracing::accept_trace;
 
 use tvix_castore::proto::blob_service_server::BlobServiceServer;
 use tvix_castore::proto::directory_service_server::DirectoryServiceServer;
@@ -245,6 +251,17 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
                 .unwrap();
 
             let mut server = Server::builder();
+
+            server = server.layer(
+                ServiceBuilder::new()
+                    .layer(TraceLayer::new_for_grpc().make_span_with(
+                        |r: &tonic::Request<tonic::transport::Body>| -> Span {
+                            let headers = r.headers();
+                            info_span!("incoming request", ?headers);
+                        },
+                    ))
+                    .map_request(accept_trace),
+            );
 
             #[allow(unused_mut)]
             let mut router = server
