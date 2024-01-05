@@ -16,6 +16,7 @@ use std::{
     path::{Path, PathBuf},
 };
 use tracing::instrument;
+use walkdir::DirEntry;
 use walkdir::WalkDir;
 
 #[derive(Debug, thiserror::Error)]
@@ -163,15 +164,150 @@ where
 
     let mut directory_putter = directory_service.put_multiple_start();
 
-    for entry in WalkDir::new(p.as_ref())
+    struct ContentsFirstWalkDirIterator {
+        seen_on_the_path: Vec<DirEntry>,
+        siblings: Vec<DirEntry>,
+        peek_next: Option<DirEntry>,
+        walkdir_iterator: <WalkDir as IntoIterator>::IntoIter,
+    }
+
+    impl ContentsFirstWalkDirIterator {
+        pub fn new(walkdir: WalkDir) -> Self {
+            Self {
+                seen_on_the_path: Vec::new(),
+                siblings: Vec::new(),
+                peek_next: None,
+                walkdir_iterator: walkdir.into_iter(),
+            }
+        }
+
+        fn walk_until_leaves(&mut self, entry: DirEntry) -> walkdir::Result<DirEntry> {
+            // Walking until the leaves means that you compute the increasing sequence of nodes by
+            // next-ing the iterator until you find a node of depth smaller.
+            let mut path = vec![entry];
+
+            while let Some(peeked) = self.walkdir_iterator.next() {
+                match peeked {
+                    Err(err) => return Err(err),
+                    Ok(peeked) => {
+                        // We are increasing strictly, i.e. descending.
+                        if path.last().unwrap().depth() < peeked.depth() {
+                            // So, if peeked is a directory, it can be descended in further.
+                            // Otherwise, it's a leaf.
+                            // Because, we are descending in DFS according to `walkdir`, this leaf
+                            // cannot be a intermediate leaf, it must be a leaf for which there's
+                            // no sibling having a deeper subtree.
+                            // So we can trust this is a sibling.
+                            if !peeked.file_type().is_dir() {
+                                self.siblings.push(peeked);
+                            } else {
+                                // We keep going inside the directory otherwise.
+                                path.push(peeked);
+                            }
+                        } else {
+                            // We didn't decrease strictly, either we are stagnating or we are
+                            // decreasing.
+                            // Therefore, we found our leaves.
+                            // They are exactly contained inside `self.siblings` at the moment.
+                            self.peek_next = Some(peeked);
+                            break;
+                        }
+                    }
+                }
+            }
+
+            self.seen_on_the_path.append(&mut path);
+            // `seen_on_the_path` looks like `[ path so far ; entry ; new path encountered here until leaves ]` now.
+
+            debug_assert!(
+                self.siblings
+                    .windows(2)
+                    .all(|pairs| pairs[0].depth() == pairs[1].depth()),
+                "Siblings should all exist on the same level."
+            );
+            debug_assert!(!self.siblings.is_empty(),
+                "After a walk until leaves, leaves cannot be empty as they should at most contain the input argument, which is by definition, a leaf, in such cases.");
+            debug_assert!(self.peek_next.is_none(),
+                "The peeking pointer should be always consumed before we walk new leaves, otherwise the state machine is an incorrect state.");
+
+            Ok(self.siblings.pop().unwrap())
+        }
+    }
+
+    impl Iterator for ContentsFirstWalkDirIterator {
+        type Item = walkdir::Result<DirEntry>;
+
+        fn next(&mut self) -> Option<Self::Item> {
+            if let Some(sibling) = self.siblings.pop() {
+                return Some(Ok(sibling));
+            }
+
+            if self.siblings.is_empty() {
+                if let Some(parent) = self.seen_on_the_path.pop() {
+                    return Some(Ok(parent));
+                }
+            }
+
+            // We would like to determine if we can pop further nodes on the path
+            // and return them or not.
+            if let Some(parent) = self.seen_on_the_path.last() {
+                // We consume the insides of `peek_next`
+                // to make it easier to pass it to `walk_until_leaves` which should consume it
+                // further.
+                if let Some(peeked) = std::mem::take(&mut self.peek_next) {
+                    // Is the peeked path a suffix of parent?
+                    // If so, this means that this parent has not been explored fully yet.
+                    // We will walk until its leaves again.
+                    if peeked.path().starts_with(parent.path()) {
+                        // `walk_until_leaves` is responsible to populate `peek_next` again.
+                        return Some(self.walk_until_leaves(peeked));
+                    } else {
+                        self.peek_next = Some(peeked);
+                        // We can pop this parent again.
+                        return Some(Ok(self.seen_on_the_path.pop().unwrap()));
+                    }
+                } else {
+                    // If we arrived here, we consumed all the internal iterator, let's just flush
+                    // everything we have.
+                    return Some(Ok(self.seen_on_the_path.pop().unwrap()));
+                }
+            }
+
+            // If have anything else in the peek buffer, return it now.
+            if let Some(peeked) = std::mem::take(&mut self.peek_next) {
+                return Some(Ok(peeked));
+            }
+
+            debug_assert!(
+                self.seen_on_the_path.is_empty(),
+                "Path seen so far is not empty!"
+            );
+            debug_assert!(self.siblings.is_empty(), "Siblings were not exhausted!");
+            debug_assert!(self.peek_next.is_none(), "Peek buffer was not consumed!");
+
+            // We exhausted all siblings, our current path (i.e. self.seen_on_the_path = []),
+            // and our peek buffer.
+            // Therefore, we are now moving on another root in the forest.
+            match self.walkdir_iterator.next() {
+                None => None,
+                Some(Err(err)) => Some(Err(err)),
+                Some(Ok(entry)) => Some(self.walk_until_leaves(entry)),
+            }
+        }
+    }
+
+    let internal_walker = WalkDir::new(p.as_ref())
         .follow_links(false)
         .follow_root_links(false)
-        // We need to process a directory's children before processing
-        // the directory itself in order to have all the data needed
-        // to compute the hash.
-        .contents_first(true)
-        .sort_by_file_name()
-    {
+        .contents_first(false)
+        .sort_by_file_name();
+
+    // We need to process a directory's children before processing
+    // the directory itself in order to have all the data needed
+    // to compute the hash.
+    let walker = ContentsFirstWalkDirIterator::new(internal_walker);
+
+    for entry in walker {
         // Entry could be a NotFound, if the root path specified does not exist.
         let entry = entry.map_err(|e| {
             Error::UnableToOpen(
