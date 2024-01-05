@@ -16,6 +16,24 @@
       "message": "Why keep those as comments?",
       "revId": "511534b3901d2cfac12e5901891d9f767204db11",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0e1069f7_f704233e",
+        "filename": "tvix/glue/src/tvix_store_io.rs",
+        "patchSetId": 3
+      },
+      "lineNbr": 70,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-01-05T16:08:29Z",
+      "side": 1,
+      "message": "I put that removal in the followup CL by accident. Rebased and squashed to here now.",
+      "parentUuid": "d1900362_a4068d64",
+      "revId": "511534b3901d2cfac12e5901891d9f767204db11",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
