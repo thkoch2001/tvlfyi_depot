@@ -16,6 +16,24 @@
       "message": "tvix_eval::Evaluation::default() where new() moved to.",
       "revId": "b293a1df66367a135b247140dcc04ef82eb3c69a",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "02789cce_50cc3df6",
+        "filename": "tvix/eval/benches/eval.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 5,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-01-05T16:27:38Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7869636b_b1e0c88c",
+      "revId": "b293a1df66367a135b247140dcc04ef82eb3c69a",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
