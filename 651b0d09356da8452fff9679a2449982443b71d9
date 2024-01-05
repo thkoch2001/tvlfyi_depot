@@ -20,6 +20,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "1139bf07_5fdb018e",
+        "filename": "tvix/build/src/proto/mod.rs",
+        "patchSetId": 6
+      },
+      "lineNbr": 65,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-01-05T23:08:17Z",
+      "side": 1,
+      "message": "This is unfortunately not sufficient, as some normalization already happens, so some of the components are swallowed:\n\n\u003e When parsing the path, there is a small amount of normalization:\n\n\u003e Repeated separators are ignored, so a/b and a//b both have a and b as components.\n\n\u003e Occurrences of . are normalized away, except if they are at the beginning of the path. For example, a/./b, a/b/, a/b/. and a/b all have a and b as components, but ./a/b starts with an additional CurDir component.\n\n\u003e A trailing slash is normalized away, /a/b and /a/b/ are equivalent.\n\n\nThis explicitly breaks detecting `foo/./bar` for example, as the intermediate `Component::CurDir` is not emitted.",
+      "parentUuid": "6b56c26e_9d780973",
+      "revId": "651b0d09356da8452fff9679a2449982443b71d9",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "0b97378c_e87c1ec4",
         "filename": "tvix/build/src/proto/mod.rs",
         "patchSetId": 6
