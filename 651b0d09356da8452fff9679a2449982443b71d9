@@ -55,6 +55,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "32da5c1e_3e5cf9c2",
+        "filename": "tvix/build/src/proto/mod.rs",
+        "patchSetId": 6
+      },
+      "lineNbr": 79,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-01-05T23:36:10Z",
+      "side": 1,
+      "message": "Eh, as long as it\u0027s only private functions in here, I don\u0027t mind that much.\n\nWe don\u0027t have Path in our BuildRequest directly, so we\u0027d have to do some conversion anyways, not sure if worth the trouble.",
+      "parentUuid": "0b97378c_e87c1ec4",
+      "revId": "651b0d09356da8452fff9679a2449982443b71d9",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "2a787430_64f88f3d",
         "filename": "tvix/build/src/proto/mod.rs",
         "patchSetId": 6
@@ -66,6 +84,24 @@
       "writtenOn": "2024-01-05T15:46:03Z",
       "side": 1,
       "message": "I\u0027m not convinced, I propose you:\n\n```rust\nfn is_sorted\u003cI\u003e(data: I) -\u003e bool\nwhere\n    I: IntoIterator,\n    I::Item: Ord + Clone,\n{\n    data.into_iter().tuple_windows().all(|(a, b)| a \u003c\u003d b)\n}\n```",
+      "revId": "651b0d09356da8452fff9679a2449982443b71d9",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5754dd2f_6badf460",
+        "filename": "tvix/build/src/proto/mod.rs",
+        "patchSetId": 6
+      },
+      "lineNbr": 96,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-01-05T23:36:10Z",
+      "side": 1,
+      "message": "Well, that brings in an additional crate, but whatever :-D\n\nWe can be a bit less demanding, I propose instead:\n\n```\nfn is_sorted\u003cI\u003e(data: I) -\u003e bool\nwhere\n    I: Iterator,\n    I::Item: Ord + Clone,\n{\n    data.tuple_windows().all(|(a, b)| a \u003c\u003d b)\n}\n```",
+      "parentUuid": "2a787430_64f88f3d",
       "revId": "651b0d09356da8452fff9679a2449982443b71d9",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
