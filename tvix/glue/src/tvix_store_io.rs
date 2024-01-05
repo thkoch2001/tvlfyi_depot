@@ -5,7 +5,6 @@ use std::{
     io,
     ops::Deref,
     path::{Path, PathBuf},
-    sync::Arc,
 };
 use tokio::io::AsyncReadExt;
 use tracing::{error, instrument, warn};
@@ -26,19 +25,23 @@ use tvix_store::pathinfoservice::PathInfoService;
 /// This is to both cover cases of syntactically valid store paths, that exist
 /// on the filesystem (still managed by Nix), as well as being able to read
 /// files outside store paths.
-pub struct TvixStoreIO {
-    blob_service: Arc<dyn BlobService>,
-    directory_service: Arc<dyn DirectoryService>,
-    path_info_service: Arc<dyn PathInfoService>,
+pub struct TvixStoreIO<BS, DS, PS> {
+    blob_service: BS,
+    directory_service: DS,
+    path_info_service: PS,
     std_io: StdIO,
     tokio_handle: tokio::runtime::Handle,
 }
 
-impl TvixStoreIO {
+impl<BS, DS, PS> TvixStoreIO<BS, DS, PS>
+where
+    DS: Deref<Target = dyn DirectoryService>,
+    PS: Deref<Target = dyn PathInfoService>,
+{
     pub fn new(
-        blob_service: Arc<dyn BlobService>,
-        directory_service: Arc<dyn DirectoryService>,
-        path_info_service: Arc<dyn PathInfoService>,
+        blob_service: BS,
+        directory_service: DS,
+        path_info_service: PS,
         tokio_handle: tokio::runtime::Handle,
     ) -> Self {
         Self {
@@ -66,9 +69,6 @@ impl TvixStoreIO {
         let root_node = match self
             .tokio_handle
             .block_on({
-                // let digest = *store_path.digest();
-                // let path_info_service = self.path_info_service.clone();
-                // async move { path_info_service.get(digest).await }
                 async {
                     self.path_info_service
                         .deref()
@@ -102,7 +102,12 @@ impl TvixStoreIO {
     }
 }
 
-impl EvalIO for TvixStoreIO {
+impl<BS, DS, PS> EvalIO for TvixStoreIO<BS, DS, PS>
+where
+    BS: Deref<Target = dyn BlobService> + Clone,
+    DS: Deref<Target = dyn DirectoryService>,
+    PS: Deref<Target = dyn PathInfoService>,
+{
     #[instrument(skip(self), ret, err)]
     fn path_exists(&self, path: &Path) -> io::Result<bool> {
         if let Ok((store_path, sub_path)) =
@@ -149,11 +154,9 @@ impl EvalIO for TvixStoreIO {
                                 )
                             })?;
 
-                        let blob_service = self.blob_service.clone();
-
-                        let task = self.tokio_handle.spawn(async move {
+                        self.tokio_handle.block_on(async {
                             let mut reader = {
-                                let resp = blob_service.open_read(&digest).await?;
+                                let resp = self.blob_service.deref().open_read(&digest).await?;
                                 match resp {
                                     Some(blob_reader) => blob_reader,
                                     None => {
@@ -173,9 +176,7 @@ impl EvalIO for TvixStoreIO {
 
                             reader.read_to_string(&mut buf).await?;
                             Ok(buf)
-                        });
-
-                        self.tokio_handle.block_on(task).unwrap()
+                        })
                     }
                     Node::Symlink(_symlink_node) => Err(io::Error::new(
                         io::ErrorKind::Unsupported,
@@ -213,12 +214,10 @@ impl EvalIO for TvixStoreIO {
                                 )
                             })?;
 
-                        let directory_service = self.directory_service.clone();
-                        let digest_clone = digest.clone();
-                        let task = self
+                        if let Some(directory) = self
                             .tokio_handle
-                            .spawn(async move { directory_service.get(&digest_clone).await });
-                        if let Some(directory) = self.tokio_handle.block_on(task).unwrap()? {
+                            .block_on(async { self.directory_service.deref().get(&digest).await })?
+                        {
                             let mut children: Vec<(bytes::Bytes, FileType)> = Vec::new();
                             for node in directory.nodes() {
                                 children.push(match node {
@@ -263,23 +262,15 @@ impl EvalIO for TvixStoreIO {
 
     #[instrument(skip(self), ret, err)]
     fn import_path(&self, path: &Path) -> io::Result<PathBuf> {
-        let task = self.tokio_handle.spawn({
-            let blob_service = self.blob_service.clone();
-            let directory_service = self.directory_service.clone();
-            let path_info_service = self.path_info_service.clone();
-            let path = path.to_owned();
-            async move {
-                tvix_store::utils::import_path(
-                    path,
-                    blob_service,
-                    directory_service,
-                    path_info_service,
-                )
-                .await
-            }
-        });
-
-        let output_path = self.tokio_handle.block_on(task)??;
+        let output_path = self.tokio_handle.block_on(async {
+            tvix_store::utils::import_path(
+                path,
+                self.blob_service.deref(),
+                self.directory_service.deref(),
+                self.path_info_service.deref(),
+            )
+            .await
+        })?;
 
         Ok(output_path.to_absolute_path().into())
     }
