@@ -1,4 +1,22 @@
 {
-  "comments": [],
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "232c742e_6853c8ee",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2024-01-05T16:13:06Z",
+      "side": 1,
+      "message": "I would like to have this around even if the benchmarks can\u0027t be run, to ensure they continue to build",
+      "revId": "6cc6a790ea4a9de6baa0167503aa5c6898261e5e",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ],
   "submitRequirementResults": []
 }
