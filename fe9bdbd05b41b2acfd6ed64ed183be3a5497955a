@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a8aaf490_0907b084",
+        "filename": "tvix/castore/src/proto/mod.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 1000073
+      },
+      "writtenOn": "2024-01-05T15:33:29Z",
+      "side": 1,
+      "message": "This comment is a bit useless, can you give examples or elaborate a bit?",
+      "revId": "fe9bdbd05b41b2acfd6ed64ed183be3a5497955a",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
