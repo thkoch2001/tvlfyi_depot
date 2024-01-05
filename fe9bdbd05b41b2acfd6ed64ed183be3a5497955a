@@ -16,6 +16,24 @@
       "message": "This comment is a bit useless, can you give examples or elaborate a bit?",
       "revId": "fe9bdbd05b41b2acfd6ed64ed183be3a5497955a",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e3bc7446_3cfa345d",
+        "filename": "tvix/castore/src/proto/mod.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-01-05T16:08:29Z",
+      "side": 1,
+      "message": "Exactly how this can be constructed from a proto message doesn\u0027t matter too much.\n\nIt\u0027s an (undesired) state we can represent with the types we have, so our validation function should flag it - I renamed it NoNodeSet and updated the comment accordingly.",
+      "parentUuid": "a8aaf490_0907b084",
+      "revId": "fe9bdbd05b41b2acfd6ed64ed183be3a5497955a",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
