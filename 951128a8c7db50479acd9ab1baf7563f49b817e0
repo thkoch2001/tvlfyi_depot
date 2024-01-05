@@ -16,6 +16,24 @@
       "message": "wouldn\u0027t that make more sense to have `AsRef` at this point?",
       "revId": "951128a8c7db50479acd9ab1baf7563f49b817e0",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "70d37717_5bda5dc6",
+        "filename": "tvix/castore/src/import.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 160,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-01-05T16:08:29Z",
+      "side": 1,
+      "message": "This is too big of a refactor to put it in here, let\u0027s save this for a followup.",
+      "parentUuid": "0fa304ea_d703043a",
+      "revId": "951128a8c7db50479acd9ab1baf7563f49b817e0",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
