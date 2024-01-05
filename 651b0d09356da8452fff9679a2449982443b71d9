@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6b56c26e_9d780973",
+        "filename": "tvix/build/src/proto/mod.rs",
+        "patchSetId": 6
+      },
+      "lineNbr": 65,
+      "author": {
+        "id": 1000073
+      },
+      "writtenOn": "2024-01-05T15:46:03Z",
+      "side": 1,
+      "message": "no, use `match component` and match over CurDir/etc. rather than casting it into an OsString.",
+      "revId": "651b0d09356da8452fff9679a2449982443b71d9",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0b97378c_e87c1ec4",
+        "filename": "tvix/build/src/proto/mod.rs",
+        "patchSetId": 6
+      },
+      "lineNbr": 79,
+      "author": {
+        "id": 1000073
+      },
+      "writtenOn": "2024-01-05T15:46:03Z",
+      "side": 1,
+      "message": "honestly, all of this should go in an extension trait.",
+      "revId": "651b0d09356da8452fff9679a2449982443b71d9",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2a787430_64f88f3d",
+        "filename": "tvix/build/src/proto/mod.rs",
+        "patchSetId": 6
+      },
+      "lineNbr": 96,
+      "author": {
+        "id": 1000073
+      },
+      "writtenOn": "2024-01-05T15:46:03Z",
+      "side": 1,
+      "message": "I\u0027m not convinced, I propose you:\n\n```rust\nfn is_sorted\u003cI\u003e(data: I) -\u003e bool\nwhere\n    I: IntoIterator,\n    I::Item: Ord + Clone,\n{\n    data.into_iter().tuple_windows().all(|(a, b)| a \u003c\u003d b)\n}\n```",
+      "revId": "651b0d09356da8452fff9679a2449982443b71d9",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
