@@ -411,7 +411,7 @@ impl<'o> VM<'o> {
                         VMRequest::PathImport(path) => {
                             let imported = self
                                 .io_handle
-                                .import_path(&path)
+                                .import_path(&path, Box::new(|_| true))
                                 .map_err(|e| ErrorKind::IO {
                                     path: Some(path),
                                     error: e.into(),

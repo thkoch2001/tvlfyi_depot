@@ -29,6 +29,7 @@ smol_str = "0.2.0"
 tabwriter = "1.2"
 test-strategy = { version = "0.2.1", optional = true }
 toml = "0.6.0"
+walkdir = "2.4.0"
 xml-rs = "0.8.4"
 
 [dev-dependencies]

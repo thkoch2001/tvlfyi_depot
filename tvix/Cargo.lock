@@ -3373,6 +3373,7 @@ dependencies = [
  "test-strategy",
  "toml",
  "tvix-eval-builtin-macros",
+ "walkdir",
  "xml-rs",
 ]
 
@@ -3405,6 +3406,7 @@ dependencies = [
  "tvix-castore",
  "tvix-eval",
  "tvix-store",
+ "walkdir",
  "wu-manber",
 ]
 
