@@ -8,6 +8,7 @@ use tvix_castore::{
     directoryservice::{self, DirectoryService},
     proto::node::Node,
 };
+use walkdir::DirEntry;
 
 use crate::{
     pathinfoservice::{self, PathInfoService},
@@ -45,14 +46,16 @@ pub async fn construct_services(
 /// [PathInfo] describing the path, that was sent to
 /// [PathInfoService].
 #[instrument(skip_all, fields(path=?path), err)]
-pub async fn import_path<BS, DS, PS, P>(
+pub async fn import_path<BS, DS, PS, P, F>(
     path: P,
     blob_service: BS,
     directory_service: DS,
     path_info_service: PS,
+    filter: F,
 ) -> Result<StorePath, std::io::Error>
 where
     P: AsRef<Path> + std::fmt::Debug,
+    F: FnMut(&DirEntry) -> bool,
     BS: Deref<Target = dyn BlobService> + Clone,
     DS: Deref<Target = dyn DirectoryService>,
     PS: Deref<Target = dyn PathInfoService>,
@@ -72,11 +75,9 @@ where
 
     // Ingest the path into blob and directory service.
     let root_node =
-        tvix_castore::import::ingest_path(blob_service, &directory_service.deref(), &path, |_| {
-            true
-        })
-        .await
-        .expect("failed to ingest path");
+        tvix_castore::import::ingest_path(blob_service, &directory_service.deref(), &path, filter)
+            .await
+            .expect("failed to ingest path");
 
     debug!(root_node =?root_node, "import successful");
 

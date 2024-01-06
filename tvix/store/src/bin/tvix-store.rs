@@ -310,6 +310,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
                                 blob_service,
                                 directory_service,
                                 path_info_service,
+                                |_| true,
                             )
                             .await;
                             if let Ok(output_path) = resp {

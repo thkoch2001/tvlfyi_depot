@@ -74,7 +74,11 @@ pub trait EvalIO {
     /// * string coercion of path literals (e.g. `/foo/bar`), which are expected
     ///   to return a path
     /// * `builtins.toJSON` on a path literal, also expected to return a path
-    fn import_path(&self, path: &Path) -> io::Result<PathBuf>;
+    fn import_path(
+        &self,
+        path: &Path,
+        filter: Box<dyn FnMut(&walkdir::DirEntry) -> bool>,
+    ) -> io::Result<PathBuf>;
 
     /// Returns the root of the store directory, if such a thing
     /// exists in the evaluation context.
@@ -128,7 +132,11 @@ impl EvalIO for StdIO {
 
     // this is a no-op for `std::io`, as the user can already refer to
     // the path directly
-    fn import_path(&self, path: &Path) -> io::Result<PathBuf> {
+    fn import_path(
+        &self,
+        path: &Path,
+        _filter: Box<dyn FnMut(&walkdir::DirEntry) -> bool>,
+    ) -> io::Result<PathBuf> {
         Ok(path.to_path_buf())
     }
 }
@@ -159,7 +167,11 @@ impl EvalIO for DummyIO {
         ))
     }
 
-    fn import_path(&self, _: &Path) -> io::Result<PathBuf> {
+    fn import_path(
+        &self,
+        _: &Path,
+        _filter: Box<dyn FnMut(&walkdir::DirEntry) -> bool>,
+    ) -> io::Result<PathBuf> {
         Err(io::Error::new(
             io::ErrorKind::Unsupported,
             "I/O methods are not implemented in DummyIO",

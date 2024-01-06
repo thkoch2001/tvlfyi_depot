@@ -29,8 +29,12 @@ impl<T: EvalIO> EvalIO for TvixIO<T> {
         self.actual.store_dir()
     }
 
-    fn import_path(&self, path: &Path) -> io::Result<PathBuf> {
-        let imported_path = self.actual.import_path(path)?;
+    fn import_path(
+        &self,
+        path: &Path,
+        filter: Box<dyn FnMut(&walkdir::DirEntry) -> bool>,
+    ) -> io::Result<PathBuf> {
+        let imported_path = self.actual.import_path(path, filter)?;
         Ok(imported_path)
     }
 
