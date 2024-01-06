@@ -10724,6 +10724,10 @@ rec {
             usesDefaultFeatures = false;
           }
           {
+            name = "walkdir";
+            packageId = "walkdir";
+          }
+          {
             name = "wu-manber";
             packageId = "wu-manber";
           }

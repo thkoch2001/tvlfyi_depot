@@ -15,6 +15,7 @@ tracing = "0.1.37"
 tokio = "1.28.0"
 thiserror = "1.0.38"
 sha2 = "0.10.8"
+walkdir = "2.4.0"
 
 [dependencies.wu-manber]
 git = "https://github.com/tvlfyi/wu-manber.git"
