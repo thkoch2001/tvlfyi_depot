@@ -36,6 +36,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "33d6051b_ad3482b0",
+        "filename": "tvix/build/src/proto/mod.rs",
+        "patchSetId": 6
+      },
+      "lineNbr": 65,
+      "author": {
+        "id": 1000073
+      },
+      "writtenOn": "2024-01-06T15:12:16Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "1139bf07_5fdb018e",
+      "revId": "651b0d09356da8452fff9679a2449982443b71d9",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "0b97378c_e87c1ec4",
@@ -67,6 +85,24 @@
       "side": 1,
       "message": "Eh, as long as it\u0027s only private functions in here, I don\u0027t mind that much.\n\nWe don\u0027t have Path in our BuildRequest directly, so we\u0027d have to do some conversion anyways, not sure if worth the trouble.",
       "parentUuid": "0b97378c_e87c1ec4",
+      "revId": "651b0d09356da8452fff9679a2449982443b71d9",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "618eadc8_e0cb0f67",
+        "filename": "tvix/build/src/proto/mod.rs",
+        "patchSetId": 6
+      },
+      "lineNbr": 79,
+      "author": {
+        "id": 1000073
+      },
+      "writtenOn": "2024-01-06T15:12:16Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "32da5c1e_3e5cf9c2",
       "revId": "651b0d09356da8452fff9679a2449982443b71d9",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
