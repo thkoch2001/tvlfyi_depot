@@ -72,9 +72,11 @@ where
 
     // Ingest the path into blob and directory service.
     let root_node =
-        tvix_castore::import::ingest_path(blob_service, &directory_service.deref(), &path)
-            .await
-            .expect("failed to ingest path");
+        tvix_castore::import::ingest_path(blob_service, &directory_service.deref(), &path, |_| {
+            true
+        })
+        .await
+        .expect("failed to ingest path");
 
     debug!(root_node =?root_node, "import successful");
 
