@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "aff58aa9_8f85f2c6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000073
+      },
+      "writtenOn": "2024-01-06T02:00:56Z",
+      "side": 1,
+      "message": "It is quite clear we don\u0027t want `walkdir::DirEntry` to leak in the rest of the project so we want to rewrap this thing more properly into an internal stable type.",
+      "revId": "f06896dd7153a0e6d12aca969dcd6e092365f7b2",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
