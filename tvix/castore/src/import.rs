@@ -149,14 +149,16 @@ where
 /// else giving it a "non-content-addressed name".
 /// It's up to the caller to possibly register it somewhere (and potentially
 /// rename it based on some naming scheme)
-#[instrument(skip(blob_service, directory_service), fields(path=?p), err)]
-pub async fn ingest_path<'a, BS, DS, P>(
+#[instrument(skip(blob_service, directory_service, filter), fields(path=?p), err)]
+pub async fn ingest_path<'a, BS, DS, P, F>(
     blob_service: BS,
     directory_service: DS,
     p: P,
+    filter: F,
 ) -> Result<Node, Error>
 where
     P: AsRef<Path> + Debug,
+    F: FnMut(&DirEntry) -> bool,
     BS: Deref<Target = dyn BlobService> + Clone,
     DS: Deref<Target = &'a dyn DirectoryService>,
 {
@@ -171,6 +173,7 @@ where
         .contents_first(false)
         .sort_by_file_name()
         .into_iter()
+        .filter_entry(filter)
     {
         // Entry could be a NotFound, if the root path specified does not exist.
         let entry = entry.map_err(|e| {

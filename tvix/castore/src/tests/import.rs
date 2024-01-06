@@ -30,6 +30,7 @@ async fn symlink() {
         blob_service,
         &directory_service.deref(),
         tmpdir.path().join("doesntmatter"),
+        |_| true,
     )
     .await
     .expect("must succeed");
@@ -56,6 +57,7 @@ async fn single_file() {
         blob_service.clone(),
         &directory_service.deref(),
         tmpdir.path().join("root"),
+        |_| true,
     )
     .await
     .expect("must succeed");
@@ -95,6 +97,7 @@ async fn complicated() {
         blob_service.clone(),
         &directory_service.deref(),
         tmpdir.path(),
+        |_| true,
     )
     .await
     .expect("must succeed");
