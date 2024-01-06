@@ -3405,7 +3405,6 @@ dependencies = [
  "tvix-castore",
  "tvix-eval",
  "tvix-store",
- "wu-manber",
 ]
 
 [[package]]

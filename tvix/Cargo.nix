@@ -10723,10 +10723,6 @@ rec {
             packageId = "tvix-store";
             usesDefaultFeatures = false;
           }
-          {
-            name = "wu-manber";
-            packageId = "wu-manber";
-          }
         ];
         devDependencies = [
           {

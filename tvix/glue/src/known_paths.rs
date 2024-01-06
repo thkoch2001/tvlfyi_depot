@@ -1,63 +1,10 @@
 //! This module implements logic required for persisting known paths
 //! during an evaluation.
-//!
-//! Tvix needs to be able to keep track of each Nix store path that it
-//! knows about during the scope of a single evaluation and its
-//! related builds.
-//!
-//! This data is required to scan derivation inputs for the build
-//! references (the "build closure") that they make use of.
-//!
-//! Please see //tvix/eval/docs/build-references.md for more
-//! information.
 
-use crate::refscan::STORE_PATH_LEN;
 use nix_compat::nixhash::NixHash;
-use std::collections::{BTreeSet, HashMap};
+use std::collections::HashMap;
 
-#[derive(Debug, PartialEq)]
-pub enum PathKind {
-    /// A literal derivation (`.drv`-file), and the *names* of its outputs.
-    Derivation { output_names: BTreeSet<String> },
-
-    /// An output of a derivation, its name, and the path of its derivation.
-    Output { name: String, derivation: String },
-
-    /// A plain store path (e.g. source files copied to the store).
-    Plain,
-}
-
-#[derive(Debug, PartialEq)]
-pub struct KnownPath {
-    pub path: String,
-    pub kind: PathKind,
-}
-
-/// Internal struct to prevent accidental leaks of the truncated path
-/// names.
-#[repr(transparent)]
-#[derive(Clone, Debug, Default, PartialEq, PartialOrd, Ord, Eq, Hash)]
-pub struct PathName(String);
-
-impl From<&str> for PathName {
-    fn from(s: &str) -> Self {
-        PathName(s[..STORE_PATH_LEN].to_string())
-    }
-}
-
-impl From<String> for PathName {
-    fn from(s: String) -> Self {
-        s.as_str().into()
-    }
-}
-
-/// This instance is required to pass PathName instances as needles to
-/// the reference scanner.
-impl AsRef<[u8]> for PathName {
-    fn as_ref(&self) -> &[u8] {
-        self.0.as_ref()
-    }
-}
+pub const STORE_PATH_LEN: usize = "/nix/store/00000000000000000000000000000000".len();
 
 #[derive(Debug, Default)]
 pub struct KnownPaths {
