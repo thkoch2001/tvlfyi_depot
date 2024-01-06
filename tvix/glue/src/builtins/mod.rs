@@ -5,6 +5,7 @@ use crate::known_paths::KnownPaths;
 
 mod derivation;
 mod derivation_error;
+mod filter_source;
 
 pub use derivation_error::Error as DerivationError;
 
@@ -20,6 +21,9 @@ pub fn add_derivation_builtins(
 ) {
     eval.builtins
         .extend(derivation::derivation_builtins::builtins(known_paths));
+
+    eval.builtins
+        .extend(filter_source::source_builtins::builtins());
 
     // Add the actual `builtins.derivation` from compiled Nix code
     eval.src_builtins
