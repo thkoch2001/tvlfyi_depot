@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "61109518_bed5adcc",
+        "filename": "tvix/glue/src/refscan.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-01-06T19:22:34Z",
+      "side": 0,
+      "message": "We still need to do reference scanning for non-overlapping, known references of store paths in blob contents and symlink targets after receiving the result of a build, to assemble the PathInfo structure and its references field.\n\nI\u0027d like to keep that code around until that has happened, if possible.",
+      "revId": "cbcd078684d1cdd279aefb8ab25aff0d8d180d6c",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
