@@ -10766,6 +10766,10 @@ rec {
             packageId = "data-encoding";
           }
           {
+            name = "futures";
+            packageId = "futures";
+          }
+          {
             name = "nix-compat";
             packageId = "nix-compat";
           }
@@ -10810,6 +10814,10 @@ rec {
             name = "tvix-store";
             packageId = "tvix-store";
             usesDefaultFeatures = false;
+          }
+          {
+            name = "walkdir";
+            packageId = "walkdir";
           }
           {
             name = "wu-manber";
