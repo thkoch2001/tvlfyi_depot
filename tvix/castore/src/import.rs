@@ -143,34 +143,24 @@ where
     todo!("handle other types")
 }
 
-/// Ingests the contents at the given path into the tvix store,
-/// interacting with a [BlobService] and [DirectoryService].
-/// It returns the root node or an error.
+/// Walk the filesystem at a given path and returns a level-keyed list of directory entries.
 ///
-/// It does not follow symlinks at the root, they will be ingested as actual
-/// symlinks.
+/// This is how [`ingest_path`] assembles the set of entries to pass on [`ingest_entries`].
+/// You can use this low-level function if you need to perform additional filtering
+/// or processing on the entries.
 ///
-/// It's not interacting with a PathInfoService (from tvix-store), or anything
-/// else giving it a "non-content-addressed name".
-/// It's up to the caller to possibly register it somewhere (and potentially
-/// rename it based on some naming scheme)
-#[instrument(skip(blob_service, directory_service), fields(path=?p), err)]
-pub async fn ingest_path<'a, BS, DS, P>(
-    blob_service: BS,
-    directory_service: DS,
-    p: P,
-) -> Result<Node, Error>
+/// Level here is in the context of graph theory, e.g. 2-level nodes
+/// are nodes that are at depth 2.
+///
+/// This function will walk the filesystem using `walkdir` and will consume
+/// `O(#number of entries)` space.
+#[instrument(fields(path), err)]
+pub fn walk_path_for_insertion<P>(path: P) -> Result<Vec<Vec<DirEntry>>, Error>
 where
-    P: AsRef<Path> + Debug,
-    BS: AsRef<dyn BlobService> + Clone,
-    DS: AsRef<dyn DirectoryService>,
+    P: AsRef<Path> + std::fmt::Debug,
 {
-    let mut directories: HashMap<PathBuf, Directory> = HashMap::default();
-
-    let mut directory_putter = directory_service.as_ref().put_multiple_start();
-
     let mut entries_per_depths: Vec<Vec<DirEntry>> = vec![Vec::new()];
-    for entry in WalkDir::new(p.as_ref())
+    for entry in WalkDir::new(path.as_ref())
         .follow_links(false)
         .follow_root_links(false)
         .contents_first(false)
@@ -180,7 +170,7 @@ where
         // Entry could be a NotFound, if the root path specified does not exist.
         let entry = entry.map_err(|e| {
             Error::UnableToOpen(
-                PathBuf::from(p.as_ref()),
+                PathBuf::from(path.as_ref()),
                 e.into_io_error().expect("walkdir err must be some"),
             )
         })?;
@@ -198,6 +188,60 @@ where
             entries_per_depths[entry.depth()].push(entry);
         }
     }
+
+    Ok(entries_per_depths)
+}
+
+/// Ingests the contents at a given path into the tvix store,
+/// interacting with a [BlobService] and [DirectoryService].
+/// It returns the root node or an error.
+///
+/// It does not follow symlinks at the root, they will be ingested as actual
+/// symlinks.
+///
+/// It's not interacting with a PathInfoService (from tvix-store), or anything
+/// else giving it a "non-content-addressed name".
+/// It's up to the caller to possibly register it somewhere (and potentially
+/// rename it based on some naming scheme)
+#[instrument(skip(blob_service, directory_service), fields(path), err)]
+pub async fn ingest_path<'a, BS, DS, P>(
+    blob_service: BS,
+    directory_service: DS,
+    path: P,
+) -> Result<Node, Error>
+where
+    P: AsRef<Path> + std::fmt::Debug,
+    BS: AsRef<dyn BlobService> + Clone,
+    DS: AsRef<dyn DirectoryService>,
+{
+    let entries = walk_path_for_insertion(path)?;
+    ingest_entries(blob_service, directory_service, entries).await
+}
+
+/// Ingests the given directory entries into the tvix store,
+/// interacting with a [BlobService] and [DirectoryService].
+/// It returns the root node or an error.
+///
+/// It does not follow symlinks at the root, they will be ingested as actual
+/// symlinks.
+///
+/// It's not interacting with a PathInfoService (from tvix-store), or anything
+/// else giving it a "non-content-addressed name".
+/// It's up to the caller to possibly register it somewhere (and potentially
+/// rename it based on some naming scheme)
+#[instrument(skip(blob_service, directory_service), err)]
+pub async fn ingest_entries<'a, BS, DS>(
+    blob_service: BS,
+    directory_service: DS,
+    entries_per_depths: Vec<Vec<DirEntry>>,
+) -> Result<Node, Error>
+where
+    BS: AsRef<dyn BlobService> + Clone,
+    DS: AsRef<dyn DirectoryService>,
+{
+    let mut directories: HashMap<PathBuf, Directory> = HashMap::default();
+
+    let mut directory_putter = directory_service.as_ref().put_multiple_start();
 
     debug_assert!(!entries_per_depths[0].is_empty(), "No root node available!");
 
