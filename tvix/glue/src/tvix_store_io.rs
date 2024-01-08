@@ -51,7 +51,7 @@ use crate::tvix_build::derivation_to_build_request;
 /// implementation of "Tvix Store IO" which does not necessarily bring the concept of blob service,
 /// directory service or path info service.
 pub struct TvixStoreIO {
-    blob_service: Arc<dyn BlobService>,
+    pub(crate) blob_service: Arc<dyn BlobService>,
     directory_service: Arc<dyn DirectoryService>,
     path_info_service: Arc<dyn PathInfoService>,
     std_io: StdIO,
@@ -331,6 +331,16 @@ impl TvixStoreIO {
         Ok((path_info, output_path.to_owned()))
     }
 
+    pub(crate) fn node_to_path_info_sync(
+        &self,
+        name: &str,
+        path: &Path,
+        root_node: Node,
+    ) -> io::Result<(PathInfo, StorePath)> {
+        self.tokio_handle
+            .block_on(async { self.node_to_path_info(name, path, root_node).await })
+    }
+
     pub(crate) async fn register_node_in_path_info_service(
         &self,
         name: &str,
@@ -341,6 +351,11 @@ impl TvixStoreIO {
         let _path_info = self.path_info_service.as_ref().put(path_info).await?;
 
         Ok(output_path)
+    }
+
+    pub(crate) fn put_to_path_info_sync(&self, path_info: PathInfo) -> io::Result<PathInfo> {
+        self.tokio_handle
+            .block_on(async { Ok(self.path_info_service.as_ref().put(path_info).await?) })
     }
 
     pub(crate) fn register_node_in_path_info_service_sync(
