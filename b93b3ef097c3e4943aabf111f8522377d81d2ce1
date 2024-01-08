@@ -16,6 +16,23 @@
       "message": "From https://docs.rs/walkdir/latest/walkdir/struct.IntoIter.html#method.filter_entry:\n\n\u003e Note that the iterator will still yield errors for reading entries that may not satisfy the predicate.\n\nThink about the example of trying to ingest a directory with a non-accessible entry that\u0027s filtered out - we don\u0027t want to return an error here, but instead just skip over it.\n\nI fear like we need to use their skip_current_dir interface instead, to prevent this from happening: https://docs.rs/walkdir/latest/walkdir/struct.IntoIter.html#method.skip_current_dir",
       "revId": "b93b3ef097c3e4943aabf111f8522377d81d2ce1",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f0506fce_4d4daba5",
+        "filename": "tvix/castore/src/tests/import.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-01-08T09:14:24Z",
+      "side": 1,
+      "message": "We need some more tests here:\n\n - filtering the entire root\n - filtering a directory (and its sub-elements)\n - filtering a file at the leaf\n\n\nIdeally, one of the example should have a non-accessible subdirectory, to ensure we don\u0027t have the problem expressed in https://cl.tvl.fyi/c/depot/+/10568/comment/d54e42b7_cfe95731/.",
+      "revId": "b93b3ef097c3e4943aabf111f8522377d81d2ce1",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
