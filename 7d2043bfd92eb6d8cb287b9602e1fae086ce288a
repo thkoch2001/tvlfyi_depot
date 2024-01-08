@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "81edfea1_28e914c3",
+        "filename": "tvix/castore/src/import.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 237,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-01-08T09:46:53Z",
+      "side": 1,
+      "message": "cl/10567 mentions the current approach is quite memory intense (as it needs to hold the entire listing in memory), yet this now makes it a public function. It\u0027ll be hard to change this.\n\nCan\u0027t we make this accept an `impl IntoIter\u003c(Path, DirEntry)\u003e`, and assemble the entries_per_depths inside this function?",
+      "revId": "7d2043bfd92eb6d8cb287b9602e1fae086ce288a",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
