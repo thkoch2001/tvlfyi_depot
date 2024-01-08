@@ -1,11 +1,10 @@
 //! Contains builtins that deal with the store or builder.
-use std::{cell::RefCell, rc::Rc};
-
-use crate::known_paths::KnownPaths;
+use std::rc::Rc;
 
 mod derivation;
 mod derivation_error;
 
+pub use derivation::DerivationBuiltinsState;
 pub use derivation_error::Error as DerivationError;
 
 /// Adds derivation-related builtins to the passed [tvix_eval::Evaluation].
@@ -16,10 +15,10 @@ pub use derivation_error::Error as DerivationError;
 /// `known_paths`.
 pub fn add_derivation_builtins(
     eval: &mut tvix_eval::Evaluation,
-    known_paths: Rc<RefCell<KnownPaths>>,
+    state: Rc<DerivationBuiltinsState>,
 ) {
     eval.builtins
-        .extend(derivation::derivation_builtins::builtins(known_paths));
+        .extend(derivation::derivation_builtins::builtins(state));
 
     // Add the actual `builtins.derivation` from compiled Nix code
     eval.src_builtins
@@ -28,12 +27,17 @@ pub fn add_derivation_builtins(
 
 #[cfg(test)]
 mod tests {
-    use super::add_derivation_builtins;
-    use crate::known_paths::KnownPaths;
+    use std::{rc::Rc, sync::Arc};
+
+    use super::{add_derivation_builtins, DerivationBuiltinsState};
     use nix_compat::store_path::hash_placeholder;
-    use std::{cell::RefCell, rc::Rc};
     use test_case::test_case;
+    use tvix_castore::{
+        blobservice::{BlobService, MemoryBlobService},
+        directoryservice::{DirectoryService, MemoryDirectoryService},
+    };
     use tvix_eval::EvaluationResult;
+    use tvix_store::pathinfoservice::{MemoryPathInfoService, PathInfoService};
 
     /// evaluates a given nix expression and returns the result.
     /// Takes care of setting up the evaluator so it knows about the
@@ -41,9 +45,21 @@ mod tests {
     fn eval(str: &str) -> EvaluationResult {
         let mut eval = tvix_eval::Evaluation::new_impure();
 
-        let known_paths: Rc<RefCell<KnownPaths>> = Default::default();
+        let blob_service = Arc::new(MemoryBlobService::default()) as Arc<dyn BlobService>;
+        let directory_service =
+            Arc::new(MemoryDirectoryService::default()) as Arc<dyn DirectoryService>;
+        let path_info_service = Arc::new(MemoryPathInfoService::new(
+            blob_service.clone(),
+            directory_service.clone(),
+        )) as Arc<dyn PathInfoService>;
 
-        add_derivation_builtins(&mut eval, known_paths.clone());
+        let state: Rc<DerivationBuiltinsState> = Rc::new(DerivationBuiltinsState::new(
+            blob_service,
+            directory_service,
+            path_info_service,
+        ));
+
+        add_derivation_builtins(&mut eval, state);
 
         // run the evaluation itself.
         eval.evaluate(str, None)

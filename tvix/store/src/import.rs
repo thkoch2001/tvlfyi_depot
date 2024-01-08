@@ -1,4 +1,4 @@
-use std::path::Path;
+use std::{path::Path, sync::Arc};
 
 use data_encoding::BASE64;
 use tracing::{debug, instrument};
@@ -145,4 +145,33 @@ where
     let _path_info = path_info_service.as_ref().put(path_info).await?;
 
     Ok(output_path.to_owned())
+}
+
+pub struct Importer {
+    pub path_info_service: Arc<dyn PathInfoService>,
+    pub directory_service: Arc<dyn DirectoryService>,
+    pub blob_service: Arc<dyn BlobService>,
+}
+
+impl Importer {
+    pub async fn import_path<P: AsRef<Path> + std::fmt::Debug>(
+        &self,
+        path: P,
+    ) -> std::io::Result<StorePath> {
+        import_path(
+            path,
+            self.blob_service.clone(),
+            self.directory_service.clone(),
+            self.path_info_service.clone(),
+        )
+        .await
+    }
+
+    pub async fn import_root_node(
+        &self,
+        root_path: &Path,
+        root_node: Node,
+    ) -> std::io::Result<StorePath> {
+        import_root_node(self.path_info_service.clone(), root_path, root_node).await
+    }
 }

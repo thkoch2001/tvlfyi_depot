@@ -1,7 +1,6 @@
-use std::cell::RefCell;
 use std::rc::Rc;
 use std::{fs, path::PathBuf};
-use tvix_glue::known_paths::KnownPaths;
+use tvix_glue::builtins::DerivationBuiltinsState;
 use tvix_glue::{builtins::add_derivation_builtins, configure_nix_path};
 
 use clap::Parser;
@@ -88,8 +87,13 @@ fn interpret(code: &str, path: Option<PathBuf>, args: &Args, explain: bool) -> b
         })
         .expect("unable to setup {blob|directory|pathinfo}service before interpreter setup");
 
-    let known_paths: Rc<RefCell<KnownPaths>> = Default::default();
-    add_derivation_builtins(&mut eval, known_paths.clone());
+    let state: Rc<DerivationBuiltinsState> = Rc::new(DerivationBuiltinsState::new(
+        blob_service.clone(),
+        directory_service.clone(),
+        path_info_service.clone(),
+    ));
+
+    add_derivation_builtins(&mut eval, state);
     configure_nix_path(&mut eval, &args.nix_search_path);
     eval.io_handle = Box::new(tvix_glue::tvix_io::TvixIO::new(TvixStoreIO::new(
         blob_service,
