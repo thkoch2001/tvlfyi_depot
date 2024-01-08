@@ -1,14 +1,24 @@
 extern crate proc_macro;
 
+use std::str::FromStr;
+
 use proc_macro::TokenStream;
 use proc_macro2::Span;
 use quote::{quote, quote_spanned, ToTokens};
-use syn::parse::Parse;
+use syn::parse::{Parse, Parser};
+use syn::punctuated::Punctuated;
 use syn::spanned::Spanned;
 use syn::{
-    parse2, parse_macro_input, parse_quote, parse_quote_spanned, Attribute, FnArg, Ident, Item,
-    ItemMod, LitStr, Meta, Pat, PatIdent, PatType, Token, Type,
+    parse2, parse_macro_input, parse_quote, parse_quote_spanned, Attribute, FnArg, GenericParam,
+    Generics, Ident, Item, ItemMod, LitStr, Meta, NestedMeta, Pat, PatIdent, PatType, Token, Type,
+    WherePredicate,
 };
+
+#[derive(Default)]
+struct ModuleArguments {
+    state_type: Option<Type>,
+    state_generics: Option<Generics>,
+}
 
 /// Description of a single argument passed to a builtin
 struct BuiltinArgument {
@@ -69,29 +79,102 @@ fn extract_docstring(attrs: &[Attribute]) -> Option<String> {
         })
 }
 
-/// Parse arguments to the `builtins` macro itself, such as `#[builtins(state = Rc<State>)]`.
-fn parse_module_args(args: TokenStream) -> Option<Type> {
+/// Parse arguments to the `builtins` macro itself, such as `#[builtins(state = Rc<State>)]`
+/// or `#[builtins(state(Rc<T>, T))]` or `#[builtins(state(Rc<T>, T, T: Clone))]`
+fn parse_module_args(args: TokenStream) -> ModuleArguments {
     if args.is_empty() {
-        return None;
+        return Default::default();
     }
 
     let meta: Meta = syn::parse(args).expect("could not parse arguments to `builtins`-attribute");
-    let name_value = match meta {
-        Meta::NameValue(nv) => nv,
-        _ => panic!("arguments to `builtins`-attribute must be of the form `name = value`"),
+    let (state_type_lit, state_generics) = match meta {
+        Meta::NameValue(nv) => {
+            // In this case, this is the simple state = ... case.
+            // There can be no type parameters here.
+
+            if nv.path.get_ident().unwrap() != "state" {
+                return Default::default();
+            }
+
+            (nv.lit, None)
+        }
+        Meta::List(xs) => {
+            // In this case, this is the `state(state type, type parameters, where clauses)`
+            // case.
+
+            if xs.nested.len() < 2 {
+                panic!("use `state = ...` if you don't specify any type parameter");
+            }
+
+            let state_type = if let NestedMeta::Lit(ref lit) = xs.nested[0] {
+                lit.clone()
+            } else {
+                panic!("state attribute must be a literal");
+            };
+
+            let type_params = if let NestedMeta::Lit(ref lit) = xs.nested[1] {
+                if let syn::Lit::Str(tts) = lit {
+                    tts.clone()
+                } else {
+                    panic!("state type parameters must be a string literal");
+                }
+            } else {
+                panic!("state type parameters must be a literal");
+            };
+
+            let tokens = TokenStream::from_str(&type_params.value())
+                .expect("Failed to re-interpret the type params as token stream");
+            let gparam_parser = Punctuated::<GenericParam, Token![,]>::parse_terminated;
+            let generic_params = gparam_parser.parse(tokens).expect(
+                "state type parameters must be a list of generics parameter separated by ,",
+            );
+
+            let where_predicates = if xs.nested.len() > 2 {
+                if let NestedMeta::Lit(lit) = &xs.nested[2] {
+                    if let syn::Lit::Str(tts) = lit {
+                        Some(
+                                Punctuated::<WherePredicate, Token![,]>::parse_terminated.parse(
+                                    TokenStream::from_str(tts.value().as_str())
+                                    .expect("failed to re-interpret the trait bounds as token stream")
+                                ).expect("state trait bounds must be a list of where predicates separated by,")
+                            )
+                    } else {
+                        panic!("state trait bounds must be a string literal");
+                    }
+                } else {
+                    panic!("where predicate must be a literal")
+                }
+            } else {
+                None
+            };
+
+            let generics = Generics {
+                lt_token: None,
+                params: generic_params,
+                gt_token: None,
+                where_clause: where_predicates.map(|ps| syn::WhereClause {
+                    where_token: syn::token::Where(Span::call_site()),
+                    predicates: ps,
+                }),
+            };
+
+            (state_type, Some(generics))
+        }
+        _ => panic!(
+            "arguments to `builtins`-attribute must be of the form `name = value` or `name(...)`"
+        ),
     };
 
-    if *name_value.path.get_ident().unwrap() != "state" {
-        return None;
-    }
+    let state_type = if let syn::Lit::Str(type_name) = state_type_lit {
+        syn::parse_str(&type_name.value()).expect("failed to parse builtins state type")
+    } else {
+        panic!("state attribute must be a quoted Rust type");
+    };
 
-    if let syn::Lit::Str(type_name) = name_value.lit {
-        let state_type: Type =
-            syn::parse_str(&type_name.value()).expect("failed to parse builtins state type");
-        return Some(state_type);
+    ModuleArguments {
+        state_type: Some(state_type),
+        state_generics,
     }
-
-    panic!("state attribute must be a quoted Rust type");
 }
 
 /// Mark the annotated module as a module for defining Nix builtins.
@@ -142,7 +225,7 @@ pub fn builtins(args: TokenStream, item: TokenStream) -> TokenStream {
     let mut module = parse_macro_input!(item as ItemMod);
 
     // parse the optional state type, which users might want to pass to builtins
-    let state_type = parse_module_args(args);
+    let module_args = parse_module_args(args);
 
     let (_, items) = match &mut module.content {
         Some(content) => content,
@@ -183,7 +266,7 @@ pub fn builtins(args: TokenStream, item: TokenStream) -> TokenStream {
                 if let FnArg::Typed(PatType { pat, .. }) = &f.sig.inputs[0] {
                     if let Pat::Ident(PatIdent { ident, .. }) = pat.as_ref() {
                         if *ident == "state" {
-                            if state_type.is_none() {
+                            if module_args.state_type.is_none() {
                                 panic!("builtin captures a `state` argument, but no state type was defined");
                             }
 
@@ -314,12 +397,21 @@ pub fn builtins(args: TokenStream, item: TokenStream) -> TokenStream {
         }
     }
 
-    if let Some(state_type) = state_type {
-        items.push(parse_quote! {
-            pub fn builtins(state: #state_type) -> Vec<(&'static str, Value)> {
+    if let Some(state_type) = module_args.state_type {
+        let mut builtin_fn = parse_quote! {
+            pub fn builtins (state: #state_type) -> Vec<(&'static str, Value)> {
                 vec![#(#builtins),*].into_iter().map(|b| (b.name(), Value::Builtin(b))).collect()
             }
-        });
+        };
+        if let Some(mut state_generics) = module_args.state_generics {
+            if let Item::Fn(ref mut f) = builtin_fn {
+                f.sig.generics = std::mem::take(&mut state_generics);
+            } else {
+                panic!("Builtin function generated by `parse_quote!` is not a… function!");
+            }
+        }
+
+        items.push(builtin_fn);
     } else {
         items.push(parse_quote! {
             pub fn builtins() -> Vec<(&'static str, Value)> {
