@@ -282,6 +282,10 @@ impl DirectoryPutter for GRPCPutter {
             }
         }
     }
+
+    fn clone(&self) -> Box<(dyn DirectoryPutter + 'static)> {
+        todo!()
+    }
 }
 
 #[cfg(test)]

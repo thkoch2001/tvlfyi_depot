@@ -132,4 +132,8 @@ impl<DS: DirectoryService + 'static> DirectoryPutter for SimplePutter<DS> {
             )),
         }
     }
+
+    fn clone(&self) -> Box<(dyn DirectoryPutter + 'static)> {
+        todo!()
+    }
 }

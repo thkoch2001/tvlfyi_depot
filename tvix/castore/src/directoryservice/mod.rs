@@ -74,4 +74,7 @@ pub trait DirectoryPutter: Send {
     /// If there's been any invalid Directory message uploaded, and error *must*
     /// be returned.
     async fn close(&mut self) -> Result<B3Digest, Error>;
+
+    // our own clone because Clone requires Sized
+    fn clone(&self) -> Box<dyn DirectoryPutter>;
 }
