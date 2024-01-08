@@ -21,6 +21,7 @@ use tokio::io::AsyncReadExt;
 use tracing::{error, instrument, warn, Level};
 use tvix_build::buildservice::BuildService;
 use tvix_eval::{ErrorKind, EvalIO, FileType, StdIO};
+use tvix_store::utils::AsyncIoBridge;
 use walkdir::DirEntry;
 
 use tvix_castore::{
@@ -53,7 +54,9 @@ use crate::tvix_build::derivation_to_build_request;
 pub struct TvixStoreIO {
     blob_service: Arc<dyn BlobService>,
     directory_service: Arc<dyn DirectoryService>,
-    path_info_service: Arc<dyn PathInfoService>,
+    // This is public because users can use it to
+    // put path infos in the service.
+    pub(crate) path_info_service: Arc<dyn PathInfoService>,
     std_io: StdIO,
     #[allow(dead_code)]
     build_service: Arc<dyn BuildService>,
@@ -343,16 +346,18 @@ impl TvixStoreIO {
         Ok(output_path)
     }
 
-    pub(crate) fn register_node_in_path_info_service_sync(
-        &self,
-        name: &str,
-        path: &Path,
-        root_node: Node,
-    ) -> io::Result<StorePath> {
-        self.tokio_handle.block_on(async {
-            self.register_node_in_path_info_service(name, path, root_node)
-                .await
-        })
+    pub(crate) async fn blob_to_nar_hash(&self, blob: B3Digest) -> io::Result<[u8; 32]> {
+        let mut reader = self.blob_service.open_read(&blob).await?.ok_or_else(|| {
+            io::Error::new(
+                io::ErrorKind::NotFound,
+                format!("blob: '{}' not found", blob),
+            )
+        })?;
+        // It is fine to use `AsyncIoBridge` here because hashing is not actually I/O.
+        let mut hasher = AsyncIoBridge(Sha256::new());
+
+        tokio::io::copy(&mut reader, &mut hasher).await?;
+        Ok(hasher.0.finalize().into())
     }
 
     pub async fn store_path_exists<'a>(&'a self, store_path: StorePathRef<'a>) -> io::Result<bool> {
