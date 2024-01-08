@@ -36,6 +36,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "fe43548b_51debd42",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-01-08T11:09:09Z",
+      "side": 1,
+      "message": "The chain landed, I rebased this by myself.",
+      "parentUuid": "06243ebb_57dffde0",
+      "revId": "ec3ce60f198290db9c145ebd6315a8e50d8ef245",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "34d00058_877f5dbc",
