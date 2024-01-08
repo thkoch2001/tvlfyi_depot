@@ -6,8 +6,10 @@ use crate::tvix_store_io::TvixStoreIO;
 
 mod derivation;
 mod derivation_error;
+mod import_error;
 
 pub use derivation_error::Error as DerivationError;
+pub use import_error::Error as ImportError;
 
 /// Adds derivation-related builtins to the passed [tvix_eval::Evaluation].
 ///
