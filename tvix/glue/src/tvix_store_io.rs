@@ -40,13 +40,13 @@ use crate::known_paths::KnownPaths;
 /// implementation of "Tvix Store IO" which does not necessarily bring the concept of blob service,
 /// directory service or path info service.
 pub struct TvixStoreIO {
-    blob_service: Arc<dyn BlobService>,
+    pub(crate) blob_service: Arc<dyn BlobService>,
     directory_service: Arc<dyn DirectoryService>,
     path_info_service: Arc<dyn PathInfoService>,
     std_io: StdIO,
     #[allow(dead_code)]
     build_service: Arc<dyn BuildService>,
-    tokio_handle: tokio::runtime::Handle,
+    pub(crate) tokio_handle: tokio::runtime::Handle,
     pub(crate) known_paths: RefCell<KnownPaths>,
 }
 
