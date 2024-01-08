@@ -220,6 +220,7 @@ pub(crate) mod derivation_builtins {
 
     use super::*;
     use nix_compat::store_path::hash_placeholder;
+    use sha2::{Digest, Sha256};
     use tvix_eval::generators::Gen;
     use tvix_eval::{NixContext, NixContextElement, NixString};
     
@@ -619,6 +620,97 @@ pub(crate) mod derivation_builtins {
         // TODO: actually persist the file in the store at that path ...
 
         Ok(Value::String(NixString::new_context_from(context, &path)))
+    }
+
+    #[builtin("path")]
+    async fn builtin_path(
+        state: Rc<TvixStoreIO>,
+        co: GenCo,
+        args: Value,
+    ) -> Result<Value, ErrorKind> {
+        let args = args.to_attrs()?;
+        let path = args.select_required("path")?;
+        let path = generators::request_force(&co, path.clone())
+            .await
+            .to_path()?;
+        let name: String = if let Some(name) = args.select("name") {
+            generators::request_force(&co, name.clone())
+                .await
+                .to_str()?
+                .as_str()
+                .to_string()
+        } else {
+            tvix_store::import::path_to_name(&path)
+                .expect("Failed to derive the default name out of the path")
+                .to_string()
+        };
+        let filter = args.select("filter");
+        let recursive_ingestion = args
+            .select("recursive")
+            .map(|r| r.as_bool())
+            .transpose()?
+            .unwrap_or(true); // Yes, yes, Nix, by default, puts `recursive = true;`.
+        let expected_sha256 = args
+            .select("sha256")
+            .map(|h| {
+                h.to_str().and_then(|expected| {
+                    nix_compat::nixhash::from_str(expected.as_ref(), None).map_err(|_err| {
+                        // TODO: a better error would be nice, what do we use for wrong hashes?
+                        ErrorKind::TypeError {
+                            expected: "sha256",
+                            actual: "not a sha256",
+                        }
+                    })
+                })
+            })
+            .transpose()?;
+
+        if !recursive_ingestion {
+            return Ok(Value::Catchable(CatchableErrorKind::UnimplementedFeature(
+                "flat `path`".to_string(),
+            )));
+        }
+
+        let root_node = filtered_ingest(state.clone(), co, path.as_ref(), filter).await?;
+        let (path_info, output_path) =
+            state.node_to_path_info_sync(name.as_ref(), path.as_ref(), root_node)?;
+
+        if let Some(expected_sha256) = expected_sha256 {
+            let nar_hash: [u8; 32] = if recursive_ingestion {
+                path_info
+                    .narinfo
+                    .as_ref()
+                    .expect("Tvix bug: expected a recursive FOD PathInfo")
+                    .nar_sha256
+                    .as_ref()
+                    .try_into()
+                    .expect("Tvix bug: expected a SHA-256 digest")
+            } else {
+                let contents = std::fs::read(&*path).expect("Failed to read file");
+                let hash = Sha256::digest(contents);
+                hash.into()
+            };
+
+            if nar_hash != expected_sha256.digest_as_bytes() {
+                return Err(ErrorKind::IO {
+                    path: Some(*path),
+                    error: std::io::Error::new(
+                        std::io::ErrorKind::InvalidData,
+                        format!(
+                            "hash mismatch, expected: {}, got: {}",
+                            expected_sha256.to_nix_hex_string(),
+                            nixhash::from_algo_and_digest(nixhash::HashAlgo::Sha256, &nar_hash)
+                                .expect("Failed to convert the SHA-256 into a Nix SHA-256 representation").to_nix_hex_string()
+                        ),
+                    )
+                    .into(),
+                });
+            }
+        }
+
+        let _ = state.put_to_path_info_sync(path_info);
+
+        Ok(output_path.to_absolute_path().into())
     }
 
     #[builtin("filterSource")]
