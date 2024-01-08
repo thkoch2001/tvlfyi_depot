@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fb24503f_89b0a38a",
+        "filename": "tvix/store/src/utils.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 80,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-01-08T09:15:49Z",
+      "side": 1,
+      "message": "Replace this expect with a ?, we now have cl/10572.",
+      "revId": "dbf526ad4c18c9f46eff62279e454ae2056bd957",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
