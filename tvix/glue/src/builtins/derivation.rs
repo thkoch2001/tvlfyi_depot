@@ -6,12 +6,17 @@ use nix_compat::nixhash;
 use std::cell::RefCell;
 use std::collections::{btree_map, BTreeSet};
 use std::rc::Rc;
+use std::sync::Arc;
+use tvix_castore::blobservice::BlobService;
+use tvix_castore::directoryservice::DirectoryService;
 use tvix_eval::builtin_macros::builtins;
 use tvix_eval::generators::{self, emit_warning_kind, GenCo};
 use tvix_eval::{
     AddContext, CatchableErrorKind, CoercionKind, ErrorKind, NixAttrs, NixContext,
     NixContextElement, NixList, Value, WarningKind,
 };
+use tvix_store::import::Importer;
+use tvix_store::pathinfoservice::PathInfoService;
 
 // Constants used for strangely named fields in derivation inputs.
 const STRUCTURED_ATTRS: &str = "__structuredAttrs";
@@ -219,7 +224,29 @@ async fn strong_importing_coerce_to_string(
     }
 }
 
-#[builtins(state = "Rc<RefCell<KnownPaths>>")]
+pub struct DerivationBuiltinsState {
+    known_paths: RefCell<KnownPaths>,
+    importer: Importer,
+}
+
+impl DerivationBuiltinsState {
+    pub fn new(
+        blob_service: Arc<dyn BlobService>,
+        directory_service: Arc<dyn DirectoryService>,
+        path_info_service: Arc<dyn PathInfoService>,
+    ) -> Self {
+        Self {
+            known_paths: Default::default(),
+            importer: Importer {
+                blob_service,
+                directory_service,
+                path_info_service,
+            },
+        }
+    }
+}
+
+#[builtins(state = "Rc<DerivationBuiltinsState>")]
 pub(crate) mod derivation_builtins {
     use super::*;
     use nix_compat::store_path::hash_placeholder;
@@ -244,7 +271,7 @@ pub(crate) mod derivation_builtins {
     /// use the higher-level `builtins.derivation` instead.
     #[builtin("derivationStrict")]
     async fn builtin_derivation_strict(
-        state: Rc<RefCell<KnownPaths>>,
+        state: Rc<DerivationBuiltinsState>,
         co: GenCo,
         input: Value,
     ) -> Result<Value, ErrorKind> {
@@ -393,7 +420,7 @@ pub(crate) mod derivation_builtins {
         }
 
         populate_inputs(&mut drv, input_context);
-        let mut known_paths = state.borrow_mut();
+        let mut known_paths = state.known_paths.borrow_mut();
 
         // At this point, derivation fields are fully populated from
         // eval data structures.
