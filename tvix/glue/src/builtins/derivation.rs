@@ -163,15 +163,21 @@ type InternalDerivationBuiltinState<BS, DS, PS> = Rc<DerivationBuiltinState<BS, 
 
 #[builtins(state(
     "Rc<DerivationBuiltinState<BS, DS, PS>>",
-    "BS: 'static, DS: 'static, PS: 'static"
+    "BS: 'static, DS: 'static, PS: 'static",
+    "BS: AsRef<dyn BlobService> + Clone, DS: AsRef<dyn DirectoryService>, PS: AsRef<dyn PathInfoService>"
 ))]
 pub(crate) mod derivation_builtins {
     use std::collections::BTreeMap;
 
     use super::*;
+    use futures::pin_mut;
     use nix_compat::store_path::hash_placeholder;
+    use tvix_castore::blobservice::BlobService;
+    use tvix_castore::directoryservice::DirectoryService;
     use tvix_eval::generators::Gen;
     use tvix_eval::{NixContext, NixContextElement, NixString};
+    use tvix_store::pathinfoservice::PathInfoService;
+    use walkdir::{DirEntry, WalkDir};
 
     #[builtin("placeholder")]
     async fn builtin_placeholder(co: GenCo, input: Value) -> Result<Value, ErrorKind> {
@@ -569,6 +575,104 @@ pub(crate) mod derivation_builtins {
         // TODO: actually persist the file in the store at that path ...
 
         Ok(Value::String(NixString::new_context_from(context, &path)))
+    }
+
+    #[builtin("filterSource")]
+    async fn builtin_filter_source<BS: 'static, DS: 'static, PS: 'static>(
+        state: Rc<DerivationBuiltinState<BS, DS, PS>>,
+        co: GenCo,
+        #[lazy] filter: Value,
+        path: Value,
+    ) -> Result<Value, ErrorKind>
+    where
+        BS: AsRef<dyn BlobService> + Clone,
+        DS: AsRef<dyn DirectoryService>,
+        PS: AsRef<dyn PathInfoService>,
+    {
+        let p = path.to_path()?;
+        let mut entries_per_depths: Vec<Vec<DirEntry>> = vec![Vec::new()];
+        let mut it = WalkDir::new(&*p)
+            .follow_links(false)
+            .follow_root_links(false)
+            .contents_first(false)
+            .sort_by_file_name()
+            .into_iter();
+
+        // Skip root node.
+        entries_per_depths[0].push(
+            it.next()
+                .expect("Failed to obtain root node")
+                .expect("Failed to read root node"),
+        );
+
+        while let Some(entry) = it.next() {
+            // Entry could be a NotFound, if the root path specified does not exist.
+            let entry = entry.expect("Failed to find the entry");
+
+            let file_type = if entry.file_type().is_dir() {
+                "directory"
+            } else if entry.file_type().is_file() {
+                "file"
+            } else if entry.file_type().is_symlink() {
+                "symlink"
+            } else {
+                "other"
+            };
+
+            let should_skip = generators::request_force(
+                &co,
+                generators::request_call_with(
+                    &co,
+                    filter.clone(),
+                    [
+                        Value::String(entry.path().to_string_lossy().as_ref().into()),
+                        Value::String(file_type.into()),
+                    ],
+                )
+                .await,
+            )
+            .await
+            .as_bool()?;
+
+            if should_skip {
+                it.skip_current_dir();
+                continue;
+            }
+
+            if entry.depth() >= entries_per_depths.len() {
+                debug_assert!(
+                    entry.depth() == entries_per_depths.len(),
+                    "We should not be allocating more than one level at once, requested node at depth {}, had entries per depth containing {} levels",
+                    entry.depth(),
+                    entries_per_depths.len()
+                );
+
+                entries_per_depths.push(vec![entry]);
+            } else {
+                entries_per_depths[entry.depth()].push(entry);
+            }
+
+            // FUTUREWORK: determine when it's the right moment to flush a level to the ingester.
+        }
+
+        let entries_stream = tvix_castore::import::leveled_entries_to_stream(entries_per_depths);
+
+        pin_mut!(entries_stream);
+
+        let root_node = state
+            .store
+            .ingest_entries(entries_stream)
+            .await
+            .expect("Failed to ingest entries");
+
+        let spath = import_root_node(state.importer.path_info_service.clone(), &p, root_node)
+        let spath = state
+            .store
+            .import_root_node(p.as_ref(), name, root_node)
+            .await
+            .expect("Failed to import root node");
+
+        Ok(spath.to_absolute_path().into())
     }
 }
 
