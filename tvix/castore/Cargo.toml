@@ -25,6 +25,7 @@ url = "2.4.0"
 walkdir = "2.4.0"
 bstr = "1.6.0"
 async-tempfile = "0.4.0"
+async-recursion = "1.0.5"
 
 [dependencies.fuse-backend-rs]
 optional = true

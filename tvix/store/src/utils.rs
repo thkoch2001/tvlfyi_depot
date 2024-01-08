@@ -53,7 +53,7 @@ pub async fn import_path<BS, DS, PS, P>(
 ) -> Result<StorePath, std::io::Error>
 where
     P: AsRef<Path> + std::fmt::Debug,
-    BS: AsRef<dyn BlobService> + Clone,
+    BS: AsRef<dyn BlobService> + Clone + Send,
     DS: AsRef<dyn DirectoryService>,
     PS: AsRef<dyn PathInfoService>,
 {

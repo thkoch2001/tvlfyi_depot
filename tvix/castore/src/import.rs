@@ -7,9 +7,15 @@ use crate::proto::DirectoryNode;
 use crate::proto::FileNode;
 use crate::proto::SymlinkNode;
 use crate::Error as CastoreError;
+use async_recursion::async_recursion;
+use async_stream::try_stream;
+use bytes::Bytes;
+use futures::stream::Peekable;
+use futures::Stream;
+use futures::StreamExt;
 use std::os::unix::ffi::OsStrExt;
+use std::pin::Pin;
 use std::{
-    collections::HashMap,
     fmt::Debug,
     os::unix::prelude::PermissionsExt,
     path::{Path, PathBuf},
@@ -44,186 +50,237 @@ impl From<CastoreError> for Error {
     }
 }
 
-/// This processes a given [walkdir::DirEntry] and returns a
-/// proto::node::Node, depending on the type of the entry.
+/// Traverses a given path and returns a stream of all elements, from the root
+/// to the leaves.
 ///
-/// If the entry is a file, its contents are uploaded.
-/// If the entry is a directory, the Directory is uploaded as well.
-/// For this to work, it relies on the caller to provide the directory object
-/// with the previously returned (child) nodes.
-///
-/// It assumes entries to be returned in "contents first" order, means this
-/// will only be called with a directory if all children of it have been
-/// visited. If the entry is indeed a directory, it'll also upload that
-/// directory to the store. For this, the so-far-assembled Directory object for
-/// this path needs to be passed in.
-///
-/// It assumes the caller adds returned nodes to the directories it assembles.
-#[instrument(skip_all, fields(entry.file_type=?&entry.file_type(),entry.path=?entry.path()))]
-async fn process_entry<'a, BS>(
-    blob_service: BS,
-    directory_putter: &'a mut Box<dyn DirectoryPutter>,
-    entry: &'a walkdir::DirEntry,
-    maybe_directory: Option<Directory>,
-) -> Result<Node, Error>
+/// It does not follow symlinks, neither at the root, nor further down, they
+/// will be yielded as actual symlinks.
+// #[instrument(skip_all, fields(path=?p), err)]
+pub fn walk_path<P, F>(
+    mut accept_fn: F,
+    p: P,
+) -> impl Stream<Item = Result<walkdir::DirEntry, walkdir::Error>>
 where
-    BS: AsRef<dyn BlobService> + Clone,
+    P: AsRef<Path> + Debug,
+    F: FnMut(&walkdir::DirEntry) -> bool,
 {
-    let file_type = entry.file_type();
+    let mut it = WalkDir::new(p.as_ref())
+        .follow_links(false)
+        .follow_root_links(false)
+        .contents_first(false)
+        .sort_by_file_name()
+        .into_iter();
 
-    if file_type.is_dir() {
-        let directory = maybe_directory
-            .expect("tvix bug: must be called with some directory in the case of directory");
-        let directory_digest = directory.digest();
-        let directory_size = directory.size();
-
-        // upload this directory
-        directory_putter
-            .put(directory)
-            .await
-            .map_err(|e| Error::UploadDirectoryError(entry.path().to_path_buf(), e))?;
-
-        return Ok(Node::Directory(DirectoryNode {
-            name: entry.file_name().as_bytes().to_owned().into(),
-            digest: directory_digest.into(),
-            size: directory_size,
-        }));
+    try_stream! {
+        loop {
+            match it.next() {
+                None => break,
+                Some(Err(e)) => Err(e)?,
+                Some(Ok(entry)) => {
+                    if !accept_fn(&entry) {
+                        it.skip_current_dir();
+                        continue;
+                    } else {
+                        yield entry;
+                    }
+                }
+            }
+        }
     }
-
-    if file_type.is_symlink() {
-        let target: bytes::Bytes = std::fs::read_link(entry.path())
-            .map_err(|e| Error::UnableToStat(entry.path().to_path_buf(), e))?
-            .as_os_str()
-            .as_bytes()
-            .to_owned()
-            .into();
-
-        return Ok(Node::Symlink(SymlinkNode {
-            name: entry.file_name().as_bytes().to_owned().into(),
-            target,
-        }));
-    }
-
-    if file_type.is_file() {
-        let metadata = entry
-            .metadata()
-            .map_err(|e| Error::UnableToStat(entry.path().to_path_buf(), e.into()))?;
-
-        let mut file = tokio::fs::File::open(entry.path())
-            .await
-            .map_err(|e| Error::UnableToOpen(entry.path().to_path_buf(), e))?;
-
-        let mut writer = blob_service.as_ref().open_write().await;
-
-        if let Err(e) = tokio::io::copy(&mut file, &mut writer).await {
-            return Err(Error::UnableToRead(entry.path().to_path_buf(), e));
-        };
-
-        let digest = writer
-            .close()
-            .await
-            .map_err(|e| Error::UnableToRead(entry.path().to_path_buf(), e))?;
-
-        return Ok(Node::File(FileNode {
-            name: entry.file_name().as_bytes().to_vec().into(),
-            digest: digest.into(),
-            size: metadata.len(),
-            // If it's executable by the user, it'll become executable.
-            // This matches nix's dump() function behaviour.
-            executable: metadata.permissions().mode() & 64 != 0,
-        }));
-    }
-    todo!("handle other types")
 }
 
-/// Ingests the contents at the given path into the tvix store,
-/// interacting with a [BlobService] and [DirectoryService].
-/// It returns the root node or an error.
-///
-/// It does not follow symlinks at the root, they will be ingested as actual
-/// symlinks.
+#[instrument(skip_all, fields(path=?p), err)]
+pub async fn ingest_blob<BS>(
+    blob_service: BS,
+    p: impl AsRef<Path> + Debug,
+) -> std::io::Result<FileNode>
+where
+    BS: AsRef<dyn BlobService>,
+{
+    // open the file at the path
+    let mut f = tokio::fs::File::open(&p).await?;
+    let metadata = f.metadata().await?;
+
+    let mut blob_writer = blob_service.as_ref().open_write().await;
+    tokio::io::copy(&mut f, &mut blob_writer).await?;
+
+    let blob_digest = blob_writer.close().await?;
+
+    Ok(FileNode {
+        name: Bytes::copy_from_slice(
+            p.as_ref()
+                .file_name()
+                .ok_or_else(|| {
+                    std::io::Error::new(std::io::ErrorKind::InvalidInput, "no valid path given")
+                })?
+                .as_bytes(),
+        ),
+        digest: blob_digest.into(),
+        size: metadata.len(),
+        executable: metadata.permissions().mode() & 0o100 != 0,
+    })
+}
+
+#[instrument(skip_all, fields(path=?p), err)]
+pub async fn ingest_symlink(p: impl AsRef<Path> + Debug) -> std::io::Result<SymlinkNode> {
+    let target = tokio::fs::read_link(&p).await?;
+
+    Ok(SymlinkNode {
+        name: Bytes::copy_from_slice(
+            p.as_ref()
+                .file_name()
+                .ok_or_else(|| {
+                    std::io::Error::new(std::io::ErrorKind::InvalidInput, "no valid path given")
+                })?
+                .as_bytes(),
+        ),
+        target: Bytes::copy_from_slice(target.as_os_str().as_encoded_bytes()),
+    })
+}
+
+/// Ingests elements yielded by the given stream, interacting with a
+/// [BlobService] and [DirectoryService].
+/// It peeks at the stream, and as soon as it's outside the same level as
+/// previously received elements, returns a directory with all nodes received
+/// so far.
 ///
 /// It's not interacting with a PathInfoService (from tvix-store), or anything
 /// else giving it a "non-content-addressed name".
 /// It's up to the caller to possibly register it somewhere (and potentially
 /// rename it based on some naming scheme)
-#[instrument(skip(blob_service, directory_service), fields(path=?p), err)]
-pub async fn ingest_path<'a, BS, DS, P>(
+#[async_recursion]
+pub async fn ingest_directory<S, BS>(
+    elems: Peekable<S>,
     blob_service: BS,
-    directory_service: DS,
-    p: P,
-) -> Result<Node, Error>
+    parent_path: Option<&'async_recursion Path>,
+    directory_putter: Box<dyn DirectoryPutter>,
+) -> std::io::Result<(DirectoryNode, Peekable<S>)>
 where
-    P: AsRef<Path> + Debug,
-    BS: AsRef<dyn BlobService> + Clone,
-    DS: AsRef<dyn DirectoryService>,
+    BS: AsRef<dyn BlobService> + Clone + Send,
+    S: Stream<Item = Result<walkdir::DirEntry, walkdir::Error>> + Unpin + Send + 'static,
+
 {
-    let mut directories: HashMap<PathBuf, Directory> = HashMap::default();
+    let mut directory = Directory::default();
 
-    let mut directory_putter = directory_service.as_ref().put_multiple_start();
+    let mut elems = elems;
 
-    for entry in WalkDir::new(p.as_ref())
-        .follow_links(false)
-        .follow_root_links(false)
-        // We need to process a directory's children before processing
-        // the directory itself in order to have all the data needed
-        // to compute the hash.
-        .contents_first(true)
-        .sort_by_file_name()
-    {
-        // Entry could be a NotFound, if the root path specified does not exist.
-        let entry = entry.map_err(|e| {
-            Error::UnableToOpen(
-                PathBuf::from(p.as_ref()),
-                e.into_io_error().expect("walkdir err must be some"),
-            )
-        })?;
-
-        // process_entry wants an Option<Directory> in case the entry points to a directory.
-        // make sure to provide it.
-        // If the directory has contents, we already have it in
-        // `directories` due to the use of contents_first on WalkDir.
-        let maybe_directory: Option<Directory> = {
-            if entry.file_type().is_dir() {
-                Some(
-                    directories
-                        .entry(entry.path().to_path_buf())
-                        .or_default()
-                        .clone(),
-                )
-            } else {
-                None
+    loop {
+        let elem = Pin::new(&mut elems).peek().await;
+        // Get rid of the borrow from peek.
+        let elem = match elem {
+            None => None,
+            Some(Err(e)) => {
+                return Err(std::io::Error::new(std::io::ErrorKind::InvalidData, e.to_string()));
             }
+            Some(Ok(e)) => Some(e.clone())
         };
+        match elem {
+            None => {}
+            Some(e) => {
+                // Ensure the next element in the stream still has the same parent
+                // as the one we're responsible for.
+                if e.path().parent() != parent_path {
+                    break;
+                }
 
-        let node = process_entry(
-            blob_service.clone(),
-            &mut directory_putter,
-            &entry,
-            maybe_directory,
-        )
-        .await?;
+                // If it's a directory, recurse
+                if e.file_type().is_dir() {
+                    let (directory_node, rest_elems) = ingest_directory(
+                        elems,
+                        blob_service.clone(),
+                        Some(e.path()),
+                        directory_putter.clone(),
+                    )
+                    .await?;
+                    directory.directories.push(directory_node);
 
-        if entry.depth() == 0 {
-            // Make sure all the directories are flushed.
-            if entry.file_type().is_dir() {
-                directory_putter.close().await?;
-            }
-            return Ok(node);
-        } else {
-            // calculate the parent path, and make sure we register the node there.
-            // NOTE: entry.depth() > 0
-            let parent_path = entry.path().parent().unwrap().to_path_buf();
+                    elems = rest_elems;
+                } else if e.file_type().is_file() {
+                    directory
+                        .files
+                        .push(ingest_blob(blob_service.clone(), e.path()).await?);
+                } else if e.file_type().is_symlink() {
+                    directory.symlinks.push(ingest_symlink(e.path()).await?);
+                } else {
+                    return Err(std::io::Error::new(
+                        std::io::ErrorKind::InvalidData,
+                        "unknown file type",
+                    ));
+                }
 
-            // record node in parent directory, creating a new [proto:Directory] if not there yet.
-            let parent_directory = directories.entry(parent_path).or_default();
-            match node {
-                Node::Directory(e) => parent_directory.directories.push(e),
-                Node::File(e) => parent_directory.files.push(e),
-                Node::Symlink(e) => parent_directory.symlinks.push(e),
+                // advance the iterator
+                let _ = elems.next().await;
             }
         }
     }
-    // unreachable, we already bailed out before if root doesn't exist.
-    unreachable!()
+
+    // When we arive here, we're either at the end of the stream, or peeked at
+    // something we're not responsible for (different parent), so send off the
+    // Directory struct and return the node pointing to it.
+
+    let name = match parent_path {
+        None => Bytes::from_static(&[]),
+        Some(parent_path) => match parent_path.file_name() {
+            None => Bytes::from_static(&[]),
+            Some(name) => Bytes::copy_from_slice(name.as_bytes()),
+        },
+    };
+
+    Ok((
+        DirectoryNode {
+            name,
+            digest: directory.digest().into(),
+            size: directory.size(),
+        },
+        elems,
+    ))
+}
+
+pub async fn ingest_path<'a, BS, DS, P>(
+    blob_service: BS,
+    directory_service: DS,
+    path: P,
+) -> std::io::Result<Node>
+where
+    BS: AsRef<dyn BlobService> + Clone + Send,
+    DS: AsRef<dyn DirectoryService>,
+    P: AsRef<Path> + Debug,
+{
+    // run walk_path (currently temporarily allowing all items), and turn it
+    // into a peekable stream.
+    let p = path.as_ref().to_path_buf();
+    let mut items = Box::pin(walk_path(|_| true, p)).peekable();
+
+    // get the first element, describing the root node.
+    let elem = items.next().await;
+    debug_assert!(elem.is_some());
+    let elem = elem.unwrap()?;
+    let ft = elem.file_type();
+
+    if ft.is_dir() {
+        let directory_putter = directory_service.as_ref().put_multiple_start();
+
+        let (root_directory_node, _rest) = ingest_directory(
+            items,
+            blob_service,
+            Some(elem.path()),
+            directory_putter.clone(),
+        )
+        .await?;
+
+        // TODO: we need to close the putter to ensure it's flushed!
+
+        Ok(Node::Directory(root_directory_node))
+    } else if ft.is_file() {
+        Ok(Node::File(
+            ingest_blob(blob_service.clone(), path.as_ref()).await?,
+        ))
+    } else if ft.is_symlink() {
+        Ok(Node::Symlink(ingest_symlink(path.as_ref()).await?))
+    } else {
+        Err(std::io::Error::new(
+            std::io::ErrorKind::InvalidData,
+            "unknown file type",
+        ))
+    }
 }

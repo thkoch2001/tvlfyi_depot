@@ -100,7 +100,7 @@ where
 
 impl<BS, DS, PS> EvalIO for TvixStoreIO<BS, DS, PS>
 where
-    BS: AsRef<dyn BlobService> + Clone,
+    BS: AsRef<dyn BlobService> + Clone + Send,
     DS: AsRef<dyn DirectoryService>,
     PS: AsRef<dyn PathInfoService>,
 {
@@ -260,7 +260,7 @@ where
         let output_path = self.tokio_handle.block_on(async {
             tvix_store::utils::import_path(
                 path,
-                &self.blob_service,
+                self.blob_service.clone(),
                 &self.directory_service,
                 &self.path_info_service,
             )
