@@ -1,0 +1,89 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f4271a2d_aa0219fd",
+        "filename": "tvix/store/src/import.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 61,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-01-08T09:41:52Z",
+      "side": 1,
+      "message": "This only does nar-based import, and conflates output calculation concerns. It should probably be specifically named to reflect this fact, it\u0027s unusable to e.g. ingest build results.",
+      "revId": "6c6558b18fc704099f1eff3405a8680a4fc6dd48",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "80127643_3cad9853",
+        "filename": "tvix/store/src/import.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 81,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-01-08T09:41:52Z",
+      "side": 1,
+      "message": "This is just calling tvix_castore::import::ingest_path, why the separate function?",
+      "revId": "6c6558b18fc704099f1eff3405a8680a4fc6dd48",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "dff76a93_9fcd5e14",
+        "filename": "tvix/store/src/import.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 97,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-01-08T09:41:52Z",
+      "side": 1,
+      "message": "The comment is gibberish and doesn\u0027t describe what it\u0027s doing. Specifically it\u0027s creating and inserting a PathInfo struct, using NAR-based path calculation, and I don\u0027t think it should be sliced that way. See comment right below.",
+      "revId": "6c6558b18fc704099f1eff3405a8680a4fc6dd48",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9725eb13_196daf53",
+        "filename": "tvix/store/src/import.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 98,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-01-08T09:41:52Z",
+      "side": 1,
+      "message": "This constructs a NAR-based PathInfo object for a root node, and inserts it into the PathInfoService.\n\nThere\u0027s however other ways how PathInfos can appear, for example for input-addressed builds.\n\nI\u0027d feel more comfortable having one or multiple helper functions returing a PathInfo-to-insert, maybe just accepting the name of the root node as a parameter. There\u0027s no need the whole path is taken as an argument.\n\nThe consumer of these functions can do the nar calculation (if necessary), and populate the fields. The consumer can also populate references, in case it\u0027s not a pure NAR-CA path.",
+      "revId": "6c6558b18fc704099f1eff3405a8680a4fc6dd48",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a14b972f_852ffbe8",
+        "filename": "tvix/store/src/import.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 143,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-01-08T09:41:52Z",
+      "side": 1,
+      "message": "The comment is outdated, we don\u0027t return it (anymore?).",
+      "revId": "6c6558b18fc704099f1eff3405a8680a4fc6dd48",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
