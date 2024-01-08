@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b0a97886_9d3d4e29",
+        "filename": "tvix/glue/src/builtins/derivation.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 590,
+      "author": {
+        "id": 1000073
+      },
+      "writtenOn": "2024-01-08T23:24:16Z",
+      "side": 1,
+      "message": "this requires to be in a tokio runtime, same for `import_root_node`, making the whole thing explode in general.",
+      "revId": "33fb2f2cceda8573d9d820523ee2118203855ce4",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
