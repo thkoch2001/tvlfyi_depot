@@ -230,6 +230,7 @@ pub(crate) mod derivation_builtins {
 
     use super::*;
     use nix_compat::store_path::hash_placeholder;
+    use sha2::{Digest, Sha256};
     use tvix_eval::generators::Gen;
     use tvix_eval::{NixContext, NixContextElement, NixString};
     use tvix_store::pathinfoservice::PathInfoService;
