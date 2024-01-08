@@ -1,5 +1,6 @@
 //! This module provides an implementation of EvalIO talking to tvix-store.
 
+use futures::Stream;
 use nix_compat::store_path::StorePath;
 use std::{
     cell::RefCell,
@@ -9,6 +10,7 @@ use std::{
 use tokio::io::AsyncReadExt;
 use tracing::{error, instrument, warn};
 use tvix_eval::{EvalIO, FileType, StdIO};
+use walkdir::DirEntry;
 
 use tvix_castore::{
     blobservice::BlobService,
@@ -46,6 +48,7 @@ pub struct TvixStoreIO<BS, DS, PS> {
 
 impl<BS, DS, PS> TvixStoreIO<BS, DS, PS>
 where
+    BS: AsRef<dyn BlobService> + Clone,
     DS: AsRef<dyn DirectoryService>,
     PS: AsRef<dyn PathInfoService>,
 {
@@ -111,6 +114,41 @@ where
     ) -> io::Result<Option<Node>> {
         self.tokio_handle
             .block_on(async { self.store_path_to_node(store_path, sub_path).await })
+    }
+
+    /// This forwards the ingestion to the [`tvix_castore::import::ingest_entries`].
+    pub(crate) async fn ingest_entries<S>(&self, entries_stream: S) -> io::Result<Node>
+    where
+        S: Stream<Item = DirEntry> + std::marker::Unpin,
+    {
+        tvix_castore::import::ingest_entries(
+            &self.blob_service,
+            &self.directory_service,
+            entries_stream,
+        )
+        .await
+        .map_err(|err| std::io::Error::new(io::ErrorKind::Other, err))
+    }
+
+    /// This forwards the importation to [`tvix_store::import::import_root_node`]
+    pub(crate) async fn import_root_node<P, N>(
+        &self,
+        path: P,
+        name: N,
+        root_node: Node,
+    ) -> io::Result<StorePath>
+    where
+        P: AsRef<Path>,
+        N: AsRef<str>,
+    {
+        tvix_store::import::import_root_node(
+            &self.path_info_service,
+            path.as_ref(),
+            name.as_ref(),
+            root_node,
+        )
+        .await
+        .map_err(|err| std::io::Error::new(io::ErrorKind::Other, err))
     }
 }
 
@@ -276,9 +314,12 @@ where
 
     #[instrument(skip(self), ret, err)]
     fn import_path(&self, path: &Path) -> io::Result<PathBuf> {
+        let name = tvix_store::import::path_to_name(path)?;
+
         let output_path = self.tokio_handle.block_on(async {
             tvix_store::import::import_path(
                 path,
+                name,
                 &self.blob_service,
                 &self.directory_service,
                 &self.path_info_service,

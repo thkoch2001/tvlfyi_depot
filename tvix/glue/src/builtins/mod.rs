@@ -5,6 +5,8 @@ mod derivation;
 mod derivation_error;
 
 pub use derivation_error::Error as DerivationError;
+use tvix_castore::{blobservice::BlobService, directoryservice::DirectoryService};
+use tvix_store::pathinfoservice::PathInfoService;
 
 /// Adds derivation-related builtins to the passed [tvix_eval::Evaluation].
 ///
@@ -15,7 +17,11 @@ pub use derivation_error::Error as DerivationError;
 pub fn add_derivation_builtins<BS: 'static, DS: 'static, PS: 'static>(
     eval: &mut tvix_eval::Evaluation,
     tvix_store_io: TvixStoreIO<BS, DS, PS>,
-) {
+) where
+    BS: AsRef<dyn BlobService> + Clone,
+    DS: AsRef<dyn DirectoryService>,
+    PS: AsRef<dyn PathInfoService>,
+{
     eval.builtins
         .extend(derivation::derivation_builtins::builtins(
             tvix_store_io.into(),
