@@ -6,13 +6,13 @@ use crate::de::{from_str, from_str_with_config};
 
 #[test]
 fn deserialize_none() {
-    let result: Option<usize> = from_str("null").expect("should deserialize");
+    let result: Option<usize> = from_str("null", false).expect("should deserialize");
     assert_eq!(None, result);
 }
 
 #[test]
 fn deserialize_some() {
-    let result: Option<usize> = from_str("40 + 2").expect("should deserialize");
+    let result: Option<usize> = from_str("40 + 2", false).expect("should deserialize");
     assert_eq!(Some(42), result);
 }
 
@@ -23,6 +23,7 @@ fn deserialize_string() {
       let greeter = name: "Hello ${name}!";
       in greeter "Slartibartfast"
     "#,
+        false,
     )
     .expect("should deserialize");
 
@@ -31,26 +32,27 @@ fn deserialize_string() {
 
 #[test]
 fn deserialize_empty_list() {
-    let result: Vec<usize> = from_str("[ ]").expect("should deserialize");
+    let result: Vec<usize> = from_str("[ ]", false).expect("should deserialize");
     assert!(result.is_empty())
 }
 
 #[test]
 fn deserialize_integer_list() {
     let result: Vec<usize> =
-        from_str("builtins.map (n: n + 2) [ 21 40 67 ]").expect("should deserialize");
+        from_str("builtins.map (n: n + 2) [ 21 40 67 ]", false).expect("should deserialize");
     assert_eq!(result, vec![23, 42, 69]);
 }
 
 #[test]
 fn deserialize_empty_map() {
-    let result: HashMap<String, usize> = from_str("{ }").expect("should deserialize");
+    let result: HashMap<String, usize> = from_str("{ }", false).expect("should deserialize");
     assert!(result.is_empty());
 }
 
 #[test]
 fn deserialize_integer_map() {
-    let result: HashMap<String, usize> = from_str("{ age = 40 + 2; }").expect("should deserialize");
+    let result: HashMap<String, usize> =
+        from_str("{ age = 40 + 2; }", false).expect("should deserialize");
     assert_eq!(result.len(), 1);
     assert_eq!(*result.get("age").unwrap(), 42);
 }
@@ -70,6 +72,7 @@ fn deserialize_struct() {
       age = 42;
     }
     "#,
+        false,
     )
     .expect("should deserialize");
 
@@ -87,13 +90,13 @@ fn deserialize_newtype() {
     #[derive(Debug, Deserialize, PartialEq)]
     struct Number(usize);
 
-    let result: Number = from_str("42").expect("should deserialize");
+    let result: Number = from_str("42", false).expect("should deserialize");
     assert_eq!(result, Number(42));
 }
 
 #[test]
 fn deserialize_tuple() {
-    let result: (String, usize) = from_str(r#" [ "foo" 42 ] "#).expect("should deserialize");
+    let result: (String, usize) = from_str(r#" [ "foo" 42 ] "#, false).expect("should deserialize");
     assert_eq!(result, ("foo".into(), 42));
 }
 
@@ -105,7 +108,7 @@ fn deserialize_unit_enum() {
         Baz,
     }
 
-    let result: Foo = from_str("\"Baz\"").expect("should deserialize");
+    let result: Foo = from_str("\"Baz\"", false).expect("should deserialize");
     assert_eq!(result, Foo::Baz);
 }
 
@@ -123,6 +126,7 @@ fn deserialize_tuple_enum() {
       Baz = [ "Slartibartfast" 42 ];
     }
     "#,
+        false,
     )
     .expect("should deserialize");
 
@@ -144,6 +148,7 @@ fn deserialize_struct_enum() {
       Baz.age = 42;
     }
     "#,
+        false,
     )
     .expect("should deserialize");
 
@@ -184,6 +189,7 @@ fn deserialize_enum_all() {
         (mkTuple "Russia" "квас")
       ]
     "#,
+        false,
     )
     .expect("should deserialize");
 
@@ -201,11 +207,26 @@ fn deserialize_enum_all() {
 }
 
 #[test]
+fn deserialize_with_impure_eval() {
+    #[derive(Debug, Deserialize, PartialEq)]
+    struct Number(usize);
+
+    let result: String = from_str("(import ./src/test.nix).cat", true).expect("should deserialize");
+    // from_str("(import \"/tmp/test.nix\").cat", true).expect("should deserialize");
+
+    assert_eq!(result, "meow!");
+}
+
+#[test]
 fn deserialize_with_config() {
-    let result: String = from_str_with_config("builtins.testWithConfig", |eval| {
-        // Add a literal string builtin that just returns `"ok"`.
-        eval.src_builtins.push(("testWithConfig", "\"ok\""));
-    })
+    let result: String = from_str_with_config(
+        "builtins.testWithConfig",
+        |eval| {
+            // Add a literal string builtin that just returns `"ok"`.
+            eval.src_builtins.push(("testWithConfig", "\"ok\""));
+        },
+        false,
+    )
     .expect("should deserialize");
 
     assert_eq!(result, "ok");
@@ -235,9 +256,13 @@ mod test_builtins {
 fn deserialize_with_extra_builtin() {
     let code = "builtins.prependHello \"world\"";
 
-    let result: String = from_str_with_config(code, |eval| {
-        eval.builtins.append(&mut test_builtins::builtins());
-    })
+    let result: String = from_str_with_config(
+        code,
+        |eval| {
+            eval.builtins.append(&mut test_builtins::builtins());
+        },
+        false,
+    )
     .expect("should deserialize");
 
     assert_eq!(result, "hello world");

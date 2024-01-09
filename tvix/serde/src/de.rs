@@ -2,7 +2,12 @@
 
 use serde::de::value::{MapDeserializer, SeqDeserializer};
 use serde::de::{self, EnumAccess, VariantAccess};
+use std::{cell::RefCell, rc::Rc};
+use std::{env, path::PathBuf};
 pub use tvix_eval::Evaluation;
+use tvix_glue::known_paths::KnownPaths;
+use tvix_glue::tvix_store_io::TvixStoreIO;
+use tvix_glue::{builtins::add_derivation_builtins, configure_nix_path};
 use tvix_eval::Value;
 
 use crate::error::Error;
@@ -31,27 +36,69 @@ impl de::IntoDeserializer<'_, Error> for NixDeserializer {
 
 /// Evaluate the Nix code in `src` and attempt to deserialise the
 /// value it returns to `T`.
-pub fn from_str<'code, T>(src: &'code str) -> Result<T, Error>
+pub fn from_str<'code, T>(src: &'code str, impure_eval: bool) -> Result<T, Error>
 where
     T: serde::Deserialize<'code>,
 {
-    from_str_with_config(src, |_| /* no extra config */ ())
+    from_str_with_config(src, |_| /* no extra config */ (), impure_eval)
 }
 
 /// Evaluate the Nix code in `src`, with extra configuration for the
 /// `tvix_eval::Evaluation` provided by the given closure.
-pub fn from_str_with_config<'code, T, F>(src: &'code str, config: F) -> Result<T, Error>
+pub fn from_str_with_config<'code, T, F>(
+    src: &'code str,
+    config: F,
+    impure_eval: bool,
+) -> Result<T, Error>
 where
     T: serde::Deserialize<'code>,
     F: FnOnce(&mut Evaluation),
 {
     // First step is to evaluate the Nix code ...
-    let mut eval = Evaluation::default();
-    config(&mut eval);
+    let mut eval = if impure_eval {
+        Evaluation::new_impure()
+    } else {
+        Evaluation::default()
+    };
 
     eval.strict = true;
+    let mut path: Option<PathBuf> = None;
     let source = eval.source_map();
-    let result = eval.evaluate(src, None);
+
+    if impure_eval {
+        let known_paths: Rc<RefCell<KnownPaths>> = Default::default();
+        let tokio_runtime = tokio::runtime::Runtime::new().expect("failed to setup tokio runtime");
+        let (blob_service, directory_service, path_info_service) = tokio_runtime
+            .block_on({
+                let blob_service_addr = "memory://";
+                let directory_service_addr = "memory://";
+                let path_info_service_addr = "memory://";
+                async move {
+                    tvix_store::utils::construct_services(
+                        blob_service_addr,
+                        directory_service_addr,
+                        path_info_service_addr,
+                    )
+                    .await
+                }
+            })
+            .expect("unable to setup {blob|directory|pathinfo}service before interpreter setup");
+
+        add_derivation_builtins(&mut eval, known_paths.clone());
+        configure_nix_path(&mut eval, &None);
+        eval.io_handle = Box::new(tvix_glue::tvix_io::TvixIO::new(TvixStoreIO::new(
+            blob_service,
+            directory_service,
+            path_info_service,
+            tokio_runtime.handle().clone(),
+        )));
+
+        path = Some(env::current_dir().unwrap_or_else(|_| PathBuf::from("")));
+    }
+
+    config(&mut eval);
+
+    let result = eval.evaluate(src, path);
 
     if !result.errors.is_empty() {
         return Err(Error::NixErrors {

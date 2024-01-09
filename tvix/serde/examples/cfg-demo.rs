@@ -29,7 +29,7 @@ fn main() {
     let code = include_str!("foods.nix");
 
     // Now you can use tvix_serde to deserialise the struct:
-    let foods: Data = tvix_serde::from_str(code).expect("deserialisation should succeed");
+    let foods: Data = tvix_serde::from_str(code, false).expect("deserialisation should succeed");
 
     println!("These are the foods:\n{:#?}", foods);
 }
