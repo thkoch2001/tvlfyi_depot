@@ -55,6 +55,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "d7b2cc44_d7b4138b",
+        "filename": "tvix/serde/src/de.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2024-01-09T10:48:19Z",
+      "side": 1,
+      "message": "Agree on the two functions, but for the second part - this should just be generic over an IO implementation, and the user should bring their own. This crate should not ever depend on all the other stuff directly.",
+      "parentUuid": "f8163aec_31527b54",
+      "revId": "aed8e6309ef53a2cf0c0fc54464d9260f27c5c1a",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "5aabfec6_3679a4a7",
         "filename": "tvix/serde/src/de.rs",
         "patchSetId": 2
