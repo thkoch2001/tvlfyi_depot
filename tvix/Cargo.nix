@@ -10801,8 +10801,21 @@ rec {
             features = [ "derive" ];
           }
           {
+            name = "tokio";
+            packageId = "tokio";
+          }
+          {
             name = "tvix-eval";
             packageId = "tvix-eval";
+          }
+          {
+            name = "tvix-glue";
+            packageId = "tvix-glue";
+          }
+          {
+            name = "tvix-store";
+            packageId = "tvix-store";
+            usesDefaultFeatures = false;
           }
         ];
 
