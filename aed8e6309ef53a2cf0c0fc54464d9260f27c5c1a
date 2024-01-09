@@ -74,6 +74,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "c2595ace_65be8448",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000094
+      },
+      "writtenOn": "2024-01-09T23:30:35Z",
+      "side": 1,
+      "message": "\u003e The user should pass the whole EvalIO thing into the function, and prepare it somewhere else.\n\u003e This crate should not ever depend on all the other stuff directly.\n\nChanged the function so it takes a io_handler attribute, but as far as I understand I\u0027ll still have to add tvix-glue as a dependency for `KnownPaths`, `add_derivation_builtins` and `configure_nix_path`. And I think I\u0027ll have to add tvix-store and tokio as dev dependencies to construct a io_handler in the impure test case?",
+      "parentUuid": "7f05c8bc_d63de256",
+      "revId": "aed8e6309ef53a2cf0c0fc54464d9260f27c5c1a",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "f8163aec_31527b54",
         "filename": "tvix/serde/src/de.rs",
         "patchSetId": 2
