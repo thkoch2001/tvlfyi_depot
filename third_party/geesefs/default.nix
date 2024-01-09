@@ -5,18 +5,18 @@
 
 pkgs.buildGoModule rec {
   pname = "geesefs";
-  version = "0.38.3";
+  version = "0.40.0";
 
   src = pkgs.fetchFromGitHub {
     owner = "yandex-cloud";
     repo = "geesefs";
     rev = "v${version}";
-    sha256 = "0kf0368hnards619azz8xw7cp7fm806v0aszmgq24qs9ax45dv6m";
+    sha256 = "0ibvzp83rwzpd4fx4wmk46j570jw8c3hbd9yw55dqwjzk6ay0aq2";
   };
 
   subPackages = [ "." ];
   buildInputs = [ pkgs.fuse ];
-  vendorSha256 = "sha256-5QPx6mNJLbhqTF6EF/ZK8CVOnLcM0wpbCwDyd9mWhAM=";
+  vendorSha256 = "11i7cmnlxi00d0csgpv8drfcw0aqshwc4hfs0jw7zwafdhnlyy0j";
 
   meta = with pkgs.lib; {
     license = licenses.asl20;
