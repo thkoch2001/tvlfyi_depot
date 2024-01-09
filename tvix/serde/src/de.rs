@@ -2,8 +2,13 @@
 
 use serde::de::value::{MapDeserializer, SeqDeserializer};
 use serde::de::{self, EnumAccess, VariantAccess};
+use std::{cell::RefCell, rc::Rc};
+use std::{env, path::PathBuf};
+use tvix_eval::EvalIO;
 pub use tvix_eval::Evaluation;
 use tvix_eval::Value;
+use tvix_glue::known_paths::KnownPaths;
+use tvix_glue::{builtins::add_derivation_builtins, configure_nix_path};
 
 use crate::error::Error;
 
@@ -38,6 +43,14 @@ where
     from_str_with_config(src, |_| /* no extra config */ ())
 }
 
+/// Same as from_str just in a impure manner, so things like imports are allowed.
+pub fn from_str_impure<'code, T>(src: &'code str, io_handler: Box<dyn EvalIO>) -> Result<T, Error>
+where
+    T: serde::Deserialize<'code>,
+{
+    from_str_with_config_impure(src, |_| /* no extra config */ (), io_handler)
+}
+
 /// Evaluate the Nix code in `src`, with extra configuration for the
 /// `tvix_eval::Evaluation` provided by the given closure.
 pub fn from_str_with_config<'code, T, F>(src: &'code str, config: F) -> Result<T, Error>
@@ -47,11 +60,49 @@ where
 {
     // First step is to evaluate the Nix code ...
     let mut eval = Evaluation::default();
-    config(&mut eval);
 
     eval.strict = true;
     let source = eval.source_map();
+
+    config(&mut eval);
     let result = eval.evaluate(src, None);
+
+    if !result.errors.is_empty() {
+        return Err(Error::NixErrors {
+            errors: result.errors,
+            source,
+        });
+    }
+
+    let de = NixDeserializer::new(result.value.expect("value should be present on success"));
+
+    T::deserialize(de)
+}
+
+pub fn from_str_with_config_impure<'code, T, F>(
+    src: &'code str,
+    config: F,
+    io_handler: Box<dyn EvalIO>,
+) -> Result<T, Error>
+where
+    T: serde::Deserialize<'code>,
+    F: FnOnce(&mut Evaluation),
+{
+    // First step is to evaluate the Nix code ...
+    let mut eval = Evaluation::new_impure();
+    eval.strict = true;
+    let source = eval.source_map();
+    let path = Some(env::current_dir().unwrap_or_else(|_| PathBuf::from("")));
+
+    let known_paths: Rc<RefCell<KnownPaths>> = Default::default();
+    add_derivation_builtins(&mut eval, known_paths.clone());
+    configure_nix_path(&mut eval, &None);
+
+    eval.io_handle = io_handler;
+
+    config(&mut eval);
+
+    let result = eval.evaluate(src, path);
 
     if !result.errors.is_empty() {
         return Err(Error::NixErrors {

@@ -2,7 +2,7 @@ use serde::Deserialize;
 use std::collections::HashMap;
 use tvix_eval::builtin_macros::builtins;
 
-use crate::de::{from_str, from_str_with_config};
+use crate::de::{from_str, from_str_impure, from_str_with_config};
 
 #[test]
 fn deserialize_none() {
@@ -198,6 +198,43 @@ fn deserialize_enum_all() {
     ];
 
     assert_eq!(result, expected);
+}
+
+#[test]
+fn deserialize_with_impure_eval() {
+    #[derive(Debug, Deserialize, PartialEq)]
+    struct Number(usize);
+
+    let tokio_runtime = tokio::runtime::Runtime::new().expect("failed to setup tokio runtime");
+    let (blob_service, directory_service, path_info_service) = tokio_runtime
+        .block_on({
+            let blob_service_addr = "memory://";
+            let directory_service_addr = "memory://";
+            let path_info_service_addr = "memory://";
+            async move {
+                tvix_store::utils::construct_services(
+                    blob_service_addr,
+                    directory_service_addr,
+                    path_info_service_addr,
+                )
+                .await
+            }
+        })
+        .expect("unable to setup {blob|directory|pathinfo}service before interpreter setup");
+
+    let io_handler = Box::new(tvix_glue::tvix_io::TvixIO::new(
+        tvix_glue::tvix_store_io::TvixStoreIO::new(
+            blob_service,
+            directory_service,
+            path_info_service,
+            tokio_runtime.handle().clone(),
+        ),
+    ));
+
+    let result: String =
+        from_str_impure("(import ./src/test.nix).cat", io_handler).expect("should deserialize");
+
+    assert_eq!(result, "meow!");
 }
 
 #[test]
