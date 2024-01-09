@@ -34,6 +34,40 @@
       "parentUuid": "cea5552f_4c3fb2cd",
       "revId": "aed8e6309ef53a2cf0c0fc54464d9260f27c5c1a",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f8163aec_31527b54",
+        "filename": "tvix/serde/src/de.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-01-09T10:05:13Z",
+      "side": 1,
+      "message": "This should probably two other functions on their own, and feature-flagged, so you can still compile tvix-serde without linking against store, glue (and soon build).",
+      "revId": "aed8e6309ef53a2cf0c0fc54464d9260f27c5c1a",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5aabfec6_3679a4a7",
+        "filename": "tvix/serde/src/de.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 73,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-01-09T10:05:13Z",
+      "side": 1,
+      "message": "Ugh. For anything wanting some persistence (imagine your config file refers to some build output, and the binary using tvix-serde for its config file expects it to be tere), this is probably not the right thing.\n\nWe need to think more about evaluator configuration, see my notes and references on b/262 too.",
+      "revId": "aed8e6309ef53a2cf0c0fc54464d9260f27c5c1a",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
