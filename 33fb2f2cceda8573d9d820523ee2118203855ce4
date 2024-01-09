@@ -16,6 +16,24 @@
       "message": "this requires to be in a tokio runtime, same for `import_root_node`, making the whole thing explode in general.",
       "revId": "33fb2f2cceda8573d9d820523ee2118203855ce4",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "26b991b3_b20977a3",
+        "filename": "tvix/glue/src/builtins/derivation.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 590,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-01-09T06:59:16Z",
+      "side": 1,
+      "message": "You need to expose a sync function in TvixStoreIO (which has a handle to the Tokio runtime) that blocks on the async task. the async stuff in eval (and builtins) is using its own executor. (The generator framework documented in eval/docs).",
+      "parentUuid": "b0a97886_9d3d4e29",
+      "revId": "33fb2f2cceda8573d9d820523ee2118203855ce4",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
