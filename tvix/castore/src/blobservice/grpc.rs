@@ -1,4 +1,4 @@
-use super::{naive_seeker::NaiveSeeker, BlobReader, BlobService, BlobWriter, ChunkedBlobService};
+use super::{naive_seeker::NaiveSeeker, BlobReader, BlobService, BlobWriter};
 use crate::{
     proto::{self, stat_blob_response::ChunkMeta},
     B3Digest,
