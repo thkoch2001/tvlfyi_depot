@@ -3425,7 +3425,10 @@ name = "tvix-serde"
 version = "0.1.0"
 dependencies = [
  "serde",
+ "tokio",
  "tvix-eval",
+ "tvix-glue",
+ "tvix-store",
 ]
 
 [[package]]
