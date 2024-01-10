@@ -327,6 +327,7 @@ mod tests {
             blob_service,
             directory_service,
             path_info_service,
+            runtime.handle().clone(),
         ));
 
         add_derivation_builtins(&mut eval, state);
