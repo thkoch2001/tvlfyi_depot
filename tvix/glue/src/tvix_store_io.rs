@@ -263,9 +263,12 @@ where
 
     #[instrument(skip(self), ret, err)]
     fn import_path(&self, path: &Path) -> io::Result<PathBuf> {
+        let name = tvix_store::import::path_to_name(path)?;
+
         let output_path = self.tokio_handle.block_on(async {
             tvix_store::import::import_path(
                 path,
+                name,
                 &self.blob_service,
                 &self.directory_service,
                 &self.path_info_service,

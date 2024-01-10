@@ -13,11 +13,12 @@ use crate::{
     proto::{nar_info, NarInfo, PathInfo},
 };
 
-fn log_node(node: &Node, path: &Path) {
+fn log_node(node: &Node, path: &Path, name: &str) {
     match node {
         Node::Directory(directory_node) => {
             debug!(
                 path = ?path,
+                store_name = ?name,
                 name = ?directory_node.name,
                 digest = BASE64.encode(&directory_node.digest),
                 "import successful",
@@ -26,6 +27,7 @@ fn log_node(node: &Node, path: &Path) {
         Node::File(file_node) => {
             debug!(
                 path = ?path,
+                store_name = ?name,
                 name = ?file_node.name,
                 digest = BASE64.encode(&file_node.digest),
                 "import successful"
@@ -34,6 +36,7 @@ fn log_node(node: &Node, path: &Path) {
         Node::Symlink(symlink_node) => {
             debug!(
                 path = ?path,
+                store_name = ?name,
                 name = ?symlink_node.name,
                 target = ?symlink_node.target,
                 "import successful"
@@ -62,6 +65,7 @@ pub fn path_to_name(path: &Path) -> std::io::Result<&str> {
 #[instrument(skip_all, fields(path=?path), err)]
 pub async fn import_path<BS, DS, PS, P>(
     path: P,
+    name: &str,
     blob_service: BS,
     directory_service: DS,
     path_info_service: PS,
@@ -73,7 +77,7 @@ where
     PS: AsRef<dyn PathInfoService>,
 {
     let root_node = path_to_root_node(path.as_ref(), blob_service, directory_service).await?;
-    import_root_node(path_info_service, path.as_ref(), root_node).await
+    import_root_node(path_info_service, path.as_ref(), name, root_node).await
 }
 
 /// Transforms a given path and returns its corresponding [`Node`] by interacting with
@@ -98,13 +102,12 @@ where
 pub async fn import_root_node<PS>(
     path_info_service: PS,
     path: &Path,
+    name: &str,
     root_node: Node,
 ) -> std::io::Result<StorePath>
 where
     PS: AsRef<dyn PathInfoService>,
 {
-    let name = path_to_name(path)?;
-
     // Ask the PathInfoService for the NAR size and sha256
     let (nar_size, nar_sha256) = path_info_service.as_ref().calculate_nar(&root_node).await?;
 
@@ -118,7 +121,7 @@ where
 
     // assemble a new root_node with a name that is derived from the nar hash.
     let root_node = root_node.rename(output_path.to_string().into_bytes().into());
-    log_node(&root_node, path);
+    log_node(&root_node, path, name);
 
     // assemble the [crate::proto::PathInfo] object.
     let path_info = PathInfo {
@@ -157,9 +160,11 @@ impl Importer {
     pub async fn import_path<P: AsRef<Path> + std::fmt::Debug>(
         &self,
         path: P,
+        name: &str,
     ) -> std::io::Result<StorePath> {
         import_path(
             path,
+            name,
             self.blob_service.clone(),
             self.directory_service.clone(),
             self.path_info_service.clone(),
@@ -170,8 +175,15 @@ impl Importer {
     pub async fn import_root_node(
         &self,
         root_path: &Path,
+        root_name: &str,
         root_node: Node,
     ) -> std::io::Result<StorePath> {
-        import_root_node(self.path_info_service.clone(), root_path, root_node).await
+        import_root_node(
+            self.path_info_service.clone(),
+            root_path,
+            root_name,
+            root_node,
+        )
+        .await
     }
 }
