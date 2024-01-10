@@ -133,7 +133,13 @@ async fn filter_and_import(
     name: &str,
     path: &Path,
     filter: Option<&Value>,
-) -> Result<nix_compat::store_path::StorePath, ErrorKind> {
+) -> Result<
+    (
+        nix_compat::store_path::StorePath,
+        tvix_castore::proto::node::Node,
+    ),
+    ErrorKind,
+> {
     let mut entries_per_depths: Vec<Vec<walkdir::DirEntry>> = vec![Vec::new()];
     let mut it = walkdir::WalkDir::new(&*path)
         .follow_links(false)
@@ -183,8 +189,13 @@ async fn filter_and_import(
         };
 
         if !should_keep {
-            it.skip_current_dir();
+            println!("Skipping {:?}...", entry);
+            if file_type == "directory" {
+                it.skip_current_dir();
+            }
             continue;
+        } else {
+            println!("Keeping {:?}...", entry);
         }
 
         if entry.depth() >= entries_per_depths.len() {
@@ -211,16 +222,15 @@ async fn filter_and_import(
     .await
     .expect("Failed to ingest entries");
 
-    let spath = tvix_store::import::import_root_node(
-        state.importer.path_info_service.clone(),
-        &path,
-        name,
-        root_node,
-    )
-    .await
-    .expect("Failed to import root node");
+    let path_info_service = state.importer.path_info_service.clone();
+    let that_root_node = root_node.clone();
+    let spath = state.tokio_runtime.block_on(async move {
+        tvix_store::import::import_root_node(path_info_service, &path, name, that_root_node)
+            .await
+            .expect("Failed to import root node")
+    });
 
-    Ok(spath)
+    Ok((spath, root_node))
 }
 
 pub struct DerivationBuiltinsState {
@@ -254,6 +264,7 @@ pub(crate) mod derivation_builtins {
 
     use super::*;
     use nix_compat::store_path::hash_placeholder;
+    use sha2::{Digest, Sha256};
     use tvix_eval::generators::Gen;
     use tvix_eval::{NixContext, NixContextElement, NixString};
 
@@ -659,31 +670,76 @@ pub(crate) mod derivation_builtins {
     async fn builtin_path(
         state: Rc<DerivationBuiltinsState>,
         co: GenCo,
-        #[lazy] args: Value,
+        args: Value,
     ) -> Result<Value, ErrorKind> {
         let args = args.to_attrs()?;
-        let path = args.select_required("path")?.to_path()?;
-        let name: String = args
-            .select("name")
-            .map(|n| n.to_str())
-            .transpose()?
-            .map(|n| n.to_string())
-            .unwrap_or_else(|| {
-                tvix_store::import::path_to_name(&path)
-                    .expect("Failed to derive the default name out of the path")
-                    .to_string()
-            });
+        let path = args.select_required("path")?;
+        let path = generators::request_force(&co, path.clone())
+            .await
+            .to_path()?;
+        let name: String = if let Some(name) = args.select("name") {
+            generators::request_force(&co, name.clone())
+                .await
+                .to_str()?
+                .as_str()
+                .to_string()
+        } else {
+            tvix_store::import::path_to_name(&path)
+                .expect("Failed to derive the default name out of the path")
+                .to_string()
+        };
         let filter = args.select("filter");
-        let recursive_ingestion = args.select("recursive").map(|r| r.as_bool());
-        let expected_sha256 = args.select("sha256").map(|h| h.to_str());
+        let recursive_ingestion = args
+            .select("recursive")
+            .map(|r| r.as_bool())
+            .transpose()?
+            .unwrap_or(true); // Yes, yes, Nix, by default, puts `recursive = true;`.
+        let expected_sha256 = args
+            .select("sha256")
+            .map(|h| {
+                h.to_str().and_then(|expected| {
+                    nix_compat::nixhash::from_str(expected.as_ref(), None).map_err(|_err| {
+                        // TODO: a better error would be nice, what do we use for wrong hashes?
+                        ErrorKind::TypeError {
+                            expected: "sha256",
+                            actual: "not a sha256",
+                        }
+                    })
+                })
+            })
+            .transpose()?;
 
-        if expected_sha256.is_some() || recursive_ingestion.is_some() {
+        if !recursive_ingestion {
             return Ok(Value::Catchable(CatchableErrorKind::UnimplementedFeature(
-                "path".to_string(),
+                "flat `path`".to_string(),
             )));
         }
 
-        let spath = filter_and_import(state, co, name.as_ref(), path.as_ref(), filter).await?;
+        let (spath, root_node) =
+            filter_and_import(state.clone(), co, name.as_ref(), path.as_ref(), filter).await?;
+
+        if let Some(expected_sha256) = expected_sha256 {
+            let nar_hash: [u8; 32] = if recursive_ingestion {
+                let path_info_service = state.importer.path_info_service.clone();
+                state.tokio_runtime.block_on(async move {
+                    path_info_service
+                        .calculate_nar(&root_node)
+                        .await
+                        .expect("Failed to compute the recursive NAR hash representation")
+                        .1
+                })
+            } else {
+                let contents = std::fs::read(&*path).expect("Failed to read file");
+                let hash = Sha256::digest(contents);
+                hash.into()
+            };
+
+            if &nar_hash[..] != expected_sha256.digest_as_bytes() {
+                // TODO: propagate the root path
+                return Err(ErrorKind::StorePathMismatchDuringImport);
+            }
+        }
+
         Ok(spath.to_absolute_path().into())
     }
 
@@ -695,7 +751,7 @@ pub(crate) mod derivation_builtins {
         path: Value,
     ) -> Result<Value, ErrorKind> {
         let p = path.to_path()?;
-        let spath = filter_and_import(
+        let (spath, _) = filter_and_import(
             state,
             co,
             tvix_store::import::path_to_name(&p)
