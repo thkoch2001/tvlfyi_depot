@@ -53,10 +53,13 @@ mod tests {
             directory_service.clone(),
         )) as Arc<dyn PathInfoService>;
 
+        let runtime = tokio::runtime::Runtime::new().unwrap();
+
         let state: Rc<DerivationBuiltinsState> = Rc::new(DerivationBuiltinsState::new(
             blob_service,
             directory_service,
             path_info_service,
+            runtime.handle().clone(),
         ));
 
         add_derivation_builtins(&mut eval, state);

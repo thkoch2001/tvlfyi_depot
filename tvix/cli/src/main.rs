@@ -91,6 +91,7 @@ fn interpret(code: &str, path: Option<PathBuf>, args: &Args, explain: bool) -> b
         blob_service.clone(),
         directory_service.clone(),
         path_info_service.clone(),
+        tokio_runtime.handle().clone(),
     ));
 
     add_derivation_builtins(&mut eval, state);

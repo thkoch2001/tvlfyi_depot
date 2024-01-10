@@ -325,6 +325,7 @@ async fn filter_and_import(
 pub struct DerivationBuiltinsState {
     known_paths: RefCell<KnownPaths>,
     importer: Importer,
+    tokio_runtime: tokio::runtime::Handle,
 }
 
 impl DerivationBuiltinsState {
@@ -332,9 +333,11 @@ impl DerivationBuiltinsState {
         blob_service: Arc<dyn BlobService>,
         directory_service: Arc<dyn DirectoryService>,
         path_info_service: Arc<dyn PathInfoService>,
+        runtime: tokio::runtime::Handle,
     ) -> Self {
         Self {
             known_paths: Default::default(),
+            tokio_runtime: runtime,
             importer: Importer {
                 blob_service,
                 directory_service,
