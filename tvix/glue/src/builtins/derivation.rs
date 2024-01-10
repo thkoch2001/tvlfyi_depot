@@ -602,9 +602,15 @@ pub(crate) mod derivation_builtins {
         .await
         .expect("Failed to ingest entries");
 
-        let spath = import_root_node(state.importer.path_info_service.clone(), &p, root_node)
-            .await
-            .expect("Failed to import root node");
+        let name = tvix_store::import::path_to_name(&p)?;
+        let spath = import_root_node(
+            state.importer.path_info_service.clone(),
+            &p,
+            name,
+            root_node,
+        )
+        .await
+        .expect("Failed to import root node");
 
         Ok(spath.to_absolute_path().into())
     }
