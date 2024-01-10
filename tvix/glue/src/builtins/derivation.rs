@@ -659,7 +659,7 @@ pub(crate) mod derivation_builtins {
             .await
             .expect("Failed to ingest entries");
 
-        let spath = import_root_node(state.importer.path_info_service.clone(), &p, root_node)
+        let name = tvix_store::import::path_to_name(&p)?;
         let spath = state
             .store
             .import_root_node(p.as_ref(), name, root_node)
