@@ -116,22 +116,26 @@ where
             .block_on(async { self.store_path_to_node(store_path, sub_path).await })
     }
 
-    /// This forwards the ingestion to the [`tvix_castore::import::ingest_entries`].
-    pub(crate) async fn ingest_entries<S>(&self, entries_stream: S) -> io::Result<Node>
+    /// This forwards the ingestion to the [`tvix_castore::import::ingest_entries`]
+    /// with a [`tokio::runtime::Handle::block_on`] call for synchronicity.
+    pub(crate) fn ingest_entries_sync<S>(&self, entries_stream: S) -> io::Result<Node>
     where
         S: Stream<Item = DirEntry> + std::marker::Unpin,
     {
-        tvix_castore::import::ingest_entries(
-            &self.blob_service,
-            &self.directory_service,
-            entries_stream,
-        )
-        .await
-        .map_err(|err| std::io::Error::new(io::ErrorKind::Other, err))
+        self.tokio_handle.block_on(async move {
+            tvix_castore::import::ingest_entries(
+                &self.blob_service,
+                &self.directory_service,
+                entries_stream,
+            )
+            .await
+            .map_err(|err| std::io::Error::new(io::ErrorKind::Other, err))
+        })
     }
 
     /// This forwards the importation to [`tvix_store::import::import_root_node`]
-    pub(crate) async fn import_root_node<P, N>(
+    /// with a [`tokio::runtime::Handle::block_on`] call for synchronicity.
+    pub(crate) fn import_root_node_sync<P, N>(
         &self,
         path: P,
         name: N,
@@ -141,14 +145,27 @@ where
         P: AsRef<Path>,
         N: AsRef<str>,
     {
-        tvix_store::import::import_root_node(
-            &self.path_info_service,
-            path.as_ref(),
-            name.as_ref(),
-            root_node,
-        )
-        .await
-        .map_err(|err| std::io::Error::new(io::ErrorKind::Other, err))
+        self.tokio_handle.block_on(async move {
+            tvix_store::import::import_root_node(
+                &self.path_info_service,
+                path.as_ref(),
+                name.as_ref(),
+                root_node,
+            )
+            .await
+            .map_err(|err| std::io::Error::new(io::ErrorKind::Other, err))
+        })
+    }
+
+    /// This forwards
+    pub(crate) fn calculate_nar_sync(&self, root_node: &Node) -> io::Result<(u64, [u8; 32])> {
+        self.tokio_handle.block_on(async move {
+            self.path_info_service
+                .as_ref()
+                .calculate_nar(root_node)
+                .await
+                .map_err(|err| std::io::Error::new(io::ErrorKind::Other, err))
+        })
     }
 }
 
