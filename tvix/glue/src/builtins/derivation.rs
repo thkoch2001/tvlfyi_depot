@@ -5,6 +5,8 @@ use nix_compat::derivation::{Derivation, Output};
 use nix_compat::nixhash;
 use std::cell::RefCell;
 use std::collections::{btree_map, BTreeSet};
+use std::ops::Deref;
+use std::path::Path;
 use std::rc::Rc;
 use std::sync::Arc;
 use tvix_castore::blobservice::BlobService;
@@ -224,6 +226,102 @@ async fn strong_importing_coerce_to_string(
     }
 }
 
+async fn filter_and_import(
+    state: Rc<DerivationBuiltinsState>,
+    co: GenCo,
+    name: &str,
+    path: &Path,
+    filter: Option<&Value>,
+) -> Result<nix_compat::store_path::StorePath, ErrorKind> {
+    let mut entries_per_depths: Vec<Vec<walkdir::DirEntry>> = vec![Vec::new()];
+    let mut it = walkdir::WalkDir::new(&*path)
+        .follow_links(false)
+        .follow_root_links(false)
+        .contents_first(false)
+        .sort_by_file_name()
+        .into_iter();
+
+    // Skip root node.
+    entries_per_depths[0].push(
+        it.next()
+            .expect("Failed to obtain root node")
+            .expect("Failed to read root node"),
+    );
+
+    while let Some(entry) = it.next() {
+        // Entry could be a NotFound, if the root path specified does not exist.
+        let entry = entry.expect("Failed to find the entry");
+
+        let file_type = if entry.file_type().is_dir() {
+            "directory"
+        } else if entry.file_type().is_file() {
+            "file"
+        } else if entry.file_type().is_symlink() {
+            "symlink"
+        } else {
+            "other"
+        };
+
+        let should_keep: bool = if let Some(filter) = filter {
+            generators::request_force(
+                &co,
+                generators::request_call_with(
+                    &co,
+                    filter.clone(),
+                    [
+                        Value::String(entry.path().to_string_lossy().as_ref().into()),
+                        Value::String(file_type.into()),
+                    ],
+                )
+                .await,
+            )
+            .await
+            .as_bool()?
+        } else {
+            true
+        };
+
+        if should_skip {
+            it.skip_current_dir();
+            continue;
+        }
+
+        if entry.depth() >= entries_per_depths.len() {
+            debug_assert!(
+                entry.depth() == entries_per_depths.len(),
+                "We should not be allocating more than one level at once, requested node at depth {}, had entries per depth containing {} levels",
+                entry.depth(),
+                entries_per_depths.len()
+            );
+
+            entries_per_depths.push(vec![entry]);
+        } else {
+            entries_per_depths[entry.depth()].push(entry);
+        }
+
+        // FUTUREWORK: determine when it's the right moment to flush a level to the ingester.
+    }
+
+    let root_node = tvix_castore::import::ingest_entries(
+        state.importer.blob_service.clone(),
+        &state.importer.directory_service.deref(),
+        entries_per_depths,
+    )
+    .await
+    .expect("Failed to ingest entries");
+
+    let spath = tvix_store::import::import_root_node(
+        state.importer.path_info_service.clone(),
+        &path,
+        name,
+        root_node,
+    )
+    .await
+    .expect("Failed to import root node");
+
+    Ok(spath)
+}
+
 pub struct DerivationBuiltinsState {
     known_paths: RefCell<KnownPaths>,
     importer: Importer,
@@ -249,15 +347,10 @@ impl DerivationBuiltinsState {
 #[builtins(state = "Rc<DerivationBuiltinsState>")]
 pub(crate) mod derivation_builtins {
 
-    use std::ops::Deref;
-
     use super::*;
     use nix_compat::store_path::hash_placeholder;
-    use tvix_castore::import::ingest_entries;
     use tvix_eval::generators::Gen;
     use tvix_eval::{NixContext, NixContextElement, NixString};
-    use tvix_store::import::import_root_node;
-    use walkdir::{DirEntry, WalkDir};
 
     #[builtin("placeholder")]
     async fn builtin_placeholder(co: GenCo, input: Value) -> Result<Value, ErrorKind> {
@@ -521,6 +614,38 @@ pub(crate) mod derivation_builtins {
         Ok(Value::String(NixString::new_context_from(context, &path)))
     }
 
+    #[builtin("path")]
+    async fn builtin_path(
+        state: Rc<DerivationBuiltinsState>,
+        co: GenCo,
+        #[lazy] args: Value,
+    ) -> Result<Value, ErrorKind> {
+        let args = args.to_attrs()?;
+        let path = args.select_required("path")?.to_path()?;
+        let name: String = args
+            .select("name")
+            .map(|n| n.to_str())
+            .transpose()?
+            .map(|n| n.to_string())
+            .unwrap_or_else(|| {
+                tvix_store::import::path_to_name(&path)
+                    .expect("Failed to derive the default name out of the path")
+                    .to_string()
+            });
+        let filter = args.select("filter");
+        let recursive_ingestion = args.select("recursive").map(|r| r.as_bool());
+        let expected_sha256 = args.select("sha256").map(|h| h.to_str());
+
+        if expected_sha256.is_some() || recursive_ingestion.is_some() {
+            return Ok(Value::Catchable(CatchableErrorKind::UnimplementedFeature(
+                "path".to_string(),
+            )));
+        }
+
+        let spath = filter_and_import(state, co, name.as_ref(), path.as_ref(), filter).await?;
+        Ok(spath.to_absolute_path().into())
+    }
+
     #[builtin("filterSource")]
     async fn builtin_filter_source(
         state: Rc<DerivationBuiltinsState>,
@@ -529,89 +654,15 @@ pub(crate) mod derivation_builtins {
         path: Value,
     ) -> Result<Value, ErrorKind> {
         let p = path.to_path()?;
-        let mut entries_per_depths: Vec<Vec<DirEntry>> = vec![Vec::new()];
-        let mut it = WalkDir::new(&*p)
-            .follow_links(false)
-            .follow_root_links(false)
-            .contents_first(false)
-            .sort_by_file_name()
-            .into_iter();
-
-        // Skip root node.
-        entries_per_depths[0].push(
-            it.next()
-                .expect("Failed to obtain root node")
-                .expect("Failed to read root node"),
-        );
-
-        while let Some(entry) = it.next() {
-            // Entry could be a NotFound, if the root path specified does not exist.
-            let entry = entry.expect("Failed to find the entry");
-
-            let file_type = if entry.file_type().is_dir() {
-                "directory"
-            } else if entry.file_type().is_file() {
-                "file"
-            } else if entry.file_type().is_symlink() {
-                "symlink"
-            } else {
-                "other"
-            };
-
-            let should_skip = generators::request_force(
-                &co,
-                generators::request_call_with(
-                    &co,
-                    filter.clone(),
-                    [
-                        Value::String(entry.path().to_string_lossy().as_ref().into()),
-                        Value::String(file_type.into()),
-                    ],
-                )
-                .await,
-            )
-            .await
-            .as_bool()?;
-
-            if should_skip {
-                it.skip_current_dir();
-                continue;
-            }
-
-            if entry.depth() >= entries_per_depths.len() {
-                debug_assert!(
-                    entry.depth() == entries_per_depths.len(),
-                    "We should not be allocating more than one level at once, requested node at depth {}, had entries per depth containing {} levels",
-                    entry.depth(),
-                    entries_per_depths.len()
-                );
-
-                entries_per_depths.push(vec![entry]);
-            } else {
-                entries_per_depths[entry.depth()].push(entry);
-            }
-
-            // FUTUREWORK: determine when it's the right moment to flush a level to the ingester.
-        }
-
-        let root_node = ingest_entries(
-            state.importer.blob_service.clone(),
-            &state.importer.directory_service.deref(),
-            entries_per_depths,
+        let spath = filter_and_import(
+            state,
+            co,
+            tvix_store::import::path_to_name(&p)
+                .expect("Failed to derive the default name out of the path"),
+            p.as_ref(),
+            Some(&filter),
         )
-        .await
-        .expect("Failed to ingest entries");
-
-        let name = tvix_store::import::path_to_name(&p)?;
-        let spath = import_root_node(
-            state.importer.path_info_service.clone(),
-            &p,
-            name,
-            root_node,
-        )
-        .await
-        .expect("Failed to import root node");
-
+        .await?;
         Ok(spath.to_absolute_path().into())
     }
 }
