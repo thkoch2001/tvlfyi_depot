@@ -997,7 +997,7 @@ impl TotalDisplay for Value {
             // Delegate thunk display to the type, as it must handle
             // the case of already evaluated or cyclic thunks.
             Value::Thunk(t) => t.total_fmt(f, set),
-            Value::Catchable(_) => panic!("total_fmt() called on a CatchableErrorKind"),
+            Value::Catchable(c) => write!(f, "internal[catchable({:?})]", c),
         }
     }
 }
