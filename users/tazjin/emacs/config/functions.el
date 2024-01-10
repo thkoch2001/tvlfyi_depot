@@ -341,4 +341,12 @@ installed (and visible) XDG apps, and let users launch them."
   (interactive "aFunction symbol: ")
   (advice-mapc (lambda (advice _props) (advice-remove sym advice)) sym))
 
+(defun M-x-always-same-window ()
+  "Run `execute-extended-command', but ensure that whatever it does
+always opens in the same window in which the command was invoked."
+  (interactive)
+  (let ((display-buffer-overriding-action
+         '((display-buffer-same-window) . ((inhibit-same-window . nil)))))
+    (call-interactively #'execute-extended-command)))
+
 (provide 'functions)
