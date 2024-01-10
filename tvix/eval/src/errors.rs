@@ -205,6 +205,9 @@ pub enum ErrorKind {
 
     /// Unexpected context string
     UnexpectedContext,
+
+    /// Store path mismatch in an (filtered) import
+    StorePathMismatchDuringImport,
 }
 
 impl error::Error for Error {
@@ -442,6 +445,10 @@ to a missing value in the attribute set(s) included via `with`."#,
                     write!(f, "{}: ", path.display())?;
                 }
                 write!(f, "{error}")
+            }
+
+            ErrorKind::StorePathMismatchDuringImport => {
+                write!(f, "store path mismatch during (filtered) import")
             }
 
             ErrorKind::JsonError(msg) => {
@@ -771,6 +778,7 @@ impl Error {
             | ErrorKind::ImportParseError { .. }
             | ErrorKind::ImportCompilerError { .. }
             | ErrorKind::IO { .. }
+            | ErrorKind::StorePathMismatchDuringImport
             | ErrorKind::JsonError(_)
             | ErrorKind::NotSerialisableToJson(_)
             | ErrorKind::FromTomlError(_)
@@ -819,6 +827,7 @@ impl Error {
             ErrorKind::FromTomlError(_) => "E035",
             ErrorKind::NotSerialisableToJson(_) => "E036",
             ErrorKind::UnexpectedContext => "E037",
+            ErrorKind::StorePathMismatchDuringImport => "E038",
 
             // Special error code for errors from other Tvix
             // components. We may want to introduce a code namespacing
