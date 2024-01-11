@@ -380,8 +380,8 @@ pub(crate) mod derivation_builtins {
         }
 
         // Each output name needs to exist in the environment, at this
-        // point initialised as an empty string because that is the
-        // way of Golang ;)
+        // point initialised as an empty string, as the ATerm serialization of that is later
+        // used for the output path calculation.
         for output in drv.outputs.keys() {
             if drv
                 .environment
