@@ -4895,6 +4895,31 @@ rec {
         };
         resolvedDefaultFeatures = [ "archive" "coff" "elf" "macho" "pe" "read_core" "unaligned" ];
       };
+      "olpc-cjson" = rec {
+        crateName = "olpc-cjson";
+        version = "0.1.3";
+        edition = "2018";
+        crateBin = [ ];
+        sha256 = "0yh2n9ppm4mlqgpqm5hy5ynm21ihd2llz3ysjzswz733bg0wjdyn";
+        authors = [
+          "iliana destroyer of worlds <iweller@amazon.com>"
+        ];
+        dependencies = [
+          {
+            name = "serde";
+            packageId = "serde";
+          }
+          {
+            name = "serde_json";
+            packageId = "serde_json";
+          }
+          {
+            name = "unicode-normalization";
+            packageId = "unicode-normalization";
+          }
+        ];
+
+      };
       "once_cell" = rec {
         crateName = "once_cell";
         version = "1.17.1";
@@ -10576,6 +10601,10 @@ rec {
             features = [ "format" "parse-floats" ];
           }
           {
+            name = "olpc-cjson";
+            packageId = "olpc-cjson";
+          }
+          {
             name = "path-clean";
             packageId = "path-clean";
           }
@@ -11081,7 +11110,7 @@ rec {
         features = {
           "default" = [ "std" ];
         };
-        resolvedDefaultFeatures = [ "std" ];
+        resolvedDefaultFeatures = [ "default" "std" ];
       };
       "unicode-segmentation" = rec {
         crateName = "unicode-segmentation";

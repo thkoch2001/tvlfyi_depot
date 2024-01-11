@@ -76,6 +76,8 @@ pub async fn coerce_value_to_path(
 
 #[builtins]
 mod pure_builtins {
+    use serde::Serialize;
+
     use crate::{value::PointerEquality, NixContext, NixContextElement};
 
     use super::*;
@@ -441,8 +443,19 @@ mod pure_builtins {
         match val.into_json(&co).await? {
             Err(cek) => Ok(Value::Catchable(cek)),
             Ok(json_value) => {
-                let json_str = serde_json::to_string(&json_value)?;
-                Ok(json_str.into())
+                let mut buf = Vec::new();
+                let mut ser = serde_json::Serializer::with_formatter(
+                    &mut buf,
+                    olpc_cjson::CanonicalFormatter::new(),
+                );
+                json_value.serialize(&mut ser)?;
+                Ok(Value::String(
+                    String::from_utf8(buf)
+                        .map_err(|e| {
+                            ErrorKind::JsonError(format!("json came back as invalid utf-8: {e}"))
+                        })?
+                        .into(),
+                ))
             }
         }
     }
