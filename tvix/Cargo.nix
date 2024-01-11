@@ -818,6 +818,18 @@ rec {
         };
         resolvedDefaultFeatures = [ "default" "std" ];
       };
+      "base-x" = rec {
+        crateName = "base-x";
+        version = "0.2.11";
+        edition = "2015";
+        sha256 = "0w02sdqvg7zwm91agb2phikw4ri8jmncw32paxsv8ra1jv8ckfsc";
+        authors = [
+          "Alex R. <alexei.rudenko@gmail.com>"
+        ];
+        features = {
+          "default" = [ "std" ];
+        };
+      };
       "base64" = rec {
         crateName = "base64";
         version = "0.21.4";
@@ -1791,6 +1803,19 @@ rec {
         };
         resolvedDefaultFeatures = [ "default" "std" ];
       };
+      "crunchy" = rec {
+        crateName = "crunchy";
+        version = "0.2.2";
+        edition = "2015";
+        sha256 = "1dx9mypwd5mpfbbajm78xcrg5lirqk7934ik980mmaffg3hdm0bs";
+        authors = [
+          "Vurich <jackefransham@hotmail.co.uk>"
+        ];
+        features = {
+          "default" = [ "limit_128" ];
+        };
+        resolvedDefaultFeatures = [ "default" "limit_128" ];
+      };
       "crypto-common" = rec {
         crateName = "crypto-common";
         version = "0.1.6";
@@ -1923,6 +1948,50 @@ rec {
           "std" = [ "alloc" ];
         };
         resolvedDefaultFeatures = [ "alloc" "default" "std" ];
+      };
+      "data-encoding-macro" = rec {
+        crateName = "data-encoding-macro";
+        version = "0.1.12";
+        edition = "2018";
+        sha256 = "1jls0b9p4nsp5vcp2h53cc01m3drg8l4nh47idlzm27ys9y7p4l6";
+        authors = [
+          "Julien Cretin <cretin@google.com>"
+        ];
+        dependencies = [
+          {
+            name = "data-encoding";
+            packageId = "data-encoding";
+            usesDefaultFeatures = false;
+          }
+          {
+            name = "data-encoding-macro-internal";
+            packageId = "data-encoding-macro-internal";
+          }
+        ];
+
+      };
+      "data-encoding-macro-internal" = rec {
+        crateName = "data-encoding-macro-internal";
+        version = "0.1.10";
+        edition = "2018";
+        sha256 = "1nrqy2c3azch285a9ya63qx43f25ldm58l0ans0fg5dav91fvfx5";
+        procMacro = true;
+        authors = [
+          "Julien Cretin <cretin@google.com>"
+        ];
+        dependencies = [
+          {
+            name = "data-encoding";
+            packageId = "data-encoding";
+            usesDefaultFeatures = false;
+            features = [ "alloc" ];
+          }
+          {
+            name = "syn";
+            packageId = "syn 1.0.109";
+          }
+        ];
+
       };
       "der" = rec {
         crateName = "der";
@@ -3906,6 +3975,52 @@ rec {
         ];
 
       };
+      "json-digest" = rec {
+        crateName = "json-digest";
+        version = "0.0.16";
+        edition = "2021";
+        sha256 = "1vwac59iji9sx54dvp7vm5zsxpazp3wpy6il07mi5764a4cp35ki";
+        authors = [
+          "IOP Ventures LLC <dev@iop-ventures.com>"
+          "Rache Bartmoss <bartmoss@tutanota.com>"
+          "wigy <wigy_opensource_developer@yahoo.com>"
+        ];
+        dependencies = [
+          {
+            name = "anyhow";
+            packageId = "anyhow";
+          }
+          {
+            name = "multibase";
+            packageId = "multibase";
+          }
+          {
+            name = "rand";
+            packageId = "rand";
+            features = [ "getrandom" ];
+          }
+          {
+            name = "serde";
+            packageId = "serde";
+            features = [ "derive" ];
+          }
+          {
+            name = "serde_json";
+            packageId = "serde_json";
+            features = [ "preserve_order" ];
+          }
+          {
+            name = "tiny-keccak";
+            packageId = "tiny-keccak";
+            features = [ "sha3" ];
+          }
+          {
+            name = "unicode-normalization";
+            packageId = "unicode-normalization";
+          }
+        ];
+
+      };
       "lazy_static" = rec {
         crateName = "lazy_static";
         version = "1.4.0";
@@ -4456,6 +4571,37 @@ rec {
           "os-ext" = [ "os-poll" "windows-sys/Win32_System_Pipes" "windows-sys/Win32_Security" ];
         };
         resolvedDefaultFeatures = [ "default" "net" "os-ext" "os-poll" ];
+      };
+      "multibase" = rec {
+        crateName = "multibase";
+        version = "0.9.1";
+        edition = "2018";
+        sha256 = "014l697md16829k41hzmfx4in9jzhn774q5292bsq10z7kn3jdcv";
+        authors = [
+          "Friedel Ziegelmayer <dignifiedquire@gmail.com>"
+        ];
+        dependencies = [
+          {
+            name = "base-x";
+            packageId = "base-x";
+            usesDefaultFeatures = false;
+          }
+          {
+            name = "data-encoding";
+            packageId = "data-encoding";
+            usesDefaultFeatures = false;
+            features = [ "alloc" ];
+          }
+          {
+            name = "data-encoding-macro";
+            packageId = "data-encoding-macro";
+          }
+        ];
+        features = {
+          "default" = [ "std" ];
+          "std" = [ "data-encoding/std" ];
+        };
+        resolvedDefaultFeatures = [ "default" "std" ];
       };
       "multimap" = rec {
         crateName = "multimap";
@@ -7750,6 +7896,12 @@ rec {
         ];
         dependencies = [
           {
+            name = "indexmap";
+            packageId = "indexmap 1.9.3";
+            optional = true;
+            features = [ "std" ];
+          }
+          {
             name = "itoa";
             packageId = "itoa";
           }
@@ -7777,7 +7929,7 @@ rec {
           "preserve_order" = [ "indexmap" "std" ];
           "std" = [ "serde/std" ];
         };
-        resolvedDefaultFeatures = [ "default" "std" ];
+        resolvedDefaultFeatures = [ "default" "indexmap" "preserve_order" "std" ];
       };
       "serde_spanned" = rec {
         crateName = "serde_spanned";
@@ -8718,6 +8870,29 @@ rec {
           }
         ];
         features = { };
+      };
+      "tiny-keccak" = rec {
+        crateName = "tiny-keccak";
+        version = "2.0.2";
+        edition = "2018";
+        sha256 = "0dq2x0hjffmixgyf6xv9wgsbcxkd65ld0wrfqmagji8a829kg79c";
+        authors = [
+          "debris <marek.kotewicz@gmail.com>"
+        ];
+        dependencies = [
+          {
+            name = "crunchy";
+            packageId = "crunchy";
+          }
+        ];
+        features = {
+          "fips202" = [ "keccak" "shake" "sha3" ];
+          "kmac" = [ "cshake" ];
+          "parallel_hash" = [ "cshake" ];
+          "sp800" = [ "cshake" "kmac" "tuple_hash" ];
+          "tuple_hash" = [ "cshake" ];
+        };
+        resolvedDefaultFeatures = [ "default" "sha3" ];
       };
       "tinytemplate" = rec {
         crateName = "tinytemplate";
@@ -10567,6 +10742,10 @@ rec {
             features = [ "serde" ];
           }
           {
+            name = "json-digest";
+            packageId = "json-digest";
+          }
+          {
             name = "lazy_static";
             packageId = "lazy_static";
           }
@@ -11081,7 +11260,7 @@ rec {
         features = {
           "default" = [ "std" ];
         };
-        resolvedDefaultFeatures = [ "std" ];
+        resolvedDefaultFeatures = [ "default" "std" ];
       };
       "unicode-segmentation" = rec {
         crateName = "unicode-segmentation";
