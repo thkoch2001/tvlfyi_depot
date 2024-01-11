@@ -119,6 +119,15 @@ mod tests {
                    }).outPath
         "#, "/nix/store/5vyvcwah9l9kf07d52rcgdk70g2f4y13-foo"; "full")]
     #[test_case(r#"(builtins.derivation { "name" = "foo"; passAsFile = ["bar"]; bar = "baz"; system = ":"; builder = ":";}).outPath"#, "/nix/store/25gf0r1ikgmh4vchrn8qlc4fnqlsa5a1-foo"; "passAsFile")]
+    // structured attrs set to false will render an empty string inside env
+    #[test_case(r#"(builtins.derivation { "name" = "foo"; system = ":"; builder = ":"; __structuredAttrs = false; foo = "bar"; }).drvPath"#, "/nix/store/qs39krwr2lsw6ac910vqx4pnk6m63333-foo.drv"; "structuredAttrs-false-drvPath")]
+    #[test_case(r#"(builtins.derivation { "name" = "foo"; system = ":"; builder = ":"; __structuredAttrs = false; foo = "bar"; }).outPath"#, "/nix/store/9yy3764rdip3fbm8ckaw4j9y7vh4d231-foo"; "structuredAttrs-false-outPath")]
+    // simple structured attrs
+    #[test_case(r#"(builtins.derivation { "name" = "foo"; system = ":"; builder = ":"; __structuredAttrs = true; foo = "bar"; }).drvPath"#, "/nix/store/k6rlb4k10cb9iay283037ml1nv3xma2f-foo.drv"; "structuredAttrs-simple-drvPath")]
+    #[test_case(r#"(builtins.derivation { "name" = "foo"; system = ":"; builder = ":"; __structuredAttrs = true; foo = "bar"; }).outPath"#, "/nix/store/6lmv3hyha1g4cb426iwjyifd7nrdv1xn-foo"; "structuredAttrs-simple-outPath")]
+    // structured attrs with outputsCheck
+    #[test_case(r#"(builtins.derivation { "name" = "foo"; system = ":"; builder = ":"; __structuredAttrs = true; foo = "bar"; outputsChecks = {out = {maxClosureSize = 256 * 1024 * 1024; disallowedRequisites = [ "dev" ];};}; }).drvPath"#, "/nix/store/fx9qzpchh5wchchhy39bwsml978d6wp1-foo.drv"; "structuredAttrs-outputChecks-drvPath")]
+    #[test_case(r#"(builtins.derivation { "name" = "foo"; system = ":"; builder = ":"; __structuredAttrs = true; foo = "bar"; outputsChecks = {out = {maxClosureSize = 256 * 1024 * 1024; disallowedRequisites = [ "dev" ];};}; }).outPath"#, "/nix/store/pcywah1nwym69rzqdvpp03sphfjgyw1l-foo"; "structuredAttrs-outputChecks-outPath")]
     fn test_outpath(code: &str, expected_path: &str) {
         let value = eval(code).value.expect("must succeed");
 
