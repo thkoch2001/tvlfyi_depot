@@ -1012,9 +1012,9 @@ rec {
       };
       "bstr" = rec {
         crateName = "bstr";
-        version = "1.6.0";
+        version = "1.9.0";
         edition = "2021";
-        sha256 = "01bvsr3x9n75klbwxym0zf939vzim0plsmy786p0zzzvrj6i9637";
+        sha256 = "1p6hzf3wqwwynv6w4pn17jg21amfafph9kb5sfvf1idlli8h13y4";
         authors = [
           "Andrew Gallant <jamslam@gmail.com>"
         ];
@@ -1039,7 +1039,7 @@ rec {
           }
         ];
         features = {
-          "alloc" = [ "serde?/alloc" ];
+          "alloc" = [ "memchr/alloc" "serde?/alloc" ];
           "default" = [ "std" "unicode" ];
           "serde" = [ "dep:serde" ];
           "std" = [ "alloc" "memchr/std" "serde?/std" ];
@@ -4430,9 +4430,9 @@ rec {
       };
       "memchr" = rec {
         crateName = "memchr";
-        version = "2.5.0";
-        edition = "2018";
-        sha256 = "0vanfk5mzs1g1syqnj03q8n0syggnhn55dq535h2wxr7rwpfbzrd";
+        version = "2.7.1";
+        edition = "2021";
+        sha256 = "0jf1kicqa4vs9lyzj4v4y1p90q0dh87hvhsdd5xvhnp527sw8gaj";
         authors = [
           "Andrew Gallant <jamslam@gmail.com>"
           "bluss"
@@ -4441,11 +4441,12 @@ rec {
           "compiler_builtins" = [ "dep:compiler_builtins" ];
           "core" = [ "dep:core" ];
           "default" = [ "std" ];
-          "libc" = [ "dep:libc" ];
+          "logging" = [ "dep:log" ];
           "rustc-dep-of-std" = [ "core" "compiler_builtins" ];
+          "std" = [ "alloc" ];
           "use_std" = [ "std" ];
         };
-        resolvedDefaultFeatures = [ "default" "std" ];
+        resolvedDefaultFeatures = [ "alloc" "default" "std" ];
       };
       "memoffset 0.6.5" = rec {
         crateName = "memoffset";
@@ -6679,9 +6680,9 @@ rec {
       };
       "regex-automata" = rec {
         crateName = "regex-automata";
-        version = "0.3.4";
+        version = "0.4.3";
         edition = "2021";
-        sha256 = "156jmvsbzd9arih42ninzkfgv7g93g6i2fdxc5gki53m1ccxddmp";
+        sha256 = "0gs8q9yhd3kcg4pr00ag4viqxnh5l7jpyb9fsfr8hzh451w4r02z";
         authors = [
           "The Rust Project Developers"
           "Andrew Gallant <jamslam@gmail.com>"
@@ -6694,7 +6695,7 @@ rec {
           "hybrid" = [ "alloc" "nfa-thompson" ];
           "internal-instrument" = [ "internal-instrument-pikevm" ];
           "internal-instrument-pikevm" = [ "logging" "std" ];
-          "logging" = [ "dep:log" "aho-corasick?/logging" ];
+          "logging" = [ "dep:log" "aho-corasick?/logging" "memchr?/logging" ];
           "meta" = [ "syntax" "nfa-pikevm" ];
           "nfa" = [ "nfa-thompson" "nfa-pikevm" "nfa-backtrack" ];
           "nfa-backtrack" = [ "nfa-thompson" ];
@@ -10892,6 +10893,10 @@ rec {
           else ./glue;
         dependencies = [
           {
+            name = "bstr";
+            packageId = "bstr";
+          }
+          {
             name = "bytes";
             packageId = "bytes";
           }
@@ -10900,8 +10905,16 @@ rec {
             packageId = "data-encoding";
           }
           {
+            name = "json-digest";
+            packageId = "json-digest";
+          }
+          {
             name = "nix-compat";
             packageId = "nix-compat";
+          }
+          {
+            name = "serde_json";
+            packageId = "serde_json";
           }
           {
             name = "sha2";
