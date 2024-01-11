@@ -163,8 +163,11 @@ pub enum ErrorKind {
         error: Rc<io::Error>,
     },
 
-    /// Errors converting JSON to a value
-    FromJsonError(String),
+    /// Errors parsing JSON
+    ParseJsonError(String),
+
+    /// Errors rendering JSON
+    RenderJsonError(String),
 
     /// Nix value that can not be serialised to JSON.
     NotSerialisableToJson(&'static str),
@@ -263,7 +266,7 @@ impl From<io::Error> for ErrorKind {
 impl From<serde_json::Error> for ErrorKind {
     fn from(err: serde_json::Error) -> Self {
         // Can't just put the `serde_json::Error` in the ErrorKind since it doesn't impl `Clone`
-        Self::FromJsonError(format!("error in JSON serialization: {err}"))
+        Self::ParseJsonError(format!("error in JSON serialization: {err}"))
     }
 }
 
@@ -444,7 +447,7 @@ to a missing value in the attribute set(s) included via `with`."#,
                 write!(f, "{error}")
             }
 
-            ErrorKind::FromJsonError(msg) => {
+            ErrorKind::ParseJsonError(msg) => {
                 write!(f, "Error converting JSON to a Nix value: {msg}")
             }
 
@@ -491,6 +494,8 @@ to a missing value in the attribute set(s) included via `with`."#,
             ErrorKind::UnexpectedContext => {
                 write!(f, "unexpected context string")
             }
+
+            ErrorKind::RenderJsonError(msg) => write!(f, "Unable to render JSON: {msg}"),
         }
     }
 }
@@ -771,7 +776,8 @@ impl Error {
             | ErrorKind::ImportParseError { .. }
             | ErrorKind::ImportCompilerError { .. }
             | ErrorKind::IO { .. }
-            | ErrorKind::FromJsonError(_)
+            | ErrorKind::ParseJsonError(_)
+            | ErrorKind::RenderJsonError(_)
             | ErrorKind::NotSerialisableToJson(_)
             | ErrorKind::FromTomlError(_)
             | ErrorKind::Xml(_)
@@ -811,7 +817,7 @@ impl Error {
             ErrorKind::ImportParseError { .. } => "E027",
             ErrorKind::ImportCompilerError { .. } => "E028",
             ErrorKind::IO { .. } => "E029",
-            ErrorKind::FromJsonError { .. } => "E030",
+            ErrorKind::ParseJsonError { .. } => "E030",
             ErrorKind::UnexpectedArgument { .. } => "E031",
             ErrorKind::RelativePathResolution(_) => "E032",
             ErrorKind::DivisionByZero => "E033",
@@ -819,6 +825,7 @@ impl Error {
             ErrorKind::FromTomlError(_) => "E035",
             ErrorKind::NotSerialisableToJson(_) => "E036",
             ErrorKind::UnexpectedContext => "E037",
+            ErrorKind::RenderJsonError(_) => "E038",
 
             // Special error code for errors from other Tvix
             // components. We may want to introduce a code namespacing

@@ -441,7 +441,8 @@ mod pure_builtins {
         match val.into_json(&co).await? {
             Err(cek) => Ok(Value::Catchable(cek)),
             Ok(json_value) => {
-                let json_str = serde_json::to_string(&json_value)?;
+                let json_str = json_digest::canonical_json(&json_value)
+                    .map_err(|e| ErrorKind::RenderJsonError(e.to_string()))?;
                 Ok(json_str.into())
             }
         }
