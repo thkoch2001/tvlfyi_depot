@@ -143,6 +143,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "044c1d8a_be458641",
+        "filename": "tvix/serde/src/de.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-01-12T15:50:24Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "bbf0688e_543e1b06",
+      "revId": "aed8e6309ef53a2cf0c0fc54464d9260f27c5c1a",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "5aabfec6_3679a4a7",
@@ -174,6 +192,24 @@
       "side": 1,
       "message": "ins\u0027t that related to how we handle https://cl.tvl.fyi/c/depot/+/10581/comments/cea5552f_4c3fb2cd ?",
       "parentUuid": "5aabfec6_3679a4a7",
+      "revId": "aed8e6309ef53a2cf0c0fc54464d9260f27c5c1a",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "574dfbee_4377964f",
+        "filename": "tvix/serde/src/de.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 73,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-01-12T15:50:24Z",
+      "side": 1,
+      "message": "Yes.",
+      "parentUuid": "fb13ae3f_ed210dfd",
       "revId": "aed8e6309ef53a2cf0c0fc54464d9260f27c5c1a",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
