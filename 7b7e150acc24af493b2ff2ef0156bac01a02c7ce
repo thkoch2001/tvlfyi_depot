@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "774baa0e_3bdaa1ab",
+        "filename": "tvix/glue/src/builtins/derivation.rs",
+        "patchSetId": 12
+      },
+      "lineNbr": 323,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-01-12T22:10:54Z",
+      "side": 1,
+      "message": "TODO also added as a comment to b/366.",
+      "revId": "7b7e150acc24af493b2ff2ef0156bac01a02c7ce",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
