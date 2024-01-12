@@ -11,7 +11,7 @@ use tvix_eval::builtin_macros::builtins;
 use tvix_eval::generators::{self, emit_warning_kind, GenCo};
 use tvix_eval::{
     AddContext, CatchableErrorKind, CoercionKind, ErrorKind, NixAttrs, NixContext,
-    NixContextElement, Value, WarningKind,
+    NixContextElement, NixString, Value, WarningKind,
 };
 
 // Constants used for strangely named fields in derivation inputs.
@@ -134,7 +134,7 @@ fn insert_env(drv: &mut Derivation, k: &str, v: BString) -> Result<(), Derivatio
 async fn strong_importing_coerce_to_string(
     co: &GenCo,
     val: Value,
-) -> Result<Result<String, CatchableErrorKind>, ErrorKind> {
+) -> Result<Result<NixString, CatchableErrorKind>, ErrorKind> {
     let val = generators::request_force(co, val).await;
     match generators::request_string_coerce(
         co,
@@ -147,7 +147,7 @@ async fn strong_importing_coerce_to_string(
     .await
     {
         Err(cek) => Ok(Err(cek)),
-        Ok(val_str) => Ok(Ok(val_str.as_str().to_string())),
+        Ok(val_str) => Ok(Ok(val_str)),
     }
 }
 
@@ -204,7 +204,7 @@ pub(crate) mod derivation_builtins {
             if let Some(attr) = attrs.select(key) {
                 match strong_importing_coerce_to_string(co, attr.clone()).await? {
                     Err(cek) => return Ok(Err(cek)),
-                    Ok(str) => return Ok(Ok(Some(str))),
+                    Ok(str) => return Ok(Ok(Some(str.as_str().to_string()))),
                 }
             }
 
@@ -250,7 +250,10 @@ pub(crate) mod derivation_builtins {
                     for arg in args {
                         match strong_importing_coerce_to_string(&co, arg).await? {
                             Err(cek) => return Ok(Value::Catchable(cek)),
-                            Ok(s) => drv.arguments.push(s),
+                            Ok(s) => {
+                                input_context.mimic(&s);
+                                drv.arguments.push(s.as_str().to_string())
+                            }
                         }
                     }
                 }
