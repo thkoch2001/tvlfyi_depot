@@ -22,6 +22,30 @@
       },
       "revId": "6e456359c1736a5ef4cce4e411297ce87c4b0228",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a3355848_0097b812",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-01-12T09:09:45Z",
+      "side": 1,
+      "message": "I saw that only in cl/10604, and assumed the order generally was not guaranteed to be stable, but that might have been as I was using a HashMap to hold structured attrs, and our tvix-eval internal datastructures are fine.\n\nI removed all occurences of the canonical json library, and only kept the error type fix in here, PTAL.",
+      "parentUuid": "0df99556_4ad075ef",
+      "range": {
+        "startLine": 9,
+        "startChar": 67,
+        "endLine": 10,
+        "endChar": 17
+      },
+      "revId": "6e456359c1736a5ef4cce4e411297ce87c4b0228",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
