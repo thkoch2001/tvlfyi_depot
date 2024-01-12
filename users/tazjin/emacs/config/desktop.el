@@ -78,6 +78,10 @@
     (`("Chromium-browser" ,title)
      (format "Chromium<%s>" (s-truncate 42 (s-chop-suffix " - Chromium" title))))
 
+    ;; similarly for Firefox
+    (`("firefox" ,title)
+     (format "FF<%s>" title))
+
     ;; Quassel buffers
     ;;
     ;; These have a title format that looks like:
