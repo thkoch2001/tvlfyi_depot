@@ -34,6 +34,24 @@
       "parentUuid": "1b562c79_3789983f",
       "revId": "00889ab67a634d3fe9418fc98150e27457f6802d",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "64275a3e_da2f8593",
+        "filename": "tvix/glue/src/builtins/derivation.rs",
+        "patchSetId": 7
+      },
+      "lineNbr": 134,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-01-12T22:09:01Z",
+      "side": 1,
+      "message": "I removed the additional Result\u003c\u003e which only was ok, made sure every possible consumer is actually using it, and rearranged helper functions a bit closer to the callsites.",
+      "parentUuid": "fc25a5aa_be0a9435",
+      "revId": "00889ab67a634d3fe9418fc98150e27457f6802d",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
