@@ -92,6 +92,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "02d2214c_d5281913",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-01-12T15:52:35Z",
+      "side": 1,
+      "message": "@tazjin@tvl.su is that how you meant it, or should the entire Eval be passed in?",
+      "parentUuid": "c2595ace_65be8448",
+      "revId": "aed8e6309ef53a2cf0c0fc54464d9260f27c5c1a",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "f8163aec_31527b54",
         "filename": "tvix/serde/src/de.rs",
         "patchSetId": 2
