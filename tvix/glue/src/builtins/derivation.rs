@@ -293,7 +293,7 @@ pub(crate) mod derivation_builtins {
                     // with whatever is in drv.outputs[$output_name].
                 }
 
-                // handle builde and system.
+                // handle builder and system.
                 "builder" | "system" => {
                     match generators::request_string_coerce(
                         &co,
