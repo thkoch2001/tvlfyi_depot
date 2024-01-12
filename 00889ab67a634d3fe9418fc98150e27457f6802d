@@ -16,6 +16,24 @@
       "message": "The error types in here are a bit messed up, I\u0027m not sure if it\u0027s better to use this function, or handle dealing with the catchable stuff when explicitly calling generators::request_*.",
       "revId": "00889ab67a634d3fe9418fc98150e27457f6802d",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fc25a5aa_be0a9435",
+        "filename": "tvix/glue/src/builtins/derivation.rs",
+        "patchSetId": 7
+      },
+      "lineNbr": 134,
+      "author": {
+        "id": 1000073
+      },
+      "writtenOn": "2024-01-12T20:39:49Z",
+      "side": 1,
+      "message": "I don\u0027t have a strong opinion, we have two instances of usecase, I think they could be inlined and this function could be inlined, however you want.",
+      "parentUuid": "1b562c79_3789983f",
+      "revId": "00889ab67a634d3fe9418fc98150e27457f6802d",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }

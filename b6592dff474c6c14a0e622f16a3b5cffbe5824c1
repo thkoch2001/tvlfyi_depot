@@ -16,6 +16,24 @@
       "message": "I think I broke the contexts somewhere, currently the output path calculation is wrong. @tvl@lahfa.xyz, can you take a look?",
       "revId": "b6592dff474c6c14a0e622f16a3b5cffbe5824c1",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8c4dc6e7_aa78dd4e",
+        "filename": "tvix/glue/src/builtins/derivation.rs",
+        "patchSetId": 4
+      },
+      "lineNbr": 201,
+      "author": {
+        "id": 1000073
+      },
+      "writtenOn": "2024-01-12T20:39:49Z",
+      "side": 1,
+      "message": "Next CLs should fix up this.",
+      "parentUuid": "148f88dd_fce7def0",
+      "revId": "b6592dff474c6c14a0e622f16a3b5cffbe5824c1",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
