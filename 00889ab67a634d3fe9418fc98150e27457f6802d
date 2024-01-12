@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1b562c79_3789983f",
+        "filename": "tvix/glue/src/builtins/derivation.rs",
+        "patchSetId": 7
+      },
+      "lineNbr": 134,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-01-12T09:15:47Z",
+      "side": 1,
+      "message": "The error types in here are a bit messed up, I\u0027m not sure if it\u0027s better to use this function, or handle dealing with the catchable stuff when explicitly calling generators::request_*.",
+      "revId": "00889ab67a634d3fe9418fc98150e27457f6802d",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
