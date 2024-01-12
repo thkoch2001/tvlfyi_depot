@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0df99556_4ad075ef",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2024-01-12T08:46:32Z",
+      "side": 1,
+      "message": "which keys?\n\nWe use ordered representations of attribute sets, and unless there\u0027s some odd custom logic to avoid traversing them in order, the serialisation should be ordered.\n\nFor example:\n\n  tvix-repl\u003e builtins.toJSON { b \u003d 2; a \u003d 1; d \u003d 4; c \u003d 3; }\n  \u003d\u003e \"{\\\"a\\\":1,\\\"b\\\":2,\\\"c\\\":3,\\\"d\\\":4}\" :: string\n\nI\u0027d be interested to see the cases you have where this doesn\u0027t work.",
+      "range": {
+        "startLine": 9,
+        "startChar": 67,
+        "endLine": 10,
+        "endChar": 17
+      },
+      "revId": "6e456359c1736a5ef4cce4e411297ce87c4b0228",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
