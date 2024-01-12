@@ -188,10 +188,9 @@ mod tests {
         }
     }
 
-    /// Construct two derivations with the same parameters except
-    /// one of them lost a context string for a dependency, causing
-    /// the loss of an element in the `inputDrvs` derivation.
-    /// Therefore, making `outPath` different.
+    /// Construct two derivations with the same parameters except one of them lost a context string
+    /// for a dependency, causing the loss of an element in the `inputDrvs` derivation. Therefore,
+    /// making `outPath` different.
     #[test]
     fn test_unsafe_discard_string_context() {
         let code = r#"
@@ -211,9 +210,8 @@ mod tests {
         }
     }
 
-    /// Construct an attribute set
-    /// that coerces to a derivation
-    /// and verify that the return type is a string.
+    /// Construct an attribute set that coerces to a derivation and verify that the return type is
+    /// a string.
     #[test]
     fn test_unsafe_discard_string_context_of_coercible() {
         let code = r#"
