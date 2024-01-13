@@ -26,6 +26,15 @@ let
   # /notes/*
   notes = [
     {
+      route = [ "notes" "private-trackers-are-markets" ];
+      name = "Private bittorrent trackers are markets";
+      page = { cssFile }: markdownToHtml {
+        name = "private-trackers-are-markets";
+        markdown = ./notes/private-trackers-are-markets.md;
+        inherit cssFile;
+      };
+    }
+    {
       route = [ "notes" "an-idealized-conflang" ];
       name = "An Idealized Configuration Language";
       page = { cssFile }: markdownToHtml {
