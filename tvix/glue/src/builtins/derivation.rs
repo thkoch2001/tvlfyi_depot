@@ -527,5 +527,3 @@ pub(crate) mod derivation_builtins {
         Ok(Value::String(NixString::new_context_from(context, &path)))
     }
 }
-
-pub use derivation_builtins::builtins as derivation_builtins;
