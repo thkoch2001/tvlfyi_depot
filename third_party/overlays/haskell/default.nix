@@ -8,20 +8,6 @@ self: super: # overlay parameters for the nixpkgs overlay
 
 let
   haskellLib = self.haskell.lib.compose;
-  dhall-source = subdir: pkg:
-    haskellLib.overrideSrc
-      {
-        src = "${super.fetchFromGitHub {
-          owner = "Profpatsch";
-          repo = "dhall-haskell";
-          # https://github.com/dhall-lang/dhall-haskell/pull/2426
-          rev = "5e3a407d8ac826597d935d8398825a0ca73fc4e9";
-          sha256 = "005plj6kgxlkm9npaq07kmsgmiqk50dpwb9li9w1ly4aj1zgfjnd";
-        }}/${subdir}";
-      }
-      (haskellLib.overrideCabal { patches = [ ]; } pkg);
-
-
 in
 {
   haskellPackages = super.haskellPackages.override {
@@ -39,10 +25,6 @@ in
         })
         haskellLib.doJailbreak
       ];
-
-      # TODO: this is to fix a bug in dhall-nix
-      dhall = dhall-source "dhall" hsSuper.dhall;
-      dhall-nix = dhall-source "dhall-nix" hsSuper.dhall-nix;
 
       pa-prelude = hsSelf.callPackage ./extra-pkgs/pa-prelude.nix { };
       pa-error-tree = hsSelf.callPackage ./extra-pkgs/pa-error-tree-0.1.0.0.nix { };
