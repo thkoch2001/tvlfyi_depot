@@ -16,6 +16,7 @@
     ./http/sterni.lv.nix
     ./http/code.sterni.lv.nix
     ./http/flipdot.openlab-augsburg.de.nix
+    ./tv.nix
 
     # Inactive:
     # ./http/likely-music.sterni.lv.nix
