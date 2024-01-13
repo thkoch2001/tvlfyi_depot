@@ -221,8 +221,8 @@ lib.fix (self: {
       bat
       chromium
       clang-manpages
-      clang-tools_11
-      clang_11
+      clang-tools
+      clang
       curl
       direnv
       dnsutils
