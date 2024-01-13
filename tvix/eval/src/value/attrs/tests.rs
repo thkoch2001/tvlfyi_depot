@@ -81,8 +81,7 @@ fn test_kv_attrs_iter() {
     let mut iter = kv_attrs
         .iter()
         .collect::<Vec<_>>()
-        .into_iter()
-        .map(|(k, v)| (k, v));
+        .into_iter();
     let (k, v) = iter.next().unwrap();
     assert!(k == *NAME_REF);
     assert!(v.to_str().unwrap() == meaning_val.to_str().unwrap());
