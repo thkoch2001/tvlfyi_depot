@@ -10,4 +10,6 @@ in
 {
   inherit src;
   cli = agenix.agenix;
+
+  meta.ci.targets = [ "cli" ];
 }
