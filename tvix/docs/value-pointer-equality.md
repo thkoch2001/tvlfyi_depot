@@ -44,6 +44,9 @@ rather if they are the same individual value (i.e. pointer equal).
 
 To figure out the _actual_ semantics, we'll first have a look at how value (pointer) equality
 works in C++ Nix, the only production ready Nix implementation currently available.
+We'll follow this up with a survey of how pointer equality is used in nixpkgs, the most
+relevant piece of Nix software. Finally, we'll summarize how this behavior is (re-)implemented
+in Tvix and look to the future.
 
 ## Nix (Pointer) Equality in C++ Nix
 

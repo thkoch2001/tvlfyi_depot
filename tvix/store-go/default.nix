@@ -18,7 +18,7 @@ in
         ${regenerate}
         if [[ -n "$(git status --porcelain -unormal)" ]]; then
             echo "-----------------------------"
-            echo ".pb.go files need to be updated, mg run //tvix/store-go/generate"
+            echo ".pb.go files need to be updated, mg run //tvix/store-go/regenerate"
             echo "-----------------------------"
             git status -unormal
             exit 1
