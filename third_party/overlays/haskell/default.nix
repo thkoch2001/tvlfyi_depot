@@ -40,9 +40,9 @@ in
         haskellLib.doJailbreak
       ];
 
-      # TODO: this is to fix a bug in dhall-nix
-      dhall = dhall-source "dhall" hsSuper.dhall;
-      dhall-nix = dhall-source "dhall-nix" hsSuper.dhall-nix;
+      # TODO(Profpatsch): rebase your freaking patch!!!!!!!!!!
+      # dhall = dhall-source "dhall" hsSuper.dhall;
+      # dhall-nix = dhall-source "dhall-nix" hsSuper.dhall-nix;
 
       pa-prelude = hsSelf.callPackage ./extra-pkgs/pa-prelude.nix { };
       pa-error-tree = hsSelf.callPackage ./extra-pkgs/pa-error-tree-0.1.0.0.nix { };
