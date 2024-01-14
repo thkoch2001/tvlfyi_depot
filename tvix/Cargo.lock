@@ -3361,6 +3361,8 @@ dependencies = [
  "data-encoding",
  "lazy_static",
  "nix-compat",
+ "pretty_assertions",
+ "rstest",
  "serde",
  "serde_json",
  "sha2",
