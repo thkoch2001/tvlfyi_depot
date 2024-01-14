@@ -8,6 +8,9 @@ mod sled;
 mod fs;
 
 use futures::stream::BoxStream;
+use futures::Stream;
+use std::pin::Pin;
+use std::sync::Arc;
 use tonic::async_trait;
 use tvix_castore::proto as castorepb;
 use tvix_castore::Error;
@@ -49,4 +52,26 @@ pub trait PathInfoService: Send + Sync {
     /// Rust doesn't support this as a generic in traits yet. This is the same thing that
     /// [async_trait] generates, but for streams instead of futures.
     fn list(&self) -> BoxStream<'static, Result<PathInfo, Error>>;
+}
+
+#[async_trait]
+impl<T: PathInfoService + ?Sized> PathInfoService for Arc<T> {
+    async fn get(&self, digest: [u8; 20]) -> Result<Option<PathInfo>, Error> {
+        (**self).get(digest).await
+    }
+
+    async fn put(&self, path_info: PathInfo) -> Result<PathInfo, Error> {
+        (**self).put(path_info).await
+    }
+
+    async fn calculate_nar(
+        &self,
+        root_node: &castorepb::node::Node,
+    ) -> Result<(u64, [u8; 32]), Error> {
+        (**self).calculate_nar(root_node).await
+    }
+
+    fn list(&self) -> Pin<Box<dyn Stream<Item = Result<PathInfo, Error>> + Send>> {
+        (**self).list()
+    }
 }

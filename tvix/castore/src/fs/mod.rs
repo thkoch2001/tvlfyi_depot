@@ -19,10 +19,16 @@ use crate::{
     proto::{node::Node, NamedNode},
     B3Digest,
 };
-use fuse_backend_rs::abi::fuse_abi::stat64;
-use fuse_backend_rs::api::filesystem::{Context, FileSystem, FsOptions, ROOT_ID};
+use async_stream::try_stream;
+use fuse_backend_rs::abi::fuse_abi::{stat64, CreateIn};
+use fuse_backend_rs::api::filesystem::{
+    AsyncFileSystem, AsyncZeroCopyReader, AsyncZeroCopyWriter, Context, Entry, FileSystem,
+    FsOptions, OpenOptions, OwnedDirEntry, SetattrValid, ROOT_ID,
+};
+use futures::stream::BoxStream;
 use futures::StreamExt;
 use parking_lot::RwLock;
+use std::ffi::CStr;
 use std::{
     collections::HashMap,
     io,
@@ -30,10 +36,8 @@ use std::{
     sync::{atomic::Ordering, Arc},
     time::Duration,
 };
-use tokio::{
-    io::{AsyncReadExt, AsyncSeekExt},
-    sync::mpsc,
-};
+use tokio::io::{AsyncReadExt, AsyncSeekExt};
+use tonic::async_trait;
 use tracing::{debug, info_span, instrument, warn};
 
 pub use self::root_nodes::RootNodes;
@@ -94,15 +98,13 @@ pub struct TvixStoreFs<BS, DS, RN> {
     file_handles: RwLock<HashMap<u64, Arc<tokio::sync::Mutex<Box<dyn BlobReader>>>>>,
 
     next_file_handle: AtomicU64,
-
-    tokio_handle: tokio::runtime::Handle,
 }
 
 impl<BS, DS, RN> TvixStoreFs<BS, DS, RN>
 where
-    BS: AsRef<dyn BlobService> + Clone + Send,
-    DS: AsRef<dyn DirectoryService> + Clone + Send + 'static,
-    RN: RootNodes + Clone + 'static,
+    BS: BlobService,
+    DS: DirectoryService,
+    RN: RootNodes,
 {
     pub fn new(
         blob_service: BS,
@@ -122,7 +124,6 @@ where
 
             file_handles: RwLock::new(Default::default()),
             next_file_handle: AtomicU64::new(1),
-            tokio_handle: tokio::runtime::Handle::current(),
         }
     }
 
@@ -140,7 +141,7 @@ where
     /// in self.directory_service is performed, and self.inode_tracker is updated with the
     /// [DirectoryInodeData::Populated].
     #[instrument(skip(self), err)]
-    fn get_directory_children(&self, ino: u64) -> io::Result<(B3Digest, Vec<(u64, Node)>)> {
+    async fn get_directory_children(&self, ino: u64) -> io::Result<(B3Digest, Vec<(u64, Node)>)> {
         let data = self.inode_tracker.read().get(ino).unwrap();
         match *data {
             // if it's populated already, return children.
@@ -152,13 +153,9 @@ where
             // and update it in [self.inode_tracker].
             InodeData::Directory(DirectoryInodeData::Sparse(ref parent_digest, _)) => {
                 let directory = self
-                    .tokio_handle
-                    .block_on(self.tokio_handle.spawn({
-                        let directory_service = self.directory_service.clone();
-                        let parent_digest = parent_digest.to_owned();
-                        async move { directory_service.as_ref().get(&parent_digest).await }
-                    }))
-                    .unwrap()?
+                    .directory_service
+                    .get(parent_digest)
+                    .await?
                     .ok_or_else(|| {
                         warn!(directory.digest=%parent_digest, "directory not found");
                         // If the Directory can't be found, this is a hole, bail out.
@@ -206,7 +203,7 @@ where
     /// or otherwise fetch from [self.root_nodes], and then insert into
     /// [self.inode_tracker].
     /// In the case the name can't be found, a libc::ENOENT is returned.
-    fn name_in_root_to_ino_and_data(
+    async fn name_in_root_to_ino_and_data(
         &self,
         name: &std::ffi::CStr,
     ) -> io::Result<(u64, Arc<InodeData>)> {
@@ -225,10 +222,11 @@ where
         }
 
         // We don't have it yet, look it up in [self.root_nodes].
-        match self.tokio_handle.block_on({
-            let root_nodes_provider = self.root_nodes_provider.clone();
-            async move { root_nodes_provider.get_by_basename(name.to_bytes()).await }
-        }) {
+        match self
+            .root_nodes_provider
+            .get_by_basename(name.to_bytes())
+            .await
+        {
             // if there was an error looking up the root node, propagate up an IO error.
             Err(_e) => Err(io::Error::from_raw_os_error(libc::EIO)),
             // the root node doesn't exist, so the file doesn't exist.
@@ -269,9 +267,9 @@ where
 
 impl<BS, DS, RN> FileSystem for TvixStoreFs<BS, DS, RN>
 where
-    BS: AsRef<dyn BlobService> + Clone + Send + 'static,
-    DS: AsRef<dyn DirectoryService> + Send + Clone + 'static,
-    RN: RootNodes + Clone + 'static,
+    BS: BlobService,
+    DS: DirectoryService,
+    RN: RootNodes,
 {
     type Handle = u64;
     type Inode = u64;
@@ -280,33 +278,60 @@ where
         Ok(FsOptions::empty())
     }
 
-    #[tracing::instrument(skip_all, fields(rq.inode = inode))]
-    fn getattr(
+    #[tracing::instrument(skip_all, fields(rq.inode = inode, fh = handle))]
+    fn release(
         &self,
         _ctx: &Context,
         inode: Self::Inode,
-        _handle: Option<Self::Handle>,
-    ) -> io::Result<(stat64, Duration)> {
-        if inode == ROOT_ID {
-            return Ok((ROOT_FILE_ATTR.into(), Duration::MAX));
-        }
-
-        match self.inode_tracker.read().get(inode) {
-            None => Err(io::Error::from_raw_os_error(libc::ENOENT)),
-            Some(node) => {
-                debug!(node = ?node, "found node");
-                Ok((gen_file_attr(&node, inode).into(), Duration::MAX))
+        _flags: u32,
+        handle: Self::Handle,
+        _flush: bool,
+        _flock_release: bool,
+        _lock_owner: Option<u64>,
+    ) -> io::Result<()> {
+        // remove and get ownership on the blob reader
+        match self.file_handles.write().remove(&handle) {
+            // drop it, which will close it.
+            Some(blob_reader) => drop(blob_reader),
+            None => {
+                // These might already be dropped if a read error occured.
+                debug!("file_handle {} not found", handle);
             }
         }
+
+        Ok(())
     }
 
+    #[tracing::instrument(skip_all, fields(rq.inode = inode))]
+    fn readlink(&self, _ctx: &Context, inode: Self::Inode) -> io::Result<Vec<u8>> {
+        if inode == ROOT_ID {
+            return Err(io::Error::from_raw_os_error(libc::ENOSYS));
+        }
+
+        // lookup the inode
+        match *self.inode_tracker.read().get(inode).unwrap() {
+            InodeData::Directory(..) | InodeData::Regular(..) => {
+                Err(io::Error::from_raw_os_error(libc::EINVAL))
+            }
+            InodeData::Symlink(ref target) => Ok(target.to_vec()),
+        }
+    }
+}
+
+#[async_trait(?Send)]
+impl<BS, DS, RN> AsyncFileSystem for TvixStoreFs<BS, DS, RN>
+where
+    BS: BlobService,
+    DS: DirectoryService,
+    RN: RootNodes,
+{
     #[tracing::instrument(skip_all, fields(rq.parent_inode = parent, rq.name = ?name))]
-    fn lookup(
+    async fn async_lookup(
         &self,
         _ctx: &Context,
         parent: Self::Inode,
-        name: &std::ffi::CStr,
-    ) -> io::Result<fuse_backend_rs::api::filesystem::Entry> {
+        name: &CStr,
+    ) -> io::Result<Entry> {
         debug!("lookup");
 
         // This goes from a parent inode to a node.
@@ -315,7 +340,7 @@ where
         // - Otherwise, lookup the parent in [self.inode_tracker] (which must be
         //   a [InodeData::Directory]), and find the child with that name.
         if parent == ROOT_ID {
-            let (ino, inode_data) = self.name_in_root_to_ino_and_data(name)?;
+            let (ino, inode_data) = self.name_in_root_to_ino_and_data(name).await?;
 
             debug!(inode_data=?&inode_data, ino=ino, "Some");
             return Ok(fuse_backend_rs::api::filesystem::Entry {
@@ -328,7 +353,7 @@ where
         }
         // This is the "lookup for "a" inside inode 42.
         // We already know that inode 42 must be a directory.
-        let (parent_digest, children) = self.get_directory_children(parent)?;
+        let (parent_digest, children) = self.get_directory_children(parent).await?;
 
         let span = info_span!("lookup", directory.digest = %parent_digest);
         let _enter = span.enter();
@@ -356,150 +381,52 @@ where
         }
     }
 
-    // TODO: readdirplus?
-
-    #[tracing::instrument(skip_all, fields(rq.inode = inode, rq.offset = offset))]
-    fn readdir(
+    #[tracing::instrument(skip_all, fields(rq.inode = inode))]
+    async fn async_getattr(
         &self,
         _ctx: &Context,
         inode: Self::Inode,
-        _handle: Self::Handle,
-        _size: u32,
-        offset: u64,
-        add_entry: &mut dyn FnMut(fuse_backend_rs::api::filesystem::DirEntry) -> io::Result<usize>,
-    ) -> io::Result<()> {
-        debug!("readdir");
-
+        _handle: Option<Self::Handle>,
+    ) -> io::Result<(stat64, Duration)> {
         if inode == ROOT_ID {
-            if !self.list_root {
-                return Err(io::Error::from_raw_os_error(libc::EPERM)); // same error code as ipfs/kubo
-            } else {
-                let root_nodes_provider = self.root_nodes_provider.clone();
-                let (tx, mut rx) = mpsc::channel(16);
-
-                // This task will run in the background immediately and will exit
-                // after the stream ends or if we no longer want any more entries.
-                self.tokio_handle.spawn(async move {
-                    let mut stream = root_nodes_provider.list().skip(offset as usize).enumerate();
-                    while let Some(node) = stream.next().await {
-                        if tx.send(node).await.is_err() {
-                            // If we get a send error, it means the sync code
-                            // doesn't want any more entries.
-                            break;
-                        }
-                    }
-                });
-
-                while let Some((i, ref root_node)) = rx.blocking_recv() {
-                    let root_node = match root_node {
-                        Err(e) => {
-                            warn!("failed to retrieve pathinfo: {}", e);
-                            return Err(io::Error::from_raw_os_error(libc::EPERM));
-                        }
-                        Ok(root_node) => root_node,
-                    };
-
-                    let name = root_node.get_name();
-                    // obtain the inode, or allocate a new one.
-                    let ino = self.get_inode_for_root_name(name).unwrap_or_else(|| {
-                        // insert the (sparse) inode data and register in
-                        // self.root_nodes.
-                        let ino = self.inode_tracker.write().put(root_node.into());
-                        self.root_nodes.write().insert(name.into(), ino);
-                        ino
-                    });
-
-                    let ty = match root_node {
-                        Node::Directory(_) => libc::S_IFDIR,
-                        Node::File(_) => libc::S_IFREG,
-                        Node::Symlink(_) => libc::S_IFLNK,
-                    };
-
-                    #[cfg(target_os = "macos")]
-                    let ty = ty as u32;
-
-                    let written = add_entry(fuse_backend_rs::api::filesystem::DirEntry {
-                        ino,
-                        offset: offset + i as u64 + 1,
-                        type_: ty,
-                        name,
-                    })?;
-                    // If the buffer is full, add_entry will return `Ok(0)`.
-                    if written == 0 {
-                        break;
-                    }
-                }
-
-                return Ok(());
-            }
+            return Ok((ROOT_FILE_ATTR.into(), Duration::MAX));
         }
 
-        // lookup the children, or return an error if it's not a directory.
-        let (parent_digest, children) = self.get_directory_children(inode)?;
-
-        let span = info_span!("lookup", directory.digest = %parent_digest);
-        let _enter = span.enter();
-
-        for (i, (ino, child_node)) in children.iter().skip(offset as usize).enumerate() {
-            // the second parameter will become the "offset" parameter on the next call.
-            let written = add_entry(fuse_backend_rs::api::filesystem::DirEntry {
-                ino: *ino,
-                offset: offset + i as u64 + 1,
-                type_: match child_node {
-                    #[allow(clippy::unnecessary_cast)]
-                    // libc::S_IFDIR is u32 on Linux and u16 on MacOS
-                    Node::Directory(_) => libc::S_IFDIR as u32,
-                    #[allow(clippy::unnecessary_cast)]
-                    // libc::S_IFDIR is u32 on Linux and u16 on MacOS
-                    Node::File(_) => libc::S_IFREG as u32,
-                    #[allow(clippy::unnecessary_cast)]
-                    // libc::S_IFDIR is u32 on Linux and u16 on MacOS
-                    Node::Symlink(_) => libc::S_IFLNK as u32,
-                },
-                name: child_node.get_name(),
-            })?;
-            // If the buffer is full, add_entry will return `Ok(0)`.
-            if written == 0 {
-                break;
+        match self.inode_tracker.read().get(inode) {
+            None => Err(io::Error::from_raw_os_error(libc::ENOENT)),
+            Some(node) => {
+                debug!(node = ?node, "found node");
+                Ok((gen_file_attr(&node, inode).into(), Duration::MAX))
             }
         }
-
-        Ok(())
     }
 
     #[tracing::instrument(skip_all, fields(rq.inode = inode))]
-    fn open(
+    async fn async_open(
         &self,
         _ctx: &Context,
         inode: Self::Inode,
         _flags: u32,
         _fuse_flags: u32,
-    ) -> io::Result<(
-        Option<Self::Handle>,
-        fuse_backend_rs::api::filesystem::OpenOptions,
-    )> {
+    ) -> io::Result<(Option<Self::Handle>, OpenOptions)> {
         if inode == ROOT_ID {
             return Err(io::Error::from_raw_os_error(libc::ENOSYS));
         }
 
         // lookup the inode
-        match *self.inode_tracker.read().get(inode).unwrap() {
+        let inode_data = self.inode_tracker.read().get(inode).unwrap().clone();
+        match *inode_data {
             // read is invalid on non-files.
             InodeData::Directory(..) | InodeData::Symlink(_) => {
                 warn!("is directory");
                 Err(io::Error::from_raw_os_error(libc::EISDIR))
             }
             InodeData::Regular(ref blob_digest, _blob_size, _) => {
+                // TODO(cbrewster): Switch to instrument, span enter is not async compatible.
                 let span = info_span!("read", blob.digest = %blob_digest);
                 let _enter = span.enter();
 
-                let task = self.tokio_handle.spawn({
-                    let blob_service = self.blob_service.clone();
-                    let blob_digest = blob_digest.clone();
-                    async move { blob_service.as_ref().open_read(&blob_digest).await }
-                });
-
-                let blob_reader = self.tokio_handle.block_on(task).unwrap();
+                let blob_reader = self.blob_service.open_read(blob_digest).await;
 
                 match blob_reader {
                     Ok(None) => {
@@ -533,37 +460,13 @@ where
         }
     }
 
-    #[tracing::instrument(skip_all, fields(rq.inode = inode, fh = handle))]
-    fn release(
+    #[tracing::instrument(skip_all, fields(rq.inode = _inode, rq.offset = offset, rq.size = size))]
+    async fn async_read(
         &self,
         _ctx: &Context,
-        inode: Self::Inode,
-        _flags: u32,
+        _inode: Self::Inode,
         handle: Self::Handle,
-        _flush: bool,
-        _flock_release: bool,
-        _lock_owner: Option<u64>,
-    ) -> io::Result<()> {
-        // remove and get ownership on the blob reader
-        match self.file_handles.write().remove(&handle) {
-            // drop it, which will close it.
-            Some(blob_reader) => drop(blob_reader),
-            None => {
-                // These might already be dropped if a read error occured.
-                debug!("file_handle {} not found", handle);
-            }
-        }
-
-        Ok(())
-    }
-
-    #[tracing::instrument(skip_all, fields(rq.inode = inode, rq.offset = offset, rq.size = size))]
-    fn read(
-        &self,
-        _ctx: &Context,
-        inode: Self::Inode,
-        handle: Self::Handle,
-        w: &mut dyn fuse_backend_rs::api::filesystem::ZeroCopyWriter,
+        w: &mut (dyn AsyncZeroCopyWriter + Send),
         size: u32,
         offset: u64,
         _lock_owner: Option<u64>,
@@ -582,50 +485,205 @@ where
             }
         };
 
-        let task = self.tokio_handle.spawn(async move {
-            let mut blob_reader = blob_reader.lock().await;
+        let mut blob_reader = blob_reader.lock().await;
 
-            // seek to the offset specified, which is relative to the start of the file.
-            let resp = blob_reader.seek(io::SeekFrom::Start(offset)).await;
+        // seek to the offset specified, which is relative to the start of the file.
+        let resp = blob_reader.seek(io::SeekFrom::Start(offset)).await;
 
-            match resp {
-                Ok(pos) => {
-                    debug_assert_eq!(offset, pos);
-                }
-                Err(e) => {
-                    warn!("failed to seek to offset {}: {}", offset, e);
-                    return Err(io::Error::from_raw_os_error(libc::EIO));
-                }
+        match resp {
+            Ok(pos) => {
+                debug_assert_eq!(offset, pos);
             }
+            Err(e) => {
+                warn!("failed to seek to offset {}: {}", offset, e);
+                return Err(io::Error::from_raw_os_error(libc::EIO));
+            }
+        }
 
-            // As written in the fuse docs, read should send exactly the number
-            // of bytes requested except on EOF or error.
+        // As written in the fuse docs, read should send exactly the number
+        // of bytes requested except on EOF or error.
 
-            let mut buf: Vec<u8> = Vec::with_capacity(size as usize);
+        let mut buf: Vec<u8> = Vec::with_capacity(size as usize);
 
-            // copy things from the internal buffer into buf to fill it till up until size
-            tokio::io::copy(&mut blob_reader.as_mut().take(size as u64), &mut buf).await?;
+        // copy things from the internal buffer into buf to fill it till up until size
+        tokio::io::copy(&mut blob_reader.as_mut().take(size as u64), &mut buf).await?;
 
-            Ok(buf)
-        });
-
-        let buf = self.tokio_handle.block_on(task).unwrap()?;
-
-        w.write(&buf)
+        w.async_write(&buf).await
     }
 
-    #[tracing::instrument(skip_all, fields(rq.inode = inode))]
-    fn readlink(&self, _ctx: &Context, inode: Self::Inode) -> io::Result<Vec<u8>> {
-        if inode == ROOT_ID {
-            return Err(io::Error::from_raw_os_error(libc::ENOSYS));
-        }
+    #[tracing::instrument(skip_all, fields(rq.inode = inode, rq.offset = offset))]
+    fn async_readdir<'a, 'b, 'async_trait>(
+        &'a self,
+        _ctx: &'b Context,
+        inode: Self::Inode,
+        _handle: Self::Handle,
+        _size: u32,
+        offset: u64,
+    ) -> BoxStream<'async_trait, io::Result<OwnedDirEntry>>
+    where
+        'a: 'async_trait,
+        'b: 'async_trait,
+        Self: 'async_trait,
+    {
+        debug!("readdir");
 
-        // lookup the inode
-        match *self.inode_tracker.read().get(inode).unwrap() {
-            InodeData::Directory(..) | InodeData::Regular(..) => {
-                Err(io::Error::from_raw_os_error(libc::EINVAL))
+        Box::pin(try_stream! {
+            if inode == ROOT_ID {
+                if !self.list_root {
+                    Err(io::Error::from_raw_os_error(libc::EPERM))?; // same error code as ipfs/kubo
+                } else {
+                    let mut stream = self
+                        .root_nodes_provider
+                        .list()
+                        .skip(offset as usize)
+                        .enumerate();
+
+                    while let Some((i, ref root_node)) = stream.next().await {
+                        let root_node = root_node.as_ref().map_err(|e| {
+                            warn!("failed to retrieve pathinfo: {}", e);
+                            io::Error::from_raw_os_error(libc::EPERM)
+                        })?;
+
+                        let name = root_node.get_name();
+                        // obtain the inode, or allocate a new one.
+                        let ino = self.get_inode_for_root_name(name).unwrap_or_else(|| {
+                            // insert the (sparse) inode data and register in
+                            // self.root_nodes.
+                            let ino = self.inode_tracker.write().put(root_node.into());
+                            self.root_nodes.write().insert(name.into(), ino);
+                            ino
+                        });
+
+                        let ty = match root_node {
+                            Node::Directory(_) => libc::S_IFDIR,
+                            Node::File(_) => libc::S_IFREG,
+                            Node::Symlink(_) => libc::S_IFLNK,
+                        };
+
+                        yield fuse_backend_rs::api::filesystem::OwnedDirEntry {
+                            ino,
+                            offset: offset + i as u64 + 1,
+                            type_: ty,
+                            name: name.into(),
+                        };
+                    }
+
+                    return;
+                }
             }
-            InodeData::Symlink(ref target) => Ok(target.to_vec()),
-        }
+
+            // lookup the children, or return an error if it's not a directory.
+            let (parent_digest, children) = self.get_directory_children(inode).await?;
+
+            // TODO(cbrewster): Spans like this are not async compatible
+            let span = info_span!("lookup", directory.digest = %parent_digest);
+            let _enter = span.enter();
+
+            for (i, (ino, child_node)) in children.iter().skip(offset as usize).enumerate() {
+                // the second parameter will become the "offset" parameter on the next call.
+                yield fuse_backend_rs::api::filesystem::OwnedDirEntry {
+                    ino: *ino,
+                    offset: offset + i as u64 + 1,
+                    type_: match child_node {
+                        #[allow(clippy::unnecessary_cast)]
+                        // libc::S_IFDIR is u32 on Linux and u16 on MacOS
+                        Node::Directory(_) => libc::S_IFDIR as u32,
+                        #[allow(clippy::unnecessary_cast)]
+                        // libc::S_IFDIR is u32 on Linux and u16 on MacOS
+                        Node::File(_) => libc::S_IFREG as u32,
+                        #[allow(clippy::unnecessary_cast)]
+                        // libc::S_IFDIR is u32 on Linux and u16 on MacOS
+                        Node::Symlink(_) => libc::S_IFLNK as u32,
+                    },
+                    name: child_node.get_name().into(),
+                };
+            }
+        })
+    }
+
+    // TODO: readdirplus?
+    fn async_readdirplus<'a, 'b, 'async_trait>(
+        &'a self,
+        _ctx: &'b Context,
+        _inode: Self::Inode,
+        _handle: Self::Handle,
+        _size: u32,
+        _offset: u64,
+    ) -> BoxStream<'async_trait, io::Result<(OwnedDirEntry, Entry)>>
+    where
+        'a: 'async_trait,
+        'b: 'async_trait,
+        Self: 'async_trait,
+    {
+        todo!()
+    }
+
+    async fn async_setattr(
+        &self,
+        _ctx: &Context,
+        _inode: Self::Inode,
+        _attr: stat64,
+        _handle: Option<Self::Handle>,
+        _valid: SetattrValid,
+    ) -> io::Result<(stat64, Duration)> {
+        Err(io::Error::from_raw_os_error(libc::ENOSYS))
+    }
+
+    async fn async_create(
+        &self,
+        _ctx: &Context,
+        _parent: Self::Inode,
+        _name: &CStr,
+        _args: CreateIn,
+    ) -> io::Result<(Entry, Option<Self::Handle>, OpenOptions)> {
+        Err(io::Error::from_raw_os_error(libc::ENOSYS))
+    }
+
+    async fn async_write(
+        &self,
+        _ctx: &Context,
+        _inode: Self::Inode,
+        _handle: Self::Handle,
+        _r: &mut (dyn AsyncZeroCopyReader + Send),
+        _size: u32,
+        _offset: u64,
+        _lock_owner: Option<u64>,
+        _delayed_write: bool,
+        _flags: u32,
+        _fuse_flags: u32,
+    ) -> io::Result<usize> {
+        Err(io::Error::from_raw_os_error(libc::ENOSYS))
+    }
+
+    async fn async_fsync(
+        &self,
+        _ctx: &Context,
+        _inode: Self::Inode,
+        _datasync: bool,
+        _handle: Self::Handle,
+    ) -> io::Result<()> {
+        Err(io::Error::from_raw_os_error(libc::ENOSYS))
+    }
+
+    async fn async_fallocate(
+        &self,
+        _ctx: &Context,
+        _inode: Self::Inode,
+        _handle: Self::Handle,
+        _mode: u32,
+        _offset: u64,
+        _length: u64,
+    ) -> io::Result<()> {
+        Err(io::Error::from_raw_os_error(libc::ENOSYS))
+    }
+
+    async fn async_fsyncdir(
+        &self,
+        _ctx: &Context,
+        _inode: Self::Inode,
+        _datasync: bool,
+        _handle: Self::Handle,
+    ) -> io::Result<()> {
+        Err(io::Error::from_raw_os_error(libc::ENOSYS))
     }
 }

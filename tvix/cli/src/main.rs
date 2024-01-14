@@ -119,7 +119,7 @@ fn interpret(code: &str, path: Option<PathBuf>, args: &Args, explain: bool) -> b
     let tvix_store_io = Rc::new(TvixStoreIO::new(
         blob_service.clone(),
         directory_service.clone(),
-        path_info_service.into(),
+        path_info_service,
         build_service.into(),
         tokio_runtime.handle().clone(),
     ));
