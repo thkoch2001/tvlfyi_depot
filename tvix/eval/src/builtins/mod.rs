@@ -576,7 +576,7 @@ mod pure_builtins {
     #[builtin("hasContext")]
     #[allow(non_snake_case)]
     async fn builtin_hasContext(co: GenCo, e: Value) -> Result<Value, ErrorKind> {
-        let v = e.to_str()?;
+        let v = e.to_contextful_str()?;
         Ok(Value::Bool(v.has_context()))
     }
 
