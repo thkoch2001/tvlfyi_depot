@@ -51,6 +51,7 @@ let
     "eval-okay-floor.nix" = [ nix ];
     "eval-okay-groupBy.nix" = [ nix ];
     "eval-okay-zipAttrsWith.nix" = [ nix ];
+    "eval-okay-builtins-group-by-propagate-catchable.nix" = [ nix ];
     # Comparable lists are not in Nix 2.3
     "eval-okay-sort.nix" = [ nix ];
     "eval-okay-compare-lists.nix" = [ nix ];
@@ -74,6 +75,11 @@ let
     # identifier formatting changed in Nix 2.17 due to cppnix commit
     # b72bc4a972fe568744d98b89d63adcd504cb586c
     "eval-okay-identifier-formatting.nix" = [ nix ];
+
+    # Different catchable behavior between nix 2.3 and 2.18
+    "eval-okay-builtins-map-propagate-catchable.nix" = [ nix ];
+    "eval-okay-builtins-gen-list-propagate-catchable.nix" = [ nix ];
+    "eval-okay-builtins-replace-strings-propagate-catchable.nix" = [ nix ];
 
     # TODO(sterni): support diffing working directory and home relative paths
     # like C++ Nix test suite (using string replacement).
