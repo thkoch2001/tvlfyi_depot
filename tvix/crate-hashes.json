@@ -1,4 +1,5 @@
 {
+  "fuse-backend-rs 0.11.0 (git+https://github.com/cbrewster/fuse-backend-rs?branch=async-readdir#bc4ac70b92b1204014b59ad008e1595e86685589)": "1hz8fw60514shsnblnzfkb697v747am3mha9nilswaks2ai9llk7",
   "test-generator 0.3.0 (git+https://github.com/JamesGuthrie/test-generator.git?rev=82e799979980962aec1aa324ec6e0e4cad781f41#82e799979980962aec1aa324ec6e0e4cad781f41)": "08brp3qqa55hijc7xby3lam2cc84hvx1zzfqv6lj7smlczh8k32y",
   "wu-manber 0.1.0 (git+https://github.com/tvlfyi/wu-manber.git#0d5b22bea136659f7de60b102a7030e0daaa503d)": "1zhk83lbq99xzyjwphv2qrb8f8qgfqwa5bbbvyzm0z0bljsjv0pd"
 }

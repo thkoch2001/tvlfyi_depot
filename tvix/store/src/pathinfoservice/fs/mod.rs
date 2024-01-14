@@ -19,9 +19,9 @@ pub fn make_fs<BS, DS, PS>(
     list_root: bool,
 ) -> TvixStoreFs<BS, DS, RootNodesWrapper<PS>>
 where
-    BS: AsRef<dyn BlobService> + Send + Clone + 'static,
-    DS: AsRef<dyn DirectoryService> + Send + Clone + 'static,
-    PS: AsRef<dyn PathInfoService> + Send + Sync + Clone + 'static,
+    BS: BlobService,
+    DS: DirectoryService,
+    PS: PathInfoService,
 {
     TvixStoreFs::new(
         blob_service,
@@ -44,29 +44,24 @@ pub struct RootNodesWrapper<T>(pub(crate) T);
 #[async_trait]
 impl<T> RootNodes for RootNodesWrapper<T>
 where
-    T: AsRef<dyn PathInfoService> + Send + Sync,
+    T: PathInfoService,
 {
     async fn get_by_basename(&self, name: &[u8]) -> Result<Option<castorepb::node::Node>, Error> {
         let Ok(store_path) = nix_compat::store_path::StorePath::from_bytes(name) else {
             return Ok(None);
         };
 
-        Ok(self
-            .0
-            .as_ref()
-            .get(*store_path.digest())
-            .await?
-            .map(|path_info| {
-                path_info
-                    .node
-                    .expect("missing root node")
-                    .node
-                    .expect("empty node")
-            }))
+        Ok(self.0.get(*store_path.digest()).await?.map(|path_info| {
+            path_info
+                .node
+                .expect("missing root node")
+                .node
+                .expect("empty node")
+        }))
     }
 
     fn list(&self) -> BoxStream<Result<castorepb::node::Node, Error>> {
-        Box::pin(self.0.as_ref().list().map(|result| {
+        Box::pin(self.0.list().map(|result| {
             result.map(|path_info| {
                 path_info
                     .node

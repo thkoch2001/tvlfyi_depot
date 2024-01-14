@@ -86,6 +86,7 @@ let
         ) [
         "test-generator"
         "wu-manber"
+        "fuse-backend-rs"
       ]);
   };
 
