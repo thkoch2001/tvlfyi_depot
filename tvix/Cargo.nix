@@ -1183,10 +1183,10 @@ rec {
       };
       "clap" = rec {
         crateName = "clap";
-        version = "4.4.16";
+        version = "4.4.17";
         edition = "2021";
         crateBin = [ ];
-        sha256 = "0ialpybl8n8ybfikzy5f07d64pfdajls0s00bf4wgkh4q20liraq";
+        sha256 = "0ls2sngyn7fba1dzkhl7k3f4l87kkny5b1nvbqivk69rqc1jx4w0";
         dependencies = [
           {
             name = "clap_builder";
@@ -1223,9 +1223,9 @@ rec {
       };
       "clap_builder" = rec {
         crateName = "clap_builder";
-        version = "4.4.16";
+        version = "4.4.17";
         edition = "2021";
-        sha256 = "1fv06ivpzpkhjm4bvxzg3fl4y61mvlf481zms4pksq1iypbq5jsr";
+        sha256 = "1ymqlxpzkh60f3a2lzcjyr91naij4y62jka47v3z3vjrqrcdph6n";
         dependencies = [
           {
             name = "anstream";
@@ -6932,7 +6932,7 @@ rec {
           }
           {
             name = "proc-macro2";
-            packageId = "proc-macro2 1.0.75";
+            packageId = "proc-macro2 1.0.76";
           }
           {
             name = "quote";
@@ -10648,6 +10648,14 @@ rec {
             packageId = "lazy_static";
           }
           {
+            name = "pretty_assertions";
+            packageId = "pretty_assertions";
+          }
+          {
+            name = "rstest";
+            packageId = "rstest";
+          }
+          {
             name = "tempfile";
             packageId = "tempfile";
           }
@@ -10656,7 +10664,10 @@ rec {
             packageId = "test-case";
           }
         ];
-
+        features = {
+          "default" = [ "nix_tests" ];
+        };
+        resolvedDefaultFeatures = [ "default" "nix_tests" ];
       };
       "tvix-serde" = rec {
         crateName = "tvix-serde";
