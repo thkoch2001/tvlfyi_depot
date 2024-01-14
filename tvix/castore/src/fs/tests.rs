@@ -42,8 +42,8 @@ fn do_mount<P: AsRef<Path>, BS, DS>(
     list_root: bool,
 ) -> io::Result<FuseDaemon>
 where
-    BS: AsRef<dyn BlobService> + Send + Sync + Clone + 'static,
-    DS: AsRef<dyn DirectoryService> + Send + Sync + Clone + 'static,
+    BS: BlobService + 'static,
+    DS: DirectoryService + 'static,
 {
     let fs = TvixStoreFs::new(
         blob_service,
