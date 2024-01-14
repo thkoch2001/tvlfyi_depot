@@ -1,6 +1,10 @@
 use std::{io, path::Path, sync::Arc, thread};
 
-use fuse_backend_rs::{api::filesystem::FileSystem, transport::FuseSession};
+use fuse_backend_rs::{
+    api::filesystem::{AsyncFileSystem, FileSystem},
+    async_runtime::block_on,
+    transport::FuseSession,
+};
 use tracing::{error, instrument};
 
 struct FuseServer<FS>
@@ -18,18 +22,19 @@ const BADFD: libc::c_int = libc::EBADFD;
 
 impl<FS> FuseServer<FS>
 where
-    FS: FileSystem + Sync + Send,
+    FS: AsyncFileSystem + Sync + Send,
 {
-    fn start(&mut self) -> io::Result<()> {
+    async fn start(&mut self) -> io::Result<()> {
         while let Some((reader, writer)) = self
             .channel
             .get_request()
             .map_err(|_| io::Error::from_raw_os_error(libc::EINVAL))?
         {
-            if let Err(e) = self
-                .server
-                .handle_message(reader, writer.into(), None, None)
-            {
+            if let Err(e) = unsafe {
+                self.server
+                    .async_handle_message(reader, writer.into(), None, None)
+                    .await
+            } {
                 match e {
                     // This indicates the session has been shut down.
                     fuse_backend_rs::Error::EncodeMessage(e) if e.raw_os_error() == Some(BADFD) => {
@@ -55,7 +60,7 @@ impl FuseDaemon {
     #[instrument(skip(fs, mountpoint), fields(mountpoint=?mountpoint), err)]
     pub fn new<FS, P>(fs: FS, mountpoint: P, threads: usize) -> Result<Self, io::Error>
     where
-        FS: FileSystem + Sync + Send + 'static,
+        FS: AsyncFileSystem + Sync + Send + 'static,
         P: AsRef<Path> + std::fmt::Debug,
     {
         let server = Arc::new(fuse_backend_rs::api::server::Server::new(Arc::new(fs)));
@@ -79,7 +84,9 @@ impl FuseDaemon {
             let join_handle = thread::Builder::new()
                 .name("fuse_server".to_string())
                 .spawn(move || {
-                    let _ = server.start();
+                    block_on(async {
+                        let _ = server.start().await;
+                    });
                 })?;
             join_handles.push(join_handle);
         }
