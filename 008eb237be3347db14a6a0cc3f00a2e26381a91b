@@ -18,6 +18,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c2616a0d_57f444ae",
+        "filename": "tvix/eval/Cargo.toml",
+        "patchSetId": 1
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1000073
+      },
+      "writtenOn": "2024-01-14T15:01:32Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d1535b6c_cfcaadb7",
+      "revId": "008eb237be3347db14a6a0cc3f00a2e26381a91b",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "04e94019_d4ab72d8",
@@ -31,6 +49,24 @@
       "writtenOn": "2024-01-14T07:55:38Z",
       "side": 1,
       "message": "NixContextElement::to_owned_references exists.",
+      "revId": "008eb237be3347db14a6a0cc3f00a2e26381a91b",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "adf11cd9_e34d244a",
+        "filename": "tvix/eval/src/builtins/mod.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 612,
+      "author": {
+        "id": 1000073
+      },
+      "writtenOn": "2024-01-14T15:01:32Z",
+      "side": 1,
+      "message": "It does not fit the bill here, I am not mapping into their references, I am mapping into a `HashMap` here. `to_owned_references` would not work.\n\nI think it\u0027s a unique use case here that should probably stay inline for now, we can move it to the context logic later on.",
+      "parentUuid": "04e94019_d4ab72d8",
       "revId": "008eb237be3347db14a6a0cc3f00a2e26381a91b",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
