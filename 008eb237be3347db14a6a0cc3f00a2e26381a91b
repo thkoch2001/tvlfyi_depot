@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d1535b6c_cfcaadb7",
+        "filename": "tvix/eval/Cargo.toml",
+        "patchSetId": 1
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-01-14T07:55:38Z",
+      "side": 1,
+      "message": "This means you need to update Cargo.lock for tvixbolt too.",
+      "revId": "008eb237be3347db14a6a0cc3f00a2e26381a91b",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "04e94019_d4ab72d8",
+        "filename": "tvix/eval/src/builtins/mod.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 612,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-01-14T07:55:38Z",
+      "side": 1,
+      "message": "NixContextElement::to_owned_references exists.",
+      "revId": "008eb237be3347db14a6a0cc3f00a2e26381a91b",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
