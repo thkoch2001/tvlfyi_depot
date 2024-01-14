@@ -6,8 +6,12 @@ use std::{
 };
 
 use fuse_backend_rs::{
-    api::{filesystem::FileSystem, server::Server},
+    api::{filesystem::AsyncFileSystem, server::Server},
     transport::{FsCacheReqHandler, Reader, VirtioFsWriter},
+};
+use tokio::{
+    runtime::Builder,
+    task::{JoinSet, LocalSet},
 };
 use tracing::error;
 use vhost::vhost_user::{
@@ -59,7 +63,7 @@ impl convert::From<Error> for io::Error {
 
 struct VhostUserFsBackend<FS>
 where
-    FS: FileSystem + Send + Sync,
+    FS: AsyncFileSystem + Send + Sync,
 {
     server: Arc<Server<Arc<FS>>>,
     event_idx: bool,
@@ -69,31 +73,61 @@ where
 
 impl<FS> VhostUserFsBackend<FS>
 where
-    FS: FileSystem + Send + Sync,
+    FS: AsyncFileSystem + Send + Sync + 'static,
 {
-    fn process_queue(&mut self, vring: &mut MutexGuard<VringState>) -> std::io::Result<bool> {
+    async fn process_queue(
+        &mut self,
+        vring: &mut MutexGuard<'_, VringState>,
+    ) -> std::io::Result<bool> {
         let mut used_descs = false;
+
+        let local_set = LocalSet::new();
+        let mut join_set = JoinSet::new();
 
         while let Some(desc_chain) = vring
             .get_queue_mut()
             .pop_descriptor_chain(self.guest_mem.memory())
         {
-            let memory = desc_chain.memory();
-            let reader = Reader::from_descriptor_chain(memory, desc_chain.clone())
-                .map_err(|_| Error::InvalidDescriptorChain)?;
-            let writer = VirtioFsWriter::new(memory, desc_chain.clone())
-                .map_err(|_| Error::InvalidDescriptorChain)?;
+            let server = self.server.clone();
 
-            self.server
-                .handle_message(
-                    reader,
-                    writer.into(),
-                    self.cache_req
-                        .as_mut()
-                        .map(|req| req as &mut dyn FsCacheReqHandler),
-                    None,
-                )
-                .map_err(Error::HandleRequests)?;
+            let mut cache_req = self.cache_req.clone();
+
+            join_set.spawn_local_on(
+                async move {
+                    let memory = desc_chain.memory();
+                    let reader = Reader::from_descriptor_chain(memory, desc_chain.clone())
+                        .map_err(|_| Error::InvalidDescriptorChain)?;
+                    let writer = VirtioFsWriter::new(memory, desc_chain.clone())
+                        .map_err(|_| Error::InvalidDescriptorChain)?;
+                    unsafe {
+                        server
+                            .async_handle_message(
+                                reader,
+                                writer.into(),
+                                cache_req
+                                    .as_mut()
+                                    .map(|req| req as &mut dyn FsCacheReqHandler),
+                                None,
+                            )
+                            .await
+                            .map_err(Error::HandleRequests)?;
+                    }
+
+                    Ok::<_, io::Error>(desc_chain)
+                },
+                &local_set,
+            );
+
+            // TODO: What happens if we error out before here?
+            used_descs = true;
+        }
+
+        local_set.await;
+
+        while let Some(desc_chain) = join_set.join_next().await {
+            let desc_chain = desc_chain??;
+
+            let memory = desc_chain.memory();
 
             // TODO: Is len 0 correct?
             if let Err(error) = vring
@@ -102,9 +136,6 @@ where
             {
                 error!(?error, "failed to add desc back to ring");
             }
-
-            // TODO: What happens if we error out before here?
-            used_descs = true;
         }
 
         let needs_notification = if self.event_idx {
@@ -134,7 +165,7 @@ where
 
 impl<FS> VhostUserBackendMut<VringMutex> for VhostUserFsBackend<FS>
 where
-    FS: FileSystem + Send + Sync,
+    FS: AsyncFileSystem + Send + Sync + 'static,
 {
     fn num_queues(&self) -> usize {
         NUM_QUEUES
@@ -189,18 +220,20 @@ where
             }
         };
 
+        let rt = Builder::new_current_thread().build()?;
+
         if self.event_idx {
             loop {
                 queue
                     .get_queue_mut()
                     .enable_notification(self.guest_mem.memory().deref())
                     .map_err(|e| io::Error::new(io::ErrorKind::Other, e.to_string()))?;
-                if !self.process_queue(&mut queue)? {
+                if !rt.block_on(self.process_queue(&mut queue))? {
                     break;
                 }
             }
         } else {
-            self.process_queue(&mut queue)?;
+            rt.block_on(self.process_queue(&mut queue))?;
         }
 
         Ok(false)
@@ -209,7 +242,7 @@ where
 
 pub fn start_virtiofs_daemon<FS, P>(fs: FS, socket: P) -> io::Result<()>
 where
-    FS: FileSystem + Send + Sync + 'static,
+    FS: AsyncFileSystem + Send + Sync + 'static,
     P: AsRef<Path>,
 {
     let guest_mem = GuestMemoryAtomic::new(GuestMemoryMmap::new());

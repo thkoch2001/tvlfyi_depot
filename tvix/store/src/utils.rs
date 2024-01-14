@@ -15,7 +15,7 @@ pub async fn construct_services(
 ) -> std::io::Result<(
     Arc<dyn BlobService>,
     Arc<dyn DirectoryService>,
-    Box<dyn PathInfoService>,
+    Arc<dyn PathInfoService>,
 )> {
     let blob_service: Arc<dyn BlobService> = blobservice::from_addr(blob_service_addr.as_ref())
         .await?
@@ -24,12 +24,13 @@ pub async fn construct_services(
         directoryservice::from_addr(directory_service_addr.as_ref())
             .await?
             .into();
-    let path_info_service = pathinfoservice::from_addr(
+    let path_info_service: Arc<dyn PathInfoService> = pathinfoservice::from_addr(
         path_info_service_addr.as_ref(),
         blob_service.clone(),
         directory_service.clone(),
     )
-    .await?;
+    .await?
+    .into();
 
     Ok((blob_service, directory_service, path_info_service))
 }

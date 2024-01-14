@@ -3,7 +3,6 @@ use clap::Subcommand;
 
 use futures::future::try_join_all;
 use std::path::PathBuf;
-use std::sync::Arc;
 use tokio_listener::Listener;
 use tokio_listener::SystemOptions;
 use tokio_listener::UserOptions;
@@ -17,7 +16,6 @@ use tvix_castore::proto::blob_service_server::BlobServiceServer;
 use tvix_castore::proto::directory_service_server::DirectoryServiceServer;
 use tvix_castore::proto::GRPCBlobServiceWrapper;
 use tvix_castore::proto::GRPCDirectoryServiceWrapper;
-use tvix_store::pathinfoservice::PathInfoService;
 use tvix_store::proto::path_info_service_server::PathInfoServiceServer;
 use tvix_store::proto::GRPCPathInfoServiceWrapper;
 
@@ -268,7 +266,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
                     GRPCDirectoryServiceWrapper::new(directory_service),
                 ))
                 .add_service(PathInfoServiceServer::new(GRPCPathInfoServiceWrapper::new(
-                    Arc::from(path_info_service),
+                    path_info_service,
                 )));
 
             #[cfg(feature = "tonic-reflection")]
@@ -305,9 +303,6 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
                     path_info_service_addr,
                 )
                 .await?;
-
-            // Arc the PathInfoService, as we clone it .
-            let path_info_service: Arc<dyn PathInfoService> = path_info_service.into();
 
             let tasks = paths
                 .into_iter()
@@ -361,7 +356,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
                 let fs = make_fs(
                     blob_service,
                     directory_service,
-                    Arc::from(path_info_service),
+                    path_info_service,
                     list_root,
                 );
                 info!(mount_path=?dest, "mounting");
@@ -401,7 +396,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
                 let fs = make_fs(
                     blob_service,
                     directory_service,
-                    Arc::from(path_info_service),
+                    path_info_service,
                     list_root,
                 );
                 info!(socket_path=?socket, "starting virtiofs-daemon");

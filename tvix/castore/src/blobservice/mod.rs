@@ -1,4 +1,5 @@
 use std::io;
+use std::sync::Arc;
 use tonic::async_trait;
 
 use crate::proto::stat_blob_response::ChunkMeta;
@@ -84,3 +85,22 @@ impl BlobReader for io::Cursor<&'static [u8; 0]> {}
 impl BlobReader for io::Cursor<Vec<u8>> {}
 impl BlobReader for io::Cursor<bytes::Bytes> {}
 impl BlobReader for tokio::fs::File {}
+
+#[async_trait]
+impl<T: BlobService + ?Sized> BlobService for Arc<T> {
+    async fn has(&self, digest: &B3Digest) -> io::Result<bool> {
+        (**self).has(digest).await
+    }
+
+    async fn open_read(&self, digest: &B3Digest) -> io::Result<Option<Box<dyn BlobReader>>> {
+        (**self).open_read(digest).await
+    }
+
+    async fn open_write(&self) -> Box<dyn BlobWriter> {
+        (**self).open_write().await
+    }
+
+    async fn chunks(&self, digest: &B3Digest) -> io::Result<Option<Vec<ChunkMeta>>> {
+        (**self).chunks(digest).await
+    }
+}

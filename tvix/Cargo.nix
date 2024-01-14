@@ -2755,7 +2755,12 @@ rec {
         crateName = "fuse-backend-rs";
         version = "0.11.0";
         edition = "2018";
-        sha256 = "0jyldvp0kvjk21j5vqga42lkksaf7zg8jkj3l6h2dv20kyl66nif";
+        workspace_member = null;
+        src = pkgs.fetchgit {
+          url = "https://github.com/cbrewster/fuse-backend-rs";
+          rev = "bc4ac70b92b1204014b59ad008e1595e86685589";
+          sha256 = "1hz8fw60514shsnblnzfkb697v747am3mha9nilswaks2ai9llk7";
+        };
         authors = [
           "Liu Bo <bo.liu@linux.alibaba.com>"
           "Liu Jiang <gerry@linux.alibaba.com>"
@@ -2765,6 +2770,15 @@ rec {
           {
             name = "arc-swap";
             packageId = "arc-swap";
+          }
+          {
+            name = "async-stream";
+            packageId = "async-stream";
+          }
+          {
+            name = "async-trait";
+            packageId = "async-trait";
+            optional = true;
           }
           {
             name = "bitflags";
@@ -2781,6 +2795,15 @@ rec {
             packageId = "core-foundation-sys";
             optional = true;
             target = { target, features }: ("macos" == target."os" or null);
+          }
+          {
+            name = "futures";
+            packageId = "futures";
+          }
+          {
+            name = "io-uring";
+            packageId = "io-uring";
+            optional = true;
           }
           {
             name = "lazy_static";
@@ -2802,6 +2825,22 @@ rec {
           {
             name = "nix";
             packageId = "nix 0.24.3";
+          }
+          {
+            name = "tokio";
+            packageId = "tokio";
+            optional = true;
+          }
+          {
+            name = "tokio-uring";
+            packageId = "tokio-uring";
+            optional = true;
+          }
+          {
+            name = "tokio-uring";
+            packageId = "tokio-uring";
+            optional = true;
+            target = { target, features }: ("linux" == target."os" or null);
           }
           {
             name = "vhost";
@@ -2856,7 +2895,7 @@ rec {
           "virtiofs" = [ "virtio-queue" "caps" "vmm-sys-util" ];
           "vmm-sys-util" = [ "dep:vmm-sys-util" ];
         };
-        resolvedDefaultFeatures = [ "caps" "core-foundation-sys" "default" "fusedev" "vhost" "vhost-user-fs" "virtio-queue" "virtiofs" "vmm-sys-util" ];
+        resolvedDefaultFeatures = [ "async-io" "async-trait" "caps" "core-foundation-sys" "default" "fusedev" "io-uring" "tokio" "tokio-uring" "vhost" "vhost-user-fs" "virtio-queue" "virtiofs" "vmm-sys-util" ];
       };
       "futures" = rec {
         crateName = "futures";
@@ -3619,7 +3658,7 @@ rec {
           }
           {
             name = "socket2";
-            packageId = "socket2";
+            packageId = "socket2 0.5.5";
             optional = true;
             features = [ "all" ];
           }
@@ -4031,6 +4070,33 @@ rec {
           "wasm-bindgen_rs" = [ "dep:wasm-bindgen_rs" ];
           "web-sys" = [ "dep:web-sys" ];
         };
+      };
+      "io-uring" = rec {
+        crateName = "io-uring";
+        version = "0.5.13";
+        edition = "2018";
+        sha256 = "0k4qrzhnc8j50g79ki8n79d4yffvcmwq5dj3bj6gs95rrw0il7nx";
+        authors = [
+          "quininer <quininer@live.com>"
+        ];
+        dependencies = [
+          {
+            name = "bitflags";
+            packageId = "bitflags 1.3.2";
+          }
+          {
+            name = "libc";
+            packageId = "libc";
+            usesDefaultFeatures = false;
+          }
+        ];
+        features = {
+          "bindgen" = [ "dep:bindgen" ];
+          "direct-syscall" = [ "sc" ];
+          "overwrite" = [ "bindgen" ];
+          "sc" = [ "dep:sc" ];
+        };
+        resolvedDefaultFeatures = [ "unstable" ];
       };
       "ipnet" = rec {
         crateName = "ipnet";
@@ -8275,6 +8341,16 @@ rec {
         ];
 
       };
+      "scoped-tls" = rec {
+        crateName = "scoped-tls";
+        version = "1.0.1";
+        edition = "2015";
+        sha256 = "15524h04mafihcvfpgxd8f4bgc3k95aclz8grjkg9a0rxcvn9kz1";
+        authors = [
+          "Alex Crichton <alex@alexcrichton.com>"
+        ];
+
+      };
       "scopeguard" = rec {
         crateName = "scopeguard";
         version = "1.2.0";
@@ -8885,7 +8961,32 @@ rec {
         features = { };
         resolvedDefaultFeatures = [ "rust_1_39" "rust_1_46" ];
       };
-      "socket2" = rec {
+      "socket2 0.4.10" = rec {
+        crateName = "socket2";
+        version = "0.4.10";
+        edition = "2018";
+        sha256 = "03ack54dxhgfifzsj14k7qa3r5c9wqy3v6mqhlim99cc03y1cycz";
+        authors = [
+          "Alex Crichton <alex@alexcrichton.com>"
+          "Thomas de Zeeuw <thomasdezeeuw@gmail.com>"
+        ];
+        dependencies = [
+          {
+            name = "libc";
+            packageId = "libc";
+            target = { target, features }: (target."unix" or false);
+          }
+          {
+            name = "winapi";
+            packageId = "winapi";
+            target = { target, features }: (target."windows" or false);
+            features = [ "handleapi" "ws2ipdef" "ws2tcpip" ];
+          }
+        ];
+        features = { };
+        resolvedDefaultFeatures = [ "all" ];
+      };
+      "socket2 0.5.5" = rec {
         crateName = "socket2";
         version = "0.5.5";
         edition = "2021";
@@ -9643,7 +9744,7 @@ rec {
           }
           {
             name = "socket2";
-            packageId = "socket2";
+            packageId = "socket2 0.5.5";
             optional = true;
             target = { target, features }: (!(builtins.elem "wasm" target."family"));
             features = [ "all" ];
@@ -9668,7 +9769,7 @@ rec {
           }
           {
             name = "socket2";
-            packageId = "socket2";
+            packageId = "socket2 0.5.5";
             target = { target, features }: (!(builtins.elem "wasm" target."family"));
           }
           {
@@ -9762,7 +9863,7 @@ rec {
           }
           {
             name = "socket2";
-            packageId = "socket2";
+            packageId = "socket2 0.5.5";
             optional = true;
             features = [ "all" ];
           }
@@ -10045,6 +10146,53 @@ rec {
           }
         ];
 
+      };
+      "tokio-uring" = rec {
+        crateName = "tokio-uring";
+        version = "0.4.0";
+        edition = "2018";
+        sha256 = "1vsmw482n01lj33dr7rnjxmdcdhq5yys6rbwahx0n0vy2fxh4phd";
+        authors = [
+          "Tokio Contributors <team@tokio.rs>"
+        ];
+        dependencies = [
+          {
+            name = "io-uring";
+            packageId = "io-uring";
+            features = [ "unstable" ];
+          }
+          {
+            name = "libc";
+            packageId = "libc";
+          }
+          {
+            name = "scoped-tls";
+            packageId = "scoped-tls";
+          }
+          {
+            name = "slab";
+            packageId = "slab";
+          }
+          {
+            name = "socket2";
+            packageId = "socket2 0.4.10";
+            features = [ "all" ];
+          }
+          {
+            name = "tokio";
+            packageId = "tokio";
+            features = [ "net" "rt" ];
+          }
+        ];
+        devDependencies = [
+          {
+            name = "tokio";
+            packageId = "tokio";
+          }
+        ];
+        features = {
+          "bytes" = [ "dep:bytes" ];
+        };
       };
       "tokio-util" = rec {
         crateName = "tokio-util";
@@ -11234,6 +11382,7 @@ rec {
             name = "fuse-backend-rs";
             packageId = "fuse-backend-rs";
             optional = true;
+            features = [ "async-io" ];
           }
           {
             name = "futures";
@@ -12061,7 +12210,7 @@ rec {
           }
         ];
         features = {
-          "default" = [ "fuse" "otlp" "tonic-reflection" ];
+          "default" = [ "fuse" "tonic-reflection" ];
           "fuse" = [ "tvix-castore/fuse" ];
           "otlp" = [ "dep:opentelemetry" "dep:opentelemetry-otlp" "dep:opentelemetry_sdk" ];
           "tonic-reflection" = [ "dep:tonic-reflection" "tvix-castore/tonic-reflection" ];
@@ -13363,7 +13512,7 @@ rec {
         features = {
           "debug" = [ "impl-debug" ];
         };
-        resolvedDefaultFeatures = [ "basetsd" "consoleapi" "errhandlingapi" "fileapi" "handleapi" "knownfolders" "minwindef" "ntstatus" "objbase" "processenv" "processthreadsapi" "shellapi" "shlobj" "std" "stringapiset" "synchapi" "sysinfoapi" "winbase" "wincon" "winerror" "winnt" "winuser" ];
+        resolvedDefaultFeatures = [ "basetsd" "consoleapi" "errhandlingapi" "fileapi" "handleapi" "knownfolders" "minwindef" "ntstatus" "objbase" "processenv" "processthreadsapi" "shellapi" "shlobj" "std" "stringapiset" "synchapi" "sysinfoapi" "winbase" "wincon" "winerror" "winnt" "winuser" "ws2ipdef" "ws2tcpip" ];
       };
       "winapi-i686-pc-windows-gnu" = rec {
         crateName = "winapi-i686-pc-windows-gnu";

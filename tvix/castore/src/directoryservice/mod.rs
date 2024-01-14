@@ -1,5 +1,8 @@
 use crate::{proto, B3Digest, Error};
 use futures::stream::BoxStream;
+use futures::Stream;
+use std::pin::Pin;
+use std::sync::Arc;
 use tonic::async_trait;
 
 mod from_addr;
@@ -78,4 +81,26 @@ pub trait DirectoryPutter: Send {
     /// If there's been any invalid Directory message uploaded, and error *must*
     /// be returned.
     async fn close(&mut self) -> Result<B3Digest, Error>;
+}
+
+#[async_trait]
+impl<T: DirectoryService + ?Sized> DirectoryService for Arc<T> {
+    async fn get(&self, digest: &B3Digest) -> Result<Option<proto::Directory>, Error> {
+        (**self).get(digest).await
+    }
+
+    async fn put(&self, directory: proto::Directory) -> Result<B3Digest, Error> {
+        (**self).put(directory).await
+    }
+
+    fn get_recursive(
+        &self,
+        root_directory_digest: &B3Digest,
+    ) -> Pin<Box<dyn Stream<Item = Result<proto::Directory, Error>> + Send + '_>> {
+        (**self).get_recursive(root_directory_digest)
+    }
+
+    fn put_multiple_start(&self) -> Box<dyn DirectoryPutter> {
+        (**self).put_multiple_start()
+    }
 }
