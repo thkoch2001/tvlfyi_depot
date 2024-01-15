@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7c891779_9c3f0161",
+        "filename": "tvix/serde/src/de.rs",
+        "patchSetId": 5
+      },
+      "lineNbr": 93,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2024-01-15T17:38:14Z",
+      "side": 1,
+      "message": "nit: slightly more idiomatic:\n```\nlet eval \u003d Evaluation {\n  strict: true,\n  io_handle,\n  ..Evaluation::new_impure()\n}\n```\n\nOr even better, make a new constructor on Evaluation",
+      "range": {
+        "startLine": 92,
+        "startChar": 1,
+        "endLine": 93,
+        "endChar": 23
+      },
+      "revId": "37c4c80369a179e8f9da2a990e0ce6756ebfc2db",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
