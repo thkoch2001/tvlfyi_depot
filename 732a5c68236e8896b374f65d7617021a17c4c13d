@@ -16,6 +16,24 @@
       "message": "wouldn\u0027t this better to make it independent of /nix/store like you did with the others?",
       "revId": "732a5c68236e8896b374f65d7617021a17c4c13d",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "be9ddbab_41b032b8",
+        "filename": "tvix/nix-compat/src/derivation/tests/mod.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 393,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-01-15T18:49:27Z",
+      "side": 1,
+      "message": "It doesn\u0027t really matter here. That\u0027s a fixture, and the tests will need to be adapted at a later point anyways, if we would use another store prefix.\n\nBut you\u0027re right, using to_string() and comparing that is shorter, so let\u0027s do that.",
+      "parentUuid": "65f6bd6f_298c1d75",
+      "revId": "732a5c68236e8896b374f65d7617021a17c4c13d",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
