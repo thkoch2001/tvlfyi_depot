@@ -16,6 +16,24 @@
       "message": "build you meant here",
       "revId": "637fa2d7d2f6f90fcbd2e62b3d637a4769e8cfcf",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "55c2c522_86bffcf5",
+        "filename": "tvix/build/src/bin/tvix-build.rs",
+        "patchSetId": 4
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-01-15T18:49:27Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f553dfc6_34699c08",
+      "revId": "637fa2d7d2f6f90fcbd2e62b3d637a4769e8cfcf",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
