@@ -34,6 +34,24 @@
       "parentUuid": "ed4721d7_5e15d6f9",
       "revId": "1e8ee191e3897ddb7da56708424b1187d14edc22",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "067818ec_cd32596e",
+        "filename": "tvix/eval/src/builtins/mod.rs",
+        "patchSetId": 29
+      },
+      "lineNbr": 216,
+      "author": {
+        "id": 1000073
+      },
+      "writtenOn": "2024-01-15T23:46:39Z",
+      "side": 1,
+      "message": "For bit xor, bit and, bit or, this is already done in our tvix tests BTW.",
+      "parentUuid": "fc89dd72_8051c342",
+      "revId": "1e8ee191e3897ddb7da56708424b1187d14edc22",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ],
   "submitRequirementResults": []
