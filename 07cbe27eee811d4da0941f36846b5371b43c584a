@@ -16,6 +16,24 @@
       "message": "build service and blob service are clashing here, I don\u0027t like this.\n\nCan you call it `BUILD` like you did somewhere else?",
       "revId": "07cbe27eee811d4da0941f36846b5371b43c584a",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f9395476_156d0700",
+        "filename": "tvix/build/src/proto/grpc_buildservice_wrapper.rs",
+        "patchSetId": 3
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-01-15T18:36:55Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "02b714cb_ed1a267a",
+      "revId": "07cbe27eee811d4da0941f36846b5371b43c584a",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
