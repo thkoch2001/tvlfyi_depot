@@ -286,7 +286,7 @@ fn eval(model: &Model) -> Output {
         return out;
     }
 
-    let mut eval = tvix_eval::Evaluation::default();
+    let mut eval = tvix_eval::Evaluation::new_pure();
     let source = eval.source_map();
 
     let result = {
