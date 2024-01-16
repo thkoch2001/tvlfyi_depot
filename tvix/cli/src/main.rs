@@ -87,6 +87,7 @@ fn interpret(code: &str, path: Option<PathBuf>, args: &Args, explain: bool) -> b
         blob_service.clone(),
         directory_service.clone(),
         path_info_service,
+        Box::<DummyBuildService>::default() as Box<dyn BuildService>,
         tokio_runtime.handle().clone(),
     ));
 
