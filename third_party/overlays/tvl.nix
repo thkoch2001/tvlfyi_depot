@@ -85,6 +85,8 @@ depot.nix.readTree.drvTargets {
       hash = "sha256-JTMe8GViCQt51WUiaaoIPmWtwEeeYrl6pBxo2DNuKig=";
     };
 
+    patches = [ ./patches/crate2nix-run-tests-in-build-source.patch ];
+
     sourceRoot = "${src.name}/crate2nix";
 
     cargoHash = "sha256-dhlSXY1CJE+JJt+6Y7W1MVMz36nwr6ny543py1TcjyY=";
