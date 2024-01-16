@@ -1,5 +1,6 @@
 use std::rc::Rc;
 use std::{fs, path::PathBuf};
+use tvix_build::buildservice::{BuildService, DummyBuildService};
 use tvix_glue::{builtins::add_derivation_builtins, configure_nix_path};
 
 use clap::Parser;
@@ -90,6 +91,7 @@ fn interpret(code: &str, path: Option<PathBuf>, args: &Args, explain: bool) -> b
         blob_service.clone(),
         directory_service.clone(),
         path_info_service,
+        Box::<DummyBuildService>::default() as Box<dyn BuildService>,
         tokio_runtime.handle().clone(),
     ));
 

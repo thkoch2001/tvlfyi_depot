@@ -16,14 +16,15 @@ use tvix_eval::EvalIO;
 ///
 /// As they need to interact with `known_paths`, we also need to pass in
 /// `known_paths`.
-pub fn add_derivation_builtins<BS, DS, PS, IO>(
+pub fn add_derivation_builtins<BS, DS, PS, BUILD, IO>(
     eval: &mut tvix_eval::Evaluation<IO>,
-    io: Rc<TvixStoreIO<BS, DS, PS>>,
+    io: Rc<TvixStoreIO<BS, DS, PS, BUILD>>,
 ) where
     IO: AsRef<dyn EvalIO>,
     BS: 'static,
     DS: 'static,
     PS: 'static,
+    BUILD: 'static,
 {
     eval.builtins
         .extend(derivation::derivation_builtins::builtins(io));
@@ -42,6 +43,7 @@ mod tests {
     use super::add_derivation_builtins;
     use nix_compat::store_path::hash_placeholder;
     use test_case::test_case;
+    use tvix_build::buildservice::{BuildService, DummyBuildService};
     use tvix_eval::{EvalIO, EvaluationResult};
     use tvix_store::utils::construct_services;
 
@@ -59,6 +61,7 @@ mod tests {
             store_services.0,
             store_services.1,
             store_services.2,
+            Box::<DummyBuildService>::default() as Box<dyn BuildService>,
             runtime.handle().clone(),
         ));
 
