@@ -1,0 +1,89 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "872c4435_aaaf1b81",
+        "filename": "tvix/cli/src/main.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 98,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-01-16T06:26:34Z",
+      "side": 1,
+      "message": "let io \u003d\nor\nlet tvix_store_io \u003d\n\nThis also contains a Tokio runtime handle, and the builder.",
+      "revId": "6814a0630757a5d0265d4c7be7f7411b3761e29f",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c23823b5_99a8dfb4",
+        "filename": "tvix/glue/src/builtins/derivation.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 129,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-01-16T06:26:34Z",
+      "side": 1,
+      "message": "No, I\u0027m asking myself \"why is KnownPaths not an attribute of TvixStoreIO\".\n\nAfter all, various IO operations trigger helper functions which trigger lookups, an we need access to known_paths there, too.",
+      "revId": "6814a0630757a5d0265d4c7be7f7411b3761e29f",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2aa4e188_e5b46aae",
+        "filename": "tvix/glue/src/builtins/derivation.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 136,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-01-16T06:26:34Z",
+      "side": 1,
+      "message": "I think it\u0027s fine if the builtins in tvix-glue use TvixStoreIO directly.",
+      "revId": "6814a0630757a5d0265d4c7be7f7411b3761e29f",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "463977e3_86ab20e7",
+        "filename": "tvix/glue/src/builtins/derivation.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 140,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-01-16T06:26:34Z",
+      "side": 1,
+      "message": "That\u0027s already visible from the type signature, you can drop this and the part below.",
+      "revId": "6814a0630757a5d0265d4c7be7f7411b3761e29f",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c6de5e54_8d9b4ed7",
+        "filename": "tvix/glue/src/builtins/mod.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-01-16T06:26:34Z",
+      "side": 1,
+      "message": "tvix_store_io",
+      "revId": "6814a0630757a5d0265d4c7be7f7411b3761e29f",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
