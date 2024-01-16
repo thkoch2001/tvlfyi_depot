@@ -10618,6 +10618,10 @@ rec {
           else ./glue;
         dependencies = [
           {
+            name = "async-recursion";
+            packageId = "async-recursion";
+          }
+          {
             name = "bstr";
             packageId = "bstr";
           }
@@ -10628,6 +10632,10 @@ rec {
           {
             name = "data-encoding";
             packageId = "data-encoding";
+          }
+          {
+            name = "futures";
+            packageId = "futures";
           }
           {
             name = "nix-compat";
