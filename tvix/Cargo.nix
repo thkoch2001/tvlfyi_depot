@@ -10540,6 +10540,10 @@ rec {
             packageId = "tracing";
           }
           {
+            name = "tvix-build";
+            packageId = "tvix-build";
+          }
+          {
             name = "tvix-castore";
             packageId = "tvix-castore";
           }

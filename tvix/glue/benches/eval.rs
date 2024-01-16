@@ -1,6 +1,7 @@
 use criterion::{black_box, criterion_group, criterion_main, Criterion};
 use lazy_static::lazy_static;
 use std::{env, rc::Rc, sync::Arc, time::Duration};
+use tvix_build::buildservice::{BuildService, DummyBuildService};
 use tvix_castore::{
     blobservice::{BlobService, MemoryBlobService},
     directoryservice::{DirectoryService, MemoryDirectoryService},
@@ -32,6 +33,7 @@ fn interpret(code: &str) {
         BLOB_SERVICE.clone(),
         DIRECTORY_SERVICE.clone(),
         PATH_INFO_SERVICE.clone(),
+        Box::<DummyBuildService>::default() as Box<dyn BuildService>,
         TOKIO_RUNTIME.handle().clone(),
     ));
 
