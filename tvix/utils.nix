@@ -68,6 +68,7 @@
           extraFileset = lib.fileset.fileFilter (f: f.hasExt "proto") root;
         };
         PROTO_ROOT = depot.tvix.build.protos.protos;
+        TVIX_BUILD_SANDBOX_SHELL = "${pkgs.busybox-sandbox-shell}/bin/busybox";
         nativeBuildInputs = [ pkgs.protobuf ];
         buildInputs = lib.optional pkgs.stdenv.isDarwin commonDarwinDeps;
       };
@@ -78,6 +79,7 @@
           extraFileset = lib.fileset.fileFilter (f: f.hasExt "proto") root;
         };
         PROTO_ROOT = depot.tvix.castore.protos.protos;
+        TVIX_BUILD_SANDBOX_SHELL = "/homeless-shelter";
         nativeBuildInputs = [ pkgs.protobuf ];
       };
 
@@ -95,6 +97,7 @@
           extraFileset = lib.fileset.fileFilter (f: f.hasExt "proto") root;
         };
         PROTO_ROOT = depot.tvix.store.protos.protos;
+        TVIX_BUILD_SANDBOX_SHELL = "/homeless-shelter";
         nativeBuildInputs = [ pkgs.protobuf ];
         # fuse-backend-rs uses DiskArbitration framework to handle mount/unmount on Darwin
         buildInputs = lib.optional pkgs.stdenv.isDarwin (commonDarwinDeps ++ pkgs.darwin.apple_sdk.frameworks.DiskArbitration);
