@@ -134,16 +134,4 @@ depot.nix.readTree.drvTargets {
       license = licenses.asl20;
     };
   };
-
-  # we're vendoring this for now, since the version upgrade has a lot of changes
-  # we can't merge it upstream yet because the Darwin build is broken
-  # https://github.com/NixOS/nixpkgs/pull/267033
-  clickhouse = (super.callPackage ./clickhouse {
-    llvmPackages = super.llvmPackages_16;
-  }).overrideAttrs (old: {
-    patches = old.patches or [ ] ++ [
-      # https://github.com/ClickHouse/ClickHouse/pull/56118
-      ./patches/clickhouse-support-reading-arrow-LargeListArray.patch
-    ];
-  });
 }
