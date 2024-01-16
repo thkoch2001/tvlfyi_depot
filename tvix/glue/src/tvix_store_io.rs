@@ -8,6 +8,7 @@ use std::{
 };
 use tokio::io::AsyncReadExt;
 use tracing::{error, instrument, warn};
+use tvix_build::buildservice::BuildService;
 use tvix_eval::{EvalIO, FileType, StdIO};
 
 use tvix_castore::{
@@ -35,24 +36,28 @@ use crate::known_paths::KnownPaths;
 /// hide this implementation detail of the glue itself so that glue can be used with more than one
 /// implementation of "Tvix Store IO" which does not necessarily bring the concept of blob service,
 /// directory service or path info service.
-pub struct TvixStoreIO<BS, DS, PS> {
+pub struct TvixStoreIO<BS, DS, PS, BUILD> {
     blob_service: BS,
     directory_service: DS,
     path_info_service: PS,
     std_io: StdIO,
+    #[allow(dead_code)]
+    build_service: BUILD,
     tokio_handle: tokio::runtime::Handle,
     pub(crate) known_paths: RefCell<KnownPaths>,
 }
 
-impl<BS, DS, PS> TvixStoreIO<BS, DS, PS>
+impl<BS, DS, PS, BUILD> TvixStoreIO<BS, DS, PS, BUILD>
 where
     DS: AsRef<dyn DirectoryService>,
     PS: AsRef<dyn PathInfoService>,
+    BUILD: AsRef<dyn BuildService>,
 {
     pub fn new(
         blob_service: BS,
         directory_service: DS,
         path_info_service: PS,
+        build_service: BUILD,
         tokio_handle: tokio::runtime::Handle,
     ) -> Self {
         Self {
@@ -60,6 +65,7 @@ where
             directory_service,
             path_info_service,
             std_io: StdIO {},
+            build_service,
             tokio_handle,
             known_paths: Default::default(),
         }
@@ -114,11 +120,12 @@ where
     }
 }
 
-impl<BS, DS, PS> EvalIO for TvixStoreIO<BS, DS, PS>
+impl<BS, DS, PS, BUILD> EvalIO for TvixStoreIO<BS, DS, PS, BUILD>
 where
     BS: AsRef<dyn BlobService> + Clone,
     DS: AsRef<dyn DirectoryService>,
     PS: AsRef<dyn PathInfoService>,
+    BUILD: AsRef<dyn BuildService>,
 {
     #[instrument(skip(self), ret, err)]
     fn path_exists(&self, path: &Path) -> io::Result<bool> {
@@ -300,6 +307,7 @@ mod tests {
     use std::{path::Path, rc::Rc, sync::Arc};
 
     use tempfile::TempDir;
+    use tvix_build::buildservice::{BuildService, DummyBuildService};
     use tvix_castore::{
         blobservice::{BlobService, MemoryBlobService},
         directoryservice::{DirectoryService, MemoryDirectoryService},
@@ -322,12 +330,14 @@ mod tests {
             blob_service.clone(),
             directory_service.clone(),
         )) as Box<dyn PathInfoService>;
+
         let runtime = tokio::runtime::Runtime::new().unwrap();
 
         let io = Rc::new(TvixStoreIO::new(
             blob_service.clone(),
             directory_service.clone(),
             path_info_service,
+            Box::<DummyBuildService>::default() as Box<dyn BuildService>,
             runtime.handle().clone(),
         ));
         let mut eval = tvix_eval::Evaluation::new(io.clone() as Rc<dyn EvalIO>, true);
