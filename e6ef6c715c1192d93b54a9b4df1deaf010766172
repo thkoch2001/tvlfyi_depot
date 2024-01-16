@@ -16,6 +16,24 @@
       "message": "I opened https://github.com/nix-community/crate2nix/issues/327.",
       "revId": "e6ef6c715c1192d93b54a9b4df1deaf010766172",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "abe4d9ee_a68cb7e9",
+        "filename": "tvix/eval/src/tests/mod.rs",
+        "patchSetId": 4
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 1000073
+      },
+      "writtenOn": "2024-01-16T01:11:59Z",
+      "side": 1,
+      "message": "https://github.com/nix-community/crate2nix/pull/328 ; can I leave you pulling it in our stuff? Thanks!",
+      "parentUuid": "7b323ce8_f795764e",
+      "revId": "e6ef6c715c1192d93b54a9b4df1deaf010766172",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
