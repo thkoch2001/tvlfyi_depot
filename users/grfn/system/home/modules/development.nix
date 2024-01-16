@@ -57,7 +57,7 @@ with lib;
     gdb
     lldb
     hyperfine
-    clang-tools_11
+    clang-tools
 
     clj2nix
     clojure
