@@ -163,17 +163,20 @@ type InternalDerivationBuiltinState<BS, DS, PS> = Rc<DerivationBuiltinState<BS, 
 
 #[builtins(state(
     "Rc<DerivationBuiltinState<BS, DS, PS>>",
-    "BS: 'static, DS: 'static, PS: 'static"
+    "BS: 'static, DS: 'static, PS: 'static",
+    "BS: AsRef<dyn BlobService> + Clone, DS: AsRef<dyn DirectoryService>, PS: AsRef<dyn PathInfoService>"
 ))]
 pub(crate) mod derivation_builtins {
     use std::collections::BTreeMap;
 
     use super::*;
+    use futures::pin_mut;
     use nix_compat::store_path::hash_placeholder;
-    use tvix_castore::import::ingest_entries;
+    use tvix_castore::blobservice::BlobService;
+    use tvix_castore::directoryservice::DirectoryService;
     use tvix_eval::generators::Gen;
     use tvix_eval::{NixContext, NixContextElement, NixString};
-    use tvix_store::import::import_root_node;
+    use tvix_store::pathinfoservice::PathInfoService;
     use walkdir::{DirEntry, WalkDir};
 
     #[builtin("placeholder")]
@@ -575,12 +578,17 @@ pub(crate) mod derivation_builtins {
     }
 
     #[builtin("filterSource")]
-    async fn builtin_filter_source(
-        state: Rc<DerivationBuiltinsState>,
+    async fn builtin_filter_source<BS: 'static, DS: 'static, PS: 'static>(
+        state: Rc<DerivationBuiltinState<BS, DS, PS>>,
         co: GenCo,
         #[lazy] filter: Value,
         path: Value,
-    ) -> Result<Value, ErrorKind> {
+    ) -> Result<Value, ErrorKind>
+    where
+        BS: AsRef<dyn BlobService> + Clone,
+        DS: AsRef<dyn DirectoryService>,
+        PS: AsRef<dyn PathInfoService>,
+    {
         let p = path.to_path()?;
         let mut entries_per_depths: Vec<Vec<DirEntry>> = vec![Vec::new()];
         let mut it = WalkDir::new(&*p)
@@ -647,15 +655,20 @@ pub(crate) mod derivation_builtins {
             // FUTUREWORK: determine when it's the right moment to flush a level to the ingester.
         }
 
-        let root_node = ingest_entries(
-            &state.importer.blob_service,
-            &state.importer.directory_service,
-            entries_per_depths,
-        )
-        .await
-        .expect("Failed to ingest entries");
+        let entries_stream = tvix_castore::import::leveled_entries_to_stream(entries_per_depths);
+
+        pin_mut!(entries_stream);
+
+        let root_node = state
+            .store
+            .ingest_entries(entries_stream)
+            .await
+            .expect("Failed to ingest entries");
 
         let spath = import_root_node(state.importer.path_info_service.clone(), &p, root_node)
+        let spath = state
+            .store
+            .import_root_node(p.as_ref(), name, root_node)
             .await
             .expect("Failed to import root node");
 

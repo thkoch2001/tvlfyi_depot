@@ -7,6 +7,10 @@ use crate::proto::DirectoryNode;
 use crate::proto::FileNode;
 use crate::proto::SymlinkNode;
 use crate::Error as CastoreError;
+use async_stream::stream;
+use futures::pin_mut;
+use futures::Stream;
+use std::collections::HashSet;
 use std::os::unix::ffi::OsStrExt;
 use std::{
     collections::HashMap,
@@ -14,6 +18,7 @@ use std::{
     os::unix::prelude::PermissionsExt,
     path::{Path, PathBuf},
 };
+use tokio_stream::StreamExt;
 use tracing::instrument;
 use walkdir::DirEntry;
 use walkdir::WalkDir;
@@ -192,17 +197,24 @@ where
     Ok(entries_per_depths)
 }
 
-/// Ingests the contents at a given path into the tvix store,
-/// interacting with a [BlobService] and [DirectoryService].
-/// It returns the root node or an error.
+/// This simple utility enable to convert a leveled-key vector of filesystem entries into a stream
+/// of [`DirEntry`] in a way that honors the Merkle invariant, i.e. from bottom to top.
+pub fn leveled_entries_to_stream(
+    entries_per_depths: Vec<Vec<DirEntry>>,
+) -> impl Stream<Item = DirEntry> {
+    stream! {
+        for level in entries_per_depths.into_iter().rev() {
+            for entry in level.into_iter() {
+                yield entry;
+            }
+        }
+    }
+}
+
+/// Ingests the contents at a given path into the tvix store, interacting with a [BlobService] and
+/// [DirectoryService]. It returns the root node or an error.
 ///
-/// It does not follow symlinks at the root, they will be ingested as actual
-/// symlinks.
-///
-/// It's not interacting with a PathInfoService (from tvix-store), or anything
-/// else giving it a "non-content-addressed name".
-/// It's up to the caller to possibly register it somewhere (and potentially
-/// rename it based on some naming scheme)
+/// It does not follow symlinks at the root, they will be ingested as actual symlinks.
 #[instrument(skip(blob_service, directory_service), fields(path), err)]
 pub async fn ingest_path<'a, BS, DS, P>(
     blob_service: BS,
@@ -215,87 +227,145 @@ where
     DS: AsRef<dyn DirectoryService>,
 {
     let entries = walk_path_for_insertion(path)?;
-    ingest_entries(blob_service, directory_service, entries).await
+    let entries_stream = leveled_entries_to_stream(entries);
+    pin_mut!(entries_stream);
+
+    ingest_entries(blob_service, directory_service, entries_stream).await
 }
 
-/// Ingests the given directory entries into the tvix store,
-/// interacting with a [BlobService] and [DirectoryService].
-/// It returns the root node or an error.
+/// The Merkle invariant checker is an internal structure to perform bookkeeping of all directory
+/// entries we are ingesting and verifying we are ingesting them in the right order.
 ///
-/// It does not follow symlinks at the root, they will be ingested as actual
-/// symlinks.
+/// That is, whenever we process an entry `L`, we would like to verify if we didn't process earlier
+/// an entry `P` such that `P` is an **ancestor** of `L`.
 ///
-/// It's not interacting with a PathInfoService (from tvix-store), or anything
-/// else giving it a "non-content-addressed name".
-/// It's up to the caller to possibly register it somewhere (and potentially
-/// rename it based on some naming scheme)
-#[instrument(skip(blob_service, directory_service), err)]
-pub async fn ingest_entries<'a, BS, DS>(
+/// If such a thing happened, it means that we have processed something like:
+///
+///```none
+///        A
+///       / \
+///      B   C
+///     / \   \
+///    G  F    P <--------- processed before this one
+///           / \                                  |
+///          D  E                                  |
+///              \                                 |
+///               L  <-----------------------------+
+/// ```
+///
+/// This is exactly what must never happen.
+///
+/// Note: this checker is local, it can only see what happens on our side, not on the remote side,
+/// i.e. the different remote services.
+#[derive(Default)]
+struct MerkleInvariantChecker {
+    seen: HashSet<PathBuf>,
+}
+
+impl MerkleInvariantChecker {
+    /// See a directory entry and remember it.
+    fn see(&mut self, node: &DirEntry) {
+        self.seen.insert(node.path().to_owned());
+    }
+
+    /// Returns a potential ancestor already seen for that directory entry.
+    fn find_ancestor(&self, node: &DirEntry) -> Option<PathBuf> {
+        for anc in node.path().ancestors() {
+            if self.seen.contains(anc) {
+                return Some(anc.to_owned());
+            }
+        }
+
+        None
+    }
+}
+
+/// Ingests the given directory entries into the tvix store, interacting with a [BlobService] and
+/// [DirectoryService]. It returns the root node or an error.
+///
+/// It does not follow symlinks at the root, they will be ingested as actual symlinks.
+#[instrument(skip(blob_service, directory_service, entries_async_iterator), err)]
+pub async fn ingest_entries<'a, BS, DS, S>(
     blob_service: BS,
     directory_service: DS,
-    entries_per_depths: Vec<Vec<DirEntry>>,
+    mut entries_async_iterator: S,
 ) -> Result<Node, Error>
 where
     BS: AsRef<dyn BlobService> + Clone,
     DS: AsRef<dyn DirectoryService>,
+    S: Stream<Item = DirEntry> + std::marker::Unpin,
 {
     let mut directories: HashMap<PathBuf, Directory> = HashMap::default();
 
     let mut directory_putter = directory_service.as_ref().put_multiple_start();
 
-    debug_assert!(!entries_per_depths[0].is_empty(), "No root node available!");
+    #[cfg(debug_assertions)]
+    let mut invariant_checker: MerkleInvariantChecker = Default::default();
 
     // We need to process a directory's children before processing
     // the directory itself in order to have all the data needed
     // to compute the hash.
-    for level in entries_per_depths.into_iter().rev() {
-        for entry in level.into_iter() {
-            // process_entry wants an Option<Directory> in case the entry points to a directory.
-            // make sure to provide it.
-            // If the directory has contents, we already have it in
-            // `directories` due to the use of contents_first on WalkDir.
-            let maybe_directory: Option<Directory> = {
-                if entry.file_type().is_dir() {
-                    Some(
-                        directories
-                            .entry(entry.path().to_path_buf())
-                            .or_default()
-                            .clone(),
-                    )
-                } else {
-                    None
-                }
-            };
-
-            let node = process_entry(
-                blob_service.clone(),
-                &mut directory_putter,
-                &entry,
-                maybe_directory,
-            )
-            .await?;
-
-            if entry.depth() == 0 {
-                // Make sure all the directories are flushed.
-                if entry.file_type().is_dir() {
-                    directory_putter.close().await?;
-                }
-                return Ok(node);
+    while let Some(entry) = entries_async_iterator.next().await {
+        // process_entry wants an Option<Directory> in case the entry points to a directory.
+        // make sure to provide it.
+        // If the directory has contents, we already have it in
+        // `directories` due to the use of contents_first on WalkDir.
+        let maybe_directory: Option<Directory> = {
+            if entry.file_type().is_dir() {
+                Some(
+                    directories
+                        .entry(entry.path().to_path_buf())
+                        .or_default()
+                        .clone(),
+                )
             } else {
-                // calculate the parent path, and make sure we register the node there.
-                // NOTE: entry.depth() > 0
-                let parent_path = entry.path().parent().unwrap().to_path_buf();
+                None
+            }
+        };
 
-                // record node in parent directory, creating a new [proto:Directory] if not there yet.
-                let parent_directory = directories.entry(parent_path).or_default();
-                match node {
-                    Node::Directory(e) => parent_directory.directories.push(e),
-                    Node::File(e) => parent_directory.files.push(e),
-                    Node::Symlink(e) => parent_directory.symlinks.push(e),
-                }
+        #[cfg(debug_assertions)]
+        {
+            // If we find an ancestor before we see this entry, this means that we broke the caller
+            // broke the contract, refer to the documentation of the invariant checker to
+            // understand the reasoning here.
+            if let Some(ancestor) = invariant_checker.find_ancestor(&entry) {
+                panic!("Tvix bug: merkle invariant checker discovered that {} was processed before {}!",
+                    ancestor.display(),
+                    entry.path().display()
+                );
+            }
+
+            invariant_checker.see(&entry);
+        }
+
+        let node = process_entry(
+            blob_service.clone(),
+            &mut directory_putter,
+            &entry,
+            maybe_directory,
+        )
+        .await?;
+
+        if entry.depth() == 0 {
+            // Make sure all the directories are flushed.
+            if entry.file_type().is_dir() {
+                directory_putter.close().await?;
+            }
+            return Ok(node);
+        } else {
+            // calculate the parent path, and make sure we register the node there.
+            // NOTE: entry.depth() > 0
+            let parent_path = entry.path().parent().unwrap().to_path_buf();
+
+            // record node in parent directory, creating a new [proto:Directory] if not there yet.
+            let parent_directory = directories.entry(parent_path).or_default();
+            match node {
+                Node::Directory(e) => parent_directory.directories.push(e),
+                Node::File(e) => parent_directory.files.push(e),
+                Node::Symlink(e) => parent_directory.symlinks.push(e),
             }
         }
     }
     // unreachable, we already bailed out before if root doesn't exist.
-    unreachable!()
+    unreachable!("Tvix bug: no root node existed during ingestion")
 }

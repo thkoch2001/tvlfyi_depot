@@ -3412,6 +3412,7 @@ dependencies = [
  "bytes",
  "criterion",
  "data-encoding",
+ "futures",
  "lazy_static",
  "nix-compat",
  "serde",
