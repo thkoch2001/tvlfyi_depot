@@ -49,6 +49,7 @@ let
 
       tvix-build = prev: {
         PROTO_ROOT = depot.tvix.build.protos.protos;
+        TVIX_BUILD_SANDBOX_SHELL = "${pkgs.busybox-sandbox-shell}/bin/busybox";
         nativeBuildInputs = protobufDep prev;
         buildInputs = darwinDeps;
       };
