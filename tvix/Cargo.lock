@@ -3373,10 +3373,12 @@ dependencies = [
 name = "tvix-glue"
 version = "0.1.0"
 dependencies = [
+ "async-recursion",
  "bstr",
  "bytes",
  "criterion",
  "data-encoding",
+ "futures",
  "lazy_static",
  "nix-compat",
  "pretty_assertions",
