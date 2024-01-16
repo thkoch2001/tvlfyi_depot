@@ -18,6 +18,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "d0798b1e_07b6bb0e",
+        "filename": "tvix/cli/src/main.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 98,
+      "author": {
+        "id": 1000073
+      },
+      "writtenOn": "2024-01-16T06:38:52Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "872c4435_aaaf1b81",
+      "revId": "6814a0630757a5d0265d4c7be7f7411b3761e29f",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "c23823b5_99a8dfb4",
@@ -31,6 +49,24 @@
       "writtenOn": "2024-01-16T06:26:34Z",
       "side": 1,
       "message": "No, I\u0027m asking myself \"why is KnownPaths not an attribute of TvixStoreIO\".\n\nAfter all, various IO operations trigger helper functions which trigger lookups, an we need access to known_paths there, too.",
+      "revId": "6814a0630757a5d0265d4c7be7f7411b3761e29f",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f1cabb0a_a03cb894",
+        "filename": "tvix/glue/src/builtins/derivation.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 129,
+      "author": {
+        "id": 1000073
+      },
+      "writtenOn": "2024-01-16T06:38:52Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "c23823b5_99a8dfb4",
       "revId": "6814a0630757a5d0265d4c7be7f7411b3761e29f",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
@@ -69,6 +105,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "436794d9_1e366a24",
+        "filename": "tvix/glue/src/builtins/derivation.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 140,
+      "author": {
+        "id": 1000073
+      },
+      "writtenOn": "2024-01-16T06:38:52Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "463977e3_86ab20e7",
+      "revId": "6814a0630757a5d0265d4c7be7f7411b3761e29f",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "c6de5e54_8d9b4ed7",
@@ -82,6 +136,24 @@
       "writtenOn": "2024-01-16T06:26:34Z",
       "side": 1,
       "message": "tvix_store_io",
+      "revId": "6814a0630757a5d0265d4c7be7f7411b3761e29f",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f75d1ff2_51af6f0f",
+        "filename": "tvix/glue/src/builtins/mod.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1000073
+      },
+      "writtenOn": "2024-01-16T06:38:52Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c6de5e54_8d9b4ed7",
       "revId": "6814a0630757a5d0265d4c7be7f7411b3761e29f",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
