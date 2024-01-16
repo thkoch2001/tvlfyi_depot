@@ -39,6 +39,7 @@ pkgs.mkShell {
     pkgs.mdbook-plantuml
     pkgs.nix_2_3 # b/313
     pkgs.pkg-config
+    pkgs.runc
     pkgs.rust-analyzer
     pkgs.rustc
     pkgs.rustfmt
@@ -57,6 +58,7 @@ pkgs.mkShell {
   # should also benchmark with a more static nixpkgs checkout, so nixpkgs
   # refactorings are not observed as eval perf changes.
   shellHook = ''
+    export TVIX_BUILD_SANDBOX_SHELL=${pkgs.busybox-sandbox-shell}/bin/busybox
     export TVIX_BENCH_NIX_PATH=nixpkgs=${pkgs.path}
   '';
 }

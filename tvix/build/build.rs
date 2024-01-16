@@ -34,5 +34,7 @@ fn main() -> Result<()> {
                 Some(proto_root) => proto_root.to_str().unwrap().to_owned(),
                 None => "../..".to_string(),
             }],
-        )
+        )?;
+
+    Ok(())
 }
