@@ -7,7 +7,7 @@ let
 
     command = pkgs.writeShellScript "tvix-eval-${builtins.replaceStrings [".drv"] ["-drv"] attrset}" ''
       TVIX_OUTPUT=$(result/bin/tvix -E '(import ${pkgs.path} {}).${attrset}')
-      EXPECTED='${/* the verbatim expected Tvix output: */ "=> \"${expectedPath}\" :: string"}'
+      EXPECTED='${/* the verbatim expected Tvix output: */ "=> \"${builtins.unsafeDiscardStringContext expectedPath}\" :: string"}'
 
       echo "Tvix output: ''${TVIX_OUTPUT}"
       if [ "$TVIX_OUTPUT" != "$EXPECTED" ]; then
