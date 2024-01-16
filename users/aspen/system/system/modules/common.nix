@@ -4,9 +4,7 @@ let
 
   depot = import ../../../../.. { };
 
-in
-
-with lib;
+in with lib;
 
 {
   boot = {
@@ -20,9 +18,7 @@ with lib;
   systemd.services.NetworkManager-wait-online.enable = lib.mkForce false;
   systemd.services.systemd-networkd-wait-online.enable = lib.mkForce false;
 
-  i18n = {
-    defaultLocale = "en_US.UTF-8";
-  };
+  i18n = { defaultLocale = "en_US.UTF-8"; };
 
   time.timeZone = lib.mkDefault "America/New_York";
 
@@ -62,11 +58,7 @@ with lib;
   users.users.aspen = {
     isNormalUser = true;
     initialPassword = "password";
-    extraGroups = [
-      "wheel"
-      "networkmanager"
-      "audio"
-    ];
+    extraGroups = [ "wheel" "networkmanager" "audio" ];
     shell = pkgs.zsh;
   };
 
@@ -81,9 +73,7 @@ with lib;
     };
   };
 
-  services.udev.packages = with pkgs; [
-    yubikey-personalization
-  ];
+  services.udev.packages = with pkgs; [ yubikey-personalization ];
 
   services.pcscd.enable = true;
 
@@ -94,4 +84,7 @@ with lib;
     SUBSYSTEMS=="usb", ATTRS{idVendor}=="16c0", ATTRS{idProduct}=="04[789ABCD]?", MODE:="0666"
     KERNEL=="ttyACM*", ATTRS{idVendor}=="16c0", ATTRS{idProduct}=="04[789B]?", MODE:="0666"
   '';
+
+  # For tvix oci builds
+  programs.fuse.userAllowOther = true;
 }
