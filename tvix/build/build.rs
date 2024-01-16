@@ -1,4 +1,7 @@
+use core::panic;
 use std::io::Result;
+
+const SANDBOX_SHELL: &str = "TVIX_BUILD_SANDBOX_SHELL";
 
 fn main() -> Result<()> {
     #[allow(unused_mut)]
@@ -34,5 +37,30 @@ fn main() -> Result<()> {
                 Some(proto_root) => proto_root.to_str().unwrap().to_owned(),
                 None => "../..".to_string(),
             }],
-        )
+        )?;
+
+    // expose SANDBOX_SHELL to rust builds on Linux.
+    // We're more tolerant on other OS, as we don't have an implementation yet that needs it.
+    #[cfg(target_os = "linux")]
+    {
+        // Bail out if the environment variable is not set.
+        match std::env::var(SANDBOX_SHELL) {
+            Err(_) => {
+                panic!("set {} env var to a sandbox shell", SANDBOX_SHELL);
+            }
+            Ok(sandbox_shell_path) => {
+                // Return an instruction to Cargo that will set the environment
+                // variable during rustc calls.
+                //
+                // https://doc.rust-lang.org/cargo/reference/build-scripts.html#cargorustc-envvarvalue
+                println!(
+                    "cargo:rustc-env={}={}",
+                    SANDBOX_SHELL,
+                    sandbox_shell_path.trim()
+                );
+            }
+        }
+    }
+
+    Ok(())
 }
