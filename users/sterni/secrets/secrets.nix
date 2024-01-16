@@ -4,7 +4,6 @@ let
   ];
 
   ingeborg = [
-    "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIB+OZ8f++cnvd4E2kFyn9jEoVpxi7LfjRvyQwzE8a5Ll" # edwin (legacy)
     "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIAHQn/j6NCYucpM7qIEIslVJxiFeUEKa0hi+HobTz/12"
   ];
 in
