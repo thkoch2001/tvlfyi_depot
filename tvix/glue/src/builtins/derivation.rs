@@ -120,9 +120,11 @@ fn handle_fixed_output(
     Ok(None)
 }
 
-// type InternalDerivationBuiltinState<BS, DS, PS> = Rc<TvixStoreIO<BS, DS, PS>>;
+#[builtins(state(
+    "Rc<TvixStoreIO<BS, DS, PS, BUILD>>",
+    "BS: 'static, DS: 'static, PS: 'static, BUILD: 'static",
+))]
 
-#[builtins(state("Rc<TvixStoreIO<BS, DS, PS>>", "BS: 'static, DS: 'static, PS: 'static",))]
 pub(crate) mod derivation_builtins {
     use std::collections::BTreeMap;
 
@@ -152,8 +154,8 @@ pub(crate) mod derivation_builtins {
     /// This is considered an internal function, users usually want to
     /// use the higher-level `builtins.derivation` instead.
     #[builtin("derivationStrict")]
-    async fn builtin_derivation_strict<BS, DS, PS>(
-        state: Rc<TvixStoreIO<BS, DS, PS>>,
+    async fn builtin_derivation_strict<BS, DS, PS, BUILD>(
+        state: Rc<TvixStoreIO<BS, DS, PS, BUILD>>,
         co: GenCo,
         input: Value,
     ) -> Result<Value, ErrorKind>
@@ -161,6 +163,7 @@ pub(crate) mod derivation_builtins {
         BS: 'static,
         DS: 'static,
         PS: 'static,
+        BUILD: 'static,
     {
         if input.is_catchable() {
             return Ok(input);
