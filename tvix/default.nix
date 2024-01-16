@@ -117,6 +117,7 @@ in
     inherit cargoDeps src;
     name = "tvix-rust-docs";
     PROTO_ROOT = protos;
+    TVIX_BUILD_SANDBOX_SHELL = "/homeless-shelter";
 
     nativeBuildInputs = with pkgs; [
       cargo
@@ -142,6 +143,7 @@ in
     inherit cargoDeps src;
     name = "tvix-clippy";
     PROTO_ROOT = protos;
+    TVIX_BUILD_SANDBOX_SHELL = "/homeless-shelter";
 
     buildInputs = [
       pkgs.fuse
