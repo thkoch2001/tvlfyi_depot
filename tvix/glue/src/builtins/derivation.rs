@@ -136,12 +136,6 @@ fn handle_fixed_output(
 /// In the future, we may revisit and figure out how to generalize this interface and hide this
 /// implementation detail of the glue itself so that glue can be used with more than one
 /// implementation of store.
-///
-/// The state of our builtins derivations are generic in:
-///
-/// - blob service: [`tvix_castore::blobservice::BlobService`]
-/// - directory service: [`tvix_castore::directoryservice::DirectoryService`]
-/// - path info service: [`tvix_store::pathinfoservice::PathInfoService`]
 pub struct DerivationBuiltinState<BS, DS, PS> {
     known_paths: RefCell<KnownPaths>,
     // For now, we don't use it, but the objective is to build all the machinery

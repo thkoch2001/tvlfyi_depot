@@ -95,14 +95,14 @@ fn interpret(code: &str, path: Option<PathBuf>, args: &Args, explain: bool) -> b
         })
         .expect("unable to setup {blob|directory|pathinfo}service before interpreter setup");
 
-    let store = TvixStoreIO::new(
+    let io = TvixStoreIO::new(
         blob_service.clone(),
         directory_service.clone(),
         path_info_service.clone(),
         tokio_runtime.handle().clone(),
     );
 
-    add_derivation_builtins(&mut eval, store);
+    add_derivation_builtins(&mut eval, io);
     configure_nix_path(&mut eval, &args.nix_search_path);
     eval.io_handle = Box::new(tvix_glue::tvix_io::TvixIO::new(TvixStoreIO::new(
         blob_service,

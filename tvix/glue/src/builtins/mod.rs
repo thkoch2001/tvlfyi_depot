@@ -16,11 +16,11 @@ use self::derivation::DerivationBuiltinState;
 /// `known_paths`.
 pub fn add_derivation_builtins<BS: 'static, DS: 'static, PS: 'static>(
     eval: &mut tvix_eval::Evaluation,
-    store: TvixStoreIO<BS, DS, PS>,
+    tvix_store_io: TvixStoreIO<BS, DS, PS>,
 ) {
     eval.builtins
         .extend(derivation::derivation_builtins::builtins(
-            DerivationBuiltinState::new(store).into(),
+            DerivationBuiltinState::new(tvix_store_io).into(),
         ));
 
     // Add the actual `builtins.derivation` from compiled Nix code
