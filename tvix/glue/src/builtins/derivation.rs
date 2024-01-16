@@ -121,7 +121,50 @@ fn handle_fixed_output(
     Ok(None)
 }
 
-#[builtins(state = "Rc<RefCell<KnownPaths>>")]
+/// This structure contains all state regarding derivation bookkeeping, e.g.
+/// hash derivation modulo and contains a direct accessor to a [`TvixStoreIO`]
+/// and a ['tokio::runtime::Handle`].
+///
+/// At this point, you may ask yourself, why not reusing [`tvix_eval::EvalIO`] interface and
+/// make the glue agnostic of the underlying store implementation?
+///
+/// Unfortunately, due to various limitations surrounding async traits (even in Rust ≥ 1.75.0)
+/// and a pragmatic approach, we will prefer a tight coupling with a direct access to
+/// the underlying implementations we need. After all, this crate is a glue, so it's expected
+/// to make it tightly coupled about a specific implementation.
+///
+/// In the future, we may revisit and figure out how to generalize this interface and hide this
+/// implementation detail of the glue itself so that glue can be used with more than one
+/// implementation of store.
+///
+/// The state of our builtins derivations are generic in:
+///
+/// - blob service: [`tvix_castore::blobservice::BlobService`]
+/// - directory service: [`tvix_castore::directoryservice::DirectoryService`]
+/// - path info service: [`tvix_store::pathinfoservice::PathInfoService`]
+pub struct DerivationBuiltinState<BS, DS, PS> {
+    known_paths: RefCell<KnownPaths>,
+    // For now, we don't use it, but the objective is to build all the machinery
+    // for `builtins.filterSource` and `builtins.path` with it.
+    #[allow(dead_code)]
+    store: crate::tvix_store_io::TvixStoreIO<BS, DS, PS>,
+}
+
+impl<BS, DS, PS> DerivationBuiltinState<BS, DS, PS> {
+    pub fn new(store: crate::tvix_store_io::TvixStoreIO<BS, DS, PS>) -> Self {
+        Self {
+            known_paths: Default::default(),
+            store,
+        }
+    }
+}
+
+type InternalDerivationBuiltinState<BS, DS, PS> = Rc<DerivationBuiltinState<BS, DS, PS>>;
+
+#[builtins(state(
+    "Rc<DerivationBuiltinState<BS, DS, PS>>",
+    "BS: 'static, DS: 'static, PS: 'static"
+))]
 pub(crate) mod derivation_builtins {
     use std::collections::BTreeMap;
 
@@ -151,8 +194,8 @@ pub(crate) mod derivation_builtins {
     /// This is considered an internal function, users usually want to
     /// use the higher-level `builtins.derivation` instead.
     #[builtin("derivationStrict")]
-    async fn builtin_derivation_strict(
-        state: Rc<RefCell<KnownPaths>>,
+    async fn builtin_derivation_strict<BS, DS, PS>(
+        state: InternalDerivationBuiltinState<BS, DS, PS>,
         co: GenCo,
         input: Value,
     ) -> Result<Value, ErrorKind> {
@@ -425,7 +468,7 @@ pub(crate) mod derivation_builtins {
         }
 
         populate_inputs(&mut drv, input_context);
-        let mut known_paths = state.borrow_mut();
+        let mut known_paths = state.known_paths.borrow_mut();
 
         // At this point, derivation fields are fully populated from
         // eval data structures.

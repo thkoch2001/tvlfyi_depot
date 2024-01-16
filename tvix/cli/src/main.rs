@@ -1,7 +1,5 @@
-use std::cell::RefCell;
-use std::rc::Rc;
+use std::sync::Arc;
 use std::{fs, path::PathBuf};
-use tvix_glue::known_paths::KnownPaths;
 use tvix_glue::{builtins::add_derivation_builtins, configure_nix_path};
 
 use clap::Parser;
@@ -9,6 +7,7 @@ use rustyline::{error::ReadlineError, Editor};
 use tvix_eval::observer::{DisassemblingObserver, TracingObserver};
 use tvix_eval::Value;
 use tvix_glue::tvix_store_io::TvixStoreIO;
+use tvix_store::pathinfoservice::PathInfoService;
 
 #[derive(Parser)]
 struct Args {
@@ -72,24 +71,38 @@ fn interpret(code: &str, path: Option<PathBuf>, args: &Args, explain: bool) -> b
 
     let tokio_runtime = tokio::runtime::Runtime::new().expect("failed to setup tokio runtime");
 
-    let (blob_service, directory_service, path_info_service) = tokio_runtime
+    let (blob_service, directory_service, path_info_service): (
+        Arc<_>,
+        Arc<_>,
+        Arc<dyn PathInfoService>,
+    ) = tokio_runtime
         .block_on({
             let blob_service_addr = args.blob_service_addr.clone();
             let directory_service_addr = args.directory_service_addr.clone();
             let path_info_service_addr = args.path_info_service_addr.clone();
             async move {
-                tvix_store::utils::construct_services(
+                let services = tvix_store::utils::construct_services(
                     blob_service_addr,
                     directory_service_addr,
                     path_info_service_addr,
                 )
-                .await
+                .await;
+
+                // We convert here the PathInfoService into an Arc
+                // to avoid infecting `construct_services` needlessly.
+                services.map(|(bs, ds, ps)| (bs, ds, Arc::from(ps)))
             }
         })
         .expect("unable to setup {blob|directory|pathinfo}service before interpreter setup");
 
-    let known_paths: Rc<RefCell<KnownPaths>> = Default::default();
-    add_derivation_builtins(&mut eval, known_paths.clone());
+    let store = TvixStoreIO::new(
+        blob_service.clone(),
+        directory_service.clone(),
+        path_info_service.clone(),
+        tokio_runtime.handle().clone(),
+    );
+
+    add_derivation_builtins(&mut eval, store);
     configure_nix_path(&mut eval, &args.nix_search_path);
     eval.io_handle = Box::new(tvix_glue::tvix_io::TvixIO::new(TvixStoreIO::new(
         blob_service,

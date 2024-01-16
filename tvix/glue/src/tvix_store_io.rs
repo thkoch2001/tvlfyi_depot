@@ -284,7 +284,7 @@ where
 
 #[cfg(test)]
 mod tests {
-    use std::{cell::RefCell, path::Path, rc::Rc, sync::Arc};
+    use std::{path::Path, sync::Arc};
 
     use tempfile::TempDir;
     use tvix_castore::{
@@ -294,7 +294,7 @@ mod tests {
     use tvix_eval::EvaluationResult;
     use tvix_store::pathinfoservice::{MemoryPathInfoService, PathInfoService};
 
-    use crate::{builtins::add_derivation_builtins, known_paths::KnownPaths};
+    use crate::builtins::add_derivation_builtins;
 
     use super::TvixStoreIO;
 
@@ -307,11 +307,18 @@ mod tests {
         let blob_service = Arc::new(MemoryBlobService::default()) as Arc<dyn BlobService>;
         let directory_service =
             Arc::new(MemoryDirectoryService::default()) as Arc<dyn DirectoryService>;
-        let path_info_service = Box::new(MemoryPathInfoService::new(
+        let path_info_service = Arc::new(MemoryPathInfoService::new(
             blob_service.clone(),
             directory_service.clone(),
-        )) as Box<dyn PathInfoService>;
+        )) as Arc<dyn PathInfoService>;
         let runtime = tokio::runtime::Runtime::new().unwrap();
+
+        let store = TvixStoreIO::new(
+            blob_service.clone(),
+            directory_service.clone(),
+            path_info_service.clone(),
+            runtime.handle().clone(),
+        );
 
         eval.io_handle = Box::new(TvixStoreIO::new(
             blob_service,
@@ -320,9 +327,7 @@ mod tests {
             runtime.handle().clone(),
         ));
 
-        let known_paths: Rc<RefCell<KnownPaths>> = Default::default();
-
-        add_derivation_builtins(&mut eval, known_paths.clone());
+        add_derivation_builtins(&mut eval, store);
 
         // run the evaluation itself.
         eval.evaluate(str, None)
