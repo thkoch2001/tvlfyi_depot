@@ -1,13 +1,12 @@
 use criterion::{black_box, criterion_group, criterion_main, Criterion};
 use lazy_static::lazy_static;
-use std::{cell::RefCell, env, rc::Rc, sync::Arc, time::Duration};
+use std::{env, sync::Arc, time::Duration};
 use tvix_castore::{
     blobservice::{BlobService, MemoryBlobService},
     directoryservice::{DirectoryService, MemoryDirectoryService},
 };
 use tvix_glue::{
-    builtins::add_derivation_builtins, configure_nix_path, known_paths::KnownPaths,
-    tvix_store_io::TvixStoreIO,
+    builtins::add_derivation_builtins, configure_nix_path, tvix_store_io::TvixStoreIO,
 };
 use tvix_store::pathinfoservice::{MemoryPathInfoService, PathInfoService};
 
@@ -28,8 +27,15 @@ fn interpret(code: &str) {
     // piece of code. b/262
     let mut eval = tvix_eval::Evaluation::new_impure();
 
-    let known_paths: Rc<RefCell<KnownPaths>> = Default::default();
-    add_derivation_builtins(&mut eval, known_paths);
+    // We assemble a complete store in memory.
+    let tvix_store_io = TvixStoreIO::new(
+        BLOB_SERVICE.clone(),
+        DIRECTORY_SERVICE.clone(),
+        PATH_INFO_SERVICE.clone(),
+        TOKIO_RUNTIME.handle().clone(),
+    );
+    add_derivation_builtins(&mut eval, tvix_store_io);
+
     configure_nix_path(
         &mut eval,
         // The benchmark requires TVIX_BENCH_NIX_PATH to be set, so barf out
