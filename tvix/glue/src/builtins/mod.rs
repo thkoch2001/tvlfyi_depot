@@ -1,7 +1,5 @@
 //! Contains builtins that deal with the store or builder.
-use std::{cell::RefCell, rc::Rc};
-
-use crate::known_paths::KnownPaths;
+use crate::tvix_store_io::TvixStoreIO;
 
 mod derivation;
 mod derivation_error;
@@ -14,12 +12,14 @@ pub use derivation_error::Error as DerivationError;
 ///
 /// As they need to interact with `known_paths`, we also need to pass in
 /// `known_paths`.
-pub fn add_derivation_builtins(
+pub fn add_derivation_builtins<BS: 'static, DS: 'static, PS: 'static>(
     eval: &mut tvix_eval::Evaluation,
-    known_paths: Rc<RefCell<KnownPaths>>,
+    tvix_store_io: TvixStoreIO<BS, DS, PS>,
 ) {
     eval.builtins
-        .extend(derivation::derivation_builtins::builtins(known_paths));
+        .extend(derivation::derivation_builtins::builtins(
+            tvix_store_io.into(),
+        ));
 
     // Add the actual `builtins.derivation` from compiled Nix code
     eval.src_builtins
@@ -28,12 +28,13 @@ pub fn add_derivation_builtins(
 
 #[cfg(test)]
 mod tests {
+    use crate::tvix_store_io::TvixStoreIO;
+
     use super::add_derivation_builtins;
-    use crate::known_paths::KnownPaths;
     use nix_compat::store_path::hash_placeholder;
-    use std::{cell::RefCell, rc::Rc};
     use test_case::test_case;
     use tvix_eval::EvaluationResult;
+    use tvix_store::utils::construct_services;
 
     /// evaluates a given nix expression and returns the result.
     /// Takes care of setting up the evaluator so it knows about the
@@ -41,9 +42,19 @@ mod tests {
     fn eval(str: &str) -> EvaluationResult {
         let mut eval = tvix_eval::Evaluation::new_impure();
 
-        let known_paths: Rc<RefCell<KnownPaths>> = Default::default();
+        // We assemble a complete store in memory.
+        let runtime = tokio::runtime::Runtime::new().expect("Failed to build a Tokio runtime");
+        let store_services = runtime
+            .block_on(async { construct_services("memory://", "memory://", "memory://").await })
+            .expect("Failed to construct store services in memory");
+        let tvix_store_io = TvixStoreIO::new(
+            store_services.0,
+            store_services.1,
+            store_services.2,
+            runtime.handle().clone(),
+        );
 
-        add_derivation_builtins(&mut eval, known_paths.clone());
+        add_derivation_builtins(&mut eval, tvix_store_io);
 
         // run the evaluation itself.
         eval.evaluate(str, None)
