@@ -1,10 +1,9 @@
 //! Implements `builtins.derivation`, the core of what makes Nix build packages.
 use crate::builtins::DerivationError;
-use crate::known_paths::KnownPaths;
+use crate::tvix_store_io::TvixStoreIO;
 use bstr::BString;
 use nix_compat::derivation::{Derivation, Output};
 use nix_compat::nixhash;
-use std::cell::RefCell;
 use std::collections::{btree_map, BTreeSet};
 use std::rc::Rc;
 use tvix_eval::builtin_macros::builtins;
@@ -121,7 +120,9 @@ fn handle_fixed_output(
     Ok(None)
 }
 
-#[builtins(state = "Rc<RefCell<KnownPaths>>")]
+// type InternalDerivationBuiltinState<BS, DS, PS> = Rc<TvixStoreIO<BS, DS, PS>>;
+
+#[builtins(state("Rc<TvixStoreIO<BS, DS, PS>>", "BS: 'static, DS: 'static, PS: 'static",))]
 pub(crate) mod derivation_builtins {
     use std::collections::BTreeMap;
 
@@ -151,11 +152,16 @@ pub(crate) mod derivation_builtins {
     /// This is considered an internal function, users usually want to
     /// use the higher-level `builtins.derivation` instead.
     #[builtin("derivationStrict")]
-    async fn builtin_derivation_strict(
-        state: Rc<RefCell<KnownPaths>>,
+    async fn builtin_derivation_strict<BS, DS, PS>(
+        state: Rc<TvixStoreIO<BS, DS, PS>>,
         co: GenCo,
         input: Value,
-    ) -> Result<Value, ErrorKind> {
+    ) -> Result<Value, ErrorKind>
+    where
+        BS: 'static,
+        DS: 'static,
+        PS: 'static,
+    {
         if input.is_catchable() {
             return Ok(input);
         }
@@ -425,7 +431,7 @@ pub(crate) mod derivation_builtins {
         }
 
         populate_inputs(&mut drv, input_context);
-        let mut known_paths = state.borrow_mut();
+        let mut known_paths = state.as_ref().known_paths.borrow_mut();
 
         // At this point, derivation fields are fully populated from
         // eval data structures.
