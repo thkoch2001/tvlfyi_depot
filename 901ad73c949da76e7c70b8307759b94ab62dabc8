@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ac56a1d4_180c097d",
+        "filename": "tvix/glue/src/tests/mod.rs",
+        "patchSetId": 9
+      },
+      "lineNbr": 136,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-01-17T07:49:50Z",
+      "side": 1,
+      "message": "This is not using test_generator anymore.",
+      "revId": "901ad73c949da76e7c70b8307759b94ab62dabc8",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3af3c0f5_534bfa9a",
+        "filename": "tvix/glue/src/tests/mod.rs",
+        "patchSetId": 9
+      },
+      "lineNbr": 151,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-01-17T07:49:50Z",
+      "side": 1,
+      "message": "If we don\u0027t have any of these here, maybe just remove that commented-out code?",
+      "revId": "901ad73c949da76e7c70b8307759b94ab62dabc8",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
