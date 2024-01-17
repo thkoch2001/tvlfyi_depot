@@ -3366,6 +3366,7 @@ dependencies = [
  "bytes",
  "criterion",
  "data-encoding",
+ "futures",
  "lazy_static",
  "nix-compat",
  "pretty_assertions",
@@ -3382,6 +3383,7 @@ dependencies = [
  "tvix-castore",
  "tvix-eval",
  "tvix-store",
+ "walkdir",
  "wu-manber",
 ]
 
