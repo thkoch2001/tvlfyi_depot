@@ -29,7 +29,7 @@
 
       windowManager.session = lib.singleton {
         name = "exwm";
-        start = "${config.tazjin.emacs}/bin/tazjins-emacs";
+        start = "${config.tazjin.emacs}/bin/tazjins-emacs --internal-border=0 --border-width=0";
       };
     };
   };
