@@ -18,6 +18,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "0653a230_f7ad144a",
+        "filename": "tvix/store/src/import.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 61,
+      "author": {
+        "id": 1000073
+      },
+      "writtenOn": "2024-01-17T08:07:44Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f4271a2d_aa0219fd",
+      "revId": "6c6558b18fc704099f1eff3405a8680a4fc6dd48",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "80127643_3cad9853",
@@ -31,6 +49,24 @@
       "writtenOn": "2024-01-08T09:41:52Z",
       "side": 1,
       "message": "This is just calling tvix_castore::import::ingest_path, why the separate function?",
+      "revId": "6c6558b18fc704099f1eff3405a8680a4fc6dd48",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0221a3da_7f9cfb88",
+        "filename": "tvix/store/src/import.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 81,
+      "author": {
+        "id": 1000073
+      },
+      "writtenOn": "2024-01-17T08:07:44Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "80127643_3cad9853",
       "revId": "6c6558b18fc704099f1eff3405a8680a4fc6dd48",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
