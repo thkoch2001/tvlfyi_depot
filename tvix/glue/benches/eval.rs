@@ -8,7 +8,9 @@ use tvix_castore::{
 };
 use tvix_eval::EvalIO;
 use tvix_glue::{
-    builtins::add_derivation_builtins, configure_nix_path, tvix_io::TvixIO,
+    builtins::{add_derivation_builtins, add_import_builtins},
+    configure_nix_path,
+    tvix_io::TvixIO,
     tvix_store_io::TvixStoreIO,
 };
 use tvix_store::pathinfoservice::{MemoryPathInfoService, PathInfoService};
@@ -43,7 +45,8 @@ fn interpret(code: &str) {
         true,
     );
 
-    add_derivation_builtins(&mut eval, tvix_store_io);
+    add_derivation_builtins(&mut eval, tvix_store_io.clone());
+    add_import_builtins(&mut eval, tvix_store_io);
     configure_nix_path(
         &mut eval,
         // The benchmark requires TVIX_BENCH_NIX_PATH to be set, so barf out
