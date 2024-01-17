@@ -16,6 +16,24 @@
       "message": "Rename this to filter_and_ingest, and only have it return the root_node (and not do any calculation inside).\n\nWe can then have the calculation, and potential PathInfo assembly further down here, and see how we can move it into functions later.",
       "revId": "db7637c8a16d70bf62866e2dc6131291f6ed751b",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4e27c773_ec9a6f8f",
+        "filename": "tvix/glue/src/builtins/derivation.rs",
+        "patchSetId": 13
+      },
+      "lineNbr": 705,
+      "author": {
+        "id": 1000073
+      },
+      "writtenOn": "2024-01-17T07:33:08Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c4184715_6e6803a0",
+      "revId": "db7637c8a16d70bf62866e2dc6131291f6ed751b",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
