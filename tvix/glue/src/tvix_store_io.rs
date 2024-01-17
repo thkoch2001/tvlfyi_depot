@@ -279,6 +279,7 @@ where
         let output_path = self.tokio_handle.block_on(async {
             tvix_store::import::import_path_as_recursive_fod(
                 path,
+                tvix_store::import::path_to_name(path)?,
                 &self.blob_service,
                 &self.directory_service,
                 &self.path_info_service,
