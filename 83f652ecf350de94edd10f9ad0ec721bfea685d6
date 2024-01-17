@@ -33,6 +33,24 @@
       "message": "please add a readme/module docstring explaining what this does, the files it expect to have around where and these that it produces, and the format these are expected in.\n\nI assume the tooling to produce some of the parquet files is not yet in depot, so some docs around the expected format would be appropriate.",
       "revId": "83f652ecf350de94edd10f9ad0ec721bfea685d6",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "23bbb274_1d318a90",
+        "filename": "tvix/tools/crunch-v2/src/main.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1000005
+      },
+      "writtenOn": "2024-01-17T19:18:14Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d316c446_79d27b28",
+      "revId": "83f652ecf350de94edd10f9ad0ec721bfea685d6",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
