@@ -2,16 +2,21 @@
 use crate::builtins::DerivationError;
 use crate::tvix_store_io::TvixStoreIO;
 use bstr::BString;
+use futures::pin_mut;
 use nix_compat::derivation::{Derivation, Output};
 use nix_compat::nixhash;
 use std::collections::{btree_map, BTreeSet};
+use std::path::Path;
 use std::rc::Rc;
+use tvix_castore::blobservice::BlobService;
+use tvix_castore::directoryservice::DirectoryService;
 use tvix_eval::builtin_macros::builtins;
 use tvix_eval::generators::{self, emit_warning_kind, GenCo};
 use tvix_eval::{
     AddContext, CatchableErrorKind, CoercionKind, ErrorKind, NixAttrs, NixContext,
     NixContextElement, Value, WarningKind,
 };
+use tvix_store::pathinfoservice::PathInfoService;
 
 // Constants used for strangely named fields in derivation inputs.
 const STRUCTURED_ATTRS: &str = "__structuredAttrs";
@@ -120,11 +125,105 @@ fn handle_fixed_output(
     Ok(None)
 }
 
-type InternalDerivationBuiltinState<BS, DS, PS> = Rc<TvixStoreIO<BS, DS, PS>>;
+async fn filtered_ingest<BS, DS, PS>(
+    state: InternalDerivationBuiltinState<BS, DS, PS>,
+    co: GenCo,
+    path: &Path,
+    filter: Option<&Value>,
+) -> Result<tvix_castore::proto::node::Node, ErrorKind>
+where
+    BS: AsRef<dyn BlobService> + Clone,
+    DS: AsRef<dyn DirectoryService>,
+    PS: AsRef<dyn PathInfoService>,
+{
+    let mut entries_per_depths: Vec<Vec<walkdir::DirEntry>> = vec![Vec::new()];
+    let mut it = walkdir::WalkDir::new(path)
+        .follow_links(false)
+        .follow_root_links(false)
+        .contents_first(false)
+        .sort_by_file_name()
+        .into_iter();
 
+    // Skip root node.
+    entries_per_depths[0].push(
+        it.next()
+            .expect("Failed to obtain root node")
+            .expect("Failed to read root node"),
+    );
+
+    while let Some(entry) = it.next() {
+        // Entry could be a NotFound, if the root path specified does not exist.
+        let entry = entry.expect("Failed to find the entry");
+
+        let file_type = if entry.file_type().is_dir() {
+            "directory"
+        } else if entry.file_type().is_file() {
+            "file"
+        } else if entry.file_type().is_symlink() {
+            "symlink"
+        } else {
+            "other"
+        };
+
+        let should_keep: bool = if let Some(filter) = filter {
+            generators::request_force(
+                &co,
+                generators::request_call_with(
+                    &co,
+                    filter.clone(),
+                    [
+                        Value::String(entry.path().to_string_lossy().as_ref().into()),
+                        Value::String(file_type.into()),
+                    ],
+                )
+                .await,
+            )
+            .await
+            .as_bool()?
+        } else {
+            true
+        };
+
+        if !should_keep {
+            println!("Skipping {:?}...", entry);
+            if file_type == "directory" {
+                it.skip_current_dir();
+            }
+            continue;
+        } else {
+            println!("Keeping {:?}...", entry);
+        }
+
+        if entry.depth() >= entries_per_depths.len() {
+            debug_assert!(
+                entry.depth() == entries_per_depths.len(),
+                "We should not be allocating more than one level at once, requested node at depth {}, had entries per depth containing {} levels",
+                entry.depth(),
+                entries_per_depths.len()
+            );
+
+            entries_per_depths.push(vec![entry]);
+        } else {
+            entries_per_depths[entry.depth()].push(entry);
+        }
+
+        // FUTUREWORK: determine when it's the right moment to flush a level to the ingester.
+    }
+
+    let entries_stream = tvix_castore::import::leveled_entries_to_stream(entries_per_depths);
+
+    pin_mut!(entries_stream);
+
+    Ok(state
+        .ingest_entries_sync(entries_stream)
+        .expect("Failed to ingest entries"))
+}
+
+type InternalDerivationBuiltinState<BS, DS, PS> = Rc<TvixStoreIO<BS, DS, PS>>;
 #[builtins(state(
     "InternalDerivationBuiltinState<BS, DS, PS>",
     "BS: 'static, DS: 'static, PS: 'static",
+    "BS: AsRef<dyn BlobService> + Clone, DS: AsRef<dyn DirectoryService>, PS: AsRef<dyn PathInfoService>"
 ))]
 pub(crate) mod derivation_builtins {
     use std::collections::BTreeMap;
@@ -133,6 +232,7 @@ pub(crate) mod derivation_builtins {
     use nix_compat::store_path::hash_placeholder;
     use tvix_eval::generators::Gen;
     use tvix_eval::{NixContext, NixContextElement, NixString};
+    use tvix_store::pathinfoservice::PathInfoService;
 
     #[builtin("placeholder")]
     async fn builtin_placeholder(co: GenCo, input: Value) -> Result<Value, ErrorKind> {
@@ -529,6 +629,125 @@ pub(crate) mod derivation_builtins {
         // TODO: actually persist the file in the store at that path ...
 
         Ok(Value::String(NixString::new_context_from(context, &path)))
+    }
+
+    #[builtin("path")]
+    async fn builtin_path<BS: 'static, DS: 'static, PS: 'static>(
+        state: InternalDerivationBuiltinState<BS, DS, PS>,
+        co: GenCo,
+        args: Value,
+    ) -> Result<Value, ErrorKind>
+    where
+        BS: AsRef<dyn BlobService> + Clone,
+        DS: AsRef<dyn DirectoryService>,
+        PS: AsRef<dyn PathInfoService>,
+    {
+        let args = args.to_attrs()?;
+        let path = args.select_required("path")?;
+        let path = generators::request_force(&co, path.clone())
+            .await
+            .to_path()?;
+        let name: String = if let Some(name) = args.select("name") {
+            generators::request_force(&co, name.clone())
+                .await
+                .to_str()?
+                .as_str()
+                .to_string()
+        } else {
+            tvix_store::import::path_to_name(&path)
+                .expect("Failed to derive the default name out of the path")
+                .to_string()
+        };
+        let filter = args.select("filter");
+        let recursive_ingestion = args
+            .select("recursive")
+            .map(|r| r.as_bool())
+            .transpose()?
+            .unwrap_or(true); // Yes, yes, Nix, by default, puts `recursive = true;`.
+        let expected_sha256 = args
+            .select("sha256")
+            .map(|h| {
+                h.to_str().and_then(|expected| {
+                    nix_compat::nixhash::from_str(expected.as_ref(), None).map_err(|_err| {
+                        // TODO: a better error would be nice, what do we use for wrong hashes?
+                        ErrorKind::TypeError {
+                            expected: "sha256",
+                            actual: "not a sha256",
+                        }
+                    })
+                })
+            })
+            .transpose()?;
+
+        if !recursive_ingestion {
+            return Ok(Value::Catchable(CatchableErrorKind::UnimplementedFeature(
+                "flat `path`".to_string(),
+            )));
+        }
+
+        let root_node = filtered_ingest(state.clone(), co, path.as_ref(), filter).await?;
+        let (path_info, output_path) =
+            state.node_to_path_info_sync(name.as_ref(), path.as_ref(), root_node)?;
+
+        if let Some(expected_sha256) = expected_sha256 {
+            let nar_hash: [u8; 32] = if recursive_ingestion {
+                path_info
+                    .narinfo
+                    .as_ref()
+                    .expect("Tvix bug: expected a recursive FOD PathInfo")
+                    .nar_sha256
+                    .as_ref()
+                    .try_into()
+                    .expect("Tvix bug: expected a SHA-256 digest")
+            } else {
+                let contents = std::fs::read(&*path).expect("Failed to read file");
+                let hash = Sha256::digest(contents);
+                hash.into()
+            };
+
+            if nar_hash != expected_sha256.digest_as_bytes() {
+                return Err(ErrorKind::IO {
+                    path: Some(*path),
+                    error: std::io::Error::new(
+                        std::io::ErrorKind::InvalidData,
+                        format!(
+                            "hash mismatch, expected: {}, got: {}",
+                            expected_sha256.to_nix_hex_string(),
+                            nixhash::from_algo_and_digest(nixhash::HashAlgo::Sha256, &nar_hash)
+                                .expect("Failed to convert the SHA-256 into a Nix SHA-256 representation").to_nix_hex_string()
+                        ),
+                    )
+                    .into(),
+                });
+            }
+        }
+
+        let _ = state.put_to_path_info_sync(path_info);
+
+        Ok(output_path.to_absolute_path().into())
+    }
+
+    #[builtin("filterSource")]
+    async fn builtin_filter_source<BS: 'static, DS: 'static, PS: 'static>(
+        state: InternalDerivationBuiltinState<BS, DS, PS>,
+        co: GenCo,
+        #[lazy] filter: Value,
+        path: Value,
+    ) -> Result<Value, ErrorKind>
+    where
+        BS: AsRef<dyn BlobService> + Clone,
+        DS: AsRef<dyn DirectoryService>,
+        PS: AsRef<dyn PathInfoService>,
+    {
+        let p = path.to_path()?;
+        let root_node = filtered_ingest(state.clone(), co, &p, Some(&filter)).await?;
+        let name = tvix_store::import::path_to_name(&p)?;
+
+        Ok(state
+            .register_node_in_path_info_service_sync(name, &p, root_node)
+            .expect("Failed to register the node in path info")
+            .to_absolute_path()
+            .into())
     }
 }
 
