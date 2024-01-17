@@ -7,6 +7,8 @@ use crate::tvix_store_io::TvixStoreIO;
 mod derivation;
 mod derivation_error;
 
+mod import;
+
 pub use derivation_error::Error as DerivationError;
 
 /// Adds derivation-related builtins to the passed [tvix_eval::Evaluation].
@@ -22,6 +24,17 @@ pub fn add_derivation_builtins<IO>(eval: &mut tvix_eval::Evaluation<IO>, io: Rc<
     // Add the actual `builtins.derivation` from compiled Nix code
     eval.src_builtins
         .push(("derivation", include_str!("derivation.nix")));
+}
+
+/// Adds import-related builtins to the passed [tvix_eval::Evaluation].
+///
+/// These are `filterSource` and `path`
+///
+/// As they need to interact with the store implementation, we pass [`TvixStoreIO`].
+pub fn add_import_builtins<IO>(eval: &mut tvix_eval::Evaluation<IO>, io: Rc<TvixStoreIO>) {
+    eval.builtins.extend(import::import_builtins(io));
+    // FUTUREWORK: should we implement `builtins.filterSource` via `builtins.path` in pure Nix?
+    // indeed: `builtins.filterSource = filter: path: builtins.path { inherit path filter; };`…
 }
 
 #[cfg(test)]
@@ -57,7 +70,8 @@ mod tests {
 
         let mut eval = tvix_eval::Evaluation::new(io.clone() as Rc<dyn EvalIO>, false);
 
-        add_derivation_builtins(&mut eval, io);
+        add_derivation_builtins(&mut eval, io.clone());
+        add_import_builtins(&mut eval, io);
 
         // run the evaluation itself.
         eval.evaluate(str, None)
