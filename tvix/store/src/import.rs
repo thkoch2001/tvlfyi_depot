@@ -13,11 +13,12 @@ use crate::{
     proto::{nar_info, NarInfo, PathInfo},
 };
 
-fn log_node(node: &Node, path: &Path) {
+pub fn log_node(node: &Node, path: &Path, name: &str) {
     match node {
         Node::Directory(directory_node) => {
             debug!(
                 path = ?path,
+                store_name = ?name,
                 name = ?directory_node.name,
                 digest = BASE64.encode(&directory_node.digest),
                 "import successful",
@@ -26,6 +27,7 @@ fn log_node(node: &Node, path: &Path) {
         Node::File(file_node) => {
             debug!(
                 path = ?path,
+                store_name = ?name,
                 name = ?file_node.name,
                 digest = BASE64.encode(&file_node.digest),
                 "import successful"
@@ -34,6 +36,7 @@ fn log_node(node: &Node, path: &Path) {
         Node::Symlink(symlink_node) => {
             debug!(
                 path = ?path,
+                store_name = ?name,
                 name = ?symlink_node.name,
                 target = ?symlink_node.target,
                 "import successful"
@@ -89,6 +92,7 @@ pub fn derive_nar_ca_path_info(nar_size: u64, nar_sha256: [u8; 32], root_node: N
 #[instrument(skip_all, fields(path=?path), err)]
 pub async fn import_path_as_nar_ca<BS, DS, PS, P>(
     path: P,
+    name: &str,
     blob_service: BS,
     directory_service: DS,
     path_info_service: PS,
@@ -106,9 +110,8 @@ where
     let (nar_size, nar_sha256) = path_info_service.as_ref().calculate_nar(&root_node).await?;
 
     // Calculate the output path. This might still fail, as some names are illegal.
-    // FUTUREWORK: take `name` as a parameter here and enforce the validity of the name
-    // at the type level.
-    let name = path_to_name(path.as_ref())?;
+    // FUTUREWORK: express the `name` at the type level to be valid and move the conversion
+    // at the caller level.
     let output_path = store_path::build_nar_based_store_path(&nar_sha256, name).map_err(|_| {
         std::io::Error::new(
             std::io::ErrorKind::InvalidData,
@@ -118,7 +121,7 @@ where
 
     // assemble a new root_node with a name that is derived from the nar hash.
     let root_node = root_node.rename(output_path.to_string().into_bytes().into());
-    log_node(&root_node, path.as_ref());
+    log_node(&root_node, path.as_ref(), name);
 
     let path_info = derive_nar_ca_path_info(nar_size, nar_sha256, root_node);
 
