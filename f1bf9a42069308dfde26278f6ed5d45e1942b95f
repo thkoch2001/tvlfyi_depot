@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "51a1b05e_3d4fb129",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 17
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-01-17T17:21:22Z",
+      "side": 1,
+      "message": "As per the discussion on IRC, I made this use Arc\u003cdyn …\u003e for all the internal services, and dropped the macro-related changes out of the chain, PTAL.",
+      "revId": "f1bf9a42069308dfde26278f6ed5d45e1942b95f",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
