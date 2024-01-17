@@ -1,5 +1,6 @@
 //! This module provides an implementation of EvalIO talking to tvix-store.
 
+use futures::Stream;
 use nix_compat::store_path::StorePath;
 use std::{
     cell::RefCell,
@@ -11,6 +12,7 @@ use tokio::io::AsyncReadExt;
 use tracing::{error, instrument, warn};
 use tvix_build::buildservice::BuildService;
 use tvix_eval::{EvalIO, FileType, StdIO};
+use walkdir::DirEntry;
 
 use tvix_castore::{
     blobservice::BlobService,
@@ -18,7 +20,7 @@ use tvix_castore::{
     proto::node::Node,
     B3Digest,
 };
-use tvix_store::pathinfoservice::PathInfoService;
+use tvix_store::{pathinfoservice::PathInfoService, proto::PathInfo};
 
 use crate::known_paths::KnownPaths;
 
@@ -113,6 +115,96 @@ impl TvixStoreIO {
     ) -> io::Result<Option<Node>> {
         self.tokio_handle
             .block_on(async { self.store_path_to_node(store_path, sub_path).await })
+    }
+
+    /// This forwards the ingestion to the [`tvix_castore::import::ingest_entries`]
+    /// with a [`tokio::runtime::Handle::block_on`] call for synchronicity.
+    pub(crate) fn ingest_entries_sync<S>(&self, entries_stream: S) -> io::Result<Node>
+    where
+        S: Stream<Item = DirEntry> + std::marker::Unpin,
+    {
+        self.tokio_handle.block_on(async move {
+            tvix_castore::import::ingest_entries(
+                &self.blob_service,
+                &self.directory_service,
+                entries_stream,
+            )
+            .await
+            .map_err(|err| std::io::Error::new(io::ErrorKind::Other, err))
+        })
+    }
+
+    pub(crate) async fn node_to_path_info(
+        &self,
+        name: &str,
+        path: &Path,
+        root_node: Node,
+    ) -> io::Result<(PathInfo, StorePath)> {
+        // Ask the PathInfoService for the NAR size and sha256
+        let (nar_size, nar_sha256) = self
+            .path_info_service
+            .as_ref()
+            .calculate_nar(&root_node)
+            .await?;
+
+        // Calculate the output path. This might still fail, as some names are illegal.
+        let output_path = nix_compat::store_path::build_nar_based_store_path(&nar_sha256, name)
+            .map_err(|_| {
+                std::io::Error::new(
+                    std::io::ErrorKind::InvalidData,
+                    format!("invalid name: {}", name),
+                )
+            })?;
+
+        // assemble a new root_node with a name that is derived from the nar hash.
+        let root_node = root_node.rename(output_path.to_string().into_bytes().into());
+        tvix_store::import::log_node(&root_node, path, name);
+
+        let path_info =
+            tvix_store::import::derive_recursive_fod_path_info(nar_size, nar_sha256, root_node);
+
+        Ok((path_info, output_path.to_owned()))
+    }
+
+    #[allow(dead_code)]
+    pub(crate) fn node_to_path_info_sync(
+        &self,
+        name: &str,
+        path: &Path,
+        root_node: Node,
+    ) -> io::Result<(PathInfo, StorePath)> {
+        self.tokio_handle
+            .block_on(async { self.node_to_path_info(name, path, root_node).await })
+    }
+
+    #[allow(dead_code)]
+    pub(crate) fn put_to_path_info_sync(&self, path_info: PathInfo) -> io::Result<PathInfo> {
+        self.tokio_handle
+            .block_on(async { Ok(self.path_info_service.as_ref().put(path_info).await?) })
+    }
+
+    pub(crate) async fn register_node_in_path_info_service(
+        &self,
+        name: &str,
+        path: &Path,
+        root_node: Node,
+    ) -> io::Result<StorePath> {
+        let (path_info, output_path) = self.node_to_path_info(name, path, root_node).await?;
+        let _path_info = self.path_info_service.as_ref().put(path_info).await?;
+
+        Ok(output_path)
+    }
+
+    pub(crate) fn register_node_in_path_info_service_sync(
+        &self,
+        name: &str,
+        path: &Path,
+        root_node: Node,
+    ) -> io::Result<StorePath> {
+        self.tokio_handle.block_on(async {
+            self.register_node_in_path_info_service(name, path, root_node)
+                .await
+        })
     }
 }
 
