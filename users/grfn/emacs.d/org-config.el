@@ -100,7 +100,7 @@
     (file+headline ,(notes-file "tvix.org") "Tvix TODO")
     "* TODO %?\nContext %a\nIn task: %K")
    ("pw" "Windtunnel" entry
-    (file+headline ,(notes-file "windtunnel.org") "Tasks")
+    (file+headline ,(notes-file "windtunnel.org") "Inbox")
     "* TODO %i%?\nContext: %a\nIn task: %K")
    )
 
@@ -127,7 +127,6 @@
  org-enforce-todo-dependencies nil
 
  org-babel-clojure-backend 'cider)
-
 
 (defun +grfn/insert-work-template ()
   (interactive)
