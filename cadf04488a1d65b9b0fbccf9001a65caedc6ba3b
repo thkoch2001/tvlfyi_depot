@@ -26,6 +26,30 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "8c99ed44_98bbcd25",
+        "filename": "users/grfn/resume/resume.tex",
+        "patchSetId": 9
+      },
+      "lineNbr": 66,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2024-01-18T15:36:13Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ef04efdc_bf92a30c",
+      "range": {
+        "startLine": 66,
+        "startChar": 56,
+        "endLine": 66,
+        "endChar": 70
+      },
+      "revId": "cadf04488a1d65b9b0fbccf9001a65caedc6ba3b",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "a44d4c09_e48f6907",
         "filename": "users/grfn/resume/resume.tex",
         "patchSetId": 9
@@ -64,6 +88,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "740b048f_bd6e9788",
+        "filename": "users/grfn/resume/resume.tex",
+        "patchSetId": 9
+      },
+      "lineNbr": 110,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2024-01-18T15:36:13Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7ed5bdf6_53976667",
+      "revId": "cadf04488a1d65b9b0fbccf9001a65caedc6ba3b",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "c2c1730e_2fbe7e72",
@@ -87,6 +129,30 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "dc79859a_1d0f1120",
+        "filename": "users/grfn/resume/resume.tex",
+        "patchSetId": 9
+      },
+      "lineNbr": 115,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2024-01-18T15:36:13Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c2c1730e_2fbe7e72",
+      "range": {
+        "startLine": 112,
+        "startChar": 0,
+        "endLine": 115,
+        "endChar": 0
+      },
+      "revId": "cadf04488a1d65b9b0fbccf9001a65caedc6ba3b",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "d1c3c9bb_5ac97932",
@@ -100,6 +166,24 @@
       "writtenOn": "2023-11-13T19:13:28Z",
       "side": 1,
       "message": "again, buggy Research Project -\u003e production.",
+      "revId": "cadf04488a1d65b9b0fbccf9001a65caedc6ba3b",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ceca7414_f9d2f54f",
+        "filename": "users/grfn/resume/resume.tex",
+        "patchSetId": 9
+      },
+      "lineNbr": 123,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2024-01-18T15:36:13Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d1c3c9bb_5ac97932",
       "revId": "cadf04488a1d65b9b0fbccf9001a65caedc6ba3b",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
@@ -176,6 +260,24 @@
       "side": 1,
       "message": "Yes, we did. We kept the name for the Rust one. It might be less confusing to refer to it as \"the first incarnation of Nix\" or something, especially as Tvix itself can also be listed here (as a contributor): https://github.com/tvlfyi/tvix/graphs/contributors (link here just for the contributor analysis)\n\nBy the way, the link should go to a specific commit probably, as it has been removed from canon for quite some time.",
       "parentUuid": "bde4c097_0b609255",
+      "revId": "cadf04488a1d65b9b0fbccf9001a65caedc6ba3b",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "86c3b86a_de0dd5b3",
+        "filename": "users/grfn/resume/resume.tex",
+        "patchSetId": 9
+      },
+      "lineNbr": 235,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2024-01-18T15:36:13Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "07a6629d_4ed88009",
       "revId": "cadf04488a1d65b9b0fbccf9001a65caedc6ba3b",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
