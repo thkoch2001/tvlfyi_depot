@@ -73,6 +73,10 @@ with lib;
 
   nix.gc.dates = "monthly";
 
+  users.users.grfn.openssh.authorizedKeys.keys = [
+    depot.users.grfn.keys.whitby
+  ];
+
   age.secrets =
     let
       secret = name: depot.users.grfn.secrets."${name}.age";
