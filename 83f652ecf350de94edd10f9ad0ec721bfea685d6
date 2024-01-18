@@ -18,6 +18,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "49b24226_4ec45468",
+        "filename": "tvix/tools/crunch-v2/Cargo.toml",
+        "patchSetId": 1
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1000005
+      },
+      "writtenOn": "2024-01-18T07:56:09Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2e40f186_cef17602",
+      "revId": "83f652ecf350de94edd10f9ad0ec721bfea685d6",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "d316c446_79d27b28",
