@@ -11,4 +11,5 @@ in
   "ddclient-password.age".publicKeys = [ grfn mugwump ];
   "buildkite-ssh-key.age".publicKeys = [ grfn mugwump ogopogo ];
   "buildkite-token.age".publicKeys = [ grfn mugwump ogopogo ];
+  "windtunnel-bot-github-token.age".publicKeys = [ grfn mugwump ogopogo ];
 }

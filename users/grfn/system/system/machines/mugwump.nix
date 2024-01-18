@@ -96,6 +96,12 @@ with lib;
         group = "keys";
         mode = "0440";
       };
+
+      windtunnel-bot-github-token = {
+        file = secret "windtunnel-bot-github-token";
+        group = "keys";
+        mode = "0440";
+      };
     };
 
   services.fail2ban = {
@@ -295,6 +301,6 @@ with lib;
 
   users.users."buildkite-agent-mugwump-1" = {
     isSystemUser = true;
-    extraGroups = [ "docker" ];
+    extraGroups = [ "docker" "keys" ];
   };
 }
