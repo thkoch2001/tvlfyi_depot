@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4436abc8_535b1429",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 16
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1000073
+      },
+      "writtenOn": "2024-01-18T14:53:30Z",
+      "side": 1,
+      "message": "Still need to edit this message.",
+      "revId": "e771d5e42b724ebff025734e8f7acbd87f7e5bc4",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "77e94744_3ae31410",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 16
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000073
+      },
+      "writtenOn": "2024-01-18T14:53:30Z",
+      "side": 1,
+      "message": "Still need to edit the commit me",
+      "revId": "e771d5e42b724ebff025734e8f7acbd87f7e5bc4",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
