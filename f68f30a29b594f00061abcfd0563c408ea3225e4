@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bca38b6d_f2301bf9",
+        "filename": "tvix/tools/crunch-v2/src/main.rs",
+        "patchSetId": 7
+      },
+      "lineNbr": 141,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-01-18T15:02:44Z",
+      "side": 1,
+      "message": "Can we make this some toplevel constants / env vars etc? It\u0027d allow running this again with different params without recompiling.",
+      "revId": "f68f30a29b594f00061abcfd0563c408ea3225e4",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
