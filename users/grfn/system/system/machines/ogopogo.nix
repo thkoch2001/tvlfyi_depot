@@ -3,6 +3,7 @@
 {
   imports = [
     (modulesPath + "/installer/scan/not-detected.nix")
+    (depot.third_party.agenix.src + "/modules/age.nix")
     ../modules/common.nix
     ../modules/xserver.nix
     ../modules/fonts.nix
@@ -94,4 +95,46 @@
       wal_level = "logical";
     };
   };
+
+  services.buildkite-agents.ogopogo-1 = rec {
+    enable = true;
+    tokenPath = config.age.secretsDir + "/buildkite-token";
+    privateSshKeyPath = config.age.secretsDir + "/buildkite-ssh-key";
+    runtimePackages = with pkgs; [
+      docker
+      nix
+      gnutar
+      gzip
+      bash
+    ];
+    tags = {
+      queue = "ogopogo";
+    };
+    dataDir = "/home/grfn/buildkite-agent";
+
+    hooks.environment = ''
+      export BUILDKITE_AGENT_HOME=${dataDir}
+    '';
+  };
+  systemd.services.buildkite-agent-ogopogo-1.serviceConfig.User =
+    lib.mkForce "grfn";
+  users.users.grfn.extraGroups = [ "keys" ];
+
+  age.secrets =
+    let
+      secret = name: depot.users.grfn.secrets."${name}.age";
+    in
+    {
+      buildkite-ssh-key = {
+        file = secret "buildkite-ssh-key";
+        group = "keys";
+        mode = "0440";
+      };
+
+      buildkite-token = {
+        file = secret "buildkite-token";
+        group = "keys";
+        mode = "0440";
+      };
+    };
 }
