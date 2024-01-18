@@ -33,6 +33,74 @@
       "message": "Still need to edit the commit me",
       "revId": "e771d5e42b724ebff025734e8f7acbd87f7e5bc4",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f3827819_4912e36c",
+        "filename": "tvix/store/src/import.rs",
+        "patchSetId": 16
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-01-18T15:20:29Z",
+      "side": 1,
+      "message": "NOTE: I think we need the same logic when when importing via tvix-eval and EvalIO in the case of path interpolation. Did you make sure we use it both? How does it treat a .. at the end?\n\nThis also needs some unit tests.",
+      "revId": "e771d5e42b724ebff025734e8f7acbd87f7e5bc4",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "36592146_3a067e08",
+        "filename": "tvix/store/src/import.rs",
+        "patchSetId": 16
+      },
+      "lineNbr": 60,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-01-18T15:20:29Z",
+      "side": 1,
+      "message": "it doesn\u0027t interact with any service, docstring needs updating (and maybe function renamed?)",
+      "revId": "e771d5e42b724ebff025734e8f7acbd87f7e5bc4",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1c4cdb9c_18694b09",
+        "filename": "tvix/store/src/import.rs",
+        "patchSetId": 16
+      },
+      "lineNbr": 92,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-01-18T15:20:29Z",
+      "side": 1,
+      "message": "following the naming scheme of cahash, we call these \"NAR\", not recursive - so maybe import_path_as_nar_ca is more appropriate?",
+      "revId": "e771d5e42b724ebff025734e8f7acbd87f7e5bc4",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "83b4bc72_f438dd87",
+        "filename": "tvix/store/src/import.rs",
+        "patchSetId": 16
+      },
+      "lineNbr": 110,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-01-18T15:20:29Z",
+      "side": 1,
+      "message": "Can we detect these cases already upfront, just by looking at the path to be imported?",
+      "revId": "e771d5e42b724ebff025734e8f7acbd87f7e5bc4",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
