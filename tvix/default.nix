@@ -88,13 +88,6 @@ let
   # The cleaned sources.
   src = depot.third_party.gitignoreSource ./.;
 
-  # Run crate2nix generate in the current working directory, then
-  # format the generated file with depotfmt.
-  crate2nix-generate = pkgs.writeShellScriptBin "crate2nix-generate" ''
-    ${pkgs.crate2nix}/bin/crate2nix generate --all-features
-    ${depot.tools.depotfmt}/bin/depotfmt Cargo.nix
-  '';
-
   # Target containing *all* tvix proto files.
   # Useful for workspace-wide cargo invocations (doc, clippy)
   protos = pkgs.symlinkJoin {
@@ -108,7 +101,7 @@ let
 
 in
 {
-  inherit crates crate2nix-generate protos;
+  inherit crates protos;
 
   # Run crate2nix generate, ensure the output doesn't differ afterwards
   # (and doesn't fail).
@@ -145,7 +138,7 @@ in
         # running this command counteracts depotfmt brokenness
         git init
 
-        ${crate2nix-generate}/bin/crate2nix-generate
+        ${depot.tools.crate2nix-generate}/bin/crate2nix-generate
 
         # technically unnecessary, but provides more-helpful output in case of error
         diff -ur Cargo.nix ${src}/Cargo.nix
