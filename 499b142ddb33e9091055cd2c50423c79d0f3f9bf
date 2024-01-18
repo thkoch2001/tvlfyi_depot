@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0acedeca_0b57a214",
+        "filename": "tvix/glue/src/builtins/derivation.rs",
+        "patchSetId": 21
+      },
+      "lineNbr": 686,
+      "author": {
+        "id": 1000073
+      },
+      "writtenOn": "2024-01-18T14:55:35Z",
+      "side": 1,
+      "message": "This is wrong, I need to use the blob service to read it",
+      "revId": "499b142ddb33e9091055cd2c50423c79d0f3f9bf",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
