@@ -52,6 +52,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "17971404_2e8dfc64",
+        "filename": "tvix/store/src/import.rs",
+        "patchSetId": 16
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 1000073
+      },
+      "writtenOn": "2024-01-19T23:37:54Z",
+      "side": 1,
+      "message": "This is what is happening @ same logic, yes. `..` at the end are failed as invalid inputs.\n\nI added clear unit tests.",
+      "parentUuid": "f3827819_4912e36c",
+      "revId": "e771d5e42b724ebff025734e8f7acbd87f7e5bc4",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "36592146_3a067e08",
@@ -65,6 +83,24 @@
       "writtenOn": "2024-01-18T15:20:29Z",
       "side": 1,
       "message": "it doesn\u0027t interact with any service, docstring needs updating (and maybe function renamed?)",
+      "revId": "e771d5e42b724ebff025734e8f7acbd87f7e5bc4",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "72715e6b_e32077a3",
+        "filename": "tvix/store/src/import.rs",
+        "patchSetId": 16
+      },
+      "lineNbr": 60,
+      "author": {
+        "id": 1000073
+      },
+      "writtenOn": "2024-01-19T23:37:54Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "36592146_3a067e08",
       "revId": "e771d5e42b724ebff025734e8f7acbd87f7e5bc4",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
@@ -86,6 +122,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "7107cd4b_b2ec461a",
+        "filename": "tvix/store/src/import.rs",
+        "patchSetId": 16
+      },
+      "lineNbr": 92,
+      "author": {
+        "id": 1000073
+      },
+      "writtenOn": "2024-01-19T23:37:54Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1c4cdb9c_18694b09",
+      "revId": "e771d5e42b724ebff025734e8f7acbd87f7e5bc4",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "83b4bc72_f438dd87",
@@ -99,6 +153,24 @@
       "writtenOn": "2024-01-18T15:20:29Z",
       "side": 1,
       "message": "Can we detect these cases already upfront, just by looking at the path to be imported?",
+      "revId": "e771d5e42b724ebff025734e8f7acbd87f7e5bc4",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a8b2cc28_b4a83c6a",
+        "filename": "tvix/store/src/import.rs",
+        "patchSetId": 16
+      },
+      "lineNbr": 110,
+      "author": {
+        "id": 1000073
+      },
+      "writtenOn": "2024-01-19T23:37:54Z",
+      "side": 1,
+      "message": "We can, but this is a local refactor, next CL is about exposing `name` and we will be able to expect the name to be a legal one at the type level in the future.\n\nI would avoid trying to do too many things at the same time in this CL. I can add a TODO to propose to do this as future work.",
+      "parentUuid": "83b4bc72_f438dd87",
       "revId": "e771d5e42b724ebff025734e8f7acbd87f7e5bc4",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }

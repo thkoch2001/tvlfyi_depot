@@ -88,6 +88,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "9e4685e3_f63aa0f0",
+        "filename": "tvix/store/src/import.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 97,
+      "author": {
+        "id": 1000073
+      },
+      "writtenOn": "2024-01-19T23:37:54Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "dff76a93_9fcd5e14",
+      "revId": "6c6558b18fc704099f1eff3405a8680a4fc6dd48",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "9725eb13_196daf53",
@@ -136,6 +154,24 @@
       "writtenOn": "2024-01-08T09:41:52Z",
       "side": 1,
       "message": "The comment is outdated, we don\u0027t return it (anymore?).",
+      "revId": "6c6558b18fc704099f1eff3405a8680a4fc6dd48",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "17694d1d_cb73d4c9",
+        "filename": "tvix/store/src/import.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 143,
+      "author": {
+        "id": 1000073
+      },
+      "writtenOn": "2024-01-19T23:37:54Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a14b972f_852ffbe8",
       "revId": "6c6558b18fc704099f1eff3405a8680a4fc6dd48",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
