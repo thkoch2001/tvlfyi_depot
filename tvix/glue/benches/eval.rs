@@ -43,6 +43,7 @@ fn interpret(code: &str) {
         true,
     );
 
+    eval.builtins.extend(impure_builtins());
     add_derivation_builtins(&mut eval, tvix_store_io);
     configure_nix_path(
         &mut eval,
