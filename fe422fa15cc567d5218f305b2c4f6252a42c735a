@@ -3,6 +3,40 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "d93e0983_acfb4063",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-01-20T09:06:11Z",
+      "side": 1,
+      "message": "I was not sure if past refers to an older commit (before the recent nixhash fixes predating this commit).\n\nCan you reword this message to describe what *this commit\" actually does, rather than describing two states?",
+      "revId": "fe422fa15cc567d5218f305b2c4f6252a42c735a",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c1b54283_444e7eff",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-01-20T09:06:11Z",
+      "side": 1,
+      "message": "This would only work with a rev. Maybe add a permalink to GitHub instead?",
+      "revId": "fe422fa15cc567d5218f305b2c4f6252a42c735a",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "124a37e2_87e1b506",
         "filename": "tvix/nix-compat/src/nixhash/mod.rs",
         "patchSetId": 1
