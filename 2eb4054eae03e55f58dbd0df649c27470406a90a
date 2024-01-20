@@ -16,6 +16,24 @@
       "message": "This is not really a derivation builtin. can it be moved to a separate module?",
       "revId": "2eb4054eae03e55f58dbd0df649c27470406a90a",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fae0b7e8_5200989a",
+        "filename": "tvix/glue/src/builtins/derivation.rs",
+        "patchSetId": 10
+      },
+      "lineNbr": 622,
+      "author": {
+        "id": 1000073
+      },
+      "writtenOn": "2024-01-20T15:01:09Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "25c8ac3d_a0cbc7da",
+      "revId": "2eb4054eae03e55f58dbd0df649c27470406a90a",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
