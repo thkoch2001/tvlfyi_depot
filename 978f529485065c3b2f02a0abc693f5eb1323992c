@@ -1,0 +1,123 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ee9490ed_e4707e7b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 23
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000073
+      },
+      "writtenOn": "2024-01-20T00:32:19Z",
+      "side": 1,
+      "message": "LGTM on the stuff I touched.",
+      "revId": "978f529485065c3b2f02a0abc693f5eb1323992c",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5a9db296_148fbbe8",
+        "filename": "tvix/eval/src/builtins/mod.rs",
+        "patchSetId": 23
+      },
+      "lineNbr": 207,
+      "author": {
+        "id": 1000073
+      },
+      "writtenOn": "2024-01-20T00:32:19Z",
+      "side": 1,
+      "message": "@flokli@flokli.de we went through the discussion of naming on this and it\u0027s back to something that does not contain the word `context`, is that fine to you? I personally don\u0027t care.",
+      "revId": "978f529485065c3b2f02a0abc693f5eb1323992c",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "353f571d_a65911ad",
+        "filename": "tvix/eval/src/builtins/mod.rs",
+        "patchSetId": 23
+      },
+      "lineNbr": 361,
+      "author": {
+        "id": 1000073
+      },
+      "writtenOn": "2024-01-20T00:32:19Z",
+      "side": 1,
+      "message": "you can drop this I think now",
+      "revId": "978f529485065c3b2f02a0abc693f5eb1323992c",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "93bea8b3_8a44bbe5",
+        "filename": "tvix/eval/src/builtins/mod.rs",
+        "patchSetId": 23
+      },
+      "lineNbr": 407,
+      "author": {
+        "id": 1000073
+      },
+      "writtenOn": "2024-01-20T00:32:19Z",
+      "side": 1,
+      "message": "Not sure if I understand that now there\u0027s `into_parts`, `from_parts` and `new_inherit_context_from`, cc @flokli@flokli.de",
+      "revId": "978f529485065c3b2f02a0abc693f5eb1323992c",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "16d64b27_0a98cb9a",
+        "filename": "tvix/eval/src/builtins/mod.rs",
+        "patchSetId": 23
+      },
+      "lineNbr": 1311,
+      "author": {
+        "id": 1000073
+      },
+      "writtenOn": "2024-01-20T00:32:19Z",
+      "side": 1,
+      "message": "can be dropped",
+      "revId": "978f529485065c3b2f02a0abc693f5eb1323992c",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0b733ce3_cee79a83",
+        "filename": "tvix/eval/src/errors.rs",
+        "patchSetId": 23
+      },
+      "lineNbr": 181,
+      "author": {
+        "id": 1000073
+      },
+      "writtenOn": "2024-01-20T00:32:19Z",
+      "side": 1,
+      "message": "typo: encountered",
+      "revId": "978f529485065c3b2f02a0abc693f5eb1323992c",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0ad608ea_776990c6",
+        "filename": "tvix/eval/src/vm/mod.rs",
+        "patchSetId": 23
+      },
+      "lineNbr": 990,
+      "author": {
+        "id": 1000073
+      },
+      "writtenOn": "2024-01-20T00:32:19Z",
+      "side": 1,
+      "message": "can be dropped",
+      "revId": "978f529485065c3b2f02a0abc693f5eb1323992c",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
