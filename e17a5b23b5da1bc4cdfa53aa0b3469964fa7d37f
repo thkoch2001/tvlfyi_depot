@@ -18,6 +18,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "3ab801f3_9fb57a70",
+        "filename": "tvix/castore/src/import.rs",
+        "patchSetId": 15
+      },
+      "lineNbr": 62,
+      "author": {
+        "id": 1000073
+      },
+      "writtenOn": "2024-01-20T14:38:33Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a73c7bc1_8b456253",
+      "revId": "e17a5b23b5da1bc4cdfa53aa0b3469964fa7d37f",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "8d84e370_743820af",
@@ -31,6 +49,24 @@
       "writtenOn": "2024-01-20T09:27:05Z",
       "side": 1,
       "message": "is \"descending\" maybe the better word here?\n\nMaybe can be shortened too:\n\nReceived unexpected entry with depth {}, previously at {}",
+      "revId": "e17a5b23b5da1bc4cdfa53aa0b3469964fa7d37f",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c10894fc_a162a63e",
+        "filename": "tvix/castore/src/import.rs",
+        "patchSetId": 15
+      },
+      "lineNbr": 191,
+      "author": {
+        "id": 1000073
+      },
+      "writtenOn": "2024-01-20T14:38:33Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8d84e370_743820af",
       "revId": "e17a5b23b5da1bc4cdfa53aa0b3469964fa7d37f",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
@@ -52,6 +88,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "8384cd0e_bdcb77a7",
+        "filename": "tvix/castore/src/import.rs",
+        "patchSetId": 15
+      },
+      "lineNbr": 213,
+      "author": {
+        "id": 1000073
+      },
+      "writtenOn": "2024-01-20T14:38:33Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3c96e0a6_826dc922",
+      "revId": "e17a5b23b5da1bc4cdfa53aa0b3469964fa7d37f",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "67b7262a_4c5927ae",
@@ -69,6 +123,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "879818d5_0847f082",
+        "filename": "tvix/castore/src/import.rs",
+        "patchSetId": 15
+      },
+      "lineNbr": 218,
+      "author": {
+        "id": 1000073
+      },
+      "writtenOn": "2024-01-20T14:38:33Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "67b7262a_4c5927ae",
+      "revId": "e17a5b23b5da1bc4cdfa53aa0b3469964fa7d37f",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "5d9e5687_1e6bdd56",
@@ -82,6 +154,24 @@
       "writtenOn": "2024-01-20T09:27:05Z",
       "side": 1,
       "message": "Don\u0027t we want to remove it from the hashmap here, as this is the last time we\u0027ll pass it (and not need the clone then)?",
+      "revId": "e17a5b23b5da1bc4cdfa53aa0b3469964fa7d37f",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5cef818e_ed20cbc8",
+        "filename": "tvix/castore/src/import.rs",
+        "patchSetId": 15
+      },
+      "lineNbr": 219,
+      "author": {
+        "id": 1000073
+      },
+      "writtenOn": "2024-01-20T14:38:33Z",
+      "side": 1,
+      "message": "Correctness first, optimization later? Added a FUTUREWORK.",
+      "parentUuid": "5d9e5687_1e6bdd56",
       "revId": "e17a5b23b5da1bc4cdfa53aa0b3469964fa7d37f",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
