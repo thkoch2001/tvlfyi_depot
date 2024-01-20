@@ -59,11 +59,9 @@ impl From<Error> for std::io::Error {
 /// For this to work, it relies on the caller to provide the directory object
 /// with the previously returned (child) nodes.
 ///
-/// It assumes entries to be returned in "contents first" order, means this
-/// will only be called with a directory if all children of it have been
-/// visited. If the entry is indeed a directory, it'll also upload that
-/// directory to the store. For this, the so-far-assembled Directory object for
-/// this path needs to be passed in.
+/// It assumes to be called only if all children of it have already been processed. If the entry is
+/// indeed a directory, it'll also upload that directory to the store. For this, the
+/// so-far-assembled Directory object for this path needs to be passed in.
 ///
 /// It assumes the caller adds returned nodes to the directories it assembles.
 #[instrument(skip_all, fields(entry.file_type=?&entry.file_type(),entry.path=?entry.path()))]
@@ -188,7 +186,7 @@ where
         if entry.depth() >= entries_per_depths.len() {
             debug_assert!(
                 entry.depth() == entries_per_depths.len(),
-                "We should not be allocating more than one level at once, requested node at depth {}, had entries per depth containing {} levels",
+                "Received unexpected entry with depth {} during descent, previously at {}",
                 entry.depth(),
                 entries_per_depths.len()
             );
@@ -206,28 +204,27 @@ where
     // to compute the hash.
     for level in entries_per_depths.into_iter().rev() {
         for entry in level.into_iter() {
-            // process_entry wants an Option<Directory> in case the entry points to a directory.
-            // make sure to provide it.
-            // If the directory has contents, we already have it in
-            // `directories` due to the use of contents_first on WalkDir.
-            let maybe_directory: Option<Directory> = {
-                if entry.file_type().is_dir() {
-                    Some(
-                        directories
-                            .entry(entry.path().to_path_buf())
-                            .or_default()
-                            .clone(),
-                    )
-                } else {
-                    None
-                }
-            };
-
+            // FUTUREWORK: inline `process_entry`
             let node = process_entry(
                 blob_service.clone(),
                 &mut directory_putter,
                 &entry,
-                maybe_directory,
+                // process_entry wants an Option<Directory> in case the entry points to a directory.
+                // make sure to provide it.
+                // If the directory has contents, we already have it in
+                // `directories` due to the use of contents_first on WalkDir.
+                if entry.file_type().is_dir() {
+                    Some(
+                        directories
+                            .entry(entry.path().to_path_buf())
+                            // In that case, it contained no children
+                            .or_default()
+                            // FUTUREWORK: can we avoid the clone and just consume it?
+                            .clone(),
+                    )
+                } else {
+                    None
+                },
             )
             .await?;
 
