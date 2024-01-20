@@ -4,7 +4,7 @@ use std::rc::Rc;
 use std::sync::Arc;
 use std::{fs, path::PathBuf};
 use tvix_build::buildservice::DummyBuildService;
-use tvix_eval::builtins::impure_builtins;
+use tvix_eval::builtins::{impure_builtins, tracking_builtins};
 use tvix_eval::observer::{DisassemblingObserver, TracingObserver};
 use tvix_eval::{EvalIO, Value};
 use tvix_glue::builtins::add_import_builtins;
@@ -100,6 +100,7 @@ fn interpret(code: &str, path: Option<PathBuf>, args: &Args, explain: bool) -> b
         true,
     );
     eval.strict = args.strict;
+    eval.builtins.extend(tracking_builtins(eval.source_map()));
     eval.builtins.extend(impure_builtins());
     add_derivation_builtins(&mut eval, tvix_store_io.clone());
     add_import_builtins(&mut eval, tvix_store_io);
