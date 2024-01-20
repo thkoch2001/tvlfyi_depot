@@ -160,6 +160,11 @@ impl<'co, 'ro> Evaluation<'co, 'ro, Box<dyn EvalIO>> {
     pub fn new_impure() -> Self {
         let mut eval = Self::new(Box::new(StdIO) as Box<dyn EvalIO>, true);
 
+        // TODO(raitobezarius): this is not really optimized atm
+        // but we just clone the whole sourcemap, should we share the sourcemap behind
+        // an Arc?
+        eval.builtins
+            .extend(builtins::tracking_builtins(eval.source_map()));
         eval.builtins.extend(builtins::impure_builtins());
 
         eval
