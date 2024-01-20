@@ -3,6 +3,23 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "19070aef_3ac62dc3",
+        "filename": "tvix/glue/src/builtins/derivation.rs",
+        "patchSetId": 24
+      },
+      "lineNbr": 630,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-01-20T06:48:53Z",
+      "side": 1,
+      "message": "this is not a derivation builtin, but a path-related builtin. maybe it should be in another module? same as https://cl.tvl.fyi/c/depot/+/10654/comment/25c8ac3d_a0cbc7da/",
+      "revId": "9dced0f29ec3bdc6e1c5ffb3458e0c630ad0d67a",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "813c19b8_844cf17c",
         "filename": "tvix/glue/src/builtins/derivation.rs",
         "patchSetId": 24
