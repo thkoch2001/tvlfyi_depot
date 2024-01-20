@@ -6,7 +6,7 @@ use tracing::Level;
 use tracing_subscriber::fmt::writer::MakeWriterExt;
 use tracing_subscriber::{layer::SubscriberExt, util::SubscriberInitExt};
 use tvix_build::buildservice;
-use tvix_eval::builtins::impure_builtins;
+use tvix_eval::builtins::{impure_builtins, tracking_builtins};
 use tvix_eval::observer::{DisassemblingObserver, TracingObserver};
 use tvix_eval::{EvalIO, Value};
 use tvix_glue::builtins::add_fetcher_builtins;
@@ -129,6 +129,7 @@ fn interpret(code: &str, path: Option<PathBuf>, args: &Args, explain: bool) -> b
         true,
     );
     eval.strict = args.strict;
+    eval.builtins.extend(tracking_builtins(eval.source_map()));
     eval.builtins.extend(impure_builtins());
     add_derivation_builtins(&mut eval, Rc::clone(&tvix_store_io));
     add_fetcher_builtins(&mut eval, Rc::clone(&tvix_store_io));

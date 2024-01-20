@@ -155,6 +155,21 @@ where
 }
 
 impl<'co, 'ro> Evaluation<'co, 'ro, Box<dyn EvalIO>> {
+    #[cfg(feature = "impure")]
+    /// Initialise an `Evaluation`, with all impure features turned on by default.
+    pub fn new_impure() -> Self {
+        let mut eval = Self::new(Box::new(StdIO) as Box<dyn EvalIO>, true);
+
+        // TODO(raitobezarius): this is not really optimized atm
+        // but we just clone the whole sourcemap, should we share the sourcemap behind
+        // an Arc?
+        eval.builtins
+            .extend(builtins::tracking_builtins(eval.source_map()));
+        eval.builtins.extend(builtins::impure_builtins());
+
+        eval
+    }
+
     /// Initialize an `Evaluation`, without the import statement available, and
     /// all IO operations stubbed out.
     pub fn new_pure() -> Self {
