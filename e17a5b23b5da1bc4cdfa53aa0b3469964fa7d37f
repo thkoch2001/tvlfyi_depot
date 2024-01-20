@@ -1,0 +1,89 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a73c7bc1_8b456253",
+        "filename": "tvix/castore/src/import.rs",
+        "patchSetId": 15
+      },
+      "lineNbr": 62,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-01-20T09:27:05Z",
+      "side": 1,
+      "message": "Can you update this comment for clarity?\n\nIt assumes to be called only if all children of it have already been processed. If the entry is indeed [...]",
+      "revId": "e17a5b23b5da1bc4cdfa53aa0b3469964fa7d37f",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8d84e370_743820af",
+        "filename": "tvix/castore/src/import.rs",
+        "patchSetId": 15
+      },
+      "lineNbr": 191,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-01-20T09:27:05Z",
+      "side": 1,
+      "message": "is \"descending\" maybe the better word here?\n\nMaybe can be shortened too:\n\nReceived unexpected entry with depth {}, previously at {}",
+      "revId": "e17a5b23b5da1bc4cdfa53aa0b3469964fa7d37f",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3c96e0a6_826dc922",
+        "filename": "tvix/castore/src/import.rs",
+        "patchSetId": 15
+      },
+      "lineNbr": 213,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-01-20T09:27:05Z",
+      "side": 1,
+      "message": "I\u0027d inline this straight into where we call process_entry (L226). This is always a Directory if is_dir(), it\u0027s consumed and removed from `directories` if present, otherwise (if there\u0027s been no children) an empty `Directory` is crafted for that purpose.\n\nGoing further (happy to do that by myself as a followup), we could keep all the Option\u003cDirectory\u003e and DirectoryPutter business in here, rather than passing it down to process_entry.",
+      "revId": "e17a5b23b5da1bc4cdfa53aa0b3469964fa7d37f",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "67b7262a_4c5927ae",
+        "filename": "tvix/castore/src/import.rs",
+        "patchSetId": 15
+      },
+      "lineNbr": 218,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-01-20T09:27:05Z",
+      "side": 1,
+      "message": "this or_default should have a small comment \"contained no children\"",
+      "revId": "e17a5b23b5da1bc4cdfa53aa0b3469964fa7d37f",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5d9e5687_1e6bdd56",
+        "filename": "tvix/castore/src/import.rs",
+        "patchSetId": 15
+      },
+      "lineNbr": 219,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-01-20T09:27:05Z",
+      "side": 1,
+      "message": "Don\u0027t we want to remove it from the hashmap here, as this is the last time we\u0027ll pass it (and not need the clone then)?",
+      "revId": "e17a5b23b5da1bc4cdfa53aa0b3469964fa7d37f",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
