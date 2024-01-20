@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "124a37e2_87e1b506",
+        "filename": "tvix/nix-compat/src/nixhash/mod.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 241,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-01-20T06:05:21Z",
+      "side": 1,
+      "message": "to pass, or to get?",
+      "revId": "fe422fa15cc567d5218f305b2c4f6252a42c735a",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
