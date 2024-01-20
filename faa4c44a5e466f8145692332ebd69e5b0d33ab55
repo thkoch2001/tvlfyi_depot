@@ -125,6 +125,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "da0a0bfe_ba6e1b14",
+        "filename": "tvix/glue/src/builtins/import.rs",
+        "patchSetId": 27
+      },
+      "lineNbr": 55,
+      "author": {
+        "id": 1000073
+      },
+      "writtenOn": "2024-01-20T20:26:26Z",
+      "side": 1,
+      "message": "\u003e NOTE: conflicts with bstr work, we probably want to not to_string_lossy() as soon as this can be Vec\u003cu8\u003e.\n\ncc @root@gws.fyi",
+      "parentUuid": "8fdcdd32_5ea4ace9",
+      "revId": "faa4c44a5e466f8145692332ebd69e5b0d33ab55",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "50889b3e_0a8a0640",
         "filename": "tvix/glue/src/builtins/import.rs",
         "patchSetId": 27
