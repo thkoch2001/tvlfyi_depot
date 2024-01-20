@@ -88,6 +88,23 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "b23ce703_7accacbf",
+        "filename": "tvix/eval/src/builtins/versions.rs",
+        "patchSetId": 23
+      },
+      "lineNbr": 61,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2024-01-20T20:14:04Z",
+      "side": 1,
+      "message": "Can you add a TODO here that we iterate by byte? C++ Nix can do this even if non-unicode garbage is in the string, so it\u0027d be neat to also be able to do so, although it is a niche occurrence probably.",
+      "revId": "978f529485065c3b2f02a0abc693f5eb1323992c",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "0b733ce3_cee79a83",
         "filename": "tvix/eval/src/errors.rs",
         "patchSetId": 23
@@ -99,6 +116,91 @@
       "writtenOn": "2024-01-20T00:32:19Z",
       "side": 1,
       "message": "typo: encountered",
+      "revId": "978f529485065c3b2f02a0abc693f5eb1323992c",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "17478a19_0c8f7f36",
+        "filename": "tvix/eval/src/value/mod.rs",
+        "patchSetId": 23
+      },
+      "lineNbr": 345,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2024-01-20T20:14:04Z",
+      "side": 1,
+      "message": "I think this comment is addressed by your change?",
+      "revId": "978f529485065c3b2f02a0abc693f5eb1323992c",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "262583de_65e66805",
+        "filename": "tvix/eval/src/value/mod.rs",
+        "patchSetId": 23
+      },
+      "lineNbr": 398,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2024-01-20T20:14:04Z",
+      "side": 1,
+      "message": "Should we use `B(\"\")` here or does that not matter w.r.t. optimization?",
+      "revId": "978f529485065c3b2f02a0abc693f5eb1323992c",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b5b91aa4_936081e7",
+        "filename": "tvix/eval/src/value/string.rs",
+        "patchSetId": 23
+      },
+      "lineNbr": 5,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2024-01-20T20:14:04Z",
+      "side": 1,
+      "message": "Doesn\u0027t this reference the previous use of `Box\u003cstr\u003e`? Maybe needs updating.",
+      "revId": "978f529485065c3b2f02a0abc693f5eb1323992c",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ae11861e_6536614f",
+        "filename": "tvix/eval/src/value/string.rs",
+        "patchSetId": 23
+      },
+      "lineNbr": 215,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2024-01-20T20:14:04Z",
+      "side": 1,
+      "message": "`Self`?",
+      "revId": "978f529485065c3b2f02a0abc693f5eb1323992c",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6c83b6a4_384eadc3",
+        "filename": "tvix/eval/src/value/string.rs",
+        "patchSetId": 23
+      },
+      "lineNbr": 219,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2024-01-20T20:14:04Z",
+      "side": 1,
+      "message": "Does it make sense keeping this instance if it is no longer the internal representation of `NixString`? The appeal of this before would have been that it\u0027s basically free, but not anymore, right?",
       "revId": "978f529485065c3b2f02a0abc693f5eb1323992c",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
@@ -139,6 +241,47 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "bfadbe76_803fc77b",
+        "filename": "tvix/eval/src/value/string.rs",
+        "patchSetId": 23
+      },
+      "lineNbr": 324,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2024-01-20T20:14:04Z",
+      "side": 1,
+      "message": "The type of the function is equivalent before and after, so I don\u0027t think this is relevant to this CL.",
+      "parentUuid": "3e63ebb9_8e1f0dee",
+      "revId": "978f529485065c3b2f02a0abc693f5eb1323992c",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8ad423e4_bb5cf03b",
+        "filename": "tvix/eval/src/value/string.rs",
+        "patchSetId": 23
+      },
+      "lineNbr": 364,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2024-01-20T20:14:04Z",
+      "side": 1,
+      "message": "Technically, `nix_escape_string()` is a byte array -\u003e byte array transformation, but I\u0027m happy to push these changes to a later issue/CL, since it kind of requires thinking about another can of worms entirely (whether printing should just vomit bytes, since that\u0027d be technically correct if you want output to be equivalent to the expression that produced it in as many cases as possible…).",
+      "range": {
+        "startLine": 364,
+        "startChar": 29,
+        "endLine": 364,
+        "endChar": 46
+      },
+      "revId": "978f529485065c3b2f02a0abc693f5eb1323992c",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "0ad608ea_776990c6",
         "filename": "tvix/eval/src/vm/mod.rs",
         "patchSetId": 23
@@ -150,6 +293,75 @@
       "writtenOn": "2024-01-20T00:32:19Z",
       "side": 1,
       "message": "can be dropped",
+      "revId": "978f529485065c3b2f02a0abc693f5eb1323992c",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "dfc84c25_a78bea70",
+        "filename": "tvix/glue/src/builtins/derivation.rs",
+        "patchSetId": 23
+      },
+      "lineNbr": 139,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2024-01-20T20:14:04Z",
+      "side": 1,
+      "message": "@flokli@flokli.de This should also use byte strings in the future, I\u0027d say—it\u0027s always an ASCII sequence.\n\nSame goes for a lot of derivation stuff though I\u0027m not sure maybe a little thinking about windows is required.",
+      "range": {
+        "startLine": 139,
+        "startChar": 26,
+        "endLine": 139,
+        "endChar": 42
+      },
+      "revId": "978f529485065c3b2f02a0abc693f5eb1323992c",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e609adb1_e73b9dc1",
+        "filename": "tvix/glue/src/builtins/derivation.rs",
+        "patchSetId": 23
+      },
+      "lineNbr": 254,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2024-01-20T20:14:04Z",
+      "side": 1,
+      "message": "Why do we this here, but `s.to_str()?.to_owned()` elsewhere?",
+      "range": {
+        "startLine": 254,
+        "startChar": 51,
+        "endLine": 254,
+        "endChar": 79
+      },
+      "revId": "978f529485065c3b2f02a0abc693f5eb1323992c",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "061917e4_1f2dc940",
+        "filename": "tvix/glue/src/builtins/derivation.rs",
+        "patchSetId": 23
+      },
+      "lineNbr": 287,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2024-01-20T20:14:04Z",
+      "side": 1,
+      "message": "I think a DerivationSafeString wrapper would be nice which checks the drv path requirements (subset of ASCII) upon construction, then a lot of lossy conversion can go away here.",
+      "range": {
+        "startLine": 287,
+        "startChar": 56,
+        "endLine": 287,
+        "endChar": 73
+      },
       "revId": "978f529485065c3b2f02a0abc693f5eb1323992c",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
