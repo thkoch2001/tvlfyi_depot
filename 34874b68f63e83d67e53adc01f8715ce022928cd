@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "69057426_9448388a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000073
+      },
+      "writtenOn": "2024-01-20T03:45:34Z",
+      "side": 1,
+      "message": "I would like to open this to discuss how to implement position tracking in tvix.",
+      "revId": "34874b68f63e83d67e53adc01f8715ce022928cd",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
