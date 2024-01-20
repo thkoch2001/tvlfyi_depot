@@ -18,6 +18,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "1721a025_6ac25499",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1000073
+      },
+      "writtenOn": "2024-01-20T15:00:53Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d93e0983_acfb4063",
+      "revId": "fe422fa15cc567d5218f305b2c4f6252a42c735a",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "c1b54283_444e7eff",
@@ -35,6 +53,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "53c81cd6_77b42367",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1000073
+      },
+      "writtenOn": "2024-01-20T15:00:53Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c1b54283_444e7eff",
+      "revId": "fe422fa15cc567d5218f305b2c4f6252a42c735a",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "124a37e2_87e1b506",
@@ -48,6 +84,24 @@
       "writtenOn": "2024-01-20T06:05:21Z",
       "side": 1,
       "message": "to pass, or to get?",
+      "revId": "fe422fa15cc567d5218f305b2c4f6252a42c735a",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4aef759a_d1b67f41",
+        "filename": "tvix/nix-compat/src/nixhash/mod.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 241,
+      "author": {
+        "id": 1000073
+      },
+      "writtenOn": "2024-01-20T15:00:53Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "124a37e2_87e1b506",
       "revId": "fe422fa15cc567d5218f305b2c4f6252a42c735a",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
