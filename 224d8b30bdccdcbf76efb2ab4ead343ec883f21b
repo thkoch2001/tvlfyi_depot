@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "14898979_a6a85d84",
+        "filename": "tvix/glue/src/builtins/derivation.rs",
+        "patchSetId": 28
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1000073
+      },
+      "writtenOn": "2024-01-20T18:32:06Z",
+      "side": 1,
+      "message": "useless and to remove I guess",
+      "revId": "224d8b30bdccdcbf76efb2ab4ead343ec883f21b",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "48da9184_dbc24eeb",
+        "filename": "tvix/glue/src/builtins/import.rs",
+        "patchSetId": 28
+      },
+      "lineNbr": 68,
+      "author": {
+        "id": 1000073
+      },
+      "writtenOn": "2024-01-20T18:32:06Z",
+      "side": 1,
+      "message": "debug to remove",
+      "revId": "224d8b30bdccdcbf76efb2ab4ead343ec883f21b",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f01aad18_002cc42f",
+        "filename": "tvix/glue/src/builtins/import.rs",
+        "patchSetId": 28
+      },
+      "lineNbr": 74,
+      "author": {
+        "id": 1000073
+      },
+      "writtenOn": "2024-01-20T18:32:06Z",
+      "side": 1,
+      "message": "debug to remove",
+      "revId": "224d8b30bdccdcbf76efb2ab4ead343ec883f21b",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
