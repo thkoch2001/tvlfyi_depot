@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6847b130_dc433658",
+        "filename": "tvix/store/src/import.rs",
+        "patchSetId": 15
+      },
+      "lineNbr": 92,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-01-20T18:13:19Z",
+      "side": 1,
+      "message": "Can\u0027t we replace all changes in this file by just adding name to the fields instrumented here?\n\nit\u0027ll be available in the log output for log_node transitively, and is other than that unused.",
+      "revId": "4da927c2d8aa14a388e9613815a1ddf5785bca14",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
