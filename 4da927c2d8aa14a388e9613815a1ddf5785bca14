@@ -16,6 +16,24 @@
       "message": "Can\u0027t we replace all changes in this file by just adding name to the fields instrumented here?\n\nit\u0027ll be available in the log output for log_node transitively, and is other than that unused.",
       "revId": "4da927c2d8aa14a388e9613815a1ddf5785bca14",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b23b3d03_43024297",
+        "filename": "tvix/store/src/import.rs",
+        "patchSetId": 15
+      },
+      "lineNbr": 92,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-01-20T18:20:38Z",
+      "side": 1,
+      "message": "I missed it\u0027s (still) passed to the `build_nar_based_store_path` call now, sorry.\n\nI however still think it\u0027s ok if we add the name to the span here already, rather than deep in the log_function.",
+      "parentUuid": "6847b130_dc433658",
+      "revId": "4da927c2d8aa14a388e9613815a1ddf5785bca14",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
