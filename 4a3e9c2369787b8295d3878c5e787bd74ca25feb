@@ -39,6 +39,40 @@
       },
       "revId": "4a3e9c2369787b8295d3878c5e787bd74ca25feb",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b0779050_6c2d2465",
+        "filename": "tvix/castore/src/import.rs",
+        "patchSetId": 17
+      },
+      "lineNbr": 215,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-01-20T14:59:53Z",
+      "side": 1,
+      "message": "The comment is wrong, we don\u0027t use contents_first in WalkDir.",
+      "revId": "4a3e9c2369787b8295d3878c5e787bd74ca25feb",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "42d96390_66421067",
+        "filename": "tvix/castore/src/import.rs",
+        "patchSetId": 17
+      },
+      "lineNbr": 232,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-01-20T14:59:53Z",
+      "side": 1,
+      "message": "Log a futurework to debug_assert for the resulting Ok(b3_digest) to equal to directories.get(entry.path()).\n\nThis needs a bit more restructuring to be movable to the scope opened in L216, so let\u0027s do it in a followup, but I don\u0027t want to forget to add this.",
+      "revId": "4a3e9c2369787b8295d3878c5e787bd74ca25feb",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
