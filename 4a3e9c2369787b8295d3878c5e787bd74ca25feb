@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e1a8a2a0_98a6b895",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 17
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-01-20T14:52:12Z",
+      "side": 1,
+      "message": "Later in the commit message you elaborate on other options. Maybe be a bit less black and white?",
+      "revId": "4a3e9c2369787b8295d3878c5e787bd74ca25feb",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "81002108_0e2f1add",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 17
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-01-20T14:52:12Z",
+      "side": 1,
+      "message": "sibling nodes",
+      "range": {
+        "startLine": 21,
+        "startChar": 19,
+        "endLine": 21,
+        "endChar": 24
+      },
+      "revId": "4a3e9c2369787b8295d3878c5e787bd74ca25feb",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
