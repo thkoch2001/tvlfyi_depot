@@ -16,6 +16,24 @@
       "message": "@flokli@flokli.de is this more to your taste? 😋",
       "revId": "245cfe5a89dbbbf8f6926ba1764f1bad445cc199",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4c579a5c_eeb8cab6",
+        "filename": "tvix/castore/src/import.rs",
+        "patchSetId": 5
+      },
+      "lineNbr": 296,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-01-20T14:53:27Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "c117ca7c_f366995a",
+      "revId": "245cfe5a89dbbbf8f6926ba1764f1bad445cc199",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
