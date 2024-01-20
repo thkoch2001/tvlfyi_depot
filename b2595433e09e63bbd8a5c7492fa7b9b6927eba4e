@@ -1,0 +1,106 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "82d0fd73_0ccfa551",
+        "filename": "tvix/glue/src/builtins/import.rs",
+        "patchSetId": 42
+      },
+      "lineNbr": 171,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-01-20T18:48:29Z",
+      "side": 1,
+      "message": "`Err(…)?;` automatically `.into()`\u0027s, so this can be a bit shorter.",
+      "revId": "b2595433e09e63bbd8a5c7492fa7b9b6927eba4e",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f46c2b58_89f00026",
+        "filename": "tvix/glue/src/builtins/import.rs",
+        "patchSetId": 42
+      },
+      "lineNbr": 179,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-01-20T18:48:29Z",
+      "side": 1,
+      "message": "We can probably just `.unwrap()` here, like in the other places where we use castore digests as B3Digest.",
+      "revId": "b2595433e09e63bbd8a5c7492fa7b9b6927eba4e",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d05b5748_f2988d53",
+        "filename": "tvix/glue/src/builtins/import.rs",
+        "patchSetId": 42
+      },
+      "lineNbr": 194,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-01-20T18:48:29Z",
+      "side": 1,
+      "message": "This will trigger when narinfo is None, not when it\u0027s a FOD or not.\n\n`narinfo must be Some()` should be sufficient.",
+      "revId": "b2595433e09e63bbd8a5c7492fa7b9b6927eba4e",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1244deac_c83199f1",
+        "filename": "tvix/glue/src/builtins/import.rs",
+        "patchSetId": 42
+      },
+      "lineNbr": 198,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-01-20T18:48:29Z",
+      "side": 1,
+      "message": "Same logic as above, you can unwrap after the conversion, this is already validated.",
+      "revId": "b2595433e09e63bbd8a5c7492fa7b9b6927eba4e",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bf169dc0_7098be6e",
+        "filename": "tvix/glue/src/builtins/import.rs",
+        "patchSetId": 42
+      },
+      "lineNbr": 204,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-01-20T18:48:29Z",
+      "side": 1,
+      "message": "`Err(…)?;` automatically `.into()`\u0027s, so this can be a bit shorter.",
+      "revId": "b2595433e09e63bbd8a5c7492fa7b9b6927eba4e",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "beed878f_a6c26443",
+        "filename": "tvix/glue/src/builtins/import.rs",
+        "patchSetId": 42
+      },
+      "lineNbr": 234,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-01-20T18:48:29Z",
+      "side": 1,
+      "message": "`Err(…)?;` automatically `.into()`\u0027s, so this can be a bit shorter.",
+      "revId": "b2595433e09e63bbd8a5c7492fa7b9b6927eba4e",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
