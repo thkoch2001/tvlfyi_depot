@@ -1,0 +1,135 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1667f814_aa6e8776",
+        "filename": "tvix/castore/src/import.rs",
+        "patchSetId": 20
+      },
+      "lineNbr": 152,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-01-20T17:24:21Z",
+      "side": 1,
+      "message": "Write in passive: \"This low-level function can be used if additional filtering…\"",
+      "revId": "a3e894aab60863e48fc310930d85a22f9de88972",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5c2b5186_4f9b76a0",
+        "filename": "tvix/castore/src/import.rs",
+        "patchSetId": 20
+      },
+      "lineNbr": 161,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-01-20T17:24:21Z",
+      "side": 1,
+      "message": "s/insertion/ingestion/\n\nThe high level function is called ingest_path, this is more consistent.",
+      "revId": "a3e894aab60863e48fc310930d85a22f9de88972",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0b080288_83068b33",
+        "filename": "tvix/castore/src/import.rs",
+        "patchSetId": 20
+      },
+      "lineNbr": 198,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-01-20T17:24:21Z",
+      "side": 1,
+      "message": "// Convert a leveled-key vector of filesystem entries into a stream of\n// [`DirEntry`] in a way that honors the Merkle invariant, i.e. from bottom to top.",
+      "revId": "a3e894aab60863e48fc310930d85a22f9de88972",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "dfa1c21e_c3343c02",
+        "filename": "tvix/castore/src/import.rs",
+        "patchSetId": 20
+      },
+      "lineNbr": 259,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-01-20T17:24:21Z",
+      "side": 1,
+      "message": "Can we also put this behind `#[cfg(debug_assertions)]`?",
+      "revId": "a3e894aab60863e48fc310930d85a22f9de88972",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7df3d766_bad5f675",
+        "filename": "tvix/castore/src/import.rs",
+        "patchSetId": 20
+      },
+      "lineNbr": 281,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-01-20T17:24:21Z",
+      "side": 1,
+      "message": "This crate is tvix-castore, not tvix-store.\ntvix-store doesn\u0027t have anything to do with it (it just holds root nodes).\n\nI think this should just say:\n\n\u003e Ingests elements from the given stream of [DirEntry] into a the passed [BlobService] and [DirectoryService].",
+      "range": {
+        "startLine": 281,
+        "startChar": 49,
+        "endLine": 281,
+        "endChar": 60
+      },
+      "revId": "a3e894aab60863e48fc310930d85a22f9de88972",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "630cb5d4_e0f61fe9",
+        "filename": "tvix/castore/src/import.rs",
+        "patchSetId": 20
+      },
+      "lineNbr": 322,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-01-20T17:24:21Z",
+      "side": 1,
+      "message": "FUTUREWORK: handle directory putting here, rather than piping it through process_entry.",
+      "revId": "a3e894aab60863e48fc310930d85a22f9de88972",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cdeda3b6_666b8495",
+        "filename": "tvix/castore/src/import.rs",
+        "patchSetId": 20
+      },
+      "lineNbr": 368,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-01-20T17:24:21Z",
+      "side": 1,
+      "message": "emitted / yielded?",
+      "range": {
+        "startLine": 368,
+        "startChar": 41,
+        "endLine": 368,
+        "endChar": 48
+      },
+      "revId": "a3e894aab60863e48fc310930d85a22f9de88972",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
