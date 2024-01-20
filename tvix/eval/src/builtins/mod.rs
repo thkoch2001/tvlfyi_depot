@@ -34,6 +34,12 @@ mod versions;
 pub use to_xml::value_to_xml;
 
 #[cfg(feature = "impure")]
+mod position_tracking;
+
+#[cfg(feature = "impure")]
+pub use position_tracking::tracking_builtins;
+
+#[cfg(feature = "impure")]
 mod impure;
 
 #[cfg(feature = "impure")]
@@ -1579,25 +1585,6 @@ mod placeholder_builtins {
         generators::emit_warning_kind(&co, WarningKind::NotImplemented("builtins.addErrorContext"))
             .await;
         Ok(val)
-    }
-
-    #[builtin("unsafeGetAttrPos")]
-    async fn builtin_unsafe_get_attr_pos(
-        co: GenCo,
-        _name: Value,
-        _attrset: Value,
-    ) -> Result<Value, ErrorKind> {
-        generators::emit_warning_kind(
-            &co,
-            WarningKind::NotImplemented("builtins.unsafeGetAttrsPos"),
-        )
-        .await;
-        let res = [
-            ("line", 42.into()),
-            ("col", 42.into()),
-            ("file", Value::String("/deep/thought".into())),
-        ];
-        Ok(Value::attrs(NixAttrs::from_iter(res.into_iter())))
     }
 }
 
