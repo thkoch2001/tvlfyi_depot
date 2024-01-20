@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "813c19b8_844cf17c",
+        "filename": "tvix/glue/src/builtins/derivation.rs",
+        "patchSetId": 24
+      },
+      "lineNbr": 705,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-01-20T06:39:39Z",
+      "side": 1,
+      "message": "did you verify that behavior matches nix? this is mostly a question of how node_to_path_info_sync handles symlinks at the root, and whether it matches Nix behavior in both cases.\n\nthis also needs tests.",
+      "revId": "9dced0f29ec3bdc6e1c5ffb3458e0c630ad0d67a",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e99afbd1_03274373",
+        "filename": "tvix/glue/src/builtins/derivation.rs",
+        "patchSetId": 24
+      },
+      "lineNbr": 716,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-01-20T06:39:39Z",
+      "side": 1,
+      "message": "Log a futurework here to avoid hashing this in again.",
+      "revId": "9dced0f29ec3bdc6e1c5ffb3458e0c630ad0d67a",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9d29cf45_3062848d",
+        "filename": "tvix/glue/src/builtins/derivation.rs",
+        "patchSetId": 24
+      },
+      "lineNbr": 742,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-01-20T06:39:39Z",
+      "side": 1,
+      "message": "Very verbose error unwrapping for something that we could already determine at the type level to be infallible.\n\nWhat do you think about `NixHash::from_sha256_digest(\u0026[u8; 32])`?",
+      "revId": "9dced0f29ec3bdc6e1c5ffb3458e0c630ad0d67a",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "327eec3d_3c2a5265",
+        "filename": "tvix/glue/src/builtins/import_error.rs",
+        "patchSetId": 24
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-01-20T06:39:39Z",
+      "side": 1,
+      "message": "aren\u0027t these more ErrorKind::IO?",
+      "revId": "9dced0f29ec3bdc6e1c5ffb3458e0c630ad0d67a",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
