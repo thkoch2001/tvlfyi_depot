@@ -170,6 +170,8 @@ impl<'co, 'ro> Evaluation<'co, 'ro, Box<dyn EvalIO>> {
     pub fn enable_impure(&mut self, io: Option<Box<dyn EvalIO>>) {
         self.io_handle = io.unwrap_or_else(|| Box::new(StdIO) as Box<dyn EvalIO>);
         self.enable_import = true;
+        self.builtins
+            .extend(builtins::tracking_builtins(self.source_map()));
         self.builtins.extend(builtins::impure_builtins());
 
         // Make `NIX_PATH` resolutions work by default, unless the
