@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "25c8ac3d_a0cbc7da",
+        "filename": "tvix/glue/src/builtins/derivation.rs",
+        "patchSetId": 10
+      },
+      "lineNbr": 622,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-01-20T06:48:18Z",
+      "side": 1,
+      "message": "This is not really a derivation builtin. can it be moved to a separate module?",
+      "revId": "2eb4054eae03e55f58dbd0df649c27470406a90a",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
