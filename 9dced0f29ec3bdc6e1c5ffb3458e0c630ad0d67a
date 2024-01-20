@@ -18,6 +18,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "3238be9c_16ef991a",
+        "filename": "tvix/glue/src/builtins/derivation.rs",
+        "patchSetId": 24
+      },
+      "lineNbr": 630,
+      "author": {
+        "id": 1000073
+      },
+      "writtenOn": "2024-01-20T15:05:38Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "19070aef_3ac62dc3",
+      "revId": "9dced0f29ec3bdc6e1c5ffb3458e0c630ad0d67a",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "813c19b8_844cf17c",
@@ -37,6 +55,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "fd263591_752031e8",
+        "filename": "tvix/glue/src/builtins/derivation.rs",
+        "patchSetId": 24
+      },
+      "lineNbr": 705,
+      "author": {
+        "id": 1000073
+      },
+      "writtenOn": "2024-01-20T15:05:38Z",
+      "side": 1,
+      "message": "I did verify that if you have a symlink and try to use it in flat, Nix will resolve it maximally as a file and work with it.\n\nIf the symlink resolves to a dir, it fails.\nIf the symlink is broken, it fails.\n\nI agree on tests.",
+      "parentUuid": "813c19b8_844cf17c",
+      "revId": "9dced0f29ec3bdc6e1c5ffb3458e0c630ad0d67a",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "e99afbd1_03274373",
         "filename": "tvix/glue/src/builtins/derivation.rs",
         "patchSetId": 24
@@ -48,6 +84,24 @@
       "writtenOn": "2024-01-20T06:39:39Z",
       "side": 1,
       "message": "Log a futurework here to avoid hashing this in again.",
+      "revId": "9dced0f29ec3bdc6e1c5ffb3458e0c630ad0d67a",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4d78ded3_a7bf167c",
+        "filename": "tvix/glue/src/builtins/derivation.rs",
+        "patchSetId": 24
+      },
+      "lineNbr": 716,
+      "author": {
+        "id": 1000073
+      },
+      "writtenOn": "2024-01-20T15:05:38Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e99afbd1_03274373",
       "revId": "9dced0f29ec3bdc6e1c5ffb3458e0c630ad0d67a",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
@@ -71,6 +125,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "938d71d9_1ffd94f2",
+        "filename": "tvix/glue/src/builtins/derivation.rs",
+        "patchSetId": 24
+      },
+      "lineNbr": 742,
+      "author": {
+        "id": 1000073
+      },
+      "writtenOn": "2024-01-20T15:05:38Z",
+      "side": 1,
+      "message": "\u003e Very verbose error unwrapping for something that we could already determine at the type level to be infallible.\n\u003e \n\u003e What do you think about `NixHash::from_sha256_digest(\u0026[u8; 32])`?\n\nWorks for me.",
+      "parentUuid": "9d29cf45_3062848d",
+      "revId": "9dced0f29ec3bdc6e1c5ffb3458e0c630ad0d67a",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "327eec3d_3c2a5265",
         "filename": "tvix/glue/src/builtins/import_error.rs",
         "patchSetId": 24
@@ -82,6 +154,24 @@
       "writtenOn": "2024-01-20T06:39:39Z",
       "side": 1,
       "message": "aren\u0027t these more ErrorKind::IO?",
+      "revId": "9dced0f29ec3bdc6e1c5ffb3458e0c630ad0d67a",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ba8308d4_87b4333d",
+        "filename": "tvix/glue/src/builtins/import_error.rs",
+        "patchSetId": 24
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1000073
+      },
+      "writtenOn": "2024-01-20T15:05:38Z",
+      "side": 1,
+      "message": "\u003e aren\u0027t these more ErrorKind::IO?\n\nDepends on your political stance here ;).\n\nHash mismatch can be seen as an IO layer error if you consider that user errors can never happen, and it\u0027s all about corruption of the IO layer.\n\nConversely, if hash mismatch can be mistakes from the user, you don\u0027t want to make this sound too much about your disk having an issue, otherwise the user will be confused.\n\nI think the error-ing has anyway a lot of improvements (not only here) so I am fine with whatever and I will revisit it anyway later on.",
+      "parentUuid": "327eec3d_3c2a5265",
       "revId": "9dced0f29ec3bdc6e1c5ffb3458e0c630ad0d67a",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
