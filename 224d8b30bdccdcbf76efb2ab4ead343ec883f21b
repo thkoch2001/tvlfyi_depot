@@ -18,6 +18,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "d3389001_0fd211ad",
+        "filename": "tvix/glue/src/builtins/derivation.rs",
+        "patchSetId": 28
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1000073
+      },
+      "writtenOn": "2024-01-20T20:25:11Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "14898979_a6a85d84",
+      "revId": "224d8b30bdccdcbf76efb2ab4ead343ec883f21b",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "48da9184_dbc24eeb",

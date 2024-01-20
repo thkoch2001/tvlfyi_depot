@@ -18,6 +18,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "9d9179c7_34f30524",
+        "filename": "tvix/glue/src/builtins/import.rs",
+        "patchSetId": 27
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1000073
+      },
+      "writtenOn": "2024-01-20T20:25:11Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a2bb1707_33c94536",
+      "revId": "faa4c44a5e466f8145692332ebd69e5b0d33ab55",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "d51edb4b_8f654571",
@@ -66,6 +84,24 @@
       "writtenOn": "2024-01-20T19:02:40Z",
       "side": 1,
       "message": "This should not be a panic, but a ErrorKind::IO",
+      "revId": "faa4c44a5e466f8145692332ebd69e5b0d33ab55",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "51473c7f_24940936",
+        "filename": "tvix/glue/src/builtins/import.rs",
+        "patchSetId": 27
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 1000073
+      },
+      "writtenOn": "2024-01-20T20:25:11Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2b05d765_da8ec1b5",
       "revId": "faa4c44a5e466f8145692332ebd69e5b0d33ab55",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
@@ -240,6 +276,24 @@
       "writtenOn": "2024-01-20T19:02:40Z",
       "side": 1,
       "message": "error handling",
+      "revId": "faa4c44a5e466f8145692332ebd69e5b0d33ab55",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "53f7bfcc_499de88e",
+        "filename": "tvix/glue/src/builtins/import.rs",
+        "patchSetId": 27
+      },
+      "lineNbr": 126,
+      "author": {
+        "id": 1000073
+      },
+      "writtenOn": "2024-01-20T20:25:11Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d72814de_52cca60e",
       "revId": "faa4c44a5e466f8145692332ebd69e5b0d33ab55",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
