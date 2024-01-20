@@ -18,6 +18,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "a11b68cc_bf1c9605",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 17
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1000073
+      },
+      "writtenOn": "2024-01-20T15:15:35Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e1a8a2a0_98a6b895",
+      "revId": "4a3e9c2369787b8295d3878c5e787bd74ca25feb",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "81002108_0e2f1add",
@@ -31,6 +49,30 @@
       "writtenOn": "2024-01-20T14:52:12Z",
       "side": 1,
       "message": "sibling nodes",
+      "range": {
+        "startLine": 21,
+        "startChar": 19,
+        "endLine": 21,
+        "endChar": 24
+      },
+      "revId": "4a3e9c2369787b8295d3878c5e787bd74ca25feb",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "784ccbbc_4721db33",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 17
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1000073
+      },
+      "writtenOn": "2024-01-20T15:15:35Z",
+      "side": 1,
+      "message": "I disagree; it\u0027s not sufficient to store siblings. You need to store *all* intermediate nodes, where \u0027intermediate\u0027 is the usual meaning you can find in graph theory.\n\nI can define it if you prefer.",
+      "parentUuid": "81002108_0e2f1add",
       "range": {
         "startLine": 21,
         "startChar": 19,
@@ -58,6 +100,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "94949d21_f63c63d6",
+        "filename": "tvix/castore/src/import.rs",
+        "patchSetId": 17
+      },
+      "lineNbr": 215,
+      "author": {
+        "id": 1000073
+      },
+      "writtenOn": "2024-01-20T15:15:35Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b0779050_6c2d2465",
+      "revId": "4a3e9c2369787b8295d3878c5e787bd74ca25feb",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "42d96390_66421067",
@@ -71,6 +131,24 @@
       "writtenOn": "2024-01-20T14:59:53Z",
       "side": 1,
       "message": "Log a futurework to debug_assert for the resulting Ok(b3_digest) to equal to directories.get(entry.path()).\n\nThis needs a bit more restructuring to be movable to the scope opened in L216, so let\u0027s do it in a followup, but I don\u0027t want to forget to add this.",
+      "revId": "4a3e9c2369787b8295d3878c5e787bd74ca25feb",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f5b404dc_47dad8f9",
+        "filename": "tvix/castore/src/import.rs",
+        "patchSetId": 17
+      },
+      "lineNbr": 232,
+      "author": {
+        "id": 1000073
+      },
+      "writtenOn": "2024-01-20T15:15:35Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "42d96390_66421067",
       "revId": "4a3e9c2369787b8295d3878c5e787bd74ca25feb",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
