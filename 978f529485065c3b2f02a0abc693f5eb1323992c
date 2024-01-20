@@ -105,6 +105,40 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "14cbffcc_3e2f805f",
+        "filename": "tvix/eval/src/value/string.rs",
+        "patchSetId": 23
+      },
+      "lineNbr": 294,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-01-20T08:15:40Z",
+      "side": 1,
+      "message": "I\u0027d be careful with this, it\u0027s very easy to discard the context here by accident, if we deref to BString and then .into() a NixString again.\n\nI\u0027d prefer this to be more explicit, but also ok to be convinced otherwise.",
+      "revId": "978f529485065c3b2f02a0abc693f5eb1323992c",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3e63ebb9_8e1f0dee",
+        "filename": "tvix/eval/src/value/string.rs",
+        "patchSetId": 23
+      },
+      "lineNbr": 324,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-01-20T08:15:40Z",
+      "side": 1,
+      "message": "The aim was to keep the NixContext type somewhat private, and have operations on NixString take care of contexta as much as possible.\n\nAlso see how you previously couldn\u0027t really *access* the context, just iterate over some of its elements.\n\nSo it could at some point be put into a feature flag.",
+      "revId": "978f529485065c3b2f02a0abc693f5eb1323992c",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "0ad608ea_776990c6",
         "filename": "tvix/eval/src/vm/mod.rs",
         "patchSetId": 23
