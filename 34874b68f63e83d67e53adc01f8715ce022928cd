@@ -1,6 +1,23 @@
 {
   "comments": [
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "11febb17_55353716",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-01-20T06:20:34Z",
+      "side": 1,
+      "message": "is this needed in nixpkgs (aka, bleeding into the output hashes somewhere), or were you just inspired to implement it?",
+      "revId": "34874b68f63e83d67e53adc01f8715ce022928cd",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "69057426_9448388a",
@@ -14,6 +31,74 @@
       "writtenOn": "2024-01-20T03:45:34Z",
       "side": 1,
       "message": "I would like to open this to discuss how to implement position tracking in tvix.",
+      "revId": "34874b68f63e83d67e53adc01f8715ce022928cd",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bccbe96d_827e9ddd",
+        "filename": "tvix/eval/src/builtins/mod.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-01-20T06:20:34Z",
+      "side": 1,
+      "message": "I\u0027m sightly more inclined to have this behind a different feature flag than impure, but this can be a followup. we should log an issue though.",
+      "revId": "34874b68f63e83d67e53adc01f8715ce022928cd",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e69c20fd_e9c395fa",
+        "filename": "tvix/eval/src/builtins/position_tracking.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-01-20T06:20:34Z",
+      "side": 1,
+      "message": "we\u0027re still emitting the warning...",
+      "revId": "34874b68f63e83d67e53adc01f8715ce022928cd",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f879562e_1fb39b9c",
+        "filename": "tvix/eval/src/lib.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 165,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-01-20T06:20:34Z",
+      "side": 1,
+      "message": "SourceCode is a pub struct SourceCode(Rc\u003cRefCell\u003cCodeMap\u003e\u003e), deriving a (cheap) clone already.",
+      "revId": "34874b68f63e83d67e53adc01f8715ce022928cd",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c17ab379_724499cb",
+        "filename": "tvix/eval/src/lib.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 167,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-01-20T06:20:34Z",
+      "side": 1,
+      "message": "please add a helper function, similar to add_derivation_builtins in tvix-glue, that takes a \u0026Mut Evaluation.\n\nWe don\u0027t really use new_impure in that many places anymore, but rather new() and new_pure() and then customize it.",
       "revId": "34874b68f63e83d67e53adc01f8715ce022928cd",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
