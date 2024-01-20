@@ -35,6 +35,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "0e797125_dda0f77c",
+        "filename": "tvix/glue/src/builtins/import.rs",
+        "patchSetId": 27
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1000073
+      },
+      "writtenOn": "2024-01-20T20:18:17Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d51edb4b_8f654571",
+      "revId": "faa4c44a5e466f8145692332ebd69e5b0d33ab55",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "2b05d765_da8ec1b5",
@@ -86,6 +104,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "e64a29b3_b54bd809",
+        "filename": "tvix/glue/src/builtins/import.rs",
+        "patchSetId": 27
+      },
+      "lineNbr": 68,
+      "author": {
+        "id": 1000073
+      },
+      "writtenOn": "2024-01-20T20:18:17Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "50889b3e_0a8a0640",
+      "revId": "faa4c44a5e466f8145692332ebd69e5b0d33ab55",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "1b3e82e4_da9abf4d",
@@ -99,6 +135,24 @@
       "writtenOn": "2024-01-20T19:02:40Z",
       "side": 1,
       "message": "same",
+      "revId": "faa4c44a5e466f8145692332ebd69e5b0d33ab55",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8bb7948c_ac686c6c",
+        "filename": "tvix/glue/src/builtins/import.rs",
+        "patchSetId": 27
+      },
+      "lineNbr": 74,
+      "author": {
+        "id": 1000073
+      },
+      "writtenOn": "2024-01-20T20:18:17Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "1b3e82e4_da9abf4d",
       "revId": "faa4c44a5e466f8145692332ebd69e5b0d33ab55",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
@@ -120,6 +174,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "39249bfc_47657321",
+        "filename": "tvix/glue/src/builtins/import.rs",
+        "patchSetId": 27
+      },
+      "lineNbr": 80,
+      "author": {
+        "id": 1000073
+      },
+      "writtenOn": "2024-01-20T20:18:17Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "4a25aff5_986b6066",
+      "revId": "faa4c44a5e466f8145692332ebd69e5b0d33ab55",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "8d59e182_12abdc8e",
@@ -133,6 +205,24 @@
       "writtenOn": "2024-01-20T19:02:40Z",
       "side": 1,
       "message": "Error handling",
+      "revId": "faa4c44a5e466f8145692332ebd69e5b0d33ab55",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "14299e3e_4587be2e",
+        "filename": "tvix/glue/src/builtins/import.rs",
+        "patchSetId": 27
+      },
+      "lineNbr": 99,
+      "author": {
+        "id": 1000073
+      },
+      "writtenOn": "2024-01-20T20:18:17Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8d59e182_12abdc8e",
       "revId": "faa4c44a5e466f8145692332ebd69e5b0d33ab55",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
@@ -171,6 +261,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "b56ce225_eb302ffa",
+        "filename": "tvix/glue/src/builtins/mod.rs",
+        "patchSetId": 27
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 1000073
+      },
+      "writtenOn": "2024-01-20T20:18:17Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "de214950_5fcc0bb3",
+      "revId": "faa4c44a5e466f8145692332ebd69e5b0d33ab55",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "04590aa2_bb8073c8",
@@ -188,6 +296,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "2c03232f_5c07b514",
+        "filename": "tvix/glue/src/tvix_store_io.rs",
+        "patchSetId": 27
+      },
+      "lineNbr": 169,
+      "author": {
+        "id": 1000073
+      },
+      "writtenOn": "2024-01-20T20:18:17Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "04590aa2_bb8073c8",
+      "revId": "faa4c44a5e466f8145692332ebd69e5b0d33ab55",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "99fe686a_45c45bb6",
@@ -201,6 +327,24 @@
       "writtenOn": "2024-01-20T19:02:40Z",
       "side": 1,
       "message": "You don\u0027t need this in cl/10597 either, so I\u0027d favor to remove it. It\u0027s small enough to resurrect if we realize we need it.",
+      "revId": "faa4c44a5e466f8145692332ebd69e5b0d33ab55",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7afda59a_8bf0c2f0",
+        "filename": "tvix/glue/src/tvix_store_io.rs",
+        "patchSetId": 27
+      },
+      "lineNbr": 180,
+      "author": {
+        "id": 1000073
+      },
+      "writtenOn": "2024-01-20T20:18:17Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "99fe686a_45c45bb6",
       "revId": "faa4c44a5e466f8145692332ebd69e5b0d33ab55",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
