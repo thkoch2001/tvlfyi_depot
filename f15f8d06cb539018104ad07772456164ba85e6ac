@@ -35,6 +35,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "acaa4b7c_5cca1d58",
+        "filename": "tvix/nix-lang-test-suite/README.md",
+        "patchSetId": 2
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2024-01-21T17:21:23Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c607703e_dec45182",
+      "revId": "f15f8d06cb539018104ad07772456164ba85e6ac",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "8982b33d_00087fef",
@@ -48,6 +66,24 @@
       "writtenOn": "2024-01-17T17:49:52Z",
       "side": 1,
       "message": "I understand talking about parsing, but `rnix-parser` is not under our control in this monorepo, right? How does that fit with this design document?",
+      "revId": "f15f8d06cb539018104ad07772456164ba85e6ac",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "894c943c_727c1449",
+        "filename": "tvix/nix-lang-test-suite/README.md",
+        "patchSetId": 2
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2024-01-21T17:21:23Z",
+      "side": 1,
+      "message": "We are aiming to make an implementation independent test suite that makes sense to run for any implementation and possibly other Nix (lang) related software. So I think it makes sense to survey what is tested elsewhere.\n\nWe don\u0027t control that much anyways—our test suite is the C++ Nix test suite with extra cases…",
+      "parentUuid": "8982b33d_00087fef",
       "revId": "f15f8d06cb539018104ad07772456164ba85e6ac",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
@@ -71,6 +107,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "c519a77d_7a6ac1ef",
+        "filename": "tvix/nix-lang-test-suite/README.md",
+        "patchSetId": 2
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2024-01-21T17:21:23Z",
+      "side": 1,
+      "message": "Obviously, but it\u0027s not necessarily easy to distinguish if you use an exit code.",
+      "parentUuid": "aed3d175_d292146a",
+      "revId": "f15f8d06cb539018104ad07772456164ba85e6ac",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "2fc13351_bc43fbb7",
         "filename": "tvix/nix-lang-test-suite/README.md",
         "patchSetId": 2
@@ -82,6 +136,24 @@
       "writtenOn": "2024-01-17T17:49:52Z",
       "side": 1,
       "message": "what about using standardization of error codes here?",
+      "revId": "f15f8d06cb539018104ad07772456164ba85e6ac",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fd0b1443_dc379762",
+        "filename": "tvix/nix-lang-test-suite/README.md",
+        "patchSetId": 2
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2024-01-21T17:21:23Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2fc13351_bc43fbb7",
       "revId": "f15f8d06cb539018104ad07772456164ba85e6ac",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
