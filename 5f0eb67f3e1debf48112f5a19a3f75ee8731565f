@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e0ca9a47_a64d7a17",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-01-21T10:35:49Z",
+      "side": 1,
+      "message": "clippy spotted you can elide lifetimes in one spot, so that needs fixing, but otherwise LGTM. thanks!",
+      "revId": "5f0eb67f3e1debf48112f5a19a3f75ee8731565f",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
