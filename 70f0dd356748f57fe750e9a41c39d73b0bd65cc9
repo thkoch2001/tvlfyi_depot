@@ -20,6 +20,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "2b91bed4_1cd2ae69",
+        "filename": "tvix/nar-bridge/cmd/nar-bridge-http/main.go",
+        "patchSetId": 3
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2024-01-21T23:13:17Z",
+      "side": 1,
+      "message": "runtime.Version is the version of Go not the service itself. I tried using debug.ReadBuildInfo to get the version of the main module but its always (devel). Maybe that\u0027s fine?",
+      "parentUuid": "f12a6fdf_29d7904d",
+      "revId": "70f0dd356748f57fe750e9a41c39d73b0bd65cc9",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "d5271fcd_48200d49",
         "filename": "tvix/nar-bridge/cmd/nar-bridge-http/otel.go",
         "patchSetId": 3
@@ -31,6 +49,24 @@
       "writtenOn": "2024-01-21T21:38:03Z",
       "side": 1,
       "message": "Peeking at https://pkg.go.dev/go.opentelemetry.io/otel/exporters/otlp/otlptrace/otlptracegrpc, this seems to be mostly configurable via env vars (`OTEL_EXPORTER_OTLP_{ENDPOINT,INSECURE}`).\n\nI\u0027d prefer not hardcoding disabling https support, users can set these env vars.",
+      "revId": "70f0dd356748f57fe750e9a41c39d73b0bd65cc9",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6c17698c_d5387455",
+        "filename": "tvix/nar-bridge/cmd/nar-bridge-http/otel.go",
+        "patchSetId": 3
+      },
+      "lineNbr": 64,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2024-01-21T23:13:17Z",
+      "side": 1,
+      "message": "Oh nice, didn\u0027t know about those env vars!",
+      "parentUuid": "d5271fcd_48200d49",
       "revId": "70f0dd356748f57fe750e9a41c39d73b0bd65cc9",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
@@ -48,6 +84,24 @@
       "writtenOn": "2024-01-21T21:38:03Z",
       "side": 1,
       "message": "So this also pushes metrics for grpc client requests?\n\nat least otelhttp mentions it enriches the handlers it wraps with metrics.",
+      "revId": "70f0dd356748f57fe750e9a41c39d73b0bd65cc9",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f9a72bf5_4b9ddb74",
+        "filename": "tvix/nar-bridge/cmd/nar-bridge-http/otel.go",
+        "patchSetId": 3
+      },
+      "lineNbr": 84,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2024-01-21T23:13:17Z",
+      "side": 1,
+      "message": "It looks like the otlp grpc interceptor also generates metrics: https://pkg.go.dev/go.opentelemetry.io/otel/exporters/otlp/otlpgrpc",
+      "parentUuid": "05b5d406_058fe68b",
       "revId": "70f0dd356748f57fe750e9a41c39d73b0bd65cc9",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
