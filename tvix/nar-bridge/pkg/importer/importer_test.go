@@ -6,6 +6,7 @@ import (
 	"errors"
 	"io"
 	"os"
+	"sync/atomic"
 	"testing"
 
 	castorev1pb "code.tvl.fyi/tvix/castore-go"
@@ -121,16 +122,7 @@ func TestFull(t *testing.T) {
 	f, err := os.Open("../../testdata/nar_1094wph9z4nwlgvsd53abfz8i117ykiv5dwnq9nnhz846s7xqd7d.nar")
 	require.NoError(t, err)
 
-	expectedDirectoryPaths := []string{
-		"/bin",
-		"/share/man/man1",
-		"/share/man/man5",
-		"/share/man/man8",
-		"/share/man",
-		"/share",
-		"/",
-	}
-	expectedDirectories := make(map[string]*castorev1pb.Directory, len(expectedDirectoryPaths))
+	expectedDirectories := make(map[string]*castorev1pb.Directory)
 
 	// /bin is a leaf directory
 	expectedDirectories["/bin"] = &castorev1pb.Directory{
@@ -424,10 +416,16 @@ func TestFull(t *testing.T) {
 			},
 		},
 	}
-	// assert we populated the two fixtures properly
-	require.Equal(t, len(expectedDirectoryPaths), len(expectedDirectories))
 
-	numDirectoriesReceived := 0
+	expectedDirectoriesByDigest := make(map[[32]byte]*castorev1pb.Directory)
+	for _, directory := range expectedDirectories {
+		digest := mustDirectoryDigest(directory)
+		var key [32]byte
+		copy(key[:], digest)
+		expectedDirectoriesByDigest[key] = directory
+	}
+
+	var numDirectoriesReceived atomic.Int32
 
 	rootNode, narSize, narSha256, err := importer.Import(
 		context.Background(),
@@ -438,15 +436,16 @@ func TestFull(t *testing.T) {
 			// directoryCb calls, and TestRegular ensures the reader works.
 			return mustBlobDigest(blobReader), nil
 		}, func(directory *castorev1pb.Directory) ([]byte, error) {
-			// use actualDirectoryOrder to look up the Directory object we expect at this specific invocation.
-			currentDirectoryPath := expectedDirectoryPaths[numDirectoriesReceived]
+			digest := mustDirectoryDigest(directory)
+			var key [32]byte
+			copy(key[:], digest)
 
-			expectedDirectory, found := expectedDirectories[currentDirectoryPath]
+			expectedDirectory, found := expectedDirectoriesByDigest[key]
 			require.True(t, found, "must find the current directory")
 
 			requireProtoEq(t, expectedDirectory, directory)
 
-			numDirectoriesReceived += 1
+			numDirectoriesReceived.Add(1)
 			return mustDirectoryDigest(directory), nil
 		},
 	)
@@ -464,6 +463,7 @@ func TestFull(t *testing.T) {
 		0xc6, 0xe1, 0x55, 0xb3, 0x45, 0x6e, 0x30, 0xb7, 0x61, 0x22, 0x63, 0xec, 0x09, 0x50, 0x70, 0x81, 0x1c, 0xaf, 0x8a, 0xbf, 0xd5, 0x9f, 0xaa, 0x72, 0xab, 0x82, 0xa5, 0x92, 0xef, 0xde, 0xb2, 0x53,
 	}, narSha256)
 	require.Equal(t, uint64(464152), narSize)
+	require.Equal(t, int32(len(expectedDirectoriesByDigest)), numDirectoriesReceived.Load())
 }
 
 // TestCallbackErrors ensures that errors returned from the callback function
