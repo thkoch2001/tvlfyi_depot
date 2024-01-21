@@ -52,6 +52,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "3f2c5e2f_c38e659f",
+        "filename": "tvix/eval/src/builtins/mod.rs",
+        "patchSetId": 23
+      },
+      "lineNbr": 361,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2024-01-21T15:40:00Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "353f571d_a65911ad",
+      "revId": "978f529485065c3b2f02a0abc693f5eb1323992c",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "93bea8b3_8a44bbe5",
@@ -65,6 +83,24 @@
       "writtenOn": "2024-01-20T00:32:19Z",
       "side": 1,
       "message": "Not sure if I understand that now there\u0027s `into_parts`, `from_parts` and `new_inherit_context_from`, cc @flokli@flokli.de",
+      "revId": "978f529485065c3b2f02a0abc693f5eb1323992c",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b3c2bfac_1f958851",
+        "filename": "tvix/eval/src/builtins/mod.rs",
+        "patchSetId": 23
+      },
+      "lineNbr": 407,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2024-01-21T15:40:00Z",
+      "side": 1,
+      "message": "This is all done primarily to avoid unnecessary cloning",
+      "parentUuid": "93bea8b3_8a44bbe5",
       "revId": "978f529485065c3b2f02a0abc693f5eb1323992c",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
@@ -86,6 +122,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c3fb36a0_6bf7a654",
+        "filename": "tvix/eval/src/builtins/mod.rs",
+        "patchSetId": 23
+      },
+      "lineNbr": 1311,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2024-01-21T15:40:00Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "16d64b27_0a98cb9a",
+      "revId": "978f529485065c3b2f02a0abc693f5eb1323992c",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "b23ce703_7accacbf",
@@ -99,6 +153,24 @@
       "writtenOn": "2024-01-20T20:14:04Z",
       "side": 1,
       "message": "Can you add a TODO here that we iterate by byte? C++ Nix can do this even if non-unicode garbage is in the string, so it\u0027d be neat to also be able to do so, although it is a niche occurrence probably.",
+      "revId": "978f529485065c3b2f02a0abc693f5eb1323992c",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6077ee08_e87bb0c6",
+        "filename": "tvix/eval/src/builtins/versions.rs",
+        "patchSetId": 23
+      },
+      "lineNbr": 61,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2024-01-21T15:40:00Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b23ce703_7accacbf",
       "revId": "978f529485065c3b2f02a0abc693f5eb1323992c",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
@@ -120,6 +192,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "617cc57b_b04f8d5d",
+        "filename": "tvix/eval/src/errors.rs",
+        "patchSetId": 23
+      },
+      "lineNbr": 181,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2024-01-21T15:40:00Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0b733ce3_cee79a83",
+      "revId": "978f529485065c3b2f02a0abc693f5eb1323992c",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "17478a19_0c8f7f36",
@@ -133,6 +223,24 @@
       "writtenOn": "2024-01-20T20:14:04Z",
       "side": 1,
       "message": "I think this comment is addressed by your change?",
+      "revId": "978f529485065c3b2f02a0abc693f5eb1323992c",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "99ba3e6e_a36ffb06",
+        "filename": "tvix/eval/src/value/mod.rs",
+        "patchSetId": 23
+      },
+      "lineNbr": 345,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2024-01-21T15:40:00Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "17478a19_0c8f7f36",
       "revId": "978f529485065c3b2f02a0abc693f5eb1323992c",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
@@ -154,6 +262,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "4310d671_ee5981c1",
+        "filename": "tvix/eval/src/value/mod.rs",
+        "patchSetId": 23
+      },
+      "lineNbr": 398,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2024-01-21T15:40:00Z",
+      "side": 1,
+      "message": "it can\u0027t matter - we have to return a BString here no matter what, so we always have to allocate on the heap (though i doubt this *really* matters)",
+      "parentUuid": "262583de_65e66805",
+      "revId": "978f529485065c3b2f02a0abc693f5eb1323992c",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "b5b91aa4_936081e7",
@@ -167,6 +293,24 @@
       "writtenOn": "2024-01-20T20:14:04Z",
       "side": 1,
       "message": "Doesn\u0027t this reference the previous use of `Box\u003cstr\u003e`? Maybe needs updating.",
+      "revId": "978f529485065c3b2f02a0abc693f5eb1323992c",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9b144c42_30e3ed3f",
+        "filename": "tvix/eval/src/value/string.rs",
+        "patchSetId": 23
+      },
+      "lineNbr": 5,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2024-01-21T15:40:00Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b5b91aa4_936081e7",
       "revId": "978f529485065c3b2f02a0abc693f5eb1323992c",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
@@ -188,6 +332,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "1b0deb37_033b89c8",
+        "filename": "tvix/eval/src/value/string.rs",
+        "patchSetId": 23
+      },
+      "lineNbr": 215,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2024-01-21T15:40:00Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ae11861e_6536614f",
+      "revId": "978f529485065c3b2f02a0abc693f5eb1323992c",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "6c83b6a4_384eadc3",
@@ -205,6 +367,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "5683a9e6_e9e8b663",
+        "filename": "tvix/eval/src/value/string.rs",
+        "patchSetId": 23
+      },
+      "lineNbr": 219,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2024-01-21T15:40:00Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6c83b6a4_384eadc3",
+      "revId": "978f529485065c3b2f02a0abc693f5eb1323992c",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "14cbffcc_3e2f805f",
@@ -218,6 +398,24 @@
       "writtenOn": "2024-01-20T08:15:40Z",
       "side": 1,
       "message": "I\u0027d be careful with this, it\u0027s very easy to discard the context here by accident, if we deref to BString and then .into() a NixString again.\n\nI\u0027d prefer this to be more explicit, but also ok to be convinced otherwise.",
+      "revId": "978f529485065c3b2f02a0abc693f5eb1323992c",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9d1038be_cffb4ba7",
+        "filename": "tvix/eval/src/value/string.rs",
+        "patchSetId": 23
+      },
+      "lineNbr": 294,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2024-01-21T15:40:00Z",
+      "side": 1,
+      "message": "I think that kind of \"avoid doing a thing by accident\" stuff should be covered by tests - not having this here is *really* annoying and verbose at the call site.",
+      "parentUuid": "14cbffcc_3e2f805f",
       "revId": "978f529485065c3b2f02a0abc693f5eb1323992c",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
@@ -259,6 +457,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "baa1ecdd_770eccf4",
+        "filename": "tvix/eval/src/value/string.rs",
+        "patchSetId": 23
+      },
+      "lineNbr": 324,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2024-01-21T15:40:00Z",
+      "side": 1,
+      "message": "Also, having `into_parts` and `from_parts` avoids a fair bit of unnecessary cloning",
+      "parentUuid": "bfadbe76_803fc77b",
+      "revId": "978f529485065c3b2f02a0abc693f5eb1323992c",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "8ad423e4_bb5cf03b",
         "filename": "tvix/eval/src/value/string.rs",
         "patchSetId": 23
@@ -282,6 +498,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "428bc424_c1c6fb8a",
+        "filename": "tvix/eval/src/value/string.rs",
+        "patchSetId": 23
+      },
+      "lineNbr": 364,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2024-01-21T15:40:00Z",
+      "side": 1,
+      "message": "yeah, I\u0027d like to push this off",
+      "parentUuid": "8ad423e4_bb5cf03b",
+      "range": {
+        "startLine": 364,
+        "startChar": 29,
+        "endLine": 364,
+        "endChar": 46
+      },
+      "revId": "978f529485065c3b2f02a0abc693f5eb1323992c",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "0ad608ea_776990c6",
         "filename": "tvix/eval/src/vm/mod.rs",
         "patchSetId": 23
@@ -293,6 +533,24 @@
       "writtenOn": "2024-01-20T00:32:19Z",
       "side": 1,
       "message": "can be dropped",
+      "revId": "978f529485065c3b2f02a0abc693f5eb1323992c",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "dd663447_38987f36",
+        "filename": "tvix/eval/src/vm/mod.rs",
+        "patchSetId": 23
+      },
+      "lineNbr": 990,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2024-01-21T15:40:00Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0ad608ea_776990c6",
       "revId": "978f529485065c3b2f02a0abc693f5eb1323992c",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
@@ -345,6 +603,30 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "a0ba8c20_43a9c402",
+        "filename": "tvix/glue/src/builtins/derivation.rs",
+        "patchSetId": 23
+      },
+      "lineNbr": 254,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2024-01-21T15:40:00Z",
+      "side": 1,
+      "message": "the latter is faster, actually, so I updated this.",
+      "parentUuid": "e609adb1_e73b9dc1",
+      "range": {
+        "startLine": 254,
+        "startChar": 51,
+        "endLine": 254,
+        "endChar": 79
+      },
+      "revId": "978f529485065c3b2f02a0abc693f5eb1323992c",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "061917e4_1f2dc940",
         "filename": "tvix/glue/src/builtins/derivation.rs",
         "patchSetId": 23
@@ -356,6 +638,30 @@
       "writtenOn": "2024-01-20T20:14:04Z",
       "side": 1,
       "message": "I think a DerivationSafeString wrapper would be nice which checks the drv path requirements (subset of ASCII) upon construction, then a lot of lossy conversion can go away here.",
+      "range": {
+        "startLine": 287,
+        "startChar": 56,
+        "endLine": 287,
+        "endChar": 73
+      },
+      "revId": "978f529485065c3b2f02a0abc693f5eb1323992c",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c7d669ab_cdde507e",
+        "filename": "tvix/glue/src/builtins/derivation.rs",
+        "patchSetId": 23
+      },
+      "lineNbr": 287,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2024-01-21T15:40:00Z",
+      "side": 1,
+      "message": "yeah, that\u0027d be nice",
+      "parentUuid": "061917e4_1f2dc940",
       "range": {
         "startLine": 287,
         "startChar": 56,
