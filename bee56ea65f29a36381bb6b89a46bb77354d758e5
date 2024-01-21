@@ -20,6 +20,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "61ff7e1e_d7e5a712",
+        "filename": "tvix/castore/src/import.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 52,
+      "author": {
+        "id": 1000073
+      },
+      "writtenOn": "2024-01-21T15:51:41Z",
+      "side": 1,
+      "message": "I can try to use it, yes",
+      "parentUuid": "d86495cc_cc558315",
+      "revId": "bee56ea65f29a36381bb6b89a46bb77354d758e5",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "83fd9a7b_4e31dc01",
         "filename": "tvix/castore/src/import.rs",
         "patchSetId": 2
