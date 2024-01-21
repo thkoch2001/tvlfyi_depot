@@ -11,6 +11,8 @@ import (
 )
 
 func requireProtoEq(t *testing.T, expected interface{}, actual interface{}) {
+	t.Helper()
+
 	if diff := cmp.Diff(expected, actual, protocmp.Transform()); diff != "" {
 		t.Errorf("unexpected difference:\n%v", diff)
 	}

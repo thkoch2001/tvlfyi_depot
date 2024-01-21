@@ -5,6 +5,7 @@ import (
 	"context"
 	"encoding/base64"
 	"fmt"
+	"sync"
 
 	castorev1pb "code.tvl.fyi/tvix/castore-go"
 	log "github.com/sirupsen/logrus"
@@ -15,6 +16,7 @@ import (
 // When the uploading is finished, a call to Done() will close the stream and
 // return the root digest returned from the directoryServiceClient.
 type DirectoriesUploader struct {
+	mu                        sync.Mutex
 	ctx                       context.Context
 	directoryServiceClient    castorev1pb.DirectoryServiceClient
 	directoryServicePutStream castorev1pb.DirectoryService_PutClient
@@ -30,6 +32,9 @@ func NewDirectoriesUploader(ctx context.Context, directoryServiceClient castorev
 }
 
 func (du *DirectoriesUploader) Put(directory *castorev1pb.Directory) ([]byte, error) {
+	du.mu.Lock()
+	defer du.mu.Unlock()
+
 	directoryDigest, err := directory.Digest()
 	if err != nil {
 		return nil, fmt.Errorf("failed calculating directory digest: %w", err)
@@ -42,6 +47,7 @@ func (du *DirectoriesUploader) Put(directory *castorev1pb.Directory) ([]byte, er
 		if err != nil {
 			return nil, fmt.Errorf("unable to initialize directory service put stream: %v", err)
 		}
+
 		du.directoryServicePutStream = directoryServicePutStream
 	}
 
