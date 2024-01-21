@@ -36,6 +36,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "57125e19_b056889c",
+        "filename": "tvix/castore/src/import.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 52,
+      "author": {
+        "id": 1000073
+      },
+      "writtenOn": "2024-01-21T15:51:47Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "61ff7e1e_d7e5a712",
+      "revId": "bee56ea65f29a36381bb6b89a46bb77354d758e5",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "83fd9a7b_4e31dc01",
@@ -49,6 +67,24 @@
       "writtenOn": "2024-01-20T21:10:01Z",
       "side": 1,
       "message": "That should only be returned if https://doc.rust-lang.org/std/fs/struct.FileType.html#method.is_file returns true, and the else case should be unknown.\n\nthere\u0027s a reason file type has is_*() functions returning bool, and not an enum - you can only be certain something is of a given type, but that doesn\u0027t mean it\u0027s automatically one of the others.",
+      "revId": "bee56ea65f29a36381bb6b89a46bb77354d758e5",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "56d5c081_6b50ae73",
+        "filename": "tvix/castore/src/import.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 85,
+      "author": {
+        "id": 1000073
+      },
+      "writtenOn": "2024-01-21T15:51:47Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "83fd9a7b_4e31dc01",
       "revId": "bee56ea65f29a36381bb6b89a46bb77354d758e5",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
