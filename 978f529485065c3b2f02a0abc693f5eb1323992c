@@ -55,6 +55,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "30cb9797_98fe5330",
+        "filename": "tvix/eval/src/builtins/mod.rs",
+        "patchSetId": 23
+      },
+      "lineNbr": 207,
+      "author": {
+        "id": 1000073
+      },
+      "writtenOn": "2024-01-21T15:44:06Z",
+      "side": 1,
+      "message": "Well, if you don\u0027t have types around, arguably, this would be nicer for code review.",
+      "parentUuid": "62e2327e_74755842",
+      "revId": "978f529485065c3b2f02a0abc693f5eb1323992c",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "353f571d_a65911ad",
         "filename": "tvix/eval/src/builtins/mod.rs",
         "patchSetId": 23
