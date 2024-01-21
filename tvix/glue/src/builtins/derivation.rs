@@ -1,9 +1,10 @@
 //! Implements `builtins.derivation`, the core of what makes Nix build packages.
 use crate::builtins::DerivationError;
-use crate::tvix_store_io::TvixStoreIO;
+use crate::known_paths::KnownPaths;
 use bstr::BString;
 use nix_compat::derivation::{Derivation, Output};
 use nix_compat::nixhash;
+use std::cell::RefCell;
 use std::collections::{btree_map, BTreeSet};
 use std::rc::Rc;
 use tvix_eval::builtin_macros::builtins;
@@ -120,7 +121,7 @@ fn handle_fixed_output(
     Ok(None)
 }
 
-#[builtins(state = "Rc<TvixStoreIO>")]
+#[builtins(state = "Rc<RefCell<KnownPaths>>")]
 pub(crate) mod derivation_builtins {
     use std::collections::BTreeMap;
 
@@ -151,7 +152,7 @@ pub(crate) mod derivation_builtins {
     /// use the higher-level `builtins.derivation` instead.
     #[builtin("derivationStrict")]
     async fn builtin_derivation_strict(
-        state: Rc<TvixStoreIO>,
+        state: Rc<RefCell<KnownPaths>>,
         co: GenCo,
         input: Value,
     ) -> Result<Value, ErrorKind> {
@@ -424,7 +425,7 @@ pub(crate) mod derivation_builtins {
         }
 
         populate_inputs(&mut drv, input_context);
-        let mut known_paths = state.as_ref().known_paths.borrow_mut();
+        let mut known_paths = state.borrow_mut();
 
         // At this point, derivation fields are fully populated from
         // eval data structures.
