@@ -104,6 +104,24 @@
       "parentUuid": "05b5d406_058fe68b",
       "revId": "70f0dd356748f57fe750e9a41c39d73b0bd65cc9",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "72d81339_942abdf7",
+        "filename": "tvix/nar-bridge/cmd/nar-bridge-http/otel.go",
+        "patchSetId": 3
+      },
+      "lineNbr": 84,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2024-01-21T23:19:27Z",
+      "side": 1,
+      "message": "Oops that was not the right package, but the one we do use, otelgrpc, does also support metrics otob: https://github.com/open-telemetry/opentelemetry-go-contrib/blob/main/instrumentation/google.golang.org/grpc/otelgrpc/config.go#L53-L56",
+      "parentUuid": "f9a72bf5_4b9ddb74",
+      "revId": "70f0dd356748f57fe750e9a41c39d73b0bd65cc9",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
