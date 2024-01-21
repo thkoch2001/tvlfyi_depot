@@ -5,10 +5,14 @@ use std::rc::Rc;
 use crate::tvix_store_io::TvixStoreIO;
 
 mod derivation;
+
 mod errors;
 mod fetchers;
 mod import;
 mod utils;
+
+#[cfg(feature = "derivation_debugger")]
+mod derivation_debugger;
 
 pub use errors::{DerivationError, FetcherError};
 
