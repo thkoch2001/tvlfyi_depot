@@ -511,6 +511,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "5af7ceed_d5317ab4",
+        "filename": "tvix/eval/src/value/string.rs",
+        "patchSetId": 23
+      },
+      "lineNbr": 324,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-01-21T21:53:51Z",
+      "side": 1,
+      "message": "Where did into_parts go? I don\u0027t find it anymore in this CL.",
+      "parentUuid": "baa1ecdd_770eccf4",
+      "revId": "978f529485065c3b2f02a0abc693f5eb1323992c",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "8ad423e4_bb5cf03b",
         "filename": "tvix/eval/src/value/string.rs",
         "patchSetId": 23
@@ -640,6 +658,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "bd9ef614_b6c3c0c8",
+        "filename": "tvix/glue/src/builtins/derivation.rs",
+        "patchSetId": 23
+      },
+      "lineNbr": 139,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-01-21T21:53:51Z",
+      "side": 1,
+      "message": "output names have stricter restrictions even. it\u0027s a subset of StorePath.name, see https://cs.tvl.fyi/depot/-/blob/tvix/nix-compat/src/derivation/validate.rs?L30\n\nI wonder if that\u0027s a TODO for me to factor out and apply the same checks here.",
+      "parentUuid": "dfc84c25_a78bea70",
+      "range": {
+        "startLine": 139,
+        "startChar": 26,
+        "endLine": 139,
+        "endChar": 42
+      },
+      "revId": "978f529485065c3b2f02a0abc693f5eb1323992c",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "e609adb1_e73b9dc1",
         "filename": "tvix/glue/src/builtins/derivation.rs",
         "patchSetId": 23
@@ -722,6 +764,30 @@
       "side": 1,
       "message": "yeah, that\u0027d be nice",
       "parentUuid": "061917e4_1f2dc940",
+      "range": {
+        "startLine": 287,
+        "startChar": 56,
+        "endLine": 287,
+        "endChar": 73
+      },
+      "revId": "978f529485065c3b2f02a0abc693f5eb1323992c",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0d4344a2_7f41d892",
+        "filename": "tvix/glue/src/builtins/derivation.rs",
+        "patchSetId": 23
+      },
+      "lineNbr": 287,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-01-21T21:53:51Z",
+      "side": 1,
+      "message": "We already have a type for that, these things are called StorePath (with a .drv suffix) ;-)\n\nThere\u0027s an open bug about making Derivation accept StorePath(Ref), but we need to have a generic prototype accepting strings (that\u0027s used for the hash derivation modulo calculation). https://b.tvl.fyi/issues/264 has some info, and there\u0027s a somewhat stale CL, but no matter what, that\u0027s followup material.",
+      "parentUuid": "c7d669ab_cdde507e",
       "range": {
         "startLine": 287,
         "startChar": 56,
