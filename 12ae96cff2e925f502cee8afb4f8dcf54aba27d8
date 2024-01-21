@@ -16,6 +16,24 @@
       "message": "This change broke `glue/benches/eval.rs`:\n```\nthread \u0027main\u0027 panicked at glue/benches/eval.rs:54:5:\nassertion failed: result.errors.is_empty()\nnote: run with `RUST_BACKTRACE\u003d1` environment variable to display a backtrace\n```",
       "revId": "12ae96cff2e925f502cee8afb4f8dcf54aba27d8",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "531e0299_f6ad0096",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 22
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2024-01-21T15:46:36Z",
+      "side": 1,
+      "message": "https://cl.tvl.fyi/c/depot/+/10667",
+      "parentUuid": "33470abf_03f9dd1b",
+      "revId": "12ae96cff2e925f502cee8afb4f8dcf54aba27d8",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
