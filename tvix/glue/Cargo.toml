@@ -26,6 +26,8 @@ serde = "1.0.195"
 serde_json = "1.0"
 sha2 = "0.10.8"
 walkdir = "2.4.0"
+lazy_static = { version = "1.4.0", optional = true }
+tempfile = { version = "3.8.1", optional = true }
 
 [dependencies.async-compression]
 version = "0.4.6"
@@ -45,10 +47,13 @@ tempfile = "3.8.1"
 test-case = "3.3.1"
 
 [features]
-default = ["nix_tests"]
+default = ["nix_tests", "derivation_debugger"]
 # Enables running the Nix language test suite from the original C++
 # Nix implementation (at version 2.3) against Tvix.
 nix_tests = []
+# Enables a derivation debugger which will dump them into a known directory
+# for comparisons with golden `.drv` recipes.
+derivation_debugger = ["lazy_static", "tempfile"]
 
 [[bench]]
 name = "eval"

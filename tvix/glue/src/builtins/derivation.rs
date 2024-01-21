@@ -477,6 +477,9 @@ pub(crate) mod derivation_builtins {
         // TODO: avoid cloning
         known_paths.add(drv_path.clone(), drv.clone());
 
+        #[cfg(feature = "derivation_debugger")]
+        crate::builtins::derivation_debugger::dump_drv_to_store(&drv_path, &drv);
+
         let mut new_attrs: Vec<(String, NixString)> = drv
             .outputs
             .into_iter()
