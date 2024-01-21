@@ -4,7 +4,9 @@ import (
 	"bytes"
 	"context"
 	"encoding/base64"
+	"errors"
 	"fmt"
+	"sync"
 
 	castorev1pb "code.tvl.fyi/tvix/castore-go"
 	log "github.com/sirupsen/logrus"
@@ -19,6 +21,7 @@ type DirectoriesUploader struct {
 	directoryServiceClient    castorev1pb.DirectoryServiceClient
 	directoryServicePutStream castorev1pb.DirectoryService_PutClient
 	lastDirectoryDigest       []byte
+	initOnce                  sync.Once
 }
 
 func NewDirectoriesUploader(ctx context.Context, directoryServiceClient castorev1pb.DirectoryServiceClient) *DirectoriesUploader {
@@ -38,11 +41,20 @@ func (du *DirectoriesUploader) Put(directory *castorev1pb.Directory) ([]byte, er
 	// Send the directory to the directory service
 	// If the stream hasn't been initialized yet, do it first
 	if du.directoryServicePutStream == nil {
-		directoryServicePutStream, err := du.directoryServiceClient.Put(du.ctx)
+		var err error
+		du.initOnce.Do(func() {
+			var directoryServicePutStream castorev1pb.DirectoryService_PutClient
+			directoryServicePutStream, err = du.directoryServiceClient.Put(du.ctx)
+			du.directoryServicePutStream = directoryServicePutStream
+		})
 		if err != nil {
 			return nil, fmt.Errorf("unable to initialize directory service put stream: %v", err)
 		}
-		du.directoryServicePutStream = directoryServicePutStream
+
+		// If its still nil, an error must have occurred in a previous attempt.
+		if du.directoryServicePutStream == nil {
+			return nil, errors.New("failed to initialized directory service put stream")
+		}
 	}
 
 	// send the directory out
