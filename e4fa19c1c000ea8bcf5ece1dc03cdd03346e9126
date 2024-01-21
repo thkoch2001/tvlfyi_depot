@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9be86c68_14bb3bc9",
+        "filename": "tvix/glue/src/tvix_store_io.rs",
+        "patchSetId": 27
+      },
+      "lineNbr": 277,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-01-21T22:06:13Z",
+      "side": 1,
+      "message": "This looks like something in the rebase gone wrong, this change shouldn\u0027t be here.",
+      "revId": "e4fa19c1c000ea8bcf5ece1dc03cdd03346e9126",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
