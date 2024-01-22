@@ -115,6 +115,27 @@ in
 
               MSG="netdata: $status ''${name//_/ } ($chart): ''${summary//_/ } = $value_string"
 
+              # Filter rules by chart name. This is necessary, since the "enabled alarms"
+              # filter only allows for filtering alarm types, not specific alarms
+              # belonging to that alarm.
+              case "$chart" in
+                # netdata prefers the automatically assigned names (dm-<n>, md<n>,
+                # sd<c>) over ids for alerts, so this configuration assumes that
+                # we have two physical disks which we kind of assert using the
+                # grub configuration (it is more difficult with the soft raid
+                # config).
+                # ${assert builtins.length config.boot.loader.grub.devices == 2; ""}
+                disk_util.sda | disk_util.sdb | disk_backlog.sda | disk_backlog.sdb)
+
+                  ;;
+                disk_util.* | disk_backlog.*)
+                  echo "$0: INFO: DISCARDING message: $MSG" >&2
+                  exit 0
+                  ;;
+                *)
+                  ;;
+              esac
+
               echo "$0: INFO: sending message: $MSG" >&2
               ${
                 mkIrcMessager {
