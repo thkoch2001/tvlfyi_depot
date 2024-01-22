@@ -704,6 +704,30 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "3fb60b6d_14a642d4",
+        "filename": "tvix/glue/src/builtins/derivation.rs",
+        "patchSetId": 23
+      },
+      "lineNbr": 139,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-01-22T09:08:31Z",
+      "side": 1,
+      "message": "There\u0027s no Derivation going over the wire, only BuildRequest, and they are fairly self-contained (contrary to .drv), so if a client assembles something wrongly, it\u0027s mostly their own fault (and we mostly do have validation for everything crossing the wire in a less strict type).\n\nI opened https://b.tvl.fyi/issues/373.",
+      "parentUuid": "79dbc2d6_665a50b6",
+      "range": {
+        "startLine": 139,
+        "startChar": 26,
+        "endLine": 139,
+        "endChar": 42
+      },
+      "revId": "978f529485065c3b2f02a0abc693f5eb1323992c",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "e609adb1_e73b9dc1",
