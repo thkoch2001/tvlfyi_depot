@@ -529,6 +529,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "e15dce07_a8ffa75f",
+        "filename": "tvix/eval/src/value/string.rs",
+        "patchSetId": 23
+      },
+      "lineNbr": 324,
+      "author": {
+        "id": 1000073
+      },
+      "writtenOn": "2024-01-22T20:06:01Z",
+      "side": 1,
+      "message": "I may have fucked up and misrebased, @root@gws.fyi I\u0027m so sorry if so… patchet 27 is me I guess.",
+      "parentUuid": "5af7ceed_d5317ab4",
+      "revId": "978f529485065c3b2f02a0abc693f5eb1323992c",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "8ad423e4_bb5cf03b",
         "filename": "tvix/eval/src/value/string.rs",
         "patchSetId": 23
