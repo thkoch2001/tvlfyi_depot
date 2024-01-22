@@ -38,6 +38,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "bc9ca88d_dd7aabc4",
+        "filename": "tvix/nar-bridge/cmd/nar-bridge-http/main.go",
+        "patchSetId": 3
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-01-22T09:59:38Z",
+      "side": 1,
+      "message": "Oh yes, my bad, I meant that one. Looks like it\u0027s only working if go recognizes a git directory (which we don\u0027t have inside the nix build), and there\u0027s no other version string anywhere either. I\u0027d still prefer using `debug.ReadBuildInfo`. At least for impure builds it should pick up the version tag from depot.\n\nSo in case the otel SDK doesn\u0027t provide any useful defaults, let\u0027s use `debug.ReadBuildInfo` here.",
+      "parentUuid": "2b91bed4_1cd2ae69",
+      "revId": "70f0dd356748f57fe750e9a41c39d73b0bd65cc9",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "d5271fcd_48200d49",
         "filename": "tvix/nar-bridge/cmd/nar-bridge-http/otel.go",
         "patchSetId": 3
