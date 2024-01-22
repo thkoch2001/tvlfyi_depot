@@ -34,6 +34,24 @@
       "parentUuid": "adeffce4_0af52545",
       "revId": "6adc54d442b591e9f305a3154fc26d15f5f2a1b8",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4e4744e0_ed52e8f4",
+        "filename": "tvix/nar-bridge/pkg/importer/importer.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 143,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-01-22T14:27:34Z",
+      "side": 1,
+      "message": "Ah yes, but that\u0027s probably something we should do for sanity-checking anyways.",
+      "parentUuid": "8fdba24f_86c9d587",
+      "revId": "6adc54d442b591e9f305a3154fc26d15f5f2a1b8",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
