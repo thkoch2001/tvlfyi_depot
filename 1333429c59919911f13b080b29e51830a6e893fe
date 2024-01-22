@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "51c3625e_57d5ffa2",
+        "filename": "tvix/nar-bridge/pkg/importer/importer.go",
+        "patchSetId": 8
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-01-22T08:18:19Z",
+      "side": 1,
+      "message": "\u003e A weighted semaphore tracking the number of blob bytes currently buffered for async uploads to ensure…\n\nIt wasn\u0027t entirely obvious at first sight that we track *bytes* here, not number of concurrent upload tasks.",
+      "revId": "1333429c59919911f13b080b29e51830a6e893fe",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
