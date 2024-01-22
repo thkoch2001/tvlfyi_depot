@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bfe9f0ec_c96245f1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-01-22T09:26:48Z",
+      "side": 1,
+      "message": "What\u0027s the status of this? I recall there\u0027s some upstream Nix issue about the difference in catchability, but we should be able to land this before Nix fixes behaviour and we backport the fix to nixpkgs\u0027 Nix.\n\nCan the known-to-fail parts be excluded from the oracle tests?",
+      "revId": "25e25a94d1d4cf3aafb1b11493a0e6003ba28363",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
