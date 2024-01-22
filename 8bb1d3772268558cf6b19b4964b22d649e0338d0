@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8cf23156_05cc2ea9",
+        "filename": "tvix/nar-bridge/pkg/importer/directory_upload.go",
+        "patchSetId": 6
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2024-01-22T01:51:33Z",
+      "side": 1,
+      "message": "Looks like you cannot perform concurrent calls to `stream.Send` so I slapped a mutex here, though the docs make it sound like a stream should only be used on a single goroutine: https://pkg.go.dev/google.golang.org/grpc#ClientStream\n\nMaybe a better approach would be to use a channel of directories rather than using a callback, then there\u0027d be one goroutine that reads the channel and `Send`s them.",
+      "revId": "8bb1d3772268558cf6b19b4964b22d649e0338d0",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
