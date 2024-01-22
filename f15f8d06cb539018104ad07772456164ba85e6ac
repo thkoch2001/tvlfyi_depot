@@ -88,6 +88,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "e48f4d2c_de9e452b",
+        "filename": "tvix/nix-lang-test-suite/README.md",
+        "patchSetId": 2
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1000073
+      },
+      "writtenOn": "2024-01-22T14:20:50Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "894c943c_727c1449",
+      "revId": "f15f8d06cb539018104ad07772456164ba85e6ac",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "aed3d175_d292146a",
@@ -119,6 +137,24 @@
       "side": 1,
       "message": "Obviously, but it\u0027s not necessarily easy to distinguish if you use an exit code.",
       "parentUuid": "aed3d175_d292146a",
+      "revId": "f15f8d06cb539018104ad07772456164ba85e6ac",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1b4f7d7f_c2342802",
+        "filename": "tvix/nix-lang-test-suite/README.md",
+        "patchSetId": 2
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1000073
+      },
+      "writtenOn": "2024-01-22T14:20:50Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "c519a77d_7a6ac1ef",
       "revId": "f15f8d06cb539018104ad07772456164ba85e6ac",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
