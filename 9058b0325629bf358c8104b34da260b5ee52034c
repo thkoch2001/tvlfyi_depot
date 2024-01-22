@@ -37,6 +37,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "8fd6e7ab_5ea29b98",
+        "filename": "tvix/glue/src/builtins/mod.rs",
+        "patchSetId": 34
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1000073
+      },
+      "writtenOn": "2024-01-22T20:08:27Z",
+      "side": 1,
+      "message": "Yes.",
+      "parentUuid": "f29c6853_f8ccf817",
+      "revId": "9058b0325629bf358c8104b34da260b5ee52034c",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "6cccce8c_bbce2acf",
         "filename": "tvix/glue/src/builtins/mod.rs",
         "patchSetId": 34
@@ -48,6 +66,30 @@
       "writtenOn": "2024-01-22T10:55:57Z",
       "side": 1,
       "message": "What\u0027s an invalid symlink? For tvix-castore, the symlink target is just a byte sequence. Whether it\u0027s resolving to an existing or non-existing path depends on runtime things, like where it\u0027s mounted at and whether the other location exists or not.",
+      "range": {
+        "startLine": 358,
+        "startChar": 179,
+        "endLine": 358,
+        "endChar": 186
+      },
+      "revId": "9058b0325629bf358c8104b34da260b5ee52034c",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "af9bb096_e127f799",
+        "filename": "tvix/glue/src/builtins/mod.rs",
+        "patchSetId": 34
+      },
+      "lineNbr": 358,
+      "author": {
+        "id": 1000073
+      },
+      "writtenOn": "2024-01-22T20:08:27Z",
+      "side": 1,
+      "message": "Well, it\u0027s a symlink with an invalid target on purpose, yes. Does it cost anything to test that case? Beyond castore, there could be weird logic with following symlinks in the tree walking, this is why those cases exist. To smoke out invalid following.",
+      "parentUuid": "6cccce8c_bbce2acf",
       "range": {
         "startLine": 358,
         "startChar": 179,
@@ -111,6 +153,24 @@
       "writtenOn": "2024-01-22T10:55:57Z",
       "side": 1,
       "message": "Please also need a test that does try to ingest a path with one of the invalid file types, and ensure it fails, but doesn\u0027t crash.",
+      "revId": "9058b0325629bf358c8104b34da260b5ee52034c",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a2f68b17_42a25c38",
+        "filename": "tvix/glue/src/builtins/mod.rs",
+        "patchSetId": 34
+      },
+      "lineNbr": 427,
+      "author": {
+        "id": 1000073
+      },
+      "writtenOn": "2024-01-22T20:08:27Z",
+      "side": 1,
+      "message": "Isn\u0027t exactly what this test does? We are testing for none, not a panic?",
+      "parentUuid": "93a89641_fe4f0288",
       "revId": "9058b0325629bf358c8104b34da260b5ee52034c",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
