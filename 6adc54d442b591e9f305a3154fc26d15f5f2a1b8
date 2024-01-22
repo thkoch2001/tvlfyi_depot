@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "adeffce4_0af52545",
+        "filename": "tvix/nar-bridge/pkg/importer/importer.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 143,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-01-22T08:11:16Z",
+      "side": 1,
+      "message": "Why do we need to wait for blob uploads of any children to have happened before sending out the Directory referring to it?\n\nDirectoryService usually doesn\u0027t have a reference to BlobService, so they don\u0027t do any checking of the blobs to exist. I think the code will be a bit simpler if we don\u0027t wait for the blobs to be uploaded first here.\n\nIf we (evezr) add some validation in DirectoryServices at a later point, it could happen in the final closing of the stream (and we surely did upload all blobs then)",
+      "revId": "6adc54d442b591e9f305a3154fc26d15f5f2a1b8",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
