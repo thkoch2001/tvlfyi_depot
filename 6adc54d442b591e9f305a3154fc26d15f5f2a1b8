@@ -16,6 +16,24 @@
       "message": "Why do we need to wait for blob uploads of any children to have happened before sending out the Directory referring to it?\n\nDirectoryService usually doesn\u0027t have a reference to BlobService, so they don\u0027t do any checking of the blobs to exist. I think the code will be a bit simpler if we don\u0027t wait for the blobs to be uploaded first here.\n\nIf we (evezr) add some validation in DirectoryServices at a later point, it could happen in the final closing of the stream (and we surely did upload all blobs then)",
       "revId": "6adc54d442b591e9f305a3154fc26d15f5f2a1b8",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8fdba24f_86c9d587",
+        "filename": "tvix/nar-bridge/pkg/importer/importer.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 143,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2024-01-22T14:25:01Z",
+      "side": 1,
+      "message": "We need to know the digest of the blob which we currently only get via calling the blobCb. We could independently compute the digest when we buffer the blob then we’d be able to upload the directory before the blob is uploaded.",
+      "parentUuid": "adeffce4_0af52545",
+      "revId": "6adc54d442b591e9f305a3154fc26d15f5f2a1b8",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
