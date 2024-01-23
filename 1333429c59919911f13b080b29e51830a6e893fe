@@ -52,6 +52,24 @@
       "parentUuid": "5736b713_1b6d4a09",
       "revId": "1333429c59919911f13b080b29e51830a6e893fe",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "43ca1cd8_c566cf25",
+        "filename": "tvix/nar-bridge/pkg/importer/importer.go",
+        "patchSetId": 8
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2024-01-23T16:24:24Z",
+      "side": 1,
+      "message": "Sounds good, switched to a limit on the errgroup.",
+      "parentUuid": "484228ee_0250bf8e",
+      "revId": "1333429c59919911f13b080b29e51830a6e893fe",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }

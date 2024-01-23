@@ -18,6 +18,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "579a0f65_0cea0a1d",
+        "filename": "tvix/nar-bridge/pkg/importer/importer.go",
+        "patchSetId": 10
+      },
+      "lineNbr": 254,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2024-01-23T16:24:24Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c2820ec5_567bb5d4",
+      "revId": "8f29ee64c6a6951a707d3121693626948ade989f",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "a861dbde_692e6403",
@@ -31,6 +49,30 @@
       "writtenOn": "2024-01-23T09:16:36Z",
       "side": 1,
       "message": "blobContents / buf",
+      "range": {
+        "startLine": 261,
+        "startChar": 5,
+        "endLine": 261,
+        "endChar": 9
+      },
+      "revId": "8f29ee64c6a6951a707d3121693626948ade989f",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "34597c64_a652dccd",
+        "filename": "tvix/nar-bridge/pkg/importer/importer.go",
+        "patchSetId": 10
+      },
+      "lineNbr": 261,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2024-01-23T16:24:24Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a861dbde_692e6403",
       "range": {
         "startLine": 261,
         "startChar": 5,
