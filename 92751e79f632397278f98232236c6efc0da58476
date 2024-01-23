@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6894a620_47806a5d",
+        "filename": "tvix/eval/src/value/function.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-01-23T14:33:07Z",
+      "side": 1,
+      "message": "@tazjin@tvl.su @root@gws.fyi let me know if this should instead be a boxed string, a cow string or a smolstr, I honestly lost track :-D",
+      "revId": "92751e79f632397278f98232236c6efc0da58476",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
