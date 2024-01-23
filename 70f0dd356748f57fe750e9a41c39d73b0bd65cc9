@@ -54,6 +54,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "6d425f58_9c0f18fc",
+        "filename": "tvix/nar-bridge/cmd/nar-bridge-http/main.go",
+        "patchSetId": 3
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2024-01-23T01:38:39Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "bc9ca88d_dd7aabc4",
+      "revId": "70f0dd356748f57fe750e9a41c39d73b0bd65cc9",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "d5271fcd_48200d49",

@@ -16,6 +16,24 @@
       "message": "In case I didn\u0027t misunderstand the other comments, considering these integrations do push metrics using otlp already, the commit message should be updated?",
       "revId": "69df1e3466c8d98f83c54045eb378a1b84ae4187",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2447a141_715b7c19",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 5
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2024-01-23T01:38:39Z",
+      "side": 1,
+      "message": "Ah in my head I was thinking about application-specific metrics, which we may want to add some in the future",
+      "parentUuid": "f9c1b6f5_1bf4e691",
+      "revId": "69df1e3466c8d98f83c54045eb378a1b84ae4187",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
