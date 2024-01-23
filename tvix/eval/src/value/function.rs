@@ -18,6 +18,9 @@ pub(crate) struct Formals {
 
     /// The span of the formals themselves, to use to emit errors
     pub(crate) span: Span,
+
+    /// An optional name for the pattern binding.
+    pub(crate) name: Option<String>,
 }
 
 impl Formals {
