@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9c771d73_80012893",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2024-01-23T19:57:53Z",
+      "side": 1,
+      "message": "Also good for the `--xml --no-location` mode we\u0027ll want to support in tvix cli.",
+      "revId": "512501aa69f8d95208aca38625a02b3c8ae8446d",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
