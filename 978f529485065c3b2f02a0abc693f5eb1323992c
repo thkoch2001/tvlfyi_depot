@@ -547,6 +547,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "46f940b7_9e7ac437",
+        "filename": "tvix/eval/src/value/string.rs",
+        "patchSetId": 23
+      },
+      "lineNbr": 324,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-01-23T14:53:29Z",
+      "side": 1,
+      "message": "`into_parts` and `from_parts` are indeed still around, I was just for some reason diffing two revisions and got confused comewhat. Sorry for the noise regarding that.\n\n----\n\nRegarding `into_parts` and `from_parts` in general - these are only used in https://cl.tvl.fyi/c/depot/+/10200/comment/5a9db296_148fbbe8/ (`baseNameOf`), which does replace the BString with a smaller one, leaving the context untouched.\n\nI\u0027d much prefer if we\u0027d have some utility function that allows replacing the inner BString with another one (for example, by having a mutable reference, or taking the owned Bstring and returning it back (or an error).\n\nI\u0027d assume we could use that same helper for things like substring as well, rather than reassembling with context from the old NixString.",
+      "parentUuid": "e15dce07_a8ffa75f",
+      "revId": "978f529485065c3b2f02a0abc693f5eb1323992c",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "8ad423e4_bb5cf03b",
         "filename": "tvix/eval/src/value/string.rs",
         "patchSetId": 23
