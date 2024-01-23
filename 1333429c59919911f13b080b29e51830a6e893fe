@@ -34,6 +34,24 @@
       "parentUuid": "51c3625e_57d5ffa2",
       "revId": "1333429c59919911f13b080b29e51830a6e893fe",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "484228ee_0250bf8e",
+        "filename": "tvix/nar-bridge/pkg/importer/importer.go",
+        "patchSetId": 8
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-01-23T09:16:36Z",
+      "side": 1,
+      "message": "asyncUploadThreshold already causes a per-task memory limit, we could probably just have a variable for the maximum number of tasks, and `asyncBlobWg.SetLimit(N)` initially to prevent more than N+1 times that threshold of buffered blob contents in memory.\nIn practice, it\u0027s probably a bit lower, as not all blobs in a NAR are just right before that threshold.\n\nThis would remove the need for the semaphore tracking, and prevent someone sending a nar with very very small blobs to cause a lot of requests to the blobservice at the same time (as they don\u0027t fill up the semaphore).",
+      "parentUuid": "5736b713_1b6d4a09",
+      "revId": "1333429c59919911f13b080b29e51830a6e893fe",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }

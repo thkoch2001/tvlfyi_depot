@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c2820ec5_567bb5d4",
+        "filename": "tvix/nar-bridge/pkg/importer/importer.go",
+        "patchSetId": 10
+      },
+      "lineNbr": 254,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-01-23T09:16:36Z",
+      "side": 1,
+      "message": "As written in the comment above, let\u0027s just set a limit on the errgroup, the `Go` will block if there\u0027s too much in flight already.",
+      "revId": "8f29ee64c6a6951a707d3121693626948ade989f",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a861dbde_692e6403",
+        "filename": "tvix/nar-bridge/pkg/importer/importer.go",
+        "patchSetId": 10
+      },
+      "lineNbr": 261,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-01-23T09:16:36Z",
+      "side": 1,
+      "message": "blobContents / buf",
+      "range": {
+        "startLine": 261,
+        "startChar": 5,
+        "endLine": 261,
+        "endChar": 9
+      },
+      "revId": "8f29ee64c6a6951a707d3121693626948ade989f",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
