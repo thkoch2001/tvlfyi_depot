@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "86e2e9aa_1262e8f1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2024-01-24T13:54:29Z",
+      "side": 1,
+      "message": "This is the kind of thing where we should measure whether just using a vector of tuples and sorting it on demand is going to be faster than allocating all the structure needed for (either of) the maps.\n\nMaybe add a TODO or a bug for that",
+      "revId": "a88929bc3e2b09c936765cfce19e93d464eb7b6e",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
