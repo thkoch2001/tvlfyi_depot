@@ -26,6 +26,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "075b4258_4d6f0616",
+        "filename": "tvix/eval/src/builtins/to_xml.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 97,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-01-24T14:18:37Z",
+      "side": 1,
+      "message": "Yes, it creates a\n\n```\n      \u003cfunction\u003e\n        \u003cattrspat\u003e\n          \u003cattr name\u003d\"x\" /\u003e\n          \u003cattr name\u003d\"y\" /\u003e\n          \u003cattr name\u003d\"z\" /\u003e\n        \u003c/attrspat\u003e\n      \u003c/function\u003e\n```\n\nfor the following expression: `{ x, y, z }: x`.\n\nI added the four different things to https://cl.tvl.fyi/c/depot/+/10689, PTAL.",
+      "parentUuid": "ea582dae_574d6c3f",
+      "range": {
+        "startLine": 97,
+        "startChar": 0,
+        "endLine": 97,
+        "endChar": 2
+      },
+      "revId": "92751e79f632397278f98232236c6efc0da58476",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "6894a620_47806a5d",
         "filename": "tvix/eval/src/value/function.rs",
         "patchSetId": 1
