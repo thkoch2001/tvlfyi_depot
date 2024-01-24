@@ -3,6 +3,29 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "ea582dae_574d6c3f",
+        "filename": "tvix/eval/src/builtins/to_xml.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 97,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2024-01-24T14:02:01Z",
+      "side": 1,
+      "message": "shouldn\u0027t the whole creation of this element be in there? or does c++ nix create empty attrspat elements if there\u0027s no attrspat assigned? can we add individual tests for these things, it\u0027s kind of difficult to understand them",
+      "range": {
+        "startLine": 97,
+        "startChar": 0,
+        "endLine": 97,
+        "endChar": 2
+      },
+      "revId": "92751e79f632397278f98232236c6efc0da58476",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "6894a620_47806a5d",
         "filename": "tvix/eval/src/value/function.rs",
         "patchSetId": 1
