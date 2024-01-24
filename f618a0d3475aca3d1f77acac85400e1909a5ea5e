@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "150796a8_6c6d2d27",
+        "filename": "tvix/eval/src/value/function.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2024-01-24T14:51:36Z",
+      "side": 1,
+      "message": "can you explain, here:\n\n- why we need this\n- when this is None vs Some",
+      "revId": "f618a0d3475aca3d1f77acac85400e1909a5ea5e",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
