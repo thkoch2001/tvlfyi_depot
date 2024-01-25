@@ -16,6 +16,24 @@
       "message": "can you explain, here:\n\n- why we need this\n- when this is None vs Some",
       "revId": "f618a0d3475aca3d1f77acac85400e1909a5ea5e",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a824d77c_5b8feb95",
+        "filename": "tvix/eval/src/value/function.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-01-25T11:31:05Z",
+      "side": 1,
+      "message": "I added a \n\n```\n    /// Optionally tracks a name for all function arguments (args@ style).\n    /// Used by toXML.\n```\n\nwhich should explain this sufficiently.",
+      "parentUuid": "150796a8_6c6d2d27",
+      "revId": "f618a0d3475aca3d1f77acac85400e1909a5ea5e",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }

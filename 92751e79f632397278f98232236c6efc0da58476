@@ -48,6 +48,30 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "847d38ff_4a6cfaee",
+        "filename": "tvix/eval/src/builtins/to_xml.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 97,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-01-25T11:31:05Z",
+      "side": 1,
+      "message": "Marked this as resolved.",
+      "parentUuid": "075b4258_4d6f0616",
+      "range": {
+        "startLine": 97,
+        "startChar": 0,
+        "endLine": 97,
+        "endChar": 2
+      },
+      "revId": "92751e79f632397278f98232236c6efc0da58476",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "6894a620_47806a5d",
@@ -61,6 +85,24 @@
       "writtenOn": "2024-01-23T14:33:07Z",
       "side": 1,
       "message": "@tazjin@tvl.su @root@gws.fyi let me know if this should instead be a boxed string, a cow string or a smolstr, I honestly lost track :-D",
+      "revId": "92751e79f632397278f98232236c6efc0da58476",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4dafc88d_eb9fe088",
+        "filename": "tvix/eval/src/value/function.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-01-25T11:31:05Z",
+      "side": 1,
+      "message": "Considering the +2 let\u0027s mark this as resolved. We can still change the type later on.",
+      "parentUuid": "6894a620_47806a5d",
       "revId": "92751e79f632397278f98232236c6efc0da58476",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
