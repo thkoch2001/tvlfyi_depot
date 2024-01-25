@@ -16,6 +16,24 @@
       "message": "Can we make this some toplevel constants / env vars etc? It\u0027d allow running this again with different params without recompiling.",
       "revId": "f68f30a29b594f00061abcfd0563c408ea3225e4",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cc9dcc0d_c482985c",
+        "filename": "tvix/tools/crunch-v2/src/main.rs",
+        "patchSetId": 7
+      },
+      "lineNbr": 141,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-01-25T12:52:55Z",
+      "side": 1,
+      "message": "I addressed this in https://cl.tvl.fyi/c/depot/+/10691/1, PTAL.",
+      "parentUuid": "bca38b6d_f2301bf9",
+      "revId": "f68f30a29b594f00061abcfd0563c408ea3225e4",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
