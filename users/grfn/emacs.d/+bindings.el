@@ -1429,4 +1429,11 @@ If invoked with a prefix ARG eval the expression after inserting it"
 
  (:map prolog-mode-map
   :n "g SPC" #'prolog-compile-buffer
-  :n "g \\" #'run-prolog))
+  :n "g \\" #'run-prolog)
+
+ (:map tuareg-mode-map
+  :n "g RET" (λ! () (compile "dune build @@runtest"))
+  :n "g SPC" #'dune-promote
+  :n "g \\" #'utop
+  :n "g y" #'merlin-locate-type
+  "C-c C-f" (λ! () (compile "dune fmt"))))
