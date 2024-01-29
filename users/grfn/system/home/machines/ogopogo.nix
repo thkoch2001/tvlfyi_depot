@@ -12,6 +12,7 @@ in
     ../modules/desktop.nix
     ../modules/development/agda.nix
     ../modules/development/readyset.nix
+    ../modules/development/ocaml.nix
   ] ++ (lib.optional (pathExists ../modules/private.nix) ../modules/private.nix);
 
   programs.home-manager.enable = true;
