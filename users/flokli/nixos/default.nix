@@ -13,23 +13,15 @@ let
 
 in
 depot.nix.readTree.drvTargets rec {
-  archeologySystem = (depot.ops.nixos.nixosFor ({ ... }: {
-    imports = [
-      ./archeology/configuration.nix
-    ];
-  })).config.system.build.toplevel;
-
   archeologyEc2System = (depot.ops.nixos.nixosFor ({ ... }: {
     imports = [
       ./archeology-ec2/configuration.nix
     ];
   })).config.system.build.toplevel;
 
-  deploy-archeology = (deployScript "archeology" archeologySystem);
   deploy-archeology-ec2 = (deployScript "archeology-ec2" archeologyEc2System);
 
   deps = (depot.nix.lazy-deps {
-    deploy-archeology.attr = "users.flokli.nixos.deploy-archeology";
     deploy-archeology-ec2.attr = "users.flokli.nixos.deploy-archeology-ec2";
   });
 
