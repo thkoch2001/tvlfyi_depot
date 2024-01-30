@@ -1454,6 +1454,16 @@ impl Compiler<'_> {
     }
 
     fn emit_force<N: ToSpan>(&mut self, node: &N) {
+        if self
+            .chunk()
+            .last_op()
+            .iter()
+            .any(|op| matches!(op, OpCode::OpConstant(_)))
+        {
+            // Optimization: Don't emit a force op for constants, since they don't need one!
+            // TODO: this is probably doable for more ops (?)
+            return;
+        }
         self.push_op(OpCode::OpForce, node);
     }
 

@@ -70,6 +70,11 @@ impl Chunk {
         self.spans[0].span
     }
 
+    /// Return a reference to the last op in the chunk, if any
+    pub fn last_op(&self) -> Option<&OpCode> {
+        self.code.last()
+    }
+
     /// Pop the last operation from the chunk and clean up its tracked
     /// span. Used when the compiler backtracks.
     pub fn pop_op(&mut self) {
