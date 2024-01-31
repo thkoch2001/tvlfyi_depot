@@ -102,6 +102,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "c3deec6c_3a62623f",
+        "filename": "tvix/glue/src/builtins/mod.rs",
+        "patchSetId": 34
+      },
+      "lineNbr": 358,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-01-31T09:56:42Z",
+      "side": 1,
+      "message": "The canonical way to call this would be \"dangling symlink\", which seems more appropriate. Can you change the name (also see my comments in the fixture file names)",
+      "parentUuid": "af9bb096_e127f799",
+      "range": {
+        "startLine": 358,
+        "startChar": 179,
+        "endLine": 358,
+        "endChar": 186
+      },
+      "revId": "9058b0325629bf358c8104b34da260b5ee52034c",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "a03b4bac_08c4e7cc",
         "filename": "tvix/glue/src/builtins/mod.rs",
         "patchSetId": 34
@@ -171,6 +195,75 @@
       "side": 1,
       "message": "Isn\u0027t exactly what this test does? We are testing for none, not a panic?",
       "parentUuid": "93a89641_fe4f0288",
+      "revId": "9058b0325629bf358c8104b34da260b5ee52034c",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4ad944e3_e692af05",
+        "filename": "tvix/glue/src/builtins/mod.rs",
+        "patchSetId": 34
+      },
+      "lineNbr": 427,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-01-31T09:56:42Z",
+      "side": 1,
+      "message": "The test currently produces three different kinds of special files in a fixture, and then is invoked four times with different filter functions.\n\nEach of these filter functions keep some of the special files around, and the assertion down there makes sure it fails in the end.\n\nWhat we don\u0027t test is this ever succeeding thanks to special files filtered out (the thing a \"consumer\" would normally do). I\u0027d expect a testcase to produce a fixture of a directory containing mostly normal files, but one special file, which is filtered out by the filter function, and then comparing that path with the same fixture without the special file present at all. This should succeed and match.\n\nThere\u0027s also interesting behaviour untested, like invoking filterSource on a non-directory.",
+      "parentUuid": "a2f68b17_42a25c38",
+      "revId": "9058b0325629bf358c8104b34da260b5ee52034c",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "952f07e6_d6535310",
+        "filename": "tvix/glue/src/tests/import_fixtures/c_dir/a_file",
+        "patchSetId": 34
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-01-31T09:56:42Z",
+      "side": 1,
+      "message": "I\u0027d call that node symlink_to_a_file",
+      "revId": "9058b0325629bf358c8104b34da260b5ee52034c",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c19f0564_896303bc",
+        "filename": "tvix/glue/src/tests/import_fixtures/d_dir/e_file",
+        "patchSetId": 34
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-01-31T09:56:42Z",
+      "side": 1,
+      "message": "I\u0027d call that node symlink_dangling",
+      "revId": "9058b0325629bf358c8104b34da260b5ee52034c",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "52e2a680_09f8c08e",
+        "filename": "tvix/glue/src/tests/import_fixtures/e_dir",
+        "patchSetId": 34
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-01-31T09:56:42Z",
+      "side": 1,
+      "message": "I\u0027d call that node symlink_to_a_file",
       "revId": "9058b0325629bf358c8104b34da260b5ee52034c",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
