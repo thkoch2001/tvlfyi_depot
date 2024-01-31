@@ -56,6 +56,18 @@ pub enum ValidateNodeError {
     InvalidSymlinkTarget(Vec<u8>),
 }
 
+/// Errors that occur during StatBlobResponse validation
+#[derive(Debug, PartialEq, Eq, thiserror::Error)]
+pub enum ValidateStatBlobResponseError {
+    /// Invalid digest length encountered
+    #[error("Invalid digest length {0} for chunk #{1}")]
+    InvalidDigestLen(usize, usize),
+
+    /// Empty list of chunks encountered
+    #[error("Empty list of chunks encountered")]
+    NoChunks,
+}
+
 /// Checks a Node name for validity as an intermediate node.
 /// We disallow slashes, null bytes, '.', '..' and the empty string.
 fn validate_node_name(name: &[u8]) -> Result<(), ValidateNodeError> {
@@ -296,6 +308,24 @@ impl Directory {
             i_files: self.files.iter().peekable(),
             i_symlinks: self.symlinks.iter().peekable(),
         };
+    }
+}
+
+impl StatBlobResponse {
+    pub fn validate(&self) -> Result<(), ValidateStatBlobResponseError> {
+        if self.chunks.is_empty() {
+            return Err(ValidateStatBlobResponseError::NoChunks);
+        }
+
+        for (i, chunk) in self.chunks.iter().enumerate() {
+            if chunk.digest.len() != blake3::KEY_LEN {
+                return Err(ValidateStatBlobResponseError::InvalidDigestLen(
+                    chunk.digest.len(),
+                    i,
+                ));
+            }
+        }
+        Ok(())
     }
 }
 
