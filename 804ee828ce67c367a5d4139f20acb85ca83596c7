@@ -50,6 +50,24 @@
       "message": "This is solved now, no?",
       "revId": "804ee828ce67c367a5d4139f20acb85ca83596c7",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6728a861_3fbed9e4",
+        "filename": "tvix/eval/src/builtins/mod.rs",
+        "patchSetId": 29
+      },
+      "lineNbr": 1311,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2024-01-31T14:38:13Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "cff06f75_eac86803",
+      "revId": "804ee828ce67c367a5d4139f20acb85ca83596c7",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
