@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "23f393d7_335fe6bb",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 29
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-01-31T09:32:56Z",
+      "side": 1,
+      "message": "Regarding nix-compat, it might be true you can create non-UTF-8 environment keys. Maybe builder+arguments / system too.\n\nThis needs some checking on my side, and if so, needs threading all the way down (not just in this one occurence).\n\nI opened b/375, feel free to refer to its number here or drop the comment alltogether if you do another pass.",
+      "revId": "804ee828ce67c367a5d4139f20acb85ca83596c7",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cff06f75_eac86803",
+        "filename": "tvix/eval/src/builtins/mod.rs",
+        "patchSetId": 29
+      },
+      "lineNbr": 1311,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-01-31T09:32:56Z",
+      "side": 1,
+      "message": "This is solved now, no?",
+      "revId": "804ee828ce67c367a5d4139f20acb85ca83596c7",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
