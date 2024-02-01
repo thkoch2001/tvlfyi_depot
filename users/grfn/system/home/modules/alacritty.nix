@@ -7,9 +7,7 @@
       font.size = 6;
       font.normal.family = "Meslo LGSDZ Nerd Font";
 
-      draw_bold_text_with_bright_colors = false;
-
-      key_bindings = [
+      keyboard.bindings = [
         {
           key = "Escape";
           mods = "Control";
@@ -18,6 +16,8 @@
       ];
 
       colors = with import ../common/solarized.nix; rec {
+        draw_bold_text_with_bright_colors = false;
+
         # Default colors
         primary = {
           background = base3;
