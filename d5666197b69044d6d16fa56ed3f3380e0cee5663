@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4c63a066_08b7e756",
+        "filename": "tvix/castore/src/blobservice/chunked_reader.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 62,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-02-01T22:15:41Z",
+      "side": 1,
+      "message": "TODO: benchmark when linear search is faster (for \u003c\u003d ~8?)",
+      "revId": "d5666197b69044d6d16fa56ed3f3380e0cee5663",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
