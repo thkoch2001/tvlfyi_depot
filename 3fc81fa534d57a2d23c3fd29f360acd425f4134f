@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c6a2d5b4_a0de3e59",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2024-02-02T20:36:57Z",
+      "side": 1,
+      "message": "cf https://cl.tvl.fyi/c/depot/+/10621",
+      "revId": "3fc81fa534d57a2d23c3fd29f360acd425f4134f",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
