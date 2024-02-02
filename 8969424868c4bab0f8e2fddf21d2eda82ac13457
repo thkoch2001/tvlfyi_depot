@@ -16,6 +16,24 @@
       "message": "Not quite sure about this one, it could be better to explicitly allow it (for 0-byte files), rather than doing an additional chunk request for the empty chunk (or having special-casing for it).",
       "revId": "8969424868c4bab0f8e2fddf21d2eda82ac13457",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4998d6be_fb14fc94",
+        "filename": "tvix/castore/src/proto/mod.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 66,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-02-02T15:56:29Z",
+      "side": 1,
+      "message": "I removed that validation. It is allowed to send an empty list if no more granular chunking is available, and that\u0027s certainly the case for 0 byte blobs ;-)",
+      "parentUuid": "01324c33_eb3db229",
+      "revId": "8969424868c4bab0f8e2fddf21d2eda82ac13457",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
