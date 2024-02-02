@@ -18,6 +18,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "03e60ee9_5f846d58",
+        "filename": "tvix/castore/src/blobservice/chunked_reader.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 62,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-02-02T16:11:45Z",
+      "side": 1,
+      "message": "Added a TODO.",
+      "parentUuid": "4c63a066_08b7e756",
+      "revId": "d5666197b69044d6d16fa56ed3f3380e0cee5663",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "f7096bda_d1c3bf6a",
@@ -31,6 +49,24 @@
       "writtenOn": "2024-02-01T22:23:21Z",
       "side": 1,
       "message": "We should probably panic whenever this is used wrongly, as it\u0027s only used by the ChunkedReader during construction and seeking.\n\nWe however still need to make sure interacting with an empty blob works.",
+      "revId": "d5666197b69044d6d16fa56ed3f3380e0cee5663",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9d12503e_a881fcdf",
+        "filename": "tvix/castore/src/blobservice/chunked_reader.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 83,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-02-02T16:11:45Z",
+      "side": 1,
+      "message": "I added an assertion in the `from_iter` constructor that rejects using this with an empty list.",
+      "parentUuid": "f7096bda_d1c3bf6a",
       "revId": "d5666197b69044d6d16fa56ed3f3380e0cee5663",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
