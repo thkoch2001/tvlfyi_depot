@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "47cca020_96f3826d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2024-02-02T10:39:06Z",
+      "side": 1,
+      "message": "I guess longer term we can also think about using `Box\u003cBstr\u003e` for `NixString`, but perhaps the mutability is useful if we can optimize string operations to be in place in some cases.",
+      "revId": "c4d06c470d73d68850dec0efd0d69a8fa90ae4ed",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
