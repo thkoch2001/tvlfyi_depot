@@ -1,0 +1,89 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cce09570_ec72d43b",
+        "filename": "tvix/castore/docs/blobstore-chunking.md",
+        "patchSetId": 2
+      },
+      "lineNbr": 72,
+      "author": {
+        "id": 1000073
+      },
+      "writtenOn": "2024-02-02T14:16:45Z",
+      "side": 1,
+      "message": "-a",
+      "revId": "38e1ea9205cffdd23da3f0c285d26aa8f18a6f42",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bc3565b0_c79efde4",
+        "filename": "tvix/castore/docs/blobstore-chunking.md",
+        "patchSetId": 2
+      },
+      "lineNbr": 85,
+      "author": {
+        "id": 1000073
+      },
+      "writtenOn": "2024-02-02T14:16:45Z",
+      "side": 1,
+      "message": "I would put it as \"BLAKE3 hash function gives us block of 1KiB, we call them logical blocks as opposed to physical blocks which are ....\"",
+      "revId": "38e1ea9205cffdd23da3f0c285d26aa8f18a6f42",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "67873e98_580ef1e3",
+        "filename": "tvix/castore/docs/blobstore-chunking.md",
+        "patchSetId": 2
+      },
+      "lineNbr": 103,
+      "author": {
+        "id": 1000073
+      },
+      "writtenOn": "2024-02-02T14:16:45Z",
+      "side": 1,
+      "message": "I don\u0027t recommend using a mix of interval and Rust slices notation here, but just mathematical notation for intervals: \"`[0 ; 3]` (that is, the set of `{0, 1, 2, 3}`)\" and you define explicitly once what is your set so that everyone understands your are describing the set of integers between a and b, a, b included.",
+      "revId": "38e1ea9205cffdd23da3f0c285d26aa8f18a6f42",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ac6c7eb0_30fd41be",
+        "filename": "tvix/castore/docs/blobstore-protocol.md",
+        "patchSetId": 2
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1000073
+      },
+      "writtenOn": "2024-02-02T14:16:45Z",
+      "side": 1,
+      "message": "why blob store is a rpc protocol and not something else!",
+      "revId": "38e1ea9205cffdd23da3f0c285d26aa8f18a6f42",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2100a128_992c7be2",
+        "filename": "tvix/castore/docs/blobstore-protocol.md",
+        "patchSetId": 2
+      },
+      "lineNbr": 71,
+      "author": {
+        "id": 1000073
+      },
+      "writtenOn": "2024-02-02T14:16:45Z",
+      "side": 1,
+      "message": "altogether",
+      "revId": "38e1ea9205cffdd23da3f0c285d26aa8f18a6f42",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
