@@ -16,6 +16,23 @@
       "message": "What\u0027s the status of this? I recall there\u0027s some upstream Nix issue about the difference in catchability, but we should be able to land this before Nix fixes behaviour and we backport the fix to nixpkgs\u0027 Nix.\n\nCan the known-to-fail parts be excluded from the oracle tests?",
       "revId": "25e25a94d1d4cf3aafb1b11493a0e6003ba28363",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ac323256_9ad5ed5f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2024-02-02T20:37:06Z",
+      "side": 1,
+      "message": "cf https://cl.tvl.fyi/c/depot/+/10732",
+      "revId": "25e25a94d1d4cf3aafb1b11493a0e6003ba28363",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
