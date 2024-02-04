@@ -23,5 +23,13 @@
       content = ./tvix-status-202209.md;
       author = "tazjin";
     }
+
+    {
+      key = "tvix-update-feb-22";
+      title = "Tvix Status - February '24";
+      date = 1707063501;
+      content = ./2024-02-tvix-update.md;
+      author = "flokli";
+    }
   ];
 }
