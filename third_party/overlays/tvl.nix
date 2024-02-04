@@ -132,4 +132,9 @@ depot.nix.readTree.drvTargets {
       license = licenses.asl20;
     };
   };
+
+  # OpenVPN + TPM2 is broken on versions of this package somewhere
+  # after 1.8.0, but it is a critical dependency for tazjin. For this
+  # reason it is vendored from a specific nixpkgs commit.
+  tpm2-pkcs11 = self.callPackage ./patches/tpm2-pkcs11.nix { };
 }
