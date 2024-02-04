@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1843e193_5a5fea23",
+        "filename": "web/tvl/blog/2024-02-tvix-update.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 172,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-02-04T16:33:28Z",
+      "side": 1,
+      "message": "@tvl@lahfa.xyz @sternenseemann@systemli.org is this something you could fill in?",
+      "revId": "b7e03e92f2b790ede647fa61bac6db53dd5f7977",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
