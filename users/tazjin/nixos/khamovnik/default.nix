@@ -69,6 +69,7 @@ in
   powerManagement.cpuFreqGovernor = lib.mkDefault "powersave";
   hardware.cpu.intel.updateMicrocode = true;
   hardware.enableRedistributableFirmware = true;
+  hardware.opengl.extraPackages = [ pkgs.intel-compute-runtime ];
 
   # from generated configuration.nix
   # Bootloader.
