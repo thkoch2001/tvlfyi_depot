@@ -20,6 +20,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "3a9aaaf3_06e9e67d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-02-04T17:25:17Z",
+      "side": 1,
+      "message": "Yes please, indeed I forgot that. looking at the git history was just too much, I just started writing and adding new sections whenever anything came into my mind. It\u0027d probably fit somewhere close to the regression testing bits.\n\nMaybe we should add a small paragraph explaining we\u0027re not going too deep into benchmarking and perf tuning until we verified to be correct with nixpkgs.\n\nCan you post it as a comment here?",
+      "parentUuid": "d2fb61ed_78f4d550",
+      "revId": "b7e03e92f2b790ede647fa61bac6db53dd5f7977",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "2e71a0b8_671baa97",
         "filename": "web/tvl/blog/2024-02-tvix-update.md",
         "patchSetId": 1
@@ -31,6 +49,23 @@
       "writtenOn": "2024-02-04T16:48:37Z",
       "side": 1,
       "message": "Maybe link http://program-transformation.org/Tools/ATermFormat.html.",
+      "revId": "b7e03e92f2b790ede647fa61bac6db53dd5f7977",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "97a64754_6ecf92bd",
+        "filename": "web/tvl/blog/2024-02-tvix-update.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 106,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-02-04T17:25:17Z",
+      "side": 1,
+      "message": "*for sled",
       "revId": "b7e03e92f2b790ede647fa61bac6db53dd5f7977",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
@@ -66,6 +101,24 @@
       "side": 1,
       "message": "Sure.",
       "parentUuid": "1843e193_5a5fea23",
+      "revId": "b7e03e92f2b790ede647fa61bac6db53dd5f7977",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2893a4e2_d99b15cf",
+        "filename": "web/tvl/blog/2024-02-tvix-update.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 172,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-02-04T17:25:17Z",
+      "side": 1,
+      "message": "Can you post it as a comment here? Happy to integrate it.",
+      "parentUuid": "f91a581f_4d405416",
       "revId": "b7e03e92f2b790ede647fa61bac6db53dd5f7977",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
