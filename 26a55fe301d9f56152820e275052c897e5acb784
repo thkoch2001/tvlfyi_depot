@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "53dd243f_11059391",
+        "filename": "third_party/overlays/tvl.nix",
+        "patchSetId": 1
+      },
+      "lineNbr": 138,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-02-04T22:31:23Z",
+      "side": 1,
+      "message": "Is there a way you can either override this locally in your machines, and maybe open an issue upstream with a way to properly test this? Running everything with this version doesn\u0027t sound too sustainable long-term...",
+      "revId": "26a55fe301d9f56152820e275052c897e5acb784",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
