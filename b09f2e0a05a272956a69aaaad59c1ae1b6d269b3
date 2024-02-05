@@ -16,6 +16,41 @@
       "message": "Are these debug logs that should be removed?",
       "revId": "b09f2e0a05a272956a69aaaad59c1ae1b6d269b3",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "036a282e_e95ad024",
+        "filename": "tvix/castore/src/blobservice/chunked_reader.rs",
+        "patchSetId": 7
+      },
+      "lineNbr": 90,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-02-05T18:40:21Z",
+      "side": 1,
+      "message": "yes, let me fix that.",
+      "parentUuid": "d1f49c5e_f0227214",
+      "revId": "b09f2e0a05a272956a69aaaad59c1ae1b6d269b3",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6466763e_6897099e",
+        "filename": "tvix/castore/src/blobservice/chunked_reader.rs",
+        "patchSetId": 7
+      },
+      "lineNbr": 433,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-02-05T18:40:21Z",
+      "side": 1,
+      "message": "still todo",
+      "revId": "b09f2e0a05a272956a69aaaad59c1ae1b6d269b3",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
