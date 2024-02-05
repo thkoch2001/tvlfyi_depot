@@ -96,7 +96,7 @@ impl NixList {
         loop {
             let mut new_len = 0;
             for i in 1..len {
-                if generators::request_force(
+                let res = generators::request_force(
                     co,
                     generators::request_call_with(
                         co,
@@ -105,9 +105,11 @@ impl NixList {
                     )
                     .await,
                 )
-                .await
-                .as_bool()
-                .context("evaluating comparator in `builtins.sort`")?
+                .await;
+
+                if res
+                    .as_bool()
+                    .context("evaluating comparator in `builtins.sort`")?
                 {
                     data.swap(i, i - 1);
                     new_len = i;

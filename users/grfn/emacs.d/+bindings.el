@@ -980,9 +980,9 @@ private/hlissner/snippets."
 
 (defun +sexp-transpose ()
   (interactive)
-  (case evil-this-operator
-    ('evil-shift-right (paxedit-transpose-forward))
-    ('evil-shift-left  (paxedit-transpose-backward))))
+  (cl-case evil-this-operator
+    (evil-shift-right (paxedit-transpose-forward))
+    (evil-shift-left  (paxedit-transpose-backward))))
 
 ;; (defun nmap (&rest keys-and-ops)
 ;;   (->>
@@ -1249,7 +1249,7 @@ If invoked with a prefix ARG eval the expression after inserting it"
   (interactive)
   (message "Running tests...")
   (cl-case (cider-repl-type-for-buffer)
-    ('cljs
+    (cljs
      (cider-interactive-eval
       "(with-out-str (cljs.test/run-tests))"
       (nrepl-make-response-handler
