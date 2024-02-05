@@ -152,3 +152,6 @@
 ;;; cpp
 (package! protobuf-mode)
 (package! clang-format+)
+
+;;; ocaml
+(package! dune-format)

@@ -101,6 +101,10 @@ mod pure_builtins {
         }};
     }
 
+    macro_rules! try_value_list {
+        () => {};
+    }
+
     #[builtin("abort")]
     async fn builtin_abort(co: GenCo, message: Value) -> Result<Value, ErrorKind> {
         // TODO(sterni): coerces to string
@@ -1046,14 +1050,15 @@ mod pure_builtins {
         keys: Value,
     ) -> Result<Value, ErrorKind> {
         let attrs = attrs.to_attrs()?;
-        let keys = keys
-            .to_list()?
-            .into_iter()
-            .map(|v| v.to_str())
-            .collect::<Result<HashSet<_>, _>>()?;
-        let res = attrs.iter().filter_map(|(k, v)| {
-            if !keys.contains(k) {
-                Some((k.clone(), v.clone()))
+        let keys_l = keys.to_list()?;
+        let mut keys = HashSet::with_capacity(keys_l.len());
+        for k in keys_l {
+            keys.insert(try_value!(k).to_str()?);
+        }
+
+        let res = attrs.into_iter().filter_map(|(k, v)| {
+            if !keys.contains(dbg!(&k)) {
+                Some((k, v))
             } else {
                 None
             }

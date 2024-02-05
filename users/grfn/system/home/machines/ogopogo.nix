@@ -42,6 +42,8 @@ in
       };
     })
     steam
+
+    (python3.withPackages (p: with p; [ipython]))
   ];
 
   systemd.user.services.laptop-keyboard = {

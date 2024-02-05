@@ -1031,6 +1031,14 @@ fn type_error(expected: &'static str, actual: &Value) -> ErrorKind {
 
 #[cfg(test)]
 mod tests {
+    use super::*;
+
+    #[test]
+    fn size() {
+        assert_eq!(std::mem::size_of::<serde_json::Value>(), 16);
+        assert_eq!(std::mem::size_of::<Value>(), 16);
+    }
+
     mod floats {
         use crate::value::total_fmt_float;
 
