@@ -347,7 +347,9 @@
   (set-face-foreground 'slack-message-output-header +solarized-s-base01)
   (set-face-attribute 'slack-message-output-header nil :underline nil)
   (set-face-attribute 'slack-message-output-text nil :height 1.0)
-  )
+  (set-face-attribute 'caml-types-expr-face
+                      nil
+                      :background +solarized-s-base2))
 
 (after! solarized-theme
   (set-face-foreground 'font-lock-doc-face +solarized-s-base1)
@@ -1122,3 +1124,16 @@
   :quit nil)
 
 (setq elcord-editor-icon "emacs_icon")
+
+;;; ocaml
+
+(after! merlin-mode
+  (set-face-attribute
+   'caml-types-expr-face
+   nil
+   :background +solarized-s-base2)
+  (add-hook! merlin-mode
+     (setq whitespace-line-column 90)))
+
+(use-package! dune-format
+  :hook (dune-mode . dune-format-on-save-mode))
