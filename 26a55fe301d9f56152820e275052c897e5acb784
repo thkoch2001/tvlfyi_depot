@@ -34,6 +34,24 @@
       "parentUuid": "53dd243f_11059391",
       "revId": "26a55fe301d9f56152820e275052c897e5acb784",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f45d39b0_ec04a8f8",
+        "filename": "third_party/overlays/tvl.nix",
+        "patchSetId": 1
+      },
+      "lineNbr": 138,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2024-02-05T21:09:50Z",
+      "side": 1,
+      "message": "I\u0027ll try this in the next days and then remove the override if it works, otherwise it\u0027ll linger around, but it\u0027s definitely not going to be unmaintained from my end because I need this every day ;)",
+      "parentUuid": "6ffbfd3b_ca2b6cb2",
+      "revId": "26a55fe301d9f56152820e275052c897e5acb784",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
