@@ -16,6 +16,24 @@
       "message": "Is there a way you can either override this locally in your machines, and maybe open an issue upstream with a way to properly test this? Running everything with this version doesn\u0027t sound too sustainable long-term...",
       "revId": "26a55fe301d9f56152820e275052c897e5acb784",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6ffbfd3b_ca2b6cb2",
+        "filename": "third_party/overlays/tvl.nix",
+        "patchSetId": 1
+      },
+      "lineNbr": 138,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2024-02-05T20:56:03Z",
+      "side": 1,
+      "message": "Nobody else is using this.\n\nThe upstream issue is https://github.com/tpm2-software/tpm2-pkcs11/issues/845\n\nThere\u0027s an experimental patch, but I haven\u0027t tried it yet (just no time for it)",
+      "parentUuid": "53dd243f_11059391",
+      "revId": "26a55fe301d9f56152820e275052c897e5acb784",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
