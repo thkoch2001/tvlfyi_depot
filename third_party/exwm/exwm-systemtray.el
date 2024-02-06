@@ -1,7 +1,7 @@
 ;;; exwm-systemtray.el --- System Tray Module for  -*- lexical-binding: t -*-
 ;;;                        EXWM
 
-;; Copyright (C) 2016-2023 Free Software Foundation, Inc.
+;; Copyright (C) 2016-2024 Free Software Foundation, Inc.
 
 ;; Author: Chris Feng <chris.w.feng@gmail.com>
 
@@ -57,7 +57,6 @@
 
 (defgroup exwm-systemtray nil
   "System tray."
-  :version "25.3"
   :group 'exwm)
 
 (defcustom exwm-systemtray-height nil
