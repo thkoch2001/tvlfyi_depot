@@ -1,8 +1,27 @@
 depot
 =====
 
+<<<<<<< HEAD   (2eafdb feat(grfn/emacs): More ocaml config)
 [![Build status](https://badge.buildkite.com/016bff4b8ae2704a3bbbb0a250784e6692007c582983b6dea7.svg?branch=refs/heads/canon)](https://buildkite.com/tvl/depot)
+=======
+EXWM (Emacs X Window Manager) is a full-featured tiling X window manager
+for Emacs built on top of [XELB](https://github.com/emacs-exwm/xelb).
 
+It features:
++ Fully keyboard-driven operations
++ Hybrid layout modes (tiling & stacking)
++ Dynamic workspace support
++ ICCCM/EWMH compliance
+
+Optional features:
++ RandR (multi-monitor) support
++ System tray
++ Input method
++ Background setting support
++ XSETTINGS server
+>>>>>>> BRANCH (a6e66f Simplify and improve focus handling (#10))
+
+<<<<<<< HEAD   (2eafdb feat(grfn/emacs): More ocaml config)
 This repository is the [monorepo][] for the community around [The
 Virus Lounge][tvl], containing our personal tools and infrastructure.
 Everything in here is built using [Nix][].
@@ -122,3 +141,10 @@ Hackint also provide a [web chat][tvl-webchat].
 [tvl-xmpp]: xmpp:#tvl@irc.hackint.org?join
 [tvl-webchat]: https://webirc.hackint.org/#ircs://irc.hackint.org/#tvl
 [Nixery]: https://nixery.dev
+=======
+Please check out the
+[screenshots](https://github.com/emacs-exwm/exwm/wiki/Screenshots)
+to get an overview of what EXWM is capable of, and the
+[user guide](https://github.com/emacs-exwm/exwm/wiki)
+for installation instructions and a detailed explanation of its usage.
+>>>>>>> BRANCH (a6e66f Simplify and improve focus handling (#10))
