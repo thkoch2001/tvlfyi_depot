@@ -7,7 +7,10 @@ let
   iconvDarwinDep = lib.optional pkgs.stdenv.isDarwin pkgs.libiconv;
 
   # On Darwin, some crates producing binaries need to be able to link against security.
-  securityDarwinDep = lib.optional pkgs.stdenv.isDarwin pkgs.buildPackages.darwin.apple_sdk.frameworks.Security;
+  darwinDeps = lib.optionals pkgs.stdenv.isDarwin (with pkgs.buildPackages.darwin.apple_sdk.frameworks; [
+    Security
+    SystemConfiguration
+  ]);
 
   # Load the crate2nix crate tree.
   crates = import ./Cargo.nix {
@@ -47,6 +50,7 @@ let
       tvix-build = prev: {
         PROTO_ROOT = depot.tvix.build.protos.protos;
         nativeBuildInputs = protobufDep prev;
+        buildInputs = darwinDeps;
       };
 
       tvix-castore = prev: {
@@ -55,7 +59,7 @@ let
       };
 
       tvix-cli = prev: {
-        buildInputs = prev.buildInputs or [ ] ++ securityDarwinDep;
+        buildInputs = prev.buildInputs or [ ] ++ darwinDeps;
       };
 
       tvix-store = prev: {
@@ -63,7 +67,7 @@ let
         nativeBuildInputs = protobufDep prev;
         # fuse-backend-rs uses DiskArbitration framework to handle mount/unmount on Darwin
         buildInputs = prev.buildInputs or [ ]
-          ++ securityDarwinDep
+          ++ darwinDeps
           ++ lib.optional pkgs.stdenv.isDarwin pkgs.buildPackages.darwin.apple_sdk.frameworks.DiskArbitration;
       };
     };
