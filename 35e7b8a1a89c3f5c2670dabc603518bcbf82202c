@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c7eb8234_59d23225",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2024-02-06T11:21:21Z",
+      "side": 1,
+      "message": "Not worse than before, pushing this through to avoid subtree conflicts.",
+      "revId": "35e7b8a1a89c3f5c2670dabc603518bcbf82202c",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
