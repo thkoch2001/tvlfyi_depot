@@ -36,6 +36,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "bfeae09e_09f7937b",
+        "filename": "tvix/castore/src/blobservice/chunked_reader.rs",
+        "patchSetId": 7
+      },
+      "lineNbr": 90,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-02-06T12:43:03Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "036a282e_e95ad024",
+      "revId": "b09f2e0a05a272956a69aaaad59c1ae1b6d269b3",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "6466763e_6897099e",
