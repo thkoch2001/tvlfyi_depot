@@ -1,6 +1,6 @@
 ;;; exwm-background.el --- X Background Module for EXWM  -*- lexical-binding: t -*-
 
-;; Copyright (C) 2022-2023 Free Software Foundation, Inc.
+;; Copyright (C) 2022-2024 Free Software Foundation, Inc.
 
 ;; Author: Steven Allen <steven@stebalien.com>
 
@@ -27,7 +27,7 @@
 ;;   (require 'exwm-background)
 ;;   (exwm-background-enable)
 ;;
-;; By default, this will apply the theme's background color. However, that
+;; By default, this will apply the theme's background color.  However, that
 ;; color can be customized via the `exwm-background-color' setting.
 
 ;;; Code:
@@ -47,13 +47,13 @@
 
 (defconst exwm-background--properties '("_XROOTPMAP_ID" "_XSETROOT_ID" "ESETROOT_PMAP_ID")
   "The background properties to set.
-We can't need to set these so that compositing window managers can correctly display the background
-color.")
+We can't need to set these so that compositing window managers
+can correctly display the background color.")
 
 (defvar exwm-background--connection nil
   "The X connection used for setting the background.
-We use a separate connection as other background-setting tools may kill this connection when they
-replace it.")
+We use a separate connection as other background-setting tools
+may kill this connection when they replace it.")
 
 (defvar exwm-background--pixmap nil
   "Cached background pixmap.")

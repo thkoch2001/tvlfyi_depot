@@ -1,6 +1,6 @@
 ;;; exwm-core.el --- Core definitions  -*- lexical-binding: t -*-
 
-;; Copyright (C) 2015-2023 Free Software Foundation, Inc.
+;; Copyright (C) 2015-2024 Free Software Foundation, Inc.
 
 ;; Author: Chris Feng <chris.w.feng@gmail.com>
 
@@ -33,6 +33,10 @@
 (require 'xcb-ewmh)
 (require 'xcb-debug)
 
+(defgroup exwm-debug nil
+  "Debugging."
+  :group 'exwm)
+
 (defcustom exwm-debug-log-time-function #'exwm-debug-log-uptime
   "Function used for generating timestamps in `exwm-debug' logs.
 
@@ -40,7 +44,6 @@ Here are some predefined candidates:
 `exwm-debug-log-uptime': Display the uptime of this Emacs instance.
 `exwm-debug-log-time': Display time of day.
 `nil': Disable timestamp."
-  :group 'exwm-debug
   :type `(choice (const :tag "Emacs uptime" ,#'exwm-debug-log-uptime)
                  (const :tag "Time of day" ,#'exwm-debug-log-time)
                  (const :tag "Off" nil)
@@ -203,7 +206,7 @@ If FRAME is null, use selected frame."
   "Convert COLOR to PIXEL (index in TrueColor colormap)."
   (when (and color
              (eq (x-display-visual-class) 'true-color))
-    (let ((rgb (x-color-values color)))
+    (let ((rgb (color-values color)))
       (logior (ash (ash (pop rgb) -8) 16)
               (ash (ash (pop rgb) -8) 8)
               (ash (pop rgb) -8)))))

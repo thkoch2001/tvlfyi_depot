@@ -1,6 +1,6 @@
 ;;; exwm-layout.el --- Layout Module for EXWM  -*- lexical-binding: t -*-
 
-;; Copyright (C) 2015-2023 Free Software Foundation, Inc.
+;; Copyright (C) 2015-2024 Free Software Foundation, Inc.
 
 ;; Author: Chris Feng <chris.w.feng@gmail.com>
 
@@ -29,7 +29,6 @@
 
 (defgroup exwm-layout nil
   "Layout."
-  :version "25.3"
   :group 'exwm)
 
 (defcustom exwm-layout-auto-iconify t
@@ -146,8 +145,8 @@ See variable `exwm-layout-auto-iconify'."
       (exwm--set-geometry id x y width height)
       (xcb:+request exwm--connection (make-instance 'xcb:MapWindow :window id))
       (exwm-layout--set-state id xcb:icccm:WM_STATE:NormalState)
-      ;; (setq exwm--ewmh-state
-      ;;       (delq xcb:Atom:_NET_WM_STATE_HIDDEN exwm--ewmh-state))
+      (setq exwm--ewmh-state
+            (delq xcb:Atom:_NET_WM_STATE_HIDDEN exwm--ewmh-state))
       (exwm-layout--set-ewmh-state id)
       (exwm-layout--auto-iconify)))
   (xcb:flush exwm--connection))
@@ -157,7 +156,8 @@ See variable `exwm-layout-auto-iconify'."
   (with-current-buffer (exwm--id->buffer id)
     (unless (or (exwm-layout--iconic-state-p)
                 (and exwm--floating-frame
-                     (eq 4294967295. exwm--desktop)))
+                     exwm--desktop
+                     (= 4294967295. exwm--desktop)))
       (exwm--log "Hide #x%x" id)
       (when exwm--floating-frame
         (let* ((container (frame-parameter exwm--floating-frame
@@ -182,7 +182,7 @@ See variable `exwm-layout-auto-iconify'."
                          :window id :value-mask xcb:CW:EventMask
                          :event-mask (exwm--get-client-event-mask)))
       (exwm-layout--set-state id xcb:icccm:WM_STATE:IconicState)
-      ;; (cl-pushnew xcb:Atom:_NET_WM_STATE_HIDDEN exwm--ewmh-state)
+      (cl-pushnew xcb:Atom:_NET_WM_STATE_HIDDEN exwm--ewmh-state)
       (exwm-layout--set-ewmh-state id)
       (exwm-layout--auto-iconify)
       (xcb:flush exwm--connection))))
@@ -207,8 +207,7 @@ See variable `exwm-layout-auto-iconify'."
                                            xcb:ConfigWindow:StackMode)
                        :border-width 0
                        :stack-mode xcb:StackMode:Above))
-    ;; commented out to work around https://github.com/ch11ng/exwm/issues/759
-    ;; (cl-pushnew xcb:Atom:_NET_WM_STATE_FULLSCREEN exwm--ewmh-state)
+    (cl-pushnew xcb:Atom:_NET_WM_STATE_FULLSCREEN exwm--ewmh-state)
     (exwm-layout--set-ewmh-state exwm--id)
     (xcb:flush exwm--connection)
     (set-window-dedicated-p (get-buffer-window) t)

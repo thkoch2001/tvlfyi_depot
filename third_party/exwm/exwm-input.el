@@ -1,6 +1,6 @@
 ;;; exwm-input.el --- Input Module for EXWM  -*- lexical-binding: t -*-
 
-;; Copyright (C) 2015-2023 Free Software Foundation, Inc.
+;; Copyright (C) 2015-2024 Free Software Foundation, Inc.
 
 ;; Author: Chris Feng <chris.w.feng@gmail.com>
 
@@ -40,7 +40,6 @@
 
 (defgroup exwm-input nil
   "Input."
-  :version "25.3"
   :group 'exwm)
 
 (defcustom exwm-input-prefix-keys
@@ -102,6 +101,13 @@ defined in `exwm-mode-map' here."
 (defconst exwm-input--update-focus-interval 0.01
   "Time interval (in seconds) for accumulating input focus update requests.")
 
+(defconst exwm-input--passthrough-functions '(read-char
+                                              read-char-exclusive
+                                              read-key-sequence-vector
+                                              read-key-sequence
+                                              read-event)
+  "Low-level read functions that must be exempted from EXWM input handling.")
+
 (defvar exwm-input--during-command nil
   "Indicate whether between `pre-command-hook' and `post-command-hook'.")
 
@@ -129,11 +135,14 @@ defined in `exwm-mode-map' here."
 
 (defvar exwm-input--timestamp-window nil)
 
+(defvar exwm-input--update-focus-timer nil
+  "Timer for deferring the update of input focus.")
+
 (defvar exwm-input--update-focus-lock nil
   "Lock for solving input focus update contention.")
 
-(defvar exwm-input--update-focus-timer nil
-  "Timer for deferring the update of input focus.")
+(defvar exwm-input--update-focus-window nil "The (Emacs) window to be focused.
+This value should always be overwritten.")
 
 (defvar exwm-input--echo-area-timer nil "Timer for detecting echo area dirty.")
 
@@ -291,38 +300,38 @@ ARGS are additional arguments to CALLBACK."
   "Run in `buffer-list-update-hook' to track input focus."
   (when (and          ; this hook is called incesantly; place cheap tests on top
          (not exwm-input--skip-buffer-list-update)
-         (exwm--terminal-p))      ; skip other terminals, e.g. TTY client frames
+         (exwm--terminal-p) ; skip other terminals, e.g. TTY client frames
+         (not (frame-parameter nil 'no-accept-focus)))
     (exwm--log "current-buffer=%S selected-window=%S"
                (current-buffer) (selected-window))
+    (redirect-frame-focus (selected-frame) nil)
+    (setq exwm-input--update-focus-window (selected-window))
     (exwm-input--update-focus-defer)))
 
 (defun exwm-input--update-focus-defer ()
-  "Defer updating input focus."
-  (redirect-frame-focus (selected-frame) nil)
+  "Schedule a deferred update to input focus.
+Instead of immediately focusing the current window, it defers the focus change
+until the selected window stops changing (debouncing input focus updates)."
   (when exwm-input--update-focus-timer
     (cancel-timer exwm-input--update-focus-timer))
   (setq exwm-input--update-focus-timer
         ;; Attempt to accumulate successive events close enough.
         (run-with-timer exwm-input--update-focus-interval
                         nil
-                        #'exwm-input--update-focus-commit
-                        (selected-window))))
+                        #'exwm-input--update-focus-commit)))
 
-(defun exwm-input--update-focus-commit (window)
-  "Commit updating input focus."
-  (let ((cwin (selected-window)))
-    (if exwm-input--update-focus-lock
-        (unless (eq exwm-input--update-focus-lock cwin)
-          (exwm-input--update-focus-defer))
-      (if (and cwin window (eq cwin window))
-          (let ((exwm-input--update-focus-lock cwin))
-            (exwm-input--update-focus window))
-        (exwm-input--update-focus-defer)))))
+(defun exwm-input--update-focus-commit ()
+  "Attempt to update the window focus.
+If we're currently updating the window focus, re-schedule a focus update
+attempt later."
+  (if exwm-input--update-focus-lock
+      (exwm-input--update-focus-defer)
+    (let ((exwm-input--update-focus-lock t))
+      (exwm-input--update-focus exwm-input--update-focus-window))))
 
 (defun exwm-input--update-focus (window)
-  "Update input focus."
-  (when  (and (window-live-p window)
-              (not (frame-parameter (window-frame window) 'no-accept-focus)))
+  "Update input focus to WINDOW."
+  (when (window-live-p window)
     (exwm--log "focus-window=%s focus-buffer=%s" window (window-buffer window))
     (with-current-buffer (window-buffer window)
       (if (derived-mode-p 'exwm-mode)
@@ -573,20 +582,10 @@ instead."
   (when (called-interactively-p 'any)
     (exwm-input--update-global-prefix-keys)))
 
-;; Putting (t . EVENT) into `unread-command-events' does not really work
-;; as documented for Emacs < 26.2.
-(eval-and-compile
-  (if (or (< emacs-major-version 26)
-          (and (= emacs-major-version 26)
-               (< emacs-minor-version 2)))
-      (defsubst exwm-input--unread-event (event)
-        (declare (indent defun))
-        (setq unread-command-events
-              (append unread-command-events (list event))))
-    (defsubst exwm-input--unread-event (event)
-      (declare (indent defun))
-      (setq unread-command-events
-            (append unread-command-events `((t . ,event)))))))
+(defsubst exwm-input--unread-event (event)
+  (declare (indent defun))
+  (setq unread-command-events
+        (append unread-command-events `((t . ,event)))))
 
 (defun exwm-input--mimic-read-event (event)
   "Process EVENT as if it were returned by `read-event'."
@@ -747,7 +746,7 @@ Current buffer must be an `exwm-mode' buffer."
 (defun exwm-input--on-ButtonPress-line-mode (buffer button-event)
   "Handle button events in line mode.
 BUFFER is the `exwm-mode' buffer the event was generated
-on. BUTTON-EVENT is the X event converted into an Emacs event.
+on.  BUTTON-EVENT is the X event converted into an Emacs event.
 
 The return value is used as event_mode to release the original
 button event."
@@ -970,11 +969,6 @@ multiple keys.  If END-KEY is non-nil, stop sending keys if it's pressed."
                    #'exwm-input-send-simulation-key))))
            exwm-input--simulation-keys))
 
-(defun exwm-input-set-simulation-keys (simulation-keys)
-  "Please customize or set `exwm-input-simulation-keys' instead."
-  (declare (obsolete nil "26"))
-  (exwm-input--set-simulation-keys simulation-keys))
-
 (defcustom exwm-input-simulation-keys nil
   "Simulation keys.
 
@@ -1151,6 +1145,11 @@ One use is to access the keymap bound to KEYS (as prefix keys) in `char-mode'."
     (exwm--log)
     (exwm-input--on-minibuffer-exit)))
 
+(defun exwm-input--call-with-passthrough (function &rest args)
+  "Bind `exwm-input-line-mode-passthrough' and call FUNCTION with ARGS."
+  (let ((exwm-input-line-mode-passthrough t))
+    (apply function args)))
+
 (defun exwm-input--init ()
   "Initialize the keyboard module."
   (exwm--log)
@@ -1206,7 +1205,10 @@ One use is to access the keymap bound to KEYS (as prefix keys) in `char-mode'."
         (run-with-idle-timer 0 t #'exwm-input--on-echo-area-dirty))
   (add-hook 'echo-area-clear-hook #'exwm-input--on-echo-area-clear)
   ;; Update focus when buffer list updates
-  (add-hook 'buffer-list-update-hook #'exwm-input--on-buffer-list-update))
+  (add-hook 'buffer-list-update-hook #'exwm-input--on-buffer-list-update)
+
+  (dolist (fun exwm-input--passthrough-functions)
+    (advice-add fun :around #'exwm-input--call-with-passthrough)))
 
 (defun exwm-input--post-init ()
   "The second stage in the initialization of the input module."
@@ -1216,6 +1218,8 @@ One use is to access the keymap bound to KEYS (as prefix keys) in `char-mode'."
 (defun exwm-input--exit ()
   "Exit the input module."
   (exwm--log)
+  (dolist (fun exwm-input--passthrough-functions)
+    (advice-remove fun #'exwm-input--call-with-passthrough))
   (exwm-input--unset-simulation-keys)
   (remove-hook 'pre-command-hook #'exwm-input--on-pre-command)
   (remove-hook 'post-command-hook #'exwm-input--on-post-command)

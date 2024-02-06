@@ -49,6 +49,19 @@ depot.nix.readTree.drvTargets {
           self.git
         ];
       });
+
+      # Pin xelb to a newer one until the new maintainers do a release.
+      xelb = eself.trivialBuild {
+        pname = "xelb";
+        version = "0.19-dev"; # invented version, last actual release was 0.18
+
+        src = self.fetchFromGitHub {
+          owner = "emacs-exwm";
+          repo = "xelb";
+          rev = "86089eba2de6c818bfa2fac075cb7ad876262798";
+          sha256 = "1mmlrd2zpcwiv8gh10y7lrpflnbmsycdascrxjr3bfcwa8yx7901";
+        };
+      };
     })
   );
 

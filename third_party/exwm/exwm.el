@@ -1,13 +1,13 @@
 ;;; exwm.el --- Emacs X Window Manager  -*- lexical-binding: t -*-
 
-;; Copyright (C) 2015-2023 Free Software Foundation, Inc.
+;; Copyright (C) 2015-2024 Free Software Foundation, Inc.
 
 ;; Author: Chris Feng <chris.w.feng@gmail.com>
-;; Maintainer: Adrián Medraño Calvo <adrian@medranocalvo.com>
+;; Maintainer: Adrián Medraño Calvo <adrian@medranocalvo.com>, Steven Allen <steven@stebalien.com>, Daniel Mendler <mail@daniel-mendler.de>
 ;; Version: 0.28
-;; Package-Requires: ((xelb "0.18"))
+;; Package-Requires: ((emacs "27.1") (xelb "0.18"))
 ;; Keywords: unix
-;; URL: https://github.com/ch11ng/exwm
+;; URL: https://github.com/emacs-exwm/exwm
 
 ;; This file is part of GNU Emacs.
 
@@ -29,14 +29,18 @@
 ;; Overview
 ;; --------
 ;; EXWM (Emacs X Window Manager) is a full-featured tiling X window manager
-;; for Emacs built on top of [XELB](https://github.com/ch11ng/xelb).
+;; for Emacs built on top of [XELB](https://github.com/emacs-exwm/xelb).
 ;; It features:
 ;; + Fully keyboard-driven operations
 ;; + Hybrid layout modes (tiling & stacking)
 ;; + Dynamic workspace support
 ;; + ICCCM/EWMH compliance
-;; + (Optional) RandR (multi-monitor) support
-;; + (Optional) Built-in system tray
+;; Optional features:
+;; + RandR (multi-monitor) support
+;; + System tray
+;; + Input method
+;; + Background setting support
+;; + XSETTINGS server
 
 ;; Installation & configuration
 ;; ----------------------------
@@ -54,7 +58,7 @@
 ;;    xinit -- vt01
 ;;
 ;; You should additionally hide the menu-bar, tool-bar, etc to increase the
-;; usable space.  Please check the wiki (https://github.com/ch11ng/exwm/wiki)
+;; usable space.  Please check the wiki (https://github.com/emacs-exwm/exwm/wiki)
 ;; for more detailed instructions on installation, configuration, usage, etc.
 
 ;; References:
@@ -77,7 +81,6 @@
 (defgroup exwm nil
   "Emacs X Window Manager."
   :tag "EXWM"
-  :version "25.3"
   :group 'applications
   :prefix "exwm-")
 
@@ -97,7 +100,10 @@
   "Normal hook run when window title is updated."
   :type 'hook)
 
-(defcustom exwm-blocking-subrs '(x-file-dialog x-popup-dialog x-select-font)
+(defcustom exwm-blocking-subrs
+  ;; `x-file-dialog' and `x-select-font' are missing on some Emacs builds, for
+  ;; example on the X11 Lucid build.
+  '(x-file-dialog x-popup-dialog x-select-font message-box message-or-box)
   "Subrs (primitives) that would normally block EXWM."
   :type '(repeat function))
 
@@ -109,6 +115,10 @@
 
 (defconst exwm--server-name "server-exwm"
   "Name of the subordinate Emacs server.")
+
+(defvar exwm--server-timeout 1
+  "Number of seconds to wait for the subordinate Emacs server to exit.
+After this time, the server will be killed.")
 
 (defvar exwm--server-process nil "Process of the subordinate Emacs server.")
 
@@ -166,7 +176,7 @@ Argument XWIN contains the X window of the `exwm-mode' buffer."
       (when reply
         (setq desktop (slot-value reply 'value))
         (cond
-         ((eq desktop 4294967295.)
+         ((and desktop (= desktop 4294967295.))
           (unless (or (not exwm--floating-frame)
                       (eq exwm--frame exwm-workspace--current)
                       (and exwm--desktop
@@ -482,9 +492,6 @@ RAW-DATA contains unmarshalled ClientMessage event data."
       (exwm-workspace-switch (elt data 0)))
      ;; _NET_ACTIVE_WINDOW.
      ((= type xcb:Atom:_NET_ACTIVE_WINDOW)
-      (dolist (f exwm-workspace--list)
-        (when (eq id (frame-parameter f 'exwm-outer-id))
-          (x-focus-frame f t)))
       (let ((buffer (exwm--id->buffer id))
             iconic window)
         (if (buffer-live-p buffer)
@@ -1002,8 +1009,13 @@ FRAME, if given, indicates the X display EXWM should manage."
 (defun exwm--server-stop ()
   "Stop the subordinate Emacs server."
   (exwm--log)
-  (server-force-delete exwm--server-name)
   (when exwm--server-process
+    (when (process-live-p exwm--server-process)
+      (cl-loop
+       initially (signal-process exwm--server-process 'TERM)
+       while     (process-live-p exwm--server-process)
+       repeat    (* 10 exwm--server-timeout)
+       do        (sit-for 0.1)))
     (delete-process exwm--server-process)
     (setq exwm--server-process nil)))
 
@@ -1020,7 +1032,7 @@ FUNCTION is the function to be evaluated, ARGS are the arguments."
                          (car command-line-args) ;The executable file
                          "-d" (frame-parameter nil 'display)
                          "-Q"
-                         (concat "--daemon=" exwm--server-name)
+                         (concat "--fg-daemon=" exwm--server-name)
                          "--eval"
                          ;; Create an invisible frame
                          "(make-frame '((window-system . x) (visibility)))"))
