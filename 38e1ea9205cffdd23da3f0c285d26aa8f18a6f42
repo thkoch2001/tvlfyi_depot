@@ -71,6 +71,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "788af413_c1ee899e",
+        "filename": "tvix/castore/docs/blobstore-chunking.md",
+        "patchSetId": 2
+      },
+      "lineNbr": 85,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-02-06T18:27:53Z",
+      "side": 1,
+      "message": "As discussed on IRC, let mark as resolved and do any followup fixes if necessary.",
+      "parentUuid": "c8649081_a6a57ca2",
+      "revId": "38e1ea9205cffdd23da3f0c285d26aa8f18a6f42",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "67873e98_580ef1e3",
