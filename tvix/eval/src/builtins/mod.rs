@@ -524,7 +524,8 @@ mod pure_builtins {
     #[builtin("genList")]
     async fn builtin_gen_list(
         co: GenCo,
-        generator: Value,
+        // Nix 2.3 doesn't propagate failures here
+        #[catch] generator: Value,
         length: Value,
     ) -> Result<Value, ErrorKind> {
         let mut out = imbl::Vector::<Value>::new();
