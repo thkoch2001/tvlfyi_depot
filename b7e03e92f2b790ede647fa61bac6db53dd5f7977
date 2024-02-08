@@ -157,6 +157,24 @@
       "parentUuid": "f91a581f_4d405416",
       "revId": "b7e03e92f2b790ede647fa61bac6db53dd5f7977",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "07d5733e_3f00365c",
+        "filename": "web/tvl/blog/2024-02-tvix-update.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 172,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2024-02-08T14:20:36Z",
+      "side": 1,
+      "message": "As you may know, Nix has a limited exception system for dealing\nwith user-generated errors: `builtins.tryEval` can be used to\ndetect if an expression fails if `builtins.throw` or `assert` are\nused to generate it. This feature requires extra support in any\nNix implementation, as errors may not necessarily cause the Nix\nprogram to abort.\n\nThe C++ Nix implementation just reuses the language-provided\nException system for `builtins.tryEval` which Tvix can\u0027t\n(even if Rust had an equivalent system): In C++ Nix the runtime\nrepresentation of the program in execution corresponds to the Nix\nexpression tree of the relevant source files. This means that an\nexception raised in C++ code will automatically bubble up\ncorrectly since the C++ and Nix call stacks are equivalen to each\nother. Tvix compiles the Nix expressions to a byte code program\nwhich may be mutated by extra optimization rules (for example, we\nhope to eliminate as many thunks as possible in the future). This\nmeans that such a correspondence between Nix and the (in this\ncase) VM runtime is not guaranteed.\n\nPreviously, `builtins.tryEval` (which is implemented in Rust and\ncan access VM internals) just allowed the VM to recover from\ncertain kinds of errors. This proved to be insufficient as it\n[blew up as soon as `builtins.tryEval`-ed thunk is forced\nagain](https://b.tvl.fyi/issues/281)—extra bookkeeping was\nneeded. As a solution, we now store thunk evaluation errors that\ncan be recovered from as `Value::Catchable` which mitigates this\nproblem.\n\nAs you can imagine, storing evaluation failures as “normal”\nvalues quickly leads to all sorts of bugs because most\nVM/`builtins` code is written with only ordinary values like\nattribute sets, strings etc. in mind. While ironing those out, we\nmade sure to supplement those fixes with as many test cases for\n`builtins.tryEval` as possible. This will hopefully prevent any\nregressions if or rather when we touch this system again. We\nalready have some ideas for replacing the `Catchable` value type\nwith a cleaner representation.\n\n---\n\nToo long?",
+      "parentUuid": "2893a4e2_d99b15cf",
+      "revId": "b7e03e92f2b790ede647fa61bac6db53dd5f7977",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
