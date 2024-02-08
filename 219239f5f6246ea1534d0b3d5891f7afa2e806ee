@@ -16,6 +16,24 @@
       "message": "`stdenv.mkDerivation`, not `callPackage`.",
       "revId": "219239f5f6246ea1534d0b3d5891f7afa2e806ee",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7b94b23b_f296e52e",
+        "filename": "web/tvl/blog/2024-02-tvix-update.md",
+        "patchSetId": 4
+      },
+      "lineNbr": 213,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-02-08T19:01:16Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1fb95865_d093e804",
+      "revId": "219239f5f6246ea1534d0b3d5891f7afa2e806ee",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
