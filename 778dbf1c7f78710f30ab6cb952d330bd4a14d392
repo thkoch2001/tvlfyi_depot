@@ -24,6 +24,30 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "ca65dda1_7bda0dc8",
+        "filename": "web/tvl/blog/2024-02-tvix-update.md",
+        "patchSetId": 5
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-02-08T20:56:45Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "61eb4c47_d15ffc6c",
+      "range": {
+        "startLine": 23,
+        "startChar": 22,
+        "endLine": 23,
+        "endChar": 25
+      },
+      "revId": "778dbf1c7f78710f30ab6cb952d330bd4a14d392",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "61f2f509_996e2718",
@@ -60,6 +84,54 @@
       "writtenOn": "2024-02-08T20:39:48Z",
       "side": 1,
       "message": "I\u0027d say \"now regularly\" here",
+      "range": {
+        "startLine": 27,
+        "startChar": 32,
+        "endLine": 27,
+        "endChar": 46
+      },
+      "revId": "778dbf1c7f78710f30ab6cb952d330bd4a14d392",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3eb0900a_bec9e619",
+        "filename": "web/tvl/blog/2024-02-tvix-update.md",
+        "patchSetId": 5
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-02-08T20:56:45Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "61f2f509_996e2718",
+      "range": {
+        "startLine": 27,
+        "startChar": 42,
+        "endLine": 27,
+        "endChar": 46
+      },
+      "revId": "778dbf1c7f78710f30ab6cb952d330bd4a14d392",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6c9d8f17_423f2c68",
+        "filename": "web/tvl/blog/2024-02-tvix-update.md",
+        "patchSetId": 5
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-02-08T20:56:45Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b7254733_da68495b",
       "range": {
         "startLine": 27,
         "startChar": 32,
@@ -116,6 +188,54 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "e8718eaa_df678b60",
+        "filename": "web/tvl/blog/2024-02-tvix-update.md",
+        "patchSetId": 5
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-02-08T20:56:45Z",
+      "side": 1,
+      "message": "I added something around these lines, but added a \"as a part of code review\".",
+      "parentUuid": "89d91dd7_33826a2a",
+      "range": {
+        "startLine": 28,
+        "startChar": 46,
+        "endLine": 28,
+        "endChar": 60
+      },
+      "revId": "778dbf1c7f78710f30ab6cb952d330bd4a14d392",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cbe31698_1425108b",
+        "filename": "web/tvl/blog/2024-02-tvix-update.md",
+        "patchSetId": 5
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-02-08T20:56:45Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fa55a15f_da1197f0",
+      "range": {
+        "startLine": 28,
+        "startChar": 0,
+        "endLine": 28,
+        "endChar": 6
+      },
+      "revId": "778dbf1c7f78710f30ab6cb952d330bd4a14d392",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "828475b0_cd438938",
@@ -157,6 +277,54 @@
         "startChar": 9,
         "endLine": 29,
         "endChar": 25
+      },
+      "revId": "778dbf1c7f78710f30ab6cb952d330bd4a14d392",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "33dedc35_3d46cd94",
+        "filename": "web/tvl/blog/2024-02-tvix-update.md",
+        "patchSetId": 5
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-02-08T20:56:45Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "088bef2e_fddaf26c",
+      "range": {
+        "startLine": 29,
+        "startChar": 9,
+        "endLine": 29,
+        "endChar": 25
+      },
+      "revId": "778dbf1c7f78710f30ab6cb952d330bd4a14d392",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c4c1df34_706642ab",
+        "filename": "web/tvl/blog/2024-02-tvix-update.md",
+        "patchSetId": 5
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-02-08T20:56:45Z",
+      "side": 1,
+      "message": "Ok",
+      "parentUuid": "828475b0_cd438938",
+      "range": {
+        "startLine": 29,
+        "startChar": 18,
+        "endLine": 29,
+        "endChar": 53
       },
       "revId": "778dbf1c7f78710f30ab6cb952d330bd4a14d392",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
