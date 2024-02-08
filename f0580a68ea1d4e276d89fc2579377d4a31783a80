@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b1101d3b_fea88371",
+        "filename": "tvix/tools/weave/src/main.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-02-08T12:16:46Z",
+      "side": 1,
+      "message": "please make these file paths configurable via clap, and add some parameter documentation about the format we expect and what\u0027s normally producing that.",
+      "revId": "f0580a68ea1d4e276d89fc2579377d4a31783a80",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "79956413_3b635c12",
+        "filename": "tvix/tools/weave/src/main.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 139,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-02-08T12:16:46Z",
+      "side": 1,
+      "message": "Can probably live in a chunked_list.rs, and get some docstrings.",
+      "revId": "f0580a68ea1d4e276d89fc2579377d4a31783a80",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8a8620e5_7906824e",
+        "filename": "tvix/tools/weave/src/main.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 170,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-02-08T12:16:46Z",
+      "side": 1,
+      "message": "Can probably live in a chunked_slice.rs, and get some docstrings.",
+      "revId": "f0580a68ea1d4e276d89fc2579377d4a31783a80",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ae376f20_d1ba9a9f",
+        "filename": "tvix/tools/weave/src/main.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 210,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-02-08T12:16:46Z",
+      "side": 1,
+      "message": "SAFETY",
+      "revId": "f0580a68ea1d4e276d89fc2579377d4a31783a80",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
