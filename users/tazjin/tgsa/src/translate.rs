@@ -155,7 +155,7 @@ fn fetch_iam_token(token: &str) -> Result<String> {
 
 pub fn fetch_translation(message: &str) -> Result<String> {
     let request_body = json!({
-        "folderId": "b1gq41rsbggeum4qafnh",
+        "folderId": "b1g5k8f0tgimg06i6p5h",
         "texts": [ message ],
         "targetLanguageCode": "en",
     });
