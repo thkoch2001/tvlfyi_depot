@@ -175,6 +175,24 @@
       "parentUuid": "2893a4e2_d99b15cf",
       "revId": "b7e03e92f2b790ede647fa61bac6db53dd5f7977",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fe45dc3b_24ec86e5",
+        "filename": "web/tvl/blog/2024-02-tvix-update.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 172,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-02-08T15:08:04Z",
+      "side": 1,
+      "message": "No no, this is okay. I reflowed, formatted and added it to this CL. Thanks!",
+      "parentUuid": "07d5733e_3f00365c",
+      "revId": "b7e03e92f2b790ede647fa61bac6db53dd5f7977",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
