@@ -55,7 +55,7 @@ We already did parts of this correctly while starting this work on
 ultimately came up with a nicer interface than there.
 
 All the Derivation internal data model, ATerm serialization and output path
-calculation been sliced out into a more general-purpose
+calculation have been sliced out into a more general-purpose
 [nix-compat][nix-compat-derivation] crate, alongside with more documentation
 unit tests and a Derivation ATerm parser, so hopefully this will now be more
 accessible for everyone now.
@@ -127,8 +127,8 @@ While doing the obvious thing - allowing mounting and browsing the contents
 of the store, this will allow lazy substitution of builds on remote builders, be
 in containerized or virtualized workloads.
 
-We have an example in the repository seeding gnu hello into a throwaway store,
-then booting a MicroVM and executing it.
+We have an [example][tvix-boot-readme] in the repository seeding gnu hello into
+a throwaway store, then booting a MicroVM and executing it.
 
 ### nar-bridge, bridging binary caches
 `nar-bridge` and the `NixHTTPPathInfoService` bridge `tvix-[ca]store` with
@@ -260,7 +260,7 @@ referred store path to actually have the same contents as the machine
 orchestrating the build (or at least very similar).
 
 If a package is not binary reproducible, this can lead to so-called
-[frankenbuilds][frankenstein-build]
+[frankenbuilds][frankenbuild].
 Even ignoring this problem, we still rely on state (the exact contents of that
 output in the remote builders' Nix Store), and making them appear there (if they
 can't be substituted) requires the one scheduling the build to copy them over,
@@ -302,5 +302,6 @@ That's it for now!
 [store-docs]:                 https://cs.tvl.fyi/depot/-/blob/tvix/store/docs/api.md
 [string-contexts-nix-bug]:    https://github.com/NixOS/nix/issues/4629
 [tryeval-infrec]:             https://b.tvl.fyi/issues/281
+[tvix-boot-readme]:           https://cs.tvl.fyi/depot/-/blob/tvix/boot/README.md
 [why-string-contexts-now]:    https://cl.tvl.fyi/c/depot/+/10446/7/tvix/eval/docs/build-references.md
 [windtunnel]:                 https://staging.windtunnel.ci/tvl/tvix
