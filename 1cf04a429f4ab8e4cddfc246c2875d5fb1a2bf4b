@@ -22,6 +22,30 @@
       },
       "revId": "1cf04a429f4ab8e4cddfc246c2875d5fb1a2bf4b",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "788e17aa_07b4a751",
+        "filename": "web/tvl/blog/default.nix",
+        "patchSetId": 7
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-02-09T09:49:35Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "03467ec8_c0fdda64",
+      "range": {
+        "startLine": 32,
+        "startChar": 0,
+        "endLine": 32,
+        "endChar": 2
+      },
+      "revId": "1cf04a429f4ab8e4cddfc246c2875d5fb1a2bf4b",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
