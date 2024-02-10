@@ -1,0 +1,123 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "100f31a0_7d5959ec",
+        "filename": "tvix/glue/src/refscan.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 62,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-02-10T21:04:47Z",
+      "side": 1,
+      "message": "I\u0027m not sure I like this being an associated function on ReferenceScanner itself. I\u0027d rather have it separate, which would allow us to have multiple reference scanners at the same time, in case we scan multiple files concurrently (and join the sets later on)",
+      "revId": "8c0c6b4d2b7be36bee88bd7611773c0025570846",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "76a0b935_aa4b75ae",
+        "filename": "tvix/glue/src/refscan.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 84,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-02-10T21:04:47Z",
+      "side": 1,
+      "message": "I might have missed to document this, but you\u0027re not guaranteed to be able to \"reach\" individual Directory messages in all store implementations.\n\nCan you instead use get_recursive(), and maybe just collect them to the initial stack Vec?",
+      "revId": "8c0c6b4d2b7be36bee88bd7611773c0025570846",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d94973f6_678d4843",
+        "filename": "tvix/glue/src/refscan.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 91,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-02-10T21:04:47Z",
+      "side": 1,
+      "message": "If we\u0027re not able to get any Directory, we can\u0027t calculate references. So this should error out.",
+      "revId": "8c0c6b4d2b7be36bee88bd7611773c0025570846",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0eff6322_1ff26f7c",
+        "filename": "tvix/glue/src/refscan.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 107,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-02-10T21:04:47Z",
+      "side": 1,
+      "message": "same for blobs (and the comment is wrong, it mentions dirs)",
+      "revId": "8c0c6b4d2b7be36bee88bd7611773c0025570846",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "dd560be4_73d22a48",
+        "filename": "tvix/glue/src/refscan.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 110,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-02-10T21:04:47Z",
+      "side": 1,
+      "message": "We could add size hints for ChunkedBlobReader (see the corresponding CL), but you have that information already, as it\u0027s size is mentioned in the FileNode attribute",
+      "revId": "8c0c6b4d2b7be36bee88bd7611773c0025570846",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5b48cbb8_16c536cd",
+        "filename": "tvix/glue/src/refscan.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 113,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-02-10T21:04:47Z",
+      "side": 1,
+      "message": "BlobReader implements AsyncRead (which you\u0027re using here). Reference scanner would need to get some writer interface (or call scan repeatedly with smaller reads)",
+      "revId": "8c0c6b4d2b7be36bee88bd7611773c0025570846",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4e73eaae_36572021",
+        "filename": "tvix/glue/src/refscan.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 119,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-02-10T21:04:47Z",
+      "side": 1,
+      "message": "Why are you only peeking in a subset of the target? this probably deserves a comment",
+      "revId": "8c0c6b4d2b7be36bee88bd7611773c0025570846",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
