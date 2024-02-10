@@ -69,6 +69,24 @@
       "message": "still todo",
       "revId": "b09f2e0a05a272956a69aaaad59c1ae1b6d269b3",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c36e91ef_6e7f7e64",
+        "filename": "tvix/castore/src/blobservice/chunked_reader.rs",
+        "patchSetId": 7
+      },
+      "lineNbr": 433,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-02-10T14:19:42Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6466763e_6897099e",
+      "revId": "b09f2e0a05a272956a69aaaad59c1ae1b6d269b3",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
