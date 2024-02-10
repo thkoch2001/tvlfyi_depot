@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "37f43f8e_041b9289",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-02-10T15:33:54Z",
+      "side": 1,
+      "message": "This got NACKed by @tazjin@tvl.su last time.",
+      "revId": "7e6b06bb6f514c00b2661a374bb86ac4db948ecf",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
