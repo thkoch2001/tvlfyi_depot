@@ -18,6 +18,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "118ce4a8_015f9a68",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2024-02-10T15:44:16Z",
+      "side": 1,
+      "message": "It\u0027s in `stdenv/generic/make-derivation.nix`, so...",
+      "parentUuid": "11febb17_55353716",
+      "revId": "34874b68f63e83d67e53adc01f8715ce022928cd",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "69057426_9448388a",
