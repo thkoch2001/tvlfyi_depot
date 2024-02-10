@@ -20,6 +20,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "7f304d7a_fab092d8",
+        "filename": "tvix/glue/src/refscan.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 62,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2024-02-10T23:02:26Z",
+      "side": 1,
+      "message": "This seems orthogonal to me. If in fact we want that (and we\u0027re not sure if we do) there\u0027s no reason that we can\u0027t just instantiate multiple `ReferenceScanner`s at the call site. Up to that point, though, `scan` is already a method on `ReferenceScanner`, and having this here is consistent with that.",
+      "parentUuid": "100f31a0_7d5959ec",
+      "revId": "8c0c6b4d2b7be36bee88bd7611773c0025570846",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "76a0b935_aa4b75ae",
         "filename": "tvix/glue/src/refscan.rs",
         "patchSetId": 1
@@ -37,6 +55,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "b7100e88_090729d6",
+        "filename": "tvix/glue/src/refscan.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 84,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2024-02-10T23:02:26Z",
+      "side": 1,
+      "message": "What? How would you not be able to reach a directory if it\u0027s referenced in a parent directory?",
+      "parentUuid": "76a0b935_aa4b75ae",
+      "revId": "8c0c6b4d2b7be36bee88bd7611773c0025570846",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "d94973f6_678d4843",
         "filename": "tvix/glue/src/refscan.rs",
         "patchSetId": 1
@@ -48,6 +84,24 @@
       "writtenOn": "2024-02-10T21:04:47Z",
       "side": 1,
       "message": "If we\u0027re not able to get any Directory, we can\u0027t calculate references. So this should error out.",
+      "revId": "8c0c6b4d2b7be36bee88bd7611773c0025570846",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a32e586c_de105882",
+        "filename": "tvix/glue/src/refscan.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 91,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2024-02-10T23:02:26Z",
+      "side": 1,
+      "message": "What error, though? This function only can return IO errors. Do we have an error type for this crate?",
+      "parentUuid": "d94973f6_678d4843",
       "revId": "8c0c6b4d2b7be36bee88bd7611773c0025570846",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
@@ -86,6 +140,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "9e6026d4_08cb08eb",
+        "filename": "tvix/glue/src/refscan.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 110,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2024-02-10T23:02:26Z",
+      "side": 1,
+      "message": "sure, we can do that later once we\u0027re optimizing this",
+      "parentUuid": "dd560be4_73d22a48",
+      "revId": "8c0c6b4d2b7be36bee88bd7611773c0025570846",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "5b48cbb8_16c536cd",
@@ -103,6 +175,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "26cd22cd_943f1caa",
+        "filename": "tvix/glue/src/refscan.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 113,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2024-02-10T23:02:26Z",
+      "side": 1,
+      "message": "as above - can do this later when we\u0027re optimizing this",
+      "parentUuid": "5b48cbb8_16c536cd",
+      "revId": "8c0c6b4d2b7be36bee88bd7611773c0025570846",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "4e73eaae_36572021",
@@ -116,6 +206,24 @@
       "writtenOn": "2024-02-10T21:04:47Z",
       "side": 1,
       "message": "Why are you only peeking in a subset of the target? this probably deserves a comment",
+      "revId": "8c0c6b4d2b7be36bee88bd7611773c0025570846",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0cbea87e_79401ae3",
+        "filename": "tvix/glue/src/refscan.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 119,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2024-02-10T23:02:26Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4e73eaae_36572021",
       "revId": "8c0c6b4d2b7be36bee88bd7611773c0025570846",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
