@@ -472,7 +472,7 @@ mod pure_builtins {
     async fn builtin_filterSource(_co: GenCo, #[lazy] _e: Value) -> Result<Value, ErrorKind> {
         // TODO: implement for nixpkgs compatibility
         Ok(Value::Catchable(CatchableErrorKind::UnimplementedFeature(
-            "filterSource".to_string(),
+            "filterSource".into(),
         )))
     }
 
@@ -691,7 +691,7 @@ mod pure_builtins {
     ) -> Result<Value, ErrorKind> {
         // FIXME: propagate contexts here.
         Ok(Value::Catchable(CatchableErrorKind::UnimplementedFeature(
-            "hashString".to_string(),
+            "hashString".into(),
         )))
     }
 
@@ -1388,7 +1388,7 @@ mod pure_builtins {
         // TODO(sterni): coerces to string
         // We do not care about the context here explicitly.
         Ok(Value::Catchable(CatchableErrorKind::Throw(
-            message.to_contextful_str()?.to_string(),
+            message.to_contextful_str()?.to_string().into(),
         )))
     }
 
@@ -1527,9 +1527,7 @@ pub fn pure_builtins() -> Vec<(&'static str, Value)> {
     // TODO: implement for nixpkgs compatibility
     result.push((
         "__curPos",
-        Value::Catchable(CatchableErrorKind::UnimplementedFeature(
-            "__curPos".to_string(),
-        )),
+        Value::Catchable(CatchableErrorKind::UnimplementedFeature("__curPos".into())),
     ));
 
     result
