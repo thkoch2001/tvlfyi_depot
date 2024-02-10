@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a5f83c9f_d0dd3bde",
+        "filename": "tvix/glue/src/tvix_store_io.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 117,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-02-10T16:56:54Z",
+      "side": 1,
+      "message": "We need a fallback here to also try regular filesystem access, for example if NIX_PATH points into the \"real\" nix store.\n\nEven if tvix-cli was not in importing this, it should probably still be allowed.",
+      "revId": "cfd8b915c41b5844e0ca2e26c375ebdce7f1d7bb",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
