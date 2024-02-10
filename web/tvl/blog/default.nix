@@ -30,7 +30,6 @@
       date = 1707472132;
       content = ./2024-02-tvix-update.md;
       author = "flokli";
-      draft = true;
     }
   ];
 }
