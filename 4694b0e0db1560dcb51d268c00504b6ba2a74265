@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4cc40aec_e446a651",
+        "filename": "tvix/glue/src/known_paths.rs",
+        "patchSetId": 5
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-02-10T16:35:58Z",
+      "side": 1,
+      "message": ".",
+      "revId": "4694b0e0db1560dcb51d268c00504b6ba2a74265",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "df2b21b9_be8a7bdf",
+        "filename": "tvix/glue/src/known_paths.rs",
+        "patchSetId": 5
+      },
+      "lineNbr": 114,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-02-10T16:35:58Z",
+      "side": 1,
+      "message": "Add tests",
+      "revId": "4694b0e0db1560dcb51d268c00504b6ba2a74265",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
