@@ -18,6 +18,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "08858d30_c0143f2f",
+        "filename": "tvix/glue/src/builtins/import.rs",
+        "patchSetId": 42
+      },
+      "lineNbr": 171,
+      "author": {
+        "id": 1000073
+      },
+      "writtenOn": "2024-02-11T18:26:59Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "82d0fd73_0ccfa551",
+      "revId": "b2595433e09e63bbd8a5c7492fa7b9b6927eba4e",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "f46c2b58_89f00026",
@@ -31,6 +49,24 @@
       "writtenOn": "2024-01-20T18:48:29Z",
       "side": 1,
       "message": "We can probably just `.unwrap()` here, like in the other places where we use castore digests as B3Digest.",
+      "revId": "b2595433e09e63bbd8a5c7492fa7b9b6927eba4e",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ca3de6e7_e44b1f63",
+        "filename": "tvix/glue/src/builtins/import.rs",
+        "patchSetId": 42
+      },
+      "lineNbr": 179,
+      "author": {
+        "id": 1000073
+      },
+      "writtenOn": "2024-02-11T18:26:59Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f46c2b58_89f00026",
       "revId": "b2595433e09e63bbd8a5c7492fa7b9b6927eba4e",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
@@ -52,6 +88,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "7676ae58_76a19187",
+        "filename": "tvix/glue/src/builtins/import.rs",
+        "patchSetId": 42
+      },
+      "lineNbr": 194,
+      "author": {
+        "id": 1000073
+      },
+      "writtenOn": "2024-02-11T18:26:59Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d05b5748_f2988d53",
+      "revId": "b2595433e09e63bbd8a5c7492fa7b9b6927eba4e",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "1244deac_c83199f1",
@@ -65,6 +119,24 @@
       "writtenOn": "2024-01-20T18:48:29Z",
       "side": 1,
       "message": "Same logic as above, you can unwrap after the conversion, this is already validated.",
+      "revId": "b2595433e09e63bbd8a5c7492fa7b9b6927eba4e",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "24ebc364_e0d4dea8",
+        "filename": "tvix/glue/src/builtins/import.rs",
+        "patchSetId": 42
+      },
+      "lineNbr": 198,
+      "author": {
+        "id": 1000073
+      },
+      "writtenOn": "2024-02-11T18:26:59Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1244deac_c83199f1",
       "revId": "b2595433e09e63bbd8a5c7492fa7b9b6927eba4e",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
@@ -86,6 +158,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "168b15c9_1aaa6a54",
+        "filename": "tvix/glue/src/builtins/import.rs",
+        "patchSetId": 42
+      },
+      "lineNbr": 204,
+      "author": {
+        "id": 1000073
+      },
+      "writtenOn": "2024-02-11T18:26:59Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "bf169dc0_7098be6e",
+      "revId": "b2595433e09e63bbd8a5c7492fa7b9b6927eba4e",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "beed878f_a6c26443",
@@ -99,6 +189,24 @@
       "writtenOn": "2024-01-20T18:48:29Z",
       "side": 1,
       "message": "`Err(…)?;` automatically `.into()`\u0027s, so this can be a bit shorter.",
+      "revId": "b2595433e09e63bbd8a5c7492fa7b9b6927eba4e",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c993bd4b_19832e41",
+        "filename": "tvix/glue/src/builtins/import.rs",
+        "patchSetId": 42
+      },
+      "lineNbr": 234,
+      "author": {
+        "id": 1000073
+      },
+      "writtenOn": "2024-02-11T18:26:59Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "beed878f_a6c26443",
       "revId": "b2595433e09e63bbd8a5c7492fa7b9b6927eba4e",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
