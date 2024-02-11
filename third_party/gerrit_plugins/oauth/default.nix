@@ -5,11 +5,11 @@ let
 in
 buildGerritBazelPlugin rec {
   name = "oauth";
-  depsOutputHash = "sha256:16lv1glsfkn2bagx0vs6sgjf1mdd8vf3dl3iby1zvcm3wnrwfz7y";
+  depsOutputHash = "sha256:01z7rn8hnms3cp7mq27yk063lpy4pmqwpfrcc3cfl0r43k889zz3";
   src = pkgs.fetchgit {
     url = "https://gerrit.googlesource.com/plugins/oauth";
-    rev = "f9bef7476bc99f7b1dc3fe2d52ec95cd7ac571dc";
-    sha256 = "08wf50bz7ash37mzlrxfy7hvmjsf6s4ncpcw5969hs9hjvjfj4dz";
+    rev = "b27cf3ea820eec2ddd22d217fc839261692ccdb0";
+    sha256 = "1m654ibgzprrhcl0wpzqrmq8drpgx6rzlw0ha16l1fi2zv5idkk2";
   };
   overlayPluginCmd = ''
     chmod +w "$out" "$out/plugins/external_plugin_deps.bzl"

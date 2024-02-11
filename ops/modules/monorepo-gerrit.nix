@@ -42,7 +42,7 @@ in
     # Gerrit.
     #
     # TODO(tazjin): Update Gerrit and remove this when possible.
-    jvmPackage = pkgs.openjdk11_headless;
+    jvmPackage = pkgs.openjdk17_headless;
 
     settings = {
       core.packedGitLimit = "100m";

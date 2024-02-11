@@ -11,7 +11,7 @@ let
     name = "bazel";
     targetPkgs = pkgs: [
       (pkgs.bazel_5.override { enableNixHacks = true; })
-      pkgs.jdk11_headless
+      pkgs.jdk17_headless
       pkgs.zlib
       pkgs.python3
       pkgs.curl
@@ -23,7 +23,7 @@ let
     runScript = "/bin/bazel-run";
   };
   bazel = bazelTop // { override = x: bazelTop; };
-  version = "3.8.2";
+  version = "3.9.1";
 in
 pkgs.lib.makeOverridable pkgs.buildBazelPackage {
   pname = "gerrit";
@@ -31,9 +31,9 @@ pkgs.lib.makeOverridable pkgs.buildBazelPackage {
 
   src = pkgs.fetchgit {
     url = "https://gerrit.googlesource.com/gerrit";
-    rev = "67500d39b5bceee8f3ae8b9d605f01428aacb740";
+    rev = "620a819cbf3c64fff7a66798822775ad42c91d8e";
     branchName = "v${version}";
-    sha256 = "sha256:06bmzbcb9717s4b016kcbn8nr9pgaz04i8bnzg7ybkbdwpl8vxvl";
+    sha256 = "sha256:1mdxbgnx3mpxand4wq96ic38bb4yh45q271h40jrk7dk23sgmz02";
     fetchSubmodules = true;
   };
 
@@ -55,7 +55,7 @@ pkgs.lib.makeOverridable pkgs.buildBazelPackage {
   fetchConfigured = true;
 
   fetchAttrs = {
-    sha256 = "sha256:1syy44n1nvrlypa8jv83yzf0miwmsn8bvh97js6v5ygllx04mvf1";
+    sha256 = "sha256:119mqli75c9fy05ddrlh2brjxb354yvv1ijjkk1y1yqcaqppwwb8";
     preBuild = ''
       rm .bazelversion
     '';
@@ -80,7 +80,7 @@ pkgs.lib.makeOverridable pkgs.buildBazelPackage {
       # Removing top-level symlinks along with their markers.
       # This is needed because they sometimes point to temporary paths (?).
       # For example, in Tensorflow-gpu build:
-      # platforms -> NIX_BUILD_TOP/tmp/install/35282f5123611afa742331368e9ae529/_embedded_binaries/platforms
+      #sha256:06bmzbcb9717s4b016kcbn8nr9pgaz04i8bnzg7ybkbdwpl8vxvv"; platforms -> NIX_BUILD_TOP/tmp/install/35282f5123611afa742331368e9ae529/_embedded_binaries/platforms
       find $bazelOut/external -maxdepth 1 -type l | while read symlink; do
         name="$(basename "$symlink")"
         rm -rf "$symlink" "$bazelOut/external/@$name.marker"
