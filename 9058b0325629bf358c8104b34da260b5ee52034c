@@ -18,6 +18,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "3b24a987_b5f7c8a4",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 34
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1000073
+      },
+      "writtenOn": "2024-02-11T17:51:53Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0b1c9df2_18078f70",
+      "revId": "9058b0325629bf358c8104b34da260b5ee52034c",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "f29c6853_f8ccf817",
@@ -49,6 +67,24 @@
       "side": 1,
       "message": "Yes.",
       "parentUuid": "f29c6853_f8ccf817",
+      "revId": "9058b0325629bf358c8104b34da260b5ee52034c",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "eb742b64_63f69ced",
+        "filename": "tvix/glue/src/builtins/mod.rs",
+        "patchSetId": 34
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1000073
+      },
+      "writtenOn": "2024-02-11T17:51:53Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8fd6e7ab_5ea29b98",
       "revId": "9058b0325629bf358c8104b34da260b5ee52034c",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
@@ -124,6 +160,30 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "e2f54121_cfb74df6",
+        "filename": "tvix/glue/src/builtins/mod.rs",
+        "patchSetId": 34
+      },
+      "lineNbr": 358,
+      "author": {
+        "id": 1000073
+      },
+      "writtenOn": "2024-02-11T17:51:53Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c3deec6c_3a62623f",
+      "range": {
+        "startLine": 358,
+        "startChar": 179,
+        "endLine": 358,
+        "endChar": 186
+      },
+      "revId": "9058b0325629bf358c8104b34da260b5ee52034c",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "a03b4bac_08c4e7cc",
@@ -147,6 +207,30 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "df65407e_b0127711",
+        "filename": "tvix/glue/src/builtins/mod.rs",
+        "patchSetId": 34
+      },
+      "lineNbr": 396,
+      "author": {
+        "id": 1000073
+      },
+      "writtenOn": "2024-02-11T17:51:53Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a03b4bac_08c4e7cc",
+      "range": {
+        "startLine": 396,
+        "startChar": 45,
+        "endLine": 396,
+        "endChar": 57
+      },
+      "revId": "9058b0325629bf358c8104b34da260b5ee52034c",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "f4153ad0_60207537",
@@ -160,6 +244,24 @@
       "writtenOn": "2024-01-22T10:55:57Z",
       "side": 1,
       "message": "Add a line \"all tests filter out these unsupported (not representable in castore) nodes\", confirming invalid, but filtered-out nodes don\u0027t prevent ingestion of a path.",
+      "revId": "9058b0325629bf358c8104b34da260b5ee52034c",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c06e3a72_41a752e2",
+        "filename": "tvix/glue/src/builtins/mod.rs",
+        "patchSetId": 34
+      },
+      "lineNbr": 400,
+      "author": {
+        "id": 1000073
+      },
+      "writtenOn": "2024-02-11T17:51:53Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f4153ad0_60207537",
       "revId": "9058b0325629bf358c8104b34da260b5ee52034c",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
@@ -217,6 +319,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "5a12931e_204405a4",
+        "filename": "tvix/glue/src/builtins/mod.rs",
+        "patchSetId": 34
+      },
+      "lineNbr": 427,
+      "author": {
+        "id": 1000073
+      },
+      "writtenOn": "2024-02-11T17:51:53Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4ad944e3_e692af05",
+      "revId": "9058b0325629bf358c8104b34da260b5ee52034c",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "952f07e6_d6535310",
@@ -230,6 +350,24 @@
       "writtenOn": "2024-01-31T09:56:42Z",
       "side": 1,
       "message": "I\u0027d call that node symlink_to_a_file",
+      "revId": "9058b0325629bf358c8104b34da260b5ee52034c",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7e26f0a2_635ed705",
+        "filename": "tvix/glue/src/tests/import_fixtures/c_dir/a_file",
+        "patchSetId": 34
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1000073
+      },
+      "writtenOn": "2024-02-11T17:51:53Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "952f07e6_d6535310",
       "revId": "9058b0325629bf358c8104b34da260b5ee52034c",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
@@ -251,6 +389,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "8985f4f1_1f533d56",
+        "filename": "tvix/glue/src/tests/import_fixtures/d_dir/e_file",
+        "patchSetId": 34
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1000073
+      },
+      "writtenOn": "2024-02-11T17:51:53Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c19f0564_896303bc",
+      "revId": "9058b0325629bf358c8104b34da260b5ee52034c",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "52e2a680_09f8c08e",
@@ -264,6 +420,24 @@
       "writtenOn": "2024-01-31T09:56:42Z",
       "side": 1,
       "message": "I\u0027d call that node symlink_to_a_file",
+      "revId": "9058b0325629bf358c8104b34da260b5ee52034c",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f530e854_d9dfcd2e",
+        "filename": "tvix/glue/src/tests/import_fixtures/e_dir",
+        "patchSetId": 34
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1000073
+      },
+      "writtenOn": "2024-02-11T17:51:53Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "52e2a680_09f8c08e",
       "revId": "9058b0325629bf358c8104b34da260b5ee52034c",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
