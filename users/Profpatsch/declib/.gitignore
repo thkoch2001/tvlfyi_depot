@@ -1,0 +1,6 @@
+/node_modules/
+/.ninja/
+/output/
+
+# ignore for now
+/package.lock.json
