@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3c82827c_59aebbee",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2024-02-11T19:11:15Z",
+      "side": 1,
+      "message": "LGTM, would just like a tiny note in the message about what\u0027s going on here (maybe a link to the right part of some Go changelog/docs explaining the importcmd stuff)",
+      "range": {
+        "startLine": 7,
+        "startChar": 0,
+        "endLine": 7,
+        "endChar": 2
+      },
+      "revId": "93db433d0538791505f9c18d9fd39d1989f2ac25",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
