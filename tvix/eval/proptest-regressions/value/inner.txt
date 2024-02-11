@@ -1,0 +1,7 @@
+# Seeds for failure cases proptest has generated in the past. It is
+# automatically read and these particular cases re-run before any
+# novel cases are generated.
+#
+# It is recommended to check this file in to source control so that
+# everyone who runs the test benefits from these saved cases.
+cc 8ec3f10c95c48c2f78e23fa7bc1e3e187b7ef85987daaec00257f3b13ccce482 # shrinks to input = _IntRoundtripArgs { i: -1 }
