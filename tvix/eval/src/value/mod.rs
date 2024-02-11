@@ -15,6 +15,7 @@ mod arbitrary;
 mod attrs;
 mod builtin;
 mod function;
+mod inner;
 mod json;
 mod list;
 mod path;
