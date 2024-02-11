@@ -91,6 +91,29 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "1cf7ace8_f3ef581b",
+        "filename": "tvix/glue/src/builtins/mod.rs",
+        "patchSetId": 34
+      },
+      "lineNbr": 353,
+      "author": {
+        "id": 1000073
+      },
+      "writtenOn": "2024-02-11T18:26:26Z",
+      "side": 1,
+      "message": "Empty directories are ignored by Git, we need to update the tests to produce the fixtures at runtime, including the empty directory.",
+      "range": {
+        "startLine": 348,
+        "startChar": 0,
+        "endLine": 353,
+        "endChar": 0
+      },
+      "revId": "9058b0325629bf358c8104b34da260b5ee52034c",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "6cccce8c_bbce2acf",
         "filename": "tvix/glue/src/builtins/mod.rs",
         "patchSetId": 34
