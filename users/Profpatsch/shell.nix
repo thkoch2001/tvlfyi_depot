@@ -61,6 +61,8 @@ pkgs.mkShell {
     pkgs.pkg-config
     pkgs.fuse
     pkgs.postgresql
+    pkgs.nodejs
+    pkgs.ninja
   ];
 
   WHATCD_RESOLVER_TOOLS = pkgs.linkFarm "whatcd-resolver-tools" [
@@ -69,6 +71,8 @@ pkgs.mkShell {
       path = "${pkgs.pgformatter}/bin/pg_format";
     }
   ];
+
+  # DECLIB_MASTODON_ACCESS_TOKEN read from `pass` in .envrc.
 
   RUSTC_WRAPPER =
     let
