@@ -1,58 +1,74 @@
-It's already been way too long since the last update here. It doesn't mean
-nothing has moved forward since, in fact a lot of things happened, but while
-there's been a talk about Tvix at [NixCon 2023][nixcon2023], as well as a
-[Nix Developer Dialogue Interview][nix-dev-dialogues-tvix], we never found the
-time to write something down - time to change that :-)
+We've now been working on our rewrite of Nix, [Tvix][], for a little more than
+two years.
+
+Our last written update was in September 2023, and although we did publish a
+couple of things in the meantime (flokli's talk on Tvix at [NixCon
+2023][nixcon2023], our interview at the [Nix Developer
+Dialogues][nix-dev-dialogues-tvix], or tazjin's [talk on
+tvix-eval][tvix-eval-ru] (in Russian)), we never found the time to write
+something down.
+
+In the meantime a lot of stuff has happened though, so it's time to change that
+:-)
+
+Note: This blog post is intended for a technical audience that is already
+intimately familiar with Nix, and knows what things like derivations or store
+paths are. If you're new to Nix, this will not make a lot of sense to you!
 
 ## Evaluation regression testing
-Most of the Evaluator work has been driven by evaluating nixpkgs, and ensuring
-we "evaluate it the same", which ultimately means we produce the same builds and
-end up with the same store paths.
 
-We don't build things yet, but at least for nixpkgs (which doesn't do any IFD),
-it's possible to just peek at the `outPath` (and `drvPath`) of a package, and
-compare the calculated store path(s) with what Nix produces to determine if they
-use the same build recipe (for the package as well as all of its dependencies)
-[^1].
+Most of the evaluator work has been driven by evaluating `nixpkgs`, and ensuring
+that we produce the same derivations, and that their results end up in the same
+store paths.
 
-We added some "integration tests" to our CI ensuring we keep getting the same
-output and drv paths as Nix, and already have quite complicated expressions in
-there and passing, like firefox, which exercises some of the more hairy bits in
-nixpkgs (like cross-compilation infrastructure for WASM). Yay!
+Builds are not hooked up all the way to the evaluator yet, but for Nix code
+without IFD (such as `nixpkgs`!) we can verify this property without building.
+An evaluated Nix derivation's `outPath` (and `drvPath`) can be compared with
+what C++ Nix produces for the same code, to determine whether we evaluated the
+package (and all of its dependencies!) correctly [^1].
 
-Even though we're not getting into very fine-grained optimization until we're
-sure Tvix evaluates nixpkgs in a compatible fashion, we still want to have an
-idea about evaluation performance, and how it changes over time.
-To do this, we extended our benchmarks and wired them into
-[Windtunnel][windtunnel], which now regularly runs benchmarks and provides
-graphs of how the benchmark results change over time, from commit to commit.
+We added integration tests in CI that ensure that the paths we calculate match
+C++ Nix, and are successfully evaluating fairly complicated expressions in them.
+For example, we test against the Firefox derivation, which exercises some of the
+more hairy bits in `nixpkgs` (like WASM cross-compilation infrastructure). Yay!
 
-In the future, we plan to extend this to also run this as a part of code review,
-before changes are applied to our main branch. This will make it easier to see
-changes in performance right in the web interface, without having
-to do a manual benchmark locally before and after the change.
+Although we're avoiding fine-grained optimization until we're sure Tvix
+evaluates all of `nixpkgs` correctly, we still want to have an idea about
+evaluation performance and how our work affects it over time.
 
-## `builtins.derivation[Strict]`, ATerms and output path calculation
-These two are obviously needed to compare any derivation. As an interesting side
-note, in Nixcpp, the former is defined by a piece of
-[bundled-in-Nix `.nix` code][nixcpp-builtins-derivation], that massages some
-parameters around and then calls the "native" `derivationStrict` - so
-implementing them required having the necessary tooling in Tvix to have builtins
-defined in `.nix` source code).
+For this we extended our benchmark suite and integrated it with
+[Windtunnel][windtunnel], which now regularly runs benchmarks and provides a
+view into how the timings change from commit to commit.
 
-`builtins.derivation[Strict]` returns an attribute set with the previously
-mentioned `outPath` and `drvPath` paths. Implementing that correctly required
-implementing output path calculation the same way as Nix does (bit-by-bit).
+In the future, we plan to run this as a part of code review, before changes are
+applied to our canonical branch, to provide this as an additional signal to
+authors and reviewers without having to run the benchmarks manually.
 
-Very little of how the output path calculation works is documented anywhere
-in Nixlang. It uses a subset of [ATerm][aterm] internally, produces
-"fingerprints" containing hashes of these ATerms, which are then hashed again.
-The intermediate hashes are not printed out anywhere (except if you [patch nix]
-[nixcpp-patch-hashes] to do so).
+## ATerms, output path calculation, and `builtins.derivation`
+
+We've implemented all of these features, which comprise the components needed to
+construct derivations in the Nix language, and to allow us to perform the path
+comparisons we mentioned before.
+
+As an interesting side note, in C++ Nix `builtins.derivation` is not actually a
+builtin! It is a piece of [bundled Nix code][nixcpp-builtins-derivation], that
+massages some parameters and then calls the *actual* builtin:
+`derivationStrict`. We've decided to keep this setup, and implemented support in
+in Tvix to have builtins defined in `.nix` source code.
+
+These builtins return attribute sets with the previously mentioned `outPath` and
+`drvPath` fields. Implementing them correctly meant that we needed to implement
+output path calculation *exactly* the same way as Nix does (bit-by-bit).
+
+Very little of how this output path calculation works is documented anywhere in
+C++ Nix. It uses a subset of [ATerm][aterm] internally, produces "fingerprints"
+containing hashes of these ATerms, which are then hashed again. The intermediate
+hashes are not printed out anywhere (except if you [patch
+Nix][nixcpp-patch-hashes] to do so).
 
 We already did parts of this correctly while starting this work on
 [go-nix][go-nix-outpath] some while ago, but found some more edge cases and
-ultimately came up with a nicer interface than there.
+ultimately came up with a nicer interface for Tvix.
 
 All the Derivation internal data model, ATerm serialization and output path
 calculation have been sliced out into a more general-purpose
@@ -166,7 +182,7 @@ that deal with path access in `tvix-eval`, like:
  - `builtins.readFile`
 
 We also recently started working on more complicated builtins like
-`builtins.filterSource` and `builtins.path`, which are also used in nixpkgs.
+`builtins.filterSource` and `builtins.path`, which are also used in `nixpkgs`.
 
 Both import a path into the store, and allow passing a Nix expression that's
 used as a filter function for each path. `builtins.path` can also ensuring the
@@ -181,6 +197,7 @@ Getting the abstractions right there required some back-and-forth, but the
 remaining changes should land quite soon.
 
 ## Catchables / tryEval
+
 As you may know, Nix has a limited exception system for dealing with
 user-generated errors: `builtins.tryEval` can be used to detect if an expression
 fails (if `builtins.throw` or `assert` are used to generate it). This feature
@@ -215,31 +232,34 @@ regressions if or rather when we touch this system again. We already have some
 ideas for replacing the `Catchable` value type with a cleaner representation.
 
 ## String contexts
-For a long time, we had the [working theory][refscan-string-contexts]
-of being able to get away with not implementing string contexts, but
-instead do reference scanning on a set of "known paths" (and not implement
+
+For a long time, we had the [working theory][refscan-string-contexts] that we
+could get away with not implementing string contexts, and instead do reference
+scanning on a set of "known paths" (and not implement
 `builtins.unsafeDiscardStringContext`).
 
-Unfortunately, we ultimately discovered we won't be able to do that, mostly due to a
-[bug in Nix][string-contexts-nix-bug] that's worked around in the nixpkgs'
-`stdenv.mkDerivation` implementation, but impossible to fix in Nix without
-breaking all hashes.
+Unfortunately, we discovered that while this is *conceptually* true, due to a
+[bug in Nix][string-contexts-nix-bug] that's worked around in the
+`stdenv.mkDerivation` implementation, we can't currently do this and calculate
+the same hashes.
 
-So we recently added support for string contexts into our `NixString`
-implementation, implemented the (`unsafeDiscardStringContext`, `getContext`)
-builtins, as well as some more unit tests that introspect string context
-behaviour of various builtins.
+Because hash compatibility is important for us at this point, we bit the bullet
+and added support for string contexts into our `NixString` implementation,
+implemented the context-related builtins, and added more unit tests that verify
+string context behaviour of various builtins.
 
 ## Strings as bstr
-C++ nix uses C-style zero-terminated char pointers to represent strings
-internally - however, until recently, Tvix has used Rust `String` and `str` for
-string values. Since those are required to be valid utf-8, we haven't been able
-to properly represent all the string values that Nix supports.
 
-We recently converted our internal representation to `BString`, which allows
-treating a `Vec<u8>` as a "morally-string-like" value.
+C++ Nix uses C-style zero-terminated strings internally - however, until
+recently, Tvix has used Rust `String` and `str` for string values. Since those
+are required to be valid utf-8, we haven't been able to properly represent all
+the string values that Nix supports.
+
+We recently converted our internal representation to byte strings, which allows
+us to treat a `Vec<u8>` as a "string-like" value.
 
 ## JSON/TOML/XML
+
 We added support for the `toJSON`, `toXML`, `fromJSON` and `fromTOML` builtins.
 
 `toXML` is particularly exciting, as it's the only format that allows expressing
@@ -247,38 +267,40 @@ We added support for the `toJSON`, `toXML`, `fromJSON` and `fromTOML` builtins.
 we can now include these in our unit test suite (and pass, yay!).
 
 ## Builder protocol, drv->builder
-Some work went into the Builder protocol, and how Tvix represents builds
-internally.
 
-Nix uses Derivations (in A-Term) as nodes in its build graph, but it refers to
-other store paths used in that build simply by these store paths *only*, and
-doesn't encode their expected *content hashes* anywhere.
+We've been working on the builder protocol, and Tvix's internal build
+representation.
 
-In Nix, this poses a big problem as soon as these builds are scheduled on remote
-builders: Builds scheduled to a builder are not truly hermetic, but rely on that
-referred store path to actually have the same contents as the machine
-orchestrating the build (or at least very similar).
+Nix uses derivations (encoded in ATerm) as nodes in its build graph, but it
+refers to other store paths used in that build by these store paths *only*. As
+mentioned before, store paths only address the inputs - and not the content.
 
-If a package is not binary reproducible, this can lead to so-called
+This poses a big problem in Nix as soon as builds are scheduled on remote
+builders: There is no guarantee that files at the same store path on the remote
+builder actually have the same contents as on the machine orchestrating the
+build. If a package is not binary reproducible, this can lead to so-called
 [frankenbuilds][frankenbuild].
-Even ignoring this problem, we still rely on state (the exact contents of that
-output in the remote builders' Nix Store), and making them appear there (if they
-can't be substituted) requires the one scheduling the build to copy them over,
-and be a trusted user.
 
-We wanted to eliminate this hermiticity problem in the internal data model
-that Tvix uses to manage builds, by not relying on external state, and instead
-explicitly tracking both build inputs as well as produced outputs by their
-contents, too.
+This also introduces a dependency on the state that's present on the remote
+builder machine: Whatever is in its store and matches the paths will be used,
+even if it was maliciously placed there.
 
----
+To eliminate this hermiticity problem and increase the integrity of builds,
+we've decided to use content-addressing in the builder protocol.
 
-That's it for now!
+We're currently hacking on this at [Thaigersprint](https://thaigersprint.org/)
+and might have some more news to share soon!
 
----
-[^1]: Why this means it's using the same build recipes is due to how the output
-      path calculation for input-addressed paths works, more of that in the
-      next section.
+--------------
+
+That's it for now, try out Tvix and hit us up on IRC or on our mailing list if
+you run into any snags, or have any questions.
+
+เจอกันนะ :)
+
+[^1]: We know that we calculated all dependencies correctly because of how their
+      hashes are included in the hashes of their dependents, and so on. More on
+      path calculation and input-addressed paths in the next section!
 [^2]: That's the same reason why `builtins.derivation[Strict]` also lives in
       `tvix-glue`, not in `tvix-eval`.
 [^3]: See [nix-casync](https://discourse.nixos.org/t/nix-casync-a-more-efficient-way-to-store-and-substitute-nix-store-paths/16539)
@@ -296,6 +318,7 @@ That's it for now!
 [nix-compat-narinfo]:         https://docs.tvix.dev/rust/nix_compat/narinfo/index.html
 [nix-dev-dialogues-tvix]:     https://www.youtube.com/watch?v=ZYG3T4l8RU8
 [nixcon2023]:                 https://www.youtube.com/watch?v=j67prAPYScY
+[tvix-eval-ru]:               https://tazj.in/blog/tvix-eval-talk-2023
 [nixcpp-builtins-derivation]: https://github.com/NixOS/nix/blob/49cf090cb2f51d6935756a6cf94d568cab063f81/src/libexpr/primops/derivation.nix#L4
 [nixcpp-patch-hashes]:        https://github.com/adisbladis/nix/tree/hash-tracing
 [refscan-string-contexts]:    https://inbox.tvl.su/depot/20230316120039.j4fkp3puzrtbjcpi@tp/T/#t
