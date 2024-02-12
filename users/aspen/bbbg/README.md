@@ -21,7 +21,7 @@ commands to install all development dependencies:
 
 ``` shell-session
 $ pwd
-/path/to/depot/users/grfn/bbbg
+/path/to/depot/users/aspen/bbbg
 $ direnv allow
 $ lorri watch --once # Wait for a single nix shell build
 ```
@@ -30,7 +30,7 @@ Then, to run a docker container with the development database:
 
 ``` shell-session
 $ pwd
-/path/to/depot/users/grfn/bbbg
+/path/to/depot/users/aspen/bbbg
 $ arion up -d
 ```
 
@@ -86,7 +86,7 @@ This will run a web server for the application listening at
 
 #### In Emacs, with [CIDER](https://docs.cider.mx/cider/index.html) + [direnv](https://github.com/wbolster/emacs-direnv)
 
-Open `//users/grfn/bbbg/src/bbbg/core.clj` in a buffer, then follow the
+Open `//users/aspen/bbbg/src/bbbg/core.clj` in a buffer, then follow the
 instructions at the end of the file
 
 ## Deployment
@@ -120,7 +120,7 @@ The current deploy configuration includes:
 You'll need:
 
 -   An uberjar for bbbg; the canonical way of building that is `nix-build
-    /path/to/depot -A users.grfn.bbbg.server-jar` but I\'m not sure how that
+    /path/to/depot -A users.aspen.bbbg.server-jar` but I\'m not sure how that
     works outside of nix
 -   A postgresql database
 -   Environment variables telling the app how to connect to that

@@ -1,35 +1,35 @@
 ;;; -*- lexical-binding: t; -*-
 
-(defun +grfn/org-setup ()
+(defun +aspen/org-setup ()
   (setq-local truncate-lines -1)
   (display-line-numbers-mode -1)
   (line-number-mode -1))
 
-(add-hook 'org-mode-hook #'+grfn/org-setup)
+(add-hook 'org-mode-hook #'+aspen/org-setup)
 
 (defun notes-file (f)
   (concat org-directory (if (string-prefix-p "/" f) "" "/") f))
 
-(defun grfn/org-project-tag->key (tag)
+(defun aspen/org-project-tag->key (tag)
   (s-replace-regexp "^project__" "" tag))
 
-(defun grfn/org-project-tag->name (tag)
+(defun aspen/org-project-tag->name (tag)
   (s-titleized-words
-   (s-join " " (s-split "_" (grfn/org-project-tag->key tag)))))
+   (s-join " " (s-split "_" (aspen/org-project-tag->key tag)))))
 
-(defun grfn/org-project-tag->keys (tag)
+(defun aspen/org-project-tag->keys (tag)
   (s-join "" (cons "p"
                    (-map (lambda (s) (substring-no-properties s 0 1))
-                         (s-split "_" (grfn/org-project-tag->key tag))))))
+                         (s-split "_" (aspen/org-project-tag->key tag))))))
 
-(defun grfn/org-projects->agenda-commands (project-tags)
+(defun aspen/org-projects->agenda-commands (project-tags)
   (loop for tag in project-tags
-        collect `(,(grfn/org-project-tag->keys tag)
-                  ,(grfn/org-project-tag->name tag)
+        collect `(,(aspen/org-project-tag->keys tag)
+                  ,(aspen/org-project-tag->name tag)
                   tags-todo
                   ,tag)))
 
-(defun grfn/org-projects ()
+(defun aspen/org-projects ()
   (loop for (tag) in
         (org-global-tags-completion-table
          (directory-files-recursively "~/notes" "\\.org$"))
@@ -37,7 +37,7 @@
         collect tag))
 
 (comment
- (grfn/org-projects->agenda-commands (grfn/org-projects))
+ (aspen/org-projects->agenda-commands (aspen/org-projects))
  )
 
 (setq
@@ -105,7 +105,7 @@
    )
 
  org-capture-templates-contexts
- `(("px" ((in-file . "/home/grfn/code/depot/users/grfn/xanthous/.*")))
+ `(("px" ((in-file . "/home/aspen/code/depot/users/aspen/xanthous/.*")))
    ("e" ((in-mode . "notmuch-show-mode"))))
 
  org-deadline-warning-days 1
@@ -121,14 +121,14 @@
    ("nt" "Next tooling" tags-todo "tooling")
 
    ("p" . "Project...")
-   ,@(grfn/org-projects->agenda-commands (grfn/org-projects)))
+   ,@(aspen/org-projects->agenda-commands (aspen/org-projects)))
 
  org-agenda-dim-blocked-tasks nil
  org-enforce-todo-dependencies nil
 
  org-babel-clojure-backend 'cider)
 
-(defun +grfn/insert-work-template ()
+(defun +aspen/insert-work-template ()
   (interactive)
   (goto-char (point-min))
   (forward-line)
@@ -142,20 +142,20 @@
 #+PROPERTY: NOBLOCKING t
 #+COLUMNS: %TODO %40ITEM(Task) %17EFFORT(Estimated){:} %CLOCKSUM(Time Spent) %17STORY-TYPE(Type) %TAGS"))
 
-(defun +grfn/insert-org-template ()
+(defun +aspen/insert-org-template ()
   (interactive)
   (pcase (buffer-file-name)
-    ((s-contains "/work/") (+grfn/insert-work-template))))
+    ((s-contains "/work/") (+aspen/insert-work-template))))
 
 ;;; TODO: this doesn't work?
-(define-auto-insert "\\.org?$" #'grfn/insert-org-template t)
+(define-auto-insert "\\.org?$" #'aspen/insert-org-template t)
 
 (defun forge--post-submit-around---link-pr-to-org-item
     (orig)
   (let ((cb (funcall orig)))
     (lambda (value headers status req)
       (prog1 (funcall cb value headers status req)
-        (grfn/at-org-clocked-in-item
+        (aspen/at-org-clocked-in-item
          (let ((url (alist-get 'html_url value))
                (number (alist-get 'number value)))
            (org-set-property

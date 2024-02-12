@@ -116,7 +116,7 @@
 ;;; Have you been to one of our events before? Note, attendance at all events will require proof of vaccination until further notice.
 
 (comment
-  (def -filename- "/home/grfn/code/depot/users/grfn/bbbg/sample-data.tsv")
+  (def -filename- "/home/aspen/code/depot/users/aspen/bbbg/sample-data.tsv")
   (def event-id #uuid "09f8fed6-7480-451b-89a2-bb4edaeae657")
 
   (read-attendees -filename-)
