@@ -3,6 +3,23 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "863067eb_38dd608d",
+        "filename": "web/tvl/blog/2024-02-tvix-update.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-02-12T07:06:02Z",
+      "side": 1,
+      "message": "I was careful to not mention Derivation specifically, because ATerms and the fact they are serialized to disk as such is something we don\u0027t do, and it might be confused for it.\n\nWe do not persist ATerms of Derivations to disk. We care about the build instructions and (as a logical consequence of it) the output paths to be the same (which can be encoded in ATerm and written on disk, but it\u0027s annoying). We only serialize Derivation to ATerm as part of calculating hashes.",
+      "revId": "2cb7ca863eb4123b745791619e9599411fc6e27b",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "15d1f9b6_558a6dbb",
         "filename": "web/tvl/blog/2024-02-tvix-update.md",
         "patchSetId": 1
