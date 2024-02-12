@@ -84,10 +84,8 @@ impl Arbitrary for Value {
 }
 
 fn leaf_value() -> impl Strategy<Value = Value> {
-    use Value::*;
-
     prop_oneof![
-        Just(Null),
+        Just(Value::NULL),
         any::<bool>().prop_map(Bool),
         any::<i64>().prop_map(Integer),
         any::<f64>().prop_map(Float),

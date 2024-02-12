@@ -337,6 +337,15 @@ where
     }
 
     #[inline]
+    pub fn into_ptrd(self) -> Result<D, Self> {
+        if self.is_ptrd() {
+            Ok(unsafe { self.into_ptrd() })
+        } else {
+            Err(self)
+        }
+    }
+
+    #[inline]
     pub unsafe fn as_ref_d_unchecked<T>(&self) -> &T
     where
         D: AsRef<T>,
