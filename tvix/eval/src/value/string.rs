@@ -4,6 +4,7 @@
 //! level, allowing us to shave off some memory overhead and only
 //! paying the cost when creating new strings.
 use bstr::{BStr, BString, ByteSlice, Chars};
+use erasable::{ErasablePtr, ErasedPtr};
 use rnix::ast;
 use std::alloc::{alloc, dealloc, handle_alloc_error, Layout};
 use std::borrow::{Borrow, Cow};
@@ -11,7 +12,8 @@ use std::collections::HashSet;
 use std::ffi::c_void;
 use std::fmt::{self, Debug, Display};
 use std::hash::Hash;
-use std::ops::Deref;
+use std::mem::ManuallyDrop;
+use std::ops::{Deref, DerefMut};
 use std::ptr::{self, NonNull};
 use std::slice;
 
@@ -339,7 +341,6 @@ impl NixStringInner {
     ///
     /// Also, all the normal Rust rules about pointer-to-reference conversion apply. See
     /// [`slice::from_raw_parts_mut`] for more.
-    #[allow(dead_code)]
     unsafe fn data_slice_mut<'a>(this: NonNull<c_void>) -> &'a mut [u8] {
         let len = Self::len(this);
         let data = Self::data_ptr(this);
@@ -368,6 +369,63 @@ impl NixStringInner {
     }
 }
 
+#[derive(Debug, Clone, Copy)]
+pub struct StringRef<'a> {
+    pub context: Option<&'a NixContext>,
+    pub string: &'a BStr,
+}
+
+impl<'a> Deref for StringRef<'a> {
+    type Target = BStr;
+
+    fn deref(&self) -> &Self::Target {
+        self.string
+    }
+}
+
+impl<'a> StringRef<'a> {
+    pub fn to_owned(&self) -> NixString {
+        NixString::new(&self.string, self.context.map(|ctx| Box::new(ctx.clone())))
+    }
+
+    pub(crate) fn has_context(&self) -> bool {
+        self.context.is_some()
+    }
+}
+
+#[derive(Debug)]
+pub struct StringRefMut<'a> {
+    pub context: Option<&'a mut NixContext>,
+    pub string: &'a mut BStr,
+}
+
+impl<'a> Deref for StringRefMut<'a> {
+    type Target = BStr;
+
+    fn deref(&self) -> &Self::Target {
+        self.string
+    }
+}
+
+impl<'a> DerefMut for StringRefMut<'a> {
+    fn deref_mut(&mut self) -> &mut Self::Target {
+        self.string
+    }
+}
+
+impl<'a> StringRefMut<'a> {
+    pub fn as_ref(&'a self) -> StringRef<'a> {
+        StringRef {
+            context: self.context.as_deref(),
+            string: &self.string,
+        }
+    }
+
+    pub fn to_owned(&self) -> NixString {
+        self.as_ref().to_owned()
+    }
+}
+
 /// Nix string values
 ///
 /// # Internals
@@ -385,6 +443,16 @@ pub struct NixString(NonNull<c_void>);
 
 unsafe impl Send for NixString {}
 unsafe impl Sync for NixString {}
+
+unsafe impl ErasablePtr for NixString {
+    fn erase(this: Self) -> ErasedPtr {
+        ManuallyDrop::new(this).0.cast()
+    }
+
+    unsafe fn unerase(this: ErasedPtr) -> Self {
+        Self(this.cast())
+    }
+}
 
 impl Drop for NixString {
     fn drop(&mut self) {
@@ -654,10 +722,38 @@ impl NixString {
         BStr::new(self.as_bytes())
     }
 
+    pub fn as_string_ref(&self) -> StringRef {
+        unsafe { Self::string_ref_from_raw(self.0) }
+    }
+
+    pub unsafe fn string_ref_from_raw<'a>(ptr: NonNull<c_void>) -> StringRef<'a> {
+        StringRef {
+            context: unsafe { NixStringInner::context_ref(ptr) }.as_deref(),
+            string: unsafe { NixStringInner::data_slice(ptr) }.as_bstr(),
+        }
+    }
+
+    pub fn as_string_ref_mut(&mut self) -> StringRefMut {
+        unsafe { Self::string_ref_mut_from_raw(self.0) }
+    }
+
+    pub unsafe fn string_ref_mut_from_raw<'a>(ptr: NonNull<c_void>) -> StringRefMut<'a> {
+        StringRefMut {
+            context: unsafe { NixStringInner::context_mut(ptr) }.as_deref_mut(),
+            string: unsafe { NixStringInner::data_slice_mut(ptr) }.as_bstr_mut(),
+        }
+    }
+
     pub fn as_bytes(&self) -> &[u8] {
         // SAFETY: There's no way to construct an uninitialized NixString (see the SAFETY comment in
         // `new`)
         unsafe { NixStringInner::data_slice(self.0) }
+    }
+
+    pub fn as_bytes_mut(&mut self) -> &mut [u8] {
+        // SAFETY: There's no way to construct an uninitialized NixString (see the SAFETY comment in
+        // `new`)
+        unsafe { NixStringInner::data_slice_mut(self.0) }
     }
 
     pub fn into_bstring(self) -> BString {

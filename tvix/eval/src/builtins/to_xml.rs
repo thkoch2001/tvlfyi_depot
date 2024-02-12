@@ -8,6 +8,7 @@ use xml::writer::events::XmlEvent;
 use xml::writer::EmitterConfig;
 use xml::writer::EventWriter;
 
+use crate::value::VRef;
 use crate::{ErrorKind, Value};
 
 /// Recursively serialise a value to XML. The value *must* have been
@@ -50,21 +51,21 @@ fn write_typed_value<W: Write, V: ToString>(
 }
 
 fn value_variant_to_xml<W: Write>(w: &mut EventWriter<W>, value: &Value) -> Result<(), ErrorKind> {
-    match value {
-        Value::Thunk(t) => return value_variant_to_xml(w, &t.value()),
+    match value.match_ref() {
+        VRef::Thunk(t) => return value_variant_to_xml(w, &t.value()),
 
-        Value::Null => {
+        VRef::Null => {
             w.write(XmlEvent::start_element("null"))?;
             w.write(XmlEvent::end_element())
         }
 
-        Value::Bool(b) => return write_typed_value(w, "bool", b),
-        Value::Integer(i) => return write_typed_value(w, "int", i),
-        Value::Float(f) => return write_typed_value(w, "float", f),
-        Value::String(s) => return write_typed_value(w, "string", s.to_str()?),
-        Value::Path(p) => return write_typed_value(w, "path", p.to_string_lossy()),
+        VRef::Bool(b) => return write_typed_value(w, "bool", b),
+        VRef::Integer(i) => return write_typed_value(w, "int", i),
+        VRef::Float(f) => return write_typed_value(w, "float", f),
+        VRef::String(s) => return write_typed_value(w, "string", s.to_str()?),
+        VRef::Path(p) => return write_typed_value(w, "path", p.to_string_lossy()),
 
-        Value::List(list) => {
+        VRef::List(list) => {
             w.write(XmlEvent::start_element("list"))?;
 
             for elem in list.into_iter() {
@@ -74,7 +75,7 @@ fn value_variant_to_xml<W: Write>(w: &mut EventWriter<W>, value: &Value) -> Resu
             w.write(XmlEvent::end_element())
         }
 
-        Value::Attrs(attrs) => {
+        VRef::Attrs(attrs) => {
             w.write(XmlEvent::start_element("attrs"))?;
 
             for elem in attrs.iter() {
@@ -86,7 +87,7 @@ fn value_variant_to_xml<W: Write>(w: &mut EventWriter<W>, value: &Value) -> Resu
             w.write(XmlEvent::end_element())
         }
 
-        Value::Closure(c) => {
+        VRef::Closure(c) => {
             w.write(XmlEvent::start_element("function"))?;
 
             match &c.lambda.formals {
@@ -128,24 +129,24 @@ fn value_variant_to_xml<W: Write>(w: &mut EventWriter<W>, value: &Value) -> Resu
             w.write(XmlEvent::end_element())
         }
 
-        Value::Builtin(_) => {
+        VRef::Builtin(_) => {
             w.write(XmlEvent::start_element("unevaluated"))?;
             w.write(XmlEvent::end_element())
         }
 
-        Value::AttrNotFound
-        | Value::Blueprint(_)
-        | Value::DeferredUpvalue(_)
-        | Value::UnresolvedPath(_)
-        | Value::Json(_)
-        | Value::FinaliseRequest(_) => {
+        VRef::AttrNotFound
+        | VRef::Blueprint(_)
+        | VRef::DeferredUpvalue(_)
+        | VRef::UnresolvedPath(_)
+        | VRef::Json(_)
+        | VRef::FinaliseRequest(_) => {
             return Err(ErrorKind::TvixBug {
                 msg: "internal value variant encountered in builtins.toXML",
                 metadata: Some(Rc::new(value.clone())),
             })
         }
 
-        Value::Catchable(_) => {
+        VRef::Catchable(_) => {
             panic!("tvix bug: value_to_xml() called on a value which had not been deep-forced")
         }
     }?;

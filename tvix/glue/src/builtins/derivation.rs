@@ -10,7 +10,7 @@ use tvix_eval::builtin_macros::builtins;
 use tvix_eval::generators::{self, emit_warning_kind, GenCo};
 use tvix_eval::{
     AddContext, CatchableErrorKind, CoercionKind, ErrorKind, NixAttrs, NixContext,
-    NixContextElement, Value, WarningKind,
+    NixContextElement, VRef, Value, WarningKind,
 };
 
 // Constants used for strangely named fields in derivation inputs.
@@ -238,7 +238,7 @@ pub(crate) mod derivation_builtins {
             let value = generators::request_force(&co, arg_value).await;
 
             // filter out nulls if ignore_nulls is set.
-            if ignore_nulls && matches!(value, Value::Null) {
+            if ignore_nulls && matches!(value.match_ref(), VRef::Null) {
                 continue;
             }
 
@@ -486,9 +486,7 @@ pub(crate) mod derivation_builtins {
             ),
         ));
 
-        Ok(Value::Attrs(Box::new(NixAttrs::from_iter(
-            new_attrs.into_iter(),
-        ))))
+        Ok(Value::attrs(NixAttrs::from_iter(new_attrs.into_iter())))
     }
 
     #[builtin("toFile")]

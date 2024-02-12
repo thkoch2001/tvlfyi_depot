@@ -52,7 +52,13 @@ where
     _phantom: PhantomData<Enum4<A, B, C, D>>,
 }
 
-impl Debug for BoxedNan {
+impl<A, B, C, D> Debug for BoxedNan<A, B, C, D>
+where
+    A: ErasablePtr,
+    B: ErasablePtr,
+    C: ErasablePtr,
+    D: ErasablePtr,
+{
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         write!(f, "{:016x}", unsafe { self.int })
     }
@@ -259,9 +265,19 @@ where
     }
 
     #[inline]
+    pub fn into_ptra(self) -> Result<A, Self> {
+        if self.is_ptra() {
+            Ok(unsafe { self.into_ptra_unchecked() })
+        } else {
+            Err(self)
+        }
+    }
+
+    #[inline]
     pub unsafe fn as_ref_a_unchecked<T>(&self) -> &T
     where
         A: AsRef<T>,
+        T: ?Sized,
     {
         debug_assert!(self.is_ptra());
         NonNull::from(ManuallyDrop::new(A::unerase(self.as_ptr_unchecked())).as_ref()).as_ref()
@@ -288,6 +304,7 @@ where
     pub unsafe fn as_ref_b_unchecked<T>(&self) -> &T
     where
         B: AsRef<T>,
+        T: ?Sized,
     {
         debug_assert!(self.is_ptrb());
         NonNull::from(ManuallyDrop::new(B::unerase(self.as_ptr_unchecked())).as_ref()).as_ref()
@@ -314,6 +331,7 @@ where
     pub unsafe fn as_ref_c_unchecked<T>(&self) -> &T
     where
         C: AsRef<T>,
+        T: ?Sized,
     {
         debug_assert!(self.is_ptrc());
         NonNull::from(ManuallyDrop::new(C::unerase(self.as_ptr_unchecked())).as_ref()).as_ref()
@@ -337,9 +355,19 @@ where
     }
 
     #[inline]
+    pub fn into_ptrd(self) -> Result<D, Self> {
+        if self.is_ptrd() {
+            Ok(unsafe { self.into_ptrd_unchecked() })
+        } else {
+            Err(self)
+        }
+    }
+
+    #[inline]
     pub unsafe fn as_ref_d_unchecked<T>(&self) -> &T
     where
         D: AsRef<T>,
+        T: ?Sized,
     {
         debug_assert!(self.is_ptrd());
         NonNull::from(ManuallyDrop::new(D::unerase(self.as_ptr_unchecked())).as_ref()).as_ref()
@@ -388,6 +416,7 @@ where
 
     #[inline]
     pub fn ptra_from_raw(ptr: ErasedPtr) -> Self {
+        debug_assert_eq!(ptr.as_ptr() as u64 >> 48, 0);
         Self {
             int: (ptr.as_ptr() as u64) | PTRA_MASK,
         }
@@ -400,6 +429,7 @@ where
 
     #[inline]
     pub fn ptrb_from_raw(ptr: ErasedPtr) -> Self {
+        debug_assert_eq!(ptr.as_ptr() as u64 >> 48, 0);
         Self {
             int: (ptr.as_ptr() as u64) | PTRB_MASK,
         }
@@ -412,6 +442,7 @@ where
 
     #[inline]
     pub fn ptrc_from_raw(ptr: ErasedPtr) -> Self {
+        debug_assert_eq!(ptr.as_ptr() as u64 >> 48, 0);
         Self {
             int: (ptr.as_ptr() as u64) | PTRC_MASK,
         }
@@ -424,6 +455,7 @@ where
 
     #[inline]
     pub fn ptrd_from_raw(ptr: ErasedPtr) -> Self {
+        debug_assert_eq!(ptr.as_ptr() as u64 >> 48, 0);
         Self {
             int: (ptr.as_ptr() as u64) | PTRD_MASK,
         }

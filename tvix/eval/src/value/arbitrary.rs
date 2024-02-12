@@ -84,15 +84,13 @@ impl Arbitrary for Value {
 }
 
 fn leaf_value() -> impl Strategy<Value = Value> {
-    use Value::*;
-
     prop_oneof![
-        Just(Null),
-        any::<bool>().prop_map(Bool),
-        any::<i64>().prop_map(Integer),
-        any::<f64>().prop_map(Float),
-        any::<NixString>().prop_map(String),
-        any::<OsString>().prop_map(|s| Path(Box::new(s.into()))),
+        Just(Value::NULL),
+        any::<bool>().prop_map(Value::bool),
+        any::<i64>().prop_map(Value::integer),
+        any::<f64>().prop_map(Value::float),
+        any::<NixString>().prop_map(Value::string),
+        any::<OsString>().prop_map(Value::path),
     ]
 }
 
@@ -100,7 +98,7 @@ fn non_internal_value() -> impl Strategy<Value = Value> {
     leaf_value().prop_recursive(3, 5, 5, |inner| {
         prop_oneof![
             NixAttrs::arbitrary_with(Parameters::Strategy(inner.clone())).prop_map(Value::attrs),
-            any_with::<NixList>(Parameters::Strategy(inner)).prop_map(Value::List)
+            any_with::<NixList>(Parameters::Strategy(inner)).prop_map(Value::list)
         ]
     })
 }

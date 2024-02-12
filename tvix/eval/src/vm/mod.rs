@@ -32,7 +32,7 @@ use crate::{
     upvalues::Upvalues,
     value::{
         Builtin, BuiltinResult, Closure, CoercionKind, Lambda, NixAttrs, NixContext, NixList,
-        PointerEquality, Thunk, Value,
+        PointerEquality, Thunk, VRef, Value, V,
     },
     vm::generators::GenCo,
     warnings::{EvalWarning, WarningKind},
@@ -441,8 +441,8 @@ where
 
             match op {
                 OpCode::OpThunkSuspended(idx) | OpCode::OpThunkClosure(idx) => {
-                    let blueprint = match &frame.chunk()[idx] {
-                        Value::Blueprint(lambda) => lambda.clone(),
+                    let blueprint = match frame.chunk()[idx].match_ref() {
+                        VRef::Blueprint(lambda) => (*lambda).clone(),
                         _ => panic!("compiler bug: non-blueprint in blueprint slot"),
                     };
 
@@ -457,7 +457,7 @@ where
                         Thunk::new_suspended(blueprint, frame.current_light_span())
                     };
                     let upvalues = thunk.upvalues_mut();
-                    self.stack.push(Value::Thunk(thunk.clone()));
+                    self.stack.push(Value::thunk(thunk.clone()));
 
                     // From this point on we internally mutate the
                     // upvalues. The closure (if `is_closure`) is
@@ -468,9 +468,9 @@ where
                 }
 
                 OpCode::OpForce => {
-                    if let Some(Value::Thunk(_)) = self.stack.last() {
-                        let thunk = match self.stack_pop() {
-                            Value::Thunk(t) => t,
+                    if self.stack.last().iter().any(|v| v.is_thunk()) {
+                        let thunk = match self.stack_pop().into_match() {
+                            V::Thunk(t) => t,
                             _ => unreachable!(),
                         };
 
@@ -526,8 +526,8 @@ where
                 }
 
                 OpCode::OpClosure(idx) => {
-                    let blueprint = match &frame.chunk()[idx] {
-                        Value::Blueprint(lambda) => lambda.clone(),
+                    let blueprint = match frame.chunk()[idx].match_ref() {
+                        VRef::Blueprint(lambda) => lambda.clone(),
                         _ => panic!("compiler bug: non-blueprint in blueprint slot"),
                     };
 
@@ -539,11 +539,10 @@ where
 
                     let mut upvalues = Upvalues::with_capacity(blueprint.upvalue_count);
                     self.populate_upvalues(&mut frame, upvalue_count, &mut upvalues)?;
-                    self.stack
-                        .push(Value::Closure(Rc::new(Closure::new_with_upvalues(
-                            Rc::new(upvalues),
-                            blueprint,
-                        ))));
+                    self.stack.push(Value::closure(Closure::new_with_upvalues(
+                        Rc::new(upvalues),
+                        blueprint,
+                    )));
                 }
 
                 OpCode::OpAttrsSelect => lifted_pop! {
@@ -582,8 +581,8 @@ where
 
                 OpCode::OpJumpIfNoFinaliseRequest(JumpOffset(offset)) => {
                     debug_assert!(offset != 0);
-                    match self.stack_peek(0) {
-                        Value::FinaliseRequest(finalise) => {
+                    match self.stack_peek(0).match_ref() {
+                        VRef::FinaliseRequest(finalise) => {
                             if !finalise {
                                 frame.ip += offset;
                             }
@@ -598,13 +597,13 @@ where
 
                 OpCode::OpAttrsTrySelect => {
                     let key = self.stack_pop().to_str().with_span(&frame, self)?;
-                    let value = match self.stack_pop() {
-                        Value::Attrs(attrs) => match attrs.select(&key) {
+                    let value = match self.stack_pop().match_ref() {
+                        VRef::Attrs(attrs) => match attrs.select(&key) {
                             Some(value) => value.clone(),
-                            None => Value::AttrNotFound,
+                            None => Value::attr_not_found(),
                         },
 
-                        _ => Value::AttrNotFound,
+                        _ => Value::attr_not_found(),
                     };
 
                     self.stack.push(value);
@@ -617,7 +616,7 @@ where
 
                 OpCode::OpJumpIfNotFound(JumpOffset(offset)) => {
                     debug_assert!(offset != 0);
-                    if matches!(self.stack_peek(0), Value::AttrNotFound) {
+                    if matches!(self.stack_peek(0).match_ref(), VRef::AttrNotFound) {
                         self.stack_pop();
                         frame.ip += offset;
                     }
@@ -677,14 +676,14 @@ where
                     self(rhs, lhs) => {
                         let rhs = rhs.to_attrs().with_span(&frame, self)?;
                         let lhs = lhs.to_attrs().with_span(&frame, self)?;
-                        self.stack.push(Value::attrs(lhs.update(*rhs)))
+                        self.stack.push(Value::attrs(lhs.update(rhs)))
                     }
                 },
 
                 OpCode::OpInvert => lifted_pop! {
                     self(v) => {
                         let v = v.as_bool().with_span(&frame, self)?;
-                        self.stack.push(Value::Bool(!v));
+                        self.stack.push(Value::bool(!v));
                     }
                 },
 
@@ -692,7 +691,7 @@ where
                     let list =
                         NixList::construct(count, self.stack.split_off(self.stack.len() - count));
 
-                    self.stack.push(Value::List(list));
+                    self.stack.push(Value::list(list));
                 }
 
                 OpCode::OpJumpIfTrue(JumpOffset(offset)) => {
@@ -705,15 +704,15 @@ where
                 OpCode::OpHasAttr => lifted_pop! {
                     self(key, attrs) => {
                         let key = key.to_str().with_span(&frame, self)?;
-                        let result = match attrs {
-                            Value::Attrs(attrs) => attrs.contains(&key),
+                        let result = match attrs.match_ref() {
+                            VRef::Attrs(attrs) => attrs.contains(&key),
 
                             // Nix allows use of `?` on non-set types, but
                             // always returns false in those cases.
                             _ => false,
                         };
 
-                        self.stack.push(Value::Bool(result));
+                        self.stack.push(Value::bool(result));
                     }
                 },
 
@@ -721,7 +720,7 @@ where
                     self(rhs, lhs) => {
                         let rhs = rhs.to_list().with_span(&frame, self)?.into_inner();
                         let lhs = lhs.to_list().with_span(&frame, self)?.into_inner();
-                        self.stack.push(Value::List(NixList::from(lhs + rhs)))
+                        self.stack.push(Value::list(lhs + rhs))
                     }
                 },
 
@@ -752,11 +751,13 @@ where
                     return Ok(false);
                 }
 
-                OpCode::OpFinalise(StackIdx(idx)) => match &self.stack[frame.stack_offset + idx] {
-                    Value::Closure(_) => panic!("attempted to finalise a closure"),
-                    Value::Thunk(thunk) => thunk.finalise(&self.stack[frame.stack_offset..]),
-                    _ => panic!("attempted to finalise a non-thunk"),
-                },
+                OpCode::OpFinalise(StackIdx(idx)) => {
+                    match self.stack[frame.stack_offset + idx].match_ref() {
+                        VRef::Closure(_) => panic!("attempted to finalise a closure"),
+                        VRef::Thunk(thunk) => thunk.finalise(&self.stack[frame.stack_offset..]),
+                        _ => panic!("attempted to finalise a non-thunk"),
+                    }
+                }
 
                 OpCode::OpCoerceToString(kind) => {
                     let value = self.stack_pop();
@@ -825,9 +826,9 @@ where
 
                 OpCode::OpDiv => lifted_pop! {
                     self(b, a) => {
-                        match b {
-                            Value::Integer(0) => return frame.error(self, ErrorKind::DivisionByZero),
-                            Value::Float(b) if b == 0.0_f64 => {
+                        match b.match_ref() {
+                            VRef::Integer(0) => return frame.error(self, ErrorKind::DivisionByZero),
+                            VRef::Float(b) if b == 0.0_f64 => {
                                 return frame.error(self, ErrorKind::DivisionByZero)
                             }
                             _ => {}
@@ -838,10 +839,10 @@ where
                     }
                 },
 
-                OpCode::OpNegate => match self.stack_pop() {
-                    Value::Integer(i) => self.stack.push(Value::Integer(-i)),
-                    Value::Float(f) => self.stack.push(Value::Float(-f)),
-                    Value::Catchable(cex) => self.stack.push(Value::Catchable(cex)),
+                OpCode::OpNegate => match self.stack_pop().into_match() {
+                    V::Integer(i) => self.stack.push(Value::integer(-i)),
+                    V::Float(f) => self.stack.push(Value::float(-f)),
+                    V::Catchable(cek) => self.stack.push(Value::catchable(cek)),
                     v => {
                         return frame.error(
                             self,
@@ -858,11 +859,11 @@ where
                 OpCode::OpMore => cmp_op!(self, frame, span, >),
                 OpCode::OpMoreOrEq => cmp_op!(self, frame, span, >=),
 
-                OpCode::OpFindFile => match self.stack_pop() {
-                    Value::UnresolvedPath(path) => {
+                OpCode::OpFindFile => match self.stack_pop().into_match() {
+                    V::UnresolvedPath(path) => {
                         let resolved = self
                             .nix_search_path
-                            .resolve(&self.io_handle, *path)
+                            .resolve(&self.io_handle, path)
                             .with_span(&frame, self)?;
                         self.stack.push(resolved.into());
                     }
@@ -870,8 +871,8 @@ where
                     _ => panic!("tvix compiler bug: OpFindFile called on non-UnresolvedPath"),
                 },
 
-                OpCode::OpResolveHomePath => match self.stack_pop() {
-                    Value::UnresolvedPath(path) => {
+                OpCode::OpResolveHomePath => match self.stack_pop().into_match() {
+                    V::UnresolvedPath(path) => {
                         match dirs::home_dir() {
                             None => {
                                 return frame.error(
@@ -882,7 +883,7 @@ where
                                 );
                             }
                             Some(mut buf) => {
-                                buf.push(*path);
+                                buf.push(path);
                                 self.stack.push(buf.into());
                             }
                         };
@@ -990,7 +991,7 @@ where
         }
 
         self.stack
-            .push(Value::String(NixString::new_context_from(context, out)));
+            .push(Value::string(NixString::new_context_from(context, out)));
         Ok(())
     }
 
@@ -1015,7 +1016,7 @@ where
 
         match builtin.call() {
             // Partially applied builtin is just pushed back on the stack.
-            BuiltinResult::Partial(partial) => self.stack.push(Value::Builtin(partial)),
+            BuiltinResult::Partial(partial) => self.stack.push(Value::builtin(partial)),
 
             // Builtin is fully applied and the generator needs to be run by the VM.
             BuiltinResult::Called(name, generator) => self.frames.push(Frame::Generator {
@@ -1035,11 +1036,11 @@ where
         parent: Option<(LightSpan, CallFrame)>,
         callable: Value,
     ) -> EvalResult<()> {
-        match callable {
-            Value::Builtin(builtin) => self.call_builtin(span, builtin),
-            Value::Thunk(thunk) => self.call_value(span, parent, thunk.value().clone()),
+        match callable.into_match() {
+            V::Builtin(builtin) => self.call_builtin(span, builtin),
+            V::Thunk(thunk) => self.call_value(span, parent, thunk.value().clone()),
 
-            Value::Closure(closure) => {
+            V::Closure(closure) => {
                 let lambda = closure.lambda();
                 self.observer.observe_tail_call(self.frames.len(), &lambda);
 
@@ -1070,21 +1071,23 @@ where
             }
 
             // Attribute sets with a __functor attribute are callable.
-            val @ Value::Attrs(_) => {
+            V::Attrs(attrs) => {
                 if let Some((parent_span, parent_frame)) = parent {
                     self.push_call_frame(parent_span, parent_frame);
                 }
 
-                self.enqueue_generator("__functor call", span, |co| call_functor(co, val));
+                self.enqueue_generator("__functor call", span, |co| {
+                    call_functor(co, Value::attrs(attrs))
+                });
                 Ok(())
             }
 
-            val @ Value::Catchable(_) => {
+            V::Catchable(c) => {
                 // the argument that we tried to apply a catchable to
                 self.stack.pop();
                 // applying a `throw` to anything is still a `throw`, so we just
                 // push it back on the stack.
-                self.stack.push(val);
+                self.stack.push(Value::catchable(c));
                 Ok(())
             }
 
@@ -1129,7 +1132,7 @@ where
                 }
 
                 OpCode::DataDeferredLocal(idx) => {
-                    upvalues.deref_mut().push(Value::DeferredUpvalue(idx));
+                    upvalues.deref_mut().push(Value::deferred_upvalue(idx));
                 }
 
                 OpCode::DataCaptureWith => {
@@ -1221,12 +1224,12 @@ async fn resolve_with(
 // TODO(amjoseph): de-asyncify this
 async fn add_values(co: GenCo, a: Value, b: Value) -> Result<Value, ErrorKind> {
     // What we try to do is solely determined by the type of the first value!
-    let result = match (a, b) {
-        (Value::Path(p), v) => {
+    let a = match a.into_path() {
+        Ok(p) => {
             let mut path = p.into_os_string();
             match generators::request_string_coerce(
                 &co,
-                v,
+                b,
                 CoercionKind {
                     strong: false,
 
@@ -1246,53 +1249,60 @@ async fn add_values(co: GenCo, a: Value, b: Value) -> Result<Value, ErrorKind> {
             {
                 Ok(vs) => {
                     path.push(vs.to_os_str()?);
-                    crate::value::canon_path(PathBuf::from(path)).into()
+                    return Ok(crate::value::canon_path(PathBuf::from(path)).into());
                 }
-                Err(c) => Value::Catchable(Box::new(c)),
+                Err(c) => return Ok(Value::catchable(c)),
             }
         }
-        (Value::String(s1), Value::String(s2)) => Value::String(s1.concat(&s2)),
-        (Value::String(s1), v) => generators::request_string_coerce(
-            &co,
-            v,
-            CoercionKind {
-                strong: false,
-                // Behaves the same as string interpolation
-                import_paths: true,
-            },
-        )
-        .await
-        .map(|s2| Value::String(s1.concat(&s2)))
-        .into(),
-        (a @ Value::Integer(_), b) | (a @ Value::Float(_), b) => arithmetic_op!(&a, &b, +)?,
-        (a, b) => {
-            let r1 = generators::request_string_coerce(
-                &co,
-                a,
-                CoercionKind {
-                    strong: false,
-                    import_paths: false,
-                },
-            )
-            .await;
-            let r2 = generators::request_string_coerce(
-                &co,
-                b,
-                CoercionKind {
-                    strong: false,
-                    import_paths: false,
-                },
-            )
-            .await;
-            match (r1, r2) {
-                (Ok(s1), Ok(s2)) => Value::String(s1.concat(&s2)),
-                (Err(c), _) => return Ok(Value::from(c)),
-                (_, Err(c)) => return Ok(Value::from(c)),
-            }
-        }
+        Err(a) => a,
     };
 
-    Ok(result)
+    let (a, b) = match (a.into_string(), b.into_string()) {
+        (Ok(s1), Ok(s2)) => return Ok(Value::string(s1.concat(&s2))),
+        (Ok(s1), Err(v)) => {
+            return Ok(generators::request_string_coerce(
+                &co,
+                v,
+                CoercionKind {
+                    strong: false,
+                    // Behaves the same as string interpolation
+                    import_paths: true,
+                },
+            )
+            .await
+            .map(|s2| Value::string(s1.concat(&s2)))
+            .into());
+        }
+        (Err(a), Ok(b)) => (a, Value::string(b)),
+        (Err(a), Err(b)) => (a, b),
+    };
+
+    if a.is_number() {
+        arithmetic_op!(&a, &b, +)
+    } else {
+        let r1 = generators::request_string_coerce(
+            &co,
+            a,
+            CoercionKind {
+                strong: false,
+                import_paths: false,
+            },
+        )
+        .await;
+        let r2 = generators::request_string_coerce(
+            &co,
+            b,
+            CoercionKind {
+                strong: false,
+                import_paths: false,
+            },
+        )
+        .await;
+        match (r1, r2) {
+            (Ok(s1), Ok(s2)) => Ok(Value::string(s1.concat(&s2))),
+            (Err(c), _) | (_, Err(c)) => Ok(c.into()),
+        }
+    }
 }
 
 /// The result of a VM's runtime evaluation.

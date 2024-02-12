@@ -9,7 +9,11 @@
 
 use std::ops::Index;
 
-use crate::{opcode::UpvalueIdx, Value};
+use crate::{
+    opcode::{StackIdx, UpvalueIdx},
+    value::VRef,
+    Value,
+};
 
 /// Structure for carrying upvalues of an UpvalueCarrier.  The
 /// implementation of this struct encapsulates the logic for
@@ -70,8 +74,8 @@ impl Upvalues {
     /// mutating them in the internal upvalue slots.
     pub fn resolve_deferred_upvalues(&mut self, stack: &[Value]) {
         for upvalue in self.static_upvalues.iter_mut() {
-            if let Value::DeferredUpvalue(update_from_idx) = upvalue {
-                *upvalue = stack[update_from_idx.0].clone();
+            if let VRef::DeferredUpvalue(StackIdx(update_from_idx)) = upvalue.match_ref() {
+                *upvalue = stack[update_from_idx].clone();
             }
         }
     }
