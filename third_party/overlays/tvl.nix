@@ -16,12 +16,12 @@ depot.nix.readTree.drvTargets {
 
   # To match telega in emacs-overlay or wherever
   tdlib = super.tdlib.overrideAttrs (_: {
-    version = "1.8.23";
+    version = "1.8.24";
     src = self.fetchFromGitHub {
       owner = "tdlib";
       repo = "td";
-      rev = "27c3eaeb4964bd5f18d8488e354abde1a4383e49";
-      sha256 = "14f65dfmg2p5hyvi3lffvvazwcd3i3jrrw3c2pwrc5yfgxk3662g";
+      rev = "d79bd4b69403868897496da39b773ab25c69f6af";
+      sha256 = "0bc5akzw12qwj45rzqkrhw65qlrn9q8pzmvc5aiqv4bvhkb1ghl0";
     };
   });
 
@@ -33,7 +33,7 @@ depot.nix.readTree.drvTargets {
 
   # Add our Emacs packages to the fixpoint
   emacsPackagesFor = emacs: (
-    (super.emacsPackagesFor emacs).overrideScope' (eself: esuper: {
+    (super.emacsPackagesFor emacs).overrideScope (eself: esuper: {
       tvlPackages = depot.tools.emacs-pkgs // depot.third_party.emacs;
 
       # Use the notmuch from nixpkgs instead of from the Emacs
@@ -118,6 +118,10 @@ depot.nix.readTree.drvTargets {
       $out/bin/crate2nix completions -s 'zsh' -o $out/share/zsh/vendor-completions
     '';
   };
+
+  # Disable tests which fail and weren't executed before the bump that
+  # introduced this problem: https://github.com/NixOS/nixpkgs/issues/288064
+  libgit2_1_5 = super.libgit2_1_5.overrideAttrs (_: { doCheck = false; });
 
   evans = super.evans.overrideAttrs (old: {
     patches = old.patches or [ ] ++ [
