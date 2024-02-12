@@ -17,12 +17,10 @@
       openssh.authorizedKeys.keys = depot.users.lukegb.keys.all;
     };
 
-    users.grfn = {
+    users.aspen = {
       isNormalUser = true;
       extraGroups = [ "git" "wheel" ];
-      openssh.authorizedKeys.keys = [
-        depot.users.grfn.keys.whitby
-      ];
+      openssh.authorizedKeys.keys = [ depot.users.aspen.keys.whitby ];
     };
 
     users.edef = {
