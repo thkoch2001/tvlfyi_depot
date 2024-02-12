@@ -1,4 +1,4 @@
-use crate::{value::Value, EvalIO};
+use crate::EvalIO;
 use builtin_macros::builtins;
 use pretty_assertions::assert_eq;
 use rstest::rstest;
@@ -35,7 +35,7 @@ mod mock_builtins {
             .into_iter(),
         ));
 
-        Ok(Value::Attrs(Box::new(attrs)))
+        Ok(Value::attrs(attrs))
     }
 }
 
@@ -56,10 +56,7 @@ fn eval_test(code_path: PathBuf, expect_success: bool) {
     eval.builtins.extend(mock_builtins::builtins());
 
     let result = eval.evaluate(code, Some(code_path.clone()));
-    let failed = match result.value {
-        Some(Value::Catchable(_)) => true,
-        _ => !result.errors.is_empty(),
-    };
+    let failed = result.value.iter().any(|v| v.is_catchable()) || !result.errors.is_empty();
     if expect_success && failed {
         panic!(
             "{}: evaluation of eval-okay test should succeed, but failed with {:?}",

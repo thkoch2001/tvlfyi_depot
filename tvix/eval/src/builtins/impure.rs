@@ -87,7 +87,7 @@ pub fn impure_builtins() -> Vec<(&'static str, Value)> {
             Err(err) => -(err.duration().as_secs() as i64),
         };
 
-        result.push(("currentTime", Value::Integer(seconds)));
+        result.push(("currentTime", Value::integer(seconds)));
     }
 
     result

@@ -27,7 +27,7 @@ async fn import_impl(
 ) -> Result<Value, ErrorKind> {
     // TODO(sterni): canon_path()?
     let mut path = match coerce_value_to_path(&co, args.pop().unwrap()).await? {
-        Err(cek) => return Ok(Value::Catchable(Box::new(cek))),
+        Err(cek) => return Ok(Value::catchable(cek)),
         Ok(path) => path,
     };
 
@@ -85,7 +85,7 @@ async fn import_impl(
 
     // Compilation succeeded, we can construct a thunk from whatever it spat
     // out and return that.
-    let res = Value::Thunk(Thunk::new_suspended(
+    let res = Value::thunk(Thunk::new_suspended(
         result.lambda,
         generators::request_span(&co).await,
     ));

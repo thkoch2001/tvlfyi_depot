@@ -259,6 +259,15 @@ where
     }
 
     #[inline]
+    pub fn into_ptra(self) -> Result<A, Self> {
+        if self.is_ptra() {
+            Ok(unsafe { self.into_ptra_unchecked() })
+        } else {
+            Err(self)
+        }
+    }
+
+    #[inline]
     pub unsafe fn as_ref_a_unchecked<T>(&self) -> &T
     where
         A: AsRef<T>,
@@ -334,6 +343,15 @@ where
         D::unerase(NonNull::new_unchecked(
             (ManuallyDrop::new(self).int & 0xFFFFFFFFFFFF) as *mut _,
         ))
+    }
+
+    #[inline]
+    pub fn into_ptrd(self) -> Result<D, Self> {
+        if self.is_ptrd() {
+            Ok(unsafe { self.into_ptrd_unchecked() })
+        } else {
+            Err(self)
+        }
     }
 
     #[inline]
