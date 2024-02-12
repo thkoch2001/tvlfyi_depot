@@ -83,7 +83,7 @@ in
           authorizedKeys =
             depot.users.tazjin.keys.all
             ++ depot.users.lukegb.keys.all
-            ++ [ depot.users.grfn.keys.whitby ];
+            ++ [ depot.users.aspen.keys.whitby ];
 
           hostKeys = [
             /etc/secrets/initrd_host_ed25519_key
@@ -189,7 +189,7 @@ in
       secret-key-files = "/run/agenix/nix-cache-priv";
 
       trusted-users = [
-        "grfn"
+        "aspen"
         "lukegb"
         "tazjin"
         "sterni"
@@ -201,7 +201,7 @@ in
       keys = with depot.users;
         tazjin.keys.all
         ++ lukegb.keys.all
-        ++ [ grfn.keys.whitby ]
+        ++ [ aspen.keys.whitby ]
         ++ sterni.keys.all
       ;
     };
@@ -565,8 +565,8 @@ in
         token_url = "https://auth.tvl.fyi/auth/realms/TVL/protocol/openid-connect/token";
         api_url = "https://auth.tvl.fyi/auth/realms/TVL/protocol/openid-connect/userinfo";
 
-        # Give lukegb, grfn, tazjin "Admin" rights.
-        role_attribute_path = "((sub == 'lukegb' || sub == 'grfn' || sub == 'tazjin') && 'Admin') || 'Editor'";
+        # Give lukegb, aspen, tazjin "Admin" rights.
+        role_attribute_path = "((sub == 'lukegb' || sub == 'aspen' || sub == 'tazjin') && 'Admin') || 'Editor'";
 
         # Allow creating new Grafana accounts from OAuth accounts.
         allow_sign_up = true;

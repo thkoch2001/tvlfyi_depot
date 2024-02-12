@@ -11,7 +11,7 @@ let
     "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIDBRXeb8EuecLHP0bW4zuebXp4KRnXgJTZfeVWXQ1n1R"
   ];
 
-  grfn = [
+  aspen = [
     "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIMcBGBoWd5pPIIQQP52rcFOQN3wAY0J/+K2fuU6SffjA "
   ];
 
@@ -22,10 +22,10 @@ let
   sanduny = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIOag0XhylaTVhmT6HB8EN2Fv5Ymrc4ZfypOXONUkykTX";
   whitby = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAILNh/w4BSKov0jdz3gKBc98tpoLta5bb87fQXWBhAl2I";
 
-  terraform.publicKeys = tazjin ++ grfn ++ sterni ++ flokli;
-  whitbyDefault.publicKeys = tazjin ++ grfn ++ sterni ++ [ whitby ];
-  allDefault.publicKeys = tazjin ++ grfn ++ sterni ++ [ sanduny whitby ];
-  sandunyDefault.publicKeys = tazjin ++ grfn ++ sterni ++ [ sanduny ];
+  terraform.publicKeys = tazjin ++ aspen ++ sterni ++ flokli;
+  whitbyDefault.publicKeys = tazjin ++ aspen ++ sterni ++ [ whitby ];
+  allDefault.publicKeys = tazjin ++ aspen ++ sterni ++ [ sanduny whitby ];
+  sandunyDefault.publicKeys = tazjin ++ aspen ++ sterni ++ [ sanduny ];
 in
 {
   "besadii.age" = whitbyDefault;
