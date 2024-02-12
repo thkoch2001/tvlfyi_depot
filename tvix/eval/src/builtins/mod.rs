@@ -14,7 +14,7 @@ use std::collections::{BTreeMap, HashSet};
 use std::path::PathBuf;
 
 use crate::arithmetic_op;
-use crate::value::PointerEquality;
+use crate::value::{PointerEquality, VRef};
 use crate::vm::generators::{self, GenCo};
 use crate::warnings::WarningKind;
 use crate::{
@@ -52,9 +52,10 @@ pub async fn coerce_value_to_path(
     v: Value,
 ) -> Result<Result<PathBuf, CatchableErrorKind>, ErrorKind> {
     let value = generators::request_force(co, v).await;
-    if let Value::Path(p) = value {
-        return Ok(Ok(*p));
-    }
+    let value = match value.into_path() {
+        Ok(p) => return Ok(Ok(p)),
+        Err(v) => v,
+    };
 
     match generators::request_string_coerce(
         co,
@@ -87,7 +88,8 @@ mod pure_builtins {
     use itertools::Itertools;
     use os_str_bytes::OsStringBytes;
 
-    use crate::{value::PointerEquality, AddContext, NixContext, NixContextElement};
+    use crate::value::PointerEquality;
+    use crate::{AddContext, NixContext, NixContextElement};
 
     use super::*;
 
@@ -123,11 +125,11 @@ mod pure_builtins {
             let pred_result = try_value!(generators::request_force(&co, pred_result).await);
 
             if !pred_result.as_bool()? {
-                return Ok(Value::Bool(false));
+                return Ok(Value::bool(false));
             }
         }
 
-        Ok(Value::Bool(true))
+        Ok(Value::bool(true))
     }
 
     #[builtin("any")]
@@ -137,11 +139,11 @@ mod pure_builtins {
             let pred_result = try_value!(generators::request_force(&co, pred_result).await);
 
             if pred_result.as_bool()? {
-                return Ok(Value::Bool(true));
+                return Ok(Value::bool(true));
             }
         }
 
-        Ok(Value::Bool(false))
+        Ok(Value::bool(false))
     }
 
     #[builtin("attrNames")]
@@ -153,7 +155,7 @@ mod pure_builtins {
             output.push(Value::from(key.clone()));
         }
 
-        Ok(Value::List(NixList::construct(output.len(), output)))
+        Ok(Value::list(NixList::construct(output.len(), output)))
     }
 
     #[builtin("attrValues")]
@@ -165,7 +167,7 @@ mod pure_builtins {
             output.push(val.clone());
         }
 
-        Ok(Value::List(NixList::construct(output.len(), output)))
+        Ok(Value::list(NixList::construct(output.len(), output)))
     }
 
     #[builtin("baseNameOf")]
@@ -192,17 +194,17 @@ mod pure_builtins {
 
     #[builtin("bitAnd")]
     async fn builtin_bit_and(co: GenCo, x: Value, y: Value) -> Result<Value, ErrorKind> {
-        Ok(Value::Integer(x.as_int()? & y.as_int()?))
+        Ok(Value::integer(x.as_int()? & y.as_int()?))
     }
 
     #[builtin("bitOr")]
     async fn builtin_bit_or(co: GenCo, x: Value, y: Value) -> Result<Value, ErrorKind> {
-        Ok(Value::Integer(x.as_int()? | y.as_int()?))
+        Ok(Value::integer(x.as_int()? | y.as_int()?))
     }
 
     #[builtin("bitXor")]
     async fn builtin_bit_xor(co: GenCo, x: Value, y: Value) -> Result<Value, ErrorKind> {
-        Ok(Value::Integer(x.as_int()? ^ y.as_int()?))
+        Ok(Value::integer(x.as_int()? ^ y.as_int()?))
     }
 
     #[builtin("catAttrs")]
@@ -219,12 +221,12 @@ mod pure_builtins {
             }
         }
 
-        Ok(Value::List(NixList::construct(output.len(), output)))
+        Ok(Value::list(NixList::construct(output.len(), output)))
     }
 
     #[builtin("ceil")]
     async fn builtin_ceil(co: GenCo, double: Value) -> Result<Value, ErrorKind> {
-        Ok(Value::Integer(double.as_float()?.ceil() as i64))
+        Ok(Value::integer(double.as_float()?.ceil() as i64))
     }
 
     #[builtin("compareVersions")]
@@ -235,9 +237,9 @@ mod pure_builtins {
         let s2 = VersionPartsIter::new_for_cmp((&s2).into());
 
         match s1.cmp(s2) {
-            std::cmp::Ordering::Less => Ok(Value::Integer(-1)),
-            std::cmp::Ordering::Equal => Ok(Value::Integer(0)),
-            std::cmp::Ordering::Greater => Ok(Value::Integer(1)),
+            std::cmp::Ordering::Less => Ok(Value::integer(-1)),
+            std::cmp::Ordering::Equal => Ok(Value::integer(0)),
+            std::cmp::Ordering::Greater => Ok(Value::integer(1)),
         }
     }
 
@@ -250,7 +252,7 @@ mod pure_builtins {
             out.extend(list.into_iter());
         }
 
-        Ok(Value::List(out.into()))
+        Ok(Value::list(out))
     }
 
     #[builtin("concatMap")]
@@ -262,7 +264,7 @@ mod pure_builtins {
             let out = try_value!(generators::request_force(&co, out).await);
             res.extend(out.to_list()?);
         }
-        Ok(Value::List(res.into()))
+        Ok(Value::list(res))
     }
 
     #[builtin("concatStringsSep")]
@@ -303,7 +305,7 @@ mod pure_builtins {
                         context = context.join(other_context);
                     }
                 }
-                Err(c) => return Ok(Value::Catchable(Box::new(c))),
+                Err(c) => return Ok(Value::catchable(c)),
             }
         }
         // FIXME: pass immediately the string res.
@@ -348,9 +350,9 @@ mod pure_builtins {
             })
             .unwrap_or(b".");
         if is_path {
-            Ok(Value::Path(Box::new(PathBuf::from(
-                OsString::assert_from_raw_vec(result.to_owned()),
-            ))))
+            Ok(Value::path(OsString::assert_from_raw_vec(
+                result.to_owned(),
+            )))
         } else {
             Ok(Value::from(NixString::new_inherit_context_from(
                 &str, result,
@@ -398,12 +400,12 @@ mod pure_builtins {
             }
         }
 
-        Ok(Value::List(out.into()))
+        Ok(Value::list(out))
     }
 
     #[builtin("floor")]
     async fn builtin_floor(co: GenCo, double: Value) -> Result<Value, ErrorKind> {
-        Ok(Value::Integer(double.as_float()?.floor() as i64))
+        Ok(Value::integer(double.as_float()?.floor() as i64))
     }
 
     #[builtin("foldl'")]
@@ -421,8 +423,8 @@ mod pure_builtins {
             // and our tests for foldl'.
             nul = generators::request_call_with(&co, op.clone(), [nul, val]).await;
             nul = generators::request_force(&co, nul).await;
-            if let c @ Value::Catchable(_) = nul {
-                return Ok(c);
+            if nul.is_catchable() {
+                return Ok(nul);
             }
         }
 
@@ -514,7 +516,7 @@ mod pure_builtins {
             work_set.extend(op_result.to_list()?.into_iter());
         }
 
-        Ok(Value::List(NixList::from(res)))
+        Ok(Value::list(res))
     }
 
     #[builtin("genList")]
@@ -530,7 +532,7 @@ mod pure_builtins {
         let span = generators::request_span(&co).await;
 
         for i in 0..len {
-            let val = Value::Thunk(Thunk::new_suspended_call(
+            let val = Value::thunk(Thunk::new_suspended_call(
                 generator.clone(),
                 i.into(),
                 span.clone(),
@@ -538,7 +540,7 @@ mod pure_builtins {
             out.push_back(val);
         }
 
-        Ok(Value::List(out.into()))
+        Ok(Value::list(out))
     }
 
     #[builtin("getAttr")]
@@ -568,8 +570,7 @@ mod pure_builtins {
             res.entry(key).or_default().push_back(val);
         }
         Ok(Value::attrs(NixAttrs::from_iter(
-            res.into_iter()
-                .map(|(k, v)| (k, Value::List(NixList::from(v)))),
+            res.into_iter().map(|(k, v)| (k, Value::list(v))),
         )))
     }
 
@@ -578,7 +579,7 @@ mod pure_builtins {
         let k = key.to_str()?;
         let xs = set.to_attrs()?;
 
-        Ok(Value::Bool(xs.contains(&k)))
+        Ok(Value::bool(xs.contains(&k)))
     }
 
     #[builtin("hasContext")]
@@ -589,7 +590,7 @@ mod pure_builtins {
         }
 
         let v = e.to_contextful_str()?;
-        Ok(Value::Bool(v.has_context()))
+        Ok(Value::bool(v.has_context()))
     }
 
     #[builtin("getContext")]
@@ -668,12 +669,15 @@ mod pure_builtins {
 
                 if !outputs.is_empty() {
                     outputs.sort();
-                    vec_attrs.push(("outputs", Value::List(outputs
+                    vec_attrs.push((
+                        "outputs",
+                        Value::list(
+                            outputs
                                 .into_iter()
                                 .map(|s| s.into())
                                 .collect::<Vector<Value>>()
-                                .into()
-                    )));
+                        )
+                    ));
                 }
 
                 (key.clone(), Value::attrs(NixAttrs::from_iter(vec_attrs.into_iter())))
@@ -784,7 +788,7 @@ mod pure_builtins {
             }
         }
 
-        Ok(Value::attrs(out.into()))
+        Ok(Value::attrs(out))
     }
 
     #[builtin("isAttrs")]
@@ -794,7 +798,7 @@ mod pure_builtins {
             return Ok(value);
         }
 
-        Ok(Value::Bool(matches!(value, Value::Attrs(_))))
+        Ok(Value::bool(value.is_attrs()))
     }
 
     #[builtin("isBool")]
@@ -803,7 +807,7 @@ mod pure_builtins {
             return Ok(value);
         }
 
-        Ok(Value::Bool(matches!(value, Value::Bool(_))))
+        Ok(Value::bool(value.is_bool()))
     }
 
     #[builtin("isFloat")]
@@ -812,7 +816,7 @@ mod pure_builtins {
             return Ok(value);
         }
 
-        Ok(Value::Bool(matches!(value, Value::Float(_))))
+        Ok(Value::bool(matches!(value.match_ref(), VRef::Float(_))))
     }
 
     #[builtin("isFunction")]
@@ -821,9 +825,9 @@ mod pure_builtins {
             return Ok(value);
         }
 
-        Ok(Value::Bool(matches!(
-            value,
-            Value::Closure(_) | Value::Builtin(_)
+        Ok(Value::bool(matches!(
+            value.match_ref(),
+            VRef::Closure(_) | VRef::Builtin(_)
         )))
     }
 
@@ -833,7 +837,7 @@ mod pure_builtins {
             return Ok(value);
         }
 
-        Ok(Value::Bool(matches!(value, Value::Integer(_))))
+        Ok(Value::bool(matches!(value.match_ref(), VRef::Integer(_))))
     }
 
     #[builtin("isList")]
@@ -842,7 +846,7 @@ mod pure_builtins {
             return Ok(value);
         }
 
-        Ok(Value::Bool(matches!(value, Value::List(_))))
+        Ok(Value::bool(matches!(value.match_ref(), VRef::List(_))))
     }
 
     #[builtin("isNull")]
@@ -851,7 +855,7 @@ mod pure_builtins {
             return Ok(value);
         }
 
-        Ok(Value::Bool(matches!(value, Value::Null)))
+        Ok(Value::bool(matches!(value.match_ref(), VRef::Null)))
     }
 
     #[builtin("isPath")]
@@ -860,7 +864,7 @@ mod pure_builtins {
             return Ok(value);
         }
 
-        Ok(Value::Bool(matches!(value, Value::Path(_))))
+        Ok(Value::bool(matches!(value.match_ref(), VRef::Path(_))))
     }
 
     #[builtin("isString")]
@@ -869,7 +873,7 @@ mod pure_builtins {
             return Ok(value);
         }
 
-        Ok(Value::Bool(matches!(value, Value::String(_))))
+        Ok(Value::bool(matches!(value.match_ref(), VRef::String(_))))
     }
 
     #[builtin("length")]
@@ -877,7 +881,7 @@ mod pure_builtins {
         if list.is_catchable() {
             return Ok(list);
         }
-        Ok(Value::Integer(list.to_list()?.len() as i64))
+        Ok(Value::integer(list.to_list()?.len() as i64))
     }
 
     #[builtin("lessThan")]
@@ -885,8 +889,8 @@ mod pure_builtins {
         let span = generators::request_span(&co).await;
         match x.nix_cmp_ordering(y, co, span).await? {
             Err(cek) => Ok(Value::from(cek)),
-            Ok(Ordering::Less) => Ok(Value::Bool(true)),
-            Ok(_) => Ok(Value::Bool(false)),
+            Ok(Ordering::Less) => Ok(Value::bool(true)),
+            Ok(_) => Ok(Value::bool(false)),
         }
     }
 
@@ -915,11 +919,11 @@ mod pure_builtins {
         let span = generators::request_span(&co).await;
 
         for val in list.to_list()? {
-            let result = Value::Thunk(Thunk::new_suspended_call(f.clone(), val, span.clone()));
+            let result = Value::thunk(Thunk::new_suspended_call(f.clone(), val, span.clone()));
             out.push_back(result)
         }
 
-        Ok(Value::List(out.into()))
+        Ok(Value::list(out))
     }
 
     #[builtin("mapAttrs")]
@@ -931,17 +935,17 @@ mod pure_builtins {
         let span = generators::request_span(&co).await;
 
         for (key, value) in attrs.into_iter() {
-            let result = Value::Thunk(Thunk::new_suspended_call(
+            let result = Value::thunk(Thunk::new_suspended_call(
                 f.clone(),
                 key.clone().into(),
                 span.clone(),
             ));
-            let result = Value::Thunk(Thunk::new_suspended_call(result, value, span.clone()));
+            let result = Value::thunk(Thunk::new_suspended_call(result, value, span.clone()));
 
             out.insert(key, result);
         }
 
-        Ok(Value::attrs(out.into()))
+        Ok(Value::attrs(out))
     }
 
     #[builtin("match")]
@@ -958,7 +962,7 @@ mod pure_builtins {
         let re = re.to_str()?;
         let re: Regex = Regex::new(&format!("^{}$", re.to_str()?)).unwrap();
         match re.captures(s.to_str()?) {
-            Some(caps) => Ok(Value::List(
+            Some(caps) => Ok(Value::list(
                 caps.iter()
                     .skip(1)
                     .map(|grp| {
@@ -969,12 +973,11 @@ mod pure_builtins {
                         // can be observed in make-initrd.nix when it comes
                         // to compressors which are matched over their full command
                         // and then a compressor name will be extracted from that.
-                        grp.map(|g| Value::from(g.as_str())).unwrap_or(Value::Null)
+                        grp.map(|g| Value::from(g.as_str())).unwrap_or(Value::NULL)
                     })
-                    .collect::<imbl::Vector<Value>>()
-                    .into(),
+                    .collect::<Vector<Value>>(),
             )),
-            None => Ok(Value::Null),
+            None => Ok(Value::NULL),
         }
     }
 
@@ -1028,10 +1031,7 @@ mod pure_builtins {
             };
         }
 
-        let res = [
-            ("right", Value::List(NixList::from(right))),
-            ("wrong", Value::List(NixList::from(wrong))),
-        ];
+        let res = [("right", Value::list(right)), ("wrong", Value::list(wrong))];
 
         Ok(Value::attrs(NixAttrs::from_iter(res.into_iter())))
     }
@@ -1201,10 +1201,10 @@ mod pure_builtins {
                         // context. This is as intended, Nix does the same.
                         Value::from(&text[start..end])
                     })
-                    .unwrap_or(Value::Null)
+                    .unwrap_or(Value::NULL)
                 })
                 .collect();
-            ret.push_back(Value::List(NixList::from(v)));
+            ret.push_back(Value::list(v));
             pos = thematch.end();
         }
 
@@ -1213,7 +1213,7 @@ mod pure_builtins {
         // context. This is as intended, Nix does the same.
         ret.push_back(Value::from(&text[pos..]));
 
-        Ok(Value::List(NixList::from(ret)))
+        Ok(Value::list(ret))
     }
 
     #[builtin("sort")]
@@ -1262,7 +1262,7 @@ mod pure_builtins {
             len = new_len;
         }
 
-        Ok(Value::List(data.into()))
+        Ok(Value::list(data))
     }
 
     #[builtin("splitVersion")]
@@ -1280,8 +1280,8 @@ mod pure_builtins {
                     VersionPart::Word(w) => w,
                 })
             })
-            .collect::<Vec<Value>>();
-        Ok(Value::List(NixList::construct(parts.len(), parts)))
+            .collect::<Vector<Value>>();
+        Ok(Value::list(parts))
     }
 
     #[builtin("stringLength")]
@@ -1303,7 +1303,7 @@ mod pure_builtins {
             return Ok(s);
         }
 
-        Ok(Value::Integer(s.to_contextful_str()?.len() as i64))
+        Ok(Value::integer(s.to_contextful_str()?.len() as i64))
     }
 
     #[builtin("sub")]
@@ -1374,8 +1374,8 @@ mod pure_builtins {
         if xs.is_empty() {
             Err(ErrorKind::TailEmptyList)
         } else {
-            let output = xs.into_iter().skip(1).collect::<Vec<_>>();
-            Ok(Value::List(NixList::construct(output.len(), output)))
+            let output = xs.into_iter().skip(1).collect::<Vector<_>>();
+            Ok(Value::list(output))
         }
     }
 
@@ -1464,9 +1464,11 @@ mod pure_builtins {
 
     #[builtin("tryEval")]
     async fn builtin_try_eval(co: GenCo, #[lazy] e: Value) -> Result<Value, ErrorKind> {
-        let res = match generators::request_try_force(&co, e).await {
-            Value::Catchable(_) => [("value", false.into()), ("success", false.into())],
-            value => [("value", value), ("success", true.into())],
+        let val = generators::request_try_force(&co, e).await;
+        let res = if val.is_catchable() {
+            [("value", false.into()), ("success", false.into())]
+        } else {
+            [("value", val), ("success", true.into())]
         };
 
         Ok(Value::attrs(NixAttrs::from_iter(res.into_iter())))
@@ -1514,10 +1516,10 @@ pub fn pure_builtins() -> Vec<(&'static str, Value)> {
 
     // Pure-value builtins
     result.push(("nixVersion", Value::from("2.3-compat-tvix-0.1")));
-    result.push(("langVersion", Value::Integer(6)));
-    result.push(("null", Value::Null));
-    result.push(("true", Value::Bool(true)));
-    result.push(("false", Value::Bool(false)));
+    result.push(("langVersion", Value::integer(6)));
+    result.push(("null", Value::NULL));
+    result.push(("true", Value::bool(true)));
+    result.push(("false", Value::bool(false)));
 
     result.push((
         "currentSystem",
@@ -1586,7 +1588,7 @@ mod placeholder_builtins {
         let res = [
             ("line", 42.into()),
             ("col", 42.into()),
-            ("file", Value::Path(Box::new("/deep/thought".into()))),
+            ("file", Value::path("/deep/thought")),
         ];
         Ok(Value::attrs(NixAttrs::from_iter(res.into_iter())))
     }

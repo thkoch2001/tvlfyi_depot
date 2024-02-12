@@ -14,7 +14,7 @@ use tabwriter::TabWriter;
 use crate::chunk::Chunk;
 use crate::generators::VMRequest;
 use crate::opcode::{CodeIdx, OpCode};
-use crate::value::Lambda;
+use crate::value::{Lambda, VRef};
 use crate::SourceCode;
 use crate::Value;
 
@@ -167,12 +167,12 @@ impl<W: Write> TracingObserver<W> {
     }
 
     fn write_value(&mut self, val: &Value) {
-        let _ = match val {
+        let _ = match val.match_ref() {
             // Potentially large types which we only want to print
             // the type of (and avoid recursing).
-            Value::List(l) => write!(&mut self.writer, "list[{}] ", l.len()),
-            Value::Attrs(a) => write!(&mut self.writer, "attrs[{}] ", a.len()),
-            Value::Thunk(t) if t.is_evaluated() => {
+            VRef::List(l) => write!(&mut self.writer, "list[{}] ", l.len()),
+            VRef::Attrs(a) => write!(&mut self.writer, "attrs[{}] ", a.len()),
+            VRef::Thunk(t) if t.is_evaluated() => {
                 self.write_value(&t.value());
                 Ok(())
             }

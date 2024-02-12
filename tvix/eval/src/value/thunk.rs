@@ -30,12 +30,12 @@ use crate::{
     opcode::OpCode,
     spans::LightSpan,
     upvalues::Upvalues,
-    value::Closure,
+    value::{Closure, VMut, VRef},
     vm::generators::{self, GenCo},
     Value,
 };
 
-use super::{Lambda, TotalDisplay};
+use super::{Lambda, Object, TotalDisplay};
 use codemap::Span;
 
 /// Internal representation of a suspended native thunk.
@@ -119,8 +119,7 @@ impl ThunkRepr {
 
     pub fn is_forced(&self) -> bool {
         match self {
-            ThunkRepr::Evaluated(Value::Thunk(_)) => false,
-            ThunkRepr::Evaluated(_) => true,
+            ThunkRepr::Evaluated(val) => !val.is_thunk(),
             _ => false,
         }
     }
@@ -135,11 +134,11 @@ pub struct Thunk(Rc<RefCell<ThunkRepr>>);
 
 impl Thunk {
     pub fn new_closure(lambda: Rc<Lambda>) -> Self {
-        Thunk(Rc::new(RefCell::new(ThunkRepr::Evaluated(Value::Closure(
-            Rc::new(Closure {
+        Thunk(Rc::new(RefCell::new(ThunkRepr::Evaluated(Value::object(
+            Object::Closure(Rc::new(Closure {
                 upvalues: Rc::new(Upvalues::with_capacity(lambda.upvalue_count)),
                 lambda: lambda.clone(),
-            }),
+            })),
         )))))
     }
 
@@ -274,37 +273,40 @@ impl Thunk {
                 }
 
                 // nested thunks -- try to flatten before forcing
-                ThunkRepr::Evaluated(Value::Thunk(inner_thunk)) => {
-                    match Rc::try_unwrap(inner_thunk.0) {
-                        Ok(refcell) => {
-                            // we are the only reference to the inner thunk,
-                            // so steal it
-                            myself.0.replace(refcell.into_inner());
-                            continue;
-                        }
-                        Err(rc) => {
-                            let inner_thunk = Thunk(rc);
-                            if inner_thunk.is_forced() {
-                                // tail call to force the inner thunk; note that
-                                // this means the outer thunk remains unforced
-                                // even after calling force() on it; however the
-                                // next time it is forced we will be one
-                                // thunk-forcing closer to it being
-                                // fully-evaluated.
-                                myself
-                                    .0
-                                    .replace(ThunkRepr::Evaluated(inner_thunk.value().clone()));
-                                continue;
+                ThunkRepr::Evaluated(val) => {
+                    match val.into_thunk() {
+                        Ok(inner_thunk) => {
+                            match Rc::try_unwrap(inner_thunk.0) {
+                                Ok(refcell) => {
+                                    // we are the only reference to the inner thunk,
+                                    // so steal it
+                                    myself.0.replace(refcell.into_inner());
+                                    continue;
+                                }
+                                Err(rc) => {
+                                    let inner_thunk = Thunk(rc);
+                                    if inner_thunk.is_forced() {
+                                        // tail call to force the inner thunk; note that
+                                        // this means the outer thunk remains unforced
+                                        // even after calling force() on it; however the
+                                        // next time it is forced we will be one
+                                        // thunk-forcing closer to it being
+                                        // fully-evaluated.
+                                        myself.0.replace(ThunkRepr::Evaluated(
+                                            inner_thunk.value().clone(),
+                                        ));
+                                        continue;
+                                    }
+                                    also_update.push(myself.0.clone());
+                                    myself = inner_thunk;
+                                    continue;
+                                }
                             }
-                            also_update.push(myself.0.clone());
-                            myself = inner_thunk;
-                            continue;
+                        }
+                        Err(val) => {
+                            return Ok(val);
                         }
                     }
-                }
-
-                ThunkRepr::Evaluated(val) => {
-                    return Ok(val);
                 }
             }
         }
@@ -358,23 +360,37 @@ impl Thunk {
     }
 
     pub fn upvalues(&self) -> Ref<'_, Upvalues> {
-        Ref::map(self.0.borrow(), |thunk| match thunk {
-            ThunkRepr::Suspended { upvalues, .. } => upvalues.as_ref(),
-            ThunkRepr::Evaluated(Value::Closure(c)) => &c.upvalues,
-            _ => panic!("upvalues() on non-suspended thunk"),
+        Ref::map(self.0.borrow(), |thunk| {
+            match thunk {
+                ThunkRepr::Suspended { upvalues, .. } => return upvalues.as_ref(),
+                ThunkRepr::Evaluated(v) => {
+                    if let VRef::Closure(c) = v.match_ref() {
+                        return &c.upvalues;
+                    }
+                }
+                _ => {}
+            }
+            panic!("upvalues() on non-suspended thunk")
         })
     }
 
     pub fn upvalues_mut(&self) -> RefMut<'_, Upvalues> {
-        RefMut::map(self.0.borrow_mut(), |thunk| match thunk {
-            ThunkRepr::Suspended { upvalues, .. } => Rc::get_mut(upvalues).unwrap(),
-            ThunkRepr::Evaluated(Value::Closure(c)) => Rc::get_mut(
-                &mut Rc::get_mut(c).unwrap().upvalues,
-            )
-            .expect(
-                "upvalues_mut() was called on a thunk which already had multiple references to it",
-            ),
-            thunk => panic!("upvalues() on non-suspended thunk: {thunk:?}"),
+        RefMut::map(self.0.borrow_mut(), |thunk| {
+            match thunk {
+                ThunkRepr::Suspended { upvalues, .. } => return Rc::get_mut(upvalues).unwrap(),
+                ThunkRepr::Evaluated(v) => match v.match_mut() {
+                    VMut::Closure(c) => {
+                        return Rc::get_mut(&mut Rc::get_mut(c).unwrap().upvalues).expect(
+                            "upvalues_mut() was called on a thunk which already had multiple \
+                                 references to it",
+                        );
+                    }
+                    v => panic!("upvalues() on non-suspended thunk: Evaluated({v:?})"),
+                },
+                thunk => {
+                    panic!("upvalues() on non-suspended thunk: {thunk:?}")
+                }
+            };
         })
     }
 
@@ -384,13 +400,16 @@ impl Thunk {
         if Rc::ptr_eq(&self.0, &other.0) {
             return true;
         }
-        match &*self.0.borrow() {
-            ThunkRepr::Evaluated(Value::Closure(c1)) => match &*other.0.borrow() {
-                ThunkRepr::Evaluated(Value::Closure(c2)) => Rc::ptr_eq(c1, c2),
-                _ => false,
-            },
-            _ => false,
+        if let ThunkRepr::Evaluated(v1) = &*self.0.borrow() {
+            if let VRef::Closure(c1) = v1.match_ref() {
+                if let ThunkRepr::Evaluated(v2) = &*other.0.borrow() {
+                    if let VRef::Closure(c2) = v2.match_ref() {
+                        return Rc::ptr_eq(c1, c2);
+                    }
+                }
+            }
         }
+        false
     }
 
     /// Helper function to format thunks in observer output.

@@ -3,7 +3,7 @@
 /// This can not be implemented through standard serde-derive methods,
 /// as there is internal Nix logic that must happen within the
 /// serialisation methods.
-use super::{CoercionKind, Value};
+use super::{CoercionKind, Value, V};
 use crate::errors::{CatchableErrorKind, ErrorKind};
 use crate::generators::{self, GenCo};
 
@@ -19,19 +19,19 @@ impl Value {
     ) -> Result<Result<Json, CatchableErrorKind>, ErrorKind> {
         let self_forced = generators::request_force(co, self).await;
 
-        let value = match self_forced {
-            Value::Null => Json::Null,
-            Value::Bool(b) => Json::Bool(b),
-            Value::Integer(i) => Json::Number(Number::from(i)),
-            Value::Float(f) => to_value(f)?,
-            Value::String(s) => Json::String(s.to_str()?.to_owned()),
+        let value = match self_forced.into_match() {
+            V::Null => Json::Null,
+            V::Bool(b) => Json::Bool(b),
+            V::Integer(i) => Json::Number(Number::from(i)),
+            V::Float(f) => to_value(f)?,
+            V::String(s) => Json::String(s.to_str()?.to_owned()),
 
-            Value::Path(p) => {
-                let imported = generators::request_path_import(co, *p).await;
+            V::Path(p) => {
+                let imported = generators::request_path_import(co, p).await;
                 Json::String(imported.to_string_lossy().to_string())
             }
 
-            Value::List(l) => {
+            V::List(l) => {
                 let mut out = vec![];
 
                 for val in l.into_iter() {
@@ -44,13 +44,13 @@ impl Value {
                 Json::Array(out)
             }
 
-            Value::Attrs(attrs) => {
+            V::Attrs(attrs) => {
                 // Attribute sets with a callable `__toString` attribute
                 // serialise to the string-coerced version of the result of
                 // calling that.
                 if attrs.select("__toString").is_some() {
                     let span = generators::request_span(co).await;
-                    match Value::Attrs(attrs)
+                    match Value::attrs(attrs)
                         .coerce_to_string_(
                             co,
                             CoercionKind {
@@ -60,10 +60,11 @@ impl Value {
                             span,
                         )
                         .await?
+                        .into_match()
                     {
-                        Value::Catchable(cek) => return Ok(Err(*cek)),
-                        Value::String(s) => return Ok(Ok(Json::String(s.to_str()?.to_owned()))),
-                        _ => panic!("Value::coerce_to_string_() returned a non-string!"),
+                        V::Catchable(cek) => return Ok(Err(cek)),
+                        V::String(s) => return Ok(Ok(Json::String(s.to_str()?.to_owned()))),
+                        _ => panic!("V::coerce_to_string_() returned a non-string!"),
                     }
                 }
 
@@ -88,17 +89,17 @@ impl Value {
                 Json::Object(out)
             }
 
-            Value::Catchable(c) => return Ok(Err(*c)),
+            V::Catchable(c) => return Ok(Err(c)),
 
-            val @ Value::Closure(_)
-            | val @ Value::Thunk(_)
-            | val @ Value::Builtin(_)
-            | val @ Value::AttrNotFound
-            | val @ Value::Blueprint(_)
-            | val @ Value::DeferredUpvalue(_)
-            | val @ Value::UnresolvedPath(_)
-            | val @ Value::Json(_)
-            | val @ Value::FinaliseRequest(_) => {
+            val @ V::Closure(_)
+            | val @ V::Thunk(_)
+            | val @ V::Builtin(_)
+            | val @ V::AttrNotFound
+            | val @ V::Blueprint(_)
+            | val @ V::DeferredUpvalue(_)
+            | val @ V::UnresolvedPath(_)
+            | val @ V::Json(_)
+            | val @ V::FinaliseRequest(_) => {
                 return Err(ErrorKind::NotSerialisableToJson(val.type_of()))
             }
         };
@@ -111,7 +112,7 @@ impl Value {
     pub(crate) async fn into_json_generator(self, co: GenCo) -> Result<Value, ErrorKind> {
         match self.into_json(&co).await? {
             Err(cek) => Ok(Value::from(cek)),
-            Ok(json) => Ok(Value::Json(Box::new(json))),
+            Ok(json) => Ok(Value::json(json)),
         }
     }
 }

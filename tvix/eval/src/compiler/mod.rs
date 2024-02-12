@@ -32,7 +32,7 @@ use crate::observer::CompilerObserver;
 use crate::opcode::{CodeIdx, ConstantIdx, Count, JumpOffset, OpCode, UpvalueIdx};
 use crate::spans::LightSpan;
 use crate::spans::ToSpan;
-use crate::value::{Closure, Formals, Lambda, NixAttrs, Thunk, Value};
+use crate::value::{Closure, Formals, Lambda, NixAttrs, Thunk, VRef, Value};
 use crate::warnings::{EvalWarning, WarningKind};
 use crate::CoercionKind;
 use crate::SourceCode;
@@ -361,9 +361,9 @@ impl Compiler<'_> {
 
     fn compile_literal(&mut self, node: &ast::Literal) {
         let value = match node.kind() {
-            ast::LiteralKind::Float(f) => Value::Float(f.value().unwrap()),
+            ast::LiteralKind::Float(f) => Value::float(f.value().unwrap()),
             ast::LiteralKind::Integer(i) => match i.value() {
-                Ok(v) => Value::Integer(v),
+                Ok(v) => Value::integer(v),
                 Err(err) => return self.emit_error(node, err.into()),
             },
 
@@ -389,26 +389,23 @@ impl Compiler<'_> {
             debug_assert!(raw_path.len() > 2 && raw_path.starts_with("~/"));
 
             let home_relative_path = &raw_path[2..(raw_path.len())];
-            self.emit_constant(
-                Value::UnresolvedPath(Box::new(home_relative_path.into())),
-                node,
-            );
+            self.emit_constant(Value::unresolved_path(home_relative_path), node);
             self.push_op(OpCode::OpResolveHomePath, node);
             return;
         } else if raw_path.starts_with('<') {
             // TODO: decide what to do with findFile
             if raw_path.len() == 2 {
                 return self.emit_constant(
-                    Value::Catchable(Box::new(CatchableErrorKind::NixPathResolution(
+                    Value::catchable(CatchableErrorKind::NixPathResolution(
                         "Empty <> path not allowed".into(),
-                    ))),
+                    )),
                     node,
                 );
             }
             let path = &raw_path[1..(raw_path.len() - 1)];
             // Make a thunk to resolve the path (without using `findFile`, at least for now?)
             return self.thunk(slot, node, move |c, _| {
-                c.emit_constant(Value::UnresolvedPath(Box::new(path.into())), node);
+                c.emit_constant(Value::unresolved_path(path), node);
                 c.push_op(OpCode::OpFindFile, node);
             });
         } else {
@@ -419,7 +416,7 @@ impl Compiler<'_> {
 
         // TODO: Use https://github.com/rust-lang/rfcs/issues/2208
         // once it is available
-        let value = Value::Path(Box::new(crate::value::canon_path(path)));
+        let value = Value::path(crate::value::canon_path(path));
         self.emit_constant(value, node);
     }
 
@@ -718,7 +715,7 @@ impl Compiler<'_> {
         // want to emit warnings here in the future.
         if let Some(OpCode::OpConstant(ConstantIdx(idx))) = self.chunk().code.last().cloned() {
             let constant = &mut self.chunk().constants[idx];
-            if let Value::Attrs(attrs) = constant {
+            if let VRef::Attrs(attrs) = constant.match_ref() {
                 let mut path_iter = path.attrs();
 
                 // Only do this optimisation if there is a *single*
@@ -1067,7 +1064,7 @@ impl Compiler<'_> {
                     let jump_to_default =
                         self.push_op(OpCode::OpJumpIfNotFound(JumpOffset(0)), default_expr);
 
-                    self.emit_constant(Value::FinaliseRequest(false), default_expr);
+                    self.emit_constant(Value::finalise_request(false), default_expr);
 
                     let jump_over_default =
                         self.push_op(OpCode::OpJump(JumpOffset(0)), default_expr);
@@ -1077,7 +1074,7 @@ impl Compiler<'_> {
                     // Does not need to thunked since compile() already does so when necessary
                     self.compile(idx, default_expr.clone());
 
-                    self.emit_constant(Value::FinaliseRequest(true), default_expr);
+                    self.emit_constant(Value::finalise_request(true), default_expr);
 
                     self.patch_jump(jump_over_default);
                 }
@@ -1252,9 +1249,9 @@ impl Compiler<'_> {
         if lambda.upvalue_count == 0 {
             self.emit_constant(
                 if is_suspended_thunk {
-                    Value::Thunk(Thunk::new_suspended(lambda, LightSpan::new_actual(span)))
+                    Value::thunk(Thunk::new_suspended(lambda, LightSpan::new_actual(span)))
                 } else {
-                    Value::Closure(Rc::new(Closure::new(lambda)))
+                    Value::closure(Closure::new(lambda))
                 },
                 node,
             );
@@ -1265,7 +1262,7 @@ impl Compiler<'_> {
         // operands that allow the runtime to close over the
         // upvalues and leave a blueprint in the constant index from
         // which the result can be constructed.
-        let blueprint_idx = self.chunk().push_constant(Value::Blueprint(lambda));
+        let blueprint_idx = self.chunk().push_constant(Value::blueprint(lambda));
 
         let code_idx = self.push_op(
             if is_suspended_thunk {
@@ -1357,7 +1354,7 @@ impl Compiler<'_> {
     /// several operations related to attribute sets, where
     /// identifiers are used as string keys.
     fn emit_literal_ident(&mut self, ident: &ast::Ident) {
-        self.emit_constant(Value::String(Box::new(ident.clone().into())), ident);
+        self.emit_constant(Value::string(ident.clone()), ident);
     }
 
     /// Patch the jump instruction at the given index, setting its
@@ -1538,7 +1535,7 @@ fn compile_src_builtin(
     let file = source.add_file(format!("<src-builtins/{}.nix>", name), code.to_string());
     let weak = weak.clone();
 
-    Value::Thunk(Thunk::new_suspended_native(Box::new(move || {
+    Value::thunk(Thunk::new_suspended_native(Box::new(move || {
         let result = compile(
             &parsed.tree().expr().unwrap(),
             None,
@@ -1558,7 +1555,7 @@ fn compile_src_builtin(
             });
         }
 
-        Ok(Value::Thunk(Thunk::new_suspended(
+        Ok(Value::thunk(Thunk::new_suspended(
             result.lambda,
             LightSpan::Actual { span: file.span },
         )))
@@ -1589,7 +1586,7 @@ pub fn prepare_globals(
         // to instantiate its compiler, the `Weak` reference is passed
         // here.
         if enable_import {
-            let import = Value::Builtin(import::builtins_import(weak, source.clone()));
+            let import = Value::builtin(import::builtins_import(weak, source.clone()));
             builtins.insert("import", import);
         }
 
@@ -1603,7 +1600,7 @@ pub fn prepare_globals(
         let weak_globals = weak.clone();
         builtins.insert(
             "builtins",
-            Value::Thunk(Thunk::new_suspended_native(Box::new(move || {
+            Value::thunk(Thunk::new_suspended_native(Box::new(move || {
                 Ok(weak_globals
                     .upgrade()
                     .unwrap()
@@ -1614,9 +1611,9 @@ pub fn prepare_globals(
         );
 
         // Insert top-level static value builtins.
-        globals.insert("true", Value::Bool(true));
-        globals.insert("false", Value::Bool(false));
-        globals.insert("null", Value::Null);
+        globals.insert("true", Value::bool(true));
+        globals.insert("false", Value::bool(false));
+        globals.insert("null", Value::NULL);
 
         // If "source builtins" were supplied, compile them and insert
         // them.
