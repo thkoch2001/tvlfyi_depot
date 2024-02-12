@@ -50,8 +50,6 @@ let
   # instead (e.g. because something is broken in unstable).
   # Use `stableNixpkgs` from above.
   stableOverlay = _unstableSelf: unstableSuper: {
-    # weird memory access issues in SBCL on AMD; 2024-02-01
-    sbcl = stableNixpkgs.sbcl;
   };
 
   # Overlay to expose the nixpkgs commits we are using to other Nix code.
