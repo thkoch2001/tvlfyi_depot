@@ -2211,6 +2211,32 @@ rec {
         sha256 = "1malmx5f4lkfvqasz319lq6gb3ddg19yzf9s8cykfsgzdmyq0hsl";
 
       };
+      "erasable" = rec {
+        crateName = "erasable";
+        version = "1.2.1";
+        edition = "2018";
+        sha256 = "0z8b6k8aan6h80vp4mm327lvmrx0mdn4psyiwmj7mm41w468j4az";
+        authors = [
+          "Christopher Durham (cad97) <cad97@cad97.com>"
+        ];
+        dependencies = [
+          {
+            name = "scopeguard";
+            packageId = "scopeguard";
+            usesDefaultFeatures = false;
+          }
+        ];
+        buildDependencies = [
+          {
+            name = "autocfg";
+            packageId = "autocfg";
+          }
+        ];
+        features = {
+          "default" = [ "alloc" ];
+        };
+        resolvedDefaultFeatures = [ "alloc" "default" ];
+      };
       "errno" = rec {
         crateName = "errno";
         version = "0.3.8";
@@ -10446,6 +10472,10 @@ rec {
           {
             name = "dirs";
             packageId = "dirs";
+          }
+          {
+            name = "erasable";
+            packageId = "erasable";
           }
           {
             name = "genawaiter";
