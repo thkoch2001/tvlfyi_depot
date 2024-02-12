@@ -89,7 +89,7 @@ personal or experimental code that does not require review.
 
 Some examples:
 
-* `//users/grfn/xanthous`: A (WIP) TUI RPG, written in Haskell.
+* `//users/aspen/xanthous`: A (WIP) TUI RPG, written in Haskell.
 * `//users/tazjin/emacs`: tazjin's Emacs & EXWM configuration
 * `//users/tazjin/finito`: A persistent finite-state machine library for Rust.
 

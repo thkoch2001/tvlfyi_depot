@@ -83,7 +83,7 @@ in
           authorizedKeys =
             depot.users.tazjin.keys.all
             ++ depot.users.lukegb.keys.all
-            ++ [ depot.users.grfn.keys.whitby ];
+            ++ [ depot.users.aspen.keys.whitby ];
 
           hostKeys = [
             /etc/secrets/initrd_host_ed25519_key
