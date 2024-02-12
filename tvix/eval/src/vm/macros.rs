@@ -14,15 +14,25 @@ macro_rules! arithmetic_op {
     }};
 
     ( $a:expr, $b:expr, $op:tt ) => {{
-        match ($a, $b) {
-            (Value::Integer(i1), Value::Integer(i2)) => Ok(Value::Integer(i1 $op i2)),
-            (Value::Float(f1), Value::Float(f2)) => Ok(Value::Float(f1 $op f2)),
-            (Value::Integer(i1), Value::Float(f2)) => Ok(Value::Float(*i1 as f64 $op f2)),
-            (Value::Float(f1), Value::Integer(i2)) => Ok(Value::Float(f1 $op *i2 as f64)),
+        let a = $a;
+        let b = $b;
+        match (a.match_ref(), b.match_ref()) {
+            ($crate::value::VRef::Integer(i1), $crate::value::VRef::Integer(i2)) => {
+                Ok(Value::integer(i1 $op i2))
+            },
+            ($crate::value::VRef::Float(f1), $crate::value::VRef::Float(f2)) => {
+                Ok(Value::float(f1 $op f2))
+            },
+            ($crate::value::VRef::Integer(i1), $crate::value::VRef::Float(f2)) => {
+                Ok(Value::float(i1 as f64 $op f2))
+            },
+            ($crate::value::VRef::Float(f1), $crate::value::VRef::Integer(i2)) => {
+                Ok(Value::float(f1 $op i2 as f64))
+            },
 
             (v1, v2) => Err(ErrorKind::TypeError {
                 expected: "number (either int or float)",
-                actual: if v1.is_number() {
+                actual: if a.is_number() {
                     v2.type_of()
                 } else {
                     v1.type_of()
@@ -45,7 +55,7 @@ macro_rules! cmp_op {
                     let ordering = a.nix_cmp_ordering(b, co, span).await?;
                     match ordering {
                         Err(cek) => Ok(Value::from(cek)),
-                        Ok(ordering) => Ok(Value::Bool(cmp_op!(@order $op ordering))),
+                        Ok(ordering) => Ok(Value::bool(cmp_op!(@order $op ordering))),
                     }
                 }
 

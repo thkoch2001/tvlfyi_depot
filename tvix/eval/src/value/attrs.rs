@@ -16,9 +16,10 @@ use serde::Deserialize;
 
 use super::string::NixString;
 use super::thunk::ThunkSet;
-use super::TotalDisplay;
 use super::Value;
+use super::{TotalDisplay, VRef};
 use crate::errors::ErrorKind;
+use crate::value::V;
 use crate::CatchableErrorKind;
 
 lazy_static! {
@@ -365,19 +366,19 @@ impl NixAttrs {
             let value = stack_slice.pop().unwrap();
             let key = stack_slice.pop().unwrap();
 
-            match key {
-                Value::String(ks) => set_attr(&mut attrs, ks, value)?,
+            match key.into_match() {
+                V::String(ks) => set_attr(&mut attrs, ks, value)?,
 
-                Value::Null => {
+                V::Null => {
                     // This is in fact valid, but leads to the value
                     // being ignored and nothing being set, i.e. `{
                     // ${null} = 1; } => { }`.
                     continue;
                 }
 
-                Value::Catchable(err) => return Ok(Err(*err)),
+                V::Catchable(err) => return Ok(Err(err)),
 
-                other => return Err(ErrorKind::InvalidAttributeName(other)),
+                other => return Err(ErrorKind::InvalidAttributeName(other.into())),
             }
         }
 
@@ -421,9 +422,10 @@ impl IntoIterator for NixAttrs {
 /// ```
 fn attempt_optimise_kv(slice: &mut [Value]) -> Option<NixAttrs> {
     let (name_idx, value_idx) = {
-        match (&slice[2], &slice[0]) {
-            (Value::String(s1), Value::String(s2)) if (*s1 == *NAME_S && *s2 == *VALUE_S) => (3, 1),
-            (Value::String(s1), Value::String(s2)) if (*s1 == *VALUE_S && *s2 == *NAME_S) => (1, 3),
+        match (slice[2].match_ref(), slice[0].match_ref()) {
+            (VRef::String(s1), VRef::String(s2)) if (*s1 == **NAME_S && *s2 == **VALUE_S) => (3, 1),
+
+            (VRef::String(s1), VRef::String(s2)) if (*s1 == **VALUE_S && *s2 == **NAME_S) => (1, 3),
 
             // Technically this branch lets type errors pass,
             // but they will be caught during normal attribute

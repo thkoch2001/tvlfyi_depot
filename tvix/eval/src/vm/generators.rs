@@ -448,7 +448,7 @@ where
                                     path: Some(path),
                                     error: e.into(),
                                 })
-                                .map(Value::Bool)
+                                .map(Value::bool)
                                 .with_span(&span, self)?;
 
                             message = VMResponse::Value(exists);
@@ -537,7 +537,7 @@ pub async fn request_stack_pop(co: &GenCo) -> Value {
 
 /// Force any value and return the evaluated result from the VM.
 pub async fn request_force(co: &GenCo, val: Value) -> Value {
-    if let Value::Thunk(_) = val {
+    if val.is_thunk() {
         match co.yield_(VMRequest::ForceValue(val)).await {
             VMResponse::Value(value) => value,
             msg => panic!(
@@ -552,7 +552,7 @@ pub async fn request_force(co: &GenCo, val: Value) -> Value {
 
 /// Force a value
 pub(crate) async fn request_try_force(co: &GenCo, val: Value) -> Value {
-    if let Value::Thunk(_) = val {
+    if val.is_thunk() {
         match co.yield_(VMRequest::TryForce(val)).await {
             VMResponse::Value(value) => value,
             msg => panic!(
@@ -606,13 +606,19 @@ pub async fn request_string_coerce(
     val: Value,
     kind: CoercionKind,
 ) -> Result<NixString, CatchableErrorKind> {
-    match val {
-        Value::String(s) => Ok(s),
-        _ => match co.yield_(VMRequest::StringCoerce(val, kind)).await {
-            VMResponse::Value(Value::Catchable(c)) => Err(*c),
-            VMResponse::Value(value) => Ok(value
-                .to_contextful_str()
-                .expect("coerce_to_string always returns a string")),
+    match val.into_string() {
+        Ok(s) => Ok(s),
+        Err(val) => match co.yield_(VMRequest::StringCoerce(val, kind)).await {
+            VMResponse::Value(value) => {
+                let value = match value.into_catchable() {
+                    Ok(c) => return Err(c),
+                    Err(v) => v,
+                };
+
+                Ok(value
+                    .to_contextful_str()
+                    .expect("coerce_to_string always returns a string"))
+            }
             msg => panic!(
                 "Tvix bug: VM responded with incorrect generator message: {}",
                 msg
@@ -639,17 +645,27 @@ pub(crate) async fn check_equality(
     b: Value,
     ptr_eq: PointerEquality,
 ) -> Result<Result<bool, CatchableErrorKind>, ErrorKind> {
-    match co
+    let resp = co
         .yield_(VMRequest::NixEquality(Box::new((a, b)), ptr_eq))
-        .await
-    {
-        VMResponse::Value(Value::Bool(b)) => Ok(Ok(b)),
-        VMResponse::Value(Value::Catchable(cek)) => Ok(Err(*cek)),
-        msg => panic!(
-            "Tvix bug: VM responded with incorrect generator message: {}",
-            msg
-        ),
-    }
+        .await;
+
+    let resp = match resp {
+        VMResponse::Value(val) => match val.into_catchable() {
+            Ok(cek) => return Ok(Err(cek)),
+            Err(val) => {
+                if let Ok(b) = val.as_bool() {
+                    return Ok(Ok(b));
+                }
+                VMResponse::Value(val)
+            }
+        },
+        r => r,
+    };
+
+    panic!(
+        "Tvix bug: VM responded with incorrect generator message: {}",
+        resp
+    );
 }
 
 /// Emit a fully constructed runtime warning.
@@ -774,14 +790,23 @@ pub(crate) async fn request_to_json(
     co: &GenCo,
     value: Value,
 ) -> Result<serde_json::Value, CatchableErrorKind> {
-    match co.yield_(VMRequest::ToJson(value)).await {
-        VMResponse::Value(Value::Json(json)) => Ok(*json),
-        VMResponse::Value(Value::Catchable(cek)) => Err(*cek),
-        msg => panic!(
-            "Tvix bug: VM responded with incorrect generator message: {}",
-            msg
-        ),
-    }
+    let resp = co.yield_(VMRequest::ToJson(value)).await;
+
+    let resp = match resp {
+        VMResponse::Value(val) => match val.into_catchable() {
+            Ok(cek) => return Err(cek),
+            Err(val) => match val.into_json_value() {
+                Ok(json) => return Ok(json),
+                Err(val) => VMResponse::Value(val),
+            },
+        },
+        r => r,
+    };
+
+    panic!(
+        "Tvix bug: VM responded with incorrect generator message: {}",
+        resp
+    );
 }
 
 /// Call the given value as if it was an attribute set containing a functor. The

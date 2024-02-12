@@ -1,12 +1,14 @@
 //! This module implements the backing representation of runtime
 //! values in the Nix language.
 use std::cmp::Ordering;
-use std::fmt::Display;
+use std::fmt::{self, Debug, Display};
+use std::mem::ManuallyDrop;
 use std::num::{NonZeroI32, NonZeroUsize};
-use std::path::PathBuf;
+use std::path::{Path, PathBuf};
 use std::rc::Rc;
 
 use bstr::{BString, ByteVec};
+use erasable::Erasable;
 use lexical_core::format::CXX_LITERAL;
 use serde::Deserialize;
 
@@ -36,62 +38,409 @@ pub use path::canon_path;
 pub use string::{NixContext, NixContextElement, NixString};
 pub use thunk::Thunk;
 
+use self::nan_boxing::{BoxedNan, BoxedNanKind};
+use self::string::{StringRef, StringRefMut};
 pub use self::thunk::ThunkSet;
 
 use lazy_static::lazy_static;
 
-#[warn(variant_size_differences)]
+#[derive(Clone)]
+enum Object {
+    BigInt(i64),
+    Path(PathBuf),
+    // must use Rc<Closure> here in order to get proper pointer equality
+    Closure(Rc<Closure>),
+    // Internal values that, while they technically exist at runtime,
+    // are never returned to or created directly by users.
+    Builtin(Builtin),
+    Thunk(Thunk),
+
+    /// See [`compiler::compile_select_or()`] for explanation
+    AttrNotFound,
+    Blueprint(Rc<Lambda>),
+    DeferredUpvalue(StackIdx),
+    UnresolvedPath(PathBuf),
+    Json(serde_json::Value),
+    FinaliseRequest(bool),
+    Catchable(CatchableErrorKind),
+}
+
+#[derive(Clone, Deserialize)]
+#[serde(from = "V")]
+pub struct Value(BoxedNan<NixString, Box<NixAttrs>, Box<NixList>, Box<Object>>);
+
+impl Debug for Value {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        write!(f, "{:?}", self.match_ref())
+    }
+}
+
+macro_rules! object_constructors {
+    () => {};
+    ($name: ident($type_and_variant : ident); $($args:tt)*) => (
+        object_constructors!($name($type_and_variant, $type_and_variant););
+        object_constructors!($($args)*);
+    );
+    ($name: ident($type : ty, $variant:ident); $($args:tt)*) => (
+        pub fn $name<T>(x : T) -> Self
+        where
+            T: Into<$type>
+        {
+            Self::object(Object::$variant(x.into()))
+        }
+        object_constructors!($($args)*);
+    );
+}
+
+/// Constructors
+impl Value {
+    pub const NULL: Self = Self(BoxedNan::NULL);
+
+    pub fn bool(b: bool) -> Self {
+        Self(BoxedNan::bool(b))
+    }
+
+    pub fn integer(i: i64) -> Self {
+        if let Ok(i) = i32::try_from(i) {
+            Self(BoxedNan::int(i))
+        } else {
+            Self::object(Object::BigInt(i))
+        }
+    }
+
+    pub fn float(f: f64) -> Self {
+        Self(BoxedNan::float(f))
+    }
+
+    pub fn string<T>(s: T) -> Self
+    where
+        T: Into<NixString>,
+    {
+        Self(BoxedNan::ptra(s.into()))
+    }
+
+    pub fn attrs<T>(a: T) -> Self
+    where
+        T: Into<NixAttrs>,
+    {
+        Self(BoxedNan::ptrb(Box::new(a.into())))
+    }
+
+    pub fn list<T>(l: T) -> Self
+    where
+        T: Into<NixList>,
+    {
+        Self(BoxedNan::ptrc(Box::new(l.into())))
+    }
+
+    pub fn attr_not_found() -> Self {
+        // TODO: use a constant pointer for this, but avoid dropping
+        Self::object(Object::AttrNotFound)
+    }
+
+    fn object(obj: Object) -> Self {
+        Self(BoxedNan::ptrd(Box::new(obj)))
+    }
+
+    object_constructors! {
+        closure(Rc<Closure>, Closure);
+        path(PathBuf, Path);
+        builtin(Builtin);
+        thunk(Thunk);
+        blueprint(Rc<Lambda>, Blueprint);
+        deferred_upvalue(StackIdx, DeferredUpvalue);
+        unresolved_path(PathBuf, UnresolvedPath);
+        json(serde_json::Value, Json);
+        finalise_request(bool, FinaliseRequest);
+        catchable(CatchableErrorKind, Catchable);
+    }
+}
+
+macro_rules! object_into {
+    () => {};
+    ($name:ident($variant:ident) -> $ret:ty; $($args:tt)*) => {
+        pub fn $name(self) -> Result<$ret, Self> {
+            match self.into_object()? {
+                Object::$variant(x) => Ok(x),
+                obj => Err(Self::object(obj)),
+            }
+        }
+
+        object_into!($($args)*);
+    };
+}
+
+/// Conversion
+impl Value {
+    pub fn into_string(self) -> Result<NixString, Self> {
+        self.0.into_ptra().map_err(Self)
+    }
+
+    fn into_object(self) -> Result<Object, Self> {
+        self.0.into_ptrd().map(|obj| *obj).map_err(Self)
+    }
+
+    object_into! {
+        into_thunk(Thunk) -> Thunk;
+        into_path(Path) -> PathBuf;
+        into_catchable(Catchable) -> CatchableErrorKind;
+        into_json_value(Json) -> serde_json::Value;
+    }
+
+    #[inline(always)]
+    pub fn into_match(self) -> V {
+        match self.0.kind() {
+            BoxedNanKind::Null => V::Null,
+            BoxedNanKind::Bool => V::Bool(unsafe { self.0.as_bool_unchecked() }),
+            BoxedNanKind::Int => V::Integer(unsafe { self.0.as_int_unchecked() }.into()),
+            BoxedNanKind::Float => V::Float(unsafe { self.0.as_float_unchecked() }),
+            BoxedNanKind::PtrA => V::String(unsafe { self.0.into_ptra_unchecked() }),
+            BoxedNanKind::PtrB => V::Attrs(*unsafe { self.0.into_ptrb_unchecked() }),
+            BoxedNanKind::PtrC => V::List(*unsafe { self.0.into_ptrc_unchecked() }),
+            BoxedNanKind::PtrD => match *unsafe { self.0.into_ptrd_unchecked() } {
+                Object::BigInt(i) => V::Integer(i),
+                Object::Path(p) => V::Path(p),
+                Object::Closure(c) => V::Closure(c),
+                Object::Builtin(b) => V::Builtin(b),
+                Object::Thunk(x) => V::Thunk(x),
+                Object::AttrNotFound => V::AttrNotFound,
+                Object::Blueprint(x) => V::Blueprint(x),
+                Object::DeferredUpvalue(x) => V::DeferredUpvalue(x),
+                Object::UnresolvedPath(x) => V::UnresolvedPath(x),
+                Object::Json(x) => V::Json(x),
+                Object::FinaliseRequest(x) => V::FinaliseRequest(x),
+                Object::Catchable(x) => V::Catchable(x),
+            },
+        }
+    }
+
+    #[inline(always)]
+    pub fn match_ref(&self) -> VRef {
+        match self.0.kind() {
+            BoxedNanKind::Null => VRef::Null,
+            BoxedNanKind::Bool => VRef::Bool(unsafe { self.0.as_bool_unchecked() }),
+            BoxedNanKind::Int => VRef::Integer(unsafe { self.0.as_int_unchecked() }.into()),
+            BoxedNanKind::Float => VRef::Float(unsafe { self.0.as_float_unchecked() }),
+            BoxedNanKind::PtrA => VRef::String(unsafe {
+                ManuallyDrop::new(NixString::unerase(self.0.as_ptr_unchecked()))
+                    .as_ref()
+                    .as_string_ref()
+            }),
+            BoxedNanKind::PtrB => VRef::Attrs(unsafe { self.0.as_ref_b_unchecked() }),
+            BoxedNanKind::PtrC => VRef::List(unsafe { self.0.as_ref_c_unchecked() }),
+            BoxedNanKind::PtrD => match unsafe { self.0.as_ref_d_unchecked() } {
+                Object::BigInt(i) => VRef::Integer(*i),
+                Object::Path(p) => VRef::Path(p),
+                Object::Closure(c) => VRef::Closure(c),
+                Object::Builtin(b) => VRef::Builtin(b),
+                Object::Thunk(x) => VRef::Thunk(x),
+                Object::AttrNotFound => VRef::AttrNotFound,
+                Object::Blueprint(x) => VRef::Blueprint(x),
+                Object::DeferredUpvalue(x) => VRef::DeferredUpvalue(*x),
+                Object::UnresolvedPath(x) => VRef::UnresolvedPath(x),
+                Object::Json(x) => VRef::Json(x),
+                Object::FinaliseRequest(x) => VRef::FinaliseRequest(*x),
+                Object::Catchable(x) => VRef::Catchable(x),
+            },
+        }
+    }
+
+    #[inline(always)]
+    pub fn match_mut(&mut self) -> VMut {
+        match self.0.kind() {
+            BoxedNanKind::Null => VMut::Null,
+            BoxedNanKind::Bool => VMut::Bool(unsafe { self.0.as_bool_unchecked() }),
+            BoxedNanKind::Int => VMut::Integer(unsafe { self.0.as_int_unchecked() }.into()),
+            BoxedNanKind::Float => VMut::Float(unsafe { self.0.as_float_unchecked() }),
+            BoxedNanKind::PtrA => VMut::String(unsafe {
+                ManuallyDrop::new(NixString::unerase(self.0.as_ptr_unchecked()))
+                    .as_mut()
+                    .as_string_ref_mut()
+            }),
+            BoxedNanKind::PtrB => VMut::Attrs(unsafe { self.0.as_mut_b_unchecked() }),
+            BoxedNanKind::PtrC => VMut::List(unsafe { self.0.as_mut_c_unchecked() }),
+            BoxedNanKind::PtrD => match unsafe { self.0.as_mut_d_unchecked() } {
+                Object::BigInt(i) => VMut::Integer(*i),
+                Object::Path(p) => VMut::Path(p),
+                Object::Closure(c) => VMut::Closure(c),
+                Object::Builtin(b) => VMut::Builtin(b),
+                Object::Thunk(x) => VMut::Thunk(x),
+                Object::AttrNotFound => VMut::AttrNotFound,
+                Object::Blueprint(x) => VMut::Blueprint(x),
+                Object::DeferredUpvalue(x) => VMut::DeferredUpvalue(x),
+                Object::UnresolvedPath(x) => VMut::UnresolvedPath(x),
+                Object::Json(x) => VMut::Json(x),
+                Object::FinaliseRequest(x) => VMut::FinaliseRequest(x),
+                Object::Catchable(x) => VMut::Catchable(x),
+            },
+        }
+    }
+}
+
 #[derive(Clone, Debug, Deserialize)]
 #[serde(untagged)]
-pub enum Value {
+pub enum V {
     Null,
     Bool(bool),
     Integer(i64),
     Float(f64),
     String(NixString),
-
     #[serde(skip)]
-    Path(Box<PathBuf>),
-    Attrs(Box<NixAttrs>),
+    Path(PathBuf),
+    Attrs(NixAttrs),
     List(NixList),
-
     #[serde(skip)]
-    Closure(Rc<Closure>), // must use Rc<Closure> here in order to get proper pointer equality
-
+    Closure(Rc<Closure>),
     #[serde(skip)]
     Builtin(Builtin),
-
-    // Internal values that, while they technically exist at runtime,
-    // are never returned to or created directly by users.
-    #[serde(skip_deserializing)]
+    #[serde(skip)]
     Thunk(Thunk),
-
-    // See [`compiler::compile_select_or()`] for explanation
     #[serde(skip)]
     AttrNotFound,
-
-    // this can only occur in Chunk::Constants and nowhere else
     #[serde(skip)]
     Blueprint(Rc<Lambda>),
-
     #[serde(skip)]
     DeferredUpvalue(StackIdx),
     #[serde(skip)]
-    UnresolvedPath(Box<PathBuf>),
+    UnresolvedPath(PathBuf),
     #[serde(skip)]
-    Json(Box<serde_json::Value>),
-
+    Json(serde_json::Value),
     #[serde(skip)]
     FinaliseRequest(bool),
-
     #[serde(skip)]
-    Catchable(Box<CatchableErrorKind>),
+    Catchable(CatchableErrorKind),
+}
+
+impl V {
+    pub fn type_of(&self) -> &'static str {
+        self.as_ref().type_of()
+    }
+
+    pub fn as_ref(&self) -> VRef {
+        match self {
+            V::Null => VRef::Null,
+            V::Bool(x) => VRef::Bool(*x),
+            V::Integer(x) => VRef::Integer(*x),
+            V::Float(x) => VRef::Float(*x),
+            V::String(x) => VRef::String(x.as_string_ref()),
+            V::Path(x) => VRef::Path(x),
+            V::Attrs(x) => VRef::Attrs(x),
+            V::List(x) => VRef::List(x),
+            V::Closure(x) => VRef::Closure(x),
+            V::Builtin(x) => VRef::Builtin(x),
+            V::Thunk(x) => VRef::Thunk(x),
+            V::AttrNotFound => VRef::AttrNotFound,
+            V::Blueprint(x) => VRef::Blueprint(x),
+            V::DeferredUpvalue(x) => VRef::DeferredUpvalue(*x),
+            V::UnresolvedPath(x) => VRef::UnresolvedPath(x),
+            V::Json(x) => VRef::Json(x),
+            V::FinaliseRequest(x) => VRef::FinaliseRequest(*x),
+            V::Catchable(x) => VRef::Catchable(x),
+        }
+    }
+}
+
+#[derive(Clone, Copy, Debug)]
+pub enum VRef<'a> {
+    Null,
+    Bool(bool),
+    Integer(i64),
+    Float(f64),
+    String(StringRef<'a>),
+    Path(&'a PathBuf),
+    Attrs(&'a NixAttrs),
+    List(&'a NixList),
+    Closure(&'a Rc<Closure>),
+    Builtin(&'a Builtin),
+    Thunk(&'a Thunk),
+    AttrNotFound,
+    Blueprint(&'a Rc<Lambda>),
+    DeferredUpvalue(StackIdx),
+    UnresolvedPath(&'a Path),
+    Json(&'a serde_json::Value),
+    FinaliseRequest(bool),
+    Catchable(&'a CatchableErrorKind),
+}
+
+impl VRef<'_> {
+    pub fn type_of(&self) -> &'static str {
+        match self {
+            VRef::Null => "null",
+            VRef::Bool(_) => "bool",
+            VRef::Integer(_) => "int",
+            VRef::Float(_) => "float",
+            VRef::String(_) => "string",
+            VRef::Path(_) => "path",
+            VRef::Attrs(_) => "set",
+            VRef::List(_) => "list",
+            VRef::Closure(_) | VRef::Builtin(_) => "lambda",
+
+            // Internal types. Note: These are only elaborated here
+            // because it makes debugging easier. If a user ever sees
+            // any of these strings, it's a bug.
+            VRef::Thunk(_) => "internal[thunk]",
+            VRef::AttrNotFound => "internal[attr_not_found]",
+            VRef::Blueprint(_) => "internal[blueprint]",
+            VRef::DeferredUpvalue(_) => "internal[deferred_upvalue]",
+            VRef::UnresolvedPath(_) => "internal[unresolved_path]",
+            VRef::Json(_) => "internal[json]",
+            VRef::FinaliseRequest(_) => "internal[finaliser_sentinel]",
+            VRef::Catchable(_) => "internal[catchable]",
+        }
+    }
+}
+
+#[derive(Debug)]
+pub enum VMut<'a> {
+    Null,
+    Bool(bool),
+    Integer(i64),
+    Float(f64),
+    String(StringRefMut<'a>),
+    Path(&'a mut PathBuf),
+    Attrs(&'a mut NixAttrs),
+    List(&'a mut NixList),
+    Closure(&'a mut Rc<Closure>),
+    Builtin(&'a mut Builtin),
+    Thunk(&'a mut Thunk),
+    AttrNotFound,
+    Blueprint(&'a mut Rc<Lambda>),
+    DeferredUpvalue(&'a mut StackIdx),
+    UnresolvedPath(&'a mut Path),
+    Json(&'a mut serde_json::Value),
+    FinaliseRequest(&'a mut bool),
+    Catchable(&'a mut CatchableErrorKind),
+}
+
+impl VMut<'_> {
+    pub fn as_ref(&self) -> VRef {
+        match self {
+            VMut::Null => VRef::Null,
+            VMut::Bool(x) => VRef::Bool(*x),
+            VMut::Integer(x) => VRef::Integer(*x),
+            VMut::Float(x) => VRef::Float(*x),
+            VMut::String(x) => VRef::String(x.as_ref()),
+            VMut::Path(x) => VRef::Path(x),
+            VMut::Attrs(x) => VRef::Attrs(x),
+            VMut::List(x) => VRef::List(x),
+            VMut::Closure(x) => VRef::Closure(x),
+            VMut::Builtin(x) => VRef::Builtin(x),
+            VMut::Thunk(x) => VRef::Thunk(x),
+            VMut::AttrNotFound => VRef::AttrNotFound,
+            VMut::Blueprint(x) => VRef::Blueprint(x),
+            VMut::DeferredUpvalue(x) => VRef::DeferredUpvalue(**x),
+            VMut::UnresolvedPath(x) => VRef::UnresolvedPath(x),
+            VMut::Json(x) => VRef::Json(x),
+            VMut::FinaliseRequest(x) => VRef::FinaliseRequest(**x),
+            VMut::Catchable(x) => VRef::Catchable(x),
+        }
+    }
 }
 
 impl From<CatchableErrorKind> for Value {
     #[inline]
     fn from(c: CatchableErrorKind) -> Value {
-        Value::Catchable(Box::new(c))
+        Value::catchable(c)
     }
 }
 
@@ -103,7 +452,7 @@ where
     fn from(v: Result<V, CatchableErrorKind>) -> Value {
         match v {
             Ok(v) => v.into(),
-            Err(e) => Value::Catchable(Box::new(e)),
+            Err(e) => Value::catchable(e),
         }
     }
 }
@@ -132,10 +481,10 @@ lazy_static! {
 macro_rules! gen_cast {
     ( $name:ident, $type:ty, $expected:expr, $variant:pat, $result:expr ) => {
         pub fn $name(&self) -> Result<$type, ErrorKind> {
-            match self {
+            match self.match_ref() {
                 $variant => Ok($result),
-                Value::Thunk(thunk) => Self::$name(&thunk.value()),
-                other => Err(type_error($expected, &other)),
+                VRef::Thunk(thunk) => Self::$name(&thunk.value()),
+                other => Err(type_error($expected, other)),
             }
         }
     };
@@ -146,9 +495,9 @@ macro_rules! gen_cast {
 macro_rules! gen_cast_mut {
     ( $name:ident, $type:ty, $expected:expr, $variant:ident) => {
         pub fn $name(&mut self) -> Result<&mut $type, ErrorKind> {
-            match self {
-                Value::$variant(x) => Ok(x),
-                other => Err(type_error($expected, &other)),
+            match self.match_mut() {
+                VMut::$variant(x) => Ok(x),
+                other => Err(type_error($expected, other.as_ref())),
             }
         }
     };
@@ -158,9 +507,9 @@ macro_rules! gen_cast_mut {
 macro_rules! gen_is {
     ( $name:ident, $variant:pat ) => {
         pub fn $name(&self) -> bool {
-            match self {
+            match self.match_ref() {
                 $variant => true,
-                Value::Thunk(thunk) => Self::$name(&thunk.value()),
+                VRef::Thunk(thunk) => Self::$name(&thunk.value()),
                 _ => false,
             }
         }
@@ -192,15 +541,7 @@ where
     T: Into<NixString>,
 {
     fn from(t: T) -> Self {
-        Self::String(t.into())
-    }
-}
-
-/// Constructors
-impl Value {
-    /// Construct a [`Value::Attrs`] from a [`NixAttrs`].
-    pub fn attrs(attrs: NixAttrs) -> Self {
-        Self::Attrs(Box::new(attrs))
+        Self::string(t.into())
     }
 }
 
@@ -220,6 +561,10 @@ pub enum PointerEquality {
 }
 
 impl Value {
+    pub fn type_of(&self) -> &'static str {
+        self.match_ref().type_of()
+    }
+
     /// Deeply forces a value, traversing e.g. lists and attribute sets and forcing
     /// their contents, too.
     ///
@@ -252,7 +597,7 @@ impl Value {
 
             // Get rid of any top-level thunks, and bail out of self-recursive
             // thunks.
-            let value = if let Value::Thunk(t) = &v {
+            let value = if let VRef::Thunk(t) = v.match_ref() {
                 if !thunk_set.insert(t) {
                     continue;
                 }
@@ -261,44 +606,43 @@ impl Value {
                 v
             };
 
-            match value {
+            match value.into_match() {
                 // Short-circuit on already evaluated values, or fail on internal values.
-                Value::Null
-                | Value::Bool(_)
-                | Value::Integer(_)
-                | Value::Float(_)
-                | Value::String(_)
-                | Value::Path(_)
-                | Value::Closure(_)
-                | Value::Builtin(_) => continue,
+                V::Null
+                | V::Bool(_)
+                | V::Integer(_)
+                | V::Float(_)
+                | V::String(_)
+                | V::Path(_)
+                | V::Closure(_)
+                | V::Builtin(_) => continue,
 
-                Value::List(list) => {
+                V::List(list) => {
                     for val in list.into_iter().rev() {
                         vals.push(val);
                     }
                     continue;
                 }
 
-                Value::Attrs(attrs) => {
+                V::Attrs(attrs) => {
                     for (_, val) in attrs.into_iter().rev() {
                         vals.push(val);
                     }
                     continue;
                 }
 
-                Value::Thunk(_) => panic!("Tvix bug: force_value() returned a thunk"),
+                V::Thunk(_) => panic!("Tvix bug: force_value() returned a thunk"),
 
-                Value::Catchable(_) => return Ok(Some(value)),
+                V::Catchable(c) => return Ok(Some(Value::catchable(c))),
 
-                Value::AttrNotFound
-                | Value::Blueprint(_)
-                | Value::DeferredUpvalue(_)
-                | Value::UnresolvedPath(_)
-                | Value::Json(_)
-                | Value::FinaliseRequest(_) => panic!(
-                    "Tvix bug: internal value left on stack: {}",
-                    value.type_of()
-                ),
+                v @ (V::AttrNotFound
+                | V::Blueprint(_)
+                | V::DeferredUpvalue(_)
+                | V::UnresolvedPath(_)
+                | V::Json(_)
+                | V::FinaliseRequest(_)) => {
+                    panic!("Tvix bug: internal value left on stack: {}", v.type_of())
+                }
             }
         }
     }
@@ -333,11 +677,11 @@ impl Value {
             let value = if let Some(v) = vals.pop() {
                 v.force(co, span.clone()).await?
             } else {
-                return Ok(Value::String(NixString::new_context_from(context, result)));
+                return Ok(Value::string(NixString::new_context_from(context, result)));
             };
-            let coerced: Result<BString, _> = match (value, kind) {
+            let coerced: Result<BString, _> = match (value.into_match(), kind) {
                 // coercions that are always done
-                (Value::String(mut s), _) => {
+                (V::String(mut s), _) => {
                     if let Some(ctx) = s.context_mut() {
                         context = context.join(ctx);
                     }
@@ -350,12 +694,12 @@ impl Value {
                 // sequences without NUL bytes, whereas Tvix only allows valid
                 // Unicode. See also b/189.
                 (
-                    Value::Path(p),
+                    V::Path(p),
                     CoercionKind {
                         import_paths: true, ..
                     },
                 ) => {
-                    let imported = generators::request_path_import(co, *p).await;
+                    let imported = generators::request_path_import(co, p).await;
                     // When we import a path from the evaluator, we must attach
                     // its original path as its context.
                     context = context.append(NixContextElement::Plain(
@@ -364,7 +708,7 @@ impl Value {
                     Ok(imported.into_os_string().into_encoded_bytes().into())
                 }
                 (
-                    Value::Path(p),
+                    V::Path(p),
                     CoercionKind {
                         import_paths: false,
                         ..
@@ -375,13 +719,13 @@ impl Value {
                 // `__toString` attribute which holds a function that receives the
                 // set itself or an `outPath` attribute which should be a string.
                 // `__toString` is preferred.
-                (Value::Attrs(attrs), kind) => {
+                (V::Attrs(attrs), kind) => {
                     if let Some(to_string) = attrs.select("__toString") {
                         let callable = to_string.clone().force(co, span.clone()).await?;
 
                         // Leave the attribute set on the stack as an argument
                         // to the function call.
-                        generators::request_stack_push(co, Value::Attrs(attrs.clone())).await;
+                        generators::request_stack_push(co, Value::attrs(attrs.clone())).await;
 
                         // Call the callable ...
                         let result = generators::request_call(co, callable).await;
@@ -400,19 +744,19 @@ impl Value {
                 }
 
                 // strong coercions
-                (Value::Null, CoercionKind { strong: true, .. })
-                | (Value::Bool(false), CoercionKind { strong: true, .. }) => Ok("".into()),
-                (Value::Bool(true), CoercionKind { strong: true, .. }) => Ok("1".into()),
+                (V::Null, CoercionKind { strong: true, .. })
+                | (V::Bool(false), CoercionKind { strong: true, .. }) => Ok("".into()),
+                (V::Bool(true), CoercionKind { strong: true, .. }) => Ok("1".into()),
 
-                (Value::Integer(i), CoercionKind { strong: true, .. }) => Ok(format!("{i}").into()),
-                (Value::Float(f), CoercionKind { strong: true, .. }) => {
+                (V::Integer(i), CoercionKind { strong: true, .. }) => Ok(format!("{i}").into()),
+                (V::Float(f), CoercionKind { strong: true, .. }) => {
                     // contrary to normal Display, coercing a float to a string will
                     // result in unconditional 6 decimal places
                     Ok(format!("{:.6}", f).into())
                 }
 
                 // Lists are coerced by coercing their elements and interspersing spaces
-                (Value::List(list), CoercionKind { strong: true, .. }) => {
+                (V::List(list), CoercionKind { strong: true, .. }) => {
                     for elem in list.into_iter().rev() {
                         vals.push(elem);
                     }
@@ -425,27 +769,30 @@ impl Value {
                     continue;
                 }
 
-                (Value::Thunk(_), _) => panic!("Tvix bug: force returned unforced thunk"),
+                (V::Thunk(_), _) => panic!("Tvix bug: force returned unforced thunk"),
 
-                val @ (Value::Closure(_), _)
-                | val @ (Value::Builtin(_), _)
-                | val @ (Value::Null, _)
-                | val @ (Value::Bool(_), _)
-                | val @ (Value::Integer(_), _)
-                | val @ (Value::Float(_), _)
-                | val @ (Value::List(_), _) => Err(ErrorKind::NotCoercibleToString {
-                    from: val.0.type_of(),
+                (
+                    val @ (V::Closure(_)
+                    | V::Builtin(_)
+                    | V::Null
+                    | V::Bool(_)
+                    | V::Integer(_)
+                    | V::Float(_)
+                    | V::List(_)),
+                    _,
+                ) => Err(ErrorKind::NotCoercibleToString {
+                    from: val.type_of(),
                     kind,
                 }),
 
-                (c @ Value::Catchable(_), _) => return Ok(c),
+                (V::Catchable(c), _) => return Ok(Value::catchable(c)),
 
-                (Value::AttrNotFound, _)
-                | (Value::Blueprint(_), _)
-                | (Value::DeferredUpvalue(_), _)
-                | (Value::UnresolvedPath(_), _)
-                | (Value::Json(_), _)
-                | (Value::FinaliseRequest(_), _) => {
+                (V::AttrNotFound, _)
+                | (V::Blueprint(_), _)
+                | (V::DeferredUpvalue(_), _)
+                | (V::UnresolvedPath(_), _)
+                | (V::Json(_), _)
+                | (V::FinaliseRequest(_), _) => {
                     panic!("tvix bug: .coerce_to_string() called on internal value")
                 }
             };
@@ -492,28 +839,28 @@ impl Value {
         // this is a stack of ((v1,v2),peq) triples to be compared;
         // after each triple is popped off of the stack, v1 is
         // compared to v2 using peq-mode PointerEquality
-        let mut vals = vec![((self, other), ptr_eq)];
+        let mut vals: Vec<((Value, Value), PointerEquality)> = vec![((self, other), ptr_eq)];
 
         loop {
             let ((a, b), ptr_eq) = if let Some(abp) = vals.pop() {
                 abp
             } else {
                 // stack is empty, so comparison has succeeded
-                return Ok(Value::Bool(true));
+                return Ok(Value::bool(true));
             };
-            let a = match a {
-                Value::Thunk(thunk) => {
+            let a = match a.match_ref() {
+                VRef::Thunk(thunk) => {
                     // If both values are thunks, and thunk comparisons are allowed by
                     // pointer, do that and move on.
                     if ptr_eq == PointerEquality::AllowAll {
-                        if let Value::Thunk(t1) = &b {
-                            if t1.ptr_eq(&thunk) {
+                        if let VRef::Thunk(t1) = b.match_ref() {
+                            if t1.ptr_eq(thunk) {
                                 continue;
                             }
                         }
                     };
 
-                    Thunk::force_(thunk, co, span.clone()).await?
+                    Thunk::force_(thunk.clone(), co, span.clone()).await?
                 }
 
                 _ => a,
@@ -521,45 +868,46 @@ impl Value {
 
             let b = b.force(co, span.clone()).await?;
 
-            debug_assert!(!matches!(a, Value::Thunk(_)));
-            debug_assert!(!matches!(b, Value::Thunk(_)));
+            debug_assert!(!matches!(a.match_ref(), VRef::Thunk(_)));
+            debug_assert!(!matches!(b.match_ref(), VRef::Thunk(_)));
 
-            let result = match (a, b) {
+            let result = match (a.match_ref(), b.match_ref()) {
                 // Trivial comparisons
-                (c @ Value::Catchable(_), _) => return Ok(c),
-                (_, c @ Value::Catchable(_)) => return Ok(c),
-                (Value::Null, Value::Null) => true,
-                (Value::Bool(b1), Value::Bool(b2)) => b1 == b2,
-                (Value::String(s1), Value::String(s2)) => s1 == s2,
-                (Value::Path(p1), Value::Path(p2)) => p1 == p2,
+                (VRef::Catchable(c), _) | (_, VRef::Catchable(c)) => {
+                    return Ok(Value::catchable(c.clone()))
+                }
+                (VRef::Null, VRef::Null) => true,
+                (VRef::Bool(b1), VRef::Bool(b2)) => b1 == b2,
+                (VRef::String(s1), VRef::String(s2)) => s1.string == s2.string,
+                (VRef::Path(p1), VRef::Path(p2)) => p1 == p2,
 
                 // Numerical comparisons (they work between float & int)
-                (Value::Integer(i1), Value::Integer(i2)) => i1 == i2,
-                (Value::Integer(i), Value::Float(f)) => i as f64 == f,
-                (Value::Float(f1), Value::Float(f2)) => f1 == f2,
-                (Value::Float(f), Value::Integer(i)) => i as f64 == f,
+                (VRef::Integer(i1), VRef::Integer(i2)) => i1 == i2,
+                (VRef::Integer(i), VRef::Float(f)) => i as f64 == f,
+                (VRef::Float(f1), VRef::Float(f2)) => f1 == f2,
+                (VRef::Float(f), VRef::Integer(i)) => i as f64 == f,
 
                 // List comparisons
-                (Value::List(l1), Value::List(l2)) => {
-                    if ptr_eq >= PointerEquality::AllowNested && l1.ptr_eq(&l2) {
+                (VRef::List(l1), VRef::List(l2)) => {
+                    if ptr_eq >= PointerEquality::AllowNested && l1.ptr_eq(l2) {
                         continue;
                     }
 
                     if l1.len() != l2.len() {
-                        return Ok(Value::Bool(false));
+                        return Ok(Value::bool(false));
                     }
 
-                    vals.extend(l1.into_iter().rev().zip(l2.into_iter().rev()).zip(
+                    vals.extend(l1.iter().rev().cloned().zip(l2.iter().rev().cloned()).zip(
                         std::iter::repeat(std::cmp::max(ptr_eq, PointerEquality::AllowNested)),
                     ));
                     continue;
                 }
 
-                (_, Value::List(_)) | (Value::List(_), _) => return Ok(Value::Bool(false)),
+                (_, VRef::List(_)) | (VRef::List(_), _) => return Ok(Value::bool(false)),
 
                 // Attribute set comparisons
-                (Value::Attrs(a1), Value::Attrs(a2)) => {
-                    if ptr_eq >= PointerEquality::AllowNested && a1.ptr_eq(&a2) {
+                (VRef::Attrs(a1), VRef::Attrs(a2)) => {
+                    if ptr_eq >= PointerEquality::AllowNested && a1.ptr_eq(a2) {
                         continue;
                     }
 
@@ -607,7 +955,7 @@ impl Value {
                                     let result =
                                         out1.to_contextful_str()? == out2.to_contextful_str()?;
                                     if !result {
-                                        return Ok(Value::Bool(false));
+                                        return Ok(Value::bool(false));
                                     } else {
                                         continue;
                                     }
@@ -618,14 +966,14 @@ impl Value {
                     };
 
                     if a1.len() != a2.len() {
-                        return Ok(Value::Bool(false));
+                        return Ok(Value::bool(false));
                     }
 
                     // note that it is important to be careful here with the
                     // order we push the keys and values in order to properly
                     // compare attrsets containing `throw` elements.
-                    let iter1 = a1.into_iter_sorted().rev();
-                    let iter2 = a2.into_iter_sorted().rev();
+                    let iter1 = a1.clone().into_iter_sorted().rev();
+                    let iter2 = a2.clone().into_iter_sorted().rev();
                     for ((k1, v1), (k2, v2)) in iter1.zip(iter2) {
                         vals.push((
                             (v1, v2),
@@ -639,57 +987,31 @@ impl Value {
                     continue;
                 }
 
-                (Value::Attrs(_), _) | (_, Value::Attrs(_)) => return Ok(Value::Bool(false)),
+                (VRef::Attrs(_), _) | (_, VRef::Attrs(_)) => return Ok(Value::bool(false)),
 
-                (Value::Closure(c1), Value::Closure(c2))
+                (VRef::Closure(c1), VRef::Closure(c2))
                     if ptr_eq >= PointerEquality::AllowNested =>
                 {
-                    if Rc::ptr_eq(&c1, &c2) {
+                    if Rc::ptr_eq(c1, c2) {
                         continue;
                     } else {
-                        return Ok(Value::Bool(false));
+                        return Ok(Value::bool(false));
                     }
                 }
 
                 // Everything else is either incomparable (e.g. internal types) or
                 // false.
-                _ => return Ok(Value::Bool(false)),
+                _ => return Ok(Value::bool(false)),
             };
             if !result {
-                return Ok(Value::Bool(false));
+                return Ok(Value::bool(false));
             }
         }
     }
 
-    pub fn type_of(&self) -> &'static str {
-        match self {
-            Value::Null => "null",
-            Value::Bool(_) => "bool",
-            Value::Integer(_) => "int",
-            Value::Float(_) => "float",
-            Value::String(_) => "string",
-            Value::Path(_) => "path",
-            Value::Attrs(_) => "set",
-            Value::List(_) => "list",
-            Value::Closure(_) | Value::Builtin(_) => "lambda",
-
-            // Internal types. Note: These are only elaborated here
-            // because it makes debugging easier. If a user ever sees
-            // any of these strings, it's a bug.
-            Value::Thunk(_) => "internal[thunk]",
-            Value::AttrNotFound => "internal[attr_not_found]",
-            Value::Blueprint(_) => "internal[blueprint]",
-            Value::DeferredUpvalue(_) => "internal[deferred_upvalue]",
-            Value::UnresolvedPath(_) => "internal[unresolved_path]",
-            Value::Json(_) => "internal[json]",
-            Value::FinaliseRequest(_) => "internal[finaliser_sentinel]",
-            Value::Catchable(_) => "internal[catchable]",
-        }
-    }
-
-    gen_cast!(as_bool, bool, "bool", Value::Bool(b), *b);
-    gen_cast!(as_int, i64, "int", Value::Integer(x), *x);
-    gen_cast!(as_float, f64, "float", Value::Float(x), *x);
+    gen_cast!(as_bool, bool, "bool", VRef::Bool(b), b);
+    gen_cast!(as_int, i64, "int", VRef::Integer(x), x);
+    gen_cast!(as_float, f64, "float", VRef::Float(x), x);
 
     /// Cast the current value into a **context-less** string.
     /// If you wanted to cast it into a potentially contextful string,
@@ -697,9 +1019,9 @@ impl Value {
     /// Contextful strings are special, they should not be obtained
     /// everytime you want a string.
     pub fn to_str(&self) -> Result<NixString, ErrorKind> {
-        match self {
-            Value::String(s) if !s.has_context() => Ok((*s).clone()),
-            Value::Thunk(thunk) => Self::to_str(&thunk.value()),
+        match self.match_ref() {
+            VRef::String(s) if s.context.is_none() => Ok(s.to_owned()),
+            VRef::Thunk(thunk) => Self::to_str(&thunk.value()),
             other => Err(type_error("contextless strings", other)),
         }
     }
@@ -708,33 +1030,44 @@ impl Value {
         to_contextful_str,
         NixString,
         "contextful string",
-        Value::String(s),
-        (*s).clone()
+        VRef::String(s),
+        s.to_owned()
     );
-    gen_cast!(to_path, Box<PathBuf>, "path", Value::Path(p), p.clone());
-    gen_cast!(to_attrs, Box<NixAttrs>, "set", Value::Attrs(a), a.clone());
-    gen_cast!(to_list, NixList, "list", Value::List(l), l.clone());
+    gen_cast!(to_path, PathBuf, "path", VRef::Path(p), p.clone());
+    gen_cast!(to_attrs, NixAttrs, "set", VRef::Attrs(a), a.clone());
+    gen_cast!(to_list, NixList, "list", VRef::List(l), l.clone());
     gen_cast!(
         as_closure,
         Rc<Closure>,
         "lambda",
-        Value::Closure(c),
+        VRef::Closure(c),
         c.clone()
     );
 
     gen_cast_mut!(as_list_mut, NixList, "list", List);
 
-    gen_is!(is_path, Value::Path(_));
-    gen_is!(is_number, Value::Integer(_) | Value::Float(_));
-    gen_is!(is_bool, Value::Bool(_));
-    gen_is!(is_attrs, Value::Attrs(_));
-    gen_is!(is_catchable, Value::Catchable(_));
+    pub fn is_integer(&self) -> bool {
+        self.0.is_int()
+    }
+
+    pub fn is_float(&self) -> bool {
+        self.0.is_float()
+    }
+
+    pub fn is_number(&self) -> bool {
+        self.is_integer() || self.is_float()
+    }
+
+    gen_is!(is_path, VRef::Path(_));
+    gen_is!(is_bool, VRef::Bool(_));
+    gen_is!(is_attrs, VRef::Attrs(_));
+    gen_is!(is_catchable, VRef::Catchable(_));
 
     /// Returns `true` if the value is a [`Thunk`].
     ///
     /// [`Thunk`]: Value::Thunk
     pub fn is_thunk(&self) -> bool {
-        matches!(self, Self::Thunk(..))
+        matches!(self.match_ref(), VRef::Thunk(..))
     }
 
     /// Compare `self` against other using (fallible) Nix ordering semantics.
@@ -779,14 +1112,14 @@ impl Value {
                 a = a.force(&co, span.clone()).await?;
                 b = b.force(&co, span.clone()).await?;
             }
-            let result = match (a, b) {
-                (Value::Catchable(c), _) => return Ok(Err(*c)),
-                (_, Value::Catchable(c)) => return Ok(Err(*c)),
+            let result = match (a.into_match(), b.into_match()) {
+                (V::Catchable(c), _) => return Ok(Err(c)),
+                (_, V::Catchable(c)) => return Ok(Err(c)),
                 // same types
-                (Value::Integer(i1), Value::Integer(i2)) => i1.cmp(&i2),
-                (Value::Float(f1), Value::Float(f2)) => f1.total_cmp(&f2),
-                (Value::String(s1), Value::String(s2)) => s1.cmp(&s2),
-                (Value::List(l1), Value::List(l2)) => {
+                (V::Integer(i1), V::Integer(i2)) => i1.cmp(&i2),
+                (V::Float(f1), V::Float(f2)) => f1.total_cmp(&f2),
+                (V::String(s1), V::String(s2)) => s1.cmp(&s2),
+                (V::List(l1), V::List(l2)) => {
                     let max = l1.len().max(l2.len());
                     for j in 0..max {
                         let i = max - 1 - j;
@@ -802,8 +1135,8 @@ impl Value {
                 }
 
                 // different types
-                (Value::Integer(i1), Value::Float(f2)) => (i1 as f64).total_cmp(&f2),
-                (Value::Float(f1), Value::Integer(i2)) => f1.total_cmp(&(i2 as f64)),
+                (V::Integer(i1), V::Float(f2)) => (i1 as f64).total_cmp(&f2),
+                (V::Float(f1), V::Integer(i2)) => f1.total_cmp(&(i2 as f64)),
 
                 // unsupported types
                 (lhs, rhs) => {
@@ -821,37 +1154,39 @@ impl Value {
 
     // TODO(amjoseph): de-asyncify this (when called directly by the VM)
     pub async fn force(self, co: &GenCo, span: LightSpan) -> Result<Value, ErrorKind> {
-        if let Value::Thunk(thunk) = self {
+        match self.into_thunk() {
             // TODO(amjoseph): use #[tailcall::mutual]
-            return Thunk::force_(thunk, co, span).await;
+            Ok(thunk) => Thunk::force_(thunk, co, span).await,
+            Err(v) => Ok(v),
         }
-        Ok(self)
     }
 
     // need two flavors, because async
     pub async fn force_owned_genco(self, co: GenCo, span: LightSpan) -> Result<Value, ErrorKind> {
-        if let Value::Thunk(thunk) = self {
+        match self.into_thunk() {
             // TODO(amjoseph): use #[tailcall::mutual]
-            return Thunk::force_(thunk, &co, span).await;
+            Ok(thunk) => Thunk::force_(thunk, &co, span).await,
+            Err(v) => Ok(v),
         }
-        Ok(self)
     }
 
     /// Explain a value in a human-readable way, e.g. by presenting
     /// the docstrings of functions if present.
     pub fn explain(&self) -> String {
-        match self {
-            Value::Null => "the 'null' value".into(),
-            Value::Bool(b) => format!("the boolean value '{}'", b),
-            Value::Integer(i) => format!("the integer '{}'", i),
-            Value::Float(f) => format!("the float '{}'", f),
-            Value::String(s) if s.has_context() => format!("the contextful string '{}'", s),
-            Value::String(s) => format!("the contextless string '{}'", s),
-            Value::Path(p) => format!("the path '{}'", p.to_string_lossy()),
-            Value::Attrs(attrs) => format!("a {}-item attribute set", attrs.len()),
-            Value::List(list) => format!("a {}-item list", list.len()),
+        match self.match_ref() {
+            VRef::Null => "the 'null' value".into(),
+            VRef::Bool(b) => format!("the boolean value '{}'", b),
+            VRef::Integer(i) => format!("the integer '{}'", i),
+            VRef::Float(f) => format!("the float '{}'", f),
+            VRef::String(s) if s.has_context() => {
+                format!("the contextful string '{}'", s.to_owned())
+            }
+            VRef::String(s) => format!("the contextless string '{}'", s.to_owned()),
+            VRef::Path(p) => format!("the path '{}'", p.to_string_lossy()),
+            VRef::Attrs(attrs) => format!("a {}-item attribute set", attrs.len()),
+            VRef::List(list) => format!("a {}-item list", list.len()),
 
-            Value::Closure(f) => {
+            VRef::Closure(f) => {
                 if let Some(name) = &f.lambda.name {
                     format!("the user-defined Nix function '{}'", name)
                 } else {
@@ -859,7 +1194,7 @@ impl Value {
                 }
             }
 
-            Value::Builtin(b) => {
+            VRef::Builtin(b) => {
                 let mut out = format!("the builtin function '{}'", b.name());
                 if let Some(docs) = b.documentation() {
                     out.push_str("\n\n");
@@ -869,16 +1204,16 @@ impl Value {
             }
 
             // TODO: handle suspended thunks with a different explanation instead of panicking
-            Value::Thunk(t) => t.value().explain(),
+            VRef::Thunk(t) => t.value().explain(),
 
-            Value::Catchable(_) => "a catchable failure".into(),
+            VRef::Catchable(_) => "a catchable failure".into(),
 
-            Value::AttrNotFound
-            | Value::Blueprint(_)
-            | Value::DeferredUpvalue(_)
-            | Value::UnresolvedPath(_)
-            | Value::Json(_)
-            | Value::FinaliseRequest(_) => "an internal Tvix evaluator value".into(),
+            VRef::AttrNotFound
+            | VRef::Blueprint(_)
+            | VRef::DeferredUpvalue(_)
+            | VRef::UnresolvedPath(_)
+            | VRef::Json(_)
+            | VRef::FinaliseRequest(_) => "an internal Tvix evaluator value".into(),
         }
     }
 }
@@ -905,7 +1240,7 @@ fn total_fmt_float<F: std::fmt::Write>(num: f64, mut f: F) -> std::fmt::Result {
 
     // apply some postprocessing on the buffer. If scientific
     // notation is used (we see an `e`), and the next character is
-    // a digit, add the missing `+` sign.)
+    // a digit, add the missing `+` sign.
     let mut new_s = Vec::with_capacity(s.len());
 
     if s.contains(&b'e') {
@@ -968,65 +1303,90 @@ fn total_fmt_float<F: std::fmt::Write>(num: f64, mut f: F) -> std::fmt::Result {
 
 impl TotalDisplay for Value {
     fn total_fmt(&self, f: &mut std::fmt::Formatter<'_>, set: &mut ThunkSet) -> std::fmt::Result {
-        match self {
-            Value::Null => f.write_str("null"),
-            Value::Bool(true) => f.write_str("true"),
-            Value::Bool(false) => f.write_str("false"),
-            Value::Integer(num) => write!(f, "{}", num),
-            Value::String(s) => s.fmt(f),
-            Value::Path(p) => p.display().fmt(f),
-            Value::Attrs(attrs) => attrs.total_fmt(f, set),
-            Value::List(list) => list.total_fmt(f, set),
+        match self.match_ref() {
+            VRef::Null => f.write_str("null"),
+            VRef::Bool(true) => f.write_str("true"),
+            VRef::Bool(false) => f.write_str("false"),
+            VRef::Integer(num) => write!(f, "{}", num),
+            VRef::String(s) => write!(f, "{}", s.to_owned()),
+            VRef::Path(p) => write!(f, "{}", p.display()),
+            VRef::Attrs(attrs) => attrs.total_fmt(f, set),
+            VRef::List(list) => list.total_fmt(f, set),
             // TODO: fancy REPL display with position
-            Value::Closure(_) => f.write_str("<LAMBDA>"),
-            Value::Builtin(builtin) => builtin.fmt(f),
+            VRef::Closure(_) => f.write_str("<LAMBDA>"),
+            VRef::Builtin(builtin) => write!(f, "{}", builtin),
 
             // Nix prints floats with a maximum precision of 5 digits
             // only. Except when it decides to use scientific notation
             // (with a + after the `e`, and zero-padded to 0 digits)
-            Value::Float(num) => total_fmt_float(*num, f),
+            VRef::Float(num) => total_fmt_float(num, f),
 
             // internal types
-            Value::AttrNotFound => f.write_str("internal[not found]"),
-            Value::Blueprint(_) => f.write_str("internal[blueprint]"),
-            Value::DeferredUpvalue(_) => f.write_str("internal[deferred_upvalue]"),
-            Value::UnresolvedPath(_) => f.write_str("internal[unresolved_path]"),
-            Value::Json(_) => f.write_str("internal[json]"),
-            Value::FinaliseRequest(_) => f.write_str("internal[finaliser_sentinel]"),
+            VRef::AttrNotFound => f.write_str("internal[not found]"),
+            VRef::Blueprint(_) => f.write_str("internal[blueprint]"),
+            VRef::DeferredUpvalue(_) => f.write_str("internal[deferred_upvalue]"),
+            VRef::UnresolvedPath(_) => f.write_str("internal[unresolved_path]"),
+            VRef::Json(_) => f.write_str("internal[json]"),
+            VRef::FinaliseRequest(_) => f.write_str("internal[finaliser_sentinel]"),
 
             // Delegate thunk display to the type, as it must handle
             // the case of already evaluated or cyclic thunks.
-            Value::Thunk(t) => t.total_fmt(f, set),
-            Value::Catchable(_) => panic!("total_fmt() called on a CatchableErrorKind"),
+            VRef::Thunk(t) => t.total_fmt(f, set),
+            VRef::Catchable(_) => panic!("total_fmt() called on a CatchableErrorKind"),
         }
     }
 }
 
 impl From<bool> for Value {
     fn from(b: bool) -> Self {
-        Value::Bool(b)
+        Self::bool(b)
     }
 }
 
 impl From<i64> for Value {
     fn from(i: i64) -> Self {
-        Self::Integer(i)
+        Self::integer(i)
     }
 }
 
 impl From<f64> for Value {
     fn from(i: f64) -> Self {
-        Self::Float(i)
+        Self::float(i)
     }
 }
 
 impl From<PathBuf> for Value {
     fn from(path: PathBuf) -> Self {
-        Self::Path(Box::new(path))
+        Self::object(Object::Path(path))
     }
 }
 
-fn type_error(expected: &'static str, actual: &Value) -> ErrorKind {
+impl From<V> for Value {
+    fn from(v: V) -> Self {
+        match v {
+            V::Null => Value::NULL,
+            V::Bool(x) => Value::bool(x),
+            V::Integer(x) => Value::integer(x),
+            V::Float(x) => Value::float(x),
+            V::String(x) => Value::string(x),
+            V::Path(x) => Value::path(x),
+            V::Attrs(x) => Value::attrs(x),
+            V::List(x) => Value::list(x),
+            V::Closure(x) => Value::closure(x),
+            V::Builtin(x) => Value::builtin(x),
+            V::Thunk(x) => Value::thunk(x),
+            V::AttrNotFound => Value::attr_not_found(),
+            V::Blueprint(x) => Value::blueprint(x),
+            V::DeferredUpvalue(x) => Value::deferred_upvalue(x),
+            V::UnresolvedPath(x) => Value::unresolved_path(x),
+            V::Json(x) => Value::json(x),
+            V::FinaliseRequest(x) => Value::finalise_request(x),
+            V::Catchable(x) => Value::catchable(x),
+        }
+    }
+}
+
+fn type_error(expected: &'static str, actual: VRef) -> ErrorKind {
     ErrorKind::TypeError {
         expected,
         actual: actual.type_of(),
@@ -1040,7 +1400,7 @@ mod tests {
 
     #[test]
     fn size() {
-        assert_eq!(size_of::<Value>(), 16);
+        assert_eq!(size_of::<Value>(), 8);
     }
 
     mod floats {

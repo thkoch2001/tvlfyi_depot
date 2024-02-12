@@ -57,7 +57,7 @@ pub use crate::vm::generators;
 pub use crate::warnings::{EvalWarning, WarningKind};
 pub use builtin_macros;
 
-pub use crate::value::{Builtin, CoercionKind, NixAttrs, NixList, NixString, Value};
+pub use crate::value::{Builtin, CoercionKind, NixAttrs, NixList, NixString, VMut, VRef, Value, V};
 
 #[cfg(feature = "impure")]
 pub use crate::io::StdIO;

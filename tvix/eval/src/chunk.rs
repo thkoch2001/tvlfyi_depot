@@ -2,7 +2,7 @@ use std::io::Write;
 use std::ops::{Index, IndexMut};
 
 use crate::opcode::{CodeIdx, ConstantIdx, OpCode};
-use crate::value::Value;
+use crate::value::{VRef, Value};
 use crate::SourceCode;
 
 /// Represents a source location from which one or more operations
@@ -157,10 +157,11 @@ impl Chunk {
 
         match self[idx] {
             OpCode::OpConstant(idx) => {
-                let val_str = match &self[idx] {
-                    Value::Thunk(t) => t.debug_repr(),
-                    Value::Closure(c) => format!("closure({:p})", c.lambda),
-                    val => format!("{}", val),
+                let val = &self[idx];
+                let val_str = match val.match_ref() {
+                    VRef::Thunk(t) => t.debug_repr(),
+                    VRef::Closure(c) => format!("closure({:p})", c.lambda),
+                    _ => format!("{}", val),
                 };
 
                 writeln!(writer, "OpConstant({}@{})", val_str, idx.0)
@@ -252,7 +253,7 @@ mod tests {
         let span = dummy_span();
         let mut chunk = Chunk::default();
         chunk.push_op(OpCode::OpAdd, span);
-        let cidx = chunk.push_constant(Value::Integer(0));
+        let cidx = chunk.push_constant(Value::integer(0));
         assert_eq!(
             cidx.0, 0,
             "first constant in main chunk should have index 0"
@@ -261,7 +262,7 @@ mod tests {
 
         let mut other = Chunk::default();
         other.push_op(OpCode::OpSub, span);
-        let other_cidx = other.push_constant(Value::Integer(1));
+        let other_cidx = other.push_constant(Value::integer(1));
         assert_eq!(
             other_cidx.0, 0,
             "first constant in other chunk should have index 0"
@@ -283,7 +284,7 @@ mod tests {
         );
 
         assert_eq!(chunk.constants.len(), 2);
-        assert!(matches!(chunk.constants[0], Value::Integer(0)));
-        assert!(matches!(chunk.constants[1], Value::Integer(1)));
+        assert!(matches!(chunk.constants[0].match_ref(), VRef::Integer(0)));
+        assert!(matches!(chunk.constants[1].match_ref(), VRef::Integer(1)));
     }
 }

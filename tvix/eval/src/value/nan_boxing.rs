@@ -259,9 +259,19 @@ where
     }
 
     #[inline]
+    pub fn into_ptra(self) -> Result<A, Self> {
+        if self.is_ptra() {
+            Ok(unsafe { self.into_ptra_unchecked() })
+        } else {
+            Err(self)
+        }
+    }
+
+    #[inline]
     pub unsafe fn as_ref_a_unchecked<T>(&self) -> &T
     where
         A: AsRef<T>,
+        T: ?Sized,
     {
         debug_assert!(self.is_ptra());
         NonNull::from(ManuallyDrop::new(A::unerase(self.as_ptr_unchecked())).as_ref()).as_ref()
@@ -288,6 +298,7 @@ where
     pub unsafe fn as_ref_b_unchecked<T>(&self) -> &T
     where
         B: AsRef<T>,
+        T: ?Sized,
     {
         debug_assert!(self.is_ptrb());
         NonNull::from(ManuallyDrop::new(B::unerase(self.as_ptr_unchecked())).as_ref()).as_ref()
@@ -314,6 +325,7 @@ where
     pub unsafe fn as_ref_c_unchecked<T>(&self) -> &T
     where
         C: AsRef<T>,
+        T: ?Sized,
     {
         debug_assert!(self.is_ptrc());
         NonNull::from(ManuallyDrop::new(C::unerase(self.as_ptr_unchecked())).as_ref()).as_ref()
@@ -337,9 +349,19 @@ where
     }
 
     #[inline]
+    pub fn into_ptrd(self) -> Result<D, Self> {
+        if self.is_ptrd() {
+            Ok(unsafe { self.into_ptrd_unchecked() })
+        } else {
+            Err(self)
+        }
+    }
+
+    #[inline]
     pub unsafe fn as_ref_d_unchecked<T>(&self) -> &T
     where
         D: AsRef<T>,
+        T: ?Sized,
     {
         debug_assert!(self.is_ptrd());
         NonNull::from(ManuallyDrop::new(D::unerase(self.as_ptr_unchecked())).as_ref()).as_ref()

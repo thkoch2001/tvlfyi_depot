@@ -31,7 +31,7 @@ fn test_kv_attrs() {
     let name_val = Value::from("name");
     let value_val = Value::from("value");
     let meaning_val = Value::from("meaning");
-    let forty_two_val = Value::Integer(42);
+    let forty_two_val = Value::integer(42);
 
     let kv_attrs = NixAttrs::construct(
         2,
@@ -68,7 +68,7 @@ fn test_kv_attrs_iter() {
     let name_val = Value::from("name");
     let value_val = Value::from("value");
     let meaning_val = Value::from("meaning");
-    let forty_two_val = Value::Integer(42);
+    let forty_two_val = Value::integer(42);
 
     let kv_attrs = NixAttrs::construct(
         2,

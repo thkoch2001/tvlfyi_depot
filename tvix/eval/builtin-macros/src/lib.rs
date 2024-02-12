@@ -342,13 +342,13 @@ pub fn builtins(args: TokenStream, item: TokenStream) -> TokenStream {
     if let Some(state_type) = state_type {
         items.push(parse_quote! {
             pub fn builtins(state: #state_type) -> Vec<(&'static str, Value)> {
-                vec![#(#builtins),*].into_iter().map(|b| (b.name(), Value::Builtin(b))).collect()
+                vec![#(#builtins),*].into_iter().map(|b| (b.name(), Value::builtin(b))).collect()
             }
         });
     } else {
         items.push(parse_quote! {
             pub fn builtins() -> Vec<(&'static str, Value)> {
-                vec![#(#builtins),*].into_iter().map(|b| (b.name(), Value::Builtin(b))).collect()
+                vec![#(#builtins),*].into_iter().map(|b| (b.name(), Value::builtin(b))).collect()
             }
         });
     }
