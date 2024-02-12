@@ -20,6 +20,7 @@ pub enum BoxedNanKind {
     PtrD,
 }
 
+#[derive(Clone)]
 pub enum NeverPtr {}
 unsafe impl ErasablePtr for NeverPtr {
     fn erase(this: Self) -> erasable::ErasedPtr {
@@ -39,7 +40,7 @@ pub enum Enum4<A, B, C, D> {
     D(D),
 }
 
-union BoxedNan<A = NeverPtr, B = NeverPtr, C = NeverPtr, D = NeverPtr>
+pub union BoxedNan<A = NeverPtr, B = NeverPtr, C = NeverPtr, D = NeverPtr>
 where
     A: ErasablePtr,
     B: ErasablePtr,
@@ -91,6 +92,49 @@ where
     }
 }
 
+impl<A, B, C, D> Clone for BoxedNan<A, B, C, D>
+where
+    A: ErasablePtr + Clone,
+    B: ErasablePtr + Clone,
+    C: ErasablePtr + Clone,
+    D: ErasablePtr + Clone,
+{
+    fn clone(&self) -> Self {
+        match self.kind() {
+            BoxedNanKind::Null => Self::NULL,
+            BoxedNanKind::Bool => Self {
+                int: unsafe { self.int },
+            },
+            BoxedNanKind::Int => Self {
+                int: unsafe { self.int },
+            },
+            BoxedNanKind::Float => Self {
+                float: unsafe { self.float },
+            },
+            BoxedNanKind::PtrA => unsafe {
+                Self::ptra(ManuallyDrop::into_inner(
+                    ManuallyDrop::new(A::unerase(self.as_ptr_unchecked())).clone(),
+                ))
+            },
+            BoxedNanKind::PtrB => unsafe {
+                Self::ptrb(ManuallyDrop::into_inner(
+                    ManuallyDrop::new(B::unerase(self.as_ptr_unchecked())).clone(),
+                ))
+            },
+            BoxedNanKind::PtrC => unsafe {
+                Self::ptrc(ManuallyDrop::into_inner(
+                    ManuallyDrop::new(C::unerase(self.as_ptr_unchecked())).clone(),
+                ))
+            },
+            BoxedNanKind::PtrD => unsafe {
+                Self::ptrd(ManuallyDrop::into_inner(
+                    ManuallyDrop::new(D::unerase(self.as_ptr_unchecked())).clone(),
+                ))
+            },
+        }
+    }
+}
+
 const QUIET_NAN: u64 = 0x7ffc000000000000;
 const NANISH_MASK: u64 = 0xffff000000000000;
 const BOOLEAN_MASK: u64 = 0x7ffe000000000002;
@@ -114,7 +158,7 @@ where
     D: ErasablePtr,
 {
     #[inline]
-    fn kind(&self) -> BoxedNanKind {
+    pub fn kind(&self) -> BoxedNanKind {
         if self.is_null() {
             BoxedNanKind::Null
         } else if self.is_bool() {
@@ -137,42 +181,42 @@ where
     }
 
     #[inline]
-    fn is_null(&self) -> bool {
+    pub fn is_null(&self) -> bool {
         unsafe { self.int == NULL_VALUE }
     }
 
     #[inline]
-    fn is_bool(&self) -> bool {
+    pub fn is_bool(&self) -> bool {
         unsafe { (self.int & BOOLEAN_MASK) == BOOLEAN_MASK }
     }
 
     #[inline]
-    fn is_int(&self) -> bool {
+    pub fn is_int(&self) -> bool {
         unsafe { (self.int & NANISH_MASK) == INTEGER_MASK }
     }
 
     #[inline]
-    fn is_float(&self) -> bool {
+    pub fn is_float(&self) -> bool {
         unsafe { (self.int & QUIET_NAN) != QUIET_NAN }
     }
 
     #[inline]
-    fn is_ptra(&self) -> bool {
+    pub fn is_ptra(&self) -> bool {
         unsafe { (self.int & NANISH_MASK) == PTRA_MASK }
     }
 
     #[inline]
-    fn is_ptrb(&self) -> bool {
+    pub fn is_ptrb(&self) -> bool {
         unsafe { (self.int & NANISH_MASK) == PTRB_MASK }
     }
 
     #[inline]
-    fn is_ptrc(&self) -> bool {
+    pub fn is_ptrc(&self) -> bool {
         unsafe { (self.int & NANISH_MASK) == PTRC_MASK }
     }
 
     #[inline]
-    fn is_ptrd(&self) -> bool {
+    pub fn is_ptrd(&self) -> bool {
         unsafe { (self.int & NANISH_MASK) == PTRD_MASK }
     }
 }
@@ -186,36 +230,36 @@ where
     D: ErasablePtr,
 {
     #[inline]
-    unsafe fn as_bool_unchecked(&self) -> bool {
+    pub unsafe fn as_bool_unchecked(&self) -> bool {
         debug_assert!(self.is_bool());
         (self.int & 0x1) != 0
     }
 
     #[inline]
-    unsafe fn as_int_unchecked(&self) -> i32 {
+    pub unsafe fn as_int_unchecked(&self) -> i32 {
         debug_assert!(self.is_int());
         self.int as i32
     }
 
     #[inline]
-    unsafe fn as_float_unchecked(&self) -> f64 {
+    pub unsafe fn as_float_unchecked(&self) -> f64 {
         debug_assert!(self.is_float());
         self.float
     }
 
     #[inline]
-    unsafe fn as_ptr_unchecked(&self) -> ErasedPtr {
+    pub unsafe fn as_ptr_unchecked(&self) -> ErasedPtr {
         NonNull::new_unchecked((self.int & 0xFFFFFFFFFFFF) as *mut _)
     }
 
     #[inline]
-    unsafe fn into_ptra_unchecked(self) -> A {
+    pub unsafe fn into_ptra_unchecked(self) -> A {
         debug_assert!(self.is_ptra());
         A::unerase(ManuallyDrop::new(self).as_ptr_unchecked())
     }
 
     #[inline]
-    unsafe fn as_ref_a_unchecked<T>(&self) -> &T
+    pub unsafe fn as_ref_a_unchecked<T>(&self) -> &T
     where
         A: AsRef<T>,
     {
@@ -224,7 +268,7 @@ where
     }
 
     #[inline]
-    unsafe fn as_mut_a_unchecked<T>(&mut self) -> &mut T
+    pub unsafe fn as_mut_a_unchecked<T>(&mut self) -> &mut T
     where
         A: AsMut<T>,
     {
@@ -233,7 +277,7 @@ where
     }
 
     #[inline]
-    unsafe fn into_ptrb_unchecked(self) -> B {
+    pub unsafe fn into_ptrb_unchecked(self) -> B {
         debug_assert!(self.is_ptrb());
         B::unerase(NonNull::new_unchecked(
             (ManuallyDrop::new(self).int & 0xFFFFFFFFFFFF) as *mut _,
@@ -241,7 +285,7 @@ where
     }
 
     #[inline]
-    unsafe fn as_ref_b_unchecked<T>(&self) -> &T
+    pub unsafe fn as_ref_b_unchecked<T>(&self) -> &T
     where
         B: AsRef<T>,
     {
@@ -250,7 +294,7 @@ where
     }
 
     #[inline]
-    unsafe fn as_mut_b_unchecked<T>(&mut self) -> &mut T
+    pub unsafe fn as_mut_b_unchecked<T>(&mut self) -> &mut T
     where
         B: AsMut<T>,
     {
@@ -259,7 +303,7 @@ where
     }
 
     #[inline]
-    unsafe fn into_ptrc_unchecked(self) -> C {
+    pub unsafe fn into_ptrc_unchecked(self) -> C {
         debug_assert!(self.is_ptrc());
         C::unerase(NonNull::new_unchecked(
             (ManuallyDrop::new(self).int & 0xFFFFFFFFFFFF) as *mut _,
@@ -267,7 +311,7 @@ where
     }
 
     #[inline]
-    unsafe fn as_ref_c_unchecked<T>(&self) -> &T
+    pub unsafe fn as_ref_c_unchecked<T>(&self) -> &T
     where
         C: AsRef<T>,
     {
@@ -276,7 +320,7 @@ where
     }
 
     #[inline]
-    unsafe fn as_mut_c_unchecked<T>(&mut self) -> &mut T
+    pub unsafe fn as_mut_c_unchecked<T>(&mut self) -> &mut T
     where
         C: AsMut<T>,
     {
@@ -285,7 +329,7 @@ where
     }
 
     #[inline]
-    unsafe fn into_ptrd_unchecked(self) -> D {
+    pub unsafe fn into_ptrd_unchecked(self) -> D {
         debug_assert!(self.is_ptrd());
         D::unerase(NonNull::new_unchecked(
             (ManuallyDrop::new(self).int & 0xFFFFFFFFFFFF) as *mut _,
@@ -293,7 +337,7 @@ where
     }
 
     #[inline]
-    unsafe fn as_ref_d_unchecked<T>(&self) -> &T
+    pub unsafe fn as_ref_d_unchecked<T>(&self) -> &T
     where
         D: AsRef<T>,
     {
@@ -302,7 +346,7 @@ where
     }
 
     #[inline]
-    unsafe fn as_mut_d_unchecked<T>(&mut self) -> &mut T
+    pub unsafe fn as_mut_d_unchecked<T>(&mut self) -> &mut T
     where
         D: AsMut<T>,
     {
@@ -319,22 +363,22 @@ where
     C: ErasablePtr,
     D: ErasablePtr,
 {
-    const NULL: Self = Self { int: NULL_VALUE };
+    pub const NULL: Self = Self { int: NULL_VALUE };
 
     #[inline]
-    fn int(i: i32) -> Self {
+    pub fn int(i: i32) -> Self {
         Self {
             int: ((i as u64) & 0x00000000ffffffff) | INTEGER_MASK,
         }
     }
 
     #[inline]
-    fn float(f: f64) -> Self {
+    pub fn float(f: f64) -> Self {
         Self { float: f }
     }
 
     #[inline]
-    fn bool(b: bool) -> Self {
+    pub fn bool(b: bool) -> Self {
         if b {
             Self { int: TRUE_VALUE }
         } else {
@@ -343,50 +387,50 @@ where
     }
 
     #[inline]
-    fn ptra_from_raw(ptr: ErasedPtr) -> Self {
+    pub fn ptra_from_raw(ptr: ErasedPtr) -> Self {
         Self {
             int: (ptr.as_ptr() as u64) | PTRA_MASK,
         }
     }
 
     #[inline]
-    fn ptra(ptr: A) -> Self {
+    pub fn ptra(ptr: A) -> Self {
         Self::ptra_from_raw(A::erase(ptr))
     }
 
     #[inline]
-    fn ptrb_from_raw(ptr: ErasedPtr) -> Self {
+    pub fn ptrb_from_raw(ptr: ErasedPtr) -> Self {
         Self {
             int: (ptr.as_ptr() as u64) | PTRB_MASK,
         }
     }
 
     #[inline]
-    fn ptrb(ptr: B) -> Self {
+    pub fn ptrb(ptr: B) -> Self {
         Self::ptrb_from_raw(B::erase(ptr))
     }
 
     #[inline]
-    fn ptrc_from_raw(ptr: ErasedPtr) -> Self {
+    pub fn ptrc_from_raw(ptr: ErasedPtr) -> Self {
         Self {
             int: (ptr.as_ptr() as u64) | PTRC_MASK,
         }
     }
 
     #[inline]
-    fn ptrc(ptr: C) -> Self {
+    pub fn ptrc(ptr: C) -> Self {
         Self::ptrc_from_raw(C::erase(ptr))
     }
 
     #[inline]
-    fn ptrd_from_raw(ptr: ErasedPtr) -> Self {
+    pub fn ptrd_from_raw(ptr: ErasedPtr) -> Self {
         Self {
             int: (ptr.as_ptr() as u64) | PTRD_MASK,
         }
     }
 
     #[inline]
-    fn ptrd(ptr: D) -> Self {
+    pub fn ptrd(ptr: D) -> Self {
         Self::ptrd_from_raw(D::erase(ptr))
     }
 }
@@ -492,6 +536,34 @@ mod tests {
             assert!(val.is_ptrd());
             assert_eq!(*unsafe { val.as_ref_d_unchecked() }, *x);
             assert_eq!(unsafe { val.into_ptrd_unchecked() }, x);
+        }
+
+        #[proptest]
+        fn clone_ptra(x: Box<usize>) {
+            let val: BoxedNan<_> = BoxedNan::ptra(x.clone());
+            let val2 = val.clone();
+            assert_eq!(unsafe { val2.into_ptra_unchecked() }, x);
+        }
+
+        #[proptest]
+        fn clone_ptrb(x: Box<usize>) {
+            let val: BoxedNan<NeverPtr, _> = BoxedNan::ptrb(x.clone());
+            let val2 = val.clone();
+            assert_eq!(unsafe { val2.into_ptrb_unchecked() }, x);
+        }
+
+        #[proptest]
+        fn clone_ptrc(x: Box<usize>) {
+            let val: BoxedNan<NeverPtr, NeverPtr, _> = BoxedNan::ptrc(x.clone());
+            let val2 = val.clone();
+            assert_eq!(unsafe { val2.into_ptrc_unchecked() }, x);
+        }
+
+        #[proptest]
+        fn clone_ptrd(x: Box<usize>) {
+            let val: BoxedNan<NeverPtr, NeverPtr, NeverPtr, _> = BoxedNan::ptrd(x.clone());
+            let val2 = val.clone();
+            assert_eq!(unsafe { val2.into_ptrd_unchecked() }, x);
         }
     }
 }
