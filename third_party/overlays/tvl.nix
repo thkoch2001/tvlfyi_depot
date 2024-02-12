@@ -33,7 +33,7 @@ depot.nix.readTree.drvTargets {
 
   # Add our Emacs packages to the fixpoint
   emacsPackagesFor = emacs: (
-    (super.emacsPackagesFor emacs).overrideScope' (eself: esuper: {
+    (super.emacsPackagesFor emacs).overrideScope (eself: esuper: {
       tvlPackages = depot.tools.emacs-pkgs // depot.third_party.emacs;
 
       # Use the notmuch from nixpkgs instead of from the Emacs
@@ -118,6 +118,10 @@ depot.nix.readTree.drvTargets {
       $out/bin/crate2nix completions -s 'zsh' -o $out/share/zsh/vendor-completions
     '';
   };
+
+  # Disable tests which fail and weren't executed before the bump that
+  # introduced this problem: https://github.com/NixOS/nixpkgs/issues/288064
+  libgit2_1_5 = super.libgit2_1_5.overrideAttrs (_: { doCheck = false; });
 
   evans = super.evans.overrideAttrs (old: {
     patches = old.patches or [ ] ++ [
