@@ -1,8 +1,12 @@
 #![allow(dead_code)]
 //! https://piotrduperas.com/posts/nan-boxing
 
-use std::ffi::c_void;
 use std::fmt::{self, Debug};
+use std::marker::PhantomData;
+use std::mem::ManuallyDrop;
+use std::ptr::NonNull;
+
+use erasable::{ErasablePtr, ErasedPtr};
 
 #[derive(Debug, Clone, Copy)]
 pub enum BoxedNanKind {
@@ -10,16 +14,41 @@ pub enum BoxedNanKind {
     Bool,
     Int,
     Float,
-    Ptr1,
-    Ptr2,
-    Ptr3,
-    Ptr4,
+    PtrA,
+    PtrB,
+    PtrC,
+    PtrD,
 }
 
-#[derive(Clone, Copy)]
-union BoxedNan {
+pub enum NeverPtr {}
+unsafe impl ErasablePtr for NeverPtr {
+    fn erase(this: Self) -> erasable::ErasedPtr {
+        match this {}
+    }
+
+    unsafe fn unerase(_this: erasable::ErasedPtr) -> Self {
+        unreachable!()
+    }
+}
+
+#[derive(Debug, Copy, Clone, Eq, PartialEq, Hash)]
+pub enum Enum4<A, B, C, D> {
+    A(A),
+    B(B),
+    C(C),
+    D(D),
+}
+
+union BoxedNan<A = NeverPtr, B = NeverPtr, C = NeverPtr, D = NeverPtr>
+where
+    A: ErasablePtr,
+    B: ErasablePtr,
+    C: ErasablePtr,
+    D: ErasablePtr,
+{
     int: u64,
     float: f64,
+    _phantom: PhantomData<Enum4<A, B, C, D>>,
 }
 
 impl Debug for BoxedNan {
@@ -28,27 +57,64 @@ impl Debug for BoxedNan {
     }
 }
 
-/// Constants
-impl BoxedNan {
-    const QUIET_NAN: u64 = 0x7ffc000000000000;
-    const NANISH_MASK: u64 = 0xffff000000000000;
-    const BOOLEAN_MASK: u64 = 0x7ffe000000000002;
-    const INTEGER_MASK: u64 = 0x7ffc000000000000;
-
-    const PTR1_MASK: u64 = 0xfffc000000000000;
-    const PTR2_MASK: u64 = 0xfffd000000000000;
-    const PTR3_MASK: u64 = 0xfffe000000000000;
-    const PTR4_MASK: u64 = 0xffff000000000000;
-
-    const TRUE_VALUE: u64 = Self::BOOLEAN_MASK | 3;
-    const FALSE_VALUE: u64 = Self::BOOLEAN_MASK | 2;
-    const NULL_VALUE: u64 = 0x7ffe000000000000;
+impl<A, B, C, D> Drop for BoxedNan<A, B, C, D>
+where
+    A: ErasablePtr,
+    B: ErasablePtr,
+    C: ErasablePtr,
+    D: ErasablePtr,
+{
+    fn drop(&mut self) {
+        match self.kind() {
+            BoxedNanKind::Null | BoxedNanKind::Bool | BoxedNanKind::Int | BoxedNanKind::Float => {}
+            BoxedNanKind::PtrA => unsafe {
+                drop(A::unerase(NonNull::new_unchecked(
+                    (self.int & 0xFFFFFFFFFFFF) as *mut _,
+                )));
+            },
+            BoxedNanKind::PtrB => unsafe {
+                drop(B::unerase(NonNull::new_unchecked(
+                    (self.int & 0xFFFFFFFFFFFF) as *mut _,
+                )));
+            },
+            BoxedNanKind::PtrC => unsafe {
+                drop(C::unerase(NonNull::new_unchecked(
+                    (self.int & 0xFFFFFFFFFFFF) as *mut _,
+                )));
+            },
+            BoxedNanKind::PtrD => unsafe {
+                drop(D::unerase(NonNull::new_unchecked(
+                    (self.int & 0xFFFFFFFFFFFF) as *mut _,
+                )));
+            },
+        }
+    }
 }
 
+const QUIET_NAN: u64 = 0x7ffc000000000000;
+const NANISH_MASK: u64 = 0xffff000000000000;
+const BOOLEAN_MASK: u64 = 0x7ffe000000000002;
+const INTEGER_MASK: u64 = 0x7ffc000000000000;
+
+const PTRA_MASK: u64 = 0xfffc000000000000;
+const PTRB_MASK: u64 = 0xfffd000000000000;
+const PTRC_MASK: u64 = 0xfffe000000000000;
+const PTRD_MASK: u64 = 0xffff000000000000;
+
+const TRUE_VALUE: u64 = BOOLEAN_MASK | 3;
+const FALSE_VALUE: u64 = BOOLEAN_MASK | 2;
+const NULL_VALUE: u64 = 0x7ffe000000000000;
+
 /// Type predicates
-impl BoxedNan {
+impl<A, B, C, D> BoxedNan<A, B, C, D>
+where
+    A: ErasablePtr,
+    B: ErasablePtr,
+    C: ErasablePtr,
+    D: ErasablePtr,
+{
     #[inline]
-    fn kind(self) -> BoxedNanKind {
+    fn kind(&self) -> BoxedNanKind {
         if self.is_null() {
             BoxedNanKind::Null
         } else if self.is_bool() {
@@ -57,115 +123,208 @@ impl BoxedNan {
             BoxedNanKind::Int
         } else if self.is_float() {
             BoxedNanKind::Float
-        } else if self.is_ptr1() {
-            BoxedNanKind::Ptr1
-        } else if self.is_ptr2() {
-            BoxedNanKind::Ptr2
-        } else if self.is_ptr3() {
-            BoxedNanKind::Ptr3
-        } else if self.is_ptr4() {
-            BoxedNanKind::Ptr4
+        } else if self.is_ptra() {
+            BoxedNanKind::PtrA
+        } else if self.is_ptrb() {
+            BoxedNanKind::PtrB
+        } else if self.is_ptrc() {
+            BoxedNanKind::PtrC
+        } else if self.is_ptrd() {
+            BoxedNanKind::PtrD
         } else {
             unreachable!()
         }
     }
 
     #[inline]
-    fn is_null(self) -> bool {
-        unsafe { self.int == Self::NULL_VALUE }
+    fn is_null(&self) -> bool {
+        unsafe { self.int == NULL_VALUE }
     }
 
     #[inline]
-    fn is_bool(self) -> bool {
-        unsafe { (self.int & Self::BOOLEAN_MASK) == Self::BOOLEAN_MASK }
+    fn is_bool(&self) -> bool {
+        unsafe { (self.int & BOOLEAN_MASK) == BOOLEAN_MASK }
     }
 
     #[inline]
-    fn is_int(self) -> bool {
-        unsafe { (self.int & Self::NANISH_MASK) == Self::INTEGER_MASK }
+    fn is_int(&self) -> bool {
+        unsafe { (self.int & NANISH_MASK) == INTEGER_MASK }
     }
 
     #[inline]
-    fn is_float(self) -> bool {
-        unsafe { (self.int & Self::QUIET_NAN) != Self::QUIET_NAN }
+    fn is_float(&self) -> bool {
+        unsafe { (self.int & QUIET_NAN) != QUIET_NAN }
     }
 
     #[inline]
-    fn is_ptr1(self) -> bool {
-        unsafe { (self.int & Self::NANISH_MASK) == Self::PTR1_MASK }
+    fn is_ptra(&self) -> bool {
+        unsafe { (self.int & NANISH_MASK) == PTRA_MASK }
     }
 
     #[inline]
-    fn is_ptr2(self) -> bool {
-        unsafe { (self.int & Self::NANISH_MASK) == Self::PTR2_MASK }
+    fn is_ptrb(&self) -> bool {
+        unsafe { (self.int & NANISH_MASK) == PTRB_MASK }
     }
 
     #[inline]
-    fn is_ptr3(self) -> bool {
-        unsafe { (self.int & Self::NANISH_MASK) == Self::PTR3_MASK }
+    fn is_ptrc(&self) -> bool {
+        unsafe { (self.int & NANISH_MASK) == PTRC_MASK }
     }
 
     #[inline]
-    fn is_ptr4(self) -> bool {
-        unsafe { (self.int & Self::NANISH_MASK) == Self::PTR4_MASK }
+    fn is_ptrd(&self) -> bool {
+        unsafe { (self.int & NANISH_MASK) == PTRD_MASK }
     }
 }
 
 /// Accessors
-impl BoxedNan {
+impl<A, B, C, D> BoxedNan<A, B, C, D>
+where
+    A: ErasablePtr,
+    B: ErasablePtr,
+    C: ErasablePtr,
+    D: ErasablePtr,
+{
     #[inline]
-    unsafe fn as_bool_unchecked(self) -> bool {
+    unsafe fn as_bool_unchecked(&self) -> bool {
         debug_assert!(self.is_bool());
         (self.int & 0x1) != 0
     }
 
     #[inline]
-    unsafe fn as_int_unchecked(self) -> i32 {
+    unsafe fn as_int_unchecked(&self) -> i32 {
         debug_assert!(self.is_int());
         self.int as i32
     }
 
     #[inline]
-    unsafe fn as_float_unchecked(self) -> f64 {
+    unsafe fn as_float_unchecked(&self) -> f64 {
         debug_assert!(self.is_float());
         self.float
     }
 
     #[inline]
-    unsafe fn as_ptr1_unchecked(self) -> *const c_void {
-        debug_assert!(self.is_ptr1());
-        (self.int & 0xFFFFFFFFFFFF) as _
+    unsafe fn as_ptr_unchecked(&self) -> ErasedPtr {
+        NonNull::new_unchecked((self.int & 0xFFFFFFFFFFFF) as *mut _)
     }
 
     #[inline]
-    unsafe fn as_ptr2_unchecked(self) -> *const c_void {
-        debug_assert!(self.is_ptr2());
-        (self.int & 0xFFFFFFFFFFFF) as _
+    unsafe fn into_ptra_unchecked(self) -> A {
+        debug_assert!(self.is_ptra());
+        A::unerase(ManuallyDrop::new(self).as_ptr_unchecked())
     }
 
     #[inline]
-    unsafe fn as_ptr3_unchecked(self) -> *const c_void {
-        debug_assert!(self.is_ptr3());
-        (self.int & 0xFFFFFFFFFFFF) as _
+    unsafe fn as_ref_a_unchecked<T>(&self) -> &T
+    where
+        A: AsRef<T>,
+    {
+        debug_assert!(self.is_ptra());
+        NonNull::from(ManuallyDrop::new(A::unerase(self.as_ptr_unchecked())).as_ref()).as_ref()
     }
 
     #[inline]
-    unsafe fn as_ptr4_unchecked(self) -> *const c_void {
-        debug_assert!(self.is_ptr4());
-        (self.int & 0xFFFFFFFFFFFF) as _
+    unsafe fn as_mut_a_unchecked<T>(&mut self) -> &mut T
+    where
+        A: AsMut<T>,
+    {
+        debug_assert!(self.is_ptra());
+        NonNull::from(ManuallyDrop::new(A::unerase(self.as_ptr_unchecked())).as_mut()).as_mut()
+    }
+
+    #[inline]
+    unsafe fn into_ptrb_unchecked(self) -> B {
+        debug_assert!(self.is_ptrb());
+        B::unerase(NonNull::new_unchecked(
+            (ManuallyDrop::new(self).int & 0xFFFFFFFFFFFF) as *mut _,
+        ))
+    }
+
+    #[inline]
+    unsafe fn as_ref_b_unchecked<T>(&self) -> &T
+    where
+        B: AsRef<T>,
+    {
+        debug_assert!(self.is_ptrb());
+        NonNull::from(ManuallyDrop::new(B::unerase(self.as_ptr_unchecked())).as_ref()).as_ref()
+    }
+
+    #[inline]
+    unsafe fn as_mut_b_unchecked<T>(&mut self) -> &mut T
+    where
+        B: AsMut<T>,
+    {
+        debug_assert!(self.is_ptrb());
+        NonNull::from(ManuallyDrop::new(B::unerase(self.as_ptr_unchecked())).as_mut()).as_mut()
+    }
+
+    #[inline]
+    unsafe fn into_ptrc_unchecked(self) -> C {
+        debug_assert!(self.is_ptrc());
+        C::unerase(NonNull::new_unchecked(
+            (ManuallyDrop::new(self).int & 0xFFFFFFFFFFFF) as *mut _,
+        ))
+    }
+
+    #[inline]
+    unsafe fn as_ref_c_unchecked<T>(&self) -> &T
+    where
+        C: AsRef<T>,
+    {
+        debug_assert!(self.is_ptrc());
+        NonNull::from(ManuallyDrop::new(C::unerase(self.as_ptr_unchecked())).as_ref()).as_ref()
+    }
+
+    #[inline]
+    unsafe fn as_mut_c_unchecked<T>(&mut self) -> &mut T
+    where
+        C: AsMut<T>,
+    {
+        debug_assert!(self.is_ptrc());
+        NonNull::from(ManuallyDrop::new(C::unerase(self.as_ptr_unchecked())).as_mut()).as_mut()
+    }
+
+    #[inline]
+    unsafe fn into_ptrd_unchecked(self) -> D {
+        debug_assert!(self.is_ptrd());
+        D::unerase(NonNull::new_unchecked(
+            (ManuallyDrop::new(self).int & 0xFFFFFFFFFFFF) as *mut _,
+        ))
+    }
+
+    #[inline]
+    unsafe fn as_ref_d_unchecked<T>(&self) -> &T
+    where
+        D: AsRef<T>,
+    {
+        debug_assert!(self.is_ptrd());
+        NonNull::from(ManuallyDrop::new(D::unerase(self.as_ptr_unchecked())).as_ref()).as_ref()
+    }
+
+    #[inline]
+    unsafe fn as_mut_d_unchecked<T>(&mut self) -> &mut T
+    where
+        D: AsMut<T>,
+    {
+        debug_assert!(self.is_ptrd());
+        NonNull::from(ManuallyDrop::new(D::unerase(self.as_ptr_unchecked())).as_mut()).as_mut()
     }
 }
 
 /// Constructors
-impl BoxedNan {
-    const NULL: Self = Self {
-        int: Self::NULL_VALUE,
-    };
+impl<A, B, C, D> BoxedNan<A, B, C, D>
+where
+    A: ErasablePtr,
+    B: ErasablePtr,
+    C: ErasablePtr,
+    D: ErasablePtr,
+{
+    const NULL: Self = Self { int: NULL_VALUE };
 
     #[inline]
     fn int(i: i32) -> Self {
         Self {
-            int: ((i as u64) & 0x00000000ffffffff) | Self::INTEGER_MASK,
+            int: ((i as u64) & 0x00000000ffffffff) | INTEGER_MASK,
         }
     }
 
@@ -177,42 +336,58 @@ impl BoxedNan {
     #[inline]
     fn bool(b: bool) -> Self {
         if b {
-            Self {
-                int: Self::TRUE_VALUE,
-            }
+            Self { int: TRUE_VALUE }
         } else {
-            Self {
-                int: Self::FALSE_VALUE,
-            }
+            Self { int: FALSE_VALUE }
         }
     }
 
     #[inline]
-    fn ptr1_from_raw(ptr: *const c_void) -> Self {
+    fn ptra_from_raw(ptr: ErasedPtr) -> Self {
         Self {
-            int: (ptr as u64) | Self::PTR1_MASK,
+            int: (ptr.as_ptr() as u64) | PTRA_MASK,
         }
     }
 
     #[inline]
-    fn ptr2_from_raw(ptr: *const c_void) -> Self {
+    fn ptra(ptr: A) -> Self {
+        Self::ptra_from_raw(A::erase(ptr))
+    }
+
+    #[inline]
+    fn ptrb_from_raw(ptr: ErasedPtr) -> Self {
         Self {
-            int: (ptr as u64) | Self::PTR2_MASK,
+            int: (ptr.as_ptr() as u64) | PTRB_MASK,
         }
     }
 
     #[inline]
-    fn ptr3_from_raw(ptr: *const c_void) -> Self {
+    fn ptrb(ptr: B) -> Self {
+        Self::ptrb_from_raw(B::erase(ptr))
+    }
+
+    #[inline]
+    fn ptrc_from_raw(ptr: ErasedPtr) -> Self {
         Self {
-            int: (ptr as u64) | Self::PTR3_MASK,
+            int: (ptr.as_ptr() as u64) | PTRC_MASK,
         }
     }
 
     #[inline]
-    fn ptr4_from_raw(ptr: *const c_void) -> Self {
+    fn ptrc(ptr: C) -> Self {
+        Self::ptrc_from_raw(C::erase(ptr))
+    }
+
+    #[inline]
+    fn ptrd_from_raw(ptr: ErasedPtr) -> Self {
         Self {
-            int: (ptr as u64) | Self::PTR4_MASK,
+            int: (ptr.as_ptr() as u64) | PTRD_MASK,
         }
+    }
+
+    #[inline]
+    fn ptrd(ptr: D) -> Self {
+        Self::ptrd_from_raw(D::erase(ptr))
     }
 }
 
@@ -222,103 +397,101 @@ mod tests {
 
     use super::*;
 
-    mod value {
-        use super::*;
-    }
-
     mod boxed_nan {
         use super::*;
 
-        fn check_kind(val: BoxedNan) {
+        fn check_kind<A, B, C, D>(val: &BoxedNan<A, B, C, D>)
+        where
+            A: ErasablePtr,
+            B: ErasablePtr,
+            C: ErasablePtr,
+            D: ErasablePtr,
+        {
             match val.kind() {
                 BoxedNanKind::Null => assert!(val.is_null()),
                 BoxedNanKind::Bool => assert!(val.is_bool()),
                 BoxedNanKind::Int => assert!(val.is_int()),
                 BoxedNanKind::Float => assert!(val.is_float()),
-                BoxedNanKind::Ptr1 => assert!(val.is_ptr1()),
-                BoxedNanKind::Ptr2 => assert!(val.is_ptr2()),
-                BoxedNanKind::Ptr3 => assert!(val.is_ptr3()),
-                BoxedNanKind::Ptr4 => assert!(val.is_ptr4()),
+                BoxedNanKind::PtrA => assert!(val.is_ptra()),
+                BoxedNanKind::PtrB => assert!(val.is_ptrb()),
+                BoxedNanKind::PtrC => assert!(val.is_ptrc()),
+                BoxedNanKind::PtrD => assert!(val.is_ptrd()),
             }
         }
 
         #[test]
         fn null_roundtrip() {
-            let val = BoxedNan::NULL;
-            check_kind(val);
+            let val: BoxedNan = BoxedNan::NULL;
+            check_kind(&val);
             assert!(val.is_null());
         }
 
         #[proptest]
         fn bool_roundtrip(b: bool) {
-            let val = BoxedNan::bool(b);
-            check_kind(val);
+            let val: BoxedNan = BoxedNan::bool(b);
+            check_kind(&val);
             assert!(val.is_bool());
             assert_eq!(unsafe { val.as_bool_unchecked() }, b);
         }
 
         #[test]
         fn int_roundtrip_example() {
-            let val = BoxedNan::int(-1);
-            check_kind(val);
+            let val: BoxedNan = BoxedNan::int(-1);
+            check_kind(&val);
             assert!(val.is_int());
             assert_eq!(unsafe { val.as_int_unchecked() }, -1);
         }
 
         #[proptest]
         fn int_roundtrip(i: i32) {
-            let val = BoxedNan::int(i);
-            check_kind(val);
+            let val: BoxedNan = BoxedNan::int(i);
+            check_kind(&val);
             assert!(val.is_int());
             assert_eq!(unsafe { val.as_int_unchecked() }, i);
         }
 
         #[proptest]
         fn float_roundtrip(f: f64) {
-            let val = BoxedNan::float(f);
-            check_kind(val);
+            let val: BoxedNan = BoxedNan::float(f);
+            check_kind(&val);
             assert!(val.is_float());
             assert_eq!(unsafe { val.as_float_unchecked() }, f);
         }
 
         #[proptest]
-        fn ptr1_roundtrip(x: Box<usize>) {
-            let ptr = Box::into_raw(x) as *const c_void;
-            let val = BoxedNan::ptr1_from_raw(ptr);
-            check_kind(val);
-            assert!(val.is_ptr1());
-            assert_eq!(unsafe { val.as_ptr1_unchecked() }, ptr);
-            drop(unsafe { Box::from_raw(ptr as *mut usize) });
+        fn ptra_roundtrip(x: Box<usize>) {
+            let val: BoxedNan<_> = BoxedNan::ptra(x.clone());
+            check_kind(&val);
+            assert!(val.is_ptra());
+            assert_eq!(*unsafe { val.as_ref_a_unchecked() }, *x);
+            assert_eq!(unsafe { val.into_ptra_unchecked() }, x);
         }
 
         #[proptest]
-        fn ptr2_roundtrip(x: Box<usize>) {
-            let ptr = Box::into_raw(x) as *const c_void;
-            let val = BoxedNan::ptr2_from_raw(ptr);
-            check_kind(val);
-            assert!(val.is_ptr2());
-            assert_eq!(unsafe { val.as_ptr2_unchecked() }, ptr);
-            drop(unsafe { Box::from_raw(ptr as *mut usize) });
+        fn ptrb_roundtrip(x: Box<usize>) {
+            let val: BoxedNan<NeverPtr, _> = BoxedNan::ptrb(x.clone());
+            check_kind(&val);
+            assert!(val.is_ptrb());
+            assert_eq!(*unsafe { val.as_ref_b_unchecked() }, *x);
+            assert_eq!(unsafe { val.into_ptrb_unchecked() }, x);
         }
 
         #[proptest]
-        fn ptr3_roundtrip(x: Box<usize>) {
-            let ptr = Box::into_raw(x) as *const c_void;
-            let val = BoxedNan::ptr3_from_raw(ptr);
-            check_kind(val);
-            assert!(val.is_ptr3());
-            assert_eq!(unsafe { val.as_ptr3_unchecked() }, ptr);
-            drop(unsafe { Box::from_raw(ptr as *mut usize) });
+        fn ptrc_roundtrip(x: Box<usize>) {
+            let val: BoxedNan<NeverPtr, NeverPtr, _> = BoxedNan::ptrc(x.clone());
+            check_kind(&val);
+            assert!(val.is_ptrc());
+            assert_eq!(*unsafe { val.as_ref_c_unchecked() }, *x);
+            assert_eq!(unsafe { val.into_ptrc_unchecked() }, x);
         }
 
         #[proptest]
-        fn ptr4_roundtrip(x: Box<usize>) {
-            let ptr = Box::into_raw(x) as *const c_void;
-            let val = BoxedNan::ptr4_from_raw(ptr);
-            check_kind(val);
-            assert!(val.is_ptr4());
-            assert_eq!(unsafe { val.as_ptr4_unchecked() }, ptr);
-            drop(unsafe { Box::from_raw(ptr as *mut usize) });
+        fn ptrd_roundtrip(x: Box<usize>) {
+            let val: BoxedNan<NeverPtr, NeverPtr, NeverPtr, _> = BoxedNan::ptrd(x.clone());
+            check_kind(&val);
+            assert!(val.is_ptrd());
+            assert_eq!(*unsafe { val.as_ref_d_unchecked() }, *x);
+            assert_eq!(unsafe { val.into_ptrd_unchecked() }, x);
         }
     }
 }
