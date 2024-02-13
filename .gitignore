@@ -8,3 +8,6 @@ garbage/
 # Ignore Nix result symlinks
 result
 result-*
+# Nix result symlink used by //nix/buildkite
+/nix-buildkite-extra-step-command-script
+/nix-buildkite-extra-step-command-script-*
