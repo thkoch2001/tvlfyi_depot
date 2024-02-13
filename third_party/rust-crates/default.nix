@@ -293,8 +293,8 @@ depot.nix.readTree.drvTargets rec{
 
   libgit2-sys = buildRustCrate {
     pname = "libgit2-sys";
-    version = "0.12.26+1.3.0";
-    sha256 = "15zg0yy7lk7464yf9i1kxh4gaxdyb8m96ayb7vkjgmz1s2rgq7s2";
+    version = "0.16.1+1.7.1";
+    sha256 = "05ci61iw5nqhilxmmdpdc5ra8zpawablh2ap1g0lbgzvzmrdncb0";
     dependencies = [
       libc
       libz-sys
@@ -309,6 +309,7 @@ depot.nix.readTree.drvTargets rec{
       cc
       pkg-config
     ];
+    env.LIBGIT2_NO_VENDOR = "1";
   };
 
   matches = buildRustCrate {
