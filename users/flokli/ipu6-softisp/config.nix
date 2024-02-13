@@ -2,25 +2,15 @@
 
 let
   libcamera = pkgs.libcamera.overrideAttrs (old: {
-    # This is a mix of #281755 (bump pipewire to 0.2.0),
-    # and the additional ipu6-softisp patches.
-    version = "0.2.0";
-    src = pkgs.fetchgit {
-      url = "https://git.libcamera.org/libcamera/libcamera.git";
-      rev = "v0.2.0";
-      hash = "sha256-x0Im9m9MoACJhQKorMI34YQ+/bd62NdAPc2nWwaJAvM=";
-    };
-
     mesonFlags = old.mesonFlags or [ ] ++ [
       "-Dpipelines=simple/simple,ipu3,uvcvideo"
       "-Dipas=simple/simple,ipu3"
     ];
 
-    # Explicitly clear list of patches, as #281755 did.
     # This is
     # https://copr-dist-git.fedorainfracloud.org/cgit/jwrdegoede/ipu6-softisp/libcamera.git/plain/libcamera-0.2.0-softisp.patch?h=f39&id=60e6b3d5e366a360a75942073dc0d642e4900982,
     # but manually piped to git and back, as some renames were not processed properly.
-    patches = [
+    patches = old.patches or [ ] ++ [
       ./libcamera/0001-libcamera-pipeline-simple-fix-size-adjustment-in-val.patch
       ./libcamera/0002-libcamera-internal-Move-dma_heaps.-h-cpp-to-common-d.patch
       ./libcamera/0003-libcamera-dma_heaps-extend-DmaHeap-class-to-support-.patch
@@ -49,19 +39,10 @@ let
     ];
   });
 
-  # compat with libcamera 0.2
-  pipewire' = (pkgs.pipewire.overrideAttrs (old: {
-    patches = old.patches or [ ] ++ [
-      (pkgs.fetchpatch {
-        # https://gitlab.freedesktop.org/pipewire/pipewire/-/merge_requests/1750
-        name = "pipewire-spa-libcamera-use-cameraconfiguration-orientation-pr1750.patch";
-        url = "https://gitlab.freedesktop.org/pipewire/pipewire/-/merge_requests/1750.patch ";
-        hash = "sha256-Ugg913KZDKELnYLwpDEgYh92YPxccw61l6kAJulBbIA=";
-      })
-    ];
-  })).override {
+  # use patched libcamera
+  pipewire' = (pkgs.pipewire..override {
     inherit libcamera;
-  };
+  });
 
   wireplumber' = (pkgs.wireplumber.override {
     pipewire = pipewire';
