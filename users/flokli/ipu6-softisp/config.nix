@@ -72,10 +72,7 @@ in
 
   boot.kernelPatches = [{
     name = "linux-kernel-test.patch";
-    patch = pkgs.fetchurl {
-      url = "https://copr-dist-git.fedorainfracloud.org/cgit/jwrdegoede/ipu6-softisp/kernel.git/plain/linux-kernel-test.patch?h=f39&id=0ed76891b2fc08579d08bedb9294a41840007299";
-      hash = "sha256-8hKP4nltGlkzr8iOgsIUT9Tt5i+x4kdLmw/+lFeNoGQ=";
-    };
+    patch = ./kernel/softisp.patch;
     extraStructuredConfig = {
       # needed for /dev/dma_heap
       DMABUF_HEAPS_CMA = lib.kernel.yes;
