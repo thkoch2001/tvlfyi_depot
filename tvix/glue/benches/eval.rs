@@ -1,6 +1,8 @@
 use criterion::{black_box, criterion_group, criterion_main, Criterion};
 use lazy_static::lazy_static;
 use std::{env, rc::Rc, sync::Arc, time::Duration};
+#[cfg(not(target_env = "msvc"))]
+use tikv_jemallocator::Jemalloc;
 use tvix_build::buildservice::DummyBuildService;
 use tvix_castore::{
     blobservice::{BlobService, MemoryBlobService},
@@ -12,6 +14,10 @@ use tvix_glue::{
     tvix_store_io::TvixStoreIO,
 };
 use tvix_store::pathinfoservice::{MemoryPathInfoService, PathInfoService};
+
+#[cfg(not(target_env = "msvc"))]
+#[global_allocator]
+static GLOBAL: Jemalloc = Jemalloc;
 
 lazy_static! {
     static ref BLOB_SERVICE: Arc<dyn BlobService> = Arc::new(MemoryBlobService::default());
