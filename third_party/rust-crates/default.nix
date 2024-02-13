@@ -4,6 +4,8 @@
 # Intended for manual updates, which makes sure we never actually update.
 
 let
+  inherit (pkgs) fetchpatch;
+
   buildRustCrate =
     attrs@{ edition ? "2018"
     , pname
@@ -74,15 +76,15 @@ depot.nix.readTree.drvTargets rec{
 
   libc = buildRustCrate {
     pname = "libc";
-    version = "0.2.82";
+    version = "0.2.153";
     edition = "2015";
-    sha256 = "02zgn6c0xwh331hky417lbr29kmvrw3ylxs8822syyhjfjqszvsx";
+    sha256 = "1xz1nz9k0vrv7lbir7ma0q4ii9cp3c0s9fbxp6268film2wrxs19";
   };
 
   bitflags = buildRustCrate {
     pname = "bitflags";
-    version = "1.2.1";
-    sha256 = "0b77awhpn7yaqjjibm69ginfn996azx5vkzfjj39g3wbsqs7mkxg";
+    version = "2.4.2";
+    sha256 = "1p370m8qh3clk33rqmyglcphlsq0gpf69j22d61fy4kkmrfn8hbd";
   };
 
   inotify-sys = buildRustCrate {
@@ -94,9 +96,18 @@ depot.nix.readTree.drvTargets rec{
 
   inotify = buildRustCrate {
     pname = "inotify";
-    version = "0.9.2";
+    version = "0.10.2";
+    patches = [
+      # Unreleased compat patch for bitflags >= 2
+      (fetchpatch {
+        name = "inotify-bitflags-2.patch";
+        url = "https://github.com/hannobraun/inotify-rs/commit/f4765593894ef0b36d39739cf3349485ca88b1ce.patch";
+        sha256 = "107r9jai0jdr0hybsvbjyjn23vyk2lp1l1pmznb7jp38my0grh4b";
+        excludes = [ "Cargo.toml" ];
+      })
+    ];
     dependencies = [ bitflags libc inotify-sys ];
-    sha256 = "0fcknyvknglwwk1pdzdlb4m0ry2dym1yx8r5prf2v00pxnjk0hv2";
+    sha256 = "0lqwk7yf6bzc2jzj5iji2p3f29zdpllqd207vgg7jswmg2gqnlqc";
   };
 
   httparse = buildRustCrate {
@@ -204,9 +215,9 @@ depot.nix.readTree.drvTargets rec{
 
   epoll = buildRustCrate {
     pname = "epoll";
-    version = "4.3.1";
+    version = "4.3.3";
     dependencies = [ bitflags libc ];
-    sha256 = "0dgmgdmrfbjkpxn1w3xmmwsm2a623a9qdwn90s8yl78n4a36kbh9";
+    sha256 = "1wc8dsd0dhqgskmkwd82fzqsy2hg0wm3833jxhzxkrwcip25yr3a";
   };
 
   serde = buildRustCrate {
@@ -293,8 +304,8 @@ depot.nix.readTree.drvTargets rec{
 
   libgit2-sys = buildRustCrate {
     pname = "libgit2-sys";
-    version = "0.12.26+1.3.0";
-    sha256 = "15zg0yy7lk7464yf9i1kxh4gaxdyb8m96ayb7vkjgmz1s2rgq7s2";
+    version = "0.16.1+1.7.1";
+    sha256 = "05ci61iw5nqhilxmmdpdc5ra8zpawablh2ap1g0lbgzvzmrdncb0";
     dependencies = [
       libc
       libz-sys
@@ -309,6 +320,7 @@ depot.nix.readTree.drvTargets rec{
       cc
       pkg-config
     ];
+    env.LIBGIT2_NO_VENDOR = "1";
   };
 
   matches = buildRustCrate {
@@ -396,8 +408,8 @@ depot.nix.readTree.drvTargets rec{
   git2 = buildRustCrate {
     pname = "git2";
     edition = "2018";
-    version = "0.13.25";
-    sha256 = "181mw4kxsqrwpib9kf25fykc48wxhjla37vzis4j0b0w0yhyaqi3";
+    version = "0.18.1";
+    sha256 = "1d1wm8cn37svyxgvzfapwilkkc9d2x7fcrgciwn8b2pv9aqz102k";
     dependencies = [
       bitflags
       libc
