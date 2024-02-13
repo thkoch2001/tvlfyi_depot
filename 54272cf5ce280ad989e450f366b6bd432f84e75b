@@ -16,6 +16,24 @@
       "message": "eval failure is due to ci.excluded in `//default.nix`.",
       "revId": "54272cf5ce280ad989e450f366b6bd432f84e75b",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bc566bf3_c49949cb",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2024-02-13T19:11:59Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "151718c9_6bbc620f",
+      "revId": "54272cf5ce280ad989e450f366b6bd432f84e75b",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
