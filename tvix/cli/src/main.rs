@@ -3,6 +3,8 @@ use rustyline::{error::ReadlineError, Editor};
 use std::rc::Rc;
 use std::sync::Arc;
 use std::{fs, path::PathBuf};
+#[cfg(not(target_env = "msvc"))]
+use tikv_jemallocator::Jemalloc;
 use tvix_build::buildservice::DummyBuildService;
 use tvix_eval::builtins::impure_builtins;
 use tvix_eval::observer::{DisassemblingObserver, TracingObserver};
@@ -10,6 +12,10 @@ use tvix_eval::{EvalIO, Value};
 use tvix_glue::tvix_io::TvixIO;
 use tvix_glue::tvix_store_io::TvixStoreIO;
 use tvix_glue::{builtins::add_derivation_builtins, configure_nix_path};
+
+#[cfg(not(target_env = "msvc"))]
+#[global_allocator]
+static GLOBAL: Jemalloc = Jemalloc;
 
 #[derive(Parser)]
 struct Args {
