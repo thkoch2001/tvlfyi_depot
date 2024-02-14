@@ -151,6 +151,41 @@ let
       url = "https://piston-data.mojang.com/v1/objects/8f3112a1049751cc472ec13e397eade5336ca7ae/server.jar";
       sha256 = "0lrzpqd6zjvqh9g2byicgh66n43z0hwzp863r22ifx2hll6s2955";
     };
+    # https://feedback.minecraft.net/hc/en-us/articles/16499677456781-Minecraft-Java-Edition-1-20-Trails-Tales
+    "1.20" = fetchJar {
+      name = "server";
+      version = "1.20";
+      url = "https://piston-data.mojang.com/v1/objects/15c777e2cfe0556eef19aab534b186c0c6f277e1/server.jar";
+      sha256 = "0sym07vqrlbhyxxhlpz73ls0jh0g9qcl4plaa1scx0n1rr1cahgz";
+    };
+    # https://www.minecraft.net/en-us/article/minecraft--java-edition-1-20-1
+    "1.20.1" = fetchJar {
+      pname = "server";
+      version = "1.20.1";
+      url = "https://piston-data.mojang.com/v1/objects/84194a2f286ef7c14ed7ce0090dba59902951553/server.jar";
+      sha256 = "1q3r3c95vkai477r3gsmf2p0pmyl4zfn0qwl8y0y60m1qnfkmxrs";
+    };
+    # https://www.minecraft.net/en-us/article/minecraft-java-edition-1-20-2
+    "1.20.2" = fetchJar {
+      pname = "server";
+      version = "1.20.2";
+      url = "https://piston-data.mojang.com/v1/objects/5b868151bd02b41319f54c8d4061b8cae84e665c/server.jar";
+      sha256 = "1s7ag1p8v0vyzc6a8mjkd3rcf065hjb4avqa3zj4dbb9hn1y9bhx";
+    };
+    # https://www.minecraft.net/en-us/article/minecraft-java-edition-1-20-3
+    "1.20.3" = fetchJar {
+      pname = "server";
+      version = "1.20.3";
+      url = "https://piston-data.mojang.com/v1/objects/4fb536bfd4a83d61cdbaf684b8d311e66e7d4c49/server.jar";
+      sha256 = "1blb2cp1nlm0yr7yjhazj33g0hjlgfawx2v7y16h70pijfz8kv9n";
+    };
+    # https://www.minecraft.net/en-us/article/minecraft-java-edition-1-20-4
+    "1.20.4" = fetchJar {
+      pname = "server";
+      version = "1.20.4";
+      url = "https://piston-data.mojang.com/v1/objects/8dd1a28015f51b1803213892b50b7b4fc76e594d/server.jar";
+      sha256 = "0qykf9a3nacklqsyb30kg9m79nw462la6rf92gsdssdakprscgy0";
+    };
   };
 
   #
