@@ -35,3 +35,6 @@ backup:
 
 open:
 	$$BROWSER "https://www.gws.fyi"
+
+preview:
+	$$BROWSER "$(shell mg build website)/index.html"
