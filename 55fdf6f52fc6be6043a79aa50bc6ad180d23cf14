@@ -18,6 +18,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "8f3726f8_e3504b3c",
+        "filename": "default.nix",
+        "patchSetId": 4
+      },
+      "lineNbr": 61,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2024-02-14T17:49:13Z",
+      "side": 1,
+      "message": "ooops, editor format on save",
+      "parentUuid": "49ed8536_8f0541d5",
+      "revId": "55fdf6f52fc6be6043a79aa50bc6ad180d23cf14",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "d0a270e5_2872fbd7",
@@ -35,6 +53,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "a857dbb2_c8cf7de0",
+        "filename": "ops/machines/whitby/default.nix",
+        "patchSetId": 4
+      },
+      "lineNbr": 60,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2024-02-14T17:49:13Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d0a270e5_2872fbd7",
+      "revId": "55fdf6f52fc6be6043a79aa50bc6ad180d23cf14",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "533682eb_a761c988",
@@ -48,6 +84,24 @@
       "writtenOn": "2024-02-14T00:34:07Z",
       "side": 1,
       "message": "How did these reformats happen?",
+      "revId": "55fdf6f52fc6be6043a79aa50bc6ad180d23cf14",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2f7eda26_e401ebf7",
+        "filename": "ops/secrets/secrets.nix",
+        "patchSetId": 4
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2024-02-14T17:49:13Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "533682eb_a761c988",
       "revId": "55fdf6f52fc6be6043a79aa50bc6ad180d23cf14",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
