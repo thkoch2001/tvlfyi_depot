@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "49ed8536_8f0541d5",
+        "filename": "default.nix",
+        "patchSetId": 4
+      },
+      "lineNbr": 61,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2024-02-14T00:34:07Z",
+      "side": 1,
+      "message": "Also a lot of unrelated reformats in this file.",
+      "revId": "55fdf6f52fc6be6043a79aa50bc6ad180d23cf14",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d0a270e5_2872fbd7",
+        "filename": "ops/machines/whitby/default.nix",
+        "patchSetId": 4
+      },
+      "lineNbr": 60,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2024-02-14T00:34:07Z",
+      "side": 1,
+      "message": "strange reformats also in this file",
+      "revId": "55fdf6f52fc6be6043a79aa50bc6ad180d23cf14",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "533682eb_a761c988",
+        "filename": "ops/secrets/secrets.nix",
+        "patchSetId": 4
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2024-02-14T00:34:07Z",
+      "side": 1,
+      "message": "How did these reformats happen?",
+      "revId": "55fdf6f52fc6be6043a79aa50bc6ad180d23cf14",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
