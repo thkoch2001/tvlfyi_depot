@@ -7,7 +7,7 @@
     services = {
       btrfs.autoScrub = {
         enable = true;
-        interval = lib.mkDefault "daily";
+        interval = lib.mkDefault "*-*-* 03:30:00";
         # gather all btrfs fileSystems, extra ones can be added via the NixOS
         # module merging mechanism, of course.
         fileSystems = lib.concatLists (
