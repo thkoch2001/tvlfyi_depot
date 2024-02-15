@@ -25,7 +25,7 @@
     }
 
     {
-      key = "tvix-update-feb-22";
+      key = "tvix-update-february-24";
       title = "Tvix Status - February '24";
       date = 1707472132;
       content = ./2024-02-tvix-update.md;
