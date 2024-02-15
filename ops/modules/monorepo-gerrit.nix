@@ -101,7 +101,7 @@ in
       # variety of backends.
       auth.type = "OAUTH";
       plugin.gerrit-oauth-provider-keycloak-oauth = {
-        root-url = "https://auth.tvl.fyi";
+        root-url = "https://auth.tvl.fyi/auth";
         realm = "TVL";
         client-id = "gerrit";
         # client-secret is set in /var/lib/gerrit/etc/secure.config.
