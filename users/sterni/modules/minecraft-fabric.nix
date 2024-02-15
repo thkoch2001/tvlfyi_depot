@@ -23,7 +23,7 @@
 #   * Op levels
 #
 # SPDX-License-Identifier: MIT
-# SPDX-FileCopyrightText: 2022-2023 sterni <sternenseemann@systemli.org>
+# SPDX-FileCopyrightText: 2022-2024 sterni <sternenseemann@systemli.org>
 
 { lib, pkgs, config, depot, ... }:
 
@@ -54,9 +54,9 @@ let
   fabricInstallerJar =
     fetchJar rec {
       pname = "fabric-installer";
-      version = "0.11.2";
+      version = "1.0.0";
       url = "https://maven.fabricmc.net/net/fabricmc/fabric-installer/${version}/fabric-installer-${version}.jar";
-      sha256 = "09sw013b385cw1w4n4f89bgsy1n9q90fagmy4xr5laxi3gpmpbf6";
+      sha256 = "0yrlzly1g5a80df27jvrbhxbp10xqxfyk64q0s0j13kz78fmnzkx";
     };
 
   # log4j workaround for Minecraft Server >= 1.12 && < 1.17
