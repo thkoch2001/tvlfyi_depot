@@ -39,6 +39,30 @@
       },
       "revId": "2cb7ca863eb4123b745791619e9599411fc6e27b",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4c19b732_316f7974",
+        "filename": "web/tvl/blog/2024-02-tvix-update.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 221,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2024-02-15T10:20:05Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "15d1f9b6_558a6dbb",
+      "range": {
+        "startLine": 221,
+        "startChar": 31,
+        "endLine": 221,
+        "endChar": 33
+      },
+      "revId": "2cb7ca863eb4123b745791619e9599411fc6e27b",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
