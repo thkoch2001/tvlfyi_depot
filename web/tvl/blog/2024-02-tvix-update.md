@@ -95,7 +95,7 @@ content-addressed systems, as it's a very Nix-specific format.
 
 ### The more granular Tvix model
 After experimenting with some concepts and ideas in Golang, mostly around how to
-improve binary cache performance [^3], both on-disk as well as over the network,
+improve binary cache performance[^3], both on-disk as well as over the network,
 we settled on a more granular, content-addressed and general-purpose format.
 
 Internally, it behaves very similar to how git handles tree objects, except
@@ -138,7 +138,7 @@ storages, as well as on more granular seeking and content-defined chunking for
 blobs.
 
 ### FUSE/virtiofs
-A tvix-store can be mounted via FUSE, or exposed through virtiofs [^4].
+A tvix-store can be mounted via FUSE, or exposed through virtiofs[^4].
 While doing the obvious thing - allowing mounting and browsing the contents
 of the store, this will allow lazy substitution of builds on remote builders, be
 in containerized or virtualized workloads.
@@ -161,7 +161,7 @@ The necessary parsers for NARInfo, signatures etc are also available in the
 ## EvalIO / builtins interacting with the store more closely
 tvix-eval itself is designed to be quite pure when it comes to IO - it doesn't
 do any IO directly on its own, but for the very little IO functionality it
-does as part of "basic interaction with paths"[^2] (like importing other
+does as part of "basic interaction with paths" (like importing other
 `.nix` files), it goes through an `EvalIO` interface, which is provided to the
 Evaluator struct on instantiation.
 
@@ -170,10 +170,10 @@ which becomes interesting for specific store implementations that might not
 expose a POSIX filesystem directly, or targets where we don't have a filesystem
 at all (like WASM).
 
-Using the `EvalIO` trait also allows avoiding the `tvix-eval` crate to get too
-strongly coupled to a specific store implementation, hashing scheme etc [^2].
-As we can extend the set of builtins available to the evaluator with "foreign
-builtins", these can live in other crates.
+Using the `EvalIO` trait also lets `tvix-eval` avoid becoming too strongly
+coupled to a specific store implementation, hashing scheme etc[^2]. As we can
+extend the set of builtins available to the evaluator with "foreign builtins",
+these can live in other crates.
 
 Following this pattern, we started implementing some of the "basic" builtins
 that deal with path access in `tvix-eval`, like:
@@ -198,38 +198,40 @@ remaining changes should land quite soon.
 
 ## Catchables / tryEval
 
-As you may know, Nix has a limited exception system for dealing with
-user-generated errors: `builtins.tryEval` can be used to detect if an expression
-fails (if `builtins.throw` or `assert` are used to generate it). This feature
-requires extra support in any Nix implementation, as errors may not necessarily
-cause the Nix program to abort.
+Nix has a limited exception system for dealing with user-generated errors:
+`builtins.tryEval` can be used to detect if an expression fails (if
+`builtins.throw` or `assert` are used to generate it). This feature requires
+extra support in any Nix implementation, as errors may not necessarily cause the
+Nix program to abort.
 
-The C++ Nix implementation just reuses the C++ language-provided Exception
-system for `builtins.tryEval` which Tvix can't (even if Rust had an equivalent
-system):
+The C++ Nix implementation reuses the C++ language-provided Exception system for
+`builtins.tryEval` which Tvix can't (even if Rust had an equivalent system):
+
 In C++ Nix the runtime representation of the program in execution corresponds
 to the Nix expression tree of the relevant source files. This means that an
 exception raised in C++ code will automatically bubble up correctly since the
 C++ and Nix call stacks are equivalent to each other.
-Tvix compiles the Nix expressions to a byte code program which may be mutated
-by extra optimization rules (for example, we hope to eliminate as many thunks as
-possible in the future). This means that such a correspondence between Nix and
-the (in this case) VM runtime is not guaranteed.
+
+Tvix compiles the Nix expressions to a byte code program which may be mutated by
+extra optimization rules (for example, we hope to eliminate as many thunks as
+possible in the future). This means that such a correspondence between the state
+of the runtime and the original Nix code is not guaranteed.
 
 Previously, `builtins.tryEval` (which is implemented in Rust and can access VM
 internals) just allowed the VM to recover from certain kinds of errors. This
-proved to be insufficient as it [blew up as soon as a `builtins.tryEval`-ed thunk
-is forced again][tryeval-infrec]–extra bookkeeping was needed. As a
-solution, we now store thunk evaluation errors that can be recovered from as
-`Value::Catchable` which mitigates this problem.
+proved to be insufficient as it [blew up as soon as a `builtins.tryEval`-ed
+thunk is forced again][tryeval-infrec] – extra bookkeeping was needed. As a
+solution, we now store recoverable errors as a separate runtime value type.
 
 As you can imagine, storing evaluation failures as "normal" values quickly leads
 to all sorts of bugs because most VM/builtins code is written with only ordinary
 values like attribute sets, strings etc. in mind.
+
 While ironing those out, we made sure to supplement those fixes with as many
 test cases for `builtins.tryEval` as possible. This will hopefully prevent any
 regressions if or rather when we touch this system again. We already have some
-ideas for replacing the `Catchable` value type with a cleaner representation.
+ideas for replacing the `Catchable` value type with a cleaner representation,
+but first we want to pin down all the unspoken behaviour.
 
 ## String contexts
 
@@ -248,12 +250,12 @@ and added support for string contexts into our `NixString` implementation,
 implemented the context-related builtins, and added more unit tests that verify
 string context behaviour of various builtins.
 
-## Strings as bstr
+## Strings as byte strings
 
 C++ Nix uses C-style zero-terminated strings internally - however, until
-recently, Tvix has used Rust `String` and `str` for string values. Since those
-are required to be valid utf-8, we haven't been able to properly represent all
-the string values that Nix supports.
+recently, Tvix has used standard Rust strings for string values. Since those are
+required to be valid UTF-8, we haven't been able to properly represent all the
+string values that Nix supports.
 
 We recently converted our internal representation to byte strings, which allows
 us to treat a `Vec<u8>` as a "string-like" value.
@@ -309,6 +311,7 @@ you run into any snags, or have any questions.
 [^4]: Strictly speaking, not limited to tvix-store - literally anything
       providing a listing into tvix-castore nodes.
 
+[Tvix]:                       https://tvix.dev
 [aterm]:                      http://program-transformation.org/Tools/ATermFormat.html
 [bazel-remote]:               https://github.com/buchgr/bazel-remote/pull/715
 [castore-docs]:               https://cs.tvl.fyi/depot/-/blob/tvix/castore/docs
