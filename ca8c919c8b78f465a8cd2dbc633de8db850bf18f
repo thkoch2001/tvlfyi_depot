@@ -16,6 +16,24 @@
       "message": "might need to regenerate Cargo.nix",
       "revId": "ca8c919c8b78f465a8cd2dbc633de8db850bf18f",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "15f2f17f_494f6848",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-02-16T10:55:43Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4e834a31_5b9bb5ae",
+      "revId": "ca8c919c8b78f465a8cd2dbc633de8db850bf18f",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
