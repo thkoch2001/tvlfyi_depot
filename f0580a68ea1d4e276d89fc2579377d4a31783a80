@@ -52,6 +52,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "f222fd48_149a05e9",
+        "filename": "tvix/tools/weave/src/main.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 170,
+      "author": {
+        "id": 1000005
+      },
+      "writtenOn": "2024-02-16T02:25:07Z",
+      "side": 1,
+      "message": "It\u0027s gone 😊",
+      "parentUuid": "8a8620e5_7906824e",
+      "revId": "f0580a68ea1d4e276d89fc2579377d4a31783a80",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "ae376f20_d1ba9a9f",
