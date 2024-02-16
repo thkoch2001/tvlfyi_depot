@@ -67,6 +67,24 @@
       "message": "SAFETY",
       "revId": "f0580a68ea1d4e276d89fc2579377d4a31783a80",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c2f0273d_ff5613dd",
+        "filename": "tvix/tools/weave/src/main.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 210,
+      "author": {
+        "id": 1000005
+      },
+      "writtenOn": "2024-02-16T02:19:05Z",
+      "side": 1,
+      "message": "Made it safe ^_^",
+      "parentUuid": "ae376f20_d1ba9a9f",
+      "revId": "f0580a68ea1d4e276d89fc2579377d4a31783a80",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
