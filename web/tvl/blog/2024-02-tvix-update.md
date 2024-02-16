@@ -54,7 +54,7 @@ As an interesting side note, in C++ Nix `builtins.derivation` is not actually a
 builtin! It is a piece of [bundled Nix code][nixcpp-builtins-derivation], that
 massages some parameters and then calls the *actual* builtin:
 `derivationStrict`. We've decided to keep this setup, and implemented support in
-in Tvix to have builtins defined in `.nix` source code.
+Tvix to have builtins defined in `.nix` source code.
 
 These builtins return attribute sets with the previously mentioned `outPath` and
 `drvPath` fields. Implementing them correctly meant that we needed to implement
