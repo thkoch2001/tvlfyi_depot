@@ -7,15 +7,12 @@
   ];
 
   config = {
-    # Short link support (i.e. plain http://at) for users with a
-    # configured tvl.fyi/tvl.su search domain.
     services.nginx.virtualHosts."grep.tvl.fyi" = {
       enableACME = true;
       forceSSL = true;
 
       locations."/" = {
-        # experimental: manually run Docker container
-        proxyPass = "http://172.17.0.3:8910";
+        proxyPass = "http://127.0.0.1:${toString config.services.depot.livegrep.port}";
       };
     };
   };
