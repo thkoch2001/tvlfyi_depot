@@ -24,6 +24,30 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "22b707b4_02bdbfe6",
+        "filename": "tvix/nix-compat/src/store_path/mod.rs",
+        "patchSetId": 4
+      },
+      "lineNbr": 446,
+      "author": {
+        "id": 1000097
+      },
+      "writtenOn": "2024-02-17T08:04:46Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "66b4baae_acd69393",
+      "range": {
+        "startLine": 446,
+        "startChar": 83,
+        "endLine": 446,
+        "endChar": 85
+      },
+      "revId": "10140223381032effcaf99033b05e73d554b892d",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "80909c4b_1ce3503d",
@@ -37,6 +61,30 @@
       "writtenOn": "2024-02-17T08:00:08Z",
       "side": 1,
       "message": "two spaces ;-)",
+      "range": {
+        "startLine": 461,
+        "startChar": 24,
+        "endLine": 461,
+        "endChar": 26
+      },
+      "revId": "10140223381032effcaf99033b05e73d554b892d",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f3f1fef4_4e593f7d",
+        "filename": "tvix/nix-compat/src/store_path/mod.rs",
+        "patchSetId": 4
+      },
+      "lineNbr": 461,
+      "author": {
+        "id": 1000097
+      },
+      "writtenOn": "2024-02-17T08:04:46Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "80909c4b_1ce3503d",
       "range": {
         "startLine": 461,
         "startChar": 24,
