@@ -17,6 +17,7 @@ in
     (mod "josh.nix")
     (mod "journaldriver.nix")
     (mod "known-hosts.nix")
+    (mod "livegrep.nix")
     (mod "monorepo-gerrit.nix")
     (mod "owothia.nix")
     (mod "panettone.nix")
@@ -369,6 +370,9 @@ in
   services.depot = {
     # Run a SourceGraph code search instance
     sourcegraph.enable = true;
+
+    # Run a livegrep code search instance
+    livegrep.enable = true;
 
     # Run the Panettone issue tracker
     panettone = {
