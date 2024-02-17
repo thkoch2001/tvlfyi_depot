@@ -33,6 +33,24 @@
       "message": "Want to commit this TODO?",
       "revId": "79f5ba310df3e8ae6c84e005765c9826dc2a3bba",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0c14cd03_72273f9a",
+        "filename": "tvix/glue/src/known_paths.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 150,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-02-17T07:33:16Z",
+      "side": 1,
+      "message": "Oh, no, I indeed added test coverage for this, but forgot to remove the TODO. Fixed, thanks!",
+      "parentUuid": "080e8c85_45659b66",
+      "revId": "79f5ba310df3e8ae6c84e005765c9826dc2a3bba",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
