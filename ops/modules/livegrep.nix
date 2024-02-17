@@ -81,6 +81,23 @@ in
         # TODO(tazjin): docroot with styles etc.
       ];
     };
+
+    systemd.services.livegrep-reindex = {
+      script = "${pkgs.docker}/bin/docker exec livegrep-codesearch /livegrep/bin/livegrep-reload";
+      serviceConfig.Type = "oneshot";
+    };
+
+    systemd.paths.livegrep-reindex = {
+      description = "Executes a livegrep reindex if depot refs change";
+      wantedBy = [ "multi-user.target" ];
+
+      pathConfig = {
+        PathChanged = [
+          "/var/lib/gerrit/git/depot.git/packed-refs"
+          "/var/lib/gerrit/git/depot.git/refs"
+        ];
+      };
+    };
   };
 }
 
