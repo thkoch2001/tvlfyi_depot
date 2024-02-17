@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "63be0273_be87ad0d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000097
+      },
+      "writtenOn": "2024-02-17T07:22:19Z",
+      "side": 1,
+      "message": "LGTM",
+      "revId": "860f466f2b75b309af51127c236ce80146d7cf3a",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "67de941f_b9058a83",
+        "filename": "tvix/glue/src/known_paths.rs",
+        "patchSetId": 8
+      },
+      "lineNbr": 94,
+      "author": {
+        "id": 1000097
+      },
+      "writtenOn": "2024-02-17T07:22:19Z",
+      "side": 1,
+      "message": "You can just use `or_insert`, I think.\n\nhttps://doc.rust-lang.org/std/collections/hash_map/enum.Entry.html#method.or_insert",
+      "revId": "860f466f2b75b309af51127c236ce80146d7cf3a",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
