@@ -16,6 +16,24 @@
       "message": "Optional nitpick: I\u0027d like it better if the first element was first stored in a variable -- that makes it clearer that a tuple is returned and we can give that a name.",
       "revId": "81be6fb05cd82fb9420429c727488522d6d0792f",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6e930e49_3f6990c0",
+        "filename": "tvix/nix-compat/src/derivation/mod.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 187,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-02-17T04:38:35Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3c3fbd87_6b0ebbe7",
+      "revId": "81be6fb05cd82fb9420429c727488522d6d0792f",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
