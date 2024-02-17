@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a63508ce_109eaa99",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000097
+      },
+      "writtenOn": "2024-02-17T07:34:55Z",
+      "side": 1,
+      "message": "One could consider leaving the interface taking StorePathRefs and doing the conversion internally. But this is fine.",
+      "revId": "46776912debe785edde46ddc12f6e907d7fb53fc",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
