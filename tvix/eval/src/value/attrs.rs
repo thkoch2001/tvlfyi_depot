@@ -13,6 +13,7 @@ use imbl::{ordmap, OrdMap};
 use lazy_static::lazy_static;
 use serde::de::{Deserializer, Error, Visitor};
 use serde::Deserialize;
+use tracing::instrument;
 
 use super::string::NixString;
 use super::thunk::ThunkSet;
@@ -199,6 +200,7 @@ impl NixAttrs {
 
     /// Return an attribute set containing the merge of the two
     /// provided sets. Keys from the `other` set have precedence.
+    #[instrument(skip_all)]
     pub fn update(self, other: Self) -> Self {
         // Short-circuit on some optimal cases:
         match (&self.0, &other.0) {
@@ -336,6 +338,7 @@ impl NixAttrs {
 
     /// Implement construction logic of an attribute set, to encapsulate
     /// logic about attribute set optimisations inside of this module.
+    #[instrument(skip(stack_slice))]
     pub fn construct(
         count: usize,
         mut stack_slice: Vec<Value>,
