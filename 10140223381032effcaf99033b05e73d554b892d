@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "66b4baae_acd69393",
+        "filename": "tvix/nix-compat/src/store_path/mod.rs",
+        "patchSetId": 4
+      },
+      "lineNbr": 446,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-02-17T08:00:08Z",
+      "side": 1,
+      "message": "two spaces ;-)",
+      "range": {
+        "startLine": 446,
+        "startChar": 83,
+        "endLine": 446,
+        "endChar": 85
+      },
+      "revId": "10140223381032effcaf99033b05e73d554b892d",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "80909c4b_1ce3503d",
+        "filename": "tvix/nix-compat/src/store_path/mod.rs",
+        "patchSetId": 4
+      },
+      "lineNbr": 461,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-02-17T08:00:08Z",
+      "side": 1,
+      "message": "two spaces ;-)",
+      "range": {
+        "startLine": 461,
+        "startChar": 24,
+        "endLine": 461,
+        "endChar": 26
+      },
+      "revId": "10140223381032effcaf99033b05e73d554b892d",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
