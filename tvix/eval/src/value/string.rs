@@ -10,6 +10,7 @@ use std::collections::HashSet;
 use std::fmt::Display;
 use std::hash::Hash;
 use std::ops::Deref;
+use tracing::instrument;
 
 use serde::de::{Deserializer, Visitor};
 use serde::{Deserialize, Serialize};
@@ -405,6 +406,7 @@ impl NixString {
         }
     }
 
+    #[instrument(skip_all)]
     pub fn concat(&self, other: &Self) -> Self {
         let mut s = self.to_vec();
         s.extend(&(***other));

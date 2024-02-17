@@ -16,6 +16,7 @@ use bstr::{BString, ByteSlice, ByteVec};
 use codemap::Span;
 use serde_json::json;
 use std::{cmp::Ordering, collections::HashMap, ops::DerefMut, path::PathBuf, rc::Rc};
+use tracing::instrument;
 
 use crate::{
     arithmetic_op,
@@ -358,6 +359,8 @@ where
 
     /// Run the VM's primary (outer) execution loop, continuing execution based
     /// on the current frame at the top of the frame stack.
+
+    #[instrument(skip(self))]
     fn execute(mut self) -> EvalResult<RuntimeResult> {
         while let Some(frame) = self.frames.pop() {
             self.reasonable_span = frame.span();
@@ -434,6 +437,7 @@ where
     ///
     /// The return value indicates whether the bytecode has been executed to
     /// completion, or whether it has been suspended in favour of a generator.
+    #[instrument(skip(self, span, frame))]
     fn execute_bytecode(&mut self, span: LightSpan, mut frame: CallFrame) -> EvalResult<bool> {
         loop {
             let op = frame.inc_ip();
@@ -1009,6 +1013,7 @@ where
     ///
     /// Due to this, once control flow exits this function, the generator will
     /// automatically be run by the VM.
+    #[instrument(skip_all, fields(builtin.name=builtin.name()))]
     fn call_builtin(&mut self, span: LightSpan, mut builtin: Builtin) -> EvalResult<()> {
         let builtin_name = builtin.name();
         self.observer.observe_enter_builtin(builtin_name);
@@ -1311,6 +1316,7 @@ async fn final_deep_force(co: GenCo) -> Result<Value, ErrorKind> {
     Ok(generators::request_deep_force(&co, value).await)
 }
 
+#[instrument(skip_all)]
 pub fn run_lambda<IO>(
     nix_search_path: NixSearchPath,
     io_handle: IO,
