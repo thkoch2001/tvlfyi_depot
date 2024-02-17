@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "257cfed0_2d6d0cd4",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000097
+      },
+      "writtenOn": "2024-02-17T07:31:17Z",
+      "side": 1,
+      "message": "LGTM!",
+      "revId": "79f5ba310df3e8ae6c84e005765c9826dc2a3bba",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "080e8c85_45659b66",
+        "filename": "tvix/glue/src/known_paths.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 150,
+      "author": {
+        "id": 1000097
+      },
+      "writtenOn": "2024-02-17T07:31:17Z",
+      "side": 1,
+      "message": "Want to commit this TODO?",
+      "revId": "79f5ba310df3e8ae6c84e005765c9826dc2a3bba",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
