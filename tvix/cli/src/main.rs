@@ -222,11 +222,13 @@ fn main() {
     // configure log settings
     let level = args.log_level.unwrap_or(Level::INFO);
 
-    let subscriber = tracing_subscriber::registry().with(
-        tracing_subscriber::fmt::Layer::new()
-            .with_writer(std::io::stderr.with_max_level(level))
-            .pretty(),
-    );
+    let subscriber = tracing_subscriber::registry()
+        .with(
+            tracing_subscriber::fmt::Layer::new()
+                .with_writer(std::io::stderr.with_max_level(level))
+                .pretty(),
+        )
+        .with(tracing_tracy::TracyLayer::default());
     subscriber
         .try_init()
         .expect("unable to set up tracing subscriber");
