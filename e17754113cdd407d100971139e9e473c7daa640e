@@ -16,6 +16,24 @@
       "message": "depotfmt",
       "revId": "e17754113cdd407d100971139e9e473c7daa640e",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cbf15dca_758fefbd",
+        "filename": "tvix/nix-compat/src/derivation/mod.rs",
+        "patchSetId": 4
+      },
+      "lineNbr": 56,
+      "author": {
+        "id": 1000097
+      },
+      "writtenOn": "2024-02-17T07:25:18Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b541e833_8fdef476",
+      "revId": "e17754113cdd407d100971139e9e473c7daa640e",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
