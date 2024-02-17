@@ -1,0 +1,113 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "79a6c89b_c9873a03",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-02-17T06:50:15Z",
+      "side": 1,
+      "message": "completely",
+      "range": {
+        "startLine": 9,
+        "startChar": 26,
+        "endLine": 9,
+        "endChar": 34
+      },
+      "revId": "b32b17b3d3d8286cd21de73d7e40f800098aab19",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "207b1e5f_1066c278",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-02-17T06:50:15Z",
+      "side": 1,
+      "message": "as ?",
+      "range": {
+        "startLine": 15,
+        "startChar": 37,
+        "endLine": 15,
+        "endChar": 39
+      },
+      "revId": "b32b17b3d3d8286cd21de73d7e40f800098aab19",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "55540a27_d1f2879c",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-02-17T06:50:15Z",
+      "side": 1,
+      "message": "Derivation",
+      "range": {
+        "startLine": 15,
+        "startChar": 95,
+        "endLine": 15,
+        "endChar": 105
+      },
+      "revId": "b32b17b3d3d8286cd21de73d7e40f800098aab19",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "02741826_0c541c1b",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-02-17T06:50:15Z",
+      "side": 1,
+      "message": "Derivation",
+      "range": {
+        "startLine": 16,
+        "startChar": 33,
+        "endLine": 16,
+        "endChar": 43
+      },
+      "revId": "b32b17b3d3d8286cd21de73d7e40f800098aab19",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b47c976d_19059f12",
+        "filename": "tvix/nix-compat/src/derivation/mod.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 55,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-02-17T06:50:15Z",
+      "side": 1,
+      "message": "newline",
+      "revId": "b32b17b3d3d8286cd21de73d7e40f800098aab19",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
