@@ -16,6 +16,7 @@ use bstr::{BString, ByteSlice, ByteVec};
 use codemap::Span;
 use serde_json::json;
 use std::{cmp::Ordering, collections::HashMap, ops::DerefMut, path::PathBuf, rc::Rc};
+use tracing::instrument;
 
 use crate::{
     arithmetic_op,
@@ -358,6 +359,8 @@ where
 
     /// Run the VM's primary (outer) execution loop, continuing execution based
     /// on the current frame at the top of the frame stack.
+
+    #[instrument(skip(self), level = "trace")]
     fn execute(mut self) -> EvalResult<RuntimeResult> {
         while let Some(frame) = self.frames.pop() {
             self.reasonable_span = frame.span();
@@ -434,6 +437,7 @@ where
     ///
     /// The return value indicates whether the bytecode has been executed to
     /// completion, or whether it has been suspended in favour of a generator.
+    #[instrument(skip(self, span, frame), level = "trace")]
     fn execute_bytecode(&mut self, span: LightSpan, mut frame: CallFrame) -> EvalResult<bool> {
         loop {
             let op = frame.inc_ip();
@@ -930,6 +934,7 @@ where
         &self.stack[self.stack.len() - 1 - offset]
     }
 
+    #[instrument(skip(self, frame), level = "trace")]
     fn run_attrset(&mut self, frame: &CallFrame, count: usize) -> EvalResult<()> {
         let attrs = NixAttrs::construct(count, self.stack.split_off(self.stack.len() - count * 2))
             .with_span(frame, self)?
@@ -1009,6 +1014,7 @@ where
     ///
     /// Due to this, once control flow exits this function, the generator will
     /// automatically be run by the VM.
+    #[instrument(skip_all, fields(builtin.name=builtin.name()), level = "trace")]
     fn call_builtin(&mut self, span: LightSpan, mut builtin: Builtin) -> EvalResult<()> {
         let builtin_name = builtin.name();
         self.observer.observe_enter_builtin(builtin_name);
@@ -1311,6 +1317,7 @@ async fn final_deep_force(co: GenCo) -> Result<Value, ErrorKind> {
     Ok(generators::request_deep_force(&co, value).await)
 }
 
+#[instrument(skip_all, level = "trace")]
 pub fn run_lambda<IO>(
     nix_search_path: NixSearchPath,
     io_handle: IO,

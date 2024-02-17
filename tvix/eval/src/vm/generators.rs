@@ -258,6 +258,7 @@ where
     ///
     /// The return value indicates whether the generator has completed (true),
     /// or was suspended (false).
+    #[instrument(skip(self, span, state, generator, initial_message), level = "trace")]
     pub(crate) fn run_generator(
         &mut self,
         name: &'static str,
