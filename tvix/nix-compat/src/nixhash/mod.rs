@@ -1,5 +1,6 @@
 use crate::nixbase32;
 use data_encoding::{BASE64, BASE64_NOPAD, HEXLOWER};
+use std::cmp::Ordering;
 use thiserror;
 
 mod algos;
@@ -15,6 +16,25 @@ pub enum NixHash {
     Sha1([u8; 20]),
     Sha256([u8; 32]),
     Sha512(Box<[u8; 64]>),
+}
+
+// This effects the ordering in BTreeMaps which in
+// turn affect ATerm serialization which in turn
+// affects output hashes.
+//
+// The original implementation sorted the resulting hex
+// strings -- this results in the same order.
+impl Ord for NixHash {
+    fn cmp(&self, other: &NixHash) -> Ordering {
+        self.digest_as_bytes().cmp(other.digest_as_bytes())
+    }
+}
+
+// See Ord for reason to implement this manually.
+impl PartialOrd for NixHash {
+    fn partial_cmp(&self, other: &NixHash) -> Option<Ordering> {
+        self.digest_as_bytes().partial_cmp(other.digest_as_bytes())
+    }
 }
 
 /// convenience Result type for all nixhash parsing Results.
@@ -61,11 +81,7 @@ impl NixHash {
     /// Formats a [NixHash] in the Nix default hash format,
     /// which is the algo, followed by a colon, then the lower hex encoded digest.
     pub fn to_nix_hex_string(&self) -> String {
-        format!(
-            "{}:{}",
-            self.algo(),
-            HEXLOWER.encode(self.digest_as_bytes())
-        )
+        format!("{}:{}", self.algo(), self.to_plain_hex_string())
     }
 
     /// Formats a [NixHash] in the format that's used inside CAHash,
@@ -76,6 +92,11 @@ impl NixHash {
             self.algo(),
             nixbase32::encode(self.digest_as_bytes())
         )
+    }
+
+    /// Returns the digest as a hex string -- without any algorithm prefix.
+    pub fn to_plain_hex_string(&self) -> String {
+        HEXLOWER.encode(self.digest_as_bytes())
     }
 }
 
