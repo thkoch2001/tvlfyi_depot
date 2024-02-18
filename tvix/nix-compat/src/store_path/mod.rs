@@ -91,6 +91,15 @@ impl FromStr for StorePath {
     }
 }
 
+impl TryFrom<String> for StorePath {
+    type Error = Error;
+    fn try_from(str: String) -> Result<StorePath, Error> {
+        let stripped: Option<&str> = str.strip_prefix(STORE_DIR_WITH_SLASH);
+        let stripped: &str = stripped.ok_or(Error::MissingStoreDir)?;
+        StorePath::from_bytes(stripped.as_bytes())
+    }
+}
+
 impl StorePath {
     /// Construct a [StorePath] by passing the `$digest-$name` string
     /// that comes after [STORE_DIR_WITH_SLASH].
@@ -257,6 +266,15 @@ impl<'de> Deserialize<'de> for StorePathRef<'de> {
         StorePathRef::from_bytes(stripped.as_bytes()).map_err(|_| {
             serde::de::Error::invalid_value(serde::de::Unexpected::Str(string), &"StorePath")
         })
+    }
+}
+
+impl<'a> TryFrom<&'a str> for StorePathRef<'a> {
+    type Error = Error;
+    fn try_from(str: &'a str) -> Result<StorePathRef<'a>, Error> {
+        let stripped: Option<&str> = str.strip_prefix(STORE_DIR_WITH_SLASH);
+        let stripped: &str = stripped.ok_or(Error::MissingStoreDir)?;
+        StorePathRef::from_bytes(stripped.as_bytes())
     }
 }
 
