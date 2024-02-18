@@ -138,12 +138,6 @@ impl TvixStoreIO {
                 let input_nodes: BTreeSet<Node> =
                     futures::stream::iter(drv.input_derivations.iter())
                         .map(|(input_drv_path, output_names)| {
-                            // since Derivation is validated, we know this can be parsed.
-                            let input_drv_path =
-                                StorePathRef::from_absolute_path(input_drv_path.as_bytes())
-                                    .expect("invalid drv path")
-                                    .to_owned();
-
                             // look up the derivation object
                             let input_drv = {
                                 let known_paths = self.known_paths.borrow();

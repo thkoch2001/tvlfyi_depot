@@ -22,6 +22,8 @@ pub use crate::nixhash::{CAHash, NixHash};
 pub use errors::{DerivationError, OutputError};
 pub use output::Output;
 
+use self::write::AtomWriteable;
+
 #[derive(Clone, Debug, Default, Eq, PartialEq, Serialize, Deserialize)]
 pub struct Derivation {
     #[serde(rename = "args")]
@@ -34,7 +36,7 @@ pub struct Derivation {
 
     /// Map from drv path to output names used from this derivation.
     #[serde(rename = "inputDrvs")]
-    pub input_derivations: BTreeMap<String, BTreeSet<String>>,
+    pub input_derivations: BTreeMap<StorePath, BTreeSet<String>>,
 
     /// Plain store paths of additional inputs.
     #[serde(rename = "inputSrcs")]
@@ -58,7 +60,7 @@ impl Derivation {
     fn serialize_with_replacements(
         &self,
         writer: &mut impl std::io::Write,
-        input_derivations: &BTreeMap<String, BTreeSet<String>>,
+        input_derivations: &BTreeMap<impl AtomWriteable, BTreeSet<String>>,
     ) -> Result<(), io::Error> {
         use write::*;
 
@@ -98,7 +100,7 @@ impl Derivation {
     /// Like `to_aterm_bytes` but allow input_derivation replacements for hashing.
     fn to_aterm_bytes_with_replacements(
         &self,
-        input_derivations: &BTreeMap<String, BTreeSet<String>>,
+        input_derivations: &BTreeMap<impl AtomWriteable, BTreeSet<String>>,
     ) -> Vec<u8> {
         let mut buffer: Vec<u8> = Vec::new();
 
@@ -131,8 +133,11 @@ impl Derivation {
         // into a (sorted, guaranteed by BTreeSet) list of references
         let references: BTreeSet<String> = {
             let mut inputs = self.input_sources.clone();
-            let input_derivation_keys: Vec<String> =
-                self.input_derivations.keys().cloned().collect();
+            let input_derivation_keys: Vec<String> = self
+                .input_derivations
+                .keys()
+                .map(|k| k.to_absolute_path())
+                .collect();
             inputs.extend(input_derivation_keys);
             inputs
         };
@@ -197,15 +202,10 @@ impl Derivation {
             // derivation_or_fod_hash, and replace the derivation path with
             // it's HEXLOWER digest.
             let input_derivations = BTreeMap::from_iter(self.input_derivations.iter().map(
-                |(drv_path_str, output_names)| {
-                    // parse drv_path to StorePathRef
-                    let drv_path = StorePathRef::from_absolute_path(drv_path_str.as_bytes())
-                        .expect("invalid input derivation path");
+                |(drv_path, output_names)| {
+                    let hash = fn_get_derivation_or_fod_hash(&drv_path.into());
 
-                    let encoded_hash = data_encoding::HEXLOWER
-                        .encode(fn_get_derivation_or_fod_hash(&drv_path).digest_as_bytes());
-
-                    (encoded_hash, output_names.to_owned())
+                    (hash, output_names.to_owned())
                 },
             ));
 
