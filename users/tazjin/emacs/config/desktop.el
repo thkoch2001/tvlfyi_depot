@@ -197,9 +197,8 @@ the back&forth behaviour of i3."
 (push ?\C-\\ exwm-input-prefix-keys)
 
 ;; Line-editing shortcuts
-(exwm-input-set-simulation-keys
- '(([?\C-d] . delete)
-   ([?\C-w] . ?\C-c)))
+(exwm-input-set-simulation-key (kbd "C-d") (kbd "DEL"))
+(exwm-input-set-simulation-key (kbd "C-w") (kbd "C-c"))
 
 ;; Show time & battery status in the mode line
 (display-time-mode)
