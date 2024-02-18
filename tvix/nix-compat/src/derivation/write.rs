@@ -5,6 +5,8 @@
 
 use crate::aterm::escape_bytes;
 use crate::derivation::{ca_kind_prefix, output::Output};
+use crate::nixbase32;
+use crate::store_path::{StorePath, STORE_DIR_WITH_SLASH};
 use bstr::BString;
 use std::{
     collections::{BTreeMap, BTreeSet},
@@ -13,6 +15,8 @@ use std::{
     io::Write,
 };
 
+use super::NixHash;
+
 pub const DERIVATION_PREFIX: &str = "Derive";
 pub const PAREN_OPEN: char = '(';
 pub const PAREN_CLOSE: char = ')';
@@ -20,6 +24,38 @@ pub const BRACKET_OPEN: char = '[';
 pub const BRACKET_CLOSE: char = ']';
 pub const COMMA: char = ',';
 pub const QUOTE: char = '"';
+
+/// Something that can be written as atom.
+///
+/// Note that we mostly use explicit `write_*` calls
+/// instead since the serialization of the items depends on
+/// the context a lot.
+pub(crate) trait AtomWriteable {
+    fn atom_write(&self, writer: &mut impl Write) -> std::io::Result<()>;
+}
+
+impl AtomWriteable for StorePath {
+    fn atom_write(&self, writer: &mut impl Write) -> std::io::Result<()> {
+        write_char(writer, QUOTE)?;
+        writer.write_all(STORE_DIR_WITH_SLASH.as_bytes())?;
+        writer.write_all(nixbase32::encode(self.digest()).as_bytes())?;
+        write_char(writer, '-')?;
+        writer.write_all(self.name().as_bytes())?;
+        write_char(writer, QUOTE)?;
+        Ok(())
+    }
+}
+
+impl AtomWriteable for NixHash {
+    fn atom_write(&self, writer: &mut impl Write) -> std::io::Result<()> {
+        write_field(writer, self.to_plain_hex_string(), false)?;
+        Ok(())
+    }
+}
+
+/// An unescaped atom field.
+#[derive(Debug, Clone, PartialOrd, Ord, PartialEq, Eq, Hash)]
+struct Unescaped(String);
 
 // Writes a character to the writer.
 pub(crate) fn write_char(writer: &mut impl Write, c: char) -> io::Result<()> {
@@ -65,7 +101,7 @@ fn write_array_elements<S: AsRef<[u8]>>(
     Ok(())
 }
 
-pub fn write_outputs(
+pub(crate) fn write_outputs(
     writer: &mut impl Write,
     outputs: &BTreeMap<String, Output>,
 ) -> Result<(), io::Error> {
@@ -99,9 +135,9 @@ pub fn write_outputs(
     Ok(())
 }
 
-pub fn write_input_derivations(
+pub(crate) fn write_input_derivations(
     writer: &mut impl Write,
-    input_derivations: &BTreeMap<String, BTreeSet<String>>,
+    input_derivations: &BTreeMap<impl AtomWriteable, BTreeSet<String>>,
 ) -> Result<(), io::Error> {
     write_char(writer, BRACKET_OPEN)?;
 
@@ -111,7 +147,7 @@ pub fn write_input_derivations(
         }
 
         write_char(writer, PAREN_OPEN)?;
-        write_field(writer, input_derivation.as_str(), false)?;
+        input_derivation.atom_write(writer)?;
         write_char(writer, COMMA)?;
 
         write_char(writer, BRACKET_OPEN)?;
@@ -132,7 +168,7 @@ pub fn write_input_derivations(
     Ok(())
 }
 
-pub fn write_input_sources(
+pub(crate) fn write_input_sources(
     writer: &mut impl Write,
     input_sources: &BTreeSet<String>,
 ) -> Result<(), io::Error> {
@@ -146,17 +182,20 @@ pub fn write_input_sources(
     Ok(())
 }
 
-pub fn write_system(writer: &mut impl Write, platform: &str) -> Result<(), Error> {
+pub(crate) fn write_system(writer: &mut impl Write, platform: &str) -> Result<(), Error> {
     write_field(writer, platform, true)?;
     Ok(())
 }
 
-pub fn write_builder(writer: &mut impl Write, builder: &str) -> Result<(), Error> {
+pub(crate) fn write_builder(writer: &mut impl Write, builder: &str) -> Result<(), Error> {
     write_field(writer, builder, true)?;
     Ok(())
 }
 
-pub fn write_arguments(writer: &mut impl Write, arguments: &[String]) -> Result<(), io::Error> {
+pub(crate) fn write_arguments(
+    writer: &mut impl Write,
+    arguments: &[String],
+) -> Result<(), io::Error> {
     write_char(writer, BRACKET_OPEN)?;
     write_array_elements(
         writer,
@@ -170,7 +209,10 @@ pub fn write_arguments(writer: &mut impl Write, arguments: &[String]) -> Result<
     Ok(())
 }
 
-pub fn write_environment<E, K, V>(writer: &mut impl Write, environment: E) -> Result<(), io::Error>
+pub(crate) fn write_environment<E, K, V>(
+    writer: &mut impl Write,
+    environment: E,
+) -> Result<(), io::Error>
 where
     E: IntoIterator<Item = (K, V)>,
     K: AsRef<[u8]>,
