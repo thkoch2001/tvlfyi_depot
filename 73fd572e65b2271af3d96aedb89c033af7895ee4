@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8990b35a_3b08d401",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-02-18T08:24:00Z",
+      "side": 1,
+      "message": "makes?",
+      "range": {
+        "startLine": 9,
+        "startChar": 5,
+        "endLine": 9,
+        "endChar": 10
+      },
+      "revId": "73fd572e65b2271af3d96aedb89c033af7895ee4",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4e130cec_2dc6b998",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-02-18T08:24:00Z",
+      "side": 1,
+      "message": "There\u0027s some callsites already, mostly in the test setup. It might make sense to update this in this CL, to see if it actually helps there (or not).",
+      "revId": "73fd572e65b2271af3d96aedb89c033af7895ee4",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
