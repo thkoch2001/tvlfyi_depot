@@ -9,26 +9,18 @@ let
     let
       good = upperChars ++ lowerChars ++ stringToCharacters "0123456789-_";
       subst = c: if any (x: x == c) good then c else "-";
-    in
-    stringAsChars subst name;
+    in stringAsChars subst name;
 
   accounts = {
     personal = {
       primary = true;
       address = "root@gws.fyi";
-      aliases = [ "grfn@gws.fyi" ];
+      aliases = [ "grfn@gws.fyi" "aspen@gws.fyi" ];
       passEntry = "root-gws-msmtp";
     };
-
-    work = {
-      address = "aspen@readyset.io";
-      passEntry = "readyset/msmtp";
-    };
-
   };
 
-in
-{
+in {
   # 2022-09-26: workaround for home-manager defaulting to removed pkgs.gmailieer
   # attribute, can likely be removed soon
   programs.lieer.package = pkgs.lieer;
@@ -44,31 +36,22 @@ in
     config.lib.depot.users.aspen.pkgs.notmuch-extract-patch
   ];
 
-  systemd.user.services = mapAttrs'
-    (name: account: {
-      name = escapeUnitName "lieer-${name}";
-      value.Service = {
-        ExecStart = mkForce "${pkgs.writeShellScript "sync-${name}" ''
+  systemd.user.services = mapAttrs' (name: account: {
+    name = escapeUnitName "lieer-${name}";
+    value.Service = {
+      ExecStart = mkForce "${pkgs.writeShellScript "sync-${name}" ''
         ${pkgs.lieer}/bin/gmi sync --path ~/mail/${name}
       ''}";
-        Environment = "NOTMUCH_CONFIG=${config.home.sessionVariables.NOTMUCH_CONFIG}";
-      };
+      Environment =
+        "NOTMUCH_CONFIG=${config.home.sessionVariables.NOTMUCH_CONFIG}";
+    };
 
-    })
-    accounts;
-
-  # xdg.configFile."notifymuch/notifymuch.cfg".text = generators.toINI {} {
-  #   notifymuch = {
-  #     query = "is:unread and is:important";
-  #     mail_client = "";
-  #     recency_interval_hours = "48";
-  #     hidden_tags = "inbox unread attachment replied sent encrypted signed";
-  #   };
-  # };
+  }) accounts;
 
   accounts.email.maildirBasePath = "mail";
-  accounts.email.accounts = mapAttrs
-    (_: params@{ passEntry, ... }: {
+  accounts.email.accounts = mapAttrs (_:
+    params@{ passEntry, ... }:
+    {
       realName = "Aspen Smith";
       passwordCommand = "pass ${passEntry}";
 
@@ -93,6 +76,5 @@ in
         };
       };
       msmtp.enable = true;
-    } // builtins.removeAttrs params [ "passEntry" ])
-    accounts;
+    } // builtins.removeAttrs params [ "passEntry" ]) accounts;
 }
