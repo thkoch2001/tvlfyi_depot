@@ -7,6 +7,7 @@ use crate::tvix_store_io::TvixStoreIO;
 mod derivation;
 mod derivation_error;
 mod fetchers;
+mod utils;
 
 pub use derivation_error::Error as DerivationError;
 

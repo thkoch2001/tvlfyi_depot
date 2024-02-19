@@ -29,7 +29,7 @@ pub enum Error {
     #[error("Dash is missing between hash and name")]
     MissingDash,
     #[error("Hash encoding is invalid: {0}")]
-    InvalidHashEncoding(DecodeError),
+    InvalidHashEncoding(#[from] DecodeError),
     #[error("Invalid length")]
     InvalidLength,
     #[error(
@@ -159,7 +159,7 @@ impl Serialize for StorePath {
 /// Like [StorePath], but without a heap allocation for the name.
 /// Used by [StorePath] for parsing.
 ///
-#[derive(Debug, Eq, PartialEq)]
+#[derive(Debug, Eq, PartialEq, Clone, Copy)]
 pub struct StorePathRef<'a> {
     digest: [u8; DIGEST_SIZE],
     name: &'a str,
@@ -220,8 +220,7 @@ impl<'a> StorePathRef<'a> {
             Err(Error::InvalidLength)?
         }
 
-        let digest = nixbase32::decode_fixed(&s[..ENCODED_DIGEST_SIZE])
-            .map_err(Error::InvalidHashEncoding)?;
+        let digest = nixbase32::decode_fixed(&s[..ENCODED_DIGEST_SIZE])?;
 
         if s[ENCODED_DIGEST_SIZE] != b'-' {
             return Err(Error::MissingDash);
