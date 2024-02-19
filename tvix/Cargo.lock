@@ -1049,6 +1049,12 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "5d3d0e0f38255e7fa3cf31335b3a56f05febd18025f4db5ef7a0cfb4f8da651f"
 
 [[package]]
+name = "hex"
+version = "0.4.3"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "7f24254aa9a54b5c858eaee2f5bccdb46aaf0e486a595ed5fd8f86ba55232a70"
+
+[[package]]
 name = "hex-literal"
 version = "0.4.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1547,6 +1553,7 @@ dependencies = [
  "futures",
  "futures-util",
  "glob",
+ "hex",
  "hex-literal",
  "lazy_static",
  "nom",
@@ -3396,6 +3403,7 @@ dependencies = [
  "nix 0.27.1",
  "nix-compat",
  "pretty_assertions",
+ "reqwest",
  "rstest",
  "serde",
  "serde_json",
