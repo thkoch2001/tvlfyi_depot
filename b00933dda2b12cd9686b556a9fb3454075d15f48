@@ -34,6 +34,24 @@
       "parentUuid": "89486b0e_4384e66c",
       "revId": "b00933dda2b12cd9686b556a9fb3454075d15f48",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3dce6f72_78f14381",
+        "filename": "tvix/nix-compat/src/nixhash/mod.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1000097
+      },
+      "writtenOn": "2024-02-19T17:21:39Z",
+      "side": 1,
+      "message": "This should really be in another CL, admittedly.\n\nNow I get why you are confused ;)\n\nMoved it.",
+      "parentUuid": "1ea7335f_af98abf8",
+      "revId": "b00933dda2b12cd9686b556a9fb3454075d15f48",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
