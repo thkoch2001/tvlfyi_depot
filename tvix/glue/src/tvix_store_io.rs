@@ -14,7 +14,7 @@ use std::{
     path::{Path, PathBuf},
     sync::Arc,
 };
-use tokio::io::AsyncReadExt;
+use tokio::io::{AsyncReadExt, AsyncWriteExt};
 use tracing::{error, instrument, warn, Level};
 use tvix_build::buildservice::BuildService;
 use tvix_eval::{EvalIO, FileType, StdIO};
@@ -22,7 +22,7 @@ use tvix_eval::{EvalIO, FileType, StdIO};
 use tvix_castore::{
     blobservice::BlobService,
     directoryservice::{self, DirectoryService},
-    proto::{node::Node, NamedNode},
+    proto::{node::Node, FileNode, NamedNode},
     B3Digest,
 };
 use tvix_store::{pathinfoservice::PathInfoService, proto::PathInfo};
@@ -53,6 +53,7 @@ pub struct TvixStoreIO {
     #[allow(dead_code)]
     build_service: Arc<dyn BuildService>,
     tokio_handle: tokio::runtime::Handle,
+    http_client: reqwest::blocking::Client,
     pub(crate) known_paths: RefCell<KnownPaths>,
 }
 
@@ -71,8 +72,13 @@ impl TvixStoreIO {
             std_io: StdIO {},
             build_service,
             tokio_handle,
+            http_client: reqwest::blocking::Client::new(),
             known_paths: Default::default(),
         }
+    }
+
+    pub fn http(&self) -> &reqwest::blocking::Client {
+        &self.http_client
     }
 
     /// for a given [StorePath] and additional [Path] inside the store path,
@@ -281,6 +287,57 @@ impl TvixStoreIO {
     ) -> io::Result<Option<Node>> {
         self.tokio_handle
             .block_on(async { self.store_path_to_node(store_path, sub_path).await })
+    }
+
+    pub async fn store_path_exists(&self, store_path: StorePathRef<'_>) -> io::Result<bool> {
+        Ok(self
+            .path_info_service
+            .as_ref()
+            .get(*store_path.digest())
+            .await?
+            .is_some())
+    }
+
+    pub async fn import_bytes_to_file(
+        &self,
+        path: StorePathRef<'_>,
+        data: Bytes,
+        hash: Option<CAHash>,
+    ) -> io::Result<()> {
+        let mut blob = self.blob_service.open_write().await;
+        blob.write_all(&data).await?;
+        let digest = blob.close().await?;
+
+        let node = Node::File(FileNode {
+            name: path.to_string().into(),
+            digest: digest.into(),
+            size: data.len() as _,
+            executable: false,
+        });
+
+        let (nar_size, nar_sha256) = self.path_info_service.calculate_nar(&node).await?;
+
+        let path_info = PathInfo {
+            node: Some(tvix_castore::proto::Node {
+                node: Some(node.clone()),
+            }),
+            references: vec![],
+            narinfo: Some(tvix_store::proto::NarInfo {
+                nar_size,
+                nar_sha256: nar_sha256.to_vec().into(),
+                signatures: vec![],
+                reference_names: vec![],
+                deriver: None, /* ? */
+                ca: hash.as_ref().map(Into::into),
+            }),
+        };
+
+        self.path_info_service
+            .put(path_info)
+            .await
+            .map_err(|e| std::io::Error::new(io::ErrorKind::Other, e))?;
+
+        Ok(())
     }
 }
 
