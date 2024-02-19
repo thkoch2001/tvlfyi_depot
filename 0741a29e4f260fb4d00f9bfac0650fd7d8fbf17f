@@ -72,6 +72,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "33f10d7f_e09a6638",
+        "filename": "tvix/glue/src/builtins/fetchers.rs",
+        "patchSetId": 3
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-02-19T16:33:59Z",
+      "side": 1,
+      "message": "ouch, but the others don\u0027t? oO Well, let\u0027s leave it for later then.",
+      "parentUuid": "d3ef80f5_17f670d8",
+      "revId": "0741a29e4f260fb4d00f9bfac0650fd7d8fbf17f",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "91135b30_b2c50737",
