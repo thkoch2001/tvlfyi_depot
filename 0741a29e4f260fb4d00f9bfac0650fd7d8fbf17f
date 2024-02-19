@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8e28a8c3_cfaea092",
+        "filename": "tvix/glue/src/builtins/fetchers.rs",
+        "patchSetId": 3
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-02-19T16:22:45Z",
+      "side": 1,
+      "message": "These need `state: Rc\u003cTvixStoreIO\u003e`, as an additional argument, otherwise they won\u0027t be able to talk to the store. Probably makes sense to thread that argument through all the way to here.",
+      "revId": "0741a29e4f260fb4d00f9bfac0650fd7d8fbf17f",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "91135b30_b2c50737",
+        "filename": "tvix/glue/src/builtins/mod.rs",
+        "patchSetId": 3
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-02-19T16:22:45Z",
+      "side": 1,
+      "message": "That should be a separate helper function, it doesn\u0027t have much to do with the derivation builtins.\n\nCompare how https://cl.tvl.fyi/c/depot/+/10654 introduces import builtins.",
+      "revId": "0741a29e4f260fb4d00f9bfac0650fd7d8fbf17f",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
