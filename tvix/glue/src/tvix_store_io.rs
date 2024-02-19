@@ -2,9 +2,18 @@
 
 use async_recursion::async_recursion;
 use bytes::Bytes;
-use futures::Stream;
+use data_encoding::HEXLOWER;
+use futures::{ready, Stream};
 use futures::{StreamExt, TryStreamExt};
+use nix_compat::nixbase32;
+use nix_compat::nixhash::{HashAlgo, NixHash};
+use nix_compat::store_path::StorePathRef;
 use nix_compat::{nixhash::CAHash, store_path::StorePath};
+use pin_project_lite::pin_project;
+use sha2::{Digest, Sha256};
+use std::marker::Unpin;
+use std::pin::Pin;
+use std::task::{Context, Poll};
 use std::{
     cell::RefCell,
     collections::BTreeSet,
@@ -12,7 +21,7 @@ use std::{
     path::{Path, PathBuf},
     sync::Arc,
 };
-use tokio::io::AsyncReadExt;
+use tokio::io::{AsyncRead, AsyncReadExt, ReadBuf};
 use tracing::{error, instrument, warn, Level};
 use tvix_build::buildservice::BuildService;
 use tvix_eval::{EvalIO, FileType, StdIO};
@@ -21,7 +30,7 @@ use walkdir::DirEntry;
 use tvix_castore::{
     blobservice::BlobService,
     directoryservice::{self, DirectoryService},
-    proto::{node::Node, NamedNode},
+    proto::{node::Node, FileNode, NamedNode},
     B3Digest,
 };
 use tvix_store::{pathinfoservice::PathInfoService, proto::PathInfo};
@@ -51,7 +60,8 @@ pub struct TvixStoreIO {
     std_io: StdIO,
     #[allow(dead_code)]
     build_service: Arc<dyn BuildService>,
-    tokio_handle: tokio::runtime::Handle,
+    pub(crate) tokio_handle: tokio::runtime::Handle,
+    http_client: reqwest::Client,
     pub(crate) known_paths: RefCell<KnownPaths>,
 }
 
@@ -70,8 +80,13 @@ impl TvixStoreIO {
             std_io: StdIO {},
             build_service,
             tokio_handle,
+            http_client: reqwest::Client::new(),
             known_paths: Default::default(),
         }
+    }
+
+    pub fn http(&self) -> &reqwest::Client {
+        &self.http_client
     }
 
     /// for a given [StorePath] and additional [Path] inside the store path,
@@ -278,7 +293,7 @@ impl TvixStoreIO {
     /// with a [`tokio::runtime::Handle::block_on`] call for synchronicity.
     pub(crate) fn ingest_entries_sync<S>(&self, entries_stream: S) -> io::Result<Node>
     where
-        S: Stream<Item = DirEntry> + std::marker::Unpin,
+        S: Stream<Item = DirEntry> + Unpin,
     {
         self.tokio_handle.block_on(async move {
             tvix_castore::import::ingest_entries(
@@ -345,6 +360,109 @@ impl TvixStoreIO {
             self.register_node_in_path_info_service(name, path, root_node)
                 .await
         })
+    }
+
+    pub async fn store_path_exists<'a>(&'a self, store_path: StorePathRef<'a>) -> io::Result<bool> {
+        Ok(self
+            .path_info_service
+            .as_ref()
+            .get(*store_path.digest())
+            .await?
+            .is_some())
+    }
+
+    pub async fn import_bytes_to_file<D>(
+        &self,
+        name: &str,
+        path: Option<StorePath>,
+        data: D,
+        hash: Option<CAHash>,
+    ) -> io::Result<StorePath>
+    where
+        D: AsyncRead + Unpin,
+    {
+        pin_project! {
+            struct ReadWithSha256<R> {
+                #[pin]
+                inner: R,
+                sha: Sha256,
+            }
+        }
+
+        impl<R> AsyncRead for ReadWithSha256<R>
+        where
+            R: AsyncRead + Unpin,
+        {
+            fn poll_read(
+                self: Pin<&mut Self>,
+                cx: &mut Context<'_>,
+                buf: &mut ReadBuf<'_>,
+            ) -> Poll<io::Result<()>> {
+                let this = self.project();
+                let res = ready!(this.inner.poll_read(cx, buf));
+                if res.is_ok() {
+                    this.sha.update(buf.filled());
+                }
+                Poll::Ready(res)
+            }
+        }
+
+        let mut reader = ReadWithSha256 {
+            inner: data,
+            sha: Sha256::new(),
+        };
+
+        let mut blob = self.blob_service.open_write().await;
+        let size = tokio::io::copy(&mut reader, blob.as_mut()).await?;
+        let blob_digest = blob.close().await?;
+        let got_digest = reader.sha.finalize();
+
+        if let Some(hash) = &hash {
+            match hash {
+                CAHash::Flat(NixHash::Sha256(expected_digest)) => {
+                    if dbg!(&expected_digest[..]) != dbg!(&got_digest[..]) {
+                        panic!(
+                            "wrong digest, guy: \n wanted {}\n   got {}",
+                            nixbase32::encode(expected_digest),
+                            nixbase32::encode(&got_digest)
+                        );
+                    }
+                }
+                _ => panic!("uh?"),
+            }
+        }
+
+        let path = path.expect("TODO");
+        let node = Node::File(FileNode {
+            name: path.to_string().into(),
+            digest: blob_digest.into(),
+            size,
+            executable: false,
+        });
+
+        let (nar_size, nar_sha256) = self.path_info_service.calculate_nar(&node).await?;
+
+        let path_info = PathInfo {
+            node: Some(tvix_castore::proto::Node {
+                node: Some(node.clone()),
+            }),
+            references: vec![],
+            narinfo: Some(tvix_store::proto::NarInfo {
+                nar_size,
+                nar_sha256: nar_sha256.to_vec().into(),
+                signatures: vec![],
+                reference_names: vec![],
+                deriver: None, /* ? */
+                ca: hash.as_ref().map(Into::into),
+            }),
+        };
+
+        self.path_info_service
+            .put(path_info)
+            .await
+            .map_err(|e| std::io::Error::new(io::ErrorKind::Other, e))?;
+
+        Ok(path.to_owned())
     }
 }
 
