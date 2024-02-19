@@ -40,7 +40,7 @@ pub struct Derivation {
 
     /// Plain store paths of additional inputs.
     #[serde(rename = "inputSrcs")]
-    pub input_sources: BTreeSet<String>,
+    pub input_sources: BTreeSet<StorePath>,
 
     /// Maps output names to Output.
     pub outputs: BTreeMap<String, Output>,
@@ -131,16 +131,8 @@ impl Derivation {
 
         // collect the list of paths from input_sources and input_derivations
         // into a (sorted, guaranteed by BTreeSet) list of references
-        let references: BTreeSet<String> = {
-            let mut inputs = self.input_sources.clone();
-            let input_derivation_keys: Vec<String> = self
-                .input_derivations
-                .keys()
-                .map(|k| k.to_absolute_path())
-                .collect();
-            inputs.extend(input_derivation_keys);
-            inputs
-        };
+        let references: BTreeSet<StorePath> = 
+            self.input_sources.iter().chain(self.input_derivations.keys()).cloned().collect();
 
         build_text_path(name, self.to_aterm_bytes(), references)
             .map(|s| s.to_owned())
@@ -250,7 +242,7 @@ impl Derivation {
             // For fixed output derivation we use the per-output info, otherwise we use the
             // derivation hash.
             let abs_store_path = if let Some(ref hwm) = output.ca_hash {
-                build_ca_path(&path_name, hwm, Vec::<String>::new(), false).map_err(|e| {
+                build_ca_path(&path_name, hwm, Vec::new(), false).map_err(|e| {
                     DerivationError::InvalidOutputDerivationPath(output_name.to_string(), e)
                 })?
             } else {

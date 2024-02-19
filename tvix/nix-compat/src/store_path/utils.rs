@@ -5,6 +5,8 @@ use sha2::{Digest, Sha256};
 use std::io::Write;
 use thiserror;
 
+use super::StorePath;
+
 /// Errors that can occur when creating a content-addressed store path.
 ///
 /// This wraps the main [crate::store_path::Error]..
@@ -43,7 +45,7 @@ pub fn compress_hash<const OUTPUT_SIZE: usize>(input: &[u8]) -> [u8; OUTPUT_SIZE
 /// derivation or a literal text file that may contain references.
 /// If you don't want to have to pass the entire contents, you might want to use
 /// [build_ca_path] instead.
-pub fn build_text_path<S: AsRef<str>, I: IntoIterator<Item = S>, C: AsRef<[u8]>>(
+pub fn build_text_path<I: IntoIterator<Item = StorePath>, C: AsRef<[u8]>>(
     name: &str,
     content: C,
     references: I,
@@ -55,7 +57,7 @@ pub fn build_text_path<S: AsRef<str>, I: IntoIterator<Item = S>, C: AsRef<[u8]>>
 }
 
 /// This builds a store path from a [CAHash] and a list of references.
-pub fn build_ca_path<'a, S: AsRef<str>, I: IntoIterator<Item = S>>(
+pub fn build_ca_path<'a, I: IntoIterator<Item = StorePath>>(
     name: &'a str,
     ca_hash: &CAHash,
     references: I,
@@ -174,7 +176,7 @@ fn build_store_path_from_fingerprint_parts<'a>(
 ///  - the nix_hash_string representation of the sha256 digest of some contents
 ///  - the value of `storeDir`
 ///  - the name
-fn make_references_string<S: AsRef<str>, I: IntoIterator<Item = S>>(
+fn make_references_string<I: IntoIterator<Item = StorePath>>(
     ty: &str,
     references: I,
     self_ref: bool,
@@ -183,7 +185,8 @@ fn make_references_string<S: AsRef<str>, I: IntoIterator<Item = S>>(
 
     for reference in references {
         s.push(':');
-        s.push_str(reference.as_ref());
+        use std::fmt::Write;
+        write!(&mut s, "{}", &reference).expect("string write to succeed");
     }
 
     if self_ref {
@@ -219,7 +222,7 @@ mod test {
         // nix-repl> builtins.toFile "foo" "bar"
         // "/nix/store/vxjiwkjkn7x4079qvh1jkl5pn05j2aw0-foo"
 
-        let store_path = build_text_path("foo", "bar", Vec::<String>::new())
+        let store_path = build_text_path("foo", "bar", Vec::new())
             .expect("build_store_path() should succeed");
 
         assert_eq!(
@@ -235,7 +238,7 @@ mod test {
         // nix-repl> builtins.toFile "baz" "${builtins.toFile "foo" "bar"}"
         // "/nix/store/5xd714cbfnkz02h2vbsj4fm03x3f15nf-baz"
 
-        let inner = build_text_path("foo", "bar", Vec::<String>::new())
+        let inner = build_text_path("foo", "bar", Vec::new())
             .expect("path_with_references() should succeed");
         let inner_path = inner.to_absolute_path();
 
