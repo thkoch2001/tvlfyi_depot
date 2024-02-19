@@ -16,6 +16,24 @@
       "message": "Note this is a regular comment, not a docstring, so won\u0027t appear in the docs.\n\nI don\u0027t understand the comment though - don\u0027t we always need to implement Ord to be able to use NixHash in a BTreeMap key? Do we use it anywhere?\n\nWhy do we sort plainly by the digest, and not `algo()` and then digest?",
       "revId": "b00933dda2b12cd9686b556a9fb3454075d15f48",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1ea7335f_af98abf8",
+        "filename": "tvix/nix-compat/src/nixhash/mod.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1000097
+      },
+      "writtenOn": "2024-02-19T17:14:51Z",
+      "side": 1,
+      "message": "Yes, I am used to have such implementation notes done as normal comments instead of doc strings. I can change it if you prefer.\n\nIndeed, the intention is to only sort by digest, see implementation. This is equivalent to sorting by the hex strings (therefore the comment). If you\u0027d use the derived implementation, it would sort by algo and then digest -- that we need to avoid (at least it would change the order in these cases and therefore the overall hash).\n\nYes, we do put this as a key into a BTreeMap for the input_derivations that are replaced by NixHashes. And that is part of the atom representation of the derivation.\n\nWhat do I need to change how?",
+      "parentUuid": "89486b0e_4384e66c",
+      "revId": "b00933dda2b12cd9686b556a9fb3454075d15f48",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
