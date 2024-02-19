@@ -38,6 +38,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "d3ef80f5_17f670d8",
+        "filename": "tvix/glue/src/builtins/fetchers.rs",
+        "patchSetId": 3
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2024-02-19T16:32:54Z",
+      "side": 1,
+      "message": "well, actually, that triggers non-resolvable \"unused variable\" warnings for now, since the arg *has* to be called `state`.",
+      "parentUuid": "0d7d8e66_8c57666b",
+      "revId": "0741a29e4f260fb4d00f9bfac0650fd7d8fbf17f",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "91135b30_b2c50737",
         "filename": "tvix/glue/src/builtins/mod.rs",
         "patchSetId": 3
