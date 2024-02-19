@@ -1,6 +1,7 @@
 //! This module provides an implementation of EvalIO talking to tvix-store.
 
 use async_recursion::async_recursion;
+use bstr::BString;
 use bytes::Bytes;
 use futures::Stream;
 use futures::{StreamExt, TryStreamExt};
@@ -139,6 +140,41 @@ impl TvixStoreIO {
                         }
                     }
                 };
+
+                debug_assert!(drv.validate(true).is_ok(), "Derivation is not valid");
+
+                // HACK: if the looked up derivation uses the magic
+                // `builtin:fetchurl` builder and a "builtin" system, do a local
+                // fetch in here.
+                // In the future, we might want to be able to express this as a BuildRequest,
+                // or otherwise being able to trigger this from the remote side.
+                // However staying platform-independent and not pulling
+                // in nix-specifics into the builder protocol (nixbase32,
+                // outputHash[Algo,Mode]) require some more thought.
+                if drv.system == "builtin" && drv.arguments == vec!["builtin:fetchurl"] {
+                    // TODO: move to function, add span logging the drv we're dealing with
+                    if drv.environment.get("outputHashMode") != Some(&BString::from(b"flat")) {
+                        Err(io::Error::other("unsupported outputHashMode"))?
+                    }
+
+                    // grab the first output
+                    let (_, output) = drv.outputs.first_key_value().expect("no outputs");
+
+                    let ca_hash = match output.ca_hash.as_ref() {
+                        None => Err(io::Error::other(
+                            "derivation is builtin:fetchurl but not CA",
+                        ))?,
+                        Some(ca) => ca,
+                    };
+
+                    // TODO: fetch drv.environment[url] into BlobService,
+                    // then call the PathInfoService.CalculatePlain() function with the
+                    // drv.environment[outputHashAlgo] specified in the Derivation.
+                    // https://b.tvl.fyi/issues/379
+                    // If it matches ca_hash.digest(), create the PathInfo for it,
+                    // persist it and return the root node.
+                    todo!()
+                }
 
                 // derivation_to_build_request needs castore nodes for all inputs.
                 // Provide them, which means, here is where we recursively build
