@@ -5,11 +5,9 @@ let
   depot = config.lib.depot;
 
 in
-
 {
   imports = [
     ../modules/alacritty.nix
-    ../modules/alsi.nix
     ../modules/development.nix
     ../modules/emacs.nix
     ../modules/email.nix
@@ -78,13 +76,7 @@ in
     pinentryFlavor = "qt";
   };
 
-  programs.zsh.initExtra = ''
-    [[ ! $IN_NIX_SHELL && "$TERM" != "dumb" ]] && alsi -l
-  '';
-
   services.lorri.enable = true;
 
-  services.dropbox = {
-    enable = true;
-  };
+  services.dropbox = { enable = true; };
 }
