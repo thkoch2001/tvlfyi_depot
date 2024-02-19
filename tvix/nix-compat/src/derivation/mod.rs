@@ -22,6 +22,8 @@ pub use crate::nixhash::{CAHash, NixHash};
 pub use errors::{DerivationError, OutputError};
 pub use output::Output;
 
+use self::write::AtomWriteable;
+
 #[derive(Clone, Debug, Default, Eq, PartialEq, Serialize, Deserialize)]
 pub struct Derivation {
     #[serde(rename = "args")]
@@ -58,7 +60,7 @@ impl Derivation {
     fn serialize_with_replacements(
         &self,
         writer: &mut impl std::io::Write,
-        input_derivations: &BTreeMap<String, BTreeSet<String>>,
+        input_derivations: &BTreeMap<impl AtomWriteable, BTreeSet<String>>,
     ) -> Result<(), io::Error> {
         use write::*;
 
@@ -98,7 +100,7 @@ impl Derivation {
     /// Like `to_aterm_bytes` but allow input_derivation replacements for hashing.
     fn to_aterm_bytes_with_replacements(
         &self,
-        input_derivations: &BTreeMap<String, BTreeSet<String>>,
+        input_derivations: &BTreeMap<impl AtomWriteable, BTreeSet<String>>,
     ) -> Vec<u8> {
         let mut buffer: Vec<u8> = Vec::new();
 
@@ -202,10 +204,9 @@ impl Derivation {
                     let drv_path = StorePathRef::from_absolute_path(drv_path_str.as_bytes())
                         .expect("invalid input derivation path");
 
-                    let encoded_hash = data_encoding::HEXLOWER
-                        .encode(fn_get_derivation_or_fod_hash(&drv_path).digest_as_bytes());
+                    let hash = fn_get_derivation_or_fod_hash(&drv_path);
 
-                    (encoded_hash, output_names.to_owned())
+                    (hash, output_names.to_owned())
                 },
             ));
 
