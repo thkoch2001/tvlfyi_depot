@@ -16,15 +16,9 @@ let
     personal = {
       primary = true;
       address = "root@gws.fyi";
-      aliases = [ "grfn@gws.fyi" ];
+      aliases = [ "grfn@gws.fyi" "aspen@gws.fyi" ];
       passEntry = "root-gws-msmtp";
     };
-
-    work = {
-      address = "aspen@readyset.io";
-      passEntry = "readyset/msmtp";
-    };
-
   };
 
 in
@@ -51,48 +45,42 @@ in
         ExecStart = mkForce "${pkgs.writeShellScript "sync-${name}" ''
         ${pkgs.lieer}/bin/gmi sync --path ~/mail/${name}
       ''}";
-        Environment = "NOTMUCH_CONFIG=${config.home.sessionVariables.NOTMUCH_CONFIG}";
+        Environment =
+          "NOTMUCH_CONFIG=${config.home.sessionVariables.NOTMUCH_CONFIG}";
       };
 
     })
     accounts;
 
-  # xdg.configFile."notifymuch/notifymuch.cfg".text = generators.toINI {} {
-  #   notifymuch = {
-  #     query = "is:unread and is:important";
-  #     mail_client = "";
-  #     recency_interval_hours = "48";
-  #     hidden_tags = "inbox unread attachment replied sent encrypted signed";
-  #   };
-  # };
-
   accounts.email.maildirBasePath = "mail";
   accounts.email.accounts = mapAttrs
-    (_: params@{ passEntry, ... }: {
-      realName = "Aspen Smith";
-      passwordCommand = "pass ${passEntry}";
+    (_:
+      params@{ passEntry, ... }:
+      {
+        realName = "Aspen Smith";
+        passwordCommand = "pass ${passEntry}";
 
-      flavor = "gmail.com";
+        flavor = "gmail.com";
 
-      imapnotify = {
-        enable = true;
-        boxes = [ "Inbox" ];
-      };
-
-      gpg = {
-        key = "0F11A989879E8BBBFDC1E23644EF5B5E861C09A7";
-        signByDefault = true;
-      };
-
-      notmuch.enable = true;
-      lieer = {
-        enable = true;
-        sync = {
+        imapnotify = {
           enable = true;
-          frequency = "*:*";
+          boxes = [ "Inbox" ];
         };
-      };
-      msmtp.enable = true;
-    } // builtins.removeAttrs params [ "passEntry" ])
+
+        gpg = {
+          key = "0F11A989879E8BBBFDC1E23644EF5B5E861C09A7";
+          signByDefault = true;
+        };
+
+        notmuch.enable = true;
+        lieer = {
+          enable = true;
+          sync = {
+            enable = true;
+            frequency = "*:*";
+          };
+        };
+        msmtp.enable = true;
+      } // builtins.removeAttrs params [ "passEntry" ])
     accounts;
 }
