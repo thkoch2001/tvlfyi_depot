@@ -6,6 +6,7 @@ use crate::tvix_store_io::TvixStoreIO;
 
 mod derivation;
 mod derivation_error;
+mod fetchers;
 
 pub use derivation_error::Error as DerivationError;
 
@@ -17,7 +18,10 @@ pub use derivation_error::Error as DerivationError;
 /// `known_paths`.
 pub fn add_derivation_builtins<IO>(eval: &mut tvix_eval::Evaluation<IO>, io: Rc<TvixStoreIO>) {
     eval.builtins
-        .extend(derivation::derivation_builtins::builtins(io));
+        .extend(derivation::derivation_builtins::builtins(Rc::clone(&io)));
+
+    eval.builtins
+        .extend(fetchers::fetcher_builtins::builtins(io));
 
     // Add the actual `builtins.derivation` from compiled Nix code
     eval.src_builtins
