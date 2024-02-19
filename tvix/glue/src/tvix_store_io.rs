@@ -1,5 +1,5 @@
 //! This module provides an implementation of EvalIO talking to tvix-store.
-
+use bstr::BString;
 use bytes::Bytes;
 use futures::{StreamExt, TryStreamExt};
 use nix_compat::nixhash::NixHash;
@@ -179,6 +179,39 @@ impl TvixStoreIO {
                                 }
                             }
                         };
+
+                        // HACK: if the looked up derivation uses the magic
+                        // `builtin:fetchurl` builder and a "builtin" system, interpret this as a a fetch.
+                        // In the future, we might want to be able to do fetches elsewhere too.
+                        // TODO: check if these fetches should already be
+                        // registered at derivation registration time.
+                        if drv.system == "builtin" && drv.arguments == vec!["builtin:fetchurl"] {
+                            // TODO: move to function, add span logging the drv we're dealing with
+                            // It should convert the Derivation to a Fetch.
+                            // We maybe want to keep both Fetch and Derivation.
+                            if drv.environment.get("outputHashMode") != Some(&BString::from("flat"))
+                            {
+                                Err(io::Error::other("unsupported outputHashMode"))?
+                            }
+
+                            // grab the first output
+                            let (_, output) = drv.outputs.first_key_value().expect("no outputs");
+
+                            let ca_hash = match output.ca_hash.as_ref() {
+                                None => Err(io::Error::other(
+                                    "derivation is builtin:fetchurl but not CA",
+                                ))?,
+                                Some(ca) => ca,
+                            };
+
+                            // TODO: fetch drv.environment[url] into BlobService,
+                            // then call the PathInfoService.CalculatePlain() function with the
+                            // drv.environment[outputHashAlgo] specified in the Derivation.
+                            // https://b.tvl.fyi/issues/379
+                            // If it matches ca_hash.digest(), create the PathInfo for it,
+                            // persist it and return the root node.
+                            todo!()
+                        }
 
                         warn!("triggering build");
 
