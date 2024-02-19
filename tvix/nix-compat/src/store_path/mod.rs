@@ -13,6 +13,8 @@ use std::os::unix::ffi::OsStringExt;
 
 mod utils;
 
+pub mod as_store_path_ref;
+
 pub use utils::*;
 
 pub const DIGEST_SIZE: usize = 20;
@@ -88,6 +90,13 @@ impl FromStr for StorePath {
     /// that comes after [STORE_DIR_WITH_SLASH].
     fn from_str(s: &str) -> Result<Self, Self::Err> {
         Self::from_bytes(s.as_bytes())
+    }
+}
+
+impl TryFrom<String> for StorePath {
+    type Error = Error;
+    fn try_from(str: String) -> Result<StorePath, Error> {
+        Ok(StorePathRef::from_absolute_path(str.as_bytes())?.to_owned())
     }
 }
 
@@ -257,6 +266,13 @@ impl<'de> Deserialize<'de> for StorePathRef<'de> {
         StorePathRef::from_bytes(stripped.as_bytes()).map_err(|_| {
             serde::de::Error::invalid_value(serde::de::Unexpected::Str(string), &"StorePath")
         })
+    }
+}
+
+impl<'a> TryFrom<&'a str> for StorePathRef<'a> {
+    type Error = Error;
+    fn try_from(str: &'a str) -> Result<StorePathRef<'a>, Error> {
+        StorePathRef::from_absolute_path(str.as_bytes())
     }
 }
 
