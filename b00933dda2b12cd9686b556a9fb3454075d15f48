@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "89486b0e_4384e66c",
+        "filename": "tvix/nix-compat/src/nixhash/mod.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-02-19T16:45:24Z",
+      "side": 1,
+      "message": "Note this is a regular comment, not a docstring, so won\u0027t appear in the docs.\n\nI don\u0027t understand the comment though - don\u0027t we always need to implement Ord to be able to use NixHash in a BTreeMap key? Do we use it anywhere?\n\nWhy do we sort plainly by the digest, and not `algo()` and then digest?",
+      "revId": "b00933dda2b12cd9686b556a9fb3454075d15f48",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
