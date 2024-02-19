@@ -35,6 +35,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "2376805f_f7eeb5f7",
+        "filename": "tvix/tools/weave/src/main.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 139,
+      "author": {
+        "id": 1000005
+      },
+      "writtenOn": "2024-02-19T15:58:56Z",
+      "side": 1,
+      "message": "I think this file is small enough now that it\u0027s fairly clear in context, and splitting a 200 LoC file up doesn\u0027t particularly aid readability.",
+      "parentUuid": "79956413_3b635c12",
+      "revId": "f0580a68ea1d4e276d89fc2579377d4a31783a80",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "8a8620e5_7906824e",
