@@ -13,9 +13,9 @@ pub enum Error {
     #[error("the environment variable '{0}' has already been set in this derivation")]
     DuplicateEnvVar(String),
     #[error("invalid derivation parameters: {0}")]
-    InvalidDerivation(DerivationError),
+    InvalidDerivation(#[from] DerivationError),
     #[error("invalid output hash: {0}")]
-    InvalidOutputHash(nixhash::Error),
+    InvalidOutputHash(#[from] nixhash::Error),
     #[error("invalid output hash mode: '{0}', only 'recursive' and 'flat` are supported")]
     InvalidOutputHashMode(String),
 }
