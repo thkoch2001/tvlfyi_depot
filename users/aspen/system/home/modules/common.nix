@@ -86,13 +86,6 @@
         forwardAgent = true;
       };
 
-      "dobharchu" = {
-        host = "dobharchu";
-        hostname = "172.16.0.4";
-        forwardAgent = true;
-        user = "griffin";
-      };
-
       "cerberus" = {
         host = "cerberus";
         hostname = "172.16.0.3";
