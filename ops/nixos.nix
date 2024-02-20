@@ -40,7 +40,10 @@ in rec {
       (throw "${hostname} is not a known NixOS host")
       (map nixosFor depot.ops.machines.all-systems));
 
-  rebuild-system = rebuildSystemWith depot.path;
+  rebuild-system = rebuildSystemWith (
+    # HACK: use the string of the original source to avoid copying the whole
+    # depot into the store just for this
+    builtins.toString depot.path.origSrc);
 
   rebuildSystemWith = depotPath: pkgs.writeShellScriptBin "rebuild-system" ''
     set -ue
