@@ -49,11 +49,25 @@ pub struct Derivation {
 }
 
 impl Derivation {
+    pub fn input_derivations(&self) -> BTreeMap<StorePath, BTreeSet<String>> {
+        self.input_derivations
+            .iter()
+            .map(|(k, v)| {
+                (
+                    k.clone()
+                        .try_into()
+                        .expect("input_derivations contains StorePath"),
+                    v.clone(),
+                )
+            })
+            .collect()
+    }
+
     /// write the Derivation to the given [std::io::Write], in ATerm format.
     ///
     /// The only errors returns are these when writing to the passed writer.
     pub fn serialize(&self, writer: &mut impl std::io::Write) -> Result<(), io::Error> {
-        self.serialize_with_replacements(writer, &self.input_derivations)
+        self.serialize_with_replacements(writer, &self.input_derivations())
     }
 
     /// Like `serialize` but allow replacing the input_derivations for hash calculations.
@@ -70,7 +84,18 @@ impl Derivation {
         write_outputs(writer, &self.outputs)?;
         write_char(writer, COMMA)?;
 
-        write_input_derivations(writer, input_derivations)?;
+        // To reproduce the exact hashes of original nix, we need to sort 
+        // these by their atom representation.
+        // StorePath has a different sort order, so we convert it here.
+        let input_derivations: BTreeMap<BString, &BTreeSet<String>> = input_derivations
+            .iter()
+            .map(|(k, v)| {
+                let mut atom_k = Vec::new();
+                k.atom_write(&mut atom_k).expect("no write error to Vec");
+                (BString::new(atom_k), v)
+            })
+            .collect();
+        write_input_derivations(writer, &input_derivations)?;
         write_char(writer, COMMA)?;
 
         write_input_sources(writer, &self.input_sources)?;
@@ -94,7 +119,13 @@ impl Derivation {
 
     /// return the ATerm serialization.
     pub fn to_aterm_bytes(&self) -> Vec<u8> {
-        self.to_aterm_bytes_with_replacements(&self.input_derivations)
+        let v1 = self.to_aterm_bytes_with_replacements(&self.input_derivations);
+        #[cfg(debug_assertions)]
+        {
+            let v2 = self.to_aterm_bytes_with_replacements(&self.input_derivations());
+            assert_eq!(BString::new(v2), BString::new(v1.clone()));
+        }
+        v1
     }
 
     /// Like `to_aterm_bytes` but allow input_derivation replacements for hashing.
