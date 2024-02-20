@@ -241,17 +241,7 @@ pub fn parse_derivation(i: &[u8]) -> NomResult<&[u8], Derivation> {
                 arguments,
                 environment,
             )| {
-                #[cfg(debug_assertions)]
-                let parsed_debug_derivations = input_derivations.clone();
-
-                let input_derivations =
-                    input_derivations
-                    .into_iter()
-                    .map(|(k, v)| (k.to_absolute_path(), v))
-                    .collect();
-
-
-                let derivation = Derivation {
+                Derivation {
                     arguments,
                     builder,
                     environment,
@@ -259,12 +249,7 @@ pub fn parse_derivation(i: &[u8]) -> NomResult<&[u8], Derivation> {
                     input_sources,
                     outputs,
                     system,
-                };
-
-                #[cfg(debug_assertions)]
-                assert_eq!(parsed_debug_derivations, derivation.input_derivations());
-
-                derivation
+                }
             },
         ),
     )(i)
