@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "97e9d92c_221e1aec",
+        "filename": "tvix/store/src/proto/mod.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-02-20T03:40:37Z",
+      "side": 1,
+      "message": "Isn\u0027t there a way to format this with some bstr extension trait, replacing invalid utf8 with replacement characters?",
+      "revId": "374338982291926610847511148e6ca669a54ad3",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
