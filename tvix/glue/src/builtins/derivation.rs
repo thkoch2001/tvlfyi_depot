@@ -24,7 +24,8 @@ fn populate_inputs(drv: &mut Derivation, full_context: NixContext) {
     for element in full_context.iter() {
         match element {
             NixContextElement::Plain(source) => {
-                drv.input_sources.insert(source.clone());
+                let sp = StorePath::from_bytes(source.as_bytes()).expect("valid store path");
+                drv.input_sources.insert(sp);
             }
 
             NixContextElement::Single {
