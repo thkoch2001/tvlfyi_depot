@@ -1,0 +1,10 @@
+# -*- mode: snippet -*-
+# name: test-module
+# uuid: test-module
+# key: tmod
+# condition: t
+# --
+let%test_module ${1:_} =
+  (module struct
+    $0
+  end)

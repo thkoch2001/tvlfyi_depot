@@ -1,0 +1,6 @@
+# -*- mode: snippet -*-
+# name: inl
+# key: inl
+# expand-env: ((yas-indent-line 'fixed))
+# --
+{-# INLINE $1 #-}
