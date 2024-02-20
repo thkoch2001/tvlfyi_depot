@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2881d127_675c50d0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000097
+      },
+      "writtenOn": "2024-02-20T11:45:19Z",
+      "side": 1,
+      "message": "Looks sane but I\u0027d need more context to really validate it.",
+      "revId": "fbe1ec20f615b08f4e2c2e316801df329af0edbe",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
