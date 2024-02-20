@@ -7,7 +7,7 @@ use crate::aterm::escape_bytes;
 use crate::derivation::{ca_kind_prefix, output::Output};
 use crate::nixbase32;
 use crate::store_path::as_store_path_ref::AsStorePathRef;
-use crate::store_path::STORE_DIR_WITH_SLASH;
+use crate::store_path::{StorePath, STORE_DIR_WITH_SLASH};
 use bstr::BString;
 use std::borrow::Borrow;
 use std::fmt::Display;
@@ -35,6 +35,13 @@ pub const QUOTE: char = '"';
 /// the context a lot.
 pub(crate) trait AtermWriteable: Display {
     fn aterm_write(&self, writer: &mut impl Write) -> std::io::Result<()>;
+
+    fn aterm_bytes(&self) -> Vec<u8> {
+        let mut bytes = Vec::new();
+        self.aterm_write(&mut bytes)
+            .expect("unexpected write errors to Vec");
+        bytes
+    }
 }
 
 impl<A: AsStorePathRef + Display> AtermWriteable for A {
@@ -172,12 +179,15 @@ pub(crate) fn write_input_derivations(
 
 pub(crate) fn write_input_sources(
     writer: &mut impl Write,
-    input_sources: &BTreeSet<String>,
+    input_sources: &BTreeSet<StorePath>,
 ) -> Result<(), io::Error> {
     write_char(writer, BRACKET_OPEN)?;
     write_array_elements(
         writer,
-        &input_sources.iter().map(String::from).collect::<Vec<_>>(),
+        &input_sources
+            .iter()
+            .map(StorePath::to_absolute_path)
+            .collect::<Vec<_>>(),
     )?;
     write_char(writer, BRACKET_CLOSE)?;
 
