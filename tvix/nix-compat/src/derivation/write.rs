@@ -139,17 +139,17 @@ pub(crate) fn write_outputs(
 
 pub(crate) fn write_input_derivations(
     writer: &mut impl Write,
-    input_derivations: &BTreeMap<BString, &BTreeSet<String>>,
+    input_derivations: &BTreeMap<impl AtermWriteable, BTreeSet<String>>,
 ) -> Result<(), io::Error> {
     write_char(writer, BRACKET_OPEN)?;
 
-    for (ii, (input_derivation_atom, output_names)) in input_derivations.iter().enumerate() {
+    for (ii, (input_derivation, output_names)) in input_derivations.iter().enumerate() {
         if ii > 0 {
             write_char(writer, COMMA)?;
         }
 
         write_char(writer, PAREN_OPEN)?;
-        writer.write_all(input_derivation_atom)?;
+        input_derivation.aterm_write(writer)?;
         write_char(writer, COMMA)?;
 
         write_char(writer, BRACKET_OPEN)?;
