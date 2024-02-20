@@ -1,0 +1,11 @@
+# -*- mode: snippet -*-
+# name: test-module
+# uuid: test-module
+# key: tmod
+# condition: t
+# --
+mod $1 {
+    use super::*;
+
+    $0
+}

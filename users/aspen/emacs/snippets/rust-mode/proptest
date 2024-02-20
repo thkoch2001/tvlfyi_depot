@@ -1,0 +1,10 @@
+# -*- mode: snippet -*-
+# name: proptest
+# uuid: proptest
+# key: proptest
+# condition: t
+# --
+#[proptest]
+fn ${1:test_name}($2) {
+   `%`$0
+}

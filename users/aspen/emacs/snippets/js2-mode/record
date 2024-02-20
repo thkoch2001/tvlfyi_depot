@@ -1,0 +1,7 @@
+# -*- mode: snippet -*-
+# name: record
+# key: rec
+# --
+export default class $1 extends Record({
+  $2
+}) {}
