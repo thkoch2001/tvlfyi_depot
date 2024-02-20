@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "684762d3_06268bd8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2024-02-20T16:03:55Z",
+      "side": 1,
+      "message": "this was intentional - putting `Rc::clone` instead of `.clone` is a common Rust idiom, and makes it explicit that we\u0027re cloning a shared reference, not an underlying resource",
+      "revId": "d9565a4d0af3bffd735a77aa6f1fd0ec0e03b14a",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
