@@ -16,6 +16,24 @@
       "message": "why use this and not tokio::process, if we\u0027re already using tokio?",
       "revId": "1de83b5ef3be07626bf46b62d9d66032eb33b0fe",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "58ce6a74_506fd6d5",
+        "filename": "tvix/build/Cargo.toml",
+        "patchSetId": 6
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-02-20T09:47:36Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b623fcf2_39412b01",
+      "revId": "1de83b5ef3be07626bf46b62d9d66032eb33b0fe",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
