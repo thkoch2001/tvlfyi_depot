@@ -219,4 +219,9 @@
     email = "eugene.lomov@protonmail.com";
     password = "{ARGON2}$argon2id$v=19$m=19456,t=2,p=1$r/EsEGkqCcv8ccjQ84pX7Q$ebpWno7LI1RXkWKBjnkDHZM1gPuPj1LSMoFUsX0j6AU";
   }
+  {
+    username = "espes";
+    email = "espes@pequalsnp.com";
+    password = "{ARGON2}$argon2id$v=19$m=19456,t=2,p=1$eXeFrbNxuKn/JCpQr5VmxA$NtMNBceNg/JtqMfHk/qHxEHsEVsTWmHJbpq4ve/+XYg";
+  }
 ]
