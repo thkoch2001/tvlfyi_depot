@@ -49,11 +49,25 @@ pub struct Derivation {
 }
 
 impl Derivation {
+    pub fn input_derivations(&self) -> BTreeMap<StorePath, BTreeSet<String>> {
+        self.input_derivations
+            .iter()
+            .map(|(k, v)| {
+                (
+                    k.clone()
+                        .try_into()
+                        .expect("input_derivations contains StorePath"),
+                    v.clone(),
+                )
+            })
+            .collect()
+    }
+
     /// write the Derivation to the given [std::io::Write], in ATerm format.
     ///
     /// The only errors returns are these when writing to the passed writer.
     pub fn serialize(&self, writer: &mut impl std::io::Write) -> Result<(), io::Error> {
-        self.serialize_with_replacements(writer, &self.input_derivations)
+        self.serialize_with_replacements(writer, &self.input_derivations())
     }
 
     /// Like `serialize` but allow replacing the input_derivations for hash calculations.
