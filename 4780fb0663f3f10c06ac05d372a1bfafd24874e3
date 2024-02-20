@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f0fbf7cc_011ab22f",
+        "filename": "tvix/serde/examples/nixpkgs.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-02-20T11:57:07Z",
+      "side": 1,
+      "message": "Can you add a line explaining this doesn\u0027t use the full Nix-glue compat stuff, so people don\u0027t run into this unnecessarily, assuming it\u0027d also work?",
+      "revId": "4780fb0663f3f10c06ac05d372a1bfafd24874e3",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
