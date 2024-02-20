@@ -1,8 +1,12 @@
 { depot, lib, pkgs, ... }:
 let
-  inherit (lib) fix pipe mapAttrsToList isAttrs concatLines isString;
+  inherit (lib) fix pipe mapAttrsToList isAttrs concatLines isString isDerivation isPath;
 
-  inherit (depot.nix.utils) isDirectory isRegularFile;
+  # TODO(sterni): move to //nix/utils with clearer naming and alternative similar to lib.types.path
+  isPathLike = value:
+    isPath value
+    || isDerivation value
+    || (isString value && builtins.hasContext value);
 
   esc = s: lib.escapeShellArg /* ensure paths import into store */ "${s}";
 
@@ -12,24 +16,12 @@ let
     ''
     + pipe tree [
       (mapAttrsToList (k: v:
-        # TODO(sterni): a more discoverable isPathLike would fit into //nix/utils
-        # ATTN: This check has the flaw that it accepts paths without context
-        # that would not be available in the sandbox!
-        if lib.types.path.check v then
-          if isRegularFile v then
-            "cp --reflink=auto ${esc v} \"$out/\"${esc path}/${esc k}"
-          else if isDirectory v then ''
-            mkdir -p "$out/"${esc path}
-            cp -r --reflink=auto ${esc v} "$out/"${esc path}/${esc k}
-          ''
-          else
-            throw "invalid path type (expected file or directory)"
-        else if isAttrs v then
-          writeTreeAtPath "${path}/${k}" v
-        else if isString v then
-          "cp --reflink=auto ${esc v} \"$out/\"${esc path}/${esc k}"
+        if isPathLike v then
+          "cp -R --reflink=auto ${v} \"$out/\"${esc path}/${esc k}"
+        else if lib.isAttrs v then
+          writeTreeAtPath (path + "/" + k) v
         else
-          throw "invalid type (expected file, directory, or attrs)"))
+          throw "invalid type (expected path, derivation, string with context, or attrs)"))
       concatLines
     ];
 
