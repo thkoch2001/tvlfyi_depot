@@ -245,10 +245,7 @@ pub fn parse_derivation(i: &[u8]) -> NomResult<&[u8], Derivation> {
                     arguments,
                     builder,
                     environment,
-                    input_derivations: input_derivations
-                        .into_iter()
-                        .map(|(k, v)| (k.to_absolute_path(), v))
-                        .collect(),
+                    input_derivations,
                     input_sources,
                     outputs,
                     system,
