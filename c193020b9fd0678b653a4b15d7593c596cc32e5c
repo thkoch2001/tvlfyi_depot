@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "12d91d28_14ff18b8",
+        "filename": "tvix/.vscode/extensions.json",
+        "patchSetId": 10
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-02-20T12:41:15Z",
+      "side": 0,
+      "message": "Was this intentional? We do have this in the repo.",
+      "revId": "c193020b9fd0678b653a4b15d7593c596cc32e5c",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
