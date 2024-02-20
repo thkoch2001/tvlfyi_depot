@@ -1,0 +1,89 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "599e33ea_bc187ac5",
+        "filename": "tvix/glue/src/builtins/fetchers.rs",
+        "patchSetId": 3
+      },
+      "lineNbr": 192,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-02-20T08:30:42Z",
+      "side": 1,
+      "message": "See comment on import_bytes_to_file - I don\u0027t think we should block and receive everything here, but instead do the streaming later.",
+      "revId": "06b5c0e6e47948be9ea1dfebb293a6ee214a999a",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1d4bf67a_bc1108e5",
+        "filename": "tvix/glue/src/builtins/utils.rs",
+        "patchSetId": 3
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-02-20T08:30:42Z",
+      "side": 1,
+      "message": "Can this be a separate CL?",
+      "revId": "06b5c0e6e47948be9ea1dfebb293a6ee214a999a",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "aca25a8e_5fc9a16c",
+        "filename": "tvix/glue/src/tvix_store_io.rs",
+        "patchSetId": 3
+      },
+      "lineNbr": 80,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-02-20T08:30:42Z",
+      "side": 1,
+      "message": "All async functions in TvixStoreIO actually use tokio async, and sync functions are not expected to take significant amounts of time. The non-blocking version in reqwest is probably more suitable.",
+      "revId": "06b5c0e6e47948be9ea1dfebb293a6ee214a999a",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "dd66f33f_71a5a47d",
+        "filename": "tvix/glue/src/tvix_store_io.rs",
+        "patchSetId": 3
+      },
+      "lineNbr": 304,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-02-20T08:30:42Z",
+      "side": 1,
+      "message": "Having the Bytes here is pretty heavy on memory usage.\n\nCan you instead have it accept an impl AsyncRead, and use io::copy to copy from it?\n\nYou can massage the request body to that, see https://cs.tvl.fyi/depot@db26cb21322b59d6d205360fb8e654605dd5fdcb/-/blob/tvix/store/src/pathinfoservice/nix_http.rs?L173-178 for an example.",
+      "revId": "06b5c0e6e47948be9ea1dfebb293a6ee214a999a",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f56bb6e5_d6a21c30",
+        "filename": "tvix/glue/src/tvix_store_io.rs",
+        "patchSetId": 3
+      },
+      "lineNbr": 318,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-02-20T08:30:42Z",
+      "side": 1,
+      "message": "Please add a comment explaining we need to still calculate the NAR hash and size for the PathInfo only, even though this does a plain import.",
+      "revId": "06b5c0e6e47948be9ea1dfebb293a6ee214a999a",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
