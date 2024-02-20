@@ -293,10 +293,11 @@ pub struct Error {
     pub kind: ErrorKind,
     pub span: Span,
     pub contexts: Vec<String>,
+    pub source: SourceCode,
 }
 
 impl Error {
-    pub fn new(mut kind: ErrorKind, span: Span) -> Self {
+    pub fn new(mut kind: ErrorKind, span: Span, source: SourceCode) -> Self {
         let mut contexts = vec![];
         while let ErrorKind::WithContext {
             context,
@@ -311,6 +312,7 @@ impl Error {
             kind,
             span,
             contexts,
+            source,
         }
     }
 }
@@ -737,9 +739,9 @@ fn spans_for_parse_errors(file: &File, errors: &[rnix::parser::ParseError]) -> V
 }
 
 impl Error {
-    pub fn fancy_format_str(&self, source: &SourceCode) -> String {
+    pub fn fancy_format_str(&self) -> String {
         let mut out = vec![];
-        Emitter::vec(&mut out, Some(&*source.codemap())).emit(&self.diagnostics(source));
+        Emitter::vec(&mut out, Some(&*self.source.codemap())).emit(&self.diagnostics(&self.source));
         String::from_utf8_lossy(&out).to_string()
     }
 
