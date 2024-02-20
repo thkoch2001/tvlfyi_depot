@@ -323,12 +323,7 @@ fn eval(model: &Model) -> Output {
 
     if !result.errors.is_empty() {
         for error in &result.errors {
-            writeln!(
-                &mut out.errors,
-                "{}\n",
-                error.fancy_format_str(&source).trim(),
-            )
-            .unwrap();
+            writeln!(&mut out.errors, "{}\n", error.fancy_format_str().trim(),).unwrap();
         }
 
         return out;
