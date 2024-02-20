@@ -295,7 +295,7 @@ where
             nix_path,
             self.io_handle,
             runtime_observer,
-            source,
+            source.clone(),
             globals,
             lambda,
             self.strict,
@@ -304,6 +304,15 @@ where
         match vm_result {
             Ok(mut runtime_result) => {
                 result.warnings.append(&mut runtime_result.warnings);
+                if let Value::Catchable(inner) = runtime_result.value {
+                    result.errors.push(Error::new(
+                        ErrorKind::CatchableError(*inner),
+                        file.span,
+                        source,
+                    ));
+                    return result;
+                }
+
                 result.value = Some(runtime_result.value);
             }
             Err(err) => {
