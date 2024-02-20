@@ -186,15 +186,21 @@ fn parse_input_derivations(i: &[u8]) -> NomResult<&[u8], BTreeMap<StorePath, BTr
     Ok((i, input_derivations))
 }
 
-fn parse_input_sources(i: &[u8]) -> NomResult<&[u8], BTreeSet<String>> {
+fn parse_input_sources(i: &[u8]) -> NomResult<&[u8], BTreeSet<StorePath>> {
     let (i, input_sources_lst) = aterm::parse_str_list(i).map_err(into_nomerror)?;
 
     let mut input_sources: BTreeSet<_> = BTreeSet::new();
     for input_source in input_sources_lst.into_iter() {
+        let input_source: StorePath = input_source.try_into().map_err(|e: store_path::Error| {
+            nom::Err::Failure(NomError {
+                input: i,
+                code: e.into(),
+            })
+        })?;
         if input_sources.contains(&input_source) {
             return Err(nom::Err::Failure(NomError {
                 input: i,
-                code: ErrorKind::DuplicateInputSource(input_source),
+                code: ErrorKind::DuplicateInputSource(input_source.to_absolute_path()),
             }));
         } else {
             input_sources.insert(input_source);
@@ -465,7 +471,14 @@ mod tests {
     fn parse_input_sources(input: &'static [u8], expected: &BTreeSet<String>) {
         let (rest, parsed) = super::parse_input_sources(input).expect("must parse");
 
-        assert_eq!(expected, &parsed, "parsed mismatch");
+        assert_eq!(
+            expected,
+            &parsed
+                .iter()
+                .map(StorePath::to_absolute_path)
+                .collect::<BTreeSet<_>>(),
+            "parsed mismatch"
+        );
         assert!(rest.is_empty(), "rest must be empty");
     }
 
