@@ -34,6 +34,24 @@
       "parentUuid": "97e9d92c_221e1aec",
       "revId": "374338982291926610847511148e6ca669a54ad3",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f4c289e8_5a3d035f",
+        "filename": "tvix/store/src/proto/mod.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-02-20T04:22:45Z",
+      "side": 1,
+      "message": "No, that would have been https://docs.rs/bstr/latest/bstr/trait.ByteVec.html#method.into_string_lossy.",
+      "parentUuid": "1ec2d972_32f4fa1a",
+      "revId": "374338982291926610847511148e6ca669a54ad3",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ],
   "submitRequirementResults": []
