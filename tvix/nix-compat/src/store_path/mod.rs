@@ -359,6 +359,7 @@ mod tests {
 
     use crate::store_path::{StorePathRef, DIGEST_SIZE};
     use hex_literal::hex;
+    use pretty_assertions::assert_eq;
     use test_case::test_case;
 
     use super::{Error, StorePath};

@@ -10,6 +10,7 @@ use crate::store_path::as_store_path_ref::AsStorePathRef;
 use crate::store_path::STORE_DIR_WITH_SLASH;
 use bstr::BString;
 use std::borrow::Borrow;
+use std::fmt::Display;
 use std::{
     collections::{BTreeMap, BTreeSet},
     io,
@@ -32,14 +33,15 @@ pub const QUOTE: char = '"';
 /// Note that we mostly use explicit `write_*` calls
 /// instead since the serialization of the items depends on
 /// the context a lot.
-pub(crate) trait AtomWriteable {
+pub(crate) trait AtomWriteable: Display {
     fn atom_write(&self, writer: &mut impl Write) -> std::io::Result<()>;
 }
 
-impl<A: AsStorePathRef> AtomWriteable for A {
+impl<A: AsStorePathRef + Display> AtomWriteable for A {
     fn atom_write(&self, writer: &mut impl Write) -> std::io::Result<()> {
         let store_path = self.as_store_path_ref().expect("valid ref");
         let store_path_ref = store_path.borrow();
+
         write_char(writer, QUOTE)?;
         writer.write_all(STORE_DIR_WITH_SLASH.as_bytes())?;
         writer.write_all(nixbase32::encode(store_path_ref.digest()).as_bytes())?;
@@ -137,17 +139,17 @@ pub(crate) fn write_outputs(
 
 pub(crate) fn write_input_derivations(
     writer: &mut impl Write,
-    input_derivations: &BTreeMap<impl AtomWriteable, BTreeSet<String>>,
+    input_derivations: &BTreeMap<BString, &BTreeSet<String>>,
 ) -> Result<(), io::Error> {
     write_char(writer, BRACKET_OPEN)?;
 
-    for (ii, (input_derivation, output_names)) in input_derivations.iter().enumerate() {
+    for (ii, (input_derivation_atom, output_names)) in input_derivations.iter().enumerate() {
         if ii > 0 {
             write_char(writer, COMMA)?;
         }
 
         write_char(writer, PAREN_OPEN)?;
-        input_derivation.atom_write(writer)?;
+        writer.write_all(input_derivation_atom)?;
         write_char(writer, COMMA)?;
 
         write_char(writer, BRACKET_OPEN)?;
