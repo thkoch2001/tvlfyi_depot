@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "13ce30b4_93f48186",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2024-02-20T23:52:54Z",
+      "side": 1,
+      "message": "I think this impurity is okay, since rebuild-system relies on $HOSTNAME.\n\nHowever, since we do already filter the source somewhat, it is probably wise to exclude `target` anyways since it is also annoying in other situations (e.g. building the depot pipeline locally with remote builders enabled).",
+      "revId": "59e49737f025c33b264f4339eec92df043a556c6",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
