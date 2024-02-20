@@ -1,5 +1,7 @@
 use crate::nixbase32;
 use data_encoding::{BASE64, BASE64_NOPAD, HEXLOWER};
+use std::cmp::Ordering;
+use std::fmt::Display;
 use thiserror;
 
 mod algos;
@@ -15,6 +17,36 @@ pub enum NixHash {
     Sha1([u8; 20]),
     Sha256([u8; 32]),
     Sha512(Box<[u8; 64]>),
+}
+
+// This effects the ordering in BTreeMaps which in
+// turn affect ATerm serialization which in turn
+// affects output hashes.
+//
+// The original implementation sorted the resulting hex
+// strings -- this results in the same order.
+impl Ord for NixHash {
+    fn cmp(&self, other: &NixHash) -> Ordering {
+        self.digest_as_bytes().cmp(other.digest_as_bytes())
+    }
+}
+
+// See Ord for reason to implement this manually.
+impl PartialOrd for NixHash {
+    fn partial_cmp(&self, other: &NixHash) -> Option<Ordering> {
+        Some(self.cmp(other))
+    }
+}
+
+impl Display for NixHash {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::result::Result<(), std::fmt::Error> {
+        write!(
+            f,
+            "{}-{}",
+            self.algo(),
+            nixbase32::encode(self.digest_as_bytes())
+        )
+    }
 }
 
 /// convenience Result type for all nixhash parsing Results.

@@ -5,13 +5,20 @@
 
 use crate::aterm::escape_bytes;
 use crate::derivation::{ca_kind_prefix, output::Output};
+use crate::nixbase32;
+use crate::store_path::as_store_path_ref::AsStorePathRef;
+use crate::store_path::STORE_DIR_WITH_SLASH;
 use bstr::BString;
+use std::borrow::Borrow;
+use std::fmt::Display;
 use std::{
     collections::{BTreeMap, BTreeSet},
     io,
     io::Error,
     io::Write,
 };
+
+use super::NixHash;
 
 pub const DERIVATION_PREFIX: &str = "Derive";
 pub const PAREN_OPEN: char = '(';
@@ -20,6 +27,37 @@ pub const BRACKET_OPEN: char = '[';
 pub const BRACKET_CLOSE: char = ']';
 pub const COMMA: char = ',';
 pub const QUOTE: char = '"';
+
+/// Something that can be written as atom.
+///
+/// Note that we mostly use explicit `write_*` calls
+/// instead since the serialization of the items depends on
+/// the context a lot.
+pub(crate) trait AtomWriteable: Display {
+    fn atom_write(&self, writer: &mut impl Write) -> std::io::Result<()>;
+}
+
+impl<A: AsStorePathRef + Display> AtomWriteable for A {
+    fn atom_write(&self, writer: &mut impl Write) -> std::io::Result<()> {
+        let store_path = self.as_store_path_ref().expect("valid ref");
+        let store_path_ref = store_path.borrow();
+
+        write_char(writer, QUOTE)?;
+        writer.write_all(STORE_DIR_WITH_SLASH.as_bytes())?;
+        writer.write_all(nixbase32::encode(store_path_ref.digest()).as_bytes())?;
+        write_char(writer, '-')?;
+        writer.write_all(store_path_ref.name().as_bytes())?;
+        write_char(writer, QUOTE)?;
+        Ok(())
+    }
+}
+
+impl AtomWriteable for NixHash {
+    fn atom_write(&self, writer: &mut impl Write) -> std::io::Result<()> {
+        write_field(writer, self.to_plain_hex_string(), false)?;
+        Ok(())
+    }
+}
 
 // Writes a character to the writer.
 pub(crate) fn write_char(writer: &mut impl Write, c: char) -> io::Result<()> {
@@ -101,17 +139,17 @@ pub(crate) fn write_outputs(
 
 pub(crate) fn write_input_derivations(
     writer: &mut impl Write,
-    input_derivations: &BTreeMap<String, BTreeSet<String>>,
+    input_derivations: &BTreeMap<BString, &BTreeSet<String>>,
 ) -> Result<(), io::Error> {
     write_char(writer, BRACKET_OPEN)?;
 
-    for (ii, (input_derivation, output_names)) in input_derivations.iter().enumerate() {
+    for (ii, (input_derivation_atom, output_names)) in input_derivations.iter().enumerate() {
         if ii > 0 {
             write_char(writer, COMMA)?;
         }
 
         write_char(writer, PAREN_OPEN)?;
-        write_field(writer, input_derivation.as_str(), false)?;
+        writer.write_all(input_derivation_atom)?;
         write_char(writer, COMMA)?;
 
         write_char(writer, BRACKET_OPEN)?;
