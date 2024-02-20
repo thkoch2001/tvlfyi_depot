@@ -63,6 +63,24 @@
       "message": "There\u0027s some callsites already, mostly in the test setup. It might make sense to update this in this CL, to see if it actually helps there (or not).",
       "revId": "73fd572e65b2271af3d96aedb89c033af7895ee4",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0d093519_b5500d66",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2024-02-20T07:36:22Z",
+      "side": 1,
+      "message": "I don\u0027t think it matters there, the `new_impure` factory method keeps working. This is mostly for things like tvix_serde, when you want to configure the existing evaluation to do I/O (I\u0027m working on an alternative to cl/10581 that avoids blowing up the deps closure of the library).",
+      "parentUuid": "4e130cec_2dc6b998",
+      "revId": "73fd572e65b2271af3d96aedb89c033af7895ee4",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
