@@ -35,6 +35,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "78ce34af_88099770",
+        "filename": "tvix/nix-compat/src/derivation/parser.rs",
+        "patchSetId": 8
+      },
+      "lineNbr": 100,
+      "author": {
+        "id": 1000097
+      },
+      "writtenOn": "2024-02-21T11:32:46Z",
+      "side": 1,
+      "message": "Basically, I wanted to first preserve the prior behavior. But I am not sure if it is actually important that this also works with empty store paths.",
+      "parentUuid": "f7e88599_0a835bdf",
+      "revId": "3c3c812232eff61c48bff06fef5aaa53aee31f1a",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "b59e75ab_1bb176d2",
@@ -66,6 +84,24 @@
       "side": 1,
       "message": "This is essentially the same as https://cl.tvl.fyi/c/depot/+/10957/comment/679cfdfb_dae9a0de/.",
       "parentUuid": "b59e75ab_1bb176d2",
+      "revId": "3c3c812232eff61c48bff06fef5aaa53aee31f1a",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "167fb760_f320fb87",
+        "filename": "tvix/nix-compat/src/derivation/parser.rs",
+        "patchSetId": 8
+      },
+      "lineNbr": 353,
+      "author": {
+        "id": 1000097
+      },
+      "writtenOn": "2024-02-21T11:32:46Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "96d1647c_e2af7419",
       "revId": "3c3c812232eff61c48bff06fef5aaa53aee31f1a",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
