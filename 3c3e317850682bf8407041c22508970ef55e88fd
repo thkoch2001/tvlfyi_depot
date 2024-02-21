@@ -16,6 +16,24 @@
       "message": "Can\u0027t you update the types in EXP_INPUT_DERIVATIONS_SIMPLE, or is this used elsewhere too?",
       "revId": "3c3e317850682bf8407041c22508970ef55e88fd",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "170f1ab0_8a319a94",
+        "filename": "tvix/nix-compat/src/derivation/parser.rs",
+        "patchSetId": 20
+      },
+      "lineNbr": 427,
+      "author": {
+        "id": 1000097
+      },
+      "writtenOn": "2024-02-21T07:50:33Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1a13cc31_c1276f76",
+      "revId": "3c3e317850682bf8407041c22508970ef55e88fd",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
