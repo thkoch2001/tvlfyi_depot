@@ -5,9 +5,14 @@
 
 use bstr::{ByteSlice, ByteVec};
 use builtin_macros::builtins;
+use data_encoding::HEXLOWER;
 use genawaiter::rc::Gen;
 use imbl::OrdMap;
+use md5::Md5;
 use regex::Regex;
+use sha1::Sha1;
+use sha2::digest::Output;
+use sha2::{Digest, Sha256, Sha512};
 use std::cmp::{self, Ordering};
 use std::collections::VecDeque;
 use std::collections::{BTreeMap, HashSet};
@@ -686,15 +691,28 @@ mod pure_builtins {
 
     #[builtin("hashString")]
     #[allow(non_snake_case)]
-    async fn builtin_hashString(
-        co: GenCo,
-        _algo: Value,
-        _string: Value,
-    ) -> Result<Value, ErrorKind> {
-        // FIXME: propagate contexts here.
-        Ok(Value::from(CatchableErrorKind::UnimplementedFeature(
-            "hashString".into(),
-        )))
+    async fn builtin_hashString(co: GenCo, algo: Value, image: Value) -> Result<Value, ErrorKind> {
+        if algo.is_catchable() {
+            return Ok(algo);
+        }
+        if image.is_catchable() {
+            return Ok(image);
+        }
+        let image = image.to_contextful_str()?;
+        let image_bytes = image.as_bytes();
+        let encoded_hash = match algo.to_contextful_str()?.as_bstr() {
+            algo if algo == b"md5".as_bstr() => 
+                HEXLOWER.encode(hash::<Md5>(image_bytes).as_bstr()),
+            algo if algo == b"sha1".as_bstr() => 
+                HEXLOWER.encode(hash::<Sha1>(image_bytes).as_bstr()),
+            algo if algo == b"sha256".as_bstr() => 
+                HEXLOWER.encode(hash::<Sha256>(image_bytes).as_bstr()),
+            algo if algo == b"sha512".as_bstr() => 
+                HEXLOWER.encode(hash::<Sha512>(image_bytes).as_bstr()),
+            _ => return Err(ErrorKind::UnknownHashType(image.to_string())),
+        };
+
+        Ok(Value::from(encoded_hash))
     }
 
     #[builtin("head")]
@@ -1597,3 +1615,12 @@ mod placeholder_builtins {
 pub fn placeholders() -> Vec<(&'static str, Value)> {
     placeholder_builtins::builtins()
 }
+
+/// Generic hashing mechanism over different hash functions into [NixString]
+fn hash<D: Digest>(s: &[u8]) -> Output<D> {
+    let mut hasher = D::new();
+    hasher.update(s);
+    hasher.finalize()
+}
+
+
