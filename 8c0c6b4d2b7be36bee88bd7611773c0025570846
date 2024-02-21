@@ -73,6 +73,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "cfc2e8d2_0bbf465f",
+        "filename": "tvix/glue/src/refscan.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 84,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-02-21T13:55:19Z",
+      "side": 1,
+      "message": "https://cl.tvl.fyi/c/depot/+/10988",
+      "parentUuid": "b7100e88_090729d6",
+      "revId": "8c0c6b4d2b7be36bee88bd7611773c0025570846",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "d94973f6_678d4843",
         "filename": "tvix/glue/src/refscan.rs",
         "patchSetId": 1
@@ -102,6 +120,24 @@
       "side": 1,
       "message": "What error, though? This function only can return IO errors. Do we have an error type for this crate?",
       "parentUuid": "d94973f6_678d4843",
+      "revId": "8c0c6b4d2b7be36bee88bd7611773c0025570846",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "51c6532b_dab4ba7f",
+        "filename": "tvix/glue/src/refscan.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 91,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-02-21T13:55:19Z",
+      "side": 1,
+      "message": "`directory_service.get(…).await` returns a `Result\u003cOption\u003cDirectory\u003e, Error\u003e` (and collecting from `get_recursive` would return an empty vec.\n\nWe can\u0027t convey a precise error to signal we were not able to find the directory, but we can probably log a `warn!` and return an io Error - it\u0027s better than just silently skipping reference scanning alltogether, as the code currently does.",
+      "parentUuid": "a32e586c_de105882",
       "revId": "8c0c6b4d2b7be36bee88bd7611773c0025570846",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
