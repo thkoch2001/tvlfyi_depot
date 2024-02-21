@@ -37,6 +37,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "4f944058_e02fb886",
+        "filename": "tvix/glue/src/builtins/utils.rs",
+        "patchSetId": 3
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2024-02-21T21:04:05Z",
+      "side": 1,
+      "message": "it\u0027s a WIP",
+      "parentUuid": "1d4bf67a_bc1108e5",
+      "revId": "06b5c0e6e47948be9ea1dfebb293a6ee214a999a",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "aca25a8e_5fc9a16c",
         "filename": "tvix/glue/src/tvix_store_io.rs",
         "patchSetId": 3
@@ -171,6 +189,24 @@
       "side": 1,
       "message": "With cl/10976 in, you can use node_to_path_info now (see https://cs.tvl.fyi/depot/-/blob/tvix/glue/src/tvix_store_io.rs).",
       "parentUuid": "f56bb6e5_d6a21c30",
+      "revId": "06b5c0e6e47948be9ea1dfebb293a6ee214a999a",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c167430a_d6ecd979",
+        "filename": "tvix/glue/src/tvix_store_io.rs",
+        "patchSetId": 3
+      },
+      "lineNbr": 318,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2024-02-21T21:04:05Z",
+      "side": 1,
+      "message": "\u003e With cl/10976 in, you can use node_to_path_info now (see https://cs.tvl.fyi/depot/-/blob/tvix/glue/src/tvix_store_io.rs).\n\nthat doesn\u0027t work, since the path doesn\u0027t exist",
+      "parentUuid": "44283254_6666a1d8",
       "revId": "06b5c0e6e47948be9ea1dfebb293a6ee214a999a",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
