@@ -1,6 +1,23 @@
 {
   "comments": [
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "d8f47ba2_f915b958",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-02-21T13:57:33Z",
+      "side": 1,
+      "message": "@tvl.janik@aq0.de does https://cl.tvl.fyi/c/depot/+/10994 provide you with sufficient functionality to instantiate serde with some impure features?",
+      "revId": "37c4c80369a179e8f9da2a990e0ce6756ebfc2db",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "7c891779_9c3f0161",
