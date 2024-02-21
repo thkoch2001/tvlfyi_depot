@@ -1,7 +1,10 @@
-use super::PathInfoService;
-use crate::proto::{self, ListPathInfoRequest, PathInfo};
+use super::{HashTypeRequest, PathInfoService};
+use crate::proto::{
+    self, calculate_digest_request::Source, CalculateDigestRequest, ListPathInfoRequest, PathInfo,
+};
 use async_stream::try_stream;
 use futures::stream::BoxStream;
+use nix_compat::nixhash::{HashAlgo, NixHash};
 use tonic::{async_trait, transport::Channel, Code};
 use tvix_castore::{proto as castorepb, Error};
 
@@ -63,27 +66,69 @@ impl PathInfoService for GRPCPathInfoService {
         Ok(path_info)
     }
 
-    async fn calculate_nar(
+    async fn calculate_digest(
         &self,
-        root_node: &castorepb::node::Node,
-    ) -> Result<(u64, [u8; 32]), Error> {
-        let path_info = self
+        hash_type_request: &HashTypeRequest,
+    ) -> Result<(NixHash, u64), Error> {
+        let resp = self
             .grpc_client
-            .clone()
-            .calculate_nar(castorepb::Node {
-                node: Some(root_node.clone()),
+            .calculate_digest(match hash_type_request {
+                HashTypeRequest::Flat(algo, blob_digest) => CalculateDigestRequest {
+                    r#type: match algo {
+                        HashAlgo::Md5 => proto::nar_info::ca::Hash::FlatMd5,
+                        HashAlgo::Sha1 => proto::nar_info::ca::Hash::FlatSha1,
+                        HashAlgo::Sha256 => proto::nar_info::ca::Hash::FlatSha256,
+                        HashAlgo::Sha512 => proto::nar_info::ca::Hash::FlatSha512,
+                    }
+                    .into(),
+                    source: Some(Source::BlobDigest(blob_digest.as_slice().into())),
+                },
+                HashTypeRequest::Nar(algo, root_node) => CalculateDigestRequest {
+                    r#type: match algo {
+                        HashAlgo::Md5 => proto::nar_info::ca::Hash::FlatMd5,
+                        HashAlgo::Sha1 => proto::nar_info::ca::Hash::FlatSha1,
+                        HashAlgo::Sha256 => proto::nar_info::ca::Hash::FlatSha256,
+                        HashAlgo::Sha512 => proto::nar_info::ca::Hash::FlatSha512,
+                    }
+                    .into(),
+                    source: Some(Source::RootNode(castorepb::Node {
+                        node: Some(*root_node.clone()),
+                    })),
+                },
             })
             .await
             .map_err(|e| Error::StorageError(e.to_string()))?
             .into_inner();
 
-        let nar_sha256: [u8; 32] = path_info
-            .nar_sha256
-            .to_vec()
-            .try_into()
-            .map_err(|_e| Error::StorageError("invalid digest length".to_string()))?;
+        // get the algo only.
+        let algo = match hash_type_request {
+            HashTypeRequest::Flat(algo, _) | HashTypeRequest::Nar(algo, _) => algo,
+        };
 
-        Ok((path_info.nar_size, nar_sha256))
+        let nixhash = match algo {
+            HashAlgo::Md5 => NixHash::Md5(
+                resp.digest[..]
+                    .try_into()
+                    .map_err(|_e| Error::StorageError("invalid digest length".to_string()))?,
+            ),
+            HashAlgo::Sha1 => NixHash::Sha1(
+                resp.digest[..]
+                    .try_into()
+                    .map_err(|_e| Error::StorageError("invalid digest length".to_string()))?,
+            ),
+            HashAlgo::Sha256 => NixHash::Sha256(
+                resp.digest[..]
+                    .try_into()
+                    .map_err(|_e| Error::StorageError("invalid digest length".to_string()))?,
+            ),
+            HashAlgo::Sha512 => {
+                NixHash::Sha512(Box::new(resp.digest[..].try_into().map_err(|_e| {
+                    Error::StorageError("invalid digest length".to_string())
+                })?))
+            }
+        };
+
+        Ok((nixhash, resp.nar_size))
     }
 
     fn list(&self) -> BoxStream<'static, Result<PathInfo, Error>> {

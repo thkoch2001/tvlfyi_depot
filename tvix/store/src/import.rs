@@ -9,7 +9,7 @@ use tvix_castore::{
 use nix_compat::store_path::{self, StorePath};
 
 use crate::{
-    pathinfoservice::PathInfoService,
+    pathinfoservice::{HashTypeRequest, PathInfoService},
     proto::{nar_info, NarInfo, PathInfo},
 };
 
@@ -104,7 +104,20 @@ where
         tvix_castore::import::ingest_path(blob_service, directory_service, &path).await?;
 
     // Ask the PathInfoService for the NAR size and sha256
-    let (nar_size, nar_sha256) = path_info_service.as_ref().calculate_nar(&root_node).await?;
+    let (nar_sha256, nar_size) = path_info_service
+        .as_ref()
+        .calculate_digest(&HashTypeRequest::Nar(
+            nix_compat::nixhash::HashAlgo::Sha256,
+            &root_node,
+        ))
+        .await?;
+
+    // Convert the nar sha256 from NixHash to [u8; 32], as that's what all
+    // followup functions want.
+    let nar_sha256: [u8; 32] = nar_sha256
+        .digest_as_bytes()
+        .try_into()
+        .map_err(|_| std::io::Error::new(std::io::ErrorKind::Other, "received invalid sha256"))?;
 
     // Calculate the output path. This might still fail, as some names are illegal.
     // FUTUREWORK: express the `name` at the type level to be valid and move the conversion

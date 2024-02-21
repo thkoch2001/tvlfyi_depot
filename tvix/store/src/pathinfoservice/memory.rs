@@ -1,12 +1,13 @@
-use super::PathInfoService;
-use crate::{nar::calculate_size_and_sha256, proto::PathInfo};
+use super::{HashTypeRequest, PathInfoService};
+use crate::proto::PathInfo;
 use futures::stream::{iter, BoxStream};
+use nix_compat::nixhash::NixHash;
 use std::{
     collections::HashMap,
     sync::{Arc, RwLock},
 };
 use tonic::async_trait;
-use tvix_castore::proto as castorepb;
+use tracing::instrument;
 use tvix_castore::Error;
 use tvix_castore::{blobservice::BlobService, directoryservice::DirectoryService};
 
@@ -61,13 +62,13 @@ where
         }
     }
 
-    async fn calculate_nar(
+    #[instrument(skip_all, fields(hash_type_request=?hash_type_request))]
+    async fn calculate_digest(
         &self,
-        root_node: &castorepb::node::Node,
-    ) -> Result<(u64, [u8; 32]), Error> {
-        calculate_size_and_sha256(root_node, &self.blob_service, &self.directory_service)
+        hash_type_request: &HashTypeRequest,
+    ) -> Result<(NixHash, u64), Error> {
+        super::utils::calculate_digest(self.blob_service, self.directory_service, hash_type_request)
             .await
-            .map_err(|e| Error::StorageError(e.to_string()))
     }
 
     fn list(&self) -> BoxStream<'static, Result<PathInfo, Error>> {

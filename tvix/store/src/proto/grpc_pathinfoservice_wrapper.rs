@@ -2,10 +2,12 @@ use crate::nar::RenderError;
 use crate::pathinfoservice::PathInfoService;
 use crate::proto;
 use futures::{stream::BoxStream, TryStreamExt};
+use proto::calculate_digest_request::Source;
 use std::ops::Deref;
 use tonic::{async_trait, Request, Response, Result, Status};
 use tracing::{instrument, warn};
-use tvix_castore::proto as castorepb;
+
+use super::nar_info;
 
 pub struct GRPCPathInfoServiceWrapper<PS> {
     inner: PS,
@@ -67,24 +69,41 @@ where
     }
 
     #[instrument(skip(self))]
-    async fn calculate_nar(
+    async fn calculate_digest(
         &self,
-        request: Request<castorepb::Node>,
-    ) -> Result<Response<proto::CalculateNarResponse>> {
-        match request.into_inner().node {
-            None => Err(Status::invalid_argument("no root node sent")),
-            Some(root_node) => {
-                let (nar_size, nar_sha256) = self
-                    .inner
-                    .calculate_nar(&root_node)
-                    .await
-                    .expect("error during nar calculation"); // TODO: handle error
+        request: Request<proto::CalculateDigestRequest>,
+    ) -> Result<Response<proto::CalculateDigestResponse>> {
+        let r = request.into_inner();
+        // TODO: move this into CalculateDigestRequest::validate()
+        let source = r.source.unwrap();
+        match r.r#type {
+            typ if typ == nar_info::ca::Hash::NarSha256 as i32 => match source {
+                Source::RootNode(root_node) => {
+                    let (nar_size, nar_sha256) = self
+                        .inner
+                        .calculate_nar(&root_node.node.unwrap()) // TODO: have CalculateDigestRequest::validate() catch this
+                        .await
+                        .expect("error during nar calculation"); // TODO: handle error
 
-                Ok(Response::new(proto::CalculateNarResponse {
-                    nar_size,
-                    nar_sha256: nar_sha256.to_vec().into(),
-                }))
+                    Ok(Response::new(proto::CalculateDigestResponse {
+                        nar_size,
+                        digest: nar_sha256.to_vec().into(),
+                    }))
+                }
+                // TODO: move this into CalculateDigestRequest::validate()
+                Source::BlobDigest(_) => Err(tonic::Status::unimplemented(
+                    "blob digest must not be set for NAR",
+                ))?,
+            },
+            typ if (typ == nar_info::ca::Hash::NarSha1 as i32
+                || typ == nar_info::ca::Hash::NarSha256 as i32
+                || typ == nar_info::ca::Hash::NarMd5 as i32) =>
+            {
+                Err(tonic::Status::unimplemented(
+                    "only NAR_SHA implemented currently",
+                ))?
             }
+            _ => Err(tonic::Status::unimplemented("hashing type not supported"))?,
         }
     }
 
