@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "679cfdfb_dae9a0de",
+        "filename": "tvix/nix-compat/src/derivation/parser.rs",
+        "patchSetId": 24
+      },
+      "lineNbr": 360,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-02-21T10:50:32Z",
+      "side": 1,
+      "message": "Why not constructing the StorePath struct directly?\n\n`b.insert(StorePath::from_bytes(b\"8bjm87p310sb7r2r0sg4xrynlvg86j8k-hello-2.12.1.tar.gz.drv\").unwrap(), {…});` , and drop the conversion later?",
+      "revId": "415f2fe0f5a5cb63e7ab3666d61fd7c6921b4c2f",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
