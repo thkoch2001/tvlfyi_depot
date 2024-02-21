@@ -54,6 +54,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "1547e1ef_9e4fd71d",
+        "filename": "tvix/glue/src/tvix_store_io.rs",
+        "patchSetId": 3
+      },
+      "lineNbr": 80,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2024-02-21T20:49:56Z",
+      "side": 1,
+      "message": "using reqwest async fails:",
+      "parentUuid": "aca25a8e_5fc9a16c",
+      "revId": "06b5c0e6e47948be9ea1dfebb293a6ee214a999a",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "65bdc49e_8f6b0134",
         "filename": "tvix/glue/src/tvix_store_io.rs",
         "patchSetId": 3
@@ -82,6 +100,24 @@
       "writtenOn": "2024-02-20T08:30:42Z",
       "side": 1,
       "message": "Having the Bytes here is pretty heavy on memory usage.\n\nCan you instead have it accept an impl AsyncRead, and use io::copy to copy from it?\n\nYou can massage the request body to that, see https://cs.tvl.fyi/depot@db26cb21322b59d6d205360fb8e654605dd5fdcb/-/blob/tvix/store/src/pathinfoservice/nix_http.rs?L173-178 for an example.",
+      "revId": "06b5c0e6e47948be9ea1dfebb293a6ee214a999a",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c2a4967f_5432b78e",
+        "filename": "tvix/glue/src/tvix_store_io.rs",
+        "patchSetId": 3
+      },
+      "lineNbr": 304,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2024-02-21T20:49:56Z",
+      "side": 1,
+      "message": "it\u0027s a WIP, lol",
+      "parentUuid": "dd66f33f_71a5a47d",
       "revId": "06b5c0e6e47948be9ea1dfebb293a6ee214a999a",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
