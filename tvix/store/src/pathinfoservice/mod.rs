@@ -3,13 +3,17 @@ mod grpc;
 mod memory;
 mod nix_http;
 mod sled;
+mod utils;
 
 #[cfg(any(feature = "fuse", feature = "virtiofs"))]
 mod fs;
 
 use futures::stream::BoxStream;
+use nix_compat::nixhash::HashAlgo;
+use nix_compat::nixhash::NixHash;
 use tonic::async_trait;
 use tvix_castore::proto as castorepb;
+use tvix_castore::B3Digest;
 use tvix_castore::Error;
 
 use crate::proto::PathInfo;
@@ -23,6 +27,16 @@ pub use self::sled::SledPathInfoService;
 #[cfg(any(feature = "fuse", feature = "virtiofs"))]
 pub use self::fs::make_fs;
 
+/// Specifies the hash algo and source to hash.
+#[derive(Debug)]
+pub enum HashTypeRequest<'a> {
+    /// hashes the blob identified by the blake3 digest with the hash algo specified.
+    Flat(HashAlgo, &'a B3Digest),
+    /// hashes the nar representation of the root node with the hash algo specified.
+    /// (and also record its size)
+    Nar(HashAlgo, &'a castorepb::node::Node),
+}
+
 /// The base trait all PathInfo services need to implement.
 #[async_trait]
 pub trait PathInfoService: Send + Sync {
@@ -33,13 +47,17 @@ pub trait PathInfoService: Send + Sync {
     /// invalid messages.
     async fn put(&self, path_info: PathInfo) -> Result<PathInfo, Error>;
 
-    /// Return the nar size and nar sha256 digest for a given root node.
-    /// This can be used to calculate NAR-based output paths,
-    /// and implementations are encouraged to cache it.
-    async fn calculate_nar(
+    /// Provide support to calculate different hashes for store contents.
+    /// Receives info on what to hash:
+    ///  - in case of a plain file, the hash algo, and the blake3 digest of the blob that needs to be present in the BlobService
+    ///  - in case of Nar hashing, a castore root node
+    /// Returns the NixHash after doing the hashing, possibly cached.
+    /// The second argument returns the size of the NAR, in case of NAR hashing,
+    /// and is undefined for plain file hashing.
+    async fn calculate_digest(
         &self,
-        root_node: &castorepb::node::Node,
-    ) -> Result<(u64, [u8; 32]), Error>;
+        hash_type_request: &HashTypeRequest,
+    ) -> Result<(NixHash, u64), Error>;
 
     /// Iterate over all PathInfo objects in the store.
     /// Implementations can decide to disallow listing.

@@ -5,6 +5,7 @@ use futures::{stream::BoxStream, TryStreamExt};
 use nix_compat::{
     narinfo::{self, NarInfo},
     nixbase32,
+    nixhash::NixHash,
 };
 use reqwest::StatusCode;
 use sha2::{digest::FixedOutput, Digest, Sha256};
@@ -16,7 +17,7 @@ use tvix_castore::{
 
 use crate::proto::PathInfo;
 
-use super::PathInfoService;
+use super::{HashTypeRequest, PathInfoService};
 
 /// NixHTTPPathInfoService acts as a bridge in between the Nix HTTP Binary cache
 /// protocol provided by Nix binary caches such as cache.nixos.org, and the Tvix
@@ -257,14 +258,13 @@ where
         ))
     }
 
-    #[instrument(skip_all, fields(root_node=?root_node))]
-    async fn calculate_nar(
+    #[instrument(skip_all, fields(hash_type_request=?hash_type_request))]
+    async fn calculate_digest(
         &self,
-        root_node: &castorepb::node::Node,
-    ) -> Result<(u64, [u8; 32]), Error> {
-        Err(Error::InvalidRequest(
-            "calculate_nar not supported for this backend".to_string(),
-        ))
+        hash_type_request: &HashTypeRequest,
+    ) -> Result<(NixHash, u64), Error> {
+        super::utils::calculate_digest(self.blob_service, self.directory_service, hash_type_request)
+            .await
     }
 
     fn list(&self) -> BoxStream<'static, Result<PathInfo, Error>> {

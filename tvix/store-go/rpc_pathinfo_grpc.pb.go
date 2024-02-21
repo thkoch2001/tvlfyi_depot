@@ -10,7 +10,6 @@
 package storev1
 
 import (
-	castore_go "code.tvl.fyi/tvix/castore-go"
 	context "context"
 	grpc "google.golang.org/grpc"
 	codes "google.golang.org/grpc/codes"
@@ -23,10 +22,10 @@ import (
 const _ = grpc.SupportPackageIsVersion7
 
 const (
-	PathInfoService_Get_FullMethodName          = "/tvix.store.v1.PathInfoService/Get"
-	PathInfoService_Put_FullMethodName          = "/tvix.store.v1.PathInfoService/Put"
-	PathInfoService_CalculateNAR_FullMethodName = "/tvix.store.v1.PathInfoService/CalculateNAR"
-	PathInfoService_List_FullMethodName         = "/tvix.store.v1.PathInfoService/List"
+	PathInfoService_Get_FullMethodName             = "/tvix.store.v1.PathInfoService/Get"
+	PathInfoService_Put_FullMethodName             = "/tvix.store.v1.PathInfoService/Put"
+	PathInfoService_CalculateDigest_FullMethodName = "/tvix.store.v1.PathInfoService/CalculateDigest"
+	PathInfoService_List_FullMethodName            = "/tvix.store.v1.PathInfoService/List"
 )
 
 // PathInfoServiceClient is the client API for PathInfoService service.
@@ -48,20 +47,15 @@ type PathInfoServiceClient interface {
 	// The returned PathInfo object MAY contain additional narinfo signatures, but
 	// is otherwise left untouched.
 	Put(ctx context.Context, in *PathInfo, opts ...grpc.CallOption) (*PathInfo, error)
-	// Calculate the NAR representation of the contents specified by the
-	// root_node. The calculation SHOULD be cached server-side for subsequent
-	// requests.
+	// Provides calculation of different hashes for store contents.
+	// These calculation SHOULD be cached server-side for subsequent requests.
 	//
-	// All references (to blobs or Directory messages) MUST already exist in the
-	// store.
+	// All references (to blobs or Directory messages) MUST exist in the store.
 	//
-	// The method can be used to produce a Nix fixed-output path, which contains
-	// the (compressed) sha256 of the NAR content representation in the root_node
-	// name (suffixed with the name).
-	//
-	// It can also be used to calculate arbitrary NAR hashes of output paths, in
-	// case a legacy Nix Binary Cache frontend is provided.
-	CalculateNAR(ctx context.Context, in *castore_go.Node, opts ...grpc.CallOption) (*CalculateNARResponse, error)
+	// NAR_* types can be used to retrieve the information necessary to calculate
+	// output paths for fixed-output derivations.
+	// FLAT_* types can be used to calculate hashes of plain file contents.
+	CalculateDigest(ctx context.Context, in *CalculateDigestRequest, opts ...grpc.CallOption) (*CalculateDigestResponse, error)
 	// Return a stream of PathInfo messages matching the criteria specified in
 	// ListPathInfoRequest.
 	List(ctx context.Context, in *ListPathInfoRequest, opts ...grpc.CallOption) (PathInfoService_ListClient, error)
@@ -93,9 +87,9 @@ func (c *pathInfoServiceClient) Put(ctx context.Context, in *PathInfo, opts ...g
 	return out, nil
 }
 
-func (c *pathInfoServiceClient) CalculateNAR(ctx context.Context, in *castore_go.Node, opts ...grpc.CallOption) (*CalculateNARResponse, error) {
-	out := new(CalculateNARResponse)
-	err := c.cc.Invoke(ctx, PathInfoService_CalculateNAR_FullMethodName, in, out, opts...)
+func (c *pathInfoServiceClient) CalculateDigest(ctx context.Context, in *CalculateDigestRequest, opts ...grpc.CallOption) (*CalculateDigestResponse, error) {
+	out := new(CalculateDigestResponse)
+	err := c.cc.Invoke(ctx, PathInfoService_CalculateDigest_FullMethodName, in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -153,20 +147,15 @@ type PathInfoServiceServer interface {
 	// The returned PathInfo object MAY contain additional narinfo signatures, but
 	// is otherwise left untouched.
 	Put(context.Context, *PathInfo) (*PathInfo, error)
-	// Calculate the NAR representation of the contents specified by the
-	// root_node. The calculation SHOULD be cached server-side for subsequent
-	// requests.
+	// Provides calculation of different hashes for store contents.
+	// These calculation SHOULD be cached server-side for subsequent requests.
 	//
-	// All references (to blobs or Directory messages) MUST already exist in the
-	// store.
+	// All references (to blobs or Directory messages) MUST exist in the store.
 	//
-	// The method can be used to produce a Nix fixed-output path, which contains
-	// the (compressed) sha256 of the NAR content representation in the root_node
-	// name (suffixed with the name).
-	//
-	// It can also be used to calculate arbitrary NAR hashes of output paths, in
-	// case a legacy Nix Binary Cache frontend is provided.
-	CalculateNAR(context.Context, *castore_go.Node) (*CalculateNARResponse, error)
+	// NAR_* types can be used to retrieve the information necessary to calculate
+	// output paths for fixed-output derivations.
+	// FLAT_* types can be used to calculate hashes of plain file contents.
+	CalculateDigest(context.Context, *CalculateDigestRequest) (*CalculateDigestResponse, error)
 	// Return a stream of PathInfo messages matching the criteria specified in
 	// ListPathInfoRequest.
 	List(*ListPathInfoRequest, PathInfoService_ListServer) error
@@ -183,8 +172,8 @@ func (UnimplementedPathInfoServiceServer) Get(context.Context, *GetPathInfoReque
 func (UnimplementedPathInfoServiceServer) Put(context.Context, *PathInfo) (*PathInfo, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Put not implemented")
 }
-func (UnimplementedPathInfoServiceServer) CalculateNAR(context.Context, *castore_go.Node) (*CalculateNARResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method CalculateNAR not implemented")
+func (UnimplementedPathInfoServiceServer) CalculateDigest(context.Context, *CalculateDigestRequest) (*CalculateDigestResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method CalculateDigest not implemented")
 }
 func (UnimplementedPathInfoServiceServer) List(*ListPathInfoRequest, PathInfoService_ListServer) error {
 	return status.Errorf(codes.Unimplemented, "method List not implemented")
@@ -238,20 +227,20 @@ func _PathInfoService_Put_Handler(srv interface{}, ctx context.Context, dec func
 	return interceptor(ctx, in, info, handler)
 }
 
-func _PathInfoService_CalculateNAR_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(castore_go.Node)
+func _PathInfoService_CalculateDigest_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(CalculateDigestRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(PathInfoServiceServer).CalculateNAR(ctx, in)
+		return srv.(PathInfoServiceServer).CalculateDigest(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: PathInfoService_CalculateNAR_FullMethodName,
+		FullMethod: PathInfoService_CalculateDigest_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(PathInfoServiceServer).CalculateNAR(ctx, req.(*castore_go.Node))
+		return srv.(PathInfoServiceServer).CalculateDigest(ctx, req.(*CalculateDigestRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -293,8 +282,8 @@ var PathInfoService_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _PathInfoService_Put_Handler,
 		},
 		{
-			MethodName: "CalculateNAR",
-			Handler:    _PathInfoService_CalculateNAR_Handler,
+			MethodName: "CalculateDigest",
+			Handler:    _PathInfoService_CalculateDigest_Handler,
 		},
 	},
 	Streams: []grpc.StreamDesc{
