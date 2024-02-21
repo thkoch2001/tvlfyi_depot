@@ -16,6 +16,24 @@
       "message": "Was this intentional? We do have this in the repo.",
       "revId": "c193020b9fd0678b653a4b15d7593c596cc32e5c",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3a094e23_2d14a7b8",
+        "filename": "tvix/.vscode/extensions.json",
+        "patchSetId": 10
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-02-21T03:48:00Z",
+      "side": 0,
+      "message": "Done",
+      "parentUuid": "12d91d28_14ff18b8",
+      "revId": "c193020b9fd0678b653a4b15d7593c596cc32e5c",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }

@@ -24,6 +24,30 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "a7faf778_7ce0e3c7",
+        "filename": "tvix/nix-compat/src/derivation/write.rs",
+        "patchSetId": 10
+      },
+      "lineNbr": 146,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-02-21T03:48:00Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f7dc15d1_8e0ffff2",
+      "range": {
+        "startLine": 146,
+        "startChar": 14,
+        "endLine": 146,
+        "endChar": 35
+      },
+      "revId": "9df194d535147710308481f9757d2e10b6206b77",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "26752d9f_2f18ce40",
@@ -37,6 +61,30 @@
       "writtenOn": "2024-02-20T12:41:15Z",
       "side": 1,
       "message": "_aterm",
+      "range": {
+        "startLine": 152,
+        "startChar": 25,
+        "endLine": 152,
+        "endChar": 46
+      },
+      "revId": "9df194d535147710308481f9757d2e10b6206b77",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e0bb4a71_78c64963",
+        "filename": "tvix/nix-compat/src/derivation/write.rs",
+        "patchSetId": 10
+      },
+      "lineNbr": 152,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-02-21T03:48:00Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "26752d9f_2f18ce40",
       "range": {
         "startLine": 152,
         "startChar": 25,
