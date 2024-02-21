@@ -16,6 +16,24 @@
       "message": "I\u0027d probably keep the digest as return type, and let our hashString implementation deal with encoding it in hexlower.",
       "revId": "be6c4d62dd04e6dc9c1ba338176afd4c2e7c2d7c",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b8ac8579_c64ec96c",
+        "filename": "tvix/eval/src/builtins/mod.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 1613,
+      "author": {
+        "id": 1000089
+      },
+      "writtenOn": "2024-02-21T18:10:17Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8437cb58_c86b4075",
+      "revId": "be6c4d62dd04e6dc9c1ba338176afd4c2e7c2d7c",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
