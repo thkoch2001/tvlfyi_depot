@@ -1,14 +1,15 @@
-use crate::derivation::OutputError;
 use crate::nixhash::CAHash;
-use crate::store_path::StorePathRef;
+use crate::{derivation::OutputError, store_path::StorePath};
+use serde::de::value::StrDeserializer;
 use serde::{Deserialize, Serialize};
 use serde_json::Map;
+use std::borrow::Cow;
 
 /// References the derivation output.
 #[derive(Clone, Debug, Default, Eq, PartialEq, Serialize)]
 pub struct Output {
     /// Store path of build result.
-    pub path: String,
+    pub path: Option<StorePath>,
 
     #[serde(flatten)]
     pub ca_hash: Option<CAHash>, // we can only represent a subset here.
@@ -20,18 +21,20 @@ impl<'de> Deserialize<'de> for Output {
         D: serde::Deserializer<'de>,
     {
         let fields = Map::deserialize(deserializer)?;
+        let path: &str = fields
+            .get("path")
+            .ok_or(serde::de::Error::missing_field(
+                "`path` is missing but required for outputs",
+            ))?
+            .as_str()
+            .ok_or(serde::de::Error::invalid_type(
+                serde::de::Unexpected::Other("certainly not a string"),
+                &"a string",
+            ))?;
+
+        let path = StorePath::deserialize(StrDeserializer::new(path))?;
         Ok(Self {
-            path: fields
-                .get("path")
-                .ok_or(serde::de::Error::missing_field(
-                    "`path` is missing but required for outputs",
-                ))?
-                .as_str()
-                .ok_or(serde::de::Error::invalid_type(
-                    serde::de::Unexpected::Other("certainly not a string"),
-                    &"a string",
-                ))?
-                .to_owned(),
+            path: Some(path),
             ca_hash: CAHash::from_map::<D>(&fields)?,
         })
     }
@@ -40,6 +43,14 @@ impl<'de> Deserialize<'de> for Output {
 impl Output {
     pub fn is_fixed(&self) -> bool {
         self.ca_hash.is_some()
+    }
+
+    /// The output path as a string -- use `""` to indicate an unset output path.
+    pub fn path_str(&self) -> Cow<str> {
+        match &self.path {
+            None => Cow::Borrowed(""),
+            Some(path) => Cow::Owned(path.to_absolute_path()),
+        }
     }
 
     pub fn validate(&self, validate_output_paths: bool) -> Result<(), OutputError> {
@@ -52,10 +63,8 @@ impl Output {
             }
         }
 
-        if validate_output_paths {
-            if let Err(e) = StorePathRef::from_absolute_path(self.path.as_bytes()) {
-                return Err(OutputError::InvalidOutputPath(self.path.to_string(), e));
-            }
+        if validate_output_paths && self.path.is_none() {
+            return Err(OutputError::MissingOutputPath);
         }
         Ok(())
     }
