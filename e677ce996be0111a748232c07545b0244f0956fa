@@ -18,6 +18,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "0ca1b87f_4b03862d",
+        "filename": "tvix/nix-compat/src/derivation/mod.rs",
+        "patchSetId": 14
+      },
+      "lineNbr": 221,
+      "author": {
+        "id": 1000097
+      },
+      "writtenOn": "2024-02-21T11:17:17Z",
+      "side": 1,
+      "message": "The String interface would also not enforce sha256.\n\nI added the deub assertion",
+      "parentUuid": "d70109f7_2735f628",
+      "revId": "e677ce996be0111a748232c07545b0244f0956fa",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "a7adce09_1f975b80",
@@ -31,6 +49,24 @@
       "writtenOn": "2024-02-21T10:47:44Z",
       "side": 1,
       "message": "https://cl.tvl.fyi/c/depot/+/10973/comment/0f135a8f_29182a55/ is not done, this doesn\u0027t explain to someone just using NixHash why it Ord is implemented the way it is (and how).",
+      "revId": "e677ce996be0111a748232c07545b0244f0956fa",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "81508075_a3a0c366",
+        "filename": "tvix/nix-compat/src/nixhash/mod.rs",
+        "patchSetId": 14
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1000097
+      },
+      "writtenOn": "2024-02-21T11:17:17Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a7adce09_1f975b80",
       "revId": "e677ce996be0111a748232c07545b0244f0956fa",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
