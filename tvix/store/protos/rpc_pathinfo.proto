@@ -27,20 +27,15 @@ service PathInfoService {
   // is otherwise left untouched.
   rpc Put(PathInfo) returns (PathInfo);
 
-  // Calculate the NAR representation of the contents specified by the
-  // root_node. The calculation SHOULD be cached server-side for subsequent
-  // requests.
+  // Provides calculation of different hashes for store contents.
+  // These calculation SHOULD be cached server-side for subsequent requests.
   //
-  // All references (to blobs or Directory messages) MUST already exist in the
-  // store.
+  // All references (to blobs or Directory messages) MUST exist in the store.
   //
-  // The method can be used to produce a Nix fixed-output path, which contains
-  // the (compressed) sha256 of the NAR content representation in the root_node
-  // name (suffixed with the name).
-  //
-  // It can also be used to calculate arbitrary NAR hashes of output paths, in
-  // case a legacy Nix Binary Cache frontend is provided.
-  rpc CalculateNAR(tvix.castore.v1.Node) returns (CalculateNARResponse);
+  // NAR_* types can be used to retrieve the information necessary to calculate
+  // output paths for fixed-output derivations.
+  // FLAT_* types can be used to validate expected hashes of file contents.
+  rpc CalculateDigest(CalculateDigestRequest) returns (CalculateDigestResponse);
 
   // Return a stream of PathInfo messages matching the criteria specified in
   // ListPathInfoRequest.
@@ -63,14 +58,31 @@ message GetPathInfoRequest {
 // Currently no filtering is possible, all objects are returned.
 message ListPathInfoRequest {}
 
-// CalculateNARResponse is the response returned by the CalculateNAR request.
-//
-// It contains the size of the NAR representation (in bytes), and the sha56
-// digest.
-message CalculateNARResponse {
-  // This size of the NAR file, in bytes.
-  uint64 nar_size = 1;
+// Message type to specify the parameters for the CalculateDigest request.
+// Only the NAR_* and FLAT_* enum kinds are supported for "type".
+message CalculateDigestRequest {
+  // The hashing type to use.
+  tvix.store.v1.NARInfo.CA.Hash type = 1;
 
-  // The sha256 of the NAR file representation.
-  bytes nar_sha256 = 2;
+  oneof source {
+    // The root node identifying the contents (for NAR_* hashing type enum
+    // kinds).
+    // The name of the root_node is ignored.
+    tvix.castore.v1.Node root_node = 2;
+
+    // The blake3 digest of the raw blob contents (for FLAT_* hashing type enum
+    // kinds)
+    bytes blob_digest = 3;
+  }
+}
+
+// CalculateDigestResponse is the response returned by the CalculateDigest
+// request.
+message CalculateDigestResponse {
+  // The calculated digest for the requested hashing type.
+  bytes digest = 1;
+
+  // The NAR size, in bytes. Only populated/nonzero if NAR_* hashing types are
+  // used.
+  uint64 nar_size = 2;
 }
