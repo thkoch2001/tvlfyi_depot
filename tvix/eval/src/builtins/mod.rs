@@ -5,9 +5,13 @@
 
 use bstr::{ByteSlice, ByteVec};
 use builtin_macros::builtins;
+use data_encoding::HEXLOWER;
 use genawaiter::rc::Gen;
 use imbl::OrdMap;
+use md5::Md5;
 use regex::Regex;
+use sha1::Sha1;
+use sha2::{Digest, Sha256, Sha512};
 use std::cmp::{self, Ordering};
 use std::collections::VecDeque;
 use std::collections::{BTreeMap, HashSet};
@@ -686,15 +690,22 @@ mod pure_builtins {
 
     #[builtin("hashString")]
     #[allow(non_snake_case)]
-    async fn builtin_hashString(
-        co: GenCo,
-        _algo: Value,
-        _string: Value,
-    ) -> Result<Value, ErrorKind> {
-        // FIXME: propagate contexts here.
-        Ok(Value::from(CatchableErrorKind::UnimplementedFeature(
-            "hashString".into(),
-        )))
+    async fn builtin_hashString(co: GenCo, algo: Value, s: Value) -> Result<Value, ErrorKind> {
+        if algo.is_catchable() {
+            return Ok(algo);
+        }
+        if s.is_catchable() {
+            return Ok(s);
+        }
+        let s = s.to_contextful_str()?;
+        let sb = s.as_bytes();
+        match algo.to_contextful_str()?.as_bstr() {
+            algo if algo == b"md5".as_bstr() => Ok(Value::from(hash::<Md5>(sb))),
+            algo if algo == b"sha1".as_bstr() => Ok(Value::from(hash::<Sha1>(sb))),
+            algo if algo == b"sha256".as_bstr() => Ok(Value::from(hash::<Sha256>(sb))),
+            algo if algo == b"sha512".as_bstr() => Ok(Value::from(hash::<Sha512>(sb))),
+            _ => Err(ErrorKind::UnknownHashType(s.to_string())),
+        }
     }
 
     #[builtin("head")]
@@ -1596,4 +1607,13 @@ mod placeholder_builtins {
 
 pub fn placeholders() -> Vec<(&'static str, Value)> {
     placeholder_builtins::builtins()
+}
+
+/// Generic hashing mechanism over different hash functions into [NixString]
+fn hash<D: Digest>(s: &[u8]) -> NixString {
+    let mut hasher = D::new();
+    hasher.update(s);
+    let hash = hasher.finalize();
+    let encoded_hash = HEXLOWER.encode(hash.as_bstr());
+    NixString::from(encoded_hash)
 }
