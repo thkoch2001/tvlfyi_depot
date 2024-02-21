@@ -16,6 +16,24 @@
       "message": "The error struct itself can just hold the StorePath now, so the consumer can decide on their own how to present it later.",
       "revId": "e21e00430ed6d67d4be0dcf9dd6a1184167cbd6a",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9fd25bb7_84dc99f3",
+        "filename": "tvix/nix-compat/src/derivation/parser.rs",
+        "patchSetId": 4
+      },
+      "lineNbr": 203,
+      "author": {
+        "id": 1000097
+      },
+      "writtenOn": "2024-02-21T07:51:02Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "306a0a6e_174aebb1",
+      "revId": "e21e00430ed6d67d4be0dcf9dd6a1184167cbd6a",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
