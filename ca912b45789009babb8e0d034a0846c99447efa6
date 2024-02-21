@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "46994140_061e34d2",
+        "filename": "tvix/nix-compat/src/nixhash/mod.rs",
+        "patchSetId": 3
+      },
+      "lineNbr": 60,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-02-21T13:00:19Z",
+      "side": 1,
+      "message": "We do have\n`impl TryFrom\u003c(HashAlgo, \u0026[u8])\u003e for NixHash`, which probably could be its own named constructor too.\n\nI wouldn\u0027t expect new(...) to accept the raw data to hash at this place.\n\nNixHash contains data to represent Algo and digest, but you don\u0027t necessarily have the original data to construct it.\n\nAlso, this doesn\u0027t allow passing bytes, or a writer interface (if you don\u0027t want all the data to hash in memory).\n\nWhat about `HashAlgo` having a `new_hasher` function, returning a https://docs.rs/digest/0.10.7/digest/trait.Digest.html for the specific enum variants?\n\nWe could then have a constructor consuming the output of that, or a digest that\u0027s coming from anywhere.",
+      "revId": "ca912b45789009babb8e0d034a0846c99447efa6",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
