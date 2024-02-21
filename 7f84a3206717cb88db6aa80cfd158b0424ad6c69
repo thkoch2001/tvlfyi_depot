@@ -16,6 +16,23 @@
       "message": "Thanks for the review",
       "revId": "7f84a3206717cb88db6aa80cfd158b0424ad6c69",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "423d7d0d_d95095f1",
+        "filename": "tvix/nix-compat/src/derivation/mod.rs",
+        "patchSetId": 8
+      },
+      "lineNbr": 137,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-02-21T10:51:45Z",
+      "side": 1,
+      "message": "nice!",
+      "revId": "7f84a3206717cb88db6aa80cfd158b0424ad6c69",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
