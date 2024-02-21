@@ -34,6 +34,24 @@
       "parentUuid": "f62019a6_5d10d863",
       "revId": "c715e45f359899dc37c84bc31d12c68a106ae6f1",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "077a644f_d69b2664",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-02-21T11:44:13Z",
+      "side": 1,
+      "message": "Please update the CL to not conflict, and also update the other occurences introduced in 73880786308d956061951114271f12a395f884b5.",
+      "parentUuid": "c2e1a2c4_f207e710",
+      "revId": "c715e45f359899dc37c84bc31d12c68a106ae6f1",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
