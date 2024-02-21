@@ -72,6 +72,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "8c82981c_e6305835",
+        "filename": "tvix/glue/src/tvix_store_io.rs",
+        "patchSetId": 3
+      },
+      "lineNbr": 80,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2024-02-21T20:52:39Z",
+      "side": 1,
+      "message": "```\ntvix-repl\u003e builtins.readFile (builtins.fetchurl {url \u003d \"http://example.com/test\"; sha256 \u003d \"1nf895jf7dbrxarvdp3q6hj9p7jgyx8m43snac6rnn7vcmyar3zc\";})\nthread \u0027main\u0027 panicked at /home/grfn/.cargo/registry/src/index.crates.io-6f17d22bba15001f/hyper-0.14.28/src/client/connect/dns.rs:121:24:\nthere is no reactor running, must be called from the context of a Tokio 1.x runtime\nnote: run with `RUST_BACKTRACE\u003d1` environment variable to display a backtrace\n```",
+      "parentUuid": "1547e1ef_9e4fd71d",
+      "revId": "06b5c0e6e47948be9ea1dfebb293a6ee214a999a",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "65bdc49e_8f6b0134",
         "filename": "tvix/glue/src/tvix_store_io.rs",
         "patchSetId": 3
