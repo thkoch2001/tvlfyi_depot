@@ -1,0 +1,142 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cc6ef2f5_4e9c932c",
+        "filename": "tvix/eval/src/builtins/mod.rs",
+        "patchSetId": 6
+      },
+      "lineNbr": 694,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2024-02-21T20:41:13Z",
+      "side": 1,
+      "message": "why is this called \"image\"? C++ nix just calls this \"s\", which feels much more natural to me",
+      "range": {
+        "startLine": 694,
+        "startChar": 56,
+        "endLine": 694,
+        "endChar": 68
+      },
+      "revId": "bcc1d6a31f772d1949734982136fd586d19de3a4",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5e39d8d0_59dea8f1",
+        "filename": "tvix/eval/src/builtins/mod.rs",
+        "patchSetId": 6
+      },
+      "lineNbr": 701,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2024-02-21T20:41:13Z",
+      "side": 1,
+      "message": "I think we want `to_str()` here - I don\u0027t think we care about context",
+      "range": {
+        "startLine": 701,
+        "startChar": 25,
+        "endLine": 701,
+        "endChar": 45
+      },
+      "revId": "bcc1d6a31f772d1949734982136fd586d19de3a4",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "917a073c_27f8d7fe",
+        "filename": "tvix/eval/src/builtins/mod.rs",
+        "patchSetId": 6
+      },
+      "lineNbr": 703,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2024-02-21T20:41:13Z",
+      "side": 1,
+      "message": "I think we want `to_str()` here - I don\u0027t think we care about context",
+      "range": {
+        "startLine": 703,
+        "startChar": 37,
+        "endLine": 703,
+        "endChar": 57
+      },
+      "revId": "bcc1d6a31f772d1949734982136fd586d19de3a4",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9ca42b3e_8edddf4c",
+        "filename": "tvix/eval/src/builtins/mod.rs",
+        "patchSetId": 6
+      },
+      "lineNbr": 704,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2024-02-21T20:41:13Z",
+      "side": 1,
+      "message": "seems cleaner to `.as_bytes()` on the match scrutinee and then match against eg `b\"md5\"` here? eg this compiles just fine:\n```\n        let encoded_hash \u003d match algo.to_contextful_str()?.as_bytes() {\n            b\"md5\" \u003d\u003e HEXLOWER.encode(hash::\u003cMd5\u003e(image_bytes).as_bstr()),\n            b\"sha1\" \u003d\u003e HEXLOWER.encode(hash::\u003cSha1\u003e(image_bytes).as_bstr()),\n            b\"sha256\" \u003d\u003e HEXLOWER.encode(hash::\u003cSha256\u003e(image_bytes).as_bstr()),\n            b\"sha512\" \u003d\u003e HEXLOWER.encode(hash::\u003cSha512\u003e(image_bytes).as_bstr()),\n            _ \u003d\u003e return Err(ErrorKind::UnknownHashType(image.to_string())),\n        };\n```",
+      "range": {
+        "startLine": 704,
+        "startChar": 12,
+        "endLine": 704,
+        "endChar": 44
+      },
+      "revId": "bcc1d6a31f772d1949734982136fd586d19de3a4",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3a6b668f_0ae3093a",
+        "filename": "tvix/eval/src/builtins/mod.rs",
+        "patchSetId": 6
+      },
+      "lineNbr": 714,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2024-02-21T20:41:13Z",
+      "side": 1,
+      "message": "better to just use `.into()`, here, both to bypass Display and to make this less painful if/when we ever decide to use something other than a String in UnknownHashType",
+      "range": {
+        "startLine": 714,
+        "startChar": 60,
+        "endLine": 714,
+        "endChar": 72
+      },
+      "revId": "bcc1d6a31f772d1949734982136fd586d19de3a4",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "74af5adf_9153203d",
+        "filename": "tvix/eval/src/builtins/mod.rs",
+        "patchSetId": 6
+      },
+      "lineNbr": 1627,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2024-02-21T20:41:13Z",
+      "side": 1,
+      "message": "I\u0027m not sure this is that useful as a top-level function (especially this far away from where it\u0027s called) - maybe just stick it inside of `builtin_hashString`?",
+      "range": {
+        "startLine": 1621,
+        "startChar": 0,
+        "endLine": 1627,
+        "endChar": 1
+      },
+      "revId": "bcc1d6a31f772d1949734982136fd586d19de3a4",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
