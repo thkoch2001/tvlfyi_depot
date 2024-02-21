@@ -1,6 +1,23 @@
 {
   "comments": [
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "5ce5d47c_eda36acf",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000097
+      },
+      "writtenOn": "2024-02-21T06:35:27Z",
+      "side": 1,
+      "message": "This CL made more sense in an earlier stage of this change stack ;)\n\nI think this is still a good idea since generalizing over StorePath/StorePathRef is useful (I have also seen this in code flokli showed me) but not in the context of the Derivation refactoring.",
+      "revId": "c193020b9fd0678b653a4b15d7593c596cc32e5c",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "6ed4b653_0d3ff6b5",
@@ -24,6 +41,30 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "d4b64bf7_e72d7651",
+        "filename": "tvix/nix-compat/src/store_path/as_store_path_ref.rs",
+        "patchSetId": 8
+      },
+      "lineNbr": 5,
+      "author": {
+        "id": 1000097
+      },
+      "writtenOn": "2024-02-21T06:35:27Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6ed4b653_0d3ff6b5",
+      "range": {
+        "startLine": 5,
+        "startChar": 29,
+        "endLine": 5,
+        "endChar": 36
+      },
+      "revId": "c193020b9fd0678b653a4b15d7593c596cc32e5c",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "b5b8eaf2_5ea27bc7",
@@ -37,6 +78,24 @@
       "writtenOn": "2024-02-21T04:06:19Z",
       "side": 1,
       "message": "Does that apply only for the str impl, for both `str` and `String` implementation, or the entire `AsStorePathRef` trait?\n\nI also don\u0027t quite understand why we\u0027re fallible here. Wouldn\u0027t it be simpler to just implement `ATermWriteable` for `\u0026str`, `\u0026StorePath` and `\u0026StorePathRef`, and use this in `write_input_derivations` and potential other consumers?\n\nTrying to ensure things parse as something store path-ishy or not shouldn\u0027t really matter for writing things out as aterm, but we know all store paths are just rendered as their absolute path string, and strings stay untouched.",
+      "revId": "c193020b9fd0678b653a4b15d7593c596cc32e5c",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3a5146e4_a4fda58c",
+        "filename": "tvix/nix-compat/src/store_path/as_store_path_ref.rs",
+        "patchSetId": 8
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 1000097
+      },
+      "writtenOn": "2024-02-21T06:35:27Z",
+      "side": 1,
+      "message": "This applies for the `str` and `String` implementation.\n\nSince you cannot use `Borrow` with `StorePath`, I\u0027d expect something like this to abstract whether you want an owned or non-owned `StorePath`. \n\nBut admittedly this could be non-failible.\n\nI can remove this for now and reintroduce something non-fallible later.",
+      "parentUuid": "b5b8eaf2_5ea27bc7",
       "revId": "c193020b9fd0678b653a4b15d7593c596cc32e5c",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
