@@ -16,6 +16,24 @@
       "message": "Can you drop the todo from tvix/eval/docs/builtins.md?",
       "revId": "2d9f49ccb627f45363758b78c189590c4964fb3f",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9512f2f4_b3adc278",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000089
+      },
+      "writtenOn": "2024-02-21T18:31:16Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "df136083_8849bc60",
+      "revId": "2d9f49ccb627f45363758b78c189590c4964fb3f",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
