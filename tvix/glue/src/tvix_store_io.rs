@@ -5,7 +5,7 @@ use bytes::Bytes;
 use futures::{StreamExt, TryStreamExt};
 use nix_compat::{
     nixhash::CAHash,
-    store_path::{StorePath, StorePathRef},
+    store_path::StorePath,
 };
 use std::{
     cell::RefCell,
@@ -151,16 +151,14 @@ impl TvixStoreIO {
                             let output_paths: Vec<StorePath> = output_names
                                 .iter()
                                 .map(|output_name| {
-                                    let output_path = &input_drv
+                                    input_drv
                                         .outputs
                                         .get(output_name)
                                         .expect("missing output_name")
-                                        .path;
-
-                                    // since Derivation is validated, we this can be parsed.
-                                    StorePathRef::from_absolute_path(output_path.as_bytes())
-                                        .expect("invalid output path")
-                                        .to_owned()
+                                        .path
+                                        .as_ref()
+                                        .expect("missing output path")
+                                        .clone()
                                 })
                                 .collect();
                             // For each output, ask for the castore node.

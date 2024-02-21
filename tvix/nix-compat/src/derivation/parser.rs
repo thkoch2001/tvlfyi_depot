@@ -97,7 +97,12 @@ fn parse_output(i: &[u8]) -> NomResult<&[u8], (String, Output)> {
                     Ok(hash_with_mode) => Ok((
                         output_name,
                         Output {
-                            path: output_path,
+                            // TODO: Check allow empty
+                            path: if output_path.is_empty() {
+                                None
+                            } else {
+                                Some(string_to_store_path(i, output_path)?)
+                            },
                             ca_hash: hash_with_mode,
                         },
                     )),
@@ -164,21 +169,7 @@ fn parse_input_derivations(i: &[u8]) -> NomResult<&[u8], BTreeMap<StorePath, BTr
             new_output_names.insert(output_name);
         }
 
-        #[cfg(debug_assertions)]
-        let input_derivation_str = input_derivation.clone();
-
-        let input_derivation: StorePath =
-            input_derivation
-                .try_into()
-                .map_err(|e: store_path::Error| {
-                    nom::Err::Failure(NomError {
-                        input: i,
-                        code: e.into(),
-                    })
-                })?;
-
-        #[cfg(debug_assertions)]
-        assert_eq!(input_derivation_str, input_derivation.to_absolute_path());
+        let input_derivation: StorePath = string_to_store_path(i, input_derivation)?;
 
         input_derivations.insert(input_derivation, new_output_names);
     }
@@ -187,16 +178,12 @@ fn parse_input_derivations(i: &[u8]) -> NomResult<&[u8], BTreeMap<StorePath, BTr
 }
 
 fn parse_input_sources(i: &[u8]) -> NomResult<&[u8], BTreeSet<StorePath>> {
-    let (i, input_sources_lst) = aterm::parse_str_list(i).map_err(into_nomerror)?;
+    let (i, input_sources_lst) = aterm::parse_str_list(i)
+        .map_err(into_nomerror)?;
 
     let mut input_sources: BTreeSet<_> = BTreeSet::new();
     for input_source in input_sources_lst.into_iter() {
-        let input_source: StorePath = input_source.try_into().map_err(|e: store_path::Error| {
-            nom::Err::Failure(NomError {
-                input: i,
-                code: e.into(),
-            })
-        })?;
+        let input_source: StorePath = string_to_store_path(i, input_source)?;
         if input_sources.contains(&input_source) {
             return Err(nom::Err::Failure(NomError {
                 input: i,
@@ -208,6 +195,26 @@ fn parse_input_sources(i: &[u8]) -> NomResult<&[u8], BTreeSet<StorePath>> {
     }
 
     Ok((i, input_sources))
+}
+
+fn string_to_store_path(i: &[u8], path_str: String) -> Result<StorePath, nom::Err<NomError<&[u8]>>> {
+    #[cfg(debug_assertions)]
+    let path_str2 = path_str.clone();
+
+    let path: StorePath =
+        path_str
+            .try_into()
+            .map_err(|e: store_path::Error| {
+                nom::Err::Failure(NomError {
+                    input: i,
+                    code: e.into(),
+                })
+            })?;
+
+    #[cfg(debug_assertions)]
+    assert_eq!(path_str2, path.to_absolute_path());
+
+    Ok(path)
 }
 
 pub fn parse_derivation(i: &[u8]) -> NomResult<&[u8], Derivation> {
