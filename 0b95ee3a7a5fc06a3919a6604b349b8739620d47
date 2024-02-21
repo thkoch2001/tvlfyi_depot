@@ -24,6 +24,30 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "8c664603_610da095",
+        "filename": "tvix/eval/docs/catchable-errors.md",
+        "patchSetId": 3
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2024-02-21T11:48:58Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "676e2429_b1d03242",
+      "range": {
+        "startLine": 22,
+        "startChar": 17,
+        "endLine": 22,
+        "endChar": 20
+      },
+      "revId": "0b95ee3a7a5fc06a3919a6604b349b8739620d47",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "89a7a3f5_7cd9d037",
@@ -37,6 +61,30 @@
       "writtenOn": "2024-02-21T09:19:17Z",
       "side": 1,
       "message": "or even any location information at all!",
+      "range": {
+        "startLine": 95,
+        "startChar": 17,
+        "endLine": 95,
+        "endChar": 36
+      },
+      "revId": "0b95ee3a7a5fc06a3919a6604b349b8739620d47",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4d0cbbdc_3078b789",
+        "filename": "tvix/eval/docs/catchable-errors.md",
+        "patchSetId": 3
+      },
+      "lineNbr": 95,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2024-02-21T11:48:58Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "89a7a3f5_7cd9d037",
       "range": {
         "startLine": 95,
         "startChar": 17,
@@ -70,6 +118,30 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "5084488f_49124956",
+        "filename": "tvix/eval/docs/catchable-errors.md",
+        "patchSetId": 3
+      },
+      "lineNbr": 101,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2024-02-21T11:48:58Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a1bfa1bd_ea864d5b",
+      "range": {
+        "startLine": 100,
+        "startChar": 25,
+        "endLine": 101,
+        "endChar": 5
+      },
+      "revId": "0b95ee3a7a5fc06a3919a6604b349b8739620d47",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "0f911ced_75d9bd14",
@@ -83,6 +155,30 @@
       "writtenOn": "2024-02-21T09:19:17Z",
       "side": 1,
       "message": "doesn\u0027t exist",
+      "range": {
+        "startLine": 111,
+        "startChar": 0,
+        "endLine": 111,
+        "endChar": 7
+      },
+      "revId": "0b95ee3a7a5fc06a3919a6604b349b8739620d47",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "44ea77d0_f0fd2a96",
+        "filename": "tvix/eval/docs/catchable-errors.md",
+        "patchSetId": 3
+      },
+      "lineNbr": 111,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2024-02-21T11:48:58Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0f911ced_75d9bd14",
       "range": {
         "startLine": 111,
         "startChar": 0,
