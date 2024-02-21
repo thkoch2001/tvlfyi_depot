@@ -6,10 +6,8 @@
 use crate::aterm::escape_bytes;
 use crate::derivation::{ca_kind_prefix, output::Output};
 use crate::nixbase32;
-use crate::store_path::as_store_path_ref::AsStorePathRef;
-use crate::store_path::STORE_DIR_WITH_SLASH;
+use crate::store_path::{StorePath, StorePathRef, STORE_DIR_WITH_SLASH};
 use bstr::BString;
-use std::borrow::Borrow;
 use std::fmt::Display;
 use std::{
     collections::{BTreeMap, BTreeSet},
@@ -37,18 +35,22 @@ pub(crate) trait AtermWriteable: Display {
     fn aterm_write(&self, writer: &mut impl Write) -> std::io::Result<()>;
 }
 
-impl<A: AsStorePathRef + Display> AtermWriteable for A {
+impl AtermWriteable for StorePathRef<'_> {
     fn aterm_write(&self, writer: &mut impl Write) -> std::io::Result<()> {
-        let store_path = self.as_store_path_ref();
-        let store_path_ref = store_path.borrow();
-
         write_char(writer, QUOTE)?;
         writer.write_all(STORE_DIR_WITH_SLASH.as_bytes())?;
-        writer.write_all(nixbase32::encode(store_path_ref.digest()).as_bytes())?;
+        writer.write_all(nixbase32::encode(self.digest()).as_bytes())?;
         write_char(writer, '-')?;
-        writer.write_all(store_path_ref.name().as_bytes())?;
+        writer.write_all(self.name().as_bytes())?;
         write_char(writer, QUOTE)?;
         Ok(())
+    }
+}
+
+impl AtermWriteable for StorePath {
+    fn aterm_write(&self, writer: &mut impl Write) -> std::io::Result<()> {
+        let r: StorePathRef = self.into();
+        r.aterm_write(writer)
     }
 }
 
@@ -143,7 +145,7 @@ pub(crate) fn write_outputs(
 
 pub(crate) fn write_input_derivations(
     writer: &mut impl Write,
-    input_derivations: &BTreeMap<BString, &BTreeSet<String>>,
+    input_derivations: &BTreeMap<impl AtermWriteable, BTreeSet<String>>,
 ) -> Result<(), io::Error> {
     write_char(writer, BRACKET_OPEN)?;
 
@@ -153,7 +155,7 @@ pub(crate) fn write_input_derivations(
         }
 
         write_char(writer, PAREN_OPEN)?;
-        writer.write_all(input_derivation_aterm)?;
+        input_derivation_aterm.aterm_write(writer)?;
         write_char(writer, COMMA)?;
 
         write_char(writer, BRACKET_OPEN)?;
