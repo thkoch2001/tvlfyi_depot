@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1a13cc31_c1276f76",
+        "filename": "tvix/nix-compat/src/derivation/parser.rs",
+        "patchSetId": 20
+      },
+      "lineNbr": 427,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-02-21T03:46:30Z",
+      "side": 1,
+      "message": "Can\u0027t you update the types in EXP_INPUT_DERIVATIONS_SIMPLE, or is this used elsewhere too?",
+      "revId": "3c3e317850682bf8407041c22508970ef55e88fd",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
