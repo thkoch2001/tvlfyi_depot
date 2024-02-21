@@ -16,6 +16,24 @@
       "message": "Does this work on WASM?",
       "revId": "6329ab78a2b40d2731256ac8960db6110097ebe7",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fcf82e6d_09500d15",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2024-02-21T20:26:22Z",
+      "side": 1,
+      "message": "wouldn\u0027t tvixbolt fail to build if it didn\u0027t?",
+      "parentUuid": "f60820b2_1e52890a",
+      "revId": "6329ab78a2b40d2731256ac8960db6110097ebe7",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
