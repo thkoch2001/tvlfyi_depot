@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6ed4b653_0d3ff6b5",
+        "filename": "tvix/nix-compat/src/store_path/as_store_path_ref.rs",
+        "patchSetId": 8
+      },
+      "lineNbr": 5,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-02-21T04:06:19Z",
+      "side": 1,
+      "message": "\"to be generic over types\"? Sounds a bit convoluted even like that :-D",
+      "range": {
+        "startLine": 5,
+        "startChar": 29,
+        "endLine": 5,
+        "endChar": 36
+      },
+      "revId": "c193020b9fd0678b653a4b15d7593c596cc32e5c",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b5b8eaf2_5ea27bc7",
+        "filename": "tvix/nix-compat/src/store_path/as_store_path_ref.rs",
+        "patchSetId": 8
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-02-21T04:06:19Z",
+      "side": 1,
+      "message": "Does that apply only for the str impl, for both `str` and `String` implementation, or the entire `AsStorePathRef` trait?\n\nI also don\u0027t quite understand why we\u0027re fallible here. Wouldn\u0027t it be simpler to just implement `ATermWriteable` for `\u0026str`, `\u0026StorePath` and `\u0026StorePathRef`, and use this in `write_input_derivations` and potential other consumers?\n\nTrying to ensure things parse as something store path-ishy or not shouldn\u0027t really matter for writing things out as aterm, but we know all store paths are just rendered as their absolute path string, and strings stay untouched.",
+      "revId": "c193020b9fd0678b653a4b15d7593c596cc32e5c",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
