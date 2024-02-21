@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "df136083_8849bc60",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-02-21T18:24:37Z",
+      "side": 1,
+      "message": "Can you drop the todo from tvix/eval/docs/builtins.md?",
+      "revId": "2d9f49ccb627f45363758b78c189590c4964fb3f",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
