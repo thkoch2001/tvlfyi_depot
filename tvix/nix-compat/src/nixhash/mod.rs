@@ -1,5 +1,9 @@
 use crate::nixbase32;
 use data_encoding::{BASE64, BASE64_NOPAD, HEXLOWER};
+use md5::Md5;
+use sha1::Sha1;
+use sha2::Digest;
+use sha2::{Sha256, Sha512};
 use thiserror;
 
 mod algos;
@@ -21,6 +25,33 @@ pub enum NixHash {
 pub type Result<V> = std::result::Result<V, Error>;
 
 impl NixHash {
+    /// Constructs a [NixHash] from a specified [HashAlgo] and
+    /// user specified string
+    pub fn new(algo: HashAlgo, s: &str) -> Self {
+        match algo {
+            HashAlgo::Md5 => {
+                let mut buf = [0u8; 16];
+                hash::<Md5>(s, &mut buf);
+                NixHash::Md5(buf)
+            }
+            HashAlgo::Sha1 => {
+                let mut buf = [0u8; 20];
+                hash::<Sha1>(s, &mut buf);
+                NixHash::Sha1(buf)
+            }
+            HashAlgo::Sha256 => {
+                let mut buf = [0u8; 32];
+                hash::<Sha256>(s, &mut buf);
+                NixHash::Sha256(buf)
+            }
+            HashAlgo::Sha512 => {
+                let mut buf = [0u8; 64];
+                hash::<Sha512>(s, &mut buf);
+                NixHash::Sha512(Box::new(buf))
+            }
+        }
+    }
+
     /// returns the algo as [HashAlgo].
     pub fn algo(&self) -> HashAlgo {
         match self {
@@ -78,6 +109,13 @@ impl NixHash {
     pub fn to_plain_hex_string(&self) -> String {
         HEXLOWER.encode(self.digest_as_bytes())
     }
+}
+
+/// Generic hashing mechanism over different hash functions
+fn hash<D: Digest>(s: &str, output: &mut [u8]) {
+    let mut hasher = D::new();
+    hasher.update(s.as_bytes());
+    output.copy_from_slice(&hasher.finalize())
 }
 
 impl TryFrom<(HashAlgo, &[u8])> for NixHash {
@@ -319,6 +357,23 @@ mod tests {
     }
     fn make_sri_string(algo: &HashAlgo, digest_encoded: String) -> String {
         format!("{}-{}", algo, digest_encoded)
+    }
+
+    #[test]
+    fn new() {
+        assert_eq!(
+            NixHash::new(HashAlgo::Md5, "tvix").to_plain_hex_string(),
+            "8a0614b4eaa4cffb7515ec101847e198"
+        );
+        assert_eq!(
+            NixHash::new(HashAlgo::Sha1, "tvix").to_plain_hex_string(),
+            "8bd218cf61321d8aa05b3602b99f90d2d8cef3d6"
+        );
+        assert_eq!(
+            NixHash::new(HashAlgo::Sha256, "tvix").to_plain_hex_string(),
+            "80ac06d74cb6c5d14af718ce8c3c1255969a1a595b76a3cf92354a95331a879a"
+        );
+        assert_eq!(NixHash::new(HashAlgo::Sha512, "tvix").to_plain_hex_string(), "0edac513b6b0454705b553deda4c9b055da0939d26d2f73548862817ebeac5378cf64ff7a752ce1a0590a736735d3bbd9e8a7f04d93617cdf514313f5ab5baa4");
     }
 
     /// Test parsing a hash string in various formats, and also when/how the out-of-band algo is needed.
