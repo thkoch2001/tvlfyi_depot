@@ -261,6 +261,12 @@ impl From<NixString> for Box<BStr> {
     }
 }
 
+impl From<NixString> for String {
+    fn from(s: NixString) -> Self {
+        s.to_string()
+    }
+}
+
 impl From<NixString> for BString {
     fn from(s: NixString) -> Self {
         s.0.to_vec().into()
