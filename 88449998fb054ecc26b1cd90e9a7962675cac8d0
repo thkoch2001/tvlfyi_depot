@@ -34,6 +34,24 @@
       "parentUuid": "286d30d2_48ff24ac",
       "revId": "88449998fb054ecc26b1cd90e9a7962675cac8d0",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "589bdb27_e2d2644e",
+        "filename": "tvix/eval/src/tests/nix_tests/eval-okay-groupBy.nix",
+        "patchSetId": 2
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-02-21T17:18:38Z",
+      "side": 1,
+      "message": "see how this only fails the 2.18 verify lang tests",
+      "parentUuid": "286d30d2_48ff24ac",
+      "revId": "88449998fb054ecc26b1cd90e9a7962675cac8d0",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
