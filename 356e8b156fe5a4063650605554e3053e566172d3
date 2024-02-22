@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6843c518_32d5572d",
+        "filename": "tvix/eval/src/errors.rs",
+        "patchSetId": 9
+      },
+      "lineNbr": 878,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2024-02-22T17:59:02Z",
+      "side": 1,
+      "message": "should probably be different than the code for ErrorKind::Utf8",
+      "range": {
+        "startLine": 878,
+        "startChar": 46,
+        "endLine": 878,
+        "endChar": 50
+      },
+      "revId": "356e8b156fe5a4063650605554e3053e566172d3",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
