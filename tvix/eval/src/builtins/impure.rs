@@ -19,15 +19,32 @@ use crate::{
 mod impure_builtins {
     use std::ffi::OsStr;
     use std::os::unix::ffi::OsStrExt;
+    use std::rc::Rc;
 
     use super::*;
-    use crate::builtins::coerce_value_to_path;
+    use crate::builtins::{coerce_value_to_path, hash::hash_nix_string};
+    use crate::{EvalIO, StdIO};
 
     #[builtin("getEnv")]
     async fn builtin_get_env(co: GenCo, var: Value) -> Result<Value, ErrorKind> {
         Ok(env::var(OsStr::from_bytes(&var.to_str()?))
             .unwrap_or_else(|_| "".into())
             .into())
+    }
+
+    #[builtin("hashFile")]
+    #[allow(non_snake_case)]
+    async fn builtin_hashFile(co: GenCo, algo: Value, path: Value) -> Result<Value, ErrorKind> {
+        match coerce_value_to_path(&co, path).await? {
+            Err(cek) => Ok(Value::from(cek)),
+            Ok(path) => match (StdIO {}).read_to_end(&path) {
+                Ok(s) => hash_nix_string(algo.to_str()?, s).map(Value::from),
+                Err(e) => Err(ErrorKind::IO {
+                    path: Some(path),
+                    error: Rc::new(e),
+                }),
+            },
+        }
     }
 
     #[builtin("pathExists")]
