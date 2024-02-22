@@ -20,6 +20,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "aaba0167_6b262962",
+        "filename": "tvix/eval/src/builtins/impure.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1000089
+      },
+      "writtenOn": "2024-02-22T11:46:34Z",
+      "side": 1,
+      "message": "directly* ...with the filesystem",
+      "parentUuid": "74f465af_9da9f996",
+      "revId": "ae67a727a4afea74b0bc61c178df0890cb5aef51",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "3b479088_ed64841e",
         "filename": "tvix/eval/src/builtins/impure.rs",
         "patchSetId": 1
