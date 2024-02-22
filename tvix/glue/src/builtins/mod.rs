@@ -5,12 +5,12 @@ use std::rc::Rc;
 use crate::tvix_store_io::TvixStoreIO;
 
 mod derivation;
-mod derivation_error;
 mod fetchers;
 
 mod import;
+mod errors;
 
-pub use derivation_error::Error as DerivationError;
+pub use errors::DerivationError;
 
 /// Adds derivation-related builtins to the passed [tvix_eval::Evaluation].
 ///
