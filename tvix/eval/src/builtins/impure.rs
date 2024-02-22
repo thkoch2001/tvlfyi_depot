@@ -8,6 +8,7 @@ use std::{
 
 use crate::{
     self as tvix_eval,
+    builtins::hash,
     errors::ErrorKind,
     io::FileType,
     value::NixAttrs,
@@ -28,6 +29,24 @@ mod impure_builtins {
         Ok(env::var(OsStr::from_bytes(&var.to_str()?))
             .unwrap_or_else(|_| "".into())
             .into())
+    }
+
+    #[builtin("hashFile")]
+    #[allow(non_snake_case)]
+    async fn builtin_hashFile(co: GenCo, algo: Value, path: Value) -> Result<Value, ErrorKind> {
+        if algo.is_catchable() {
+            return Ok(algo);
+        }
+        if path.is_catchable() {
+            return Ok(path);
+        }
+
+        let s = match coerce_value_to_path(&co, path).await? {
+            Err(cek) => return Ok(Value::from(cek)),
+            Ok(path) => generators::request_read_to_string(&co, path).await,
+        };
+
+        hash::hash_nix_string(algo.to_str()?.as_bytes(), s.to_str()?).map(|s| Value::from(s))
     }
 
     #[builtin("pathExists")]
