@@ -2,7 +2,7 @@
 { ... }:
 
 {
-  time.timeZone = "Asia/Bangkok";
+  time.timeZone = "Europe/Moscow";
 
   # Automatically detect location for redshift & so on ...
   services.geoclue2.enable = true;
