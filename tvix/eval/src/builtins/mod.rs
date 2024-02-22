@@ -9,8 +9,7 @@ use genawaiter::rc::Gen;
 use imbl::OrdMap;
 use regex::Regex;
 use std::cmp::{self, Ordering};
-use std::collections::VecDeque;
-use std::collections::{BTreeMap, HashSet};
+use std::collections::{hash_map, BTreeMap, HashMap, HashSet, VecDeque};
 use std::path::PathBuf;
 
 use crate::arithmetic_op;
@@ -84,7 +83,6 @@ mod pure_builtins {
 
     use bstr::{BString, ByteSlice, B};
     use imbl::Vector;
-    use itertools::Itertools;
     use os_str_bytes::OsStringBytes;
 
     use crate::{value::PointerEquality, AddContext, NixContext, NixContextElement};
@@ -601,9 +599,8 @@ mod pure_builtins {
             return Ok(e);
         }
 
-        // also forces the value
         let span = generators::request_span(&co).await;
-        let v = e
+        let value = e
             .coerce_to_string(
                 co,
                 CoercionKind {
@@ -613,75 +610,72 @@ mod pure_builtins {
                 span,
             )
             .await?;
-        let s = v.to_contextful_str()?;
 
-        let groups = s
-            .iter_context()
-            .flat_map(|context| context.iter())
-            // Do not think `group_by` works here.
-            // `group_by` works on consecutive elements of the iterator.
-            // Due to how `HashSet` works (ordering is not guaranteed),
-            // this can become a source of non-determinism if you `group_by` naively.
-            // I know I did.
-            .into_grouping_map_by(|ctx_element| match ctx_element {
-                NixContextElement::Plain(spath) => spath,
-                NixContextElement::Single { derivation, .. } => derivation,
-                NixContextElement::Derivation(drv_path) => drv_path,
-            })
-            .collect::<Vec<_>>();
+        #[derive(Default)]
+        struct ContextData {
+            path: bool,
+            all_outputs: bool,
+            outputs: HashSet<NixString>,
+        }
 
-        let elements = groups
-            .into_iter()
-            .map(|(key, group)| {
-                let mut outputs: Vector<NixString> = Vector::new();
-                let mut is_path = false;
-                let mut all_outputs = false;
-
-                for ctx_element in group {
-                    match ctx_element {
-                        NixContextElement::Plain(spath) => {
-                            debug_assert!(spath == key, "Unexpected group containing mixed keys, expected: {:?}, encountered {:?}", key, spath);
-                            is_path = true;
-                        }
-
-                        NixContextElement::Single { name, derivation } => {
-                            debug_assert!(derivation == key, "Unexpected group containing mixed keys, expected: {:?}, encountered {:?}", key, derivation);
-                            outputs.push_back(name.clone().into());
-                        }
-
-                        NixContextElement::Derivation(drv_path) => {
-                            debug_assert!(drv_path == key, "Unexpected group containing mixed keys, expected: {:?}, encountered {:?}", key, drv_path);
-                            all_outputs = true;
-                        }
+        impl ContextData {
+            fn merge_context(&mut self, elem: &NixContextElement) {
+                match elem {
+                    NixContextElement::Plain(_) => {
+                        self.path = true;
+                    }
+                    NixContextElement::Derivation(_) => {
+                        self.all_outputs = true;
+                    }
+                    NixContextElement::Single { name, .. } => {
+                        self.outputs.insert(name.as_str().into());
                     }
                 }
+            }
 
-                // FIXME(raitobezarius): is there a better way to construct an attribute set
-                // conditionally?
-                let mut vec_attrs: Vec<(&str, Value)> = Vec::new();
+            fn into_value(self) -> Value {
+                let mut attrs = vec![];
 
-                if is_path {
-                    vec_attrs.push(("path", true.into()));
+                if self.path {
+                    attrs.push(("path", Value::from(true)));
                 }
 
-                if all_outputs {
-                    vec_attrs.push(("allOutputs", true.into()));
+                if self.all_outputs {
+                    attrs.push(("allOutputs", Value::from(true)));
                 }
 
-                if !outputs.is_empty() {
-                    outputs.sort();
-                    vec_attrs.push(("outputs", Value::List(outputs
+                if !self.outputs.is_empty() {
+                    attrs.push((
+                        "outputs",
+                        Value::List(
+                            self.outputs
                                 .into_iter()
-                                .map(|s| s.into())
-                                .collect::<Vector<Value>>()
-                                .into()
-                    )));
+                                .map(Value::from)
+                                .collect::<Vector<_>>()
+                                .into(),
+                        ),
+                    ))
                 }
 
-                (key.clone(), Value::attrs(NixAttrs::from_iter(vec_attrs.into_iter())))
-            });
+                Value::Attrs(Box::new(NixAttrs::from_iter(attrs.into_iter())))
+            }
+        }
 
-        Ok(Value::attrs(NixAttrs::from_iter(elements)))
+        let mut ctx_map: HashMap<&str, ContextData> = HashMap::new();
+        let ctx_str = value.to_contextful_str()?;
+
+        for ctx in ctx_str.iter_context() {
+            match ctx_map.entry(ctx.key().into()) {
+                hash_map::Entry::Vacant(entry) => {
+                    entry.insert(ContextData::default()).merge_context(ctx)
+                }
+                hash_map::Entry::Occupied(mut entry) => entry.get_mut().merge_context(ctx),
+            }
+        }
+
+        Ok(Value::Attrs(Box::new(NixAttrs::from_iter(
+            ctx_map.into_iter().map(|(k, v)| (k, v.into_value())),
+        ))))
     }
 
     #[builtin("hashString")]
