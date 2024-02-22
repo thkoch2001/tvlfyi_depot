@@ -34,6 +34,17 @@ pub enum NixContextElement {
     Derivation(String),
 }
 
+impl NixContextElement {
+    /// Returns the path on which this context element is keyed.
+    pub fn key(&self) -> &str {
+        match self {
+            NixContextElement::Plain(spath) => &spath,
+            NixContextElement::Single { derivation, .. } => &derivation,
+            NixContextElement::Derivation(drv_path) => &drv_path,
+        }
+    }
+}
+
 /// Nix context strings representation in Tvix. This tracks a set of different kinds of string
 /// dependencies that we can come across during manipulation of our language primitives, mostly
 /// strings. There's some simple algebra of context strings and how they propagate w.r.t. primitive
