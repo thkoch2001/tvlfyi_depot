@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "74f465af_9da9f996",
+        "filename": "tvix/eval/src/builtins/impure.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1000089
+      },
+      "writtenOn": "2024-02-22T11:45:35Z",
+      "side": 1,
+      "message": "I presume I\u0027m correct this should be in impure given we are dealing directory",
+      "revId": "ae67a727a4afea74b0bc61c178df0890cb5aef51",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3b479088_ed64841e",
+        "filename": "tvix/eval/src/builtins/impure.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 1000089
+      },
+      "writtenOn": "2024-02-22T11:45:35Z",
+      "side": 1,
+      "message": "@flokli@flokli.de You had mentioned \"we only have `EvalIO::read_to_string` right now\" in matrix but I could not find it specified. I followed the readDir implementation as below as a guide but if that is not the intended approach please advise.",
+      "revId": "ae67a727a4afea74b0bc61c178df0890cb5aef51",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b7c7fd10_775a690e",
+        "filename": "tvix/eval/src/builtins/impure.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 1000089
+      },
+      "writtenOn": "2024-02-22T11:45:35Z",
+      "side": 1,
+      "message": "Ugly?",
+      "revId": "ae67a727a4afea74b0bc61c178df0890cb5aef51",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
