@@ -89,46 +89,6 @@ impl NixContext {
         }
     }
 
-    /// Iterates over "plain" context elements, e.g. sources imported
-    /// in the store without more information, i.e. `toFile` or coerced imported paths.
-    /// It yields paths to the store.
-    pub fn iter_plain(&self) -> impl Iterator<Item = &str> {
-        self.iter().filter_map(|elt| {
-            if let NixContextElement::Plain(s) = elt {
-                Some(s.as_str())
-            } else {
-                None
-            }
-        })
-    }
-
-    /// Iterates over "full derivations" context elements, e.g. something
-    /// referring to their `drvPath`, i.e. their full sources and binary closure.
-    /// It yields derivation paths.
-    pub fn iter_derivation(&self) -> impl Iterator<Item = &str> {
-        self.iter().filter_map(|elt| {
-            if let NixContextElement::Derivation(s) = elt {
-                Some(s.as_str())
-            } else {
-                None
-            }
-        })
-    }
-
-    /// Iterates over "single" context elements, e.g. single derived paths,
-    /// or also known as the single output of a given derivation.
-    /// The first element of the tuple is the output name
-    /// and the second element is the derivation path.
-    pub fn iter_single_outputs(&self) -> impl Iterator<Item = (&str, &str)> {
-        self.iter().filter_map(|elt| {
-            if let NixContextElement::Single { name, derivation } = elt {
-                Some((name.as_str(), derivation.as_str()))
-            } else {
-                None
-            }
-        })
-    }
-
     /// Iterates over any element of the context.
     pub fn iter(&self) -> impl Iterator<Item = &NixContextElement> {
         self.0.iter()
@@ -148,8 +108,8 @@ impl NixContext {
     }
 }
 
-/// This type is never instantiated, but serves to document the memory layout of the actual heap
-/// allocation for Nix strings.
+/// This type is never instantiated, but serves to document the memory
+/// layout of the actual heap allocation for Nix strings.
 #[allow(dead_code)]
 struct NixStringInner {
     /// The string context, if any.  Note that this is boxed to take advantage of the null pointer
@@ -606,6 +566,23 @@ mod arbitrary {
     }
 }
 
+/// Iterator over borrowed Nix context elements.
+pub enum NixContextIter<'a> {
+    Empty,
+    Inner(std::collections::hash_set::Iter<'a, NixContextElement>),
+}
+
+impl<'a> Iterator for NixContextIter<'a> {
+    type Item = &'a NixContextElement;
+
+    fn next(&mut self) -> Option<&'a NixContextElement> {
+        match self {
+            NixContextIter::Empty => None,
+            NixContextIter::Inner(inner) => inner.next(),
+        }
+    }
+}
+
 impl NixString {
     fn new(contents: &[u8], context: Option<Box<NixContext>>) -> Self {
         // SAFETY: We're always fully initializing a NixString here:
@@ -723,24 +700,52 @@ impl NixString {
         unsafe { NixStringInner::context_mut(self.0).as_deref_mut() }
     }
 
-    pub fn iter_context(&self) -> impl Iterator<Item = &NixContext> {
-        self.context().into_iter()
+    /// Iterates over all context elements of the string.
+    pub fn iter_context<'a>(&'a self) -> NixContextIter<'a> {
+        match self.context() {
+            None => NixContextIter::Empty,
+            Some(ctx) => NixContextIter::Inner(ctx.0.iter()),
+        }
     }
 
+    /// Iterates over "plain" context elements, e.g. sources imported in the
+    /// store without more information, i.e. `toFile` or coerced imported paths.
+    /// It yields paths to the store.
     pub fn iter_plain(&self) -> impl Iterator<Item = &str> {
-        self.iter_context().flat_map(|context| context.iter_plain())
+        self.iter_context().filter_map(|elt| {
+            if let NixContextElement::Plain(s) = elt {
+                Some(s.as_str())
+            } else {
+                None
+            }
+        })
     }
 
+    /// Iterates over "full derivations" context elements, e.g. something
+    /// referring to their `drvPath`, i.e. their full sources and binary closure.
+    /// It yields derivation paths.
     pub fn iter_derivation(&self) -> impl Iterator<Item = &str> {
-        return self
-            .iter_context()
-            .flat_map(|context| context.iter_derivation());
+        self.iter_context().filter_map(|elt| {
+            if let NixContextElement::Derivation(s) = elt {
+                Some(s.as_str())
+            } else {
+                None
+            }
+        })
     }
 
+    /// Iterates over "single" context elements, e.g. single derived paths, or
+    /// also known as the single output of a given derivation. The first element
+    /// of the tuple is the output name and the second element is the derivation
+    /// path.
     pub fn iter_single_outputs(&self) -> impl Iterator<Item = (&str, &str)> {
-        return self
-            .iter_context()
-            .flat_map(|context| context.iter_single_outputs());
+        self.iter_context().filter_map(|elt| {
+            if let NixContextElement::Single { name, derivation } = elt {
+                Some((name.as_str(), derivation.as_str()))
+            } else {
+                None
+            }
+        })
     }
 
     /// Returns whether this Nix string possess a context or not.
