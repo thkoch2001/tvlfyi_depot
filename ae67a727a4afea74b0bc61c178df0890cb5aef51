@@ -55,6 +55,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "ee989614_b9f4a240",
+        "filename": "tvix/eval/src/builtins/impure.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-02-22T12:59:10Z",
+      "side": 1,
+      "message": "The EvalIO trait has been renamed to read_to_end in https://cl.tvl.fyi/c/depot/+/11003, but the generator request has not :-D",
+      "parentUuid": "3b479088_ed64841e",
+      "revId": "ae67a727a4afea74b0bc61c178df0890cb5aef51",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "b7c7fd10_775a690e",
         "filename": "tvix/eval/src/builtins/impure.rs",
         "patchSetId": 1
