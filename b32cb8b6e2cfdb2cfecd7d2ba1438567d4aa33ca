@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fc40bee0_df024d37",
+        "filename": "tvix/eval/src/builtins/impure.rs",
+        "patchSetId": 6
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2024-02-22T19:12:59Z",
+      "side": 1,
+      "message": "this could be:\n```\nlet path \u003d try_value!(coerce_value_to_path(\u0026co, path).await?);\n```",
+      "range": {
+        "startLine": 38,
+        "startChar": 8,
+        "endLine": 40,
+        "endChar": 21
+      },
+      "revId": "b32cb8b6e2cfdb2cfecd7d2ba1438567d4aa33ca",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "dcb98734_c4442e2d",
+        "filename": "tvix/eval/src/builtins/impure.rs",
+        "patchSetId": 6
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2024-02-22T19:12:59Z",
+      "side": 1,
+      "message": "hmm... this seems wrong... @flokli@flokli.de @tvl@lahfa.xyz ?",
+      "range": {
+        "startLine": 40,
+        "startChar": 30,
+        "endLine": 40,
+        "endChar": 40
+      },
+      "revId": "b32cb8b6e2cfdb2cfecd7d2ba1438567d4aa33ca",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4ae335fe_b732f739",
+        "filename": "tvix/eval/src/builtins/impure.rs",
+        "patchSetId": 6
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2024-02-22T19:12:59Z",
+      "side": 1,
+      "message": "maybe we just let `hash_nix_string` take `impl AsRef\u003c[u8]\u003e` for both args?",
+      "range": {
+        "startLine": 41,
+        "startChar": 55,
+        "endLine": 41,
+        "endChar": 66
+      },
+      "revId": "b32cb8b6e2cfdb2cfecd7d2ba1438567d4aa33ca",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
