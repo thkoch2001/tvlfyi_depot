@@ -49,6 +49,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "0a11bb83_568c2919",
+        "filename": "tvix/eval/src/builtins/impure.rs",
+        "patchSetId": 6
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1000089
+      },
+      "writtenOn": "2024-02-22T23:11:07Z",
+      "side": 1,
+      "message": "`try_value!` as I read it seems to only operate on `Value` types, `coerce_value_to_path` gives a `Result\u003cResult\u003cPathBuf, CatchableErrorKind\u003e, ErrorKind\u003e` which I don\u0027t think is correct",
+      "parentUuid": "fc40bee0_df024d37",
+      "range": {
+        "startLine": 38,
+        "startChar": 8,
+        "endLine": 40,
+        "endChar": 21
+      },
+      "revId": "b32cb8b6e2cfdb2cfecd7d2ba1438567d4aa33ca",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "4ae335fe_b732f739",
         "filename": "tvix/eval/src/builtins/impure.rs",
         "patchSetId": 6
@@ -60,6 +84,30 @@
       "writtenOn": "2024-02-22T19:12:59Z",
       "side": 1,
       "message": "maybe we just let `hash_nix_string` take `impl AsRef\u003c[u8]\u003e` for both args?",
+      "range": {
+        "startLine": 41,
+        "startChar": 55,
+        "endLine": 41,
+        "endChar": 66
+      },
+      "revId": "b32cb8b6e2cfdb2cfecd7d2ba1438567d4aa33ca",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "24568b18_8dc087d3",
+        "filename": "tvix/eval/src/builtins/impure.rs",
+        "patchSetId": 6
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 1000089
+      },
+      "writtenOn": "2024-02-22T23:11:07Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4ae335fe_b732f739",
       "range": {
         "startLine": 41,
         "startChar": 55,
