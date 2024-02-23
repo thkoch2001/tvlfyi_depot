@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "45c44302_38b44945",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2024-02-23T11:16:04Z",
+      "side": 1,
+      "message": "I dunno if tazjin should +2 this since it touches corp stuff so... +1 for now.",
+      "revId": "d79bf1ce244cdd7cd93ddb63938da09310372397",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6c4dd54c_603679dd",
+        "filename": "ops/modules/www/tvix.dev.nix",
+        "patchSetId": 3
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2024-02-23T11:16:04Z",
+      "side": 1,
+      "message": ".dev is preloaded anyway, so is it even worth sending an STS header?\n\nI guess it\u0027s consistent with the other entries so whatever.",
+      "revId": "d79bf1ce244cdd7cd93ddb63938da09310372397",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
