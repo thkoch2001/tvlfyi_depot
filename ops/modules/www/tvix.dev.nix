@@ -11,20 +11,12 @@
       enableACME = true;
       forceSSL = true;
       root = depot.tvix.website;
-
-      extraConfig = ''
-        add_header Strict-Transport-Security "max-age=31536000; includeSubDomains; preload" always;
-      '';
     };
 
     services.nginx.virtualHosts."bolt.tvix.dev" = {
       root = depot.web.tvixbolt;
       enableACME = true;
       forceSSL = true;
-
-      extraConfig = ''
-        add_header Strict-Transport-Security "max-age=31536000; includeSubDomains; preload" always;
-      '';
     };
 
     # old domain, serve redirect
@@ -40,8 +32,6 @@
       forceSSL = true;
 
       extraConfig = ''
-        add_header Strict-Transport-Security "max-age=31536000; includeSubDomains; preload" always;
-
         location = / {
           # until we have a better default page here
           return 301 https://docs.tvix.dev/rust/tvix_eval/index.html;
