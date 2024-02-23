@@ -33,6 +33,24 @@
       "message": ".dev is preloaded anyway, so is it even worth sending an STS header?\n\nI guess it\u0027s consistent with the other entries so whatever.",
       "revId": "d79bf1ce244cdd7cd93ddb63938da09310372397",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "133fd774_dcfd8656",
+        "filename": "ops/modules/www/tvix.dev.nix",
+        "patchSetId": 3
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-02-23T18:17:37Z",
+      "side": 1,
+      "message": "Well, if someone visits bolt.tvix.dev without visiting tvix.dev first, we\u0027d have a chance to set HSTS and also set it for subdomains, but yeah :shrug:.\n\nIt\u0027s consistent with docs.tvix.dev, for which the same logic would apply.",
+      "parentUuid": "6c4dd54c_603679dd",
+      "revId": "d79bf1ce244cdd7cd93ddb63938da09310372397",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
