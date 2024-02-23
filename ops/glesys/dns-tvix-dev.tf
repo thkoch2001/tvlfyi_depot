@@ -18,6 +18,13 @@ resource "glesys_dnsdomain_record" "tvix_dev_apex_AAAA" {
   data   = var.whitby_ipv6
 }
 
+resource "glesys_dnsdomain_record" "tvix_dev_bolt_CNAME" {
+  domain = glesys_dnsdomain.tvix_dev.id
+  host   = "bolt"
+  type   = "CNAME"
+  data   = "whitby.tvl.su."
+}
+
 resource "glesys_dnsdomain_record" "tvix_dev_docs_CNAME" {
   domain = glesys_dnsdomain.tvix_dev.id
   host   = "docs"
