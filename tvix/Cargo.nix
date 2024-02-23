@@ -6863,7 +6863,7 @@ rec {
           "wasm-streams" = [ "dep:wasm-streams" ];
           "webpki-roots" = [ "dep:webpki-roots" ];
         };
-        resolvedDefaultFeatures = [ "__rustls" "__tls" "hyper-rustls" "rustls" "rustls-pemfile" "rustls-tls" "rustls-tls-webpki-roots" "stream" "tokio-rustls" "tokio-util" "wasm-streams" "webpki-roots" ];
+        resolvedDefaultFeatures = [ "__rustls" "__tls" "blocking" "hyper-rustls" "rustls" "rustls-pemfile" "rustls-tls" "rustls-tls-webpki-roots" "stream" "tokio-rustls" "tokio-util" "wasm-streams" "webpki-roots" ];
       };
       "ring" = rec {
         crateName = "ring";
@@ -10777,6 +10777,12 @@ rec {
             packageId = "nix-compat";
           }
           {
+            name = "reqwest";
+            packageId = "reqwest";
+            usesDefaultFeatures = false;
+            features = [ "rustls-tls" "blocking" ];
+          }
+          {
             name = "serde";
             packageId = "serde";
           }
@@ -10795,6 +10801,11 @@ rec {
           {
             name = "tokio";
             packageId = "tokio";
+          }
+          {
+            name = "tokio-util";
+            packageId = "tokio-util";
+            features = [ "io" "io-util" "compat" ];
           }
           {
             name = "tracing";
