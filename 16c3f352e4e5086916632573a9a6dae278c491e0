@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3c4e00ab_f79e753e",
+        "filename": "tvix/eval/src/errors.rs",
+        "patchSetId": 10
+      },
+      "lineNbr": 235,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-02-23T07:23:22Z",
+      "side": 1,
+      "message": "Unrelated to this PR, but note we can encounter this also through `derivationStrict` when parsing its input parameters (https://docs.tvix.dev/rust/nix_compat/nixhash/enum.Error.html#variant.InvalidAlgo in https://docs.tvix.dev/rust/tvix_glue/builtins/enum.DerivationError.html).\n\nMaybe we can clean this up a bit once the other hash-related, and fetching/importing builtins landed?",
+      "revId": "16c3f352e4e5086916632573a9a6dae278c491e0",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
