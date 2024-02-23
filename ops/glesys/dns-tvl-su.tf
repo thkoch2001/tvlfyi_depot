@@ -76,15 +76,12 @@ resource "glesys_dnsdomain_record" "tvl_su_whitby_services" {
   for_each = toset(local.whitby_services)
 }
 
-# Explicit records for corp-only services running on whitby.
-resource "glesys_dnsdomain_record" "tvl_su_corp_whitby_services" {
+# historical tvixbolt.tvl.su record, redirects to bolt.tvix.dev
+resource "glesys_dnsdomain_record" "tvix_dev_bolt_CNAME" {
   domain = glesys_dnsdomain.tvl_su.id
+  host   = "tvixbolt"
   type   = "CNAME"
   data   = "whitby.tvl.su."
-  host   = each.key
-  for_each = toset([
-    "tvixbolt",
-  ])
 }
 
 resource "glesys_dnsdomain_record" "tvl_su_inbox_CNAME" {
