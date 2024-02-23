@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b3963b8f_2ca835b3",
+        "filename": "tvix/glue/src/builtins/fetchers.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 55,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-02-23T15:46:05Z",
+      "side": 1,
+      "message": "We already have https://docs.tvix.dev/rust/nix_compat/nixhash/ca_hash/enum.CAHash.html and https://docs.tvix.dev/rust/tvix_store/proto/nar_info/ca/enum.Hash.html / https://docs.tvix.dev/rust/tvix_store/proto/nar_info/struct.Ca.html\n\nShouldn\u0027t we just use Option\u003cCAHash\u003e here for both hash and mode fields?",
+      "revId": "18e3cbe88a510584c748f877b759826423ce21a6",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "72502438_0142be5d",
+        "filename": "tvix/glue/src/builtins/fetchers.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 80,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-02-23T15:46:05Z",
+      "side": 1,
+      "message": "this should probably be a method on CaHash itself (followup CL maybe)",
+      "revId": "18e3cbe88a510584c748f877b759826423ce21a6",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b37f8f07_833e9e98",
+        "filename": "tvix/glue/src/builtins/fetchers.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 83,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-02-23T15:46:05Z",
+      "side": 1,
+      "message": "This looks like we\u0027re constructing the wrong error here, fetches are not derivations.",
+      "revId": "18e3cbe88a510584c748f877b759826423ce21a6",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "130aed00_809584e7",
+        "filename": "tvix/glue/src/builtins/fetchers.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 132,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-02-23T15:46:05Z",
+      "side": 1,
+      "message": "Can then be removed.",
+      "revId": "18e3cbe88a510584c748f877b759826423ce21a6",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
