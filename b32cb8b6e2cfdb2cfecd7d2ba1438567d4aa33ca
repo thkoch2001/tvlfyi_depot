@@ -71,6 +71,30 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "64a6a923_b288e440",
+        "filename": "tvix/eval/src/builtins/impure.rs",
+        "patchSetId": 6
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2024-02-23T15:33:02Z",
+      "side": 1,
+      "message": "eurgh, yeah. I\u0027ve been wanting to fix that. Ah well, not for this CL",
+      "parentUuid": "0a11bb83_568c2919",
+      "range": {
+        "startLine": 38,
+        "startChar": 8,
+        "endLine": 40,
+        "endChar": 21
+      },
+      "revId": "b32cb8b6e2cfdb2cfecd7d2ba1438567d4aa33ca",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "4ae335fe_b732f739",
