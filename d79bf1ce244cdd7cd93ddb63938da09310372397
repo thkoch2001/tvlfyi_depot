@@ -105,6 +105,24 @@
       "parentUuid": "62e53007_d10b731c",
       "revId": "d79bf1ce244cdd7cd93ddb63938da09310372397",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "52eda4b8_ecc3fb5b",
+        "filename": "ops/modules/www/tvix.dev.nix",
+        "patchSetId": 3
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-02-23T18:44:55Z",
+      "side": 1,
+      "message": "Or well, after this one, autosubmit was too fast :-)",
+      "parentUuid": "7ad51998_38e189f7",
+      "revId": "d79bf1ce244cdd7cd93ddb63938da09310372397",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ],
   "submitRequirementResults": []
