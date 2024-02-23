@@ -6797,6 +6797,12 @@ rec {
             features = [ "AbortController" "AbortSignal" "Headers" "Request" "RequestInit" "RequestMode" "Response" "Window" "FormData" "Blob" "BlobPropertyBag" "ServiceWorkerGlobalScope" "RequestCredentials" "File" "ReadableStream" ];
           }
           {
+            name = "webpki-roots";
+            packageId = "webpki-roots";
+            optional = true;
+            target = { target, features }: (!("wasm32" == target."arch" or null));
+          }
+          {
             name = "winreg";
             packageId = "winreg";
             target = { target, features }: (target."windows" or false);
@@ -6875,7 +6881,7 @@ rec {
           "wasm-streams" = [ "dep:wasm-streams" ];
           "webpki-roots" = [ "dep:webpki-roots" ];
         };
-        resolvedDefaultFeatures = [ "__rustls" "__tls" "hyper-rustls" "rustls" "rustls-native-certs" "rustls-pemfile" "rustls-tls-native-roots" "stream" "tokio-rustls" "tokio-util" "wasm-streams" ];
+        resolvedDefaultFeatures = [ "__rustls" "__tls" "blocking" "hyper-rustls" "rustls" "rustls-native-certs" "rustls-pemfile" "rustls-tls" "rustls-tls-native-roots" "rustls-tls-webpki-roots" "stream" "tokio-rustls" "tokio-util" "wasm-streams" "webpki-roots" ];
       };
       "ring" = rec {
         crateName = "ring";
@@ -10793,6 +10799,12 @@ rec {
             packageId = "nix-compat";
           }
           {
+            name = "reqwest";
+            packageId = "reqwest";
+            usesDefaultFeatures = false;
+            features = [ "rustls-tls" "blocking" ];
+          }
+          {
             name = "serde";
             packageId = "serde";
           }
@@ -10811,6 +10823,11 @@ rec {
           {
             name = "tokio";
             packageId = "tokio";
+          }
+          {
+            name = "tokio-util";
+            packageId = "tokio-util";
+            features = [ "io" "io-util" "compat" ];
           }
           {
             name = "tracing";
@@ -12345,6 +12362,13 @@ rec {
             target = { target, features }: ((builtins.elem "wasm" target."family") && (!(("emscripten" == target."os" or null) || ("wasi" == target."os" or null))));
           }
         ];
+
+      };
+      "webpki-roots" = rec {
+        crateName = "webpki-roots";
+        version = "0.25.4";
+        edition = "2018";
+        sha256 = "1qgqa615gc1cgklls4bkjp9jv9pvv3jnl82lc6wd7dkximywa82z";
 
       };
       "which" = rec {
