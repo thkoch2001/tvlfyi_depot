@@ -18,6 +18,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "d6d9d6b4_df136e67",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2024-02-23T18:22:36Z",
+      "side": 1,
+      "message": "our OWNERS approvals are up-to-date, only stuff in //corp is corp, and tvixbolt is no longer in there!",
+      "parentUuid": "45c44302_38b44945",
+      "revId": "d79bf1ce244cdd7cd93ddb63938da09310372397",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "6c4dd54c_603679dd",
