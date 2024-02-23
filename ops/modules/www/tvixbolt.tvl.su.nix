@@ -7,7 +7,7 @@
 
   config = {
     services.nginx.virtualHosts."tvixbolt.tvl.su" = {
-      root = depot.corp.tvixbolt;
+      root = depot.web.tvixbolt;
       enableACME = true;
       forceSSL = true;
 
