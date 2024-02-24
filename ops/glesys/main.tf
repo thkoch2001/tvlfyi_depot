@@ -12,14 +12,18 @@ terraform {
   }
 
   backend "s3" {
-    endpoint = "https://objects.dc-sto1.glesys.net"
-    bucket   = "tvl-state"
-    key      = "terraform/tvl-glesys"
-    region   = "glesys"
+    endpoints = {
+      s3 = "https://objects.dc-sto1.glesys.net"
+    }
+    bucket = "tvl-state"
+    key    = "terraform/tvl-glesys"
+    region = "glesys"
 
     skip_credentials_validation = true
     skip_region_validation      = true
     skip_metadata_api_check     = true
+    skip_requesting_account_id  = true
+    skip_s3_checksum            = true
   }
 }
 
