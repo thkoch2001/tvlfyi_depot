@@ -129,7 +129,7 @@ in
     class = "project";
     title = "Tvixbolt";
     date = 1667293200;
-    url = "https://tvixbolt.tvl.su/";
+    url = "https://bolt.tvix.dev/";
     description = "In-browser language evaluator for Nix, based on Tvix";
   }
   {
