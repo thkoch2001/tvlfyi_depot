@@ -17,7 +17,7 @@ use std::{
     path::{Path, PathBuf},
     sync::Arc,
 };
-use tokio::io::AsyncReadExt;
+use tokio::io::{AsyncBufRead, AsyncReadExt};
 use tracing::{error, instrument, warn, Level};
 use tvix_build::buildservice::BuildService;
 use tvix_eval::{ErrorKind, EvalIO, FileType, StdIO};
@@ -32,6 +32,7 @@ use tvix_castore::{
 use tvix_store::{pathinfoservice::PathInfoService, proto::PathInfo};
 
 use crate::builtins::FetcherError;
+use crate::decompression::DecompressedReader;
 use crate::known_paths::KnownPaths;
 use crate::tvix_build::derivation_to_build_request;
 
@@ -364,20 +365,18 @@ impl TvixStoreIO {
             .is_some())
     }
 
-    pub async fn fetch_url(
+    async fn download<'a>(
         &self,
         url: &str,
-        name: &str,
-        hash: Option<&NixHash>,
-    ) -> Result<StorePath, ErrorKind> {
+        sha: &'a mut Sha256,
+    ) -> Result<impl AsyncBufRead + Unpin + 'a, ErrorKind> {
         let resp = self
             .http_client
             .get(url)
             .send()
             .await
             .map_err(FetcherError::from)?;
-        let mut sha = Sha256::new();
-        let mut data = tokio_util::io::StreamReader::new(
+        Ok(tokio_util::io::StreamReader::new(
             resp.bytes_stream()
                 .inspect_ok(|data| {
                     sha.update(data);
@@ -387,10 +386,20 @@ impl TvixStoreIO {
                     warn!(%e, "failed to get response body");
                     io::Error::new(io::ErrorKind::BrokenPipe, e.to_string())
                 }),
-        );
+        ))
+    }
 
+    pub async fn fetch_url(
+        &self,
+        url: &str,
+        name: &str,
+        hash: Option<&NixHash>,
+    ) -> Result<StorePath, ErrorKind> {
+        let mut sha = Sha256::new();
+        let mut data = self.download(url, &mut sha).await?;
         let mut blob = self.blob_service.open_write().await;
         let size = tokio::io::copy(&mut data, blob.as_mut()).await?;
+        drop(data);
         let blob_digest = blob.close().await?;
         let got = NixHash::Sha256(sha.finalize().into());
 
@@ -444,6 +453,27 @@ impl TvixStoreIO {
             .map_err(|e| std::io::Error::new(io::ErrorKind::Other, e))?;
 
         Ok(path.to_owned())
+    }
+
+    pub async fn fetch_tarball(
+        &self,
+        url: &str,
+        name: &str,
+        hash: Option<&NixHash>,
+    ) -> Result<StorePath, ErrorKind> {
+        let mut sha = Sha256::new();
+        let data = self.download(url, &mut sha).await?;
+        let data = DecompressedReader::new(data);
+        let mut archive = tokio_tar::Archive::new(data);
+        let node = tvix_castore::import::ingest_archive(
+            &self.blob_service,
+            &self.directory_service,
+            archive,
+        )
+        .await
+        .map_err(|e| std::io::Error::new(io::ErrorKind::Other, e))?;
+
+        todo!()
     }
 }
 
