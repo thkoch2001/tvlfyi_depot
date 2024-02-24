@@ -6,11 +6,15 @@ use crate::proto::Directory;
 use crate::proto::DirectoryNode;
 use crate::proto::FileNode;
 use crate::proto::SymlinkNode;
+use crate::utils::gen_directory_service;
 use crate::Error as CastoreError;
 use async_stream::stream;
 use futures::pin_mut;
 use futures::Stream;
 use std::fs::FileType;
+use tokio::io::AsyncRead;
+use tokio::io::{self, AsyncBufRead};
+use tokio_tar::Archive;
 use tracing::Level;
 
 #[cfg(target_family = "unix")]
@@ -46,6 +50,9 @@ pub enum Error {
 
     #[error("unable to read {0}: {1}")]
     UnableToRead(PathBuf, std::io::Error),
+
+    #[error("error reading from archive: {0}")]
+    Archive(std::io::Error),
 
     #[error("unsupported file {0} type: {1:?}")]
     UnsupportedFileType(PathBuf, FileType),
@@ -382,4 +389,67 @@ where
     }
     // unreachable, we already bailed out before if root doesn't exist.
     unreachable!("Tvix bug: no root node emitted during ingestion")
+}
+
+/// Ingests elements from the given tar [`Archive`] into a the passed [`BlobService`] and
+/// [`DirectoryService`].
+#[instrument(skip_all, ret(level = Level::TRACE), err)]
+pub async fn ingest_archive<'a, BS, DS, R>(
+    blob_service: BS,
+    directory_service: DS,
+    mut archive: Archive<R>,
+) -> Result<Node, Error>
+where
+    BS: AsRef<dyn BlobService> + Clone,
+    DS: AsRef<dyn DirectoryService>,
+    R: AsyncRead + Unpin,
+{
+    let mut paths = HashMap::new();
+    let mut entries = archive.entries().map_err(Error::Archive)?;
+    while let Some(mut entry) = entries.try_next().await.map_err(Error::Archive)? {
+        let path = entry.path().map_err(Error::Archive)?.into_owned();
+        let name = path
+            .file_name()
+            .ok_or_else(|| {
+                Error::Archive(io::Error::new(
+                    io::ErrorKind::InvalidInput,
+                    "invalid filename in archive",
+                ))
+            })?
+            .as_bytes()
+            .to_vec()
+            .into();
+        let node = if let Some(target) = entry.link_name().map_err(Error::Archive)? {
+            Node::Symlink(SymlinkNode {
+                name,
+                target: target.as_os_str().as_bytes().to_vec().into(),
+            })
+        } else {
+            let mut writer = blob_service.as_ref().open_write().await;
+            let size = io::copy(&mut entry, &mut writer)
+                .await
+                .map_err(Error::Archive)?;
+            let digest = writer.close().await.map_err(Error::Archive)?;
+            Node::File(FileNode {
+                name,
+                digest: digest.into(),
+                size,
+                executable: entry.header().mode().map_err(Error::Archive)? & 64 != 0,
+            })
+        };
+
+        paths.insert(path, node);
+    }
+
+    let mut directories: HashMap<PathBuf, Directory> = HashMap::default();
+    let mut directory_putter = directory_service.as_ref().put_multiple_start();
+    for (path, mut node) in paths {
+        let mut path: &Path = path.as_ref();
+        loop {
+            path = path.parent().unwrap_or_else(|| Path::new("/"));
+            let ent = directories.entry(path);
+        }
+    }
+
+    Ok(Node::Directory(directories.remove(Path::new("/")).unwrap()))
 }
