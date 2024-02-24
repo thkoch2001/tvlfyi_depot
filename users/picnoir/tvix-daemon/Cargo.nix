@@ -2366,8 +2366,7 @@ rec {
           }
         ];
         features = {
-          "async" = [ "futures-util" ];
-          "futures-util" = [ "dep:futures-util" ];
+          "async" = [ "tokio" ];
           "pin-project-lite" = [ "dep:pin-project-lite" ];
           "tokio" = [ "dep:tokio" ];
           "wire" = [ "tokio" "pin-project-lite" ];
