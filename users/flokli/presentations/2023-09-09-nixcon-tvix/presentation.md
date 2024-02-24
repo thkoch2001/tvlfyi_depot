@@ -75,7 +75,7 @@ Note: Derivation types, serializers. NAR writers, nixbase32 enc/dec, Nix Hash fu
 - <!-- .element: class="fragment" -->
   IO is nicely abstracted away
   - <!-- .element: class="fragment" -->
-    We can run a Nixlang subset without IO in wasm (see [tvixbolt](https://tvixbolt.tvl.su/)),
+    We can run a Nixlang subset without IO in wasm (see [tvixbolt](https://bolt.tvix.dev/)),
     or parse Nix into a config struct with `tvix-serde`
 
 ----

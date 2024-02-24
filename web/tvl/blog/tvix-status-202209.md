@@ -153,7 +153,7 @@ figuring out weird ways to break it – and if you do, let us know.
 We'll see you around!
 
 [Tvix]: https://tvl.fyi/blog/rewriting-nix
-[Tvixbolt]: https://tvixbolt.tvl.su
+[Tvixbolt]: https://bolt.tvix.dev
 [integrated]: https://cl.tvl.fyi/q/status:merged+%2522tvix/eval%2522+mergedbefore:2022-09-09
 [src]: https://cs.tvl.fyi/depot/-/tree/tvix/eval
 [src-noscript]: https://code.tvl.fyi/tree/tvix/eval
