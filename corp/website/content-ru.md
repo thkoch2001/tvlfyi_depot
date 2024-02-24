@@ -95,4 +95,4 @@ TVL][tvl], чтобы узнать больше.
 [nixery]: https://nixery.dev
 [predlozhnik]: https://predlozhnik.ru/
 [depot]: https://cs.tvl.fyi/depot
-[tvixbolt]: https://tvixbolt.tvl.su/
+[tvixbolt]: https://bolt.tvix.dev/
