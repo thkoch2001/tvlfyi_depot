@@ -7,6 +7,7 @@
     enable = true;
     adminCredentialsFile = "/run/agenix/miniflux";
     config.LISTEN_ADDR = "127.0.0.1:6359";
+    config.BASE_URL = "https://feeds.tazj.in";
   };
 
   services.nginx.virtualHosts."feeds" = {
