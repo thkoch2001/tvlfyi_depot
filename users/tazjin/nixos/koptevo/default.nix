@@ -16,6 +16,7 @@ in
     (usermod "geesefs.nix")
     (usermod "predlozhnik.nix")
     (usermod "tgsa.nix")
+    (usermod "miniflux.nix")
     (depot.third_party.agenix.src + "/modules/age.nix")
   ];
 

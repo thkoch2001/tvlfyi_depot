@@ -10,6 +10,7 @@ let
   ];
 in
 {
-  "tgsa-yandex.age".publicKeys = allKeys;
   "geesefs-tazjins-files.age".publicKeys = allKeys;
+  "miniflux.age".publicKeys = allKeys;
+  "tgsa-yandex.age".publicKeys = allKeys;
 }
