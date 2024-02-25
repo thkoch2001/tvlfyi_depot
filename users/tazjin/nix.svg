@@ -33,7 +33,7 @@
        id="lambda-4"
        href="#lambda-path"
        visibility="visible"
-       fill="#f8f8ff" />
+       fill="#d52b1e" />
     <use
        id="lambda-5"
        transform="rotate(60,407.11155,-715.78724)"
@@ -45,6 +45,6 @@
        id="lambda-6"
        href="#lambda-path"
        visibility="visible"
-       fill="#d52b1e" />
+       fill="#f8f8ff" />
   </g>
 </svg>
