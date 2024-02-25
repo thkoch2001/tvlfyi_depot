@@ -14,7 +14,6 @@ in
     (mod "www/tazj.in.nix")
     (usermod "airsonic.nix")
     (usermod "geesefs.nix")
-    (usermod "monica.nix")
     (usermod "predlozhnik.nix")
     (usermod "tgsa.nix")
     (depot.third_party.agenix.src + "/modules/age.nix")
