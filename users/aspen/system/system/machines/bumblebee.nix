@@ -19,5 +19,5 @@
     thresholdPercentage = 5;
   };
 
-  services.xserver.xkbOptions = "caps:swapescape";
+  services.xserver.xkb.options = "caps:swapescape";
 }
