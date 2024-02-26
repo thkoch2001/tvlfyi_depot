@@ -110,7 +110,7 @@ lib.fix (self: {
   };
 
   fonts = {
-    fonts = with pkgs; [
+    packages = with pkgs; [
       corefonts
       dejavu_fonts
       jetbrains-mono
@@ -156,8 +156,8 @@ lib.fix (self: {
 
   services.xserver = {
     enable = true;
-    layout = "us";
-    xkbOptions = "caps:super";
+    xkb.layout = "us";
+    xkb.options = "caps:super";
     exportConfiguration = true;
     videoDrivers = [ "amdgpu" ];
     displayManager = {

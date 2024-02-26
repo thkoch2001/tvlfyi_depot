@@ -108,7 +108,7 @@ lib.fix (self: {
   programs.mosh.enable = true;
 
   fonts = {
-    fonts = [ pkgs.jetbrains-mono ];
+    packages = [ pkgs.jetbrains-mono ];
     fontconfig.defaultFonts.monospace = [ "JetBrains Mono" ];
   };
 
@@ -163,7 +163,7 @@ lib.fix (self: {
   services.tailscale.enable = true;
 
   # Allow sudo-ing via the forwarded SSH agent.
-  security.pam.enableSSHAgentAuth = true;
+  security.pam.sshAgentAuth.enable = true;
 
   # NixOS 20.03 broke nginx and I can't be bothered to debug it
   # anymore, all solution attempts have failed, so here's a
