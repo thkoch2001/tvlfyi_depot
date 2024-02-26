@@ -18,6 +18,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "1374f1c1_21cd6ab7",
+        "filename": "tvix/tools/weave/src/main.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1000005
+      },
+      "writtenOn": "2024-02-26T15:59:07Z",
+      "side": 1,
+      "message": "The formats expected are documented now, and we can cover configurability in a followup.",
+      "parentUuid": "b1101d3b_fea88371",
+      "revId": "f0580a68ea1d4e276d89fc2579377d4a31783a80",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "79956413_3b635c12",
