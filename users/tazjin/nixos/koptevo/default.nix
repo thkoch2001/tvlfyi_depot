@@ -147,10 +147,13 @@ in
   };
 
   # hack to work around the strict sandboxing of the gonic module
-  # breaking DNS resolutino
+  # breaking DNS resolution
   systemd.services.gonic.serviceConfig.BindReadOnlyPaths = [
     "-/etc/resolv.conf"
   ];
+
+  # add a hard dependency on the FUSE mount
+  systemd.services.gonic.requires = [ "geesefs.service" ];
 
   services.nginx.virtualHosts."music.tazj.in" = {
     addSSL = true;
