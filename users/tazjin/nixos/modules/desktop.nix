@@ -15,8 +15,8 @@
 
     xserver = {
       enable = true;
-      layout = "us";
-      xkbOptions = "caps:super";
+      xkb.layout = "us";
+      xkb.options = "caps:super";
 
       libinput.enable = true;
 
