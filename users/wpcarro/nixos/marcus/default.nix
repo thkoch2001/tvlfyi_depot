@@ -57,8 +57,8 @@ in
         touchpad.naturalScrolling = false;
         touchpad.tapping = false;
       };
-      layout = "us";
-      xkbOptions = "caps:escape";
+      xkb.layout = "us";
+      xkb.options = "caps:escape";
       displayManager = {
         # Give EXWM permission to control the session (from tazjin's setup).
         sessionCommands = "${pkgs.xorg.xhost}/bin/xhost +SI:localhost:$USER";
@@ -96,7 +96,7 @@ in
   security.sudo.wheelNeedsPassword = false;
 
   fonts = {
-    fonts = with pkgs; [
+    packages = with pkgs; [
       jetbrains-mono
     ];
 
