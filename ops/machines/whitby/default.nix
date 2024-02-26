@@ -454,9 +454,7 @@ in
 
     ensureUsers = [{
       name = "panettone";
-      ensurePermissions = {
-        "DATABASE panettone" = "ALL PRIVILEGES";
-      };
+      ensureDBOwnership = true;
     }];
   };
 
