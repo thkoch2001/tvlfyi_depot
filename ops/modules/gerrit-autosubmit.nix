@@ -25,6 +25,7 @@ in
     systemd.services.gerrit-autosubmit = {
       inherit description;
       wantedBy = [ "multi-user.target" ];
+      wants = [ "network-online.target" ];
       after = [ "network-online.target" ];
 
       serviceConfig = {
