@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ac2a0c1c_ffdf48be",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-02-27T09:19:51Z",
+      "side": 1,
+      "message": "with cl/11001 and parents, this can be abandoned.",
+      "revId": "78718d38b75d7cbfe9932e2717627cdac4724a36",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
