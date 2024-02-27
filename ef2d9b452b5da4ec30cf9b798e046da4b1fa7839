@@ -18,6 +18,23 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "a001d649_eb38388c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-02-27T09:18:41Z",
+      "side": 1,
+      "message": "with cl/11001 and parents, this can be abandoned.",
+      "revId": "ef2d9b452b5da4ec30cf9b798e046da4b1fa7839",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "1f896cf3_cf99d09f",
