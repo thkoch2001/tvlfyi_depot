@@ -24,6 +24,7 @@ in
     (mod "tvl-users.nix")
     (mod "www/inbox.tvl.su.nix")
     (mod "www/self-redirect.nix")
+    (mod "www/volgasprint.org.nix")
   ];
 
   networking = {
