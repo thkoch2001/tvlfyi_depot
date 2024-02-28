@@ -69,7 +69,7 @@ Kazan has an international airport [with many connections](https://www.flightcon
 
 Depending on where you're coming from a flight via Moscow or a more eastern location like Vladivostok might be preferable. Internal Russian flights are fairly cheap, and train rides are also a comfortable alternative (although they can be up to a week long - it's a big country!).
 
-### Visas
+### 🛂 Visas
 
 Tatarstan is subject to standard Russian visa regulations. For citizens of most European[^1] (and many other) countries, a simple e-visa can be [applied for online](https://evisa.kdmid.ru/) and is valid for up to 16 days.
 
