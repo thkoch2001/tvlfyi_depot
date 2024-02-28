@@ -143,6 +143,30 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "07e60309_f37f257f",
+        "filename": "tvix/eval/src/builtins/impure.rs",
+        "patchSetId": 6
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1000089
+      },
+      "writtenOn": "2024-02-28T21:13:24Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b4a1ea24_a8a2fc1d",
+      "range": {
+        "startLine": 40,
+        "startChar": 30,
+        "endLine": 40,
+        "endChar": 40
+      },
+      "revId": "b32cb8b6e2cfdb2cfecd7d2ba1438567d4aa33ca",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "4ae335fe_b732f739",
