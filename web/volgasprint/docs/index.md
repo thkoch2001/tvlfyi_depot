@@ -54,10 +54,9 @@ We'll try to have a recommended dinner location on most evenings, but everyone i
 
 ## 🔥 Registration
 
-<!-- [Fill out the form to apply](https://cryptpad.fr/form/#/2/form/view/EKsx9kFyCVf8sTGNziBRIuFascXwPsiw+xli5jr3Ago/). -->
+[Fill out the form to apply](https://forms.yandex.ru/cloud/65dfad4584227c6dace44877/).
 
-Registration will open soon. Stay tuned!
-<!-- You'll be notified soon if you're part of the sprint. -->
+We're aiming to process applications as soon as possible and notify attendees in May.
 
 ## 🧵 Topics
 
@@ -80,8 +79,6 @@ For everyone else (notably, Americans and Brits) a visa application at your loca
 [^1]: **e-visas** available for citizens of Andorra, Austria, Bahrain, Belgium, Bulgaria, Cambodia, China, Croatia, Cyprus, Czech Republic, Denmark, Estonia, Finland, France, Germany, Greece, Hungary, Iceland, India, Indonesia, Iran, Ireland, Italy, Japan, North Korea, Kuwait, Latvia, Liechtenstein, Lithuania, Luxembourg, Malaysia, Malta, Mexico, Monaco, Myanmar, Netherlands, North Macedonia, Norway, Oman, Philippines, Poland, Portugal, Romania, San Marino, Saudi Arabia, Serbia, Singapore, Slovakia, Slovenia, Spain, Sweden, Switzerland, Taiwan, China, Turkey, Vatican, Viet Nam
 
 [^2]: **visa-free** travel for citizens of Abkhazia, Argentina, Armenia, Azerbaijan, Belarus, Bolivia, Bosnia and Herzegovina, Brazil, Brunei Darussalam, Chile, Colombia, Costa Rica, Cuba, Dominican Republic, Ecuador, Fiji, Guatemala, Guyana, Honduras, Israel, Kazakhstan, South Korea, Kyrgyzstan, Moldova, Mongolia, Montenegro, Nicaragua, North Macedonia, Peru, Serbia, South Africa, Tajikistan, Thailand, Turkey, Ukraine, United Arab Emirates, Uruguay, Uzbekistan, Venezuela
-
-### 
 
 ## 🥳 Stuff to do in Kazan
 
