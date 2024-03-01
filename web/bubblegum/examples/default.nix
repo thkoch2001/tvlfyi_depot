@@ -4,7 +4,6 @@ let
 
   scripts = [
     ./hello.nix
-    ./derivation-svg.nix
     (substituteAll {
       src = ./blog.nix;
       # by making this a plain string this

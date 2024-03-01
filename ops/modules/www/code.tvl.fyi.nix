@@ -13,13 +13,6 @@
       forceSSL = true;
 
       extraConfig = ''
-        # Serve the rendered Tvix component SVG.
-        #
-        # TODO(tazjin): Implement a way of serving this dynamically
-        location = /about/tvix/docs/component-flow.svg {
-            alias ${depot.tvix.docs.svg}/component-flow.svg;
-        }
-
         location = /go-get/tvix/build-go {
             alias ${pkgs.writeText "go-import-metadata.html" ''<html><meta name="go-import" content="code.tvl.fyi/tvix/build-go git https://code.tvl.fyi/depot.git:/tvix/build-go.git"></html>''};
         }
