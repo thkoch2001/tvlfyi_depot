@@ -25,6 +25,8 @@ url = "2.4.0"
 walkdir = "2.4.0"
 bstr = "1.6.0"
 async-tempfile = "0.4.0"
+object_store = { version = "0.9.0", features = ["aws", "azure", "gcp", "http"] }
+fastcdc = { version = "3.1.0", features = ["tokio"] }
 
 [dependencies.fuse-backend-rs]
 optional = true
