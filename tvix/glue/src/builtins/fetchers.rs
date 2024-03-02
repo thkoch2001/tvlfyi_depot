@@ -185,11 +185,20 @@ async fn fetch(
         }
     }
 
-    let store_path = Rc::clone(&state).tokio_handle.block_on(state.fetch_url(
-        &args.url,
-        &args.name,
-        args.hash.as_ref(),
-    ))?;
+    let store_path = Rc::clone(&state).tokio_handle.block_on(async move {
+        match mode {
+            FetchMode::Url => {
+                state
+                    .fetch_url(&args.url, &args.name, args.hash.as_ref())
+                    .await
+            }
+            FetchMode::Tarball => {
+                state
+                    .fetch_tarball(&args.url, &args.name, args.hash.as_ref())
+                    .await
+            }
+        }
+    })?;
 
     Ok(string_from_store_path(store_path.as_ref()).into())
 }
