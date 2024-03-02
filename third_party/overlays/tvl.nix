@@ -122,10 +122,6 @@ depot.nix.readTree.drvTargets {
     '';
   };
 
-  # Disable tests which fail and weren't executed before the bump that
-  # introduced this problem: https://github.com/NixOS/nixpkgs/issues/288064
-  libgit2_1_5 = super.libgit2_1_5.overrideAttrs (_: { doCheck = false; });
-
   evans = super.evans.overrideAttrs (old: {
     patches = old.patches or [ ] ++ [
       # add support for unix domain sockets
