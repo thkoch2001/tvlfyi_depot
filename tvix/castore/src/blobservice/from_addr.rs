@@ -3,7 +3,8 @@ use url::Url;
 use crate::{proto::blob_service_client::BlobServiceClient, Error};
 
 use super::{
-    BlobService, GRPCBlobService, MemoryBlobService, SimpleFilesystemBlobService, SledBlobService,
+    BlobService, GRPCBlobService, MemoryBlobService, ObjectStoreBlobService,
+    SimpleFilesystemBlobService, SledBlobService,
 };
 
 /// Constructs a new instance of a [BlobService] from an URI.
@@ -62,6 +63,15 @@ pub async fn from_addr(uri: &str) -> Result<Box<dyn BlobService>, crate::Error> 
         }
 
         Box::new(SimpleFilesystemBlobService::new(url.path().into()).await?)
+    } else if let Some(trimmed_scheme) = url.scheme().strip_prefix("objectstore+") {
+        let mut trimmed_url = url.clone();
+        trimmed_url
+            .set_scheme(trimmed_scheme)
+            .expect("failed to construct trimmed URL");
+        return Ok(Box::new(
+            ObjectStoreBlobService::from_url(&trimmed_url)
+                .map_err(|e| Error::StorageError(e.to_string()))?,
+        ));
     } else {
         Err(crate::Error::StorageError(format!(
             "unknown scheme: {}",
@@ -114,6 +124,14 @@ mod tests {
     #[test_case("grpc+https://localhost", true; "grpc valid https host without port")]
     /// Correct scheme to connect to localhost over http, but with additional path, which is invalid.
     #[test_case("grpc+http://localhost/some-path", false; "grpc valid invalid host and path")]
+    /// An example for object store (Memory)
+    #[test_case("objectstore+memory:///", true; "objectstore valid memory url")]
+    /// An example for object store (File)
+    // #[test_case("objectstore+file:///foo/bar", true; "objectstore valid file url")] // ??
+    /// An example for object store (S3)
+    #[test_case("objectstore+s3://bucket/path", true; "objectstore valid s3 url")]
+    /// An example for object store (GCS)
+    #[test_case("objectstore+gs://bucket/path", true; "objectstore valid gcs url")]
     #[tokio::test]
     async fn test_from_addr_tokio(uri_str: &str, is_ok: bool) {
         assert_eq!(from_addr(uri_str).await.is_ok(), is_ok)
