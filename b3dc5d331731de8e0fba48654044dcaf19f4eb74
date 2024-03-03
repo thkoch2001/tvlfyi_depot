@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9adc50e1_0d1d906d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-03-03T16:01:46Z",
+      "side": 1,
+      "message": "@sternenseemann@systemli.org is this still actionable?",
+      "revId": "b3dc5d331731de8e0fba48654044dcaf19f4eb74",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
