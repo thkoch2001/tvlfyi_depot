@@ -18,6 +18,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "10ded9e4_91310222",
+        "filename": "tvix/castore/src/blobservice/object_store.rs",
+        "patchSetId": 4
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-03-03T13:15:36Z",
+      "side": 1,
+      "message": "base64 itself is a bit messy, as it contains \"/\".\n\n`object_store` is fine with it, it supports creating dirs as needed for its `file://` backend, but it\u0027s still annoying.\n\nWe could use urlsafe base64, though the whole point of it was being able to simply copy/paste hashes from logs, and that also wouldn\u0027t be given if we used that (and changing all logging to urlsafe base64 will mean these are not aligned with SRI.\n\nI\u0027ll just leave it hexlower for now, we can re-iterate on this later.",
+      "parentUuid": "733bb8b0_c495a741",
+      "revId": "279c284f682bca4b3071bdde7688284e5f2d2dd4",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "5cf8bf23_62b6410b",
@@ -31,6 +49,24 @@
       "writtenOn": "2024-03-02T20:49:24Z",
       "side": 1,
       "message": "clones can be inlined now",
+      "revId": "279c284f682bca4b3071bdde7688284e5f2d2dd4",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ce4d7a83_22870b07",
+        "filename": "tvix/castore/src/blobservice/object_store.rs",
+        "patchSetId": 4
+      },
+      "lineNbr": 281,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-03-03T13:15:36Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5cf8bf23_62b6410b",
       "revId": "279c284f682bca4b3071bdde7688284e5f2d2dd4",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
@@ -69,6 +105,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "fb5567f9_e6fc6a9a",
+        "filename": "tvix/castore/src/blobservice/object_store.rs",
+        "patchSetId": 4
+      },
+      "lineNbr": 324,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-03-03T13:15:36Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a8f2dd25_717a3342",
+      "revId": "279c284f682bca4b3071bdde7688284e5f2d2dd4",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "76508f43_2fd661a8",
@@ -82,6 +136,24 @@
       "writtenOn": "2024-03-03T01:43:16Z",
       "side": 1,
       "message": "There is no need to box things here just call poll directly.\n```suggestion\n        let fut_p \u003d fut.poll(cx);\n```",
+      "revId": "279c284f682bca4b3071bdde7688284e5f2d2dd4",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f328f812_2dd056d5",
+        "filename": "tvix/castore/src/blobservice/object_store.rs",
+        "patchSetId": 4
+      },
+      "lineNbr": 416,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-03-03T13:15:36Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "76508f43_2fd661a8",
       "revId": "279c284f682bca4b3071bdde7688284e5f2d2dd4",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
@@ -103,6 +175,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "18ba9463_4f4d4972",
+        "filename": "tvix/castore/src/blobservice/object_store.rs",
+        "patchSetId": 4
+      },
+      "lineNbr": 417,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-03-03T13:15:36Z",
+      "side": 1,
+      "message": "I moved things around, poll the future first, and if it is ready return Poll::Ready(Err(…)) by myself.",
+      "parentUuid": "a98edb4e_a505cd6f",
+      "revId": "279c284f682bca4b3071bdde7688284e5f2d2dd4",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "12cceec9_16f0a286",
@@ -116,6 +206,24 @@
       "writtenOn": "2024-03-03T01:43:16Z",
       "side": 1,
       "message": "Same as above no need to box things.",
+      "revId": "279c284f682bca4b3071bdde7688284e5f2d2dd4",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "27553a7e_68b82b7c",
+        "filename": "tvix/castore/src/blobservice/object_store.rs",
+        "patchSetId": 4
+      },
+      "lineNbr": 435,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-03-03T13:15:36Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "12cceec9_16f0a286",
       "revId": "279c284f682bca4b3071bdde7688284e5f2d2dd4",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
@@ -137,6 +245,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "a240738e_db9d7e40",
+        "filename": "tvix/castore/src/blobservice/object_store.rs",
+        "patchSetId": 4
+      },
+      "lineNbr": 436,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-03-03T13:15:36Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "bcb77eca_a6e91b6b",
+      "revId": "279c284f682bca4b3071bdde7688284e5f2d2dd4",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "e3519245_b7fa55e6",
@@ -150,6 +276,24 @@
       "writtenOn": "2024-03-03T01:43:16Z",
       "side": 1,
       "message": "It is not enough to just drop the writer. You must always call poll_shutdown on an AsyncWrite otherwise the code may sometimes drop data. The tricky thing is it might work sometimes and with some writers all the time but to guarantee that all data is correctly processed, written and flushed you must call poll_shutdown. \n```suggestion\n                writer.shutdown().await?;\n```",
+      "revId": "279c284f682bca4b3071bdde7688284e5f2d2dd4",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7e387c3b_5c968496",
+        "filename": "tvix/castore/src/blobservice/object_store.rs",
+        "patchSetId": 4
+      },
+      "lineNbr": 461,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-03-03T13:15:36Z",
+      "side": 1,
+      "message": "Ok, thanks. Done!",
+      "parentUuid": "e3519245_b7fa55e6",
       "revId": "279c284f682bca4b3071bdde7688284e5f2d2dd4",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
@@ -185,6 +329,24 @@
       "side": 1,
       "message": "When I have needed to clone an io::Error I have usually just made a new one with the same ErrorKind and message.",
       "parentUuid": "6f889a84_5eb9aad6",
+      "revId": "279c284f682bca4b3071bdde7688284e5f2d2dd4",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ca7e33f9_555b876f",
+        "filename": "tvix/castore/src/blobservice/object_store.rs",
+        "patchSetId": 4
+      },
+      "lineNbr": 470,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-03-03T13:15:36Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e530e1d6_4ebf0dca",
       "revId": "279c284f682bca4b3071bdde7688284e5f2d2dd4",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
