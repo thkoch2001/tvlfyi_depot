@@ -71,6 +71,57 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "76508f43_2fd661a8",
+        "filename": "tvix/castore/src/blobservice/object_store.rs",
+        "patchSetId": 4
+      },
+      "lineNbr": 416,
+      "author": {
+        "id": 1000082
+      },
+      "writtenOn": "2024-03-03T01:43:16Z",
+      "side": 1,
+      "message": "There is no need to box things here just call poll directly.\n```suggestion\n        let fut_p \u003d fut.poll(cx);\n```",
+      "revId": "279c284f682bca4b3071bdde7688284e5f2d2dd4",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "12cceec9_16f0a286",
+        "filename": "tvix/castore/src/blobservice/object_store.rs",
+        "patchSetId": 4
+      },
+      "lineNbr": 435,
+      "author": {
+        "id": 1000082
+      },
+      "writtenOn": "2024-03-03T01:43:16Z",
+      "side": 1,
+      "message": "Same as above no need to box things.",
+      "revId": "279c284f682bca4b3071bdde7688284e5f2d2dd4",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e3519245_b7fa55e6",
+        "filename": "tvix/castore/src/blobservice/object_store.rs",
+        "patchSetId": 4
+      },
+      "lineNbr": 461,
+      "author": {
+        "id": 1000082
+      },
+      "writtenOn": "2024-03-03T01:43:16Z",
+      "side": 1,
+      "message": "It is not enough to just drop the writer. You must always call poll_shutdown on an AsyncWrite otherwise the code may sometimes drop data. The tricky thing is it might work sometimes and with some writers all the time but to guarantee that all data is correctly processed, written and flushed you must call poll_shutdown. \n```suggestion\n                writer.shutdown().await?;\n```",
+      "revId": "279c284f682bca4b3071bdde7688284e5f2d2dd4",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "6f889a84_5eb9aad6",
         "filename": "tvix/castore/src/blobservice/object_store.rs",
         "patchSetId": 4
@@ -82,6 +133,24 @@
       "writtenOn": "2024-03-02T20:49:24Z",
       "side": 1,
       "message": "it\u0027s probably ok to not return the same error multiple times, we can just return a more generic error when calling close for the second time.",
+      "revId": "279c284f682bca4b3071bdde7688284e5f2d2dd4",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e530e1d6_4ebf0dca",
+        "filename": "tvix/castore/src/blobservice/object_store.rs",
+        "patchSetId": 4
+      },
+      "lineNbr": 470,
+      "author": {
+        "id": 1000082
+      },
+      "writtenOn": "2024-03-03T01:43:16Z",
+      "side": 1,
+      "message": "When I have needed to clone an io::Error I have usually just made a new one with the same ErrorKind and message.",
+      "parentUuid": "6f889a84_5eb9aad6",
       "revId": "279c284f682bca4b3071bdde7688284e5f2d2dd4",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
