@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a7292301_0857af14",
+        "filename": "nix/buildkite/default.nix",
+        "patchSetId": 8
+      },
+      "lineNbr": 421,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2024-03-03T09:03:50Z",
+      "side": 1,
+      "message": "Clever! I\u0027m curious whether Buildkite\u0027s cleanup commands get rid of this, though, or if we\u0027re accumulating these in the existing depot clones.\n\nThis seems to be a static string - can\u0027t we add it to the actual depot gitignore?",
+      "range": {
+        "startLine": 421,
+        "startChar": 0,
+        "endLine": 421,
+        "endChar": 2
+      },
+      "revId": "f219cf0b05b7899687b5507928a1d78089395312",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
