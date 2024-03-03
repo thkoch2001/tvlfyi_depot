@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8a4e1c74_39b683cc",
+        "filename": "tvix/docs/book.toml",
+        "patchSetId": 3
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1000005
+      },
+      "writtenOn": "2024-03-03T16:44:21Z",
+      "side": 1,
+      "message": "```suggestion\nuse-data-uris \u003d true\n```",
+      "revId": "c2432b4c18ee4331e42080d5e69af18a6932b14b",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
