@@ -16,6 +16,24 @@
       "message": "AsyncHashingReader no?",
       "revId": "87de57365cd44cbaddefe48d05ea168b31045560",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6016defc_0e22954f",
+        "filename": "tvix/castore/src/hashing_reader.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-03-03T15:31:08Z",
+      "side": 1,
+      "message": "There\u0027s a bunch of things with async interfaces in tvix-castore. Let\u0027s distinguish here if we add a non-async variant.",
+      "parentUuid": "af9d18b6_0de896d2",
+      "revId": "87de57365cd44cbaddefe48d05ea168b31045560",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
