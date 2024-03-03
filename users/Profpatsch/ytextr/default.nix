@@ -54,7 +54,7 @@ in
 nix-run-with-channel {
   channel = "nixos-unstable";
   packageNamesAtRuntime = [ "yt-dlp" ];
-  executable = depot.nix.writeExecline "ytextr" { readNArgs = 1; } [
+  executable = depot.nix.writeExecline "ytextr" { } [
     "getcwd"
     "-E"
     "cwd"
@@ -77,6 +77,6 @@ nix-run-with-channel {
     "mkv"
     "-f"
     "bestvideo[height<=?1080]+bestaudio/best"
-    "$1"
+    "$@"
   ];
 }
