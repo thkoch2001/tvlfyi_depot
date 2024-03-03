@@ -34,6 +34,24 @@
       "parentUuid": "86220acc_7d325912",
       "revId": "3e9967da244fcb34124a3a1163fde9ab9335a680",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7f551999_51811f6c",
+        "filename": "tvix/castore/src/blobservice/object_store.rs",
+        "patchSetId": 5
+      },
+      "lineNbr": 405,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-03-03T16:59:32Z",
+      "side": 1,
+      "message": "That\u0027s not what I meant with my question - Assume a client uses `BlobService::open_write()`, then halfway stops writing (because the process dies, or couldn\u0027t get all the data it wanted to write, …), doesn\u0027t matter - it does not call `close()`.\n\nIn that case we don\u0027t want the blob to be finalized, aka nothing should be written in `blobs/…` (EOF code handling of `upload_blob`), only some stray `chunks/…` might be stay sitting around.\n\nDoes the code behave like this currently, or does `upload_blob` see a EOF in these cases too? If that\u0027s the case, we might need to signal differently that the upload should be aborted…",
+      "parentUuid": "63748591_5ecc2ca7",
+      "revId": "3e9967da244fcb34124a3a1163fde9ab9335a680",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
