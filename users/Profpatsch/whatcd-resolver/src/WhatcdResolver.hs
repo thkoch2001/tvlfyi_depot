@@ -7,8 +7,6 @@ module WhatcdResolver where
 
 import Control.Category qualified as Cat
 import Control.Monad.Catch.Pure (runCatch)
-import Control.Monad.Error (catchError)
-import Control.Monad.Except (runExcept)
 import Control.Monad.Logger qualified as Logger
 import Control.Monad.Logger.CallStack
 import Control.Monad.Reader
@@ -42,7 +40,6 @@ import Json.Enc qualified as Enc
 import Label
 import Multipart2 qualified as Multipart
 import Network.HTTP.Client.Conduit qualified as Http
-import Network.HTTP.Conduit qualified as Http
 import Network.HTTP.Simple qualified as Http
 import Network.HTTP.Types
 import Network.HTTP.Types qualified as Http
@@ -86,7 +83,7 @@ main =
     <&> first showToError
     >>= expectIOError "could not start whatcd-resolver"
 
-htmlUi :: App ()
+htmlUi :: AppT IO ()
 htmlUi = do
   let debug = True
   withRunInIO $ \runInIO -> Warp.run 9092 $ \req respond -> do
@@ -222,7 +219,7 @@ htmlUi = do
     everySecond call extraData innerHtml = [hsx|<div hx-trigger="every 1s" hx-swap="outerHTML" hx-post={call} hx-vals={Enc.encToBytesUtf8 extraData}>{innerHtml}</div>|]
 
     mainHtml span = runTransaction $ do
-      jsonld <- httpGetJsonLd span "https://musicbrainz.org/work/92000fd4-d304-406d-aeb4-6bdbeed318ec" <&> renderJsonld
+      -- jsonld <- httpGetJsonLd span "https://musicbrainz.org/work/92000fd4-d304-406d-aeb4-6bdbeed318ec" <&> renderJsonld
       bestTorrentsTable <- getBestTorrentsTable
       -- transmissionTorrentsTable <- lift @Transaction getTransmissionTorrentsTable
       pure $
@@ -243,7 +240,7 @@ htmlUi = do
         </style>
       </head>
       <body>
-        {jsonld}
+        {""::Text {-jsonld-}}
         <form
           hx-post="/snips/redacted/search"
           hx-target="#redacted-search-results">
@@ -425,21 +422,21 @@ jsonldParser :: (Monad m) => Json.ParseT err m Jsonld
 jsonldParser =
   Json.asValue >>= \cur -> do
     if
-        | Json.Object _ <- cur -> do
-            typeMay <- Json.keyMay "@type" $ (Json.asArraySet Json.asText Json.<|> (Set.singleton <$> Json.asText))
-            idMay <- Json.keyMay "@id" $ Json.asText
-            if
-                | Just type_ <- typeMay,
-                  Just id_ <- idMay -> do
-                    previewFields <-
-                      Json.asObjectMap jsonldParser
-                        <&> Map.delete "@type"
-                        <&> Map.delete "@id"
-                    pure $ JsonldObject $ JsonldObject' {..}
-                | otherwise -> pure $ JsonldField cur
-        | Json.Array _ <- cur -> do
-            JsonldArray <$> Json.eachInArray jsonldParser
-        | otherwise -> pure $ JsonldField cur
+      | Json.Object _ <- cur -> do
+          typeMay <- Json.keyMay "@type" $ (Json.asArraySet Json.asText Json.<|> (Set.singleton <$> Json.asText))
+          idMay <- Json.keyMay "@id" $ Json.asText
+          if
+            | Just type_ <- typeMay,
+              Just id_ <- idMay -> do
+                previewFields <-
+                  Json.asObjectMap jsonldParser
+                    <&> Map.delete "@type"
+                    <&> Map.delete "@id"
+                pure $ JsonldObject $ JsonldObject' {..}
+            | otherwise -> pure $ JsonldField cur
+      | Json.Array _ <- cur -> do
+          JsonldArray <$> Json.eachInArray jsonldParser
+      | otherwise -> pure $ JsonldField cur
 
 renderJsonld :: Jsonld -> Html
 renderJsonld = \case
@@ -490,9 +487,9 @@ scientificPercentage =
   Field.boundedScientificRealFloat @Float
     >>> ( FieldParser $ \f ->
             if
-                | f < 0 -> Left "percentage cannot be negative"
-                | f > 1 -> Left "percentage cannot be over 100%"
-                | otherwise -> Right $ Percentage $ ceiling (f * 100)
+              | f < 0 -> Left "percentage cannot be negative"
+              | f > 1 -> Left "percentage cannot be over 100%"
+              | otherwise -> Right $ Percentage $ ceiling (f * 100)
         )
 
 -- | Fetch the current status from transmission, and remove the tranmission hash from our database
@@ -834,10 +831,10 @@ redactedGetTorrentFile dat = inSpan' "Redacted Get Torrent File" $ \span -> do
           (label @"action" "download")
           ( label @"actionArgs"
               [ ("id", Just (dat.torrentId & showToText @Int & textToBytesUtf8))
-              -- try using tokens as long as we have them (TODO: what if there’s no tokens left?
-              -- ANSWER: it breaks:
-              -- responseBody = "{\"status\":\"failure\",\"error\":\"You do not have any freeleech tokens left. Please use the regular DL link.\"}",
-              -- ("usetoken", Just "1")
+                -- try using tokens as long as we have them (TODO: what if there’s no tokens left?
+                -- ANSWER: it breaks:
+                -- responseBody = "{\"status\":\"failure\",\"error\":\"You do not have any freeleech tokens left. Please use the regular DL link.\"}",
+                -- ("usetoken", Just "1")
               ]
           )
       )
@@ -1256,11 +1253,11 @@ getBestTorrents = do
           TorrentData
             { torrentStatus =
                 if
-                    | not hasTorrentFile -> NoTorrentFileYet
-                    | Nothing <- transmissionTorrentHash -> NotInTransmissionYet
-                    | Just hash <- transmissionTorrentHash ->
-                        InTransmission $
-                          T2 (label @"torrentHash" hash) (label @"transmissionInfo" ()),
+                  | not hasTorrentFile -> NoTorrentFileYet
+                  | Nothing <- transmissionTorrentHash -> NotInTransmissionYet
+                  | Just hash <- transmissionTorrentHash ->
+                      InTransmission $
+                        T2 (label @"torrentHash" hash) (label @"transmissionInfo" ()),
               ..
             }
     )
@@ -1353,16 +1350,16 @@ httpTorrent span req =
                   <&> Wai.parseContentType
                   <&> (\(ct, _mimeAttributes) -> ct)
           if
-              | statusCode == 200,
-                Just "application/x-bittorrent" <- contentType ->
-                  Right $ (resp & Http.responseBody)
-              | statusCode == 200,
-                Just otherType <- contentType ->
-                  Left [fmt|Redacted returned a non-torrent body, with content-type "{otherType}"|]
-              | statusCode == 200,
-                Nothing <- contentType ->
-                  Left [fmt|Redacted returned a body with unspecified content type|]
-              | code <- statusCode -> Left [fmt|Redacted returned an non-200 error code, code {code}: {resp & showPretty}|]
+            | statusCode == 200,
+              Just "application/x-bittorrent" <- contentType ->
+                Right $ (resp & Http.responseBody)
+            | statusCode == 200,
+              Just otherType <- contentType ->
+                Left [fmt|Redacted returned a non-torrent body, with content-type "{otherType}"|]
+            | statusCode == 200,
+              Nothing <- contentType ->
+                Left [fmt|Redacted returned a body with unspecified content type|]
+            | code <- statusCode -> Left [fmt|Redacted returned an non-200 error code, code {code}: {resp & showPretty}|]
       )
 
 newtype Optional a = OptionalInternal (Maybe a)
@@ -1401,17 +1398,17 @@ httpJson opts span parser req = do
                   <&> Wai.parseContentType
                   <&> (\(ct, _mimeAttributes) -> ct)
           if
-              | statusCode == 200,
-                Just ct <- contentType,
-                ct == opts'.contentType ->
-                  Right $ (resp & Http.responseBody)
-              | statusCode == 200,
-                Just otherType <- contentType ->
-                  Left [fmt|Server returned a non-json body, with content-type "{otherType}"|]
-              | statusCode == 200,
-                Nothing <- contentType ->
-                  Left [fmt|Server returned a body with unspecified content type|]
-              | code <- statusCode -> Left [fmt|Server returned an non-200 error code, code {code}: {resp & showPretty}|]
+            | statusCode == 200,
+              Just ct <- contentType,
+              ct == opts'.contentType ->
+                Right $ (resp & Http.responseBody)
+            | statusCode == 200,
+              Just otherType <- contentType ->
+                Left [fmt|Server returned a non-json body, with content-type "{otherType}"|]
+            | statusCode == 200,
+              Nothing <- contentType ->
+                Left [fmt|Server returned a body with unspecified content type|]
+            | code <- statusCode -> Left [fmt|Server returned an non-200 error code, code {code}: {resp & showPretty}|]
       )
     >>= assertM
       span
@@ -1512,8 +1509,6 @@ data Context = Context
 newtype AppT m a = AppT {unAppT :: ReaderT Context m a}
   deriving newtype (Functor, Applicative, Monad, MonadIO, MonadUnliftIO, MonadThrow)
 
-type App a = AppT IO a
-
 data AppException = AppException Text
   deriving stock (Show)
   deriving anyclass (Exception)
@@ -1594,8 +1589,3 @@ runPGTransaction (Transaction transaction) = do
   withRunInIO $ \unliftIO ->
     withPGTransaction pool $ \conn -> do
       unliftIO $ runReaderT transaction conn
-
-data HasQueryParams param
-  = HasNoParams
-  | HasSingleParam param
-  | HasMultiParams [param]
