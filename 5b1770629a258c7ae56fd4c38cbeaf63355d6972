@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "48d26047_c7cb36f3",
+        "filename": "tvix/nix-compat/src/derivation/output.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 186,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-03-03T12:00:35Z",
+      "side": 1,
+      "message": "debug leftover?",
+      "revId": "5b1770629a258c7ae56fd4c38cbeaf63355d6972",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
