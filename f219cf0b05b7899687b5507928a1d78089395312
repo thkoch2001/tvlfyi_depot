@@ -46,6 +46,30 @@
       },
       "revId": "f219cf0b05b7899687b5507928a1d78089395312",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "848c3b97_a0954e90",
+        "filename": "nix/buildkite/default.nix",
+        "patchSetId": 8
+      },
+      "lineNbr": 421,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2024-03-03T15:19:11Z",
+      "side": 1,
+      "message": "https://buildkite.com/docs/agent/v3/configuration#git-clean-flags\n\nSeems like the agent runs `git clean -fdxq` which would remove these symlinks.",
+      "parentUuid": "6cb1539f_c85cc771",
+      "range": {
+        "startLine": 421,
+        "startChar": 0,
+        "endLine": 421,
+        "endChar": 2
+      },
+      "revId": "f219cf0b05b7899687b5507928a1d78089395312",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
