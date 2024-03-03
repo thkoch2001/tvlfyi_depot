@@ -60,7 +60,7 @@ pkgs.mkShell {
     pkgs.rustup
     pkgs.pkg-config
     pkgs.fuse
-    pkgs.postgresql
+    pkgs.postgresql_14
     pkgs.nodejs
     pkgs.ninja
   ];
@@ -94,4 +94,5 @@ pkgs.mkShell {
       depot.third_party.rust-crates.nom
     ]}"
     ];
+
 }

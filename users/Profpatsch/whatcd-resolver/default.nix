@@ -56,7 +56,8 @@ depot.nix.writeExecline "whatcd-resolver-wrapped" { } [
   "PATH"
   "export"
   "PATH"
-  "${pkgs.postgresql}/bin:$${PATH}"
+  # TODO: figure out how to automatically migrate to a new postgres version with tmp_postgres (dump?)
+  "${pkgs.postgresql_14}/bin:$${PATH}"
   "export"
   "WHATCD_RESOLVER_TOOLS"
   (pkgs.linkFarm "whatcd-resolver-tools" [
