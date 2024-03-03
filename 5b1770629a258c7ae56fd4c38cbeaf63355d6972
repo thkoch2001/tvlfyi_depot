@@ -16,6 +16,29 @@
       "message": "debug leftover?",
       "revId": "5b1770629a258c7ae56fd4c38cbeaf63355d6972",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ba52d6b4_023fe0da",
+        "filename": "tvix/nix-compat/src/nixhash/ca_hash.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 132,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-03-03T12:07:42Z",
+      "side": 1,
+      "message": "I\u0027d rename this variable `nar` (or `mode_is_nar`).\n\n`recursive` is a misleading term, we try to avoid using it as much as possible.\n\nAlso note https://cl.tvl.fyi/c/depot/+/11069, which introduces a `CAHashMode` enum. Once this landed, maybe we can have another constructor for CAHash, making use of that enum?",
+      "range": {
+        "startLine": 132,
+        "startChar": 11,
+        "endLine": 132,
+        "endChar": 20
+      },
+      "revId": "5b1770629a258c7ae56fd4c38cbeaf63355d6972",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
