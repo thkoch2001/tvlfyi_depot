@@ -5,8 +5,8 @@ repo_name: '//web/volgasprint'
 repo_url: 'https://code.tvl.fyi/tree/web/volgasprint'
 theme:
   name: material
-  logo: https://code.tvl.fyi/plain/users/tazjin/nix.svg
-  favicon: https://code.tvl.fyi/plain/users/tazjin/nix.svg
+  logo: assets/logos/volgasprint_nix.svg
+  favicon: assets/logos/volgasprint_nix.svg
   palette:
     primary: black
     accent: '#FBFBFB'
