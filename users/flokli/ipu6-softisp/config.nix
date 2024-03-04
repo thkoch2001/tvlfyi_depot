@@ -49,8 +49,6 @@ let
   });
 in
 {
-  hardware.firmware = [ pkgs.ipu6-camera-bins ];
-
   boot.kernelPatches = [{
     name = "linux-kernel-test.patch";
     patch = ./kernel/softisp.patch;
