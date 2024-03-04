@@ -1,8 +1,8 @@
 # NixOS Volga Sprint 2024
 
-<img src="https://code.tvl.fyi/plain/users/tazjin/nix.svg"
-     alt="Nix logo with Russian flag colours"
-     width="200"
+<img src="assets/logos/volgasprint_ru.svg"
+     alt="Nix logo with the tower Söyembikä, a famous Kazan landmark"
+     width="300"
      style="filter: drop-shadow(1px 1px 6px grey);">
 
 *What*
@@ -18,13 +18,13 @@
 *Who*
 :    ~20 developers.
 
-Volga Sprint is similar to events like [Ocean Sprint](https://oceansprint.org/) and [Thaiger Sprint](https://thaigersprint.org/).
+Volga Sprint is similar to other Nix events like [Ocean Sprint](https://oceansprint.org/) and [Thaiger Sprint](https://thaigersprint.org/).
 
 ## 📍 Location
 
 [Kazan, Tatarstan, Russia](https://yandex.com/maps/-/CDFaeW~J)
 
-Kazan is the historial capital of the Autonomous Republic of Tatarstan. The city is over 1000 years old and is considered one of the main tourist destinations in Russia.
+Kazan is the historial capital of the Republic of Tatarstan. The city is over 1000 years old and is considered one of the main tourist destinations in Russia.
 
 Kazan is located on the bank of the Volga, the longest river in Europe, and surrounded by numerous lakes and beautiful nature.
 
@@ -54,7 +54,7 @@ We'll try to have a recommended dinner location on most evenings, but everyone i
 
 ## 🔥 Registration
 
-[Fill out the form to apply](https://forms.yandex.ru/cloud/65dfad4584227c6dace44877/).
+[Fill out the form to apply](https://forms.yandex.ru/cloud/65e640fc73cee71ec679db66/).
 
 We're aiming to process applications as soon as possible and notify attendees in May.
 
