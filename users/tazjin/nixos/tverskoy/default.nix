@@ -44,7 +44,6 @@ lib.fix (self: {
     kernelPackages = pkgs.zfsUnstable.latestCompatibleLinuxPackages;
     loader.systemd-boot.enable = true;
     loader.efi.canTouchEfiVariables = true;
-    zfs.enableUnstable = true;
   };
 
   virtualisation.docker.enable = true;
