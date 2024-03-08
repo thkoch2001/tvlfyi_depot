@@ -36,13 +36,7 @@
 
 (require 'treesit)
 
-(defvar treecrumbs-languages
-  `(;; In YAML documents, crumbs are generated from the keys of maps,
-    ;; and from elements of arrays.
-    (yaml . (("block_mapping_pair" .
-              ,(treesit-query-compile 'yaml '((block_mapping_pair key: (_) @key))))
-             ("block_sequence_item" . "[]"))))
-
+(defvar treecrumbs-languages nil
   "Describes the tree-sitter language grammars supported by
 treecrumbs, and how the breadcrumbs for their node types are
 generated.
@@ -64,6 +58,17 @@ function, the key in a map, ...).
 Treecrumbs will only consider node types that are mentioned in
 the node type list. All other nodes are ignored when constructing
 the crumbs.")
+
+(setq treecrumbs-languages
+      `(;; In YAML documents, crumbs are generated from the keys of maps,
+        ;; and from elements of arrays.
+        (yaml . (("block_mapping_pair" .
+                  ,(treesit-query-compile 'yaml '((block_mapping_pair key: (_) @key))))
+                 ("block_sequence" . "[]")
+                 ("flow_pair" .
+                  ;; TODO: Why can this query not match on to (flow_pair)?
+                  ((_) key: (_) @key))
+                 ("flow_sequence" . "[]")))))
 
 (defvar-local treecrumbs--current-crumbs nil
   "Current crumbs to display in the header line. Only updated when
