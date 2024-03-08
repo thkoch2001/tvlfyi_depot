@@ -25,7 +25,7 @@ where
 {
     type GetStream = ReceiverStream<tonic::Result<proto::Directory, Status>>;
 
-    #[instrument(skip(self))]
+    #[instrument(skip_all, err)]
     async fn get(
         &self,
         request: Request<proto::GetDirectoryRequest>,
@@ -76,7 +76,7 @@ where
         Ok(Response::new(receiver_stream))
     }
 
-    #[instrument(skip(self, request))]
+    #[instrument(skip_all, err)]
     async fn put(
         &self,
         request: Request<Streaming<proto::Directory>>,
