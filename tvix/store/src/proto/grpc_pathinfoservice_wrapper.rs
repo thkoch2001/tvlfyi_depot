@@ -27,7 +27,7 @@ where
 {
     type ListStream = BoxStream<'static, tonic::Result<proto::PathInfo, Status>>;
 
-    #[instrument(skip(self))]
+    #[instrument(skip_all, err)]
     async fn get(
         &self,
         request: Request<proto::GetPathInfoRequest>,
@@ -51,7 +51,7 @@ where
         }
     }
 
-    #[instrument(skip(self))]
+    #[instrument(skip_all, err)]
     async fn put(&self, request: Request<proto::PathInfo>) -> Result<Response<proto::PathInfo>> {
         let path_info = request.into_inner();
 
@@ -66,7 +66,7 @@ where
         }
     }
 
-    #[instrument(skip(self))]
+    #[instrument(skip_all, err)]
     async fn calculate_nar(
         &self,
         request: Request<castorepb::Node>,
@@ -88,7 +88,7 @@ where
         }
     }
 
-    #[instrument(skip(self))]
+    #[instrument(skip_all, err)]
     async fn list(
         &self,
         _request: Request<proto::ListPathInfoRequest>,
