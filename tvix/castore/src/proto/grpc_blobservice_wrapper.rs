@@ -86,7 +86,7 @@ where
     // https://github.com/tokio-rs/tokio/issues/2723#issuecomment-1534723933
     type ReadStream = BoxStream<'static, Result<super::BlobChunk, Status>>;
 
-    #[instrument(skip(self))]
+    #[instrument(skip_all, err)]
     async fn stat(
         &self,
         request: Request<super::StatBlobRequest>,
@@ -107,7 +107,7 @@ where
         }
     }
 
-    #[instrument(skip(self))]
+    #[instrument(skip_all, err)]
     async fn read(
         &self,
         request: Request<super::ReadBlobRequest>,
@@ -130,7 +130,7 @@ where
         }
     }
 
-    #[instrument(skip(self))]
+    #[instrument(skip_all, err)]
     async fn put(
         &self,
         request: Request<Streaming<super::BlobChunk>>,
