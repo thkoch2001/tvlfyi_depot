@@ -34,6 +34,7 @@
 
 ;;; Code:
 
+(require 'seq)
 (require 'treesit)
 
 (defvar treecrumbs-languages nil
@@ -45,30 +46,49 @@ Alist of symbols representing tree-sitter languages (e.g. `yaml')
 to another alist (the \"node type list\") describing how
 different node types should be displayed in the crumbs.
 
-The node type list has string keys (corresponding to tree-sitter
-node type names), and its values are either a static
-string (which is displayed verbatim in the crumbs if such a node
-is encountered), or a tree-sitter query.
+See `define-treecrumbs-language' for more details on how to add a
+language.")
 
-Tree-sitter queries are executed on the node, and MUST capture
-exactly one argument named `@key', which should be a node whose
-text value will become the braedcrumb (e.g. the name of a
-function, the key in a map, ...).
+(defmacro define-treecrumbs-language (lang &rest clauses)
+  "Defines a new language for use in treecrumbs. LANG should be a
+symbol representing the language as understood by treesit (e.g.
+`yaml').
+
+Each of CLAUSES is a cons cell mapping the name of a tree
+node (in string format) to one of either:
+
+1. a static string, which will become the breadcrumb verbatim
+
+2. a tree-sitter query (in S-expression syntax) which must capture
+   exactly one argument named `@key' that will become the
+   breadcrumb (e.g. the name of a function, the key in a map, ...)
 
 Treecrumbs will only consider node types that are mentioned in
-the node type list. All other nodes are ignored when constructing
-the crumbs.")
+CLAUSES. All other nodes are ignored when constructing the
+crumbs.
 
-(setq treecrumbs-languages
-      `(;; In YAML documents, crumbs are generated from the keys of maps,
-        ;; and from elements of arrays.
-        (yaml . (("block_mapping_pair" .
-                  ,(treesit-query-compile 'yaml '((block_mapping_pair key: (_) @key))))
-                 ("block_sequence" . "[]")
-                 ("flow_pair" .
-                  ;; TODO: Why can this query not match on to (flow_pair)?
-                  ,(treesit-query-compile 'yaml '((_) key: (_) @key)))
-                 ("flow_sequence" . "[]")))))
+The defined languages are stored in `treecrumbs-languages'."
+
+  (declare (indent 1))
+  (let ((compiled
+         (seq-map (lambda (clause)
+                    (if (stringp (cdr clause))
+                        `(cons ,(car clause) ,(cdr clause))
+                      `(cons ,(car clause)
+                             (treesit-query-compile ',lang ',(cdr clause)))))
+                  clauses)))
+    `(setf (alist-get ',lang treecrumbs-languages nil nil #'equal) (list ,@compiled))))
+
+(define-treecrumbs-language yaml
+  ;; In YAML documents, crumbs are generated from the keys of maps, and from
+  ;; elements of arrays. "block"-nodes are standard YAML syntax, "flow"-nodes
+  ;; are inline JSON-ish syntax.
+  ("block_mapping_pair" . ((block_mapping_pair key: (_) @key)))
+  ("block_sequence" . "[]")
+
+  ;; TODO: Why can this query not match on to (flow_pair)?
+  ("flow_pair" . ((_) key: (_) @key))
+  ("flow_sequence" . "[]"))
 
 (defvar-local treecrumbs--current-crumbs nil
   "Current crumbs to display in the header line. Only updated when
