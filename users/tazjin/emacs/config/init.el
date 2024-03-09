@@ -181,6 +181,9 @@
 (use-package terraform-mode)
 (use-package toml-ts-mode)
 
+(use-package treecrumbs
+  :hook ((yaml-ts-mode . treecrumbs-mode)))
+
 (use-package tvl)
 
 (use-package vertico
