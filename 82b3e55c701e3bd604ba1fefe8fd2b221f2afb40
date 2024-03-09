@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ccc05e6c_505843eb",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-03-09T14:27:23Z",
+      "side": 1,
+      "message": "I think something similar already landed. In canon, iter_context() also returns an iterator over context elements, the context elements are in a HashSet, and iter_context() just does piggy-back on on that (and its iterator). The specific iter_{plain,derivation,single_outputs} specific iterators use iter_context() and then a flatmap. Contrary to this CL, the \"empty context\" part is signalled by an empty HashSet, so some logic could be dropped.\n\nI think this CL can be abandoned.",
+      "revId": "82b3e55c701e3bd604ba1fefe8fd2b221f2afb40",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
