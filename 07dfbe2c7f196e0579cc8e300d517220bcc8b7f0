@@ -16,6 +16,24 @@
       "message": "Shouldn\u0027t this be fsf then?",
       "revId": "07dfbe2c7f196e0579cc8e300d517220bcc8b7f0",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d072f173_1df8e2c5",
+        "filename": "tools/emacs-pkgs/treecrumbs/treecrumbs.el",
+        "patchSetId": 1
+      },
+      "lineNbr": 3,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2024-03-09T09:27:25Z",
+      "side": 1,
+      "message": "They don\u0027t allow putting the header there until you submit it to emacs core, but otoh projects like exwm do that, so I\u0027m not sure.",
+      "parentUuid": "aeb5c4ad_b1a37f95",
+      "revId": "07dfbe2c7f196e0579cc8e300d517220bcc8b7f0",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
