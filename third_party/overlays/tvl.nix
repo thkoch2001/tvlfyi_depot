@@ -8,7 +8,14 @@ depot.nix.readTree.drvTargets {
     # flaky tests, long painful build, see https://github.com/NixOS/nixpkgs/pull/266443
     withAWS = false;
   });
-  nix = self.nix_2_3;
+  nix = self.nix_2_3 // {
+    # avoid duplicate pipeline step
+    meta = self.nix_2_3.meta or { } // {
+      ci = self.nix_2_3.meta.ci or { } // {
+        skip = true;
+      };
+    };
+  };
   nix_latest = super.nix.override ({
     # flaky tests, long painful build, see https://github.com/NixOS/nixpkgs/pull/266443
     withAWS = false;
