@@ -116,6 +116,7 @@ pkgs.makeOverridable
       tvlPackages.passively
       tvlPackages.rcirc
       tvlPackages.term-switcher
+      tvlPackages.treecrumbs
       tvlPackages.tvl
 
       # Dynamic/native modules
