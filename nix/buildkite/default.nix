@@ -29,6 +29,20 @@ let
   inherit (depot.nix.readTree) mkLabel;
 in
 rec {
+  drvId = drvOrPath:
+    let
+      drvPath =
+        if lib.isDerivation drvOrPath then drvOrPath.drvPath
+        else if lib.isString drvOrPath then drvOrPath
+        else builtins.throw "drvId: expected string or derivation";
+
+      # Only use the drv hash to prevent escaping problems. Buildkite also has a
+      # limit of 100 characters on keys.
+    in
+    "drv-" + (builtins.substring 0 32
+      (builtins.baseNameOf (unsafeDiscardStringContext drvPath))
+    );
+
   # Given an arbitrary attribute path generate a Nix expression which obtains
   # this from the root of depot (assumed to be ./.). Attributes may be any
   # Nix strings suitable as attribute names, not just Nix literal-safe strings.
@@ -78,7 +92,7 @@ rec {
     in
     {
       label = ":nix: " + label;
-      key = hashString "sha1" label;
+      key = drvId target;
       skip = shouldSkip { inherit label drvPath parentTargetMap; };
       command = mkBuildCommand {
         attrPath = targetAttrPath target;
@@ -391,7 +405,7 @@ rec {
       commandScriptLink = "nix-buildkite-extra-step-command-script";
 
       step = {
-        key = hashString "sha1" "${cfg.label}-${cfg.parentLabel}";
+        key = "extra-step-" + hashString "sha1" "${cfg.label}-${cfg.parentLabel}";
         label = ":gear: ${cfg.label} (from ${cfg.parentLabel})";
         skip =
           let
