@@ -34,6 +34,24 @@
       "parentUuid": "aeb5c4ad_b1a37f95",
       "revId": "07dfbe2c7f196e0579cc8e300d517220bcc8b7f0",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f503e354_87444c8e",
+        "filename": "tools/emacs-pkgs/treecrumbs/treecrumbs.el",
+        "patchSetId": 1
+      },
+      "lineNbr": 3,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2024-03-09T11:22:55Z",
+      "side": 1,
+      "message": "If it is not a requirement for submitting the code, I guess that\u0027s okay.\n\nConsider adding an OWNERS file with `set noparent` to avoid an accidental mess later possibly, e.g. someone fixing up something on a channel bump by accident.",
+      "parentUuid": "d072f173_1df8e2c5",
+      "revId": "07dfbe2c7f196e0579cc8e300d517220bcc8b7f0",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
