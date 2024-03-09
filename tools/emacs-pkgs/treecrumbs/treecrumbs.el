@@ -59,6 +59,14 @@ Treecrumbs will only consider node types that are mentioned in
 the node type list. All other nodes are ignored when constructing
 the crumbs.")
 
+(defmacro define-treecrumbs-language (lang &rest clauses)
+  (declare (indent 1))
+  `(quote ,clauses))
+
+(define-treecrumbs-language yaml
+  ("block_mapping_pair" . ((block_mapping_pair key: (_) @key))))
+
+
 (setq treecrumbs-languages
       `(;; In YAML documents, crumbs are generated from the keys of maps,
         ;; and from elements of arrays.
@@ -68,7 +76,38 @@ the crumbs.")
                  ("flow_pair" .
                   ;; TODO: Why can this query not match on to (flow_pair)?
                   ,(treesit-query-compile 'yaml '((_) key: (_) @key)))
-                 ("flow_sequence" . "[]")))))
+                 ("flow_sequence" . "[]")))
+
+        ;; In C++ files, crumbs are generated from namespaces and
+        ;; identifier declarations.
+        (cpp . (("namespace_definition" .
+                 ,(treesit-query-compile
+                   'cpp '([(namespace_definition
+                            name: (namespace_identifier) @key)
+                           (namespace_definition
+                            "namespace" @key
+                            !name)])))
+
+                ("function_definition" .
+                 ,(treesit-query-compile
+                   'cpp '((function_definition
+                           declarator: (function_declarator
+                                        declarator: (identifier) @key)))))
+
+                ("class_specifier" .
+                 ,(treesit-query-compile
+                   'cpp '((class_specifier
+                           name: (type_identifier) @key))))
+
+                ("field_declaration" .
+                 ,(treesit-query-compile
+                   ' cpp '((field_declaration
+                            declarator: (_) @key))))
+
+                ("init_declarator" .
+                 ,(treesit-query-compile
+                   ' cpp '((init_declarator
+                            declarator: (_) @key))))))))
 
 (defvar-local treecrumbs--current-crumbs nil
   "Current crumbs to display in the header line. Only updated when
