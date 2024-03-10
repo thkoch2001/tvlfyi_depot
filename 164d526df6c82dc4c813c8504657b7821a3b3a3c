@@ -36,6 +36,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "91c8fb43_933f3b98",
+        "filename": "tvix/glue/Cargo.toml",
+        "patchSetId": 7
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2024-03-10T23:26:51Z",
+      "side": 1,
+      "message": "Fix applied.",
+      "parentUuid": "17a6c4a6_26eaab8d",
+      "revId": "164d526df6c82dc4c813c8504657b7821a3b3a3c",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "0ba0f3bc_ef7352cd",
@@ -49,6 +67,24 @@
       "writtenOn": "2024-03-10T20:56:50Z",
       "side": 1,
       "message": "Nit: What do you think about using [`HashMode` from `nix-compat`](https://docs.tvix.dev/rust/nix_compat/nixhash/ca_hash/enum.HashMode.html) instead of introducing a new type?",
+      "revId": "164d526df6c82dc4c813c8504657b7821a3b3a3c",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a6d0c78c_9a211442",
+        "filename": "tvix/glue/src/builtins/fetchers.rs",
+        "patchSetId": 7
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2024-03-10T23:26:51Z",
+      "side": 1,
+      "message": "I saw that; I don\u0027t want to have to pattern-match with an `unreachable!()` on `Text`. a new two-variant enum is very cheap",
+      "parentUuid": "0ba0f3bc_ef7352cd",
       "revId": "164d526df6c82dc4c813c8504657b7821a3b3a3c",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
