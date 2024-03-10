@@ -220,7 +220,9 @@ in
       rustPlatform.cargoSetupHook
     ];
 
-    buildPhase = "cargo clippy --tests --all-features --benches --examples -- -Dwarnings | tee $out";
+    # Allow blocks_in_conditions due to false positives with #[tracing::instrument(…)]:
+    # https://github.com/rust-lang/rust-clippy/issues/12281
+    buildPhase = "cargo clippy --tests --all-features --benches --examples -- -Dwarnings -A clippy::blocks_in_conditions | tee $out";
   };
 
   meta.ci.targets = [
