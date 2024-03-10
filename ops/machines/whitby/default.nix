@@ -345,7 +345,7 @@ in
   # Start the Gerrit->IRC bot
   services.depot.clbot = {
     enable = true;
-    channels = [ "#tvl" ];
+    channels = [ "#tvix-dev" "#tvl" ];
 
     # See //fun/clbot for details.
     flags = {
