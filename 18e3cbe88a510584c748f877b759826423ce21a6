@@ -85,6 +85,24 @@
       "parentUuid": "130aed00_809584e7",
       "revId": "18e3cbe88a510584c748f877b759826423ce21a6",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4c316e9c_87abe060",
+        "filename": "tvix/glue/src/builtins/fetchers.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 132,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-03-10T19:13:39Z",
+      "side": 1,
+      "message": "If we have`FetchArgs` holds a `Option\u003cCAHash\u003e` rather than `mode` and `hash` (as suggested in https://cl.tvl.fyi/c/depot/+/11017/comment/b3963b8f_2ca835b3/), we don\u0027t need to have a helper function synthesizing a `CAHash`",
+      "parentUuid": "9689beb5_cae3fd48",
+      "revId": "18e3cbe88a510584c748f877b759826423ce21a6",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
