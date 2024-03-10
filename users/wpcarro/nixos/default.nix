@@ -13,7 +13,7 @@ in
   avaSystem = systemFor ava;
   kyokoSystem = systemFor kyoko;
   marcusSystem = systemFor marcus;
-  tarascoSystem = systemFor ava;
+  tarascoSystem = systemFor tarasco;
 
   meta.ci.targets = [
     "avaSystem"
