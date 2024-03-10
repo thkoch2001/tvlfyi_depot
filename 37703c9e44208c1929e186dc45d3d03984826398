@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9c308bbb_d55f04ab",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2024-03-10T20:05:05Z",
+      "side": 1,
+      "message": "It makes no sense to have #tvix-dev in addition to #tvix",
+      "revId": "37703c9e44208c1929e186dc45d3d03984826398",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
