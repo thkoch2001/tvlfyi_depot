@@ -95,6 +95,18 @@ The defined languages are stored in `treecrumbs-languages'."
   ("pair" . ((pair key: (string (string_content) @key))))
   ("array" . "[]"))
 
+(define-treecrumbs-language toml
+  ;; TOML has sections, key names and arrays. Sections are the only
+  ;; relevant difference to YAML. Nested keys are not parsed, and just
+  ;; displayed as-is.
+  ("table" . ((table (_) @key)) )
+  ;; TODO: query cannot match on pair in inline_table, hence matching
+  ;; directly on keys
+  ("pair" . ([(dotted_key)
+              (quoted_key)
+              (bare_key)]))
+  ("array" . "[]"))
+
 (define-treecrumbs-language cpp
   ;; In C++ files, crumbs are generated from namespaces and
   ;; identifier declarations.
