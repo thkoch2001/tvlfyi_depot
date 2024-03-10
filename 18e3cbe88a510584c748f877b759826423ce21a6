@@ -70,6 +70,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "ad9fbc91_0edfd0c3",
+        "filename": "tvix/glue/src/builtins/fetchers.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 83,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-03-10T20:56:50Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b37f8f07_833e9e98",
+      "revId": "18e3cbe88a510584c748f877b759826423ce21a6",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "130aed00_809584e7",

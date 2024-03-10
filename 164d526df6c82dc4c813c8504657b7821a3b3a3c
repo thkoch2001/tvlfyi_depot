@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "62b3fbcd_8d918414",
+        "filename": "tvix/glue/Cargo.toml",
+        "patchSetId": 7
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-03-10T20:56:50Z",
+      "side": 1,
+      "message": "```suggestion\nreqwest \u003d { version \u003d \"0.11.22\", features \u003d [\"rustls-tls-native-roots\", \"blocking\"], default-features \u003d false }\n```\n\nWe don\u0027t use the blocking interface anymore, and rustls-tls-native-roots for the same reasons as documented in cl/11090.",
+      "revId": "164d526df6c82dc4c813c8504657b7821a3b3a3c",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0ba0f3bc_ef7352cd",
+        "filename": "tvix/glue/src/builtins/fetchers.rs",
+        "patchSetId": 7
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-03-10T20:56:50Z",
+      "side": 1,
+      "message": "Nit: What do you think about using [`HashMode` from `nix-compat`](https://docs.tvix.dev/rust/nix_compat/nixhash/ca_hash/enum.HashMode.html) instead of introducing a new type?",
+      "revId": "164d526df6c82dc4c813c8504657b7821a3b3a3c",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
