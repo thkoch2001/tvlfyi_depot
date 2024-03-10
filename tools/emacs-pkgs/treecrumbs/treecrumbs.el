@@ -90,6 +90,11 @@ The defined languages are stored in `treecrumbs-languages'."
   ("flow_pair" . ((_) key: (_) @key))
   ("flow_sequence" . "[]"))
 
+(define-treecrumbs-language json
+  ;; In JSON documents, crumbs are generated from key names and array fields.
+  ("pair" . ((pair key: (string (string_content) @key))))
+  ("array" . "[]"))
+
 (define-treecrumbs-language cpp
   ;; In C++ files, crumbs are generated from namespaces and
   ;; identifier declarations.
