@@ -20,6 +20,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "17a6c4a6_26eaab8d",
+        "filename": "tvix/glue/Cargo.toml",
+        "patchSetId": 7
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-03-10T21:01:24Z",
+      "side": 1,
+      "message": "I think we also need to include the `SSL_CERT_FILE\u003d` export, so `reqwest` is able to find its CA bundle during the tests.\n\nSee how that same CL extended `tvix/store/default.nix`, we\u0027d need the same in `tvix/glue/default.nix`.",
+      "parentUuid": "62b3fbcd_8d918414",
+      "revId": "164d526df6c82dc4c813c8504657b7821a3b3a3c",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "0ba0f3bc_ef7352cd",
         "filename": "tvix/glue/src/builtins/fetchers.rs",
         "patchSetId": 7
