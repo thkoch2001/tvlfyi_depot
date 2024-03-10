@@ -27,6 +27,8 @@ let
 
   inherit (pkgs) lib runCommand writeText;
   inherit (depot.nix.readTree) mkLabel;
+
+  inherit (depot.nix) dependency-analyzer;
 in
 rec {
   drvId = drvOrPath:
@@ -84,8 +86,12 @@ rec {
     target.__readTree
     ++ lib.optionals (target ? __subtarget) [ target.__subtarget ];
 
+  getTargetPipelineDeps = targetDepMap: drvPath:
+    assert targetDepMap.${drvPath}.known;
+    builtins.map drvId targetDepMap.${drvPath}.knownDeps;
+
   # Create a pipeline step from a single target.
-  mkStep = { headBranch, parentTargetMap, target, cancelOnBuildFailing }:
+  mkStep = { headBranch, parentTargetMap, targetDepMap, target, cancelOnBuildFailing }:
     let
       label = mkLabel target;
       drvPath = unsafeDiscardStringContext target.drvPath;
@@ -104,7 +110,9 @@ rec {
       # Add a dependency on the initial static pipeline step which
       # always runs. This allows build steps uploaded in batches to
       # start running before all batches have been uploaded.
-      depends_on = [ ":init:" ] ++ lib.optionals (target ? meta.ci.buildkiteExtraDeps) target.meta.ci.buildkiteExtraDeps;
+      depends_on = [ ":init:" ]
+      ++ getTargetPipelineDeps targetDepMap drvPath
+      ++ lib.optionals (target ? meta.ci.buildkiteExtraDeps) target.meta.ci.buildkiteExtraDeps;
     } // lib.optionalAttrs (target ? meta.timeout) {
       timeout_in_minutes = target.meta.timeout / 60;
       # Additional arguments to set on the step.
@@ -207,12 +215,14 @@ rec {
       # logic/optimisation depends on knowing whether is executing.
       buildEnabled = elem "build" enabledPhases;
 
+      targetDepMap = dependency-analyzer (dependency-analyzer.drvsToPaths drvTargets);
+
       # Convert a target into all of its steps, separated by build
       # phase (as phases end up in different chunks).
       targetToSteps = target:
         let
           mkStepArgs = {
-            inherit headBranch parentTargetMap target cancelOnBuildFailing;
+            inherit headBranch parentTargetMap targetDepMap target cancelOnBuildFailing;
           };
           step = mkStep mkStepArgs;
 
