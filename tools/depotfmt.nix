@@ -5,29 +5,37 @@
 let
   # terraform fmt can't handle multiple paths at once, but treefmt
   # expects this
-  terraformat = pkgs.writeShellScript "terraformat" ''
+  terraformat = pkgs.writeShellScriptBin "terraformat" ''
     echo "$@" | xargs -n1 ${pkgs.terraform}/bin/terraform fmt
   '';
 
+  # avoid downloading formatters that are not executed
+  lazyFormatters = depot.nix.lazy-deps {
+    gofmt.attr = "nix.buildGo.go";
+    nixpkgs-fmt.attr = "third_party.nixpkgs.nixpkgs-fmt";
+    rustfmt.attr = "third_party.nixpkgs.rustfmt";
+    terraformat.attr = "tools.depotfmt.terraformat";
+  };
+
   config = pkgs.writeText "depot-treefmt-config" ''
     [formatter.go]
-    command = "${depot.nix.buildGo.go}/bin/gofmt"
+    command = "${lazyFormatters}/bin/gofmt"
     options = [ "-w" ]
     includes = ["*.go"]
 
     [formatter.tf]
-    command = "${terraformat}"
+    command = "${lazyFormatters}/bin/terraformat"
     includes = [ "*.tf" ]
 
     [formatter.nix]
-    command = "${pkgs.nixpkgs-fmt}/bin/nixpkgs-fmt"
+    command = "${lazyFormatters}/bin/nixpkgs-fmt"
     includes = [ "*.nix" ]
     excludes = [
       "tvix/eval/src/tests/*",
     ]
 
     [formatter.rust]
-    command = "${pkgs.rustfmt}/bin/rustfmt"
+    command = "${lazyFormatters}/bin/rustfmt"
     includes = [ "*.rs" ]
     excludes = [
       "users/tazjin/*",
@@ -44,16 +52,19 @@ let
   # wrapper script for running formatting checks in CI
   check = pkgs.writeShellScript "depotfmt-check" ''
     ${pkgs.treefmt}/bin/treefmt \
-      --clear-cache \
-      --fail-on-change \
-      --config-file ${config} \
-      --tree-root .
+    --clear-cache \
+    --fail-on-change \
+    --config-file ${config} \
+    --tree-root .
   '';
 in
 depotfmt.overrideAttrs (_: {
-  passthru.meta.ci.extraSteps.check = {
-    label = "depot formatting check";
-    command = check;
-    alwaysRun = true;
+  passthru = {
+    inherit terraformat;
+    meta.ci.extraSteps.check = {
+      label = "depot formatting check";
+      command = check;
+      alwaysRun = true;
+    };
   };
 })
