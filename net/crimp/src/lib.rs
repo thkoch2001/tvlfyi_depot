@@ -365,7 +365,7 @@ impl<'a> Request<'a> {
         match self.method {
             Method::Get => self.handle.get(true)?,
             Method::Post => self.handle.post(true)?,
-            Method::Put => self.handle.put(true)?,
+            Method::Put => self.handle.upload(true)?,
             Method::Patch => self.handle.custom_request("PATCH")?,
             Method::Delete => self.handle.custom_request("DELETE")?,
         }
@@ -386,14 +386,23 @@ impl<'a> Request<'a> {
         // and configure the expected body size (or form payload).
         match self.body {
             Body::Bytes { content_type, data } => {
-                self.handle.post_field_size(data.len() as u64)?;
+                match self.method {
+                  Method::Put => self.handle.in_filesize(data.len() as u64)?,
+                  // TODO(sterni): this may still be wrong for some request types?
+                  _ => self.handle.post_field_size(data.len() as u64)?,
+                };
+
                 self.headers
                     .append(&format!("Content-Type: {}", content_type))?;
             }
 
             #[cfg(feature = "json")]
             Body::Json(ref data) => {
-                self.handle.post_field_size(data.len() as u64)?;
+                match self.method {
+                  Method::Put => self.handle.in_filesize(data.len() as u64)?,
+                  // TODO(sterni): this may still be wrong for some request types?
+                  _ => self.handle.post_field_size(data.len() as u64)?,
+                };
                 self.headers.append("Content-Type: application/json")?;
             }
 
