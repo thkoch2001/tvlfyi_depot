@@ -1161,6 +1161,11 @@ nil
 #+begin_src elisp :tangle yes
 (use-package! evil-matchit)
 #+end_src
+** Direnv
+#+begin_src elisp :tangle yes
+(use-package! direnv
+  :config (direnv-mode))
+#+end_src
 ** IRC
 *** Connecting to IRC
 
