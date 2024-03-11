@@ -52,6 +52,24 @@
       "parentUuid": "63748591_5ecc2ca7",
       "revId": "3e9967da244fcb34124a3a1163fde9ab9335a680",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5117a5ec_0ead2216",
+        "filename": "tvix/castore/src/blobservice/object_store.rs",
+        "patchSetId": 5
+      },
+      "lineNbr": 405,
+      "author": {
+        "id": 1000082
+      },
+      "writtenOn": "2024-03-11T18:28:47Z",
+      "side": 1,
+      "message": "When aborting the common thing is to simply stop polling the future and maybe dropping it. Most futures are built to be aborted this way and if the user of BlobService detects that the other process stops writing with a timeout and then gets dropped you should be fine.\n\nDepending on how atomic object store is you should get some stray chunks if it is atomic and some unfinished files laying around if it isn\u0027t atomic.",
+      "parentUuid": "7f551999_51811f6c",
+      "revId": "3e9967da244fcb34124a3a1163fde9ab9335a680",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
