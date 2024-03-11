@@ -1,14 +1,10 @@
-{ depot, pkgs, ... }:
+{ pkgs, ... }:
 
-depot.third_party.naersk.buildPackage {
-  name = "paroxysm";
-  version = "0.0.2";
-  src = ./.;
+let
+  cargoNix = import ./Cargo.nix {
+    inherit pkgs;
+    nixpkgs = pkgs.path;
+  };
+in
 
-  buildInputs = with pkgs; [
-    openssl
-    pkg-config
-    postgresql.lib
-    curl
-  ];
-}
+cargoNix.rootCrate.build
