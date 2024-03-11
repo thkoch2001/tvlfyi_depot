@@ -18,6 +18,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "817f92f5_096f307e",
+        "filename": "tvix/castore/src/blobservice/object_store.rs",
+        "patchSetId": 9
+      },
+      "lineNbr": 137,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-03-11T22:25:13Z",
+      "side": 1,
+      "message": "Done.\n\nErr(e)? also took care of the e.into() we now have, but the nesting is an argument.",
+      "parentUuid": "63a58966_dbad9aa8",
+      "revId": "d21d882e9fd3f362af2095b2ce453134b167178b",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "95a805e5_ea2fd7cc",
@@ -35,6 +53,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "903f559a_cc222c9d",
+        "filename": "tvix/castore/src/blobservice/object_store.rs",
+        "patchSetId": 9
+      },
+      "lineNbr": 216,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-03-11T22:25:13Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "95a805e5_ea2fd7cc",
+      "revId": "d21d882e9fd3f362af2095b2ce453134b167178b",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "f10ab0c3_112b2b5c",
@@ -48,6 +84,24 @@
       "writtenOn": "2024-03-11T22:07:27Z",
       "side": 1,
       "message": "why do we need the `w_p` binding here? doesn\u0027t look like we do anything with it",
+      "revId": "d21d882e9fd3f362af2095b2ce453134b167178b",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d9c4ab00_048da2da",
+        "filename": "tvix/castore/src/blobservice/object_store.rs",
+        "patchSetId": 9
+      },
+      "lineNbr": 391,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-03-11T22:25:13Z",
+      "side": 1,
+      "message": "Nice catch (here and in flush too). I think I did the future polling afterwards initially, and that was why I had to do the let binding first.",
+      "parentUuid": "f10ab0c3_112b2b5c",
       "revId": "d21d882e9fd3f362af2095b2ce453134b167178b",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
