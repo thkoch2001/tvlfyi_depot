@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "63a58966_dbad9aa8",
+        "filename": "tvix/castore/src/blobservice/object_store.rs",
+        "patchSetId": 9
+      },
+      "lineNbr": 137,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2024-03-11T22:07:27Z",
+      "side": 1,
+      "message": "nit: Maybe push the `Ok()` down to each match arm to reduce some nesting and avoid needing to do `Err(e)?`",
+      "revId": "d21d882e9fd3f362af2095b2ce453134b167178b",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "95a805e5_ea2fd7cc",
+        "filename": "tvix/castore/src/blobservice/object_store.rs",
+        "patchSetId": 9
+      },
+      "lineNbr": 216,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2024-03-11T22:07:27Z",
+      "side": 1,
+      "message": "ditto",
+      "revId": "d21d882e9fd3f362af2095b2ce453134b167178b",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f10ab0c3_112b2b5c",
+        "filename": "tvix/castore/src/blobservice/object_store.rs",
+        "patchSetId": 9
+      },
+      "lineNbr": 391,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2024-03-11T22:07:27Z",
+      "side": 1,
+      "message": "why do we need the `w_p` binding here? doesn\u0027t look like we do anything with it",
+      "revId": "d21d882e9fd3f362af2095b2ce453134b167178b",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
