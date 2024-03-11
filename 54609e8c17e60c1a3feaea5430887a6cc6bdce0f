@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "87a5a105_b227f8cb",
+        "filename": "tvix/glue/src/decompression.rs",
+        "patchSetId": 9
+      },
+      "lineNbr": 58,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-03-11T11:39:24Z",
+      "side": 1,
+      "message": "This probably still needs to be addressed.",
+      "revId": "54609e8c17e60c1a3feaea5430887a6cc6bdce0f",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
