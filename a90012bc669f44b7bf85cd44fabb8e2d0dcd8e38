@@ -16,6 +16,24 @@
       "message": "Can these be set in `clippy.toml` instead? That\u0027d have the advantage to also get honored when impurely running `cargo clippy` locally, not just in CI.",
       "revId": "a90012bc669f44b7bf85cd44fabb8e2d0dcd8e38",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "56b37d49_4be6a739",
+        "filename": "tvix/default.nix",
+        "patchSetId": 2
+      },
+      "lineNbr": 225,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-03-11T15:58:47Z",
+      "side": 1,
+      "message": "It seems it\u0027s not possible to configure these, bah! I\u0027d probably like to have a wrapper in `mg shell //tvix:shell`, that wraps clippy to ignore these, but that\u0027s probably material for another CL.",
+      "parentUuid": "3d087a28_9d099d0d",
+      "revId": "a90012bc669f44b7bf85cd44fabb8e2d0dcd8e38",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
