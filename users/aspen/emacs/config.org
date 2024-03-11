@@ -1053,28 +1053,40 @@ nil
  #+RESULTS:
 
 ** rust
-*** Config
-#+begin_src elisp
+#+begin_src elisp :tangle yes
 (defun aspen/rust-setup ()
   (interactive)
   (+evil-embrace-angle-bracket-modes-hook-h)
   (setq-local whitespace-line-column 100
               fill-column 100)
-  (eglot-inlay-hints-mode -1)
   (setq lsp-rust-analyzer-cargo-watch-command "clippy"
+        lsp-rust-analyzer-cargo-watch-args ["--target-dir" "/home/grfn/code/readyset/readyset/target/rust-analyzer"]
         rustic-format-trigger 'on-save
-        ))
+        lsp-ui-doc-enable t))
 
 (add-hook 'rust-mode-hook #'aspen/rust-setup)
 #+end_src
 
 #+RESULTS:
-| doom-modeline-env-setup-rust | aspen/rust-setup |
+| aspen/rust-setup | grfn/rust-setup | doom-modeline-env-setup-rust |
 
 *** Bindings
 
+#+begin_src elisp :tangle yes
+(map!
+ (:map rust-mode-map
+  :n "g RET" #'lsp-rust-analyzer-run
+  :n "g R" #'lsp-find-references
+  :n "g d" #'lsp-find-definition
+  :n "g Y" #'lsp-goto-type-definition
+  (:localleader
+   "m" #'lsp-rust-analyzer-expand-macro)))
+#+end_src
+
+#+RESULTS:
+
 *** Theme overrides
-#+begin_src elisp
+#+begin_src elisp :tangle yes
 (custom-set-faces!
   `(rust-unsafe :foreground ,+solarized-red))
 #+end_src
