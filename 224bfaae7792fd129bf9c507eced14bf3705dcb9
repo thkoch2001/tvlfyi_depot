@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a61bfd0e_7812aa83",
+        "filename": "tvix/castore/src/import.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 407,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-03-11T11:53:19Z",
+      "side": 1,
+      "message": "This section could get some descriptive comment, about what we do, and what\u0027s gonna be in paths later.",
+      "revId": "224bfaae7792fd129bf9c507eced14bf3705dcb9",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ffff69ec_f6f9c8ae",
+        "filename": "tvix/castore/src/import.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 422,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-03-11T11:53:19Z",
+      "side": 1,
+      "message": "Just to make sure I understand, the tar reader never emits directories, so we either add a symlink or a FileNode (writing blob contents to the BlobService). \n\nIf so, could you add a comment on top, so people don\u0027t chase for the directory case?",
+      "revId": "224bfaae7792fd129bf9c507eced14bf3705dcb9",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9a3df68f_0b5fe62f",
+        "filename": "tvix/castore/src/import.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 444,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-03-11T11:53:19Z",
+      "side": 1,
+      "message": "I assume this is missing some code here still, but do I see right it\u0027s supposed to take the Symlink or Directory nodes from the map above, and shape them into individual `Directory` nodes that are then uploaded through the `directory_putter`?\n\nFeels like this is something we should move into a helper function.\n\nThere\u0027s some of this stuff in tvix/castore/src/import.rs (`ingest_entries`), and leveled_entries_to_stream, though it\u0027s using DirEntry as stream elements. Maybe this can be refactored out to be usable for this case too.",
+      "revId": "224bfaae7792fd129bf9c507eced14bf3705dcb9",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
