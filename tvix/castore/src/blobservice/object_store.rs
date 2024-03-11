@@ -97,6 +97,7 @@ impl ObjectStoreBlobService {
     }
 }
 
+#[instrument(skip_all,fields(base_path=%base_path,blob.digest=%digest),ret(Display))]
 fn derive_blob_path(base_path: &Path, digest: &B3Digest) -> Path {
     base_path
         .child("blobs")
@@ -105,6 +106,7 @@ fn derive_blob_path(base_path: &Path, digest: &B3Digest) -> Path {
         .child(HEXLOWER.encode(digest.as_slice()))
 }
 
+#[instrument(skip_all,fields(base_path=%base_path,chunk.digest=%digest),ret(Display))]
 fn derive_chunk_path(base_path: &Path, digest: &B3Digest) -> Path {
     base_path
         .child("chunks")
@@ -280,7 +282,7 @@ async fn chunk_and_upload<R: AsyncRead + Unpin>(
     match object_store.head(&blob_path).await {
         // blob already exists, nothing to do
         Ok(_) => {
-            trace!(
+            info!(
                 blob.digest = %blob_digest,
                 blob.path = %blob_path,
                 "blob already exists on backend"
@@ -288,7 +290,7 @@ async fn chunk_and_upload<R: AsyncRead + Unpin>(
         }
         // chunk does not yet exist, upload first
         Err(object_store::Error::NotFound { .. }) => {
-            debug!(
+            info!(
                 blob.digest = %blob_digest,
                 blob.path = %blob_path,
                 "uploading blob"
