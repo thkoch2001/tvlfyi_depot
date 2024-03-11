@@ -903,11 +903,13 @@ nil
   `(merlin-eldoc-occurrences-face :background ,+solarized-s-base2)
   `(merlin-type-face :background ,+solarized-s-base2)
   `(utop-prompt :foreground ,+solarized-blue)
-  `(utop-frozen :foreground ,+solarized-s-base1 :italic t))
+  `(utop-frozen :foreground ,+solarized-s-base1 :italic t)
+  `(vertico-group-title :foreground ,+solarized-s-base1)
+  `(vertico-group-header :foreground ,+solarized-s-base1))
 #+end_src
 
 #+RESULTS:
-| doom--customize-themes-h-30 | doom--customize-themes-h-31 | doom--customize-themes-h-32 | doom--customize-themes-h-42 | doom--customize-themes-h-46 | doom--customize-themes-h-47 | doom--customize-themes-h-64 | doom--customize-themes-h-65 | doom--customize-themes-h-66 | doom--customize-themes-h-67 | doom--customize-themes-h-68 | doom--customize-themes-h-69 |
+| doom--customize-themes-h-30 | doom--customize-themes-h-31 | doom--customize-themes-h-32 | doom--customize-themes-h-33 | doom--customize-themes-h-34 | doom--customize-themes-h-35 | doom--customize-themes-h-52 |
 
 ** clojure
 
