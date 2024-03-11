@@ -1094,6 +1094,16 @@ nil
 #+RESULTS:
 | doom--customize-themes-h-30 | doom--customize-themes-h-31 | doom--customize-themes-h-32 | doom--customize-themes-h-33 | doom--customize-themes-h-54 |
 
+* Fuzzy search
+#+begin_src emacs-lisp :tangle yes
+(use-package! hotfuzz
+  :config
+  (setopt completion-styles '(hotfuzz)))
+#+end_src
+
+#+RESULTS:
+: t
+
 * Email
 #+begin_src elisp :tangle yes
 (after! notmuch
