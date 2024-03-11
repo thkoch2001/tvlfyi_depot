@@ -10,3 +10,4 @@
 (package! evil-matchit)
 (package! string-inflection)
 (package! protobuf-mode)
+(package! hotfuzz)
