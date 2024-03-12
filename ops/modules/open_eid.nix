@@ -16,7 +16,7 @@
     # the "web-eid-app" native component.
     # Users not using `programs.firefox.enable` can override their firefox
     # derivation, by setting `extraNativeMessagingHosts = [ pkgs.web-eid-app ]`.
-    nativeMessagingHosts.euwebid = true;
+    nativeMessagingHosts.packages = [ pkgs.web-eid-app ];
     # Configure Firefox to load smartcards via p11kit-proxy.
     # Users not using `programs.firefox.enable` can override their firefox
     # derivation, by setting
