@@ -10,11 +10,12 @@ set -ueo pipefail
 
 # Load input variables from Terraform. jq's @sh format takes care of
 # escaping.
-eval "$(jq -r '@sh "ATTRPATH=\(.attrpath) && ENTRYPOINT=\(.entrypoint)"')"
+eval "$(jq -r '@sh "attrpath=\(.attrpath) && entrypoint=\(.entrypoint)"')"
 
 # Evaluate the system derivation.
-[[ -z "$ENTRYPOINT" ]] && ENTRYPOINT=$(git rev-parse --show-toplevel)
-SYSTEM_DRV=$(nix-instantiate -A "${ATTRPATH}" "${ENTRYPOINT}")
+[[ -z "$entrypoint" ]] && entrypoint=$(git rev-parse --show-toplevel)
+# shellcheck disable=SC2154
+system_drv=$(nix-instantiate -A "${attrpath}" "${entrypoint}")
 
 # Return system derivation back to Terraform.
-jq -n --arg drv "$SYSTEM_DRV" '{"drv":$drv}'
+jq -n --arg drv "$system_drv" '{"drv":$drv}'
