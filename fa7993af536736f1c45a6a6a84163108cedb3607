@@ -1,0 +1,89 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "58d7f5f2_997c1aec",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000096
+      },
+      "writtenOn": "2024-03-14T15:35:03Z",
+      "side": 1,
+      "message": "LGTM",
+      "revId": "fa7993af536736f1c45a6a6a84163108cedb3607",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8328dea6_0d0a024b",
+        "filename": "tvix/glue/src/known_paths.rs",
+        "patchSetId": 3
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1000096
+      },
+      "writtenOn": "2024-03-14T15:35:03Z",
+      "side": 1,
+      "message": "alias again",
+      "revId": "fa7993af536736f1c45a6a6a84163108cedb3607",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "768a8160_205dbe2b",
+        "filename": "tvix/glue/src/known_paths.rs",
+        "patchSetId": 3
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 1000096
+      },
+      "writtenOn": "2024-03-14T15:35:03Z",
+      "side": 1,
+      "message": "Same here, type alias would have been nice.",
+      "revId": "fa7993af536736f1c45a6a6a84163108cedb3607",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "475f8956_0e8f83e3",
+        "filename": "tvix/nix-compat/src/derivation/write.rs",
+        "patchSetId": 3
+      },
+      "lineNbr": 69,
+      "author": {
+        "id": 1000096
+      },
+      "writtenOn": "2024-03-14T15:35:03Z",
+      "side": 1,
+      "message": "What about creating a type alias for that?",
+      "revId": "fa7993af536736f1c45a6a6a84163108cedb3607",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "dd46afd5_082dbe00",
+        "filename": "tvix/nix-compat/src/store_path/utils.rs",
+        "patchSetId": 3
+      },
+      "lineNbr": 69,
+      "author": {
+        "id": 1000096
+      },
+      "writtenOn": "2024-03-14T15:35:03Z",
+      "side": 1,
+      "message": "We probably should document what we mean by inner digest somewhere.",
+      "revId": "fa7993af536736f1c45a6a6a84163108cedb3607",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
