@@ -18,6 +18,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "7632cca7_7d653d6b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-03-14T21:55:34Z",
+      "side": 1,
+      "message": "Done. We should also expose the mod itself to external crate users.",
+      "parentUuid": "6cf26b8f_2eb8845e",
+      "revId": "0800858c68d8754b89d7e7de0d1e8251ba4ad9c8",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "d4e1a2a9_50ac6f96",
@@ -31,6 +49,24 @@
       "writtenOn": "2024-03-14T16:51:01Z",
       "side": 1,
       "message": "We should add the upstream link.\n\nhttps://codeberg.org/gorgon/gorgon/src/branch/main/nix-daemon/src/wire.rs",
+      "revId": "0800858c68d8754b89d7e7de0d1e8251ba4ad9c8",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "266a52a3_8f50827d",
+        "filename": "tvix/nix-compat/src/wire/primitive.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-03-14T21:55:34Z",
+      "side": 1,
+      "message": "Done, updated the commit message. It doesn\u0027t really belong into the SPDX header.",
+      "parentUuid": "d4e1a2a9_50ac6f96",
       "revId": "0800858c68d8754b89d7e7de0d1e8251ba4ad9c8",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
