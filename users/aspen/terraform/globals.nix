@@ -1,16 +1,18 @@
 { pkgs, ... }:
 
 {
-  provider.aws = map
-    (region: {
-      inherit region;
-      alias = region;
-      profile = "personal";
-    }) [
-    "us-east-1"
-    "us-east-2"
-    "us-west-2"
-  ];
+  provider.aws =
+    map
+      (region: {
+        inherit region;
+        alias = region;
+        profile = "personal";
+      })
+      [
+        "us-east-1"
+        "us-east-2"
+        "us-west-2"
+      ];
 
   data.external.cloudflare_api_key = {
     program = [

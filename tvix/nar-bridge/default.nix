@@ -1,6 +1,11 @@
 # Target containing just the proto files.
 
-{ depot, pkgs, lib, ... }:
+{
+  depot,
+  pkgs,
+  lib,
+  ...
+}:
 
 pkgs.buildGoModule {
   name = "nar-bridge";

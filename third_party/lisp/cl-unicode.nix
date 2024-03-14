@@ -13,9 +13,7 @@ let
 
   cl-unicode-base = depot.nix.buildLisp.library {
     name = "cl-unicode-base";
-    deps = with depot.third_party.lisp; [
-      cl-ppcre
-    ];
+    deps = with depot.third_party.lisp; [ cl-ppcre ];
 
     srcs = map (f: src + ("/" + f)) [
       "packages.lisp"
@@ -35,25 +33,26 @@ let
       }
     ];
 
-    srcs = (map (f: src + ("/build/" + f)) [
-      "util.lisp"
-      "char-info.lisp"
-      "read.lisp"
-    ]) ++ [
-      (runCommand "dump.lisp" { } ''
-        substitute ${src}/build/dump.lisp $out \
-          --replace ':defaults *this-file*' ":defaults (uiop:getcwd)"
-      '')
+    srcs =
+      (map (f: src + ("/build/" + f)) [
+        "util.lisp"
+        "char-info.lisp"
+        "read.lisp"
+      ])
+      ++ [
+        (runCommand "dump.lisp" { } ''
+          substitute ${src}/build/dump.lisp $out \
+            --replace ':defaults *this-file*' ":defaults (uiop:getcwd)"
+        '')
 
-      (writeText "export-create-source-files.lisp" ''
-        (in-package :cl-unicode)
-        (export 'create-source-files)
-      '')
-    ];
+        (writeText "export-create-source-files.lisp" ''
+          (in-package :cl-unicode)
+          (export 'create-source-files)
+        '')
+      ];
 
     main = "cl-unicode:create-source-files";
   };
-
 
   generated = runCommand "cl-unicode-generated" { } ''
     mkdir -p $out/build
@@ -62,7 +61,6 @@ let
     pwd
     ${cl-unicode-build}/bin/cl-unicode-build
   '';
-
 in
 depot.nix.buildLisp.library {
   name = "cl-unicode";

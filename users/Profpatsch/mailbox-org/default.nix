@@ -1,4 +1,9 @@
-{ depot, pkgs, lib, ... }:
+{
+  depot,
+  pkgs,
+  lib,
+  ...
+}:
 
 let
   mailbox-org = pkgs.haskellPackages.mkDerivation {
@@ -27,8 +32,6 @@ let
     isExecutable = true;
     license = lib.licenses.mit;
   };
-
-
 in
 lib.pipe mailbox-org [
   (x: (depot.nix.getBins x [ "mailbox-org" ]).mailbox-org)

@@ -1,29 +1,37 @@
-{ depot, pkgs, lib, ... }:
+{
+  depot,
+  pkgs,
+  lib,
+  ...
+}:
 
 let
   systemFor = sys: (depot.ops.nixos.nixosFor sys).system;
 
   # assumes `name` is configured appropriately in your .ssh/config
-  deployScript = name: sys: pkgs.writeShellScriptBin "deploy-${name}" ''
-    set -eo pipefail
-    nix-copy-closure --to ${name} --gzip --use-substitutes ${sys}
-    ssh ${name} nix-env --profile /nix/var/nix/profiles/system --set ${sys}
-    ssh ${name} ${sys}/bin/switch-to-configuration switch
-  '';
-
+  deployScript =
+    name: sys:
+    pkgs.writeShellScriptBin "deploy-${name}" ''
+      set -eo pipefail
+      nix-copy-closure --to ${name} --gzip --use-substitutes ${sys}
+      ssh ${name} nix-env --profile /nix/var/nix/profiles/system --set ${sys}
+      ssh ${name} ${sys}/bin/switch-to-configuration switch
+    '';
 in
 depot.nix.readTree.drvTargets rec {
-  archeologyEc2System = (depot.ops.nixos.nixosFor ({ ... }: {
-    imports = [
-      ./archeology-ec2/configuration.nix
-    ];
-  })).config.system.build.toplevel;
+  archeologyEc2System =
+    (depot.ops.nixos.nixosFor (
+      { ... }:
+      {
+        imports = [ ./archeology-ec2/configuration.nix ];
+      }
+    )).config.system.build.toplevel;
 
   deploy-archeology-ec2 = (deployScript "archeology-ec2" archeologyEc2System);
 
-  deps = (depot.nix.lazy-deps {
-    deploy-archeology-ec2.attr = "users.flokli.nixos.deploy-archeology-ec2";
-  });
+  deps = (
+    depot.nix.lazy-deps { deploy-archeology-ec2.attr = "users.flokli.nixos.deploy-archeology-ec2"; }
+  );
 
   shell = pkgs.mkShell {
     name = "flokli-nixos-shell";

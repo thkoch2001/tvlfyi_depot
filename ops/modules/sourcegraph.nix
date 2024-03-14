@@ -1,6 +1,12 @@
 # Run sourcegraph, including its entire machinery, in a container.
 # Running it outside of a container is a futile endeavour for now.
-{ depot, config, pkgs, lib, ... }:
+{
+  depot,
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 
 let
   cfg = config.services.depot.sourcegraph;
@@ -37,9 +43,7 @@ in
     virtualisation.oci-containers.containers.sourcegraph = {
       image = "sourcegraph/server:3.40.0";
 
-      ports = [
-        "127.0.0.1:${toString cfg.port}:7080"
-      ];
+      ports = [ "127.0.0.1:${toString cfg.port}:7080" ];
 
       volumes = [
         "/var/lib/sourcegraph/etc:/etc/sourcegraph"

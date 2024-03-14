@@ -3,11 +3,18 @@
 
 # Configures a shell environment that builds required local packages to
 # run Nixery.
-{ pkgs ? import <nixpkgs> { } }:
+{
+  pkgs ? import <nixpkgs> { },
+}:
 
-let nixery = import ./default.nix { inherit pkgs; };
-in pkgs.stdenv.mkDerivation {
+let
+  nixery = import ./default.nix { inherit pkgs; };
+in
+pkgs.stdenv.mkDerivation {
   name = "nixery-dev-shell";
 
-  buildInputs = with pkgs; [ jq nixery.nixery-prepare-image ];
+  buildInputs = with pkgs; [
+    jq
+    nixery.nixery-prepare-image
+  ];
 }

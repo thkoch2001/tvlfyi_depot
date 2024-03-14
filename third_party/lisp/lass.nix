@@ -7,7 +7,6 @@ let
     rev = "f51b9e941ee0a2a1f76ba814dcef22f9fb5f69bf";
     sha256 = "11mxzyx34ynsfsrs8pgrarqi9s442vkpmh7kdpzvarhj7i97g8yx";
   };
-
 in
 depot.nix.buildLisp.library {
   name = "lass";

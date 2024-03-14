@@ -1,15 +1,9 @@
 { depot, ... }:
 
 let
-  inherit (depot.third_party.nixpkgs)
-    lib
-    ;
+  inherit (depot.third_party.nixpkgs) lib;
 
-  inherit (depot.web.bubblegum)
-    pathInfo
-    respond
-    absolutePath
-    ;
+  inherit (depot.web.bubblegum) pathInfo respond absolutePath;
 
   routes = {
     "/" = {
@@ -55,40 +49,36 @@ let
     '';
   };
 
-  navigation =
-    lib.concatStrings (lib.mapAttrsToList
-      (p: v: "<li><a href=\"${absolutePath p}\">${v.title}</a></li>")
-      routes);
+  navigation = lib.concatStrings (
+    lib.mapAttrsToList (p: v: "<li><a href=\"${absolutePath p}\">${v.title}</a></li>") routes
+  );
 
-  template = { title, content, ... }: ''
-    <!doctype html>
-    <html lang="en">
-    <head>
-      <meta charset="utf-8">
-      <title>${title}</title>
-      <style>a:link, a:visited { color: blue; }</style>
-    </head>
-    <body>
-      <hgroup>
-      <h1><code>//web/bubblegum</code></h1>
-      <h2>example app</h2>
-      </hgroup>
-      <header>
-        <nav>
-          <ul>${navigation}</ul>
-        </nav>
-      </header>
-      <main>
-        <p>${content}</p>
-      </main>
-    </body>
-  '';
+  template =
+    { title, content, ... }:
+    ''
+      <!doctype html>
+      <html lang="en">
+      <head>
+        <meta charset="utf-8">
+        <title>${title}</title>
+        <style>a:link, a:visited { color: blue; }</style>
+      </head>
+      <body>
+        <hgroup>
+        <h1><code>//web/bubblegum</code></h1>
+        <h2>example app</h2>
+        </hgroup>
+        <header>
+          <nav>
+            <ul>${navigation}</ul>
+          </nav>
+        </header>
+        <main>
+          <p>${content}</p>
+        </main>
+      </body>
+    '';
 
   response = routes."${pathInfo}" or notFound;
-
 in
-respond response.status
-{
-  "Content-type" = "text/html";
-}
-  (template response)
+respond response.status { "Content-type" = "text/html"; } (template response)

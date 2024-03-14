@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 let
   inherit (config.lib) depot;
@@ -8,27 +13,28 @@ with lib;
 
 {
 
-  home.packages = with pkgs; [
-    rustup
-    cargo-edit
-    cargo-expand
-    cargo-udeps
-    cargo-bloat
-    sccache
-    evcxr
+  home.packages =
+    with pkgs;
+    [
+      rustup
+      cargo-edit
+      cargo-expand
+      cargo-udeps
+      cargo-bloat
+      sccache
+      evcxr
 
-    depot.users.aspen.pkgs.cargo-hakari
-    depot.users.aspen.pkgs.cargo-nextest
+      depot.users.aspen.pkgs.cargo-hakari
+      depot.users.aspen.pkgs.cargo-nextest
 
-    # benchmarking+profiling
-    cargo-criterion
-    cargo-flamegraph
-    coz
-    inferno
-    hotspot
-  ] ++ optionals (stdenv.isLinux) [
-    cargo-rr
-  ];
+      # benchmarking+profiling
+      cargo-criterion
+      cargo-flamegraph
+      coz
+      inferno
+      hotspot
+    ]
+    ++ optionals (stdenv.isLinux) [ cargo-rr ];
 
   programs.zsh.shellAliases = {
     "cg" = "cargo";

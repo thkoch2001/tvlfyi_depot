@@ -1,4 +1,9 @@
-{ pkgs, lib, config, ... }:
+{
+  pkgs,
+  lib,
+  config,
+  ...
+}:
 
 let
   inherit (builtins) pathExists;
@@ -51,7 +56,9 @@ in
       PartOf = [ "graphical-session.target" ];
     };
 
-    Install = { WantedBy = [ "graphical-session.target" ]; };
+    Install = {
+      WantedBy = [ "graphical-session.target" ];
+    };
 
     Service = {
       Type = "oneshot";
@@ -71,6 +78,5 @@ in
   # Telegram adds this to ~/.config/mimeapps.list if it isn't already there,
   # preventing home manager from installing (since it doesn't want to overwrite
   # the file)
-  xdg.mimeApps.defaultApplications."x-scheme-handler/tg" =
-    "userapp-Telegram Desktop-K290F1.desktop";
+  xdg.mimeApps.defaultApplications."x-scheme-handler/tg" = "userapp-Telegram Desktop-K290F1.desktop";
 }

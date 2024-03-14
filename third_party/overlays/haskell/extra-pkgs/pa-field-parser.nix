@@ -1,18 +1,19 @@
-{ mkDerivation
-, aeson
-, aeson-better-errors
-, attoparsec
-, base
-, case-insensitive
-, containers
-, lib
-, pa-error-tree
-, pa-prelude
-, scientific
-, semigroupoids
-, template-haskell
-, text
-, time
+{
+  mkDerivation,
+  aeson,
+  aeson-better-errors,
+  attoparsec,
+  base,
+  case-insensitive,
+  containers,
+  lib,
+  pa-error-tree,
+  pa-prelude,
+  scientific,
+  semigroupoids,
+  template-haskell,
+  text,
+  time,
 }:
 mkDerivation {
   pname = "pa-field-parser";

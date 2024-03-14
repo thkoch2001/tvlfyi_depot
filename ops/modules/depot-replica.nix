@@ -3,7 +3,13 @@
 #
 # This only prepares the user and folder for receiving the replica,
 # but Gerrit configuration still needs to be modified in addition.
-{ config, depot, lib, pkgs, ... }:
+{
+  config,
+  depot,
+  lib,
+  pkgs,
+  ...
+}:
 
 let
   cfg = config.services.depot.replica;
@@ -38,8 +44,6 @@ in
       shell = pkgs.bashInteractive; # gerrit needs to run shell commands
     };
 
-    environment.systemPackages = [
-      pkgs.git
-    ];
+    environment.systemPackages = [ pkgs.git ];
   };
 }

@@ -8,12 +8,13 @@
 # in //default.nix passes this attribute as the `pkgs` argument to all
 # readTree derivations.
 
-{ depot ? { }
-, externalArgs ? { }
-, depotOverlays ? true
-, localSystem ? externalArgs.localSystem or builtins.currentSystem
-, crossSystem ? externalArgs.crossSystem or localSystem
-, ...
+{
+  depot ? { },
+  externalArgs ? { },
+  depotOverlays ? true,
+  localSystem ? externalArgs.localSystem or builtins.currentSystem,
+  crossSystem ? externalArgs.crossSystem or localSystem,
+  ...
 }:
 
 let
@@ -21,16 +22,14 @@ let
   # Includes everything but overlays which are only passed to unstable nixpkgs.
   commonNixpkgsArgs = {
     # allow users to inject their config into builds (e.g. to test CA derivations)
-    config =
-      (if externalArgs ? nixpkgsConfig then externalArgs.nixpkgsConfig else { })
-      // {
-        allowUnfree = true;
-        allowUnfreeRedistributable = true;
-        allowBroken = true;
-        # Forbids our meta.ci attribute
-        # https://github.com/NixOS/nixpkgs/pull/191171#issuecomment-1260650771
-        checkMeta = false;
-      };
+    config = (if externalArgs ? nixpkgsConfig then externalArgs.nixpkgsConfig else { }) // {
+      allowUnfree = true;
+      allowUnfreeRedistributable = true;
+      allowBroken = true;
+      # Forbids our meta.ci attribute
+      # https://github.com/NixOS/nixpkgs/pull/191171#issuecomment-1260650771
+      checkMeta = false;
+    };
 
     inherit localSystem crossSystem;
   };
@@ -59,16 +58,26 @@ let
     };
   };
 in
-import nixpkgsSrc (commonNixpkgsArgs // {
-  overlays = [
-    commitsOverlay
-    stableOverlay
-  ] ++ (if depotOverlays then [
-    depot.third_party.overlays.haskell
-    depot.third_party.overlays.emacs
-    depot.third_party.overlays.tvl
-    depot.third_party.overlays.ecl-static
-    depot.third_party.overlays.dhall
-    (import depot.third_party.sources.rust-overlay)
-  ] else [ ]);
-})
+import nixpkgsSrc (
+  commonNixpkgsArgs
+  // {
+    overlays =
+      [
+        commitsOverlay
+        stableOverlay
+      ]
+      ++ (
+        if depotOverlays then
+          [
+            depot.third_party.overlays.haskell
+            depot.third_party.overlays.emacs
+            depot.third_party.overlays.tvl
+            depot.third_party.overlays.ecl-static
+            depot.third_party.overlays.dhall
+            (import depot.third_party.sources.rust-overlay)
+          ]
+        else
+          [ ]
+      );
+  }
+)

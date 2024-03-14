@@ -1,8 +1,10 @@
 # Compatibility layer for minor MOP implementation differences
 { depot, pkgs, ... }:
 
-let src = with pkgs; srcOnly lispPackages.moptilities;
-in depot.nix.buildLisp.library {
+let
+  src = with pkgs; srcOnly lispPackages.moptilities;
+in
+depot.nix.buildLisp.library {
   name = "moptilities";
   deps = [ depot.third_party.lisp.closer-mop ];
   srcs = [ "${src}/dev/moptilities.lisp" ];

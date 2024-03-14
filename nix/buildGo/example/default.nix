@@ -14,25 +14,18 @@ let
   # package from the specified source files.
   examplePackage = buildGo.package {
     name = "example";
-    srcs = [
-      ./lib.go
-    ];
+    srcs = [ ./lib.go ];
   };
-
-  # Example use of buildGo.program, which builds an executable using
-  # the specified name and dependencies (which in turn must have been
-  # created via buildGo.package etc.)
 in
+# Example use of buildGo.program, which builds an executable using
+# the specified name and dependencies (which in turn must have been
+# created via buildGo.package etc.)
 buildGo.program {
   name = "example";
 
-  srcs = [
-    ./main.go
-  ];
+  srcs = [ ./main.go ];
 
-  deps = [
-    examplePackage
-  ];
+  deps = [ examplePackage ];
 
   x_defs = {
     "main.Flag" = "successfully";

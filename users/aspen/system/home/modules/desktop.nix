@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 # Things that only work in the presence of a linux desktop environment
 
@@ -17,7 +22,10 @@
     (writeShellApplication {
       name = "edit-input";
 
-      runtimeInputs = [ xdotool xclip ];
+      runtimeInputs = [
+        xdotool
+        xclip
+      ];
       text = ''
         set -euo pipefail
 

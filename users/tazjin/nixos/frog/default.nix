@@ -1,4 +1,9 @@
-{ depot, lib, pkgs, ... }:
+{
+  depot,
+  lib,
+  pkgs,
+  ...
+}:
 
 config:
 let
@@ -11,9 +16,7 @@ let
   };
 in
 lib.fix (self: {
-  imports = [
-    (depot.path.origSrc + "/ops/modules/v4l2loopback.nix")
-  ];
+  imports = [ (depot.path.origSrc + "/ops/modules/v4l2loopback.nix") ];
 
   boot = {
     tmp.useTmpfs = true;
@@ -26,7 +29,14 @@ lib.fix (self: {
 
     initrd = {
       luks.devices.frog-crypt.device = "/dev/disk/by-label/frog-crypt";
-      availableKernelModules = [ "xhci_pci" "ahci" "nvme" "usb_storage" "usbhid" "sd_mod" ];
+      availableKernelModules = [
+        "xhci_pci"
+        "ahci"
+        "nvme"
+        "usb_storage"
+        "usbhid"
+        "sd_mod"
+      ];
       kernelModules = [ "dm-snapshot" ];
     };
 
@@ -98,7 +108,11 @@ lib.fix (self: {
 
   # Configure user account
   users.extraUsers.tazjin = {
-    extraGroups = [ "wheel" "audio" "docker" ];
+    extraGroups = [
+      "wheel"
+      "audio"
+      "docker"
+    ];
     isNormalUser = true;
     uid = 1000;
     shell = pkgs.fish;
@@ -144,9 +158,7 @@ lib.fix (self: {
 
   # Required for Yubikey usage as smartcard
   services.pcscd.enable = true;
-  services.udev.packages = [
-    pkgs.yubikey-personalization
-  ];
+  services.udev.packages = [ pkgs.yubikey-personalization ];
 
   # Enable Docker for Nixery testing
   virtualisation.docker = {
@@ -213,71 +225,72 @@ lib.fix (self: {
       third_party.git
       tools.nsfv-setup
       users.tazjin.emacs
-    ]) ++
+    ])
+    ++
 
-    # programs from nixpkgs
-    (with pkgs; [
-      age
-      bat
-      chromium
-      clang-manpages
-      clang-tools
-      clang
-      curl
-      direnv
-      dnsutils
-      emacs28 # mostly for emacsclient
-      fd
-      file
-      gdb
-      gnupg
-      go
-      google-chrome
-      google-cloud-sdk
-      htop
-      hyperfine
-      i3lock
-      iftop
-      imagemagick
-      jq
-      kubectl
-      linuxPackages.perf
-      man-pages
-      miller
-      msmtp
-      nix-prefetch-github
-      notmuch
-      obs-studio
-      openssh
-      openssl
-      pass
-      pavucontrol
-      pciutils
-      pinentry
-      pinentry-emacs
-      pmutils
-      pwgen
-      ripgrep
-      rustup
-      screen
-      spotify
-      tokei
-      transmission
-      tree
-      unzip
-      usbutils
-      v4l-utils
-      vlc
-      xclip
-      xsecurelock
-      yubico-piv-tool
-      yubikey-personalization
-      zoxide
+      # programs from nixpkgs
+      (with pkgs; [
+        age
+        bat
+        chromium
+        clang-manpages
+        clang-tools
+        clang
+        curl
+        direnv
+        dnsutils
+        emacs28 # mostly for emacsclient
+        fd
+        file
+        gdb
+        gnupg
+        go
+        google-chrome
+        google-cloud-sdk
+        htop
+        hyperfine
+        i3lock
+        iftop
+        imagemagick
+        jq
+        kubectl
+        linuxPackages.perf
+        man-pages
+        miller
+        msmtp
+        nix-prefetch-github
+        notmuch
+        obs-studio
+        openssh
+        openssl
+        pass
+        pavucontrol
+        pciutils
+        pinentry
+        pinentry-emacs
+        pmutils
+        pwgen
+        ripgrep
+        rustup
+        screen
+        spotify
+        tokei
+        transmission
+        tree
+        unzip
+        usbutils
+        v4l-utils
+        vlc
+        xclip
+        xsecurelock
+        yubico-piv-tool
+        yubikey-personalization
+        zoxide
 
-      # Commented out because of interim breakage:
-      # steam
-      # lutris
-    ]);
+        # Commented out because of interim breakage:
+        # steam
+        # lutris
+      ]);
 
   # ... and other nonsense.
   system.stateVersion = "20.03";

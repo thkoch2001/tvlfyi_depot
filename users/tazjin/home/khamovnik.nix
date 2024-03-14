@@ -4,7 +4,5 @@
 { config, lib, ... }: # home-manager
 
 {
-  imports = [
-    depot.users.tazjin.home.shared
-  ];
+  imports = [ depot.users.tazjin.home.shared ];
 }

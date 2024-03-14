@@ -1,8 +1,10 @@
 # Babel is an encoding conversion library for Common Lisp.
 { depot, pkgs, ... }:
 
-let src = with pkgs; srcOnly lispPackages.babel;
-in depot.nix.buildLisp.library {
+let
+  src = with pkgs; srcOnly lispPackages.babel;
+in
+depot.nix.buildLisp.library {
   name = "babel";
   deps = [
     depot.third_party.lisp.alexandria

@@ -24,6 +24,5 @@ let
       > "$tmp/out"
     mv "$tmp/out" "$to"
   '';
-
 in
 atomically-write

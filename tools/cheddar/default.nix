@@ -18,7 +18,5 @@ depot.third_party.naersk.buildPackage {
     '';
   };
 
-  meta.ci.targets = [
-    "about-filter"
-  ];
+  meta.ci.targets = [ "about-filter" ];
 }

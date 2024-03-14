@@ -1,13 +1,16 @@
-{ depot, pkgs, lib, ... }:
+{
+  depot,
+  pkgs,
+  lib,
+  ...
+}:
 { ... }:
 
 let
   inherit (depot.users) wpcarro;
   inherit (depot.users.wpcarro.lib) usermod;
 
-  wpcarrosEmacs = wpcarro.emacs.nixos {
-    load = [ ./tarasco.el ];
-  };
+  wpcarrosEmacs = wpcarro.emacs.nixos { load = [ ./tarasco.el ]; };
 
   quasselClient = pkgs.quassel.override {
     client = true;
@@ -16,9 +19,7 @@ let
   };
 in
 {
-  imports = [
-    (usermod "hardware/nopn.nix")
-  ];
+  imports = [ (usermod "hardware/nopn.nix") ];
 
   # Use the TVL binary cache
   tvl.cache.enable = true;
@@ -31,7 +32,6 @@ in
     kernel.sysctl."net.ipv4.ip_forward" = true;
     kernel.sysctl."net.ipv6.conf.all.forwarding" = true;
   };
-
 
   time.timeZone = "America/Los_Angeles";
 
@@ -101,9 +101,7 @@ in
   security.sudo.wheelNeedsPassword = false;
 
   fonts = {
-    packages = with pkgs; [
-      jetbrains-mono
-    ];
+    packages = with pkgs; [ jetbrains-mono ];
 
     fontconfig = {
       defaultFonts = {
@@ -126,8 +124,8 @@ in
   };
 
   environment.systemPackages =
-    wpcarro.common.shell-utils ++
-    (with pkgs; [
+    wpcarro.common.shell-utils
+    ++ (with pkgs; [
       alacritty
       firefox
       google-chrome

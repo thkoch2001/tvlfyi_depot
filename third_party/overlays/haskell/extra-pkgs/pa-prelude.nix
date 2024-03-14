@@ -1,20 +1,21 @@
-{ mkDerivation
-, base
-, bytestring
-, containers
-, error
-, exceptions
-, lib
-, mtl
-, profunctors
-, PyF
-, scientific
-, semigroupoids
-, template-haskell
-, text
-, these
-, validation-selective
-, vector
+{
+  mkDerivation,
+  base,
+  bytestring,
+  containers,
+  error,
+  exceptions,
+  lib,
+  mtl,
+  profunctors,
+  PyF,
+  scientific,
+  semigroupoids,
+  template-haskell,
+  text,
+  these,
+  validation-selective,
+  vector,
 }:
 mkDerivation {
   pname = "pa-prelude";

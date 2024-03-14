@@ -1,7 +1,12 @@
 # Creates an output containing the logo in SVG format (animated and
 # static, one for each background colour) and without animations in
 # PNG.
-{ depot, lib, pkgs, ... }:
+{
+  depot,
+  lib,
+  pkgs,
+  ...
+}:
 
 let
   palette = {
@@ -21,11 +26,15 @@ let
 
   # Create an animated CSS that equally spreads out the colours over
   # the animation duration (1min).
-  animatedCss = colours:
+  animatedCss =
+    colours:
     let
       # Calculate at which percentage offset each colour should appear.
       stepSize = 100 / ((builtins.length colours) - 1);
-      frames = lib.imap0 (idx: colour: { inherit colour; at = idx * stepSize; }) colours;
+      frames = lib.imap0 (idx: colour: {
+        inherit colour;
+        at = idx * stepSize;
+      }) colours;
       frameCss = frame: "${toString frame.at}% { fill: ${frame.colour}; }";
     in
     ''
@@ -68,30 +77,41 @@ let
       ${logoShapes}
     </svg>
   '';
-
 in
-depot.nix.readTree.drvTargets (lib.fix (self: {
-  # Expose the logo construction functions.
-  inherit palette darkCss lightCss animatedCss staticCss;
+depot.nix.readTree.drvTargets (
+  lib.fix (
+    self:
+    {
+      # Expose the logo construction functions.
+      inherit
+        palette
+        darkCss
+        lightCss
+        animatedCss
+        staticCss
+        ;
 
-  # Create a TVL logo SVG with the specified style.
-  logoSvg = style: pkgs.writeText "logo.svg" (logoSvg style);
+      # Create a TVL logo SVG with the specified style.
+      logoSvg = style: pkgs.writeText "logo.svg" (logoSvg style);
 
-  # Create a PNG of the TVL logo with the specified style and DPI.
-  logoPng = style: dpi: pkgs.runCommand "logo.png" { } ''
-    ${pkgs.inkscape}/bin/inkscape \
-      --export-area-drawing \
-      --export-background-opacity 0 \
-      --export-dpi ${toString dpi} \
-      ${self.logoSvg style} -o $out
-  '';
+      # Create a PNG of the TVL logo with the specified style and DPI.
+      logoPng =
+        style: dpi:
+        pkgs.runCommand "logo.png" { } ''
+          ${pkgs.inkscape}/bin/inkscape \
+            --export-area-drawing \
+            --export-background-opacity 0 \
+            --export-dpi ${toString dpi} \
+            ${self.logoSvg style} -o $out
+        '';
 
-  # Animated dark SVG logo with all colours.
-  pastelRainbow = self.logoSvg (darkCss (animatedCss (lib.attrValues palette)));
-}
+      # Animated dark SVG logo with all colours.
+      pastelRainbow = self.logoSvg (darkCss (animatedCss (lib.attrValues palette)));
+    }
 
-  # Add individual outputs for static dark logos of each colour.
-  // (lib.mapAttrs'
-  (k: v: lib.nameValuePair "${k}Png"
-    (self.logoPng (darkCss (staticCss v)) 96))
-  palette)))
+    # Add individual outputs for static dark logos of each colour.
+    // (lib.mapAttrs' (
+      k: v: lib.nameValuePair "${k}Png" (self.logoPng (darkCss (staticCss v)) 96)
+    ) palette)
+  )
+)

@@ -1,4 +1,10 @@
-{ config, lib, pkgs, depot, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  depot,
+  ...
+}:
 
 {
   # Booting / Kernel
@@ -19,9 +25,7 @@
         "xhci_pci"
         "e1000e"
       ];
-      kernelModules = [
-        "dm-snapshot"
-      ];
+      kernelModules = [ "dm-snapshot" ];
     };
 
     swraid = {
@@ -32,9 +36,7 @@
       '';
     };
 
-    kernelModules = [
-      "kvm-intel"
-    ];
+    kernelModules = [ "kvm-intel" ];
   };
 
   # Filesystems
@@ -57,9 +59,7 @@
     };
   };
 
-  swapDevices = [
-    { device = "/dev/mainvg/swap"; }
-  ];
+  swapDevices = [ { device = "/dev/mainvg/swap"; } ];
 
   # CPU
   hardware = {

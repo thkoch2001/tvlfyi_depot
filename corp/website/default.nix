@@ -1,6 +1,5 @@
 { depot, pkgs, ... }:
 
-
 let
   # https://developers.google.com/search/docs/advanced/structured-data/logo
   structuredData = {
@@ -40,16 +39,22 @@ let
   };
 
   descEn = "TVL provides technology consulting for monorepos, Nix, and other SRE/DevOps/Software Engineering topics.";
-  indexEn = depot.web.tvl.template ({
-    title = "TVL (The Virus Lounge) - Software consulting";
-    content = builtins.readFile ./content-en.md;
-  } // common descEn);
+  indexEn = depot.web.tvl.template (
+    {
+      title = "TVL (The Virus Lounge) - Software consulting";
+      content = builtins.readFile ./content-en.md;
+    }
+    // common descEn
+  );
 
   descRu = "TVL предоставляет технологическое консультирование по монорепозиториям, Nix и другим темам SRE/DevOps/Software Engineering.";
-  indexRu = depot.web.tvl.template ({
-    title = "ТВЛ - Монорепозитории, SRE, Nix, программное обеспечение";
-    content = builtins.readFile ./content-ru.md;
-  } // common descRu);
+  indexRu = depot.web.tvl.template (
+    {
+      title = "ТВЛ - Монорепозитории, SRE, Nix, программное обеспечение";
+      content = builtins.readFile ./content-ru.md;
+    }
+    // common descRu
+  );
 in
 pkgs.runCommand "corp-website" { } ''
   mkdir -p $out/{en,ru}

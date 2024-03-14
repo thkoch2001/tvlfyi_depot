@@ -13,20 +13,15 @@ let
       "https://packdeps.haskellers.com/reverse"
     ]
     rev-hs
-
   ];
 
-  rev-hs = pkgs.writers.writeHaskell "revers-haskell-deps-hs"
-    {
-      libraries = [
-        depot.users.Profpatsch.my-prelude
-        pkgs.haskellPackages.nicify-lib
-        pkgs.haskellPackages.tagsoup
-      ];
-      ghcArgs = [ "-threaded" ];
-    }
-    ./ReverseHaskellDeps.hs;
-
-
+  rev-hs = pkgs.writers.writeHaskell "revers-haskell-deps-hs" {
+    libraries = [
+      depot.users.Profpatsch.my-prelude
+      pkgs.haskellPackages.nicify-lib
+      pkgs.haskellPackages.tagsoup
+    ];
+    ghcArgs = [ "-threaded" ];
+  } ./ReverseHaskellDeps.hs;
 in
 rev

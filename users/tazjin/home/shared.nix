@@ -3,7 +3,6 @@
 { depot, pkgs, ... }: # readTree
 { config, lib, ... }: # home-manager
 
-
 let
   # URL handler to open `tg://` URLs in telega.el
   telega-launcher = pkgs.writeShellScriptBin "telega-launcher" ''

@@ -1,4 +1,10 @@
-{ config, pkgs, lib, depot, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  depot,
+  ...
+}:
 
 let
   ipv6 = "2a01:4f9:2a:1bc6::/64";
@@ -11,9 +17,7 @@ in
 {
   config = {
     boot = {
-      kernelParams = [
-        "ip=${ipv4}::${gatewayv4}:${netmaskv4}::eth0:none"
-      ];
+      kernelParams = [ "ip=${ipv4}::${gatewayv4}:${netmaskv4}::eth0:none" ];
 
       initrd.network = {
         enable = true;

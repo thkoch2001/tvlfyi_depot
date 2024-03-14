@@ -1,4 +1,9 @@
-{ depot, pkgs, lib, ... }:
+{
+  depot,
+  pkgs,
+  lib,
+  ...
+}:
 
 let
 
@@ -26,7 +31,6 @@ let
   };
 
   bins = depot.nix.getBins httzip [ "httzip" ];
-
 in
 depot.nix.writeExecline "httzip-wrapped" { } [
   "importas"

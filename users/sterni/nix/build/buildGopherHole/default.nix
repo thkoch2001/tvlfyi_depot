@@ -1,14 +1,14 @@
-{ depot, pkgs, lib, ... }:
+{
+  depot,
+  pkgs,
+  lib,
+  ...
+}:
 
 let
-  inherit (pkgs)
-    runCommand
-    writeText
-    ;
+  inherit (pkgs) runCommand writeText;
 
-  inherit (depot.users.sterni.nix.build)
-    buildGopherHole
-    ;
+  inherit (depot.users.sterni.nix.build) buildGopherHole;
 
   fileTypes = {
     # RFC1436
@@ -31,7 +31,12 @@ let
     html = "h";
   };
 
-  buildFile = { file, name, fileType ? fileTypes.text }:
+  buildFile =
+    {
+      file,
+      name,
+      fileType ? fileTypes.text,
+    }:
     runCommand name
       {
         passthru = {
@@ -40,26 +45,30 @@ let
           # default value.
           fileType = file.fileType or fileType;
         };
-      } ''
-      ln -s ${file} "$out"
-    '';
+      }
+      ''
+        ln -s ${file} "$out"
+      '';
 
-  buildGopherMap = dir:
+  buildGopherMap =
+    dir:
     let
-      /* strings constitute an info line or an empty line
-         if their length is zero. sets that contain a menu
-         value have that added to the gophermap as-is.
+      /*
+        strings constitute an info line or an empty line
+        if their length is zero. sets that contain a menu
+        value have that added to the gophermap as-is.
 
-         all other entries should be a set which can be built using
-         buildGopherHole and is linked by their name. The resulting
-         derivation is expected to passthru a fileType containing the
-         gopher file type char of themselves.
+        all other entries should be a set which can be built using
+        buildGopherHole and is linked by their name. The resulting
+        derivation is expected to passthru a fileType containing the
+        gopher file type char of themselves.
       */
-      gopherMapLine = e:
-        if builtins.isString e
-        then e
-        else if e ? menu
-        then e.menu
+      gopherMapLine =
+        e:
+        if builtins.isString e then
+          e
+        else if e ? menu then
+          e.menu
         else
           let
             drv = buildGopherHole e;
@@ -75,9 +84,9 @@ let
     let
       # filter all entries out that have to be symlinked:
       # sets with the file or dir attribute
-      drvOnly = builtins.map buildGopherHole (builtins.filter
-        (x: !(builtins.isString x) && (x ? dir || x ? file))
-        dir);
+      drvOnly = builtins.map buildGopherHole (
+        builtins.filter (x: !(builtins.isString x) && (x ? dir || x ? file)) dir
+      );
       gopherMap = buildGopherMap dir;
     in
     runCommand name
@@ -86,24 +95,28 @@ let
           fileType = fileTypes.dir;
         };
       }
-      (''
-        mkdir -p "$out"
-        ln -s "${gopherMap}" "$out/.gophermap"
-      '' + lib.concatMapStrings
-        (drv: ''
+      (
+        ''
+          mkdir -p "$out"
+          ln -s "${gopherMap}" "$out/.gophermap"
+        ''
+        + lib.concatMapStrings (drv: ''
           ln -s "${drv}" "$out/${drv.name}"
-        '')
-        drvOnly);
+        '') drvOnly
+      );
 in
 
 {
   # Dispatch into different file / dir handling code
   # which is mutually recursive with this function.
-  __functor = _: args:
-    if args ? file then buildFile args
-    else if args ? dir then buildDir args
-    else builtins.throw "Unrecognized gopher hole item type: "
-      + lib.generators.toPretty { } args;
+  __functor =
+    _: args:
+    if args ? file then
+      buildFile args
+    else if args ? dir then
+      buildDir args
+    else
+      builtins.throw "Unrecognized gopher hole item type: " + lib.generators.toPretty { } args;
 
   inherit fileTypes;
 }

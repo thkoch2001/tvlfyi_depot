@@ -1,5 +1,11 @@
 # EXWM and other desktop configuration.
-{ config, depot, lib, pkgs, ... }:
+{
+  config,
+  depot,
+  lib,
+  pkgs,
+  ...
+}:
 
 {
   services = {

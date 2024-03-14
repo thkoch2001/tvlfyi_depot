@@ -1,11 +1,15 @@
 # Configures journaldriver to forward to the tvl-fyi GCP project from
 # TVL machines.
-{ config, depot, lib, pkgs, ... }:
+{
+  config,
+  depot,
+  lib,
+  pkgs,
+  ...
+}:
 
 {
-  imports = [
-    (depot.third_party.agenix.src + "/modules/age.nix")
-  ];
+  imports = [ (depot.third_party.agenix.src + "/modules/age.nix") ];
 
   age.secrets.journaldriver.file = depot.ops.secrets."journaldriver.age";
 

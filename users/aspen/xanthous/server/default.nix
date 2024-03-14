@@ -1,6 +1,7 @@
-args@{ depot ? import ../../../.. { }
-, pkgs ? depot.third_party.nixpkgs
-, ...
+args@{
+  depot ? import ../../../.. { },
+  pkgs ? depot.third_party.nixpkgs,
+  ...
 }:
 
 depot.third_party.naersk.buildPackage {

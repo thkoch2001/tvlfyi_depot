@@ -23,7 +23,15 @@ in
       exit 1
     fi
 
-    PATH="${makeBinPath (with pkgs; [ busybox gnupg ])}"
+    PATH="${
+      makeBinPath (
+        with pkgs;
+        [
+          busybox
+          gnupg
+        ]
+      )
+    }"
     destination="$(mktemp -d)"
 
     function cleanup() {
@@ -48,7 +56,16 @@ in
   export-gpg = writeShellScript "export-gpg" ''
     set -euo pipefail
 
-    PATH="${makeBinPath (with pkgs; [ busybox gnupg zip ])}"
+    PATH="${
+      makeBinPath (
+        with pkgs;
+        [
+          busybox
+          gnupg
+          zip
+        ]
+      )
+    }"
     output="$(pwd)/export.zip"
     destination="$(mktemp -d)"
 

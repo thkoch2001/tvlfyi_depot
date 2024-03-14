@@ -1,4 +1,9 @@
-{ depot, pkgs, lib, ... }:
+{
+  depot,
+  pkgs,
+  lib,
+  ...
+}:
 let
   runExecline = import ./runExecline.nix {
     inherit (pkgs) stdenv;
@@ -6,15 +11,17 @@ let
     inherit pkgs lib;
   };
 
-  runExeclineLocal = name: args: execline:
-    runExecline name
-      (args // {
+  runExeclineLocal =
+    name: args: execline:
+    runExecline name (
+      args
+      // {
         derivationArgs = args.derivationArgs or { } // {
           preferLocalBuild = true;
           allowSubstitutes = false;
         };
-      })
-      execline;
+      }
+    ) execline;
 
   tests = import ./tests.nix {
     inherit runExecline runExeclineLocal;
@@ -22,7 +29,6 @@ let
     inherit (pkgs) stdenv coreutils;
     inherit pkgs;
   };
-
 in
 {
   __functor = _: runExecline;

@@ -1,6 +1,11 @@
 # SPDX-License-Identifier: MIT
 # SPDX-FileCopyrightText: Copyright (c) 2003-2023 The Nixpkgs/NixOS contributors
-{ config, pkgs, lib, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 
 let
   cfg = config.services.deprecated-ddclient;
@@ -15,11 +20,16 @@ let
     foreground=YES
     use=${cfg.use}
     login=${cfg.username}
-    password=${if cfg.protocol == "nsupdate" then "/run/${RuntimeDirectory}/ddclient.key" else "@password_placeholder@"}
+    password=${
+      if cfg.protocol == "nsupdate" then
+        "/run/${RuntimeDirectory}/ddclient.key"
+      else
+        "@password_placeholder@"
+    }
     protocol=${cfg.protocol}
     ${lib.optionalString (cfg.script != "") "script=${cfg.script}"}
     ${lib.optionalString (cfg.server != "") "server=${cfg.server}"}
-    ${lib.optionalString (cfg.zone != "")   "zone=${cfg.zone}"}
+    ${lib.optionalString (cfg.zone != "") "zone=${cfg.zone}"}
     ssl=${boolToStr cfg.ssl}
     wildcard=YES
     quiet=${boolToStr cfg.quiet}
@@ -31,15 +41,21 @@ let
 
   preStart = ''
     install --mode=600 --owner=$USER ${configFile} /run/${RuntimeDirectory}/ddclient.conf
-    ${lib.optionalString (cfg.configFile == null) (if (cfg.protocol == "nsupdate") then ''
-      install --mode=600 --owner=$USER ${cfg.passwordFile} /run/${RuntimeDirectory}/ddclient.key
-    '' else if (cfg.passwordFile != null) then ''
-      "${pkgs.replace-secret}/bin/replace-secret" "@password_placeholder@" "${cfg.passwordFile}" "/run/${RuntimeDirectory}/ddclient.conf"
-    '' else ''
-      sed -i '/^password=@password_placeholder@$/d' /run/${RuntimeDirectory}/ddclient.conf
-    '')}
+    ${lib.optionalString (cfg.configFile == null) (
+      if (cfg.protocol == "nsupdate") then
+        ''
+          install --mode=600 --owner=$USER ${cfg.passwordFile} /run/${RuntimeDirectory}/ddclient.key
+        ''
+      else if (cfg.passwordFile != null) then
+        ''
+          "${pkgs.replace-secret}/bin/replace-secret" "@password_placeholder@" "${cfg.passwordFile}" "/run/${RuntimeDirectory}/ddclient.conf"
+        ''
+      else
+        ''
+          sed -i '/^password=@password_placeholder@$/d' /run/${RuntimeDirectory}/ddclient.conf
+        ''
+    )}
   '';
-
 in
 
 with lib;
@@ -189,7 +205,6 @@ with lib;
       };
     };
   };
-
 
   ###### implementation
 

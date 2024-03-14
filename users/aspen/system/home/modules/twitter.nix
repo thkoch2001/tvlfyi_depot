@@ -1,13 +1,9 @@
 { pkgs, lib, ... }:
 
 {
-  imports = [
-    ./lib/zshFunctions.nix
-  ];
+  imports = [ ./lib/zshFunctions.nix ];
 
-  home.packages = with pkgs; [
-    t
-  ];
+  home.packages = with pkgs; [ t ];
 
   home.sessionVariables = {
     TWITTER_WHOAMI = "glittershark1";

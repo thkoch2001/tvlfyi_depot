@@ -1,7 +1,12 @@
 # Configures an OpenLDAP instance for TVL
 #
 # TODO(tazjin): Configure ldaps://
-{ depot, lib, pkgs, ... }:
+{
+  depot,
+  lib,
+  pkgs,
+  ...
+}:
 
 with depot.nix.yants;
 
@@ -13,19 +18,24 @@ let
     displayName = option string;
   };
 
-  toLdif = defun [ user string ] (u: ''
-    dn: cn=${u.username},ou=users,dc=tvl,dc=fyi
-    objectClass: organizationalPerson
-    objectClass: inetOrgPerson
-    sn: ${u.username}
-    cn: ${u.username}
-    displayName: ${u.displayName or u.username}
-    mail: ${u.email}
-    userPassword: ${u.password}
-  '');
+  toLdif =
+    defun
+      [
+        user
+        string
+      ]
+      (u: ''
+        dn: cn=${u.username},ou=users,dc=tvl,dc=fyi
+        objectClass: organizationalPerson
+        objectClass: inetOrgPerson
+        sn: ${u.username}
+        cn: ${u.username}
+        displayName: ${u.displayName or u.username}
+        mail: ${u.email}
+        userPassword: ${u.password}
+      '');
 
   inherit (depot.ops) users;
-
 in
 {
   services.openldap = {
@@ -33,7 +43,10 @@ in
 
     settings.children = {
       "olcDatabase={1}mdb".attrs = {
-        objectClass = [ "olcDatabaseConfig" "olcMdbConfig" ];
+        objectClass = [
+          "olcDatabaseConfig"
+          "olcMdbConfig"
+        ];
         olcDatabase = "{1}mdb";
         olcDbDirectory = "/var/lib/openldap/db";
         olcSuffix = "dc=tvl,dc=fyi";
@@ -47,9 +60,12 @@ in
         olcModuleLoad = "argon2";
       };
 
-      "cn=schema".includes =
-        map (schema: "${pkgs.openldap}/etc/schema/${schema}.ldif")
-          [ "core" "cosine" "inetorgperson" "nis" ];
+      "cn=schema".includes = map (schema: "${pkgs.openldap}/etc/schema/${schema}.ldif") [
+        "core"
+        "cosine"
+        "inetorgperson"
+        "nis"
+      ];
     };
 
     # Contents are immutable at runtime, and adding user accounts etc.

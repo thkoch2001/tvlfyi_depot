@@ -1,2 +1,4 @@
-let depot = import ../../.. { };
-in depot.third_party.nixpkgs
+let
+  depot = import ../../.. { };
+in
+depot.third_party.nixpkgs

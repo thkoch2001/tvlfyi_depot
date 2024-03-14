@@ -12,9 +12,7 @@ rec {
       fetchSubmodules = true;
     };
 
-    nativeBuildInputs = [
-      pkgs.qmk
-    ];
+    nativeBuildInputs = [ pkgs.qmk ];
 
     buildPhase = ''
       mkdir -p keyboards/keychron/k6_pro/ansi/rgb/keymaps/flokli

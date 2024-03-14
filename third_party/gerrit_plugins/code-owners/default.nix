@@ -11,7 +11,5 @@ buildGerritBazelPlugin rec {
     rev = "e654ae5bda2085bce9a99942bec440e004a114f3";
     sha256 = "sha256:14d3x3iqskgw16pvyaa0swh252agj84p9pzlf24l8lgx9d7y4biz";
   };
-  patches = [
-    ./using-usernames.patch
-  ];
+  patches = [ ./using-usernames.patch ];
 }

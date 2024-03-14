@@ -1,5 +1,11 @@
 # Configures the public josh instance for serving the depot.
-{ config, depot, lib, pkgs, ... }:
+{
+  config,
+  depot,
+  lib,
+  pkgs,
+  ...
+}:
 
 let
   cfg = config.services.depot.josh;
@@ -20,7 +26,10 @@ in
     systemd.services.josh = {
       description = "josh - partial cloning of monorepos";
       wantedBy = [ "multi-user.target" ];
-      path = [ pkgs.git pkgs.bash ];
+      path = [
+        pkgs.git
+        pkgs.bash
+      ];
 
       serviceConfig = {
         DynamicUser = true;

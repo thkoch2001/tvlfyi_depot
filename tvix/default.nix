@@ -1,5 +1,10 @@
 # Nix helpers for projects under //tvix
-{ pkgs, lib, depot, ... }:
+{
+  pkgs,
+  lib,
+  depot,
+  ...
+}:
 
 let
   # crate override for crates that need protobuf
@@ -7,10 +12,13 @@ let
   iconvDarwinDep = lib.optional pkgs.stdenv.isDarwin pkgs.libiconv;
 
   # On Darwin, some crates producing binaries need to be able to link against security.
-  darwinDeps = lib.optionals pkgs.stdenv.isDarwin (with pkgs.buildPackages.darwin.apple_sdk.frameworks; [
-    Security
-    SystemConfiguration
-  ]);
+  darwinDeps = lib.optionals pkgs.stdenv.isDarwin (
+    with pkgs.buildPackages.darwin.apple_sdk.frameworks;
+    [
+      Security
+      SystemConfiguration
+    ]
+  );
 
   # Load the crate2nix crate tree.
   crates = import ./Cargo.nix {
@@ -19,7 +27,8 @@ let
 
     # Hack to fix Darwin build
     # See https://github.com/NixOS/nixpkgs/issues/218712
-    buildRustCrateForPkgs = pkgs:
+    buildRustCrateForPkgs =
+      pkgs:
       if pkgs.stdenv.isDarwin then
         let
           buildRustCrate = pkgs.buildRustCrate;
@@ -27,7 +36,8 @@ let
           override = o: args: buildRustCrate.override o (args // { dontStrip = true; });
         in
         pkgs.makeOverridable override { }
-      else pkgs.buildRustCrate;
+      else
+        pkgs.buildRustCrate;
 
     defaultCrateOverrides = pkgs.defaultCrateOverrides // {
       zstd-sys = prev: {
@@ -35,17 +45,11 @@ let
         buildInputs = prev.buildInputs or [ ] ++ iconvDarwinDep;
       };
 
-      opentelemetry-proto = prev: {
-        nativeBuildInputs = protobufDep prev;
-      };
+      opentelemetry-proto = prev: { nativeBuildInputs = protobufDep prev; };
 
-      prost-build = prev: {
-        nativeBuildInputs = protobufDep prev;
-      };
+      prost-build = prev: { nativeBuildInputs = protobufDep prev; };
 
-      tonic-reflection = prev: {
-        nativeBuildInputs = protobufDep prev;
-      };
+      tonic-reflection = prev: { nativeBuildInputs = protobufDep prev; };
 
       tvix-build = prev: {
         PROTO_ROOT = depot.tvix.build.protos.protos;
@@ -58,15 +62,14 @@ let
         nativeBuildInputs = protobufDep prev;
       };
 
-      tvix-cli = prev: {
-        buildInputs = prev.buildInputs or [ ] ++ darwinDeps;
-      };
+      tvix-cli = prev: { buildInputs = prev.buildInputs or [ ] ++ darwinDeps; };
 
       tvix-store = prev: {
         PROTO_ROOT = depot.tvix.store.protos.protos;
         nativeBuildInputs = protobufDep prev;
         # fuse-backend-rs uses DiskArbitration framework to handle mount/unmount on Darwin
-        buildInputs = prev.buildInputs or [ ]
+        buildInputs =
+          prev.buildInputs or [ ]
           ++ darwinDeps
           ++ lib.optional pkgs.stdenv.isDarwin pkgs.buildPackages.darwin.apple_sdk.frameworks.DiskArbitration;
       };
@@ -79,14 +82,19 @@ let
     # Extract the hashes from `crates` / Cargo.nix, we already get them from cargo2nix.
     # This returns an attribute set containing "${crateName}-${version}" as key,
     # and the outputHash as value.
-    outputHashes = builtins.listToAttrs
-      (map
-        (crateName:
-          (lib.nameValuePair "${crateName}-${crates.internal.crates.${crateName}.version}" crates.internal.crates.${crateName}.src.outputHash)
-        ) [
-        "test-generator"
-        "wu-manber"
-      ]);
+    outputHashes = builtins.listToAttrs (
+      map
+        (
+          crateName:
+          (lib.nameValuePair "${crateName}-${
+            crates.internal.crates.${crateName}.version
+          }" crates.internal.crates.${crateName}.src.outputHash)
+        )
+        [
+          "test-generator"
+          "wu-manber"
+        ]
+    );
   };
 
   # The cleaned sources.
@@ -102,7 +110,6 @@ let
       depot.tvix.store.protos.protos
     ];
   };
-
 in
 {
   inherit crates protos;
@@ -124,12 +131,17 @@ in
       # Important: we include the hash of the Cargo.lock file and
       # Cargo.nix file in the derivation name.  This forces the FOD
       # to be rebuilt/reverified whenever either of them changes.
-      name = "tvix-crate2nix-check-" +
-        (builtins.substring 0 8 (builtins.hashFile "sha256" ./Cargo.lock)) +
-        "-" +
-        (builtins.substring 0 8 (builtins.hashFile "sha256" ./Cargo.nix));
+      name =
+        "tvix-crate2nix-check-"
+        + (builtins.substring 0 8 (builtins.hashFile "sha256" ./Cargo.lock))
+        + "-"
+        + (builtins.substring 0 8 (builtins.hashFile "sha256" ./Cargo.nix));
 
-      nativeBuildInputs = with pkgs; [ git cacert cargo ];
+      nativeBuildInputs = with pkgs; [
+        git
+        cacert
+        cargo
+      ];
       buildPhase = ''
         export CARGO_HOME=$(mktemp -d)
 
@@ -159,10 +171,7 @@ in
     };
 
   # Provide the Tvix logo in both .webp and .png format.
-  logo = pkgs.runCommand "logo"
-    {
-      nativeBuildInputs = [ pkgs.imagemagick ];
-    } ''
+  logo = pkgs.runCommand "logo" { nativeBuildInputs = [ pkgs.imagemagick ]; } ''
     mkdir -p $out
     cp ${./logo.webp} $out/logo.webp
     convert $out/logo.webp $out/logo.png
@@ -191,9 +200,7 @@ in
       rustPlatform.cargoSetupHook
     ];
 
-    buildInputs = [
-      pkgs.fuse
-    ] ++ iconvDarwinDep;
+    buildInputs = [ pkgs.fuse ] ++ iconvDarwinDep;
 
     buildPhase = ''
       cargo doc --document-private-items
@@ -208,9 +215,7 @@ in
     name = "tvix-clippy";
     PROTO_ROOT = protos;
 
-    buildInputs = [
-      pkgs.fuse
-    ];
+    buildInputs = [ pkgs.fuse ];
     nativeBuildInputs = with pkgs; [
       cargo
       clippy

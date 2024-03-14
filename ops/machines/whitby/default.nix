@@ -1,4 +1,9 @@
-{ depot, lib, pkgs, ... }: # readTree options
+{
+  depot,
+  lib,
+  pkgs,
+  ...
+}: # readTree options
 { config, ... }: # passed by module system
 
 let
@@ -81,13 +86,9 @@ in
           enable = true;
           port = 2222;
           authorizedKeys =
-            depot.users.tazjin.keys.all
-            ++ depot.users.lukegb.keys.all
-            ++ [ depot.users.aspen.keys.whitby ];
+            depot.users.tazjin.keys.all ++ depot.users.lukegb.keys.all ++ [ depot.users.aspen.keys.whitby ];
 
-          hostKeys = [
-            /etc/secrets/initrd_host_ed25519_key
-          ];
+          hostKeys = [ /etc/secrets/initrd_host_ed25519_key ];
         };
 
         # this will launch the zfs password prompt on login and kill the
@@ -153,7 +154,14 @@ in
       interface = "enp196s0";
     };
 
-    firewall.allowedTCPPorts = [ 22 80 443 4238 8443 29418 ];
+    firewall.allowedTCPPorts = [
+      22
+      80
+      443
+      4238
+      8443
+      29418
+    ];
     firewall.allowedUDPPorts = [ 8443 ];
 
     interfaces.enp196s0.useDHCP = true;
@@ -198,12 +206,9 @@ in
 
     sshServe = {
       enable = true;
-      keys = with depot.users;
-        tazjin.keys.all
-        ++ lukegb.keys.all
-        ++ [ aspen.keys.whitby ]
-        ++ sterni.keys.all
-      ;
+      keys =
+        with depot.users;
+        tazjin.keys.all ++ lukegb.keys.all ++ [ aspen.keys.whitby ] ++ sterni.keys.all;
     };
   };
 
@@ -345,7 +350,10 @@ in
   # Start the Gerrit->IRC bot
   services.depot.clbot = {
     enable = true;
-    channels = [ "#tvix-dev" "#tvl" ];
+    channels = [
+      "#tvix-dev"
+      "#tvl"
+    ];
 
     # See //fun/clbot for details.
     flags = {
@@ -403,9 +411,7 @@ in
           # Note: irccat means 'ident' where it says 'realname', so
           # this is critical for connecting to ZNC.
           realname = "tvlbot";
-          channels = [
-            "#tvl"
-          ];
+          channels = [ "#tvl" ];
         };
       };
     };
@@ -448,14 +454,14 @@ in
       hostnossl all all ::1/128  password
     '';
 
-    ensureDatabases = [
-      "panettone"
-    ];
+    ensureDatabases = [ "panettone" ];
 
-    ensureUsers = [{
-      name = "panettone";
-      ensureDBOwnership = true;
-    }];
+    ensureUsers = [
+      {
+        name = "panettone";
+        ensureDBOwnership = true;
+      }
+    ];
   };
 
   services.postgresqlBackup = {
@@ -476,28 +482,28 @@ in
 
   services.fail2ban.enable = true;
 
-  environment.systemPackages = (with pkgs; [
-    bat
-    bb
-    curl
-    direnv
-    emacs-nox
-    fd
-    git
-    htop
-    hyperfine
-    jq
-    nano
-    nvd
-    ripgrep
-    tree
-    unzip
-    vim
-    zfs
-    zfstools
-  ]) ++ (with depot; [
-    ops.deploy-whitby
-  ]);
+  environment.systemPackages =
+    (with pkgs; [
+      bat
+      bb
+      curl
+      direnv
+      emacs-nox
+      fd
+      git
+      htop
+      hyperfine
+      jq
+      nano
+      nvd
+      ripgrep
+      tree
+      unzip
+      vim
+      zfs
+      zfstools
+    ])
+    ++ (with depot; [ ops.deploy-whitby ]);
 
   # Required for prometheus to be able to scrape stats
   services.nginx.statusPage = true;
@@ -526,20 +532,22 @@ in
       };
     };
 
-    scrapeConfigs = [{
-      job_name = "node";
-      scrape_interval = "5s";
-      static_configs = [{
-        targets = [ "localhost:${toString config.services.prometheus.exporters.node.port}" ];
-      }];
-    }
+    scrapeConfigs = [
+      {
+        job_name = "node";
+        scrape_interval = "5s";
+        static_configs = [
+          { targets = [ "localhost:${toString config.services.prometheus.exporters.node.port}" ]; }
+        ];
+      }
       {
         job_name = "nginx";
         scrape_interval = "5s";
-        static_configs = [{
-          targets = [ "localhost:${toString config.services.prometheus.exporters.nginx.port}" ];
-        }];
-      }];
+        static_configs = [
+          { targets = [ "localhost:${toString config.services.prometheus.exporters.nginx.port}" ]; }
+        ];
+      }
+    ];
   };
 
   services.grafana = {
@@ -589,11 +597,13 @@ in
 
     provision = {
       enable = true;
-      datasources.settings.datasources = [{
-        name = "Prometheus";
-        type = "prometheus";
-        url = "http://localhost:9090";
-      }];
+      datasources.settings.datasources = [
+        {
+          name = "Prometheus";
+          type = "prometheus";
+          url = "http://localhost:9090";
+        }
+      ];
     };
   };
 
@@ -625,13 +635,17 @@ in
 
   # Allow Keycloak access to the LDAP module by forcing in the JVM
   # configuration
-  systemd.services.keycloak.environment.PREPEND_JAVA_OPTS =
-    "--add-exports=java.naming/com.sun.jndi.ldap=ALL-UNNAMED";
+  systemd.services.keycloak.environment.PREPEND_JAVA_OPTS = "--add-exports=java.naming/com.sun.jndi.ldap=ALL-UNNAMED";
 
   security.sudo.extraRules = [
     {
       groups = [ "wheel" ];
-      commands = [{ command = "ALL"; options = [ "NOPASSWD" ]; }];
+      commands = [
+        {
+          command = "ALL";
+          options = [ "NOPASSWD" ];
+        }
+      ];
     }
   ];
 

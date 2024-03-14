@@ -1,9 +1,7 @@
 { config, pkgs, ... }:
 
 {
-  imports = [
-    (throw "Pick a machine from ./machines")
-  ];
+  imports = [ (throw "Pick a machine from ./machines") ];
 
   # Let Home Manager install and manage itself.
   programs.home-manager.enable = true;

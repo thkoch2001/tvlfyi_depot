@@ -2,29 +2,15 @@
 
 let
 
-  inherit (depot.nix.runTestsuite)
-    runTestsuite
-    it
-    assertEq
-    ;
+  inherit (depot.nix.runTestsuite) runTestsuite it assertEq;
 
-  inherit (depot.users.sterni.nix)
-    int
-    string
-    fun
-    ;
+  inherit (depot.users.sterni.nix) int string fun;
 
   testBounds = it "checks minBound and maxBound" [
-    (assertEq "maxBound is the maxBound" true
-      (int.maxBound + 1 < int.maxBound))
-    (assertEq "minBound is the minBound" true
-      (int.minBound - 1 > int.minBound))
-    (assertEq "maxBound overflows to minBound"
-      (int.maxBound + 1)
-      int.minBound)
-    (assertEq "minBound overflows to maxBound"
-      (int.minBound - 1)
-      int.maxBound)
+    (assertEq "maxBound is the maxBound" true (int.maxBound + 1 < int.maxBound))
+    (assertEq "minBound is the minBound" true (int.minBound - 1 > int.minBound))
+    (assertEq "maxBound overflows to minBound" (int.maxBound + 1) int.minBound)
+    (assertEq "minBound overflows to maxBound" (int.minBound - 1) int.maxBound)
   ];
 
   expectedBytes = [
@@ -286,34 +272,67 @@ let
     "FF"
   ];
 
-  hexByte = i: string.fit { width = 2; char = "0"; } (int.toHex i);
+  hexByte =
+    i:
+    string.fit {
+      width = 2;
+      char = "0";
+    } (int.toHex i);
 
   hexInts = [
-    { left = 0; right = "0"; }
-    { left = 1; right = "1"; }
-    { left = 11; right = "B"; }
-    { left = 123; right = "7B"; }
-    { left = 9000; right = "2328"; }
-    { left = 2323; right = "913"; }
-    { left = 4096; right = "1000"; }
-    { left = int.maxBound; right = "7FFFFFFFFFFFFFFF"; }
-    { left = int.minBound; right = "-8000000000000000"; }
+    {
+      left = 0;
+      right = "0";
+    }
+    {
+      left = 1;
+      right = "1";
+    }
+    {
+      left = 11;
+      right = "B";
+    }
+    {
+      left = 123;
+      right = "7B";
+    }
+    {
+      left = 9000;
+      right = "2328";
+    }
+    {
+      left = 2323;
+      right = "913";
+    }
+    {
+      left = 4096;
+      right = "1000";
+    }
+    {
+      left = int.maxBound;
+      right = "7FFFFFFFFFFFFFFF";
+    }
+    {
+      left = int.minBound;
+      right = "-8000000000000000";
+    }
   ];
 
-  testHex = it "checks conversion to hex" (lib.flatten [
-    (lib.imap0
-      (i: hex: [
+  testHex = it "checks conversion to hex" (
+    lib.flatten [
+      (lib.imap0 (i: hex: [
         (assertEq "hexByte ${toString i} == ${hex}" (hexByte i) hex)
         (assertEq "${toString i} == fromHex ${hex}" i (int.fromHex hex))
-      ])
-      expectedBytes)
-    (builtins.map
-      ({ left, right }: [
-        (assertEq "toHex ${toString left} == ${right}" (int.toHex left) right)
-        (assertEq "${toString left} == fromHex ${right}" left (int.fromHex right))
-      ])
-      hexInts)
-  ]);
+      ]) expectedBytes)
+      (builtins.map (
+        { left, right }:
+        [
+          (assertEq "toHex ${toString left} == ${right}" (int.toHex left) right)
+          (assertEq "${toString left} == fromHex ${right}" left (int.fromHex right))
+        ]
+      ) hexInts)
+    ]
+  );
 
   testBasic = it "checks basic int operations" [
     (assertEq "122 is even" (int.even 122 && !(int.odd 122)) true)
@@ -321,39 +340,112 @@ let
   ];
 
   expNumbers = [
-    { left = -3; right = 0.125; }
-    { left = -2; right = 0.25; }
-    { left = -1; right = 0.5; }
-    { left = 0; right = 1; }
-    { left = 1; right = 2; }
-    { left = 2; right = 4; }
-    { left = 3; right = 8; }
-    { left = 4; right = 16; }
-    { left = 5; right = 32; }
-    { left = 16; right = 65536; }
+    {
+      left = -3;
+      right = 0.125;
+    }
+    {
+      left = -2;
+      right = 0.25;
+    }
+    {
+      left = -1;
+      right = 0.5;
+    }
+    {
+      left = 0;
+      right = 1;
+    }
+    {
+      left = 1;
+      right = 2;
+    }
+    {
+      left = 2;
+      right = 4;
+    }
+    {
+      left = 3;
+      right = 8;
+    }
+    {
+      left = 4;
+      right = 16;
+    }
+    {
+      left = 5;
+      right = 32;
+    }
+    {
+      left = 16;
+      right = 65536;
+    }
   ];
 
-  testExp = it "checks exponentiation"
-    (builtins.map
-      ({ left, right }:
-        assertEq
-          "2 ^ ${toString left} == ${toString right}"
-          (int.exp 2 left)
-          right)
-      expNumbers);
+  testExp = it "checks exponentiation" (
+    builtins.map (
+      { left, right }: assertEq "2 ^ ${toString left} == ${toString right}" (int.exp 2 left) right
+    ) expNumbers
+  );
 
   shifts = [
-    { a = 2; b = 5; c = 64; op = "<<"; }
-    { a = -2; b = 5; c = -64; op = "<<"; }
-    { a = 123; b = 4; c = 1968; op = "<<"; }
-    { a = 1; b = 8; c = 256; op = "<<"; }
-    { a = 256; b = 8; c = 1; op = ">>"; }
-    { a = 374; b = 2; c = 93; op = ">>"; }
-    { a = 2; b = 2; c = 0; op = ">>"; }
-    { a = 99; b = 9; c = 0; op = ">>"; }
+    {
+      a = 2;
+      b = 5;
+      c = 64;
+      op = "<<";
+    }
+    {
+      a = -2;
+      b = 5;
+      c = -64;
+      op = "<<";
+    }
+    {
+      a = 123;
+      b = 4;
+      c = 1968;
+      op = "<<";
+    }
+    {
+      a = 1;
+      b = 8;
+      c = 256;
+      op = "<<";
+    }
+    {
+      a = 256;
+      b = 8;
+      c = 1;
+      op = ">>";
+    }
+    {
+      a = 374;
+      b = 2;
+      c = 93;
+      op = ">>";
+    }
+    {
+      a = 2;
+      b = 2;
+      c = 0;
+      op = ">>";
+    }
+    {
+      a = 99;
+      b = 9;
+      c = 0;
+      op = ">>";
+    }
   ];
 
-  checkShift = { a, b, c, op }@args:
+  checkShift =
+    {
+      a,
+      b,
+      c,
+      op,
+    }@args:
     let
       f = string.match op {
         "<<" = int.bitShiftL;
@@ -362,88 +454,125 @@ let
     in
     assertEq "${toString a} ${op} ${toString b} == ${toString c}" (f a b) c;
 
-  checkShiftRDivExp = n:
-    assertEq "${toString n} >> 5 == ${toString n} / 2 ^ 5"
-      (int.bitShiftR n 5)
-      (n / (int.exp 2 5));
+  checkShiftRDivExp =
+    n: assertEq "${toString n} >> 5 == ${toString n} / 2 ^ 5" (int.bitShiftR n 5) (n / (int.exp 2 5));
 
-  checkShiftLMulExp = n:
-    assertEq "${toString n} >> 6 == ${toString n} * 2 ^ 6"
-      (int.bitShiftL n 5)
-      (n * (int.exp 2 5));
+  checkShiftLMulExp =
+    n: assertEq "${toString n} >> 6 == ${toString n} * 2 ^ 6" (int.bitShiftL n 5) (n * (int.exp 2 5));
 
-  testBit = it "checks bitwise operations" (lib.flatten [
-    (builtins.map checkShift shifts)
-    (builtins.map checkShiftRDivExp [
-      1
-      2
-      3
-      5
-      7
-      23
-      1623
-      238
-      34
-      348
-      2834
-      834
-      348
-    ])
-    (builtins.map checkShiftLMulExp [
-      1
-      2
-      3
-      5
-      7
-      23
-      384
-      3
-      2
-      5991
-      85109
-      38
-    ])
-  ]);
+  testBit = it "checks bitwise operations" (
+    lib.flatten [
+      (builtins.map checkShift shifts)
+      (builtins.map checkShiftRDivExp [
+        1
+        2
+        3
+        5
+        7
+        23
+        1623
+        238
+        34
+        348
+        2834
+        834
+        348
+      ])
+      (builtins.map checkShiftLMulExp [
+        1
+        2
+        3
+        5
+        7
+        23
+        384
+        3
+        2
+        5991
+        85109
+        38
+      ])
+    ]
+  );
 
   divisions = [
-    { a = 2; b = 1; c = 2; rem = 0; }
-    { a = 2; b = 2; c = 1; rem = 0; }
-    { a = 20; b = 10; c = 2; rem = 0; }
-    { a = 12; b = 5; c = 2; rem = 2; }
-    { a = 23; b = 4; c = 5; rem = 3; }
+    {
+      a = 2;
+      b = 1;
+      c = 2;
+      rem = 0;
+    }
+    {
+      a = 2;
+      b = 2;
+      c = 1;
+      rem = 0;
+    }
+    {
+      a = 20;
+      b = 10;
+      c = 2;
+      rem = 0;
+    }
+    {
+      a = 12;
+      b = 5;
+      c = 2;
+      rem = 2;
+    }
+    {
+      a = 23;
+      b = 4;
+      c = 5;
+      rem = 3;
+    }
   ];
 
-  checkQuot = n: { a, b, c, rem }: [
-    (assertEq "${n}: quot result" (int.quot a b) c)
-    (assertEq "${n}: rem result" (int.rem a b) rem)
-    (assertEq "${n}: quotRem law" ((int.quot a b) * b + (int.rem a b)) a)
-  ];
+  checkQuot =
+    n:
+    {
+      a,
+      b,
+      c,
+      rem,
+    }:
+    [
+      (assertEq "${n}: quot result" (int.quot a b) c)
+      (assertEq "${n}: rem result" (int.rem a b) rem)
+      (assertEq "${n}: quotRem law" ((int.quot a b) * b + (int.rem a b)) a)
+    ];
 
-  testQuotRem = it "checks integer quotient and remainder"
-    (lib.flatten [
+  testQuotRem = it "checks integer quotient and remainder" (
+    lib.flatten [
       (builtins.map (checkQuot "+a / +b") divisions)
-      (builtins.map
-        (fun.rl (checkQuot "-a / +b") (x: x // {
+      (builtins.map (fun.rl (checkQuot "-a / +b") (
+        x:
+        x
+        // {
           a = -x.a;
           c = -x.c;
           rem = -x.rem;
-        }))
-        divisions)
-      (builtins.map
-        (fun.rl (checkQuot "+a / -b") (x: x // {
+        }
+      )) divisions)
+      (builtins.map (fun.rl (checkQuot "+a / -b") (
+        x:
+        x
+        // {
           b = -x.b;
           c = -x.c;
-        }))
-        divisions)
-      (builtins.map
-        (fun.rl (checkQuot "-a / -b") (x: x // {
+        }
+      )) divisions)
+      (builtins.map (fun.rl (checkQuot "-a / -b") (
+        x:
+        x
+        // {
           a = -x.a;
           b = -x.b;
           rem = -x.rem;
-        }))
-        divisions)
-    ]);
-
+        }
+      )) divisions)
+    ]
+  );
 in
 runTestsuite "nix.int" [
   testBounds

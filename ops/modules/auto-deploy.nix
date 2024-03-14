@@ -4,7 +4,13 @@
 # Deploys can be stopped in emergency situations by creating an empty
 # file called `stop` in the state directory of the auto-deploy service
 # (typically /var/lib/auto-deploy).
-{ depot, config, lib, pkgs, ... }:
+{
+  depot,
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 let
   cfg = config.services.depot.auto-deploy;

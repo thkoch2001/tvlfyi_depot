@@ -1,4 +1,9 @@
-{ depot, lib, pkgs, ... }:
+{
+  depot,
+  lib,
+  pkgs,
+  ...
+}:
 
 with depot.nix.yants;
 
@@ -15,30 +20,37 @@ let
     footer = "";
   };
 
-  posts = sort (x: y: x.date > y.date)
-    (filter includePost (list post (import ./posts.nix)));
+  posts = sort (x: y: x.date > y.date) (filter includePost (list post (import ./posts.nix)));
 
   rendered = pkgs.runCommand "blog-posts" { } ''
     mkdir -p $out
 
-    ${lib.concatStringsSep "\n" (map (post:
-      "cp ${renderPost config post} $out/${post.key}.html"
-    ) posts)}
+    ${lib.concatStringsSep "\n" (
+      map (post: "cp ${renderPost config post} $out/${post.key}.html") posts
+    )}
   '';
 
-  formatDate = date: readFile (pkgs.runCommand "date" { } ''
-    date --date='@${toString date}' '+%B %e, %Y' > $out
-  '');
+  formatDate =
+    date:
+    readFile (
+      pkgs.runCommand "date" { } ''
+        date --date='@${toString date}' '+%B %e, %Y' > $out
+      ''
+    );
 
   postsHtml = renderTemplate ./fragments/posts.html {
     postsHtml = lib.concatStringsSep "\n" (map toPostHtml posts);
   };
 
-  toPostHtml = post: readFile (renderTemplate ./fragments/post.html {
-    postUrl = "${config.baseUrl}/posts/${post.key}.html";
-    postTitle = post.title;
-    postDate = formatDate post.date;
-  });
+  toPostHtml =
+    post:
+    readFile (
+      renderTemplate ./fragments/post.html {
+        postUrl = "${config.baseUrl}/posts/${post.key}.html";
+        postTitle = post.title;
+        postDate = formatDate post.date;
+      }
+    );
 in
 pkgs.runCommand "blog" { } ''
   mkdir -p $out

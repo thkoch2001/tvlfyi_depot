@@ -4,14 +4,16 @@ let
   # TODO(sterni): find a better place for this: is dot time //fun?
 
   # get the email address of a depot user from //ops/users
-  findEmail = user:
+  findEmail =
+    user:
     let
       res = builtins.filter ({ username, ... }: username == user) depot.ops.users;
       len = builtins.length res;
     in
-    if len == 1
-    then (builtins.head res).email
-    else builtins.throw "findEmail: got ${toString len} results instead of 1";
+    if len == 1 then
+      (builtins.head res).email
+    else
+      builtins.throw "findEmail: got ${toString len} results instead of 1";
 
   # dot-time(7) man page, ported from dotti.me
   dot-time = rec {
@@ -63,8 +65,5 @@ let
       .An sterni Aq Mt ${findEmail "sterni"} .
     '';
   };
-
 in
-depot.nix.buildManPages "dot-time" { } [
-  dot-time
-]
+depot.nix.buildManPages "dot-time" { } [ dot-time ]

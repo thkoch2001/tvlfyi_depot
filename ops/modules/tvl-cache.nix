@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 {
   options = {
@@ -7,13 +12,9 @@
 
   config = lib.mkIf config.tvl.cache.enable {
     nix.settings = {
-      trusted-public-keys = [
-        "cache.tvl.su:kjc6KOMupXc1vHVufJUoDUYeLzbwSr9abcAKdn/U1Jk="
-      ];
+      trusted-public-keys = [ "cache.tvl.su:kjc6KOMupXc1vHVufJUoDUYeLzbwSr9abcAKdn/U1Jk=" ];
 
-      substituters = [
-        "https://cache.tvl.su"
-      ];
+      substituters = [ "https://cache.tvl.su" ];
     };
   };
 }

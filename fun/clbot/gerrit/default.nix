@@ -6,9 +6,7 @@ let
 in
 depot.nix.buildGo.package {
   name = "code.tvl.fyi/fun/clbot/gerrit";
-  srcs = [
-    ./watcher.go
-  ];
+  srcs = [ ./watcher.go ];
   deps = [
     clbot.gerrit.gerritevents
     clbot.backoffutil

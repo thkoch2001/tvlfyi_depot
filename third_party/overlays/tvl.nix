@@ -1,13 +1,20 @@
 # This overlay is used to make TVL-specific modifications in the
 # nixpkgs tree, where required.
-{ lib, depot, localSystem, ... }:
+{
+  lib,
+  depot,
+  localSystem,
+  ...
+}:
 
 self: super:
 depot.nix.readTree.drvTargets {
-  nix_2_3 = (super.nix_2_3.override {
-    # flaky tests, long painful build, see https://github.com/NixOS/nixpkgs/pull/266443
-    withAWS = false;
-  });
+  nix_2_3 = (
+    super.nix_2_3.override {
+      # flaky tests, long painful build, see https://github.com/NixOS/nixpkgs/pull/266443
+      withAWS = false;
+    }
+  );
   nix = self.nix_2_3;
   nix_latest = super.nix.override ({
     # flaky tests, long painful build, see https://github.com/NixOS/nixpkgs/pull/266443
@@ -27,43 +34,42 @@ depot.nix.readTree.drvTargets {
 
   home-manager = super.home-manager.overrideAttrs (_: {
     src = depot.third_party.sources.home-manager;
-    version = "git-"
-      + builtins.substring 0 7 depot.third_party.sources.home-manager.rev;
+    version = "git-" + builtins.substring 0 7 depot.third_party.sources.home-manager.rev;
   });
 
   # Add our Emacs packages to the fixpoint
-  emacsPackagesFor = emacs: (
-    (super.emacsPackagesFor emacs).overrideScope (eself: esuper: {
-      tvlPackages = depot.tools.emacs-pkgs // depot.third_party.emacs;
+  emacsPackagesFor =
+    emacs:
+    ((super.emacsPackagesFor emacs).overrideScope (
+      eself: esuper: {
+        tvlPackages = depot.tools.emacs-pkgs // depot.third_party.emacs;
 
-      # Use the notmuch from nixpkgs instead of from the Emacs
-      # overlay, to avoid versions being out of sync.
-      notmuch = super.notmuch.emacs;
+        # Use the notmuch from nixpkgs instead of from the Emacs
+        # overlay, to avoid versions being out of sync.
+        notmuch = super.notmuch.emacs;
 
-      # Build EXWM with the depot sources instead.
-      depotExwm = eself.callPackage depot.third_party.exwm.override { };
+        # Build EXWM with the depot sources instead.
+        depotExwm = eself.callPackage depot.third_party.exwm.override { };
 
-      # Workaround for magit checking the git version at load time
-      magit = esuper.magit.overrideAttrs (_: {
-        propagatedNativeBuildInputs = [
-          self.git
-        ];
-      });
+        # Workaround for magit checking the git version at load time
+        magit = esuper.magit.overrideAttrs (_: {
+          propagatedNativeBuildInputs = [ self.git ];
+        });
 
-      # Pin xelb to a newer one until the new maintainers do a release.
-      xelb = eself.trivialBuild {
-        pname = "xelb";
-        version = "0.19-dev"; # invented version, last actual release was 0.18
+        # Pin xelb to a newer one until the new maintainers do a release.
+        xelb = eself.trivialBuild {
+          pname = "xelb";
+          version = "0.19-dev"; # invented version, last actual release was 0.18
 
-        src = self.fetchFromGitHub {
-          owner = "emacs-exwm";
-          repo = "xelb";
-          rev = "86089eba2de6c818bfa2fac075cb7ad876262798";
-          sha256 = "1mmlrd2zpcwiv8gh10y7lrpflnbmsycdascrxjr3bfcwa8yx7901";
+          src = self.fetchFromGitHub {
+            owner = "emacs-exwm";
+            repo = "xelb";
+            rev = "86089eba2de6c818bfa2fac075cb7ad876262798";
+            sha256 = "1mmlrd2zpcwiv8gh10y7lrpflnbmsycdascrxjr3bfcwa8yx7901";
+          };
         };
-      };
-    })
-  );
+      }
+    ));
 
   # dottime support for notmuch
   notmuch = super.notmuch.overrideAttrs (old: {
@@ -77,11 +83,14 @@ depot.nix.readTree.drvTargets {
   nix-serve = super.nix-serve.override { nix = self.nix_2_3; };
 
   # Avoid builds of mkShell derivations in CI.
-  mkShell = super.lib.makeOverridable (args: (super.mkShell args).overrideAttrs (_: {
-    passthru = {
-      meta.ci.skip = true;
-    };
-  }));
+  mkShell = super.lib.makeOverridable (
+    args:
+    (super.mkShell args).overrideAttrs (_: {
+      passthru = {
+        meta.ci.skip = true;
+      };
+    })
+  );
 
   crate2nix = super.rustPlatform.buildRustPackage rec {
     pname = "crate2nix";
@@ -111,7 +120,16 @@ depot.nix.readTree.drvTargets {
 
     postFixup = ''
       wrapProgram $out/bin/crate2nix \
-          --suffix PATH ":" ${lib.makeBinPath (with self; [ cargo nix_latest nix-prefetch-git ])}
+          --suffix PATH ":" ${
+            lib.makeBinPath (
+              with self;
+              [
+                cargo
+                nix_latest
+                nix-prefetch-git
+              ]
+            )
+          }
 
       rm -rf $out/lib $out/bin/crate2nix.d
       mkdir -p \

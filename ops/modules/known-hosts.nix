@@ -4,7 +4,10 @@
 {
   programs.ssh.knownHosts = {
     whitby = {
-      hostNames = [ "whitby.tvl.fyi" "whitby.tvl.su" ];
+      hostNames = [
+        "whitby.tvl.fyi"
+        "whitby.tvl.su"
+      ];
       publicKey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAILNh/w4BSKov0jdz3gKBc98tpoLta5bb87fQXWBhAl2I";
     };
 

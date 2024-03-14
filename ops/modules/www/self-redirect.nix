@@ -9,9 +9,7 @@ let
   host = "${config.networking.hostName}.${config.networking.domain}";
 in
 {
-  imports = [
-    ./base.nix
-  ];
+  imports = [ ./base.nix ];
 
   config.services.nginx.virtualHosts."${host}" = {
     serverName = host;

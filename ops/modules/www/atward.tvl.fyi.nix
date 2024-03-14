@@ -2,9 +2,7 @@
 { config, ... }:
 
 {
-  imports = [
-    ./base.nix
-  ];
+  imports = [ ./base.nix ];
 
   config = {
     # Short link support (i.e. plain http://at) for users with a

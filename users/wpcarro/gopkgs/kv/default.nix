@@ -2,7 +2,5 @@
 
 depot.nix.buildGo.package {
   name = "kv";
-  srcs = [
-    ./kv.go
-  ];
+  srcs = [ ./kv.go ];
 }

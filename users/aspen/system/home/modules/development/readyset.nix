@@ -1,9 +1,12 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 {
-  imports = [
-    ./rust.nix
-  ];
+  imports = [ ./rust.nix ];
 
   home.packages = with pkgs; [
     # These go in $PATH so I can run it from rofi and parent to my WM

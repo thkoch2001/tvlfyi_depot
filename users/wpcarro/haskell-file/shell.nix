@@ -1,5 +1,3 @@
 { depot, ... }:
 
-depot.users.wpcarro.buildHaskell.shell {
-  deps = hpkgs: [ ];
-}
+depot.users.wpcarro.buildHaskell.shell { deps = hpkgs: [ ]; }

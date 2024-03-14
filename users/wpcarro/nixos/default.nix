@@ -5,7 +5,8 @@ let
     ava
     kyoko
     marcus
-    tarasco;
+    tarasco
+    ;
 
   systemFor = sys: (depot.ops.nixos.nixosFor sys).system;
 in

@@ -5,15 +5,22 @@
 # - restic's cache lives in /var/backup/restic/cache
 # - repository password lives in /var/backup/restic/secret
 # - object storage credentials in /var/backup/restic/glesys-key
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 let
   cfg = config.services.depot.restic;
   description = "Restic backups to GleSYS";
-  mkStringOption = default: lib.mkOption {
-    inherit default;
-    type = lib.types.str;
-  };
+  mkStringOption =
+    default:
+    lib.mkOption {
+      inherit default;
+      type = lib.types.str;
+    };
 in
 {
   options.services.depot.restic = {
@@ -24,15 +31,19 @@ in
     repository = mkStringOption config.networking.hostName;
     interval = mkStringOption "hourly";
 
-    paths = with lib; mkOption {
-      description = "Directories that should be backed up";
-      type = types.listOf types.str;
-    };
+    paths =
+      with lib;
+      mkOption {
+        description = "Directories that should be backed up";
+        type = types.listOf types.str;
+      };
 
-    exclude = with lib; mkOption {
-      description = "Files that should be excluded from backups";
-      type = types.listOf types.str;
-    };
+    exclude =
+      with lib;
+      mkOption {
+        description = "Files that should be excluded from backups";
+        type = types.listOf types.str;
+      };
   };
 
   config = lib.mkIf cfg.enable {
@@ -47,8 +58,7 @@ in
         RESTIC_PASSWORD_FILE = "/var/backup/restic/secret";
         RESTIC_CACHE_DIR = "/var/backup/restic/cache";
 
-        RESTIC_EXCLUDE_FILE =
-          builtins.toFile "exclude-files" (lib.concatStringsSep "\n" cfg.exclude);
+        RESTIC_EXCLUDE_FILE = builtins.toFile "exclude-files" (lib.concatStringsSep "\n" cfg.exclude);
       };
     };
 

@@ -1,11 +1,12 @@
-{ mkDerivation
-, base
-, bytestring
-, lib
-, monad-logger
-, pa-prelude
-, text
-, typed-process
+{
+  mkDerivation,
+  base,
+  bytestring,
+  lib,
+  monad-logger,
+  pa-prelude,
+  text,
+  typed-process,
 }:
 mkDerivation {
   pname = "pa-run-command";

@@ -3,7 +3,13 @@
 # The account itself is a Yandex 360 account in the tvl.su organisation, which
 # is accessed via IMAP. Yandex takes care of spam filtering for us, so there is
 # no particular SpamAssassin or other configuration.
-{ config, depot, lib, pkgs, ... }:
+{
+  config,
+  depot,
+  lib,
+  pkgs,
+  ...
+}:
 
 let
   cfg = config.services.depot.inbox;
@@ -89,9 +95,7 @@ in
         coderepo = [ "depot" ];
         url = "https://inbox.tvl.su/depot";
 
-        watch = [
-          "maildir:/var/lib/public-inbox/depot-imap/INBOX/"
-        ];
+        watch = [ "maildir:/var/lib/public-inbox/depot-imap/INBOX/" ];
 
         newsgroup = "su.tvl.depot";
       };

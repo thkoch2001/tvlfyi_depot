@@ -6,9 +6,7 @@ let
     name = "s-xml-source";
     src = pkgs.lispPackages.s-xml.src;
 
-    patches = [
-      ./0001-fix-definition-order-in-xml.lisp.patch
-    ];
+    patches = [ ./0001-fix-definition-order-in-xml.lisp.patch ];
   };
 in
 depot.nix.buildLisp.library {

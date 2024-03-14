@@ -20,8 +20,15 @@ let
   agenixSecret = struct "agenixSecret" { publicKeys = list ssh-pubkey; };
 in
 
-defun [ path (attrs agenixSecret) (attrs any) ]
-  (path: secrets:
-  depot.nix.readTree.drvTargets
-    # Import each secret into the Nix store
-    (builtins.mapAttrs (name: _: "${path}/${name}") secrets))
+defun
+  [
+    path
+    (attrs agenixSecret)
+    (attrs any)
+  ]
+  (
+    path: secrets:
+    depot.nix.readTree.drvTargets
+      # Import each secret into the Nix store
+      (builtins.mapAttrs (name: _: "${path}/${name}") secrets)
+  )

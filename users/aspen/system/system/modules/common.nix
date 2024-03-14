@@ -1,9 +1,13 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 let
 
   depot = import ../../../../.. { };
-
 in
 
 with lib;
@@ -75,9 +79,7 @@ with lib;
     };
   };
 
-  services.udev.packages = with pkgs; [
-    yubikey-personalization
-  ];
+  services.udev.packages = with pkgs; [ yubikey-personalization ];
 
   services.pcscd.enable = true;
 

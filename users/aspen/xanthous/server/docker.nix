@@ -1,6 +1,7 @@
-{ depot ? import ../../../.. { }
-, pkgs ? depot.third_party.nixpkgs
-, ...
+{
+  depot ? import ../../../.. { },
+  pkgs ? depot.third_party.nixpkgs,
+  ...
 }:
 
 let
@@ -10,7 +11,10 @@ in
 pkgs.dockerTools.buildLayeredImage {
   name = "xanthous-server";
   tag = "latest";
-  contents = [ xanthous xanthous-server ];
+  contents = [
+    xanthous
+    xanthous-server
+  ];
   config = {
     Cmd = [
       "${xanthous-server}/bin/xanthous-server"

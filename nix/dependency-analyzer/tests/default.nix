@@ -1,16 +1,9 @@
 { depot, lib, ... }:
 
 let
-  inherit (depot.nix.runTestsuite)
-    runTestsuite
-    assertEq
-    it
-    ;
+  inherit (depot.nix.runTestsuite) runTestsuite assertEq it;
 
-  inherit (depot.nix.dependency-analyzer)
-    plainDrvDepMap
-    drvsToPaths
-    ;
+  inherit (depot.nix.dependency-analyzer) plainDrvDepMap drvsToPaths;
 
   knownDrvs = drvsToPaths (
     builtins.filter lib.isDerivation (builtins.attrValues depot.third_party.lisp)
@@ -24,13 +17,11 @@ in
 
 runTestsuite "dependency-analyzer" [
   (it "checks plainDrvDepMap properties" [
-    (assertEq "all known drvs are marked known"
-      (builtins.all (drv: exampleMap.${drv}.known) knownDrvsNoContext)
-      true)
-    (assertEq "no unknown drv is marked known"
-      (builtins.all (entry: !entry.known) (
-        builtins.attrValues (builtins.removeAttrs exampleMap knownDrvsNoContext)
-      ))
-      true)
+    (assertEq "all known drvs are marked known" (builtins.all (
+      drv: exampleMap.${drv}.known
+    ) knownDrvsNoContext) true)
+    (assertEq "no unknown drv is marked known" (builtins.all (entry: !entry.known) (
+      builtins.attrValues (builtins.removeAttrs exampleMap knownDrvsNoContext)
+    )) true)
   ])
 ]

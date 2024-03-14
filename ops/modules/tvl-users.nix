@@ -6,20 +6,29 @@
   users = {
     users.tazjin = {
       isNormalUser = true;
-      extraGroups = [ "git" "wheel" ];
+      extraGroups = [
+        "git"
+        "wheel"
+      ];
       shell = pkgs.fish;
       openssh.authorizedKeys.keys = depot.users.tazjin.keys.all;
     };
 
     users.lukegb = {
       isNormalUser = true;
-      extraGroups = [ "git" "wheel" ];
+      extraGroups = [
+        "git"
+        "wheel"
+      ];
       openssh.authorizedKeys.keys = depot.users.lukegb.keys.all;
     };
 
     users.aspen = {
       isNormalUser = true;
-      extraGroups = [ "git" "wheel" ];
+      extraGroups = [
+        "git"
+        "wheel"
+      ];
       openssh.authorizedKeys.keys = [ depot.users.aspen.keys.whitby ];
     };
 
@@ -56,13 +65,19 @@
 
     users.sterni = {
       isNormalUser = true;
-      extraGroups = [ "git" "wheel" ];
+      extraGroups = [
+        "git"
+        "wheel"
+      ];
       openssh.authorizedKeys.keys = depot.users.sterni.keys.all;
     };
 
     users.flokli = {
       isNormalUser = true;
-      extraGroups = [ "git" "wheel" ];
+      extraGroups = [
+        "git"
+        "wheel"
+      ];
       openssh.authorizedKeys.keys = depot.users.flokli.keys.all;
     };
   };
@@ -76,8 +91,15 @@
     kitty.terminfo
   ];
 
-  security.sudo.extraRules = [{
-    groups = [ "wheel" ];
-    commands = [{ command = "ALL"; options = [ "NOPASSWD" ]; }];
-  }];
+  security.sudo.extraRules = [
+    {
+      groups = [ "wheel" ];
+      commands = [
+        {
+          command = "ALL";
+          options = [ "NOPASSWD" ];
+        }
+      ];
+    }
+  ];
 }

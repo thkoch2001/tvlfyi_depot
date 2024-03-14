@@ -18,8 +18,9 @@ buildLisp.library {
   name = "cl-json";
   deps = [ (buildLisp.bundled "asdf") ];
 
-  srcs = [ "${src}/cl-json.asd" ] ++
-    (getSrcs "src" [
+  srcs =
+    [ "${src}/cl-json.asd" ]
+    ++ (getSrcs "src" [
       "package.lisp"
       "common.lisp"
       "objects.lisp"
@@ -35,18 +36,20 @@ buildLisp.library {
       depot.third_party.lisp.cl-unicode
       depot.third_party.lisp.fiveam
     ];
-    srcs = [
-      # CLOS tests are broken upstream as well
-      # https://github.com/sharplispers/cl-json/issues/11
-      (pkgs.writeText "no-clos-tests.lisp" ''
-        (replace *features* (delete :cl-json-clos *features*))
-      '')
-    ] ++ getSrcs "t" [
-      "package.lisp"
-      "testencoder.lisp"
-      "testdecoder.lisp"
-      "testmisc.lisp"
-    ];
+    srcs =
+      [
+        # CLOS tests are broken upstream as well
+        # https://github.com/sharplispers/cl-json/issues/11
+        (pkgs.writeText "no-clos-tests.lisp" ''
+          (replace *features* (delete :cl-json-clos *features*))
+        '')
+      ]
+      ++ getSrcs "t" [
+        "package.lisp"
+        "testencoder.lisp"
+        "testdecoder.lisp"
+        "testmisc.lisp"
+      ];
 
     expression = "(fiveam:run! 'json-test::json)";
   };

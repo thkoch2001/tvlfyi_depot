@@ -1,4 +1,9 @@
-{ depot, pkgs, lib, ... }:
+{
+  depot,
+  pkgs,
+  lib,
+  ...
+}:
 
 # ytextr is a wrapper arount yt-dlp (previously youtube-dl)
 # that extracts a single video according to my preferred settings.
@@ -11,21 +16,20 @@
 # it will be fetched from the most recent nixpkgs unstable channel before running.
 
 let
-  bins = depot.nix.getBins pkgs.nix [ "nix-build" ]
-    // depot.nix.getBins pkgs.bubblewrap [ "bwrap" ];
+  bins = depot.nix.getBins pkgs.nix [ "nix-build" ] // depot.nix.getBins pkgs.bubblewrap [ "bwrap" ];
 
   # Run a command, with the given packages in scope, and `packageNamesAtRuntime` being fetched at the start in the given nix `channel`.
   nix-run-with-channel =
     {
       # The channel to get `packageNamesAtRuntime` from
-      channel
-    , # executable to run with `packageNamesAtRuntime` in PATH
+      channel,
+      # executable to run with `packageNamesAtRuntime` in PATH
       # and the argv
-      executable
-    , # A list of nixpkgs package attribute names that should be put into PATH when running `command`.
-      packageNamesAtRuntime
-    ,
-    }: depot.nix.writeExecline "nix-run-with-channel-${channel}" { } [
+      executable,
+      # A list of nixpkgs package attribute names that should be put into PATH when running `command`.
+      packageNamesAtRuntime,
+    }:
+    depot.nix.writeExecline "nix-run-with-channel-${channel}" { } [
       # TODO: prevent race condition by writing a temporary gc root
       "backtick"
       "-iE"
@@ -49,7 +53,6 @@ let
       executable
       "$@"
     ];
-
 in
 nix-run-with-channel {
   channel = "nixos-unstable";

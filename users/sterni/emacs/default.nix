@@ -1,4 +1,9 @@
-{ depot, pkgs, lib, ... }:
+{
+  depot,
+  pkgs,
+  lib,
+  ...
+}:
 
 let
   inherit (pkgs.stdenv.hostPlatform) is64bit;
@@ -14,44 +19,46 @@ let
     exec chktex -n8 "$@"
   '';
 
-  emacs = (pkgs.emacsPackagesFor pkgs.emacs29-pgtk).withPackages (epkgs: [
-    epkgs.bqn-mode
-    #epkgs.elpaPackages.ada-mode
-    epkgs.elpaPackages.rainbow-mode
-    epkgs.elpaPackages.undo-tree
-    epkgs.elpaPackages.which-key
-    epkgs.melpaPackages.adoc-mode
-    epkgs.melpaPackages.cmake-mode
-    epkgs.melpaPackages.deft
-    epkgs.melpaPackages.direnv
-    epkgs.melpaPackages.dockerfile-mode
-    epkgs.melpaPackages.editorconfig
-    epkgs.melpaPackages.elfeed
-    epkgs.melpaPackages.evil
-    epkgs.melpaPackages.evil-collection
-    epkgs.melpaPackages.flycheck
-    epkgs.melpaPackages.haskell-mode
-    epkgs.melpaPackages.hl-todo
-    epkgs.melpaPackages.jq-mode
-    epkgs.melpaPackages.lsp-haskell
-    epkgs.melpaPackages.lsp-mode
-    epkgs.melpaPackages.lsp-ui
-    epkgs.melpaPackages.magit
-    epkgs.melpaPackages.markdown-mode
-    epkgs.melpaPackages.meson-mode
-    epkgs.melpaPackages.nix-mode
-    epkgs.melpaPackages.org-clock-csv
-    epkgs.melpaPackages.paredit
-    epkgs.melpaPackages.rainbow-delimiters
-    epkgs.melpaPackages.sly
-    epkgs.melpaPackages.use-package
-    epkgs.melpaPackages.yaml-mode
-    epkgs.rust-mode
-    epkgs.tvlPackages.tvl
-    epkgs.urweb-mode
-  ] ++ lib.optionals is64bit [
-    epkgs.melpaPackages.languagetool
-  ]);
+  emacs = (pkgs.emacsPackagesFor pkgs.emacs29-pgtk).withPackages (
+    epkgs:
+    [
+      epkgs.bqn-mode
+      #epkgs.elpaPackages.ada-mode
+      epkgs.elpaPackages.rainbow-mode
+      epkgs.elpaPackages.undo-tree
+      epkgs.elpaPackages.which-key
+      epkgs.melpaPackages.adoc-mode
+      epkgs.melpaPackages.cmake-mode
+      epkgs.melpaPackages.deft
+      epkgs.melpaPackages.direnv
+      epkgs.melpaPackages.dockerfile-mode
+      epkgs.melpaPackages.editorconfig
+      epkgs.melpaPackages.elfeed
+      epkgs.melpaPackages.evil
+      epkgs.melpaPackages.evil-collection
+      epkgs.melpaPackages.flycheck
+      epkgs.melpaPackages.haskell-mode
+      epkgs.melpaPackages.hl-todo
+      epkgs.melpaPackages.jq-mode
+      epkgs.melpaPackages.lsp-haskell
+      epkgs.melpaPackages.lsp-mode
+      epkgs.melpaPackages.lsp-ui
+      epkgs.melpaPackages.magit
+      epkgs.melpaPackages.markdown-mode
+      epkgs.melpaPackages.meson-mode
+      epkgs.melpaPackages.nix-mode
+      epkgs.melpaPackages.org-clock-csv
+      epkgs.melpaPackages.paredit
+      epkgs.melpaPackages.rainbow-delimiters
+      epkgs.melpaPackages.sly
+      epkgs.melpaPackages.use-package
+      epkgs.melpaPackages.yaml-mode
+      epkgs.rust-mode
+      epkgs.tvlPackages.tvl
+      epkgs.urweb-mode
+    ]
+    ++ lib.optionals is64bit [ epkgs.melpaPackages.languagetool ]
+  );
 
   configDirectory = pkgs.symlinkJoin {
     name = "emacs.d";
@@ -71,7 +78,8 @@ let
             (setq languagetool-java-bin "${pkgs.jre}/bin/java"
                   languagetool-console-command "${pkgs.languagetool}/share/languagetool-commandline.jar"
                   languagetool-server-command "${pkgs.languagetool}/share/languagetool-server.jar")
-          '' + ''
+          ''
+          + ''
 
             ;; use bash instead of fish from SHELL for some things, as it plays
             ;; nicer with TERM=dumb, as I don't need/want vterm anyways.
@@ -85,7 +93,7 @@ let
             (setq tex-chktex-program "${chktexLessWarnings}")
 
             (provide 'nix-inject)
-        '';
+          '';
       })
     ];
     postBuild = ''
@@ -101,10 +109,11 @@ in
     --directory ${configDirectory} \
     --eval "(require 'init)"       \
     "$@"
-'').overrideAttrs (super: {
-  buildCommand = ''
-    ${super.buildCommand}
+'').overrideAttrs
+  (super: {
+    buildCommand = ''
+      ${super.buildCommand}
 
-    ln -s "${emacs}/bin/emacsclient" "$out/bin/emacsclient"
-  '';
-})
+      ln -s "${emacs}/bin/emacsclient" "$out/bin/emacsclient"
+    '';
+  })

@@ -1,12 +1,12 @@
 { depot, pkgs, ... }:
 
-let src = with pkgs; srcOnly lispPackages.physical-quantities;
-in depot.nix.buildLisp.library {
+let
+  src = with pkgs; srcOnly lispPackages.physical-quantities;
+in
+depot.nix.buildLisp.library {
   name = "physical-quantities";
 
-  deps = with depot.third_party.lisp; [
-    parseq
-  ];
+  deps = with depot.third_party.lisp; [ parseq ];
 
   srcs = map (f: src + ("/" + f)) [
     "package.lisp"

@@ -4,7 +4,13 @@
 # https://cloud.yandex.com/en/docs/compute/operations/image-create/custom-image
 #
 # TODO(tazjin): Upstream to nixpkgs once it works well.
-{ config, lib, pkgs, modulesPath, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  modulesPath,
+  ...
+}:
 
 let
   cfg = config.virtualisation.yandexCloud;
@@ -20,22 +26,22 @@ let
   ];
 in
 {
-  imports = [
-    "${modulesPath}/profiles/headless.nix"
-  ];
+  imports = [ "${modulesPath}/profiles/headless.nix" ];
 
   options = {
-    virtualisation.yandexCloud.rootPartitionUuid = with lib; mkOption {
-      type = types.str;
-      default = "C55A5EE2-E5FA-485C-B3AE-CC928429AB6B";
+    virtualisation.yandexCloud.rootPartitionUuid =
+      with lib;
+      mkOption {
+        type = types.str;
+        default = "C55A5EE2-E5FA-485C-B3AE-CC928429AB6B";
 
-      description = ''
-        UUID to use for the root partition of the disk image. Yandex
-        Cloud requires that root partitions are mounted by UUID.
+        description = ''
+          UUID to use for the root partition of the disk image. Yandex
+          Cloud requires that root partitions are mounted by UUID.
 
-        Most users do not need to set this to a non-default value.
-      '';
-    };
+          Most users do not need to set this to a non-default value.
+        '';
+      };
   };
 
   config = {

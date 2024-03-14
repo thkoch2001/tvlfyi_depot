@@ -1,4 +1,9 @@
-{ pkgs, lib, config, ... }:
+{
+  pkgs,
+  lib,
+  config,
+  ...
+}:
 
 let
   inherit (builtins) pathExists;
@@ -45,7 +50,9 @@ in
       PartOf = [ "graphical-session.target" ];
     };
 
-    Install = { WantedBy = [ "graphical-session.target" ]; };
+    Install = {
+      WantedBy = [ "graphical-session.target" ];
+    };
 
     Service = {
       Type = "oneshot";
@@ -62,8 +69,7 @@ in
 
   xsession.windowManager.i3.config.keybindings.F9 = "exec lock";
 
-  xdg.mimeApps.defaultApplications."x-scheme-handler/tg" =
-    "telegramdesktop.desktop";
+  xdg.mimeApps.defaultApplications."x-scheme-handler/tg" = "telegramdesktop.desktop";
 
   programs.zsh.shellAliases = {
     "graph" = "curl -s localhost:6033/graph | dot -Tpng | feh -";

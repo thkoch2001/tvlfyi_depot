@@ -3,9 +3,7 @@
 let
   src = depot.third_party.sources.agenix;
 
-  agenix = import src {
-    inherit pkgs;
-  };
+  agenix = import src { inherit pkgs; };
 in
 {
   inherit src;

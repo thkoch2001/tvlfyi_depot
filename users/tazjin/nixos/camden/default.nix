@@ -1,15 +1,26 @@
 # This file configures camden.tazj.in, my homeserver.
-{ depot, pkgs, lib, ... }:
+{
+  depot,
+  pkgs,
+  lib,
+  ...
+}:
 
 config:
 let
-  nginxRedirect = { from, to, acmeHost }: {
-    serverName = from;
-    useACMEHost = acmeHost;
-    forceSSL = true;
+  nginxRedirect =
+    {
+      from,
+      to,
+      acmeHost,
+    }:
+    {
+      serverName = from;
+      useACMEHost = acmeHost;
+      forceSSL = true;
 
-    extraConfig = "return 301 https://${to}$request_uri;";
-  };
+      extraConfig = "return 301 https://${to}$request_uri;";
+    };
   mod = name: depot.path.origSrc + ("/ops/modules/" + name);
 in
 lib.fix (self: {
@@ -76,14 +87,13 @@ lib.fix (self: {
 
   nix.settings = {
     max-jobs = lib.mkDefault 4;
-    trusted-users = [ "root" "tazjin" ];
-    substituters = [
-      "https://tazjin.cachix.org"
+    trusted-users = [
+      "root"
+      "tazjin"
     ];
+    substituters = [ "https://tazjin.cachix.org" ];
 
-    trusted-public-keys = [
-      "tazjin.cachix.org-1:IZkgLeqfOr1kAZjypItHMg1NoBjm4zX9Zzep8oRSh7U="
-    ];
+    trusted-public-keys = [ "tazjin.cachix.org-1:IZkgLeqfOr1kAZjypItHMg1NoBjm4zX9Zzep8oRSh7U=" ];
   };
 
   powerManagement.cpuFreqGovernor = lib.mkDefault "powersave";
@@ -117,33 +127,39 @@ lib.fix (self: {
     (with depot; [
       fun.idual.script
       fun.idual.setAlarm
-    ]) ++
+    ])
+    ++
 
-    # programs from nixpkgs
-    (with pkgs; [
-      bat
-      curl
-      direnv
-      emacs28-nox
-      fswebcam
-      git
-      gnupg
-      google-cloud-sdk
-      htop
-      jq
-      pass
-      pciutils
-      restic
-      ripgrep
-      screen
-    ]);
+      # programs from nixpkgs
+      (with pkgs; [
+        bat
+        curl
+        direnv
+        emacs28-nox
+        fswebcam
+        git
+        gnupg
+        google-cloud-sdk
+        htop
+        jq
+        pass
+        pciutils
+        restic
+        ripgrep
+        screen
+      ]);
 
   users = {
     # Set up my own user for logging in and doing things ...
     users.tazjin = {
       isNormalUser = true;
       uid = 1000;
-      extraGroups = [ "git" "wheel" "quassel" "video" ];
+      extraGroups = [
+        "git"
+        "wheel"
+        "quassel"
+        "video"
+      ];
       shell = pkgs.fish;
     };
 
@@ -223,9 +239,7 @@ lib.fix (self: {
   services.depot.quassel = {
     enable = true;
     acmeHost = "quassel.tazj.in";
-    bindAddresses = [
-      "0.0.0.0"
-    ];
+    bindAddresses = [ "0.0.0.0" ];
   };
 
   services.bitlbee = {
@@ -237,9 +251,7 @@ lib.fix (self: {
   services.nginx = {
     enable = true;
     enableReload = true;
-    package = with pkgs; nginx.override {
-      modules = [ nginxModules.rtmp ];
-    };
+    package = with pkgs; nginx.override { modules = [ nginxModules.rtmp ]; };
 
     recommendedTlsSettings = true;
     recommendedGzipSettings = true;

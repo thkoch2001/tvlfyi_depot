@@ -2,7 +2,9 @@
 
 with pkgs;
 
-let avrlibc = pkgsCross.avr.libcCross; in
+let
+  avrlibc = pkgsCross.avr.libcCross;
+in
 
 rec {
   qmkSource = fetchgit {

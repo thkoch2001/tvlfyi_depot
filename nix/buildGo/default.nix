@@ -4,8 +4,9 @@
 # buildGo provides Nix functions to build Go packages in the style of Bazel's
 # rules_go.
 
-{ pkgs ? import <nixpkgs> { }
-, ...
+{
+  pkgs ? import <nixpkgs> { },
+  ...
 }:
 
 let
@@ -20,9 +21,17 @@ let
     match
     readDir
     replaceStrings
-    toString;
+    toString
+    ;
 
-  inherit (pkgs) lib runCommand fetchFromGitHub protobuf symlinkJoin go;
+  inherit (pkgs)
+    lib
+    runCommand
+    fetchFromGitHub
+    protobuf
+    symlinkJoin
+    go
+    ;
   goStdlib = buildStdlib go;
 
   # Helpers for low-level Go compiler invocations
@@ -47,52 +56,69 @@ let
   # Add an `overrideGo` attribute to a function result that works
   # similar to `overrideAttrs`, but is used specifically for the
   # arguments passed to Go builders.
-  makeOverridable = f: orig: (f orig) // {
-    overrideGo = new: makeOverridable f (orig // (new orig));
-  };
+  makeOverridable =
+    f: orig: (f orig) // { overrideGo = new: makeOverridable f (orig // (new orig)); };
 
-  buildStdlib = go: runCommand "go-stdlib-${go.version}"
+  buildStdlib =
+    go:
+    runCommand "go-stdlib-${go.version}" { nativeBuildInputs = [ go ]; } ''
+      HOME=$NIX_BUILD_TOP/home
+      mkdir $HOME
+
+      goroot="$(go env GOROOT)"
+      cp -R "$goroot/src" "$goroot/pkg" .
+
+      chmod -R +w .
+      GODEBUG=installgoroot=all GOROOT=$NIX_BUILD_TOP go install -v --trimpath std
+
+      mkdir $out
+      cp -r pkg/*_*/* $out
+
+      find $out -name '*.a' | while read -r ARCHIVE_FULL; do
+        ARCHIVE="''${ARCHIVE_FULL#"$out/"}"
+        PACKAGE="''${ARCHIVE%.a}"
+        echo "packagefile $PACKAGE=$ARCHIVE_FULL"
+      done > $out/importcfg
+    '';
+
+  importcfgCmd =
     {
-      nativeBuildInputs = [ go ];
-    } ''
-    HOME=$NIX_BUILD_TOP/home
-    mkdir $HOME
-
-    goroot="$(go env GOROOT)"
-    cp -R "$goroot/src" "$goroot/pkg" .
-
-    chmod -R +w .
-    GODEBUG=installgoroot=all GOROOT=$NIX_BUILD_TOP go install -v --trimpath std
-
-    mkdir $out
-    cp -r pkg/*_*/* $out
-
-    find $out -name '*.a' | while read -r ARCHIVE_FULL; do
-      ARCHIVE="''${ARCHIVE_FULL#"$out/"}"
-      PACKAGE="''${ARCHIVE%.a}"
-      echo "packagefile $PACKAGE=$ARCHIVE_FULL"
-    done > $out/importcfg
-  '';
-
-  importcfgCmd = { name, deps, out ? "importcfg" }: ''
-    echo "# nix buildGo ${name}" > "${out}"
-    cat "${goStdlib}/importcfg" >> "${out}"
-    ${lib.concatStringsSep "\n" (map (dep: ''
-      find "${dep}" -name '*.a' | while read -r pkgp; do
-        relpath="''${pkgp#"${dep}/"}"
-        pkgname="''${relpath%.a}"
-        echo "packagefile $pkgname=$pkgp"
-      done >> "${out}"
-    '') deps)}
-  '';
+      name,
+      deps,
+      out ? "importcfg",
+    }:
+    ''
+      echo "# nix buildGo ${name}" > "${out}"
+      cat "${goStdlib}/importcfg" >> "${out}"
+      ${lib.concatStringsSep "\n" (
+        map (dep: ''
+          find "${dep}" -name '*.a' | while read -r pkgp; do
+            relpath="''${pkgp#"${dep}/"}"
+            pkgname="''${relpath%.a}"
+            echo "packagefile $pkgname=$pkgp"
+          done >> "${out}"
+        '') deps
+      )}
+    '';
 
   # High-level build functions
 
   # Build a Go program out of the specified files and dependencies.
-  program = { name, srcs, deps ? [ ], x_defs ? { } }:
-    let uniqueDeps = allDeps (map (d: d.gopkg) deps);
-    in runCommand name { } ''
-      ${importcfgCmd { inherit name; deps = uniqueDeps; }}
+  program =
+    {
+      name,
+      srcs,
+      deps ? [ ],
+      x_defs ? { },
+    }:
+    let
+      uniqueDeps = allDeps (map (d: d.gopkg) deps);
+    in
+    runCommand name { } ''
+      ${importcfgCmd {
+        inherit name;
+        deps = uniqueDeps;
+      }}
       ${go}/bin/go tool compile -o ${name}.a -importcfg=importcfg -trimpath=$PWD -trimpath=${go} -p main ${includeSources uniqueDeps} ${spaceOut srcs}
       mkdir -p $out/bin
       export GOROOT_FINAL=go
@@ -103,7 +129,14 @@ let
   #
   # This outputs both the sources and compiled binary, as both are
   # needed when downstream packages depend on it.
-  package = { name, srcs, deps ? [ ], path ? name, sfiles ? [ ] }:
+  package =
+    {
+      name,
+      srcs,
+      deps ? [ ],
+      path ? name,
+      sfiles ? [ ],
+    }:
     let
       uniqueDeps = allDeps (map (d: d.gopkg) deps);
 
@@ -121,20 +154,25 @@ let
         ${go}/bin/go tool pack r $out/${path}.a ./asm.o
       '';
 
-      gopkg = (runCommand "golib-${name}" { } ''
-        mkdir -p $out/${path}
-        ${srcList path (map (s: "${s}") srcs)}
-        ${asmBuild}
-        ${importcfgCmd { inherit name; deps = uniqueDeps; }}
-        ${go}/bin/go tool compile -pack ${asmLink} -o $out/${path}.a -importcfg=importcfg -trimpath=$PWD -trimpath=${go} -p ${path} ${includeSources uniqueDeps} ${spaceOut srcs}
-        ${asmPack}
-      '').overrideAttrs (_: {
-        passthru = {
-          inherit gopkg;
-          goDeps = uniqueDeps;
-          goImportPath = path;
-        };
-      });
+      gopkg =
+        (runCommand "golib-${name}" { } ''
+          mkdir -p $out/${path}
+          ${srcList path (map (s: "${s}") srcs)}
+          ${asmBuild}
+          ${importcfgCmd {
+            inherit name;
+            deps = uniqueDeps;
+          }}
+          ${go}/bin/go tool compile -pack ${asmLink} -o $out/${path}.a -importcfg=importcfg -trimpath=$PWD -trimpath=${go} -p ${path} ${includeSources uniqueDeps} ${spaceOut srcs}
+          ${asmPack}
+        '').overrideAttrs
+          (_: {
+            passthru = {
+              inherit gopkg;
+              goDeps = uniqueDeps;
+              goImportPath = path;
+            };
+          });
     in
     gopkg;
 
@@ -145,7 +183,6 @@ let
   # The derivation for each actual package will reside in an attribute
   # named "gopkg", and an attribute named "gobin" for binaries.
   external = import ./external { inherit pkgs program package; };
-
 in
 {
   # Only the high-level builder functions are exposed, but made

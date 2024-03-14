@@ -1,4 +1,9 @@
-{ depot, pkgs, lib, ... }:
+{
+  depot,
+  pkgs,
+  lib,
+  ...
+}:
 
 let
   inherit (pkgs) python3 python3Packages;
@@ -8,9 +13,7 @@ let
     version = "0.1";
     src = ./.;
 
-    propagatedBuildInputs = [
-      depot.third_party.python.broadlink
-    ];
+    propagatedBuildInputs = [ depot.third_party.python.broadlink ];
   };
   package = python3Packages.buildPythonPackage opts;
   script = python3Packages.buildPythonApplication opts;

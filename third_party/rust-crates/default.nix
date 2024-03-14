@@ -7,18 +7,15 @@ let
   inherit (pkgs) fetchpatch;
 
   buildRustCrate =
-    attrs@{ edition ? "2018"
-    , pname
-    , crateName ? pname
-    , ...
-    }: pkgs.buildRustCrate (attrs // {
-      inherit
-        crateName
-        edition
-        ;
-    });
+    attrs@{
+      edition ? "2018",
+      pname,
+      crateName ? pname,
+      ...
+    }:
+    pkgs.buildRustCrate (attrs // { inherit crateName edition; });
 in
-depot.nix.readTree.drvTargets rec{
+depot.nix.readTree.drvTargets rec {
   cfg-if = buildRustCrate {
     pname = "cfg-if";
     version = "1.0.0";
@@ -106,7 +103,11 @@ depot.nix.readTree.drvTargets rec{
         excludes = [ "Cargo.toml" ];
       })
     ];
-    dependencies = [ bitflags libc inotify-sys ];
+    dependencies = [
+      bitflags
+      libc
+      inotify-sys
+    ];
     sha256 = "0lqwk7yf6bzc2jzj5iji2p3f29zdpllqd207vgg7jswmg2gqnlqc";
   };
 
@@ -136,14 +137,20 @@ depot.nix.readTree.drvTargets rec{
     sha256 = "1gb4r6mjwd645jqh02nhn60i7qkw8cgy3xq1r4clnmvz3cmkv1l0";
     dependencies = [ memchr ];
     buildDependencies = [ version-check ];
-    features = [ "std" "alloc" ];
+    features = [
+      "std"
+      "alloc"
+    ];
   };
 
   base64 = buildRustCrate {
     pname = "base64";
     version = "0.13.0";
     sha256 = "0i0jk5sgq37kc4c90d1g7dp7zvphbg0dbqc1ajnn0vffjxblgamg";
-    features = [ "alloc" "std" ];
+    features = [
+      "alloc"
+      "std"
+    ];
   };
 
   bufstream = buildRustCrate {
@@ -180,8 +187,14 @@ depot.nix.readTree.drvTargets rec{
     pname = "chrono";
     version = "0.4.22";
     edition = "2018";
-    dependencies = [ num-traits num-integer ];
-    features = [ "alloc" "std" ];
+    dependencies = [
+      num-traits
+      num-integer
+    ];
+    features = [
+      "alloc"
+      "std"
+    ];
     sha256 = "01vbn93ba1q2afq10qis41j847damk5ifgn1all337mcscl345fn";
   };
 
@@ -216,7 +229,10 @@ depot.nix.readTree.drvTargets rec{
   epoll = buildRustCrate {
     pname = "epoll";
     version = "4.3.3";
-    dependencies = [ bitflags libc ];
+    dependencies = [
+      bitflags
+      libc
+    ];
     sha256 = "1wc8dsd0dhqgskmkwd82fzqsy2hg0wm3833jxhzxkrwcip25yr3a";
   };
 
@@ -244,7 +260,11 @@ depot.nix.readTree.drvTargets rec{
     pname = "serde_json";
     version = "1.0.62";
     sha256 = "0sgc8dycigq0nxr4j613m4q733alfb2i10s6nz80lsbbqgrka21q";
-    dependencies = [ serde ryu itoa ];
+    dependencies = [
+      serde
+      ryu
+      itoa
+    ];
     features = [ "std" ];
   };
 
@@ -260,7 +280,10 @@ depot.nix.readTree.drvTargets rec{
     version = "0.9.0";
     edition = "2015";
     sha256 = "1zgl8l15i19lzp90icgwyi6zqdd31b9vm8w129f41d1zd0hs7ayq";
-    dependencies = [ log serde ];
+    dependencies = [
+      log
+      serde
+    ];
   };
 
   semver-parser = buildRustCrate {
@@ -315,7 +338,10 @@ depot.nix.readTree.drvTargets rec{
     # TODO: this should be available via `pkgs.defaultCrateOverrides`,
     # I thought that was included by default?
     nativeBuildInputs = [ pkg-config ];
-    buildInputs = [ pkgs.zlib pkgs.libgit2 ];
+    buildInputs = [
+      pkgs.zlib
+      pkgs.libgit2
+    ];
     buildDependencies = [
       cc
       pkg-config
@@ -358,27 +384,21 @@ depot.nix.readTree.drvTargets rec{
     version = "1.2.0";
     sha256 = "1c95nma20kiyrjwfsk7hzd5ir6yy4bm63fmfbfb4dm9ahnlvdp3y";
     features = [ "alloc" ];
-    dependencies = [
-      tinyvec_macros
-    ];
+    dependencies = [ tinyvec_macros ];
   };
 
   unicode-normalization = buildRustCrate {
     pname = "unicode-normalization";
     version = "0.1.17";
     sha256 = "0w4s0avzlf7pzcclhhih93aap613398sshm6jrxcwq0f9lhis11c";
-    dependencies = [
-      tinyvec
-    ];
+    dependencies = [ tinyvec ];
   };
 
   unicode-bidi = buildRustCrate {
     pname = "unicode-bidi";
     version = "0.3.5";
     sha256 = "193jzlxj1dfcms2381lyd45zh4ywlicj9lzcfpid1zbkmfarymkz";
-    dependencies = [
-      matches
-    ];
+    dependencies = [ matches ];
   };
 
   idna = buildRustCrate {
@@ -403,7 +423,6 @@ depot.nix.readTree.drvTargets rec{
       percent-encoding
     ];
   };
-
 
   git2 = buildRustCrate {
     pname = "git2";

@@ -1,4 +1,10 @@
-{ config, pkgs, lib, depot, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  depot,
+  ...
+}:
 
 let
   ipv6 = "2a01:4f8:151:54d0::/64";
@@ -11,9 +17,7 @@ in
 {
   config = {
     boot = {
-      kernelParams = [
-        "ip=${ipv4}::${gatewayv4}:${netmaskv4}::eth0:none"
-      ];
+      kernelParams = [ "ip=${ipv4}::${gatewayv4}:${netmaskv4}::eth0:none" ];
 
       initrd.network = {
         enable = true;
@@ -41,7 +45,11 @@ in
       firewall = {
         enable = true;
         allowPing = true;
-        allowedTCPPorts = [ 22 80 443 ];
+        allowedTCPPorts = [
+          22
+          80
+          443
+        ];
       };
     };
 

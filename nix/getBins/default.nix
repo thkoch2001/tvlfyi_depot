@@ -1,4 +1,9 @@
-{ lib, pkgs, depot, ... }:
+{
+  lib,
+  pkgs,
+  depot,
+  ...
+}:
 
 # Takes a derivation and a list of binary names
 # and returns an attribute set of `name -> path`.
@@ -25,25 +30,34 @@
 #
 
 let
-  getBins = drv: xs:
+  getBins =
+    drv: xs:
     let
-      f = x:
+      f =
+        x:
         # TODO(Profpatsch): typecheck
-        let x' = if builtins.isString x then { use = x; as = x; } else x;
-        in {
+        let
+          x' =
+            if builtins.isString x then
+              {
+                use = x;
+                as = x;
+              }
+            else
+              x;
+        in
+        {
           name = x'.as;
           value = "${lib.getBin drv}/bin/${x'.use}";
         };
     in
     builtins.listToAttrs (builtins.map f xs);
 
-
   tests = import ./tests.nix {
     inherit getBins;
     inherit (depot.nix) writeScriptBin;
     inherit (depot.nix.runTestsuite) assertEq it runTestsuite;
   };
-
 in
 {
   __functor = _: getBins;

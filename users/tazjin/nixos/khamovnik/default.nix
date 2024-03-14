@@ -1,7 +1,12 @@
 # Yandex work laptop
 #
 # Some of the configuration for this machine is not public.
-{ depot, lib, pkgs, ... }:
+{
+  depot,
+  lib,
+  pkgs,
+  ...
+}:
 
 config:
 let
@@ -15,23 +20,29 @@ let
   };
 in
 {
-  imports = [
-    (usermod "chromium.nix")
-    (usermod "desktop.nix")
-    (usermod "fonts.nix")
-    (usermod "home-config.nix")
-    (usermod "laptop.nix")
-    (usermod "physical.nix")
-    (pkgs.home-manager.src + "/nixos")
-  ] ++ (if (builtins.pathExists private) then [
-    (private + "/nixos/yandex.nix")
-    (private + "/emacs/module.nix")
-  ] else [ ]);
+  imports =
+    [
+      (usermod "chromium.nix")
+      (usermod "desktop.nix")
+      (usermod "fonts.nix")
+      (usermod "home-config.nix")
+      (usermod "laptop.nix")
+      (usermod "physical.nix")
+      (pkgs.home-manager.src + "/nixos")
+    ]
+    ++ (
+      if (builtins.pathExists private) then
+        [
+          (private + "/nixos/yandex.nix")
+          (private + "/emacs/module.nix")
+        ]
+      else
+        [ ]
+    );
 
   # from hardware-configuration.nix
   boot = {
-    initrd.luks.devices."luks-9c3cd590-a648-450d-ae42-ed3859d4c717".device =
-      "/dev/disk/by-uuid/9c3cd590-a648-450d-ae42-ed3859d4c717";
+    initrd.luks.devices."luks-9c3cd590-a648-450d-ae42-ed3859d4c717".device = "/dev/disk/by-uuid/9c3cd590-a648-450d-ae42-ed3859d4c717";
 
     initrd.availableKernelModules = [
       "xhci_pci"
@@ -57,9 +68,7 @@ in
     };
   };
 
-  swapDevices = [{
-    device = "/dev/disk/by-uuid/9b9049c5-5975-441d-9ac6-2f9150775fd6";
-  }];
+  swapDevices = [ { device = "/dev/disk/by-uuid/9b9049c5-5975-441d-9ac6-2f9150775fd6"; } ];
 
   tvl.cache.enable = true;
 

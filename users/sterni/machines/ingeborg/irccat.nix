@@ -1,9 +1,13 @@
-{ depot, config, pkgs, lib, ... }:
+{
+  depot,
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 
 {
-  imports = [
-    (depot.path.origSrc + "/ops/modules/irccat.nix")
-  ];
+  imports = [ (depot.path.origSrc + "/ops/modules/irccat.nix") ];
 
   config = {
     services.depot.irccat = {

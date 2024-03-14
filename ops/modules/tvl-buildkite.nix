@@ -1,15 +1,23 @@
 # Configuration for the TVL buildkite agents.
-{ config, depot, pkgs, lib, ... }:
+{
+  config,
+  depot,
+  pkgs,
+  lib,
+  ...
+}:
 
 let
   cfg = config.services.depot.buildkite;
   agents = lib.range 1 cfg.agentCount;
   description = "Buildkite agents for TVL";
 
-  besadiiWithConfig = name: pkgs.writeShellScript "besadii-whitby" ''
-    export BESADII_CONFIG=/run/agenix/buildkite-besadii-config
-    exec -a ${name} ${depot.ops.besadii}/bin/besadii "$@"
-  '';
+  besadiiWithConfig =
+    name:
+    pkgs.writeShellScript "besadii-whitby" ''
+      export BESADII_CONFIG=/run/agenix/buildkite-besadii-config
+      exec -a ${name} ${depot.ops.besadii}/bin/besadii "$@"
+    '';
 
   # All Buildkite hooks are actually besadii, but it's being invoked
   # with different names.
@@ -34,8 +42,8 @@ in
 
   config = lib.mkIf cfg.enable {
     # Run the Buildkite agents using the default upstream module.
-    services.buildkite-agents = builtins.listToAttrs (map
-      (n: rec {
+    services.buildkite-agents = builtins.listToAttrs (
+      map (n: rec {
         name = "whitby-${toString n}";
         value = {
           inherit name;
@@ -59,22 +67,25 @@ in
             nix
           ];
         };
-      })
-      agents);
+      }) agents
+    );
 
     # Set up a group for all Buildkite agent users
     users = {
       groups.buildkite-agents = { };
-      users = builtins.listToAttrs (map
-        (n: rec {
+      users = builtins.listToAttrs (
+        map (n: rec {
           name = "buildkite-agent-whitby-${toString n}";
           value = {
             isSystemUser = true;
             group = lib.mkForce "buildkite-agents";
-            extraGroups = [ name "docker" ];
+            extraGroups = [
+              name
+              "docker"
+            ];
           };
-        })
-        agents);
+        }) agents
+      );
     };
   };
 }

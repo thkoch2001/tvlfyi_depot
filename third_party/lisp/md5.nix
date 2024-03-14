@@ -3,8 +3,10 @@
 
 with depot.nix;
 
-let src = with pkgs; srcOnly lispPackages.md5;
-in buildLisp.library {
+let
+  src = with pkgs; srcOnly lispPackages.md5;
+in
+buildLisp.library {
   name = "md5";
   deps = [
     {

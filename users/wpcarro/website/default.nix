@@ -16,30 +16,28 @@ let
     depotWork = "https://cs.tvl.fyi/depot/-/blob/users/wpcarro";
   };
 
-  renderTemplate = src: vars: pkgs.substituteAll (globalVars // vars // {
-    inherit src;
-  });
+  renderTemplate = src: vars: pkgs.substituteAll (globalVars // vars // { inherit src; });
 
-  withBrand = contentHtml: renderTemplate ./fragments/template.html {
-    inherit contentHtml;
-  };
+  withBrand = contentHtml: renderTemplate ./fragments/template.html { inherit contentHtml; };
 
   # Create a simple static file server using nginx to serve `content`.
-  nginxCfgFor = content: pkgs.writeText "nginx.conf" ''
-    user nobody nobody;
-    daemon off;
-    error_log /dev/stdout info;
-    pid /dev/null;
-    events {}
-    http {
-      server {
-        listen 8080;
-        location / {
-          root ${content};
+  nginxCfgFor =
+    content:
+    pkgs.writeText "nginx.conf" ''
+      user nobody nobody;
+      daemon off;
+      error_log /dev/stdout info;
+      pid /dev/null;
+      events {}
+      http {
+        server {
+          listen 8080;
+          location / {
+            root ${content};
+          }
         }
       }
-    }
-  '';
+    '';
 in
 rec {
   inherit domain renderTemplate withBrand;
@@ -48,7 +46,7 @@ rec {
     mkdir -p $out
 
     # /
-    cp ${withBrand (readFile (renderTemplate ./fragments/homepage.html {}))} $out/index.html
+    cp ${withBrand (readFile (renderTemplate ./fragments/homepage.html { }))} $out/index.html
 
     # /habits
     mkdir -p $out/habits
@@ -68,10 +66,19 @@ rec {
       mkdir -p var/log/nginx
     '';
     config = {
-      Cmd = [ "${pkgs.nginx}/bin/nginx" "-c" (nginxCfgFor content) ];
-      ExposedPorts = { "8080/tcp" = { }; };
+      Cmd = [
+        "${pkgs.nginx}/bin/nginx"
+        "-c"
+        (nginxCfgFor content)
+      ];
+      ExposedPorts = {
+        "8080/tcp" = { };
+      };
     };
   };
 
-  meta.ci.targets = [ "root" "image" ];
+  meta.ci.targets = [
+    "root"
+    "image"
+  ];
 }

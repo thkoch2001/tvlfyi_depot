@@ -1,4 +1,9 @@
-{ depot, pkgs, lib, ... }:
+{
+  depot,
+  pkgs,
+  lib,
+  ...
+}:
 
 let
   #   bins = depot.nix.getBins pkgs.sqlite ["sqlite3"];
@@ -46,7 +51,6 @@ let
   };
 
   bins = depot.nix.getBins openlab-tools [ "openlab-tools" ];
-
 in
 
 depot.nix.writeExecline "openlab-tools-wrapped" { } [
@@ -67,4 +71,3 @@ depot.nix.writeExecline "openlab-tools-wrapped" { } [
   ])
   bins.openlab-tools
 ]
-

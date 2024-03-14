@@ -21,9 +21,7 @@ depot.nix.readTree.drvTargets {
     name = "proto-check";
     src = protos;
 
-    nativeBuildInputs = [
-      pkgs.buf
-    ];
+    nativeBuildInputs = [ pkgs.buf ];
 
     buildPhase = ''
       export HOME=$TMPDIR

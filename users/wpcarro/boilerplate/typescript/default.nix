@@ -2,7 +2,10 @@
 
 pkgs.stdenv.mkDerivation {
   name = "typescript";
-  srcs = builtins.path { path = ./.; name = "typescript"; };
+  srcs = builtins.path {
+    path = ./.;
+    name = "typescript";
+  };
   buildInputs = with pkgs; [
     nodejs
     # Exposes lscpu for parcel.js

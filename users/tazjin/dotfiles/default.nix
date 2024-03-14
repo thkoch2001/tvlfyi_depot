@@ -1,3 +1,1 @@
-_: {
-  dunstrc = ./dunstrc;
-}
+_: { dunstrc = ./dunstrc; }

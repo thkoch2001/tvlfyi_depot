@@ -3,16 +3,20 @@
 
 # Load a Nix package set from one of the supported source types
 # (nixpkgs, git, path).
-{ srcType, srcArgs, importArgs ? { } }:
+{
+  srcType,
+  srcArgs,
+  importArgs ? { },
+}:
 
 with builtins;
 let
   # If a nixpkgs channel is requested, it is retrieved from Github (as
   # a tarball) and imported.
-  fetchImportChannel = channel:
+  fetchImportChannel =
+    channel:
     let
-      url =
-        "https://github.com/NixOS/nixpkgs/archive/${channel}.tar.gz";
+      url = "https://github.com/NixOS/nixpkgs/archive/${channel}.tar.gz";
     in
     import (fetchTarball url) importArgs;
 

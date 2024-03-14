@@ -25,7 +25,13 @@
 # SPDX-License-Identifier: MIT
 # SPDX-FileCopyrightText: 2022-2024 sterni <sternenseemann@systemli.org>
 
-{ lib, pkgs, config, depot, ... }:
+{
+  lib,
+  pkgs,
+  config,
+  depot,
+  ...
+}:
 
 let
   #
@@ -34,7 +40,8 @@ let
   inherit (depot.nix.utils) storePathName;
   inherit (depot.nix) getBins;
 
-  bins = getBins pkgs.mcrcon [ "mcrcon" ]
+  bins =
+    getBins pkgs.mcrcon [ "mcrcon" ]
     // getBins pkgs.jre [ "java" ]
     // getBins pkgs.diffutils [ "diff" ]
     // getBins pkgs.moreutils [ "sponge" ]
@@ -44,20 +51,28 @@ let
   #
   # Needed JARs
   #
-  fetchJar = { pname, version, url, sha256, passthru ? { } }:
+  fetchJar =
+    {
+      pname,
+      version,
+      url,
+      sha256,
+      passthru ? { },
+    }:
     pkgs.fetchurl {
       name = "${pname}-${version}.jar";
       inherit url sha256;
-      passthru = passthru // { inherit version; };
+      passthru = passthru // {
+        inherit version;
+      };
     };
 
-  fabricInstallerJar =
-    fetchJar rec {
-      pname = "fabric-installer";
-      version = "1.0.0";
-      url = "https://maven.fabricmc.net/net/fabricmc/fabric-installer/${version}/fabric-installer-${version}.jar";
-      sha256 = "0yrlzly1g5a80df27jvrbhxbp10xqxfyk64q0s0j13kz78fmnzkx";
-    };
+  fabricInstallerJar = fetchJar rec {
+    pname = "fabric-installer";
+    version = "1.0.0";
+    url = "https://maven.fabricmc.net/net/fabricmc/fabric-installer/${version}/fabric-installer-${version}.jar";
+    sha256 = "0yrlzly1g5a80df27jvrbhxbp10xqxfyk64q0s0j13kz78fmnzkx";
+  };
 
   # log4j workaround for Minecraft Server >= 1.12 && < 1.17
   log4jFix_112_116 = pkgs.fetchurl {
@@ -75,9 +90,7 @@ let
       url = "https://launcher.mojang.com/v1/objects/1b557e7b033b583cd9f66746b7a9ab1ec1673ced/server.jar";
       sha256 = "19ix6x5ij4jcwqam1dscnqwm0m251gysc2j793wjcrb9sb3jkwsq";
       passthru = {
-        baseJvmOpts = [
-          "-Dlog4j.configurationFile=${log4jFix_112_116}"
-        ];
+        baseJvmOpts = [ "-Dlog4j.configurationFile=${log4jFix_112_116}" ];
       };
     };
     "1.17" = fetchJar {
@@ -85,27 +98,21 @@ let
       version = "1.17";
       url = "https://launcher.mojang.com/v1/objects/0a269b5f2c5b93b1712d0f5dc43b6182b9ab254e/server.jar";
       sha256 = "0jqz7hpx7zvjj2n5rfrh8jmdj6ziqyp8c9nq4sr4jmkbky6hsfbv";
-      passthru.baseJvmOpts = [
-        "-Dlog4j2.formatMsgNoLookups=true"
-      ];
+      passthru.baseJvmOpts = [ "-Dlog4j2.formatMsgNoLookups=true" ];
     };
     "1.17.1" = fetchJar {
       pname = "server";
       version = "1.17.1";
       url = "https://launcher.mojang.com/v1/objects/a16d67e5807f57fc4e550299cf20226194497dc2/server.jar";
       sha256 = "0pzmzagvrrapjsnd8xg4lqwynwnb5rcqk2n9h2kzba8p2fs13hp8";
-      passthru.baseJvmOpts = [
-        "-Dlog4j2.formatMsgNoLookups=true"
-      ];
+      passthru.baseJvmOpts = [ "-Dlog4j2.formatMsgNoLookups=true" ];
     };
     "1.18" = fetchJar {
       pname = "server";
       version = "1.18";
       url = "https://launcher.mojang.com/v1/objects/3cf24a8694aca6267883b17d934efacc5e44440d/server.jar";
       sha256 = "0vvycjcfq96z7cl5dsrq98k9b7j7l4x0y9nflrcqmcvink7fs5w4";
-      passthru.baseJvmOpts = [
-        "-Dlog4j2.formatMsgNoLookups=true"
-      ];
+      passthru.baseJvmOpts = [ "-Dlog4j2.formatMsgNoLookups=true" ];
     };
     "1.18.1" = fetchJar {
       pname = "server";
@@ -191,45 +198,43 @@ let
   #
   # mods directory for fabric
   #
-  makeModFolder = name: mods:
+  makeModFolder =
+    name: mods:
     pkgs.runCommand "${name}-fabric-mod-folder" { } (
       ''
         mkdir -p "$out"
-      '' + lib.concatMapStrings
-        (mod: ''
-          test -f "${mod}" || {
-              printf 'Not a regular file: %s\n' "${mod}" >&2
-              exit 1
-          }
-          ln -s "${mod}" "$out/${storePathName mod}"
-        '')
-        mods
+      ''
+      + lib.concatMapStrings (mod: ''
+        test -f "${mod}" || {
+            printf 'Not a regular file: %s\n' "${mod}" >&2
+            exit 1
+        }
+        ln -s "${mod}" "$out/${storePathName mod}"
+      '') mods
     );
 
   #
   # Create a server.properties file
   #
-  propertyValue = v:
-    if builtins.isBool v
-    then lib.boolToString v
-    else toString v;
+  propertyValue = v: if builtins.isBool v then lib.boolToString v else toString v;
 
-  serverPropertiesFile = name: instanceCfg:
+  serverPropertiesFile =
+    name: instanceCfg:
     let
-      serverProperties' =
-        builtins.removeAttrs instanceCfg.serverProperties [
-          "rcon.password"
-        ] // {
-          enable-rcon = true;
-        };
+      serverProperties' = builtins.removeAttrs instanceCfg.serverProperties [ "rcon.password" ] // {
+        enable-rcon = true;
+      };
     in
-    pkgs.writeText "${name}-server.properties" (''
-      # created by minecraft-fabric.nix
-    '' + lib.concatStrings (lib.mapAttrsToList
-      (key: value: ''
-        ${key}=${propertyValue value}
-      '')
-      serverProperties'));
+    pkgs.writeText "${name}-server.properties" (
+      ''
+        # created by minecraft-fabric.nix
+      ''
+      + lib.concatStrings (
+        lib.mapAttrsToList (key: value: ''
+          ${key}=${propertyValue value}
+        '') serverProperties'
+      )
+    );
 
   #
   # Create JSON “state” files
@@ -238,27 +243,28 @@ let
 
   toWhitelist = name: uuid: { inherit name uuid; };
 
-  whitelistFile = name: instanceCfg:
-    writeJson "${name}-whitelist" (
-      lib.mapAttrsToList toWhitelist instanceCfg.whitelist
-    );
+  whitelistFile =
+    name: instanceCfg:
+    writeJson "${name}-whitelist" (lib.mapAttrsToList toWhitelist instanceCfg.whitelist);
 
-  opsFile = name: instanceCfg:
+  opsFile =
+    name: instanceCfg:
     writeJson "${name}-ops" (
-      lib.mapAttrsToList
-        (name: value:
-          toWhitelist name value // {
-            level = 4;
-            bypassesPlayerLimit = true;
-          }
-        )
-        instanceCfg.ops
+      lib.mapAttrsToList (
+        name: value:
+        toWhitelist name value
+        // {
+          level = 4;
+          bypassesPlayerLimit = true;
+        }
+      ) instanceCfg.ops
     );
 
   #
   # Service start and stop scripts
   #
-  stopScript = name: instanceCfg:
+  stopScript =
+    name: instanceCfg:
     pkgs.writeShellScript "minecraft-fabric-${name}-stop" ''
       set -eu
 
@@ -282,11 +288,12 @@ let
       "${bins.flock}" "''${RUNTIME_DIRECTORY}" true
     '';
 
-  startScript = name: instanceCfg:
+  startScript =
+    name: instanceCfg:
     let
-      serverJar = serverJars.${instanceCfg.version} or
-        (throw "Don't have server.jar for Minecraft Server ${instanceCfg.version}");
-
+      serverJar =
+        serverJars.${instanceCfg.version}
+          or (throw "Don't have server.jar for Minecraft Server ${instanceCfg.version}");
     in
 
     pkgs.writeShellScript "minecraft-fabric-${name}-start" ''
@@ -333,12 +340,10 @@ let
   #
   impurePath = lib.types.path // {
     name = "impurePath";
-    check = x:
-      lib.types.path.check x
-        && !(builtins.isPath x)
-        && !(lib.hasPrefix builtins.storeDir (toString x));
+    check =
+      x:
+      lib.types.path.check x && !(builtins.isPath x) && !(lib.hasPrefix builtins.storeDir (toString x));
   };
-
 
   instanceType = lib.types.submodule {
     options = {
@@ -456,17 +461,9 @@ let
 
   cfg = config.services.minecraft-fabric-server;
 
-  serverPorts = lib.mapAttrsToList
-    (_: instanceCfg:
-      instanceCfg.serverProperties.server-port
-    )
-    cfg;
+  serverPorts = lib.mapAttrsToList (_: instanceCfg: instanceCfg.serverProperties.server-port) cfg;
 
-  rconPorts = lib.mapAttrsToList
-    (_: instanceCfg:
-      instanceCfg.serverProperties."rcon.port"
-    )
-    cfg;
+  rconPorts = lib.mapAttrsToList (_: instanceCfg: instanceCfg.serverProperties."rcon.port") cfg;
 in
 
 {
@@ -481,7 +478,8 @@ in
   config = {
     assertions = [
       {
-        assertion = builtins.all (instance: !instance.enable) (builtins.attrValues cfg)
+        assertion =
+          builtins.all (instance: !instance.enable) (builtins.attrValues cfg)
           || pkgs.config.allowUnfreeRedistributable or false
           || pkgs.config.allowUnfree or false;
         message = lib.concatStringsSep " " [
@@ -499,30 +497,26 @@ in
       }
     ];
 
-    systemd.services = lib.mapAttrs'
-      (name: instanceCfg:
-        {
-          name = "minecraft-fabric-${name}";
-          value = {
-            description = "Minecraft server ${name} with the fabric mod loader";
-            wantedBy = [ "multi-user.target" ];
-            after = [ "network.target" ];
-            inherit (instanceCfg) enable;
+    systemd.services = lib.mapAttrs' (name: instanceCfg: {
+      name = "minecraft-fabric-${name}";
+      value = {
+        description = "Minecraft server ${name} with the fabric mod loader";
+        wantedBy = [ "multi-user.target" ];
+        after = [ "network.target" ];
+        inherit (instanceCfg) enable;
 
-            serviceConfig = {
-              Type = "simple";
-              User = instanceCfg.user;
-              Group = instanceCfg.group;
-              ExecStart = startScript name instanceCfg;
-              ExecStop = stopScript name instanceCfg;
-              RuntimeDirectory = "minecraft-fabric-${name}";
-              LoadCredential = "rcon-password:${instanceCfg.rconPasswordFile}";
-              RestartSec = "40s";
-            };
-          };
-        }
-      )
-      cfg;
+        serviceConfig = {
+          Type = "simple";
+          User = instanceCfg.user;
+          Group = instanceCfg.group;
+          ExecStart = startScript name instanceCfg;
+          ExecStop = stopScript name instanceCfg;
+          RuntimeDirectory = "minecraft-fabric-${name}";
+          LoadCredential = "rcon-password:${instanceCfg.rconPasswordFile}";
+          RestartSec = "40s";
+        };
+      };
+    }) cfg;
 
     networking.firewall = {
       allowedTCPPorts = serverPorts;

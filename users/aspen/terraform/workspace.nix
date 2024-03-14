@@ -1,37 +1,52 @@
 { pkgs, depot, ... }:
-name: { plugins }: module_tf:
+name:
+{ plugins }:
+module_tf:
 
 let
 
-  inherit (pkgs) lib runCommand writeText writeScript;
+  inherit (pkgs)
+    lib
+    runCommand
+    writeText
+    writeScript
+    ;
   inherit (lib) filterAttrsRecursive;
 
-  allPlugins = (p: plugins p ++ (with p; [
-    external
-    local
-    tls
-    p.null
-  ]));
+  allPlugins = (
+    p:
+    plugins p
+    ++ (with p; [
+      external
+      local
+      tls
+      p.null
+    ])
+  );
 
   tf = pkgs.terraform.withPlugins allPlugins;
 
-  cleanTerraform = filterAttrsRecursive (k: _: ! (builtins.elem k [
-    "__readTree"
-    "__readTreeChildren"
-  ]));
+  cleanTerraform = filterAttrsRecursive (
+    k: _:
+    !(builtins.elem k [
+      "__readTree"
+      "__readTreeChildren"
+    ])
+  );
 
   plugins_tf = {
-    terraform.required_providers = (builtins.listToAttrs (map
-      (p: {
-        name = lib.last (lib.splitString "/" p.provider-source-address);
-        value = {
-          source = p.provider-source-address;
-          version = p.version;
-        };
-      })
-      (allPlugins pkgs.terraform.plugins)));
+    terraform.required_providers = (
+      builtins.listToAttrs (
+        map (p: {
+          name = lib.last (lib.splitString "/" p.provider-source-address);
+          value = {
+            source = p.provider-source-address;
+            version = p.version;
+          };
+        }) (allPlugins pkgs.terraform.plugins)
+      )
+    );
   };
-
 
   module_tf' = module_tf // {
     inherit (depot.users.aspen.terraform) globals;
@@ -40,17 +55,21 @@ let
 
   module = runCommand "module" { } ''
     mkdir $out
-    ${lib.concatStrings (lib.mapAttrsToList (k: config_tf:
-      (let
-        # TODO: filterAttrsRecursive?
-        configJson = writeText "${k}.tf.json"
-          (builtins.toJSON (cleanTerraform config_tf));
-      in ''
-        ${pkgs.jq}/bin/jq . ${configJson} > $out/${lib.escapeShellArg k}.tf.json
-      ''))
-      (cleanTerraform module_tf'))}
+    ${lib.concatStrings (
+      lib.mapAttrsToList (
+        k: config_tf:
+        (
+          let
+            # TODO: filterAttrsRecursive?
+            configJson = writeText "${k}.tf.json" (builtins.toJSON (cleanTerraform config_tf));
+          in
+          ''
+            ${pkgs.jq}/bin/jq . ${configJson} > $out/${lib.escapeShellArg k}.tf.json
+          ''
+        )
+      ) (cleanTerraform module_tf')
+    )}
   '';
-
 
   tfcmd = writeScript "${name}-tfcmd" ''
     set -e
@@ -80,7 +99,6 @@ let
     ln -s ${tfcmd} $out/bin/apply
     ln -s ${tfcmd} $out/bin/destroy
   '';
-
 in
 {
   inherit name module;
@@ -103,5 +121,8 @@ in
     touch $out
   '';
 
-  meta.targets = [ "module" "test" ];
+  meta.targets = [
+    "module"
+    "test"
+  ];
 }

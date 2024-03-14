@@ -14,13 +14,11 @@ let
     ref = "refs/heads/canon";
   };
 in
-(pkgs.runCommandLocal "export-views" { }
-  ''
-    echo "no-op carrier target for repo export steps" | tee $out
-  '').overrideAttrs
+(pkgs.runCommandLocal "export-views" { } ''
+  echo "no-op carrier target for repo export steps" | tee $out
+'').overrideAttrs
   (_: {
     meta.ci.extraSteps = {
       inherit export-tvix export-kit;
     };
   })
-

@@ -1,4 +1,11 @@
-{ depot, modulesPath, config, lib, pkgs, ... }:
+{
+  depot,
+  modulesPath,
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 {
   imports = [
@@ -19,7 +26,14 @@
 
   boot = {
     initrd = {
-      availableKernelModules = [ "nvme" "xhci_pci" "ahci" "usbhid" "usb_storage" "sd_mod" ];
+      availableKernelModules = [
+        "nvme"
+        "xhci_pci"
+        "ahci"
+        "usbhid"
+        "usb_storage"
+        "sd_mod"
+      ];
       kernelModules = [ ];
     };
 
@@ -49,9 +63,7 @@
     };
   };
 
-  swapDevices = [{
-    device = "/dev/disk/by-uuid/8bdae7c8-5160-491f-8cd0-4f0a79acadf9";
-  }];
+  swapDevices = [ { device = "/dev/disk/by-uuid/8bdae7c8-5160-491f-8cd0-4f0a79acadf9"; } ];
 
   services.earlyoom = {
     enable = true;
@@ -116,8 +128,7 @@
       export BUILDKITE_AGENT_HOME=${dataDir}
     '';
   };
-  systemd.services.buildkite-agent-ogopogo-1.serviceConfig.User =
-    lib.mkForce "grfn";
+  systemd.services.buildkite-agent-ogopogo-1.serviceConfig.User = lib.mkForce "grfn";
   users.users.grfn.extraGroups = [ "keys" ];
 
   age.secrets =

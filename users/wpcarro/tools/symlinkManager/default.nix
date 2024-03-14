@@ -5,10 +5,6 @@ let
 in
 depot.nix.buildGo.program {
   name = "symlink-mgr";
-  srcs = [
-    ./main.go
-  ];
-  deps = with gopkgs; [
-    utils
-  ];
+  srcs = [ ./main.go ];
+  deps = with gopkgs; [ utils ];
 }

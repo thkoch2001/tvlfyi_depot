@@ -9,7 +9,10 @@ let
       export DIRECTORY_SERVICE_ADDR=memory://
       export PATH_INFO_SERVICE_ADDR=memory://
       TVIX_STORE_OUTPUT=$(result/bin/tvix-store import ${p})
-      EXPECTED='${/* the vebatim expected Tvix output: */expectedPath}'
+      EXPECTED='${
+        # the vebatim expected Tvix output:
+        expectedPath
+      }'
 
       echo "tvix-store output: ''${TVIX_STORE_OUTPUT}"
       if [ "$TVIX_STORE_OUTPUT" != "$EXPECTED" ]; then
@@ -30,9 +33,17 @@ in
 
   # virtiofs feature currently fails to build on Darwin.
   # we however can ship it for non-darwin.
-  features = if pkgs.stdenv.isDarwin then [ "default" ] else [ "default" "virtiofs" ];
-}).overrideAttrs (_: {
-  meta.ci.extraSteps = {
-    import-docs = (mkImportCheck "tvix/store/docs" ./docs);
-  };
-})
+  features =
+    if pkgs.stdenv.isDarwin then
+      [ "default" ]
+    else
+      [
+        "default"
+        "virtiofs"
+      ];
+}).overrideAttrs
+  (_: {
+    meta.ci.extraSteps = {
+      import-docs = (mkImportCheck "tvix/store/docs" ./docs);
+    };
+  })

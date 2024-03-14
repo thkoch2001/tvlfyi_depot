@@ -1,6 +1,11 @@
 # This file configures the primary build pipeline used for the
 # top-level list of depot targets.
-{ depot, pkgs, externalArgs, ... }:
+{
+  depot,
+  pkgs,
+  externalArgs,
+  ...
+}:
 
 let
   # Protobuf check step which validates that changes to .proto files
@@ -17,9 +22,10 @@ let
     additionalSteps = [ protoCheck ];
 
     parentTargetMap =
-      if (externalArgs ? parentTargetMap)
-      then builtins.fromJSON (builtins.readFile externalArgs.parentTargetMap)
-      else { };
+      if (externalArgs ? parentTargetMap) then
+        builtins.fromJSON (builtins.readFile externalArgs.parentTargetMap)
+      else
+        { };
 
     postBuildSteps = [
       # After successful builds, create a gcroot for builds on canon.

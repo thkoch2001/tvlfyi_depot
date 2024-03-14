@@ -6,18 +6,19 @@
 # it simple. Adding it may be useful if we set up test scaffolding
 # around the exported workspace.
 
-{ pkgs ? (import ./nixpkgs {
-    depotOverlays = false;
-    depot.third_party.sources = import ./sources { };
-    externalArgs = args;
-  })
-, ...
+{
+  pkgs ? (
+    import ./nixpkgs {
+      depotOverlays = false;
+      depot.third_party.sources = import ./sources { };
+      externalArgs = args;
+    }
+  ),
+  ...
 }@args:
 
 pkgs.lib.fix (self: {
-  besadii = import ./besadii {
-    depot.nix.buildGo = self.buildGo;
-  };
+  besadii = import ./besadii { depot.nix.buildGo = self.buildGo; };
 
   buildGo = import ./buildGo { inherit pkgs; };
 

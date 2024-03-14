@@ -1,12 +1,12 @@
 # Portable chunked streams for Common Lisp
 { depot, pkgs, ... }:
 
-let src = with pkgs; srcOnly lispPackages.chunga;
-in depot.nix.buildLisp.library {
+let
+  src = with pkgs; srcOnly lispPackages.chunga;
+in
+depot.nix.buildLisp.library {
   name = "chunga";
-  deps = with depot.third_party.lisp; [
-    trivial-gray-streams
-  ];
+  deps = with depot.third_party.lisp; [ trivial-gray-streams ];
 
   srcs = map (f: src + ("/" + f)) [
     "packages.lisp"

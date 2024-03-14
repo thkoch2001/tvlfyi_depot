@@ -1,4 +1,9 @@
-{ depot, pkgs, lib, ... }:
+{
+  depot,
+  pkgs,
+  lib,
+  ...
+}:
 
 let
   bins = depot.nix.getBins pkgs.sqlite [ "sqlite3" ];

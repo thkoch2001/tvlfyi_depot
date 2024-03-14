@@ -65,30 +65,27 @@ let
       bordeaux-threads
     ];
 
-    srcs = [
-      "${src}/postmodern.asd"
-    ] ++ (map (f: src + ("/postmodern/" + f)) [
-      "package.lisp"
-      "config.lisp"
-      "connect.lisp"
-      "json-encoder.lisp"
-      "query.lisp"
-      "prepare.lisp"
-      "roles.lisp"
-      "util.lisp"
-      "transaction.lisp"
-      "namespace.lisp"
-      "execute-file.lisp"
-      "table.lisp"
-      "deftable.lisp"
-    ]);
+    srcs =
+      [ "${src}/postmodern.asd" ]
+      ++ (map (f: src + ("/postmodern/" + f)) [
+        "package.lisp"
+        "config.lisp"
+        "connect.lisp"
+        "json-encoder.lisp"
+        "query.lisp"
+        "prepare.lisp"
+        "roles.lisp"
+        "util.lisp"
+        "transaction.lisp"
+        "namespace.lisp"
+        "execute-file.lisp"
+        "table.lisp"
+        "deftable.lisp"
+      ]);
 
     brokenOn = [
       "ecl" # TODO(sterni): https://gitlab.com/embeddable-common-lisp/ecl/-/issues/651
     ];
   };
-
 in
-postmodern // {
-  inherit s-sql cl-postgres;
-}
+postmodern // { inherit s-sql cl-postgres; }

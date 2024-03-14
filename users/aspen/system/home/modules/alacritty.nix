@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 {
   programs.alacritty = {
@@ -31,7 +36,14 @@
 
         # Normal colors
         normal = {
-          inherit red green yellow blue magenta cyan;
+          inherit
+            red
+            green
+            yellow
+            blue
+            magenta
+            cyan
+            ;
           black = base02;
           white = base2;
         };

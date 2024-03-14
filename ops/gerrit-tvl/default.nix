@@ -1,4 +1,9 @@
-{ depot, pkgs, lib, ... }:
+{
+  depot,
+  pkgs,
+  lib,
+  ...
+}:
 
 let
   classPath = lib.concatStringsSep ":" [
@@ -12,9 +17,7 @@ pkgs.stdenvNoCC.mkDerivation rec {
 
   src = ./.;
 
-  nativeBuildInputs = with pkgs; [
-    jdk
-  ];
+  nativeBuildInputs = with pkgs; [ jdk ];
 
   buildPhase = ''
     mkdir $NIX_BUILD_TOP/build

@@ -1,7 +1,6 @@
 {
   # list of package attribute names to get at run time
-  packageNamesAtRuntimeJsonPath
-,
+  packageNamesAtRuntimeJsonPath,
 }:
 let
   pkgs = import <nixpkgs> { };
@@ -11,7 +10,6 @@ let
   packageNamesAtRuntime = builtins.fromJSON (builtins.readFile packageNamesAtRuntimeJsonPath);
 
   runtime = map getPkg packageNamesAtRuntime;
-
 in
 pkgs.symlinkJoin {
   name = "symlink-farm";

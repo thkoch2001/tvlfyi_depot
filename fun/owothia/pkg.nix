@@ -1,15 +1,16 @@
-{ mkDerivation
-, base
-, bytestring
-, chatter
-, containers
-, envy
-, irc-client
-, lens
-, lib
-, random
-, relude
-, text
+{
+  mkDerivation,
+  base,
+  bytestring,
+  chatter,
+  containers,
+  envy,
+  irc-client,
+  lens,
+  lib,
+  random,
+  relude,
+  text,
 }:
 mkDerivation {
   pname = "owothia";

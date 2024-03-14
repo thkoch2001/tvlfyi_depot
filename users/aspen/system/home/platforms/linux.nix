@@ -3,7 +3,6 @@
 let
 
   depot = config.lib.depot;
-
 in
 {
   imports = [
@@ -78,5 +77,7 @@ in
 
   services.lorri.enable = true;
 
-  services.dropbox = { enable = true; };
+  services.dropbox = {
+    enable = true;
+  };
 }

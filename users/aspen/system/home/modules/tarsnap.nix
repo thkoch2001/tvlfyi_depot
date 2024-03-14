@@ -1,9 +1,12 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 {
-  home.packages = with pkgs; [
-    tarsnap
-  ];
+  home.packages = with pkgs; [ tarsnap ];
 
   home.file.".tarsnaprc".text = ''
     ### Recommended options

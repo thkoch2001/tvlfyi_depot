@@ -1,12 +1,16 @@
 # I tried looking up the manufacturer, product name, and version, but
 # `dmidecode -t system` reported "To be filled by O.E.M." for each of these
 # fields.
-{ config, lib, pkgs, modulesPath, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  modulesPath,
+  ...
+}:
 
 {
-  imports = [
-    (modulesPath + "/installer/scan/not-detected.nix")
-  ];
+  imports = [ (modulesPath + "/installer/scan/not-detected.nix") ];
 
   fileSystems."/" = {
     device = "/dev/disk/by-label/NIXROOT";

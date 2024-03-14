@@ -1,7 +1,9 @@
 { depot, pkgs, ... }:
 
-let src = with pkgs; srcOnly lispPackages.anaphora;
-in depot.nix.buildLisp.library {
+let
+  src = with pkgs; srcOnly lispPackages.anaphora;
+in
+depot.nix.buildLisp.library {
   name = "anaphora";
 
   srcs = map (f: src + ("/" + f)) [

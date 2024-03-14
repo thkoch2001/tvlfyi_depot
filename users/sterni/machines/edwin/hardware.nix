@@ -1,4 +1,10 @@
-{ config, lib, pkgs, depot, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  depot,
+  ...
+}:
 
 {
   config = {
@@ -12,9 +18,7 @@
         ];
       };
 
-      kernelModules = [
-        "kvm-intel"
-      ];
+      kernelModules = [ "kvm-intel" ];
 
       initrd.availableKernelModules = [
         "ahci"

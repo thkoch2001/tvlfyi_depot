@@ -1,22 +1,20 @@
 { pkgs, depot, ... }:
 
 let
-  string = pkgs.callPackage
-    ({ emacsPackages }:
-      emacsPackages.trivialBuild {
-        pname = "string";
-        version = "1.0.0";
-        src = ./string.el;
-        packageRequires = [
-          emacsPackages.dash
-          emacsPackages.s
-        ];
-      })
-    { };
+  string = pkgs.callPackage (
+    { emacsPackages }:
+    emacsPackages.trivialBuild {
+      pname = "string";
+      version = "1.0.0";
+      src = ./string.el;
+      packageRequires = [
+        emacsPackages.dash
+        emacsPackages.s
+      ];
+    }
+  ) { };
 
-  emacs = (pkgs.emacsPackagesFor pkgs.emacs28).emacsWithPackages (epkgs: [
-    string
-  ]);
+  emacs = (pkgs.emacsPackagesFor pkgs.emacs28).emacsWithPackages (epkgs: [ string ]);
 in
 string.overrideAttrs (_old: {
   doCheck = true;

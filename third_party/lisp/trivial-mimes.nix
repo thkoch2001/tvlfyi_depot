@@ -10,7 +10,6 @@ let
       # We want to prevent an ASDF lookup at build time since this will
       # generally fail — we are not using ASDF after all.
   '';
-
 in
 depot.nix.buildLisp.library {
   name = "trivial-mimes";

@@ -3,7 +3,5 @@
 { pkgs, ... }:
 
 pkgs.git.overrideAttrs (old: {
-  patches = (old.patches or [ ]) ++ [
-    ./0001-feat-third_party-git-date-add-dottime-format.patch
-  ];
+  patches = (old.patches or [ ]) ++ [ ./0001-feat-third_party-git-date-add-dottime-format.patch ];
 })

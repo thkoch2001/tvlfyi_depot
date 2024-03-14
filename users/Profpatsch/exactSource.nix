@@ -22,7 +22,8 @@ let
   #     error: getting attributes of path
   #     '/home/grahamc/playground/bogus': No such file or
   #     directory
-  requireAllPathsExist = paths:
+  requireAllPathsExist =
+    paths:
     let
       validation = builtins.map (path: "${path}") paths;
     in
@@ -37,9 +38,8 @@ let
   #
   # Concretely, convert: "/foo/baz/tux" in to:
   #     [ "/foo/baz/tux" "/foo/baz" "/foo" ]
-  recursivelyPopDir = path:
-    if path == "/" then [ ]
-    else [ path ] ++ (recursivelyPopDir (builtins.dirOf path));
+  recursivelyPopDir =
+    path: if path == "/" then [ ] else [ path ] ++ (recursivelyPopDir (builtins.dirOf path));
 
   # Given a list of of strings, dedup the list and return a
   # list of all unique strings.
@@ -54,33 +54,32 @@ let
   #     ]
   # then convert that to { "foo" = ""; "bar" = ""; }
   # then get the attribute names, "foo" and "bar".
-  dedup = strings:
+  dedup =
+    strings:
     let
-      name_value_pairs = builtins.map
-        (string: { name = string; value = ""; })
-        strings;
+      name_value_pairs = builtins.map (string: {
+        name = string;
+        value = "";
+      }) strings;
       attrset_of_strings = builtins.listToAttrs name_value_pairs;
     in
     builtins.attrNames attrset_of_strings;
 
-  exactSource = source_root: paths:
+  exactSource =
+    source_root: paths:
     let
       all_possible_paths =
         let
           # Convert all the paths in to relative paths on disk.
           # ie: stringPaths will contain [ "/home/grahamc/playground/..." ];
           # instead of /nix/store paths.
-          string_paths = builtins.map toString
-            (requireAllPathsExist paths);
+          string_paths = builtins.map toString (requireAllPathsExist paths);
 
-          all_paths_with_duplicates = builtins.concatMap
-            recursivelyPopDir
-            string_paths;
+          all_paths_with_duplicates = builtins.concatMap recursivelyPopDir string_paths;
         in
         dedup all_paths_with_duplicates;
 
-      pathIsSpecified = path:
-        builtins.elem path all_possible_paths;
+      pathIsSpecified = path: builtins.elem path all_possible_paths;
     in
     builtins.path {
       path = source_root;

@@ -7,18 +7,20 @@ in
 depot.third_party.naersk.buildPackage {
   src = ./.;
 
-  buildInputs = [
-    llvmPackages.clang
-    llvmPackages.llvm
-    llvmPackages.bintools
-    llvmPackages.libclang.lib
-  ] ++ (with pkgs; [
-    zlib
-    ncurses
-    libxml2
-    libffi
-    pkg-config
-  ]);
+  buildInputs =
+    [
+      llvmPackages.clang
+      llvmPackages.llvm
+      llvmPackages.bintools
+      llvmPackages.libclang.lib
+    ]
+    ++ (with pkgs; [
+      zlib
+      ncurses
+      libxml2
+      libffi
+      pkg-config
+    ]);
 
   doCheck = true;
 

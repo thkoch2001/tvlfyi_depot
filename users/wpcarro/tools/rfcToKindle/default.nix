@@ -4,8 +4,6 @@
 # it's an imcomplete packaging.
 depot.nix.buildGo.program {
   name = "rfcToKindle";
-  srcs = [
-    ./main.go
-  ];
+  srcs = [ ./main.go ];
   deps = [ ];
 }

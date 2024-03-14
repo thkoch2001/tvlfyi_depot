@@ -1,9 +1,16 @@
 # This file builds an Emacs pre-configured with the packages I need
 # and my personal Emacs configuration.
-{ depot, lib, pkgs, ... }:
+{
+  depot,
+  lib,
+  pkgs,
+  ...
+}:
 
-pkgs.makeOverridable
-  ({ emacs ? pkgs.emacs29 }:
+pkgs.makeOverridable (
+  {
+    emacs ? pkgs.emacs29,
+  }:
   let
     emacsPackages = (pkgs.emacsPackagesFor emacs);
     emacsWithPackages = emacsPackages.emacsWithPackages;
@@ -21,107 +28,117 @@ pkgs.makeOverridable
     identity = x: x;
 
     # tree-sitter grammars for various ts-modes
-    customTreesitGrammars = emacs.pkgs.treesit-grammars.with-grammars (g: with g; [
-      tree-sitter-bash
-      tree-sitter-c
-      tree-sitter-cmake
-      tree-sitter-cpp
-      tree-sitter-css
-      tree-sitter-dockerfile
-      tree-sitter-go
-      tree-sitter-gomod
-      tree-sitter-hcl
-      tree-sitter-html
-      tree-sitter-java
-      tree-sitter-json
-      tree-sitter-latex
-      tree-sitter-make
-      tree-sitter-nix
-      tree-sitter-python
-      tree-sitter-rust
-      tree-sitter-sql
-      tree-sitter-toml
-      tree-sitter-yaml
-    ]);
+    customTreesitGrammars = emacs.pkgs.treesit-grammars.with-grammars (
+      g: with g; [
+        tree-sitter-bash
+        tree-sitter-c
+        tree-sitter-cmake
+        tree-sitter-cpp
+        tree-sitter-css
+        tree-sitter-dockerfile
+        tree-sitter-go
+        tree-sitter-gomod
+        tree-sitter-hcl
+        tree-sitter-html
+        tree-sitter-java
+        tree-sitter-json
+        tree-sitter-latex
+        tree-sitter-make
+        tree-sitter-nix
+        tree-sitter-python
+        tree-sitter-rust
+        tree-sitter-sql
+        tree-sitter-toml
+        tree-sitter-yaml
+      ]
+    );
 
-    tazjinsEmacs = pkgfun: (emacsWithPackages (epkgs: pkgfun (with epkgs; [
-      ace-link
-      ace-window
-      avy
-      bazel
-      browse-kill-ring
-      cargo
-      clojure-mode
-      consult
-      deft
-      direnv
-      elixir-mode
-      elm-mode
-      erlang
-      depotExwm
-      go-mode
-      google-c-style
-      gruber-darker-theme
-      haskell-mode
-      ht
-      hydra
-      idle-highlight-mode
-      inspector
-      jq-mode
-      kotlin-mode
-      kubernetes
-      magit
-      markdown-toc
-      multiple-cursors
-      nginx-mode
-      nix-mode
-      notmuch
-      paredit
-      password-store
-      pinentry
-      prescient
-      protobuf-mode
-      rainbow-delimiters
-      rainbow-mode
-      request
-      restclient
-      rust-mode
-      sly
-      string-edit-at-point
-      terraform-mode
-      undo-tree
-      uuidgen
-      vertico
-      vterm
-      web-mode
-      websocket
-      which-key
-      xelb
-      yasnippet
-      zetteldeft
-      zoxide
+    tazjinsEmacs =
+      pkgfun:
+      (emacsWithPackages (
+        epkgs:
+        pkgfun (
+          with epkgs;
+          [
+            ace-link
+            ace-window
+            avy
+            bazel
+            browse-kill-ring
+            cargo
+            clojure-mode
+            consult
+            deft
+            direnv
+            elixir-mode
+            elm-mode
+            erlang
+            depotExwm
+            go-mode
+            google-c-style
+            gruber-darker-theme
+            haskell-mode
+            ht
+            hydra
+            idle-highlight-mode
+            inspector
+            jq-mode
+            kotlin-mode
+            kubernetes
+            magit
+            markdown-toc
+            multiple-cursors
+            nginx-mode
+            nix-mode
+            notmuch
+            paredit
+            password-store
+            pinentry
+            prescient
+            protobuf-mode
+            rainbow-delimiters
+            rainbow-mode
+            request
+            restclient
+            rust-mode
+            sly
+            string-edit-at-point
+            terraform-mode
+            undo-tree
+            uuidgen
+            vertico
+            vterm
+            web-mode
+            websocket
+            which-key
+            xelb
+            yasnippet
+            zetteldeft
+            zoxide
 
-      # experimental (not otherwise embedded in config yet)
-      orderless
-      corfu
-      eat
+            # experimental (not otherwise embedded in config yet)
+            orderless
+            corfu
+            eat
 
-      # Wonky stuff
-      (currentTelega epkgs)
-      customTreesitGrammars # TODO(tazjin): how is this *supposed* to work?!
+            # Wonky stuff
+            (currentTelega epkgs)
+            customTreesitGrammars # TODO(tazjin): how is this *supposed* to work?!
 
-      # Custom depot packages (either ours, or overridden ones)
-      tvlPackages.dottime
-      tvlPackages.nix-util
-      tvlPackages.passively
-      tvlPackages.rcirc
-      tvlPackages.term-switcher
-      tvlPackages.treecrumbs
-      tvlPackages.tvl
+            # Custom depot packages (either ours, or overridden ones)
+            tvlPackages.dottime
+            tvlPackages.nix-util
+            tvlPackages.passively
+            tvlPackages.rcirc
+            tvlPackages.term-switcher
+            tvlPackages.treecrumbs
+            tvlPackages.tvl
 
-      # Dynamic/native modules
-      depot.users.tazjin.gio-list-apps
-    ])));
+            # Dynamic/native modules
+            depot.users.tazjin.gio-list-apps
+          ]
+        )
+      ));
 
     # Tired of telega.el runtime breakages through tdlib
     # incompatibility. Target to make that a build failure instead.
@@ -146,8 +163,9 @@ pkgs.makeOverridable
         ${tgEmacs}/bin/emacs --script ${verifyTdlibVersion} && touch $out
       '';
   in
-  lib.fix
-    (self: l: f: (pkgs.writeShellScriptBin "tazjins-emacs" ''
+  lib.fix (
+    self: l: f:
+    (pkgs.writeShellScriptBin "tazjins-emacs" ''
       export PATH="${emacsBinPath}:$PATH"
       exec ${tazjinsEmacs f}/bin/emacs \
         --debug-init \
@@ -182,8 +200,6 @@ pkgs.makeOverridable
           inherit tdlibCheck;
           meta.ci.targets = [ "tdlibCheck" ];
         };
-      }))
-    null
-    identity
-  )
-{ }
+      })
+  ) null identity
+) { }

@@ -1,4 +1,4 @@
-args @ { depot, pkgs, ... }:
+args@{ depot, pkgs, ... }:
 
 rec {
   mugwump = import ./machines/mugwump.nix;
@@ -7,20 +7,26 @@ rec {
 
   roswell = import ./machines/roswell.nix;
 
-  roswellSystem = (depot.ops.nixos.nixosFor ({ ... }: {
-    imports = [
-      ./machines/roswell.nix
-      "${pkgs.home-manager.src}/nixos"
-    ];
+  roswellSystem =
+    (depot.ops.nixos.nixosFor (
+      { ... }:
+      {
+        imports = [
+          ./machines/roswell.nix
+          "${pkgs.home-manager.src}/nixos"
+        ];
 
-    # Use the same nixpkgs as everything else
-    home-manager.useGlobalPkgs = true;
+        # Use the same nixpkgs as everything else
+        home-manager.useGlobalPkgs = true;
 
-    home-manager.users.grfn = { config, lib, ... }: {
-      imports = [ ../home/machines/roswell.nix ];
-      lib.depot = depot;
-    };
-  })).system;
+        home-manager.users.grfn =
+          { config, lib, ... }:
+          {
+            imports = [ ../home/machines/roswell.nix ];
+            lib.depot = depot;
+          };
+      }
+    )).system;
 
   ogopogo = import ./machines/ogopogo.nix;
 

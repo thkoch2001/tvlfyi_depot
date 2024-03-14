@@ -1,13 +1,16 @@
-{ depot, pkgs, lib, ... }:
+{
+  depot,
+  pkgs,
+  lib,
+  ...
+}:
 { ... }:
 
 let
   inherit (depot.users) wpcarro;
   inherit (depot.users.wpcarro.lib) usermod;
 
-  wpcarrosEmacs = wpcarro.emacs.nixos {
-    load = [ ./marcus.el ];
-  };
+  wpcarrosEmacs = wpcarro.emacs.nixos { load = [ ./marcus.el ]; };
 
   quasselClient = pkgs.quassel.override {
     client = true;
@@ -96,9 +99,7 @@ in
   security.sudo.wheelNeedsPassword = false;
 
   fonts = {
-    packages = with pkgs; [
-      jetbrains-mono
-    ];
+    packages = with pkgs; [ jetbrains-mono ];
 
     fontconfig = {
       defaultFonts = {
@@ -116,45 +117,47 @@ in
   };
 
   home-manager.useGlobalPkgs = true;
-  home-manager.users.wpcarro = { config, lib, ... }: {
-    programs.git = {
-      enable = true;
-      userName = "William Carroll";
-      userEmail = "wpcarro@gmail.com";
-      extraConfig = {
-        pull.rebase = true;
+  home-manager.users.wpcarro =
+    { config, lib, ... }:
+    {
+      programs.git = {
+        enable = true;
+        userName = "William Carroll";
+        userEmail = "wpcarro@gmail.com";
+        extraConfig = {
+          pull.rebase = true;
+        };
       };
+
+      services.picom = {
+        enable = true;
+        vSync = true;
+        backend = "glx";
+      };
+
+      services.redshift = {
+        enable = true;
+        latitude = 37.4223931;
+        longitude = -122.0864016;
+      };
+
+      services.dunst.enable = true;
+      xdg.configFile."dunst/dunstrc" = {
+        source = wpcarro.dotfiles.dunstrc;
+        onChange = ''
+          ${pkgs.procps}/bin/pkill -u "$USER" ''${VERBOSE+-e} dunst || true
+        '';
+      };
+
+      systemd.user.startServices = true;
+
+      # Previous default version, see https://github.com/nix-community/home-manager/blob/master/docs/release-notes/rl-2211.adoc
+      home.stateVersion = "18.09";
     };
-
-    services.picom = {
-      enable = true;
-      vSync = true;
-      backend = "glx";
-    };
-
-    services.redshift = {
-      enable = true;
-      latitude = 37.4223931;
-      longitude = -122.0864016;
-    };
-
-    services.dunst.enable = true;
-    xdg.configFile."dunst/dunstrc" = {
-      source = wpcarro.dotfiles.dunstrc;
-      onChange = ''
-        ${pkgs.procps}/bin/pkill -u "$USER" ''${VERBOSE+-e} dunst || true
-      '';
-    };
-
-    systemd.user.startServices = true;
-
-    # Previous default version, see https://github.com/nix-community/home-manager/blob/master/docs/release-notes/rl-2211.adoc
-    home.stateVersion = "18.09";
-  };
 
   environment.systemPackages =
-    wpcarro.common.shell-utils ++
-    (with pkgs; [
+    wpcarro.common.shell-utils
+    ++ (with pkgs; [
       alacritty
       firefox
       pavucontrol

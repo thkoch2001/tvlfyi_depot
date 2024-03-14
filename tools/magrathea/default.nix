@@ -13,14 +13,16 @@ let
     nix
     lib
     ;
-
 in
 stdenv.mkDerivation {
   name = "magrathea";
   src = ./.;
   dontInstall = true;
 
-  nativeBuildInputs = [ chicken makeWrapper ];
+  nativeBuildInputs = [
+    chicken
+    makeWrapper
+  ];
   buildInputs = with chickenPackages.chickenEggs; [
     matchable
     srfi-13

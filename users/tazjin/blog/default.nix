@@ -1,4 +1,9 @@
-{ depot, lib, pkgs, ... }:
+{
+  depot,
+  lib,
+  pkgs,
+  ...
+}:
 
 with depot.nix.yants;
 
@@ -27,11 +32,10 @@ let
   rendered = pkgs.runCommand "tazjins-blog" { } ''
     mkdir -p $out
 
-    ${lib.concatStringsSep "\n" (map (post:
-      "cp ${renderPost config post} $out/${post.key}.html"
-    ) posts)}
+    ${lib.concatStringsSep "\n" (
+      map (post: "cp ${renderPost config post} $out/${post.key}.html") posts
+    )}
   '';
-
 in
 {
   inherit rendered config;
@@ -40,11 +44,11 @@ in
   posts = filter includePost posts;
 
   # Generate embeddable nginx configuration for redirects from old post URLs
-  oldRedirects = lib.concatStringsSep "\n" (map
-    (post: ''
+  oldRedirects = lib.concatStringsSep "\n" (
+    map (post: ''
       location ~* ^(/en)?/${post.oldKey} {
         return 301 https://tazj.in/blog/${post.key};
       }
-    '')
-    (filter (hasAttr "oldKey") posts));
+    '') (filter (hasAttr "oldKey") posts)
+  );
 }

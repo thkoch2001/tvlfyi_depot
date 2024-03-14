@@ -1,4 +1,9 @@
-{ depot, lib, pkgs, ... }:
+{
+  depot,
+  lib,
+  pkgs,
+  ...
+}:
 
 let
   buildInputs = with pkgs; [
@@ -36,20 +41,21 @@ let
     OPENCORPORA_DATA = openCorpora;
     OPENRUSSIAN_DATA = openRussianArchive;
   };
-
 in
-lib.fix (self: depot.third_party.naersk.buildPackage {
-  src = depot.third_party.gitignoreSource ./.;
-  inherit buildInputs;
+lib.fix (
+  self:
+  depot.third_party.naersk.buildPackage {
+    src = depot.third_party.gitignoreSource ./.;
+    inherit buildInputs;
 
-  passthru = depot.nix.readTree.drvTargets {
-    inherit shell openCorpora;
+    passthru = depot.nix.readTree.drvTargets {
+      inherit shell openCorpora;
 
-    # target that actually builds an entire database
-    database = pkgs.runCommand "tvl-russian-db.sqlite"
-      {
+      # target that actually builds an entire database
+      database = pkgs.runCommand "tvl-russian-db.sqlite" {
         OPENCORPORA_DATA = openCorpora;
         OPENRUSSIAN_DATA = openRussianArchive;
       } "${self}/bin/data-import --output $out";
-  };
-})
+    };
+  }
+)

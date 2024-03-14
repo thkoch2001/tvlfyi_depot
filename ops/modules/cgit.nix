@@ -1,16 +1,23 @@
 # Configuration for running the TVL cgit instance using thttpd.
-{ config, depot, lib, pkgs, ... }:
+{
+  config,
+  depot,
+  lib,
+  pkgs,
+  ...
+}:
 
 let
   cfg = config.services.depot.cgit;
 
   userConfig =
-    if builtins.isNull cfg.user then {
-      DynamicUser = true;
-    } else {
-      User = cfg.user;
-      Group = cfg.user;
-    };
+    if builtins.isNull cfg.user then
+      { DynamicUser = true; }
+    else
+      {
+        User = cfg.user;
+        Group = cfg.user;
+      };
 in
 {
   options.services.depot.cgit = with lib; {
@@ -46,9 +53,7 @@ in
       serviceConfig = {
         Restart = "on-failure";
 
-        ExecStart = depot.web.cgit-tvl.override {
-          inherit (cfg) port repo;
-        };
+        ExecStart = depot.web.cgit-tvl.override { inherit (cfg) port repo; };
       } // userConfig;
     };
   };

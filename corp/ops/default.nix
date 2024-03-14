@@ -1,10 +1,13 @@
-{ depot, lib, pkgs, ... }:
+{
+  depot,
+  lib,
+  pkgs,
+  ...
+}:
 
 depot.nix.readTree.drvTargets rec {
   # Provide a Terraform wrapper with Yandex Cloud support.
-  terraform = pkgs.terraform.withPlugins (p: [
-    p.yandex
-  ]);
+  terraform = pkgs.terraform.withPlugins (p: [ p.yandex ]);
 
   validate = depot.tools.checks.validateTerraform {
     inherit terraform;

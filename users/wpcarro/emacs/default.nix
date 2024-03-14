@@ -4,7 +4,12 @@
 #
 # USAGE:
 #   $ nix-build -A users.wpcarro.emacs.osx -o /Applications/BillsEmacs.app
-{ depot, pkgs, lib, ... }:
+{
+  depot,
+  pkgs,
+  lib,
+  ...
+}:
 
 # TODO(wpcarro): See if it's possible to expose emacsclient on PATH, so that I
 # don't need to depend on wpcarros-emacs and emacs in my NixOS configurations.
@@ -16,31 +21,35 @@ let
   inherit (pkgs) runCommand writeShellScriptBin;
 
   emacsBinPath = makeBinPath (
-    wpcarro.common.shell-utils ++
-    # Rust dependencies
-    (with pkgs; [
-      cargo
-      rust-analyzer
-      rustc
-      rustfmt
-    ]) ++
-    # Misc dependencies
-    (with pkgs; [
-      ispell
-      nix
-      rust-analyzer
-      rustc
-      rustfmt
-      xorg.xset
-    ] ++
-    (if pkgs.stdenv.isLinux then [
-      scrot
-    ] else [ ]))
+    wpcarro.common.shell-utils
+    ++
+      # Rust dependencies
+      (with pkgs; [
+        cargo
+        rust-analyzer
+        rustc
+        rustfmt
+      ])
+    ++
+      # Misc dependencies
+      (
+        with pkgs;
+        [
+          ispell
+          nix
+          rust-analyzer
+          rustc
+          rustfmt
+          xorg.xset
+        ]
+        ++ (if pkgs.stdenv.isLinux then [ scrot ] else [ ])
+      )
   );
 
   emacsWithPackages = (emacsPackagesFor emacs28).emacsWithPackages;
 
-  wpcarrosEmacs = emacsWithPackages (epkgs:
+  wpcarrosEmacs = emacsWithPackages (
+    epkgs:
     (with wpcarro.emacs.pkgs; [
       al
       bookmark
@@ -57,99 +66,100 @@ let
       tuple
       vterm-mgt
       zle
-    ]) ++
+    ])
+    ++
 
-    (with epkgs.tvlPackages; [
-      tvl
-    ]) ++
+      (with epkgs.tvlPackages; [ tvl ])
+    ++
 
-    (with epkgs.elpaPackages; [
-      exwm
-    ]) ++
+      (with epkgs.elpaPackages; [ exwm ])
+    ++
 
-    (with epkgs.melpaPackages; [
-      alert
-      all-the-icons
-      all-the-icons-ivy
-      avy
-      base16-theme
-      cider
-      clojure-mode
-      company
-      counsel
-      counsel-projectile
-      csharp-mode
-      dap-mode
-      dash
-      deadgrep
-      deferred
-      diminish
-      direnv
-      dockerfile-mode
-      # TODO(wpcarro): broken since channel bump cl/10204
-      # doom-themes
-      elisp-slime-nav
-      elixir-mode
-      elm-mode
-      emojify
-      engine-mode
-      evil
-      evil-collection
-      evil-commentary
-      evil-surround
-      f
-      fish-mode
-      flycheck
-      flymake-shellcheck
-      general
-      go-mode
-      haskell-mode
-      helpful
-      ivy
-      ivy-clipmenu
-      ivy-prescient
-      key-chord
-      lispyville
-      lsp-ui
-      magit
-      magit-popup
-      markdown-mode
-      nix-mode
-      notmuch
-      org-bullets
-      package-lint
-      paradox
-      parsec
-      pcre2el
-      prettier-js
-      projectile
-      py-yapf
-      racket-mode
-      rainbow-delimiters
-      reason-mode
-      refine
-      request
-      restclient
-      rjsx-mode
-      rust-mode
-      sly
-      suggest
-      telephone-line
-      terraform-mode
-      tide
-      ts
-      tuareg
-      use-package
-      vterm
-      web-mode
-      which-key
-      yaml-mode
-      yasnippet
-    ]) ++
+      (with epkgs.melpaPackages; [
+        alert
+        all-the-icons
+        all-the-icons-ivy
+        avy
+        base16-theme
+        cider
+        clojure-mode
+        company
+        counsel
+        counsel-projectile
+        csharp-mode
+        dap-mode
+        dash
+        deadgrep
+        deferred
+        diminish
+        direnv
+        dockerfile-mode
+        # TODO(wpcarro): broken since channel bump cl/10204
+        # doom-themes
+        elisp-slime-nav
+        elixir-mode
+        elm-mode
+        emojify
+        engine-mode
+        evil
+        evil-collection
+        evil-commentary
+        evil-surround
+        f
+        fish-mode
+        flycheck
+        flymake-shellcheck
+        general
+        go-mode
+        haskell-mode
+        helpful
+        ivy
+        ivy-clipmenu
+        ivy-prescient
+        key-chord
+        lispyville
+        lsp-ui
+        magit
+        magit-popup
+        markdown-mode
+        nix-mode
+        notmuch
+        org-bullets
+        package-lint
+        paradox
+        parsec
+        pcre2el
+        prettier-js
+        projectile
+        py-yapf
+        racket-mode
+        rainbow-delimiters
+        reason-mode
+        refine
+        request
+        restclient
+        rjsx-mode
+        rust-mode
+        sly
+        suggest
+        telephone-line
+        terraform-mode
+        tide
+        ts
+        tuareg
+        use-package
+        vterm
+        web-mode
+        which-key
+        yaml-mode
+        yasnippet
+      ])
+    ++
 
-    [
-      epkgs.eglot # from elpa devel
-    ]);
+      [
+        epkgs.eglot # from elpa devel
+      ]
+  );
 
   loadPath = concatStringsSep ":" [
     ./.emacs.d/wpc
@@ -158,10 +168,14 @@ let
   ];
 
   # Transform an attrset into "export k=v" statements.
-  makeEnvVars = env: concatStringsSep "\n"
-    (mapAttrsToList (k: v: "export ${k}=\"${v}\"") env);
+  makeEnvVars = env: concatStringsSep "\n" (mapAttrsToList (k: v: "export ${k}=\"${v}\"") env);
 
-  withEmacsPath = { emacsBin, env ? { }, load ? [ ] }:
+  withEmacsPath =
+    {
+      emacsBin,
+      env ? { },
+      load ? [ ],
+    }:
     writeShellScriptBin "wpcarros-emacs" ''
       export XMODIFIERS=emacs
       export PATH="${emacsBinPath}:$PATH"
@@ -193,26 +207,32 @@ let
     "/opt/X11/bin"
   ];
 
-  infoPlist = pkgs.writeText "Info.plist" (pkgs.lib.generators.toPlist { } {
-    LSEnvironment = {
-      PATH = "${emacsBinPath}:${osxDefaultPath}";
-    };
-    CFBundleExecutable = "BillsEmacs";
-    CFBundleDisplayName = "BillsEmacs";
-    CFBundleIconFile = "AppIcon";
-    CFBundleIconName = "AppIcon";
-  });
+  infoPlist = pkgs.writeText "Info.plist" (
+    pkgs.lib.generators.toPlist { } {
+      LSEnvironment = {
+        PATH = "${emacsBinPath}:${osxDefaultPath}";
+      };
+      CFBundleExecutable = "BillsEmacs";
+      CFBundleDisplayName = "BillsEmacs";
+      CFBundleIconFile = "AppIcon";
+      CFBundleIconName = "AppIcon";
+    }
+  );
 
-  versionPlist = pkgs.writeText "version.plist" (pkgs.lib.generators.toPlist { } {
-    ProjectName = "OSXPlatformSupport";
-  });
+  versionPlist = pkgs.writeText "version.plist" (
+    pkgs.lib.generators.toPlist { } { ProjectName = "OSXPlatformSupport"; }
+  );
 in
 {
   # TODO(wpcarro): Support this with base.overrideAttrs or something similar.
-  nixos = { load ? [ ] }: withEmacsPath {
-    inherit load;
-    emacsBin = "${wpcarrosEmacs}/bin/emacs";
-  };
+  nixos =
+    {
+      load ? [ ],
+    }:
+    withEmacsPath {
+      inherit load;
+      emacsBin = "${wpcarrosEmacs}/bin/emacs";
+    };
 
   # To install GUI:
   # $ nix-build -A users.wpcarro.emacs.osx -o /Applications/BillsEmacs.app

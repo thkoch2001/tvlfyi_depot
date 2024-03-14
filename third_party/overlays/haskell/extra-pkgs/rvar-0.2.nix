@@ -1,10 +1,11 @@
-{ mkDerivation
-, base
-, lib
-, MonadPrompt
-, mtl
-, random-source
-, transformers
+{
+  mkDerivation,
+  base,
+  lib,
+  MonadPrompt,
+  mtl,
+  random-source,
+  transformers,
 }:
 mkDerivation {
   pname = "rvar";

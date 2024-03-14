@@ -1,8 +1,19 @@
 # Module that configures CLBot, our Gerrit->IRC info bridge.
-{ depot, config, lib, pkgs, ... }:
+{
+  depot,
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 let
-  inherit (builtins) attrValues concatStringsSep mapAttrs readFile;
+  inherit (builtins)
+    attrValues
+    concatStringsSep
+    mapAttrs
+    readFile
+    ;
   inherit (pkgs) runCommand;
 
   inherit (lib)
@@ -11,19 +22,26 @@ let
     mkIf
     mkOption
     removeSuffix
-    types;
+    types
+    ;
 
   description = "Bot to forward CL notifications";
   cfg = config.services.depot.clbot;
 
-  mkFlags = flags:
-    concatStringsSep " "
-      (attrValues (mapAttrs (key: value: "-${key} \"${toString value}\"") flags));
+  mkFlags =
+    flags:
+    concatStringsSep " " (attrValues (mapAttrs (key: value: "-${key} \"${toString value}\"") flags));
 
   # Escapes a unit name for use in systemd
-  systemdEscape = name: removeSuffix "\n" (readFile (runCommand "unit-name" { } ''
-    ${pkgs.systemd}/bin/systemd-escape '${name}' >> $out
-  ''));
+  systemdEscape =
+    name:
+    removeSuffix "\n" (
+      readFile (
+        runCommand "unit-name" { } ''
+          ${pkgs.systemd}/bin/systemd-escape '${name}' >> $out
+        ''
+      )
+    );
 
   mkUnit = flags: channel: {
     name = "clbot-${systemdEscape channel}";
@@ -31,9 +49,9 @@ let
       description = "${description} to ${channel}";
       wantedBy = [ "multi-user.target" ];
 
-      script = "${depot.fun.clbot}/bin/clbot ${mkFlags (cfg.flags // {
-        irc_channel = channel;
-      })} -alsologtostderr";
+      script = "${depot.fun.clbot}/bin/clbot ${
+        mkFlags (cfg.flags // { irc_channel = channel; })
+      } -alsologtostderr";
 
       serviceConfig = {
         User = "clbot";

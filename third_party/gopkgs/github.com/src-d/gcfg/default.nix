@@ -10,7 +10,5 @@ depot.nix.buildGo.external {
     sha256 = "044j95skmyrwjw5fwjk6ka32rjgsg0ar0mfp9np19sh1acwv4x4r";
   };
 
-  deps = with depot.third_party; [
-    gopkgs."gopkg.in".warnings
-  ];
+  deps = with depot.third_party; [ gopkgs."gopkg.in".warnings ];
 }

@@ -19,18 +19,18 @@ depot.nix.buildLisp.library {
     "closure-common.asd"
     "package.lisp"
     "definline.lisp"
-    "characters.lisp" #+rune-is-character
+    "characters.lisp" # +rune-is-character
     "syntax.lisp"
-    "encodings.lisp" #-x&y-streams-are-stream
-    "encodings-data.lisp" #-x&y-streams-are-stream
-    "xstream.lisp" #-x&y-streams-are-stream
-    "ystream.lisp" #-x&y-streams-are-stream
+    "encodings.lisp" # -x&y-streams-are-stream
+    "encodings-data.lisp" # -x&y-streams-are-stream
+    "xstream.lisp" # -x&y-streams-are-stream
+    "ystream.lisp" # -x&y-streams-are-stream
     "hax.lisp"
   ];
 
   deps = [
     (depot.nix.buildLisp.bundled "asdf")
     depot.third_party.lisp.trivial-gray-streams
-    depot.third_party.lisp.babel #+rune-is-character
+    depot.third_party.lisp.babel # +rune-is-character
   ];
 }

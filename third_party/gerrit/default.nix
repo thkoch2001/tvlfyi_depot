@@ -22,7 +22,9 @@ let
     ];
     runScript = "/bin/bazel-run";
   };
-  bazel = bazelTop // { override = x: bazelTop; };
+  bazel = bazelTop // {
+    override = x: bazelTop;
+  };
   version = "3.9.1";
 in
 pkgs.lib.makeOverridable pkgs.buildBazelPackage {
@@ -43,7 +45,10 @@ pkgs.lib.makeOverridable pkgs.buildBazelPackage {
     ./0003-Add-titles-to-CLs-over-HTTP.patch
   ];
 
-  bazelTargets = [ "release" "api-skip-javadoc" ];
+  bazelTargets = [
+    "release"
+    "api-skip-javadoc"
+  ];
   inherit bazel;
 
   bazelFlags = [
@@ -131,9 +136,7 @@ pkgs.lib.makeOverridable pkgs.buildBazelPackage {
       unzip bazel-bin/api-skip-javadoc.zip -d "$out"/share/api
     '';
 
-    nativeBuildInputs = with pkgs; [
-      unzip
-    ];
+    nativeBuildInputs = with pkgs; [ unzip ];
   };
 
   passthru = {

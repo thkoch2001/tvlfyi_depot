@@ -9,7 +9,5 @@ depot.nix.buildGo.external {
     hash = "sha256:18sz5426h320l9gdll9n43lzzxg2dmqv0s5fjy6sbvbkkpjs1m28";
   };
 
-  deps = with depot.third_party; [
-    gopkgs."golang.org".x.sys.unix.gopkg
-  ];
+  deps = with depot.third_party; [ gopkgs."golang.org".x.sys.unix.gopkg ];
 }

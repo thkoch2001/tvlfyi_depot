@@ -8,11 +8,11 @@
 # recommended.
 { depot, pkgs, ... }:
 
-let staticHash = depot.web.static.drvHash;
-in {
-  imports = [
-    ./base.nix
-  ];
+let
+  staticHash = depot.web.static.drvHash;
+in
+{
+  imports = [ ./base.nix ];
 
   config = {
     services.nginx.virtualHosts."static.tvl.fyi" = {

@@ -10,7 +10,10 @@ let
   inherit (builtins) toFile toJSON;
 
   acl = struct "acl" {
-    Action = enum [ "accept" "reject" ];
+    Action = enum [
+      "accept"
+      "reject"
+    ];
     Users = list string;
     Ports = list string;
   };

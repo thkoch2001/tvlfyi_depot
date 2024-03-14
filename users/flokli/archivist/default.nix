@@ -1,7 +1,4 @@
-{ depot
-, pkgs
-, ...
-}:
+{ depot, pkgs, ... }:
 depot.nix.readTree.drvTargets {
   shell = pkgs.mkShell {
     name = "archivist-shell";

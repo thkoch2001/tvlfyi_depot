@@ -1,33 +1,31 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 let
-  agda-categories = with pkgs.agdaPackages; mkDerivation rec {
-    pname = "agda-categories";
-    version = "2128fab";
-    src = pkgs.fetchFromGitHub {
-      owner = "agda";
-      repo = "agda-categories";
-      rev = version;
-      sha256 = "08mc20qaz9vp5rhi60rh8wvjkg5aby3bgwwdhfnxha1663qf1q24";
+  agda-categories =
+    with pkgs.agdaPackages;
+    mkDerivation rec {
+      pname = "agda-categories";
+      version = "2128fab";
+      src = pkgs.fetchFromGitHub {
+        owner = "agda";
+        repo = "agda-categories";
+        rev = version;
+        sha256 = "08mc20qaz9vp5rhi60rh8wvjkg5aby3bgwwdhfnxha1663qf1q24";
+      };
+
+      buildInputs = [ standard-library ];
     };
-
-    buildInputs = [ standard-library ];
-  };
-
 in
 
 {
-  imports = [
-    ../lib/cloneRepo.nix
-  ];
+  imports = [ ../lib/cloneRepo.nix ];
 
-  home.packages = with pkgs; [
-    (pkgs.agda.withPackages
-      (p: with p; [
-        p.standard-library
-
-      ]))
-  ];
+  home.packages = with pkgs; [ (pkgs.agda.withPackages (p: with p; [ p.standard-library ])) ];
 
   grfn.impure.clonedRepos = {
     agda-stdlib = {
@@ -54,5 +52,4 @@ in
     /home/grfn/code/agda-stdlib/standard-library.agda-lib
     /home/grfn/code/agda-categories/agda-categories.agda-lib
   '';
-
 }

@@ -1,4 +1,9 @@
-{ depot, pkgs, lib, ... }:
+{
+  depot,
+  pkgs,
+  lib,
+  ...
+}:
 
 let
   #   bins = depot.nix.getBins pkgs.sqlite ["sqlite3"];
@@ -21,13 +26,11 @@ let
       pkgs.haskellPackages.foldl
       pkgs.haskellPackages.sqlite-simple
       pkgs.haskellPackages.xml-conduit
-
     ];
 
     isExecutable = true;
     isLibrary = false;
     license = lib.licenses.mit;
   };
-
 in
 jbovlaste-sqlite

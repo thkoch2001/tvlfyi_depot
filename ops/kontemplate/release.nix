@@ -11,16 +11,15 @@
 # several different architectures and operating systems.
 
 let
-  pkgs = import
-    ((import <nixpkgs> { }).fetchFromGitHub {
-      owner = "NixOS";
-      repo = "nixpkgs-channels";
-      rev = "541d9cce8af7a490fb9085305939569567cb58e6";
-      sha256 = "0jgz72hhzkd5vyq5v69vpljjlnf0lqaz7fh327bvb3cvmwbfxrja";
-    })
-    { };
+  pkgs = import ((import <nixpkgs> { }).fetchFromGitHub {
+    owner = "NixOS";
+    repo = "nixpkgs-channels";
+    rev = "541d9cce8af7a490fb9085305939569567cb58e6";
+    sha256 = "0jgz72hhzkd5vyq5v69vpljjlnf0lqaz7fh327bvb3cvmwbfxrja";
+  }) { };
 in
-with pkgs; buildGoPackage rec {
+with pkgs;
+buildGoPackage rec {
   name = "kontemplate-${version}";
   version = "canon";
   src = ./.;

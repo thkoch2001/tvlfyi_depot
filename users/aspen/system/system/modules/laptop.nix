@@ -1,9 +1,12 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 {
-  imports = [
-    ./reusable/battery.nix
-  ];
+  imports = [ ./reusable/battery.nix ];
 
   laptop.onLowBattery.enable = true;
 

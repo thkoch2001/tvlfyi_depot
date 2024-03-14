@@ -1,5 +1,11 @@
 # NixOS module for configuring the simple SMTP relay.
-{ depot, pkgs, config, lib, ... }:
+{
+  depot,
+  pkgs,
+  config,
+  lib,
+  ...
+}:
 
 let
   inherit (builtins) attrValues mapAttrs;
@@ -24,10 +30,11 @@ let
   };
 
   # Creates the command line argument string for the service.
-  prepareArgs = args:
-    concatStringsSep " "
-      (attrValues (mapAttrs (key: value: "-${key} \"${toString value}\"")
-        (args // overrideArgs)));
+  prepareArgs =
+    args:
+    concatStringsSep " " (
+      attrValues (mapAttrs (key: value: "-${key} \"${toString value}\"") (args // overrideArgs))
+    );
 in
 {
   options.services.depot.smtprelay = {

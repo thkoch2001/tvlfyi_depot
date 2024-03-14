@@ -1,11 +1,7 @@
 let
-  nonremote = [
-    "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIJk+KvgvI2oJTppMASNUfMcMkA2G5ZNt+HnWDzaXKLlo"
-  ];
+  nonremote = [ "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIJk+KvgvI2oJTppMASNUfMcMkA2G5ZNt+HnWDzaXKLlo" ];
 
-  ingeborg = [
-    "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIAHQn/j6NCYucpM7qIEIslVJxiFeUEKa0hi+HobTz/12"
-  ];
+  ingeborg = [ "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIAHQn/j6NCYucpM7qIEIslVJxiFeUEKa0hi+HobTz/12" ];
 in
 
 {

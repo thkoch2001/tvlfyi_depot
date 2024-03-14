@@ -2,7 +2,10 @@
 
 pkgs.stdenv.mkDerivation {
   name = "ideal-website";
-  src = builtins.path { path = ./.; name = "contentful"; };
+  src = builtins.path {
+    path = ./.;
+    name = "contentful";
+  };
   buildInputs = with pkgs; [
     nodejs
     # Exposes lscpu for parcel.js

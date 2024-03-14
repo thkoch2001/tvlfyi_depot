@@ -1,10 +1,14 @@
 # Configuration for persistent (non-home) data.
-{ config, depot, pkgs, lib, ... }:
+{
+  config,
+  depot,
+  pkgs,
+  lib,
+  ...
+}:
 
 {
-  imports = [
-    (depot.third_party.sources.impermanence + "/nixos.nix")
-  ];
+  imports = [ (depot.third_party.sources.impermanence + "/nixos.nix") ];
 
   environment.persistence."/persist" = {
     directories = [
@@ -17,9 +21,7 @@
       "/var/log"
     ];
 
-    files = lib.optional (builtins.isNull config.networking.hostId) [
-      "/etc/machine-id"
-    ];
+    files = lib.optional (builtins.isNull config.networking.hostId) [ "/etc/machine-id" ];
   };
 
   programs.fuse.userAllowOther = true;

@@ -8,7 +8,6 @@ let
     rev = "dab613ff419a655036a00beecee026ab6e0ba430";
     sha256 = "06lnipwc6mmg0v5gybcnr7wn5xmn5xfd1gs19vbima777245bfka";
   };
-
 in
 depot.nix.buildLisp.library {
   name = "easy-routes";

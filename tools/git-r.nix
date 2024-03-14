@@ -92,7 +92,12 @@ pkgs.writeTextFile {
     command = pkgs.writeShellScript "git-r-matches-refs" ''
       set -euo pipefail
 
-      export PATH="${lib.makeBinPath [ pkgs.git pkgs.findutils ]}"
+      export PATH="${
+        lib.makeBinPath [
+          pkgs.git
+          pkgs.findutils
+        ]
+      }"
       revs=("origin/canon" "origin/canon~1" "93a746aaaa092ffc3e7eb37e1df30bfd3a28435f")
 
       failed=false

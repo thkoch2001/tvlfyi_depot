@@ -1,15 +1,16 @@
-{ pkgs, lib, config, ... }:
+{
+  pkgs,
+  lib,
+  config,
+  ...
+}:
 
 let
   ircChannel = "#sterni.lv";
-  irccatPort =
-    builtins.replaceStrings [ ":" ] [ "" ]
-      config.services.depot.irccat.config.tcp.listen;
+  irccatPort = builtins.replaceStrings [ ":" ] [ "" ] config.services.depot.irccat.config.tcp.listen;
 
   mkIrcMessager =
-    { name
-    , msgExpr
-    }:
+    { name, msgExpr }:
     pkgs.writeShellScript name ''
       set -euo pipefail
       printf '%s %s\n' ${lib.escapeShellArg ircChannel} ${msgExpr} | \
@@ -20,14 +21,10 @@ let
 in
 
 {
-  imports = [
-    ./irccat.nix
-  ];
+  imports = [ ./irccat.nix ];
 
   config = {
-    services.depot.irccat.config.irc.channels = [
-      ircChannel
-    ];
+    services.depot.irccat.config.irc.channels = [ ircChannel ];
 
     # Since we have irccat we can wire up mdadm --monitor
     boot.swraid.mdadmConf = ''
@@ -124,7 +121,10 @@ in
                 # we have two physical disks which we kind of assert using the
                 # grub configuration (it is more difficult with the soft raid
                 # config).
-                # ${assert builtins.length config.boot.loader.grub.devices == 2; ""}
+                # ${
+                  assert builtins.length config.boot.loader.grub.devices == 2;
+                  ""
+                }
                 disk_util.sda | disk_util.sdb | disk_backlog.sda | disk_backlog.sdb)
 
                   ;;

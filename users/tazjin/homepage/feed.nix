@@ -1,5 +1,12 @@
 # Creates the Atom feed for my homepage.
-{ depot, lib, pkgs, entry, pageEntries, ... }:
+{
+  depot,
+  lib,
+  pkgs,
+  entry,
+  pageEntries,
+  ...
+}:
 
 with depot.nix.yants;
 
@@ -9,20 +16,27 @@ let
   inherit (pkgs) writeText;
   inherit (depot.web) blog atom-feed;
 
-  pageEntryToEntry = defun [ entry atom-feed.entry ] (e: {
-    id = "tazjin:${e.class}:${toString e.date}";
-    updated = e.date;
-    published = e.date;
-    title = e.title;
-    summary = e.description;
+  pageEntryToEntry =
+    defun
+      [
+        entry
+        atom-feed.entry
+      ]
+      (e: {
+        id = "tazjin:${e.class}:${toString e.date}";
+        updated = e.date;
+        published = e.date;
+        title = e.title;
+        summary = e.description;
 
-    links = singleton {
-      rel = "alternate";
-      href = e.url;
-    };
-  });
+        links = singleton {
+          rel = "alternate";
+          href = e.url;
+        };
+      });
 
-  allEntries = (with depot.users.tazjin.blog; map (blog.toFeedEntry config) posts)
+  allEntries =
+    (with depot.users.tazjin.blog; map (blog.toFeedEntry config) posts)
     ++ (map pageEntryToEntry (filter (e: e.class != "note") pageEntries));
 
   feed = {

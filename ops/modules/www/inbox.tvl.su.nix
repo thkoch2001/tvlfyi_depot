@@ -1,9 +1,7 @@
 { config, depot, ... }:
 
 {
-  imports = [
-    ./base.nix
-  ];
+  imports = [ ./base.nix ];
 
   config = {
     services.nginx.virtualHosts."inbox.tvl.su" = {

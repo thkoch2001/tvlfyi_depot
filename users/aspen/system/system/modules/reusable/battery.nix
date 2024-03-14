@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 with lib;
 {
   options = {
@@ -14,14 +19,20 @@ with lib;
       action = mkOption {
         description = "Action to perform on low battery";
         default = "hibernate";
-        type = types.enum [ "hibernate" "suspend" "suspend-then-hibernate" ];
+        type = types.enum [
+          "hibernate"
+          "suspend"
+          "suspend-then-hibernate"
+        ];
       };
     };
   };
 
   config =
-    let cfg = config.laptop.onLowBattery;
-    in mkIf cfg.enable {
+    let
+      cfg = config.laptop.onLowBattery;
+    in
+    mkIf cfg.enable {
       services.udev.extraRules = concatStrings [
         ''SUBSYSTEM=="power_supply", ''
         ''ATTR{status}=="Discharging", ''

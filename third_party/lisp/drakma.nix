@@ -1,8 +1,10 @@
 # Drakma is an HTTP client for Common Lisp.
 { depot, pkgs, ... }:
 
-let src = with pkgs; srcOnly lispPackages.drakma;
-in depot.nix.buildLisp.library {
+let
+  src = with pkgs; srcOnly lispPackages.drakma;
+in
+depot.nix.buildLisp.library {
   name = "drakma";
   deps = with depot.third_party.lisp; [
     chipz

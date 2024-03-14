@@ -1,13 +1,16 @@
-{ depot, pkgs, lib, ... }:
+{
+  depot,
+  pkgs,
+  lib,
+  ...
+}:
 _:
 
 let
   inherit (depot.users) wpcarro;
   inherit (depot.users.wpcarro.lib) usermod;
 
-  wpcarrosEmacs = wpcarro.emacs.nixos {
-    load = [ ./kyoko.el ];
-  };
+  wpcarrosEmacs = wpcarro.emacs.nixos { load = [ ./kyoko.el ]; };
 
   quasselClient = pkgs.quassel.override {
     client = true;
@@ -109,9 +112,7 @@ in
   security.sudo.wheelNeedsPassword = false;
 
   fonts = {
-    packages = with pkgs; [
-      jetbrains-mono
-    ];
+    packages = with pkgs; [ jetbrains-mono ];
 
     fontconfig = {
       defaultFonts = {
@@ -134,8 +135,8 @@ in
   };
 
   environment.systemPackages =
-    wpcarro.common.shell-utils ++
-    (with pkgs; [
+    wpcarro.common.shell-utils
+    ++ (with pkgs; [
       alacritty
       ec2-api-tools
       firefox

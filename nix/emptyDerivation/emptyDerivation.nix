@@ -1,4 +1,9 @@
-{ stdenv, system, pkgs, getBins }:
+{
+  stdenv,
+  system,
+  pkgs,
+  getBins,
+}:
 
 # The empty derivation. All it does is touch $out.
 # Basically the unit value for derivations.
@@ -10,8 +15,12 @@
 # so you can use this to add more fields.
 
 let
-  bins = getBins pkgs.s6-portable-utils [ "s6-touch" ]
-    // getBins pkgs.execline [ "importas" "exec" ];
+  bins =
+    getBins pkgs.s6-portable-utils [ "s6-touch" ]
+    // getBins pkgs.execline [
+      "importas"
+      "exec"
+    ];
 
   emptiness = {
     name = "empty-derivation";
@@ -26,11 +35,10 @@ let
       "$out"
     ];
   };
-
 in
-(derivation emptiness) // {
+(derivation emptiness)
+// {
   # This allows us to call the empty derivation
   # like a function and override fields/add new fields.
-  __functor = _: overrides:
-    derivation (emptiness // overrides);
+  __functor = _: overrides: derivation (emptiness // overrides);
 }

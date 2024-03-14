@@ -1,5 +1,10 @@
 # zamalek is my Huawei MateBook X (unknown year)
-{ depot, lib, pkgs, ... }:
+{
+  depot,
+  lib,
+  pkgs,
+  ...
+}:
 
 config:
 let
@@ -28,7 +33,10 @@ in
   tvl.cache.enable = true;
 
   boot = {
-    initrd.availableKernelModules = [ "nvme" "xhci_pci" ];
+    initrd.availableKernelModules = [
+      "nvme"
+      "xhci_pci"
+    ];
     loader.systemd-boot.enable = true;
     loader.efi.canTouchEfiVariables = true;
     supportedFilesystems = [ "zfs" ];
@@ -45,7 +53,9 @@ in
   fileSystems = {
     "/" = zdevice "zpool/ephemeral/root";
     "/home" = zdevice "zpool/ephemeral/home";
-    "/persist" = zdevice "zpool/persistent/data" // { neededForBoot = true; };
+    "/persist" = zdevice "zpool/persistent/data" // {
+      neededForBoot = true;
+    };
     "/nix" = zdevice "zpool/persistent/nix";
     "/depot" = zdevice "zpool/persistent/depot";
 

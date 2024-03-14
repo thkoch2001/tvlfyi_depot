@@ -1,4 +1,10 @@
-{ config, lib, pkgs, depot, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  depot,
+  ...
+}:
 
 let
   cfg = config.services.xanthous-server;

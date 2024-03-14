@@ -6,7 +6,10 @@ let
     yubikey5 = "ecdsa-sha2-nistp256 AAAAE2VjZHNhLXNoYTItbmlzdHAyNTYAAAAIbmlzdHAyNTYAAABBBKCJx23px0Vknw1NlD+arcqeVXxcogPUMJgF/PGp6wA/tg7hHUKs2udC+gDMYlxQ9IpnWOwZ/9yvqzTDwUU3R/4= YubiKey #15026444 PIV Slot 9a";
   };
   configs = {
-    whitby = [ keys.yubikey4 keys.yubikey5 ];
+    whitby = [
+      keys.yubikey4
+      keys.yubikey5
+    ];
   };
 in
 configs

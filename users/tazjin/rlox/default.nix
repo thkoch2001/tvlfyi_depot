@@ -1,5 +1,3 @@
 { depot, ... }:
 
-depot.third_party.naersk.buildPackage {
-  src = ./.;
-}
+depot.third_party.naersk.buildPackage { src = ./.; }

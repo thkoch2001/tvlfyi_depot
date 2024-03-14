@@ -1,5 +1,11 @@
 # Run the owothia IRC bot.
-{ depot, config, lib, pkgs, ... }:
+{
+  depot,
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 let
   cfg = config.services.depot.owothia;

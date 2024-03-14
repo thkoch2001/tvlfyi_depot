@@ -1,19 +1,17 @@
 { pkgs, depot, ... }:
 
 let
-  maybe = pkgs.callPackage
-    ({ emacsPackages }:
-      emacsPackages.trivialBuild {
-        pname = "maybe";
-        version = "1.0.0";
-        src = ./maybe.el;
-        packageRequires = [ ];
-      })
-    { };
+  maybe = pkgs.callPackage (
+    { emacsPackages }:
+    emacsPackages.trivialBuild {
+      pname = "maybe";
+      version = "1.0.0";
+      src = ./maybe.el;
+      packageRequires = [ ];
+    }
+  ) { };
 
-  emacs = (pkgs.emacsPackagesFor pkgs.emacs28).emacsWithPackages (epkgs: [
-    maybe
-  ]);
+  emacs = (pkgs.emacsPackagesFor pkgs.emacs28).emacsWithPackages (epkgs: [ maybe ]);
 in
 maybe.overrideAttrs (_old: {
   doCheck = true;

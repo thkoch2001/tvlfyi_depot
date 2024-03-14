@@ -1,10 +1,13 @@
-{ depot, lib, pkgs, ... }:
+{
+  depot,
+  lib,
+  pkgs,
+  ...
+}:
 
 depot.nix.readTree.drvTargets rec {
   # Provide a Terraform wrapper with the right provider installed.
-  terraform = pkgs.terraform.withPlugins (p: [
-    p.keycloak
-  ]);
+  terraform = pkgs.terraform.withPlugins (p: [ p.keycloak ]);
 
   validate = depot.tools.checks.validateTerraform {
     inherit terraform;

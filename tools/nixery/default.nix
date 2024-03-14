@@ -7,13 +7,16 @@
 # In the future, Nixery will transition to using //nix/buildGo for its
 # build system and this will need some major adaptations to support
 # that.
-{ depot ? { nix.readTree.drvTargets = x: x; }
-, pkgs ? import <nixpkgs> { }
-, preLaunch ? ""
-, extraPackages ? [ ]
-, maxLayers ? 20
-, commitHash ? null
-, ...
+{
+  depot ? {
+    nix.readTree.drvTargets = x: x;
+  },
+  pkgs ? import <nixpkgs> { },
+  preLaunch ? "",
+  extraPackages ? [ ],
+  maxLayers ? 20,
+  commitHash ? null,
+  ...
 }@args:
 
 with pkgs;

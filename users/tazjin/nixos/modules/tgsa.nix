@@ -1,4 +1,10 @@
-{ config, depot, lib, pkgs, ... }:
+{
+  config,
+  depot,
+  lib,
+  pkgs,
+  ...
+}:
 
 {
   systemd.services.tgsa = {

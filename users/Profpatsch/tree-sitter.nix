@@ -1,53 +1,65 @@
-{ depot, pkgs, lib, ... }:
+{
+  depot,
+  pkgs,
+  lib,
+  ...
+}:
 
 let
-  bins = depot.nix.getBins pkgs.coreutils [ "head" "printf" "cat" ]
+  bins =
+    depot.nix.getBins pkgs.coreutils [
+      "head"
+      "printf"
+      "cat"
+    ]
     // depot.nix.getBins pkgs.ncurses [ "tput" ]
     // depot.nix.getBins pkgs.bc [ "bc" ]
     // depot.nix.getBins pkgs.ocamlPackages.sexp [ "sexp" ];
 
-  print-ast = depot.nix.writers.rustSimple
-    {
-      name = "print-ast";
-      dependencies = with depot.third_party.rust-crates; [
-        libloading
-        tree-sitter
-      ];
-    } ''
-    extern crate libloading;
-    extern crate tree_sitter;
-    use std::mem;
-    use std::io::{Read};
-    use libloading::{Library, Symbol};
-    use tree_sitter::{Language, Parser};
+  print-ast =
+    depot.nix.writers.rustSimple
+      {
+        name = "print-ast";
+        dependencies = with depot.third_party.rust-crates; [
+          libloading
+          tree-sitter
+        ];
+      }
+      ''
+        extern crate libloading;
+        extern crate tree_sitter;
+        use std::mem;
+        use std::io::{Read};
+        use libloading::{Library, Symbol};
+        use tree_sitter::{Language, Parser};
 
-    /// Load the shared lib FILE and return the language under SYMBOL-NAME.
-    /// Inspired by the rust source of emacs-tree-sitter.
-    fn _load_language(file: String, symbol_name: String) -> Result<Language, libloading::Error> {
-        let lib = Library::new(file)?;
-        let tree_sitter_lang: Symbol<'_, unsafe extern "C" fn() -> _> =
-            unsafe { lib.get(symbol_name.as_bytes())? };
-        let language: Language = unsafe { tree_sitter_lang() };
-        // Avoid segmentation fault by not unloading the lib, as language is a static piece of data.
-        // TODO: Attach an Rc<Library> to Language instead.
-        mem::forget(lib);
-        Ok(language)
-    }
+        /// Load the shared lib FILE and return the language under SYMBOL-NAME.
+        /// Inspired by the rust source of emacs-tree-sitter.
+        fn _load_language(file: String, symbol_name: String) -> Result<Language, libloading::Error> {
+            let lib = Library::new(file)?;
+            let tree_sitter_lang: Symbol<'_, unsafe extern "C" fn() -> _> =
+                unsafe { lib.get(symbol_name.as_bytes())? };
+            let language: Language = unsafe { tree_sitter_lang() };
+            // Avoid segmentation fault by not unloading the lib, as language is a static piece of data.
+            // TODO: Attach an Rc<Library> to Language instead.
+            mem::forget(lib);
+            Ok(language)
+        }
 
-    fn main() {
-      let mut args = std::env::args();
-      let so = args.nth(1).unwrap();
-      let symbol_name = args.nth(0).unwrap();
-      let file = args.nth(0).unwrap();
-      let mut parser = Parser::new();
-      let lang = _load_language(so, symbol_name).unwrap();
-      parser.set_language(lang).unwrap();
-      let bytes = std::fs::read(&file).unwrap();
-      print!("{}", parser.parse(&bytes, None).unwrap().root_node().to_sexp());
-    }
+        fn main() {
+          let mut args = std::env::args();
+          let so = args.nth(1).unwrap();
+          let symbol_name = args.nth(0).unwrap();
+          let file = args.nth(0).unwrap();
+          let mut parser = Parser::new();
+          let lang = _load_language(so, symbol_name).unwrap();
+          parser.set_language(lang).unwrap();
+          let bytes = std::fs::read(&file).unwrap();
+          print!("{}", parser.parse(&bytes, None).unwrap().root_node().to_sexp());
+        }
 
 
-  '';
+      '';
 
   tree-sitter-nix = buildTreeSitterGrammar {
     language = "tree-sitter-nix";
@@ -59,69 +71,88 @@ let
     };
   };
 
-  watch-file-modified = depot.nix.writers.rustSimple
-    {
-      name = "watch-file-modified";
-      dependencies = [
-        depot.third_party.rust-crates.inotify
-        depot.users.Profpatsch.netstring.rust-netstring
-      ];
-    } ''
-    extern crate inotify;
-    extern crate netstring;
-    use inotify::{EventMask, WatchMask, Inotify};
-    use std::io::Write;
+  watch-file-modified =
+    depot.nix.writers.rustSimple
+      {
+        name = "watch-file-modified";
+        dependencies = [
+          depot.third_party.rust-crates.inotify
+          depot.users.Profpatsch.netstring.rust-netstring
+        ];
+      }
+      ''
+        extern crate inotify;
+        extern crate netstring;
+        use inotify::{EventMask, WatchMask, Inotify};
+        use std::io::Write;
 
-    fn main() {
-        let mut inotify = Inotify::init()
-            .expect("Failed to initialize inotify");
+        fn main() {
+            let mut inotify = Inotify::init()
+                .expect("Failed to initialize inotify");
 
-        let file = std::env::args().nth(1).unwrap();
+            let file = std::env::args().nth(1).unwrap();
 
-        let file_watch = inotify
-            .add_watch(
-                &file,
-                WatchMask::MODIFY
-            )
-            .expect("Failed to add inotify watch");
+            let file_watch = inotify
+                .add_watch(
+                    &file,
+                    WatchMask::MODIFY
+                )
+                .expect("Failed to add inotify watch");
 
-        let mut buffer = [0u8; 4096];
-        loop {
-            let events = inotify
-                .read_events_blocking(&mut buffer)
-                .expect("Failed to read inotify events");
+            let mut buffer = [0u8; 4096];
+            loop {
+                let events = inotify
+                    .read_events_blocking(&mut buffer)
+                    .expect("Failed to read inotify events");
 
-            for event in events {
-                if event.wd == file_watch {
-                  std::io::stdout().write(&netstring::to_netstring(file.as_bytes()));
-                  std::io::stdout().flush();
+                for event in events {
+                    if event.wd == file_watch {
+                      std::io::stdout().write(&netstring::to_netstring(file.as_bytes()));
+                      std::io::stdout().flush();
+                    }
                 }
             }
         }
-    }
 
-  '';
+      '';
 
   # clear screen and set LINES and COLUMNS to terminal height & width
   clear-screen = depot.nix.writeExecline "clear-screen" { } [
     "if"
-    [ bins.tput "clear" ]
+    [
+      bins.tput
+      "clear"
+    ]
     "backtick"
     "-in"
     "LINES"
-    [ bins.tput "lines" ]
+    [
+      bins.tput
+      "lines"
+    ]
     "backtick"
     "-in"
     "COLUMNS"
-    [ bins.tput "cols" ]
+    [
+      bins.tput
+      "cols"
+    ]
     "$@"
   ];
 
   print-nix-file = depot.nix.writeExecline "print-nix-file" { readNArgs = 1; } [
     "pipeline"
-    [ print-ast "${tree-sitter-nix}/parser" "tree_sitter_nix" "$1" ]
+    [
+      print-ast
+      "${tree-sitter-nix}/parser"
+      "tree_sitter_nix"
+      "$1"
+    ]
     "pipeline"
-    [ bins.sexp "print" ]
+    [
+      bins.sexp
+      "print"
+    ]
     clear-screen
     "importas"
     "-ui"
@@ -133,7 +164,11 @@ let
     [
       "pipeline"
       # when you pull out bc to decrement an integer it’s time to switch to python lol
-      [ bins.printf "x=%s; --x\n" "$lines" ]
+      [
+        bins.printf
+        "x=%s; --x\n"
+        "$lines"
+      ]
       bins.bc
     ]
     "importas"
@@ -146,9 +181,15 @@ let
 
   print-nix-file-on-update = depot.nix.writeExecline "print-nix-file-on-update" { readNArgs = 1; } [
     "if"
-    [ print-nix-file "$1" ]
+    [
+      print-nix-file
+      "$1"
+    ]
     "pipeline"
-    [ watch-file-modified "$1" ]
+    [
+      watch-file-modified
+      "$1"
+    ]
     "forstdin"
     "-d"
     ""
@@ -164,9 +205,9 @@ let
   buildTreeSitterGrammar =
     {
       # language name
-      language
+      language,
       # source for the language grammar
-    , source
+      source,
     }:
 
     pkgs.stdenv.mkDerivation {
@@ -197,7 +238,6 @@ let
         runHook postInstall
       '';
     };
-
 in
 depot.nix.readTree.drvTargets {
   inherit

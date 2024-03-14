@@ -1,4 +1,11 @@
-{ depot, modulesPath, config, lib, pkgs, ... }:
+{
+  depot,
+  modulesPath,
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 {
   imports = [
@@ -25,7 +32,14 @@
 
   boot = {
     initrd = {
-      availableKernelModules = [ "xhci_pci" "thunderbolt" "nvme" "usb_storage" "sd_mod" "rtsx_pci_sdmmc" ];
+      availableKernelModules = [
+        "xhci_pci"
+        "thunderbolt"
+        "nvme"
+        "usb_storage"
+        "sd_mod"
+        "rtsx_pci_sdmmc"
+      ];
       kernelModules = [ ];
 
       luks.devices = {
@@ -35,9 +49,7 @@
 
     kernelModules = [ "kvm-intel" ];
     blacklistedKernelModules = [ "psmouse" ];
-    extraModulePackages = [
-      config.boot.kernelPackages.digimend
-    ];
+    extraModulePackages = [ config.boot.kernelPackages.digimend ];
     kernelParams = [
       "i915.preliminary_hw_support=1"
       "pcie_aspm=force"
@@ -65,9 +77,7 @@
     };
   };
 
-  swapDevices = [{
-    device = "/dev/disk/by-uuid/b627cb0e-0451-4f25-94d0-6497e01f0da4";
-  }];
+  swapDevices = [ { device = "/dev/disk/by-uuid/b627cb0e-0451-4f25-94d0-6497e01f0da4"; } ];
 
   services.earlyoom = {
     enable = true;
@@ -106,8 +116,7 @@
   #   package = pkgs.fprintd-tod;
   # };
 
-  systemd.services.fprintd.environment.FP_TOD_DRIVERS_DIR =
-    "${pkgs.libfprint-2-tod1-goodix}/usr/lib/libfprint-2/tod-1";
+  systemd.services.fprintd.environment.FP_TOD_DRIVERS_DIR = "${pkgs.libfprint-2-tod1-goodix}/usr/lib/libfprint-2/tod-1";
 
   security.pam.services = {
     login.fprintAuth = true;

@@ -1,13 +1,11 @@
 { pkgs, depot, ... }:
 
-pkgs.callPackage
-  ({ emacsPackages }:
+pkgs.callPackage (
+  { emacsPackages }:
   emacsPackages.trivialBuild {
     pname = "bookmark";
     version = "1.0.0";
     src = ./bookmark.el;
-    packageRequires = (with pkgs.emacsPackages; [
-      general
-    ]);
-  })
-{ }
+    packageRequires = (with pkgs.emacsPackages; [ general ]);
+  }
+) { }

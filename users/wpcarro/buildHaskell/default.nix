@@ -2,13 +2,12 @@
 
 {
   # Create a nix-shell for Haskell development.
-  shell = { deps }:
+  shell =
+    { deps }:
     let
       ghc = pkgs.haskellPackages.ghcWithPackages (hpkgs: deps hpkgs);
     in
-    pkgs.mkShell {
-      buildInputs = [ ghc ];
-    };
+    pkgs.mkShell { buildInputs = [ ghc ]; };
 
   # Build a Haskell executable. This assumes a project directory with a
   # top-level Main.hs.
@@ -17,7 +16,13 @@
   # - `deps`: A function that accepts `hpkgs` and returns a list of Haskell
   # - `ghcExtensions`: A list of strings representing the language extensions to
   #   use.
-  program = { name, srcs, deps, ghcExtensions }:
+  program =
+    {
+      name,
+      srcs,
+      deps,
+      ghcExtensions,
+    }:
     let
       ghc = pkgs.haskellPackages.ghcWithPackages (hpkgs: deps hpkgs);
     in

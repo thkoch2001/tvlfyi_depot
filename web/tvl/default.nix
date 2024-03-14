@@ -1,4 +1,9 @@
-{ depot, lib, pkgs, ... }:
+{
+  depot,
+  lib,
+  pkgs,
+  ...
+}:
 
 with depot.nix.yants;
 
@@ -7,21 +12,37 @@ let
   inherit (pkgs) graphviz runCommand writeText;
   inherit (depot.web) atom-feed blog tvl;
 
-  listPosts = defun [ (list blog.post) string ] (posts:
-    lib.concatStringsSep "\n" (map (p: "* [${p.title}](blog/${p.key})") posts)
-  );
+  listPosts = defun [
+    (list blog.post)
+    string
+  ] (posts: lib.concatStringsSep "\n" (map (p: "* [${p.title}](blog/${p.key})") posts));
 
-  postRenderingCommands = defun [ (list blog.post) string ] (posts:
-    lib.concatStringsSep "\n"
-      (map (p: "cp ${blog.renderPost tvl.blog.config p} $out/blog/${p.key}.html") posts)
-  );
+  postRenderingCommands =
+    defun
+      [
+        (list blog.post)
+        string
+      ]
+      (
+        posts:
+        lib.concatStringsSep "\n" (
+          map (p: "cp ${blog.renderPost tvl.blog.config p} $out/blog/${p.key}.html") posts
+        )
+      );
 
-  tvlGraph = runCommand "tvl.svg"
-    {
-      nativeBuildInputs = with pkgs; [ fontconfig freetype cairo jetbrains-mono ];
-    } ''
-    ${graphviz}/bin/neato -Tsvg ${./tvl.dot} > $out
-  '';
+  tvlGraph =
+    runCommand "tvl.svg"
+      {
+        nativeBuildInputs = with pkgs; [
+          fontconfig
+          freetype
+          cairo
+          jetbrains-mono
+        ];
+      }
+      ''
+        ${graphviz}/bin/neato -Tsvg ${./tvl.dot} > $out
+      '';
 
   publishedPosts = filter blog.includePost tvl.blog.posts;
 

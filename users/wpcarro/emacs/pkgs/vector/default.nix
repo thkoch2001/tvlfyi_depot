@@ -1,14 +1,14 @@
 { pkgs, depot, ... }:
 
 let
-  vector = pkgs.callPackage
-    ({ emacsPackages }:
-      emacsPackages.trivialBuild {
-        pname = "vector";
-        version = "1.0.0";
-        src = ./vector.el;
-      })
-    { };
+  vector = pkgs.callPackage (
+    { emacsPackages }:
+    emacsPackages.trivialBuild {
+      pname = "vector";
+      version = "1.0.0";
+      src = ./vector.el;
+    }
+  ) { };
 
   emacs = (pkgs.emacsPackagesFor pkgs.emacs28).emacsWithPackages (epkgs: [ vector ]);
 in

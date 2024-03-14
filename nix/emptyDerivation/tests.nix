@@ -1,12 +1,18 @@
-{ emptyDerivation, getBins, pkgs, writeExecline, runTestsuite, it, assertEq }:
+{
+  emptyDerivation,
+  getBins,
+  pkgs,
+  writeExecline,
+  runTestsuite,
+  it,
+  assertEq,
+}:
 
 let
   bins = getBins pkgs.s6-portable-utils [ "s6-echo" ];
 
   empty = it "is just an empty path" [
-    (assertEq "path empty"
-      (builtins.readFile emptyDerivation)
-      "")
+    (assertEq "path empty" (builtins.readFile emptyDerivation) "")
   ];
 
   fooOut = emptyDerivation {
@@ -25,14 +31,9 @@ let
   };
 
   overrideBuilder = it "can override the builder" [
-    (assertEq "output is foo"
-      (builtins.readFile fooOut)
-      "foo")
-    (assertEq "can add new drv variables"
-      (emptyDerivation { foo = "bar"; }).foo
-      "bar")
+    (assertEq "output is foo" (builtins.readFile fooOut) "foo")
+    (assertEq "can add new drv variables" (emptyDerivation { foo = "bar"; }).foo "bar")
   ];
-
 in
 runTestsuite "emptyDerivation" [
   empty

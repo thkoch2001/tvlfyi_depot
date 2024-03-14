@@ -1,4 +1,10 @@
-{ config, depot, lib, pkgs, ... }:
+{
+  config,
+  depot,
+  lib,
+  pkgs,
+  ...
+}:
 
 {
   age.secrets.miniflux.file = depot.users.tazjin.secrets."miniflux.age";

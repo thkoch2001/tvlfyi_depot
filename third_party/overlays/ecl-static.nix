@@ -17,12 +17,12 @@ self: super:
   # would be available as ways to swap out the used GMP in the
   # program.
   # See https://www.gnu.org/licenses/gpl-faq.en.html#LGPLStaticVsDynamic
-  ecl-static = (super.pkgsMusl.ecl.override {
-    inherit (self.pkgsStatic) gmp libffi boehmgc;
-  }).overrideAttrs (drv: rec {
-    configureFlags = drv.configureFlags ++ [
-      "--disable-shared"
-      "--with-dffi=no" # will fail at runtime anyways if statically linked
-    ];
-  });
+  ecl-static =
+    (super.pkgsMusl.ecl.override { inherit (self.pkgsStatic) gmp libffi boehmgc; }).overrideAttrs
+      (drv: rec {
+        configureFlags = drv.configureFlags ++ [
+          "--disable-shared"
+          "--with-dffi=no" # will fail at runtime anyways if statically linked
+        ];
+      });
 }

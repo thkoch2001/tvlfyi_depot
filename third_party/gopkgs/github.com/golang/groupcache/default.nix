@@ -9,7 +9,5 @@ depot.nix.buildGo.external {
     hash = "sha256:0ydaq1xn03h2arfdri0vcv0df19pk8dvq4ly5hm1kv18yjfv1v13";
   };
 
-  deps = with depot.third_party; [
-    gopkgs."github.com".golang.protobuf.proto
-  ];
+  deps = with depot.third_party; [ gopkgs."github.com".golang.protobuf.proto ];
 }

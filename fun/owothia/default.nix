@@ -1,6 +1,7 @@
-{ depot ? (import ../../../. { })
-, pkgs ? depot.third_party.nixpkgs
-, ...
+{
+  depot ? (import ../../../. { }),
+  pkgs ? depot.third_party.nixpkgs,
+  ...
 }:
 
 let

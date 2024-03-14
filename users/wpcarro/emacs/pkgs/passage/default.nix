@@ -1,12 +1,18 @@
 { pkgs, depot, ... }:
 
-pkgs.callPackage
-  ({ emacsPackages }:
+pkgs.callPackage (
+  { emacsPackages }:
   emacsPackages.trivialBuild {
     pname = "passage";
     version = "1.0.0";
     src = ./passage.el;
-    packageRequires = (with emacsPackages; [ dash f s ]);
+    packageRequires = (
+      with emacsPackages;
+      [
+        dash
+        f
+        s
+      ]
+    );
   }
-  )
-{ }
+) { }

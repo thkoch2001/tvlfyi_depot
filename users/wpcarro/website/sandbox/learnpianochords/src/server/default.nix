@@ -12,17 +12,18 @@ depot.users.wpcarro.buildHaskell.program {
     "RecordWildCards"
     "TypeApplications"
   ];
-  deps = hpkgs: with hpkgs; [
-    servant-server
-    aeson
-    wai-cors
-    warp
-    jwt
-    unordered-containers
-    base64
-    http-conduit
-    rio
-    envy
-    req
-  ];
+  deps =
+    hpkgs: with hpkgs; [
+      servant-server
+      aeson
+      wai-cors
+      warp
+      jwt
+      unordered-containers
+      base64
+      http-conduit
+      rio
+      envy
+      req
+    ];
 }

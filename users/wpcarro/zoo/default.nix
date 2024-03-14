@@ -12,10 +12,11 @@ depot.users.wpcarro.buildHaskell.program {
     "RecordWildCards"
     "TypeApplications"
   ];
-  deps = hpkgs: with hpkgs; [
-    servant-server
-    aeson
-    warp
-    rio
-  ];
+  deps =
+    hpkgs: with hpkgs; [
+      servant-server
+      aeson
+      warp
+      rio
+    ];
 }

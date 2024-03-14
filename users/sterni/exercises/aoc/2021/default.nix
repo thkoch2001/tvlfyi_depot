@@ -1,10 +1,7 @@
-{ depot ? import ../../../../.. { }
-, pkgs ? depot.third_party.nixpkgs
-, ...
+{
+  depot ? import ../../../../.. { },
+  pkgs ? depot.third_party.nixpkgs,
+  ...
 }:
 
-pkgs.mkShell {
-  nativeBuildInputs = [
-    pkgs.cbqn
-  ];
-}
+pkgs.mkShell { nativeBuildInputs = [ pkgs.cbqn ]; }

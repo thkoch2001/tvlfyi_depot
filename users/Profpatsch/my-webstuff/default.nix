@@ -1,4 +1,9 @@
-{ depot, pkgs, lib, ... }:
+{
+  depot,
+  pkgs,
+  lib,
+  ...
+}:
 
 pkgs.haskellPackages.mkDerivation {
   pname = "my-webstuff";
@@ -23,5 +28,4 @@ pkgs.haskellPackages.mkDerivation {
   ];
 
   license = lib.licenses.mit;
-
 }

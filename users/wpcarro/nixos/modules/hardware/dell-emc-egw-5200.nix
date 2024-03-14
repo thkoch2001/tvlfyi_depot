@@ -1,12 +1,15 @@
 # In a nutshell, this configuration defines the configuration required to run
 # NixOS on the Dell EMC EGW 5200 (often the config that NixOS put in
 # hardware.nix by default).
-{ config, lib, modulesPath, ... }:
+{
+  config,
+  lib,
+  modulesPath,
+  ...
+}:
 
 {
-  imports = [
-    (modulesPath + "/installer/scan/not-detected.nix")
-  ];
+  imports = [ (modulesPath + "/installer/scan/not-detected.nix") ];
 
   boot.initrd.availableKernelModules = [
     "xhci_pci"

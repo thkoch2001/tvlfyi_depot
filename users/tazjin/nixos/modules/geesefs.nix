@@ -1,9 +1,7 @@
 { depot, pkgs, ... }:
 
 {
-  imports = [
-    (depot.third_party.agenix.src + "/modules/age.nix")
-  ];
+  imports = [ (depot.third_party.agenix.src + "/modules/age.nix") ];
 
   age.secrets.geesefs-tazjins-files.file = depot.users.tazjin.secrets."geesefs-tazjins-files.age";
   programs.fuse.userAllowOther = true;

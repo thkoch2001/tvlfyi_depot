@@ -6,11 +6,12 @@ depot.users.wpcarro.buildHaskell.program {
     path = ./.;
     name = "transform-keyboard-src";
   };
-  deps = hpkgs: with hpkgs; [
-    optparse-applicative
-    unordered-containers
-    split
-    rio
-  ];
+  deps =
+    hpkgs: with hpkgs; [
+      optparse-applicative
+      unordered-containers
+      split
+      rio
+    ];
   ghcExtensions = [ ];
 }

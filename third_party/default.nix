@@ -12,7 +12,12 @@
 #    other folders below //third_party, other than the ones mentioned
 #    above.
 
-{ pkgs, depot, localSystem, ... }:
+{
+  pkgs,
+  depot,
+  localSystem,
+  ...
+}:
 
 {
   # Expose a partially applied NixOS, expecting an attribute set with
@@ -25,10 +30,11 @@
   # needs to be partially evaluated in NixOS configuration before
   # module imports are resolved.
   nixos =
-    { configuration
-    , specialArgs ? { }
-    , system ? localSystem
-    , ...
+    {
+      configuration,
+      specialArgs ? { },
+      system ? localSystem,
+      ...
     }:
     let
       eval = import (pkgs.path + "/nixos/lib/eval-config.nix") {
@@ -40,13 +46,14 @@
       };
 
       # This is for `nixos-rebuild build-vm'.
-      vmConfig = (import (pkgs.path + "/nixos/lib/eval-config.nix") {
-        inherit specialArgs system;
-        modules = [
-          configuration
-          (pkgs.path + "/nixos/modules/virtualisation/qemu-vm.nix")
-        ];
-      }).config;
+      vmConfig =
+        (import (pkgs.path + "/nixos/lib/eval-config.nix") {
+          inherit specialArgs system;
+          modules = [
+            configuration
+            (pkgs.path + "/nixos/modules/virtualisation/qemu-vm.nix")
+          ];
+        }).config;
     in
     {
       inherit (eval) pkgs config options;

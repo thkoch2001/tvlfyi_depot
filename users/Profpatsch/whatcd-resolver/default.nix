@@ -1,4 +1,9 @@
-{ depot, pkgs, lib, ... }:
+{
+  depot,
+  pkgs,
+  lib,
+  ...
+}:
 
 let
   #   bins = depot.nix.getBins pkgs.sqlite ["sqlite3"];
@@ -46,7 +51,6 @@ let
   };
 
   bins = depot.nix.getBins whatcd-resolver [ "whatcd-resolver" ];
-
 in
 
 depot.nix.writeExecline "whatcd-resolver-wrapped" { } [
@@ -68,4 +72,3 @@ depot.nix.writeExecline "whatcd-resolver-wrapped" { } [
   ])
   bins.whatcd-resolver
 ]
-

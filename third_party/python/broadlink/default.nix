@@ -8,9 +8,11 @@ let
   inherit (pkgs) fetchFromGitHub;
   inherit (pkgs.python3Packages) buildPythonPackage cryptography;
 in
-buildPythonPackage (lib.fix (self: {
-  pname = "python-broadlink";
-  version = "0.13.2";
-  src = ./.;
-  propagatedBuildInputs = [ cryptography ];
-}))
+buildPythonPackage (
+  lib.fix (self: {
+    pname = "python-broadlink";
+    version = "0.13.2";
+    src = ./.;
+    propagatedBuildInputs = [ cryptography ];
+  })
+)

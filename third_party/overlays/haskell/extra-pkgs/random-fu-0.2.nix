@@ -1,18 +1,19 @@
-{ mkDerivation
-, base
-, erf
-, lib
-, math-functions
-, monad-loops
-, mtl
-, random
-, random-shuffle
-, random-source
-, rvar
-, syb
-, template-haskell
-, transformers
-, vector
+{
+  mkDerivation,
+  base,
+  erf,
+  lib,
+  math-functions,
+  monad-loops,
+  mtl,
+  random,
+  random-shuffle,
+  random-source,
+  rvar,
+  syb,
+  template-haskell,
+  transformers,
+  vector,
 }:
 mkDerivation {
   pname = "random-fu";

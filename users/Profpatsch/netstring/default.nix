@@ -1,16 +1,17 @@
-{ lib, pkgs, depot, ... }:
+{
+  lib,
+  pkgs,
+  depot,
+  ...
+}:
 let
   toNetstring = depot.nix.netstring.fromString;
 
-  toNetstringList = xs:
-    lib.concatStrings (map toNetstring xs);
+  toNetstringList = xs: lib.concatStrings (map toNetstring xs);
 
   toNetstringKeyVal = depot.nix.netstring.attrsToKeyValList;
 
-  python-netstring = depot.users.Profpatsch.writers.python3Lib
-    {
-      name = "netstring";
-    } ''
+  python-netstring = depot.users.Profpatsch.writers.python3Lib { name = "netstring"; } ''
     def read_netstring(bytes):
         (int_length, rest) = bytes.split(sep=b':', maxsplit=1)
         val = rest[:int(int_length)]
@@ -35,10 +36,7 @@ let
         return res
   '';
 
-  rust-netstring = depot.nix.writers.rustSimpleLib
-    {
-      name = "netstring";
-    } ''
+  rust-netstring = depot.nix.writers.rustSimpleLib { name = "netstring"; } ''
     pub fn to_netstring(s: &[u8]) -> Vec<u8> {
         let len = s.len();
         // length of the integer as ascii
@@ -51,7 +49,6 @@ let
         res
     }
   '';
-
 in
 depot.nix.readTree.drvTargets {
   inherit

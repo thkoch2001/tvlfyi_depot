@@ -1,4 +1,10 @@
-{ depot, pkgs, lib, config, ... }:
+{
+  depot,
+  pkgs,
+  lib,
+  config,
+  ...
+}:
 
 let
   virtualHost = "code.sterni.lv";
@@ -83,7 +89,8 @@ let
 
   repoPath = name: repo: repo.path or "/srv/git/${name}.git";
 
-  cgitRepoEntry = name: repo:
+  cgitRepoEntry =
+    name: repo:
     lib.concatStringsSep "\n" (
       [
         "repo.url=${name}"
@@ -130,30 +137,26 @@ let
     readme=:readme.md
 
     section-sort=0
-    ${
-      lib.concatMapStringsSep "\n" (section:
-        ''
-          section=${section.section}
+    ${lib.concatMapStringsSep "\n" (
+      section:
+      ''
+        section=${section.section}
 
-        ''
-        + builtins.concatStringsSep "\n\n" (lib.mapAttrsToList cgitRepoEntry section.repos)
-      ) repoSections
-    }
+      ''
+      + builtins.concatStringsSep "\n\n" (lib.mapAttrsToList cgitRepoEntry section.repos)
+    ) repoSections}
   '';
 
-  /* Merge a list of attrs, but fail when the same attribute occurs twice.
+  /*
+    Merge a list of attrs, but fail when the same attribute occurs twice.
 
-     Type: [ attrs ] -> attrs
+    Type: [ attrs ] -> attrs
   */
-  mergeManyDistinctAttrs = lib.foldAttrs
-    (
-      val: nul:
-        if nul == null then val else throw "Every attribute name may occur only once"
-    )
-    null;
+  mergeManyDistinctAttrs = lib.foldAttrs (
+    val: nul: if nul == null then val else throw "Every attribute name may occur only once"
+  ) null;
 
-  flatRepos = mergeManyDistinctAttrs
-    (builtins.map (section: section.repos) repoSections);
+  flatRepos = mergeManyDistinctAttrs (builtins.map (section: section.repos) repoSections);
 
   reposToMirror = lib.filterAttrs (_: repo: repo ? upstream) flatRepos;
 
@@ -199,65 +202,59 @@ in
       groups.${mirroredReposOwner} = { };
     };
 
+    systemd.timers = lib.mapAttrs' (name: repo: {
+      name = unitName name;
+      value = {
+        description = "regularly update mirror git repository ${name}";
+        wantedBy = [ "timers.target" ];
+        enable = true;
+        timerConfig = {
+          # Fire every 6h and distribute the workload over next 6h randomly
+          OnCalendar = "*-*-* 00/6:00:00";
+          RandomizedDelaySec = "6h";
+          Persistent = true;
+        };
+      };
+    }) reposToMirror;
 
-    systemd.timers = lib.mapAttrs'
-      (
-        name: repo:
-          {
-            name = unitName name;
-            value = {
-              description = "regularly update mirror git repository ${name}";
-              wantedBy = [ "timers.target" ];
-              enable = true;
-              timerConfig = {
-                # Fire every 6h and distribute the workload over next 6h randomly
-                OnCalendar = "*-*-* 00/6:00:00";
-                RandomizedDelaySec = "6h";
-                Persistent = true;
-              };
-            };
-          }
-      )
-      reposToMirror;
+    systemd.services = lib.mapAttrs' (name: repo: {
+      name = unitName name;
+      value = {
+        description = "mirror git repository ${name}";
+        requires = [ "network-online.target" ];
+        after = [ "network-online.target" ];
 
-    systemd.services = lib.mapAttrs'
-      (
-        name: repo:
-          {
-            name = unitName name;
-            value = {
-              description = "mirror git repository ${name}";
-              requires = [ "network-online.target" ];
-              after = [ "network-online.target" ];
+        script =
+          let
+            path = repoPath name repo;
+          in
+          ''
+            set -euo pipefail
 
-              script =
-                let
-                  path = repoPath name repo;
-                in
-                ''
-                  set -euo pipefail
+            export PATH="${
+              lib.makeBinPath [
+                pkgs.coreutils
+                pkgs.git
+              ]
+            }"
 
-                  export PATH="${lib.makeBinPath [ pkgs.coreutils pkgs.git ]}"
+            if test ! -d "${path}"; then
+              mkdir -p "$(dirname "${path}")"
+              git clone --mirror "${repo.upstream}" "${path}"
+              exit 0
+            fi
 
-                  if test ! -d "${path}"; then
-                    mkdir -p "$(dirname "${path}")"
-                    git clone --mirror "${repo.upstream}" "${path}"
-                    exit 0
-                  fi
+            cd "${path}"
 
-                  cd "${path}"
+            git fetch "${repo.upstream}" '+refs/*:refs/*' --prune
+          '';
 
-                  git fetch "${repo.upstream}" '+refs/*:refs/*' --prune
-                '';
-
-              serviceConfig = {
-                Type = "oneshot";
-                User = mirroredReposOwner;
-                Group = mirroredReposOwner;
-              };
-            };
-          }
-      )
-      reposToMirror;
+        serviceConfig = {
+          Type = "oneshot";
+          User = mirroredReposOwner;
+          Group = mirroredReposOwner;
+        };
+      };
+    }) reposToMirror;
   };
 }

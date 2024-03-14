@@ -11,6 +11,5 @@ let
       readDir = path: builtins.trace "depot-scan '${toString path}'" (builtins.readDir path);
     };
   };
-
 in
 global.import

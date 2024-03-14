@@ -1,7 +1,14 @@
 { depot, pkgs, ... }:
 
 let
-  inherit (pkgs) fontconfig texlive stdenv imagemagick runCommand qrencode;
+  inherit (pkgs)
+    fontconfig
+    texlive
+    stdenv
+    imagemagick
+    runCommand
+    qrencode
+    ;
 
   tex = texlive.combine {
     inherit (texlive)
@@ -19,7 +26,8 @@ let
       ms
       pgfopts
       scheme-basic
-      translator;
+      translator
+      ;
   };
 
   linksQrCode = runCommand "qrcode.png" { } ''
@@ -36,10 +44,19 @@ stdenv.mkDerivation {
   name = "progmsk-tvix-eval";
   src = ./.;
 
-  nativeBuildInputs = [ tex imagemagick fontconfig ];
+  nativeBuildInputs = [
+    tex
+    imagemagick
+    fontconfig
+  ];
 
   FONTCONFIG_FILE = pkgs.makeFontsConf {
-    fontDirectories = with pkgs; [ jetbrains-mono fira fira-code fira-mono ];
+    fontDirectories = with pkgs; [
+      jetbrains-mono
+      fira
+      fira-code
+      fira-mono
+    ];
   };
 
   buildPhase = ''

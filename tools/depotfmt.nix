@@ -20,7 +20,7 @@ let
     includes = [ "*.tf" ]
 
     [formatter.nix]
-    command = "${pkgs.nixpkgs-fmt}/bin/nixpkgs-fmt"
+    command = "${pkgs.nixfmt-rfc-style}/bin/nixfmt"
     includes = [ "*.nix" ]
     excludes = [
       "tvix/eval/src/tests/*",

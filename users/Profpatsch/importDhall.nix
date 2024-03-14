@@ -1,4 +1,9 @@
-{ pkgs, depot, lib, ... }:
+{
+  pkgs,
+  depot,
+  lib,
+  ...
+}:
 let
 
   # import the dhall file as nix expression via dhall-nix.
@@ -11,23 +16,22 @@ let
   importDhall =
     {
       # Root path of the dhall file tree to import (will be filtered by files)
-      root
-    , # A list of files which should be taken from `root` (relative paths).
+      root,
+      # A list of files which should be taken from `root` (relative paths).
       # This is for minimizing the amount of things that have to be copied to the store.
       # TODO: can you have directory prefixes?
-      files
-    , # The path of the dhall file which should be evaluated, relative to `root`, has to be in `files`
-      main
-    , # List of dependencies (TODO: what is a dependency?)
-      deps
-    , # dhall type of `main`, or `null` if anything should be possible.
-      type ? null
+      files,
+      # The path of the dhall file which should be evaluated, relative to `root`, has to be in `files`
+      main,
+      # List of dependencies (TODO: what is a dependency?)
+      deps,
+      # dhall type of `main`, or `null` if anything should be possible.
+      type ? null,
     }:
     let
       absRoot = path: toString root + "/" + path;
       src =
-        depot.users.Profpatsch.exactSource
-          root
+        depot.users.Profpatsch.exactSource root
           # exactSource wants nix paths, but I think relative paths
           # as strings are more intuitive.
           ([ (absRoot main) ] ++ (map absRoot files));
@@ -54,27 +58,31 @@ let
         ' \
           ${pkgs.dhall}/bin/dhall \
           ${absRoot main}
-        ${if hadTypeAnnot then ''
-            printf '%s' ${lib.escapeShellArg "${src}/${main} ${typeAnnot}"} \
-              | ${pkgs.dhall-nix}/bin/dhall-to-nix \
-              > $out
-          ''
-          else ''
-            printf 'No type annotation given, the dhall expression type was:\n'
-            ${pkgs.dhall}/bin/dhall type --file "${src}/${main}"
-            printf '%s' ${lib.escapeShellArg "${src}/${main}"} \
-              | ${pkgs.dhall-nix}/bin/dhall-to-nix \
-              > $out
-          ''}
+        ${
+          if hadTypeAnnot then
+            ''
+              printf '%s' ${lib.escapeShellArg "${src}/${main} ${typeAnnot}"} \
+                | ${pkgs.dhall-nix}/bin/dhall-to-nix \
+                > $out
+            ''
+          else
+            ''
+              printf 'No type annotation given, the dhall expression type was:\n'
+              ${pkgs.dhall}/bin/dhall type --file "${src}/${main}"
+              printf '%s' ${lib.escapeShellArg "${src}/${main}"} \
+                | ${pkgs.dhall-nix}/bin/dhall-to-nix \
+                > $out
+            ''
+        }
 
       '';
     in
     import convert;
 
-
   # read dhall file in as JSON, then import as nix expression.
   # The dhall file must not try to import from non-local URLs!
-  readDhallFileAsJson = dhallType: file:
+  readDhallFileAsJson =
+    dhallType: file:
     let
       convert = pkgs.runCommandLocal "dhall-to-json" { } ''
         printf '%s' ${lib.escapeShellArg "${file} : ${dhallType}"} \
@@ -83,11 +91,7 @@ let
       '';
     in
     builtins.fromJSON (builtins.readFile convert);
-
 in
 {
-  inherit
-    importDhall
-    readDhallFileAsJson
-    ;
+  inherit importDhall readDhallFileAsJson;
 }

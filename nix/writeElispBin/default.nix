@@ -1,6 +1,11 @@
 { depot, pkgs, ... }:
 
-{ name, src, deps ? (_: [ ]), emacs ? pkgs.emacs28-nox }:
+{
+  name,
+  src,
+  deps ? (_: [ ]),
+  emacs ? pkgs.emacs28-nox,
+}:
 
 let
   inherit (pkgs) emacsPackages emacsPackagesFor;
@@ -8,11 +13,7 @@ let
 
   finalEmacs = (emacsPackagesFor emacs).emacsWithPackages deps;
 
-  srcFile =
-    if isString src
-    then toFile "${name}.el" src
-    else src;
-
+  srcFile = if isString src then toFile "${name}.el" src else src;
 in
 depot.nix.writeScriptBin name ''
   #!/bin/sh

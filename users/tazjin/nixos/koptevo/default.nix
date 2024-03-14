@@ -1,7 +1,13 @@
 # NUC in my closet.
 _: # ignore readTree options
 
-{ config, depot, lib, pkgs, ... }:
+{
+  config,
+  depot,
+  lib,
+  pkgs,
+  ...
+}:
 
 let
   mod = name: depot.path.origSrc + ("/ops/modules/" + name);
@@ -23,7 +29,13 @@ in
   boot = {
     loader.systemd-boot.enable = true;
     loader.efi.canTouchEfiVariables = true;
-    initrd.availableKernelModules = [ "ahci" "xhci_pci" "usb_storage" "sd_mod" "sdhci_pci" ];
+    initrd.availableKernelModules = [
+      "ahci"
+      "xhci_pci"
+      "usb_storage"
+      "sd_mod"
+      "sdhci_pci"
+    ];
     kernelModules = [ "kvm-intel" ];
     kernelParams = [ "nomodeset" ];
   };
@@ -62,7 +74,11 @@ in
     domain = "tazj.in";
     useDHCP = true;
     firewall.enable = true;
-    firewall.allowedTCPPorts = [ 22 80 443 ];
+    firewall.allowedTCPPorts = [
+      22
+      80
+      443
+    ];
 
     wireless.enable = true;
     wireless.networks."How do I computer fast?" = {
@@ -79,7 +95,11 @@ in
 
   users.users.tazjin = {
     isNormalUser = true;
-    extraGroups = [ "wheel" "docker" "systemd-journal" ];
+    extraGroups = [
+      "wheel"
+      "docker"
+      "systemd-journal"
+    ];
     shell = pkgs.fish;
     openssh.authorizedKeys.keys = depot.users.tazjin.keys.all;
   };
@@ -99,9 +119,7 @@ in
   services.depot.quassel = {
     enable = true;
     acmeHost = "koptevo.tazj.in";
-    bindAddresses = [
-      "0.0.0.0"
-    ];
+    bindAddresses = [ "0.0.0.0" ];
   };
 
   services.tailscale = {
@@ -131,9 +149,7 @@ in
 
   # I don't use the podcast feature, but I *have to* supply podcasts
   # to gonic ...
-  systemd.tmpfiles.rules = [
-    "d /tmp/fake-podcasts 0555 nobody nobody -"
-  ];
+  systemd.tmpfiles.rules = [ "d /tmp/fake-podcasts 0555 nobody nobody -" ];
 
   services.gonic = {
     enable = true;
@@ -148,9 +164,7 @@ in
 
   # hack to work around the strict sandboxing of the gonic module
   # breaking DNS resolution
-  systemd.services.gonic.serviceConfig.BindReadOnlyPaths = [
-    "-/etc/resolv.conf"
-  ];
+  systemd.services.gonic.serviceConfig.BindReadOnlyPaths = [ "-/etc/resolv.conf" ];
 
   # add a hard dependency on the FUSE mount
   systemd.services.gonic.requires = [ "geesefs.service" ];

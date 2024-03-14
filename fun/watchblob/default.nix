@@ -7,7 +7,5 @@ depot.nix.buildGo.program {
     ./urls.go
   ];
 
-  deps = with depot.third_party; [
-    gopkgs."golang.org".x.crypto.ssh.terminal.gopkg
-  ];
+  deps = with depot.third_party; [ gopkgs."golang.org".x.crypto.ssh.terminal.gopkg ];
 }

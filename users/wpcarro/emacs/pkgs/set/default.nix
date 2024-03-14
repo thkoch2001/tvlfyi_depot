@@ -1,22 +1,20 @@
 { pkgs, depot, ... }:
 
 let
-  set = pkgs.callPackage
-    ({ emacsPackages }:
-      emacsPackages.trivialBuild {
-        pname = "set";
-        version = "1.0.0";
-        src = ./set.el;
-        packageRequires =
-          (with emacsPackages; [
-            dash
-            ht
-          ]) ++
-          (with depot.users.wpcarro.emacs.pkgs; [
-            struct
-          ]);
-      })
-    { };
+  set = pkgs.callPackage (
+    { emacsPackages }:
+    emacsPackages.trivialBuild {
+      pname = "set";
+      version = "1.0.0";
+      src = ./set.el;
+      packageRequires =
+        (with emacsPackages; [
+          dash
+          ht
+        ])
+        ++ (with depot.users.wpcarro.emacs.pkgs; [ struct ]);
+    }
+  ) { };
 
   emacs = (pkgs.emacsPackagesFor pkgs.emacs28).emacsWithPackages (epkgs: [
     epkgs.dash

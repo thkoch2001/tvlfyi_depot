@@ -1,2 +1,1 @@
-{ depot, ... }:
-depot.ops.secrets.mkSecrets ./. (import ./secrets.nix)
+{ depot, ... }: depot.ops.secrets.mkSecrets ./. (import ./secrets.nix)

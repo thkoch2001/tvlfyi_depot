@@ -10,7 +10,5 @@ depot.nix.buildGo.external {
     sha256 = "08bmkqdn7sb5laqc1mvgk4xj31f600n1y04s1ifppjvszbcsxhid";
   };
 
-  deps = with depot.third_party; [
-    gopkgs."github.com".mattn.go-runewidth
-  ];
+  deps = with depot.third_party; [ gopkgs."github.com".mattn.go-runewidth ];
 }

@@ -1,6 +1,12 @@
 # NixOS module to run Nixery, currently with local-storage as the
 # backend for storing/serving image layers.
-{ depot, config, lib, pkgs, ... }:
+{
+  depot,
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 let
   cfg = config.services.depot.nixery;

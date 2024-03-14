@@ -1,7 +1,13 @@
 # generic shell.nix that can be used for most of my projects here,
 # until I figure out a way to have composable shells.
-let root = (import ../../. { }); in
-{ pkgs ? root.third_party.nixpkgs, depot ? root, ... }:
+let
+  root = (import ../../. { });
+in
+{
+  pkgs ? root.third_party.nixpkgs,
+  depot ? root,
+  ...
+}:
 
 pkgs.mkShell {
   buildInputs = [
@@ -76,23 +82,22 @@ pkgs.mkShell {
 
   RUSTC_WRAPPER =
     let
-      wrapperArgFile = libs: pkgs.writeText "rustc-wrapper-args"
-        (pkgs.lib.concatStringsSep
-          "\n"
-          (pkgs.lib.concatLists
-            (map
-              (lib: [
+      wrapperArgFile =
+        libs:
+        pkgs.writeText "rustc-wrapper-args" (
+          pkgs.lib.concatStringsSep "\n" (
+            pkgs.lib.concatLists (
+              map (lib: [
                 "-L"
                 "${pkgs.lib.getLib lib}/lib"
-              ])
-              libs)));
+              ]) libs
+            )
+          )
+        );
     in
     depot.nix.writeExecline "rustc-wrapper" { readNArgs = 1; } [
       "$1"
       "$@"
-      "@${wrapperArgFile [
-      depot.third_party.rust-crates.nom
-    ]}"
+      "@${wrapperArgFile [ depot.third_party.rust-crates.nom ]}"
     ];
-
 }

@@ -12,4 +12,3 @@ _:
   # Backlight control command.
   programs.light.enable = true;
 }
-

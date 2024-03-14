@@ -1,4 +1,11 @@
-{ config, lib, pkgs, modulesPath, depot, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  modulesPath,
+  depot,
+  ...
+}:
 
 with lib;
 
@@ -23,7 +30,14 @@ with lib;
     extraModulePackages = [ ];
 
     initrd = {
-      availableKernelModules = [ "xhci_pci" "ehci_pci" "ahci" "usb_storage" "usbhid" "sd_mod" ];
+      availableKernelModules = [
+        "xhci_pci"
+        "ehci_pci"
+        "ahci"
+        "usb_storage"
+        "usbhid"
+        "sd_mod"
+      ];
       kernelModules = [
         "uas"
         "usbcore"
@@ -64,18 +78,27 @@ with lib;
   };
 
   networking.firewall.enable = true;
-  networking.firewall.allowedTCPPorts = [ 22 80 443 ];
+  networking.firewall.allowedTCPPorts = [
+    22
+    80
+    443
+  ];
 
-  security.sudo.extraRules = [{
-    groups = [ "wheel" ];
-    commands = [{ command = "ALL"; options = [ "NOPASSWD" ]; }];
-  }];
+  security.sudo.extraRules = [
+    {
+      groups = [ "wheel" ];
+      commands = [
+        {
+          command = "ALL";
+          options = [ "NOPASSWD" ];
+        }
+      ];
+    }
+  ];
 
   nix.gc.dates = "monthly";
 
-  users.users.grfn.openssh.authorizedKeys.keys = [
-    depot.users.aspen.keys.whitby
-  ];
+  users.users.grfn.openssh.authorizedKeys.keys = [ depot.users.aspen.keys.whitby ];
 
   age.secrets =
     let
@@ -106,9 +129,7 @@ with lib;
 
   services.fail2ban = {
     enable = true;
-    ignoreIP = [
-      "172.16.0.0/16"
-    ];
+    ignoreIP = [ "172.16.0.0/16" ];
   };
 
   services.openssh = {
@@ -134,11 +155,13 @@ with lib;
 
     provision = {
       enable = true;
-      datasources.settings.datasources = [{
-        name = "Prometheus";
-        type = "prometheus";
-        url = "http://localhost:9090";
-      }];
+      datasources.settings.datasources = [
+        {
+          name = "Prometheus";
+          type = "prometheus";
+          url = "http://localhost:9090";
+        }
+      ];
     };
   };
 
@@ -207,19 +230,21 @@ with lib;
       blackbox = {
         enable = true;
         openFirewall = true;
-        configFile = pkgs.writeText "blackbox-exporter.yaml" (builtins.toJSON {
-          modules = {
-            https_2xx = {
-              prober = "http";
-              http = {
-                method = "GET";
-                fail_if_ssl = false;
-                fail_if_not_ssl = true;
-                preferred_ip_protocol = "ip4";
+        configFile = pkgs.writeText "blackbox-exporter.yaml" (
+          builtins.toJSON {
+            modules = {
+              https_2xx = {
+                prober = "http";
+                http = {
+                  method = "GET";
+                  fail_if_ssl = false;
+                  fail_if_not_ssl = true;
+                  preferred_ip_protocol = "ip4";
+                };
               };
             };
-          };
-        });
+          }
+        );
       };
     };
 
@@ -227,41 +252,44 @@ with lib;
       {
         job_name = "node";
         scrape_interval = "5s";
-        static_configs = [{
-          targets = [ "localhost:${toString config.services.prometheus.exporters.node.port}" ];
-        }];
+        static_configs = [
+          { targets = [ "localhost:${toString config.services.prometheus.exporters.node.port}" ]; }
+        ];
       }
       {
         job_name = "nginx";
         scrape_interval = "5s";
-        static_configs = [{
-          targets = [ "localhost:${toString config.services.prometheus.exporters.nginx.port}" ];
-        }];
+        static_configs = [
+          { targets = [ "localhost:${toString config.services.prometheus.exporters.nginx.port}" ]; }
+        ];
       }
       {
         job_name = "xanthous_server";
         scrape_interval = "1s";
-        static_configs = [{
-          targets = [ "localhost:${toString config.services.xanthous-server.metricsPort}" ];
-        }];
+        static_configs = [
+          { targets = [ "localhost:${toString config.services.xanthous-server.metricsPort}" ]; }
+        ];
       }
       {
         job_name = "blackbox";
         metrics_path = "/probe";
         params.module = [ "https_2xx" ];
         scrape_interval = "5s";
-        static_configs = [{
-          targets = [
-            "https://gws.fyi"
-            "https://windtunnel.ci"
-            "https://app.windtunnel.ci"
-            "https://metrics.gws.fyi"
-          ];
-        }];
-        relabel_configs = [{
-          source_labels = [ "__address__" ];
-          target_label = "__param_target";
-        }
+        static_configs = [
+          {
+            targets = [
+              "https://gws.fyi"
+              "https://windtunnel.ci"
+              "https://app.windtunnel.ci"
+              "https://metrics.gws.fyi"
+            ];
+          }
+        ];
+        relabel_configs = [
+          {
+            source_labels = [ "__address__" ];
+            target_label = "__param_target";
+          }
           {
             source_labels = [ "__param_target" ];
             target_label = "instance";
@@ -269,7 +297,8 @@ with lib;
           {
             target_label = "__address__";
             replacement = "localhost:${toString config.services.prometheus.exporters.blackbox.port}";
-          }];
+          }
+        ];
       }
     ];
   };
@@ -281,8 +310,8 @@ with lib;
     storageDriver = "btrfs";
   };
 
-  services.buildkite-agents = listToAttrs (map
-    (n: rec {
+  services.buildkite-agents = listToAttrs (
+    map (n: rec {
       name = "mugwump-${toString n}";
       value = {
         inherit name;
@@ -296,11 +325,14 @@ with lib;
           gzip
         ];
       };
-    })
-    (range 1 1));
+    }) (range 1 1)
+  );
 
   users.users."buildkite-agent-mugwump-1" = {
     isSystemUser = true;
-    extraGroups = [ "docker" "keys" ];
+    extraGroups = [
+      "docker"
+      "keys"
+    ];
   };
 }

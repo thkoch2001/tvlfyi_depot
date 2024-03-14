@@ -1,4 +1,9 @@
-{ depot, pkgs, localSystem, ... }:
+{
+  depot,
+  pkgs,
+  localSystem,
+  ...
+}:
 
 let
   emptyDerivation = import ./emptyDerivation.nix {
@@ -14,7 +19,6 @@ let
     inherit (depot.nix) writeExecline getBins;
     inherit (depot.nix.runTestsuite) runTestsuite it assertEq;
   };
-
 in
 {
   __functor = _: emptyDerivation;

@@ -1,19 +1,17 @@
 { pkgs, depot, ... }:
 
 let
-  struct = pkgs.callPackage
-    ({ emacsPackages }:
-      emacsPackages.trivialBuild {
-        pname = "struct";
-        version = "1.0.0";
-        src = ./struct.el;
-        packageRequires = [ ];
-      })
-    { };
+  struct = pkgs.callPackage (
+    { emacsPackages }:
+    emacsPackages.trivialBuild {
+      pname = "struct";
+      version = "1.0.0";
+      src = ./struct.el;
+      packageRequires = [ ];
+    }
+  ) { };
 
-  emacs = (pkgs.emacsPackagesFor pkgs.emacs28).emacsWithPackages (epkgs: [
-    struct
-  ]);
+  emacs = (pkgs.emacsPackagesFor pkgs.emacs28).emacsWithPackages (epkgs: [ struct ]);
 in
 struct.overrideAttrs (_old: {
   doCheck = true;

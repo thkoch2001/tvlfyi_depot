@@ -10,7 +10,5 @@ depot.nix.buildGo.external {
     sha256 = "1chjlnv5d6svpymxgsr62d992m2xi6jb5lybjc5zn1h3hv1m01av";
   };
 
-  deps = with depot.third_party; [
-    gopkgs."golang.org".x.crypto.ssh.agent
-  ];
+  deps = with depot.third_party; [ gopkgs."golang.org".x.crypto.ssh.agent ];
 }

@@ -1,4 +1,9 @@
-{ depot, pkgs, lib, ... }:
+{
+  depot,
+  pkgs,
+  lib,
+  ...
+}:
 
 let
   inherit (pkgs.buildPackages) cbqn ngn-k;
@@ -25,29 +30,24 @@ depot.nix.readTree.drvTargets {
     inherit BQNLIBS;
   };
 
-  bqn = pkgs.runCommand "bqn-aoc-2022"
-    {
-      nativeBuildInputs = [
-        cbqn
-      ];
+  bqn =
+    pkgs.runCommand "bqn-aoc-2022"
+      {
+        nativeBuildInputs = [ cbqn ];
 
-      aoc = builtins.path {
-        name = "bqn-aoc-2022";
-        path = ./../.;
-        # Need lib.bqn from ../ and all inputs as well as bqn files from ./*
-        filter = path: type:
-          lib.hasSuffix ".bqn" path || (
-            lib.hasPrefix (toString ./.) path
-            && (
-              type == "directory"
-              || lib.hasSuffix "/input" path
-            )
-          );
-      };
+        aoc = builtins.path {
+          name = "bqn-aoc-2022";
+          path = ./../.;
+          # Need lib.bqn from ../ and all inputs as well as bqn files from ./*
+          filter =
+            path: type:
+            lib.hasSuffix ".bqn" path
+            || (lib.hasPrefix (toString ./.) path && (type == "directory" || lib.hasSuffix "/input" path));
+        };
 
-      inherit meta BQNLIBS;
-    }
-    ''
-      find "$aoc/2022" -name '*.bqn' -exec BQN {} \; | tee "$out"
-    '';
+        inherit meta BQNLIBS;
+      }
+      ''
+        find "$aoc/2022" -name '*.bqn' -exec BQN {} \; | tee "$out"
+      '';
 }

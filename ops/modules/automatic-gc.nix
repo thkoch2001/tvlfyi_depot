@@ -1,7 +1,12 @@
 # Defines a service for automatically collecting Nix garbage
 # periodically, without relying on the (ostensibly broken) Nix options
 # for min/max space available.
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 let
   cfg = config.services.depot.automatic-gc;

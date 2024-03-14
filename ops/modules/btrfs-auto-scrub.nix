@@ -11,13 +11,9 @@
         # gather all btrfs fileSystems, extra ones can be added via the NixOS
         # module merging mechanism, of course.
         fileSystems = lib.concatLists (
-          lib.mapAttrsToList
-            (
-              _:
-              { fsType, mountPoint, ... }:
-              if fsType == "btrfs" then [ mountPoint ] else [ ]
-            )
-            config.fileSystems
+          lib.mapAttrsToList (
+            _: { fsType, mountPoint, ... }: if fsType == "btrfs" then [ mountPoint ] else [ ]
+          ) config.fileSystems
         );
       };
     };

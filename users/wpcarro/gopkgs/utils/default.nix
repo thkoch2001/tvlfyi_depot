@@ -2,7 +2,5 @@
 
 depot.nix.buildGo.package {
   name = "utils";
-  srcs = [
-    ./utils.go
-  ];
+  srcs = [ ./utils.go ];
 }

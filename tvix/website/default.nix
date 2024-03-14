@@ -1,4 +1,9 @@
-{ depot, lib, pkgs, ... }:
+{
+  depot,
+  lib,
+  pkgs,
+  ...
+}:
 
 let
   description = "Rust implementation of the purely-functional Nix package manager";
@@ -17,9 +22,9 @@ let
   };
 
   # All Tvix-related blog posts from the main TVL website
-  tvixPosts = builtins.filter
-    (post: !(post.draft or false) && (lib.hasInfix "Tvix" post.title))
-    depot.web.tvl.blog.posts;
+  tvixPosts = builtins.filter (
+    post: !(post.draft or false) && (lib.hasInfix "Tvix" post.title)
+  ) depot.web.tvl.blog.posts;
 
   postListEntries = map (p: "* [${p.title}](https://tvl.fyi/blog/${p.key})") tvixPosts;
 
@@ -37,7 +42,6 @@ let
       </script>
     '';
   };
-
 in
 pkgs.runCommand "tvix-website" { } ''
   mkdir $out

@@ -1,29 +1,30 @@
 { lib, pkgs, ... }:
 
 let
-  wasmRust = pkgs.rust-bin.stable.latest.default.override {
-    targets = [ "wasm32-unknown-unknown" ];
-  };
+  wasmRust = pkgs.rust-bin.stable.latest.default.override { targets = [ "wasm32-unknown-unknown" ]; };
 
   cargoToml = with builtins; fromTOML (readFile ./Cargo.toml);
 
-  wasmBindgenMatch =
-    cargoToml.dependencies.wasm-bindgen == "= ${pkgs.wasm-bindgen-cli.version}";
+  wasmBindgenMatch = cargoToml.dependencies.wasm-bindgen == "= ${pkgs.wasm-bindgen-cli.version}";
 
-  assertWasmBindgen = assert (lib.assertMsg wasmBindgenMatch ''
-    Due to instability in the Rust WASM ecosystem, the trunk build
-    tool enforces that the Cargo-dependency version of `wasm-bindgen`
-    MUST match the version of the CLI supplied in the environment.
+  assertWasmBindgen =
+    assert (
+      lib.assertMsg wasmBindgenMatch ''
+        Due to instability in the Rust WASM ecosystem, the trunk build
+        tool enforces that the Cargo-dependency version of `wasm-bindgen`
+        MUST match the version of the CLI supplied in the environment.
 
-    This can get out of sync when nixpkgs is updated. To resolve it,
-    wasm-bindgen must be bumped in the Cargo.toml file and cargo needs
-    to be run to resolve the dependencies.
+        This can get out of sync when nixpkgs is updated. To resolve it,
+        wasm-bindgen must be bumped in the Cargo.toml file and cargo needs
+        to be run to resolve the dependencies.
 
-    Versions of `wasm-bindgen` in Cargo.toml:
+        Versions of `wasm-bindgen` in Cargo.toml:
 
-      Expected: '= ${pkgs.wasm-bindgen-cli.version}'
-      Actual:   '${cargoToml.dependencies.wasm-bindgen}'
-  ''); pkgs.wasm-bindgen-cli;
+          Expected: '= ${pkgs.wasm-bindgen-cli.version}'
+          Actual:   '${cargoToml.dependencies.wasm-bindgen}'
+      ''
+    );
+    pkgs.wasm-bindgen-cli;
 
   deps = with pkgs; [
     binaryen
@@ -32,7 +33,6 @@ let
     trunk
     assertWasmBindgen
   ];
-
 in
 pkgs.rustPlatform.buildRustPackage rec {
   pname = "rih-frontend";

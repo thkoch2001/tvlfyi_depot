@@ -2,9 +2,8 @@
 
 let
   bins = depot.nix.getBins pkgs.coreutils [ "printf" ];
-
-  # printf(1), but redirect to stderr
 in
+# printf(1), but redirect to stderr
 depot.nix.writeExecline "eprintf" { } [
   "fdmove"
   "-c"

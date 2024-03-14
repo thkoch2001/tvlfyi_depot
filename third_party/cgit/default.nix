@@ -1,14 +1,31 @@
-{ depot, lib, pkgs, ... }:
+{
+  depot,
+  lib,
+  pkgs,
+  ...
+}:
 
 let
-  inherit (pkgs) stdenv gzip bzip2 xz lzip zstd zlib openssl;
+  inherit (pkgs)
+    stdenv
+    gzip
+    bzip2
+    xz
+    lzip
+    zstd
+    zlib
+    openssl
+    ;
 in
 stdenv.mkDerivation rec {
   pname = "cgit-pink";
   version = "master";
   src = ./.;
 
-  buildInputs = [ openssl zlib ];
+  buildInputs = [
+    openssl
+    zlib
+  ];
 
   enableParallelBuilding = true;
 

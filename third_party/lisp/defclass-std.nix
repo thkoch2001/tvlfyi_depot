@@ -2,15 +2,15 @@
 # Seems to be unmaintained (since early 2021)
 { depot, pkgs, ... }:
 
-let src = with pkgs; srcOnly lispPackages.defclass-std;
-in depot.nix.buildLisp.library {
+let
+  src = with pkgs; srcOnly lispPackages.defclass-std;
+in
+depot.nix.buildLisp.library {
   name = "defclass-std";
   deps = with depot.third_party.lisp; [
     alexandria
     anaphora
   ];
 
-  srcs = map (f: src + ("/src/" + f)) [
-    "defclass-std.lisp"
-  ];
+  srcs = map (f: src + ("/src/" + f)) [ "defclass-std.lisp" ];
 }

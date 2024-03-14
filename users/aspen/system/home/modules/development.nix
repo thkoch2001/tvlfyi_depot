@@ -1,15 +1,18 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 let
 
-  clj2nix = pkgs.callPackage
-    (pkgs.fetchFromGitHub {
-      owner = "hlolli";
-      repo = "clj2nix";
-      rev = "3ab3480a25e850b35d1f532a5e4e7b3202232383";
-      sha256 = "1lry026mlpxp1j563qs13nhxf37i2zpl7lh0lgfdwc44afybqka6";
-    })
-    { };
+  clj2nix = pkgs.callPackage (pkgs.fetchFromGitHub {
+    owner = "hlolli";
+    repo = "clj2nix";
+    rev = "3ab3480a25e850b35d1f532a5e4e7b3202232383";
+    sha256 = "1lry026mlpxp1j563qs13nhxf37i2zpl7lh0lgfdwc44afybqka6";
+  }) { };
 
   pg-dump-upsert = pkgs.buildGoModule rec {
     pname = "pg-dump-upsert";
@@ -24,7 +27,6 @@ let
 
     vendorHash = "sha256:1a5fx6mrv30cl46kswicd8lf5i5shn1fykchvbnbhdpgxhbz6qi4";
   };
-
 in
 
 with lib;
@@ -38,44 +40,47 @@ with lib;
     ./development/rust.nix
   ];
 
-  home.packages = with pkgs; [
-    jq
-    yq
-    gron
-    gitAndTools.tig
-    gitAndTools.gh
-    shellcheck
-    httpie
-    entr
-    gnumake
-    inetutils
-    tokei
-    jsonnet
-    ngrok
-    amber
+  home.packages =
+    with pkgs;
+    [
+      jq
+      yq
+      gron
+      gitAndTools.tig
+      gitAndTools.gh
+      shellcheck
+      httpie
+      entr
+      gnumake
+      inetutils
+      tokei
+      jsonnet
+      ngrok
+      amber
 
-    gdb
-    lldb
-    hyperfine
-    clang-tools
+      gdb
+      lldb
+      hyperfine
+      clang-tools
 
-    clj2nix
-    clojure
-    leiningen
-    clj-kondo
+      clj2nix
+      clojure
+      leiningen
+      clj-kondo
 
-    pg-dump-upsert
+      pg-dump-upsert
 
-    nodePackages.prettier
-  ] ++ optionals (stdenv.isLinux) [
-    # TODO(grfn): replace with stable again once the current julia debacle
-    # is resolved upstream, see https://github.com/NixOS/nixpkgs/pull/121114
-    julia_16-bin
-    valgrind
+      nodePackages.prettier
+    ]
+    ++ optionals (stdenv.isLinux) [
+      # TODO(grfn): replace with stable again once the current julia debacle
+      # is resolved upstream, see https://github.com/NixOS/nixpkgs/pull/121114
+      julia_16-bin
+      valgrind
 
-    linuxPackages.perf
-    rr
-  ];
+      linuxPackages.perf
+      rr
+    ];
 
   programs.git = {
     enable = true;

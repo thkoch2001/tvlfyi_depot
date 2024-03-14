@@ -4,7 +4,8 @@ let
   # Seed a tvix-store with the tvix docs, then start a VM, ask it to list all
   # files in /nix/store, and ensure the store path is present, which acts as a
   # nice smoketest.
-  mkBootTest = blobServiceAddr:
+  mkBootTest =
+    blobServiceAddr:
     pkgs.stdenv.mkDerivation {
       name = "run-vm";
       nativeBuildInputs = [

@@ -1,5 +1,10 @@
 # nixery.dev backing host in ru-central1-b
-{ depot, lib, pkgs, ... }: # readTree options
+{
+  depot,
+  lib,
+  pkgs,
+  ...
+}: # readTree options
 { config, ... }: # passed by module system
 
 let
@@ -19,12 +24,21 @@ in
   networking = {
     hostName = "nixery-01";
     domain = "tvl.fyi";
-    firewall.allowedTCPPorts = [ 22 80 443 ];
+    firewall.allowedTCPPorts = [
+      22
+      80
+      443
+    ];
   };
 
   security.sudo.extraRules = lib.singleton {
     groups = [ "wheel" ];
-    commands = [{ command = "ALL"; options = [ "NOPASSWD" ]; }];
+    commands = [
+      {
+        command = "ALL";
+        options = [ "NOPASSWD" ];
+      }
+    ];
   };
 
   services.depot.nixery.enable = true;

@@ -1,8 +1,10 @@
 # Common Lisp library for decompressing deflate, zlib, gzip, and bzip2 data
 { depot, pkgs, ... }:
 
-let src = with pkgs; srcOnly lispPackages.chipz;
-in depot.nix.buildLisp.library {
+let
+  src = with pkgs; srcOnly lispPackages.chipz;
+in
+depot.nix.buildLisp.library {
   name = "chipz";
   deps = [ (depot.nix.buildLisp.bundled "asdf") ];
 

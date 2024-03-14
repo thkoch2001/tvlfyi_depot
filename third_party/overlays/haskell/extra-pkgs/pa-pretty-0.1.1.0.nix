@@ -1,13 +1,14 @@
-{ mkDerivation
-, aeson
-, aeson-pretty
-, ansi-terminal
-, base
-, hscolour
-, lib
-, nicify-lib
-, pa-prelude
-, text
+{
+  mkDerivation,
+  aeson,
+  aeson-pretty,
+  ansi-terminal,
+  base,
+  hscolour,
+  lib,
+  nicify-lib,
+  pa-prelude,
+  text,
 }:
 mkDerivation {
   pname = "pa-pretty";

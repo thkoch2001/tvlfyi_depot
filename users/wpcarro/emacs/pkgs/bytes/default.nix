@@ -1,18 +1,15 @@
 { pkgs, depot, ... }:
 
 let
-  bytes = pkgs.callPackage
-    ({ emacsPackages }:
-      emacsPackages.trivialBuild {
-        pname = "bytes";
-        version = "1.0.0";
-        src = ./bytes.el;
-        packageRequires =
-          (with depot.users.wpcarro.emacs.pkgs; [
-            tuple
-          ]);
-      })
-    { };
+  bytes = pkgs.callPackage (
+    { emacsPackages }:
+    emacsPackages.trivialBuild {
+      pname = "bytes";
+      version = "1.0.0";
+      src = ./bytes.el;
+      packageRequires = (with depot.users.wpcarro.emacs.pkgs; [ tuple ]);
+    }
+  ) { };
 
   emacs = (pkgs.emacsPackagesFor pkgs.emacs28).emacsWithPackages (epkgs: [ bytes ]);
 in

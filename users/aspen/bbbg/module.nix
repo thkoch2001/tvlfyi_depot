@@ -1,4 +1,10 @@
-{ config, lib, pkgs, depot, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  depot,
+  ...
+}:
 
 let
   bbbg = depot.users.aspen.bbbg;
@@ -81,10 +87,7 @@ in
       systemd.services.migrate-bbbg = {
         description = "Run database migrations for BBBG";
         wantedBy = [ "bbbg-server.service" ];
-        after = ([ "network.target" ]
-          ++ (if cfg.database.enable
-        then [ "postgresql.service" ]
-        else [ ]));
+        after = ([ "network.target" ] ++ (if cfg.database.enable then [ "postgresql.service" ] else [ ]));
 
         serviceConfig = {
           Type = "oneshot";
@@ -111,16 +114,16 @@ in
           hostnossl all all ::1/128  password
         '';
 
-        ensureDatabases = [
-          cfg.database.name
-        ];
+        ensureDatabases = [ cfg.database.name ];
 
-        ensureUsers = [{
-          name = cfg.database.user;
-          ensurePermissions = {
-            "DATABASE ${cfg.database.name}" = "ALL PRIVILEGES";
-          };
-        }];
+        ensureUsers = [
+          {
+            name = cfg.database.user;
+            ensurePermissions = {
+              "DATABASE ${cfg.database.name}" = "ALL PRIVILEGES";
+            };
+          }
+        ];
       };
     })
     (lib.mkIf cfg.proxy.enable {

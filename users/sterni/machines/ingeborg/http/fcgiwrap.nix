@@ -1,9 +1,7 @@
 { ... }:
 
 {
-  imports = [
-    ./nginx.nix
-  ];
+  imports = [ ./nginx.nix ];
 
   config.services.fcgiwrap = {
     enable = true;

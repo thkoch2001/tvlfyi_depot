@@ -36,12 +36,13 @@
     "ccl"
     "ecl"
   ];
-}).overrideAttrs (super: {
-  # The built binary dispatches based on argv[0]. Building two executables would
-  # waste a lot of space.
-  buildCommand = ''
-    ${super.buildCommand}
+}).overrideAttrs
+  (super: {
+    # The built binary dispatches based on argv[0]. Building two executables would
+    # waste a lot of space.
+    buildCommand = ''
+      ${super.buildCommand}
 
-    ln -s "$out/bin/mblog" "$out/bin/mnote-html"
-  '';
-})
+      ln -s "$out/bin/mblog" "$out/bin/mnote-html"
+    '';
+  })

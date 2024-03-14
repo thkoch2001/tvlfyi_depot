@@ -2,7 +2,12 @@
 #
 # Only TODOs that match the form 'TODO($username)' are considered, and
 # only for users that are known to us.
-{ depot, lib, pkgs, ... }:
+{
+  depot,
+  lib,
+  pkgs,
+  ...
+}:
 
 let
   inherit (pkgs)
@@ -39,27 +44,46 @@ let
     user = string;
   };
 
-  allTodos = fromJSON (readFile (runCommand "depot-todos.json" { } ''
-    ${ripgrep}/bin/rg --json 'TODO\(\w+\):.*$' ${depot.path} | \
-      ${jq}/bin/jq -s -f ${./extract-todos.jq} > $out
-  ''));
+  allTodos = fromJSON (
+    readFile (
+      runCommand "depot-todos.json" { } ''
+        ${ripgrep}/bin/rg --json 'TODO\(\w+\):.*$' ${depot.path} | \
+          ${jq}/bin/jq -s -f ${./extract-todos.jq} > $out
+      ''
+    )
+  );
 
   knownUserTodos = filter (todos: elem (head todos).user knownUsers) allTodos;
 
-  fileLink = defun [ todo string ] (t:
-    ''<a style="color: inherit;"
-         href="https://cs.tvl.fyi/depot/-/blob/${t.file}#L${toString t.line}">
-      //${t.file}:${toString t.line}</a>'');
+  fileLink =
+    defun
+      [
+        todo
+        string
+      ]
+      (t: ''
+        <a style="color: inherit;"
+                 href="https://cs.tvl.fyi/depot/-/blob/${t.file}#L${toString t.line}">
+              //${t.file}:${toString t.line}</a>'');
 
-  todoElement = defun [ todo string ] (t: ''
-    <p>${fileLink t}:</p>
-    <blockquote>${t.todo}</blockquote>
+  todoElement =
+    defun
+      [
+        todo
+        string
+      ]
+      (t: ''
+        <p>${fileLink t}:</p>
+        <blockquote>${t.todo}</blockquote>
 
-  '');
+      '');
 
-  userParagraph = todos:
-    let user = (head todos).user;
-    in ''
+  userParagraph =
+    todos:
+    let
+      user = (head todos).user;
+    in
+    ''
       <p>
         <h3>
           <a style="color:inherit; text-decoration: none;"
@@ -72,7 +96,6 @@ let
     '';
 
   staticUrl = "https://static.tvl.fyi/${depot.web.static.drvHash}";
-
 in
 writeTextFile {
   name = "tvl-todos";

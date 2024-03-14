@@ -40,26 +40,23 @@ let
   });
 
   # use patched libcamera
-  pipewire' = (pkgs.pipewire.override {
-    inherit libcamera;
-  });
+  pipewire' = (pkgs.pipewire.override { inherit libcamera; });
 
-  wireplumber' = (pkgs.wireplumber.override {
-    pipewire = pipewire';
-  });
+  wireplumber' = (pkgs.wireplumber.override { pipewire = pipewire'; });
 in
 {
-  boot.kernelPatches = [{
-    name = "linux-kernel-test.patch";
-    patch = ./kernel/softisp.patch;
-    extraStructuredConfig = {
-      # needed for /dev/dma_heap
-      DMABUF_HEAPS_CMA = lib.kernel.yes;
-      DMABUF_HEAPS_SYSTEM = lib.kernel.yes;
-      DMABUF_HEAPS = lib.kernel.yes;
-    };
-  }];
-
+  boot.kernelPatches = [
+    {
+      name = "linux-kernel-test.patch";
+      patch = ./kernel/softisp.patch;
+      extraStructuredConfig = {
+        # needed for /dev/dma_heap
+        DMABUF_HEAPS_CMA = lib.kernel.yes;
+        DMABUF_HEAPS_SYSTEM = lib.kernel.yes;
+        DMABUF_HEAPS = lib.kernel.yes;
+      };
+    }
+  ];
 
   services.udev.extraRules = ''
     KERNEL=="system", SUBSYSTEM=="dma_heap", TAG+="uaccess"

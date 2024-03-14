@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 let
 
@@ -14,14 +19,10 @@ let
     xset -r ${pttKeycode}
     ${pkgs.pulseaudio}/bin/pactl set-source-mute ${sourceID} 0
   '';
-
 in
 
 {
-  home.packages = with pkgs; [
-    xbindkeys
-  ];
-
+  home.packages = with pkgs; [ xbindkeys ];
 
   home.file.".xbindkeysrc.scm".text = ''
     (xbindkey '("c:${pttKeycode}") "${unmute}")
@@ -35,7 +36,9 @@ in
       PartOf = [ "graphical-session.target" ];
     };
 
-    Install = { WantedBy = [ "graphical-session.target" ]; };
+    Install = {
+      WantedBy = [ "graphical-session.target" ];
+    };
 
     Service = {
       ExecStart = "${pkgs.xbindkeys}/bin/xbindkeys -n -v";

@@ -1,7 +1,3 @@
 { pkgs, ... }:
 
-pkgs.mkShell {
-  buildInputs = with pkgs; [
-    leiningen
-  ];
-}
+pkgs.mkShell { buildInputs = with pkgs; [ leiningen ]; }

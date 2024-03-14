@@ -1,18 +1,17 @@
-{ depot, lib, pkgs, ... }:
+{
+  depot,
+  lib,
+  pkgs,
+  ...
+}:
 
 let
 
-  inherit (depot.users.sterni.nix.flow)
-    cond
-    ;
+  inherit (depot.users.sterni.nix.flow) cond;
 
-  inherit (depot.nix)
-    yants
-    ;
+  inherit (depot.nix) yants;
 
-  inherit (depot.users.sterni.nix)
-    string
-    ;
+  inherit (depot.users.sterni.nix) string;
 
   # A char is the atomic element of a nix string
   # which is essentially an array of arbitrary bytes
@@ -29,9 +28,12 @@ let
   # Originally I searched a list for this, but came to the
   # conclusion that this can never be fast enough in Nix.
   # We therefore use a solution similar to infinisil's.
-  ordMap = builtins.listToAttrs
-    (lib.imap1 (i: v: { name = v; value = i; })
-      (string.toChars allChars));
+  ordMap = builtins.listToAttrs (
+    lib.imap1 (i: v: {
+      name = v;
+      value = i;
+    }) (string.toChars allChars)
+  );
 
   # Note on performance:
   # chr and ord have been benchmarked using the following cases:
@@ -50,21 +52,21 @@ let
 
   chr = i: string.charAt (i - 1) allChars;
 
-  asciiAlpha = c:
+  asciiAlpha =
+    c:
     let
       v = ord c;
     in
-    (v >= 65 && v <= 90)
-    || (v >= 97 && v <= 122);
+    (v >= 65 && v <= 90) || (v >= 97 && v <= 122);
 
-  asciiNum = c:
+  asciiNum =
+    c:
     let
       v = ord c;
     in
     v >= 48 && v <= 57;
 
   asciiAlphaNum = c: asciiAlpha c || asciiNum c;
-
 in
 {
   inherit
@@ -81,19 +83,21 @@ in
   # originally I generated a nix file containing a list of
   # characters, but infinisil uses a better way which I adapt
   # which is using builtins.readFile instead of import.
-  __generateAllChars = pkgs.runCommandCC "generate-all-chars"
-    {
-      source = ''
-        #include <stdio.h>
+  __generateAllChars =
+    pkgs.runCommandCC "generate-all-chars"
+      {
+        source = ''
+          #include <stdio.h>
 
-        int main(void) {
-          for(int i = 1; i <= 0xff; i++) {
-            putchar(i);
+          int main(void) {
+            for(int i = 1; i <= 0xff; i++) {
+              putchar(i);
+            }
           }
-        }
+        '';
+        passAsFile = [ "source" ];
+      }
+      ''
+        $CC -o "$out" -x c "$sourcePath"
       '';
-      passAsFile = [ "source" ];
-    } ''
-    $CC -o "$out" -x c "$sourcePath"
-  '';
 }

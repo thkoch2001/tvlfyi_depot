@@ -1,10 +1,13 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 {
   i18n.inputMethod = {
     enabled = "fcitx";
-    fcitx.engines = with pkgs.fcitx-engines; [
-      cloudpinyin
-    ];
+    fcitx.engines = with pkgs.fcitx-engines; [ cloudpinyin ];
   };
 }

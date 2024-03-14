@@ -1,20 +1,21 @@
-{ mkDerivation
-, aeson
-, aeson-better-errors
-, aeson-pretty
-, base
-, base64-bytestring
-, bytestring
-, containers
-, lib
-, pa-error-tree
-, pa-field-parser
-, pa-label
-, pa-prelude
-, scientific
-, text
-, time
-, vector
+{
+  mkDerivation,
+  aeson,
+  aeson-better-errors,
+  aeson-pretty,
+  base,
+  base64-bytestring,
+  bytestring,
+  containers,
+  lib,
+  pa-error-tree,
+  pa-field-parser,
+  pa-label,
+  pa-prelude,
+  scientific,
+  text,
+  time,
+  vector,
 }:
 mkDerivation {
   pname = "pa-json";

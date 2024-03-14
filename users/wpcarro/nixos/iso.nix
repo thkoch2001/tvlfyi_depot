@@ -7,9 +7,7 @@
 { pkgs, ... }:
 
 {
-  imports = [
-    "${pkgs.nixos}/modules/installer/cd-graphical-gnome.nix"
-  ];
+  imports = [ "${pkgs.nixos}/modules/installer/cd-graphical-gnome.nix" ];
 
   config = {
     networking.wireless.enable = true;

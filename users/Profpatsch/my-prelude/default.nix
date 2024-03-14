@@ -1,4 +1,9 @@
-{ depot, pkgs, lib, ... }:
+{
+  depot,
+  pkgs,
+  lib,
+  ...
+}:
 
 pkgs.haskellPackages.mkDerivation {
   pname = "my-prelude";
@@ -45,5 +50,4 @@ pkgs.haskellPackages.mkDerivation {
   ];
 
   license = lib.licenses.mit;
-
 }

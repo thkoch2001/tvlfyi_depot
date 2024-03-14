@@ -11,10 +11,7 @@ let
     hash = "sha256-94QrHcVHiEMCpBZJ5sghwtVNLNm4gdG8X85OetoGRD0=";
   };
 
-
-  naersk = pkgs.callPackage depot.third_party.sources.naersk {
-    inherit (pkgs) rustc cargo;
-  };
+  naersk = pkgs.callPackage depot.third_party.sources.naersk { inherit (pkgs) rustc cargo; };
   version = "git-${builtins.substring 0 8 rev}";
 in
 naersk.buildPackage {
@@ -29,17 +26,22 @@ naersk.buildPackage {
   ];
 
   dontStrip = true;
-  cargoBuildOptions = x: x ++ [
-    "-p"
-    "josh-filter"
-    "-p"
-    "josh-proxy"
-  ];
+  cargoBuildOptions =
+    x:
+    x
+    ++ [
+      "-p"
+      "josh-filter"
+      "-p"
+      "josh-proxy"
+    ];
 
   overrideMain = x: {
-    preBuild = x.preBuild or "" + ''
-      echo 'debug = true' >> Cargo.toml
-    '';
+    preBuild =
+      x.preBuild or ""
+      + ''
+        echo 'debug = true' >> Cargo.toml
+      '';
 
     nativeBuildInputs = (x.nativeBuildInputs or [ ]) ++ [ pkgs.makeWrapper ];
     postInstall = ''

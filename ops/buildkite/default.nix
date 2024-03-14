@@ -1,9 +1,12 @@
-{ depot, lib, pkgs, ... }:
+{
+  depot,
+  lib,
+  pkgs,
+  ...
+}:
 
 depot.nix.readTree.drvTargets rec {
-  terraform = pkgs.terraform.withPlugins (p: [
-    p.buildkite
-  ]);
+  terraform = pkgs.terraform.withPlugins (p: [ p.buildkite ]);
 
   validate = depot.tools.checks.validateTerraform {
     inherit terraform;

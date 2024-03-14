@@ -1,11 +1,12 @@
-{ depot, lib, config, ... }:
+{
+  depot,
+  lib,
+  config,
+  ...
+}:
 
 let
-  inherit (depot.users.sterni.external.flipdot-gschichtler)
-    bahnhofshalle
-    warteraum
-    nixosModule
-    ;
+  inherit (depot.users.sterni.external.flipdot-gschichtler) bahnhofshalle warteraum nixosModule;
 in
 
 {
@@ -15,13 +16,15 @@ in
   ];
 
   config = {
-    age.secrets = lib.genAttrs [
-      "warteraum-salt"
-      "warteraum-tokens"
-    ]
-      (name: {
-        file = depot.users.sterni.secrets."${name}.age";
-      });
+    age.secrets =
+      lib.genAttrs
+        [
+          "warteraum-salt"
+          "warteraum-tokens"
+        ]
+        (name: {
+          file = depot.users.sterni.secrets."${name}.age";
+        });
 
     services.flipdot-gschichtler = {
       enable = true;

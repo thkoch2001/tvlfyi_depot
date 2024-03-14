@@ -16,7 +16,6 @@ let
   };
 
   getSrcs = builtins.map (p: "${src}/${p}");
-
 in
 
 depot.nix.buildLisp.library {
@@ -37,9 +36,7 @@ depot.nix.buildLisp.library {
   tests = {
     name = "qbase64-tests";
 
-    srcs = getSrcs [
-      "qbase64-test.lisp"
-    ];
+    srcs = getSrcs [ "qbase64-test.lisp" ];
 
     deps = [
       {

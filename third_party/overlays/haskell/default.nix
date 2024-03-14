@@ -16,12 +16,14 @@ in
       ihp-hsx = lib.pipe hsSuper.ihp-hsx [
         (haskellLib.overrideSrc {
           version = "1.1.0";
-          src = "${self.fetchFromGitHub {
-            owner = "digitallyinduced";
-            repo = "ihp";
-            rev = "b5d47963c998ccd779aa5c3d46484338fd621f0d";
-            sha256 = "sha256-M22W8VX4sRaeU2yVraR0S2t2VOwWGmoteD/M8TahdoE=";
-          }}/ihp-hsx";
+          src = "${
+            self.fetchFromGitHub {
+              owner = "digitallyinduced";
+              repo = "ihp";
+              rev = "b5d47963c998ccd779aa5c3d46484338fd621f0d";
+              sha256 = "sha256-M22W8VX4sRaeU2yVraR0S2t2VOwWGmoteD/M8TahdoE=";
+            }
+          }/ihp-hsx";
         })
         haskellLib.doJailbreak
       ];

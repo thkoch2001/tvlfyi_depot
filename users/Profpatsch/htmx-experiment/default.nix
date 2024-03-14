@@ -1,4 +1,9 @@
-{ depot, pkgs, lib, ... }:
+{
+  depot,
+  pkgs,
+  lib,
+  ...
+}:
 
 let
   htmx-experiment = pkgs.haskellPackages.mkDerivation {
@@ -33,14 +38,11 @@ let
       pkgs.haskellPackages.unliftio
       pkgs.haskellPackages.wai
       pkgs.haskellPackages.warp
-
     ];
 
     isLibrary = false;
     isExecutable = true;
     license = lib.licenses.mit;
   };
-
-
 in
 htmx-experiment

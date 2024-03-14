@@ -1,14 +1,19 @@
-{ depot, lib, pkgs, ... }:
+{
+  depot,
+  lib,
+  pkgs,
+  ...
+}:
 
 let
-  sourceFilter = name: type:
+  sourceFilter =
+    name: type:
     let
       baseName = builtins.baseNameOf (builtins.toString name);
     in
     (baseName == "Cargo.toml")
     || (type == "directory" && baseName == "src")
-    || (lib.hasSuffix ".rs" baseName)
-  ;
+    || (lib.hasSuffix ".rs" baseName);
 in
 
 pkgs.buildRustCrate rec {
@@ -16,11 +21,19 @@ pkgs.buildRustCrate rec {
   crateName = "store-ref-scanner";
   version = "0.1.0";
   edition = "2021";
-  src = lib.cleanSourceWith { filter = sourceFilter; src = ./.; };
+  src = lib.cleanSourceWith {
+    filter = sourceFilter;
+    src = ./.;
+  };
 
   passthru.tests = pkgs.buildRustCrate {
     pname = "store-ref-scanner-tests";
-    inherit crateName src version edition;
+    inherit
+      crateName
+      src
+      version
+      edition
+      ;
     buildTests = true;
     postInstall = ''
       set -ex
@@ -45,5 +58,4 @@ pkgs.buildRustCrate rec {
       set +ex
     '';
   };
-
 }

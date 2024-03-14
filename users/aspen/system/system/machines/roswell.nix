@@ -1,4 +1,11 @@
-{ depot, config, lib, pkgs, modulesPath, ... }:
+{
+  depot,
+  config,
+  lib,
+  pkgs,
+  modulesPath,
+  ...
+}:
 
 {
   imports = [
@@ -12,9 +19,7 @@
 
   networking.hostName = "roswell";
 
-  users.users.grfn.openssh.authorizedKeys.keys = [
-    depot.users.aspen.keys.main
-  ];
+  users.users.grfn.openssh.authorizedKeys.keys = [ depot.users.aspen.keys.main ];
 
   boot.loader.systemd-boot.enable = lib.mkForce false;
   boot.loader.efi.canTouchEfiVariables = lib.mkForce false;
@@ -25,7 +30,5 @@
 
   security.sudo.wheelNeedsPassword = false;
 
-  environment.systemPackages = with pkgs; [
-    cloud-utils
-  ];
+  environment.systemPackages = with pkgs; [ cloud-utils ];
 }

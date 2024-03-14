@@ -1,4 +1,8 @@
-{ mkDerivation, base, lib }:
+{
+  mkDerivation,
+  base,
+  lib,
+}:
 mkDerivation {
   pname = "pa-label";
   version = "0.1.0.1";

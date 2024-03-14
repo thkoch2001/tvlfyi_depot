@@ -3,36 +3,36 @@
 # If you're an outside user of this, import config.nix as a NixOS module (and
 # check the README.md file).
 
-{ depot
-, pkgs
-, ...
-}:
+{ depot, pkgs, ... }:
 
 let
   systemFor = sys: (depot.ops.nixos.nixosFor sys).system;
 in
 depot.nix.readTree.drvTargets rec {
-  testSystem = systemFor ({ modulesPath, pkgs, ... }: {
-    imports = [
-      # Import the module, this is something a user would do in their config.
-      ./config.nix
-    ];
+  testSystem = systemFor (
+    { modulesPath, pkgs, ... }:
+    {
+      imports = [
+        # Import the module, this is something a user would do in their config.
+        ./config.nix
+      ];
 
-    # Make sure we use the linuxPackages_latest.
-    boot.kernelPackages = pkgs.linuxPackages_latest;
+      # Make sure we use the linuxPackages_latest.
+      boot.kernelPackages = pkgs.linuxPackages_latest;
 
-    # Enable firmware.
-    hardware.enableAllFirmware = true;
+      # Enable firmware.
+      hardware.enableAllFirmware = true;
 
-    # Set some options necessary to evaluate.
-    boot.loader.systemd-boot.enable = true;
-    fileSystems."/" = {
-      device = "/dev/disk/by-partlabel/root";
-      fsType = "xfs";
-    };
-    # Shut off the warning.
-    system.stateVersion = "24.05";
-  });
+      # Set some options necessary to evaluate.
+      boot.loader.systemd-boot.enable = true;
+      fileSystems."/" = {
+        device = "/dev/disk/by-partlabel/root";
+        fsType = "xfs";
+      };
+      # Shut off the warning.
+      system.stateVersion = "24.05";
+    }
+  );
 
   # Make sure the firmware requested by the driver is present in our firmware.
   # We do have a .xz suffix here, but that's fine, since request_firmware does

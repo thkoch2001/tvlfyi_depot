@@ -11,7 +11,5 @@ in
 depot.nix.buildLisp.library {
   name = "cl-yacc";
 
-  srcs = map (f: src + ("/" + f)) [
-    "yacc.lisp"
-  ];
+  srcs = map (f: src + ("/" + f)) [ "yacc.lisp" ];
 }

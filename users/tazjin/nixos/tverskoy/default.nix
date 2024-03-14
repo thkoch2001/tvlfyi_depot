@@ -1,5 +1,10 @@
 # tverskoy is my Thinkpad X13 AMD 1st gen
-{ depot, lib, pkgs, ... }:
+{
+  depot,
+  lib,
+  pkgs,
+  ...
+}:
 
 config:
 let
@@ -29,7 +34,14 @@ lib.fix (self: {
   tvl.cache.enable = true;
 
   boot = rec {
-    initrd.availableKernelModules = [ "nvme" "ehci_pci" "xhci_pci" "usb_storage" "sd_mod" "rtsx_pci_sdmmc" ];
+    initrd.availableKernelModules = [
+      "nvme"
+      "ehci_pci"
+      "xhci_pci"
+      "usb_storage"
+      "sd_mod"
+      "rtsx_pci_sdmmc"
+    ];
     initrd.kernelModules = [ ];
 
     # Restore /home to the blank snapshot, erasing all ephemeral data.
@@ -40,14 +52,21 @@ lib.fix (self: {
     # Install thinkpad modules for TLP
     extraModulePackages = [ kernelPackages.acpi_call ];
 
-    kernelModules = [ "kvm-amd" "i2c_dev" ];
+    kernelModules = [
+      "kvm-amd"
+      "i2c_dev"
+    ];
     kernelPackages = pkgs.zfsUnstable.latestCompatibleLinuxPackages;
     loader.systemd-boot.enable = true;
     loader.efi.canTouchEfiVariables = true;
   };
 
   virtualisation.docker.enable = true;
-  users.users.tazjin.extraGroups = [ "docker" "vboxusers" "adbusers" ];
+  users.users.tazjin.extraGroups = [
+    "docker"
+    "vboxusers"
+    "adbusers"
+  ];
 
   fileSystems = {
     "/" = {

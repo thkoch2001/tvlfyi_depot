@@ -2,7 +2,12 @@
 #
 # We do not currently build Livegrep in Nix, because it's a complex,
 # multi-language Bazel build and doesn't play nicely with Nix.
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 let
   cfg = config.services.depot.livegrep;
@@ -10,22 +15,26 @@ let
   livegrepConfig = {
     name = "livegrep";
 
-    fs_paths = [{
-      name = "depot";
-      path = "/depot";
-      metadata.url_pattern = "https://code.tvl.fyi/tree/{path}?id={version}#n{lno}";
-    }];
+    fs_paths = [
+      {
+        name = "depot";
+        path = "/depot";
+        metadata.url_pattern = "https://code.tvl.fyi/tree/{path}?id={version}#n{lno}";
+      }
+    ];
 
-    repositories = [{
-      name = "depot";
-      path = "/depot";
-      revisions = [ "HEAD" ];
+    repositories = [
+      {
+        name = "depot";
+        path = "/depot";
+        revisions = [ "HEAD" ];
 
-      metadata = {
-        url_pattern = "https://code.tvl.fyi/tree/{path}?id={version}#n{lno}";
-        remote = "https://cl.tvl.fyi/depot.git";
-      };
-    }];
+        metadata = {
+          url_pattern = "https://code.tvl.fyi/tree/{path}?id={version}#n{lno}";
+          remote = "https://cl.tvl.fyi/depot.git";
+        };
+      }
+    ];
   };
 
   configFile = pkgs.writeText "livegrep-config.json" (builtins.toJSON livegrepConfig);
@@ -100,7 +109,6 @@ in
     };
   };
 }
-
 
 # sudo docker exec -ti livegrep /livegrep/bin/codesearch -reload_rpc -revparse /var/lib/livegrep/config.jsno
 # sudo docker run -d --ip 172.17.0.3 --name livegrep -v /var/lib/livegrep:/varlib/livegrep -v /var/lib/gerrit/git/depot.git:/depot:ro -v /home/tazjin/livegrep-web:/livegrep/web:ro ghcr.io/livegrep/livegrep/base /livegrep/bin/livegrep -listen 0.0.0.0:8910 -reload -docroot /livegrep/webbsudo docker run -d --ip 172.17.0.3 --name livegrep -v /var/lib/livegrep:/varlib/livegrep -v /var/lib/gerrit/git/depot.git:/depot:ro -v /home/tazjin/livegrep-web:/livegrep/web:ro ghcr.io/livegrep/livegrep/base /livegrep/bin/livegrep -listen 0.0.0.0:8910 -reload -docroot /livegrep/webb

@@ -1,19 +1,21 @@
 { pkgs, depot, ... }:
 
 let
-  list = pkgs.callPackage
-    ({ emacsPackages }:
-      emacsPackages.trivialBuild {
-        pname = "list";
-        version = "1.0.0";
-        src = ./list.el;
-        packageRequires =
-          (with depot.users.wpcarro.emacs.pkgs; [
-            maybe
-            set
-          ]);
-      })
-    { };
+  list = pkgs.callPackage (
+    { emacsPackages }:
+    emacsPackages.trivialBuild {
+      pname = "list";
+      version = "1.0.0";
+      src = ./list.el;
+      packageRequires = (
+        with depot.users.wpcarro.emacs.pkgs;
+        [
+          maybe
+          set
+        ]
+      );
+    }
+  ) { };
 
   emacs = (pkgs.emacsPackagesFor pkgs.emacs28).emacsWithPackages (epkgs: [ list ]);
 in

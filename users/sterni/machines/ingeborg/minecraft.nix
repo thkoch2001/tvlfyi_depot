@@ -1,4 +1,9 @@
-{ pkgs, depot, config, ... }:
+{
+  pkgs,
+  depot,
+  config,
+  ...
+}:
 
 let
   carpet = pkgs.fetchurl {

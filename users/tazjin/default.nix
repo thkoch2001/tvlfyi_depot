@@ -7,7 +7,6 @@ let
       ${pkgs.ripgrep}/bin/rg 'users/tazjin' | \
       xargs ${pkgs.rustfmt}/bin/rustfmt --check --config-path users/tazjin
   '';
-
 in
 depot.nix.readTree.drvTargets {
   rustfmt = rustfmt.overrideAttrs (_: {

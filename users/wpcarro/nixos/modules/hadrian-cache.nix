@@ -1,5 +1,10 @@
 # If enabled, use Hadrian's Nix cache.
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 {
   options = {
@@ -10,8 +15,6 @@
     nix.settings.trusted-public-keys = [
       "cache.hadrian.internal:XWdYSn5ZASj6IqZd4nnDBXJmahQEolBrtq9DvSe0UT0="
     ];
-    nix.settings.substituters = [
-      "http://cache.hadrian.internal"
-    ];
+    nix.settings.substituters = [ "http://cache.hadrian.internal" ];
   };
 }

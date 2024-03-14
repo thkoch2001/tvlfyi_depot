@@ -4,9 +4,7 @@
 depot.nix.buildLisp.library {
   name = "quasiquote-2.0";
 
-  deps = [
-    depot.third_party.lisp.iterate
-  ];
+  deps = [ depot.third_party.lisp.iterate ];
 
   srcs = [
     ./package.lisp

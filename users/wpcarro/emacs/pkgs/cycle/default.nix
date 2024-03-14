@@ -1,21 +1,16 @@
 { pkgs, depot, ... }:
 
 let
-  cycle = pkgs.callPackage
-    ({ emacsPackages }:
-      emacsPackages.trivialBuild {
-        pname = "cycle";
-        version = "1.0.0";
-        src = ./cycle.el;
-        packageRequires =
-          (with emacsPackages; [
-            dash
-          ]) ++
-          (with depot.users.wpcarro.emacs.pkgs; [
-            struct
-          ]);
-      })
-    { };
+  cycle = pkgs.callPackage (
+    { emacsPackages }:
+    emacsPackages.trivialBuild {
+      pname = "cycle";
+      version = "1.0.0";
+      src = ./cycle.el;
+      packageRequires =
+        (with emacsPackages; [ dash ]) ++ (with depot.users.wpcarro.emacs.pkgs; [ struct ]);
+    }
+  ) { };
 
   emacs = (pkgs.emacsPackagesFor pkgs.emacs28).emacsWithPackages (epkgs: [
     epkgs.dash

@@ -12,15 +12,15 @@
 
 {
   # Description of the package set to be used (will be loaded by load-pkgs.nix)
-  srcType ? "nixpkgs"
-, srcArgs ? "nixos-unstable"
-, system ? "x86_64-linux"
-, importArgs ? { }
-, # Path to load-pkgs.nix
-  loadPkgs ? ./load-pkgs.nix
-, # Packages to install by name (which must refer to top-level attributes of
+  srcType ? "nixpkgs",
+  srcArgs ? "nixos-unstable",
+  system ? "x86_64-linux",
+  importArgs ? { },
+  # Path to load-pkgs.nix
+  loadPkgs ? ./load-pkgs.nix,
+  # Packages to install by name (which must refer to top-level attributes of
   # nixpkgs). This is passed in as a JSON-array in string form.
-  packages ? "[]"
+  packages ? "[]",
 }:
 
 let
@@ -32,11 +32,20 @@ let
     match
     readFile
     toFile
-    toJSON;
+    toJSON
+    ;
 
   # Package set to use for sourcing utilities
   nativePkgs = import loadPkgs { inherit srcType srcArgs importArgs; };
-  inherit (nativePkgs) coreutils jq openssl lib runCommand writeText symlinkJoin;
+  inherit (nativePkgs)
+    coreutils
+    jq
+    openssl
+    lib
+    runCommand
+    writeText
+    symlinkJoin
+    ;
 
   # Package set to use for packages to be included in the image. This
   # package set is imported with the system set to the target
@@ -65,10 +74,15 @@ let
   # For example, `deepFetch pkgs "xorg.xev"` retrieves `pkgs.xorg.xev` and
   # `deepFetch haskellpackages.stylish-haskell` retrieves
   # `haskellPackages.stylish-haskell`.
-  deepFetch = with lib; s: n:
+  deepFetch =
+    with lib;
+    s: n:
     let
       path = splitString "." n;
-      err = { error = "not_found"; pkg = n; };
+      err = {
+        error = "not_found";
+        pkg = n;
+      };
       # The most efficient way I've found to do a lookup against
       # case-differing versions of an attribute is to first construct a
       # mapping of all lowercased attribute names to their differently cased
@@ -78,12 +92,12 @@ let
       # (case-sensitive) one does not yield a result.
       hasUpper = str: (match ".*[A-Z].*" str) != null;
       allUpperKeys = filter hasUpper (attrNames s);
-      lowercased = listToAttrs (map
-        (k: {
+      lowercased = listToAttrs (
+        map (k: {
           name = toLower k;
           value = k;
-        })
-        allUpperKeys);
+        }) allUpperKeys
+      );
       caseAmendedPath = map (v: if hasAttr v lowercased then lowercased."${v}" else v) path;
       fetchLower = attrByPath caseAmendedPath err s;
     in
@@ -112,11 +126,16 @@ let
     # separate them into errors and content. This allows the program to
     # terminate early and return only the errors if any are encountered.
     let
-      splitter = attrs: res:
-        if hasAttr "error" res
-        then attrs // { errors = attrs.errors ++ [ res ]; }
-        else attrs // { contents = attrs.contents ++ [ res ]; };
-      init = { contents = [ ]; errors = [ ]; };
+      splitter =
+        attrs: res:
+        if hasAttr "error" res then
+          attrs // { errors = attrs.errors ++ [ res ]; }
+        else
+          attrs // { contents = attrs.contents ++ [ res ]; };
+      init = {
+        contents = [ ];
+        errors = [ ];
+      };
       fetched = (map (deepFetch pkgs) normalisedPackages);
     in
     foldl' splitter init fetched;
@@ -125,16 +144,15 @@ let
   # which has information about all runtime dependencies of the image.
   #
   # This is used by Nixery to group closures into image layers.
-  runtimeGraph = runCommand "runtime-graph.json"
-    {
-      __structuredAttrs = true;
-      exportReferencesGraph.graph = allContents.contents;
-      PATH = "${coreutils}/bin";
-      builder = toFile "builder" ''
-        . .attrs.sh
-        cp .attrs.json ''${outputs[out]}
-      '';
-    } "";
+  runtimeGraph = runCommand "runtime-graph.json" {
+    __structuredAttrs = true;
+    exportReferencesGraph.graph = allContents.contents;
+    PATH = "${coreutils}/bin";
+    builder = toFile "builder" ''
+      . .attrs.sh
+      cp .attrs.json ''${outputs[out]}
+    '';
+  } "";
 
   # Create a symlink forest into all top-level store paths of the
   # image contents.
@@ -168,16 +186,27 @@ let
   # Metadata about the symlink layer which is required for serving it.
   # Two different hashes are computed for different usages (inclusion
   # in manifest vs. content-checking in the layer cache).
-  symlinkLayerMeta = fromJSON (builtins.unsafeDiscardStringContext (readFile (runCommand "symlink-layer-meta.json"
-    {
-      buildInputs = [ coreutils jq openssl ];
-    } ''
-    tarHash=$(sha256sum ${symlinkLayer} | cut -d ' ' -f1)
-    layerSize=$(stat --printf '%s' ${symlinkLayer})
+  symlinkLayerMeta = fromJSON (
+    builtins.unsafeDiscardStringContext (
+      readFile (
+        runCommand "symlink-layer-meta.json"
+          {
+            buildInputs = [
+              coreutils
+              jq
+              openssl
+            ];
+          }
+          ''
+            tarHash=$(sha256sum ${symlinkLayer} | cut -d ' ' -f1)
+            layerSize=$(stat --printf '%s' ${symlinkLayer})
 
-    jq -n -c --arg tarHash $tarHash --arg size $layerSize --arg path ${symlinkLayer} \
-      '{ size: ($size | tonumber), tarHash: $tarHash, path: $path }' >> $out
-  '')));
+            jq -n -c --arg tarHash $tarHash --arg size $layerSize --arg path ${symlinkLayer} \
+              '{ size: ($size | tonumber), tarHash: $tarHash, path: $path }' >> $out
+          ''
+      )
+    )
+  );
 
   # Final output structure returned to Nixery if the build succeeded
   buildOutput = {
@@ -192,7 +221,6 @@ let
     pkgs = map (err: err.pkg) allContents.errors;
   };
 in
-writeText "build-output.json" (if (length allContents.errors) == 0
-then toJSON buildOutput
-else toJSON errorOutput
+writeText "build-output.json" (
+  if (length allContents.errors) == 0 then toJSON buildOutput else toJSON errorOutput
 )

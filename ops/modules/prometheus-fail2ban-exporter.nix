@@ -1,4 +1,10 @@
-{ config, lib, pkgs, depot, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  depot,
+  ...
+}:
 
 let
   cfg = config.services.prometheus-fail2ban-exporter;
@@ -19,7 +25,10 @@ in
   config = lib.mkIf cfg.enable {
     systemd.services."prometheus-fail2ban-exporter" = {
       wantedBy = [ "multi-user.target" ];
-      after = [ "network.target" "fail2ban.service" ];
+      after = [
+        "network.target"
+        "fail2ban.service"
+      ];
       serviceConfig = {
         User = "root";
         Type = "oneshot";
@@ -44,9 +53,7 @@ in
     services.prometheus.exporters.node = {
       enabledCollectors = [ "textfile" ];
 
-      extraFlags = [
-        "--collector.textfile.directory=/var/lib/prometheus/node-exporter"
-      ];
+      extraFlags = [ "--collector.textfile.directory=/var/lib/prometheus/node-exporter" ];
     };
   };
 }

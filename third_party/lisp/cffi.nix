@@ -2,8 +2,10 @@
 { depot, pkgs, ... }:
 
 with depot.nix;
-let src = with pkgs; srcOnly lispPackages.cffi;
-in buildLisp.library {
+let
+  src = with pkgs; srcOnly lispPackages.cffi;
+in
+buildLisp.library {
   name = "cffi";
   deps = with depot.third_party.lisp; [
     alexandria
@@ -12,23 +14,25 @@ in buildLisp.library {
     (buildLisp.bundled "asdf")
   ];
 
-  srcs = [
-    {
-      ecl = src + "/src/cffi-ecl.lisp";
-      sbcl = src + "/src/cffi-sbcl.lisp";
-      ccl = src + "/src/cffi-openmcl.lisp";
-    }
-  ] ++ map (f: src + ("/src/" + f)) [
-    "package.lisp"
-    "utils.lisp"
-    "libraries.lisp"
-    "early-types.lisp"
-    "types.lisp"
-    "enum.lisp"
-    "strings.lisp"
-    "structures.lisp"
-    "functions.lisp"
-    "foreign-vars.lisp"
-    "features.lisp"
-  ];
+  srcs =
+    [
+      {
+        ecl = src + "/src/cffi-ecl.lisp";
+        sbcl = src + "/src/cffi-sbcl.lisp";
+        ccl = src + "/src/cffi-openmcl.lisp";
+      }
+    ]
+    ++ map (f: src + ("/src/" + f)) [
+      "package.lisp"
+      "utils.lisp"
+      "libraries.lisp"
+      "early-types.lisp"
+      "types.lisp"
+      "enum.lisp"
+      "strings.lisp"
+      "structures.lisp"
+      "functions.lisp"
+      "foreign-vars.lisp"
+      "features.lisp"
+    ];
 }

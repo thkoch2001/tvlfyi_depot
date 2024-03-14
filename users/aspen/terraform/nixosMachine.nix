@@ -1,33 +1,42 @@
-{ depot, pkgs, lib, ... }:
+{
+  depot,
+  pkgs,
+  lib,
+  ...
+}:
 
 # mostly stolen from espes
 
-{ name
-, instanceType
-, configuration
-, prefix ? "${name}_"
-, region ? "us-east-2"
-, rootVolumeSizeGb ? 50
-, securityGroupId ? null
-, extraIngressPorts ? [ ]
+{
+  name,
+  instanceType,
+  configuration,
+  prefix ? "${name}_",
+  region ? "us-east-2",
+  rootVolumeSizeGb ? 50,
+  securityGroupId ? null,
+  extraIngressPorts ? [ ],
 }:
 
 let
-  os = depot.ops.nixos.nixosFor ({ modulesPath, ... }: {
-    imports = [
-      (pkgs.path + "/nixos/modules/virtualisation/amazon-image.nix")
-      configuration
-    ];
+  os = depot.ops.nixos.nixosFor (
+    { modulesPath, ... }:
+    {
+      imports = [
+        (pkgs.path + "/nixos/modules/virtualisation/amazon-image.nix")
+        configuration
+      ];
 
-    ec2.hvm = true;
-    networking.hostName = name;
-    # TODO: remove this once the terraform tls provider supports ed25519 keys
-    # https://github.com/hashicorp/terraform-provider-tls/issues/26
-    services.openssh.extraConfig = ''
-      PubkeyAcceptedKeyTypes=+ssh-rsa
-      PubkeyAcceptedAlgorithms=+ssh-rsa
-    '';
-  });
+      ec2.hvm = true;
+      networking.hostName = name;
+      # TODO: remove this once the terraform tls provider supports ed25519 keys
+      # https://github.com/hashicorp/terraform-provider-tls/issues/26
+      services.openssh.extraConfig = ''
+        PubkeyAcceptedKeyTypes=+ssh-rsa
+        PubkeyAcceptedAlgorithms=+ssh-rsa
+      '';
+    }
+  );
 
   targetUser = "root";
 
@@ -43,9 +52,7 @@ let
   recursiveMerge = builtins.foldl' lib.recursiveUpdate { };
 
   securityGroupId' =
-    if isNull securityGroupId
-    then "\${aws_security_group.${prefix}group.id}"
-    else securityGroupId;
+    if isNull securityGroupId then "\${aws_security_group.${prefix}group.id}" else securityGroupId;
 in
 recursiveMerge [
   (lib.optionalAttrs (isNull securityGroupId) {
@@ -186,8 +193,8 @@ recursiveMerge [
   }
 
   {
-    resource.aws_security_group_rule = builtins.listToAttrs (map
-      (port: {
+    resource.aws_security_group_rule = builtins.listToAttrs (
+      map (port: {
         name = "ingress_${toString port}";
         value = {
           provider = "aws.${region}";
@@ -202,7 +209,7 @@ recursiveMerge [
           prefix_list_ids = null;
           self = null;
         };
-      })
-      extraIngressPorts);
+      }) extraIngressPorts
+    );
   }
 ]

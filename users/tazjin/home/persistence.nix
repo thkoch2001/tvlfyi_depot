@@ -35,8 +35,6 @@
       "mail"
     ];
 
-    files = [
-      ".notmuch-config"
-    ];
+    files = [ ".notmuch-config" ];
   };
 }

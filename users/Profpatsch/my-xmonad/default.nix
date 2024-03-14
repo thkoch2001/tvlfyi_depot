@@ -1,4 +1,9 @@
-{ depot, pkgs, lib, ... }:
+{
+  depot,
+  pkgs,
+  lib,
+  ...
+}:
 
 let
   #   bins = depot.nix.getBins pkgs.sqlite ["sqlite3"];
@@ -12,14 +17,11 @@ let
       ./Xmonad.hs
     ];
 
-    libraryHaskellDepends = [
-      pkgs.haskellPackages.xmonad-contrib
-    ];
+    libraryHaskellDepends = [ pkgs.haskellPackages.xmonad-contrib ];
 
     isExecutable = true;
     isLibrary = false;
     license = lib.licenses.mit;
   };
-
 in
 my-xmonad

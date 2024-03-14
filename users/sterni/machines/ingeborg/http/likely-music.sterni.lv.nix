@@ -1,10 +1,7 @@
 { depot, ... }:
 
 let
-  inherit (depot.users.sterni.external.likely-music)
-    nixosModule
-    likely-music
-    ;
+  inherit (depot.users.sterni.external.likely-music) nixosModule likely-music;
 in
 
 {

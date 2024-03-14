@@ -1,13 +1,16 @@
-{ depot, pkgs, lib, ... }:
+{
+  depot,
+  pkgs,
+  lib,
+  ...
+}:
 { ... }:
 
 let
   inherit (depot.users) wpcarro;
   inherit (depot.users.wpcarro.lib) usermod;
 
-  wpcarrosEmacs = wpcarro.emacs.nixos {
-    load = [ ./ava.el ];
-  };
+  wpcarrosEmacs = wpcarro.emacs.nixos { load = [ ./ava.el ]; };
 
   quasselClient = pkgs.quassel.override {
     client = true;
@@ -16,9 +19,7 @@ let
   };
 in
 {
-  imports = [
-    (usermod "hardware/nopn.nix")
-  ];
+  imports = [ (usermod "hardware/nopn.nix") ];
 
   # Use the TVL binary cache
   tvl.cache.enable = true;
@@ -106,9 +107,7 @@ in
   security.sudo.wheelNeedsPassword = false;
 
   fonts = {
-    packages = with pkgs; [
-      jetbrains-mono
-    ];
+    packages = with pkgs; [ jetbrains-mono ];
 
     fontconfig = {
       defaultFonts = {
@@ -131,8 +130,8 @@ in
   };
 
   environment.systemPackages =
-    wpcarro.common.shell-utils ++
-    (with pkgs; [
+    wpcarro.common.shell-utils
+    ++ (with pkgs; [
       alacritty
       ec2-api-tools
       firefox

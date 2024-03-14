@@ -2,23 +2,38 @@
 
 let
   inherit (pkgs)
-    fontconfig qrencode runCommand stdenv;
-  mkQr = url: runCommand "qrcode.png" { } ''
-    ${qrencode}/bin/qrencode -o $out -t SVG -s 5 \
-      --background=fafafa \
-      --foreground=000000 \
-      ${url}
-  '';
+    fontconfig
+    qrencode
+    runCommand
+    stdenv
+    ;
+  mkQr =
+    url:
+    runCommand "qrcode.png" { } ''
+      ${qrencode}/bin/qrencode -o $out -t SVG -s 5 \
+        --background=fafafa \
+        --foreground=000000 \
+        ${url}
+    '';
 in
 stdenv.mkDerivation {
   name = "2023-asg-tvix-store";
   src = ./.;
 
   FONTCONFIG_FILE = pkgs.makeFontsConf {
-    fontDirectories = with pkgs; [ jetbrains-mono fira fira-code fira-mono lato ];
+    fontDirectories = with pkgs; [
+      jetbrains-mono
+      fira
+      fira-code
+      fira-mono
+      lato
+    ];
   };
 
-  nativeBuildInputs = [ pkgs.reveal-md pkgs.graphviz ];
+  nativeBuildInputs = [
+    pkgs.reveal-md
+    pkgs.graphviz
+  ];
 
   buildPhase = ''
     cp ${depot.tvix.logo}/logo.png tvix-logo.png

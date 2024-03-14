@@ -1,8 +1,10 @@
 # cl-ppcre is a Common Lisp regular expression library.
 { depot, pkgs, ... }:
 
-let src = with pkgs; srcOnly lispPackages.cl-ppcre;
-in depot.nix.buildLisp.library {
+let
+  src = with pkgs; srcOnly lispPackages.cl-ppcre;
+in
+depot.nix.buildLisp.library {
   name = "cl-ppcre";
 
   srcs = map (f: src + ("/" + f)) [

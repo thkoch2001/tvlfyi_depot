@@ -13,7 +13,5 @@ buildLisp.library {
     bordeaux-threads
   ];
 
-  srcs = [
-    "${src}/server.lisp"
-  ];
+  srcs = [ "${src}/server.lisp" ];
 }

@@ -6,10 +6,7 @@ let
   bucket = "s3://gws.fyi";
   distributionID = "E2ST43JNBH8C64";
 
-  css = runCommand "main.css"
-    {
-      buildInputs = [ pkgs.minify ];
-    } ''
+  css = runCommand "main.css" { buildInputs = [ pkgs.minify ]; } ''
     minify --type css < ${./main.css} > $out
   '';
 
@@ -18,20 +15,23 @@ let
     echo "${depot.users.aspen.keys.main}" >> $out
   '';
 
-  website =
-    runCommand "gws.fyi" { } ''
-      mkdir -p $out
-      cp ${css} $out/main.css
-      cp ${site.index} $out/index.html
-      cp -r ${site.recipes} $out/recipes
-      cp ${resume} $out/resume.pdf
-      cp ${keys} $out/keys
-      cp ${./pubkey.gpg} $out/pubkey.gpg
-    '';
+  website = runCommand "gws.fyi" { } ''
+    mkdir -p $out
+    cp ${css} $out/main.css
+    cp ${site.index} $out/index.html
+    cp -r ${site.recipes} $out/recipes
+    cp ${resume} $out/resume.pdf
+    cp ${keys} $out/keys
+    cp ${./pubkey.gpg} $out/pubkey.gpg
+  '';
 
   purge-cf = writeShellApplication {
     name = "purge-cf.sh";
-    runtimeInputs = [ httpie jq pass ];
+    runtimeInputs = [
+      httpie
+      jq
+      pass
+    ];
     text = ''
       cfapi() {
         http \
@@ -57,6 +57,9 @@ in
     aws --profile personal s3 sync ${website}/ ${bucket}
     echo "Deployed to http://gws.fyi"
   '';
-}).overrideAttrs {
-  passthru = { inherit website site purge-cf; };
-}
+}).overrideAttrs
+  {
+    passthru = {
+      inherit website site purge-cf;
+    };
+  }

@@ -1,8 +1,11 @@
-{ config, lib, pkgs, ... }:
 {
-  imports = [
-    ../modules/reusable/battery.nix
-  ];
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+{
+  imports = [ ../modules/reusable/battery.nix ];
 
   networking.hostName = "bumblebee";
 

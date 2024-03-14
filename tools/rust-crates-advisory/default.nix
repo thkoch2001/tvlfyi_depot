@@ -1,4 +1,9 @@
-{ depot, pkgs, lib, ... }:
+{
+  depot,
+  pkgs,
+  lib,
+  ...
+}:
 
 let
 
@@ -6,22 +11,19 @@ let
     depot.nix.getBins pkgs.cargo-audit [ "cargo-audit" ]
     // depot.nix.getBins pkgs.jq [ "jq" ]
     // depot.nix.getBins pkgs.findutils [ "find" ]
-    // depot.nix.getBins pkgs.gnused [ "sed" ]
-  ;
+    // depot.nix.getBins pkgs.gnused [ "sed" ];
 
-  our-crates = lib.filter (v: v ? outPath)
-    (builtins.attrValues depot.third_party.rust-crates);
+  our-crates = lib.filter (v: v ? outPath) (builtins.attrValues depot.third_party.rust-crates);
 
-  our-crates-lock-file = pkgs.writeText "our-crates-Cargo.lock"
-    (lib.concatMapStrings
-      (crate: ''
-        [[package]]
-        name = "${crate.crateName}"
-        version = "${crate.version}"
-        source = "registry+https://github.com/rust-lang/crates.io-index"
+  our-crates-lock-file = pkgs.writeText "our-crates-Cargo.lock" (
+    lib.concatMapStrings (crate: ''
+      [[package]]
+      name = "${crate.crateName}"
+      version = "${crate.version}"
+      source = "registry+https://github.com/rust-lang/crates.io-index"
 
-      '')
-      our-crates);
+    '') our-crates
+  );
 
   lock-file-report = pkgs.writers.writeBash "lock-file-report" ''
     set -u
@@ -74,9 +76,10 @@ let
   '';
 
   buildkiteReportStep =
-    { command
-    , context ? null
-    , style ? "warning"
+    {
+      command,
+      context ? null,
+      style ? "warning",
     }:
     let
       commandName = depot.nix.utils.storePathName (builtins.head command);
@@ -90,22 +93,22 @@ let
       if test $? -ne 0; then
          printf "%s" "$report" | \
          buildkite-agent annotate ${
-           lib.escapeShellArgs ([
-             "--style"
-             style
-           ] ++ lib.optionals (context != null) [
-             "--context"
-             context
-           ])
+           lib.escapeShellArgs (
+             [
+               "--style"
+               style
+             ]
+             ++ lib.optionals (context != null) [
+               "--context"
+               context
+             ]
+           )
          }
       fi
     '';
-
 in
 depot.nix.readTree.drvTargets {
-  inherit
-    lock-file-report
-    ;
+  inherit lock-file-report;
 
   tree-lock-file-report = tree-lock-file-report // {
     meta.ci.extraSteps.run = {

@@ -1,30 +1,48 @@
 { depot, pkgs, ... }:
 let
-  bins = depot.nix.getBins pkgs.coreutils [ "printf" "echo" "cat" "printenv" "tee" ]
+  bins =
+    depot.nix.getBins pkgs.coreutils [
+      "printf"
+      "echo"
+      "cat"
+      "printenv"
+      "tee"
+    ]
     // depot.nix.getBins pkgs.bash [ "bash" ]
-    // depot.nix.getBins pkgs.fdtools [ "multitee" ]
-  ;
+    // depot.nix.getBins pkgs.fdtools [ "multitee" ];
 
   # Print `msg` and and argv to stderr, then execute into argv
-  debugExec = msg: depot.nix.writeExecline "debug-exec" { } [
-    "if"
-    [
-      "fdmove"
-      "-c"
-      "1"
-      "2"
+  debugExec =
+    msg:
+    depot.nix.writeExecline "debug-exec" { } [
       "if"
-      [ bins.printf "%s: " msg ]
-      "if"
-      [ bins.echo "$@" ]
-    ]
-    "$@"
-  ];
+      [
+        "fdmove"
+        "-c"
+        "1"
+        "2"
+        "if"
+        [
+          bins.printf
+          "%s: "
+          msg
+        ]
+        "if"
+        [
+          bins.echo
+          "$@"
+        ]
+      ]
+      "$@"
+    ];
 
   # Print stdin to stderr and stdout
   eprint-stdin = depot.nix.writeExecline "eprint-stdin" { } [
     "pipeline"
-    [ bins.multitee "0-1,2" ]
+    [
+      bins.multitee
+      "0-1,2"
+    ]
     "$@"
   ];
 
@@ -38,7 +56,10 @@ let
       "1"
       # the multitee copies stdin to 1 (the other pipeline end) and 3 (the stdout of the outer pipeline block)
       "pipeline"
-      [ bins.multitee "0-1,3" ]
+      [
+        bins.multitee
+        "0-1,3"
+      ]
       # make stderr the stdout of pretty, merging with the stderr of pretty
       "fdmove"
       "-c"
@@ -52,10 +73,20 @@ let
   # print the given environment variable in $1 to stderr, then execute into the rest of argv
   eprintenv = depot.nix.writeExecline "eprintenv" { readNArgs = 1; } [
     "ifelse"
-    [ "fdmove" "-c" "1" "2" bins.printenv "$1" ]
+    [
+      "fdmove"
+      "-c"
+      "1"
+      "2"
+      bins.printenv
+      "$1"
+    ]
     [ "$@" ]
     "if"
-    [ depot.tools.eprintf "eprintenv: could not find \"\${1}\" in the environment\n" ]
+    [
+      depot.tools.eprintf
+      "eprintenv: could not find \"\${1}\" in the environment\n"
+    ]
     "$@"
   ];
 
@@ -85,16 +116,31 @@ let
   ];
 
   # remove everything but a few selected environment variables
-  runInEmptyEnv = keepVars:
+  runInEmptyEnv =
+    keepVars:
     let
-      importas = pkgs.lib.concatMap (var: [ "importas" "-i" var var ]) keepVars;
+      importas = pkgs.lib.concatMap (var: [
+        "importas"
+        "-i"
+        var
+        var
+      ]) keepVars;
       # we have to explicitely call export here, because PATH is probably empty
-      export = pkgs.lib.concatMap (var: [ "${pkgs.execline}/bin/export" var ''''${${var}}'' ]) keepVars;
+      export = pkgs.lib.concatMap (var: [
+        "${pkgs.execline}/bin/export"
+        var
+        ''''${${var}}''
+      ]) keepVars;
     in
-    depot.nix.writeExecline "empty-env" { }
-      (importas ++ [ "emptyenv" ] ++ export ++ [ "${pkgs.execline}/bin/exec" "$@" ]);
-
-
+    depot.nix.writeExecline "empty-env" { } (
+      importas
+      ++ [ "emptyenv" ]
+      ++ export
+      ++ [
+        "${pkgs.execline}/bin/exec"
+        "$@"
+      ]
+    );
 in
 {
   inherit

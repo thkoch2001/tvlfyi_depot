@@ -1,9 +1,7 @@
 { depot, ... }:
 
 let
-  inherit (depot.users.sterni.nix)
-    num
-    ;
+  inherit (depot.users.sterni.nix) num;
 in
 
 rec {
@@ -12,7 +10,8 @@ rec {
   floor = builtins.floor or (throw "Nix implementation is missing builtins.floor");
 
   truncate = f: if f >= 0 then floor f else ceil f;
-  round = f:
+  round =
+    f:
     let
       s = num.sign f;
       a = s * f;

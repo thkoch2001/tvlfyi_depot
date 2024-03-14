@@ -7,7 +7,13 @@
 
 _: # ignore readTree options
 
-{ config, depot, lib, pkgs, ... }:
+{
+  config,
+  depot,
+  lib,
+  pkgs,
+  ...
+}:
 
 let
   mod = name: depot.path.origSrc + ("/ops/modules/" + name);
@@ -47,7 +53,11 @@ in
     defaultGateway = "85.119.80.1";
     defaultGateway6.address = "2001:ba8:1f1:f109::1";
 
-    firewall.allowedTCPPorts = [ 22 80 443 ];
+    firewall.allowedTCPPorts = [
+      22
+      80
+      443
+    ];
 
     # https://bitfolk.com/customer_information.html#toc_2_DNS
     nameservers = [
@@ -130,9 +140,7 @@ in
 
   tvl.cache.enable = true;
 
-  swapDevices = lib.singleton {
-    device = "/dev/disk/by-uuid/df4ad9da-0a06-4c27-93e5-5d44e4750e55";
-  };
+  swapDevices = lib.singleton { device = "/dev/disk/by-uuid/df4ad9da-0a06-4c27-93e5-5d44e4750e55"; };
 
   system.stateVersion = "22.05"; # Did you read the comment?
 }

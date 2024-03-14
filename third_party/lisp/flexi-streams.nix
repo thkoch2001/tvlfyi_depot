@@ -1,8 +1,10 @@
 # Flexible bivalent streams for Common Lisp
 { depot, pkgs, ... }:
 
-let src = with pkgs; srcOnly lispPackages.flexi-streams;
-in depot.nix.buildLisp.library {
+let
+  src = with pkgs; srcOnly lispPackages.flexi-streams;
+in
+depot.nix.buildLisp.library {
   name = "flexi-streams";
   deps = [ depot.third_party.lisp.trivial-gray-streams ];
 
@@ -30,4 +32,3 @@ in depot.nix.buildLisp.library {
     "strings.lisp"
   ];
 }
-

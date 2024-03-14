@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 with lib;
 
@@ -12,12 +17,10 @@ with lib;
   };
 
   config.programs.zsh.initExtra = concatStringsSep "\n" (
-    mapAttrsToList
-      (name: funSrc: ''
-        function ${name}() {
-          ${funSrc}
-        }
-      '')
-      config.programs.zsh.functions
+    mapAttrsToList (name: funSrc: ''
+      function ${name}() {
+        ${funSrc}
+      }
+    '') config.programs.zsh.functions
   );
 }

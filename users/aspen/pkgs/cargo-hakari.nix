@@ -17,11 +17,7 @@ rustPlatform.buildRustPackage rec {
 
   buildAndTestSubdir = "tools/cargo-hakari";
 
-  nativeBuildInputs = [
-    pkg-config
-  ];
+  nativeBuildInputs = [ pkg-config ];
 
-  buildInputs = [
-    openssl
-  ];
+  buildInputs = [ openssl ];
 }

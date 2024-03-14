@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 with pkgs;
 with lib;
@@ -7,12 +12,14 @@ let
 
   df-orig = dwarf-fortress-packages.dwarf-fortress-original;
 
-  df-full = (dwarf-fortress-packages.dwarf-fortress-full.override {
-    theme = null;
-    enableIntro = false;
-    enableFPS = true;
-    enableDFHack = true;
-  });
+  df-full = (
+    dwarf-fortress-packages.dwarf-fortress-full.override {
+      theme = null;
+      enableIntro = false;
+      enableFPS = true;
+      enableDFHack = true;
+    }
+  );
 
   init = runCommand "init.txt" { } ''
     substitute "${df-orig}/data/init/init.txt" $out \
@@ -43,7 +50,6 @@ let
 
     chmod +x $out/bin/dwarf-fortress
   '';
-
 in
 mkMerge [
   {

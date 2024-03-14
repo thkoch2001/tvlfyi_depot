@@ -1,10 +1,14 @@
 # serve tazjin's website & blog
-{ depot, config, lib, pkgs, ... }:
+{
+  depot,
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 {
-  imports = [
-    ./base.nix
-  ];
+  imports = [ ./base.nix ];
 
   config = {
     services.nginx.virtualHosts."tazj.in" = {

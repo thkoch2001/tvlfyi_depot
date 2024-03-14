@@ -10,30 +10,36 @@ let
   '';
   # clickhouse has a very odd AWS config concept.
   # Configure it to be a bit more sane.
-  clickhoseLocalFixedAWS = pkgs.runCommand "clickhouse-local-fixed"
-    {
-      nativeBuildInputs = [ pkgs.makeWrapper ];
-    } ''
-    mkdir -p $out/bin
-    makeWrapper ${pkgs.clickhouse}/bin/clickhouse-local $out/bin/clickhouse-local \
-      --append-flags "-C ${clickhouseConfigAWS}"
-  '';
+  clickhoseLocalFixedAWS =
+    pkgs.runCommand "clickhouse-local-fixed" { nativeBuildInputs = [ pkgs.makeWrapper ]; }
+      ''
+        mkdir -p $out/bin
+        makeWrapper ${pkgs.clickhouse}/bin/clickhouse-local $out/bin/clickhouse-local \
+          --append-flags "-C ${clickhouseConfigAWS}"
+      '';
 in
 
 depot.nix.readTree.drvTargets {
   inherit clickhoseLocalFixedAWS;
-  parse-bucket-logs = pkgs.runCommand "archeology-parse-bucket-logs"
-    {
-      nativeBuildInputs = [ pkgs.makeWrapper ];
-    } ''
-    mkdir -p $out/bin
-    makeWrapper ${(pkgs.writers.writeRust "parse-bucket-logs-unwrapped" {} ./parse_bucket_logs.rs)} $out/bin/archeology-parse-bucket-logs \
-      --prefix PATH : ${pkgs.lib.makeBinPath [ clickhoseLocalFixedAWS ]}
-  '';
+  parse-bucket-logs =
+    pkgs.runCommand "archeology-parse-bucket-logs" { nativeBuildInputs = [ pkgs.makeWrapper ]; }
+      ''
+        mkdir -p $out/bin
+        makeWrapper ${
+          (pkgs.writers.writeRust "parse-bucket-logs-unwrapped" { } ./parse_bucket_logs.rs)
+        } $out/bin/archeology-parse-bucket-logs \
+          --prefix PATH : ${pkgs.lib.makeBinPath [ clickhoseLocalFixedAWS ]}
+      '';
 
   shell = pkgs.mkShell {
     name = "archeology-shell";
-    packages = with pkgs; [ awscli2 clickhoseLocalFixedAWS rust-analyzer rustc rustfmt ];
+    packages = with pkgs; [
+      awscli2
+      clickhoseLocalFixedAWS
+      rust-analyzer
+      rustc
+      rustfmt
+    ];
 
     AWS_PROFILE = "sso";
     AWS_CONFIG_FILE = pkgs.writeText "aws-config" ''

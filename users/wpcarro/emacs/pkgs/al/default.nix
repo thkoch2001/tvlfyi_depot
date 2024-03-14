@@ -1,21 +1,15 @@
 { pkgs, depot, ... }:
 
 let
-  al = pkgs.callPackage
-    ({ emacsPackages }:
-      emacsPackages.trivialBuild {
-        pname = "al";
-        version = "1.0.0";
-        src = ./al.el;
-        packageRequires =
-          (with emacsPackages; [
-            dash
-          ]) ++
-          (with depot.users.wpcarro.emacs.pkgs; [
-            list
-          ]);
-      })
-    { };
+  al = pkgs.callPackage (
+    { emacsPackages }:
+    emacsPackages.trivialBuild {
+      pname = "al";
+      version = "1.0.0";
+      src = ./al.el;
+      packageRequires = (with emacsPackages; [ dash ]) ++ (with depot.users.wpcarro.emacs.pkgs; [ list ]);
+    }
+  ) { };
 
   emacs = (pkgs.emacsPackagesFor pkgs.emacs28).emacsWithPackages (epkgs: [ al ]);
 in

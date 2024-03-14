@@ -6,7 +6,6 @@ with lib;
 let
 
   emacs = pkgs.emacs28;
-
 in
 
 opts:
@@ -19,24 +18,21 @@ let
   filename = elemAt (splitString "." bn) 0;
 
   outName =
-    if isNull headline
-    then
+    if isNull headline then
       let
         bn = builtins.baseNameOf src;
         filename = elemAt (splitString "." bn) 0;
       in
-      if depot.nix.utils.isDirectory src
-      then filename
-      else filename + ".html"
-    else "${filename}-${replaceStrings [" "] ["-"] filename}.html";
+      if depot.nix.utils.isDirectory src then filename else filename + ".html"
+    else
+      "${filename}-${replaceStrings [ " " ] [ "-" ] filename}.html";
 
   escapeDoubleQuotes = replaceStrings [ "\"" ] [ "\\\"" ];
 
-  navToHeadline = optionalString (! isNull headline) ''
+  navToHeadline = optionalString (!isNull headline) ''
     (search-forward "${escapeDoubleQuotes headline}")
     (org-narrow-to-subtree)
   '';
-
 in
 
 runCommand outName { inherit src; } ''

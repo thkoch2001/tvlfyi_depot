@@ -20,7 +20,8 @@ let
       ms
       pgfopts
       scheme-basic
-      translator;
+      translator
+      ;
   };
 in
 stdenv.mkDerivation {
@@ -28,10 +29,19 @@ stdenv.mkDerivation {
   src = ./.;
 
   FONTCONFIG_FILE = makeFontsConf {
-    fontDirectories = [ fira fira-code fira-mono ];
+    fontDirectories = [
+      fira
+      fira-code
+      fira-mono
+    ];
   };
 
-  buildInputs = [ tex fira fira-code fira-mono ];
+  buildInputs = [
+    tex
+    fira
+    fira-code
+    fira-mono
+  ];
   buildPhase = ''
     # LaTeX needs a cache folder in /home/ ...
     mkdir home

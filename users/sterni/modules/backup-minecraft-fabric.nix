@@ -4,13 +4,18 @@
 #
 # SPDX-License-Identifier: MIT
 # SPDX-FileCopyrightText: 2023 sterni <sternenseemann@systemli.org>
-{ pkgs, depot, config, lib, ... }:
+{
+  pkgs,
+  depot,
+  config,
+  lib,
+  ...
+}:
 
 let
   inherit (depot.nix) getBins;
 
-  bins = getBins pkgs.borgbackup [ "borg" ]
-    // getBins pkgs.mcrcon [ "mcrcon" ];
+  bins = getBins pkgs.borgbackup [ "borg" ] // getBins pkgs.mcrcon [ "mcrcon" ];
 
   unvaried = ls: builtins.all (l: l == builtins.head ls) ls;
 
@@ -20,7 +25,8 @@ let
   users = lib.mapAttrsToList (_: i: i.user) instances;
   groups = lib.mapAttrsToList (_: i: i.group) instances;
 
-  mkBackupScript = instanceName: instanceCfg:
+  mkBackupScript =
+    instanceName: instanceCfg:
     let
       archivePrefix = "minecraft-fabric-${instanceName}-world-${builtins.baseNameOf instanceCfg.world}-";
     in
@@ -37,35 +43,47 @@ let
       # Give the server plenty of time to save
       sleep 60
 
-      ${bins.borg} ${lib.escapeShellArgs [
-        "create"
-        "--verbose" "--filter" "AMEU" "--list"
-        "--stats" "--show-rc"
-        "--compression" "zlib"
-        "${cfg.repository}::${archivePrefix}{now}"
-        instanceCfg.world
-      ]}
+      ${bins.borg} ${
+        lib.escapeShellArgs [
+          "create"
+          "--verbose"
+          "--filter"
+          "AMEU"
+          "--list"
+          "--stats"
+          "--show-rc"
+          "--compression"
+          "zlib"
+          "${cfg.repository}::${archivePrefix}{now}"
+          instanceCfg.world
+        ]
+      }
 
-      ${bins.borg} ${lib.escapeShellArgs [
-        "prune"
-        "--list"
-        "--show-rc"
-        "--glob-archives" "${archivePrefix}*"
-        "--keep-hourly" "168"
-        "--keep-daily" "31"
-        "--keep-monthly" "6"
-        "--keep-yearly" "2"
-        cfg.repository
-      ]}
+      ${bins.borg} ${
+        lib.escapeShellArgs [
+          "prune"
+          "--list"
+          "--show-rc"
+          "--glob-archives"
+          "${archivePrefix}*"
+          "--keep-hourly"
+          "168"
+          "--keep-daily"
+          "31"
+          "--keep-monthly"
+          "6"
+          "--keep-yearly"
+          "2"
+          cfg.repository
+        ]
+      }
 
       ${bins.borg} compact ${lib.escapeShellArg cfg.repository}
     '';
 in
 
 {
-  imports = [
-    ./minecraft-fabric.nix
-  ];
+  imports = [ ./minecraft-fabric.nix ];
 
   options = {
     services.backup-minecraft-fabric-servers = {
@@ -87,17 +105,13 @@ in
       }
     ];
 
-    environment.systemPackages = [
-      pkgs.borgbackup
-    ];
+    environment.systemPackages = [ pkgs.borgbackup ];
 
     systemd = {
       services.backup-minecraft-fabric-servers = {
         description = "Backup world of all fabric based Minecraft servers";
         wantedBy = [ ];
-        after = builtins.map
-          (name: "minecraft-fabric-${name}.service")
-          (builtins.attrNames instances);
+        after = builtins.map (name: "minecraft-fabric-${name}.service") (builtins.attrNames instances);
 
         script = lib.concatStrings (lib.mapAttrsToList mkBackupScript instances);
 
@@ -105,9 +119,9 @@ in
           Type = "oneshot";
           User = builtins.head users;
           Group = builtins.head groups;
-          LoadCredential = lib.mapAttrsToList
-            (instanceName: instanceCfg: "${instanceName}-rcon-password:${instanceCfg.rconPasswordFile}")
-            instances;
+          LoadCredential = lib.mapAttrsToList (
+            instanceName: instanceCfg: "${instanceName}-rcon-password:${instanceCfg.rconPasswordFile}"
+          ) instances;
         };
       };
 

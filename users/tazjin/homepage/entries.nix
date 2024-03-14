@@ -141,9 +141,17 @@ in
   }
 
   # Notes.
-  (note 1676106000 "If you have a Huawei device that sometimes struggles on public Wi-Fi networks, try enabling MAC-address randomisation. Huawei devices often get pushed onto management networks!")
-  (note 1686868637 "I moved some of my pages (including this one) to a machine in my flat in Moscow. If you end up having access trouble because your ISP blocks Russian resources, please let me know.")
-  (note 1686868636 "Protip: Use the Reddit blackout to click the 'Logout' button, and never come back.")
-  (note 1486550941 "↓ I no longer recommend people to use this. Generate your configuration from a language like Nix instead.")
+  (note 1676106000
+    "If you have a Huawei device that sometimes struggles on public Wi-Fi networks, try enabling MAC-address randomisation. Huawei devices often get pushed onto management networks!"
+  )
+  (note 1686868637
+    "I moved some of my pages (including this one) to a machine in my flat in Moscow. If you end up having access trouble because your ISP blocks Russian resources, please let me know."
+  )
+  (note 1686868636
+    "Protip: Use the Reddit blackout to click the 'Logout' button, and never come back."
+  )
+  (note 1486550941
+    "↓ I no longer recommend people to use this. Generate your configuration from a language like Nix instead."
+  )
   (note 1576800001 "↓ No longer just my projects, it's all of TVL! Go check it out.")
 ]

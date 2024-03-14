@@ -4,10 +4,20 @@
 #
 # An entire post is rendered by `renderPost`, which assembles the
 # fragments together in a runCommand execution.
-{ depot, lib, pkgs, ... }:
+{
+  depot,
+  lib,
+  pkgs,
+  ...
+}:
 
 let
-  inherit (builtins) filter map hasAttr replaceStrings;
+  inherit (builtins)
+    filter
+    map
+    hasAttr
+    replaceStrings
+    ;
   inherit (pkgs) runCommand writeText;
   inherit (depot.nix) renderMarkdown;
 
@@ -15,7 +25,20 @@ let
   isDraft = post: (hasAttr "draft" post) && post.draft;
   isUnlisted = post: (hasAttr "listed" post) && !post.listed;
 
-  escape = replaceStrings [ "<" ">" "&" "'" ] [ "&lt;" "&gt;" "&amp;" "&#39;" ];
+  escape =
+    replaceStrings
+      [
+        "<"
+        ">"
+        "&"
+        "'"
+      ]
+      [
+        "&lt;"
+        "&gt;"
+        "&amp;"
+        "&#39;"
+      ];
 
   header = name: title: staticUrl: ''
     <!DOCTYPE html>
@@ -59,36 +82,53 @@ let
     <hr>
   '';
 
-  renderPost = { name, footer, staticUrl ? "https://static.tvl.fyi/${depot.web.static.drvHash}", ... }: post: runCommand "${post.key}.html" { } ''
-    cat ${writeText "header.html" (header name post.title staticUrl)} > $out
+  renderPost =
+    {
+      name,
+      footer,
+      staticUrl ? "https://static.tvl.fyi/${depot.web.static.drvHash}",
+      ...
+    }:
+    post:
+    runCommand "${post.key}.html" { } ''
+      cat ${writeText "header.html" (header name post.title staticUrl)} > $out
 
-    # Write the post title & date
-    echo '<article><h2 class="inline">${escape post.title}</h2>' >> $out
-    echo '<aside class="date">' >> $out
-    date --date="@${toString post.date}" '+%Y-%m-%d' >> $out
-    ${
-      if post ? updated
-      then ''date --date="@${toString post.updated}" '+ (updated %Y-%m-%d)' >> $out''
-      else ""
-    }
-    ${if post ? author then "echo ' by ${post.author}' >> $out" else ""}
-    echo '</aside>' >> $out
+      # Write the post title & date
+      echo '<article><h2 class="inline">${escape post.title}</h2>' >> $out
+      echo '<aside class="date">' >> $out
+      date --date="@${toString post.date}" '+%Y-%m-%d' >> $out
+      ${
+        if post ? updated then
+          ''date --date="@${toString post.updated}" '+ (updated %Y-%m-%d)' >> $out''
+        else
+          ""
+      }
+      ${if post ? author then "echo ' by ${post.author}' >> $out" else ""}
+      echo '</aside>' >> $out
 
-    ${
-      # Add a warning to draft/unlisted posts to make it clear that
-      # people should not share the post.
+      ${
+        # Add a warning to draft/unlisted posts to make it clear that
+        # people should not share the post.
 
-      if (isDraft post) then "cat ${draftWarning} >> $out"
-      else if (isUnlisted post) then "cat ${unlistedWarning} >> $out"
-      else "# Your ads could be here?"
-    }
+        if (isDraft post) then
+          "cat ${draftWarning} >> $out"
+        else if (isUnlisted post) then
+          "cat ${unlistedWarning} >> $out"
+        else
+          "# Your ads could be here?"
+      }
 
-    # Write the actual post through cheddar's about-filter mechanism
-    cat ${renderMarkdown { path = post.content; tagfilter = post.tagfilter or true; }} >> $out
-    echo '</article>' >> $out
+      # Write the actual post through cheddar's about-filter mechanism
+      cat ${
+        renderMarkdown {
+          path = post.content;
+          tagfilter = post.tagfilter or true;
+        }
+      } >> $out
+      echo '</article>' >> $out
 
-    cat ${writeText "footer.html" (fullFooter footer)} >> $out
-  '';
+      cat ${writeText "footer.html" (fullFooter footer)} >> $out
+    '';
 in
 {
   inherit isDraft isUnlisted renderPost;

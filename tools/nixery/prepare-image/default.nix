@@ -7,7 +7,9 @@
 # The purpose of using a wrapper script is to ensure that the paths to
 # all required Nix files are set correctly at runtime.
 
-{ pkgs ? import <nixpkgs> { } }:
+{
+  pkgs ? import <nixpkgs> { },
+}:
 
 pkgs.writeShellScriptBin "nixery-prepare-image" ''
   exec ${pkgs.nix}/bin/nix-build \

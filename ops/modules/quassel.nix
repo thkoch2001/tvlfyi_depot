@@ -1,5 +1,10 @@
 # A more modern module for running Quassel.
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 let
   cfg = config.services.depot.quassel;
@@ -42,42 +47,44 @@ in
     };
   };
 
-  config = with lib; mkIf cfg.enable {
-    networking.firewall.allowedTCPPorts = [ cfg.port ];
+  config =
+    with lib;
+    mkIf cfg.enable {
+      networking.firewall.allowedTCPPorts = [ cfg.port ];
 
-    systemd.services.quassel = {
-      description = "Quassel IRC daemon";
-      wantedBy = [ "multi-user.target" ];
+      systemd.services.quassel = {
+        description = "Quassel IRC daemon";
+        wantedBy = [ "multi-user.target" ];
 
-      script = concatStringsSep " " [
-        "${quasselDaemon}/bin/quasselcore"
-        "--listen=${concatStringsSep "," cfg.bindAddresses}"
-        "--port=${toString cfg.port}"
-        "--configdir=/var/lib/quassel"
-        "--require-ssl"
-        "--ssl-cert=$CREDENTIALS_DIRECTORY/quassel.pem"
-        "--loglevel=${cfg.logLevel}"
-      ];
+        script = concatStringsSep " " [
+          "${quasselDaemon}/bin/quasselcore"
+          "--listen=${concatStringsSep "," cfg.bindAddresses}"
+          "--port=${toString cfg.port}"
+          "--configdir=/var/lib/quassel"
+          "--require-ssl"
+          "--ssl-cert=$CREDENTIALS_DIRECTORY/quassel.pem"
+          "--loglevel=${cfg.logLevel}"
+        ];
 
-      serviceConfig = {
-        Restart = "always";
-        User = "quassel";
-        Group = "quassel";
-        StateDirectory = "quassel";
+        serviceConfig = {
+          Restart = "always";
+          User = "quassel";
+          Group = "quassel";
+          StateDirectory = "quassel";
 
-        # Avoid trouble with the ACME file permissions by using the
-        # systemd credentials feature.
-        LoadCredential = "quassel.pem:/var/lib/acme/${cfg.acmeHost}/full.pem";
-      };
-    };
-
-    users = {
-      users.quassel = {
-        isSystemUser = true;
-        group = "quassel";
+          # Avoid trouble with the ACME file permissions by using the
+          # systemd credentials feature.
+          LoadCredential = "quassel.pem:/var/lib/acme/${cfg.acmeHost}/full.pem";
+        };
       };
 
-      groups.quassel = { };
+      users = {
+        users.quassel = {
+          isSystemUser = true;
+          group = "quassel";
+        };
+
+        groups.quassel = { };
+      };
     };
-  };
 }

@@ -1,4 +1,9 @@
-{ depot, pkgs, lib, ... }:
+{
+  depot,
+  pkgs,
+  lib,
+  ...
+}:
 
 let
 
@@ -12,54 +17,58 @@ let
     })
   ];
 
-  inherit (depot.nix)
-    writeExecline
-    runExecline
-    getBins
-    ;
+  inherit (depot.nix) writeExecline runExecline getBins;
 
-  inherit (depot.web.bubblegum)
-    writeCGI
-    ;
+  inherit (depot.web.bubblegum) writeCGI;
 
-  inherit (pkgs)
-    runCommandLocal
-    substituteAll
-    ;
+  inherit (pkgs) runCommandLocal substituteAll;
 
-  bins = (getBins pkgs.thttpd [ "thttpd" ])
-    // (getBins pkgs.coreutils [ "printf" "cp" "mkdir" ]);
+  bins =
+    (getBins pkgs.thttpd [ "thttpd" ])
+    // (getBins pkgs.coreutils [
+      "printf"
+      "cp"
+      "mkdir"
+    ]);
 
   webRoot =
     let
-      copyScripts = lib.concatMap
-        (path:
-          let
-            cgi = writeCGI
-              {
-                # assume we are on NixOS since thttpd doesn't set PATH.
-                # using third_party.nix is tricky because not everyone
-                # has a tvix daemon running.
-                binPath = "/run/current-system/sw/bin";
-              }
-              path;
-          in
+      copyScripts = lib.concatMap (
+        path:
+        let
+          cgi = writeCGI {
+            # assume we are on NixOS since thttpd doesn't set PATH.
+            # using third_party.nix is tricky because not everyone
+            # has a tvix daemon running.
+            binPath = "/run/current-system/sw/bin";
+          } path;
+        in
+        [
+          "if"
           [
-            "if"
-            [ bins.cp cgi "\${out}/${cgi.name}" ]
-          ])
-        scripts;
+            bins.cp
+            cgi
+            "\${out}/${cgi.name}"
+          ]
+        ]
+      ) scripts;
     in
-    runExecline.local "webroot" { } ([
-      "importas"
-      "out"
-      "out"
-      "if"
-      [ bins.mkdir "-p" "$out" ]
-    ] ++ copyScripts);
+    runExecline.local "webroot" { } (
+      [
+        "importas"
+        "out"
+        "out"
+        "if"
+        [
+          bins.mkdir
+          "-p"
+          "$out"
+        ]
+      ]
+      ++ copyScripts
+    );
 
   port = 9000;
-
 in
 writeExecline "serve-examples" { } [
   "foreground"

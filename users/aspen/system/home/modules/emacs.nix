@@ -1,4 +1,9 @@
-{ pkgs, lib, config, ... }:
+{
+  pkgs,
+  lib,
+  config,
+  ...
+}:
 
 with lib;
 
@@ -11,12 +16,9 @@ let
   # };
 
   depot = config.lib.depot;
-
 in
 {
-  imports = [
-    ./lib/cloneRepo.nix
-  ];
+  imports = [ ./lib/cloneRepo.nix ];
 
   # home.packages = [ doom-emacs ];
   # home.file.".emacs.d/init.el".text = ''
@@ -66,7 +68,8 @@ in
       programs.emacs = {
         enable = true;
         package = pkgs.emacs;
-        extraPackages = (epkgs:
+        extraPackages = (
+          epkgs:
           (with epkgs; [
             tvlPackages.dottime
             tvlPackages.tvl
