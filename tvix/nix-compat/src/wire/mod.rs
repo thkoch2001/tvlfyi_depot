@@ -2,4 +2,6 @@
 //! nix-daemon protocol as well as in the NAR format.
 
 #[cfg(feature = "async")]
+mod bytes;
+#[cfg(feature = "async")]
 mod primitive;
