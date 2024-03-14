@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "18a753f6_a2347053",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000096
+      },
+      "writtenOn": "2024-03-14T16:52:39Z",
+      "side": 1,
+      "message": "Clippy is broken by the previous patch.",
+      "revId": "d8ab3a1dbb35f4b5a13b6520118805a73f5e3c5d",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
