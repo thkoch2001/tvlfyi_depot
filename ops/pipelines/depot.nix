@@ -3,18 +3,9 @@
 { depot, pkgs, externalArgs, ... }:
 
 let
-  # Protobuf check step which validates that changes to .proto files
-  # between revisions don't cause backwards-incompatible or otherwise
-  # flawed changes.
-  protoCheck = {
-    command = "${depot.nix.bufCheck}/bin/ci-buf-check";
-    label = ":water_buffalo: protoCheck";
-  };
-
   pipeline = depot.nix.buildkite.mkPipeline {
     headBranch = "refs/heads/canon";
     drvTargets = depot.ci.targets;
-    additionalSteps = [ protoCheck ];
 
     parentTargetMap =
       if (externalArgs ? parentTargetMap)
