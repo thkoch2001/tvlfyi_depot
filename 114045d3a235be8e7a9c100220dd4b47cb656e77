@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "103f6fe6_a12e4bf5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2024-03-14T14:40:21Z",
+      "side": 1,
+      "message": "I think we tried this before and it was a little bit slow, but I\u0027d say it\u0027s a win overall since the terraform download is very painful. We can probably speed it up by adding a caching mechanism to lazy deps so that we don\u0027t need to go through nix every time which is the slow bit.\n\nPlease cherry-pick cl/7083 on top of this which is probably also interesting to @root@gws.fyi now.",
+      "revId": "114045d3a235be8e7a9c100220dd4b47cb656e77",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a4feaca3_7b1e85a5",
+        "filename": "tools/depotfmt.nix",
+        "patchSetId": 1
+      },
+      "lineNbr": 64,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2024-03-14T14:40:21Z",
+      "side": 1,
+      "message": "Why are we setting meta via passthru?",
+      "range": {
+        "startLine": 64,
+        "startChar": 4,
+        "endLine": 64,
+        "endChar": 8
+      },
+      "revId": "114045d3a235be8e7a9c100220dd4b47cb656e77",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
