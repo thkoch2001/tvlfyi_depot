@@ -149,8 +149,12 @@ depot.nix.readTree.drvTargets {
     };
   };
 
-  # OpenVPN + TPM2 is broken on versions of this package somewhere
-  # after 1.8.0, but it is a critical dependency for tazjin. For this
-  # reason it is vendored from a specific nixpkgs commit.
-  tpm2-pkcs11 = self.callPackage ./patches/tpm2-pkcs11.nix { };
+  # Imports a patch that fixes usage of this package on versions
+  # >=1.9. The patch has been proposed upstream, but so far with no
+  # reactions from the maintainer:
+  #
+  # https://github.com/tpm2-software/tpm2-pkcs11/pull/849
+  tpm2-pkcs11 = super.tpm2-pkcs11.overrideAttrs (old: {
+    patches = (old.patches or [ ]) ++ [ ./patches/tpm2-pkcs11-190-dbupgrade.patch ];
+  });
 }
