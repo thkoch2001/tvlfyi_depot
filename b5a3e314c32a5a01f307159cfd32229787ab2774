@@ -1,0 +1,123 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "055b92fc_c89d10b3",
+        "filename": "tvix/castore/Cargo.toml",
+        "patchSetId": 5
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-03-15T23:33:17Z",
+      "side": 1,
+      "message": "please set the exact rev here, and provide some context around this branch (link to PR, ...)",
+      "revId": "b5a3e314c32a5a01f307159cfd32229787ab2774",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a233c29c_7fab81a8",
+        "filename": "tvix/castore/src/directoryservice/mod.rs",
+        "patchSetId": 5
+      },
+      "lineNbr": 87,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-03-15T23:33:17Z",
+      "side": 1,
+      "message": "Is it possible to pull this out in a prep CL? this might open some other cleanups...",
+      "revId": "b5a3e314c32a5a01f307159cfd32229787ab2774",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3113895b_aa2ed8af",
+        "filename": "tvix/castore/src/fs/fuse.rs",
+        "patchSetId": 5
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-03-15T23:33:17Z",
+      "side": 1,
+      "message": "needs SAFETY comment why this is ok",
+      "revId": "b5a3e314c32a5a01f307159cfd32229787ab2774",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "dad25707_d85e2818",
+        "filename": "tvix/castore/src/fs/fuse.rs",
+        "patchSetId": 5
+      },
+      "lineNbr": 93,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-03-15T23:33:17Z",
+      "side": 1,
+      "message": "don\u0027t we spawn separate threads, disconnected from the Tokio runtime, but .start() contains await statements? how does this work?",
+      "revId": "b5a3e314c32a5a01f307159cfd32229787ab2774",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fbf135c3_a53684d3",
+        "filename": "tvix/castore/src/fs/mod.rs",
+        "patchSetId": 5
+      },
+      "lineNbr": 425,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-03-15T23:33:17Z",
+      "side": 1,
+      "message": "open_read should already add the digest it was called with in it\u0027s instrumentation.\n\nwe\u0027re probably good without the additional span, and the rq.inode from our instrument.",
+      "revId": "b5a3e314c32a5a01f307159cfd32229787ab2774",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ebf65565_1150cfd3",
+        "filename": "tvix/castore/src/fs/mod.rs",
+        "patchSetId": 5
+      },
+      "lineNbr": 578,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-03-15T23:33:17Z",
+      "side": 1,
+      "message": "Is it? we don\u0027t have any await in here...\n\nMaybe simply logging the digest with debug!() is sufficient too.",
+      "revId": "b5a3e314c32a5a01f307159cfd32229787ab2774",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4d66e24f_d0343707",
+        "filename": "tvix/castore/src/fs/mod.rs",
+        "patchSetId": 5
+      },
+      "lineNbr": 618,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-03-15T23:33:17Z",
+      "side": 1,
+      "message": "This will panic at runtime. what\u0027s the default implementation, signalling we don\u0027t support readdirplus (yet)?\n\nreturning ENOSYS, like the others below?",
+      "revId": "b5a3e314c32a5a01f307159cfd32229787ab2774",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
