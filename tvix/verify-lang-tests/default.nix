@@ -76,11 +76,14 @@ let
     # b72bc4a972fe568744d98b89d63adcd504cb586c
     "eval-okay-identifier-formatting.nix" = [ nix ];
 
-    # Different catchable behavior between nix 2.3 and 2.18
+    # Differing strictness in the function argument for some builtins in Nix 2.18
+    # https://github.com/NixOS/nix/issues/9779
     "eval-okay-builtins-map-propagate-catchable.nix" = [ nix_latest ];
     "eval-okay-builtins-gen-list-propagate-catchable.nix" = [ nix_latest ];
     "eval-okay-builtins-replace-strings-propagate-catchable.nix" =
       [ nix_latest ];
+    "eval-okay-builtins-map-function-strictness.nix" = [ nix_latest ];
+    "eval-okay-builtins-genList-function-strictness.nix" = [ nix_latest ];
 
     # TODO(sterni): support diffing working directory and home relative paths
     # like C++ Nix test suite (using string replacement).
