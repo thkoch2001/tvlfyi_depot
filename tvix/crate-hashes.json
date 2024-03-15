@@ -1,4 +1,5 @@
 {
   "test-generator 0.3.0 (git+https://github.com/JamesGuthrie/test-generator.git?rev=82e799979980962aec1aa324ec6e0e4cad781f41#82e799979980962aec1aa324ec6e0e4cad781f41)": "08brp3qqa55hijc7xby3lam2cc84hvx1zzfqv6lj7smlczh8k32y",
+  "tokio-listener 0.3.1 (git+https://github.com/flokli/tokio-listener.git?rev=9a3021d5158ee00ffb51b55dc5159c9b974f0f7d#9a3021d5158ee00ffb51b55dc5159c9b974f0f7d)": "13ysakgbprg7g4dcz3gs7d29r33455zvq2r9ssns2q6b1dyxx7jx",
   "wu-manber 0.1.0 (git+https://github.com/tvlfyi/wu-manber.git#0d5b22bea136659f7de60b102a7030e0daaa503d)": "1zhk83lbq99xzyjwphv2qrb8f8qgfqwa5bbbvyzm0z0bljsjv0pd"
 }
