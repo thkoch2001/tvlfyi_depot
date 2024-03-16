@@ -119,12 +119,12 @@ recordException span dat = liftIO $ do
 
 instance (MonadThrow m, MonadUnliftIO m) => MonadPostgres (AppT m) where
   execute = executeImpl (AppT ask) (AppT $ asks (.config.logDatabaseQueries))
-  execute_ = executeImpl_ (AppT ask) (AppT $ asks (.config.logDatabaseQueries))
   executeMany = executeManyImpl (AppT ask) (AppT $ asks (.config.logDatabaseQueries))
   executeManyReturningWith = executeManyReturningWithImpl (AppT ask) (AppT $ asks (.config.logDatabaseQueries))
   queryWith = queryWithImpl (AppT ask) (AppT $ asks (.config.logDatabaseQueries))
   queryWith_ = queryWithImpl_ (AppT ask)
-  foldRows = foldRowsImpl (AppT ask)
+
+  foldRowsWithAcc = foldRowsWithAccImpl (AppT ask) (AppT $ asks (.config.logDatabaseQueries))
   runTransaction = runPGTransaction
 
 runPGTransaction :: (MonadUnliftIO m) => Transaction (AppT m) a -> AppT m a

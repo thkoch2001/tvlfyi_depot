@@ -35,6 +35,7 @@ import Json.Enc (Enc)
 import Json.Enc qualified as Enc
 import Label
 import Multipart2 qualified as Multipart
+import MyPrelude
 import Network.HTTP.Client.Conduit qualified as Http
 import Network.HTTP.Simple qualified as Http
 import Network.HTTP.Types
@@ -50,7 +51,6 @@ import OpenTelemetry.Trace qualified as Otel hiding (getTracer, inSpan, inSpan')
 import OpenTelemetry.Trace.Monad qualified as Otel
 import Parse (Parse)
 import Parse qualified
-import PossehlAnalyticsPrelude
 import Postgres.Decoder qualified as Dec
 import Postgres.MonadPostgres
 import Pretty
@@ -848,7 +848,9 @@ redactedSearchAndInsert extraArguments = do
   pure $
     (firstPage : otherPages)
       & concatMap (.tourGroups)
-      & insertTourGroupsAndTorrents
+      & \case
+        IsNonEmpty tgs -> tgs & insertTourGroupsAndTorrents
+        IsEmpty -> pure ()
   where
     go mpage =
       redactedSearch
@@ -893,12 +895,13 @@ redactedSearchAndInsert extraArguments = do
                   )
         )
     insertTourGroupsAndTorrents ::
-      [ T2
-          "tourGroup"
-          (T3 "groupId" Int "groupName" Text "fullJsonResult" Json.Value)
-          "torrents"
-          [T2 "torrentId" Int "fullJsonResult" Json.Value]
-      ] ->
+      NonEmpty
+        ( T2
+            "tourGroup"
+            (T3 "groupId" Int "groupName" Text "fullJsonResult" Json.Value)
+            "torrents"
+            [T2 "torrentId" Int "fullJsonResult" Json.Value]
+        ) ->
       Transaction m ()
     insertTourGroupsAndTorrents dat = do
       let tourGroups = dat <&> (.tourGroup)
@@ -909,23 +912,22 @@ redactedSearchAndInsert extraArguments = do
                   zipT2 $
                     T2
                       (label @"torrentGroupIdPg" $ res <&> (.tourGroupIdPg))
-                      (label @"torrents" torrents)
+                      (label @"torrents" (torrents & toList))
             )
     insertTourGroups ::
-      [ T3
-          "groupId"
-          Int
-          "groupName"
-          Text
-          "fullJsonResult"
-          Json.Value
-      ] ->
+      NonEmpty
+        ( T3
+            "groupId"
+            Int
+            "groupName"
+            Text
+            "fullJsonResult"
+            Json.Value
+        ) ->
       Transaction m [Label "tourGroupIdPg" Int]
     insertTourGroups dats = do
       let groupNames =
-            [ [fmt|{dat.groupId}: {dat.groupName}|]
-              | dat <- dats
-            ]
+            dats <&> \dat -> [fmt|{dat.groupId}: {dat.groupName}|]
       logInfo [fmt|Inserting tour groups for {showPretty groupNames}|]
       _ <-
         execute
@@ -933,7 +935,7 @@ redactedSearchAndInsert extraArguments = do
                   DELETE FROM redacted.torrent_groups
                   WHERE group_id = ANY (?::integer[])
               |]
-          (Only $ (dats <&> (.groupId) & PGArray :: PGArray Int))
+          (Only $ (dats <&> (.groupId) & toList & PGArray :: PGArray Int))
       executeManyReturningWith
         [fmt|
               INSERT INTO redacted.torrent_groups (
@@ -1082,7 +1084,7 @@ migrate ::
   ) =>
   Transaction m (Label "numberOfRowsAffected" Natural)
 migrate = inSpan "Database Migration" $ do
-  execute_
+  execute
     [sql|
     CREATE SCHEMA IF NOT EXISTS redacted;
 
@@ -1134,6 +1136,7 @@ migrate = inSpan "Database Migration" $ do
     CREATE INDEX IF NOT EXISTS torrents_json_seeding ON redacted.torrents_json(((full_json_result->'seeding')::integer));
     CREATE INDEX IF NOT EXISTS torrents_json_snatches ON redacted.torrents_json(((full_json_result->'snatches')::integer));
   |]
+    ()
 
 data TorrentData transmissionInfo = TorrentData
   { groupId :: Int,
