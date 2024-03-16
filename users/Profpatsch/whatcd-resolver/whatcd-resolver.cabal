@@ -35,6 +35,10 @@ common common-options
     -- does not export record fields as functions, use OverloadedRecordDot to access instead
     NoFieldSelectors
 
+    -- Allow the same record field name to be declared twice per module.
+    -- This works, because we use `OverloadedRecordDot` everywhere (enforced by `NoFieldSelectors`).
+    DuplicateRecordFields
+
     -- Record punning
     RecordWildCards
 
@@ -48,8 +52,10 @@ common common-options
     -- to enable the `type` keyword in import lists (ormolu uses this automatically)
     ExplicitNamespaces
 
-  default-language: GHC2021
+    -- allows defining pattern synonyms, but also the `import Foo (pattern FooPattern)` import syntax
+    PatternSynonyms
 
+  default-language: GHC2021
 
 library
     import: common-options
@@ -58,6 +64,8 @@ library
 
     exposed-modules:
        WhatcdResolver
+       AppT
+       Html
 
     build-depends:
         base >=4.15 && <5,
