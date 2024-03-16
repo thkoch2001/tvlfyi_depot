@@ -543,11 +543,11 @@ traceQueryIfEnabled tools span logDatabaseQueries qry params = do
         Otel.addAttributes
           span
           $ HashMap.fromList
-          $ ( ("postgres.query", Otel.toAttribute @Text errs.query)
+          $ ( ("_.postgres.query", Otel.toAttribute @Text errs.query)
                 : ( errs.explain
                       & foldMap
                         ( \ex ->
-                            [("postgres.explain", Otel.toAttribute @Text ex)]
+                            [("_.postgres.explain", Otel.toAttribute @Text ex)]
                         )
                   )
             )

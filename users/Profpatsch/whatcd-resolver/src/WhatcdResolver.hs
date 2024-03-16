@@ -40,7 +40,9 @@ import Network.HTTP.Simple qualified as Http
 import Network.HTTP.Types
 import Network.HTTP.Types qualified as Http
 import Network.HTTP.Types.URI qualified as Url
+import Network.URI (URI)
 import Network.URI qualified
+import Network.URI qualified as URI
 import Network.Wai qualified as Wai
 import Network.Wai.Handler.Warp qualified as Warp
 import Network.Wai.Parse qualified as Wai
@@ -201,25 +203,31 @@ htmlUi = do
               parseQueryArgs
                 span
                 ( label @"target"
-                    <$> ( singleQueryArgument "target" Field.utf8
-                            >>> textToHttpClientRequest
+                    <$> ( (singleQueryArgument "target" Field.utf8 >>> textToURI)
+                            & Parse.andParse uriToHttpClientRequest
                         )
                 )
-            jsonld <- httpGetJsonLd span (qry.target)
+            jsonld <- httpGetJsonLd (qry.target)
             pure $ renderJsonld jsonld
         otherRoute -> h [fmt|/{otherRoute}|] mainHtml
   where
     everySecond :: Text -> Enc -> Html -> Html
     everySecond call extraData innerHtml = [hsx|<div hx-trigger="every 1s" hx-swap="outerHTML" hx-post={call} hx-vals={Enc.encToBytesUtf8 extraData}>{innerHtml}</div>|]
 
-    mainHtml span = runTransaction $ do
-      -- jsonld <- httpGetJsonLd span "https://musicbrainz.org/work/92000fd4-d304-406d-aeb4-6bdbeed318ec" <&> renderJsonld
+    mainHtml _span = runTransaction $ do
+      jsonld <-
+        httpGetJsonLd
+          ( URI.parseURI "https://musicbrainz.org/work/92000fd4-d304-406d-aeb4-6bdbeed318ec" & annotate "not an URI" & unwrapError,
+            "https://musicbrainz.org/work/92000fd4-d304-406d-aeb4-6bdbeed318ec"
+          )
+          <&> renderJsonld
       bestTorrentsTable <- getBestTorrentsTable
       -- transmissionTorrentsTable <- lift @Transaction getTransmissionTorrentsTable
       pure $
         Html.docTypeHtml
           [hsx|
       <head>
+        <title>whatcd-resolver</title>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
@@ -234,7 +242,7 @@ htmlUi = do
         </style>
       </head>
       <body>
-        {""::Text {-jsonld-}}
+        {jsonld}
         <form
           hx-post="/snips/redacted/search"
           hx-target="#redacted-search-results">
@@ -270,11 +278,9 @@ singleQueryArgument field inner =
     )
     >>> Parse.fieldParser inner
 
--- | Make sure we can parse the given Text into a Request via a URI.
---
--- This tries to work around the horrible, horrible interface in Http.Client.
-textToHttpClientRequest :: Parse Text Http.Request
-textToHttpClientRequest =
+-- | Make sure we can parse the given Text into an URI.
+textToURI :: Parse Text URI
+textToURI =
   Parse.fieldParser
     ( FieldParser $ \text ->
         text
@@ -282,21 +288,26 @@ textToHttpClientRequest =
           & Network.URI.parseURI
           & annotate [fmt|Cannot parse this as a URL: "{text}"|]
     )
-    >>> ( Parse.mkParseNoContext
-            ( \url ->
-                (url & Http.requestFromURI)
-                  & runCatch
-                  & first (checkException @Http.HttpException)
-                  & \case
-                    Left (Right (Http.InvalidUrlException urlText reason)) ->
-                      Left [fmt|Unable to set the url "{urlText}" as request URL, reason: {reason}|]
-                    Left (Right exc@(Http.HttpExceptionRequest _ _)) ->
-                      Left [fmt|Weird! Should not get a HttpExceptionRequest when parsing an URL (bad library design), was {exc & displayException}|]
-                    Left (Left someExc) ->
-                      Left [fmt|Weird! Should not get anyhting but a HttpException when parsing an URL (bad library design), was {someExc & displayException}|]
-                    Right req -> pure req
-            )
-        )
+
+-- | Make sure we can parse the given URI into a Request.
+--
+-- This tries to work around the horrible, horrible interface in Http.Client.
+uriToHttpClientRequest :: Parse URI Http.Request
+uriToHttpClientRequest =
+  Parse.mkParseNoContext
+    ( \url ->
+        (url & Http.requestFromURI)
+          & runCatch
+          & first (checkException @Http.HttpException)
+          & \case
+            Left (Right (Http.InvalidUrlException urlText reason)) ->
+              Left [fmt|Unable to set the url "{urlText}" as request URL, reason: {reason}|]
+            Left (Right exc@(Http.HttpExceptionRequest _ _)) ->
+              Left [fmt|Weird! Should not get a HttpExceptionRequest when parsing an URL (bad library design), was {exc & displayException}|]
+            Left (Left someExc) ->
+              Left [fmt|Weird! Should not get anyhting but a HttpException when parsing an URL (bad library design), was {someExc & displayException}|]
+            Right req -> pure req
+    )
 
 checkException :: (Exception b) => SomeException -> Either SomeException b
 checkException some = case fromException some of
@@ -309,8 +320,7 @@ snipsRedactedSearch ::
     HasField "searchstr" r ByteString,
     MonadThrow m,
     MonadTransmission m,
-    Otel.MonadTracer m,
-    MonadUnliftIO m
+    MonadOtel m
   ) =>
   r ->
   m Html
@@ -329,8 +339,7 @@ getBestTorrentsTable ::
     MonadThrow m,
     MonadLogger m,
     MonadPostgres m,
-    Otel.MonadTracer m,
-    MonadUnliftIO m
+    MonadOtel m
   ) =>
   Transaction m Html
 getBestTorrentsTable = do
@@ -399,15 +408,20 @@ getBestTorrentsTable = do
         </table>
       |]
 
+-- | A recursive `json+ld` structure.
 data Jsonld
   = JsonldObject JsonldObject
   | JsonldArray [Jsonld]
   | JsonldField Json.Value
   deriving stock (Show, Eq)
 
+-- | A json+ld object, that is something which can be further expanded by following the URL in its `id_` field.
 data JsonldObject = JsonldObject'
-  { type_ :: Set Text,
+  { -- | `@type` field; currently just the plain value without taking into account the json+ld context
+    type_ :: Set Text,
+    -- | `@id` field, usually a link to follow for expanding the object to its full glory
     id_ :: Text,
+    -- | any fields of this object that remote deemed important enough to already pre-emptively include in the object; to get all fields resolve the URL in `id_`.
     previewFields :: Map Text Jsonld
   }
   deriving stock (Show, Eq)
@@ -493,8 +507,7 @@ getAndUpdateTransmissionTorrentsStatus ::
     MonadThrow m,
     MonadLogger m,
     MonadPostgres m,
-    Otel.MonadTracer m,
-    MonadUnliftIO m
+    MonadOtel m
   ) =>
   Map (Label "torrentHash" Text) () ->
   (Transaction m (Map (Label "torrentHash" Text) (Label "percentDone" Percentage)))
@@ -525,7 +538,7 @@ getAndUpdateTransmissionTorrentsStatus knownTorrents = do
   pure actualTorrents
 
 getTransmissionTorrentsTable ::
-  (MonadTransmission m, MonadThrow m, MonadLogger m, Otel.MonadTracer m, MonadUnliftIO m) => m Html
+  (MonadTransmission m, MonadThrow m, MonadLogger m, MonadOtel m) => m Html
 getTransmissionTorrentsTable = do
   let fields =
         [ "hashString",
@@ -640,8 +653,7 @@ doTransmissionRequest' ::
   ( MonadTransmission m,
     MonadThrow m,
     MonadLogger m,
-    Otel.MonadTracer m,
-    MonadUnliftIO m
+    MonadOtel m
   ) =>
   (TransmissionRequest, Json.Parse Error output) ->
   m output
@@ -685,7 +697,7 @@ doTransmissionRequest span dat (req, parser) = do
           ]
             <> (req.tag & foldMap (\t -> [("tag", t & intArg)]))
         )
-  Otel.addAttributes
+  addAttributes
     span
     ( HashMap.fromList $
         body
@@ -740,25 +752,24 @@ doTransmissionRequest span dat (req, parser) = do
     _ -> liftIO $ unwrapIOError $ Left [fmt|Non-200 response: {showPretty resp}|]
 
 redactedSearch ::
-  (MonadLogger m, MonadThrow m, Otel.MonadTracer m, MonadUnliftIO m) =>
+  (MonadLogger m, MonadThrow m, MonadOtel m) =>
   [(ByteString, ByteString)] ->
   Json.Parse ErrorTree a ->
   m a
-redactedSearch advanced parser = inSpan' "Redacted API Search" $ \span ->
-  redactedApiRequestJson
-    span
-    ( T2
-        (label @"action" "browse")
-        (label @"actionArgs" ((advanced <&> second Just)))
-    )
-    parser
+redactedSearch advanced parser =
+  inSpan "Redacted API Search" $
+    redactedApiRequestJson
+      ( T2
+          (label @"action" "browse")
+          (label @"actionArgs" ((advanced <&> second Just)))
+      )
+      parser
 
 redactedGetTorrentFile ::
   ( MonadLogger m,
     MonadThrow m,
     HasField "torrentId" dat Int,
-    MonadUnliftIO m,
-    Otel.MonadTracer m
+    MonadOtel m
   ) =>
   dat ->
   m ByteString
@@ -785,7 +796,7 @@ redactedGetTorrentFile dat = inSpan' "Redacted Get Torrent File" $ \span -> do
 --       io
 --   )
 
-exampleSearch :: (MonadThrow m, MonadLogger m, MonadPostgres m, Otel.MonadTracer m, MonadUnliftIO m) => m (Transaction m ())
+exampleSearch :: (MonadThrow m, MonadLogger m, MonadPostgres m, MonadOtel m) => m (Transaction m ())
 exampleSearch = do
   t1 <-
     redactedSearchAndInsert
@@ -822,8 +833,7 @@ redactedSearchAndInsert ::
   ( MonadLogger m,
     MonadPostgres m,
     MonadThrow m,
-    Otel.MonadTracer m,
-    MonadUnliftIO m
+    MonadOtel m
   ) =>
   [(ByteString, ByteString)] ->
   m (Transaction m ())
@@ -1002,8 +1012,7 @@ redactedGetTorrentFileAndInsert ::
     MonadPostgres m,
     MonadThrow m,
     MonadLogger m,
-    Otel.MonadTracer m,
-    MonadUnliftIO m
+    MonadOtel m
   ) =>
   r ->
   Transaction m (Label "torrentFile" ByteString)
@@ -1069,8 +1078,7 @@ assertOneUpdated span name x = case x.numberOfRowsAffected of
 
 migrate ::
   ( MonadPostgres m,
-    MonadUnliftIO m,
-    Otel.MonadTracer m
+    MonadOtel m
   ) =>
   Transaction m (Label "numberOfRowsAffected" Natural)
 migrate = inSpan "Database Migration" $ do
@@ -1218,11 +1226,11 @@ mkRedactedApiRequest dat = do
       & Http.setQueryString (("action", Just dat.action) : dat.actionArgs)
       & Http.setRequestHeader "Authorization" [authKey]
 
-httpGetJsonLd :: (MonadIO m, MonadThrow m) => Otel.Span -> Http.Request -> m Jsonld
-httpGetJsonLd span req = do
+httpGetJsonLd :: (MonadThrow m, MonadOtel m) => (URI, Http.Request) -> m Jsonld
+httpGetJsonLd (uri, req) = inSpan' "Fetch json+ld" $ \span -> do
+  addAttribute span "json+ld.targetUrl" (uri & showToText)
   httpJson
     (mkOptional (label @"contentType" "application/ld+json"))
-    span
     jsonldParser
     ( req
         & Http.setRequestMethod "GET"
@@ -1275,15 +1283,14 @@ instance HasField "withDefault" (Optional a) (a -> a) where
     Just a -> a
 
 httpJson ::
-  ( MonadIO m,
-    MonadThrow m
+  ( MonadThrow m,
+    MonadOtel m
   ) =>
   (Optional (Label "contentType" ByteString)) ->
-  Otel.Span ->
   Json.Parse ErrorTree b ->
   Http.Request ->
   m b
-httpJson opts span parser req = do
+httpJson opts parser req = inSpan' "HTTP Request (JSON)" $ \span -> do
   let opts' = opts.withDefault (label @"contentType" "application/json")
   Http.httpBS req
     >>= assertM
@@ -1318,19 +1325,18 @@ httpJson opts span parser req = do
 
 redactedApiRequestJson ::
   ( MonadThrow m,
-    MonadIO m,
     MonadLogger m,
     HasField "action" p ByteString,
-    HasField "actionArgs" p [(ByteString, Maybe ByteString)]
+    HasField "actionArgs" p [(ByteString, Maybe ByteString)],
+    MonadOtel m
   ) =>
-  Otel.Span ->
   p ->
   Json.Parse ErrorTree a ->
   m a
-redactedApiRequestJson span dat parser =
+redactedApiRequestJson dat parser =
   do
     mkRedactedApiRequest dat
-    >>= httpJson defaults span parser
+    >>= httpJson defaults parser
 
 runAppWith :: AppT IO a -> IO (Either TmpPg.StartError a)
 runAppWith appT = withTracer $ \tracer -> withDb $ \db -> do

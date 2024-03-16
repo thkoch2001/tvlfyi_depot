@@ -97,6 +97,12 @@ multipleNE inner = Parse $ \(ctx, from) ->
     -- we assume that, since the same parser is used everywhere, the context will be the same as well (TODO: correct?)
     & second (\((ctx', y) :| ys) -> (ctx', y :| (snd <$> ys)))
 
+-- | Like '(>>>)', but returns the intermediate result alongside the final parse result.
+andParse :: Parse to to2 -> Parse from to -> Parse from (to, to2)
+andParse outer inner = Parse $ \from -> case runParse' inner from of
+  Failure err -> Failure err
+  Success (ctx, to) -> runParse' outer (ctx, to) <&> (second (to,))
+
 -- | Lift a parser into an optional value
 maybe :: Parse from to -> Parse (Maybe from) (Maybe to)
 maybe inner = Parse $ \(ctx, m) -> case m of
