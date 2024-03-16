@@ -1272,35 +1272,6 @@ hush :: Either a1 a2 -> Maybe a2
 hush (Left _) = Nothing
 hush (Right a) = Just a
 
-zipT2 ::
-  forall l1 l2 t1 t2.
-  ( HasField l1 (T2 l1 [t1] l2 [t2]) [t1],
-    HasField l2 (T2 l1 [t1] l2 [t2]) [t2]
-  ) =>
-  T2 l1 [t1] l2 [t2] ->
-  [T2 l1 t1 l2 t2]
-zipT2 xs =
-  zipWith
-    (\t1 t2 -> T2 (label @l1 t1) (label @l2 t2))
-    (getField @l1 xs)
-    (getField @l2 xs)
-
-unzipT2 :: forall l1 t1 l2 t2. [T2 l1 t1 l2 t2] -> T2 l1 [t1] l2 [t2]
-unzipT2 xs = xs <&> toTup & unzip & fromTup
-  where
-    toTup :: forall a b. T2 a t1 b t2 -> (t1, t2)
-    toTup (T2 a b) = (getField @a a, getField @b b)
-    fromTup :: (a, b) -> T2 l1 a l2 b
-    fromTup (t1, t2) = T2 (label @l1 t1) (label @l2 t2)
-
-unzipT3 :: forall l1 t1 l2 t2 l3 t3. [T3 l1 t1 l2 t2 l3 t3] -> T3 l1 [t1] l2 [t2] l3 [t3]
-unzipT3 xs = xs <&> toTup & unzip3 & fromTup
-  where
-    toTup :: forall a b c. T3 a t1 b t2 c t3 -> (t1, t2, t3)
-    toTup (T3 a b c) = (getField @a a, getField @b b, getField @c c)
-    fromTup :: (a, b, c) -> T3 l1 a l2 b l3 c
-    fromTup (t1, t2, t3) = T3 (label @l1 t1) (label @l2 t2) (label @l3 t3)
-
 -- | Do a request to the redacted API. If you know what that is, you know how to find the API docs.
 mkRedactedApiRequest ::
   ( MonadThrow m,
