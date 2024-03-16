@@ -1,13 +1,11 @@
 {-# LANGUAGE DeriveAnyClass #-}
-{-# LANGUAGE DuplicateRecordFields #-}
 {-# LANGUAGE QuasiQuotes #-}
-{-# LANGUAGE ScopedTypeVariables #-}
 
 module WhatcdResolver where
 
+import AppT
 import Control.Category qualified as Cat
 import Control.Monad.Catch.Pure (runCatch)
-import Control.Monad.Logger qualified as Logger
 import Control.Monad.Logger.CallStack
 import Control.Monad.Reader
 import Data.Aeson qualified as Json
@@ -19,7 +17,6 @@ import Data.HashMap.Strict qualified as HashMap
 import Data.List qualified as List
 import Data.List.NonEmpty qualified as NonEmpty
 import Data.Map.Strict qualified as Map
-import Data.Pool (Pool)
 import Data.Pool qualified as Pool
 import Data.Set (Set)
 import Data.Set qualified as Set
@@ -32,7 +29,7 @@ import Database.Postgres.Temp qualified as TmpPg
 import FieldParser (FieldParser, FieldParser' (..))
 import FieldParser qualified as Field
 import GHC.Records (HasField (..))
-import GHC.Stack qualified
+import Html qualified
 import IHP.HSX.QQ (hsx)
 import Json qualified
 import Json.Enc (Enc)
@@ -49,7 +46,6 @@ import Network.Wai qualified as Wai
 import Network.Wai.Handler.Warp qualified as Warp
 import Network.Wai.Parse qualified as Wai
 import OpenTelemetry.Trace qualified as Otel hiding (getTracer, inSpan, inSpan')
-import OpenTelemetry.Trace.Core qualified as Otel hiding (inSpan, inSpan')
 import OpenTelemetry.Trace.Monad qualified as Otel
 import Parse (Parse)
 import Parse qualified
@@ -62,12 +58,11 @@ import System.Directory qualified as Dir
 import System.Directory qualified as Xdg
 import System.Environment qualified as Env
 import System.FilePath ((</>))
-import System.IO qualified as IO
 import Text.Blaze.Html (Html)
 import Text.Blaze.Html.Renderer.Pretty qualified as Html.Pretty
 import Text.Blaze.Html.Renderer.Utf8 qualified as Html
 import Text.Blaze.Html5 qualified as Html
-import Tool (Tool, readTool, readTools)
+import Tool (readTool, readTools)
 import UnliftIO
 import Prelude hiding (span)
 
@@ -144,7 +139,7 @@ htmlUi = do
             snipsRedactedSearch dat
         "snips/redacted/torrentDataJson" -> h "/snips/redacted/torrentDataJson" $ \span -> do
           dat <- torrentIdMp span
-          mkVal <$> (runTransaction $ getTorrentById dat)
+          Html.mkVal <$> (runTransaction $ getTorrentById dat)
         "snips/redacted/getTorrentFile" -> h "/snips/redacted/getTorrentFile" $ \span -> do
           dat <- torrentIdMp span
           runTransaction $ do
@@ -449,7 +444,7 @@ renderJsonld = \case
       <dd><a href={obj.id_}>{obj.id_}</a></dd>
       <dt>Fields</dt>
       <dd>
-        {obj.previewFields & toDefinitionList schemaType renderJsonld}
+        {obj.previewFields & Html.toDefinitionList schemaType renderJsonld}
         <div>
           <button
             hx-get={snippetHref obj.id_}
@@ -474,8 +469,8 @@ renderJsonld = \case
       schemaType t =
         let href :: Text = [fmt|https://schema.org/{t}|] in [hsx|<a href={href} target="_blank">{t}</a>|]
   JsonldArray arr ->
-    toOrderedList renderJsonld arr
-  JsonldField f -> mkVal f
+    Html.toOrderedList renderJsonld arr
+  JsonldField f -> Html.mkVal f
 
 -- | A value between (inclusive) 0% and (inclusive) 100%. Precise to 1% steps.
 newtype Percentage = Percentage {unPercentage :: Int}
@@ -546,69 +541,13 @@ getTransmissionTorrentsTable = do
         Json.asObject <&> KeyMap.toMapText
     )
     <&> \resp ->
-      toTable
+      Html.toTable
         ( resp
             & List.sortOn (\m -> m & Map.lookup "percentDone" & fromMaybe (Json.Number 0))
             <&> Map.toList
             -- TODO
             & List.take 100
         )
-
--- | Render an arbitrary json value to HTML in a more-or-less reasonable fashion.
-mkVal :: Json.Value -> Html
-mkVal = \case
-  Json.Number n -> Html.toHtml @Text $ showToText n
-  Json.String s -> Html.toHtml @Text s
-  Json.Bool True -> [hsx|<em>true</em>|]
-  Json.Bool False -> [hsx|<em>false</em>|]
-  Json.Null -> [hsx|<em>null</em>|]
-  Json.Array arr -> toOrderedList mkVal arr
-  Json.Object obj ->
-    obj
-      & KeyMap.toMapText
-      & toDefinitionList (Html.toHtml @Text) mkVal
-
-toOrderedList :: (Foldable t1) => (t2 -> Html) -> t1 t2 -> Html
-toOrderedList mkValFn arr =
-  arr
-    & foldMap (\el -> Html.li $ mkValFn el)
-    & Html.ol
-
-toUnorderedList :: (Foldable t1) => (t2 -> Html) -> t1 t2 -> Html
-toUnorderedList mkValFn arr =
-  arr
-    & foldMap (\el -> Html.li $ mkValFn el)
-    & Html.ul
-
--- | Render a definition list from a Map
-toDefinitionList :: (Text -> Html) -> (t -> Html) -> Map Text t -> Html
-toDefinitionList mkKeyFn mkValFn obj =
-  obj
-    & Map.toList
-    & foldMap (\(k, v) -> Html.dt (mkKeyFn k) <> Html.dd (mkValFn v))
-    & Html.dl
-
--- | Render a table-like structure of json values as an HTML table.
-toTable :: [[(Text, Json.Value)]] -> Html
-toTable xs =
-  case xs & nonEmpty of
-    Nothing ->
-      [hsx|<p>No results.</p>|]
-    Just xs' -> do
-      let headers = xs' & NonEmpty.head <&> fst <&> (\h -> [hsx|<th>{h}</th>|]) & mconcat
-      let vals = xs' & foldMap (Html.tr . foldMap (Html.td . mkVal . snd))
-      [hsx|
-              <table class="table">
-                <thead>
-                  <tr>
-                  {headers}
-                  </tr>
-                </thead>
-                <tbody>
-                  {vals}
-                </tbody>
-              </table>
-          |]
 
 data TransmissionRequest = TransmissionRequest
   { method :: Text,
@@ -831,10 +770,10 @@ redactedGetTorrentFile dat = inSpan' "Redacted Get Torrent File" $ \span -> do
           (label @"action" "download")
           ( label @"actionArgs"
               [ ("id", Just (dat.torrentId & showToText @Int & textToBytesUtf8))
-                -- try using tokens as long as we have them (TODO: what if there’s no tokens left?
-                -- ANSWER: it breaks:
-                -- responseBody = "{\"status\":\"failure\",\"error\":\"You do not have any freeleech tokens left. Please use the regular DL link.\"}",
-                -- ("usetoken", Just "1")
+              -- try using tokens as long as we have them (TODO: what if there’s no tokens left?
+              -- ANSWER: it breaks:
+              -- responseBody = "{\"status\":\"failure\",\"error\":\"You do not have any freeleech tokens left. Please use the regular DL link.\"}",
+              -- ("usetoken", Just "1")
               ]
           )
       )
@@ -1262,16 +1201,6 @@ getBestTorrents = do
             }
     )
 
-inSpan :: (MonadUnliftIO m, Otel.MonadTracer m) => Text -> m a -> m a
-inSpan name = Otel.inSpan name Otel.defaultSpanArguments
-
-inSpan' :: (MonadUnliftIO m, Otel.MonadTracer m) => Text -> (Otel.Span -> m a) -> m a
-inSpan' name = Otel.inSpan' name Otel.defaultSpanArguments
-
-hush :: Either a1 a2 -> Maybe a2
-hush (Left _) = Nothing
-hush (Right a) = Just a
-
 -- | Do a request to the redacted API. If you know what that is, you know how to find the API docs.
 mkRedactedApiRequest ::
   ( MonadThrow m,
@@ -1404,11 +1333,6 @@ redactedApiRequestJson span dat parser =
     mkRedactedApiRequest dat
     >>= httpJson defaults span parser
 
-assertM :: (MonadThrow f, MonadIO f) => Otel.Span -> (t -> Either ErrorTree a) -> t -> f a
-assertM span f v = case f v of
-  Right a -> pure a
-  Left err -> appThrowTree span err
-
 runAppWith :: AppT IO a -> IO (Either TmpPg.StartError a)
 runAppWith appT = withTracer $ \tracer -> withDb $ \db -> do
   pgFormat <- readTools (label @"toolsEnvVar" "WHATCD_RESOLVER_TOOLS") (readTool "pg_format")
@@ -1469,71 +1393,6 @@ withDb act = do
     -- print [fmt|conn string: {db & TmpPg.toConnectionString}|]
     act db
 
-data Context = Context
-  { config :: Label "logDatabaseQueries" DebugLogDatabaseQueries,
-    tracer :: Otel.Tracer,
-    pgFormat :: Tool,
-    pgConnPool :: Pool Postgres.Connection,
-    transmissionSessionId :: MVar ByteString
-  }
-
-newtype AppT m a = AppT {unAppT :: ReaderT Context m a}
-  deriving newtype (Functor, Applicative, Monad, MonadIO, MonadUnliftIO, MonadThrow)
-
-data AppException = AppException Text
-  deriving stock (Show)
-  deriving anyclass (Exception)
-
--- | A specialized variant of @addEvent@ that records attributes conforming to
--- the OpenTelemetry specification's
--- <https://github.com/open-telemetry/opentelemetry-specification/blob/49c2f56f3c0468ceb2b69518bcadadd96e0a5a8b/specification/trace/semantic_conventions/exceptions.md semantic conventions>
---
--- @since 0.0.1.0
-recordException ::
-  ( MonadIO m,
-    HasField "message" r Text,
-    HasField "type_" r Text
-  ) =>
-  Otel.Span ->
-  r ->
-  m ()
-recordException span dat = liftIO $ do
-  callStack <- GHC.Stack.whoCreated dat.message
-  newEventTimestamp <- Just <$> Otel.getTimestamp
-  Otel.addEvent span $
-    Otel.NewEvent
-      { newEventName = "exception",
-        newEventAttributes =
-          HashMap.fromList
-            [ ("exception.type", Otel.toAttribute @Text dat.type_),
-              ("exception.message", Otel.toAttribute @Text dat.message),
-              ("exception.stacktrace", Otel.toAttribute @Text $ Text.unlines $ map stringToText callStack)
-            ],
-        ..
-      }
-
-appThrowTree :: (MonadThrow m, MonadIO m) => Otel.Span -> ErrorTree -> m a
-appThrowTree span exc = do
-  let msg = prettyErrorTree exc
-  recordException
-    span
-    ( T2
-        (label @"type_" "AppException")
-        (label @"message" msg)
-    )
-  throwM $ AppException msg
-
-orAppThrowTree :: (MonadThrow m, MonadIO m) => Otel.Span -> Either ErrorTree a -> m a
-orAppThrowTree span = \case
-  Left err -> appThrowTree span err
-  Right a -> pure a
-
-instance (MonadIO m) => MonadLogger (AppT m) where
-  monadLoggerLog loc src lvl msg = liftIO $ Logger.defaultOutput IO.stderr loc src lvl (Logger.toLogStr msg)
-
-instance (Monad m) => Otel.MonadTracer (AppT m) where
-  getTracer = AppT $ asks (.tracer)
-
 class MonadTransmission m where
   getTransmissionId :: m (Maybe ByteString)
   setTransmissionId :: ByteString -> m ()
@@ -1543,20 +1402,3 @@ instance (MonadIO m) => MonadTransmission (AppT m) where
   setTransmissionId t = do
     var <- AppT $ asks (.transmissionSessionId)
     putMVar var t
-
-instance (MonadThrow m, MonadUnliftIO m) => MonadPostgres (AppT m) where
-  execute = executeImpl (AppT ask) (AppT $ asks (.config.logDatabaseQueries))
-  execute_ = executeImpl_ (AppT ask) (AppT $ asks (.config.logDatabaseQueries))
-  executeMany = executeManyImpl (AppT ask) (AppT $ asks (.config.logDatabaseQueries))
-  executeManyReturningWith = executeManyReturningWithImpl (AppT ask) (AppT $ asks (.config.logDatabaseQueries))
-  queryWith = queryWithImpl (AppT ask) (AppT $ asks (.config.logDatabaseQueries))
-  queryWith_ = queryWithImpl_ (AppT ask)
-  foldRows = foldRowsImpl (AppT ask)
-  runTransaction = runPGTransaction
-
-runPGTransaction :: (MonadUnliftIO m) => Transaction (AppT m) a -> AppT m a
-runPGTransaction (Transaction transaction) = do
-  pool <- AppT ask <&> (.pgConnPool)
-  withRunInIO $ \unliftIO ->
-    withPGTransaction pool $ \conn -> do
-      unliftIO $ runReaderT transaction conn
