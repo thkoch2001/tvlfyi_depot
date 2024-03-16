@@ -30,11 +30,11 @@ let
 in
 depot.nix.writeExecline "httzip-wrapped" { } [
   "importas"
-  "-ui"
+  "-i"
   "PATH"
   "PATH"
   "export"
   "PATH"
-  "${pkgs.zip}/bin"
+  "${pkgs.zip}/bin:$${PATH}"
   bins.httzip
 ]
