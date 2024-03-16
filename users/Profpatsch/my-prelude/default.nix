@@ -28,6 +28,7 @@ pkgs.haskellPackages.mkDerivation {
     pkgs.haskellPackages.pa-pretty
     pkgs.haskellPackages.pa-field-parser
     pkgs.haskellPackages.aeson-better-errors
+    pkgs.haskellPackages.foldl
     pkgs.haskellPackages.resource-pool
     pkgs.haskellPackages.error
     pkgs.haskellPackages.hs-opentelemetry-api

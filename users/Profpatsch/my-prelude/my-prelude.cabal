@@ -48,6 +48,8 @@ common common-options
     -- to enable the `type` keyword in import lists (ormolu uses this automatically)
     ExplicitNamespaces
 
+    -- allows defining pattern synonyms, but also the `import Foo (pattern FooPattern)` import syntax
+    PatternSynonyms
   default-language: GHC2021
 
 
@@ -83,6 +85,7 @@ library
      , aeson-better-errors
      , bytestring
      , containers
+     , foldl
      , unordered-containers
      , resource-pool
      , resourcet
@@ -101,9 +104,11 @@ library
      , PyF
      , semigroupoids
      , selective
+     , template-haskell
      , text
      , these
      , unix
      , unliftio
      , validation-selective
      , vector
+     , ghc-boot
