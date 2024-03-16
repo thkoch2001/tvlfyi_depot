@@ -6,6 +6,7 @@ import Control.Monad.Logger qualified as Logger
 import Control.Monad.Logger.CallStack
 import Control.Monad.Reader
 import Data.Error.Tree
+import Data.HashMap.Strict (HashMap)
 import Data.HashMap.Strict qualified as HashMap
 import Data.Pool (Pool)
 import Data.Text qualified as Text
@@ -45,11 +46,25 @@ instance (MonadIO m) => MonadLogger (AppT m) where
 instance (Monad m) => Otel.MonadTracer (AppT m) where
   getTracer = AppT $ asks (.tracer)
 
-inSpan :: (MonadUnliftIO m, Otel.MonadTracer m) => Text -> m a -> m a
+class (MonadUnliftIO m, Otel.MonadTracer m) => MonadOtel m
+
+instance (MonadUnliftIO m) => MonadOtel (AppT m)
+
+instance (MonadOtel m) => MonadOtel (Transaction m)
+
+inSpan :: (MonadOtel m) => Text -> m a -> m a
 inSpan name = Otel.inSpan name Otel.defaultSpanArguments
 
-inSpan' :: (MonadUnliftIO m, Otel.MonadTracer m) => Text -> (Otel.Span -> m a) -> m a
+inSpan' :: (MonadOtel m) => Text -> (Otel.Span -> m a) -> m a
 inSpan' name = Otel.inSpan' name Otel.defaultSpanArguments
+
+-- | Add the attribute to the span, prefixing it with the `_` namespace (to easier distinguish our application’s tags from standard tags)
+addAttribute :: (MonadIO m, Otel.ToAttribute a) => Otel.Span -> Text -> a -> m ()
+addAttribute span key a = Otel.addAttribute span ("_." <> key) a
+
+-- | Add the attributes to the span, prefixing each key with the `_` namespace (to easier distinguish our application’s tags from standard tags)
+addAttributes :: (MonadIO m) => Otel.Span -> HashMap Text Otel.Attribute -> m ()
+addAttributes span attrs = Otel.addAttributes span $ attrs & HashMap.mapKeys ("_." <>)
 
 appThrowTree :: (MonadThrow m, MonadIO m) => Otel.Span -> ErrorTree -> m a
 appThrowTree span exc = do
