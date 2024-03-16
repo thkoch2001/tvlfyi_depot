@@ -11,6 +11,8 @@ let
       ./whatcd-resolver.cabal
       ./Main.hs
       ./src/WhatcdResolver.hs
+      ./src/AppT.hs
+      ./src/Html.hs
     ];
 
     libraryHaskellDepends = [
