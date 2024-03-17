@@ -11,6 +11,8 @@ rec {
   };
 
   # A kernel with virtiofs support baked in
+  # TODO: make a smaller kernel, we don't need a gazillion filesystems and
+  # device drivers in it.
   kernel = pkgs.buildLinux ({ } // {
     inherit (pkgs.linuxPackages_latest.kernel) src version modDirVersion;
     autoModules = false;
