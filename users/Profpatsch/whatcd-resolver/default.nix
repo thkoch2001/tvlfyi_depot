@@ -12,7 +12,8 @@ let
       ./Main.hs
       ./src/WhatcdResolver.hs
       ./src/AppT.hs
-      ./src/Html.hs
+      ./src/Transmission.hs
+      ./src/Redacted.hs
     ];
 
     libraryHaskellDepends = [
@@ -23,7 +24,6 @@ let
       pkgs.haskellPackages.pa-json
       pkgs.haskellPackages.pa-error-tree
       pkgs.haskellPackages.pa-field-parser
-      pkgs.haskellPackages.pa-pretty
       pkgs.haskellPackages.pa-run-command
       pkgs.haskellPackages.aeson-better-errors
       pkgs.haskellPackages.blaze-html
@@ -40,6 +40,7 @@ let
       pkgs.haskellPackages.unliftio
       pkgs.haskellPackages.wai-extra
       pkgs.haskellPackages.warp
+      pkgs.haskellPackages.punycode
     ];
 
     isExecutable = true;
