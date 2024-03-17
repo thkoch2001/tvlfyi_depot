@@ -30,6 +30,13 @@ depot.nix.readTree.drvTargets rec {
       device = "/dev/disk/by-partlabel/root";
       fsType = "xfs";
     };
+
+    # Enable pipewire and wireplumber.
+    services.pipewire = {
+      enable = true;
+      wireplumber.enable = true;
+    };
+
     # Shut off the warning.
     system.stateVersion = "24.05";
   });
