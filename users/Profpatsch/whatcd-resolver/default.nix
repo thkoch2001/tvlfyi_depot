@@ -12,6 +12,7 @@ let
       ./Main.hs
       ./src/WhatcdResolver.hs
       ./src/AppT.hs
+      ./src/JsonLd.hs
       ./src/Html.hs
       ./src/Transmission.hs
       ./src/Redacted.hs

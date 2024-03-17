@@ -65,6 +65,7 @@ library
     exposed-modules:
        WhatcdResolver
        AppT
+       JsonLd
        Html
        Transmission
        Redacted
