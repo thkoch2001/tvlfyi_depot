@@ -1,7 +1,7 @@
-From e03beabbad83c4c283c7f1c2c4798b6c3e2eaf06 Mon Sep 17 00:00:00 2001
+From e9580d30a1a79fce1ebd72ae74ceb4a3d1cf8fbb Mon Sep 17 00:00:00 2001
 From: Hans de Goede <hdegoede@redhat.com>
 Date: Tue, 19 Dec 2023 11:16:26 +0100
-Subject: [PATCH 20/25] libcamera: Add support for IGIG_GBGR_IGIG_GRGB bayer
+Subject: [PATCH 16/21] libcamera: Add support for IGIG_GBGR_IGIG_GRGB bayer
  order DNU
 
 The ov01a1s sensor has the following bayer pattern (4x4 tile repeating):
@@ -233,5 +233,5 @@ index 15e8206a..4ad37aaf 100644
  	{ MEDIA_BUS_FMT_SGBRG12_1X12, { 12, "SGBRG12_1X12", PixelFormatInfo::ColourEncodingRAW } },
  	{ MEDIA_BUS_FMT_SGRBG12_1X12, { 12, "SGRBG12_1X12", PixelFormatInfo::ColourEncodingRAW } },
 -- 
-2.43.0
+2.43.2
 
