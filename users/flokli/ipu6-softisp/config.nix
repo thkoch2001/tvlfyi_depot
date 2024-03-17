@@ -62,6 +62,13 @@ in
     KERNEL=="system", SUBSYSTEM=="dma_heap", TAG+="uaccess"
   '';
 
+  # provide qcam in $PATH.
+  environment.systemPackages = [
+    (libcamera.override {
+      withQcam = true;
+    })
+  ];
+
   services.pipewire.package = pipewire';
   services.pipewire.wireplumber.package = wireplumber';
 }
