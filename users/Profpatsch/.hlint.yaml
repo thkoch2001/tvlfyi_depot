@@ -125,11 +125,11 @@
       message: "`void` leads to bugs. Use an explicit `_ <- …` instead"
 
     - name: Data.Foldable.length
-      within: []
+      within: ["MyPrelude"]
       message: "`Data.Foldable.length` is dangerous to use, because it also works on types you wouldn’t expect, like `length (3,4) == 1` and `length (Just 2) == 1`. Use the `length` function for your specific type instead, for example `List.length` or `Map.length`."
 
     - name: Prelude.length
-      within: [MyPrelude]
+      within: ["MyPrelude"]
       message: "`Prelude.length` is dangerous to use, because it also works on types you wouldn’t expect, like `length (3,4) == 1` and `length (Just 2) == 1`. Use the `length` function for your specific type instead, for example `List.length` or `Map.length`."
 
     # Using an explicit lambda with its argument “underscored”
