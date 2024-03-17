@@ -1,41 +1,70 @@
-From ad61052d9aea1f1af6aaef9ce7e5d447c595187c Mon Sep 17 00:00:00 2001
+From d64b0fca22ef25b8a14d7fc97dfab64eb1c4f21a Mon Sep 17 00:00:00 2001
 From: Andrey Konovalov <andrey.konovalov@linaro.org>
-Date: Tue, 12 Dec 2023 02:02:37 +0300
-Subject: [PATCH 15/25] libcamera: pipeline: simple: enable use of Soft ISP and
+Date: Mon, 11 Mar 2024 15:15:16 +0100
+Subject: [PATCH 12/21] libcamera: pipeline: simple: enable use of Soft ISP and
  Soft IPA
 
 To enable the Simple Soft ISP and Soft IPA for simple pipeline handler
 configure the build with:
-  -Dpipelines=simple/simple -Dipas=simple/simple
+  -Dpipelines=simple -Dipas=simple
+
+Also using the Soft ISP for the particular hardware platform must
+be enabled in the supportedDevices[] table.
 
 If the pipeline uses Converter, Soft ISP and Soft IPA aren't
 available.
 
-Configuring the build with just:
-  -Dpipelines=simple
-makes it to work like before - Soft ISP and Soft IPA aren't used.
-
-Signed-off-by: Andrey Konovalov <andrey.konovalov@linaro.org>
-Signed-off-by: Hans de Goede <hdegoede@redhat.com>
 Tested-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org> # sc8280xp Lenovo x13s
 Tested-by: Pavel Machek <pavel@ucw.cz>
+Reviewed-by: Pavel Machek <pavel@ucw.cz>
+Signed-off-by: Andrey Konovalov <andrey.konovalov@linaro.org>
+Signed-off-by: Hans de Goede <hdegoede@redhat.com>
 ---
- src/libcamera/pipeline/simple/simple.cpp | 111 ++++++++++++++++++-----
- 1 file changed, 89 insertions(+), 22 deletions(-)
+ src/libcamera/pipeline/simple/simple.cpp | 137 ++++++++++++++++++-----
+ 1 file changed, 109 insertions(+), 28 deletions(-)
 
 diff --git a/src/libcamera/pipeline/simple/simple.cpp b/src/libcamera/pipeline/simple/simple.cpp
-index fa298746..c76510c2 100644
+index 78854ef8..c3ebb7b7 100644
 --- a/src/libcamera/pipeline/simple/simple.cpp
 +++ b/src/libcamera/pipeline/simple/simple.cpp
 @@ -34,6 +34,7 @@
  #include "libcamera/internal/device_enumerator.h"
  #include "libcamera/internal/media_device.h"
  #include "libcamera/internal/pipeline_handler.h"
-+#include "libcamera/internal/software_isp.h"
++#include "libcamera/internal/software_isp/software_isp.h"
  #include "libcamera/internal/v4l2_subdevice.h"
  #include "libcamera/internal/v4l2_videodevice.h"
  
-@@ -274,6 +275,7 @@ public:
+@@ -185,17 +186,22 @@ struct SimplePipelineInfo {
+ 	 * and the number of streams it supports.
+ 	 */
+ 	std::vector<std::pair<const char *, unsigned int>> converters;
++	/*
++	 * Using Software ISP is to be enabled per driver.
++	 * The Software ISP can't be used together with the converters.
++	 */
++	bool swIspEnabled;
+ };
+ 
+ namespace {
+ 
+ static const SimplePipelineInfo supportedDevices[] = {
+-	{ "dcmipp", {} },
+-	{ "imx7-csi", { { "pxp", 1 } } },
+-	{ "j721e-csi2rx", {} },
+-	{ "mxc-isi", {} },
+-	{ "qcom-camss", {} },
+-	{ "sun6i-csi", {} },
++	{ "dcmipp", {}, false },
++	{ "imx7-csi", { { "pxp", 1 } }, false },
++	{ "j721e-csi2rx", {}, false },
++	{ "mxc-isi", {}, false },
++	{ "qcom-camss", {}, true },
++	{ "sun6i-csi", {}, false },
+ };
+ 
+ } /* namespace */
+@@ -274,6 +280,7 @@ public:
  	bool useConversion_;
  
  	std::unique_ptr<Converter> converter_;
@@ -43,7 +72,7 @@ index fa298746..c76510c2 100644
  
  private:
  	void tryPipeline(unsigned int code, const Size &size);
-@@ -281,6 +283,9 @@ private:
+@@ -281,6 +288,9 @@ private:
  
  	void conversionInputDone(FrameBuffer *buffer);
  	void conversionOutputDone(FrameBuffer *buffer);
@@ -53,58 +82,79 @@ index fa298746..c76510c2 100644
  };
  
  class SimpleCameraConfiguration : public CameraConfiguration
-@@ -509,6 +514,25 @@ int SimpleCameraData::init()
+@@ -332,6 +342,7 @@ public:
+ 	V4L2VideoDevice *video(const MediaEntity *entity);
+ 	V4L2Subdevice *subdev(const MediaEntity *entity);
+ 	MediaDevice *converter() { return converter_; }
++	bool swIspEnabled() { return swIspEnabled_; }
+ 
+ protected:
+ 	int queueRequestDevice(Camera *camera, Request *request) override;
+@@ -360,6 +371,7 @@ private:
+ 	std::map<const MediaEntity *, EntityData> entities_;
+ 
+ 	MediaDevice *converter_;
++	bool swIspEnabled_;
+ };
+ 
+ /* -----------------------------------------------------------------------------
+@@ -509,6 +521,29 @@ int SimpleCameraData::init()
  		}
  	}
  
 +	/*
-+	 * Create SoftwareIsp unconditionally if no converter is used
-+	 * - to be revisited
++	 * Instantiate Soft ISP if this is enabled for the given driver and no converter is used.
 +	 */
-+	if (!converter_) {
-+		swIsp_ = SoftwareIspFactoryBase::create(pipe, sensor_->controls());
-+		if (!swIsp_) {
++	if (!converter_ && pipe->swIspEnabled()) {
++		swIsp_ = std::make_unique<SoftwareIsp>(pipe, sensor_->controls());
++		if (!swIsp_->isValid()) {
 +			LOG(SimplePipeline, Warning)
 +				<< "Failed to create software ISP, disabling software debayering";
 +			swIsp_.reset();
 +		} else {
-+			swIsp_->inputBufferReady.connect(this, &SimpleCameraData::conversionInputDone);
++			/*
++			 * \todo explain why SimpleCameraData::conversionInputDone() can't be directly
++			 * connected to inputBufferReady signal.
++			 */
++			swIsp_->inputBufferReady.connect(pipe, [this](FrameBuffer *buffer) {
++				this->conversionInputDone(buffer);
++			});
 +			swIsp_->outputBufferReady.connect(this, &SimpleCameraData::conversionOutputDone);
 +			swIsp_->ispStatsReady.connect(this, &SimpleCameraData::ispStatsReady);
-+
-+			swIsp_->getSignalSetSensorControls().connect(this, &SimpleCameraData::setSensorControls);
++			swIsp_->setSensorControls.connect(this, &SimpleCameraData::setSensorControls);
 +		}
 +	}
 +
  	video_ = pipe->video(entities_.back().entity);
  	ASSERT(video_);
  
-@@ -599,12 +623,20 @@ void SimpleCameraData::tryPipeline(unsigned int code, const Size &size)
+@@ -599,12 +634,21 @@ void SimpleCameraData::tryPipeline(unsigned int code, const Size &size)
  		config.captureFormat = pixelFormat;
  		config.captureSize = format.size;
  
 -		if (!converter_) {
--			config.outputFormats = { pixelFormat };
--			config.outputSizes = config.captureSize;
--		} else {
++
 +		if (converter_) {
- 			config.outputFormats = converter_->formats(pixelFormat);
- 			config.outputSizes = converter_->sizes(format.size);
++ 			config.outputFormats = converter_->formats(pixelFormat);
++ 			config.outputSizes = converter_->sizes(format.size);
 +		} else if (swIsp_) {
 +			config.outputFormats = swIsp_->formats(pixelFormat);
 +			config.outputSizes = swIsp_->sizes(pixelFormat, format.size);
 +			if (config.outputFormats.empty()) {
-+				/* Do not use swIsp for unsupported pixelFormat's */
++				/* Do not use swIsp for unsupported pixelFormat's: */
 +				config.outputFormats = { pixelFormat };
 +				config.outputSizes = config.captureSize;
 +			}
 +		} else {
-+			config.outputFormats = { pixelFormat };
-+			config.outputSizes = config.captureSize;
+ 			config.outputFormats = { pixelFormat };
+ 			config.outputSizes = config.captureSize;
+-		} else {
+-			config.outputFormats = converter_->formats(pixelFormat);
+-			config.outputSizes = converter_->sizes(format.size);
  		}
  
  		configs_.push_back(config);
-@@ -750,9 +782,9 @@ void SimpleCameraData::bufferReady(FrameBuffer *buffer)
+@@ -750,9 +794,9 @@ void SimpleCameraData::bufferReady(FrameBuffer *buffer)
  		}
  
  		/*
@@ -117,7 +167,7 @@ index fa298746..c76510c2 100644
  		 */
  		if (buffer->metadata().status != FrameMetadata::FrameCancelled)
  			video_->queueBuffer(buffer);
-@@ -798,9 +830,9 @@ void SimpleCameraData::bufferReady(FrameBuffer *buffer)
+@@ -798,9 +842,9 @@ void SimpleCameraData::bufferReady(FrameBuffer *buffer)
  					buffer->metadata().timestamp);
  
  	/*
@@ -130,7 +180,7 @@ index fa298746..c76510c2 100644
  	 */
  	if (useConversion_) {
  		if (conversionQueue_.empty()) {
-@@ -808,7 +840,11 @@ void SimpleCameraData::bufferReady(FrameBuffer *buffer)
+@@ -808,7 +852,11 @@ void SimpleCameraData::bufferReady(FrameBuffer *buffer)
  			return;
  		}
  
@@ -143,7 +193,7 @@ index fa298746..c76510c2 100644
  		conversionQueue_.pop();
  		return;
  	}
-@@ -834,6 +870,18 @@ void SimpleCameraData::conversionOutputDone(FrameBuffer *buffer)
+@@ -834,6 +882,18 @@ void SimpleCameraData::conversionOutputDone(FrameBuffer *buffer)
  		pipe->completeRequest(request);
  }
  
@@ -162,7 +212,7 @@ index fa298746..c76510c2 100644
  /* Retrieve all source pads connected to a sink pad through active routes. */
  std::vector<const MediaPad *> SimpleCameraData::routedSourcePads(MediaPad *sink)
  {
-@@ -1016,8 +1064,10 @@ CameraConfiguration::Status SimpleCameraConfiguration::validate()
+@@ -1046,8 +1106,10 @@ CameraConfiguration::Status SimpleCameraConfiguration::validate()
  		/* Set the stride, frameSize and bufferCount. */
  		if (needConversion_) {
  			std::tie(cfg.stride, cfg.frameSize) =
@@ -175,7 +225,7 @@ index fa298746..c76510c2 100644
  			if (cfg.stride == 0)
  				return Invalid;
  		} else {
-@@ -1180,7 +1230,9 @@ int SimplePipelineHandler::configure(Camera *camera, CameraConfiguration *c)
+@@ -1210,7 +1272,9 @@ int SimplePipelineHandler::configure(Camera *camera, CameraConfiguration *c)
  	inputCfg.stride = captureFormat.planes[0].bpl;
  	inputCfg.bufferCount = kNumInternalBuffers;
  
@@ -186,7 +236,7 @@ index fa298746..c76510c2 100644
  }
  
  int SimplePipelineHandler::exportFrameBuffers(Camera *camera, Stream *stream,
-@@ -1194,8 +1246,10 @@ int SimplePipelineHandler::exportFrameBuffers(Camera *camera, Stream *stream,
+@@ -1224,8 +1288,10 @@ int SimplePipelineHandler::exportFrameBuffers(Camera *camera, Stream *stream,
  	 * whether the converter is used or not.
  	 */
  	if (data->useConversion_)
@@ -199,7 +249,7 @@ index fa298746..c76510c2 100644
  	else
  		return data->video_->exportBuffers(count, buffers);
  }
-@@ -1240,10 +1294,18 @@ int SimplePipelineHandler::start(Camera *camera, [[maybe_unused]] const ControlL
+@@ -1270,10 +1336,18 @@ int SimplePipelineHandler::start(Camera *camera, [[maybe_unused]] const ControlL
  	}
  
  	if (data->useConversion_) {
@@ -222,7 +272,7 @@ index fa298746..c76510c2 100644
  		}
  
  		/* Queue all internal buffers for capture. */
-@@ -1259,8 +1321,13 @@ void SimplePipelineHandler::stopDevice(Camera *camera)
+@@ -1289,8 +1363,13 @@ void SimplePipelineHandler::stopDevice(Camera *camera)
  	SimpleCameraData *data = cameraData(camera);
  	V4L2VideoDevice *video = data->video_;
  
@@ -238,6 +288,15 @@ index fa298746..c76510c2 100644
  
  	video->streamOff();
  	video->releaseBuffers();
+@@ -1452,6 +1531,8 @@ bool SimplePipelineHandler::match(DeviceEnumerator *enumerator)
+ 		}
+ 	}
+ 
++  swIspEnabled_ = info->swIspEnabled;
++
+ 	/* Locate the sensors. */
+ 	std::vector<MediaEntity *> sensors = locateSensors();
+ 	if (sensors.empty()) {
 -- 
-2.43.0
+2.43.2
 

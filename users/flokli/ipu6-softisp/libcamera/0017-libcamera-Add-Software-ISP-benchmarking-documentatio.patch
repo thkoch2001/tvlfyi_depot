@@ -1,14 +1,16 @@
-From 26e96232c314f9d34f6ee3be365c04918967084e Mon Sep 17 00:00:00 2001
+From 6c509a3d144d46a11454d32d128d16e16602b50f Mon Sep 17 00:00:00 2001
 From: Hans de Goede <hdegoede@redhat.com>
-Date: Mon, 22 Jan 2024 17:18:00 +0100
-Subject: [PATCH 23/25] libcamera: Add "Software ISP benchmarking"
+Date: Mon, 11 Mar 2024 15:15:20 +0100
+Subject: [PATCH 17/21] libcamera: Add "Software ISP benchmarking"
  documentation
 
 Add a "Software ISP benchmarking" documentation section which describes
 the performance/power consumption measurements used during
 the Software ISP's development.
 
+Reviewed-by: Milan Zamazal <mzamazal@redhat.com>
 Signed-off-by: Hans de Goede <hdegoede@redhat.com>
+Reviewed-by: Stefan Klug <stefan.klug@ideasonboard.com>
 ---
  Documentation/index.rst                     |  1 +
  Documentation/meson.build                   |  1 +
@@ -39,7 +41,7 @@ index 7a58fec8..3872e0a8 100644
  
 diff --git a/Documentation/software-isp-benchmarking.rst b/Documentation/software-isp-benchmarking.rst
 new file mode 100644
-index 00000000..738c8c65
+index 00000000..b2803953
 --- /dev/null
 +++ b/Documentation/software-isp-benchmarking.rst
 @@ -0,0 +1,82 @@
@@ -50,8 +52,8 @@ index 00000000..738c8c65
 +Software ISP benchmarking
 +=========================
 +
-+The Software ISP is paricular sensitive to performance regressions
-+therefor it is a good idea to always benchmark the Software ISP
++The Software ISP is particularly sensitive to performance regressions
++therefore it is a good idea to always benchmark the Software ISP
 +before and after making changes to it and ensure that there are
 +no performance regressions.
 +
@@ -59,8 +61,8 @@ index 00000000..738c8c65
 +----------------------------------
 +
 +The DebayerCpu class has a builtin benchmark. This benchmark
-+measures the time spend on processing (collecting statistics
-+and debayering) only, it does not measure the time spend on
++measures the time spent on processing (collecting statistics
++and debayering) only, it does not measure the time spent on
 +capturing or outputting the frames.
 +
 +The builtin benchmark always runs. So this can be used by simply
@@ -71,7 +73,7 @@ index 00000000..738c8c65
 +and then it measures 30 fps and shows the total and per frame
 +processing time using an info level log message:
 +
-+.. code-block::
++.. code-block:: text
 +
 +   INFO Debayer debayer_cpu.cpp:907 Processed 30 frames in 244317us, 8143 us/frame
 +
@@ -83,7 +85,7 @@ index 00000000..738c8c65
 +For example when benchmarking on a Lenovo ThinkPad X1 Yoga Gen 8, with
 +the charger plugged in, the CPU can be fixed to run at 2 GHz using:
 +
-+.. code-block::
++.. code-block:: shell
 +
 +   sudo x86_energy_perf_policy --turbo-enable 0
 +   sudo cpupower frequency-set -d 2GHz -u 2GHz
@@ -107,14 +109,14 @@ index 00000000..738c8c65
 +so that it is fully visible. After this run the following command to monitor
 +the power consumption:
 +
-+.. code-block::
++.. code-block:: shell
 +
 +   watch -n 10 cat /sys/class/power_supply/BAT0/power_now /sys/class/hwmon/hwmon6/fan?_input
 +
-+Note this not only measures the power consumption in ųW it also monitors
++Note this not only measures the power consumption in µW it also monitors
 +the speed of this laptop's 2 fans. This is important because depending on
 +the ambient temperature the 2 fans may spin up while testing and this
-+will cause an additional power consumption of approx. 0.5W messing up
++will cause an additional power consumption of approx. 0.5 W messing up
 +the measurement.
 +
 +After starting qcam + the watch command let the laptop sit without using
@@ -123,8 +125,8 @@ index 00000000..738c8c65
 +and avarage these.
 +
 +On the example Lenovo ThinkPad X1 Yoga Gen 8 laptop this results in
-+a measured power consumption of approx. 13W while running qcam versus
-+approx. 4-5W while setting idle with its OLED panel on.
++a measured power consumption of approx. 13 W while running qcam versus
++approx. 4-5 W while setting idle with its OLED panel on.
 -- 
-2.43.0
+2.43.2
 

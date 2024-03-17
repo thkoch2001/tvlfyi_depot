@@ -1,7 +1,7 @@
-From 155065b3d78c14173fd71c21fe0639f94c3da109 Mon Sep 17 00:00:00 2001
+From 050440eed6ab90686df217f5ff7dea0b241e3898 Mon Sep 17 00:00:00 2001
 From: Andrey Konovalov <andrey.konovalov@linaro.org>
-Date: Fri, 1 Dec 2023 15:45:14 +0300
-Subject: [PATCH 14/25] libcamera: pipeline: simple: rename converterBuffers_
+Date: Mon, 11 Mar 2024 15:15:15 +0100
+Subject: [PATCH 11/21] libcamera: pipeline: simple: rename converterBuffers_
  and related vars
 
 The converterBuffers_ and the converterQueue_ are not that specific
@@ -12,16 +12,18 @@ Rename converterBuffers_, converterQueue_, and useConverter_ to
 conversionBuffers_, conversionQueue_ and useConversion_ to
 disassociate them from the Converter.
 
-Signed-off-by: Andrey Konovalov <andrey.konovalov@linaro.org>
-Signed-off-by: Hans de Goede <hdegoede@redhat.com>
 Tested-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org> # sc8280xp Lenovo x13s
 Tested-by: Pavel Machek <pavel@ucw.cz>
+Reviewed-by: Kieran Bingham <kieran.bingham@ideasonboard.com>
+Reviewed-by: Pavel Machek <pavel@ucw.cz>
+Signed-off-by: Andrey Konovalov <andrey.konovalov@linaro.org>
+Signed-off-by: Hans de Goede <hdegoede@redhat.com>
 ---
  src/libcamera/pipeline/simple/simple.cpp | 63 ++++++++++++------------
  1 file changed, 32 insertions(+), 31 deletions(-)
 
 diff --git a/src/libcamera/pipeline/simple/simple.cpp b/src/libcamera/pipeline/simple/simple.cpp
-index 4d0e7255..fa298746 100644
+index a84f6760..78854ef8 100644
 --- a/src/libcamera/pipeline/simple/simple.cpp
 +++ b/src/libcamera/pipeline/simple/simple.cpp
 @@ -269,17 +269,18 @@ public:
@@ -135,7 +137,7 @@ index 4d0e7255..fa298746 100644
  {
  	SimplePipelineHandler *pipe = SimpleCameraData::pipe();
  
-@@ -1159,14 +1160,14 @@ int SimplePipelineHandler::configure(Camera *camera, CameraConfiguration *c)
+@@ -1189,14 +1190,14 @@ int SimplePipelineHandler::configure(Camera *camera, CameraConfiguration *c)
  
  	/* Configure the converter if needed. */
  	std::vector<std::reference_wrapper<StreamConfiguration>> outputCfgs;
@@ -152,7 +154,7 @@ index 4d0e7255..fa298746 100644
  			outputCfgs.push_back(cfg);
  	}
  
-@@ -1192,7 +1193,7 @@ int SimplePipelineHandler::exportFrameBuffers(Camera *camera, Stream *stream,
+@@ -1222,7 +1223,7 @@ int SimplePipelineHandler::exportFrameBuffers(Camera *camera, Stream *stream,
  	 * Export buffers on the converter or capture video node, depending on
  	 * whether the converter is used or not.
  	 */
@@ -161,7 +163,7 @@ index 4d0e7255..fa298746 100644
  		return data->converter_->exportBuffers(data->streamIndex(stream),
  						       count, buffers);
  	else
-@@ -1213,13 +1214,13 @@ int SimplePipelineHandler::start(Camera *camera, [[maybe_unused]] const ControlL
+@@ -1243,13 +1244,13 @@ int SimplePipelineHandler::start(Camera *camera, [[maybe_unused]] const ControlL
  		return -EBUSY;
  	}
  
@@ -177,7 +179,7 @@ index 4d0e7255..fa298746 100644
  	} else {
  		/* Otherwise, prepare for using buffers from the only stream. */
  		Stream *stream = &data->streams_[0];
-@@ -1238,7 +1239,7 @@ int SimplePipelineHandler::start(Camera *camera, [[maybe_unused]] const ControlL
+@@ -1268,7 +1269,7 @@ int SimplePipelineHandler::start(Camera *camera, [[maybe_unused]] const ControlL
  		return ret;
  	}
  
@@ -186,7 +188,7 @@ index 4d0e7255..fa298746 100644
  		ret = data->converter_->start();
  		if (ret < 0) {
  			stop(camera);
-@@ -1246,7 +1247,7 @@ int SimplePipelineHandler::start(Camera *camera, [[maybe_unused]] const ControlL
+@@ -1276,7 +1277,7 @@ int SimplePipelineHandler::start(Camera *camera, [[maybe_unused]] const ControlL
  		}
  
  		/* Queue all internal buffers for capture. */
@@ -195,7 +197,7 @@ index 4d0e7255..fa298746 100644
  			video->queueBuffer(buffer.get());
  	}
  
-@@ -1258,7 +1259,7 @@ void SimplePipelineHandler::stopDevice(Camera *camera)
+@@ -1288,7 +1289,7 @@ void SimplePipelineHandler::stopDevice(Camera *camera)
  	SimpleCameraData *data = cameraData(camera);
  	V4L2VideoDevice *video = data->video_;
  
@@ -204,7 +206,7 @@ index 4d0e7255..fa298746 100644
  		data->converter_->stop();
  
  	video->streamOff();
-@@ -1266,7 +1267,7 @@ void SimplePipelineHandler::stopDevice(Camera *camera)
+@@ -1296,7 +1297,7 @@ void SimplePipelineHandler::stopDevice(Camera *camera)
  
  	video->bufferReady.disconnect(data, &SimpleCameraData::bufferReady);
  
@@ -213,7 +215,7 @@ index 4d0e7255..fa298746 100644
  
  	releasePipeline(data);
  }
-@@ -1284,7 +1285,7 @@ int SimplePipelineHandler::queueRequestDevice(Camera *camera, Request *request)
+@@ -1314,7 +1315,7 @@ int SimplePipelineHandler::queueRequestDevice(Camera *camera, Request *request)
  		 * queue, it will be handed to the converter in the capture
  		 * completion handler.
  		 */
@@ -222,7 +224,7 @@ index 4d0e7255..fa298746 100644
  			buffers.emplace(data->streamIndex(stream), buffer);
  		} else {
  			ret = data->video_->queueBuffer(buffer);
-@@ -1293,8 +1294,8 @@ int SimplePipelineHandler::queueRequestDevice(Camera *camera, Request *request)
+@@ -1323,8 +1324,8 @@ int SimplePipelineHandler::queueRequestDevice(Camera *camera, Request *request)
  		}
  	}
  
@@ -234,5 +236,5 @@ index 4d0e7255..fa298746 100644
  	return 0;
  }
 -- 
-2.43.0
+2.43.2
 

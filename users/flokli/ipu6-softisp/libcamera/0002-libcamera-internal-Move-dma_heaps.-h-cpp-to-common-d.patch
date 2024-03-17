@@ -1,7 +1,7 @@
-From ca3bcfde49f069a85f7860f61d8c3bd196f97139 Mon Sep 17 00:00:00 2001
+From 96e50c6a43352a9cb81d558fea27e580f2b26585 Mon Sep 17 00:00:00 2001
 From: Andrey Konovalov <andrey.konovalov@linaro.org>
-Date: Tue, 26 Dec 2023 16:55:08 +0300
-Subject: [PATCH 02/25] libcamera: internal: Move dma_heaps.[h,cpp] to common
+Date: Mon, 11 Mar 2024 15:15:06 +0100
+Subject: [PATCH 02/21] libcamera: internal: Move dma_heaps.[h, cpp] to common
  directories
 
 DmaHeap class is useful outside the RPi pipeline handler too.
@@ -9,20 +9,26 @@ DmaHeap class is useful outside the RPi pipeline handler too.
 Move dma_heaps.h and dma_heaps.cpp to common directories. Update
 the build files and RPi vc4 pipeline handler accordingly.
 
-Signed-off-by: Andrey Konovalov <andrey.konovalov@linaro.org>
-Signed-off-by: Hans de Goede <hdegoede@redhat.com>
 Tested-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org> # sc8280xp Lenovo x13s
 Tested-by: Pavel Machek <pavel@ucw.cz>
+Reviewed-by: Kieran Bingham <kieran.bingham@ideasonboard.com>
+Reviewed-by: Naushir Patuck <naush@raspberrypi.com>
+Reviewed-by: Pavel Machek <pavel@ucw.cz>
+Signed-off-by: Andrey Konovalov <andrey.konovalov@linaro.org>
+Signed-off-by: Hans de Goede <hdegoede@redhat.com>
+Reviewed-by: Milan Zamazal <mzamazal@redhat.com>
 ---
- .../libcamera/internal}/dma_heaps.h            |  4 ----
- include/libcamera/internal/meson.build         |  1 +
- .../{pipeline/rpi/vc4 => }/dma_heaps.cpp       | 18 +++++++-----------
- src/libcamera/meson.build                      |  1 +
- src/libcamera/pipeline/rpi/vc4/meson.build     |  1 -
- src/libcamera/pipeline/rpi/vc4/vc4.cpp         |  5 ++---
- 6 files changed, 11 insertions(+), 19 deletions(-)
+ .../libcamera/internal}/dma_heaps.h           |   4 -
+ include/libcamera/internal/meson.build        |   1 +
+ src/libcamera/dma_heaps.cpp                   | 127 ++++++++++++++++++
+ src/libcamera/meson.build                     |   1 +
+ src/libcamera/pipeline/rpi/vc4/dma_heaps.cpp  |  90 -------------
+ src/libcamera/pipeline/rpi/vc4/meson.build    |   1 -
+ src/libcamera/pipeline/rpi/vc4/vc4.cpp        |   5 +-
+ 7 files changed, 131 insertions(+), 98 deletions(-)
  rename {src/libcamera/pipeline/rpi/vc4 => include/libcamera/internal}/dma_heaps.h (92%)
- rename src/libcamera/{pipeline/rpi/vc4 => }/dma_heaps.cpp (83%)
+ create mode 100644 src/libcamera/dma_heaps.cpp
+ delete mode 100644 src/libcamera/pipeline/rpi/vc4/dma_heaps.cpp
 
 diff --git a/src/libcamera/pipeline/rpi/vc4/dma_heaps.h b/include/libcamera/internal/dma_heaps.h
 similarity index 92%
@@ -59,85 +65,139 @@ index 7f1f3440..33eb0fb3 100644
      'formats.h',
      'framebuffer.h',
      'ipa_manager.h',
-diff --git a/src/libcamera/pipeline/rpi/vc4/dma_heaps.cpp b/src/libcamera/dma_heaps.cpp
-similarity index 83%
-rename from src/libcamera/pipeline/rpi/vc4/dma_heaps.cpp
-rename to src/libcamera/dma_heaps.cpp
-index 317b1fc1..7444d9c2 100644
---- a/src/libcamera/pipeline/rpi/vc4/dma_heaps.cpp
+diff --git a/src/libcamera/dma_heaps.cpp b/src/libcamera/dma_heaps.cpp
+new file mode 100644
+index 00000000..38ef175a
+--- /dev/null
 +++ b/src/libcamera/dma_heaps.cpp
-@@ -5,8 +5,6 @@
-  * dma_heaps.h - Helper class for dma-heap allocations.
-  */
- 
--#include "dma_heaps.h"
--
- #include <array>
- #include <fcntl.h>
- #include <linux/dma-buf.h>
-@@ -16,6 +14,8 @@
- 
- #include <libcamera/base/log.h>
- 
+@@ -0,0 +1,127 @@
++/* SPDX-License-Identifier: LGPL-2.1-or-later */
++/*
++ * Copyright (C) 2020, Raspberry Pi Ltd
++ *
++ * dma_heaps.h - Helper class for dma-heap allocations.
++ */
++
 +#include "libcamera/internal/dma_heaps.h"
 +
- /*
-  * /dev/dma-heap/linux,cma is the dma-heap allocator, which allows dmaheap-cma
-  * to only have to worry about importing.
-@@ -30,9 +30,7 @@ static constexpr std::array<const char *, 2> heapNames = {
- 
- namespace libcamera {
- 
--LOG_DECLARE_CATEGORY(RPI)
--
--namespace RPi {
++#include <array>
++#include <fcntl.h>
++#include <sys/ioctl.h>
++#include <unistd.h>
++
++#include <linux/dma-buf.h>
++#include <linux/dma-heap.h>
++
++#include <libcamera/base/log.h>
++
++/**
++ * \file dma_heaps.cpp
++ * \brief CMA dma-heap allocator
++ */
++
++/*
++ * /dev/dma_heap/linux,cma is the dma-heap allocator, which allows dmaheap-cma
++ * to only have to worry about importing.
++ *
++ * Annoyingly, should the cma heap size be specified on the kernel command line
++ * instead of DT, the heap gets named "reserved" instead.
++ */
++static constexpr std::array<const char *, 2> heapNames = {
++	"/dev/dma_heap/linux,cma",
++	"/dev/dma_heap/reserved"
++};
++
++namespace libcamera {
++
 +LOG_DEFINE_CATEGORY(DmaHeap)
- 
- DmaHeap::DmaHeap()
- {
-@@ -40,7 +38,7 @@ DmaHeap::DmaHeap()
- 		int ret = ::open(name, O_RDWR | O_CLOEXEC, 0);
- 		if (ret < 0) {
- 			ret = errno;
--			LOG(RPI, Debug) << "Failed to open " << name << ": "
-+			LOG(DmaHeap, Debug) << "Failed to open " << name << ": "
- 					<< strerror(ret);
- 			continue;
- 		}
-@@ -50,7 +48,7 @@ DmaHeap::DmaHeap()
- 	}
- 
- 	if (!dmaHeapHandle_.isValid())
--		LOG(RPI, Error) << "Could not open any dmaHeap device";
++
++/**
++ * \class DmaHeap
++ * \brief Helper class for CMA dma-heap allocations
++ */
++
++/**
++ * \brief Construct a DmaHeap that owns a CMA dma-heap file descriptor
++ *
++ * Goes through the internal list of possible names of the CMA dma-heap devices
++ * until a CMA dma-heap device is successfully opened. If it fails to open any
++ * dma-heap device, an invalid DmaHeap object is constructed. A valid DmaHeap
++ * object owns a wrapped dma-heap file descriptor.
++ *
++ * Please check the new DmaHeap object with \ref DmaHeap::isValid before using it.
++ */
++DmaHeap::DmaHeap()
++{
++	for (const char *name : heapNames) {
++		int ret = ::open(name, O_RDWR | O_CLOEXEC, 0);
++		if (ret < 0) {
++			ret = errno;
++			LOG(DmaHeap, Debug)
++				<< "Failed to open " << name << ": "
++				<< strerror(ret);
++			continue;
++		}
++
++		dmaHeapHandle_ = UniqueFD(ret);
++		break;
++	}
++
++	if (!dmaHeapHandle_.isValid())
 +		LOG(DmaHeap, Error) << "Could not open any dmaHeap device";
- }
- 
- DmaHeap::~DmaHeap() = default;
-@@ -69,7 +67,7 @@ UniqueFD DmaHeap::alloc(const char *name, std::size_t size)
- 
- 	ret = ::ioctl(dmaHeapHandle_.get(), DMA_HEAP_IOCTL_ALLOC, &alloc);
- 	if (ret < 0) {
--		LOG(RPI, Error) << "dmaHeap allocation failure for "
-+		LOG(DmaHeap, Error) << "dmaHeap allocation failure for "
- 				<< name;
- 		return {};
- 	}
-@@ -77,7 +75,7 @@ UniqueFD DmaHeap::alloc(const char *name, std::size_t size)
- 	UniqueFD allocFd(alloc.fd);
- 	ret = ::ioctl(allocFd.get(), DMA_BUF_SET_NAME, name);
- 	if (ret < 0) {
--		LOG(RPI, Error) << "dmaHeap naming failure for "
-+		LOG(DmaHeap, Error) << "dmaHeap naming failure for "
- 				<< name;
- 		return {};
- 	}
-@@ -85,6 +83,4 @@ UniqueFD DmaHeap::alloc(const char *name, std::size_t size)
- 	return allocFd;
- }
- 
--} /* namespace RPi */
--
- } /* namespace libcamera */
++}
++
++/**
++ * \brief Destroy the DmaHeap instance
++ *
++ * Destroying a DmaHeap instance which owns a wrapped dma-heap file descriptor
++ * closes the descriptor automatically.
++ */
++DmaHeap::~DmaHeap() = default;
++
++/**
++ * \fn DmaHeap::isValid()
++ * \brief Check if the DmaHeap instance is valid
++ * \return True if the DmaHeap is valid, false otherwise
++ */
++
++/**
++ * \brief Allocate a dma-buf from the DmaHeap
++ * \param [in] name The name to set for the allocated buffer
++ * \param [in] size The size of the buffer to allocate
++ * \return The \ref UniqueFD of the allocated buffer
++ *
++ * Allocates a dma-buf with read/write access.
++ * If the allocation fails returns invalid UniqueFD.
++ */
++UniqueFD DmaHeap::alloc(const char *name, std::size_t size)
++{
++	int ret;
++
++	if (!name)
++		return {};
++
++	struct dma_heap_allocation_data alloc = {};
++
++	alloc.len = size;
++	alloc.fd_flags = O_CLOEXEC | O_RDWR;
++
++	ret = ::ioctl(dmaHeapHandle_.get(), DMA_HEAP_IOCTL_ALLOC, &alloc);
++	if (ret < 0) {
++		LOG(DmaHeap, Error) << "dmaHeap allocation failure for " << name;
++		return {};
++	}
++
++	UniqueFD allocFd(alloc.fd);
++	ret = ::ioctl(allocFd.get(), DMA_BUF_SET_NAME, name);
++	if (ret < 0) {
++		LOG(DmaHeap, Error) << "dmaHeap naming failure for " << name;
++		return {};
++	}
++
++	return allocFd;
++}
++
++} /* namespace libcamera */
 diff --git a/src/libcamera/meson.build b/src/libcamera/meson.build
 index 45f63e93..3c5e43df 100644
 --- a/src/libcamera/meson.build
@@ -150,6 +210,102 @@ index 45f63e93..3c5e43df 100644
      'fence.cpp',
      'formats.cpp',
      'framebuffer.cpp',
+diff --git a/src/libcamera/pipeline/rpi/vc4/dma_heaps.cpp b/src/libcamera/pipeline/rpi/vc4/dma_heaps.cpp
+deleted file mode 100644
+index 317b1fc1..00000000
+--- a/src/libcamera/pipeline/rpi/vc4/dma_heaps.cpp
++++ /dev/null
+@@ -1,90 +0,0 @@
+-/* SPDX-License-Identifier: LGPL-2.1-or-later */
+-/*
+- * Copyright (C) 2020, Raspberry Pi Ltd
+- *
+- * dma_heaps.h - Helper class for dma-heap allocations.
+- */
+-
+-#include "dma_heaps.h"
+-
+-#include <array>
+-#include <fcntl.h>
+-#include <linux/dma-buf.h>
+-#include <linux/dma-heap.h>
+-#include <sys/ioctl.h>
+-#include <unistd.h>
+-
+-#include <libcamera/base/log.h>
+-
+-/*
+- * /dev/dma-heap/linux,cma is the dma-heap allocator, which allows dmaheap-cma
+- * to only have to worry about importing.
+- *
+- * Annoyingly, should the cma heap size be specified on the kernel command line
+- * instead of DT, the heap gets named "reserved" instead.
+- */
+-static constexpr std::array<const char *, 2> heapNames = {
+-	"/dev/dma_heap/linux,cma",
+-	"/dev/dma_heap/reserved"
+-};
+-
+-namespace libcamera {
+-
+-LOG_DECLARE_CATEGORY(RPI)
+-
+-namespace RPi {
+-
+-DmaHeap::DmaHeap()
+-{
+-	for (const char *name : heapNames) {
+-		int ret = ::open(name, O_RDWR | O_CLOEXEC, 0);
+-		if (ret < 0) {
+-			ret = errno;
+-			LOG(RPI, Debug) << "Failed to open " << name << ": "
+-					<< strerror(ret);
+-			continue;
+-		}
+-
+-		dmaHeapHandle_ = UniqueFD(ret);
+-		break;
+-	}
+-
+-	if (!dmaHeapHandle_.isValid())
+-		LOG(RPI, Error) << "Could not open any dmaHeap device";
+-}
+-
+-DmaHeap::~DmaHeap() = default;
+-
+-UniqueFD DmaHeap::alloc(const char *name, std::size_t size)
+-{
+-	int ret;
+-
+-	if (!name)
+-		return {};
+-
+-	struct dma_heap_allocation_data alloc = {};
+-
+-	alloc.len = size;
+-	alloc.fd_flags = O_CLOEXEC | O_RDWR;
+-
+-	ret = ::ioctl(dmaHeapHandle_.get(), DMA_HEAP_IOCTL_ALLOC, &alloc);
+-	if (ret < 0) {
+-		LOG(RPI, Error) << "dmaHeap allocation failure for "
+-				<< name;
+-		return {};
+-	}
+-
+-	UniqueFD allocFd(alloc.fd);
+-	ret = ::ioctl(allocFd.get(), DMA_BUF_SET_NAME, name);
+-	if (ret < 0) {
+-		LOG(RPI, Error) << "dmaHeap naming failure for "
+-				<< name;
+-		return {};
+-	}
+-
+-	return allocFd;
+-}
+-
+-} /* namespace RPi */
+-
+-} /* namespace libcamera */
 diff --git a/src/libcamera/pipeline/rpi/vc4/meson.build b/src/libcamera/pipeline/rpi/vc4/meson.build
 index cdb049c5..386e2296 100644
 --- a/src/libcamera/pipeline/rpi/vc4/meson.build
@@ -190,5 +346,5 @@ index 26102ea7..3a42e75e 100644
  
  	struct Config {
 -- 
-2.43.0
+2.43.2
 
