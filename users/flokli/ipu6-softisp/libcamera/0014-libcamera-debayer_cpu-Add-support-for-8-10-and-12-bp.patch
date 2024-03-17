@@ -1,7 +1,7 @@
-From b7b211eb56d98d5b170bd73a23b55aeb45bde8c5 Mon Sep 17 00:00:00 2001
+From 5f3647bd4f12dd62256a425c49fd18a0f5990930 Mon Sep 17 00:00:00 2001
 From: Hans de Goede <hdegoede@redhat.com>
-Date: Thu, 14 Dec 2023 19:57:15 +0100
-Subject: [PATCH 17/25] libcamera: debayer_cpu: Add support for 8, 10 and 12
+Date: Mon, 11 Mar 2024 15:15:18 +0100
+Subject: [PATCH 14/21] libcamera: debayer_cpu: Add support for 8, 10 and 12
  bpp unpacked bayer input
 
 Add support for 8, 10 and 12 bpp unpacked bayer input for all 4 standard
@@ -9,80 +9,32 @@ bayer orders.
 
 Tested-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org> # sc8280xp Lenovo x13s
 Tested-by: Pavel Machek <pavel@ucw.cz>
+Reviewed-by: Pavel Machek <pavel@ucw.cz>
+Reviewed-by: Milan Zamazal <mzamazal@redhat.com>
 Signed-off-by: Kieran Bingham <kieran.bingham@ideasonboard.com>
 Signed-off-by: Hans de Goede <hdegoede@redhat.com>
 ---
- .../internal/software_isp/debayer_cpu.h       |  13 ++
- src/libcamera/software_isp/debayer_cpu.cpp    | 128 ++++++++++++++++++
+ src/libcamera/software_isp/debayer_cpu.cpp | 128 +++++++++++++++++++++
+ src/libcamera/software_isp/debayer_cpu.h   |  13 +++
  2 files changed, 141 insertions(+)
 
-diff --git a/include/libcamera/internal/software_isp/debayer_cpu.h b/include/libcamera/internal/software_isp/debayer_cpu.h
-index 78573f44..1147b368 100644
---- a/include/libcamera/internal/software_isp/debayer_cpu.h
-+++ b/include/libcamera/internal/software_isp/debayer_cpu.h
-@@ -17,6 +17,7 @@
- 
- #include <libcamera/base/object.h>
- 
-+#include "libcamera/internal/bayer_format.h"
- #include "libcamera/internal/software_isp/swstats_cpu.h"
- #include "libcamera/internal/software_isp/debayer.h"
- 
-@@ -75,11 +76,21 @@ public:
- 	 * \return The output frame size.
- 	 */
- 	unsigned int frameSize() { return outputConfig_.frameSize; }
-+
- private:
- 	void initLinePointers(const uint8_t *linePointers[], const uint8_t *src);
- 	void shiftLinePointers(const uint8_t *linePointers[], const uint8_t *src);
- 	void process2(const uint8_t *src, uint8_t *dst);
- 	void process4(const uint8_t *src, uint8_t *dst);
-+	/* 8-bit raw bayer format */
-+	void debayer8_BGBG_BGR888(uint8_t *dst, const uint8_t *src[]);
-+	void debayer8_GRGR_BGR888(uint8_t *dst, const uint8_t *src[]);
-+	/* unpacked 10-bit raw bayer format */
-+	void debayer10_BGBG_BGR888(uint8_t *dst, const uint8_t *src[]);
-+	void debayer10_GRGR_BGR888(uint8_t *dst, const uint8_t *src[]);
-+	/* unpacked 12-bit raw bayer format */
-+	void debayer12_BGBG_BGR888(uint8_t *dst, const uint8_t *src[]);
-+	void debayer12_GRGR_BGR888(uint8_t *dst, const uint8_t *src[]);
- 	/* CSI-2 packed 10-bit raw bayer format (all the 4 orders) */
- 	void debayer10P_BGBG_BGR888(uint8_t *dst, const uint8_t *src[]);
- 	void debayer10P_GRGR_BGR888(uint8_t *dst, const uint8_t *src[]);
-@@ -103,6 +114,7 @@ private:
- 
- 	int getInputConfig(PixelFormat inputFormat, DebayerInputConfig &config);
- 	int getOutputConfig(PixelFormat outputFormat, DebayerOutputConfig &config);
-+	int setupStandardBayerOrder(BayerFormat::Order order);
- 	int setDebayerFunctions(PixelFormat inputFormat, PixelFormat outputFormat);
- 
- 	uint8_t gamma_[1024];
-@@ -119,6 +131,7 @@ private:
- 	std::unique_ptr<SwStatsCpu> stats_;
- 	uint8_t *lineBuffers_[5];
- 	unsigned int lineBufferIndex_;
-+	unsigned int x_shift_; /* Offset of 0/1 applied to window_.x */
- 	bool enableInputMemcpy_;
- 	float gamma_correction_;
- 	int measuredFrames_;
 diff --git a/src/libcamera/software_isp/debayer_cpu.cpp b/src/libcamera/software_isp/debayer_cpu.cpp
-index e0c3c658..7b7623b7 100644
+index f932362c..eb1c2718 100644
 --- a/src/libcamera/software_isp/debayer_cpu.cpp
 +++ b/src/libcamera/software_isp/debayer_cpu.cpp
-@@ -45,6 +45,11 @@ DebayerCpu::~DebayerCpu()
+@@ -56,6 +56,11 @@ DebayerCpu::~DebayerCpu()
  		free(lineBuffers_[i]);
  }
  
-+#define DECLARE_SRC_POINTERS(pixel_t)                             \
-+	const pixel_t *prev = (const pixel_t *)src[0] + x_shift_; \
-+	const pixel_t *curr = (const pixel_t *)src[1] + x_shift_; \
-+	const pixel_t *next = (const pixel_t *)src[2] + x_shift_;
++#define DECLARE_SRC_POINTERS(pixel_t)                            \
++	const pixel_t *prev = (const pixel_t *)src[0] + xShift_; \
++	const pixel_t *curr = (const pixel_t *)src[1] + xShift_; \
++	const pixel_t *next = (const pixel_t *)src[2] + xShift_;
 +
  // RGR
  // GBG
  // RGR
-@@ -81,6 +86,70 @@ DebayerCpu::~DebayerCpu()
+@@ -92,6 +97,70 @@ DebayerCpu::~DebayerCpu()
  	*dst++ = red_[curr[x] / (div)];                                                        \
  	x++;
  
@@ -153,7 +105,7 @@ index e0c3c658..7b7623b7 100644
  void DebayerCpu::debayer10P_BGBG_BGR888(uint8_t *dst, const uint8_t *src[])
  {
  	const int width_in_bytes = window_.width * 5 / 4;
-@@ -170,6 +239,16 @@ int DebayerCpu::getInputConfig(PixelFormat inputFormat, DebayerInputConfig &conf
+@@ -193,6 +262,16 @@ int DebayerCpu::getInputConfig(PixelFormat inputFormat, DebayerInputConfig &conf
  	BayerFormat bayerFormat =
  		BayerFormat::fromPixelFormat(inputFormat);
  
@@ -170,12 +122,12 @@ index e0c3c658..7b7623b7 100644
  	if (bayerFormat.bitDepth == 10 &&
  	    bayerFormat.packing == BayerFormat::Packing::CSI2 &&
  	    isStandardBayerOrder(bayerFormat.order)) {
-@@ -197,12 +276,61 @@ int DebayerCpu::getOutputConfig(PixelFormat outputFormat, DebayerOutputConfig &c
+@@ -220,12 +299,61 @@ int DebayerCpu::getOutputConfig(PixelFormat outputFormat, DebayerOutputConfig &c
  	return -EINVAL;
  }
  
 +/*
-+ * Check for standard Bayer orders and set x_shift_ and swap debayer0/1, so that
++ * Check for standard Bayer orders and set xShift_ and swap debayer0/1, so that
 + * a single pair of BGGR debayer functions can be used for all 4 standard orders.
 + */
 +int DebayerCpu::setupStandardBayerOrder(BayerFormat::Order order)
@@ -184,13 +136,13 @@ index e0c3c658..7b7623b7 100644
 +	case BayerFormat::BGGR:
 +		break;
 +	case BayerFormat::GBRG:
-+		x_shift_ = 1; /* BGGR -> GBRG */
++		xShift_ = 1; /* BGGR -> GBRG */
 +		break;
 +	case BayerFormat::GRBG:
 +		std::swap(debayer0_, debayer1_); /* BGGR -> GRBG */
 +		break;
 +	case BayerFormat::RGGB:
-+		x_shift_ = 1; /* BGGR -> GBRG */
++		xShift_ = 1; /* BGGR -> GBRG */
 +		std::swap(debayer0_, debayer1_); /* GBRG -> RGGB */
 +		break;
 +	default:
@@ -206,7 +158,7 @@ index e0c3c658..7b7623b7 100644
  	BayerFormat bayerFormat =
  		BayerFormat::fromPixelFormat(inputFormat);
  
-+	x_shift_ = 0;
++	xShift_ = 0;
 +
 +	if ((bayerFormat.bitDepth == 8 || bayerFormat.bitDepth == 10 || bayerFormat.bitDepth == 12) &&
 +	    bayerFormat.packing == BayerFormat::Packing::None &&
@@ -232,6 +184,51 @@ index e0c3c658..7b7623b7 100644
  	if (bayerFormat.bitDepth == 10 &&
  	    bayerFormat.packing == BayerFormat::Packing::CSI2) {
  		switch (bayerFormat.order) {
+diff --git a/src/libcamera/software_isp/debayer_cpu.h b/src/libcamera/software_isp/debayer_cpu.h
+index 8a51ed85..fd1fa180 100644
+--- a/src/libcamera/software_isp/debayer_cpu.h
++++ b/src/libcamera/software_isp/debayer_cpu.h
+@@ -17,6 +17,8 @@
+ 
+ #include <libcamera/base/object.h>
+ 
++#include "libcamera/internal/bayer_format.h"
++
+ #include "debayer.h"
+ #include "swstats_cpu.h"
+ 
+@@ -82,6 +84,15 @@ private:
+ 	 */
+ 	using debayerFn = void (DebayerCpu::*)(uint8_t *dst, const uint8_t *src[]);
+ 
++	/* 8-bit raw bayer format */
++	void debayer8_BGBG_BGR888(uint8_t *dst, const uint8_t *src[]);
++	void debayer8_GRGR_BGR888(uint8_t *dst, const uint8_t *src[]);
++	/* unpacked 10-bit raw bayer format */
++	void debayer10_BGBG_BGR888(uint8_t *dst, const uint8_t *src[]);
++	void debayer10_GRGR_BGR888(uint8_t *dst, const uint8_t *src[]);
++	/* unpacked 12-bit raw bayer format */
++	void debayer12_BGBG_BGR888(uint8_t *dst, const uint8_t *src[]);
++	void debayer12_GRGR_BGR888(uint8_t *dst, const uint8_t *src[]);
+ 	/* CSI-2 packed 10-bit raw bayer format (all the 4 orders) */
+ 	void debayer10P_BGBG_BGR888(uint8_t *dst, const uint8_t *src[]);
+ 	void debayer10P_GRGR_BGR888(uint8_t *dst, const uint8_t *src[]);
+@@ -103,6 +114,7 @@ private:
+ 
+ 	int getInputConfig(PixelFormat inputFormat, DebayerInputConfig &config);
+ 	int getOutputConfig(PixelFormat outputFormat, DebayerOutputConfig &config);
++	int setupStandardBayerOrder(BayerFormat::Order order);
+ 	int setDebayerFunctions(PixelFormat inputFormat, PixelFormat outputFormat);
+ 	void setupInputMemcpy(const uint8_t *linePointers[]);
+ 	void shiftLinePointers(const uint8_t *linePointers[], const uint8_t *src);
+@@ -131,6 +143,7 @@ private:
+ 	unsigned int lineBufferLength_;
+ 	unsigned int lineBufferPadding_;
+ 	unsigned int lineBufferIndex_;
++	unsigned int xShift_; /* Offset of 0/1 applied to window_.x */
+ 	bool enableInputMemcpy_;
+ 	float gamma_correction_;
+ 	unsigned int measuredFrames_;
 -- 
-2.43.0
+2.43.2
 
