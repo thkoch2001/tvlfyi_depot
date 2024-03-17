@@ -1,7 +1,1112 @@
-From 4e34bb68beec288e6fbc71170ff6d3ed39b76ce6 Mon Sep 17 00:00:00 2001
+From 037f05a9772f3243907bb826e913971ee20e9487 Mon Sep 17 00:00:00 2001
+From: Sakari Ailus <sakari.ailus@linux.intel.com>
+Date: Tue, 8 Aug 2023 10:55:31 +0300
+Subject: [PATCH 01/33] media: mc: Add INTERNAL pad flag
+
+Internal source pads will be used as routing endpoints in V4L2
+[GS]_ROUTING IOCTLs, to indicate that the stream begins in the entity.
+
+Also prevent creating links to pads that have been flagged as internal.
+
+Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
+---
+ Documentation/userspace-api/media/glossary.rst             | 6 ++++++
+ Documentation/userspace-api/media/mediactl/media-types.rst | 6 ++++++
+ drivers/media/mc/mc-entity.c                               | 6 +++++-
+ include/uapi/linux/media.h                                 | 1 +
+ 4 files changed, 18 insertions(+), 1 deletion(-)
+
+diff --git a/Documentation/userspace-api/media/glossary.rst b/Documentation/userspace-api/media/glossary.rst
+index 96a360edbf3b..f7b99a4527c7 100644
+--- a/Documentation/userspace-api/media/glossary.rst
++++ b/Documentation/userspace-api/media/glossary.rst
+@@ -173,6 +173,12 @@ Glossary
+ 	An integrated circuit that integrates all components of a computer
+ 	or other electronic systems.
+ 
++_media-glossary-stream:
++    Stream
++	A distinct flow of data (image data or metadata) over a media pipeline
++	from source to sink. A source may be e.g. an image sensor and a sink
++	e.g. a memory buffer.
++
+     V4L2 API
+ 	**V4L2 userspace API**
+ 
+diff --git a/Documentation/userspace-api/media/mediactl/media-types.rst b/Documentation/userspace-api/media/mediactl/media-types.rst
+index 0ffeece1e0c8..28941da27790 100644
+--- a/Documentation/userspace-api/media/mediactl/media-types.rst
++++ b/Documentation/userspace-api/media/mediactl/media-types.rst
+@@ -361,6 +361,7 @@ Types and flags used to represent the media graph elements
+ .. _MEDIA-PAD-FL-SINK:
+ .. _MEDIA-PAD-FL-SOURCE:
+ .. _MEDIA-PAD-FL-MUST-CONNECT:
++.. _MEDIA-PAD-FL-INTERNAL:
+ 
+ .. flat-table:: Media pad flags
+     :header-rows:  0
+@@ -382,6 +383,11 @@ Types and flags used to represent the media graph elements
+ 	  when this flag isn't set; the absence of the flag doesn't imply
+ 	  there is none.
+ 
++    *  -  ``MEDIA_PAD_FL_INTERNAL``
++       -  The internal flag indicates an internal pad that has no external
++	  connections. Such a pad shall not be connected with a link. The
++	  internal flag indicates that the :ref:``stream
++	  <media-glossary-stream>`` either starts or ends in the entity.
+ 
+ One and only one of ``MEDIA_PAD_FL_SINK`` and ``MEDIA_PAD_FL_SOURCE``
+ must be set for every pad.
+diff --git a/drivers/media/mc/mc-entity.c b/drivers/media/mc/mc-entity.c
+index 543a392f8635..1fc80fd3e5e3 100644
+--- a/drivers/media/mc/mc-entity.c
++++ b/drivers/media/mc/mc-entity.c
+@@ -1075,7 +1075,8 @@ int media_get_pad_index(struct media_entity *entity, u32 pad_type,
+ 
+ 	for (i = 0; i < entity->num_pads; i++) {
+ 		if ((entity->pads[i].flags &
+-		     (MEDIA_PAD_FL_SINK | MEDIA_PAD_FL_SOURCE)) != pad_type)
++		     (MEDIA_PAD_FL_SINK | MEDIA_PAD_FL_SOURCE |
++		      MEDIA_PAD_FL_INTERNAL)) != pad_type)
+ 			continue;
+ 
+ 		if (entity->pads[i].sig_type == sig_type)
+@@ -1098,6 +1099,9 @@ media_create_pad_link(struct media_entity *source, u16 source_pad,
+ 		return -EINVAL;
+ 	if (WARN_ON(!(source->pads[source_pad].flags & MEDIA_PAD_FL_SOURCE)))
+ 		return -EINVAL;
++	if (WARN_ON(source->pads[source_pad].flags & MEDIA_PAD_FL_SOURCE &&
++		    source->pads[source_pad].flags & MEDIA_PAD_FL_INTERNAL))
++		return -EINVAL;
+ 	if (WARN_ON(!(sink->pads[sink_pad].flags & MEDIA_PAD_FL_SINK)))
+ 		return -EINVAL;
+ 
+diff --git a/include/uapi/linux/media.h b/include/uapi/linux/media.h
+index 1c80b1d6bbaf..80cfd12a43fc 100644
+--- a/include/uapi/linux/media.h
++++ b/include/uapi/linux/media.h
+@@ -208,6 +208,7 @@ struct media_entity_desc {
+ #define MEDIA_PAD_FL_SINK			(1U << 0)
+ #define MEDIA_PAD_FL_SOURCE			(1U << 1)
+ #define MEDIA_PAD_FL_MUST_CONNECT		(1U << 2)
++#define MEDIA_PAD_FL_INTERNAL			(1U << 3)
+ 
+ struct media_pad_desc {
+ 	__u32 entity;		/* entity ID */
+-- 
+2.43.2
+
+
+From 5f0cdae874f1c0237936c2c12a9fc019b93de4c9 Mon Sep 17 00:00:00 2001
+From: Sakari Ailus <sakari.ailus@linux.intel.com>
+Date: Tue, 8 Aug 2023 10:55:32 +0300
+Subject: [PATCH 02/33] media: uapi: Add generic serial metadata mbus formats
+
+Add generic serial metadata mbus formats. These formats describe data
+width and packing but not the content itself. The reason for specifying
+such formats is that the formats as such are fairly device specific but
+they are still handled by CSI-2 receiver drivers that should not be aware
+of device specific formats. What makes generic metadata formats possible
+is that these formats are parsed by software only, after capturing the
+data to system memory.
+
+Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
+---
+ .../media/v4l/subdev-formats.rst              | 257 ++++++++++++++++++
+ include/uapi/linux/media-bus-format.h         |   9 +
+ 2 files changed, 266 insertions(+)
+
+diff --git a/Documentation/userspace-api/media/v4l/subdev-formats.rst b/Documentation/userspace-api/media/v4l/subdev-formats.rst
+index eb3cd20b0cf2..7d107873cddd 100644
+--- a/Documentation/userspace-api/media/v4l/subdev-formats.rst
++++ b/Documentation/userspace-api/media/v4l/subdev-formats.rst
+@@ -8306,3 +8306,260 @@ The following table lists the existing metadata formats.
+ 	both sides of the link and the bus format is a fixed
+ 	metadata format that is not configurable from userspace.
+ 	Width and height will be set to 0 for this format.
++
++Generic Serial Metadata Formats
++^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
++
++Generic serial metadata formats are used on serial busses where the actual data
++content is more or less device specific but the data is transmitted and received
++by multiple devices that do not process the data in any way, simply writing
++it to system memory for processing in software at the end of the pipeline.
++
++The more specific variant describing the actual data is used on the internal
++source pad of the originating sub-device.
++
++"b" in an array cell signifies a byte of data, followed by the number of byte
++and finally the bit number in subscript. "p" indicates a padding bit.
++
++.. _media-bus-format-generic-meta:
++
++.. cssclass: longtable
++
++.. flat-table:: Generic Serial Metadata Formats
++    :header-rows:  2
++    :stub-columns: 0
++
++    * - Identifier
++      - Code
++      -
++      - :cspan:`23` Data organization
++    * -
++      -
++      - Bit
++      - 23
++      - 22
++      - 21
++      - 20
++      - 19
++      - 18
++      - 17
++      - 16
++      - 15
++      - 14
++      - 13
++      - 12
++      - 11
++      - 10
++      - 9
++      - 8
++      - 7
++      - 6
++      - 5
++      - 4
++      - 3
++      - 2
++      - 1
++      - 0
++    * .. _MEDIA-BUS-FMT-META-8:
++
++      - MEDIA_BUS_FMT_META_8
++      - 0x8001
++      -
++      -
++      -
++      -
++      -
++      -
++      -
++      -
++      -
++      -
++      -
++      -
++      -
++      -
++      -
++      -
++      -
++      - b0\ :sub:`7`
++      - b0\ :sub:`6`
++      - b0\ :sub:`5`
++      - b0\ :sub:`4`
++      - b0\ :sub:`3`
++      - b0\ :sub:`2`
++      - b0\ :sub:`1`
++      - b0\ :sub:`0`
++    * .. _MEDIA-BUS-FMT-META-10:
++
++      - MEDIA_BUS_FMT_META_10
++      - 0x8002
++      -
++      -
++      -
++      -
++      -
++      -
++      -
++      -
++      -
++      -
++      -
++      -
++      -
++      -
++      -
++      - b0\ :sub:`7`
++      - b0\ :sub:`6`
++      - b0\ :sub:`5`
++      - b0\ :sub:`4`
++      - b0\ :sub:`3`
++      - b0\ :sub:`2`
++      - b0\ :sub:`1`
++      - b0\ :sub:`0`
++      - p
++      - p
++    * .. _MEDIA-BUS-FMT-META-12:
++
++      - MEDIA_BUS_FMT_META_12
++      - 0x8003
++      -
++      -
++      -
++      -
++      -
++      -
++      -
++      -
++      -
++      -
++      -
++      -
++      -
++      - b0\ :sub:`7`
++      - b0\ :sub:`6`
++      - b0\ :sub:`5`
++      - b0\ :sub:`4`
++      - b0\ :sub:`3`
++      - b0\ :sub:`2`
++      - b0\ :sub:`1`
++      - b0\ :sub:`0`
++      - p
++      - p
++      - p
++      - p
++    * .. _MEDIA-BUS-FMT-META-14:
++
++      - MEDIA_BUS_FMT_META_14
++      - 0x8004
++      -
++      -
++      -
++      -
++      -
++      -
++      -
++      -
++      -
++      -
++      -
++      - b0\ :sub:`7`
++      - b0\ :sub:`6`
++      - b0\ :sub:`5`
++      - b0\ :sub:`4`
++      - b0\ :sub:`3`
++      - b0\ :sub:`2`
++      - b0\ :sub:`1`
++      - b0\ :sub:`0`
++      - p
++      - p
++      - p
++      - p
++      - p
++      - p
++    * .. _MEDIA-BUS-FMT-META-16:
++
++      - MEDIA_BUS_FMT_META_16
++      - 0x8005
++      -
++      -
++      -
++      -
++      -
++      -
++      -
++      -
++      -
++      - b0\ :sub:`7`
++      - b0\ :sub:`6`
++      - b0\ :sub:`5`
++      - b0\ :sub:`4`
++      - b0\ :sub:`3`
++      - b0\ :sub:`2`
++      - b0\ :sub:`1`
++      - b0\ :sub:`0`
++      - p
++      - p
++      - p
++      - p
++      - p
++      - p
++      - p
++      - p
++    * .. _MEDIA-BUS-FMT-META-20:
++
++      - MEDIA_BUS_FMT_META_20
++      - 0x8007
++      -
++      -
++      -
++      -
++      -
++      - b0\ :sub:`7`
++      - b0\ :sub:`6`
++      - b0\ :sub:`5`
++      - b0\ :sub:`4`
++      - b0\ :sub:`3`
++      - b0\ :sub:`2`
++      - b0\ :sub:`1`
++      - b0\ :sub:`0`
++      - p
++      - p
++      - p
++      - p
++      - p
++      - p
++      - p
++      - p
++      - p
++      - p
++      - p
++      - p
++    * .. _MEDIA-BUS-FMT-META-24:
++
++      - MEDIA_BUS_FMT_META_24
++      - 0x8009
++      -
++      - b0\ :sub:`7`
++      - b0\ :sub:`6`
++      - b0\ :sub:`5`
++      - b0\ :sub:`4`
++      - b0\ :sub:`3`
++      - b0\ :sub:`2`
++      - b0\ :sub:`1`
++      - b0\ :sub:`0`
++      - p
++      - p
++      - p
++      - p
++      - p
++      - p
++      - p
++      - p
++      - p
++      - p
++      - p
++      - p
++      - p
++      - p
++      - p
++      - p
+diff --git a/include/uapi/linux/media-bus-format.h b/include/uapi/linux/media-bus-format.h
+index f05f747e444d..d4c1d991014b 100644
+--- a/include/uapi/linux/media-bus-format.h
++++ b/include/uapi/linux/media-bus-format.h
+@@ -174,4 +174,13 @@
+  */
+ #define MEDIA_BUS_FMT_METADATA_FIXED		0x7001
+ 
++/* Generic line based metadata formats for serial buses. Next is 0x8008. */
++#define MEDIA_BUS_FMT_META_8			0x8001
++#define MEDIA_BUS_FMT_META_10			0x8002
++#define MEDIA_BUS_FMT_META_12			0x8003
++#define MEDIA_BUS_FMT_META_14			0x8004
++#define MEDIA_BUS_FMT_META_16			0x8005
++#define MEDIA_BUS_FMT_META_20			0x8006
++#define MEDIA_BUS_FMT_META_24			0x8007
++
+ #endif /* __LINUX_MEDIA_BUS_FORMAT_H */
+-- 
+2.43.2
+
+
+From 8af4eeaee34159605ec86b57fa638a82fd968f31 Mon Sep 17 00:00:00 2001
+From: Sakari Ailus <sakari.ailus@linux.intel.com>
+Date: Tue, 8 Aug 2023 10:55:33 +0300
+Subject: [PATCH 03/33] media: uapi: Document which mbus format fields are
+ valid for metadata
+
+Now that metadata mbus formats have been added, it is necessary to define
+which fields in struct v4l2_mbus_format are applicable to them (not many).
+
+Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
+---
+ include/uapi/linux/v4l2-mediabus.h | 18 ++++++++++++------
+ 1 file changed, 12 insertions(+), 6 deletions(-)
+
+diff --git a/include/uapi/linux/v4l2-mediabus.h b/include/uapi/linux/v4l2-mediabus.h
+index 6b07b73473b5..3cadb3b58b85 100644
+--- a/include/uapi/linux/v4l2-mediabus.h
++++ b/include/uapi/linux/v4l2-mediabus.h
+@@ -19,12 +19,18 @@
+  * @width:	image width
+  * @height:	image height
+  * @code:	data format code (from enum v4l2_mbus_pixelcode)
+- * @field:	used interlacing type (from enum v4l2_field)
+- * @colorspace:	colorspace of the data (from enum v4l2_colorspace)
+- * @ycbcr_enc:	YCbCr encoding of the data (from enum v4l2_ycbcr_encoding)
+- * @hsv_enc:	HSV encoding of the data (from enum v4l2_hsv_encoding)
+- * @quantization: quantization of the data (from enum v4l2_quantization)
+- * @xfer_func:  transfer function of the data (from enum v4l2_xfer_func)
++ * @field:	used interlacing type (from enum v4l2_field), not applicable
++ *		to metadata mbus codes
++ * @colorspace:	colorspace of the data (from enum v4l2_colorspace), zero on
++ *		metadata mbus codes
++ * @ycbcr_enc:	YCbCr encoding of the data (from enum v4l2_ycbcr_encoding), zero
++ *		on metadata mbus codes
++ * @hsv_enc:	HSV encoding of the data (from enum v4l2_hsv_encoding), zero on
++ *		metadata mbus codes
++ * @quantization: quantization of the data (from enum v4l2_quantization), zero
++ *		on metadata mbus codes
++ * @xfer_func:  transfer function of the data (from enum v4l2_xfer_func), zero
++ *		on metadata mbus codes
+  * @flags:	flags (V4L2_MBUS_FRAMEFMT_*)
+  * @reserved:  reserved bytes that can be later used
+  */
+-- 
+2.43.2
+
+
+From ed5884d40def9adfa77841427e52733746158a77 Mon Sep 17 00:00:00 2001
+From: Sakari Ailus <sakari.ailus@linux.intel.com>
+Date: Tue, 8 Aug 2023 10:55:34 +0300
+Subject: [PATCH 04/33] media: uapi: Add a macro to tell whether an mbus code
+ is metadata
+
+Add a macro to tell whether a given mbus code is metadata.
+
+Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
+---
+ include/uapi/linux/media-bus-format.h | 3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git a/include/uapi/linux/media-bus-format.h b/include/uapi/linux/media-bus-format.h
+index d4c1d991014b..6fcd7d276bc6 100644
+--- a/include/uapi/linux/media-bus-format.h
++++ b/include/uapi/linux/media-bus-format.h
+@@ -183,4 +183,7 @@
+ #define MEDIA_BUS_FMT_META_20			0x8006
+ #define MEDIA_BUS_FMT_META_24			0x8007
+ 
++#define MEDIA_BUS_FMT_IS_META(code)		\
++	((code) & 0xf000 == 0x7000 || (code) & 0xf000 == 0x8000)
++
+ #endif /* __LINUX_MEDIA_BUS_FORMAT_H */
+-- 
+2.43.2
+
+
+From c0e682a815c5baf012c8963968385c197e7e0943 Mon Sep 17 00:00:00 2001
+From: Sakari Ailus <sakari.ailus@linux.intel.com>
+Date: Tue, 8 Aug 2023 10:55:35 +0300
+Subject: [PATCH 05/33] media: uapi: Add generic 8-bit metadata format
+ definitions
+
+Generic 8-bit metadata formats define the in-memory data layout but not
+the format of the data itself. The reasoning for having such formats is to
+allow CSI-2 receiver drivers to receive and DMA drivers to write the data
+to memory without knowing a large number of device specific formats.
+
+These formats may be used only in conjunction of a Media controller
+pipeline where the internal pad of the source sub-device defines the
+specific format of the data (using an mbus code).
+
+Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
+---
+ .../userspace-api/media/v4l/meta-formats.rst  |   1 +
+ .../media/v4l/metafmt-generic.rst             | 331 ++++++++++++++++++
+ drivers/media/v4l2-core/v4l2-ioctl.c          |   8 +
+ include/uapi/linux/videodev2.h                |   9 +
+ 4 files changed, 349 insertions(+)
+ create mode 100644 Documentation/userspace-api/media/v4l/metafmt-generic.rst
+
+diff --git a/Documentation/userspace-api/media/v4l/meta-formats.rst b/Documentation/userspace-api/media/v4l/meta-formats.rst
+index 0bb61fc5bc00..919f595576b9 100644
+--- a/Documentation/userspace-api/media/v4l/meta-formats.rst
++++ b/Documentation/userspace-api/media/v4l/meta-formats.rst
+@@ -19,3 +19,4 @@ These formats are used for the :ref:`metadata` interface only.
+     metafmt-vsp1-hgo
+     metafmt-vsp1-hgt
+     metafmt-vivid
++    metafmt-generic
+diff --git a/Documentation/userspace-api/media/v4l/metafmt-generic.rst b/Documentation/userspace-api/media/v4l/metafmt-generic.rst
+new file mode 100644
+index 000000000000..a27bfc721edf
+--- /dev/null
++++ b/Documentation/userspace-api/media/v4l/metafmt-generic.rst
+@@ -0,0 +1,331 @@
++.. SPDX-License-Identifier: GPL-2.0 OR GFDL-1.1-no-invariants-or-later
++
++**************************************************************************************************************************************************************************************************************************************************************************************************************************
++V4L2_META_FMT_GENERIC_8 ('MET8'), V4L2_META_FMT_GENERIC_CSI2_10 ('MC1A'), V4L2_META_FMT_GENERIC_CSI2_12 ('MC1C'), V4L2_META_FMT_GENERIC_CSI2_14 ('MC1E'), V4L2_META_FMT_GENERIC_CSI2_16 ('MC1G'), V4L2_META_FMT_GENERIC_CSI2_20 ('MC1K'), V4L2_META_FMT_GENERIC_CSI2_24 ('MC1O'), V4L2_META_FMT_GENERIC_CSI2_2_24 ('MC2O')
++**************************************************************************************************************************************************************************************************************************************************************************************************************************
++
++
++Generic line-based metadata formats
++
++
++Description
++===========
++
++These generic line-based metadata formats define the memory layout of the data
++without defining the format or meaning of the metadata itself. These formats may
++only be used with a Media controller pipeline where the more specific format is
++defined in an :ref:`internal source pad <MEDIA-PAD-FL-INTERNAL>` of the source
++sub-device. See also :ref:`source routes <v4l2-subdev-source-routes>`.
++
++.. _v4l2-meta-fmt-generic-8:
++
++V4L2_META_FMT_GENERIC_8
++-----------------------
++
++The V4L2_META_FMT_GENERIC_8 format is a plain 8-bit metadata format.
++
++This format is also used on CSI-2 on both 8 bits per sample as well as on
++16 bits per sample when two bytes of metadata are packed into one sample.
++
++**Byte Order Of V4L2_META_FMT_GENERIC_8.**
++Each cell is one byte. "M" denotes a byte of metadata.
++
++.. tabularcolumns:: |p{2.4cm}|p{1.2cm}|p{1.2cm}|p{1.2cm}|p{1.2cm}|
++
++.. flat-table::
++    :header-rows:  0
++    :stub-columns: 0
++    :widths: 12 8 8 8 8
++
++    * - start + 0:
++      - M\ :sub:`00`
++      - M\ :sub:`10`
++      - M\ :sub:`20`
++      - M\ :sub:`30`
++    * - start + 4:
++      - M\ :sub:`01`
++      - M\ :sub:`11`
++      - M\ :sub:`21`
++      - M\ :sub:`31`
++
++.. _v4l2-meta-fmt-generic-csi2-10:
++
++V4L2_META_FMT_GENERIC_CSI2_10
++-----------------------------
++
++V4L2_META_FMT_GENERIC_CSI2_10 contains packed 8-bit generic metadata, 10 bits
++for each 8 bits of data. Every four bytes of metadata is followed by a single
++byte of padding. The way the data is stored follows the CSI-2 specification.
++
++This format is also used on CSI-2 on 20 bits per sample format that packs two
++bytes of metadata into one sample.
++
++This format is little endian.
++
++**Byte Order Of V4L2_META_FMT_GENERIC_CSI2_10.**
++Each cell is one byte. "M" denotes a byte of metadata and "p" a byte of padding.
++
++.. tabularcolumns:: |p{2.4cm}|p{1.2cm}|p{1.2cm}|p{1.2cm}|p{1.2cm}|p{.8cm}|
++
++.. flat-table::
++    :header-rows:  0
++    :stub-columns: 0
++    :widths: 12 8 8 8 8 8
++
++    * - start + 0:
++      - M\ :sub:`00`
++      - M\ :sub:`10`
++      - M\ :sub:`20`
++      - M\ :sub:`30`
++      - p
++    * - start + 5:
++      - M\ :sub:`01`
++      - M\ :sub:`11`
++      - M\ :sub:`21`
++      - M\ :sub:`31`
++      - p
++
++.. _v4l2-meta-fmt-generic-csi2-12:
++
++V4L2_META_FMT_GENERIC_CSI2_12
++-----------------------------
++
++V4L2_META_FMT_GENERIC_CSI2_12 contains packed 8-bit generic metadata, 12 bits
++for each 8 bits of data. Every four bytes of metadata is followed by two bytes
++of padding. The way the data is stored follows the CSI-2 specification.
++
++This format is little endian.
++
++**Byte Order Of V4L2_META_FMT_GENERIC_CSI2_12.**
++Each cell is one byte. "M" denotes a byte of metadata and "p" a byte of padding.
++
++.. tabularcolumns:: |p{2.4cm}|p{1.2cm}|p{1.2cm}|p{1.2cm}|p{1.2cm}|p{.8cm}|p{.8cm}|
++
++.. flat-table::
++    :header-rows:  0
++    :stub-columns: 0
++    :widths: 12 8 8 8 8 8 8
++
++    * - start + 0:
++      - M\ :sub:`00`
++      - M\ :sub:`10`
++      - M\ :sub:`20`
++      - M\ :sub:`30`
++      - p
++      - p
++    * - start + 6:
++      - M\ :sub:`01`
++      - M\ :sub:`11`
++      - M\ :sub:`21`
++      - M\ :sub:`31`
++      - p
++      - p
++
++.. _v4l2-meta-fmt-generic-csi2-14:
++
++V4L2_META_FMT_GENERIC_CSI2_14
++-----------------------------
++
++V4L2_META_FMT_GENERIC_CSI2_14 contains packed 8-bit generic metadata, 14 bits
++for each 8 bits of data. Every four bytes of metadata is followed by three
++bytes of padding. The way the data is stored follows the CSI-2 specification.
++
++This format is little endian.
++
++**Byte Order Of V4L2_META_FMT_GENERIC_CSI2_14.**
++Each cell is one byte. "M" denotes a byte of metadata and "p" a byte of padding.
++
++.. tabularcolumns:: |p{2.4cm}|p{1.2cm}|p{1.2cm}|p{1.2cm}|p{1.2cm}|p{.8cm}|p{.8cm}|p{.8cm}|
++
++.. flat-table::
++    :header-rows:  0
++    :stub-columns: 0
++    :widths: 12 8 8 8 8 8 8 8
++
++    * - start + 0:
++      - M\ :sub:`00`
++      - M\ :sub:`10`
++      - M\ :sub:`20`
++      - M\ :sub:`30`
++      - p
++      - p
++      - p
++    * - start + 7:
++      - M\ :sub:`01`
++      - M\ :sub:`11`
++      - M\ :sub:`21`
++      - M\ :sub:`31`
++      - p
++      - p
++      - p
++
++.. _v4l2-meta-fmt-generic-csi2-16:
++
++V4L2_META_FMT_GENERIC_CSI2_16
++-----------------------------
++
++V4L2_META_FMT_GENERIC_CSI2_16 contains packed 8-bit generic metadata, 16 bits
++for each 8 bits of data. Every byte of metadata is followed by one byte of
++padding. The way the data is stored follows the CSI-2 specification.
++
++This format is little endian.
++
++**Byte Order Of V4L2_META_FMT_GENERIC_CSI2_16.**
++Each cell is one byte. "M" denotes a byte of metadata and "p" a byte of padding.
++
++.. tabularcolumns:: |p{2.4cm}|p{1.2cm}|p{.8cm}|p{1.2cm}|p{.8cm}|p{1.2cm}|p{.8cm}|p{1.2cm}|p{.8cm}|
++
++.. flat-table::
++    :header-rows:  0
++    :stub-columns: 0
++    :widths: 12 8 8 8 8 8 8 8 8
++
++    * - start + 0:
++      - M\ :sub:`00`
++      - p
++      - M\ :sub:`10`
++      - p
++      - M\ :sub:`20`
++      - p
++      - M\ :sub:`30`
++      - p
++    * - start + 8:
++      - M\ :sub:`01`
++      - p
++      - M\ :sub:`11`
++      - p
++      - M\ :sub:`21`
++      - p
++      - M\ :sub:`31`
++      - p
++
++.. _v4l2-meta-fmt-generic-csi2-20:
++
++V4L2_META_FMT_GENERIC_CSI2_20
++-----------------------------
++
++V4L2_META_FMT_GENERIC_CSI2_20 contains packed 8-bit generic metadata, 20 bits
++for each 8 bits of data. Every byte of metadata is followed by alternating one
++and two bytes of padding. The way the data is stored follows the CSI-2
++specification.
++
++This format is little endian.
++
++**Byte Order Of V4L2_META_FMT_GENERIC_CSI2_20.**
++Each cell is one byte. "M" denotes a byte of metadata and "p" a byte of padding.
++
++.. tabularcolumns:: |p{2.4cm}|p{1.2cm}|p{.8cm}|p{1.2cm}|p{.8cm}|p{.8cm}|p{1.2cm}|p{.8cm}|p{1.2cm}|p{.8cm}|p{.8cm}|
++
++.. flat-table::
++    :header-rows:  0
++    :stub-columns: 0
++    :widths: 12 8 8 8 8 8 8 8 8 8 8
++
++    * - start + 0:
++      - M\ :sub:`00`
++      - p
++      - M\ :sub:`10`
++      - p
++      - p
++      - M\ :sub:`20`
++      - p
++      - M\ :sub:`30`
++      - p
++      - p
++    * - start + 10:
++      - M\ :sub:`01`
++      - p
++      - M\ :sub:`11`
++      - p
++      - p
++      - M\ :sub:`21`
++      - p
++      - M\ :sub:`31`
++      - p
++      - p
++
++.. _v4l2-meta-fmt-generic-csi2-24:
++
++V4L2_META_FMT_GENERIC_CSI2_24
++-----------------------------
++
++V4L2_META_FMT_GENERIC_CSI2_24 contains packed 8-bit generic metadata, 24 bits
++for each 8 bits of data. Every byte of metadata is followed by two bytes of
++padding. The way the data is stored follows the CSI-2 specification.
++
++This format is little endian.
++
++**Byte Order Of V4L2_META_FMT_GENERIC_CSI2_24.**
++Each cell is one byte. "M" denotes a byte of metadata and "p" a byte of padding.
++
++.. tabularcolumns:: |p{2.4cm}|p{1.2cm}|p{.8cm}|p{.8cm}|p{1.2cm}|p{.8cm}|p{.8cm}|p{1.2cm}|p{.8cm}|p{.8cm}|p{1.2cm}|p{.8cm}|p{.8cm}|
++
++.. flat-table::
++    :header-rows:  0
++    :stub-columns: 0
++    :widths: 12 8 8 8 8 8 8 8 8 8 8 8 8
++
++    * - start + 0:
++      - M\ :sub:`00`
++      - p
++      - p
++      - M\ :sub:`10`
++      - p
++      - p
++      - M\ :sub:`20`
++      - p
++      - p
++      - M\ :sub:`30`
++      - p
++      - p
++    * - start + 12:
++      - M\ :sub:`01`
++      - p
++      - p
++      - M\ :sub:`11`
++      - p
++      - p
++      - M\ :sub:`21`
++      - p
++      - p
++      - M\ :sub:`31`
++      - p
++      - p
++
++.. _v4l2-meta-fmt-generic-csi2-2-24:
++
++V4L2_META_FMT_GENERIC_CSI2_2_24
++-------------------------------
++
++V4L2_META_FMT_GENERIC_CSI2_2_24 contains packed 8-bit generic metadata, 24 bits
++for each two times 8 bits of data. Every two bytes of metadata are followed by
++one byte of padding. The way the data is stored follows the CSI-2
++specification.
++
++This format is little endian.
++
++**Byte Order Of V4L2_META_FMT_GENERIC_CSI2_2_24.**
++Each cell is one byte. "M" denotes a byte of metadata and "p" a byte of padding.
++
++.. tabularcolumns:: |p{2.4cm}|p{1.2cm}|p{1.2cm}|p{.8cm}|p{1.2cm}|p{1.2cm}|p{.8cm}|
++
++.. flat-table::
++    :header-rows:  0
++    :stub-columns: 0
++    :widths: 12 8 8 8 8 8 8
++
++    * - start + 0:
++      - M\ :sub:`00`
++      - M\ :sub:`10`
++      - p
++      - M\ :sub:`20`
++      - M\ :sub:`30`
++      - p
++    * - start + 6:
++      - M\ :sub:`01`
++      - M\ :sub:`11`
++      - p
++      - M\ :sub:`21`
++      - M\ :sub:`31`
++      - p
++
+diff --git a/drivers/media/v4l2-core/v4l2-ioctl.c b/drivers/media/v4l2-core/v4l2-ioctl.c
+index 33076af4dfdb..4eb3db1773e1 100644
+--- a/drivers/media/v4l2-core/v4l2-ioctl.c
++++ b/drivers/media/v4l2-core/v4l2-ioctl.c
+@@ -1452,6 +1452,14 @@ static void v4l_fill_fmtdesc(struct v4l2_fmtdesc *fmt)
+ 	case V4L2_PIX_FMT_Y210:		descr = "10-bit YUYV Packed"; break;
+ 	case V4L2_PIX_FMT_Y212:		descr = "12-bit YUYV Packed"; break;
+ 	case V4L2_PIX_FMT_Y216:		descr = "16-bit YUYV Packed"; break;
++	case V4L2_META_FMT_GENERIC_8:	descr = "8-bit Generic Metadata"; break;
++	case V4L2_META_FMT_GENERIC_CSI2_10:	descr = "8b Generic Meta, 10b CSI-2"; break;
++	case V4L2_META_FMT_GENERIC_CSI2_12:	descr = "8b Generic Meta, 12b CSI-2"; break;
++	case V4L2_META_FMT_GENERIC_CSI2_14:	descr = "8b Generic Meta, 14b CSI-2"; break;
++	case V4L2_META_FMT_GENERIC_CSI2_16:	descr = "8b Generic Meta, 16b CSI-2"; break;
++	case V4L2_META_FMT_GENERIC_CSI2_20:	descr = "8b Generic Meta, 20b CSI-2"; break;
++	case V4L2_META_FMT_GENERIC_CSI2_24:	descr = "8b Generic Meta, 24b CSI-2"; break;
++	case V4L2_META_FMT_GENERIC_CSI2_2_24:	descr = "2x8b Generic Meta, 24b CSI-2"; break;
+ 
+ 	default:
+ 		/* Compressed formats */
+diff --git a/include/uapi/linux/videodev2.h b/include/uapi/linux/videodev2.h
+index 68e7ac178cc2..2c4e03d47789 100644
+--- a/include/uapi/linux/videodev2.h
++++ b/include/uapi/linux/videodev2.h
+@@ -839,6 +839,15 @@ struct v4l2_pix_format {
+ #define V4L2_META_FMT_RK_ISP1_PARAMS	v4l2_fourcc('R', 'K', '1', 'P') /* Rockchip ISP1 3A Parameters */
+ #define V4L2_META_FMT_RK_ISP1_STAT_3A	v4l2_fourcc('R', 'K', '1', 'S') /* Rockchip ISP1 3A Statistics */
+ 
++#define V4L2_META_FMT_GENERIC_8		v4l2_fourcc('M', 'E', 'T', '8') /* Generic 8-bit metadata */
++#define V4L2_META_FMT_GENERIC_CSI2_10	v4l2_fourcc('M', 'C', '1', 'A') /* 10-bit CSI-2 packed 8-bit metadata */
++#define V4L2_META_FMT_GENERIC_CSI2_12	v4l2_fourcc('M', 'C', '1', 'C') /* 12-bit CSI-2 packed 8-bit metadata */
++#define V4L2_META_FMT_GENERIC_CSI2_14	v4l2_fourcc('M', 'C', '1', 'E') /* 14-bit CSI-2 packed 8-bit metadata */
++#define V4L2_META_FMT_GENERIC_CSI2_16	v4l2_fourcc('M', 'C', '1', 'G') /* 16-bit CSI-2 packed 8-bit metadata */
++#define V4L2_META_FMT_GENERIC_CSI2_20	v4l2_fourcc('M', 'C', '1', 'K') /* 20-bit CSI-2 packed 8-bit metadata */
++#define V4L2_META_FMT_GENERIC_CSI2_24	v4l2_fourcc('M', 'C', '1', 'O') /* 24-bit CSI-2 packed 8-bit metadata */
++#define V4L2_META_FMT_GENERIC_CSI2_2_24	v4l2_fourcc('M', 'C', '2', 'O') /* 2 bytes of 8-bit metadata, 24-bit CSI-2 packed */
++
+ /* priv field value to indicates that subsequent fields are valid. */
+ #define V4L2_PIX_FMT_PRIV_MAGIC		0xfeedcafe
+ 
+-- 
+2.43.2
+
+
+From 453627c23062ff0aa01e0e46e3b7922ddf82f998 Mon Sep 17 00:00:00 2001
+From: Sakari Ailus <sakari.ailus@linux.intel.com>
+Date: Tue, 8 Aug 2023 10:55:36 +0300
+Subject: [PATCH 06/33] media: v4l: Support line-based metadata capture
+
+many camera sensors, among other devices, transmit embedded data and image
+data for each CSI-2 frame. This embedded data typically contains register
+configuration of the sensor that has been used to capture the image data
+of the same frame.
+
+The embedded data is received by the CSI-2 receiver and has the same
+properties as the image data, including that it is line based: it has
+width, height and bytesperline (stride).
+
+Add these fields to struct v4l2_meta_format and document them.
+
+Also add V4L2_FMT_FLAG_META_LINE_BASED to tell a given format is
+line-based i.e. these fields of struct v4l2_meta_format are valid for it.
+
+Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
+---
+ .../userspace-api/media/v4l/dev-meta.rst          | 15 +++++++++++++++
+ .../userspace-api/media/v4l/vidioc-enum-fmt.rst   |  7 +++++++
+ .../media/videodev2.h.rst.exceptions              |  1 +
+ drivers/media/v4l2-core/v4l2-ioctl.c              |  5 +++--
+ include/uapi/linux/videodev2.h                    | 10 ++++++++++
+ 5 files changed, 36 insertions(+), 2 deletions(-)
+
+diff --git a/Documentation/userspace-api/media/v4l/dev-meta.rst b/Documentation/userspace-api/media/v4l/dev-meta.rst
+index 0e7e1ee1471a..4b24bae6e171 100644
+--- a/Documentation/userspace-api/media/v4l/dev-meta.rst
++++ b/Documentation/userspace-api/media/v4l/dev-meta.rst
+@@ -65,3 +65,18 @@ to 0.
+       - ``buffersize``
+       - Maximum buffer size in bytes required for data. The value is set by the
+         driver.
++    * - __u32
++      - ``width``
++      - Width of a line of metadata in samples. Valid when :c:type`v4l2_fmtdesc`
++	flag ``V4L2_FMT_FLAG_META_LINE_BASED`` is set, otherwise zero. See
++	:c:func:`VIDIOC_ENUM_FMT`.
++    * - __u32
++      - ``height``
++      - Number of rows of metadata. Valid when :c:type`v4l2_fmtdesc` flag
++	``V4L2_FMT_FLAG_META_LINE_BASED`` is set, otherwise zero. See
++	:c:func:`VIDIOC_ENUM_FMT`.
++    * - __u32
++      - ``bytesperline``
++      - Offset in bytes between the beginning of two consecutive lines. Valid
++	when :c:type`v4l2_fmtdesc` flag ``V4L2_FMT_FLAG_META_LINE_BASED`` is
++	set, otherwise zero. See :c:func:`VIDIOC_ENUM_FMT`.
+diff --git a/Documentation/userspace-api/media/v4l/vidioc-enum-fmt.rst b/Documentation/userspace-api/media/v4l/vidioc-enum-fmt.rst
+index 000c154b0f98..6d7664345a4e 100644
+--- a/Documentation/userspace-api/media/v4l/vidioc-enum-fmt.rst
++++ b/Documentation/userspace-api/media/v4l/vidioc-enum-fmt.rst
+@@ -227,6 +227,13 @@ the ``mbus_code`` field is handled differently:
+ 	The application can ask to configure the quantization of the capture
+ 	device when calling the :ref:`VIDIOC_S_FMT <VIDIOC_G_FMT>` ioctl with
+ 	:ref:`V4L2_PIX_FMT_FLAG_SET_CSC <v4l2-pix-fmt-flag-set-csc>` set.
++    * - ``V4L2_FMT_FLAG_META_LINE_BASED``
++      - 0x0200
++      - The metadata format is line-based. In this case the ``width``,
++	``height`` and ``bytesperline`` fields of :c:type:`v4l2_meta_format` are
++	valid. The buffer consists of ``height`` lines, each having ``width``
++	bytes of data and offset between the beginning of each two consecutive
++	lines is ``bytesperline``.
+ 
+ Return Value
+ ============
+diff --git a/Documentation/userspace-api/media/videodev2.h.rst.exceptions b/Documentation/userspace-api/media/videodev2.h.rst.exceptions
+index 3e58aac4ef0b..bdc628e8c1d6 100644
+--- a/Documentation/userspace-api/media/videodev2.h.rst.exceptions
++++ b/Documentation/userspace-api/media/videodev2.h.rst.exceptions
+@@ -215,6 +215,7 @@ replace define V4L2_FMT_FLAG_CSC_XFER_FUNC fmtdesc-flags
+ replace define V4L2_FMT_FLAG_CSC_YCBCR_ENC fmtdesc-flags
+ replace define V4L2_FMT_FLAG_CSC_HSV_ENC fmtdesc-flags
+ replace define V4L2_FMT_FLAG_CSC_QUANTIZATION fmtdesc-flags
++replace define V4L2_FMT_FLAG_META_LINE_BASED fmtdesc-flags
+ 
+ # V4L2 timecode types
+ replace define V4L2_TC_TYPE_24FPS timecode-type
+diff --git a/drivers/media/v4l2-core/v4l2-ioctl.c b/drivers/media/v4l2-core/v4l2-ioctl.c
+index 4eb3db1773e1..1fcec1515bcc 100644
+--- a/drivers/media/v4l2-core/v4l2-ioctl.c
++++ b/drivers/media/v4l2-core/v4l2-ioctl.c
+@@ -343,8 +343,9 @@ static void v4l_print_format(const void *arg, bool write_only)
+ 	case V4L2_BUF_TYPE_META_OUTPUT:
+ 		meta = &p->fmt.meta;
+ 		pixelformat = meta->dataformat;
+-		pr_cont(", dataformat=%p4cc, buffersize=%u\n",
+-			&pixelformat, meta->buffersize);
++		pr_cont(", dataformat=%p4cc, buffersize=%u, width=%u, height=%u, bytesperline=%u\n",
++			&pixelformat, meta->buffersize, meta->width,
++			meta->height, meta->bytesperline);
+ 		break;
+ 	}
+ }
+diff --git a/include/uapi/linux/videodev2.h b/include/uapi/linux/videodev2.h
+index 2c4e03d47789..48fb44772098 100644
+--- a/include/uapi/linux/videodev2.h
++++ b/include/uapi/linux/videodev2.h
+@@ -878,6 +878,7 @@ struct v4l2_fmtdesc {
+ #define V4L2_FMT_FLAG_CSC_YCBCR_ENC		0x0080
+ #define V4L2_FMT_FLAG_CSC_HSV_ENC		V4L2_FMT_FLAG_CSC_YCBCR_ENC
+ #define V4L2_FMT_FLAG_CSC_QUANTIZATION		0x0100
++#define V4L2_FMT_FLAG_META_LINE_BASED		0x0200
+ 
+ 	/* Frame Size and frame rate enumeration */
+ /*
+@@ -2424,10 +2425,19 @@ struct v4l2_sdr_format {
+  * struct v4l2_meta_format - metadata format definition
+  * @dataformat:		little endian four character code (fourcc)
+  * @buffersize:		maximum size in bytes required for data
++ * @width:		number of bytes of data per line (valid for line based
++ *			formats only, see format documentation)
++ * @height:		number of lines of data per buffer (valid for line based
++ *			formats only)
++ * @bytesperline:	offset between the beginnings of two adjacent lines in
++ *			bytes (valid for line based formats only)
+  */
+ struct v4l2_meta_format {
+ 	__u32				dataformat;
+ 	__u32				buffersize;
++	__u32				width;
++	__u32				height;
++	__u32				bytesperline;
+ } __attribute__ ((packed));
+ 
+ /**
+-- 
+2.43.2
+
+
+From 090bb3894bda739ff06e8a431815210b731056b7 Mon Sep 17 00:00:00 2001
+From: Sakari Ailus <sakari.ailus@linux.intel.com>
+Date: Tue, 8 Aug 2023 10:55:37 +0300
+Subject: [PATCH 07/33] media: Add media bus codes for MIPI CCS embedded data
+
+Add new MIPI CCS embedded data media bus formats.
+
+Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
+---
+ .../media/v4l/subdev-formats.rst              | 32 +++++++++++++++++++
+ include/uapi/linux/media-bus-format.h         | 10 +++++-
+ 2 files changed, 41 insertions(+), 1 deletion(-)
+
+diff --git a/Documentation/userspace-api/media/v4l/subdev-formats.rst b/Documentation/userspace-api/media/v4l/subdev-formats.rst
+index 7d107873cddd..7afb057a09c5 100644
+--- a/Documentation/userspace-api/media/v4l/subdev-formats.rst
++++ b/Documentation/userspace-api/media/v4l/subdev-formats.rst
+@@ -8563,3 +8563,35 @@ and finally the bit number in subscript. "p" indicates a padding bit.
+       - p
+       - p
+       - p
++
++MIPI CCS Embedded Data Formats
++^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
++
++`MIPI CCS <https://www.mipi.org/specifications/camera-command-set>`_ defines an
++metadata format for sensor embedded data, which is used to store the register
++configuration used for capturing a given frame. The format is defined in the CCS
++specification.
++
++The bit depth of the CCS embedded data matches the pixel data bit depth
++configured on the sensor. The formats used and their corresponding generic
++formats are listed in the table below.
++
++.. flat-table: CCS embedded data mbus formats and corresponding generic formats
++    :header-rows: 1
++
++    * - CCS embedded data mbus format
++      - Generic metadata format
++    * - MEDIA_BUS_FMT_CCS_EMBEDDED_8
++      - MEDIA_BUS_FMT_META_8
++    * - MEDIA_BUS_FMT_CCS_EMBEDDED_10
++      - MEDIA_BUS_FMT_META_10
++    * - MEDIA_BUS_FMT_CCS_EMBEDDED_12
++      - MEDIA_BUS_FMT_META_12
++    * - MEDIA_BUS_FMT_CCS_EMBEDDED_14
++      - MEDIA_BUS_FMT_META_14
++    * - MEDIA_BUS_FMT_CCS_EMBEDDED_16
++      - MEDIA_BUS_FMT_META_16
++    * - MEDIA_BUS_FMT_CCS_EMBEDDED_20
++      - MEDIA_BUS_FMT_META_20
++    * - MEDIA_BUS_FMT_CCS_EMBEDDED_24
++      - MEDIA_BUS_FMT_META_24
+diff --git a/include/uapi/linux/media-bus-format.h b/include/uapi/linux/media-bus-format.h
+index 6fcd7d276bc6..d5014ef3c43a 100644
+--- a/include/uapi/linux/media-bus-format.h
++++ b/include/uapi/linux/media-bus-format.h
+@@ -183,7 +183,15 @@
+ #define MEDIA_BUS_FMT_META_20			0x8006
+ #define MEDIA_BUS_FMT_META_24			0x8007
+ 
++/* Specific metadata formats. Next is 0x9008. */
++#define MEDIA_BUS_FMT_CCS_EMBEDDED_8		0x9001
++#define MEDIA_BUS_FMT_CCS_EMBEDDED_10		0x9002
++#define MEDIA_BUS_FMT_CCS_EMBEDDED_12		0x9003
++#define MEDIA_BUS_FMT_CCS_EMBEDDED_14		0x9004
++#define MEDIA_BUS_FMT_CCS_EMBEDDED_16		0x9005
++#define MEDIA_BUS_FMT_CCS_EMBEDDED_20		0x9006
++#define MEDIA_BUS_FMT_CCS_EMBEDDED_24		0x9007
++
+ #define MEDIA_BUS_FMT_IS_META(code)		\
+ 	((code) & 0xf000 == 0x7000 || (code) & 0xf000 == 0x8000)
+-
+ #endif /* __LINUX_MEDIA_BUS_FORMAT_H */
+-- 
+2.43.2
+
+
+From 44f8084f055969874d2216ba4e6e225046931e73 Mon Sep 17 00:00:00 2001
 From: Bingbu Cao <bingbu.cao@intel.com>
 Date: Thu, 11 Jan 2024 14:55:15 +0800
-Subject: [PATCH 01/31] media: intel/ipu6: add Intel IPU6 PCI device driver
+Subject: [PATCH 08/33] media: intel/ipu6: add Intel IPU6 PCI device driver
 
 Intel Image Processing Unit 6th Gen includes input and processing systems
 but the hardware presents itself as a single PCI device in system.
@@ -12,8 +1117,6 @@ specific variants to support multiple IPU6 devices in single device
 driver.
 
 Signed-off-by: Bingbu Cao <bingbu.cao@intel.com>
-Link: https://lore.kernel.org/r/20240111065531.2418836-2-bingbu.cao@intel.com
-Signed-off-by: Hans de Goede <hdegoede@redhat.com>
 ---
  .../media/pci/intel/ipu6/ipu6-platform-regs.h | 179 ++++
  drivers/media/pci/intel/ipu6/ipu6.c           | 966 ++++++++++++++++++
@@ -1212,10 +2315,10 @@ index 000000000000..04e7e7e61ca5
 +#define IPU6_NAME			"intel-ipu6"
 +#define IPU6_MEDIA_DEV_MODEL_NAME	"ipu6"
 +
-+#define IPU6SE_FIRMWARE_NAME		"intel/ipu/ipu6se_fw.bin"
-+#define IPU6EP_FIRMWARE_NAME		"intel/ipu/ipu6ep_fw.bin"
-+#define IPU6_FIRMWARE_NAME		"intel/ipu/ipu6_fw.bin"
-+#define IPU6EPMTL_FIRMWARE_NAME		"intel/ipu/ipu6epmtl_fw.bin"
++#define IPU6SE_FIRMWARE_NAME		"intel/ipu6se_fw.bin"
++#define IPU6EP_FIRMWARE_NAME		"intel/ipu6ep_fw.bin"
++#define IPU6_FIRMWARE_NAME		"intel/ipu6_fw.bin"
++#define IPU6EPMTL_FIRMWARE_NAME		"intel/ipu6epmtl_fw.bin"
 +
 +enum ipu6_version {
 +	IPU6_VER_INVALID = 0,
@@ -1543,12 +2646,13 @@ index 000000000000..04e7e7e61ca5
 +			dma_addr_t pkg_dir_dma_addr);
 +#endif /* IPU6_H */
 -- 
-2.43.0
+2.43.2
 
-From 79ff4f8a1383c679fc4bbee832e51e6369cbc21c Mon Sep 17 00:00:00 2001
+
+From f52c1b80222269f99d52b0af5937995e22c9ed6d Mon Sep 17 00:00:00 2001
 From: Bingbu Cao <bingbu.cao@intel.com>
 Date: Thu, 11 Jan 2024 14:55:16 +0800
-Subject: [PATCH 02/31] media: intel/ipu6: add IPU auxiliary devices
+Subject: [PATCH 09/33] media: intel/ipu6: add IPU auxiliary devices
 
 Even the IPU input system and processing system are in a single PCI
 device, each system has its own power sequence, the processing system
@@ -1561,8 +2665,6 @@ Register the IS/PS devices on auxiliary bus and attach power domain
 to implement the power sequence dependency.
 
 Signed-off-by: Bingbu Cao <bingbu.cao@intel.com>
-Link: https://lore.kernel.org/r/20240111065531.2418836-3-bingbu.cao@intel.com
-Signed-off-by: Hans de Goede <hdegoede@redhat.com>
 ---
  drivers/media/pci/intel/ipu6/ipu6-bus.c | 165 ++++++++++++++++++++++++
  drivers/media/pci/intel/ipu6/ipu6-bus.h |  58 +++++++++
@@ -1806,12 +2908,13 @@ index 000000000000..d46181354836
 +
 +#endif
 -- 
-2.43.0
+2.43.2
 
-From 5836e6b1138ff9cba76ab74c1eab0ec57e50dfc1 Mon Sep 17 00:00:00 2001
+
+From a74d85716ec13ff2f55997c73c9f06367174d7a6 Mon Sep 17 00:00:00 2001
 From: Bingbu Cao <bingbu.cao@intel.com>
 Date: Thu, 11 Jan 2024 14:55:17 +0800
-Subject: [PATCH 03/31] media: intel/ipu6: add IPU6 buttress interface driver
+Subject: [PATCH 10/33] media: intel/ipu6: add IPU6 buttress interface driver
 
 The IPU6 buttress is the interface between IPU device (input system
 and processing system) with rest of the SoC. It contains overall IPU
@@ -1820,8 +2923,6 @@ interfaces with the Intel Converged Security Engine and Punit to do
 firmware authentication and power management.
 
 Signed-off-by: Bingbu Cao <bingbu.cao@intel.com>
-Link: https://lore.kernel.org/r/20240111065531.2418836-4-bingbu.cao@intel.com
-Signed-off-by: Hans de Goede <hdegoede@redhat.com>
 ---
  drivers/media/pci/intel/ipu6/ipu6-buttress.c  | 912 ++++++++++++++++++
  drivers/media/pci/intel/ipu6/ipu6-buttress.h  | 102 ++
@@ -3096,12 +4197,13 @@ index 000000000000..87239af96502
 +				  BUTTRESS_ISR_SAI_VIOLATION)
 +#endif /* IPU6_PLATFORM_BUTTRESS_REGS_H */
 -- 
-2.43.0
+2.43.2
 
-From 4e01328e611be4ba5a2c9fe2baedfeb239db9d99 Mon Sep 17 00:00:00 2001
+
+From 12bd5bdd53a7c829cc5cd61a6887f89ffb036f8f Mon Sep 17 00:00:00 2001
 From: Bingbu Cao <bingbu.cao@intel.com>
 Date: Thu, 11 Jan 2024 14:55:18 +0800
-Subject: [PATCH 04/31] media: intel/ipu6: CPD parsing for get firmware
+Subject: [PATCH 11/33] media: intel/ipu6: CPD parsing for get firmware
  components
 
 For IPU6, firmware is generated and released as signed
@@ -3111,8 +4213,6 @@ header, manifest, metadata and module data. Driver can parse them
 according to the CPD layout to acquire each component.
 
 Signed-off-by: Bingbu Cao <bingbu.cao@intel.com>
-Link: https://lore.kernel.org/r/20240111065531.2418836-5-bingbu.cao@intel.com
-Signed-off-by: Hans de Goede <hdegoede@redhat.com>
 ---
  drivers/media/pci/intel/ipu6/ipu6-cpd.c | 362 ++++++++++++++++++++++++
  drivers/media/pci/intel/ipu6/ipu6-cpd.h | 105 +++++++
@@ -3600,12 +4700,13 @@ index 000000000000..37465d507386
 +			       unsigned long cpd_file_size);
 +#endif /* IPU6_CPD_H */
 -- 
-2.43.0
+2.43.2
 
-From 05c36b7a6306ed7ef15b9fd6039920a7d08626cc Mon Sep 17 00:00:00 2001
+
+From 86b4cd540a9cb10de7a521882495f5eba6cc919f Mon Sep 17 00:00:00 2001
 From: Bingbu Cao <bingbu.cao@intel.com>
 Date: Thu, 11 Jan 2024 14:55:19 +0800
-Subject: [PATCH 05/31] media: intel/ipu6: add IPU6 DMA mapping API and MMU
+Subject: [PATCH 12/33] media: intel/ipu6: add IPU6 DMA mapping API and MMU
  table
 
 he Intel IPU6 has an internal microcontroller (scalar processor, SP) which
@@ -3616,8 +4717,6 @@ This patch adds a driver for the IPU MMU and a DMA mapping implementation
 using the internal MMU. The system IOMMU may be used besides the IPU MMU.
 
 Signed-off-by: Bingbu Cao <bingbu.cao@intel.com>
-Link: https://lore.kernel.org/r/20240111065531.2418836-6-bingbu.cao@intel.com
-Signed-off-by: Hans de Goede <hdegoede@redhat.com>
 ---
  drivers/media/pci/intel/ipu6/ipu6-dma.c | 502 ++++++++++++++
  drivers/media/pci/intel/ipu6/ipu6-dma.h |  19 +
@@ -5093,12 +6192,13 @@ index 000000000000..95df7931a2e5
 +				  dma_addr_t iova);
 +#endif
 -- 
-2.43.0
+2.43.2
 
-From 6e686c2ff23611004d6e4f9a543116d65cbcf5f3 Mon Sep 17 00:00:00 2001
+
+From a4363013580d8a552e8084faedbb98bd2482c057 Mon Sep 17 00:00:00 2001
 From: Bingbu Cao <bingbu.cao@intel.com>
 Date: Thu, 11 Jan 2024 14:55:20 +0800
-Subject: [PATCH 06/31] media: intel/ipu6: add syscom interfaces between
+Subject: [PATCH 13/33] media: intel/ipu6: add syscom interfaces between
  firmware and driver
 
 Syscom is an inter-process(or) communication mechanism between an IPU
@@ -5110,8 +6210,6 @@ or memory to reside the read and write indices which are updated by
 consumer and producer.
 
 Signed-off-by: Bingbu Cao <bingbu.cao@intel.com>
-Link: https://lore.kernel.org/r/20240111065531.2418836-7-bingbu.cao@intel.com
-Signed-off-by: Hans de Goede <hdegoede@redhat.com>
 ---
  drivers/media/pci/intel/ipu6/ipu6-fw-com.c | 413 +++++++++++++++++++++
  drivers/media/pci/intel/ipu6/ipu6-fw-com.h |  47 +++
@@ -5592,12 +6690,13 @@ index 000000000000..660c406b3ac9
 +
 +#endif
 -- 
-2.43.0
+2.43.2
 
-From 6784d60f5fe68eca8bfc92785b5badd0bf415048 Mon Sep 17 00:00:00 2001
+
+From e690b8a96eb4fbe1d948ad80047a9af7c601b761 Mon Sep 17 00:00:00 2001
 From: Bingbu Cao <bingbu.cao@intel.com>
 Date: Thu, 11 Jan 2024 14:55:21 +0800
-Subject: [PATCH 07/31] media: intel/ipu6: input system ABI between firmware
+Subject: [PATCH 14/33] media: intel/ipu6: input system ABI between firmware
  and driver
 
 Implement the input system firmware ABIs between the firmware and
@@ -5605,8 +6704,6 @@ driver - include stream configuration, control command, capture
 request and response, etc.
 
 Signed-off-by: Bingbu Cao <bingbu.cao@intel.com>
-Link: https://lore.kernel.org/r/20240111065531.2418836-8-bingbu.cao@intel.com
-Signed-off-by: Hans de Goede <hdegoede@redhat.com>
 ---
  drivers/media/pci/intel/ipu6/ipu6-fw-isys.c | 487 +++++++++++++++++
  drivers/media/pci/intel/ipu6/ipu6-fw-isys.h | 573 ++++++++++++++++++++
@@ -6687,12 +7784,13 @@ index 000000000000..a7ffa0e22bf0
 +void ipu6_fw_isys_put_resp(void *context, unsigned int queue);
 +#endif
 -- 
-2.43.0
+2.43.2
 
-From 2d13721450bd1d8e778c0727a7c3eac6cc1fd6c0 Mon Sep 17 00:00:00 2001
+
+From e69a245fa4db99e5983170aab73f962dc99d3149 Mon Sep 17 00:00:00 2001
 From: Bingbu Cao <bingbu.cao@intel.com>
 Date: Thu, 11 Jan 2024 14:55:22 +0800
-Subject: [PATCH 08/31] media: intel/ipu6: add IPU6 CSI2 receiver v4l2
+Subject: [PATCH 15/33] media: intel/ipu6: add IPU6 CSI2 receiver v4l2
  sub-device
 
 Input system CSI2 receiver is exposed as a v4l2 sub-device.
@@ -6702,8 +7800,6 @@ by linked with ISYS CSI2's sink pad. CSI2 source pad is linked
 to the sink pad of video capture device.
 
 Signed-off-by: Bingbu Cao <bingbu.cao@intel.com>
-Link: https://lore.kernel.org/r/20240111065531.2418836-9-bingbu.cao@intel.com
-Signed-off-by: Hans de Goede <hdegoede@redhat.com>
 ---
  drivers/media/pci/intel/ipu6/ipu6-isys-csi2.c | 666 ++++++++++++++++++
  drivers/media/pci/intel/ipu6/ipu6-isys-csi2.h |  81 +++
@@ -8126,12 +9222,13 @@ index 000000000000..2034e1109d98
 +
 +#endif /* IPU6_ISYS_CSI2_REG_H */
 -- 
-2.43.0
+2.43.2
 
-From ba67c52b68d458e2c8ae4af08bd01a6ebe60b475 Mon Sep 17 00:00:00 2001
+
+From 71d3da5e8f1ea094e26030a12ceed4553cbe182a Mon Sep 17 00:00:00 2001
 From: Bingbu Cao <bingbu.cao@intel.com>
 Date: Thu, 11 Jan 2024 14:55:23 +0800
-Subject: [PATCH 09/31] media: intel/ipu6: add the CSI2 DPHY implementation
+Subject: [PATCH 16/33] media: intel/ipu6: add the CSI2 DPHY implementation
 
 IPU6 CSI2 DPHY hardware varies on different platforms, current
 IPU6 has three DPHY hardware instance which maybe used on tigerlake,
@@ -8142,8 +9239,6 @@ Each PHY has its own register space, input system driver call the
 DPHY callback which was set at isys_probe().
 
 Signed-off-by: Bingbu Cao <bingbu.cao@intel.com>
-Link: https://lore.kernel.org/r/20240111065531.2418836-10-bingbu.cao@intel.com
-Signed-off-by: Hans de Goede <hdegoede@redhat.com>
 ---
  .../media/pci/intel/ipu6/ipu6-isys-dwc-phy.c  | 536 +++++++++++++
  .../media/pci/intel/ipu6/ipu6-isys-jsl-phy.c  | 242 ++++++
@@ -9670,19 +10765,18 @@ index 000000000000..9abf389a05f1
 +	return ipu6_isys_mcd_phy_powerdown_ack(isys, phy_id);
 +}
 -- 
-2.43.0
+2.43.2
 
-From a3b3658e56d3fe9e0cb03166e38a023dba853594 Mon Sep 17 00:00:00 2001
+
+From 5d8544bd1d6dc7fce10a3bf01d10d926b8990b54 Mon Sep 17 00:00:00 2001
 From: Bingbu Cao <bingbu.cao@intel.com>
 Date: Thu, 11 Jan 2024 14:55:24 +0800
-Subject: [PATCH 10/31] media: intel/ipu6: add input system driver
+Subject: [PATCH 17/33] media: intel/ipu6: add input system driver
 
 Input system driver do basic isys hardware setup and irq handling
 and work with fwnode and v4l2 to register the ISYS v4l2 devices.
 
 Signed-off-by: Bingbu Cao <bingbu.cao@intel.com>
-Signed-off-by: Hans de Goede <hdegoede@redhat.com>
-Link: https://lore.kernel.org/r/20240111065531.2418836-11-bingbu.cao@intel.com
 Signed-off-by: Hans de Goede <hdegoede@redhat.com>
 ---
  drivers/media/pci/intel/ipu6/ipu6-isys.c | 1353 ++++++++++++++++++++++
@@ -11264,12 +12358,13 @@ index 000000000000..cf7a90bfedc9
 +				bool on);
 +#endif /* IPU6_ISYS_H */
 -- 
-2.43.0
+2.43.2
 
-From 32d07a2e879187ea87b90256ac32a41080e3b8bc Mon Sep 17 00:00:00 2001
+
+From 7cdb944c1cc8beb6f61268e2fe177d585fa5f415 Mon Sep 17 00:00:00 2001
 From: Bingbu Cao <bingbu.cao@intel.com>
 Date: Thu, 11 Jan 2024 14:55:25 +0800
-Subject: [PATCH 11/31] media: intel/ipu6: input system video capture nodes
+Subject: [PATCH 18/33] media: intel/ipu6: input system video capture nodes
 
 Register v4l2 video device and setup the vb2 queue to
 support basic video capture. Video streaming callback
@@ -11279,8 +12374,6 @@ data type and stream ID and then queue buffers to firmware
 to do capture.
 
 Signed-off-by: Bingbu Cao <bingbu.cao@intel.com>
-Link: https://lore.kernel.org/r/20240111065531.2418836-12-bingbu.cao@intel.com
-Signed-off-by: Hans de Goede <hdegoede@redhat.com>
 ---
  .../media/pci/intel/ipu6/ipu6-isys-queue.c    |  825 +++++++++++
  .../media/pci/intel/ipu6/ipu6-isys-queue.h    |   76 +
@@ -13607,12 +14700,13 @@ index 000000000000..21cd33c7e277
 +
 +#endif /* IPU6_ISYS_VIDEO_H */
 -- 
-2.43.0
+2.43.2
 
-From abf929b4fbd35689080a8629c6bfebe0de699fe5 Mon Sep 17 00:00:00 2001
+
+From cc79447bab87ce8c498b0e7a5f849c7d4f6262c0 Mon Sep 17 00:00:00 2001
 From: Bingbu Cao <bingbu.cao@intel.com>
 Date: Thu, 11 Jan 2024 14:55:26 +0800
-Subject: [PATCH 12/31] media: add Kconfig and Makefile for IPU6
+Subject: [PATCH 19/33] media: add Kconfig and Makefile for IPU6
 
 Add IPU6 support in Kconfig and Makefile, with this patch you can
 build the Intel IPU6 and input system modules by select the
@@ -13620,8 +14714,6 @@ CONFIG_VIDEO_INTEL_IPU6 in config.
 
 Signed-off-by: Bingbu Cao <bingbu.cao@intel.com>
 Signed-off-by: Andreas Helbech Kleist <andreaskleist@gmail.com>
-Link: https://lore.kernel.org/r/20240111065531.2418836-13-bingbu.cao@intel.com
-Signed-off-by: Hans de Goede <hdegoede@redhat.com>
 ---
  drivers/media/pci/intel/Kconfig       |  1 +
  drivers/media/pci/intel/Makefile      |  1 +
@@ -13705,28 +14797,27 @@ index 000000000000..a821b0a1567f
 +
 +obj-$(CONFIG_VIDEO_INTEL_IPU6)	+= intel-ipu6-isys.o
 -- 
-2.43.0
+2.43.2
 
-From 59872e5aa96479948da4b1d04a10101d8cb86da2 Mon Sep 17 00:00:00 2001
+
+From edc6bed6991727e64f1eb60c0392403c39b96ba4 Mon Sep 17 00:00:00 2001
 From: Bingbu Cao <bingbu.cao@intel.com>
 Date: Thu, 11 Jan 2024 14:55:27 +0800
-Subject: [PATCH 13/31] MAINTAINERS: add maintainers for Intel IPU6 input
+Subject: [PATCH 20/33] MAINTAINERS: add maintainers for Intel IPU6 input
  system driver
 
 Update MAINTAINERS file for Intel IPU6 input system driver.
 
 Signed-off-by: Bingbu Cao <bingbu.cao@intel.com>
-Link: https://lore.kernel.org/r/20240111065531.2418836-14-bingbu.cao@intel.com
-Signed-off-by: Hans de Goede <hdegoede@redhat.com>
 ---
  MAINTAINERS | 10 ++++++++++
  1 file changed, 10 insertions(+)
 
 diff --git a/MAINTAINERS b/MAINTAINERS
-index a7c4cf8201e0..bedffa6941ab 100644
+index 1aabf1c15bb3..5346d472cb0f 100644
 --- a/MAINTAINERS
 +++ b/MAINTAINERS
-@@ -10733,6 +10733,16 @@ F:	Documentation/admin-guide/media/ipu3_rcb.svg
+@@ -10899,6 +10899,16 @@ F:	Documentation/admin-guide/media/ipu3_rcb.svg
  F:	Documentation/userspace-api/media/v4l/metafmt-intel-ipu3.rst
  F:	drivers/staging/media/ipu3/
  
@@ -13744,12 +14835,13 @@ index a7c4cf8201e0..bedffa6941ab 100644
  M:	Sumesh K Naduvalath <sumesh.k.naduvalath@intel.com>
  L:	platform-driver-x86@vger.kernel.org
 -- 
-2.43.0
+2.43.2
 
-From 7acc1618d2f9cbb0d6b07ce9a1eace25663b9fb2 Mon Sep 17 00:00:00 2001
+
+From a12041e5f7fb32b93669f19b579bc1940a026bbe Mon Sep 17 00:00:00 2001
 From: Bingbu Cao <bingbu.cao@intel.com>
 Date: Thu, 11 Jan 2024 14:55:28 +0800
-Subject: [PATCH 14/31] Documentation: add Intel IPU6 ISYS driver admin-guide
+Subject: [PATCH 21/33] Documentation: add Intel IPU6 ISYS driver admin-guide
  doc
 
 This document mainly describe the functionality of IPU6 and
@@ -13757,8 +14849,6 @@ IPU6 isys driver, and gives an example that how user can do
 imaging capture with tools.
 
 Signed-off-by: Bingbu Cao <bingbu.cao@intel.com>
-Link: https://lore.kernel.org/r/20240111065531.2418836-15-bingbu.cao@intel.com
-Signed-off-by: Hans de Goede <hdegoede@redhat.com>
 ---
  Documentation/admin-guide/media/ipu6-isys.rst | 158 ++++++++++++++++
  .../admin-guide/media/ipu6_isys_graph.svg     | 174 ++++++++++++++++++
@@ -14112,7 +15202,7 @@ index 000000000000..707747c75280
 +</g>
 +</svg>
 diff --git a/Documentation/admin-guide/media/v4l-drivers.rst b/Documentation/admin-guide/media/v4l-drivers.rst
-index 61283d67ceef..50bdef2d1762 100644
+index f4bb2605f07e..4120eded9a13 100644
 --- a/Documentation/admin-guide/media/v4l-drivers.rst
 +++ b/Documentation/admin-guide/media/v4l-drivers.rst
 @@ -16,6 +16,7 @@ Video4Linux (V4L) driver-specific documentation
@@ -14124,20 +15214,19 @@ index 61283d67ceef..50bdef2d1762 100644
  	mgb4
  	omap3isp
 -- 
-2.43.0
+2.43.2
 
-From 878747fcd0bb4f27933d3d32525472b8a0425724 Mon Sep 17 00:00:00 2001
+
+From 3e80683ecc9ffe38fdf6e6232089794b6019816b Mon Sep 17 00:00:00 2001
 From: Bingbu Cao <bingbu.cao@intel.com>
 Date: Thu, 11 Jan 2024 14:55:29 +0800
-Subject: [PATCH 15/31] Documentation: add documentation of Intel IPU6 driver
+Subject: [PATCH 22/33] Documentation: add documentation of Intel IPU6 driver
  and hardware overview
 
 Add a documentation for an overview of IPU6 hardware and describe the main
 the components of IPU6 driver.
 
 Signed-off-by: Bingbu Cao <bingbu.cao@intel.com>
-Link: https://lore.kernel.org/r/20240111065531.2418836-16-bingbu.cao@intel.com
-Signed-off-by: Hans de Goede <hdegoede@redhat.com>
 ---
  .../driver-api/media/drivers/index.rst        |   1 +
  .../driver-api/media/drivers/ipu6.rst         | 205 ++++++++++++++++++
@@ -14368,12 +15457,659 @@ index 000000000000..b6357155c13b
 +
 +
 -- 
-2.43.0
+2.43.2
 
-From 7103b8fabe3158d203b72036abc2a964687d46b8 Mon Sep 17 00:00:00 2001
+
+From d883f3386e7185d9404cb25e32df986656a4e82a Mon Sep 17 00:00:00 2001
+From: Bingbu Cao <bingbu.cao@intel.com>
+Date: Thu, 11 Jan 2024 14:55:30 +0800
+Subject: [PATCH 23/33] media: ipu6/isys: support line-based metadata capture
+ support
+
+Some camera sensor can output the embedded data in specific
+data type.  This patch add the support for embedded data capture
+in IPU6 IS driver.
+
+It's based on Sakari's line-based metadata capture support change:
+<URL:https://git.linuxtv.org/sailus/media_tree.git/log/?h=metadata>
+
+Signed-off-by: Hongju Wang <hongju.wang@intel.com>
+Signed-off-by: Bingbu Cao <bingbu.cao@intel.com>
+---
+ drivers/media/pci/intel/ipu6/ipu6-isys-csi2.c |   5 +
+ .../media/pci/intel/ipu6/ipu6-isys-queue.c    |  44 ++--
+ .../media/pci/intel/ipu6/ipu6-isys-subdev.c   |   5 +
+ .../media/pci/intel/ipu6/ipu6-isys-video.c    | 201 +++++++++++++++---
+ .../media/pci/intel/ipu6/ipu6-isys-video.h    |   7 +-
+ 5 files changed, 216 insertions(+), 46 deletions(-)
+
+diff --git a/drivers/media/pci/intel/ipu6/ipu6-isys-csi2.c b/drivers/media/pci/intel/ipu6/ipu6-isys-csi2.c
+index ac9fa3e0d7ab..a6430d531129 100644
+--- a/drivers/media/pci/intel/ipu6/ipu6-isys-csi2.c
++++ b/drivers/media/pci/intel/ipu6/ipu6-isys-csi2.c
+@@ -42,6 +42,11 @@ static const u32 csi2_supported_codes[] = {
+ 	MEDIA_BUS_FMT_SGBRG8_1X8,
+ 	MEDIA_BUS_FMT_SGRBG8_1X8,
+ 	MEDIA_BUS_FMT_SRGGB8_1X8,
++	MEDIA_BUS_FMT_META_8,
++	MEDIA_BUS_FMT_META_10,
++	MEDIA_BUS_FMT_META_12,
++	MEDIA_BUS_FMT_META_16,
++	MEDIA_BUS_FMT_META_24,
+ 	0
+ };
+ 
+diff --git a/drivers/media/pci/intel/ipu6/ipu6-isys-queue.c b/drivers/media/pci/intel/ipu6/ipu6-isys-queue.c
+index 735d2d642d87..15fa7ed22b2f 100644
+--- a/drivers/media/pci/intel/ipu6/ipu6-isys-queue.c
++++ b/drivers/media/pci/intel/ipu6/ipu6-isys-queue.c
+@@ -35,11 +35,14 @@ static int queue_setup(struct vb2_queue *q, unsigned int *num_buffers,
+ 	/* num_planes == 0: we're being called through VIDIOC_REQBUFS */
+ 	if (!*num_planes) {
+ 		use_fmt = true;
+-		*num_planes = av->mpix.num_planes;
++		if (av->vfmt.type == V4L2_BUF_TYPE_VIDEO_CAPTURE_MPLANE)
++			*num_planes = av->vfmt.fmt.pix_mp.num_planes;
++		else if (av->vfmt.type == V4L2_BUF_TYPE_META_CAPTURE)
++			*num_planes = 1;
+ 	}
+ 
+ 	for (i = 0; i < *num_planes; i++) {
+-		size = av->mpix.plane_fmt[i].sizeimage;
++		size = ipu6_get_data_size(&av->vfmt, i);
+ 		if (use_fmt) {
+ 			sizes[i] = size;
+ 		} else if (sizes[i] < size) {
+@@ -59,16 +62,17 @@ static int ipu6_isys_buf_prepare(struct vb2_buffer *vb)
+ 	struct ipu6_isys_queue *aq = vb2_queue_to_isys_queue(vb->vb2_queue);
+ 	struct ipu6_isys_video *av = ipu6_isys_queue_to_video(aq);
+ 	struct device *dev = &av->isys->adev->auxdev.dev;
++	u32 bytesperline = ipu6_get_bytes_per_line(&av->vfmt);
++	u32 height = ipu6_get_frame_height(&av->vfmt);
++	u32 size = ipu6_get_data_size(&av->vfmt, 0);
+ 
+ 	dev_dbg(dev, "buffer: %s: configured size %u, buffer size %lu\n",
+-		av->vdev.name, av->mpix.plane_fmt[0].sizeimage,
+-		vb2_plane_size(vb, 0));
++		av->vdev.name, size, vb2_plane_size(vb, 0));
+ 
+-	if (av->mpix.plane_fmt[0].sizeimage > vb2_plane_size(vb, 0))
++	if (size > vb2_plane_size(vb, 0))
+ 		return -EINVAL;
+ 
+-	vb2_set_plane_payload(vb, 0, av->mpix.plane_fmt[0].bytesperline *
+-			      av->mpix.height);
++	vb2_set_plane_payload(vb, 0, bytesperline * height);
+ 	vb->planes[0].data_offset = 0;
+ 
+ 	return 0;
+@@ -437,18 +441,22 @@ static int ipu6_isys_link_fmt_validate(struct ipu6_isys_queue *aq)
+ 		return ret;
+ 	}
+ 
+-	if (format.width != av->mpix.width ||
+-	    format.height != av->mpix.height) {
+-		dev_dbg(dev, "wrong width or height %ux%u (%ux%u expected)\n",
+-			av->mpix.width, av->mpix.height,
+-			format.width, format.height);
++	if (format.width != ipu6_get_frame_width(&av->vfmt) ||
++	    format.height != ipu6_get_frame_height(&av->vfmt)) {
++		dev_err(dev, "wrong width or height %ux%u (%ux%u expected)\n",
++			ipu6_get_frame_width(&av->vfmt),
++			ipu6_get_frame_height(&av->vfmt), format.width,
++			format.height);
+ 		return -EINVAL;
+ 	}
+ 
+-	if (format.field != av->mpix.field) {
+-		dev_dbg(dev, "wrong field value 0x%8.8x (0x%8.8x expected)\n",
+-			av->mpix.field, format.field);
+-		return -EINVAL;
++	if (av->vfmt.type == V4L2_BUF_TYPE_VIDEO_CAPTURE_MPLANE) {
++		if (format.field != av->vfmt.fmt.pix_mp.field) {
++			dev_dbg(dev,
++				"wrong field value 0x%8.8x (%8.8x expected)\n",
++				av->vfmt.fmt.pix_mp.field, format.field);
++			return -EINVAL;
++		}
+ 	}
+ 
+ 	if (format.code != av->pfmt->code) {
+@@ -531,8 +539,8 @@ static int start_streaming(struct vb2_queue *q, unsigned int count)
+ 	int nr_queues, ret;
+ 
+ 	dev_dbg(dev, "stream: %s: width %u, height %u, css pixelformat %u\n",
+-		av->vdev.name, av->mpix.width, av->mpix.height,
+-		av->pfmt->css_pixelformat);
++		av->vdev.name, ipu6_get_frame_width(&av->vfmt),
++		ipu6_get_frame_height(&av->vfmt), av->pfmt->css_pixelformat);
+ 
+ 	ret = ipu6_isys_setup_video(av, &source_entity, &nr_queues);
+ 	if (ret < 0) {
+diff --git a/drivers/media/pci/intel/ipu6/ipu6-isys-subdev.c b/drivers/media/pci/intel/ipu6/ipu6-isys-subdev.c
+index 510c5ca34f9f..3c9263ac02a3 100644
+--- a/drivers/media/pci/intel/ipu6/ipu6-isys-subdev.c
++++ b/drivers/media/pci/intel/ipu6/ipu6-isys-subdev.c
+@@ -20,25 +20,30 @@ unsigned int ipu6_isys_mbus_code_to_bpp(u32 code)
+ {
+ 	switch (code) {
+ 	case MEDIA_BUS_FMT_RGB888_1X24:
++	case MEDIA_BUS_FMT_META_24:
+ 		return 24;
+ 	case MEDIA_BUS_FMT_RGB565_1X16:
+ 	case MEDIA_BUS_FMT_UYVY8_1X16:
+ 	case MEDIA_BUS_FMT_YUYV8_1X16:
++	case MEDIA_BUS_FMT_META_16:
+ 		return 16;
+ 	case MEDIA_BUS_FMT_SBGGR12_1X12:
+ 	case MEDIA_BUS_FMT_SGBRG12_1X12:
+ 	case MEDIA_BUS_FMT_SGRBG12_1X12:
+ 	case MEDIA_BUS_FMT_SRGGB12_1X12:
++	case MEDIA_BUS_FMT_META_12:
+ 		return 12;
+ 	case MEDIA_BUS_FMT_SBGGR10_1X10:
+ 	case MEDIA_BUS_FMT_SGBRG10_1X10:
+ 	case MEDIA_BUS_FMT_SGRBG10_1X10:
+ 	case MEDIA_BUS_FMT_SRGGB10_1X10:
++	case MEDIA_BUS_FMT_META_10:
+ 		return 10;
+ 	case MEDIA_BUS_FMT_SBGGR8_1X8:
+ 	case MEDIA_BUS_FMT_SGBRG8_1X8:
+ 	case MEDIA_BUS_FMT_SGRBG8_1X8:
+ 	case MEDIA_BUS_FMT_SRGGB8_1X8:
++	case MEDIA_BUS_FMT_META_8:
+ 		return 8;
+ 	default:
+ 		WARN_ON(1);
+diff --git a/drivers/media/pci/intel/ipu6/ipu6-isys-video.c b/drivers/media/pci/intel/ipu6/ipu6-isys-video.c
+index 847eac26bcd6..1a023bf1e1a6 100644
+--- a/drivers/media/pci/intel/ipu6/ipu6-isys-video.c
++++ b/drivers/media/pci/intel/ipu6/ipu6-isys-video.c
+@@ -85,6 +85,11 @@ const struct ipu6_isys_pixelformat ipu6_isys_pfmts[] = {
+ 	 IPU6_FW_ISYS_FRAME_FORMAT_RGB565},
+ 	{V4L2_PIX_FMT_BGR24, 24, 24, MEDIA_BUS_FMT_RGB888_1X24,
+ 	 IPU6_FW_ISYS_FRAME_FORMAT_RGBA888},
++	{V4L2_META_FMT_GENERIC_8, 8, 8, MEDIA_BUS_FMT_META_8, 0},
++	{V4L2_META_FMT_GENERIC_CSI2_10, 10, 10, MEDIA_BUS_FMT_META_10, 0},
++	{V4L2_META_FMT_GENERIC_CSI2_12, 12, 12, MEDIA_BUS_FMT_META_12, 0},
++	{V4L2_META_FMT_GENERIC_CSI2_16, 16, 16, MEDIA_BUS_FMT_META_16, 0},
++	{V4L2_META_FMT_GENERIC_CSI2_24, 24, 24, MEDIA_BUS_FMT_META_24, 0},
+ };
+ 
+ static int video_open(struct file *file)
+@@ -181,12 +186,12 @@ static int ipu6_isys_vidioc_enum_framesizes(struct file *file, void *fh,
+ 	return 0;
+ }
+ 
+-static int vidioc_g_fmt_vid_cap_mplane(struct file *file, void *fh,
+-				       struct v4l2_format *fmt)
++static int vidioc_get_format(struct file *file, void *fh,
++			     struct v4l2_format *fmt)
+ {
+ 	struct ipu6_isys_video *av = video_drvdata(file);
+ 
+-	fmt->fmt.pix_mp = av->mpix;
++	*fmt = av->vfmt;
+ 
+ 	return 0;
+ }
+@@ -245,30 +250,114 @@ ipu6_isys_video_try_fmt_vid_mplane(struct ipu6_isys_video *av,
+ 	return pfmt;
+ }
+ 
+-static int vidioc_s_fmt_vid_cap_mplane(struct file *file, void *fh,
+-				       struct v4l2_format *f)
++static const struct ipu6_isys_pixelformat *
++ipu6_isys_video_try_fmt_meta(struct ipu6_isys_video *av,
++			     struct v4l2_meta_format *meta)
++{
++	const struct ipu6_isys_pixelformat *pfmt =
++		ipu6_isys_get_pixelformat(meta->dataformat);
++
++	memset(&av->vfmt, 0, sizeof(av->vfmt));
++	av->vfmt.type = V4L2_BUF_TYPE_META_CAPTURE;
++	av->pfmt = pfmt;
++
++	meta->dataformat = pfmt->pixelformat;
++	meta->width = clamp(meta->width, IPU6_ISYS_MIN_WIDTH,
++			    IPU6_ISYS_MAX_WIDTH);
++	meta->height = clamp(meta->height, IPU6_ISYS_MIN_HEIGHT,
++			     IPU6_ISYS_MAX_HEIGHT);
++
++	if (pfmt->bpp != pfmt->bpp_packed)
++		meta->bytesperline = meta->width *
++				     DIV_ROUND_UP(pfmt->bpp, BITS_PER_BYTE);
++	else
++		meta->bytesperline =
++			DIV_ROUND_UP(meta->width * pfmt->bpp, BITS_PER_BYTE);
++
++	meta->bytesperline = ALIGN(meta->bytesperline, av->isys->line_align);
++	meta->buffersize =
++		max(max(meta->buffersize, meta->bytesperline * meta->height +
++			max(meta->bytesperline,
++			    av->isys->pdata->ipdata->isys_dma_overshoot)), 1U);
++
++	return pfmt;
++}
++
++static const struct ipu6_isys_pixelformat *
++ipu6_isys_video_try_fmt(struct ipu6_isys_video *av, struct v4l2_format *f)
++{
++	if (f->type == V4L2_BUF_TYPE_VIDEO_CAPTURE_MPLANE)
++		return ipu6_isys_video_try_fmt_vid_mplane(av, &f->fmt.pix_mp);
++	else if (f->type == V4L2_BUF_TYPE_META_CAPTURE)
++		return ipu6_isys_video_try_fmt_meta(av, &f->fmt.meta);
++	else
++		return &ipu6_isys_pfmts[0];
++}
++
++static int vidioc_set_format(struct file *file, void *fh,
++			     struct v4l2_format *f)
+ {
+ 	struct ipu6_isys_video *av = video_drvdata(file);
+ 
+ 	if (av->aq.vbq.streaming)
+ 		return -EBUSY;
+ 
+-	av->pfmt = ipu6_isys_video_try_fmt_vid_mplane(av, &f->fmt.pix_mp);
+-	av->mpix = f->fmt.pix_mp;
++	if (f->type != V4L2_BUF_TYPE_VIDEO_CAPTURE_MPLANE &&
++	    f->type != V4L2_BUF_TYPE_META_CAPTURE)
++		return -EINVAL;
++
++	av->pfmt = ipu6_isys_video_try_fmt(av, f);
++	av->vfmt = *f;
+ 
+ 	return 0;
+ }
+ 
+-static int vidioc_try_fmt_vid_cap_mplane(struct file *file, void *fh,
+-					 struct v4l2_format *f)
++static int vidioc_try_format(struct file *file, void *fh,
++			     struct v4l2_format *f)
+ {
+ 	struct ipu6_isys_video *av = video_drvdata(file);
+ 
+-	ipu6_isys_video_try_fmt_vid_mplane(av, &f->fmt.pix_mp);
++	if (f->type != V4L2_BUF_TYPE_VIDEO_CAPTURE_MPLANE &&
++	    f->type != V4L2_BUF_TYPE_META_CAPTURE)
++		return -EINVAL;
++
++	ipu6_isys_video_try_fmt(av, f);
+ 
+ 	return 0;
+ }
+ 
++static int vidioc_request_qbufs(struct file *file, void *priv,
++				struct v4l2_requestbuffers *p)
++{
++	struct ipu6_isys_video *av = video_drvdata(file);
++	int ret;
++
++	av->aq.vbq.is_multiplanar = V4L2_TYPE_IS_MULTIPLANAR(p->type);
++	av->aq.vbq.is_output = V4L2_TYPE_IS_OUTPUT(p->type);
++
++	ret = vb2_queue_change_type(&av->aq.vbq, p->type);
++	if (ret)
++		return ret;
++
++	return vb2_ioctl_reqbufs(file, priv, p);
++}
++
++static int vidioc_create_bufs(struct file *file, void *priv,
++			      struct v4l2_create_buffers *p)
++{
++	struct ipu6_isys_video *av = video_drvdata(file);
++	int ret;
++
++	av->aq.vbq.is_multiplanar = V4L2_TYPE_IS_MULTIPLANAR(p->format.type);
++	av->aq.vbq.is_output = V4L2_TYPE_IS_OUTPUT(p->format.type);
++
++	ret = vb2_queue_change_type(&av->aq.vbq, p->format.type);
++	if (ret)
++		return ret;
++
++	return vb2_ioctl_create_bufs(file, priv, p);
++}
++
+ static int link_validate(struct media_link *link)
+ {
+ 	struct ipu6_isys_video *av =
+@@ -279,6 +368,8 @@ static int link_validate(struct media_link *link)
+ 	struct v4l2_mbus_framefmt *s_fmt;
+ 	struct media_pad *s_pad;
+ 	u32 s_stream;
++	u32 height;
++	u32 width;
+ 	int ret = -EPIPE;
+ 
+ 	if (!link->source->entity)
+@@ -305,11 +396,13 @@ static int link_validate(struct media_link *link)
+ 		goto unlock;
+ 	}
+ 
+-	if (s_fmt->width != av->mpix.width ||
+-	    s_fmt->height != av->mpix.height || s_fmt->code != av->pfmt->code) {
++	height = ipu6_get_frame_height(&av->vfmt);
++	width = ipu6_get_frame_width(&av->vfmt);
++	if (s_fmt->width != width || s_fmt->height != height ||
++	    s_fmt->code != av->pfmt->code) {
+ 		dev_err(dev, "format mismatch %dx%d,%x != %dx%d,%x\n",
+-			s_fmt->width, s_fmt->height, s_fmt->code,
+-			av->mpix.width, av->mpix.height, av->pfmt->code);
++			s_fmt->width, s_fmt->height, s_fmt->code, width, height,
++			av->pfmt->code);
+ 		goto unlock;
+ 	}
+ 
+@@ -393,10 +486,10 @@ static int ipu6_isys_fw_pin_cfg(struct ipu6_isys_video *av,
+ 
+ 	output_pin = &cfg->output_pins[output_pins];
+ 	output_pin->input_pin_id = input_pins;
+-	output_pin->output_res.width = av->mpix.width;
+-	output_pin->output_res.height = av->mpix.height;
++	output_pin->output_res.width = ipu6_get_frame_width(&av->vfmt);
++	output_pin->output_res.height = ipu6_get_frame_height(&av->vfmt);
+ 
+-	output_pin->stride = av->mpix.plane_fmt[0].bytesperline;
++	output_pin->stride = ipu6_get_bytes_per_line(&av->vfmt);
+ 	if (av->pfmt->bpp != av->pfmt->bpp_packed)
+ 		output_pin->pt = IPU6_FW_ISYS_PIN_TYPE_RAW_SOC;
+ 	else
+@@ -663,8 +756,8 @@ void ipu6_isys_configure_stream_watermark(struct ipu6_isys_video *av,
+ 
+ 	esd = media_entity_to_v4l2_subdev(av->stream->source_entity);
+ 
+-	av->watermark.width = av->mpix.width;
+-	av->watermark.height = av->mpix.height;
++	av->watermark.width = ipu6_get_frame_width(&av->vfmt);
++	av->watermark.height = ipu6_get_frame_height(&av->vfmt);
+ 	av->watermark.sram_gran_shift = isys->pdata->ipdata->sram_gran_shift;
+ 	av->watermark.sram_gran_size = isys->pdata->ipdata->sram_gran_size;
+ 
+@@ -992,11 +1085,15 @@ static const struct v4l2_ioctl_ops ioctl_ops_mplane = {
+ 	.vidioc_querycap = ipu6_isys_vidioc_querycap,
+ 	.vidioc_enum_fmt_vid_cap = ipu6_isys_vidioc_enum_fmt,
+ 	.vidioc_enum_framesizes = ipu6_isys_vidioc_enum_framesizes,
+-	.vidioc_g_fmt_vid_cap_mplane = vidioc_g_fmt_vid_cap_mplane,
+-	.vidioc_s_fmt_vid_cap_mplane = vidioc_s_fmt_vid_cap_mplane,
+-	.vidioc_try_fmt_vid_cap_mplane = vidioc_try_fmt_vid_cap_mplane,
+-	.vidioc_reqbufs = vb2_ioctl_reqbufs,
+-	.vidioc_create_bufs = vb2_ioctl_create_bufs,
++	.vidioc_g_fmt_vid_cap_mplane = vidioc_get_format,
++	.vidioc_s_fmt_vid_cap_mplane = vidioc_set_format,
++	.vidioc_try_fmt_vid_cap_mplane = vidioc_try_format,
++	.vidioc_enum_fmt_meta_cap = ipu6_isys_vidioc_enum_fmt,
++	.vidioc_g_fmt_meta_cap = vidioc_get_format,
++	.vidioc_s_fmt_meta_cap = vidioc_set_format,
++	.vidioc_try_fmt_meta_cap = vidioc_try_format,
++	.vidioc_reqbufs = vidioc_request_qbufs,
++	.vidioc_create_bufs = vidioc_create_bufs,
+ 	.vidioc_prepare_buf = vb2_ioctl_prepare_buf,
+ 	.vidioc_querybuf = vb2_ioctl_querybuf,
+ 	.vidioc_qbuf = vb2_ioctl_qbuf,
+@@ -1199,7 +1296,8 @@ int ipu6_isys_video_init(struct ipu6_isys_video *av)
+ 
+ 	mutex_init(&av->mutex);
+ 	av->vdev.device_caps = V4L2_CAP_STREAMING | V4L2_CAP_IO_MC |
+-			       V4L2_CAP_VIDEO_CAPTURE_MPLANE;
++			       V4L2_CAP_VIDEO_CAPTURE_MPLANE |
++			       V4L2_CAP_META_CAPTURE;
+ 	av->vdev.vfl_dir = VFL_DIR_RX;
+ 
+ 	ret = ipu6_isys_queue_init(&av->aq);
+@@ -1220,8 +1318,8 @@ int ipu6_isys_video_init(struct ipu6_isys_video *av)
+ 	av->vdev.queue = &av->aq.vbq;
+ 	av->vdev.lock = &av->mutex;
+ 
+-	ipu6_isys_video_try_fmt_vid_mplane(av, &format.fmt.pix_mp);
+-	av->mpix = format.fmt.pix_mp;
++	ipu6_isys_video_try_fmt(av, &format);
++	av->vfmt = format;
+ 
+ 	set_bit(V4L2_FL_USES_V4L2_FH, &av->vdev.flags);
+ 	video_set_drvdata(&av->vdev, av);
+@@ -1251,3 +1349,52 @@ void ipu6_isys_video_cleanup(struct ipu6_isys_video *av)
+ 	media_entity_cleanup(&av->vdev.entity);
+ 	mutex_destroy(&av->mutex);
+ }
++
++u32 ipu6_get_data_size(struct v4l2_format *vfmt, int plane)
++{
++	if (vfmt->type == V4L2_BUF_TYPE_VIDEO_CAPTURE_MPLANE)
++		return vfmt->fmt.pix_mp.plane_fmt[plane].sizeimage;
++	else if (vfmt->type == V4L2_BUF_TYPE_META_CAPTURE)
++		return vfmt->fmt.meta.buffersize;
++
++	WARN_ON_ONCE(1);
++
++	return 0;
++}
++
++u32 ipu6_get_bytes_per_line(struct v4l2_format *vfmt)
++{
++	if (vfmt->type == V4L2_BUF_TYPE_VIDEO_CAPTURE_MPLANE)
++		return vfmt->fmt.pix_mp.plane_fmt[0].bytesperline;
++	else if (vfmt->type == V4L2_BUF_TYPE_META_CAPTURE)
++		return vfmt->fmt.meta.bytesperline;
++
++	WARN_ON_ONCE(1);
++
++	return 0;
++}
++
++u32 ipu6_get_frame_width(struct v4l2_format *vfmt)
++{
++	if (vfmt->type == V4L2_BUF_TYPE_VIDEO_CAPTURE_MPLANE)
++		return vfmt->fmt.pix_mp.width;
++	else if (vfmt->type == V4L2_BUF_TYPE_META_CAPTURE)
++		return vfmt->fmt.meta.width;
++
++	WARN_ON_ONCE(1);
++
++	return 0;
++}
++
++u32 ipu6_get_frame_height(struct v4l2_format *vfmt)
++{
++	if (vfmt->type == V4L2_BUF_TYPE_VIDEO_CAPTURE_MPLANE)
++		return vfmt->fmt.pix_mp.height;
++	else if (vfmt->type == V4L2_BUF_TYPE_META_CAPTURE)
++		return vfmt->fmt.meta.height;
++
++	WARN_ON_ONCE(1);
++
++	return 0;
++}
++
+diff --git a/drivers/media/pci/intel/ipu6/ipu6-isys-video.h b/drivers/media/pci/intel/ipu6/ipu6-isys-video.h
+index 21cd33c7e277..2634ec0fd68b 100644
+--- a/drivers/media/pci/intel/ipu6/ipu6-isys-video.h
++++ b/drivers/media/pci/intel/ipu6/ipu6-isys-video.h
+@@ -90,7 +90,7 @@ struct ipu6_isys_video {
+ 	struct mutex mutex;
+ 	struct media_pad pad;
+ 	struct video_device vdev;
+-	struct v4l2_pix_format_mplane mpix;
++	struct v4l2_format vfmt;
+ 	const struct ipu6_isys_pixelformat *pfmt;
+ 	struct ipu6_isys *isys;
+ 	struct ipu6_isys_stream *stream;
+@@ -133,4 +133,9 @@ void ipu6_isys_configure_stream_watermark(struct ipu6_isys_video *av,
+ 					  bool state);
+ void ipu6_isys_update_stream_watermark(struct ipu6_isys_video *av, bool state);
+ 
++u32 ipu6_get_data_size(struct v4l2_format *vfmt, int plane);
++u32 ipu6_get_bytes_per_line(struct v4l2_format *vfmt);
++u32 ipu6_get_frame_width(struct v4l2_format *vfmt);
++u32 ipu6_get_frame_height(struct v4l2_format *vfmt);
++
+ #endif /* IPU6_ISYS_VIDEO_H */
+-- 
+2.43.2
+
+
+From 9a6fb311b81433ebbd8e0769bed19958a6a5a5f6 Mon Sep 17 00:00:00 2001
+From: Bingbu Cao <bingbu.cao@intel.com>
+Date: Thu, 11 Jan 2024 14:55:31 +0800
+Subject: [PATCH 24/33] media: ipu6/isys: support new v4l2 subdev state APIs
+
+Add support for the upcoming v4l2-subdev API changes in kernel 6.8.
+This patch is based on Sakari's branch:
+<URL:https://git.linuxtv.org/sailus/media_tree.git/log/?h=metadata>
+
+Signed-off-by: Hans de Goede <hdegoede@redhat.com>
+Signed-off-by: Bingbu Cao <bingbu.cao@intel.com>
+---
+ drivers/media/pci/intel/ipu6/ipu6-isys-csi2.c |  8 +++-----
+ .../media/pci/intel/ipu6/ipu6-isys-subdev.c   | 19 +++++++++++--------
+ .../media/pci/intel/ipu6/ipu6-isys-subdev.h   |  2 --
+ .../media/pci/intel/ipu6/ipu6-isys-video.c    |  3 +--
+ 4 files changed, 15 insertions(+), 17 deletions(-)
+
+diff --git a/drivers/media/pci/intel/ipu6/ipu6-isys-csi2.c b/drivers/media/pci/intel/ipu6/ipu6-isys-csi2.c
+index a6430d531129..6f258cf92fc1 100644
+--- a/drivers/media/pci/intel/ipu6/ipu6-isys-csi2.c
++++ b/drivers/media/pci/intel/ipu6/ipu6-isys-csi2.c
+@@ -403,12 +403,11 @@ static int ipu6_isys_csi2_set_sel(struct v4l2_subdev *sd,
+ 	if (!sink_ffmt)
+ 		return -EINVAL;
+ 
+-	src_ffmt = v4l2_subdev_state_get_stream_format(state, sel->pad,
+-						       sel->stream);
++	src_ffmt = v4l2_subdev_state_get_format(state, sel->pad, sel->stream);
+ 	if (!src_ffmt)
+ 		return -EINVAL;
+ 
+-	crop = v4l2_subdev_state_get_stream_crop(state, sel->pad, sel->stream);
++	crop = v4l2_subdev_state_get_crop(state, sel->pad, sel->stream);
+ 	if (!crop)
+ 		return -EINVAL;
+ 
+@@ -453,7 +452,7 @@ static int ipu6_isys_csi2_get_sel(struct v4l2_subdev *sd,
+ 	if (!sink_ffmt)
+ 		return -EINVAL;
+ 
+-	crop = v4l2_subdev_state_get_stream_crop(state, sel->pad, sel->stream);
++	crop = v4l2_subdev_state_get_crop(state, sel->pad, sel->stream);
+ 	if (!crop)
+ 		return -EINVAL;
+ 
+@@ -480,7 +479,6 @@ static const struct v4l2_subdev_video_ops csi2_sd_video_ops = {
+ };
+ 
+ static const struct v4l2_subdev_pad_ops csi2_sd_pad_ops = {
+-	.init_cfg = ipu6_isys_subdev_init_cfg,
+ 	.get_fmt = v4l2_subdev_get_fmt,
+ 	.set_fmt = ipu6_isys_subdev_set_fmt,
+ 	.get_selection = ipu6_isys_csi2_get_sel,
+diff --git a/drivers/media/pci/intel/ipu6/ipu6-isys-subdev.c b/drivers/media/pci/intel/ipu6/ipu6-isys-subdev.c
+index 3c9263ac02a3..aeccd6f93986 100644
+--- a/drivers/media/pci/intel/ipu6/ipu6-isys-subdev.c
++++ b/drivers/media/pci/intel/ipu6/ipu6-isys-subdev.c
+@@ -156,8 +156,7 @@ int ipu6_isys_subdev_set_fmt(struct v4l2_subdev *sd,
+ 	format->format.field = V4L2_FIELD_NONE;
+ 
+ 	/* Store the format and propagate it to the source pad. */
+-	fmt = v4l2_subdev_state_get_stream_format(state, format->pad,
+-						  format->stream);
++	fmt = v4l2_subdev_state_get_format(state, format->pad, format->stream);
+ 	if (!fmt)
+ 		return -EINVAL;
+ 
+@@ -182,8 +181,7 @@ int ipu6_isys_subdev_set_fmt(struct v4l2_subdev *sd,
+ 	if (ret)
+ 		return -EINVAL;
+ 
+-	crop = v4l2_subdev_state_get_stream_crop(state, other_pad,
+-						 other_stream);
++	crop = v4l2_subdev_state_get_crop(state, other_pad, other_stream);
+ 	/* reset crop */
+ 	crop->left = 0;
+ 	crop->top = 0;
+@@ -241,7 +239,7 @@ int ipu6_isys_get_stream_pad_fmt(struct v4l2_subdev *sd, u32 pad, u32 stream,
+ 		return -EINVAL;
+ 
+ 	state = v4l2_subdev_lock_and_get_active_state(sd);
+-	fmt = v4l2_subdev_state_get_stream_format(state, pad, stream);
++	fmt = v4l2_subdev_state_get_format(state, pad, stream);
+ 	if (fmt)
+ 		*format = *fmt;
+ 	v4l2_subdev_unlock_state(state);
+@@ -259,7 +257,7 @@ int ipu6_isys_get_stream_pad_crop(struct v4l2_subdev *sd, u32 pad, u32 stream,
+ 		return -EINVAL;
+ 
+ 	state = v4l2_subdev_lock_and_get_active_state(sd);
+-	rect = v4l2_subdev_state_get_stream_crop(state, pad, stream);
++	rect = v4l2_subdev_state_get_crop(state, pad, stream);
+ 	if (rect)
+ 		*crop = *rect;
+ 	v4l2_subdev_unlock_state(state);
+@@ -291,8 +289,8 @@ u32 ipu6_isys_get_src_stream_by_src_pad(struct v4l2_subdev *sd, u32 pad)
+ 	return source_stream;
+ }
+ 
+-int ipu6_isys_subdev_init_cfg(struct v4l2_subdev *sd,
+-			      struct v4l2_subdev_state *state)
++static int ipu6_isys_subdev_init_state(struct v4l2_subdev *sd,
++				       struct v4l2_subdev_state *state)
+ {
+ 	struct v4l2_subdev_route route = {
+ 		.sink_pad = 0,
+@@ -317,6 +315,10 @@ int ipu6_isys_subdev_set_routing(struct v4l2_subdev *sd,
+ 	return subdev_set_routing(sd, state, routing);
+ }
+ 
++static const struct v4l2_subdev_internal_ops ipu6_isys_subdev_internal_ops = {
++	.init_state = ipu6_isys_subdev_init_state,
++};
++
+ int ipu6_isys_subdev_init(struct ipu6_isys_subdev *asd,
+ 			  const struct v4l2_subdev_ops *ops,
+ 			  unsigned int nr_ctrls,
+@@ -334,6 +336,7 @@ int ipu6_isys_subdev_init(struct ipu6_isys_subdev *asd,
+ 			 V4L2_SUBDEV_FL_STREAMS;
+ 	asd->sd.owner = THIS_MODULE;
+ 	asd->sd.entity.function = MEDIA_ENT_F_VID_IF_BRIDGE;
++	asd->sd.internal_ops = &ipu6_isys_subdev_internal_ops;
+ 
+ 	asd->pad = devm_kcalloc(&asd->isys->adev->auxdev.dev, num_pads,
+ 				sizeof(*asd->pad), GFP_KERNEL);
+diff --git a/drivers/media/pci/intel/ipu6/ipu6-isys-subdev.h b/drivers/media/pci/intel/ipu6/ipu6-isys-subdev.h
+index adea2a55761d..f4e32b094b5b 100644
+--- a/drivers/media/pci/intel/ipu6/ipu6-isys-subdev.h
++++ b/drivers/media/pci/intel/ipu6/ipu6-isys-subdev.h
+@@ -46,8 +46,6 @@ int ipu6_isys_get_stream_pad_fmt(struct v4l2_subdev *sd, u32 pad, u32 stream,
+ 				 struct v4l2_mbus_framefmt *format);
+ int ipu6_isys_get_stream_pad_crop(struct v4l2_subdev *sd, u32 pad, u32 stream,
+ 				  struct v4l2_rect *crop);
+-int ipu6_isys_subdev_init_cfg(struct v4l2_subdev *sd,
+-			      struct v4l2_subdev_state *state);
+ int ipu6_isys_subdev_set_routing(struct v4l2_subdev *sd,
+ 				 struct v4l2_subdev_state *state,
+ 				 enum v4l2_subdev_format_whence which,
+diff --git a/drivers/media/pci/intel/ipu6/ipu6-isys-video.c b/drivers/media/pci/intel/ipu6/ipu6-isys-video.c
+index 1a023bf1e1a6..62d4043fc2a1 100644
+--- a/drivers/media/pci/intel/ipu6/ipu6-isys-video.c
++++ b/drivers/media/pci/intel/ipu6/ipu6-isys-video.c
+@@ -389,8 +389,7 @@ static int link_validate(struct media_link *link)
+ 
+ 	v4l2_subdev_lock_state(s_state);
+ 
+-	s_fmt = v4l2_subdev_state_get_stream_format(s_state, s_pad->index,
+-						    s_stream);
++	s_fmt = v4l2_subdev_state_get_format(s_state, s_pad->index, s_stream);
+ 	if (!s_fmt) {
+ 		dev_err(dev, "failed to get source pad format\n");
+ 		goto unlock;
+-- 
+2.43.2
+
+
+From 53ca77877d2cc7ecc39bb0ef26a1871a1c26afd1 Mon Sep 17 00:00:00 2001
 From: Hans de Goede <hdegoede@redhat.com>
 Date: Mon, 15 Jan 2024 15:57:06 +0100
-Subject: [PATCH 16/31] media: intel/ipu6: Disable packed bayer v4l2-buffer
+Subject: [PATCH 25/33] media: intel/ipu6: Disable packed bayer v4l2-buffer
  formats on TGL
 
 Using CSI2 packing to store 10bpp bayer data in the v4l2-buffers does not
@@ -14383,11 +16119,11 @@ Disable packed bayer formats on Tiger Lake for now.
 
 Signed-off-by: Hans de Goede <hdegoede@redhat.com>
 ---
- .../media/pci/intel/ipu6/ipu6-isys-video.c    | 60 +++++++++++++------
- 1 file changed, 43 insertions(+), 17 deletions(-)
+ .../media/pci/intel/ipu6/ipu6-isys-video.c    | 65 ++++++++++++-------
+ 1 file changed, 43 insertions(+), 22 deletions(-)
 
 diff --git a/drivers/media/pci/intel/ipu6/ipu6-isys-video.c b/drivers/media/pci/intel/ipu6/ipu6-isys-video.c
-index 847eac26bcd6..16d15f05a6dc 100644
+index 62d4043fc2a1..c971ffe0b948 100644
 --- a/drivers/media/pci/intel/ipu6/ipu6-isys-video.c
 +++ b/drivers/media/pci/intel/ipu6/ipu6-isys-video.c
 @@ -61,6 +61,17 @@ const struct ipu6_isys_pixelformat ipu6_isys_pfmts[] = {
@@ -14408,7 +16144,7 @@ index 847eac26bcd6..16d15f05a6dc 100644
  	{V4L2_PIX_FMT_SBGGR12P, 12, 12, MEDIA_BUS_FMT_SBGGR12_1X12,
  	 IPU6_FW_ISYS_FRAME_FORMAT_RAW12},
  	{V4L2_PIX_FMT_SGBRG12P, 12, 12, MEDIA_BUS_FMT_SGBRG12_1X12,
-@@ -77,14 +88,6 @@ const struct ipu6_isys_pixelformat ipu6_isys_pfmts[] = {
+@@ -77,19 +88,6 @@ const struct ipu6_isys_pixelformat ipu6_isys_pfmts[] = {
  	 IPU6_FW_ISYS_FRAME_FORMAT_RAW10},
  	{V4L2_PIX_FMT_SRGGB10P, 10, 10, MEDIA_BUS_FMT_SRGGB10_1X10,
  	 IPU6_FW_ISYS_FRAME_FORMAT_RAW10},
@@ -14420,10 +16156,15 @@ index 847eac26bcd6..16d15f05a6dc 100644
 -	 IPU6_FW_ISYS_FRAME_FORMAT_RGB565},
 -	{V4L2_PIX_FMT_BGR24, 24, 24, MEDIA_BUS_FMT_RGB888_1X24,
 -	 IPU6_FW_ISYS_FRAME_FORMAT_RGBA888},
+-	{V4L2_META_FMT_GENERIC_8, 8, 8, MEDIA_BUS_FMT_META_8, 0},
+-	{V4L2_META_FMT_GENERIC_CSI2_10, 10, 10, MEDIA_BUS_FMT_META_10, 0},
+-	{V4L2_META_FMT_GENERIC_CSI2_12, 12, 12, MEDIA_BUS_FMT_META_12, 0},
+-	{V4L2_META_FMT_GENERIC_CSI2_16, 16, 16, MEDIA_BUS_FMT_META_16, 0},
+-	{V4L2_META_FMT_GENERIC_CSI2_24, 24, 24, MEDIA_BUS_FMT_META_24, 0},
  };
  
  static int video_open(struct file *file)
-@@ -109,14 +112,27 @@ static int video_release(struct file *file)
+@@ -114,14 +112,27 @@ static int video_release(struct file *file)
  	return vb2_fop_release(file);
  }
  
@@ -14454,7 +16195,7 @@ index 847eac26bcd6..16d15f05a6dc 100644
  		if (pfmt->pixelformat == pixelformat)
  			return pfmt;
  	}
-@@ -138,24 +154,34 @@ int ipu6_isys_vidioc_querycap(struct file *file, void *fh,
+@@ -143,24 +154,34 @@ int ipu6_isys_vidioc_querycap(struct file *file, void *fh,
  int ipu6_isys_vidioc_enum_fmt(struct file *file, void *fh,
  			      struct v4l2_fmtdesc *f)
  {
@@ -14462,13 +16203,13 @@ index 847eac26bcd6..16d15f05a6dc 100644
 +	struct ipu6_isys_video *av = video_drvdata(file);
 +	const struct ipu6_isys_pixelformat *fmt;
 +	unsigned int i, nfmts, found = 0;
- 
--	if (f->index >= ARRAY_SIZE(ipu6_isys_pfmts))
++
 +	nfmts = ARRAY_SIZE(ipu6_isys_pfmts);
 +	/* Disable packed formats on TGL for now, TGL has 8 CSI ports */
 +	if (av->isys->pdata->ipdata->csi2.nports != 8)
 +		nfmts += ARRAY_SIZE(ipu6_isys_pfmts_packed);
-+
+ 
+-	if (f->index >= ARRAY_SIZE(ipu6_isys_pfmts))
 +	if (f->index >= nfmts)
  		return -EINVAL;
  
@@ -14496,12 +16237,13 @@ index 847eac26bcd6..16d15f05a6dc 100644
  		}
  		found++;
 -- 
-2.43.0
+2.43.2
 
-From ddd2826369e8ee4ba5b04502e1e20869590742da Mon Sep 17 00:00:00 2001
+
+From ed407043f03e9af2b09ab8ad449c2716ce7fde01 Mon Sep 17 00:00:00 2001
 From: Hans de Goede <hdegoede@redhat.com>
 Date: Mon, 6 Nov 2023 12:13:42 +0100
-Subject: [PATCH 17/31] media: Add ov01a1s driver
+Subject: [PATCH 26/33] media: Add ov01a1s driver
 
 Add ov01a1s driver from:
 https://github.com/intel/ipu6-drivers/
@@ -14515,10 +16257,10 @@ Signed-off-by: Hans de Goede <hdegoede@redhat.com>
  create mode 100644 drivers/media/i2c/ov01a1s.c
 
 diff --git a/drivers/media/i2c/Kconfig b/drivers/media/i2c/Kconfig
-index 59ee0ca2c978..d5a516e4fce2 100644
+index 4c3435921f19..08f934740980 100644
 --- a/drivers/media/i2c/Kconfig
 +++ b/drivers/media/i2c/Kconfig
-@@ -283,6 +283,15 @@ config VIDEO_OV01A10
+@@ -313,6 +313,15 @@ config VIDEO_OV01A10
  	  To compile this driver as a module, choose M here: the
  	  module will be called ov01a10.
  
@@ -14535,10 +16277,10 @@ index 59ee0ca2c978..d5a516e4fce2 100644
  	tristate "OmniVision OV02A10 sensor support"
  	help
 diff --git a/drivers/media/i2c/Makefile b/drivers/media/i2c/Makefile
-index f5010f80a21f..ed5aa45e3506 100644
+index dfbe6448b549..53ea54c2cf01 100644
 --- a/drivers/media/i2c/Makefile
 +++ b/drivers/media/i2c/Makefile
-@@ -73,6 +73,7 @@ obj-$(CONFIG_VIDEO_MT9V032) += mt9v032.o
+@@ -76,6 +76,7 @@ obj-$(CONFIG_VIDEO_MT9V032) += mt9v032.o
  obj-$(CONFIG_VIDEO_MT9V111) += mt9v111.o
  obj-$(CONFIG_VIDEO_OG01A1B) += og01a1b.o
  obj-$(CONFIG_VIDEO_OV01A10) += ov01a10.o
@@ -15744,12 +17486,70 @@ index 000000000000..0dcce8b492b4
 +MODULE_DESCRIPTION("OmniVision OV01A1S sensor driver");
 +MODULE_LICENSE("GPL v2");
 -- 
-2.43.0
+2.43.2
 
-From 07d707663a69f65c366d3ac75c2bf41749f33224 Mon Sep 17 00:00:00 2001
+
+From 9f58ae728245ad7ac604737ab16781d7ccb2006e Mon Sep 17 00:00:00 2001
+From: Florian Klink <flokli@flokli.de>
+Date: Sun, 17 Mar 2024 14:24:05 +0200
+Subject: [PATCH 27/33] ov01a1s.c: support Linux 6.8.0
+
+Used https://github.com/intel/ipu6-drivers/pull/213 as an inspiration.
+---
+ drivers/media/i2c/ov01a1s.c | 13 ++++++++++---
+ 1 file changed, 10 insertions(+), 3 deletions(-)
+
+diff --git a/drivers/media/i2c/ov01a1s.c b/drivers/media/i2c/ov01a1s.c
+index 0dcce8b492b4..923b12b2a948 100644
+--- a/drivers/media/i2c/ov01a1s.c
++++ b/drivers/media/i2c/ov01a1s.c
+@@ -832,8 +832,10 @@ static int ov01a1s_set_format(struct v4l2_subdev *sd,
+ 	if (fmt->which == V4L2_SUBDEV_FORMAT_TRY) {
+ #if LINUX_VERSION_CODE < KERNEL_VERSION(5, 14, 0)
+ 		*v4l2_subdev_get_try_format(sd, cfg, fmt->pad) = fmt->format;
+-#else
++#elif LINUX_VERSION_CODE < KERNEL_VERSION(6, 8, 0)
+ 		*v4l2_subdev_get_try_format(sd, sd_state, fmt->pad) = fmt->format;
++#else
++		*v4l2_subdev_state_get_format(sd_state, fmt->pad) = fmt->format;
+ #endif
+ 	} else {
+ 		ov01a1s->cur_mode = mode;
+@@ -871,9 +873,11 @@ static int ov01a1s_get_format(struct v4l2_subdev *sd,
+ #if LINUX_VERSION_CODE < KERNEL_VERSION(5, 14, 0)
+ 		fmt->format = *v4l2_subdev_get_try_format(&ov01a1s->sd, cfg,
+ 							  fmt->pad);
+-#else
++#elif LINUX_VERSION_CODE < KERNEL_VERSION(6, 8, 0)
+ 		fmt->format = *v4l2_subdev_get_try_format(&ov01a1s->sd,
+ 							  sd_state, fmt->pad);
++#else
++		fmt->format = *v4l2_subdev_state_get_format(sd_state, fmt->pad);
+ #endif
+ 	else
+ 		ov01a1s_update_pad_format(ov01a1s->cur_mode, &fmt->format);
+@@ -929,9 +933,12 @@ static int ov01a1s_open(struct v4l2_subdev *sd, struct v4l2_subdev_fh *fh)
+ #if LINUX_VERSION_CODE < KERNEL_VERSION(5, 14, 0)
+ 	ov01a1s_update_pad_format(&supported_modes[0],
+ 				  v4l2_subdev_get_try_format(sd, fh->pad, 0));
+-#else
++#elif LINUX_VERSION_CODE < KERNEL_VERSION(6, 8, 0)
+ 	ov01a1s_update_pad_format(&supported_modes[0],
+ 				  v4l2_subdev_get_try_format(sd, fh->state, 0));
++#else
++	ov01a1s_update_pad_format(&supported_modes[0],
++				  v4l2_subdev_state_get_format(fh->state, 0));
+ #endif
+ 	mutex_unlock(&ov01a1s->mutex);
+ 
+-- 
+2.43.2
+
+
+From 80bee1ca899ebfa4126d1e69ea821a2c30aba00c Mon Sep 17 00:00:00 2001
 From: Hans de Goede <hdegoede@redhat.com>
 Date: Mon, 6 Nov 2023 12:33:56 +0100
-Subject: [PATCH 18/31] media: ov01a1s: Remove non upstream iVSC support
+Subject: [PATCH 28/33] media: ov01a1s: Remove non upstream iVSC support
 
 Signed-off-by: Hans de Goede <hdegoede@redhat.com>
 ---
@@ -15757,7 +17557,7 @@ Signed-off-by: Hans de Goede <hdegoede@redhat.com>
  1 file changed, 71 deletions(-)
 
 diff --git a/drivers/media/i2c/ov01a1s.c b/drivers/media/i2c/ov01a1s.c
-index 0dcce8b492b4..c97c1a661022 100644
+index 923b12b2a948..22b406bdeae9 100644
 --- a/drivers/media/i2c/ov01a1s.c
 +++ b/drivers/media/i2c/ov01a1s.c
 @@ -17,9 +17,6 @@
@@ -15883,7 +17683,7 @@ index 0dcce8b492b4..c97c1a661022 100644
  
  	return ret;
  }
-@@ -1044,18 +985,6 @@ static int ov01a1s_parse_power(struct ov01a1s *ov01a1s)
+@@ -1051,18 +992,6 @@ static int ov01a1s_parse_power(struct ov01a1s *ov01a1s)
  {
  	int ret = 0;
  
@@ -15903,915 +17703,13 @@ index 0dcce8b492b4..c97c1a661022 100644
  	ret = ov01a1s_parse_gpio(ov01a1s);
  #elif IS_ENABLED(CONFIG_POWER_CTRL_LOGIC)
 -- 
-2.43.0
+2.43.2
 
-From 3f59512af8a39b5d22694e2996d8441d5e723423 Mon Sep 17 00:00:00 2001
-From: Hans de Goede <hdegoede@redhat.com>
-Date: Mon, 4 Dec 2023 13:39:38 +0100
-Subject: [PATCH 19/31] media: ov2740: Add support for reset GPIO
 
-On some ACPI platforms, such as Chromebooks the ACPI methods to
-change the power-state (_PS0 and _PS3) fully take care of powering
-on/off the sensor.
-
-On other ACPI platforms, such as e.g. various ThinkPad models with
-IPU6 + ov2740 sensor, the sensor driver must control the reset GPIO
-and the sensor's clock itself.
-
-Add support for having the driver control an optional reset GPIO.
-
-Reviewed-by: Bingbu Cao <bingbu.cao@intel.com>
-Signed-off-by: Hans de Goede <hdegoede@redhat.com>
-Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
-Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
----
- drivers/media/i2c/ov2740.c | 48 ++++++++++++++++++++++++++++++++++++--
- 1 file changed, 46 insertions(+), 2 deletions(-)
-
-diff --git a/drivers/media/i2c/ov2740.c b/drivers/media/i2c/ov2740.c
-index 24e468485fbf..e5f9569a229d 100644
---- a/drivers/media/i2c/ov2740.c
-+++ b/drivers/media/i2c/ov2740.c
-@@ -4,6 +4,7 @@
- #include <asm/unaligned.h>
- #include <linux/acpi.h>
- #include <linux/delay.h>
-+#include <linux/gpio/consumer.h>
- #include <linux/i2c.h>
- #include <linux/module.h>
- #include <linux/pm_runtime.h>
-@@ -333,6 +334,9 @@ struct ov2740 {
- 	struct v4l2_ctrl *hblank;
- 	struct v4l2_ctrl *exposure;
- 
-+	/* GPIOs, clocks */
-+	struct gpio_desc *reset_gpio;
-+
- 	/* Current mode */
- 	const struct ov2740_mode *cur_mode;
- 
-@@ -1058,6 +1062,26 @@ static int ov2740_register_nvmem(struct i2c_client *client,
- 	return 0;
- }
- 
-+static int ov2740_suspend(struct device *dev)
-+{
-+	struct v4l2_subdev *sd = dev_get_drvdata(dev);
-+	struct ov2740 *ov2740 = to_ov2740(sd);
-+
-+	gpiod_set_value_cansleep(ov2740->reset_gpio, 1);
-+	return 0;
-+}
-+
-+static int ov2740_resume(struct device *dev)
-+{
-+	struct v4l2_subdev *sd = dev_get_drvdata(dev);
-+	struct ov2740 *ov2740 = to_ov2740(sd);
-+
-+	gpiod_set_value_cansleep(ov2740->reset_gpio, 0);
-+	msleep(20);
-+
-+	return 0;
-+}
-+
- static int ov2740_probe(struct i2c_client *client)
- {
- 	struct device *dev = &client->dev;
-@@ -1073,12 +1097,24 @@ static int ov2740_probe(struct i2c_client *client)
- 	if (!ov2740)
- 		return -ENOMEM;
- 
-+	ov2740->reset_gpio = devm_gpiod_get_optional(dev, "reset", GPIOD_OUT_HIGH);
-+	if (IS_ERR(ov2740->reset_gpio))
-+		return dev_err_probe(dev, PTR_ERR(ov2740->reset_gpio),
-+				     "failed to get reset GPIO\n");
-+
- 	v4l2_i2c_subdev_init(&ov2740->sd, client, &ov2740_subdev_ops);
- 	full_power = acpi_dev_state_d0(&client->dev);
- 	if (full_power) {
--		ret = ov2740_identify_module(ov2740);
-+		/* ACPI does not always clear the reset GPIO / enable the clock */
-+		ret = ov2740_resume(dev);
- 		if (ret)
--			return dev_err_probe(dev, ret, "failed to find sensor\n");
-+			return dev_err_probe(dev, ret, "failed to power on sensor\n");
-+
-+		ret = ov2740_identify_module(ov2740);
-+		if (ret) {
-+			dev_err_probe(dev, ret, "failed to find sensor\n");
-+			goto probe_error_power_off;
-+		}
- 	}
- 
- 	ov2740->cur_mode = &supported_modes[0];
-@@ -1132,9 +1168,16 @@ static int ov2740_probe(struct i2c_client *client)
- probe_error_v4l2_ctrl_handler_free:
- 	v4l2_ctrl_handler_free(ov2740->sd.ctrl_handler);
- 
-+probe_error_power_off:
-+	if (full_power)
-+		ov2740_suspend(dev);
-+
- 	return ret;
- }
- 
-+static DEFINE_RUNTIME_DEV_PM_OPS(ov2740_pm_ops, ov2740_suspend, ov2740_resume,
-+				 NULL);
-+
- static const struct acpi_device_id ov2740_acpi_ids[] = {
- 	{"INT3474"},
- 	{}
-@@ -1146,6 +1189,7 @@ static struct i2c_driver ov2740_i2c_driver = {
- 	.driver = {
- 		.name = "ov2740",
- 		.acpi_match_table = ov2740_acpi_ids,
-+		.pm = pm_sleep_ptr(&ov2740_pm_ops),
- 	},
- 	.probe = ov2740_probe,
- 	.remove = ov2740_remove,
--- 
-2.43.0
-
-From ddde5ef9b19c4e4755be62c588209db986e57400 Mon Sep 17 00:00:00 2001
-From: Hans de Goede <hdegoede@redhat.com>
-Date: Mon, 4 Dec 2023 13:39:39 +0100
-Subject: [PATCH 20/31] media: ov2740: Add support for external clock
-
-On some ACPI platforms, such as Chromebooks the ACPI methods to
-change the power-state (_PS0 and _PS3) fully take care of powering
-on/off the sensor.
-
-On other ACPI platforms, such as e.g. various ThinkPad models with
-IPU6 + ov2740 sensor, the sensor driver must control the reset GPIO
-and the sensor's clock itself.
-
-Add support for having the driver control an optional clock.
-
-Reviewed-by: Bingbu Cao <bingbu.cao@intel.com>
-Signed-off-by: Hans de Goede <hdegoede@redhat.com>
-Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
-Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
----
- drivers/media/i2c/ov2740.c | 13 +++++++++++++
- 1 file changed, 13 insertions(+)
-
-diff --git a/drivers/media/i2c/ov2740.c b/drivers/media/i2c/ov2740.c
-index e5f9569a229d..0396e40419ca 100644
---- a/drivers/media/i2c/ov2740.c
-+++ b/drivers/media/i2c/ov2740.c
-@@ -3,6 +3,7 @@
- 
- #include <asm/unaligned.h>
- #include <linux/acpi.h>
-+#include <linux/clk.h>
- #include <linux/delay.h>
- #include <linux/gpio/consumer.h>
- #include <linux/i2c.h>
-@@ -336,6 +337,7 @@ struct ov2740 {
- 
- 	/* GPIOs, clocks */
- 	struct gpio_desc *reset_gpio;
-+	struct clk *clk;
- 
- 	/* Current mode */
- 	const struct ov2740_mode *cur_mode;
-@@ -1068,6 +1070,7 @@ static int ov2740_suspend(struct device *dev)
- 	struct ov2740 *ov2740 = to_ov2740(sd);
- 
- 	gpiod_set_value_cansleep(ov2740->reset_gpio, 1);
-+	clk_disable_unprepare(ov2740->clk);
- 	return 0;
- }
- 
-@@ -1075,6 +1078,11 @@ static int ov2740_resume(struct device *dev)
- {
- 	struct v4l2_subdev *sd = dev_get_drvdata(dev);
- 	struct ov2740 *ov2740 = to_ov2740(sd);
-+	int ret;
-+
-+	ret = clk_prepare_enable(ov2740->clk);
-+	if (ret)
-+		return ret;
- 
- 	gpiod_set_value_cansleep(ov2740->reset_gpio, 0);
- 	msleep(20);
-@@ -1102,6 +1110,11 @@ static int ov2740_probe(struct i2c_client *client)
- 		return dev_err_probe(dev, PTR_ERR(ov2740->reset_gpio),
- 				     "failed to get reset GPIO\n");
- 
-+	ov2740->clk = devm_clk_get_optional(dev, "clk");
-+	if (IS_ERR(ov2740->clk))
-+		return dev_err_probe(dev, PTR_ERR(ov2740->clk),
-+				     "failed to get clock\n");
-+
- 	v4l2_i2c_subdev_init(&ov2740->sd, client, &ov2740_subdev_ops);
- 	full_power = acpi_dev_state_d0(&client->dev);
- 	if (full_power) {
--- 
-2.43.0
-
-From be361f059239a5444a436a73888cc1c1665d90a7 Mon Sep 17 00:00:00 2001
-From: Hans de Goede <hdegoede@redhat.com>
-Date: Mon, 4 Dec 2023 13:39:40 +0100
-Subject: [PATCH 21/31] media: ov2740: Move fwnode_graph_get_next_endpoint()
- call up
-
-If the bridge has not yet setup the fwnode-graph then
-the fwnode_property_read_u32("clock-frequency") call will fail.
-
-Move the fwnode_graph_get_next_endpoint() call to above reading
-the clock-frequency.
-
-Signed-off-by: Hans de Goede <hdegoede@redhat.com>
-Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
-Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
----
- drivers/media/i2c/ov2740.c | 26 +++++++++++++++++---------
- 1 file changed, 17 insertions(+), 9 deletions(-)
-
-diff --git a/drivers/media/i2c/ov2740.c b/drivers/media/i2c/ov2740.c
-index 0396e40419ca..35b2f43bd3e5 100644
---- a/drivers/media/i2c/ov2740.c
-+++ b/drivers/media/i2c/ov2740.c
-@@ -926,19 +926,27 @@ static int ov2740_check_hwcfg(struct device *dev)
- 	int ret;
- 	unsigned int i, j;
- 
--	ret = fwnode_property_read_u32(fwnode, "clock-frequency", &mclk);
--	if (ret)
--		return ret;
--
--	if (mclk != OV2740_MCLK)
--		return dev_err_probe(dev, -EINVAL,
--				     "external clock %d is not supported\n",
--				     mclk);
--
-+	/*
-+	 * Sometimes the fwnode graph is initialized by the bridge driver,
-+	 * wait for this.
-+	 */
- 	ep = fwnode_graph_get_next_endpoint(fwnode, NULL);
- 	if (!ep)
- 		return -EPROBE_DEFER;
- 
-+	ret = fwnode_property_read_u32(fwnode, "clock-frequency", &mclk);
-+	if (ret) {
-+		fwnode_handle_put(ep);
-+		return ret;
-+	}
-+
-+	if (mclk != OV2740_MCLK) {
-+		fwnode_handle_put(ep);
-+		return dev_err_probe(dev, -EINVAL,
-+				     "external clock %d is not supported\n",
-+				     mclk);
-+	}
-+
- 	ret = v4l2_fwnode_endpoint_alloc_parse(ep, &bus_cfg);
- 	fwnode_handle_put(ep);
- 	if (ret)
--- 
-2.43.0
-
-From 4d499411eccc2db42d0d21365039f479c9367214 Mon Sep 17 00:00:00 2001
-From: Hans de Goede <hdegoede@redhat.com>
-Date: Mon, 4 Dec 2023 13:39:41 +0100
-Subject: [PATCH 22/31] media: ov2740: Improve ov2740_check_hwcfg() error
- reporting
-
-Make ov2740_check_hwcfg() report an error on failure in all error paths,
-so that it is always clear why the probe() failed.
-
-Signed-off-by: Hans de Goede <hdegoede@redhat.com>
-Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
-Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
----
- drivers/media/i2c/ov2740.c | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
-
-diff --git a/drivers/media/i2c/ov2740.c b/drivers/media/i2c/ov2740.c
-index 35b2f43bd3e5..87176948f766 100644
---- a/drivers/media/i2c/ov2740.c
-+++ b/drivers/media/i2c/ov2740.c
-@@ -937,7 +937,8 @@ static int ov2740_check_hwcfg(struct device *dev)
- 	ret = fwnode_property_read_u32(fwnode, "clock-frequency", &mclk);
- 	if (ret) {
- 		fwnode_handle_put(ep);
--		return ret;
-+		return dev_err_probe(dev, ret,
-+				     "reading clock-frequency property\n");
- 	}
- 
- 	if (mclk != OV2740_MCLK) {
-@@ -950,7 +951,7 @@ static int ov2740_check_hwcfg(struct device *dev)
- 	ret = v4l2_fwnode_endpoint_alloc_parse(ep, &bus_cfg);
- 	fwnode_handle_put(ep);
- 	if (ret)
--		return ret;
-+		return dev_err_probe(dev, ret, "parsing endpoint failed\n");
- 
- 	if (bus_cfg.bus.mipi_csi2.num_data_lanes != OV2740_DATA_LANES) {
- 		ret = dev_err_probe(dev, -EINVAL,
--- 
-2.43.0
-
-From 28c5209404274ded2f2fb2c93611da32e03a2538 Mon Sep 17 00:00:00 2001
-From: Hans de Goede <hdegoede@redhat.com>
-Date: Mon, 4 Dec 2023 13:39:43 +0100
-Subject: [PATCH 24/31] media: ov2740: Check hwcfg after allocating the ov2740
- struct
-
-Alloc ov2740_data and set up the drvdata pointer before calling
-ov2740_check_hwcfg().
-
-This is a preparation patch to allow ov2740_check_hwcfg()
-to store some of the parsed data in the ov2740 struct.
-
-Signed-off-by: Hans de Goede <hdegoede@redhat.com>
-Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
-Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
----
- drivers/media/i2c/ov2740.c | 11 ++++++-----
- 1 file changed, 6 insertions(+), 5 deletions(-)
-
-diff --git a/drivers/media/i2c/ov2740.c b/drivers/media/i2c/ov2740.c
-index a646be427ab2..28f4659a6bfb 100644
---- a/drivers/media/i2c/ov2740.c
-+++ b/drivers/media/i2c/ov2740.c
-@@ -1095,14 +1095,16 @@ static int ov2740_probe(struct i2c_client *client)
- 	bool full_power;
- 	int ret;
- 
--	ret = ov2740_check_hwcfg(&client->dev);
--	if (ret)
--		return dev_err_probe(dev, ret, "failed to check HW configuration\n");
--
- 	ov2740 = devm_kzalloc(&client->dev, sizeof(*ov2740), GFP_KERNEL);
- 	if (!ov2740)
- 		return -ENOMEM;
- 
-+	v4l2_i2c_subdev_init(&ov2740->sd, client, &ov2740_subdev_ops);
-+
-+	ret = ov2740_check_hwcfg(dev);
-+	if (ret)
-+		return dev_err_probe(dev, ret, "failed to check HW configuration\n");
-+
- 	ov2740->reset_gpio = devm_gpiod_get_optional(dev, "reset", GPIOD_OUT_HIGH);
- 	if (IS_ERR(ov2740->reset_gpio))
- 		return dev_err_probe(dev, PTR_ERR(ov2740->reset_gpio),
-@@ -1113,7 +1115,6 @@ static int ov2740_probe(struct i2c_client *client)
- 		return dev_err_probe(dev, PTR_ERR(ov2740->clk),
- 				     "failed to get clock\n");
- 
--	v4l2_i2c_subdev_init(&ov2740->sd, client, &ov2740_subdev_ops);
- 	full_power = acpi_dev_state_d0(&client->dev);
- 	if (full_power) {
- 		/* ACPI does not always clear the reset GPIO / enable the clock */
--- 
-2.43.0
-
-From 5e06f2a1cbbaf0ceffd62475ad4170f7224372be Mon Sep 17 00:00:00 2001
-From: Hans de Goede <hdegoede@redhat.com>
-Date: Mon, 4 Dec 2023 13:39:44 +0100
-Subject: [PATCH 25/31] media: ov2740: Add support for 180 MHz link frequency
-
-On various Lenovo Thinkpad models with an ov2740 sensor the 360 MHz
-link frequency is not supported.
-
-Add support for 180 MHz link frequency, even though this has half the
-pixel clock, this supports the same framerate by using half the VTS value
-(significantly reducing the amount of empty lines send during vblank).
-
-Normally if there are multiple link-frequencies then the sensor driver
-choses the lowest link-frequency still usable for the chosen resolution.
-
-In this case the board supports only 1 link-frequency. Which frequency
-is supported is checked in ov2740_check_hwcfg() and then a different
-set of supported_modes (using only the supported link-freq) is selected.
-
-The register settings for this were taken from the ov2740 sensor driver
-in the out of tree IPU6 driver:
-
-https://github.com/intel/ipu6-drivers/
-
-Signed-off-by: Hans de Goede <hdegoede@redhat.com>
-Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
-Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
----
- drivers/media/i2c/ov2740.c | 263 +++++++++++++++++++++++++++++++++----
- 1 file changed, 239 insertions(+), 24 deletions(-)
-
-diff --git a/drivers/media/i2c/ov2740.c b/drivers/media/i2c/ov2740.c
-index 28f4659a6bfb..85629992d3aa 100644
---- a/drivers/media/i2c/ov2740.c
-+++ b/drivers/media/i2c/ov2740.c
-@@ -16,6 +16,7 @@
- #include <media/v4l2-fwnode.h>
- 
- #define OV2740_LINK_FREQ_360MHZ		360000000ULL
-+#define OV2740_LINK_FREQ_180MHZ		180000000ULL
- #define OV2740_SCLK			72000000LL
- #define OV2740_MCLK			19200000
- #define OV2740_DATA_LANES		2
-@@ -30,9 +31,6 @@
- 
- /* vertical-timings from sensor */
- #define OV2740_REG_VTS			0x380e
--#define OV2740_VTS_DEF			0x088a
--#define OV2740_VTS_MIN			0x0460
--#define OV2740_VTS_MAX			0x7fff
- 
- /* horizontal-timings from sensor */
- #define OV2740_REG_HTS			0x380c
-@@ -86,6 +84,7 @@ struct nvm_data {
- 
- enum {
- 	OV2740_LINK_FREQ_360MHZ_INDEX,
-+	OV2740_LINK_FREQ_180MHZ_INDEX,
- };
- 
- struct ov2740_reg {
-@@ -118,6 +117,9 @@ struct ov2740_mode {
- 	/* Min vertical timining size */
- 	u32 vts_min;
- 
-+	/* Max vertical timining size */
-+	u32 vts_max;
-+
- 	/* Link frequency needed for this resolution */
- 	u32 link_freq_index;
- 
-@@ -134,7 +136,18 @@ static const struct ov2740_reg mipi_data_rate_720mbps[] = {
- 	{0x0312, 0x11},
- };
- 
--static const struct ov2740_reg mode_1932x1092_regs[] = {
-+static const struct ov2740_reg mipi_data_rate_360mbps[] = {
-+	{0x0103, 0x01},
-+	{0x0302, 0x4b},
-+	{0x0303, 0x01},
-+	{0x030d, 0x4b},
-+	{0x030e, 0x02},
-+	{0x030a, 0x01},
-+	{0x0312, 0x11},
-+	{0x4837, 0x2c},
-+};
-+
-+static const struct ov2740_reg mode_1932x1092_regs_360mhz[] = {
- 	{0x3000, 0x00},
- 	{0x3018, 0x32},
- 	{0x3031, 0x0a},
-@@ -287,6 +300,159 @@ static const struct ov2740_reg mode_1932x1092_regs[] = {
- 	{0x3813, 0x01},
- };
- 
-+static const struct ov2740_reg mode_1932x1092_regs_180mhz[] = {
-+	{0x3000, 0x00},
-+	{0x3018, 0x32},	/* 0x32 for 2 lanes, 0x12 for 1 lane */
-+	{0x3031, 0x0a},
-+	{0x3080, 0x08},
-+	{0x3083, 0xB4},
-+	{0x3103, 0x00},
-+	{0x3104, 0x01},
-+	{0x3106, 0x01},
-+	{0x3500, 0x00},
-+	{0x3501, 0x44},
-+	{0x3502, 0x40},
-+	{0x3503, 0x88},
-+	{0x3507, 0x00},
-+	{0x3508, 0x00},
-+	{0x3509, 0x80},
-+	{0x350c, 0x00},
-+	{0x350d, 0x80},
-+	{0x3510, 0x00},
-+	{0x3511, 0x00},
-+	{0x3512, 0x20},
-+	{0x3632, 0x00},
-+	{0x3633, 0x10},
-+	{0x3634, 0x10},
-+	{0x3635, 0x10},
-+	{0x3645, 0x13},
-+	{0x3646, 0x81},
-+	{0x3636, 0x10},
-+	{0x3651, 0x0a},
-+	{0x3656, 0x02},
-+	{0x3659, 0x04},
-+	{0x365a, 0xda},
-+	{0x365b, 0xa2},
-+	{0x365c, 0x04},
-+	{0x365d, 0x1d},
-+	{0x365e, 0x1a},
-+	{0x3662, 0xd7},
-+	{0x3667, 0x78},
-+	{0x3669, 0x0a},
-+	{0x366a, 0x92},
-+	{0x3700, 0x54},
-+	{0x3702, 0x10},
-+	{0x3706, 0x42},
-+	{0x3709, 0x30},
-+	{0x370b, 0xc2},
-+	{0x3714, 0x63},
-+	{0x3715, 0x01},
-+	{0x3716, 0x00},
-+	{0x371a, 0x3e},
-+	{0x3732, 0x0e},
-+	{0x3733, 0x10},
-+	{0x375f, 0x0e},
-+	{0x3768, 0x30},
-+	{0x3769, 0x44},
-+	{0x376a, 0x22},
-+	{0x377b, 0x20},
-+	{0x377c, 0x00},
-+	{0x377d, 0x0c},
-+	{0x3798, 0x00},
-+	{0x37a1, 0x55},
-+	{0x37a8, 0x6d},
-+	{0x37c2, 0x04},
-+	{0x37c5, 0x00},
-+	{0x37c8, 0x00},
-+	{0x3800, 0x00},
-+	{0x3801, 0x00},
-+	{0x3802, 0x00},
-+	{0x3803, 0x00},
-+	{0x3804, 0x07},
-+	{0x3805, 0x8f},
-+	{0x3806, 0x04},
-+	{0x3807, 0x47},
-+	{0x3808, 0x07},
-+	{0x3809, 0x88},
-+	{0x380a, 0x04},
-+	{0x380b, 0x40},
-+	{0x380c, 0x08},
-+	{0x380d, 0x70},
-+	{0x380e, 0x04},
-+	{0x380f, 0x56},
-+	{0x3810, 0x00},
-+	{0x3811, 0x04},
-+	{0x3812, 0x00},
-+	{0x3813, 0x04},
-+	{0x3814, 0x01},
-+	{0x3815, 0x01},
-+	{0x3820, 0x80},
-+	{0x3821, 0x46},
-+	{0x3822, 0x84},
-+	{0x3829, 0x00},
-+	{0x382a, 0x01},
-+	{0x382b, 0x01},
-+	{0x3830, 0x04},
-+	{0x3836, 0x01},
-+	{0x3837, 0x08},
-+	{0x3839, 0x01},
-+	{0x383a, 0x00},
-+	{0x383b, 0x08},
-+	{0x383c, 0x00},
-+	{0x3f0b, 0x00},
-+	{0x4001, 0x20},
-+	{0x4009, 0x07},
-+	{0x4003, 0x10},
-+	{0x4010, 0xe0},
-+	{0x4016, 0x00},
-+	{0x4017, 0x10},
-+	{0x4044, 0x02},
-+	{0x4304, 0x08},
-+	{0x4307, 0x30},
-+	{0x4320, 0x80},
-+	{0x4322, 0x00},
-+	{0x4323, 0x00},
-+	{0x4324, 0x00},
-+	{0x4325, 0x00},
-+	{0x4326, 0x00},
-+	{0x4327, 0x00},
-+	{0x4328, 0x00},
-+	{0x4329, 0x00},
-+	{0x432c, 0x03},
-+	{0x432d, 0x81},
-+	{0x4501, 0x84},
-+	{0x4502, 0x40},
-+	{0x4503, 0x18},
-+	{0x4504, 0x04},
-+	{0x4508, 0x02},
-+	{0x4601, 0x10},
-+	{0x4800, 0x00},
-+	{0x4816, 0x52},
-+	{0x5000, 0x73},	/* 0x7f enable DPC */
-+	{0x5001, 0x00},
-+	{0x5005, 0x38},
-+	{0x501e, 0x0d},
-+	{0x5040, 0x00},
-+	{0x5901, 0x00},
-+	{0x3800, 0x00},
-+	{0x3801, 0x00},
-+	{0x3802, 0x00},
-+	{0x3803, 0x00},
-+	{0x3804, 0x07},
-+	{0x3805, 0x8f},
-+	{0x3806, 0x04},
-+	{0x3807, 0x47},
-+	{0x3808, 0x07},
-+	{0x3809, 0x8c},
-+	{0x380a, 0x04},
-+	{0x380b, 0x44},
-+	{0x3810, 0x00},
-+	{0x3811, 0x00},
-+	{0x3812, 0x00},
-+	{0x3813, 0x01},
-+	{0x4003, 0x40},	/* set Black level to 0x40 */
-+};
-+
- static const char * const ov2740_test_pattern_menu[] = {
- 	"Disabled",
- 	"Color Bar",
-@@ -297,6 +463,7 @@ static const char * const ov2740_test_pattern_menu[] = {
- 
- static const s64 link_freq_menu_items[] = {
- 	OV2740_LINK_FREQ_360MHZ,
-+	OV2740_LINK_FREQ_180MHZ,
- };
- 
- static const struct ov2740_link_freq_config link_freq_configs[] = {
-@@ -306,23 +473,46 @@ static const struct ov2740_link_freq_config link_freq_configs[] = {
- 			.regs = mipi_data_rate_720mbps,
- 		}
- 	},
-+	[OV2740_LINK_FREQ_180MHZ_INDEX] = {
-+		.reg_list = {
-+			.num_of_regs = ARRAY_SIZE(mipi_data_rate_360mbps),
-+			.regs = mipi_data_rate_360mbps,
-+		}
-+	},
- };
- 
--static const struct ov2740_mode supported_modes[] = {
-+static const struct ov2740_mode supported_modes_360mhz[] = {
- 	{
- 		.width = 1932,
- 		.height = 1092,
- 		.hts = 2160,
--		.vts_def = OV2740_VTS_DEF,
--		.vts_min = OV2740_VTS_MIN,
-+		.vts_min = 1120,
-+		.vts_def = 2186,
-+		.vts_max = 32767,
- 		.reg_list = {
--			.num_of_regs = ARRAY_SIZE(mode_1932x1092_regs),
--			.regs = mode_1932x1092_regs,
-+			.num_of_regs = ARRAY_SIZE(mode_1932x1092_regs_360mhz),
-+			.regs = mode_1932x1092_regs_360mhz,
- 		},
- 		.link_freq_index = OV2740_LINK_FREQ_360MHZ_INDEX,
- 	},
- };
- 
-+static const struct ov2740_mode supported_modes_180mhz[] = {
-+	{
-+		.width = 1932,
-+		.height = 1092,
-+		.hts = 2160,
-+		.vts_min = 1110,
-+		.vts_def = 1110,
-+		.vts_max = 2047,
-+		.reg_list = {
-+			.num_of_regs = ARRAY_SIZE(mode_1932x1092_regs_180mhz),
-+			.regs = mode_1932x1092_regs_180mhz,
-+		},
-+		.link_freq_index = OV2740_LINK_FREQ_180MHZ_INDEX,
-+	},
-+};
-+
- struct ov2740 {
- 	struct v4l2_subdev sd;
- 	struct media_pad pad;
-@@ -345,6 +535,10 @@ struct ov2740 {
- 	/* NVM data inforamtion */
- 	struct nvm_data *nvm;
- 
-+	/* Supported modes */
-+	const struct ov2740_mode *supported_modes;
-+	int supported_modes_count;
-+
- 	/* True if the device has been identified */
- 	bool identified;
- };
-@@ -589,7 +783,7 @@ static int ov2740_init_controls(struct ov2740 *ov2740)
- 					       pixel_rate, 1, pixel_rate);
- 
- 	vblank_min = cur_mode->vts_min - cur_mode->height;
--	vblank_max = OV2740_VTS_MAX - cur_mode->height;
-+	vblank_max = cur_mode->vts_max - cur_mode->height;
- 	vblank_default = cur_mode->vts_def - cur_mode->height;
- 	ov2740->vblank = v4l2_ctrl_new_std(ctrl_hdlr, &ov2740_ctrl_ops,
- 					   V4L2_CID_VBLANK, vblank_min,
-@@ -816,10 +1010,10 @@ static int ov2740_set_format(struct v4l2_subdev *sd,
- 	const struct ov2740_mode *mode;
- 	s32 vblank_def, h_blank;
- 
--	mode = v4l2_find_nearest_size(supported_modes,
--				      ARRAY_SIZE(supported_modes), width,
--				      height, fmt->format.width,
--				      fmt->format.height);
-+	mode = v4l2_find_nearest_size(ov2740->supported_modes,
-+				      ov2740->supported_modes_count,
-+				      width, height,
-+				      fmt->format.width, fmt->format.height);
- 
- 	ov2740_update_pad_format(mode, &fmt->format);
- 	*v4l2_subdev_get_pad_format(sd, sd_state, fmt->pad) = fmt->format;
-@@ -836,7 +1030,7 @@ static int ov2740_set_format(struct v4l2_subdev *sd,
- 	vblank_def = mode->vts_def - mode->height;
- 	__v4l2_ctrl_modify_range(ov2740->vblank,
- 				 mode->vts_min - mode->height,
--				 OV2740_VTS_MAX - mode->height, 1, vblank_def);
-+				 mode->vts_max - mode->height, 1, vblank_def);
- 	__v4l2_ctrl_s_ctrl(ov2740->vblank, vblank_def);
- 	h_blank = mode->hts - mode->width;
- 	__v4l2_ctrl_modify_range(ov2740->hblank, h_blank, h_blank, 1, h_blank);
-@@ -860,7 +1054,10 @@ static int ov2740_enum_frame_size(struct v4l2_subdev *sd,
- 				  struct v4l2_subdev_state *sd_state,
- 				  struct v4l2_subdev_frame_size_enum *fse)
- {
--	if (fse->index >= ARRAY_SIZE(supported_modes))
-+	struct ov2740 *ov2740 = to_ov2740(sd);
-+	const struct ov2740_mode *supported_modes = ov2740->supported_modes;
-+
-+	if (fse->index >= ov2740->supported_modes_count)
- 		return -EINVAL;
- 
- 	if (fse->code != MEDIA_BUS_FMT_SGRBG10_1X10)
-@@ -877,9 +1074,10 @@ static int ov2740_enum_frame_size(struct v4l2_subdev *sd,
- static int ov2740_init_cfg(struct v4l2_subdev *sd,
- 			   struct v4l2_subdev_state *sd_state)
- {
--	ov2740_update_pad_format(&supported_modes[0],
--				 v4l2_subdev_get_pad_format(sd, sd_state, 0));
-+	struct ov2740 *ov2740 = to_ov2740(sd);
- 
-+	ov2740_update_pad_format(&ov2740->supported_modes[0],
-+				 v4l2_subdev_get_pad_format(sd, sd_state, 0));
- 	return 0;
- }
- 
-@@ -906,6 +1104,8 @@ static const struct media_entity_operations ov2740_subdev_entity_ops = {
- 
- static int ov2740_check_hwcfg(struct device *dev)
- {
-+	struct v4l2_subdev *sd = dev_get_drvdata(dev);
-+	struct ov2740 *ov2740 = to_ov2740(sd);
- 	struct fwnode_handle *ep;
- 	struct fwnode_handle *fwnode = dev_fwnode(dev);
- 	struct v4l2_fwnode_endpoint bus_cfg = {
-@@ -961,14 +1161,29 @@ static int ov2740_check_hwcfg(struct device *dev)
- 				break;
- 		}
- 
--		if (j == bus_cfg.nr_of_link_frequencies) {
--			ret = dev_err_probe(dev, -EINVAL,
--					    "no link frequency %lld supported\n",
--					    link_freq_menu_items[i]);
--			goto check_hwcfg_error;
-+		if (j == bus_cfg.nr_of_link_frequencies)
-+			continue;
-+
-+		switch (i) {
-+		case OV2740_LINK_FREQ_360MHZ_INDEX:
-+			ov2740->supported_modes = supported_modes_360mhz;
-+			ov2740->supported_modes_count =
-+				ARRAY_SIZE(supported_modes_360mhz);
-+			break;
-+		case OV2740_LINK_FREQ_180MHZ_INDEX:
-+			ov2740->supported_modes = supported_modes_180mhz;
-+			ov2740->supported_modes_count =
-+				ARRAY_SIZE(supported_modes_180mhz);
-+			break;
- 		}
-+
-+		break; /* Prefer modes from first available link-freq */
- 	}
- 
-+	if (!ov2740->supported_modes)
-+		ret = dev_err_probe(dev, -EINVAL,
-+				    "no supported link frequencies\n");
-+
- check_hwcfg_error:
- 	v4l2_fwnode_endpoint_free(&bus_cfg);
- 
-@@ -1129,7 +1344,7 @@ static int ov2740_probe(struct i2c_client *client)
- 		}
- 	}
- 
--	ov2740->cur_mode = &supported_modes[0];
-+	ov2740->cur_mode = &ov2740->supported_modes[0];
- 	ret = ov2740_init_controls(ov2740);
- 	if (ret) {
- 		dev_err_probe(dev, ret, "failed to init controls\n");
--- 
-2.43.0
-
-From b8c88a81135741a39f56d63673bfd2d2f5f12b3a Mon Sep 17 00:00:00 2001
-From: Hans de Goede <hdegoede@redhat.com>
-Date: Mon, 4 Dec 2023 13:39:45 +0100
-Subject: [PATCH 26/31] media: ov2740: Add a sleep after resetting the sensor
-
-Split the resetting of the sensor out of the link_freq_config reg_list
-and add a delay after this.
-
-This hopefully fixes the stream sometimes not starting, this was
-taken from the ov2740 sensor driver in the out of tree IPU6 driver:
-
-https://github.com/intel/ipu6-drivers/
-
-Signed-off-by: Hans de Goede <hdegoede@redhat.com>
-Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
-Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
----
- drivers/media/i2c/ov2740.c | 11 +++++++++--
- 1 file changed, 9 insertions(+), 2 deletions(-)
-
-diff --git a/drivers/media/i2c/ov2740.c b/drivers/media/i2c/ov2740.c
-index 85629992d3aa..9666f6e293d9 100644
---- a/drivers/media/i2c/ov2740.c
-+++ b/drivers/media/i2c/ov2740.c
-@@ -128,7 +128,6 @@ struct ov2740_mode {
- };
- 
- static const struct ov2740_reg mipi_data_rate_720mbps[] = {
--	{0x0103, 0x01},
- 	{0x0302, 0x4b},
- 	{0x030d, 0x4b},
- 	{0x030e, 0x02},
-@@ -137,7 +136,6 @@ static const struct ov2740_reg mipi_data_rate_720mbps[] = {
- };
- 
- static const struct ov2740_reg mipi_data_rate_360mbps[] = {
--	{0x0103, 0x01},
- 	{0x0302, 0x4b},
- 	{0x0303, 0x01},
- 	{0x030d, 0x4b},
-@@ -935,6 +933,15 @@ static int ov2740_start_streaming(struct ov2740 *ov2740)
- 	if (ov2740->nvm)
- 		ov2740_load_otp_data(ov2740->nvm);
- 
-+	/* Reset the sensor */
-+	ret = ov2740_write_reg(ov2740, 0x0103, 1, 0x01);
-+	if (ret) {
-+		dev_err(&client->dev, "failed to reset\n");
-+		return ret;
-+	}
-+
-+	usleep_range(10000, 15000);
-+
- 	link_freq_index = ov2740->cur_mode->link_freq_index;
- 	reg_list = &link_freq_configs[link_freq_index].reg_list;
- 	ret = ov2740_write_reg_list(ov2740, reg_list);
--- 
-2.43.0
-
-From e807d266be092024e9963ffb6c7b9ace1153ec15 Mon Sep 17 00:00:00 2001
-From: Hans de Goede <hdegoede@redhat.com>
-Date: Mon, 4 Dec 2023 13:39:46 +0100
-Subject: [PATCH 27/31] media: ipu-bridge: Change ov2740 link-frequency to 180
- MHz
-
-The only known devices that use an ov2740 sensor in combination with
-the ipu-bridge code are various Lenovo ThinkPad models, which all
-need the link-frequency to be 180 MHz for things to work properly.
-
-The ov2740 driver used to only support 360 MHz link-frequency,
-which is why the ipu-bridge entry used 360 MHz, but now the
-ov2740 driver has been extended to also support 180 MHz.
-
-The ov2740 is actually used with 360 MHz link-frequency on Chromebooks.
-On Chromebooks the camera/sensor fwnode graph is part of the ACPI tables.
-The ipu-bridge code is used to dynamically generate the graph when it is
-missing, so it is not used on Chromebooks and the ov2740 will keep using
-360 MHz link-frequency there as before.
-
-Signed-off-by: Hans de Goede <hdegoede@redhat.com>
-Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
-Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
----
- drivers/media/pci/intel/ipu-bridge.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/media/pci/intel/ipu-bridge.c b/drivers/media/pci/intel/ipu-bridge.c
-index e38198e259c0..f980e3125a7b 100644
---- a/drivers/media/pci/intel/ipu-bridge.c
-+++ b/drivers/media/pci/intel/ipu-bridge.c
-@@ -53,7 +53,7 @@ static const struct ipu_sensor_config ipu_supported_sensors[] = {
- 	/* Omnivision ov8856 */
- 	IPU_SENSOR_CONFIG("OVTI8856", 3, 180000000, 360000000, 720000000),
- 	/* Omnivision ov2740 */
--	IPU_SENSOR_CONFIG("INT3474", 1, 360000000),
-+	IPU_SENSOR_CONFIG("INT3474", 1, 180000000),
- 	/* Hynix hi556 */
- 	IPU_SENSOR_CONFIG("INT3537", 1, 437000000),
- 	/* Omnivision ov13b10 */
--- 
-2.43.0
-
-From d1c04b1284f0ce4d32ea73f6a325e08b31b2a323 Mon Sep 17 00:00:00 2001
+From e624515c64d782b452a4676c1e117815267559ae Mon Sep 17 00:00:00 2001
 From: Hans de Goede <hdegoede@redhat.com>
 Date: Tue, 23 Jan 2024 14:58:35 +0100
-Subject: [PATCH 28/31] media: hi556: Return -EPROBE_DEFER if no endpoint is
+Subject: [PATCH 29/33] media: hi556: Return -EPROBE_DEFER if no endpoint is
  found
 
 With ipu bridge, endpoints may only be created when ipu bridge has
@@ -16823,10 +17721,10 @@ Signed-off-by: Hans de Goede <hdegoede@redhat.com>
  1 file changed, 7 insertions(+), 6 deletions(-)
 
 diff --git a/drivers/media/i2c/hi556.c b/drivers/media/i2c/hi556.c
-index f6ea9b7b9700..258614b33f51 100644
+index 38c77d515786..96bae9914d52 100644
 --- a/drivers/media/i2c/hi556.c
 +++ b/drivers/media/i2c/hi556.c
-@@ -1207,8 +1207,13 @@ static int hi556_check_hwcfg(struct device *dev)
+@@ -1206,8 +1206,13 @@ static int hi556_check_hwcfg(struct device *dev)
  	int ret = 0;
  	unsigned int i, j;
  
@@ -16842,7 +17740,7 @@ index f6ea9b7b9700..258614b33f51 100644
  
  	ret = fwnode_property_read_u32(fwnode, "clock-frequency", &mclk);
  	if (ret) {
-@@ -1221,10 +1226,6 @@ static int hi556_check_hwcfg(struct device *dev)
+@@ -1220,10 +1225,6 @@ static int hi556_check_hwcfg(struct device *dev)
  		return -EINVAL;
  	}
  
@@ -16854,12 +17752,13 @@ index f6ea9b7b9700..258614b33f51 100644
  	fwnode_handle_put(ep);
  	if (ret)
 -- 
-2.43.0
+2.43.2
 
-From 109e64438f05a0cd791e5d84084672b2fcf12cf2 Mon Sep 17 00:00:00 2001
+
+From b127d1003050fb894ea764b600d5f399af413b68 Mon Sep 17 00:00:00 2001
 From: Hans de Goede <hdegoede@redhat.com>
 Date: Tue, 23 Jan 2024 14:48:26 +0100
-Subject: [PATCH 29/31] media: hi556: Add support for reset GPIO
+Subject: [PATCH 30/33] media: hi556: Add support for reset GPIO
 
 On some ACPI platforms, such as Chromebooks the ACPI methods to
 change the power-state (_PS0 and _PS3) fully take care of powering
@@ -16876,7 +17775,7 @@ Signed-off-by: Hans de Goede <hdegoede@redhat.com>
  1 file changed, 44 insertions(+), 1 deletion(-)
 
 diff --git a/drivers/media/i2c/hi556.c b/drivers/media/i2c/hi556.c
-index 258614b33f51..7398391989ea 100644
+index 96bae9914d52..f5a39b83598b 100644
 --- a/drivers/media/i2c/hi556.c
 +++ b/drivers/media/i2c/hi556.c
 @@ -4,6 +4,7 @@
@@ -16897,7 +17796,7 @@ index 258614b33f51..7398391989ea 100644
  	/* Current mode */
  	const struct hi556_mode *cur_mode;
  
-@@ -1277,6 +1281,25 @@ static void hi556_remove(struct i2c_client *client)
+@@ -1276,6 +1280,25 @@ static void hi556_remove(struct i2c_client *client)
  	mutex_destroy(&hi556->mutex);
  }
  
@@ -16923,7 +17822,7 @@ index 258614b33f51..7398391989ea 100644
  static int hi556_probe(struct i2c_client *client)
  {
  	struct hi556 *hi556;
-@@ -1296,12 +1319,24 @@ static int hi556_probe(struct i2c_client *client)
+@@ -1295,12 +1318,24 @@ static int hi556_probe(struct i2c_client *client)
  
  	v4l2_i2c_subdev_init(&hi556->sd, client, &hi556_subdev_ops);
  
@@ -16949,7 +17848,7 @@ index 258614b33f51..7398391989ea 100644
  		}
  	}
  
-@@ -1346,9 +1381,16 @@ static int hi556_probe(struct i2c_client *client)
+@@ -1345,9 +1380,16 @@ static int hi556_probe(struct i2c_client *client)
  	v4l2_ctrl_handler_free(hi556->sd.ctrl_handler);
  	mutex_destroy(&hi556->mutex);
  
@@ -16966,7 +17865,7 @@ index 258614b33f51..7398391989ea 100644
  #ifdef CONFIG_ACPI
  static const struct acpi_device_id hi556_acpi_ids[] = {
  	{"INT3537"},
-@@ -1362,6 +1404,7 @@ static struct i2c_driver hi556_i2c_driver = {
+@@ -1361,6 +1403,7 @@ static struct i2c_driver hi556_i2c_driver = {
  	.driver = {
  		.name = "hi556",
  		.acpi_match_table = ACPI_PTR(hi556_acpi_ids),
@@ -16975,12 +17874,13 @@ index 258614b33f51..7398391989ea 100644
  	.probe = hi556_probe,
  	.remove = hi556_remove,
 -- 
-2.43.0
+2.43.2
 
-From 23a74772614fcba8ad2ed9370db613ab0540072e Mon Sep 17 00:00:00 2001
+
+From ee651202ba2ca38da067b5379edd7b4f339cf7a8 Mon Sep 17 00:00:00 2001
 From: Hans de Goede <hdegoede@redhat.com>
 Date: Tue, 23 Jan 2024 14:54:22 +0100
-Subject: [PATCH 30/31] media: hi556: Add support for external clock
+Subject: [PATCH 31/33] media: hi556: Add support for external clock
 
 On some ACPI platforms, such as Chromebooks the ACPI methods to
 change the power-state (_PS0 and _PS3) fully take care of powering
@@ -16997,7 +17897,7 @@ Signed-off-by: Hans de Goede <hdegoede@redhat.com>
  1 file changed, 13 insertions(+)
 
 diff --git a/drivers/media/i2c/hi556.c b/drivers/media/i2c/hi556.c
-index 7398391989ea..fb6ba6984e38 100644
+index f5a39b83598b..b783e0f56687 100644
 --- a/drivers/media/i2c/hi556.c
 +++ b/drivers/media/i2c/hi556.c
 @@ -3,6 +3,7 @@
@@ -17016,7 +17916,7 @@ index 7398391989ea..fb6ba6984e38 100644
  
  	/* Current mode */
  	const struct hi556_mode *cur_mode;
-@@ -1287,6 +1289,7 @@ static int hi556_suspend(struct device *dev)
+@@ -1286,6 +1288,7 @@ static int hi556_suspend(struct device *dev)
  	struct hi556 *hi556 = to_hi556(sd);
  
  	gpiod_set_value_cansleep(hi556->reset_gpio, 1);
@@ -17024,7 +17924,7 @@ index 7398391989ea..fb6ba6984e38 100644
  	return 0;
  }
  
-@@ -1294,6 +1297,11 @@ static int hi556_resume(struct device *dev)
+@@ -1293,6 +1296,11 @@ static int hi556_resume(struct device *dev)
  {
  	struct v4l2_subdev *sd = dev_get_drvdata(dev);
  	struct hi556 *hi556 = to_hi556(sd);
@@ -17036,7 +17936,7 @@ index 7398391989ea..fb6ba6984e38 100644
  
  	gpiod_set_value_cansleep(hi556->reset_gpio, 0);
  	usleep_range(5000, 5500);
-@@ -1325,6 +1333,11 @@ static int hi556_probe(struct i2c_client *client)
+@@ -1324,6 +1332,11 @@ static int hi556_probe(struct i2c_client *client)
  		return dev_err_probe(&client->dev, PTR_ERR(hi556->reset_gpio),
  				     "failed to get reset GPIO\n");
  
@@ -17049,12 +17949,13 @@ index 7398391989ea..fb6ba6984e38 100644
  	if (full_power) {
  		/* Ensure non ACPI managed resources are enabled */
 -- 
-2.43.0
+2.43.2
 
-From 6c3b454ee3ab07dd2e10011d685f6bd9f03bee71 Mon Sep 17 00:00:00 2001
+
+From 16be71996d451b8137ba63070e760448814c11a1 Mon Sep 17 00:00:00 2001
 From: Hans de Goede <hdegoede@redhat.com>
 Date: Wed, 24 Jan 2024 18:45:02 +0100
-Subject: [PATCH 31/31] media: hi556: Add support for avdd regulator
+Subject: [PATCH 32/33] media: hi556: Add support for avdd regulator
 
 On some ACPI platforms, such as Chromebooks the ACPI methods to
 change the power-state (_PS0 and _PS3) fully take care of powering
@@ -17074,7 +17975,7 @@ Signed-off-by: Hans de Goede <hdegoede@redhat.com>
  1 file changed, 24 insertions(+)
 
 diff --git a/drivers/media/i2c/hi556.c b/drivers/media/i2c/hi556.c
-index fb6ba6984e38..90eff282a6e2 100644
+index b783e0f56687..5641c249d4b1 100644
 --- a/drivers/media/i2c/hi556.c
 +++ b/drivers/media/i2c/hi556.c
 @@ -9,6 +9,7 @@
@@ -17093,7 +17994,7 @@ index fb6ba6984e38..90eff282a6e2 100644
  
  	/* Current mode */
  	const struct hi556_mode *cur_mode;
-@@ -1287,8 +1289,17 @@ static int hi556_suspend(struct device *dev)
+@@ -1286,8 +1288,17 @@ static int hi556_suspend(struct device *dev)
  {
  	struct v4l2_subdev *sd = dev_get_drvdata(dev);
  	struct hi556 *hi556 = to_hi556(sd);
@@ -17111,7 +18012,7 @@ index fb6ba6984e38..90eff282a6e2 100644
  	clk_disable_unprepare(hi556->clk);
  	return 0;
  }
-@@ -1303,6 +1314,13 @@ static int hi556_resume(struct device *dev)
+@@ -1302,6 +1313,13 @@ static int hi556_resume(struct device *dev)
  	if (ret)
  		return ret;
  
@@ -17125,7 +18026,7 @@ index fb6ba6984e38..90eff282a6e2 100644
  	gpiod_set_value_cansleep(hi556->reset_gpio, 0);
  	usleep_range(5000, 5500);
  	return 0;
-@@ -1338,6 +1356,12 @@ static int hi556_probe(struct i2c_client *client)
+@@ -1337,6 +1355,12 @@ static int hi556_probe(struct i2c_client *client)
  		return dev_err_probe(&client->dev, PTR_ERR(hi556->clk),
  				     "failed to get clock\n");
  
@@ -17139,5 +18040,38 @@ index fb6ba6984e38..90eff282a6e2 100644
  	if (full_power) {
  		/* Ensure non ACPI managed resources are enabled */
 -- 
-2.43.0
+2.43.2
+
+
+From 6bd6e73829cf264120f629c88c552c4eb59c7eee Mon Sep 17 00:00:00 2001
+From: Florian Klink <flokli@flokli.de>
+Date: Sun, 17 Mar 2024 17:07:53 +0200
+Subject: [PATCH 33/33] media: intel/ipu6: fix firmware paths
+
+linux-firmware ships them in intel/ipu, not intel/.
+---
+ drivers/media/pci/intel/ipu6/ipu6.h | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
+
+diff --git a/drivers/media/pci/intel/ipu6/ipu6.h b/drivers/media/pci/intel/ipu6/ipu6.h
+index 04e7e7e61ca5..da8a95a9edf8 100644
+--- a/drivers/media/pci/intel/ipu6/ipu6.h
++++ b/drivers/media/pci/intel/ipu6/ipu6.h
+@@ -24,10 +24,10 @@ struct ipu6_bus_device;
+ #define IPU6_NAME			"intel-ipu6"
+ #define IPU6_MEDIA_DEV_MODEL_NAME	"ipu6"
+ 
+-#define IPU6SE_FIRMWARE_NAME		"intel/ipu6se_fw.bin"
+-#define IPU6EP_FIRMWARE_NAME		"intel/ipu6ep_fw.bin"
+-#define IPU6_FIRMWARE_NAME		"intel/ipu6_fw.bin"
+-#define IPU6EPMTL_FIRMWARE_NAME		"intel/ipu6epmtl_fw.bin"
++#define IPU6SE_FIRMWARE_NAME		"intel/ipu/ipu6se_fw.bin"
++#define IPU6EP_FIRMWARE_NAME		"intel/ipu/ipu6ep_fw.bin"
++#define IPU6_FIRMWARE_NAME		"intel/ipu/ipu6_fw.bin"
++#define IPU6EPMTL_FIRMWARE_NAME		"intel/ipu/ipu6epmtl_fw.bin"
+ 
+ enum ipu6_version {
+ 	IPU6_VER_INVALID = 0,
+-- 
+2.43.2
 
