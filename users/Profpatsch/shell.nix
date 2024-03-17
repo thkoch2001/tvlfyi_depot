@@ -4,6 +4,7 @@ let root = (import ../../. { }); in
 { pkgs ? root.third_party.nixpkgs, depot ? root, ... }:
 
 pkgs.mkShell {
+
   buildInputs = [
     pkgs.sqlite-interactive
     pkgs.sqlite-utils
@@ -63,7 +64,17 @@ pkgs.mkShell {
     pkgs.postgresql_14
     pkgs.nodejs
     pkgs.ninja
+    pkgs.s6
+    pkgs.caddy
+
+    (depot.nix.binify {
+       name = "nix-run";
+       exe = depot.users.Profpatsch.nix-tools.nix-run;
+    })
   ];
+
+  DEPOT_ROOT = toString ./../..;
+  PROFPATSCH_ROOT = toString ./.;
 
   WHATCD_RESOLVER_TOOLS = pkgs.linkFarm "whatcd-resolver-tools" [
     {
