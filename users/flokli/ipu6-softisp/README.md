@@ -5,7 +5,7 @@ https://copr.fedorainfracloud.org/coprs/jwrdegoede/ipu6-softisp/.
 
 It's supposed to be included in your NixOS configuration imports, and will:
 
- - Add some patches to your kernel, which should apply on 6.7.x
+ - Add some patches to your kernel, which should apply on 6.8.x
  - Add the `ipu6-camera-bins` firmware (still needed)
  - Enable some kernel config options
  - Add an udev rule so libcamera can do DMABUF things
@@ -15,6 +15,9 @@ It's supposed to be included in your NixOS configuration imports, and will:
 
 Please make sure you don't have any of the `hardware.ipu6` options still
 enabled, as they use the closed-source userspace stack and will conflict.
+
+Also make sure to track nixos-unstable for this. This code will get periodically
+updated to be compatible with nixos-unstable!
 
 The testing instructions from
 https://copr.fedorainfracloud.org/coprs/jwrdegoede/ipu6-softisp/ still apply.

@@ -11,10 +11,6 @@ let
   };
 in
 lib.fix (self: {
-  imports = [
-    (depot.path.origSrc + "/ops/modules/v4l2loopback.nix")
-  ];
-
   boot = {
     tmp.useTmpfs = true;
     kernelModules = [ "kvm-amd" ];
