@@ -82,7 +82,16 @@ main =
 htmlUi :: AppT IO ()
 htmlUi = do
   let debug = True
-  withRunInIO $ \runInIO -> Warp.run 9092 $ \req respond -> do
+  uniqueRunId <-
+    runTransaction $
+      querySingleRowWith
+        [sql|
+            SELECT gen_random_uuid()::text
+        |]
+        ()
+        (Dec.fromField @Text)
+
+  withRunInIO $ \runInIO -> Warp.run 9093 $ \req respond -> do
     let catchAppException act =
           try act >>= \case
             Right a -> pure a
@@ -95,7 +104,7 @@ htmlUi = do
             if debug
               then Html.Pretty.renderHtml >>> stringToText >>> textToBytesUtf8 >>> toLazyBytes
               else Html.renderHtml
-      let h route act =
+      let hh route act =
             runInIO $
               Otel.inSpan'
                 [fmt|Route {route }|]
@@ -108,9 +117,9 @@ htmlUi = do
                 )
                 ( \span -> withRunInIO $ \runInIO' -> do
                     res <- runInIO' $ act span
-                    respond . Wai.responseLBS Http.ok200 [("Content-Type", "text/html")] . renderHtml $ res
+                    respond . Wai.responseLBS Http.ok200 ([("Content-Type", "text/html")] <> res.extraHeaders) . renderHtml $ res.html
                 )
-
+      let h route act = hh route (\span -> act span <&> (\html -> T2 (label @"html" html) (label @"extraHeaders" [])))
       let mp span parser =
             Multipart.parseMultipartOrThrow
               (appThrowTree span)
@@ -127,8 +136,12 @@ htmlUi = do
             Parse.runParse "Unable to find the right request query arguments" (lmap Wai.queryString parser) req
               & assertM span id
 
+      let parseQueryArgsNewSpan spanName parser =
+            Parse.runParse "Unable to find the right request query arguments" (lmap Wai.queryString parser) req
+              & assertMNewSpan spanName id
+
       case req & Wai.pathInfo & Text.intercalate "/" of
-        "" -> h "/" mainHtml
+        "" -> h "/" (mainHtml uniqueRunId)
         "snips/redacted/search" -> do
           h "/snips/redacted/search" $ \span -> do
             dat <-
@@ -209,12 +222,30 @@ htmlUi = do
                 )
             jsonld <- httpGetJsonLd (qry.target)
             pure $ renderJsonld jsonld
-        otherRoute -> h [fmt|/{otherRoute}|] mainHtml
+        "autorefresh" -> do
+          qry <-
+            runInIO $
+              parseQueryArgsNewSpan
+                "Autorefresh Query Parse"
+                ( label @"hasItBeenRestarted"
+                    <$> singleQueryArgument "hasItBeenRestarted" Field.utf8
+                )
+          respond $
+            Wai.responseLBS
+              Http.ok200
+              ( [("Content-Type", "text/html")]
+                  <> if uniqueRunId /= qry.hasItBeenRestarted
+                    then -- cause the client side to refresh
+                      [("HX-Refresh", "true")]
+                    else []
+              )
+              ""
+        otherRoute -> h [fmt|/{otherRoute}|] (mainHtml uniqueRunId)
   where
     everySecond :: Text -> Enc -> Html -> Html
     everySecond call extraData innerHtml = [hsx|<div hx-trigger="every 1s" hx-swap="outerHTML" hx-post={call} hx-vals={Enc.encToBytesUtf8 extraData}>{innerHtml}</div>|]
 
-    mainHtml _span = runTransaction $ do
+    mainHtml uniqueRunId _span = runTransaction $ do
       jsonld <-
         httpGetJsonLd
           ( URI.parseURI "https://musicbrainz.org/work/92000fd4-d304-406d-aeb4-6bdbeed318ec" & annotate "not an URI" & unwrapError,
@@ -257,6 +288,17 @@ htmlUi = do
         <div id="redacted-search-results">
           {bestTorrentsTable}
         </div>
+        <!-- refresh the page if the uniqueRunId is different -->
+        <input
+             hidden
+             type="text"
+             id="autorefresh"
+             name="hasItBeenRestarted"
+             value={uniqueRunId}
+             hx-get="/autorefresh"
+             hx-trigger="every 5s"
+             hx-swap="none"
+        />
       </body>
     |]
 

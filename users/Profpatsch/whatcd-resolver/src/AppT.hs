@@ -66,6 +66,17 @@ addAttribute span key a = Otel.addAttribute span ("_." <> key) a
 addAttributes :: (MonadIO m) => Otel.Span -> HashMap Text Otel.Attribute -> m ()
 addAttributes span attrs = Otel.addAttributes span $ attrs & HashMap.mapKeys ("_." <>)
 
+appThrowTreeNewSpan :: (MonadThrow m, MonadOtel m) => Text -> ErrorTree -> m a
+appThrowTreeNewSpan spanName exc = inSpan' spanName $ \span -> do
+  let msg = prettyErrorTree exc
+  recordException
+    span
+    ( T2
+        (label @"type_" "AppException")
+        (label @"message" msg)
+    )
+  throwM $ AppException msg
+
 appThrowTree :: (MonadThrow m, MonadIO m) => Otel.Span -> ErrorTree -> m a
 appThrowTree span exc = do
   let msg = prettyErrorTree exc
@@ -86,6 +97,11 @@ assertM :: (MonadThrow f, MonadIO f) => Otel.Span -> (t -> Either ErrorTree a) -
 assertM span f v = case f v of
   Right a -> pure a
   Left err -> appThrowTree span err
+
+assertMNewSpan :: (MonadThrow f, MonadOtel f) => Text -> (t -> Either ErrorTree a) -> t -> f a
+assertMNewSpan spanName f v = case f v of
+  Right a -> pure a
+  Left err -> appThrowTreeNewSpan spanName err
 
 -- | A specialized variant of @addEvent@ that records attributes conforming to
 -- the OpenTelemetry specification's

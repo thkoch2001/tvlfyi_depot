@@ -165,6 +165,21 @@ querySingleRow qry params = do
   query qry params >>= ensureSingleRow
 
 -- TODO: implement via fold, so that the result doesn’t have to be realized in memory
+querySingleRowWith ::
+  ( MonadPostgres m,
+    ToRow qParams,
+    Typeable qParams,
+    Typeable a,
+    MonadThrow m
+  ) =>
+  Query ->
+  qParams ->
+  Decoder a ->
+  Transaction m a
+querySingleRowWith qry params decoder = do
+  queryWith qry params decoder >>= ensureSingleRow
+
+-- TODO: implement via fold, so that the result doesn’t have to be realized in memory
 querySingleRowMaybe ::
   ( MonadPostgres m,
     ToRow qParams,
