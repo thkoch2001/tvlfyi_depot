@@ -16,6 +16,24 @@
       "message": "I think this should be `json()`",
       "revId": "b2b49bc9b7518b9ce2f39d3ef25b7990d859378e",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "661c2978_e1413378",
+        "filename": "tvix/store/src/bin/tvix-store.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 186,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-03-18T15:38:06Z",
+      "side": 1,
+      "message": "You\u0027re absolutely right! Seems I copied here and forgot to replace. Thanks, updated!",
+      "parentUuid": "1b95cff0_3d7542be",
+      "revId": "b2b49bc9b7518b9ce2f39d3ef25b7990d859378e",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
