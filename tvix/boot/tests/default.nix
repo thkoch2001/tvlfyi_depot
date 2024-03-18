@@ -76,6 +76,25 @@ let
         '';
         requiredSystemFeatures = [ "kvm" ];
       };
+
+  systemFor = sys: (depot.ops.nixos.nixosFor sys).system;
+
+  testSystem = systemFor ({ modulesPath, pkgs, ... }: {
+    # Set some options necessary to evaluate.
+    boot.loader.systemd-boot.enable = true;
+
+    # TODO: figure out how to disable this without causing eval to fail
+    fileSystems."/" = {
+      device = "/dev/disk/by-partlabel/root";
+      fsType = "xfs";
+    };
+
+    # TODO: have the machine power itself off right after finishing bootup.
+
+    # Shut off the warning.
+    system.stateVersion = "24.05";
+  });
+
 in
 depot.nix.readTree.drvTargets
 {
@@ -100,5 +119,12 @@ depot.nix.readTree.drvTargets
     blobServiceAddr = "objectstore+file://$PWD/blobs";
     path = depot.tvix.store;
     isClosure = true;
+  });
+
+  closure-nixos = (mkBootTest {
+    path = testSystem;
+    isClosure = true;
+    vmCmdline = "init=${testSystem}/init panic=-1"; # reboot immediately on panic
+    assertVMOutput = "multi-user.target"; # TODO: probably better to have some canary service writing some message, and then shitting down..
   });
 }
