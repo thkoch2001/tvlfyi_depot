@@ -70,12 +70,38 @@ let
           tvix-store --otlp=false copy
         '' + ''
           # Invoke a VM using tvix as the backing store, ensure the outpath appears in its listing.
+          echo "Starting VM…"
 
           CH_CMDLINE="${vmCmdline}" run-tvix-vm 2>&1 | tee output.txt
           grep "${assertVMOutput}" output.txt
         '';
         requiredSystemFeatures = [ "kvm" ];
       };
+
+  systemFor = sys: (depot.ops.nixos.nixosFor sys).system;
+
+  testSystem = systemFor ({ modulesPath, pkgs, ... }: {
+    # Set some options necessary to evaluate.
+    boot.loader.systemd-boot.enable = true;
+    # TODO: figure out how to disable this without causing eval to fail
+    fileSystems."/" = {
+      device = "/dev/root";
+      fsType = "tmpfs";
+    };
+
+    services.getty.helpLine = "Onwards and upwards.";
+    systemd.services.do-shutdown = {
+      after = [ "getty.target" ];
+      description = "Shut down again";
+      wantedBy = [ "multi-user.target" ];
+      serviceConfig.Type = "oneshot";
+      script = "/run/current-system/sw/bin/systemctl poweroff --when=+10s";
+    };
+
+    # Don't warn about stateVersion.
+    system.stateVersion = "24.05";
+  });
+
 in
 depot.nix.readTree.drvTargets
 {
@@ -100,5 +126,13 @@ depot.nix.readTree.drvTargets
     blobServiceAddr = "objectstore+file://$PWD/blobs";
     path = depot.tvix.store;
     isClosure = true;
+  });
+
+  closure-nixos = (mkBootTest {
+    blobServiceAddr = "objectstore+file://$PWD/blobs";
+    path = testSystem;
+    isClosure = true;
+    vmCmdline = "init=${testSystem}/init panic=-1"; # reboot immediately on panic
+    assertVMOutput = "Onwards and upwards.";
   });
 }
