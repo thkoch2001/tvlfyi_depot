@@ -8,56 +8,113 @@ let
     { blobServiceAddr ? "memory://"
     , directoryServiceAddr ? "memory://"
     , pathInfoServiceAddr ? "memory://"
-      # The path to import (via tvix-store import).
-    , importPath ? ../../docs
-    , importPathName ? "docs"
+
+
+      # The path to import.
+    , path
+
+      # Whether the path should be imported as a closure.
+      # If false, importPathName must be specified.
+    , isClosure ? false
+    , importPathName ? null
+
     }:
-    pkgs.stdenv.mkDerivation {
-      name = "run-vm";
-      nativeBuildInputs = [
-        depot.tvix.store
-        depot.tvix.boot.runVM
-      ];
-      buildCommand = ''
-        touch $out
 
-        # Start the tvix daemon, listening on a unix socket.
-        BLOB_SERVICE_ADDR=${blobServiceAddr} \
-          DIRECTORY_SERVICE_ADDR=${directoryServiceAddr} \
-          PATH_INFO_SERVICE_ADDR=${pathInfoServiceAddr} \
-          tvix-store daemon -l $PWD/tvix-store.socket &
+      assert isClosure -> importPathName == null;
+      assert (!isClosure) -> importPathName != null;
 
-        # Wait for the socket to be created.
-        while [ ! -e $PWD/tvix-store.socket ]; do sleep 1; done
+      pkgs.stdenv.mkDerivation {
+        name = "run-vm";
 
-        # Export env vars so that subsequent tvix-store commands will talk to
-        # our tvix-store daemon over the unix socket.
-        export BLOB_SERVICE_ADDR=grpc+unix://$PWD/tvix-store.socket
-        export DIRECTORY_SERVICE_ADDR=grpc+unix://$PWD/tvix-store.socket
-        export PATH_INFO_SERVICE_ADDR=grpc+unix://$PWD/tvix-store.socket
-      '' + lib.optionalString (importPath != null) ''
-        echo "Importing ${importPath} into tvix-store with name ${importPathName}…"
-        cp -R ${importPath} ${importPathName}
-        outpath=$(tvix-store import ${importPathName})
+        nativeBuildInputs = [
+          depot.tvix.store
+          depot.tvix.boot.runVM
+        ] ++ lib.optionals isClosure [
+          depot.tvix.nar-bridge
+          pkgs.curl
+          pkgs.parallel
+          pkgs.xz.bin
+        ];
+        buildCommand = ''
+          touch $out
 
-        echo "imported to $outpath"
+          # Start the tvix daemon, listening on a unix socket.
+          BLOB_SERVICE_ADDR=${blobServiceAddr} \
+            DIRECTORY_SERVICE_ADDR=${directoryServiceAddr} \
+            PATH_INFO_SERVICE_ADDR=${pathInfoServiceAddr} \
+            tvix-store daemon -l $PWD/tvix-store.sock &
 
-        # Invoke a VM using tvix as the backing store, ensure the outpath appears in its listing.
+          # Wait for the socket to be created.
+          while [ ! -e $PWD/tvix-store.sock ]; do sleep 1; done
 
-        CH_CMDLINE="tvix.find" run-tvix-vm 2>&1 | tee output.txt
-        grep $outpath output.txt
-      '';
-      requiredSystemFeatures = [ "kvm" ];
-    };
+          # Export env vars so that subsequent tvix-store commands will talk to
+          # our tvix-store daemon over the unix socket.
+          export BLOB_SERVICE_ADDR=grpc+unix://$PWD/tvix-store.sock
+          export DIRECTORY_SERVICE_ADDR=grpc+unix://$PWD/tvix-store.sock
+          export PATH_INFO_SERVICE_ADDR=grpc+unix://$PWD/tvix-store.sock
+        '' + lib.optionalString (!isClosure) ''
+          echo "Importing ${path} into tvix-store with name ${importPathName}…"
+          cp -R ${path} ${importPathName}
+          outpath=$(tvix-store import ${importPathName})
+
+          echo "imported to $outpath"
+        '' + lib.optionalString (isClosure) ''
+          echo "Starting nar-bridge…"
+          nar-bridge-http --store-addr=unix://$PWD/tvix-store.sock --listen-addr=$PWD/nar-bridge.sock &
+
+          # Wait for the socket to be created.
+          while [ ! -e $PWD/nar-bridge.sock ]; do sleep 1; done
+
+          # Upload. We can't use nix copy --to http://…, as it wants access to the nix db.
+          # However, we can use mkBinaryCache to assemble .narinfo and .nar.xz to upload,
+          # and then drive a HTTP client ourselves.
+          to_upload=${pkgs.mkBinaryCache { rootPaths = [path];}}
+
+          # Upload all NAR files (with some parallelism).
+          # As mkBinaryCache produces them xz-compressed, unpack them on the fly.
+          # nar-bridge doesn't care about the path we upload *to*, but a
+          # subsequent .narinfo upload need to refer to its contents (by narhash).
+          echo -e "Uploading NARs… "
+          ls -d $to_upload/nar/*.nar.xz | parallel 'xz -d < {} | curl -s -T - --unix-socket $PWD/nar-bridge.sock http://localhost:9000/nar/$(basename {} | cut -d "." -f 1).nar'
+          echo "Done."
+
+          # Upload all NARInfo files.
+          # FUTUREWORK: This doesn't upload them in order, and currently relies
+          # on PathInfoService not doing any checking.
+          # In the future, we might want to make this behaviour configurable,
+          # and disable checking here, to keep the logic simple.
+          ls -d $to_upload/*.narinfo | parallel 'curl -s -T - --unix-socket $PWD/nar-bridge.sock http://localhost:9000/$(basename {}) < {}'
+        '' + ''
+          # Invoke a VM using tvix as the backing store, ensure the outpath appears in its listing.
+
+          CH_CMDLINE="tvix.find" run-tvix-vm 2>&1 | tee output.txt
+          grep ${path} output.txt
+        '';
+        requiredSystemFeatures = [ "kvm" ];
+      };
 in
-depot.nix.readTree.drvTargets {
-  docs-memory = (mkBootTest { });
+depot.nix.readTree.drvTargets
+{
+  docs-memory = (mkBootTest {
+    path = ../../docs;
+    importPathName = "docs";
+  });
   docs-sled = (mkBootTest {
     blobServiceAddr = "sled://$PWD/blobs.sled";
     directoryServiceAddr = "sled://$PWD/directories.sled";
     pathInfoServiceAddr = "sled://$PWD/pathinfo.sled";
+    path = ../../docs;
+    importPathName = "docs";
   });
   docs-objectstore-local = (mkBootTest {
     blobServiceAddr = "objectstore+file://$PWD/blobs";
+    path = ../../docs;
+    importPathName = "docs";
+  });
+
+  closure-tvix = (mkBootTest {
+    blobServiceAddr = "objectstore+file://$PWD/blobs";
+    path = depot.tvix.store;
+    isClosure = true;
   });
 }
