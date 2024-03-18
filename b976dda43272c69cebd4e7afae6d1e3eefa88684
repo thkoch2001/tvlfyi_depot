@@ -16,6 +16,24 @@
       "message": "Do we need to kill the daemon after the test is done? Or is this covered by the Nix sandbox?",
       "revId": "b976dda43272c69cebd4e7afae6d1e3eefa88684",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0e7cb7ad_6c749c76",
+        "filename": "tvix/boot/tests/default.nix",
+        "patchSetId": 1
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-03-18T15:38:06Z",
+      "side": 1,
+      "message": "This is covered by the Nix sandbox, at least on Linux.\n\nNot on MacOS, but the virtiofs stuff doesn\u0027t work there anyways.",
+      "parentUuid": "41e6f380_db48f2f4",
+      "revId": "b976dda43272c69cebd4e7afae6d1e3eefa88684",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
