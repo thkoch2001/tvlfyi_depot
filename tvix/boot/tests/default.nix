@@ -42,7 +42,9 @@ let
           BLOB_SERVICE_ADDR=${blobServiceAddr} \
             DIRECTORY_SERVICE_ADDR=${directoryServiceAddr} \
             PATH_INFO_SERVICE_ADDR=${pathInfoServiceAddr} \
-            tvix-store daemon -l $PWD/tvix-store.sock &
+            tvix-store \
+              --otlp=false \
+              daemon -l $PWD/tvix-store.sock &
 
           # Wait for the socket to be created.
           while [ ! -e $PWD/tvix-store.sock ]; do sleep 1; done
@@ -60,7 +62,10 @@ let
           echo "imported to $outpath"
         '' + lib.optionalString (isClosure) ''
           echo "Starting nar-bridge…"
-          nar-bridge-http --store-addr=unix://$PWD/tvix-store.sock --listen-addr=$PWD/nar-bridge.sock &
+          nar-bridge-http \
+            --otlp=false \
+            --store-addr=unix://$PWD/tvix-store.sock \
+            --listen-addr=$PWD/nar-bridge.sock &
 
           # Wait for the socket to be created.
           while [ ! -e $PWD/nar-bridge.sock ]; do sleep 1; done

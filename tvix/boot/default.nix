@@ -83,7 +83,7 @@ rec {
     trap cleanup EXIT
 
     # Spin up the virtiofs daemon
-    tvix-store virtiofs -l $tempdir/tvix.sock &
+    tvix-store --otlp=false virtiofs -l $tempdir/tvix.sock &
     virtiofsd_pid=$!
 
     # Wait for the socket to exist.
