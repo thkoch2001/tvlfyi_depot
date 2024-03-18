@@ -18,6 +18,12 @@ let
     , isClosure ? false
     , importPathName ? null
 
+      # The cmdline to pass to the VM.
+      # Defaults to tvix.find, which lists all files in the store.
+    , vmCmdline ? "tvix.find"
+      # The string we expect to find in the VM output.
+      # Defaults the value of `path` (the store path we upload).
+    , assertVMOutput ? path
     }:
 
       assert isClosure -> importPathName == null;
@@ -92,8 +98,8 @@ let
         '' + ''
           # Invoke a VM using tvix as the backing store, ensure the outpath appears in its listing.
 
-          CH_CMDLINE="tvix.find" run-tvix-vm 2>&1 | tee output.txt
-          grep ${path} output.txt
+          CH_CMDLINE="${vmCmdline}" run-tvix-vm 2>&1 | tee output.txt
+          grep "${assertVMOutput}" output.txt
         '';
         requiredSystemFeatures = [ "kvm" ];
       };
