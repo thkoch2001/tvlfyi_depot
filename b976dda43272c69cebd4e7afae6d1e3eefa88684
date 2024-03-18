@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "41e6f380_db48f2f4",
+        "filename": "tvix/boot/tests/default.nix",
+        "patchSetId": 1
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2024-03-18T15:22:42Z",
+      "side": 1,
+      "message": "Do we need to kill the daemon after the test is done? Or is this covered by the Nix sandbox?",
+      "revId": "b976dda43272c69cebd4e7afae6d1e3eefa88684",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
