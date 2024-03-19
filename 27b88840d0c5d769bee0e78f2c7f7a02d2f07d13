@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "77f42364_9e6eb7b8",
+        "filename": "tvix/castore/src/directoryservice/bigtable.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 221,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-03-19T22:19:09Z",
+      "side": 1,
+      "message": "TODO: do some tests with cbtemulator.",
+      "revId": "27b88840d0c5d769bee0e78f2c7f7a02d2f07d13",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
