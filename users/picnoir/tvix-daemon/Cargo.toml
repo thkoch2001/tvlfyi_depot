@@ -1,0 +1,17 @@
+[package]
+name = "tvix-daemon"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+tvix-store = { path = "../../../tvix/store/" }
+nix-compat = { path = "../../../tvix/nix-compat/" }
+tokio-listener = "0.3.1"
+tokio = { version = "1.36.0", features = ["full"] }
+tracing-subscriber = "0.3.18"
+tracing = "0.1.40"
+anyhow = "1.0.81"
+clap = { version = "4.5.3", features = ["derive"] }
+
+[dev-dependencies]
+tokio-test = "0.4.4"
