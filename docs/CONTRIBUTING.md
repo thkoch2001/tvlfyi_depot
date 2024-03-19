@@ -37,7 +37,7 @@ When in doubt - just ask! You can reach out to us via mail at
 All commit messages should be structured like this:
 
 ```
-type(scope): Subject line with at most a 68 character length
+type(scope): Subject line with at most a 72 character length
 
 Body of the commit message with an empty line between subject and
 body. This text should explain what the change does and why it has
