@@ -51,6 +51,24 @@
       "parentUuid": "2df30cfc_790dd92b",
       "revId": "8e5c09b6c9f202cb9faa9614f76d6b9eaca62d6c",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fb7825ad_8bd4a0f1",
+        "filename": "users/picnoir/tvix-daemon/src/main.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1000096
+      },
+      "writtenOn": "2024-03-19T16:47:46Z",
+      "side": 1,
+      "message": "Woops, added a +2 by mistake \u003e\u003c",
+      "parentUuid": "2b5eca55_81285eb1",
+      "revId": "8e5c09b6c9f202cb9faa9614f76d6b9eaca62d6c",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
