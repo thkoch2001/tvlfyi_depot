@@ -3,6 +3,23 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "9237bfa2_4400b7e1",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-03-19T22:34:01Z",
+      "side": 1,
+      "message": "Update commit message. this doesn\u0027t do closures/bucketing yet, as neither castore-fs does query recursive and buffer, nor we have composition yet, so intermediate keys would not be accessible.",
+      "revId": "27b88840d0c5d769bee0e78f2c7f7a02d2f07d13",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "77f42364_9e6eb7b8",
         "filename": "tvix/castore/src/directoryservice/bigtable.rs",
         "patchSetId": 2
