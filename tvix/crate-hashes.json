@@ -1,4 +1,5 @@
 {
+  "bigtable_rs 0.2.9 (git+https://github.com/flokli/bigtable_rs?rev=978307f5d300c913bf3ba991b4f1b453511b1d1b#978307f5d300c913bf3ba991b4f1b453511b1d1b)": "0zaa376czwxr5nhdydqpfnv9i57cnr38dh9jzwxh0cf9km1gj46p",
   "test-generator 0.3.0 (git+https://github.com/JamesGuthrie/test-generator.git?rev=82e799979980962aec1aa324ec6e0e4cad781f41#82e799979980962aec1aa324ec6e0e4cad781f41)": "08brp3qqa55hijc7xby3lam2cc84hvx1zzfqv6lj7smlczh8k32y",
   "wu-manber 0.1.0 (git+https://github.com/tvlfyi/wu-manber.git#0d5b22bea136659f7de60b102a7030e0daaa503d)": "1zhk83lbq99xzyjwphv2qrb8f8qgfqwa5bbbvyzm0z0bljsjv0pd"
 }
