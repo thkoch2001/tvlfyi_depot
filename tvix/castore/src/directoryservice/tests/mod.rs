@@ -16,6 +16,9 @@ use crate::{
 mod utils;
 use self::utils::make_grpc_directory_service_client;
 
+#[cfg(feature = "cloud")]
+use self::utils::make_bigtable;
+
 // TODO: add tests doing individual puts of a closure, then doing a get_recursive
 // (and figure out semantics if necessary)
 
@@ -26,6 +29,7 @@ use self::utils::make_grpc_directory_service_client;
 #[case::grpc(make_grpc_directory_service_client().await)]
 #[case::memory(directoryservice::from_addr("memory://").await.unwrap())]
 #[case::sled(directoryservice::from_addr("sled://").await.unwrap())]
+#[cfg_attr(feature = "cloud", case::bigtable(make_bigtable().await))]
 pub fn directory_services(#[case] directory_service: impl DirectoryService) {}
 
 /// Ensures asking for a directory that doesn't exist returns a Ok(None).
