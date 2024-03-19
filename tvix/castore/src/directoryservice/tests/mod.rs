@@ -16,16 +16,31 @@ use crate::{
 mod utils;
 use self::utils::make_grpc_directory_service_client;
 
+#[cfg(feature = "cloud")]
+use self::utils::make_bigtable;
+
 // TODO: add tests doing individual puts of a closure, then doing a get_recursive
 // (and figure out semantics if necessary)
 
 /// This produces a template, which will be applied to all individual test functions.
 /// See https://github.com/la10736/rstest/issues/130#issuecomment-968864832
+/// TODO: we currently have *two* definitions, see discussion in
+/// https://github.com/la10736/rstest/issues/234.
+#[cfg(not(feature = "cloud"))]
 #[template]
 #[rstest]
 #[case::grpc(make_grpc_directory_service_client().await)]
 #[case::memory(directoryservice::from_addr("memory://").await.unwrap())]
 #[case::sled(directoryservice::from_addr("sled://").await.unwrap())]
+pub fn directory_services(#[case] directory_service: impl DirectoryService) {}
+
+#[cfg(feature = "cloud")]
+#[template]
+#[rstest]
+#[case::grpc(make_grpc_directory_service_client().await)]
+#[case::memory(directoryservice::from_addr("memory://").await.unwrap())]
+#[case::sled(directoryservice::from_addr("sled://").await.unwrap())]
+#[case::bigtable(make_bigtable().await)]
 pub fn directory_services(#[case] directory_service: impl DirectoryService) {}
 
 /// Ensures asking for a directory that doesn't exist returns a Ok(None).
