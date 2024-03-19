@@ -1,10 +1,13 @@
 use crate::directoryservice::{DirectoryService, GRPCDirectoryService};
 use crate::proto::directory_service_client::DirectoryServiceClient;
-use crate::proto::GRPCDirectoryServiceWrapper;
+use crate::proto::{GRPCDirectoryServiceWrapper};
 use crate::{
     directoryservice::MemoryDirectoryService,
     proto::directory_service_server::DirectoryServiceServer,
 };
+
+
+
 use tonic::transport::{Endpoint, Server, Uri};
 
 /// Constructs and returns a gRPC DirectoryService.
