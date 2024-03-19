@@ -4,6 +4,9 @@
 
 use tokio::io::{AsyncRead, AsyncReadExt, AsyncWrite, AsyncWriteExt};
 
+pub static MAGIC_HELLO: u64 = 0x6e697863;
+pub static MAGIC_HELLO_RESPONSE: u64 = 0x6478696f;
+
 #[allow(dead_code)]
 /// Read a u64 from the AsyncRead (little endian).
 pub async fn read_u64<R: AsyncReadExt + Unpin>(r: &mut R) -> std::io::Result<u64> {
