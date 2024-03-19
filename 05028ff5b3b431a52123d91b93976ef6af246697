@@ -18,6 +18,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "372616fa_fa5778d9",
+        "filename": "tvix/nix-compat/src/wire/primitive.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000096
+      },
+      "writtenOn": "2024-03-19T16:50:05Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d5f231f3_259a6744",
+      "revId": "05028ff5b3b431a52123d91b93976ef6af246697",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "8508e394_6029992a",
@@ -31,6 +49,24 @@
       "writtenOn": "2024-03-19T14:03:18Z",
       "side": 1,
       "message": "This is [u8; 4] \u003d *b\"dxio\";",
+      "revId": "05028ff5b3b431a52123d91b93976ef6af246697",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8a75cdd8_2eb34f3e",
+        "filename": "tvix/nix-compat/src/wire/primitive.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 1000096
+      },
+      "writtenOn": "2024-03-19T16:50:05Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8508e394_6029992a",
       "revId": "05028ff5b3b431a52123d91b93976ef6af246697",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
