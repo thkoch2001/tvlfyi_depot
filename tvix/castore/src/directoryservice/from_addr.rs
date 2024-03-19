@@ -62,6 +62,46 @@ pub async fn from_addr(uri: &str) -> Result<Box<dyn DirectoryService>, crate::Er
             let client = DirectoryServiceClient::new(crate::tonic::channel_from_url(&url).await?);
             Box::new(GRPCDirectoryService::from_client(client))
         }
+        #[cfg(feature = "cloud")]
+        "bigtable" => {
+            use super::BigtableDirectoryService;
+            use std::{borrow::Cow, collections::HashMap, time::Duration};
+
+            let query_pairs: HashMap<Cow<str>, Cow<str>> = url.query_pairs().collect();
+
+            let project_id = query_pairs
+                .get("project-id")
+                .ok_or_else(|| Error::StorageError("project-id parameter missing".into()))?;
+
+            // TODO: should instance_name be the hostname of the URL instead?
+            let instance_name = query_pairs
+                .get("instance-name")
+                .ok_or_else(|| Error::StorageError("instance-name parameter missing".into()))?;
+
+            let table_name = query_pairs
+                .get("table-name")
+                .ok_or_else(|| Error::StorageError("table-name parameter missing".into()))?;
+
+            let family_name = query_pairs
+                .get("family-name")
+                .ok_or_else(|| Error::StorageError("family-name parameter missing".into()))?;
+
+            // FUTUREWORK: make is_read_only, channel_size and timeout configurable
+
+            Box::new(
+                BigtableDirectoryService::connect(
+                    project_id,
+                    instance_name,
+                    table_name.to_string(),
+                    family_name.to_string(),
+                    false,
+                    4,
+                    Some(Duration::from_secs(4)),
+                )
+                .await
+                .map_err(|e| Error::StorageError(e.to_string()))?,
+            )
+        }
         _ => {
             return Err(crate::Error::StorageError(format!(
                 "unknown scheme: {}",
@@ -118,6 +158,20 @@ mod tests {
     #[test_case("grpc+http://localhost/some-path", false; "grpc valid invalid host and path")]
     #[tokio::test]
     async fn test_from_addr_tokio(uri_str: &str, exp_succeed: bool) {
+        if exp_succeed {
+            from_addr(uri_str).await.expect("should succeed");
+        } else {
+            assert!(from_addr(uri_str).await.is_err(), "should fail");
+        }
+    }
+
+    #[cfg(feature = "cloud")]
+    /// An example for Bigtable
+    #[test_case("bigtable:?project-id=project-1&instance-name=instance-1&table-name=table-1&family-name=cf1", true; "objectstore valid bigtable url")]
+    /// An example for Bigtable
+    #[test_case("bigtable?instance_name=instance-1", false; "objectstore invalid bigtable url, missing project_id")]
+    #[tokio::test]
+    async fn test_from_addr_tokio_cloud(uri_str: &str, exp_succeed: bool) {
         if exp_succeed {
             from_addr(uri_str).await.expect("should succeed");
         } else {

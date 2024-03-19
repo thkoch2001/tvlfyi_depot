@@ -43,6 +43,10 @@ let
         nativeBuildInputs = protobufDep prev;
       };
 
+      prost-wkt-types = prev: {
+        nativeBuildInputs = protobufDep prev;
+      };
+
       tonic-reflection = prev: {
         nativeBuildInputs = protobufDep prev;
       };
