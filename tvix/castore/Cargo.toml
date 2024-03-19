@@ -30,6 +30,12 @@ url = "2.4.0"
 walkdir = "2.4.0"
 zstd = "0.13.0"
 
+[dependencies.bigtable_rs]
+optional = true
+# https://github.com/liufuyang/bigtable_rs/pull/72
+git = "https://github.com/flokli/bigtable_rs"
+rev = "eb2c2a18e1fcd7ba94481f66e7b7e777b01a7cba"
+
 [dependencies.fuse-backend-rs]
 optional = true
 version = "0.11.0"
@@ -71,6 +77,7 @@ prost-build = "0.12.1"
 tonic-build = "0.11.0"
 
 [dev-dependencies]
+async-process = "2.1.0"
 rstest = "0.18.2"
 test-case = "3.3.1"
 tempfile = "3.3.0"
@@ -81,6 +88,7 @@ rstest_reuse = "0.6.0"
 [features]
 default = []
 cloud = [
+  "dep:bigtable_rs",
   "object_store/aws",
   "object_store/azure",
   "object_store/gcp",
