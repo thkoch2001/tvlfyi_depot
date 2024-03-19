@@ -43,6 +43,10 @@ let
         nativeBuildInputs = protobufDep prev;
       };
 
+      prost-wkt-types = prev: {
+        nativeBuildInputs = protobufDep prev;
+      };
+
       tonic-reflection = prev: {
         nativeBuildInputs = protobufDep prev;
       };
@@ -84,6 +88,7 @@ let
         (crateName:
           (lib.nameValuePair "${crateName}-${crates.internal.crates.${crateName}.version}" crates.internal.crates.${crateName}.src.outputHash)
         ) [
+        "bigtable_rs"
         "test-generator"
         "wu-manber"
       ]);
