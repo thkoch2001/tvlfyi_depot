@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4ca8ab72_2ac57636",
+        "filename": "users/picnoir/tvix-daemon/shell.nix",
+        "patchSetId": 1
+      },
+      "lineNbr": 5,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-03-19T14:32:15Z",
+      "side": 1,
+      "message": "I guess you can drop some of these things that you don\u0027t need in your project, but your call :-)",
+      "revId": "8e5c09b6c9f202cb9faa9614f76d6b9eaca62d6c",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2df30cfc_790dd92b",
+        "filename": "users/picnoir/tvix-daemon/src/main.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-03-19T14:32:15Z",
+      "side": 1,
+      "message": "I\u0027d strongly suggest making this some command line argument, with the tooling tokio-listener provides (see the examples in the tvix-store CLI)\n\nI can point Nix to another daemon easily, but because this as it is only works with systemd socket activation, it makes it much harder to test interactively, without building and booting the entire VM.",
+      "revId": "8e5c09b6c9f202cb9faa9614f76d6b9eaca62d6c",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
