@@ -83,6 +83,34 @@ depot.nix.readTree.drvTargets {
     };
   }));
 
+  cbtemulator = super.buildGoModule rec {
+    pname = "cbtemulator";
+    version = "1.22.0";
+
+    src = super.fetchFromGitHub {
+      owner = "googleapis";
+      repo = "google-cloud-go";
+      rev = "bigtable/v${version}";
+      hash = "sha256-eOi4QFthnmZb5ry/5L7wzr4Fy1pF/H07BzxOnXtmSu4=";
+    };
+
+    vendorHash = "sha256-7M7YZfl0usjN9hLGozqJV2bGh+M1ec4PZRGYUhEckpY=";
+
+    modRoot = "bigtable";
+    subPackages = [ "cmd/emulator" ];
+    GOWORK = "off";
+
+    postInstall = ''
+      mv $out/bin/emulator $out/bin/cbtemulator
+    '';
+
+    meta = with lib; {
+      description = "In-memory Google Cloud Bigtable server";
+      homepage = "https://github.com/googleapis/google-cloud-go/blob/bigtable/v1.22.0/bigtable/cmd/emulator/cbtemulator.go";
+      license = licenses.asl20;
+    };
+  };
+
   crate2nix = super.rustPlatform.buildRustPackage rec {
     pname = "crate2nix";
     version = "0.13.0";
