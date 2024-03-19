@@ -33,6 +33,24 @@
       "message": "I\u0027d strongly suggest making this some command line argument, with the tooling tokio-listener provides (see the examples in the tvix-store CLI)\n\nI can point Nix to another daemon easily, but because this as it is only works with systemd socket activation, it makes it much harder to test interactively, without building and booting the entire VM.",
       "revId": "8e5c09b6c9f202cb9faa9614f76d6b9eaca62d6c",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2b5eca55_81285eb1",
+        "filename": "users/picnoir/tvix-daemon/src/main.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1000096
+      },
+      "writtenOn": "2024-03-19T16:46:52Z",
+      "side": 1,
+      "message": "Added an optional CLI flag to specific a unix socket.",
+      "parentUuid": "2df30cfc_790dd92b",
+      "revId": "8e5c09b6c9f202cb9faa9614f76d6b9eaca62d6c",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
