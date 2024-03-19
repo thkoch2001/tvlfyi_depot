@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4e89ae4a_7908732a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2024-03-19T16:20:48Z",
+      "side": 1,
+      "message": "Please update docs/CONTRIBUTING.md as well.",
+      "revId": "a19555b0fdb3315b45ee6c5f00c9d0d340bbcc3a",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
