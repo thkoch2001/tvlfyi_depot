@@ -83,6 +83,49 @@ depot.nix.readTree.drvTargets {
     };
   }));
 
+  # Upstreamed in https://github.com/NixOS/nixpkgs/pull/298044,
+  # can be reduced to just the patch on the next nixpkgs bump.
+  cbtemulator = super.buildGoModule rec {
+    pname = "cbtemulator";
+    version = "1.22.0";
+
+    src = (super.fetchFromGitHub {
+      owner = "googleapis";
+      repo = "google-cloud-go";
+      rev = "bigtable/v${version}";
+      hash = "sha256-eOi4QFthnmZb5ry/5L7wzr4Fy1pF/H07BzxOnXtmSu4=";
+    }) + "/bigtable";
+
+    vendorHash = "sha256-7M7YZfl0usjN9hLGozqJV2bGh+M1ec4PZRGYUhEckpY=";
+    subPackages = [ "cmd/emulator" ];
+
+    patches = [
+      (super.fetchpatch {
+        url = "https://github.com/googleapis/google-cloud-go/pull/9665/commits/7b716627fae4d8b28f175eff968090d27d4477eb.patch";
+        hash = "sha256-nEVB7DjafByGHspfDYPcCRHMVHBjeSQ5MBVd6eeo4ls=";
+        stripLen = 1;
+      })
+      (super.fetchpatch {
+        url = "https://github.com/googleapis/google-cloud-go/pull/9665/commits/a65bc68f49bd340040f836e890f1fd4d781f6f2a.patch";
+        hash = "sha256-Zu1JXym+IK9pWp7HKJiGUv2HG776hUat8Qlty9/PsQs=";
+        stripLen = 1;
+      })
+    ];
+
+    postInstall = ''
+      mv $out/bin/emulator $out/bin/cbtemulator
+    '';
+
+    meta = with lib; {
+      description = "In-memory Google Cloud Bigtable server";
+      homepage = "https://github.com/googleapis/google-cloud-go/blob/bigtable/v1.22.0/bigtable/cmd/emulator/cbtemulator.go";
+      license = licenses.asl20;
+      maintainers = [ maintainers.flokli ];
+      mainProgram = "cbtemulator";
+      platforms = platforms.all;
+    };
+  };
+
   crate2nix = super.rustPlatform.buildRustPackage rec {
     pname = "crate2nix";
     version = "0.13.0";
