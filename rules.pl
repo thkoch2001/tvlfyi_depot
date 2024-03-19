@@ -59,10 +59,10 @@ unresolved_comments(Check) :-
 commit_message(Check) :-
     % Check if the commit message uses the prescribed angular-style commit format
     gerrit:commit_message_matches('^(feat|fix|docs|style|refactor|test|chore|merge|revert|subtree)[\(:]'),
-    % Check if the first line of the commit message is less than 68 characters long
+    % Check if the first line of the commit message is less than 72 characters long
     gerrit:commit_message(Message), name(Message, MessageCodes),
     take_until_equal(10, MessageCodes, FirstLine), length(FirstLine, FirstLineLength),
-    FirstLineLength =< 68,
+    FirstLineLength =< 72,
     !,
     applicable_owner(Owner),
     Check = label('Conformant-Commit-Message', ok(Owner)).
