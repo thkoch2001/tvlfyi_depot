@@ -290,19 +290,17 @@ mod tests {
 
     use crate::{
         directoryservice::{
-            grpc::GRPCPutter, DirectoryPutter, DirectoryService, GRPCDirectoryService,
+            self, grpc::GRPCPutter, DirectoryPutter, DirectoryService, GRPCDirectoryService,
             MemoryDirectoryService,
         },
         fixtures::{self, DIRECTORY_A, DIRECTORY_B},
         proto::{directory_service_client::DirectoryServiceClient, GRPCDirectoryServiceWrapper},
-        utils::gen_directorysvc_grpc_client,
     };
 
     #[tokio::test]
     async fn test() {
         // create the GrpcDirectoryService
-        let directory_service =
-            super::GRPCDirectoryService::from_client(gen_directorysvc_grpc_client().await);
+        let directory_service = directoryservice::from_addr("grpcmemory://").await.unwrap();
 
         // try to get DIRECTORY_A should return Ok(None)
         assert_eq!(

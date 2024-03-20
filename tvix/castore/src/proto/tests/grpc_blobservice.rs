@@ -1,12 +1,12 @@
+use crate::blobservice;
 use crate::fixtures::{BLOB_A, BLOB_A_DIGEST};
 use crate::proto::{BlobChunk, ReadBlobRequest, StatBlobRequest};
-use crate::utils::gen_blobsvc_grpc_client;
 use tokio_stream::StreamExt;
 
 /// Trying to read a non-existent blob should return a not found error.
 #[tokio::test]
 async fn not_found_read() {
-    let mut grpc_client = gen_blobsvc_grpc_client().await;
+    let mut grpc_client = blobservice::from_addr("grpcmem://").await.unwrap();
 
     let resp = grpc_client
         .read(ReadBlobRequest {
@@ -26,7 +26,7 @@ async fn not_found_read() {
 /// Trying to stat a non-existent blob should return a not found error.
 #[tokio::test]
 async fn not_found_stat() {
-    let mut grpc_client = gen_blobsvc_grpc_client().await;
+    let mut grpc_client = blobservice::from_addr("grpcmem://").await.unwrap();
 
     let resp = grpc_client
         .stat(StatBlobRequest {
@@ -43,7 +43,7 @@ async fn not_found_stat() {
 /// Put a blob in the store, get it back.
 #[tokio::test]
 async fn put_read_stat() {
-    let mut grpc_client = gen_blobsvc_grpc_client().await;
+    let mut grpc_client = blobservice::from_addr("grpcmem://").await.unwrap();
 
     // Send blob A.
     let put_resp = grpc_client
