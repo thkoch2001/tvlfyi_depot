@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0ed36be2_860eed46",
+        "filename": "tvix/castore/src/directoryservice/memory_putter.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2024-03-20T20:27:08Z",
+      "side": 1,
+      "message": "```suggestion\n    /// and size fields.\n```",
+      "revId": "426c6e5eeb381abad2e577681bb8ef94e9a27b42",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
