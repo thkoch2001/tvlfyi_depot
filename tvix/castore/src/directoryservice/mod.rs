@@ -8,12 +8,14 @@ mod memory;
 mod sled;
 mod traverse;
 mod utils;
+mod validate_closure;
 
 pub use self::from_addr::from_addr;
 pub use self::grpc::GRPCDirectoryService;
 pub use self::memory::MemoryDirectoryService;
 pub use self::sled::SledDirectoryService;
 pub use self::traverse::descend_to;
+pub use self::validate_closure::ClosureValidator;
 
 /// The base trait all Directory services need to implement.
 /// This is a simple get and put of [crate::proto::Directory], returning their
