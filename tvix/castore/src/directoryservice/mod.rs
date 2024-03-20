@@ -5,6 +5,7 @@ use tonic::async_trait;
 mod from_addr;
 mod grpc;
 mod memory;
+mod memory_putter;
 mod sled;
 mod traverse;
 mod utils;
@@ -12,6 +13,7 @@ mod utils;
 pub use self::from_addr::from_addr;
 pub use self::grpc::GRPCDirectoryService;
 pub use self::memory::MemoryDirectoryService;
+pub use self::memory_putter::DirectoryClosureValidator;
 pub use self::sled::SledDirectoryService;
 pub use self::traverse::descend_to;
 
