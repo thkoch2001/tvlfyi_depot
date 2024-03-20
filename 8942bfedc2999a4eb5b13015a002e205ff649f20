@@ -16,6 +16,24 @@
       "message": "Not sure about this name. Finalize?",
       "revId": "8942bfedc2999a4eb5b13015a002e205ff649f20",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "96422197_4e0ef143",
+        "filename": "tvix/castore/src/directoryservice/validate_closure.rs",
+        "patchSetId": 3
+      },
+      "lineNbr": 96,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2024-03-20T22:28:19Z",
+      "side": 1,
+      "message": "I like finalize more than drain",
+      "parentUuid": "b2d29465_704a9a5d",
+      "revId": "8942bfedc2999a4eb5b13015a002e205ff649f20",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
