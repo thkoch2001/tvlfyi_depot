@@ -27,6 +27,45 @@ pub async fn from_addr(uri: &str) -> Result<Box<dyn BlobService>, crate::Error> 
             }
             Box::<MemoryBlobService>::default()
         }
+        #[cfg(test)]
+        "grpcmemory" => {
+            // This will spawn the a gRPC BlobService server, exposing a in-memory service,
+            // and then connect to it with a gRPC client. That client is returned.
+            use crate::proto::blob_service_server::BlobServiceServer;
+            use crate::proto::GRPCBlobServiceWrapper;
+            use tonic::transport::{Endpoint, Server, Uri};
+
+            let (left, right) = tokio::io::duplex(64);
+
+            // spin up a server, which will only connect once, to the left side.
+            tokio::spawn(async {
+                let blob_service = Box::<MemoryBlobService>::default() as Box<dyn BlobService>;
+
+                // spin up a new DirectoryService
+                let mut server = Server::builder();
+                let router = server.add_service(BlobServiceServer::new(
+                    GRPCBlobServiceWrapper::new(blob_service),
+                ));
+
+                router
+                    .serve_with_incoming(tokio_stream::once(Ok::<_, std::io::Error>(left)))
+                    .await
+            });
+
+            // Create a client, connecting to the right side. The URI is unused.
+            let mut maybe_right = Some(right);
+
+            Box::new(GRPCBlobService::from_client(BlobServiceClient::new(
+                Endpoint::try_from("http://[::]:50051")
+                    .unwrap()
+                    .connect_with_connector(tower::service_fn(move |_: Uri| {
+                        let right = maybe_right.take().unwrap();
+                        async move { Ok::<_, std::io::Error>(right) }
+                    }))
+                    .await
+                    .unwrap(),
+            )))
+        }
         "sled" => {
             // sled doesn't support host, and a path can be provided (otherwise
             // it'll live in memory only).
