@@ -1,9 +1,9 @@
+use crate::directoryservice;
 use crate::fixtures::{DIRECTORY_A, DIRECTORY_B, DIRECTORY_C};
 use crate::proto::directory_service_client::DirectoryServiceClient;
 use crate::proto::get_directory_request::ByWhat;
 use crate::proto::GetDirectoryRequest;
 use crate::proto::{Directory, DirectoryNode, SymlinkNode};
-use crate::utils::gen_directorysvc_grpc_client;
 use tokio_stream::StreamExt;
 use tonic::transport::Channel;
 use tonic::Status;
@@ -34,7 +34,7 @@ async fn get_directories(
 /// Trying to get a non-existent Directory should return a not found error.
 #[tokio::test]
 async fn not_found() {
-    let mut grpc_client = gen_directorysvc_grpc_client().await;
+    let mut grpc_client = directoryservice::from_addr("grpcmemory://").await.unwrap();
 
     let resp = grpc_client
         .get(GetDirectoryRequest {
@@ -62,7 +62,7 @@ async fn not_found() {
 /// Put a Directory into the store, get it back.
 #[tokio::test]
 async fn put_get() {
-    let mut grpc_client = gen_directorysvc_grpc_client().await;
+    let mut grpc_client = directoryservice::from_addr("grpcmemory://").await.unwrap();
 
     // send directory A.
     let put_resp = {
@@ -93,7 +93,7 @@ async fn put_get() {
 /// Put multiple Directories into the store, and get them back
 #[tokio::test]
 async fn put_get_multiple() {
-    let mut grpc_client = gen_directorysvc_grpc_client().await;
+    let mut grpc_client = directoryservice::from_addr("grpcmemory://").await.unwrap();
 
     // sending "b" (which refers to "a") without sending "a" first should fail.
     let put_resp = {
