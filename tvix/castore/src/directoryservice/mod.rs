@@ -7,7 +7,6 @@ mod grpc;
 mod memory;
 mod sled;
 mod traverse;
-mod utils;
 mod validate_closure;
 
 pub use self::from_addr::from_addr;
