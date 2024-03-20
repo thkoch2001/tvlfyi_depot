@@ -20,6 +20,108 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "51ecfe83_6e276f56",
+        "filename": "tvix/castore/src/directoryservice/bigtable.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 106,
+      "author": {
+        "id": 1000073
+      },
+      "writtenOn": "2024-03-20T12:07:09Z",
+      "side": 1,
+      "message": "report a storage \"\"inconsistency\"\"",
+      "revId": "27b88840d0c5d769bee0e78f2c7f7a02d2f07d13",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "aca5c8c5_902084b5",
+        "filename": "tvix/castore/src/directoryservice/bigtable.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 113,
+      "author": {
+        "id": 1000073
+      },
+      "writtenOn": "2024-03-20T12:07:09Z",
+      "side": 1,
+      "message": "`debug_assert!` or report error to caller?",
+      "revId": "27b88840d0c5d769bee0e78f2c7f7a02d2f07d13",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bfe67b2c_41d04c9b",
+        "filename": "tvix/castore/src/directoryservice/bigtable.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 117,
+      "author": {
+        "id": 1000073
+      },
+      "writtenOn": "2024-03-20T12:07:09Z",
+      "side": 1,
+      "message": "same as above",
+      "revId": "27b88840d0c5d769bee0e78f2c7f7a02d2f07d13",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "deec2164_df8c4840",
+        "filename": "tvix/castore/src/directoryservice/bigtable.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 119,
+      "author": {
+        "id": 1000073
+      },
+      "writtenOn": "2024-03-20T12:07:09Z",
+      "side": 1,
+      "message": "same as above",
+      "revId": "27b88840d0c5d769bee0e78f2c7f7a02d2f07d13",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4a74c539_a89326db",
+        "filename": "tvix/castore/src/directoryservice/bigtable.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 162,
+      "author": {
+        "id": 1000073
+      },
+      "writtenOn": "2024-03-20T12:07:09Z",
+      "side": 1,
+      "message": "i\u0027d like a constant",
+      "revId": "27b88840d0c5d769bee0e78f2c7f7a02d2f07d13",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "92715471_a9ffbe1f",
+        "filename": "tvix/castore/src/directoryservice/bigtable.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 188,
+      "author": {
+        "id": 1000073
+      },
+      "writtenOn": "2024-03-20T12:07:09Z",
+      "side": 1,
+      "message": "why: please add a comment",
+      "revId": "27b88840d0c5d769bee0e78f2c7f7a02d2f07d13",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "77f42364_9e6eb7b8",
         "filename": "tvix/castore/src/directoryservice/bigtable.rs",
         "patchSetId": 2
@@ -31,6 +133,29 @@
       "writtenOn": "2024-03-19T22:19:09Z",
       "side": 1,
       "message": "TODO: do some tests with cbtemulator.",
+      "revId": "27b88840d0c5d769bee0e78f2c7f7a02d2f07d13",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6a7ce109_29f919f3",
+        "filename": "tvix/castore/src/directoryservice/from_addr.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 70,
+      "author": {
+        "id": 1000073
+      },
+      "writtenOn": "2024-03-20T12:07:09Z",
+      "side": 1,
+      "message": "long term: see `query_pairs()` as a structure to deserialize over something like serde",
+      "range": {
+        "startLine": 70,
+        "startChar": 63,
+        "endLine": 70,
+        "endChar": 74
+      },
       "revId": "27b88840d0c5d769bee0e78f2c7f7a02d2f07d13",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
