@@ -30,6 +30,46 @@ pub async fn from_addr(uri: &str) -> Result<Box<dyn DirectoryService>, crate::Er
             }
             Box::<MemoryDirectoryService>::default()
         }
+        #[cfg(test)]
+        "grpcmemory" => {
+            // This will spawn the a gRPC DirectoryService server, exposing a in-memory service,
+            // and then connect to it with a gRPC client. That client is returned.
+            use crate::proto::directory_service_server::DirectoryServiceServer;
+            use crate::proto::GRPCDirectoryServiceWrapper;
+            use tonic::transport::{Endpoint, Server, Uri};
+
+            let (left, right) = tokio::io::duplex(64);
+
+            // spin up a server, which will only connect once, to the left side.
+            tokio::spawn(async {
+                let directory_service =
+                    Box::<MemoryDirectoryService>::default() as Box<dyn DirectoryService>;
+
+                let mut server = Server::builder();
+                let router = server.add_service(DirectoryServiceServer::new(
+                    GRPCDirectoryServiceWrapper::new(directory_service),
+                ));
+
+                router
+                    .serve_with_incoming(tokio_stream::once(Ok::<_, std::io::Error>(left)))
+                    .await
+            });
+
+            // Create a client, connecting to the right side. The URI is unused.
+            let mut maybe_right = Some(right);
+            Box::new(GRPCDirectoryService::from_client(
+                DirectoryServiceClient::new(
+                    Endpoint::try_from("http://[::]:50051")
+                        .unwrap()
+                        .connect_with_connector(tower::service_fn(move |_: Uri| {
+                            let right = maybe_right.take().unwrap();
+                            async move { Ok::<_, std::io::Error>(right) }
+                        }))
+                        .await
+                        .unwrap(),
+                ),
+            ))
+        }
         "sled" => {
             // sled doesn't support host, and a path can be provided (otherwise
             // it'll live in memory only).
