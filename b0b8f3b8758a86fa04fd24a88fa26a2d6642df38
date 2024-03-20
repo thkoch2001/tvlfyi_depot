@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "912060e7_a2f2364c",
+        "filename": "tvix/castore/src/directoryservice/bigtable.rs",
+        "patchSetId": 3
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2024-03-20T15:55:23Z",
+      "side": 1,
+      "message": "If we include the digest in the row key, why do we need to also include it in the column? I think a static column name might suffice",
+      "revId": "b0b8f3b8758a86fa04fd24a88fa26a2d6642df38",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f7c358d4_31c2db36",
+        "filename": "tvix/castore/src/directoryservice/from_addr.rs",
+        "patchSetId": 3
+      },
+      "lineNbr": 76,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2024-03-20T15:55:23Z",
+      "side": 1,
+      "message": "This sounds reasonable to me",
+      "revId": "b0b8f3b8758a86fa04fd24a88fa26a2d6642df38",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
