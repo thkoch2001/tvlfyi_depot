@@ -5,6 +5,7 @@ use tonic::async_trait;
 mod from_addr;
 mod grpc;
 mod memory;
+mod simple_putter;
 mod sled;
 mod traverse;
 mod utils;
@@ -13,8 +14,10 @@ mod validate_closure;
 pub use self::from_addr::from_addr;
 pub use self::grpc::GRPCDirectoryService;
 pub use self::memory::MemoryDirectoryService;
+pub use self::simple_putter::SimplePutter;
 pub use self::sled::SledDirectoryService;
 pub use self::traverse::descend_to;
+pub use self::utils::traverse_directory;
 pub use self::validate_closure::ClosureValidator;
 
 /// The base trait all Directory services need to implement.
