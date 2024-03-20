@@ -18,14 +18,23 @@ set -ueo pipefail
 #  - `argstr`: A map containing string keys and values
 #    which are passed to Nix as `--argstr $key $value`
 #    command line args. Optional.
+#  - `build`: A boolean (or string being "true" or "false") stating whether the
+#    expression should also be built/substituted on the machine executing this script.
 #
 # jq's @sh format takes care of escaping.
-eval "$(jq -r '@sh "attrpath=\(.attrpath) && entrypoint=\(.entrypoint) && argstr=\((.argstr // {}) | to_entries | map ("--argstr", .key, .value) | join(" "))"')"
+eval "$(jq -r '@sh "attrpath=\(.attrpath) && entrypoint=\(.entrypoint) && argstr=\((.argstr // {}) | to_entries | map ("--argstr", .key, .value) | join(" ")) build=\(.build)"')"
 
 # Evaluate the expression.
 [[ -z "$entrypoint" ]] && entrypoint=$(git rev-parse --show-toplevel)
 # shellcheck disable=SC2086,SC2154
 drv=$(nix-instantiate -A "${attrpath}" "${entrypoint}" ${argstr})
+
+# If `build` is set to true, invoke nix-build on the .drv.
+# We need to swallow all stdout, to not garble the JSON printed later.
+# shellcheck disable=SC2154
+if [ "${build}" == "true" ]; then
+  nix-build --no-out-link "${drv}" > /dev/null
+fi
 
 # Determine the output path.
 outPath=$(nix show-derivation "${drv}" | jq -r ".\"${drv}\".outputs.out.path")
