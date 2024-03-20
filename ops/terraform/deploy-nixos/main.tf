@@ -53,7 +53,7 @@ variable "triggers" {
 
 # Fetch the derivation hash for the NixOS system.
 data "external" "nixos_system" {
-  program = ["${path.module}/nixos-eval.sh"]
+  program = ["${path.module}/nix-eval.sh"]
 
   query = {
     attrpath   = var.attrpath
