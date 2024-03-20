@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "97e82f36_bf4b3648",
+        "filename": "tvix/castore/src/tests/import.rs",
+        "patchSetId": 4
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2024-03-20T21:15:58Z",
+      "side": 1,
+      "message": "Should these all be using the `grpcmemory` scheme?",
+      "revId": "e8dc8e8b161b13594719b9c8e10e0ea3476c60a8",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
