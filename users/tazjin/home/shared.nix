@@ -30,6 +30,10 @@ in
   programs.fish = {
     enable = true;
     interactiveShellInit = ''
+      # emacs vterm integration
+      source (find '${pkgs.emacsPackages.vterm}' -name 'emacs-vterm.fish')
+
+      # z
       ${pkgs.zoxide}/bin/zoxide init fish | source
     '';
   };
