@@ -16,6 +16,24 @@
       "message": "Should these all be using the `grpcmemory` scheme?",
       "revId": "e8dc8e8b161b13594719b9c8e10e0ea3476c60a8",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4a8a4920_9d0083e7",
+        "filename": "tvix/castore/src/tests/import.rs",
+        "patchSetId": 4
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-03-20T21:34:22Z",
+      "side": 1,
+      "message": "I think long-term these should be instantiated with verious permutation of stores - but that\u0027s out of scope for this CL.\n\nFor now this just stops using `gen_{directory,blob}_service()`, and instead uses the Memory implementations (which the functions were also doing).\n\nI still need to update occurences of `gen_{blob,directory}svc_grpc_client` - they should use the `grpcmemory` scheme.",
+      "parentUuid": "97e82f36_bf4b3648",
+      "revId": "e8dc8e8b161b13594719b9c8e10e0ea3476c60a8",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
