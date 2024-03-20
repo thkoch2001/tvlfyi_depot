@@ -36,6 +36,17 @@ async fn has_nonexistent_false(blob_service: impl BlobService) {
         .expect("must not fail"));
 }
 
+/// Using [BlobService::chunks] on a non-existing blob should return Ok(None)
+#[apply(blob_services)]
+#[tokio::test]
+async fn chunks_nonexistent_false(blob_service: impl BlobService) {
+    assert!(blob_service
+        .chunks(&fixtures::BLOB_A_DIGEST)
+        .await
+        .expect("must be ok")
+        .is_none());
+}
+
 /// Trying to read a non-existing blob should return a None instead of a reader.
 #[apply(blob_services)]
 #[tokio::test]
@@ -43,9 +54,11 @@ async fn not_found_read(blob_service: impl BlobService) {
     assert!(blob_service
         .open_read(&fixtures::BLOB_A_DIGEST)
         .await
-        .expect("must not fail")
+        .expect("must be ok")
         .is_none())
 }
+
+/// TODO: do tests with `chunks`
 
 /// Put a blob in the store, check has, get it back.
 /// TODO: figure out how to instantiate this with BLOB_A and BLOB_B, we want to test with BLOB_B too.
