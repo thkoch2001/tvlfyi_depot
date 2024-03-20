@@ -27,8 +27,12 @@ eval "$(jq -r '@sh "attrpath=\(.attrpath) && entrypoint=\(.entrypoint) && argstr
 # shellcheck disable=SC2086,SC2154
 drv=$(nix-instantiate -A "${attrpath}" "${entrypoint}" ${argstr})
 
+# Determine the output path.
+outPath=$(nix show-derivation "${drv}" | jq -r ".\"${drv}\".outputs.out.path")
+
 # Return a JSON back to stdout.
 # It contains the following keys:
 #
 # - `drv`: the store path of the Derivation that has been instantiated.
-jq -n --arg drv "$drv" '{"drv":$drv}'
+# - `outPath`: the output store path.
+jq -n --arg drv "$drv" --arg outPath "$outPath" '{"drv":$drv, "outPath":$outPath}'
