@@ -30,6 +30,12 @@ pub async fn read_u32<R: AsyncReadExt + Unpin>(r: &mut R) -> std::io::Result<u32
     })
 }
 
+/// Write 8 bytes, the u32 being on the first 4 bytes, then 4 bytes of
+/// 0 padding.
+pub async fn write_u32<W: AsyncWriteExt + Unpin>(w: &mut W, u: u32) -> std::io::Result<()> {
+    w.write_all(&(u as u64).to_le_bytes()).await
+}
+
 #[allow(dead_code)]
 /// Read a u64 from the AsyncRead (little endian).
 pub async fn read_u64<R: AsyncReadExt + Unpin>(r: &mut R) -> std::io::Result<u64> {
@@ -114,5 +120,10 @@ mod tests {
         let mut mock = Builder::new().read(&hex!("7856341298760000")).build();
         let res = read_u32(&mut mock).await;
         assert_err!(res);
+    }
+    #[tokio::test]
+    async fn test_write_u32() {
+        let mut mock = Builder::new().write(&hex!("7856341200000000")).build();
+        write_u32(&mut mock, 0x12345678).await.unwrap();
     }
 }
