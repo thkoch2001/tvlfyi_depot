@@ -20,6 +20,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "6d66379a_cfd42a82",
+        "filename": "users/picnoir/tvix-daemon/src/main.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 93,
+      "author": {
+        "id": 1000096
+      },
+      "writtenOn": "2024-03-21T18:48:28Z",
+      "side": 1,
+      "message": "Nice, better!",
+      "parentUuid": "395b94cb_9e50c3e9",
+      "revId": "86af82b7f2cf99bd7370b586422502467393c7f9",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "00b560a3_f5acaff1",
         "filename": "users/picnoir/tvix-daemon/src/main.rs",
         "patchSetId": 1
@@ -66,6 +84,24 @@
       "writtenOn": "2024-03-21T11:25:47Z",
       "side": 1,
       "message": "In here (users/picnois) you can to do whatever you want :-)\n\nIn the bigger picture, assuming some of the protocol interaction gets moved to nix-compat, we probably want to have some handshake function that takes what to send here as an argument, so the user can specify the version string.",
+      "revId": "86af82b7f2cf99bd7370b586422502467393c7f9",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "267dafcb_c4a43931",
+        "filename": "users/picnoir/tvix-daemon/src/main.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 112,
+      "author": {
+        "id": 1000096
+      },
+      "writtenOn": "2024-03-21T18:48:28Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "fd6a2e95_aa0fd747",
       "revId": "86af82b7f2cf99bd7370b586422502467393c7f9",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
