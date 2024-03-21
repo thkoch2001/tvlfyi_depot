@@ -4,7 +4,7 @@ use tokio::io::{AsyncReadExt, AsyncWriteExt};
 use tokio_listener::{self, SystemOptions, UserOptions};
 use tracing::{debug, error, info, instrument};
 
-use nix_compat::wire::primitive;
+use nix_compat::wire::{bytes, primitive, worker_protocol};
 
 #[derive(Parser, Debug)]
 struct Cli {
@@ -26,13 +26,17 @@ async fn main() {
         .parse()
         .expect("Invalid listening socket address");
     let system_options: SystemOptions = Default::default();
-    let user_options: UserOptions = Default::default();
+    let mut user_options: UserOptions = Default::default();
+    user_options.recv_buffer_size = Some(1024);
+    user_options.send_buffer_size = Some(1024);
+    info!(user_options.send_buffer_size);
+    info!(user_options.recv_buffer_size);
     let mut listener = tokio_listener::Listener::bind(&addr, &system_options, &user_options)
         .await
         .unwrap();
-    info!("Listening for incoming connections on {:?}", listener);
+    info!(listener_address = ?listener, "Listening for incoming connections");
     while let Ok((conn, addr)) = listener.accept().await {
-        info!("Incoming connection from {addr}");
+        info!(addr = %addr, "Incoming connection");
         tokio::spawn(async move { worker(conn).await });
     }
 }
@@ -46,9 +50,16 @@ where
 {
     match perform_init_handshake(&mut conn).await {
         Ok(_) => {
-            // TODO: process request here, dispatch to operation
-            // handler.
-            info!("Handshake done, bye now");
+            info!("Client hanshake succeeded");
+            // TODO: implement logging. For now, we'll just send
+            // STDERR_LAST, which is good enough to get Nix respond to
+            // us.
+            primitive::write_u32(&mut conn, worker_protocol::STDERR_LAST)
+                .await
+                .unwrap();
+            //
+            let op = worker_protocol::read_op(&mut conn).await.unwrap();
+            info!(op = ?op, "Operation received");
         }
         Err(e) => error!("Client handshake failed: {}", e),
     }
@@ -86,10 +97,7 @@ where
         }
         let protocol_minor = client_version & 0x00ff;
         let protocol_major = client_version & 0xff00;
-        debug!(
-            "client version: {}, major: {}, minor: {}",
-            client_version, protocol_major, protocol_minor
-        );
+        debug!(client.version = %client_version, client.minor = %protocol_minor, client.major = %protocol_major);
         // TODO: find a more efficient way to discard data. We're
         // pointlessly allocating data here.
         let mut _discard_buf = [0; 8];
@@ -112,8 +120,12 @@ where
             // good idea.
             debug!("write version");
             // Plain str padded to 64 bits.
-            conn.write(&"2.3.17\0\0".as_bytes()).await?;
+            bytes::write_bytes(&mut conn, "2.3.17".as_bytes()).await?;
+            conn.flush().await?;
         }
+        worker_protocol::write_worker_trust_level(&mut conn, worker_protocol::Trust::Trusted)
+            .await?;
+        info!("Trust sent");
         Ok(())
     }
 }
@@ -134,9 +146,13 @@ mod integration_tests {
             .read(&vec![0; 8])
             // reservespace
             .read(&vec![0; 8])
-            // version
-            .write(&"2.3.17\0\0".as_bytes())
+            // version (size)
+            .write(&vec![0x06, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00])
+            // version (data == 2.2.17 + padding)
+            .write(&vec![50, 46, 51, 46, 49, 55, 0, 0])
+            // Trusted (1 == client trusted
+            .write(&vec![1, 0, 0, 0, 0, 0, 0, 0])
             .build();
-        crate::worker(&mut test_conn).await;
+        crate::perform_init_handshake(&mut test_conn).await.unwrap();
     }
 }
