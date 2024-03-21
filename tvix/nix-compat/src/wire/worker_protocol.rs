@@ -63,11 +63,17 @@ pub enum Operation {
 /// Read a worker [Operation] from the wire.
 pub async fn read_op<R: AsyncReadExt + Unpin>(r: &mut R) -> std::io::Result<Operation> {
     let op_number = primitive::read_u64(r).await?;
-    Operation::from_u64(op_number).ok_or(Error::new(ErrorKind::Other, format!("Invalid OP number {}", op_number)))
+    Operation::from_u64(op_number).ok_or(Error::new(
+        ErrorKind::Other,
+        format!("Invalid OP number {}", op_number),
+    ))
 }
 
 /// Write a worker [Operation] to the wire.
 pub async fn write_op<W: AsyncWriteExt + Unpin>(w: &mut W, op: &Operation) -> std::io::Result<()> {
-    let op = Operation::to_u64(op).ok_or(Error::new(ErrorKind::Other, format!("Can't convert the OP {:?} to u64", op)))?;
+    let op = Operation::to_u64(op).ok_or(Error::new(
+        ErrorKind::Other,
+        format!("Can't convert the OP {:?} to u64", op),
+    ))?;
     w.write_u64(op).await
 }
