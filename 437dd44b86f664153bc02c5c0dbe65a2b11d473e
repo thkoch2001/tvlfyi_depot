@@ -16,6 +16,24 @@
       "message": "(when inside this directory)",
       "revId": "437dd44b86f664153bc02c5c0dbe65a2b11d473e",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "383af4b8_bb15feab",
+        "filename": "users/picnoir/tvix-daemon/README.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-03-21T19:02:41Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5a17f654_7c2b9032",
+      "revId": "437dd44b86f664153bc02c5c0dbe65a2b11d473e",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
