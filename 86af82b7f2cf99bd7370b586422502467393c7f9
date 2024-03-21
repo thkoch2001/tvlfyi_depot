@@ -38,6 +38,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "05a8ac8d_3dee354a",
+        "filename": "users/picnoir/tvix-daemon/src/main.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 93,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-03-21T19:08:48Z",
+      "side": 1,
+      "message": "But the comment about doing allocation is still there? 😕",
+      "parentUuid": "6d66379a_cfd42a82",
+      "revId": "86af82b7f2cf99bd7370b586422502467393c7f9",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "00b560a3_f5acaff1",
         "filename": "users/picnoir/tvix-daemon/src/main.rs",
         "patchSetId": 1
@@ -67,6 +85,24 @@
       "side": 1,
       "message": "The Nix daemon itself ignore those, the semantics are not clear, at least not without a fair bit of spelunking. This one (cpu affinity), is the most \"recently\" deprecated one, and it dates from 2019, 5 years ago (time flies!).\n\nhttps://github.com/NixOS/nix/commit/9747ea84b43c75f719d719673b9d0a7cb50d34e5\n\nI\u0027d be in favor of leaving this as it is until we end up in a situation where we need those.",
       "parentUuid": "00b560a3_f5acaff1",
+      "revId": "86af82b7f2cf99bd7370b586422502467393c7f9",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3ecc7258_d3240bf0",
+        "filename": "users/picnoir/tvix-daemon/src/main.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 98,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-03-21T19:08:48Z",
+      "side": 1,
+      "message": "Ok. Let\u0027s keep in mind to at least keep the comment around to say what this once was when refactoring this out into nix-compat.",
+      "parentUuid": "b0a6eea0_f0980b65",
       "revId": "86af82b7f2cf99bd7370b586422502467393c7f9",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
