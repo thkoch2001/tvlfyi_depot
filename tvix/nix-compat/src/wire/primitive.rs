@@ -53,6 +53,11 @@ pub async fn write_bool<W: AsyncWrite + Unpin>(w: &mut W, v: bool) -> std::io::R
     write_u64(w, if v { 1u64 } else { 0u64 }).await
 }
 
+/// Write a u8 to the AsyncWrite, encoded as u64.
+pub async fn write_u8<W: AsyncWrite + Unpin>(w: &mut W, u: u8) -> std::io::Result<()> {
+    write_u64(w, u.into()).await
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
