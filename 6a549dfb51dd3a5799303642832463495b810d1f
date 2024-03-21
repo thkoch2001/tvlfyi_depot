@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "76dbf222_0e953902",
+        "filename": "tvix/nix-compat/src/wire/primitive.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-03-21T11:15:54Z",
+      "side": 1,
+      "message": "can you shift this by 1 space to the right? I had to tilt my head a bit to make these align 😄",
+      "revId": "6a549dfb51dd3a5799303642832463495b810d1f",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "da1fb543_fd3bde3e",
+        "filename": "tvix/nix-compat/src/wire/primitive.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-03-21T11:15:54Z",
+      "side": 1,
+      "message": "This would only fail if it\u0027d overflow u32, and that would only happen if there was more nonzero bits than in the first 32 bits, so the padding was not empty, correct?\n\nI\u0027d prefer mapping the error like this:\n\n```rs\nu32::try_from(val64).map_err(|e| std::io::Error::new(std::io::ErrorKind::InvalidData, \"padding is not all zeroes\"))\n```\n\nThis matches the error message in `read_bytes`.\n\nThe user of `read_u32` expects to get a u32, and these are defined as 32bits of data (however the endianess), and then 32bits of padding on the wire.\n\nSo I\u0027d expect to get that error if there\u0027s something in the padding, not a overflow-related error.",
+      "revId": "6a549dfb51dd3a5799303642832463495b810d1f",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e5876b5e_73c19570",
+        "filename": "tvix/nix-compat/src/wire/primitive.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 99,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-03-21T11:15:54Z",
+      "side": 1,
+      "message": "Please add some tests here, both for the success and error case.",
+      "revId": "6a549dfb51dd3a5799303642832463495b810d1f",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
