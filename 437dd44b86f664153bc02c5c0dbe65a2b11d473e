@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5a17f654_7c2b9032",
+        "filename": "users/picnoir/tvix-daemon/README.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-03-21T11:16:25Z",
+      "side": 1,
+      "message": "(when inside this directory)",
+      "revId": "437dd44b86f664153bc02c5c0dbe65a2b11d473e",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
