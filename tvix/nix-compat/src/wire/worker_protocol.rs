@@ -4,6 +4,8 @@ use enum_primitive_derive::Primitive;
 use num_traits::{FromPrimitive, ToPrimitive};
 use tokio::io::{AsyncReadExt, AsyncWriteExt};
 
+use crate::wire::primitive;
+
 /// Worker Operation
 ///
 /// These operations are encoded as unsigned 64 bits before being sent
@@ -68,4 +70,26 @@ pub async fn read_op<R: AsyncReadExt + Unpin>(r: &mut R) -> std::io::Result<Oper
 pub async fn write_op<W: AsyncWriteExt + Unpin>(w: &mut W, op: &Operation) -> std::io::Result<()> {
     let op = Operation::to_u64(op).ok_or(Error::new(ErrorKind::Other, "Invalid OP number"))?;
     w.write_u64(op).await
+}
+
+#[derive(Debug, PartialEq)]
+pub enum Trust {
+    Trusted,
+    NotTrusted,
+}
+
+/// Write the worker [Trust] level to the wire.
+///
+/// Cpp Nix has a legacy third option: u8 0. This option is meant to
+/// be used as a backward compatible measure. Since we're not
+/// targetting protocol versions pre-dating the trust notion, we
+/// decided not to implement it here.
+pub async fn write_worker_trust_level<W>(conn: &mut W, t: Trust) -> std::io::Result<()>
+where
+    W: AsyncReadExt + AsyncWriteExt + Unpin + std::fmt::Debug,
+{
+    match t {
+        Trust::Trusted => primitive::write_u8(conn, 1).await,
+        Trust::NotTrusted => primitive::write_u8(conn, 2).await,
+    }
 }
