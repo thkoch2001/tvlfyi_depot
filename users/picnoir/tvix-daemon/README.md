@@ -8,7 +8,9 @@ On the long run, I hope this to be useful to get some real-world usage experienc
 
 ## Build
 
+When inside this directory:
+
 ```sh
-mg shell //tvix:shell
+mg shell :shell
 cargo build
 ```
