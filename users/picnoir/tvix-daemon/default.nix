@@ -1,4 +1,4 @@
-{ depot, lib, pkgs, ... }:
+{ depot, pkgs, ... }:
 
 let
   crate2nix = pkgs.callPackage ./Cargo.nix {
@@ -19,6 +19,22 @@ in
 {
   shell = (import ./shell.nix { inherit pkgs; });
   tvix-daemon = crate2nix.rootCrate.build;
+  clippy = pkgs.stdenv.mkDerivation {
+    src = ./.;
+    cargoDeps = crate2nix.allWorkspaceMembers;
+    name = "tvix-daemon-clippy";
+
+    nativeBuildInputs = with pkgs; [
+      cargo
+      clippy
+      pkg-config
+      protobuf
+      rustc
+      rustPlatform.cargoSetupHook
+    ];
+
+    buildPhase = "cargo clippy --tests --all-features --benches --examples | tee $out";
+  };
   meta.ci.targets = [
     "tvix-daemon"
     "shell"
