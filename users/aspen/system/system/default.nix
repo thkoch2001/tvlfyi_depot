@@ -16,7 +16,7 @@ rec {
     # Use the same nixpkgs as everything else
     home-manager.useGlobalPkgs = true;
 
-    home-manager.users.grfn = { config, lib, ... }: {
+    home-manager.users.aspen = { config, lib, ... }: {
       imports = [ ../home/machines/roswell.nix ];
       lib.depot = depot;
     };
@@ -30,7 +30,11 @@ rec {
 
   yerenSystem = (depot.ops.nixos.nixosFor yeren).system;
 
-  # TODO(grfn): reenable after
+  lusca = import ./machines/lusca.nix;
+
+  luscaSystem = (depot.ops.nixos.nixosFor lusca).system;
+
+  # TODO(aspen): reenable after
   # https://github.com/NixOS/nixpkgs/pull/234883 has propagated
   # through to our channel
   # iso = import ./iso.nix args;
