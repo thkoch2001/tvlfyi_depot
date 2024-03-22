@@ -90,6 +90,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "a0e2e175_bcc25cff",
+        "filename": "users/picnoir/tvix-daemon/src/main.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 93,
+      "author": {
+        "id": 1000096
+      },
+      "writtenOn": "2024-03-22T07:01:23Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4bb21a5c_4d91f6a5",
+      "revId": "86af82b7f2cf99bd7370b586422502467393c7f9",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "00b560a3_f5acaff1",
