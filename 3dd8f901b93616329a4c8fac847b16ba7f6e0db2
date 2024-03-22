@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1fb03d75_1fc31f60",
+        "filename": "ops/terraform/deploy-nixos/nix-eval.sh",
+        "patchSetId": 3
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2024-03-22T13:32:42Z",
+      "side": 1,
+      "message": "or send it to stderr? Not having the build output seems like it would be annoying",
+      "range": {
+        "startLine": 33,
+        "startChar": 0,
+        "endLine": 33,
+        "endChar": 2
+      },
+      "revId": "3dd8f901b93616329a4c8fac847b16ba7f6e0db2",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
