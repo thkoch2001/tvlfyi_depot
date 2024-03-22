@@ -132,7 +132,7 @@ fn interpret(code: &str, path: Option<PathBuf>, args: &Args, explain: bool) -> b
     eval.builtins.extend(impure_builtins());
     add_derivation_builtins(&mut eval, Rc::clone(&tvix_store_io));
     add_fetcher_builtins(&mut eval, Rc::clone(&tvix_store_io));
-    add_import_builtins(&mut eval, tvix_store_io);
+    add_import_builtins(&mut eval, &tvix_store_io);
     configure_nix_path(&mut eval, &args.nix_search_path);
 
     let source_map = eval.source_map();
