@@ -21,7 +21,7 @@ mod impure_builtins {
     use std::os::unix::ffi::OsStrExt;
 
     use super::*;
-    use crate::builtins::{coerce_value_to_path, hash::hash_nix_string};
+    use crate::builtins::{coerce_value_to_path, hash::hash_nix};
 
     #[builtin("getEnv")]
     async fn builtin_get_env(co: GenCo, var: Value) -> Result<Value, ErrorKind> {
@@ -37,8 +37,8 @@ mod impure_builtins {
             Err(cek) => return Ok(Value::from(cek)),
             Ok(p) => p,
         };
-        let s = generators::request_read_to_string(&co, path).await;
-        hash_nix_string(algo.to_str()?, s.to_str()?).map(Value::from)
+        let r = generators::request_open_file(&co, path).await;
+        hash_nix(algo.to_str()?, r).map(Value::from)
     }
 
     #[builtin("pathExists")]
@@ -79,7 +79,13 @@ mod impure_builtins {
     async fn builtin_read_file(co: GenCo, path: Value) -> Result<Value, ErrorKind> {
         match coerce_value_to_path(&co, path).await? {
             Err(cek) => Ok(Value::from(cek)),
-            Ok(path) => Ok(generators::request_read_to_string(&co, path).await),
+            Ok(path) => {
+                let mut buf = String::new();
+                generators::request_open_file(&co, path)
+                    .await
+                    .read_to_string(&mut buf)?;
+                Ok(Value::from(buf))
+            }
         }
     }
 }
