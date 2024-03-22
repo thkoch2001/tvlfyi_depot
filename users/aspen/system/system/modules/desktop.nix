@@ -10,7 +10,7 @@
 
   programs.nm-applet.enable = true;
 
-  users.users.grfn.extraGroups = [
+  users.users.aspen.extraGroups = [
     "audio"
     "video"
   ];

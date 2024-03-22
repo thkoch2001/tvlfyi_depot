@@ -2,11 +2,11 @@
 
 {
   virtualisation.docker.enable = true;
-  users.users.grfn.extraGroups = [ "docker" ];
+  users.users.aspen.extraGroups = [ "docker" ];
 
   security.pam.loginLimits = [
     {
-      domain = "grfn";
+      domain = "aspen";
       type = "soft";
       item = "nofile";
       value = "65535";

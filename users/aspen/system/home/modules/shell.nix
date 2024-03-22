@@ -38,8 +38,7 @@ let
     "ll" = "ls -al";
     "la" = "ls -a";
   };
-in
-{
+in {
   home.packages = with pkgs; [ zsh autojump ];
 
   home.sessionVariables = {
@@ -57,7 +56,7 @@ in
 
   programs.zsh = {
     enable = true;
-    enableAutosuggestions = true;
+    autosuggestion.enable = true;
     autocd = true;
 
     inherit shellAliases;
