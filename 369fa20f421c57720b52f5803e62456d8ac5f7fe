@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c79bb11c_9257e1c1",
+        "filename": "users/picnoir/tvix-daemon/src/main.rs",
+        "patchSetId": 4
+      },
+      "lineNbr": 93,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-03-22T07:47:24Z",
+      "side": 1,
+      "message": "leftover comment? or where do we allocate?",
+      "revId": "369fa20f421c57720b52f5803e62456d8ac5f7fe",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4ea3ad5d_0aa0bf90",
+        "filename": "users/picnoir/tvix-daemon/src/main.rs",
+        "patchSetId": 4
+      },
+      "lineNbr": 98,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-03-22T07:47:24Z",
+      "side": 1,
+      "message": "Reading some 8 bytes, and if they\u0027re nonzero, reading another 8 bytes - isn\u0027t that the equivalent of reading a regular \"byte packet\", so read_bytes (with a maximum of 8 bytes field length)?\n\nIt feels like we\u0027re reimplementing this here, I\u0027d probably just call read_bytes(8) here and add a `debug!(cpu_affinity\u003d?cpu_affinity, \"got CPU affinity\")` if it came back nonzero.",
+      "revId": "369fa20f421c57720b52f5803e62456d8ac5f7fe",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
