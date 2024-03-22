@@ -44,18 +44,7 @@ let
     chmod +x $out/bin/dwarf-fortress
   '';
 
-in
-mkMerge [
-  {
-    home.packages = [
-      crawl
-      xonotic
-    ];
-  }
-  (mkIf stdenv.isLinux {
-    home.packages = [
-      df
-      prismlauncher
-    ];
-  })
+in mkMerge [
+  { home.packages = [ crawl ]; }
+  (mkIf stdenv.isLinux { home.packages = [ df prismlauncher ]; })
 ]

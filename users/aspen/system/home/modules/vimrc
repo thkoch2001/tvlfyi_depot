@@ -22,7 +22,7 @@ set expandtab
 set noerrorbells visualbell t_vb=
 set laststatus=2
 set hidden
-let mapleader = ','
+let mapleader = ' '
 let maplocalleader = '\'
 set undofile
 " set undodir=~/.vim/undo

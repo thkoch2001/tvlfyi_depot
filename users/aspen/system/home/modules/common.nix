@@ -9,7 +9,6 @@
     # ../modules/development.nix
     ../modules/emacs.nix
     ../modules/vim.nix
-    ../modules/tarsnap.nix
     ../modules/twitter.nix
     ../modules/lib/cloneRepo.nix
   ];
@@ -76,35 +75,6 @@
       /tmp/home/activate
     '')
   ];
-
-  programs.ssh = {
-    enable = true;
-
-    matchBlocks = {
-      "home" = {
-        host = "home.gws.fyi";
-        forwardAgent = true;
-      };
-
-      "cerberus" = {
-        host = "cerberus";
-        hostname = "172.16.0.3";
-        forwardAgent = true;
-        user = "griffin";
-      };
-
-      "mugwump" = {
-        host = "mugwump";
-        hostname = "172.16.0.5";
-        forwardAgent = true;
-      };
-
-      "roswell" = {
-        host = "roswell";
-        forwardAgent = true;
-      };
-    };
-  };
 
   programs.direnv = {
     enable = true;

@@ -32,7 +32,7 @@ with lib;
 {
   imports = [
     ./lib/zshFunctions.nix
-    ./development/kube.nix
+    # ./development/kube.nix
     # TODO(grfn): agda build is broken in the nixpkgs checkout
     # ./development/agda.nix
     ./development/rust.nix
