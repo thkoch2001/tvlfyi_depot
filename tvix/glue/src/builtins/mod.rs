@@ -7,6 +7,7 @@ use crate::tvix_store_io::TvixStoreIO;
 mod derivation;
 mod errors;
 mod fetchers;
+mod hashers;
 mod import;
 mod utils;
 
@@ -46,6 +47,15 @@ pub fn add_import_builtins<IO>(eval: &mut tvix_eval::Evaluation<IO>, io: Rc<Tvix
     eval.builtins.extend(import::import_builtins(io));
 
     // TODO(raitobezarius): evaluate expressing filterSource as Nix code using path (b/372)
+}
+
+/// Adds hasher builtins to the passed [tvix_eval::Evaluation]:
+///
+/// * `hashString`
+/// * `hashFile`
+pub fn add_hasher_builtins<IO>(eval: &mut tvix_eval::Evaluation<IO>, io: Rc<TvixStoreIO>) {
+    eval.builtins
+        .extend(hashers::hasher_builtins::builtins(Rc::clone(&io)));
 }
 
 #[cfg(test)]

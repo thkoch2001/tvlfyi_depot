@@ -19,14 +19,12 @@ use crate::vm::generators::{self, GenCo};
 use crate::warnings::WarningKind;
 use crate::{
     self as tvix_eval,
-    builtins::hash::hash_nix_string,
     errors::{CatchableErrorKind, ErrorKind},
     value::{CoercionKind, NixAttrs, NixList, NixString, Thunk, Value},
 };
 
 use self::versions::{VersionPart, VersionPartsIter};
 
-mod hash;
 mod to_xml;
 mod versions;
 
@@ -690,12 +688,6 @@ mod pure_builtins {
             });
 
         Ok(Value::attrs(NixAttrs::from_iter(elements)))
-    }
-
-    #[builtin("hashString")]
-    #[allow(non_snake_case)]
-    async fn builtin_hashString(co: GenCo, algo: Value, s: Value) -> Result<Value, ErrorKind> {
-        hash_nix_string(algo.to_str()?, s.to_str()?).map(Value::from)
     }
 
     #[builtin("head")]

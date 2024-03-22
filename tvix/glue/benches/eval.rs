@@ -48,7 +48,8 @@ fn interpret(code: &str) {
     eval.builtins.extend(impure_builtins());
     add_derivation_builtins(&mut eval, Rc::clone(&tvix_store_io));
     add_fetcher_builtins(&mut eval, Rc::clone(&tvix_store_io));
-    add_import_builtins(&mut eval, tvix_store_io);
+    add_import_builtins(&mut eval, Rc::clone(&tvix_store_io));
+    add_hasher_builtins(&mut eval, tvix_store_io);
     configure_nix_path(
         &mut eval,
         // The benchmark requires TVIX_BENCH_NIX_PATH to be set, so barf out
