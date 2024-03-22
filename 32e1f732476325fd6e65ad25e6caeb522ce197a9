@@ -1,0 +1,140 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "93b48fd0_0c3efa5d",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1000073
+      },
+      "writtenOn": "2024-03-22T03:35:25Z",
+      "side": 1,
+      "message": "usually a directory closure is a tree (or a forest, but that does not matter, that\u0027s a set of trees) to me\nare you saying that the directory closure can be **cyclical** connected graph?\n\nin that case, please mention the presence of cycles explicitly.",
+      "revId": "32e1f732476325fd6e65ad25e6caeb522ce197a9",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0fd21ed7_371fbcf3",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1000073
+      },
+      "writtenOn": "2024-03-22T03:35:25Z",
+      "side": 1,
+      "message": "you say graph but not tree and you talk about leaves but leaves doesn\u0027t exist in a graph of connected directories in all generality\n\na \u003c-\u003e b is a graph of connected directories, what is a leaf here? (degenerated definition of leaves)",
+      "revId": "32e1f732476325fd6e65ad25e6caeb522ce197a9",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "15eaf8ac_b2c42ef3",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 1000073
+      },
+      "writtenOn": "2024-03-22T03:35:25Z",
+      "side": 1,
+      "message": "disconnected components, not graphs\n\nyou are looking at all connected components of the potentially non-connected global graph, which is not the same object as we were talking about above",
+      "revId": "32e1f732476325fd6e65ad25e6caeb522ce197a9",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0713e2d0_8cc55fef",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000073
+      },
+      "writtenOn": "2024-03-22T03:35:25Z",
+      "side": 1,
+      "message": "I mostly have vocabulary problems with the CL, no fundamental issues with the code.",
+      "revId": "32e1f732476325fd6e65ad25e6caeb522ce197a9",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8271f977_a52e7000",
+        "filename": "tvix/castore/src/directoryservice/validate_closure.rs",
+        "patchSetId": 4
+      },
+      "lineNbr": 109,
+      "author": {
+        "id": 1000073
+      },
+      "writtenOn": "2024-03-22T03:35:25Z",
+      "side": 1,
+      "message": "nit: `dir_to_visit`.\n`worklist` is very generic.",
+      "revId": "32e1f732476325fd6e65ad25e6caeb522ce197a9",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "73d28c76_1a5abd67",
+        "filename": "tvix/castore/src/directoryservice/validate_closure.rs",
+        "patchSetId": 4
+      },
+      "lineNbr": 115,
+      "author": {
+        "id": 1000073
+      },
+      "writtenOn": "2024-03-22T03:35:25Z",
+      "side": 1,
+      "message": "nit: `seen_worklist_digests`, better: `seen_dir_digests`.",
+      "revId": "32e1f732476325fd6e65ad25e6caeb522ce197a9",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f5df57d4_cb58a048",
+        "filename": "tvix/castore/src/directoryservice/validate_closure.rs",
+        "patchSetId": 4
+      },
+      "lineNbr": 128,
+      "author": {
+        "id": 1000073
+      },
+      "writtenOn": "2024-03-22T03:35:25Z",
+      "side": 1,
+      "message": "nit: push it back, this is not a LIFO driven algorithm; enqueue should/can mean push_front instead of push_back, I\u0027d argue.",
+      "revId": "32e1f732476325fd6e65ad25e6caeb522ce197a9",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f5d3b9aa_49675478",
+        "filename": "tvix/castore/src/directoryservice/validate_closure.rs",
+        "patchSetId": 4
+      },
+      "lineNbr": 132,
+      "author": {
+        "id": 1000073
+      },
+      "writtenOn": "2024-03-22T03:35:25Z",
+      "side": 1,
+      "message": "future-work/performance: this will generate a bunch of allocations on large closures but will be amortized on the long run by the classical Vector resize behavior. this can be further amortized w.r.t. constants by passing a hint of directory size in `add`, maintaining it, and using it to `reserve` the `worklist`\u0027s vec.",
+      "revId": "32e1f732476325fd6e65ad25e6caeb522ce197a9",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
