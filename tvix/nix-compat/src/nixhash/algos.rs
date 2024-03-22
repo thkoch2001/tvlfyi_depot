@@ -1,8 +1,13 @@
 use std::fmt::Display;
 
+use md5::Md5;
 use serde::{Deserialize, Serialize};
+use sha1::Sha1;
+use sha2::{digest::Output, Digest, Sha256, Sha512};
 
 use crate::nixhash::Error;
+
+use super::NixHash;
 
 /// This are the hash algorithms supported by cppnix.
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
@@ -23,6 +28,21 @@ impl HashAlgo {
             HashAlgo::Md5 => 16,
         }
     }
+
+    pub fn hash_bytes<R: std::io::Read>(&self, reader: R) -> std::io::Result<NixHash> {
+        Ok(match self {
+            HashAlgo::Md5 => NixHash::Md5(hash::<Md5>(reader)?.into()),
+            HashAlgo::Sha1 => NixHash::Sha1(hash::<Sha1>(reader)?.into()),
+            HashAlgo::Sha256 => NixHash::Sha256(hash::<Sha256>(reader)?.into()),
+            HashAlgo::Sha512 => NixHash::Sha512(Box::new(hash::<Sha512>(reader)?.into())),
+        })
+    }
+}
+
+fn hash<D: Digest + std::io::Write>(mut r: impl std::io::Read) -> std::io::Result<Output<D>> {
+    let mut hasher = D::new();
+    std::io::copy(&mut r, &mut hasher)?;
+    Ok(hasher.finalize())
 }
 
 impl Display for HashAlgo {
@@ -69,7 +89,21 @@ impl TryFrom<&str> for HashAlgo {
             "sha1" => Ok(Self::Sha1),
             "sha256" => Ok(Self::Sha256),
             "sha512" => Ok(Self::Sha512),
-            _ => Err(Error::InvalidAlgo(algo_str.to_string())),
+            _ => Err(Error::InvalidAlgo(algo_str.into())),
+        }
+    }
+}
+
+impl TryFrom<&[u8]> for HashAlgo {
+    type Error = Error;
+
+    fn try_from(algo: &[u8]) -> Result<Self, Self::Error> {
+        match algo {
+            b"md5" => Ok(Self::Md5),
+            b"sha1" => Ok(Self::Sha1),
+            b"sha256" => Ok(Self::Sha256),
+            b"sha512" => Ok(Self::Sha512),
+            _ => Err(Error::InvalidAlgo(algo.into())),
         }
     }
 }

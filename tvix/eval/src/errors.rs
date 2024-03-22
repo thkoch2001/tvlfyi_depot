@@ -7,6 +7,7 @@ use std::string::FromUtf8Error;
 use std::sync::Arc;
 use std::{fmt::Debug, fmt::Display, num::ParseIntError};
 
+use bstr::BString;
 use codemap::{File, Span};
 use codemap_diagnostic::{ColorConfig, Diagnostic, Emitter, Level, SpanLabel, SpanStyle};
 use smol_str::SmolStr;
@@ -232,7 +233,7 @@ pub enum ErrorKind {
 
     /// Invalid hash type specified, must be one of "md5", "sha1", "sha256"
     /// or "sha512"
-    UnknownHashType(String),
+    UnknownHashType(BString),
 }
 
 impl error::Error for Error {

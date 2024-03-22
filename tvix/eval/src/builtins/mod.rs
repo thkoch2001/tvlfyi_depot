@@ -19,14 +19,12 @@ use crate::vm::generators::{self, GenCo};
 use crate::warnings::WarningKind;
 use crate::{
     self as tvix_eval,
-    builtins::hash::hash_nix_string,
     errors::{CatchableErrorKind, ErrorKind},
     value::{CoercionKind, NixAttrs, NixList, NixString, Thunk, Value},
 };
 
 use self::versions::{VersionPart, VersionPartsIter};
 
-mod hash;
 mod to_xml;
 mod versions;
 
@@ -87,6 +85,7 @@ mod pure_builtins {
     use bstr::{BString, ByteSlice, B};
     use imbl::Vector;
     use itertools::Itertools;
+    use nix_compat::nixhash::HashAlgo;
     use os_str_bytes::OsStringBytes;
 
     use crate::{value::PointerEquality, AddContext, NixContext, NixContextElement};
@@ -695,7 +694,13 @@ mod pure_builtins {
     #[builtin("hashString")]
     #[allow(non_snake_case)]
     async fn builtin_hashString(co: GenCo, algo: Value, s: Value) -> Result<Value, ErrorKind> {
-        hash_nix_string(algo.to_str()?, s.to_str()?).map(Value::from)
+        let algo = algo.to_str()?;
+        let algo = HashAlgo::try_from(algo.as_bytes())
+            .map_err(|_| ErrorKind::UnknownHashType(algo.into()))?;
+        Ok(algo
+            .hash_bytes(std::io::Cursor::new(s.to_str()?))
+            .map(|hash| hash.to_plain_hex_string())
+            .map(Value::from)?)
     }
 
     #[builtin("head")]
