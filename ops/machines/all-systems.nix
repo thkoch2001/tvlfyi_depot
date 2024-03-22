@@ -16,6 +16,7 @@
   yeren
   mugwump
   ogopogo
+  lusca
 ]) ++
 
 (with depot.users.wpcarro.nixos; [
