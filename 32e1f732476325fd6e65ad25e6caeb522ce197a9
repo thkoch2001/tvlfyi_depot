@@ -20,6 +20,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "70638533_0f52d3f4",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-03-22T13:11:31Z",
+      "side": 1,
+      "message": "How do you produce a cycle? You\u0027d need to bake the hash of your own representation. It\u0027s not a tree either, as a node can have multiple parents.\n\nIt\u0027s a acyclical graph, but the fact that it\u0027s acyclical is kinda obvious due to the whole model being documented as a Merkle structure.",
+      "parentUuid": "93b48fd0_0c3efa5d",
+      "revId": "32e1f732476325fd6e65ad25e6caeb522ce197a9",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "0fd21ed7_371fbcf3",
         "filename": "/COMMIT_MSG",
         "patchSetId": 4
@@ -37,6 +55,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "ab088ee5_2a6eaa9d",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-03-22T13:11:31Z",
+      "side": 1,
+      "message": "\u003e A node in a graph is a leaf (or a leaf node) if it has degree one and the only edge associated to the node is either undirected or is directed to it. Hence, in an undirected graph, all degree one nodes are leafs. In a directed graph, each degree one node is either a root or a leaf.\n\nI don\u0027t see how leaf is wrong here as a term?\n\nThe part about the graph needing to be connected is that just with the insertion order checks, nothing prevents you from sending a bunch of nodes (entirely single or small graphs), and then never connecting them to the last graph you send. The traversal at the end makes sure all nodes are reachable from the root.",
+      "parentUuid": "0fd21ed7_371fbcf3",
+      "revId": "32e1f732476325fd6e65ad25e6caeb522ce197a9",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "15eaf8ac_b2c42ef3",
         "filename": "/COMMIT_MSG",
         "patchSetId": 4
@@ -48,6 +84,24 @@
       "writtenOn": "2024-03-22T03:35:25Z",
       "side": 1,
       "message": "disconnected components, not graphs\n\nyou are looking at all connected components of the potentially non-connected global graph, which is not the same object as we were talking about above",
+      "revId": "32e1f732476325fd6e65ad25e6caeb522ce197a9",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9ca6ebca_457f743f",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-03-22T13:11:31Z",
+      "side": 1,
+      "message": "I think the proper term would be disconnected subgraph?",
+      "parentUuid": "15eaf8ac_b2c42ef3",
       "revId": "32e1f732476325fd6e65ad25e6caeb522ce197a9",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
@@ -88,6 +142,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "d79de7d1_2b316ebf",
+        "filename": "tvix/castore/src/directoryservice/validate_closure.rs",
+        "patchSetId": 4
+      },
+      "lineNbr": 109,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-03-22T13:11:31Z",
+      "side": 1,
+      "message": "The problem is that this is then also returned, I\u0027m also not happy with `dir_to_visit`. We can just call it `nodes`, and update the comment a bit to say what it represents first?",
+      "parentUuid": "8271f977_a52e7000",
+      "revId": "32e1f732476325fd6e65ad25e6caeb522ce197a9",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "73d28c76_1a5abd67",
         "filename": "tvix/castore/src/directoryservice/validate_closure.rs",
         "patchSetId": 4
@@ -99,6 +171,24 @@
       "writtenOn": "2024-03-22T03:35:25Z",
       "side": 1,
       "message": "nit: `seen_worklist_digests`, better: `seen_dir_digests`.",
+      "revId": "32e1f732476325fd6e65ad25e6caeb522ce197a9",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8591c388_c89097bc",
+        "filename": "tvix/castore/src/directoryservice/validate_closure.rs",
+        "patchSetId": 4
+      },
+      "lineNbr": 115,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-03-22T13:11:31Z",
+      "side": 1,
+      "message": "ack",
+      "parentUuid": "73d28c76_1a5abd67",
       "revId": "32e1f732476325fd6e65ad25e6caeb522ce197a9",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
@@ -122,6 +212,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "b8025e43_66e05605",
+        "filename": "tvix/castore/src/directoryservice/validate_closure.rs",
+        "patchSetId": 4
+      },
+      "lineNbr": 128,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-03-22T13:11:31Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "f5df57d4_cb58a048",
+      "revId": "32e1f732476325fd6e65ad25e6caeb522ce197a9",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "f5d3b9aa_49675478",
         "filename": "tvix/castore/src/directoryservice/validate_closure.rs",
         "patchSetId": 4
@@ -133,6 +241,24 @@
       "writtenOn": "2024-03-22T03:35:25Z",
       "side": 1,
       "message": "future-work/performance: this will generate a bunch of allocations on large closures but will be amortized on the long run by the classical Vector resize behavior. this can be further amortized w.r.t. constants by passing a hint of directory size in `add`, maintaining it, and using it to `reserve` the `worklist`\u0027s vec.",
+      "revId": "32e1f732476325fd6e65ad25e6caeb522ce197a9",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8749313d_0732cf7c",
+        "filename": "tvix/castore/src/directoryservice/validate_closure.rs",
+        "patchSetId": 4
+      },
+      "lineNbr": 132,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-03-22T13:11:31Z",
+      "side": 1,
+      "message": "I think we should initialize `worklist` with a capaciy set to the number of elements in `directories_and_sizes`, yes. Good catch.",
+      "parentUuid": "f5d3b9aa_49675478",
       "revId": "32e1f732476325fd6e65ad25e6caeb522ce197a9",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
