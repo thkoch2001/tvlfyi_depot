@@ -30,11 +30,16 @@ rec {
 
   yerenSystem = (depot.ops.nixos.nixosFor yeren).system;
 
+  lusca = import ./machines/lusca.nix;
+
+  luscaSystem = (depot.ops.nixos.nixosFor lusca).system;
+
   iso = import ./iso.nix args;
 
   meta.ci.targets = [
     "mugwumpSystem"
     "roswellSystem"
+    "luscaSystem"
     "ogopogoSystem"
     "yerenSystem"
 

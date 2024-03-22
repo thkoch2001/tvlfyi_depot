@@ -30,7 +30,13 @@ rec {
 
   yerenHome = yeren.activation-script;
 
+  lusca = home ./machines/lusca.nix;
+
+  luscaHome = lusca.activation-script;
+
   meta.ci.targets = [
+    "ogopogoHome"
+    "luscaHome"
     "yerenHome"
   ];
 }
