@@ -1,4 +1,5 @@
 use crate::nixbase32;
+use bstr::BString;
 use data_encoding::{BASE64, BASE64_NOPAD, HEXLOWER};
 use std::cmp::Ordering;
 use std::fmt::Display;
@@ -143,7 +144,7 @@ pub fn from_algo_and_digest(algo: HashAlgo, digest: &[u8]) -> Result<NixHash> {
 #[derive(Debug, Eq, PartialEq, thiserror::Error)]
 pub enum Error {
     #[error("invalid hash algo: {0}")]
-    InvalidAlgo(String),
+    InvalidAlgo(BString),
     #[error("invalid SRI string: {0}")]
     InvalidSRI(String),
     #[error("invalid encoded digest length '{0}' for algo {1}")]
@@ -239,7 +240,7 @@ pub fn from_nix_str(s: &str) -> Result<NixHash> {
     } else if let Some(rest) = s.strip_prefix("md5:") {
         decode_digest(rest.as_bytes(), HashAlgo::Md5)
     } else {
-        Err(Error::InvalidAlgo(s.to_string()))
+        Err(Error::InvalidAlgo(s.into()))
     }
 }
 
