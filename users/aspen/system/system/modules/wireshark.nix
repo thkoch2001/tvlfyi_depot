@@ -5,5 +5,5 @@
     enable = true;
     package = pkgs.wireshark;
   };
-  users.users.grfn.extraGroups = [ "wireshark" ];
+  users.users.aspen.extraGroups = [ "wireshark" ];
 }

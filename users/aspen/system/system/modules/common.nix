@@ -53,7 +53,7 @@ with lib;
   users.mutableUsers = true;
   programs.zsh.enable = true;
   environment.pathsToLink = [ "/share/zsh" ];
-  users.users.grfn = {
+  users.users.aspen = {
     isNormalUser = true;
     initialPassword = "password";
     extraGroups = [
@@ -65,7 +65,7 @@ with lib;
   };
 
   nix = {
-    settings.trusted-users = [ "grfn" ];
+    settings.trusted-users = [ "aspen" ];
     distributedBuilds = true;
 
     gc = {

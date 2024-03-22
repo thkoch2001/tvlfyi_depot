@@ -16,7 +16,7 @@ rec {
     # Use the same nixpkgs as everything else
     home-manager.useGlobalPkgs = true;
 
-    home-manager.users.grfn = { config, lib, ... }: {
+    home-manager.users.aspen = { config, lib, ... }: {
       imports = [ ../home/machines/roswell.nix ];
       lib.depot = depot;
     };
@@ -29,6 +29,10 @@ rec {
   yeren = import ./machines/yeren.nix;
 
   yerenSystem = (depot.ops.nixos.nixosFor yeren).system;
+
+  lusca = import ./machines/lusca.nix;
+
+  luscaSystem = (depot.ops.nixos.nixosFor lusca).system;
 
   iso = import ./iso.nix args;
 

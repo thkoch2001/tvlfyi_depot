@@ -5,8 +5,8 @@
 {
   imports = [
     ./i3.nix
-    ./obs.nix
-    ./games.nix
+    # ./obs.nix
+    # ./games.nix
   ];
 
   home.packages = with pkgs; [
@@ -38,8 +38,8 @@
   gtk = {
     enable = true;
     gtk3.bookmarks = [
-      "file:///home/grfn/code"
-      "file:///home/grfn/notes"
+      "file:///home/aspen/code"
+      "file:///home/aspen/notes"
     ];
   };
 }
