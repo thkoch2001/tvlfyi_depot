@@ -80,7 +80,6 @@ library
         pa-label,
         pa-json,
         pa-field-parser,
-        pa-pretty,
         pa-run-command,
         aeson-better-errors,
         aeson,
