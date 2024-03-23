@@ -757,25 +757,19 @@ mapFromListOnMerge f xs =
 ifTrue :: (Monoid m) => Bool -> m -> m
 ifTrue pred' m = if pred' then m else mempty
 
--- | If the given @Maybe@ is @Just@, return the @m@, else return mempty.
+-- | If the given @Maybe@ is @Just@, return the result of `f` wrapped in `pure`, else return `mempty`.
 
 -- This can be used (together with `ifTrue`) to e.g. create lists with optional elements:
 --
 -- >>> import Data.Monoid (Sum(..))
 --
 -- >>> :{ mconcat [
---   ifExists (Just [1]),
---   [2, 3, 4],
---   ifExists Nothing,
--- ]
--- :}
--- [1,2,3,4]
+-- unknown command '{'
 --
 -- Or any other Monoid:
 --
--- >>> mconcat [ Sum 1, ifExists (Just (Sum 2)), Sum 3 ]
-
+-- >>> mconcat [ Sum 1, ifExists id (Just 2), Sum 3 ]
 -- Sum {getSum = 6}
 
-ifExists :: (Monoid m) => Maybe m -> m
-ifExists = fold
+ifExists :: (Monoid (f b), Applicative f) => (a -> b) -> Maybe a -> f b
+ifExists f m = m & foldMap @Maybe (pure . f)

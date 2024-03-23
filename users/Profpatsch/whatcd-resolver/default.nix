@@ -13,7 +13,9 @@ let
       ./src/WhatcdResolver.hs
       ./src/AppT.hs
       ./src/JsonLd.hs
+      ./src/Optional.hs
       ./src/Html.hs
+      ./src/Http.hs
       ./src/Transmission.hs
       ./src/Redacted.hs
     ];

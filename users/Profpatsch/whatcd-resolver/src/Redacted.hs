@@ -14,7 +14,6 @@ import Database.PostgreSQL.Simple (Binary (Binary), Only (..))
 import Database.PostgreSQL.Simple.SqlQQ (sql)
 import Database.PostgreSQL.Simple.Types (PGArray (PGArray))
 import FieldParser qualified as Field
-import GHC.Records (HasField (..))
 import Json qualified
 import Label
 import MyPrelude
@@ -23,6 +22,7 @@ import Network.HTTP.Simple qualified as Http
 import Network.HTTP.Types
 import Network.Wai.Parse qualified as Wai
 import OpenTelemetry.Trace qualified as Otel hiding (getTracer, inSpan, inSpan')
+import Optional
 import Postgres.Decoder qualified as Dec
 import Postgres.MonadPostgres
 import Pretty
@@ -134,7 +134,7 @@ redactedSearchAndInsert extraArguments = do
       redactedSearch
         ( extraArguments
             -- pass the page (for every search but the first one)
-            <> ifExists (mpage <&> (\page -> [("page", (page :: Natural) & showToText & textToBytesUtf8)]))
+            <> (mpage & ifExists (\page -> ("page", (page :: Natural) & showToText & textToBytesUtf8)))
         )
         ( do
             status <- Json.key "status" Json.asText
@@ -361,7 +361,7 @@ data TorrentData transmissionInfo = TorrentData
     torrentId :: Int,
     seedingWeight :: Int,
     torrentJson :: Json.Value,
-    torrentGroupJson :: T2 "artist" Text "groupName" Text,
+    torrentGroupJson :: T3 "artist" Text "groupName" Text "groupYear" Int,
     torrentStatus :: TorrentStatus transmissionInfo
   }
 
@@ -411,7 +411,8 @@ getBestTorrents = do
           ( Dec.json $ do
               artist <- Json.keyLabel @"artist" "artist" Json.asText
               groupName <- Json.keyLabel @"groupName" "groupName" Json.asText
-              pure $ T2 artist groupName
+              groupYear <- Json.keyLabel @"groupYear" "groupYear" (Json.asIntegral @_ @Int)
+              pure $ T3 artist groupName groupYear
             )
         hasTorrentFile <- Dec.fromField @Bool
         transmissionTorrentHash <-
@@ -478,19 +479,6 @@ httpTorrent span req =
                 Left [fmt|Redacted returned a body with unspecified content type|]
             | code <- statusCode -> Left [fmt|Redacted returned an non-200 error code, code {code}: {resp & showPretty}|]
       )
-
-newtype Optional a = OptionalInternal (Maybe a)
-
-mkOptional :: a -> Optional a
-mkOptional defaultValue = OptionalInternal $ Just defaultValue
-
-defaults :: Optional a
-defaults = OptionalInternal Nothing
-
-instance HasField "withDefault" (Optional a) (a -> a) where
-  getField (OptionalInternal m) defaultValue = case m of
-    Nothing -> defaultValue
-    Just a -> a
 
 httpJson ::
   ( MonadThrow m,
