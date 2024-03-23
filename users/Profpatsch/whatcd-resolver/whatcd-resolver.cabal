@@ -66,6 +66,8 @@ library
        WhatcdResolver
        AppT
        JsonLd
+       Optional
+       Http
        Html
        Transmission
        Redacted
@@ -84,7 +86,9 @@ library
         aeson-better-errors,
         aeson,
         blaze-html,
+        blaze-markup,
         bytestring,
+        case-insensitive,
         containers,
         unordered-containers,
         directory,
@@ -95,12 +99,14 @@ library
         hs-opentelemetry-api,
         http-conduit,
         http-types,
+        http-client,
         ihp-hsx,
         monad-logger,
         mtl,
         network-uri,
         resource-pool,
         postgresql-simple,
+        punycode,
         scientific,
         selective,
         tmp-postgres,
