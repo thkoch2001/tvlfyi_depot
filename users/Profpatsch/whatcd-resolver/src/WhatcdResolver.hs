@@ -37,6 +37,7 @@ import Network.HTTP.Types qualified as Http
 import Network.URI (URI)
 import Network.URI qualified
 import Network.URI qualified as URI
+import Network.Wai (ResponseReceived)
 import Network.Wai qualified as Wai
 import Network.Wai.Handler.Warp qualified as Warp
 import Network.Wai.Parse qualified as Wai
@@ -59,7 +60,7 @@ import Text.Blaze.Html.Renderer.Utf8 qualified as Html
 import Text.Blaze.Html5 qualified as Html
 import Tool (readTool, readTools)
 import Transmission
-import UnliftIO
+import UnliftIO hiding (Handler)
 import Prelude hiding (span)
 
 main :: IO ()
@@ -95,26 +96,6 @@ htmlUi = do
               respond (Wai.responseLBS Http.status500 [] "")
 
     catchAppException $ do
-      let renderHtml =
-            if debug
-              then Html.Pretty.renderHtml >>> stringToText >>> textToBytesUtf8 >>> toLazyBytes
-              else Html.renderHtml
-      let hh route act =
-            runInIO $
-              Otel.inSpan'
-                [fmt|Route {route }|]
-                ( Otel.defaultSpanArguments
-                    { Otel.attributes =
-                        HashMap.fromList
-                          [ ("server.path", Otel.toAttribute @Text route)
-                          ]
-                    }
-                )
-                ( \span -> withRunInIO $ \runInIO' -> do
-                    res <- runInIO' $ act span
-                    respond . Wai.responseLBS Http.ok200 ([("Content-Type", "text/html")] <> res.extraHeaders) . renderHtml $ res.html
-                )
-      let h route act = hh route (\span -> act span <&> (\html -> T2 (label @"html" html) (label @"extraHeaders" [])))
       let mp span parser =
             Multipart.parseMultipartOrThrow
               (appThrowTree span)
@@ -135,111 +116,133 @@ htmlUi = do
             Parse.runParse "Unable to find the right request query arguments" (lmap Wai.queryString parser) req
               & assertMNewSpan spanName id
 
-      case req & Wai.pathInfo & Text.intercalate "/" of
-        "" -> h "/" (mainHtml uniqueRunId)
-        "snips/redacted/search" -> do
-          h "/snips/redacted/search" $ \span -> do
-            dat <-
-              mp
-                span
-                ( do
-                    label @"searchstr" <$> Multipart.field "redacted-search" Cat.id
-                )
-            snipsRedactedSearch dat
-        "snips/redacted/torrentDataJson" -> h "/snips/redacted/torrentDataJson" $ \span -> do
-          dat <- torrentIdMp span
-          Html.mkVal <$> (runTransaction $ getTorrentById dat)
-        "snips/redacted/getTorrentFile" -> h "/snips/redacted/getTorrentFile" $ \span -> do
-          dat <- torrentIdMp span
-          runTransaction $ do
-            inserted <- redactedGetTorrentFileAndInsert dat
-            running <-
-              lift @Transaction $
-                doTransmissionRequest' (transmissionRequestAddTorrent inserted)
-            updateTransmissionTorrentHashById
-              ( T2
-                  (getLabel @"torrentHash" running)
-                  (getLabel @"torrentId" dat)
-              )
-            pure $
-              everySecond
-                "snips/transmission/getTorrentState"
-                (Enc.object [("torrent-hash", Enc.text running.torrentHash)])
-                "Starting"
-        -- TODO: this is bad duplication??
-        "snips/redacted/startTorrentFile" -> h "/snips/redacted/startTorrentFile" $ \span -> do
-          dat <- torrentIdMp span
-          runTransaction $ do
-            file <-
-              getTorrentFileById dat
-                <&> annotate [fmt|No torrent file for torrentId "{dat.torrentId}"|]
-                >>= orAppThrowTree span
-
-            running <-
-              lift @Transaction $
-                doTransmissionRequest' (transmissionRequestAddTorrent file)
-            updateTransmissionTorrentHashById
-              ( T2
-                  (getLabel @"torrentHash" running)
-                  (getLabel @"torrentId" dat)
-              )
-            pure $
-              everySecond
-                "snips/transmission/getTorrentState"
-                (Enc.object [("torrent-hash", Enc.text running.torrentHash)])
-                "Starting"
-        "snips/transmission/getTorrentState" -> h "/snips/transmission/getTorrentState" $ \span -> do
-          dat <- mp span $ label @"torrentHash" <$> Multipart.field "torrent-hash" Field.utf8
-          status <-
-            doTransmissionRequest'
-              ( transmissionRequestListOnlyTorrents
-                  ( T2
-                      (label @"ids" [label @"torrentHash" dat.torrentHash])
-                      (label @"fields" ["hashString"])
-                  )
-                  (Json.keyLabel @"torrentHash" "hashString" Json.asText)
-              )
-              <&> List.find (\torrent -> torrent.torrentHash == dat.torrentHash)
-
-          pure $
-            case status of
-              Nothing -> [hsx|ERROR unknown|]
-              Just _torrent -> [hsx|Running|]
-        "snips/jsonld/render" ->
-          h "/snips/jsonld/render" $ \span -> do
-            qry <-
-              parseQueryArgs
-                span
-                ( label @"target"
-                    <$> ( (singleQueryArgument "target" Field.utf8 >>> textToURI)
-                            & Parse.andParse uriToHttpClientRequest
+      let handlers :: Handlers (AppT IO)
+          handlers respond =
+            Map.fromList
+              [ ("", respond.h (mainHtml uniqueRunId)),
+                ( "snips/redacted/search",
+                  respond.h $
+                    \span -> do
+                      dat <-
+                        mp
+                          span
+                          ( do
+                              label @"searchstr" <$> Multipart.field "redacted-search" Cat.id
+                          )
+                      snipsRedactedSearch dat
+                ),
+                ( "snips/redacted/torrentDataJson",
+                  respond.h $ \span -> do
+                    dat <- torrentIdMp span
+                    Html.mkVal <$> (runTransaction $ getTorrentById dat)
+                ),
+                ( "snips/redacted/getTorrentFile",
+                  respond.h $ \span -> do
+                    dat <- torrentIdMp span
+                    runTransaction $ do
+                      inserted <- redactedGetTorrentFileAndInsert dat
+                      running <-
+                        lift @Transaction $
+                          doTransmissionRequest' (transmissionRequestAddTorrent inserted)
+                      updateTransmissionTorrentHashById
+                        ( T2
+                            (getLabel @"torrentHash" running)
+                            (getLabel @"torrentId" dat)
                         )
+                      pure $
+                        everySecond
+                          "snips/transmission/getTorrentState"
+                          (Enc.object [("torrent-hash", Enc.text running.torrentHash)])
+                          "Starting"
+                ),
+                -- TODO: this is bad duplication??
+                ( "snips/redacted/startTorrentFile",
+                  respond.h $ \span -> do
+                    dat <- torrentIdMp span
+                    runTransaction $ do
+                      file <-
+                        getTorrentFileById dat
+                          <&> annotate [fmt|No torrent file for torrentId "{dat.torrentId}"|]
+                          >>= orAppThrowTree span
+
+                      running <-
+                        lift @Transaction $
+                          doTransmissionRequest' (transmissionRequestAddTorrent file)
+                      updateTransmissionTorrentHashById
+                        ( T2
+                            (getLabel @"torrentHash" running)
+                            (getLabel @"torrentId" dat)
+                        )
+                      pure $
+                        everySecond
+                          "snips/transmission/getTorrentState"
+                          (Enc.object [("torrent-hash", Enc.text running.torrentHash)])
+                          "Starting"
+                ),
+                ( "snips/transmission/getTorrentState",
+                  respond.h $ \span -> do
+                    dat <- mp span $ label @"torrentHash" <$> Multipart.field "torrent-hash" Field.utf8
+                    status <-
+                      doTransmissionRequest'
+                        ( transmissionRequestListOnlyTorrents
+                            ( T2
+                                (label @"ids" [label @"torrentHash" dat.torrentHash])
+                                (label @"fields" ["hashString"])
+                            )
+                            (Json.keyLabel @"torrentHash" "hashString" Json.asText)
+                        )
+                        <&> List.find (\torrent -> torrent.torrentHash == dat.torrentHash)
+
+                    pure $
+                      case status of
+                        Nothing -> [hsx|ERROR unknown|]
+                        Just _torrent -> [hsx|Running|]
+                ),
+                ( "snips/jsonld/render",
+                  respond.h $ \span -> do
+                    qry <-
+                      parseQueryArgs
+                        span
+                        ( label @"target"
+                            <$> ( (singleQueryArgument "target" Field.utf8 >>> textToURI)
+                                    & Parse.andParse uriToHttpClientRequest
+                                )
+                        )
+                    jsonld <- httpGetJsonLd (qry.target)
+                    pure $ renderJsonld jsonld
+                ),
+                ( "autorefresh",
+                  respond.plain $ do
+                    qry <-
+                      parseQueryArgsNewSpan
+                        "Autorefresh Query Parse"
+                        ( label @"hasItBeenRestarted"
+                            <$> singleQueryArgument "hasItBeenRestarted" Field.utf8
+                        )
+                    pure $
+                      Wai.responseLBS
+                        Http.ok200
+                        ( [("Content-Type", "text/html")]
+                            <> if uniqueRunId /= qry.hasItBeenRestarted
+                              then -- cause the client side to refresh
+                                [("HX-Refresh", "true")]
+                              else []
+                        )
+                        ""
                 )
-            jsonld <- httpGetJsonLd (qry.target)
-            pure $ renderJsonld jsonld
-        "autorefresh" -> do
-          qry <-
-            runInIO $
-              parseQueryArgsNewSpan
-                "Autorefresh Query Parse"
-                ( label @"hasItBeenRestarted"
-                    <$> singleQueryArgument "hasItBeenRestarted" Field.utf8
-                )
-          respond $
-            Wai.responseLBS
-              Http.ok200
-              ( [("Content-Type", "text/html")]
-                  <> if uniqueRunId /= qry.hasItBeenRestarted
-                    then -- cause the client side to refresh
-                      [("HX-Refresh", "true")]
-                    else []
-              )
-              ""
-        otherRoute -> h [fmt|/{otherRoute}|] (mainHtml uniqueRunId)
+              ]
+      runInIO $
+        runHandlers
+          debug
+          (\respond -> respond.h $ (mainHtml uniqueRunId))
+          handlers
+          req
+          respond
   where
     everySecond :: Text -> Enc -> Html -> Html
     everySecond call extraData innerHtml = [hsx|<div hx-trigger="every 1s" hx-swap="outerHTML" hx-post={call} hx-vals={Enc.encToBytesUtf8 extraData}>{innerHtml}</div>|]
 
+    mainHtml :: Text -> Otel.Span -> AppT IO Html
     mainHtml uniqueRunId _span = runTransaction $ do
       jsonld <-
         httpGetJsonLd
@@ -296,6 +299,51 @@ htmlUi = do
         />
       </body>
     |]
+
+type Handlers m = HandlerResponses m -> Map Text (m ResponseReceived)
+
+type HandlerResponses m = T2 "h" ((Otel.Span -> m Html) -> m ResponseReceived) "plain" (m Wai.Response -> m ResponseReceived)
+
+runHandlers ::
+  (MonadOtel m) =>
+  Bool ->
+  (HandlerResponses m -> m ResponseReceived) ->
+  (HandlerResponses m -> Map Text (m ResponseReceived)) ->
+  Wai.Request ->
+  (Wai.Response -> IO ResponseReceived) ->
+  m ResponseReceived
+runHandlers debug defaultHandler handlers req respond = withRunInIO $ \runInIO -> do
+  let renderHtml =
+        if debug
+          then Html.Pretty.renderHtml >>> stringToText >>> textToBytesUtf8 >>> toLazyBytes
+          else Html.renderHtml
+  let hh route act =
+        Otel.inSpan'
+          [fmt|Route {route }|]
+          ( Otel.defaultSpanArguments
+              { Otel.attributes =
+                  HashMap.fromList
+                    [ ("server.path", Otel.toAttribute @Text route)
+                    ]
+              }
+          )
+          ( \span -> do
+              res <- act span
+              liftIO $ respond . Wai.responseLBS Http.ok200 ([("Content-Type", "text/html")] <> res.extraHeaders) . renderHtml $ res.html
+          )
+  let h route act = hh route (\span -> act span <&> (\html -> T2 (label @"html" html) (label @"extraHeaders" [])))
+
+  let path = (req & Wai.pathInfo & Text.intercalate "/")
+  let handlerResponses =
+        ( T2
+            (label @"h" (h path))
+            (label @"plain" (\m -> liftIO $ runInIO m >>= respond))
+        )
+  let handler =
+        (handlers handlerResponses)
+          & Map.lookup path
+          & fromMaybe (defaultHandler handlerResponses)
+  runInIO handler
 
 singleQueryArgument :: Text -> FieldParser ByteString to -> Parse Http.Query to
 singleQueryArgument field inner =
