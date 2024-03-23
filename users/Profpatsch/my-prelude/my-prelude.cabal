@@ -65,6 +65,7 @@ library
       Postgres.MonadPostgres
       ValidationParseT
       Parse
+      Pretty
       Seconds
       Tool
 
@@ -112,3 +113,8 @@ library
      , validation-selective
      , vector
      , ghc-boot
+     -- for Pretty
+     , aeson-pretty
+     , hscolour
+     , ansi-terminal
+     , nicify-lib

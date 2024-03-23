@@ -79,7 +79,6 @@ executable mailbox-org
         my-prelude,
         pa-prelude,
         pa-label,
-        pa-pretty,
         pa-error-tree,
         exec-helpers,
         netencode,
