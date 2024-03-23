@@ -18,6 +18,7 @@ use std::{
     sync::Arc,
 };
 use tokio::io::{AsyncBufRead, AsyncReadExt};
+use tokio_util::io::InspectReader;
 use tracing::{error, instrument, warn, Level};
 use tvix_build::buildservice::BuildService;
 use tvix_eval::{ErrorKind, EvalIO, FileType, StdIO};
@@ -305,7 +306,7 @@ impl TvixStoreIO {
         name: &str,
         path: &Path,
         root_node: Node,
-    ) -> io::Result<(PathInfo, StorePath)> {
+    ) -> io::Result<(PathInfo, NixHash, StorePath)> {
         // Ask the PathInfoService for the NAR size and sha256
         let (nar_size, nar_sha256) = self
             .path_info_service
@@ -329,7 +330,11 @@ impl TvixStoreIO {
         let path_info =
             tvix_store::import::derive_nar_ca_path_info(nar_size, nar_sha256, root_node);
 
-        Ok((path_info, output_path.to_owned()))
+        Ok((
+            path_info,
+            NixHash::Sha256(nar_sha256),
+            output_path.to_owned(),
+        ))
     }
 
     pub(crate) async fn register_node_in_path_info_service(
@@ -338,7 +343,7 @@ impl TvixStoreIO {
         path: &Path,
         root_node: Node,
     ) -> io::Result<StorePath> {
-        let (path_info, output_path) = self.node_to_path_info(name, path, root_node).await?;
+        let (path_info, _, output_path) = self.node_to_path_info(name, path, root_node).await?;
         let _path_info = self.path_info_service.as_ref().put(path_info).await?;
 
         Ok(output_path)
@@ -365,11 +370,7 @@ impl TvixStoreIO {
             .is_some())
     }
 
-    async fn download<'a>(
-        &self,
-        url: &str,
-        sha: &'a mut Sha256,
-    ) -> Result<impl AsyncBufRead + Unpin + 'a, ErrorKind> {
+    async fn download<'a>(&self, url: &str) -> Result<impl AsyncBufRead + Unpin + 'a, ErrorKind> {
         let resp = self
             .http_client
             .get(url)
@@ -377,15 +378,11 @@ impl TvixStoreIO {
             .await
             .map_err(FetcherError::from)?;
         Ok(tokio_util::io::StreamReader::new(
-            resp.bytes_stream()
-                .inspect_ok(|data| {
-                    sha.update(data);
-                })
-                .map_err(|e| {
-                    let e = e.without_url();
-                    warn!(%e, "failed to get response body");
-                    io::Error::new(io::ErrorKind::BrokenPipe, e.to_string())
-                }),
+            resp.bytes_stream().map_err(|e| {
+                let e = e.without_url();
+                warn!(%e, "failed to get response body");
+                io::Error::new(io::ErrorKind::BrokenPipe, e.to_string())
+            }),
         ))
     }
 
@@ -396,7 +393,8 @@ impl TvixStoreIO {
         hash: Option<&NixHash>,
     ) -> Result<StorePath, ErrorKind> {
         let mut sha = Sha256::new();
-        let mut data = self.download(url, &mut sha).await?;
+        let data = self.download(url).await?;
+        let mut data = InspectReader::new(data, |b| sha.update(b));
         let mut blob = self.blob_service.open_write().await;
         let size = tokio::io::copy(&mut data, blob.as_mut()).await?;
         drop(data);
@@ -461,10 +459,9 @@ impl TvixStoreIO {
         name: &str,
         hash: Option<&NixHash>,
     ) -> Result<StorePath, ErrorKind> {
-        let mut sha = Sha256::new();
-        let data = self.download(url, &mut sha).await?;
+        let data = self.download(url).await?;
         let data = DecompressedReader::new(data);
-        let mut archive = tokio_tar::Archive::new(data);
+        let archive = tokio_tar::Archive::new(data);
         let node = tvix_castore::import::ingest_archive(
             &self.blob_service,
             &self.directory_service,
@@ -473,7 +470,26 @@ impl TvixStoreIO {
         .await
         .map_err(|e| std::io::Error::new(io::ErrorKind::Other, e))?;
 
-        todo!()
+        let (path_info, got, output_path) =
+            self.node_to_path_info(name, Path::new(""), node).await?;
+
+        if let Some(wanted) = hash {
+            if *wanted != got {
+                return Err(FetcherError::HashMismatch {
+                    url: url.to_owned(),
+                    wanted: wanted.clone(),
+                    got,
+                }
+                .into());
+            }
+        }
+
+        self.path_info_service
+            .put(path_info)
+            .await
+            .map_err(|e| std::io::Error::new(io::ErrorKind::Other, e))?;
+
+        Ok(output_path)
     }
 }
 
