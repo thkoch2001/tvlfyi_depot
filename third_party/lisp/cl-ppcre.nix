@@ -24,4 +24,16 @@ in depot.nix.buildLisp.library {
     "scanner.lisp"
     "api.lisp"
   ];
+
+  passthru = {
+    unicode = depot.nix.buildLisp.library {
+      name = "cl-ppcre-unicode";
+      deps = with depot.third_party.lisp; [ cl-ppcre cl-unicode ];
+
+      srcs = map (f: src + ("/cl-ppcre-unicode/" + f)) [
+        "packages.lisp"
+        "resolver.lisp"
+      ];
+    };
+  };
 }
