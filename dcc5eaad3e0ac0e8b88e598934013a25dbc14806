@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f3b54a7d_da46cb1f",
+        "filename": "tvix/castore/src/import.rs",
+        "patchSetId": 4
+      },
+      "lineNbr": 537,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2024-03-23T16:35:01Z",
+      "side": 1,
+      "message": "Need to think about this a bit more, would like to remove all of these unwraps. I don\u0027t _think_ we\u0027d ever panic but maybe there\u0027s some edge cases I\u0027m not thinking of.",
+      "revId": "dcc5eaad3e0ac0e8b88e598934013a25dbc14806",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
