@@ -34,6 +34,24 @@
       "parentUuid": "97e82f36_bf4b3648",
       "revId": "e8dc8e8b161b13594719b9c8e10e0ea3476c60a8",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6a89c6ea_00a528a2",
+        "filename": "tvix/castore/src/tests/import.rs",
+        "patchSetId": 4
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-03-23T23:06:49Z",
+      "side": 1,
+      "message": "I ended up refactoring the chain below a bit.\n\nWhile we could be using some more rstest here to test with various permutations of `BlobService` and `DirectoryService`, I\u0027m not sure we need to.\n\nI\u0027d assume we sufficiently cover these store impls in the generic store tests, and as this is essentially only testing the import functionality, we\u0027re fine with any store (so just use a (bare after cl/11249 `MemoryBlobService` and `MemoryDirectoryService`) to test with?\n\nOpen to opinions.",
+      "parentUuid": "4a8a4920_9d0083e7",
+      "revId": "e8dc8e8b161b13594719b9c8e10e0ea3476c60a8",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
