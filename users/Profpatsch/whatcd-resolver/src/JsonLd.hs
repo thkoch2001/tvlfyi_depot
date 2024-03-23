@@ -20,6 +20,7 @@ import Network.HTTP.Client.Conduit qualified as Http
 import Network.HTTP.Simple qualified as Http
 import Network.HTTP.Types.URI qualified as Url
 import Network.URI (URI)
+import Optional
 import Redacted
 import Text.Blaze.Html (Html)
 import Prelude hiding (span)
