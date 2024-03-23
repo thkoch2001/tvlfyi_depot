@@ -54,6 +54,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "0d3fd7f8_02445292",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-03-23T21:52:31Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "af1ecd2e_60d9e870",
+      "revId": "32e1f732476325fd6e65ad25e6caeb522ce197a9",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "0fd21ed7_371fbcf3",
@@ -109,6 +127,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "7eca24cd_9cfff3aa",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-03-23T21:52:31Z",
+      "side": 1,
+      "message": "I replaced the \"graph of\" with \"DAG of\" in the paragraph above, so this is now OK?",
+      "parentUuid": "46bab620_7debbead",
+      "revId": "32e1f732476325fd6e65ad25e6caeb522ce197a9",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "15eaf8ac_b2c42ef3",
         "filename": "/COMMIT_MSG",
         "patchSetId": 4
@@ -156,6 +192,24 @@
       "side": 1,
       "message": "If your main object of interest is a \"connected DAG\", you cannot really talk about the disconnected subgraph of the connected DAG.\nOr you need to talk about the DAG and talk about their connected subgraphs if you want.\n\nEither way: https://en.wikipedia.org/wiki/Component_(graph_theory) is also the valid term here.",
       "parentUuid": "9ca6ebca_457f743f",
+      "revId": "32e1f732476325fd6e65ad25e6caeb522ce197a9",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3bbe1e2b_2e9fab05",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-03-23T21:52:31Z",
+      "side": 1,
+      "message": "Reworded this to\n\n\u003eWhile assembling that list, a check for graph connectivity is performed\n\u003e too, to ensure there\u0027s no separate components being sent (and only one\n\u003e root).\n\nLet me know if you\u0027re OK with this.",
+      "parentUuid": "609aeeda_5afb8531",
       "revId": "32e1f732476325fd6e65ad25e6caeb522ce197a9",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
@@ -230,6 +284,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "e449d3a0_a5f7ccd8",
+        "filename": "tvix/castore/src/directoryservice/validate_closure.rs",
+        "patchSetId": 4
+      },
+      "lineNbr": 109,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-03-23T21:52:31Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a863954c_9acbb7f6",
+      "revId": "32e1f732476325fd6e65ad25e6caeb522ce197a9",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "73d28c76_1a5abd67",
@@ -265,6 +337,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "680d9428_3877e08a",
+        "filename": "tvix/castore/src/directoryservice/validate_closure.rs",
+        "patchSetId": 4
+      },
+      "lineNbr": 115,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-03-23T21:52:31Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8591c388_c89097bc",
+      "revId": "32e1f732476325fd6e65ad25e6caeb522ce197a9",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "f5df57d4_cb58a048",
@@ -296,6 +386,24 @@
       "side": 1,
       "message": "Acknowledged",
       "parentUuid": "f5df57d4_cb58a048",
+      "revId": "32e1f732476325fd6e65ad25e6caeb522ce197a9",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "74818da3_63af666c",
+        "filename": "tvix/castore/src/directoryservice/validate_closure.rs",
+        "patchSetId": 4
+      },
+      "lineNbr": 128,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-03-23T21:52:31Z",
+      "side": 1,
+      "message": "Updated to\n\n```\n                // In case the digest is neither already visited nor already in dirs_to_visit,\n                // add it to the end of it.\n```\n\nwhich feels sounds a bit more natural in this context, and should also not be ambiguous.",
+      "parentUuid": "b8025e43_66e05605",
       "revId": "32e1f732476325fd6e65ad25e6caeb522ce197a9",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
@@ -349,6 +457,24 @@
       "side": 1,
       "message": "Nice.",
       "parentUuid": "8749313d_0732cf7c",
+      "revId": "32e1f732476325fd6e65ad25e6caeb522ce197a9",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bf8cdcdb_0e06ceac",
+        "filename": "tvix/castore/src/directoryservice/validate_closure.rs",
+        "patchSetId": 4
+      },
+      "lineNbr": 132,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-03-23T21:52:31Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "04d7a20c_c4100d4a",
       "revId": "32e1f732476325fd6e65ad25e6caeb522ce197a9",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
