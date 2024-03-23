@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5661f36d_a418b260",
+        "filename": "tvix/build/src/buildservice/oci.rs",
+        "patchSetId": 8
+      },
+      "lineNbr": 97,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2024-03-23T17:01:11Z",
+      "side": 1,
+      "message": "```suggestion\n        let _permit \u003d self.concurrent_builds.acquire().await.unwrap();\n```\n`_` doesn\u0027t actually bind, so the permit is dropped immediately. I\u0027ve been bitten by this before :(",
+      "revId": "9b553c1cf391d4f17a25fee78d3d027f3d39e6c6",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b6e20e4b_c4b63da6",
+        "filename": "tvix/build/src/buildservice/oci.rs",
+        "patchSetId": 8
+      },
+      "lineNbr": 154,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2024-03-23T17:01:11Z",
+      "side": 1,
+      "message": "`FuseDeamon` already implements unmount on drop",
+      "revId": "9b553c1cf391d4f17a25fee78d3d027f3d39e6c6",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
