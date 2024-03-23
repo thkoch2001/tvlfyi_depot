@@ -12150,6 +12150,10 @@ rec {
             features = [ "fs" "net" ];
           }
           {
+            name = "tokio-tar";
+            packageId = "tokio-tar";
+          }
+          {
             name = "tokio-util";
             packageId = "tokio-util";
             features = [ "io" "io-util" ];
