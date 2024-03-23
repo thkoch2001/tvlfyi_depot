@@ -12,7 +12,12 @@ let
       ./Main.hs
       ./src/WhatcdResolver.hs
       ./src/AppT.hs
+      ./src/JsonLd.hs
+      ./src/Optional.hs
       ./src/Html.hs
+      ./src/Http.hs
+      ./src/Transmission.hs
+      ./src/Redacted.hs
     ];
 
     libraryHaskellDepends = [
@@ -39,6 +44,7 @@ let
       pkgs.haskellPackages.unliftio
       pkgs.haskellPackages.wai-extra
       pkgs.haskellPackages.warp
+      pkgs.haskellPackages.punycode
     ];
 
     isExecutable = true;

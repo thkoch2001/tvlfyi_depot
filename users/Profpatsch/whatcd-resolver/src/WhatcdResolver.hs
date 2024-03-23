@@ -40,6 +40,7 @@ import Network.URI qualified as URI
 import Network.Wai qualified as Wai
 import Network.Wai.Handler.Warp qualified as Warp
 import Network.Wai.Parse qualified as Wai
+import OpenTelemetry.Attributes qualified as Otel
 import OpenTelemetry.Trace qualified as Otel hiding (getTracer, inSpan, inSpan')
 import OpenTelemetry.Trace.Monad qualified as Otel
 import Parse (Parse)
@@ -596,7 +597,22 @@ withTracer f = do
   setDefaultEnv "OTEL_SERVICE_NAME" "whatcd-resolver"
   bracket
     -- Install the SDK, pulling configuration from the environment
-    Otel.initializeGlobalTracerProvider
+    ( do
+        (processors, opts) <- Otel.getTracerProviderInitializationOptions
+        tp <-
+          Otel.createTracerProvider
+            processors
+            -- workaround the attribute length bug https://github.com/iand675/hs-opentelemetry/issues/113
+            ( opts
+                { Otel.tracerProviderOptionsAttributeLimits =
+                    opts.tracerProviderOptionsAttributeLimits
+                      { Otel.attributeCountLimit = Just 65_000
+                      }
+                }
+            )
+        Otel.setGlobalTracerProvider tp
+        pure tp
+    )
     -- Ensure that any spans that haven't been exported yet are flushed
     Otel.shutdownTracerProvider
     -- Get a tracer so you can create spans

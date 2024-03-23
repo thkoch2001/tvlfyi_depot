@@ -56,6 +56,7 @@ pkgs.mkShell {
       h.resource-pool
       h.xmonad-contrib
       h.hs-opentelemetry-sdk
+      h.punycode
     ]))
 
     pkgs.rustup

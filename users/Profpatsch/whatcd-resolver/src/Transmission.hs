@@ -18,15 +18,15 @@ import Database.PostgreSQL.Simple.Types (PGArray (PGArray))
 import FieldParser (FieldParser' (..))
 import FieldParser qualified as Field
 import Html qualified
+import Http qualified
 import Json qualified
 import Json.Enc (Enc)
 import Json.Enc qualified as Enc
 import Label
 import MyPrelude
-import Network.HTTP.Simple qualified as Http
 import Network.HTTP.Types
 import OpenTelemetry.Trace qualified as Otel hiding (getTracer, inSpan, inSpan')
-import OpenTelemetry.Trace.Monad qualified as Otel
+import Optional
 import Postgres.MonadPostgres
 import Pretty
 import Text.Blaze.Html (Html)
@@ -116,8 +116,8 @@ data TransmissionRequest = TransmissionRequest
   }
   deriving stock (Show)
 
-transmissionConnectionConfig :: T2 "host" Text "port" Text
-transmissionConnectionConfig = (T2 (label @"host" "localhost") (label @"port" "9091"))
+transmissionConnectionConfig :: T3 "host" Text "port" Int "usePlainHttp" Bool
+transmissionConnectionConfig = (T3 (label @"host" "localhost") (label @"port" 9091) (label @"usePlainHttp" True))
 
 transmissionRequestListAllTorrents :: (Monad m) => [Text] -> Json.ParseT e m out -> (TransmissionRequest, Json.ParseT e m [out])
 transmissionRequestListAllTorrents fields parseTorrent =
@@ -215,11 +215,11 @@ doTransmissionRequest' req = inSpan' "Transmission Request" $ \span -> do
 doTransmissionRequest ::
   ( MonadTransmission m,
     HasField "host" t1 Text,
-    HasField "port" t1 Text,
+    HasField "port" t1 Int,
+    HasField "usePlainHttp" t1 Bool,
     MonadThrow m,
     MonadLogger m,
-    Otel.MonadTracer m,
-    MonadUnliftIO m
+    MonadOtel m
   ) =>
   Otel.Span ->
   t1 ->
@@ -245,12 +245,16 @@ doTransmissionRequest span dat (req, parser) = do
             (\k -> [fmt|transmission.{k}|])
             (\(_, attr) -> attr)
     )
-  let httpReq =
-        [fmt|http://{dat.host}:{dat.port}/transmission/rpc|]
-          & Http.setRequestMethod "POST"
-          & Http.setRequestBodyLBS (Enc.encToBytesUtf8Lazy (body <&> second fst & Enc.object))
-          & (sessionId & maybe id (Http.setRequestHeader "X-Transmission-Session-Id" . (: [])))
-  resp <- Http.httpBS httpReq
+  resp <-
+    Http.doRequestJson
+      ( (Http.mkRequestOptions (T2 (label @"method" "POST") (label @"host" dat.host)))
+          { Http.path = mkOptional ["transmission", "rpc"],
+            Http.port = mkOptional dat.port,
+            Http.headers = mkOptional $ (sessionId & ifExists ("X-Transmission-Session-Id",)),
+            Http.usePlainHttp = mkOptional dat.usePlainHttp
+          }
+      )
+      (body <&> second fst & Enc.object)
   -- Implement the CSRF protection thingy
   case resp & Http.getResponseStatus & (.statusCode) of
     409 -> do
