@@ -37,6 +37,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "1d08d6a9_cea2cb4f",
+        "filename": "tvix/castore/src/directoryservice/mod.rs",
+        "patchSetId": 5
+      },
+      "lineNbr": 87,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-03-23T22:54:31Z",
+      "side": 1,
+      "message": "Done in cl/11248, cl/11249",
+      "parentUuid": "a233c29c_7fab81a8",
+      "revId": "b5a3e314c32a5a01f307159cfd32229787ab2774",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "3113895b_aa2ed8af",
         "filename": "tvix/castore/src/fs/fuse.rs",
         "patchSetId": 5
