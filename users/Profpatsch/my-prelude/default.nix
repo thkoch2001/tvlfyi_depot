@@ -11,6 +11,7 @@ pkgs.haskellPackages.mkDerivation {
     ./src/MyPrelude.hs
     ./src/Test.hs
     ./src/Parse.hs
+    ./src/Pretty.hs
     ./src/Seconds.hs
     ./src/Tool.hs
     ./src/ValidationParseT.hs
