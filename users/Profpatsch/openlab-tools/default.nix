@@ -21,7 +21,6 @@ let
       pkgs.haskellPackages.pa-json
       pkgs.haskellPackages.pa-error-tree
       pkgs.haskellPackages.pa-field-parser
-      pkgs.haskellPackages.pa-pretty
       pkgs.haskellPackages.pa-run-command
       pkgs.haskellPackages.aeson-better-errors
       pkgs.haskellPackages.blaze-html
