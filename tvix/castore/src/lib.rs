@@ -20,3 +20,6 @@ pub use hashing_reader::{B3HashingReader, HashingReader};
 
 #[cfg(test)]
 mod tests;
+
+#[cfg(test)]
+use rstest_reuse;
