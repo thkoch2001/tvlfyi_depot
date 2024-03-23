@@ -1,0 +1,174 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9ca37ca0_fea0982e",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2024-03-23T11:42:35Z",
+      "side": 1,
+      "message": "nice, I was thinking of revisiting cl/2472 :)",
+      "revId": "1316c7f22e7917602e3a3b19af83224b7558dd45",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "912b0dc4_a18c3485",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2024-03-23T11:42:35Z",
+      "side": 1,
+      "message": "Not sure if the ccl/ecl failures are solvable. Feel free to sprinkle `brokenOn` wherever, panettone only works with SBCL to begin with.",
+      "revId": "1316c7f22e7917602e3a3b19af83224b7558dd45",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cf357984_1c517f80",
+        "filename": "third_party/lisp/esrap.nix",
+        "patchSetId": 1
+      },
+      "lineNbr": 4,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2024-03-23T11:42:35Z",
+      "side": 1,
+      "message": "`pkgs.srcOnly pkgs.lispPackages.esrap`?\n\nIf we need the dev version maybe note it in a comment?",
+      "revId": "1316c7f22e7917602e3a3b19af83224b7558dd45",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d4fa9d5f_ff677cf7",
+        "filename": "third_party/lisp/esrap.nix",
+        "patchSetId": 1
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2024-03-23T11:42:35Z",
+      "side": 1,
+      "message": "esrap adds symbols to `*features*` in the asd file, do we need to replicate that somehow?",
+      "revId": "1316c7f22e7917602e3a3b19af83224b7558dd45",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b1307cab_fa92ca97",
+        "filename": "third_party/lisp/generic-comparability.nix",
+        "patchSetId": 1
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2024-03-23T11:42:35Z",
+      "side": 1,
+      "message": "Did you try adding the test suite `(generic-comparability-test:run-tests)`?",
+      "revId": "1316c7f22e7917602e3a3b19af83224b7558dd45",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "867baf63_28a93c5c",
+        "filename": "third_party/lisp/postmodern-passenger-pigeon.nix",
+        "patchSetId": 1
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2024-03-23T11:42:35Z",
+      "side": 1,
+      "message": "Has a test suite, but seems to depend on a database running, so probably not worth it.",
+      "revId": "1316c7f22e7917602e3a3b19af83224b7558dd45",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fb752bf0_078fcef2",
+        "filename": "third_party/lisp/pp-toml.nix",
+        "patchSetId": 1
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2024-03-23T11:42:35Z",
+      "side": 1,
+      "message": "Test suite `(pp-toml-tests:run-tests)`.",
+      "revId": "1316c7f22e7917602e3a3b19af83224b7558dd45",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c679b184_26b9fc65",
+        "filename": "third_party/lisp/quri.nix",
+        "patchSetId": 1
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2024-03-23T11:42:35Z",
+      "side": 1,
+      "message": "Is UIOP also neede for non-sbcl? Then `default \u003d bundled \"asdf\"`.",
+      "revId": "1316c7f22e7917602e3a3b19af83224b7558dd45",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "52f87cf0_844f80b7",
+        "filename": "third_party/lisp/quri.nix",
+        "patchSetId": 1
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2024-03-23T11:42:35Z",
+      "side": 1,
+      "message": "Has a test suite as well.",
+      "revId": "1316c7f22e7917602e3a3b19af83224b7558dd45",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9ae5b603_c4fbb955",
+        "filename": "third_party/lisp/trivial-with-current-source-form.nix",
+        "patchSetId": 1
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2024-03-23T11:42:35Z",
+      "side": 1,
+      "message": "Better:\n\n    {\n      sbcl \u003d getSrc \"sbcl.lisp\";\n      clasp \u003d getSrc \"clasp.lisp\";\n      default \u003d getSrc \"unsupported.lisp\";\n    }",
+      "revId": "1316c7f22e7917602e3a3b19af83224b7558dd45",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
