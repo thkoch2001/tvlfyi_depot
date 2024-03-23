@@ -38,6 +38,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "af1ecd2e_60d9e870",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1000073
+      },
+      "writtenOn": "2024-03-23T14:36:35Z",
+      "side": 1,
+      "message": "Well, writing a quine could be possible, we didn\u0027t rule out this possibility, di we? But that\u0027s beyond the topic. If we don\u0027t want cyclic stuff, let\u0027s write \"connected DAG\".\n\nNow, it becomes clear for everyone.",
+      "parentUuid": "70638533_0f52d3f4",
+      "revId": "32e1f732476325fd6e65ad25e6caeb522ce197a9",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "0fd21ed7_371fbcf3",
         "filename": "/COMMIT_MSG",
         "patchSetId": 4
@@ -73,6 +91,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "46bab620_7debbead",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1000073
+      },
+      "writtenOn": "2024-03-23T14:36:35Z",
+      "side": 1,
+      "message": "I gave an example of a graph of connected directories where leaves don\u0027t make sense.\n\nIf we say leaves in a (connected) DAG, that\u0027s completely fine, it makes sense with the definition you provided.",
+      "parentUuid": "ab088ee5_2a6eaa9d",
+      "revId": "32e1f732476325fd6e65ad25e6caeb522ce197a9",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "15eaf8ac_b2c42ef3",
         "filename": "/COMMIT_MSG",
         "patchSetId": 4
@@ -102,6 +138,24 @@
       "side": 1,
       "message": "I think the proper term would be disconnected subgraph?",
       "parentUuid": "15eaf8ac_b2c42ef3",
+      "revId": "32e1f732476325fd6e65ad25e6caeb522ce197a9",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "609aeeda_5afb8531",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 1000073
+      },
+      "writtenOn": "2024-03-23T14:36:35Z",
+      "side": 1,
+      "message": "If your main object of interest is a \"connected DAG\", you cannot really talk about the disconnected subgraph of the connected DAG.\nOr you need to talk about the DAG and talk about their connected subgraphs if you want.\n\nEither way: https://en.wikipedia.org/wiki/Component_(graph_theory) is also the valid term here.",
+      "parentUuid": "9ca6ebca_457f743f",
       "revId": "32e1f732476325fd6e65ad25e6caeb522ce197a9",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
@@ -154,6 +208,24 @@
       "side": 1,
       "message": "The problem is that this is then also returned, I\u0027m also not happy with `dir_to_visit`. We can just call it `nodes`, and update the comment a bit to say what it represents first?",
       "parentUuid": "8271f977_a52e7000",
+      "revId": "32e1f732476325fd6e65ad25e6caeb522ce197a9",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a863954c_9acbb7f6",
+        "filename": "tvix/castore/src/directoryservice/validate_closure.rs",
+        "patchSetId": 4
+      },
+      "lineNbr": 109,
+      "author": {
+        "id": 1000073
+      },
+      "writtenOn": "2024-03-23T14:36:35Z",
+      "side": 1,
+      "message": "You can rebind if you want to rename at the end so that the return value intent is clearer, but during the algorithm, it\u0027s clearly a DFS and thus this is a \"to visit directories\" list.\n\nIf you call it nodes, you make it again very generic and you do not say this is a DFS over the nodes of directories, if this is made clearer in a comment, naming it nodes is OK to me.",
+      "parentUuid": "d79de7d1_2b316ebf",
       "revId": "32e1f732476325fd6e65ad25e6caeb522ce197a9",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
@@ -259,6 +331,24 @@
       "side": 1,
       "message": "I think we should initialize `worklist` with a capaciy set to the number of elements in `directories_and_sizes`, yes. Good catch.",
       "parentUuid": "f5d3b9aa_49675478",
+      "revId": "32e1f732476325fd6e65ad25e6caeb522ce197a9",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "04d7a20c_c4100d4a",
+        "filename": "tvix/castore/src/directoryservice/validate_closure.rs",
+        "patchSetId": 4
+      },
+      "lineNbr": 132,
+      "author": {
+        "id": 1000073
+      },
+      "writtenOn": "2024-03-23T14:36:35Z",
+      "side": 1,
+      "message": "Nice.",
+      "parentUuid": "8749313d_0732cf7c",
       "revId": "32e1f732476325fd6e65ad25e6caeb522ce197a9",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
