@@ -16,6 +16,24 @@
       "message": "Test failure is concerning, seems to indicate issue in the ClosureValidator design for singletons?",
       "revId": "b48460316b17cb59840188fd7a6fe8e2cff5a5cd",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "55f2d12a_ccd49058",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-03-23T06:57:17Z",
+      "side": 1,
+      "message": "No, the failing test was not calling close properly, and later on still relied on the data being uploaded. I have a fix, will push as soon as I am done fixing the rest of the chain.",
+      "parentUuid": "ab6cacae_680b6198",
+      "revId": "b48460316b17cb59840188fd7a6fe8e2cff5a5cd",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
