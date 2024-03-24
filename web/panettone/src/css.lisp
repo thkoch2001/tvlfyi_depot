@@ -49,7 +49,24 @@
        :color "var(--primary)")))
 
     (.comment-count
-     :color "var(--gray)")))
+     :color "var(--gray)")
+
+    (.issue-links
+     :display "flex"
+     :flex-direction "row"
+     :align-items "center"
+     :justify-content "space-between"
+     :flex-wrap "wrap")
+
+    (.issue-search
+     ((:and input (:= type "search"))
+      :padding "0.5rem"
+      :background-image "url('static/search.png')"
+      :background-position "10px 10px"
+      :background-repeat "no-repeat"
+      :background-size "1rem"
+      :padding-left "2rem"
+      ))))
 
 (defparameter issue-history-styles
   `((.issue-history
@@ -220,4 +237,15 @@
      :margin "0 auto")
 
     (.created-by-at
-     :color "var(--gray)")))
+     :color "var(--gray)")
+
+    ;; screen-reader-only content
+    (.sr-only
+     :border 0
+     :clip "rect(0 0 0 0)"
+     :height "1px"
+     :margin "-1px"
+     :overflow "hidden"
+     :padding 0
+     :position "absolute"
+     :width "1px")))
