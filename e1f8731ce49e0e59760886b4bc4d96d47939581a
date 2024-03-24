@@ -1,0 +1,123 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c6d04406_538950a2",
+        "filename": "tvix/glue/src/builtins/import.rs",
+        "patchSetId": 56
+      },
+      "lineNbr": 225,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-03-24T20:53:13Z",
+      "side": 1,
+      "message": "Please move the whole \"getting the sha256 digest of a store path that\u0027s a plain blob and return the digest\" into a pub(crate) async helper function in `TvixStoreIO`, that way we don\u0027t need to expose `blob_service` and have `builtins.path` code itself shorter.",
+      "revId": "e1f8731ce49e0e59760886b4bc4d96d47939581a",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "158e5fc4_b4e55002",
+        "filename": "tvix/glue/src/builtins/import.rs",
+        "patchSetId": 56
+      },
+      "lineNbr": 228,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-03-24T20:53:13Z",
+      "side": 1,
+      "message": "```\nlet blob_reader \u003d state.blob_service.open_read(\u0026digest).await?.ok_or_else(|| our_error)?;\n```",
+      "revId": "e1f8731ce49e0e59760886b4bc4d96d47939581a",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "91e625b4_9c20b623",
+        "filename": "tvix/glue/src/builtins/import.rs",
+        "patchSetId": 56
+      },
+      "lineNbr": 233,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-03-24T20:53:13Z",
+      "side": 1,
+      "message": "Can you just directly call io::copy from the blob_reader into hasher, and rely on blob_reader to be reasonably buffered?",
+      "revId": "e1f8731ce49e0e59760886b4bc4d96d47939581a",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b9ac4dfd_49faba39",
+        "filename": "tvix/glue/src/builtins/import.rs",
+        "patchSetId": 56
+      },
+      "lineNbr": 240,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-03-24T20:53:13Z",
+      "side": 1,
+      "message": "We don\u0027t want to panic here, but emit an error, see 2 comments above for a proposed way to deal with that.",
+      "revId": "e1f8731ce49e0e59760886b4bc4d96d47939581a",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "512b3d13_1c1d3b4e",
+        "filename": "tvix/glue/src/tvix_store_io.rs",
+        "patchSetId": 56
+      },
+      "lineNbr": 54,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-03-24T20:53:13Z",
+      "side": 1,
+      "message": "This should have a comment describing why it\u0027s `pub(crate)` - we currently need to read blobs in manually to determine the hash. (and link to https://b.tvl.fyi/issues/379).",
+      "revId": "e1f8731ce49e0e59760886b4bc4d96d47939581a",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "90924e47_80d5e162",
+        "filename": "tvix/glue/src/tvix_store_io.rs",
+        "patchSetId": 56
+      },
+      "lineNbr": 334,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-03-24T20:53:13Z",
+      "side": 1,
+      "message": "Why do we introduce these sync functions? `glue/src/builtins/fetchers.rs` does use `tokio_handle` to `block_on` directly at the call site.\n\nThis is probably the nicer pattern than cluttering up the function lists in TvixStoreIO with useless sync trampolines.\n\nLet\u0027s use this right the callsite, and refactor the other users of the sync functions to the same approach while we\u0027re at it.",
+      "revId": "e1f8731ce49e0e59760886b4bc4d96d47939581a",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a2a3ec36_ee537307",
+        "filename": "tvix/glue/src/tvix_store_io.rs",
+        "patchSetId": 56
+      },
+      "lineNbr": 368,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-03-24T20:53:13Z",
+      "side": 1,
+      "message": "Same as the comment above, use `tokio_handle` directly.",
+      "revId": "e1f8731ce49e0e59760886b4bc4d96d47939581a",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
