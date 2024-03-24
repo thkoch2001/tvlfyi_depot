@@ -143,6 +143,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "1609c002_78d49c89",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1000073
+      },
+      "writtenOn": "2024-03-24T17:39:20Z",
+      "side": 1,
+      "message": "Yep, all good.",
+      "parentUuid": "7eca24cd_9cfff3aa",
+      "revId": "32e1f732476325fd6e65ad25e6caeb522ce197a9",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "15eaf8ac_b2c42ef3",
@@ -210,6 +228,24 @@
       "side": 1,
       "message": "Reworded this to\n\n\u003eWhile assembling that list, a check for graph connectivity is performed\n\u003e too, to ensure there\u0027s no separate components being sent (and only one\n\u003e root).\n\nLet me know if you\u0027re OK with this.",
       "parentUuid": "609aeeda_5afb8531",
+      "revId": "32e1f732476325fd6e65ad25e6caeb522ce197a9",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d9092f6b_3f5c94fb",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 1000073
+      },
+      "writtenOn": "2024-03-24T17:39:20Z",
+      "side": 1,
+      "message": "Yep, all good.",
+      "parentUuid": "3bbe1e2b_2e9fab05",
       "revId": "32e1f732476325fd6e65ad25e6caeb522ce197a9",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
@@ -404,6 +440,24 @@
       "side": 1,
       "message": "Updated to\n\n```\n                // In case the digest is neither already visited nor already in dirs_to_visit,\n                // add it to the end of it.\n```\n\nwhich feels sounds a bit more natural in this context, and should also not be ambiguous.",
       "parentUuid": "b8025e43_66e05605",
+      "revId": "32e1f732476325fd6e65ad25e6caeb522ce197a9",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "763d0d66_860e2127",
+        "filename": "tvix/castore/src/directoryservice/validate_closure.rs",
+        "patchSetId": 4
+      },
+      "lineNbr": 128,
+      "author": {
+        "id": 1000073
+      },
+      "writtenOn": "2024-03-24T17:39:20Z",
+      "side": 1,
+      "message": "All good to me.",
+      "parentUuid": "74818da3_63af666c",
       "revId": "32e1f732476325fd6e65ad25e6caeb522ce197a9",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
