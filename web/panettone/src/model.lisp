@@ -207,7 +207,7 @@ its new value will be formatted using ~A into NEW-VALUE"))
 
 (defclass migration ()
   ((version
-    :col-type integer
+    :col-type bigint
     :primary-key t
     :initarg :version
     :accessor version)
@@ -235,14 +235,8 @@ its new value will be formatted using ~A into NEW-VALUE"))
   (unless (table-exists-p (dao-table-name 'migration))
     (create-table 'migration)))
 
-(defvar *migrations-dir*
-  ;; Let the nix build override the migrations dir for us
-  (or (when-let ((package (find-package :build)))
-        (let ((sym (find-symbol "*MIGRATIONS-DIR*" package)))
-          (when (boundp sym)
-            (symbol-value sym))))
-      "migrations/")
-  "The directory where migrations are stored")
+(define-build-time-var *migrations-dir* "migrations/"
+    "The directory where migrations are stored")
 
 (defun load-migration-docstring (migration-path)
   "If the first form in the file pointed to by `migration-pathname` is
@@ -290,9 +284,12 @@ its new value will be formatted using ~A into NEW-VALUE"))
     (insert-dao migration)))
 
 (defun list-migration-files ()
-  (remove-if-not
-   (lambda (pn) (string= "lisp" (pathname-type pn)))
-   (uiop:directory-files *migrations-dir*)))
+  (let ((dir (if (char-equal (uiop:last-char *migrations-dir*) #\/)
+                 *migrations-dir*
+                 (concatenate 'string *migrations-dir* "/"))))
+    (remove-if-not
+     (lambda (pn) (string= "lisp" (pathname-type pn)))
+     (uiop:directory-files dir))))
 
 (defun load-migrations ()
   (mapcar #'load-migration (list-migration-files)))
