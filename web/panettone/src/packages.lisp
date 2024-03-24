@@ -36,16 +36,16 @@
   (:import-from :alexandria :if-let :when-let :define-constant)
   (:export
    :prepare-db-connections
-   :ddl/init
+   :migrate
    :*pg-spec*
 
    :user-settings
    :user-dn :enable-email-notifications-p :settings-for-user
    :update-user-settings :enable-email-notifications
 
-   :issue :issue-comment :issue-event
+   :issue :issue-comment :issue-event :migration
    :id :subject :body :author-dn :issue-id :status :created-at :acting-user-dn
-   :field :previous-value :new-value
+   :field :previous-value :new-value :+issue-statuses+
 
    :get-issue :issue-exists-p :list-issues :create-issue :set-issue-status
    :update-issue :delete-issue :issue-not-found :not-found-id
