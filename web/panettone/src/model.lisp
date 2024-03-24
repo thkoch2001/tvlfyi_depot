@@ -1,6 +1,8 @@
 (in-package :panettone.model)
 (declaim (optimize (safety 3)))
 
+(setq pomo:*ignore-unknown-columns* t)
+
 (defvar *pg-spec* nil
   "Connection spec for use with the with-connection macro. Needs to be
 initialised at launch time.")
@@ -226,14 +228,8 @@ its new value will be formatted using ~A into NEW-VALUE"))
   (unless (table-exists-p (dao-table-name 'migration))
     (create-table 'migration)))
 
-(defvar *migrations-dir*
-  ;; Let the nix build override the migrations dir for us
-  (or (when-let ((package (find-package :build)))
-        (let ((sym (find-symbol "*MIGRATIONS-DIR*" package)))
-          (when (boundp sym)
-            (symbol-value sym))))
-      "migrations/")
-  "The directory where migrations are stored")
+(define-build-time-var *migrations-dir* "migrations/"
+    "The directory where migrations are stored")
 
 (defun load-migration-docstring (migration-path)
   "If the first form in the file pointed to by `migration-pathname` is
@@ -281,12 +277,9 @@ its new value will be formatted using ~A into NEW-VALUE"))
     (insert-dao migration)))
 
 (defun list-migration-files ()
-  (let ((dir (if (char-equal (uiop:last-char *migrations-dir*) #\/)
-                 *migrations-dir*
-                 (concatenate 'string *migrations-dir* "/"))))
-    (remove-if-not
-     (lambda (pn) (string= "lisp" (pathname-type pn)))
-     (uiop:directory-files dir))))
+  (remove-if-not
+   (lambda (pn) (string= "lisp" (pathname-type pn)))
+   (uiop:directory-files (util:->dir *migrations-dir*))))
 
 (defun load-migrations ()
   (mapcar #'load-migration (list-migration-files)))
@@ -392,24 +385,31 @@ type `ISSUE-NOT-FOUND'."
                       :where (:= 'id id))))
    :single))
 
-(defun list-issues (&key status (with '(:num-comments)))
+(defun list-issues (&key status search (with '(:num-comments)))
   "Return a list of all issues with the given STATUS (or all if nil), ordered by
   ID descending. If WITH contains `:NUM-COMMENTS' (the default) each issue will
   have the `num-comments' slot filled with the number of comments on that issue
   (to avoid N+1 queries)."
-  (let* ((condition (unless (null status)
-                      `(:where (:= status $1))))
+  (let* ((conditions
+           (and-where*
+            (unless (null status)
+              `(:= status $1))
+            (when (str:non-blank-string-p search)
+              `(:@@ tsv (:websearch-to-tsquery ,search)))))
          (select (if (find :num-comments with)
                      `(:select issues.* (:as (:count issue-comments.id)
                                              num-comments)
                        :from issues
                        :left-join issue-comments
                        :on (:= issues.id issue-comments.issue-id)
-                       ,@condition
+                       :where ,conditions
                        :group-by issues.id)
-                     `(:select * :from issues ,@condition)))
+                     `(:select * :from issues :where ,conditions)))
+         (order (if (str:non-blank-string-p search)
+                    `(:desc (:ts-rank-cd tsv (:websearch-to-tsquery ,search)))
+                    `(:desc id)))
          (query (sql-compile
-                 `(:order-by ,select (:desc id)))))
+                 `(:order-by ,select ,order))))
     (with-column-writers ('num_comments 'num-comments)
       (query-dao 'issue query status))))
 
@@ -570,8 +570,8 @@ explicitly subscribing to / unsubscribing from individual issues."
 
  ;; Creating new migrations
  (setq *migrations-dir* (merge-pathnames "migrations/"))
- (generate-migration "init-schema"
-                     :documentation "Initialize the database schema")
+ (generate-migration "add-issue-tsv"
+                     :documentation "Add tsvector for full-text search of issues")
 
  ;; Running migrations
  (with-connection *pg-spec*

@@ -193,7 +193,21 @@
                            (who:esc
                             (format nil "~A comment~:p" num-comments))))))))))))))
 
-(defun render/index (&key issues)
+(defun render/issue-search (&key search)
+  (who:with-html-output (*standard-output*)
+    (:form
+     :method "get"
+     :class "issue-search"
+     (:input :type "search"
+             :name "search"
+             :title "Issue search query"
+             :value search)
+     (:input
+      :type "submit"
+      :value "Search Issues"
+      :class "sr-only"))))
+
+(defun render/index (&key issues search)
   (render ()
     (:header
      (:h1 "Issues")
@@ -205,17 +219,19 @@
     (:main
      (:div
       :class "issue-links"
-      (:a :href "/issues/closed" "View closed issues"))
+      (:a :href "/issues/closed" "View closed issues")
+      (render/issue-search :search search))
      (render/issue-list :issues issues))))
 
-(defun render/closed-issues (&key issues)
+(defun render/closed-issues (&key issues search)
   (render ()
     (:header
      (:h1 "Closed issues"))
     (:main
      (:div
       :class "issue-links"
-      (:a :href "/" "View open isues"))
+      (:a :href "/" "View open isues")
+      (render/issue-search :search search))
      (render/issue-list :issues issues))))
 
 (defun render/issue-form (&optional issue message)
@@ -442,9 +458,11 @@ given subject an body (in a thread, to avoid blocking)"
   (hunchentoot:delete-session-value 'user)
   (hunchentoot:redirect "/"))
 
-(defroute index ("/" :decorators (@auth-optional @db)) ()
-  (let ((issues (model:list-issues :status :open)))
-    (render/index :issues issues)))
+(defroute index ("/" :decorators (@auth-optional @db)) (&get search)
+  (let ((issues (model:list-issues :status :open
+                                   :search search)))
+    (render/index :issues issues
+                  :search search)))
 
 (defroute settings ("/settings" :method :get :decorators (@auth @db)) ()
   (render/settings))
@@ -458,9 +476,12 @@ given subject an body (in a thread, to avoid blocking)"
     (render/settings)))
 
 (defroute handle-closed-issues
-    ("/issues/closed" :decorators (@auth-optional @db)) ()
-  (let ((issues (model:list-issues :status :closed)))
-    (render/closed-issues :issues issues)))
+    ("/issues/closed" :decorators (@auth-optional @db))
+    (&get search)
+  (let ((issues (model:list-issues :status :closed
+                                   :search search)))
+    (render/closed-issues :issues issues
+                          :search search)))
 
 (defroute new-issue ("/issues/new" :decorators (@auth)) ()
   (render/issue-form))
@@ -608,6 +629,9 @@ given subject an body (in a thread, to avoid blocking)"
   (pomo:with-connection *pg-spec*
     (model:migrate)))
 
+(define-build-time-var *static-dir* "static/"
+    "Directory to serve static files from")
+
 (defun start-panettone (&key port session-secret)
   (authn:initialise-oauth2)
   (model:prepare-db-connections)
@@ -619,7 +643,14 @@ given subject an body (in a thread, to avoid blocking)"
   (setq hunchentoot:*session-max-time* (* 60 60 24 90))
 
   (setq *acceptor*
-        (make-instance 'easy-routes:routes-acceptor :port port))
+        (make-instance 'easy-routes:easy-routes-acceptor :port port))
+
+  (push
+   (hunchentoot:create-folder-dispatcher-and-handler
+    "/static/"
+    (util:->dir *static-dir*))
+   hunchentoot:*dispatch-table*)
+
   (hunchentoot:start *acceptor*))
 
 (defun main ()

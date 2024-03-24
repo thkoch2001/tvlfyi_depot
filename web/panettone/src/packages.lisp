@@ -1,7 +1,10 @@
 (defpackage panettone.util
+  (:nicknames :util)
   (:use :cl :klatre)
   (:import-from :alexandria :when-let)
-  (:export :integer-env :add-missing-base64-padding))
+  (:export
+   :integer-env :add-missing-base64-padding :and-where :and-where*
+   :define-build-time-var :->dir))
 
 (defpackage panettone.css
   (:use :cl :lass)
