@@ -606,7 +606,7 @@ given subject an body (in a thread, to avoid blocking)"
 (defun migrate-db ()
   "Migrate the database to the latest version of the schema"
   (pomo:with-connection *pg-spec*
-    (model:ddl/init)))
+    (model:migrate)))
 
 (defun start-panettone (&key port session-secret)
   (authn:initialise-oauth2)
