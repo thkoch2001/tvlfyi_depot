@@ -30,10 +30,7 @@ rec {
 
   yerenSystem = (depot.ops.nixos.nixosFor yeren).system;
 
-  # TODO(grfn): reenable after
-  # https://github.com/NixOS/nixpkgs/pull/234883 has propagated
-  # through to our channel
-  # iso = import ./iso.nix args;
+  iso = import ./iso.nix args;
 
   meta.ci.targets = [
     "mugwumpSystem"
