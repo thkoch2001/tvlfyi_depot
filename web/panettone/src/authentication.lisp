@@ -42,23 +42,31 @@ the user, however email addresses are temporarily not available."
   (or (uiop:getenv "OAUTH2_REDIRECT_URI")
       "https://b.tvl.fyi/auth"))
 
+(comment
+ (setq *oauth2-redirect-uri* "http://localhost:6161/auth")
+ )
+
 (defun initialise-oauth2 ()
   "Initialise all settings needed for OAuth2"
 
   (setq *oauth2-auth-endpoint*
-        (or (uiop:getenv "OAUTH2_AUTH_ENDPOINT")
+        (or *oauth2-auth-endpoint*
+            (uiop:getenv "OAUTH2_AUTH_ENDPOINT")
             "https://auth.tvl.fyi/auth/realms/TVL/protocol/openid-connect/auth"))
 
   (setq *oauth2-token-endpoint*
-        (or (uiop:getenv "OAUTH2_TOKEN_ENDPOINT")
+        (or *oauth2-token-endpoint*
+            (uiop:getenv "OAUTH2_TOKEN_ENDPOINT")
             "https://auth.tvl.fyi/auth/realms/TVL/protocol/openid-connect/token"))
 
   (setq *oauth2-client-id*
-        (or (uiop:getenv "OAUTH2_CLIENT_ID")
+        (or *oauth2-client-id*
+            (uiop:getenv "OAUTH2_CLIENT_ID")
             "panettone"))
 
   (setq *oauth2-client-secret*
-        (or (uiop:getenv "OAUTH2_CLIENT_SECRET")
+        (or *oauth2-client-secret*
+            (uiop:getenv "OAUTH2_CLIENT_SECRET")
             (error "OAUTH2_CLIENT_SECRET must be set!"))))
 
 (defun auth-url ()
