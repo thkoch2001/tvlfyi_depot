@@ -20,6 +20,19 @@ initialised at launch time.")
   "Initialises the connection spec used for all Postgres connections."
   (setq *pg-spec* (make-pg-spec)))
 
+(defun connect-to-db ()
+  "Connect using *PG-SPEC* at the top-level, for use during development"
+  (apply #'connect-toplevel
+         (loop for v in *pg-spec*
+               until (eq v :pooled-p)
+               collect v)))
+
+(defun pg-spec->url (&optional (spec *pg-spec*))
+  (destructuring-bind (db user password host &key port &allow-other-keys) spec
+    (format nil
+            "postgres://~A:~A@~A:~A/~A"
+            user password host port db)))
+
 ;;;
 ;;; Schema
 ;;;
@@ -192,23 +205,175 @@ its new value will be formatted using ~A into NEW-VALUE"))
   (!dao-def)
   (!foreign 'issues 'issue-id 'id :on-delete :cascade :on-update :cascade))
 
-(define-constant +all-tables+
-    '(issue
-      issue-comment
-      issue-event
-      user-settings)
-  :test #'equal)
+(defclass migration ()
+  ((version
+    :col-type bigint
+    :primary-key t
+    :initarg :version
+    :accessor version)
+   (name :col-type string :initarg :name :accessor name)
+   (docstring :col-type string :initarg :docstring :accessor docstring)
+   (path :col-type string
+         :type pathname
+         :initarg :path
+         :accessor path
+         :col-export namestring
+         :col-import parse-namestring)
+   (package :type keyword :initarg :package :accessor migration-package))
+  (:metaclass dao-class)
+  (:keys version)
+  (:table-name migrations)
+  (:documentation "Migration scripts that have been run on the database"))
+(deftable migration (!dao-def))
 
-(defun ddl/create-tables ()
-  "Issue DDL to create all tables, if they don't already exist."
-  (dolist (table +all-tables+)
-    (unless (table-exists-p (dao-table-name table))
-      (create-table table))))
+;;;
+;;; Migrations
+;;;
 
-(defun ddl/init ()
-  "Idempotently initialize the full database schema for Panettone"
-  (ddl/create-issue-status)
-  (ddl/create-tables))
+(defun ensure-migrations-table ()
+  "Ensure the migrations table exists"
+  (unless (table-exists-p (dao-table-name 'migration))
+    (create-table 'migration)))
+
+(defvar *migrations-dir*
+  ;; Let the nix build override the migrations dir for us
+  (or (when-let ((package (find-package :build)))
+        (let ((sym (find-symbol "*MIGRATIONS-DIR*" package)))
+          (when (boundp sym)
+            (symbol-value sym))))
+      "migrations/")
+  "The directory where migrations are stored")
+
+(defun load-migration-docstring (migration-path)
+  "If the first form in the file pointed to by `migration-pathname` is
+  a string, return it, otherwise return NIL."
+
+  (handler-case
+      (with-open-file (s migration-path)
+        (when-let ((form (read s)))
+          (when (stringp form) form)))
+    (t () nil)))
+
+(defun load-migration (path)
+  (let* ((parts (str:split #\- (pathname-name path) :limit 2))
+         (version (parse-integer (car parts)))
+         (name (cadr parts))
+         (docstring (load-migration-docstring path))
+         (package (intern (format nil "MIGRATION-~A" version)
+                          :keyword))
+         (migration (make-instance 'migration
+                                   :version version
+                                   :name name
+                                   :docstring docstring
+                                   :path path
+                                   :package package)))
+    (uiop/package:ensure-package package
+                                 :use '(#:common-lisp
+                                        #:postmodern
+                                        #:panettone.model))
+    (let ((*package* (find-package package)))
+      (load path))
+
+    migration))
+
+(defun run-migration (migration)
+  (declare (type migration migration))
+  (with-transaction ()
+    (format t "Running migration ~A (version ~A)"
+            (name migration)
+            (version migration))
+    (query
+     (sql-compile
+      `(:delete-from migrations
+        :where (= version ,(version migration)))))
+    (uiop:symbol-call (migration-package migration) :up)
+    (insert-dao migration)))
+
+(defun list-migration-files ()
+  (let ((dir (if (char-equal (uiop:last-char *migrations-dir*) #\/)
+                 *migrations-dir*
+                 (concatenate 'string *migrations-dir* "/"))))
+    (remove-if-not
+     (lambda (pn) (string= "lisp" (pathname-type pn)))
+     (uiop:directory-files dir))))
+
+(defun load-migrations ()
+  (mapcar #'load-migration (list-migration-files)))
+
+(defun generate-migration (name &key documentation)
+  "Generate a new database migration with the given NAME, optionally
+prepopulated with the given DOCUMENTATION.
+
+Returns the file that the migration is located at, as a `pathname'. Write Lisp
+code in this migration file to define a function called `up', which will be run
+in the context of a database transaction and should perform the migration."
+  (let* ((version (get-universal-time))
+         (filename (format nil "~A-~A.lisp"
+                           version
+                           name))
+         (pathname
+           (merge-pathnames filename *migrations-dir*)))
+    (with-open-file (stream pathname
+                            :direction :output
+                            :if-does-not-exist :create)
+      (when documentation
+        (format stream "~S~%~%" documentation))
+
+      (format stream "(defun up ()~%)"))
+    pathname))
+
+(defun migrations-already-run ()
+  "Query the database for a list of migrations that have already been run"
+  (query-dao 'migration (sql-compile '(:select * :from migrations))))
+
+(define-condition migration-name-mismatch ()
+  ((version :type integer :initarg :version)
+   (name-in-database :type string :initarg :name-in-database)
+   (name-in-code :type string :initarg :name-in-code))
+  (:report
+   (lambda (cond stream)
+     (format stream "Migration mismatch: Migration version ~A has name ~S in the database, but we have name ~S"
+             (slot-value cond 'version)
+             (slot-value cond 'name-in-database)
+             (slot-value cond 'name-in-code)))))
+
+(defun migrate ()
+  "Migrate the database, running all migrations that have not yet been run"
+  (ensure-migrations-table)
+  (let* ((all-migrations (load-migrations))
+         (already-run (migrations-already-run))
+         (num-migrations-run 0))
+    (iter (for migration in all-migrations)
+      (if-let ((existing (find-if (lambda (existing)
+                                    (= (version existing)
+                                       (version migration)))
+                                  already-run)))
+        (progn
+          (unless (string= (name migration)
+                           (name existing))
+            (restart-case
+                (error 'migration-name-mismatch
+                       :version (version existing)
+                       :name-in-database (name existing)
+                       :name-in-code (name migration))
+              (skip ()
+                :report "Skip this migration"
+                (next-iteration))
+              (run-and-overwrite ()
+                :report "Run this migration anyway, overwriting the previous migration"
+                (run-migration migration))
+              (retry ()
+                :report "Re-run this migration"
+                (run-migration migration))))
+          (next-iteration))
+        ;; otherwise, run the migration
+        (run-migration migration))
+      (incf num-migrations-run))
+    (format nil "Ran ~A migration~:P" num-migrations-run)))
+
+(comment
+ (migrate)
+ )
 
 ;;;
 ;;; Querying
@@ -253,11 +418,11 @@ type `ISSUE-NOT-FOUND'."
          (select (if (find :num-comments with)
                      `(:select issues.* (:as (:count issue-comments.id)
                                              num-comments)
-                               :from issues
-                               :left-join issue-comments
-                               :on (:= issues.id issue-comments.issue-id)
-                               ,@condition
-                               :group-by issues.id)
+                       :from issues
+                       :left-join issue-comments
+                       :on (:= issues.id issue-comments.issue-id)
+                       ,@condition
+                       :group-by issues.id)
                      `(:select * :from issues ,@condition)))
          (query (sql-compile
                  `(:order-by ,select (:desc id)))))
@@ -409,12 +574,22 @@ explicitly subscribing to / unsubscribing from individual issues."
 
 
 (comment
- (ddl/init)
+
  (make-instance 'issue :subject "test")
- (create-issue :subject "test"
-               :author-dn "cn=grfn,ou=users,dc=tvl,dc=fyi")
+
+ (with-connection *pg-spec*
+   (create-issue :subject "test"
+                 :author-dn "cn=aspen,ou=users,dc=tvl,dc=fyi"))
 
  (issue-commenter-dns 1)
  (issue-subscribers 1)
 
+ ;; Creating new migrations
+ (setq *migrations-dir* (merge-pathnames "migrations/"))
+ (generate-migration "init-schema"
+                     :documentation "Initialize the database schema")
+
+ ;; Running migrations
+ (with-connection *pg-spec*
+   (migrate))
  )
