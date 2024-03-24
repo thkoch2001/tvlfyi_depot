@@ -4,7 +4,7 @@
   nix = {
     buildMachines = [{
       hostName = "whitby.tvl.fyi";
-      sshUser = "grfn";
+      sshUser = "aspen";
       sshKey = "/root/.ssh/id_rsa";
       system = "x86_64-linux";
       maxJobs = 64;
