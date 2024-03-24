@@ -1,4 +1,4 @@
-{ depot, ... }:
+{ depot, pkgs, ... }:
 
 depot.nix.buildLisp.program {
   name = "panettone";
@@ -9,6 +9,7 @@ depot.nix.buildLisp.program {
     cl-ppcre
     cl-smtp
     cl-who
+    str
     defclass-std
     drakma
     easy-routes
@@ -23,6 +24,16 @@ depot.nix.buildLisp.program {
   srcs = [
     ./panettone.asd
     ./src/packages.lisp
+    (pkgs.writeText "build.lisp" ''
+      (defpackage build
+        (:use :cl :alexandria)
+        (:export :+migrations-dir+))
+      (declaim (optimize (safety 3)))
+      (in-package :build)
+      (define-constant +migrations-dir
+       "${./src/migrations}"
+       :test #'string=)
+    '')
     ./src/util.lisp
     ./src/css.lisp
     ./src/email.lisp
