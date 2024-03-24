@@ -1,0 +1,123 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cd4630f6_5f94c5fc",
+        "filename": "tvix/eval/src/builtins/hash.rs",
+        "patchSetId": 3
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-03-24T08:30:09Z",
+      "side": 1,
+      "message": "Nit, feel free to ignore: I\u0027d personally prefer to not import this, but use std::io everywhere, to make it more clear this is the sync variant.",
+      "revId": "08e71941a849b088f39937bdf743fd40a06cf0f1",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "099d2e78_f52ef172",
+        "filename": "tvix/eval/src/builtins/hash.rs",
+        "patchSetId": 3
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-03-24T08:30:09Z",
+      "side": 1,
+      "message": "Can we move this somewhere to `tvix/nix-compat/src/nixhash/algos.rs`?",
+      "revId": "08e71941a849b088f39937bdf743fd40a06cf0f1",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3eefde0c_bf380e6b",
+        "filename": "tvix/eval/src/builtins/hash.rs",
+        "patchSetId": 3
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-03-24T08:30:09Z",
+      "side": 1,
+      "message": "… and maybe either have a `HashAlgo::new_hasher()` returning you the hash function, or a `hash_bytes(r: impl std::io::Read) -\u003e Vec\u003cu8\u003e` function does accept a reader.\n\nThis should get rid of some of the algo-specific reflection here.",
+      "revId": "08e71941a849b088f39937bdf743fd40a06cf0f1",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "76ebe73c_f148d99a",
+        "filename": "tvix/eval/src/builtins/impure.rs",
+        "patchSetId": 3
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-03-24T08:30:09Z",
+      "side": 1,
+      "message": "… we cold parse to HashAlgo here.",
+      "revId": "08e71941a849b088f39937bdf743fd40a06cf0f1",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ef20d841_63e5a42b",
+        "filename": "tvix/eval/src/vm/generators.rs",
+        "patchSetId": 3
+      },
+      "lineNbr": 204,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-03-24T08:30:09Z",
+      "side": 1,
+      "message": "/// `std::io::Read` produced …",
+      "revId": "08e71941a849b088f39937bdf743fd40a06cf0f1",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7958c30d_86716530",
+        "filename": "tvix/glue/src/tvix_store_io.rs",
+        "patchSetId": 3
+      },
+      "lineNbr": 474,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-03-24T08:30:09Z",
+      "side": 1,
+      "message": "stray debug leftover",
+      "revId": "08e71941a849b088f39937bdf743fd40a06cf0f1",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2c11ee06_e2d9b9d1",
+        "filename": "tvix/glue/src/tvix_store_io.rs",
+        "patchSetId": 3
+      },
+      "lineNbr": 504,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-03-24T08:30:09Z",
+      "side": 1,
+      "message": "maybe add a comment that the VMResponse wants a sync reader here",
+      "revId": "08e71941a849b088f39937bdf743fd40a06cf0f1",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
