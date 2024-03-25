@@ -3,6 +3,23 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "f2cd8c50_65f20075",
+        "filename": "tvix/nix-compat/src/wire/worker_protocol.rs",
+        "patchSetId": 5
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-03-25T21:11:04Z",
+      "side": 1,
+      "message": "could we use `#[repr(u64)]` here instead?",
+      "revId": "1d5f205427f73788ff18edb3130b306a0712555d",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "28d6901e_a9994083",
         "filename": "tvix/nix-compat/src/wire/worker_protocol.rs",
         "patchSetId": 5
