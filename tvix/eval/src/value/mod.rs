@@ -79,6 +79,8 @@ pub enum Value {
     UnresolvedPath(Box<PathBuf>),
     #[serde(skip)]
     Json(Box<serde_json::Value>),
+    #[serde(skip)]
+    ContextfulJson(Box<serde_json::Value>, Box<NixContext>),
 
     #[serde(skip)]
     FinaliseRequest(bool),
@@ -295,6 +297,7 @@ impl Value {
                 | Value::DeferredUpvalue(_)
                 | Value::UnresolvedPath(_)
                 | Value::Json(_)
+                | Value::ContextfulJson(..)
                 | Value::FinaliseRequest(_) => panic!(
                     "Tvix bug: internal value left on stack: {}",
                     value.type_of()
@@ -445,6 +448,7 @@ impl Value {
                 | (Value::DeferredUpvalue(_), _)
                 | (Value::UnresolvedPath(_), _)
                 | (Value::Json(_), _)
+                | (Value::ContextfulJson(..), _)
                 | (Value::FinaliseRequest(_), _) => {
                     panic!("tvix bug: .coerce_to_string() called on internal value")
                 }
@@ -682,6 +686,7 @@ impl Value {
             Value::DeferredUpvalue(_) => "internal[deferred_upvalue]",
             Value::UnresolvedPath(_) => "internal[unresolved_path]",
             Value::Json(_) => "internal[json]",
+            Value::ContextfulJson(..) => "internal[contextful_json]",
             Value::FinaliseRequest(_) => "internal[finaliser_sentinel]",
             Value::Catchable(_) => "internal[catchable]",
         }
@@ -878,6 +883,7 @@ impl Value {
             | Value::DeferredUpvalue(_)
             | Value::UnresolvedPath(_)
             | Value::Json(_)
+            | Value::ContextfulJson(..)
             | Value::FinaliseRequest(_) => "an internal Tvix evaluator value".into(),
         }
     }
@@ -992,6 +998,7 @@ impl TotalDisplay for Value {
             Value::DeferredUpvalue(_) => f.write_str("internal[deferred_upvalue]"),
             Value::UnresolvedPath(_) => f.write_str("internal[unresolved_path]"),
             Value::Json(_) => f.write_str("internal[json]"),
+            Value::ContextfulJson(..) => f.write_str("internal[contextful_json]"),
             Value::FinaliseRequest(_) => f.write_str("internal[finaliser_sentinel]"),
 
             // Delegate thunk display to the type, as it must handle
