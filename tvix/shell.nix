@@ -34,6 +34,7 @@ pkgs.mkShell {
     pkgs.rustfmt
     pkgs.plantuml
     pkgs.protobuf
+    pkgs.maturin
   ] ++ pkgs.lib.optionals pkgs.stdenv.isDarwin [
     # We need these two dependencies in the ambient environment to be able to
     # `cargo build` on MacOS.
