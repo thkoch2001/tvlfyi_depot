@@ -121,6 +121,10 @@ pub enum VMRequest {
     /// Request serialisation of a value to JSON, according to the
     /// slightly odd Nix evaluation rules.
     ToJson(Value),
+
+    /// Request serialization of a value to contextful JSON, according to the
+    /// slightly odd Nix evaluation and context accumulation rules.
+    ToContextfulJson(Value),
 }
 
 /// Human-readable representation of a generator message, used by observers.
@@ -178,6 +182,7 @@ impl Display for VMRequest {
             VMRequest::Span => write!(f, "span"),
             VMRequest::TryForce(v) => write!(f, "try_force({})", v.type_of()),
             VMRequest::ToJson(v) => write!(f, "to_json({})", v.type_of()),
+            VMRequest::ToContextfulJson(v) => write!(f, "to_contextful_json({})", v.type_of()),
         }
     }
 }
@@ -493,6 +498,13 @@ where
                             });
                             return Ok(false);
                         }
+                        VMRequest::ToContextfulJson(value) => {
+                            self.reenqueue_generator(name, span.clone(), generator);
+                            self.enqueue_generator("to_contextful_json", span, |co| {
+                                value.into_contextful_json_generator(co)
+                            });
+                            return Ok(false);
+                        }
                     }
                 }
 
@@ -776,6 +788,20 @@ pub(crate) async fn request_to_json(
 ) -> Result<serde_json::Value, CatchableErrorKind> {
     match co.yield_(VMRequest::ToJson(value)).await {
         VMResponse::Value(Value::Json(json)) => Ok(*json),
+        VMResponse::Value(Value::Catchable(cek)) => Err(*cek),
+        msg => panic!(
+            "Tvix bug: VM responded with incorrect generator message: {}",
+            msg
+        ),
+    }
+}
+
+pub(crate) async fn request_to_contextful_json(
+    co: &GenCo,
+    value: Value,
+) -> Result<(serde_json::Value, NixContext), CatchableErrorKind> {
+    match co.yield_(VMRequest::ToContextfulJson(value)).await {
+        VMResponse::Value(Value::ContextfulJson(json, ctx)) => Ok((*json, *ctx)),
         VMResponse::Value(Value::Catchable(cek)) => Err(*cek),
         msg => panic!(
             "Tvix bug: VM responded with incorrect generator message: {}",
